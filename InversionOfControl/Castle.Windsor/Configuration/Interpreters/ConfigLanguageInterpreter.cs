@@ -78,6 +78,9 @@ namespace Castle.Windsor.Configuration.Interpreters
 					throw new ConfigurationException(message);
 				}
 			}
+
+			// We dispose the source
+			Source.Dispose();
 		}
 
 		private void AddComponents(ConfigurationCollection components, IConfigurationStore store)

@@ -18,8 +18,6 @@ namespace Castle.Facilities.TypedFactory.Tests
 
 	using Castle.Windsor;
 
-	using Castle.Windsor.Configuration.Xml;
-
 	using Castle.Facilities.TypedFactory.Tests.Components;
 	using Castle.Facilities.TypedFactory.Tests.Factories;
 
@@ -33,8 +31,7 @@ namespace Castle.Facilities.TypedFactory.Tests
 		[SetUp]
 		public void Init()
 		{
-			_container = new WindsorContainer( 
-				new XmlConfigurationStore(@"..\typedFactory_castle_config.xml") );
+			_container = new WindsorContainer( @"..\typedFactory_castle_config.xml" );
 			
 			_container.AddFacility( "typedfactory", new TypedFactoryFacility() );
 

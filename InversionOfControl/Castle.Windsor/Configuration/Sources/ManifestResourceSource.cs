@@ -39,14 +39,16 @@ namespace Castle.Windsor.Configuration.Sources
 			ExtractResourceStream( assembly, null, resourceName );
 		}
 
+		~ManifestResourceSource()
+		{
+			Close();
+		}
+
 		#region IConfigurationSource Members
 
 		public TextReader Contents
 		{
-			get
-			{
-				return _reader;
-			}
+			get { return _reader; }
 		}
 
 		#endregion
@@ -55,7 +57,8 @@ namespace Castle.Windsor.Configuration.Sources
 
 		public void Dispose()
 		{
-			if (_reader != null) _reader.Close();
+			Close();
+			GC.SuppressFinalize(this);
 		}
 
 		#endregion
@@ -81,6 +84,11 @@ namespace Castle.Windsor.Configuration.Sources
 			}
 
 			_reader = new StreamReader(resourceStream);
+		}
+
+		private void Close()
+		{
+			if (_reader != null) _reader.Close();
 		}
 	}
 }

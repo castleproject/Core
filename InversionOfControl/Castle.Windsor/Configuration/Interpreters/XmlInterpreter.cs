@@ -65,6 +65,9 @@ namespace Castle.Windsor.Configuration.Interpreters
 			doc.Load(Source.Contents);
 			
 			Deserialize(doc.DocumentElement, store);
+
+			// We dispose the source
+			Source.Dispose();
 		}
 
 		#endregion

@@ -42,6 +42,11 @@ namespace Castle.Windsor.Configuration.Sources
 			}
 		}
 
+		~ExternalFileSource()
+		{
+			Close();
+		}
+
 		#region IConfigurationSource Members
 
 		public TextReader Contents
@@ -63,9 +68,15 @@ namespace Castle.Windsor.Configuration.Sources
 
 		public void Dispose()
 		{
-			if (_reader != null) _reader.Close();
+			Close();
+			GC.SuppressFinalize(this);
 		}
 
 		#endregion
+
+		private void Close()
+		{
+			if (_reader != null) _reader.Close();
+		}
 	}
 }

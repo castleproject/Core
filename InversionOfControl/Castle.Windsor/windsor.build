@@ -77,6 +77,10 @@
 				<include name="${bin.dir}/Castle.MicroKernel.dll" />
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
 			</references>
+
+			<resources basedir="${test.src.dir}" prefix="Castle.Windsor.Tests" dynamicprefix="true">
+				<include name="Configuration\sample_config.xml" />
+			</resources>
 		</csc>
 	</target>
 	

@@ -21,9 +21,6 @@ namespace Castle.Facilities.AspectSharp.Tests
 	using Castle.Model.Configuration;
 
 	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Xml;
-
-	using Castle.MicroKernel.SubSystems.Configuration;
 
 	using Castle.Facilities.AspectSharp.Tests.Components;
 	using Castle.Facilities.AspectSharp.Tests.Interceptors;
@@ -37,9 +34,7 @@ namespace Castle.Facilities.AspectSharp.Tests
 		[Test]
 		public void ExternalConfigurationUsage()
 		{
-			XmlConfigurationStore store = new XmlConfigurationStore("../aop_castle_config.xml");
-
-			WindsorContainer container = new WindsorContainer( store );
+			WindsorContainer container = new WindsorContainer( "../aop_castle_config.xml" );
 
 			container.AddFacility( "aspectsharp", new AspectSharpFacility() );
 			
