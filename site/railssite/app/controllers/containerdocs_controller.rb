@@ -17,4 +17,19 @@ class ContainerdocsController < AbstractDocumentationController
   def typeconverter
   end
   
+  def mkfaq
+  end
+  
+  def config
+  end
+  
+  def parameters
+  end
+  
+  def interceptors
+  end
+  
+  def windsorfaq
+  end
+  
 end
