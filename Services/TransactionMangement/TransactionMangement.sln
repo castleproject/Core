@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Transaction", "Castle.Services.Transaction\Castle.Services.Transaction.csproj", "{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Debug.ActiveCfg = Debug|.NET
+		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Debug.Build.0 = Debug|.NET
+		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Release.ActiveCfg = Release|.NET
+		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
