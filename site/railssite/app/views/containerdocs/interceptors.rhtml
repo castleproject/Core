@@ -35,7 +35,9 @@ if (Something())
   model.Interceptors.Add( 
     new InteceptorReference( typeof(MyTransactionalInterceptor) ) );
   model.Dependencies.Add( 
-    new DependencyModel( DependencyType.Service, "", typeof(MyTransactionalInterceptor), false ) );
+    new DependencyModel( 
+      DependencyType.Service, "", 
+      typeof(MyTransactionalInterceptor), false ) );
 }
 </pre>
 
