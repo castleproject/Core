@@ -24,15 +24,19 @@ namespace Castle.Windsor.Configuration.Sources
 	/// </summary>
 	public class AppDomainConfigSource : StaticContentSource
 	{
-		public AppDomainConfigSource()
+		public AppDomainConfigSource() : this("castle")
 		{
-			XmlNode node = (XmlNode) ConfigurationSettings.GetConfig("castle");
+		}
+
+		public AppDomainConfigSource(string section)
+		{
+			XmlNode node = (XmlNode) ConfigurationSettings.GetConfig(section);
 
 			// Need to decide if this is going to be considered an error or not
 			if (node == null)
 			{
 				String message = String.Format(
-					"Could not find section 'castle' in the configuration file associated with this domain.");
+					"Could not find section '{0}' in the configuration file associated with this domain.", section);
 				throw new ConfigurationException(message);
 			}
 

@@ -17,29 +17,31 @@ namespace Castle.Windsor.Configuration.Sources
 	using System;
 	using System.IO;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public class StaticContentSource : AbstractConfigurationSource
+	public abstract class AbstractConfigurationSource : IConfigurationSource
 	{
-		protected StringReader _reader;
-
-		public StaticContentSource(String contents)
-		{
-			_reader = new StringReader(contents);
-		}
-
-		protected StaticContentSource()
-		{
-		}
-
 		#region IConfigurationSource Members
 
-		public override TextReader Contents
+		public abstract TextReader Contents { get; }
+
+		#endregion
+
+		#region IDisposable Members
+
+		public void Dispose()
 		{
-			get { return _reader; }
+			Dispose(true);
+			GC.SuppressFinalize(true);
 		}
 
 		#endregion
+		
+		protected virtual void Dispose(bool disposing)
+		{
+		}
+
+		~AbstractConfigurationSource()
+		{
+			Dispose(false);
+		}
 	}
 }

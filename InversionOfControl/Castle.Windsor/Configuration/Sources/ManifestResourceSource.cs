@@ -18,53 +18,62 @@ namespace Castle.Windsor.Configuration.Sources
 	using System.IO;
 	using System.Reflection;
 
-
-	public class ManifestResourceSource : IConfigurationSource
+	public class ManifestResourceSource : AbstractConfigurationSource
 	{
 		private StreamReader _reader;
 
 		public ManifestResourceSource(Type type, String resourceName)
 		{
-			if (type == null) throw new ArgumentNullException("true", "Null type");
-			if (resourceName == null || resourceName.Length == 0) throw new ArgumentException("resourceName", "Null or empty resource name");
+			if (type == null)
+			{
+				throw new ArgumentNullException("type", "Null type");
+			}
 
 			ExtractResourceStream( type.Assembly, type, resourceName );
 		}
 
 		public ManifestResourceSource(Assembly assembly, String resourceName)
 		{
-			if (assembly == null) throw new ArgumentNullException("assembly", "Null assembly");
-			if (resourceName == null || resourceName.Length == 0) throw new ArgumentException("resourceName", "Null or empty resource name");
+
+			if (assembly == null)
+			{
+				throw new ArgumentNullException("assembly", "Null assembly");
+			}
 
 			ExtractResourceStream( assembly, null, resourceName );
 		}
 
-		~ManifestResourceSource()
-		{
-			Close();
-		}
-
 		#region IConfigurationSource Members
 
-		public TextReader Contents
+		public override TextReader Contents
 		{
 			get { return _reader; }
 		}
 
 		#endregion
 
-		#region IDisposable Members
-
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Close();
-			GC.SuppressFinalize(this);
+			if (disposing)
+			{
+				try
+				{
+					if (_reader != null) _reader.Close();
+				}
+				finally
+				{
+					base.Dispose(disposing);	
+				}
+			}
 		}
-
-		#endregion
 
 		private void ExtractResourceStream(Assembly assembly, Type type, String resourceName)
 		{
+			if (resourceName == null || resourceName.Length == 0)
+			{
+				throw new ArgumentException("resourceName", "Null or empty resource name");
+			}
+
 			Stream resourceStream = null;
 
 			if (type == null)
@@ -84,11 +93,6 @@ namespace Castle.Windsor.Configuration.Sources
 			}
 
 			_reader = new StreamReader(resourceStream);
-		}
-
-		private void Close()
-		{
-			if (_reader != null) _reader.Close();
 		}
 	}
 }

@@ -46,41 +46,41 @@ namespace Castle.Windsor.Configuration.Interpreters
 		/// <param name="store"></param>
 		public override void Process(IConfigurationStore store)
 		{
-			WindsorConfLanguageLexer lexer = new WindsorConfLanguageLexer(Source.Contents);
-
-			WindsorParser parser = new WindsorParser(new IndentTokenStream(lexer));
-
-			ConfigurationDefinition confDef = parser.start();
-
-			Imports = confDef.Imports;
-
-			IConfiguration container = confDef.Root.Children["container"];
-
-			if (container == null)
+			using (Source)
 			{
-				throw new ConfigurationException("Root node 'container' not found.");
-			}
+				WindsorConfLanguageLexer lexer = new WindsorConfLanguageLexer(Source.Contents);
 
-			foreach(IConfiguration node in container.Children)
-			{
-				if (FacilitiesNodeName.Equals(node.Name))
+				WindsorParser parser = new WindsorParser(new IndentTokenStream(lexer));
+
+				ConfigurationDefinition confDef = parser.start();
+
+				Imports = confDef.Imports;
+
+				IConfiguration container = confDef.Root.Children["container"];
+
+				if (container == null)
 				{
-					AddFacilities(node.Children, store);
+					throw new ConfigurationException("Root node 'container' not found.");
 				}
-				else if (ComponentsNodeName.Equals(node.Name))
+
+				foreach(IConfiguration node in container.Children)
 				{
-					AddComponents(node.Children, store);
-				}
-				else
-				{
-					String message = String.Format("Unexpected node {0}. We were expecting either {1} or {2}", 
-						node.Name, FacilitiesNodeName, ComponentsNodeName);
-					throw new ConfigurationException(message);
+					if (FacilitiesNodeName.Equals(node.Name))
+					{
+						AddFacilities(node.Children, store);
+					}
+					else if (ComponentsNodeName.Equals(node.Name))
+					{
+						AddComponents(node.Children, store);
+					}
+					else
+					{
+						String message = String.Format("Unexpected node {0}. We were expecting either {1} or {2}", 
+							node.Name, FacilitiesNodeName, ComponentsNodeName);
+						throw new ConfigurationException(message);
+					}
 				}
 			}
-
-			// We dispose the source
-			Source.Dispose();
 		}
 
 		private void AddComponents(ConfigurationCollection components, IConfigurationStore store)

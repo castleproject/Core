@@ -60,14 +60,14 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			if (store == null) throw new ArgumentNullException("store");
 
-			XmlDocument doc = new XmlDocument();
+			using (Source)
+			{
+				XmlDocument doc = new XmlDocument();
 			
-			doc.Load(Source.Contents);
+				doc.Load(Source.Contents);
 			
-			Deserialize(doc.DocumentElement, store);
-
-			// We dispose the source
-			Source.Dispose();
+				Deserialize(doc.DocumentElement, store);
+			}
 		}
 
 		#endregion

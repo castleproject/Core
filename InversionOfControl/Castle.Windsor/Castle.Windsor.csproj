@@ -529,6 +529,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\Sources\AbstractConfigurationSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\Sources\AppDomainConfigSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -18,7 +18,7 @@ namespace Castle.Windsor.Configuration.Sources
 	using System.IO;
 
 
-	public class ExternalFileSource : IConfigurationSource
+	public class ExternalFileSource : AbstractConfigurationSource
 	{
 		private FileInfo _info;
 		private StreamReader _reader;
@@ -42,14 +42,9 @@ namespace Castle.Windsor.Configuration.Sources
 			}
 		}
 
-		~ExternalFileSource()
-		{
-			Close();
-		}
-
 		#region IConfigurationSource Members
 
-		public TextReader Contents
+		public override TextReader Contents
 		{
 			get
 			{
@@ -64,19 +59,19 @@ namespace Castle.Windsor.Configuration.Sources
 
 		#endregion
 
-		#region IDisposable Members
-
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			Close();
-			GC.SuppressFinalize(this);
-		}
-
-		#endregion
-
-		private void Close()
-		{
-			if (_reader != null) _reader.Close();
+			if (disposing)
+			{
+				try
+				{
+					if (_reader != null) _reader.Close();
+				}
+				finally
+				{
+					base.Dispose(disposing);	
+				}
+			}
 		}
 	}
 }
