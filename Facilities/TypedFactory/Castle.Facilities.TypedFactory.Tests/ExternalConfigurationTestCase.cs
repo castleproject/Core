@@ -26,7 +26,7 @@ namespace Castle.Facilities.TypedFactory.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class ExternalConfiguration
+	public class ExternalConfigurationTestCase
 	{
 		private IWindsorContainer _container;
 

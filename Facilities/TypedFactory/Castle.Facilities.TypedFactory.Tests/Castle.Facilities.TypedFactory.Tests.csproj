@@ -120,7 +120,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ExternalConfiguration.cs"
+                    RelPath = "ExternalConfigurationTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
