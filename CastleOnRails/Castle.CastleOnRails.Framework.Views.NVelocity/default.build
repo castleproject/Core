@@ -44,9 +44,9 @@
 			<references>
 				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
 				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
-				<include name="${bin.dir}/Commons.dll" />
-				<include name="${bin.dir}/log4net.dll" />
-				<include name="${bin.dir}/NVelocity.dll" />
+				<include name="${lib.dir}/Commons.dll" />
+				<include name="${lib.dir}/log4net.dll" />
+				<include name="${lib.dir}/NVelocity.dll" />
 			</references>
 		</csc>
 	</target>
