@@ -19,7 +19,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 	using NUnit.Framework;
 
-	using ByteFX.Data.MySqlClient;
+	using MySql.Data.MySqlClient;
 
 	using Castle.Model.Configuration;
 
@@ -33,7 +33,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	public abstract class AbstractNHibernateTestCase
 	{
 		// protected const string Driver = "NHibernate.Driver.MySqlDataDriver";
-		protected const string Driver = "Castle.Facilities.NHibernateIntegration.Tests.ByteFxDriver, Castle.Facilities.NHibernateIntegration.Tests";
+		protected const string Driver = "NHibernate.Driver.MySqlDataDriver";
 		protected const string Dialect = "NHibernate.Dialect.MySQLDialect";
 		protected const string ConnectionProvider = "NHibernate.Connection.DriverConnectionProvider";
 		protected const string ConnectionString = "Database=Test;Data Source=localhost;User Id=theuser;Password=opauser";

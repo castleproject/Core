@@ -131,18 +131,6 @@
                     HintPath = "..\bin\Castle.Windsor.dll"
                 />
                 <Reference
-                    Name = "ByteFX.MySqlClient.Design"
-                    AssemblyName = "ByteFX.MySqlClient.Design"
-                    HintPath = "C:\dev\dotnet\tools\ByteFX\ByteFX .Data Provider\ByteFX.MySqlClient.Design.dll"
-                    AssemblyFolderKey = "hklm\dn\bytefx"
-                />
-                <Reference
-                    Name = "ByteFX.MySqlClient"
-                    AssemblyName = "ByteFX.MySqlClient"
-                    HintPath = "C:\dev\dotnet\tools\ByteFX\ByteFX .Data Provider\ByteFX.MySqlClient.dll"
-                    AssemblyFolderKey = "hklm\dn\bytefx"
-                />
-                <Reference
                     Name = "Castle.Facilities.NHibernateExtension"
                     Project = "{B687632A-D2C9-4E48-B878-D9066FB43434}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -156,6 +144,11 @@
                     Name = "Castle.Facilities.AutomaticTransactionManagement"
                     AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
                     HintPath = "..\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
+                />
+                <Reference
+                    Name = "MySql.Data"
+                    AssemblyName = "MySql.Data"
+                    HintPath = "..\lib\MySql.Data.dll"
                 />
             </References>
         </Build>
@@ -188,11 +181,6 @@
                 />
                 <File
                     RelPath = "BlogItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ByteFxDriver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
