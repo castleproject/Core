@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="services" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="doc.dir" value="${base.dir}/docs" />
+	<property name="name" value="Services" />
+	<property name="version" value="alpha-2" />
+	<property name="optimize" value="true" />
+	<property name="debug" value="false" />
+
+	<target name="build" depends="init, transaction" />
+	
+	<target name="init">
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}" />
+
+		<delete dir="${doc.dir}" failonerror="false" />
+		<mkdir dir="${doc.dir}" />
+	</target>
+	
+	<target name="transaction">
+		<nant buildfile="TransactionMangement/transaction.build" target="build" />
+	</target>
+	
+	<target name="dist">
+		<zip zipfile="${name}.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+				<exclude name="**/*.projdata" />
+				<exclude name="**/*.resharperoptions" />
+
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="TransactionMangement/**/*.*" />
+			</fileset>
+		</zip>
+
+		<zip zipfile="${name}.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/*.dll" />				
+				<include name="${base.dir}/License.txt" />				
+				<include name="${base.dir}/Readme.txt" />				
+				<include name="${name}.src.${version}.zip" />				
+			</fileset>
+		</zip>
+		
+	</target>
+	
+</project>
