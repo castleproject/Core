@@ -1,5 +1,4 @@
 <container>
-
   <facilities>
     <facility key="manageable" type="" />
     <facility key="nhibernate" type="" />
