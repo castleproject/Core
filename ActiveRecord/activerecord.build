@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="container" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="doc.dir" value="${base.dir}/docs" />
+	<property name="dynamicproxy" value="${base.dir}/../tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
+	<property name="name" value="InversionOfControl" />
+	<property name="version" value="beta-1" />
+
+	<target name="build" depends="init, model, microkernel, windsor" />
+	
+	<target name="init">
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}" />
+
+		<delete dir="${doc.dir}" failonerror="false" />
+		<mkdir dir="${doc.dir}" />
+	</target>
+	
+	<target name="model">
+		<nant buildfile="Castle.Model/model.build" target="build" />
+	</target>
+
+	<target name="microkernel">
+		<nant buildfile="Castle.MicroKernel/microkernel.build" target="build" />
+	</target>
+
+	<target name="windsor">
+	    <copy file="${dynamicproxy}" todir="${bin.dir}" />
+		<nant buildfile="Castle.Windsor/windsor.build" target="build" />
+	</target>
+
+	<target name="documentation">
+		<ndoc failonerror="false">
+			<assemblies basedir="${bin.dir}">
+				<include name="Castle.Model.dll" />
+				<include name="Castle.MicroKernel.dll" />
+				<include name="Castle.Windsor.dll" />
+			</assemblies>
+			<documenters>
+				<documenter name="MSDN">
+					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
+					<property name="HtmlHelpName" value="Castle.Container" />
+					<property name="IncludeFavorites" value="False" />
+					<property name="Title" value="Castle's Inversion of Control" />
+					<property name="SplitTOCs" value="True" />
+					<property name="DefaulTOC" value="Castle.Windsor" />
+					<property name="ShowVisualBasic" value="False" />
+					<property name="ShowMissingSummaries" value="False" />
+					<property name="ShowMissingRemarks" value="False" />
+					<property name="ShowMissingParams" value="False" />
+					<property name="ShowMissingReturns" value="False" />
+					<property name="ShowMissingValues" value="False" />
+					<property name="DocumentInternals" value="True" />
+					<property name="DocumentProtected" value="True" />
+					<property name="DocumentPrivates" value="False" />
+					<property name="DocumentEmptyNamespaces" value="False" />
+					<property name="IncludeAssemblyVersion" value="True" />
+					<property name="CopyrightText" value="Copyright 2004-2005 (c) Castle Project" />
+					<property name="CopyrightHref" value="http://www.castleproject.org/" />
+				</documenter>
+			</documenters>
+		</ndoc>
+	</target>
+	
+	<target name="dist">
+		<zip zipfile="${name}.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+				<exclude name="**/*.projdata" />
+				<exclude name="**/*.resharperoptions" />
+
+				<include name="License.txt" />
+				<include name="Readme.txt" />
+				<include name="Changes.txt" />
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="Castle.Model/**/*.*" />
+				<include name="Castle.Model.Tests/**/*.*" />
+				<include name="Castle.MicroKernel/**/*.*" />
+				<include name="Castle.MicroKernel.Tests/**/*.*" />
+				<include name="Castle.Windsor/**/*.*" />
+				<include name="Castle.Windsor.Tests/**/*.*" />
+			</fileset>
+		</zip>
+
+		<zip zipfile="${name}.bin-src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/*.dll" />				
+				<include name="${base.dir}/License.txt" />				
+				<include name="${base.dir}/Readme.txt" />
+				<include name="${base.dir}/Changes.txt" />
+				<include name="${name}.src.${version}.zip" />				
+			</fileset>
+		</zip>
+		
+	</target>
+
+	
+</project>

@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord", "Castle.ActiveRecord\Castle.ActiveRecord.csproj", "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Tests", "Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests.csproj", "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Debug.ActiveCfg = Debug|.NET
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Debug.Build.0 = Debug|.NET
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Release.ActiveCfg = Release|.NET
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Release.Build.0 = Release|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug.ActiveCfg = Debug|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug.Build.0 = Debug|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.ActiveCfg = Release|.NET
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		activerecord.build = activerecord.build
+		Changes.txt = Changes.txt
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
