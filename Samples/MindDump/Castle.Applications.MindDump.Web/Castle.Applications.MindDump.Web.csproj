@@ -145,16 +145,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
                 <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\..\..\CastleOnRails\bin\Commons.dll"
-                />
-                <Reference
-                    Name = "NVelocity"
-                    AssemblyName = "NVelocity"
-                    HintPath = "..\..\..\CastleOnRails\bin\NVelocity.dll"
-                />
-                <Reference
                     Name = "Castle.CastleOnRails.Engine"
                     AssemblyName = "Castle.CastleOnRails.Engine"
                     HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.Engine.dll"
@@ -173,6 +163,16 @@
                     Name = "Castle.CastleOnRails.WindsorExtension"
                     AssemblyName = "Castle.CastleOnRails.WindsorExtension"
                     HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.WindsorExtension.dll"
+                />
+                <Reference
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\lib\Commons.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\lib\NVelocity.dll"
                 />
             </References>
         </Build>
