@@ -19,10 +19,6 @@ namespace Castle.DynamicProxy
 
 	using Castle.DynamicProxy.Builder;
 
-	public delegate void EnhanceTypeDelegate( TypeBuilder mainType, FieldBuilder handlerFieldBuilder, ConstructorBuilder constructorBuilder );
-
-	public delegate Type[] ScreenInterfacesDelegate( Type[] interfaces );
-
 	/// <summary>
 	/// Generates a Java style proxy. This overrides the .Net proxy requirements 
 	/// that forces one to extend MarshalByRefObject or (for a different purpose)
@@ -31,7 +27,7 @@ namespace Castle.DynamicProxy
 	/// <remarks>
 	/// The <see cref="ProxyGenerator"/> should be used to generate a class 
 	/// implementing the specified interfaces. The dynamic implementation will 
-	/// only calls the internal <see cref="IInvocationHandler"/> instance.
+	/// only calls the internal <see cref="IInterceptor"/> instance.
 	/// </remarks>
 	/// <remarks>
 	/// Please note that this proxy implementation currently doesn't not supports ref and out arguments 
@@ -40,10 +36,10 @@ namespace Castle.DynamicProxy
 	/// </remarks>
 	/// <example>
 	/// <code>
-	/// MyInvocationHandler handler = ...
+	/// MyInvocationHandler interceptor = ...
 	/// ProxyGenerator generator = new ProxyGenerator();
 	/// IInterfaceExposed proxy = 
-	///		generator.CreateProxy( new Type[] { typeof(IInterfaceExposed) }, handler );
+	///		generator.CreateProxy( new Type[] { typeof(IInterfaceExposed) }, interceptor );
 	/// </code>
 	/// </example>
 	public class ProxyGenerator
@@ -65,98 +61,103 @@ namespace Castle.DynamicProxy
 			set { m_builder = value; }
 		}
 
-		public virtual object CreateClassProxy(Type baseClass, IInvocationHandler handler)
+		public virtual object CreateClassProxy(Type baseClass, IInterceptor interceptor)
 		{
-			AssertCreateClassProxyArguments(baseClass, handler);
+			AssertCreateClassProxyArguments(baseClass, interceptor);
 
 			Type newType = ProxyBuilder.CreateClassProxy(baseClass);
-			return CreateProxyInstance( newType, handler );
+			return CreateProxyInstance( newType, interceptor );
 		}
 
 		public virtual object CreateCustomClassProxy(Type baseClass, 
-			IInvocationHandler handler, GeneratorContext context)
+			IInterceptor interceptor, GeneratorContext context)
 		{
-			AssertCreateClassProxyArguments(baseClass, handler, context);
+			AssertCreateClassProxyArguments(baseClass, interceptor, context);
 
 			Type newType = ProxyBuilder.CreateCustomClassProxy(baseClass, context);
-			return CreateProxyInstance( newType, handler, context );
+			return CreateProxyInstance( newType, interceptor, context );
 		}
 
 		/// <summary>
 		/// Generates a proxy implementing all the specified interfaces and
-		/// redirecting method invocations to the specifed handler.
+		/// redirecting method invocations to the specifed interceptor.
 		/// </summary>
 		/// <param name="theInterface">Interface to be implemented</param>
-		/// <param name="handler">instance of <see cref="IInvocationHandler"/></param>
+		/// <param name="interceptor">instance of <see cref="IInterceptor"/></param>
 		/// <returns>Proxy instance</returns>
-		public virtual object CreateProxy(Type theInterface, IInvocationHandler handler)
+		public virtual object CreateProxy(Type theInterface, IInterceptor interceptor, object target)
 		{
-			return CreateProxy(new Type[] {theInterface}, handler);
+			return CreateProxy(new Type[] {theInterface}, interceptor, target);
 		}
 
 		/// <summary>
 		/// Generates a proxy implementing all the specified interfaces and
-		/// redirecting method invocations to the specifed handler.
+		/// redirecting method invocations to the specifed interceptor.
 		/// </summary>
 		/// <param name="interfaces">Array of interfaces to be implemented</param>
-		/// <param name="handler">instance of <see cref="IInvocationHandler"/></param>
+		/// <param name="interceptor">instance of <see cref="IInterceptor"/></param>
 		/// <returns>Proxy instance</returns>
-		public virtual object CreateProxy(Type[] interfaces, IInvocationHandler handler)
+		public virtual object CreateProxy(Type[] interfaces, IInterceptor interceptor, object target)
 		{
-			AssertCreateProxyArguments(interfaces, handler);
+			AssertCreateProxyArguments(interfaces, interceptor);
 
 			Type newType = ProxyBuilder.CreateInterfaceProxy(interfaces);
-			return CreateProxyInstance( newType, handler );
+			return CreateProxyInstance( newType, interceptor, target );
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="theInterface"></param>
-		/// <param name="handler"></param>
+		/// <param name="interceptor"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
 		public virtual object CreateCustomProxy(Type theInterface, 
-			IInvocationHandler handler, 
+			IInterceptor interceptor, 
 			GeneratorContext context )
 		{
-			return CreateCustomProxy( new Type[] { theInterface }, handler, context );
+			return CreateCustomProxy( new Type[] { theInterface }, interceptor, context );
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="interfaces"></param>
-		/// <param name="handler"></param>
+		/// <param name="interceptor"></param>
 		/// <param name="context"></param>
 		/// <returns></returns>
 		public virtual object CreateCustomProxy(Type[] interfaces, 
-			IInvocationHandler handler, GeneratorContext context )
+			IInterceptor interceptor, GeneratorContext context )
 		{
-			AssertCreateProxyArguments( interfaces, handler, context );
+			AssertCreateProxyArguments( interfaces, interceptor, context );
 			Type newType = ProxyBuilder.CreateCustomInterfaceProxy(interfaces, context);
-			return CreateProxyInstance( newType, handler, context );
+			return CreateProxyInstance( newType, interceptor, context );
 		}
 
-		protected virtual object CreateProxyInstance(Type type, IInvocationHandler handler)
+		protected virtual object CreateProxyInstance(Type type, IInterceptor interceptor, object target)
 		{
-			return Activator.CreateInstance(type, new object[] {handler});
+			return Activator.CreateInstance(type, new object[] {interceptor, target});
 		}
 
-		protected virtual object CreateProxyInstance(Type type, IInvocationHandler handler, GeneratorContext context)
+		protected virtual object CreateProxyInstance(Type type, IInterceptor interceptor)
 		{
-			return CreateProxyInstance( type, handler );
+			return Activator.CreateInstance(type, new object[] {interceptor});
 		}
 
-		protected static void AssertCreateProxyArguments(Type[] interfaces, IInvocationHandler handler)
+		protected virtual object CreateProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context, object target)
+		{
+			return CreateProxyInstance( type, interceptor, target );
+		}
+
+		protected static void AssertCreateProxyArguments(Type[] interfaces, IInterceptor interceptor)
 		{
 			if (interfaces == null)
 			{
 				throw new ArgumentNullException("interfaces");
 			}
-			if (handler == null)
+			if (interceptor == null)
 			{
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException("interceptor");
 			}
 			if (interfaces.Length == 0)
 			{
@@ -164,9 +165,9 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		protected static void AssertCreateProxyArguments(Type[] interfaces, IInvocationHandler handler, GeneratorContext context)
+		protected static void AssertCreateProxyArguments(Type[] interfaces, IInterceptor interceptor, GeneratorContext context)
 		{
-			AssertCreateProxyArguments(interfaces, handler);
+			AssertCreateProxyArguments(interfaces, interceptor);
 
 			if (context == null)
 			{
@@ -174,7 +175,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		protected static void AssertCreateClassProxyArguments(Type baseClass, IInvocationHandler handler)
+		protected static void AssertCreateClassProxyArguments(Type baseClass, IInterceptor interceptor)
 		{
 			if (baseClass == null)
 			{
@@ -184,15 +185,15 @@ namespace Castle.DynamicProxy
 			{
 				throw new ArgumentException("'baseClass' must be a class, not an interface");
 			}
-			if (handler == null)
+			if (interceptor == null)
 			{
-				throw new ArgumentNullException("handler");
+				throw new ArgumentNullException("interceptor");
 			}
 		}
 
-		protected static void AssertCreateClassProxyArguments(Type baseClass, IInvocationHandler handler, GeneratorContext context)
+		protected static void AssertCreateClassProxyArguments(Type baseClass, IInterceptor interceptor, GeneratorContext context)
 		{
-			AssertCreateClassProxyArguments(baseClass, handler);
+			AssertCreateClassProxyArguments(baseClass, interceptor);
 			if (context == null)
 			{
 				throw new ArgumentNullException("context");

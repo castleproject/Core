@@ -15,21 +15,39 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Reflection;
 
 	/// <summary>
-	/// Defines the handler that will receive all methods 
-	/// invoked on the proxy object.
+	/// Summary description for StandardInterceptor.
 	/// </summary>
-	public interface IInvocationHandler
+	[Serializable]
+	public class StandardInterceptor : IInterceptor
 	{
+		public StandardInterceptor()
+		{
+		}
+
+		protected virtual void PreProceed(IInvocation invocation, params object[] args)
+		{
+			
+		}
+
+		protected virtual void PostProceed(IInvocation invocation, ref object returnValue, params object[] args)
+		{
+			
+		}
+
 		/// <summary>
-		/// Implementation should invoke the method on the real object.
+		/// 
 		/// </summary>
-		/// <param name="proxy">proxy instance</param>
-		/// <param name="method"><see cref="System.Reflection.MethodInfo"/> being invoked.</param>
-		/// <param name="arguments">Arguments of method - if any</param>
-		/// <returns>Should return the result of method invocation</returns>
-		object Invoke(object proxy, MethodInfo method, params object[] arguments);
+		/// <param name="invocation"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		public virtual object Intercept(IInvocation invocation, params object[] args)
+		{
+			PreProceed(invocation, args);
+			object retValue = invocation.Proceed( args );
+			PostProceed(invocation, ref retValue, args);
+			return retValue;
+		}
 	}
 }

@@ -23,7 +23,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("Copyright (c) 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
-[assembly: AssemblyVersion("1.0.0.3")]
+[assembly: AssemblyVersion("1.0.1.0")]
 
 #if STRONG
 [assembly: AssemblyDelaySign(false)]

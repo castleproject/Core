@@ -1,4 +1,4 @@
- // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		private object m_lockobj = new object();
 
+		private int innerTypeCounter;
+
 		private AssemblyBuilder m_assemblyBuilder;
 
 		public ModuleBuilder ObtainDynamicModule()
@@ -69,6 +71,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			return m_moduleBuilder;
+		}
+
+		public int InnerTypeCounter
+		{
+			get { return innerTypeCounter++; }
 		}
 
 		public Type this[String name]

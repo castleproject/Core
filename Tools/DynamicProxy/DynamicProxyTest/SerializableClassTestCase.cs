@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Test
 
 			ProxyGenerator generator = new ProxyGenerator();
 			MySerializableClass proxy = (MySerializableClass) 
-				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInvocationHandler(myClass) );
+				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInterceptor() );
 
 			Assert.IsTrue( proxy.GetType().IsSerializable );
 		}
@@ -43,12 +43,11 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProxySerialization()
 		{
-			MySerializableClass myClass = new MySerializableClass();
-			DateTime current = myClass.Current;
-
 			ProxyGenerator generator = new ProxyGenerator();
 			MySerializableClass proxy = (MySerializableClass) 
-				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInvocationHandler(myClass) );
+				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInterceptor() );
+
+			DateTime current = proxy.Current;
 
 			MemoryStream stream = new MemoryStream();
 			BinaryFormatter formatter = new BinaryFormatter();

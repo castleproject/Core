@@ -1,4 +1,3 @@
-using System.Reflection.Emit;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
 	using System.Collections;
+	using System.Reflection.Emit;
 
 	/// <summary>
 	/// Summary description for OpCodesDictionary.
@@ -29,14 +29,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		private OpCodesDictionary() : base()
 		{
+			Dictionary[ typeof (bool) ] = OpCodes.Ldind_I1;
+			Dictionary[ typeof (SByte) ] = OpCodes.Ldind_I1;
 			Dictionary[ typeof (Int16) ] = OpCodes.Ldind_I2;
 			Dictionary[ typeof (Int32) ] = OpCodes.Ldind_I4;
 			Dictionary[ typeof (Int64) ] = OpCodes.Ldind_I8;
 			Dictionary[ typeof (float) ] = OpCodes.Ldind_R4;
 			Dictionary[ typeof (double) ] = OpCodes.Ldind_R8;
+			Dictionary[ typeof (byte) ] = OpCodes.Ldind_U1;
 			Dictionary[ typeof (UInt16) ] = OpCodes.Ldind_U2;
 			Dictionary[ typeof (UInt32) ] = OpCodes.Ldind_U4;
-			Dictionary[ typeof (bool) ] = OpCodes.Ldind_I4;
 		}
 
 		public OpCode this[Type type]

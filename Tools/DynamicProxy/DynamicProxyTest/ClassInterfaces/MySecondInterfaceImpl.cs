@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 
 		#region IMySecondInterface Members
 
-		public String Address
+		public virtual String Address
 		{
 			get
 			{

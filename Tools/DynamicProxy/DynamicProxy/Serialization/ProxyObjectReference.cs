@@ -20,14 +20,13 @@ namespace Castle.DynamicProxy.Serialization
 	/// <summary>
 	/// Summary description for ProxyObjectReference.
 	/// </summary>
+	[Serializable]
 	public class ProxyObjectReference : IObjectReference
 	{
-		public ProxyObjectReference()
-		{
-		}
-
 		public object GetRealObject(StreamingContext context)
 		{
+			Type baseType = (Type) context["baseType"];
+			
 			return null;
 		}
 	}

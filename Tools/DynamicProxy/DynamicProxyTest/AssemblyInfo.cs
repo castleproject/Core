@@ -15,11 +15,11 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("Avalon DynamicProxy Test cases")]
+[assembly: AssemblyTitle("DynamicProxy Test cases")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("DigitalCraftsmen - http://www.digitalcraftsmen.com.br/")]
-[assembly: AssemblyProduct("Avalon DynamicProxy Test cases")]
+[assembly: AssemblyProduct("DynamicProxy Test cases")]
 [assembly: AssemblyCopyright("Copyright (c) 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		

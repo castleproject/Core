@@ -26,14 +26,17 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// </summary>
 	public abstract class BaseCodeGenerator
 	{
-		private Type m_baseType = typeof (Object);
 		private TypeBuilder m_typeBuilder;
-		private FieldBuilder m_handlerField;
+		private FieldBuilder m_interceptorField;
+		private FieldBuilder m_cacheField;
 		private ConstructorBuilder m_constBuilder;
+		protected MethodBuilder m_method2Invocation;
+		protected Type m_baseType = typeof (Object);
+		
 		private IList m_generated = new ArrayList();
 
-		private GeneratorContext m_context;
 		private ModuleScope m_moduleScope;
+		private GeneratorContext m_context;
 
 		protected BaseCodeGenerator(ModuleScope moduleScope) : this(moduleScope, new GeneratorContext())
 		{
@@ -60,9 +63,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get { return m_typeBuilder; }
 		}
 
-		protected FieldBuilder HandlerFieldBuilder
+		protected FieldBuilder InterceptorFieldBuilder
 		{
-			get { return m_handlerField; }
+			get { return m_interceptorField; }
+		}
+
+		protected FieldBuilder CacheFieldBuilder
+		{
+			get { return m_cacheField; }
 		}
 
 		protected ConstructorBuilder DefaultConstructorBuilder
@@ -92,10 +100,18 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			m_typeBuilder = moduleBuilder.DefineType(
 				typeName, flags, baseType, interfaces);
 
-			m_handlerField = GenerateField();
+			GenerateFields();
+
 			m_constBuilder = GenerateConstructor();
 
 			return m_typeBuilder;
+		}
+
+		protected virtual void GenerateFields()
+		{
+			m_interceptorField = GenerateField("__interceptor", typeof (IInterceptor));
+			m_cacheField = GenerateField("__cache", typeof (Hashtable), 
+				FieldAttributes.Family|FieldAttributes.NotSerialized);
 		}
 
 		protected virtual String GenerateTypeName(Type type, Type[] interfaces)
@@ -112,56 +128,114 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual void ImplementGetObjectData()
 		{
-			// Avoiding re-generate this method.
-			m_generated.Add( typeof(ISerializable) );
+			// To prevent re-implementation of this interface.
+			m_generated.Add(typeof (ISerializable));
 
-			Type[] args = new Type[] { typeof(SerializationInfo), typeof(StreamingContext) };
-			Type[] get_type_args = new Type[] { typeof(String), typeof(bool), typeof(bool) };
-			Type[] key_and_object = new Type[] { typeof(String), typeof(Object) };
+			Type[] args = new Type[] {typeof (SerializationInfo), typeof (StreamingContext)};
+			Type[] get_type_args = new Type[] {typeof (String), typeof (bool), typeof (bool)};
+			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
 
-			MethodAttributes attrs = MethodAttributes.HideBySig|MethodAttributes.Virtual|MethodAttributes.Public;
-			MethodBuilder builder = MainTypeBuilder.DefineMethod("GetObjectData", attrs, typeof(void), args);
-		
+			MethodAttributes attrs = MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;
+			MethodBuilder builder = MainTypeBuilder.DefineMethod("GetObjectData", attrs, typeof (void), args);
+
 			ILGenerator generator = builder.GetILGenerator();
-			LocalBuilder type_local = generator.DeclareLocal( typeof(Type) );
-			
+			LocalBuilder type_local = generator.DeclareLocal(typeof (Type));
+
 			// type name declared
 			generator.Emit(OpCodes.Ldstr, "Castle.DynamicProxy.Serialization.ProxyObjectReference, Castle.DynamicProxy");
 			generator.Emit(OpCodes.Ldc_I4_1); // true
 			generator.Emit(OpCodes.Ldc_I4_0); // false
-			generator.Emit(OpCodes.Call, typeof(Type).GetMethod("GetType", get_type_args) );
+			generator.Emit(OpCodes.Call, typeof (Type).GetMethod("GetType", get_type_args));
 
+			// We set the class responsible for
+			// serialize/desserialize the proxy
 			generator.Emit(OpCodes.Stloc_0);
 			generator.Emit(OpCodes.Ldarg_1);
 			generator.Emit(OpCodes.Ldloc_0);
-			generator.Emit(OpCodes.Callvirt, typeof(SerializationInfo).GetMethod("SetType") );
+			generator.Emit(OpCodes.Callvirt, typeof (SerializationInfo).GetMethod("SetType"));
+
+			// We need to save a few things to allow
+			// the proxy to be reconstructed later.
+			generator.Emit(OpCodes.Ldarg_1);
+			generator.Emit(OpCodes.Ldstr, "interceptor");
+			generator.Emit(OpCodes.Ldarg_0);
+			generator.Emit(OpCodes.Ldfld, InterceptorFieldBuilder);
+			generator.Emit(OpCodes.Callvirt, typeof (SerializationInfo).GetMethod("AddValue", key_and_object));
 
 			generator.Emit(OpCodes.Ldarg_1);
-			generator.Emit(OpCodes.Ldstr, "handler");
-			generator.Emit(OpCodes.Ldarg_0);
-			generator.Emit(OpCodes.Ldfld, m_handlerField);
+			generator.Emit(OpCodes.Ldstr, "baseType");
+			generator.Emit(OpCodes.Ldtoken, this.m_baseType);
+			generator.Emit(OpCodes.Call, typeof (Type).GetMethod("GetTypeFromHandle"));
+			generator.Emit(OpCodes.Callvirt, typeof (SerializationInfo).GetMethod("AddValue", key_and_object));
 
-			generator.Emit(OpCodes.Callvirt, typeof(SerializationInfo).GetMethod("AddValue", key_and_object) );
+
+
+			generator.Emit(OpCodes.Ret);
 		}
 
-		protected virtual void EnhanceType()
+		protected virtual void ImplementCacheInvocationCache()
 		{
-			if (Context.EnhanceType != null)
-			{
-				Context.EnhanceType(MainTypeBuilder, HandlerFieldBuilder, DefaultConstructorBuilder);
-			}
-		}
+			Type[] args = new Type[] {typeof (ICallable), typeof (MethodInfo), typeof(object)};
+			Type[] invocation_const_args = new Type[] {typeof (ICallable), typeof(object), typeof(object), typeof (MethodInfo)};
+			Type[] int_invocation_const_args = new Type[] {typeof(object), typeof(object), typeof (MethodInfo)};
 
-		protected virtual Type[] ScreenInterfaces(Type[] interfaces)
-		{
-			interfaces = AddISerializable(interfaces);
+			MethodAttributes attrs = MethodAttributes.Private;
+			m_method2Invocation = MainTypeBuilder.DefineMethod("_Method2Invocation", attrs, typeof (IInvocation), args);
 
-			if (Context.ScreenInterfaces != null)
-			{
-				interfaces = Context.ScreenInterfaces(interfaces);
-			}
+			ILGenerator gen = m_method2Invocation.GetILGenerator();
+			LocalBuilder inv_local = gen.DeclareLocal(typeof (IInvocation));
 
-			return interfaces;
+			Label endMethodBranch = gen.DefineLabel();
+			Label interfaceInvocationBranch = gen.DefineLabel();
+			Label setInCacheBranch = gen.DefineLabel();
+			Label retValueBranch = gen.DefineLabel();
+
+			// Try to obtain the invocation stored in the Hashtable
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Ldfld, CacheFieldBuilder);
+			gen.Emit(OpCodes.Ldarg_2);
+			gen.Emit(OpCodes.Callvirt, typeof(Hashtable).GetMethod("get_Item", new Type[] { typeof(object) } ));
+			gen.Emit(OpCodes.Castclass, typeof(IInvocation));
+			gen.Emit(OpCodes.Stloc_0);
+
+			// If not null, goto to return
+			gen.Emit(OpCodes.Ldloc_0);
+			gen.Emit(OpCodes.Brtrue_S, endMethodBranch);
+
+			// If target != this
+			gen.Emit(OpCodes.Ldarg_3);
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Bne_Un_S, interfaceInvocationBranch);
+
+			// Create a SameClassInvocation
+			gen.Emit(OpCodes.Ldarg_1); // Callable
+			gen.Emit(OpCodes.Ldarg_0); // this
+			gen.Emit(OpCodes.Ldarg_0); // this
+			gen.Emit(OpCodes.Ldarg_2); // MethodInfo
+			gen.Emit(OpCodes.Newobj, typeof(SameClassInvocation).GetConstructor(invocation_const_args) );
+			gen.Emit(OpCodes.Stloc_0);
+			gen.Emit(OpCodes.Br_S, setInCacheBranch);
+
+			gen.MarkLabel(interfaceInvocationBranch);
+			gen.Emit(OpCodes.Ldarg_0); // this
+			gen.Emit(OpCodes.Ldarg_3); // target
+			gen.Emit(OpCodes.Ldarg_2); // MethodInfo
+			gen.Emit(OpCodes.Newobj, typeof(InterfaceInvocation).GetConstructor(int_invocation_const_args) );
+			gen.Emit(OpCodes.Stloc_0);
+
+			gen.MarkLabel(setInCacheBranch);
+			gen.Emit(OpCodes.Ldarg_0); // this
+			gen.Emit(OpCodes.Ldfld, CacheFieldBuilder); 
+			gen.Emit(OpCodes.Ldarg_2); // MethodInfo as key
+			gen.Emit(OpCodes.Ldloc_0); // IInvocation instance as value
+			gen.Emit(OpCodes.Callvirt, typeof(Hashtable).GetMethod("Add", new Type[] { typeof(object), typeof(object) } ));
+			
+			gen.MarkLabel(endMethodBranch);
+			gen.Emit(OpCodes.Br_S, retValueBranch);
+
+			gen.MarkLabel(retValueBranch);
+			gen.Emit(OpCodes.Ldloc_0); 
+			gen.Emit(OpCodes.Ret); 
 		}
 
 		protected virtual Type[] AddISerializable(Type[] interfaces)
@@ -188,50 +262,29 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		}
 
 		/// <summary>
-		/// Generates a public field holding the <see cref="IInvocationHandler"/>
-		/// </summary>
-		/// <returns><see cref="FieldBuilder"/> instance</returns>
-		protected FieldBuilder GenerateField()
-		{
-			return GenerateField("handler", typeof (IInvocationHandler));
-		}
-
-		/// <summary>
-		/// Generates a public field
+		/// Generates a protected field
 		/// </summary>
 		/// <param name="name">Field's name</param>
 		/// <param name="type">Field's type</param>
 		/// <returns></returns>
 		protected FieldBuilder GenerateField(String name, Type type)
 		{
-			return m_typeBuilder.DefineField(name,
-			                                 typeof (IInvocationHandler), FieldAttributes.Public);
+			return GenerateField(name, type, FieldAttributes.Family);
+		}
+
+		protected FieldBuilder GenerateField(String name, Type type, FieldAttributes attrs)
+		{
+			return m_typeBuilder.DefineField(name, type, attrs);
 		}
 
 		/// <summary>
 		/// Generates one public constructor receiving 
-		/// the <see cref="IInvocationHandler"/> instance.
+		/// the <see cref="IInterceptor"/> instance and instantiating a hashtable
 		/// </summary>
 		/// <returns><see cref="ConstructorBuilder"/> instance</returns>
-		protected ConstructorBuilder GenerateConstructor()
-		{
-			ConstructorBuilder consBuilder = m_typeBuilder.DefineConstructor(
-				MethodAttributes.Public,
-				CallingConventions.Standard,
-				new Type[] {typeof (IInvocationHandler)});
+		protected abstract ConstructorBuilder GenerateConstructor();
 
-			ILGenerator ilGenerator = consBuilder.GetILGenerator();
-			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Call, ObtainAvailableConstructor(m_baseType));
-			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Ldarg_1);
-			ilGenerator.Emit(OpCodes.Stfld, m_handlerField);
-			ilGenerator.Emit(OpCodes.Ret);
-
-			return consBuilder;
-		}
-
-		private ConstructorInfo ObtainAvailableConstructor(Type target)
+		protected ConstructorInfo ObtainAvailableConstructor(Type target)
 		{
 			return target.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[0], null);
 		}
@@ -302,11 +355,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				{
 					continue;
 				}
-				if (method.DeclaringType.Equals(typeof(Object)) && !method.IsVirtual)
+				if (method.DeclaringType.Equals(typeof (Object)) && !method.IsVirtual)
 				{
 					continue;
 				}
-				if (method.DeclaringType.Equals(typeof(Object)) && "Finalize".Equals(method.Name) )
+				if (method.DeclaringType.Equals(typeof (Object)) && "Finalize".Equals(method.Name))
 				{
 					continue;
 				}
@@ -332,11 +385,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected void GenerateMethodImplementation(
 			MethodInfo method, PropertyBuilder[] properties)
 		{
-			if (method.IsFinal)
-			{
-				return;
-			}
-
 			ParameterInfo[] parameterInfo = method.GetParameters();
 
 			Type[] parameters = new Type[parameterInfo.Length];
@@ -352,7 +400,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			{
 				// Sorry. To avoid future problems we
 				// decide to not allow NonVirtual members
-				throw new ProxyGenerationException(String.Format("Can't generate stub for non-virtual member " + 
+				throw new ProxyGenerationException(String.Format("Can't generate stub for non-virtual member " +
 					"{0} declared by {1}", method.Name, method.DeclaringType.FullName));
 			}
 
@@ -360,7 +408,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			{
 				atts |= MethodAttributes.Public;
 			}
-			
+
 			if (method.IsFamilyAndAssembly)
 			{
 				atts |= MethodAttributes.FamANDAssem;
@@ -410,150 +458,29 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				}
 			}
 
-			WriteILForMethod(method, methodBuilder, parameters, HandlerFieldBuilder);
+			PreProcessMethod(method);
+			
+			WriteILForMethod(method, methodBuilder, parameters);
+			
+			PostProcessMethod(method);
+		}
+
+		protected virtual void PreProcessMethod(MethodInfo method)
+		{
+		}
+
+		protected virtual void PostProcessMethod(MethodInfo method)
+		{
 		}
 
 		/// <summary>
-		/// Writes the stack for the method implementation. This 
-		/// method generates the IL stack for property get/set method and
+		/// Writes the method implementation. This 
+		/// method generates the IL code for property get/set method and
 		/// ordinary methods.
 		/// </summary>
-		/// <remarks>
-		/// The method implementation would be as simple as:
-		/// <code>
-		/// public void SomeMethod( int parameter )
-		/// {
-		///     MethodBase method = MethodBase.GetCurrentMethod();
-		///     handler.Invoke( this, method, new object[] { parameter } );
-		/// }
-		/// </code>
-		/// </remarks>
 		/// <param name="builder"><see cref="MethodBuilder"/> being constructed.</param>
 		/// <param name="parameters"></param>
-		/// <param name="handlerField"></param>
-		protected void WriteILForMethod(MethodInfo method, MethodBuilder builder,
-		                                Type[] parameters, FieldBuilder handlerField)
-		{
-			int arrayPositionInStack = 2;
-
-			ILGenerator ilGenerator = builder.GetILGenerator();
-
-			ilGenerator.DeclareLocal(typeof (MethodBase));
-			ilGenerator.DeclareLocal(typeof (MethodInfo));
-
-			if (builder.ReturnType != typeof (void))
-			{
-				ilGenerator.DeclareLocal(builder.ReturnType);
-				arrayPositionInStack = 3;
-			}
-
-			ilGenerator.DeclareLocal(typeof (object[]));
-
-			ilGenerator.Emit(OpCodes.Ldtoken, method);
-			ilGenerator.Emit(OpCodes.Call, typeof (MethodBase).GetMethod("GetMethodFromHandle"));
-			ilGenerator.Emit(OpCodes.Stloc_0);
-
-			ilGenerator.Emit(OpCodes.Ldloc_0);
-			ilGenerator.Emit(OpCodes.Castclass, typeof(MethodInfo));
-			ilGenerator.Emit(OpCodes.Stloc_1);
-
-
-			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Ldfld, handlerField);
-			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Ldloc_1);
-			ilGenerator.Emit(OpCodes.Ldc_I4, parameters.Length);
-			ilGenerator.Emit(OpCodes.Newarr, typeof (object));
-
-			if (parameters.Length != 0)
-			{
-				ilGenerator.Emit(OpCodes.Stloc, arrayPositionInStack);
-				ilGenerator.Emit(OpCodes.Ldloc, arrayPositionInStack);
-			}
-
-			for (int c = 0; c < parameters.Length; c++)
-			{
-				ilGenerator.Emit(OpCodes.Ldc_I4, c);
-				ilGenerator.Emit(OpCodes.Ldarg, c + 1);
-
-				if (parameters[c].IsValueType)
-				{
-					ilGenerator.Emit(OpCodes.Box, parameters[c].UnderlyingSystemType);
-				}
-
-				ilGenerator.Emit(OpCodes.Stelem_Ref);
-				ilGenerator.Emit(OpCodes.Ldloc, arrayPositionInStack);
-			}
-
-			ilGenerator.Emit(OpCodes.Callvirt, typeof (IInvocationHandler).GetMethod("Invoke"));
-
-			if (builder.ReturnType != typeof (void))
-			{
-				if (!builder.ReturnType.IsValueType)
-				{
-					ilGenerator.Emit(OpCodes.Castclass, builder.ReturnType);
-				}
-				else
-				{
-					ilGenerator.Emit(OpCodes.Unbox, builder.ReturnType);
-					ilGenerator.Emit(ConvertTypeToOpCode(builder.ReturnType));
-				}
-
-				ilGenerator.Emit(OpCodes.Stloc, 1);
-
-				Label label = ilGenerator.DefineLabel();
-				ilGenerator.Emit(OpCodes.Br_S, label);
-				ilGenerator.MarkLabel(label);
-				ilGenerator.Emit(OpCodes.Ldloc, 1);
-			}
-			else
-			{
-				ilGenerator.Emit(OpCodes.Pop);
-			}
-
-			ilGenerator.Emit(OpCodes.Ret);
-		}
-
-		/// <summary>
-		/// Converts a Value type to a correspondent OpCode of 
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		protected virtual OpCode ConvertTypeToOpCode(Type type)
-		{
-			if (type.IsEnum)
-			{
-				Enum baseType = (Enum) Activator.CreateInstance(type);
-				TypeCode code = baseType.GetTypeCode();
-
-				switch (code)
-				{
-					case TypeCode.Byte:
-						type = typeof (Byte);
-						break;
-					case TypeCode.Int16:
-						type = typeof (Int16);
-						break;
-					case TypeCode.Int32:
-						type = typeof (Int32);
-						break;
-					case TypeCode.Int64:
-						type = typeof (Int64);
-						break;
-				}
-
-				return ConvertTypeToOpCode(type);
-			}
-
-			OpCode opCode = OpCodesDictionary.Instance[type];
-
-			if (Object.ReferenceEquals(opCode, OpCodesDictionary.EmptyOpCode))
-			{
-				throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
-			}
-
-			return opCode;
-		}
+		protected abstract void WriteILForMethod(MethodInfo method, MethodBuilder builder, Type[] parameters);
 
 		public static bool NoFilterImpl(Type type, object criteria)
 		{

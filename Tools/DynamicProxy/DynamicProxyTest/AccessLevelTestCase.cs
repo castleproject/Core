@@ -30,12 +30,14 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProtectedConstructor()
 		{
-			NonPublicConstructorClass myClass = NonPublicConstructorClass.Create();
-
 			ProxyGenerator generator = new ProxyGenerator();
 
-			NonPublicConstructorClass proxy = (NonPublicConstructorClass) 
-				generator.CreateClassProxy( typeof(NonPublicConstructorClass), new StandardInvocationHandler(myClass) );
+			NonPublicConstructorClass proxy =  
+				generator.CreateClassProxy( 
+					typeof(NonPublicConstructorClass), new StandardInterceptor() ) 
+						as NonPublicConstructorClass;
+
+			Assert.IsNotNull(proxy);
 
 			proxy.DoSomething();
 		}
@@ -43,11 +45,10 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProtectedMethods()
 		{
-			NonPublicMethodsClass myClass = new NonPublicMethodsClass();
-
 			ProxyGenerator generator = new ProxyGenerator();
 
-			LogInvocationHandler logger = new LogInvocationHandler(myClass);
+			LogInvocationInterceptor logger = new LogInvocationInterceptor();
+
 			NonPublicMethodsClass proxy = (NonPublicMethodsClass) 
 				generator.CreateClassProxy( typeof(NonPublicMethodsClass), logger );
 
@@ -57,20 +58,15 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual( "DoSomething", logger.Invocations[0] );
 			Assert.AreEqual( "DoOtherThing", logger.Invocations[1] );
 		}
-
 	}
 
-	public class LogInvocationHandler : StandardInvocationHandler
+	public class LogInvocationInterceptor : StandardInterceptor
 	{
 		protected ArrayList invocations = new ArrayList();
 
-		public LogInvocationHandler( object instanceDelegate ) : base(instanceDelegate)
+		protected override void PreProceed(IInvocation invocation, params object[] arguments)
 		{
-		}
-
-		protected override void PreInvoke(object proxy, System.Reflection.MethodInfo method, params object[] arguments)
-		{
-			invocations.Add(method.Name);
+			invocations.Add(invocation.Method.Name);
 		}
 
 		public String[] Invocations

@@ -89,7 +89,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IInvocationHandler.cs"
+                    RelPath = "Invocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -99,7 +99,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "StandardInvocationHandler.cs"
+                    RelPath = "StandardInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -124,6 +124,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeGenerators\CallableDelegateBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeGenerators\ClassProxyGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -144,12 +149,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Builder\CodeGenerators\ProxyGenerationException.cs"
+                    RelPath = "Builder\CodeGenerators\OpCodeUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Serialization\ProxyFake.cs"
+                    RelPath = "Builder\CodeGenerators\ProxyGenerationException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

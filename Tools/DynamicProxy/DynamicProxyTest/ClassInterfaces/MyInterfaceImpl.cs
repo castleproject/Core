@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 
 		#region IMyInterface Members
 
-		public String Name
+		public virtual String Name
 		{
 			get
 			{
@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 			}
 		}
 
-		public bool Started
+		public virtual bool Started
 		{
 			get
 			{

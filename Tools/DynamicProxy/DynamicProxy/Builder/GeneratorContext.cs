@@ -22,31 +22,10 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public sealed class GeneratorContext : DictionaryBase
 	{
-		private EnhanceTypeDelegate m_enhance;
-		private ScreenInterfacesDelegate m_screenInterfaces;
 		private IList m_skipInterfaces = new ArrayList();
 
 		public GeneratorContext()
 		{
-		}
-
-		public GeneratorContext(EnhanceTypeDelegate enhanceDelegate, 
-			ScreenInterfacesDelegate screenDelegate)
-		{
-			m_enhance = enhanceDelegate;
-			m_screenInterfaces = screenDelegate;
-		}
-
-		public EnhanceTypeDelegate EnhanceType
-		{
-			get { return m_enhance; }
-			set { m_enhance = value; }
-		}
-
-		public ScreenInterfacesDelegate ScreenInterfaces
-		{
-			get { return m_screenInterfaces; }
-			set { m_screenInterfaces = value; }
 		}
 
 		public bool ShouldSkip( Type interfaceType )

@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Test
 		public void ProxyForClass()
 		{
 			object proxy = m_generator.CreateClassProxy( 
-				typeof(ServiceClass), new ResultModifiedInvocationHandler( new ServiceClass() ) );
+				typeof(ServiceClass), new ResultModifiedInvocationHandler( ) );
 			
 			Assert.IsNotNull( proxy );
 			Assert.IsTrue( typeof(ServiceClass).IsAssignableFrom( proxy.GetType() ) );
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Test
 		public void ProxyForClassWithSuperClass()
 		{
 			object proxy = m_generator.CreateClassProxy( 
-				typeof(SpecializedServiceClass), new ResultModifiedInvocationHandler( new SpecializedServiceClass() ) );
+				typeof(SpecializedServiceClass), new ResultModifiedInvocationHandler( ) );
 			
 			Assert.IsNotNull( proxy );
 			Assert.IsTrue( typeof(ServiceClass).IsAssignableFrom( proxy.GetType() ) );
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Test
 		public void ProxyForClassWhichImplementsInterfaces()
 		{
 			object proxy = m_generator.CreateClassProxy( 
-				typeof(MyInterfaceImpl), new ResultModifiedInvocationHandler( new MyInterfaceImpl() ) );
+				typeof(MyInterfaceImpl), new ResultModifiedInvocationHandler( ) );
 			
 			Assert.IsNotNull( proxy );
 			Assert.IsTrue( typeof(MyInterfaceImpl).IsAssignableFrom( proxy.GetType() ) );
@@ -90,7 +90,7 @@ namespace Castle.DynamicProxy.Test
 		public void ProxyingClassWithoutVirtualMethods()
 		{
 			m_generator.CreateClassProxy( 
-				typeof(NoVirtualMethodClass), new ResultModifiedInvocationHandler( new SpecializedServiceClass() ) );
+				typeof(NoVirtualMethodClass), new ResultModifiedInvocationHandler( ) );
 		}
 
 		[Test]
@@ -98,7 +98,7 @@ namespace Castle.DynamicProxy.Test
 		public void ProxyingClassWithSealedMethods()
 		{
 			m_generator.CreateClassProxy( 
-				typeof(SealedMethodsClass), new ResultModifiedInvocationHandler( new SpecializedServiceClass() ) );
+				typeof(SealedMethodsClass), new ResultModifiedInvocationHandler( ) );
 		}
 
 		[Test]
@@ -107,7 +107,7 @@ namespace Castle.DynamicProxy.Test
 			try
 			{
 				m_generator.CreateClassProxy( 
-					typeof(ICloneable), new StandardInvocationHandler( new SpecializedServiceClass() ) );
+					typeof(ICloneable), new StandardInterceptor( ) );
 			}
 			catch(ArgumentException)
 			{
@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy.Test
 			try
 			{
 				m_generator.CreateClassProxy( 
-					null, new StandardInvocationHandler( new SpecializedServiceClass() ) );
+					null, new StandardInterceptor( ) );
 			}
 			catch(ArgumentNullException)
 			{
@@ -139,7 +139,7 @@ namespace Castle.DynamicProxy.Test
 		public void TestGenerationSimpleInterface()
 		{
 			object proxy = m_generator.CreateProxy( 
-				typeof(IMyInterface), new StandardInvocationHandler( new MyInterfaceImpl() ) );
+				typeof(IMyInterface), new StandardInterceptor( ), new MyInterfaceImpl() );
 			
 			Assert.IsNotNull( proxy );
 			Assert.IsTrue( typeof(IMyInterface).IsAssignableFrom( proxy.GetType() ) );
@@ -159,7 +159,7 @@ namespace Castle.DynamicProxy.Test
 		public void TestGenerationWithInterfaceHeritage()
 		{
 			object proxy = m_generator.CreateProxy( 
-				typeof(IMySecondInterface), new StandardInvocationHandler( new MySecondInterfaceImpl() ) );
+				typeof(IMySecondInterface), new StandardInterceptor( ), new MySecondInterfaceImpl() );
 
 			Assert.IsNotNull( proxy );
 			Assert.IsTrue( typeof(IMyInterface).IsAssignableFrom( proxy.GetType() ) );
@@ -183,7 +183,7 @@ namespace Castle.DynamicProxy.Test
 			ServiceStatusImpl service = new ServiceStatusImpl();
 
 			object proxy = m_generator.CreateProxy( 
-				typeof(IServiceStatus), new StandardInvocationHandler( service ) );
+				typeof(IServiceStatus), new StandardInterceptor( ), service );
 			
 			Assert.IsNotNull( proxy );
 			Assert.IsTrue( typeof(IServiceStatus).IsAssignableFrom( proxy.GetType() ) );
@@ -195,26 +195,18 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual( State.Valid, inter.ActualState );
 		}
 
-		public class MyInterfaceProxy : IInvocationHandler
+		public class MyInterfaceProxy : IInterceptor
 		{
-			#region IInvocationHandler Members
-
-			public object Invoke(object proxy, MethodInfo method, params object[] arguments)
+			public object Intercept(IInvocation invocation, params object[] args)
 			{
 				return null;
 			}
-
-			#endregion
 		}
 	}
 
-	public class ResultModifiedInvocationHandler : StandardInvocationHandler
+	public class ResultModifiedInvocationHandler : StandardInterceptor
 	{
-		public ResultModifiedInvocationHandler( object instanceDelegate ) : base(instanceDelegate)
-		{
-		}
-
-		protected override void PostInvoke(object proxy, System.Reflection.MethodInfo method, ref object returnValue, params object[] arguments)
+		protected override void PostProceed(IInvocation invocation, ref object returnValue, params object[] arguments)
 		{
 			if ( returnValue != null && returnValue.GetType() == typeof(int))
 			{
@@ -224,5 +216,3 @@ namespace Castle.DynamicProxy.Test
 		}
 	}
 }
-
-

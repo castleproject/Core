@@ -32,13 +32,13 @@ namespace Castle.DynamicProxy.Test
 		public void CachedClassProxies()
 		{
 			object proxy = m_generator.CreateClassProxy( 
-				typeof(ServiceClass), new StandardInvocationHandler( new ServiceClass() ) );
+				typeof(ServiceClass), new StandardInterceptor( ) );
 			
 			Assert.IsNotNull(proxy);
 			Assert.IsTrue( typeof(ServiceClass).IsAssignableFrom( proxy.GetType() ) );
 
 			proxy = m_generator.CreateClassProxy( 
-				typeof(ServiceClass), new StandardInvocationHandler( new ServiceClass() ) );
+				typeof(ServiceClass), new StandardInterceptor( ) );
 			
 			Assert.IsNotNull(proxy);
 			Assert.IsTrue( typeof(ServiceClass).IsAssignableFrom( proxy.GetType() ) );
