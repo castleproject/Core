@@ -16,19 +16,16 @@ namespace Castle.CastleOnRails.Generator.Generators
 {
 	using System;
 	using System.IO;
-	using System.Text;
 	using System.Collections;
-	using System.ComponentModel;
-
-	using Castle.Components.Common.TemplateEngine;
-	using Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine;
 
 
 	/// <summary>
-	/// 
+	/// Generates a project skeleton.
 	/// </summary>
-	public class ProjectGenerator : IGenerator
+	public class ProjectGenerator : AbstractGenerator, IGenerator
 	{
+		private DirectoryInfo rootDir;
+		private DirectoryInfo frameworkDir;
 		private DirectoryInfo projectDir;
 		private DirectoryInfo projectTestDir;
 		private DirectoryInfo controllersDir;
@@ -36,22 +33,10 @@ namespace Castle.CastleOnRails.Generator.Generators
 		private DirectoryInfo viewsDir;
 		private DirectoryInfo libDir;
 		private bool useWindsorIntegration;
-		private ITemplateEngine engine;
 		private bool isNVelocity;
-		private DirectoryInfo rootDir;
-		private DirectoryInfo frameworkDir;
-
 
 		public ProjectGenerator()
 		{
-			// TODO: Move templates to bin directory
-
-			String templatePath = Path.Combine( 
-				AppDomain.CurrentDomain.BaseDirectory, 
-				@"../Castle.CastleOnRails.Generator/templates" );
-
-			engine = new NVelocityTemplateEngine(templatePath);
-			(engine as ISupportInitialize).BeginInit();
 		}
 
 		#region IGenerator Members
@@ -82,10 +67,14 @@ namespace Castle.CastleOnRails.Generator.Generators
 			else if (!options.Contains("outdir"))
 			{
 				writer.WriteLine("outdir must be specified");
+				
+				return false;
 			}
 			else if (!options.Contains("name"))
 			{
 				writer.WriteLine("name must be specified");
+				
+				return false;
 			}
 			else 
 			{
@@ -95,6 +84,8 @@ namespace Castle.CastleOnRails.Generator.Generators
 				{
 					// info.Create(); // Is it safe to use it?
 					writer.WriteLine("Error: The specified outdir does not exists.");
+
+					return false;
 				}
 			}
 
@@ -103,6 +94,8 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 		public void Execute(IDictionary options, TextWriter writer)
 		{
+			writer.WriteLine("Generating Project...");
+
 			// Start up
 
 			useWindsorIntegration = options.Contains("windsor");
@@ -116,11 +109,15 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 			// 1. Create a controllers and views Directory
 
+			writer.WriteLine("Creating directories...");
 			CreateDirectories(name, options, writer);
+
+			writer.WriteLine("Copying files...");
 			CopyFiles(name, options, writer);
 
 			// 2. Create a proper web.config
 
+			writer.WriteLine("Creating web.config...");
 			CreateWebConfig(options, writer);
 
 			// 3. Create a build file?
@@ -129,7 +126,11 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 			// 4. Create the sln and the proper csproj (references to assemblies)
 
+			writer.WriteLine("Creating solution...");
 			CreateSolution(name, options, writer);
+
+
+			writer.WriteLine("Done!");
 		}
 
 		#endregion
@@ -161,6 +162,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 			String templateName = "webconfig.vm";
 
 			Hashtable ctx = new Hashtable();
+			ctx.Add("name", options["name"]);
 			ctx.Add("viewpath", viewsDir.FullName);
 			ctx.Add("useWindsorIntegration", useWindsorIntegration);
 
@@ -180,6 +182,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 		private void CreateNAntBuildFile(IDictionary options, TextWriter writer)
 		{
+			// TODO: ?? Is it worthwhile?
 		}
 
 		private void CreateSolution(string name, IDictionary options, TextWriter writer)
@@ -199,6 +202,9 @@ namespace Castle.CastleOnRails.Generator.Generators
 			WriteTemplateFile(Path.Combine(rootDir.FullName, name + ".sln"), ctx, "solution.vm");
 			WriteTemplateFile(Path.Combine(projectDir.FullName, name + ".csproj"), ctx, "csproj.vm");
 			WriteTemplateFile(Path.Combine(projectTestDir.FullName, name + ".Tests.csproj"),  ctx, "csprojtest.vm");
+			WriteTemplateFile(Path.Combine(projectTestDir.FullName, "AbstractCassiniTestCase.cs"),  ctx, "abstractcassini.vm");
+
+			
 
 			if (useWindsorIntegration)
 			{
@@ -208,20 +214,13 @@ namespace Castle.CastleOnRails.Generator.Generators
 			}
 		}
 
-		private void WriteTemplateFile(String filename, Hashtable ctx, string templateName)
-		{
-			using (StreamWriter swriter = new StreamWriter(filename, false, Encoding.Default))
-			{
-				engine.Process(ctx, templateName, swriter);
-			}
-		}
-
 		private void CopyFiles(string name, IDictionary options, TextWriter writer)
 		{
 			String sourcedir = AppDomain.CurrentDomain.BaseDirectory;
 
 			CopyFileToLib(sourcedir, "Castle.CastleOnRails.Engine.dll");
 			CopyFileToLib(sourcedir, "Castle.CastleOnRails.Framework.dll");
+			CopyFileToLib(sourcedir, "Cassini.dll");
 			
 			if (isNVelocity)
 			{

@@ -89,11 +89,25 @@
                     Project = "{${projid}}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Cassini"
+                    AssemblyName = "Cassini"
+                    HintPath = "..\lib\Cassini.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework"
+                    AssemblyName = "Castle.CastleOnRails.Framework"
+                    HintPath = "..\lib\Castle.CastleOnRails.Framework.dll"
+                />
              </References>
         </Build>
         <Files>
             <Include>
-
+                <File
+                    RelPath = "AbstractCassiniTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>

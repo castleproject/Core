@@ -15,6 +15,14 @@
 		<viewEngine 
 			viewPathRoot="$viewpath" 
 			customEngine="$viewenginetypename" />
+#if($useWindsorIntegration)
+		<customControllerFactory type="Castle.CastleOnRails.WindsorExtension.WindsorControllerFactory, Castle.CastleOnRails.WindsorExtension" />
+		<customFilterFactory type="Castle.CastleOnRails.WindsorExtension.WindsorFilterFactory, Castle.CastleOnRails.WindsorExtension" />
+#else
+		<controllers>
+			<assembly>${name}</assembly>
+		</controllers>
+#end
     </rails>
 #if($useWindsorIntegration)
 

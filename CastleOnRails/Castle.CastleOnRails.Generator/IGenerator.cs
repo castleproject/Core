@@ -18,11 +18,26 @@ namespace Castle.CastleOnRails.Generator
 	using System.IO;
 	using System.Collections;
 
-
+	/// <summary>
+	/// Abstract a generator implementation
+	/// </summary>
 	public interface IGenerator
 	{
-		bool Accept(String name, IDictionary options, TextWriter writer);
+		/// <summary>
+		/// Ask the generator instance if is support the 
+		/// arguments specified on the command line.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="options"></param>
+		/// <param name="output"></param>
+		/// <returns></returns>
+		bool Accept(String name, IDictionary options, TextWriter output);
 
-		void Execute(IDictionary options, TextWriter writer);
+		/// <summary>
+		/// If accepted, ask it to execute
+		/// </summary>
+		/// <param name="options"></param>
+		/// <param name="output"></param>
+		void Execute(IDictionary options, TextWriter output);
 	}
 }

@@ -128,9 +128,23 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Generators\AbstractGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\ControllerGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Generators\ProjectGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "templates\abstractcassini.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "templates\container.vm"
@@ -150,6 +164,14 @@
                 />
                 <File
                     RelPath = "templates\httpapp.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\newview.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\newviewaspx.vm"
                     BuildAction = "None"
                 />
                 <File

@@ -43,15 +43,22 @@ namespace Castle.CastleOnRails.Generator
 			else
 			{
 				IDictionary dic = BuildDictionary(args);
+//				bool found = false;
 
 				foreach(IGenerator generator in generators)
 				{
 					if (generator.Accept(args[1], dic, Console.Out))
 					{
+//						found = true;
 						generator.Execute(dic, Console.Out);
 						break;
 					}
 				}
+
+//				if (!found)
+//				{
+//					Console.Out.WriteLine("No generator found for '{0}'", args[1]);
+//				}
 			}
 		}
 
@@ -86,7 +93,6 @@ namespace Castle.CastleOnRails.Generator
 			Console.WriteLine("Actions:");
 			Console.WriteLine("  project");
 			Console.WriteLine("  controller");
-			Console.WriteLine("  model");
 			Console.WriteLine("");
 			Console.WriteLine("Try 'generator action' for more information about the action");
 		}
@@ -103,7 +109,7 @@ namespace Castle.CastleOnRails.Generator
 
 		private static IGenerator[] CreateGenerators()
 		{
-			return new IGenerator[] { new ProjectGenerator() };
+			return new IGenerator[] { new ProjectGenerator(), new ControllerGenerator() };
 		}
 
 		private static string NormalizeValue(string value)
