@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy.Test", 
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "..\ConsoleApplication1\ConsoleApplication1.csproj", "{52059B9E-E9A2-466E-8A9B-A8FFD6C4DC81}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -21,6 +25,10 @@ Global
 		{EF89321E-FB2A-41B6-85B3-794D50A55CF1}.Debug.Build.0 = Debug|.NET
 		{EF89321E-FB2A-41B6-85B3-794D50A55CF1}.Release.ActiveCfg = Release|.NET
 		{EF89321E-FB2A-41B6-85B3-794D50A55CF1}.Release.Build.0 = Release|.NET
+		{52059B9E-E9A2-466E-8A9B-A8FFD6C4DC81}.Debug.ActiveCfg = Debug|.NET
+		{52059B9E-E9A2-466E-8A9B-A8FFD6C4DC81}.Debug.Build.0 = Debug|.NET
+		{52059B9E-E9A2-466E-8A9B-A8FFD6C4DC81}.Release.ActiveCfg = Release|.NET
+		{52059B9E-E9A2-466E-8A9B-A8FFD6C4DC81}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
