@@ -36,7 +36,7 @@ namespace Castle.MicroKernel
 		private IKernel _parentKernel;
 		private IHandlerFactory _handlerFactory;
 		private IComponentModelBuilder _modelBuilder;
-		private IDependecyResolver _resolver;
+		private IDependencyResolver _resolver;
 		private IReleasePolicy _releaserPolicy;
 		private IProxyFactory _proxyFactory;
 		private IList _facilities;
@@ -316,7 +316,7 @@ namespace Castle.MicroKernel
 			}
 		}
 
-		public IDependecyResolver Resolver
+		public IDependencyResolver Resolver
 		{
 			get { return _resolver; }
 		}

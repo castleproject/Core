@@ -309,7 +309,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Resolvers\IDependecyResolver.cs"
+                    RelPath = "Resolvers\IDependencyResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

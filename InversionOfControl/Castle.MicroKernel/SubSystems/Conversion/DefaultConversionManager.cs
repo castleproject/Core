@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System.Collections;
 
 	/// <summary>
-	/// Summary description for DefaultConversionManager.
+	/// Composition of all available conversion managers
 	/// </summary>
 	public class DefaultConversionManager : IConversionManager
 	{

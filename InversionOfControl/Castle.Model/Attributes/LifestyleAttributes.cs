@@ -17,7 +17,7 @@ namespace Castle.Model
 	using System;
 
 	[AttributeUsage(AttributeTargets.Class)]
-	public class LifestyleAttribute : Attribute
+	public abstract class LifestyleAttribute : Attribute
 	{
 		private LifestyleType _type;
 

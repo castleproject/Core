@@ -18,7 +18,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System.Collections;
 
 	/// <summary>
-	/// Summary description for PrimitiveConverter.
+	/// Implements all standard conversions.
 	/// </summary>
 	public class PrimitiveConverter : ITypeConverter
 	{

@@ -19,22 +19,26 @@ namespace Castle.MicroKernel
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for HandlerState.
+	/// Possible states for a IHandler instance
 	/// </summary>
 	public enum HandlerState
 	{
 		/// <summary>
-		/// 
+		/// The component can be requested
 		/// </summary>
 		Valid,
 		/// <summary>
-		/// 
+		/// The component can not be requested 
+		/// as it still depending on a external 
+		/// dependency not yet available
 		/// </summary>
 		WaitingDependency
 	}
 
 	/// <summary>
-	/// Summary description for IHandler.
+	/// Contract for the IHandler, which manages an
+	/// component state and coordinates its creation 
+	/// and destruction (dispatching to activators, lifestyle managers)
 	/// </summary>
 	public interface IHandler
 	{

@@ -23,6 +23,4 @@ namespace Castle.Model
 	{
 		void Initialize();
 	}
-
-	
 }

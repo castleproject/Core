@@ -19,20 +19,54 @@ namespace Castle.MicroKernel
 	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// Summary description for IConfigurationStore.
+	/// The contract used by the kernel to obtain
+	/// external configuration for the components and
+	/// facilities.
 	/// </summary>
 	public interface IConfigurationStore : ISubSystem
 	{
+		/// <summary>
+		/// Associates a configuration node with a facility key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="config"></param>
 		void AddFacilityConfiguration( String key, IConfiguration config );
 
+		/// <summary>
+		/// Associates a configuration node with a component key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="config"></param>
 		void AddComponentConfiguration( String key, IConfiguration config );
 
+		/// <summary>
+		/// Returns the configuration node associated with 
+		/// the specified facility key. Should return null
+		/// if no association exists.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		IConfiguration GetFacilityConfiguration( String key );
 
+		/// <summary>
+		/// Returns the configuration node associated with 
+		/// the specified component key. Should return null
+		/// if no association exists.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		IConfiguration GetComponentConfiguration( String key );
 
+		/// <summary>
+		/// Returns all configuration nodes for facilities
+		/// </summary>
+		/// <returns></returns>
 		IConfiguration[] GetFacilities();
 
+		/// <summary>
+		/// Returns all configuration nodes for components
+		/// </summary>
+		/// <returns></returns>
 		IConfiguration[] GetComponents();
 	}
 }

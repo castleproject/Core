@@ -17,16 +17,10 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System;
 
 	/// <summary>
-	/// Summary description for TypeNameConverter.
+	/// Convert a type name to a Type instance.
 	/// </summary>
 	public class TypeNameConverter : ITypeConverter
 	{
-		public TypeNameConverter()
-		{
-		}
-
-		#region ITypeConverter Members
-
 		public bool CanHandleType(Type type)
 		{
 			return type == typeof(Type);
@@ -47,7 +41,5 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 			return type;
 		}
-
-		#endregion
 	}
 }

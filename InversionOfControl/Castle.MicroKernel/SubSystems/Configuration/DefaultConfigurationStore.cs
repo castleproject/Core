@@ -21,7 +21,10 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// Summary description for DefaultConfigurationStore.
+	/// This implementation of <see cref="IConfigurationStore"/>
+	/// does not try to obtain an external configuration by any means.
+	/// Its only purpose is to serve as a base class for subclasses
+	/// that might obtain the configuration node from anywhere.
 	/// </summary>
 	public class DefaultConfigurationStore : IConfigurationStore
 	{

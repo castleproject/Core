@@ -22,9 +22,11 @@ namespace Castle.MicroKernel.Resolvers
 	using Castle.MicroKernel.Util;
 
 	/// <summary>
-	/// Summary description for DefaultDependecyResolver.
+	/// Default implementation for <see cref="IDependencyResolver"/>.
+	/// This implementation is quite simple, but still should be useful
+	/// for 99% of situations. 
 	/// </summary>
-	public class DefaultDependecyResolver : IDependecyResolver
+	public class DefaultDependecyResolver : IDependencyResolver
 	{
 		private readonly IKernel _kernel;
 		private readonly ITypeConverter _converter;
@@ -37,6 +39,13 @@ namespace Castle.MicroKernel.Resolvers
 				_kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 		}
 
+		/// <summary>
+		/// Try to resolve the dependency by checking the parameters in 
+		/// the model or checking the Kernel for the requested service.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="dependency"></param>
+		/// <returns></returns>
 		public object Resolve(ComponentModel model, DependencyModel dependency)
 		{
 			object value = null;

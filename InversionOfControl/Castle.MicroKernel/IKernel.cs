@@ -166,7 +166,7 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// 
 		/// </summary>
-		IDependecyResolver Resolver
+		IDependencyResolver Resolver
 		{
 			get;
 		}
