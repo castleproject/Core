@@ -47,7 +47,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				ar.Properties.Clear();
 				ar.Properties.AddRange(properties);
 				
-
 				listView1.Items.Clear();
 
 				foreach(ActiveRecordPropertyDescriptor desc in properties)
@@ -67,8 +66,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			base.Deactivated(context);
 
 			ActiveRecordDescriptor desc = context["ardesc"] as ActiveRecordDescriptor;
-
-			desc.Properties.Clear();
 
 			foreach(ListViewItem item in listView1.Items)
 			{
@@ -132,6 +129,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			this.listView1.Size = new System.Drawing.Size(576, 232);
 			this.listView1.TabIndex = 1;
 			this.listView1.View = System.Windows.Forms.View.Details;
+			this.listView1.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.listView1_AfterLabelEdit);
 			// 
 			// columnHeader1
 			// 
@@ -166,6 +164,19 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 		}
 		#endregion
+
+		private void listView1_AfterLabelEdit(object sender, System.Windows.Forms.LabelEditEventArgs e)
+		{
+			if (e.Label.Length == 0)
+			{
+				e.CancelEdit = true;
+			}
+			else
+			{
+				ActiveRecordPropertyDescriptor desc = listView1.Items[e.Item].Tag as ActiveRecordPropertyDescriptor;			
+				desc.PropertyName = e.Label;
+			}
+		}
 	}
 }
 

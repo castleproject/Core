@@ -41,7 +41,9 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			BuildContext context = new BuildContext();
 
-			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( blogTable, context );
+			ActiveRecordDescriptor arDesc = new ActiveRecordDescriptor();
+
+			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( arDesc, blogTable, context );
 
 			Assert.IsNotNull(descs);
 			Assert.AreEqual( 1, descs.Length );
@@ -72,7 +74,9 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			BuildContext context = new BuildContext();
 
-			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( postTable, context );
+			ActiveRecordDescriptor arDesc = new ActiveRecordDescriptor();
+
+			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( arDesc, postTable, context );
 
 			Assert.IsNotNull(descs);
 			Assert.AreEqual( 1, descs.Length );
@@ -106,7 +110,9 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			BuildContext context = new BuildContext();
 
-			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( categoryTable, context );
+			ActiveRecordDescriptor arDesc = new ActiveRecordDescriptor();
+
+			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( arDesc, categoryTable, context );
 
 			Assert.IsFalse(context.HasPendents);
 

@@ -31,53 +31,78 @@ namespace Castle.ActiveRecord.Generator.Components
 
 		#region IRelationShipInferenceService Members
 
-		public ActiveRecordPropertyRelationDescriptor[] InferRelations(TableDefinition tableDef, BuildContext context)
+		public ActiveRecordPropertyRelationDescriptor[] InferRelations(ActiveRecordDescriptor desc, 
+			TableDefinition tableDef, BuildContext context)
 		{
+			if (desc == null) throw new ArgumentNullException("desc");
+			if (tableDef == null) throw new ArgumentNullException("tableDef");
+			if (context == null) throw new ArgumentNullException("context");
+			if (tableDef.RelatedDescriptor != null && tableDef.RelatedDescriptor != desc) {
+				throw new ArgumentException("Different descriptors");
+			}
+
 			ArrayList list = new ArrayList();
 
-			CreateHasManyRelations(tableDef, list, context);
+			CreateHasManyRelations(desc, tableDef, list, context);
 
-			CreateBelongsToRelations(tableDef, list, context);
+			CreateBelongsToRelations(desc, tableDef, list, context);
 
 			return (ActiveRecordPropertyRelationDescriptor[]) list.ToArray( typeof(ActiveRecordPropertyRelationDescriptor) );
 		}
 
-		private void CreateBelongsToRelations(TableDefinition tableDef, IList list, BuildContext context)
+		private void CreateBelongsToRelations(ActiveRecordDescriptor desc, TableDefinition tableDef, 
+			IList list, BuildContext context)
 		{
 			foreach(ColumnDefinition col in tableDef.Columns)
 			{
 				if (col.RelatedTable != null)
 				{
+					bool pendentNecessary = false;
 					String propertyName = _namingService.CreateClassName(col.RelatedTable.Name);
+
 					ActiveRecordDescriptor targetType = null;
 
 					if (col.RelatedTable.RelatedDescriptor == null && col.RelatedTable != tableDef)
 					{
 						col.RelatedTable.RelatedDescriptor = new ActiveRecordDescriptor(col.RelatedTable);
 
-						context.AddPendentDescriptor(col.RelatedTable.RelatedDescriptor);
+						pendentNecessary = true;
 					}
-					
-					targetType = col.RelatedTable.RelatedDescriptor;
+					else if (col.RelatedTable == tableDef)
+					{
+						targetType = desc;
+					}
 
+					if (targetType == null)
+					{
+						targetType = col.RelatedTable.RelatedDescriptor;
+					}
 
 					ActiveRecordBelongsToDescriptor belongsTo = 
 						new ActiveRecordBelongsToDescriptor(col.Name, 
 							propertyName, targetType);
 
 					list.Add(belongsTo);
+
+					if (pendentNecessary)
+					{
+						context.AddPendentDescriptor(belongsTo, col.RelatedTable.RelatedDescriptor);
+					}
 				}
 			}
 		}
 
-		private void CreateHasManyRelations(TableDefinition tableDef, IList list, BuildContext context)
+		private void CreateHasManyRelations(ActiveRecordDescriptor desc, TableDefinition tableDef, 
+			IList list, BuildContext context)
 		{
 			foreach(TableDefinition fkTable in tableDef.TablesReferencedByHasRelation)
 			{
 				String propertyName = _namingService.CreateRelationName(fkTable.Name);
-				Type propertyType = typeof(IList);
 				ActiveRecordDescriptor targetType = null;
+				Type propertyType = typeof(IList);
 				String colName = null;
+				bool pendentNecessary = false;
+				ColumnDefinition selectedCol = null;
 
 				foreach(ColumnDefinition col in fkTable.Columns)
 				{
@@ -89,14 +114,19 @@ namespace Castle.ActiveRecord.Generator.Components
 						{
 							col.RelatedTable.RelatedDescriptor = new ActiveRecordDescriptor(fkTable);
 
-							context.AddPendentDescriptor(col.RelatedTable.RelatedDescriptor);
+							pendentNecessary = true;
 						}
-						else if (col.RelatedTable == fkTable)
+						else if (col.RelatedTable == tableDef)
+						{
+							targetType = desc;
+						}
+						
+						if (targetType == null)
 						{
 							targetType = col.RelatedTable.RelatedDescriptor;
 						}
 
-						targetType = col.RelatedTable.RelatedDescriptor;
+						selectedCol = col;
 
 						break;
 					}
@@ -107,6 +137,11 @@ namespace Castle.ActiveRecord.Generator.Components
 
 				ActiveRecordHasManyDescriptor hasMany = 
 					new ActiveRecordHasManyDescriptor(colName, propertyName, propertyType, targetType);
+
+				if (pendentNecessary)
+				{
+					context.AddPendentDescriptor(hasMany, selectedCol.RelatedTable.RelatedDescriptor);
+				}
 				
 				list.Add(hasMany);
 			}

@@ -79,6 +79,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			foreach(TableDefinition table in descriptor.Table.DatabaseDefinition.Tables)
 			{
 				if (table.RelatedDescriptor == null) continue;
+				if (table.RelatedDescriptor.ClassName == null) continue;
 				if (table.RelatedDescriptor == descriptor) continue;
 
 				parentClass.Items.Add( table.RelatedDescriptor.ClassName );
@@ -92,6 +93,18 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			foreach(ColumnDefinition col in descriptor.Table.Columns)
 			{
 				discColumn.Items.Add( col );
+				
+				if (col.Name.Equals(descriptor.DiscriminatorField))
+				{
+					discColumn.SelectedItem = col;
+				}
+			}
+
+			useDiscriminator.Checked = descriptor.DiscriminatorField != null;
+
+			if (descriptor.DiscriminatorValue != null)
+			{
+				discValue.Text = descriptor.DiscriminatorValue;
 			}
 	
 			if (descriptor is ActiveRecordDescriptorSubClass ||
@@ -147,6 +160,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+			this.columnHeader13 = new System.Windows.Forms.ColumnHeader();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.AddRelation = new System.Windows.Forms.Button();
 			this.listView2 = new System.Windows.Forms.ListView();
@@ -159,7 +173,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
 			this.okButton = new System.Windows.Forms.Button();
-			this.columnHeader13 = new System.Windows.Forms.ColumnHeader();
 			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -360,6 +373,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.listView1.Size = new System.Drawing.Size(576, 213);
 			this.listView1.TabIndex = 2;
 			this.listView1.View = System.Windows.Forms.View.Details;
+			this.listView1.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.listView1_AfterLabelEdit);
 			// 
 			// columnHeader1
 			// 
@@ -383,6 +397,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader4.Text = "Type";
 			this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.columnHeader4.Width = 90;
+			// 
+			// columnHeader13
+			// 
+			this.columnHeader13.Text = "PK";
+			this.columnHeader13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// tabPage2
 			// 
@@ -418,6 +437,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.listView2.Size = new System.Drawing.Size(576, 213);
 			this.listView2.TabIndex = 4;
 			this.listView2.View = System.Windows.Forms.View.Details;
+			this.listView2.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.listView2_AfterLabelEdit);
 			// 
 			// columnHeader9
 			// 
@@ -471,11 +491,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 3;
 			this.okButton.Text = "OK";
-			// 
-			// columnHeader13
-			// 
-			this.columnHeader13.Text = "PK";
-			this.columnHeader13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
 			// ActiveRecordPropertiesDialog
 			// 
@@ -514,25 +530,55 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 		private void FillClassProperties(ActiveRecordDescriptor descriptor)
 		{
+			IList added = new ArrayList();
+
 			foreach(ActiveRecordPropertyDescriptor prop in descriptor.Properties)
 			{
 				ListViewItem item = listView1.Items.Add(prop.PropertyName);
 				item.Tag = prop;
-				item.Checked = true;
+				item.Checked = prop.Generate;
 				item.SubItems.Add( prop.PropertyType.ToString() );
 				item.SubItems.Add( prop.ColumnName );
 				item.SubItems.Add( prop.ColumnTypeName );
 				item.SubItems.Add( (prop is ActiveRecordPrimaryKeyDescriptor) ? "Yes" : "" );
+
+				added.Add(prop);
+			}
+
+			if (descriptor is ActiveRecordDescriptorSubClass)
+			{
+				ActiveRecordDescriptor parent = 
+					((ActiveRecordDescriptorSubClass) descriptor).BaseClass;
+
+				// This code might look strange, but we're
+				// only showing the fields on the parent class that haven't been
+				// marked for generation, so the user might have the
+				// oportunity to add them
+
+				foreach(ActiveRecordPropertyDescriptor prop in parent.Properties)
+				{
+					if (prop.Generate || added.Contains(prop)) continue;
+
+					ListViewItem item = listView1.Items.Add(prop.PropertyName);
+					item.Tag = prop;
+					item.Checked = prop.Generate;
+					item.SubItems.Add( prop.PropertyType.ToString() );
+					item.SubItems.Add( prop.ColumnName );
+					item.SubItems.Add( prop.ColumnTypeName );
+					item.SubItems.Add( (prop is ActiveRecordPrimaryKeyDescriptor) ? "Yes" : "" );
+				}
 			}
 		}
 
 		private void FillClassRelationships(ActiveRecordDescriptor descriptor)
 		{
+			IList added = new ArrayList();
+
 			foreach(ActiveRecordPropertyRelationDescriptor prop in descriptor.PropertiesRelations)
 			{
 				ListViewItem item = listView2.Items.Add(prop.PropertyName);
 				item.Tag = prop;
-				item.Checked = true;
+				item.Checked = prop.Generate;
 
 				if (prop.TargetType == null)
 				{
@@ -542,6 +588,123 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 				item.SubItems.Add( prop.TargetType.ClassName );
 				item.SubItems.Add( prop.RelationType );
 				item.SubItems.Add( prop.ColumnName );
+
+				added.Add(prop);
+			}
+
+			if (descriptor is ActiveRecordDescriptorSubClass)
+			{
+				ActiveRecordDescriptor parent = 
+					((ActiveRecordDescriptorSubClass) descriptor).BaseClass;
+
+				// This code might look strange, but we're
+				// only showing the fields on the parent class that haven't been
+				// marked for generation, so the user might have the
+				// oportunity to add them
+
+				foreach(ActiveRecordPropertyRelationDescriptor prop in parent.PropertiesRelations)
+				{
+					if (prop.Generate || added.Contains(prop)) continue;
+
+					ListViewItem item = listView2.Items.Add(prop.PropertyName);
+					item.Tag = prop;
+					item.Checked = prop.Generate;
+
+					if (prop.TargetType == null)
+					{
+						throw new ApplicationException("Information missing");
+					}
+
+					item.SubItems.Add( prop.TargetType.ClassName );
+					item.SubItems.Add( prop.RelationType );
+					item.SubItems.Add( prop.ColumnName );
+				}
+			}
+		}
+
+		private void okButton_Click(object sender, System.EventArgs e)
+		{
+			// What's common can be updated without any problems:
+
+			if (className.Text.Length != 0)
+			{
+				_descriptor.ClassName = className.Text;
+			}
+
+			if (discColumn.SelectedIndex == -1)
+			{
+				_descriptor.DiscriminatorField = null;
+			}
+			else
+			{
+				_descriptor.DiscriminatorField = (discColumn.SelectedItem as ColumnDefinition).Name;
+			}
+
+			if (discValue.Text.Length != 0)
+			{
+				_descriptor.DiscriminatorValue = discValue.Text;
+			}
+			else
+			{
+				_descriptor.DiscriminatorValue = null;
+			}
+
+			// Updating properties
+
+			_descriptor.Properties.Clear();
+			foreach(ListViewItem item in listView1.Items)
+			{
+				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
+				prop.Generate = item.Checked;
+
+				_descriptor.Properties.Add( prop );
+			}
+
+			// Updating relations
+
+			_descriptor.PropertiesRelations.Clear();
+			foreach(ListViewItem item in listView2.Items)
+			{
+				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
+				prop.Generate = item.Checked;
+
+				_descriptor.PropertiesRelations.Add( prop );
+			}
+
+			// Now here, semantic matters
+
+			if (_descriptor is ActiveRecordDescriptorSubClass ||
+				_descriptor is ActiveRecordDescriptorJoinedSubClass )
+			{
+			}
+
+			DialogResult = DialogResult.OK;
+			Close();
+		}
+
+		private void listView1_AfterLabelEdit(object sender, System.Windows.Forms.LabelEditEventArgs e)
+		{
+			if (e.Label.Length == 0)
+			{
+				e.CancelEdit = true;
+			}
+			else
+			{
+				ActiveRecordPropertyDescriptor desc = listView1.Items[e.Item].Tag as ActiveRecordPropertyDescriptor;
+				desc.PropertyName = e.Label;
+			}
+		}
+
+		private void listView2_AfterLabelEdit(object sender, System.Windows.Forms.LabelEditEventArgs e)
+		{
+			if (e.Label.Length == 0)
+			{
+				e.CancelEdit = true;
+			}
+			else
+			{
+				ActiveRecordPropertyDescriptor desc = listView2.Items[e.Item].Tag as ActiveRecordPropertyDescriptor;			
+				desc.PropertyName = e.Label;
 			}
 		}
 	}

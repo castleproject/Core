@@ -22,6 +22,7 @@ namespace Castle.ActiveRecord.Generator.Components
 
 	public interface IRelationshipInferenceService
 	{
-		ActiveRecordPropertyRelationDescriptor[] InferRelations(TableDefinition tableDef, BuildContext context);
+		ActiveRecordPropertyRelationDescriptor[] InferRelations(ActiveRecordDescriptor desc, 
+			TableDefinition tableDef, BuildContext context);
 	}
 }

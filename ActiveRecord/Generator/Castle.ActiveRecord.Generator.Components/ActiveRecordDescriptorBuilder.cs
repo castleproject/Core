@@ -63,7 +63,7 @@ namespace Castle.ActiveRecord.Generator.Components
 
 			// Relations
 
-			desc.PropertiesRelations.AddRange( _relationsService.InferRelations(tableDef, context) );
+			desc.PropertiesRelations.AddRange( _relationsService.InferRelations(desc, tableDef, context) );
 
 			// Operations
 

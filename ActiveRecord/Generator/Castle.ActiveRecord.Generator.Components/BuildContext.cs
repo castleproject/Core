@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Generator.Components
 
 	public class BuildContext
 	{
-		private IList _pendents = new ArrayList();
+		private IDictionary _key2Desc = new Hashtable();
 		private IList _newlyCreated = new ArrayList();
 
 		public BuildContext()
@@ -34,31 +34,54 @@ namespace Castle.ActiveRecord.Generator.Components
 			get { return _newlyCreated; }
 		}
 
-		public void AddPendentDescriptor(ActiveRecordDescriptor descriptor)
+		public void AddPendentDescriptor(object key, ActiveRecordDescriptor descriptor)
 		{
-			if (!_pendents.Contains(descriptor))
+			if (!_key2Desc.Contains(key))
 			{
-				_pendents.Add(descriptor);
+				_key2Desc[key] = descriptor;
 			}
+		}
+
+		public void IgnorePendent(object key)
+		{
+			_key2Desc.Remove(key);
 		}
 
 		public void RemovePendent(ActiveRecordDescriptor descriptor)
 		{
-			_pendents.Remove(descriptor);
+			foreach(DictionaryEntry entry in _key2Desc)
+			{
+				if (entry.Value == descriptor)
+				{
+					_key2Desc.Remove(entry.Key);
+					break;
+				}
+			}
 
-			_newlyCreated.Add(descriptor);
+			AddToNewlyCreated(descriptor);
+		}
+
+		private void AddToNewlyCreated(ActiveRecordDescriptor descriptor)
+		{
+			if (!_newlyCreated.Contains(descriptor))
+			{
+				_newlyCreated.Add(descriptor);
+			}
 		}
 
 		public bool HasPendents
 		{
-			get { return (_pendents.Count != 0); }
+			get { return (_key2Desc.Count != 0); }
 		}
 
 		public ActiveRecordDescriptor GetNextPendent()
 		{
 			if (HasPendents)
 			{
-				return _pendents[0] as ActiveRecordDescriptor;
+				foreach(DictionaryEntry entry in _key2Desc)
+				{
+					return entry.Value as ActiveRecordDescriptor;
+				}
 			}
 
 			return null;

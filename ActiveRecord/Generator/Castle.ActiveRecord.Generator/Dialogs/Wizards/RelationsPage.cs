@@ -34,17 +34,19 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			if (table != _oldTable)
 			{
 				_oldTable = table;
-				
+
+				ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
+
 				listView1.Items.Clear();
 
 				BuildContext buildCtx = context["buildcontext"] as BuildContext;
 
-				IRelationshipInferenceService relationInference = ServiceRegistry.Instance[ typeof(IRelationshipInferenceService) ] as IRelationshipInferenceService;
+				IRelationshipInferenceService relationInference = 
+					ServiceRegistry.Instance[ typeof(IRelationshipInferenceService) ] as IRelationshipInferenceService;
 
 				ActiveRecordPropertyRelationDescriptor[] properties = 
-					relationInference.InferRelations( table, buildCtx );
+					relationInference.InferRelations( ar, table, buildCtx );
 
-				ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
 				ar.PropertiesRelations.Clear();
 				ar.PropertiesRelations.AddRange(properties);
 
@@ -74,6 +76,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		{
 			base.Deactivated(context);
 
+			BuildContext buildCtx = context["buildcontext"] as BuildContext;
 			ActiveRecordDescriptor desc = context["ardesc"] as ActiveRecordDescriptor;
 
 			desc.PropertiesRelations.Clear();
@@ -81,9 +84,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			foreach(ListViewItem item in listView1.Items)
 			{
 				ActiveRecordPropertyRelationDescriptor property = item.Tag as ActiveRecordPropertyRelationDescriptor;
-				property.Generate = item.Checked;
-			}
 
+				if (!item.Checked)
+				{
+					desc.PropertiesRelations.Remove(property);
+					buildCtx.IgnorePendent(property);
+				}
+				else
+				{
+					desc.PropertiesRelations.Add(property);
+				}
+			}
 		}
 
 		/// <summary>
@@ -133,6 +144,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			this.listView1.Size = new System.Drawing.Size(576, 152);
 			this.listView1.TabIndex = 3;
 			this.listView1.View = System.Windows.Forms.View.Details;
+			this.listView1.AfterLabelEdit += new System.Windows.Forms.LabelEditEventHandler(this.listView1_AfterLabelEdit);
 			// 
 			// columnHeader1
 			// 
@@ -188,6 +200,19 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 		}
 		#endregion
+
+		private void listView1_AfterLabelEdit(object sender, System.Windows.Forms.LabelEditEventArgs e)
+		{
+			if (e.Label.Length == 0)
+			{
+				e.CancelEdit = true;
+			}
+			else
+			{
+				ActiveRecordPropertyDescriptor desc = listView1.Items[e.Item].Tag as ActiveRecordPropertyDescriptor;			
+				desc.PropertyName = e.Label;
+			}
+		}
 	}
 }
 
