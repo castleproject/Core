@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="prevalence-facility" default="build">
+    
+    <!-- This build file inherits common properties from the ../facilities.build -->
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="doc.dir" value="${base.dir}/docs" />
+	<property name="src.dir" value="${base.dir}/Castle.Facilities.Prevalence" />
+
+	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.Prevalence.Tests" />
+	<property name="name" value="Castle.Facilities.Prevalence" />
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${name}.Tests.dll" />
+
+	<property name="version" value="alpha-2" />
+
+	<target name="clean">
+	</target>
+
+	<target name="init" depends="clean">
+		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
+		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
+		<copy todir="${bin.dir}">
+			<fileset basedir="${lib.dir}">
+				<includes name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build" depends="init,tests.run" />
+	
+	<target name="compile" depends="init">
+		<!-- doc="${bin.dir}/${name}.xml" -->
+		<csc 
+			define="STRONG"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}">
+			
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/*.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.compile" depends="compile">
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name}">
+			
+			<sources basedir="${test.src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/*.dll" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="tests.run" depends="tests.compile">
+		<nunit2 >
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+	</target>
+	
+	<target name="dist">
+		<zip zipfile="${name}.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="Changes.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${src.dir}/**/*.*" />
+				<include name="${test.src.dir}/**/*.*" />
+				<include name="${lib.dir}/**/*.*" />
+				
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+			</fileset>
+		</zip>
+		<zip zipfile="${name}.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/${assembly.name}" />				
+				<include name="${lib.dir}/**/*.*" />
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="Changes.txt" />				
+			</fileset>
+		</zip>		
+	</target>
+
+</project>
