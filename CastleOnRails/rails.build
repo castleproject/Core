@@ -113,7 +113,6 @@
 				<include name="Castle.CastleOnRails.WindsorExtension/**/*.*" />
 				<include name="Castle.CastleOnRails.WindsorExtension.Tests/**/*.*" />
 				<include name="TestSite/**/*.*" />
-				<include name="TestSiteDirVir/**/*.*" />
 				<include name="TestSiteWindsor/**/*.*" />
 				<include name="TestSiteNVelocity/**/*.*" />
 			</fileset>

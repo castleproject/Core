@@ -45,7 +45,9 @@ namespace TestSite.Controllers
 
 		public void DoAPostBack(int postCount)
 		{
-			PropertyBag["postCount"] = postCount++;
+			Context.Flash["errormessage"] = "An error message goes here!";
+
+			PropertyBag["postCount"] = ++postCount;
 
 			RenderView( "postback" );
 		}

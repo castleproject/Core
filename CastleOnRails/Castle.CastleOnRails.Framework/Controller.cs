@@ -30,6 +30,8 @@ namespace Castle.CastleOnRails.Framework
 	/// </summary>
 	public abstract class Controller
 	{
+		internal static readonly String OriginalViewKey = "original_view";
+
 		private IViewEngine _viewEngine;
 		private IRailsEngineContext _context;
 		private IDictionary _bag;

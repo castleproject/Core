@@ -1,4 +1,3 @@
-using System.IO;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +15,7 @@ using System.IO;
 namespace Castle.CastleOnRails.Framework.Views.Aspx
 {
 	using System;
+	using System.IO;
 	using System.Web.UI;
 
 	/// <summary>

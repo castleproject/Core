@@ -36,7 +36,6 @@ namespace TestSite.views.registration
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			postCount.Text = PostCount.ToString();
 		}
 
 		#region Web Form Designer generated code
@@ -72,6 +71,8 @@ namespace TestSite.views.registration
 			// Ok, proceed
 
 			_controller.Send( "DoAPostBack" );
+
+			postCount.Text = PostCount.ToString();
 		}
 	}
 }

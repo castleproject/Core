@@ -27,6 +27,8 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	/// </summary>
 	public class AspNetViewEngine : IViewEngine
 	{
+		private static readonly String ProcessedBeforeKey = "processed_before";
+		
 		private String _viewRootDir;
 
 		#region IViewEngine
@@ -48,13 +50,21 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		{
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
 
-			/// Hack ! 
-			/// Todo: document this hack for the sake of our users
+			/// 
+			/// To Do: document this hack for the sake of our users
+			/// 
 			if (httpContext != null)
 			{
-				if(viewName.Equals(httpContext.Items["original_view"]))
+				if (!httpContext.Items.Contains(ProcessedBeforeKey))
 				{
-					return;
+					httpContext.Items[ProcessedBeforeKey] = true;
+				}
+				else
+				{
+					if(viewName.Equals(httpContext.Items[Controller.OriginalViewKey]))
+					{
+						return;
+					}
 				}
 			}
 
@@ -78,7 +88,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 			childPage.ProcessRequest(httpContext);
 
-			//Checks if its only returning from a inner process invocation
+			// Checks if its only returning from a inner process invocation
 			
 			controller.PostSendView(childPage);
 

@@ -13,6 +13,7 @@
 			Post Count: 
 			<asp:Label ID="postCount" Runat="server"></asp:Label><br>
 			<asp:Button ID="Save" Runat="server" Text="Save" OnClick="DoAPostBack" />
+			<%= Context.Items["errormessage"] %>
 		</form>
 	</body>
 </HTML>
