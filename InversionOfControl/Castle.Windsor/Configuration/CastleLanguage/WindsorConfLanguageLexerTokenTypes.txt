@@ -3,8 +3,8 @@ WindsorConfLanguageLexer    // output token vocab name
 IN="in"=4
 IMPORT="import"=5
 EOS=6
-COLON=7
-NEWLINE=8
+NEWLINE=7
+COLON=8
 INDENT=9
 DEDENT=10
 ID=11

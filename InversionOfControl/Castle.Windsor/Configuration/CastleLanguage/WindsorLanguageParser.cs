@@ -31,8 +31,8 @@ namespace Castle.Windsor.Configuration.CastleLanguage
 		public const int IN = 4;
 		public const int IMPORT = 5;
 		public const int EOS = 6;
-		public const int COLON = 7;
-		public const int NEWLINE = 8;
+		public const int NEWLINE = 7;
+		public const int COLON = 8;
 		public const int INDENT = 9;
 		public const int DEDENT = 10;
 		public const int ID = 11;
@@ -165,7 +165,7 @@ _loop7_breakloop:				;
 		try {      // for error handling
 			i = LT(1);
 			match(IMPORT);
-			ns=identifier();
+			ns=name();
 			if (0==inputState.guessing)
 			{
 				
@@ -179,7 +179,7 @@ _loop7_breakloop:				;
 				case IN:
 				{
 					match(IN);
-					assemblyName=identifier();
+					assemblyName=name();
 					if (0==inputState.guessing)
 					{
 						
@@ -188,9 +188,7 @@ _loop7_breakloop:				;
 					}
 					break;
 				}
-				case EOF:
-				case IMPORT:
-				case ID:
+				case NEWLINE:
 				{
 					break;
 				}
@@ -199,6 +197,9 @@ _loop7_breakloop:				;
 					throw new NoViableAltException(LT(1), getFilename());
 				}
 				 }
+			}
+			{
+				match(NEWLINE);
 			}
 		}
 		catch (RecognitionException ex)
@@ -226,7 +227,7 @@ _loop7_breakloop:				;
 			
 		
 		try {      // for error handling
-			i=identifier();
+			i=name();
 			match(COLON);
 			match(NEWLINE);
 			if (0==inputState.guessing)
@@ -240,27 +241,27 @@ _loop7_breakloop:				;
 			{    // ( ... )*
 				for (;;)
 				{
-					bool synPredMatched13 = false;
+					bool synPredMatched14 = false;
 					if (((LA(1)==ID)))
 					{
-						int _m13 = mark();
-						synPredMatched13 = true;
+						int _m14 = mark();
+						synPredMatched14 = true;
 						inputState.guessing++;
 						try {
 							{
-								identifier();
+								name();
 								match(COLON);
-								identifier();
+								value();
 							}
 						}
 						catch (RecognitionException)
 						{
-							synPredMatched13 = false;
+							synPredMatched14 = false;
 						}
-						rewind(_m13);
+						rewind(_m14);
 						inputState.guessing--;
 					}
-					if ( synPredMatched13 )
+					if ( synPredMatched14 )
 					{
 						attribute(newNode);
 					}
@@ -269,11 +270,11 @@ _loop7_breakloop:				;
 					}
 					else
 					{
-						goto _loop14_breakloop;
+						goto _loop15_breakloop;
 					}
 					
 				}
-_loop14_breakloop:				;
+_loop15_breakloop:				;
 			}    // ( ... )*
 			match(DEDENT);
 		}
@@ -291,7 +292,7 @@ _loop14_breakloop:				;
 		}
 	}
 	
-	protected String  identifier() //throws RecognitionException, TokenStreamException
+	protected String  name() //throws RecognitionException, TokenStreamException
 {
 		String value;
 		
@@ -322,18 +323,18 @@ _loop14_breakloop:				;
 						if (0==inputState.guessing)
 						{
 							
-								        sbuilder.Append('.');
-								        sbuilder.Append(id2.getText());
-								
+										sbuilder.Append('.');
+										sbuilder.Append(id2.getText());
+									
 						}
 					}
 					else
 					{
-						goto _loop18_breakloop;
+						goto _loop19_breakloop;
 					}
 					
 				}
-_loop18_breakloop:				;
+_loop19_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
@@ -357,6 +358,94 @@ _loop18_breakloop:				;
 		return value;
 	}
 	
+	protected String  value() //throws RecognitionException, TokenStreamException
+{
+		String value;
+		
+		IToken  id = null;
+		IToken  id2 = null;
+		IToken  id3 = null;
+		
+				value = null; sbuilder.Length = 0;
+			
+		
+		try {      // for error handling
+			id = LT(1);
+			match(ID);
+			if (0==inputState.guessing)
+			{
+									
+						sbuilder.Append(id.getText());
+						value = sbuilder.ToString();
+					
+			}
+			{    // ( ... )*
+				for (;;)
+				{
+					switch ( LA(1) )
+					{
+					case DOT:
+					{
+						{
+							match(DOT);
+							id2 = LT(1);
+							match(ID);
+							if (0==inputState.guessing)
+							{
+								
+												sbuilder.Append('.');
+												sbuilder.Append(id2.getText());
+											
+							}
+						}
+						break;
+					}
+					case IN:
+					{
+						{
+							match(IN);
+							id3 = LT(1);
+							match(ID);
+							if (0==inputState.guessing)
+							{
+								
+												sbuilder.Append(" in ");
+												sbuilder.Append(id3.getText());
+											
+							}
+						}
+						break;
+					}
+					default:
+					{
+						goto _loop24_breakloop;
+					}
+					 }
+				}
+_loop24_breakloop:				;
+			}    // ( ... )*
+			if (0==inputState.guessing)
+			{
+				
+					    value = sbuilder.ToString();
+					
+			}
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_4_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+		return value;
+	}
+	
 	protected void attribute(
 		MutableConfiguration conf
 	) //throws RecognitionException, TokenStreamException
@@ -368,9 +457,9 @@ _loop18_breakloop:				;
 			
 		
 		try {      // for error handling
-			i=identifier();
+			i=name();
 			match(COLON);
-			v=identifier();
+			v=value();
 			match(NEWLINE);
 			if (0==inputState.guessing)
 			{
@@ -384,7 +473,7 @@ _loop18_breakloop:				;
 			if (0 == inputState.guessing)
 			{
 				reportError(ex);
-				recover(ex,tokenSet_4_);
+				recover(ex,tokenSet_5_);
 			}
 			else
 			{
@@ -405,8 +494,8 @@ _loop18_breakloop:				;
 		@"""in""",
 		@"""import""",
 		@"""EOS""",
-		@"""COLON""",
 		@"""NEWLINE""",
+		@"""COLON""",
 		@"""INDENT""",
 		@"""DEDENT""",
 		@"""ID""",
@@ -433,16 +522,22 @@ _loop18_breakloop:				;
 	public static readonly BitSet tokenSet_2_ = new BitSet(mk_tokenSet_2_());
 	private static long[] mk_tokenSet_3_()
 	{
-		long[] data = { 2482L, 0L};
+		long[] data = { 400L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_3_ = new BitSet(mk_tokenSet_3_());
 	private static long[] mk_tokenSet_4_()
 	{
-		long[] data = { 3072L, 0L};
+		long[] data = { 128L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_4_ = new BitSet(mk_tokenSet_4_());
+	private static long[] mk_tokenSet_5_()
+	{
+		long[] data = { 3072L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_5_ = new BitSet(mk_tokenSet_5_());
 	
 }
 }

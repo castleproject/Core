@@ -120,6 +120,96 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 		}
 
 		[Test]
+		public void IndentDetendCommonUsage()
+		{
+			String contents = "container: \r\n" + 
+                              "  item1: my.namespace.type in my.namespace\r\n" + 
+							  "  item2: 10\r\n" + 
+				 			  "\r\n" + 
+				 			  "  facility:\r\n" +
+				 			  "    type: mytype in myassembly\r\n" + 
+				 			  "\r\n" + 
+							  "  item3: 20\r\n" + 
+				 			  "\r\n"; 
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual("my.namespace.type in my.namespace", conf.Root.Children["container"].Attributes["item1"]);
+			Assert.AreEqual("10", conf.Root.Children["container"].Attributes["item2"]);
+			Assert.AreEqual("20", conf.Root.Children["container"].Attributes["item3"]);
+
+			IConfiguration sub = conf.Root.Children["container"].Children["facility"];
+			Assert.IsNotNull(sub);
+			Assert.AreEqual("mytype in myassembly", sub.Attributes["type"]);
+		}
+
+		[Test]
+		public void Imports()
+		{
+			String contents = 
+				"import my.namespace1 \r\n" + 
+				"import my.namespace2 in my.assembly\r\n// Comments !\r\n" + 
+                "container: \r\n" + 
+				"  item1: my.namespace.type in my.namespace\r\n" + 
+				"  item2: 10\r\n" + 
+				"\r\n" + 
+				"  facility:\r\n" +
+				"    type: mytype in myassembly\r\n" + 
+				"\r\n" + 
+				"  item3: 20\r\n" + 
+				"\r\n"; 
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(2, conf.Imports.Count);
+
+			Assert.AreEqual("my.namespace1", conf.Imports[0].Namespace);
+			Assert.AreEqual("my.namespace2", conf.Imports[1].Namespace);
+			Assert.AreEqual("my.assembly", conf.Imports[1].AssemblyReference.AssemblyName);
+
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual("my.namespace.type in my.namespace", conf.Root.Children["container"].Attributes["item1"]);
+			Assert.AreEqual("10", conf.Root.Children["container"].Attributes["item2"]);
+			Assert.AreEqual("20", conf.Root.Children["container"].Attributes["item3"]);
+
+			IConfiguration sub = conf.Root.Children["container"].Children["facility"];
+			Assert.IsNotNull(sub);
+			Assert.AreEqual("mytype in myassembly", sub.Attributes["type"]);
+		}
+
+		[Test]
+		public void AssemblyNames()
+		{
+			String contents = "container: \r\n  item: my.namespace.type in my.namespace\r\n";
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual("my.namespace.type in my.namespace", conf.Root.Children["container"].Attributes["item"]);
+		}
+
+		[Test]
 		public void Comments1()
 		{
 			String contents = "// comments\r\ncontainer: \r\n  item.1: my.key\r\n  item.2: value2\r\n";

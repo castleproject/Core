@@ -51,17 +51,20 @@ import_directive[ConfigurationDefinition conf]
 		String assemblyName;
 		ImportDirective import = null;
 	}: 
-	i:IMPORT! ns=identifier!
+	i:IMPORT ns=name
 	{
 		import = new ImportDirective( ToLexicalInfo(i), ns );
 		conf.Imports.Add(import);
 	}
 	(
-	    IN! assemblyName=identifier!
+	    IN assemblyName=name
 	    {
 	        import.AssemblyReference = new AssemblyReference( ToLexicalInfo(i), assemblyName);
 	    }
 	)?
+	(
+		NEWLINE
+	)
 	;
 	    
 nodes[MutableConfiguration conf]
@@ -69,14 +72,14 @@ nodes[MutableConfiguration conf]
 		String i = null;
 		MutableConfiguration newNode = null;
 	}:
-	i=identifier COLON NEWLINE
+	i=name COLON NEWLINE
 	{
 		newNode = new MutableConfiguration(i);
 		conf.Children.Add(newNode);
 	}	
 	INDENT 
 	
-	 ( (identifier COLON identifier)=> attribute[newNode] | nodes[newNode])*
+	 ( (name COLON value)=> attribute[newNode] | nodes[newNode])*
 
 	DEDENT
 	;
@@ -87,14 +90,14 @@ attribute [MutableConfiguration conf]
 		String i = null;
 		String v = null;
 	}:
-	i=identifier COLON v=identifier NEWLINE
+	i=name COLON v=value NEWLINE
 	{
 		conf.Attributes[i] = v;
 	}
 	;
 
 protected
-identifier returns [String value]
+name returns [String value]
 	{
 		value = null; sbuilder.Length = 0;
 	}:			
@@ -103,12 +106,48 @@ identifier returns [String value]
 		sbuilder.Append(id.getText());
 		value = sbuilder.ToString();
 	}
-	( options { greedy = true; }:
-	    DOT id2:ID
-	    {
-	        sbuilder.Append('.');
-	        sbuilder.Append(id2.getText());
-	    }
+	( 
+	    options 
+	    { greedy = true; }:
+		DOT id2:ID 
+		{
+			sbuilder.Append('.');
+			sbuilder.Append(id2.getText());
+		}
+	)*
+	{
+	    value = sbuilder.ToString();
+	}
+	;
+
+protected
+value returns [String value]
+	{
+		value = null; sbuilder.Length = 0;
+	}:			
+	id:ID			
+	{					
+		sbuilder.Append(id.getText());
+		value = sbuilder.ToString();
+	}
+	( 
+	    options 
+	    { greedy = true; }:
+	    (
+			DOT id2:ID 
+			{
+				sbuilder.Append('.');
+				sbuilder.Append(id2.getText());
+			}
+	    )
+	    |
+	    (
+			IN id3:ID
+			{
+				sbuilder.Append(" in ");
+				sbuilder.Append(id3.getText());
+			}
+	    )
 	)*
 	{
 	    value = sbuilder.ToString();

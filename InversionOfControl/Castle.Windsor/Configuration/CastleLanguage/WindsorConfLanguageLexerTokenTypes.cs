@@ -9,8 +9,8 @@ namespace Castle.Windsor.Configuration.CastleLanguage
 		public const int IN = 4;
 		public const int IMPORT = 5;
 		public const int EOS = 6;
-		public const int COLON = 7;
-		public const int NEWLINE = 8;
+		public const int NEWLINE = 7;
+		public const int COLON = 8;
 		public const int INDENT = 9;
 		public const int DEDENT = 10;
 		public const int ID = 11;
