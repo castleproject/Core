@@ -12,19 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Model
 {
-	using System;
+	using System.Collections;
 
-	using Castle.Model;
+	using Castle.Model.Interceptor;
 
 	/// <summary>
-	/// Summary description for IComponentFactory.
+	/// Summary description for InterceptorCollection.
 	/// </summary>
-	public interface IComponentFactory
+	public class InterceptorCollection : ReadOnlyCollectionBase
 	{
-		object Create( );
+		public void Add(IMethodInterceptor interceptor)
+		{
+			InnerList.Add( interceptor );
+		}
 
-		void Destroy(object instance);
+		public bool HasInterceptors
+		{
+			get { return Count != 0; }
+		}
+
+		public IMethodInterceptor[] ToArray()
+		{
+			return (IMethodInterceptor[]) InnerList.ToArray( typeof(IMethodInterceptor) );
+		}
 	}
 }

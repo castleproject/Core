@@ -3,20 +3,26 @@
     <ItemStatistics item="Qualified:Castle.Model.CustomLifestyleAttribute">
       <Item value="LifestyleHandlerType" priority="0" />
     </ItemStatistics>
+    <ItemStatistics item="Qualified:@">
+      <Item value="AddComponent" priority="0" />
+      <Item value="AddFacility" priority="0" />
+      <Item value="FullName" priority="0" />
+    </ItemStatistics>
     <ItemStatistics item="Qualified:Castle.MicroKernel.IKernel">
       <Item value="Dispose" priority="0" />
       <Item value="HasComponent" priority="0" />
-      <Item value="AddComponent" priority="1" />
+      <Item value="AddComponent" priority="2" />
       <Item value="ComponentModelBuilder" priority="0" />
-      <Item value="Parent" priority="1" />
-      <Item value="AddedAsChildKernel" priority="0" />
-      <Item value="AddFacility" priority="0" />
+      <Item value="Parent" priority="2" />
+      <Item value="ComponentRegistered" priority="4" />
+      <Item value="AddChildKernel" priority="1" />
       <Item value="Resolver" priority="0" />
-      <Item value="ReleaseComponent" priority="0" />
-      <Item value="ComponentRegistered" priority="3" />
+      <Item value="ReleaseComponent" priority="1" />
+      <Item value="AddFacility" priority="0" />
       <Item value="GetHandler" priority="5" />
+      <Item value="ProxyFactory" priority="0" />
       <Item value="ComponentCreated" priority="0" />
-      <Item value="AddChildKernel" priority="0" />
+      <Item value="AddedAsChildKernel" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:Castle.Model.LifestyleType">
       <Item value="Custom" priority="0" />
@@ -30,25 +36,42 @@
     <ItemStatistics item="Qualified:Castle.Facilities.ManagedExtensions.ManagementExtensionsClientFacility">
       <Item value="MServer" priority="0" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:@NUnit">
-      <Item value="Framework" priority="4" />
+    <ItemStatistics item="Qualified:Castle.Model.Interceptor.IMethodInvocation">
+      <Item value="Proceed" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Threading.Thread.CurrentThread">
-      <Item value="Join" priority="0" />
+      <Item value="Join" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.Model.Interceptor.IMethodInterceptor[]">
+      <Item value="Length" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.DynamicProxy.ProxyGenerator">
+      <Item value="CreateClassProxy" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:Castle.Model.Model.ConstructorCandidateCollection">
-      <Item value="Add" priority="1" />
       <Item value="FewerArgumentsCandidate" priority="0" />
+      <Item value="Add" priority="1" />
       <Item value="Count" priority="0" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:Castle.MicroKernel.LifecycleConcerns.ILifecycleConcern">
-      <Item value="Apply" priority="0" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:System.Reflection.ParameterInfo[]">
-      <Item value="Length" priority="0" />
+    <ItemStatistics item="Qualified:@Castle.Model.ActivationType">
+      <Item value="Undefined" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@Castle.Facilities">
       <Item value="ManagedExtensions" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.Model.ComponentModel">
+      <Item value="Properties" priority="1" />
+      <Item value="LifestyleType" priority="1" />
+      <Item value="Implementation" priority="6" />
+      <Item value="Constructors" priority="2" />
+      <Item value="CustomLifetyleHandler" priority="0" />
+      <Item value="Name" priority="1" />
+      <Item value="ConstructorCandidates" priority="0" />
+      <Item value="ExtendedProperties" priority="0" />
+      <Item value="Interceptors" priority="2" />
+      <Item value="LifecycleSteps" priority="1" />
+      <Item value="Dependencies" priority="0" />
+      <Item value="Service" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Collections">
       <Item value="Specialized" priority="1" />
@@ -56,8 +79,8 @@
     <ItemStatistics item="Qualified:Castle.MicroKernel.IDependecyResolver">
       <Item value="Resolve" priority="0" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:Castle.MicroKernel.IFacility">
-      <Item value="Init" priority="0" />
+    <ItemStatistics item="Qualified:System.Windows.Forms.TreeView">
+      <Item value="Nodes" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:Castle.MicroKernel.Tests.ClassComponents.DefaultSpamService">
       <Item value="TemplateEngine" priority="0" />
@@ -73,8 +96,18 @@
       <Item value="Disconnect" priority="0" />
       <Item value="Dispose" priority="0" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:System.Windows.Forms.TreeView">
-      <Item value="Nodes" priority="0" />
+    <ItemStatistics item="Qualified:Castle.DynamicProxy.GeneratorContext">
+      <Item value="Interceptor" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.Windsor.IWindsorContainer">
+      <Item value="AddComponent" priority="0" />
+      <Item value="AddFacility" priority="0" />
+      <Item value="Kernel" priority="1" />
+      <Item value="AddChildContainer" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.Model.InterceptorCollection">
+      <Item value="HasInterceptors" priority="0" />
+      <Item value="Add" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Reflection.PropertyInfo">
       <Item value="CanWrite" priority="0" />
@@ -89,10 +122,13 @@
       <Item value="Key" priority="0" />
       <Item value="Value" priority="1" />
     </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.MicroKernel.Tests.Lifecycle.Components.HttpFakeServer">
+      <Item value="IsInitialize" priority="0" />
+    </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.IDictionary">
       <Item value="Clear" priority="0" />
-      <Item value="Add" priority="0" />
       <Item value="Contains" priority="8" />
+      <Item value="Add" priority="0" />
       <Item value="Remove" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:Castle.Model.LifestyleAttribute">
@@ -123,6 +159,9 @@
     <ItemStatistics item="Qualified:@System.AttributeTargets">
       <Item value="Class" priority="0" />
     </ItemStatistics>
+    <ItemStatistics item="Qualified:@Castle.Model.LifestyleType">
+      <Item value="Undefined" priority="0" />
+    </ItemStatistics>
     <ItemStatistics item="Qualified:@Castle">
       <Item value="Model" priority="3" />
       <Item value="ComponentModel" priority="11" />
@@ -131,7 +170,35 @@
       <Item value="Resolve" priority="0" />
       <Item value="Release" priority="5" />
       <Item value="Init" priority="0" />
-      <Item value="ComponentModel" priority="3" />
+      <Item value="ComponentModel" priority="4" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.ManagementExtensions.Remote.Server.MConnectorServer">
+      <Item value="Dispose" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.ArrayList">
+      <Item value="ToArray" priority="0" />
+      <Item value="AddRange" priority="0" />
+      <Item value="GetEnumerator" priority="0" />
+      <Item value="Add" priority="4" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@NUnit">
+      <Item value="Framework" priority="4" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.DynamicProxy.ICallable">
+      <Item value="Target" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.Model.LifecycleStep">
+      <Item value="StepType" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.MicroKernel.LifecycleConcerns.ILifecycleConcern">
+      <Item value="Apply" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Threading.ManualResetEvent">
+      <Item value="WaitOne" priority="1" />
+      <Item value="Set" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Reflection.ParameterInfo[]">
+      <Item value="Length" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.SortedList">
       <Item value="SyncRoot" priority="0" />
@@ -139,25 +206,8 @@
       <Item value="Values" priority="0" />
       <Item value="Count" priority="0" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:System.Collections.ArrayList">
-      <Item value="AddRange" priority="0" />
-      <Item value="GetEnumerator" priority="0" />
-      <Item value="Add" priority="3" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:@">
-      <Item value="AddComponent" priority="0" />
-      <Item value="AddFacility" priority="0" />
-      <Item value="FullName" priority="0" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:Castle.Model.LifecycleStep">
-      <Item value="StepType" priority="0" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:Castle.MicroKernel.Tests.Lifecycle.Components.HttpFakeServer">
-      <Item value="IsInitialize" priority="0" />
-    </ItemStatistics>
-    <ItemStatistics item="Qualified:System.Reflection.ParameterInfo">
-      <Item value="Name" priority="0" />
-      <Item value="ParameterType" priority="0" />
+    <ItemStatistics item="Qualified:@System.Console.Out">
+      <Item value="Write" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:Castle.MicroKernel.IComponentModelBuilder">
       <Item value="AddContributor" priority="0" />
@@ -171,8 +221,14 @@
       <Item value="FullName" priority="0" />
       <Item value="GetProperties" priority="0" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:Castle.ManagementExtensions.Remote.Server.MConnectorServer">
-      <Item value="Dispose" priority="0" />
+    <ItemStatistics item="Qualified:Castle.MicroKernel.IFacility">
+      <Item value="Init" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.Windsor.Proxy.DefaultMethodInvocation">
+      <Item value="ResetIndex" priority="0" />
+      <Item value="InterceptorChain" priority="0" />
+      <Item value="Reset" priority="0" />
+      <Item value="Proceed" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:Castle.MicroKernel.ILifestyleManager">
       <Item value="Init" priority="0" />
@@ -183,6 +239,7 @@
     <ItemStatistics item="Qualified:@System">
       <Item value="Reflection" priority="2" />
       <Item value="Collections.Specialized" priority="0" />
+      <Item value="Attribute" priority="0" />
       <Item value="Collections" priority="5" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.IList">
@@ -192,18 +249,9 @@
       <Item value="Add" priority="2" />
       <Item value="Count" priority="5" />
     </ItemStatistics>
-    <ItemStatistics item="Qualified:Castle.Model.ComponentModel">
-      <Item value="Properties" priority="1" />
-      <Item value="LifestyleType" priority="1" />
-      <Item value="Implementation" priority="5" />
-      <Item value="Constructors" priority="2" />
-      <Item value="CustomLifetyleHandler" priority="0" />
-      <Item value="ExtendedProperties" priority="0" />
-      <Item value="Dependencies" priority="0" />
-      <Item value="Name" priority="1" />
-      <Item value="LifecycleSteps" priority="1" />
-      <Item value="ConstructorCandidates" priority="0" />
-      <Item value="Service" priority="0" />
+    <ItemStatistics item="Qualified:System.Reflection.ParameterInfo">
+      <Item value="Name" priority="0" />
+      <Item value="ParameterType" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Reflection.ConstructorInfo">
       <Item value="GetParameters" priority="6" />
@@ -225,6 +273,9 @@
       <Item value="HasTrack" priority="0" />
       <Item value="ToString" priority="0" />
     </ItemStatistics>
+    <ItemStatistics item="Qualified:Castle.Windsor.Tests.Components.CalculatorService">
+      <Item value="Sum" priority="1" />
+    </ItemStatistics>
   </CompletionStatisticsManager>
   <SettingsComponent>
     <string />
@@ -233,33 +284,34 @@
   </SettingsComponent>
   <RecentFilesTracker>
     <RecentFilesTracker>
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Samples\ManagementExtensions\ClientApplication\Form1.cs" offset="2815" line="47" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensions\Default\MDefaultRegistry.cs" offset="7856" line="39" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Facilities\ManagedExtensionsFacility\ManagementExtensionsServerFacility.cs" offset="2067" line="22" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Samples\ManagementExtensions\SampleComponents\MessageServer.cs" offset="833" line="0" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Facilities\ManagedExtensionsFacility\ManagementExtensionsClientFacility.cs" offset="1258" line="16" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensionsTest\RemoteTestCase.cs" offset="1307" line="46" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Samples\ManagementExtensions\ServerApplication\Application.cs" offset="1312" line="8" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensions\Remote\Server\MConnectorServer.cs" offset="919" line="19" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Samples\ManagementExtensions\SampleComponents\IMessageServer.cs" offset="835" line="0" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Facilities\ManagedExtensionsFacility\ManagementExtensionModelInspector.cs" offset="1527" line="14" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\DefaultKernel.cs" offset="4915" line="38" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensions\ManagedObjectName.cs" offset="6018" line="228" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Handlers\AbstractHandler.cs" offset="260" line="0" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\ComponentFactory\DefaultComponentFactory.cs" offset="965" line="0" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\IKernel.cs" offset="3011" line="94" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\KernelEventSupport.cs" offset="2513" line="79" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\IKernelEvents.cs" offset="3511" line="82" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensionsTest\MServerFactoryTestCase.cs" offset="0" line="30" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensions\Default\MInspector.cs" offset="757" line="11" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Facilities\IFacility.cs" offset="835" line="-1" column="-1" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Handlers\DefaultHandlerFactory.cs" offset="0" line="0" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensions\MServer.cs" offset="2124" line="0" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensions\Default\MDefaultServer.cs" offset="4026" line="38" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensions\ManagedInstance.cs" offset="24" line="0" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor\IWindsorContainer.cs" offset="13" line="9" column="0" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\Tools\ManagedExtensions\ManagementExtensionsTest\CodeGenerationInvokerStrategyTestCase.cs" offset="77" line="-1" column="-1" />
-      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor\WindsorContainer.cs" offset="1437" line="31" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor.Tests\InterceptorsTestCase.cs" offset="2673" line="81" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor\Proxy\DefaultMethodInvocation.cs" offset="1398" line="66" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor\Proxy\InterceptorChain.cs" offset="0" line="24" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor.Tests\Components\CalculatorService.cs" offset="876" line="0" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor\Proxy\DefaultProxyFactory.cs" offset="1239" line="32" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor\WindsorContainer.cs" offset="1748" line="33" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\DefaultKernel.cs" offset="3470" line="207" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Releasers\LifecycledComponentsReleasePolicy.cs" offset="1214" line="-1" column="-1" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Handlers\DefaultHandler.cs" offset="1210" line="-1" column="-1" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Lifestyle\SingletonLifestyleManager.cs" offset="1122" line="-1" column="-1" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Lifestyle\AbstractLifestyleManager.cs" offset="1098" line="-1" column="-1" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\ComponentActivator\DefaultComponentFactory.cs" offset="2022" line="52" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Model\Model\ComponentModel.cs" offset="3014" line="4" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\IKernelEvents.cs" offset="0" line="18" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Model\Interceptor\IMethodInterceptor.cs" offset="807" line="7" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Lifestyle\PerThreadLifestyleManager.cs" offset="1283" line="22" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\LifecycleConcerns\DisposalConcern.cs" offset="0" line="0" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\LifecycleConcerns\InitializationConcern.cs" offset="0" line="5" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\LifecycleConcerns\ILifecycleConcern.cs" offset="0" line="-1" column="-1" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Model\Model\InterceptorCollection.cs" offset="1074" line="18" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\IKernel.cs" offset="2906" line="99" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Castle.Windsor\IWindsorContainer.cs" offset="947" line="13" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Handlers\AbstractHandler.cs" offset="936" line="24" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernelTest\SubContainers\SubContainersTestCase.cs" offset="645" line="0" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Proxy\IProxyFactory.cs" offset="0" line="0" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\MicroKernel\MicroKernel\Proxy\NotSupportedProxyFactory.cs" offset="0" line="6" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Model\Interceptor\IMethodInvocation.cs" offset="0" line="10" column="0" />
+      <TrackedFile location="E:\dev\projects\digitalgravity\castle\trunk\MicroKernel\Model\Model\PropertySetCollection.cs" offset="0" line="-1" column="-1" />
     </RecentFilesTracker>
   </RecentFilesTracker>
 </Configuration>

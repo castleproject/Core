@@ -63,22 +63,22 @@ namespace Castle.Model
 		OnDemand
 	}
 
-
-
 	/// <summary>
 	/// Summary description for ComponentModel.
 	/// </summary>
-	public class ComponentModel
+	public sealed class ComponentModel
 	{
 		private String _name;
 		private Type _service;
 		private Type _implementation;
+		private IDictionary _extended;
 		private LifestyleType _lifestyleType;
 		private Type _customLifestyle;
+
 		private ConstructorCandidateCollection _constructors;
 		private PropertySetCollection _properties;
 		private LifecycleStepCollection _lifecycleSteps;
-		private IDictionary _extended;
+		private InterceptorCollection _interceptors;
 
 		public ComponentModel(String name, Type service, Type implementation)
 		{
@@ -91,6 +91,7 @@ namespace Castle.Model
 			_constructors = new ConstructorCandidateCollection();
 			_properties = new PropertySetCollection();
 			_lifecycleSteps = new LifecycleStepCollection();
+			_interceptors = new InterceptorCollection();
 		}
 
 		public String Name
@@ -143,9 +144,15 @@ namespace Castle.Model
 			set { _customLifestyle = value; }
 		}
 
+		public InterceptorCollection Interceptors
+		{
+			get { return _interceptors; }
+		}
+
 		public void Freeze()
 		{
-			// TODO: Freeze
+			// TODO: Is it worthwhile to implement a freeze semantic?
+
 		}
 	}
 }

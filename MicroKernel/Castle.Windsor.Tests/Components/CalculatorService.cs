@@ -12,24 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.Windsor.Tests.Components
 {
 	using System;
 
-	using System.Collections;
-
 	/// <summary>
-	/// Summary description for DependencyModelCollection.
+	/// Summary description for CalculatorService.
 	/// </summary>
-	public class DependencyModelCollection : ReadOnlyCollectionBase
+	public class CalculatorService
 	{
-		public DependencyModelCollection()
+		public CalculatorService()
 		{
 		}
 
-		public void Add(DependencyModel model)
+		public virtual int Sum(int x, int y)
 		{
-			InnerList.Add(model);
+			return x + y;
 		}
 	}
 }

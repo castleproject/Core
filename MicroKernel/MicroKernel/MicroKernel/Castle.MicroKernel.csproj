@@ -114,12 +114,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ComponentFactory\DefaultComponentFactory.cs"
+                    RelPath = "ComponentActivator\DefaultComponentFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ComponentFactory\IComponentFactory.cs"
+                    RelPath = "ComponentActivator\IComponentFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -240,6 +240,16 @@
                 />
                 <File
                     RelPath = "ModelBuilder\Inspectors\PropertiesDependenciesModelInspector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\IProxyFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\NotSupportedProxyFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

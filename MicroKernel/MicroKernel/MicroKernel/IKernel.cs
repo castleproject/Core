@@ -21,7 +21,7 @@ namespace Castle.MicroKernel
 	/// <summary>
 	/// Summary description for IKernel.
 	/// </summary>
-	public interface IKernel :  IKernelEvents, IDisposable
+	public interface IKernel : IKernelEvents, IDisposable
 	{
 		/// <summary>
 		/// 
@@ -118,6 +118,11 @@ namespace Castle.MicroKernel
 		// void ConfigureExternalComponent(object component);
 
 		// void ConfigureExternalComponent(object component, ComponentModel model);
+		
+		IProxyFactory ProxyFactory
+		{
+			get; set;
+		}
 
 		IKernel Parent
 		{
@@ -126,6 +131,6 @@ namespace Castle.MicroKernel
 
 		void AddChildKernel(IKernel kernel);
 
-		IComponentFactory CreateComponentFactory(ComponentModel model);
+		IComponentActivator CreateComponentActivator(ComponentModel model);
 	}
 }

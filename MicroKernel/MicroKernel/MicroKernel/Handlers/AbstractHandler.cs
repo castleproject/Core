@@ -47,9 +47,9 @@ namespace Castle.MicroKernel.Handlers
 			_kernel = kernel;
 			_kernel.AddedAsChildKernel += new EventHandler(OnAddedAsChildKernel);
 
-			IComponentFactory factory = _kernel.CreateComponentFactory(ComponentModel);
+			IComponentActivator activator = _kernel.CreateComponentActivator(ComponentModel);
 			
-			_lifestyleManager = CreateLifestyleManager(factory);
+			_lifestyleManager = CreateLifestyleManager(activator);
 
 			EnsureDependenciesCanBeSatisfied();
 		}
@@ -96,7 +96,7 @@ namespace Castle.MicroKernel.Handlers
 			get { return _dependencies; }
 		}
 
-		protected virtual ILifestyleManager CreateLifestyleManager(IComponentFactory factory)
+		protected virtual ILifestyleManager CreateLifestyleManager(IComponentActivator activator)
 		{
 			ILifestyleManager manager = null;
 
@@ -119,7 +119,7 @@ namespace Castle.MicroKernel.Handlers
 					Activator.CreateInstance( ComponentModel.CustomLifestyle );
 			}
 
-			manager.Init( factory );
+			manager.Init( activator );
 
 			return manager;
 		}

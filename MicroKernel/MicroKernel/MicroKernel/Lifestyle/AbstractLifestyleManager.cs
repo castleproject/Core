@@ -21,11 +21,11 @@ namespace Castle.MicroKernel.Lifestyle
 	/// </summary>
 	public abstract class AbstractLifestyleManager : ILifestyleManager
 	{
-		protected IComponentFactory _componentFactory;
+		protected IComponentActivator _componentFactory;
 
-		public virtual void Init(IComponentFactory componentFactory)
+		public virtual void Init(IComponentActivator componentActivator)
 		{
-			_componentFactory = componentFactory;
+			_componentFactory = componentActivator;
 		}
 
 		public virtual object Resolve()

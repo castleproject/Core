@@ -12,24 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.MicroKernel
 {
-	using System;
-
-	using System.Collections;
+	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for DependencyModelCollection.
+	/// Summary description for IProxyFactory.
 	/// </summary>
-	public class DependencyModelCollection : ReadOnlyCollectionBase
+	public interface IProxyFactory
 	{
-		public DependencyModelCollection()
-		{
-		}
-
-		public void Add(DependencyModel model)
-		{
-			InnerList.Add(model);
-		}
+		object Create( ComponentModel mode, params object[] constructorArguments );
 	}
 }

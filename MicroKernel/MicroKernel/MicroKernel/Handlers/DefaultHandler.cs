@@ -14,12 +14,7 @@
 
 namespace Castle.MicroKernel.Handlers
 {
-	using System;
-	using System.Collections;
-
 	using Castle.Model;
-
-	using Castle.MicroKernel.ComponentFactory;
 
 	/// <summary>
 	/// Summary description for DefaultHandler.

@@ -17,14 +17,38 @@ namespace Castle.MicroKernel
 	using System;
 
 	/// <summary>
-	/// Summary description for ILifestyleManager.
+	/// The <code>ILifestyleManager</code> implements 
+	/// a strategy for a given lifestyle, like singleton, perthread
+	/// and transient.
 	/// </summary>
+	/// <remarks>
+	/// The responsability of <code>ILifestyleManager</code>
+	/// is only the management of lifestyle. It should rely on
+	/// <see cref="IComponentActivator"/> to obtain a new component instance
+	/// </remarks>
 	public interface ILifestyleManager : IDisposable
 	{
-		void Init(IComponentFactory factory);
+		/// <summary>
+		/// Initializes the <code>ILifestyleManager</code> with the 
+		/// <see cref="IComponentActivator"/>
+		/// </summary>
+		/// <param name="componentActivator"></param>
+		void Init(IComponentActivator componentActivator);
 
+		/// <summary>
+		/// Implementors should return the component instance based 
+		/// on the lifestyle semantic.
+		/// </summary>
+		/// <returns></returns>
 		object Resolve();
 
+		/// <summary>
+		/// Implementors should release the component instance based
+		/// on the lifestyle semantic, for example, singleton components
+		/// should not be released on a call for release, instead they should
+		/// release them when disposed is invoked.
+		/// </summary>
+		/// <param name="instance"></param>
 		void Release(object instance);
 	}
 }

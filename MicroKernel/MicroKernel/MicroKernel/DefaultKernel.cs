@@ -24,7 +24,8 @@ namespace Castle.MicroKernel
 	using Castle.MicroKernel.ModelBuilder;
 	using Castle.MicroKernel.Resolvers;
 	using Castle.MicroKernel.Releasers;
-	using Castle.MicroKernel.ComponentFactory;
+	using Castle.MicroKernel.ComponentActivator;
+	using Castle.MicroKernel.Proxy;
 
 	/// <summary>
 	/// Summary description for DefaultKernel.
@@ -36,18 +37,17 @@ namespace Castle.MicroKernel
 		private IComponentModelBuilder _modelBuilder;
 		private IDependecyResolver _resolver;
 		private IReleasePolicy _releaserPolicy;
-		private Hashtable _dependencyToSatisfy;
+		private IProxyFactory _proxyFactory;
 		private IList _facilities;
 		private IList _childKernels;
 
 		private IDictionary _key2Handler;
 		private IDictionary _service2Handler;
 
-		public DefaultKernel()
+		public DefaultKernel() : this(new NotSupportedProxyFactory())
 		{
 			_key2Handler = new HybridDictionary();
 			_service2Handler = new Hashtable();
-			_dependencyToSatisfy = new Hashtable();
 			_childKernels = new ArrayList();
 			_facilities = new ArrayList();
 
@@ -55,6 +55,12 @@ namespace Castle.MicroKernel
 			_resolver = new DefaultDependecyResolver(this);
 			_handlerFactory = new DefaultHandlerFactory(this);
 			_modelBuilder = new DefaultComponentModelBuilder();
+			_proxyFactory = new NotSupportedProxyFactory();
+		}
+
+		public DefaultKernel(IProxyFactory proxyFactory)
+		{
+			_proxyFactory = proxyFactory;
 		}
 
 		#region IKernel Members
@@ -163,6 +169,12 @@ namespace Castle.MicroKernel
 			get { return _modelBuilder; }
 		}
 
+		public IProxyFactory ProxyFactory
+		{
+			get { return _proxyFactory; }
+			set { _proxyFactory = value; }
+		}
+
 		public IConfigurationStore ConfigurationStore
 		{
 			get
@@ -214,6 +226,7 @@ namespace Castle.MicroKernel
 
 		public void AddSubSystem(String key, ISubSystem subsystem)
 		{
+			throw new NotImplementedException("AddSubSystem");
 		}
 
 		// void ConfigureExternalComponent(object component);
@@ -249,9 +262,9 @@ namespace Castle.MicroKernel
 			get { return _resolver; }
 		}
 
-		public IComponentFactory CreateComponentFactory(ComponentModel model)
+		public IComponentActivator CreateComponentActivator(ComponentModel model)
 		{
-			return new DefaultComponentFactory(model, this, 
+			return new DefaultComponentActivator(model, this, 
 				new ComponentInstanceDelegate(RaiseComponentCreated), 
 				new ComponentInstanceDelegate(RaiseComponentDestroyed) );
 		}
@@ -272,6 +285,12 @@ namespace Castle.MicroKernel
 				{
 					((IDisposable) handler).Dispose();
 				}
+			}
+
+			if (Parent != null)
+			{
+				Parent.ComponentRegistered -= new ComponentDataDelegate(RaiseComponentRegistered);
+				Parent.ComponentUnregistered -= new ComponentDataDelegate(RaiseComponentUnregistered);
 			}
 		}
 

@@ -12,24 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.Model.Interceptor
 {
 	using System;
-
-	using System.Collections;
+	using System.Reflection;
 
 	/// <summary>
-	/// Summary description for DependencyModelCollection.
+	/// Summary description for IMethodInvocation.
 	/// </summary>
-	public class DependencyModelCollection : ReadOnlyCollectionBase
+	public interface IMethodInvocation
 	{
-		public DependencyModelCollection()
-		{
-		}
+		/// <summary>
+		/// 
+		/// </summary>
+		object Proxy { get; }
 
-		public void Add(DependencyModel model)
-		{
-			InnerList.Add(model);
-		}
+		/// <summary>
+		/// 
+		/// </summary>
+		object InvocationTarget { get;set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		MethodInfo Method { get; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		object Proceed( params object[] args );
 	}
 }
