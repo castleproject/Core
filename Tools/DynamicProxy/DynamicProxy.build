@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<!--
+ Copyright 2003-2004 The Apache Software Foundation
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project name="dynamicproxy" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="doc.dir" value="${base.dir}/doc" />
+	<property name="src.dir" value="${base.dir}/src" />
+
+	<property name="core.src.dir" value="${src.dir}/DynamicProxy" />
+	<property name="core.test.src.dir" value="${src.dir}/DynamicProxyTest" />
+	<property name="core.name" value="Apache.Avalon.DynamicProxy" />
+	<property name="core.assembly.name" value="${core.name}.dll" />
+	<property name="core.test.assembly.name" value="${core.name}.Test.dll" />
+
+	<property name="debug" value="true" />
+	<property name="optimize" value="false" />
+	<property name="version" value="1.0.0.2" />
+
+	<!-- find out where nunit.framework.dll is -->
+	<property name="nant.lib.dir"
+		value="${path::combine(nant::get-base-directory(), 'lib')}"
+		dynamic="true" />
+		
+	<property name="nant.lib.family.dir"
+		value="${path::combine(nant.lib.dir,framework::get-family(framework::get-target-framework()))}"
+		dynamic="true" />
+		
+	<property name="nant.lib.framework.dir"
+		value="${path::combine(nant.lib.family.dir, framework::get-version(framework::get-target-framework()))}"
+		dynamic="true" />
+		
+	<property name="nunit.framework.dll"
+			value="${path::combine(nant.lib.framework.dir, 'nunit.framework.dll')}" />
+
+	<property name="nant.tasks.nunit2"
+			value="False"
+			unless="${property::exists('nant.tasks.nunit2')}" />	
+
+	<target name="clean">
+		<delete dir="bin" failonerror="false" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="bin" />
+		<!-- <copy file="${antlr.runtime.dll}" todir="build" /> -->
+	</target>
+
+	<target name="build" depends="init,core.tests.run" />
+	
+	<target name="core.compile" depends="init">
+		<csc 
+			doc="${bin.dir}/${core.name}.xml" 
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${core.assembly.name}">
+			
+			<sources basedir="${core.src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+		</csc>
+	</target>
+
+	<target name="core.tests.compile" depends="core.compile">
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${core.test.assembly.name}">
+			
+			<sources basedir="${core.test.src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/${core.assembly.name}" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="core.tests.run" depends="core.tests.compile">
+		<nunit2 haltonerror="true" failonerror="true" haltonfailure="true">
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${core.test.assembly.name}" />
+		</nunit2>
+	</target>
+	
+	<target name="documentation">
+		<ndoc failonerror="false">
+			<assemblies basedir="${bin.dir}">
+				<include name="${core.assembly.name}" />
+			</assemblies>
+			<documenters>
+				<documenter name="MSDN">
+					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
+					<property name="HtmlHelpName" value="AspectSharp" />
+					<property name="IncludeFavorites" value="False" />
+					<property name="Title" value="AspectSharp - .NET AOP Implementation" />
+					<property name="SplitTOCs" value="False" />
+					<property name="DefaulTOC" value="AspectSharp.Framework" />
+					<property name="ShowVisualBasic" value="False" />
+					<property name="ShowMissingSummaries" value="True" />
+					<property name="ShowMissingRemarks" value="False" />
+					<property name="ShowMissingParams" value="True" />
+					<property name="ShowMissingReturns" value="True" />
+					<property name="ShowMissingValues" value="False" />
+					<property name="DocumentInternals" value="True" />
+					<property name="DocumentProtected" value="True" />
+					<property name="DocumentPrivates" value="False" />
+					<property name="DocumentEmptyNamespaces" value="False" />
+					<property name="IncludeAssemblyVersion" value="True" />
+					<property name="CopyrightText" value="Copyright 2004 Henry Conceição / Rafael Steil" />
+					<property name="CopyrightHref" value="" />
+				</documenter>
+			</documenters>
+		</ndoc>
+	</target>
+	
+</project>
