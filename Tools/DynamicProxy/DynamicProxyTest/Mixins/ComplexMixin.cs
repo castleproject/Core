@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.DynamicProxy.Test.Mixins
 {
 	using System;
@@ -33,6 +34,7 @@ namespace Castle.DynamicProxy.Test.Mixins
 	/// <summary>
 	/// Summary description for ComplexMixin.
 	/// </summary>
+	[Serializable]
 	public class ComplexMixin : IThird
 	{
 		public ComplexMixin()

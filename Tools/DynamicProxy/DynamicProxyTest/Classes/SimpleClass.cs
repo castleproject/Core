@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Test.Classes
 	/// <summary>
 	/// Summary description for SimpleClass.
 	/// </summary>
+	[Serializable]
 	public class SimpleClass
 	{
 		public SimpleClass()

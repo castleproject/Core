@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Test
 	using NUnit.Framework;
 
 	using Castle.DynamicProxy.Test.Classes;
+	using Castle.DynamicProxy.Test.Mixins;
 
 	/// <summary>
 	/// Summary description for SerializableClassTestCase.
@@ -28,12 +29,19 @@ namespace Castle.DynamicProxy.Test
 	[TestFixture]
 	public class SerializableClassTestCase
 	{
+		ProxyGenerator generator;
+
+		[SetUp]
+		public void Init()
+		{
+			generator = new ProxyGenerator();
+		}
+
 		[Test]
 		public void CreateSerializable()
 		{
 			MySerializableClass myClass = new MySerializableClass();
 
-			ProxyGenerator generator = new ProxyGenerator();
 			MySerializableClass proxy = (MySerializableClass) 
 				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInterceptor() );
 
@@ -41,23 +49,55 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		public void ProxySerialization()
+		public void SimpleProxySerialization()
 		{
-			ProxyGenerator generator = new ProxyGenerator();
 			MySerializableClass proxy = (MySerializableClass) 
 				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInterceptor() );
 
 			DateTime current = proxy.Current;
 
+			MySerializableClass otherProxy = (MySerializableClass) SerializeAndDeserialize(proxy);
+
+			Assert.AreEqual( current, otherProxy.Current );
+		}
+
+		[Test]
+		public void MixinSerialization()
+		{
+			GeneratorContext context = new GeneratorContext();
+			SimpleMixin mixin1 = new SimpleMixin();
+			OtherMixin mixin2 = new OtherMixin();
+
+			context.AddMixinInstance( mixin1 );
+			context.AddMixinInstance( mixin2 );
+
+			object proxy = generator.CreateCustomClassProxy( 
+				typeof(SimpleClass), new StandardInterceptor(), context );
+
+			Assert.IsTrue( typeof(SimpleClass).IsAssignableFrom( proxy.GetType() ) );
+
+			ISimpleMixin mixin = proxy as ISimpleMixin;
+			Assert.AreEqual(1, mixin.DoSomething());
+
+			IOtherMixin other = proxy as IOtherMixin;
+			Assert.AreEqual(3, other.Sum(1,2));
+
+			SimpleClass otherProxy = (SimpleClass) SerializeAndDeserialize(proxy);
+
+			mixin = otherProxy as ISimpleMixin;
+			Assert.AreEqual(1, mixin.DoSomething());
+
+			other = otherProxy as IOtherMixin;
+			Assert.AreEqual(3, other.Sum(1,2));
+		}
+
+		public object SerializeAndDeserialize( object proxy )
+		{
 			MemoryStream stream = new MemoryStream();
 			BinaryFormatter formatter = new BinaryFormatter();
-
 			formatter.Serialize( stream, proxy );
-
 			stream.Position = 0;
-
-			MySerializableClass otherProxy = formatter.Deserialize( stream ) as MySerializableClass;
-			Assert.AreEqual( current, otherProxy.Current );
+			return formatter.Deserialize( stream );
 		}
 	}
 }

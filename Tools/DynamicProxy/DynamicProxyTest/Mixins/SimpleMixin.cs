@@ -24,6 +24,7 @@ namespace Castle.DynamicProxy.Test.Mixins
 	/// <summary>
 	/// Summary description for SimpleMixin.
 	/// </summary>
+	[Serializable]
 	public class SimpleMixin : ISimpleMixin
 	{
 		public SimpleMixin()
