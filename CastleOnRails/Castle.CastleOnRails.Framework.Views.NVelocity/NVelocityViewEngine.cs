@@ -156,7 +156,10 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 				innerContext[entry.Key] = entry.Value;
 			}
 
-			innerContext["siteRoot"] = HttpContext.Current.Request.ApplicationPath;
+			if (HttpContext.Current != null)
+			{
+				innerContext["siteRoot"] = HttpContext.Current.Request.ApplicationPath;
+			}
 
 			return new VelocityContext( innerContext );
 		}
