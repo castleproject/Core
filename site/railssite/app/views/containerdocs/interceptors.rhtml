@@ -2,34 +2,57 @@
 <% @main_title = "Interceptors" %>
 <%= render "/containerdocs/deflinks" %>
 
-In others container you usually have to proxy a component 
-in order to implement a chain of interceptors. The MicroKernel 
-exposes an interesting infrastructure to allow interceptor in a 
-painless fashion.
+Some containers usually always proxy every component. 
+On other you have to proxy them to intercept something. 
+Others leave to you the burden of constructing a chain of interceptors.
+The MicroKernel exposes an interesting 
+infrastructure to allow interceptors in a painless fashion.
 
 <p>
 Basically facilies can associate one or more interceptors with a component. 
 When the component is activated the MicroKernel checks whether 
-is there any interceptors associated with a component and if so, a proxy 
+there's any interceptors associated with a component and if so, a proxy 
 is created and a interceptor chain is associated with the proxy.
 </p>
 
 <pre class="source">
-
 if (Something())
 {
   model.Interceptors.Add( 
     new InteceptorReference( typeof(MyTransactionalInterceptor) ) );
 }
-
 </pre>
+
+<p>
+Usually the facility that associates components to 
+interceptors is the same one that registered the interceptor. However,
+if this is not your case, it would be nice to explicit say so to the kernel:
+</p>
+
+<pre class="source">
+if (Something())
+{
+  model.Interceptors.Add( 
+    new InteceptorReference( typeof(MyTransactionalInterceptor) ) );
+  model.Dependencies.Add( 
+    new DependencyModel( DependencyType.Service, "", typeof(MyTransactionalInterceptor), false ) );
+}
+</pre>
+
+<p>
+The last code snippet says to the kernel "hey, this component 
+requires the existance of another component implementing the 
+service 'MyTransactionalInterceptor' and this component will not be
+available until this dependency is satisfied. 
+</p>
+
 
 <h3>The rationale behind this design</h3>
 
 <p>
-The whole principle behind Castle project is orthogonality, so
+The whole principle behind Castle Project is orthogonality, so
 by choosing this design, more than one facility could register 
-their inteceptors to handle different concerns. 
+their inteceptors to handle different concerns on the same component. 
 Something that have been implemented, for example, is the
 NHibernate facility that register an AutomaticSessionInterceptor,
 and the Automatic Transaction Management facility that register an 
@@ -40,12 +63,13 @@ TransactionInterceptor to carry on with the Begins/Committs/Rollbacks.
  
 <p>
 An interceptor is a component registered like any other
-component. The only requirement is that the inteceptor must
-implement (correctly) the interface IMethodInterceptor.
+component. The only requirement is that the inteceptor 
+implements (correctly) the interface IMethodInterceptor.
 </p>
 
 <p>
-The transactional interceptor code follows:
+As an example, we present you with the 
+transactional interceptor code:
 </p>
 
 <pre class="source">
