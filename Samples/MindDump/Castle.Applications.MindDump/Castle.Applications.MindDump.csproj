@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Adapters\PrincipalAuthorAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dao\AuthorDao.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -185,6 +190,11 @@
                 />
                 <File
                     RelPath = "Services\BlogMaintenanceService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\EncryptionService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

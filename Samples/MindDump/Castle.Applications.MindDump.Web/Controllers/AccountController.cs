@@ -1,4 +1,4 @@
- // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,17 +15,38 @@
 namespace Castle.Applications.MindDump.Web.Controllers
 {
 	using System;
+	using System.Collections;
+	using System.Security.Cryptography;
+
 	using Castle.CastleOnRails.Framework;
+
+	using Castle.Applications.MindDump.Model;
+	using Castle.Applications.MindDump.Services;
+
 
 	[Layout("default")]
 	public class AccountController : AbstractSecureController
 	{
+		private AccountService _accountService;
+		private AuthenticationService _authenticationService;
+		private EncryptionService _encryptionService;
+
+		public AccountController(AccountService accountService, 
+			AuthenticationService authenticationService, 
+			EncryptionService encryptionService)
+		{
+			_accountService = accountService;
+			_authenticationService = authenticationService;
+			_encryptionService = encryptionService;
+		}
+
 		[SkipFilter]
 		public void New()
 		{
 		}
 
 		[SkipFilter]
+		[Rescue("errorcreatingaccount")]
 		public void CreateAccount(String login, String name, String email,
 		                      String pwd, String pwd2, String blogname,
 		                      String blogdesc, String theme)
@@ -36,12 +57,21 @@ namespace Castle.Applications.MindDump.Web.Controllers
 				RenderView("new");
 				return;
 			}
+ 
+			Author author = new Author(name, login, pwd);
+			Blog blog = new Blog(blogname, blogdesc, theme, author);
 
+			_accountService.CreateAccountAndBlog( blog );
 
-			Console.Write("");
+			// Done, now lets log on into the system
+			PerformLogin(login, pwd);
 		}
 
 		public void Change()
+		{
+		}
+
+		public void SaveChanges()
 		{
 		}
 
@@ -50,12 +80,62 @@ namespace Castle.Applications.MindDump.Web.Controllers
 		{
 		}
 
+		[SkipFilter]
+		public void PerformLogin(String login, String pwd)
+		{
+			if (!_authenticationService.Authenticate(login, pwd))
+			{
+				Context.Flash["errormessage"] = "User not found or incorrect password.";
+			
+				RenderView("Authentication");
+			}
+			else
+			{
+				Context.Response.CreateCookie(
+					"authenticationticket", _encryptionService.Encrypt(login) );
+				
+				Redirect("Maintenance", "newentry");
+			}
+		}
+
+		//
+		// Private operations to handle common tasks
+		//
 
 		private bool IsValid(string login, string name, string email, string pwd, string pwd2, string blogname, string blogdesc, string theme)
 		{
-			Context.Flash["errormessage"] = "You must";
+			ArrayList errors = new ArrayList();
+
+			if (login.Trim().Length == 0)
+			{
+				errors.Add("You must supply a valid login name");
+			}
+			if (name.Trim().Length == 0)
+			{
+				errors.Add("You must supply a valid name");
+			}
+			if (pwd.Trim().Length == 0)
+			{
+				errors.Add("You must supply a valid password");
+			}
+			if (pwd2.Trim().Length == 0)
+			{
+				errors.Add("You must supply a valid password confirmation");
+			}
+			else if (!pwd.Equals(pwd2))
+			{
+				errors.Add("Passwords don't match...");
+			}
+			if (blogname.Trim().Length == 0)
+			{
+				errors.Add("You must supply a valid blog name");
+			}
+
+			if (errors.Count == 0) return true;
+
+			Context.Flash["errormessages"] = errors;
+			
 			return false;
 		}
-
 	}
 }

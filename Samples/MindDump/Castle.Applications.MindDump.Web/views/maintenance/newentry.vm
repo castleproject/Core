@@ -1,0 +1,37 @@
+<p>
+MindDump is a simple blog application. To create your blog and start to dump 
+your thoughts and opinions, please create <a href="/account/new.rails">an account</a>.
+</p>
+
+<br>
+<font size="+1">Last updates</font>
+<br>
+
+<p>
+<table width="100%" border="1">
+  <tr>
+    <td>Blog x</td>
+    <td>Is there life out there?</td>
+  </tr>
+  <tr>
+    <td>Blog x</td>
+    <td>Is there life out there?</td>
+  </tr>
+</table>
+</p>
+
+<br>
+<font size="+1">Best picks</font>
+<br>
+
+<p>
+<table width="100%" border="1">
+  <tr>
+    <td>Blog x</td>
+    <td>Is there life out there?</td>
+  </tr>
+  <tr>
+    <td>Blog x</td>
+    <td>Is there life out there?</td>
+  </tr>
+</table>

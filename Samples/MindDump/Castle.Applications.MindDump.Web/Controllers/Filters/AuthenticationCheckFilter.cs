@@ -18,12 +18,50 @@ namespace Castle.Applications.MindDump.Web.Controllers.Filters
 
 	using Castle.CastleOnRails.Framework;
 
+	using Castle.Applications.MindDump.Model;
+	using Castle.Applications.MindDump.Services;
+	using Castle.Applications.MindDump.Adapters;
 
+	/// <summary>
+	/// Looks for a cookie "authenticationticket", decrypt it and obtains the 
+	/// login name. It then obtains the Author based on the login and
+	/// associate the user with the context.
+	/// </summary>
 	public class AuthenticationCheckFilter : IFilter
 	{
+		private EncryptionService _encryptionService;
+		private AccountService _accountService;
+
+		public AuthenticationCheckFilter(AccountService accountService, 
+			EncryptionService encryptionService)
+		{
+			_accountService = accountService;
+			_encryptionService = encryptionService;
+		}
+
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
-			return false;
+			String contents = context.Request.ReadCookie("authenticationticket"); 
+
+			if (contents == null)
+			{
+				context.Response.Redirect("account", "authentication");
+				return false;
+			}
+
+			String login = _encryptionService.Decrypt(contents);
+
+			Author author = _accountService.ObtainAuthor(login);
+
+			if (author == null)
+			{
+				context.Response.Redirect("account", "authentication");
+				return false;
+			}
+
+			context.CurrentUser = new PrincipalAuthorAdapter(author);
+
+			return true;
 		}
 	}
 }

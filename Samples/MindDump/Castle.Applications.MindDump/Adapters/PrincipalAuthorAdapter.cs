@@ -12,24 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.MindDump.Web.Controllers
+namespace Castle.Applications.MindDump.Adapters
 {
 	using System;
+	using System.Security.Principal;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.Applications.MindDump.Model;
 
 
-	[Layout("private")]
-	public class MaintenanceController : AbstractSecureController
+	public class PrincipalAuthorAdapter : IPrincipal, IIdentity
 	{
-		public void NewEntry()
+		private Author _author;
+
+		public PrincipalAuthorAdapter(Author author)
 		{
-			
+			_author = author;
 		}
 
-		public void EditEntry()
+		#region IPrincipal
+
+		public bool IsInRole(String role)
 		{
-			
+			return false;
+		}
+
+		public IIdentity Identity
+		{
+			get { return this; }
+		}
+
+		#endregion
+
+		public string Name
+		{
+			get { return _author.Name; }
+		}
+
+		public string AuthenticationType
+		{
+			get { return "Castle"; }
+		}
+
+		public bool IsAuthenticated
+		{
+			get { return true; }
 		}
 	}
 }

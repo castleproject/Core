@@ -227,6 +227,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "views\account\authentication.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\account\new.vm"
                     BuildAction = "None"
                 />
@@ -236,6 +240,18 @@
                 />
                 <File
                     RelPath = "views\layouts\default.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\private.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\newentry.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\errorcreatingaccount.vm"
                     BuildAction = "None"
                 />
             </Include>

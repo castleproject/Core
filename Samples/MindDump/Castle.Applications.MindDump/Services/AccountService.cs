@@ -45,5 +45,10 @@ namespace Castle.Applications.MindDump.Services
 			_authorDao.Create( blog.Author );
 			_blogDao.Create( blog );
 		}
+
+		public virtual Author ObtainAuthor( String login )
+		{
+			return _authorDao.Find(login);
+		}
 	}
 }

@@ -58,6 +58,7 @@ namespace Castle.Applications.MindDump
 			AddComponent( "post.dao", typeof(PostDao) );
 			AddComponent( "authentication", typeof(AuthenticationService) );
 			AddComponent( "account", typeof(AccountService) );
+			AddComponent( "encryption", typeof(EncryptionService) );
 		}
 	}
 }

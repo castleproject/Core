@@ -12,24 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.MindDump.Web.Controllers
+namespace Castle.Applications.MindDump.Tests
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using NUnit.Framework;
+
+	using Castle.Applications.MindDump.Services;
 
 
-	[Layout("private")]
-	public class MaintenanceController : AbstractSecureController
+	[TestFixture]
+	public class EncryptionServiceTestCase
 	{
-		public void NewEntry()
+		[Test]
+		public void EncryptDecrypt()
 		{
-			
-		}
+			EncryptionService service = new EncryptionService();
 
-		public void EditEntry()
-		{
-			
+			String originalContents = "My content to be encrypted";
+
+			String encContents = service.Encrypt(originalContents);
+
+			Assert.IsNotNull( encContents );
+			Assert.IsFalse( encContents.Equals(originalContents) );
+
+			String restoredContents = service.Decrypt(encContents);
+			Assert.AreEqual( originalContents, restoredContents );
 		}
 	}
 }
