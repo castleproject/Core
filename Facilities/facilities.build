@@ -15,7 +15,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, autotransaction, nhibernate, ibatis, aspectsharp, typedfactory, batchregistration" />
+	<target name="build" depends="init, autotransaction, nhibernate, ibatis, aspectsharp, typedfactory, batchregistration, startable" />
 	
 	<target name="init">
 
