@@ -21,18 +21,19 @@ namespace Castle.DynamicProxy.Invocation
 	/// </summary>
 	public class SameClassInvocation : AbstractInvocation
 	{
-		private ICallable call;
+		protected ICallable _callable;
 
-		public SameClassInvocation(ICallable del, object proxy, object target, MethodInfo method) : base(proxy, target, method)
+		public SameClassInvocation(ICallable callable, object proxy, object target, MethodInfo method) : 
+			base(proxy, target, method)
 		{
-			call = del;
+			_callable = callable;
 		}
 
 		public override object Proceed(params object[] args)
 		{
 			if (Proxy == InvocationTarget)
 			{
-				return call.Call( args );
+				return _callable.Call( args );
 			}
 			else
 			{

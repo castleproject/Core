@@ -30,7 +30,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		private TypeBuilder m_typeBuilder;
 		private FieldBuilder m_interceptorField;
 		private FieldBuilder m_cacheField;
-		private ConstructorBuilder m_constBuilder;
 		protected MethodBuilder m_method2Invocation;
 		protected Type m_baseType = typeof (Object);
 		
@@ -38,6 +37,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		private ModuleScope m_moduleScope;
 		private GeneratorContext m_context;
+
+		/// <summary>
+		/// Holds instance fields which points to delegates instantiated
+		/// </summary>
+		protected ArrayList m_cachedFields = new ArrayList();
+
+		/// <summary>
+		/// MethodInfo => Callable delegate
+		/// </summary>
+		protected Hashtable m_method2Delegate = new Hashtable();
 
 		protected BaseCodeGenerator(ModuleScope moduleScope) : this(moduleScope, new GeneratorContext())
 		{
@@ -74,10 +83,15 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get { return m_cacheField; }
 		}
 
-		protected ConstructorBuilder DefaultConstructorBuilder
+		protected abstract Type InvocationType
 		{
-			get { return m_constBuilder; }
+			get;
 		}
+
+//		protected ConstructorBuilder DefaultConstructorBuilder
+//		{
+//			get { return m_constBuilder; }
+//		}
 
 		protected Type GetFromCache(Type baseClass, Type[] interfaces)
 		{
@@ -88,6 +102,25 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			ModuleScope[generatedType.Name] = generatedType;
 		}
+
+		protected FieldBuilder ObtainCachedFieldBuilderDelegate(CallableDelegateBuilder builder)
+		{
+			foreach(CachedField field in m_cachedFields)
+			{
+				if (field.Callable == builder)
+				{
+					return field.Field;
+				}
+			}
+
+			return null;
+		}
+
+		protected void RegisterCacheFieldToBeInitialized(FieldBuilder field, CallableDelegateBuilder builder, MethodInfo baseInvokeMethod)
+		{
+			m_cachedFields.Add( new CachedField(field, builder, baseInvokeMethod) );
+		}
+
 
 		protected virtual TypeBuilder CreateTypeBuilder(Type baseType, Type[] interfaces)
 		{
@@ -155,8 +188,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			generator.Emit(OpCodes.Call, typeof (Type).GetMethod("GetTypeFromHandle"));
 			generator.Emit(OpCodes.Callvirt, typeof (SerializationInfo).GetMethod("AddValue", key_and_object));
 
-
-
 			generator.Emit(OpCodes.Ret);
 		}
 
@@ -167,13 +198,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			Type[] int_invocation_const_args = new Type[] {typeof(object), typeof(object), typeof (MethodInfo)};
 
 			MethodAttributes attrs = MethodAttributes.Private;
-			m_method2Invocation = MainTypeBuilder.DefineMethod("_Method2Invocation", attrs, typeof (IInvocation), args);
+			m_method2Invocation = MainTypeBuilder.DefineMethod("_Method2Invocation", 
+				attrs, typeof (IInvocation), args);
 
 			ILGenerator gen = m_method2Invocation.GetILGenerator();
 			LocalBuilder inv_local = gen.DeclareLocal(typeof (IInvocation));
 
 			Label endMethodBranch = gen.DefineLabel();
-			Label interfaceInvocationBranch = gen.DefineLabel();
 			Label setInCacheBranch = gen.DefineLabel();
 			Label retValueBranch = gen.DefineLabel();
 
@@ -189,26 +220,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			gen.Emit(OpCodes.Ldloc_0);
 			gen.Emit(OpCodes.Brtrue_S, endMethodBranch);
 
-			// If target != this
-			gen.Emit(OpCodes.Ldarg_3);
-			gen.Emit(OpCodes.Ldarg_0);
-			gen.Emit(OpCodes.Bne_Un_S, interfaceInvocationBranch);
-
-			// Create a SameClassInvocation
+			// Create the invocation target
 			gen.Emit(OpCodes.Ldarg_1); // Callable
 			gen.Emit(OpCodes.Ldarg_0); // this
 			gen.Emit(OpCodes.Ldarg_0); // this
 			gen.Emit(OpCodes.Ldarg_2); // MethodInfo
-			gen.Emit(OpCodes.Newobj, typeof(SameClassInvocation).GetConstructor(invocation_const_args) );
+			gen.Emit(OpCodes.Newobj, InvocationType.GetConstructor(invocation_const_args) );
 			gen.Emit(OpCodes.Stloc_0);
 			gen.Emit(OpCodes.Br_S, setInCacheBranch);
-
-			gen.MarkLabel(interfaceInvocationBranch);
-			gen.Emit(OpCodes.Ldarg_0); // this
-			gen.Emit(OpCodes.Ldarg_3); // target
-			gen.Emit(OpCodes.Ldarg_2); // MethodInfo
-			gen.Emit(OpCodes.Newobj, typeof(InterfaceInvocation).GetConstructor(int_invocation_const_args) );
-			gen.Emit(OpCodes.Stloc_0);
 
 			gen.MarkLabel(setInCacheBranch);
 			gen.Emit(OpCodes.Ldarg_0); // this
@@ -243,6 +262,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			Type newType = MainTypeBuilder.CreateType();
 
+			foreach(CallableDelegateBuilder builder in m_method2Delegate.Values)
+			{
+				builder.CreateType();
+			}
+
 			RegisterInCache(newType);
 
 			return newType;
@@ -268,8 +292,26 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// Generates one public constructor receiving 
 		/// the <see cref="IInterceptor"/> instance and instantiating a hashtable
 		/// </summary>
-		/// <returns><see cref="ConstructorBuilder"/> instance</returns>
-		protected abstract ConstructorBuilder GenerateConstructor();
+		protected abstract void GenerateConstructor();
+
+		protected virtual void GenerateConstructorCode(ILGenerator ilGenerator, OpCode target)
+		{
+			// Stores the interceptor in the field
+			ilGenerator.Emit(OpCodes.Ldarg_0);
+			ilGenerator.Emit(OpCodes.Ldarg_1);
+			ilGenerator.Emit(OpCodes.Stfld, InterceptorFieldBuilder);
+
+			// Instantiates the hashtable
+			ilGenerator.Emit(OpCodes.Ldarg_0);
+			ilGenerator.Emit(OpCodes.Newobj, typeof(Hashtable).GetConstructor( new Type[0] ));
+			ilGenerator.Emit(OpCodes.Stfld, CacheFieldBuilder);
+
+			// Initialize the delegate fields
+			foreach(CachedField field in m_cachedFields)
+			{
+				field.WriteInitialization(ilGenerator, target);
+			}
+		}
 
 		protected ConstructorInfo ObtainAvailableConstructor(Type target)
 		{
@@ -446,6 +488,21 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual void PreProcessMethod(MethodInfo method)
 		{
+			MethodInfo baseInvokeMethod = GenerateMethodActualInvoke(method);
+
+			CallableDelegateBuilder delegateBuilder = CallableDelegateBuilder.BuildForMethod( 
+				MainTypeBuilder, method, ModuleScope );
+			m_method2Delegate[method] = delegateBuilder;
+
+			FieldBuilder field = GenerateField( 
+				String.Format("_cached_{0}", delegateBuilder.ID), 
+				typeof(ICallable) );
+			RegisterCacheFieldToBeInitialized(field, delegateBuilder, baseInvokeMethod);
+		}
+
+		protected virtual MethodInfo GenerateMethodActualInvoke(MethodInfo method)
+		{
+			return method;
 		}
 
 		protected virtual void PostProcessMethod(MethodInfo method)
@@ -459,11 +516,132 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		/// <param name="builder"><see cref="MethodBuilder"/> being constructed.</param>
 		/// <param name="parameters"></param>
-		protected abstract void WriteILForMethod(MethodInfo method, MethodBuilder builder, Type[] parameters);
+		protected virtual void WriteILForMethod(MethodInfo method, MethodBuilder builder, Type[] parameters)
+		{
+			ILGenerator gen = builder.GetILGenerator();
+
+			gen.DeclareLocal(typeof (MethodBase));   // 0
+			gen.DeclareLocal(typeof (object[]));     // 1
+			gen.DeclareLocal(typeof (IInvocation));  // 2
+
+			if (builder.ReturnType != typeof (void))
+			{
+				gen.DeclareLocal(builder.ReturnType);// 3
+			}
+
+			CallableDelegateBuilder delegateType = m_method2Delegate[method] as CallableDelegateBuilder;
+			FieldBuilder fieldDelegate = ObtainCachedFieldBuilderDelegate( delegateType );
+
+			// Obtains the MethodBase from ldtoken method
+			gen.Emit(OpCodes.Ldtoken, method);
+			gen.Emit(OpCodes.Call, typeof (MethodBase).GetMethod("GetMethodFromHandle"));
+			gen.Emit(OpCodes.Stloc_0);
+
+			// Invokes the Method2Invocation to obtain a proper IInvocation instance
+			gen.Emit(OpCodes.Ldarg_0);
+
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Ldfld, fieldDelegate);
+			//			gen.Emit(OpCodes.Ldftn, delegateTarget);
+			//			gen.Emit(OpCodes.Newobj, delegateType.Constructor);
+			gen.Emit(OpCodes.Ldloc_0);
+			gen.Emit(OpCodes.Castclass, typeof (MethodInfo)); // Cast MethodBase to MethodInfo
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Call, m_method2Invocation);
+			gen.Emit(OpCodes.Stloc_2);
+
+			gen.Emit(OpCodes.Ldc_I4, parameters.Length); // push the array size
+			gen.Emit(OpCodes.Newarr, typeof (object)); // creates an array of objects
+			gen.Emit(OpCodes.Stloc_1); // store the array into local field
+			
+			// Here we set all the arguments in the array
+			for( int i=0; i < parameters.Length; i++ )
+			{
+				gen.Emit(OpCodes.Ldloc_1); // load the array
+				gen.Emit(OpCodes.Ldc_I4, i); // set the index
+				gen.Emit(OpCodes.Ldarg, i + 1); // set the value
+				// box if necessary
+				if (parameters[i].IsValueType)
+				{
+					gen.Emit(OpCodes.Box, parameters[i].UnderlyingSystemType);
+				}
+				gen.Emit(OpCodes.Stelem_Ref); // set the value
+			}
+
+			gen.Emit(OpCodes.Ldarg_0); // push this
+			gen.Emit(OpCodes.Ldfld, InterceptorFieldBuilder); // push interceptor reference
+			
+			gen.Emit(OpCodes.Ldloc_2); // push the invocation
+			gen.Emit(OpCodes.Ldloc_1); // push the array into stack
+
+			gen.Emit(OpCodes.Callvirt, typeof (IInterceptor).GetMethod("Intercept"));
+
+			if (builder.ReturnType == typeof (void))
+			{
+				gen.Emit(OpCodes.Pop);
+			}
+			else
+			{
+				if (!builder.ReturnType.IsValueType)
+				{
+					gen.Emit(OpCodes.Castclass, builder.ReturnType);
+				}
+				else
+				{
+					gen.Emit(OpCodes.Unbox, builder.ReturnType);
+					OpCodeUtil.ConvertTypeToOpCode(gen, builder.ReturnType);
+				}
+
+				gen.Emit(OpCodes.Stloc, 3);
+
+				Label label = gen.DefineLabel();
+				gen.Emit(OpCodes.Br_S, label);
+				gen.MarkLabel(label);
+				gen.Emit(OpCodes.Ldloc, 3); // Push the return value
+			}
+
+			gen.Emit(OpCodes.Ret);
+		}
 
 		public static bool NoFilterImpl(Type type, object criteria)
 		{
 			return true;
+		}
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	internal class CachedField
+	{
+		private FieldBuilder m_field; 
+		private CallableDelegateBuilder m_callable; 
+		private MethodInfo m_callback;
+
+		public CachedField(FieldBuilder field, CallableDelegateBuilder callable, MethodInfo callback)
+		{
+			this.m_field = field;
+			this.m_callable = callable;
+			this.m_callback = callback;
+		}
+
+		public FieldBuilder Field
+		{
+			get { return m_field; }
+		}
+
+		public CallableDelegateBuilder Callable
+		{
+			get { return m_callable; }
+		}
+
+		public void WriteInitialization(ILGenerator gen, OpCode target)
+		{
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(target);
+			gen.Emit(OpCodes.Ldftn, m_callback);
+			gen.Emit(OpCodes.Newobj, m_callable.Constructor);
+			gen.Emit(OpCodes.Stfld, m_field);
 		}
 	}
 }

@@ -45,7 +45,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected CallableDelegateBuilder Build()
 		{
-			String delegateName = String.Format("_delegate_{0}_{1}", m_typeBuilderParent.Name, m_id);
+			// String delegateName = String.Format("_delegate_{0}_{1}", m_typeBuilderParent.Name, m_id);
+			String delegateName = String.Format("_delegate_{0}", m_id);
 
 			TypeAttributes flags = TypeAttributes.Sealed|TypeAttributes.NestedPublic|TypeAttributes.Class;
 

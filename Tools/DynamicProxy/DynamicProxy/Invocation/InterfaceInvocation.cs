@@ -19,15 +19,29 @@ namespace Castle.DynamicProxy.Invocation
 	/// <summary>
 	/// 
 	/// </summary>
-	public class InterfaceInvocation : AbstractInvocation
+	public class InterfaceInvocation : SameClassInvocation
 	{
-		public InterfaceInvocation(object proxy, object target, MethodInfo method) : base(proxy, target, method)
+		private object proxytarget;
+
+		public InterfaceInvocation(ICallable callable, object proxy, object target, MethodInfo method) : 
+			base(callable, proxy, target, method)
 		{
+			// We save the original target set in the proxy
+			proxytarget = proxy;
 		}
 
 		public override object Proceed(params object[] args)
 		{
-			return Method.Invoke(InvocationTarget, args);
+			// If the user changed the target, we use reflection
+			// otherwise the delegate will be used.
+			if (InvocationTarget == proxytarget)
+			{
+				return _callable.Call( args );
+			}
+			else
+			{
+				return Method.Invoke(InvocationTarget, args);
+			}
 		}
 	}
 }
