@@ -44,6 +44,72 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			ActiveRecordPropertyRelationDescriptor propDesc = relService.Build( info );
 			Assert.IsNotNull(propDesc);
+			Assert.IsNotNull(propDesc as ActiveRecordBelongsToDescriptor);
+			Assert.AreEqual( "Blog", propDesc.PropertyName );
+			Assert.AreEqual( targetDesc, propDesc.TargetType );
+			Assert.AreEqual( "blog_id", propDesc.ColumnName );
+		}
+
+		[Test]
+		public void HasMany()
+		{
+			InitKernel();
+			IRelationshipBuilder relService = ObtainService();
+
+			TableDefinition blogTable;
+			TableDefinition postTable;
+
+			BuildBlogPostsStructure(out blogTable, out postTable);
+
+			ActiveRecordDescriptor desc = new ActiveRecordDescriptor("Blog");
+			ActiveRecordDescriptor targetDesc = new ActiveRecordDescriptor("Post");
+
+			RelationshipInfo info = new RelationshipInfo( AssociationEnum.HasMany, desc, targetDesc );
+			info.ChildCol = new ColumnDefinition("blog_id", false, true, true, false, OleDbType.Numeric);
+
+			ActiveRecordPropertyRelationDescriptor propDesc = relService.Build( info );
+			Assert.IsNotNull(propDesc);
+			Assert.IsNotNull(propDesc as ActiveRecordHasManyDescriptor);
+			Assert.AreEqual( "Posts", propDesc.PropertyName );
+			Assert.AreEqual( targetDesc, propDesc.TargetType );
+			Assert.AreEqual( "blog_id", propDesc.ColumnName );
+		}
+
+		[Test]
+		public void Has¡ndBelongsToMany()
+		{
+			InitKernel();
+			IRelationshipBuilder relService = ObtainService();
+
+			DatabaseDefinition dbdef = new DatabaseDefinition("alias");
+
+			TableDefinition compTable = new TableDefinition("companies", dbdef );
+			compTable.AddColumn( new ColumnDefinition("id", true, false, true, false, OleDbType.Integer) );
+			compTable.AddColumn( new ColumnDefinition("name", false, false, false, false, OleDbType.VarChar) );
+
+			TableDefinition peopleTable = new TableDefinition("people", dbdef );
+			peopleTable.AddColumn( new ColumnDefinition("id", true, false, true, false, OleDbType.Integer) );
+			peopleTable.AddColumn( new ColumnDefinition("name", false, false, false, false, OleDbType.VarChar) );
+
+			TableDefinition assocTable = new TableDefinition("companiespeople", dbdef );
+			assocTable.AddColumn( new ColumnDefinition("comp_id", true, true, true, false, OleDbType.Integer) );
+			assocTable.AddColumn( new ColumnDefinition("person_id", true, true, false, false, OleDbType.Integer) );
+
+			ActiveRecordDescriptor desc = new ActiveRecordDescriptor("Company");
+			ActiveRecordDescriptor targetDesc = new ActiveRecordDescriptor("Person");
+
+			RelationshipInfo info = new RelationshipInfo( AssociationEnum.HasAndBelongsToMany, desc, targetDesc );
+			info.AssociationTable = assocTable;
+			info.ParentCol = new ColumnDefinition("comp_id", false, true, false, true, OleDbType.Integer);
+			info.ChildCol = new ColumnDefinition("person_id", false, true, false, true, OleDbType.Integer);
+
+			ActiveRecordPropertyRelationDescriptor propDesc = relService.Build( info );
+			Assert.IsNotNull(propDesc as ActiveRecordHasAndBelongsToManyDescriptor);
+			Assert.IsNotNull(propDesc);
+			Assert.AreEqual( "People", propDesc.PropertyName );
+			Assert.AreEqual( targetDesc, propDesc.TargetType );
+			Assert.AreEqual( "person_id", propDesc.ColumnName );
+			Assert.AreEqual( "comp_id", (propDesc as ActiveRecordHasAndBelongsToManyDescriptor).ColumnKey);
 		}
 
 		private void InitKernel()

@@ -125,6 +125,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NamingServiceTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "PlainFieldInferenceServiceTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

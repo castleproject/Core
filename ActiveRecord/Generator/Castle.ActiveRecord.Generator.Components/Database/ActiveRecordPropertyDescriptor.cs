@@ -278,5 +278,17 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			_associationtable = associationtable;
 			_columnKey = columnKey;
 		}
+
+		public String ColumnKey
+		{
+			get { return _columnKey; }
+			set { _columnKey = value; }
+		}
+
+		public String AssociationTable
+		{
+			get { return _associationtable; }
+			set { _associationtable = value; }
+		}
 	}
 }

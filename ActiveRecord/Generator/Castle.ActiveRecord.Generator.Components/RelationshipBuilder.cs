@@ -65,18 +65,9 @@ namespace Castle.ActiveRecord.Generator.Components
 			}
 	
 			String colName = info.ParentCol.Name;
-			String propName = _namingService.CreatePropertyName(colName);
+			String propName = info.TargetDescriptor.ClassName;
 	
 			return new ActiveRecordBelongsToDescriptor(colName, propName, info.TargetDescriptor);
-		}
-
-		private void PopulateInfoIntoDescriptor(RelationshipInfo info, ActiveRecordPropertyRelationDescriptor desc)
-		{
-			desc.Insert = info.Insert;
-			desc.Update = info.Update;
-			desc.Proxy = info.UseProxy;
-
-			// TODO: Finish this
 		}
 
 		private ActiveRecordPropertyRelationDescriptor CreateHasManyRelation(RelationshipInfo info)
@@ -111,12 +102,21 @@ namespace Castle.ActiveRecord.Generator.Components
 				throw new ArgumentException("No association table specified");
 			}
 	
-			String colName = info.ParentCol.Name;
-			String colKeyName = info.ChildCol.Name;
+			String colName = info.ChildCol.Name;
+			String colKeyName = info.ParentCol.Name;
 			String propName = _namingService.CreateRelationName( info.TargetDescriptor.ClassName );
 	
 			return new ActiveRecordHasAndBelongsToManyDescriptor(colName, 
 				info.AssociationTable.Name, propName, info.TargetDescriptor, colKeyName);
+		}
+
+		private void PopulateInfoIntoDescriptor(RelationshipInfo info, ActiveRecordPropertyRelationDescriptor desc)
+		{
+			desc.Insert = info.Insert;
+			desc.Update = info.Update;
+			desc.Proxy = info.UseProxy;
+
+			// TODO: Finish this
 		}
 	}
 }

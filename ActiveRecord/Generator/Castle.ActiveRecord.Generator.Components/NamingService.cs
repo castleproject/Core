@@ -30,28 +30,28 @@ namespace Castle.ActiveRecord.Generator.Components
 				new Pair("(?:([^f])fe|([lr])f)$", "$1$2ves"),
 				new Pair("sis$", "ses"),
 				new Pair("([ti])um$", "$1a"),
-				new Pair("person$", "people"),
-				new Pair("man$", "men"),
-				new Pair("child$", "children")//,
-//				new Pair("s$", "s"),
-//				new Pair("$", "s"),
+				new Pair("Person$", "People"),
+				new Pair("Man$", "Men"),
+				new Pair("Child$", "Children"),
+				new Pair("s$", "s"),
+				new Pair("$", "s")
 		};
 
 		private Pair[] singularRules = new Pair[] 
-			{
-				new Pair("(x|ch|ss)es$", @"$1"), 
-				new Pair("Movies$", "Movie"),
-				new Pair("([^aeiouy]|qu)ies$", "$1y"),
-				new Pair("([lr])ves$", @"$1f"),
-				new Pair("([^f])ves$", @"$1fe"),
-				new Pair("(analy|ba|diagno|parenthe|progno|synop|the)ses$", @"$1sis"),
-				new Pair("([ti])a$", @"$1um"),
-				new Pair("People$", @"Person"),
-				new Pair("Men$", @"Man"),
-				new Pair("Status$", @"Status"),
-				new Pair("Children$", @"Child"),
-				new Pair("s$", @"")
-			};
+		{
+			new Pair("(x|ch|ss)es$", @"$1"), 
+			new Pair("Movies$", "Movie"),
+			new Pair("([^aeiouy]|qu)ies$", "$1y"),
+			new Pair("([lr])ves$", @"$1f"),
+			new Pair("([^f])ves$", @"$1fe"),
+			new Pair("(analy|ba|diagno|parenthe|progno|synop|the)ses$", @"$1sis"),
+			new Pair("([ti])a$", @"$1um"),
+			new Pair("People$", @"Person"),
+			new Pair("Men$", @"Man"),
+			new Pair("Status$", @"Status"),
+			new Pair("Children$", @"Child"),
+			new Pair("s$", @"")
+		};
 
 		public String CreateRelationName(String tableName)
 		{
@@ -127,16 +127,23 @@ namespace Castle.ActiveRecord.Generator.Components
 
 		private String Pluralize(String name)
 		{
+			String result = name;
+
 			foreach(Pair pair in pluralRules)
 			{
-				String result = Regex.Replace(name, pair.First, pair.Second);
+				result = Regex.Replace(name, pair.First, pair.Second, RegexOptions.IgnoreCase|RegexOptions.Singleline);
 				if (!result.Equals(name))
 				{
-					return result;
+					break;
 				}
 			}
 
-			return name; 
+			if (result.EndsWith("ss"))
+			{
+				result = result.Substring(0, result.Length - 1);
+			}
+
+			return result; 
 		}
 	}
 }
