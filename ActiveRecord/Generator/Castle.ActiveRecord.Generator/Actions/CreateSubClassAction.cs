@@ -17,30 +17,29 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System;
 	using System.Windows.Forms;
 
+	using Castle.ActiveRecord.Generator.Components.Database;
 	using Castle.ActiveRecord.Generator.Dialogs;
 
 
-	public class GenerateCodeAction : AbstractAction
+	public class CreateSubClassAction : AbstractAction
 	{
-		private MenuItem _item;
-
-		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
+		public CreateSubClassAction()
 		{
-			base.Install(workspace, parentMenu, parentGroup);
-
-			_item = new MenuItem("Generate code...");
-			_item.Click += new EventHandler(OnGenerate);
-
-			(parentMenu as MenuItem).MenuItems.Add(_item);
 		}
 
-		private void OnGenerate(object sender, EventArgs e)
+		public void Run(ActiveRecordDescriptor descriptor)
 		{
-			using(GenCodeDialog dialog = new GenCodeDialog(Model))
+			using(NewSubClassDialog dialog = new NewSubClassDialog())
 			{
 				if (dialog.ShowDialog(Workspace.ActiveWindow) == DialogResult.OK)
 				{
-//					ServiceRegistry.Instance[];
+					ActiveRecordDescriptorSubClass subclass = new ActiveRecordDescriptorSubClass(descriptor);
+					subclass.Table = descriptor.Table;
+					subclass.DiscriminatorValue = dialog.DiscriminatorValue;
+					subclass.ClassName = dialog.ClassName;
+					
+					Model.CurrentProject.AddActiveRecordDescriptor(subclass);
+					Model.Update();
 				}
 			}
 		}

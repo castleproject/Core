@@ -214,6 +214,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Actions\CreateJoinedSubClassAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\CreateSubClassAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Actions\ExitAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -331,6 +341,16 @@
                 <File
                     RelPath = "Dialogs\GenCodeDialog.resx"
                     DependentUpon = "GenCodeDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\NewSubClassDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\NewSubClassDialog.resx"
+                    DependentUpon = "NewSubClassDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

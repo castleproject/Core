@@ -140,7 +140,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.Name = "DatabaseConnectionDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

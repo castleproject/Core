@@ -154,6 +154,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CodeGenerator\CodeProviderFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\CodeProviderInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\ICodeProviderFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\IProjectGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\ProjectGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Database\AbstractActiveRecordDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -165,6 +190,16 @@
                 />
                 <File
                     RelPath = "Database\ActiveRecordDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\ActiveRecordDescriptorJoinedSubClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\ActiveRecordDescriptorSubClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

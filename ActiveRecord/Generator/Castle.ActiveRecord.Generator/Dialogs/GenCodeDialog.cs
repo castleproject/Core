@@ -2,7 +2,9 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
+using Castle.ActiveRecord.Generator.Components.CodeGenerator;
 
 namespace Castle.ActiveRecord.Generator.Dialogs
 {
@@ -28,21 +30,37 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		public GenCodeDialog()
+		private ICodeProviderFactory codeproviderFactory;
+		private Model _model;
+
+
+		protected GenCodeDialog()
 		{
+			codeproviderFactory = 
+				ServiceRegistry.Instance[ typeof(ICodeProviderFactory) ] as ICodeProviderFactory;
+
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
+			languageCombo.ValueMember = "Label";
+
+			foreach(CodeProviderInfo info in codeproviderFactory.GetAvailableProviders())
+			{
+				languageCombo.Items.Add(info);
+			}
+
+			languageCombo.SelectedIndex = 0;
 		}
 
 		public GenCodeDialog(Model model) : this()
 		{
-			
+			_model = model;
+
+			ns.Text = model.CurrentProject.Namespace;
+			outDir.Text = model.CurrentProject.LastOutDir;
+			overwriteCheck.Checked = model.CurrentProject.OverwriteFiles;
 		}
 
 		/// <summary>
@@ -223,6 +241,31 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 		private void button1_Click(object sender, System.EventArgs e)
 		{
+			DirectoryInfo dirInfo = new DirectoryInfo(outDir.Text);
+
+			if (outDir.Text == String.Empty)
+			{
+				MessageBox.Show(this, "You must specify an output directory.", "Field is required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				return;
+			}
+
+			if (!dirInfo.Exists)
+			{
+				if (MessageBox.Show(this, "Output directory does not exists. Create it?", "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
+				{
+					dirInfo.Create();
+				}
+				else
+				{
+					return;
+				}
+			}
+
+			_model.CurrentProject.CodeInfo = languageCombo.SelectedItem as CodeProviderInfo;
+			_model.CurrentProject.LastOutDir = outDir.Text;
+			_model.CurrentProject.Namespace = ns.Text;
+			_model.CurrentProject.OverwriteFiles = overwriteCheck.Checked;
+
 			DialogResult = DialogResult.OK;
 			Close();
 		}

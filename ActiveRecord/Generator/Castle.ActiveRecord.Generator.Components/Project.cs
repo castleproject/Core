@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Generator.Components
 	using System.Collections;
 
 	using Castle.ActiveRecord.Generator.Components.Database;
+	using Castle.ActiveRecord.Generator.Components.CodeGenerator;
 
 
 	[Serializable]
@@ -27,6 +28,10 @@ namespace Castle.ActiveRecord.Generator.Components
 		private IList _databases = new ArrayList();
 		private IList _descriptors = new ArrayList();
 		private IDictionary _dbDef2ArBase = new Hashtable();
+		private String _Namespace;
+		private String _LastOutDir;
+		private bool _OverwriteFiles;
+		private CodeProviderInfo _info;
 
 		public Project(string name)
 		{
@@ -89,6 +94,30 @@ namespace Castle.ActiveRecord.Generator.Components
 		public IDictionary BaseClasses
 		{
 			get { return _dbDef2ArBase; }
+		}
+
+		public String Namespace
+		{
+			get { return _Namespace; }
+			set { _Namespace = value; }
+		}
+
+		public String LastOutDir
+		{
+			get { return _LastOutDir; }
+			set { _LastOutDir = value; }
+		}
+
+		public bool OverwriteFiles
+		{
+			get { return _OverwriteFiles; }
+			set { _OverwriteFiles = value; }
+		}
+
+		public CodeProviderInfo CodeInfo
+		{
+			get { return _info; }
+			set { _info = value; }
 		}
 	}
 }

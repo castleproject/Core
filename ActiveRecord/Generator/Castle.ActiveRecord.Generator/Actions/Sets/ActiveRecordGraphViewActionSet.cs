@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Generator.Components.Database;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +23,8 @@ namespace Castle.ActiveRecord.Generator.Actions
 	{
 		private ShowPropertiesAction showProperties;
 		private NewArDescriptorUsingWizard newUsingWizard;
+		private CreateSubClassAction createSubClass;
+		private CreateJoinedSubClassAction createJoinedSub;
 
 		public ActiveRecordGraphViewActionSet()
 		{
@@ -33,15 +36,21 @@ namespace Castle.ActiveRecord.Generator.Actions
 		{
 			showProperties = new ShowPropertiesAction();
 			newUsingWizard = new NewArDescriptorUsingWizard();
+			createSubClass = new CreateSubClassAction();
+			createJoinedSub = new CreateJoinedSubClassAction();
 
 			showProperties.Init(model);
 			newUsingWizard.Init(model);
+			createSubClass.Init(model);
+			createJoinedSub.Init(model);
 		}
 
 		public void Install(IWorkspace workspace)
 		{
 			showProperties.Install(workspace, null, null);
 			newUsingWizard.Install(workspace, null, null);
+			createSubClass.Install(workspace, null, null);
+			createJoinedSub.Install(workspace, null, null);
 		}
 
 		#endregion
@@ -49,6 +58,16 @@ namespace Castle.ActiveRecord.Generator.Actions
 		public bool DoNewARWizard()
 		{
 			return newUsingWizard.Run(null);
+		}
+
+		public void CreateSubClass(ActiveRecordDescriptor descriptor)
+		{
+			createSubClass.Run(descriptor);
+		}
+
+		public void CreateJoinedSubClass(ActiveRecordDescriptor descriptor)
+		{
+			createJoinedSub.Run(descriptor);
 		}
 	}
 }

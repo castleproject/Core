@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord.Generator
 
 	using Castle.ActiveRecord.Generator.Components;
 	using Castle.ActiveRecord.Generator.Components.Database;
+	using Castle.ActiveRecord.Generator.Components.CodeGenerator;
 
 
 	public class ServiceRegistry : WindsorContainer
@@ -37,6 +38,7 @@ namespace Castle.ActiveRecord.Generator
 			AddComponent("arbuilder", typeof(IActiveRecordDescriptorBuilder), typeof(ActiveRecordDescriptorBuilder) );
 			AddComponent("plainfields.service", typeof(IPlainFieldInferenceService), typeof(PlainFieldInferenceService) );
 			AddComponent("relation.service", typeof(IRelationshipInferenceService), typeof(RelationshipInferenceService) );
+			AddComponent("codeproviderfactory", typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
 		}
 
 		public static ServiceRegistry Instance

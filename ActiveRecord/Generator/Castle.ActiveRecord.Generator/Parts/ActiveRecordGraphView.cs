@@ -147,11 +147,13 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			this.addSubClassMenu.Index = 0;
 			this.addSubClassMenu.Text = "Add SubClass";
+			this.addSubClassMenu.Click += new System.EventHandler(this.addSubClassMenu_Click);
 			// 
 			// addJoinedSubclassMenu
 			// 
 			this.addJoinedSubclassMenu.Index = 1;
 			this.addJoinedSubclassMenu.Text = "Add Joined SubClass";
+			this.addJoinedSubclassMenu.Click += new System.EventHandler(this.addJoinedSubclassMenu_Click);
 			// 
 			// menuItem5
 			// 
@@ -162,6 +164,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			this.showCodePreviewMenu.Index = 3;
 			this.showCodePreviewMenu.Text = "Preview code";
+			this.showCodePreviewMenu.Click += new System.EventHandler(this.showCodePreviewMenu_Click);
 			// 
 			// menuItem4
 			// 
@@ -207,9 +210,9 @@ namespace Castle.ActiveRecord.Generator.Parts
 				
 				if (_actionSet.DoNewARWizard())
 				{
-					ConnectSubToSuperClass(
-						ObtainBaseShape(arshape), 
-						arshape);
+//					ConnectSubToSuperClass(
+//						ObtainBaseShape(arshape), 
+//						arshape);
 				}
 			}
 			else if (shape is ActiveRecordBaseClassShape)
@@ -418,8 +421,37 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 			if (arshape != null)
 			{
-				ConnectSubToSuperClass( ObtainBaseShape(arshape), shape );
+				if (arshape.ActiveRecordDescriptor is ActiveRecordDescriptorSubClass)
+				{
+					ActiveRecordDescriptorSubClass subclass = arshape.ActiveRecordDescriptor as ActiveRecordDescriptorSubClass;
+					ConnectSubToSuperClass( ObtainShape(subclass.BaseClass), shape );
+				}
+				else
+				{
+					ConnectSubToSuperClass( ObtainBaseShape(arshape), shape );
+				}
 			}
+		}
+
+		private void addSubClassMenu_Click(object sender, System.EventArgs e)
+		{
+			if (SelectedShape is ActiveRecordShape)
+			{
+				_actionSet.CreateSubClass( (SelectedShape as ActiveRecordShape).ActiveRecordDescriptor );
+			}
+		}
+
+		private void addJoinedSubclassMenu_Click(object sender, System.EventArgs e)
+		{
+			if (SelectedShape is ActiveRecordShape)
+			{
+				_actionSet.CreateJoinedSubClass( (SelectedShape as ActiveRecordShape).ActiveRecordDescriptor );
+			}
+		}
+
+		private void showCodePreviewMenu_Click(object sender, System.EventArgs e)
+		{
+//			_actionSet.PreviewCode( SelectedShape );
 		}
 	}
 }

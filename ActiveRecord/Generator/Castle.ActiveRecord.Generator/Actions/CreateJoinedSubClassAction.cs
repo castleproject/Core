@@ -15,34 +15,19 @@
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
-	using System.Windows.Forms;
 
-	using Castle.ActiveRecord.Generator.Dialogs;
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 
-	public class GenerateCodeAction : AbstractAction
+	public class CreateJoinedSubClassAction : AbstractAction
 	{
-		private MenuItem _item;
-
-		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
+		public CreateJoinedSubClassAction()
 		{
-			base.Install(workspace, parentMenu, parentGroup);
-
-			_item = new MenuItem("Generate code...");
-			_item.Click += new EventHandler(OnGenerate);
-
-			(parentMenu as MenuItem).MenuItems.Add(_item);
 		}
 
-		private void OnGenerate(object sender, EventArgs e)
+		public void Run(ActiveRecordDescriptor descriptor)
 		{
-			using(GenCodeDialog dialog = new GenCodeDialog(Model))
-			{
-				if (dialog.ShowDialog(Workspace.ActiveWindow) == DialogResult.OK)
-				{
-//					ServiceRegistry.Instance[];
-				}
-			}
+			throw new NotImplementedException();
 		}
 	}
 }
