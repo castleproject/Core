@@ -29,12 +29,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		private ILGenerator m_generator;
 		private bool m_isEmpty;
 		private ArrayList m_stmts;
-		private ArrayList m_locals;
+		private ArrayList m_ilmarkers;
 
 		protected AbstractCodeBuilder( ILGenerator generator ) 
 		{
 			m_stmts = new ArrayList();
-			m_locals = new ArrayList();
+			m_ilmarkers = new ArrayList();
+			
 			m_generator = generator;
 			m_isEmpty = true;
 		}
@@ -53,22 +54,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		public LocalReference DeclareLocal( Type type )
 		{
 			LocalReference local = new LocalReference(type);
-			m_locals.Add( local );
+			m_ilmarkers.Add( local );
 			return local;
 		}
 
-//		protected void CallNonVirtual(ConstructorInfo constructor)
-//		{
-//			SetNonEmpty();
-//			Generator.Emit(OpCodes.Ldarg_0);
-//			Generator.Emit(OpCodes.Call, constructor);
-//		}
-
-//		protected void Return()
-//		{
-//			SetNonEmpty();
-//			Generator.Emit(OpCodes.Ret);
-//		}
+		public LabelReference CreateLabel()
+		{
+			LabelReference label = new LabelReference();
+			m_ilmarkers.Add(label);
+			return label;
+		}
 
 		protected internal void SetNonEmpty()
 		{
@@ -82,10 +77,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		internal void Generate( IEasyMember member, ILGenerator il )
 		{
-			foreach(LocalReference local in m_locals)
+			foreach(Reference local in m_ilmarkers)
 			{
 				local.Generate(il);
 			}
+
 			foreach(Statement stmt in m_stmts)
 			{
 				stmt.Emit(member, il);

@@ -26,10 +26,15 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	{
 		public static void EmitLoadOwnerAndReference(Reference reference, ILGenerator il)
 		{
-			if (reference.OwnerReference != null)
-			{
-				reference.OwnerReference.LoadReference(il);
-			}
+			if (reference == null) return;
+
+			EmitLoadOwnerAndReference(reference.OwnerReference, il);
+
+//			if (reference.OwnerReference != null)
+//			{
+//				reference.OwnerReference.LoadReference(il);
+//			}
+
 			reference.LoadReference(il);
 		}
 		

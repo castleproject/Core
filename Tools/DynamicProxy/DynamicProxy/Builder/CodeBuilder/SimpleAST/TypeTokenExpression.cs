@@ -19,29 +19,21 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Summary description for ConstructorInvocationExpression.
+	/// Summary description for TypeTokenExpression.
 	/// </summary>
-	public class ConstructorInvocationExpression : Expression
+	public class TypeTokenExpression : Expression
 	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
+		private Type m_type;
 
-		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
+		public TypeTokenExpression( Type type )
 		{
-			m_cmethod = method;
-			m_args = args;
+			m_type = type;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldarg_0);
-			
-			foreach(Expression exp in m_args)
-			{
-				exp.Emit(member, gen);
-			}
-
-			gen.Emit(OpCodes.Call, m_cmethod);
+			gen.Emit(OpCodes.Ldtoken, m_type);
+			gen.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
 		}
 	}
 }

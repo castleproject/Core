@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public FixedReference( object value ) : base( value.GetType() )
 		{
-			if (!value.GetType().IsPrimitive)
+			if (!value.GetType().IsPrimitive && !(value is String))
 			{
 				throw new ApplicationException("Invalid type to FixedReference");
 			}

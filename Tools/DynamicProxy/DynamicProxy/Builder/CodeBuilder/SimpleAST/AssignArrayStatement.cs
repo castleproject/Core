@@ -1,3 +1,4 @@
+using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,33 +16,35 @@
 namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Summary description for ConstructorInvocationExpression.
+	/// Summary description for AssignArrayStatement.
 	/// </summary>
-	public class ConstructorInvocationExpression : Expression
+	public class AssignArrayStatement : Statement
 	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
+		private Reference m_targetArray;
+		private int m_targetPosition;
+		private Expression m_value;
 
-		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
+		public AssignArrayStatement( Reference targetArray, int targetPosition, Expression value )
 		{
-			m_cmethod = method;
-			m_args = args;
+			m_targetArray = targetArray;
+			m_targetPosition = targetPosition;
+			m_value = value;
 		}
 
-		public override void Emit(IEasyMember member, ILGenerator gen)
+		public override void Emit(IEasyMember member, ILGenerator il)
 		{
-			gen.Emit(OpCodes.Ldarg_0);
+			ArgumentsUtil.EmitLoadOwnerAndReference( m_targetArray.OwnerReference, il );
 			
-			foreach(Expression exp in m_args)
-			{
-				exp.Emit(member, gen);
-			}
+			m_targetArray.LoadReference( il );
+			
+			il.Emit(OpCodes.Ldc_I4, m_targetPosition);
 
-			gen.Emit(OpCodes.Call, m_cmethod);
+			m_value.Emit(member, il);
+
+			il.Emit(OpCodes.Stelem_Ref);
 		}
 	}
 }

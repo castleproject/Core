@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,33 +16,22 @@
 namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
-	using System.Reflection;
-	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Summary description for ConstructorInvocationExpression.
+	/// Summary description for GotoStatement.
 	/// </summary>
-	public class ConstructorInvocationExpression : Expression
+	public class GotoStatement : Statement
 	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
+		private LabelReference m_label;
 
-		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
+		public GotoStatement( LabelReference label )
 		{
-			m_cmethod = method;
-			m_args = args;
+			m_label = label;
 		}
 
-		public override void Emit(IEasyMember member, ILGenerator gen)
+		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldarg_0);
-			
-			foreach(Expression exp in m_args)
-			{
-				exp.Emit(member, gen);
-			}
-
-			gen.Emit(OpCodes.Call, m_cmethod);
+			gen.Emit(OpCodes.Br_S, m_label.Reference );
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,33 +16,41 @@
 namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
-	using System.Reflection;
-	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Summary description for ConstructorInvocationExpression.
+	/// Summary description for LabelReference.
 	/// </summary>
-	public class ConstructorInvocationExpression : Expression
+	public class LabelReference : Reference
 	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
+		private Label m_label;
 
-		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
+		public LabelReference()
 		{
-			m_cmethod = method;
-			m_args = args;
 		}
 
-		public override void Emit(IEasyMember member, ILGenerator gen)
+		public Label Reference
 		{
-			gen.Emit(OpCodes.Ldarg_0);
-			
-			foreach(Expression exp in m_args)
-			{
-				exp.Emit(member, gen);
-			}
+			get { return m_label; }
+		}
 
-			gen.Emit(OpCodes.Call, m_cmethod);
+		public override Expression ToExpression()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Generate(ILGenerator gen)
+		{
+			 m_label = gen.DefineLabel();
+		}
+
+		public override void LoadReference(ILGenerator gen)
+		{
+			gen.MarkLabel( m_label );
+		}
+
+		public override void StoreReference(ILGenerator gen)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

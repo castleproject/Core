@@ -17,10 +17,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System;
 	using System.Text;
 	using System.Reflection;
-	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
 
 	using Castle.DynamicProxy.Invocation;
+	using Castle.DynamicProxy.Builder.CodeBuilder;
+	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 
 	/// <summary>
 	/// Summary description for ClassProxyGenerator.
@@ -60,37 +61,99 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// Generates one public constructor receiving 
 		/// the <see cref="IInterceptor"/> instance and instantiating a hashtable
 		/// </summary>
-		protected override void GenerateConstructor()
+		protected override EasyConstructor GenerateConstructor()
 		{
-			Type[] signature = GetConstructorSignature();
+			ArgumentReference arg1 = new ArgumentReference( typeof(IInterceptor) );
+			ArgumentReference arg2 = new ArgumentReference( typeof(object[]) );
 
-			ConstructorBuilder consBuilder = MainTypeBuilder.DefineConstructor(
-				MethodAttributes.Public,
-				CallingConventions.Standard,
-				signature);
+			EasyConstructor constructor;
 
-			ILGenerator ilGenerator = consBuilder.GetILGenerator();
-			
-			ilGenerator.DeclareLocal( typeof(object) );
-
-			// Calls the base constructor
-			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Call, ObtainAvailableConstructor(m_baseType));
-
-			GenerateConstructorCode(ilGenerator, OpCodes.Ldarg_0, OpCodes.Ldarg_2);
-
-			ilGenerator.Emit(OpCodes.Ret);
-		}
-
-		protected override Type[] GetConstructorSignature()
-		{
 			if (Context.HasMixins)
 			{
-				return new Type[] { typeof(IInterceptor), typeof(object[]) };
+				constructor = MainTypeBuilder.CreateConstructor( arg1, arg2 );
 			}
 			else
 			{
-				return new Type[] { typeof(IInterceptor) };
+				constructor = MainTypeBuilder.CreateConstructor( arg1 );
+			}
+
+			constructor.CodeBuilder.InvokeBaseConstructor();
+
+			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg2);
+		
+			return constructor;
+		}
+
+		protected void GenerateSerializationConstructor( EasyConstructor defConstructor )
+		{
+			// TODO: Adjust to mixin constructors too
+
+			ArgumentReference arg1 = new ArgumentReference( typeof(SerializationInfo) );
+			ArgumentReference arg2 = new ArgumentReference( typeof(StreamingContext) );
+
+			EasyConstructor constr = MainTypeBuilder.CreateConstructor( arg1, arg2 );
+
+			Type[] object_arg = new Type[] { typeof (String), typeof(Type) };
+			MethodInfo getValueMethod = typeof (SerializationInfo).GetMethod("GetValue", object_arg);
+
+			VirtualMethodInvocationExpression getValueInvocation =
+				new VirtualMethodInvocationExpression(arg1, getValueMethod, 
+				new FixedReference("__interceptor").ToExpression(), 
+				new TypeTokenExpression( typeof(IInterceptor) ) );
+
+			constr.CodeBuilder.AddStatement( new ExpressionStatement(
+				new ConstructorInvocationExpression( defConstructor.Builder, 
+				new ConvertExpression( typeof(IInterceptor), getValueInvocation ) )) );
+			
+			
+			
+			constr.CodeBuilder.AddStatement( new ReturnStatement() );
+		}
+
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, 
+			ArgumentReference arg1, ArgumentReference arg2)
+		{
+			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
+			Type[] key_and_bool = new Type[] {typeof (String), typeof (bool)};
+			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
+			MethodInfo addValueBoolMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_bool);
+
+			codebuilder.AddStatement( new ExpressionStatement(
+				new VirtualMethodInvocationExpression(arg1, addValueBoolMethod, 
+				new FixedReference("__delegateToBase").ToExpression(), 
+				new FixedReference( m_delegateToBaseGetObjectData ? 1 : 0 ).ToExpression() ) ) );
+
+			if (m_delegateToBaseGetObjectData)
+			{
+				MethodInfo baseGetObjectData = m_baseType.GetMethod("GetObjectData", 
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+				codebuilder.AddStatement( new ExpressionStatement(
+					new MethodInvocationExpression( baseGetObjectData, 
+						arg1.ToExpression(), arg2.ToExpression() )) );
+			}
+			else
+			{
+				LocalReference members_ref = codebuilder.DeclareLocal( typeof(MemberInfo[]) );
+				LocalReference data_ref = codebuilder.DeclareLocal( typeof(object[]) );
+
+				MethodInfo getSerMembers = typeof(FormatterServices).GetMethod("GetSerializableMembers", 
+					new Type[] { typeof(Type) });
+				MethodInfo getObjData = typeof(FormatterServices).GetMethod("GetObjectData", 
+					new Type[] { typeof(object), typeof(MemberInfo[]) });
+				
+				codebuilder.AddStatement( new AssignStatement( members_ref,
+					new MethodInvocationExpression( null, getSerMembers, 
+					new TypeTokenExpression( m_baseType ) )) );
+				
+				codebuilder.AddStatement( new AssignStatement( data_ref, 
+					new MethodInvocationExpression( null, getObjData, 
+					SelfReference.Self.ToExpression(), members_ref.ToExpression() )) );
+
+				codebuilder.AddStatement( new ExpressionStatement(
+					new VirtualMethodInvocationExpression(arg1, addValueMethod, 
+					new FixedReference("__data").ToExpression(), 
+					data_ref.ToExpression() ) ) );
 			}
 		}
 
@@ -103,7 +166,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			if (baseClass.IsSerializable)
 			{
-				m_delegateToBaseGetObjectData = VerifyIsBaseImplementsGetObjectData(baseClass);
+				m_delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(baseClass);
 				interfaces = AddISerializable( interfaces );
 			}
 
@@ -119,7 +182,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			if (baseClass.IsSerializable)
 			{
-				ImplementGetObjectData();
+				ImplementGetObjectData( interfaces );
 			}
 
 			ImplementCacheInvocationCache();
@@ -142,7 +205,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return GenerateCode(baseClass, mixinInterfaces);
 		}
 
-		protected bool VerifyIsBaseImplementsGetObjectData(Type baseType)
+		protected bool VerifyIfBaseImplementsGetObjectData(Type baseType)
 		{
 			// If base type implements ISerializable, we have to make sure
 			// the GetObjectData is marked as virtual
@@ -158,10 +221,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 					throw new ProxyGenerationException(message);
 				}
 
-				ConstructorInfo serializatioConstructor = baseType.GetConstructor(
+				ConstructorInfo serializationConstructor = baseType.GetConstructor(
 					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
-				if (serializatioConstructor == null)
+				if (serializationConstructor == null)
 				{
 					String message = String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor", 
 						baseType.FullName);
@@ -189,56 +252,39 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return union;
 		}
 
-		protected override MethodInfo GenerateMethodActualInvoke(MethodInfo method)
+		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
 		{
 			if (Context.HasMixins && m_interface2mixinIndex.Contains(method.DeclaringType))
 			{
 				return method;
 			}
 
-			MethodAttributes atts = MethodAttributes.Private;
-
-			ParameterInfo[] parameterInfo = method.GetParameters();
-
-			Type[] parameters = new Type[parameterInfo.Length];
-
-			for (int i = 0; i < parameterInfo.Length; i++)
-			{
-				parameters[i] = parameterInfo[i].ParameterType;
-			}
-
 			String name = String.Format("callback__{0}", method.Name);
 
-			MethodBuilder baseMethodCall = MainTypeBuilder.DefineMethod(name, atts, method.ReturnType, parameters);
+			ParameterInfo[] parameters = method.GetParameters();
 
-			ILGenerator gen = baseMethodCall.GetILGenerator();
-
-			if (method.ReturnType != typeof(void))
-			{
-				gen.DeclareLocal( method.ReturnType );
-			}
+			ArgumentReference[] args = new ArgumentReference[ parameters.Length ];
 			
-			gen.Emit(OpCodes.Ldarg_0);
-
-			for (int i = 0; i < parameterInfo.Length; i++)
+			for(int i=0; i < args.Length; i++)
 			{
-				gen.Emit(OpCodes.Ldarg, i + 1);
+				args[i] = new ArgumentReference( parameters[i].ParameterType );
 			}
 
-			gen.Emit(OpCodes.Call, method);
+			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
+				new ReturnReferenceExpression(method.ReturnType), args);
 
-			if (method.ReturnType != typeof(void))
+			Expression[] exps = new Expression[ parameters.Length ];
+			
+			for(int i=0; i < args.Length; i++)
 			{
-				gen.Emit(OpCodes.Stloc_0);
-				Label retBranch = gen.DefineLabel();
-				gen.Emit(OpCodes.Br_S, retBranch);
-				gen.MarkLabel(retBranch);
-				gen.Emit(OpCodes.Ldloc_0);
+				exps[i] = args[i].ToExpression();
 			}
 
-			gen.Emit(OpCodes.Ret);
+			easymethod.CodeBuilder.AddStatement(
+				new ReturnStatement( 
+					new MethodInvocationExpression(method, exps) ) );
 
-			return baseMethodCall;
+			return easymethod.MethodBuilder;
 		}
 	}
 }

@@ -68,6 +68,20 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			return member;
 		}
 
+		public EasyMethod CreateMethod( String name, MethodAttributes attrs, ReturnReferenceExpression returnType, params Type[] args)
+		{
+			ArgumentReference[] arguments = new ArgumentReference[args.Length];
+			
+			for(int i=0; i < args.Length; ++i)
+			{
+				arguments[i] = new ArgumentReference(args[i]);
+			}
+
+			EasyMethod member = new EasyMethod( this, name, attrs, returnType, arguments );
+			m_methods.Add(member);
+			return member;
+		}
+
 		public EasyRuntimeMethod CreateRuntimeMethod( String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments )
 		{
 			EasyRuntimeMethod member = new EasyRuntimeMethod( this, name, returnType, arguments );
@@ -77,9 +91,19 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public FieldReference CreateField( string name, Type fieldType )
 		{
-			FieldBuilder fieldBuilder = 
-				m_typebuilder.DefineField( name, fieldType, 
-					FieldAttributes.Public );
+			return CreateField(name, fieldType, true);
+		}
+
+		public FieldReference CreateField( string name, Type fieldType, bool serializable )
+		{
+			FieldAttributes atts = FieldAttributes.Public;
+
+			if (!serializable)
+			{
+				atts |= FieldAttributes.NotSerialized;
+			}
+
+			FieldBuilder fieldBuilder = m_typebuilder.DefineField( name, fieldType, atts );
 			
 			return new FieldReference( fieldBuilder );
 		}

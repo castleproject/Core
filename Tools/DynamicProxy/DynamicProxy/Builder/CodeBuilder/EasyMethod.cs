@@ -27,6 +27,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	public class EasyMethod : IEasyMember
 	{
 		protected MethodBuilder m_builder;
+		protected ArgumentReference[] m_arguments;
 		
 		private MethodCodeBuilder m_codebuilder;
 		private AbstractEasyType m_maintype;
@@ -44,6 +45,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			ReturnReferenceExpression returnRef, params ArgumentReference[] arguments )
 		{
 			m_maintype = maintype;
+			m_arguments = arguments;
 
 			Type returnType = returnRef.Type;
 			Type[] args = ArgumentsUtil.InitializeAndConvert( arguments );
@@ -67,6 +69,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				}
 				return m_codebuilder;
 			}
+		}
+
+		public ArgumentReference[] Arguments
+		{
+			get { return m_arguments; }
 		}
 
 		internal MethodBuilder MethodBuilder

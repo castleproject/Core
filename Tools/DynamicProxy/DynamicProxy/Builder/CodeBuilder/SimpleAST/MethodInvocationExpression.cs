@@ -1,4 +1,3 @@
-using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,14 +18,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
+
 	/// <summary>
 	/// Summary description for MethodInvocationExpression.
 	/// </summary>
 	public class MethodInvocationExpression : Expression
 	{
-		private MethodInfo m_method;
-		private Expression[] m_args;
-		private Reference m_owner;
+		protected MethodInfo m_method;
+		protected Expression[] m_args;
+		protected Reference m_owner;
 
 		public MethodInvocationExpression(MethodInfo method, params Expression[] args) : 
 			this(SelfReference.Self, method, args)

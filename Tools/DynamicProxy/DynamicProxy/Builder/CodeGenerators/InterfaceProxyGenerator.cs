@@ -16,10 +16,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
 	using System.Text;
-	using System.Reflection;
-	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Invocation;
+	using Castle.DynamicProxy.Builder.CodeBuilder;
+	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 
 	/// <summary>
 	/// Summary description for InterfaceProxyGenerator.
@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	{
 		private static readonly Type INVOCATION_TYPE = typeof(InterfaceInvocation);
 
-		protected FieldBuilder m_targetField;
+		protected FieldReference m_targetField;
 
 		public InterfaceProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -58,51 +58,38 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected override void GenerateFields()
 		{
 			base.GenerateFields ();
-
-			m_targetField = GenerateField("__target", typeof (object));
+			m_targetField = MainTypeBuilder.CreateField("__target", typeof (object));
 		}
 
 		/// <summary>
 		/// Generates one public constructor receiving 
 		/// the <see cref="IInterceptor"/> instance and instantiating a HybridCollection
 		/// </summary>
-		protected override void GenerateConstructor()
+		protected override EasyConstructor GenerateConstructor()
 		{
-			Type[] signature = GetConstructorSignature();
+			ArgumentReference arg1 = new ArgumentReference( typeof(IInterceptor) );
+			ArgumentReference arg2 = new ArgumentReference( typeof(object) );
+			ArgumentReference arg3 = new ArgumentReference( typeof(object[]) );
 
-			ConstructorBuilder consBuilder = MainTypeBuilder.DefineConstructor(
-				MethodAttributes.Public,
-				CallingConventions.Standard,
-				signature);
+			EasyConstructor constructor;
 
-			ILGenerator ilGenerator = consBuilder.GetILGenerator();
-			
-			ilGenerator.DeclareLocal( typeof(object) );
-
-			// Calls the base constructor
-			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Call, ObtainAvailableConstructor(m_baseType));
-
-			// Stores the target in the field
-			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Ldarg_2);
-			ilGenerator.Emit(OpCodes.Stfld, m_targetField);
-
-			GenerateConstructorCode(ilGenerator, OpCodes.Ldarg_2, OpCodes.Ldarg_3);
-
-			ilGenerator.Emit(OpCodes.Ret);
-		}
-
-		protected override Type[] GetConstructorSignature()
-		{
 			if (Context.HasMixins)
 			{
-				return new Type[] { typeof(IInterceptor), typeof(object), typeof(object[]) };
+				constructor = MainTypeBuilder.CreateConstructor( arg1, arg2, arg3 );
 			}
 			else
 			{
-				return new Type[] { typeof(IInterceptor), typeof(object) };
+				constructor = MainTypeBuilder.CreateConstructor( arg1, arg2 );
 			}
+
+			constructor.CodeBuilder.InvokeBaseConstructor();
+
+			constructor.CodeBuilder.AddStatement( new AssignStatement(
+				m_targetField, arg2.ToExpression()) );
+
+			GenerateConstructorCode(constructor.CodeBuilder, arg1, arg2, arg3);
+			
+			return constructor;
 		}
 
 		protected Type[] Join(Type[] interfaces, Type[] mixinInterfaces)
@@ -111,6 +98,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			Array.Copy( interfaces, 0, union, 0, interfaces.Length );
 			Array.Copy( mixinInterfaces, 0, union, interfaces.Length, mixinInterfaces.Length );
 			return union;
+		}
+
+		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1, ArgumentReference arg2)
+		{
 		}
 
 		public virtual Type GenerateCode(Type[] interfaces)
@@ -133,12 +124,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			CreateTypeBuilder( typeof(Object), interfaces );
 			GenerateFields();
-			ImplementGetObjectData();
+			ImplementGetObjectData( interfaces );
 			ImplementCacheInvocationCache();
 			GenerateInterfaceImplementation( interfaces );
 			GenerateConstructor();
 			return CreateType();
 		}
-
 	}
 }

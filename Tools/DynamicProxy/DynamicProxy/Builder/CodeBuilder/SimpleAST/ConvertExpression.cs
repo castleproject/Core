@@ -24,11 +24,17 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	public class ConvertExpression : Expression
 	{
 		private Type m_target;
+		private Type m_fromType;
 		private Expression m_right;
 
-		public ConvertExpression( Type targeType, Expression right )
+		public ConvertExpression( Type targetType, Expression right ) : this(targetType, typeof(object), right)
 		{
-			m_target = targeType;
+		}
+
+		public ConvertExpression( Type targetType, Type fromType, Expression right )
+		{
+			m_target = targetType;
+			m_fromType = fromType;
 			m_right = right;
 		}
 
@@ -36,12 +42,23 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		{
 			m_right.Emit(member, gen);
 
-			if (m_target.IsValueType)
+			if (m_fromType == m_target)
+			{
+				return;
+			}
+
+			if (m_target.IsValueType && !m_fromType.IsValueType)
 			{
 				gen.Emit(OpCodes.Unbox, m_target);
 				OpCodeUtil.ConvertTypeToOpCode(gen, m_target);
+				return;
 			}
-			else if (m_target != typeof(Object))
+			else if (!m_target.IsValueType && m_fromType.IsValueType)
+			{
+				gen.Emit(OpCodes.Box, m_fromType);
+			}
+			
+			if (m_target != typeof(Object))
 			{
 				gen.Emit(OpCodes.Castclass, m_target);
 			}

@@ -31,10 +31,20 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 		}
 
-		public EasyType( ModuleScope modulescope, String name, Type baseType, Type[] interfaces ) : this()
+		public EasyType( ModuleScope modulescope, String name, Type baseType, Type[] interfaces ) : 
+			this(modulescope, name, baseType, interfaces, false)
+		{
+		}
+
+		public EasyType( ModuleScope modulescope, String name, Type baseType, Type[] interfaces, bool serializable ) : this()
 		{
 			TypeAttributes flags = 
 				TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
+
+			if (serializable)
+			{
+				flags |= TypeAttributes.Serializable;
+			}
 			
 			m_typebuilder = modulescope.ObtainDynamicModule().DefineType( 
 				name, flags, baseType, interfaces );
@@ -48,8 +58,23 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		public EasyCallable CreateCallable( ReturnReferenceExpression returnType, 
 			params ArgumentReference[] args )
 		{
-			String name = String.Format("__delegate_{0}", IncrementAndGetCounterValue );
-			EasyCallable nested = new EasyCallable( this, name, returnType, args );
+			EasyCallable nested = new EasyCallable( this, IncrementAndGetCounterValue, 
+				returnType, args );
+			m_nested.Add( nested );
+			return nested;
+		}
+
+		public EasyCallable CreateCallable( Type returnType, params ParameterInfo[] args )
+		{
+			ArgumentReference[] arguments = new ArgumentReference[args.Length];
+			
+			for(int i=0; i < args.Length; ++i)
+			{
+				arguments[i] = new ArgumentReference( args[i].ParameterType );
+			}
+			
+			EasyCallable nested = new EasyCallable( this, IncrementAndGetCounterValue, 
+				new ReturnReferenceExpression(returnType), arguments );
 			m_nested.Add( nested );
 			return nested;
 		}

@@ -18,30 +18,39 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	/// <summary>
-	/// Summary description for ConstructorInvocationExpression.
-	/// </summary>
-	public class ConstructorInvocationExpression : Expression
-	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
-		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
+	/// <summary>
+	/// Summary description for VirtualMethodInvocationExpression.
+	/// </summary>
+	public class VirtualMethodInvocationExpression : MethodInvocationExpression
+	{
+		public VirtualMethodInvocationExpression(MethodInfo method, params Expression[] args) : base(method, args)
 		{
-			m_cmethod = method;
-			m_args = args;
+		}
+
+		public VirtualMethodInvocationExpression(EasyMethod method, params Expression[] args) : base(method, args)
+		{
+		}
+
+		public VirtualMethodInvocationExpression(Reference owner, EasyMethod method, params Expression[] args) : base(owner, method, args)
+		{
+		}
+
+		public VirtualMethodInvocationExpression(Reference owner, MethodInfo method, params Expression[] args) : base(owner, method, args)
+		{
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldarg_0);
-			
+			ArgumentsUtil.EmitLoadOwnerAndReference(m_owner, gen);
+
 			foreach(Expression exp in m_args)
 			{
 				exp.Emit(member, gen);
 			}
 
-			gen.Emit(OpCodes.Call, m_cmethod);
+			gen.Emit(OpCodes.Callvirt, m_method);
 		}
 	}
 }

@@ -15,33 +15,20 @@
 namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Summary description for ConstructorInvocationExpression.
+	/// Summary description for PopValueFromStackStatement.
 	/// </summary>
-	public class ConstructorInvocationExpression : Expression
+	public class PopValueFromStackStatement : Statement
 	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
-
-		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
+		public PopValueFromStackStatement()
 		{
-			m_cmethod = method;
-			m_args = args;
 		}
 
-		public override void Emit(IEasyMember member, ILGenerator gen)
+		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldarg_0);
-			
-			foreach(Expression exp in m_args)
-			{
-				exp.Emit(member, gen);
-			}
-
-			gen.Emit(OpCodes.Call, m_cmethod);
+			gen.Emit(OpCodes.Pop);
 		}
 	}
 }

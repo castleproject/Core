@@ -33,6 +33,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, m_method);
+			gen.Emit(OpCodes.Call, typeof(MethodBase).GetMethod("GetMethodFromHandle"));
 			gen.Emit(OpCodes.Castclass, typeof(MethodInfo));
 		}
 	}

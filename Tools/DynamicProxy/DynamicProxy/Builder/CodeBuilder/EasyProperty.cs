@@ -37,6 +37,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				name, PropertyAttributes.None, returnType, new Type[0]);
 		}
 
+		public String Name
+		{
+			get { return m_builder.Name; }
+		}
+
 		public EasyMethod CreateGetMethod()
 		{
 			if (m_getMethod != null)
@@ -72,7 +77,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			if (m_setMethod != null)
 			{
 				m_setMethod.Generate();
-				m_builder.SetGetMethod(m_setMethod.MethodBuilder);
+				m_builder.SetSetMethod(m_setMethod.MethodBuilder);
 			}
 			
 			if (m_getMethod != null)

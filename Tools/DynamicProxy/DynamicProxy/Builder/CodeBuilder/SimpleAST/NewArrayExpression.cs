@@ -15,33 +15,26 @@
 namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Summary description for ConstructorInvocationExpression.
+	/// Summary description for NewArrayExpression.
 	/// </summary>
-	public class ConstructorInvocationExpression : Expression
+	public class NewArrayExpression : Expression
 	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
+		private int m_size;
+		private Type m_arrayType;
 
-		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
+		public NewArrayExpression( int size, Type arrayType )
 		{
-			m_cmethod = method;
-			m_args = args;
+			m_size = size;
+			m_arrayType = arrayType;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldarg_0);
-			
-			foreach(Expression exp in m_args)
-			{
-				exp.Emit(member, gen);
-			}
-
-			gen.Emit(OpCodes.Call, m_cmethod);
+			gen.Emit(OpCodes.Ldc_I4, m_size);
+			gen.Emit(OpCodes.Newarr, m_arrayType);
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System.Reflection.Emit;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +15,7 @@ using System.Reflection.Emit;
 namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
+	using System.Reflection.Emit;
 
 	/// <summary>
 	/// Summary description for ReferencesToObjectArrayExpression.

@@ -33,6 +33,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 				OpCode code = LdcOpCodesDictionary.Instance[ value.GetType() ];
 				gen.Emit(code, (int) value);
 			}
+			else if (value is bool)
+			{
+				OpCode code = LdcOpCodesDictionary.Instance[ value.GetType() ];
+				gen.Emit(code, Convert.ToInt32(value) );
+			}
 			else
 			{
 				throw new NotSupportedException();

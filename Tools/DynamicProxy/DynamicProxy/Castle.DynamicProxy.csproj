@@ -224,7 +224,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Builder\CodeBuilder\SimpleAST\ArgumentsToObjectArrayExpression.cs"
+                    RelPath = "Builder\CodeBuilder\SimpleAST\AssignArrayStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -274,7 +274,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\GotoStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\IEmitter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\LabelReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -285,6 +295,11 @@
                 />
                 <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\LocalReference.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\MarkBranchStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -304,6 +319,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\NewArrayExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\NewInstanceExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -319,12 +339,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\PopValueFromStackStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\Reference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\ReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\ReferencesToObjectArrayExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -354,6 +384,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\TypeTokenExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\VirtualMethodInvocationExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeBuilder\Utils\ArgumentsUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -374,11 +414,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Builder\CodeGenerators\CallableDelegateBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Builder\CodeGenerators\ClassProxyGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -395,16 +430,6 @@
                 />
                 <File
                     RelPath = "Builder\CodeGenerators\ProxyGenerationException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Builder\CodeGenerators\Utils\OpCodesDictionary.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Builder\CodeGenerators\Utils\OpCodeUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

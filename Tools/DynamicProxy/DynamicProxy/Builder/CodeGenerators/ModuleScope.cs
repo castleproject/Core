@@ -94,6 +94,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			set
 			{
 				m_typeCache[name] = value;
+				SaveAssembly();
 			}
 		}
 	}

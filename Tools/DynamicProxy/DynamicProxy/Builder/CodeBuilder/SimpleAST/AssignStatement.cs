@@ -16,6 +16,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
 
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
+
 	/// <summary>
 	/// Summary description for AssignStatement.
 	/// </summary>
@@ -32,10 +34,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			if (m_target.OwnerReference != null)
-			{
-				m_target.OwnerReference.StoreReference(gen);
-			}
+			ArgumentsUtil.EmitLoadOwnerAndReference( m_target.OwnerReference, gen );
 
 			m_expression.Emit(member, gen);
 

@@ -30,13 +30,18 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		private EasyRuntimeMethod m_invokeMethod;
 		private EasyConstructor m_constructor;
 		private EasyMethod m_callmethod;
+		private int m_id;
 
 		public EasyCallable( AbstractEasyType type, 
-			String name,
+			int id,
 			ReturnReferenceExpression returnType, 
-			params ArgumentReference[] args ) : base(type, name, typeof(MulticastDelegate),
-			new Type[] { typeof(ICallable) }, returnType, args )
+			params ArgumentReference[] args ) : 
+				base(type, 
+					 String.Format("__delegate_{0}", id), 
+					 typeof(MulticastDelegate),
+					 new Type[] { typeof(ICallable) }, returnType, args )
 		{
+			m_id = id;
 			m_args = args;
 			m_returnType = returnType;
 
@@ -86,7 +91,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			else
 			{
 				ConvertExpression conversion = new ConvertExpression( 
-					m_returnType.Type, methodInv );
+					typeof(object), m_returnType.Type, methodInv );
 				m_callmethod.CodeBuilder.AddStatement( new ReturnStatement( conversion ) );
 			}
 		}
@@ -101,7 +106,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			getMethod.CodeBuilder.AddStatement( 
 				new ReturnStatement( new MethodInvocationExpression(baseMethod) ) );
 
-			//			PropertyAttributes patts = PropertyAttributes.None;
+//			PropertyAttributes patts = PropertyAttributes.None;
 //			PropertyBuilder pbuilder = m_delegateBuilder.DefineProperty("Target", patts, typeof(Object), null);
 //			
 //			MethodAttributes atts = MethodAttributes.Public|MethodAttributes.Virtual|MethodAttributes.SpecialName;
@@ -124,6 +129,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 			GenerateCall();
 			GenerateTargetProperty();
+		}
+
+		public int ID
+		{
+			get { return m_id; }
 		}
 
 		public EasyMethod InvokeMethod
