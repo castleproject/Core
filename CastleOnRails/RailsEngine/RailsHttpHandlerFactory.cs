@@ -1,3 +1,5 @@
+using System;
+using Castle.CastleOnRails.Engine.ControllerFactory;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,28 +29,63 @@ namespace Castle.CastleOnRails.Engine
 	/// </summary>
 	public class RailsHttpHandlerFactory : IHttpHandlerFactory
 	{
-		private ControllersCache _cache;
+		private GeneralConfiguration _config;
+		private IControllerFactory _controllerFactory;
 		private IViewEngine _viewEngine;
 
 		public RailsHttpHandlerFactory()
 		{
-			_cache = new ControllersCache();
+			ObtainConfiguration();
+			InitializeControllerFactory();
+			InitializeViewEngine();
+		}
 
-			GeneralConfiguration config = (GeneralConfiguration) 
-				ConfigurationSettings.GetConfig("rails");
-
-			if (config != null && config.ControllersAssembly != null)
+		protected virtual void InitializeControllerFactory()
+		{
+			if (_config != null && _config.CustomControllerFactory != null)
 			{
-				_cache.Inspect( config.ControllersAssembly );
-			}
+				String typeName = _config.CustomControllerFactory;
+				Type controllerFactoryType = Type.GetType(typeName, false, false);
 
+				if (controllerFactoryType == null)
+				{
+					String message = 
+						String.Format("Could not obtain controller factory. Type not found {0}", typeName);
+					throw new RailsException(message);
+				}
+
+				_controllerFactory = (IControllerFactory) 
+					Activator.CreateInstance(controllerFactoryType);
+			}
+			else
+			{
+				ControllersCache cache = new ControllersCache();
+
+				if (_config != null)
+				{
+					cache.Inspect( _config.ControllersAssembly );
+				}
+				
+				_controllerFactory = new DefaultControllerFactory(cache);
+			}
+		}
+
+		protected virtual void InitializeViewEngine()
+		{
 			// Default view engine
 			_viewEngine = new AspNetViewEngine();
 		}
 
+		protected virtual void ObtainConfiguration()
+		{
+			_config = (GeneralConfiguration) 
+				ConfigurationSettings.GetConfig("rails");
+		}
+
 		public virtual IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated)
 		{
-			RailsHttpHandler handler = new RailsHttpHandler( _viewEngine, _cache, 
+			RailsHttpHandler handler = new RailsHttpHandler( 
+				_viewEngine, _controllerFactory, 
 				requestType, url, pathTranslated);
 			
 			Configure(handler);

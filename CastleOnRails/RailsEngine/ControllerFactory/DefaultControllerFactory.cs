@@ -12,39 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Configuration
+namespace Castle.CastleOnRails.Engine.ControllerFactory
 {
 	using System;
 
+	using Castle.CastleOnRails.Framework;
+
 	/// <summary>
-	/// Summary description for GeneralConfiguration.
+	/// Summary description for DefaultControllerFactory.
 	/// </summary>
-	public class GeneralConfiguration
+	public class DefaultControllerFactory : IControllerFactory
 	{
-		private String _controllersAssembly;
-		private String _viewsPhysicalPath;
-		private String _customControllerFactory;
+		private ControllersCache _cache;
 
-		public GeneralConfiguration()
+		public DefaultControllerFactory(ControllersCache cache)
 		{
+			_cache = cache;
 		}
 
-		public string ControllersAssembly
+		#region IControllerFactory Members
+
+		public Controller GetController(String name)
 		{
-			get { return _controllersAssembly; }
-			set { _controllersAssembly = value; }
+			Type controllerType = _cache.GetController( name );
+
+			if (controllerType == null)
+			{
+				throw new RailsException( String.Format("Could not find controller for {0}",
+					name) );
+			}
+
+			return (Controller) Activator.CreateInstance( controllerType );
 		}
 
-		public string ViewsPhysicalPath
-		{
-			get { return _viewsPhysicalPath; }
-			set { _viewsPhysicalPath = value; }
-		}
 
-		public string CustomControllerFactory
-		{
-			get { return _customControllerFactory; }
-			set { _customControllerFactory = value; }
-		}
+		#endregion
 	}
 }

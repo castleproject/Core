@@ -30,14 +30,14 @@ namespace Castle.CastleOnRails.Engine
 		private String _pathTranslated;
 		private String _controllersAssembly;
 		private String _viewsPhysicalPath;
-		private ControllersCache _cache;
+		private IControllerFactory _controllerFactory;
 		private IViewEngine _viewEngine;
 
-		public RailsHttpHandler( IViewEngine viewEngine, ControllersCache cache, 
+		public RailsHttpHandler( IViewEngine viewEngine, IControllerFactory controllerFactory, 
 			String requestType, String url, String pathTranslated)
 		{
 			_viewEngine = viewEngine;
-			_cache = cache;
+			_controllerFactory = controllerFactory;
 			_requestType = requestType;
 			_url = url;
 			_pathTranslated = pathTranslated;
@@ -59,17 +59,11 @@ namespace Castle.CastleOnRails.Engine
 		{
 			UrlInfo info = UrlTokenizer.ExtractInfo(_url);
 
-			Type controllerType = _cache.GetController( info.Controller );
+			Controller controller = _controllerFactory.GetController( info.Controller );
 
-			if (controllerType == null)
-			{
-				throw new RailsException( String.Format("Could not find controller for {0}",
-					info.Controller) );
-			}
-
-			Controller controller = (Controller) Activator.CreateInstance( controllerType );
-
-			controller.__Process( _url, ViewsPhysicalPath, info.Controller, info.Action, _viewEngine, context );
+			controller.__Process( _url, 
+				ViewsPhysicalPath, info.Controller, 
+				info.Action, _viewEngine, context );
 		}
 
 		public bool IsReusable

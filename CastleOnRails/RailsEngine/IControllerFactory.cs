@@ -12,39 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Configuration
+namespace Castle.CastleOnRails.Engine
 {
 	using System;
 
+	using Castle.CastleOnRails.Framework;
+
 	/// <summary>
-	/// Summary description for GeneralConfiguration.
+	/// Summary description for IControllerFactory.
 	/// </summary>
-	public class GeneralConfiguration
+	public interface IControllerFactory
 	{
-		private String _controllersAssembly;
-		private String _viewsPhysicalPath;
-		private String _customControllerFactory;
-
-		public GeneralConfiguration()
-		{
-		}
-
-		public string ControllersAssembly
-		{
-			get { return _controllersAssembly; }
-			set { _controllersAssembly = value; }
-		}
-
-		public string ViewsPhysicalPath
-		{
-			get { return _viewsPhysicalPath; }
-			set { _viewsPhysicalPath = value; }
-		}
-
-		public string CustomControllerFactory
-		{
-			get { return _customControllerFactory; }
-			set { _customControllerFactory = value; }
-		}
+		Controller GetController(String name);
 	}
 }
