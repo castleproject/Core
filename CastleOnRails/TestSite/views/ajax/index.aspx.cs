@@ -23,7 +23,6 @@ namespace TestSite.views.ajax
 		protected System.Web.UI.WebControls.TextBox name;
 		protected System.Web.UI.WebControls.TextBox addressf;
 		protected Castle.CastleOnRails.Framework.Views.Aspx.InvokeHelper ObserveForm;
-		protected System.Web.UI.WebControls.Label message;
 		protected System.Web.UI.WebControls.Button postBackerBtn;
 
 		private Controller _controller;
