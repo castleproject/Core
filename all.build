@@ -4,7 +4,7 @@
 	<property name="base.dir" value="." />
 	<property name="version" value="alpha-1" />
 
-	<target name="build" depends="init, tools, container, facilities, rails, samples" />
+	<target name="build" depends="init, tools, container, services, facilities, rails, samples" />
 	
 	<target name="init">
 
@@ -16,6 +16,10 @@
 
 	<target name="container">
 		<nant buildfile="InversionOfControl\container.build" target="build" />
+	</target>
+
+	<target name="services">
+		<nant buildfile="Services\services.build" target="build" />
 	</target>
 
 	<target name="facilities">
