@@ -249,6 +249,14 @@ namespace Castle.CastleOnRails.Framework
 			// Specifies the default view for this area/controller/action
 			RenderView( action );
 
+			if (HttpContext.Current != null)
+			{
+				if (!HttpContext.Current.Items.Contains("original_view"))
+				{
+					HttpContext.Current.Items["original_view"] = _selectedViewName;
+				}
+			}
+
 			MethodInfo method = SelectMethod(action, _context.Request);
 
 			bool skipFilters = _filters == null || method.IsDefined( typeof(SkipFilter), true );

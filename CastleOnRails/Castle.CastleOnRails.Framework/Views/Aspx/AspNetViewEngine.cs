@@ -46,12 +46,18 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		/// <param name="viewName"></param>
 		public void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
-//			if (!Path.IsPathRooted(_viewRootDir))
-//			{
-//				_viewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _viewRootDir);
-//			}
-
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
+
+			/// Hack ! 
+			/// Todo: document this hack for the sake of our users
+			if (httpContext != null)
+			{
+				if(viewName.Equals(httpContext.Items["original_view"]))
+				{
+					return;
+				}
+			}
+
 			Page masterHandler = null;
 
 			if (controller.LayoutName != null)
@@ -98,7 +104,6 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 				}
 			}
 		}
-
 
 		private void WriteBuffered(HttpResponse response)
 		{
