@@ -1,0 +1,2 @@
+module ManagementHelper
+end

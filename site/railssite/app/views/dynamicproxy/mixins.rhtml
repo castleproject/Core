@@ -1,0 +1,29 @@
+<% @page_title = "DynamicProxy" %>
+<% @main_title = "Mixins" %>
+<%= render "/dynamicproxy/deflinks" %>
+
+The DynamicProxy has a built-in support for mixins. However this is an 
+advanced usage.
+
+<h3>How to use</h3>
+
+<p>
+You must add the mixins instances to the GeneratorContext class
+before invoke the CreateCustomClassProxy or CreateCustomProxy method, as follows:
+</p>
+
+<pre class="source">
+GeneratorContext context = new GeneratorContext();
+SimpleMixin mixin_instance = new SimpleMixin();
+context.AddMixinInstance( mixin_instance );
+
+object proxy = generator.CreateCustomClassProxy( 
+	typeof(SimpleClass), interceptor, context );
+</pre> 
+
+<p>
+If the mixin implements an interface, the proxy will expose it as
+well. If methods are invoked using the mixin interface, the interceptor is
+invoked and the method is dispatched to the mixins instance when the 
+Proceed method is invoked.
+</p>

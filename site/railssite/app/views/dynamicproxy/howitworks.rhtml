@@ -1,0 +1,33 @@
+<% @page_title = "DynamicProxy" %>
+<% @main_title = "What it is" %>
+<%= render "/dynamicproxy/deflinks" %>
+
+The DynamicProxy emits IL code to provide java-like proxy capabilities 
+to your application. Nevertheless, the approaches are different depending 
+on what you are proxying.
+
+<h3>Good performance</h3>
+
+<p>
+To achieve a good performance, DynamicProxy generates a Multicast delegate
+for each method that is going to be intercepted. Thus no invocation happens using 
+reflection and delegates have a extremely good performance compared to 
+reflection based invocations.
+</p>
+
+<h3>Proxying interfaces</h3>
+
+<p>
+In the case of interfaces being proxy, a class is generated
+to implement the interfaces and direct the calls to the target of the invocation (that
+happens when you invoke the Proceed method).
+</p>
+
+<h3>Proxying classes</h3>
+
+<p>
+For concrete classes, only virtual methods can be intercepted as the approach is
+to create a sub class of your class, which overrides all virtual methods (public and
+protected as well) and dispatches the invocations to the interceptor.
+</p>
+

@@ -1,0 +1,2 @@
+module DynamicproxyHelper
+end

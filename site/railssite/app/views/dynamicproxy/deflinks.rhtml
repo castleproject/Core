@@ -1,0 +1,14 @@
+<% @subarea = "DynamicProxy" %>
+
+<% add_topmenu( 'Home', '/home/' ) %>
+
+<% add_rightmenu( 'What it is', 'index' ) %>
+<% add_rightmenu( 'How it works', 'howitworks' ) %>
+<% add_rightmenu( 'Mixins', 'mixins' ) %>
+<% add_rightmenu( 'Serialization', 'serialization' ) %>
+<% add_rightmenu( 'Download', 'download' ) %>
+<% add_rightmenu( 'Coverage report', 'coverage' ) %>
+
+<% add_rightmenu_separator( ) %>
+
+<%= render "/home/deflinks" %>

@@ -1,0 +1,90 @@
+<% @page_title = "DynamicProxy" %>
+<% @main_title = "What it is" %>
+<%= render "/dynamicproxy/deflinks" %>
+
+    The DynamicProxy project was created to overcome the CLR's proxy (in)capabilities. 
+    There are proxies in the CLR world, but they can be considered a bit
+    intrusive as it forces one to extend MarshalByRefObject or ContextBoundObject. 
+    <p>
+    You can use DynamicProxy to generate proxies on the fly for one or more interfaces
+    or even concrete classes (but only virtual methods will be intercepted).
+    </p>
+
+  <h3>Usage</h3>
+    <p>
+    DynamicProxy relies on Reflection.Emit to generate new classes that implements
+    the specified interfaces, or extends your class, and delegates to your 
+	implementation of IInterceptor.
+    The usage is very simple. You only need to invoke ProxyGenerator.CreateProxy or
+	ProxyGenerator.CreateClassProxy specifying the type to be proxied:
+    </p>
+<pre class="source">
+using Castle.DynamicProxy;
+
+public interface IMyInterface
+{
+  String Name
+  {
+    get; set;
+  }
+
+  void DoSomething(int x, int y);
+}
+
+public class YourProxyInterceptor : IInterceptor
+{
+  public object Intercept(IInvocation invocation, params object[] args)
+  {
+    // do something before
+
+    object returnVal = invocation.Proceed( args );
+
+    // do something after...
+
+    return returnVal;
+  }
+}
+
+ProxyGenerator gen = new ProxyGenerator();
+
+object proxy = gen.CreateProxy( 
+	typeof(IMyInterface), 
+	new YourProxyInterceptor(), 
+	new MyInterfaceImpl() );
+
+// proxy can be safely casted to IMyInterface
+
+IMyInterface inter = proxy as IMyInterface;
+</pre>
+
+	<h3>Proxy for a class</h3>
+
+    <p>
+	The interceptor is also valid for class proxies. <strong>Please
+	note that only virtual methods can be intercepted.</strong>
+    </p>
+    
+<pre class="source">
+public class MyClass
+{
+  public virtual void DoSomething(int x, int y)
+  {
+     // Some work
+  }
+}
+
+ProxyGenerator gen = new ProxyGenerator();
+
+object proxy = gen.CreateClassProxy( 
+	typeof(MyClass), 
+	new YourProxyInterceptor() );
+
+// proxy can be safely casted to MyClass
+
+MyClass inter = proxy as MyClass;
+</pre>
+	<h3>More information</h3>
+	<p>
+	Please join our dev mailing list of search the archive for
+	more under the hood information.
+	</p>
