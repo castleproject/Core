@@ -240,6 +240,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Interceptors\LogInvokeInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Interceptors\MyInterfaceProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

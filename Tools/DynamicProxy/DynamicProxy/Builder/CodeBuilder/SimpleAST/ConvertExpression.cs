@@ -1,5 +1,3 @@
-using System.Reflection.Emit;
-using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +15,9 @@ using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
+	using System.Reflection.Emit;
+
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
 	/// <summary>
 	/// Summary description for ConvertExpression.

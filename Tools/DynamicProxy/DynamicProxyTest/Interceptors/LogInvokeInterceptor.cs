@@ -12,19 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Test.Classes
+namespace Castle.DynamicProxy.Test.Interceptors
 {
 	using System;
+	using System.Text;
 
-	public class ClassWithRefType
+
+	public class LogInvokeInterceptor : StandardInterceptor
 	{
-		public ClassWithRefType()
+		private StringBuilder sb = new StringBuilder();
+
+		public LogInvokeInterceptor()
 		{
+
 		}
 
-		public virtual void DoSomething(ref int value1)
+		protected override void PreProceed(IInvocation invocation, params object[] args)
 		{
-			
+			sb.Append( String.Format("{0} ", invocation.Method.Name) );
+
+			base.PreProceed(invocation, args);
+		}
+
+		public String LogContents
+		{
+			get { return sb.ToString(); }
 		}
 	}
 }

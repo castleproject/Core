@@ -282,9 +282,11 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProxyForRefAndOutClass()
 		{
+			LogInvokeInterceptor interceptor = new LogInvokeInterceptor();
+
 			RefAndOutClass proxy = (RefAndOutClass) 
 				_generator.CreateClassProxy(
-				typeof(RefAndOutClass), new StandardInterceptor());
+				typeof(RefAndOutClass), interceptor);
 
 			Assert.IsNotNull(proxy);
 
@@ -295,6 +297,8 @@ namespace Castle.DynamicProxy.Test
 			int arg2;
 			proxy.OutPingTwo(out arg2);
 			Assert.AreEqual(2, arg2);
+
+			Assert.AreEqual("RefPongOne OutPingTwo ", interceptor.LogContents);
 		}
 	}
 }
