@@ -50,6 +50,11 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			SetupProperties(properties);
 		}
 
+		internal IDictionary Properties
+		{
+			get { return _properties; }
+		}
+
 		/// <summary>
 		/// Serialization constructor.
 		/// </summary>
@@ -88,6 +93,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			else
 			{
 				SetupService(name);
+				SetupProperties(String.Empty);
 			}
 		}
 
@@ -120,6 +126,12 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			{
 				_literalProperties = "*";
 				_allProperties = true;
+				return;
+			}
+			if (properties == String.Empty)
+			{
+				_literalProperties = "";
+				SetupProperties(new HybridDictionary(true));
 				return;
 			}
 

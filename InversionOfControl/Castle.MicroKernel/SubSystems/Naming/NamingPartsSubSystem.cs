@@ -15,18 +15,56 @@
 namespace Castle.MicroKernel.SubSystems.Naming
 {
 	using System;
-	using System.Collections;
+
 
 	[Serializable]
 	public class NamingPartsSubSystem : DefaultNamingSubSystem
 	{
+		private BinaryTreeComponentName _tree;
+
 		public NamingPartsSubSystem()
 		{
+			_tree = new BinaryTreeComponentName();
 		}
 
 		private ComponentName ToComponentName(String key)
 		{
 			return new ComponentName(key);
+		}
+
+		public override bool Contains(String key)
+		{
+			return _tree.Contains( ToComponentName(key) );
+		}
+
+		public override void UnRegister(String key)
+		{
+			_tree.Remove( ToComponentName(key) );
+		}
+
+		public override IHandler GetHandler(String key)
+		{
+			return _tree.GetHandler( ToComponentName(key) );
+		}
+
+		public override IHandler[] GetHandlers(String query)
+		{
+			return _tree.GetHandlers( ToComponentName(query) );
+		}
+
+		public override IHandler[] GetHandlers()
+		{
+			return _tree.Handlers;
+		}
+
+		public override IHandler this[String key]
+		{
+			set { _tree.Add( ToComponentName(key), value ); }
+		}
+
+		public override int ComponentCount
+		{
+			get { return _tree.Count; }
 		}
 	}
 }

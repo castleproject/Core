@@ -658,25 +658,11 @@ namespace Castle.MicroKernel
 		protected INamingSubSystem NamingSubSystem
 		{
 			get { return GetSubSystem(SubSystemConstants.NamingKey) as INamingSubSystem; }
-			set { AddSubSystem(SubSystemConstants.NamingKey, value); }
 		}
 
 		protected void RegisterHandler(String key, IHandler handler)
 		{
-			Type service = handler.ComponentModel.Service;
-
-			if (NamingSubSystem.Contains(key))
-			{
-				throw new ComponentRegistrationException(
-					String.Format("There is a component already registered for the given key {0}", key));
-			}
-
-			if (!NamingSubSystem.Contains(service))
-			{
-				NamingSubSystem[service] = handler;
-			}
-
-			NamingSubSystem[key] = handler;
+			NamingSubSystem.Register(key, handler);
 
 			base.RaiseHandlerRegistered(handler);
 			base.RaiseComponentRegistered(key, handler);

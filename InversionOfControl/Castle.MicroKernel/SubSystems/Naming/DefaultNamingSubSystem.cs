@@ -69,10 +69,10 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			if (!_service2Handler.Contains(service))
 			{
-				_service2Handler[service] = handler;
+				this[service] = handler;
 			}
 
-			_key2Handler[key] = handler;
+			this[key] = handler;
 		}
 
 		public virtual bool Contains(String key)
@@ -95,7 +95,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			_service2Handler.Remove(service);
 		}
 
-		public int ComponentCount
+		public virtual int ComponentCount
 		{
 			get { return _key2Handler.Count; }
 		}
@@ -125,7 +125,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			ArrayList list = new ArrayList();
 
-			foreach( IHandler handler in _key2Handler.Values )
+			foreach( IHandler handler in this.GetHandlers() )
 			{
 				if ( service == handler.ComponentModel.Service )
 				{
@@ -142,7 +142,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			ArrayList list = new ArrayList();
 
-			foreach( IHandler handler in _key2Handler.Values )
+			foreach( IHandler handler in this.GetHandlers() )
 			{
 				if ( service.IsAssignableFrom(handler.ComponentModel.Service))
 				{
