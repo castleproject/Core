@@ -27,6 +27,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite", "TestSite\TestSi
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteDirVir", "TestSiteDirVir\TestSiteDirVir.csproj", "{5C34E377-3C66-4535-AD56-B6CEB114D517}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor", "TestSiteWindsor\TestSiteWindsor.csproj", "{22432F75-FD21-474A-AB8F-43100DE79FDB}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine.WindsorExtension.Tests", "Castle.CastleOnRails.Engine.WindsorExtension.Tests\Castle.CastleOnRails.Engine.WindsorExtension.Tests.csproj", "{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -61,6 +73,18 @@ Global
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug.Build.0 = Debug|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release.ActiveCfg = Release|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release.Build.0 = Release|.NET
+		{5C34E377-3C66-4535-AD56-B6CEB114D517}.Debug.ActiveCfg = Debug|.NET
+		{5C34E377-3C66-4535-AD56-B6CEB114D517}.Debug.Build.0 = Debug|.NET
+		{5C34E377-3C66-4535-AD56-B6CEB114D517}.Release.ActiveCfg = Release|.NET
+		{5C34E377-3C66-4535-AD56-B6CEB114D517}.Release.Build.0 = Release|.NET
+		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.ActiveCfg = Debug|.NET
+		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.Build.0 = Debug|.NET
+		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.ActiveCfg = Release|.NET
+		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.Build.0 = Release|.NET
+		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug.ActiveCfg = Debug|.NET
+		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug.Build.0 = Debug|.NET
+		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.ActiveCfg = Release|.NET
+		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
