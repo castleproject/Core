@@ -1,4 +1,3 @@
-using Castle.ActiveRecord.Framework;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,8 @@ namespace Castle.ActiveRecord
 	using NHibernate;
 	using NHibernate.Expression;
 
+	using Castle.ActiveRecord.Framework;
+
 	/// <summary>
 	/// Base class for all ActiveRecord classes. Implements 
 	/// all the functionality to simplify the code on the 
@@ -30,22 +31,44 @@ namespace Castle.ActiveRecord
 	{
 		protected internal static ISessionFactoryHolder _holder;
 
+		/// <summary>
+		/// Constructs an ActiveRecordBase subclass.
+		/// </summary>
 		public ActiveRecordBase()
 		{
 		}
 
 		#region Overridable Hooks
 
+		/// <summary>
+		/// Hook to change the object state
+		/// before saving it.
+		/// </summary>
+		/// <param name="state"></param>
+		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
 		protected internal virtual bool BeforeSave(IDictionary state)
 		{
 			return false;
 		}
 
+		/// <summary>
+		/// Hook to transform the read data 
+		/// from the database before populating 
+		/// the object instance
+		/// </summary>
+		/// <param name="adapter"></param>
+		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
 		protected internal virtual bool BeforeLoad(DictionaryAdapter adapter)
 		{
 			return false;
 		}
 
+		/// <summary>
+		/// Hook to perform additional tasks 
+		/// before removing the object instance representation
+		/// from the database.
+		/// </summary>
+		/// <param name="adapter"></param>
 		protected internal virtual void BeforeDelete(DictionaryAdapter adapter)
 		{
 		}
@@ -54,132 +77,193 @@ namespace Castle.ActiveRecord
 
 		#region Base static methods
 
+		/// <summary>
+		/// Finds an object instance by a unique ID
+		/// </summary>
+		/// <param name="targetType">The AR subclass type</param>
+		/// <param name="id">ID value</param>
+		/// <returns></returns>
 		protected static object FindByPrimaryKey(Type targetType, object id)
 		{
-			ISession sess = _holder.CreateSession( targetType );
+			ISession session = _holder.CreateSession( targetType );
 
 			try
 			{
-				return sess.Load( targetType, id );
+				return session.Load( targetType, id );
+			}
+			catch(ObjectNotFoundException)
+			{
+				return null;
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Load (Find by id) for " + targetType.Name, ex);
 			}
 			finally
 			{
-				_holder.ReleaseSession(sess);
+				_holder.ReleaseSession(session);
 			}
 		}
 
-		protected static Array FindAll(Type t, Order[] orders, params Expression[] expressions)
+		protected static Array FindAll(Type targetType, Order[] orders, params Expression[] expressions)
 		{
-			ISession sess = _holder.CreateSession( t );
+			ISession session = _holder.CreateSession( targetType );
 
-			ICriteria criteria = sess.CreateCriteria(t);
-
-			if (orders != null)
+			try
 			{
-				foreach( Order order in orders )
+				ICriteria criteria = session.CreateCriteria(targetType);
+
+				if (orders != null)
 				{
-					criteria.AddOrder( order );
+					foreach( Order order in orders )
+					{
+						criteria.AddOrder( order );
+					}
 				}
-			}
 
-			IList result = criteria.List();
+				IList result = criteria.List();
 		
-			Array array = Array.CreateInstance(t, result.Count);
+				Array array = Array.CreateInstance(targetType, result.Count);
 	
-			int index = 0;
+				int index = 0;
 
-			foreach(object item in result)
-			{
-				array.SetValue(item, index++);
+				foreach(object item in result)
+				{
+					array.SetValue(item, index++);
+				}
+
+				return array;
 			}
-
-			_holder.ReleaseSession(sess);
-
-			return array;
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
 		}
 
-		protected static Array FindAll(Type t, params Expression[] expressions)
+		protected static Array FindAll(Type targetType, params Expression[] expressions)
 		{
-			ISession sess = _holder.CreateSession( t );
+			ISession session = _holder.CreateSession( targetType );
 
-			ICriteria criteria = sess.CreateCriteria(t);
-
-			foreach( Expression ex in expressions )
+			try
 			{
-				criteria.Add( ex );
-			}
+				ICriteria criteria = session.CreateCriteria(targetType);
 
-			IList result = criteria.List();
+				foreach( Expression ex in expressions )
+				{
+					criteria.Add( ex );
+				}
+
+				IList result = criteria.List();
 		
-			Array array = Array.CreateInstance(t, result.Count);
+				Array array = Array.CreateInstance(targetType, result.Count);
 	
-			int index = 0;
+				int index = 0;
 
-			foreach(object item in result)
-			{
-				array.SetValue(item, index++);
+				foreach(object item in result)
+				{
+					array.SetValue(item, index++);
+				}
+
+				return array;
 			}
-
-			_holder.ReleaseSession(sess);
-
-			return array;
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
 		}
 
 		protected static void DeleteAll(Type type)
 		{
-			ISession sess = _holder.CreateSession( type );
+			ISession session = _holder.CreateSession( type );
 
 			try
 			{
-				sess.Delete( String.Format("from {0}", type.Name) );
+				session.Delete( String.Format("from {0}", type.Name) );
 
-				sess.Flush();
+				session.Flush();
 			}
 			catch(Exception ex)
 			{
-				// Convert to AR Save Exception or something like that
-
-				Console.WriteLine( ex.StackTrace );
-
-				throw ex;
+				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
 			}
 			finally
 			{
-				_holder.ReleaseSession(sess);
+				_holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
+		/// Saves the instance to the database
+		/// </summary>
+		/// <param name="instance"></param>
+		protected static void Save(object instance)
+		{
+			ISession session = _holder.CreateSession( instance.GetType() );
+
+			try
+			{
+				session.Save(instance);
+
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
+		/// Deletes the instance from the database.
+		/// </summary>
+		/// <param name="instance"></param>
+		protected static void Delete(object instance)
+		{
+			ISession session = _holder.CreateSession( instance.GetType() );
+
+			try
+			{
+				session.Delete(instance);
+
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
 			}
 		}
 
 		#endregion
 
+		/// <summary>
+		/// Saves the instance information to the database.
+		/// </summary>
 		public virtual void Save()
 		{
 			Save(this);
 		}
 
-		protected void Save(object obj)
+		/// <summary>
+		/// Deletes the instance from the database.
+		/// </summary>
+		public virtual void Delete()
 		{
-			ISession sess = _holder.CreateSession( obj.GetType() );
-
-			try
-			{
-				sess.Save(obj);
-
-				sess.Flush();
-			}
-			catch(Exception ex)
-			{
-				// Convert to AR Save Exception or something like that
-
-				Console.WriteLine( ex.StackTrace );
-
-				throw ex;
-			}
-			finally
-			{
-				_holder.ReleaseSession(sess);
-			}
+			Delete(this);
 		}
 	}
 }
-
-

@@ -117,5 +117,17 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( post2.Id, (blog.RecentPosts[1] as Post).Id );
 			Assert.AreEqual( post1.Id, (blog.RecentPosts[2] as Post).Id );
 		}
+
+		[Test]
+		public void FindLoad()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog blog = Blog.Find(0);
+			Assert.IsNull(blog);
+		}
 	}
 }

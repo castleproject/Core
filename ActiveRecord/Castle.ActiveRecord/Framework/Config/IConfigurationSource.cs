@@ -19,10 +19,16 @@ namespace Castle.ActiveRecord.Framework
 	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// 
+	/// Abstracts the source of configuration for the framework.
 	/// </summary>
 	public interface IConfigurationSource
 	{
+		/// <summary>
+		/// Implementors should return an <see cref="IConfiguration"/> 
+		/// instance
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		IConfiguration GetConfiguration(Type type);
 	}
 }

@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Tests",
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernate-1.1", "..\..\others\nhibernatebeta1\src\NHibernate\NHibernate-1.1.csproj", "{EE3B9473-7C64-44FF-B342-91B558D413A8}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -25,13 +21,10 @@ Global
 		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug.Build.0 = Debug|.NET
 		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.ActiveCfg = Release|.NET
 		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release.Build.0 = Release|.NET
-		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Debug.ActiveCfg = Debug|.NET
-		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Debug.Build.0 = Debug|.NET
-		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Release.ActiveCfg = Release|.NET
-		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		activerecord.build = activerecord.build
+		Castle.ActiveRecord.Tests.dll.config = Castle.ActiveRecord.Tests.dll.config
 		Changes.txt = Changes.txt
 		License.txt = License.txt
 		Readme.txt = Readme.txt

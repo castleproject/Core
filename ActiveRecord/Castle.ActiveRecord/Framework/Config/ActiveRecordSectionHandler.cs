@@ -14,23 +14,23 @@
 
 namespace Castle.ActiveRecord.Framework.Config
 {
-	using System;
+	using System.Xml;
+	using System.Configuration;
 
-
-	public class AppDomainConfiguration : IConfigurationSource
+	/// <summary>
+	/// Reads the configuration from a entry 'activerecord'
+	/// in the xml associated with the AppDomain
+	/// </summary>
+	public class ActiveRecordSectionHandler : XmlConfigurationSource, IConfigurationSectionHandler
 	{
-		public AppDomainConfiguration()
+		public ActiveRecordSectionHandler()
 		{
 		}
 
-		#region IConfigurationSource Members
-
-		public Castle.Model.Configuration.IConfiguration GetConfiguration(Type type)
+		public object Create(object parent, object configContext, XmlNode section)
 		{
-			// TODO:  Add AppDomainConfiguration.GetConfiguration implementation
-			return null;
+			PopulateSource( section );
+			return this;
 		}
-
-		#endregion
 	}
 }

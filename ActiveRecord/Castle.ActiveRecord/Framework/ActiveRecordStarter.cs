@@ -23,7 +23,6 @@ namespace Castle.ActiveRecord
 	using Castle.Model.Configuration;
 
 	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Framework.Config;
 
 	/// <summary>
 	/// 
@@ -96,7 +95,7 @@ namespace Castle.ActiveRecord
 
 		public static void Initialize( )
 		{
-			Initialize( Assembly.GetExecutingAssembly(), new AppDomainConfiguration() );
+			Initialize( Assembly.GetExecutingAssembly(), System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource );
 		}
 
 		private static Configuration CreateConfiguration(IConfiguration config)

@@ -199,7 +199,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\Config\AppDomainConfiguration.cs"
+                    RelPath = "Framework\Config\ActiveRecordSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -210,6 +210,11 @@
                 />
                 <File
                     RelPath = "Framework\Config\InPlaceConfigurationSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Config\XmlConfigurationSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
