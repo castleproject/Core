@@ -71,6 +71,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			m_consBuilder.SetImplementationFlags(MethodImplAttributes.Runtime|MethodImplAttributes.Managed);
 		}
 
+		public int ID
+		{
+			get { return m_id; }
+		}
+
 		public void CreateType()
 		{
 			m_delegateBuilder.CreateType();

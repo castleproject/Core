@@ -20,6 +20,40 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	class CachedField
+	{
+		FieldBuilder field; 
+		CallableDelegateBuilder callable; 
+		MethodBuilder callback;
+
+		public CachedField(FieldBuilder field, CallableDelegateBuilder callable, MethodBuilder callback)
+		{
+			this.field = field;
+			this.callable = callable;
+			this.callback = callback;
+		}
+
+		public FieldBuilder Field
+		{
+			get { return field; }
+		}
+
+		public CallableDelegateBuilder Callable
+		{
+			get { return callable; }
+		}
+
+		public void WriteInitialization(ILGenerator gen)
+		{
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Ldarg_0);
+//			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Ldftn, callback);
+			gen.Emit(OpCodes.Newobj, callable.Constructor);
+			gen.Emit(OpCodes.Stfld, field);
+		}
+	}
+
 	/// <summary>
 	/// Summary description for ClassProxyGenerator.
 	/// </summary>
@@ -27,6 +61,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	{
 		private Hashtable m_method2Delegate = new Hashtable();
 		private Hashtable m_method2BaseCall = new Hashtable();
+		private ArrayList m_cachedFields = new ArrayList();
 
 		public ClassProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -76,6 +111,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ilGenerator.Emit(OpCodes.Newobj, typeof(Hashtable).GetConstructor( new Type[0] ));
 			ilGenerator.Emit(OpCodes.Stfld, CacheFieldBuilder);
 
+			// Initialize the delegate fields
+
+			foreach(CachedField field in m_cachedFields)
+			{
+				field.WriteInitialization(ilGenerator);
+			}
+
 			ilGenerator.Emit(OpCodes.Ret);
 
 			return consBuilder;
@@ -110,6 +152,29 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			CallableDelegateBuilder delegateBuilder = CallableDelegateBuilder.BuildForMethod( 
 				MainTypeBuilder, method, ModuleScope );
 			m_method2Delegate[method] = delegateBuilder;
+
+			FieldBuilder field = GenerateField( 
+				String.Format("_cached_{0}", delegateBuilder.ID), 
+				typeof(ICallable) );
+			RegisterCacheFieldToBeInitialized(field, delegateBuilder, baseInvokeMethod);
+		}
+
+		private FieldBuilder ObtainCachedFieldBuilderDelegate(CallableDelegateBuilder builder)
+		{
+			foreach(CachedField field in m_cachedFields)
+			{
+				if (field.Callable == builder)
+				{
+					return field.Field;
+				}
+			}
+
+			return null;
+		}
+
+		private void RegisterCacheFieldToBeInitialized(FieldBuilder field, CallableDelegateBuilder builder, MethodBuilder baseInvokeMethod)
+		{
+			m_cachedFields.Add( new CachedField(field, builder, baseInvokeMethod) );
 		}
 
 		protected MethodBuilder GenerateMethodBaseInvoke(MethodInfo method)
@@ -173,7 +238,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			CallableDelegateBuilder delegateType = m_method2Delegate[method] as CallableDelegateBuilder;
-			MethodBuilder delegateTarget = m_method2BaseCall[method] as MethodBuilder;
+			//			MethodBuilder delegateTarget = m_method2BaseCall[method] as MethodBuilder;
+			FieldBuilder fieldDelegate = ObtainCachedFieldBuilderDelegate( delegateType );
 
 			// Obtains the MethodBase from ldtoken method
 			gen.Emit(OpCodes.Ldtoken, method);
@@ -184,8 +250,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			gen.Emit(OpCodes.Ldarg_0);
 
 			gen.Emit(OpCodes.Ldarg_0);
-			gen.Emit(OpCodes.Ldftn, delegateTarget);
-			gen.Emit(OpCodes.Newobj, delegateType.Constructor);
+			gen.Emit(OpCodes.Ldfld, fieldDelegate);
+//			gen.Emit(OpCodes.Ldftn, delegateTarget);
+//			gen.Emit(OpCodes.Newobj, delegateType.Constructor);
 			gen.Emit(OpCodes.Ldloc_0);
 			gen.Emit(OpCodes.Castclass, typeof (MethodInfo)); // Cast MethodBase to MethodInfo
 			gen.Emit(OpCodes.Ldarg_0);
