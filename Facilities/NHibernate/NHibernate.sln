@@ -33,11 +33,13 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 		bin\Blog.hbm.xml = bin\Blog.hbm.xml
 		bin\BlogItem.hbm.xml = bin\BlogItem.hbm.xml
+		bin\Castle.Facilities.NHibernateIntegration.Tests.dll.config = bin\Castle.Facilities.NHibernateIntegration.Tests.dll.config
 		Changes.txt = Changes.txt
 		default.build = default.build
 		License.txt = License.txt
 		bin\Order.hbm.xml = bin\Order.hbm.xml
 		Readme.txt = Readme.txt
+		Running the tests.txt = Running the tests.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
