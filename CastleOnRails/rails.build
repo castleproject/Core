@@ -31,7 +31,7 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="clean, init, framework, engine, integration, samples, tests" />
+	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, samples, tests" />
 
 	<target name="clean">
 		<delete>
@@ -68,15 +68,21 @@
 		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="compile" />
 	</target>
 
+	<target name="nvelocity" depends="init">
+		<nant buildfile="Castle.CastleOnRails.Framework.Views.NVelocity/default.build" inheritall="true" target="compile" />
+	</target>
+
 	<target name="samples" depends="init">
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteDirVir/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
+		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
 	</target>
 	
 	<target name="tests" depends="init">
 		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.CastleOnRails.Framework.Views.NVelocity/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="test" />
 	</target>
 
@@ -101,12 +107,13 @@
 				<include name="Castle.CastleOnRails.Framework/**/*.*" />
 				<include name="Castle.CastleOnRails.Framework.Tests/**/*.*" />
 				<include name="Castle.CastleOnRails.Framework.Views.NVelocity/**/*.*" />
+				<include name="Castle.CastleOnRails.Framework.Views.NVelocity.Tests/**/*.*" />
 				<include name="Castle.CastleOnRails.WindsorExtension/**/*.*" />
-				<include name="Castle.CastleOnRails.WindsorExtension.Tests/**/*.*" />
 				<include name="Castle.CastleOnRails.WindsorExtension.Tests/**/*.*" />
 				<include name="TestSite/**/*.*" />
 				<include name="TestSiteDirVir/**/*.*" />
 				<include name="TestSiteWindsor/**/*.*" />
+				<include name="TestSiteNVelocity/**/*.*" />
 			</fileset>
 		</zip>
 
