@@ -22,6 +22,9 @@ Global
 		{8A080CE4-4C56-4FCB-9940-451F261BFEE9}.Release.ActiveCfg = Release|.NET
 		{8A080CE4-4C56-4FCB-9940-451F261BFEE9}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		typedFactory_castle_config.xml = typedFactory_castle_config.xml
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
