@@ -1,0 +1,23 @@
+Beta 1  - 16/jan/2005
+------
+
+- Changed: from #{} to ${} - way of referencing to another component
+  on the configuration.
+
+- Added: support for dictionaries, lists and arrays on the configuration file.
+
+  <component>
+    <parameters>
+      <properties>
+        <dictionary>
+          <item key="mykey">value</item>
+        </dictionary>
+      </properties>
+    </parameters>
+  </component>
+
+- Added: Component Graph (used by the Remove method and to dispose the components)
+
+- Fixed: Remove method
+
+
