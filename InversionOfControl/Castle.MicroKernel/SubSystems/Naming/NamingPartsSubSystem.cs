@@ -16,7 +16,30 @@ namespace Castle.MicroKernel.SubSystems.Naming
 {
 	using System;
 
-
+	/// <summary>
+	/// Alternative <see cref="INamingSubSystem"/> implementation.
+	/// Extends the default implementation replacing the 
+	/// key support with a more complete ComponentName. Supports
+	/// queries.
+	/// </summary>
+	/// <example>
+	/// The user must register components using the following construction
+	/// <code>
+	///   service:properties
+	/// </code>
+	/// Where properties is a list of key value pairs (comma separated). Example:
+	/// <code>
+	///   protocol:secure=true,version=1.2
+	/// </code>
+	/// The user can then query for components using the same construction:
+	/// <code>
+	///   protocol:secure=true
+	/// </code>
+	/// Or to return all:
+	/// <code>
+	///   protocol:*
+	/// </code>
+	/// </example>
 	[Serializable]
 	public class NamingPartsSubSystem : DefaultNamingSubSystem
 	{
