@@ -12,49 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.Facilities.ActiveRecordGenerator.Utils
 {
 	using System;
+	using System.Text.RegularExpressions;
 
+	public class Pair
+	{
+		private string _first;
+		private string _second;
 
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class ActiveRecordAttribute : Attribute
-	{ 
-		private string _table;
-		private string _schema;
-		private string _proxy;
-
-		public ActiveRecordAttribute()
+		public Pair(String first, String second)
 		{
+			_first = first;
+			_second = second;
 		}
 
-		public ActiveRecordAttribute(String table)
+		public string First
 		{
-			_table = table;
+			get { return _first; }
 		}
 
-		public ActiveRecordAttribute(String table, String schema)
+		public string Second
 		{
-			_table = table;
-			_schema = schema;
+			get { return _second; }
 		}
 
-		public string Table
+		public override string ToString()
 		{
-			get { return _table; }
-			set { _table = value; }
-		}
-
-		public string Schema
-		{
-			get { return _schema; }
-			set { _schema = value; }
-		}
-
-		public string Proxy
-		{
-			get { return _proxy; }
-			set { _proxy = value; }
+			return _first;
 		}
 	}
 }

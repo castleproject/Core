@@ -106,7 +106,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
@@ -129,7 +129,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CodeGenerator\ICodeGenerator.cs"
+                    RelPath = "CodeGenerator\ICodeDomGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -139,7 +139,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CodeGenerator\INamingService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\Default\CodeDomGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CodeGenerator\Default\CodeProviderFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\Default\NamingService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -165,6 +180,11 @@
                 />
                 <File
                     RelPath = "Model\ActiveRecordDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\ActiveRecordDescriptorBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -205,6 +225,11 @@
                 />
                 <File
                     RelPath = "Prevalence\IProjectPrevalence.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Utils\Pair.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

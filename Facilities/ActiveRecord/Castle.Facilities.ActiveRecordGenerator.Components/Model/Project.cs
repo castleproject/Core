@@ -16,6 +16,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 {
 	using System;
 	using System.Collections;
+	using System.CodeDom.Compiler;
+	using System.IO;
 
 	using Castle.Model;
 
@@ -33,12 +35,20 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		private String _namespace;
 		private CodeProviderInfo _codeProvider;		
 		private DatabaseDefinition _dbDefinition;
+		
 		private IList _activeRecordDescriptors = new ArrayList();
+		
 		private IDatabaseDefinitionBuilder _definitionBuilder;
+		private ICodeDomGenerator _codeGenerator;
+		private ICodeProviderFactory _codeProviderFactory;
 
-		public Project(IDatabaseDefinitionBuilder definitionBuilder)
+
+		public Project(IDatabaseDefinitionBuilder definitionBuilder, 
+			ICodeProviderFactory codeProviderFactory, ICodeDomGenerator codeGenerator)
 		{
 			_definitionBuilder = definitionBuilder;
+			_codeProviderFactory = codeProviderFactory;
+			_codeGenerator = codeGenerator;
 		}
 
 		public String Name
@@ -91,6 +101,18 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		public void RefreshDatabaseDefinition()
 		{
 			_dbDefinition = _definitionBuilder.Build( this );
+		}
+
+		public String GenerateCode(ActiveRecordDescriptor arDesc)
+		{
+			CodeDomProvider provider = _codeProviderFactory.GetProvider(_codeProvider);
+
+			StringWriter writer = new StringWriter();
+
+			ICodeGenerator generator = provider.CreateGenerator();
+			generator.GenerateCodeFromType( _codeGenerator.Generate(arDesc), writer, null ); 
+
+			return writer.GetStringBuilder().ToString();
 		}
 	}
 }

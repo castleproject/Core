@@ -12,35 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Utils
+namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator
 {
 	using System;
 
 
-	public class Pair
+	public interface INamingService
 	{
-		private string _first;
-		private string _second;
+		String CreateClassName( String tableName );
 
-		public Pair(String first, String second)
-		{
-			_first = first;
-			_second = second;
-		}
+		String CreateRelationName( String referencedTableName );
 
-		public string First
-		{
-			get { return _first; }
-		}
+		String CreatePropertyName( String columnName );
 
-		public string Second
-		{
-			get { return _second; }
-		}
-
-		public override string ToString()
-		{
-			return _first;
-		}
+		String CreateFieldName( String columnName );
 	}
 }

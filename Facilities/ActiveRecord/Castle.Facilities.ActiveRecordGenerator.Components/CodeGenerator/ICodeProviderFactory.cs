@@ -15,10 +15,13 @@
 namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator
 {
 	using System;
+	using System.CodeDom.Compiler;
 
 
 	public interface ICodeProviderFactory
 	{
 		CodeProviderInfo[] GetAvailableProviders();
+
+		CodeDomProvider GetProvider(CodeProviderInfo info);
 	}
 }

@@ -51,8 +51,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components.Database.Default
 					objArrRestrict = new object[] {null, null, tableDef.Name, null};
 
 					DataTable columns = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, objArrRestrict);
-					DataTable pks = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Primary_Keys, objArrRestrict);
-					DataTable fks = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, objArrRestrict);
+//					DataTable pks = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Primary_Keys, objArrRestrict);
+//					DataTable fks = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, objArrRestrict);
 
 					foreach(DataRow column in columns.Rows)
 					{

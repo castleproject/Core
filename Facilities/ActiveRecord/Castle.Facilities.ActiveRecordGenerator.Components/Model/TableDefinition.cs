@@ -22,6 +22,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 	{
 		private String _name;
 		private IList _columns = new ArrayList();
+		private ActiveRecordDescriptor _relatedDescriptor;
 
 		public TableDefinition(String name)
 		{
@@ -33,6 +34,12 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 			get { return _name; }
 		}
 
+		public ActiveRecordDescriptor RelatedDescriptor
+		{
+			get { return _relatedDescriptor; }
+			set { _relatedDescriptor = value; }
+		}
+
 		public ColumnDefinition AddColumn( ColumnDefinition column )
 		{
 			_columns.Add( column );
@@ -42,6 +49,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		public IList Columns
 		{
 			get { return _columns; }
+		}
+
+		public override string ToString()
+		{
+			return _name;
 		}
 	}
 }

@@ -15,12 +15,95 @@
 namespace Castle.Facilities.ActiveRecordGenerator.Model
 {
 	using System;
+	using System.Collections;
 
 
 	public class ActiveRecordDescriptor
 	{
-		public ActiveRecordDescriptor()
+		private bool _generate = true;
+		private String _className;
+		private IList _properties = new ArrayList();
+
+		public ActiveRecordDescriptor(String className)
 		{
+			_className = className;
+		}
+
+		public String ClassName
+		{
+			get { return _className; }
+			set { _className = value; }
+		}
+
+		public void AddProperty( ActiveRecordPropertyDescriptor propertyDescriptor )
+		{
+			_properties.Add(propertyDescriptor);
+		}
+
+		public IList Properties
+		{
+			get { return _properties; }
+		}
+
+		public bool Generate
+		{
+			get { return _generate; }
+			set { _generate = value; }
+		}
+	}
+
+	public class ActiveRecordPropertyDescriptor
+	{
+		private bool _generate = true;
+		private String _columnName;
+		private String _columnTypeName = "VARCHAR";
+		private String _propertyName;
+		private String _propertyFieldName;
+		private Type _propertyType;
+
+		public ActiveRecordPropertyDescriptor(string columnName, string columnTypeName, string propertyName, string propertyFieldName, Type propertyType)
+		{
+			_columnName = columnName;
+			_columnTypeName = columnTypeName;
+			_propertyName = propertyName;
+			_propertyFieldName = propertyFieldName;
+			_propertyType = propertyType;
+		}
+
+		public string ColumnName
+		{
+			get { return _columnName; }
+			set { _columnName = value; }
+		}
+
+		public string ColumnTypeName
+		{
+			get { return _columnTypeName; }
+			set { _columnTypeName = value; }
+		}
+
+		public string PropertyName
+		{
+			get { return _propertyName; }
+			set { _propertyName = value; }
+		}
+
+		public string PropertyFieldName
+		{
+			get { return _propertyFieldName; }
+			set { _propertyFieldName = value; }
+		}
+
+		public Type PropertyType
+		{
+			get { return _propertyType; }
+			set { _propertyType = value; }
+		}
+
+		public bool Generate
+		{
+			get { return _generate; }
+			set { _generate = value; }
 		}
 	}
 }

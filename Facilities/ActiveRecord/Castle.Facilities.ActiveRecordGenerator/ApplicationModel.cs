@@ -24,6 +24,9 @@ namespace Castle.Facilities.ActiveRecordGenerator
 	{
 		private IWin32Window _window;
 		private Project _project;
+		private TableDefinition _table;
+		private ColumnDefinition _column;
+		private ActiveRecordDescriptor _arDescriptor;
 
 		public ApplicationModel()
 		{
@@ -44,6 +47,48 @@ namespace Castle.Facilities.ActiveRecordGenerator
 			}
 		}
 
+		public TableDefinition CurrentTable
+		{
+			get { return _table; }
+			set
+			{
+				_table = value;
+
+				if (OnSelectionChanged != null)
+				{
+					OnSelectionChanged(this, ModelSelectionEnum.Table);
+				}
+			}
+		}
+
+		public ColumnDefinition CurrentColumn
+		{
+			get { return _column; }
+			set
+			{
+				_column = value;
+			
+				if (OnSelectionChanged != null)
+				{
+					OnSelectionChanged(this, ModelSelectionEnum.Column);
+				}
+			}
+		}
+
+		public ActiveRecordDescriptor CurrentActiveRecord
+		{
+			get { return _arDescriptor; }
+			set
+			{
+				_arDescriptor = value;
+
+				if (OnSelectionChanged != null)
+				{
+					OnSelectionChanged(this, ModelSelectionEnum.ActiveRecord);
+				}
+			}
+		}
+
 		public IWin32Window MainWindow
 		{
 			get { return _window; }
@@ -61,6 +106,8 @@ namespace Castle.Facilities.ActiveRecordGenerator
 		public event ProjectReplaceDelegate OnProjectReplaced;
 		
 		public event ProjectDelegate OnProjectChanged;
+
+		public event SelectionDelegate OnSelectionChanged;
 
 		#endregion
 	}

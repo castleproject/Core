@@ -55,12 +55,20 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 
 			AddComponent( "codeprovider", 
 				typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
-			
+
+			AddComponent( "codedomgenerator", 
+				typeof(ICodeDomGenerator), typeof(CodeDomGenerator) );
+
+			AddComponent( "namingservice", 
+				typeof(INamingService), typeof(NamingService) );
+
 			AddComponent( "db.connection.factory", 
 				typeof(IConnectionFactory), typeof(ConnectionFactory) );
 			
 			AddComponent( "db.def.builder", 
 				typeof(IDatabaseDefinitionBuilder), typeof(DatabaseDefinitionBuilder) );
+
+			AddComponent( "model.ar.builder", typeof(ActiveRecordDescriptorBuilder) );
 		}
 	}
 }

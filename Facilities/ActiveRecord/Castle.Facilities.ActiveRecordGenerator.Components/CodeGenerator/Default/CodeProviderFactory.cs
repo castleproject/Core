@@ -15,6 +15,7 @@
 namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 {
 	using System;
+	using System.CodeDom.Compiler;
 
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
 
@@ -31,6 +32,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 //			providers[3] = new CodeProviderInfo( "VJ#", typeof(Microsoft.VJSharp.VJSharpCodeProvider, VJSharpCodeProvider) );
 			
 			return providers;
+		}
+
+		public CodeDomProvider GetProvider(CodeProviderInfo info)
+		{
+			return (CodeDomProvider) Activator.CreateInstance(info.CodeProvider);
 		}
 	}
 }

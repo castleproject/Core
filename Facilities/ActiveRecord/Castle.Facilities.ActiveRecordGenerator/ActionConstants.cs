@@ -24,5 +24,6 @@ namespace Castle.Facilities.ActiveRecordGenerator
 		public static readonly String Save_Project = "saveproject";
 		public static readonly String SaveAs_Project = "saveprojectas";
 		public static readonly String Exit = "exit";
+		public static readonly String New_Active_Record = "newactiverecord";
 	}
 }

@@ -128,7 +128,7 @@
                 />
                 <Reference
                     Name = "adodb"
-                    AssemblyName = "adodb"
+                    AssemblyName = "ADODB"
                     HintPath = "C:\Program Files\Microsoft.NET\Primary Interop Assemblies\adodb.dll"
                     AssemblyFolderKey = "hklm\primary interop assemblies"
                 />
@@ -211,9 +211,24 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Action\Standard\NewActiveRecordAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Action\Standard\NewProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ActiveRecordDefForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ActiveRecordDefForm.resx"
+                    DependentUpon = "ActiveRecordDefForm.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Forms\MainForm.cs"
@@ -234,6 +249,11 @@
                     RelPath = "Forms\NewProjectForm.resx"
                     DependentUpon = "NewProjectForm.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\Views\CodeView.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Forms\Views\ProjectExplorerView.cs"
@@ -302,11 +322,6 @@
                 />
                 <File
                     RelPath = "Icons\ImageConstants.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Utils\Pair.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

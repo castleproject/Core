@@ -12,49 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.Facilities.ActiveRecordGenerator.Components.Tests
 {
 	using System;
 
+	using Castle.Windsor;
 
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
-	public class ActiveRecordAttribute : Attribute
-	{ 
-		private string _table;
-		private string _schema;
-		private string _proxy;
+	using NUnit.Framework;
 
-		public ActiveRecordAttribute()
+
+	public abstract class BaseContainerTestCase
+	{
+		private IWindsorContainer container;
+
+		[SetUp]
+		public void Init()
 		{
+			container = new ActiveRecordGeneratorContainer();
 		}
 
-		public ActiveRecordAttribute(String table)
+		[TearDown]
+		public void Terminate()
 		{
-			_table = table;
+			container.Dispose();
 		}
 
-		public ActiveRecordAttribute(String table, String schema)
+		public IWindsorContainer Container
 		{
-			_table = table;
-			_schema = schema;
-		}
-
-		public string Table
-		{
-			get { return _table; }
-			set { _table = value; }
-		}
-
-		public string Schema
-		{
-			get { return _schema; }
-			set { _schema = value; }
-		}
-
-		public string Proxy
-		{
-			get { return _proxy; }
-			set { _proxy = value; }
+			get { return container; }
 		}
 	}
 }

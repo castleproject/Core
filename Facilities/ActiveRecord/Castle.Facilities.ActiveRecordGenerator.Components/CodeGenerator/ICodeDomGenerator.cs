@@ -20,7 +20,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
 
-	public interface ICodeGenerator
+	public interface ICodeDomGenerator
 	{
 		CodeCompileUnit Generate(Project project);
 

@@ -19,22 +19,39 @@ namespace Castle.Facilities.ActiveRecordGenerator
 
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
+	public enum ModelSelectionEnum
+	{
+		Table,
+		Column,
+		AllActiveRecord,
+		ActiveRecord
+	}
 	
 	public delegate void ProjectReplaceDelegate(object sender, Project oldProject, Project newProject);
 
 	public delegate void ProjectDelegate(object sender, Project project);
+
+	public delegate void SelectionDelegate(object sender, ModelSelectionEnum newSelection);
 
 
 	public interface IApplicationModel
 	{
 		Project CurrentProject { get; set; }
 
+		TableDefinition CurrentTable { get; set; }
+
+		ColumnDefinition CurrentColumn { get; set; }
+
+		ActiveRecordDescriptor CurrentActiveRecord { get; set; }
+
 		IWin32Window MainWindow { get; set; }
 
 		event ProjectReplaceDelegate OnProjectReplaced;
 
 		event ProjectDelegate OnProjectChanged;
-		
+
+		event SelectionDelegate OnSelectionChanged;
+
 		void UpdateViews();
 	}
 }

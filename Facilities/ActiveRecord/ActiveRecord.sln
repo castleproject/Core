@@ -7,6 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRec
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRecordGenerator.Components.Tests", "Castle.Facilities.ActiveRecordGenerator.Components.Tests\Castle.Facilities.ActiveRecordGenerator.Components.Tests.csproj", "{24A48C35-1A5B-42BD-925A-19F11D5536D6}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord", "Castle.Facilities.ActiveRecord\Castle.ActiveRecord.csproj", "{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -21,6 +29,14 @@ Global
 		{B4E7F7E6-C02A-4828-BB5C-CEB5A67C4FF2}.Debug.Build.0 = Debug|.NET
 		{B4E7F7E6-C02A-4828-BB5C-CEB5A67C4FF2}.Release.ActiveCfg = Release|.NET
 		{B4E7F7E6-C02A-4828-BB5C-CEB5A67C4FF2}.Release.Build.0 = Release|.NET
+		{24A48C35-1A5B-42BD-925A-19F11D5536D6}.Debug.ActiveCfg = Debug|.NET
+		{24A48C35-1A5B-42BD-925A-19F11D5536D6}.Debug.Build.0 = Debug|.NET
+		{24A48C35-1A5B-42BD-925A-19F11D5536D6}.Release.ActiveCfg = Release|.NET
+		{24A48C35-1A5B-42BD-925A-19F11D5536D6}.Release.Build.0 = Release|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Debug.ActiveCfg = Debug|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Debug.Build.0 = Debug|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Release.ActiveCfg = Release|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
