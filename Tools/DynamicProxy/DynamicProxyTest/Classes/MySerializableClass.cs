@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +23,7 @@ namespace Castle.DynamicProxy.Test.Classes
 	[Serializable]
 	public class MySerializableClass
 	{
-		private DateTime current;
+		protected DateTime current;
 
 		public MySerializableClass()
 		{
@@ -37,6 +38,24 @@ namespace Castle.DynamicProxy.Test.Classes
 		public virtual double CalculateSumDistanceNow()
 		{
 			return Math.PI;
+		}
+	}
+
+	[Serializable]
+	public class MySerializableClass2 : MySerializableClass, ISerializable
+	{
+		public MySerializableClass2() 
+		{
+		}
+
+		public MySerializableClass2(SerializationInfo info, StreamingContext context) 
+		{
+			current = (DateTime) info.GetValue("dt", typeof(DateTime));
+		}
+
+		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("dt", current);
 		}
 	}
 }

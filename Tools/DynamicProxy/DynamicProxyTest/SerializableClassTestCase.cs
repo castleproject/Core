@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Test
 
 	using Castle.DynamicProxy.Test.Classes;
 	using Castle.DynamicProxy.Test.Mixins;
+	using Castle.DynamicProxy.Test.ClassInterfaces;
 
 	/// <summary>
 	/// Summary description for SerializableClassTestCase.
@@ -60,6 +61,41 @@ namespace Castle.DynamicProxy.Test
 
 			Assert.AreEqual( current, otherProxy.Current );
 		}
+
+		[Test]
+		public void SerializationDelegate()
+		{
+			MySerializableClass2 proxy = (MySerializableClass2) 
+				generator.CreateClassProxy( typeof(MySerializableClass2), new StandardInterceptor() );
+
+			DateTime current = proxy.Current;
+
+			MySerializableClass2 otherProxy = (MySerializableClass2) SerializeAndDeserialize(proxy);
+
+			Assert.AreEqual( current, otherProxy.Current );
+		}
+
+		[Test]
+		public void SimpleInterfaceProxy()
+		{
+			object proxy = generator.CreateProxy( 
+				typeof(IMyInterface), new StandardInterceptor( ), new MyInterfaceImpl() );
+
+			Assert.IsTrue( proxy.GetType().IsSerializable );
+			
+			IMyInterface inter = (IMyInterface) proxy;
+
+			inter.Name = "opa";
+			Assert.AreEqual( "opa", inter.Name );
+			inter.Started = true;
+			Assert.AreEqual( true, inter.Started );
+
+			IMyInterface otherProxy = (IMyInterface) SerializeAndDeserialize(proxy);
+
+			Assert.AreEqual( inter.Name, otherProxy.Name );
+			Assert.AreEqual( inter.Started, otherProxy.Started );
+		}
+
 
 		[Test]
 		public void MixinSerialization()
