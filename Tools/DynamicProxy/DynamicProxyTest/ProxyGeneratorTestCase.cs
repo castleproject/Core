@@ -210,6 +210,28 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual( State.Valid, inter.ActualState );
 		}
 
+		public class GuidClass 
+		{
+			public virtual Guid GooId 
+			{
+				get { return Guid.NewGuid(); }
+			}
+		}
+
+		[Test]
+		public void ProxyForClassWithGuidProperty() 
+		{
+			object proxy = m_generator.CreateClassProxy( 
+				typeof(GuidClass), new StandardInterceptor() );
+
+			Assert.IsNotNull( proxy );
+			Assert.IsTrue( typeof(GuidClass).IsAssignableFrom( proxy.GetType() ) );
+
+			GuidClass inter = (GuidClass) proxy;
+
+			Assert.IsNotNull( inter.GooId );
+		}
+
 		public class MyInterfaceProxy : IInterceptor
 		{
 			public object Intercept(IInvocation invocation, params object[] args)

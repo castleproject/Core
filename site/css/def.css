@@ -43,6 +43,20 @@ body {
 	font-size: small;
 
 }
+.menubar a {
+	color: #FFFFFF;
+	text-decoration: none;
+	padding-right: 6px;
+	padding-left: 6px;
+
+
+}
+.menubar a:hover {
+	color: #FFFFFF;
+	background-color: #000033;
+
+}
+
 .contentmenu {
 	padding: 8px;
 	font-size: small;

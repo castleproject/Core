@@ -4,8 +4,8 @@ Microkernel
 
 - Allow registration of concrete classes as components
   (this is a core change)
-  (try to infer the service by inspecting the interfaces is an idea, screening by namespaces;
-  if it fails, should go on as an interface to describe the service, although recommended,
+  (try to infer the service by inspecting the interfaces. Its just an idea, screening by namespaces;
+  if it fails, should go on without an interface to describe the service, although recommended,
   should not be required)
 
 - Remove the Avalon dependency
@@ -83,15 +83,18 @@ What to keep in mind:
 =====================
 
 - Avoid xml configurations, try to create self describing applications
+
 - If external configuration is needed, keep it very simple and descriptive
-- Check YAML as a reference to other formats
+
+- Check YAML as a reference to other formats or even build a better language 
+  to configure applications (domain languages chapter of The Pragmatic Programmer)
 
 
 Mono
 ==== 
 
 Microkernel/Avalon should be ok
-DynamicProxy doesnt work on 1.0.2 (need to state this on the website)
+DynamicProxy doesnt work on 1.0.2 / ldtoken issue (need to state this on the website)
 
 
 
