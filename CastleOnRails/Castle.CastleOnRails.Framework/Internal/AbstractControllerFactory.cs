@@ -57,6 +57,13 @@ namespace Castle.CastleOnRails.Framework.Internal
 		protected virtual Controller CreateControllerInstance(string area, string name)
 		{
 			Type type = (Type) Tree.GetController(area, name);
+
+			if (type == null)
+			{
+				throw new RailsException(
+					string.Format("Controller not found. Area: '{0}'. Controller Name: '{0}'.", area, name ) );
+			}
+
 			return (Controller) Activator.CreateInstance( type );
 		}
 	}
