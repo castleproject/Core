@@ -35,8 +35,16 @@ namespace Castle.DynamicProxy.Serialization
 		{
 			_interceptor = (IInterceptor) info.GetValue("__interceptor", typeof(IInterceptor) );
 			_baseType = (Type) info.GetValue("__baseType", typeof(Type) );
-			_interfaces = (Type[]) info.GetValue("__interfaces", typeof(Type[]) );
 			_mixins = (object[]) info.GetValue("__mixins", typeof(object[]) );
+
+			String[] _interfaceNames = (String[]) info.GetValue("__interfaces", typeof(String[]) );
+ 			
+			_interfaces = new Type[_interfaceNames.Length];
+ 
+ 			for (int i = 0; i < _interfaceNames.Length; i++)
+ 			{
+ 				_interfaces[i] = Type.GetType(_interfaceNames[i]);
+ 			}
 
 			_proxy = RecreateProxy(info, context);
 

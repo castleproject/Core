@@ -201,17 +201,17 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				new FixedReference("__mixins").ToExpression(), 
 				MixinField.ToExpression() ) ) );
 
-			LocalReference interfacesLocal = 
-				getObjectData.CodeBuilder.DeclareLocal( typeof(Type[]) );
+ 			LocalReference interfacesLocal = 
+ 				getObjectData.CodeBuilder.DeclareLocal( typeof(String[]) );
 
 			getObjectData.CodeBuilder.AddStatement(
 				new AssignStatement(interfacesLocal, 
-				new NewArrayExpression( interfaces.Length, typeof(Type) )));
+				new NewArrayExpression( interfaces.Length, typeof(String) )));
 
 			for(int i=0; i < interfaces.Length; i++)
 			{
 				getObjectData.CodeBuilder.AddStatement( new AssignArrayStatement(
-					interfacesLocal, i, new TypeTokenExpression( interfaces[i] )) );
+					interfacesLocal, i, new FixedReference(interfaces[i].AssemblyQualifiedName).ToExpression() ) );
 			}
 
 			getObjectData.CodeBuilder.AddStatement( new ExpressionStatement(

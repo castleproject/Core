@@ -2,3 +2,14 @@
 Version 1.0.0
 - First release
 
+Version 1.0.2
+- Support for constructor arguments
+- Lock implemented on the obtention of the invocation objects (also multithread test case added)
+- Applied patch from Mark Traudt to make SimpleAST support the creation of events
+
+Version 1.0.3
+- Applied patch from Sergey Koshcheyev related to proxy desserialization problems
+
+
+
+
