@@ -39,14 +39,24 @@ namespace Castle.MVC.Configuration
 	/// </summary>
 	public class CommandsSetting
 	{
-		private string _view = string.Empty;
-		private StringDictionary _commands = new StringDictionary();
 		/// <summary>
-		/// Key used to retrieve configuation element.
+		/// Key used to retrieve command configuation element.
 		/// </summary>
 		internal const string NODE_COMMAND_XPATH = "command";
+		/// <summary>
+		/// Key used to retrieve id view attribute.
+		/// </summary>
 		internal const string ATTRIBUTE_VIEW = "view";
+		/// <summary>
+		/// Key used to retrieve id command attribute.
+		/// </summary>
 		internal const string ATTRIBUTE_ID = "id";
+
+		#region Fields
+
+		private string _view = string.Empty;
+		private StringDictionary _commands = new StringDictionary();
+		#endregion 
 
 		#region Properties
 		/// <summary>

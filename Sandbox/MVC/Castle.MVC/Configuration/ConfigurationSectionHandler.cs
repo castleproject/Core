@@ -96,7 +96,9 @@ namespace Castle.MVC.Configuration
 		/// </param>
 		/// <param name="section">
 		/// The <see cref="System.Xml.XmlNode"/> for the section.
-		/// <param name="formatProvider">The format provider.</param>
+		/// </param>
+		/// <param name="formatProvider">The format provider.
+		/// </param>
 		/// <returns>MVCConfigSettings for the section.</returns>
 		public object Create(object parent, object configContext, XmlNode section, IFormatProvider formatProvider)
 		{

@@ -25,12 +25,15 @@
 *************************************************/
 #endregion 
 
+#region Using
+
 using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Security.Principal;
 
 using Castle.MVC.States;
+#endregion 
 
 namespace Castle.MVC.StatePersister
 {
@@ -40,8 +43,15 @@ namespace Castle.MVC.StatePersister
 	/// </summary>
 	public class MemoryStatePersister : IStatePersister
 	{
+
+		#region Fields
+
 		private IState _state = null;
 		private IStateFactory _stateFactory = null;
+
+		#endregion 
+
+		#region Constructors
 
 		/// <summary>
 		/// Constructor
@@ -49,6 +59,7 @@ namespace Castle.MVC.StatePersister
 		public MemoryStatePersister()
 		{
 		}
+		#endregion 
 
 		#region IStatePersister Members
 
@@ -81,6 +92,16 @@ namespace Castle.MVC.StatePersister
 				_state = _stateFactory.Create();
 			}
 			return _state;	
+		}
+
+		/// <summary>
+		/// Release a state
+		/// </summary>
+		/// <param name="state">The state to release.</param>
+		public void Release(IState state)
+		{
+			_stateFactory.Release(state);
+			_state = null;
 		}
 		#endregion
 	}

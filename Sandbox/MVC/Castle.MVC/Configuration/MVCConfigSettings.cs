@@ -50,7 +50,7 @@ namespace Castle.MVC.Configuration
 
 		#region Fields
 
-		private StringDictionary _paths = new StringDictionary();
+		private StringDictionary _urls = new StringDictionary();
 		private StringDictionary _webViews= new StringDictionary();
 		private HybridDictionary _mappings = new HybridDictionary();
 
@@ -66,9 +66,12 @@ namespace Castle.MVC.Configuration
 		public MVCConfigSettings(XmlNode configNode, IFormatProvider formatProvider) 
 		{
 			LoadWebViews(configNode, formatProvider);
+			//LoadWinViews(configNode, formatProvider);
 			LoadMapping(configNode);
 		}
 		#endregion 
+
+		#region Methods
 
 		/// <summary>
 		/// Load the command mapping
@@ -94,12 +97,12 @@ namespace Castle.MVC.Configuration
 			foreach( XmlNode viewNode in configNode.SelectNodes( NODE_VIEW_XPATH ) )
 			{
 				string viewName = viewNode.Attributes[ATTRIBUTE_ID].Value;
-				string vieawPath = viewNode.Attributes[ATTRIBUTE_PATH].Value;
+				string viewUrl = viewNode.Attributes[ATTRIBUTE_PATH].Value;
 
 				if( !_webViews.ContainsKey( viewName ) )
 				{
-					_paths.Add( viewName, vieawPath ); 
-					_webViews.Add( vieawPath, viewName ); 
+					_urls.Add( viewName, viewUrl ); 
+					_webViews.Add( viewUrl, viewName ); 
 				}
 				else 
 				{
@@ -112,18 +115,18 @@ namespace Castle.MVC.Configuration
 		///Looks up a url view based on view name.
 		///</summary>  
 		///<param name="viewName">The name of the view to retrieve the settings for.</param>
-		public virtual string GetPath( string viewName )
+		public virtual string GetUrl( string viewName )
 		{
-			return _paths[viewName] as string;
+			return _urls[viewName] as string;
 		}
 
 		///<summary>
 		/// Looks up a web view based on his url.
 		///</summary>  
-		///<param name="viewName">The name of the view to retrieve the settings for.</param>
-		public virtual string GetView(string path)
+		///<param name="url">The URL.</param>
+		public virtual string GetView(string url)
 		{
-			return _webViews[path] as string;
+			return _webViews[url] as string;
 		}
 
 		///<summary>
@@ -150,5 +153,8 @@ namespace Castle.MVC.Configuration
 			}
 			return nextView;
 		}
+		#endregion 
+
+
 	}
 }

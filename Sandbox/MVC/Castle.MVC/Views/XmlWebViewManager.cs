@@ -29,7 +29,6 @@
 
 using System;
 using System.Web;
-using System.Configuration;
 
 using Castle.MVC.Configuration;
 using Castle.MVC.Navigation;
@@ -38,32 +37,28 @@ using Castle.MVC.Navigation;
 namespace Castle.MVC.Views
 {
 	/// <summary>
-	/// Description résumée de XmlViewManager.
+	/// Represent a web ViewManager to use in conjuntion with an application section configuration.
 	/// </summary>
 	public class XmlWebViewManager : IViewManager
 	{
 
-		#region Fields
-
-		private MVCConfigSettings _setting = null;
-
-		#endregion 
-
 		#region Constructor
-
+		/// <summary>
+		/// Default constructor
+		/// </summary>
 		public XmlWebViewManager()
-		{
-			_setting = ConfigurationSettings.GetConfig("castle/mvc") as MVCConfigSettings; 
-		}
+		{}
 		#endregion 
 
 		#region IViewManager members
 
+		/// <summary>
+		/// Activates the specified view.
+		/// </summary>
+		/// <param name="navigator">A navigator to access the next view id.</param>
 		public void ActivateView(INavigator navigator)
 		{
-			string url = _setting.GetPath( navigator.CurrentState.CurrentView );
-
-			HttpContext.Current.Response.Redirect( url, false );
+			HttpContext.Current.Response.Redirect( ConfigUtil.Settings.GetUrl( navigator.CurrentState.CurrentView ), false );
 		}
 
 		#endregion

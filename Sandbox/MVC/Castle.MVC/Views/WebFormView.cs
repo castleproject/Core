@@ -25,16 +25,18 @@
 *************************************************/
 #endregion 
 
+#region Using
+
 using System;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Configuration;
 
 using Castle.Windsor;
 using Castle.MVC.Controllers;
 using Castle.MVC.States;
 using Castle.MVC.Configuration;
+#endregion 
 
 namespace Castle.MVC.Views
 {
@@ -48,16 +50,16 @@ namespace Castle.MVC.Views
 		#region Fields
 
 		private IController _controller = null;
-		private MVCConfigSettings _setting = null;
 
 		#endregion 
 
 		#region Constructor
 
+		/// <summary>
+		/// Default cosntructor
+		/// </summary>
 		public WebFormView():base()
 		{
-			_setting = ConfigurationSettings.GetConfig("castle/mvc") as MVCConfigSettings; 
-
 			this.Load += new EventHandler(WebFormView_Load);
 		}
 		#endregion 
@@ -130,7 +132,7 @@ namespace Castle.MVC.Views
 			}
 
 			// Acquire current view
-			this.State.CurrentView = _setting.GetView(this.Request.Path);
+			this.State.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
 		}
 
 

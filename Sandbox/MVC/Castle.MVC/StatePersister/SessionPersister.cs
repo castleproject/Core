@@ -25,15 +25,14 @@
 *************************************************/
 #endregion 
 
+#region Using
+
 using System;
 using System.Web;
 using System.Collections;
 
-using System.Security.Principal;
-
-using Castle.Model; // Transient attribute
 using Castle.MVC.States;
-
+#endregion 
 
 namespace Castle.MVC.StatePersister
 {
@@ -43,7 +42,11 @@ namespace Castle.MVC.StatePersister
 	public class SessionPersister : IStatePersister
 	{
 
+		#region Fields
+
 		private IStateFactory _stateFactory = null;
+
+		#endregion 
 
 		#region Constructors
 		/// <summary>
@@ -89,6 +92,16 @@ namespace Castle.MVC.StatePersister
 			}
 			state.Reset();
 			return state;
+		}
+
+		/// <summary>
+		/// Release a state
+		/// </summary>
+		/// <param name="state">The state to release.</param>
+		public void Release(IState state)
+		{
+			HttpContext.Current.Session.Remove( BaseState.SESSION_KEY );
+			_stateFactory.Release(state);
 		}
 		#endregion
 	}

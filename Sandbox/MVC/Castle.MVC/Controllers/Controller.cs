@@ -26,7 +26,6 @@
 #endregion 
 
 using System;
-using System.Configuration;
 using System.Collections;
 using System.Collections.Specialized;
 
@@ -100,9 +99,8 @@ namespace Castle.MVC.Controllers
 		/// </summary>
 		public void Navigate()
 		{
-			MVCConfigSettings setting = ConfigurationSettings.GetConfig("castle/mvc") as MVCConfigSettings;
  			this.State.PreviousView = this.State.CurrentView;
-			this.State.CurrentView = setting.GetNextView(this.State.CurrentView, this.State.Command);
+			this.State.CurrentView = ConfigUtil.Settings.GetNextView(this.State.CurrentView, this.State.Command);
 			_navigator.Navigate();
 		}
 

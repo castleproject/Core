@@ -32,13 +32,17 @@ using Castle.MVC.Navigation;
 namespace Castle.MVC.Views
 {
 	/// <summary>
-	/// Description résumée de MockViewManager.
+	/// Represent a mock View Manager to use in unit test.
 	/// </summary>
 	public class MockViewManager : IViewManager
 	{
 
 		#region IViewManager members
 
+		/// <summary>
+		/// Activates the specified view.
+		/// </summary>
+		/// <param name="navigator">A navigator</param>
 		public void ActivateView(INavigator navigator)
 		{
 			// Do nothing

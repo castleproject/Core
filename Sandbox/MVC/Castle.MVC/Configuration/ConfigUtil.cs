@@ -21,51 +21,32 @@
 #region Autors
 
 /************************************************
-* Hamilton Verissimo
+* Gilles Bayon
 *************************************************/
 #endregion 
 
 #region Using
 
 using System;
-using System.Web;
-
-using Castle.Windsor;
+using System.Configuration;
 #endregion 
 
-namespace Castle.MVC
+namespace Castle.MVC.Configuration
 {
-
 	/// <summary>
-	/// Uses the HttpContext and the <see cref="IContainerAccessor"/> 
-	/// to access the container instance.
+	/// Utility to access the configuration elements.
 	/// </summary>
-	public abstract class ContainerWebAccessorUtil
+	public class ConfigUtil
 	{
 		/// <summary>
-		/// Obtains the conatainer form the application instance
+		/// Access the configuration element
 		/// </summary>
-		/// <returns>Retunr a IWindsorContainer</returns>
-		public static IWindsorContainer ObtainContainer()
+		public static MVCConfigSettings Settings
 		{
-			IContainerAccessor containerAccessor = 
-				HttpContext.Current.ApplicationInstance as IContainerAccessor;
-	
-			if (containerAccessor == null)
+			get
 			{
-				throw new ApplicationException("You must extend the HttpApplication in your web project " + 
-					"and implement the IContainerAccessor to properly expose your container instance");
+				return ConfigurationSettings.GetConfig("castle/mvc") as MVCConfigSettings;
 			}
-	
-			IWindsorContainer container = containerAccessor.Container;
-	
-			if (container == null)
-			{
-				throw new ApplicationException("The container seems to be unavailable in " + 
-					"your HttpApplication subclass");
-			}
-
-			return container;
 		}
 	}
 }

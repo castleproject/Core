@@ -25,6 +25,8 @@
 *************************************************/
 #endregion 
 
+#region Using
+
 using System;
 using System.Collections;
 using System.Collections.Specialized;
@@ -33,16 +35,22 @@ using System.Runtime.Serialization;
 
 using Castle.MVC.StatePersister;
 using Castle.Model;
+#endregion 
 
 namespace Castle.MVC.States
 {
 	/// <summary>
-	/// Summary description for State.
+	/// Represent the base State.
+	/// You could inherit from this class when developing your state.
 	/// </summary>
 	[Serializable]
-	public class BaseState : DictionaryBase, IState
+	[Transient]
+	public abstract class BaseState : DictionaryBase, IState
 	{
 
+		/// <summary>
+		/// Key used to retrieve the session.
+		/// </summary>
 		public const string SESSION_KEY = "_MVC_SESSION_STATE_";
 
 		#region Fields
@@ -51,7 +59,7 @@ namespace Castle.MVC.States
 		[NonSerialized]
 		private HybridDictionary _items = new HybridDictionary();
 		private string _currentView = string.Empty;
-		private string _previousViewas = string.Empty;
+		private string _previousView = string.Empty;
 		IStatePersister _statePersister = null;
 		#endregion 
 
@@ -116,8 +124,8 @@ namespace Castle.MVC.States
 		/// </summary>
 		public string PreviousView
 		{
-			get{ return _previousViewas; }
-			set{_previousViewas = value;}
+			get{ return _previousView; }
+			set{_previousView = value;}
 		}
 
 		/// <summary>

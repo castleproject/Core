@@ -93,7 +93,7 @@ namespace Castle.MVC
 		#region Methods
 
 		/// <summary>
-		/// Gets a resource stream with the messages used by the UIP classes.
+		/// Gets a resource stream.
 		/// </summary>
 		/// <param name="name">The resource key.</param>
 		/// <returns>A resource stream.</returns>
@@ -103,7 +103,7 @@ namespace Castle.MVC
 		}
 
 		/// <summary>
-		/// Formats a message stored in the UIP assembly resource file.
+		/// Formats a message stored in the assembly resource file.
 		/// </summary>
 		/// <param name="key">The resource key.</param>
 		/// <param name="format">The format arguments.</param>

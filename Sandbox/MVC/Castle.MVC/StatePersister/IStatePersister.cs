@@ -56,5 +56,12 @@ namespace Castle.MVC.StatePersister
 		/// <returns>The saved state</returns>
 		IState Load();
 
+
+		/// <summary>
+		/// Release a state
+		/// </summary>
+		/// <param name="state">The state to release.</param>
+		void Release(IState state);
+
 	}
 }
