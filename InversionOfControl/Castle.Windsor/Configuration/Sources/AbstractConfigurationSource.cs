@@ -23,25 +23,33 @@ namespace Castle.Windsor.Configuration.Sources
 
 		public abstract TextReader Contents { get; }
 
+		public virtual void Close()
+		{
+		}
+
 		#endregion
 
 		#region IDisposable Members
 
 		public void Dispose()
 		{
-			Dispose(true);
-			GC.SuppressFinalize(true);
+			Dispose( true );
+			GC.SuppressFinalize( true );
 		}
 
 		#endregion
 		
 		protected virtual void Dispose(bool disposing)
 		{
+			if (disposing)
+			{
+				Close();
+			}
 		}
 
 		~AbstractConfigurationSource()
 		{
-			Dispose(false);
+			Dispose( false );
 		}
 	}
 }

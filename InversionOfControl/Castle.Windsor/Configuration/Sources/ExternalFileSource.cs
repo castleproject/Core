@@ -57,21 +57,15 @@ namespace Castle.Windsor.Configuration.Sources
 			}
 		}
 
-		#endregion
-
-		protected override void Dispose(bool disposing)
+		public override void Close()
 		{
-			if (disposing)
+			if (_reader != null) 
 			{
-				try
-				{
-					if (_reader != null) _reader.Close();
-				}
-				finally
-				{
-					base.Dispose(disposing);	
-				}
+				_reader.Close();
+				_reader = null;
 			}
 		}
+
+		#endregion
 	}
 }

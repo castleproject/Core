@@ -20,6 +20,8 @@ namespace Castle.Windsor.Configuration.Sources
 
 	public class ManifestResourceSource : AbstractConfigurationSource
 	{
+		private Assembly _assembly;
+		private string _resourceName;
 		private StreamReader _reader;
 
 		public ManifestResourceSource(Type type, String resourceName)
@@ -29,70 +31,84 @@ namespace Castle.Windsor.Configuration.Sources
 				throw new ArgumentNullException("type", "Null type");
 			}
 
-			ExtractResourceStream( type.Assembly, type, resourceName );
+			_assembly = type.Assembly;
+			_resourceName = resourceName;
+
+			AssertValidResource(type);
 		}
 
 		public ManifestResourceSource(Assembly assembly, String resourceName)
 		{
-
 			if (assembly == null)
 			{
 				throw new ArgumentNullException("assembly", "Null assembly");
 			}
 
-			ExtractResourceStream( assembly, null, resourceName );
+			_assembly = assembly;
+			_resourceName = resourceName;
+
+			AssertValidResource(null);
 		}
 
 		#region IConfigurationSource Members
 
 		public override TextReader Contents
 		{
-			get { return _reader; }
+			get
+			{
+				if (_reader == null)
+				{
+					_reader = new StreamReader( ExtractResourceStream() );
+				}
+
+				return _reader;
+			}
+		}
+
+		public override void Close()
+		{
+			if (_reader != null)
+			{
+				_reader.Close();
+				_reader = null;
+			}
 		}
 
 		#endregion
 
-		protected override void Dispose(bool disposing)
+		/// <summary>
+		/// Ensures the resource exists in the manifest.
+		/// </summary>
+		/// <param name="type">The type to scope the resource.</param>
+		private void AssertValidResource(Type type)
 		{
-			if (disposing)
+			if (_resourceName == null || _resourceName.Length == 0)
 			{
-				try
-				{
-					if (_reader != null) _reader.Close();
-				}
-				finally
-				{
-					base.Dispose(disposing);	
-				}
+				throw new ArgumentException("_resourceName", "Null or empty resource name");
 			}
+	
+			if (type != null && type.Namespace != String.Empty)
+				_resourceName = String.Format( "{0}.{1}", type.Namespace, _resourceName );
+
+			string[] resourceNames = _assembly.GetManifestResourceNames();
+			for (int i = 0; i < resourceNames.Length; ++i)
+			{
+				if (resourceNames[i] == _resourceName)
+					return;
+			}
+
+			throw new ArgumentException(
+				String.Format( "Missing resource '{0}' in _assembly {1}",
+				_resourceName, _assembly.FullName ) );
 		}
-
-		private void ExtractResourceStream(Assembly assembly, Type type, String resourceName)
+	
+		/// <summary>
+		/// Extracts the <see cref="Stream"/> representing the resource.
+		/// </summary>
+		/// <returns>The resource <see cref="Stream"/>.</returns>
+		private Stream ExtractResourceStream()
 		{
-			if (resourceName == null || resourceName.Length == 0)
-			{
-				throw new ArgumentException("resourceName", "Null or empty resource name");
-			}
-
-			Stream resourceStream = null;
-
-			if (type == null)
-			{
-				resourceStream = assembly.GetManifestResourceStream( resourceName );
-			}
-			else
-			{
-				resourceStream = assembly.GetManifestResourceStream( type, resourceName );
-			}
-
-			if (resourceStream == null)
-			{
-				if (type != null && type.Namespace != String.Empty)
-					resourceName = String.Format( "{0}.{1}", type.Namespace, resourceName );
-				throw new ArgumentException(String.Format( "Missing resource '{0}' in assembly {1}", resourceName, assembly.FullName ));
-			}
-
-			_reader = new StreamReader(resourceStream);
+			return _assembly.GetManifestResourceStream( _resourceName );
 		}
 	}
 }

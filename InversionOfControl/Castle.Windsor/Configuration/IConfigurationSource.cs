@@ -24,5 +24,7 @@ namespace Castle.Windsor.Configuration
 	public interface IConfigurationSource : IDisposable
 	{
 		TextReader Contents { get; }
+
+		void Close();
 	}
 }
