@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration", "Castle.Facilities.NHibernate\Castle.Facilities.NHibernateIntegration.csproj", "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration", "Castle.Facilities.NHibernateIntegration\Castle.Facilities.NHibernateIntegration.csproj", "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernate.Tests", "Castle.Facilities.NHibernate.Tests\Castle.Facilities.NHibernate.Tests.csproj", "{0C9EE31D-A700-485B-948A-68E4A3614E71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration.Tests", "Castle.Facilities.NHibernateIntegration.Tests\Castle.Facilities.NHibernateIntegration.Tests.csproj", "{0C9EE31D-A700-485B-948A-68E4A3614E71}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.0">
-	<class name="Castle.Facilities.NHibernate.Tests.BlogItem, Castle.Facilities.NHibernate.Tests" table="BLOG_ITEMS" dynamic-update="true">
+	<class name="Castle.Facilities.NHibernateIntegration.Tests.BlogItem, Castle.Facilities.NHibernateIntegration.Tests" table="BLOG_ITEMS" dynamic-update="true">
 		<id name="Id" column="BLOG_ITEM_ID" unsaved-value="0">
 			<generator class="native" />
 		</id>

@@ -12,21 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using MySql.Data.MySqlClient;
-using NHibernate;
-
-namespace Castle.Facilities.NHibernate.Tests
+namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
 	using System.Collections;
-
 	using NUnit.Framework;
-
 	using Castle.Windsor;
-
 	using Castle.Model.Configuration;
-	
 	using Castle.MicroKernel.SubSystems.Configuration;
+	using MySql.Data.MySqlClient;
+	using NHibernate;
 
 	/// <summary>
 	/// Summary description for NHibernateFacilityTestCase.
@@ -43,10 +38,10 @@ namespace Castle.Facilities.NHibernate.Tests
 		public void InitDb()
 		{
 			// Reset tables
-			
+
 			MySql.Data.MySqlClient.MySqlConnection conn = new MySqlConnection(ConnectionString);
 			conn.Open();
-			
+
 			try
 			{
 				MySqlCommand command = conn.CreateCommand();
@@ -65,11 +60,10 @@ namespace Castle.Facilities.NHibernate.Tests
 		public void Usage()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
-			container.AddFacility( "nhibernate", new NHibernateFacility() );
+			container.AddFacility("nhibernate", new NHibernateFacility());
 
 			ISessionFactory factory = (ISessionFactory) container["sessionFactory1"];
 			ISession session = factory.OpenSession();
-
 
 			const string BlogName = "hammett's blog";
 
@@ -87,7 +81,7 @@ namespace Castle.Facilities.NHibernate.Tests
 			}
 			catch (HibernateException e)
 			{
-				if (tx!=null) tx.Rollback();
+				if (tx != null) tx.Rollback();
 				throw e;
 			}
 			finally
@@ -95,53 +89,58 @@ namespace Castle.Facilities.NHibernate.Tests
 				session.Close();
 			}
 
-			blog = (Blog) session.Find( "from Blog as b where b.Name=:name", BlogName, NHibernate. )[0];
-			Assert.IsNotNull(blog);
-			Assert.AreEqual( 0, blog.Items.Count );
+			session = factory.OpenSession();
 
+			try
+			{
+				blog = (Blog) 
+					session.Find("from Blog as b where b.Name=:name", BlogName, NHibernate.String)[0];
+				Assert.IsNotNull(blog);
+				Assert.AreEqual(0, blog.Items.Count);
+			}
+			finally
+			{
+				session.Close();
+			}
 		}
 
 		private IWindsorContainer CreateConfiguredContainer()
 		{
-			IWindsorContainer container = new WindsorContainer( new DefaultConfigurationStore() );
-	
+			IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
+
 			MutableConfiguration confignode = new MutableConfiguration("facility");
-	
-			IConfiguration factory = 
-				confignode.Children.Add( new MutableConfiguration("factory") );
+
+			IConfiguration factory =
+				confignode.Children.Add(new MutableConfiguration("factory"));
 			factory.Attributes["id"] = "sessionFactory1";
 
-			IConfiguration settings = 
-				factory.Children.Add( new MutableConfiguration("settings") );
+			IConfiguration settings =
+				factory.Children.Add(new MutableConfiguration("settings"));
 
-			settings.Children.Add( 
-				new MutableConfiguration("item", 
-				                         ConnectionProvider)).Attributes["key"] = 
-					"hibernate.connection.provider";
-			settings.Children.Add( 
-				new MutableConfiguration("item", 
-				                         Driver)).Attributes["key"] = 
-					"hibernate.connection.driver_class";
-			settings.Children.Add( 
-				new MutableConfiguration("item", 
-				                         ConnectionString)).Attributes["key"] = 
-					"hibernate.connection.connection_string";
-			settings.Children.Add( 
-				new MutableConfiguration("item", 
-				                         Dialect)).Attributes["key"] = 
-				"hibernate.dialect";
-	
-			IConfiguration resources = 
-				factory.Children.Add( new MutableConfiguration("resources") );
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				                         ConnectionProvider)).Attributes["key"] = "hibernate.connection.provider";
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				                         Driver)).Attributes["key"] = "hibernate.connection.driver_class";
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				                         ConnectionString)).Attributes["key"] = "hibernate.connection.connection_string";
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				                         Dialect)).Attributes["key"] = "hibernate.dialect";
+
+			IConfiguration resources =
+				factory.Children.Add(new MutableConfiguration("resources"));
 
 			IConfiguration resource;
-			resource = resources.Children.Add( new MutableConfiguration("resource") );
+			resource = resources.Children.Add(new MutableConfiguration("resource"));
 			resource.Attributes["name"] = "Blog.hbm.xml";
-			resource = resources.Children.Add( new MutableConfiguration("resource") );
+			resource = resources.Children.Add(new MutableConfiguration("resource"));
 			resource.Attributes["name"] = "BlogItem.hbm.xml";
-	
-			container.Kernel.ConfigurationStore.AddFacilityConfiguration( "nhibernate", confignode );
-			
+
+			container.Kernel.ConfigurationStore.AddFacilityConfiguration("nhibernate", confignode);
+
 			return container;
 		}
 	}
