@@ -15,4 +15,8 @@ class DynamicproxyController < AbstractApplicationController
   def mixins
   end
 
+  def roadmap
+  
+  end
+
 end

@@ -15,4 +15,10 @@ class HomeController < AbstractApplicationController
   def codingstandards
   end
 
+  def download
+  end
+
+  def lists
+  end
+
 end
