@@ -2,4 +2,203 @@
 <% @main_title = "MicroKernel" %>
 <%= render "/container/deflinks" %>
 
-Work in progress
+<i>"The Microkernel Architecture Pattern is a useful 
+pattern when a system consists of a core set of 
+services that may be augmented at build-time 
+with a variety of additional services."</i> -  'Real-Time Design Patterns' by Bruce Powel Douglass
+
+<p>
+Most of inversion of control containers implementations 
+mix different concerns resulting in a tool which is hard to 
+test and hard to extend. The decision of building a simple 
+kernel simplified the development of the container and 
+allowed the improvement of functionality based on new use cases.
+</p>
+
+<h3>How to use</h3>
+
+<p>
+The MicroKernel usage is very simple. You only need to add components
+and it will inspect the components to try in infer the dependencies and
+parameters and try to satisfy them, when possible. In other words,
+the kernel will auto-wire the components. The standard heristic is:
+</p>
+
+<ul>
+  <li>Constructor arguments are non-optional dependencies
+  <li>The kernel will be in a happy state if it can statify 
+  all dependencies for the constructor with less arguments
+  <li>Writable properties are considered optional dependencies
+</ul>
+
+<p>
+You don't have to worry about the order in which the components 
+must be registered. 
+</p>
+
+<p>
+Follows a example of adding a concrete class 
+as a component:
+</p>
+
+<pre class="source">
+
+IKernel kernel = new DefaultKernel();
+kernel.AddComponent("key", typeof(CustomerServices);
+
+</pre>
+
+<p>
+The suggested approach however is to add the contract
+and the implementation: 
+</p>
+
+<pre class="source">
+
+IKernel kernel = new DefaultKernel();
+kernel.AddComponent("key", 
+	typeof(ICustomerServices), 
+	typeof(DefaultCustomerServices);
+
+</pre>
+
+
+
+<h3>Obtaining component instances</h3>
+
+<p>
+To obtain a component instance, you can ask by 
+its key or by the service it implements. Please note that 
+you can add more than one implementation for the same service,
+in this case, when you request a component by the service, the first 
+component registered for the service will be returned.
+</p>
+
+<pre class="source">
+CustomerServices instance = kernel["key"] as CustomerServices;
+
+ICustomerServices instance = kernel[ typeof(ICustomerServices) ] 
+	as ICustomerServices;
+</pre>
+
+<p>
+Its recomended that you release the component
+instance after finishing with it:
+</p>
+
+<pre class="source">
+CustomerServices instance = kernel["key"] as CustomerServices;
+
+// Working...
+
+kernel.ReleaseComponent(instance);
+</pre>
+
+<p>
+It's not mandatory, but its important if the component uses a custom
+lifestyle or a decommission lifecycle. More on that later.
+</p>
+
+
+<h3>Lifestyles</h3>
+
+<p>
+The lifestyle manages the component creation and destruction 
+accordingly with a specific semantic. 
+The default lifestyle for components is 'singleton'. So only one instance
+of the component will exist (per container instance). Others supported
+lifestyle are per thread and transient. 
+</p>
+
+<p>
+There are two ways of specifing a lifestyle for a component: through 
+attributes or through configuration. In fact, the external configuration
+overrides whatever is defined in the component.
+</p>
+
+<pre class="source">
+using Castle.Model;
+
+[Singleton]
+public class MyComponent : IComponent
+{
+...
+</pre>
+
+<pre class="source">
+using Castle.Model;
+
+[Transient]
+public class MyComponent : IComponent
+{
+...
+</pre>
+
+<pre class="source">
+using Castle.Model;
+
+[PerThread]
+public class MyComponent : IComponent
+{
+...
+</pre>
+
+<p>
+You can specify a custom lifestyle. For example, you can create 
+a pooleable component lifestyle:
+</p>
+
+<pre class="source">
+using Castle.MicroKernel.Lifestyle;
+
+public class MyLifestyleHandler : AbstractLifestyleManager
+{
+...
+</pre>
+
+<p>
+And finally use it in your components:
+</p>
+
+<pre class="source">
+using Castle.Model;
+
+[CustomLifestyle( typeof(MyLifestyleHandler) )]
+public class CustomComponent : IComponent
+{
+...
+</pre>
+
+<p>
+We'll show you how to override these configurations
+on the section dedicated to Windsor.
+</p>
+
+<h3>Lifecycle</h3>
+
+<p>
+Lifecycle is what the container must invoke on the component
+to ensure the correct state before and after its use. We divided 
+these phases into commission and decomnission stages.
+</p>
+
+<p>
+Out of box, only two lifecycles are supported: the IInitialize and 
+the standard IDisposable. Its easy to augment this support, as we'll show
+later in Extending the MicroKernel.
+</p>
+
+<p>
+To use these lifecycles, simply implement the interfaces in your component
+and remember to release the components with ReleaseComponent method
+for the components with decommission lifecycle.
+</p>
+
+
+<h3>Conclusion</h3>
+
+<p>
+We hope you have considered the usage simple. If so, you'll find
+out that Windsor is even simpler.
+</p>
+

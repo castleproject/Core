@@ -1,0 +1,181 @@
+<% @page_title = "Extending the MicroKernel" %>
+<% @main_title = "Extending the MicroKernel" %>
+<%= render "/container/deflinks" %>
+
+In this section we'll guide you through the possibilies offered
+to augment the kernel functionality. The extending, we don't really
+mean 'creating a subclass', although its possible, you don't really need
+to do it for most of cases.
+
+<h3>Facilities</h3>
+
+<p>
+Facilities the units of extension, usually for a family of components. 
+They should extended the container by registering to the MicroKernel events and
+defining custom steps in the model construction and different activator
+for complex components.
+</p>
+
+<h3>The ComponentModel</h3>
+
+<p>
+For each component added to the kernel, a few steps are performed.
+One of the more important steps is the construction of the ComponentModel.
+</p>
+
+<p>
+The ComponentModel holds all the information the kernel need about a component.
+The rationale is to perform every heavy work during the container start up instead of
+performing for each lookup. So information about lifecycle, lifestyle, available constructors
+and properties that potentially refers to external dependencies, are kept in the
+ComponentModel. 
+</p>
+
+<p>
+You can register a class to participate in this process 
+by collecting more information or even change the information collected.
+To do so, you must implement the interface IContributeComponentModelBuilder and
+add it to the ComponentModelBuilder exposed by the MicroKernel.
+</p>
+
+<p>
+For example, follows the code that inspect if the component
+implements lifecycle interfaces and add this information to be
+used later:
+</p>
+
+<pre class="source">
+using Castle.MicroKernel.LifecycleConcerns;
+
+public class LifecycleModelInspector : 
+  IContributeComponentModelConstruction
+{
+  public LifecycleModelInspector()
+  {
+  }
+
+  public void ProcessModel(IKernel kernel, ComponentModel model)
+  {
+    if (typeof(IInitialize).IsAssignableFrom(model.Implementation))
+    {
+      model.LifecycleSteps.Add( LifecycleStepType.Commission, 
+        InitializationConcern.Instance );
+    }
+    if (typeof(IDisposable).IsAssignableFrom(model.Implementation))
+    {
+      model.LifecycleSteps.Add( LifecycleStepType.Decommission, 
+        DisposalConcern.Instance );
+    }
+  }
+}
+</pre>
+
+<h3>Activators</h3>
+
+<p>
+The MicroKernel uses a IComponentActivator to 
+create a set up a component instance. The default implementation
+just select an appropriate constructor, instantiate the component, 
+and sets properties it could resolve. 
+However there are components that are not so easy to create.
+Components that come from factories or builders need a different approach.
+In this case you can implement the IComponentActivator, or extend the
+AbstractComponentActivator and specify your logic.
+</p>
+
+
+<h3>Events</h3>
+
+<p>
+The MicroKernel exposes the following events:
+</p>
+
+<ul>
+<li>ComponentRegistered: fired when a new component is registered 
+ on the kernel
+</ul>
+
+<ul>
+<li>ComponentUnregistered: fired when a component is removed from the kernel.
+</ul>
+
+<ul>
+<li>ComponentModelCreated: fired after the ComponentModel is created.
+ Allows customizations that may affect the handler
+</ul>
+
+<ul>
+<li>ComponentCreated: fired before the component is created.
+</ul>
+
+<ul>
+<li>ComponentDestroyed: fired before the component is destroyed.
+</ul>
+
+
+<h3>Example: implementing the startable lifecycle</h3>
+
+<p>
+Suppose you'd like that every component registered 
+in the kernel which implements the IStartable marker interface
+be "started" as soon as they are ready.
+</p>
+
+<p>
+Let's implement it by using a new facility:
+</p>
+
+<pre class="source">
+
+public class StartableFacility : IFacility
+{
+  public void Init(IKernel kernel, IConfiguration config)
+  {
+    kernel.ComponentModelBuilder.AddContributor( 
+      new StartableModelInspector() )
+    
+    kernel.ComponentRegistered += 
+      new ComponentDataDelegate(OnComponentRegistered);
+  }
+  
+  public void Terminate()
+  {
+  }
+  
+  private void OnComponentRegistered(String key, IHandler handler)
+  {
+    if (model.ExtendedProperties["startable"] != null)
+    {
+      // If the minimal set of dependencies are satisfied
+      if (handler.CurrentState == HandlerState.Valid)
+      {
+        // Instantiate
+        handler.Resolve();
+      }
+    }
+  }
+}
+
+public class StartableModelInspector : 
+  IContributeComponentModelBuilder
+{
+  public void Process(IKernel kernel, ComponentModel model)
+  {
+    if (typeof(IStartable).IsAssignableFrom(model.Implementation))
+    {
+      model.ExtendedProperties.Add("startable", true);
+    }
+  }
+}
+</pre>
+
+<h3>Conclusion</h3>
+
+<p>
+The MicroKernel was created to be extensible, so instead of
+trying to foresee every single possibility and crossroad a 
+user might have had, we'd rather to deliver a more flexible 
+tool.
+</p>
+
+

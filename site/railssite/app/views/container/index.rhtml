@@ -20,8 +20,8 @@ system, where components are interchangeable - provided that contracts are respe
 <p>
 Other implicit consequences are:
 <ul>
-  <li>Reusability
-  <li>Easier tests
+  <li>Reusability among different applications
+  <li>Testable software
   <li>Better division of responsability
 </ul>
 </p>
@@ -30,37 +30,17 @@ Other implicit consequences are:
 
 <p>
 Castle provides a very simple Kernel that implements the core of an 
-inversion of control container. Its intended to be only a kernel so no
+inversion of control container. Its intended to be only a kernel thus no
 built-in support for external configuration is provided, for instance.
-If you're looking for a more friendly container, see the below.
+If you're looking for a more friendly container, see below.
 
 </p>
 
-<h3>The Windsor</h3>
+<h3>Windsor Container</h3>
 
 <p>
-The Windsor container aggregates the Microkernel exposing a
+The Windsor Container aggregates the Microkernel exposing a
 friendly interface and provinding the
-subsystems for external configurations and other commons helpers.
+subsystems for external configurations and others common helpers.
 </p>
 
-<h3>Some concepts</h3>
-
-<p>
-Before diving into details of how the kernel works, its time to 
-explain some concepts used:
-
-<ol>
-  <li>Facility: A facility is registered in the kernel 
-  and should extend the container by augmenting its support for
-  components and subscribing to kernel events, hence having a chance
-  to act on components being used.
-
-  <li>SubSystem: A SubSystem is also registered in the kernel, but its role is different.
-  The kernel actually uses subsystems to gather external information or implement a
-  specific heuristic. Common examples are a configuration subsystem, which exposes to
-  the kernel external configuration; and a lookup subsystem that tries to return a
-  component mathing a specific criteria.
-</ol>
-
-</p>
