@@ -96,10 +96,18 @@ And follows the configuration:
   &lt;facility id="nhibernate"&gt;
     &lt;factory id="nhibernate.factory"&gt;
       &lt;settings&gt;
-        &lt;item key="hibernate.connection.provider"&gt;NHibernate.Connection.DriverConnectionProvider&lt;/item&gt;
-        &lt;item key="hibernate.connection.driver_class"&gt;NHibernate.Driver.MySqlDataDriver&lt;/item&gt;
-        &lt;item key="hibernate.connection.connection_string"&gt;Database=minddump;Data Source=localhost&lt;/item&gt;
-        &lt;item key="hibernate.dialect"&gt;NHibernate.Dialect.MySQLDialect&lt;/item&gt;
+        &lt;item key="hibernate.connection.provider"&gt;
+          NHibernate.Connection.DriverConnectionProvider
+        &lt;/item&gt;
+        &lt;item key="hibernate.connection.driver_class"&gt;
+          NHibernate.Driver.MySqlDataDriver
+        &lt;/item&gt;
+        &lt;item key="hibernate.connection.connection_string"&gt;
+          Database=minddump;Data Source=localhost
+        &lt;/item&gt;
+        &lt;item key="hibernate.dialect"&gt;
+          NHibernate.Dialect.MySQLDialect
+        &lt;/item&gt;
       &lt;/settings&gt;
       &lt;resources&gt;
         &lt;resource name="..\bin\Author.hbm.xml" /&gt;

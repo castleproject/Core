@@ -1,6 +1,0 @@
-
-Something to achieve:
-
-
-NHibernate Facility:
---> Adds interceptor to components marked as NHibernateObject/DAO

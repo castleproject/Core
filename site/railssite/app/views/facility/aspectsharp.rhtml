@@ -54,19 +54,19 @@ And follows the configuration:
 	&lt;facilities&gt;
 		&lt;facility id="aspectsharp"&gt;
 	    &lt;![CDATA[
-        import Castle.Facilities.AspectSharp.Tests.Components in Castle.Facilities.AspectSharp.Tests 
-        import Castle.Facilities.AspectSharp.Tests.Interceptors in Castle.Facilities.AspectSharp.Tests 
-        
-        interceptors [ "key" : LoggerTraceInterceptor ] 
-        mixins [ "key" : SecurityMixin  ] 
+import AspectSharp.Tests.Components in AspectSharp.Tests 
+import AspectSharp.Tests.Interceptors in AspectSharp.Tests 
 
-        aspect ProtocolHandlerLogger for [ assignableFrom(IProtocolHandler) ]  
-            include "key" 
+interceptors [ "key" : LoggerTraceInterceptor ] 
+mixins [ "key" : SecurityMixin  ] 
 
-            pointcut method(*) 
-                advice("key") 
-            end 
-        end 
+aspect ProtocolHandlerLogger for [ assignableFrom(IProtocolHandler) ]  
+    include "key" 
+
+    pointcut method(*) 
+        advice("key") 
+    end 
+end 
 		]]&gt;
 		&lt;/facility&gt;
 	&lt;/facilities&gt;
