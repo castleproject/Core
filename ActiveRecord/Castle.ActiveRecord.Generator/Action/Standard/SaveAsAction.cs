@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
+namespace Castle.ActiveRecord.Generator.Action.Standard
 {
 	using System;
 
-	using Castle.Facilities.ActiveRecordGenerator.Prevalence;
+	using Castle.ActiveRecord.Generator.Prevalence;
 
 
 	public class SaveAsAction : IAction

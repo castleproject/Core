@@ -1,4 +1,4 @@
-namespace Castle.Facilities.ActiveRecordGenerator.Forms
+namespace Castle.ActiveRecord.Generator.Forms
 {
 	using System;
 	using System.Drawing;

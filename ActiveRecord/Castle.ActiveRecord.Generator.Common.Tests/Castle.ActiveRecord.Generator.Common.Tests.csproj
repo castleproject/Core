@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Facilities.ActiveRecordGenerator.Components.Tests"
+                AssemblyName = "Castle.ActiveRecord.Generator.Common.Tests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Facilities.ActiveRecordGenerator.Components.Tests"
+                RootNamespace = "Castle.ActiveRecord.Generator.Common.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -85,16 +85,6 @@
                     HintPath = "..\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Facilities.ActiveRecordGenerator.Components"
-                    Project = "{B4E7F7E6-C02A-4828-BB5C-CEB5A67C4FF2}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
@@ -103,7 +93,22 @@
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\bin\Castle.Windsor.dll"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.ActiveRecord.Generator.Common"
+                    Project = "{B4E7F7E6-C02A-4828-BB5C-CEB5A67C4FF2}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

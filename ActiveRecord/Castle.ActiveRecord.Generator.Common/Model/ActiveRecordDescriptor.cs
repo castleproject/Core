@@ -13,7 +13,7 @@ using System.Data.OleDb;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Model
+namespace Castle.ActiveRecord.Generator.Model
 {
 	using System;
 	using System.Collections;

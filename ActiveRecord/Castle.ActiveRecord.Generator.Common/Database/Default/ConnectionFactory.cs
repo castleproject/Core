@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Components.Database.Default
+namespace Castle.ActiveRecord.Generator.Common.Database.Default
 {
 	using System;
 	using System.Data;
 	using System.Data.OleDb;
 	
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.ActiveRecord.Generator.Model;
 
 	public class ConnectionFactory : IConnectionFactory
 	{

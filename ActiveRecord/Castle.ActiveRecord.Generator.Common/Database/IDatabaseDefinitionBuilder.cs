@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Database
+namespace Castle.ActiveRecord.Generator.Database
 {
 	using System;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.ActiveRecord.Generator.Model;
 
 
 	public interface IDatabaseDefinitionBuilder

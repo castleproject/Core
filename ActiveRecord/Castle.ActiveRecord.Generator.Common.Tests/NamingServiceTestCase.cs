@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Components.Tests
+namespace Castle.ActiveRecord.Generator.Common.Tests
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
+	using Castle.ActiveRecord.Generator.CodeGenerator;
 
 
 	[TestFixture]

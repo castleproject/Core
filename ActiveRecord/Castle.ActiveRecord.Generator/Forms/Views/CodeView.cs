@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Forms.Views
+namespace Castle.ActiveRecord.Generator.Forms.Views
 {
 	using System;
 	using System.Windows.Forms;

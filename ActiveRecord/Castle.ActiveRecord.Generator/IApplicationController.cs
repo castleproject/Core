@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator
+namespace Castle.ActiveRecord.Generator
 {
 	using System;
 
-	using Castle.Facilities.ActiveRecordGenerator.Action;
+	using Castle.ActiveRecord.Generator.Action;
 
 
 	public interface IApplicationController

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Forms
+namespace Castle.ActiveRecord.Generator.Forms
 {
 	using System;
 	using System.Data;
 	using System.Windows.Forms;
 
-	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
-	using Castle.Facilities.ActiveRecordGenerator.Model;
-	using Castle.Facilities.ActiveRecordGenerator.Utils;
+	using Castle.ActiveRecord.Generator.CodeGenerator;
+	using Castle.ActiveRecord.Generator.Model;
+	using Castle.ActiveRecord.Generator.Utils;
 
 
 	public class NewProjectForm : Form

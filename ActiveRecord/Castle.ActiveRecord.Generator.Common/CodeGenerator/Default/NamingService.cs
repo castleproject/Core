@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
+namespace Castle.ActiveRecord.Generator.CodeGenerator.Default
 {
 	using System;
 	using System.Text.RegularExpressions;
 
-	using Castle.Facilities.ActiveRecordGenerator.Utils;
+	using Castle.ActiveRecord.Generator.Utils;
 
 
 	public class NamingService : INamingService

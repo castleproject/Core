@@ -76,7 +76,8 @@ namespace Castle.ActiveRecord.Framework.Config
 
 					if (typeNameAtt == null)
 					{
-						String message = String.Format("Invalid attribute at node '{0}'. The only supported attrubute is 'type'", Config_Node_Name);
+						String message = String.Format("Invalid attribute at node '{0}'. " + 
+							"The only supported attribute is 'type'", Config_Node_Name);
 					
 						throw new ConfigurationException(message);
 					}

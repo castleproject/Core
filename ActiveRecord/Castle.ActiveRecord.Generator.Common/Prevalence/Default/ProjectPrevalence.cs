@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Prevalence.Default
+namespace Castle.ActiveRecord.Generator.Prevalence.Default
 {
 	using System;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
-	using Castle.Facilities.ActiveRecordGenerator.Prevalence;
+	using Castle.ActiveRecord.Generator.Model;
+	using Castle.ActiveRecord.Generator.Prevalence;
 
 
 	public class ProjectPrevalence : IProjectPrevalence

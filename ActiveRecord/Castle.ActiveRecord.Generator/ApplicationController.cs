@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator
+namespace Castle.ActiveRecord.Generator
 {
 	using System;
 	using System.Windows.Forms;
 
 	using Castle.Model;
 
-	using Castle.Facilities.ActiveRecordGenerator.Forms;
-	using Castle.Facilities.ActiveRecordGenerator.Action;
+	using Castle.ActiveRecord.Generator.Forms;
+	using Castle.ActiveRecord.Generator.Action;
 
 
 

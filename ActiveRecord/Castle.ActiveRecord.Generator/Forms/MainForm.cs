@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Forms
+namespace Castle.ActiveRecord.Generator.Forms
 {
 	using System;
 	using System.Drawing;
@@ -21,8 +21,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 	using System.Windows.Forms;
 	using System.Data;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
-	using Castle.Facilities.ActiveRecordGenerator.Forms.Views;
+	using Castle.ActiveRecord.Generator.Model;
+	using Castle.ActiveRecord.Generator.Forms.Views;
 
 	public delegate void ActionDelegate(String actionName);
 
@@ -52,7 +52,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 
 		private Hashtable _translator = new Hashtable();
 
-		private Project _currentProject;
 		private System.Windows.Forms.ContextMenu arContextMenu;
 		private System.Windows.Forms.MenuItem newActiveRecord;
 		private ProjectExplorerView _explorer;

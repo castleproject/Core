@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Components
+namespace Castle.ActiveRecord.Generator.Common
 {
 	using System;
 
@@ -21,14 +21,14 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 	using Castle.Facilities.Startable;
 	using Castle.Facilities.TypedFactory;
 
-	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
-	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default;
-	using Castle.Facilities.ActiveRecordGenerator.Components.Database;
-	using Castle.Facilities.ActiveRecordGenerator.Components.Database.Default;
-	using Castle.Facilities.ActiveRecordGenerator.Prevalence;
-	using Castle.Facilities.ActiveRecordGenerator.Prevalence.Default;
-	using Castle.Facilities.ActiveRecordGenerator.Database;
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.ActiveRecord.Generator.CodeGenerator;
+	using Castle.ActiveRecord.Generator.CodeGenerator.Default;
+	using Castle.ActiveRecord.Generator.Common.Database;
+	using Castle.ActiveRecord.Generator.Common.Database.Default;
+	using Castle.ActiveRecord.Generator.Prevalence;
+	using Castle.ActiveRecord.Generator.Prevalence.Default;
+	using Castle.ActiveRecord.Generator.Database;
+	using Castle.ActiveRecord.Generator.Model;
 
 
 	public class ActiveRecordGeneratorContainer : WindsorContainer

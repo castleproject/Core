@@ -135,6 +135,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Castle.ActiveRecord.Tests.dll.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "SessionScopeTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator
+namespace Castle.ActiveRecord.Generator
 {
 	using System;
 
 	using Castle.MicroKernel;
 
 	using Castle.Facilities.TypedFactory;
-	using Castle.Facilities.ActiveRecordGenerator.Forms;
-	using Castle.Facilities.ActiveRecordGenerator.Components;
-	using Castle.Facilities.ActiveRecordGenerator.Action;
-	using Castle.Facilities.ActiveRecordGenerator.Action.Standard;
+	using Castle.ActiveRecord.Generator.Forms;
+	using Castle.ActiveRecord.Generator.Common;
+	using Castle.ActiveRecord.Generator.Action;
+	using Castle.ActiveRecord.Generator.Action.Standard;
 
 	using Castle.Components.Winforms.AssemblyResolver;
 

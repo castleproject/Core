@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Forms.Views
+namespace Castle.ActiveRecord.Generator.Forms.Views
 {
 	using System;
 	using System.Collections;
 	using System.Drawing;
 	using System.Windows.Forms;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.ActiveRecord.Generator.Model;
 
 
 	public class ProjectExplorerView
