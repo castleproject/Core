@@ -53,6 +53,7 @@ namespace Castle.CastleOnRails.Engine
 
 	public class UrlInfo
 	{
+		private String _area;
 		private String _controller;
 		private String _action;
 
@@ -70,6 +71,11 @@ namespace Castle.CastleOnRails.Engine
 		public String Action
 		{
 			get { return _action; }
+		}
+
+		public string Area
+		{
+			get { return _area; }
 		}
 	}
 }

@@ -1,5 +1,3 @@
-using System;
-using Castle.CastleOnRails.Engine.ControllerFactory;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,22 +14,23 @@ using Castle.CastleOnRails.Engine.ControllerFactory;
 
 namespace Castle.CastleOnRails.Engine
 {
+	using System;
 	using System.Web;
 	using System.Configuration;
 
-	using Castle.CastleOnRails.Engine.Configuration;
+	using Castle.CastleOnRails.Framework;
 
-	using Castle.CastleOnRails.Framework.Views;
-	using Castle.CastleOnRails.Framework.Views.Aspx;
+	using Castle.CastleOnRails.Engine.Configuration;
+	using Castle.CastleOnRails.Engine.ControllerFactory;
 
 	/// <summary>
 	/// Summary description for RailsHttpHandlerFactory.
 	/// </summary>
 	public class RailsHttpHandlerFactory : IHttpHandlerFactory
 	{
+		private IViewEngine _viewEngine;
 		private GeneralConfiguration _config;
 		private IControllerFactory _controllerFactory;
-		private IViewEngine _viewEngine;
 
 		public RailsHttpHandlerFactory()
 		{
@@ -73,7 +72,7 @@ namespace Castle.CastleOnRails.Engine
 		protected virtual void InitializeViewEngine()
 		{
 			// Default view engine
-			_viewEngine = new AspNetViewEngine();
+//			_viewEngine = new AspNetViewEngine();
 		}
 
 		protected virtual void ObtainConfiguration()
@@ -84,9 +83,9 @@ namespace Castle.CastleOnRails.Engine
 
 		public virtual IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated)
 		{
-			RailsHttpHandler handler = new RailsHttpHandler( 
-				_viewEngine, _controllerFactory, 
-				requestType, url, pathTranslated);
+			RailsHttpHandler handler = 
+				new RailsHttpHandler( 
+					_viewEngine, _controllerFactory, requestType, url);
 			
 			Configure(handler);
 
@@ -102,8 +101,8 @@ namespace Castle.CastleOnRails.Engine
 			GeneralConfiguration config = (GeneralConfiguration) 
 				ConfigurationSettings.GetConfig("rails");
 
-			handler.ControllersAssembly = config.ControllersAssembly;
-			handler.ViewsPhysicalPath = config.ViewsPhysicalPath;
+//			handler.ControllersAssembly = config.ControllersAssembly;
+//			handler.ViewsPhysicalPath = config.ViewsPhysicalPath;
 		}
 	}
 }

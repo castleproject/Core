@@ -17,81 +17,74 @@ namespace Castle.CastleOnRails.Framework
 	using System;
 	using System.IO;
 	using System.Web;
-	using System.Web.SessionState;
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
-
-	using Castle.CastleOnRails.Framework.Views;
 
 	/// <summary>
 	/// Summary description for Controller.
 	/// </summary>
 	public abstract class Controller
 	{
-		private String __controller;
-		private String __view;
-		private String __url;
-		private String __viewPhysicalPath;
-		private IViewEngine __viewEngine;
-		private HttpContext __context;
-		private IDictionary __bag;
+		private IViewEngine _viewEngine;
+		private IRailsEngineContext _context;
+		private String _areaName;
+		private String _controllerName;
+		private String _selectedViewName;
+		private IDictionary _bag;
 
 		public Controller()
 		{
-			__bag = new HybridDictionary();
+			_bag = new HybridDictionary();
 		}
 
 		public String Name
 		{
-			get { return __controller; }
+			get { return _controllerName; }
 		}
 
 		protected void RenderView( String name )
 		{
-			__view = Path.Combine( __controller, name );
+			String basePath = _controllerName;
+
+			if (_areaName != null)
+			{
+				basePath = Path.Combine( _areaName, _controllerName );
+			}
+
+			_selectedViewName = Path.Combine( basePath, name );
 		}
 
 		protected void RenderView( String controller, String name )
 		{
-			__view = Path.Combine( controller, name );
+			_selectedViewName = Path.Combine( controller, name );
 		}
 
 		protected void Redirect( String controller, String action )
 		{
 			// Cancel the view processing
-			__view = null;
-
-			__context.Response.Redirect( String.Format("../{0}/{1}.rails", controller, action) );
+			_selectedViewName = null;
+			_context.Response.Redirect( 
+				String.Format("../{0}/{1}.rails", controller, action), true );
 		}
 
-		/// <summary>
-		/// This method should not be virtual.
-		/// </summary>
-		/// <param name="url"></param>
-		/// <param name="viewPath"></param>
-		/// <param name="controller"></param>
-		/// <param name="action"></param>
-		/// <param name="viewEngine"></param>
-		/// <param name="context"></param>
-		public void __Process( String url, String viewPath, String controller, String action, 
-			IViewEngine viewEngine, HttpContext context )
+		public void Process( IRailsEngineContext context, 
+			String areaName, String controllerName, String actionName, IViewEngine viewEngine )
 		{
-			__url = url;
-			__viewPhysicalPath = viewPath;
-			__controller = controller;
-			__viewEngine = viewEngine;
-			__context = context;
+			_areaName = areaName;
+			_controllerName = controllerName;
+			_viewEngine = viewEngine;
+			_context = context;
 
-			Send( action );
+			Send( actionName );
 		}
 
-		protected virtual void InvokeMethod(MethodInfo method, HttpRequest request)
+		protected virtual void InvokeMethod(MethodInfo method, IRequest request)
 		{
 			method.Invoke( this, new object[0] );
 		}
 
-		protected virtual MethodInfo SelectMethod(String action, HttpRequest request)
+		protected virtual MethodInfo SelectMethod(String action, IRequest request)
 		{
 			Type type = this.GetType();
 
@@ -109,43 +102,44 @@ namespace Castle.CastleOnRails.Framework
 
 		public IDictionary PropertyBag
 		{
-			get { return __bag; }
+			get { return _bag; }
 		}
 
 		protected HttpContext Context
 		{
-			get { return __context; }
-		}
-
-		protected HttpSessionState Session
-		{
-			get { return __context.Session; }
+			get { return _context.UnderlyingContext as HttpContext; }
 		}
 
 		public virtual void Send( String action )
 		{
-			// Specifies the default action for this action
+			// Specifies the default view for this area/controller/action
 			RenderView( action );
 
-			// Try to dispatch the action
-			MethodInfo method = SelectMethod(action, Context.Request);
+			MethodInfo method = SelectMethod(action, _context.Request);
 
+			InvokeMethod(method);
+
+			ProcessView();
+		}
+
+		private void InvokeMethod(MethodInfo method)
+		{
 			try
 			{
-				InvokeMethod(method, Context.Request);
+				InvokeMethod(method, _context.Request);
 			}
 			catch(Exception ex)
 			{
 				// TODO: Implement a rescue feature
-
 				throw ex;
 			}
+		}
 
-			// Send view 
-
-			if (__view != null)
+		private void ProcessView()
+		{
+			if (_selectedViewName != null)
 			{
-				__viewEngine.Process( this, __url, __viewPhysicalPath, __view, Context );
+				_viewEngine.Process( _context, this, _selectedViewName );
 			}
 		}
 

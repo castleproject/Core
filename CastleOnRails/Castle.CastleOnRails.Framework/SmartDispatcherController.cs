@@ -25,7 +25,7 @@ namespace Castle.CastleOnRails.Framework
 	/// </summary>
 	public abstract class SmartDispatcherController : Controller
 	{
-		protected override void InvokeMethod(MethodInfo method, HttpRequest request)
+		protected override void InvokeMethod(MethodInfo method, IRequest request)
 		{
 			NameValueCollection webParams = request.Params;
 			ParameterInfo[] parameters = method.GetParameters();
@@ -35,7 +35,7 @@ namespace Castle.CastleOnRails.Framework
 			method.Invoke(this, methodArgs);
 		}
 
-		protected override MethodInfo SelectMethod(String action, HttpRequest request)
+		protected override MethodInfo SelectMethod(String action, IRequest request)
 		{
 			NameValueCollection webParams = request.Params;
 

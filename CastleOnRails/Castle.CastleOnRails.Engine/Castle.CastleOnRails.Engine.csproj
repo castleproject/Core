@@ -109,6 +109,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProcessEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RailsException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -130,6 +135,26 @@
                 />
                 <File
                     RelPath = "UrlTokenizerException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\RailsEngineContextAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\RequestAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ResponseAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\SessionAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

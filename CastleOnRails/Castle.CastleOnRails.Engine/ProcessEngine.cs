@@ -15,44 +15,43 @@
 namespace Castle.CastleOnRails.Engine
 {
 	using System;
-	using System.Web;
-
-	using Castle.CastleOnRails.Engine.Adapters;
 
 	using Castle.CastleOnRails.Framework;
 
 	/// <summary>
-	/// Summary description for RailsHttpHandler.
+	/// Summary description for ProcessEngine.
 	/// </summary>
-	public class RailsHttpHandler : ProcessEngine, IHttpHandler
+	public class ProcessEngine
 	{
-		private HttpContext _context;
-		private String _url; 
-		private String _pathTranslated;
-		private String _requestType;
+		private IControllerFactory _controllerFactory;
+		private IViewEngine _viewEngine;
 
-		public RailsHttpHandler( IViewEngine viewEngine, IControllerFactory controllerFactory, 
-			String requestType, String url) : 
-			base(controllerFactory, viewEngine)
+		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine)
 		{
-			_url = url;
-			_requestType = requestType;
+			_controllerFactory = controllerFactory;
+			_viewEngine = viewEngine;
 		}
 
-		#region IHttpHandler Members
-
-		public void ProcessRequest(HttpContext context)
+		public virtual void Process( IRailsEngineContext context )
 		{
-			IRailsEngineContext railsContext = new RailsEngineContextAdapter(context, _url, _requestType);
+			UrlInfo info = ExtractUrlInfo(context);
 
-			base.Process(railsContext);
+			Controller controller = _controllerFactory.GetController( info.Controller );
+
+			try
+			{
+				controller.Process( 
+					context, info.Area, info.Controller, info.Action, _viewEngine );
+			}
+			finally
+			{
+				_controllerFactory.Release(controller);
+			}
 		}
 
-		public bool IsReusable
+		protected virtual UrlInfo ExtractUrlInfo(IRailsEngineContext context)
 		{
-			get { return false; }
+			return UrlTokenizer.ExtractInfo(context.Url);
 		}
-
-		#endregion
 	}
 }

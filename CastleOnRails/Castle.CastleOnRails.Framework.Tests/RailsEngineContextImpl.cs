@@ -1,0 +1,205 @@
+using System.IO;
+using System.Text;
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+namespace Castle.CastleOnRails.Framework.Tests
+{
+	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
+	using System.Security.Principal;
+
+	/// <summary>
+	/// Summary description for RailsEngineContextImpl.
+	/// </summary>
+	public class RailsEngineContextImpl : IRailsEngineContext
+	{
+		private object _context = new object();
+		private String _url;
+		private String _requestType;
+		private RequestImpl _request = new RequestImpl();
+		private ResponseImpl _response = new ResponseImpl();
+
+		public RailsEngineContextImpl(String url) : this(url, "GET")
+		{
+		}
+
+		public RailsEngineContextImpl(String url, String requestType)
+		{
+			_url = url;
+			_requestType = requestType;
+		}
+
+		public void AddRequestParam(String name, String value)
+		{
+			_request._params.Add(name, value);
+		}
+
+		public object Output
+		{
+			get { return _response._contents.ToString(); }
+		}
+
+		#region IRailsEngineContext
+
+		public String RequestType
+		{
+			get { return _requestType; }
+		}
+
+		public String Url
+		{
+			get { return _url; }
+		}
+
+		public object UnderlyingContext
+		{
+			get { return _context; }
+		}
+
+		public NameValueCollection Params
+		{
+			get { return _request._params; }
+		}
+
+		public NameValueCollection Session
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IRequest Request
+		{
+			get { return _request; }
+		}
+
+		public IResponse Response
+		{
+			get { return _response; }
+		}
+
+		public System.Web.Caching.Cache Cache
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IDictionary Items
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public void Transfer(String path, bool preserveForm)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IPrincipal CurrentUser
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		
+
+		#endregion
+	}
+
+	public class RequestImpl : IRequest
+	{
+		internal NameValueCollection _params = new NameValueCollection();
+
+		public RequestImpl()
+		{
+		}
+
+		#region IRequest Members
+
+		public string this[string key]
+		{
+			get { return _params[key]; }
+		}
+
+		public IDictionary Files
+		{
+			get { return null; }
+		}
+
+		public byte[] BinaryRead(int count)
+		{
+			return null;
+		}
+
+		public NameValueCollection Params
+		{
+			get { return _params; }
+		}
+
+		#endregion
+	}
+
+	public class ResponseImpl : IResponse
+	{
+		internal StringBuilder _contents = new StringBuilder();
+		private StringWriter _writer;
+
+		public ResponseImpl()
+		{
+			_writer = new StringWriter(_contents);
+		}
+
+		public void AppendHeader(String name, String value)
+		{
+			throw new NotImplementedException();
+		}
+
+		public System.IO.TextWriter Output
+		{
+			get { return _writer; }
+		}
+
+		public System.IO.Stream OutputStream
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public void Write(String s)
+		{
+			_writer.Write(s);
+		}
+
+		public void Write(object obj)
+		{
+			_writer.Write(obj);
+		}
+
+		public void Write(char ch)
+		{
+			_writer.Write(ch);
+		}
+
+		public void Write(char[] buffer, int index, int count)
+		{
+			_writer.Write(buffer, index, count);
+		}
+
+		public void Redirect(String url)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Redirect(String url, bool endProcess)
+		{
+			throw new NotImplementedException();
+		}
+	}
+}

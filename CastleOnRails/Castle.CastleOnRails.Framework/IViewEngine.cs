@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Views
+namespace Castle.CastleOnRails.Framework
 {
 	using System;
 	using System.Web;
@@ -22,6 +22,8 @@ namespace Castle.CastleOnRails.Framework.Views
 	/// </summary>
 	public interface IViewEngine
 	{
-		void Process( Controller controller, String url, String viewPath, String viewName, HttpContext context );
+		String ViewRootDir { get; set; }
+
+		void Process(IRailsEngineContext context, Controller controller, String viewName);
 	}
 }
