@@ -1,6 +1,6 @@
 Component: CodeProviderFactory
   AvailableCodeProviders: CodeProviderInfo[]
-
+  
 Component: ApplicationPrevalence
   Preferences (PropertyBag/Hashtable)
 
