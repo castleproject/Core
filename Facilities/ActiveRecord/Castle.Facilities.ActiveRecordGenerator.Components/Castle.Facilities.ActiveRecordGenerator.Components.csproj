@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{2A879BB5-E207-43F7-96B2-923CE6BB084B}"
+        ProjectGuid = "{B4E7F7E6-C02A-4828-BB5C-CEB5A67C4FF2}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Facilities.ActiveRecord.Tests"
+                AssemblyName = "Castle.Facilities.ActiveRecordGenerator.Components"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Facilities.ActiveRecord.Tests"
+                RootNamespace = "Castle.Facilities.ActiveRecordGenerator.Components"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -76,67 +76,32 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.Xml"
+                    AssemblyName = "System.XML"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                    HintPath = "..\bin\Castle.Windsor.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilities.ActiveRecord"
-                    Project = "{46567A8A-4413-495A-8195-EA0AE879AD74}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "NHibernate"
-                    AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
-                />
-                <Reference
-                    Name = "Castle.Facilities.NHibernateIntegration"
-                    AssemblyName = "Castle.Facilities.NHibernateIntegration"
-                    HintPath = "..\..\NHibernate\bin\Castle.Facilities.NHibernateIntegration.dll"
-                />
-                <Reference
-                    Name = "Castle.Facilities.AutomaticTransactionManagement"
-                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
-                    HintPath = "..\..\NHibernate\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
-                />
-                <Reference
-                    Name = "Castle.Facilities.NHibernateExtension"
-                    AssemblyName = "Castle.Facilities.NHibernateExtension"
-                    HintPath = "..\..\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\bin\Castle.Model.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "App.config"
-                    BuildAction = "None"
+                    RelPath = "ActiveRecordGeneratorContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
@@ -144,37 +109,67 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BaseTestFixture.cs"
+                    RelPath = "CodeGenerator\CodeProviderInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model1TestCase.cs"
+                    RelPath = "CodeGenerator\ICodeGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model1\Order.cs"
+                    RelPath = "CodeGenerator\ICodeProviderFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model1\OrderDao.cs"
+                    RelPath = "CodeGenerator\Default\CodeProviderFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model1\OrderGenCode.cs"
+                    RelPath = "Database\IDatabaseDefinitionBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model1\OrderItem.cs"
+                    RelPath = "Model\ActiveRecordDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model1\Product.cs"
+                    RelPath = "Model\ColumnDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\DatabaseDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Project.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\RelationDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\TableDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Prevalence\IApplicationPrevalence.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Prevalence\IProjectPrevalence.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,36 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.Facilities.ActiveRecordGenerator
 {
 	using System;
+	using System.Windows.Forms;
+
+	using Castle.Facilities.ActiveRecordGenerator.Forms;
+	using Castle.Facilities.ActiveRecordGenerator.Components;
 
 
-	public abstract class ActiveRecordBase
+	public class App
 	{
-		public virtual void Save()
+		[STAThread]
+		public static void Main() 
 		{
-			
-		}
+			ActiveRecordGeneratorContainer container = new ActiveRecordGeneratorContainer();
 
-		public virtual void Create()
-		{
-			
-		}
+			container.AddComponent("newproject.form", typeof(NewProject));
+			container.AddComponent("mainform.form", typeof(MainForm));
 
-		public virtual void Update()
-		{
-			
-		}
+			MainForm form = (MainForm) container[ typeof(MainForm) ];
 
-		public virtual void Delete()
-		{
-			
-		}
-
-		public static ActiveRecordBase Find(object[] ids)
-		{
-			return null;
+			Application.Run(form);
 		}
 	}
 }

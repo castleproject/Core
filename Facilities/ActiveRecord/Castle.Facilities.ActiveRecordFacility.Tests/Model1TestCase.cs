@@ -21,12 +21,13 @@ namespace Castle.Facilities.ActiveRecord.Tests
 
 	using Castle.Facilities.ActiveRecord.Tests.Model1;
 
+
 	/// <summary>
 	/// Summary description for Model1TestCase.
 	/// </summary>
 	[TestFixture]
 	public class Model1TestCase
 	{
-		
+		Order a = Order.Find(1);
 	}
 }

@@ -12,36 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.Facilities.ActiveRecordGenerator.Database
 {
 	using System;
 
+	using Castle.Facilities.ActiveRecordGenerator.Model;
 
-	public abstract class ActiveRecordBase
+
+	public interface IDatabaseDefinitionBuilder
 	{
-		public virtual void Save()
-		{
-			
-		}
-
-		public virtual void Create()
-		{
-			
-		}
-
-		public virtual void Update()
-		{
-			
-		}
-
-		public virtual void Delete()
-		{
-			
-		}
-
-		public static ActiveRecordBase Find(object[] ids)
-		{
-			return null;
-		}
+		DatabaseDefinition Build();
 	}
 }

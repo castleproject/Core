@@ -12,36 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator
 {
 	using System;
+	using System.CodeDom;
+
+	using Castle.Facilities.ActiveRecordGenerator.Model;
 
 
-	public abstract class ActiveRecordBase
+	public interface ICodeGenerator
 	{
-		public virtual void Save()
-		{
-			
-		}
+		CodeCompileUnit Generate(Project project);
 
-		public virtual void Create()
-		{
-			
-		}
-
-		public virtual void Update()
-		{
-			
-		}
-
-		public virtual void Delete()
-		{
-			
-		}
-
-		public static ActiveRecordBase Find(object[] ids)
-		{
-			return null;
-		}
+		CodeTypeDeclaration Generate(ActiveRecordDescriptor arDescriptor);
 	}
 }

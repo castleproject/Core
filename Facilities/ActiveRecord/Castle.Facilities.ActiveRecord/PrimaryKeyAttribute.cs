@@ -20,7 +20,7 @@ namespace Castle.Facilities.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class PrimaryKeyAttribute : Attribute
 	{
-		private PrimaryKeyType _generator;
+		private PrimaryKeyType _generator = PrimaryKeyType.Native;
 		private string _column;
 		private string _unsavedValue;
 		private string _access;

@@ -1,0 +1,57 @@
+Component: CodeProviderFactory
+  AvailableCodeProviders: CodeProviderInfo[]
+
+Component: ApplicationPrevalence
+  Preferences (PropertyBag/Hashtable)
+
+Component: CodeGenerator
+  CodeCompileUnit Generate(Project)  
+  CodeTypeDeclaration Generate(ActiveRecordDescriptor)  
+
+Component: ProjectPrevalence
+  Save
+  SaveAs
+  Load
+
+Class: Project
+fields
+  Name
+  Location
+  DatabaseDriver
+  DatabaseConnectionString
+  Namespace
+  CodeProvider
+  DatabaseStructure*
+  ActiveRecordDescriptor[]
+operations
+  RefreshStructure
+
+Class: DatabaseStructure
+  TableStructure[]
+
+Class: TableStructure
+  Name
+  ColumnStructure[]
+  Relations
+  Object -> Tag
+
+Class ColumnStructure
+  Name
+  Type
+  IsPrimaryKey
+  IsForeignKey
+  Object -> Tag
+
+Component: DatabaseStructureBuilder
+  Build ( Connection )
+
+Class: ActiveRecordDescriptor
+  [ActiveRecordDescriptor Parent - Table Inheritance]
+  TableStructure
+  RelationDescriptor[]
+
+Class: RelationDescriptor
+  [OrderBy]
+  [Criteria]
+
+

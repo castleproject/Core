@@ -12,48 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord.Tests.Model1
+namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator
 {
 	using System;
-	using System.Collections;
-
-	using Castle.Facilities.ActiveRecord;
 
 
-	[ActiveRecord( ActiveTableType=typeof(OrderDao) )]
-	public class Order : ActiveRecordBase
+	public class CodeProviderInfo
 	{
-		private int _id;
-		private String _description;
-		private IList _items;
+		private readonly String _label;
+		private readonly Type _codeProvider;
 
-		public Order()
+		public CodeProviderInfo(string label, Type codeProvider)
 		{
+			_label = label;
+			_codeProvider = codeProvider;
 		}
 
-		[PrimaryKey]
-		public int Id
+		public string Label
 		{
-			get { return _id; }
-			set { _id = value; }
+			get { return _label; }
 		}
 
-		public String Description
+		public Type CodeProvider
 		{
-			get { return _description; }
-			set { _description = value; }
+			get { return _codeProvider; }
 		}
 
-		[HasMany( typeof(OrderItem), Key = "order_id" )]
-		public IList Items
+		public override string ToString()
 		{
-			get { return _items; }
-			set { _items = value; }
-		}
-
-		public static Order Find(int id)
-		{
-			return new Order();
+			return _label;
 		}
 	}
 }

@@ -12,36 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.Facilities.ActiveRecordGenerator.Components
 {
 	using System;
 
+	using Castle.Windsor;
 
-	public abstract class ActiveRecordBase
+	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
+	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default;
+
+
+	public class ActiveRecordGeneratorContainer : WindsorContainer
 	{
-		public virtual void Save()
+		public ActiveRecordGeneratorContainer()
 		{
-			
+			Init();
 		}
 
-		public virtual void Create()
+		private void Init()
 		{
-			
-		}
-
-		public virtual void Update()
-		{
-			
-		}
-
-		public virtual void Delete()
-		{
-			
-		}
-
-		public static ActiveRecordBase Find(object[] ids)
-		{
-			return null;
+			AddComponent( "codeprovider", 
+				typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
+//			AddComponent( "codeprovider", 
+//				typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
 		}
 	}
 }

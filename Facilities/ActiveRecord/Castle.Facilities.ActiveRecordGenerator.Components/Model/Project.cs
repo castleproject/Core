@@ -12,48 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord.Tests.Model1
+namespace Castle.Facilities.ActiveRecordGenerator.Model
 {
 	using System;
 	using System.Collections;
 
-	using Castle.Facilities.ActiveRecord;
 
-
-	[ActiveRecord( ActiveTableType=typeof(OrderDao) )]
-	public class Order : ActiveRecordBase
+	public class Project
 	{
-		private int _id;
-		private String _description;
-		private IList _items;
+		private String _name;
+		private String _location;
+		private String _driver;
+		private String _connectionString;
+		private String _namespace;
+		private String _codeProvider;		
+		private IList _activeRecordDescriptors = new ArrayList();
+		private DatabaseDefinition _dbDefinition;
 
-		public Order()
+		public Project()
 		{
-		}
-
-		[PrimaryKey]
-		public int Id
-		{
-			get { return _id; }
-			set { _id = value; }
-		}
-
-		public String Description
-		{
-			get { return _description; }
-			set { _description = value; }
-		}
-
-		[HasMany( typeof(OrderItem), Key = "order_id" )]
-		public IList Items
-		{
-			get { return _items; }
-			set { _items = value; }
-		}
-
-		public static Order Find(int id)
-		{
-			return new Order();
 		}
 	}
 }
