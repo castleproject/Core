@@ -7,10 +7,11 @@ Options +FollowSymLinks +ExecCGI
 RewriteEngine On
 
 # Change extension from .cgi to .fcgi to switch to FCGI and to .rb to switch to mod_ruby
-RewriteBase /dispatch.cgi
+# RewriteBase /dispatch.cgi
+RewriteBase /dispatch.rb
 
 # Enable this rewrite rule to point to the controller/action that should serve root.
-# RewriteRule ^$ /wiki/ [R]
+RewriteRule ^$ /wiki/ [R]
 
 # Add missing slash
 RewriteRule ^([-_a-zA-Z0-9]+)$                                            /$1/ [R]
