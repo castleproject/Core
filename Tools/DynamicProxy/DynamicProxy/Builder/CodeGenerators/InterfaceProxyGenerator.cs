@@ -146,7 +146,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				else
 				{
 					gen.Emit(OpCodes.Unbox, builder.ReturnType);
-					gen.Emit(OpCodeUtil.ConvertTypeToOpCode(builder.ReturnType));
+					OpCodeUtil.ConvertTypeToOpCode(gen, builder.ReturnType);
 				}
 
 				gen.Emit(OpCodes.Stloc, 3);
@@ -162,7 +162,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		public virtual Type GenerateCode(Type[] interfaces)
 		{
-//			interfaces = ScreenInterfaces(interfaces);
+			interfaces = AddISerializable(interfaces);
 
 			Type cacheType = GetFromCache(typeof(Object), interfaces);
 			

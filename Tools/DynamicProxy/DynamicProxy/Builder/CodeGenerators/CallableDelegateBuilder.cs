@@ -127,7 +127,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				if (param.ParameterType.IsValueType)
 				{
 					gen.Emit(OpCodes.Unbox, param.ParameterType);
-					gen.Emit(OpCodeUtil.ConvertTypeToOpCode(param.ParameterType));
+					OpCodeUtil.ConvertTypeToOpCode(gen, param.ParameterType);
 				}
 				else if (param.ParameterType != typeof(Object))
 				{

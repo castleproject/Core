@@ -21,13 +21,30 @@ namespace Castle.DynamicProxy.Serialization
 	/// Summary description for ProxyObjectReference.
 	/// </summary>
 	[Serializable]
-	public class ProxyObjectReference : IObjectReference
+	public class ProxyObjectReference : IObjectReference, ISerializable
 	{
+		private Type m_baseType;
+		private IInterceptor m_interceptor;
+
+		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
+		{
+			m_interceptor = (IInterceptor) info.GetValue("interceptor", typeof(IInterceptor) );
+			m_baseType = (Type) info.GetValue("baseType", typeof(Type) );
+		}
+
 		public object GetRealObject(StreamingContext context)
 		{
-			Type baseType = (Type) context["baseType"];
+			ProxyGenerator generator = new ProxyGenerator();
 			
-			return null;
+			return generator.CreateClassProxy( m_baseType, m_interceptor );
 		}
+
+		#region ISerializable Members
+
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+		}
+
+		#endregion
 	}
 }

@@ -94,7 +94,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			ModuleBuilder moduleBuilder = ModuleScope.ObtainDynamicModule();
 
-			TypeAttributes flags = TypeAttributes.Public | TypeAttributes.Class;
+			TypeAttributes flags = TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
 
 			m_baseType = baseType;
 			m_typeBuilder = moduleBuilder.DefineType(

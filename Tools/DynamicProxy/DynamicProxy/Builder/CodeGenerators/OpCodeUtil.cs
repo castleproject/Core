@@ -26,9 +26,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// Converts a Value type to a correspondent OpCode
 		/// of value type allocation
 		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		public static OpCode ConvertTypeToOpCode(Type type)
+		/// <param name="gen"></param>
+		public static void ConvertTypeToOpCode(ILGenerator gen, Type type)
 		{
 			if (type.IsEnum)
 			{
@@ -51,17 +50,25 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 						break;
 				}
 
-				return ConvertTypeToOpCode(type);
+				ConvertTypeToOpCode(gen, type);
+				return;
 			}
 
-			OpCode opCode = OpCodesDictionary.Instance[type];
-
-			if (Object.ReferenceEquals(opCode, OpCodesDictionary.EmptyOpCode))
+			if (type.IsPrimitive)
 			{
-				throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
-			}
+				OpCode opCode = OpCodesDictionary.Instance[type];
 
-			return opCode;
+				if (Object.ReferenceEquals(opCode, OpCodesDictionary.EmptyOpCode))
+				{
+					throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
+				}
+
+				gen.Emit(opCode);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldobj, type);
+			}
 		}
 	}
 }

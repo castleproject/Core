@@ -29,12 +29,12 @@ namespace Castle.DynamicProxy.Test.Classes
 			current = DateTime.Now;
 		}
 
-		public DateTime Current
+		public virtual DateTime Current
 		{
 			get { return current; }
 		}
 
-		public double CalculateSumDistanceNow()
+		public virtual double CalculateSumDistanceNow()
 		{
 			return Math.PI;
 		}
