@@ -1,0 +1,53 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernateSpiking", "NHibernateSpiking\NHibernateSpiking.csproj", "{AC3F901A-3369-4EED-B05C-BCCA89E3C101}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernate-1.1", "..\..\..\..\..\others\nhibernate\src\NHibernate\NHibernate-1.1.csproj", "{EE3B9473-7C64-44FF-B342-91B558D413A8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRecord", "Castle.Facilities.ActiveRecord\Castle.Facilities.ActiveRecord.csproj", "{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRecordFacility", "Castle.Facilities.ActiveRecordFacility\Castle.Facilities.ActiveRecordFacility.csproj", "{57FBA700-641E-4EDF-ABC8-DBB9C66156B5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRecordFacility.Tests", "Castle.Facilities.ActiveRecordFacility.Tests\Castle.Facilities.ActiveRecordFacility.Tests.csproj", "{2A879BB5-E207-43F7-96B2-923CE6BB084B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{AC3F901A-3369-4EED-B05C-BCCA89E3C101}.Debug.ActiveCfg = Debug|.NET
+		{AC3F901A-3369-4EED-B05C-BCCA89E3C101}.Debug.Build.0 = Debug|.NET
+		{AC3F901A-3369-4EED-B05C-BCCA89E3C101}.Release.ActiveCfg = Release|.NET
+		{AC3F901A-3369-4EED-B05C-BCCA89E3C101}.Release.Build.0 = Release|.NET
+		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Debug.ActiveCfg = Debug|.NET
+		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Debug.Build.0 = Debug|.NET
+		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Release.ActiveCfg = Release|.NET
+		{EE3B9473-7C64-44FF-B342-91B558D413A8}.Release.Build.0 = Release|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Debug.ActiveCfg = Debug|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Debug.Build.0 = Debug|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Release.ActiveCfg = Release|.NET
+		{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}.Release.Build.0 = Release|.NET
+		{57FBA700-641E-4EDF-ABC8-DBB9C66156B5}.Debug.ActiveCfg = Debug|.NET
+		{57FBA700-641E-4EDF-ABC8-DBB9C66156B5}.Debug.Build.0 = Debug|.NET
+		{57FBA700-641E-4EDF-ABC8-DBB9C66156B5}.Release.ActiveCfg = Release|.NET
+		{57FBA700-641E-4EDF-ABC8-DBB9C66156B5}.Release.Build.0 = Release|.NET
+		{2A879BB5-E207-43F7-96B2-923CE6BB084B}.Debug.ActiveCfg = Debug|.NET
+		{2A879BB5-E207-43F7-96B2-923CE6BB084B}.Debug.Build.0 = Debug|.NET
+		{2A879BB5-E207-43F7-96B2-923CE6BB084B}.Release.ActiveCfg = Release|.NET
+		{2A879BB5-E207-43F7-96B2-923CE6BB084B}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
