@@ -28,9 +28,10 @@ namespace Castle.MicroKernel
 		/// Implementors must create a proxy based on 
 		/// the information exposed by ComponentModel
 		/// </summary>
+		/// <param name="kernel"></param>
 		/// <param name="mode"></param>
 		/// <param name="constructorArguments"></param>
 		/// <returns></returns>
-		object Create( ComponentModel mode, params object[] constructorArguments );
+		object Create( IKernel kernel, ComponentModel mode, params object[] constructorArguments );
 	}
 }

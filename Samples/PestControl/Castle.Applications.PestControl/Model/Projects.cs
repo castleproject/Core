@@ -15,6 +15,7 @@
 namespace Castle.Applications.PestControl.Model
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Summary description for Projects.
@@ -22,7 +23,8 @@ namespace Castle.Applications.PestControl.Model
 	[Serializable]
 	public class Project : Identifiable
 	{
-		public string name;
+		public bool isPublic;
+		public String name;
 		public User owner;
 
 		public Project(String name, User owner)
@@ -31,7 +33,7 @@ namespace Castle.Applications.PestControl.Model
 			this.owner = owner;
 		}
 
-		public string Name
+		public String Name
 		{
 			get { return name; }
 			set { name = value; }
@@ -41,6 +43,27 @@ namespace Castle.Applications.PestControl.Model
 		{
 			get { return owner; }
 			set { owner = value; }
+		}
+
+		public bool IsPublic
+		{
+			get { return isPublic; }
+			set { isPublic = value; }
+		}
+	}
+
+	/// <summary>
+	/// Summary description for ProjectCollection.
+	/// </summary>
+	[Serializable]
+	public class ProjectCollection : CollectionBase
+	{
+		public void Add(Project project)
+		{
+			lock(this.InnerList.SyncRoot)
+			{
+				InnerList.Add(project);
+			}
 		}
 	}
 }

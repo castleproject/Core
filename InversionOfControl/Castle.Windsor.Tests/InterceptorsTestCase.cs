@@ -19,8 +19,9 @@ namespace Castle.Windsor.Tests
 
 	using NUnit.Framework;
 
-	using Castle.MicroKernel;
+	using Castle.Model;
 	using Castle.Model.Interceptor;
+	using Castle.MicroKernel;
 	using Castle.Windsor.Tests.Components;
 
 	/// <summary>
@@ -53,6 +54,7 @@ namespace Castle.Windsor.Tests
 		[Test]
 		public void ClassProxy()
 		{
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
 			_container.AddComponent( "key", typeof(CalculatorService)  );
 
 			CalculatorService service = (CalculatorService) _container.Resolve("key");
@@ -62,8 +64,24 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
+		public void ClassProxyWithAttributes()
+		{
+			_container = new WindsorContainer(); // So we wont use the facilities
+
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
+			_container.AddComponent( "key", typeof(CalculatorServiceWithAttributes)  );
+
+			CalculatorServiceWithAttributes service = 
+				(CalculatorServiceWithAttributes) _container.Resolve("key");
+
+			Assert.IsNotNull(service);
+			Assert.AreEqual( 5, service.Sum(2,2) );
+		}
+
+		[Test]
 		public void Multithreaded()
 		{
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
 			_container.AddComponent( "key", typeof(CalculatorService)  );
 
 			_service = (CalculatorService) _container.Resolve("key");
@@ -109,14 +127,16 @@ namespace Castle.Windsor.Tests
 
 		public void Terminate()
 		{
-			// TODO:  Add MyInterceptorGreedyFacility.Terminate implementation
 		}
 
 		#endregion
 
 		private void OnComponentRegistered(String key, IHandler handler)
 		{
-			handler.ComponentModel.Interceptors.Add( new ResultModifierInterceptor() );
+			if (key == "key")
+			{
+				handler.ComponentModel.Interceptors.Add( new InterceptorReference( "interceptor" ) );
+			}
 		}
 	}
 

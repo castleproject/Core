@@ -21,7 +21,6 @@ namespace Castle.MicroKernel.Tests.Configuration
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel.Resolvers;
-	using Castle.MicroKernel.SubSystems.Configuration;
 	using Castle.MicroKernel.Tests.Configuration.Components;
 	using Castle.MicroKernel.Tests.ClassComponents;
 
@@ -91,6 +90,29 @@ namespace Castle.MicroKernel.Tests.Configuration
 			kernel.AddComponent( "commonserviceuser", typeof(CommonServiceUser) );
 
 			CommonServiceUser instance = (CommonServiceUser) kernel["commonserviceuser"];
+
+			Assert.IsNotNull(instance);
+			Assert.AreEqual( typeof(CommonImpl2), instance.CommonService.GetType() );
+		}
+
+		[Test]
+		public void ServiceOverrideUsingProperties()
+		{
+			MutableConfiguration confignode = new MutableConfiguration("key");
+			
+			IConfiguration parameters = 
+				confignode.Children.Add( new MutableConfiguration("parameters") );
+
+			parameters.Children.Add( new MutableConfiguration("CommonService", "#{commonservice2}") );
+
+			kernel.ConfigurationStore.AddComponentConfiguration( "commonserviceuser", confignode );
+
+			kernel.AddComponent( "commonservice1", typeof(ICommon), typeof(CommonImpl1) );
+			kernel.AddComponent( "commonservice2", typeof(ICommon), typeof(CommonImpl2) );
+
+			kernel.AddComponent( "commonserviceuser", typeof(CommonServiceUser2) );
+
+			CommonServiceUser2 instance = (CommonServiceUser2) kernel["commonserviceuser"];
 
 			Assert.IsNotNull(instance);
 			Assert.AreEqual( typeof(CommonImpl2), instance.CommonService.GetType() );

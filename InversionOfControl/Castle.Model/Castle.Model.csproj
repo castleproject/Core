@@ -89,7 +89,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes\CastleComponentAttribute.cs"
+                    RelPath = "Attributes\InterceptorAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -140,6 +140,11 @@
                 />
                 <File
                     RelPath = "Model\InterceptorCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\InterceptorReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -133,6 +133,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\CalculatorServiceWithAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\AppDomainConfigurationStoreTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -44,6 +44,7 @@ namespace Castle.MicroKernel.ModelBuilder
 			AddContributor( new PropertiesDependenciesModelInspector() );
 			AddContributor( new LifecycleModelInspector() );
 			AddContributor( new ConfigurationParametersInspector() );
+			AddContributor( new InterceptorInspector() );
 		}
 
 		public ComponentModel BuildModel(String key, Type service, 

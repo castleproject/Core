@@ -129,11 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "global.asax"
+                    RelPath = "default.htm"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "index.html"
+                    RelPath = "global.asax"
                     BuildAction = "Content"
                 />
                 <File

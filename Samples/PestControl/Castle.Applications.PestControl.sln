@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Prevalenc
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Applications.PestControl.Tests", "Castle.Applications.PestControl.Tests\Castle.Applications.PestControl.Tests.csproj", "{5DFDD338-D552-4D1E-B6E7-6E031F00696E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -69,6 +73,10 @@ Global
 		{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}.Debug.Build.0 = Debug|.NET
 		{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}.Release.ActiveCfg = Release|.NET
 		{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}.Release.Build.0 = Release|.NET
+		{5DFDD338-D552-4D1E-B6E7-6E031F00696E}.Debug.ActiveCfg = Debug|.NET
+		{5DFDD338-D552-4D1E-B6E7-6E031F00696E}.Debug.Build.0 = Debug|.NET
+		{5DFDD338-D552-4D1E-B6E7-6E031F00696E}.Release.ActiveCfg = Release|.NET
+		{5DFDD338-D552-4D1E-B6E7-6E031F00696E}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -19,11 +19,11 @@ namespace Castle.Model
 	using Castle.Model.Interceptor;
 
 	/// <summary>
-	/// Summary description for InterceptorCollection.
+	/// Summary description for InterceptorReferenceCollection.
 	/// </summary>
-	public class InterceptorCollection : ReadOnlyCollectionBase
+	public class InterceptorReferenceCollection : ReadOnlyCollectionBase
 	{
-		public void Add(IMethodInterceptor interceptor)
+		public void Add(InterceptorReference interceptor)
 		{
 			InnerList.Add( interceptor );
 		}
@@ -33,9 +33,9 @@ namespace Castle.Model
 			get { return Count != 0; }
 		}
 
-		public IMethodInterceptor[] ToArray()
-		{
-			return (IMethodInterceptor[]) InnerList.ToArray( typeof(IMethodInterceptor) );
-		}
+//		public IMethodInterceptor[] ToArray()
+//		{
+//			return (IMethodInterceptor[]) InnerList.ToArray( typeof(IMethodInterceptor) );
+//		}
 	}
 }

@@ -38,9 +38,9 @@ namespace Castle.Windsor.Proxy
 			_generator = new ProxyGenerator();
 		}
 
-		public object Create(ComponentModel mode, params object[] constructorArguments)
+		public object Create(IKernel kernel, ComponentModel model, params object[] constructorArguments)
 		{
-			IMethodInterceptor[] interceptors = mode.Interceptors.ToArray();
+			IMethodInterceptor[] interceptors = ObtainInterceptors(kernel, model);
 			IInterceptor interceptorChain = new InterceptorChain(interceptors);
 
 			// This is a hack to avoid unnecessary object creations
@@ -53,8 +53,53 @@ namespace Castle.Windsor.Proxy
 			context.Invocation = typeof(IMethodInvocation);
 			context.SameClassInvocation = typeof(DefaultMethodInvocation);
 
-			return _generator.CreateCustomClassProxy(mode.Implementation, 
+			return _generator.CreateCustomClassProxy(model.Implementation, 
 				interceptorChain, context, constructorArguments);
+		}
+
+		protected IMethodInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model)
+		{
+			IMethodInterceptor[] interceptors = new IMethodInterceptor[model.Interceptors.Count];
+			int index = 0;
+
+			foreach(InterceptorReference interceptorRef in model.Interceptors)
+			{
+				IHandler handler = null;
+
+				if (interceptorRef.ReferenceType == InterceptorReferenceType.Interface)
+				{
+					handler = kernel.GetHandler( interceptorRef.ServiceType );
+				}
+				else
+				{
+					handler = kernel.GetHandler( interceptorRef.ComponentKey );
+				}
+
+				if (handler == null)
+				{
+					// This shoul be virtually impossible to happen
+					// Seriously!
+					throw new ApplicationException("The interceptor could not be resolved");
+				}
+
+				try
+				{
+					IMethodInterceptor interceptor = (IMethodInterceptor) handler.Resolve();
+					
+					interceptors[index++] = interceptor;
+				}
+				catch(InvalidCastException)
+				{
+					String message = String.Format(
+						"An interceptor registered for {0} doesnt implement " + 
+						"the IMethodInterceptor interface", 
+						model.Name);
+
+					throw new ApplicationException(message);
+				}
+			}
+
+			return interceptors;
 		}
 	}
 }

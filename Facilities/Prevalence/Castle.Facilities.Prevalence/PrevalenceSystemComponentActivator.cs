@@ -1,4 +1,3 @@
-using Bamboo.Prevalence;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +15,8 @@ using Bamboo.Prevalence;
 namespace Castle.Facilities.Prevalence
 {
 	using System;
+
+	using Bamboo.Prevalence;
 
 	using Castle.Model;
 

@@ -16,6 +16,8 @@ namespace Castle.MicroKernel.Proxy
 {
 	using System;
 
+	using Castle.Model;
+
 	/// <summary>
 	/// This is a placeholder implementation of <see cref="IProxyFactory"/>.
 	/// </summary>
@@ -32,10 +34,11 @@ namespace Castle.MicroKernel.Proxy
 	{
 		#region IProxyFactory Members
 
-		public object Create(Castle.Model.ComponentModel mode, params object[] constructorArguments)
+		public object Create(IKernel kernel, ComponentModel mode, params object[] constructorArguments)
 		{
 			throw new NotImplementedException(
-				"You must supply an implementation of IProxyFactory to use interceptors in the Microkernel");
+				"You must supply an implementation of IProxyFactory " + 
+				"to use interceptors in the Microkernel");
 		}
 
 		#endregion

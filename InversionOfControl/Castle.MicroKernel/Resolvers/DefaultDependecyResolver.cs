@@ -19,6 +19,7 @@ namespace Castle.MicroKernel.Resolvers
 	using Castle.Model;
 
 	using Castle.MicroKernel.SubSystems.Conversion;
+	using Castle.MicroKernel.Util;
 
 	/// <summary>
 	/// Summary description for DefaultDependecyResolver.
@@ -118,16 +119,14 @@ namespace Castle.MicroKernel.Resolvers
 		/// <returns></returns>
 		protected virtual String ExtractComponentKey(String keyValue, String name)
 		{
-			// Constraints:
-			if (keyValue == null || keyValue.Length <= 3 || 
-				!keyValue.StartsWith("#{") || !keyValue.EndsWith("}"))
+			if (!ReferenceExpressionUtil.IsReference(keyValue))
 			{
 				throw new DependecyResolverException( 
 					String.Format("Key invalid for parameter {0}. " + 
 					"Thus the kernel was unable to override the service dependency", name) );
 			}
 
-			return keyValue.Substring( 2, keyValue.Length - 3 );
+			return ReferenceExpressionUtil.ExtractComponentKey(keyValue);
 		}
 	}
 }

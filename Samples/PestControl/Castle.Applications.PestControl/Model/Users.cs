@@ -58,7 +58,10 @@ namespace Castle.Applications.PestControl.Model
 	{
 		public void Add(User user)
 		{
-			InnerList.Add(user);
+			lock(this.InnerList.SyncRoot)
+			{
+				InnerList.Add(user);
+			}
 		}
 	}
 }

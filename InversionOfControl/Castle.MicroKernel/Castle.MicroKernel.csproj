@@ -249,6 +249,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ModelBuilder\Inspectors\InterceptorInspector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ModelBuilder\Inspectors\LifecycleModelInspector.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -355,6 +360,11 @@
                 />
                 <File
                     RelPath = "SubSystems\Conversion\TypeNameConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\ReferenceExpressionUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

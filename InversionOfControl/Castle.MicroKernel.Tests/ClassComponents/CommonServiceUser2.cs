@@ -12,33 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Model
+namespace Castle.MicroKernel.Tests.ClassComponents
 {
 	using System;
 
 	/// <summary>
-	/// The Prevalence System for the PestControl
+	/// Summary description for CommonServiceUser2.
 	/// </summary>
-	[Serializable]
-	public class PestControlModel
+	public class CommonServiceUser2
 	{
-		private UserCollection users;
-		private ProjectCollection projects;
+		private ICommon _common;
 
-		public PestControlModel()
+		public CommonServiceUser2()
 		{
-			users = new UserCollection();
-			projects = new ProjectCollection();
 		}
 
-		public UserCollection Users
+		public ICommon CommonService
 		{
-			get { return users; }
-		}
-
-		public ProjectCollection Projects
-		{
-			get { return projects; }
+			get { return _common; }
+			set { _common = value; }
 		}
 	}
 }

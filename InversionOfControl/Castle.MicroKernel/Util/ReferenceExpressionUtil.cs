@@ -12,27 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.MicroKernel.Util
 {
 	using System;
 
 	/// <summary>
-	/// Summary description for CastleComponentAttribute.
+	/// Summary description for ReferenceExpressionUtil.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class CastleComponentAttribute : System.Attribute
+	internal abstract class ReferenceExpressionUtil
 	{
-		LifestyleType _lifestyle; 
-		ActivationType _activation;
-
-		public CastleComponentAttribute() : this(LifestyleType.Undefined, ActivationType.Undefined)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static bool IsReference(String value)
 		{
+			if (value == null || value.Length <= 3 || 
+				!value.StartsWith("#{") || !value.EndsWith("}"))
+			{
+				return false;
+			}
+
+			return true;
 		}
 
-		public CastleComponentAttribute(LifestyleType lifestyle, ActivationType activation)
+		public static String ExtractComponentKey(String value)
 		{
-			_lifestyle = lifestyle;
-			_activation = activation;
+			if (IsReference(value))
+			{
+				return value.Substring( 2, value.Length - 3 );
+			}
+
+			return null;
 		}
 	}
 }

@@ -135,6 +135,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ClassComponents\CommonServiceUser2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ClassComponents\CustomerImpl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

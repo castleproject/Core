@@ -12,33 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Model
+namespace Castle.Windsor.Tests.Components
 {
 	using System;
 
+	using Castle.Model;
+
 	/// <summary>
-	/// The Prevalence System for the PestControl
+	/// Summary description for CalculatorServiceWithAttributes.
 	/// </summary>
-	[Serializable]
-	public class PestControlModel
+	[Interceptor( typeof(ResultModifierInterceptor) )]
+	public class CalculatorServiceWithAttributes
 	{
-		private UserCollection users;
-		private ProjectCollection projects;
-
-		public PestControlModel()
+		public CalculatorServiceWithAttributes()
 		{
-			users = new UserCollection();
-			projects = new ProjectCollection();
 		}
 
-		public UserCollection Users
+		public virtual int Sum(int x, int y)
 		{
-			get { return users; }
-		}
-
-		public ProjectCollection Projects
-		{
-			get { return projects; }
+			return x + y;
 		}
 	}
 }

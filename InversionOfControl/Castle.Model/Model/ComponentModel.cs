@@ -70,21 +70,54 @@ namespace Castle.Model
 	/// </summary>
 	public sealed class ComponentModel
 	{
+		/// <summary>Name (key) of the component</summary>
 		private String _name;
+
+		/// <summary>Service exposed</summary>
 		private Type _service;
+
+		/// <summary>Implementation for the service</summary>
 		private Type _implementation;
+
+		/// <summary>Extended properties</summary>
 		private IDictionary _extended;
+
+		/// <summary>Lifestyle for the component</summary>
 		private LifestyleType _lifestyleType;
+
+		/// <summary>Custom lifestyle, if any</summary>
 		private Type _customLifestyle;
+
+		/// <summary>Custom activator, if any</summary>
 		private Type _customComponentActivator;
 
+		/// <summary>Dependencies the kernel must resolve</summary>
+		private DependencyModelCollection _dependencies;
+		
+		/// <summary>All available constructors</summary>
 		private ConstructorCandidateCollection _constructors;
+		
+		/// <summary>All potential properties that can be setted by the kernel</summary>
 		private PropertySetCollection _properties;
+		
+		/// <summary>Steps of lifecycle</summary>
 		private LifecycleStepCollection _lifecycleSteps;
-		private InterceptorCollection _interceptors;
+		
+		/// <summary>External parameters</summary>
 		private ParameterModelCollection _parameters;
+		
+		/// <summary>Configuration node associated</summary>
 		private IConfiguration _configuration;
+		
+		/// <summary>Interceptors associated</summary>
+		private InterceptorReferenceCollection _interceptors;
 
+		/// <summary>
+		/// Constructs a ComponentModel
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="service"></param>
+		/// <param name="implementation"></param>
 		public ComponentModel(String name, Type service, Type implementation)
 		{
 			_name = name;
@@ -96,10 +129,14 @@ namespace Castle.Model
 			_properties = new PropertySetCollection();
 			_parameters = new ParameterModelCollection();
 			_constructors = new ConstructorCandidateCollection();
-			_interceptors = new InterceptorCollection();
+			_interceptors = new InterceptorReferenceCollection();
 			_lifecycleSteps = new LifecycleStepCollection();
+			_dependencies = new DependencyModelCollection();
 		}
 
+		/// <summary>
+		/// Sets or returns the component key
+		/// </summary>
 		public String Name
 		{
 			get { return _name; }
@@ -163,7 +200,7 @@ namespace Castle.Model
 			set { _customComponentActivator = value; }
 		}
 
-		public InterceptorCollection Interceptors
+		public InterceptorReferenceCollection Interceptors
 		{
 			get { return _interceptors; }
 		}
@@ -171,6 +208,16 @@ namespace Castle.Model
 		public ParameterModelCollection Parameters
 		{
 			get { return _parameters; }
+		}
+
+		/// <summary>
+		/// Dependencies are kept within constructors and
+		/// properties. Others dependencies must be 
+		/// registered here, so the kernel can check them
+		/// </summary>
+		public DependencyModelCollection Dependencies
+		{
+			get { return _dependencies; }
 		}
 	}
 }

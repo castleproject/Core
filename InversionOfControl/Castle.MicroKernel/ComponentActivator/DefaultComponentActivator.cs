@@ -44,7 +44,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			if (Model.Interceptors.HasInterceptors)
 			{
-				instance = Kernel.ProxyFactory.Create(Model, arguments);
+				instance = Kernel.ProxyFactory.Create(Kernel, Model, arguments);
 			}
 			else
 			{

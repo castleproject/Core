@@ -123,6 +123,8 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "Model\Commands\" />
+                <Folder RelPath = "Services\SourceControl\SVN\" />
             </Include>
         </Files>
     </CSHARP>
