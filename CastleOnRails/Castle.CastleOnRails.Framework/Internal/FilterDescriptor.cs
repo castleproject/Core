@@ -12,23 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
-	public class HomeController : Controller
+	public class FilterDescriptor
 	{
-		public HomeController()
+		private FilterAttribute _attribute;
+		private IFilter _filterInstance;
+
+		public FilterDescriptor( FilterAttribute attribute )
 		{
+			_attribute = attribute;
 		}
 
-		public void Index()
+		public Type FilterType
 		{
+			get { return _attribute.FilterType; }
 		}
 
-		public void Other()
+		public ExecuteEnum When
 		{
-			RenderView("display");
+			get { return _attribute.When; }
+		}
+
+		public bool ExecuteFilterBefore
+		{
+			get { return (When & ExecuteEnum.Before) != 0; }
+		}
+
+		public bool ExecuteFilterAfter
+		{
+			get { return (When & ExecuteEnum.After) != 0; }
+		}
+
+		public IFilter FilterInstance
+		{
+			get { return _filterInstance; }
+			set { _filterInstance = value; }
 		}
 	}
 }

@@ -31,6 +31,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 		private String _requestType;
 		private RequestImpl _request = new RequestImpl();
 		private ResponseImpl _response = new ResponseImpl();
+		private Exception _lastException;
 
 		public RailsEngineContextImpl(String url) : this(url, "GET")
 		{
@@ -53,6 +54,12 @@ namespace Castle.CastleOnRails.Framework.Tests
 		}
 
 		#region IRailsEngineContext
+
+		public Exception LastException
+		{
+			get { return _lastException; }
+			set { _lastException = value; }
+		}
 
 		public String RequestType
 		{
@@ -107,6 +114,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 		public IPrincipal CurrentUser
 		{
 			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 
 		
@@ -124,7 +132,12 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 		#region IRequest Members
 
-		public string this[string key]
+		public bool IsLocal
+		{
+			get { return true; }
+		}
+
+		public String this[string key]
 		{
 			get { return _params[key]; }
 		}

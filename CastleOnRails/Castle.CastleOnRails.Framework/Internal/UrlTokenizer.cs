@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine
+namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
@@ -47,35 +47,8 @@ namespace Castle.CastleOnRails.Engine
 			String controller = parts[ parts.Length - 2 ];
 
 
-			return new UrlInfo(controller, action);
+			return new UrlInfo(url, null, controller, action);
 		}
 	}
 
-	public class UrlInfo
-	{
-		private String _area;
-		private String _controller;
-		private String _action;
-
-		public UrlInfo(String controller, String action)
-		{
-			_controller = controller;
-			_action = action;
-		}
-
-		public String Controller
-		{
-			get { return _controller; }
-		}
-
-		public String Action
-		{
-			get { return _action; }
-		}
-
-		public string Area
-		{
-			get { return _area; }
-		}
-	}
 }

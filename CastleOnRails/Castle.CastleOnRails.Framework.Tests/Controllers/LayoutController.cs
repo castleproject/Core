@@ -16,19 +16,19 @@ namespace Castle.CastleOnRails.Framework.Tests.Controllers
 {
 	using System;
 
-	public class HomeController : Controller
+	[Layout("general")]
+	public class LayoutController : Controller
 	{
-		public HomeController()
-		{
-		}
-
 		public void Index()
 		{
 		}
 
-		public void Other()
+		public void Save()
 		{
-			RenderView("display");
+		}
+	
+		public void Update()
+		{
 		}
 	}
 }

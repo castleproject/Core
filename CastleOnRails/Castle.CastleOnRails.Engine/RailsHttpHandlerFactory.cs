@@ -21,11 +21,7 @@ namespace Castle.CastleOnRails.Engine
 	using Castle.CastleOnRails.Framework;
 
 	using Castle.CastleOnRails.Engine.Configuration;
-	using Castle.CastleOnRails.Engine.ControllerFactory;
 
-	/// <summary>
-	/// Summary description for RailsHttpHandlerFactory.
-	/// </summary>
 	public class RailsHttpHandlerFactory : IHttpHandlerFactory
 	{
 		private IViewEngine _viewEngine;
@@ -58,14 +54,14 @@ namespace Castle.CastleOnRails.Engine
 			}
 			else
 			{
-				ControllersCache cache = new ControllersCache();
-
-				if (_config != null)
-				{
-					cache.Inspect( _config.ControllersAssembly );
-				}
-				
-				_controllerFactory = new DefaultControllerFactory(cache);
+//				ControllersCache cache = new ControllersCache();
+//
+//				if (_config != null)
+//				{
+//					cache.Inspect( _config.ControllersAssembly );
+//				}
+//				
+//				_controllerFactory = new DefaultControllerFactory(cache);
 			}
 		}
 

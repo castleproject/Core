@@ -12,23 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine
+namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
-	using System.Runtime.Serialization;
 
-	/// <summary>
-	/// Summary description for UrlTokenizerException.
-	/// </summary>
-	[Serializable]
-	public class UrlTokenizerException : Exception
+	public class UrlInfo
 	{
-		public UrlTokenizerException(string message) : base(message)
+		private readonly String _urlRaw;
+		private readonly String _area;
+		private readonly String _controller;
+		private readonly String _action;
+
+		public UrlInfo(String urlRaw, String area, String controller, String action)
 		{
+			_controller = controller;
+			_area = area;
+			_action = action;
+			_urlRaw = urlRaw;
 		}
 
-		public UrlTokenizerException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public String Controller
 		{
+			get { return _controller; }
+		}
+
+		public String Action
+		{
+			get { return _action; }
+		}
+
+		public String Area
+		{
+			get { return _area; }
+		}
+
+		public String UrlRaw
+		{
+			get { return _urlRaw; }
 		}
 	}
 }

@@ -99,16 +99,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ControllersCache.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IControllerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ProcessEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -125,16 +115,6 @@
                 />
                 <File
                     RelPath = "RailsHttpHandlerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UrlTokenizer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UrlTokenizerException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -165,11 +145,6 @@
                 />
                 <File
                     RelPath = "Configuration\RailsSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ControllerFactory\DefaultControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

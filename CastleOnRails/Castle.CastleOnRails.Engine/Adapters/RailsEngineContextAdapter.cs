@@ -33,6 +33,8 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		private String _requestType;
 		private RequestAdapter _request;
 		private ResponseAdapter _response;
+		private IPrincipal _user;
+		private Exception _lastException;
 
 		public RailsEngineContextAdapter(HttpContext context, String url, String requestType)
 		{
@@ -41,6 +43,12 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			_requestType = requestType;
 			_request = new RequestAdapter(context.Request);
 			_response = new ResponseAdapter(context.Response);
+		}
+
+		public Exception LastException
+		{
+			get { return _lastException; }
+			set { _lastException = value; }
 		}
 
 		public String RequestType
@@ -95,7 +103,18 @@ namespace Castle.CastleOnRails.Engine.Adapters
 
 		public IPrincipal CurrentUser
 		{
-			get { return _context.User; }
+			get
+			{
+				if (_user == null)
+				{
+					_user = _context.User;
+				}
+				return _user;
+			}
+			set
+			{
+				_user = value;
+			}
 		}
 	}
 }

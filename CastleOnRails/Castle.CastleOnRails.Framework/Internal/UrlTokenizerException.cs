@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
+	using System.Runtime.Serialization;
 
-	public class HomeController : Controller
+	/// <summary>
+	/// Summary description for UrlTokenizerException.
+	/// </summary>
+	[Serializable]
+	public class UrlTokenizerException : Exception
 	{
-		public HomeController()
+		public UrlTokenizerException(string message) : base(message)
 		{
 		}
 
-		public void Index()
+		public UrlTokenizerException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
-		}
-
-		public void Other()
-		{
-			RenderView("display");
 		}
 	}
 }

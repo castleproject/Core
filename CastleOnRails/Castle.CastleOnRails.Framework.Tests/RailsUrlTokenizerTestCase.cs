@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace RailsEngineTest
+namespace Castle.CastleOnRails.Framework.Tests
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Castle.CastleOnRails.Engine;
+	using Castle.CastleOnRails.Framework.Internal;
 
 	/// <summary>
 	/// Summary description for RailsUrlTokenizerTestCase.

@@ -42,6 +42,8 @@ namespace Castle.CastleOnRails.Framework
 
 		void Transfer( String path, bool preserveForm );
 
-		IPrincipal CurrentUser { get; }
+		IPrincipal CurrentUser { get; set; }
+
+		Exception LastException { get; set; }
 	}
 }

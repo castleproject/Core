@@ -37,7 +37,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			viewColl.Add(name, contents);
 		}
 
-		private ViewCollection ObtainViewCollection(string path)
+		protected ViewCollection ObtainViewCollection(string path)
 		{
 			ViewCollection coll = _paths[path] as ViewCollection;
 
@@ -58,7 +58,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			set { throw new NotImplementedException(); }
 		}
 
-		public void Process(IRailsEngineContext context, Controller controller, String viewName)
+		public virtual void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			String path = PathFrom(viewName);
 			String view = ViewFrom(viewName);
@@ -74,8 +74,10 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 			context.Response.Write(contents);
 		}
+		
+		#endregion
 
-		private string ViewFrom(string name)
+		protected string ViewFrom(string name)
 		{
 			int index = name.LastIndexOf('/');
 			if (index == -1) index = name.LastIndexOf('\\');
@@ -83,15 +85,46 @@ namespace Castle.CastleOnRails.Framework.Tests
 			return name.Substring(index + 1);
 		}
 
-		private string PathFrom(string name)
+		protected string PathFrom(string name)
 		{
 			int index = name.LastIndexOf('/');
 			if (index == -1) index = name.LastIndexOf('\\');
 
 			return name.Substring(0, index);
 		}
+	}
 
-		#endregion
+	public class FakeViewEngineWithLayoutSupport : FakeViewEngine
+	{
+		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
+		{
+			String layoutContents = null;
+
+			if (controller.LayoutName != null)
+			{
+				ViewCollection viewLayoutsColl = ObtainViewCollection("layouts");
+				layoutContents = viewLayoutsColl[controller.LayoutName];
+			}
+
+			String path = PathFrom(viewName);
+			String view = ViewFrom(viewName);
+
+			ViewCollection viewColl = ObtainViewCollection(path);
+
+			String contents = viewColl[view];
+
+			if (contents == null)
+			{
+				contents = "view not found!";
+			}
+
+			if (layoutContents != null)
+			{
+				contents = String.Format(layoutContents, contents);
+			}
+
+			context.Response.Write(contents);
+		}
 	}
 
 	public class ViewCollection : NameObjectCollectionBase

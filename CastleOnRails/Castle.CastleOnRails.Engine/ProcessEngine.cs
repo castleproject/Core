@@ -17,6 +17,7 @@ namespace Castle.CastleOnRails.Engine
 	using System;
 
 	using Castle.CastleOnRails.Framework;
+	using Castle.CastleOnRails.Framework.Internal;
 
 	/// <summary>
 	/// Summary description for ProcessEngine.
@@ -25,23 +26,32 @@ namespace Castle.CastleOnRails.Engine
 	{
 		private IControllerFactory _controllerFactory;
 		private IViewEngine _viewEngine;
+		private IFilterFactory _filterFactory;
 
-		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine)
+		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine) : 
+			this(controllerFactory, viewEngine, new DefaultFilterFactory())
+		{
+		}
+
+		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine, 
+			IFilterFactory filterFactory)
 		{
 			_controllerFactory = controllerFactory;
 			_viewEngine = viewEngine;
+			_filterFactory = filterFactory;
 		}
 
 		public virtual void Process( IRailsEngineContext context )
 		{
 			UrlInfo info = ExtractUrlInfo(context);
 
-			Controller controller = _controllerFactory.GetController( info.Controller );
+			Controller controller = _controllerFactory.GetController( info );
 
 			try
 			{
 				controller.Process( 
-					context, info.Area, info.Controller, info.Action, _viewEngine );
+					context, _filterFactory, 
+					info.Area, info.Controller, info.Action, _viewEngine );
 			}
 			finally
 			{

@@ -26,9 +26,9 @@ namespace Castle.CastleOnRails.Engine
 	/// </summary>
 	public class RailsHttpHandler : ProcessEngine, IHttpHandler
 	{
-		private HttpContext _context;
+//		private HttpContext _context;
 		private String _url; 
-		private String _pathTranslated;
+//		private String _pathTranslated;
 		private String _requestType;
 
 		public RailsHttpHandler( IViewEngine viewEngine, IControllerFactory controllerFactory, 

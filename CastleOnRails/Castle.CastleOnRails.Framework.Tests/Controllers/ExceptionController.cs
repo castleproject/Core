@@ -12,40 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.ControllerFactory
+namespace Castle.CastleOnRails.Framework.Tests.Controllers
 {
 	using System;
 
 	using Castle.CastleOnRails.Framework;
 
-	/// <summary>
-	/// Summary description for DefaultControllerFactory.
-	/// </summary>
-	public class DefaultControllerFactory : IControllerFactory
+	[Rescue("generalrescue")]
+	public class ExceptionController : Controller
 	{
-		private ControllersCache _cache;
-
-		public DefaultControllerFactory(ControllersCache cache)
+		public void Index()
 		{
-			_cache = cache;
+			throw new ApplicationException("Error on index call");
 		}
 
-		public Controller GetController(String name)
+		[Rescue("saverescue")]
+		public void Save()
 		{
-			Type controllerType = _cache.GetController( name );
-
-			if (controllerType == null)
-			{
-				throw new RailsException( String.Format("Could not find controller for {0}",
-					name) );
-			}
-
-			return (Controller) Activator.CreateInstance( controllerType );
+			throw new ApplicationException("Error on Save call");
 		}
 
-		public void Release(Controller controller)
+		[Rescue("updaterescue")]
+		public void Update()
 		{
-			
+			throw new ApplicationException("Error on Update call");
 		}
 	}
 }

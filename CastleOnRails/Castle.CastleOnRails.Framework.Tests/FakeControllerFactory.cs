@@ -18,22 +18,36 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 	using Castle.CastleOnRails.Engine;
 
+	using Castle.CastleOnRails.Framework.Internal;
 	using Castle.CastleOnRails.Framework.Tests.Controllers;
 
-	/// <summary>
-	/// Summary description for FakeControllerFactory.
-	/// </summary>
 	public class FakeControllerFactory : IControllerFactory
 	{
 		public FakeControllerFactory()
 		{
 		}
 
-		public Controller GetController(String name)
+		public Controller GetController(UrlInfo info)
 		{
-			if ("home".Equals(name))
+			if ("home".Equals(info.Controller))
 			{
 				return new HomeController();
+			}
+			else if ("filtered".Equals(info.Controller))
+			{
+				return new FilteredController();
+			}
+			else if ("filtered2".Equals(info.Controller))
+			{
+				return new Filtered2Controller();
+			}
+			else if ("exception".Equals(info.Controller))
+			{
+				return new ExceptionController();
+			}
+			else if ("layout".Equals(info.Controller))
+			{
+				return new LayoutController();
 			}
 
 			throw new RailsException("Unknown controller");

@@ -12,23 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
-	public class HomeController : Controller
+	public interface IFilterFactory
 	{
-		public HomeController()
-		{
-		}
+		IFilter Create( Type filterType );
 
-		public void Index()
-		{
-		}
-
-		public void Other()
-		{
-			RenderView("display");
-		}
+		void Release( IFilter filter );
 	}
 }

@@ -16,19 +16,46 @@ namespace Castle.CastleOnRails.Framework.Tests.Controllers
 {
 	using System;
 
-	public class HomeController : Controller
+	using NUnit.Framework;
+
+	[Filter( ExecuteEnum.Before|ExecuteEnum.After, typeof(MyFilter) )]
+	public class FilteredController : Controller
 	{
-		public HomeController()
+		public FilteredController()
 		{
 		}
 
+		[SkipFilter]
 		public void Index()
 		{
 		}
 
-		public void Other()
+		public void Save()
 		{
-			RenderView("display");
+		}
+
+		public void Update()
+		{
+		}
+	}
+
+	public class MyFilter : IFilter
+	{
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		{
+			Assert.IsNotNull(context);
+			Assert.IsNotNull(controller);
+
+			if (exec == ExecuteEnum.Before)
+			{
+				context.Response.Write("(before)");
+			}
+			else
+			{
+				context.Response.Write("(after)");
+			}
+
+			return true; // Continue execution
 		}
 	}
 }

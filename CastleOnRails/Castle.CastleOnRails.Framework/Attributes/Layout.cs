@@ -12,23 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
-	public class HomeController : Controller
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
+	public class LayoutAttribute : Attribute
 	{
-		public HomeController()
+		private String _layoutName;
+
+		public LayoutAttribute(String layoutName)
 		{
+			if (layoutName == null || layoutName.Length == 0) 
+				throw new ArgumentNullException("layoutName");
+			_layoutName = layoutName;
 		}
 
-		public void Index()
+		public String LayoutName
 		{
-		}
-
-		public void Other()
-		{
-			RenderView("display");
+			get { return _layoutName; }
 		}
 	}
 }

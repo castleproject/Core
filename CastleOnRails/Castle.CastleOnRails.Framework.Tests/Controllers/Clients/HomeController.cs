@@ -12,23 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework.Tests.Controllers.Clients
 {
 	using System;
 
+	/// <summary>
+	/// Summary description for HomeController.
+	/// </summary>
+	[ControllerDetails(Area="clients")]
 	public class HomeController : Controller
 	{
 		public HomeController()
 		{
-		}
-
-		public void Index()
-		{
-		}
-
-		public void Other()
-		{
-			RenderView("display");
 		}
 	}
 }

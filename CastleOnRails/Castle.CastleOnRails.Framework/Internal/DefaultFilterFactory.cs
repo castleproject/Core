@@ -12,19 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine
+namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
-
-	/// <summary>
-	/// Summary description for IControllerFactory.
-	/// </summary>
-	public interface IControllerFactory
+	public class DefaultFilterFactory : IFilterFactory
 	{
-		Controller GetController(String name);
+		public virtual IFilter Create(Type filterType)
+		{
+			return (IFilter) Activator.CreateInstance(filterType);
+		}
 
-		void Release(Controller controller);
+		public virtual void Release(IFilter filter)
+		{
+			if (filter is IDisposable)
+			{
+				(filter as IDisposable).Dispose();
+			}
+		}
 	}
 }

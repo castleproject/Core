@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Specialized;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,48 +12,37 @@ using System.Collections.Specialized;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Adapters
+namespace Castle.CastleOnRails.Framework
 {
 	using System;
-	using System.Web;
-
-	using Castle.CastleOnRails.Framework;
 
 	/// <summary>
-	/// Summary description for RequestAdapter.
+	/// Summary description for ControllerDetailsAttribute.
 	/// </summary>
-	public class RequestAdapter : IRequest
+	[AttributeUsage(AttributeTargets.Class)]
+	public class ControllerDetailsAttribute : Attribute
 	{
-		private HttpRequest _request;
+		private String _name;
+		private String _area;
 
-		public RequestAdapter(HttpRequest request)
+		public ControllerDetailsAttribute()
 		{
-			_request = request;
 		}
 
-		public bool IsLocal 
-		{ 
-			get { return _request.Url.IsLoopback; } 
+		public ControllerDetailsAttribute(String name)
+		{
+			_name = name;
 		}
 
-		public byte[] BinaryRead(int count)
+		public String Name
 		{
-			return _request.BinaryRead(count);
+			get { return _name; }
 		}
 
-		public String this[String key]
+		public String Area
 		{
-			get { return _request[key]; }
-		}
-
-		public IDictionary Files
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public NameValueCollection Params
-		{
-			get { return _request.Params; }
+			get { return _area; }
+			set { _area = value; }
 		}
 	}
 }

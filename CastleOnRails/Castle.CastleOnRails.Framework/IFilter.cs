@@ -12,23 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
-	public class HomeController : Controller
+	[Flags]
+	public enum ExecuteEnum
 	{
-		public HomeController()
-		{
-		}
+		Before = 0x01,
+		After = 0x02
+	}
 
-		public void Index()
-		{
-		}
-
-		public void Other()
-		{
-			RenderView("display");
-		}
+	public interface IFilter
+	{
+		bool Perform( ExecuteEnum exec, IRailsEngineContext context, Controller controller );
 	}
 }

@@ -12,23 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
-	public class HomeController : Controller
+	[AttributeUsage(AttributeTargets.Method)]
+	public class SkipFilter : Attribute
 	{
-		public HomeController()
+	}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public class FilterAttribute : Attribute
+	{
+		private Type _filterType;
+		private ExecuteEnum _when;
+
+		public FilterAttribute( ExecuteEnum when, Type filterType )
 		{
+			if (!typeof(IFilter).IsAssignableFrom(filterType))
+			{
+				throw new ArgumentException("The specified filter does not implement IFilter");
+			}
+
+			_filterType = filterType;
+			_when = when;
 		}
 
-		public void Index()
+		public Type FilterType
 		{
+			get { return _filterType; }
 		}
 
-		public void Other()
+		public ExecuteEnum When
 		{
-			RenderView("display");
+			get { return _when; }
 		}
 	}
 }

@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine.WindsorExtension", "Castle.CastleOnRails.Engine.WindsorExtension\Castle.CastleOnRails.Engine.WindsorExtension.csproj", "{6C51A1E3-7F20-4696-BFD6-829134678341}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Framework", "Castle.CastleOnRails.Framework\Castle.CastleOnRails.Framework.csproj", "{EC393863-333E-49CE-94A6-654B9F323954}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -37,10 +33,6 @@ Global
 		{12A3B0DA-079D-4337-AF70-798596FDB9FE}.Debug.Build.0 = Debug|.NET
 		{12A3B0DA-079D-4337-AF70-798596FDB9FE}.Release.ActiveCfg = Release|.NET
 		{12A3B0DA-079D-4337-AF70-798596FDB9FE}.Release.Build.0 = Release|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.ActiveCfg = Debug|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.Build.0 = Debug|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.ActiveCfg = Release|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.Build.0 = Release|.NET
 		{EC393863-333E-49CE-94A6-654B9F323954}.Debug.ActiveCfg = Debug|.NET
 		{EC393863-333E-49CE-94A6-654B9F323954}.Debug.Build.0 = Debug|.NET
 		{EC393863-333E-49CE-94A6-654B9F323954}.Release.ActiveCfg = Release|.NET

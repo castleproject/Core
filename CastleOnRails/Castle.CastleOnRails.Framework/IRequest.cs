@@ -18,11 +18,10 @@ namespace Castle.CastleOnRails.Framework
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	/// <summary>
-	/// Summary description for IRequest.
-	/// </summary>
 	public interface IRequest
 	{
+		bool IsLocal { get; }
+
 		byte[] BinaryRead(int count);
 
 		String this [String key] { get; }

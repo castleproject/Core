@@ -12,23 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
-	public class HomeController : Controller
+	/// <summary>
+	/// Summary description for IControllerFactory.
+	/// </summary>
+	public interface IControllerFactory
 	{
-		public HomeController()
-		{
-		}
+		Controller GetController(Internal.UrlInfo urlInfo);
 
-		public void Index()
-		{
-		}
-
-		public void Other()
-		{
-			RenderView("display");
-		}
+		void Release(Controller controller);
 	}
 }

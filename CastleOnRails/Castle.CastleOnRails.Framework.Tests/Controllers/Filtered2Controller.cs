@@ -16,19 +16,22 @@ namespace Castle.CastleOnRails.Framework.Tests.Controllers
 {
 	using System;
 
-	public class HomeController : Controller
-	{
-		public HomeController()
-		{
-		}
+	using NUnit.Framework;
 
+	[Filter( ExecuteEnum.Before, typeof(MyFilter) )]
+	public class Filtered2Controller : Controller
+	{
+		[SkipFilter]
 		public void Index()
 		{
 		}
 
-		public void Other()
+		public void Save()
 		{
-			RenderView("display");
+		}
+
+		public void Update()
+		{
 		}
 	}
 }
