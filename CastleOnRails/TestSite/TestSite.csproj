@@ -207,6 +207,22 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "views\registration\actionto.aspx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\registration\actionto.aspx.cs"
+                    DependentUpon = "actionto.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\registration\actionto.aspx.resx"
+                    DependentUpon = "actionto.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "views\registration\index.aspx"
                     BuildAction = "Content"
                 />

@@ -56,5 +56,11 @@ namespace TestSite.Controllers
 		{
 			
 		}
+
+		public void ActionTo()
+		{
+			
+		}
+
 	}
 }

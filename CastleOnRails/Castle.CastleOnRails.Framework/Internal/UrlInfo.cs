@@ -25,33 +25,76 @@ namespace Castle.CastleOnRails.Framework.Internal
 		private readonly String _area;
 		private readonly String _controller;
 		private readonly String _action;
+		private readonly String _extension;
 
-		public UrlInfo(String urlRaw, String area, String controller, String action)
+		public UrlInfo(String urlRaw, String area, String controller, String action, String extension)
 		{
 			_controller = controller;
 			_area = area;
 			_action = action;
 			_urlRaw = urlRaw;
+			_extension = extension;
 		}
 
 		public String Controller
 		{
-			get { return _controller; }
+			get
+			{
+				return _controller;
+			}
 		}
 
 		public String Action
 		{
-			get { return _action; }
+			get
+			{
+				return _action;
+			}
 		}
 
 		public String Area
 		{
-			get { return _area; }
+			get
+			{
+				return _area;
+			}
 		}
 
 		public String UrlRaw
 		{
-			get { return _urlRaw; }
+			get
+			{
+				return _urlRaw;
+			}
+		}
+
+		public string Extension
+		{
+			get
+			{
+				return _extension;
+			}
+		}
+
+		/// <summary>
+		/// Creates the rails Url.
+		/// </summary>
+		/// <param name="controller"></param>
+		/// <param name="action"></param>
+		public static string GetRailsUrl(String controller, String action, String extension)
+		{
+			return String.Format("../{0}/{1}.{2}", controller, action, extension);
+		}
+
+		/// <summary>
+		/// Creates the rails Url.
+		/// </summary>
+		/// <param name="area"></param>
+		/// <param name="controller"></param>
+		/// <param name="action"></param>
+		public static string GetRailsUrl(String area, String controller, String action, String extension)
+		{
+			return String.Format("../{0}/{1}/{2}.{3}", area, controller, action, extension);
 		}
 	}
 }

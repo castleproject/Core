@@ -61,10 +61,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 				}
 				else
 				{
-					if(viewName.Equals(httpContext.Items[Controller.OriginalViewKey]))
-					{
-						return;
-					}
+					if (IsTheSameView(httpContext, viewName)) return;
 				}
 			}
 
@@ -87,6 +84,14 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 			ProccessPage(controller, childPage, httpContext);
 
 			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);		
+		}
+
+		private bool IsTheSameView(HttpContext httpContext, string viewName)
+		{
+			string original = ((string) httpContext.Items[Controller.OriginalViewKey]);
+			string actual = viewName;
+
+			return String.Compare(original, actual, true) == 0;
 		}
 
 		private void ProccessPage(Controller controller, IHttpHandler page, HttpContext httpContext)

@@ -40,7 +40,7 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			_url = url;
 			_context = context;
 			_request = new RequestAdapter(context.Request);
-			_response = new ResponseAdapter(context.Response);
+			_response = new ResponseAdapter(context.Response, _url);
 		}
 
 		public Exception LastException

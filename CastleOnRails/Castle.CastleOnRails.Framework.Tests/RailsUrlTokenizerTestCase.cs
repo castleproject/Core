@@ -34,6 +34,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
 			Assert.AreEqual( String.Empty, info.Area );
+			Assert.AreEqual( "rails", info.Extension );
 		}
 
 		[Test]
@@ -44,6 +45,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
 			Assert.AreEqual( String.Empty, info.Area );
+			Assert.AreEqual( "something", info.Extension );
 		}
 
 		[Test]

@@ -31,38 +31,40 @@ namespace Castle.CastleOnRails.Framework.Tests
 		[Test]
 		public void ControllerHierarchy()
 		{
+			string extension = "rails";
+
 			DefaultControllerFactory factory = new DefaultControllerFactory();
 			factory.Inspect( Assembly.GetExecutingAssembly() );
-
-			Controller controller = factory.GetController( new UrlInfo("", "", "home", "") );
+			
+			Controller controller = factory.GetController( new UrlInfo("", "", "home", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.CastleOnRails.Framework.Tests.Controllers.HomeController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "clients", "home", "") );
+			controller = factory.GetController( new UrlInfo("", "clients", "home", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.CastleOnRails.Framework.Tests.Controllers.Clients.HomeController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "clients", "hire-us", "") );
+			controller = factory.GetController( new UrlInfo("", "clients", "hire-us", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.CastleOnRails.Framework.Tests.Controllers.Clients.OtherController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "ourproducts", "shoppingcart", "") );
+			controller = factory.GetController( new UrlInfo("", "ourproducts", "shoppingcart", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.CastleOnRails.Framework.Tests.Controllers.Products.CartController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "ourproducts", "lista", "") );
+			controller = factory.GetController( new UrlInfo("", "ourproducts", "lista", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 

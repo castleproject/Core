@@ -18,14 +18,17 @@ namespace Castle.CastleOnRails.Engine.Adapters
 	using System.Web;
 
 	using Castle.CastleOnRails.Framework;
+	using Castle.CastleOnRails.Framework.Internal;
 
 	public class ResponseAdapter : IResponse
 	{
+		private readonly string _extension;
 		private HttpResponse _response;
 
-		public ResponseAdapter(HttpResponse response)
+		public ResponseAdapter(HttpResponse response, string url)
 		{
 			_response = response;
+			_extension = UrlTokenizer.GetExtension(url);
 		}
 
 		#region IResponse
@@ -90,13 +93,13 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		public void Redirect(String controller, String action)
 		{
 			_response.Redirect( 
-				String.Format("../{0}/{1}.rails", controller, action), false );
+				UrlInfo.GetRailsUrl(controller, action, _extension), false );
 		}
 
 		public void Redirect(String area, String controller, String action)
 		{
 			_response.Redirect( 
-				String.Format("../{0}/{1}/{2}.rails", area, controller, action), false );
+				UrlInfo.GetRailsUrl(area, controller, action, _extension), false );
 		}
 
 		public void CreateCookie(String name, String value)

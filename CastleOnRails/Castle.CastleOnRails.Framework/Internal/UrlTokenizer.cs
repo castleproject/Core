@@ -15,6 +15,7 @@
 namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
+	using System.IO;
 
 	/// <summary>
 	/// Extracts the information from a Url Path into
@@ -69,7 +70,17 @@ namespace Castle.CastleOnRails.Framework.Internal
 				area = parts[ parts.Length - 3 ];
 			}
 
-			return new UrlInfo(url, area, controller, action);
+			string extension = GetExtension(url);
+
+			return new UrlInfo(url, area, controller, action, extension);
+		}
+
+		public static string GetExtension(string url)
+		{
+			String extension = Path.GetExtension(url);
+			extension = extension.Substring(1);
+
+			return extension;
 		}
 	}
 
