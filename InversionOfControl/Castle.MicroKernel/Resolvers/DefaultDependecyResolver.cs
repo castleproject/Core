@@ -96,11 +96,7 @@ namespace Castle.MicroKernel.Resolvers
 				handler = _kernel.GetHandler( dependency.TargetType );
 			}
 
-			if (handler == null)
-			{
-				throw new DependecyResolverException( 
-					String.Format("Handler for {0} not found.", dependency.TargetType.FullName) );
-			}
+			if (handler == null) return null;
 
 			return handler.Resolve();
 		}
