@@ -23,7 +23,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// Inspect the component for <code>InterceptorAttribute</code> and
+	/// Inspect the component for <c>InterceptorAttribute</c> and
 	/// the configuration for the interceptors node
 	/// </summary>
 	public class InterceptorInspector : IContributeComponentModelConstruction

@@ -20,7 +20,7 @@ namespace Castle.MicroKernel
 	using Castle.Model;
 
 	/// <summary>
-	/// The <code>IKernel</code> interface exposes all the functionality
+	/// The <c>IKernel</c> interface exposes all the functionality
 	/// the MicroKernel implements.
 	/// </summary>
 	/// <remarks>

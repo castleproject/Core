@@ -25,6 +25,7 @@ namespace Castle.Model
 	{
 		private ConstructorInfo _constructorInfo;
 		private DependencyModel[] _dependencies;
+		private int _points;
 
 		public ConstructorCandidate( ConstructorInfo constructorInfo, params DependencyModel[] dependencies )
 		{
@@ -40,6 +41,12 @@ namespace Castle.Model
 		public DependencyModel[] Dependencies
 		{
 			get { return _dependencies; }
+		}
+
+		public int Points
+		{
+			get { return _points; }
+			set { _points = value; }
 		}
 	}
 }

@@ -17,19 +17,19 @@ namespace Castle.MicroKernel
 	using System;
 
 	/// <summary>
-	/// The <code>ILifestyleManager</code> implements 
+	/// The <c>ILifestyleManager</c> implements 
 	/// a strategy for a given lifestyle, like singleton, perthread
 	/// and transient.
 	/// </summary>
 	/// <remarks>
-	/// The responsability of <code>ILifestyleManager</code>
+	/// The responsability of <c>ILifestyleManager</c>
 	/// is only the management of lifestyle. It should rely on
 	/// <see cref="IComponentActivator"/> to obtain a new component instance
 	/// </remarks>
 	public interface ILifestyleManager : IDisposable
 	{
 		/// <summary>
-		/// Initializes the <code>ILifestyleManager</code> with the 
+		/// Initializes the <c>ILifestyleManager</c> with the 
 		/// <see cref="IComponentActivator"/>
 		/// </summary>
 		/// <param name="componentActivator"></param>

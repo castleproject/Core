@@ -71,6 +71,55 @@ namespace Castle.MicroKernel.Resolvers
 			return value;
 		}
 
+		/// <summary>
+		/// Returns true if the resolver is able to satisfy this dependency.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="dependency"></param>
+		/// <returns></returns>
+		public bool CanResolve(ComponentModel model, DependencyModel dependency)
+		{
+			if(dependency.DependencyType == DependencyType.Service)
+			{
+				return CanResolveServiceDependency( model, dependency );
+			}
+			else
+			{
+				return CanResolveParameterDependency( model, dependency );
+			}
+		}
+
+		protected virtual bool CanResolveServiceDependency(ComponentModel model, DependencyModel dependency)
+		{
+			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
+
+			if (parameter != null)
+			{
+				// User wants to override
+
+				String value = ExtractComponentKey( parameter.Value, parameter.Name );
+
+				return _kernel.HasComponent( value );
+			}
+			else if (dependency.TargetType == typeof(IKernel))
+			{
+				return true;
+			}
+			else
+			{
+				// Default behaviour
+
+				return _kernel.HasComponent( dependency.TargetType );
+			}
+		}
+
+		protected virtual bool CanResolveParameterDependency(ComponentModel model, DependencyModel dependency)
+		{
+			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
+
+			return parameter != null;
+		}
+
 		protected virtual object ResolveServiceDependency(ComponentModel model, DependencyModel dependency)
 		{
 			IHandler handler = null;

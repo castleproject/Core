@@ -19,7 +19,7 @@ namespace Castle.Windsor
 	using Castle.MicroKernel;
 
 	/// <summary>
-	/// The <code>IWindsorContainer</code> interface exposes all the 
+	/// The <c>IWindsorContainer</c> interface exposes all the 
 	/// functionality the Windsor implements.
 	/// </summary>
 	public interface IWindsorContainer : IDisposable

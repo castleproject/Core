@@ -18,7 +18,8 @@ namespace Castle.Windsor.Configuration.AppDomain
 	using System.Configuration;
 
 	/// <summary>
-	/// Summary description for CastleSectionHandler.
+	/// Implementation of <see cref="IConfigurationSectionHandler"/>.
+	/// Do not support configuration inheritance.
 	/// </summary>
 	public class CastleSectionHandler : IConfigurationSectionHandler
 	{

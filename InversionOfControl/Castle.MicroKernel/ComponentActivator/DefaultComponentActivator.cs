@@ -22,8 +22,16 @@ namespace Castle.MicroKernel.ComponentActivator
 	using Castle.MicroKernel.LifecycleConcerns;
 
 	/// <summary>
-	/// Summary description for DefaultComponentActivator
+	/// Standard implementation of <see cref="IComponentActivator"/>.
+	/// Handles the selection of the best constructor, fills the
+	/// writable properties the component exposes, run the commission 
+	/// and decommission lifecycles, etc.
 	/// </summary>
+	/// <remarks>
+	/// Custom implementors can just override the <c>CreateInstance</c> method.
+	/// Please note however that the activator is responsible for the proxy creation
+	/// when needed.
+	/// </remarks>
 	public class DefaultComponentActivator : AbstractComponentActivator
 	{
 		public DefaultComponentActivator(ComponentModel model, IKernel kernel, 
@@ -99,10 +107,60 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual ConstructorCandidate SelectEligibleConstructor()
 		{
-			// TODO: Put the selection in a strategy 
-			// so anyone can override this implementation with a better heuristic
+			if (Model.Constructors.Count == 0)
+			{
+				// This is required by some facilities
+				return null;
+			}
 
-			return Model.Constructors.FewerArgumentsCandidate;
+			if (Model.Constructors.BestCandidate != null)
+			{
+				return Model.Constructors.BestCandidate;
+			}
+
+			if (Model.Constructors.Count == 1)
+			{
+				return Model.Constructors.FewerArgumentsCandidate;
+			}
+
+			ConstructorCandidate winnerCandidate = null; 
+
+			foreach(ConstructorCandidate candidate in Model.Constructors)
+			{
+				foreach(DependencyModel dep in candidate.Dependencies)
+				{
+					if (CanSatisfyDependency(dep))
+					{
+						candidate.Points += 2;
+					}
+					else
+					{
+						candidate.Points -= 2;
+					}
+				}
+
+				if (winnerCandidate == null) winnerCandidate = candidate;
+
+				if (winnerCandidate.Points < candidate.Points)
+				{
+					winnerCandidate = candidate;
+				}
+			}
+
+			if (winnerCandidate == null)
+			{
+				// What?
+				throw new ComponentActivatorException("Could not find eligible constructor.");
+			}
+
+			Model.Constructors.BestCandidate = winnerCandidate;
+
+			return winnerCandidate;
+		}
+
+		protected virtual bool CanSatisfyDependency(DependencyModel dep)
+		{
+			return Kernel.Resolver.CanResolve(Model, dep);
 		}
 
 		protected virtual object[] CreateConstructorArguments( 

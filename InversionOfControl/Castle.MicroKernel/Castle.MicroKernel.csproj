@@ -119,6 +119,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ComponentActivator\ComponentActivatorException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ComponentActivator\DefaultComponentActivator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

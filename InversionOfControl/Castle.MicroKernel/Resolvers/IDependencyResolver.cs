@@ -36,5 +36,13 @@ namespace Castle.MicroKernel
 		/// <param name="dependency"></param>
 		/// <returns></returns>
 		object Resolve(ComponentModel model, DependencyModel dependency);
+
+		/// <summary>
+		/// Returns true if the resolver is able to satisfy this dependency.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="dependency"></param>
+		/// <returns></returns>
+		bool CanResolve(ComponentModel model, DependencyModel dependency);
 	}
 }

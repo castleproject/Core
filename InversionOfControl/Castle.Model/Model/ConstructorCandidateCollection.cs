@@ -23,11 +23,7 @@ namespace Castle.Model
 	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
 	{
 		private ConstructorCandidate _fewerArgumentsCandidate;
-
-		public ConstructorCandidate FewerArgumentsCandidate
-		{
-			get { return _fewerArgumentsCandidate; }
-		}
+		private ConstructorCandidate _bestCandidate;
 
 		public void Add(ConstructorCandidate candidate)
 		{
@@ -45,6 +41,17 @@ namespace Castle.Model
 			}
 
 			InnerList.Add(candidate);
+		}
+
+		public ConstructorCandidate FewerArgumentsCandidate
+		{
+			get { return _fewerArgumentsCandidate; }
+		}
+
+		public ConstructorCandidate BestCandidate
+		{
+			get { return _bestCandidate; }
+			set { _bestCandidate = value; }
 		}
 	}
 }

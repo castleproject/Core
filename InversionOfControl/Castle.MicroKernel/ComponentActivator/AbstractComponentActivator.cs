@@ -19,7 +19,10 @@ namespace Castle.MicroKernel.ComponentActivator
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for AbstractComponentActivator.
+	/// Abstract implementation of <see cref="IComponentActivator"/>.
+	/// The implementors must only override the InternalCreate and 
+	/// InternalDestroy methods in order to perform their creation and
+	/// destruction logic.
 	/// </summary>
 	public abstract class AbstractComponentActivator : IComponentActivator
 	{
@@ -28,6 +31,13 @@ namespace Castle.MicroKernel.ComponentActivator
 		private ComponentInstanceDelegate _onCreation;
 		private ComponentInstanceDelegate _onDestruction;
 
+		/// <summary>
+		/// Constructs an AbstractComponentActivator
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="kernel"></param>
+		/// <param name="onCreation"></param>
+		/// <param name="onDestruction"></param>
 		public AbstractComponentActivator(ComponentModel model, IKernel kernel, 
 			ComponentInstanceDelegate onCreation, 
 			ComponentInstanceDelegate onDestruction)

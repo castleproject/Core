@@ -24,7 +24,22 @@ namespace Castle.Windsor.Configuration.Xml
 	using Castle.MicroKernel.SubSystems.Configuration;
 
 	/// <summary>
-	/// Summary description for XmlConfigurationStore.
+	/// Reads the configuration from a XmlFile. Example structure:
+	/// <code>
+	/// &lt;configuration&gt;
+	///   &lt;facilities&gt;
+	///     &lt;facility id="myfacility"&gt;
+	///     
+	///     &lt;/facility&gt;
+	///   &lt;/facilities&gt;
+	///   
+	///   &lt;components&gt;
+	///     &lt;component id="component1"&gt;
+	///     
+	///     &lt;/component&gt;
+	///   &lt;/components&gt;
+	/// &lt;/configuration&gt;
+	/// </code>
 	/// </summary>
 	public class XmlConfigurationStore : DefaultConfigurationStore
 	{
@@ -34,6 +49,13 @@ namespace Castle.Windsor.Configuration.Xml
 		public XmlConfigurationStore( String filename )
 		{
 			Deserialize(filename);
+		}
+
+		public XmlConfigurationStore( TextReader reader )
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.Load(reader);
+			Deserialize(doc.DocumentElement);
 		}
 
 		protected XmlConfigurationStore()

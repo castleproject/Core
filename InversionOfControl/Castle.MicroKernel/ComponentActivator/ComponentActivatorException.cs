@@ -12,32 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.SubSystems.Conversion
+namespace Castle.MicroKernel.ComponentActivator
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Implements a conversion logic to a type of a
-	/// set of types. 
+	/// Summary description for ComponentActivatorException.
 	/// </summary>
-	public interface ITypeConverter
+	[Serializable]
+	public class ComponentActivatorException : Exception
 	{
-		/// <summary>
-		/// Returns true if this instance of <c>ITypeConverter</c>
-		/// is able to handle the specified type.
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		bool CanHandleType( Type type );
+		public ComponentActivatorException(string message) : base(message)
+		{
+		}
 
-		/// <summary>
-		/// Should perform the conversion from the
-		/// string representation specified to the type
-		/// specified.
-		/// </summary>
-		/// <param name="value"></param>
-		/// <param name="targetType"></param>
-		/// <returns></returns>
-		object PerformConversion( String value, Type targetType );
+		public ComponentActivatorException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
 	}
 }

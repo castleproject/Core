@@ -105,6 +105,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BestConstructorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DefaultConversionManagerTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
