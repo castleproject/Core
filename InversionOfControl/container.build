@@ -30,6 +30,39 @@
 	    <copy file="${dynamicproxy}" todir="${bin.dir}" />
 		<nant buildfile="Castle.Windsor/windsor.build" target="build" />
 	</target>
+
+	<target name="documentation">
+		<ndoc failonerror="false">
+			<assemblies basedir="${bin.dir}">
+				<includes name="Castle.Model.dll" />
+				<includes name="Castle.MicroKernel.dll" />
+				<includes name="Castle.Windsor.dll" />
+			</assemblies>
+			<documenters>
+				<documenter name="MSDN">
+					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
+					<property name="HtmlHelpName" value="Castle.Container" />
+					<property name="IncludeFavorites" value="False" />
+					<property name="Title" value="Castle.Container" />
+					<property name="SplitTOCs" value="False" />
+					<property name="DefaulTOC" value="Castle.Windsor" />
+					<property name="ShowVisualBasic" value="False" />
+					<property name="ShowMissingSummaries" value="False" />
+					<property name="ShowMissingRemarks" value="False" />
+					<property name="ShowMissingParams" value="False" />
+					<property name="ShowMissingReturns" value="False" />
+					<property name="ShowMissingValues" value="False" />
+					<property name="DocumentInternals" value="True" />
+					<property name="DocumentProtected" value="True" />
+					<property name="DocumentPrivates" value="False" />
+					<property name="DocumentEmptyNamespaces" value="False" />
+					<property name="IncludeAssemblyVersion" value="True" />
+					<property name="CopyrightText" value="Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors" />
+					<property name="CopyrightHref" value="http://www.digitalcraftsmen.com.br/~hammett/" />
+				</documenter>
+			</documenters>
+		</ndoc>
+	</target>
 	
 	<target name="dist">
 		<zip zipfile="${name}.src.${version}.zip">
