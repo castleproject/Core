@@ -72,7 +72,7 @@ namespace Castle.CastleOnRails.Framework
 				return candidates[0];
 			}
 
-			int lastMaxPoints = 0;
+			int lastMaxPoints = int.MinValue;
 			MethodInfo bestCandidate = null;
 
 			foreach(MethodInfo candidate in candidates)

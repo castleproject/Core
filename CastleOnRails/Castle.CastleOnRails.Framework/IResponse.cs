@@ -45,5 +45,7 @@ namespace Castle.CastleOnRails.Framework
 		String ContentType { get; set; }
 
 		void CreateCookie( String name, String value );
+		
+		void CreateCookie( String name, String value, DateTime expiration );
 	}
 }

@@ -28,6 +28,8 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			_response = response;
 		}
 
+		#region IResponse
+
 		public int StatusCode
 		{
 			get { return _response.StatusCode; }
@@ -101,5 +103,16 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		{
 			_response.Cookies.Add( new HttpCookie(name, value) );
 		}
+
+		public void CreateCookie(String name, String value, DateTime expiration)
+		{
+			HttpCookie cookie = new HttpCookie(name, value);
+			cookie.Expires = expiration;
+			cookie.Path = "/";
+
+			_response.Cookies.Add( cookie );
+		}
+
+		#endregion
 	}
 }

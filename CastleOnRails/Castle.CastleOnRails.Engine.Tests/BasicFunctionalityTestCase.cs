@@ -100,5 +100,109 @@ namespace Castle.CastleOnRails.Engine.Tests
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
 			AssertContents("\r\nCustomer is hammett\r\n<br>\r\n123", response);
 		}
+
+		[Test]
+		public void CreateCookie()
+		{
+			HttpWebRequest myReq = (HttpWebRequest) 
+				WebRequest.Create("http://localhost:8083/cookies/addcookie.rails");
+			myReq.AllowAutoRedirect = false;
+			myReq.CookieContainer = new CookieContainer();
+			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+
+			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.AreEqual("/cookies/addcookie.rails", response.ResponseUri.PathAndQuery);
+			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+			AssertContents("My View contents for Home\\Index", response);
+			CookieCollection cookies = 
+				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+			
+			/// The server may use two headers for SetCookie
+			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+			foreach(Cookie cookie in cookies)
+			{
+				Assert.AreEqual( "cookiename", cookie.Name );
+				Assert.AreEqual( "value", cookie.Value );
+			}
+		}
+
+		[Test]
+		public void CreateCookieRedirect()
+		{
+			HttpWebRequest myReq = (HttpWebRequest) 
+				WebRequest.Create("http://localhost:8083/cookies/AddCookieRedirect.rails");
+			myReq.AllowAutoRedirect = false;
+			myReq.CookieContainer = new CookieContainer();
+			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+
+			Assert.AreEqual(HttpStatusCode.Found, response.StatusCode);
+
+			CookieCollection cookies = 
+				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+			
+			/// The server may use two headers for SetCookie
+			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+			foreach(Cookie cookie in cookies)
+			{
+				Assert.AreEqual( "cookiename", cookie.Name );
+				Assert.AreEqual( "value", cookie.Value );
+			}
+		}
+
+		[Test]
+		public void CreateCookieExpirationRedirect()
+		{
+			HttpWebRequest myReq = (HttpWebRequest) 
+				WebRequest.Create("http://localhost:8083/cookies/AddCookieExpirationRedirect.rails");
+			myReq.AllowAutoRedirect = false;
+			myReq.CookieContainer = new CookieContainer();
+			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+
+			Assert.AreEqual(HttpStatusCode.Found, response.StatusCode);
+
+			CookieCollection cookies = 
+				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+			
+			/// The server may use two headers for SetCookie
+			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+			foreach(Cookie cookie in cookies)
+			{
+				Assert.AreEqual( "cookiename2", cookie.Name );
+				Assert.AreEqual( "value", cookie.Value );
+				DateTime twoWeeks = DateTime.Now.Add(new TimeSpan(14, 0, 0, 0));
+				Assert.AreEqual( twoWeeks.Day, cookie.Expires.Day );
+				Assert.AreEqual( twoWeeks.Month, cookie.Expires.Month );
+				Assert.AreEqual( twoWeeks.Year, cookie.Expires.Year );
+			}
+		}
+
+		[Test]
+		public void CreateCookieExpiration()
+		{
+			HttpWebRequest myReq = (HttpWebRequest) 
+				WebRequest.Create("http://localhost:8083/cookies/AddCookieExpiration.rails");
+			myReq.AllowAutoRedirect = false;
+			myReq.CookieContainer = new CookieContainer();
+			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+
+			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.AreEqual("/cookies/AddCookieExpiration.rails", response.ResponseUri.PathAndQuery);
+			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+			AssertContents("My View contents for Home\\Index", response);
+			CookieCollection cookies = 
+				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+			
+			/// The server may use two headers for SetCookie
+			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+			foreach(Cookie cookie in cookies)
+			{
+				Assert.AreEqual( "cookiename2", cookie.Name );
+				Assert.AreEqual( "value", cookie.Value );
+				DateTime twoWeeks = DateTime.Now.Add(new TimeSpan(14, 0, 0, 0));
+				Assert.AreEqual( twoWeeks.Day, cookie.Expires.Day );
+				Assert.AreEqual( twoWeeks.Month, cookie.Expires.Month );
+				Assert.AreEqual( twoWeeks.Year, cookie.Expires.Year );
+			}
+		}
 	}
 }

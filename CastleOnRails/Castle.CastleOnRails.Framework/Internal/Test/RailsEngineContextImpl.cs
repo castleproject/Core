@@ -190,6 +190,8 @@ namespace Castle.CastleOnRails.Framework.Tests
 			_writer = new StringWriter(_contents);
 		}
 
+		#region IResponse
+
 		public int StatusCode
 		{
 			get { return _statusCode; }
@@ -261,5 +263,12 @@ namespace Castle.CastleOnRails.Framework.Tests
 		{
 			throw new NotImplementedException();
 		}
+
+		public void CreateCookie(String name, String value, DateTime expiration)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
 	}
 }

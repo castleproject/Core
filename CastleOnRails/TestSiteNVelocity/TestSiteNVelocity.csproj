@@ -137,6 +137,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Controllers\CookiesController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\Exception.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -170,6 +175,10 @@
                     RelPath = "Controllers\SubArea\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\cookies\index.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "views\filter\index.vm"

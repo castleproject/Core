@@ -15,7 +15,6 @@
 namespace Castle.CastleOnRails.WindsorExtension
 {
 	using System;
-	using System.Web;
 
 	using Castle.Windsor;
 

@@ -37,6 +37,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 		{
 			ExtendedProperties props = new ExtendedProperties();
 
+			props.SetProperty( RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity" );
 			props.SetProperty( RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir );
 
 			Velocity.Init(props);
