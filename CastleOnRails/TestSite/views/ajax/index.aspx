@@ -1,5 +1,5 @@
-<%@ Page language="c#" Codebehind="index.aspx.cs" AutoEventWireup="false" Inherits="TestSite.views.ajax.index" %>
 <%@ Register tagprefix="rails" namespace="Castle.CastleOnRails.Framework.Views.Aspx" assembly="Castle.CastleOnRails.Framework" %>
+<%@ Page language="c#" Codebehind="index.aspx.cs" AutoEventWireup="false" Inherits="TestSite.views.ajax.index" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
@@ -18,28 +18,32 @@
 			<input id="zip" type="text" name="zip">
 			<br>
 			<div id="address"></div>
-			<rails:invokehelper id=ObserveField_Zip runat="server" Method="ObserveField" Name="AjaxHelper" Args='<%# new object[]{"zip", 2, "inferaddress.rails", "address", "\"aa new content\"" } %>' />
+			<rails:invokehelper id=ObserveField_Zip runat="server" Method="ObserveField" Name="AjaxHelper" Args='<%# new object[]{"zip", 2, "inferaddress.rails", "address", "\"aa new content\"" } %>'>
+			</rails:invokehelper>
 			<hr>
-			<h2>not implemented yet</h2>
 			
 			<!-- ObserveForm -->
-			<p>Observer form example: Fill the field below to create an account:<br>
+			<p>
+				Observer form example: Fill the field below to create an account:<br>
 				Name:
 				<asp:textbox id="name" runat="server"></asp:textbox><br>
 				Address:
 				<asp:textbox id="addressf" runat="server"></asp:textbox><br>
-				<div id="message"></div>
-			<P></P>
-			<rails:invokehelper id=ObserveForm runat="server" Method="ObserveForm" Name="AjaxHelper" Args='<%# new object[]{ "Form1", 2, "accountformvalidate.rails", "message", "" } %>' />
+				<asp:label id="message" runat="server"></asp:label>
+			</p>
+			<rails:invokehelper id=ObserveForm runat="server" Method="ObserveForm" Name="AjaxHelper" Args='<%# new object[]{ "Form1", 2, "accountformvalidate.rails", "message", "" } %>'>
+			</rails:invokehelper>
 			<hr>
 			
+			<h2>not implemented yet</h2>
 			<!-- Remote Form -->
 			<h4 id="status">Status</h4>
-			<p><asp:datagrid id="DataGrid1" runat="server"></asp:datagrid><br>
+			<p>
+				<asp:datagrid id="DataGrid1" runat="server"></asp:datagrid><br>
 				<b>Add New User:</b> 
 				<!-- $AjaxHelper.BuildFormRemoteTag("AddUserWithAjax.rails", 
-			"userlist", null, "$('status').innerHTML = 'Saving...'", null, null, 
-			"$('status').innerHTML = 'Done!'") -->
+				"userlist", null, "$('status').innerHTML = 'Saving...'", null, null, 
+				"$('status').innerHTML = 'Done!'") -->
 				<table>
 					<tr>
 						<td>Name:</td>
@@ -55,7 +59,8 @@
 						</td>
 					</tr>
 				</table>
-				<!--</form>--></p>
+			</p>
+			<asp:Button id="postBackerBtn" runat="server" Text="Do a simple PostBack"></asp:Button>
 		</form>
 	</body>
 </HTML>
