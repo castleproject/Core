@@ -9,7 +9,7 @@
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="src.dir" value="${base.dir}/Castle.Facilities.NHibernateIntegration" />
 	<property name="src.ext.dir" value="${base.dir}/Castle.Facilities.NHibernateExtension" />
-	<property name="nhibernate.test" value="true" />
+	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
 
 	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.NHibernateIntegration.Tests" />
 	<property name="name" value="Castle.Facilities.NHibernateIntegration" />

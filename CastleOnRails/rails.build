@@ -7,7 +7,7 @@
 	<property name="name" value="CastleOnRails" />
 	<property name="version" value="beta-1" />
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
-	<property name="rails.test" value="true" />
+	<property name="rails.test" value="true" unless="${property::exists('rails.test')}" />
 
 	<!-- find out where nunit.framework.dll is -->
 	<property name="nant.lib.dir"
