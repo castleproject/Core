@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apache.Avalon.Castle.ManagementExtensions", "Apache.Avalon.Castle.ManagementExtensions.csproj", "{1FBC7823-D95B-481C-9715-14EE2CEDD13A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ManagementExtensions", "Castle.ManagementExtensions.csproj", "{1FBC7823-D95B-481C-9715-14EE2CEDD13A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apache.Avalon.Castle.ManagementExtensions.Test", "..\CastleManagementExtensionsTest\Apache.Avalon.Castle.ManagementExtensions.Test.csproj", "{69375E7E-BDC1-488A-BA0C-12D9EED2D159}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ManagementExtensions.Test", "..\ManagementExtensionsTest\Castle.ManagementExtensions.Test.csproj", "{69375E7E-BDC1-488A-BA0C-12D9EED2D159}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
