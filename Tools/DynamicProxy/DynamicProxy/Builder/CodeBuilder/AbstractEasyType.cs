@@ -34,6 +34,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		protected MethodCollection _methods;
 		protected NestedTypeCollection _nested;
 		protected PropertiesCollection _properties;
+		protected EventsCollection _events;
 
 		public AbstractEasyType()
 		{
@@ -41,6 +42,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			_methods = new MethodCollection();
 			_constructors = new ConstructorCollection();
 			_properties = new PropertiesCollection();
+			_events = new EventsCollection();
 		}
 
 		public void CreateDefaultConstructor( )
@@ -109,6 +111,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			return prop;
 		}
 
+		public EasyEvent CreateEvent( String name, Type eventHandlerType )
+		{
+			EasyEvent easyEvent = new EasyEvent( this, name, eventHandlerType );
+			_events.Add(easyEvent);
+			return easyEvent;
+		}
+
 		public ConstructorCollection Constructors
 		{
 			get { return _constructors; }
@@ -156,6 +165,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			}
 
 			foreach(IEasyMember builder in _properties)
+			{
+				builder.EnsureValidCodeBlock();
+				builder.Generate();
+			}
+			foreach(IEasyMember builder in _events)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();

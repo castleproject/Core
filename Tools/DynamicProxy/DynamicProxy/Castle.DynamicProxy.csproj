@@ -169,6 +169,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeBuilder\EasyEvent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeBuilder\EasyMethod.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -195,6 +200,11 @@
                 />
                 <File
                     RelPath = "Builder\CodeBuilder\EasyType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeBuilder\EventsCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
