@@ -180,6 +180,15 @@ namespace Castle.MicroKernel
 		IHandler[] GetHandlers(Type service);
 
 		/// <summary>
+		/// Return handlers for components that 
+		/// implements the specified service. 
+		/// The check is made using IsAssignableFrom
+		/// </summary>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		IHandler[] GetAssignableHandlers(Type service);
+
+		/// <summary>
 		/// Returns the implementation for <see cref="IReleasePolicy"/>
 		/// </summary>
 		IReleasePolicy ReleasePolicy

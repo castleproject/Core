@@ -30,7 +30,6 @@
 
 	
 	<target name="compile" depends="init">
-		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG"
 			target="library" 
@@ -38,8 +37,13 @@
 			optimize="${optimize}"
 			output="${bin.dir}/${assembly.name}">
 			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+			
 			<sources basedir="${src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>
@@ -55,7 +59,7 @@
 			output="${bin.dir}/${test.assembly.name}">
 			
 			<sources basedir="${test.src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>

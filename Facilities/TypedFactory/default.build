@@ -38,7 +38,7 @@
 			output="${bin.dir}/${assembly.name}">
 			
 			<sources basedir="${src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>
@@ -54,7 +54,7 @@
 			output="${bin.dir}/${test.assembly.name}">
 			
 			<sources basedir="${test.src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>

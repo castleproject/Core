@@ -104,17 +104,17 @@
             <csc nostdlib="true" noconfig="true" warnaserror="false" target="library" debug="${current.build.debug}"
                 define="${current.build.defines.csc}" output="${current.bin.dir}/${avalon-framework.assembly}" doc="${current.bin.dir}/${avalon-framework.doc}">
                 <sources basedir="${avalon-framework.src}" defaultexcludes="true">
-                    <includes name="**/*.cs" />
+                    <include name="**/*.cs" />
                 </sources>
                 <references defaultexcludes="true">
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
                         fromPath="false" />
                     <!-- allow for third party assemblies to be referenced by just storing them in the lib/<framework>/<framework version>/<build configuration> directory -->
-                    <includes name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
+                    <include name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
                         fromPath="false" />
                 </references>
             </csc>
@@ -151,17 +151,17 @@
             <csc nostdlib="true" noconfig="true" warnaserror="false" target="library" debug="${current.build.debug}"
                 define="${current.build.defines.csc}" output="${current.bin.dir}/${avalon-framework.assembly}" doc="${current.bin.dir}/${avalon-framework.doc}">
                 <sources basedir="${avalon-framework.src}" defaultexcludes="true">
-                    <includes name="**/*.cs" />
+                    <include name="**/*.cs" />
                 </sources>
                 <references defaultexcludes="true">
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
                         fromPath="false" />
                     <!-- allow for third party assemblies to be referenced by just storing them in the lib/<framework>/<framework version>/<build configuration> directory -->
-                    <includes name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
+                    <include name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
                         fromPath="false" />
                 </references>
             </csc>
@@ -198,17 +198,17 @@
             <csc nostdlib="false" noconfig="true" warnaserror="false" target="library" debug="${current.build.debug}"
                 define="${current.build.defines.csc}" output="${current.bin.dir}/${avalon-framework.assembly}">
                 <sources basedir="${avalon-framework.src}" defaultexcludes="true">
-                    <includes name="**/*.cs" />
+                    <include name="**/*.cs" />
                 </sources>
                 <references defaultexcludes="true">
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
                         fromPath="false" />
                     <!-- allow for third party assemblies to be referenced by just storing them in the lib/<framework>/<framework version>/<build configuration> directory -->
-                    <includes name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
+                    <include name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
                         fromPath="false" />
                 </references>
             </csc>
@@ -245,17 +245,17 @@
             <csc nostdlib="true" noconfig="true" warnaserror="false" target="library" debug="${current.build.debug}"
                 define="${current.build.defines.csc}" output="${current.bin.dir}/${avalon-framework.assembly}">
                 <sources basedir="${avalon-framework.src}" defaultexcludes="true">
-                    <includes name="**/*.cs" />
+                    <include name="**/*.cs" />
                 </sources>
                 <references defaultexcludes="true">
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
                         fromPath="false" />
                     <!-- allow for third party assemblies to be referenced by just storing them in the lib/<framework>/<framework version>/<build configuration> directory -->
-                    <includes name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
+                    <include name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
                         fromPath="false" />
                 </references>
             </csc>
@@ -269,20 +269,20 @@
         <csc nostdlib="true" noconfig="true" warnaserror="false" target="library" debug="${current.build.debug}"
             define="${current.build.defines.csc}" output="${current.bin.dir}/${avalon-framework.test.assembly}">
             <sources basedir="${avalon-framework.test.src}" defaultexcludes="true">
-                <includes name="**/*.cs" />
+                <include name="**/*.cs" />
             </sources>
             <references defaultexcludes="true">
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/mscorlib.dll"
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.dll" 
                         fromPath="false" />
-                    <includes name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
+                    <include name="${nant.settings.currentframework.frameworkassemblydirectory}/System.Xml.dll"
                         fromPath="false" />
-                <includes name="${nant.location}/nunit.framework.dll"
+                <include name="${nant.location}/nunit.framework.dll"
                     fromPath="false" />
-                <includes name="${current.bin.dir}/${avalon-framework.assembly}" fromPath="false" />
+                <include name="${current.bin.dir}/${avalon-framework.assembly}" fromPath="false" />
                 <!-- allow for third party assemblies to be referenced by just storing them in the lib/<framework>/<framework version>/<build configuration> directory -->
-                <includes name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
+                <include name="lib/${current.runtime.config}/${current.runtime.version}/${current.build.config}/*.dll"
                     fromPath="false" />
             </references>
         </csc>

@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}"
+        ProjectGuid = "{22432F75-FD21-474A-AB8F-43100DE79FDB}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "TestSite"
+                AssemblyName = "TestSiteWindsor"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "TestSite"
+                RootNamespace = "TestSiteWindsor"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -80,6 +80,36 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
+                    Name = "Castle.CastleOnRails.Framework"
+                    AssemblyName = "Castle.CastleOnRails.Framework"
+                    HintPath = "..\bin\Castle.CastleOnRails.Framework.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Engine"
+                    AssemblyName = "Castle.CastleOnRails.Engine"
+                    HintPath = "..\bin\Castle.CastleOnRails.Engine.dll"
+                />
+                <Reference
                     Name = "System.Web"
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
@@ -90,13 +120,8 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Engine"
-                    Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.CastleOnRails.Framework"
-                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Name = "Castle.CastleOnRails.WindsorExtension"
+                    Project = "{6C51A1E3-7F20-4696-BFD6-829134678341}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
@@ -109,8 +134,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "default.htm"
+                    RelPath = "global.asax"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "MyHttpApplication.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "sample.build"
@@ -121,12 +151,12 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\Exception.cs"
+                    RelPath = "Controllers\AccountController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\FilterController.cs"
+                    RelPath = "Controllers\AuthenticationFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -136,40 +166,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\LayoutController.cs"
+                    RelPath = "Controllers\MyController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\Registration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\RescueController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\SubArea\HomeController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "views\filter\index.aspx"
-                    BuildAction = "Content"
-                />
-                <Folder RelPath = "views\general\" />
-                <File
-                    RelPath = "views\home\bag.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\home\bag2.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\home\heyhello.aspx"
+                    RelPath = "views\account\login.aspx"
                     BuildAction = "Content"
                 />
                 <File
@@ -177,58 +179,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "views\layoutable\changelayout.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\layoutable\index.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\layouts\master.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\layouts\master2.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\registration\index.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\registration\index.aspx.cs"
-                    DependentUpon = "index.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "views\registration\index.aspx.resx"
-                    DependentUpon = "index.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "views\registration\list.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\registration\success.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\rescues\general.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\rescues\saveerror.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\rescues\updateerror.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\SubArea\home\index.aspx"
+                    RelPath = "views\home\list.aspx"
                     BuildAction = "Content"
                 />
             </Include>

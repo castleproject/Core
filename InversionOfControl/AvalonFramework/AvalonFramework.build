@@ -31,7 +31,7 @@
         
         <copy todir="${current.bin.dir}">
             <fileset basedir="${nant.location}">
-                <includes name="nunit.*.dll" />
+                <include name="nunit.*.dll" />
             </fileset>
         </copy>
         
@@ -42,8 +42,8 @@
         
         <delete>
             <fileset basedir="${current.bin.dir}">
-                <includes name="nunit.*.dll" />
-                <includes name="*Test.*" />
+                <include name="nunit.*.dll" />
+                <include name="*Test.*" />
             </fileset>
         </delete>
     </target>

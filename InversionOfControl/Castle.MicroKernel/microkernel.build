@@ -47,7 +47,6 @@
 	<target name="build" depends="init,tests.run" />
 	
 	<target name="compile" depends="init">
-		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG"
 			target="library" 
@@ -56,8 +55,13 @@
 			output="${bin.dir}/${assembly.name}"
 			doc="${bin.dir}/${name}.xml" >
 			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+			
 			<sources basedir="${src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>
@@ -73,7 +77,7 @@
 			output="${bin.dir}/${test.assembly.name}">
 			
 			<sources basedir="${test.src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>

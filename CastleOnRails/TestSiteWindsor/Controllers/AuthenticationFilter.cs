@@ -12,36 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSite.Controllers
+namespace TestSiteWindsor.Controllers
 {
 	using System;
 
 	using Castle.CastleOnRails.Framework;
 
-	[Filter(ExecuteEnum.Before, typeof(FilterBadHeader))]	
-	public class FilterController : Controller
+	public class AuthenticationFilter : IFilter
 	{
-		public void Index()
-		{
-		}
-	}
-
-	public class FilterBadHeader : IFilter
-	{
-		#region IFilter Members
-
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
-			if (context.Request.Headers["mybadheader"] != null)
+			if (context.CurrentUser == null || context.CurrentUser.Identity.IsAuthenticated == false)
 			{
-				context.Response.Write("Denied!");
-
+				controller.Redirect("account", "login");
+				
 				return false;
 			}
 
 			return true;
 		}
-
-		#endregion
 	}
 }

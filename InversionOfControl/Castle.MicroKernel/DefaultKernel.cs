@@ -340,6 +340,28 @@ namespace Castle.MicroKernel
 			return (IHandler[]) list.ToArray( typeof(IHandler) );
 		}
 
+		/// <summary>
+		/// Return handlers for components that 
+		/// implements the specified service. 
+		/// The check is made using IsAssignableFrom
+		/// </summary>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		public virtual IHandler[] GetAssignableHandlers(Type service)
+		{
+			ArrayList list = new ArrayList();
+
+			foreach( IHandler handler in _key2Handler.Values )
+			{
+				if ( service.IsAssignableFrom(handler.ComponentModel.Service))
+				{
+					list.Add(handler);
+				}
+			}
+
+			return (IHandler[]) list.ToArray( typeof(IHandler) );
+		}
+
 		public IReleasePolicy ReleasePolicy
 		{
 			get { return _releaserPolicy; }

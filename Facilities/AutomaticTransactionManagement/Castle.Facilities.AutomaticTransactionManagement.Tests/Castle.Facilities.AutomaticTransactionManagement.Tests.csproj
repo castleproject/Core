@@ -80,40 +80,10 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilties.AutomaticTransactionManagement"
-                    Project = "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
-                    Name = "Castle.Services.Transaction"
-                    AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\bin\Castle.Services.Transaction.dll"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
                 />
             </References>
         </Build>

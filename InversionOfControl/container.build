@@ -34,9 +34,9 @@
 	<target name="documentation">
 		<ndoc failonerror="false">
 			<assemblies basedir="${bin.dir}">
-				<includes name="Castle.Model.dll" />
-				<includes name="Castle.MicroKernel.dll" />
-				<includes name="Castle.Windsor.dll" />
+				<include name="Castle.Model.dll" />
+				<include name="Castle.MicroKernel.dll" />
+				<include name="Castle.Windsor.dll" />
 			</assemblies>
 			<documenters>
 				<documenter name="MSDN">

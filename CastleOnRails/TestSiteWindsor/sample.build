@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="rails-testsite" default="build">
+<project name="rails-testsitewindsor" default="build">
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="name" value="TestSite" />
+	<property name="name" value="TestSiteWindsor" />
 	<property name="assembly.name" value="${name}.dll" />
 
 	<property name="version" value="1.0.0.0" />
@@ -21,6 +21,11 @@
 			<fileset basedir="../bin">
 				<include name="Castle.CastleOnRails.Engine.dll" />
 				<include name="Castle.CastleOnRails.Framework.dll" />
+				<include name="Castle.CastleOnRails.WindsorExtension.dll" />
+				<include name="Castle.DynamicProxy.dll" />
+				<include name="Castle.Model.dll" />
+				<include name="Castle.MicroKernel.dll" />
+				<include name="Castle.Windsor.dll" />
 			</fileset>
 		</copy>
 	</target>
@@ -38,8 +43,14 @@
 			</sources>
 
 			<references>
+				<include name="System.Web.dll" />
 				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
 				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Castle.CastleOnRails.WindsorExtension.dll" />
+				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
+				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.MicroKernel.dll" />
+				<include name="${bin.dir}/Castle.Windsor.dll" />
 			</references>
 		</csc>
 	</target>

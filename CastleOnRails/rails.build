@@ -33,33 +33,41 @@
 	<target name="build" depends="init, framework, engine, integration, samples, tests" />
 	
 	<target name="init">
+		<delete>
+			<fileset>
+				<include name="${bin.dir}\*.dll" />
+				<include name="${bin.dir}\*.pdb" />
+				<include name="${bin.dir}\*.xml" />
+			</fileset>
+		</delete>
 		<copy todir="${bin.dir}">
 			<fileset basedir="${container.bin.dir}">
-				<includes name="*.dll" />
+				<include name="*.dll" />
 			</fileset>
 		</copy>
 	</target>
 	
 	<target name="framework">
-		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="build" />
+		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="engine">
-		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="build" />
+		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="integration">
-		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="build" />
+		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="samples">
-		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="build" />
+		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
+		<nant buildfile="TestSiteDirVir/sample.build" inheritall="true" target="compile" />
+		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 	</target>
 	
 	<target name="tests">
-		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="build" />
-	</target>
 
+	</target>
 
 	<target name="dist">
 		<zip zipfile="${name}.src.${version}.zip">

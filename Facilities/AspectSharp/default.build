@@ -26,7 +26,7 @@
 		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
 		<copy todir="${bin.dir}">
 			<fileset basedir="${lib.dir}">
-				<includes name="*.dll" />
+				<include name="*.dll" />
 			</fileset>
 		</copy>
 	</target>
@@ -43,7 +43,7 @@
 			output="${bin.dir}/${assembly.name}">
 			
 			<sources basedir="${src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>
@@ -59,7 +59,7 @@
 			output="${bin.dir}/${test.assembly.name}">
 			
 			<sources basedir="${test.src.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
+				<include name="**/*.cs" />
 			</sources>
 
 			<references>
