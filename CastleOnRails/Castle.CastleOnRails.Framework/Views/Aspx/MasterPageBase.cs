@@ -21,7 +21,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	/// <summary>
 	/// Summary description for MasterPageBase.
 	/// </summary>
-	public abstract class MasterPageBase : Page
+	public class MasterPageBase : Page
 	{
 		const string ViewStateKey = "__MASTERVIEWSTATE";
 

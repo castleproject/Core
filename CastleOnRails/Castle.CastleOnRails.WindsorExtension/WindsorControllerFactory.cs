@@ -40,6 +40,11 @@ namespace Castle.CastleOnRails.WindsorExtension
 
 			String key = (String) tree.GetController(urlInfo.Area, urlInfo.Controller);
 
+			if (key == null || key.Length == 0)
+			{
+				throw new RailsException("Controller not found. Controller Name: " + urlInfo.Controller);
+			}
+
 			if (container.Kernel.HasComponent(key))
 			{
 				return (Controller) container[key];

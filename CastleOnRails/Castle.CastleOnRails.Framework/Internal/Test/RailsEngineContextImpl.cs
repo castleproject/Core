@@ -120,7 +120,15 @@ namespace Castle.CastleOnRails.Framework.Tests
 			get { return _user; }
 			set { _user = value; }
 		}
-		
+
+		public string ApplicationPath
+		{
+			get
+			{
+				return AppDomain.CurrentDomain.BaseDirectory;
+			}
+		}
+
 		#endregion
 	}
 

@@ -84,15 +84,18 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 			ProcessPropertyBag(controller.PropertyBag, childPage);
 
-			controller.PreSendView(childPage);
-
-			childPage.ProcessRequest(httpContext);
-
-			// Checks if its only returning from a inner process invocation
-			
-			controller.PostSendView(childPage);
+			ProccessPage(controller, childPage, httpContext);
 
 			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);		
+		}
+
+		private void ProccessPage(Controller controller, IHttpHandler page, HttpContext httpContext)
+		{
+			controller.PreSendView(page);
+	
+			page.ProcessRequest(httpContext);
+	
+			controller.PostSendView(page);
 		}
 
 		#endregion
@@ -105,14 +108,18 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 				{
 					byte[] contents = RestoreFilter(httpContext.Response);
 
-					if (!Convert.ToBoolean(httpContext.Items["rails.processed"]))
+					// Checks if its only returning from a inner process invocation
+					if (!Convert.ToBoolean(httpContext.Items["rails.layout.processed"]))
 					{
 						httpContext.Items.Add("rails.contents", contents);
 						httpContext.Items.Add("rails.child", childPage);
-						httpContext.Items["rails.processed"] = true;
+
+						httpContext.Items["rails.layout.processed"] = true;
+
+						httpContext.Response.RedirectLocation = "foo";
 					}
 
-					masterHandler.ProcessRequest(httpContext);
+					ProccessPage(controller, masterHandler, httpContext);
 				}
 				else
 				{

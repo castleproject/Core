@@ -89,5 +89,10 @@ namespace Castle.CastleOnRails.Framework
 		/// the execution of an action.
 		/// </summary>
 		Exception LastException { get; set; }
+
+		/// <summary>
+		/// Returns the application path.
+		/// </summary>
+		string ApplicationPath { get; }
 	}
 }

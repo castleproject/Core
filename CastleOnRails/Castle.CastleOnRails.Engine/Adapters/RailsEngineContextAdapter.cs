@@ -111,5 +111,29 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			get { return _context.User; }
 			set { _context.User = value; }
 		}
+
+		public string ApplicationPath
+		{
+			get
+			{
+				String path = null;
+
+				if (HttpContext.Current != null)
+				{
+					path = HttpContext.Current.Request.ApplicationPath;
+			
+					if("/".Equals(path))
+					{
+						path = String.Empty;
+					}
+				}
+				else
+				{
+					path = AppDomain.CurrentDomain.BaseDirectory;
+				}
+
+				return path;
+			}
+		}
 	}
 }
