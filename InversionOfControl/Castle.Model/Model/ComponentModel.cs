@@ -47,29 +47,13 @@ namespace Castle.Model
 	}
 
 	/// <summary>
-	/// Enumeration to define the component's activation policy.
+	/// Represents the collection of information and
+	/// meta information collected about a component.
 	/// </summary>
-//	public enum ActivationType
-//	{
-//		/// <summary>
-//		/// No activation policy specified.
-//		/// </summary>
-//		Undefined,
-//		/// <summary>
-//		/// The component should be activated as soon as the container is ready.
-//		/// </summary>
-//		Start,
-//		/// <summary>
-//		/// The component should be activated only if requested.
-//		/// </summary>
-//		OnDemand
-//	}
-
-	/// <summary>
-	/// Summary description for ComponentModel.
-	/// </summary>
-	public sealed class ComponentModel
+	public sealed class ComponentModel : GraphNode
 	{
+		#region Fields
+
 		/// <summary>Name (key) of the component</summary>
 		private String _name;
 
@@ -112,12 +96,11 @@ namespace Castle.Model
 		/// <summary>Interceptors associated</summary>
 		private InterceptorReferenceCollection _interceptors;
 
+		#endregion
+
 		/// <summary>
 		/// Constructs a ComponentModel
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="service"></param>
-		/// <param name="implementation"></param>
 		public ComponentModel(String name, Type service, Type implementation)
 		{
 			_name = name;
