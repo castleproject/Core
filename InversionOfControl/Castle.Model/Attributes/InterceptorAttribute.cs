@@ -19,10 +19,9 @@ namespace Castle.Model
 	using Castle.Model.Interceptor;
 
 	/// <summary>
-	/// Used to declare that a component wants interceptors
-	/// on it
+	/// Used to declare that a component wants interceptors acting on it.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
 	public class InterceptorAttribute : Attribute
 	{
 		private InterceptorReference _interceptorRef;

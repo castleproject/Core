@@ -32,6 +32,16 @@ namespace Castle.MicroKernel.Tests
 		public C(B b) {}
 	}
 
+	public class CycleA
+	{
+		public CycleA(CycleB b) {}
+	}
+
+	public class CycleB
+	{
+		public CycleB(CycleA a) {}
+	}
+
 	[TestFixture]
 	public class DependencyGraph
 	{
@@ -91,5 +101,16 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual( HandlerState.Valid, handlerB.CurrentState );
 			Assert.AreEqual( HandlerState.Valid, handlerC.CurrentState );
 		}
+
+		/// This test case must pass !
+//		[Test]
+//		public void CycleComponents()
+//		{
+//			kernel.AddComponent( "a", typeof(CycleA) );
+//			kernel.AddComponent( "b", typeof(CycleB) );
+//
+//			Assert.IsNotNull( kernel["a"] );
+//			Assert.IsNotNull( kernel["b"] );
+//		}
 	}
 }

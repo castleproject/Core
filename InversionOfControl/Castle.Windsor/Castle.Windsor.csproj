@@ -118,7 +118,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Builders\" />
                 <File
                     RelPath = "Configuration\AppDomain\AppDomainConfigurationStore.cs"
                     SubType = "Code"
@@ -131,11 +130,6 @@
                 />
                 <File
                     RelPath = "Configuration\Xml\XmlConfigurationStore.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Profiles\IProfile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

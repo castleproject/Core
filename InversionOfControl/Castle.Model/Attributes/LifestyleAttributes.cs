@@ -16,7 +16,11 @@ namespace Castle.Model
 {
 	using System;
 
-	[AttributeUsage(AttributeTargets.Class)]
+	/// <summary>
+	/// Base for Attributes that want to express lifestyle
+	/// chosen by the component.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public abstract class LifestyleAttribute : Attribute
 	{
 		private LifestyleType _type;
@@ -26,7 +30,7 @@ namespace Castle.Model
 			_type = type;
 		}
 
-		public LifestyleType LifestyleType
+		public LifestyleType Lifestyle
 		{
 			get { return _type; }
 			set { _type = value; }
@@ -34,9 +38,10 @@ namespace Castle.Model
 	}
 
 	/// <summary>
-	/// Summary description for LifestyleAttributes.
+	/// Indicates that the target components wants a
+	/// singleton lifestyle.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class SingletonAttribute : LifestyleAttribute
 	{
 		public SingletonAttribute() : base(LifestyleType.Singleton)
@@ -45,7 +50,11 @@ namespace Castle.Model
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.Class)]
+	/// <summary>
+	/// Indicates that the target components wants a
+	/// transient lifestyle.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class TransientAttribute : LifestyleAttribute
 	{
 		public TransientAttribute() : base(LifestyleType.Transient)
@@ -54,7 +63,11 @@ namespace Castle.Model
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.Class)]
+	/// <summary>
+	/// Indicates that the target components wants a
+	/// per thread lifestyle.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class PerThreadAttribute : LifestyleAttribute
 	{
 		public PerThreadAttribute() : base(LifestyleType.Thread)
@@ -63,7 +76,11 @@ namespace Castle.Model
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.Class)]
+	/// <summary>
+	/// Indicates that the target components wants a
+	/// custom lifestyle.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class CustomLifestyleAttribute : LifestyleAttribute
 	{
 		private Type _lifestyleHandler;

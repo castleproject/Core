@@ -106,7 +106,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				LifestyleAttribute attribute = (LifestyleAttribute)
 					attributes[0];
 
-				model.LifestyleType = attribute.LifestyleType;
+				model.LifestyleType = attribute.Lifestyle;
 
 				if (model.LifestyleType == LifestyleType.Custom)
 				{
