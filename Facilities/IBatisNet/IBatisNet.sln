@@ -22,6 +22,15 @@ Global
 		{0C9EE31D-A700-485B-948A-68E4A3614E71}.Release.ActiveCfg = Release|.NET
 		{0C9EE31D-A700-485B-948A-68E4A3614E71}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Castle.mdb = Castle.mdb
+		Changes.txt = Changes.txt
+		DataBase.config = DataBase.config
+		default.build = default.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+		usage.txt = usage.txt
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution

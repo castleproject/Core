@@ -8,7 +8,6 @@
 	<property name="lib.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="src.dir" value="${base.dir}/Castle.Facilities.IBatisNetIntegration" />
-	<property name="src.ext.dir" value="${base.dir}/Castle.Facilities.IBatisNetIntegration" />
 
 	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.IBatisNetIntegration.Tests" />
 	<property name="name" value="Castle.Facilities.IBatisNetIntegration" />
@@ -18,6 +17,11 @@
 	<property name="version" value="beta-1" />
 
 	<target name="clean">
+		<delete failonerror="false">
+			<fileset basedir="${bin.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="init" depends="clean">
@@ -37,7 +41,6 @@
 	<target name="build" depends="init,tests.run" />
 	
 	<target name="compile" depends="init">
-		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG2"
 			target="library" 

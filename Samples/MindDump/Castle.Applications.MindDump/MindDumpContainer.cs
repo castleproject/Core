@@ -26,6 +26,10 @@ namespace Castle.Applications.MindDump
 
 	using Castle.Applications.MindDump.Dao;
 	using Castle.Applications.MindDump.Services;
+	using Castle.Applications.MindDump.Presentation.Controllers;
+	using Castle.Applications.MindDump.Presentation.Filters;
+
+	using Castle.CastleOnRails.WindsorExtension;
 
 
 	public class MindDumpContainer : WindsorContainer
@@ -43,10 +47,12 @@ namespace Castle.Applications.MindDump
 		{
 			RegisterFacilities();
 			RegisterComponents();
+			SubcribeForEvents();
 		}
 
 		private void RegisterFacilities()
 		{
+			AddFacility( "rails", new RailsFacility() );
 			AddFacility( "nhibernate", new NHibernateFacility() );
 			AddFacility( "transaction", new TransactionFacility() );
 		}
@@ -63,6 +69,24 @@ namespace Castle.Applications.MindDump
 			AddComponent( "account", typeof(AccountService) );
 			AddComponent( "encryption", typeof(EncryptionService) );
 			AddComponent( "blogMaintenanceService", typeof(BlogMaintenanceService) );
+
+			AddComponent( "auth.filter", typeof(AuthenticationCheckFilter) );
+			AddComponent( "auth.attempt.filter", typeof(AuthenticationAttemptFilter) );
+			AddComponent( "intro.controller", typeof(IntroController) );
+			AddComponent( "account.controller", typeof(AccountController) );
+			AddComponent( "blogs.controller", typeof(BlogController) );
+			AddComponent( "maintenance.controller", typeof(MaintenanceController) );
+		}
+
+		protected void SubcribeForEvents()
+		{
+			AddComponent( "blog.creator.subscriber", typeof(BlogControllerCreatorSubscriber) );
+			
+			IMindDumpEventPublisher channel = 
+				(IMindDumpEventPublisher) this[ typeof(IMindDumpEventPublisher) ];
+
+			channel.AddSubcriber( 
+				(IMindDumpEventSubscriber) this[ typeof(BlogControllerCreatorSubscriber) ] );
 		}
 	}
 }

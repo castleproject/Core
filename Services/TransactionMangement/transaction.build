@@ -35,6 +35,11 @@
 			unless="${property::exists('nant.tasks.nunit2')}" />	
 
 	<target name="clean">
+		<delete>
+			<fileset basedir="${bin.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</delete>
 	</target>
 
 	<target name="init" depends="clean">

@@ -17,8 +17,13 @@
 	<property name="version" value="beta-1" />
 
 	<target name="clean">
+		<delete failonerror="false">
+			<fileset basedir="${bin.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</delete>
 	</target>
-
+	
 	<target name="init" depends="clean">
 		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />

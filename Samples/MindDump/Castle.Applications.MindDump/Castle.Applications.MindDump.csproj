@@ -129,6 +129,16 @@
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\..\..\Facilities\AutomaticTransactionManagement\bin\Castle.Services.Transaction.dll"
                 />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework"
+                    AssemblyName = "Castle.CastleOnRails.Framework"
+                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.Framework.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.WindsorExtension"
+                    AssemblyName = "Castle.CastleOnRails.WindsorExtension"
+                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.WindsorExtension.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -175,6 +185,46 @@
                 />
                 <File
                     RelPath = "Model\Post.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Controllers\AbstractSecureController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Controllers\AccountController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Controllers\BlogController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Controllers\BlogControllerCreatorSubscriber.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Controllers\IntroController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Controllers\MaintenanceController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Filters\AuthenticationAttemptFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\Filters\AuthenticationCheckFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

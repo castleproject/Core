@@ -22,8 +22,7 @@ namespace Castle.Applications.MindDump.Web
 	using Castle.CastleOnRails.WindsorExtension;
 
 	using Castle.Applications.MindDump.Services;
-	using Castle.Applications.MindDump.Web.Controllers;
-	using Castle.Applications.MindDump.Web.Controllers.Filters;
+	using Castle.Applications.MindDump.Presentation.Controllers;
 
 
 	public class MindDumpHttpApplication : HttpApplication, IContainerAccessor
@@ -33,32 +32,8 @@ namespace Castle.Applications.MindDump.Web
 		public void Application_OnStart() 
 		{
 			container = new MindDumpContainer();
-			container.AddFacility( "rails", new RailsFacility() );
-
-			AddFiltersAndControllers(container);
-			SubcribeForEvents(container);
 		}
 
-		private void AddFiltersAndControllers(WindsorContainer container)
-		{
-			container.AddComponent( "auth.filter", typeof(AuthenticationCheckFilter) );
-			container.AddComponent( "auth.attempt.filter", typeof(AuthenticationAttemptFilter) );
-			container.AddComponent( "intro.controller", typeof(IntroController) );
-			container.AddComponent( "account.controller", typeof(AccountController) );
-			container.AddComponent( "blogs.controller", typeof(BlogController) );
-			container.AddComponent( "maintenance.controller", typeof(MaintenanceController) );
-		}
-
-		private void SubcribeForEvents(WindsorContainer container)
-		{
-			container.AddComponent( "blog.creator.subscriber", typeof(BlogControllerCreatorSubscriber) );
-			
-			IMindDumpEventPublisher channel = (IMindDumpEventPublisher) 
-				container[ typeof(IMindDumpEventPublisher) ];
-
-			channel.AddSubcriber( (IMindDumpEventSubscriber) 
-				container[ typeof(BlogControllerCreatorSubscriber) ] );
-		}
 
 		public void Application_OnEnd() 
 		{
