@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ITransaction = Castle.Services.Transaction.ITransaction;
-
 namespace Castle.Facilities.NHibernateIntegration
 {
-	using System;
-	using System.Collections;
-
 	using Castle.Model;
 
 	using Castle.Services.Transaction;
-
-	using NHibernate;
 
 	/// <summary>
 	/// Dispatch the transaction management to the

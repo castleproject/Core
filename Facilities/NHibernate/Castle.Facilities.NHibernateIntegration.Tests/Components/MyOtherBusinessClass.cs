@@ -15,40 +15,36 @@
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
-	using System.Collections;
 
-	using NHibernate;
-
-	using Castle.Facilities.NHibernateExtension;
+	using Castle.Services.Transaction;
 
 
-	[UsesAutomaticSessionCreation]
-	public class BlogDao
+	[Transactional]
+	public class MyOtherBusinessClass
 	{
-		public virtual Blog CreateBlog( String name )
+		private OrderDao _orderDao;
+		private BlogDao _blogDao;
+
+		public MyOtherBusinessClass(OrderDao orderDao, BlogDao blogDao)
 		{
-			ISession session = SessionManager.CurrentSession;
-
-			Blog blog = new Blog();
-			blog.Name = name;
-			blog.Items = new ArrayList();
-
-			session.Save(blog);
-
-			return blog;
+			_orderDao = orderDao;
+			_blogDao = blogDao;
 		}
 
-		public virtual IList ObtainBlogs()
+		[Transaction(TransactionMode.Requires)]
+		public virtual Blog Create( int value )
 		{
-			ISession session = SessionManager.CurrentSession;
-			return session.Find("from Blog");
+			Order order = _orderDao.CreateOrder( value );
+			return _blogDao.CreateBlog("name");
 		}
 
-		[SessionFlush(FlushOption.Force)]
-		public virtual void DeleteAll()
+		[Transaction(TransactionMode.Requires)]
+		public virtual Blog CreateWithError( int value )
 		{
-			ISession session = SessionManager.CurrentSession;
-			session.Delete("from Blog");
+			_orderDao.CreateOrder( value );
+			_blogDao.CreateBlog("name");
+
+			throw new ApplicationException("Ugh!");
 		}
 	}
 }

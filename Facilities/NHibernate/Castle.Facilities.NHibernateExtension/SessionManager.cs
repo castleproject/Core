@@ -15,21 +15,97 @@
 namespace Castle.Facilities.NHibernateExtension
 {
 	using System;
+	using System.Diagnostics;
+	using System.Collections;
 	using System.Threading;
-
+	using System.Runtime.CompilerServices;
 	using NHibernate;
 
 	/// <summary>
-	/// PerThread component to hold ISession instances.
+	/// PerThread class to hold ISession instances.
 	/// </summary>
 	public abstract class SessionManager
 	{
 		private static LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
 
+
+		/// <summary>
+		/// Returns the current NHibernate's Session
+		/// </summary>
 		public static ISession CurrentSession
 		{
-			get { return (ISession) Thread.GetData(_slot); }
-			set { Thread.SetData(_slot, value); }
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get
+			{
+				return CurrentPair != null ? CurrentPair.Session : null;
+			}
+		}
+
+		internal static Stack CurStack
+		{
+			[MethodImpl(MethodImplOptions.Synchronized)]
+			get
+			{
+				Stack stack = (Stack) Thread.GetData(_slot);
+
+				if (stack == null)
+				{
+					stack = new Stack();
+					Thread.SetData(_slot, stack);
+				}
+
+				return stack;
+			}
+		}
+
+		internal static Pair CurrentPair
+		{
+			get
+			{
+				if (CurStack.Count == 0) return null;
+				return (Pair) CurStack.Peek();
+			}
+		}
+
+		/// <summary>
+		/// Used by the internal framwork. Do not explicit call this method.
+		/// </summary>
+		public static bool IsCurrentSessionCompatible(String id)
+		{
+			Pair pair = CurrentPair;
+			if (pair == null) return false;
+			return pair.id.Equals(id);
+		}
+
+		/// <summary>
+		/// Used by the internal framwork. Do not explicit call this method.
+		/// </summary>
+		public static void Push(ISession session, String id)
+		{
+			CurStack.Push( new Pair(session, id) );
+		}
+
+		/// <summary>
+		/// Used by the internal framwork. Do not explicit call this method.
+		/// </summary>
+		public static ISession Pop(String id)
+		{
+			Pair pair = CurStack.Pop() as Pair;
+			if (pair == null) return null;
+			Debug.Assert( pair.id.Equals(id) );
+			return pair.Session;
+		}
+	}
+
+	internal class Pair
+	{
+		public readonly ISession Session;
+		public readonly String id;
+
+		public Pair(ISession session, string id)
+		{
+			Session = session;
+			this.id = id;
 		}
 	}
 }

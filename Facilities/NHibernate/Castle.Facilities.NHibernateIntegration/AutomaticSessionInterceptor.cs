@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Reflection;
 using Transaction = Castle.Services.Transaction.ITransaction;
 
 namespace Castle.Facilities.NHibernateIntegration
@@ -29,8 +30,14 @@ namespace Castle.Facilities.NHibernateIntegration
 	using NHibernate;
 
 
+	/// <summary>
+	/// Opens, configure and ensure the proper flush and close
+	/// of a NHibernate's Session object.
+	/// </summary>
 	public class AutomaticSessionInterceptor : IMethodInterceptor
 	{
+		private const string SessionFactoryKeyDefault = "nhibernate.sessfactory.default";
+
 		private IKernel _kernel;
 
 		public AutomaticSessionInterceptor(IKernel kernel)
@@ -40,20 +47,32 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-			if (SessionManager.CurrentSession != null)
+			String key = ObtainSessionFactoryKeyFor(invocation.InvocationTarget);
+
+			if (SessionManager.IsCurrentSessionCompatible(key))
 			{
 				return invocation.Proceed(args);
 			}
 
-			String key = ObtainSessionFactoryKeyFor(invocation.InvocationTarget);
 			ISessionFactory sessionFactory = ObtainSessionFactoryFor(key);
 
 			ISession session = sessionFactory.OpenSession();
-			SessionManager.CurrentSession = session;
+			SessionManager.Push(session, key);
+
+			FlushOption flushOption = ExtractFlushOption(invocation.MethodInvocationTarget);
+
+			ConfigureFlushMode(flushOption, session);
 
 			if (EnlistSessionIfHasTransactionActive(key, session))
 			{
-				return invocation.Proceed(args);
+				try
+				{
+					return invocation.Proceed(args);
+				}
+				finally
+				{
+					SessionManager.Pop(key);
+				}
 			}
 
 			try
@@ -62,10 +81,28 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 			finally
 			{
-				session.Flush();
+				if (flushOption == FlushOption.Force)
+				{
+					session.Flush();
+				}
 				session.Close();
-				session = null;
-				SessionManager.CurrentSession = null;
+				SessionManager.Pop(key);
+			}
+		}
+
+		private static void ConfigureFlushMode(FlushOption flushOption, ISession session)
+		{
+			switch(flushOption)
+			{
+				case FlushOption.Auto:
+					session.FlushMode = FlushMode.Auto;
+					break;
+				case FlushOption.Commit:
+					session.FlushMode = FlushMode.Commit;
+					break;
+				case FlushOption.Never:
+					session.FlushMode = FlushMode.Never;
+					break;
 			}
 		}
 
@@ -74,8 +111,6 @@ namespace Castle.Facilities.NHibernateIntegration
 			if (!_kernel.HasComponent(typeof(ITransactionManager))) return false;
 
 			bool enlisted = false;
-
-			if (key == null) key = "nhibernate.sf";
 
 			ITransactionManager manager = (ITransactionManager) _kernel[ typeof(ITransactionManager) ];
 
@@ -97,18 +132,40 @@ namespace Castle.Facilities.NHibernateIntegration
 			return enlisted;
 		}
 
+		protected FlushOption ExtractFlushOption(MethodInfo method)
+		{
+			object[] attrs = method.GetCustomAttributes( typeof(SessionFlushAttribute), true );
+
+			if (attrs.Length == 0)
+			{
+				return FlushOption.Auto;
+			}
+			else
+			{
+				return (attrs[0] as SessionFlushAttribute).FlushOption;
+			}
+		}
+
 		protected String ObtainSessionFactoryKeyFor(object target)
 		{
-			// TODO: Use the key specified in the attribute - if any
-			// Returns the first ISessionFactory registered, which might
-			// be wrong if more than one factory was registered.
+			object[] attributes = target.GetType().GetCustomAttributes( 
+				typeof(UsesAutomaticSessionCreationAttribute), true );
 
-			return null;
+			UsesAutomaticSessionCreationAttribute attribute = attributes[0] as UsesAutomaticSessionCreationAttribute;
+
+			String key = attribute.SessionFactoryId;
+
+			if (key == null)
+			{
+				key = SessionFactoryKeyDefault;
+			}
+
+			return key;
 		}
 
 		protected ISessionFactory ObtainSessionFactoryFor(String key)
 		{
-			if (key == null)
+			if (key == SessionFactoryKeyDefault)
 			{
 				return (ISessionFactory) _kernel[ typeof(ISessionFactory) ];
 			}

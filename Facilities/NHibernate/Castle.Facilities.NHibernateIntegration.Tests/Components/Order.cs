@@ -15,40 +15,27 @@
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
-	using System.Collections;
-
-	using NHibernate;
-
-	using Castle.Facilities.NHibernateExtension;
 
 
-	[UsesAutomaticSessionCreation]
-	public class BlogDao
+	public class Order
 	{
-		public virtual Blog CreateBlog( String name )
+		private int _id;
+		private float _value;
+
+		public Order()
 		{
-			ISession session = SessionManager.CurrentSession;
-
-			Blog blog = new Blog();
-			blog.Name = name;
-			blog.Items = new ArrayList();
-
-			session.Save(blog);
-
-			return blog;
 		}
 
-		public virtual IList ObtainBlogs()
+		public int Id
 		{
-			ISession session = SessionManager.CurrentSession;
-			return session.Find("from Blog");
+			get { return _id; }
+			set { _id = value; }
 		}
 
-		[SessionFlush(FlushOption.Force)]
-		public virtual void DeleteAll()
+		public float Value
 		{
-			ISession session = SessionManager.CurrentSession;
-			session.Delete("from Blog");
+			get { return _value; }
+			set { _value = value; }
 		}
 	}
 }

@@ -14,8 +14,6 @@
 
 namespace Castle.Facilities.NHibernateIntegration
 {
-	using System;
-
 	using Castle.Model;
 
 	using Castle.MicroKernel;
@@ -24,6 +22,9 @@ namespace Castle.Facilities.NHibernateIntegration
 	using NHibernate.Cfg;
 
 
+	/// <summary>
+	/// Custom activator to provide the ISessionFactory instance
+	/// </summary>
 	public class SessionFactoryActivator : AbstractComponentActivator
 	{
 		public SessionFactoryActivator(ComponentModel model, 
@@ -38,12 +39,12 @@ namespace Castle.Facilities.NHibernateIntegration
 			Configuration config = (Configuration) 
 				Model.ExtendedProperties[ NHibernateFacility.ConfiguredObject ];
 
-			
 			return config.BuildSessionFactory();
 		}
 
 		protected override void InternalDestroy(object instance)
 		{
+			// Nothing to do
 		}
 	}
 }

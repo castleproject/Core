@@ -18,7 +18,10 @@ namespace Castle.Facilities.NHibernateIntegration
 {
 	using NHibernate;
 
-
+	/// <summary>
+	/// Adapts the IResource interface the the 
+	/// underlying NHibernate's transaction.
+	/// </summary>
 	public class ResourceSessionAdapter : Castle.Services.Transaction.IResource
 	{
 		private ITransaction _transaction;

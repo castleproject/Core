@@ -1,3 +1,4 @@
+using NHibernate;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +31,12 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		public override Blog CreateBlog(String name)
 		{
 			return base.CreateBlog(name);
+		}
+
+		[Transaction(TransactionMode.Requires)]
+		public override void DeleteAll()
+		{
+			base.DeleteAll();
 		}
 	}
 }

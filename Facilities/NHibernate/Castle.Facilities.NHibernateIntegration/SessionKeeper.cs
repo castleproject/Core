@@ -14,8 +14,6 @@
 
 namespace Castle.Facilities.NHibernateIntegration
 {
-	using System;
-
 	using Castle.Services.Transaction;
 
 	using Castle.Facilities.NHibernateExtension;
@@ -23,6 +21,10 @@ namespace Castle.Facilities.NHibernateIntegration
 	using NHibernate;
 
 
+	/// <summary>
+	/// Synchronization object to ensure proper close and 
+	/// flush of the session
+	/// </summary>
 	public class SessionKeeper : ISynchronization
 	{
 		private ISession _session;
@@ -38,9 +40,9 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public void AfterCompletion()
 		{
-			_session.Flush();
+//			_session.Flush();
 			_session.Close();
-			SessionManager.CurrentSession = null;
+//			SessionManager.CurrentSession = null;
 		}
 	}
 }

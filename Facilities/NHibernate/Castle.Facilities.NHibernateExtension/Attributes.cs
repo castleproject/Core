@@ -40,4 +40,32 @@ namespace Castle.Facilities.NHibernateExtension
 			get { return _sessionFactoryId; }
 		}
 	}
+
+	public enum FlushOption
+	{
+		Force,
+		Auto,
+		Commit,
+		Never
+	}
+
+	/// <summary>
+	/// Declares the way a method wants to perform 
+	/// the session flush.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
+	public class SessionFlushAttribute : System.Attribute
+	{
+		private FlushOption _option;
+
+		public SessionFlushAttribute(FlushOption option)
+		{
+			_option = option;
+		}
+
+		public FlushOption FlushOption
+		{
+			get { return _option; }
+		}
+	}
 }

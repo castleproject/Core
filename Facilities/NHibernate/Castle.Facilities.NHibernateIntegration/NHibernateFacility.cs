@@ -22,7 +22,6 @@ namespace Castle.Facilities.NHibernateIntegration
 	using Castle.Model;
 	using Castle.Model.Configuration;
 
-	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 
 	using Castle.Services.Transaction;
@@ -30,8 +29,10 @@ namespace Castle.Facilities.NHibernateIntegration
 	using NHibernate;
 	using NHibernate.Cfg;
 
+
 	/// <summary>
-	/// 
+	/// Enable components to take advantage of the capabilities 
+	/// offered by the NHibernate project.
 	/// </summary>
 	public class NHibernateFacility : AbstractFacility
 	{
@@ -59,20 +60,29 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			Kernel.ComponentModelBuilder.AddContributor( new AutomaticSessionInspector() );
 
-			Kernel.AddComponent( 
-				"nhibernate.session.interceptor", 
-				typeof(AutomaticSessionInterceptor) );
+			Kernel.AddComponent( "nhibernate.session.interceptor", typeof(AutomaticSessionInterceptor) );
 
-			Kernel.AddComponent( 
-				"nhibernate.transaction.manager", 
-				typeof(ITransactionManager), typeof(NHibernateTransactionManager) );
+			Kernel.AddComponent( "nhibernate.transaction.manager", typeof(ITransactionManager), typeof(NHibernateTransactionManager) );
 
-			ConfigureFactories(Kernel, factoriesConfig);
+			foreach(IConfiguration factoryConfig in FacilityConfig.Children)
+			{
+				if (!"factory".Equals(factoryConfig.Name))
+				{
+					throw new ConfigurationException("Unexpected node " + factoryConfig.Name);
+				}
+
+				ConfigureFactories(factoryConfig);
+			}
 		}
 
-		private void ConfigureFactories(IKernel kernel, IConfiguration config)
+		private void ConfigureFactories(IConfiguration config)
 		{
 			String id = config.Attributes["id"];
+
+			if (id == null || String.Empty.Equals(id))
+			{
+				throw new ConfigurationException("You must provide a valid 'id' attribute for the 'factory' node");
+			}
 
 			Configuration cfg = new Configuration();
 
@@ -80,12 +90,17 @@ namespace Castle.Facilities.NHibernateIntegration
 			RegisterAssemblies(cfg, config.Children["assemblies"]);
 			RegisterResources(cfg, config.Children["resources"]);
 
+			// Registers the Configuration object
+
+			Kernel.AddComponentInstance( String.Format("{0}.cfg", id), cfg );
+
+			// Registers the ISessionFactory with a custom activator
+
 			ComponentModel model = new ComponentModel(id, typeof(ISessionFactory), null);
 			model.ExtendedProperties.Add(ConfiguredObject, cfg );
 			model.LifestyleType = LifestyleType.Singleton;
 			model.CustomComponentActivator = typeof( SessionFactoryActivator );
-
-			kernel.AddCustomComponent( model );
+			Kernel.AddCustomComponent( model );
 		}
 
 		protected virtual void ApplyConfigurationSettings(Configuration cfg, IConfiguration facilityConfig)

@@ -30,27 +30,57 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 	public abstract class AbstractNHibernateTestCase
 	{
-		// protected const string Driver = "NHibernate.Driver.MySqlDataDriver";
 		protected const string Driver = "NHibernate.Driver.MySqlDataDriver";
 		protected const string Dialect = "NHibernate.Dialect.MySQLDialect";
 		protected const string ConnectionProvider = "NHibernate.Connection.DriverConnectionProvider";
 		protected const string ConnectionString = "Database=Test;Data Source=localhost;User Id=theuser;Password=opauser";
+		protected const string ConnectionString2 = "Database=Test2;Data Source=localhost;User Id=theuser;Password=opauser";
 
 		[SetUp]
 		public virtual void InitDb()
 		{
 			// Reset tables
 
+			ResetDb1();
+			ResetDb2();
+		}
+
+		private void ResetDb1()
+		{
 			MySqlConnection conn = new MySqlConnection(ConnectionString);
 			conn.Open();
 
 			try
 			{
+				// This is a bad practice named 
+				// `programming by coincidence`, but we need to 
+				// ask the mysql developers why changes are so slow
+				// to be reflected
 				Thread.CurrentThread.Join(1000);
+
 				MySqlCommand command = conn.CreateCommand();
 				command.CommandText = "DELETE FROM BLOGS";
 				command.ExecuteNonQuery();
 				command.CommandText = "DELETE FROM BLOG_ITEMS";
+				command.ExecuteNonQuery();
+			}
+			finally
+			{
+				conn.Close();
+			}
+		}
+
+		private void ResetDb2()
+		{
+			MySqlConnection conn = new MySqlConnection(ConnectionString2);
+			conn.Open();
+
+			try
+			{
+				Thread.CurrentThread.Join(1000);
+
+				MySqlCommand command = conn.CreateCommand();
+				command.CommandText = "DELETE FROM ORDERS";
 				command.ExecuteNonQuery();
 			}
 			finally
@@ -94,9 +124,45 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			resource = resources.Children.Add(new MutableConfiguration("resource"));
 			resource.Attributes["name"] = "BlogItem.hbm.xml";
 
+			CustomizeConfig(confignode);
+
 			container.Kernel.ConfigurationStore.AddFacilityConfiguration("nhibernate", confignode);
 
 			return container;
+		}
+
+		protected virtual void CustomizeConfig(MutableConfiguration confignode)
+		{
+		}
+
+		protected void AddOtherDatabase(MutableConfiguration confignode)
+		{
+			IConfiguration factory =
+				confignode.Children.Add(new MutableConfiguration("factory"));
+			factory.Attributes["id"] = "sessionFactory2";
+
+			IConfiguration settings =
+				factory.Children.Add(new MutableConfiguration("settings"));
+
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				ConnectionProvider)).Attributes["key"] = "hibernate.connection.provider";
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				Driver)).Attributes["key"] = "hibernate.connection.driver_class";
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				ConnectionString2)).Attributes["key"] = "hibernate.connection.connection_string";
+			settings.Children.Add(
+				new MutableConfiguration("item",
+				Dialect)).Attributes["key"] = "hibernate.dialect";
+
+			IConfiguration resources =
+				factory.Children.Add(new MutableConfiguration("resources"));
+
+			IConfiguration resource;
+			resource = resources.Children.Add(new MutableConfiguration("resource"));
+			resource.Attributes["name"] = "Order.hbm.xml";
 		}
 	}
 }

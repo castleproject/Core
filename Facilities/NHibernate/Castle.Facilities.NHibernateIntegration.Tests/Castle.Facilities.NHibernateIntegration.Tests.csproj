@@ -170,7 +170,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SessionFlushTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "TransactionalPlaceHolderTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TwoSessionFactoriesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -196,6 +206,21 @@
                 />
                 <File
                     RelPath = "Components\MyBusinessClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\MyOtherBusinessClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Order.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\OrderDao.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -22,33 +22,29 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	using Castle.Facilities.NHibernateExtension;
 
 
-	[UsesAutomaticSessionCreation]
-	public class BlogDao
+	[UsesAutomaticSessionCreation("sessionFactory2")]
+	public class OrderDao
 	{
-		public virtual Blog CreateBlog( String name )
+		public OrderDao()
 		{
-			ISession session = SessionManager.CurrentSession;
-
-			Blog blog = new Blog();
-			blog.Name = name;
-			blog.Items = new ArrayList();
-
-			session.Save(blog);
-
-			return blog;
 		}
 
-		public virtual IList ObtainBlogs()
+		public virtual Order CreateOrder(int value)
 		{
 			ISession session = SessionManager.CurrentSession;
-			return session.Find("from Blog");
+
+			Order order = new Order();
+			order.Value = value;
+
+			session.Save(order);
+
+			return order;
 		}
 
-		[SessionFlush(FlushOption.Force)]
-		public virtual void DeleteAll()
+		public virtual IList ObtainOrders()
 		{
 			ISession session = SessionManager.CurrentSession;
-			session.Delete("from Blog");
+			return session.Find("from Order");
 		}
 	}
 }
