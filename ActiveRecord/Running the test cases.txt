@@ -11,6 +11,29 @@ like.
 
    --- cut here ---
 
+/****** Object:  Table [dbo].[Companies]    Script Date: 26/3/2005 12:28:17 ******/
+CREATE TABLE [dbo].[Companies] (
+	[id] [int] IDENTITY (1, 1) NOT NULL ,
+	[client_of] [int] NULL ,
+	[name] [varchar] (50) NULL ,
+	[type] [varchar] (50) NULL 
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[people]    Script Date: 26/3/2005 12:28:17 ******/
+CREATE TABLE [dbo].[people] (
+	[id] [int] IDENTITY (1, 1) NOT NULL ,
+	[name] [varchar] (50) NULL 
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[people_companies]    Script Date: 26/3/2005 12:28:17 ******/
+CREATE TABLE [dbo].[people_companies] (
+	[person_id] [int] NOT NULL ,
+	[company_id] [int] NOT NULL 
+) ON [PRIMARY]
+GO
+
 /****** Object:  Table [dbo].[Blogs]    Script Date: 19/3/2005 23:53:47 ******/
 CREATE TABLE [dbo].[Blogs] (
 	[blog_id] [int] IDENTITY (1, 1) NOT NULL ,
