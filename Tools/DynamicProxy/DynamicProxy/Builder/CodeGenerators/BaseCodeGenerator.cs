@@ -21,6 +21,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
 
+	using Castle.DynamicProxy.Builder.CodeBuilder;
+	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
+
 	/// <summary>
 	/// Summary description for BaseCodeGenerator.
 	/// </summary>
@@ -175,17 +178,28 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			MethodBuilder builder = MainTypeBuilder.DefineMethod("GetObjectData", attrs, typeof (void), args);
 
 			ILGenerator generator = builder.GetILGenerator();
-			LocalBuilder type_local = generator.DeclareLocal(typeof (Type));
+
+//			ILCodeBuilder codebuilder = new ILCodeBuilder( builder );
+//
+//			LocalReferenceExpression type_var_local = codebuilder.DeclareLocal( typeof(Type) );
+//			MethodInvocationExpression get_type_method = new MethodInvocationExpression( 
+//				typeof(Type).GetMethod("GetType", get_type_args), 
+//				"Castle.DynamicProxy.Serialization.ProxyObjectReference, Castle.DynamicProxy",
+//				true, false );
+//
+//			codebuilder.Assign( type_var_local, get_type_method );
+//
+			LocalBuilder type_local = generator.DeclareLocal(typeof(Type));
 
 			// type name declared
 			generator.Emit(OpCodes.Ldstr, "Castle.DynamicProxy.Serialization.ProxyObjectReference, Castle.DynamicProxy");
 			generator.Emit(OpCodes.Ldc_I4_1); // true
 			generator.Emit(OpCodes.Ldc_I4_0); // false
-			generator.Emit(OpCodes.Call, typeof (Type).GetMethod("GetType", get_type_args));
+			generator.Emit(OpCodes.Call, typeof(Type).GetMethod("GetType", get_type_args));
+			generator.Emit(OpCodes.Stloc_0);
 
 			// We set the class responsible for
 			// serialize/desserialize the proxy
-			generator.Emit(OpCodes.Stloc_0);
 			generator.Emit(OpCodes.Ldarg_1);
 			generator.Emit(OpCodes.Ldloc_0);
 			generator.Emit(OpCodes.Callvirt, typeof (SerializationInfo).GetMethod("SetType"));

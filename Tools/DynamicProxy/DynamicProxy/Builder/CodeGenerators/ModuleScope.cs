@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// </summary>
 	public class ModuleScope
 	{
-		private static readonly String FILE_NAME = "GeneratedAssembly.dll";
+		public static readonly String FILE_NAME = "GeneratedAssembly.dll";
 
 		/// <summary>
 		/// Avoid leaks caused by non disposal of generated types.
@@ -78,15 +78,22 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get { return innerTypeCounter++; }
 		}
 
+		public bool SaveAssembly()
+		{
+#if ( DEBUG )
+			m_assemblyBuilder.Save(FILE_NAME);
+			return true;
+#else
+			return false;
+#endif
+		}
+
 		public Type this[String name]
 		{
 			get { return m_typeCache[name] as Type; }
 			set
 			{
 				m_typeCache[name] = value;
-#if ( DEBUG )
-				m_assemblyBuilder.Save(FILE_NAME);
-#endif
 			}
 		}
 	}

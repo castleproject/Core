@@ -1,4 +1,3 @@
-using Castle.DynamicProxy.Test.ClassInterfaces;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ namespace Castle.DynamicProxy.Test
 
 	using Castle.DynamicProxy.Test.Classes;
 	using Castle.DynamicProxy.Test.Mixins;
+	using Castle.DynamicProxy.Test.ClassInterfaces;
 
 	/// <summary>
 	/// Summary description for CachedTypeTestCase.

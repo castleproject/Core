@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Text;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using System.Runtime.Serialization;
 
 	using Castle.DynamicProxy.Invocation;
 
@@ -27,6 +28,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	public class ClassProxyGenerator : BaseCodeGenerator
 	{
 		private static readonly Type INVOCATION_TYPE = typeof(SameClassInvocation);
+
+		private bool m_delegateToBaseGetObjectData;
 
 		public ClassProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -98,7 +101,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		
 		public virtual Type GenerateCode(Type baseClass, Type[] interfaces)
 		{
-			interfaces = AddISerializable( interfaces );
+			if (baseClass.IsSerializable)
+			{
+				m_delegateToBaseGetObjectData = VerifyIsBaseImplementsGetObjectData(baseClass);
+				interfaces = AddISerializable( interfaces );
+			}
 
 			Type cacheType = GetFromCache(baseClass, interfaces);
 			
@@ -109,7 +116,12 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			CreateTypeBuilder( baseClass, interfaces );
 			GenerateFields();
-			ImplementGetObjectData();
+
+			if (baseClass.IsSerializable)
+			{
+				ImplementGetObjectData();
+			}
+
 			ImplementCacheInvocationCache();
 			GenerateTypeImplementation( baseClass, true );
 			GenerateInterfaceImplementation(interfaces);
@@ -128,6 +140,37 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			Type[] mixinInterfaces = InspectAndRegisterInterfaces( m_mixins );
 
 			return GenerateCode(baseClass, mixinInterfaces);
+		}
+
+		protected bool VerifyIsBaseImplementsGetObjectData(Type baseType)
+		{
+			// If base type implements ISerializable, we have to make sure
+			// the GetObjectData is marked as virtual
+			if (typeof(ISerializable).IsAssignableFrom(baseType))
+			{
+				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData", 
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+				if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
+				{
+					String message = String.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual", 
+						baseType.FullName);
+					throw new ProxyGenerationException(message);
+				}
+
+				ConstructorInfo serializatioConstructor = baseType.GetConstructor(
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+				if (serializatioConstructor == null)
+				{
+					String message = String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor", 
+						baseType.FullName);
+					throw new ProxyGenerationException(message);
+				}
+
+				return true;
+			}
+			return false;
 		}
 
 		protected void SkipDefaultInterfaceImplementation(Type[] interfaces)
