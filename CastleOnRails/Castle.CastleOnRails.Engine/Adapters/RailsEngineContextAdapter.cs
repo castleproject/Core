@@ -112,7 +112,7 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			set { _context.User = value; }
 		}
 
-		public string ApplicationPath
+		public String ApplicationPath
 		{
 			get
 			{
