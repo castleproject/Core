@@ -24,32 +24,7 @@
 	</target>
 	
 	<target name="dist">
-		<zip zipfile="${name}.src.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<exclude name="**/Debug/*" />
-				<exclude name="**/obj/*" />
-				<exclude name="**/*.user" />
-				<exclude name="**/*.suo" />
-				<exclude name="**/*.projdata" />
-				<exclude name="**/*.resharperoptions" />
-
-				<include name="License.txt" />				
-				<include name="Readme.txt" />				
-				<include name="*.build" />
-				<include name="*.sln" />
-				<include name="TransactionMangement/**/*.*" />
-			</fileset>
-		</zip>
-
-		<zip zipfile="${name}.bin.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/*.dll" />				
-				<include name="${base.dir}/License.txt" />				
-				<include name="${base.dir}/Readme.txt" />				
-				<include name="${name}.src.${version}.zip" />				
-			</fileset>
-		</zip>
-		
+		<nant buildfile="TransactionMangement/transaction.build" target="dist" />
 	</target>
 	
 </project>
