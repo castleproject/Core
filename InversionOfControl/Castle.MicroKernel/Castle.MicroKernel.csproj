@@ -204,6 +204,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LifecycleConcerns\SupportInitializeConcern.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifestyle\AbstractLifestyleManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
