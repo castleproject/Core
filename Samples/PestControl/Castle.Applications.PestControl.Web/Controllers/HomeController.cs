@@ -1,5 +1,3 @@
-using System.Web;
-using System.Web.Security;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +15,8 @@ using System.Web.Security;
 namespace Castle.Applications.PestControl.Web.Controllers
 {
 	using System;
+	using System.Web;
+	using System.Web.Security;
 
 	using Castle.Model;
 
