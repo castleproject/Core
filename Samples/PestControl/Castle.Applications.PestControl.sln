@@ -1,0 +1,77 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Applications.PestControl", "Castle.Applications.PestControl\Castle.Applications.PestControl.csproj", "{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Applications.PestControl.Web", "Castle.Applications.PestControl.Web\Castle.Applications.PestControl.Web.csproj", "{C88C7F7D-C951-4BD9-B128-8BB3765725C1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine", "..\..\CastleOnRails\RailsEngine\Castle.CastleOnRails.Engine.csproj", "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Framework", "..\..\CastleOnRails\RailsFramework\Castle.CastleOnRails.Framework.csproj", "{EC393863-333E-49CE-94A6-654B9F323954}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine.WindsorExtension", "..\..\CastleOnRails\WindsorIntegration\Castle.CastleOnRails.Engine.WindsorExtension.csproj", "{6C51A1E3-7F20-4696-BFD6-829134678341}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel", "..\..\InversionOfControl\Castle.MicroKernel\Castle.MicroKernel.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor", "..\..\InversionOfControl\Castle.Windsor\Castle.Windsor.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Prevalence", "..\..\Facilities\Prevalence\Castle.Facilities.Prevalence\Castle.Facilities.Prevalence.csproj", "{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}.Debug.ActiveCfg = Debug|.NET
+		{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}.Debug.Build.0 = Debug|.NET
+		{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}.Release.ActiveCfg = Release|.NET
+		{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}.Release.Build.0 = Release|.NET
+		{C88C7F7D-C951-4BD9-B128-8BB3765725C1}.Debug.ActiveCfg = Debug|.NET
+		{C88C7F7D-C951-4BD9-B128-8BB3765725C1}.Debug.Build.0 = Debug|.NET
+		{C88C7F7D-C951-4BD9-B128-8BB3765725C1}.Release.ActiveCfg = Release|.NET
+		{C88C7F7D-C951-4BD9-B128-8BB3765725C1}.Release.Build.0 = Release|.NET
+		{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}.Debug.ActiveCfg = Debug|.NET
+		{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}.Debug.Build.0 = Debug|.NET
+		{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}.Release.ActiveCfg = Release|.NET
+		{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}.Release.Build.0 = Release|.NET
+		{EC393863-333E-49CE-94A6-654B9F323954}.Debug.ActiveCfg = Debug|.NET
+		{EC393863-333E-49CE-94A6-654B9F323954}.Debug.Build.0 = Debug|.NET
+		{EC393863-333E-49CE-94A6-654B9F323954}.Release.ActiveCfg = Release|.NET
+		{EC393863-333E-49CE-94A6-654B9F323954}.Release.Build.0 = Release|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.ActiveCfg = Debug|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.Build.0 = Debug|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.ActiveCfg = Release|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.Build.0 = Release|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.ActiveCfg = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.Build.0 = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.ActiveCfg = Release|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.Build.0 = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.ActiveCfg = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.Build.0 = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.ActiveCfg = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.Build.0 = Release|.NET
+		{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}.Debug.ActiveCfg = Debug|.NET
+		{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}.Debug.Build.0 = Debug|.NET
+		{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}.Release.ActiveCfg = Release|.NET
+		{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
