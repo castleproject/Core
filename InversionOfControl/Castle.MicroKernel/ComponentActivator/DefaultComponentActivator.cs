@@ -108,6 +108,8 @@ namespace Castle.MicroKernel.ComponentActivator
 		protected virtual object[] CreateConstructorArguments( 
 			ConstructorCandidate constructor )
 		{
+			if (constructor == null) return new object[0];
+
 			object[] arguments = new object[constructor.Constructor.GetParameters().Length];
 
 			int index = 0;
