@@ -1,0 +1,3 @@
+#!/usr/local/bin/ruby
+$LOAD_PATH << File.dirname(__FILE__) + '/../vendor/railties/lib'
+require 'breakpoint_client'

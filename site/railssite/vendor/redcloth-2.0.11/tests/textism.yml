@@ -1,0 +1,404 @@
+---
+in: h1. Header 1
+out: <h1>Header 1</h1>
+---
+in: h2. Header 2
+out: <h2>Header 2</h2>
+---
+in: h3. Header 3
+out: <h3>Header 3</h3>
+---
+in: |-
+  Any old text.
+
+  bq. A block quotation.
+
+  Any old text.
+
+out: |-
+  <p>Any old text.</p>
+  
+  	<blockquote>
+  		<p>A block quotation.</p>
+  	</blockquote>
+  
+  	<p>Any old text.</p>
+
+---
+in: This is covered elsewhere[1].
+out: <p>This is covered elsewhere<sup><a href="#fn1">1</a></sup>.</p>
+---
+in: fn1. Down here, in fact.
+out: <p id="fn1"><sup>1</sup> Down here, in fact.</p>
+---
+in: |-
+  # A first item
+  # A second item
+  # A third item
+  # A fourth item
+out: |-
+  <ol>
+  	<li>A first item</li>
+  		<li>A second item</li>
+  		<li>A third item</li>
+  		<li>A fourth item</li>
+  	</ol>
+---
+in: |-
+  * A first item
+  * A second item
+  * A third item
+  * A fourth item
+
+out: |-
+  <ul>
+  	<li>A first item</li>
+  		<li>A second item</li>
+  		<li>A third item</li>
+  		<li>A fourth item</li>
+  	</ul>
+
+---
+in: _a phrase_
+out: <p><em>a phrase</em></p>
+---
+in: __a phrase__
+out: <p><i>a phrase</i></p>
+---
+in: '*a phrase*'
+out: <p><strong>a phrase</strong></p>
+---
+in: '**a phrase**'
+out: <p><b>a phrase</b></p>
+---
+in: Nabokov's ??Pnin??
+out: <p>Nabokov&#8217;s <cite>Pnin</cite></p>
+---
+in: -a phrase-
+out: <p><del>a phrase</del></p>
+---
+in: +a phrase+
+out: <p><ins>a phrase</ins></p>
+---
+in: ^a phrase^
+out: <p><sup>a phrase</sup></p>
+---
+in: ~a phrase~
+out: <p><sub>a phrase</sub></p>
+# ---
+# in: %(caps)SPAN%
+# out: <p><span class="caps">SPAN</span>
+---
+in: %{color:red}red%
+out: <p><span style="color:red;">red</span></p>
+---
+in: %[fr]rouge%
+out: <p><span lang="fr">rouge</span></p>
+---
+in: _(big)red_
+out: <p><em class="big">red</em></p>
+---
+in: p(bob). A paragraph
+out: <p class="bob">A paragraph</p>
+---
+in: p{color:#ddd}. A paragraph
+out: <p style="color:#ddd;">A paragraph</p>
+---
+in: p[fr]. A paragraph
+out: <p lang="fr">A paragraph</p>
+---
+in: h2()>. right-aligned header2, indented 1em both side
+out: <h2 style="padding-left:1em;padding-right:1em;text-align:right;">right-aligned header2, indented 1em both side</h2>
+---
+in: h3=. centered header
+out: <h3 style="text-align:center;">centered header</h3>
+---
+in: '!>/image.gif! right-aligned image'
+out: <p><img src="/image.gif" align="right" alt="" /> right-aligned image</p>
+---
+in: p[no]{color:red}. A Norse of a different colour.
+out: <p style="color:red;" lang="no">A Norse of a different colour.</p>
+---
+in: |-
+  |This|is|a|simple|table|
+  |This|is|a|simple|row|
+out: |-
+  <table>
+  		<tr>
+  			<td>This</td>
+  			<td>is</td>
+  			<td>a</td>
+  			<td>simple</td>
+  			<td>table</td>
+  		</tr>
+  		<tr>
+  			<td>This</td>
+  			<td>is</td>
+  			<td>a</td>
+  			<td>simple</td>
+  			<td>row</td>
+  		</tr>
+  	</table>
+---
+in: |-
+  table{border:1px solid black}.
+  |This|is|a|row|
+  |This|is|a|row|
+out: |-
+  <table style="border:1px solid black;">
+  		<tr>
+  			<td>This</td>
+  			<td>is</td>
+  			<td>a</td>
+  			<td>row</td>
+  		</tr>
+  		<tr>
+  			<td>This</td>
+  			<td>is</td>
+  			<td>a</td>
+  			<td>row</td>
+  		</tr>
+  	</table>
+---
+in: '{background:#ddd}. |This|is|a|row|'
+out: |-
+  <table>
+  		<tr style="background:#ddd;">
+  			<td>This</td>
+  			<td>is</td>
+  			<td>a</td>
+  			<td>row</td>
+  		</tr>
+  	</table>
+---
+in: |-
+  |{background:#ddd}. Cell with gray background|
+  |\2. Cell spanning 2 columns|
+  |/3. Cell spanning 3 rows|
+  |>. Right-aligned cell|
+out: |-
+  <table>
+  		<tr>
+  			<td style="background:#ddd;">Cell with gray background</td>
+  		</tr>
+  		<tr>
+  			<td colspan="2">Cell spanning 2 columns</td>
+  		</tr>
+  		<tr>
+  			<td rowspan="3">Cell spanning 3 rows</td>
+  		</tr>
+  		<tr>
+  			<td style="text-align:right;">Right-aligned cell</td>
+  		</tr>
+  	</table>
+# ---
+# in: |-
+#   This is a "link":bob to Bob's website.
+# 
+#   [bob]http://itsbob.com/index.html
+---
+in: ACLU(American Civil Liberties Union)
+out: <p><acronym title="American Civil Liberties Union">ACLU</acronym></p>
+---
+in: |-
+  h2{color:green}. This is a title
+
+  h3. This is a subhead
+  
+  p{color:red}. This is some text of dubious character. Isn't the use of "quotes" just lazy writing -- and theft of 'intellectual property' besides? I think the time has come to see a block quote.
+  
+  bq[fr]. This is a block quote. I'll admit it's not the most exciting block quote ever devised.
+  
+  Simple list:
+  
+  #{color:blue} one
+  # two
+  # three
+  
+  Multi-level list:
+  
+  # one
+  ## aye
+  ## bee
+  ## see
+  # two
+  ## x
+  ## y
+  # three
+  
+  Mixed list:
+  
+  * Point one
+  * Point two
+  ## Step 1
+  ## Step 2
+  ## Step 3
+  * Point three
+  ** Sub point 1
+  ** Sub point 2
+  
+  
+  Well, that went well. How about we insert an <a href="/" title="watch out">old-fashioned hypertext link</a>? Will the quote marks in the tags get messed up? No!
+  
+  "This is a link (optional title)":http://www.textism.com
+  
+  table{border:1px solid black}.
+  |_. this|_. is|_. a|_. header|
+  <{background:gray}. |\2. this is|{background:red;width:200px}. a|^<>{height:200px}. row|
+  |this|<>{padding:10px}. is|^. another|(bob#bob). row|
+  
+  An image:
+  
+  !/common/textist.gif(optional alt text)!
+  
+  # Librarians rule
+  # Yes they do
+  # But you knew that
+  
+  Some more text of dubious character. Here is a noisome string of CAPITAL letters. Here is something we want to _emphasize_. 
+  That was a linebreak. And something to indicate *strength*. Of course I could use <em>my own HTML tags</em> if I <strong>felt</strong> like it.
+  
+  h3. Coding
+  
+  This <code>is some code, "isn't it"</code>. Watch those quote marks! Now for some preformatted text:
+  
+  <pre>
+  <code>
+      $text = str_replace("<p>%::%</p>","",$text);
+      $text = str_replace("%::%</p>","",$text);
+      $text = str_replace("%::%","",$text);
+  
+  </code>
+  </pre>
+  
+  This isn't code.
+  
+  
+  So you see, my friends:
+  
+  * The time is now
+  * The time is not later
+  * The time is not yesterday
+  * We must act
+
+out: |-
+  <h2 style="color:green;">This is a title</h2>
+
+  	<h3>This is a subhead</h3>
+  
+  	<p style="color:red;">This is some text of dubious character. Isn&#8217;t the use of &#8220;quotes&#8221; just lazy writing&#8212;and theft of &#8216;intellectual property&#8217; besides? I think the time has come to see a block quote.</p>
+  
+  	<blockquote>
+  		<p lang="fr">This is a block quote. I&#8217;ll admit it&#8217;s not the most exciting block quote ever devised.</p>
+  	</blockquote>
+  
+  	<p>Simple list:</p>
+  
+  	<ol style="color:blue;">
+  	<li>one</li>
+  		<li>two</li>
+  		<li>three</li>
+  	</ol>
+  
+  	<p>Multi-level list:</p>
+  
+  	<ol>
+  	<li>one
+  	<ol>
+  	<li>aye</li>
+  		<li>bee</li>
+  		<li>see</li>
+  	</ol>
+  	</li>
+  		<li>two
+  	<ol>
+  	<li>x</li>
+  		<li>y</li>
+  	</ol>
+  	</li>
+  		<li>three</li>
+  	</ol>
+  
+  	<p>Mixed list:</p>
+  
+  	<ul>
+  	<li>Point one</li>
+  		<li>Point two
+  	<ol>
+  	<li>Step 1</li>
+  		<li>Step 2</li>
+  		<li>Step 3</li>
+  	</ol>
+  	</li>
+  		<li>Point three
+  	<ul>
+  	<li>Sub point 1</li>
+  		<li>Sub point 2</li>
+  	</ul></li>
+  	</ul>
+  
+  	<p>Well, that went well. How about we insert an <a href="/" title="watch out">old-fashioned hypertext link</a>? Will the quote marks in the tags get messed up? No!</p>
+  
+  	<p><a href="http://www.textism.com" title="optional title">This is a link</a></p>
+  
+  	<table style="border:1px solid black;">
+  		<tr>
+  			<th>this</th>
+  			<th>is</th>
+  			<th>a</th>
+  			<th>header</th>
+  		</tr>
+  		<tr style="background:gray;text-align:left;">
+  			<td colspan="2">this is</td>
+  			<td style="background:red;width:200px;">a</td>
+  			<td style="vertical-align:top;height:200px;text-align:justify;">row</td>
+  		</tr>
+  		<tr>
+  			<td>this</td>
+  			<td style="padding:10px;text-align:justify;">is</td>
+  			<td style="vertical-align:top;">another</td>
+  			<td class="bob" id="bob">row</td>
+  		</tr>
+  	</table>
+  
+  	<p>An image:</p>
+  
+  	<p><img src="/common/textist.gif" title="optional alt text" alt="optional alt text" /></p>
+  
+  	<ol>
+  	<li>Librarians rule</li>
+  		<li>Yes they do</li>
+  		<li>But you knew that</li>
+  	</ol>
+  
+  	<p>Some more text of dubious character. Here is a noisome string of <span class="caps">CAPITAL</span> letters. Here is something we want to <em>emphasize</em>. <br />
+  That was a linebreak. And something to indicate <strong>strength</strong>. Of course I could use <em>my own <span class="caps">HTML</span> tags</em> if I <strong>felt</strong> like it.</p>
+  
+  	<h3>Coding</h3>
+  
+  	<p>This <code>is some code, "isn't it"</code>. Watch those quote marks! Now for some preformatted text:</p>
+  
+  <pre>
+  <code>
+      $text = str_replace("&lt;p&gt;%::%&lt;/p&gt;","",$text);
+      $text = str_replace("%::%&lt;/p&gt;","",$text);
+      $text = str_replace("%::%","",$text);
+  
+  </code>
+  </pre>
+  
+  	<p>This isn&#8217;t code.</p>
+  
+  	<p>So you see, my friends:</p>
+  
+  	<ul>
+  	<li>The time is now</li>
+  		<li>The time is not later</li>
+  		<li>The time is not yesterday</li>
+  		<li>We must act</li>
+  	</ul>
+
+
+
+
+ 

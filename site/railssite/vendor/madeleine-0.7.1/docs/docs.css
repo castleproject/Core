@@ -1,0 +1,28 @@
+body {
+    background-color: #FFFFF0;
+}
+p {
+    width: 70ex
+}
+h1 {
+    font-family: verdana,arial,helvetica,sans-serif;
+}
+h2 {
+    font-family: verdana,arial,helvetica,sans-serif;
+    background: #EEEEE0;
+}
+h3 {
+    font-family: verdana,arial,helvetica,sans-serif;
+}
+h4 {
+    font-family: verdana,arial,helvetica,sans-serif;
+}
+.classMethod {
+    font-family: courier,monospace;
+    font-weight: bold;
+    background: #EEEEE0;
+}
+.instanceMethod {
+    font-family: courier,sans-serif;
+    background: #EEEEE0;
+}

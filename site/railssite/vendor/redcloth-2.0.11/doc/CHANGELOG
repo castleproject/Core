@@ -1,0 +1,111 @@
+--- %YAML:1.0
+- version: 2.0.11
+  date: 2004-06-01
+  changes:
+    - Fixed the new 2.0-style aliased links.
+    - Lines starting with div opening or closing tags aren't given paragraph tags.
+    - Escaped some sample markup that was being translated by RDoc.
+    - Subtle changes to the quick tags to help them interact with surrounding HTML better.
+    - Ensure angle brackets inside code quick tags get escaped.
+    - New patch and test by F. Ros to fix <pre> tags with class settings.
+    - Commented out encode_entities and fix_entities, they do nothing now.  Thanks, Denis.
+    - Scaled back QTAGS a back to avoid mixing up hyphens and dels.  Thanks, Denis.
+    - Work on the references to ensure they are generating at least XHTML 1.0 Transitional.
+
+- version: 2.0.10
+  date: 2004-05-26
+  changes:
+    - Table and list problems.  Rewrote the <pre> handling code.. again.
+
+- version: 2.0.9
+  date: 2004-05-26
+  changes:
+    - Improved RDoc.  Ri documentation is auto-installed now!
+    - Links were consuming closing HTML tags.  (See latest test in tests/links.yml.)
+    - Further speed patch from Denis.  Good good.
+    - Patch by F. Ros to fix <pre> tags with class settings.
+
+- version: 2.0.8
+  date: 2004-05-22
+  changes:
+    - First scan of the glyphs() method only scans for pre|notextile|code, the
+      deeper passes scan for all HTML.  Now inlines work around HTML tags!
+      (What a pain!)
+    - Moved tables and blocks into glyphs to keep them shielded from the parser
+      if they are in <pre> tags.
+    - Patch by Denis Mertz to speed up RedCloth by compiling the various RegExps
+      only once.  Thanks, David!
+
+- version: 2.0.7
+  date: 2004-04-21
+  changes:
+    - New REFERENCE and QUICK-REFERENCE.  See http://hobix.com/textile/.
+    - Lists rewritten to accomplish better line folding.
+    - Better, greedier links.
+    - Additional link and list tests.
+
+- version: 2.0.6
+  date: 2004-04-16
+  changes:
+    - Bold and strong tags were mixed up.  '*' is now strong.  '**' is bold.
+      They were swapped until now.
+    - Horizontal alignments were pretty buggy.  Combining alignments with
+      indents was totally broken.
+    - Fixed table problem.  Now glyphs are handled between tables and blocks.
+    - Nested <pre> and <code> tags are now escaped.  Much better handling of
+      HTML inside <pre> tags.  Really: quite nice.
+    - Patch from Florian Gross to fix an html filtration inconsistency.
+
+- version: 2.0.5
+  date: 2004-04-14
+  changes: 
+    - Added safe mode (patch courtesy of Florian Gross).
+    - Added line folding (suggested by Jim Menard).
+    - Fixing notextile tags to work multi-line.
+    - Ambiguity with em-dash and block opener.
+    - Footnote bug. (Thanks, Jim Menard!)
+
+- version: 2.0.4
+  date: 2004-04-08
+  changes:
+    - Scaled back aggresiveness of the inline matching to aid the em-dash.
+    - Scaled back footnotes to stay out of array indices.
+
+- version: 2.0.3
+  date: 2004-04-02
+  changes:
+    - Handling of pre, code, notextile was all wrong.  Also, got rid of the goofed up
+      split then collect.  Now using gsub! and recursion to handle inlines and glyphs.
+    - Better acronym support.
+    - Suppression of Regexp warnings.
+    - Single- and double-quoted string wierdness.  Thanks, Bret Pettichord.
+
+- version: 2.0.2
+  date: 2004-03-08
+  changes:
+    - Fixed broken lists, broken tables.
+    - code/pre tags now escape properly, glyphs are working, spans are working when surrounded by html tags.
+    - Fixed classes and ids. 
+    - Restricted notextile tags to a single line.
+
+- version: 2.0.1
+  date: 2004-02-10
+  changes:
+    - Unmatched closing slash on regexps in ruby 1.6.8.
+    - Fixes to bulleted lists.
+
+- version: 2.0
+  date: 2004-02-06
+  changes:
+    - Complete rewrite of RedCloth, against beta2 from textism.com.
+
+- version: 0.41
+  date: 2003-06-20
+  changes:
+    - Newlines were outputing as escaped.
+
+- version: 0.4
+  date: 2003-06-20
+  changes:
+    - Initial public release.
+    - Integration of YAML-based PyTextile tests.

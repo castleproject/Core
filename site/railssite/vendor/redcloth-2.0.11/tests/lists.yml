@@ -1,0 +1,81 @@
+--- # Bret Pettichord, Thanks.
+in: |-
+  * first line
+  * second
+    line
+  * third line
+out: |-
+  <ul>
+  	<li>first line</li>
+  		<li>second
+    line</li>
+  		<li>third line</li>
+  	</ul>
+---
+in: |-
+  p. start
+
+  * one
+  and one
+  * two
+  and two
+  * three
+
+  p. end
+out: |-
+  <p>start</p>
+  
+  	<ul>
+  	<li>one<br />
+  and one</li>
+  		<li>two<br />
+  and two</li>
+  		<li>three</li>
+  	</ul>
+  
+  	<p>end</p>
+---
+in: |-
+  Funky:
+
+  * Testing
+  *# number
+  *##* bullet
+  *# number
+  *# number
+  yeah number
+  #* bullet
+  *** okay
+
+  ****# what
+
+
+out: |-
+  <p>Funky:</p>
+  
+  	<ul>
+  	<li>Testing
+  	<ol>
+  	<li>number
+  	<ul>
+  	<li>bullet</li>
+  	</ul>
+  	</li>
+  		<li>number</li>
+  		<li>number<br />
+  yeah number</li>
+  	<ul>
+  	<li>bullet
+  	<ul>
+  	<li>okay
+  
+  	<ol>
+  	<li>what</li>
+  	</ul></li>
+  	</ol></li>
+  	</ul></li>
+  	</ul></li>
+  	</ol>
+---
+in: "* command run: @time ruby run-tests.rb > toto@"
+out: "<ul>\n\t<li>command run: <code>time ruby run-tests.rb &gt; toto</code></li>\n\t</ul>"

@@ -1,0 +1,366 @@
+------------------------------------------------------------------------
+r69 | ged | 2004-08-24 22:27:15 -0700 (Tue, 24 Aug 2004) | 2 lines
+
+- Fixed bug introduced by the last bugfix, fixed tests that missed the new bug.
+
+------------------------------------------------------------------------
+r68 | ged | 2004-08-24 22:14:37 -0700 (Tue, 24 Aug 2004) | 3 lines
+
+- Tracked down and fixed another regexp engine overflow bug; added a new test,
+   datafile, and minimal testcase that illustrates it.
+
+------------------------------------------------------------------------
+r66 | ged | 2004-08-24 07:57:17 -0700 (Tue, 24 Aug 2004) | 1 line
+
+- Updated to v1.0.0.
+------------------------------------------------------------------------
+r65 | ged | 2004-08-24 07:56:47 -0700 (Tue, 24 Aug 2004) | 1 line
+
+- Updated to v1.0.0.
+------------------------------------------------------------------------
+r64 | ged | 2004-08-24 07:53:32 -0700 (Tue, 24 Aug 2004) | 1 line
+
+- Updated to 20040824.
+------------------------------------------------------------------------
+r63 | ged | 2004-08-24 07:52:05 -0700 (Tue, 24 Aug 2004) | 3 lines
+
+- Added CHANGES.xml to ignore property for root directory.
+
+
+------------------------------------------------------------------------
+r62 | ged | 2004-08-24 07:48:44 -0700 (Tue, 24 Aug 2004) | 7 lines
+
+- Brought list of block-level tags up to date with Markdown 1.0's list
+- Propagated fix for overflow to the other two block-match patterns.
+- Abstracted list-item patterns out into constants to closer match Markdown's
+  code and to expose them for use in other code.
+- Fixed indentation of <pre> blocks inside blockquotes.
+- Added new tests for all of the above.
+
+------------------------------------------------------------------------
+r61 | ged | 2004-08-22 12:28:23 -0700 (Sun, 22 Aug 2004) | 5 lines
+
+- Fixed re-engine overflow for all tested cases (thanks to Martin Chase
+  <stillflame@FaerieMUD.org> for the fix).
+- Wrote some additional tests to be sure the block-level html escaper is working
+  after the above fix.
+
+------------------------------------------------------------------------
+r60 | ged | 2004-08-22 12:26:25 -0700 (Sun, 22 Aug 2004) | 2 lines
+
+- Removed skip of overflow test.
+
+------------------------------------------------------------------------
+r59 | ged | 2004-08-22 12:24:35 -0700 (Sun, 22 Aug 2004) | 2 lines
+
+- "Fixed" the test case so it overflows again.
+
+------------------------------------------------------------------------
+r58 | deveiant | 2004-08-08 22:12:02 -0700 (Sun, 08 Aug 2004) | 2 lines
+
+- Updated to 20040808.
+
+------------------------------------------------------------------------
+r57 | deveiant | 2004-08-08 18:16:14 -0700 (Sun, 08 Aug 2004) | 2 lines
+
+- Modified to work from wherever the test is run (RPA compat).
+
+------------------------------------------------------------------------
+r56 | deveiant | 2004-08-08 18:15:57 -0700 (Sun, 08 Aug 2004) | 2 lines
+
+- Modified to work from wherever the test is run (RPA compat).
+
+------------------------------------------------------------------------
+r55 | deveiant | 2004-08-08 18:15:27 -0700 (Sun, 08 Aug 2004) | 2 lines
+
+- Updated version attribute.
+
+------------------------------------------------------------------------
+r54 | deveiant | 2004-08-08 18:14:58 -0700 (Sun, 08 Aug 2004) | 2 lines
+
+- Brought markdown syntax up to date with Markdown 1.0fc1.
+
+------------------------------------------------------------------------
+r53 | deveiant | 2004-08-08 18:13:16 -0700 (Sun, 08 Aug 2004) | 2 lines
+
+- Made the require-header work wherever the test is run from (RPA compat).
+
+------------------------------------------------------------------------
+r51 | deveiant | 2004-06-21 08:20:59 -0700 (Mon, 21 Jun 2004) | 4 lines
+
+- Brought up to date with Markdown 1.0b7.
+
+- Ignore list properties on the base and docs directories updated.
+
+------------------------------------------------------------------------
+r50 | deveiant | 2004-06-02 06:37:15 -0700 (Wed, 02 Jun 2004) | 1 line
+
+- Commented out non-functional --output option for now.
+------------------------------------------------------------------------
+r49 | deveiant | 2004-06-01 20:30:18 -0700 (Tue, 01 Jun 2004) | 2 lines
+
+Initial checkin.
+
+------------------------------------------------------------------------
+r48 | deveiant | 2004-06-01 20:29:31 -0700 (Tue, 01 Jun 2004) | 2 lines
+
+- Added test for bug #574.
+
+------------------------------------------------------------------------
+r47 | deveiant | 2004-06-01 20:21:04 -0700 (Tue, 01 Jun 2004) | 8 lines
+
+- Test for bug #620 - Unresolved reference-style links doubled the character
+  immediately after them.
+
+- Added additional test email addresses, including ones that use extended latin
+  charset.
+
+- Added bug reference to a test.
+
+------------------------------------------------------------------------
+r46 | deveiant | 2004-06-01 20:19:41 -0700 (Tue, 01 Jun 2004) | 4 lines
+
+- Fix for bug #620 - Unresolved reference-style links doubled the character
+  immediately after them.
+
+
+------------------------------------------------------------------------
+r45 | deveiant | 2004-05-13 19:43:17 -0700 (Thu, 13 May 2004) | 4 lines
+
+- Added tests for bug #568 (Two sets of bold text on one line doesn't render
+  properly). Tests confirmed that two sets of bold text did work, but single
+  characters being bolded does not.
+
+------------------------------------------------------------------------
+r44 | deveiant | 2004-05-13 19:41:52 -0700 (Thu, 13 May 2004) | 2 lines
+
+- Fixed bug with bolding of single characters (bug #568).
+
+------------------------------------------------------------------------
+r43 | deveiant | 2004-05-04 07:35:11 -0700 (Tue, 04 May 2004) | 2 lines
+
+- Additional fixes and tests for bug #537.
+
+------------------------------------------------------------------------
+r41 | deveiant | 2004-04-29 20:40:38 -0700 (Thu, 29 Apr 2004) | 2 lines
+
+- Added bin/ directory.
+
+------------------------------------------------------------------------
+r40 | deveiant | 2004-04-29 20:40:04 -0700 (Thu, 29 Apr 2004) | 2 lines
+
+- Set date.
+
+------------------------------------------------------------------------
+r39 | deveiant | 2004-04-29 20:39:24 -0700 (Thu, 29 Apr 2004) | 3 lines
+
+- Added test for Bug #543 (Safe mode does not work when there are no left
+  angle-brackets in the source).
+
+------------------------------------------------------------------------
+r38 | deveiant | 2004-04-29 20:38:42 -0700 (Thu, 29 Apr 2004) | 5 lines
+
+- Added test for email address encoding (Bug #537).
+
+- Added test for bug #541 (Leading line of codeblock with more than one tab
+  width of indent mistakenly unindented).
+
+------------------------------------------------------------------------
+r37 | deveiant | 2004-04-29 20:35:26 -0700 (Thu, 29 Apr 2004) | 5 lines
+
+- Fix for bug #543 (Safe mode does not work when there are no left
+  angle-brackets in the source).
+
+
+
+------------------------------------------------------------------------
+r36 | deveiant | 2004-04-29 20:33:01 -0700 (Thu, 29 Apr 2004) | 5 lines
+
+- Fix for bug #541 (Leading line of codeblock with more than one tab
+  width of indent mistakenly unindented)
+
+
+
+------------------------------------------------------------------------
+r35 | deveiant | 2004-04-29 20:31:37 -0700 (Thu, 29 Apr 2004) | 3 lines
+
+- Fix for bug #537. Fix suggested by Marek Janukowicz.
+
+
+------------------------------------------------------------------------
+r32 | deveiant | 2004-04-22 21:47:42 -0700 (Thu, 22 Apr 2004) | 2 lines
+
+- Temporary fixes until I have time to integrate SVN stuff.
+
+------------------------------------------------------------------------
+r31 | deveiant | 2004-04-22 21:46:51 -0700 (Thu, 22 Apr 2004) | 2 lines
+
+- Version bump.
+
+------------------------------------------------------------------------
+r30 | deveiant | 2004-04-22 21:46:15 -0700 (Thu, 22 Apr 2004) | 2 lines
+
+- Brought in line with most-recent release.
+
+------------------------------------------------------------------------
+r29 | deveiant | 2004-04-22 21:40:50 -0700 (Thu, 22 Apr 2004) | 2 lines
+
+- Version bump.
+
+------------------------------------------------------------------------
+r28 | deveiant | 2004-04-22 21:39:05 -0700 (Thu, 22 Apr 2004) | 4 lines
+
+- Bugfixes for bugs 524 and 525. Thanks to David Heinemeier Hansson and Javier
+  Goizueta for bug reports and fixes.
+
+
+------------------------------------------------------------------------
+r27 | deveiant | 2004-04-22 21:34:31 -0700 (Thu, 22 Apr 2004) | 2 lines
+
+- Test for bugs 524 and 525
+
+------------------------------------------------------------------------
+r25 | deveiant | 2004-04-15 18:55:19 -0700 (Thu, 15 Apr 2004) | 1 line
+
+- Corrected version
+------------------------------------------------------------------------
+r24 | deveiant | 2004-04-15 18:53:52 -0700 (Thu, 15 Apr 2004) | 2 lines
+
+- Brought Version up to date.
+
+------------------------------------------------------------------------
+r23 | deveiant | 2004-04-15 18:52:17 -0700 (Thu, 15 Apr 2004) | 1 line
+
+- Updated ignore metadata.
+------------------------------------------------------------------------
+r22 | deveiant | 2004-04-15 18:51:14 -0700 (Thu, 15 Apr 2004) | 2 lines
+
+Initial checkin.
+
+------------------------------------------------------------------------
+r21 | deveiant | 2004-04-15 18:50:31 -0700 (Thu, 15 Apr 2004) | 6 lines
+
+- Changed tests/ pattern to catch all tests.
+
+- Added CHANGES.
+
+- Dropped MANIFEST.
+
+------------------------------------------------------------------------
+r20 | deveiant | 2004-04-15 18:49:46 -0700 (Thu, 15 Apr 2004) | 2 lines
+
+- Added missing dependency check for devel-logger.
+
+------------------------------------------------------------------------
+r19 | deveiant | 2004-04-15 18:49:12 -0700 (Thu, 15 Apr 2004) | 8 lines
+
+- Added contributors section to the header.
+
+- Integrated html- and style-filtering patch from Florian Gross <flgr@ccan.de>.
+
+- Corrections to RedCloth-compatibility.
+
+- Removed log from renderstate, as it's an attribute of the string itself.
+
+------------------------------------------------------------------------
+r18 | deveiant | 2004-04-15 18:48:27 -0700 (Thu, 15 Apr 2004) | 8 lines
+
+- Added contributors section to the header.
+
+- Integrated html- and style-filtering patch from Florian Gross <flgr@ccan.de>.
+
+- Corrections to RedCloth-compatibility.
+
+- Removed log from renderstate, as it's an attribute of the string itself.
+
+------------------------------------------------------------------------
+r15 | deveiant | 2004-04-11 23:02:54 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+- Added keywords.
+
+
+------------------------------------------------------------------------
+r14 | deveiant | 2004-04-11 23:01:40 -0700 (Sun, 11 Apr 2004) | 2 lines
+
+- Updated comments/added to-do marker.
+
+------------------------------------------------------------------------
+r13 | deveiant | 2004-04-11 22:47:16 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+- Updated ignore list.
+
+
+------------------------------------------------------------------------
+r12 | deveiant | 2004-04-11 22:46:49 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+Initial checkin.
+
+
+------------------------------------------------------------------------
+r11 | deveiant | 2004-04-11 22:45:07 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+- Added a time() function for timing bits of code.
+
+
+------------------------------------------------------------------------
+r10 | deveiant | 2004-04-11 22:43:10 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+- Changed keyword constants from CVS to SVN keywords.
+
+
+------------------------------------------------------------------------
+r9 | deveiant | 2004-04-11 22:29:37 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+- Changed location of keyword stuff, added URL keyword.
+
+
+------------------------------------------------------------------------
+r8 | deveiant | 2004-04-11 22:26:38 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+- Added the rest of the content.
+
+
+------------------------------------------------------------------------
+r7 | deveiant | 2004-04-11 22:21:47 -0700 (Sun, 11 Apr 2004) | 12 lines
+
+- Fixed license in header
+
+- Fixed error message in exception class with no second argument.
+
+- Removed unnecessary (and slllooowww) 'm' flag from HTML block matching
+  patterns.
+
+- Fixed code-span scanning to match spans that occur at the beginning of the
+  line.
+
+- Fixed error in code-span exception case.
+
+------------------------------------------------------------------------
+r6 | deveiant | 2004-04-11 22:17:45 -0700 (Sun, 11 Apr 2004) | 3 lines
+
+- Renamed to reflect repurposing.
+
+
+------------------------------------------------------------------------
+r5 | deveiant | 2004-04-11 22:17:08 -0700 (Sun, 11 Apr 2004) | 2 lines
+
+- Converted to bug-testing testcase.
+
+------------------------------------------------------------------------
+r4 | deveiant | 2004-04-11 22:15:34 -0700 (Sun, 11 Apr 2004) | 2 lines
+
+- Added some mode code span tests to catch bugs.
+
+------------------------------------------------------------------------
+r3 | deveiant | 2004-04-10 21:40:29 -0700 (Sat, 10 Apr 2004) | 2 lines
+
+- Updated dist/install utilities/libs.
+
+------------------------------------------------------------------------
+r2 | deveiant | 2004-04-10 13:36:46 -0700 (Sat, 10 Apr 2004) | 1 line
+
+Removed markdown reference source
+------------------------------------------------------------------------
+r1 | deveiant | 2004-04-10 13:35:02 -0700 (Sat, 10 Apr 2004) | 1 line
+
+Initial checkin

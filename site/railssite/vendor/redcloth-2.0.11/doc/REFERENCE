@@ -1,0 +1,216 @@
+---
+- A Textile Reference:
+  - Textile is a simple text markup.  Simple symbols mark words' emphasis.  Blocks of text
+    can be easily tagged as headers, quotes, or lists.  A Textile document can then be
+    converted to HTML(Hypertext Markup Language) for viewing on the web.
+  - You can try Textile out on the "Textile home page":http://www.textism.com/tools/textile/.
+    Textile is also available as "RedCloth":http://whytheluckystiff.net/ruby/redcloth/ for
+    Ruby or "PyTextile":http://dealmeida.net/projects/textile for Python.
+  - Also refer to the "*Quick Reference*":javascript:quickRedReference(); for this guide.
+  - h4. Reading the Examples
+  - In each section below, examples are provided to clearly illustrate.  In each example,
+    the Textile example is followed by the raw HTML it is translated into, followed by how
+    the HTML appears in the browser.
+  - 
+    - Textile example
+    - Converted to HTML
+    - Browser-view
+- Writing in Textile:
+  - Textile looks for paragraphs in your text.  Paragraphs are separated by one blank line.
+    Every paragraph is translated as an HTML paragraph.
+  - !!example "A single paragraph.\n\nFollowed by another."
+  - h4. Using HTML in Textile
+  - You can certainly use HTML tags inside your Textile documents.  HTML will only be escaped
+    if it's found in a @pre@ or @code@ block.
+  - !!example "I am <b>very</b> serious.\n\n<pre>\n  I am <b>very</b> serious.\n</pre>"
+  - h4. Line Breaks
+  - Line breaks are converted to HTML breaks.
+  - !!example "I spoke.\nAnd none replied."
+  - Line breaks can be disabled in RedCloth by turning on @fold_lines@.
+  - h4. Entities
+  - Single- and double-quotes around words or phrases are converted to curly quotations, much easier on the eye.
+  - !!example '"Observe!"'
+  - Double hyphens are replaced with an em-dash.
+  - !!example Observe -- very nice!
+  - Single hyphens are replaced with en-dashes.
+  - !!example Observe - tiny and brief.
+  - Triplets of periods become an ellipsis.
+  - !!example Observe...
+  - The letter 'x' becomes a dimension sign when used alone.
+  - !!example 'Observe: 2 x 2.'
+  - Conversion of trademark and copyright symbols.
+  - !!example 'one(TM), two(R), three(C).'
+- Quick Block Modifiers:
+  - Blocks of text default to being treated as paragraphs.  But modifers can be affixed
+    to the beginning of a block to change its treatment.
+  - h4. Headers
+  - To make an entire paragraph into a Header, place "h<em>n</em>." at 
+    its beginning, where _n_ is a number from 1-6.
+  - !!example h1. Header 1
+  - !!example h2. Header 2
+  - !!example h3. Header 3
+  - h4. Block Quotes
+  - To make an entire paragraph into a block quotation, place
+    "bq." before it.
+  - !!example "An old text\n\nbq. A block quotation.\n\nAny old text"
+  - h4. Footnotes
+  - Numeric references within text to footnotes appear between square brackets.
+  - !!example This is covered elsewhere[1].
+  - To create the footnote that corresponds to its reference within the text, begin a new paragraph with fn and the 
+    footnote's number, followed by a dot and a space.
+  - !!example fn1. Down here, in fact.
+- Quick Phrase Modifiers:
+  - h4. Structural Emphasis
+  - Emphasis to text is added by surrounding a phrase with underscores.  In HTML, this often
+    appears as <em>italics</em>.
+  - !!example I _believe_ every word.
+  - Strength can be give to text by surrounding with asterisks.  In HTML, this strength appears
+    as <strong>bold</strong>.
+  - !!example And then? She *fell*!
+  - Both italics and bold can be forced by doubling the underscores or asterisks.
+  - !!example "I __know__.\nI **really** __know__."
+  - Use double question marks to indicate _citation_.  The title of a book, for instance.
+  - !!example "??Cat's Cradle?? by Vonnegut"
+  - Code phrases can be surrounded by at-symbols.
+  - !!example "Convert with @r.to_html@"
+  - To indicate a passage which has been deleted, surround the passage with hypens.
+  - !!example "I'm -sure- not sure."
+  - Pluses around a passage indicate its insertion.
+  - !!example "You are a +pleasant+ child."
+  - To superscript a phrase, surround with carets.
+  - !!example "a ^2^ + b ^2^ = c ^2^"
+  - To subscript, surround with tildes.
+  - !!example "log ~2~ x"
+  - h4. HTML-Specific
+  - Lastly, if you find yourself needing to customize the style of a passage, use percent symbols
+    to translate the passage as an HTML span.
+  - !!example I'm %unaware% of most soft drinks.
+  - This way, you can apply style settings, as described in the next section to arbitrary phrases.
+  - !!example "I'm %{color:red}unaware%\nof most soft drinks."
+- Attributes:
+  - Tailoring Textile to suit your needs is quite easy.  Attributes allow you to provide CSS(Cascading
+    Style Sheets) information about any phrase.
+  - h4. Block Attributes
+  - A block can be tagged with a CSS class by circling the class in parentheses and
+    placing it just before the period which marks the block.
+  - !!example p(example1). An example
+  - An element ID can be given by prefixing the ID with a pound symbol and using it in place of
+    the class.
+  - !!example p(#big-red). Red here
+  - Class and ID can be combined by placing the class first.
+  - !!example p(example1#big-red2). Red here
+  - Style settings can be provided directly by surrounding them in curly braces.
+  - !!example p{color:blue;margin:30px}. Spacey blue
+  - Language designations can be given between angel brackets.
+  - !!example p[fr]. rouge
+  - h4. Phrase Attributes
+  - All block attributes can be applied to phrases as well by placing them just inside the
+    opening modifier.
+  - !!example "I seriously *{color:red}blushed*\nwhen I _(big)sprouted_ that\ncorn stalk from my\n%[es]cabeza%."
+  - h4. Block Alignments
+  - Text inside blocks can be aligned in four basic ways.
+  - !!example p<. align left
+  - !!example p>. align right
+  - !!example p=. centered
+  - !!example p<>. justified
+  - Indentation can also be specified by provide a single left paren for every 1em to the left.  A single right
+    paren for every 1em to the right.
+  - !!example p(. left ident 1em
+  - !!example p((. left ident 2em
+  - !!example p))). right ident 3em
+  - h4. Combining Alignments
+  - Identation may be coupled with alignment.
+  - !!example "h2()>. Bingo."
+  - And, furthermore, coupled with language settings and CSS styles.
+  - !!example "h3()>[no]{color:red}. Bingo"
+  - h4. HTML in Textile
+  - Textile is designed for quickening the simple markups.  For more complex formatting, you are encouraged
+    to break out into HTML.
+  - For example, long code blocks belong between @pre@ and @code@ tags.  Please also indent your code inside
+    the tags to be sure that all Textile processors out there will ignore the contents.
+  - !!example |
+      <pre>
+      <code>
+        a.gsub!( /</, '' )
+      </code>
+      </pre>
+  - You may also choose to surround sections with @div@ tags to separate your document into sections.
+    "Instiki":http://www.instiki.org/ uses this technique to float a sidebar to the right.
+  - !!example |
+      <div style="float:right;">
+      
+      h3. Sidebar
+
+      "Hobix":http://hobix.com/
+      "Ruby":http://ruby-lang.org/
+
+      </div>
+      
+      The main text of the
+      page goes here and will 
+      stay to the left of the 
+      sidebar.
+
+- Lists:
+  - h4. Numeric Lists
+  - To make a numbered list, place each item in its own paragraph, preceded by "#".
+  - !!example "# A first item\n# A second item\n# A third"
+  - These lists may be nested by increasing the number of pound symbols preceding child entries.
+  - !!example "# Fuel could be:\n## Coal\n## Gasoline\n## Electricity\n# Humans need only:\n## Water\n## Protein"
+  - h4. Bulleted Lists
+  - Bulleted lists use an asterisk in place of the pound.
+  - !!example "* A first item\n* A second item\n* A third"
+  - These lists may be nested in like manner.
+  - !!example "* Fuel could be:\n** Coal\n** Gasoline\n** Electricity\n* Humans need only:\n** Water\n** Protein"
+- External References:
+  - h4. Hypertext Links
+  - Basic links are comprised of a phrase which is linked to a URL(Universal Resource Locator).  Place the
+    descriptive phrase in quotation marks.  Follow it immediately by a colon and the URL.
+  - !!example I searched "Google":http://google.com.
+  - Notice, the link won't include any trailing punctuation.
+  - h4. Link Aliases
+  - If you are using the same link several times in your document, or you'd just like to be a tad more
+    organized, you can use a link alias.  Place the URL anywhere in your document, beginning with its
+    alias in square brackets.  Then, use the alias in place of the URL, using the link format above.
+  - !!example |
+      I am crazy about "Hobix":hobix
+      and "it's":hobix "all":hobix I ever
+      "link to":hobix!
+
+      [hobix]http://hobix.com
+  - h4. Embedded Images
+  - You can embed an image in your Textile document by surrounding its URL with exclamation marks.
+  - !!example "!http://hobix.com/sample.jpg!" 
+  - URLs may be relative.
+  - A title for the image can also be provided in parens, just before the closing exclamation.
+  - !!example "!openwindow1.gif(Bunny.)!"
+  - The title also acts as *alt* text should the image not be found.
+  - Links can be attached to images with a colon.
+  - !!example "!openwindow1.gif!:http://hobix.com/"
+  - h4. Image Alignments
+  - Alignments can be applied as well to images.
+  - !!example "!>obake.gif!\n\nAnd others sat all round the small\nmachine and paid it to sing to them."
+  - h4. Acronyms
+  - Definitions for acronyms can be provided by following an acronym with its definition in parens.
+  - !!example We use CSS(Cascading Style Sheets).
+- Tables:
+  - Simple tables can be built by separating fields with pipe characters
+  - !!example "| name | age | sex |\n| joan | 24 | f |\n| archie | 29 | m |\n| bella | 45 | f |"
+  - Specify header cells by marking them with an underscore and period.
+  - !!example "|_. name |_. age |_. sex |\n| joan | 24 | f |\n| archie | 29 | m |\n| bella | 45 | f |"
+  - h4. Cell Attributes
+  - The period used above marks the end of a cell's attributes.  Other attributes can be applied as well.
+  - !!example "|_. attribute list |\n|<. align left |\n|>. align right|\n|=. center |\n|<>. justify |\n|^. valign top |\n|~. bottom |"
+  - You can also specify colspans with a backslash, followed by the cell width.
+  - !!example "|\\2. spans two cols |\n| col 1 | col 2 |"
+  - Rowspan is specified by a forward slash, followed by the row height.
+  - !!example "|/3. spans 3 rows | a |\n| b |\n| c |"
+  - All block attributes can be applied to table cells as well.
+  - !!example "|{background:#ddd}. Grey cell|"
+  - h4. Table and Row Attributes
+  - Table-wide attributes can be applied before the first row of the table.  On its own line, followed by
+    a period.
+  - !!example "table{border:1px solid black}.\n|This|is|a|row|\n|This|is|a|row|"
+  - Attributes can be applied to a single row by supplying the attribute before the row starts, using a
+    @table@ modifier and following it by a period.
+  - !!example "|This|is|a|row|\n{background:#ddd}. |This|is|grey|row|"

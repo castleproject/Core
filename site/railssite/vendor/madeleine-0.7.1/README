@@ -1,0 +1,78 @@
+
+Madeleine is a Ruby implementation of Object Prevalence: Transparent
+persistence of business objects using command logging and complete
+system snapshots.
+
+<http://madeleine.sourceforge.net/>
+
+Madeleine's design is based on Prevayler, the original Java
+prevalence layer.
+
+Learn more about object prevalence at <http://www.prevayler.org/>.
+
+
+Installation:
+
+    Typical installation procedure is:
+    $ ruby install.rb config
+    $ ruby install.rb setup
+    # ruby install.rb install  (may require root privilege)
+    Try 'ruby install.rb --help' for detailed usage.
+
+    [From the documentation of Minero Aoki's 'install.rb']
+
+Usage:
+
+    require 'madeleine'
+
+    # Create an application as a prevalent system
+
+    madeleine = SnapshotMadeleine.new("my_example_storage") {
+      SomeExampleApplication.new()
+    }
+
+    # Do modifications of the system by sending commands through
+    # the Madeleine instance. A command is an object with a suitable
+    # "execute(system)" method.
+
+    madeleine.execute_command(command)
+
+
+Requirements:
+
+    * Ruby 1.8.1 or later
+
+    Additionaly, some of the sample code also uses ruby/tk.
+
+
+Known problems:
+
+    * Won't run in some Windows-ports of Ruby due to missing
+      fsync() call.
+
+Contact:
+
+    Homepage:
+    <http://madeleine.sourceforge.net/>
+
+    Questions, bug reports, patches, complaints? Use the mailing list:
+    <http://lists.sourceforge.net/lists/listinfo/madeleine-devel>
+
+License:
+
+    BSD (see the file COPYING)
+
+Credits:
+
+    Anders Bengtsson   -   Prevalence core impl.
+    Stephen Sykes      -   Automatic commands impl.
+
+    With the help of patches, testing and feedback from:
+
+    Steve Conover, David Heinemeier Hansson, Johan Lind, Håkan Råberg,
+    IIMA Susumu, Martin Tampe and Jon Tirsén
+
+    Thanks to Klaus Wuestefeld and the Prevayler developers for the
+    model of this software; to Minero Aoki for the installer; to Matz and
+    the core developers for the Ruby language!
+

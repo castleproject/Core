@@ -1,0 +1,10 @@
+* Fix problem with mixing AbstractInputStream::gets and AbstractInputStream::red
+* Implement ZipFsDir.glob
+* ZipFile.checkIntegrity method
+* non-MSDOS permission attributes
+** See mail from Ned Konz to ruby-talk subj. "Re: SV: [ANN] Archive 0.2"
+* Packager version, required unpacker version in zip headers
+** See mail from Ned Konz to ruby-talk subj. "Re: SV: [ANN] Archive 0.2"
+* implement small gui app on top, to exercise library and to discover
+what features should be added to rubyzip next.
+* implement storing attributes and ownership information

@@ -1,0 +1,17 @@
+Hi,
+
+I'd like to announce the alpha release of a Markdown library for [Ruby][1]
+called "BlueCloth". It's mostly a direct port of the most recent Perl version,
+minus the various plugin hooks and whatnot.
+
+More information can be found on [the project page][2], or feel free to ask me
+directly. I don't have much in the way of a demo yet, but will be working on
+getting something set up in the coming days.
+
+  [1]: http://www.ruby-lang.org/
+  [2]: http://bluecloth.rubyforge.org/
+
+--
+Michael Granger <ged@FaerieMUD.org>  
+Rubymage, Believer, Architect  
+The FaerieMUD Consortium <http://www.FaerieMUD.org/>  
