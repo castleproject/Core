@@ -15,7 +15,7 @@
 using NHibernate;
 using NHibernate.Cfg;
 
-namespace Castle.Facilities.NHibernate
+namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 	using System.IO;
@@ -86,6 +86,8 @@ namespace Castle.Facilities.NHibernate
 
 		protected virtual void ApplyConfigurationSettings(Configuration cfg, IConfiguration facilityConfig)
 		{
+			if (facilityConfig == null) return;
+
 			foreach(IConfiguration item in facilityConfig.Children)
 			{
 				String key = item.Attributes["key"];
@@ -97,6 +99,8 @@ namespace Castle.Facilities.NHibernate
 
 		protected virtual void RegisterResources(Configuration cfg, IConfiguration facilityConfig)
 		{
+			if (facilityConfig == null) return;
+
 			foreach(IConfiguration item in facilityConfig.Children)
 			{
 				String name = item.Attributes["name"];
@@ -115,6 +119,8 @@ namespace Castle.Facilities.NHibernate
 
 		protected virtual void RegisterAssemblies(Configuration cfg, IConfiguration facilityConfig)
 		{
+			if (facilityConfig == null) return;
+
 			foreach(IConfiguration item in facilityConfig.Children)
 			{
 				String assembly = item.Value;

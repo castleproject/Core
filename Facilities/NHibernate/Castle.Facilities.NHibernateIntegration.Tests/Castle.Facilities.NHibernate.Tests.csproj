@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
+        ProjectGuid = "{0C9EE31D-A700-485B-948A-68E4A3614E71}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Facilities.NHibernate"
+                AssemblyName = "Castle.Facilities.NHibernate.Tests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Facilities.NHibernate"
+                RootNamespace = "Castle.Facilities.NHibernate.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -80,39 +80,65 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\lib\Iesi.Collections.dll"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
                 />
                 <Reference
-                    Name = "NHibernate"
-                    AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
+                    Name = "Castle.Facilities.NHibernate"
+                    Project = "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "Commons"
                     AssemblyName = "Commons"
-                    HintPath = "..\lib\Commons.dll"
+                    HintPath = "..\bin\Commons.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\lib\HashCodeProvider.dll"
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\bin\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\bin\log4net.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\bin\NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                    HintPath = "..\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Model"
                     AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                    HintPath = "..\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "ICSharpCode.SharpZipLib"
+                    AssemblyName = "ICSharpCode.SharpZipLib"
+                    HintPath = "..\lib\ICSharpCode.SharpZipLib.dll"
+                />
+                <Reference
+                    Name = "MySql.Data"
+                    AssemblyName = "MySql.Data"
+                    HintPath = "..\lib\MySql.Data.dll"
                 />
             </References>
         </Build>
@@ -124,12 +150,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NHibernateFacility.cs"
+                    RelPath = "Blog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SessionFactoryActivator.cs"
+                    RelPath = "BlogItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NHibernateFacilityTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernate", "Castle.Facilities.NHibernate\Castle.Facilities.NHibernate.csproj", "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration", "Castle.Facilities.NHibernate\Castle.Facilities.NHibernateIntegration.csproj", "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

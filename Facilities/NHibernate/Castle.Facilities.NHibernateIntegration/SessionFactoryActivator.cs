@@ -16,7 +16,7 @@ using Castle.MicroKernel;
 using Castle.Model;
 using NHibernate.Cfg;
 
-namespace Castle.Facilities.NHibernate
+namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 
