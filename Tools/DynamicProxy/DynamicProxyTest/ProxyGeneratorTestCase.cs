@@ -244,12 +244,12 @@ namespace Castle.DynamicProxy.Test
 		public void ProxyForClassWithGuidProperty() 
 		{
 			object proxy = _generator.CreateClassProxy( 
-				typeof(GuidClass), new StandardInterceptor() );
+				typeof(ClassWithGuid), new StandardInterceptor() );
 
 			Assert.IsNotNull( proxy );
-			Assert.IsTrue( typeof(GuidClass).IsAssignableFrom( proxy.GetType() ) );
+			Assert.IsTrue( typeof(ClassWithGuid).IsAssignableFrom( proxy.GetType() ) );
 
-			GuidClass inter = (GuidClass) proxy;
+			ClassWithGuid inter = (ClassWithGuid) proxy;
 
 			Assert.IsNotNull( inter.GooId );
 		}

@@ -12,15 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Test.Interceptors
+namespace Castle.DynamicProxy.Test.Classes
 {
 	using System;
 
-	public class MyInterfaceProxy : StandardInterceptor
+	/// <summary>
+	/// Summary description for GuidClass.
+	/// </summary>
+	public class ClassWithGuid 
 	{
-		protected override void PreProceed(IInvocation invocation, params object[] args)
+		public virtual Guid GooId 
 		{
-			base.PreProceed(invocation, args);
+			get { return Guid.NewGuid(); }
 		}
 	}
 }

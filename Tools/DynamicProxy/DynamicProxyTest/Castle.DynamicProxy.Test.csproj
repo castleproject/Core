@@ -145,17 +145,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\ClassWithGuid.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\ClassWithRefType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Classes\ClassWithSByteEnum.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Classes\GuidClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
