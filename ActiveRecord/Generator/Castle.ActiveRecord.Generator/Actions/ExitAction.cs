@@ -12,17 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Generator
+namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
+	using System.Windows.Forms;
 
 
-	public interface IApplicationLayout
+	public class ExitAction : AbstractAction
 	{
-		void Install(IWorkspace workspace);
+		private MenuItem _item;
 
-		void Persist(IWorkspace workspace);
-		
-		void Restore(IWorkspace workspace);
+		public ExitAction()
+		{
+		}
+
+		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
+		{
+			base.Install(workspace, parentMenu, parentGroup);
+
+			_item = new MenuItem("Exit");
+			_item.Click += new EventHandler(OnExit);
+
+			(parentMenu as MenuItem).MenuItems.Add(_item);
+		}
+
+		private void OnExit(object sender, EventArgs e)
+		{
+			// TODO: Confirmation
+			Application.Exit();
+		}
 	}
 }

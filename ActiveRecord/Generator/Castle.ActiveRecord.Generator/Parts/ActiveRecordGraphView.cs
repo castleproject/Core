@@ -315,17 +315,17 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 		public MainMenu MainMenu
 		{
-			get { return null; }
+			get { return _parentWorkspace.MainMenu; }
 		}
 
 		public ToolBar MainToolBar
 		{
-			get { return null; }
+			get { return _parentWorkspace.MainToolBar; }
 		}
 
 		public StatusBar MainStatusBar
 		{
-			get { return null; }
+			get { return _parentWorkspace.MainStatusBar; }
 		}
 
 		public DockManager MainDockManager

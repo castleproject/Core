@@ -12,17 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Generator
+namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
+	using System.Windows.Forms;
 
 
-	public interface IApplicationLayout
+	public class HelpActionSet : IActionSet
 	{
-		void Install(IWorkspace workspace);
+		private CastleSiteAction siteAction;
+		private AboutAction aboutAction;
 
-		void Persist(IWorkspace workspace);
-		
-		void Restore(IWorkspace workspace);
+		public HelpActionSet()
+		{
+		}
+
+		public void Init(Model model)
+		{
+			siteAction = new CastleSiteAction();
+			aboutAction = new AboutAction();
+
+			siteAction.Init(model);
+			aboutAction.Init(model);
+		}
+
+		public void Install(IWorkspace workspace)
+		{
+			MenuItem item = new MenuItem("Help");
+			workspace.MainMenu.MenuItems.Add(item);
+
+			siteAction.Install(workspace, item, null);
+			aboutAction.Install(workspace, item, null);
+		}
 	}
 }

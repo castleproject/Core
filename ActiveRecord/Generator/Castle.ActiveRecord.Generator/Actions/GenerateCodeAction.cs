@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Generator.Dialogs;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,57 +18,29 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System;
 	using System.Windows.Forms;
 
-	using Castle.ActiveRecord.Generator.Components;
 
-
-	public class ProjectNewAction : AbstractAction
+	public class GenerateCodeAction : AbstractAction
 	{
 		private MenuItem _item;
-		private ToolBarButton _button;
-
-		public ProjectNewAction()
-		{
-		}
-
-		#region IAction Members
 
 		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
 		{
 			base.Install(workspace, parentMenu, parentGroup);
 
-			_item = new MenuItem("&New");
+			_item = new MenuItem("Generate code...");
+			_item.Click += new EventHandler(OnGenerate);
 
-			_item.Click += new EventHandler(OnNew);
 			(parentMenu as MenuItem).MenuItems.Add(_item);
-
-			_button = new ToolBarButton();
-			_button.ToolTipText = "New";
-			_button.ImageIndex = 0;
-
-			(parentGroup as ToolBar).Buttons.Add( _button );
-			(parentGroup as ToolBar).ButtonClick += new ToolBarButtonClickEventHandler(ProjectNewAction_ButtonClick);
 		}
 
-		#endregion
-
-		private void OnNew(object sender, EventArgs e)
+		private void OnGenerate(object sender, EventArgs e)
 		{
-			if (sender == _item)
+			using(GenCodeDialog dialog = new GenCodeDialog(Model))
 			{
-				DoAction();
-			}
-		}
-
-		private void DoAction()
-		{
-			base.Model.CurrentProject = new Project();
-		}
-
-		private void ProjectNewAction_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
-		{
-			if (e.Button == _button)
-			{
-				DoAction();
+				if (dialog.ShowDialog(Workspace.ActiveWindow) == DialogResult.OK)
+				{
+					
+				}
 			}
 		}
 	}

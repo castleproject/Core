@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Generator.Parts;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +16,20 @@
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
-	using System.IO;
 	using System.Windows.Forms;
-	using System.Runtime.Serialization.Formatters.Binary;
 
 	using Castle.ActiveRecord.Generator.Components;
 
 
-	public class ProjectOpenAction : AbstractAction
+	public class ViewProjectExplorerAction : AbstractAction
 	{
+		private MenuItem _item;
 		private ToolBarButton _button;
+		private ProjectExplorer _explorer;
 
-		public ProjectOpenAction()
+		public ViewProjectExplorerAction(ProjectExplorer explorer)
 		{
+			_explorer = explorer;
 		}
 
 		#region IAction Members
@@ -36,46 +38,39 @@ namespace Castle.ActiveRecord.Generator.Actions
 		{
 			base.Install(workspace, parentMenu, parentGroup);
 
-			MenuItem item = new MenuItem("&Open...");
+			_item = new MenuItem("Project Explorer");
 
-			item.Click += new EventHandler(OnOpen);
-
-			(parentMenu as MenuItem).MenuItems.Add(item);
+			_item.Click += new EventHandler(OnNew);
+			(parentMenu as MenuItem).MenuItems.Add(_item);
 
 			_button = new ToolBarButton();
-			_button.ToolTipText = "Open";
-			_button.ImageIndex = 1;
+			_button.ToolTipText = "Project Explorer";
+			_button.ImageIndex = 3;
 
 			(parentGroup as ToolBar).Buttons.Add( _button );
-			(parentGroup as ToolBar).ButtonClick += new ToolBarButtonClickEventHandler(OnButtonClick);
+			(parentGroup as ToolBar).ButtonClick += new ToolBarButtonClickEventHandler(ProjectNewAction_ButtonClick);
 		}
 
 		#endregion
 
-		private void OnOpen(object sender, EventArgs e)
+		private void OnNew(object sender, EventArgs e)
 		{
-			try
+			if (sender == _item)
 			{
-				using(FileStream fs = new FileStream(@"C:\project1.ar", FileMode.Open, FileAccess.Read, FileShare.Read))
-				{
-					BinaryFormatter formatter = new BinaryFormatter();
-
-					Model.CurrentProject = formatter.Deserialize( fs ) as Project;
-				}
-			}
-			catch(Exception ex)
-			{
-				Model.CurrentProject = new Project();
-
-				MessageBox.Show(Workspace.ActiveWindow, ex.Message, "Error opening project");
+				DoAction();
 			}
 		}
 
-		private void OnButtonClick(object sender, ToolBarButtonClickEventArgs e)
+		private void DoAction()
+		{
+			_explorer.Show(Workspace.MainDockManager);
+		}
+
+		private void ProjectNewAction_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
 		{
 			if (e.Button == _button)
 			{
-				OnOpen(sender, e);
+				DoAction();
 			}
 		}
 	}

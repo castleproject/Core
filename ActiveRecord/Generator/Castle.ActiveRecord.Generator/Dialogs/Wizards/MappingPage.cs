@@ -54,6 +54,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				{
 					ListViewItem item = listView1.Items.Add( desc.PropertyName );
 					item.Tag = desc;
+					item.Checked = desc.Generate;
 					item.SubItems.Add( desc.PropertyType.Name );
 					item.SubItems.Add( desc.ColumnName );
 					item.SubItems.Add( desc.ColumnTypeName );
@@ -123,6 +124,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 																						this.columnHeader2,
 																						this.columnHeader3,
 																						this.columnHeader4});
+			this.listView1.FullRowSelect = true;
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.listView1.LabelEdit = true;
 			this.listView1.Location = new System.Drawing.Point(16, 88);

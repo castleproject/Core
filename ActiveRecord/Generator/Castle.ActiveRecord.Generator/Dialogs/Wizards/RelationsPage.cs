@@ -19,7 +19,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
-		private System.Windows.Forms.CheckBox acceptSuggestions;
 		private System.Windows.Forms.Label label2;
 		private TableDefinition _oldTable;
 
@@ -52,6 +51,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				foreach(ActiveRecordPropertyRelationDescriptor property in properties)
 				{
 					ListViewItem item = listView1.Items.Add( property.PropertyName );
+					item.Tag = property;
+					item.Checked = property.Generate;
 					item.SubItems.Add( "TODO!" );
 					item.SubItems.Add( property.RelationType );
 					item.SubItems.Add( property.ColumnName );
@@ -63,12 +64,16 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		{
 			base.Deactivated(context);
 
-			ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
+			ActiveRecordDescriptor desc = context["ardesc"] as ActiveRecordDescriptor;
 
-			foreach(ActiveRecordPropertyDescriptor relation in ar.PropertiesRelations)
+			desc.PropertiesRelations.Clear();
+
+			foreach(ListViewItem item in listView1.Items)
 			{
-				relation.Generate = acceptSuggestions.Checked;
+				ActiveRecordPropertyRelationDescriptor property = item.Tag as ActiveRecordPropertyRelationDescriptor;
+				property.Generate = item.Checked;
 			}
+
 		}
 
 		/// <summary>
@@ -96,20 +101,21 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+			this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
 			this.label1 = new System.Windows.Forms.Label();
-			this.acceptSuggestions = new System.Windows.Forms.CheckBox();
-			this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
 			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// listView1
 			// 
+			this.listView1.CheckBoxes = true;
 			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 																						this.columnHeader1,
 																						this.columnHeader2,
 																						this.columnHeader5,
 																						this.columnHeader3});
+			this.listView1.FullRowSelect = true;
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.listView1.LabelEdit = true;
 			this.listView1.Location = new System.Drawing.Point(16, 96);
@@ -129,6 +135,12 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.columnHeader2.Width = 90;
 			// 
+			// columnHeader5
+			// 
+			this.columnHeader5.Text = "Association";
+			this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.columnHeader5.Width = 120;
+			// 
 			// columnHeader3
 			// 
 			this.columnHeader3.Text = "Column";
@@ -137,33 +149,19 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(24, 64);
+			this.label1.Location = new System.Drawing.Point(24, 56);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(568, 23);
+			this.label1.Size = new System.Drawing.Size(560, 32);
 			this.label1.TabIndex = 2;
-			this.label1.Text = "Map the relation this class might have with others. Here is our suggestion:";
-			// 
-			// acceptSuggestions
-			// 
-			this.acceptSuggestions.Checked = true;
-			this.acceptSuggestions.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.acceptSuggestions.Location = new System.Drawing.Point(24, 256);
-			this.acceptSuggestions.Name = "acceptSuggestions";
-			this.acceptSuggestions.Size = new System.Drawing.Size(144, 32);
-			this.acceptSuggestions.TabIndex = 4;
-			this.acceptSuggestions.Text = "Accept suggestions";
-			// 
-			// columnHeader5
-			// 
-			this.columnHeader5.Text = "Association";
-			this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.columnHeader5.Width = 120;
+			this.label1.Text = "Map the relation this class might have with others. Here is our suggestion, just " +
+				"uncheck the ones that don\'t make sense";
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(24, 296);
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label2.Location = new System.Drawing.Point(24, 264);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(560, 32);
+			this.label2.Size = new System.Drawing.Size(560, 48);
 			this.label2.TabIndex = 5;
 			this.label2.Text = "Please note that sometimes the relationship points to an ActiveRecord class that " +
 				"does not exist yet. In this case, the generator will create them for you. You ca" +
@@ -172,7 +170,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			// RelationsPage
 			// 
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.acceptSuggestions);
 			this.Controls.Add(this.listView1);
 			this.Controls.Add(this.label1);
 			this.Name = "RelationsPage";

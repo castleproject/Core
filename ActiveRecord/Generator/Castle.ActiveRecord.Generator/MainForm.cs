@@ -29,9 +29,9 @@ namespace Castle.ActiveRecord.Generator
 	{
 		private DockManager dockManager;
 		private System.Windows.Forms.MainMenu mainMenu1;
-		private System.Windows.Forms.ImageList imageList1;
 		private System.Windows.Forms.StatusBar statusBar1;
 		private System.Windows.Forms.ToolBar toolBar1;
+		private System.Windows.Forms.ImageList imageList2;
 		private System.ComponentModel.IContainer components;
 
 		public MainForm()
@@ -99,9 +99,9 @@ namespace Castle.ActiveRecord.Generator
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
 			this.dockManager = new WeifenLuo.WinFormsUI.DockManager();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.statusBar1 = new System.Windows.Forms.StatusBar();
 			this.toolBar1 = new System.Windows.Forms.ToolBar();
+			this.imageList2 = new System.Windows.Forms.ImageList(this.components);
 			this.SuspendLayout();
 			// 
 			// dockManager
@@ -113,31 +113,31 @@ namespace Castle.ActiveRecord.Generator
 			this.dockManager.Size = new System.Drawing.Size(855, 609);
 			this.dockManager.TabIndex = 1;
 			// 
-			// imageList1
-			// 
-			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			// 
 			// statusBar1
 			// 
 			this.statusBar1.Location = new System.Drawing.Point(0, 651);
 			this.statusBar1.Name = "statusBar1";
 			this.statusBar1.Size = new System.Drawing.Size(855, 21);
 			this.statusBar1.TabIndex = 0;
-			this.statusBar1.Text = "statusBar1";
+			this.statusBar1.Text = "Ready.";
 			// 
 			// toolBar1
 			// 
 			this.toolBar1.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
 			this.toolBar1.BackColor = System.Drawing.SystemColors.Control;
 			this.toolBar1.DropDownArrows = true;
-			this.toolBar1.ImageList = this.imageList1;
+			this.toolBar1.ImageList = this.imageList2;
 			this.toolBar1.Location = new System.Drawing.Point(0, 0);
 			this.toolBar1.Name = "toolBar1";
 			this.toolBar1.ShowToolTips = true;
 			this.toolBar1.Size = new System.Drawing.Size(855, 42);
 			this.toolBar1.TabIndex = 1;
+			// 
+			// imageList2
+			// 
+			this.imageList2.ImageSize = new System.Drawing.Size(16, 16);
+			this.imageList2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList2.ImageStream")));
+			this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// MainForm
 			// 

@@ -194,12 +194,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Actions\AboutAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Actions\AbstractAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Actions\AddDatabaseAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\CastleSiteAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\ExitAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\GenerateCodeAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -229,6 +249,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Actions\ViewAvailableItemsAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\ViewProjectExplorerAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Actions\Sets\ActiveRecordGraphViewActionSet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -239,9 +269,29 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Actions\Sets\HelpActionSet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Actions\Sets\ProjectExplorerActionSet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\Sets\ViewActionSet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\AboutDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\AboutDialog.resx"
+                    DependentUpon = "AboutDialog.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Dialogs\ActiveRecordBasePropertiesDialog.cs"
@@ -271,6 +321,16 @@
                 <File
                     RelPath = "Dialogs\DatabaseConnectionDialog.resx"
                     DependentUpon = "DatabaseConnectionDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\GenCodeDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\GenCodeDialog.resx"
+                    DependentUpon = "GenCodeDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

@@ -17,57 +17,32 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System;
 	using System.Windows.Forms;
 
-	using Castle.ActiveRecord.Generator.Components;
+	using Castle.ActiveRecord.Generator.Dialogs;
 
 
-	public class ProjectNewAction : AbstractAction
+	public class AboutAction : AbstractAction
 	{
 		private MenuItem _item;
-		private ToolBarButton _button;
 
-		public ProjectNewAction()
+		public AboutAction()
 		{
 		}
-
-		#region IAction Members
 
 		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
 		{
 			base.Install(workspace, parentMenu, parentGroup);
 
-			_item = new MenuItem("&New");
+			_item = new MenuItem("About...");
+			_item.Click += new EventHandler(OnShowAbout);
 
-			_item.Click += new EventHandler(OnNew);
 			(parentMenu as MenuItem).MenuItems.Add(_item);
-
-			_button = new ToolBarButton();
-			_button.ToolTipText = "New";
-			_button.ImageIndex = 0;
-
-			(parentGroup as ToolBar).Buttons.Add( _button );
-			(parentGroup as ToolBar).ButtonClick += new ToolBarButtonClickEventHandler(ProjectNewAction_ButtonClick);
 		}
 
-		#endregion
-
-		private void OnNew(object sender, EventArgs e)
+		private void OnShowAbout(object sender, EventArgs e)
 		{
-			if (sender == _item)
+			using(AboutDialog dialog = new AboutDialog())
 			{
-				DoAction();
-			}
-		}
-
-		private void DoAction()
-		{
-			base.Model.CurrentProject = new Project();
-		}
-
-		private void ProjectNewAction_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
-		{
-			if (e.Button == _button)
-			{
-				DoAction();
+				dialog.ShowDialog(Workspace.ActiveWindow);
 			}
 		}
 	}

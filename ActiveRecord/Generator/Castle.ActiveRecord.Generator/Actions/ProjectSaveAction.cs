@@ -1,4 +1,3 @@
-using System.Runtime.Serialization.Formatters.Binary;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +18,13 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System.IO;
 	using System.Windows.Forms;
 	using System.Runtime.Serialization;
+	using System.Runtime.Serialization.Formatters.Binary;
 
 
 	public class ProjectSaveAction : AbstractAction
 	{
 		private MenuItem _item;
+		private ToolBarButton _button;
 
 		public ProjectSaveAction()
 		{
@@ -37,6 +38,13 @@ namespace Castle.ActiveRecord.Generator.Actions
 			_item.Click += new EventHandler(OnSave);
 
 			(parentMenu as MenuItem).MenuItems.Add(_item);
+
+			_button = new ToolBarButton();
+			_button.ToolTipText = "Save";
+			_button.ImageIndex = 2;
+
+			(parentGroup as ToolBar).Buttons.Add( _button );
+			(parentGroup as ToolBar).ButtonClick += new ToolBarButtonClickEventHandler(OnButtonClick);
 		}
 
 		private void OnSave(object sender, EventArgs e)
@@ -53,6 +61,14 @@ namespace Castle.ActiveRecord.Generator.Actions
 			catch(Exception ex)
 			{
 				MessageBox.Show(Workspace.ActiveWindow, ex.Message, "Error saving project");
+			}
+		}
+
+		private void OnButtonClick(object sender, ToolBarButtonClickEventArgs e)
+		{
+			if (e.Button == _button)
+			{
+				OnSave(sender, e);
 			}
 		}
 	}

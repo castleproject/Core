@@ -15,6 +15,10 @@
 namespace Castle.ActiveRecord.Generator
 {
 	using System;
+	using System.IO;
+	using System.Windows.Forms;
+
+	using WeifenLuo.WinFormsUI;
 
 	using Castle.ActiveRecord.Generator.Actions;
 	using Castle.ActiveRecord.Generator.Parts;
@@ -23,6 +27,10 @@ namespace Castle.ActiveRecord.Generator
 	public class ARGeneratorLayout : IApplicationLayout
 	{
 		private Model _model;
+		private ActiveRecordGraphView arGraph;
+		private OutputView outView;
+		private ProjectExplorer projExplorer;
+		private AvailableShapes avaShapes;
 
 		public ARGeneratorLayout(Model model)
 		{
@@ -33,35 +41,78 @@ namespace Castle.ActiveRecord.Generator
 
 		public void Install(IWorkspace workspace)
 		{
+			// Add parts
+
+			arGraph = new ActiveRecordGraphView(_model);
+			arGraph.ParentWorkspace = workspace;
+
+			outView = new OutputView(_model);
+//			outView.ParentWorkspace = workspace;
+
+			projExplorer = new ProjectExplorer(_model);
+			projExplorer.ParentWorkspace = workspace;
+
+			avaShapes = new AvailableShapes(_model);
+			avaShapes.ParentWorkspace = workspace;
+
 			// Register Actions
 			
 			FileActionGroup group1 = new FileActionGroup();
 			group1.Init(_model);
 			group1.Install(workspace);
 
-			// Add parts
+			ViewActionSet group2 = new ViewActionSet(arGraph, outView, projExplorer, avaShapes);
+			group2.Init(_model);
+			group2.Install(workspace);
 
-			ActiveRecordGraphView arGraph = new ActiveRecordGraphView(_model);
-			arGraph.ParentWorkspace = workspace;
-			arGraph.Show(workspace.MainDockManager);
+			HelpActionSet group3 = new HelpActionSet();
+			group3.Init(_model);
+			group3.Install(workspace);
 
-			OutputView outView = new OutputView(_model);
-//			outView.ParentWorkspace = workspace;
-			outView.Show(workspace.MainDockManager);
-
-			ProjectExplorer projExplorer = new ProjectExplorer(_model);
-			projExplorer.ParentWorkspace = workspace;
-			projExplorer.Show(workspace.MainDockManager);
-
-			AvailableShapes avaShapes = new AvailableShapes(_model);
-			avaShapes.ParentWorkspace = workspace;
-			avaShapes.Show(workspace.MainDockManager);
 		}
 
-		public void Persist()
+		public void Persist(IWorkspace workspace)
 		{
+			String configFile = Path.Combine(
+				Path.GetDirectoryName(Application.ExecutablePath), "Layout.config");
+			workspace.MainDockManager.SaveAsXml(configFile);
+		}
+
+		public void Restore(IWorkspace workspace)
+		{
+			String configFile = Path.Combine(
+				Path.GetDirectoryName(Application.ExecutablePath), "Layout.config");
+
+			if (File.Exists(configFile))
+			{
+				workspace.MainDockManager.LoadFromXml(configFile, 
+					new GetContentCallback(GetContentFromPersistString));
+			}
+			else
+			{
+				arGraph.Show(workspace.MainDockManager);
+				outView.Show(workspace.MainDockManager);
+				projExplorer.Show(workspace.MainDockManager);
+				avaShapes.Show(workspace.MainDockManager);
+			}
 		}
 
 		#endregion
+
+		private Content GetContentFromPersistString(String persistString)
+		{
+			if (persistString == typeof(ActiveRecordGraphView).ToString())
+				return arGraph;
+			else if (persistString == typeof(OutputView).ToString())
+				return outView;
+			else if (persistString == typeof(ProjectExplorer).ToString())
+				return projExplorer;
+			else if (persistString == typeof(AvailableShapes).ToString())
+				return avaShapes;
+			else
+			{
+				return null;
+			}
+		}
 	}
 }

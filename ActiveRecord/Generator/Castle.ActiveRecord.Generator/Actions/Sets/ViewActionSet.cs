@@ -17,56 +17,47 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System;
 	using System.Windows.Forms;
 
+	using Castle.ActiveRecord.Generator.Parts;
 
-	public class FileActionGroup : IActionSet
+
+	public class ViewActionSet : IActionSet
 	{
-		private ProjectNewAction newAction;
-		private ProjectOpenAction openAction;
-		private ProjectSaveAction saveAction;
-		private ExitAction exitAction;
-		private GenerateCodeAction generateAction;
+		private ViewProjectExplorerAction projExAction;
+		private ViewAvailableItemsAction avalItemsAction;
+		private ActiveRecordGraphView _graph;
+		private OutputView _outputview;
+		private ProjectExplorer _explorer;
+		private AvailableShapes _shapes;
 
-		public FileActionGroup()
+		public ViewActionSet(ActiveRecordGraphView graph, OutputView outputview, 
+			ProjectExplorer explorer, AvailableShapes shapes)
 		{
+			_graph = graph;
+			_outputview = outputview;
+			_explorer = explorer;
+			_shapes = shapes;
 		}
 
-		#region IAction Members
+		#region IActionSet Members
 
 		public void Init(Model model)
 		{
-			newAction = new ProjectNewAction();
-			openAction = new ProjectOpenAction();
-			saveAction = new ProjectSaveAction();
-			generateAction = new GenerateCodeAction();
-			exitAction = new ExitAction();
+			projExAction = new ViewProjectExplorerAction(_explorer);
+			avalItemsAction = new ViewAvailableItemsAction(_shapes);
 
-			newAction.Init(model);
-			openAction.Init(model);
-			saveAction.Init(model);
-			exitAction.Init(model);
-			generateAction.Init(model);
+			projExAction.Init(model);
+			avalItemsAction.Init(model);
 		}
 
 		public void Install(IWorkspace workspace)
 		{
-			MenuItem item = new MenuItem("P&roject");
+			MenuItem item = new MenuItem("View");
 			workspace.MainMenu.MenuItems.Add(item);
 
 			ToolBar toolbar = workspace.MainToolBar;
 
-			newAction.Install(workspace, item, toolbar);
-			openAction.Install(workspace, item, toolbar);
-			saveAction.Install(workspace, item, toolbar);
-
-			MenuItem menuSep = new MenuItem("-");
-			item.MenuItems.Add(menuSep);
-
-			generateAction.Install(workspace, item, toolbar);
-
-			menuSep = new MenuItem("-");
-			item.MenuItems.Add(menuSep);
-
-			exitAction.Install(workspace, item, toolbar);
+			projExAction.Install(workspace, item, toolbar);
+			avalItemsAction.Install(workspace, item, toolbar);
 
 			ToolBarButton sep = new ToolBarButton();
 			sep.Style = ToolBarButtonStyle.Separator;

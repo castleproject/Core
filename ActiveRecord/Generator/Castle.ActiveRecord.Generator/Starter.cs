@@ -50,7 +50,7 @@ namespace Castle.ActiveRecord.Generator
 			_layout.Install(_main);
 
 			// Restore pesisted changes to layout
-			// layout.Restore();
+			_layout.Restore(_main);
 
 			_model.CurrentProject = new Project();
 		}
@@ -58,7 +58,7 @@ namespace Castle.ActiveRecord.Generator
 		private void OnWorkspaceClosed(object sender, EventArgs e)
 		{
 			// Persist changes to layout
-			_layout.Persist();
+			_layout.Persist(_main);
 		}
 	}
 }
