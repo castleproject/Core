@@ -167,7 +167,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 		private void listView1_AfterLabelEdit(object sender, System.Windows.Forms.LabelEditEventArgs e)
 		{
-			if (e.Label.Length == 0)
+			if (e.Label == null || e.Label.Length == 0)
 			{
 				e.CancelEdit = true;
 			}

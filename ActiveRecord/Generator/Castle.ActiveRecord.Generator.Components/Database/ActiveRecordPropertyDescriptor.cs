@@ -19,63 +19,91 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	[Serializable]
 	public abstract class ActiveRecordPropertyDescriptor
 	{
+		private bool _generate = true;
 		private String _columnName;
 		private String _columnTypeName = "VARCHAR";
 		private String _propertyName;
-		private Type _propertyType;
-		private bool _generate = true;
+		protected Type _propertyType;
+		private bool _insert = true;
+		private bool _update = true;
 
 		public ActiveRecordPropertyDescriptor(
 			String columnName, String columnTypeName, 
-			String propertyName, /*String propertyFieldName,*/ Type propertyType)
+			String propertyName, Type propertyType) : this(columnName, columnTypeName,propertyName)
 		{
-			_columnName = columnName;
-			_columnTypeName = columnTypeName;
-			_propertyName = propertyName;
+			if (propertyType == null) throw new ArgumentNullException("propertyType can't be null");
+
 			_propertyType = propertyType;
 		}
 
-		public ActiveRecordPropertyDescriptor(string _columnName, string _columnTypeName, string _propertyName)
+		public ActiveRecordPropertyDescriptor(String columnName, 
+			String columnTypeName, String propertyName)
 		{
-			this._columnName = _columnName;
-			this._columnTypeName = _columnTypeName;
-			this._propertyName = _propertyName;
+			if (columnName == null) throw new ArgumentNullException("columnName can't be null");
+			if (columnTypeName == null) throw new ArgumentNullException("columnTypeName can't be null");
+			if (propertyName == null) throw new ArgumentNullException("propertyName can't be null");
+
+			_columnName = columnName;
+			_columnTypeName = columnTypeName;
+			_propertyName = propertyName;
 		}
 
-		public string ColumnName
+		public String ColumnName
 		{
 			get { return _columnName; }
-			set { _columnName = value; }
 		}
 
-		public string ColumnTypeName
+		public String ColumnTypeName
 		{
 			get { return _columnTypeName; }
-			set { _columnTypeName = value; }
 		}
 
-		public string PropertyName
+		public String PropertyName
 		{
 			get { return _propertyName; }
 			set { _propertyName = value; }
 		}
 
-//		public string PropertyFieldName
-//		{
-//			get { return _propertyFieldName; }
-//			set { _propertyFieldName = value; }
-//		}
-
 		public Type PropertyType
 		{
 			get { return _propertyType; }
-			set { _propertyType = value; }
 		}
 
 		public bool Generate
 		{
 			get { return _generate; }
 			set { _generate = value; }
+		}
+
+		public bool Insert
+		{
+			get { return _insert; }
+			set { _insert = value; }
+		}
+
+		public bool Update
+		{
+			get { return _update; }
+			set { _update = value; }
+		}
+
+		public override String ToString()
+		{
+			return _columnName;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ActiveRecordPropertyDescriptor other = obj as ActiveRecordPropertyDescriptor;
+			
+			if (other == null) return false;
+			
+			return _columnName.Equals(other._columnName);
+		}
+
+		public override int GetHashCode()
+		{
+			return _columnName.GetHashCode();
 		}
 	}
 
@@ -86,10 +114,10 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 		public ActiveRecordPrimaryKeyDescriptor(
 			String columnName, String columnTypeName, 
-			String propertyName, Type propertyType, String _generatorType) : 
+			String propertyName, Type propertyType, String generatorType) : 
 			base(columnName, columnTypeName, propertyName, propertyType, false)
 		{
-			this._generatorType = _generatorType;
+			_generatorType = generatorType;
 		}
 	}
 
@@ -110,18 +138,25 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	[Serializable]
 	public abstract class ActiveRecordPropertyRelationDescriptor : ActiveRecordPropertyDescriptor
 	{
-		private String _relationType;
 		private ActiveRecordDescriptor _targetType;
+		private String _relationType;
+		private String _where;
+		private String _orderBy;
+		private String _cascade;
+		private String _outerJoin;
+		private bool _lazy;
+		private bool _proxy;
+		private bool _inverse;
 
-		public ActiveRecordPropertyRelationDescriptor(string _columnName, string _columnTypeName, 
-			string _propertyName, string _relationType, ActiveRecordDescriptor _targetType) : 
-			base(_columnName, _columnTypeName, _propertyName)
+		public ActiveRecordPropertyRelationDescriptor(String columnName, String columnTypeName, 
+			String propertyName, String relationType, ActiveRecordDescriptor targetType) : 
+			base(columnName, columnTypeName, propertyName)
 		{
-			this._relationType = _relationType;
-			this._targetType = _targetType;
+			_relationType = relationType;
+			_targetType = targetType;
 		}
 
-		public string RelationType
+		public String RelationType
 		{
 			get { return _relationType; }
 		}
@@ -130,13 +165,55 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		{
 			get { return _targetType; }
 		}
+
+		public String Where
+		{
+			get { return _where; }
+			set { _where = value; }
+		}
+
+		public String OrderBy
+		{
+			get { return _orderBy; }
+			set { _orderBy = value; }
+		}
+
+		public String Cascade
+		{
+			get { return _cascade; }
+			set { _cascade = value; }
+		}
+
+		public String OuterJoin
+		{
+			get { return _outerJoin; }
+			set { _outerJoin = value; }
+		}
+
+		public bool Proxy
+		{
+			get { return _proxy; }
+			set { _proxy = value; }
+		}
+
+		public bool Lazy
+		{
+			get { return _lazy; }
+			set { _lazy = value; }
+		}
+
+		public bool Inverse
+		{
+			get { return _inverse; }
+			set { _inverse = value; }
+		}
 	}
 
 	[Serializable]
 	public class ActiveRecordBelongsToDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
-		public ActiveRecordBelongsToDescriptor(string _columnName, 
-			string _propertyName, ActiveRecordDescriptor _targetType) : 
+		public ActiveRecordBelongsToDescriptor(String _columnName, 
+			String _propertyName, ActiveRecordDescriptor _targetType) : 
 			base(_columnName, "", _propertyName, "BelongsTo", _targetType)
 		{
 		}
@@ -145,19 +222,19 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	[Serializable]
 	public class ActiveRecordHasManyDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
-		public ActiveRecordHasManyDescriptor(string _columnName, 
-			string _propertyName, Type propertyName, ActiveRecordDescriptor _targetType) : 
-			base(_columnName, "", _propertyName, "HasMany", _targetType)
+		public ActiveRecordHasManyDescriptor(String columnName,
+			String propertyName, Type propertyType, ActiveRecordDescriptor targetType) : 
+			base(columnName, String.Empty, propertyName, "HasMany", targetType)
 		{
-			base.PropertyType = propertyName;
+			_propertyType = propertyType;
 		}
 	}
 
 	[Serializable]
 	public class ActiveRecordHasOneDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
-		public ActiveRecordHasOneDescriptor(string _columnName, 
-			string _propertyName, ActiveRecordDescriptor _targetType) : 
+		public ActiveRecordHasOneDescriptor(String _columnName, 
+			String _propertyName, ActiveRecordDescriptor _targetType) : 
 			base(_columnName, "", _propertyName, "HasOne", _targetType)
 		{
 		}
@@ -168,8 +245,8 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	{
 		private String _columnKey;
 
-		public ActiveRecordHasAndBelongsToManyDescriptor(string _columnName, string _columnTypeName, 
-			string _propertyName, ActiveRecordDescriptor _targetType, string _columnKey) : 
+		public ActiveRecordHasAndBelongsToManyDescriptor(String _columnName, String _columnTypeName, 
+			String _propertyName, ActiveRecordDescriptor _targetType, String _columnKey) : 
 			base(_columnName, _columnTypeName, _propertyName, "HasAndBelongsToMany", _targetType)
 		{
 			this._columnKey = _columnKey;

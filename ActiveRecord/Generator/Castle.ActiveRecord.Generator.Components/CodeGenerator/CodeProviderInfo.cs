@@ -23,13 +23,13 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 		private readonly String _label;
 		private readonly Type _codeProvider;
 
-		public CodeProviderInfo(string label, Type codeProvider)
+		public CodeProviderInfo(String label, Type codeProvider)
 		{
 			_label = label;
 			_codeProvider = codeProvider;
 		}
 
-		public string Label
+		public String Label
 		{
 			get { return _label; }
 		}
@@ -39,7 +39,7 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 			get { return _codeProvider; }
 		}
 
-		public override string ToString()
+		public override String ToString()
 		{
 			return _label;
 		}

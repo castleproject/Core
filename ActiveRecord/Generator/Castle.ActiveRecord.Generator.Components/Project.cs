@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord.Generator.Components
 		private bool _OverwriteFiles;
 		private CodeProviderInfo _info;
 
-		public Project(string name)
+		public Project(String name)
 		{
 			_name = name;
 		}

@@ -74,7 +74,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			set { _db = value; }
 		}
 
-		public override string ToString()
+		public override String ToString()
 		{
 			return _name;
 		}

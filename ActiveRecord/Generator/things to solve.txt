@@ -1,0 +1,14 @@
+- Context menu on the project explorer
+
+- Add relation Dialog
+
+- Operations is not configurable yet
+
+- Search for a better alternative to CodeDom
+
+- Inherited fields on subclasses 
+  (when marked, it appears on both parent and subclass)
+  FIXED
+
+- Support joined subclass
+

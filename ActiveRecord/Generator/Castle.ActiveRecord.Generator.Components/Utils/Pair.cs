@@ -19,8 +19,8 @@ namespace Castle.ActiveRecord.Generator.Components.Utils
 
 	public class Pair
 	{
-		private string _first;
-		private string _second;
+		private String _first;
+		private String _second;
 
 		public Pair(String first, String second)
 		{
@@ -28,17 +28,17 @@ namespace Castle.ActiveRecord.Generator.Components.Utils
 			_second = second;
 		}
 
-		public string First
+		public String First
 		{
 			get { return _first; }
 		}
 
-		public string Second
+		public String Second
 		{
 			get { return _second; }
 		}
 
-		public override string ToString()
+		public override String ToString()
 		{
 			return _first;
 		}

@@ -119,6 +119,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IRelationshipBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IRelationshipInferenceService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -140,6 +145,11 @@
                 />
                 <File
                     RelPath = "Project.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RelationshipBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

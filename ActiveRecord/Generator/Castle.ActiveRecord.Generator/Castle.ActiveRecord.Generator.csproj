@@ -324,6 +324,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Dialogs\AddRelationDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\AddRelationDialog.resx"
+                    DependentUpon = "AddRelationDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Dialogs\DatabaseConnectionDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

@@ -6,6 +6,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 	using System.ComponentModel;
 	using System.Windows.Forms;
 
+	using Castle.ActiveRecord.Generator.Components;
 	using Castle.ActiveRecord.Generator.Components.Database;
 
 	/// <summary>
@@ -53,13 +54,22 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private System.Windows.Forms.ColumnHeader columnHeader13;
+		private System.Windows.Forms.Button cancelButton;
 
 		private ActiveRecordDescriptor _descriptor;
+		private ActiveRecordDescriptor _parent;
+		private Project _project;
 
 
-		public ActiveRecordPropertiesDialog(ActiveRecordDescriptor descriptor)
+		public ActiveRecordPropertiesDialog(ActiveRecordDescriptor descriptor, Project project)
 		{
+			_project = project;
 			_descriptor = descriptor;
+
+			if (descriptor is ActiveRecordDescriptorSubClass)
+			{
+				_parent = ((ActiveRecordDescriptorSubClass) descriptor).BaseClass;
+			}
 
 			InitializeComponent();
 
@@ -173,6 +183,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
 			this.okButton = new System.Windows.Forms.Button();
+			this.cancelButton = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -198,7 +209,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.tabControl1.Location = new System.Drawing.Point(16, 40);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(656, 328);
+			this.tabControl1.Size = new System.Drawing.Size(656, 320);
 			this.tabControl1.TabIndex = 2;
 			// 
 			// tabPage3
@@ -211,21 +222,21 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.tabPage3.Controls.Add(this.label1);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Size = new System.Drawing.Size(648, 302);
+			this.tabPage3.Size = new System.Drawing.Size(648, 294);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Class";
 			// 
 			// parentClass
 			// 
 			this.parentClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.parentClass.Location = new System.Drawing.Point(272, 40);
+			this.parentClass.Location = new System.Drawing.Point(272, 48);
 			this.parentClass.Name = "parentClass";
 			this.parentClass.Size = new System.Drawing.Size(192, 21);
 			this.parentClass.TabIndex = 9;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(176, 40);
+			this.label3.Location = new System.Drawing.Point(176, 48);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100, 24);
 			this.label3.TabIndex = 8;
@@ -237,9 +248,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.groupBox2.Controls.Add(this.joinedSubKeyColumn);
 			this.groupBox2.Controls.Add(this.label5);
 			this.groupBox2.Controls.Add(this.isJoinedSubClass);
-			this.groupBox2.Location = new System.Drawing.Point(336, 96);
+			this.groupBox2.Location = new System.Drawing.Point(336, 104);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(288, 176);
+			this.groupBox2.Size = new System.Drawing.Size(288, 168);
 			this.groupBox2.TabIndex = 4;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Joined-subclass";
@@ -278,9 +289,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.groupBox1.Controls.Add(this.discColumn);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.useDiscriminator);
-			this.groupBox1.Location = new System.Drawing.Point(24, 96);
+			this.groupBox1.Location = new System.Drawing.Point(24, 104);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(288, 176);
+			this.groupBox1.Size = new System.Drawing.Size(288, 168);
 			this.groupBox1.TabIndex = 3;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Table hierarchy";
@@ -332,7 +343,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// className
 			// 
-			this.className.Location = new System.Drawing.Point(272, 8);
+			this.className.Location = new System.Drawing.Point(272, 16);
 			this.className.Name = "className";
 			this.className.Size = new System.Drawing.Size(192, 21);
 			this.className.TabIndex = 1;
@@ -340,7 +351,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(176, 8);
+			this.label1.Location = new System.Drawing.Point(176, 16);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 24);
 			this.label1.TabIndex = 0;
@@ -352,7 +363,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.tabPage1.Controls.Add(this.listView1);
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Size = new System.Drawing.Size(648, 302);
+			this.tabPage1.Size = new System.Drawing.Size(648, 294);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Columns";
 			// 
@@ -409,17 +420,19 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.tabPage2.Controls.Add(this.listView2);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Size = new System.Drawing.Size(648, 302);
+			this.tabPage2.Size = new System.Drawing.Size(648, 294);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Relationships";
 			// 
 			// AddRelation
 			// 
+			this.AddRelation.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.AddRelation.Location = new System.Drawing.Point(504, 256);
 			this.AddRelation.Name = "AddRelation";
 			this.AddRelation.Size = new System.Drawing.Size(104, 23);
 			this.AddRelation.TabIndex = 5;
 			this.AddRelation.Text = "Add Relation";
+			this.AddRelation.Click += new System.EventHandler(this.AddRelation_Click);
 			// 
 			// listView2
 			// 
@@ -487,16 +500,28 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// okButton
 			// 
-			this.okButton.Location = new System.Drawing.Point(592, 384);
+			this.okButton.Location = new System.Drawing.Point(592, 376);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 3;
 			this.okButton.Text = "OK";
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
+			// cancelButton
+			// 
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.cancelButton.Location = new System.Drawing.Point(504, 376);
+			this.cancelButton.Name = "cancelButton";
+			this.cancelButton.TabIndex = 4;
+			this.cancelButton.Text = "Cancel";
+			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+			// 
 			// ActiveRecordPropertiesDialog
 			// 
+			this.AcceptButton = this.okButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(686, 424);
+			this.CancelButton = this.cancelButton;
+			this.ClientSize = new System.Drawing.Size(686, 408);
+			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.title);
@@ -505,7 +530,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.MaximizeBox = false;
 			this.Name = "ActiveRecordPropertiesDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "ActiveRecordPropertiesDialog";
+			this.Text = "Properties";
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
@@ -547,15 +572,12 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 			if (descriptor is ActiveRecordDescriptorSubClass)
 			{
-				ActiveRecordDescriptor parent = 
-					((ActiveRecordDescriptorSubClass) descriptor).BaseClass;
-
 				// This code might look strange, but we're
 				// only showing the fields on the parent class that haven't been
 				// marked for generation, so the user might have the
 				// oportunity to add them
 
-				foreach(ActiveRecordPropertyDescriptor prop in parent.Properties)
+				foreach(ActiveRecordPropertyDescriptor prop in _parent.Properties)
 				{
 					if (prop.Generate || added.Contains(prop)) continue;
 
@@ -594,15 +616,12 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 			if (descriptor is ActiveRecordDescriptorSubClass)
 			{
-				ActiveRecordDescriptor parent = 
-					((ActiveRecordDescriptorSubClass) descriptor).BaseClass;
-
 				// This code might look strange, but we're
 				// only showing the fields on the parent class that haven't been
 				// marked for generation, so the user might have the
 				// oportunity to add them
 
-				foreach(ActiveRecordPropertyRelationDescriptor prop in parent.PropertiesRelations)
+				foreach(ActiveRecordPropertyRelationDescriptor prop in _parent.PropertiesRelations)
 				{
 					if (prop.Generate || added.Contains(prop)) continue;
 
@@ -626,11 +645,108 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			// What's common can be updated without any problems:
 
+			SaveCommonFields();
+
+			// Updating properties
+
+			SaveClassProperties();
+
+			// Updating relations
+
+			SaveClassRelationships();
+
+			// Now here, semantic matters
+
+//			if (_descriptor is ActiveRecordDescriptorSubClass ||
+//				_descriptor is ActiveRecordDescriptorJoinedSubClass )
+//			{
+//			}
+
+			DialogResult = DialogResult.OK;
+			Close();
+		}
+
+		private void AddRelation_Click(object sender, System.EventArgs e)
+		{
+			using(AddRelationDialog addRelationDlg = new AddRelationDialog(_descriptor, _project))
+			{
+				addRelationDlg.ShowDialog(  );
+			}
+		}
+
+		private void SaveClassRelationships()
+		{
+			_descriptor.PropertiesRelations.Clear();
+
+			foreach(ListViewItem item in listView2.Items)
+			{
+				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
+				prop.Generate = item.Checked;
+
+				if (item.Checked)
+				{
+					_descriptor.PropertiesRelations.Add(prop);
+				}
+
+				/// Another option would be to clone 
+				/// the property
+				if (_parent != null)
+				{
+					if (item.Checked)
+					{
+						_parent.Properties.Remove(prop);
+					}
+					else
+					{
+						if (!_parent.Properties.Contains(prop))
+						{
+							_parent.Properties.Add(prop);
+						}
+					}
+				}
+			}
+		}
+
+		private void SaveClassProperties()
+		{
+			_descriptor.Properties.Clear();
+
+			foreach(ListViewItem item in listView1.Items)
+			{
+				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
+				prop.Generate = item.Checked;
+
+				if (item.Checked)
+				{
+					_descriptor.Properties.Add(prop);
+				}
+				
+				/// Another option would be to clone 
+				/// the property
+				if (_parent != null)
+				{
+					if (item.Checked)
+					{
+						_parent.Properties.Remove(prop);
+					}
+					else
+					{
+						if (!_parent.Properties.Contains(prop))
+						{
+							_parent.Properties.Add(prop);
+						}
+					}
+				}
+			}
+		}
+
+		private void SaveCommonFields()
+		{
 			if (className.Text.Length != 0)
 			{
 				_descriptor.ClassName = className.Text;
 			}
-
+	
 			if (discColumn.SelectedIndex == -1)
 			{
 				_descriptor.DiscriminatorField = null;
@@ -639,7 +755,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			{
 				_descriptor.DiscriminatorField = (discColumn.SelectedItem as ColumnDefinition).Name;
 			}
-
+	
 			if (discValue.Text.Length != 0)
 			{
 				_descriptor.DiscriminatorValue = discValue.Text;
@@ -648,43 +764,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			{
 				_descriptor.DiscriminatorValue = null;
 			}
-
-			// Updating properties
-
-			_descriptor.Properties.Clear();
-			foreach(ListViewItem item in listView1.Items)
-			{
-				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
-				prop.Generate = item.Checked;
-
-				_descriptor.Properties.Add( prop );
-			}
-
-			// Updating relations
-
-			_descriptor.PropertiesRelations.Clear();
-			foreach(ListViewItem item in listView2.Items)
-			{
-				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
-				prop.Generate = item.Checked;
-
-				_descriptor.PropertiesRelations.Add( prop );
-			}
-
-			// Now here, semantic matters
-
-			if (_descriptor is ActiveRecordDescriptorSubClass ||
-				_descriptor is ActiveRecordDescriptorJoinedSubClass )
-			{
-			}
-
-			DialogResult = DialogResult.OK;
-			Close();
 		}
 
 		private void listView1_AfterLabelEdit(object sender, System.Windows.Forms.LabelEditEventArgs e)
 		{
-			if (e.Label.Length == 0)
+			if (e.Label == null || e.Label.Length == 0)
 			{
 				e.CancelEdit = true;
 			}
@@ -697,7 +781,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 		private void listView2_AfterLabelEdit(object sender, System.Windows.Forms.LabelEditEventArgs e)
 		{
-			if (e.Label.Length == 0)
+			if (e.Label == null || e.Label.Length == 0)
 			{
 				e.CancelEdit = true;
 			}
@@ -706,6 +790,12 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 				ActiveRecordPropertyDescriptor desc = listView2.Items[e.Item].Tag as ActiveRecordPropertyDescriptor;			
 				desc.PropertyName = e.Label;
 			}
+		}
+
+		private void cancelButton_Click(object sender, System.EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
+			Close();
 		}
 	}
 }

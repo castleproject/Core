@@ -257,7 +257,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			{
 				ActiveRecordDescriptor ar = (shape as ActiveRecordShape).ActiveRecordDescriptor;
 
-				ActiveRecordPropertiesDialog d = new ActiveRecordPropertiesDialog(ar);
+				ActiveRecordPropertiesDialog d = new ActiveRecordPropertiesDialog(ar, _model.CurrentProject);
 				d.ShowDialog(this);
 			}
 		}
