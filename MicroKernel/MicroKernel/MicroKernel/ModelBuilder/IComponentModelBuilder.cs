@@ -12,30 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel
 {
 	using System;
-	using System.Reflection;
+
+	using Castle.Model;
+
+	using Castle.MicroKernel.ModelBuilder;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for IComponentModelBuilder.
 	/// </summary>
-	public interface IConstructionModel
+	public interface IComponentModelBuilder
 	{
+		ComponentModel BuildModel( String key, Type service, Type classType );
+
 		/// <summary>
-		/// Implementation type
+		/// "To give or supply in common with others; give to a 
+		/// common fund or for a common purpose"
 		/// </summary>
-        Type Implementation { get; set; }
+		void AddContributor( IContributeComponentModelConstruction contributor );
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
-
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		void RemoveContributor( IContributeComponentModelConstruction contributor );
 	}
 }

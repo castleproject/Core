@@ -12,30 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel
 {
 	using System;
-	using System.Reflection;
+	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for ComponentRegistrationException.
 	/// </summary>
-	public interface IConstructionModel
+	[Serializable]
+	public class ComponentRegistrationException : Exception
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		public ComponentRegistrationException(string message) : base(message)
+		{
+		}
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
-
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public ComponentRegistrationException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
 	}
 }

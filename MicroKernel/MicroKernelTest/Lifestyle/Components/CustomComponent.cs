@@ -12,30 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel.Tests.Lifestyle.Components
 {
 	using System;
-	using System.Reflection;
+
+	using Castle.Model;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for CustomComponent.
 	/// </summary>
-	public interface IConstructionModel
+	[CustomLifestyle( typeof(MyLifestyleHandler) )]
+	public class CustomComponent : IComponent
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		public CustomComponent()
+		{
+		}
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		#region IComponent Members
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public int ID
+		{
+			get
+			{
+				return this.GetHashCode();
+			}
+		}
+
+		#endregion
 	}
 }

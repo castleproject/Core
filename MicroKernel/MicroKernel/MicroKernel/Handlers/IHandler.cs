@@ -12,30 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel
 {
 	using System;
-	using System.Reflection;
+
+	using Castle.Model;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for HandlerState.
 	/// </summary>
-	public interface IConstructionModel
+	public enum HandlerState
 	{
 		/// <summary>
-		/// Implementation type
+		/// 
 		/// </summary>
-        Type Implementation { get; set; }
+		Valid,
+		/// <summary>
+		/// 
+		/// </summary>
+		WaitingDependency
+	}
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+	/// <summary>
+	/// Summary description for IHandler.
+	/// </summary>
+	public interface IHandler
+	{
+		void Init(IKernel kernel);
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		object Resolve();
+
+		void Release(object instance);
+
+		HandlerState CurrentState
+		{
+			get;
+		}
+
+		ComponentModel ComponentModel
+		{
+			get;
+		}
 	}
 }

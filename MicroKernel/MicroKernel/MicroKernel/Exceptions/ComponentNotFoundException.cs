@@ -12,30 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel
 {
 	using System;
-	using System.Reflection;
+	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for ComponentNotFoundException.
 	/// </summary>
-	public interface IConstructionModel
+	[Serializable]
+	public class ComponentNotFoundException : Exception
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		public ComponentNotFoundException(String name) : 
+			base( String.Format("No component for key {0} was found", name) )
+		{
+		}
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		public ComponentNotFoundException(Type service) : 
+			base( String.Format("No component for supporting the service {0} was found", service.FullName) )
+		{
+		}
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public ComponentNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
 	}
 }

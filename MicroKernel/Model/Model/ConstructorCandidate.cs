@@ -12,30 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.Model
 {
 	using System;
 	using System.Reflection;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for ConstructorCandidate.
 	/// </summary>
-	public interface IConstructionModel
+	public class ConstructorCandidate
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		private ConstructorInfo _constructorInfo;
+		private DependencyModel[] _dependencies;
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		public ConstructorCandidate( ConstructorInfo constructorInfo, params DependencyModel[] dependencies )
+		{
+			_constructorInfo = constructorInfo;
+			_dependencies = dependencies;
+		}
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public ConstructorInfo Constructor
+		{
+			get { return _constructorInfo; }
+		}
+
+		public DependencyModel[] Dependencies
+		{
+			get { return _dependencies; }
+		}
 	}
 }

@@ -3,6 +3,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel", "Castl
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Test", "..\MicroKernelTest\Castle.MicroKernel.Test.csproj", "{50442F0D-987F-4A8D-B38C-DFA855B9249E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -13,6 +17,10 @@ Global
 		{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}.Debug.Build.0 = Debug|.NET
 		{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}.Release.ActiveCfg = Release|.NET
 		{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}.Release.Build.0 = Release|.NET
+		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Debug.ActiveCfg = Debug|.NET
+		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Debug.Build.0 = Debug|.NET
+		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Release.ActiveCfg = Release|.NET
+		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

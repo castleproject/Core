@@ -12,30 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel.Releasers
 {
 	using System;
-	using System.Reflection;
+	using System.Collections;
+	using System.Collections.Specialized;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Only tracks components that have decommission steps
+	/// registered
 	/// </summary>
-	public interface IConstructionModel
+	public class LifecycledComponentsReleasePolicy : AllComponentsReleasePolicy
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		public LifecycledComponentsReleasePolicy()
+		{
+		}
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
-
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public override void Track(object instance, IHandler handler)
+		{
+			if (handler.ComponentModel.LifecycleSteps.HasDecommissionSteps)
+			{
+				base.Track(instance, handler);
+			}
+		}
 	}
 }

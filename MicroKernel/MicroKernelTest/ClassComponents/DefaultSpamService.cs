@@ -12,30 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel.Tests.ClassComponents
 {
 	using System;
-	using System.Reflection;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for DefaultSpamService.
 	/// </summary>
-	public interface IConstructionModel
+	public class DefaultSpamService
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		private DefaultMailSenderService mailSender;
+		private DefaultTemplateEngine templateEngine;
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		public DefaultSpamService()
+		{
+		}
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public DefaultMailSenderService MailSender
+		{
+			get { return mailSender; }
+			set { mailSender = value; }
+		}
+
+		public DefaultTemplateEngine TemplateEngine
+		{
+			get { return templateEngine; }
+			set { templateEngine = value; }
+		}
 	}
 }

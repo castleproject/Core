@@ -12,30 +12,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel.Tests.Lifecycle.Components
 {
 	using System;
-	using System.Reflection;
+
+	using Castle.Model;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for HttpFakeServer.
 	/// </summary>
-	public interface IConstructionModel
+	[Transient]
+	public class HttpFakeServer : IInitialize, IDisposable
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		private bool _isInitialized;
+		private bool _isDisposed;
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		public HttpFakeServer()
+		{
+		}
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		#region IInitialize Members
+
+		public void Initialize()
+		{
+			_isInitialized = true;
+		}
+
+		#endregion
+
+		public bool IsInitialized
+		{
+			get { return _isInitialized; }
+		}
+
+		public bool IsDisposed
+		{
+			get { return _isDisposed; }
+		}
+
+		#region IDisposable Members
+
+		public void Dispose()
+		{
+			_isDisposed = true;
+		}
+
+		#endregion
 	}
 }

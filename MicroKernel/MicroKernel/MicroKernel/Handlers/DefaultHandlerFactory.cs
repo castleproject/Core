@@ -12,30 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel.Handlers
 {
 	using System;
-	using System.Reflection;
+
+	using Castle.Model;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for DefaultHandlerFactory.
 	/// </summary>
-	public interface IConstructionModel
+	public class DefaultHandlerFactory : IHandlerFactory
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		private IKernel _kernel;
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		public DefaultHandlerFactory(IKernel kernel)
+		{
+			_kernel = kernel;
+		}
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public virtual IHandler Create(ComponentModel model)
+		{
+			IHandler handler = new DefaultHandler(model);
+			handler.Init(_kernel);
+			return handler;
+		}
 	}
 }

@@ -12,30 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel.Releasers
 {
 	using System;
-	using System.Reflection;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// No tracking of component instances are made.
 	/// </summary>
-	public interface IConstructionModel
+	public class NoTrackingReleasePolicy : IReleasePolicy
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		public NoTrackingReleasePolicy()
+		{
+		}
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		#region IReleasePolicy Members
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public void Track(object instance, IHandler handler)
+		{
+		}
+
+		public bool HasTrack(object instance)
+		{
+			return false;
+		}
+
+		public void Release(object instance)
+		{
+		}
+
+		#endregion
+
+		#region IDisposable Members
+
+		public void Dispose()
+		{
+		}
+
+		#endregion
 	}
 }

@@ -12,30 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.MicroKernel.LifecycleConcerns
 {
 	using System;
-	using System.Reflection;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for DisposalConcern.
 	/// </summary>
-	public interface IConstructionModel
+	public class DisposalConcern : ILifecycleConcern
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		private static readonly DisposalConcern _instance = new DisposalConcern();
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
+		public static DisposalConcern Instance
+		{
+			get { return _instance; }
+		}
 
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		protected DisposalConcern()
+		{
+		}
+
+		public void Apply(Castle.Model.ComponentModel model, object component)
+		{
+			((IDisposable)component).Dispose();
+		}
 	}
 }

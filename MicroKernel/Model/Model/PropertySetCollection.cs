@@ -12,30 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Model
+namespace Castle.Model
 {
 	using System;
-	using System.Reflection;
+	using System.Collections;
 
 	/// <summary>
-	/// Holds the information to allow the container to
-	/// correctly instantiate the component implementation.
+	/// Summary description for PropertySetCollection.
 	/// </summary>
-	public interface IConstructionModel
+	public class PropertySetCollection : ReadOnlyCollectionBase
 	{
-		/// <summary>
-		/// Implementation type
-		/// </summary>
-        Type Implementation { get; set; }
+		public PropertySetCollection()
+		{
+		}
 
-        /// <summary>
-		/// The best constructor selected.
-		/// </summary>
-        ConstructorInfo SelectedConstructor { get; set; }
-
-        /// <summary>
-		/// Properties that will be used to satisfy dependencies.
-		/// </summary>
-		PropertyInfo[] SelectedProperties { get; }
+		public void Add(PropertySet property)
+		{
+			InnerList.Add(property);
+		}
 	}
 }
