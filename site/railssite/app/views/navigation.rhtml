@@ -1,0 +1,25 @@
+<%
+def list_item(title, url, description, accesskey = nil)
+  if @title == title
+    "<span class=\"navOn\" title=\"#{description}\" accesskey=\"#{accesskey}\">#{title}</span>"
+  else
+    "<a href=\"#{url}\" title=\"#{description}\" accesskey=\"#{accesskey}\">#{title}</a>"
+  end
+end
+%>
+
+<form id="navigationForm" action="../search/" method="get" class="navigation">  
+  
+  <% if @action_name != "published" then %>
+  	<%= list_item "Home Page", "../show/HomePage", "Home, Sweet Home", "H" %> | 
+    <%= list_item "All Pages", "../list/", "Alphabetically sorted list of pages", "A" %> | 
+    <%= list_item "Recently Revised", "../recently_revised/", "Pages sorted by when they were last changed", "U" %> | 
+    <%= list_item "Authors", "../authors/", "Who wrote what" %> | 
+    <%= list_item "Feeds", "../feeds/", "Subscribe to changes by RSS" %> | 
+    <%= list_item "Export", "../export/", "Download a zip with all the pages in this wiki", "X" %> | 
+    <input type="text" id="searchField" name="query" style="font-size: 10px" value="Search" onClick="this.value == 'Search' ? this.value = '' : true" />
+  <% else %>
+  	<%= list_item "Home Page", "../published/HomePage", "Home, Sweet Home", "H" %> | 
+  <% end%>
+
+</form>

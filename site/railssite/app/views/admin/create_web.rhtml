@@ -1,0 +1,69 @@
+<% @title = "New Wiki Web"; @content_width = 500 %>
+
+<p>
+  Each web serves as an isolated name space for wiki pages, 
+  so different subjects or projects can write about different <i>MuppetShows</i>.
+</p>
+
+<form action="create_web" id="setup" method="post" onSubmit="cleanAddress(); 
+      return validateSetup()">
+
+<ol class="setup">
+  <li>
+    <h2 style="margin-bottom: 3px">Name and address for your new web</h2>
+    <div class="help">
+      The name of the web is included in the title on all pages. 
+      The address is the base path that all pages within the web live beneath. 
+      Ex: the address "rails" gives URLs like <i>/rails/show/HomePage</i>. 
+      The address can only consist of letters and digits.
+    </div>
+    <div class="inputBox">
+      Name: <input type="text" id="web_name" name="name" onChange="proposeAddress();" />
+      &nbsp;&nbsp;
+      Address: <input type="text" id="web_address" name="address" onChange="cleanAddress();" />
+    </div>
+  </li>
+</ol>
+
+
+<p align="right">
+  <small>
+    Enter system password
+    <input type="password" id="system_password" name="system_password" />
+    and
+    <input type="submit" value="Create Web" />
+  </small>
+</p>
+
+</form>
+
+<script>
+function proposeAddress() {
+  document.getElementById('web_address').value =
+    document.getElementById('web_name').value.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+}
+
+function cleanAddress() {
+  document.getElementById('web_address').value =
+    document.getElementById('web_address').value.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+}
+
+function validateSetup() {
+  if (document.getElementById('web_name').value == "") {
+    alert("You must pick a name for the new web");
+    return false;
+  }
+  
+  if (document.getElementById('web_address').value == "") {
+    alert("You must pick an address for the new web");
+    return false;
+  }
+  
+  if (document.getElementById('system_password').value == "") {
+    alert("You must enter the system password");
+    return false;
+  }
+  
+  return true;
+}
+</script>

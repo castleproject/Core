@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<channel>
+		<title><%= @web.name %></title>
+		<link><%= url_for :only_path => false, :web => @web_name, :action => 'show', :id => 'HomePage' %></link>
+		<description>An Instiki wiki</description>
+		<language>en-us</language>
+		<ttl>40</ttl>
+  <% for page in @pages_by_revision %>
+		<item>
+      <title><%= page.plain_name %></title>
+    <% unless @hide_description %>
+      <description><%= CGI.escapeHTML(page.display_content) %></description>
+    <% end %>
+      <pubDate><%= page.created_at.strftime "%a, %e %b %Y %H:%M:%S %Z" %></pubDate>
+      <guid><%= url_for :only_path => false, :web => @web_name, :action => 'show', :id => page.name %></guid>
+      <link><%= url_for :only_path => false, :web => @web_name, :action => 'show', :id => page.name %></link>
+      <dc:creator><%= WikiWords.separate(page.author) %></dc:creator>
+    </item>
+  <% end %>
+  </channel>
+</rss>

@@ -1,0 +1,34 @@
+<% @title = "Search results for \"#{@params["query"]}\"" %>
+
+<% unless @title_results.empty? %>
+<h2><%= @title_results.length %> page(s) containing search string in the page name:</h2>
+  <ul>
+    <% for page in @title_results %>
+      <li><a href="../show/<%= page.name %>"><%= page.plain_name %></a></li>
+    <% end %>
+  </ul>
+<% end %>
+
+
+<% unless @results.empty? %>
+  <h2> <%= @results.length %> page(s) containing search string in the page text:</h2>
+  <ul>
+    <% for page in @results %>
+      <li><a href="../show/<%= page.name %>"><%= page.plain_name %></a></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if (@results + @title_results).empty? %>
+  <h2>No pages contains "<%= @params["query"] %>" </h2>
+  <p>
+    Perhaps you should try expanding your query. Remember that Instiki searches for entire 
+    phrases, so if you search for "all that jazz" it will not match pages that contain these 
+    words in separation&mdash;only as a sentence fragment.
+  </p>
+  <p>
+    If you're a high-tech computer wizard, you might even want try constructing a Ruby regular 
+    expression. That's actually what Instiki uses, so go right ahead and flex your 
+    "[a-z]*Leet?RegExpSkill(s|z)"
+  </p>
+<% end %>

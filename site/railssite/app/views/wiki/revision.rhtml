@@ -1,0 +1,79 @@
+<% @title = "#{@page.plain_name} (Rev ##{@revision.number})" %>
+
+<div id="revision">
+  <%= @revision.display_content %>
+</div>
+
+<div id="changes" style="display: none">
+  <p style="background: #eee; padding: 3px; border: 1px solid silver">
+    <small>
+      Showing changes from revision #<%= @revision.number - 1 %> to #<%= @revision.number %>:
+      <ins class="diffins">Added</ins> | <del class="diffdel">Removed</del>
+    </small>
+  </p>
+
+  <%= @revision.display_diff %>
+</div>
+
+
+<div class="byline">
+  <%= "Revision from #{@revision.pretty_created_at} by" %>
+  <%= @page.web.make_link(@revision.author) %>
+</div>
+
+<div class="navigation">
+
+  <% if @revision.next_revision %>
+    <% if @revision.next_revision.number < (@page.revisions.length - 1) %>
+      <a href="../revision/<%= @page.name %>?rev=<%= @revision.next_revision.number %>" class="navlink">
+    <% else %>
+      <a href="../show/<%= @page.name %>" class="navlink">
+    <% end %>
+      Forward in time</a>
+    (<%= @revision.page.revisions.length - @revision.next_revision.number %> more)
+  <% end %>
+
+  <% if @revision.next_revision && @revision.previous_revision %>
+    |
+  <% end %>
+
+  <% if @revision.previous_revision %>
+    <a href="../revision/<%= @page.name %>?rev=<%= @revision.previous_revision.number %>" class="navlink">Back in time</a>
+    (<%= @revision.previous_revision.number + 1 %> more)
+  <% end %>
+
+  | <a href="../show/<%= @page.name %>" class="navlink">See current</a>
+
+  <% if @revision.previous_revision %>
+    <span id="show_changes">
+      | <a href="#" onClick="toggleChanges(); return false;">See changes</a>
+    </span>
+    <span id="hide_changes" style="display: none">
+      | <a href="#" onClick="toggleChanges(); return false;">Hide changes</a>
+    </span>
+  <% end %>
+
+  | <a href="../rollback/<%= @page.name %>?rev=<%= @revision.number %>" class="navlink">Rollback</a>  
+  
+  <% if @page.references.length > 0 %>
+    <small>
+      | Linked from: <%= @page.references.collect { |ref| "<a href='#{ref.name}'>#{ref.name}</a>" }.join(", ") %>
+    </small>
+  <% end %>
+</div>
+
+<script language="Javascript">
+  function toggleChanges() {
+    if (document.getElementById("changes").style.display == "none") {
+      document.getElementById("changes").style.display  = "block";
+      document.getElementById("revision").style.display = "none";
+      document.getElementById("show_changes").style.display  = "none";
+      document.getElementById("hide_changes").style.display = "inline";
+    } else {
+      document.getElementById("changes").style.display  = "none";
+      document.getElementById("revision").style.display = "block";
+      document.getElementById("show_changes").style.display  = "inline";
+      document.getElementById("hide_changes").style.display = "none";
+    }
+  }
+</script>

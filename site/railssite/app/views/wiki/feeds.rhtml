@@ -1,0 +1,8 @@
+<% @title = "Feeds" %>
+
+<p>You can subscribe to this wiki by RSS and get either just the headlines of the pages that change or the entire page.</p> 
+
+<ul id="feedsList">
+  <li><a href="../rss_with_content<%= "?password=#{@web.password}" if @web.password %>">Full content (RSS 2.0)</a>
+  <li><a href="../rss_with_headlines<%= "?password=#{@web.password}" if @web.password %>">Headlines (RSS 2.0)</a>
+</ul>

@@ -1,0 +1,23 @@
+\documentclass[12pt,titlepage]{article}
+
+\usepackage[danish]{babel}      %danske tekster
+\usepackage[OT1]{fontenc}       %rigtige danske bogstaver...
+\usepackage{a4}
+\usepackage{graphicx}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\input epsf 
+
+%-------------------------------------------------------------------
+
+\begin{document}
+
+\sloppy
+
+%-------------------------------------------------------------------
+
+\section*{<%= @page.name %>}
+
+<%= @tex_content %>
+
+\end{document}

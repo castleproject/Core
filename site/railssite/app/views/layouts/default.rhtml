@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>
+    <% if @page and (@page.name == 'HomePage') and (%w( show published print ).include?(@action_name)) %>
+      <%= @web.name %>
+    <% elsif @web %>
+      <%= @title %> in <%= @web.name %>
+    <% else %>
+      <%= @title %>
+    <% end %>
+  </title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+  <style type="text/css">
+    #Container, #Content {
+      width: <%= @content_width || "600" %>px;
+    }
+  </style>
+
+  <link href="/css/def.css" rel="stylesheet" type="text/css" />
+  
+  <style type="text/css">
+    <%= @style_additions %>
+    <%= @web ? @web.additional_style : '' %>
+  </style>
+</head>
+
+<body>
+<table width="768" border="0" cellpadding="0" cellspacing="0" bordercolor="#000000" align="center" class="maincontainer">
+  <tr>
+    <td>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+		<td><div class="maintitle">
+    <% if @page and (@page.name == 'HomePage') and %w( show published print ).include?(@action_name) %>
+    Castle
+    <% elsif @web %>
+      Castle - <%= @title %>
+    <% else %>
+      Castle - <%= @title %>
+    <% end %>
+    </div></td>
+	  </tr>
+	  <tr>
+		<td>
+		<div class="mainimgcontainer">
+<% index = rand(3) %>
+<img src="/images/bar<%= index %>.png">
+</div>
+		</td>
+	  </tr>
+	  <tr>
+		<td align="left">
+<% if has_topmenu %>
+		<div class="menubar">
+        <%= show_topmenu() %>
+		</div>
+<% end %>
+		</td>
+	  </tr>
+	  <tr>
+		<td>
+
+		<div class="sectiontitle"><%= @title %></div>
+		
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<td valign="top">
+			<div class="maincontent">
+<%= render 'navigation' unless @web.nil? || @hide_navigation %>
+
+<% if @flash[:error] %> <div id="error">
+    <hr/><p><%= @flash[:error].to_s %></p><hr/></div>
+<% end %>
+
+<% if @flash[:info] %> <div id="info">
+    <hr/><p><%= @flash[:info].to_s %></p><hr/></div>
+<% end %>
+			
+<%= @content_for_layout %>
+<br>
+			</div>
+			</td>
+<% if has_rightmenu %>
+			<td width="180px" valign="top">
+<%= render "rightmenu" %>
+			</td>
+<% end %>
+		  </tr>
+		</table>
+
+		</td>
+	  </tr>
+	  <tr>
+	    <td colspan="2" class="innercontent" align="center">
+	    <table border="0" width="90%">
+	      <tr>
+	        <td class="innercontent" align="center">
+            Site powered by <br><a href="http://www.rubyonrails.org">Ruby on Rails</a>
+	        </td>
+	        <td class="innercontent" align="center">
+	        Infrastructure by<br>
+            <a href="http://sourceforge.net">
+            <img src="http://sourceforge.net/sflogo.php?group_id=124416&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" />
+            </a>
+	        </td>
+	      </tr>
+	    </table>
+            
+            </td>
+	  </tr>
+	</table>
+
+	</td>
+  </tr>
+</table>
+
+</body>
+</html>

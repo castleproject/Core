@@ -3,41 +3,26 @@ AddHandler fastcgi-script .fcgi
 AddHandler cgi-script .cgi
 Options +FollowSymLinks +ExecCGI
 
-
-# Remember to set RubySafeLevel 0 in httpd.conf
-<IfModule mod_ruby.c>
-  RubyRequire apache/ruby-run
-  <Files dispatch.rb>
-    SetHandler ruby-object
-    RubyHandler Apache::RubyRun.instance
-  </Files>
-</IfModule>
-
-
 # Make sure that mod_ruby.c has been added and loaded as a module with Apache
 RewriteEngine On
 
-RewriteRule ^dispatch.servlet$ / [R]
+# Change extension from .cgi to .fcgi to switch to FCGI and to .rb to switch to mod_ruby
+RewriteBase /dispatch.cgi
 
 # Enable this rewrite rule to point to the controller/action that should serve root.
-# RewriteRule ^$ /controller/action [R]
+# RewriteRule ^$ /wiki/ [R]
 
-# Force fcgi
-RewriteRule ^fcgi/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$ /dispatch.fcgi?controller=$1&action=$2&id=$3 [QSA] [L]
-RewriteRule ^fcgi/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$ /dispatch.fcgi?controller=$1&action=$2 [QSA] [L]
-RewriteRule ^fcgi/([-_a-zA-Z0-9]+)/?$ /dispatch.fcgi?controller=$1&action=index [QSA] [L]
+# Add missing slash
+RewriteRule ^([-_a-zA-Z0-9]+)$                                            /$1/ [R]
 
-# Force mod_ruby
-RewriteRule ^mruby/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$ /dispatch.rb?controller=$1&action=$2&id=$3 [QSA] [L]
-RewriteRule ^mruby/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$ /dispatch.rb?controller=$1&action=$2 [QSA] [L]
-RewriteRule ^mruby/([-_a-zA-Z0-9]+)/?$ /dispatch.rb?controller=$1&action=index [QSA] [L]
+# Default rewriting rules. 
+RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([0-9]+)$                  ?controller=$1&action=$2&id=$3 [QSA,L]
+RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$                           ?controller=$1&action=$2 [QSA,L]
+RewriteRule ^([-_a-zA-Z0-9]+)/$                                           ?controller=$1&action=index [QSA,L]
 
-# Default rewriting rules. Change extension from .cgi to .fcgi to switch to FCGI and to .rb to switch to mod_ruby
-RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$ /dispatch.cgi?controller=$1&action=$2&id=$3 [QSA] [L]
-RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$ /dispatch.cgi?controller=$1&action=$2 [QSA] [L]
-RewriteRule ^([-_a-zA-Z0-9]+)/$ /dispatch.cgi?controller=$1&action=index [QSA] [L]
-RewriteRule ^([-_a-zA-Z0-9]+)$ /$1/ [R]
-
+RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([0-9]+)$ ?module=$1&controller=$2&action=$3&id=$4 [QSA,L]
+RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)$          ?module=$1&controller=$2&action=$3 [QSA,L]
+RewriteRule ^([-_a-zA-Z0-9]+)/([-_a-zA-Z0-9]+)/$                          ?module=$1&controller=$2&action=index [QSA,L]
 
 # You can also point these error messages to a controller/action
 ErrorDocument 500 /500.html

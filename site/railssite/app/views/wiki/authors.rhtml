@@ -1,0 +1,11 @@
+<% @title = 'Authors' %>
+
+<ul id="authorList">
+  <% for author in @authors %>
+    <li>
+      <%= @web.make_link(author) %>
+      co- or authored:
+      <%= @web.select.pages_authored_by(author).collect { |page| page.link }.join ', ' %>
+    </li>
+  <% end %>
+</ul>

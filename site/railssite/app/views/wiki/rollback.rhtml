@@ -1,0 +1,29 @@
+<% 
+  @title = "Rollback to #{@page.plain_name} Rev ##{@revision.number}"
+  @content_width = 720
+  @hide_navigation = true
+%>
+
+<%= "<p style='color:red'>Please correct the error that caused this error in rendering:<br/><small>#{@params["msg"]}</small></p>" if @params["msg"] %>
+
+<form id="editForm" action="../save/<%= @page.name %>" method="post" onSubmit="cleanAuthorName();">
+<p>
+  <textarea name="content" style="font-size: 12px; width: 450px; height: 500px"><%= @revision.content %></textarea>
+</p>
+<p>
+    <input type="submit" value="Update"> as 
+    <input type="text" name="author" id="authorName" value="<%= @author %>" 
+        onClick="this.value == 'AnonymousCoward' ? this.value = '' : true">
+    | <a href="../cancel_edit/<%= @page.name %>">Cancel</a> <small>(unlocks page)</small>
+</p>
+</form>
+
+<%= render("#{@web.markup}_help") if @web %>
+
+<script language="JavaScript1.2">
+function cleanAuthorName() {
+  if (document.getElementById('authorName').value == "") {
+    document.getElementById('authorName').value = 'AnonymousCoward';
+  }
+}
+</script>

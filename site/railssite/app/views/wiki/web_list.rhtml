@@ -1,0 +1,18 @@
+<% @title = "Wiki webs" %>
+
+<ul>
+<% for web in @webs %>
+  <li>
+    <% if web.published %>
+      <%= web.make_link 'HomePage', web.name, :mode => :publish %> (read-only) /
+      <%= web.make_link 'HomePage', 'editable version', :mode => :edit %> (requires login)
+    <% else %>
+      <%= web.make_link 'HomePage', nil, :mode => :edit %>
+    <% end %>
+    <div class="byline" style="margin-bottom: 0px">
+      <%= web.pages.length %> pages by <%= web.authors.length %> authors
+    </div>
+    
+  </li>
+<% end %>
+</ul>

@@ -1,0 +1,28 @@
+<div id="TextileHelp" >
+		<h3>Textile formatting tips (<a href="#" onClick="quickRedReference(); return false;">advanced</a>)</h3>
+		<table cellspacing="0" cellpadding="0">
+			<tr><td>_your text_</td><td class="arrow">&rarr;</td><td><em>your text</em></td></tr>
+			<tr><td>*your text*</td><td class="arrow">&rarr;</td><td><strong>your text</strong></td></tr>
+			<tr><td>%{color:red}hello%</td><td class="arrow">&rarr;</td><td><span style="color: red;">hello</span></td></tr>
+			<tr><td>* Bulleted list<br />* Second item</td><td class="arrow">&rarr;</td><td>&#8226; Bulleted list<br />&#8226; Second item</td></tr>
+			<tr><td># Numbered list<br /># Second item</td><td class="arrow">&rarr;</td><td>1. Numbered list<br />2. Second item</td></tr>
+			<tr><td>"linkname":URL</td><td class="arrow">&rarr;</td><td><a href="URL">linkname</a></td></tr>
+			<tr><td>|a|table|row|<br />|b|table|row|</td><td class="arrow">&rarr;</td><td>Table</td></tr>
+			<tr><td>http://url<br />email@address.com</td><td class="arrow">&rarr;</td><td>Auto-linked</td></tr>
+			<tr><td>!imageURL!</td><td class="arrow">&rarr;</td><td>Image</td></tr>
+    </table>
+    
+    <%= render 'wiki_words_help' %>
+</div>
+
+<script language="JavaScript">
+  function quickRedReference() {
+    window.open( 
+      "http://hobix.com/textile/quick.html",
+      "redRef",
+      "height=600,width=550,channelmode=0,dependent=0," +
+      "directories=0,fullscreen=0,location=0,menubar=0," +
+      "resizable=0,scrollbars=1,status=1,toolbar=0" 
+    );
+  }
+</script>

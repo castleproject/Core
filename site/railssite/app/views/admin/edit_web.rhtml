@@ -1,0 +1,124 @@
+<% @title = "Edit Web" %>
+
+<form action="update_web" id="setup" method="post" onSubmit="cleanAddress(); return validateSetup()">
+  <h2 style="margin-bottom: 3px">Name and address</h2>
+  <div class="help">
+    The name of the web is included in the title on all pages. 
+    The address is the base path that all pages within the web live beneath. 
+    Ex: the address "rails" gives URLs like <i>/rails/show/HomePage</i>.
+  </div>
+
+  <div class="inputBox, disableAutoComplete">
+    Name: <input type="text" id="name" name="name" value="<%= @web.name %>" 
+                 onChange="proposeAddress();" /> &nbsp;&nbsp;
+    Address: <input type="text" id="address" name="address" value="<%= @web.address %>" 
+                    onChange="cleanAddress();" />
+    <i>(Letters and digits only)</i>
+  </div>
+
+  <h2 style="margin-bottom: 3px">Specialize</h2>
+  <div class="inputBox, disableAutoComplete">
+    Markup:
+    <select name="markup">
+      <%= html_options({"Textile" => :textile, "Markdown" => :markdown, "RDoc" => :rdoc }, 
+              @web.markup) %>
+    </select>
+
+    &nbsp;&nbsp;
+
+    Color:
+    <select name="color">
+      <%= html_options({ "Green" => "008B26", "Purple" => "504685", "Red" => "DA0006", 
+                         "Orange" => "FA6F00", "Grey" => "8BA2B0" }, @web.color) %>
+    </select>
+    <br/>
+    <p>
+    <small>
+      <input type="checkbox" name="safe_mode" <%= 'checked="on"' if @web.safe_mode %> /> 
+      Safe mode
+      <em>- strip HTML tags and stylesheet options from the content of all pages</em>
+      <br/>
+      <input type="checkbox" name="brackets_only" <%= 'checked="on"' if @web.brackets_only %> /> 
+      Brackets only 
+      <em>- require all wiki words to be as [[wiki word]], WikiWord links won't be created</em>
+      <br/>
+      <input type="checkbox" name="count_pages" <%= 'checked="on"' if @web.count_pages %> /> 
+      Count pages
+      <br/>
+      <input type="checkbox" name="allow_uploads" <%= 'checked="on"' if @web.allow_uploads %> /> 
+      Allow uploads of no more than 
+      <input type="text" name="max_upload_size" value="<%= @web.max_upload_size %>" 
+             width="20" /> 
+      kbytes
+      <em>- 
+        let wiki users to upload pictures and other files and include or link to them on wiki pages
+      </em>
+      <br/>
+    </small>
+    </p>
+
+    <a href="#" onClick="document.getElementById('additionalStyle').style.display='block';return false;">
+    Stylesheet tweaks &gt;&gt;</a>
+    <small><em>
+    - add or change styles used by this web; styles defined here take precedence over 
+    instiki.css. Hint: View HTML source of a page you want to style to find ID names on individual 
+    tags.</em></small>
+    <br/>
+    <textarea id="additionalStyle" 
+      style="display: none; margin-top: 10px; margin-bottom: 5px; width: 560px; height: 200px" 
+      name="additional_style"><%= @web.additional_style %>
+    </textarea>
+  </div>
+
+  <h2 style="margin-bottom: 3px">Password protection for this web (<%= @web.name %>)</h2>
+  <div class="help">
+    This is the password that visitors need to view and edit this web. 
+    Setting the password to nothing will remove the password protection.
+  </div>
+  <div class="inputBox">
+    Password: <input class="disableAutoComplete" type="password" id="password" 
+                     name="password" value="<%= @web.password %>" /> 
+    &nbsp;&nbsp;
+    Verify: <input class="disableAutoComplete" type="password" id="password_check" 
+                          value="<%= @web.password %>" name="password_check" />
+  </div>
+
+  <h2 style="margin-bottom: 3px">Publish read-only version of this web (<%= @web.name %>)</h2>
+  <div class="help">
+    You can turn on a read-only version of this web that's accessible even when the regular web 
+    is password protected.
+    The published version is accessible through URLs like /wiki/published/HomePage.
+  </div>
+  <div class="inputBox">
+    <input type="checkbox" name="published" <%= 'checked="on"' if @web.published %> /> Publish this web
+  </div>
+
+<p align="right">
+  <small>
+    Enter system password
+    <input type="password" class="disableAutoComplete" id="system_password" name="system_password" />
+    and
+    <input type="submit" value="Update Web" />
+    <br/><br/>
+    ...or forget changes and <a href="/create_web/">create a new web</a>
+  </small>
+</p>
+
+</form>
+
+<br/>
+<h1>Other administrative tasks</h1>
+
+<form action="../remove_orphaned_pages" id="remove_orphaned_pages" method="post">
+  <p align="right">
+    <small>
+      Clean up by entering system password
+      <input type="password" id="system_password" name="system_password" />
+      and
+      <input type="submit" value="Delete Orphan Pages" />
+    </small>
+  </p>
+</form>
+
+<script type="text/javascript" src="/javascripts/edit_web.js" />
+<script type="text/javascript">overrideAutocomplete()</script>

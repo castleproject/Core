@@ -1,0 +1,31 @@
+<% 
+  @title = "Editing #{@page.name}"
+  @content_width = 720
+  @hide_navigation = true
+%>
+
+<%= "<p style='color:red'>Please correct the error that caused this error in rendering:<br/><small>#{@params["msg"]}</small></p>" if @params["msg"] %>
+
+<form id="editForm" action="../save/<%= @page.name %>" method="post" onSubmit="cleanAuthorName();">
+<p>
+    <textarea name="content" style="width: 450px; height: 500px"><%= @page.content %></textarea>
+</p>
+<p>
+    <input type="submit" value="Submit" accesskey="s"/> as 
+    <input type="text" name="author" id="authorName" value="<%= @author %>" 
+        onClick="this.value == 'AnonymousCoward' ? this.value = '' : true" />
+    | <a href="../cancel_edit/<%= @page.name %>" accesskey="c">Cancel</a> <small>(unlocks page)</small>
+</p>
+</form>
+
+<p>
+<%= render("#{@web.markup}_help") if @web %>
+</p>
+
+<script language="JavaScript1.2">
+function cleanAuthorName() {
+  if (document.getElementById('authorName').value == "") {
+    document.getElementById('authorName').value = 'AnonymousCoward';
+  }
+}
+</script>

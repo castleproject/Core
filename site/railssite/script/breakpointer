@@ -1,0 +1,35 @@
+#!/usr/local/bin/ruby
+
+RAILS_ROOT = File.expand_path(File.dirname(__FILE__) + '/..')
+
+# Model subdirectories.
+ADDITIONAL_LOAD_PATHS = Dir["#{RAILS_ROOT}/app/models/[_a-z]*"]
+
+# Followed by the standard includes.
+ADDITIONAL_LOAD_PATHS.concat %w(
+  app
+  app/models
+  app/controllers
+  app/helpers
+  config
+  libraries
+).map { |dir| "#{File.expand_path(File.join(RAILS_ROOT, dir))}" }
+
+ADDITIONAL_LOAD_PATHS.concat %w(
+  vendor/bluecloth-1.0.0/lib
+  vendor/madeleine-0.7.1/lib
+  vendor/redcloth-2.0.11/lib
+  vendor/rubyzip-0.5.6
+  vendor/actionpack/lib
+  vendor/activesupport/lib
+  vendor/railties/lib
+).map { |dir| 
+  "#{File.expand_path(File.join(RAILS_ROOT, dir))}" 
+}.delete_if { |dir| 
+  puts dir
+  not File.exist?(dir) }
+
+# Prepend to $LOAD_PATH
+ADDITIONAL_LOAD_PATHS.reverse.each { |dir| $:.unshift(dir) if File.directory?(dir) }
+
+require 'breakpoint_client'

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>
+    <% if @web && @page && @page.name == "HomePage" && %( show published print ).include?(@action_name) %>
+      <%= @web.name %>
+    <% elsif @web %>
+      <%= @title %> in <%= @web.name %>
+    <% else %>
+      <%= @title %>
+    <% end %>
+  </title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <style type="text/css">
+    h1#pageName, .newWikiWord a, a.existingWikiWord, .newWikiWord a:hover, #TextileHelp h3 { 
+      color: #<%= @web ? @web.color : "393" %>; 
+    }
+
+    #Container, #Content {
+      width: <%= @content_width || "600" %>px;
+    }
+    <%= sub_template("static_style_sheet") if @inline_style %>
+  </style>
+
+  <link rel="Stylesheet" href="../static_style_sheet/" type="text/css" media="screen" />
+
+  <style type="text/css">
+    <%= @style_additions %>
+    <%= @web ? web.additional_style : "" %>
+  </style>
+</head>
+<body>
+<div id="Container">
+  <div id="Content">
+  
+  <h1 id="pageName">
+    <% if @web && @page && @page.name == "HomePage" && %( show published print ).include?(@action_name) %>
+      <%= @web.name %>
+    <% elsif @web %>
+      <small><%= @web.name %></small><br />
+      <%= @title %>
+    <% else %>
+      <%= @title %>
+    <% end %>
+  </h1>
+
+  <%= sub_template "navigation" unless @web.nil? || @hide_navigation %>

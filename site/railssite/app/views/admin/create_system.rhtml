@@ -1,0 +1,83 @@
+<% @title = "Instiki Setup"; @content_width = 500 %>
+
+<p>
+  Congratulations on succesfully installing and starting Instiki. 
+  Since this is the first time Instiki has been run on this port, 
+  you'll need to do a brief one-time setup.
+</p>
+
+<form action="create_system" id="setup" method="post" onSubmit="return validateSetup()">
+<ol class="setup">
+  <li>
+
+    <h2 style="margin-bottom: 3px">Name and address for your first web</h2>
+    <div class="help">
+      The name of the web is included in the title on all pages. 
+      The address is the base path that all pages within the web live beneath. 
+      Ex: the address "rails" gives URLs like <i>/rails/show/HomePage</i>. 
+      The address can only consist of letters and digits.
+    </div>
+    <div class="inputBox">
+      Name: <input type="text" id="web_name" name="web_name" value="Wiki" 
+            onChange="proposeAddress();" onClick="this.value == 'Wiki' ? this.value = '' : true" /> 
+      &nbsp;&nbsp;
+      Address: <input type="text" id="web_address" name="web_address" onChange="cleanAddress();"
+               value="wiki" />
+    </div>
+  </li>
+
+  <li>
+    <h2 style="margin-bottom: 3px">Password for creating and changing webs</h2>
+    <div class="help">
+      Administrative access allows you to make new webs and change existing ones.<br/>
+      Everyone with this password will be able to do this, so pick it carefully.
+    </div>
+    <div class="inputBox">
+      Password: <input type="password" id="password" name="password" />
+      &nbsp;&nbsp;
+      Verify: <input type="password" id="password_check" name="password_check" />
+    </div>
+  </li>
+</ol>
+
+<p align="right">
+    <input type="submit" value="Setup" style="margin-left: 40px" />
+</p>
+</form>
+
+<script>
+function proposeAddress() {
+  document.getElementById('web_address').value =
+    document.getElementById('web_name').value.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+}
+
+function cleanAddress() {
+  document.getElementById('web_address').value =
+    document.getElementById('web_address').value.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+}
+
+function validateSetup() {
+  if (document.getElementById('web_name').value == "") {
+    alert("You must pick a name for the first web");
+    return false;
+  }
+  
+  if (document.getElementById('web_address').value == "") {
+    alert("You must pick an address for the first web");
+    return false;
+  }
+  
+  if (document.getElementById('password').value == "") {
+    alert("You must pick a system password");
+    return false;
+  }
+
+  if (document.getElementById('password_check').value == "" ||
+      document.getElementById('password').value != document.getElementById('password_check').value) {
+    alert("The password and its verification doesn't match");
+    return false;
+  }
+  
+  return true;
+}
+</script>
