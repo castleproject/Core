@@ -130,6 +130,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "FilterAttributeTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "FilterTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -176,6 +181,21 @@
                 />
                 <File
                     RelPath = "Controllers\LayoutController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\MyAbstractController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\SecureController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\TheController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -328,7 +328,7 @@ namespace Castle.CastleOnRails.Framework
 
 		#region Filters
 
-		private FilterDescriptor[] CollectFilterDescriptor()
+		protected internal FilterDescriptor[] CollectFilterDescriptor()
 		{
 			object[] attrs = GetType().GetCustomAttributes( typeof(FilterAttribute), true );
 			FilterDescriptor[] desc = new FilterDescriptor[attrs.Length];
