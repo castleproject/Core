@@ -12,7 +12,7 @@
       <div id="bannerrow1">
         <table class="bannerparthead" cellspacing="0">
           <tr id="hdr">
-            <td class="runninghead">Castle.Container</td>
+            <td class="runninghead">Castle's Inversion of Control</td>
             <td class="product">
             </td>
           </tr>
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div id="nstext">
-      <p> Summary description for IComponentActivator. </p>
+      <p> Implements the instance creation logic. The default implementation should rely on an ordinary call to Activator.CreateInstance(). </p>
       <p>For a list of all members of this type, see <a href="Castle.MicroKernel.IComponentActivatorMembers.html">IComponentActivator Members</a>.</p>
       <p>
       </p>
@@ -41,16 +41,21 @@
             <td width="50%">
               <a href="Castle.MicroKernel.ComponentActivator.AbstractComponentActivator.html">AbstractComponentActivator</a>
             </td>
-            <td width="50%"> Summary description for AbstractComponentActivator. </td>
+            <td width="50%"> Abstract implementation of <a href="Castle.MicroKernel.IComponentActivator.html">IComponentActivator</a>. The implementors must only override the InternalCreate and InternalDestroy methods in order to perform their creation and destruction logic. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.MicroKernel.ComponentActivator.DefaultComponentActivator.html">DefaultComponentActivator</a>
             </td>
-            <td width="50%"> Summary description for DefaultComponentActivator </td>
+            <td width="50%"> Standard implementation of <a href="Castle.MicroKernel.IComponentActivator.html">IComponentActivator</a>. Handles the selection of the best constructor, fills the writable properties the component exposes, run the commission and decommission lifecycles, etc. </td>
           </tr>
         </table>
       </div>
+      <h4 class="dtH4">Remarks</h4>
+      <p> This interface is provided in order to allow custom components to be created using a different logic, such as using a specific factory or builder. <br /> The constructor for implementation have the following signature: <pre class="code">ComponentModel model, IKernel kernel, 
+ComponentInstanceDelegate onCreation, 
+ComponentInstanceDelegate onDestruction
+</pre> The Activator should raise the events onCreation and onDestruction in order to correctly implement the contract. Usually the best way of creating a custom activator is by extending the existing ones. <seealso cref="T:Castle.MicroKernel.ComponentActivator.AbstractComponentActivator"></seealso><seealso cref="T:Castle.MicroKernel.ComponentActivator.DefaultComponentActivator"></seealso></p>
       <h4 class="dtH4">Requirements</h4>
       <p>
         <b>Namespace: </b>
@@ -61,7 +66,7 @@
 					</p>
       <h4 class="dtH4">See Also</h4>
       <p>
-        <a href="Castle.MicroKernel.IComponentActivatorMembers.html">IComponentActivator Members</a> | <a href="Castle.MicroKernel.html">Castle.MicroKernel Namespace</a></p>
+        <a href="Castle.MicroKernel.IComponentActivatorMembers.html">IComponentActivator Members</a> | <a href="Castle.MicroKernel.html">Castle.MicroKernel Namespace</a> | <a href="Castle.MicroKernel.ComponentActivator.AbstractComponentActivator.html">AbstractComponentActivator</a> | <a href="Castle.MicroKernel.ComponentActivator.DefaultComponentActivator.html">DefaultComponentActivator</a></p>
       <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
         <param name="Keyword" value="IComponentActivator interface, about IComponentActivator interface">
         </param>
@@ -69,7 +74,7 @@
       <hr />
       <div id="footer">
         <p>
-          <a href="http://www.digitalcraftsmen.com.br/~hammett/">Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors</a>
+          <a href="http://www.castleproject.org/">Copyright 2004-2005 (c) Castle Project</a>
         </p>
         <p>Generated from assembly Castle.MicroKernel [1.0.0.2]</p>
       </div>

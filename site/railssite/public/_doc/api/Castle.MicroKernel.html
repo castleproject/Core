@@ -12,7 +12,7 @@
       <div id="bannerrow1">
         <table class="bannerparthead" cellspacing="0">
           <tr id="hdr">
-            <td class="runninghead">Castle.Container</td>
+            <td class="runninghead">Castle's Inversion of Control</td>
             <td class="product">
             </td>
           </tr>
@@ -49,7 +49,7 @@
             <td width="50%">
               <a href="Castle.MicroKernel.DefaultKernel.html">DefaultKernel</a>
             </td>
-            <td width="50%"> Summary description for DefaultKernel. </td>
+            <td width="50%"> Default implementation of <a href="Castle.MicroKernel.IKernel.html">IKernel</a>. This implementation is complete and also support a kernel hierarchy (sub containers). </td>
           </tr>
           <tr valign="top">
             <td width="50%">
@@ -82,7 +82,7 @@
             <td width="50%">
               <a href="Castle.MicroKernel.IComponentActivator.html">IComponentActivator</a>
             </td>
-            <td width="50%"> Summary description for IComponentActivator. </td>
+            <td width="50%"> Implements the instance creation logic. The default implementation should rely on an ordinary call to Activator.CreateInstance(). </td>
           </tr>
           <tr valign="top">
             <td width="50%">
@@ -106,7 +106,7 @@
             <td width="50%">
               <a href="Castle.MicroKernel.IFacility.html">IFacility</a>
             </td>
-            <td width="50%"> Summary description for IFacility. </td>
+            <td width="50%"> Unit of extension. A facility should use the extension points offered by the kernel to augment its functionality. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
@@ -124,7 +124,7 @@
             <td width="50%">
               <a href="Castle.MicroKernel.IKernel.html">IKernel</a>
             </td>
-            <td width="50%"> The <pre class="code">IKernel</pre> interface exposes all the functionality the MicroKernel must implement. </td>
+            <td width="50%"> The <code>IKernel</code> interface exposes all the functionality the MicroKernel implements. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
@@ -136,7 +136,7 @@
             <td width="50%">
               <a href="Castle.MicroKernel.ILifestyleManager.html">ILifestyleManager</a>
             </td>
-            <td width="50%"> The <pre class="code">ILifestyleManager</pre> implements a strategy for a given lifestyle, like singleton, perthread and transient. </td>
+            <td width="50%"> The <code>ILifestyleManager</code> implements a strategy for a given lifestyle, like singleton, perthread and transient. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
@@ -183,6 +183,12 @@
             </td>
             <td width="50%"> Represents a delegate which holds the information about the component </td>
           </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="Castle.MicroKernel.HandlerDelegate.html">HandlerDelegate</a>
+            </td>
+            <td width="50%"> Represents a delegate which holds a handler </td>
+          </tr>
         </table>
       </div>
       <h3 class="dtH3">Enumerations</h3>
@@ -203,7 +209,7 @@
       <hr />
       <div id="footer">
         <p>
-          <a href="http://www.digitalcraftsmen.com.br/~hammett/">Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors</a>
+          <a href="http://www.castleproject.org/">Copyright 2004-2005 (c) Castle Project</a>
         </p>
         <p>
         </p>

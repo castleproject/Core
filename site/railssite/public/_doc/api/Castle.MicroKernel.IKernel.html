@@ -12,7 +12,7 @@
       <div id="bannerrow1">
         <table class="bannerparthead" cellspacing="0">
           <tr id="hdr">
-            <td class="runninghead">Castle.Container</td>
+            <td class="runninghead">Castle's Inversion of Control</td>
             <td class="product">
             </td>
           </tr>
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div id="nstext">
-      <p> The <pre class="code">IKernel</pre> interface exposes all the functionality the MicroKernel must implement. </p>
+      <p> The <code>IKernel</code> interface exposes all the functionality the MicroKernel implements. </p>
       <p>For a list of all members of this type, see <a href="Castle.MicroKernel.IKernelMembers.html">IKernel Members</a>.</p>
       <p>
       </p>
@@ -41,10 +41,12 @@
             <td width="50%">
               <a href="Castle.MicroKernel.DefaultKernel.html">DefaultKernel</a>
             </td>
-            <td width="50%"> Summary description for DefaultKernel. </td>
+            <td width="50%"> Default implementation of <a href="Castle.MicroKernel.IKernel.html">IKernel</a>. This implementation is complete and also support a kernel hierarchy (sub containers). </td>
           </tr>
         </table>
       </div>
+      <h4 class="dtH4">Remarks</h4>
+      <p> It allows you to register components and request them by the key or the service they implemented. It also allow you to register facilities and subsystem, thus augmenting the functionality exposed by the kernel alone to fits your needs. <seealso cref="T:Castle.MicroKernel.IFacility"></seealso><seealso cref="T:Castle.MicroKernel.ISubSystem"></seealso></p>
       <h4 class="dtH4">Requirements</h4>
       <p>
         <b>Namespace: </b>
@@ -55,7 +57,7 @@
 					</p>
       <h4 class="dtH4">See Also</h4>
       <p>
-        <a href="Castle.MicroKernel.IKernelMembers.html">IKernel Members</a> | <a href="Castle.MicroKernel.html">Castle.MicroKernel Namespace</a></p>
+        <a href="Castle.MicroKernel.IKernelMembers.html">IKernel Members</a> | <a href="Castle.MicroKernel.html">Castle.MicroKernel Namespace</a> | <a href="Castle.MicroKernel.IFacility.html">IFacility</a> | <a href="Castle.MicroKernel.ISubSystem.html">ISubSystem</a></p>
       <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
         <param name="Keyword" value="IKernel interface, about IKernel interface">
         </param>
@@ -63,7 +65,7 @@
       <hr />
       <div id="footer">
         <p>
-          <a href="http://www.digitalcraftsmen.com.br/~hammett/">Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors</a>
+          <a href="http://www.castleproject.org/">Copyright 2004-2005 (c) Castle Project</a>
         </p>
         <p>Generated from assembly Castle.MicroKernel [1.0.0.2]</p>
       </div>

@@ -12,7 +12,7 @@
       <div id="bannerrow1">
         <table class="bannerparthead" cellspacing="0">
           <tr id="hdr">
-            <td class="runninghead">Castle.Container</td>
+            <td class="runninghead">Castle's Inversion of Control</td>
             <td class="product">
             </td>
           </tr>
@@ -35,111 +35,123 @@
           </tr>
           <tr valign="top">
             <td width="50%">
+              <a href="Castle.Model.CastleComponentAttribute.html">CastleComponentAttribute</a>
+            </td>
+            <td width="50%"> This attribute is usefull only when you want to register all components on an assembly as a batch process. By doing so, the batch register will look for this attribute to distinguish components from other classes. </td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
               <a href="Castle.Model.ComponentModel.html">ComponentModel</a>
             </td>
-            <td width="50%"> Summary description for ComponentModel. </td>
+            <td width="50%"> Represents the collection of information and meta information collected about a component. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.ConstructorCandidate.html">ConstructorCandidate</a>
             </td>
-            <td width="50%"> Summary description for ConstructorCandidate. </td>
+            <td width="50%"> Represents a constructor of the component that the container can use to initialize it properly. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.ConstructorCandidateCollection.html">ConstructorCandidateCollection</a>
             </td>
-            <td width="50%"> Summary description for ConstructorCandidateCollection. </td>
+            <td width="50%"> Collection of <a href="Castle.Model.ConstructorCandidate.html">ConstructorCandidate</a></td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.CustomLifestyleAttribute.html">CustomLifestyleAttribute</a>
             </td>
-            <td width="50%"> </td>
+            <td width="50%"> Indicates that the target components wants a custom lifestyle. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.DependencyModel.html">DependencyModel</a>
             </td>
-            <td width="50%"> Summary description for DependencyModel. </td>
+            <td width="50%"> Represents a dependency (other component or a fixed value available through external configuration). </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.DependencyModelCollection.html">DependencyModelCollection</a>
             </td>
-            <td width="50%"> Summary description for DependencyModelCollection. </td>
+            <td width="50%"> Collection of <a href="Castle.Model.DependencyModel.html">DependencyModel</a>. </td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="Castle.Model.GraphNode.html">GraphNode</a>
+            </td>
+            <td width="50%"> </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.InterceptorAttribute.html">InterceptorAttribute</a>
             </td>
-            <td width="50%"> Used to declare that a component wants interceptors on it </td>
+            <td width="50%"> Used to declare that a component wants interceptors acting on it. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.InterceptorReference.html">InterceptorReference</a>
             </td>
-            <td width="50%"> Summary description for InterceptorReference. </td>
+            <td width="50%"> Represents an reference to a Interceptor component. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.InterceptorReferenceCollection.html">InterceptorReferenceCollection</a>
             </td>
-            <td width="50%"> Summary description for InterceptorReferenceCollection. </td>
+            <td width="50%"> Collection of <a href="Castle.Model.InterceptorReference.html">InterceptorReference</a></td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.LifecycleStepCollection.html">LifecycleStepCollection</a>
             </td>
-            <td width="50%"> Summary description for LifecycleStepCollection. </td>
+            <td width="50%"> Represents a collection of ordered lifecycle steps. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.LifestyleAttribute.html">LifestyleAttribute</a>
             </td>
-            <td width="50%"> </td>
+            <td width="50%"> Base for Attributes that want to express lifestyle chosen by the component. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.ParameterModel.html">ParameterModel</a>
             </td>
-            <td width="50%"> Summary description for DependencyModel. </td>
+            <td width="50%"> Represents a parameter. Usually the parameter comes from the external world, ie, an external configuration. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.ParameterModelCollection.html">ParameterModelCollection</a>
             </td>
-            <td width="50%"> Summary description for ParameterModelCollection. </td>
+            <td width="50%"> Collection of <a href="Castle.Model.ParameterModel.html">ParameterModel</a></td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.PerThreadAttribute.html">PerThreadAttribute</a>
             </td>
-            <td width="50%"> </td>
+            <td width="50%"> Indicates that the target components wants a per thread lifestyle. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.PropertySet.html">PropertySet</a>
             </td>
-            <td width="50%"> Summary description for PropertySet. </td>
+            <td width="50%"> Represents a property and the respective optional dependency. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.PropertySetCollection.html">PropertySetCollection</a>
             </td>
-            <td width="50%"> Summary description for PropertySetCollection. </td>
+            <td width="50%"> Collection of <a href="Castle.Model.PropertySet.html">PropertySet</a></td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.SingletonAttribute.html">SingletonAttribute</a>
             </td>
-            <td width="50%"> Summary description for LifestyleAttributes. </td>
+            <td width="50%"> Indicates that the target components wants a singleton lifestyle. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Model.TransientAttribute.html">TransientAttribute</a>
             </td>
-            <td width="50%"> </td>
+            <td width="50%"> Indicates that the target components wants a transient lifestyle. </td>
           </tr>
         </table>
       </div>
@@ -152,9 +164,15 @@
           </tr>
           <tr valign="top">
             <td width="50%">
-              <a href="Castle.Model.IInitialize.html">IInitialize</a>
+              <a href="Castle.Model.IInitializable.html">IInitializable</a>
             </td>
-            <td width="50%"> Summary description for LifecycleInterfaces. </td>
+            <td width="50%"> Lifecycle interface. If implemented by a component, the method Initialized will be invoked by the container before making the component available to the external world. </td>
+          </tr>
+          <tr valign="top">
+            <td width="50%">
+              <a href="Castle.Model.IVertex.html">IVertex</a>
+            </td>
+            <td width="50%"> Abstract representation of a vertex. </td>
           </tr>
         </table>
       </div>
@@ -164,12 +182,6 @@
           <tr valign="top">
             <th width="50%">Enumeration</th>
             <th width="50%">Description</th>
-          </tr>
-          <tr valign="top">
-            <td width="50%">
-              <a href="Castle.Model.ActivationType.html">ActivationType</a>
-            </td>
-            <td width="50%"> Enumeration to define the component's activation policy. </td>
           </tr>
           <tr valign="top">
             <td width="50%">
@@ -200,7 +212,7 @@
       <hr />
       <div id="footer">
         <p>
-          <a href="http://www.digitalcraftsmen.com.br/~hammett/">Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors</a>
+          <a href="http://www.castleproject.org/">Copyright 2004-2005 (c) Castle Project</a>
         </p>
         <p>
         </p>

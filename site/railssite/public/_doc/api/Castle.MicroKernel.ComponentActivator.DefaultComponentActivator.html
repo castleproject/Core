@@ -12,7 +12,7 @@
       <div id="bannerrow1">
         <table class="bannerparthead" cellspacing="0">
           <tr id="hdr">
-            <td class="runninghead">Castle.Container</td>
+            <td class="runninghead">Castle's Inversion of Control</td>
             <td class="product">
             </td>
           </tr>
@@ -23,18 +23,20 @@
       </div>
     </div>
     <div id="nstext">
-      <p> Summary description for DefaultComponentActivator </p>
+      <p> Standard implementation of <a href="Castle.MicroKernel.IComponentActivator.html">IComponentActivator</a>. Handles the selection of the best constructor, fills the writable properties the component exposes, run the commission and decommission lifecycles, etc. </p>
       <p>For a list of all members of this type, see <a href="Castle.MicroKernel.ComponentActivator.DefaultComponentActivatorMembers.html">DefaultComponentActivator Members</a>.</p>
       <p>
         <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemObjectClassTopic.htm">System.Object</a>
-        <br />   <a href="Castle.MicroKernel.ComponentActivator.AbstractComponentActivator.html">AbstractComponentActivator</a><br />      <b>DefaultComponentActivator</b></p>
+        <br />   <a href="Castle.MicroKernel.ComponentActivator.AbstractComponentActivator.html">Castle.MicroKernel.ComponentActivator.AbstractComponentActivator</a><br />      <b>Castle.MicroKernel.ComponentActivator.DefaultComponentActivator</b></p>
       <div class="syntax">
         <div>public class DefaultComponentActivator<b> : <a href="Castle.MicroKernel.ComponentActivator.AbstractComponentActivator.html">AbstractComponentActivator</a></b></div>
       </div>
       <H4 class="dtH4">Thread Safety</H4>
-      <P>Public static (Shared in Visual Basic) members of this type are 
+      <P>Public static (<b>Shared</b> in Visual Basic) members of this type are 
 				safe for multithreaded operations. Instance members are <b>not</b> guaranteed to be 
 				thread-safe.</P>
+      <h4 class="dtH4">Remarks</h4>
+      <p> Custom implementors can just override the <code>CreateInstance</code> method. Please note however that the activator is responsible for the proxy creation when needed. </p>
       <h4 class="dtH4">Requirements</h4>
       <p>
         <b>Namespace: </b>
@@ -53,7 +55,7 @@
       <hr />
       <div id="footer">
         <p>
-          <a href="http://www.digitalcraftsmen.com.br/~hammett/">Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors</a>
+          <a href="http://www.castleproject.org/">Copyright 2004-2005 (c) Castle Project</a>
         </p>
         <p>Generated from assembly Castle.MicroKernel [1.0.0.2]</p>
       </div>

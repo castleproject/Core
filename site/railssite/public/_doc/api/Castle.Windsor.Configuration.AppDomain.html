@@ -12,7 +12,7 @@
       <div id="bannerrow1">
         <table class="bannerparthead" cellspacing="0">
           <tr id="hdr">
-            <td class="runninghead">Castle.Container</td>
+            <td class="runninghead">Castle's Inversion of Control</td>
             <td class="product">
             </td>
           </tr>
@@ -37,20 +37,43 @@
             <td width="50%">
               <a href="Castle.Windsor.Configuration.AppDomain.AppDomainConfigurationStore.html">AppDomainConfigurationStore</a>
             </td>
-            <td width="50%"> Summary description for AppDomainConfigurationStore. </td>
+            <td width="50%"> Looks for a section 'castle' in the standard Configuration scheme. It then deserialize the nodes to <a href="Castle.Model.Configuration.IConfiguration.html">IConfiguration</a> implementation. <pre class="code">&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;section name="castle"
+      type="Castle.Windsor.Configuration.AppDomain.CastleSectionHandler, Castle.Windsor" /&gt;
+  &lt;/configSections&gt;
+  
+  &lt;castle&gt;
+    &lt;facilities&gt;
+      &lt;facility id="myfacility"&gt;
+    
+      &lt;/facility&gt;
+    &lt;/facilities&gt;
+  
+    &lt;components&gt;
+      &lt;component id="component1"&gt;
+    
+      &lt;/component&gt;
+    &lt;/components&gt;
+  
+  &lt;/castle&gt;
+  
+&lt;/configuration&gt;
+</pre></td>
           </tr>
           <tr valign="top">
             <td width="50%">
               <a href="Castle.Windsor.Configuration.AppDomain.CastleSectionHandler.html">CastleSectionHandler</a>
             </td>
-            <td width="50%"> Summary description for CastleSectionHandler. </td>
+            <td width="50%"> Implementation of <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemConfigurationIConfigurationSectionHandlerClassTopic.htm">IConfigurationSectionHandler</a>. Do not support configuration inheritance. </td>
           </tr>
         </table>
       </div>
       <hr />
       <div id="footer">
         <p>
-          <a href="http://www.digitalcraftsmen.com.br/~hammett/">Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors</a>
+          <a href="http://www.castleproject.org/">Copyright 2004-2005 (c) Castle Project</a>
         </p>
         <p>
         </p>
