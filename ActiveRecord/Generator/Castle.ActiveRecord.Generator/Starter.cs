@@ -54,6 +54,8 @@ namespace Castle.ActiveRecord.Generator
 			_layout.Restore(_main);
 
 			_model.CurrentProject = new Project();
+
+			_main.ResumeLayout(true);
 		}
 
 		private void OnWorkspaceClosed(object sender, EventArgs e)

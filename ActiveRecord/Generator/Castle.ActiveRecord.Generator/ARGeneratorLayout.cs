@@ -73,9 +73,9 @@ namespace Castle.ActiveRecord.Generator
 
 		public void Persist(IWorkspace workspace)
 		{
-			String configFile = Path.Combine(
-				Path.GetDirectoryName(Application.ExecutablePath), "Layout.config");
-			workspace.MainDockManager.SaveAsXml(configFile);
+//			String configFile = Path.Combine(
+//				Path.GetDirectoryName(Application.ExecutablePath), "Layout.config");
+//			workspace.MainDockManager.SaveAsXml(configFile);
 		}
 
 		public void Restore(IWorkspace workspace)
@@ -90,10 +90,10 @@ namespace Castle.ActiveRecord.Generator
 //			}
 //			else
 			{
-				arGraph.Show(workspace.MainDockManager);
-				outView.Show(workspace.MainDockManager);
-				projExplorer.Show(workspace.MainDockManager);
-				avaShapes.Show(workspace.MainDockManager);
+				arGraph.Show(workspace.MainDockManager, DockState.Document);
+//				outView.Show(workspace.MainDockManager, DockState.DockBottomAutoHide);
+				projExplorer.Show(workspace.MainDockManager, DockState.DockRight);
+				avaShapes.Show(workspace.MainDockManager, DockState.DockRight);
 			}
 		}
 

@@ -1,3 +1,5 @@
+using Castle.ActiveRecord.Generator.Dialogs;
+
 namespace Castle.ActiveRecord.Generator.Parts
 {
 	using System;
@@ -22,6 +24,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.TreeView treeView1;
 		private System.ComponentModel.IContainer components;
+		private System.Windows.Forms.ContextMenu contextMenu1;
+		private System.Windows.Forms.MenuItem propertiesMenu;
 		private Model _model;
 
 		public ProjectExplorer()
@@ -30,6 +34,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
+
+			treeView1.ContextMenu = contextMenu1;
 		}
 
 		public ProjectExplorer(Model model) : this()
@@ -69,6 +75,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.toolBar1 = new System.Windows.Forms.ToolBar();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.treeView1 = new System.Windows.Forms.TreeView();
+			this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+			this.propertiesMenu = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// imageList1
@@ -107,18 +115,30 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.treeView1.Name = "treeView1";
 			this.treeView1.Size = new System.Drawing.Size(246, 279);
 			this.treeView1.TabIndex = 4;
+			this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+			// 
+			// contextMenu1
+			// 
+			this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																						 this.propertiesMenu});
+			// 
+			// propertiesMenu
+			// 
+			this.propertiesMenu.Index = 0;
+			this.propertiesMenu.Text = "Properties";
+			this.propertiesMenu.Click += new System.EventHandler(this.propertiesMenu_Click);
 			// 
 			// ProjectExplorer
 			// 
-			this.DockableAreas = ((WeifenLuo.WinFormsUI.DockAreas)(((((WeifenLuo.WinFormsUI.DockAreas.Float | WeifenLuo.WinFormsUI.DockAreas.DockLeft) 
-				| WeifenLuo.WinFormsUI.DockAreas.DockRight) 
-				| WeifenLuo.WinFormsUI.DockAreas.DockTop) 
-				| WeifenLuo.WinFormsUI.DockAreas.DockBottom)));
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(246, 323);
 			this.Controls.Add(this.treeView1);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.toolBar1);
+			this.DockableAreas = ((WeifenLuo.WinFormsUI.DockAreas)(((((WeifenLuo.WinFormsUI.DockAreas.Float | WeifenLuo.WinFormsUI.DockAreas.DockLeft) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockRight) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockTop) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockBottom)));
 			this.DockPadding.Bottom = 2;
 			this.HideOnClose = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -127,6 +147,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.Text = "Project Explorer";
 			this.Load += new System.EventHandler(this.ProjectExplorer_Load);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -237,6 +258,25 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 				parent.Nodes.Add(arNode);
 			}
+		}
+
+		private void propertiesMenu_Click(object sender, System.EventArgs e)
+		{
+			if (treeView1.SelectedNode.Tag is ActiveRecordDescriptor) 
+			{
+				using(ActiveRecordPropertiesDialog d = 
+						  new ActiveRecordPropertiesDialog(
+							treeView1.SelectedNode.Tag as ActiveRecordDescriptor, 
+							_model.CurrentProject))
+				{
+					d.ShowDialog();
+				}
+			}
+		}
+
+		private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			propertiesMenu.Enabled = (e.Node.Tag is IActiveRecordDescriptor);
 		}
 	}
 }

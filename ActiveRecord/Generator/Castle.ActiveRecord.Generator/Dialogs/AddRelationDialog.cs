@@ -161,6 +161,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// okButton
 			// 
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.Location = new System.Drawing.Point(536, 296);
 			this.okButton.Name = "okButton";
 			this.okButton.TabIndex = 5;
@@ -519,11 +520,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			}
 			else if (hasAndBelongsToManyButton.Checked)
 			{
-				SwitchViewTo(AssociationEnum.HasMany);
+				SwitchViewTo(AssociationEnum.HasAndBelongsToMany);
 			}
 			else if (belongsToButton.Checked)
 			{
-				SwitchViewTo(AssociationEnum.HasMany);
+				SwitchViewTo(AssociationEnum.BelongsTo);
 			}
 		}
 
@@ -531,7 +532,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			get
 			{
-				if (targetTableList.SelectedIndex != 1)
+				if (targetTableList.SelectedIndex != -1)
 				{
 					return targetTableList.SelectedItem as ActiveRecordDescriptor;
 				}
@@ -543,7 +544,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			get
 			{
-				if (relatedCols.SelectedIndex != 1)
+				if (relatedCols.SelectedIndex != -1)
 				{
 					return relatedCols.SelectedItem as ColumnDefinition;
 				}
@@ -555,7 +556,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			get
 			{
-				if (parentCols.SelectedIndex != 1)
+				if (parentCols.SelectedIndex != -1)
 				{
 					return parentCols.SelectedItem as ColumnDefinition;
 				}
@@ -567,7 +568,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			get
 			{
-				if (associationTable.SelectedIndex != 1)
+				if (associationTable.SelectedIndex != -1)
 				{
 					return associationTable.SelectedItem as TableDefinition;
 				}

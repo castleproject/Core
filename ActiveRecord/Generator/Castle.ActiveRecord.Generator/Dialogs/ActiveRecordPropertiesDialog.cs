@@ -173,6 +173,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader13 = new System.Windows.Forms.ColumnHeader();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.EditRelation = new System.Windows.Forms.Button();
 			this.AddRelation = new System.Windows.Forms.Button();
 			this.listView2 = new System.Windows.Forms.ListView();
 			this.columnHeader9 = new System.Windows.Forms.ColumnHeader();
@@ -185,7 +186,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
-			this.EditRelation = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -427,9 +427,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Relationships";
 			// 
+			// EditRelation
+			// 
+			this.EditRelation.Location = new System.Drawing.Point(392, 256);
+			this.EditRelation.Name = "EditRelation";
+			this.EditRelation.Size = new System.Drawing.Size(104, 23);
+			this.EditRelation.TabIndex = 6;
+			this.EditRelation.Text = "Edit Relation";
+			this.EditRelation.Click += new System.EventHandler(this.EditRelation_Click);
+			// 
 			// AddRelation
 			// 
-			this.AddRelation.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.AddRelation.Location = new System.Drawing.Point(504, 256);
 			this.AddRelation.Name = "AddRelation";
 			this.AddRelation.Size = new System.Drawing.Size(104, 23);
@@ -511,22 +519,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.Location = new System.Drawing.Point(504, 376);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 4;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-			// 
-			// EditRelation
-			// 
-			this.EditRelation.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.EditRelation.Location = new System.Drawing.Point(392, 256);
-			this.EditRelation.Name = "EditRelation";
-			this.EditRelation.Size = new System.Drawing.Size(104, 23);
-			this.EditRelation.TabIndex = 6;
-			this.EditRelation.Text = "Edit Relation";
-			this.EditRelation.Click += new System.EventHandler(this.EditRelation_Click);
 			// 
 			// ActiveRecordPropertiesDialog
 			// 
@@ -539,10 +536,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.title);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "ActiveRecordPropertiesDialog";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Properties";
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);

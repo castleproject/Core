@@ -37,9 +37,9 @@ namespace Castle.ActiveRecord.Generator.Components
 			if (desc == null) throw new ArgumentNullException("desc");
 			if (tableDef == null) throw new ArgumentNullException("tableDef");
 			if (context == null) throw new ArgumentNullException("context");
-			if (tableDef.RelatedDescriptor != null && tableDef.RelatedDescriptor != desc) {
-				throw new ArgumentException("Different descriptors");
-			}
+//			if (tableDef.RelatedDescriptor != null && tableDef.RelatedDescriptor != desc) {
+//				throw new ArgumentException("Different descriptors");
+//			}
 
 			ArrayList list = new ArrayList();
 

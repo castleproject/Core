@@ -107,12 +107,14 @@ namespace Castle.ActiveRecord.Generator
 			// dockManager
 			// 
 			this.dockManager.ActiveAutoHideContent = null;
+			this.dockManager.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dockManager.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dockManager.Font = new System.Drawing.Font("Tahoma", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World);
+			this.dockManager.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World, ((System.Byte)(0)));
 			this.dockManager.Location = new System.Drawing.Point(0, 42);
+			this.dockManager.MdiIntegration = false;
 			this.dockManager.Name = "dockManager";
 			this.dockManager.Size = new System.Drawing.Size(855, 609);
-			this.dockManager.TabIndex = 1;
+			this.dockManager.TabIndex = 0;
 			// 
 			// statusBar1
 			// 
