@@ -91,11 +91,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "NHibernate"
-                    AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
-                />
-                <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
                     HintPath = "..\lib\Castle.DynamicProxy.dll"
@@ -114,6 +109,11 @@
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\lib\log4net.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\lib\NHibernate.dll"
                 />
             </References>
         </Build>
@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TableHierarchyTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "TransactionScopeTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -155,6 +160,26 @@
                 />
                 <File
                     RelPath = "Model\Blog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Client.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Company.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Firm.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Person.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

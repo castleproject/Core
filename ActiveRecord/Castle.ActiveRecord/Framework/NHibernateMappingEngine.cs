@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+	using System.Collections;
 	using System.Configuration;
 	using System.Reflection;
 	using System.Text;
@@ -24,10 +25,14 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public class NHibernateMappingEngine
 	{
+		private const BindingFlags PropertiesBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.Instance;
+		private static readonly String subclassOpen = "\r\n<subclass name=\"{0}\" {1}>";
+		private static readonly String subclassClose = "\r\n</subclass>";
 		private static readonly String mappingOpen = "\r\n<hibernate-mapping xmlns=\"urn:nhibernate-mapping-2.0\" {0}>";
 		private static readonly String mappingClose = "\r\n</hibernate-mapping>";
 		private static readonly String classOpen = "\r\n<class name=\"{0}\" {1}>";
 		private static readonly String classClose = "\r\n</class>";
+		private static readonly String discValueAttribute = "discriminator-value=\"{0}\" ";
 		private static readonly String tableAttribute = "table=\"{0}\" ";
 		private static readonly String proxyAttribute = "proxy=\"{0}\" ";
 		private static readonly String schemaAttribute = "schema=\"{0}\" ";
@@ -49,6 +54,7 @@ namespace Castle.ActiveRecord
 		private static readonly String oneToOne = "\r\n<one-to-one name=\"{0}\" class=\"{1}\" {2}/>";
 		private static readonly String oneToMany = "\r\n<one-to-many class=\"{0}\" />";
 		private static readonly String manyToOne = "\r\n<many-to-one {0} {1} />";
+		private static readonly String manyToMany = "\r\n<many-to-many class=\"{0}\" {1} />";
 		private static readonly String cascadeAttribute = "cascade=\"{0}\" ";
 		private static readonly String outerJoinAttribute = "outer-join=\"{0}\" ";
 		private static readonly String accessAttribute = "access=\"{0}\" ";
@@ -71,8 +77,15 @@ namespace Castle.ActiveRecord
 		private static readonly String orderByAttribute = "order-by=\"{0}\" ";
 		private static readonly String whereAttribute = "where=\"{0}\" ";
 
-		public String CreateMapping(Type type)
+		private IList _visited = new ArrayList();
+
+		
+		public String CreateMapping(Type type, Type[] sefOfTypes)
 		{
+			if (_visited.Contains(type)) return String.Empty;
+			_visited.Add(type);
+
+
 			if (!type.IsDefined(typeof(ActiveRecordAttribute), true))
 			{
 				return String.Empty;
@@ -82,15 +95,35 @@ namespace Castle.ActiveRecord
 
 			if (ar != null)
 			{
+				// Is it a child?
+
+				if (ar.DiscriminatorValue != null && ar.DiscriminatorColumn == null)
+				{
+					// In this case, it must be 
+					// mapped as a subclass later
+					return String.Empty;
+				}
+
 				StringBuilder xml = new StringBuilder(String.Format(mappingOpen, ""));
 
 				String table = (ar.Table == null ? "" : String.Format(tableAttribute, ar.Table));
 				String schema = (ar.Schema == null ? "" : String.Format(schemaAttribute, ar.Schema));
 				String proxy = (ar.Proxy == null ? "" : String.Format(proxyAttribute, ar.Proxy));
+				String disc = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
 
-				xml.AppendFormat(classOpen, type.AssemblyQualifiedName, table + schema + proxy);
+				xml.AppendFormat(classOpen, type.AssemblyQualifiedName, table + schema + proxy + disc);
 
-				AddMappedProperties(xml, type.GetProperties());
+				AddMappedIdOrCompositeId(xml, type.GetProperties( PropertiesBindingFlags ));
+
+				if (AddDiscrimitator(xml, ar))
+				{
+					AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+					AddSubClasses(xml, ar, type, sefOfTypes);
+				}
+				else
+				{
+					AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+				}
 
 				xml.Append(classClose).Append(mappingClose);
 
@@ -100,8 +133,30 @@ namespace Castle.ActiveRecord
 			return String.Empty;
 		}
 
-		private void AddMappedProperties(StringBuilder builder, PropertyInfo[] props)
+		private void CreateSubClassMapping(StringBuilder xml, Type type, Type[] sefOfTypes)
 		{
+			_visited.Add(type);
+
+			ActiveRecordAttribute ar = GetActiveRecord(type);
+
+			if (ar != null)
+			{
+				String table = (ar.Table == null ? "" : String.Format(tableAttribute, ar.Table));
+				String proxy = (ar.Proxy == null ? "" : String.Format(proxyAttribute, ar.Proxy));
+				String discvalue = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
+
+				xml.AppendFormat(subclassOpen, type.AssemblyQualifiedName, table + proxy + discvalue);
+
+				AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+
+				xml.Append(subclassClose);
+			}
+		}
+
+		private void AddMappedIdOrCompositeId(StringBuilder builder, PropertyInfo[] props)
+		{
+			// TODO: Composite-id
+
 			foreach (PropertyInfo prop in props)
 			{
 				object[] attributes = prop.GetCustomAttributes(false);
@@ -114,6 +169,17 @@ namespace Castle.ActiveRecord
 
 						continue;
 					}
+				}
+			}
+		}
+
+		private void AddMappedProperties(StringBuilder builder, PropertyInfo[] props)
+		{
+			foreach (PropertyInfo prop in props)
+			{
+				object[] attributes = prop.GetCustomAttributes(false);
+				foreach (object attribute in attributes)
+				{
 					PropertyAttribute property = attribute as PropertyAttribute;
 					if (property != null)
 					{
@@ -128,6 +194,35 @@ namespace Castle.ActiveRecord
 
 						continue;
 					}
+					HasAndBelongsToManyAttribute hasAndBelongs = attribute as HasAndBelongsToManyAttribute;
+					if (hasAndBelongs != null)
+					{
+						if (hasAndBelongs.RelationType == RelationType.Bag)
+						{
+							AddBagMapping(prop, hasAndBelongs, builder);
+						}
+//						else if (hasmany.RelationType == RelationType.Map)
+//						{
+//							AddMapMapping(prop, hasmany, builder);
+//						}
+//						else if (hasmany.RelationType == RelationType.List)
+//						{
+//							AddListMapping(prop, hasmany, builder);
+//						}
+//						else if (hasmany.RelationType == RelationType.Set)
+//						{
+//							AddSetMapping(prop, hasmany, builder);
+//						}
+						else
+						{
+							String message = String.Format("Sorry but we do not support " + 
+								"mapping of '{0}' yet", hasAndBelongs.RelationType);
+							throw new NotSupportedException(message);
+						}
+
+						continue;
+					}
+
 					HasManyAttribute hasmany = attribute as HasManyAttribute;
 					if (hasmany != null)
 					{
@@ -357,7 +452,7 @@ namespace Castle.ActiveRecord
 
 		private void AddPropertyMapping(PropertyAttribute property, PropertyInfo prop, StringBuilder builder)
 		{
-			String column = (property.Column == null ? "" : String.Format(columnAttribute, property.Column));
+			String column = (property.Column == null ? String.Format(columnAttribute, prop.Name) : String.Format(columnAttribute, property.Column));
 			String update = (property.Update == null ? "" : String.Format(updateAttribute, property.Update));
 			String insert = (property.Insert == null ? "" : String.Format(insertAttribute, property.Insert));
 			String formula = (property.Formula == null ? "" : String.Format(formulaAttribute, property.Formula));
@@ -374,7 +469,7 @@ namespace Castle.ActiveRecord
 		{
 			String name = String.Format(nameAttribute, prop.Name);
 			String type = String.Format(typeAttribute, prop.PropertyType.Name);
-			String column = (pk.Column == null ? "" : String.Format(columnAttribute, pk.Column));
+			String column = (pk.Column == null ? String.Format(columnAttribute, prop.Name) : String.Format(columnAttribute, pk.Column));
 			String unsavedValue = (pk.UnsavedValue == null ? "" : String.Format(unsavedValueAttribute, pk.UnsavedValue));
 			String access = (pk.Access == null ? "" : String.Format(accessAttribute, pk.Access));
 
@@ -401,6 +496,75 @@ namespace Castle.ActiveRecord
 			return null;
 		}
 
+		private void AddBagMapping(PropertyInfo prop, HasAndBelongsToManyAttribute hasAndBelongsTo, StringBuilder builder)
+		{
+			String name = prop.Name;
+			String table = (hasAndBelongsTo.Table == null ? "" : String.Format(tableAttribute, hasAndBelongsTo.Table));
+			String schema = (hasAndBelongsTo.Schema == null ? "" : String.Format(schemaAttribute, hasAndBelongsTo.Schema));
+			String lazy = (hasAndBelongsTo.Lazy == null ? "" : String.Format(lazyAttribute, hasAndBelongsTo.Lazy));
+			String inverse = (hasAndBelongsTo.Inverse == null ? "" : String.Format(inverseAttribute, hasAndBelongsTo.Inverse));
+			String cascade = (hasAndBelongsTo.Cascade == null ? "" : String.Format(cascadeAttribute, hasAndBelongsTo.Cascade));
+			String sort = (hasAndBelongsTo.Sort == null ? "" : String.Format(sortAttribute, hasAndBelongsTo.Sort));
+			String orderBy = (hasAndBelongsTo.OrderBy == null ? "" : String.Format(orderByAttribute, hasAndBelongsTo.OrderBy));
+			String where = (hasAndBelongsTo.Where == null ? "" : String.Format(whereAttribute, hasAndBelongsTo.Where));
+
+			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + sort + orderBy + where);
+
+			Type otherType = hasAndBelongsTo.MapType;
+			
+			//			if (hasAndBelongsTo.Key == null)
+			//			{
+			//				throw new ConfigurationException("hasAndBelongsToAttribute must expose a Key");
+			//			}
+
+			//			PropertyInfo elementProp = otherType.GetProperty(hasAndBelongsTo.Key);
+			
+			//			if (elementProp != null)
+			{
+				//				PropertyInfo indexProp = otherType.GetProperty(hasAndBelongsTo.Index);
+				//				if (indexProp != null)
+				//				{
+				//					String type = String.Format(typeAttribute, indexProp.Name);
+				//					builder.AppendFormat(indexTag, hasAndBelongsTo.Index, type);
+				//				}
+
+
+				//				object[] elementAttributes = elementProp.GetCustomAttributes(false);
+				//				foreach (object attribute in elementAttributes)
+				//				{
+				//					if (attribute is PropertyAttribute)
+				//					{
+				//						column = (attribute as PropertyAttribute).Column;
+				//						break;
+				//					}
+				//					else if (attribute is PrimaryKeyAttribute)
+				//					{
+				//						column = (attribute as PrimaryKeyAttribute).Column;
+				//						break;
+				//					}
+				//					else if (attribute is BelongsToAttribute)
+				//					{
+				//						column = (attribute as BelongsToAttribute).Column;
+				//						break;
+				//					}
+				//				}
+
+				String columnkey = hasAndBelongsTo.ColumnKey == null ? "" : hasAndBelongsTo.ColumnKey;
+				String column = hasAndBelongsTo.Column == null ? "" : String.Format(columnAttribute, hasAndBelongsTo.Column);
+
+				builder.AppendFormat(keyTag, columnkey);
+
+				// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
+				// We need to do it wisely
+				if (column != null)
+				{
+					builder.AppendFormat(manyToMany, otherType.AssemblyQualifiedName, column);
+				}
+			}
+		
+			builder.Append(bagClose);
+		}
+
 		private void AddBagMapping(PropertyInfo prop, HasManyAttribute hasmany, StringBuilder builder)
 		{
 			String name = prop.Name;
@@ -417,10 +581,10 @@ namespace Castle.ActiveRecord
 
 			Type otherType = hasmany.MapType;
 			
-			if (hasmany.Key == null)
-			{
-				throw new ConfigurationException("HasManyAttribute must expose a Key");
-			}
+//			if (hasmany.Key == null)
+//			{
+//				throw new ConfigurationException("HasManyAttribute must expose a Key");
+//			}
 
 //			PropertyInfo elementProp = otherType.GetProperty(hasmany.Key);
 			
@@ -466,6 +630,37 @@ namespace Castle.ActiveRecord
 			}
 		
 			builder.Append(bagClose);
+		}
+
+		private bool AddDiscrimitator(StringBuilder xml, ActiveRecordAttribute ar)
+		{
+			if (ar.DiscriminatorColumn != null)
+			{
+				xml.Append("\r\n\t<discriminator ");
+				xml.Append( String.Format(" column=\"{0}\" ", ar.DiscriminatorColumn) );
+
+				if (ar.DiscriminatorType != null)
+				{
+					xml.Append( String.Format(" type=\"{0}\" ", ar.DiscriminatorType) );
+				}
+
+				xml.Append("/>\r\n");
+				
+				return true;
+			}
+
+			return false;
+		}
+
+		private void AddSubClasses(StringBuilder xml, ActiveRecordAttribute ar, Type type, Type[] types)
+		{
+			foreach(Type sub in types)
+			{
+				if (sub.BaseType == type)
+				{
+					CreateSubClassMapping(xml, sub, types);
+				}
+			}
 		}
 	}
 }

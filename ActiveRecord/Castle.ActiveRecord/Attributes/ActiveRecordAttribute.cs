@@ -23,6 +23,9 @@ namespace Castle.ActiveRecord
 		private String _table;
 		private String _schema;
 		private String _proxy;
+		private String _discriminatorType;
+		private String _discriminatorValue;
+		private String _discriminatorColumn;
 
 		public ActiveRecordAttribute()
 		{
@@ -55,6 +58,24 @@ namespace Castle.ActiveRecord
 		{
 			get { return _proxy; }
 			set { _proxy = value; }
+		}
+
+		public String DiscriminatorColumn
+		{
+			get { return _discriminatorColumn; }
+			set { _discriminatorColumn = value; }
+		}
+
+		public String DiscriminatorType
+		{
+			get { return _discriminatorType; }
+			set { _discriminatorType = value; }
+		}
+
+		public String DiscriminatorValue
+		{
+			get { return _discriminatorValue; }
+			set { _discriminatorValue = value; }
 		}
 	}
 }

@@ -38,42 +38,42 @@ namespace Castle.ActiveRecord.Tests
 			set { _id = value; }
 		}
 
-		[PropertyAttribute("blog_name")]
+		[Property("blog_name")]
 		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
 		}
 
-		[PropertyAttribute("blog_author")]
+		[Property("blog_author")]
 		public String Author
 		{
 			get { return _author; }
 			set { _author = value; }
 		}
 
-		[HasManyAttribute(typeof(Post), RelationType.Bag, Key="Posts", Table="Posts", Column="post_blogid")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="Posts", Table="Posts", Column="post_blogid")]
 		public IList Posts
 		{
 			get { return _posts; }
 			set { _posts = value; }
 		}
 
-		[HasManyAttribute(typeof(Post), RelationType.Bag, Key="PublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 1")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="PublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 1")]
 		public IList PublishedPosts
 		{
 			get { return _publishedposts; }
 			set { _publishedposts = value; }
 		}
 
-		[HasManyAttribute(typeof(Post), RelationType.Bag, Key="UnPublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 0")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="UnPublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 0")]
 		public IList UnPublishedPosts
 		{
 			get { return _unpublishedposts; }
 			set { _unpublishedposts = value; }
 		}
 
-		[HasManyAttribute(typeof(Post), RelationType.Bag, Key="RecentPosts", Table="Posts", Column="post_blogid", OrderBy="post_created desc")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="RecentPosts", Table="Posts", Column="post_blogid", OrderBy="post_created desc")]
 		public IList RecentPosts
 		{
 			get { return _recentposts; }

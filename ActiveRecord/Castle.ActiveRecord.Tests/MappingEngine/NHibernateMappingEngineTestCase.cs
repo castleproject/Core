@@ -39,7 +39,7 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 				"</hibernate-mapping>";
 
 			NHibernateMappingEngine engine = new NHibernateMappingEngine();
-			String xml = engine.CreateMapping( typeof(SimpleModel) );
+			String xml = engine.CreateMapping( typeof(SimpleModel), new Type[] { typeof(SimpleModel) } );
 			Assert.AreEqual(contents, xml);
 		}
 
@@ -58,7 +58,7 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 				"</hibernate-mapping>";
 
 			NHibernateMappingEngine engine = new NHibernateMappingEngine();
-			String xml = engine.CreateMapping( typeof(SimpleModel2) );
+			String xml = engine.CreateMapping( typeof(SimpleModel2), new Type[] { typeof(SimpleModel2) } );
 			Assert.AreEqual(contents, xml);
 		}
 
@@ -77,7 +77,7 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 				"</hibernate-mapping>";
 
 			NHibernateMappingEngine engine = new NHibernateMappingEngine();
-			String xml = engine.CreateMapping( typeof(SimpleModel3) );
+			String xml = engine.CreateMapping( typeof(SimpleModel3), new Type[] { typeof(SimpleModel3) } );
 			Assert.AreEqual(contents, xml);
 		}
 	}

@@ -45,6 +45,8 @@ namespace Castle.ActiveRecord
 			/// Base configuration
 			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
+			NHibernateMappingEngine engine = new NHibernateMappingEngine();
+
 			foreach( Type type in types )
 			{
 				if ( !typeof(ActiveRecordBase).IsAssignableFrom( type ) )
@@ -63,8 +65,7 @@ namespace Castle.ActiveRecord
 
 				if (!type.IsAbstract)
 				{
-					NHibernateMappingEngine engine = new NHibernateMappingEngine();
-					String xml = engine.CreateMapping(type);
+					String xml = engine.CreateMapping(type, types);
 					if (xml != String.Empty) cfg.AddXmlString(xml);
 				}
 			}
