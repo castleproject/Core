@@ -1,0 +1,49 @@
+namespace ${basename}
+{
+	using System;
+
+	using Castle.Windsor;
+	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Configuration.Sources;
+
+	using Castle.MicroKernel;
+
+	using Castle.CastleOnRails.WindsorExtension;
+
+
+	public class MyContainer : WindsorContainer
+	{
+		// Using AppDomain as configuration source
+		public MyContainer() : base( new XmlInterpreter(new AppDomainConfigSource()) )
+		{
+			Init();
+		}
+
+		public void Init()
+		{
+			RegisterFacilities();
+			RegisterComponents();
+		}
+
+		private void RegisterFacilities()
+		{
+			AddFacility( "rails", new RailsFacility() );
+			
+			// You can use more :-)
+			// AddFacility( "nhibernate", new NHibernateFacility() );
+			// AddFacility( "transaction", new TransactionFacility() );
+		}
+
+		protected void RegisterComponents()
+		{
+			// Standard components
+			// AddComponent( "author.dao", typeof(AuthorDao) );
+
+			// CoR Filters
+			// AddComponent( "auth.filter", typeof(AuthenticationCheckFilter) );
+
+			// CoR Controllers
+			// AddComponent( "intro.controller", typeof(IntroController) );
+		}
+	}
+}

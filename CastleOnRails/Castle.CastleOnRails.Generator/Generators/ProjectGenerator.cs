@@ -38,6 +38,8 @@ namespace Castle.CastleOnRails.Generator.Generators
 		private bool useWindsorIntegration;
 		private ITemplateEngine engine;
 		private bool isNVelocity;
+		private DirectoryInfo rootDir;
+		private DirectoryInfo frameworkDir;
 
 
 		public ProjectGenerator()
@@ -101,9 +103,14 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 		public void Execute(IDictionary options, TextWriter writer)
 		{
+			// Start up
+
 			useWindsorIntegration = options.Contains("windsor");
 			isNVelocity = !(options.Contains("view") && options["view"].Equals("aspnet"));
 			String name = options["name"] as String;
+
+			DirectoryInfo sysDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.System));
+			frameworkDir = new DirectoryInfo( Path.Combine(sysDir.Parent.FullName, @"Microsoft.NET\Framework\v1.1.4322\") );
 
 			// Steps to create the project:
 
@@ -129,13 +136,14 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 		private void CreateDirectories(string name, IDictionary options, TextWriter writer)
 		{
-			DirectoryInfo info = new DirectoryInfo(options["outdir"] as String);
+			DirectoryInfo outdir = new DirectoryInfo(options["outdir"] as String);
 			
 			try
 			{
-				projectDir = info.CreateSubdirectory(name);
-				projectTestDir = info.CreateSubdirectory(name + ".Tests");
-				libDir = info.CreateSubdirectory("lib");
+				rootDir = outdir.CreateSubdirectory(name);
+				projectDir = rootDir.CreateSubdirectory(name);
+				projectTestDir = rootDir.CreateSubdirectory(name + ".Tests");
+				libDir = rootDir.CreateSubdirectory("lib");
 
 				controllersDir = projectDir.CreateSubdirectory("Controllers");
 				modelstDir = projectDir.CreateSubdirectory("Models");
@@ -150,11 +158,11 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 		private void CreateWebConfig(IDictionary options, TextWriter writer)
 		{
-			String templateName = (useWindsorIntegration) ? "webconfigwindsor.vm" : "webconfig.vm";
+			String templateName = "webconfig.vm";
 
 			Hashtable ctx = new Hashtable();
-
-			ctx["viewpath"] = viewsDir.FullName;
+			ctx.Add("viewpath", viewsDir.FullName);
+			ctx.Add("useWindsorIntegration", useWindsorIntegration);
 
 			if (isNVelocity)
 			{
@@ -167,11 +175,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 					"Castle.CastleOnRails.Framework.Views.Aspx.AspNetViewEngine, Castle.CastleOnRails.Framework";
 			}
 
-			using (StreamWriter swriter = 
-					   new StreamWriter(Path.Combine(projectDir.FullName, "web.config"), false, Encoding.Default))
-			{
-				engine.Process(ctx, templateName, swriter);
-			}
+			WriteTemplateFile(Path.Combine(projectDir.FullName, "web.config"), ctx, templateName);
 		}
 
 		private void CreateNAntBuildFile(IDictionary options, TextWriter writer)
@@ -180,33 +184,33 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 		private void CreateSolution(string name, IDictionary options, TextWriter writer)
 		{
-			String templateName = "solution.vm";
-
 			Hashtable ctx = new Hashtable();
-			ctx.Add("id", Guid.NewGuid().ToString());
+			ctx.Add("projid", Guid.NewGuid().ToString());
+			ctx.Add("projtestid", Guid.NewGuid().ToString());
 			ctx.Add("basename", name);
 			ctx.Add("basenameproj", name + ".csproj");
 			ctx.Add("basenameprojtests", name + ".Tests.csproj");
+			ctx.Add("projectDir", projectDir.FullName);
 			ctx.Add("projectTestDir", projectTestDir.FullName);
+			ctx.Add("frameworkpath", frameworkDir.FullName);
+			ctx.Add("isNVelocity", isNVelocity);
+			ctx.Add("useWindsorIntegration", useWindsorIntegration);
 
-			using (StreamWriter swriter = 
-					   new StreamWriter(Path.Combine(projectDir.FullName, name + ".sln"), false, Encoding.Default))
+			WriteTemplateFile(Path.Combine(rootDir.FullName, name + ".sln"), ctx, "solution.vm");
+			WriteTemplateFile(Path.Combine(projectDir.FullName, name + ".csproj"), ctx, "csproj.vm");
+			WriteTemplateFile(Path.Combine(projectTestDir.FullName, name + ".Tests.csproj"),  ctx, "csprojtest.vm");
+
+			if (useWindsorIntegration)
 			{
-				engine.Process(ctx, templateName, swriter);
+				WriteTemplateFile(Path.Combine(projectDir.FullName, "global.asax"), ctx, "global.vm");
+				WriteTemplateFile(Path.Combine(projectDir.FullName, "MyHttpApplication.cs"), ctx, "httpapp.vm");
+				WriteTemplateFile(Path.Combine(projectDir.FullName, "MyContainer.cs"), ctx, "container.vm");
 			}
+		}
 
-			templateName = "csproj.vm";
-
-			using (StreamWriter swriter = 
-					   new StreamWriter(Path.Combine(projectDir.FullName, name + ".csproj"), false, Encoding.Default))
-			{
-				engine.Process(ctx, templateName, swriter);
-			}
-
-			templateName = "csprojtest.vm";
-
-			using (StreamWriter swriter = 
-					   new StreamWriter(Path.Combine(projectTestDir.FullName, name + ".Tests.csproj"), false, Encoding.Default))
+		private void WriteTemplateFile(String filename, Hashtable ctx, string templateName)
+		{
+			using (StreamWriter swriter = new StreamWriter(filename, false, Encoding.Default))
 			{
 				engine.Process(ctx, templateName, swriter);
 			}

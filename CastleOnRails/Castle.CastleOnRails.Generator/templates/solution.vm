@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{$id}") = "$basename", "${basenameproj}", "{992ACC07-728E-493D-929B-A684B7135421}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "${basename}", "${basename}\\${basenameproj}", "{${projid}}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{$id}") = "${basename}.Tests", "${projectTestDir}\\${basenameprojtests}", "{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "${basename}.Tests", "${basename}.Tests\\${basenameprojtests}", "{${projtestid}}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -13,14 +13,14 @@ Global
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{992ACC07-728E-493D-929B-A684B7135421}.Debug.ActiveCfg = Debug|.NET
-		{992ACC07-728E-493D-929B-A684B7135421}.Debug.Build.0 = Debug|.NET
-		{992ACC07-728E-493D-929B-A684B7135421}.Release.ActiveCfg = Release|.NET
-		{992ACC07-728E-493D-929B-A684B7135421}.Release.Build.0 = Release|.NET
-		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Debug.ActiveCfg = Debug|.NET
-		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Debug.Build.0 = Debug|.NET
-		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Release.ActiveCfg = Release|.NET
-		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Release.Build.0 = Release|.NET
+		{${projid}}.Debug.ActiveCfg = Debug|.NET
+		{${projid}}.Debug.Build.0 = Debug|.NET
+		{${projid}}.Release.ActiveCfg = Release|.NET
+		{${projid}}.Release.Build.0 = Release|.NET
+		{${projtestid}}.Debug.ActiveCfg = Debug|.NET
+		{${projtestid}}.Debug.Build.0 = Debug|.NET
+		{${projtestid}}.Release.ActiveCfg = Release|.NET
+		{${projtestid}}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

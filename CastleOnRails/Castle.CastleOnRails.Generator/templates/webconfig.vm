@@ -5,6 +5,10 @@
     <configSections>
         <section name="rails"
                  type="Castle.CastleOnRails.Engine.Configuration.RailsSectionHandler, Castle.CastleOnRails.Engine" />
+#if($useWindsorIntegration)
+        <section name="castle"
+                 type="Castle.Windsor.Configuration.AppDomain.CastleSectionHandler, Castle.Windsor" />
+#end
     </configSections>
 
     <rails>
@@ -12,6 +16,18 @@
 			viewPathRoot="$viewpath" 
 			customEngine="$viewenginetypename" />
     </rails>
+#if($useWindsorIntegration)
+
+	<castle>
+		<facilities>
+		  <!-- Facilities declarations goes here -->
+		</facilities>
+
+		<components>
+		  <!-- Components declarations goes here -->
+		</components>
+	</castle>
+#end
 
     <system.web>
         <httpHandlers>

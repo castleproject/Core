@@ -133,6 +133,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "templates\container.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "templates\csproj.vm"
                     BuildAction = "None"
                 />
@@ -141,15 +145,19 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "templates\global.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\httpapp.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "templates\solution.vm"
                     BuildAction = "None"
                 />
                 <File
                     RelPath = "templates\webconfig.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "templates\webconfigwindsor.vm"
                     BuildAction = "None"
                 />
             </Include>
