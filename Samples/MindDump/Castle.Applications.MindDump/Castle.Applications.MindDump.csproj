@@ -80,24 +80,44 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\lib\Commons.dll"
-                />
-                <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\lib\Iesi.Collections.dll"
+                    Name = "Castle.Facilities.NHibernateExtension"
+                    AssemblyName = "Castle.Facilities.NHibernateExtension"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\NHibernate.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.NHibernateIntegration"
+                    AssemblyName = "Castle.Facilities.NHibernateIntegration"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateIntegration.dll"
                 />
             </References>
         </Build>
@@ -109,7 +129,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MindDumpContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dao\AuthorDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dao\BlogDao.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -124,17 +154,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model\Category.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\Comment.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Model\Post.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\AuthenticationService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -23,6 +23,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
 
 	using Castle.Services.Transaction;
 
@@ -32,7 +33,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NHibernateFacility : IFacility
+	public class NHibernateFacility : AbstractFacility
 	{
 		public static readonly String ConfiguredObject = "nhibernate.cfg";
 
@@ -40,42 +41,34 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 		}
 
-		#region IFacility Members
-
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
+		protected override void Init()
 		{
-			if (facilityConfig == null)
+			if (FacilityConfig == null)
 			{
 				throw new ConfigurationException(
 					"The NHibernateFacility requires an external configuration");
 			}
 
-			IConfiguration factoriesConfig = facilityConfig.Children["factory"];
+			IConfiguration factoriesConfig = FacilityConfig.Children["factory"];
 
 			if (factoriesConfig == null)
 			{
 				throw new ConfigurationException(
-					"You need to configure at least one factory for NHibernateFacility");
+					"You need to configure at least one factory to use the NHibernateFacility");
 			}
 
-			kernel.ComponentModelBuilder.AddContributor( new AutomaticSessionInspector() );
+			Kernel.ComponentModelBuilder.AddContributor( new AutomaticSessionInspector() );
 
-			kernel.AddComponent( 
+			Kernel.AddComponent( 
 				"nhibernate.session.interceptor", 
 				typeof(AutomaticSessionInterceptor) );
 
-			kernel.AddComponent( 
+			Kernel.AddComponent( 
 				"nhibernate.transaction.manager", 
 				typeof(ITransactionManager), typeof(NHibernateTransactionManager) );
 
-			ConfigureFactories(kernel, factoriesConfig);
+			ConfigureFactories(Kernel, factoriesConfig);
 		}
-
-		public void Terminate()
-		{
-		}
-
-		#endregion
 
 		private void ConfigureFactories(IKernel kernel, IConfiguration config)
 		{

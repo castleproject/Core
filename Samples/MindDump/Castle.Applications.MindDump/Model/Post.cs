@@ -16,15 +16,13 @@ namespace Castle.Applications.MindDump.Model
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for Post.
-	/// </summary>
 	public class Post
 	{
 		private long _id;
 		private String _title;
 		private String _contents;
-		private Author _author;
+		private DateTime _date;
+		private Blog _blog;
 
 		public Post()
 		{
@@ -48,10 +46,16 @@ namespace Castle.Applications.MindDump.Model
 			set { _contents = value; }
 		}
 
-		public Author Author
+		public Blog Blog
 		{
-			get { return _author; }
-			set { _author = value; }
+			get { return _blog; }
+			set { _blog = value; }
+		}
+
+		public DateTime Date
+		{
+			get { return _date; }
+			set { _date = value; }
 		}
 	}
 }

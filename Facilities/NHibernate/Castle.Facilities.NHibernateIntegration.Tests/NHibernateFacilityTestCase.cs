@@ -28,7 +28,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	/// <summary>
 	/// Summary description for NHibernateFacilityTestCase.
 	/// </summary>
-	// [TestFixture]
+	[TestFixture]
 	public class NHibernateFacilityTestCase : AbstractNHibernateTestCase
 	{
 		[Test]
@@ -78,6 +78,5 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 				session.Close();
 			}
 		}
-
 	}
 }

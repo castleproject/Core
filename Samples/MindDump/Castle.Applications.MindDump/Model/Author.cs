@@ -17,19 +17,24 @@ namespace Castle.Applications.MindDump.Model
 	using System;
 	using System.Collections;
 
-	/// <summary>
-	/// Summary description for Author.
-	/// </summary>
+
 	public class Author
 	{
 		private long _id;
 		private string _name;
 		private string _login;
 		private string _password;
-		private IList _posts;
+		private IList _blogs;
 
 		public Author()
 		{
+		}
+
+		public Author(string name, string login, string password)
+		{
+			_name = name;
+			_login = login;
+			_password = password;
 		}
 
 		public long Id
@@ -56,10 +61,10 @@ namespace Castle.Applications.MindDump.Model
 			set { _password = value; }
 		}
 
-		public IList Posts
+		public IList Blogs
 		{
-			get { return _posts; }
-			set { _posts = value; }
+			get { return _blogs; }
+			set { _blogs = value; }
 		}
 	}
 }

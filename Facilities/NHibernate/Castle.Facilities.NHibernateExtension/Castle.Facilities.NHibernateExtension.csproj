@@ -84,6 +84,11 @@
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
                 />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                />
             </References>
         </Build>
         <Files>

@@ -18,7 +18,7 @@ namespace Castle.Facilities.NHibernateExtension
 
 	/// <summary>
 	/// Declares that a component
-	/// wants to use <see cref="ISessionManager"/> to 
+	/// wants to use <see cref="SessionManager"/> to 
 	/// obtain the current NHibernate's ISession.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]

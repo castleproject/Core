@@ -95,11 +95,6 @@
                     HintPath = "..\lib\NHibernate.dll"
                 />
                 <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\lib\Commons.dll"
-                />
-                <Reference
                     Name = "HashCodeProvider"
                     AssemblyName = "HashCodeProvider"
                     HintPath = "..\lib\HashCodeProvider.dll"
@@ -123,6 +118,11 @@
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\bin\Castle.Services.Transaction.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

@@ -38,13 +38,13 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-			ISessionFactory sessionFactory = 
-				ObtainSessionFactoryFor(invocation.InvocationTarget);
-
 			if (SessionManager.CurrentSession != null)
 			{
 				return invocation.Proceed(args);
 			}
+
+			ISessionFactory sessionFactory = 
+				ObtainSessionFactoryFor(invocation.InvocationTarget);
 
 			SessionManager.CurrentSession = sessionFactory.OpenSession();
 
@@ -54,6 +54,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 			finally
 			{
+				SessionManager.CurrentSession.Flush();
 				SessionManager.CurrentSession.Close();
 				SessionManager.CurrentSession = null;
 			}

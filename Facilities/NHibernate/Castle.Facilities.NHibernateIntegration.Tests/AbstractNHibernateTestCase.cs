@@ -27,9 +27,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	
 	using Castle.MicroKernel.SubSystems.Configuration;
 
-	/// <summary>
-	/// Summary description for AbstractNHibernateTestCase.
-	/// </summary>
+
 	public abstract class AbstractNHibernateTestCase
 	{
 		// protected const string Driver = "NHibernate.Driver.MySqlDataDriver";

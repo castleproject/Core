@@ -76,8 +76,64 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "Castle.Applications.MindDump"
+                    Project = "{992ACC07-728E-493D-929B-A684B7135421}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\log4net.dll"
+                />
+                <Reference
+                    Name = "MySql.Data"
+                    AssemblyName = "MySql.Data"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\MySql.Data.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\NHibernate.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.NHibernateExtension"
+                    AssemblyName = "Castle.Facilities.NHibernateExtension"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.NHibernateIntegration"
+                    AssemblyName = "Castle.Facilities.NHibernateIntegration"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateIntegration.dll"
                 />
             </References>
         </Build>
@@ -85,6 +141,21 @@
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AuthorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BaseMindDumpTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BlogTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
