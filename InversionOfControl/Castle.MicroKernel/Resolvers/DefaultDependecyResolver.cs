@@ -18,40 +18,74 @@ namespace Castle.MicroKernel.Resolvers
 
 	using Castle.Model;
 
-	using Castle.Model.Configuration;
+	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
 	/// Summary description for DefaultDependecyResolver.
 	/// </summary>
 	public class DefaultDependecyResolver : IDependecyResolver
 	{
-		private IKernel _kernel;
+		private readonly IKernel _kernel;
+		private readonly ITypeConverter _converter;
 
 		public DefaultDependecyResolver(IKernel kernel)
 		{
 			_kernel = kernel;
+
+			_converter = (ITypeConverter) 
+				_kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 		}
 
 		public object Resolve(ComponentModel model, DependencyModel dependency)
 		{
+			object value = null;
+
 			if(dependency.DependencyType == DependencyType.Service)
 			{
-				return ResolveServiceDependency( model, dependency );
+				value = ResolveServiceDependency( model, dependency );
 			}
 			else
 			{
-				return ResolveParameterDependency( model, dependency );
+				value = ResolveParameterDependency( model, dependency );
 			}
+
+			if (value == null && !dependency.IsOptional)
+			{
+				String message = String.Format(
+					"Could not resolve non-optional dependency for {0}. Parameter '{1}' type {2}", 
+					model.Name, dependency.DependencyKey, dependency.TargetType.Name);
+
+				throw new DependecyResolverException(message);	
+			}
+
+			return value;
 		}
 
 		protected virtual object ResolveServiceDependency(ComponentModel model, DependencyModel dependency)
 		{
-			IHandler handler = _kernel.GetHandler( dependency.Service );
+			IHandler handler = null;
+
+			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
+
+			if (parameter != null)
+			{
+				// User wants to override
+
+				String value = ExtractComponentKey( parameter.Value, parameter.Name );
+
+				handler = _kernel.GetHandler( value );
+			}
+			else
+			{
+				// Default behaviour
+
+				handler = _kernel.GetHandler( dependency.TargetType );
+			}
 
 			if (handler == null)
 			{
 				throw new DependecyResolverException( 
-					String.Format("Handler for {0} not found.", dependency.Service.FullName) );
+					String.Format("Handler for {0} not found.", dependency.TargetType.FullName) );
 			}
 
 			return handler.Resolve();
@@ -59,30 +93,41 @@ namespace Castle.MicroKernel.Resolvers
 
 		protected virtual object ResolveParameterDependency(ComponentModel model, DependencyModel dependency)
 		{
-			String key = dependency.DependencyKey;
+			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
 
-			if (model.Configuration == null)
+			if (parameter != null)
 			{
-				return null;
-			}
-
-			IConfiguration parameters = model.Configuration.Children["parameters"];
-
-			if (parameters == null)
-			{
-				return null;
-			}
-
-			foreach(IConfiguration parameter in parameters.Children)
-			{
-				if ( String.Compare(key, parameter.Name, true) == 0)
-				{
-					return parameter.Value;
-				}
+				return _converter.PerformConversion( parameter.Value, dependency.TargetType );
 			}
 
 			return null;
 		}
 
+		protected virtual ParameterModel ObtainParameterModelMatchingDependency(DependencyModel dependency, ComponentModel model)
+		{
+			String key = dependency.DependencyKey;
+
+			return model.Parameters[ key ];
+		}
+
+		/// <summary>
+		/// Extracts the component name from the a ref strings which is
+		/// #{something}
+		/// </summary>
+		/// <param name="keyValue"></param>
+		/// <returns></returns>
+		protected virtual String ExtractComponentKey(String keyValue, String name)
+		{
+			// Constraints:
+			if (keyValue == null || keyValue.Length <= 3 || 
+				!keyValue.StartsWith("#{") || !keyValue.EndsWith("}"))
+			{
+				throw new DependecyResolverException( 
+					String.Format("Key invalid for parameter {0}. " + 
+					"Thus the kernel was unable to override the service dependency", name) );
+			}
+
+			return keyValue.Substring( 2, keyValue.Length - 3 );
+		}
 	}
 }

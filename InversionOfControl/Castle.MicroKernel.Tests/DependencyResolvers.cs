@@ -14,11 +14,12 @@
 
 namespace Castle.MicroKernel.Tests
 {
-	using System;
-
 	using NUnit.Framework;
 
+	using Castle.Model.Configuration;
+
 	using Castle.MicroKernel.Handlers;
+
 	using Castle.MicroKernel.Tests.ClassComponents;
 
 	/// <summary>
@@ -39,6 +40,30 @@ namespace Castle.MicroKernel.Tests
 		public void Dispose()
 		{
 			kernel.Dispose();
+		}
+
+		[Test]
+		public void ResolvingPrimitivesThroughProperties()
+		{
+			MutableConfiguration config = new MutableConfiguration("component");
+			
+			MutableConfiguration parameters = (MutableConfiguration ) 
+				config.Children.Add( new MutableConfiguration("parameters") );
+
+			parameters.Children.Add( new MutableConfiguration("name", "hammett") );
+			parameters.Children.Add( new MutableConfiguration("address", "something") );
+			parameters.Children.Add( new MutableConfiguration("age", "25") );
+
+			kernel.ConfigurationStore.AddComponentConfiguration("customer", config);
+
+			kernel.AddComponent( "customer", typeof(ICustomer), typeof(CustomerImpl) );
+
+			ICustomer customer = (ICustomer) kernel["customer"];
+
+			Assert.IsNotNull(customer);
+			Assert.AreEqual("hammett", customer.Name);
+			Assert.AreEqual("something", customer.Address);
+			Assert.AreEqual(25, customer.Age);
 		}
 
 		[Test]

@@ -149,6 +149,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\ParameterModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\ParameterModelCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\PropertySet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -20,8 +20,10 @@ namespace Castle.MicroKernel.Tests.Configuration
 
 	using Castle.Model.Configuration;
 
-	using Castle.MicroKernel.Tests.Configuration.Components;
+	using Castle.MicroKernel.Resolvers;
 	using Castle.MicroKernel.SubSystems.Configuration;
+	using Castle.MicroKernel.Tests.Configuration.Components;
+	using Castle.MicroKernel.Tests.ClassComponents;
 
 	/// <summary>
 	/// Summary description for ConfigurationTestCase.
@@ -44,12 +46,11 @@ namespace Castle.MicroKernel.Tests.Configuration
 		}
 
 		[Test]
+		[ExpectedException(typeof(DependecyResolverException))]
 		public void ConstructorWithUnsatisfiedParameters()
 		{
 			kernel.AddComponent( "key", typeof(ClassWithConstructors) );
-			ClassWithConstructors instance = (ClassWithConstructors) kernel["key"];
-			Assert.IsNotNull( instance );
-			Assert.IsNull( instance.Host );
+			object res = kernel["key"];
 		}
 
 		[Test]
@@ -70,6 +71,29 @@ namespace Castle.MicroKernel.Tests.Configuration
 			Assert.IsNotNull( instance );
 			Assert.IsNotNull( instance.Host );
 			Assert.AreEqual( "castleproject.org", instance.Host );
+		}
+
+		[Test]
+		public void ServiceOverride()
+		{
+			MutableConfiguration confignode = new MutableConfiguration("key");
+			
+			IConfiguration parameters = 
+			 	confignode.Children.Add( new MutableConfiguration("parameters") );
+
+			parameters.Children.Add( new MutableConfiguration("common", "#{commonservice2}") );
+
+			kernel.ConfigurationStore.AddComponentConfiguration( "commonserviceuser", confignode );
+
+			kernel.AddComponent( "commonservice1", typeof(ICommon), typeof(CommonImpl1) );
+			kernel.AddComponent( "commonservice2", typeof(ICommon), typeof(CommonImpl2) );
+
+			kernel.AddComponent( "commonserviceuser", typeof(CommonServiceUser) );
+
+			CommonServiceUser instance = (CommonServiceUser) kernel["commonserviceuser"];
+
+			Assert.IsNotNull(instance);
+			Assert.AreEqual( typeof(CommonImpl2), instance.CommonService.GetType() );
 		}
 	}
 }

@@ -17,30 +17,9 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 	using System;
 
 	/// <summary>
-	/// Summary description for CustomerImpl.
+	/// Summary description for ICommon.
 	/// </summary>
-	public class CustomerImpl : ICustomer
+	public interface ICommon
 	{
-		private String name;
-		private String address;
-		private int age;
-
-		public String Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		public String Address
-		{
-			get { return address; }
-			set { address = value; }
-		}
-
-		public int Age
-		{
-			get { return age; }
-			set { age = value; }
-		}
 	}
 }

@@ -18,6 +18,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using System.Reflection;
 
 	using Castle.Model;
+	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
 	/// This implementation of <see cref="IContributeComponentModelConstruction"/>
@@ -28,20 +29,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class PropertiesDependenciesModelInspector : IContributeComponentModelConstruction
 	{
-		/// <summary>
-		/// We don't need to have multiple instances
-		/// </summary>
-		private static readonly PropertiesDependenciesModelInspector instance = new PropertiesDependenciesModelInspector();
+		private ITypeConverter _converter;
 
-		/// <summary>
-		/// Singleton instance
-		/// </summary>
-		public static PropertiesDependenciesModelInspector Instance
-		{
-			get { return instance; }
-		}
-
-		protected PropertiesDependenciesModelInspector()
+		public PropertiesDependenciesModelInspector()
 		{
 		}
 
@@ -52,11 +42,22 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		/// <param name="model"></param>
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-			Type targetType = model.Implementation;
+			if (_converter == null)
+			{
+				_converter = (ITypeConverter) 
+					kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+			}
 
+			InspectProperties(model);
+		}
+
+		protected virtual void InspectProperties(ComponentModel model)
+		{
+			Type targetType = model.Implementation;
+	
 			PropertyInfo[] properties = targetType.GetProperties( 
 				BindingFlags.Public|BindingFlags.Instance );
-
+	
 			foreach(PropertyInfo property in properties)
 			{
 				if (!property.CanWrite)
@@ -71,7 +72,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				// All these dependencies are simple guesses
 				// So we make them optional (the 'true' parameter below)
 
-				if (propertyType.IsPrimitive || propertyType == typeof(String) || propertyType == typeof(Type))
+				if ( _converter.CanHandleType(propertyType) )
 				{
 					dependency = new DependencyModel(DependencyType.Parameter, property.Name, propertyType, true);
 				}
@@ -81,6 +82,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				}
 				else
 				{
+					// What is it?!
+					// Awkward type, probably.
+
 					continue;
 				}
 

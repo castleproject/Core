@@ -12,35 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for CustomerImpl.
+	/// Summary description for ConverterException.
 	/// </summary>
-	public class CustomerImpl : ICustomer
+	[Serializable]
+	public class ConverterException : Exception
 	{
-		private String name;
-		private String address;
-		private int age;
-
-		public String Name
+		public ConverterException(string message) : base(message)
 		{
-			get { return name; }
-			set { name = value; }
 		}
 
-		public String Address
+		public ConverterException(string message, Exception innerException) : base(message, innerException)
 		{
-			get { return address; }
-			set { address = value; }
 		}
 
-		public int Age
+		public ConverterException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
-			get { return age; }
-			set { age = value; }
 		}
 	}
 }

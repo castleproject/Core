@@ -24,20 +24,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class ConfigurationModelInspector : IContributeComponentModelConstruction
 	{
-		/// <summary>
-		/// We don't need to have multiple instances
-		/// </summary>
-		private static readonly ConfigurationModelInspector instance = new ConfigurationModelInspector();
-
-		/// <summary>
-		/// Singleton instance
-		/// </summary>
-		public static ConfigurationModelInspector Instance
-		{
-			get { return instance; }
-		}
-		
-		protected ConfigurationModelInspector()
+		public ConfigurationModelInspector()
 		{
 		}
 

@@ -20,19 +20,21 @@ namespace Castle.MicroKernel
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for IKernel.
+	/// The <code>IKernel</code> interface exposes all the functionality
+	/// the MicroKernel must implement.
 	/// </summary>
 	public interface IKernel : IKernelEvents, IDisposable
 	{
 		/// <summary>
-		/// 
+		/// Adds a concrete class as a component
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
 		void AddComponent( String key, Type classType );
 
 		/// <summary>
-		/// 
+		/// Adds a concrete class and an interface 
+		/// as a component
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
@@ -99,58 +101,109 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="instance"></param>
 		void ReleaseComponent( object instance );
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		IComponentActivator CreateComponentActivator(ComponentModel model);
 
+		/// <summary>
+		/// 
+		/// </summary>
 		IComponentModelBuilder ComponentModelBuilder
 		{
 			get; 
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		IHandlerFactory HandlerFactory
 		{
 			get;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		IConfigurationStore ConfigurationStore
 		{
 			get; set;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		IHandler GetHandler(String key);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="service"></param>
+		/// <returns></returns>
 		IHandler GetHandler(Type service);
 
+		/// <summary>
+		/// 
+		/// </summary>
 		IReleasePolicy ReleasePolicy
 		{
 		 	get;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		IDependecyResolver Resolver
 		{
 			get;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="facility"></param>
 		void AddFacility(String key, IFacility facility);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="subsystem"></param>
 		void AddSubSystem(String key, ISubSystem subsystem);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		ISubSystem GetSubSystem(String key);
 
-		// void ConfigureExternalComponent(object component);
-
-		// void ConfigureExternalComponent(object component, ComponentModel model);
-		
+		/// <summary>
+		/// Allows the customization of Proxy creation
+		/// </summary>
 		IProxyFactory ProxyFactory
 		{
 			get; set;
 		}
 
+		/// <summary>
+		/// Returns the parent kernel
+		/// </summary>
 		IKernel Parent
 		{
 			get; set;
 		}
 
+		/// <summary>
+		/// Support for kernel hierarchy
+		/// </summary>
+		/// <param name="kernel"></param>
 		void AddChildKernel(IKernel kernel);
-
-		IComponentActivator CreateComponentActivator(ComponentModel model);
 	}
 }

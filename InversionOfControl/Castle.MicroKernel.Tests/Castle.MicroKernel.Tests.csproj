@@ -105,12 +105,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DefaultConversionManagerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DependencyResolvers.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "MicroKernelTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClassComponents\CommonImpl1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClassComponents\CommonImpl2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClassComponents\CommonServiceUser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -141,6 +161,11 @@
                 />
                 <File
                     RelPath = "ClassComponents\DefaultTemplateEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClassComponents\ICommon.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

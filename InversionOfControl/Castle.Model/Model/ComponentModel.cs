@@ -1,4 +1,3 @@
-using Castle.Model.Configuration;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,8 @@ namespace Castle.Model
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+
+	using Castle.Model.Configuration;
 
 	/// <summary>
 	/// Enumeration used to mark the component's lifestyle.
@@ -81,6 +82,7 @@ namespace Castle.Model
 		private PropertySetCollection _properties;
 		private LifecycleStepCollection _lifecycleSteps;
 		private InterceptorCollection _interceptors;
+		private ParameterModelCollection _parameters;
 		private IConfiguration _configuration;
 
 		public ComponentModel(String name, Type service, Type implementation)
@@ -92,6 +94,7 @@ namespace Castle.Model
 
 			_extended = new HybridDictionary(true);
 			_properties = new PropertySetCollection();
+			_parameters = new ParameterModelCollection();
 			_constructors = new ConstructorCandidateCollection();
 			_interceptors = new InterceptorCollection();
 			_lifecycleSteps = new LifecycleStepCollection();
@@ -163,6 +166,11 @@ namespace Castle.Model
 		public InterceptorCollection Interceptors
 		{
 			get { return _interceptors; }
+		}
+
+		public ParameterModelCollection Parameters
+		{
+			get { return _parameters; }
 		}
 	}
 }

@@ -31,20 +31,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </remarks>
 	public class LifestyleModelInspector : IContributeComponentModelConstruction
 	{
-		/// <summary>
-		/// We don't need to have multiple instances
-		/// </summary>
-		private static readonly LifestyleModelInspector instance = new LifestyleModelInspector();
-
-		/// <summary>
-		/// Singleton instance
-		/// </summary>
-		public static LifestyleModelInspector Instance
-		{
-			get { return instance; }
-		}
-
-		protected LifestyleModelInspector()
+		public LifestyleModelInspector()
 		{
 		}
 

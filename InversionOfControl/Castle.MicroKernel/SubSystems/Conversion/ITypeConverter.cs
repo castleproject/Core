@@ -12,35 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 
 	/// <summary>
-	/// Summary description for CustomerImpl.
+	/// Summary description for ITypeConverter.
 	/// </summary>
-	public class CustomerImpl : ICustomer
+	public interface ITypeConverter
 	{
-		private String name;
-		private String address;
-		private int age;
+		bool CanHandleType( Type type );
 
-		public String Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		public String Address
-		{
-			get { return address; }
-			set { address = value; }
-		}
-
-		public int Age
-		{
-			get { return age; }
-			set { age = value; }
-		}
+		object PerformConversion( String value, Type targetType );
 	}
 }

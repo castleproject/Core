@@ -26,20 +26,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class LifecycleModelInspector : IContributeComponentModelConstruction
 	{
-		/// <summary>
-		/// We don't need to have multiple instances
-		/// </summary>
-		private static readonly LifecycleModelInspector instance = new LifecycleModelInspector();
-
-		/// <summary>
-		/// Singleton instance
-		/// </summary>
-		public static LifecycleModelInspector Instance
-		{
-			get { return instance; }
-		}
-
-		protected LifecycleModelInspector()
+		public LifecycleModelInspector()
 		{
 		}
 

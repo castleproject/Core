@@ -12,35 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 
 	/// <summary>
-	/// Summary description for CustomerImpl.
+	/// Summary description for TypeNameConverter.
 	/// </summary>
-	public class CustomerImpl : ICustomer
+	public class TypeNameConverter : ITypeConverter
 	{
-		private String name;
-		private String address;
-		private int age;
-
-		public String Name
+		public TypeNameConverter()
 		{
-			get { return name; }
-			set { name = value; }
 		}
 
-		public String Address
+		#region ITypeConverter Members
+
+		public bool CanHandleType(Type type)
 		{
-			get { return address; }
-			set { address = value; }
+			return type == typeof(Type);
 		}
 
-		public int Age
+		public object PerformConversion(String value, Type targetType)
 		{
-			get { return age; }
-			set { age = value; }
+			Type type = Type.GetType(value, false, false);
+
+			if (type == null)
+			{
+				String message = String.Format(
+					"Could not convert from '{0}' to {1} - Maybe type could not be found", 
+					value, targetType.FullName);
+				
+				throw new ConverterException(message);
+			}
+
+			return type;
 		}
+
+		#endregion
 	}
 }

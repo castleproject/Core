@@ -28,16 +28,16 @@ namespace Castle.Model
 	public class DependencyModel
 	{
 		private String _dependencyKey;
-		private Type _service;
+		private Type _targetType;
 		private bool _isOptional;
-		private object _value;
 		private DependencyType _dependencyType;
 
-		public DependencyModel( DependencyType type, String dependencyKey, Type service, bool isOptional)
+		public DependencyModel( DependencyType type, String dependencyKey, 
+			Type targetType, bool isOptional)
 		{
 			_dependencyType = type;
 			_dependencyKey = dependencyKey;
-			_service = service;
+			_targetType = targetType;
 			_isOptional = isOptional;
 		}
 
@@ -51,15 +51,9 @@ namespace Castle.Model
 			get { return _dependencyKey; }
 		}
 
-		public Type Service
+		public Type TargetType
 		{
-			get { return _service; }
-		}
-
-		public object Value
-		{
-			get { return _value; }
-			set { _value = value; }
+			get { return _targetType; }
 		}
 
 		public bool IsOptional

@@ -239,6 +239,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ModelBuilder\Inspectors\ConfigurationParametersInspector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ModelBuilder\Inspectors\ConstructorDependenciesModelInspector.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -309,12 +314,47 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\SubSystemConstants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubSystems\Configuration\DefaultConfigurationStore.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "SubSystems\Configuration\IConfigurationStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\ConverterException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\DefaultConversionManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\IConversionManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\ITypeConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\PrimitiveConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\TypeNameConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,35 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.MicroKernel
 {
 	using System;
 
 	/// <summary>
-	/// Summary description for CustomerImpl.
+	/// Holds the keys used by Kernel to register/request 
+	/// a subsystem.
 	/// </summary>
-	public class CustomerImpl : ICustomer
+	public abstract class SubSystemConstants
 	{
-		private String name;
-		private String address;
-		private int age;
+		/// <summary>
+		/// Key used by the configuration store subsystem
+		/// </summary>
+		public static readonly String ConfigurationStoreKey = "config.store";
 
-		public String Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		public String Address
-		{
-			get { return address; }
-			set { address = value; }
-		}
-
-		public int Age
-		{
-			get { return age; }
-			set { age = value; }
-		}
+		/// <summary>
+		/// Key used by the conversion manager
+		/// </summary>
+		public static readonly String ConversionManagerKey  = "conversion.mng";
 	}
 }

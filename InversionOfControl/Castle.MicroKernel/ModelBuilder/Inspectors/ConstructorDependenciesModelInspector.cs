@@ -19,6 +19,8 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 	using Castle.Model;
 
+	using Castle.MicroKernel.SubSystems.Conversion;
+
 	/// <summary>
 	/// This implementation of <see cref="IContributeComponentModelConstruction"/>
 	/// collects all available constructors and populates them in the model
@@ -27,25 +29,20 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class ConstructorDependenciesModelInspector : IContributeComponentModelConstruction
 	{
-		/// <summary>
-		/// We don't need to have multiple instances
-		/// </summary>
-		private static readonly ConstructorDependenciesModelInspector instance = new ConstructorDependenciesModelInspector();
+		private ITypeConverter _converter;
 
-		/// <summary>
-		/// Singleton instance
-		/// </summary>
-		public static ConstructorDependenciesModelInspector Instance
-		{
-			get { return instance; }
-		}
-
-		protected ConstructorDependenciesModelInspector()
+		public ConstructorDependenciesModelInspector()
 		{
 		}
 
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
+			if (_converter == null)
+			{
+				_converter = (ITypeConverter) 
+					kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+			}
+
 			Type targetType = model.Implementation;
 
 			ConstructorInfo[] constructors = 
@@ -73,14 +70,14 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 				Type paramType = parameter.ParameterType;
 
-				if (paramType.IsPrimitive || paramType == typeof(String))
+				if ( _converter.CanHandleType(paramType) )
 				{
 					dependencies[i] = new DependencyModel( 
-						DependencyType.Parameter, parameter.Name, null, false );
+						DependencyType.Parameter, parameter.Name, paramType, false );
 				}
 				else
 				{
-					dependencies[i] = new DependencyModel( 
+					dependencies[i] = new DependencyModel(
 						DependencyType.Service, parameter.Name, paramType, false );
 				}
 			}

@@ -161,7 +161,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				if (dependency.DependencyType == DependencyType.Service)
 				{
-					AddDependency(dependency.Service);
+					AddDependency(dependency.TargetType);
 				}
 			}
 		}

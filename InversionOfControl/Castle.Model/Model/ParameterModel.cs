@@ -12,35 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Tests.ClassComponents
+namespace Castle.Model
 {
 	using System;
 
 	/// <summary>
-	/// Summary description for CustomerImpl.
+	/// Summary description for DependencyModel.
 	/// </summary>
-	public class CustomerImpl : ICustomer
+	public class ParameterModel
 	{
-		private String name;
-		private String address;
-		private int age;
+		private String _name;
+		private String _value;
+
+		public ParameterModel( String name, String value )
+		{
+			_name = name;
+			_value = value;
+		}
 
 		public String Name
 		{
-			get { return name; }
-			set { name = value; }
+			get { return _name; }
 		}
 
-		public String Address
+		public String Value
 		{
-			get { return address; }
-			set { address = value; }
+			get { return _value; }
 		}
 
-		public int Age
-		{
-			get { return age; }
-			set { age = value; }
-		}
+		
 	}
 }

@@ -30,5 +30,10 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 		{
 			get; set;
 		}
+
+		int Age
+		{
+			get; set;
+		}
 	}
 }

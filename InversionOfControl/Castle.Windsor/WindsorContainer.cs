@@ -1,4 +1,4 @@
- // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
 namespace Castle.Windsor
 {
 	using System;
+
 	using Castle.MicroKernel;
+	using Castle.Windsor.Configuration.AppDomain;
 
 	/// <summary>
 	/// Summary description for Windsor.
@@ -25,9 +27,14 @@ namespace Castle.Windsor
 		private IKernel _kernel;
 		private IWindsorContainer _parent;
 
-		public WindsorContainer() : this(new DefaultKernel())
+		public WindsorContainer() : this(new AppDomainConfigurationStore())
 		{
+			
+		}
 
+		public WindsorContainer(IConfigurationStore store) : this(new DefaultKernel())
+		{
+			Kernel.ConfigurationStore = store;
 		}
 
 		public WindsorContainer(IKernel kernel)

@@ -20,30 +20,19 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// Summary description for ConfigurationParametersInspector.
+	/// Check for a node 'parameters' within the component 
+	/// configuration. For each child it, a ParameterModel is created
+	/// and added to ComponentModel's Parameters collection
 	/// </summary>
 	public class ConfigurationParametersInspector : IContributeComponentModelConstruction
 	{
-		/// <summary>
-		/// We don't need to have multiple instances
-		/// </summary>
-		private static readonly ConfigurationParametersInspector instance = new ConfigurationParametersInspector();
-
-		/// <summary>
-		/// Singleton instance
-		/// </summary>
-		public static ConfigurationParametersInspector Instance
-		{
-			get { return instance; }
-		}
-		
-		protected ConfigurationParametersInspector()
+		public ConfigurationParametersInspector()
 		{
 		}
 
 		/// <summary>
-		/// Queries the kernel's ConfigurationStore for a configuration
-		/// associated with the component name.
+		/// Inspect the configuration associated with the component
+		/// and populates the parameter model collection accordingly
 		/// </summary>
 		/// <param name="kernel"></param>
 		/// <param name="model"></param>
@@ -57,7 +46,10 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 			foreach(IConfiguration parameter in parameters.Children)
 			{
-				model.Parameters.Add( parameter.Name, parameter.Value );
+				String name = parameter.Name;
+				String value = parameter.Value;
+
+				model.Parameters.Add( name, value );
 			}
 		}
 	}

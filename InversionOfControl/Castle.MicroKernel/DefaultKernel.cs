@@ -33,8 +33,6 @@ namespace Castle.MicroKernel
 	/// </summary>
 	public class DefaultKernel : KernelEventSupport, IKernel
 	{
-		private static readonly String ConfigurationStoreKey = "config.store";
-
 		private IKernel _parentKernel;
 		private IHandlerFactory _handlerFactory;
 		private IComponentModelBuilder _modelBuilder;
@@ -50,24 +48,30 @@ namespace Castle.MicroKernel
 
 		public DefaultKernel() : this(new NotSupportedProxyFactory())
 		{
+		}
+
+		public DefaultKernel(IProxyFactory proxyFactory)
+		{
+			_proxyFactory = proxyFactory;
+
 			_key2Handler = new HybridDictionary();
 			_service2Handler = new Hashtable();
 			_childKernels = new ArrayList();
 			_facilities = new ArrayList();
 			_subsystems = new Hashtable();
 
+			AddSubSystem( SubSystemConstants.ConfigurationStoreKey, 
+				new DefaultConfigurationStore() );
+			
+			AddSubSystem( SubSystemConstants.ConversionManagerKey, 
+				new SubSystems.Conversion.DefaultConversionManager() );
+
 			_releaserPolicy = new LifecycledComponentsReleasePolicy();
-			_resolver = new DefaultDependecyResolver(this);
 			_handlerFactory = new DefaultHandlerFactory(this);
 			_modelBuilder = new DefaultComponentModelBuilder(this);
-			_proxyFactory = new NotSupportedProxyFactory();
-			ConfigurationStore = new DefaultConfigurationStore();
+			_resolver = new DefaultDependecyResolver(this);
 		}
 
-		public DefaultKernel(IProxyFactory proxyFactory)
-		{
-			_proxyFactory = proxyFactory;
-		}
 
 		#region IKernel Members
 
@@ -81,7 +85,7 @@ namespace Castle.MicroKernel
 
 		public virtual void AddComponent(String key, Type serviceType, Type classType)
 		{
-			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, null);
+			ComponentModel model = ComponentModelBuilder.BuildModel(key, serviceType, classType, null);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
@@ -214,8 +218,8 @@ namespace Castle.MicroKernel
 
 		public virtual IConfigurationStore ConfigurationStore
 		{
-			get { return GetSubSystem(ConfigurationStoreKey) as IConfigurationStore; }
-			set { AddSubSystem(ConfigurationStoreKey, value); }
+			get { return GetSubSystem(SubSystemConstants.ConfigurationStoreKey) as IConfigurationStore; }
+			set { AddSubSystem(SubSystemConstants.ConfigurationStoreKey, value); }
 		}
 
 		public virtual IHandler GetHandler(String key)
@@ -257,7 +261,6 @@ namespace Castle.MicroKernel
 		public virtual void AddSubSystem(String key, ISubSystem subsystem)
 		{
 			subsystem.Init(this);
-
 			_subsystems[key] = subsystem;
 		}
 

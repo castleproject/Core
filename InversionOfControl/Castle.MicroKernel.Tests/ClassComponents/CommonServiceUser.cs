@@ -17,30 +17,20 @@ namespace Castle.MicroKernel.Tests.ClassComponents
 	using System;
 
 	/// <summary>
-	/// Summary description for CustomerImpl.
+	/// Summary description for CommonServiceUser.
 	/// </summary>
-	public class CustomerImpl : ICustomer
+	public class CommonServiceUser
 	{
-		private String name;
-		private String address;
-		private int age;
+		private ICommon _common;
 
-		public String Name
+		public CommonServiceUser(ICommon common)
 		{
-			get { return name; }
-			set { name = value; }
+			_common = common;
 		}
 
-		public String Address
+		public ICommon CommonService
 		{
-			get { return address; }
-			set { address = value; }
-		}
-
-		public int Age
-		{
-			get { return age; }
-			set { age = value; }
+			get { return _common; }
 		}
 	}
 }
