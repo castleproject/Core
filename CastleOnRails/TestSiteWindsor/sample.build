@@ -12,7 +12,7 @@
 	<property name="version" value="1.0.0.0" />
 
 	<target name="clean">
-		<delete dir="${bin.dir}"/>
+		<delete dir="${bin.dir}" failonerror="false"/>
 		<mkdir dir="${bin.dir}"/>
 	</target>
 
