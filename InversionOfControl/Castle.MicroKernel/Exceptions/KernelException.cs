@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Exceptions
+namespace Castle.MicroKernel
 {
 	using System;
 	using System.Runtime.Serialization;

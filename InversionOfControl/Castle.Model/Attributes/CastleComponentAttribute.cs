@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Model
 {
 	using System;
 
-	using Castle.Model.Configuration;
-
 	/// <summary>
-	/// Summary description for IConfigurationStore.
+	/// Summary description for CastleComponentAttribute.
 	/// </summary>
-	public interface IConfigurationStore : ISubSystem
+	[AttributeUsage(AttributeTargets.Class)]
+	public class CastleComponentAttribute : System.Attribute
 	{
-		void AddFacilityConfiguration( String key, IConfiguration config );
+		LifestyleType _lifestyle; 
+		ActivationType _activation;
 
-		void AddComponentConfiguration( String key, IConfiguration config );
+		public CastleComponentAttribute() : this(LifestyleType.Undefined, ActivationType.Undefined)
+		{
+		}
 
-		IConfiguration GetFacilityConfiguration( String key );
-
-		IConfiguration GetComponentConfiguration( String key );
-
-		IConfiguration[] GetFacilities();
-
-		IConfiguration[] GetComponents();
+		public CastleComponentAttribute(LifestyleType lifestyle, ActivationType activation)
+		{
+			_lifestyle = lifestyle;
+			_activation = activation;
+		}
 	}
 }

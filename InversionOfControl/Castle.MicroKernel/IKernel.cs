@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel
 {
 	using System;
+	using System.Collections;
 
 	using Castle.Model;
 
@@ -37,6 +38,23 @@ namespace Castle.MicroKernel
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
 		void AddComponent( String key, Type serviceType, Type classType );
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="classType"></param>
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithProperties( String key, Type classType, IDictionary extendedProperties );
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="serviceType"></param>
+		/// <param name="classType"></param>
+		/// <param name="extendedProperties"></param>
+		void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary extendedProperties );
 
 		/// <summary>
 		/// Returns true if the specified component was 

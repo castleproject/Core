@@ -71,7 +71,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -79,6 +79,11 @@
                     AssemblyName = "nunit.framework"
                     HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
@@ -98,13 +103,7 @@
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\Tools\bin\Castle.DynamicProxy.dll"
-                    Private = "False"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                    HintPath = "..\bin\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>
@@ -121,7 +120,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sample_config.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Components\CalculatorService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\AppDomainConfigurationStoreTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\XmlConfigurationStoreTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

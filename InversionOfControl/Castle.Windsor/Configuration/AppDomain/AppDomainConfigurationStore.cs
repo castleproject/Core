@@ -12,27 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Windsor.Configuration.AppDomain
 {
 	using System;
+	using System.Xml;
+	using System.Configuration;
 
-	using Castle.Model.Configuration;
+	using Castle.Windsor.Configuration.Xml;
 
 	/// <summary>
-	/// Summary description for IConfigurationStore.
+	/// Summary description for AppDomainConfigurationStore.
 	/// </summary>
-	public interface IConfigurationStore : ISubSystem
+	public class AppDomainConfigurationStore : XmlConfigurationStore
 	{
-		void AddFacilityConfiguration( String key, IConfiguration config );
+		public AppDomainConfigurationStore()
+		{
+			XmlNode node = (XmlNode) ConfigurationSettings.GetConfig("castle");
 
-		void AddComponentConfiguration( String key, IConfiguration config );
+			if (node == null)
+			{
+				String message = String.Format(
+					"Could not find section 'castle' in the configuration file associated with this domain.");
+				throw new ConfigurationException(message);
+			}
 
-		IConfiguration GetFacilityConfiguration( String key );
-
-		IConfiguration GetComponentConfiguration( String key );
-
-		IConfiguration[] GetFacilities();
-
-		IConfiguration[] GetComponents();
+			Deserialize( node );
+		}
 	}
 }

@@ -28,6 +28,7 @@ namespace Castle.Windsor.Proxy
 	public sealed class DefaultMethodInvocation : IMethodInvocation
 	{
 		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
+//		private static ReaderWriterLock _locker = new ReaderWriterLock();
 
 		private ICallable _callable;
 		private MethodInfo _method;
@@ -36,16 +37,10 @@ namespace Castle.Windsor.Proxy
 		private object _original_target;
 		private IMethodInterceptor[] _interceptorChain;
 
+		private object key = new object();
+
 		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method)
 		{
-			lock(this)
-			{
-				if (Thread.GetData(_slot) == null)
-				{
-					Thread.SetData( _slot, Hashtable.Synchronized(new Hashtable()) );
-				}
-			}
-
 			_callable = callable;
 			_proxy = proxy; 
 			_method = method;
@@ -106,13 +101,11 @@ namespace Castle.Windsor.Proxy
 		{
 			get
 			{
-				Hashtable map = Thread.GetData(_slot) as Hashtable;
-				return (int) map[this];
+				return (int) Thread.GetData(_slot);
 			}
 			set
 			{
-				Hashtable map = Thread.GetData(_slot) as Hashtable;
-				map[this] = value;				
+				Thread.SetData(_slot, value);
 			}
 		}
 

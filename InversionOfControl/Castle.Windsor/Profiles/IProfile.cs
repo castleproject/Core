@@ -12,27 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Windsor
 {
 	using System;
 
-	using Castle.Model.Configuration;
-
 	/// <summary>
-	/// Summary description for IConfigurationStore.
+	/// Stills a draft of an idea to configure containers with
+	/// a lot of components, subcontainers and facilities.
 	/// </summary>
-	public interface IConfigurationStore : ISubSystem
+	public interface IProfile
 	{
-		void AddFacilityConfiguration( String key, IConfiguration config );
 
-		void AddComponentConfiguration( String key, IConfiguration config );
-
-		IConfiguration GetFacilityConfiguration( String key );
-
-		IConfiguration GetComponentConfiguration( String key );
-
-		IConfiguration[] GetFacilities();
-
-		IConfiguration[] GetComponents();
 	}
 }

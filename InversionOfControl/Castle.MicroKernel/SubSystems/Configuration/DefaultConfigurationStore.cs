@@ -56,6 +56,24 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 			return _components[key] as IConfiguration;
 		}
 
+		public IConfiguration[] GetFacilities()
+		{
+			IConfiguration[] array = new IConfiguration[_facilities.Count];
+			
+			_facilities.Values.CopyTo(array, 0);
+
+			return array;
+		}
+
+		public IConfiguration[] GetComponents()
+		{
+			IConfiguration[] array = new IConfiguration[_components.Count];
+			
+			_components.Values.CopyTo(array, 0);
+
+			return array;
+		}
+
 		#endregion
 
 		#region ISubSystem Members

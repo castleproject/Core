@@ -1,0 +1,23 @@
+<configuration>
+
+	<facilities>
+
+		<facility id="testidengine">
+		<item>value</item>
+		</facility>
+
+	</facilities>
+
+	<components>
+
+		<component id="testidcomponent1">
+		<item>value1</item>
+		</component>
+
+		<component id="testidcomponent2">
+		<item>value2</item>
+		</component>
+
+	</components>
+
+</configuration>

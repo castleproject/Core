@@ -1,4 +1,4 @@
- // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ namespace Castle.Model.Configuration
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Summary description for IConfiguration.
@@ -52,7 +53,7 @@ namespace Castle.Model.Configuration
 		/// <summary>
 		/// Gets an <see cref="IDictionary"/> of the configuration attributes.
 		/// </summary>
-		IDictionary Attributes { get; }
+		NameValueCollection Attributes { get; }
 
 		/// <summary>
 		/// Gets the value of the node and converts it 

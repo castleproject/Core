@@ -12,27 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Windsor
 {
 	using System;
 
-	using Castle.Model.Configuration;
-
 	/// <summary>
-	/// Summary description for IConfigurationStore.
+	/// This interface should be implemented by classes
+	/// that are available in a bigger context, exposing
+	/// the container to different areas in the same application.
+	/// <p>
+	/// For example, in Web application, the (global) HttpApplication
+	/// subclasses should implement this interface to expose 
+	/// the configured container
+	/// </p>
 	/// </summary>
-	public interface IConfigurationStore : ISubSystem
+	public interface IContainerAccessor
 	{
-		void AddFacilityConfiguration( String key, IConfiguration config );
-
-		void AddComponentConfiguration( String key, IConfiguration config );
-
-		IConfiguration GetFacilityConfiguration( String key );
-
-		IConfiguration GetComponentConfiguration( String key );
-
-		IConfiguration[] GetFacilities();
-
-		IConfiguration[] GetComponents();
+		IWindsorContainer Container
+		{
+			get;
+		}
 	}
 }

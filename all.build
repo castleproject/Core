@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="all" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="version" value="alpha-1" />
+
+	<target name="build" depends="init, tools, container, facilities, rails, samples" />
+	
+	<target name="init">
+
+	</target>
+	
+	<target name="tools">
+		<nant buildfile="Tools\DynamicProxy\DynamicProxy.build" target="build" />
+	</target>
+
+	<target name="container">
+		<nant buildfile="InversionOfControl\container.build" target="build" />
+	</target>
+
+	<target name="facilities">
+		<nant buildfile="Facilities\facilities.build" target="build" />
+	</target>
+
+	<target name="rails">
+		<nant buildfile="CastleOnRails\rails.build" target="build" />
+	</target>
+
+	<target name="samples">
+	</target>
+	
+	<target name="dist">
+		<zip zipfile="${name}.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+				<exclude name="**/*.projdata" />
+				<exclude name="**/*.resharperoptions" />
+
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="Castle.Model/**/*.*" />
+				<include name="Castle.Model.Tests/**/*.*" />
+				<include name="Castle.MicroKernel/**/*.*" />
+				<include name="Castle.MicroKernel.Tests/**/*.*" />
+				<include name="Castle.Windsor/**/*.*" />
+				<include name="Castle.Windsor.Tests/**/*.*" />
+			</fileset>
+		</zip>
+
+		<zip zipfile="${name}.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/*.dll" />				
+				<include name="${base.dir}/License.txt" />				
+				<include name="${base.dir}/Readme.txt" />				
+				<include name="${name}.src.${version}.zip" />				
+			</fileset>
+		</zip>
+		
+	</target>
+
+	
+</project>

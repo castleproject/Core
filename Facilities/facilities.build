@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="container" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="name" value="Facilities" />
+	<property name="version" value="alpha-1" />
+	<property name="container.bin.dir" value="${base.dir}/../../InversionOfControl/bin" />
+
+	<!-- find out where nunit.framework.dll is -->
+	<property name="nant.lib.dir"
+		value="${path::combine(nant::get-base-directory(), 'lib')}"
+		dynamic="true" />
+		
+	<property name="nant.lib.family.dir"
+		value="${path::combine(nant.lib.dir,framework::get-family(framework::get-target-framework()))}"
+		dynamic="true" />
+		
+	<property name="nant.lib.framework.dir"
+		value="${path::combine(nant.lib.family.dir, framework::get-version(framework::get-target-framework()))}"
+		dynamic="true" />
+		
+	<property name="nunit.framework.dll"
+			value="${path::combine(nant.lib.framework.dir, 'nunit.framework.dll')}" />
+
+	<property name="nant.tasks.nunit2"
+			value="False"
+			unless="${property::exists('nant.tasks.nunit2')}" />	
+
+	<property name="debug" value="false" />
+	<property name="optimize" value="true" />
+
+
+	<target name="build" depends="init, prevalence" />
+	
+	<target name="init">
+
+	</target>
+	
+	<target name="prevalence">
+		<nant buildfile="Prevalence/default.build" inheritall="true" target="build" />
+	</target>
+
+	<target name="dist">
+
+		<nant buildfile="Prevalence/default.build" inheritall="true" target="dist" />
+		
+	</target>
+
+	
+</project>

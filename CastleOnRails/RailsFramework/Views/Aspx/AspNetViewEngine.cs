@@ -31,12 +31,18 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		public virtual void Process(Controller controller, String url, String viewPath, 
 			String viewName, HttpContext context)
 		{
-			String viewUrl = viewName.Replace('\\', '/');
+			// String viewUrl = viewName.Replace('\\', '/');
+
+			if (!Path.IsPathRooted(viewPath))
+			{
+				viewPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, viewPath);
+			}
 
 			String physicalPath = Path.Combine( viewPath, viewName + ".aspx" );
+			physicalPath = physicalPath.Replace('/', '\\');
 
 			IHttpHandler handler = 
-				PageParser.GetCompiledPageInstance( viewUrl, physicalPath, context );
+				PageParser.GetCompiledPageInstance( viewName, physicalPath, context );
 			
 			controller.PreSendView( handler );
 

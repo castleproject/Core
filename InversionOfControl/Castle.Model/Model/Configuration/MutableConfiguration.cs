@@ -19,6 +19,7 @@ namespace Castle.Model.Configuration
 	/// <summary>
 	/// Summary description for MutableConfiguration.
 	/// </summary>
+	[Serializable]
 	public class MutableConfiguration : AbstractConfiguration
 	{
 		public MutableConfiguration( String name ) : this(name, null)

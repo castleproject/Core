@@ -146,6 +146,12 @@ namespace Castle.MicroKernel.Handlers
 
 		protected virtual void EnsureDependenciesCanBeSatisfied()
 		{
+			// Custom activators should deal with this case
+			if (ComponentModel.Constructors.Count == 0)
+			{
+				return;
+			}
+
 			// We need to satisfy at least the constructor 
 			// with fewer arguments
 

@@ -24,26 +24,17 @@ namespace Castle.MicroKernel.ComponentActivator
 	/// <summary>
 	/// Summary description for DefaultComponentActivator
 	/// </summary>
-	public class DefaultComponentActivator : IComponentActivator
+	public class DefaultComponentActivator : AbstractComponentActivator
 	{
-		private IKernel _kernel;
-		private ComponentModel _model; 
-		private ComponentInstanceDelegate _onCreation;
-		private ComponentInstanceDelegate _onDestruction;
-
 		public DefaultComponentActivator(ComponentModel model, IKernel kernel, 
 			ComponentInstanceDelegate onCreation, 
-			ComponentInstanceDelegate onDestruction)
+			ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
 		{
-			_model = model;
-			_kernel = kernel;
-			_onCreation = onCreation;
-			_onDestruction = onDestruction;
 		}
 
-		#region IComponentActivator Members
+		#region AbstractComponentActivator Members
 
-		public object Create()
+		protected override object InternalCreate()
 		{
 			ConstructorCandidate candidate = SelectEligibleConstructor();
 			
@@ -51,42 +42,38 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			object instance = null;
 
-			if (_model.Interceptors.HasInterceptors)
+			if (Model.Interceptors.HasInterceptors)
 			{
-				instance = _kernel.ProxyFactory.Create(_model, arguments);
+				instance = Kernel.ProxyFactory.Create(Model, arguments);
 			}
 			else
 			{
-				instance = Activator.CreateInstance(_model.Implementation, arguments);
+				instance = Activator.CreateInstance(Model.Implementation, arguments);
 			}
 
 			SetUpProperties(instance);
 
 			ApplyCommissionConcerns( instance );
 
-			_onCreation(_model, instance);
-
 			return instance;
 		}
 
-		public void Destroy(object instance)
+		protected override void InternalDestroy(object instance)
 		{
 			ApplyDecommissionConcerns( instance );
-
-			_onDestruction(_model, instance);
 		}
 
 		#endregion
 
 		protected virtual void ApplyCommissionConcerns( object instance )
 		{
-			object[] steps = _model.LifecycleSteps.GetCommissionSteps();
+			object[] steps = Model.LifecycleSteps.GetCommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
 
 		protected virtual void ApplyDecommissionConcerns( object instance )
 		{
-			object[] steps = _model.LifecycleSteps.GetDecommissionSteps();
+			object[] steps = Model.LifecycleSteps.GetDecommissionSteps();
 			ApplyConcerns(steps, instance);
 		}
 
@@ -94,7 +81,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			foreach (ILifecycleConcern concern in steps)
 			{
-				concern.Apply( _model, instance );
+				concern.Apply( Model, instance );
 			}
 		}
 
@@ -103,7 +90,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			// TODO: Put the selection in a strategy 
 			// so anyone can override this implementation with a better heuristic
 
-			return _model.Constructors.FewerArgumentsCandidate;
+			return Model.Constructors.FewerArgumentsCandidate;
 		}
 
 		protected virtual object[] CreateConstructorArguments( 
@@ -115,7 +102,7 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
-				object value = _kernel.Resolver.Resolve(_model, dependency);
+				object value = Kernel.Resolver.Resolve(Model, dependency);
 				arguments[index++] = value;
 			}
 
@@ -124,9 +111,9 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		protected virtual void SetUpProperties(object instance)
 		{
-			foreach(PropertySet property in _model.Properties)
+			foreach(PropertySet property in Model.Properties)
 			{
-				object value = _kernel.Resolver.Resolve(_model, property.Dependency);
+				object value = Kernel.Resolver.Resolve(Model, property.Dependency);
 				MethodInfo setMethod = property.Property.GetSetMethod();
 				setMethod.Invoke( instance, new object[] { value } );
 			}

@@ -26,7 +26,6 @@ namespace Castle.MicroKernel
 	using Castle.MicroKernel.Releasers;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Proxy;
-	using Castle.MicroKernel.Exceptions;
 	using Castle.MicroKernel.SubSystems.Configuration;
 
 	/// <summary>
@@ -72,28 +71,57 @@ namespace Castle.MicroKernel
 
 		#region IKernel Members
 
-		public void AddComponent(String key, Type classType)
+		public virtual void AddComponent(String key, Type classType)
 		{
-			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType);
+			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, null);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
 		}
 
-		public void AddComponent(String key, Type serviceType, Type classType)
+		public virtual void AddComponent(String key, Type serviceType, Type classType)
 		{
-			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType);
+			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, null);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
 		}
 
-		public bool RemoveComponent(String key)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="classType"></param>
+		/// <param name="parameters"></param>
+		public virtual void AddComponentWithProperties( String key, Type classType, IDictionary parameters )
+		{
+			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, parameters);
+			RaiseComponentModelCreated(model);
+			IHandler handler = HandlerFactory.Create(model);
+			RegisterHandler(key, handler);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="serviceType"></param>
+		/// <param name="classType"></param>
+		/// <param name="parameters"></param>
+		public virtual void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary parameters )
+		{
+			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, parameters);
+			RaiseComponentModelCreated(model);
+			IHandler handler = HandlerFactory.Create(model);
+			RegisterHandler(key, handler);
+		}
+
+		public virtual bool RemoveComponent(String key)
 		{
 			return false;
 		}
 
-		public bool HasComponent(String key)
+		public virtual bool HasComponent(String key)
 		{
 			if (_key2Handler.Contains(key))
 			{
@@ -108,7 +136,7 @@ namespace Castle.MicroKernel
 			return false;
 		}
 
-		public bool HasComponent(Type serviceType)
+		public virtual bool HasComponent(Type serviceType)
 		{
 			if (_service2Handler.Contains(serviceType))
 			{
@@ -123,7 +151,7 @@ namespace Castle.MicroKernel
 			return false;
 		}
 
-		public object this[String key]
+		public virtual object this[String key]
 		{
 			get
 			{
@@ -138,7 +166,7 @@ namespace Castle.MicroKernel
 			}
 		}
 
-		public object this[Type service]
+		public virtual object this[Type service]
 		{
 			get
 			{
@@ -153,7 +181,7 @@ namespace Castle.MicroKernel
 			}
 		}
 
-		public void ReleaseComponent(object instance)
+		public virtual void ReleaseComponent(object instance)
 		{
 			if (ReleasePolicy.HasTrack(instance))
 			{
@@ -184,13 +212,13 @@ namespace Castle.MicroKernel
 			set { _proxyFactory = value; }
 		}
 
-		public IConfigurationStore ConfigurationStore
+		public virtual IConfigurationStore ConfigurationStore
 		{
 			get { return GetSubSystem(ConfigurationStoreKey) as IConfigurationStore; }
 			set { AddSubSystem(ConfigurationStoreKey, value); }
 		}
 
-		public IHandler GetHandler(String key)
+		public virtual IHandler GetHandler(String key)
 		{
 			IHandler handler = _key2Handler[key] as IHandler;
 
@@ -202,7 +230,7 @@ namespace Castle.MicroKernel
 			return handler;
 		}
 
-		public IHandler GetHandler(Type service)
+		public virtual IHandler GetHandler(Type service)
 		{
 			IHandler handler = _service2Handler[service] as IHandler;
 
@@ -219,21 +247,21 @@ namespace Castle.MicroKernel
 			get { return _releaserPolicy; }
 		}
 
-		public void AddFacility(String key, IFacility facility)
+		public virtual void AddFacility(String key, IFacility facility)
 		{
 			facility.Init(this, ConfigurationStore.GetFacilityConfiguration(key));
 
 			_facilities.Add(facility);
 		}
 
-		public void AddSubSystem(String key, ISubSystem subsystem)
+		public virtual void AddSubSystem(String key, ISubSystem subsystem)
 		{
 			subsystem.Init(this);
 
 			_subsystems[key] = subsystem;
 		}
 
-		public ISubSystem GetSubSystem(String key)
+		public virtual ISubSystem GetSubSystem(String key)
 		{
 			return _subsystems[key] as ISubSystem;
 		}
@@ -242,14 +270,13 @@ namespace Castle.MicroKernel
 
 		// void ConfigureExternalComponent(object component, ComponentModel model);
 
-		public void AddChildKernel(IKernel childKernel)
+		public virtual void AddChildKernel(IKernel childKernel)
 		{
-			_childKernels.Add(childKernel);
-
 			childKernel.Parent = this;
+			_childKernels.Add(childKernel);
 		}
 
-		public IKernel Parent
+		public virtual IKernel Parent
 		{
 			get { return _parentKernel; }
 			set
@@ -271,15 +298,15 @@ namespace Castle.MicroKernel
 			get { return _resolver; }
 		}
 
-		public IComponentActivator CreateComponentActivator(ComponentModel model)
+		public virtual IComponentActivator CreateComponentActivator(ComponentModel model)
 		{
 			IComponentActivator activator = null;
 
 			if (model.CustomComponentActivator == null)
 			{
 				activator = new DefaultComponentActivator(model, this,
-				                                          new ComponentInstanceDelegate(RaiseComponentCreated),
-				                                          new ComponentInstanceDelegate(RaiseComponentDestroyed));
+								new ComponentInstanceDelegate(RaiseComponentCreated),
+								new ComponentInstanceDelegate(RaiseComponentDestroyed));
 			}
 			else
 			{
@@ -287,12 +314,12 @@ namespace Castle.MicroKernel
 				{
 					activator = (IComponentActivator)
 						Activator.CreateInstance(model.CustomComponentActivator,
-						                         new object[]
-						                         	{
-						                         		model, this,
-						                         		new ComponentInstanceDelegate(RaiseComponentCreated),
-						                         		new ComponentInstanceDelegate(RaiseComponentDestroyed)
-						                         	});
+						    new object[]
+						    {
+						        model, this,
+						        new ComponentInstanceDelegate(RaiseComponentCreated),
+						        new ComponentInstanceDelegate(RaiseComponentDestroyed)
+						    });
 				}
 				catch (Exception e)
 				{

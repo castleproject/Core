@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="microkernel" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/../bin" />
+	<property name="lib.dir" value="${base.dir}/../lib" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="test.src.dir" value="${src.dir}/../Castle.MicroKernel.Tests" />
+	<property name="name" value="Castle.MicroKernel" />
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${name}.Tests.dll" />
+
+	<property name="debug" value="false" />
+	<property name="optimize" value="true" />
+	<property name="version" value="1.0.0.0" />
+
+	<!-- find out where nunit.framework.dll is -->
+	<property name="nant.lib.dir"
+		value="${path::combine(nant::get-base-directory(), 'lib')}"
+		dynamic="true" />
+		
+	<property name="nant.lib.family.dir"
+		value="${path::combine(nant.lib.dir,framework::get-family(framework::get-target-framework()))}"
+		dynamic="true" />
+		
+	<property name="nant.lib.framework.dir"
+		value="${path::combine(nant.lib.family.dir, framework::get-version(framework::get-target-framework()))}"
+		dynamic="true" />
+		
+	<property name="nunit.framework.dll"
+			value="${path::combine(nant.lib.framework.dir, 'nunit.framework.dll')}" />
+
+	<property name="nant.tasks.nunit2"
+			value="False"
+			unless="${property::exists('nant.tasks.nunit2')}" />	
+
+	<target name="clean">
+
+	</target>
+
+	<target name="init" depends="clean">
+
+	</target>
+
+	<target name="build" depends="init,tests.run" />
+	
+	<target name="compile" depends="init">
+		<!-- doc="${bin.dir}/${name}.xml" -->
+		<csc 
+			define="STRONG"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}">
+			
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/Castle.Model.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.compile" depends="compile">
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name}">
+			
+			<sources basedir="${test.src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/${assembly.name}" />
+				<include name="${bin.dir}/Castle.Model.dll" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="tests.run" depends="tests.compile">
+		<nunit2 haltonerror="true" failonerror="true" haltonfailure="true">
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+	</target>
+	
+	<target name="packfiles">
+		<zip zipfile="${name}.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/${assembly.name}" />				
+				<include name="${base.dir}/../License.txt" />				
+				<include name="${base.dir}/../Readme.txt" />				
+				<include name="Changes.txt" />				
+			</fileset>
+		</zip>
+		
+		<zip zipfile="${name}.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${base.dir}/../License.txt" />				
+				<include name="${base.dir}/../Readme.txt" />				
+				<include name="Changes.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${src.dir}/**/*.*" />
+				<include name="${test.src.dir}/**/*.*" />
+				
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+			</fileset>
+		</zip>
+	</target>
+
+</project>

@@ -61,6 +61,15 @@ namespace Castle.CastleOnRails.Framework
 			__view = Path.Combine( controller, name );
 		}
 
+		protected void Redirect( String controller, String action )
+		{
+			// Cancel the view processing
+
+			__view = null;
+
+			__context.Response.Redirect( String.Format("../{0}/{1}.rails", controller, action) );
+		}
+
 		public virtual void __Process( String url, String viewPath, String controller, String action, 
 			IViewEngine viewEngine, HttpContext context )
 		{
@@ -118,8 +127,11 @@ namespace Castle.CastleOnRails.Framework
 				throw ex;
 			}
 
-			// Send view 
-			__viewEngine.Process( this, __url, __viewPhysicalPath, __view, Context );
+			if (__view != null)
+			{
+				// Send view 
+				__viewEngine.Process( this, __url, __viewPhysicalPath, __view, Context );
+			}
 		}
 
 		public virtual void PreSendView(object view)

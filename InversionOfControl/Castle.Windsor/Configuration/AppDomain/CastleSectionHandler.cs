@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Windsor.Configuration.AppDomain
 {
 	using System;
-
-	using Castle.Model.Configuration;
+	using System.Configuration;
 
 	/// <summary>
-	/// Summary description for IConfigurationStore.
+	/// Summary description for CastleSectionHandler.
 	/// </summary>
-	public interface IConfigurationStore : ISubSystem
+	public class CastleSectionHandler : IConfigurationSectionHandler
 	{
-		void AddFacilityConfiguration( String key, IConfiguration config );
+		public CastleSectionHandler()
+		{
+		}
 
-		void AddComponentConfiguration( String key, IConfiguration config );
-
-		IConfiguration GetFacilityConfiguration( String key );
-
-		IConfiguration GetComponentConfiguration( String key );
-
-		IConfiguration[] GetFacilities();
-
-		IConfiguration[] GetComponents();
+		public object Create(object parent, object configContext, System.Xml.XmlNode section)
+		{
+			return section;
+		}
 	}
 }

@@ -1,4 +1,4 @@
- // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,11 +27,12 @@ namespace Castle.Model.Configuration
 	/// <para><b>AbstractConfiguration</b> makes easier to implementers 
 	/// to create a new version of <see cref="IConfiguration"/></para>
 	/// </remarks>
+	[Serializable]
 	public abstract class AbstractConfiguration : IConfiguration
 	{
 		protected String name;
 		protected String value;
-		protected IDictionary attributes = new HybridDictionary();
+		protected NameValueCollection attributes = new NameValueCollection();
 		protected ConfigurationCollection children = new ConfigurationCollection();
 
 		/// <summary>
@@ -72,7 +73,7 @@ namespace Castle.Model.Configuration
 		/// <value>
 		/// All attributes of the node.
 		/// </value>
-		public virtual IDictionary Attributes
+		public virtual NameValueCollection Attributes
 		{
 			get { return attributes; }
 

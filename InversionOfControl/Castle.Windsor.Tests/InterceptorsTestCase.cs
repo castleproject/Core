@@ -68,7 +68,7 @@ namespace Castle.Windsor.Tests
 
 			_service = (CalculatorService) _container.Resolve("key");
 
-			const int threadCount = 2;
+			const int threadCount = 10;
 
 			Thread[] threads = new Thread[threadCount];
 			

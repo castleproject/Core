@@ -118,6 +118,7 @@ namespace Castle.Model
 		public IDictionary ExtendedProperties
 		{
 			get { return _extended; }
+			set { _extended = value; }
 		}
 
 		public ConstructorCandidateCollection Constructors

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="rails-framework" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/../bin" />
+	<property name="lib.dir" value="${base.dir}/../lib" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="test.src.dir" value="${src.dir}/../RailsFrameworkTest" />
+	<property name="name" value="Castle.CastleOnRails.Framework" />
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${name}.Tests.dll" />
+
+	<property name="version" value="1.0.0.0" />
+
+	<target name="clean">
+
+	</target>
+
+	<target name="init" depends="clean">
+
+	</target>
+
+	<target name="build" depends="init,compile" />
+	
+	<target name="compile" depends="init">
+		<!-- doc="${bin.dir}/${name}.xml" -->
+		<csc 
+			define="STRONG"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}">
+			
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+
+			<references>
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.compile" depends="compile">
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name}">
+			
+			<sources basedir="${test.src.dir}" defaultexcludes="true">
+				<includes name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/${assembly.name}" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="tests.run" depends="tests.compile">
+		<nunit2 haltonerror="true" failonerror="true" haltonfailure="true">
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+	</target>
+	
+	<target name="dist">
+		<zip zipfile="${name}.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/${assembly.name}" />				
+				<include name="${base.dir}/../License.txt" />				
+				<include name="${base.dir}/../Readme.txt" />				
+				<include name="Changes.txt" />				
+			</fileset>
+		</zip>
+		
+		<zip zipfile="${name}.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${base.dir}/../License.txt" />				
+				<include name="${base.dir}/../Readme.txt" />				
+				<include name="Changes.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${src.dir}/**/*.*" />
+				<include name="${test.src.dir}/**/*.*" />
+				
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+			</fileset>
+		</zip>
+	</target>
+
+</project>

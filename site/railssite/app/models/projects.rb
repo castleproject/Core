@@ -25,3 +25,17 @@ class ProjectList
   end
 
 end
+
+class FacilitiesList 
+  include Enumerable
+
+  def initialize()
+    @list = []
+    @list << Project.new( 'Prevalence', '/facilities/', '' )
+  end
+  
+  def each
+    @list.each { |item| yield(item) }
+  end
+
+end

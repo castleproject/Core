@@ -20,6 +20,7 @@ namespace Castle.Model.Configuration
 	/// <summary>
 	/// A collection of <see cref="IConfiguration"/> objects.
 	/// </summary>
+	[Serializable]
 	public class ConfigurationCollection: ReadOnlyCollectionBase
 	{
 		/// <summary>

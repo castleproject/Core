@@ -40,9 +40,15 @@ namespace Castle.MicroKernel.ModelBuilder
 			AddContributor( ConfigurationModelInspector.Instance );
 		}
 
-		public ComponentModel BuildModel(String key, Type service, Type classType)
+		public ComponentModel BuildModel(String key, Type service, 
+			Type classType, IDictionary extendedProperties)
 		{
 			ComponentModel model = new ComponentModel(key, service, classType);
+			
+			if (extendedProperties != null)
+			{
+				model.ExtendedProperties = extendedProperties;
+			}
 
 			foreach(IContributeComponentModelConstruction contributor in _contributors)
 			{
