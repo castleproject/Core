@@ -41,10 +41,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			CreateTypeBuilder( typeof(Object), interfaces );
+			ImplementGetObjectData();
 			GenerateInterfaceImplementation( interfaces );
-
 			EnhanceType();
-
 			return CreateType();
 		}
 

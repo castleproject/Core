@@ -1,4 +1,3 @@
-using System.Text;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +18,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Collections;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using System.Runtime.Serialization;
+	using System.Text;
 
 	/// <summary>
 	/// Summary description for BaseCodeGenerator.
 	/// </summary>
 	public abstract class BaseCodeGenerator
 	{
-
 		private Type m_baseType = typeof (Object);
 		private TypeBuilder m_typeBuilder;
 		private FieldBuilder m_handlerField;
@@ -70,14 +70,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get { return m_constBuilder; }
 		}
 
-		protected Type GetFromCache( Type baseClass, Type[] interfaces )
+		protected Type GetFromCache(Type baseClass, Type[] interfaces)
 		{
-			return ModuleScope[ GenerateTypeName( baseClass, interfaces ) ] as Type;
+			return ModuleScope[GenerateTypeName(baseClass, interfaces)] as Type;
 		}
 
-		protected void RegisterInCache( Type generatedType )
+		protected void RegisterInCache(Type generatedType)
 		{
-			ModuleScope[ generatedType.Name ] = generatedType;
+			ModuleScope[generatedType.Name] = generatedType;
 		}
 
 		protected virtual TypeBuilder CreateTypeBuilder(Type baseType, Type[] interfaces)
@@ -86,15 +86,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			ModuleBuilder moduleBuilder = ModuleScope.ObtainDynamicModule();
 
-			TypeAttributes flags = TypeAttributes.Public | TypeAttributes.Class; 
-
-			if (baseType != typeof(Object))
-			{
-				if (baseType.IsSerializable)
-				{
-					flags |= TypeAttributes.Serializable;
-				}
-			}
+			TypeAttributes flags = TypeAttributes.Public | TypeAttributes.Class;
 
 			m_baseType = baseType;
 			m_typeBuilder = moduleBuilder.DefineType(
@@ -109,13 +101,47 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected virtual String GenerateTypeName(Type type, Type[] interfaces)
 		{
 			StringBuilder sb = new StringBuilder();
-			foreach(Type inter in interfaces)
+			foreach (Type inter in interfaces)
 			{
 				sb.Append('_');
 				sb.Append(inter.Name);
 			}
 			/// Naive implementation
 			return String.Format("ProxyType{0}{1}", type.Name, sb.ToString());
+		}
+
+		protected virtual void ImplementGetObjectData()
+		{
+			// Avoiding re-generate this method.
+			m_generated.Add( typeof(ISerializable) );
+
+			Type[] args = new Type[] { typeof(SerializationInfo), typeof(StreamingContext) };
+			Type[] get_type_args = new Type[] { typeof(String), typeof(bool), typeof(bool) };
+			Type[] key_and_object = new Type[] { typeof(String), typeof(Object) };
+
+			MethodAttributes attrs = MethodAttributes.HideBySig|MethodAttributes.Virtual|MethodAttributes.Public;
+			MethodBuilder builder = MainTypeBuilder.DefineMethod("GetObjectData", attrs, typeof(void), args);
+		
+			ILGenerator generator = builder.GetILGenerator();
+			LocalBuilder type_local = generator.DeclareLocal( typeof(Type) );
+			
+			// type name declared
+			generator.Emit(OpCodes.Ldstr, "Castle.DynamicProxy.Serialization.ProxyObjectReference, Castle.DynamicProxy");
+			generator.Emit(OpCodes.Ldc_I4_1); // true
+			generator.Emit(OpCodes.Ldc_I4_0); // false
+			generator.Emit(OpCodes.Call, typeof(Type).GetMethod("GetType", get_type_args) );
+
+			generator.Emit(OpCodes.Stloc_0);
+			generator.Emit(OpCodes.Ldarg_1);
+			generator.Emit(OpCodes.Ldloc_0);
+			generator.Emit(OpCodes.Callvirt, typeof(SerializationInfo).GetMethod("SetType") );
+
+			generator.Emit(OpCodes.Ldarg_1);
+			generator.Emit(OpCodes.Ldstr, "handler");
+			generator.Emit(OpCodes.Ldarg_0);
+			generator.Emit(OpCodes.Ldfld, m_handlerField);
+
+			generator.Emit(OpCodes.Callvirt, typeof(SerializationInfo).GetMethod("AddValue", key_and_object) );
 		}
 
 		protected virtual void EnhanceType()
@@ -128,6 +154,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual Type[] ScreenInterfaces(Type[] interfaces)
 		{
+			interfaces = AddISerializable(interfaces);
+
 			if (Context.ScreenInterfaces != null)
 			{
 				interfaces = Context.ScreenInterfaces(interfaces);
@@ -136,11 +164,25 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return interfaces;
 		}
 
+		protected virtual Type[] AddISerializable(Type[] interfaces)
+		{
+			if (Array.IndexOf(interfaces, typeof (ISerializable)) != -1)
+			{
+				return interfaces;
+			}
+
+			int len = interfaces.Length;
+			Type[] newlist = new Type[len + 1];
+			Array.Copy(interfaces, newlist, len);
+			newlist[len] = typeof (ISerializable);
+			return newlist;
+		}
+
 		protected virtual Type CreateType()
 		{
 			Type newType = MainTypeBuilder.CreateType();
 
-			RegisterInCache( newType );
+			RegisterInCache(newType);
 
 			return newType;
 		}
@@ -180,7 +222,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			ILGenerator ilGenerator = consBuilder.GetILGenerator();
 			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Call, m_baseType.GetConstructor(new Type[0]));
+			ilGenerator.Emit(OpCodes.Call, ObtainAvailableConstructor(m_baseType));
 			ilGenerator.Emit(OpCodes.Ldarg_0);
 			ilGenerator.Emit(OpCodes.Ldarg_1);
 			ilGenerator.Emit(OpCodes.Stfld, m_handlerField);
@@ -189,13 +231,18 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return consBuilder;
 		}
 
+		private ConstructorInfo ObtainAvailableConstructor(Type target)
+		{
+			return target.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[0], null);
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="interfaces"></param>
 		protected void GenerateInterfaceImplementation(Type[] interfaces)
 		{
-			foreach(Type inter in interfaces)
+			foreach (Type inter in interfaces)
 			{
 				if (!Context.ShouldSkip(inter))
 				{
@@ -237,7 +284,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			PropertyInfo[] properties = inter.GetProperties();
 			PropertyBuilder[] propertiesBuilder = new PropertyBuilder[properties.Length];
 
-			for(int i = 0; i < properties.Length; i++)
+			for (int i = 0; i < properties.Length; i++)
 			{
 				propertiesBuilder[i] = GeneratePropertyImplementation(properties[i]);
 			}
@@ -247,10 +294,22 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual void GenerateMethods(Type inter, PropertyBuilder[] propertiesBuilder)
 		{
-			MethodInfo[] methods = inter.GetMethods();
+			MethodInfo[] methods = inter.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-			foreach(MethodInfo method in methods)
+			foreach (MethodInfo method in methods)
 			{
+				if (method.IsPrivate)
+				{
+					continue;
+				}
+				if (method.DeclaringType.Equals(typeof(Object)) && !method.IsVirtual)
+				{
+					continue;
+				}
+				if (method.DeclaringType.Equals(typeof(Object)) && "Finalize".Equals(method.Name) )
+				{
+					continue;
+				}
 				GenerateMethodImplementation(method, propertiesBuilder);
 			}
 		}
@@ -282,16 +341,42 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			Type[] parameters = new Type[parameterInfo.Length];
 
-			for(int i = 0; i < parameterInfo.Length; i++)
+			for (int i = 0; i < parameterInfo.Length; i++)
 			{
 				parameters[i] = parameterInfo[i].ParameterType;
 			}
 
-			MethodAttributes atts = MethodAttributes.Public | MethodAttributes.Virtual;
+			MethodAttributes atts = MethodAttributes.Virtual;
+
+			if (!method.IsVirtual || method.IsFinal)
+			{
+				// Sorry. To avoid future problems we
+				// decide to not allow NonVirtual members
+				throw new ProxyGenerationException(String.Format("Can't generate stub for non-virtual member " + 
+					"{0} declared by {1}", method.Name, method.DeclaringType.FullName));
+			}
+
+			if (method.IsPublic)
+			{
+				atts |= MethodAttributes.Public;
+			}
+			
+			if (method.IsFamilyAndAssembly)
+			{
+				atts |= MethodAttributes.FamANDAssem;
+			}
+			else if (method.IsFamilyOrAssembly)
+			{
+				atts |= MethodAttributes.FamORAssem;
+			}
+			else if (method.IsFamily)
+			{
+				atts |= MethodAttributes.Family;
+			}
 
 			if (method.Name.StartsWith("set_") || method.Name.StartsWith("get_"))
 			{
-				atts = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.Virtual;
+				atts |= MethodAttributes.SpecialName;
 			}
 
 			MethodBuilder methodBuilder =
@@ -300,7 +385,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			if (method.Name.StartsWith("set_") || method.Name.StartsWith("get_"))
 			{
-				foreach(PropertyBuilder property in properties)
+				foreach (PropertyBuilder property in properties)
 				{
 					if (property == null)
 					{
@@ -349,28 +434,34 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected void WriteILForMethod(MethodInfo method, MethodBuilder builder,
 		                                Type[] parameters, FieldBuilder handlerField)
 		{
-			int arrayPositionInStack = 1;
+			int arrayPositionInStack = 2;
 
 			ILGenerator ilGenerator = builder.GetILGenerator();
 
 			ilGenerator.DeclareLocal(typeof (MethodBase));
+			ilGenerator.DeclareLocal(typeof (MethodInfo));
 
 			if (builder.ReturnType != typeof (void))
 			{
 				ilGenerator.DeclareLocal(builder.ReturnType);
-				arrayPositionInStack = 2;
+				arrayPositionInStack = 3;
 			}
 
 			ilGenerator.DeclareLocal(typeof (object[]));
 
 			ilGenerator.Emit(OpCodes.Ldtoken, method);
 			ilGenerator.Emit(OpCodes.Call, typeof (MethodBase).GetMethod("GetMethodFromHandle"));
-
 			ilGenerator.Emit(OpCodes.Stloc_0);
+
+			ilGenerator.Emit(OpCodes.Ldloc_0);
+			ilGenerator.Emit(OpCodes.Castclass, typeof(MethodInfo));
+			ilGenerator.Emit(OpCodes.Stloc_1);
+
+
 			ilGenerator.Emit(OpCodes.Ldarg_0);
 			ilGenerator.Emit(OpCodes.Ldfld, handlerField);
 			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Ldloc_0);
+			ilGenerator.Emit(OpCodes.Ldloc_1);
 			ilGenerator.Emit(OpCodes.Ldc_I4, parameters.Length);
 			ilGenerator.Emit(OpCodes.Newarr, typeof (object));
 
@@ -380,7 +471,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				ilGenerator.Emit(OpCodes.Ldloc, arrayPositionInStack);
 			}
 
-			for(int c = 0; c < parameters.Length; c++)
+			for (int c = 0; c < parameters.Length; c++)
 			{
 				ilGenerator.Emit(OpCodes.Ldc_I4, c);
 				ilGenerator.Emit(OpCodes.Ldarg, c + 1);
@@ -435,7 +526,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				Enum baseType = (Enum) Activator.CreateInstance(type);
 				TypeCode code = baseType.GetTypeCode();
 
-				switch(code)
+				switch (code)
 				{
 					case TypeCode.Byte:
 						type = typeof (Byte);
@@ -454,7 +545,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				return ConvertTypeToOpCode(type);
 			}
 
-			OpCode opCode = OpCodesDictionary.Instance[ type ];
+			OpCode opCode = OpCodesDictionary.Instance[type];
 
 			if (Object.ReferenceEquals(opCode, OpCodesDictionary.EmptyOpCode))
 			{

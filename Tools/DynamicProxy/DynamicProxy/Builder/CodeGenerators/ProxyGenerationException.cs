@@ -15,37 +15,20 @@
 namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for ClassProxyGenerator.
+	/// Summary description for ProxyGenerationException.
 	/// </summary>
-	public class ClassProxyGenerator : BaseCodeGenerator
+	[Serializable]
+	public class ProxyGenerationException : Exception
 	{
-		public ClassProxyGenerator(ModuleScope scope) : base(scope)
+		public ProxyGenerationException(string message) : base(message)
 		{
 		}
 
-		public ClassProxyGenerator(ModuleScope scope, GeneratorContext context) : base(scope, context)
+		public ProxyGenerationException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
-		}
-
-		public Type GenerateCode(Type baseClass)
-		{
-			Type[] interfaces = new Type[0];
-			interfaces = ScreenInterfaces(interfaces);
-
-			Type cacheType = GetFromCache(baseClass, interfaces);
-			
-			if (cacheType != null)
-			{
-				return cacheType;
-			}
-
-			CreateTypeBuilder( baseClass, interfaces );
-			ImplementGetObjectData();
-			GenerateTypeImplementation( baseClass, true );
-			EnhanceType();
-			return CreateType();
 		}
 	}
 }

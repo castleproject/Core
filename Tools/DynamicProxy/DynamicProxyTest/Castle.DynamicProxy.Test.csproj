@@ -95,6 +95,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AccessLevelTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -121,6 +126,16 @@
                 />
                 <File
                     RelPath = "Classes\MySerializableClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\NonPublicConstructorClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\NonPublicMethodsClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

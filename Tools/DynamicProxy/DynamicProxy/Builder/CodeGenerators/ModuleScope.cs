@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+ // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -55,8 +55,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 #if ( DEBUG )
 					m_assemblyBuilder =
 						AppDomain.CurrentDomain.DefineDynamicAssembly(
-						assemblyName,
-						AssemblyBuilderAccess.RunAndSave);
+							assemblyName,
+							AssemblyBuilderAccess.RunAndSave);
 					m_moduleBuilder = m_assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME);
 #else
 					m_assemblyBuilder =
@@ -74,7 +74,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		public Type this[String name]
 		{
 			get { return m_typeCache[name] as Type; }
-			set { m_typeCache[name] = value; }
+			set
+			{
+				m_typeCache[name] = value;
+				m_assemblyBuilder.Save(FILE_NAME);
+			}
 		}
 	}
 }

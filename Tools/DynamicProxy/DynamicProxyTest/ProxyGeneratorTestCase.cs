@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Test
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Test.Classes;
 	using Castle.DynamicProxy.Test.ClassInterfaces;
+	using Castle.DynamicProxy.Builder.CodeGenerators;
 
 	/// <summary>
 	/// Summary description for ProxyGeneratorTestCase.
@@ -85,31 +86,19 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
+		[ExpectedException(typeof(ProxyGenerationException))]
 		public void ProxyingClassWithoutVirtualMethods()
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			m_generator.CreateClassProxy( 
 				typeof(NoVirtualMethodClass), new ResultModifiedInvocationHandler( new SpecializedServiceClass() ) );
-			
-			Assert.IsNotNull( proxy );
-			Assert.IsTrue( typeof(NoVirtualMethodClass).IsAssignableFrom( proxy.GetType() ) );
-
-			NoVirtualMethodClass inter = (NoVirtualMethodClass) proxy;
-
-			Assert.AreEqual( 45, inter.Sum( 20, 25 ) );
 		}
 
 		[Test]
+		[ExpectedException(typeof(ProxyGenerationException))]
 		public void ProxyingClassWithSealedMethods()
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			m_generator.CreateClassProxy( 
 				typeof(SealedMethodsClass), new ResultModifiedInvocationHandler( new SpecializedServiceClass() ) );
-			
-			Assert.IsNotNull( proxy );
-			Assert.IsTrue( typeof(SealedMethodsClass).IsAssignableFrom( proxy.GetType() ) );
-
-			SealedMethodsClass inter = (SealedMethodsClass) proxy;
-
-			Assert.AreEqual( 45, inter.Sum( 20, 25 ) );
 		}
 
 		[Test]
