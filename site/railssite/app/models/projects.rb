@@ -31,7 +31,8 @@ class FacilitiesList
 
   def initialize()
     @list = []
-    @list << Project.new( 'Prevalence', '/facilities/', '' )
+    @list << Project.new( 'Prevalence', '/prevalence/', '' )
+    @list << Project.new( 'Management Extensions', '/management/facility', '' )
   end
   
   def each

@@ -115,6 +115,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Castle.Windsor.Tests.dll.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "InterceptorsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -66,6 +66,7 @@
 				<include name="RailsEngine/**/*.*" />
 				<include name="RailsEngineTest/**/*.*" />
 				<include name="RailsFramework/**/*.*" />
+				<include name="WindsorIntegration/**/*.*" />
 			</fileset>
 		</zip>
 

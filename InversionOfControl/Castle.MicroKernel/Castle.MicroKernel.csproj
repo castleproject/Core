@@ -81,8 +81,8 @@
                 />
                 <Reference
                     Name = "Castle.Model"
-                    Project = "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\bin\Castle.Model.dll"
                 />
             </References>
         </Build>
