@@ -29,6 +29,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components.Tests
 		{
 			INamingService service = (INamingService) Container[ typeof(INamingService) ];
 
+			Assert.AreEqual( "Author", service.CreateClassName("authors") );
 			Assert.AreEqual( "Tax", service.CreateClassName("Taxes") );
 			Assert.AreEqual( "child", service.CreateClassName("children") );
 			Assert.AreEqual( "Order", service.CreateClassName("Orders") );

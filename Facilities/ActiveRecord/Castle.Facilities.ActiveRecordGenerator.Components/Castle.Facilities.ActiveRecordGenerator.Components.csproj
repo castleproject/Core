@@ -194,6 +194,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\ColumnDefinitionCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\DatabaseDefinition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -215,6 +220,11 @@
                 />
                 <File
                     RelPath = "Model\TableDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\TableDefinitionCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

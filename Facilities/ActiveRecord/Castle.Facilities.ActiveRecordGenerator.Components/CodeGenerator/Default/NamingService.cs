@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-using Castle.Facilities.ActiveRecordGenerator.Utils;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +15,9 @@ using Castle.Facilities.ActiveRecordGenerator.Utils;
 namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 {
 	using System;
+	using System.Text.RegularExpressions;
+
+	using Castle.Facilities.ActiveRecordGenerator.Utils;
 
 
 	public class NamingService : INamingService
@@ -24,16 +25,16 @@ namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 		private Pair[] singularRules = new Pair[] 
 			{
 				new Pair("(x|ch|ss)es$", @"$1"), 
-				new Pair("movies$", "movie"),
+				new Pair("Movies$", "Movie"),
 				new Pair("([^aeiouy]|qu)ies$", "$1y"),
 				new Pair("([lr])ves$", @"$1f"),
 				new Pair("([^f])ves$", @"$1fe"),
 				new Pair("(analy|ba|diagno|parenthe|progno|synop|the)ses$", @"$1sis"),
 				new Pair("([ti])a$", @"$1um"),
-				new Pair("people$", @"person"),
-				new Pair("men$", @"man"),
-				new Pair("status$", @"status"),
-				new Pair("children$", @"child"),
+				new Pair("People$", @"Person"),
+				new Pair("Men$", @"Man"),
+				new Pair("Status$", @"Status"),
+				new Pair("Children$", @"Child"),
 				new Pair("s$", @"")
 			};
 
@@ -48,7 +49,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 
 		public String CreateClassName(String tableName)
 		{
+			MatchEvaluator UpCaser = new MatchEvaluator(UpCaserDef);
+
 			tableName = Regex.Replace(tableName, "(tb_|_)", "");
+			tableName = Regex.Replace(tableName, "^[a-z]", UpCaser);
 
 			return Singularize(tableName);
 		}

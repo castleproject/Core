@@ -12,35 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Utils
+namespace Castle.Facilities.ActiveRecordGenerator.Model
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
 
-
-	public class Pair
+	public class ColumnDefinitionCollection : NameObjectCollectionBase, IEnumerable
 	{
-		private string _first;
-		private string _second;
-
-		public Pair(String first, String second)
+		public void Add(ColumnDefinition def)
 		{
-			_first = first;
-			_second = second;
+			BaseAdd(def.Name, def);
 		}
 
-		public string First
+		public ColumnDefinition this [String name]
 		{
-			get { return _first; }
+			get { return BaseGet(name) as ColumnDefinition; }
 		}
 
-		public string Second
+		public new IEnumerator GetEnumerator()
 		{
-			get { return _second; }
-		}
-
-		public override string ToString()
-		{
-			return _first;
+			return base.BaseGetAllValues().GetEnumerator();
 		}
 	}
 }

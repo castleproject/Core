@@ -1,3 +1,4 @@
+using System.Data.OleDb;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,19 +21,27 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 
 	public class ActiveRecordDescriptor
 	{
-		private bool _generate = true;
-		private String _className;
 		private IList _properties = new ArrayList();
+		private String _className;
+		private String _tableName;
+		private bool _generate = true;
 
-		public ActiveRecordDescriptor(String className)
+		public ActiveRecordDescriptor(String className, String tableName)
 		{
 			_className = className;
+			_tableName = tableName;
 		}
 
 		public String ClassName
 		{
 			get { return _className; }
 			set { _className = value; }
+		}
+
+		public String TableName
+		{
+			get { return _tableName; }
+			set { _tableName = value; }
 		}
 
 		public void AddProperty( ActiveRecordPropertyDescriptor propertyDescriptor )
@@ -52,22 +61,26 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		}
 	}
 
+
 	public class ActiveRecordPropertyDescriptor
 	{
 		private bool _generate = true;
+		private bool _nullable = false;
 		private String _columnName;
 		private String _columnTypeName = "VARCHAR";
 		private String _propertyName;
 		private String _propertyFieldName;
 		private Type _propertyType;
 
-		public ActiveRecordPropertyDescriptor(string columnName, string columnTypeName, string propertyName, string propertyFieldName, Type propertyType)
+		public ActiveRecordPropertyDescriptor(string columnName, string columnTypeName, 
+			string propertyName, string propertyFieldName, Type propertyType, bool nullable)
 		{
 			_columnName = columnName;
 			_columnTypeName = columnTypeName;
 			_propertyName = propertyName;
 			_propertyFieldName = propertyFieldName;
 			_propertyType = propertyType;
+			_nullable = nullable;
 		}
 
 		public string ColumnName

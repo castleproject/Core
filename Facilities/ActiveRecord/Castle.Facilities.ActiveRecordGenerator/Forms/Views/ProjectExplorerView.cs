@@ -65,6 +65,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms.Views
 					tableNode.SelectedImageIndex = ImageConstants.Database_Table;
 					tableNode.Tag = table;
 
+					tableNode.EnsureVisible();
+
 					foreach(ColumnDefinition column in table.Columns)
 					{
 						TreeNode columnNode = tableNode.Nodes.Add( column.Name );
@@ -87,19 +89,21 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms.Views
 				arNode.SelectedImageIndex = ImageConstants.Classes_Entity;
 				arNode.Tag = desc;
 
+				arNode.EnsureVisible();
+
 				foreach(ActiveRecordPropertyDescriptor property in desc.Properties)
 				{
 					TreeNode propertyNode = arNode.Nodes.Add( property.PropertyName );
 					propertyNode.ImageIndex = ImageConstants.Classes_Property;
 					propertyNode.SelectedImageIndex = ImageConstants.Classes_Property;
-					
-					TreeNode fieldNode = arNode.Nodes.Add( property.PropertyFieldName );
-					fieldNode.ImageIndex = ImageConstants.Classes_Private_Field;
-					fieldNode.SelectedImageIndex = ImageConstants.Classes_Private_Field;
+//					
+//					TreeNode fieldNode = arNode.Nodes.Add( property.PropertyFieldName );
+//					fieldNode.ImageIndex = ImageConstants.Classes_Private_Field;
+//					fieldNode.SelectedImageIndex = ImageConstants.Classes_Private_Field;
 				}
 			}
 
-			_treeView.ExpandAll();
+//			_treeView.ExpandAll();
 		}
 
 		protected void OnProjectReplaced(object sender, Project oldProject, Project newProject)

@@ -15,18 +15,21 @@
 namespace Castle.Facilities.ActiveRecordGenerator.Model
 {
 	using System;
-	using System.Collections;
 
 
 	public class TableDefinition
 	{
 		private String _name;
-		private IList _columns = new ArrayList();
 		private ActiveRecordDescriptor _relatedDescriptor;
+		private ColumnDefinitionCollection _columns = new ColumnDefinitionCollection();
 
 		public TableDefinition(String name)
 		{
 			_name = name;
+		}
+
+		public void AddManyRelation(TableDefinition def)
+		{
 		}
 
 		public String Name
@@ -46,7 +49,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 			return column;
 		}
 
-		public IList Columns
+		public ColumnDefinitionCollection Columns
 		{
 			get { return _columns; }
 		}

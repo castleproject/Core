@@ -39,8 +39,22 @@ namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 
 			declaration.Attributes |= MemberAttributes.Public;
 			declaration.BaseTypes.Add( new CodeTypeReference("ActiveRecordBase") );
-			declaration.CustomAttributes.Add( new CodeAttributeDeclaration("ActiveRecord") );
+
+			CodeAttributeDeclaration att = new CodeAttributeDeclaration("ActiveRecord");
 			
+			att.Arguments.Add( 
+				new CodeAttributeArgument( 
+					new CodeSnippetExpression("\"" + arDescriptor.TableName + "\"") ) );
+
+			declaration.CustomAttributes.Add( att );
+
+			GenerateProperties(arDescriptor, declaration);
+
+			return declaration;
+		}
+
+		private void GenerateProperties(ActiveRecordDescriptor arDescriptor, CodeTypeDeclaration declaration)
+		{
 			foreach(ActiveRecordPropertyDescriptor property in arDescriptor.Properties)
 			{
 				if (!property.Generate) continue;
@@ -49,27 +63,26 @@ namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 				
 				CodeMemberProperty memberProperty = new CodeMemberProperty();
 				memberProperty.Name = property.PropertyName;
+				memberProperty.Type = new CodeTypeReference(property.PropertyType);
 				
 				memberProperty.CustomAttributes.Add( 
 					new CodeAttributeDeclaration("FieldMapping", 
-					new CodeAttributeArgument[]
-						{
-							new CodeAttributeArgument(new CodeSnippetExpression("\"" + property.ColumnName + "\"") ),
-						} ) );
+					                             new CodeAttributeArgument[]
+					                             	{
+					                             		new CodeAttributeArgument(new CodeSnippetExpression("\"" + property.ColumnName + "\"") ),
+					                             	} ) );
 
 				CodeFieldReferenceExpression fieldReference = new CodeFieldReferenceExpression( 
-							new CodeThisReferenceExpression(), property.PropertyFieldName );
+					new CodeThisReferenceExpression(), property.PropertyFieldName );
 
 				memberProperty.GetStatements.Add( 
 					new CodeMethodReturnStatement( fieldReference ) );
 				memberProperty.SetStatements.Add( 
 					new CodeAssignStatement(fieldReference, 
-					new CodeArgumentReferenceExpression("value") ) );
+					                        new CodeArgumentReferenceExpression("value") ) );
 				
 				declaration.Members.Add( memberProperty );
 			}
-
-			return declaration;
 		}
 
 		#endregion

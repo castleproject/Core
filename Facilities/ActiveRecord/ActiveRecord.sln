@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRec
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsApplication1", "WindowsApplication1\WindowsApplication1.csproj", "{525F2FCD-B0DF-4EF8-88C4-7DD9DB9C9064}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -53,6 +57,10 @@ Global
 		{2A879BB5-E207-43F7-96B2-923CE6BB084B}.Debug.Build.0 = Debug|.NET
 		{2A879BB5-E207-43F7-96B2-923CE6BB084B}.Release.ActiveCfg = Release|.NET
 		{2A879BB5-E207-43F7-96B2-923CE6BB084B}.Release.Build.0 = Release|.NET
+		{525F2FCD-B0DF-4EF8-88C4-7DD9DB9C9064}.Debug.ActiveCfg = Debug|.NET
+		{525F2FCD-B0DF-4EF8-88C4-7DD9DB9C9064}.Debug.Build.0 = Debug|.NET
+		{525F2FCD-B0DF-4EF8-88C4-7DD9DB9C9064}.Release.ActiveCfg = Release|.NET
+		{525F2FCD-B0DF-4EF8-88C4-7DD9DB9C9064}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

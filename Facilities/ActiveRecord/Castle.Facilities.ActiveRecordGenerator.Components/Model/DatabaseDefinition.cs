@@ -21,7 +21,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 	public class DatabaseDefinition
 	{
 		private String _name;
-		private IList _tables = new ArrayList();
+		private TableDefinitionCollection _tables = new TableDefinitionCollection();
 
 		public DatabaseDefinition()
 		{
@@ -39,7 +39,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 			set { _name = value; }
 		}
 
-		public IList Tables
+		public TableDefinitionCollection Tables
 		{
 			get { return _tables; }
 		}

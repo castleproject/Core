@@ -24,10 +24,12 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 	public class NewProjectAction : IAction
 	{
 		private NewProjectForm _newProjectForm;
+		private ActiveRecordDescriptorBuilder _arBuilder;
 
-		public NewProjectAction(NewProjectForm newProjectForm)
+		public NewProjectAction(NewProjectForm newProjectForm, ActiveRecordDescriptorBuilder arBuilder)
 		{
 			_newProjectForm = newProjectForm;
+			_arBuilder = arBuilder;
 		}
 
 		#region IAction Members
@@ -55,6 +57,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 				model.CurrentProject = _newProjectForm.Project;
 
 				model.CurrentProject.RefreshDatabaseDefinition();
+
+				foreach(TableDefinition table in model.CurrentProject.DatabaseDefinition.Tables)
+				{
+					table.RelatedDescriptor = _arBuilder.Build(table);
+				}
 
 				model.UpdateViews();
 			}
