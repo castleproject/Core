@@ -1,0 +1,62 @@
+The test cases run against a MSSQL Server database, but due to 
+NHibernate's features, you can change the database to whathever you 
+like. 
+
+
+1. Modify the Connection properties information:
+
+   See file Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests.dll.config
+
+2. Create the database schema
+
+   --- cut here ---
+
+/****** Object:  Table [dbo].[Blogs]    Script Date: 19/3/2005 23:53:47 ******/
+CREATE TABLE [dbo].[Blogs] (
+	[blog_id] [int] IDENTITY (1, 1) NOT NULL ,
+	[blog_name] [varchar] (50) NULL ,
+	[blog_author] [varchar] (50) NULL 
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[Posts]    Script Date: 19/3/2005 23:53:49 ******/
+CREATE TABLE [dbo].[Posts] (
+	[post_id] [int] IDENTITY (1, 1) NOT NULL ,
+	[post_title] [varchar] (50) NULL ,
+	[post_contents] [text] NULL ,
+	[post_category] [varchar] (50) NULL ,
+	[post_blogid] [int] NULL ,
+	[post_created] [datetime] NULL ,
+	[post_published] [bit] NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Blogs] WITH NOCHECK ADD 
+	CONSTRAINT [PK_Blogs] PRIMARY KEY  CLUSTERED 
+	(
+		[blog_id]
+	)  ON [PRIMARY] 
+GO
+
+ALTER TABLE [dbo].[Posts] WITH NOCHECK ADD 
+	CONSTRAINT [PK_Posts] PRIMARY KEY  CLUSTERED 
+	(
+		[post_id]
+	)  ON [PRIMARY] 
+GO
+
+ALTER TABLE [dbo].[Posts] WITH NOCHECK ADD 
+	CONSTRAINT [DF_Posts_post_created] DEFAULT (getdate()) FOR [post_created],
+	CONSTRAINT [DF_Posts_post_published] DEFAULT (0) FOR [post_published]
+GO
+
+ALTER TABLE [dbo].[Posts] ADD 
+	CONSTRAINT [FK_Posts_Blogs] FOREIGN KEY 
+	(
+		[post_blogid]
+	) REFERENCES [dbo].[Blogs] (
+		[blog_id]
+	) ON DELETE CASCADE  ON UPDATE CASCADE 
+GO
+
+   -- cut here --

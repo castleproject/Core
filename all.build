@@ -4,10 +4,14 @@
 	<property name="base.dir" value="." />
 	<property name="version" value="beta-1" />
 
-	<target name="build" depends="init, tools, container, rails, services, facilities, components, samples" />
+	<target name="build" depends="init, tools, container, activerecord, rails, services, facilities, components, samples" />
 	
 	<target name="init">
 
+	</target>
+
+	<target name="activerecord">
+		<nant buildfile="ActiveRecord\activerecord.build" target="build" inheritall="true" />
 	</target>
 	
 	<target name="tools">

@@ -50,6 +50,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 		public void FewAreas()
 		{
 			ControllerTree tree = new ControllerTree();
+
 			tree.AddController("", "home", "controller1");
 			tree.AddController("", "contact", "controller2");
 			tree.AddController("", "cart", "controller3");

@@ -39,7 +39,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("Current apppath is /", response);
+			AssertContents("Current apppath is ", response);
 		}
 	}
 }

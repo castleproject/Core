@@ -12,35 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration
+namespace TestSite.Controllers
 {
-	using Castle.Services.Transaction;
+	using System;
 
-	using Castle.Facilities.NHibernateExtension;
-
-	using NHibernate;
-
+	using Castle.CastleOnRails.Framework;
 
 	/// <summary>
-	/// Synchronization object to ensure proper close and 
-	/// flush of the session
+	/// Tests the file upload ability
 	/// </summary>
-	public class SessionKeeper : ISynchronization
+	public class UploadFileController : SmartDispatcherController
 	{
-		private ISession _session;
-
-		public SessionKeeper(ISession session)
-		{
-			_session = session;
-		}
-
-		public void BeforeCompletion()
+		public void Index()
 		{
 		}
 
-		public void AfterCompletion()
+		public void ShowUploadFileName(System.Web.HttpPostedFile pic)
 		{
-			_session.Close();
+			this.PropertyBag.Add("filename", pic.FileName);
 		}
 	}
 }

@@ -1,104 +1,139 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="container" default="build">
+<project name="activerecord" default="build">
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="dynamicproxy" value="${base.dir}/../tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
-	<property name="name" value="InversionOfControl" />
-	<property name="version" value="beta-1" />
+	<property name="castle.model" value="${base.dir}/../InversionOfControl/bin/Castle.Model.dll" />
+	<property name="name" value="ActiveRecord" />
+	<property name="version" value="alpha-1" />
+	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
 
-	<target name="build" depends="init, model, microkernel, windsor" />
-	
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="name" value="Castle.ActiveRecord" />
+	<property name="src.dir" value="${base.dir}\${name}" />
+	<property name="test.src.dir" value="${src.dir}/../Castle.ActiveRecord.Tests" />
+	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.assembly.appconfig" value="${test.assembly.name}.config" />
+
+	<property name="debug" value="false" />
+	<property name="optimize" value="true" />
+	<property name="version" value="0.0.1.0" />
+
 	<target name="init">
 		<delete dir="${bin.dir}" failonerror="false" />
 		<mkdir dir="${bin.dir}" />
 
 		<delete dir="${doc.dir}" failonerror="false" />
 		<mkdir dir="${doc.dir}" />
+
+		<copy file="${test.src.dir}/${test.assembly.appconfig}" todir="${bin.dir}" />
+
+		<copy file="${castle.model}" todir="${bin.dir}" />
+
+		<copy todir="${bin.dir}">
+                  <fileset basedir="${library.dir}">
+                    <include name="*.dll" />
+                  </fileset>
+		</copy>
 	</target>
 	
-	<target name="model">
-		<nant buildfile="Castle.Model/model.build" target="build" />
+	<include buildfile="../common.inc" />
+
+	<target name="clean">
+
 	</target>
 
-	<target name="microkernel">
-		<nant buildfile="Castle.MicroKernel/microkernel.build" target="build" />
+	<target name="build" depends="init,tests.run" />
+	
+	<target name="compile" depends="init">
+		<csc 
+			define="STRONG"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
+			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
+				<include name="${bin.dir}/log4net.dll" />
+				<include name="${bin.dir}/Iesi.Collections.dll" />
+				<include name="${bin.dir}/HashCodeProvider.dll" />
+				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
+			</references>
+		</csc>
 	</target>
 
-	<target name="windsor">
-	    <copy file="${dynamicproxy}" todir="${bin.dir}" />
-		<nant buildfile="Castle.Windsor/windsor.build" target="build" />
-	</target>
+	<target name="tests.compile" depends="compile">
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name}">
+			
+			<sources basedir="${test.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
 
-	<target name="documentation">
-		<ndoc failonerror="false">
-			<assemblies basedir="${bin.dir}">
-				<include name="Castle.Model.dll" />
-				<include name="Castle.MicroKernel.dll" />
-				<include name="Castle.Windsor.dll" />
-			</assemblies>
-			<documenters>
-				<documenter name="MSDN">
-					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
-					<property name="HtmlHelpName" value="Castle.Container" />
-					<property name="IncludeFavorites" value="False" />
-					<property name="Title" value="Castle's Inversion of Control" />
-					<property name="SplitTOCs" value="True" />
-					<property name="DefaulTOC" value="Castle.Windsor" />
-					<property name="ShowVisualBasic" value="False" />
-					<property name="ShowMissingSummaries" value="False" />
-					<property name="ShowMissingRemarks" value="False" />
-					<property name="ShowMissingParams" value="False" />
-					<property name="ShowMissingReturns" value="False" />
-					<property name="ShowMissingValues" value="False" />
-					<property name="DocumentInternals" value="True" />
-					<property name="DocumentProtected" value="True" />
-					<property name="DocumentPrivates" value="False" />
-					<property name="DocumentEmptyNamespaces" value="False" />
-					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004-2005 (c) Castle Project" />
-					<property name="CopyrightHref" value="http://www.castleproject.org/" />
-				</documenter>
-			</documenters>
-		</ndoc>
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/${assembly.name}" />
+				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
+				<include name="${bin.dir}/log4net.dll" />
+				<include name="${bin.dir}/Iesi.Collections.dll" />
+				<include name="${bin.dir}/HashCodeProvider.dll" />
+				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
+			</references>
+		</csc>
 	</target>
 	
-	<target name="dist">
+	<target name="tests.run" depends="tests.compile" if="${nhibernate.test}">
+		<nunit2 >
+			<formatter type="Plain" />
+			<test 
+				assemblyname="${bin.dir}/${test.assembly.name}" 
+				appconfig="${bin.dir}/${test.assembly.appconfig}"/>
+		</nunit2>
+	</target>
+	
+	<target name="packfiles">
+		<zip zipfile="${name}.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/${assembly.name}" />				
+				<include name="${base.dir}/../License.txt" />				
+				<include name="${base.dir}/../Readme.txt" />				
+				<include name="Changes.txt" />				
+			</fileset>
+		</zip>
+		
 		<zip zipfile="${name}.src.${version}.zip">
 			<fileset basedir="${base.dir}">
+				<include name="${base.dir}/../License.txt" />				
+				<include name="${base.dir}/../Readme.txt" />				
+				<include name="Changes.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${src.dir}/**/*.*" />
+				<include name="${test.src.dir}/**/*.*" />
+				
 				<exclude name="**/Debug/*" />
 				<exclude name="**/obj/*" />
 				<exclude name="**/*.user" />
 				<exclude name="**/*.suo" />
-				<exclude name="**/*.projdata" />
-				<exclude name="**/*.resharperoptions" />
-
-				<include name="License.txt" />
-				<include name="Readme.txt" />
-				<include name="Changes.txt" />
-				<include name="*.build" />
-				<include name="*.sln" />
-				<include name="Castle.Model/**/*.*" />
-				<include name="Castle.Model.Tests/**/*.*" />
-				<include name="Castle.MicroKernel/**/*.*" />
-				<include name="Castle.MicroKernel.Tests/**/*.*" />
-				<include name="Castle.Windsor/**/*.*" />
-				<include name="Castle.Windsor.Tests/**/*.*" />
 			</fileset>
 		</zip>
-
-		<zip zipfile="${name}.bin-src.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/*.dll" />				
-				<include name="${base.dir}/License.txt" />				
-				<include name="${base.dir}/Readme.txt" />
-				<include name="${base.dir}/Changes.txt" />
-				<include name="${name}.src.${version}.zip" />				
-			</fileset>
-		</zip>
-		
 	</target>
-
 	
 </project>

@@ -156,6 +156,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\UploadFileController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\SubArea\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -238,6 +243,14 @@
                 />
                 <File
                     RelPath = "views\SubArea\home\index.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\uploadfile\index.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\uploadfile\showuploadfilename.aspx"
                     BuildAction = "Content"
                 />
             </Include>

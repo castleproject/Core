@@ -63,7 +63,7 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		{
 			get
 			{
-				if (_files != null)
+				if (_files == null)
 				{
 					_files = new FileDictionaryAdapter(_request.Files);
 				}

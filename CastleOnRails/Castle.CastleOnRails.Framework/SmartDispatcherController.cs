@@ -30,10 +30,11 @@ namespace Castle.CastleOnRails.Framework
 		{
 			NameValueCollection webParams = request.Params;
 			ParameterInfo[] parameters = method.GetParameters();
+            IDictionary files = request.Files;
 
-			object[] methodArgs = BuildMethodArguments( parameters, webParams );
+			object[] methodArgs = BuildMethodArguments( parameters, webParams, files );
+            method.Invoke(this, methodArgs);
 
-			method.Invoke(this, methodArgs);
 		}
 
 		protected override MethodInfo SelectMethod(String action, IRequest request)
@@ -102,14 +103,6 @@ namespace Castle.CastleOnRails.Framework
 
 			foreach(ParameterInfo param in parameters)
 			{
-//				if (!param.ParameterType.IsPrimitive)
-//				{
-//					// Non-primitives can be an issue. 
-//					// So we better avoid them					
-//					points -= 10;
-//					continue;
-//				}
-
 				object value = webParams.Get( param.Name );
 				if (value != null ) points += 10;
 			}
@@ -117,7 +110,7 @@ namespace Castle.CastleOnRails.Framework
 			return points;
 		}
 
-		private object[] BuildMethodArguments(ParameterInfo[] parameters, NameValueCollection webParams)
+		private object[] BuildMethodArguments(ParameterInfo[] parameters, NameValueCollection webParams, IDictionary files)
 		{
 			object[] args = new object[parameters.Length];
 
@@ -159,7 +152,7 @@ namespace Castle.CastleOnRails.Framework
 				}
 				else if (param.ParameterType == typeof(HttpPostedFile))
 				{
-					args[i] = value;
+					args[i] = files[param.Name];
 				}
 			}
 

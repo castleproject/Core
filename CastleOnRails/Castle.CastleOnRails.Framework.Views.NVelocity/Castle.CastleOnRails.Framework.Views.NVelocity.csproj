@@ -114,6 +114,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "default.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "NVelocityViewEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
