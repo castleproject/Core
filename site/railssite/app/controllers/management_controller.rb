@@ -12,4 +12,7 @@ class ManagementController < AbstractApplicationController
   def download
   end
 
+  def facility
+  end
+
 end

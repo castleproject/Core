@@ -33,7 +33,8 @@ public interface IMyInterface
 
 public class YourProxyInterceptor : IInterceptor
 {
-  public object Intercept(IInvocation invocation, params object[] args)
+  public object Intercept(IInvocation invocation, 
+    params object[] args)
   {
     // do something before
 

@@ -1,0 +1,12 @@
+<% @subarea = "Container" %>
+
+<% add_topmenu( 'Home', '/home/' ) %>
+
+<% add_rightmenu( 'Inversion of control', 'index' ) %>
+<% add_rightmenu( 'MicroKernel', 'kernel' ) %>
+<% add_rightmenu( 'Windsor', 'windsor' ) %>
+<% add_rightmenu( 'Download', 'download' ) %>
+
+<% add_rightmenu_separator( ) %>
+
+<%= render "/home/deflinks" %>

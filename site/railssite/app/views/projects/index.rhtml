@@ -1,0 +1,13 @@
+<% @page_title = "Projects" %>
+<% @main_title = "List of projects" %>
+<%= render "/projects/deflinks" %>
+
+Here is a list of Castle's sub projects:
+<br>
+
+<% projects.each do |project| %>
+<p>
+  <strong><a href="<%= project.link %>"><%= project.name %></a></strong> 
+  <p><%= project.description %></p>
+</p>
+<% end %>

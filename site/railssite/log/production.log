@@ -630,3 +630,292 @@ Processing AboutController#index (for 127.0.0.1 at Thu Nov 18 03:28:04 Pacific S
 Rendering about/index within layouts/castlelayout
 Rendering layouts/castlelayout (200 OK)
 Completed in 0.047000 (21 reqs/sec) | Rendering: 0.047000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 03:58:24 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 04:16:28 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.031000 (32 reqs/sec) | Rendering: 0.031000 (100%)
+
+
+Processing ContainerController#index (for 127.0.0.1 at Thu Nov 18 04:16:40 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"container"}
+Rendering container/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.000100 (10000 reqs/sec) | Rendering: 0.000000 (0%)
+
+
+Processing ContainerController#index (for 127.0.0.1 at Thu Nov 18 04:26:00 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"container"}
+Rendering container/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing ContainerController#index (for 127.0.0.1 at Thu Nov 18 04:45:58 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"container"}
+Rendering container/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.031000 (32 reqs/sec) | Rendering: 0.016000 (51%)
+
+
+Processing ContainerController#index (for 127.0.0.1 at Thu Nov 18 04:46:03 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"container"}
+Rendering container/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.031000 (32 reqs/sec) | Rendering: 0.031000 (100%)
+
+
+Processing ContainerController#index (for 127.0.0.1 at Thu Nov 18 04:49:59 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"container"}
+Rendering container/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.032000 (31 reqs/sec) | Rendering: 0.016000 (50%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 04:52:28 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 04:53:20 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ContainerController#index (for 127.0.0.1 at Thu Nov 18 04:53:25 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"container"}
+Rendering container/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing ContainerController#kernel (for 127.0.0.1 at Thu Nov 18 04:54:35 Pacific Standard Time 2004)
+  Parameters: {"action"=>"kernel", "id"=>nil, "controller"=>"container"}
+Rendering container/kernel within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ContainerController#windsor (for 127.0.0.1 at Thu Nov 18 04:54:39 Pacific Standard Time 2004)
+  Parameters: {"action"=>"windsor", "id"=>nil, "controller"=>"container"}
+Rendering container/windsor within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ContainerController#download (for 127.0.0.1 at Thu Nov 18 04:54:44 Pacific Standard Time 2004)
+  Parameters: {"action"=>"download", "id"=>nil, "controller"=>"container"}
+Rendering container/download within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing ManagementController#index (for 127.0.0.1 at Thu Nov 18 04:59:02 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"management"}
+Rendering management/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing ManagementController#index (for 127.0.0.1 at Thu Nov 18 05:01:26 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"management"}
+Rendering management/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.031000 (32 reqs/sec) | Rendering: 0.031000 (100%)
+
+
+Processing ManagementController#index (for 127.0.0.1 at Thu Nov 18 05:01:34 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"management"}
+Rendering management/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ManagementController#download (for 127.0.0.1 at Thu Nov 18 05:01:51 Pacific Standard Time 2004)
+  Parameters: {"action"=>"download", "id"=>nil, "controller"=>"management"}
+Rendering management/download within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ManagementController#facility (for 127.0.0.1 at Thu Nov 18 05:01:57 Pacific Standard Time 2004)
+  Parameters: {"action"=>"facility", "id"=>nil, "controller"=>"management"}
+Rendering management/facility within layouts/castlelayout
+
+
+ActionView::ActionViewError (No rhtml or rxml template found for management/facility):
+    /gems/actionpack-0.9.5/lib/action_view/base.rb:210:in `pick_template_extension'
+    /gems/actionpack-0.9.5/lib/action_view/base.rb:166:in `render_file'
+    /gems/actionpack-0.9.5/lib/action_controller/layout.rb:142:in `render_without_benchmark'
+    /gems/actionpack-0.9.5/lib/action_controller/benchmarking.rb:22:in `render'
+    /gems/actionpack-0.9.5/lib/action_controller/benchmarking.rb:22:in `measure'
+    /gems/actionpack-0.9.5/lib/action_controller/benchmarking.rb:22:in `render'
+    /gems/actionpack-0.9.5/lib/action_controller/base.rb:578:in `perform_action_without_filters'
+    /gems/actionpack-0.9.5/lib/action_controller/filters.rb:236:in `perform_action_without_benchmark'
+    /gems/actionpack-0.9.5/lib/action_controller/benchmarking.rb:30:in `perform_action_without_rescue'
+    /gems/actionpack-0.9.5/lib/action_controller/benchmarking.rb:30:in `measure'
+    /gems/actionpack-0.9.5/lib/action_controller/benchmarking.rb:30:in `perform_action_without_rescue'
+    /gems/actionpack-0.9.5/lib/action_controller/rescue.rb:68:in `perform_action'
+    /gems/actionpack-0.9.5/lib/action_controller/base.rb:254:in `process'
+    /gems/actionpack-0.9.5/lib/action_controller/base.rb:242:in `process'
+    /gems/rails-0.8.5/lib/dispatcher.rb:35:in `dispatch'
+    E:/dev/projects/digitalgravity/castle/trunk/site/railssite/public/dispatch.rb:10
+    E:/dev/projects/digitalgravity/castle/trunk/site/railssite/public/dispatch.rb:1:in `load'
+    E:/dev/projects/digitalgravity/castle/trunk/site/railssite/public/dispatch.rb:1
+    -:7
+
+
+Rendering c:/dev/ruby/runtime/lib/ruby/gems/1.8/gems/actionpack-0.9.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing ManagementController#facility (for 127.0.0.1 at Thu Nov 18 05:02:58 Pacific Standard Time 2004)
+  Parameters: {"action"=>"facility", "id"=>nil, "controller"=>"management"}
+Rendering management/facility within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing AboutController#index (for 127.0.0.1 at Thu Nov 18 05:03:05 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"about"}
+Rendering about/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ProjectsController#index (for 127.0.0.1 at Thu Nov 18 05:10:56 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"projects"}
+Rendering projects/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing ProjectsController#index (for 127.0.0.1 at Thu Nov 18 05:11:26 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"projects"}
+Rendering projects/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing ProjectsController#index (for 127.0.0.1 at Thu Nov 18 05:11:50 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"projects"}
+Rendering projects/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ProjectsController#index (for 127.0.0.1 at Thu Nov 18 05:12:25 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"projects"}
+Rendering projects/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing ProjectsController#index (for 127.0.0.1 at Thu Nov 18 05:12:45 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"projects"}
+Rendering projects/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.032000 (31 reqs/sec) | Rendering: 0.032000 (100%)
+
+
+Processing ProjectsController#index (for 127.0.0.1 at Thu Nov 18 05:13:05 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"projects"}
+Rendering projects/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 05:13:26 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing CastleonrailsController#index (for 127.0.0.1 at Thu Nov 18 05:14:12 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"castleonrails"}
+Rendering castleonrails/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing CastleonrailsController#index (for 127.0.0.1 at Thu Nov 18 05:17:29 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"castleonrails"}
+Rendering castleonrails/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.031000 (32 reqs/sec) | Rendering: 0.016000 (51%)
+
+
+Processing YamlController#index (for 127.0.0.1 at Thu Nov 18 05:17:34 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"yaml"}
+Rendering yaml/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing FacilitiesController#index (for 127.0.0.1 at Thu Nov 18 05:17:39 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"facilities"}
+Rendering facilities/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.000000 (0%)
+
+
+Processing FacilitiesController#index (for 127.0.0.1 at Thu Nov 18 05:18:55 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"facilities"}
+Rendering facilities/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing FacilitiesController#index (for 127.0.0.1 at Thu Nov 18 05:19:36 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"facilities"}
+Rendering facilities/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing FacilitiesController#index (for 127.0.0.1 at Thu Nov 18 05:20:01 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"facilities"}
+Rendering facilities/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 05:20:13 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.031000 (32 reqs/sec) | Rendering: 0.031000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 05:22:53 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 05:23:06 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.015000 (66 reqs/sec) | Rendering: 0.015000 (100%)
+
+
+Processing HomeController#index (for 127.0.0.1 at Thu Nov 18 05:23:18 Pacific Standard Time 2004)
+  Parameters: {"action"=>"index", "id"=>nil, "controller"=>"home"}
+Rendering home/index within layouts/castlelayout
+Rendering layouts/castlelayout (200 OK)
+Completed in 0.016000 (62 reqs/sec) | Rendering: 0.016000 (100%)
