@@ -1,0 +1,21 @@
+// $ANTLR 2.7.5 (20050128): langlexer.g -> WindsorConfLanguageLexerTokenTypes.txt$
+WindsorConfLanguageLexer    // output token vocab name
+IN="in"=4
+IMPORT="import"=5
+EOS=6
+COLON=7
+NEWLINE=8
+INDENT=9
+DEDENT=10
+ID=11
+DOT=12
+COMMA=13
+INHERITS=14
+LBRACK=15
+RBRACK=16
+DIGIT=17
+INTLIT=18
+CHARLIT=19
+STRING_LITERAL=20
+LEADING_WS=21
+WS=22

@@ -114,6 +114,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "microkernel.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "ComponentActivator\AbstractComponentActivator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
