@@ -7,8 +7,8 @@ First of all, the idea of Castle on Rails is to have Controllers
 to carry on the application logic and requesting data from the model 
 (by dispatch these calls to the appropriate entities), and
 use the view just as a presentation, without any logic different from 
-the view logic. This is very different from how developers usually works
-with ASP.Net.
+the view logic. This is very different from how developers usually use
+ASP.Net.
 
 <h3>Configuration</h3>
 
@@ -107,8 +107,7 @@ namespace AspnetSample.Controllers
 </pre>
 
 <p>
-The controller dispatch the user to a different view by using the 
-RenderView method:
+The controller can use a different view:
 </p>
 
 <pre class="source">
@@ -122,7 +121,7 @@ namespace AspnetSample.Controllers
 	{
 		public void Index()
 		{
-			RenderView("welcome");
+			<b>RenderView("welcome")</b>;
 		}
 	}
 }
@@ -150,8 +149,8 @@ Would be mapped to a method Save that exposes arguments for name and password.
 Please note that the controller uses a heuristic to choose the method, so you can use method overload
 and the controller will choose the method with more arguments that can be satified.
 Basically it gives points to methods, for each argument that can be satisfied, it
-adds more points, for arguments that cannot be matched, it subtract points. Finished this process it will
-choose the method with more points.
+adds more points, for arguments that cannot be matched, it subtract points. After the inspection
+it will pick the method with more points.
 </p>
 
 <p>
@@ -223,7 +222,7 @@ public class index : System.Web.UI.Page, IControllerAware
 {
 	private Controller _controller;
 
-    // implementation of IControllerAware
+	// implementation of IControllerAware
 	public void SetController(Controller controller)
 	{
 		_controller = controller;
@@ -250,7 +249,7 @@ The Response.End is used to avoid the current page to proceed its lifecycle.
 <h3>Windsor integration</h3>
 
 <p>
-As every subprojects of Castle Project, Castle on Rails can be used as a standalone 
+As every subproject of Castle Project, Castle on Rails can be used as a standalone 
 application or you can use it together with the inversion of control container.
 To do so, you only need to use a custom factory for controllers. So instead of inspecting 
 an assembly, the Castle on Rails framework will ask the container for controllers.
@@ -270,7 +269,7 @@ Castle.Windsor" /&gt;
     &lt;/configSections&gt;
 
     &lt;rails&gt;
-		&lt;views path="views" /&gt;
+        &lt;views path="views" /&gt;
         &lt;customControllerFactory 
 type="Castle.CastleOnRails.Engine.WindsorExtension.WindsorControllerFactory, 
 Castle.CastleOnRails.Engine.WindsorExtension" /&gt;
