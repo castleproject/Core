@@ -33,7 +33,8 @@ namespace Castle.MicroKernel
 		/// <see cref="IComponentActivator"/>
 		/// </summary>
 		/// <param name="componentActivator"></param>
-		void Init(IComponentActivator componentActivator);
+		/// <param name="kernel"></param>
+		void Init(IComponentActivator componentActivator, IKernel kernel);
 
 		/// <summary>
 		/// Implementors should return the component instance based 

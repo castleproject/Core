@@ -41,8 +41,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public DefaultNamingSubSystem()
 		{
-			_key2Handler = new HybridDictionary();
-			_service2Handler = new Hashtable();
+			_key2Handler = Hashtable.Synchronized(new Hashtable());
+			_service2Handler = Hashtable.Synchronized(new Hashtable());
 		}
 
 		#region ISubSystem Members

@@ -135,8 +135,24 @@ namespace Castle.MicroKernel.Handlers
 				manager = (ILifestyleManager) 
 					Activator.CreateInstance( ComponentModel.CustomLifestyle );
 			}
+			else if (ComponentModel.LifestyleType == LifestyleType.Pooled)
+			{
+				int initial = ExtendedPropertiesConstants.Pool_Default_InitialPoolSize;
+				int maxSize = ExtendedPropertiesConstants.Pool_Default_MaxPoolSize;
 
-			manager.Init( activator );
+				if (ComponentModel.ExtendedProperties.Contains(ExtendedPropertiesConstants.Pool_InitialPoolSize))
+				{
+					initial = (int) ComponentModel.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize];
+				}
+				if (ComponentModel.ExtendedProperties.Contains(ExtendedPropertiesConstants.Pool_MaxPoolSize))
+				{
+					maxSize = (int) ComponentModel.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize];
+				}
+
+				manager = new Lifestyle.PoolableLifestyleManager(initial, maxSize);
+			}
+
+			manager.Init( activator, Kernel );
 
 			return manager;
 		}

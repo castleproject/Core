@@ -70,6 +70,11 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 							Enum.Parse(typeof(LifestyleType), lifestyle, true);
 
 						model.LifestyleType = type;
+
+						if (model.LifestyleType == LifestyleType.Pooled)
+						{
+							ExtractPoolConfig(model);
+						}
 					}
 					catch(Exception ex)
 					{
@@ -85,6 +90,21 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			}
 
 			return false;
+		}
+
+		private void ExtractPoolConfig(ComponentModel model)
+		{
+			String initial = model.Configuration.Attributes["initialPoolSize"];
+			String maxSize = model.Configuration.Attributes["maxPoolSize"];
+	
+			if (initial != null)
+			{
+				model.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize] = Convert.ToInt32(initial);
+			}
+			if (maxSize != null)
+			{
+				model.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize] = Convert.ToInt32(maxSize);
+			}
 		}
 
 		/// <summary>
@@ -109,6 +129,12 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 					CustomLifestyleAttribute custom = (CustomLifestyleAttribute)
 						attribute;
 					model.CustomLifestyle = custom.LifestyleHandlerType;
+				}
+				else if (model.LifestyleType == LifestyleType.Pooled)
+				{
+					PooledAttribute pooled = (PooledAttribute) attribute;
+					model.ExtendedProperties[ExtendedPropertiesConstants.Pool_InitialPoolSize] = pooled.InitialPoolSize;
+					model.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize] = pooled.MaxPoolSize;
 				}
 			}
 		}

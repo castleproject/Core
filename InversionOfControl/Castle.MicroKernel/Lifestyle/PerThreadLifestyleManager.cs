@@ -61,12 +61,12 @@ namespace Castle.MicroKernel.Lifestyle
 					Thread.SetData( _slot, map );
 				}
 
-				Object instance = map[ _componentFactory ];
+				Object instance = map[ ComponentActivator ];
 
 				if ( instance == null )
 				{
 					instance = base.Resolve();
-					map.Add( _componentFactory, instance );
+					map.Add( ComponentActivator, instance );
 					_instances.Add( instance );
 				}
 

@@ -12,32 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Releasers
+namespace Castle.Model
 {
 	using System;
 
-	using Castle.Model;
-
 	/// <summary>
-	/// Only tracks components that have decommission steps
-	/// registered
+	/// Only called for components that 
+	/// belongs to a pool when the component
+	/// comes back to the pool.
 	/// </summary>
-	[Serializable]
-	public class LifecycledComponentsReleasePolicy : AllComponentsReleasePolicy
+	public interface IRecyclable
 	{
-		public LifecycledComponentsReleasePolicy()
-		{
-		}
-
-		public override void Track(object instance, IHandler handler)
-		{
-			ComponentModel model = handler.ComponentModel;
-
-			if (model.LifecycleSteps.HasDecommissionSteps || 
-				model.LifestyleType == LifestyleType.Pooled)
-			{
-				base.Track(instance, handler);
-			}
-		}
+		/// <summary>
+		/// Implementors should perform any 
+		/// initialization/clean up.
+		/// </summary>
+		void Recycle();
 	}
 }

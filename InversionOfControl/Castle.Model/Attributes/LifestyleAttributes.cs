@@ -78,6 +78,41 @@ namespace Castle.Model
 
 	/// <summary>
 	/// Indicates that the target components wants a
+	/// pooled lifestyle.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
+	public class PooledAttribute : LifestyleAttribute
+	{
+		private static readonly int Initial_PoolSize = 5;
+		private static readonly int Max_PoolSize = 15;
+		
+		private readonly int _initialPoolSize;
+		private readonly int _maxPoolSize;
+
+		public PooledAttribute() : this(Initial_PoolSize, Max_PoolSize)
+		{
+			
+		}
+
+		public PooledAttribute(int initialPoolSize, int maxPoolSize) : base(LifestyleType.Pooled)
+		{
+			_initialPoolSize = initialPoolSize;
+			_maxPoolSize = maxPoolSize;
+		}
+
+		public int InitialPoolSize
+		{
+			get { return _initialPoolSize; }
+		}
+
+		public int MaxPoolSize
+		{
+			get { return _maxPoolSize; }
+		}
+	}
+
+	/// <summary>
+	/// Indicates that the target components wants a
 	/// custom lifestyle.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]

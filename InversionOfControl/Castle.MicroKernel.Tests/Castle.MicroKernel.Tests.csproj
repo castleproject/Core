@@ -270,6 +270,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Pools\MultithreadedPooledTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Pools\PoolableComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Pools\PooledLifestyleManagerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubContainers\SubContainersTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -12,32 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel.Releasers
+namespace Castle.MicroKernel.Tests.Pools
 {
 	using System;
 
 	using Castle.Model;
 
-	/// <summary>
-	/// Only tracks components that have decommission steps
-	/// registered
-	/// </summary>
-	[Serializable]
-	public class LifecycledComponentsReleasePolicy : AllComponentsReleasePolicy
+	[Pooled(2, 5)]
+	public class PoolableComponent1
 	{
-		public LifecycledComponentsReleasePolicy()
+		public PoolableComponent1()
 		{
-		}
-
-		public override void Track(object instance, IHandler handler)
-		{
-			ComponentModel model = handler.ComponentModel;
-
-			if (model.LifecycleSteps.HasDecommissionSteps || 
-				model.LifestyleType == LifestyleType.Pooled)
-			{
-				base.Track(instance, handler);
-			}
 		}
 	}
 }

@@ -16,7 +16,6 @@ namespace Castle.MicroKernel.Releasers
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Summary description for AllComponentsReleasePolicy.
@@ -24,7 +23,7 @@ namespace Castle.MicroKernel.Releasers
 	[Serializable]
 	public class AllComponentsReleasePolicy : IReleasePolicy
 	{
-		private IDictionary _instance2Handler = new HybridDictionary();
+		private IDictionary _instance2Handler = Hashtable.Synchronized(new Hashtable());
 
 		public AllComponentsReleasePolicy()
 		{

@@ -31,7 +31,7 @@ namespace Castle.MicroKernel.Lifestyle
 
 		public override object Resolve()
 		{
-			lock(_componentFactory)
+			lock(ComponentActivator)
 			{
 				if (_instance == null)
 				{

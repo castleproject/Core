@@ -144,7 +144,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Lifecycle\LifecycleInterfaces.cs"
+                    RelPath = "Lifecycle\IInitializable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Lifecycle\IRecyclable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Lifecycle\IStartable.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

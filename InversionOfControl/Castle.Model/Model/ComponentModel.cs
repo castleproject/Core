@@ -42,7 +42,14 @@ namespace Castle.Model
 		/// Transient components are created on demand.
 		/// </summary>
 		Transient,
-		
+		/// <summary>
+		/// Optimization of transient components that keeps
+		/// instance in a pool instead of always creating them.
+		/// </summary>
+		Pooled,
+		/// <summary>
+		/// Any other logic to create/release components.
+		/// </summary>
 		Custom
 	}
 

@@ -233,12 +233,42 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Lifestyle\PoolableLifestyleManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifestyle\SingletonLifestyleManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Lifestyle\TransientLifestyleManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Lifestyle\Pool\DefaultPool.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Lifestyle\Pool\DefaultPoolFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Lifestyle\Pool\IPool.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Lifestyle\Pool\IPoolFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Lifestyle\Pool\PoolException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -269,6 +299,11 @@
                 />
                 <File
                     RelPath = "ModelBuilder\Inspectors\ConstructorDependenciesModelInspector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ModelBuilder\Inspectors\ExtendedPropertiesConstants.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,30 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.MicroKernel
 {
 	using System;
 
 	/// <summary>
-	/// Lifecycle interface. If implemented by a component,
-	/// the method Initialized will be invoked by the container
-	/// before making the component available to the external world.
+	/// Only to hold internal constants and get rid of 
+	/// magic numbers and hardcode names.
 	/// </summary>
-	public interface IInitializable
+	internal abstract class ExtendedPropertiesConstants
 	{
-		/// <summary>
-		/// Implementors should perform any initialization logic.
-		/// </summary>
-		void Initialize();
-	}
+		public static readonly int Pool_Default_MaxPoolSize = 15;
 
-	/// <summary>
-	/// Interface for components that wish to be started by the container
-	/// </summary>
-	public interface IStartable
-	{
-		void Start();
+		public static readonly int Pool_Default_InitialPoolSize = 5;
 
-		void Stop();
+		public static readonly String Pool_MaxPoolSize = "pool.max.pool.size";
+
+		public static readonly String Pool_InitialPoolSize = "pool.initial.pool.size";
 	}
 }
