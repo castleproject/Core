@@ -4,7 +4,7 @@
 	<property name="base.dir" value="." />
 	<property name="version" value="beta-1" />
 
-	<target name="build" depends="init, tools, container, activerecord, rails, services, facilities, components, samples" />
+	<target name="build" depends="init, tools, components, container, activerecord, rails, services, facilities, samples" />
 	
 	<target name="init">
 
