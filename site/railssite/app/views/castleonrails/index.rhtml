@@ -1,8 +1,62 @@
 <% @page_title = "Castle on Rails" %>
 <% @subarea = "Castle on Rails" %>
 <% @main_title = "Castle on Rails" %>
-<%= render "/home/deflinks" %>
+<%= render "/castleonrails/deflinks" %>
 
+Castle on Rails is an attempt to provide a port of 
+<a href="http://ap.rubyonrails.org">Action Pack</a> (and maybe a 
+similar approach for <a href="http://ap.rubyonrails.org">Active Record</a>) 
+for .Net. Action Pack way of development
+is extremelly productive, its very intuitive and easily testable.
+
+<p>
+The current alpha release of Castle on Rails is a proof-of-concept. So its not intended to
+go to a production environment.
+</p>
+
+<h3>Task list</h3>
+
+<p>The following points are being discussed on the mailing list:</p>
+
+<p>
+  <ul>
+    <li>Abstract the ASP.Net objects (Request, Response, Session etc): 
+    This is important so we can have a more independent framework thus easily testable
+    and adaptable to different environments. This can be tricky as the ViewEngine for ASP.Net
+    requires the HttpContext.
+    </li>
+  </ul>
+  <ul>
+    <li>Controllers mapping: instead of using the name of the controller in the URL, 
+    the controllers classes could expose an attribute to specify their name and even a bigger 
+    context that they belong, like Area or section.
+    </li>
+  </ul>
+  <ul>
+    <li>
+    Controllers must be able to pass on instance values: This can be accomplished 
+    by inspecting the fields/properties in the controller and transfer them to the view instance
+    or using a property bag or similar construction.
+    </li>
+  </ul>
+  <ul>
+    <li>
+    Integration with Windsor: Done. However the controller must be Transient (instead of singleton), 
+    so a facility must be developed to ensure that.
+    </li>
+  </ul>
+  <ul>
+    <li>
+    An script to generate the project skeleton or the controller skeleton might be useful: No 
+    sure about how valuable will be this one, but should be done using CodeDOM, so the user can specify
+    the language throught a command line argument.
+    </li>
+  </ul>
+</p>
+
+
+
+<h3>Download</h3>
 
 <a href="http://sourceforge.net/project/showfiles.php?group_id=124416">
 Releases</a> at SourceForge.

@@ -5,5 +5,8 @@ class CastleonrailsController < AbstractApplicationController
 
   def index
   end
+  
+  def howtouse
+  end
 
 end
