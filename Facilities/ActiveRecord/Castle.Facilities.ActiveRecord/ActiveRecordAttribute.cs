@@ -20,6 +20,7 @@ namespace Castle.Facilities.ActiveRecord
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class ActiveRecordAttribute : Attribute
 	{ 
+		private Type _activeTableType = typeof(ActiveTable);
 		private string _table;
 		private string _schema;
 		private string _proxy;
@@ -37,6 +38,12 @@ namespace Castle.Facilities.ActiveRecord
 		{
 			_table = table;
 			_schema = schema;
+		}
+
+		public Type ActiveTableType
+		{
+			get { return _activeTableType; }
+			set { _activeTableType = value; }
 		}
 
 		public string Table

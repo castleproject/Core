@@ -14,17 +14,17 @@
 
 namespace Castle.Facilities.ActiveRecord.Tests.Model1
 {
+	using System;
 	using System.Collections;
 
 	using Castle.Facilities.ActiveRecord;
 
-	/// <summary>
-	/// Summary description for Order.
-	/// </summary>
-	[ActiveRecord]
-	public class Order
+
+	[ActiveRecord( ActiveTableType=typeof(OrderDao) )]
+	public class Order : ActiveRecordBase
 	{
 		private int _id;
+		private String _description;
 		private IList _items;
 
 		public Order()
@@ -35,6 +35,12 @@ namespace Castle.Facilities.ActiveRecord.Tests.Model1
 		{
 			get { return _id; }
 			set { _id = value; }
+		}
+
+		public String Description
+		{
+			get { return _description; }
+			set { _description = value; }
 		}
 
 		[HasMany( typeof(OrderItem), Key = "order_id" )]

@@ -12,36 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord.Tests
+namespace Castle.Facilities.ActiveRecord
 {
-	using NHibernate;
-	using NHibernate.Cfg;
-	using NHibernate.Dialect;
-	using NHibernate.Tool.hbm2ddl;
-	
-	using NUnit.Framework;
+	using System;
 
 
-	public abstract class BaseTestFixture
+	public abstract class ActiveRecordBase
 	{
-		protected Configuration cfg;
-		protected Dialect dialect;
-		protected ISessionFactory sessions;
-
-		[TearDown]
-		public void Teardown()
+		public virtual void Save()
 		{
-			DropSchema();
+			
 		}
 
-		public void ExportSchema()
+		public virtual void Create()
 		{
-			new SchemaExport( cfg ).Create( true, true );
+			
 		}
 
-		public void DropSchema()
+		public virtual void Update()
 		{
-			new SchemaExport( cfg ).Drop( true, true );
+			
+		}
+
+		public virtual void Delete()
+		{
+			
 		}
 	}
 }

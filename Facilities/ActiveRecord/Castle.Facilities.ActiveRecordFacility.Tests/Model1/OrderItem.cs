@@ -16,12 +16,12 @@ namespace Castle.Facilities.ActiveRecord.Tests.Model1
 {
 	using Castle.Facilities.ActiveRecord;
 
-	/// <summary>
-	/// Summary description for OrderItem.
-	/// </summary>
-	public class OrderItem
+
+	[ActiveRecord]
+	public class OrderItem : ActiveRecordBase
 	{
 		private int _id;
+		private int _quantity;
 		private Order _parent;
 		private Product _product;
 
@@ -33,6 +33,12 @@ namespace Castle.Facilities.ActiveRecord.Tests.Model1
 		{
 			get { return _id; }
 			set { _id = value; }
+		}
+
+		public int Quantity
+		{
+			get { return _quantity; }
+			set { _quantity = value; }
 		}
 
 		[BelongsTo( typeof(Order) )]

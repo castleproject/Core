@@ -14,16 +14,31 @@
 
 namespace Castle.Facilities.ActiveRecord.Tests.Model1
 {
+	using System;
+
 	using Castle.Facilities.ActiveRecord;
 
-	/// <summary>
-	/// Summary description for Product.
-	/// </summary>
+
 	[ActiveRecord]
-	public class Product
+	public class Product : ActiveRecordBase
 	{
+		private String _name;
+		private Decimal _price;
+
 		public Product()
 		{
+		}
+
+		public string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
+		public decimal Price
+		{
+			get { return _price; }
+			set { _price = value; }
 		}
 	}
 }

@@ -27,6 +27,6 @@ namespace Castle.Facilities.ActiveRecord.Tests
 	[TestFixture]
 	public class Model1TestCase
 	{
-
+		
 	}
 }

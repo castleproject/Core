@@ -115,6 +115,21 @@
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
                 />
+                <Reference
+                    Name = "Castle.Facilities.NHibernateIntegration"
+                    AssemblyName = "Castle.Facilities.NHibernateIntegration"
+                    HintPath = "..\..\NHibernate\bin\Castle.Facilities.NHibernateIntegration.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.AutomaticTransactionManagement"
+                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
+                    HintPath = "..\..\NHibernate\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.NHibernateExtension"
+                    AssemblyName = "Castle.Facilities.NHibernateExtension"
+                    HintPath = "..\..\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -136,6 +151,11 @@
                 />
                 <File
                     RelPath = "Model1\Order.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model1\OrderDao.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
