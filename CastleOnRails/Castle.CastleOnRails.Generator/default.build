@@ -25,7 +25,7 @@
 		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG"
-			target="library" 
+			target="exe" 
 			debug="${debug}"
 			optimize="${optimize}"
 			output="${bin.dir}/${assembly.name}">

@@ -225,6 +225,9 @@ namespace Castle.CastleOnRails.Generator.Generators
 			if (isNVelocity)
 			{
 				CopyFileToLib(sourcedir, "Castle.CastleOnRails.Framework.Views.NVelocity.dll");
+				CopyFileToLib(sourcedir, "Commons.dll");
+				CopyFileToLib(sourcedir, "log4net.dll");
+				CopyFileToLib(sourcedir, "NVelocity.dll");
 			}
 
 			if (useWindsorIntegration)
@@ -234,9 +237,6 @@ namespace Castle.CastleOnRails.Generator.Generators
 				CopyFileToLib(sourcedir, "Castle.MicroKernel.dll");
 				CopyFileToLib(sourcedir, "Castle.Model.dll");
 				CopyFileToLib(sourcedir, "Castle.Windsor.dll");
-				CopyFileToLib(sourcedir, "Commons.dll");
-				CopyFileToLib(sourcedir, "log4net.dll");
-				CopyFileToLib(sourcedir, "NVelocity.dll");
 			}
 		}
 

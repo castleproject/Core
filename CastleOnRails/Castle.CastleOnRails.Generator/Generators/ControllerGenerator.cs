@@ -320,6 +320,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 			unit.Namespaces.Add(thisNs);
 			thisNs.Imports.Add(new CodeNamespaceImport("System"));
 			thisNs.Imports.Add(new CodeNamespaceImport("System.Net"));
+			thisNs.Imports.Add(new CodeNamespaceImport("NUnit.Framework"));
 			thisNs.Comments.Add(new CodeCommentStatement("Ignore the above comment or better, delete it"));
 	
 			CodeTypeDeclaration controllerType = new CodeTypeDeclaration(name + "TestCase");
