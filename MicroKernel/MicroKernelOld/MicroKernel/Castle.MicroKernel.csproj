@@ -79,11 +79,6 @@
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
-                <Reference
-                    Name = "Apache.Avalon.Framework"
-                    AssemblyName = "Apache.Avalon.Framework"
-                    HintPath = "..\..\bin\Apache.Avalon.Framework.dll"
-                />
             </References>
         </Build>
         <Files>
