@@ -38,6 +38,7 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 		public const int ID = 11;
 		public const int DOT = 12;
 		public const int STRING_LITERAL = 13;
+		public const int DATA = 14;
 		
 		
     protected StringBuilder sbuilder = new StringBuilder();
@@ -364,6 +365,7 @@ _loop19_breakloop:				;
 		String value;
 		
 		IToken  valueToken = null;
+		IToken  valueToken2 = null;
 		IToken  id = null;
 		IToken  id2 = null;
 		IToken  id3 = null;
@@ -383,6 +385,19 @@ _loop19_breakloop:				;
 					{
 						
 									String val = valueToken.getText();
+									sbuilder.Append(val);
+								
+					}
+					break;
+				}
+				case DATA:
+				{
+					valueToken2 = LT(1);
+					match(DATA);
+					if (0==inputState.guessing)
+					{
+						
+									String val = valueToken2.getText();
 									sbuilder.Append(val);
 								
 					}
@@ -528,7 +543,8 @@ _loop25_breakloop:						;
 		@"""DEDENT""",
 		@"""ID""",
 		@"""DOT""",
-		@"""STRING_LITERAL"""
+		@"""STRING_LITERAL""",
+		@"""DATA"""
 	};
 	
 	private static long[] mk_tokenSet_0_()

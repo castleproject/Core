@@ -16,12 +16,13 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 		public const int ID = 11;
 		public const int DOT = 12;
 		public const int STRING_LITERAL = 13;
-		public const int COMMA = 14;
-		public const int LLITERAL = 15;
-		public const int RLITERAL = 16;
-		public const int SL_COMMENT = 17;
-		public const int LEADING_WS = 18;
-		public const int WS = 19;
+		public const int DATA = 14;
+		public const int COMMA = 15;
+		public const int LLITERAL = 16;
+		public const int RLITERAL = 17;
+		public const int SL_COMMENT = 18;
+		public const int LEADING_WS = 19;
+		public const int WS = 20;
 		
 	}
 }

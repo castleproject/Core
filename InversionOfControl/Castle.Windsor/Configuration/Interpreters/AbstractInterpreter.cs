@@ -18,7 +18,10 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 	using Castle.MicroKernel;
 
+	using Castle.Model.Configuration;
+
 	using Castle.Windsor.Configuration.Sources;
+	using Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal;
 
 	/// <summary>
 	/// 
@@ -26,6 +29,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 	public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
 		private IConfigurationSource _source;
+		private ImportDirectiveCollection _imports = new ImportDirectiveCollection();
 
 		public AbstractInterpreter(IConfigurationSource source)
 		{
@@ -45,6 +49,20 @@ namespace Castle.Windsor.Configuration.Interpreters
 		public IConfigurationSource Source
 		{
 			get { return _source; }
+		}
+
+		public ImportDirectiveCollection Imports
+		{
+			get { return _imports; }
+			set { _imports = value; }
+		}
+
+		protected void AddFacilityConfig(IConfiguration facility, IConfigurationStore store)
+		{
+		}
+
+		protected void AddComponentConfig(IConfiguration component, IConfigurationStore store)
+		{
 		}
 
 		/// <summary>

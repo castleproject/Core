@@ -20,6 +20,7 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 		public const int ID = 11;
 		public const int DOT = 12;
 		public const int STRING_LITERAL = 13;
+		public const int DATA = 14;
 		
 	}
 }

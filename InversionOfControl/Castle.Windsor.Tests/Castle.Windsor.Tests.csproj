@@ -124,6 +124,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "ConfigContents2.lang"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "InterceptorsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -158,7 +162,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\XmlConfigurationStoreTestCase.cs"
+                    RelPath = "Configuration\ConfigLangTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\XmlInterpreterTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -26,10 +26,10 @@ namespace Castle.Windsor.Tests.Configuration
 	using Castle.Windsor.Configuration.Sources;
 
 	/// <summary>
-	/// Summary description for AppDomainConfigurationStoreTestCase.
+	/// Summary description for AppDomainConfigSourceTestCase.
 	/// </summary>
 	[TestFixture]
-	public class AppDomainConfigurationStoreTestCase
+	public class AppDomainConfigSourceTestCase
 	{
 		[Test]
 		public void ProperDeserialization()

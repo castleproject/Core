@@ -34,6 +34,30 @@ STRING_LITERAL :
 	(~('"'|'\n'))* '"'!
 	;
 
+DATA
+	:	
+	"<<"!
+	{
+	implicitLineJoiningLevel++;
+	}
+	(
+			/* See comment in WS.  Language for combining any flavor
+			 * newline is ambiguous.  Shutting off the warning.
+			 */
+			options {
+				generateAmbigWarnings=false;
+			}
+		:	
+			'\r' '\n'		{newline();}
+		|	'\r'			{newline();}
+		|	'\n'			{newline();}
+		|	~('>')
+		)+ 
+	">>"!
+	{
+	implicitLineJoiningLevel--;
+	}
+	;
 
 /** 
  *  Grab everything before a real symbol.  Then if newline, kill it

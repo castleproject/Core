@@ -68,10 +68,9 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 		}
 
 		[Test]
-		[Ignore("Need to fix this")]
 		public void MultipleLinesLiterals()
 		{
-			String contents = "container: \r\n  item: <  value\r\n super\r\n value\r\n>\r\n  item2: value2\r\n";
+			String contents = "container: \r\n  item: <<  value\r\n super\r\n value\r\n>>\r\n  item2: value2\r\n";
 
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
@@ -83,7 +82,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			Assert.AreEqual(0, conf.Imports.Count);
 			Assert.IsNotNull(conf.Root);
 			Assert.IsNotNull(conf.Root.Children["container"]);
-			Assert.AreEqual("value super value", conf.Root.Children["container"].Attributes["item"]);
+			Assert.AreEqual("  value\r\n super\r\n value\r\n", conf.Root.Children["container"].Attributes["item"]);
 			Assert.AreEqual("value2", conf.Root.Children["container"].Attributes["item2"]);
 			Assert.AreEqual(2, conf.Root.Children["container"].Attributes.Count);
 		}

@@ -131,6 +131,11 @@ value returns [String value]
 			String val = valueToken.getText();
 			sbuilder.Append(val);
 		} |
+		valueToken2:DATA
+		{
+			String val = valueToken2.getText();
+			sbuilder.Append(val);
+		} |
 		id:ID			
 		{					
 			sbuilder.Append(id.getText());
