@@ -102,10 +102,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			m_typeBuilder = moduleBuilder.DefineType(
 				typeName, flags, baseType, interfaces);
 
-			GenerateFields();
-
-			m_constBuilder = GenerateConstructor();
-
 			return m_typeBuilder;
 		}
 
@@ -116,17 +112,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				FieldAttributes.Family|FieldAttributes.NotSerialized);
 		}
 
-		protected virtual String GenerateTypeName(Type type, Type[] interfaces)
-		{
-			StringBuilder sb = new StringBuilder();
-			foreach (Type inter in interfaces)
-			{
-				sb.Append('_');
-				sb.Append(inter.Name);
-			}
-			/// Naive implementation
-			return String.Format("ProxyType{0}{1}", type.Name, sb.ToString());
-		}
+		protected abstract String GenerateTypeName(Type type, Type[] interfaces);
 
 		protected virtual void ImplementGetObjectData()
 		{

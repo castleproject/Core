@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
+	using System.Text;
 	using System.Collections;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -32,6 +33,18 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		public InterfaceProxyGenerator(ModuleScope scope, GeneratorContext context) : base(scope, context)
 		{
+		}
+
+		protected override String GenerateTypeName(Type type, Type[] interfaces)
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (Type inter in interfaces)
+			{
+				sb.Append('_');
+				sb.Append(inter.Name);
+			}
+			/// Naive implementation
+			return String.Format("ProxyInterface{0}{1}", type.Name, sb.ToString());
 		}
 
 		protected override void GenerateFields()
@@ -172,10 +185,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			CreateTypeBuilder( typeof(Object), interfaces );
+			GenerateFields();
+			GenerateConstructor();
 			ImplementGetObjectData();
 			ImplementCacheInvocationCache();
 			GenerateInterfaceImplementation( interfaces );
-//			EnhanceType();
 			return CreateType();
 		}
 
