@@ -90,11 +90,6 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilities.ActiveRecord"
-                    Project = "{46567A8A-4413-495A-8195-EA0AE879AD74}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"

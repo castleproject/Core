@@ -19,22 +19,49 @@ namespace Castle.Facilities.ActiveRecordGenerator
 
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
-	
-	public delegate void ProjectReplaceDelegate(object sender, Project oldProject, Project newProject);
 
-	public delegate void ProjectDelegate(object sender, Project project);
-
-
-	public interface IApplicationModel
+	public class ApplicationModel : IApplicationModel
 	{
-		Project CurrentProject { get; set; }
+		private IWin32Window _window;
+		private Project _project;
 
-		IWin32Window MainWindow { get; set; }
+		public ApplicationModel()
+		{
+		}
 
-		event ProjectReplaceDelegate OnProjectReplaced;
+		#region IApplicationModel Members
 
-		event ProjectDelegate OnProjectChanged;
+		public Project CurrentProject
+		{
+			get { return _project; }
+			set
+			{
+				if (OnProjectReplaced != null)
+				{
+					OnProjectReplaced(this, _project, value);
+				}
+				_project = value;
+			}
+		}
+
+		public IWin32Window MainWindow
+		{
+			get { return _window; }
+			set { _window = value; }
+		}
+
+		public void UpdateViews()
+		{
+			if (OnProjectChanged != null)
+			{
+				OnProjectChanged(this, _project);
+			}
+		}
+
+		public event ProjectReplaceDelegate OnProjectReplaced;
 		
-		void UpdateViews();
+		public event ProjectDelegate OnProjectChanged;
+
+		#endregion
 	}
 }

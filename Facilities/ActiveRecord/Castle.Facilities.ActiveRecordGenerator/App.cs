@@ -1,4 +1,3 @@
-using Castle.Facilities.ActiveRecordGenerator.Action.Standard;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +15,16 @@ using Castle.Facilities.ActiveRecordGenerator.Action.Standard;
 namespace Castle.Facilities.ActiveRecordGenerator
 {
 	using System;
-	using System.Windows.Forms;
+
+	using Castle.MicroKernel;
 
 	using Castle.Facilities.TypedFactory;
-
 	using Castle.Facilities.ActiveRecordGenerator.Forms;
 	using Castle.Facilities.ActiveRecordGenerator.Components;
 	using Castle.Facilities.ActiveRecordGenerator.Action;
+	using Castle.Facilities.ActiveRecordGenerator.Action.Standard;
+
+	using Castle.Components.Winforms.AssemblyResolver;
 
 
 	public class App
@@ -33,36 +35,63 @@ namespace Castle.Facilities.ActiveRecordGenerator
 			ActiveRecordGeneratorContainer container = new ActiveRecordGeneratorContainer();
 
 			AddFacilities(container);
-
 			AddComponents(container);
-
 			StartApplication(container);
 		}
 
 		private static void StartApplication(ActiveRecordGeneratorContainer container)
 		{
-			MainForm form = (MainForm) container[ typeof(MainForm) ];
-	
-			Application.Run(form);
 		}
 
 		private static void AddComponents(ActiveRecordGeneratorContainer container)
 		{
+			AddForms(container);
+
+			AddActions(container);
+
+			AddMvcComponents(container);
+
+			container.AddComponent( "assembly.resolver", typeof(AssemblyResolverComponent) );
+		}
+
+		private static void AddMvcComponents(ActiveRecordGeneratorContainer container)
+		{
+			container.AddComponent( "controller", 
+				typeof(IApplicationController), typeof(ApplicationController) );
+			container.AddComponent( "model", 
+				typeof(IApplicationModel), typeof(ApplicationModel) );
+		}
+
+		private static void AddActions(ActiveRecordGeneratorContainer container)
+		{
+			container.AddComponent( ActionConstants.New_Project, 
+				typeof(IAction), typeof(NewProjectAction) );
+			container.AddComponent( ActionConstants.Exit, 
+				typeof(IAction), typeof(ExitAction) );
+		}
+
+		private static void AddForms(ActiveRecordGeneratorContainer container)
+		{
 			container.AddComponent("newproject.form", typeof(NewProjectForm));
 			container.AddComponent("mainform.form", typeof(MainForm));
-
-			container.AddComponent( ActionConstants.New_Project, typeof(IAction), typeof(NewProjectAction) );
-			container.AddComponent( ActionConstants.Exit, typeof(IAction), typeof(ExitAction) );
 		}
 
 		private static void AddFacilities(ActiveRecordGeneratorContainer container)
 		{
-			TypedFactoryFacility typedFactory = new TypedFactoryFacility();
-	
-			container.AddFacility( "typedFactory", typedFactory );
+			IFacility[] facilities = container.Kernel.GetFacilities();
 
-			typedFactory.AddTypedFactoryEntry( 
-				new FactoryEntry("action.factory", typeof(IActionFactory), "Create", "") );
+			foreach(IFacility facility in facilities)
+			{
+				TypedFactoryFacility typedFactory = (facility as TypedFactoryFacility);
+
+				if (typedFactory != null)
+				{
+					typedFactory.AddTypedFactoryEntry( 
+						new FactoryEntry("action.factory", typeof(IActionFactory), "Create", "") );
+		
+					break;
+				}
+			}
 		}
 	}
 }

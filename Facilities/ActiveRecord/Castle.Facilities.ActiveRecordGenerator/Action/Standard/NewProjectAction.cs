@@ -51,6 +51,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 			if (_newProjectForm.ShowDialog(model.MainWindow) == DialogResult.OK)
 			{
 				model.CurrentProject = _newProjectForm.Project;
+
+				model.CurrentProject.RefreshDatabaseDefinition();
+
+				model.UpdateViews();
 			}
 			
 			return null;

@@ -19,8 +19,16 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 
 	public class ColumnDefinition
 	{
-		public ColumnDefinition()
+		private String _name;
+
+		public ColumnDefinition( String name )
 		{
+			_name = name;
+		}
+
+		public String Name
+		{
+			get { return _name; }
 		}
 	}
 }

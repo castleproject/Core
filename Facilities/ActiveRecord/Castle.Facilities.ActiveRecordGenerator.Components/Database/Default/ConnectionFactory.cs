@@ -12,29 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator
+namespace Castle.Facilities.ActiveRecordGenerator.Components.Database.Default
 {
 	using System;
-	using System.Windows.Forms;
-
+	using System.Data;
+	using System.Data.OleDb;
+	
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
-	
-	public delegate void ProjectReplaceDelegate(object sender, Project oldProject, Project newProject);
-
-	public delegate void ProjectDelegate(object sender, Project project);
-
-
-	public interface IApplicationModel
+	public class ConnectionFactory : IConnectionFactory
 	{
-		Project CurrentProject { get; set; }
+		public OleDbConnection CreateConnection(Project project)
+		{
+//			Type driverType = Type.GetType(project.Driver, false, false);
+//
+//			if (driverType == null)
+//			{
+//				throw new ApplicationException("Could not load driver type");
+//			}
 
-		IWin32Window MainWindow { get; set; }
-
-		event ProjectReplaceDelegate OnProjectReplaced;
-
-		event ProjectDelegate OnProjectChanged;
-		
-		void UpdateViews();
+			try
+			{
+				OleDbConnection conn = new OleDbConnection(project.ConnectionString);
+				conn.Open();
+				return conn;
+			}
+			catch(Exception ex)
+			{
+				throw ex;
+			}
+		}
 	}
 }

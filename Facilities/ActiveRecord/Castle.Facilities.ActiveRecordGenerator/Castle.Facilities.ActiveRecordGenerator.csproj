@@ -126,6 +126,28 @@
                     AssemblyName = "Castle.Components.Winforms.AssemblyResolver"
                     HintPath = "..\..\..\Components\Winforms\AssemblyResolverDialog\bin\Castle.Components.Winforms.AssemblyResolver.dll"
                 />
+                <Reference
+                    Name = "adodb"
+                    AssemblyName = "adodb"
+                    HintPath = "C:\Program Files\Microsoft.NET\Primary Interop Assemblies\adodb.dll"
+                    AssemblyFolderKey = "hklm\primary interop assemblies"
+                />
+                <Reference
+                    Name = "MSDASC"
+                    Guid = "{2206CEB0-19C1-11D1-89E0-00C04FD7A829}"
+                    VersionMajor = "1"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "OLEDBError"
+                    Guid = "{C8B522D5-5CF3-11CE-ADE5-00AA0044773D}"
+                    VersionMajor = "1"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
             </References>
         </Build>
         <Files>
@@ -145,11 +167,31 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "ApplicationController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ApplicationModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IApplicationController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IApplicationModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -192,6 +234,76 @@
                     RelPath = "Forms\NewProjectForm.resx"
                     DependentUpon = "NewProjectForm.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\Views\ProjectExplorerView.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Icons\cl1.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\cl2.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\cl3.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\cl4.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\cl5.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\cl6.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\cl7.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db1.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db2.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db3.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db4.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db5.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db6.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db7.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\db8.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Icons\ImageConstants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Utils\Pair.cs"

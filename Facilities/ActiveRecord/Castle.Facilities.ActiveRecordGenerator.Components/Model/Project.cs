@@ -17,9 +17,13 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 	using System;
 	using System.Collections;
 
+	using Castle.Model;
+
+	using Castle.Facilities.ActiveRecordGenerator.Database;
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
 
 
+	[Transient]
 	public class Project
 	{
 		private String _name;
@@ -27,39 +31,41 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		private String _driver;
 		private String _connectionString;
 		private String _namespace;
-		private IList _activeRecordDescriptors = new ArrayList();
 		private CodeProviderInfo _codeProvider;		
 		private DatabaseDefinition _dbDefinition;
+		private IList _activeRecordDescriptors = new ArrayList();
+		private IDatabaseDefinitionBuilder _definitionBuilder;
 
-		public Project()
+		public Project(IDatabaseDefinitionBuilder definitionBuilder)
 		{
+			_definitionBuilder = definitionBuilder;
 		}
 
-		public string Name
+		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
 		}
 
-		public string Location
+		public String Location
 		{
 			get { return _location; }
 			set { _location = value; }
 		}
 
-		public string Driver
+		public String Driver
 		{
 			get { return _driver; }
 			set { _driver = value; }
 		}
 
-		public string ConnectionString
+		public String ConnectionString
 		{
 			get { return _connectionString; }
 			set { _connectionString = value; }
 		}
 
-		public string CodeNamespace
+		public String CodeNamespace
 		{
 			get { return _namespace; }
 			set { _namespace = value; }
@@ -74,6 +80,17 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		public bool IsValid()
 		{
 			return true;
+		}
+
+		public DatabaseDefinition DatabaseDefinition
+		{
+			get { return _dbDefinition; }
+			set { _dbDefinition = value; }
+		}
+
+		public void RefreshDatabaseDefinition()
+		{
+			_dbDefinition = _definitionBuilder.Build( this );
 		}
 	}
 }

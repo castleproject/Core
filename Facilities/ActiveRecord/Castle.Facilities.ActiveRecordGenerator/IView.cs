@@ -15,26 +15,10 @@
 namespace Castle.Facilities.ActiveRecordGenerator
 {
 	using System;
-	using System.Windows.Forms;
-
-	using Castle.Facilities.ActiveRecordGenerator.Model;
-
-	
-	public delegate void ProjectReplaceDelegate(object sender, Project oldProject, Project newProject);
-
-	public delegate void ProjectDelegate(object sender, Project project);
 
 
-	public interface IApplicationModel
+	public interface IView
 	{
-		Project CurrentProject { get; set; }
-
-		IWin32Window MainWindow { get; set; }
-
-		event ProjectReplaceDelegate OnProjectReplaced;
-
-		event ProjectDelegate OnProjectChanged;
-		
-		void UpdateViews();
+		void Refresh(IApplicationModel model);
 	}
 }

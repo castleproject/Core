@@ -15,12 +15,33 @@
 namespace Castle.Facilities.ActiveRecordGenerator.Model
 {
 	using System;
+	using System.Collections;
 
 
 	public class DatabaseDefinition
 	{
+		private String _name;
+		private IList _tables = new ArrayList();
+
 		public DatabaseDefinition()
 		{
+		}
+
+		public TableDefinition AddTable(TableDefinition table)
+		{
+			_tables.Add(table);
+			return table;
+		}
+
+		public String Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
+		public IList Tables
+		{
+			get { return _tables; }
 		}
 	}
 }

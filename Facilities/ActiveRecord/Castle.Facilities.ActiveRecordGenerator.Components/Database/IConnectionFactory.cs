@@ -12,29 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator
+namespace Castle.Facilities.ActiveRecordGenerator.Components.Database
 {
 	using System;
-	using System.Windows.Forms;
+	using System.Data.OleDb;
 
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
-	
-	public delegate void ProjectReplaceDelegate(object sender, Project oldProject, Project newProject);
 
-	public delegate void ProjectDelegate(object sender, Project project);
-
-
-	public interface IApplicationModel
+	public interface IConnectionFactory
 	{
-		Project CurrentProject { get; set; }
-
-		IWin32Window MainWindow { get; set; }
-
-		event ProjectReplaceDelegate OnProjectReplaced;
-
-		event ProjectDelegate OnProjectChanged;
-		
-		void UpdateViews();
+		OleDbConnection CreateConnection( Project project );
 	}
 }

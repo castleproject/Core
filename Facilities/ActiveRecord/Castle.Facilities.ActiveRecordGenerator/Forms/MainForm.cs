@@ -21,13 +21,13 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 	using System.Windows.Forms;
 	using System.Data;
 
-	using Castle.Facilities.ActiveRecordGenerator.Action;
 	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.Facilities.ActiveRecordGenerator.Forms.Views;
 
-	/// <summary>
-	/// Summary description for MainForm
-	/// </summary>
-	public class MainForm : Form, IApplicationModel
+	public delegate void ActionDelegate(String actionName);
+
+
+	public class MainForm : Form
 	{
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItem4;
@@ -53,18 +53,19 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 
 		private Hashtable _translator = new Hashtable();
 
-		private IActionFactory _actionFactory;
 		private Project _currentProject;
+		private ProjectExplorerView _explorer;
 
 
-		public MainForm(IActionFactory actionFactory)
+		public MainForm(IApplicationModel model)
 		{
-			_actionFactory = actionFactory;
-
 			InitializeComponent();
-
 			InitTranslator();
+
+			_explorer = new ProjectExplorerView(treeView1, model);
 		}
+
+		public event ActionDelegate OnAction;
 
 		private void InitTranslator()
 		{
@@ -99,6 +100,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.fileMenu = new System.Windows.Forms.MenuItem();
 			this.newMenu = new System.Windows.Forms.MenuItem();
@@ -119,32 +121,28 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.splitter1 = new System.Windows.Forms.Splitter();
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
 			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-				{
-					this.fileMenu,
-					this.helpMenu
-				});
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.fileMenu,
+																					  this.helpMenu});
 			// 
 			// fileMenu
 			// 
 			this.fileMenu.Index = 0;
-			this.fileMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-				{
-					this.newMenu,
-					this.openMenu,
-					this.menuItem4,
-					this.saveMenu,
-					this.saveAsMenu,
-					this.menuItem7,
-					this.menuItem8,
-					this.menuItem9,
-					this.exitMenu
-				});
+			this.fileMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.newMenu,
+																					 this.openMenu,
+																					 this.menuItem4,
+																					 this.saveMenu,
+																					 this.saveAsMenu,
+																					 this.menuItem7,
+																					 this.menuItem8,
+																					 this.menuItem9,
+																					 this.exitMenu});
 			this.fileMenu.Text = "&File";
 			// 
 			// newMenu
@@ -184,10 +182,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// menuItem8
 			// 
 			this.menuItem8.Index = 6;
-			this.menuItem8.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-				{
-					this.menuItem13
-				});
+			this.menuItem8.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.menuItem13});
 			this.menuItem8.Text = "Recent Projecs";
 			// 
 			// menuItem13
@@ -209,10 +205,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// helpMenu
 			// 
 			this.helpMenu.Index = 1;
-			this.helpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-				{
-					this.aboutMenu
-				});
+			this.helpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.aboutMenu});
 			this.helpMenu.Text = "&Help";
 			// 
 			// aboutMenu
@@ -223,64 +217,66 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// statusBar1
 			// 
-			this.statusBar1.Location = new System.Drawing.Point(0, 468);
+			this.statusBar1.Location = new System.Drawing.Point(0, 368);
 			this.statusBar1.Name = "statusBar1";
-			this.statusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[]
-				{
-					this.statusBarPanel1
-				});
+			this.statusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
+																						  this.statusBarPanel1});
+			this.statusBar1.ShowPanels = true;
 			this.statusBar1.Size = new System.Drawing.Size(712, 22);
 			this.statusBar1.TabIndex = 3;
 			this.statusBar1.Text = "statusBar1";
 			// 
 			// statusBarPanel1
 			// 
+			this.statusBarPanel1.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
 			this.statusBarPanel1.Text = "Ready.";
+			this.statusBarPanel1.Width = 696;
 			// 
 			// panel1
 			// 
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(712, 468);
+			this.panel1.Size = new System.Drawing.Size(712, 368);
 			this.panel1.TabIndex = 7;
 			// 
 			// imageList1
 			// 
+			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
 			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// treeView1
 			// 
 			this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
-			this.treeView1.ImageIndex = -1;
+			this.treeView1.ImageList = this.imageList1;
 			this.treeView1.Location = new System.Drawing.Point(0, 0);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.SelectedImageIndex = -1;
-			this.treeView1.Size = new System.Drawing.Size(121, 468);
+			this.treeView1.Size = new System.Drawing.Size(160, 368);
 			this.treeView1.TabIndex = 8;
 			// 
 			// splitter1
 			// 
-			this.splitter1.Location = new System.Drawing.Point(121, 0);
+			this.splitter1.Location = new System.Drawing.Point(160, 0);
 			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(3, 468);
+			this.splitter1.Size = new System.Drawing.Size(4, 368);
 			this.splitter1.TabIndex = 9;
 			this.splitter1.TabStop = false;
 			// 
 			// MainForm
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(7, 15);
-			this.ClientSize = new System.Drawing.Size(712, 490);
+			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
+			this.ClientSize = new System.Drawing.Size(712, 390);
 			this.Controls.Add(this.splitter1);
 			this.Controls.Add(this.treeView1);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.statusBar1);
-			this.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
+			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.Menu = this.mainMenu1;
 			this.Name = "MainForm";
-			this.Text = "Form1";
-			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).EndInit();
+			this.Text = "Castle Project\'s ActiveRecord Generator";
+			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -291,33 +287,38 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		{
 			String actionName = (String) _translator[sender];
 
-			if (actionName != null)
+			if (OnAction != null)
 			{
-				IAction action = _actionFactory.Create(actionName);
-
-				action.Execute(this);
+				OnAction(actionName);
 			}
+//
+//			if (actionName != null)
+//			{
+//				IAction action = _actionFactory.Create(actionName);
+//
+//				action.Execute(this);
+//			}
 		}
 
-		#region IApplicationModel Members
-
-		public Project CurrentProject
-		{
-			get { return _currentProject; }
-			set
-			{
-				if (OnProjectChange != null) OnProjectChange(this, _currentProject, value);
-				_currentProject = value;
-			}
-		}
-
-		public IWin32Window MainWindow
-		{
-			get { return this; }
-		}
-
-		public event ProjectDelegate OnProjectChange;
-
-		#endregion
+//		#region IApplicationModel Members
+//
+//		public Project CurrentProject
+//		{
+//			get { return _currentProject; }
+//			set
+//			{
+//				if (OnProjectChange != null) OnProjectChange(this, _currentProject, value);
+//				_currentProject = value;
+//			}
+//		}
+//
+//		public IWin32Window MainWindow
+//		{
+//			get { return this; }
+//		}
+//
+//		public event ProjectDelegate OnProjectChange;
+//
+//		#endregion
 	}
 }

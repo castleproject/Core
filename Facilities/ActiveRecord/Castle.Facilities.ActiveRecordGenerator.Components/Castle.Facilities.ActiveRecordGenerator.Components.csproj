@@ -70,16 +70,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
@@ -108,6 +98,16 @@
                     Name = "Castle.Components.Winforms.AssemblyResolver"
                     AssemblyName = "Castle.Components.Winforms.AssemblyResolver"
                     HintPath = "..\..\..\Components\Winforms\AssemblyResolverDialog\bin\Castle.Components.Winforms.AssemblyResolver.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.XML"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
         </Build>
@@ -144,7 +144,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Database\IConnectionFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Database\IDatabaseDefinitionBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\Default\ConnectionFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\Default\DatabaseDefinitionBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -160,6 +175,11 @@
                 />
                 <File
                     RelPath = "Model\DatabaseDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\IProjectFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

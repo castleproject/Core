@@ -1,4 +1,3 @@
-using Castle.Facilities.ActiveRecordGenerator.Model;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +15,11 @@ using Castle.Facilities.ActiveRecordGenerator.Model;
 namespace Castle.Facilities.ActiveRecordGenerator.Forms
 {
 	using System;
+	using System.Data;
 	using System.Windows.Forms;
 
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
+	using Castle.Facilities.ActiveRecordGenerator.Model;
 	using Castle.Facilities.ActiveRecordGenerator.Utils;
 
 
@@ -32,8 +33,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.TextBox connectionString;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.TextBox driver;
-		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ComboBox database;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.GroupBox groupBox3;
@@ -47,25 +46,34 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.ComboBox languages;
 		private System.ComponentModel.Container components = null;
 		private Project _project;
+		private System.Windows.Forms.Button buildConnStringButton;
+		private IProjectFactory _projectFactory;
 
-		public NewProjectForm(ICodeProviderFactory factory)
+		public NewProjectForm(ICodeProviderFactory factory, IProjectFactory projectFactory)
 		{
 			InitializeComponent();
 			InitializeDatabaseShortcuts();
 
+			_projectFactory = projectFactory;
+
 			CodeProviderInfo[] providers = factory.GetAvailableProviders();
 
-			foreach(CodeProviderInfo provider in providers)
+			foreach (CodeProviderInfo provider in providers)
 			{
 				languages.Items.Add(provider);
 			}
+
+			languages.SelectedIndex = 0;
+
+			location.Text = AppDomain.CurrentDomain.BaseDirectory;
 		}
 
 		private void InitializeDatabaseShortcuts()
 		{
-			database.Items.Add( new Pair("MS SQL Server", "System.Data.SqlClient.SqlConnection, System.Data.SqlClient") );
-			database.Items.Add( new Pair("Oracle", "Oracle.DataAccess.Client.OracleConnection, Oracle.DataAccess") );
-			database.Items.Add( new Pair("MySQL", "MySql.Data.MySqlClient.MySqlConnection, MySql.Data") );
+			database.Items.Add(new Pair("MS SQL Server", "System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"));
+			database.Items.Add(new Pair("Oracle", "Oracle.DataAccess.Client.OracleConnection, Oracle.DataAccess"));
+			database.Items.Add(new Pair("MySQL", "MySql.Data.MySqlClient.MySqlConnection, MySql.Data"));
+			database.Items.Add(new Pair("Odbc", "System.Data.Odbc.OdbcConnection, System.Data, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"));
 		}
 
 		public Project Project
@@ -73,23 +81,23 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			get { return _project; }
 		}
 
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		private void button1_Click(object sender, System.EventArgs e)
 		{
 			browserDialog1.RootFolder = Environment.SpecialFolder.Personal;
 			browserDialog1.SelectedPath = location.Text;
-			
+
 			if (browserDialog1.ShowDialog(this) == DialogResult.OK)
 			{
 				location.Text = browserDialog1.SelectedPath;
@@ -97,6 +105,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -114,8 +123,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.connectionString = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.driver = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
 			this.database = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -124,6 +131,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.ns = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.browserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+			this.buildConnStringButton = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -203,10 +211,9 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.buildConnStringButton);
 			this.groupBox2.Controls.Add(this.connectionString);
 			this.groupBox2.Controls.Add(this.label5);
-			this.groupBox2.Controls.Add(this.driver);
-			this.groupBox2.Controls.Add(this.label4);
 			this.groupBox2.Controls.Add(this.database);
 			this.groupBox2.Controls.Add(this.label3);
 			this.groupBox2.Location = new System.Drawing.Point(8, 116);
@@ -218,35 +225,20 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// connectionString
 			// 
-			this.connectionString.Location = new System.Drawing.Point(138, 95);
+			this.connectionString.Location = new System.Drawing.Point(138, 60);
+			this.connectionString.Multiline = true;
 			this.connectionString.Name = "connectionString";
-			this.connectionString.Size = new System.Drawing.Size(346, 21);
+			this.connectionString.Size = new System.Drawing.Size(310, 60);
 			this.connectionString.TabIndex = 11;
 			this.connectionString.Text = "";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(18, 99);
+			this.label5.Location = new System.Drawing.Point(18, 68);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(116, 16);
 			this.label5.TabIndex = 10;
-			this.label5.Text = "Connection";
-			// 
-			// driver
-			// 
-			this.driver.Location = new System.Drawing.Point(138, 63);
-			this.driver.Name = "driver";
-			this.driver.Size = new System.Drawing.Size(344, 21);
-			this.driver.TabIndex = 9;
-			this.driver.Text = "";
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(18, 67);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(116, 16);
-			this.label4.TabIndex = 8;
-			this.label4.Text = "Driver";
+			this.label5.Text = "Conn. string";
 			// 
 			// database
 			// 
@@ -310,6 +302,15 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.label2.TabIndex = 14;
 			this.label2.Text = "Namespace";
 			// 
+			// buildConnStringButton
+			// 
+			this.buildConnStringButton.Location = new System.Drawing.Point(456, 60);
+			this.buildConnStringButton.Name = "buildConnStringButton";
+			this.buildConnStringButton.Size = new System.Drawing.Size(28, 20);
+			this.buildConnStringButton.TabIndex = 12;
+			this.buildConnStringButton.Text = "...";
+			this.buildConnStringButton.Click += new System.EventHandler(this.buildConnStringButton_Click);
+			// 
 			// NewProjectForm
 			// 
 			this.AcceptButton = this.createButton;
@@ -321,7 +322,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.Controls.Add(this.createButton);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.groupBox1);
-			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.MaximizeBox = false;
 			this.Name = "NewProjectForm";
@@ -333,23 +334,29 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.ResumeLayout(false);
 
 		}
+
 		#endregion
 
 		private void database_SelectionChangeCommitted(object sender, System.EventArgs e)
 		{
-			if (database.SelectedItem != null)
-			{
-				driver.Text = (database.SelectedItem as Pair).Second;
-			}
+//			if (database.SelectedItem != null)
+//			{
+//				driver.Text = (database.SelectedItem as Pair).Second;
+//			}
 		}
 
 		private void createButton_Click(object sender, System.EventArgs e)
 		{
-			_project = new Project();
-			
+			if (!ValidateConnectionInformation())
+			{
+				return;
+			}
+
+			_project = _projectFactory.Create();
+
 			_project.Name = name.Text;
 			_project.Location = location.Text;
-			_project.Driver = driver.Text;
+//			_project.Driver = driver.Text;
 			_project.ConnectionString = connectionString.Text;
 			_project.CodeNamespace = ns.Text;
 			_project.CodeProvider = languages.SelectedItem as CodeProviderInfo;
@@ -364,9 +371,76 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			}
 		}
 
+		private bool ValidateConnectionInformation()
+		{
+//			Type driverType = Type.GetType(driver.Text, false, false);
+//
+//			if (driverType == null) return false;
+//
+//			try
+//			{
+//				IDbConnection connection = (IDbConnection)
+//					Activator.CreateInstance(driverType);
+//
+//				connection.ConnectionString = connectionString.Text;
+//				connection.Open();
+//				connection.Close();
+//			}
+//			catch (Exception ex)
+//			{
+//				String message = String.Format("Could not create connection\r\n{0}", ex.Message);
+//
+//				MessageBox.Show(this, message,
+//				                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+//
+//				return false;
+//			}
+
+			return true;
+		}
+
 		private void cancelButton_Click(object sender, System.EventArgs e)
 		{
 			DialogResult = DialogResult.Cancel;
+		}
+
+		private void buildConnStringButton_Click(object sender, System.EventArgs e)
+		{
+			MSDASC.DataLinks dataLinks = new MSDASC.DataLinksClass();
+			ADODB._Connection connection;
+
+			if (connectionString.Text == String.Empty)
+			{
+				try
+				{
+					connection = (ADODB._Connection) dataLinks.PromptNew();
+
+					connectionString.Text = connection.ConnectionString.ToString();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.ToString());
+				}
+			}
+			else
+			{
+				connection = new ADODB.ConnectionClass();
+				connection.ConnectionString = connectionString.Text;
+
+				object oConnection = connection;
+				
+				try
+				{
+					if ((bool) dataLinks.PromptEdit(ref oConnection))
+					{
+						connectionString.Text = connection.ConnectionString;
+					}
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.ToString());
+				}
+			}
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using Castle.Components.Winforms.AssemblyResolver;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +19,14 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 	using Castle.Windsor;
 
 	using Castle.Facilities.Startable;
+	using Castle.Facilities.TypedFactory;
 
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default;
+	using Castle.Facilities.ActiveRecordGenerator.Components.Database;
+	using Castle.Facilities.ActiveRecordGenerator.Components.Database.Default;
+	using Castle.Facilities.ActiveRecordGenerator.Database;
+	using Castle.Facilities.ActiveRecordGenerator.Model;
 
 
 	public class ActiveRecordGeneratorContainer : WindsorContainer
@@ -36,16 +40,27 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 		protected virtual void AddFacilities()
 		{
 			AddFacility( "startable", new StartableFacility() );
+
+			TypedFactoryFacility typedFactory = new TypedFactoryFacility();
+	
+			AddFacility( "typedFactory", typedFactory );
+
+			typedFactory.AddTypedFactoryEntry( 
+				new FactoryEntry("project.factory", typeof(IProjectFactory), "Create", "") );
 		}
 
 		protected virtual void AddComponents()
 		{
-			AddComponent( "assembly.resolver", typeof(AssemblyResolverComponent) );
+			AddComponent( "project", typeof(Project) );
 
 			AddComponent( "codeprovider", 
 				typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
-//			AddComponent( "codeprovider", 
-//				typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
+			
+			AddComponent( "db.connection.factory", 
+				typeof(IConnectionFactory), typeof(ConnectionFactory) );
+			
+			AddComponent( "db.def.builder", 
+				typeof(IDatabaseDefinitionBuilder), typeof(DatabaseDefinitionBuilder) );
 		}
 	}
 }
