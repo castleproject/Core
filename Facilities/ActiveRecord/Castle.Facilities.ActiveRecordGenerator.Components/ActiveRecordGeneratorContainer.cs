@@ -1,3 +1,4 @@
+using Castle.Components.Winforms.AssemblyResolver;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +19,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 
 	using Castle.Windsor;
 
+	using Castle.Facilities.Startable;
+
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default;
 
@@ -26,11 +29,19 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 	{
 		public ActiveRecordGeneratorContainer()
 		{
-			Init();
+			AddFacilities();
+			AddComponents();
 		}
 
-		private void Init()
+		protected virtual void AddFacilities()
 		{
+			AddFacility( "startable", new StartableFacility() );
+		}
+
+		protected virtual void AddComponents()
+		{
+			AddComponent( "assembly.resolver", typeof(AssemblyResolverComponent) );
+
 			AddComponent( "codeprovider", 
 				typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
 //			AddComponent( "codeprovider", 

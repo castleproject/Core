@@ -295,7 +295,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			{
 				IAction action = _actionFactory.Create(actionName);
 
-				action.Execute(this, null);
+				action.Execute(this);
 			}
 		}
 

@@ -32,7 +32,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 
 		#region IAction Members
 
-		public object Execute(IWin32Window main, Project project)
+		public object Execute(IApplicationModel model)
 		{
 //			if (project.IsDirty)
 //			{
@@ -48,9 +48,9 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 //				}
 //			}
 
-			if (_newProjectForm.ShowDialog(main) == DialogResult.OK)
+			if (_newProjectForm.ShowDialog(model.MainWindow) == DialogResult.OK)
 			{
-				
+				model.CurrentProject = _newProjectForm.Project;
 			}
 			
 			return null;

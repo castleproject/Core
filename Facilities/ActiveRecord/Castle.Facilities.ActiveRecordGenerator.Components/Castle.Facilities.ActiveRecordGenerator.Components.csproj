@@ -80,24 +80,34 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\bin\Castle.Windsor.dll"
-                />
-                <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\bin\Castle.MicroKernel.dll"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Model"
                     AssemblyName = "Castle.Model"
-                    HintPath = "..\bin\Castle.Model.dll"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
                 />
                 <Reference
                     Name = "Castle.Facilities.TypedFactory"
                     AssemblyName = "Castle.Facilities.TypedFactory"
                     HintPath = "..\..\TypedFactory\bin\Castle.Facilities.TypedFactory.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.Startable"
+                    AssemblyName = "Castle.Facilities.Startable"
+                    HintPath = "..\..\Startable\bin\Castle.Facilities.Startable.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Winforms.AssemblyResolver"
+                    AssemblyName = "Castle.Components.Winforms.AssemblyResolver"
+                    HintPath = "..\..\..\Components\Winforms\AssemblyResolverDialog\bin\Castle.Components.Winforms.AssemblyResolver.dll"
                 />
             </References>
         </Build>
@@ -175,11 +185,6 @@
                 />
                 <File
                     RelPath = "Prevalence\IProjectPrevalence.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\IProjectServices.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

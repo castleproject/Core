@@ -90,29 +90,41 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                    Private = "False"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                    Private = "False"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
                     Name = "Castle.Facilities.ActiveRecordGenerator.Components"
                     Project = "{B4E7F7E6-C02A-4828-BB5C-CEB5A67C4FF2}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\bin\Castle.Windsor.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "Castle.Facilities.TypedFactory"
                     AssemblyName = "Castle.Facilities.TypedFactory"
                     HintPath = "..\..\TypedFactory\bin\Castle.Facilities.TypedFactory.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.Startable"
+                    AssemblyName = "Castle.Facilities.Startable"
+                    HintPath = "..\..\Startable\bin\Castle.Facilities.Startable.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Winforms.AssemblyResolver"
+                    AssemblyName = "Castle.Components.Winforms.AssemblyResolver"
+                    HintPath = "..\..\..\Components\Winforms\AssemblyResolverDialog\bin\Castle.Components.Winforms.AssemblyResolver.dll"
                 />
             </References>
         </Build>
@@ -160,16 +172,6 @@
                     RelPath = "Action\Standard\NewProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Forms\LocateAssembly.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Forms\LocateAssembly.resx"
-                    DependentUpon = "LocateAssembly.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Forms\MainForm.cs"

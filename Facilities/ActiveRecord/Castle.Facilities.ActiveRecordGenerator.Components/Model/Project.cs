@@ -17,6 +17,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 	using System;
 	using System.Collections;
 
+	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
+
 
 	public class Project
 	{
@@ -25,12 +27,53 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		private String _driver;
 		private String _connectionString;
 		private String _namespace;
-		private String _codeProvider;		
 		private IList _activeRecordDescriptors = new ArrayList();
+		private CodeProviderInfo _codeProvider;		
 		private DatabaseDefinition _dbDefinition;
 
 		public Project()
 		{
+		}
+
+		public string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
+		public string Location
+		{
+			get { return _location; }
+			set { _location = value; }
+		}
+
+		public string Driver
+		{
+			get { return _driver; }
+			set { _driver = value; }
+		}
+
+		public string ConnectionString
+		{
+			get { return _connectionString; }
+			set { _connectionString = value; }
+		}
+
+		public string CodeNamespace
+		{
+			get { return _namespace; }
+			set { _namespace = value; }
+		}
+
+		public CodeProviderInfo CodeProvider
+		{
+			get { return _codeProvider; }
+			set { _codeProvider = value; }
+		}
+
+		public bool IsValid()
+		{
+			return true;
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 
 		#region IAction Members
 
-		public object Execute(IWin32Window main, Project project)
+		public object Execute(IApplicationModel model)
 		{
 			Application.Exit();
 

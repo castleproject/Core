@@ -1,3 +1,4 @@
+using Castle.Facilities.ActiveRecordGenerator.Model;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +46,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.TextBox location;
 		private System.Windows.Forms.ComboBox languages;
 		private System.ComponentModel.Container components = null;
+		private Project _project;
 
 		public NewProjectForm(ICodeProviderFactory factory)
 		{
@@ -64,6 +66,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			database.Items.Add( new Pair("MS SQL Server", "System.Data.SqlClient.SqlConnection, System.Data.SqlClient") );
 			database.Items.Add( new Pair("Oracle", "Oracle.DataAccess.Client.OracleConnection, Oracle.DataAccess") );
 			database.Items.Add( new Pair("MySQL", "MySql.Data.MySqlClient.MySqlConnection, MySql.Data") );
+		}
+
+		public Project Project
+		{
+			get { return _project; }
 		}
 
 		protected override void Dispose( bool disposing )
@@ -184,6 +191,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 4;
 			this.cancelButton.Text = "Cancel";
+			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
 			// 
 			// createButton
 			// 
@@ -191,6 +199,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.createButton.Name = "createButton";
 			this.createButton.TabIndex = 3;
 			this.createButton.Text = "Create";
+			this.createButton.Click += new System.EventHandler(this.createButton_Click);
 			// 
 			// groupBox2
 			// 
@@ -332,6 +341,32 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			{
 				driver.Text = (database.SelectedItem as Pair).Second;
 			}
+		}
+
+		private void createButton_Click(object sender, System.EventArgs e)
+		{
+			_project = new Project();
+			
+			_project.Name = name.Text;
+			_project.Location = location.Text;
+			_project.Driver = driver.Text;
+			_project.ConnectionString = connectionString.Text;
+			_project.CodeNamespace = ns.Text;
+			_project.CodeProvider = languages.SelectedItem as CodeProviderInfo;
+
+			if (_project.IsValid())
+			{
+				DialogResult = DialogResult.OK;
+			}
+			else
+			{
+				// TODO: Message box
+			}
+		}
+
+		private void cancelButton_Click(object sender, System.EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
 		}
 	}
 }

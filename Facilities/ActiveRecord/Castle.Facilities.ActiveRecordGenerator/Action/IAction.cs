@@ -22,6 +22,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action
 
 	public interface IAction
 	{
-		object Execute(IWin32Window main, Project project);
+		object Execute(IApplicationModel model);
 	}
 }
