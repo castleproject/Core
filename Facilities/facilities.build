@@ -33,7 +33,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, autotransaction, nhibernate" />
+	<target name="build" depends="init, autotransaction, nhibernate, aspectsharp" />
 	
 	<target name="init">
 
@@ -51,10 +51,15 @@
 		<nant buildfile="AutomaticTransactionManagement/default.build" inheritall="true" target="build" />
 	</target>
 
+	<target name="aspectsharp">
+		<nant buildfile="AspectSharp/default.build" inheritall="true" target="build" />
+	</target>
+
 	<target name="dist">
 		<nant buildfile="Prevalence/default.build" inheritall="true" target="dist" />
 		<nant buildfile="AutomaticTransactionManagement/default.build" inheritall="true" target="dist" />
 		<nant buildfile="NHibernate/default.build" inheritall="true" target="dist" />
+		<nant buildfile="AspectSharp/default.build" inheritall="true" target="dist" />
 	</target>
 
 	
