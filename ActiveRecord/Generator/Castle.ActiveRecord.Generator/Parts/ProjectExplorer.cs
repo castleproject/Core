@@ -15,7 +15,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 	/// <summary>
 	/// Summary description for ProjectExplorer.
 	/// </summary>
-	public class ProjectExplorer : Content, ISubWorkspace
+	public class ProjectExplorer : DockContent, ISubWorkspace
 	{
 		private System.Windows.Forms.ImageList imageList1;
 		private System.Windows.Forms.ToolBar toolBar1;
@@ -110,10 +110,10 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			// ProjectExplorer
 			// 
-			this.AllowedStates = ((WeifenLuo.WinFormsUI.ContentStates)(((((WeifenLuo.WinFormsUI.ContentStates.Float | WeifenLuo.WinFormsUI.ContentStates.DockLeft) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockRight) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockTop) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockBottom)));
+			this.DockableAreas = ((WeifenLuo.WinFormsUI.DockAreas)(((((WeifenLuo.WinFormsUI.DockAreas.Float | WeifenLuo.WinFormsUI.DockAreas.DockLeft) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockRight) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockTop) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockBottom)));
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(246, 323);
 			this.Controls.Add(this.treeView1);
@@ -160,7 +160,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			get { return null; }
 		}
 
-		public DockManager MainDockManager
+		public DockPanel MainDockManager
 		{
 			get { return null; }
 		}

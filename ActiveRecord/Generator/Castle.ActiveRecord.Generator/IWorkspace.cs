@@ -31,7 +31,7 @@ namespace Castle.ActiveRecord.Generator
 
 		StatusBar MainStatusBar { get; }
 
-		DockManager MainDockManager { get; }
+		DockPanel MainDockManager { get; }
 	}
 
 	public interface ISubWorkspace : IWorkspace

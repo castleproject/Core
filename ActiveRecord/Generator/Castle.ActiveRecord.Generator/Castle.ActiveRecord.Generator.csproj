@@ -100,11 +100,6 @@
                     HintPath = "..\..\Deps\netron\BasicShapes.dll"
                 />
                 <Reference
-                    Name = "WeifenLuo.WinFormsUI"
-                    AssemblyName = "WeifenLuo.WinFormsUI"
-                    HintPath = "..\lib\WeifenLuo.WinFormsUI.dll"
-                />
-                <Reference
                     Name = "ADODB"
                     AssemblyName = "ADODB"
                     HintPath = "..\lib\ADODB.dll"
@@ -138,6 +133,11 @@
                     Name = "Castle.Model"
                     AssemblyName = "Castle.Model"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "WeifenLuo.WinFormsUI.Docking"
+                    AssemblyName = "WeifenLuo.WinFormsUI.Docking"
+                    HintPath = "..\lib\WeifenLuo.WinFormsUI.Docking.dll"
                 />
             </References>
         </Build>

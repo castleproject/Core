@@ -49,19 +49,22 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		private System.Windows.Forms.Label associationTableLabel;
 		private System.Windows.Forms.Label relatedColsLabel;
 		private System.Windows.Forms.Label parentColsLabel;
-		private System.Windows.Forms.CheckBox checkBox2;
-		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.ComboBox outerJoin;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.ComboBox cascade;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.CheckBox updateButton;
+		private System.Windows.Forms.CheckBox insertButton;
 		private ActiveRecordDescriptor _oldDescSelection;
+		private IRelationshipBuilder _relationBuilder;
 
 
 		public AddRelationDialog(ActiveRecordDescriptor descriptor, Project project) : this()
 		{
 			_descriptor = descriptor;
 			_project = project;
+
+			_relationBuilder = (IRelationshipBuilder) ServiceRegistry.Instance[ typeof(IRelationshipBuilder) ];
 
 			className.Text = _descriptor.ClassName;
 
@@ -79,6 +82,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		public AddRelationDialog()
 		{
 			InitializeComponent();
+
+			outerJoin.SelectedIndex = 0;
+			cascade.SelectedIndex = 0;
 		}
 
 		/// <summary>
@@ -123,19 +129,19 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.parentColsLabel = new System.Windows.Forms.Label();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.cascade = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.updateButton = new System.Windows.Forms.CheckBox();
+			this.insertButton = new System.Windows.Forms.CheckBox();
 			this.inverseButton = new System.Windows.Forms.CheckBox();
 			this.lazyButton = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.outerJoin = new System.Windows.Forms.ComboBox();
+			this.label9 = new System.Windows.Forms.Label();
 			this.order = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.where = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			this.outerJoin = new System.Windows.Forms.ComboBox();
-			this.label9 = new System.Windows.Forms.Label();
-			this.cascade = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
@@ -327,8 +333,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			this.groupBox2.Controls.Add(this.cascade);
 			this.groupBox2.Controls.Add(this.label1);
-			this.groupBox2.Controls.Add(this.checkBox2);
-			this.groupBox2.Controls.Add(this.checkBox1);
+			this.groupBox2.Controls.Add(this.updateButton);
+			this.groupBox2.Controls.Add(this.insertButton);
 			this.groupBox2.Controls.Add(this.inverseButton);
 			this.groupBox2.Controls.Add(this.lazyButton);
 			this.groupBox2.Location = new System.Drawing.Point(24, 136);
@@ -337,6 +343,47 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Behavior and tuning";
+			// 
+			// cascade
+			// 
+			this.cascade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cascade.Items.AddRange(new object[] {
+														 "none",
+														 "all",
+														 "save-update",
+														 "delete"});
+			this.cascade.Location = new System.Drawing.Point(320, 42);
+			this.cascade.Name = "cascade";
+			this.cascade.Size = new System.Drawing.Size(184, 21);
+			this.cascade.TabIndex = 19;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(320, 26);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(100, 16);
+			this.label1.TabIndex = 18;
+			this.label1.Text = "Cascade:";
+			// 
+			// updateButton
+			// 
+			this.updateButton.Checked = true;
+			this.updateButton.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.updateButton.Location = new System.Drawing.Point(48, 56);
+			this.updateButton.Name = "updateButton";
+			this.updateButton.Size = new System.Drawing.Size(104, 16);
+			this.updateButton.TabIndex = 17;
+			this.updateButton.Text = "Update";
+			// 
+			// insertButton
+			// 
+			this.insertButton.Checked = true;
+			this.insertButton.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.insertButton.Location = new System.Drawing.Point(48, 24);
+			this.insertButton.Name = "insertButton";
+			this.insertButton.Size = new System.Drawing.Size(104, 16);
+			this.insertButton.TabIndex = 16;
+			this.insertButton.Text = "Insert";
 			// 
 			// inverseButton
 			// 
@@ -369,6 +416,26 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Queries";
 			// 
+			// outerJoin
+			// 
+			this.outerJoin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.outerJoin.Items.AddRange(new object[] {
+														   "auto",
+														   "true",
+														   "false"});
+			this.outerJoin.Location = new System.Drawing.Point(16, 80);
+			this.outerJoin.Name = "outerJoin";
+			this.outerJoin.Size = new System.Drawing.Size(224, 21);
+			this.outerJoin.TabIndex = 17;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(16, 64);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(100, 16);
+			this.label9.TabIndex = 16;
+			this.label9.Text = "Outer join:";
+			// 
 			// order
 			// 
 			this.order.Location = new System.Drawing.Point(288, 40);
@@ -400,67 +467,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.label4.Size = new System.Drawing.Size(100, 16);
 			this.label4.TabIndex = 0;
 			this.label4.Text = "Where:";
-			// 
-			// checkBox2
-			// 
-			this.checkBox2.Checked = true;
-			this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox2.Location = new System.Drawing.Point(48, 56);
-			this.checkBox2.Name = "checkBox2";
-			this.checkBox2.Size = new System.Drawing.Size(104, 16);
-			this.checkBox2.TabIndex = 17;
-			this.checkBox2.Text = "Update";
-			// 
-			// checkBox1
-			// 
-			this.checkBox1.Checked = true;
-			this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox1.Location = new System.Drawing.Point(48, 24);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(104, 16);
-			this.checkBox1.TabIndex = 16;
-			this.checkBox1.Text = "Insert";
-			// 
-			// outerJoin
-			// 
-			this.outerJoin.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.outerJoin.Items.AddRange(new object[] {
-														   "auto",
-														   "true",
-														   "false"});
-			this.outerJoin.Location = new System.Drawing.Point(16, 80);
-			this.outerJoin.Name = "outerJoin";
-			this.outerJoin.Size = new System.Drawing.Size(224, 21);
-			this.outerJoin.TabIndex = 17;
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(16, 64);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(100, 16);
-			this.label9.TabIndex = 16;
-			this.label9.Text = "Outer join:";
-			// 
-			// cascade
-			// 
-			this.cascade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cascade.Items.AddRange(new object[] {
-														 "none",
-														 "all",
-														 "save-update",
-														 "delete"});
-			this.cascade.Location = new System.Drawing.Point(320, 42);
-			this.cascade.Name = "cascade";
-			this.cascade.Size = new System.Drawing.Size(184, 21);
-			this.cascade.TabIndex = 19;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(320, 26);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 16);
-			this.label1.TabIndex = 18;
-			this.label1.Text = "Cascade:";
 			// 
 			// AddRelationDialog
 			// 
@@ -649,8 +655,36 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 				return;
 			}
 
-			ActiveRecordPropertyRelationDescriptor newRelation = null;
+			try
+			{
+				RelationshipInfo info = new RelationshipInfo(_association, _descriptor, SelectedTarget);
+				
+				info.ParentCol = SelectedParentCol;
+				info.ChildCol = SelectedRelatedCol;
+				info.AssociationTable = SelectedAssociationTable;
 
+				info.Where = where.Text;
+				info.OrderBy = order.Text;
+				info.OuterJoin = outerJoin.Text;
+
+				// TODO: Add checkbox for proxy
+				info.UseProxy = false;
+
+				info.Insert = insertButton.Checked;
+				info.Update = updateButton.Checked;
+				info.Lazy = lazyButton.Checked;
+				info.Cascade = cascade.SelectedText;
+
+				ActiveRecordPropertyRelationDescriptor prop = _relationBuilder.Build( info );
+
+				_descriptor.PropertiesRelations.Add(prop);
+			}
+			catch(Exception ex)
+			{
+				String message = String.Format("Something is missing... \r\n\r\n{0}", ex.Message);
+				MessageBox.Show(this, message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 
 			DialogResult = DialogResult.OK;
 		}

@@ -83,12 +83,12 @@ namespace Castle.ActiveRecord.Generator
 			String configFile = Path.Combine(
 				Path.GetDirectoryName(Application.ExecutablePath), "Layout.config");
 
-			if (File.Exists(configFile))
-			{
-				workspace.MainDockManager.LoadFromXml(configFile, 
-					new GetContentCallback(GetContentFromPersistString));
-			}
-			else
+//			if (File.Exists(configFile))
+//			{
+//				workspace.MainDockManager.LoadFromXml(configFile, 
+//					new GetContentCallback(GetContentFromPersistString));
+//			}
+//			else
 			{
 				arGraph.Show(workspace.MainDockManager);
 				outView.Show(workspace.MainDockManager);
@@ -99,7 +99,7 @@ namespace Castle.ActiveRecord.Generator
 
 		#endregion
 
-		private Content GetContentFromPersistString(String persistString)
+		private DockContent GetContentFromPersistString(String persistString)
 		{
 			if (persistString == typeof(ActiveRecordGraphView).ToString())
 				return arGraph;

@@ -10,7 +10,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 	/// <summary>
 	/// Summary description for OutputView.
 	/// </summary>
-	public class OutputView : Content
+	public class OutputView : DockContent
 	{
 		private System.Windows.Forms.TextBox textBox1;
 
@@ -70,10 +70,10 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.textBox1.TabIndex = 1;
 			this.textBox1.WordWrap = false;
 
-			this.AllowedStates = ((((WeifenLuo.WinFormsUI.ContentStates.Float | WeifenLuo.WinFormsUI.ContentStates.DockLeft) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockRight) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockTop) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockBottom);
+			this.DockableAreas = ((((WeifenLuo.WinFormsUI.DockAreas.Float | WeifenLuo.WinFormsUI.DockAreas.DockLeft) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockRight) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockTop) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockBottom);
 			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
 			this.ClientSize = new System.Drawing.Size(307, 394);
 			this.Controls.AddRange(new System.Windows.Forms.Control[] {

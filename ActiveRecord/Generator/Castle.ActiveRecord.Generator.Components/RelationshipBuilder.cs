@@ -114,9 +114,14 @@ namespace Castle.ActiveRecord.Generator.Components
 		{
 			desc.Insert = info.Insert;
 			desc.Update = info.Update;
+			desc.Inverse = info.Inverse;
 			desc.Proxy = info.UseProxy;
+			
+			desc.Cascade = info.Cascade;
+			desc.OuterJoin = info.OuterJoin;
 
-			// TODO: Finish this
+			desc.Where = info.Where;
+			desc.OrderBy = info.OrderBy;
 		}
 	}
 }

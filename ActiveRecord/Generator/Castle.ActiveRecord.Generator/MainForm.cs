@@ -27,7 +27,7 @@ namespace Castle.ActiveRecord.Generator
 
 	public class MainForm : Form, IWorkspace
 	{
-		private DockManager dockManager;
+		private DockPanel dockManager;
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.StatusBar statusBar1;
 		private System.Windows.Forms.ToolBar toolBar1;
@@ -61,7 +61,7 @@ namespace Castle.ActiveRecord.Generator
 			get { return statusBar1; }
 		}
 
-		public DockManager MainDockManager
+		public DockPanel MainDockManager
 		{
 			get { return dockManager; }
 		}
@@ -97,7 +97,7 @@ namespace Castle.ActiveRecord.Generator
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
-			this.dockManager = new WeifenLuo.WinFormsUI.DockManager();
+			this.dockManager = new WeifenLuo.WinFormsUI.DockPanel();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.statusBar1 = new System.Windows.Forms.StatusBar();
 			this.toolBar1 = new System.Windows.Forms.ToolBar();
@@ -108,6 +108,7 @@ namespace Castle.ActiveRecord.Generator
 			// 
 			this.dockManager.ActiveAutoHideContent = null;
 			this.dockManager.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dockManager.Font = new System.Drawing.Font("Tahoma", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World);
 			this.dockManager.Location = new System.Drawing.Point(0, 42);
 			this.dockManager.Name = "dockManager";
 			this.dockManager.Size = new System.Drawing.Size(855, 609);

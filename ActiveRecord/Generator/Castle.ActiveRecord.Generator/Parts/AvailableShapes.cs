@@ -14,7 +14,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 	/// <summary>
 	/// Summary description for AvailableShapes.
 	/// </summary>
-	public class AvailableShapes : Content, ISubWorkspace
+	public class AvailableShapes : DockContent, ISubWorkspace
 	{
 		private Netron.GraphLib.UI.GraphShapesView graphShapesView1;
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			get { throw new NotImplementedException(); }
 		}
 
-		public DockManager MainDockManager
+		public DockPanel MainDockManager
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -109,10 +109,10 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			// AvailableShapes
 			// 
-			this.AllowedStates = ((WeifenLuo.WinFormsUI.ContentStates)(((((WeifenLuo.WinFormsUI.ContentStates.Float | WeifenLuo.WinFormsUI.ContentStates.DockLeft) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockRight) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockTop) 
-				| WeifenLuo.WinFormsUI.ContentStates.DockBottom)));
+			this.DockableAreas = ((WeifenLuo.WinFormsUI.DockAreas)(((((WeifenLuo.WinFormsUI.DockAreas.Float | WeifenLuo.WinFormsUI.DockAreas.DockLeft) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockRight) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockTop) 
+				| WeifenLuo.WinFormsUI.DockAreas.DockBottom)));
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
 			this.ClientSize = new System.Drawing.Size(246, 323);
 			this.Controls.Add(this.graphShapesView1);

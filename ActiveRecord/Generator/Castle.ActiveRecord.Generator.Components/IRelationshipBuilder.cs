@@ -42,11 +42,12 @@ namespace Castle.ActiveRecord.Generator.Components
 		private String where;
 		private String orderBy;
 		private String outerJoin;
+		private String cascade;
 		private bool insert;
 		private bool update;
 		private bool useProxy;
 		private bool invert;
-		private bool cascade;
+		private bool lazy;
 
 		public RelationshipInfo(AssociationEnum association, ActiveRecordDescriptor descriptor, ActiveRecordDescriptor targetDescriptor)
 		{
@@ -116,13 +117,13 @@ namespace Castle.ActiveRecord.Generator.Components
 			set { useProxy = value; }
 		}
 
-		public bool Invert
+		public bool Inverse
 		{
 			get { return invert; }
 			set { invert = value; }
 		}
 
-		public bool Cascade
+		public String Cascade
 		{
 			get { return cascade; }
 			set { cascade = value; }
@@ -138,6 +139,12 @@ namespace Castle.ActiveRecord.Generator.Components
 		{
 			get { return update; }
 			set { update = value; }
+		}
+
+		public bool Lazy
+		{
+			get { return lazy; }
+			set { lazy = value; }
 		}
 	}
 }

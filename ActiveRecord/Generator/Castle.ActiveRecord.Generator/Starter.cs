@@ -35,7 +35,8 @@ namespace Castle.ActiveRecord.Generator
 			_main.Load += new EventHandler(OnWorkspaceLoad);
 			_main.Closed += new EventHandler(OnWorkspaceClosed);
 
-			Application.Run(_main);
+			ApplicationContext context = new ApplicationContext(_main);
+			Application.Run(context);
 		}
 
 		[STAThread]

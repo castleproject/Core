@@ -58,6 +58,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 		private ActiveRecordDescriptor _descriptor;
 		private ActiveRecordDescriptor _parent;
+		private System.Windows.Forms.Button EditRelation;
 		private Project _project;
 
 
@@ -184,6 +185,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
+			this.EditRelation = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -416,6 +418,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// tabPage2
 			// 
+			this.tabPage2.Controls.Add(this.EditRelation);
 			this.tabPage2.Controls.Add(this.AddRelation);
 			this.tabPage2.Controls.Add(this.listView2);
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -514,6 +517,16 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.cancelButton.TabIndex = 4;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+			// 
+			// EditRelation
+			// 
+			this.EditRelation.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.EditRelation.Location = new System.Drawing.Point(392, 256);
+			this.EditRelation.Name = "EditRelation";
+			this.EditRelation.Size = new System.Drawing.Size(104, 23);
+			this.EditRelation.TabIndex = 6;
+			this.EditRelation.Text = "Edit Relation";
+			this.EditRelation.Click += new System.EventHandler(this.EditRelation_Click);
 			// 
 			// ActiveRecordPropertiesDialog
 			// 
@@ -670,7 +683,10 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			using(AddRelationDialog addRelationDlg = new AddRelationDialog(_descriptor, _project))
 			{
-				addRelationDlg.ShowDialog(  );
+				if (addRelationDlg.ShowDialog( this ) == DialogResult.OK)
+				{
+					FillClassRelationships( _descriptor );
+				}
 			}
 		}
 
@@ -690,20 +706,20 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 				/// Another option would be to clone 
 				/// the property
-				if (_parent != null)
-				{
-					if (item.Checked)
-					{
-						_parent.Properties.Remove(prop);
-					}
-					else
-					{
-						if (!_parent.Properties.Contains(prop))
-						{
-							_parent.Properties.Add(prop);
-						}
-					}
-				}
+//				if (_parent != null)
+//				{
+//					if (item.Checked)
+//					{
+//						_parent.Properties.Remove(prop);
+//					}
+//					else
+//					{
+//						if (!_parent.Properties.Contains(prop))
+//						{
+//							_parent.Properties.Add(prop);
+//						}
+//					}
+//				}
 			}
 		}
 
@@ -723,20 +739,20 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 				
 				/// Another option would be to clone 
 				/// the property
-				if (_parent != null)
-				{
-					if (item.Checked)
-					{
-						_parent.Properties.Remove(prop);
-					}
-					else
-					{
-						if (!_parent.Properties.Contains(prop))
-						{
-							_parent.Properties.Add(prop);
-						}
-					}
-				}
+//				if (_parent != null)
+//				{
+//					if (item.Checked)
+//					{
+//						_parent.Properties.Remove(prop);
+//					}
+//					else
+//					{
+//						if (!_parent.Properties.Contains(prop))
+//						{
+//							_parent.Properties.Add(prop);
+//						}
+//					}
+//				}
 			}
 		}
 
@@ -796,6 +812,18 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			DialogResult = DialogResult.Cancel;
 			Close();
+		}
+
+		private void EditRelation_Click(object sender, System.EventArgs e)
+		{
+			if (listView2.SelectedItems.Count != 0)
+			{
+				
+			}
+			else
+			{
+				MessageBox.Show(this.Owner, "Select an existing relationship first.");
+			}
 		}
 	}
 }

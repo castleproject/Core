@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 	/// <summary>
 	/// Summary description for ActiveRecordGraphView
 	/// </summary>
-	public class ActiveRecordGraphView : Content, ISubWorkspace
+	public class ActiveRecordGraphView : DockContent, ISubWorkspace
 	{
 		private Netron.GraphLib.UI.GraphControl graphControl1;
 
@@ -190,7 +190,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			// ActiveRecordGraphView
 			// 
-			this.AllowedStates = WeifenLuo.WinFormsUI.ContentStates.Document;
+			this.DockableAreas = WeifenLuo.WinFormsUI.DockAreas.Document;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(848, 394);
@@ -251,14 +251,16 @@ namespace Castle.ActiveRecord.Generator.Parts
 			if (shape is ActiveRecordBaseClassShape)
 			{
 				ActiveRecordBasePropertiesDialog d = new ActiveRecordBasePropertiesDialog();
-				d.ShowDialog(this);
+				d.ShowDialog();
 			}
 			else if (shape is ActiveRecordShape)
 			{
 				ActiveRecordDescriptor ar = (shape as ActiveRecordShape).ActiveRecordDescriptor;
 
-				ActiveRecordPropertiesDialog d = new ActiveRecordPropertiesDialog(ar, _model.CurrentProject);
-				d.ShowDialog(this);
+				ActiveRecordPropertiesDialog dlg = 
+					new ActiveRecordPropertiesDialog(ar, _model.CurrentProject);
+				
+				dlg.ShowDialog();
 			}
 		}
 
@@ -353,7 +355,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			get { return _parentWorkspace.MainStatusBar; }
 		}
 
-		public DockManager MainDockManager
+		public DockPanel MainDockManager
 		{
 			get { return null; }
 		}
