@@ -25,12 +25,12 @@ namespace Castle.DynamicProxy.Test.Classes
 		{
 		}
 
-		public int Pong(int i)
+		public virtual int Pong(int i)
 		{
 			return i;
 		}
 
-		public object Ping(object o)
+		public virtual object Ping(object o)
 		{
 			return o;	
         }
