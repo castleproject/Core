@@ -104,7 +104,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ÌTransactionManager.cs"
+                    RelPath = "ITransactionManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

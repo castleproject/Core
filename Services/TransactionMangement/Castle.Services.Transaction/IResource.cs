@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// This supporting service was inspired by
+// http://www.codeproject.com/cs/database/dal.asp
+// by Deyan Petrov
+
 namespace Castle.Services.Transaction
 {
 	using System;
