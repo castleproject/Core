@@ -6,6 +6,9 @@
 <% add_rightmenu( 'Rationale', '/home/rationale' ) %>
 <% add_rightmenu( 'Mission', '/home/mission' ) %>
 <% add_rightmenu_separator( ) %>
+<% add_rightmenu( 'Samples', '/sample/', false ) %>
+<% add_rightmenu( 'PestControl', '/sample/pestcontrol', true ) %>
+<% add_rightmenu_separator( ) %>
 <% add_rightmenu( 'Projects', '/projects/', false ) %>
 <% projects.each do |project| %>
 <% add_rightmenu( project.name, project.link ) %>
