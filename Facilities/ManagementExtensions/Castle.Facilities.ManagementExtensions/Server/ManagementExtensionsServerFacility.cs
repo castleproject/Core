@@ -16,10 +16,15 @@ namespace Castle.Facilities.ManagedExtensions
 {
 	using System;
 
+	using Castle.Model;
+	using Castle.Model.Configuration;
+
 	using Castle.MicroKernel;
 
 	using Castle.ManagementExtensions;
 	using Castle.ManagementExtensions.Remote.Server;
+
+	using Castle.Facilities.ManagedExtensions.Server;
 
 	/// <summary>
 	/// Summary description for ManagementExtensionsServerFacility.
@@ -39,9 +44,7 @@ namespace Castle.Facilities.ManagedExtensions
 			get { return _mserver; }
 		}
 
-		#region IFacility Members
-
-		public void Init(IKernel kernel)
+		public void Init(IKernel kernel, IConfiguration config)
 		{
 			_kernel = kernel;
 
@@ -51,7 +54,8 @@ namespace Castle.Facilities.ManagedExtensions
 				MConnectorServerFactory.CreateServer( 
 					"provider:http:binary:test.rem", null, _mserver );
 
-			_kernel.ComponentModelBuilder.AddContributor( new ManagementExtensionModelInspector() );
+			_kernel.ComponentModelBuilder.AddContributor( 
+				new ManagementExtensionModelServerInspector() );
 
 			_kernel.ComponentCreated += new ComponentInstanceDelegate(OnComponentCreated);
 			_kernel.ComponentDestroyed += new ComponentInstanceDelegate(OnComponentDestroyed);
@@ -62,19 +66,27 @@ namespace Castle.Facilities.ManagedExtensions
 			_serverConn.Dispose();
 		}
 
-		#endregion
-
-		private void OnComponentCreated(Castle.Model.ComponentModel model, object instance)
+		private void OnComponentCreated(ComponentModel model, object instance)
 		{
-			if (model.ExtendedProperties.Contains( ManagementExtensionModelInspector.ComponentIsManagedKey ))
+			if (model.ExtendedProperties.Contains( ManagementConstants.ComponentIsNaturalManageable ))
 			{
 				_mserver.RegisterManagedObject( instance, new ManagedObjectName( model.Name ) );
 			}
+			else if (model.ExtendedProperties.Contains( ManagementConstants.ComponentIsNonNaturalManageable ))
+			{
+				DefaultMDynamicSupport dynamic = 
+					new DefaultMDynamicSupport(
+						instance, 
+						model.Configuration.Children["management"]);
+
+				_mserver.RegisterManagedObject( dynamic, new ManagedObjectName( model.Name ) );
+			}
 		}
 
-		private void OnComponentDestroyed(Castle.Model.ComponentModel model, object instance)
+		private void OnComponentDestroyed(ComponentModel model, object instance)
 		{
-			if (model.ExtendedProperties.Contains( ManagementExtensionModelInspector.ComponentIsManagedKey ))
+			if (model.ExtendedProperties.Contains( ManagementConstants.ComponentIsNaturalManageable )
+				|| model.ExtendedProperties.Contains( ManagementConstants.ComponentIsNonNaturalManageable ))
 			{
 				_mserver.UnregisterManagedObject( new ManagedObjectName( model.Name ) );
 			}

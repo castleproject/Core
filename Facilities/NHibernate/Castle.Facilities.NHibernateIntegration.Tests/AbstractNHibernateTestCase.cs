@@ -1,4 +1,3 @@
-using System.Threading;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +15,7 @@ using System.Threading;
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
+	using System.Threading;
 
 	using NUnit.Framework;
 

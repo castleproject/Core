@@ -12,28 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AutomaticTransactionManagement
+namespace Castle.Facilities.ManagedExtensions.Client
 {
 	using System;
 
 	using Castle.Model;
-
-	using Castle.MicroKernel.ModelBuilder;
+	
 	using Castle.MicroKernel;
-
-	using Castle.Services.Transaction;
+	using Castle.MicroKernel.ModelBuilder;
+	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
-	/// Summary description for TransactionComponentInspector.
+	/// Summary description for ManagementExtensionModelClientInspector.
 	/// </summary>
-	public class TransactionComponentInspector : IContributeComponentModelConstruction
+	public class ManagementExtensionModelClientInspector : IContributeComponentModelConstruction
 	{
+		public ManagementExtensionModelClientInspector()
+		{
+		}
+
 		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-			if (model.Implementation.IsDefined( typeof(TransactionalAttribute), true ))
+			if (model.Configuration != null)
 			{
-				model.Interceptors.Add( 
-					new InterceptorReference( typeof(TransactionInterceptor) ) );
+				String manageableProxy = model.Configuration.Attributes["manageableProxy"];
+
+				if (manageableProxy == null) return;
+
+				ITypeConverter converter = (ITypeConverter)
+					kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
+
+				if ((bool)converter.PerformConversion(manageableProxy, typeof (bool)))
+				{
+//					model.Interceptors.Add();
+				}
 			}
 		}
 	}

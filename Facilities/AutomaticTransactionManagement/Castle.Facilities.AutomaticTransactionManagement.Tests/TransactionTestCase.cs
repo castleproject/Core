@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilties.AutomaticTransactionManagement.Tests
+namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 {
 	using System;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="nhibernate-facility" default="build">
+<project name="prevalence-facility" default="build">
     
     <!-- This build file inherits common properties from the ../facilities.build -->
 
@@ -7,11 +7,10 @@
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="lib.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Facilities.NHibernateIntegration" />
-	<property name="src.ext.dir" value="${base.dir}/Castle.Facilities.NHibernateExtension" />
+	<property name="src.dir" value="${base.dir}/Castle.Facilities.Prevalence" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.NHibernateIntegration.Tests" />
-	<property name="name" value="Castle.Facilities.NHibernateIntegration" />
+	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.Prevalence.Tests" />
+	<property name="name" value="Castle.Facilities.Prevalence" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
@@ -23,10 +22,6 @@
 	<target name="init" depends="clean">
 		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
-		<copy file="${services.bin.dir}/Castle.Services.Transaction.dll" todir="${bin.dir}" />
-		<copy file="../AutomaticTransactionManagement/bin/Castle.Facilities.AutomaticTransactionManagement.dll" todir="${bin.dir}" />
 		<copy todir="${bin.dir}">
 			<fileset basedir="${lib.dir}">
 				<includes name="*.dll" />
@@ -35,27 +30,8 @@
 	</target>
 
 	<target name="build" depends="init,tests.run" />
-
-	<target name="compileextension" depends="init">
-		<!-- doc="${bin.dir}/${name}.xml" -->
-		<csc 
-			define="STRONG"
-			target="library" 
-			debug="${debug}"
-			optimize="${optimize}"
-			output="${bin.dir}/Castle.Facilities.NHibernateExtension.dll">
-			
-			<sources basedir="${src.ext.dir}" defaultexcludes="true">
-				<includes name="**/*.cs" />
-			</sources>
-
-			<references>
-				<include name="${bin.dir}/*.dll" />
-			</references>
-		</csc>
-	</target>
 	
-	<target name="compile" depends="compileextension">
+	<target name="compile" depends="init">
 		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG"

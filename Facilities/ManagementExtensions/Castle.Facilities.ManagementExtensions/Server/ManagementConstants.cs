@@ -12,32 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AutomaticTransactionManagement
+namespace Castle.Facilities.ManagedExtensions.Server
 {
 	using System;
 
-	using Castle.MicroKernel;
-
-	using Castle.Model.Configuration;
-
 	/// <summary>
-	/// Summary description for TransactionFacility.
+	/// Summary description for ManagementConstants.
 	/// </summary>
-	public class TransactionFacility : IFacility
+	internal abstract class ManagementConstants
 	{
-		public TransactionFacility()
-		{
-		}
+		internal static readonly String ComponentIsNaturalManageable = "ManagementExtensionModelInspector.IsManageable";
 
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
-		{
-			kernel.AddComponent( "transaction.interceptor", typeof(TransactionInterceptor) );
+		internal static readonly String ComponentIsNonNaturalManageable = "ManagementExtensionModelInspector.IsNonNatManageable";
 
-			kernel.ComponentModelBuilder.AddContributor( new TransactionComponentInspector() );
-		}
-
-		public void Terminate()
-		{
-		}
+		internal static readonly String DynamicDispatcher = "ManagementExtensionModelInspector.DynamicDispatcher";
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 	using Castle.Windsor;
 
-	using Castle.Facilties.AutomaticTransactionManagement;
+	using Castle.Facilities.AutomaticTransactionManagement;
 
 	/// <summary>
 	/// Summary description for DaoTestCase.

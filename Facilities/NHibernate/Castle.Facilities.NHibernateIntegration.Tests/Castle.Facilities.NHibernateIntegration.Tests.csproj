@@ -153,9 +153,9 @@
                     HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilties.AutomaticTransactionManagement"
-                    AssemblyName = "Castle.Facilties.AutomaticTransactionManagement"
-                    HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilties.AutomaticTransactionManagement.dll"
+                    Name = "Castle.Facilities.AutomaticTransactionManagement"
+                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
+                    HintPath = "..\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
                 />
             </References>
         </Build>

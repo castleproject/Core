@@ -16,6 +16,8 @@ namespace Castle.Facilities.ManagedExtensions
 {
 	using System;
 
+	using Castle.Model.Configuration;
+
 	using Castle.MicroKernel;
 
 	using Castle.ManagementExtensions;
@@ -26,19 +28,19 @@ namespace Castle.Facilities.ManagedExtensions
 	/// </summary>
 	public class ManagementExtensionsClientFacility : IFacility
 	{
-		MConnector _connector;
+		private MConnector _connector;
 
 		public ManagementExtensionsClientFacility()
 		{
 		}
 
-		#region IFacility Members
-
-		public void Init(IKernel kernel)
+		public void Init(IKernel kernel, IConfiguration config)
 		{
+			kernel.AddComponent("managed.dispatcher.interceptor", typeof());
+
 			_connector = MConnectorFactory.CreateConnector( "provider:http:binary:test.rem", null );
 
-		
+			kernel.ComponentModelBuilder.AddContributor( new Client.ManagementExtensionModelClientInspector() );
 		}
 
 		public void Terminate()
@@ -46,8 +48,6 @@ namespace Castle.Facilities.ManagedExtensions
 			_connector.Disconnect();
 			_connector.Dispose();
 		}
-
-		#endregion
 
 		public MServer MServer
 		{

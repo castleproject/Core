@@ -12,32 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.AutomaticTransactionManagement
+namespace Castle.Facilities.ManagedExtensions.Client
 {
 	using System;
 
-	using Castle.MicroKernel;
-
-	using Castle.Model.Configuration;
+	using Castle.Model.Interceptor;
 
 	/// <summary>
-	/// Summary description for TransactionFacility.
+	/// Summary description for ManagementExtensionsClientInterceptor.
 	/// </summary>
-	public class TransactionFacility : IFacility
+	public class ManagementExtensionsClientInterceptor : IMethodInterceptor
 	{
-		public TransactionFacility()
+		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-		}
-
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
-		{
-			kernel.AddComponent( "transaction.interceptor", typeof(TransactionInterceptor) );
-
-			kernel.ComponentModelBuilder.AddContributor( new TransactionComponentInspector() );
-		}
-
-		public void Terminate()
-		{
+			return invocation.Proceed(args);
 		}
 	}
 }
