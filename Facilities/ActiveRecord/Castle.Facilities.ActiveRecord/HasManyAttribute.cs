@@ -22,12 +22,86 @@ namespace Castle.Facilities.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property)]
 	public class HasManyAttribute : RelationAttribute
 	{
-		public HasManyAttribute( Type mapType )
+		private Type _mapType;
+		private string _key;
+		private string _index;
+		private string _table;
+		private string _schema;
+		private string _lazy;
+		private string _inverse;
+		private string _cascade;
+		private string _sort;
+		private string _orderBy;
+		private string _where;
+
+		public HasManyAttribute()
 		{
 		}
 
-		public HasManyAttribute( Type mapType, String fk_colName )
+		public Type MapType
 		{
+			get { return _mapType; }
+			set { _mapType = value; }
+		}
+
+		public string Key
+		{
+			get { return _key; }
+			set { _key = value; }
+		}
+
+		public string Index
+		{
+			get { return _index; }
+			set { _index = value; }
+		}
+
+		public string Table
+		{
+			get { return _table; }
+			set { _table = value; }
+		}
+
+		public string Schema
+		{
+			get { return _schema; }
+			set { _schema = value; }
+		}
+
+		public string Lazy
+		{
+			get { return _lazy; }
+			set { _lazy = value; }
+		}
+
+		public string Inverse
+		{
+			get { return _inverse; }
+			set { _inverse = value; }
+		}
+
+		public string Cascade
+		{
+			get { return _cascade; }
+			set { _cascade = value; }
+		}
+
+		public string Sort
+		{
+			get { return _sort; }
+			set { _sort = value; }
+		}
+
+		public string OrderBy
+		{
+			get { return _orderBy; }
+			set { _orderBy = value; }
+		}
+
+		public string Where
+		{
+			get { return _where; }
+			set { _where = value; }
 		}
 	}
 }
