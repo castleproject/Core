@@ -70,16 +70,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
                     Name = "Bamboo.Prevalence.Collections"
                     AssemblyName = "Bamboo.Prevalence.Collections"
                     HintPath = "..\lib\Bamboo.Prevalence.Collections.dll"
@@ -95,14 +85,14 @@
                     HintPath = "..\lib\Bamboo.Prevalence.Util.dll"
                 />
                 <Reference
-                    Name = "Castle.MicroKernel"
-                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Model"
                     AssemblyName = "Castle.Model"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
             </References>
         </Build>
