@@ -16,6 +16,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 {
 	using System;
 	using System.IO;
+	using System.Net;
 
 	using NUnit.Framework;
 
@@ -27,6 +28,18 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 		protected override String ObtainPhysicalDir()
 		{
 			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
+		}
+
+		[Test]
+		public void AppPath()
+		{
+			HttpWebRequest myReq = (HttpWebRequest) 
+				WebRequest.Create("http://localhost:8083/apppath/index.rails");
+			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+
+			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+			AssertContents("Current apppath is /", response);
 		}
 	}
 }

@@ -1,5 +1,8 @@
+Change history
 
-Alpha Version 1.0.0
-- First release
+Beta 2
+------ 
 
-Future modifications - after the first release - shall be tracked in this file
+- Few bug corrections
+- Applied patch from Dru Sellers: NVelocityViewEngine adds a $siteRoot exposing the Request.ApplicationPath
+

@@ -21,6 +21,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 {
 	using System;
 	using System.IO;
+	using System.Web;
 	using System.Collections;
 
 	using Commons.Collections;
@@ -154,6 +155,8 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			{
 				innerContext[entry.Key] = entry.Value;
 			}
+
+			innerContext["siteRoot"] = HttpContext.Current.Request.ApplicationPath;
 
 			return new VelocityContext( innerContext );
 		}
