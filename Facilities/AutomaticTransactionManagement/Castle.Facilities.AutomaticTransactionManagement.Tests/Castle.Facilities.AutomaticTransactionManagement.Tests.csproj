@@ -120,12 +120,22 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AnotherCustomerService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "CustomerService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ICustomerService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

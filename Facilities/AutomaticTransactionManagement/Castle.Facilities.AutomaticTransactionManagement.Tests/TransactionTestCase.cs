@@ -66,5 +66,42 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 			Assert.AreEqual(1, transactionManager.CommittedCount);
 			Assert.AreEqual(1, transactionManager.RolledBackCount);
 		}
+
+		[Test]
+		public void TestBasicOperationsWithInterfaceService()
+		{
+			WindsorContainer container = new WindsorContainer( new DefaultConfigurationStore() );
+
+			container.AddFacility( "transactionmanagement", new TransactionFacility() );
+
+			container.AddComponent( "transactionmanager", 
+				typeof(ITransactionManager), typeof(MockTransactionManager) );
+
+			container.AddComponent( "services.customer", typeof(ICustomerService), typeof(AnotherCustomerService) );
+
+			ICustomerService service = (ICustomerService) container["services.customer"];
+
+			service.Insert( "TestCustomer", "Rua P Leite, 33" );
+
+			MockTransactionManager transactionManager = (MockTransactionManager) 
+				container["transactionmanager"];
+
+			Assert.AreEqual(1, transactionManager.TransactionCount);
+			Assert.AreEqual(1, transactionManager.CommittedCount);
+			Assert.AreEqual(0, transactionManager.RolledBackCount);
+
+			try
+			{
+				service.Delete( 1 );
+			}
+			catch(Exception)
+			{
+				// Expected
+			}
+
+			Assert.AreEqual(2, transactionManager.TransactionCount);
+			Assert.AreEqual(1, transactionManager.CommittedCount);
+			Assert.AreEqual(1, transactionManager.RolledBackCount);
+		}
 	}
 }

@@ -59,6 +59,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 		// Specify wich Data Mapper to use
 		[Session(AbstractIBatisNetTestCase.DATA_MAPPER)]
+		[Transaction(TransactionMode.Requires)]
 		public Account GetAccountWithSpecificDataMapper(int id)
 		{
 			return _accountDao.GetAccount(id);
@@ -84,6 +85,14 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 		public void DummyNoSession()
 		{
 			Console.WriteLine("No session will be open since we're using the NoSession attribute");
+		}
+
+		[Transaction(TransactionMode.Requires)]
+		public void InsertTransactionalAccountWithError(Account account)
+		{
+			_accountDao.InsertAccount(account);
+
+			throw new ApplicationException("Ugh!");
 		}
 
 		#endregion

@@ -53,18 +53,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-			// Get custom attributes from the method   
-			#region Important remark
-			// For line 62, I have first tried 
-			// invocation.Method.IsDefined( typeof(NoSessionAttribute), true )
-			// but this not not work, don't know why (perhaps because I use an interface IService for my Service class on test...)
-			// This bug may be affected also the TransactionAttribute as the Intercept method used the same method
-			// (99% of chance)
-			// Must be investigate
-			#endregion
-
-			MethodInfo info = invocation.Method;
-			// MethodInfo info = invocation.InvocationTarget.GetType().GetMethod(invocation.Method.Name);
+			MethodInfo info = invocation.MethodInvocationTarget;
 
 			if (info.IsDefined( typeof(NoSessionAttribute), true ))
 			{

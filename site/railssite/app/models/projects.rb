@@ -31,8 +31,15 @@ class FacilitiesList
 
   def initialize()
     @list = []
-    @list << Project.new( 'Prevalence', '/prevalence/', '' )
-    @list << Project.new( 'Management Extensions', '/management/facility', '' )
+    @list << Project.new( 'Aspect#', '/aspectsharp/', 'Enable AOP capabilities for components' )
+    @list << Project.new( 'ActiveRecord', '/ar/', 'Simulates the Rail\'s ActiveRecord. Still on early stages' )
+    @list << Project.new( 'Prevalence', '/prevalence/', 'Manages the prevalence of an object model' )
+    @list << Project.new( 'Automatic Transaction Management', '/autotransaction/', 'Manages transactions for methods' )
+    @list << Project.new( 'NHibernate', '/nhibernate/', 'Enables the usage of NHibernate O/R framework for your components' )
+    @list << Project.new( 'iBatisNet', '/ibatis/', 'Enables the usage of iBatis O/R framework for your components' )
+    @list << Project.new( 'Batch Registration', '/batchreg/', 'Registers components based on configuration instructions' )
+    @list << Project.new( 'TypedFactory', '/batchreg/', 'Implements factories for components' )
+    @list << Project.new( 'RemoteComponent', '/remcomponents/', 'Exposes and access remote components in a transparent fashion. Still on early stages' )
   end
   
   def each
@@ -40,3 +47,5 @@ class FacilitiesList
   end
 
 end
+
+

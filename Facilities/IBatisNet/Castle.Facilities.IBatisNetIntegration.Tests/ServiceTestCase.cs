@@ -24,12 +24,8 @@
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
 	using System;
-	using System.Collections;
-	using System.Threading;
 
 	using NUnit.Framework;
-
-	using Castle.Windsor;
 
 	using Castle.Facilities.AutomaticTransactionManagement;
 
@@ -37,7 +33,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
 
 	/// <summary>
-	/// Summary description for DaoTestCase.
+	/// Summary description for ServiceTestCase.
 	/// </summary>
 	[TestFixture]
 	public class ServiceTestCase : AbstractIBatisNetTestCase
@@ -100,7 +96,41 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 			IService service = container["Service"] as IService;
 			service.DummyNoSession();
+		}
 
+		[Test]
+		public void Rollback()
+		{
+			container = CreateConfiguredContainer();
+			container.AddFacility("IBatisNet", new IBatisNetFacility());
+			container.AddFacility("transaction", new TransactionFacility());
+
+			container.AddComponent("AccountDao", typeof(IAccountDao), typeof(AccountDao));
+			container.AddComponent("Service", typeof(IService), typeof(Service));
+
+			this.ResetDatabase();
+			IService service = container["Service"] as IService;
+
+			Account account = new Account();
+			account.Id = 999;
+			account.EmailAddress = "ibatis@somewhere.com";
+			account.FirstName = "Transaction";
+			account.LastName = "Error";
+
+			try
+			{
+				service.InsertTransactionalAccountWithError(account);
+				Assert.Fail("Exception was expected");
+			}
+			catch(Exception)
+			{
+				// Expected
+			}
+
+			account = null;
+			account = service.GetAccountWithSpecificDataMapper(999) as Account;
+
+			Assert.IsNull( account );
 		}
 	}
 }

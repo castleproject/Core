@@ -16,9 +16,23 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for ServiceStatusImpl.
-	/// </summary>
+	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Property|AttributeTargets.Method)]
+	public class MyAttribute : Attribute
+	{
+		private string _name;
+
+		public MyAttribute(String name)
+		{
+			_name = name;
+		}
+
+		public string name
+		{
+			get { return _name; }
+		}
+	}
+
+	[MyAttribute("class attribute")]
 	public class ServiceStatusImpl : IServiceStatus
 	{
 		private State _state = State.Invalid;
@@ -27,29 +41,22 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		{
 		}
 
-		#region IServiceStatus Members
-
+		[MyAttribute("Requests")]
 		public int Requests
 		{
-			get
-			{
-				return 10;
-			}
+			get { return 10; }
 		}
 
+		[MyAttribute("ActualState")]
 		public State ActualState
 		{
-			get
-			{
-				return _state;
-			}
+			get { return _state; }
 		}
 
+		[MyAttribute("ChangeState")]
 		public void ChangeState(State state)
 		{
 			_state = state;
 		}
-
-		#endregion
 	}
 }

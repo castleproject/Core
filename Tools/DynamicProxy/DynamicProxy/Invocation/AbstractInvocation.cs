@@ -1,3 +1,4 @@
+using System;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +47,11 @@ namespace Castle.DynamicProxy.Invocation
 		public MethodInfo Method
 		{
 			get { return _method; }
+		}
+
+		public virtual MethodInfo MethodInvocationTarget
+		{
+			get { return Method; }
 		}
 
 		public abstract object Proceed(params object[] args);

@@ -42,6 +42,12 @@ namespace Castle.DynamicProxy
 		/// <param name="args"></param>
 		/// <returns></returns>
 		object Proceed( params object[] args );
+
+		/// <summary>
+		/// 
+		/// </summary>
+		MethodInfo MethodInvocationTarget { get; }
+
 	}
 
 }

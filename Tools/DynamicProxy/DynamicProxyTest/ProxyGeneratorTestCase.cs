@@ -16,18 +16,14 @@ namespace Castle.DynamicProxy.Test
 {
 	using System;
 	using System.Collections;
-	using System.Reflection;
 
 	using NUnit.Framework;
 
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Test.Classes;
 	using Castle.DynamicProxy.Test.ClassInterfaces;
-	using Castle.DynamicProxy.Builder.CodeGenerators;
 
-	/// <summary>
-	/// Summary description for ProxyGeneratorTestCase.
-	/// </summary>
+
 	[TestFixture]
 	public class ProxyGeneratorTestCase
 	{
@@ -237,6 +233,25 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual( State.Valid, inter.ActualState );
 		}
 
+		[Test]
+		public void TestAttributesForInterfaceProxies()
+		{
+			ServiceStatusImpl service = new ServiceStatusImpl();
+
+			object proxy = _generator.CreateProxy( 
+				typeof(IServiceStatus), new MyInterfaceProxy( ), service );
+			
+			Assert.IsNotNull( proxy );
+			Assert.IsTrue( typeof(IServiceStatus).IsAssignableFrom( proxy.GetType() ) );
+
+			IServiceStatus inter = (IServiceStatus) proxy;
+
+			Assert.AreEqual( State.Invalid, inter.ActualState );
+			
+			inter.ChangeState( State.Valid );
+			Assert.AreEqual( State.Valid, inter.ActualState );
+		}
+
 		public class GuidClass 
 		{
 			public virtual Guid GooId 
@@ -259,11 +274,11 @@ namespace Castle.DynamicProxy.Test
 			Assert.IsNotNull( inter.GooId );
 		}
 
-		public class MyInterfaceProxy : IInterceptor
+		public class MyInterfaceProxy : StandardInterceptor
 		{
-			public object Intercept(IInvocation invocation, params object[] args)
+			protected override void PreProceed(IInvocation invocation, params object[] args)
 			{
-				return null;
+				base.PreProceed(invocation, args);
 			}
 		}
 	}

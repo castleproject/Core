@@ -145,6 +145,14 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			{
 				innerContext[entry.Key] = entry.Value;
 			}
+			foreach(String key in context.Params.AllKeys)
+			{
+				innerContext[key] = context.Params[key];
+			}
+			foreach(DictionaryEntry entry in context.Flash)
+			{
+				innerContext[entry.Key] = entry.Value;
+			}
 
 			return new VelocityContext( innerContext );
 		}

@@ -19,6 +19,7 @@ namespace Castle.Windsor.Proxy
 	using System.Threading;
 
 	using Castle.DynamicProxy;
+	using Castle.DynamicProxy.Invocation;
 	
 	using Castle.Model.Interceptor;
 
@@ -31,15 +32,15 @@ namespace Castle.Windsor.Proxy
 	/// Although we have multithread test cases to ensure the correct 
 	/// behavior, we might have threading synchronization issues.
 	/// </remarks>
-	public sealed class DefaultMethodInvocation : IMethodInvocation, IInvocation
+	public class DefaultMethodInvocation : SameClassInvocation, IMethodInvocation
 	{
 		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
 
-		private ICallable _callable;
-		private MethodInfo _method;
-		private object _proxy;
-		private object _target;
-		private object _original_target;
+//		private ICallable _callable;
+//		private MethodInfo _method;
+//		private object _proxy;
+//		private object _target;
+//		private object _original_target;
 		private IMethodInterceptor[] _interceptorChain;
 
 		private object key = new object();
@@ -51,33 +52,19 @@ namespace Castle.Windsor.Proxy
 		/// <param name="callable"></param>
 		/// <param name="proxy"></param>
 		/// <param name="method"></param>
-		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method)
+		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method) : base(callable, proxy, method)
 		{
-			_callable = callable;
-			_proxy = proxy;
-			_method = method;
-			_target = _original_target = callable.Target;
 		}
 
-		#region IMethodInvocation Members
+//		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method)
+//		{
+//			_callable = callable;
+//			_proxy = proxy;
+//			_method = method;
+//			_target = _original_target = callable.Target;
+//		}
 
-		public object Proxy
-		{
-			get { return _proxy; }
-		}
-
-		public object InvocationTarget
-		{
-			get { return _target; }
-			set { _target = value; }
-		}
-
-		public MethodInfo Method
-		{
-			get { return _method; }
-		}
-
-		public object Proceed(params object[] args)
+		public override object Proceed(params object[] args)
 		{
 			// In a multithreaded application, the Proceed on the same 
 			// invocation instance can be called at the same time
@@ -106,8 +93,6 @@ namespace Castle.Windsor.Proxy
 				}
 			}
 		}
-
-		#endregion
 
 		private int CurrentIndex
 		{

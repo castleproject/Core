@@ -41,5 +41,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 		void ResetTableAccount();
 
 		void DummyNoSession();
+
+		void InsertTransactionalAccountWithError(Account account);
 	}
 }

@@ -43,5 +43,7 @@ namespace Castle.CastleOnRails.Framework
 		int StatusCode { get; set; }
 
 		String ContentType { get; set; }
+
+		void CreateCookie( String name, String value );
 	}
 }

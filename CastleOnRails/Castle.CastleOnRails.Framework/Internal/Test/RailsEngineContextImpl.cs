@@ -169,6 +169,11 @@ namespace Castle.CastleOnRails.Framework.Tests
 			get { throw new NotImplementedException(); }
 		}
 
+		public String ReadCookie(String name)
+		{
+			throw new NotImplementedException();
+		}
+
 		#endregion
 	}
 
@@ -248,6 +253,11 @@ namespace Castle.CastleOnRails.Framework.Tests
 		}
 
 		public void Redirect(String area, String controller, String action)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void CreateCookie(String name, String value)
 		{
 			throw new NotImplementedException();
 		}

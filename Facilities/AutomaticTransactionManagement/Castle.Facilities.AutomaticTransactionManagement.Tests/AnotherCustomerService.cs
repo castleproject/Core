@@ -12,28 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 
-	public interface IRequest
+	using Castle.Services.Transaction;
+
+
+	[Transactional]
+	public class AnotherCustomerService : ICustomerService
 	{
-		NameValueCollection Headers { get; }
+		[Transaction(TransactionMode.Requires)]
+		public void Insert( String name, String address )
+		{
+			
+		}
 
-		IDictionary Files { get; }
-
-		NameValueCollection Params { get; }
-
-		bool IsLocal { get; }
-
-		Uri Uri { get; }
-
-		byte[] BinaryRead(int count);
-
-		String this [String key] { get; }
-
-		String ReadCookie( String name );
+		[Transaction(TransactionMode.Requires)]
+		public void Delete( int id )
+		{
+			throw new ApplicationException("Whopps. Problems!");
+		}
 	}
 }

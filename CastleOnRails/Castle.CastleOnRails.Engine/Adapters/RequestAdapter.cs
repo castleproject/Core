@@ -75,5 +75,15 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		{
 			get { return _request.Params; }
 		}
+
+		public String ReadCookie(String name)
+		{
+			HttpCookie cookie = _request.Cookies[name];
+			if (cookie == null)
+			{
+				return null;
+			}
+			return cookie.Value;
+		}
 	}
 }

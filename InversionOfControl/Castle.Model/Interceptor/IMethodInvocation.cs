@@ -41,6 +41,11 @@ namespace Castle.Model.Interceptor
 		MethodInfo Method { get; }
 
 		/// <summary>
+		/// The Method being invoked on the target.
+		/// </summary>
+		MethodInfo MethodInvocationTarget { get; }
+
+		/// <summary>
 		/// The Proceed go on with the actual invocation.
 		/// </summary>
 		/// <param name="args">The arguments of the method</param>

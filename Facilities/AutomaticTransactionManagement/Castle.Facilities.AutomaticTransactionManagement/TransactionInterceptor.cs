@@ -1,3 +1,4 @@
+using System.Reflection;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,13 +35,15 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-			if (!invocation.Method.IsDefined( typeof(TransactionAttribute), true ))
+			MethodInfo methodInfo = invocation.MethodInvocationTarget;
+
+			if (!methodInfo.IsDefined( typeof(TransactionAttribute), true ))
 			{
 				return invocation.Proceed(args);
 			}
 			else
 			{
-				object[] attrs = invocation.Method.GetCustomAttributes( 
+				object[] attrs = methodInfo.GetCustomAttributes( 
 					typeof(TransactionAttribute), true );
 
 				TransactionAttribute transactionAtt = (TransactionAttribute) attrs[0];

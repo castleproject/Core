@@ -134,6 +134,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Proxy\DefaultInterfaceMethodInvocation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Proxy\DefaultMethodInvocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Invocation
+namespace Castle.Windsor.Proxy
 {
 	using System;
 	using System.Reflection;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public class InterfaceInvocation : SameClassInvocation
+	using Castle.DynamicProxy;
+
+
+	public class DefaultInterfaceMethodInvocation : DefaultMethodInvocation
 	{
 		private MethodInfo _methodInvocationTarget;
 
-		public InterfaceInvocation(ICallable callable, object proxy, MethodInfo method) : 
-			base(callable, proxy, method)
+		public DefaultInterfaceMethodInvocation(ICallable callable, object proxy, MethodInfo method) : base(callable, proxy, method)
 		{
 		}
 

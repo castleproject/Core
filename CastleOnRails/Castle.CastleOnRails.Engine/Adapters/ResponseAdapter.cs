@@ -96,5 +96,10 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			_response.Redirect( 
 				String.Format("../{0}/{1}/{2}.rails", area, controller, action), false );
 		}
+
+		public void CreateCookie(String name, String value)
+		{
+			_response.Cookies.Add( new HttpCookie(name, value) );
+		}
 	}
 }
