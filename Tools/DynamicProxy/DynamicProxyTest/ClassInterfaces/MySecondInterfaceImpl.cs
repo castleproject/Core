@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 	/// </summary>
 	public class MySecondInterfaceImpl : MyInterfaceImpl, IMySecondInterface
 	{
-		private String m_address;
+		private String _address;
 
 		public MySecondInterfaceImpl()
 		{
@@ -33,11 +33,11 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		{
 			get
 			{
-				return m_address;
+				return _address;
 			}
 			set
 			{
-				m_address = value;
+				_address = value;
 			}
 		}
 

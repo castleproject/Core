@@ -24,28 +24,28 @@ namespace Castle.DynamicProxy.Serialization
 	[Serializable]
 	public class ProxyObjectReference : IObjectReference, ISerializable
 	{
-		private Type m_baseType;
-		private Type[] m_interfaces;
-		private IInterceptor m_interceptor;
-		private object[] m_mixins;
-		private object[] m_data;
-		private object m_proxy;
+		private Type _baseType;
+		private Type[] _interfaces;
+		private IInterceptor _interceptor;
+		private object[] _mixins;
+		private object[] _data;
+		private object _proxy;
 
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
 		{
-			m_interceptor = (IInterceptor) info.GetValue("__interceptor", typeof(IInterceptor) );
-			m_baseType = (Type) info.GetValue("__baseType", typeof(Type) );
-			m_interfaces = (Type[]) info.GetValue("__interfaces", typeof(Type[]) );
-			m_mixins = (object[]) info.GetValue("__mixins", typeof(object[]) );
+			_interceptor = (IInterceptor) info.GetValue("__interceptor", typeof(IInterceptor) );
+			_baseType = (Type) info.GetValue("__baseType", typeof(Type) );
+			_interfaces = (Type[]) info.GetValue("__interfaces", typeof(Type[]) );
+			_mixins = (object[]) info.GetValue("__mixins", typeof(object[]) );
 
-			m_proxy = RecreateProxy(info, context);
+			_proxy = RecreateProxy(info, context);
 
-			InvokeCallback(m_proxy);
+			InvokeCallback(_proxy);
 		}
 
 		protected virtual object RecreateProxy(SerializationInfo info, StreamingContext context)
 		{
-			if (m_baseType == typeof(object))
+			if (_baseType == typeof(object))
 			{
 				return RecreateInterfaceProxy(info, context);
 			}
@@ -64,20 +64,20 @@ namespace Castle.DynamicProxy.Serialization
 
 			object target = info.GetValue("__target", typeof(object));
 
-			if (m_mixins.Length == 0)
+			if (_mixins.Length == 0)
 			{
-				proxy = generator.CreateProxy( m_interfaces, m_interceptor, target);
+				proxy = generator.CreateProxy( _interfaces, _interceptor, target);
 			}
 			else
 			{
 				GeneratorContext genContext = new GeneratorContext();
 				
-				foreach(object mixin in m_mixins)
+				foreach(object mixin in _mixins)
 				{
 					genContext.AddMixinInstance(mixin);
 				}
 				
-				proxy = generator.CreateCustomProxy( m_interfaces, m_interceptor, target, genContext );
+				proxy = generator.CreateCustomProxy( _interfaces, _interceptor, target, genContext );
 			}
 
 			return proxy;
@@ -89,7 +89,7 @@ namespace Castle.DynamicProxy.Serialization
 
 			if (!delegateBaseSer)
 			{
-				m_data = (object[]) info.GetValue("__data", typeof(object[]) );
+				_data = (object[]) info.GetValue("__data", typeof(object[]) );
 			}
 
 			object proxy = null;
@@ -99,45 +99,45 @@ namespace Castle.DynamicProxy.Serialization
 
 			if (delegateBaseSer)
 			{
-				if (m_mixins.Length == 0)
+				if (_mixins.Length == 0)
 				{
-					Type proxy_type = generator.ProxyBuilder.CreateClassProxy( m_baseType );
+					Type proxy_type = generator.ProxyBuilder.CreateClassProxy( _baseType );
 					proxy = Activator.CreateInstance( proxy_type, new object[] { info, context } );
 				} 
 				else
 				{
 					GeneratorContext genContext = new GeneratorContext();
 					
-					foreach(object mixin in m_mixins)
+					foreach(object mixin in _mixins)
 					{
 						genContext.AddMixinInstance(mixin);
 					}
 					
 					Type proxy_type = generator.ProxyBuilder.CreateCustomClassProxy( 
-						m_baseType, genContext );
+						_baseType, genContext );
 					proxy = Activator.CreateInstance( proxy_type, new object[] { info, context } );
 				}
 			}
 			else
 			{
-				if (m_mixins.Length == 0)
+				if (_mixins.Length == 0)
 				{
-					proxy = generator.CreateClassProxy( m_baseType, m_interceptor );
+					proxy = generator.CreateClassProxy( _baseType, _interceptor );
 				}
 				else
 				{
 					GeneratorContext genContext = new GeneratorContext();
 					
-					foreach(object mixin in m_mixins)
+					foreach(object mixin in _mixins)
 					{
 						genContext.AddMixinInstance(mixin);
 					}
 					
-					proxy = generator.CreateCustomClassProxy( m_baseType, m_interceptor, genContext );
+					proxy = generator.CreateCustomClassProxy( _baseType, _interceptor, genContext );
 				}
 
-				MemberInfo[] members = FormatterServices.GetSerializableMembers( m_baseType );
-				FormatterServices.PopulateObjectMembers(proxy, members, m_data);
+				MemberInfo[] members = FormatterServices.GetSerializableMembers( _baseType );
+				FormatterServices.PopulateObjectMembers(proxy, members, _data);
 			}
 
 			return proxy;
@@ -153,7 +153,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		public object GetRealObject(StreamingContext context)
 		{
-			return m_proxy;
+			return _proxy;
 		}
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)

@@ -22,16 +22,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class GotoStatement : Statement
 	{
-		private LabelReference m_label;
+		private LabelReference _label;
 
 		public GotoStatement( LabelReference label )
 		{
-			m_label = label;
+			_label = label;
 		}
 
 		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Br_S, m_label.Reference );
+			gen.Emit(OpCodes.Br_S, _label.Reference );
 		}
 	}
 }

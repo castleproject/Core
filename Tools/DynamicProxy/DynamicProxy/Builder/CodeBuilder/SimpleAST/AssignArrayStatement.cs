@@ -23,26 +23,26 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class AssignArrayStatement : Statement
 	{
-		private Reference m_targetArray;
-		private int m_targetPosition;
-		private Expression m_value;
+		private Reference _targetArray;
+		private int _targetPosition;
+		private Expression _value;
 
 		public AssignArrayStatement( Reference targetArray, int targetPosition, Expression value )
 		{
-			m_targetArray = targetArray;
-			m_targetPosition = targetPosition;
-			m_value = value;
+			_targetArray = targetArray;
+			_targetPosition = targetPosition;
+			_value = value;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator il)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference( m_targetArray.OwnerReference, il );
+			ArgumentsUtil.EmitLoadOwnerAndReference( _targetArray.OwnerReference, il );
 			
-			m_targetArray.LoadReference( il );
+			_targetArray.LoadReference( il );
 			
-			il.Emit(OpCodes.Ldc_I4, m_targetPosition);
+			il.Emit(OpCodes.Ldc_I4, _targetPosition);
 
-			m_value.Emit(member, il);
+			_value.Emit(member, il);
 
 			il.Emit(OpCodes.Stelem_Ref);
 		}

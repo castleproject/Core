@@ -18,34 +18,34 @@ namespace Castle.DynamicProxy.Invocation
 
 	public abstract class AbstractInvocation : IInvocation
 	{
-		protected ICallable m_callable;
-		protected object m_original_target;
-		private MethodInfo m_method;
-		private object m_proxy;
-		private object m_target;
+		protected ICallable _callable;
+		protected object _original_target;
+		private MethodInfo _method;
+		private object _proxy;
+		private object _target;
 
 		public AbstractInvocation( ICallable callable, object proxy, MethodInfo method )
 		{
-			m_callable = callable;
-			m_proxy = proxy;
-			m_target = m_original_target = callable.Target;
-			m_method = method;
+			_callable = callable;
+			_proxy = proxy;
+			_target = _original_target = callable.Target;
+			_method = method;
 		}
 
 		public object Proxy
 		{
-			get { return m_proxy; }
+			get { return _proxy; }
 		}
 
 		public object InvocationTarget
 		{
-			get { return m_target; }
-			set { m_target = value; }
+			get { return _target; }
+			set { _target = value; }
 		}
 
 		public MethodInfo Method
 		{
-			get { return m_method; }
+			get { return _method; }
 		}
 
 		public abstract object Proceed(params object[] args);

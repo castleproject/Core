@@ -23,22 +23,22 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class AssignStatement : Statement
 	{
-		private Reference m_target;
-		private Expression m_expression;
+		private Reference _target;
+		private Expression _expression;
 
 		public AssignStatement( Reference target, Expression expression )
 		{
-			m_target = target;
-			m_expression = expression;
+			_target = target;
+			_expression = expression;
 		}
 
 		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference( m_target.OwnerReference, gen );
+			ArgumentsUtil.EmitLoadOwnerAndReference( _target.OwnerReference, gen );
 
-			m_expression.Emit(member, gen);
+			_expression.Emit(member, gen);
 
-			m_target.StoreReference(gen);
+			_target.StoreReference(gen);
 		}
 	}
 }

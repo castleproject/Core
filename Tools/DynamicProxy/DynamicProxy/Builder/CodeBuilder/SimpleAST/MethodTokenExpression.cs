@@ -23,16 +23,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class MethodTokenExpression : Expression
 	{
-		private MethodInfo m_method;
+		private MethodInfo _method;
 
 		public MethodTokenExpression( MethodInfo method )
 		{
-			m_method = method;
+			_method = method;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldtoken, m_method);
+			gen.Emit(OpCodes.Ldtoken, _method);
 			gen.Emit(OpCodes.Call, typeof(MethodBase).GetMethod("GetMethodFromHandle"));
 			gen.Emit(OpCodes.Castclass, typeof(MethodInfo));
 		}

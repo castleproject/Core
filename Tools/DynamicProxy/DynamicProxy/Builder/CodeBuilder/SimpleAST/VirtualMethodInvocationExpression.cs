@@ -43,14 +43,14 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(m_owner, gen);
+			ArgumentsUtil.EmitLoadOwnerAndReference(_owner, gen);
 
-			foreach(Expression exp in m_args)
+			foreach(Expression exp in _args)
 			{
 				exp.Emit(member, gen);
 			}
 
-			gen.Emit(OpCodes.Callvirt, m_method);
+			gen.Emit(OpCodes.Callvirt, _method);
 		}
 	}
 }

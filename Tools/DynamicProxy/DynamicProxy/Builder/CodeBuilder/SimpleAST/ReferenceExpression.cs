@@ -22,20 +22,20 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ReferenceExpression : Expression
 	{
-		private Reference m_reference;
+		private Reference _reference;
 
 		public ReferenceExpression( Reference reference )
 		{
-			m_reference = reference;
+			_reference = reference;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			if (m_reference.OwnerReference != null)
+			if (_reference.OwnerReference != null)
 			{
-				m_reference.OwnerReference.StoreReference(gen);
+				_reference.OwnerReference.StoreReference(gen);
 			}
-			m_reference.LoadReference(gen);
+			_reference.LoadReference(gen);
 		}
 	}
 }

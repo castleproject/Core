@@ -23,25 +23,25 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ConstructorInvocationExpression : Expression
 	{
-		private ConstructorInfo m_cmethod;
-		private Expression[] m_args;
+		private ConstructorInfo _cmethod;
+		private Expression[] _args;
 
 		public ConstructorInvocationExpression(ConstructorInfo method, params Expression[] args)
 		{
-			m_cmethod = method;
-			m_args = args;
+			_cmethod = method;
+			_args = args;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldarg_0);
 			
-			foreach(Expression exp in m_args)
+			foreach(Expression exp in _args)
 			{
 				exp.Emit(member, gen);
 			}
 
-			gen.Emit(OpCodes.Call, m_cmethod);
+			gen.Emit(OpCodes.Call, _cmethod);
 		}
 	}
 }

@@ -24,19 +24,19 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// </summary>
 	public class MethodCodeBuilder : AbstractCodeBuilder
 	{
-		private Type m_baseType;
-		private MethodBuilder m_methodbuilder;
+		private Type _baseType;
+		private MethodBuilder _methodbuilder;
 
 		public MethodCodeBuilder( Type baseType, MethodBuilder methodbuilder, ILGenerator generator) : 
 			base(generator)
 		{
-			m_baseType = baseType;
-			m_methodbuilder = methodbuilder;
+			_baseType = baseType;
+			_methodbuilder = methodbuilder;
 		}
 
 		private MethodBuilder Builder
 		{
-			get { return m_methodbuilder; }
+			get { return _methodbuilder; }
 		}
 
 //		public void Nop()

@@ -23,10 +23,10 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class NewInstanceExpression : Expression
 	{
-		private Type m_type;
-		private Type[] m_constructor_args;
-		private Expression[] m_arguments;
-		private ConstructorInfo m_constructor;
+		private Type _type;
+		private Type[] _constructor_args;
+		private Expression[] _arguments;
+		private ConstructorInfo _constructor;
 
 		public NewInstanceExpression( EasyCallable callable, params Expression[] args ) : 
 			this( callable.Constructor, args )
@@ -35,35 +35,35 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public NewInstanceExpression( ConstructorInfo constructor, params Expression[] args )
 		{
-			m_constructor = constructor;
-			m_arguments = args;
+			_constructor = constructor;
+			_arguments = args;
 		}
 
 		public NewInstanceExpression( Type target, Type[] constructor_args, params Expression[] args )
 		{
-			m_type = target;
-			m_constructor_args = constructor_args;
-			m_arguments = args;
+			_type = target;
+			_constructor_args = constructor_args;
+			_arguments = args;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			foreach(Expression exp in m_arguments)
+			foreach(Expression exp in _arguments)
 			{
 				exp.Emit(member, gen);
 			}
 
-			if (m_constructor == null)
+			if (_constructor == null)
 			{
-				m_constructor = m_type.GetConstructor( m_constructor_args );
+				_constructor = _type.GetConstructor( _constructor_args );
 			}
 
-			if (m_constructor == null)
+			if (_constructor == null)
 			{
 				throw new ApplicationException("Could not find constructor matching specified arguments");
 			}
 
-			gen.Emit(OpCodes.Newobj, m_constructor);
+			gen.Emit(OpCodes.Newobj, _constructor);
 		}
 	}
 }

@@ -26,10 +26,10 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public sealed class GeneratorContext : DictionaryBase
 	{
-		private IList m_skipInterfaces = new ArrayList();
-		private IList m_skipMethods = new ArrayList();
-		private ArrayList m_mixins = new ArrayList();
-		private Type m_proxyObjectReference = typeof(ProxyObjectReference);
+		private IList _skipInterfaces = new ArrayList();
+		private IList _skipMethods = new ArrayList();
+		private ArrayList _mixins = new ArrayList();
+		private Type _proxyObjectReference = typeof(ProxyObjectReference);
 
 		public GeneratorContext()
 		{
@@ -50,43 +50,43 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		public Type ProxyObjectReference
 		{
-			get { return m_proxyObjectReference; }
-			set { m_proxyObjectReference = value; }
+			get { return _proxyObjectReference; }
+			set { _proxyObjectReference = value; }
 		}
 
 		public bool HasMixins
 		{
-			get { return m_mixins.Count != 0; }
+			get { return _mixins.Count != 0; }
 		}
 
 		public void AddMixinInstance(object instance)
 		{
-			m_mixins.Add(instance);
+			_mixins.Add(instance);
 		}
 
 		public object[] MixinsAsArray()
 		{
-			return m_mixins.ToArray();
+			return _mixins.ToArray();
 		}
 
 		public bool ShouldSkip(Type interfaceType)
 		{
-			return m_skipInterfaces.Contains(interfaceType);
+			return _skipInterfaces.Contains(interfaceType);
 		}
 
 		public bool ShouldSkip(MethodInfo method)
 		{
-			return m_skipMethods.Contains(method);
+			return _skipMethods.Contains(method);
 		}
 
 		public void AddInterfaceToSkip(Type interfaceType)
 		{
-			m_skipInterfaces.Add(interfaceType);
+			_skipInterfaces.Add(interfaceType);
 		}
 
 		public void AddMethodToSkip(MethodInfo method)
 		{
-			m_skipMethods.Add(method);
+			_skipMethods.Add(method);
 		}
 
 		public object this[String key]

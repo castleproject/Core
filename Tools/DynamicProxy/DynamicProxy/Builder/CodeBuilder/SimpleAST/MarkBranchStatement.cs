@@ -21,16 +21,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class MarkBranchStatement : Statement
 	{
-		private LabelReference m_label;
+		private LabelReference _label;
 
 		public MarkBranchStatement(LabelReference label)
 		{
-			m_label = label;
+			_label = label;
 		}
 
 		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			gen.MarkLabel(m_label.Reference);
+			gen.MarkLabel(_label.Reference);
 		}
 	}
 }

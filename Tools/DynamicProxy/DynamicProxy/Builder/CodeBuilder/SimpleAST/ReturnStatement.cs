@@ -24,8 +24,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ReturnStatement : Statement
 	{
-		private Reference m_reference;
-		private Expression m_expression;
+		private Reference _reference;
+		private Expression _expression;
 
 		public ReturnStatement( )
 		{
@@ -33,27 +33,27 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public ReturnStatement( Reference reference )
 		{
-			m_reference = reference;
+			_reference = reference;
 		}
 
 		public ReturnStatement( Expression expression )
 		{
-			m_expression = expression;
+			_expression = expression;
 		}
 
 		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			if (m_reference != null)
+			if (_reference != null)
 			{
-				if (m_reference.OwnerReference != null)
+				if (_reference.OwnerReference != null)
 				{
-					m_reference.OwnerReference.LoadReference( gen );
+					_reference.OwnerReference.LoadReference( gen );
 				}
-				m_reference.LoadReference( gen );
+				_reference.LoadReference( gen );
 			}
-			else if (m_expression != null)
+			else if (_expression != null)
 			{
-				m_expression.Emit(member, gen);
+				_expression.Emit(member, gen);
 			}
 			else
 			{

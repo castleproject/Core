@@ -24,22 +24,22 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	{
 		public static readonly OpCode Add = OpCodes.Add;
 		
-		private OpCode m_operation;
-		private Expression m_left;
-		private Expression m_right;
+		private OpCode _operation;
+		private Expression _left;
+		private Expression _right;
 
 		public BinaryExpression( OpCode operation, Expression left, Expression right )
 		{
-			m_operation = operation;
-			m_left = left;
-			m_right = right;
+			_operation = operation;
+			_left = left;
+			_right = right;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			m_left.Emit(member, gen);
-			m_right.Emit(member, gen);
-			gen.Emit(m_operation);
+			_left.Emit(member, gen);
+			_right.Emit(member, gen);
+			gen.Emit(_operation);
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ArgumentReference : TypeReference
 	{
-		private int m_position = -1;
+		private int _position = -1;
 
 		public ArgumentReference( Type argumentType ) : base(argumentType)
 		{
@@ -30,8 +30,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		internal int Position
 		{
-			get { return m_position; }
-			set { m_position = value; }
+			get { return _position; }
+			set { _position = value; }
 		}
 
 		public override void LoadReference(ILGenerator gen)

@@ -26,60 +26,60 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// </summary>
 	public abstract class AbstractEasyType
 	{
-		private int m_counter;
+		private int _counter;
 
-		protected TypeBuilder m_typebuilder;
+		protected TypeBuilder _typebuilder;
 
-		protected ConstructorCollection m_constructors;
-		protected MethodCollection m_methods;
-		protected NestedTypeCollection m_nested;
-		protected PropertiesCollection m_properties;
+		protected ConstructorCollection _constructors;
+		protected MethodCollection _methods;
+		protected NestedTypeCollection _nested;
+		protected PropertiesCollection _properties;
 
 		public AbstractEasyType()
 		{
-			m_nested = new NestedTypeCollection();
-			m_methods = new MethodCollection();
-			m_constructors = new ConstructorCollection();
-			m_properties = new PropertiesCollection();
+			_nested = new NestedTypeCollection();
+			_methods = new MethodCollection();
+			_constructors = new ConstructorCollection();
+			_properties = new PropertiesCollection();
 		}
 
 		public void CreateDefaultConstructor( )
 		{
-			m_constructors.Add( new EasyDefaultConstructor( this ) );
+			_constructors.Add( new EasyDefaultConstructor( this ) );
 		}
 
 		public EasyConstructor CreateConstructor( params ArgumentReference[] arguments )
 		{
 			EasyConstructor member = new EasyConstructor( this, arguments );
-			m_constructors.Add(  member );
+			_constructors.Add(  member );
 			return member;
 		}
 
 		public EasyConstructor CreateRuntimeConstructor( params ArgumentReference[] arguments )
 		{
 			EasyRuntimeConstructor member = new EasyRuntimeConstructor( this, arguments );
-			m_constructors.Add(  member );
+			_constructors.Add(  member );
 			return member;
 		}
 
 		public EasyMethod CreateMethod( String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments )
 		{
 			EasyMethod member = new EasyMethod( this, name, returnType, arguments );
-			m_methods.Add(member);
+			_methods.Add(member);
 			return member;
 		}
 
 		public EasyMethod CreateMethod( String name, MethodAttributes attrs, ReturnReferenceExpression returnType, params Type[] args)
 		{
 			EasyMethod member = new EasyMethod( this, name, attrs, returnType, ArgumentsUtil.ConvertToArgumentReference(args) );
-			m_methods.Add(member);
+			_methods.Add(member);
 			return member;
 		}
 
 		public EasyRuntimeMethod CreateRuntimeMethod( String name, ReturnReferenceExpression returnType, params ArgumentReference[] arguments )
 		{
 			EasyRuntimeMethod member = new EasyRuntimeMethod( this, name, returnType, arguments );
-			m_methods.Add(member);
+			_methods.Add(member);
 			return member;
 		}
 
@@ -97,7 +97,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				atts |= FieldAttributes.NotSerialized;
 			}
 
-			FieldBuilder fieldBuilder = m_typebuilder.DefineField( name, fieldType, atts );
+			FieldBuilder fieldBuilder = _typebuilder.DefineField( name, fieldType, atts );
 			
 			return new FieldReference( fieldBuilder );
 		}
@@ -105,23 +105,23 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		public EasyProperty CreateProperty( String name, Type returnType )
 		{
 			EasyProperty prop = new EasyProperty( this, name, returnType );
-			m_properties.Add(prop);
+			_properties.Add(prop);
 			return prop;
 		}
 
 		public ConstructorCollection Constructors
 		{
-			get { return m_constructors; }
+			get { return _constructors; }
 		}
 
 		public MethodCollection Methods
 		{
-			get { return m_methods; }
+			get { return _methods; }
 		}
 
 		public TypeBuilder TypeBuilder
 		{
-			get { return m_typebuilder; }
+			get { return _typebuilder; }
 		}
 
 		internal Type BaseType
@@ -131,16 +131,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		internal int IncrementAndGetCounterValue
 		{
-			get { return ++m_counter; }
+			get { return ++_counter; }
 		}
 
 		public virtual Type BuildType()
 		{
 			EnsureBuildersAreInAValidState();
 
-			Type type = m_typebuilder.CreateType();		
+			Type type = _typebuilder.CreateType();		
 
-			foreach(EasyNested builder in m_nested)
+			foreach(EasyNested builder in _nested)
 			{
 				builder.BuildType();
 			}
@@ -150,22 +150,22 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		protected virtual void EnsureBuildersAreInAValidState()
 		{
-			if (m_constructors.Count == 0)
+			if (_constructors.Count == 0)
 			{
 				CreateDefaultConstructor();
 			}
 
-			foreach(IEasyMember builder in m_properties)
+			foreach(IEasyMember builder in _properties)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IEasyMember builder in m_constructors)
+			foreach(IEasyMember builder in _constructors)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach(IEasyMember builder in m_methods)
+			foreach(IEasyMember builder in _methods)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();

@@ -26,21 +26,21 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// </summary>
 	public class EasyProperty : IEasyMember
 	{
-		private PropertyBuilder m_builder;
-		private AbstractEasyType m_maintype;
-		private EasyMethod m_getMethod;
-		private EasyMethod m_setMethod;
+		private PropertyBuilder _builder;
+		private AbstractEasyType _maintype;
+		private EasyMethod _getMethod;
+		private EasyMethod _setMethod;
 
 		public EasyProperty( AbstractEasyType maintype, String name, Type returnType )
 		{
-			m_maintype = maintype;
-			m_builder = maintype.TypeBuilder.DefineProperty(
+			_maintype = maintype;
+			_builder = maintype.TypeBuilder.DefineProperty(
 				name, PropertyAttributes.None, returnType, new Type[0]);
 		}
 
 		public String Name
 		{
-			get { return m_builder.Name; }
+			get { return _builder.Name; }
 		}
 
 		public EasyMethod CreateGetMethod()
@@ -51,17 +51,17 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public EasyMethod CreateGetMethod( MethodAttributes attrs, params Type[] parameters )
 		{
-			if (m_getMethod != null)
+			if (_getMethod != null)
 			{
-				return m_getMethod;
+				return _getMethod;
 			}
 
-			m_getMethod = new EasyMethod(m_maintype, "get_" + m_builder.Name, 
+			_getMethod = new EasyMethod(_maintype, "get_" + _builder.Name, 
 				attrs,
 				new ReturnReferenceExpression(ReturnType), 
 				ArgumentsUtil.ConvertToArgumentReference(parameters) );
 			
-			return m_getMethod;
+			return _getMethod;
 		}
 
 		public EasyMethod CreateSetMethod(Type arg)
@@ -72,46 +72,46 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public EasyMethod CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
 		{
-			if (m_setMethod != null)
+			if (_setMethod != null)
 			{
-				return m_setMethod;
+				return _setMethod;
 			}
 
-			m_setMethod = new EasyMethod(m_maintype, "set_" + m_builder.Name, 
+			_setMethod = new EasyMethod(_maintype, "set_" + _builder.Name, 
 				attrs,
 				new ReturnReferenceExpression( typeof(void) ), 
 				ArgumentsUtil.ConvertToArgumentReference(parameters));
 			
-			return m_setMethod;
+			return _setMethod;
 		}
 
 		#region IEasyMember Members
 
 		public void Generate()
 		{
-			if (m_setMethod != null)
+			if (_setMethod != null)
 			{
-				m_setMethod.Generate();
-				m_builder.SetSetMethod(m_setMethod.MethodBuilder);
+				_setMethod.Generate();
+				_builder.SetSetMethod(_setMethod.MethodBuilder);
 			}
 			
-			if (m_getMethod != null)
+			if (_getMethod != null)
 			{
-				m_getMethod.Generate();
-				m_builder.SetGetMethod(m_getMethod.MethodBuilder);
+				_getMethod.Generate();
+				_builder.SetGetMethod(_getMethod.MethodBuilder);
 			}
 		}
 
 		public void EnsureValidCodeBlock()
 		{
-			if (m_setMethod != null)
+			if (_setMethod != null)
 			{
-				m_setMethod.EnsureValidCodeBlock();
+				_setMethod.EnsureValidCodeBlock();
 			}
 			
-			if (m_getMethod != null)
+			if (_getMethod != null)
 			{
-				m_getMethod.EnsureValidCodeBlock();
+				_getMethod.EnsureValidCodeBlock();
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 			get
 			{
-				return m_builder.PropertyType;
+				return _builder.PropertyType;
 			}
 		}
 

@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	{
 		private static readonly Type INVOCATION_TYPE = typeof(InterfaceInvocation);
 
-		protected FieldReference m_targetField;
+		protected FieldReference _targetField;
 
 		public InterfaceProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected override void GenerateFields()
 		{
 			base.GenerateFields ();
-			m_targetField = MainTypeBuilder.CreateField("__target", typeof (object));
+			_targetField = MainTypeBuilder.CreateField("__target", typeof (object));
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			constructor.CodeBuilder.InvokeBaseConstructor();
 
 			constructor.CodeBuilder.AddStatement( new AssignStatement(
-				m_targetField, arg2.ToExpression()) );
+				_targetField, arg2.ToExpression()) );
 
 			GenerateConstructorCode(constructor.CodeBuilder, arg1, arg2, arg3);
 			
@@ -110,15 +110,15 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			codebuilder.AddStatement( new ExpressionStatement(
 				new VirtualMethodInvocationExpression(arg1, addValueMethod, 
 				new FixedReference("__target").ToExpression(), 
-				m_targetField.ToExpression() ) ) );
+				_targetField.ToExpression() ) ) );
 		}
 
 		public virtual Type GenerateCode(Type[] interfaces)
 		{
 			if (Context.HasMixins)
 			{
-				m_mixins = Context.MixinsAsArray();
-				Type[] mixinInterfaces = InspectAndRegisterInterfaces( m_mixins );
+				_mixins = Context.MixinsAsArray();
+				Type[] mixinInterfaces = InspectAndRegisterInterfaces( _mixins );
 				interfaces = Join(interfaces, mixinInterfaces);
 			}
 

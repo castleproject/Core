@@ -23,9 +23,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	/// </summary>
 	public sealed class LdcOpCodesDictionary : DictionaryBase
 	{
-		private static readonly LdcOpCodesDictionary m_dict = new LdcOpCodesDictionary();
+		private static readonly LdcOpCodesDictionary _dict = new LdcOpCodesDictionary();
 
-		private static readonly OpCode m_emptyOpCode = new OpCode();
+		private static readonly OpCode _emptyOpCode = new OpCode();
 
 		private LdcOpCodesDictionary() : base()
 		{
@@ -55,12 +55,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 
 		public static LdcOpCodesDictionary Instance
 		{
-			get { return m_dict; }
+			get { return _dict; }
 		}
 
 		public static OpCode EmptyOpCode
 		{
-			get { return m_emptyOpCode; }
+			get { return _emptyOpCode; }
 		}
 	}
 
@@ -69,9 +69,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	/// </summary>
 	public sealed class LdindOpCodesDictionary : DictionaryBase
 	{
-		private static readonly LdindOpCodesDictionary m_dict = new LdindOpCodesDictionary();
+		private static readonly LdindOpCodesDictionary _dict = new LdindOpCodesDictionary();
 
-		private static readonly OpCode m_emptyOpCode = new OpCode();
+		private static readonly OpCode _emptyOpCode = new OpCode();
 
 		private LdindOpCodesDictionary() : base()
 		{
@@ -101,12 +101,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 
 		public static LdindOpCodesDictionary Instance
 		{
-			get { return m_dict; }
+			get { return _dict; }
 		}
 
 		public static OpCode EmptyOpCode
 		{
-			get { return m_emptyOpCode; }
+			get { return _emptyOpCode; }
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			ReturnReferenceExpression returnType, 
 			params ArgumentReference[] args )
 		{
-			m_typebuilder = maintype.TypeBuilder.DefineNestedType( 
+			_typebuilder = maintype.TypeBuilder.DefineNestedType( 
 				name, 
 				TypeAttributes.Sealed|TypeAttributes.NestedPublic|TypeAttributes.Class, 
 				baseType, interfaces );

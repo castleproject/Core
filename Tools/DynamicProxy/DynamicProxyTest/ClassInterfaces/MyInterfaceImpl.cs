@@ -22,8 +22,8 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 	[Serializable]
 	public class MyInterfaceImpl : IMyInterface
 	{
-		private String m_name;
-		private bool m_started;
+		private String _name;
+		private bool _started;
 
 		public MyInterfaceImpl()
 		{
@@ -35,11 +35,11 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		{
 			get
 			{
-				return m_name;
+				return _name;
 			}
 			set
 			{
-				m_name = value;
+				_name = value;
 			}
 		}
 
@@ -47,11 +47,11 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		{
 			get
 			{
-				return m_started;
+				return _started;
 			}
 			set
 			{
-				m_started = value;
+				_started = value;
 			}
 		}
 

@@ -18,11 +18,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Text;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+	using System.Collections;
 	using System.Collections.Specialized;
 
 	using Castle.DynamicProxy.Invocation;
 	using Castle.DynamicProxy.Builder.CodeBuilder;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
 	/// <summary>
 	/// Summary description for ClassProxyGenerator.
@@ -31,9 +33,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	{
 		private static readonly Type INVOCATION_TYPE = typeof(SameClassInvocation);
 
-		private bool m_delegateToBaseGetObjectData;
+		private bool _delegateToBaseGetObjectData;
 		
-		protected ConstructorInfo m_serializationConstructor;
+		protected ConstructorInfo _serializationConstructor;
 
 		public ClassProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -64,30 +66,38 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// Generates one public constructor receiving 
 		/// the <see cref="IInterceptor"/> instance and instantiating a hashtable
 		/// </summary>
-		protected override EasyConstructor GenerateConstructor()
+		protected virtual EasyConstructor GenerateConstructor( ConstructorInfo baseConstructor )
 		{
+			ArrayList arguments = new ArrayList();
+
 			ArgumentReference arg1 = new ArgumentReference( typeof(IInterceptor) );
 			ArgumentReference arg2 = new ArgumentReference( typeof(object[]) );
 
-			EasyConstructor constructor;
+			arguments.Add( arg1 );
+
+			ParameterInfo[] parameters = baseConstructor.GetParameters();
 
 			if (Context.HasMixins)
 			{
-				constructor = MainTypeBuilder.CreateConstructor( arg1, arg2 );
-			}
-			else
-			{
-				constructor = MainTypeBuilder.CreateConstructor( arg1 );
+				arguments.Add( arg2 );
 			}
 
-			constructor.CodeBuilder.InvokeBaseConstructor();
+			ArgumentReference[] originalArguments = 
+				ArgumentsUtil.ConvertToArgumentReference(parameters);
+
+			arguments.AddRange(originalArguments);
+
+			EasyConstructor constructor = MainTypeBuilder.CreateConstructor( 
+				(ArgumentReference[]) arguments.ToArray( typeof(ArgumentReference) ) );
+
+			constructor.CodeBuilder.InvokeBaseConstructor( baseConstructor, originalArguments );
 
 			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg2);
 		
 			return constructor;
 		}
 
-		protected void GenerateSerializationConstructor( EasyConstructor defConstructor )
+		protected void GenerateSerializationConstructor()
 		{
 			ArgumentReference arg1 = new ArgumentReference( typeof(SerializationInfo) );
 			ArgumentReference arg2 = new ArgumentReference( typeof(StreamingContext) );
@@ -95,7 +105,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			EasyConstructor constr = MainTypeBuilder.CreateConstructor( arg1, arg2 );
 
 			constr.CodeBuilder.AddStatement( new ExpressionStatement(
-				new ConstructorInvocationExpression( m_serializationConstructor, 
+				new ConstructorInvocationExpression( _serializationConstructor, 
 				arg1.ToExpression(), arg2.ToExpression() )) );
 
 			Type[] object_arg = new Type[] { typeof (String), typeof(Type) };
@@ -123,7 +133,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				getMixinsInvocation) );
 
 			// Initialize the delegate fields
-			foreach(CallableField field in m_cachedFields)
+			foreach(CallableField field in _cachedFields)
 			{
 				field.WriteInitialization(constr.CodeBuilder, SelfReference.Self, MixinField);
 			}
@@ -142,11 +152,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			codebuilder.AddStatement( new ExpressionStatement(
 				new VirtualMethodInvocationExpression(arg1, addValueBoolMethod, 
 				new FixedReference("__delegateToBase").ToExpression(), 
-				new FixedReference( m_delegateToBaseGetObjectData ? 1 : 0 ).ToExpression() ) ) );
+				new FixedReference( _delegateToBaseGetObjectData ? 1 : 0 ).ToExpression() ) ) );
 
-			if (m_delegateToBaseGetObjectData)
+			if (_delegateToBaseGetObjectData)
 			{
-				MethodInfo baseGetObjectData = m_baseType.GetMethod("GetObjectData", 
+				MethodInfo baseGetObjectData = _baseType.GetMethod("GetObjectData", 
 					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
 				codebuilder.AddStatement( new ExpressionStatement(
@@ -165,7 +175,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				
 				codebuilder.AddStatement( new AssignStatement( members_ref,
 					new MethodInvocationExpression( null, getSerMembers, 
-					new TypeTokenExpression( m_baseType ) )) );
+					new TypeTokenExpression( _baseType ) )) );
 				
 				codebuilder.AddStatement( new AssignStatement( data_ref, 
 					new MethodInvocationExpression( null, getObjData, 
@@ -187,7 +197,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			if (baseClass.IsSerializable)
 			{
-				m_delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(baseClass);
+				_delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(baseClass);
 				interfaces = AddISerializable( interfaces );
 			}
 
@@ -209,11 +219,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ImplementCacheInvocationCache();
 			GenerateTypeImplementation( baseClass, true );
 			GenerateInterfaceImplementation(interfaces);
-			EasyConstructor defConstructor = GenerateConstructor();
 
-			if (m_delegateToBaseGetObjectData)
+			GenerateConstructors(baseClass);
+//			EasyConstructor defConstructor = GenerateConstructor();
+
+			if (_delegateToBaseGetObjectData)
 			{
-				GenerateSerializationConstructor(defConstructor);
+				GenerateSerializationConstructor();
 			}
 
 			return CreateType();
@@ -226,10 +238,25 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				return GenerateCode(baseClass);
 			}
 
-			m_mixins = Context.MixinsAsArray();
-			Type[] mixinInterfaces = InspectAndRegisterInterfaces( m_mixins );
+			_mixins = Context.MixinsAsArray();
+			Type[] mixinInterfaces = InspectAndRegisterInterfaces( _mixins );
 
 			return GenerateCode(baseClass, mixinInterfaces);
+		}
+
+		protected virtual void GenerateConstructors(Type baseClass)
+		{
+			ConstructorInfo[] constructors = 
+				baseClass.GetConstructors( BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic );
+
+			foreach(ConstructorInfo constructor in constructors)
+			{
+				if (constructor.IsPrivate || constructor.IsAssembly)
+				{
+					continue;
+				}
+				GenerateConstructor(constructor);
+			}
 		}
 
 		protected bool VerifyIfBaseImplementsGetObjectData(Type baseType)
@@ -251,13 +278,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 				Context.AddMethodToSkip(getObjectDataMethod);
 
-				m_serializationConstructor = baseType.GetConstructor( 
+				_serializationConstructor = baseType.GetConstructor( 
 					BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic, 
 					null,  
 					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) }, 
 					null);
 
-				if (m_serializationConstructor == null)
+				if (_serializationConstructor == null)
 				{
 					String message = String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor", 
 						baseType.FullName);
@@ -287,7 +314,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
 		{
-			if (Context.HasMixins && m_interface2mixinIndex.Contains(method.DeclaringType))
+			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
 			{
 				return method;
 			}

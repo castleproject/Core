@@ -1,4 +1,3 @@
-using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,16 +18,19 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
+
 	/// <summary>
 	/// Summary description for ConstructorCodeBuilder.
 	/// </summary>
 	public class ConstructorCodeBuilder : AbstractCodeBuilder
 	{
-		private Type m_baseType;
+		private Type _baseType;
 
 		public ConstructorCodeBuilder( Type baseType, ILGenerator generator ) : base(generator)
 		{
-			m_baseType = baseType;
+			_baseType = baseType;
 		}
 
 		public void InvokeBaseConstructor()
@@ -36,22 +38,24 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			InvokeBaseConstructor( ObtainAvailableConstructor() );
 		}
 
-//		public void InvokeBaseConstructor( ConstructorMethodReference constructor )
-//		{
-//			
-//		}
-
 		internal void InvokeBaseConstructor( ConstructorInfo constructor )
 		{
 			AddStatement( 
 				new ExpressionStatement( 
 					new ConstructorInvocationExpression(constructor) ) );
-//			base.CallNonVirtual( constructor );
+		}
+
+		internal void InvokeBaseConstructor( ConstructorInfo constructor, params ArgumentReference[] arguments )
+		{
+			AddStatement( 
+				new ExpressionStatement( 
+				new ConstructorInvocationExpression(constructor, 
+				ArgumentsUtil.ConvertArgumentReferenceToExpression(arguments) ) ) );
 		}
 
 		internal ConstructorInfo ObtainAvailableConstructor()
 		{
-			return m_baseType.GetConstructor(
+			return _baseType.GetConstructor(
 				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, 
 				null, new Type[0], null);
 		}

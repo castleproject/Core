@@ -23,9 +23,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ConvertExpression : Expression
 	{
-		private Type m_target;
-		private Type m_fromType;
-		private Expression m_right;
+		private Type _target;
+		private Type _fromType;
+		private Expression _right;
 
 		public ConvertExpression( Type targetType, Expression right ) : this(targetType, typeof(object), right)
 		{
@@ -33,34 +33,34 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public ConvertExpression( Type targetType, Type fromType, Expression right )
 		{
-			m_target = targetType;
-			m_fromType = fromType;
-			m_right = right;
+			_target = targetType;
+			_fromType = fromType;
+			_right = right;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			m_right.Emit(member, gen);
+			_right.Emit(member, gen);
 
-			if (m_fromType == m_target)
+			if (_fromType == _target)
 			{
 				return;
 			}
 
-			if (m_target.IsValueType && !m_fromType.IsValueType)
+			if (_target.IsValueType && !_fromType.IsValueType)
 			{
-				gen.Emit(OpCodes.Unbox, m_target);
-				OpCodeUtil.ConvertTypeToOpCode(gen, m_target);
+				gen.Emit(OpCodes.Unbox, _target);
+				OpCodeUtil.ConvertTypeToOpCode(gen, _target);
 				return;
 			}
-			else if (!m_target.IsValueType && m_fromType.IsValueType)
+			else if (!_target.IsValueType && _fromType.IsValueType)
 			{
-				gen.Emit(OpCodes.Box, m_fromType);
+				gen.Emit(OpCodes.Box, _fromType);
 			}
 			
-			if (m_target != typeof(Object))
+			if (_target != typeof(Object))
 			{
-				gen.Emit(OpCodes.Castclass, m_target);
+				gen.Emit(OpCodes.Castclass, _target);
 			}
 		}
 	}

@@ -22,16 +22,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class FieldReference : Reference
 	{
-		private FieldBuilder m_fieldbuilder;
+		private FieldBuilder _fieldbuilder;
 
 		public FieldReference( FieldBuilder fieldbuilder )
 		{
-			m_fieldbuilder = fieldbuilder;
+			_fieldbuilder = fieldbuilder;
 		}
 
 		public FieldBuilder Reference
 		{
-			get { return m_fieldbuilder; }
+			get { return _fieldbuilder; }
 		}
 
 		public override void LoadReference(ILGenerator gen)

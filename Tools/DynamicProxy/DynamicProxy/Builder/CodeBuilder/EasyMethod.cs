@@ -26,11 +26,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// </summary>
 	public class EasyMethod : IEasyMember
 	{
-		protected MethodBuilder m_builder;
-		protected ArgumentReference[] m_arguments;
+		protected MethodBuilder _builder;
+		protected ArgumentReference[] _arguments;
 		
-		private MethodCodeBuilder m_codebuilder;
-		private AbstractEasyType m_maintype;
+		private MethodCodeBuilder _codebuilder;
+		private AbstractEasyType _maintype;
 
 		internal EasyMethod( AbstractEasyType maintype, String name, 
 			ReturnReferenceExpression returnRef, params ArgumentReference[] arguments ) : 
@@ -44,13 +44,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			MethodAttributes attrs, 
 			ReturnReferenceExpression returnRef, params ArgumentReference[] arguments )
 		{
-			m_maintype = maintype;
-			m_arguments = arguments;
+			_maintype = maintype;
+			_arguments = arguments;
 
 			Type returnType = returnRef.Type;
 			Type[] args = ArgumentsUtil.InitializeAndConvert( arguments );
 
-			m_builder = maintype.TypeBuilder.DefineMethod( name,  attrs, 
+			_builder = maintype.TypeBuilder.DefineMethod( name,  attrs, 
 				returnType, args );
 		}
 
@@ -62,38 +62,38 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 			get
 			{
-				if (m_codebuilder == null)
+				if (_codebuilder == null)
 				{
-					m_codebuilder = new MethodCodeBuilder( 
-						m_maintype.BaseType, m_builder, m_builder.GetILGenerator() );
+					_codebuilder = new MethodCodeBuilder( 
+						_maintype.BaseType, _builder, _builder.GetILGenerator() );
 				}
-				return m_codebuilder;
+				return _codebuilder;
 			}
 		}
 
 		public ArgumentReference[] Arguments
 		{
-			get { return m_arguments; }
+			get { return _arguments; }
 		}
 
 		internal MethodBuilder MethodBuilder
 		{
-			get { return m_builder; }
+			get { return _builder; }
 		}
 
 		public Type ReturnType
 		{
-			get { return m_builder.ReturnType; }
+			get { return _builder.ReturnType; }
 		}
 
 		public MethodBase Member
 		{
-			get { return m_builder; }
+			get { return _builder; }
 		}
 
 		public virtual void Generate()
 		{
-			m_codebuilder.Generate(this, m_builder.GetILGenerator());
+			_codebuilder.Generate(this, _builder.GetILGenerator());
 		}
 
 		public virtual void EnsureValidCodeBlock()

@@ -23,11 +23,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ConditionExpression : Expression
 	{
-		private OpCode m_operation = OpCodes.Brfalse_S;
-		private ArrayList m_trueStmts;
-		private ArrayList m_falseStmts;
-		private Expression m_left;
-		private Expression m_right;
+		private OpCode _operation = OpCodes.Brfalse_S;
+		private ArrayList _trueStmts;
+		private ArrayList _falseStmts;
+		private Expression _left;
+		private Expression _right;
 
 		public ConditionExpression( Expression left ) : this(OpCodes.Brfalse_S, left)
 		{
@@ -39,49 +39,49 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public ConditionExpression( OpCode operation, Expression left, Expression right )
 		{
-			m_trueStmts = new ArrayList();
-			m_falseStmts = new ArrayList();
+			_trueStmts = new ArrayList();
+			_falseStmts = new ArrayList();
 
-			m_operation = operation;
-			m_left = left;
-			m_right = right;
+			_operation = operation;
+			_left = left;
+			_right = right;
 		}
 
 		public void AddTrueStatement( Statement stmt )
 		{
-			m_trueStmts.Add( stmt );
+			_trueStmts.Add( stmt );
 		}
 
 		public void AddFalseStatement( Statement stmt )
 		{
-			m_falseStmts.Add( stmt );
+			_falseStmts.Add( stmt );
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			if (OpCodes.Brfalse.Equals(m_operation) || 
-				OpCodes.Brfalse_S.Equals(m_operation) || 
-				OpCodes.Brtrue.Equals(m_operation) ||
-				OpCodes.Brtrue_S.Equals(m_operation) )
+			if (OpCodes.Brfalse.Equals(_operation) || 
+				OpCodes.Brfalse_S.Equals(_operation) || 
+				OpCodes.Brtrue.Equals(_operation) ||
+				OpCodes.Brtrue_S.Equals(_operation) )
 			{
 				// Unary operators
-				m_left.Emit(member, gen);
+				_left.Emit(member, gen);
 			}
 			else
 			{
 				// Binary operators
-				m_left.Emit(member, gen);
-				m_right.Emit(member, gen);
+				_left.Emit(member, gen);
+				_right.Emit(member, gen);
 			}
 
 			Label truePart = gen.DefineLabel(); 
 			Label exitPart = gen.DefineLabel(); 
 			
-			gen.Emit(m_operation, truePart);
+			gen.Emit(_operation, truePart);
 			
-			if (m_falseStmts.Count != 0)
+			if (_falseStmts.Count != 0)
 			{
-				foreach(Statement stmt in m_falseStmts)
+				foreach(Statement stmt in _falseStmts)
 				{
 					stmt.Emit(member, gen);
 				}
@@ -90,9 +90,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 			gen.Emit(OpCodes.Br_S, exitPart);
 
 			gen.MarkLabel(truePart);
-			if (m_trueStmts.Count != 0)
+			if (_trueStmts.Count != 0)
 			{
-				foreach(Statement stmt in m_trueStmts)
+				foreach(Statement stmt in _trueStmts)
 				{
 					stmt.Emit(member, gen);
 				}

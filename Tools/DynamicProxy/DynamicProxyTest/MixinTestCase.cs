@@ -28,12 +28,12 @@ namespace Castle.DynamicProxy.Test
 	[TestFixture]
 	public class MixinTestCase
 	{
-		private ProxyGenerator m_generator;
+		private ProxyGenerator _generator;
 
 		[SetUp]
 		public void Init()
 		{
-			m_generator = new ProxyGenerator();
+			_generator = new ProxyGenerator();
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy.Test
 
 			AssertInvocationInterceptor interceptor = new AssertInvocationInterceptor();
 
-			object proxy = m_generator.CreateCustomClassProxy( 
+			object proxy = _generator.CreateCustomClassProxy( 
 				typeof(SimpleClass), interceptor, context );
 			
 			Assert.IsNotNull(proxy);
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Test
 
 			AssertInvocationInterceptor interceptor = new AssertInvocationInterceptor();
 
-			object proxy = m_generator.CreateCustomClassProxy( 
+			object proxy = _generator.CreateCustomClassProxy( 
 				typeof(SimpleClass), interceptor, context );
 			
 			Assert.IsFalse( interceptor.Invoked );
@@ -108,7 +108,7 @@ namespace Castle.DynamicProxy.Test
 
 			AssertInvocationInterceptor interceptor = new AssertInvocationInterceptor();
 
-			object proxy = m_generator.CreateCustomClassProxy( 
+			object proxy = _generator.CreateCustomClassProxy( 
 				typeof(SimpleClass), interceptor, context );
 			
 			Assert.IsNotNull(proxy);
@@ -152,7 +152,7 @@ namespace Castle.DynamicProxy.Test
 
 			MyInterfaceImpl target = new MyInterfaceImpl();
 			
-			object proxy = m_generator.CreateCustomProxy( 
+			object proxy = _generator.CreateCustomProxy( 
 				typeof(IMyInterface), interceptor, target, context );
 			
 			Assert.IsNotNull(proxy);

@@ -23,8 +23,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class MethodPointerExpression : Expression
 	{
-		private Reference m_owner;
-		private MethodInfo m_method;
+		private Reference _owner;
+		private MethodInfo _method;
 
 		public MethodPointerExpression( MethodInfo method ) : this( SelfReference.Self, method )
 		{
@@ -32,17 +32,17 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		
 		public MethodPointerExpression( Reference owner, MethodInfo method )
 		{
-			m_owner = owner;
-			m_method = method;
+			_owner = owner;
+			_method = method;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-//			if (m_owner != null)
+//			if (_owner != null)
 //			{
-//				m_owner.LoadReference(gen);
+//				_owner.LoadReference(gen);
 //			}
-			gen.Emit(OpCodes.Ldftn, m_method);
+			gen.Emit(OpCodes.Ldftn, _method);
 		}
 	}
 }

@@ -26,63 +26,63 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// </summary>
 	public abstract class AbstractCodeBuilder
 	{
-		private ILGenerator m_generator;
-		private bool m_isEmpty;
-		private ArrayList m_stmts;
-		private ArrayList m_ilmarkers;
+		private ILGenerator _generator;
+		private bool _isEmpty;
+		private ArrayList _stmts;
+		private ArrayList _ilmarkers;
 
 		protected AbstractCodeBuilder( ILGenerator generator ) 
 		{
-			m_stmts = new ArrayList();
-			m_ilmarkers = new ArrayList();
+			_stmts = new ArrayList();
+			_ilmarkers = new ArrayList();
 			
-			m_generator = generator;
-			m_isEmpty = true;
+			_generator = generator;
+			_isEmpty = true;
 		}
 
 		protected ILGenerator Generator
 		{
-			get { return m_generator; }
+			get { return _generator; }
 		}
 
 		public void AddStatement( Statement stmt )
 		{
 			SetNonEmpty();
-			m_stmts.Add( stmt );
+			_stmts.Add( stmt );
 		}
 
 		public LocalReference DeclareLocal( Type type )
 		{
 			LocalReference local = new LocalReference(type);
-			m_ilmarkers.Add( local );
+			_ilmarkers.Add( local );
 			return local;
 		}
 
 		public LabelReference CreateLabel()
 		{
 			LabelReference label = new LabelReference();
-			m_ilmarkers.Add(label);
+			_ilmarkers.Add(label);
 			return label;
 		}
 
 		protected internal void SetNonEmpty()
 		{
-			m_isEmpty = false;
+			_isEmpty = false;
 		}
 
 		internal bool IsEmpty
 		{
-			get { return m_isEmpty; }
+			get { return _isEmpty; }
 		}
 
 		internal void Generate( IEasyMember member, ILGenerator il )
 		{
-			foreach(Reference local in m_ilmarkers)
+			foreach(Reference local in _ilmarkers)
 			{
 				local.Generate(il);
 			}
 
-			foreach(Statement stmt in m_stmts)
+			foreach(Statement stmt in _stmts)
 			{
 				stmt.Emit(member, il);
 			}

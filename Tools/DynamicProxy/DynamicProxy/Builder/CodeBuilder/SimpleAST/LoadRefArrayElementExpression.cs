@@ -23,8 +23,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class LoadRefArrayElementExpression : Expression
 	{
-		private FixedReference m_index; 
-		private Reference m_arrayReference;
+		private FixedReference _index; 
+		private Reference _arrayReference;
 
 		public LoadRefArrayElementExpression( int index, Reference arrayReference ) : 
 			this( new FixedReference(index), arrayReference )
@@ -33,14 +33,14 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public LoadRefArrayElementExpression( FixedReference index, Reference arrayReference )
 		{
-			m_index = index;
-			m_arrayReference = arrayReference;
+			_index = index;
+			_arrayReference = arrayReference;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(m_arrayReference, gen);
-			ArgumentsUtil.EmitLoadOwnerAndReference(m_index, gen);
+			ArgumentsUtil.EmitLoadOwnerAndReference(_arrayReference, gen);
+			ArgumentsUtil.EmitLoadOwnerAndReference(_index, gen);
 			gen.Emit(OpCodes.Ldelem_Ref);
 		}
 	}

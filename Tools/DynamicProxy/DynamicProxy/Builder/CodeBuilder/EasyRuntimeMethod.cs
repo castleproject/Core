@@ -31,9 +31,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			MethodAttributes atts = MethodAttributes.HideBySig|MethodAttributes.Public|MethodAttributes.Virtual;
 			Type[] args = ArgumentsUtil.InitializeAndConvert( arguments );
 
-			m_builder = maintype.TypeBuilder.DefineMethod(
+			_builder = maintype.TypeBuilder.DefineMethod(
 				name, atts, returnRef.Type, args);
-			m_builder.SetImplementationFlags(
+			_builder.SetImplementationFlags(
 				MethodImplAttributes.Runtime|MethodImplAttributes.Managed);
 		}
 

@@ -21,16 +21,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ExpressionStatement : Statement
 	{
-		private Expression m_expression;
+		private Expression _expression;
 
 		public ExpressionStatement( Expression expression )
 		{
-			m_expression = expression;
+			_expression = expression;
 		}
 
 		public override void Emit(IEasyMember member, System.Reflection.Emit.ILGenerator gen)
 		{
-			m_expression.Emit(member, gen);
+			_expression.Emit(member, gen);
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Builder
 	/// </summary>
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
-		ModuleScope m_scope = new ModuleScope();
+		ModuleScope _scope = new ModuleScope();
 
 		public DefaultProxyBuilder()
 		{
@@ -30,32 +30,32 @@ namespace Castle.DynamicProxy.Builder
 
 		protected ModuleScope ModuleScope
 		{
-			get { return m_scope; }
+			get { return _scope; }
 		}
 
 		#region IProxyBuilder Members
 
 		public virtual Type CreateInterfaceProxy(Type[] interfaces)
 		{
-			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(m_scope);
+			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(_scope);
 			return generator.GenerateCode(interfaces);
 		}
 
 		public virtual Type CreateClassProxy(Type theClass)
 		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(m_scope);
+			ClassProxyGenerator generator = new ClassProxyGenerator(_scope);
 			return generator.GenerateCode(theClass);
 		}
 
 		public virtual Type CreateCustomInterfaceProxy(Type[] interfaces, GeneratorContext context)
 		{
-			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(m_scope, context);
+			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(_scope, context);
 			return generator.GenerateCode(interfaces);
 		}
 
 		public virtual Type CreateCustomClassProxy(Type theClass, GeneratorContext context)
 		{
-			ClassProxyGenerator generator = new ClassProxyGenerator(m_scope, context);
+			ClassProxyGenerator generator = new ClassProxyGenerator(_scope, context);
 			return generator.GenerateCustomCode(theClass);
 		}
 

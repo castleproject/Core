@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public abstract class TypeReference : Reference
 	{
-		private Type m_type;
+		private Type _type;
 
 		public TypeReference( Type argumentType ) : this( null, argumentType )
 		{
@@ -29,12 +29,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public TypeReference( Reference owner, Type type ) : base(owner)
 		{
-			m_type = type;
+			_type = type;
 		}
 
 		public Type Type
 		{
-			get { return m_type; }
+			get { return _type; }
 		}
 	}
 }

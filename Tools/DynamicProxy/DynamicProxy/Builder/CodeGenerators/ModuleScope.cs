@@ -29,48 +29,48 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// <summary>
 		/// Avoid leaks caused by non disposal of generated types.
 		/// </summary>
-		private ModuleBuilder m_moduleBuilder = null;
+		private ModuleBuilder _moduleBuilder = null;
 
 		/// <summary>
 		/// Keep track of generated types
 		/// </summary>
-		private Hashtable m_typeCache = Hashtable.Synchronized(new Hashtable());
+		private Hashtable _typeCache = Hashtable.Synchronized(new Hashtable());
 
 		/// <summary>
 		/// Used to lock the module builder creation
 		/// </summary>
-		private object m_lockobj = new object();
+		private object _lockobj = new object();
 
 		private int innerTypeCounter;
 
-		private AssemblyBuilder m_assemblyBuilder;
+		private AssemblyBuilder _assemblyBuilder;
 
 		public ModuleBuilder ObtainDynamicModule()
 		{
-			lock (m_lockobj)
+			lock (_lockobj)
 			{
-				if (m_moduleBuilder == null)
+				if (_moduleBuilder == null)
 				{
 					AssemblyName assemblyName = new AssemblyName();
 					assemblyName.Name = "DynamicAssemblyProxyGen";
 
 #if ( DEBUG )
-					m_assemblyBuilder =
+					_assemblyBuilder =
 						AppDomain.CurrentDomain.DefineDynamicAssembly(
 							assemblyName,
 							AssemblyBuilderAccess.RunAndSave);
-					m_moduleBuilder = m_assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME);
+					_moduleBuilder = _assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME);
 #else
-					m_assemblyBuilder =
+					_assemblyBuilder =
 						AppDomain.CurrentDomain.DefineDynamicAssembly(
 							assemblyName,
 							AssemblyBuilderAccess.Run);
-					m_moduleBuilder = m_assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
+					_moduleBuilder = _assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
 #endif
 				}
 			}
 
-			return m_moduleBuilder;
+			return _moduleBuilder;
 		}
 
 		public int InnerTypeCounter
@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		public bool SaveAssembly()
 		{
 #if ( DEBUG )
-			m_assemblyBuilder.Save(FILE_NAME);
+			_assemblyBuilder.Save(FILE_NAME);
 			return true;
 #else
 			return false;
@@ -90,10 +90,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		public Type this[String name]
 		{
-			get { return m_typeCache[name] as Type; }
+			get { return _typeCache[name] as Type; }
 			set
 			{
-				m_typeCache[name] = value;
+				_typeCache[name] = value;
 				SaveAssembly();
 			}
 		}

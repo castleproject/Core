@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class FixedReference : TypeReference
 	{
-		private object m_value;
+		private object _value;
 
 		public FixedReference( object value ) : base( value.GetType() )
 		{
@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 				throw new ApplicationException("Invalid type to FixedReference");
 			}
 
-			m_value = value;
+			_value = value;
 		}
 
 		public override void Generate(ILGenerator gen)
@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void LoadReference(ILGenerator gen)
 		{
-			OpCodeUtil.ConvertValueToLdcOpCode(gen, m_value);
+			OpCodeUtil.ConvertValueToLdcOpCode(gen, _value);
 		}
 
 		public override void StoreReference(ILGenerator gen)

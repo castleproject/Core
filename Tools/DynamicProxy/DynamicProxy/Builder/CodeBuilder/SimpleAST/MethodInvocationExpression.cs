@@ -25,9 +25,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class MethodInvocationExpression : Expression
 	{
-		protected MethodInfo m_method;
-		protected Expression[] m_args;
-		protected Reference m_owner;
+		protected MethodInfo _method;
+		protected Expression[] _args;
+		protected Reference _owner;
 
 		public MethodInvocationExpression(MethodInfo method, params Expression[] args) : 
 			this(SelfReference.Self, method, args)
@@ -46,21 +46,21 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public MethodInvocationExpression(Reference owner, MethodInfo method, params Expression[] args)
 		{
-			m_owner = owner;
-			m_method = method;
-			m_args = args;
+			_owner = owner;
+			_method = method;
+			_args = args;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(m_owner, gen);
+			ArgumentsUtil.EmitLoadOwnerAndReference(_owner, gen);
 
-			foreach(Expression exp in m_args)
+			foreach(Expression exp in _args)
 			{
 				exp.Emit(member, gen);
 			}
 
-			gen.Emit(OpCodes.Call, m_method);
+			gen.Emit(OpCodes.Call, _method);
 		}
 	}
 }

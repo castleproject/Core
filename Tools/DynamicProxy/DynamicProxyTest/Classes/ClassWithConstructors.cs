@@ -12,35 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
+namespace Castle.DynamicProxy.Test.Classes
 {
 	using System;
-	using System.Reflection.Emit;
+	using System.Collections;
 
 	/// <summary>
-	/// Summary description for LocalReference.
+	/// Summary description for ClassWithConstructors.
 	/// </summary>
-	public class LocalReference : TypeReference
+	public class ClassWithConstructors
 	{
-		private LocalBuilder _localbuilder;
+		IList list;
+		IDictionary dic;
 
-		public LocalReference( Type type ) : base( type )
+		public ClassWithConstructors(IList list)
 		{
+			this.list = list;
 		}
 
-		public override void Generate(ILGenerator gen)
+		public ClassWithConstructors(IList list, IDictionary dic) : this(list)
 		{
-			_localbuilder = gen.DeclareLocal( base.Type );
+			this.dic = dic;
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public IList List
 		{
-			gen.Emit( OpCodes.Ldloc, _localbuilder );
+			get { return list; }
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public IDictionary Dictionary
 		{
-			gen.Emit( OpCodes.Stloc, _localbuilder );
+			get { return dic; }
 		}
 	}
 }

@@ -26,18 +26,18 @@ namespace Castle.DynamicProxy.Test
 	[TestFixture]
 	public class CachedTypeTestCase
 	{
-		private ProxyGenerator m_generator = new ProxyGenerator();
+		private ProxyGenerator _generator = new ProxyGenerator();
 
 		[Test]
 		public void CachedClassProxies()
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			object proxy = _generator.CreateClassProxy( 
 				typeof(ServiceClass), new StandardInterceptor( ) );
 			
 			Assert.IsNotNull(proxy);
 			Assert.IsTrue( typeof(ServiceClass).IsAssignableFrom( proxy.GetType() ) );
 
-			proxy = m_generator.CreateClassProxy( 
+			proxy = _generator.CreateClassProxy( 
 				typeof(ServiceClass), new StandardInterceptor( ) );
 			
 			Assert.IsNotNull(proxy);

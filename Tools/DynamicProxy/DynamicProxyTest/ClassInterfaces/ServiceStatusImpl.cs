@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 	/// </summary>
 	public class ServiceStatusImpl : IServiceStatus
 	{
-		private State m_state = State.Invalid;
+		private State _state = State.Invalid;
 
 		public ServiceStatusImpl()
 		{
@@ -41,13 +41,13 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		{
 			get
 			{
-				return m_state;
+				return _state;
 			}
 		}
 
 		public void ChangeState(State state)
 		{
-			m_state = state;
+			_state = state;
 		}
 
 		#endregion

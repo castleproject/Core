@@ -130,6 +130,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\ClassWithConstructors.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\MySerializableClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -29,12 +29,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 			Type[] args = ArgumentsUtil.InitializeAndConvert( arguments );
 			
-			m_builder = maintype.TypeBuilder.DefineConstructor( 
+			_builder = maintype.TypeBuilder.DefineConstructor( 
 				MethodAttributes.SpecialName|MethodAttributes.Public|MethodAttributes.HideBySig, 
 				CallingConventions.Standard, 
 				args );
 
-			m_builder.SetImplementationFlags(MethodImplAttributes.Runtime|MethodImplAttributes.Managed);
+			_builder.SetImplementationFlags(MethodImplAttributes.Runtime|MethodImplAttributes.Managed);
 		}
 
 		public override void Generate()

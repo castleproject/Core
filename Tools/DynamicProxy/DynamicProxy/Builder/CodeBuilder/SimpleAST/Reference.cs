@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public abstract class Reference
 	{
-		private Reference m_owner = SelfReference.Self;
+		private Reference _owner = SelfReference.Self;
 
 		public Reference()
 		{
@@ -30,13 +30,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public Reference( Reference owner )
 		{
-			m_owner = owner;
+			_owner = owner;
 		}
 
 		public Reference OwnerReference
 		{
-			get { return m_owner; }
-			set { m_owner = value; }
+			get { return _owner; }
+			set { _owner = value; }
 		}
 
 		public virtual Expression ToExpression()

@@ -26,17 +26,17 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// </summary>
 	public class EasyConstructor : IEasyMember
 	{
-		protected ConstructorBuilder m_builder;
-		private ConstructorCodeBuilder m_codebuilder;
-		private AbstractEasyType m_maintype;
+		protected ConstructorBuilder _builder;
+		private ConstructorCodeBuilder _codebuilder;
+		private AbstractEasyType _maintype;
 
 		internal EasyConstructor( AbstractEasyType maintype, params ArgumentReference[] arguments )
 		{
-			m_maintype = maintype;
+			_maintype = maintype;
 
 			Type[] args = ArgumentsUtil.InitializeAndConvert( arguments );
 			
-			m_builder = maintype.TypeBuilder.DefineConstructor( 
+			_builder = maintype.TypeBuilder.DefineConstructor( 
 				 MethodAttributes.Public, CallingConventions.Standard, args );
 		}
 
@@ -48,23 +48,23 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 			get
 			{
-				if (m_codebuilder == null)
+				if (_codebuilder == null)
 				{
-					m_codebuilder = new ConstructorCodeBuilder( 
-						m_maintype.BaseType, m_builder.GetILGenerator() );
+					_codebuilder = new ConstructorCodeBuilder( 
+						_maintype.BaseType, _builder.GetILGenerator() );
 				}
-				return m_codebuilder;
+				return _codebuilder;
 			}
 		}
 
 		internal ConstructorBuilder Builder
 		{
-			get { return m_builder; }
+			get { return _builder; }
 		}
 
 		public MethodBase Member
 		{
-			get { return m_builder; }
+			get { return _builder; }
 		}
 
 		public Type ReturnType
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public virtual void Generate()
 		{
-			m_codebuilder.Generate(this, m_builder.GetILGenerator());
+			_codebuilder.Generate(this, _builder.GetILGenerator());
 		}
 
 		public virtual void EnsureValidCodeBlock()

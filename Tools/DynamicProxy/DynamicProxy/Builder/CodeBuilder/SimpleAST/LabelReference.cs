@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class LabelReference : Reference
 	{
-		private Label m_label;
+		private Label _label;
 
 		public LabelReference()
 		{
@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public Label Reference
 		{
-			get { return m_label; }
+			get { return _label; }
 		}
 
 		public override Expression ToExpression()
@@ -40,12 +40,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void Generate(ILGenerator gen)
 		{
-			 m_label = gen.DefineLabel();
+			 _label = gen.DefineLabel();
 		}
 
 		public override void LoadReference(ILGenerator gen)
 		{
-			gen.MarkLabel( m_label );
+			gen.MarkLabel( _label );
 		}
 
 		public override void StoreReference(ILGenerator gen)

@@ -78,5 +78,17 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 
 			return arguments;
 		}
+
+		public static Expression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
+		{
+			Expression[] expressions = new Expression[args.Length];
+			
+			for(int i=0; i < args.Length; ++i)
+			{
+				expressions[i] = args[i].ToExpression();
+			}
+
+			return expressions;
+		}
 	}
 }

@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections;
 
 	using Castle.DynamicProxy.Builder;
 
@@ -43,11 +44,11 @@ namespace Castle.DynamicProxy
 	/// </example>
 	public class ProxyGenerator
 	{
-		private IProxyBuilder m_builder;
+		private IProxyBuilder _builder;
 
 		public ProxyGenerator(IProxyBuilder builder)
 		{
-			m_builder = builder;
+			_builder = builder;
 		}
 
 		public ProxyGenerator() : this( new DefaultProxyBuilder() )
@@ -56,25 +57,33 @@ namespace Castle.DynamicProxy
 
 		public IProxyBuilder ProxyBuilder
 		{
-			get { return m_builder; }
-			set { m_builder = value; }
+			get { return _builder; }
+			set { _builder = value; }
 		}
 
-		public virtual object CreateClassProxy(Type baseClass, IInterceptor interceptor)
+		public virtual object CreateClassProxy(Type baseClass, IInterceptor interceptor, 
+			params object[] argumentsForConstructor)
 		{
-			AssertCreateClassProxyArguments(baseClass, interceptor);
+			AssertUtil.IsClass(baseClass, "baseClass");
+			AssertUtil.NotNull(interceptor, "interceptor");
 
 			Type newType = ProxyBuilder.CreateClassProxy(baseClass);
-			return CreateClassProxyInstance( newType, interceptor );
+			return CreateClassProxyInstance( newType, interceptor, argumentsForConstructor );
 		}
 
+		
+
 		public virtual object CreateCustomClassProxy(Type baseClass, 
-			IInterceptor interceptor, GeneratorContext context)
+			IInterceptor interceptor, GeneratorContext context, 
+			params object[] argumentsForConstructor)
 		{
-			AssertCreateClassProxyArguments(baseClass, interceptor, context);
+			AssertUtil.IsClass(baseClass, "baseClass");
+			AssertUtil.NotNull(interceptor, "interceptor");
+			AssertUtil.NotNull(context, "context");
 
 			Type newType = ProxyBuilder.CreateCustomClassProxy(baseClass, context);
-			return CreateCustomClassProxyInstance( newType, interceptor, context );
+			return CreateCustomClassProxyInstance( newType, interceptor, context, 
+				argumentsForConstructor );
 		}
 
 		/// <summary>
@@ -98,7 +107,9 @@ namespace Castle.DynamicProxy
 		/// <returns>Proxy instance</returns>
 		public virtual object CreateProxy(Type[] interfaces, IInterceptor interceptor, object target)
 		{
-			AssertCreateProxyArguments(interfaces, interceptor);
+			AssertUtil.IsInterface(interfaces, "interfaces");
+			AssertUtil.NotNull(interceptor, "interceptor");
+			AssertUtil.NotNull(target, "target");
 
 			Type newType = ProxyBuilder.CreateInterfaceProxy(interfaces);
 			return CreateProxyInstance( newType, interceptor, target );
@@ -127,7 +138,11 @@ namespace Castle.DynamicProxy
 		public virtual object CreateCustomProxy(Type[] interfaces, 
 			IInterceptor interceptor, object target, GeneratorContext context )
 		{
-			AssertCreateProxyArguments( interfaces, interceptor, context );
+			AssertUtil.IsInterface(interfaces, "interfaces");
+			AssertUtil.NotNull(interceptor, "interceptor");
+			AssertUtil.NotNull(target, "target");
+			AssertUtil.NotNull(context, "context");
+
 			Type newType = ProxyBuilder.CreateCustomInterfaceProxy(interfaces, context);
 			return CreateCustomProxyInstance( newType, interceptor, target, context );
 		}
@@ -137,7 +152,8 @@ namespace Castle.DynamicProxy
 			return Activator.CreateInstance(type, new object[] {interceptor, target});
 		}
 
-		protected virtual object CreateCustomProxyInstance(Type type, IInterceptor interceptor, object target, GeneratorContext context)
+		protected virtual object CreateCustomProxyInstance(Type type, IInterceptor interceptor, 
+			object target, GeneratorContext context)
 		{
 			if (context.HasMixins)
 			{
@@ -146,74 +162,35 @@ namespace Castle.DynamicProxy
 			return CreateProxyInstance( type, interceptor, target );
 		}
 
-		protected virtual object CreateClassProxyInstance(Type type, IInterceptor interceptor)
+		protected virtual object CreateClassProxyInstance(Type type, IInterceptor interceptor, 
+			params object[] argumentsForConstructor)
 		{
-			return Activator.CreateInstance(type, new object[] {interceptor});
+			ArrayList args = new ArrayList();
+			args.Add(interceptor);
+			args.AddRange(argumentsForConstructor);
+
+			return Activator.CreateInstance(type, args.ToArray());
 		}
 
-		protected virtual object CreateCustomClassProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context)
+		protected virtual object CreateCustomClassProxyInstance(Type type, IInterceptor interceptor, 
+			GeneratorContext context, params object[] argumentsForConstructor)
 		{
 			if (context.HasMixins)
 			{
-				return Activator.CreateInstance( type, new object[] { interceptor, context.MixinsAsArray() } );
+				ArrayList args = new ArrayList();
+				args.Add(interceptor);
+				args.Add(context.MixinsAsArray());
+				args.AddRange(argumentsForConstructor);
+
+				return Activator.CreateInstance( type, args.ToArray() );
 			}
-			return CreateClassProxyInstance( type, interceptor );
+			return CreateClassProxyInstance( type, interceptor, argumentsForConstructor );
 		}
 
-		protected virtual object CreateCustomClassProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context, object target)
+		protected virtual object CreateCustomClassProxyInstance(Type type, IInterceptor interceptor, 
+			GeneratorContext context, object target)
 		{
 			return CreateProxyInstance( type, interceptor, target );
-		}
-
-		protected static void AssertCreateProxyArguments(Type[] interfaces, IInterceptor interceptor)
-		{
-			if (interfaces == null)
-			{
-				throw new ArgumentNullException("interfaces");
-			}
-			if (interceptor == null)
-			{
-				throw new ArgumentNullException("interceptor");
-			}
-			if (interfaces.Length == 0)
-			{
-				throw new ArgumentException("Can't handle an empty interface array");
-			}
-		}
-
-		protected static void AssertCreateProxyArguments(Type[] interfaces, IInterceptor interceptor, GeneratorContext context)
-		{
-			AssertCreateProxyArguments(interfaces, interceptor);
-
-			if (context == null)
-			{
-				throw new ArgumentNullException("context");
-			}
-		}
-
-		protected static void AssertCreateClassProxyArguments(Type baseClass, IInterceptor interceptor)
-		{
-			if (baseClass == null)
-			{
-				throw new ArgumentNullException("theClass");
-			}
-			if (baseClass.IsInterface)
-			{
-				throw new ArgumentException("'baseClass' must be a class, not an interface");
-			}
-			if (interceptor == null)
-			{
-				throw new ArgumentNullException("interceptor");
-			}
-		}
-
-		protected static void AssertCreateClassProxyArguments(Type baseClass, IInterceptor interceptor, GeneratorContext context)
-		{
-			AssertCreateClassProxyArguments(baseClass, interceptor);
-			if (context == null)
-			{
-				throw new ArgumentNullException("context");
-			}
 		}
 	}
 }

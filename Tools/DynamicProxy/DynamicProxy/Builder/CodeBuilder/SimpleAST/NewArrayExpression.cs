@@ -22,19 +22,19 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class NewArrayExpression : Expression
 	{
-		private int m_size;
-		private Type m_arrayType;
+		private int _size;
+		private Type _arrayType;
 
 		public NewArrayExpression( int size, Type arrayType )
 		{
-			m_size = size;
-			m_arrayType = arrayType;
+			_size = size;
+			_arrayType = arrayType;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldc_I4, m_size);
-			gen.Emit(OpCodes.Newarr, m_arrayType);
+			gen.Emit(OpCodes.Ldc_I4, _size);
+			gen.Emit(OpCodes.Newarr, _arrayType);
 		}
 	}
 }

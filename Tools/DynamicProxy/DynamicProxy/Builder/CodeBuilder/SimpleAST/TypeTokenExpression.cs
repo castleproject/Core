@@ -23,16 +23,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class TypeTokenExpression : Expression
 	{
-		private Type m_type;
+		private Type _type;
 
 		public TypeTokenExpression( Type type )
 		{
-			m_type = type;
+			_type = type;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldtoken, m_type);
+			gen.Emit(OpCodes.Ldtoken, _type);
 			gen.Emit(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle"));
 		}
 	}

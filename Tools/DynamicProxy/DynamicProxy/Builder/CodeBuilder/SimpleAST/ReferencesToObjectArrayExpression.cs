@@ -22,28 +22,28 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// </summary>
 	public class ReferencesToObjectArrayExpression : Expression
 	{
-		private TypeReference[] m_args;
+		private TypeReference[] _args;
 
 		public ReferencesToObjectArrayExpression( params TypeReference[] args )
 		{
-			m_args = args;
+			_args = args;
 		}
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
 			LocalBuilder local = gen.DeclareLocal( typeof(object[]) );
-			gen.Emit(OpCodes.Ldc_I4, m_args.Length);
+			gen.Emit(OpCodes.Ldc_I4, _args.Length);
 			gen.Emit(OpCodes.Newarr, typeof(object));
 			gen.Emit(OpCodes.Stloc, local);
 			
-			for(int i=0; i < m_args.Length; i++)
+			for(int i=0; i < _args.Length; i++)
 			{
 				gen.Emit(OpCodes.Ldloc, local);
 				gen.Emit(OpCodes.Ldc_I4, i);
 
-				TypeReference reference = m_args[i];
+				TypeReference reference = _args[i];
 
-				m_args[i].LoadReference( gen );
+				_args[i].LoadReference( gen );
 
 				if (reference.Type.IsValueType)
 				{

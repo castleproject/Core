@@ -31,18 +31,18 @@ namespace Castle.DynamicProxy.Test
 	[TestFixture]
 	public class ProxyGeneratorTestCase
 	{
-		private ProxyGenerator m_generator;
+		private ProxyGenerator _generator;
 
 		[SetUp]
 		public void Init()
 		{
-			m_generator = new ProxyGenerator();
+			_generator = new ProxyGenerator();
 		}
 
 		[Test]
 		public void ProxyForClass()
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			object proxy = _generator.CreateClassProxy( 
 				typeof(ServiceClass), new ResultModifiedInvocationHandler( ) );
 			
 			Assert.IsNotNull( proxy );
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProxyForClassWithSuperClass()
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			object proxy = _generator.CreateClassProxy( 
 				typeof(SpecializedServiceClass), new ResultModifiedInvocationHandler( ) );
 			
 			Assert.IsNotNull( proxy );
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProxyForClassWhichImplementsInterfaces()
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			object proxy = _generator.CreateClassProxy( 
 				typeof(MyInterfaceImpl), new ResultModifiedInvocationHandler( ) );
 			
 			Assert.IsNotNull( proxy );
@@ -89,7 +89,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProxyingClassWithoutVirtualMethods()
 		{
-			NoVirtualMethodClass proxy = (NoVirtualMethodClass) m_generator.CreateClassProxy( 
+			NoVirtualMethodClass proxy = (NoVirtualMethodClass) _generator.CreateClassProxy( 
 				typeof(NoVirtualMethodClass), new StandardInterceptor( ) );
 			Assert.IsNotNull(proxy);
 		}
@@ -97,7 +97,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProxyingClassWithSealedMethods()
 		{
-			SealedMethodsClass proxy = (SealedMethodsClass) m_generator.CreateClassProxy( 
+			SealedMethodsClass proxy = (SealedMethodsClass) _generator.CreateClassProxy( 
 				typeof(SealedMethodsClass), new StandardInterceptor() );
 			Assert.IsNotNull(proxy);
 		}
@@ -105,7 +105,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void HashtableProxy()
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			object proxy = _generator.CreateClassProxy( 
 				typeof(Hashtable), new HashtableInterceptor() );
 
 			Assert.IsTrue( typeof(Hashtable).IsAssignableFrom( proxy.GetType() ) );
@@ -121,7 +121,7 @@ namespace Castle.DynamicProxy.Test
 		{
 			try
 			{
-				m_generator.CreateClassProxy( 
+				_generator.CreateClassProxy( 
 					typeof(ICloneable), new StandardInterceptor( ) );
 			}
 			catch(ArgumentException)
@@ -131,7 +131,7 @@ namespace Castle.DynamicProxy.Test
 
 			try
 			{
-				m_generator.CreateClassProxy( 
+				_generator.CreateClassProxy( 
 					null, new StandardInterceptor( ) );
 			}
 			catch(ArgumentNullException)
@@ -141,7 +141,7 @@ namespace Castle.DynamicProxy.Test
 
 			try
 			{
-				m_generator.CreateClassProxy( 
+				_generator.CreateClassProxy( 
 					typeof(SpecializedServiceClass), null );
 			}
 			catch(ArgumentNullException)
@@ -153,7 +153,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void TestGenerationSimpleInterface()
 		{
-			object proxy = m_generator.CreateProxy( 
+			object proxy = _generator.CreateProxy( 
 				typeof(IMyInterface), new StandardInterceptor( ), new MyInterfaceImpl() );
 			
 			Assert.IsNotNull( proxy );
@@ -173,7 +173,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void TestGenerationWithInterfaceHeritage()
 		{
-			object proxy = m_generator.CreateProxy( 
+			object proxy = _generator.CreateProxy( 
 				typeof(IMySecondInterface), new StandardInterceptor( ), new MySecondInterfaceImpl() );
 
 			Assert.IsNotNull( proxy );
@@ -193,11 +193,38 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
+		public void ClassWithConstructors()
+		{
+			object proxy = _generator.CreateClassProxy( 
+				typeof(ClassWithConstructors), 
+				new StandardInterceptor(), 
+				new ArrayList() );
+
+			Assert.IsNotNull( proxy );
+
+			ClassWithConstructors objProxy = (ClassWithConstructors) proxy;
+			
+			Assert.IsNotNull( objProxy.List );
+			Assert.IsNull( objProxy.Dictionary );
+
+			proxy = _generator.CreateClassProxy( 
+				typeof(ClassWithConstructors), 
+				new StandardInterceptor(), 
+				new ArrayList(), new Hashtable() );
+
+			Assert.IsNotNull( proxy );
+			objProxy = (ClassWithConstructors) proxy;
+			
+			Assert.IsNotNull( objProxy.List );
+			Assert.IsNotNull( objProxy.Dictionary );
+		}
+
+		[Test]
 		public void TestEnumProperties()
 		{
 			ServiceStatusImpl service = new ServiceStatusImpl();
 
-			object proxy = m_generator.CreateProxy( 
+			object proxy = _generator.CreateProxy( 
 				typeof(IServiceStatus), new StandardInterceptor( ), service );
 			
 			Assert.IsNotNull( proxy );
@@ -221,7 +248,7 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void ProxyForClassWithGuidProperty() 
 		{
-			object proxy = m_generator.CreateClassProxy( 
+			object proxy = _generator.CreateClassProxy( 
 				typeof(GuidClass), new StandardInterceptor() );
 
 			Assert.IsNotNull( proxy );

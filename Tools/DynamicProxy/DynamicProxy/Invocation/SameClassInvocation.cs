@@ -21,19 +21,16 @@ namespace Castle.DynamicProxy.Invocation
 	/// </summary>
 	public class SameClassInvocation : AbstractInvocation
 	{
-		protected ICallable _callable;
-
 		public SameClassInvocation(ICallable callable, object proxy, MethodInfo method) : 
 			base(callable, proxy, method)
 		{
-			_callable = callable;
 		}
 
 		public override object Proceed(params object[] args)
 		{
 			// If the user changed the target, we use reflection
 			// otherwise the delegate will be used.
-			if (InvocationTarget == m_original_target)
+			if (InvocationTarget == _original_target)
 			{
 				return _callable.Call( args );
 			}

@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				flags |= TypeAttributes.Serializable;
 			}
 			
-			m_typebuilder = modulescope.ObtainDynamicModule().DefineType( 
+			_typebuilder = modulescope.ObtainDynamicModule().DefineType( 
 				name, flags, baseType, interfaces );
 		}
 
@@ -61,7 +61,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 			EasyCallable nested = new EasyCallable( this, IncrementAndGetCounterValue, 
 				returnType, args );
-			m_nested.Add( nested );
+			_nested.Add( nested );
 			return nested;
 		}
 
@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		{
 			EasyCallable nested = new EasyCallable( this, IncrementAndGetCounterValue, 
 				new ReturnReferenceExpression(returnType), ArgumentsUtil.ConvertToArgumentReference(args) );
-			m_nested.Add( nested );
+			_nested.Add( nested );
 			return nested;
 		}
 	}
