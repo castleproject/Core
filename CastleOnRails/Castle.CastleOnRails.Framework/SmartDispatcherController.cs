@@ -131,7 +131,7 @@ namespace Castle.CastleOnRails.Framework
 					}
 					else
 					{
-						args[i] = new Guid(); 
+						args[i] = Guid.Empty; 
 					}
 				}
 				else if (param.ParameterType == typeof(int))
@@ -149,6 +149,10 @@ namespace Castle.CastleOnRails.Framework
 				else if (param.ParameterType == typeof(Double))
 				{
 					args[i] = System.Convert.ToDouble( value );
+				}
+				else if (param.ParameterType == typeof(Boolean))
+				{
+					args[i] = value != null;
 				}
 				else if (param.ParameterType == typeof(HttpPostedFile))
 				{

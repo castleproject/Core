@@ -172,7 +172,7 @@ namespace Castle.CastleOnRails.Framework
 		public void Redirect( String area, String controller, String action )
 		{
 			CancelView();
-
+			
 			_context.Response.Redirect( area, controller, action );
 		}
 
