@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Generator.Components
 {
 	using System;
+	using System.Collections;
 
 	using Castle.ActiveRecord.Generator.Components.Database;
 
@@ -36,25 +37,38 @@ namespace Castle.ActiveRecord.Generator.Components
 
 			if (info.Association == AssociationEnum.BelongsTo)
 			{
-				// Validates first
-
-				if (info.ParentCol == null)
-				{
-					throw new ArgumentException("No parent column specified");
-				}
-
-				String colName = info.ParentCol.Name;
-				String propName = _namingService.CreatePropertyName(colName);
-
-				desc = ActiveRecordBelongsToDescriptor(colName, propName, info.TargetDescriptor);
+				desc = CreateBelongsToRelation(info);
+			}
+			else if (info.Association == AssociationEnum.HasMany)
+			{
+				desc = CreateHasManyRelation(info);
+			}
+			else if (info.Association == AssociationEnum.HasAndBelongsToMany)
+			{
+				desc = CreateHasManyAndBelongsToRelation(info);
 			}
 
 			PopulateInfoIntoDescriptor(info, desc);
 
-			return null;
+			return desc;
 		}
-
+		
 		#endregion
+
+		private ActiveRecordPropertyRelationDescriptor CreateBelongsToRelation(RelationshipInfo info)
+		{
+			// Validates first
+	
+			if (info.ParentCol == null)
+			{
+				throw new ArgumentException("No parent column specified");
+			}
+	
+			String colName = info.ParentCol.Name;
+			String propName = _namingService.CreatePropertyName(colName);
+	
+			return new ActiveRecordBelongsToDescriptor(colName, propName, info.TargetDescriptor);
+		}
 
 		private void PopulateInfoIntoDescriptor(RelationshipInfo info, ActiveRecordPropertyRelationDescriptor desc)
 		{
@@ -63,6 +77,46 @@ namespace Castle.ActiveRecord.Generator.Components
 			desc.Proxy = info.UseProxy;
 
 			// TODO: Finish this
+		}
+
+		private ActiveRecordPropertyRelationDescriptor CreateHasManyRelation(RelationshipInfo info)
+		{
+			// Validates first
+	
+			if (info.ChildCol == null)
+			{
+				throw new ArgumentException("No column specified");
+			}
+	
+			String colName = info.ChildCol.Name;
+			String propName = _namingService.CreateRelationName( info.TargetDescriptor.ClassName );
+	
+			return new ActiveRecordHasManyDescriptor(colName, propName, typeof(IList), info.TargetDescriptor);
+		}
+
+		private ActiveRecordPropertyRelationDescriptor CreateHasManyAndBelongsToRelation(RelationshipInfo info)
+		{
+			// Validates first
+	
+			if (info.ParentCol == null)
+			{
+				throw new ArgumentException("No parent column specified");
+			}
+			if (info.ChildCol == null)
+			{
+				throw new ArgumentException("No child column specified");
+			}
+			if (info.AssociationTable == null)
+			{
+				throw new ArgumentException("No association table specified");
+			}
+	
+			String colName = info.ParentCol.Name;
+			String colKeyName = info.ChildCol.Name;
+			String propName = _namingService.CreateRelationName( info.TargetDescriptor.ClassName );
+	
+			return new ActiveRecordHasAndBelongsToManyDescriptor(colName, 
+				info.AssociationTable.Name, propName, info.TargetDescriptor, colKeyName);
 		}
 	}
 }

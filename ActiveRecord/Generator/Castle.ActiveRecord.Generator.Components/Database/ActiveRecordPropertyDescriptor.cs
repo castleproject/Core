@@ -209,16 +209,34 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	/// <summary>
+	/// Represents a many to one association
+	/// 
+	/// Order has OrderItem
+	/// -> OrderItem.ParentOrderId
+	/// 
+	/// OrderItem.ParentOrder
+	/// 
+	/// </summary>
 	[Serializable]
 	public class ActiveRecordBelongsToDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
-		public ActiveRecordBelongsToDescriptor(String _columnName, 
-			String _propertyName, ActiveRecordDescriptor _targetType) : 
-			base(_columnName, "", _propertyName, "BelongsTo", _targetType)
+		public ActiveRecordBelongsToDescriptor(String columnName, 
+			String propertyName, ActiveRecordDescriptor targetType) : 
+			base(columnName, String.Empty, propertyName, "BelongsTo", targetType)
 		{
 		}
 	}
 
+	/// <summary>
+	/// Represents a one to many association with a key on the foreign table:
+	/// 
+	/// Order has OrderItem
+	/// -> OrderItem.ParentOrderId
+	/// 
+	/// Order.Items 
+	/// 
+	/// </summary>
 	[Serializable]
 	public class ActiveRecordHasManyDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
@@ -230,26 +248,35 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	/// <summary>
+	/// Represents an one to one association
+	/// </summary>
 	[Serializable]
 	public class ActiveRecordHasOneDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		public ActiveRecordHasOneDescriptor(String _columnName, 
 			String _propertyName, ActiveRecordDescriptor _targetType) : 
-			base(_columnName, "", _propertyName, "HasOne", _targetType)
+			base(_columnName, String.Empty, _propertyName, "HasOne", _targetType)
 		{
 		}
 	}
 
+	/// <summary>
+	/// Represents a Many to many association using an
+	/// association table
+	/// </summary>
 	[Serializable]
 	public class ActiveRecordHasAndBelongsToManyDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		private String _columnKey;
+		private String _associationtable;
 
-		public ActiveRecordHasAndBelongsToManyDescriptor(String _columnName, String _columnTypeName, 
-			String _propertyName, ActiveRecordDescriptor _targetType, String _columnKey) : 
-			base(_columnName, _columnTypeName, _propertyName, "HasAndBelongsToMany", _targetType)
+		public ActiveRecordHasAndBelongsToManyDescriptor(String columnName, String associationtable, 
+			String propertyName, ActiveRecordDescriptor targetType, String columnKey) : 
+			base(columnName, String.Empty, propertyName, "HasAndBelongsToMany", targetType)
 		{
-			this._columnKey = _columnKey;
+			_associationtable = associationtable;
+			_columnKey = columnKey;
 		}
 	}
 }
