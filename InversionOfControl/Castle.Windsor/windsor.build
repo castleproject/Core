@@ -11,6 +11,7 @@
 	<property name="name" value="Castle.Windsor" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.assembly.appconfig" value="${test.assembly.name}.config" />
 
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
@@ -96,7 +97,9 @@
 	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
 			<formatter type="Plain" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+			<test 
+				assemblyname="${bin.dir}/${test.assembly.name}" 
+				appconfig="${bin.dir}/${test.assembly.appconfig}"/>
 		</nunit2>
 	</target>
 	
