@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CodeGenerator\IProjectGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CodeGenerator\Default\CodeDomGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -155,6 +160,11 @@
                 />
                 <File
                     RelPath = "CodeGenerator\Default\NamingService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\Default\ProjectGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

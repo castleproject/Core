@@ -12,16 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 {
 	using System;
 
 
-	public abstract class ActiveRecordBase
+	public class GenerateProjectAction : IAction
 	{
-		public static ActiveRecordBase Find(object[] ids)
+		public GenerateProjectAction()
 		{
+		}
+
+		#region IAction Members
+
+		public object Execute(IApplicationModel model)
+		{
+			// TODO:  Add GenerateProjectAction.Execute implementation
 			return null;
 		}
+
+		#endregion
 	}
 }

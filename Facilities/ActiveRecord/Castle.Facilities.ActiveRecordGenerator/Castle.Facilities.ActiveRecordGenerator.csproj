@@ -212,6 +212,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Action\Standard\GenerateProjectAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Action\Standard\NewActiveRecordAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -259,6 +264,16 @@
                 <File
                     RelPath = "Forms\NewProjectForm.resx"
                     DependentUpon = "NewProjectForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\ProjectGeneratorForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ProjectGeneratorForm.resx"
+                    DependentUpon = "ProjectGeneratorForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

@@ -60,6 +60,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.RichTextBox codeBox;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+		private System.Windows.Forms.MenuItem menuItem1;
+		private System.Windows.Forms.MenuItem menuItem2;
 		private CodeView _codeView;
 
 
@@ -136,6 +138,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.label1 = new System.Windows.Forms.Label();
 			this.codeBox = new System.Windows.Forms.RichTextBox();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.menuItem1 = new System.Windows.Forms.MenuItem();
+			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -143,6 +147,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																					  this.fileMenu,
+																					  this.menuItem1,
 																					  this.helpMenu});
 			// 
 			// fileMenu
@@ -219,7 +224,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// helpMenu
 			// 
-			this.helpMenu.Index = 1;
+			this.helpMenu.Index = 2;
 			this.helpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																					 this.aboutMenu});
 			this.helpMenu.Text = "&Help";
@@ -319,6 +324,18 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.codeBox.Size = new System.Drawing.Size(570, 416);
 			this.codeBox.TabIndex = 12;
 			this.codeBox.Text = "";
+			// 
+			// menuItem1
+			// 
+			this.menuItem1.Index = 1;
+			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					  this.menuItem2});
+			this.menuItem1.Text = "Project";
+			// 
+			// menuItem2
+			// 
+			this.menuItem2.Index = 0;
+			this.menuItem2.Text = "Generate...";
 			// 
 			// MainForm
 			// 
