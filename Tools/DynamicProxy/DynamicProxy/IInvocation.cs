@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		/// 
 		/// </summary>
-		object InvocationTarget { get; }
+		object InvocationTarget { get;set; }
 
 		/// <summary>
 		/// 

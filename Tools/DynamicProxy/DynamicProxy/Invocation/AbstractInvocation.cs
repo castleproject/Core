@@ -37,6 +37,7 @@ namespace Castle.DynamicProxy.Invocation
 		public object InvocationTarget
 		{
 			get { return target; }
+			set { target = value; }
 		}
 
 		public MethodInfo Method

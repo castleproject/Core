@@ -30,8 +30,14 @@ namespace Castle.DynamicProxy.Invocation
 
 		public override object Proceed(params object[] args)
 		{
-			object value = call.Call( args );
-			return value;
+			if (Proxy == InvocationTarget)
+			{
+				return call.Call( args );
+			}
+			else
+			{
+				return Method.Invoke(InvocationTarget, args);
+			}
 		}
 	}
 }
