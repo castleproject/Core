@@ -16,7 +16,7 @@
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
-	<property name="version" value="alpha-2" />
+	<property name="version" value="beta-1" />
 
 	<target name="clean">
 	</target>
@@ -117,6 +117,7 @@
 				<include name="Changes.txt" />				
 				<include name="*.build" />
 				<include name="*.sln" />
+				<include name="Castle.Facilities.NHibernateExtension/**/*.*" />
 				<include name="${src.dir}/**/*.*" />
 				<include name="${test.src.dir}/**/*.*" />
 				<include name="${lib.dir}/**/*.*" />

@@ -1,11 +1,13 @@
 
--- Trying the sample
+-- Running the test cases
 
-1. Unzip the source zip and create a virtual directory on IIS
-   pointing to AspnetSample directory
-2. Map the extension .rails to ASP.Net ISAPI
-3. Don't forget to _unmark_ 'check file existence'
-4. Try accessing http://localhost:8080/home/index.rails 
+Cassini should be working on your machine in order to
+run the tests. Just use nant:
+
+> nant -t:net-1.1
+
+to compile and test everything
+
 
 
 -- More

@@ -10,6 +10,11 @@ Version 1.0.2
 Version 1.0.3
 - Applied patch from Sergey Koshcheyev related to proxy desserialization problems
 
+Version 1.0.4
+- Added the property MethodInvocationTarget to the IInvocation interface.
+  This property represents the methods being invoked on the target object. This
+  is important when proxying interfaces and still you want to obtain attributes
+  from the method on the concrete class.
 
 
 
