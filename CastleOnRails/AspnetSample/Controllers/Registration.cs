@@ -33,7 +33,7 @@ namespace AspnetSample.Controllers
 			IList customers = new ArrayList();
 			customers.Add( "" );
 
-			Bag.Add("customers", customers);
+			PropertyBag.Add("customers", customers);
 		}
 
 		public void Save(String name, String address, String city, String country, int age)
