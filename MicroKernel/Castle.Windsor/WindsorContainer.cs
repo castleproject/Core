@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+ // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 namespace Castle.Windsor
 {
 	using System;
-
 	using Castle.MicroKernel;
 
 	/// <summary>
@@ -24,65 +23,66 @@ namespace Castle.Windsor
 	public class WindsorContainer : IWindsorContainer
 	{
 		private IKernel _kernel;
+		private IWindsorContainer _parent;
 
 		public WindsorContainer() : this(new DefaultKernel())
 		{
+
 		}
 
 		public WindsorContainer(IKernel kernel)
 		{
 			_kernel = kernel;
+			_kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
 		}
 
 		#region IWindsorContainer Members
 
 		public IKernel Kernel
 		{
-			get
-			{
-				// TODO:  Add WindsorContainer.Kernel getter implementation
-				return null;
-			}
+			get { return _kernel; }
 		}
 
 		public IWindsorContainer Parent
 		{
-			get
-			{
-				// TODO:  Add WindsorContainer.Parent getter implementation
-				return null;
-			}
+			get { return _parent; }
+			set { _parent = value; }
 		}
 
-		public void AddFacility( IFacility facility )
+		public void AddFacility(IFacility facility)
 		{
-			_kernel.AddFacility( facility );
+			_kernel.AddFacility(facility);
 		}
 
 		public void AddComponent(String key, Type classType)
 		{
-			// TODO:  Add WindsorContainer.AddComponent implementation
+			Kernel.AddComponent(key, classType);
 		}
 
 		public void AddComponent(String key, Type serviceType, Type classType)
 		{
-			// TODO:  Add WindsorContainer.Castle.Windsor.IWindsorContainer.AddComponent implementation
+			Kernel.AddComponent(key, serviceType, classType);
 		}
 
 		public object Resolve(String key)
 		{
-			// TODO:  Add WindsorContainer.Resolve implementation
-			return null;
+			return Kernel[key];
 		}
 
 		public object Resolve(Type service)
 		{
-			// TODO:  Add WindsorContainer.Castle.Windsor.IWindsorContainer.Resolve implementation
-			return null;
+			return Kernel[service];
 		}
 
 		public void Release(object instance)
 		{
+			Kernel.ReleaseComponent(instance);
+		}
+
+		public void AddChildContainer(IWindsorContainer childContainer)
+		{
+			childContainer.Parent = this;
+			Kernel.AddChildKernel(childContainer.Kernel);
 		}
 
 		#endregion

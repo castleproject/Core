@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -88,6 +88,12 @@
                     Name = "Castle.Model"
                     Project = "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\Tools\bin\Castle.DynamicProxy.dll"
+                    Private = "False"
                 />
             </References>
         </Build>
@@ -105,6 +111,21 @@
                 />
                 <File
                     RelPath = "WindsorContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\DefaultMethodInvocation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\DefaultProxyFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\InterceptorChain.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -30,7 +30,7 @@ namespace Castle.Windsor
 
 		IWindsorContainer Parent
 		{
-			get;
+			get; set;
 		}
 
 		void AddFacility( IFacility facility );
@@ -44,5 +44,7 @@ namespace Castle.Windsor
 		object Resolve( Type service );
 
 		void Release( object instance );
+
+		void AddChildContainer(IWindsorContainer childContainer);
 	}
 }
