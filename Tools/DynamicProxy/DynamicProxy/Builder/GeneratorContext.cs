@@ -17,6 +17,9 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Reflection;
 	using System.Collections;
+	using System.Runtime.Serialization;
+
+	using Castle.DynamicProxy.Serialization;
 
 	/// <summary>
 	/// Summary description for GeneratorContext.
@@ -26,9 +29,29 @@ namespace Castle.DynamicProxy
 		private IList m_skipInterfaces = new ArrayList();
 		private IList m_skipMethods = new ArrayList();
 		private ArrayList m_mixins = new ArrayList();
+		private Type m_proxyObjectReference = typeof(ProxyObjectReference);
 
 		public GeneratorContext()
 		{
+			// By default we skip a few interfaces
+			AddInterfaceToSkip( typeof(ISerializable) );
+			AddInterfaceToSkip( typeof(IDeserializationCallback) );
+			AddInterfaceToSkip( typeof(ICloneable) );
+
+			// And their methods
+			AddMethodToSkip( typeof(ISerializable).GetMethod("GetObjectData") );
+			AddMethodToSkip( typeof(IDeserializationCallback).GetMethod("OnDeserialization") );
+			AddMethodToSkip( typeof(ICloneable).GetMethod("Clone") );
+		}
+
+		/// <summary>
+		/// The implementor of IObjectReference responsible for 
+		/// the deserialization and reconstruction of the proxy object
+		/// </summary>
+		public Type ProxyObjectReference
+		{
+			get { return m_proxyObjectReference; }
+			set { m_proxyObjectReference = value; }
 		}
 
 		public bool HasMixins

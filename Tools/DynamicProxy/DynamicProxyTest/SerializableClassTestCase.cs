@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Test
 {
 	using System;
+	using System.Collections;
 	using System.IO;
 	using System.Runtime.Serialization.Formatters.Binary;
 
@@ -96,7 +97,6 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual( inter.Started, otherProxy.Started );
 		}
 
-
 		[Test]
 		public void MixinSerialization()
 		{
@@ -125,6 +125,24 @@ namespace Castle.DynamicProxy.Test
 
 			other = otherProxy as IOtherMixin;
 			Assert.AreEqual(3, other.Sum(1,2));
+		}
+
+		[Test]
+		public void HashtableSerialization()
+		{
+			GeneratorContext context = new GeneratorContext();
+
+			object proxy = generator.CreateClassProxy( 
+				typeof(Hashtable), new StandardInterceptor() );
+
+			Assert.IsTrue( typeof(Hashtable).IsAssignableFrom( proxy.GetType() ) );
+
+			(proxy as Hashtable).Add("key", "helloooo!");
+
+			Hashtable otherProxy = (Hashtable) SerializeAndDeserialize(proxy);
+
+			Assert.IsTrue(otherProxy.ContainsKey("key"));
+			Assert.AreEqual("helloooo!", otherProxy["key"]);
 		}
 
 		public object SerializeAndDeserialize( object proxy )

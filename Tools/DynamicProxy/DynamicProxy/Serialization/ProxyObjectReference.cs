@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Serialization
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for ProxyObjectReference.
+	/// Handles the deserialization of proxies.
 	/// </summary>
 	[Serializable]
 	public class ProxyObjectReference : IObjectReference, ISerializable
@@ -39,6 +39,8 @@ namespace Castle.DynamicProxy.Serialization
 			m_mixins = (object[]) info.GetValue("__mixins", typeof(object[]) );
 
 			m_proxy = RecreateProxy(info, context);
+
+			InvokeCallback(m_proxy);
 		}
 
 		protected virtual object RecreateProxy(SerializationInfo info, StreamingContext context)
@@ -97,8 +99,6 @@ namespace Castle.DynamicProxy.Serialization
 
 			if (delegateBaseSer)
 			{
-				// TODO: Invoke Serialization constructor
-				
 				if (m_mixins.Length == 0)
 				{
 					Type proxy_type = generator.ProxyBuilder.CreateClassProxy( m_baseType );
@@ -143,6 +143,14 @@ namespace Castle.DynamicProxy.Serialization
 			return proxy;
 		}
 
+		protected void InvokeCallback(object target)
+		{
+			if (target is IDeserializationCallback)
+			{
+				(target as IDeserializationCallback).OnDeserialization(this);
+			}
+		}
+
 		public object GetRealObject(StreamingContext context)
 		{
 			return m_proxy;
@@ -150,6 +158,8 @@ namespace Castle.DynamicProxy.Serialization
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
+			// There is no need to implement this method as 
+			// this class would never be serialized.
 		}
 	}
 }

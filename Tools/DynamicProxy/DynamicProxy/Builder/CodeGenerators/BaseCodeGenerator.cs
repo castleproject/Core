@@ -182,7 +182,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			
 			getObjectData.CodeBuilder.AddStatement( new AssignStatement(
 				typeLocal, new MethodInvocationExpression( null, typeof(Type).GetMethod("GetType", get_type_args), 
-				new FixedReference("Castle.DynamicProxy.Serialization.ProxyObjectReference, Castle.DynamicProxy").ToExpression(), 
+				new FixedReference( Context.ProxyObjectReference.AssemblyQualifiedName ).ToExpression(), 
 				new FixedReference(1).ToExpression(),
 				new FixedReference(0).ToExpression() ) ) );
 

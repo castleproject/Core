@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Text;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+	using System.Collections.Specialized;
 
 	using Castle.DynamicProxy.Invocation;
 	using Castle.DynamicProxy.Builder.CodeBuilder;
@@ -32,6 +32,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		private static readonly Type INVOCATION_TYPE = typeof(SameClassInvocation);
 
 		private bool m_delegateToBaseGetObjectData;
+		
+		protected ConstructorInfo m_serializationConstructor;
 
 		public ClassProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -87,16 +89,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected void GenerateSerializationConstructor( EasyConstructor defConstructor )
 		{
-			ConstructorInfo serializationConstructor = m_baseType.GetConstructor(
-				new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
-
 			ArgumentReference arg1 = new ArgumentReference( typeof(SerializationInfo) );
 			ArgumentReference arg2 = new ArgumentReference( typeof(StreamingContext) );
 
 			EasyConstructor constr = MainTypeBuilder.CreateConstructor( arg1, arg2 );
 
 			constr.CodeBuilder.AddStatement( new ExpressionStatement(
-				new ConstructorInvocationExpression( serializationConstructor, 
+				new ConstructorInvocationExpression( m_serializationConstructor, 
 				arg1.ToExpression(), arg2.ToExpression() )) );
 
 			Type[] object_arg = new Type[] { typeof (String), typeof(Type) };
@@ -190,7 +189,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			{
 				m_delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(baseClass);
 				interfaces = AddISerializable( interfaces );
-				Context.AddInterfaceToSkip( typeof(ISerializable) );
 			}
 
 			Type cacheType = GetFromCache(baseClass, interfaces);
@@ -253,10 +251,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 				Context.AddMethodToSkip(getObjectDataMethod);
 
-				ConstructorInfo serializationConstructor = baseType.GetConstructor(
-					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+				m_serializationConstructor = baseType.GetConstructor( 
+					BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic, 
+					null,  
+					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) }, 
+					null);
 
-				if (serializationConstructor == null)
+				if (m_serializationConstructor == null)
 				{
 					String message = String.Format("The type {0} implements ISerializable, but failed to provide a deserialization constructor", 
 						baseType.FullName);
