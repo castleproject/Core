@@ -12,35 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Tests
+namespace Castle.Applications.MindDump.Web.Controllers
 {
 	using System;
 
-	using Castle.Services.Transaction;
+	using Castle.CastleOnRails.Framework;
 
-
-	[Transactional]
-	public class MyBusinessClass
+	[Layout("default")]
+	public class IntroController : Controller
 	{
-		private BlogDao _blogDao;
-
-		public MyBusinessClass(BlogDao blogDao)
+		public IntroController()
 		{
-			_blogDao = blogDao;
 		}
 
-		[Transaction(TransactionMode.Requires)]
-		public virtual Blog Create( String name )
+		public void Index()
 		{
-			return _blogDao.CreateBlog( name );
-		}
-
-		[Transaction(TransactionMode.Requires)]
-		public virtual Blog CreateWithError( String name )
-		{
-			_blogDao.CreateBlog( name );
-
-			throw new ApplicationException("Ugh!");
+			
 		}
 	}
 }

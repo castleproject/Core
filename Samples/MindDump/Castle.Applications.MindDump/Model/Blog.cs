@@ -30,12 +30,17 @@ namespace Castle.Applications.MindDump.Model
 		{
 		}
 
-		public Blog(string _name, string _description, string _theme, Author _author)
+		public Blog(long id)
 		{
-			this._name = _name;
-			this._description = _description;
-			this._theme = _theme;
-			this._author = _author;
+			_id = id;
+		}
+
+		public Blog(String name, String description, String theme, Author author)
+		{
+			_name = name;
+			_description = description;
+			_theme = theme;
+			_author = author;
 		}
 
 		public long Id

@@ -47,5 +47,32 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			Assert.AreEqual( 1, blogs.Count );
 		}
 
+		[Test]
+		public void Rollback()
+		{
+			IWindsorContainer container = CreateConfiguredContainer();
+			container.AddFacility("nhibernate", new NHibernateFacility());
+			container.AddFacility("transaction", new TransactionFacility());
+			container.AddComponent("blogdao", typeof(BlogDao));
+			container.AddComponent("business", typeof(MyBusinessClass));
+
+			MyBusinessClass service = (MyBusinessClass) container[typeof(MyBusinessClass)];
+			
+			try
+			{
+				Blog blog = service.CreateWithError("myblog");
+			}
+			catch(Exception)
+			{
+				// Expected
+			}
+
+			BlogDao dao = (BlogDao) container["blogdao"];
+
+			IList blogs = dao.ObtainBlogs();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Count );
+		}
 	}
 }

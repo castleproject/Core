@@ -12,35 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Tests
+namespace Castle.Applications.MindDump.Web.Controllers
 {
 	using System;
 
-	using Castle.Services.Transaction;
+	using Castle.CastleOnRails.Framework;
+
+	using Castle.Applications.MindDump.Web.Controllers.Filters;
 
 
-	[Transactional]
-	public class MyBusinessClass
+	[Filter(ExecuteEnum.Before, typeof(AuthenticationCheckFilter) )]
+	public abstract class AbstractSecureController : SmartDispatcherController
 	{
-		private BlogDao _blogDao;
-
-		public MyBusinessClass(BlogDao blogDao)
-		{
-			_blogDao = blogDao;
-		}
-
-		[Transaction(TransactionMode.Requires)]
-		public virtual Blog Create( String name )
-		{
-			return _blogDao.CreateBlog( name );
-		}
-
-		[Transaction(TransactionMode.Requires)]
-		public virtual Blog CreateWithError( String name )
-		{
-			_blogDao.CreateBlog( name );
-
-			throw new ApplicationException("Ugh!");
-		}
+		
 	}
 }

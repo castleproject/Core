@@ -19,31 +19,45 @@ namespace Castle.Applications.MindDump.Services
 	using Castle.Applications.MindDump.Dao;
 	using Castle.Applications.MindDump.Model;
 
-	using Castle.Services.Transaction;
 
-	[Transactional]
-	public class AccountService
+	public class BlogMaintenanceService
 	{
-		private AuthorDao _authorDao;
 		private BlogDao _blogDao;
+		private PostDao _postDao;
 
-		public AccountService(AuthorDao authorDao, BlogDao blogDao)
+		public BlogMaintenanceService(BlogDao blogDao, PostDao postDao)
 		{
-			_authorDao = authorDao;
 			_blogDao = blogDao;
+			_postDao = postDao;
 		}
 
-		/// <summary>
-		/// This method creates an author and a blog for him,
-		/// if something fails, we need to recover both. Thus
-		/// we require that this method is transactional.
-		/// </summary>
-		/// <param name="blog"></param>
-		[Transaction(TransactionMode.Requires)]
-		public virtual void CreateAccountAndBlog( Blog blog )
+		public Post CreateNewEntry(int blogId, Post post)
 		{
-			_authorDao.Create( blog.Author );
-			_blogDao.Create( blog );
+			post.Blog = new Blog(blogId);
+			
+			try
+			{
+				return _postDao.Create(post);
+			}
+			catch(Exception ex)
+			{
+				throw new ApplicationException("Could not create entry", ex);
+			}
+		}
+
+		public void UpdateEntry(int blogId, int postId, Post post)
+		{
+			post.Id = postId;
+			post.Blog = new Blog(blogId);
+			
+			try
+			{
+				_postDao.Update(post);
+			}
+			catch(Exception ex)
+			{
+				throw new ApplicationException("Could not update entry", ex);
+			}
 		}
 	}
 }

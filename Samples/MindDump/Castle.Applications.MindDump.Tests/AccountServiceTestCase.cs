@@ -42,57 +42,5 @@ namespace Castle.Applications.MindDump.Tests
 			BlogDao blogdao = (BlogDao) Container[ typeof(BlogDao) ];
 			Assert.AreEqual( 1, blogdao.Find().Count );
 		}
-
-		[Test]
-		public void TestRollback()
-		{
-			ResetDatabase();
-
-			AccountService service = (AccountService) Container[ typeof(AccountService) ];
-
-			Author author = new Author("this is an incredible big, I mean, huge name for an author, don't you think? If you don't, please state why, cause I have all day to hear your arguments", "hammett", "mypass");
-			Blog blog = new Blog("hammett's blog", "Description", "default", author);
-
-			try
-			{
-				service.CreateAccountAndBlog( blog );
-				Assert.Fail("Expected exception");
-			}
-			catch(Exception)
-			{
-				// Expected
-			}
-
-			AuthorDao dao = (AuthorDao) Container[ typeof(AuthorDao) ];
-			Assert.AreEqual( 0, dao.Find().Count );
-			BlogDao blogdao = (BlogDao) Container[ typeof(BlogDao) ];
-			Assert.AreEqual( 0, blogdao.Find().Count );
-		}
-
-		[Test]
-		public void TestRollback2()
-		{
-			ResetDatabase();
-
-			AccountService service = (AccountService) Container[ typeof(AccountService) ];
-
-			Author author = new Author("hamilton verissimo", "hammett", "mypass");
-			Blog blog = new Blog("this is an incredible big, I mean, huge name for an author, don't you think? If you don't, please state why, cause I have all day to hear your arguments", "Description", "default", author);
-
-			try
-			{
-				service.CreateAccountAndBlog( blog );
-				Assert.Fail("Expected exception");
-			}
-			catch(Exception)
-			{
-				// Expected
-			}
-
-			AuthorDao dao = (AuthorDao) Container[ typeof(AuthorDao) ];
-			Assert.AreEqual( 0, dao.Find().Count );
-			BlogDao blogdao = (BlogDao) Container[ typeof(BlogDao) ];
-			Assert.AreEqual( 0, blogdao.Find().Count );
-		}
 	}
 }

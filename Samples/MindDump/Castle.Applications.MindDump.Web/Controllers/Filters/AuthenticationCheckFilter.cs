@@ -12,35 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Tests
+namespace Castle.Applications.MindDump.Web.Controllers.Filters
 {
 	using System;
 
-	using Castle.Services.Transaction;
+	using Castle.CastleOnRails.Framework;
 
 
-	[Transactional]
-	public class MyBusinessClass
+	public class AuthenticationCheckFilter : IFilter
 	{
-		private BlogDao _blogDao;
-
-		public MyBusinessClass(BlogDao blogDao)
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
-			_blogDao = blogDao;
-		}
-
-		[Transaction(TransactionMode.Requires)]
-		public virtual Blog Create( String name )
-		{
-			return _blogDao.CreateBlog( name );
-		}
-
-		[Transaction(TransactionMode.Requires)]
-		public virtual Blog CreateWithError( String name )
-		{
-			_blogDao.CreateBlog( name );
-
-			throw new ApplicationException("Ugh!");
+			return false;
 		}
 	}
 }

@@ -139,6 +139,41 @@
                     AssemblyName = "log4net"
                     HintPath = "..\..\..\Facilities\NHibernate\bin\log4net.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\..\..\CastleOnRails\bin\Commons.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\..\..\CastleOnRails\bin\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Engine"
+                    AssemblyName = "Castle.CastleOnRails.Engine"
+                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.Engine.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework"
+                    AssemblyName = "Castle.CastleOnRails.Framework"
+                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.Framework.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                    AssemblyName = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.Framework.Views.NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.WindsorExtension"
+                    AssemblyName = "Castle.CastleOnRails.WindsorExtension"
+                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.WindsorExtension.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -147,6 +182,61 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "MindDumpHttpApplication.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\AbstractSecureController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AccountController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\BlogController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\IntroController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\MaintenanceController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Filters\AuthenticationCheckFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\account\new.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\intro\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\default.vm"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

@@ -23,6 +23,7 @@ namespace Castle.Applications.MindDump.Dao
 
 	using Castle.Facilities.NHibernateExtension;
 
+
 	[UsesAutomaticSessionCreation]
 	public class PostDao
 	{
@@ -33,6 +34,13 @@ namespace Castle.Applications.MindDump.Dao
 			session.Save(post);
 
 			return post;
+		}
+
+		public virtual void Update(Post post)
+		{
+			ISession session = SessionManager.CurrentSession;
+
+			session.Update(post);
 		}
 
 		/// <summary>

@@ -10,9 +10,9 @@
 					<item key="hibernate.dialect">NHibernate.Dialect.MySQLDialect</item>
 				</settings>
 				<resources>
-					<resource name="Author.hbm.xml" />
-					<resource name="Blog.hbm.xml" />
-					<resource name="Post.hbm.xml" />
+					<resource name="..\bin\Author.hbm.xml" />
+					<resource name="..\bin\Blog.hbm.xml" />
+					<resource name="..\bin\Post.hbm.xml" />
 				</resources>
 			</factory>
 		</facility>
