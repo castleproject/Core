@@ -55,7 +55,7 @@ namespace Castle.ActiveRecord
 
 				SetUpConfiguration(source, type, holder);
 
-				Configuration cfg = holder.GetConfiguration( type );
+				Configuration cfg = holder.GetConfiguration( holder.GetRootType(type) );
 
 				if (cfg == null)
 				{
@@ -118,7 +118,7 @@ namespace Castle.ActiveRecord
 			if (config != null)
 			{
 				Configuration nconf = CreateConfiguration(config);
-				holder.Add( type, nconf );
+				holder.Register( type, nconf );
 			}
 		}
 	}

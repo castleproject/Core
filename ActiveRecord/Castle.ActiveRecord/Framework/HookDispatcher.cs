@@ -23,6 +23,17 @@ namespace Castle.ActiveRecord.Framework
 
 	public class HookDispatcher : IInterceptor
 	{
+		private static readonly HookDispatcher _instance = new HookDispatcher();
+
+		protected HookDispatcher()
+		{
+		}
+
+		public static HookDispatcher Instance
+		{
+			get { return _instance; }
+		}
+
 		#region IInterceptor Members
 
 		/// <summary>
@@ -40,6 +51,11 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns><c>true</c> if the user modified the <c>state</c> in any way</returns>
 		public bool OnLoad(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
+			if (entity is ActiveRecordBase)
+			{
+				return (entity as ActiveRecordBase).BeforeLoad( new DictionaryAdapter(propertyNames, state) );
+			}
+
 			return false;
 		}
 
@@ -101,7 +117,10 @@ namespace Castle.ActiveRecord.Framework
 		/// </remarks>
 		public void OnDelete(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-			
+			if (entity is ActiveRecordBase)
+			{
+				(entity as ActiveRecordBase).BeforeDelete( new DictionaryAdapter(propertyNames, state) );
+			}
 		}
 
 		/// <summary>

@@ -16,8 +16,17 @@ namespace Castle.ActiveRecord.Framework
 {
 	using System;
 
+	using NHibernate;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface ISessionScope : IDisposable
 	{
+		bool IsKeyKnown(object key);
+
+		void RegisterSession(object key, ISession session);
+
+		ISession GetSession(object key);
 	}
 }

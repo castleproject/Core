@@ -12,30 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.ActiveRecord.Framework.Scopes
 {
 	using System;
-	using System.Collections;
+	using System.Runtime.Serialization;
 
-	using NHibernate;
-
-	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Framework.Scopes;
-
-	/// <summary>
-	/// Implementation of <see cref="ISessionScope"/> to 
-	/// augment performance by caching the sessions, thus
-	/// avoiding too much opens/flushes/closes.
-	/// </summary>
-	public class SessionScope : AbstractScope
+	[Serializable]
+	public class ScopeMachineryException : Exception
 	{
-		protected override void PerformDisposal(ICollection sessions)
+		public ScopeMachineryException(string message) : base(message)
 		{
-			foreach(ISession session in sessions)
-			{
-				session.Flush();
-				session.Close();
-			}
+		}
+
+		public ScopeMachineryException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
 		}
 	}
 }

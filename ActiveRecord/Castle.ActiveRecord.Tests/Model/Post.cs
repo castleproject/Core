@@ -100,9 +100,9 @@ namespace Castle.ActiveRecord.Tests
 			ActiveRecordBase.DeleteAll( typeof(Post) );
 		}
 
-		public static Blog[] FindAll()
+		public static Post[] FindAll()
 		{
-			return (Blog[]) ActiveRecordBase.FindAll( typeof(Post) );
+			return (Post[]) ActiveRecordBase.FindAll( typeof(Post) );
 		}
 	}
 }

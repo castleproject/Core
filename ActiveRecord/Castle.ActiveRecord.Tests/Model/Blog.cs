@@ -17,6 +17,8 @@ namespace Castle.ActiveRecord.Tests
 	using System;
 	using System.Collections;
 
+	using Castle.ActiveRecord.Framework;
+
 
 	[ActiveRecord("Blogs")]
 	public class Blog : ActiveRecordBase
@@ -96,7 +98,7 @@ namespace Castle.ActiveRecord.Tests
 		/// <summary>
 		/// We make it visible only to for test cases' assertions 
 		/// </summary>
-		public static SessionFactoryHolder Holder
+		public static ISessionFactoryHolder Holder
 		{
 			get { return _holder; }
 		}

@@ -12,30 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.ActiveRecord.Framework
 {
 	using System;
-	using System.Collections;
 
 	using NHibernate;
-
-	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Framework.Scopes;
+	using NHibernate.Cfg;
 
 	/// <summary>
-	/// Implementation of <see cref="ISessionScope"/> to 
-	/// augment performance by caching the sessions, thus
-	/// avoiding too much opens/flushes/closes.
+	/// 
 	/// </summary>
-	public class SessionScope : AbstractScope
+	public interface ISessionFactoryHolder
 	{
-		protected override void PerformDisposal(ICollection sessions)
-		{
-			foreach(ISession session in sessions)
-			{
-				session.Flush();
-				session.Close();
-			}
-		}
+		void Register(Type rootType, Configuration cfg);
+
+		Configuration GetConfiguration(Type type);
+
+		ISessionFactory GetSessionFactory(Type type);
+
+		ISession CreateSession(Type type);
+
+		void ReleaseSession(ISession session);
 	}
 }

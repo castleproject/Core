@@ -12,75 +12,169 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.ActiveRecord.Framework
 {
 	using System;
+	using System.Threading;
 	using System.Collections;
+	using System.Runtime.CompilerServices;
 
 	using NHibernate;
 	using NHibernate.Cfg;
-	using NHibernate.Type;
 
-	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Scopes;
 
-
-	public class SessionFactoryHolder
+	/// <summary>
+	/// 
+	/// </summary>
+	public class SessionFactoryHolder : ISessionFactoryHolder
 	{
 		private Hashtable type2Conf = Hashtable.Synchronized(new Hashtable());
 		private Hashtable type2SessFactory = Hashtable.Synchronized(new Hashtable());
+		private ReaderWriterLock readerWriterLock = new ReaderWriterLock();
 
 		public SessionFactoryHolder()
 		{
 		}
 
-		protected internal void Add(Type rootType, Configuration cfg)
+		public void Register(Type rootType, Configuration cfg)
 		{
 			type2Conf.Add(rootType, cfg);
 		}
 
-		protected internal Configuration GetConfiguration(Type type)
+		public Configuration GetConfiguration(Type type)
+		{
+			return type2Conf[type] as Configuration;
+		}
+
+		/// <summary>
+		/// Optimized with reader/writer lock.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public ISessionFactory GetSessionFactory(Type type)
+		{
+			Type normalizedtype = GetRootType(type);
+
+			if (normalizedtype == null)
+			{
+				throw new ActiveRecordException("No configuration for ActiveRecord found in the type hierarchy -> " + type.FullName);
+			}
+
+			readerWriterLock.AcquireReaderLock(-1);
+
+			ISessionFactory sessFactory = null;
+
+			if (type2SessFactory.Contains(normalizedtype))
+			{
+				sessFactory = type2SessFactory[normalizedtype] as ISessionFactory;
+			}
+
+			if (sessFactory != null)
+			{
+				readerWriterLock.ReleaseReaderLock();
+
+				return sessFactory;
+			}
+
+			readerWriterLock.UpgradeToWriterLock(-1);
+
+			try
+			{
+				Configuration cfg = GetConfiguration(normalizedtype);
+
+				sessFactory = cfg.BuildSessionFactory();
+
+				type2SessFactory[normalizedtype] = sessFactory;
+
+				return sessFactory;
+			}
+			finally
+			{
+				readerWriterLock.ReleaseWriterLock();
+			}
+		}
+
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		public ISession CreateSession(Type type)
+		{
+			if (ThreadScopeInfo.HasInitializedScope)
+			{
+				return CreateScopeSession(type);
+			}
+
+			ISessionFactory sessionFactory = GetSessionFactory(type);
+
+			ISession session = OpenSession(sessionFactory);
+
+			System.Diagnostics.Debug.Assert( session != null );
+
+			return session;
+		}
+
+		private static ISession OpenSession(ISessionFactory sessionFactory)
+		{
+			return sessionFactory.OpenSession( HookDispatcher.Instance );
+		}
+
+		public void ReleaseSession(ISession session)
+		{
+			if (ThreadScopeInfo.HasInitializedScope)
+			{
+				ReleaseScopedSession(session);
+			}
+			else
+			{
+				session.Close();
+			}
+		}
+
+		private ISession CreateScopeSession(Type type)
+		{
+			ISessionScope scope = ThreadScopeInfo.GetRegisteredScope();
+			ISessionFactory sessionFactory = GetSessionFactory(type);
+
+#if DEBUG
+			System.Diagnostics.Debug.Assert( scope != null );
+			System.Diagnostics.Debug.Assert( sessionFactory != null );
+#endif
+
+			if (scope.IsKeyKnown(sessionFactory))
+			{
+				return scope.GetSession(sessionFactory);
+			}
+			else
+			{
+				ISession session = OpenSession(sessionFactory);
+
+#if DEBUG
+				System.Diagnostics.Debug.Assert( session != null );
+#endif
+
+				scope.RegisterSession(sessionFactory,  session);
+
+				return session;
+			}
+		}
+
+		private void ReleaseScopedSession(ISession session)
+		{
+			
+		}
+
+		protected internal Type GetRootType(Type type)
 		{
 			while(type != typeof(object))
 			{
 				if (type2Conf.ContainsKey(type))
 				{
-					return (Configuration) type2Conf[type];
+					return type;
 				}
 
 				type = type.BaseType;
 			}
 
 			return null;
-		}
-
-		protected internal ISessionFactory GetSessionFactory(Type type)
-		{
-			// TODO: Lock?
-
-			if (type2SessFactory.Contains(type))
-			{
-				return type2SessFactory[type] as ISessionFactory;
-			}
-
-			Configuration cfg = GetConfiguration(type);
-
-			ISessionFactory sessFac = cfg.BuildSessionFactory();
-
-			type2SessFactory[type] = sessFac;
-
-			return sessFac;
-		}
-
-		public ISession CreateSession(Type type)
-		{
-			ISessionFactory sessionFactory = GetSessionFactory(type);
-
-			return sessionFactory.OpenSession( new HookDispatcher() );
-		}
-
-		public void ReleaseSession(ISession session)
-		{
-			session.Close();
 		}
 	}
 }

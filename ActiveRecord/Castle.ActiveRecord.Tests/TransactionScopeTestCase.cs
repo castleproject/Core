@@ -25,8 +25,7 @@ namespace Castle.ActiveRecord.Tests
 	public class TransactionScopeTestCase : AbstractActiveRecordTest
 	{
 		[Test]
-		[Ignore("Scope Not implemented")]
-		public void ScopeWorks()
+		public void TransactionScopeUsage()
 		{
 			ISession session1, session2, session3, session4;
 
@@ -60,6 +59,64 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog.Holder.ReleaseSession(session1);
 			Blog.Holder.ReleaseSession(session2);
+		}
+
+		[Test]
+		public void RollbackVote()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(TransactionScope transaction = new TransactionScope())
+			{
+				Blog blog = new Blog();
+				blog.Author = "hammett";
+				blog.Name = "some name";
+				blog.Save();
+
+				Post post = new Post(blog, "title", "post contents", "Castle");
+				post.Save();
+
+				// pretend something went wrong
+
+				transaction.VoteRollBack();
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 0, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 0, posts.Length );
+		}
+
+		[Test]
+		public void CommitVote()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(TransactionScope transaction = new TransactionScope())
+			{
+				Blog blog = new Blog();
+				blog.Author = "hammett";
+				blog.Name = "some name";
+				blog.Save();
+
+				Post post = new Post(blog, "title", "post contents", "Castle");
+				post.Save();
+
+				// Default to VoteCommit
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 1, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 1, posts.Length );
 		}
 	}
 }

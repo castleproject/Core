@@ -15,19 +15,53 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+	using System.Collections;
 
-	using Castle.ActiveRecord.Framework;
+	using NHibernate;
 
 
-	public class TransactionScope : ISessionScope
+	public class TransactionScope : SessionScope
 	{
+		private IList _transactions = new ArrayList();
+		private bool _rollbackOnly;
+
 		public TransactionScope()
 		{
 		}
 
-		public void Dispose()
+		public void VoteRollBack()
 		{
-			
+			_rollbackOnly = true;
+		}
+
+		public void VoteCommit()
+		{
+			// Nothing to do as it's always assume commit
+		}
+
+		protected override void Initialize(ISession session)
+		{
+			session.FlushMode = FlushMode.Commit;
+			ITransaction transaction = session.BeginTransaction();
+
+			_transactions.Add(transaction);
+		}
+
+		protected override void PerformDisposal(ICollection sessions)
+		{
+			foreach(ITransaction transaction in _transactions)
+			{
+				if (_rollbackOnly)
+				{
+					transaction.Rollback();
+				}
+				else
+				{
+					transaction.Commit();
+				}
+			}
+
+			base.PerformDisposal(sessions);
 		}
 	}
 }

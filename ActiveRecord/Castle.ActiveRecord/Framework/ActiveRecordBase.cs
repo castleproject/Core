@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Framework;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,41 +19,40 @@ namespace Castle.ActiveRecord
 	using System.Collections;
 
 	using NHibernate;
-	using NHibernate.Cfg;
 	using NHibernate.Expression;
 
-
+	/// <summary>
+	/// Base class for all ActiveRecord classes. Implements 
+	/// all the functionality to simplify the code on the 
+	/// subclasses.
+	/// </summary>
 	public abstract class ActiveRecordBase
 	{
-		protected internal static SessionFactoryHolder _holder;
-
-		public static Configuration DefineConfiguration(IDictionary dict)
-		{
-			Configuration cfg = new Configuration();
-
-			cfg.Properties.Add("hibernate.connection.driver_class", 
-				"NHibernate.Driver.SqlClientDriver");
-			
-			cfg.Properties.Add("hibernate.dialect", 
-				"NHibernate.Dialect.MsSql2000Dialect");
-			
-			cfg.Properties.Add("hibernate.connection.provider", 
-				"NHibernate.Connection.DriverConnectionProvider");
-			
-			cfg.Properties.Add("hibernate.connection.connection_String", 
-				"UID=susa;Password=OverKkk;Initial Catalog=test;Data Source=.");
-
-			return cfg;
-		}
+		protected internal static ISessionFactoryHolder _holder;
 
 		public ActiveRecordBase()
 		{
 		}
 
+		#region Overridable Hooks
+
 		protected internal virtual bool BeforeSave(IDictionary state)
 		{
 			return false;
 		}
+
+		protected internal virtual bool BeforeLoad(DictionaryAdapter adapter)
+		{
+			return false;
+		}
+
+		protected internal virtual void BeforeDelete(DictionaryAdapter adapter)
+		{
+		}
+
+		#endregion
+
+		#region Base static methods
 
 		protected static object FindByPrimaryKey(Type targetType, object id)
 		{
@@ -125,18 +125,13 @@ namespace Castle.ActiveRecord
 			return array;
 		}
 
-		public virtual void Save()
+		protected static void DeleteAll(Type type)
 		{
-			Save(this);
-		}
-
-		protected void Save(object obj)
-		{
-			ISession sess = _holder.CreateSession( obj.GetType() );
+			ISession sess = _holder.CreateSession( type );
 
 			try
 			{
-				sess.Save(obj);
+				sess.Delete( String.Format("from {0}", type.Name) );
 
 				sess.Flush();
 			}
@@ -154,13 +149,20 @@ namespace Castle.ActiveRecord
 			}
 		}
 
-		protected static void DeleteAll(Type type)
+		#endregion
+
+		public virtual void Save()
 		{
-			ISession sess = _holder.CreateSession( type );
+			Save(this);
+		}
+
+		protected void Save(object obj)
+		{
+			ISession sess = _holder.CreateSession( obj.GetType() );
 
 			try
 			{
-				sess.Delete( String.Format("from {0}", type.Name) );
+				sess.Save(obj);
 
 				sess.Flush();
 			}

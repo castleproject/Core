@@ -164,6 +164,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\ActiveRecordException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\ActiveRecordStarter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -175,6 +180,11 @@
                 />
                 <File
                     RelPath = "Framework\HookDispatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\ISessionFactoryHolder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -204,12 +214,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Scopes\AbstractScope.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Scopes\ISessionScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Scopes\ScopeMachineryException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Scopes\SessionScope.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Scopes\ThreadScopeInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
