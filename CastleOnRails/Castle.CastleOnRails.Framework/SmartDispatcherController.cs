@@ -102,15 +102,15 @@ namespace Castle.CastleOnRails.Framework
 
 			foreach(ParameterInfo param in parameters)
 			{
-				if (!param.ParameterType.IsPrimitive)
-				{
-					// Non-primitives can be an issue. 
-					// So we better avoid them					
-					points -= 10;
-					continue;
-				}
+//				if (!param.ParameterType.IsPrimitive)
+//				{
+//					// Non-primitives can be an issue. 
+//					// So we better avoid them					
+//					points -= 10;
+//					continue;
+//				}
 
-				String value = webParams.Get( param.Name );
+				object value = webParams.Get( param.Name );
 				if (value != null ) points += 10;
 			}
 
@@ -124,11 +124,22 @@ namespace Castle.CastleOnRails.Framework
 			for(int i=0; i < args.Length; i++)
 			{
 				ParameterInfo param = parameters[i];
-				String value = webParams.Get( param.Name );
+				object value = webParams.Get( param.Name );
 
 				if (param.ParameterType == typeof(String))
 				{
 					args[i] = value;
+				}
+				else if (param.ParameterType == typeof(Guid))
+				{
+					if (value != null)
+					{
+						args[i] = new Guid( value.ToString() );
+					}
+					else
+					{
+						args[i] = new Guid(); 
+					}
 				}
 				else if (param.ParameterType == typeof(int))
 				{
@@ -145,6 +156,10 @@ namespace Castle.CastleOnRails.Framework
 				else if (param.ParameterType == typeof(Double))
 				{
 					args[i] = System.Convert.ToDouble( value );
+				}
+				else if (param.ParameterType == typeof(HttpPostedFile))
+				{
+					args[i] = value;
 				}
 			}
 

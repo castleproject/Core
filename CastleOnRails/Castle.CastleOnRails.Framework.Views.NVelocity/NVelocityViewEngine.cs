@@ -23,7 +23,6 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 	using System.IO;
 	using System.Web;
 	using System.Collections;
-
 	using Commons.Collections;
 
 	public class NVelocityViewEngine : IViewEngine
@@ -38,8 +37,8 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 		{
 			ExtendedProperties props = new ExtendedProperties();
 
-			props.SetProperty( RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity" );
-			props.SetProperty( RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir );
+			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
+			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
 
 			Velocity.Init(props);
 		}
@@ -56,7 +55,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			bool hasLayout = controller.LayoutName != null;
 
 			TextWriter writer = context.Response.Output;
-			
+
 			if (hasLayout)
 			{
 				writer = new StringWriter();
@@ -68,7 +67,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 
 				template.Merge(ctx, writer);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (hasLayout)
 				{
@@ -89,7 +88,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 
 			if (hasLayout)
 			{
-				ProcessLayout( (writer as StringWriter).GetStringBuilder().ToString(), controller, ctx, context );
+				ProcessLayout((writer as StringWriter).GetStringBuilder().ToString(), controller, ctx, context);
 			}
 
 		}
@@ -97,7 +96,11 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 		public String ViewRootDir
 		{
 			get { return _viewRootDir; }
-			set { _viewRootDir = value; InitVelocity(); }
+			set
+			{
+				_viewRootDir = value;
+				InitVelocity();
+			}
 		}
 
 		#endregion
@@ -114,7 +117,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 
 				template.Merge(ctx, context.Response.Output);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				if (context.Request.IsLocal)
 				{
@@ -143,30 +146,42 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			innerContext.Add("response", context.Response);
 			innerContext.Add("session", context.Session);
 
-			foreach(DictionaryEntry entry in controller.PropertyBag)
+			foreach (DictionaryEntry entry in controller.PropertyBag)
 			{
 				innerContext[entry.Key] = entry.Value;
 			}
-			foreach(String key in context.Params.AllKeys)
+			foreach (String key in context.Params.AllKeys)
 			{
 				innerContext[key] = context.Params[key];
 			}
-			foreach(DictionaryEntry entry in context.Flash)
+			foreach (DictionaryEntry entry in context.Flash)
 			{
 				innerContext[entry.Key] = entry.Value;
 			}
 
 			if (HttpContext.Current != null)
 			{
-				innerContext["siteRoot"] = HttpContext.Current.Request.ApplicationPath;
+				innerContext["siteRoot"] = GetSiteVirtualDirPath();
 			}
 
-			return new VelocityContext( innerContext );
+			return new VelocityContext(innerContext);
 		}
 
 		private void SendErrorDetails(Exception ex, TextWriter writer)
 		{
 			writer.WriteLine(ex.ToString());
+		}
+
+		private String GetSiteVirtualDirPath()
+		{
+			String path = HttpContext.Current.Request.ApplicationPath;
+			
+			if("/".Equals(path))
+			{
+				return String.Empty;
+			}
+
+			return path;
 		}
 	}
 }
