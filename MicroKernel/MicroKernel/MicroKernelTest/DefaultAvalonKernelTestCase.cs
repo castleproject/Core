@@ -1,5 +1,5 @@
-using Apache.Avalon.Castle.MicroKernel.Handler;
-// Copyright 2004 The Apache Software Foundation
+using Castle.MicroKernel.Handler;
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,13 +13,13 @@ using Apache.Avalon.Castle.MicroKernel.Handler;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.MicroKernel.Test
+namespace Castle.MicroKernel.Test
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Apache.Avalon.Castle.MicroKernel.Test.Components;
+	using Castle.MicroKernel.Test.Components;
 
 	/// <summary>
 	/// Summary description for DefaultAvalonKernelTestCase.

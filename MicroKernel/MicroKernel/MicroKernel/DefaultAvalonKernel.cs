@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.MicroKernel
+namespace Castle.MicroKernel
 {
 	using System;
 
-	using Apache.Avalon.Castle.MicroKernel.Concerns;
-	using Apache.Avalon.Castle.MicroKernel.Subsystems.Configuration.Default;
-	using Apache.Avalon.Castle.MicroKernel.Subsystems.Logger.Default;
+	using Castle.MicroKernel.Concerns;
+	using Castle.MicroKernel.Subsystems.Configuration.Default;
+	using Castle.MicroKernel.Subsystems.Logger.Default;
 
 	/// <summary>
 	/// Specialization of BaseKernel to adhere to Avalon 

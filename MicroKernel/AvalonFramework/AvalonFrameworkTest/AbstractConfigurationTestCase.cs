@@ -14,8 +14,6 @@
 
 namespace Apache.Avalon.Framework.Test
 {
-	using System;
-	using System.Collections;
 	using Apache.Avalon.Framework;
 	using NUnit.Framework;
 

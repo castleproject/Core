@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.MicroKernel.Test.Graph
+namespace Castle.MicroKernel.Test.Graph
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Apache.Avalon.Castle.MicroKernel.Graph;
+	using Castle.MicroKernel.Graph;
 
 	/// <summary>
 	/// Summary description for TopologicalSortTestCase.

@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.MicroKernel.Model.Default
+namespace Castle.MicroKernel.Model.Default
 {
 	using System;
 	using System.Collections;
@@ -20,8 +20,8 @@ namespace Apache.Avalon.Castle.MicroKernel.Model.Default
 
 	using Apache.Avalon.Framework;
 
-	using Apache.Avalon.Castle.MicroKernel.Subsystems.Configuration;
-	using Apache.Avalon.Castle.MicroKernel.Subsystems.Logger;
+	using Castle.MicroKernel.Subsystems.Configuration;
+	using Castle.MicroKernel.Subsystems.Logger;
 
 	/// <summary>
 	/// Summary description for DefaultComponentModelBuilder.

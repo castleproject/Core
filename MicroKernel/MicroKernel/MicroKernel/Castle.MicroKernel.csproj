@@ -84,11 +84,6 @@
                     AssemblyName = "Apache.Avalon.Framework"
                     HintPath = "..\..\bin\Apache.Avalon.Framework.dll"
                 />
-                <Reference
-                    Name = "Apache.Avalon.DynamicProxy"
-                    AssemblyName = "Apache.Avalon.DynamicProxy"
-                    HintPath = "..\..\bin\Apache.Avalon.DynamicProxy.dll"
-                />
             </References>
         </Build>
         <Files>

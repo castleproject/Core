@@ -1,4 +1,4 @@
- // Copyright 2004 The Apache Software Foundation
+ // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.MicroKernel
+namespace Castle.MicroKernel
 {
 	using System;
 	using System.Collections;
 
 	using Apache.Avalon.Framework;
-	using Apache.Avalon.Castle.MicroKernel.Graph;
-	using Apache.Avalon.Castle.MicroKernel.Model;
-	using Apache.Avalon.Castle.MicroKernel.Handler.Default;
-	using Apache.Avalon.Castle.MicroKernel.Lifestyle.Default;
-	using Apache.Avalon.Castle.MicroKernel.Model.Default;
+	using Castle.MicroKernel.Graph;
+	using Castle.MicroKernel.Model;
+	using Castle.MicroKernel.Handler.Default;
+	using Castle.MicroKernel.Lifestyle.Default;
+	using Castle.MicroKernel.Model.Default;
 
 	/// <summary>
 	/// Base implementation of <see cref="IKernel"/>

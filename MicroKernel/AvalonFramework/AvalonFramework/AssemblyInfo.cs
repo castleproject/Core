@@ -27,6 +27,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDelaySign(false)]
 
 #if STRONG
-[assembly: AssemblyKeyFile("../../../../ApacheAvalon.snk")]
+[assembly: AssemblyKeyFile("../../../../../ApacheAvalon.snk")]
 [assembly: AssemblyKeyName("")]
 #endif

@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.MicroKernel.Assemble
+namespace Castle.MicroKernel.Assemble
 {
 	using System;
 	using System.Reflection;
 
 	using Apache.Avalon.Framework;
-	using Apache.Avalon.Castle.MicroKernel.Model;
+	using Castle.MicroKernel.Model;
 
 	/// <summary>
 	/// 

@@ -1,17 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apache.Avalon.Castle.MicroKernel", "Apache.Avalon.Castle.MicroKernel.csproj", "{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apache.Avalon.Castle.MicroKernel.Test", "MicroKernelTest\Apache.Avalon.Castle.MicroKernel.Test.csproj", "{50442F0D-987F-4A8D-B38C-DFA855B9249E}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apache.Avalon.Castle.Windsor", "..\Windsor\Windsor\Apache.Avalon.Castle.Windsor.csproj", "{E60B95FF-FDB6-4DE2-844D-1C0D5695FF09}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apache.Avalon.Castle.Windsor.Test", "..\Windsor\WindsorTest\Apache.Avalon.Castle.Windsor.Test.csproj", "{D39DB46B-C162-41DD-861E-17675BC60461}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel", "Castle.MicroKernel.csproj", "{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -25,18 +13,6 @@ Global
 		{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}.Debug.Build.0 = Debug|.NET
 		{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}.Release.ActiveCfg = Release|.NET
 		{1E57B734-BA4B-4ADE-B4C2-78C7D4993AD4}.Release.Build.0 = Release|.NET
-		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Debug.ActiveCfg = Debug|.NET
-		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Debug.Build.0 = Debug|.NET
-		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Release.ActiveCfg = Release|.NET
-		{50442F0D-987F-4A8D-B38C-DFA855B9249E}.Release.Build.0 = Release|.NET
-		{E60B95FF-FDB6-4DE2-844D-1C0D5695FF09}.Debug.ActiveCfg = Debug|.NET
-		{E60B95FF-FDB6-4DE2-844D-1C0D5695FF09}.Debug.Build.0 = Debug|.NET
-		{E60B95FF-FDB6-4DE2-844D-1C0D5695FF09}.Release.ActiveCfg = Release|.NET
-		{E60B95FF-FDB6-4DE2-844D-1C0D5695FF09}.Release.Build.0 = Release|.NET
-		{D39DB46B-C162-41DD-861E-17675BC60461}.Debug.ActiveCfg = Debug|.NET
-		{D39DB46B-C162-41DD-861E-17675BC60461}.Debug.Build.0 = Debug|.NET
-		{D39DB46B-C162-41DD-861E-17675BC60461}.Release.ActiveCfg = Release|.NET
-		{D39DB46B-C162-41DD-861E-17675BC60461}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

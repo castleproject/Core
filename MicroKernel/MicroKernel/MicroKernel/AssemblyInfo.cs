@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("Apache.Avalon.Castle.MicroKernel")]
-[assembly: AssemblyDescription("Apache.Avalon.Castle.MicroKernel")]
+[assembly: AssemblyTitle("Castle.MicroKernel")]
+[assembly: AssemblyDescription("Castle.MicroKernel")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Apache Software Foundation")]
-[assembly: AssemblyProduct("Apache.Avalon.Castle.MicroKernel")]
+[assembly: AssemblyProduct("Castle.MicroKernel")]
 [assembly: AssemblyCopyright("Copyright (c) 2003-2004 Apache Software Foundation")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
