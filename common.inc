@@ -9,13 +9,14 @@
 		value="${path::combine(lib.dir,framework::get-family(framework::get-target-framework()))}"
 		dynamic="true" />
 	
-	<!-- for nant 0.85 rc1 or higher
+	<!-- for nant 0.85 rc2 or higher you have to uncomment the property above
 	
 	<property name="lib.framework.dir"
 		value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}"
 		dynamic="true" />
-	 -->
-	 
+	-->
+
+	<!-- And comment this one -->
 	<property name="lib.framework.dir"
 		value="${path::combine(lib.family.dir, framework::get-version(framework::get-target-framework()))}"
 		dynamic="true" />
