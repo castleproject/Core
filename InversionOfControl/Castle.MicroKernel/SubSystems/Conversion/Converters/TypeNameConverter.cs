@@ -12,47 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 
 	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// Represents a parameter. Usually the parameter
-	/// comes from the external world, ie, an external configuration.
+	/// Convert a type name to a Type instance.
 	/// </summary>
-	public class ParameterModel
+	public class TypeNameConverter : AbstractTypeConverter
 	{
-		private String _name;
-		private String _value;
-		private IConfiguration _configValue;
-
-		public ParameterModel( String name, String value )
+		public override bool CanHandleType(Type type)
 		{
-			_name = name;
-			_value = value;
+			return type == typeof(Type);
 		}
 
-		public ParameterModel( String name, IConfiguration value )
+		public override object PerformConversion(String value, Type targetType)
 		{
-			_name = name;
-			_configValue = value;
-		}
+			Type type = Type.GetType(value, false, false);
 
-		public String Name
-		{
-			get { return _name; }
-		}
+			if (type == null)
+			{
+				String message = String.Format(
+					"Could not convert from '{0}' to {1} - Maybe type could not be found", 
+					value, targetType.FullName);
+				
+				throw new ConverterException(message);
+			}
 
-		public String Value
-		{
-			get { return _value; }
+			return type;
 		}
-
-		public IConfiguration ConfigValue
+		
+		public override object PerformConversion(IConfiguration configuration, Type targetType)
 		{
-			get { return _configValue; }
+			return PerformConversion(configuration.Value, targetType);
 		}
 	}
 }

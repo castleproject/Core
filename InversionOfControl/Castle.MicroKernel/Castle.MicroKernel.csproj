@@ -344,6 +344,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\Conversion\AbstractTypeConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubSystems\Conversion\ConverterException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -364,12 +369,32 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SubSystems\Conversion\PrimitiveConverter.cs"
+                    RelPath = "SubSystems\Conversion\ITypeConverterContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SubSystems\Conversion\TypeNameConverter.cs"
+                    RelPath = "SubSystems\Conversion\Converters\ArrayConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\Converters\DictionaryConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\Converters\ListConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\Converters\PrimitiveConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\Converters\TypeNameConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

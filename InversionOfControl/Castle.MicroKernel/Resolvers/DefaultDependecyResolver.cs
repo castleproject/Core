@@ -156,7 +156,14 @@ namespace Castle.MicroKernel.Resolvers
 
 			if (parameter != null)
 			{
-				return _converter.PerformConversion( parameter.Value, dependency.TargetType );
+				if (parameter.Value != null)
+				{
+					return _converter.PerformConversion( parameter.Value, dependency.TargetType );
+				}
+				else
+				{
+					return _converter.PerformConversion( parameter.ConfigValue, dependency.TargetType );
+				}
 			}
 
 			return null;

@@ -17,6 +17,8 @@ namespace Castle.Model
 	using System;
 	using System.Collections;
 
+	using Castle.Model.Configuration;
+
 	/// <summary>
 	/// Collection of <see cref="ParameterModel"/>
 	/// </summary>
@@ -34,6 +36,11 @@ namespace Castle.Model
 		public void Add(String name, String value)
 		{
 			_dictionary.Add( name, new ParameterModel(name, value) );
+		}
+
+		public void Add(String name, IConfiguration configNode)
+		{
+			_dictionary.Add( name, new ParameterModel(name, configNode) );
 		}
 
 		public bool Contains(object key)

@@ -24,9 +24,7 @@ namespace Castle.MicroKernel.Tests.Configuration
 	using Castle.MicroKernel.Tests.Configuration.Components;
 	using Castle.MicroKernel.Tests.ClassComponents;
 
-	/// <summary>
-	/// Summary description for ConfigurationTestCase.
-	/// </summary>
+
 	[TestFixture]
 	public class ConfigurationTestCase
 	{
@@ -116,6 +114,32 @@ namespace Castle.MicroKernel.Tests.Configuration
 
 			Assert.IsNotNull(instance);
 			Assert.AreEqual( typeof(CommonImpl2), instance.CommonService.GetType() );
+		}
+
+		[Test]
+		public void ConstructorWithListParameter()
+		{
+			MutableConfiguration confignode = new MutableConfiguration("key");
+			
+			IConfiguration parameters = 
+				confignode.Children.Add( new MutableConfiguration("parameters") );
+
+			IConfiguration hosts = parameters.Children.Add(new MutableConfiguration("hosts"));
+			IConfiguration array = hosts.Children.Add(new MutableConfiguration("array"));
+			array.Children.Add(new MutableConfiguration("item", "castle"));
+			array.Children.Add(new MutableConfiguration("item", "uol"));
+			array.Children.Add(new MutableConfiguration("item", "folha"));
+
+			kernel.ConfigurationStore.AddComponentConfiguration( "key", confignode );
+
+			kernel.AddComponent( "key", typeof(ClassWithConstructors) );
+			
+			ClassWithConstructors instance = (ClassWithConstructors) kernel["key"];
+			Assert.IsNotNull( instance );
+			Assert.IsNull( instance.Host );
+			Assert.AreEqual( "castle", instance.Hosts[0] );
+			Assert.AreEqual( "uol", instance.Hosts[1] );
+			Assert.AreEqual( "folha", instance.Hosts[2] );
 		}
 	}
 }

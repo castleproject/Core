@@ -17,10 +17,12 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System;
 	using System.Collections;
 
+	using Castle.Model.Configuration;
+
 	/// <summary>
 	/// Composition of all available conversion managers
 	/// </summary>
-	public class DefaultConversionManager : IConversionManager
+	public class DefaultConversionManager : IConversionManager, ITypeConverterContext
 	{
 		private IList _converters;
 
@@ -33,8 +35,11 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		protected virtual void InitDefaultConverters()
 		{
-			_converters.Add( new PrimitiveConverter() );
-			_converters.Add( new TypeNameConverter() );
+			Add( new PrimitiveConverter() );
+			Add( new TypeNameConverter() );
+			Add( new ListConverter() );
+			Add( new DictionaryConverter() );
+			Add( new ArrayConverter() ); 
 		}
 
 		#region ISubSystem Members
@@ -53,12 +58,20 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public void Add(ITypeConverter converter)
 		{
+			converter.Context = this;
+
 			_converters.Add(converter);
 		}
 
 		#endregion
 
 		#region ITypeConverter Members
+
+		public ITypeConverterContext Context
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
 
 		public bool CanHandleType(Type type)
 		{
@@ -82,6 +95,29 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 				targetType.FullName);
 
 			throw new ConverterException(message);
+		}
+
+		public object PerformConversion(IConfiguration configuration, Type targetType)
+		{
+			foreach(ITypeConverter converter in _converters)
+			{
+				if (converter.CanHandleType(targetType)) 
+					return converter.PerformConversion(configuration, targetType);
+			}
+
+			String message = String.Format("No converter registered to handle the type {0}", 
+				targetType.FullName);
+
+			throw new ConverterException(message);
+		}
+
+		#endregion
+
+		#region ITypeConverterContext Members
+
+		public ITypeConverter Composition
+		{
+			get { return this; }
 		}
 
 		#endregion

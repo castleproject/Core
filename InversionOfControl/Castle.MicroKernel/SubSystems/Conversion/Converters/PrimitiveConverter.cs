@@ -1,4 +1,4 @@
- // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
-	using System.Collections;
+
+	using Castle.Model.Configuration;
 
 	/// <summary>
 	/// Implements all standard conversions.
 	/// </summary>
-	public class PrimitiveConverter : ITypeConverter
+	public class PrimitiveConverter : AbstractTypeConverter
 	{
 		private Type[] _types;
 
@@ -46,12 +47,12 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 				};
 		}
 
-		public virtual bool CanHandleType(Type type)
+		public override bool CanHandleType(Type type)
 		{
 			return Array.IndexOf(_types, type) != -1;
 		}
 
-		public virtual object PerformConversion(String value, Type targetType)
+		public override object PerformConversion(String value, Type targetType)
 		{
 			if (targetType == typeof(String)) return value;
 
@@ -67,6 +68,11 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 				
 				throw new ConverterException(message, ex);
 			}
+		}
+
+		public override object PerformConversion(IConfiguration configuration, Type targetType)
+		{
+			return PerformConversion(configuration.Value, targetType);
 		}
 	}
 }

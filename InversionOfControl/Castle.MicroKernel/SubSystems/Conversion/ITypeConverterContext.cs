@@ -16,30 +16,8 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 
-	/// <summary>
-	/// Convert a type name to a Type instance.
-	/// </summary>
-	public class TypeNameConverter : ITypeConverter
+	public interface ITypeConverterContext
 	{
-		public bool CanHandleType(Type type)
-		{
-			return type == typeof(Type);
-		}
-
-		public object PerformConversion(String value, Type targetType)
-		{
-			Type type = Type.GetType(value, false, false);
-
-			if (type == null)
-			{
-				String message = String.Format(
-					"Could not convert from '{0}' to {1} - Maybe type could not be found", 
-					value, targetType.FullName);
-				
-				throw new ConverterException(message);
-			}
-
-			return type;
-		}
+		ITypeConverter Composition { get; }
 	}
 }

@@ -12,47 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Model
+namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
 
 	using Castle.Model.Configuration;
 
-	/// <summary>
-	/// Represents a parameter. Usually the parameter
-	/// comes from the external world, ie, an external configuration.
-	/// </summary>
-	public class ParameterModel
+
+	public abstract class AbstractTypeConverter : ITypeConverter
 	{
-		private String _name;
-		private String _value;
-		private IConfiguration _configValue;
+		private ITypeConverterContext _context;
 
-		public ParameterModel( String name, String value )
+		public ITypeConverterContext Context
 		{
-			_name = name;
-			_value = value;
+			get { return _context; }
+			set { _context = value; }
 		}
 
-		public ParameterModel( String name, IConfiguration value )
-		{
-			_name = name;
-			_configValue = value;
-		}
+		public abstract bool CanHandleType(Type type);
 
-		public String Name
-		{
-			get { return _name; }
-		}
+		public abstract object PerformConversion(String value, Type targetType);
 
-		public String Value
-		{
-			get { return _value; }
-		}
-
-		public IConfiguration ConfigValue
-		{
-			get { return _configValue; }
-		}
+		public abstract object PerformConversion(IConfiguration configuration, Type targetType);
 	}
 }

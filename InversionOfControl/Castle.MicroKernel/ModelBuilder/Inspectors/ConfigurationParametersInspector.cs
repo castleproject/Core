@@ -26,10 +26,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class ConfigurationParametersInspector : IContributeComponentModelConstruction
 	{
-		public ConfigurationParametersInspector()
-		{
-		}
-
 		/// <summary>
 		/// Inspect the configuration associated with the component
 		/// and populates the parameter model collection accordingly
@@ -49,7 +45,15 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				String name = parameter.Name;
 				String value = parameter.Value;
 
-				model.Parameters.Add( name, value );
+				if (value == null && parameter.Children.Count != 0)
+				{
+					IConfiguration parameterValue = parameter.Children[0];
+					model.Parameters.Add( name, parameterValue );
+				}
+				else
+				{
+					model.Parameters.Add( name, value );
+				}
 			}
 		}
 	}
