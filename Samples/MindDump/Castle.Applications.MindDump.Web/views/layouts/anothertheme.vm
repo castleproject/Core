@@ -36,8 +36,7 @@
            </td>
         </tr>
         <tr>
-           <td class="title" width="100%" bgcolor="#cccc99"
-             valign="top">${blog.name}<br>
+           <td class="title" width="100%" bgcolor="#cccc99" valign="top">${blog.name}<br>
              <font class="descrip">${blog.description}</font>
            </td>
         </tr>
@@ -100,6 +99,7 @@
 <ul>
 	<li><a id="MyLinks1_HomeLink" href="/${blog.author.login}/view.rails">Home</a></li>
 	<li><a id="MyLinks1_Admin" href="/account/authentication.rails">Login</a></li>
+	<li><a id="MyLinks1_HomeLink" href="/${blog.author.login}/view.rails?printable=true">Printable</a></li>
 </ul>
                        </td>
                     </tr>

@@ -34,8 +34,8 @@ namespace Castle.Applications.MindDump.Tests
 
 			AccountService account = (AccountService) 
 				Container[ typeof(AccountService) ];
-			BlogMaintenanceService maintenance = (BlogMaintenanceService) 
-				Container[ typeof(BlogMaintenanceService) ];
+			BlogService maintenance = (BlogService) 
+				Container[ typeof(BlogService) ];
 
 			Author author = new Author("hamilton verissimo", "hammett", "mypass");
 			Blog blog = new Blog("hammett's blog", "my thoughts.. ugh!", "default", author);

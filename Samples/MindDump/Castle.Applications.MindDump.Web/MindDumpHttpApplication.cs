@@ -14,15 +14,9 @@
 
 namespace Castle.Applications.MindDump.Web
 {
-	using System;
 	using System.Web;
 
 	using Castle.Windsor;
-
-	using Castle.CastleOnRails.WindsorExtension;
-
-	using Castle.Applications.MindDump.Services;
-	using Castle.Applications.MindDump.Presentation.Controllers;
 
 
 	public class MindDumpHttpApplication : HttpApplication, IContainerAccessor
@@ -33,7 +27,6 @@ namespace Castle.Applications.MindDump.Web
 		{
 			container = new MindDumpContainer();
 		}
-
 
 		public void Application_OnEnd() 
 		{

@@ -30,6 +30,11 @@ Global
 		{3A5CAB1F-58A9-4A49-99C7-C9F4D52CC2C8}.Release.ActiveCfg = Release|.NET
 		{3A5CAB1F-58A9-4A49-99C7-C9F4D52CC2C8}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		app_config.xml = app_config.xml
+		app_test_config.xml = app_test_config.xml
+		README.txt = README.txt
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution

@@ -68,10 +68,12 @@ namespace Castle.Applications.MindDump
 			AddComponent( "authentication", typeof(AuthenticationService) );
 			AddComponent( "account", typeof(AccountService) );
 			AddComponent( "encryption", typeof(EncryptionService) );
-			AddComponent( "blogMaintenanceService", typeof(BlogMaintenanceService) );
+			AddComponent( "blogService", typeof(BlogService) );
 
 			AddComponent( "auth.filter", typeof(AuthenticationCheckFilter) );
 			AddComponent( "auth.attempt.filter", typeof(AuthenticationAttemptFilter) );
+			AddComponent( "print.filter", typeof(PrintableFilter) );
+
 			AddComponent( "intro.controller", typeof(IntroController) );
 			AddComponent( "account.controller", typeof(AccountController) );
 			AddComponent( "blogs.controller", typeof(BlogController) );

@@ -169,6 +169,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dao\ListUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dao\PostDao.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -229,6 +234,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\Filters\PrintableFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Services\AccountService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -239,7 +249,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Services\BlogMaintenanceService.cs"
+                    RelPath = "Services\BlogService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -48,7 +48,7 @@ namespace Castle.Applications.MindDump.Dao
 		}
 
 		/// <summary>
-		/// Usually will be invoked only be the
+		/// Usually will be invoked only by the
 		/// test cases
 		/// </summary>
 		public virtual void DeleteAll()
@@ -74,6 +74,18 @@ namespace Castle.Applications.MindDump.Dao
 			{
 				return null;
 			}
+		}
+
+		public virtual IList FindLatest(int howMany)
+		{
+			IList list = SessionManager.CurrentSession.Find("from Blog order by id desc");
+
+			if (list.Count > howMany)
+			{
+				list = ListUtil.Limit(howMany, list);
+			}
+
+			return list;
 		}
 	}
 }

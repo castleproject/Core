@@ -21,25 +21,27 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 
 	using Castle.Applications.MindDump.Model;
 	using Castle.Applications.MindDump.Services;
+	using Castle.Applications.MindDump.Presentation.Filters;
 
 
 	[ControllerDetails("blogs")]
+	[Filter(ExecuteEnum.After, typeof(PrintableFilter))]
 	public class BlogController : SmartDispatcherController
 	{
-		private BlogMaintenanceService _maintenanceService;
+		private BlogService _blogService;
 
-		public BlogController(BlogMaintenanceService maintenanceService)
+		public BlogController(BlogService blogService)
 		{
-			_maintenanceService = maintenanceService;
+			_blogService = blogService;
 		}
 
 		public void View()
 		{
-			Blog blog = _maintenanceService.ObtainBlogByAuthorName( Name );
+			Blog blog = _blogService.ObtainBlogByAuthorName( Name );
 
 			LayoutName = blog.Theme;
 
-			IList posts = _maintenanceService.ObtainPosts( blog );
+			IList posts = _blogService.ObtainPosts( blog );
 
 			PropertyBag.Add( "blog", blog );
 			PropertyBag.Add( "posts", posts );
@@ -54,15 +56,15 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 
 		public void View(long entryid)
 		{
-			Blog blog = _maintenanceService.ObtainBlogByAuthorName( Name );
+			Blog blog = _blogService.ObtainBlogByAuthorName( Name );
 
 			LayoutName = blog.Theme;
 
-			IList posts = _maintenanceService.ObtainPosts( blog );
+			IList posts = _blogService.ObtainPosts( blog );
 
 			PropertyBag.Add( "blog", blog );
 			PropertyBag.Add( "posts", posts );
-			PropertyBag.Add( "lastpost", _maintenanceService.ObtainPost(blog, entryid) );
+			PropertyBag.Add( "lastpost", _blogService.ObtainPost(blog, entryid) );
 
 			RenderView("blogs", "view");
 		}

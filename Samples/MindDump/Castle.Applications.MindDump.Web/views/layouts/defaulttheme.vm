@@ -21,6 +21,7 @@
 <ul>
 	<li><a id="MyLinks1_HomeLink" href="/${blog.author.login}/view.rails">Home</a></li>
 	<li><a id="MyLinks1_Admin" href="/account/authentication.rails">Login</a></li>
+	<li><a id="MyLinks1_HomeLink" href="/${blog.author.login}/view.rails?printable=true">Printable</a></li>
 </ul>
 	
 <h3>Last posts</h3>

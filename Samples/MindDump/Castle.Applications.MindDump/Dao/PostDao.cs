@@ -79,5 +79,17 @@ namespace Castle.Applications.MindDump.Dao
 				return null;
 			}
 		}
+
+		public virtual IList FindLatest(int howMany)
+		{
+			IList list = SessionManager.CurrentSession.Find("from Post order by id desc");
+
+			if (list.Count > howMany)
+			{
+				list = ListUtil.Limit(howMany, list);
+			}
+
+			return list;
+		}
 	}
 }

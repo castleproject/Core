@@ -25,6 +25,7 @@
 	<div>- <a href="newentry.rails">New entry</a></div>
 	<div>- <a href="accountsettings.rails">Account Settings</a></div>
 	<div>- <a href="blogsettings.rails">Blog Settings</a></div>
+	<div>- <a href="/$context.CurrentUser.Author.Login/view.rails" target="_blank">View Blog</a></div>
 	<br>&nbsp;<br>
 #foreach ($entry in $entries)
 	<div>- <a href="editentry.rails?entryid=${entry.id}">$entry.title</a></div>

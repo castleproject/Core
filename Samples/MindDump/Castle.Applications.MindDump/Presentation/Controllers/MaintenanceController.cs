@@ -25,25 +25,25 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	[Layout("private")]
 	public class MaintenanceController : AbstractSecureController
 	{
-		private BlogMaintenanceService _maintenanceService;
+		private BlogService _blogService;
 		private AccountService _accountService;
 
-		public MaintenanceController(AccountService accountService, BlogMaintenanceService maintenanceService)
+		public MaintenanceController(AccountService accountService, BlogService blogService)
 		{
 			_accountService = accountService;
-			_maintenanceService = maintenanceService;
+			_blogService = blogService;
 		}
 
 		public void NewEntry()
 		{
-			PropertyBag.Add( "entries", _maintenanceService.ObtainPosts( ObtainCurrentBlog() ) );
+			PropertyBag.Add( "entries", _blogService.ObtainPosts( ObtainCurrentBlog() ) );
 		}
 
 		public void SaveNewEntry(String title, String contents)
 		{
 			Blog blog = ObtainCurrentBlog();
 
-			Post post = _maintenanceService.CreateNewPost( 
+			Post post = _blogService.CreateNewPost( 
 				blog, new Post(title, contents, DateTime.Now) );
 
 			Context.Flash["message"] = "Your post was created successfully";
@@ -54,15 +54,15 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 
 		public void EditEntry(long entryid)
 		{
-			PropertyBag.Add( "entries", _maintenanceService.ObtainPosts( ObtainCurrentBlog() ) );
-			PropertyBag.Add( "post", _maintenanceService.ObtainPost( ObtainCurrentBlog(), entryid ) );
+			PropertyBag.Add( "entries", _blogService.ObtainPosts( ObtainCurrentBlog() ) );
+			PropertyBag.Add( "post", _blogService.ObtainPost( ObtainCurrentBlog(), entryid ) );
 		}
 
 		public void UpdateEntry(long entryid, String title, String contents)
 		{
 			Blog blog = ObtainCurrentBlog();
 
-			_maintenanceService.UpdatePost( 
+			_blogService.UpdatePost( 
 				blog, entryid, new Post(title, contents) );
 
 			Context.Flash["message"] = "Your post was updated successfully";
@@ -106,7 +106,6 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 			RenderView("NewEntry");
 			NewEntry();
 		}
-
 
 		// Private utility members
 

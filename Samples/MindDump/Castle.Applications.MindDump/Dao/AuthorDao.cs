@@ -48,7 +48,7 @@ namespace Castle.Applications.MindDump.Dao
 		}
 
 		/// <summary>
-		/// Usually will be invoked only be the
+		/// Usually will be invoked only by the
 		/// test cases
 		/// </summary>
 		public virtual void DeleteAll()

@@ -1,11 +1,14 @@
-This sample illustrates the integration between Castle Windsor and Castle on Rails. It depicts how the application overall development can benefit from them.
+This sample illustrates the integration between Castle Windsor and Castle on Rails. 
+It depicts how the application overall development can benefit from them.
 
 
 
 How to use
 ==========
 
-The web application was developed using the Cassini web server, instead of IIS (I only have Windows XP Home). It was also developed as the root web application. If you have cassini installed, you can run the application by using:
+The web application was developed using the Cassini web server, instead of IIS 
+(I only have Windows XP Home). It was also developed as the root web application.
+If you have cassini installed, you can run the application by using:
 
 > cd E:\dev\castle\Samples\PestControl\
 > CassiniWebServer.exe "E:\dev\castle\Samples\PestControl\Castle.Applications.PestControl.Web" 8082 /

@@ -19,26 +19,24 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	using Castle.CastleOnRails.Framework;
 
 	using Castle.Applications.MindDump.Presentation.Filters;
-	using Castle.Applications.MindDump.Dao;
+	using Castle.Applications.MindDump.Services;
 
 
 	[Filter(ExecuteEnum.Before, typeof(AuthenticationAttemptFilter))]
 	[Layout("default")]
 	public class IntroController : Controller
 	{
-		private BlogDao _blogDao;
-		private PostDao _postDao;
+		private BlogService _blogService;
 
-		public IntroController(BlogDao blogDao, PostDao postDao)
+		public IntroController(BlogService blogService)
 		{
-			_blogDao = blogDao;
-			_postDao = postDao;
+			_blogService = blogService;
 		}
 
 		public void Index()
 		{
-			PropertyBag.Add( "blogs", _blogDao.Find() );
-			PropertyBag.Add( "posts", _postDao.Find() );
+			PropertyBag.Add( "blogs", _blogService.ObtainLatestBlogs() );
+			PropertyBag.Add( "posts", _blogService.ObtainLatestPosts() );
 		}
 	}
 }
