@@ -1,7 +1,5 @@
 <%@ Page CodeBehind="new.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.views.project.New" %>
-<%@ Register TagPrefix="pcontrol" TagName="Header" Src="../../views/header.ascx" %>
-<%@ Register TagPrefix="pcontrol" TagName="Footer" Src="../../views/footer.ascx" %>
-<pcontrol:Header title="New Project" runat="server" ID="Header1" />
+
 <form runat="server" ID="Form1" method=post>
 	<p>
 		Please fill the fields below to create a new project
@@ -50,4 +48,4 @@
 		</TR>
 	</TABLE>
 </form>
-<pcontrol:Footer runat="server" ID="Footer1" />
+

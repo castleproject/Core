@@ -27,7 +27,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	/// <summary>
 	/// Summary description for HomeController.
 	/// </summary>
-	[Transient]
+	[Layout("default")]
 	public class HomeController : SmartDispatcherController
 	{
 		private PestControlModel _model;
@@ -55,7 +55,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 				FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(email, true, 14 * 24 * 60);
 				String cookieContents = FormsAuthentication.Encrypt( ticket );
 				
-				Context.Response.Cookies.Add( 
+				HttpContext.Response.Cookies.Add( 
 					new HttpCookie(FormsAuthentication.FormsCookieName, cookieContents) );
 
 				Redirect("dashboard", "index");

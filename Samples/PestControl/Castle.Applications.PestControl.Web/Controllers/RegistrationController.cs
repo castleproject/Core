@@ -27,7 +27,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	/// <summary>
 	/// Summary description for RegistrationController.
 	/// </summary>
-	[Transient]
+	[Layout("default")]
 	public class RegistrationController : SmartDispatcherController
 	{
 		private PrevalenceEngine _engine;
@@ -47,7 +47,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 			User user = (User)
 				_engine.ExecuteCommand( new CreateUserCommand(name, passwd, email) );
 
-			Context.User = user;
+			HttpContext.User = user;
 
 			Redirect("home", "index");
 		}

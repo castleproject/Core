@@ -21,6 +21,8 @@ namespace Castle.Applications.PestControl.Web
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.AppDomain;
 
+	using Castle.CastleOnRails.WindsorExtension;
+
 	using Castle.Applications.PestControl.Model;
 	using Castle.Applications.PestControl.Web.Controllers;
 
@@ -34,6 +36,7 @@ namespace Castle.Applications.PestControl.Web
 		public void Application_OnStart() 
 		{
 			container = new PestControlContainer( new AppDomainConfigurationStore() );
+			container.AddFacility( "rails", new RailsFacility() );
 
 			AddControllers(container);
 		}

@@ -135,9 +135,9 @@
                     HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.Engine.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Engine.WindsorExtension"
-                    AssemblyName = "Castle.CastleOnRails.Engine.WindsorExtension"
-                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.Engine.WindsorExtension.dll"
+                    Name = "Castle.CastleOnRails.WindsorExtension"
+                    AssemblyName = "Castle.CastleOnRails.WindsorExtension"
+                    HintPath = "..\..\..\CastleOnRails\bin\Castle.CastleOnRails.WindsorExtension.dll"
                 />
             </References>
         </Build>
@@ -190,14 +190,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "views\footer.ascx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\header.ascx"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "views\dashboard\index.aspx"
                     BuildAction = "Content"
                 />
@@ -226,6 +218,10 @@
                     RelPath = "views\home\index.aspx.resx"
                     DependentUpon = "index.aspx.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "views\layouts\default.aspx"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "views\project\new.aspx"

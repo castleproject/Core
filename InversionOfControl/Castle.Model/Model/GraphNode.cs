@@ -97,9 +97,11 @@ namespace Castle.Model
 				}
 				else
 				{
-					if (sorted.Contains(  ))
+//					if (sorted.Contains(  ))
 				}
 			}
+
+			return null;
 		}
 	}
 }

@@ -1,7 +1,5 @@
-<%@ Register TagPrefix="pcontrol" TagName="Footer" Src="../../views/footer.ascx" %>
-<%@ Register TagPrefix="pcontrol" TagName="Header" Src="../../views/header.ascx" %>
 <%@ Page CodeBehind="signup.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.Views.Registration.Index" %>
-<pcontrol:Header title="Home" runat="server" ID="Header1" />
+
 <form runat="server">
 	<p>
 		Please fill the fields below to create an account.
@@ -32,4 +30,3 @@
 		</TR>
 	</TABLE>
 </form>
-<pcontrol:Footer runat="server" ID="Footer1" />

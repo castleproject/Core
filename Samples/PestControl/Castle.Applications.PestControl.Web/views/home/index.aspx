@@ -1,8 +1,5 @@
-<%@ Page CodeBehind="index.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.Views.Home.Index" %>
-<%@ Register TagPrefix="pcontrol" TagName="Header" Src="../../views/header.ascx" %>
-<%@ Register TagPrefix="pcontrol" TagName="Footer" Src="../../views/footer.ascx" %>
+<%@ Page CodeBehind="index.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.Views.Home.Index" %
 
-<pcontrol:Header title="Home" runat=server />
 	    	
     <p>If you'd like to administer projects, please log on.</p>
     <p>Of course, you have to <a href="../registration/signup.rails">register</a> first.</p>
@@ -31,4 +28,4 @@
 				</p>
 		</form>
 				
-<pcontrol:Footer runat=server />
+

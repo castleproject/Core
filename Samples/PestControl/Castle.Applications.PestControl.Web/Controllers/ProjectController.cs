@@ -30,7 +30,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	/// <summary>
 	/// Summary description for ProjectController.
 	/// </summary>
-	[Transient]
+	[Layout("default")]
 	public class ProjectController : SmartDispatcherController
 	{
 		private PestControlModel _model;

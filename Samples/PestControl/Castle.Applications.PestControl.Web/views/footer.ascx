@@ -1,5 +1,0 @@
-<%@ Control %>
-			</div>
-			
-	</body>
-</HTML>

@@ -25,7 +25,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	/// <summary>
 	/// Summary description for DashboardController.
 	/// </summary>
-	[Transient]
+	[Layout("default")]
 	public class DashboardController : Controller
 	{
 		PestControlModel _model;
