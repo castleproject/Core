@@ -13,9 +13,9 @@
 	<property name="core.assembly.name" value="${core.name}.dll" />
 	<property name="core.test.assembly.name" value="${core.name}.Test.dll" />
 
-	<property name="debug" value="true" />
-	<property name="optimize" value="false" />
-	<property name="version" value="1.0.0.2" />
+	<property name="debug" value="false" />
+	<property name="optimize" value="true" />
+	<property name="version" value="1.0.0.0" />
 
 	<!-- find out where nunit.framework.dll is -->
 	<property name="nant.lib.dir"
@@ -51,7 +51,7 @@
 	<target name="core.compile" depends="init">
 		<!-- doc="${bin.dir}/${core.name}.xml" -->
 		<csc 
-			
+			define="STRONG"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
@@ -87,35 +87,32 @@
 		</nunit2>
 	</target>
 	
-	<target name="documentation">
-		<ndoc failonerror="false">
-			<assemblies basedir="${bin.dir}">
-				<include name="${core.assembly.name}" />
-			</assemblies>
-			<documenters>
-				<documenter name="MSDN">
-					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
-					<property name="HtmlHelpName" value="AspectSharp" />
-					<property name="IncludeFavorites" value="False" />
-					<property name="Title" value="AspectSharp - .NET AOP Implementation" />
-					<property name="SplitTOCs" value="False" />
-					<property name="DefaulTOC" value="AspectSharp.Framework" />
-					<property name="ShowVisualBasic" value="False" />
-					<property name="ShowMissingSummaries" value="True" />
-					<property name="ShowMissingRemarks" value="False" />
-					<property name="ShowMissingParams" value="True" />
-					<property name="ShowMissingReturns" value="True" />
-					<property name="ShowMissingValues" value="False" />
-					<property name="DocumentInternals" value="True" />
-					<property name="DocumentProtected" value="True" />
-					<property name="DocumentPrivates" value="False" />
-					<property name="DocumentEmptyNamespaces" value="False" />
-					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004 Henry Conceição / Rafael Steil" />
-					<property name="CopyrightHref" value="" />
-				</documenter>
-			</documenters>
-		</ndoc>
+	<target name="packfiles">
+		<zip zipfile="DynamicProxy.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/Castle.DynamicProxy.dll" />				
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="Changes.txt" />				
+			</fileset>
+		</zip>
+		
+		<zip zipfile="DynamicProxy.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="Changes.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${core.src.dir}/**/*.*" />
+				<include name="${core.test.src.dir}/**/*.*" />
+				
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+			</fileset>
+		</zip>
 	</target>
-	
+
 </project>

@@ -25,8 +25,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.0.1.0")]
 
-//#if STRONG
+#if STRONG
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("../../../../../CastleKey.snk")]
+[assembly: AssemblyKeyFile("../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
-//#endif
+#endif
