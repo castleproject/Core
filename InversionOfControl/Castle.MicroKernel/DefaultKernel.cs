@@ -15,8 +15,10 @@
 namespace Castle.MicroKernel
 {
 	using System;
+	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Runtime.Serialization;
 
 	using Castle.Model;
 	using Castle.Model.Internal;
@@ -34,7 +36,8 @@ namespace Castle.MicroKernel
 	/// This implementation is complete and also support a kernel 
 	/// hierarchy (sub containers).
 	/// </summary>
-	public class DefaultKernel : KernelEventSupport, IKernel
+	[Serializable]
+	public class DefaultKernel : KernelEventSupport, IKernel, IDeserializationCallback
 	{
 		#region Fields
 
@@ -132,6 +135,15 @@ namespace Castle.MicroKernel
 			_handlerFactory = new DefaultHandlerFactory(this);
 			_modelBuilder = new DefaultComponentModelBuilder(this);
 			_resolver = new DefaultDependecyResolver(this);
+		}
+
+		public DefaultKernel(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+			MemberInfo[] members = FormatterServices.GetSerializableMembers( GetType(), context );
+			
+			object[] kernelmembers = (object[]) info.GetValue( "members", typeof(object[]) );
+			
+			FormatterServices.PopulateObjectMembers( this, members, kernelmembers );
 		}
 
 		#endregion
@@ -604,6 +616,25 @@ namespace Castle.MicroKernel
 			ReleasePolicy.Track(instance, handler);
 
 			return instance;
+		}
+
+		#endregion
+
+		#region Serialization and Deserialization
+
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+
+			MemberInfo[] members = FormatterServices.GetSerializableMembers( GetType(), context );
+
+			object[] kernelmembers = FormatterServices.GetObjectData(this, members);
+
+			info.AddValue( "members", kernelmembers, typeof(object[]) );
+		}
+
+		void IDeserializationCallback.OnDeserialization(object sender)
+		{
 		}
 
 		#endregion

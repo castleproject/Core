@@ -27,8 +27,10 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// The Kernel might be able to set some of these properties when the component 
 	/// is requested.
 	/// </summary>
+	[Serializable]
 	public class PropertiesDependenciesModelInspector : IContributeComponentModelConstruction
 	{
+		[NonSerialized]
 		private ITypeConverter _converter;
 
 		public PropertiesDependenciesModelInspector()

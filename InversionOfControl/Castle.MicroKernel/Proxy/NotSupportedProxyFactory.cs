@@ -30,6 +30,7 @@ namespace Castle.MicroKernel.Proxy
 	/// simple cases, no use use of interceptors will take place.
 	/// If you want to use however, see the Windsor container.
 	/// </remarks>
+	[Serializable]
 	public class NotSupportedProxyFactory : IProxyFactory
 	{
 		#region IProxyFactory Members

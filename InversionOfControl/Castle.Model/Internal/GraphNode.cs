@@ -17,7 +17,8 @@ namespace Castle.Model
 	using System;
 	using System.Collections;
 
-	public class GraphNode : IVertex
+	[Serializable]
+	public class GraphNode : MarshalByRefObject, IVertex
 	{
 		private ArrayList _incoming;
 		private ArrayList _outgoing;
@@ -25,7 +26,17 @@ namespace Castle.Model
 		public GraphNode()
 		{
 		}
-		
+
+		/// <summary>
+		/// Kind of copy constructor
+		/// </summary>
+		/// <param name="copy"></param>
+		public GraphNode(GraphNode copy)
+		{
+			_incoming = new ArrayList(Incoming);
+			_outgoing = new ArrayList(Outgoing);
+		}
+
 		#region IVertex Members
 
 		public IVertex[] Adjacencies

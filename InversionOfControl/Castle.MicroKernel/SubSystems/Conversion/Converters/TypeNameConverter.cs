@@ -21,6 +21,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	/// <summary>
 	/// Convert a type name to a Type instance.
 	/// </summary>
+	[Serializable]
 	public class TypeNameConverter : AbstractTypeConverter
 	{
 		public override bool CanHandleType(Type type)

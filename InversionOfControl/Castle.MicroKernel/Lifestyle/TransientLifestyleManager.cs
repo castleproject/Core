@@ -19,6 +19,7 @@ namespace Castle.MicroKernel.Lifestyle
 	/// <summary>
 	/// Summary description for TransientLifestyleManager.
 	/// </summary>
+	[Serializable]
 	public class TransientLifestyleManager : AbstractLifestyleManager
 	{
 		public override void Dispose()

@@ -22,6 +22,7 @@ namespace Castle.Model
 	/// <summary>
 	/// Collection of <see cref="ParameterModel"/>
 	/// </summary>
+	[Serializable]
 	public class ParameterModelCollection : IEnumerable
 	{
 		private Hashtable _dictionary;

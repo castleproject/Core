@@ -16,12 +16,14 @@ namespace Castle.MicroKernel.Handlers
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for AbstractHandler.
+	/// Implements the basis of <see cref="IHandler"/>
 	/// </summary>
+	[Serializable]
 	public abstract class AbstractHandler : IHandler, IDisposable
 	{
 		private IKernel _kernel;
@@ -85,8 +87,6 @@ namespace Castle.MicroKernel.Handlers
 		protected void SetNewState( HandlerState newState )
 		{
 			_state = newState;
-
-			// RaiseChangeStateEvent();
 		}
 
 		protected ArrayList DependenciesByService
@@ -107,7 +107,7 @@ namespace Castle.MicroKernel.Handlers
 			{
 				if (_dependenciesByKey == null) 
 				{
-					_dependenciesByKey = new SortedList( Comparer.Default );
+					_dependenciesByKey = new HybridDictionary();
 				}
 				return _dependenciesByKey;
 			}
@@ -174,6 +174,10 @@ namespace Castle.MicroKernel.Handlers
 			{
 				SetNewState(HandlerState.Valid);
 				Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
+				
+				// We don't need these anymore
+				_dependenciesByKey = null;
+				_dependenciesByService = null;
 			}
 		}
 

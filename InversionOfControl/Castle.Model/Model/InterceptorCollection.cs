@@ -14,6 +14,7 @@
 
 namespace Castle.Model
 {
+	using System;
 	using System.Collections;
 
 	using Castle.Model.Interceptor;
@@ -21,6 +22,7 @@ namespace Castle.Model
 	/// <summary>
 	/// Collection of <see cref="InterceptorReference"/>
 	/// </summary>
+	[Serializable]
 	public class InterceptorReferenceCollection : ReadOnlyCollectionBase
 	{
 		public void Add(InterceptorReference interceptor)

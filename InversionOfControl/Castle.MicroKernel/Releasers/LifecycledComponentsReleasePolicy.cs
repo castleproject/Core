@@ -15,13 +15,12 @@
 namespace Castle.MicroKernel.Releasers
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Only tracks components that have decommission steps
 	/// registered
 	/// </summary>
+	[Serializable]
 	public class LifecycledComponentsReleasePolicy : AllComponentsReleasePolicy
 	{
 		public LifecycledComponentsReleasePolicy()

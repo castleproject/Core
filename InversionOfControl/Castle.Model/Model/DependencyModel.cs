@@ -26,6 +26,7 @@ namespace Castle.Model
 	/// Represents a dependency (other component or a fixed value available through external
 	/// configuration).
 	/// </summary>
+	[Serializable]
 	public class DependencyModel
 	{
 		private String _dependencyKey;

@@ -21,6 +21,7 @@ namespace Castle.Model
 	/// Represents a property and the respective optional 
 	/// dependency.
 	/// </summary>
+	[Serializable]
 	public class PropertySet
 	{
 		private PropertyInfo _propertyInfo;

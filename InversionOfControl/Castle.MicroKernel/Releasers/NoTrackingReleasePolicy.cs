@@ -19,6 +19,7 @@ namespace Castle.MicroKernel.Releasers
 	/// <summary>
 	/// No tracking of component instances are made.
 	/// </summary>
+	[Serializable]
 	public class NoTrackingReleasePolicy : IReleasePolicy
 	{
 		public NoTrackingReleasePolicy()

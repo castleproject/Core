@@ -22,6 +22,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	/// <summary>
 	/// Composition of all available conversion managers
 	/// </summary>
+	[Serializable]
 	public class DefaultConversionManager : IConversionManager, ITypeConverterContext
 	{
 		private IList _converters;

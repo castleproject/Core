@@ -21,6 +21,7 @@ namespace Castle.MicroKernel.Releasers
 	/// <summary>
 	/// Summary description for AllComponentsReleasePolicy.
 	/// </summary>
+	[Serializable]
 	public class AllComponentsReleasePolicy : IReleasePolicy
 	{
 		private IDictionary _instance2Handler = new HybridDictionary();

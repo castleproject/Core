@@ -24,7 +24,8 @@ namespace Castle.Windsor
 	/// Implementation of <see cref="IWindsorContainer"/>
 	/// which delegates to <see cref="IKernel"/> implementation.
 	/// </summary>
-	public class WindsorContainer : IWindsorContainer
+	[Serializable]
+	public class WindsorContainer : MarshalByRefObject, IWindsorContainer
 	{
 		private IKernel _kernel;
 		private IWindsorContainer _parent;

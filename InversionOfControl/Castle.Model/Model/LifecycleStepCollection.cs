@@ -26,6 +26,7 @@ namespace Castle.Model
 	/// <summary>
 	/// Represents a collection of ordered lifecycle steps.
 	/// </summary>
+	[Serializable]
 	public class LifecycleStepCollection : ICollection
 	{
 		private IList _commissionSteps;

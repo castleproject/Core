@@ -102,15 +102,15 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual( HandlerState.Valid, handlerC.CurrentState );
 		}
 
-		/// This test case must pass !
-//		[Test]
-//		public void CycleComponents()
-//		{
-//			kernel.AddComponent( "a", typeof(CycleA) );
-//			kernel.AddComponent( "b", typeof(CycleB) );
-//
-//			Assert.IsNotNull( kernel["a"] );
-//			Assert.IsNotNull( kernel["b"] );
-//		}
+		[Test]
+		[Ignore("Since the modification for hierarchy of dependencies, cycles are not supported")]
+		public void CycleComponentGraphs()
+		{
+			kernel.AddComponent( "a", typeof(CycleA) );
+			kernel.AddComponent( "b", typeof(CycleB) );
+
+			Assert.IsNotNull( kernel["a"] );
+			Assert.IsNotNull( kernel["b"] );
+		}
 	}
 }

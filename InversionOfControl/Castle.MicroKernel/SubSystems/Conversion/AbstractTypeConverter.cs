@@ -18,7 +18,10 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 	using Castle.Model.Configuration;
 
-
+	/// <summary>
+	/// Base implementation of <see cref="ITypeConverter"/>
+	/// </summary>
+	[Serializable]
 	public abstract class AbstractTypeConverter : ITypeConverter
 	{
 		private ITypeConverterContext _context;

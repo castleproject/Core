@@ -15,7 +15,6 @@
 namespace Castle.Model.Configuration
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Specialized;
 
 	/// <summary>

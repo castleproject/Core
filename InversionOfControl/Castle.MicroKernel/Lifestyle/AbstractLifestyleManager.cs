@@ -19,6 +19,7 @@ namespace Castle.MicroKernel.Lifestyle
 	/// <summary>
 	/// Summary description for AbstractLifestyleManager.
 	/// </summary>
+	[Serializable]
 	public abstract class AbstractLifestyleManager : ILifestyleManager
 	{
 		protected IComponentActivator _componentFactory;

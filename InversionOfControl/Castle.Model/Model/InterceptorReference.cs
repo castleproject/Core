@@ -25,6 +25,7 @@ namespace Castle.Model
 	/// <summary>
 	/// Represents an reference to a Interceptor component.
 	/// </summary>
+	[Serializable]
 	public class InterceptorReference
 	{
 		private readonly Type _serviceType;

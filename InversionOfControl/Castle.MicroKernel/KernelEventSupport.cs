@@ -16,13 +16,15 @@ namespace Castle.MicroKernel
 {
 	using System;
 	using System.ComponentModel;
+	using System.Runtime.Serialization;
 
 	using Castle.Model;
 
 	/// <summary>
 	/// Summary description for KernelEventSupport.
 	/// </summary>
-	public abstract class KernelEventSupport : IKernelEvents
+	[Serializable]
+	public abstract class KernelEventSupport : MarshalByRefObject, IKernelEvents, ISerializable
 	{
 		private static readonly object HandlerRegisteredEvent = new object();
 		private static readonly object ComponentRegisteredEvent = new object();
@@ -32,11 +34,20 @@ namespace Castle.MicroKernel
 		private static readonly object AddedAsChildKernelEvent = new object();
 		private static readonly object ComponentModelCreatedEvent = new object();
 
+		[NonSerialized]
 		private EventHandlerList _events;
 
 		public KernelEventSupport()
 		{
 			_events = new EventHandlerList();
+		}
+
+		public KernelEventSupport(SerializationInfo info, StreamingContext context)
+		{
+			_events = new EventHandlerList();
+
+			_events[HandlerRegisteredEvent] = (Delegate) 
+				 info.GetValue("HandlerRegisteredEvent", typeof(Delegate));
 		}
 
 		/// <summary>
@@ -122,13 +133,13 @@ namespace Castle.MicroKernel
 			if (eventDelegate != null) eventDelegate(key, handler);
 		}
 
-		protected virtual void RaiseComponentCreated(ComponentModel model, object instance)
+		public virtual void RaiseComponentCreated(ComponentModel model, object instance)
 		{
 			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) _events[ComponentCreatedEvent];
 			if (eventDelegate != null) eventDelegate(model, instance);
 		}
 
-		protected virtual void RaiseComponentDestroyed(ComponentModel model, object instance)
+		public virtual void RaiseComponentDestroyed(ComponentModel model, object instance)
 		{
 			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) _events[ComponentDestroyedEvent];
 			if (eventDelegate != null) eventDelegate(model, instance);
@@ -151,5 +162,14 @@ namespace Castle.MicroKernel
 			HandlerDelegate eventDelegate = (HandlerDelegate) _events[HandlerRegisteredEvent];
 			if (eventDelegate != null) eventDelegate(handler);
 		}
+
+		#region IDeserializationCallback Members
+
+		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			info.AddValue("HandlerRegisteredEvent", _events[HandlerRegisteredEvent]);
+		}
+
+		#endregion
 	}
 }

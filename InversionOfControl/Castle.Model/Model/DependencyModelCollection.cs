@@ -15,12 +15,12 @@
 namespace Castle.Model
 {
 	using System;
-
 	using System.Collections;
 
 	/// <summary>
 	/// Collection of <see cref="DependencyModel"/>.
 	/// </summary>
+	[Serializable]
 	public class DependencyModelCollection : ReadOnlyCollectionBase
 	{
 		public void Add(DependencyModel model)

@@ -21,6 +21,7 @@ namespace Castle.MicroKernel.Handlers
 	/// <summary>
 	/// Summary description for DefaultHandlerFactory.
 	/// </summary>
+	[Serializable]
 	public class DefaultHandlerFactory : IHandlerFactory
 	{
 		private IKernel _kernel;

@@ -22,6 +22,7 @@ namespace Castle.Model
 	/// Represents a parameter. Usually the parameter
 	/// comes from the external world, ie, an external configuration.
 	/// </summary>
+	[Serializable]
 	public class ParameterModel
 	{
 		private String _name;

@@ -17,14 +17,18 @@ namespace Castle.MicroKernel.Lifestyle
 	using System;
 	using System.Collections;
 	using System.Threading;
+	using System.Runtime.Serialization;
 
 	/// <summary>
 	/// Summary description for PerThreadLifestyleManager.
 	/// </summary>
-	public class PerThreadLifestyleManager : AbstractLifestyleManager
+	[Serializable]
+	public class PerThreadLifestyleManager : AbstractLifestyleManager, IDeserializationCallback
 	{
+		[NonSerialized]
 		private static LocalDataStoreSlot _slot = Thread.AllocateNamedDataSlot("CastlePerThread");
 
+		[NonSerialized]
 		private IList _instances = new ArrayList();
 
 		/// <summary>
@@ -76,5 +80,11 @@ namespace Castle.MicroKernel.Lifestyle
 		}
 
 		#endregion
+
+		public void OnDeserialization(object sender)
+		{
+			_slot = Thread.AllocateNamedDataSlot("CastlePerThread");
+			_instances = new ArrayList();
+		}
 	}
 }

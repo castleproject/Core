@@ -43,8 +43,8 @@
 					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
 					<property name="HtmlHelpName" value="Castle.Container" />
 					<property name="IncludeFavorites" value="False" />
-					<property name="Title" value="Castle.Container" />
-					<property name="SplitTOCs" value="False" />
+					<property name="Title" value="Castle's Inversion of Control" />
+					<property name="SplitTOCs" value="True" />
 					<property name="DefaulTOC" value="Castle.Windsor" />
 					<property name="ShowVisualBasic" value="False" />
 					<property name="ShowMissingSummaries" value="False" />
@@ -57,8 +57,8 @@
 					<property name="DocumentPrivates" value="False" />
 					<property name="DocumentEmptyNamespaces" value="False" />
 					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004-2005 DigitalCraftsmen.com.br and the original authors" />
-					<property name="CopyrightHref" value="http://www.digitalcraftsmen.com.br/~hammett/" />
+					<property name="CopyrightText" value="Copyright 2004-2005 (c) Castle Project" />
+					<property name="CopyrightHref" value="http://www.castleproject.org/" />
 				</documenter>
 			</documenters>
 		</ndoc>

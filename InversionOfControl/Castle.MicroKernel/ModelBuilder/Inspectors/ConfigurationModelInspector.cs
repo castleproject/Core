@@ -22,12 +22,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// Uses the ConfigurationStore registered in the kernel to obtain
 	/// an <see cref="IConfiguration"/> associated with the component.
 	/// </summary>
+	[Serializable]
 	public class ConfigurationModelInspector : IContributeComponentModelConstruction
 	{
-		public ConfigurationModelInspector()
-		{
-		}
-
 		/// <summary>
 		/// Queries the kernel's ConfigurationStore for a configuration
 		/// associated with the component name.

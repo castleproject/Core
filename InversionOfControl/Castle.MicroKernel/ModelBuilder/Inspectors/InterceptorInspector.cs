@@ -26,12 +26,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// Inspect the component for <c>InterceptorAttribute</c> and
 	/// the configuration for the interceptors node
 	/// </summary>
+	[Serializable]
 	public class InterceptorInspector : IContributeComponentModelConstruction
 	{
-		public InterceptorInspector()
-		{
-		}
-		
 		/// <summary>
 		/// </summary>
 		/// <param name="kernel"></param>

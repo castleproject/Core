@@ -16,6 +16,7 @@ namespace Castle.Windsor.Proxy
 {
 	using System;
 	using System.Reflection;
+	using System.Runtime.Serialization;
 
 	using Castle.Model;
 	using Castle.Model.Interceptor;
@@ -34,8 +35,10 @@ namespace Castle.Windsor.Proxy
 	/// was registered with a service interface, we proxy
 	/// the interface and the methods don't need to be virtual,
 	/// </remarks>
-	public class DefaultProxyFactory : IProxyFactory
+	[Serializable]
+	public class DefaultProxyFactory : IProxyFactory, IDeserializationCallback
 	{
+		[NonSerialized]
 		protected ProxyGenerator _generator;
 
 		/// <summary>
@@ -43,7 +46,7 @@ namespace Castle.Windsor.Proxy
 		/// </summary>
 		public DefaultProxyFactory()
 		{
-			_generator = new ProxyGenerator();
+			Init();
 		}
 
 		/// <summary>
@@ -172,6 +175,20 @@ namespace Castle.Windsor.Proxy
 			{
 				onBehalfAware.SetInterceptedComponentModel(target);
 			}
+		}
+
+		#region IDeserializationCallback
+
+		public void OnDeserialization(object sender)
+		{
+			Init();
+		}
+
+		#endregion
+
+		private void Init()
+		{
+			_generator = new ProxyGenerator();
 		}
 	}
 }

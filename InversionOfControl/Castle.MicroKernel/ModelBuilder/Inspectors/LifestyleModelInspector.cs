@@ -29,13 +29,9 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// If nothing could be found it wont touch the model. In this case is up to
 	/// the kernel to estabish a default lifestyle for components.
 	/// </remarks>
+	[Serializable]
 	public class LifestyleModelInspector : IContributeComponentModelConstruction
 	{
-		public LifestyleModelInspector()
-		{
-		}
-
-		
 		/// <summary>
 		/// Seaches for the lifestyle in the configuration and, if unsuccessful
 		/// look for the lifestyle attribute in the implementation type.

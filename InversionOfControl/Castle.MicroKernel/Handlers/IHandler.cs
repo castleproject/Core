@@ -42,20 +42,37 @@ namespace Castle.MicroKernel
 	/// </summary>
 	public interface IHandler
 	{
+		/// <summary>
+		/// Initializes the handler with a reference to the
+		/// kernel.
+		/// </summary>
+		/// <param name="kernel"></param>
 		void Init(IKernel kernel);
 
+		/// <summary>
+		/// Implementors should return a valid instance 
+		/// for the component the handler is responsible.
+		/// It should throw an exception in the case the component
+		/// can't be created for some reason
+		/// </summary>
+		/// <returns></returns>
 		object Resolve();
 
+		/// <summary>
+		/// Implementors should dispose the component instance
+		/// </summary>
+		/// <param name="instance"></param>
 		void Release(object instance);
 
-		HandlerState CurrentState
-		{
-			get;
-		}
+		/// <summary>
+		/// Gets the state of the handler
+		/// </summary>
+		HandlerState CurrentState { get; }
 
-		ComponentModel ComponentModel
-		{
-			get;
-		}
+		/// <summary>
+		/// Gets the model of the component being 
+		/// managed by this handler.
+		/// </summary>
+		ComponentModel ComponentModel { get; }
 	}
 }

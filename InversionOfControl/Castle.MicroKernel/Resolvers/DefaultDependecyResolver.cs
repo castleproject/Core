@@ -26,6 +26,7 @@ namespace Castle.MicroKernel.Resolvers
 	/// This implementation is quite simple, but still should be useful
 	/// for 99% of situations. 
 	/// </summary>
+	[Serializable]
 	public class DefaultDependecyResolver : IDependencyResolver
 	{
 		private readonly IKernel _kernel;

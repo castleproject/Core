@@ -14,11 +14,14 @@
 
 namespace Castle.MicroKernel.Handlers
 {
+	using System;
+
 	using Castle.Model;
 
 	/// <summary>
 	/// Summary description for DefaultHandler.
 	/// </summary>
+	[Serializable]
 	public class DefaultHandler : AbstractHandler
 	{
 		public DefaultHandler(ComponentModel model) : base(model)

@@ -36,11 +36,6 @@ namespace Castle.Windsor.Proxy
 	{
 		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
 
-//		private ICallable _callable;
-//		private MethodInfo _method;
-//		private object _proxy;
-//		private object _target;
-//		private object _original_target;
 		private IMethodInterceptor[] _interceptorChain;
 
 		private object key = new object();
@@ -55,14 +50,6 @@ namespace Castle.Windsor.Proxy
 		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method) : base(callable, proxy, method)
 		{
 		}
-
-//		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method)
-//		{
-//			_callable = callable;
-//			_proxy = proxy;
-//			_method = method;
-//			_target = _original_target = callable.Target;
-//		}
 
 		public override object Proceed(params object[] args)
 		{

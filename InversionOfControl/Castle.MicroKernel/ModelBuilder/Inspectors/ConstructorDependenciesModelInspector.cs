@@ -27,8 +27,10 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// as candidates. The Kernel will pick up one of the candidates
 	/// according to a heuristic.
 	/// </summary>
+	[Serializable]
 	public class ConstructorDependenciesModelInspector : IContributeComponentModelConstruction
 	{
+		[NonSerialized]
 		private ITypeConverter _converter;
 
 		public ConstructorDependenciesModelInspector()

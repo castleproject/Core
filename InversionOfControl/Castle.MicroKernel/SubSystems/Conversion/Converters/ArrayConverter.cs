@@ -15,11 +15,11 @@
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
 	using System;
-	using System.Collections;
 
 	using Castle.Model.Configuration;
 
 
+	[Serializable]
 	public class ArrayConverter : AbstractTypeConverter
 	{
 		public ArrayConverter()

@@ -19,6 +19,7 @@ namespace Castle.MicroKernel.Lifestyle
 	/// <summary>
 	/// Summary description for SingletonLifestyleManager.
 	/// </summary>
+	[Serializable]
 	public class SingletonLifestyleManager : AbstractLifestyleManager
 	{
 		private Object _instance;

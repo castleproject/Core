@@ -32,6 +32,7 @@ namespace Castle.MicroKernel.ComponentActivator
 	/// Please note however that the activator is responsible for the proxy creation
 	/// when needed.
 	/// </remarks>
+	[Serializable]
 	public class DefaultComponentActivator : AbstractComponentActivator
 	{
 		public DefaultComponentActivator(ComponentModel model, IKernel kernel, 

@@ -41,6 +41,7 @@ namespace Castle.Windsor.Configuration.Xml
 	/// &lt;/configuration&gt;
 	/// </code>
 	/// </summary>
+	[Serializable]
 	public class XmlConfigurationStore : DefaultConfigurationStore
 	{
 		const string FacilitiesNodeName = "facilities";

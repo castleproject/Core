@@ -21,6 +21,7 @@ namespace Castle.MicroKernel.LifecycleConcerns
 	/// <summary>
 	/// Summary description for InitializationConcern.
 	/// </summary>
+	[Serializable]
 	public class InitializationConcern : ILifecycleConcern
 	{
 		private static readonly InitializationConcern _instance = new InitializationConcern();

@@ -20,6 +20,7 @@ namespace Castle.Model
 	/// <summary>
 	/// Collection of <see cref="PropertySet"/>
 	/// </summary>
+	[Serializable]
 	public class PropertySetCollection : ReadOnlyCollectionBase
 	{
 		public void Add(PropertySet property)

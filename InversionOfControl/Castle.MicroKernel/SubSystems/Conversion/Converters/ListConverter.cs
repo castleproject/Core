@@ -20,6 +20,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using Castle.Model.Configuration;
 
 
+	[Serializable]
 	public class ListConverter : AbstractTypeConverter
 	{
 		public ListConverter()

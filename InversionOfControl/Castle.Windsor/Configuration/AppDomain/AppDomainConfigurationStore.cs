@@ -51,6 +51,7 @@ namespace Castle.Windsor.Configuration.AppDomain
 	/// &lt;/configuration&gt;
 	/// </code>
 	/// </summary>
+	[Serializable]
 	public class AppDomainConfigurationStore : XmlConfigurationStore
 	{
 		public AppDomainConfigurationStore()

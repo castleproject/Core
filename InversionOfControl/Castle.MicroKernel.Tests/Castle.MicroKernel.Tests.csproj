@@ -135,6 +135,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SerializationTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ClassComponents\CommonImpl1.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -20,6 +20,7 @@ namespace Castle.Model
 	/// <summary>
 	/// Collection of <see cref="ConstructorCandidate"/>
 	/// </summary>
+	[Serializable]
 	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
 	{
 		private ConstructorCandidate _fewerArgumentsCandidate;

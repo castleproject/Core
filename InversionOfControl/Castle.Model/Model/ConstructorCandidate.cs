@@ -21,6 +21,7 @@ namespace Castle.Model
 	/// Represents a constructor of the component 
 	/// that the container can use to initialize it properly.
 	/// </summary>
+	[Serializable]
 	public class ConstructorCandidate
 	{
 		private ConstructorInfo _constructorInfo;

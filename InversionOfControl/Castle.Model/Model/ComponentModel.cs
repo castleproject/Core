@@ -16,7 +16,7 @@ namespace Castle.Model
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Runtime.Serialization;
 
 	using Castle.Model.Configuration;
 
@@ -50,7 +50,8 @@ namespace Castle.Model
 	/// Represents the collection of information and
 	/// meta information collected about a component.
 	/// </summary>
-	public sealed class ComponentModel : GraphNode
+	[Serializable]
+	public sealed class ComponentModel : GraphNode, IDeserializationCallback
 	{
 		#region Fields
 
@@ -64,6 +65,7 @@ namespace Castle.Model
 		private Type _implementation;
 
 		/// <summary>Extended properties</summary>
+		[NonSerialized]
 		private IDictionary _extended;
 
 		/// <summary>Lifestyle for the component</summary>
@@ -108,7 +110,7 @@ namespace Castle.Model
 			_implementation = implementation;
 			_lifestyleType = LifestyleType.Undefined;
 
-			_extended = new HybridDictionary(true);
+			_extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
 			_properties = new PropertySetCollection();
 			_parameters = new ParameterModelCollection();
 			_constructors = new ConstructorCandidateCollection();
@@ -202,5 +204,14 @@ namespace Castle.Model
 		{
 			get { return _dependencies; }
 		}
+
+		#region IDeserializationCallback
+
+		public void OnDeserialization(object sender)
+		{
+			_extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
+		}
+
+		#endregion
 	}
 }

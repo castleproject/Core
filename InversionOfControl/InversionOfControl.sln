@@ -54,6 +54,12 @@ Global
 		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Release.ActiveCfg = Release|.NET
 		{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		container.build = container.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution

@@ -24,6 +24,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// Inspects the type looking for interfaces that constitutes
 	/// lifecycle interfaces, defined in the Castle.Model namespace.
 	/// </summary>
+	[Serializable]
 	public class LifecycleModelInspector : IContributeComponentModelConstruction
 	{
 		public LifecycleModelInspector()
@@ -31,7 +32,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		}
 
 		/// <summary>
-		/// Checks if the type implements <see cref="IInitialize"/> and or
+		/// Checks if the type implements <see cref="IInitializable"/> and or
 		/// <see cref="IDisposable"/> interfaces.
 		/// </summary>
 		/// <param name="kernel"></param>
