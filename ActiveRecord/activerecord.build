@@ -6,7 +6,7 @@
 	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="castle.model" value="${base.dir}/../InversionOfControl/bin/Castle.Model.dll" />
-	<property name="name" value="ActiveRecord" />
+	<property name="name" value="Castle.ActiveRecord" />
 	<property name="version" value="alpha-1" />
 	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
 
