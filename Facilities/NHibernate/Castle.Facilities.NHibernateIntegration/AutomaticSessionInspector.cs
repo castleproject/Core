@@ -31,6 +31,9 @@ namespace Castle.Facilities.NHibernateIntegration
 			if (model.Implementation.IsDefined( 
 				typeof(UsesAutomaticSessionCreationAttribute), true ))
 			{
+				model.Dependencies.Add( 
+					new DependencyModel( DependencyType.Service, null, typeof(AutomaticSessionInterceptor), false ) );
+
 				model.Interceptors.Add( 
 					new InterceptorReference( typeof(AutomaticSessionInterceptor) ) );
 			}

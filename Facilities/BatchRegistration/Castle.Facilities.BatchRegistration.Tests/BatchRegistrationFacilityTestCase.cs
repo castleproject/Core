@@ -132,5 +132,26 @@ namespace Castle.Facilities.BatchRegistration.Tests
 
 			_kernel.AddFacility( "batchregistration", new BatchRegistrationFacility() );
 		}
+
+		[Test]
+		public void AddFacilities()
+		{
+			String xml = 
+				"<configuration>" + 
+				"	<facilities>" + 
+				"		<facility id=\"batchregistration\">" + 
+				"			<addFacility id=\"facility1\" type=\"Castle.Facilities.BatchRegistration.Tests.Facilities.Facility1, Castle.Facilities.BatchRegistration.Tests\" />" + 
+				"			<addFacility id=\"facility2\" type=\"Castle.Facilities.BatchRegistration.Tests.Facilities.Facility2, Castle.Facilities.BatchRegistration.Tests\" />" + 
+				"		</facility>" + 
+				"	</facilities>" + 
+				"</configuration>";
+
+			_kernel.ConfigurationStore = new XmlConfigurationStore( new StringReader(xml) );
+
+			_kernel.AddFacility( "batchregistration", new BatchRegistrationFacility() );
+
+			IFacility[] facilities = _kernel.GetFacilities();
+			Assert.AreEqual( 3, facilities.Length );				
+		}
 	}
 }

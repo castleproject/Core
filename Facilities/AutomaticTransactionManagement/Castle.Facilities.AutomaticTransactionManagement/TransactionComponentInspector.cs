@@ -32,6 +32,9 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		{
 			if (model.Implementation.IsDefined( typeof(TransactionalAttribute), true ))
 			{
+				model.Dependencies.Add( 
+					new DependencyModel( DependencyType.Service, null, typeof(TransactionInterceptor), false ) );
+
 				model.Interceptors.Insert( 0,  
 					new InterceptorReference( typeof(TransactionInterceptor) ) );
 			}

@@ -19,6 +19,7 @@ namespace Castle.Facilities.BatchRegistration
 
 	using Castle.Model.Configuration;
 
+	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 
 
@@ -30,17 +31,24 @@ namespace Castle.Facilities.BatchRegistration
 
 			foreach(IConfiguration config in FacilityConfig.Children)
 			{
-				AddComponents(config);
+				if ("assemblyBatch".Equals(config.Name))
+				{
+					AddComponents(config);
+				}
+				else if ("addFacility".Equals(config.Name))
+				{
+					AddFacility(config);
+				}
+				else
+				{
+					throw new ConfigurationException("Invalid node inside facility configuration. " + 
+						"Expected assemblyBatch");
+				}
 			}
 		}
 
 		private void AddComponents(IConfiguration config)
 		{
-			if (!"assemblyBatch".Equals(config.Name))
-			{
-				throw new ConfigurationException("Invalid node inside facility configuration. " + 
-					"Expected assemblyBatch");
-			}
 
 			String assemblyName = config.Attributes["name"];
 
@@ -67,6 +75,32 @@ namespace Castle.Facilities.BatchRegistration
 					Kernel.AddComponent( definition.Key, definition.ServiceType, definition.ClassType );
 				}
 			}
+		}
+
+		private void AddFacility(IConfiguration config)
+		{
+			String id = config.Attributes["id"];
+			String type = config.Attributes["type"];
+
+			if (type == null || type.Length == 0)
+			{
+				throw new ConfigurationException("The addFacility node must have a 'type' " + 
+					" attribute with the Type's name");
+			}
+			if (id == null || id.Length == 0)
+			{
+				throw new ConfigurationException("The addFacility node must have a 'id' " + 
+					" attribute with facility's key");
+			}
+
+			Kernel.AddFacility( id, InstatiateFacility( type ) );
+		}
+
+		private IFacility InstatiateFacility(String facilityType)
+		{
+			Type type = TypeLoadUtil.GetType(facilityType);
+
+			return (IFacility) Activator.CreateInstance( type );
 		}
 
 		private void ConfigureScanner(IConfiguration config, ComponentScanner scanner)

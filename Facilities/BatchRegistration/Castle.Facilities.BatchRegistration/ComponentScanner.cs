@@ -150,17 +150,7 @@ namespace Castle.Facilities.BatchRegistration
 		/// <returns></returns>
 		private Type InferType(Assembly assembly, String typeName)
 		{
-			Type type = assembly.GetType(typeName, false, false);
-
-			if (type == null)
-			{
-				String message = 
-					String.Format("Could not load type {0} from {1}", typeName, assembly.FullName);
-				
-				throw new ConfigurationException(message);
-			}
-
-			return type;
+			return TypeLoadUtil.GetType(assembly, typeName);
 		}
 
 		/// <summary>
@@ -182,17 +172,7 @@ namespace Castle.Facilities.BatchRegistration
 			}
 			else
 			{
-				Type type = Type.GetType( typeName, false, false );
-
-				if (type == null)
-				{
-					String message = 
-						String.Format("Could not load type {0}", typeName);
-				
-					throw new ConfigurationException(message);
-				}
-
-				return type;
+				return TypeLoadUtil.GetType(typeName);
 			}
 		}
 	}
