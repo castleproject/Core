@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="aspectsharp-facility" default="build">
+<project name="typedfactory-facility" default="build">
     
     <!-- This build file inherits common properties from the ../facilities.build -->
 
@@ -7,10 +7,10 @@
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="lib.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Facilities.AspectSharp" />
+	<property name="src.dir" value="${base.dir}/Castle.Facilities.TypedFactory" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.AspectSharp.Tests" />
-	<property name="name" value="Castle.Facilities.AspectSharp" />
+	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.TypedFactory.Tests" />
+	<property name="name" value="Castle.Facilities.TypedFactory" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
@@ -24,11 +24,6 @@
 		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
-		<copy todir="${bin.dir}">
-			<fileset basedir="${lib.dir}">
-				<includes name="*.dll" />
-			</fileset>
-		</copy>
 	</target>
 
 	<target name="build" depends="init,tests.run" />
@@ -36,7 +31,7 @@
 	<target name="compile" depends="init">
 		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
-			define="STRONG2"
+			define="STRONG"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
