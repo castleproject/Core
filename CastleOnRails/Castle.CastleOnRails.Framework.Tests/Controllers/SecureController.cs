@@ -17,6 +17,7 @@ namespace Castle.CastleOnRails.Framework.Tests.Controllers
 	using System;
 
 
+	[Filter( ExecuteEnum.After, typeof(MyFilter) )]
 	public abstract class SecureController : MyAbstractController
 	{
 		public SecureController()

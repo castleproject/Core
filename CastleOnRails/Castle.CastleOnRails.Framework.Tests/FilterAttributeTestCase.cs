@@ -32,7 +32,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 			FilterDescriptor[] descs = controller.GetFilters();
 			Assert.IsNotNull(descs);
-			Assert.AreEqual(1, descs.Length);
+			Assert.AreEqual(2, descs.Length);
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace Castle.CastleOnRails.Framework
 	/// Decorates a controller associating a <see cref="IFilter"/>
 	/// implementation with it. More than one can be associated.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
 	public class FilterAttribute : Attribute
 	{
 		private Type _filterType;
