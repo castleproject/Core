@@ -95,11 +95,6 @@
                     AssemblyName = "Cassini"
                     HintPath = "..\lib\Cassini.dll"
                 />
-                <Reference
-                    Name = "AspnetSample"
-                    Project = "{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>

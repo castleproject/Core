@@ -42,7 +42,7 @@ namespace Castle.CastleOnRails.Engine.Tests
 
 		protected virtual String ObtainPhysicalDir()
 		{
-			String path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\AspnetSample" );
+			String path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSite" );
 			return path;
 		}
 
