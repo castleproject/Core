@@ -17,10 +17,20 @@ namespace Castle.MicroKernel
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for IProxyFactory.
+	/// Defines the contract used by the kernel 
+	/// to obtain proxies for components. The implementor
+	/// must return a proxied instance that dispatch 
+	/// the invocation to the registered interceptors in the model
 	/// </summary>
 	public interface IProxyFactory
 	{
+		/// <summary>
+		/// Implementors must create a proxy based on 
+		/// the information exposed by ComponentModel
+		/// </summary>
+		/// <param name="mode"></param>
+		/// <param name="constructorArguments"></param>
+		/// <returns></returns>
 		object Create( ComponentModel mode, params object[] constructorArguments );
 	}
 }

@@ -143,6 +143,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "views\registration\list.aspx"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "views\registration\success.aspx"
                     BuildAction = "Content"
                 />

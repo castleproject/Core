@@ -22,8 +22,13 @@ namespace Castle.Windsor.Proxy
 	using Castle.Model.Interceptor;
 
 	/// <summary>
-	/// Summary description for DefaultProxyFactory.
+	/// This implementation of <see cref="IProxyFactory"/> relies 
+	/// on DynamicProxy to deliver proxies capabilies.
 	/// </summary>
+	/// <remarks>
+	/// Note that only virtual methods can be intercepted in a 
+	/// concrete class. 
+	/// </remarks>
 	public class DefaultProxyFactory : IProxyFactory
 	{
 		private ProxyGenerator _generator;

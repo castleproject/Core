@@ -19,6 +19,7 @@ namespace Castle.CastleOnRails.Framework
 	using System.Web;
 	using System.Reflection;
 	using System.Collections;
+	using System.Collections.Specialized;
 
 	using Castle.CastleOnRails.Framework.Views;
 
@@ -33,9 +34,21 @@ namespace Castle.CastleOnRails.Framework
 		private String __viewPhysicalPath;
 		private IViewEngine __viewEngine;
 		private HttpContext __context;
+		private IDictionary __bag;
 
 		public Controller()
 		{
+			__bag = new HybridDictionary();
+		}
+
+		public String Name
+		{
+			get { return __controller; }
+		}
+
+		public IDictionary Bag
+		{
+			get { return __bag; }
 		}
 
 		protected void RenderView( String name )
@@ -53,7 +66,6 @@ namespace Castle.CastleOnRails.Framework
 		{
 			__url = url;
 			__viewPhysicalPath = viewPath;
-			// __action = action;
 			__controller = controller;
 			__viewEngine = viewEngine;
 			__context = context;

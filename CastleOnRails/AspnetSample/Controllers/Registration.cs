@@ -15,6 +15,7 @@
 namespace AspnetSample.Controllers
 {
 	using System;
+	using System.Collections;
 
 	using Castle.CastleOnRails.Framework;
 
@@ -25,6 +26,14 @@ namespace AspnetSample.Controllers
 	{
 		public void Index()
 		{
+		}
+
+		public void List()
+		{
+			IList customers = new ArrayList();
+			customers.Add( "" );
+
+			Bag.Add("customers", customers);
 		}
 
 		public void Save(String name, String address, String city, String country, int age)

@@ -14,8 +14,6 @@
 
 namespace Castle.CastleOnRails.Engine
 {
-	using System;
-	using System.Reflection;
 	using System.Web;
 	using System.Configuration;
 
