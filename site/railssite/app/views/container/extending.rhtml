@@ -3,15 +3,15 @@
 <%= render "/container/deflinks" %>
 
 In this section we'll guide you through the possibilies offered
-to augment the kernel functionality. The extending, we don't really
+to augment the kernel functionality. By 'extending', we don't really
 mean 'creating a subclass', although its possible, you don't really need
-to do it for most of cases.
+to do that for most of cases.
 
 <h3>Facilities</h3>
 
 <p>
-Facilities the units of extension, usually for a family of components. 
-They should extended the container by registering to the MicroKernel events and
+Facilities are units of extension, usually for a family of components. 
+They should extended the container by subscribing to MicroKernel events and
 defining custom steps in the model construction and different activator
 for complex components.
 </p>
@@ -20,22 +20,34 @@ for complex components.
 
 <p>
 For each component added to the kernel, a few steps are performed.
-One of the more important steps is the construction of the ComponentModel.
+One important step is the construction of the ComponentModel.
 </p>
 
 <p>
-The ComponentModel holds all the information the kernel need about a component.
-The rationale is to perform every heavy work during the container start up instead of
-performing for each lookup. So information about lifecycle, lifestyle, available constructors
+The ComponentModel holds all information the kernel needs about a component. These information
+is collected by the ComponentModelBuilder implementation exposed by the MicroKernel. Well, in fact
+the default ComponentModelBuilder implementation doesn't do much, it only allows 'contributors'
+to be registered on it, and invoke them for each component registered. More about that later.
+</p>
+
+<p>
+The rationale behind ComponentModel is to perform any heavy 
+work during the container start up instead of
+leaving the work to be performed on demand (and raising potential issues in multithreading environment). 
+So information about lifecycle, lifestyle, available constructors
 and properties that potentially refers to external dependencies, are kept in the
-ComponentModel. 
+ComponentModel, but you can use the ComponentModel to hold more meta-information and use that later.
 </p>
 
 <p>
-You can register a class to participate in this process 
-by collecting more information or even change the information collected.
-To do so, you must implement the interface IContributeComponentModelBuilder and
-add it to the ComponentModelBuilder exposed by the MicroKernel.
+As we said, the ComponentModelBuilder has a collection of contributors. 
+You can register your contributor to participate in this information collecting process 
+so you can collect more information and even change the information collected by previous
+contributors.
+To do so, you must implement the interface 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/ModelBuilder/IContributeComponentModelConstruction.cs">IContributeComponentModelConstruction</a>
+ and add it to the <a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/ModelBuilder/DefaultComponentModelBuilder.cs">ComponentModelBuilder</a>
+  exposed by the MicroKernel.
 </p>
 
 <p>
@@ -70,15 +82,25 @@ public class LifecycleModelInspector :
 }
 </pre>
 
+<p>
+More contributors used by the MicroKernel are <a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/ModelBuilder/Inspectors/ConfigurationModelInspector.cs">configuration</a>, 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/ModelBuilder/Inspectors/ConstructorDependenciesModelInspector.cs">constructor dependencies</a>, 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/ModelBuilder/Inspectors/ConstructorDependenciesModelInspector.cs">lifestyle</a> 
+and <a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/ModelBuilder/Inspectors/PropertiesDependenciesModelInspector.cs">properties dependencies</a>.
+</p>
+
+
+
 <h3>Activators</h3>
 
 <p>
-The MicroKernel uses a IComponentActivator to 
-create a set up a component instance. The default implementation
+The MicroKernel uses a implementation of <a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/ComponentActivator/IComponentActivator.cs">IComponentActivator</a>
+ to create a set up a component instance. The default implementation
 just select an appropriate constructor, instantiate the component, 
 and sets properties it could resolve. 
 However there are components that are not so easy to create.
-Components that come from factories or builders need a different approach.
+Components that come from factories or builders, remote components and so on
+ need a different approach.
 In this case you can implement the IComponentActivator, or extend the
 AbstractComponentActivator and specify your logic.
 </p>
@@ -116,9 +138,9 @@ The MicroKernel exposes the following events:
 <h3>Example: implementing the startable lifecycle</h3>
 
 <p>
-Suppose you'd like that every component registered 
-in the kernel which implements the IStartable marker interface
-be "started" as soon as they are ready.
+Suppose you'd like that every component that implements the IStartable marker interface
+ added to the kernel 
+be "started" as soon as possible.
 </p>
 
 <p>
@@ -144,6 +166,8 @@ public class StartableFacility : IFacility
   
   private void OnComponentRegistered(String key, IHandler handler)
   {
+    // The StartableModelInspector will add true to this key
+    // see below
     if (model.ExtendedProperties["startable"] != null)
     {
       // If the minimal set of dependencies are satisfied
@@ -173,8 +197,9 @@ public class StartableModelInspector :
 
 <p>
 The MicroKernel was created to be extensible, so instead of
-trying to foresee every single possibility and crossroad a 
-user might have had, we'd rather to deliver a more flexible 
+trying to foresee every single possibility and use case, we developed
+just an small core that is prepared to have every piece of it 
+augmented or replaced.
 tool.
 </p>
 

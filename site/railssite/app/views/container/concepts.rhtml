@@ -3,34 +3,37 @@
 <%= render "/container/deflinks" %>
 
 Before diving into details of how to use the containers, its time to 
-explain some concepts used:
+explain some concepts we're going to use:
 
 <ul>
-  <li>Component: a component is a smallest unit of functionality. 
+  <li>Component: a component is the smallest unit of functionality. 
   It exposes a service to the outside world. Please note that a
   component is not data. Its meaningless to register 
   something like a Value Object, for instance, in the container.
-  Its strongly adviced that you use contracts for components, i.e., 
-  interfaces to dictate the service.
+  <br>Its strongly advised that you use contracts for components, i.e. 
+  interfaces, to dictate the service, although its not required.
 </ul>
+
 <ul>
   <li>Service: sometimes we can interchange 'component' by 'service', 
   but usually a service is the contract which a component exposes and
-  implements. In practical terms its the interface exposed. 
+  implements. In practical terms its the interface. 
 </ul>
-<ul>
-  
-  <li>Facility: A facility is registered on the kernel 
-  and should extend the container by augmenting its support for
-  components by subscribing to kernel events, hence having a chance
-  to act on components.
-</ul>
-<ul>
 
-  <li>SubSystem: A SubSystem is also registered on the kernel, but its role is different.
-  The kernel actually uses subsystems to gather external information or implement a
-  specific heuristic. Common examples are a configuration subsystem, which exposes to
-  the kernel external configuration; and a lookup subsystem that tries to return a
-  component mathing a specific criteria.
+<ul>
+  <li>Facility: A facility is registered within the kernel 
+  and should extend the container by augmenting its support for
+  components. It does that using several strategies, which we'll depict in the next
+  sections.
 </ul>
+
+<ul>
+  <li>SubSystem: A SubSystem is also registered within kernel, but its role is different.
+  The kernel actually uses subsystems to gather communicate with the external workd
+  or implement a specific heuristic. 
+  Common examples are a configuration subsystem, which exposes to
+  the kernel external configuration; and a lookup subsystem that returns a
+  component matching a specific criteria.
+</ul>
+
   

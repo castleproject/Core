@@ -3,7 +3,7 @@
 <%= render "/container/deflinks" %>
 
 The Windsor container provides capabilites that
-make things even easier, life external configuration
+make things even easier, like external configuration
 from Xml files or from the AppDomain related configuration
 file.
 
@@ -11,7 +11,7 @@ file.
 
 <p>
 If you are wondering why we've decided to 
-offer the MicroKernel and the Windsor, the answer is:
+offer the MicroKernel and the Windsor, the answer is 
 separation of concerns. The MicroKernel concern is to offer an
 extensible inversion of control container core. The Windsor
 concern is to offer a facade to the kernel and deal with external 
@@ -21,11 +21,12 @@ configuration, proxies and profiles.
 <h3>How to use</h3>
 
 <p>
-The usage is similar to the use of the MicroKernel.
+The usage is similar to MicroKernel.
 Windsor will, by default, try to obtain external configurations
 from the AppDomain configuration file. If you'd like to use a different
 source, you can create your own configuration store (by implementing 
 the IConfigurationStore interface) or specifying one of those available.
+For example:
 </p>
 
 <pre class="source">
@@ -34,21 +35,22 @@ IWindsorContainer container = new WindsorContainer();
 
 // Will use a xml file
 IConfigurationStore store = 
-	new XmlConfigurationStore("file.xml");
+	new XmlConfigurationStore(@"file.xml");
 IWindsorContainer container = new WindsorContainer(store); 
 </pre>
 
 <h3>The configuration file</h3>
 
 <p>
-The configuration file is only necessary if you want to override
+The configuration file is only necessary if your component needs external parameters
+ or you want to override
 the behavior of a component, or if your components graph is 
 complex and you'd like to give some hints about how the container 
 should assemble it.
 </p>
 <p>
 If you're using the AppDomainConfigurationStore, your configuration 
-should look like the following
+should look like the following:
 </p>
 
 <pre class="source">
@@ -74,7 +76,9 @@ should look like the following
 	&lt;components&gt;
 
 		&lt;component id="testidcomponent1"&gt;
-			&lt;item&gt;value1&lt;/item&gt;
+			&lt;parameters&gt;
+			&lt;port&gt;3000&lt;/port&gt;
+			&lt;/parameters&gt;
 		&lt;/component&gt;
 
 	&lt;/components&gt;
@@ -83,7 +87,6 @@ should look like the following
 &lt;/configuration&gt;
 
 </pre>
-
 
 <h3>Profiles</h3>
 

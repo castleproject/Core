@@ -8,20 +8,20 @@ services that may be augmented at build-time
 with a variety of additional services."</i> -  'Real-Time Design Patterns' by Bruce Powel Douglass
 
 <p>
-Most of inversion of control containers implementations 
+Most inversion of control containers implementations 
 mix different concerns resulting in a tool which is hard to 
 test and hard to extend. The decision of building a simple 
 kernel simplified the development of the container and 
-allowed the improvement of functionality based on new use cases.
+allowed it to be easily extended to adjust to new use cases.
 </p>
 
 <h3>How to use</h3>
 
 <p>
 The MicroKernel usage is very simple. You only need to add components
-and it will inspect the components to try in infer the dependencies and
-parameters and try to satisfy them, when possible. In other words,
-the kernel will auto-wire the components. The standard heristic is:
+and it will inspect the components dependencies and
+properties and try to satisfy them, whenever is possible. In other words,
+the kernel will auto-wire the components. The standard flow is:
 </p>
 
 <ul>
@@ -33,11 +33,11 @@ the kernel will auto-wire the components. The standard heristic is:
 
 <p>
 You don't have to worry about the order in which the components 
-must be registered. 
+are registered. 
 </p>
 
 <p>
-Follows a example of adding a concrete class 
+The following is an example of adding a concrete class 
 as a component:
 </p>
 
@@ -62,8 +62,6 @@ kernel.AddComponent("key",
 
 </pre>
 
-
-
 <h3>Obtaining component instances</h3>
 
 <p>
@@ -71,7 +69,8 @@ To obtain a component instance, you can ask by
 its key or by the service it implements. Please note that 
 you can add more than one implementation for the same service,
 in this case, when you request a component by the service, the first 
-component registered for the service will be returned.
+component registered for the service will be returned. To obtain
+the others implementation for the same service you must use its key.
 </p>
 
 <pre class="source">
@@ -83,7 +82,7 @@ ICustomerServices instance = kernel[ typeof(ICustomerServices) ]
 
 <p>
 Its recomended that you release the component
-instance after finishing with it:
+instance after using it:
 </p>
 
 <pre class="source">
@@ -96,7 +95,7 @@ kernel.ReleaseComponent(instance);
 
 <p>
 It's not mandatory, but its important if the component uses a custom
-lifestyle or a decommission lifecycle. More on that later.
+lifestyle or a decommission lifecycle. More on that later in this section.
 </p>
 
 
@@ -177,15 +176,15 @@ on the section dedicated to Windsor.
 <h3>Lifecycle</h3>
 
 <p>
-Lifecycle is what the container must invoke on the component
+Lifecycle are the steps or phases invoked on the component 
 to ensure the correct state before and after its use. We divided 
-these phases into commission and decomnission stages.
+these stages into two groups: commission and decommission.
 </p>
 
 <p>
-Out of box, only two lifecycles are supported: the IInitialize and 
-the standard IDisposable. Its easy to augment this support, as we'll show
-later in Extending the MicroKernel.
+Out of box, only two lifecycles are supported: the Initialize and 
+the standard Dispose. Its easy to augment this support, as we'll show
+later in Extending the MicroKernel section.
 </p>
 
 <p>
