@@ -37,7 +37,7 @@ namespace Castle.Facilities.ActiveRecord.Tests.Model1
 			set { _id = value; }
 		}
 
-		[HasMany( typeof(OrderItem), "order_id" )]
+		[HasMany( typeof(OrderItem), Key = "order_id" )]
 		public IList Items
 		{
 			get { return _items; }

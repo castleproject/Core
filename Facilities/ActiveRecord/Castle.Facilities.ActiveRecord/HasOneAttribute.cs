@@ -22,21 +22,42 @@ namespace Castle.Facilities.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property)]
 	public class HasOneAttribute : Attribute
 	{
-		private Type _type;
+		private Type _mapType;
+		private string _cascade;
+		private string _constrained;
+		private string _outerJoin;
 
 		public HasOneAttribute()
 		{
 		}
 
-		public HasOneAttribute( Type _type )
+		public HasOneAttribute( Type mapType )
 		{
-			this._type = _type;
+			this._mapType = mapType;
 		}
 
-		public Type Type
+		public Type MapType
 		{
-			get { return _type; }
-			set { _type = value; }
+			get { return _mapType; }
+			set { _mapType = value; }
+		}
+
+		public string Cascade
+		{
+			get { return _cascade; }
+			set { _cascade = value; }
+		}
+
+		public string Constrained
+		{
+			get { return _constrained; }
+			set { _constrained = value; }
+		}
+
+		public string OuterJoin
+		{
+			get { return _outerJoin; }
+			set { _outerJoin = value; }
 		}
 	}
 }
