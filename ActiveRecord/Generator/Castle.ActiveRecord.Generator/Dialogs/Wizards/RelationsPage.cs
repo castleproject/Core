@@ -38,33 +38,23 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				
 				listView1.Items.Clear();
 
-				INamingService naming = ServiceRegistry.Instance[ typeof(INamingService) ] as INamingService;
+				BuildContext buildCtx = context["buildcontext"] as BuildContext;
 
-				foreach(TableDefinition otherTable in table.TablesReferencedByHasRelation)
+				IRelationshipInferenceService relationInference = ServiceRegistry.Instance[ typeof(IRelationshipInferenceService) ] as IRelationshipInferenceService;
+
+				ActiveRecordPropertyRelationDescriptor[] properties = 
+					relationInference.InferRelations( table, buildCtx );
+
+				ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
+				ar.PropertiesRelations.Clear();
+				ar.PropertiesRelations.AddRange(properties);
+
+				foreach(ActiveRecordPropertyRelationDescriptor property in properties)
 				{
-					ListViewItem item = listView1.Items.Add( naming.CreateRelationName(otherTable.Name) );
-					item.SubItems.Add( "IList TODO" );
-					item.SubItems.Add( "HasMany" );
-
-					foreach(ColumnDefinition col in otherTable.Columns)
-					{
-						if (col.RelatedTable == table)
-						{
-							item.SubItems.Add( col.Name );
-							break;
-						}
-					}
-				}
-
-				foreach(ColumnDefinition col in table.Columns)
-				{
-					if (col.RelatedTable != null)
-					{
-						ListViewItem item = listView1.Items.Add( naming.CreateClassName(col.RelatedTable.Name) );
-						item.SubItems.Add( "TODO!" );
-						item.SubItems.Add( "BelongsTo" );
-						item.SubItems.Add( col.Name );
-					}
+					ListViewItem item = listView1.Items.Add( property.PropertyName );
+					item.SubItems.Add( "TODO!" );
+					item.SubItems.Add( property.RelationType );
+					item.SubItems.Add( property.ColumnName );
 				}
 			}
 		}
@@ -73,9 +63,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		{
 			base.Deactivated(context);
 
-			if (acceptSuggestions.Checked)
+			ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
+
+			foreach(ActiveRecordPropertyDescriptor relation in ar.PropertiesRelations)
 			{
-				
+				relation.Generate = acceptSuggestions.Checked;
 			}
 		}
 

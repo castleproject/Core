@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		private String _columnTypeName = "VARCHAR";
 		private String _propertyName;
 		private Type _propertyType;
-
+		private bool _generate = true;
 
 		public ActiveRecordPropertyDescriptor(
 			String columnName, String columnTypeName, 
@@ -70,6 +70,12 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			get { return _propertyType; }
 			set { _propertyType = value; }
 		}
+
+		public bool Generate
+		{
+			get { return _generate; }
+			set { _generate = value; }
+		}
 	}
 
 	public class ActiveRecordPrimaryKeyDescriptor : ActiveRecordPropertyDescriptor
@@ -98,39 +104,65 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
-	public class ActiveRecordBelongsToDescriptor : ActiveRecordPropertyDescriptor
-	{
-		public ActiveRecordBelongsToDescriptor(
-			string columnName, string columnTypeName, 
-			string propertyName, ActiveRecordDescriptor propertyType) : 
-			base(columnName, columnTypeName, propertyName)
-		{
-		}
-	}
-
-	public class ActiveRecordHasManyDescriptor : ActiveRecordPropertyDescriptor
+	public abstract class ActiveRecordPropertyRelationDescriptor : ActiveRecordPropertyDescriptor
 	{
 		private String _relationType;
 		private ActiveRecordDescriptor _targetType;
 
-		public ActiveRecordHasManyDescriptor(
-			string columnName, 
-			string propertyName, Type propertyType, string _relationType, ActiveRecordDescriptor targetType) : 
-			base(columnName, null, propertyName, propertyType)
+		public ActiveRecordPropertyRelationDescriptor(string _columnName, string _columnTypeName, 
+			string _propertyName, string _relationType, ActiveRecordDescriptor _targetType) : 
+			base(_columnName, _columnTypeName, _propertyName)
 		{
-			_relationType = _relationType;
-			_targetType = targetType;
+			this._relationType = _relationType;
+			this._targetType = _targetType;
+		}
+
+		public string RelationType
+		{
+			get { return _relationType; }
+		}
+
+		public ActiveRecordDescriptor TargetType
+		{
+			get { return _targetType; }
 		}
 	}
 
-	public class ActiveRecordHasAndBelongsToManyDescriptor : ActiveRecordPropertyDescriptor
+	public class ActiveRecordBelongsToDescriptor : ActiveRecordPropertyRelationDescriptor
+	{
+		public ActiveRecordBelongsToDescriptor(string _columnName, 
+			string _propertyName, ActiveRecordDescriptor _targetType) : 
+			base(_columnName, "", _propertyName, "BelongsTo", _targetType)
+		{
+		}
+	}
+
+	public class ActiveRecordHasManyDescriptor : ActiveRecordPropertyRelationDescriptor
+	{
+		public ActiveRecordHasManyDescriptor(string _columnName, 
+			string _propertyName, Type propertyName, ActiveRecordDescriptor _targetType) : 
+			base(_columnName, "", _propertyName, "HasMany", _targetType)
+		{
+			base.PropertyType = propertyName;
+		}
+	}
+
+	public class ActiveRecordHasOneDescriptor : ActiveRecordPropertyRelationDescriptor
+	{
+		public ActiveRecordHasOneDescriptor(string _columnName, 
+			string _propertyName, ActiveRecordDescriptor _targetType) : 
+			base(_columnName, "", _propertyName, "HasOne", _targetType)
+		{
+		}
+	}
+
+	public class ActiveRecordHasAndBelongsToManyDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		private String _columnKey;
 
-		public ActiveRecordHasAndBelongsToManyDescriptor(
-			string columnName, string columnTypeName, 
-			string propertyName, Type propertyType, string _columnKey) : 
-			base(columnName, columnTypeName, propertyName, propertyType)
+		public ActiveRecordHasAndBelongsToManyDescriptor(string _columnName, string _columnTypeName, 
+			string _propertyName, ActiveRecordDescriptor _targetType, string _columnKey) : 
+			base(_columnName, _columnTypeName, _propertyName, "HasAndBelongsToMany", _targetType)
 		{
 			this._columnKey = _columnKey;
 		}

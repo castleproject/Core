@@ -34,6 +34,9 @@ namespace Castle.ActiveRecord.Generator
 			AddComponent("db.def.builder", typeof(IDatabaseDefinitionBuilder), typeof(DatabaseDefinitionBuilder));
 			AddComponent("naming.service", typeof(INamingService), typeof(NamingService));
 			AddComponent("typeinfer.service", typeof(ITypeInferenceService), typeof(TypeInferenceService) );
+			AddComponent("arbuilder", typeof(IActiveRecordDescriptorBuilder), typeof(ActiveRecordDescriptorBuilder) );
+			AddComponent("plainfields.service", typeof(IPlainFieldInferenceService), typeof(PlainFieldInferenceService) );
+			AddComponent("relation.service", typeof(IRelationshipInferenceService), typeof(RelationshipInferenceService) );
 		}
 
 		public static ServiceRegistry Instance

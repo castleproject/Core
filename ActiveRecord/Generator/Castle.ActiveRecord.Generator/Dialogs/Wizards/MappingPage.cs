@@ -30,28 +30,38 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			typeInference = ServiceRegistry.Instance[ typeof(ITypeInferenceService) ] as ITypeInferenceService;
 		}
 
-		public override void Activated(System.Collections.IDictionary context)
+		public override void Activated(IDictionary context)
 		{
 			TableDefinition table = context["selectedtable"] as TableDefinition;
 			
 			if (table != _oldTable)
 			{
 				_oldTable = table;
+
+				IPlainFieldInferenceService fieldInference = ServiceRegistry.Instance[ typeof(IPlainFieldInferenceService) ] as IPlainFieldInferenceService;
+
+				ActiveRecordPropertyDescriptor[] properties = 
+					fieldInference.InferProperties( table );
+
+				ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
+				ar.Properties.Clear();
+				ar.Properties.AddRange(properties);
 				
+
 				listView1.Items.Clear();
 
-				foreach(ColumnDefinition col in table.Columns)
+				foreach(ActiveRecordPropertyDescriptor desc in properties)
 				{
-					ListViewItem item = listView1.Items.Add( naming.CreatePropertyName(col.Name) );
-					item.Tag = col;
-					item.SubItems.Add( typeInference.ConvertOleType(col.Type).ToString() );
-					item.SubItems.Add( col.Name );
-					item.SubItems.Add( col.Type.ToString() );
+					ListViewItem item = listView1.Items.Add( desc.PropertyName );
+					item.Tag = desc;
+					item.SubItems.Add( desc.PropertyType.Name );
+					item.SubItems.Add( desc.ColumnName );
+					item.SubItems.Add( desc.ColumnTypeName );
 				}
 			}
 		}
 
-		public override void Deactivated(System.Collections.IDictionary context)
+		public override void Deactivated(IDictionary context)
 		{
 			base.Deactivated(context);
 
@@ -61,24 +71,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 			foreach(ListViewItem item in listView1.Items)
 			{
-				ColumnDefinition col = item.Tag as ColumnDefinition;
-				
-				String propertyName = item.Text;
-				Type propertyType = typeInference.ConvertOleType(col.Type);
-				String colTypeName = col.Type.ToString();
-
-				if (col.PrimaryKey) // PK is always generated
-				{
-					desc.Properties.Add(
-						new ActiveRecordPrimaryKeyDescriptor(
-							col.Name, colTypeName, propertyName, propertyType, "Native"));
-				}
-				else if (item.Checked)
-				{
-					desc.Properties.Add(
-						new ActiveRecordFieldDescriptor(
-							col.Name, colTypeName, propertyName, propertyType, col.Nullable));
-				}
+				ActiveRecordPropertyDescriptor property = item.Tag as ActiveRecordPropertyDescriptor;
+				property.Generate = item.Checked;
 			}
 		}
 

@@ -36,6 +36,19 @@ namespace Castle.ActiveRecord.Generator.Components
 
 		#region IActiveRecordDescriptorBuilder Members
 
+		public ActiveRecordDescriptor[] Build(BuildContext context)
+		{
+			while(context.HasPendents)
+			{
+				ActiveRecordDescriptor pendent = context.GetNextPendent();
+				Build(pendent.Table, context);
+			}
+			
+			ActiveRecordDescriptor[] array = new ActiveRecordDescriptor[context.NewlyCreatedDescriptors.Count];
+			context.NewlyCreatedDescriptors.CopyTo(array, 0);
+			return array;
+		}
+
 		public ActiveRecordDescriptor Build(TableDefinition tableDef, BuildContext context)
 		{
 			ActiveRecordDescriptor desc = ObtainDescriptor(tableDef);
@@ -56,10 +69,9 @@ namespace Castle.ActiveRecord.Generator.Components
 
 			// TODO!
 
-			while(context.HasPendents)
-			{
-				break;
-			}
+			context.RemovePendent(desc);
+
+			Build(context);
 
 			return desc;
 		}

@@ -1,5 +1,3 @@
-using Castle.ActiveRecord.Generator.Components.Database;
-
 namespace Castle.ActiveRecord.Generator.Parts
 {
 	using System;
@@ -13,7 +11,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 	using Castle.ActiveRecord.Generator.Parts.Shapes;
 	using Castle.ActiveRecord.Generator.Dialogs;
 	using Castle.ActiveRecord.Generator.Dialogs.Wizards;
-
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 	/// <summary>
 	/// Summary description for ActiveRecordGraphView
@@ -199,9 +197,11 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 		private void graphControl1_OnShapeAdded(object sender, Netron.GraphLib.Shape shape)
 		{
-			if (shape is ActiveRecordShape)
+			ActiveRecordShape arshape = shape as ActiveRecordShape;
+
+			if (arshape != null)
 			{
-				using(NewARClassWizard wizard = new NewARClassWizard(_model, shape))
+				using(NewARClassWizard wizard = new NewARClassWizard(_model, arshape))
 				{
 					if (wizard.ShowDialog(this) != DialogResult.OK)
 					{
@@ -210,6 +210,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 					}
 
 					EnsureHasParent(shape);
+					CreateDependents(wizard.Dependents);
 				}
 			}
 		}
@@ -293,6 +294,22 @@ namespace Castle.ActiveRecord.Generator.Parts
 			conn.LineEnd = ConnectionEnds.RightOpenArrow;
 			
 			return conn;
+		}
+
+		private void CreateDependents(ActiveRecordDescriptor[] dependents)
+		{
+			if (dependents == null) return;
+
+			Random rnd = new Random(1);
+
+			foreach(ActiveRecordDescriptor desc in dependents)
+			{
+				ActiveRecordShape shape = (ActiveRecordShape) graphControl1.AddShape(
+					"castle.ar.shape", new PointF(80,20)); 
+				shape.ActiveRecordDescriptor = desc;
+				shape.X = rnd.Next(50,graphControl1.Width-100);
+				shape.Y = rnd.Next(50,graphControl1.Height-20);
+			}
 		}
 	}
 }

@@ -6,6 +6,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 	using System.Drawing;
 	using System.Data;
 	using System.Windows.Forms;
+	using Castle.ActiveRecord.Generator.Components;
 	using Castle.ActiveRecord.Generator.Components.Database;
 
 	/// <summary>
@@ -15,6 +16,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 	{
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.ListBox listBox1;
+
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
@@ -32,19 +34,20 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Component Designer generated code
+
 		/// <summary> 
 		/// Required method for Designer support - do not modify 
 		/// the contents of this method with the code editor.
@@ -79,17 +82,18 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			// 
 			this.Controls.Add(this.listBox1);
 			this.Controls.Add(this.textBox1);
-			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.Name = "TableSelectionPage";
 			this.Size = new System.Drawing.Size(616, 344);
 			this.ResumeLayout(false);
 
 		}
+
 		#endregion
 
 		public override void Activated(IDictionary context)
 		{
-			DatabaseDefinition db =  context["selecteddb"] as DatabaseDefinition;
+			DatabaseDefinition db = context["selecteddb"] as DatabaseDefinition;
 
 			if (db == null)
 			{
@@ -103,7 +107,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				listBox1.Items.Clear();
 				listBox1.ValueMember = "Name";
 
-				foreach(TableDefinition table in db.Tables)
+				foreach (TableDefinition table in db.Tables)
 				{
 					listBox1.Items.Add(table);
 				}
@@ -113,6 +117,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		public override void Deactivated(System.Collections.IDictionary context)
 		{
 			context["selectedtable"] = listBox1.SelectedItem;
+			context["buildcontext"] = new BuildContext();
 
 			ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
 			ar.Table = listBox1.SelectedItem as TableDefinition;
@@ -130,10 +135,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 		public override String ErrorMessage
 		{
-			get
-			{
-				return "Please select a table";
-			}
+			get { return "Please select a table"; }
 		}
 	}
 }

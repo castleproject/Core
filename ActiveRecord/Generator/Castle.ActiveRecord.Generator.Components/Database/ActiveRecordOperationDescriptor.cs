@@ -19,8 +19,8 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 	public abstract class ActiveRecordOperationDescriptor
 	{
-		private String _name;
-		private Type _returnType;
-		private bool _static;
+//		private String _name;
+//		private Type _returnType;
+//		private bool _static;
 	}
 }

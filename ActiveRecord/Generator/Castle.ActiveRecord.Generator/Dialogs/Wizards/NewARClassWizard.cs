@@ -1,5 +1,4 @@
-using Castle.ActiveRecord.Generator.Components.Database;
-using Castle.ActiveRecord.Generator.Parts.Shapes;
+using Castle.ActiveRecord.Generator.Components;
 
 namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 {
@@ -10,14 +9,25 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 	using System.Windows.Forms;
 	using Netron.GraphLib;
 
+	using Castle.ActiveRecord.Generator.Components.Database;
+	using Castle.ActiveRecord.Generator.Parts.Shapes;
+
+
 	public class NewARClassWizard : WizardBaseDialog
 	{
 		private System.ComponentModel.IContainer components = null;
-		private Shape _shape;
+		private ActiveRecordShape _shape;
+		private ActiveRecordDescriptor[] _dependents;
 
-		public NewARClassWizard(Model model, Shape shape) : base(model)
+		public NewARClassWizard(Model model, ActiveRecordShape shape) : base(model)
 		{
+//			if (shape.ActiveRecordDescriptor == null)
+//			{
+//				throw new ArgumentException("No AR instance in shape");
+//			}
+
 			_shape = shape;
+
 			Context["ardesc"] = new ActiveRecordDescriptor();
 
 			InitializeComponent();
@@ -63,8 +73,22 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 			ar.Table = (Context["selectedtable"] as TableDefinition);
 			ar.Table.RelatedDescriptor = ar;
+			_shape.ActiveRecordDescriptor = ar;
 
-			(_shape as ActiveRecordShape).ActiveRecordDescriptor = ar;
+			// Build dependencies
+
+			IActiveRecordDescriptorBuilder builder = 
+				ServiceRegistry.Instance[ typeof(IActiveRecordDescriptorBuilder) ] 
+				as IActiveRecordDescriptorBuilder;
+
+			BuildContext buildContext = Context["buildcontext"] as BuildContext;
+			Dependents = builder.Build( buildContext );
+		}
+
+		public ActiveRecordDescriptor[] Dependents
+		{
+			set { _dependents = value; }
+			get { return _dependents;  }
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Castle.ActiveRecord.Generator.Components
 
 		#region IRelationShipInferenceService Members
 
-		public ActiveRecordPropertyDescriptor[] InferRelations(TableDefinition tableDef, BuildContext context)
+		public ActiveRecordPropertyRelationDescriptor[] InferRelations(TableDefinition tableDef, BuildContext context)
 		{
 			ArrayList list = new ArrayList();
 
@@ -39,7 +39,7 @@ namespace Castle.ActiveRecord.Generator.Components
 
 			CreateBelongsToRelations(tableDef, list, context);
 
-			return (ActiveRecordPropertyDescriptor[]) list.ToArray( typeof(ActiveRecordPropertyDescriptor) );
+			return (ActiveRecordPropertyRelationDescriptor[]) list.ToArray( typeof(ActiveRecordPropertyRelationDescriptor) );
 		}
 
 		private void CreateBelongsToRelations(TableDefinition tableDef, IList list, BuildContext context)
@@ -64,7 +64,7 @@ namespace Castle.ActiveRecord.Generator.Components
 
 					ActiveRecordBelongsToDescriptor belongsTo = 
 						new ActiveRecordBelongsToDescriptor(col.Name, 
-							col.Type.ToString(), propertyName, propertyType);
+							propertyName, propertyType);
 
 					list.Add(belongsTo);
 				}
@@ -105,7 +105,7 @@ namespace Castle.ActiveRecord.Generator.Components
 				if (colName == null) continue;
 
 				ActiveRecordHasManyDescriptor hasMany = 
-					new ActiveRecordHasManyDescriptor(colName, propertyName, propertyType, "Bag", targetType);
+					new ActiveRecordHasManyDescriptor(colName, propertyName, propertyType, targetType);
 				
 				list.Add(hasMany);
 			}

@@ -1,4 +1,3 @@
-using Castle.ActiveRecord.Generator.Components.Database;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +24,8 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 	using Netron.GraphLib.Interfaces;
 	using Netron.GraphLib.Attributes;
 
+	using Castle.ActiveRecord.Generator.Components.Database;
+
 
 	[Serializable]
 	[NetronGraphShape("ActiveRecord", 
@@ -38,7 +39,7 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		private Connector TopNode;
 		private Connector BottomNode;
 
-		private ActiveRecordDescriptor _activeRecordDescriptor = new ActiveRecordDescriptor("ClassName");
+		private ActiveRecordDescriptor _activeRecordDescriptor;
 
 
 		public ActiveRecordShape() : base()
@@ -109,6 +110,12 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 				className = _activeRecordDescriptor.ClassName;
 				alias = _activeRecordDescriptor.Table.DatabaseDefinition.Alias;
 				tableName = _activeRecordDescriptor.Table.Name;
+			}
+			else
+			{
+				className = "Class name";
+				alias = "[alias]";
+				tableName = "table";
 			}
 
 			if (recalculateSize)

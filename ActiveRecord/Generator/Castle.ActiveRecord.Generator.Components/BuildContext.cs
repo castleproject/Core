@@ -23,9 +23,15 @@ namespace Castle.ActiveRecord.Generator.Components
 	public class BuildContext
 	{
 		private IList _pendents = new ArrayList();
+		private IList _newlyCreated = new ArrayList();
 
 		public BuildContext()
 		{
+		}
+
+		public IList NewlyCreatedDescriptors
+		{
+			get { return _newlyCreated; }
 		}
 
 		public void AddPendentDescriptor(ActiveRecordDescriptor descriptor)
@@ -39,6 +45,8 @@ namespace Castle.ActiveRecord.Generator.Components
 		public void RemovePendent(ActiveRecordDescriptor descriptor)
 		{
 			_pendents.Remove(descriptor);
+
+			_newlyCreated.Add(descriptor);
 		}
 
 		public bool HasPendents

@@ -1,4 +1,3 @@
-using System.Data.OleDb;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +15,7 @@ using System.Data.OleDb;
 namespace Castle.ActiveRecord.Generator.Components.Tests
 {
 	using System;
+	using System.Data.OleDb;
 
 	using NUnit.Framework;
 
