@@ -31,8 +31,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// </summary>
 	public class ClassProxyGenerator : BaseCodeGenerator
 	{
-		private static readonly Type INVOCATION_TYPE = typeof(SameClassInvocation);
-
 		private bool _delegateToBaseGetObjectData;
 		
 		protected ConstructorInfo _serializationConstructor;
@@ -47,7 +45,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected override Type InvocationType
 		{
-			get { return INVOCATION_TYPE; }
+			get { return Context.SameClassInvocation; }
 		}
 
 		protected override String GenerateTypeName(Type type, Type[] interfaces)
@@ -70,7 +68,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			ArrayList arguments = new ArrayList();
 
-			ArgumentReference arg1 = new ArgumentReference( typeof(IInterceptor) );
+			ArgumentReference arg1 = new ArgumentReference( Context.Interceptor );
 			ArgumentReference arg2 = new ArgumentReference( typeof(object[]) );
 
 			arguments.Add( arg1 );
@@ -114,7 +112,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			VirtualMethodInvocationExpression getInterceptorInvocation =
 				new VirtualMethodInvocationExpression(arg1, getValueMethod, 
 				new FixedReference("__interceptor").ToExpression(), 
-				new TypeTokenExpression( typeof(IInterceptor) ) );
+				new TypeTokenExpression( Context.Interceptor ) );
 
 			VirtualMethodInvocationExpression getMixinsInvocation =
 				new VirtualMethodInvocationExpression(arg1, getValueMethod, 

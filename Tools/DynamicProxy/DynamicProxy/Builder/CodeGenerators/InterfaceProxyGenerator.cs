@@ -1,5 +1,3 @@
-using System.Reflection;
-using System.Runtime.Serialization;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +16,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
 	using System.Text;
+	using System.Reflection;
+	using System.Runtime.Serialization;
 
 	using Castle.DynamicProxy.Invocation;
 	using Castle.DynamicProxy.Builder.CodeBuilder;
@@ -28,8 +28,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// </summary>
 	public class InterfaceProxyGenerator : BaseCodeGenerator
 	{
-		private static readonly Type INVOCATION_TYPE = typeof(InterfaceInvocation);
-
 		protected FieldReference _targetField;
 
 		public InterfaceProxyGenerator(ModuleScope scope) : base(scope)
@@ -42,7 +40,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected override Type InvocationType
 		{
-			get { return INVOCATION_TYPE; }
+			get { return Context.InterfaceInvocation; }
 		}
 
 		protected override String GenerateTypeName(Type type, Type[] interfaces)
@@ -69,7 +67,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		protected override EasyConstructor GenerateConstructor()
 		{
-			ArgumentReference arg1 = new ArgumentReference( typeof(IInterceptor) );
+			ArgumentReference arg1 = new ArgumentReference( Context.Interceptor );
 			ArgumentReference arg2 = new ArgumentReference( typeof(object) );
 			ArgumentReference arg3 = new ArgumentReference( typeof(object[]) );
 

@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy
 	using System.Runtime.Serialization;
 
 	using Castle.DynamicProxy.Serialization;
+	using Castle.DynamicProxy.Invocation;
 
 	/// <summary>
 	/// Summary description for GeneratorContext.
@@ -30,6 +31,10 @@ namespace Castle.DynamicProxy
 		private IList _skipMethods = new ArrayList();
 		private ArrayList _mixins = new ArrayList();
 		private Type _proxyObjectReference = typeof(ProxyObjectReference);
+		private Type _interceptor = typeof(IInterceptor);
+		private Type _invocation = typeof(IInvocation);
+		private Type _interfaceInvocation = typeof(InterfaceInvocation);
+		private Type _sameClassInvocation = typeof(SameClassInvocation);
 
 		public GeneratorContext()
 		{
@@ -52,6 +57,30 @@ namespace Castle.DynamicProxy
 		{
 			get { return _proxyObjectReference; }
 			set { _proxyObjectReference = value; }
+		}
+
+		public Type Interceptor
+		{
+			get { return _interceptor; }
+			set { _interceptor = value; }
+		}
+
+		public Type Invocation
+		{
+			get { return _invocation; }
+			set { _invocation = value; }
+		}
+
+		public Type InterfaceInvocation
+		{
+			get { return _interfaceInvocation; }
+			set { _interfaceInvocation = value; }
+		}
+
+		public Type SameClassInvocation
+		{
+			get { return _sameClassInvocation; }
+			set { _sameClassInvocation = value; }
 		}
 
 		public bool HasMixins

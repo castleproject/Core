@@ -157,7 +157,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual void GenerateFields()
 		{
-			_interceptorField = _typeBuilder.CreateField("__interceptor", typeof (IInterceptor));
+			_interceptorField = _typeBuilder.CreateField("__interceptor", Context.Interceptor);
 			_cacheField = _typeBuilder.CreateField("__cache", typeof (HybridDictionary), false);
 			_mixinField = _typeBuilder.CreateField("__mixin", typeof (object[]));
 		}
@@ -244,13 +244,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ArgumentReference arg1 = new ArgumentReference( typeof(ICallable) );
 			ArgumentReference arg2 = new ArgumentReference( typeof(MethodInfo) );
 			_method2Invocation = MainTypeBuilder.CreateMethod("_Method2Invocation", 
-				new ReturnReferenceExpression(typeof(IInvocation)), arg1, arg2);
+				new ReturnReferenceExpression(Context.Invocation), arg1, arg2);
 
 			LocalReference invocation_local = 
-				_method2Invocation.CodeBuilder.DeclareLocal(typeof (IInvocation));
+				_method2Invocation.CodeBuilder.DeclareLocal(Context.Invocation);
 
 			_method2Invocation.CodeBuilder.AddStatement( new AssignStatement( invocation_local,
-				new ConvertExpression( typeof(IInvocation), 
+				new ConvertExpression( Context.Invocation, 
 					new VirtualMethodInvocationExpression(CacheField, 
 					get_ItemMethod, 
 					arg2.ToExpression() ) ) ) );
@@ -567,7 +567,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			ArgumentReference[] arguments = builder.Arguments;
 
-			LocalReference local_inv = builder.CodeBuilder.DeclareLocal(typeof (IInvocation));   
+			LocalReference local_inv = builder.CodeBuilder.DeclareLocal(Context.Invocation);   
 
 			EasyCallable callable = _method2Delegate[method] as EasyCallable;
 			FieldReference fieldDelegate = ObtainCallableFieldBuilderDelegate( callable );
@@ -583,7 +583,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			builder.CodeBuilder.AddStatement( 
 				new AssignStatement( ret_local,
 					new VirtualMethodInvocationExpression( InterceptorField,
-						typeof (IInterceptor).GetMethod("Intercept"), 
+						Context.Interceptor.GetMethod("Intercept"), 
 						local_inv.ToExpression(),
 						new ReferencesToObjectArrayExpression(arguments))));
 			
