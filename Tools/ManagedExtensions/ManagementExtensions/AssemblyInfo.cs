@@ -24,6 +24,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.0.0.0")]
+
+#if STRONG
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("")]
+[assembly: AssemblyKeyFile("../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
+#endif
