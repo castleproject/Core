@@ -21,8 +21,9 @@ namespace Castle.DynamicProxy.Test
 
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Test.Classes;
+	using Castle.DynamicProxy.Test.Interceptors;
 	using Castle.DynamicProxy.Test.ClassInterfaces;
-
+	
 
 	[TestFixture]
 	public class ProxyGeneratorTestCase
@@ -276,39 +277,6 @@ namespace Castle.DynamicProxy.Test
 
 			int i = 10;
 			Assert.AreEqual(i, proxy.Pong(i));
-		}
-
-		public class MyInterfaceProxy : StandardInterceptor
-		{
-			protected override void PreProceed(IInvocation invocation, params object[] args)
-			{
-				base.PreProceed(invocation, args);
-			}
-		}
-	}
-
-	public class HashtableInterceptor : StandardInterceptor
-	{
-		public override object Intercept(IInvocation invocation, params object[] args)
-		{
-			if (invocation.Method.Name.Equals("get_Item"))
-			{
-				object item = base.Intercept(invocation, args);
-				return (item == null) ? "default" : item;
-			}
-			return base.Intercept(invocation, args);
-		}
-	}
-
-	public class ResultModifiedInvocationHandler : StandardInterceptor
-	{
-		protected override void PostProceed(IInvocation invocation, ref object returnValue, params object[] arguments)
-		{
-			if ( returnValue != null && returnValue.GetType() == typeof(int))
-			{
-				int value = (int) returnValue;
-				returnValue = --value;
-			}
 		}
 	}
 }

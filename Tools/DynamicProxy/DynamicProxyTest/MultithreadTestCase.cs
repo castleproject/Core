@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Test
 	using NUnit.Framework;
 
 	using Castle.DynamicProxy.Test.Classes;
+	using Castle.DynamicProxy.Test.Interceptors;
 
 	/// <summary>
 	/// Summary description for MultithreadTestCase.

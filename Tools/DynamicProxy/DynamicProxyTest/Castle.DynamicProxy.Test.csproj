@@ -230,6 +230,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Interceptors\HashtableInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interceptors\MyInterfaceProxy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Interceptors\ResultModifiedInvocationHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Mixins\ComplexMixin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
