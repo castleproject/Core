@@ -1,13 +1,13 @@
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Windows.Forms;
-using Castle.ActiveRecord.Generator.Components.Database;
-
 namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 {
+	using System;
+	using System.Collections;
+	using System.ComponentModel;
+	using System.Drawing;
+	using System.Data;
+	using System.Windows.Forms;
+	using Castle.ActiveRecord.Generator.Components.Database;
+
 	/// <summary>
 	/// Summary description for TableSelectionPage.
 	/// </summary>
@@ -20,13 +20,13 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
+		private DatabaseDefinition _oldDb;
+
+
 		public TableSelectionPage() : base("Table Selection")
 		{
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
-
-			// TODO: Add any initialization after the InitializeComponent call
-
 		}
 
 		/// <summary> 
@@ -54,7 +54,6 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.listBox1 = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
-
 			// 
 			// textBox1
 			// 
@@ -70,7 +69,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			// 
 			// listBox1
 			// 
-			this.listBox1.Location = new System.Drawing.Point(152, 104);
+			this.listBox1.Location = new System.Drawing.Point(156, 104);
 			this.listBox1.Name = "listBox1";
 			this.listBox1.Size = new System.Drawing.Size(304, 212);
 			this.listBox1.TabIndex = 3;
@@ -97,12 +96,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				throw new ApplicationException("No database definition selected");
 			}
 
-			listBox1.Items.Clear();
-			listBox1.ValueMember = "Name";
-
-			foreach(TableDefinition table in db.Tables)
+			if (db != _oldDb)
 			{
-				listBox1.Items.Add(table);
+				_oldDb = db;
+
+				listBox1.Items.Clear();
+				listBox1.ValueMember = "Name";
+
+				foreach(TableDefinition table in db.Tables)
+				{
+					listBox1.Items.Add(table);
+				}
 			}
 		}
 

@@ -1,17 +1,25 @@
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
+using Castle.ActiveRecord.Generator.Components.Database;
+using Castle.ActiveRecord.Generator.Parts.Shapes;
 
 namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 {
-	public class NewARClassWizard : Castle.ActiveRecord.Generator.Dialogs.Wizards.WizardBaseDialog
+	using System;
+	using System.Collections;
+	using System.ComponentModel;
+	using System.Drawing;
+	using System.Windows.Forms;
+	using Netron.GraphLib;
+
+	public class NewARClassWizard : WizardBaseDialog
 	{
 		private System.ComponentModel.IContainer components = null;
+		private Shape _shape;
 
-		public NewARClassWizard(Model model) : base(model)
+		public NewARClassWizard(Model model, Shape shape) : base(model)
 		{
+			_shape = shape;
+			Context["ardesc"] = new ActiveRecordDescriptor();
+
 			InitializeComponent();
 
 			Title = "New ActiveRecord class";
@@ -20,6 +28,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			AddPage(new TableSelectionPage());
 			AddPage(new MappingPage());
 			AddPage(new RelationsPage());
+			AddPage(new ClassNamePage());
 		}
 
 		/// <summary>
@@ -47,6 +56,16 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			components = new System.ComponentModel.Container();
 		}
 		#endregion
+
+		protected override void DoProcess()
+		{
+			ActiveRecordDescriptor ar = Context["ardesc"] as ActiveRecordDescriptor;
+
+			ar.TableName = (Context["selectedtable"] as TableDefinition).Name;
+			ar.DbAlias = (Context["selecteddb"] as DatabaseDefinition).Alias;
+
+			(_shape as ActiveRecordShape).ActiveRecordDescriptor = ar;
+		}
 	}
 }
 

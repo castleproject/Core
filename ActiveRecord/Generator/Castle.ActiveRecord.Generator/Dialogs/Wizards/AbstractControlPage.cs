@@ -112,7 +112,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 		public virtual String ErrorMessage
 		{
-			get { return ""; }
+			get { return null; }
 		}
 
 		public event System.EventHandler OnChange;

@@ -22,6 +22,40 @@ namespace Castle.ActiveRecord.Generator.Components
 
 	public class NamingService : INamingService
 	{
+//		def plural_rules #:doc:
+//			[
+//		[/fish$/, 'fish'],               # fish
+//		[/(x|ch|ss|sh)$/, '\1es'],               # search, switch, fix, box, process, address
+//		[/series$/, '\1series'],
+//		[/([^aeiouy]|qu)ies$/, '\1y'],
+//		[/([^aeiouy]|qu)y$/, '\1ies'],        # query, ability, agency
+//		[/(?:([^f])fe|([lr])f)$/, '\1\2ves'], # half, safe, wife
+//		[/sis$/, 'ses'],                      # basis, diagnosis
+//		[/([ti])um$/, '\1a'],                 # datum, medium
+//		[/person$/, 'people'],                # person, salesperson
+//		[/man$/, 'men'],                      # man, woman, spokesman
+//		[/child$/, 'children'],               # child
+//		[/s$/, 's'],                          # no change (compatibility)
+//		[/$/, 's']
+//		]
+//		end
+
+		private Pair[] pluralRules = new Pair[] 
+			{
+				new Pair("(x|ch|ss|sh)$", "$1es"), 
+				new Pair("series$", "$1series"),
+				new Pair("([^aeiouy]|qu)ies$", "$1y"),
+				new Pair("([^aeiouy]|qu)y$", "$1ies"),
+				new Pair("(?:([^f])fe|([lr])f)$", "$1$2ves"),
+				new Pair("sis$", "ses"),
+				new Pair("([ti])um$", "$1a"),
+				new Pair("person$", "people"),
+				new Pair("man$", "men"),
+				new Pair("child$", "children")//,
+//				new Pair("s$", "s"),
+//				new Pair("$", "s"),
+		};
+
 		private Pair[] singularRules = new Pair[] 
 			{
 				new Pair("(x|ch|ss)es$", @"$1"), 
@@ -42,9 +76,14 @@ namespace Castle.ActiveRecord.Generator.Components
 		{
 		}
 
-		public String CreateRelationName(String referencedTableName)
+		public String CreateRelationName(String tableName)
 		{
-			throw new NotImplementedException();
+			MatchEvaluator UpCaser = new MatchEvaluator(UpCaserDef);
+
+			tableName = Regex.Replace(tableName, "(tb_|_)", "");
+			tableName = Regex.Replace(tableName, "^[a-z]", UpCaser);
+
+			return Pluralize(tableName);
 		}
 
 		public String CreateClassName(String tableName)
@@ -98,6 +137,20 @@ namespace Castle.ActiveRecord.Generator.Components
 		private string Singularize(string name)
 		{
 			foreach(Pair pair in singularRules)
+			{
+				String result = Regex.Replace(name, pair.First, pair.Second);
+				if (result != name)
+				{
+					return result;
+				}
+			}
+
+			return name; 
+		}
+
+		private string Pluralize(string name)
+		{
+			foreach(Pair pair in pluralRules)
 			{
 				String result = Regex.Replace(name, pair.First, pair.Second);
 				if (result != name)

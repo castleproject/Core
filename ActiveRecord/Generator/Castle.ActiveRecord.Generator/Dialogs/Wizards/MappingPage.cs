@@ -18,13 +18,16 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.ComponentModel.IContainer components = null;
 		private TableDefinition _oldTable;
+		private INamingService naming;
+		private ITypeInferenceService typeInference;
 
 		public MappingPage() : base("Fields mapping")
 		{
 			// This call is required by the Windows Form Designer.
 			InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
+			naming = ServiceRegistry.Instance[ typeof(INamingService) ] as INamingService;
+			typeInference = ServiceRegistry.Instance[ typeof(ITypeInferenceService) ] as ITypeInferenceService;
 		}
 
 		public override void Activated(System.Collections.IDictionary context)
@@ -37,15 +40,44 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				
 				listView1.Items.Clear();
 
-				INamingService naming = ServiceRegistry.Instance[ typeof(INamingService) ] as INamingService;
-				ITypeInferenceService typeInference = ServiceRegistry.Instance[ typeof(ITypeInferenceService) ] as ITypeInferenceService;
-
 				foreach(ColumnDefinition col in table.Columns)
 				{
 					ListViewItem item = listView1.Items.Add( naming.CreatePropertyName(col.Name) );
+					item.Tag = col;
 					item.SubItems.Add( typeInference.ConvertOleType(col.Type).ToString() );
 					item.SubItems.Add( col.Name );
 					item.SubItems.Add( col.Type.ToString() );
+				}
+			}
+		}
+
+		public override void Deactivated(System.Collections.IDictionary context)
+		{
+			base.Deactivated(context);
+
+			ActiveRecordDescriptor desc = context["ardesc"] as ActiveRecordDescriptor;
+
+			desc.Properties.Clear();
+
+			foreach(ListViewItem item in listView1.Items)
+			{
+				ColumnDefinition col = item.Tag as ColumnDefinition;
+				
+				String propertyName = item.Text;
+				Type propertyType = typeInference.ConvertOleType(col.Type);
+				String colTypeName = col.Type.ToString();
+
+				if (col.PrimaryKey) // PK is always generated
+				{
+					desc.Properties.Add(
+						new ActiveRecordPrimaryKeyDescriptor(
+							col.Name, colTypeName, propertyName, propertyType, "Native"));
+				}
+				else if (item.Checked)
+				{
+					desc.Properties.Add(
+						new ActiveRecordFieldDescriptor(
+							col.Name, colTypeName, propertyName, propertyType, col.Nullable));
 				}
 			}
 		}
@@ -98,6 +130,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 																						this.columnHeader3,
 																						this.columnHeader4});
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.listView1.LabelEdit = true;
 			this.listView1.Location = new System.Drawing.Point(16, 88);
 			this.listView1.Name = "listView1";
 			this.listView1.Size = new System.Drawing.Size(576, 232);

@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Generator.Components.Database;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +18,6 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 	using System;
 	using System.IO;
 	using System.Drawing;
-	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Reflection;
 
@@ -33,12 +33,14 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		"Represents an ActiveRecord class")]
 	public class ActiveRecordShape : Shape
 	{
-		private String _name;
-		private String _table;
 		private float _lineHeight;
 
 		private Connector TopNode;
 		private Connector BottomNode;
+
+		private ActiveRecordDescriptor _activeRecordDescriptor = 
+			new ActiveRecordDescriptor("ClassName", "TableName", "Database Alias");
+
 
 		public ActiveRecordShape() : base()
 		{
@@ -48,18 +50,6 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		public ActiveRecordShape(IGraphSite site) : base(site)
 		{
 			Init(true);
-		}
-
-		public string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-
-		public string Table
-		{
-			get { return _table; }
-			set { _table = value; }
 		}
 
 		private void Init(bool resizable)
@@ -113,13 +103,13 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 
 			if (recalculateSize)
 			{
-				SizeF size1 = g.MeasureString(Name + "\"\"", mFont);
-//				SizeF size2 = g.MeasureString(mText, mFont);
-				SizeF size3 = g.MeasureString(Table, mFont);
+				SizeF size1 = g.MeasureString(_activeRecordDescriptor.ClassName + "\"\"", mFont);
+				SizeF size2 = g.MeasureString(_activeRecordDescriptor.DbAlias + "[]", mFont);
+				SizeF size3 = g.MeasureString(_activeRecordDescriptor.TableName, mFont);
 
 				_lineHeight = size1.Height;
 
-				SizeF max = new SizeF(Math.Max(size1.Width, size3.Width) + 3,
+				SizeF max = new SizeF(Math.Max(size1.Width, Math.Max(size2.Width, size3.Width)) + 3,
 				                      (_lineHeight*3) + 10);
 
 				Rectangle = new RectangleF(new PointF(Rectangle.X, Rectangle.Y), max);
@@ -131,17 +121,11 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 			g.DrawRectangle(pen, Rectangle.X, Rectangle.Y, Rectangle.Width + 1, Rectangle.Height + 1);
 			g.DrawLine(pen, Rectangle.X, Rectangle.Y + _lineHeight + 3, Rectangle.X + Rectangle.Width, Rectangle.Y + _lineHeight + 3);
 
-//			ComponentModel model = Tag as ComponentModel;
-//
-//			if (model != null)
-			{
-				StringFormat sf = new StringFormat();
-				sf.Alignment = StringAlignment.Center;
-				g.DrawString(Name, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
-//				g.DrawString(mText, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
-//				g.DrawString(Table, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight*2) + 6, sf);
-				g.DrawString(Table, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight) + 6, sf);
-			}
+			StringFormat sf = new StringFormat();
+			sf.Alignment = StringAlignment.Center;
+			g.DrawString(_activeRecordDescriptor.ClassName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
+			g.DrawString(_activeRecordDescriptor.ClassName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
+			g.DrawString("[" + _activeRecordDescriptor.DbAlias + "]", mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight * 2) + 6, sf);
 		}
 
 		/// <summary>
@@ -154,6 +138,12 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 			if (c == TopNode) return new PointF(Rectangle.Left + (Rectangle.Width*1/2), Rectangle.Top);
 			if (c == BottomNode) return new PointF(Rectangle.Left + (Rectangle.Width*1/2), Rectangle.Bottom);
 			return new PointF(0, 0);
+		}
+
+		public ActiveRecordDescriptor ActiveRecordDescriptor
+		{
+			get { return _activeRecordDescriptor; }
+			set { _activeRecordDescriptor = value; }
 		}
 	}
 }

@@ -1,6 +1,3 @@
-using Castle.ActiveRecord.Generator.Dialogs;
-using Castle.ActiveRecord.Generator.Dialogs.Wizards;
-
 namespace Castle.ActiveRecord.Generator.Parts
 {
 	using System;
@@ -12,6 +9,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 	using WeifenLuo.WinFormsUI;
 
 	using Castle.ActiveRecord.Generator.Parts.Shapes;
+	using Castle.ActiveRecord.Generator.Dialogs;
+	using Castle.ActiveRecord.Generator.Dialogs.Wizards;
 
 
 	/// <summary>
@@ -199,7 +198,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 		{
 			if (shape is ActiveRecordShape)
 			{
-				using(NewARClassWizard wizard = new NewARClassWizard(_model))
+				using(NewARClassWizard wizard = new NewARClassWizard(_model, shape))
 				{
 					if (wizard.ShowDialog(this) != DialogResult.OK)
 					{

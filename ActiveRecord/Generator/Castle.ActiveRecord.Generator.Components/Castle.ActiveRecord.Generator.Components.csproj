@@ -119,6 +119,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Database\ActiveRecordOperationDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\ActiveRecordPropertyDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Database\ColumnDefinition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -264,6 +264,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Dialogs\Wizards\ClassNamePage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\ClassNamePage.resx"
+                    DependentUpon = "ClassNamePage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Dialogs\Wizards\IWizardPage.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

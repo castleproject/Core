@@ -6,6 +6,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 	using System.ComponentModel;
 	using System.Windows.Forms;
 
+
 	/// <summary>
 	/// Summary description for WizardBaseDialog.
 	/// </summary>
@@ -37,6 +38,14 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			InitializeComponent();
 
 			this.Load += new EventHandler(WizardBaseDialog_Load);
+		}
+
+		/// <summary>
+		/// Only to make VS.Net happy
+		/// </summary>
+		public WizardBaseDialog()
+		{
+			
 		}
 
 		public void AddPage(IWizardPage page)
@@ -208,6 +217,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Name = "WizardBaseDialog";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "WizardBaseDialog";
 			this.ResumeLayout(false);
 
@@ -222,7 +232,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 		private void finishButton_Click(object sender, System.EventArgs e)
 		{
+			if (!CheckIsValid())
+			{
+				return;
+			}
+
+			_curPage.Deactivated(_context);
+
 			DialogResult = DialogResult.OK;
+
+			DoProcess();
+			
 			Close();
 		}
 
@@ -240,6 +260,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		{
 			UpdateNavButtons();
 
+			CheckIsValid();
+		}
+
+		private bool CheckIsValid()
+		{
 			if (_curPage != null && !_curPage.IsValid())
 			{
 				if (_curPage.ErrorMessage != null)
@@ -250,17 +275,25 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 				{
 					ErrorMessage = "Error: missing fields or invalid values for this page.";
 				}
+
+				return false;
 			}
 			else
 			{
 				ErrorMessage = "";
 			}
+
+			return true;
 		}
 
 		public String Title
 		{
 			get { return title.Text; }
-			set { title.Text = value; }
+			set
+			{
+				this.Text = value;
+				title.Text = value;
+			}
 		}
 
 		public String ErrorMessage
@@ -277,6 +310,21 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		private void ShowNextPage()
 		{
 			ShowPage(_curPageIndex + 1);
+		}
+
+		protected Model Model
+		{
+			get { return _model; }
+		}
+
+		protected IDictionary Context
+		{
+			get { return _context; }
+		}
+
+		protected virtual void DoProcess()
+		{
+
 		}
 	}
 }

@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Generator.Components.Database
 {
 	using System;
+	using System.Collections;
 
 
 	public class TableDefinition
@@ -22,6 +23,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		private String _name;
 //		private ActiveRecordDescriptor _relatedDescriptor;
 		private ColumnDefinitionCollection _columns = new ColumnDefinitionCollection();
+		private ArrayList _hasRelation = new ArrayList();
 
 		public TableDefinition(String name)
 		{
@@ -30,6 +32,10 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 		public void AddManyRelation(TableDefinition def)
 		{
+			if (!_hasRelation.Contains(def))
+			{
+				_hasRelation.Add(def);
+			}
 		}
 
 		public String Name
@@ -52,6 +58,11 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		public ColumnDefinitionCollection Columns
 		{
 			get { return _columns; }
+		}
+
+		public IList TablesReferencedByHasRelation
+		{
+			get { return _hasRelation; }
 		}
 
 		public override string ToString()

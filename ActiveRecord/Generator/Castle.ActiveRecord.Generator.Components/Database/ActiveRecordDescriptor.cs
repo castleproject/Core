@@ -20,15 +20,25 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 	public class ActiveRecordDescriptor
 	{
-		private IList _properties = new ArrayList();
 		private String _className;
 		private String _tableName;
-		private bool _generate = true;
+		private String _discriminatorField;
+		private String _discriminatorValue;
+		private String _discriminatorType;
+		private String _dbAlias;
+		private IList _properties = new ArrayList();
+		private IList _propertiesRelations = new ArrayList();
+		private IList _operations = new ArrayList();
 
-		public ActiveRecordDescriptor(String className, String tableName)
+		public ActiveRecordDescriptor()
+		{
+		}
+
+		public ActiveRecordDescriptor(String className, String tableName, String dbAlias)
 		{
 			_className = className;
 			_tableName = tableName;
+			_dbAlias = dbAlias;
 		}
 
 		public String ClassName
@@ -43,6 +53,30 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			set { _tableName = value; }
 		}
 
+		public String DiscriminatorField
+		{
+			get { return _discriminatorField; }
+			set { _discriminatorField = value; }
+		}
+
+		public String DiscriminatorValue
+		{
+			get { return _discriminatorValue; }
+			set { _discriminatorValue = value; }
+		}
+
+		public String DiscriminatorType
+		{
+			get { return _discriminatorType; }
+			set { _discriminatorType = value; }
+		}
+
+		public String DbAlias
+		{
+			get { return _dbAlias; }
+			set { _dbAlias = value; }
+		}
+
 		public void AddProperty( ActiveRecordPropertyDescriptor propertyDescriptor )
 		{
 			_properties.Add(propertyDescriptor);
@@ -53,69 +87,14 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			get { return _properties; }
 		}
 
-		public bool Generate
+		public IList PropertiesRelations
 		{
-			get { return _generate; }
-			set { _generate = value; }
-		}
-	}
-
-
-	public class ActiveRecordPropertyDescriptor
-	{
-		private bool _generate = true;
-		private bool _nullable = false;
-		private String _columnName;
-		private String _columnTypeName = "VARCHAR";
-		private String _propertyName;
-		private String _propertyFieldName;
-		private Type _propertyType;
-
-		public ActiveRecordPropertyDescriptor(string columnName, string columnTypeName, 
-			string propertyName, string propertyFieldName, Type propertyType, bool nullable)
-		{
-			_columnName = columnName;
-			_columnTypeName = columnTypeName;
-			_propertyName = propertyName;
-			_propertyFieldName = propertyFieldName;
-			_propertyType = propertyType;
-			_nullable = nullable;
+			get { return _propertiesRelations; }
 		}
 
-		public string ColumnName
+		public IList Operations
 		{
-			get { return _columnName; }
-			set { _columnName = value; }
-		}
-
-		public string ColumnTypeName
-		{
-			get { return _columnTypeName; }
-			set { _columnTypeName = value; }
-		}
-
-		public string PropertyName
-		{
-			get { return _propertyName; }
-			set { _propertyName = value; }
-		}
-
-		public string PropertyFieldName
-		{
-			get { return _propertyFieldName; }
-			set { _propertyFieldName = value; }
-		}
-
-		public Type PropertyType
-		{
-			get { return _propertyType; }
-			set { _propertyType = value; }
-		}
-
-		public bool Generate
-		{
-			get { return _generate; }
-			set { _generate = value; }
+			get { return _operations; }
 		}
 	}
 }
