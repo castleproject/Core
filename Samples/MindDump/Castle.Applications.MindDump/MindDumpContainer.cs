@@ -53,12 +53,16 @@ namespace Castle.Applications.MindDump
 
 		protected void RegisterComponents()
 		{
+			AddComponent( "event.channel", typeof(IMindDumpEventPublisher), 
+				typeof(MindDumpEventChannel) );
+
 			AddComponent( "author.dao", typeof(AuthorDao) );
 			AddComponent( "blog.dao", typeof(BlogDao) );
 			AddComponent( "post.dao", typeof(PostDao) );
 			AddComponent( "authentication", typeof(AuthenticationService) );
 			AddComponent( "account", typeof(AccountService) );
 			AddComponent( "encryption", typeof(EncryptionService) );
+			AddComponent( "blogMaintenanceService", typeof(BlogMaintenanceService) );
 		}
 	}
 }

@@ -54,22 +54,30 @@ namespace Castle.Applications.MindDump.Dao
 
 		public virtual IList Find()
 		{
-			return SessionManager.CurrentSession.Find("from Post");
+			return SessionManager.CurrentSession.Find("from Post order by id desc");
 		}
 
-//		public virtual Author Find(String login)
-//		{
-//			IList list = SessionManager.CurrentSession.Find(
-//				"from Blog as a where a.Login=:name", login, NHibernate.String);
-//
-//			if (list.Count == 1)
-//			{
-//				return list[0] as Author;
-//			}
-//			else
-//			{
-//				return null;
-//			}
-//		}
+		public virtual IList Find(Blog blog)
+		{
+			IList list = SessionManager.CurrentSession.Find(
+				"from Post as a where a.Blog.Id=:name", blog.Id, NHibernate.Int64);
+
+			return list;
+		}
+
+		public virtual Post Find(long id)
+		{
+			IList list = SessionManager.CurrentSession.Find(
+				"from Post as a where a.id=:name order by id desc", id, NHibernate.Int64);
+
+			if (list.Count == 1)
+			{
+				return list[0] as Post;
+			}
+			else
+			{
+				return null;
+			}
+		}
 	}
 }

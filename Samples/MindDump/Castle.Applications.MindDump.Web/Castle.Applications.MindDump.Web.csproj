@@ -212,12 +212,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\BlogControllerCreatorSubscriber.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\IntroController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Controllers\MaintenanceController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Filters\AuthenticationAttemptFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -235,7 +245,15 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\blogs\view.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\intro\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\anothertheme.vm"
                     BuildAction = "None"
                 />
                 <File
@@ -243,7 +261,23 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\layouts\defaulttheme.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\layouts\private.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\accountsettings.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\blogsettings.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\editentry.vm"
                     BuildAction = "None"
                 />
                 <File

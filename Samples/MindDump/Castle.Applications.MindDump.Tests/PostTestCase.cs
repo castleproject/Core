@@ -79,5 +79,32 @@ namespace Castle.Applications.MindDump.Tests
 			IList posts = postDao.Find();
 			Assert.AreEqual( 2, posts.Count );
 		}
+
+		[Test]
+		public void FindBlogPosts()
+		{
+			ResetDatabase();
+
+			AuthorDao authorDao = (AuthorDao) Container[ typeof(AuthorDao) ];
+			BlogDao blogDao = (BlogDao) Container[ typeof(BlogDao) ];
+
+			Author author = new Author("hamilton verissimo", "hammett", "mypass");
+			Blog blog = new Blog("hammett's blog", "my thoughts.. ugh!", "default", author);
+
+			authorDao.Create( author );
+			blogDao.Create( blog );
+
+			Post post1 = new Post("My first entry", "This is my first entry", DateTime.Now);
+			post1.Blog = blog;
+			Post post2 = new Post("My second entry", "This is my second entry", DateTime.Now);
+			post2.Blog = blog;
+
+			PostDao postDao = (PostDao) Container[ typeof(PostDao) ];
+			postDao.Create(post1);
+			postDao.Create(post2);
+
+			IList posts = postDao.Find(blog);
+			Assert.AreEqual( 2, posts.Count );
+		}
 	}
 }

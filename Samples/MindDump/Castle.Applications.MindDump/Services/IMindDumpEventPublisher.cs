@@ -12,55 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.MindDump.Adapters
+namespace Castle.Applications.MindDump.Services
 {
 	using System;
-	using System.Security.Principal;
 
 	using Castle.Applications.MindDump.Model;
 
 
-	public class PrincipalAuthorAdapter : IPrincipal, IIdentity
+	public interface IMindDumpEventPublisher
 	{
-		private Author _author;
+		void NotifyBlogAdded( Blog blog );
 
-		public PrincipalAuthorAdapter(Author author)
-		{
-			_author = author;
-		}
+		void NotifyBlogRemoved( Blog blog );
 
-		public Author Author
-		{
-			get { return _author; }
-		}
+		void AddSubcriber(IMindDumpEventSubscriber subscriber);
 
-		#region IPrincipal
-
-		public bool IsInRole(String role)
-		{
-			return false;
-		}
-
-		public IIdentity Identity
-		{
-			get { return this; }
-		}
-
-		#endregion
-
-		public string Name
-		{
-			get { return _author.Name; }
-		}
-
-		public string AuthenticationType
-		{
-			get { return "Castle"; }
-		}
-
-		public bool IsAuthenticated
-		{
-			get { return true; }
-		}
+		void RemoveSubcriber(IMindDumpEventSubscriber subscriber);
 	}
 }

@@ -15,6 +15,7 @@
 namespace Castle.Applications.MindDump.Services
 {
 	using System;
+	using System.Collections;
 
 	using Castle.Applications.MindDump.Dao;
 	using Castle.Applications.MindDump.Model;
@@ -22,18 +23,20 @@ namespace Castle.Applications.MindDump.Services
 
 	public class BlogMaintenanceService
 	{
-		private BlogDao _blogDao;
 		private PostDao _postDao;
+		private BlogDao _blogDao;
+		private AuthorDao _authorDao;
 
-		public BlogMaintenanceService(BlogDao blogDao, PostDao postDao)
+		public BlogMaintenanceService(AuthorDao authorDao, BlogDao blogDao, PostDao postDao)
 		{
+			_authorDao = authorDao;
 			_blogDao = blogDao;
 			_postDao = postDao;
 		}
 
-		public Post CreateNewEntry(int blogId, Post post)
+		public Post CreateNewPost(Blog blog, Post post)
 		{
-			post.Blog = new Blog(blogId);
+			post.Blog = blog;
 			
 			try
 			{
@@ -41,23 +44,69 @@ namespace Castle.Applications.MindDump.Services
 			}
 			catch(Exception ex)
 			{
-				throw new ApplicationException("Could not create entry", ex);
+				throw new ApplicationException("Could not create post", ex);
 			}
 		}
 
-		public void UpdateEntry(int blogId, int postId, Post post)
+		public void UpdatePost(Blog blog, long postId, Post post)
 		{
-			post.Id = postId;
-			post.Blog = new Blog(blogId);
+			Post originalPost = ObtainPost(blog, postId);
+
+			originalPost.Title = post.Title;
+			originalPost.Contents = post.Contents;
 			
 			try
 			{
-				_postDao.Update(post);
+				_postDao.Update(originalPost);
 			}
 			catch(Exception ex)
 			{
-				throw new ApplicationException("Could not update entry", ex);
+				throw new ApplicationException("Could not update post", ex);
 			}
+		}
+
+		public Post ObtainPost( Blog blog, long postId )
+		{
+			try
+			{
+				Post post = _postDao.Find(postId);
+
+				if (post != null)
+				{
+					if (post.Blog.Id != blog.Id)
+					{
+						throw new ApplicationException("The post requested belongs " + 
+							"to a different blog");
+					}
+				}
+
+				return post;
+			}
+			catch(ApplicationException ex)
+			{
+				throw ex;
+			}
+			catch(Exception ex)
+			{
+				throw new ApplicationException("Could not find post", ex);
+			}
+		}
+
+		public IList ObtainPosts(Blog blog)
+		{
+			return _postDao.Find(blog);
+		}
+
+		public Blog ObtainBlogByAuthorName(string authorName)
+		{
+			Author author = _authorDao.Find(authorName);
+			
+			if (author == null)
+			{
+				return null;
+			}
+
+			return author.Blogs[0] as Blog;
 		}
 	}
 }

@@ -39,28 +39,37 @@ namespace Castle.Applications.MindDump.Web.Controllers.Filters
 			_encryptionService = encryptionService;
 		}
 
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public virtual bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		{
+			if (!PerformAuthentication(context))
+			{
+				context.Response.Redirect("account", "authentication");
+				return false;
+			}
+
+			return true;
+		}
+
+		protected bool PerformAuthentication(IRailsEngineContext context)
 		{
 			String contents = context.Request.ReadCookie("authenticationticket"); 
-
+	
 			if (contents == null)
 			{
-				context.Response.Redirect("account", "authentication");
 				return false;
 			}
-
+	
 			String login = _encryptionService.Decrypt(contents);
-
+	
 			Author author = _accountService.ObtainAuthor(login);
-
+	
 			if (author == null)
 			{
-				context.Response.Redirect("account", "authentication");
 				return false;
 			}
-
+	
 			context.CurrentUser = new PrincipalAuthorAdapter(author);
-
+			
 			return true;
 		}
 	}

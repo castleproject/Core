@@ -40,6 +40,13 @@ namespace Castle.Applications.MindDump.Dao
 			return blog;
 		}
 
+		public virtual void Update(Blog blog)
+		{
+			ISession session = SessionManager.CurrentSession;
+
+			session.Update(blog);
+		}
+
 		/// <summary>
 		/// Usually will be invoked only be the
 		/// test cases
@@ -54,19 +61,19 @@ namespace Castle.Applications.MindDump.Dao
 			return SessionManager.CurrentSession.Find("from Blog");
 		}
 
-//		public virtual Author Find(String login)
-//		{
-//			IList list = SessionManager.CurrentSession.Find(
-//				"from Blog as a where a.Login=:name", login, NHibernate.String);
-//
-//			if (list.Count == 1)
-//			{
-//				return list[0] as Author;
-//			}
-//			else
-//			{
-//				return null;
-//			}
-//		}
+		public virtual Blog Find(String blogName)
+		{
+			IList list = SessionManager.CurrentSession.Find(
+				"from Blog as a where a.Name=:name", blogName, NHibernate.String);
+
+			if (list.Count == 1)
+			{
+				return list[0] as Blog;
+			}
+			else
+			{
+				return null;
+			}
+		}
 	}
 }

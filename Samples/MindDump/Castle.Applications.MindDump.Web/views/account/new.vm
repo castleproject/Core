@@ -22,23 +22,23 @@
 	<table width="380px" border="0" cellspacing="5" cellpadding="2">
 	  <tr>
 		<td width="120px">Login:</td>
-		<td><input type="text" name="login" value="${login}" maxlength="45"></td>
+		<td><input type="text" name="login" value="$!login" maxlength="45"></td>
 	  </tr>
 	  <tr>
 		<td>Name:</td>
-		<td><input type="text" name="name" value="${name}" maxlength="45" size="30"></td>
+		<td><input type="text" name="name" value="$!name" maxlength="45" size="30"></td>
 	  </tr>
 	  <tr>
 		<td>E-mail:</td>
-		  <td><input type="text" name="email" value="${email}" maxlength="100" size="30"></td>
+		  <td><input type="text" name="email" value="$!email" maxlength="100" size="30"></td>
 	  </tr>
 	  <tr>
 		<td>Password:</td> 
-		<td><input name="pwd" type="password" value="${pwd}" maxlength="12"></td>
+		<td><input name="pwd" type="password" value="$!pwd" maxlength="12"></td>
 	  </tr>
 	  <tr>
 		<td>Retype Password:</td>
-		<td><input name="pwd2" type="password" value="${pwd2}" maxlength="12"></td>
+		<td><input name="pwd2" type="password" value="$!pwd2" maxlength="12"></td>
 	  </tr>
 	</table>
 	
@@ -49,17 +49,18 @@
 	<table width="380px" border="0" cellspacing="5" cellpadding="2">
 	  <tr>
 		<td width="120px">Name:</td>
-		<td><input type="text" name="blogname" value="${blogname}" maxlength="20"></td>
+		<td><input type="text" name="blogname" value="$!blogname" maxlength="20"></td>
 	  </tr>
 	  <tr>
 		<td>Description:</td>
-		<td><input type="text" name="blogdesc" value="${blogdesc}" maxlength="45" size="30"></td>
+		<td><input type="text" name="blogdesc" value="$!blogdesc" maxlength="45" size="30"></td>
 	  </tr>
 	  <tr>
 		<td>Theme:</td>
 		  <td>
 <select name="theme">
-	<option>aa</option>
+	<option>defaulttheme</option>
+	<option>anothertheme</option>
 </select>
 		  </td>
 	  </tr>

@@ -18,18 +18,107 @@ namespace Castle.Applications.MindDump.Web.Controllers
 
 	using Castle.CastleOnRails.Framework;
 
+	using Castle.Applications.MindDump.Model;
+	using Castle.Applications.MindDump.Services;
+	using Castle.Applications.MindDump.Adapters;
 
 	[Layout("private")]
 	public class MaintenanceController : AbstractSecureController
 	{
-		public void NewEntry()
+		private BlogMaintenanceService _maintenanceService;
+		private AccountService _accountService;
+
+		public MaintenanceController(AccountService accountService, BlogMaintenanceService maintenanceService)
 		{
-			
+			_accountService = accountService;
+			_maintenanceService = maintenanceService;
 		}
 
-		public void EditEntry()
+		public void NewEntry()
 		{
-			
+			PropertyBag.Add( "entries", _maintenanceService.ObtainPosts( ObtainCurrentBlog() ) );
+		}
+
+		public void SaveNewEntry(String title, String contents)
+		{
+			Blog blog = ObtainCurrentBlog();
+
+			Post post = _maintenanceService.CreateNewPost( 
+				blog, new Post(title, contents, DateTime.Now) );
+
+			Context.Flash["message"] = "Your post was created successfully";
+
+			RenderView("EditEntry");
+			EditEntry( post.Id );
+		}
+
+		public void EditEntry(long entryid)
+		{
+			PropertyBag.Add( "entries", _maintenanceService.ObtainPosts( ObtainCurrentBlog() ) );
+			PropertyBag.Add( "post", _maintenanceService.ObtainPost( ObtainCurrentBlog(), entryid ) );
+		}
+
+		public void UpdateEntry(long entryid, String title, String contents)
+		{
+			Blog blog = ObtainCurrentBlog();
+
+			_maintenanceService.UpdatePost( 
+				blog, entryid, new Post(title, contents) );
+
+			Context.Flash["message"] = "Your post was updated successfully";
+
+			RenderView("EditEntry");
+			EditEntry( entryid );
+		}
+
+		public void AccountSettings()
+		{
+			PropertyBag.Add("author", ObtainCurrentAuthor() );
+		}
+
+		public void UpdateAccount(String name, String email)
+		{
+			Author author = ObtainCurrentAuthor();
+
+			author.Name = name;
+
+			_accountService.UpdateAccount(author);
+
+			RenderView("NewEntry");
+			NewEntry();
+		}
+
+		public void BlogSettings()
+		{
+			PropertyBag.Add("blog", ObtainCurrentBlog() );
+		}
+
+		public void UpdateBlog(String blogname, String blogdesc, String theme)
+		{
+			Blog blog = ObtainCurrentBlog();
+
+			blog.Name = blogname;
+			blog.Description = blogdesc;
+			blog.Theme = theme;
+
+			_accountService.UpdateBlog(blog);
+
+			RenderView("NewEntry");
+			NewEntry();
+		}
+
+
+		// Private utility members
+
+		private Blog ObtainCurrentBlog()
+		{
+			Author author = ObtainCurrentAuthor();
+			return author.Blogs[0] as Blog;
+		}
+
+		private Author ObtainCurrentAuthor()
+		{
+			return (Context.CurrentUser as PrincipalAuthorAdapter).Author;
 		}
 	}
 }

@@ -40,6 +40,13 @@ namespace Castle.Applications.MindDump.Dao
 			return author;
 		}
 
+		public virtual void Update(Author author)
+		{
+			ISession session = SessionManager.CurrentSession;
+
+			session.Update(author);
+		}
+
 		/// <summary>
 		/// Usually will be invoked only be the
 		/// test cases
@@ -61,7 +68,16 @@ namespace Castle.Applications.MindDump.Dao
 
 			if (list.Count == 1)
 			{
-				return list[0] as Author;
+				Author author = list[0] as Author;
+				
+				if (author.Blogs.Count == 1)
+				{
+					// We just reference the blog
+					// to load it
+					Blog blog = author.Blogs[0] as Blog; 
+				}
+
+				return author;
 			}
 			else
 			{

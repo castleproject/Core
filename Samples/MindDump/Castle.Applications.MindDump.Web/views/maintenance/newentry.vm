@@ -1,37 +1,33 @@
-<p>
-MindDump is a simple blog application. To create your blog and start to dump 
-your thoughts and opinions, please create <a href="/account/new.rails">an account</a>.
+<p align="center">
+Show the world your thoughts and opinions
 </p>
-
-<br>
-<font size="+1">Last updates</font>
 <br>
 
-<p>
-<table width="100%" border="1">
-  <tr>
-    <td>Blog x</td>
-    <td>Is there life out there?</td>
-  </tr>
-  <tr>
-    <td>Blog x</td>
-    <td>Is there life out there?</td>
-  </tr>
-</table>
-</p>
+<form action="SaveNewEntry.rails" method="post">
+	<fieldset>
+	
+	<legend>Entry contents:</legend>
+	
+	<table align="center" width="100%" border="0" cellspacing="2" cellpadding="2">
+	<tr>
+		<td>Title:</td>
+		<td><input type="text" name="title" maxlength="45" size="45"></td>
+	</tr>
+	<tr>
+		<td colspan="2">Contents:</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+		<textarea name="contents" cols="60" rows="20"></textarea>
+		</td>
+	</tr>
+	</table>
+	</fieldset>
 
-<br>
-<font size="+1">Best picks</font>
-<br>
+	<br>
+	<div align="center">
+	<input name="act" type="submit" value="Publish"> 
+	</div>
+	<br>&nbsp;
 
-<p>
-<table width="100%" border="1">
-  <tr>
-    <td>Blog x</td>
-    <td>Is there life out there?</td>
-  </tr>
-  <tr>
-    <td>Blog x</td>
-    <td>Is there life out there?</td>
-  </tr>
-</table>
+</form>

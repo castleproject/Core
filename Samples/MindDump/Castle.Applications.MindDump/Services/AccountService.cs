@@ -26,11 +26,18 @@ namespace Castle.Applications.MindDump.Services
 	{
 		private AuthorDao _authorDao;
 		private BlogDao _blogDao;
+		private IMindDumpEventPublisher _publisher;
 
 		public AccountService(AuthorDao authorDao, BlogDao blogDao)
 		{
 			_authorDao = authorDao;
 			_blogDao = blogDao;
+		}
+
+		public IMindDumpEventPublisher EventPublisher
+		{
+			get { return _publisher; }
+			set { _publisher = value; }
 		}
 
 		/// <summary>
@@ -44,6 +51,18 @@ namespace Castle.Applications.MindDump.Services
 		{
 			_authorDao.Create( blog.Author );
 			_blogDao.Create( blog );
+
+			if (EventPublisher != null) EventPublisher.NotifyBlogAdded( blog );
+		}
+
+		public virtual void UpdateAccount( Author author )
+		{
+			_authorDao.Update( author );
+		}
+
+		public virtual void UpdateBlog( Blog blog )
+		{
+			_blogDao.Update( blog );
 		}
 
 		public virtual Author ObtainAuthor( String login )

@@ -7,18 +7,44 @@
 </head>
 
 <body>
-<div>
-  <img src="/images/logo-maintenance.jpg">
-</div>
-<br>&nbsp;<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="3">
+  <tr>
+    <td width="50%"><img src="/images/logo-maintenance.jpg"></td>
+    <td>&nbsp;</td>
+    <td width="40%" align="center" bgcolor="#333333" class="toolboxheader">Welcome $context.CurrentUser.Identity.Name</td>
+  </tr>
+</table>
 
+<table width="100%" border="0" cellspacing="0" cellpadding="7">
+  <tr>
+    <td colspan="2" align="left" valign="top" bgcolor="#999999">
+	</td>
+  </tr>
+  <tr>
+    <td width="170px" align="left" valign="top" bgcolor="#999999">
+	<div>- <a href="newentry.rails">New entry</a></div>
+	<div>- <a href="accountsettings.rails">Account Settings</a></div>
+	<div>- <a href="blogsettings.rails">Blog Settings</a></div>
+	<br>&nbsp;<br>
+#foreach ($entry in $entries)
+	<div>- <a href="editentry.rails?entryid=${entry.id}">$entry.title</a></div>
+#end
+	</td>
+    <td valign="top">
 
 $childContent
 
-
+	</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="left" valign="top" bgcolor="#999999">
+	</td>
+  </tr>
+</table>
 	
 <p>
 <br>&nbsp;<br>
+
 <hr width="80%" size="1" noshade>
 <div align="center">
 Copyright (c) 2005 - Castle Project Team</div>

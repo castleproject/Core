@@ -28,11 +28,15 @@ namespace Castle.Applications.MindDump.Model
 		{
 		}
 
-		public Post(string _title, string _contents, DateTime _date)
+		public Post(string title, string contents, DateTime date) : this(title, contents)
 		{
-			this._title = _title;
-			this._contents = _contents;
-			this._date = _date;
+			_date = date;
+		}
+
+		public Post(string title, string contents)
+		{
+			_title = title;
+			_contents = contents;
 		}
 
 		public long Id

@@ -7,3 +7,7 @@ body {
 td {
 	font-size: small;
 }
+.toolboxheader {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}

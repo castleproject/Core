@@ -16,7 +16,6 @@ namespace Castle.Applications.MindDump.Web.Controllers
 {
 	using System;
 	using System.Collections;
-	using System.Security.Cryptography;
 
 	using Castle.CastleOnRails.Framework;
 
@@ -67,14 +66,6 @@ namespace Castle.Applications.MindDump.Web.Controllers
 			PerformLogin(login, pwd);
 		}
 
-		public void Change()
-		{
-		}
-
-		public void SaveChanges()
-		{
-		}
-
 		[SkipFilter]
 		public void Authentication()
 		{
@@ -91,8 +82,10 @@ namespace Castle.Applications.MindDump.Web.Controllers
 			}
 			else
 			{
-				Context.Response.CreateCookie(
-					"authenticationticket", _encryptionService.Encrypt(login) );
+				DateTime twoWeeks = DateTime.Now.Add( new TimeSpan(14,0,0,0) ); 
+
+				Context.Response.CreateCookie("authenticationticket", 
+					_encryptionService.Encrypt(login), twoWeeks );
 				
 				Redirect("Maintenance", "newentry");
 			}

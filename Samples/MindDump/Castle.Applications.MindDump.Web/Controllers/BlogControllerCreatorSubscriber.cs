@@ -15,30 +15,45 @@
 namespace Castle.Applications.MindDump.Web.Controllers
 {
 	using System;
+	using System.Collections;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.Model;
 
-	using Castle.Applications.MindDump.Web.Controllers.Filters;
 	using Castle.Applications.MindDump.Dao;
+	using Castle.Applications.MindDump.Model;
+	using Castle.Applications.MindDump.Services;
+
+	using Castle.CastleOnRails.Framework.Internal.Graph;
 
 
-	[Filter(ExecuteEnum.Before, typeof(AuthenticationAttemptFilter))]
-	[Layout("default")]
-	public class IntroController : Controller
+	public class BlogControllerCreatorSubscriber : IMindDumpEventSubscriber, IInitializable
 	{
 		private BlogDao _blogDao;
-		private PostDao _postDao;
+		private ControllerTree _controllerTree;
 
-		public IntroController(BlogDao blogDao, PostDao postDao)
+		public BlogControllerCreatorSubscriber(BlogDao blogDao, ControllerTree controllerTree)
 		{
 			_blogDao = blogDao;
-			_postDao = postDao;
+			_controllerTree = controllerTree;
 		}
 
-		public void Index()
+		public void Initialize()
 		{
-			PropertyBag.Add( "blogs", _blogDao.Find() );
-			PropertyBag.Add( "posts", _postDao.Find() );
+			IList blogs = _blogDao.Find();
+
+			foreach(Blog blog in blogs)
+			{
+				OnBlogAdded(blog);
+			}
+		}
+
+		public void OnBlogAdded(Blog blog)
+		{
+			_controllerTree.AddController(String.Empty, blog.Author.Login, "blogs.controller");
+		}
+
+		public void OnBlogRemoved(Blog blog)
+		{
 		}
 	}
 }

@@ -15,14 +15,56 @@
 namespace Castle.Applications.MindDump.Web.Controllers
 {
 	using System;
+	using System.Collections;
 
 	using Castle.CastleOnRails.Framework;
 
+	using Castle.Applications.MindDump.Model;
+	using Castle.Applications.MindDump.Services;
 
-	public class BlogController : Controller
+
+	[ControllerDetails("blogs")]
+	public class BlogController : SmartDispatcherController
 	{
-		public BlogController()
+		private BlogMaintenanceService _maintenanceService;
+
+		public BlogController(BlogMaintenanceService maintenanceService)
 		{
+			_maintenanceService = maintenanceService;
+		}
+
+		public void View()
+		{
+			Blog blog = _maintenanceService.ObtainBlogByAuthorName( Name );
+
+			LayoutName = blog.Theme;
+
+			IList posts = _maintenanceService.ObtainPosts( blog );
+
+			PropertyBag.Add( "blog", blog );
+			PropertyBag.Add( "posts", posts );
+
+			if (posts.Count != 0)
+			{
+				PropertyBag.Add( "lastpost", posts[ posts.Count - 1 ] );
+			}
+
+			RenderView("blogs", "view");
+		}
+
+		public void View(long entryid)
+		{
+			Blog blog = _maintenanceService.ObtainBlogByAuthorName( Name );
+
+			LayoutName = blog.Theme;
+
+			IList posts = _maintenanceService.ObtainPosts( blog );
+
+			PropertyBag.Add( "blog", blog );
+			PropertyBag.Add( "posts", posts );
+			PropertyBag.Add( "lastpost", _maintenanceService.ObtainPost(blog, entryid) );
+
+			RenderView("blogs", "view");
 		}
 	}
 }
