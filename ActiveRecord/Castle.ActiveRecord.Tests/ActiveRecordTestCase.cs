@@ -111,6 +111,11 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsNotNull(blog);
 			Assert.AreEqual(2, blog.UnPublishedPosts.Count);
 			Assert.AreEqual(1, blog.PublishedPosts.Count);
+
+			Assert.AreEqual(3, blog.RecentPosts.Count);
+			Assert.AreEqual( post3.Id, (blog.RecentPosts[0] as Post).Id );
+			Assert.AreEqual( post2.Id, (blog.RecentPosts[1] as Post).Id );
+			Assert.AreEqual( post1.Id, (blog.RecentPosts[2] as Post).Id );
 		}
 	}
 }
