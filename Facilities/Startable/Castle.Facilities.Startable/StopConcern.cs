@@ -12,16 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Action
+namespace Castle.Facilities.Startable
 {
 	using System;
-	using System.Windows.Forms;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.Model;
+
+	using Castle.MicroKernel.LifecycleConcerns;
 
 
-	public interface IAction
+	public class StopConcern : ILifecycleConcern
 	{
-		object Execute(IWin32Window main, Project project);
+		private static readonly StopConcern _instance = new StopConcern();
+
+		protected StopConcern()
+		{
+		}
+
+		public static StopConcern Instance
+		{
+			get { return _instance; }
+		}
+
+		public void Apply(ComponentModel model, object component)
+		{
+			(component as IStartable).Stop();
+		}
 	}
 }

@@ -21,6 +21,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Database
 
 	public interface IDatabaseDefinitionBuilder
 	{
-		DatabaseDefinition Build();
+		DatabaseDefinition Build(Project project);
 	}
 }

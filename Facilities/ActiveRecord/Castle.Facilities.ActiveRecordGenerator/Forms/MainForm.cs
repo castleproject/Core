@@ -1,4 +1,3 @@
-using Castle.Facilities.ActiveRecordGenerator.Action;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,10 +21,13 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 	using System.Windows.Forms;
 	using System.Data;
 
+	using Castle.Facilities.ActiveRecordGenerator.Action;
+	using Castle.Facilities.ActiveRecordGenerator.Model;
+
 	/// <summary>
 	/// Summary description for MainForm
 	/// </summary>
-	public class MainForm : System.Windows.Forms.Form
+	public class MainForm : Form, IApplicationModel
 	{
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem menuItem4;
@@ -48,10 +50,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.MenuItem helpMenu;
 		private System.Windows.Forms.MenuItem aboutMenu;
 		private System.ComponentModel.IContainer components;
-		
+
 		private Hashtable _translator = new Hashtable();
-		
+
 		private IActionFactory _actionFactory;
+		private Project _currentProject;
 
 
 		public MainForm(IActionFactory actionFactory)
@@ -65,29 +68,30 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 
 		private void InitTranslator()
 		{
-			_translator.Add( newMenu, ActionConstants.New_Project );
-			_translator.Add( openMenu, ActionConstants.Open_Project );
-			_translator.Add( saveMenu, ActionConstants.Save_Project );
-			_translator.Add( saveAsMenu, ActionConstants.SaveAs_Project );
-			_translator.Add( exitMenu, ActionConstants.Exit );
+			_translator.Add(newMenu, ActionConstants.New_Project);
+			_translator.Add(openMenu, ActionConstants.Open_Project);
+			_translator.Add(saveMenu, ActionConstants.Save_Project);
+			_translator.Add(saveAsMenu, ActionConstants.SaveAs_Project);
+			_translator.Add(exitMenu, ActionConstants.Exit);
 		}
 
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if (components != null) 
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -115,28 +119,32 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.splitter1 = new System.Windows.Forms.Splitter();
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
 			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.fileMenu,
-																					  this.helpMenu});
+			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.fileMenu,
+					this.helpMenu
+				});
 			// 
 			// fileMenu
 			// 
 			this.fileMenu.Index = 0;
-			this.fileMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.newMenu,
-																					 this.openMenu,
-																					 this.menuItem4,
-																					 this.saveMenu,
-																					 this.saveAsMenu,
-																					 this.menuItem7,
-																					 this.menuItem8,
-																					 this.menuItem9,
-																					 this.exitMenu});
+			this.fileMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.newMenu,
+					this.openMenu,
+					this.menuItem4,
+					this.saveMenu,
+					this.saveAsMenu,
+					this.menuItem7,
+					this.menuItem8,
+					this.menuItem9,
+					this.exitMenu
+				});
 			this.fileMenu.Text = "&File";
 			// 
 			// newMenu
@@ -176,8 +184,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// menuItem8
 			// 
 			this.menuItem8.Index = 6;
-			this.menuItem8.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem13});
+			this.menuItem8.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.menuItem13
+				});
 			this.menuItem8.Text = "Recent Projecs";
 			// 
 			// menuItem13
@@ -199,8 +209,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// helpMenu
 			// 
 			this.helpMenu.Index = 1;
-			this.helpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.aboutMenu});
+			this.helpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.aboutMenu
+				});
 			this.helpMenu.Text = "&Help";
 			// 
 			// aboutMenu
@@ -213,8 +225,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			this.statusBar1.Location = new System.Drawing.Point(0, 468);
 			this.statusBar1.Name = "statusBar1";
-			this.statusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
-																						  this.statusBarPanel1});
+			this.statusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[]
+				{
+					this.statusBarPanel1
+				});
 			this.statusBar1.Size = new System.Drawing.Size(712, 22);
 			this.statusBar1.TabIndex = 3;
 			this.statusBar1.Text = "statusBar1";
@@ -262,26 +276,48 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.Controls.Add(this.treeView1);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.statusBar1);
-			this.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
 			this.Menu = this.mainMenu1;
 			this.Name = "MainForm";
 			this.Text = "Form1";
-			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
+			((System.ComponentModel.ISupportInitialize) (this.statusBarPanel1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
+
 		#endregion
 
 		private void Menu_Click(object sender, System.EventArgs e)
 		{
-			String actionName = (String) _translator[ sender ];
-			
+			String actionName = (String) _translator[sender];
+
 			if (actionName != null)
 			{
 				IAction action = _actionFactory.Create(actionName);
 
-				action.Execute()
+				action.Execute(this, null);
 			}
 		}
+
+		#region IApplicationModel Members
+
+		public Project CurrentProject
+		{
+			get { return _currentProject; }
+			set
+			{
+				if (OnProjectChange != null) OnProjectChange(this, _currentProject, value);
+				_currentProject = value;
+			}
+		}
+
+		public IWin32Window MainWindow
+		{
+			get { return this; }
+		}
+
+		public event ProjectDelegate OnProjectChange;
+
+		#endregion
 	}
 }

@@ -12,16 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Action
+namespace Castle.Facilities.ActiveRecordGenerator
 {
 	using System;
 	using System.Windows.Forms;
 
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
+	
+	public delegate void ProjectDelegate(object sender, Project oldProject, Project newProject);
 
-	public interface IAction
+
+	public interface IApplicationModel
 	{
-		object Execute(IWin32Window main, Project project);
+		Project CurrentProject { get; set; }
+
+		IWin32Window MainWindow { get; }
+
+		event ProjectDelegate OnProjectChange;
 	}
 }

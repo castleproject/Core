@@ -1,4 +1,3 @@
-using MSDASC;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +18,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 	using System.Windows.Forms;
 
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator;
+	using Castle.Facilities.ActiveRecordGenerator.Utils;
 
 
-	public class NewProject : Form
+	public class NewProjectForm : Form
 	{
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label label1;
@@ -29,7 +29,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.Button createButton;
 		private System.Windows.Forms.TextBox name;
 		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.Button connectionStringButton;
 		private System.Windows.Forms.TextBox connectionString;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox driver;
@@ -47,9 +46,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.ComboBox languages;
 		private System.ComponentModel.Container components = null;
 
-		public NewProject(ICodeProviderFactory factory)
+		public NewProjectForm(ICodeProviderFactory factory)
 		{
 			InitializeComponent();
+			InitializeDatabaseShortcuts();
 
 			CodeProviderInfo[] providers = factory.GetAvailableProviders();
 
@@ -57,6 +57,13 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			{
 				languages.Items.Add(provider);
 			}
+		}
+
+		private void InitializeDatabaseShortcuts()
+		{
+			database.Items.Add( new Pair("MS SQL Server", "System.Data.SqlClient.SqlConnection, System.Data.SqlClient") );
+			database.Items.Add( new Pair("Oracle", "Oracle.DataAccess.Client.OracleConnection, Oracle.DataAccess") );
+			database.Items.Add( new Pair("MySQL", "MySql.Data.MySqlClient.MySqlConnection, MySql.Data") );
 		}
 
 		protected override void Dispose( bool disposing )
@@ -98,7 +105,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.createButton = new System.Windows.Forms.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.connectionStringButton = new System.Windows.Forms.Button();
 			this.connectionString = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.driver = new System.Windows.Forms.TextBox();
@@ -188,7 +194,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Controls.Add(this.connectionStringButton);
 			this.groupBox2.Controls.Add(this.connectionString);
 			this.groupBox2.Controls.Add(this.label5);
 			this.groupBox2.Controls.Add(this.driver);
@@ -202,20 +207,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Database:";
 			// 
-			// connectionStringButton
-			// 
-			this.connectionStringButton.Location = new System.Drawing.Point(450, 95);
-			this.connectionStringButton.Name = "connectionStringButton";
-			this.connectionStringButton.Size = new System.Drawing.Size(28, 20);
-			this.connectionStringButton.TabIndex = 12;
-			this.connectionStringButton.Text = "...";
-			this.connectionStringButton.Click += new System.EventHandler(this.connectionStringButton_Click);
-			// 
 			// connectionString
 			// 
 			this.connectionString.Location = new System.Drawing.Point(138, 95);
 			this.connectionString.Name = "connectionString";
-			this.connectionString.Size = new System.Drawing.Size(304, 21);
+			this.connectionString.Size = new System.Drawing.Size(346, 21);
 			this.connectionString.TabIndex = 11;
 			this.connectionString.Text = "";
 			// 
@@ -250,6 +246,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.database.Name = "database";
 			this.database.Size = new System.Drawing.Size(164, 21);
 			this.database.TabIndex = 7;
+			this.database.SelectionChangeCommitted += new System.EventHandler(this.database_SelectionChangeCommitted);
 			// 
 			// label3
 			// 
@@ -304,7 +301,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.label2.TabIndex = 14;
 			this.label2.Text = "Namespace";
 			// 
-			// NewProject
+			// NewProjectForm
 			// 
 			this.AcceptButton = this.createButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
@@ -318,7 +315,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.MaximizeBox = false;
-			this.Name = "NewProject";
+			this.Name = "NewProjectForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "New Project";
 			this.groupBox1.ResumeLayout(false);
@@ -329,22 +326,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		}
 		#endregion
 
-		private void connectionStringButton_Click(object sender, System.EventArgs e)
+		private void database_SelectionChangeCommitted(object sender, System.EventArgs e)
 		{
-			DataLinks links = new DataLinksClass();
-
-			if (connectionString.Text.Length == 0)
+			if (database.SelectedItem != null)
 			{
-				connectionString.Text = (String) links.PromptNew();
-			}
-			else
-			{
-				object ocs = connectionString.Text;
-
-				if((bool)links.PromptEdit(ref ocs))
-				{
-					connectionString.Text = (string)ocs;
-				}
+				driver.Text = (database.SelectedItem as Pair).Second;
 			}
 		}
 	}

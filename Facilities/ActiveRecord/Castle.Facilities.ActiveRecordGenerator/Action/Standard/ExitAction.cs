@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Action
+namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 {
 	using System;
 	using System.Windows.Forms;
@@ -20,8 +20,21 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
 
-	public interface IAction
+	public class ExitAction : IAction
 	{
-		object Execute(IWin32Window main, Project project);
+		public ExitAction()
+		{
+		}
+
+		#region IAction Members
+
+		public object Execute(IWin32Window main, Project project)
+		{
+			Application.Exit();
+
+			return null;
+		}
+
+		#endregion
 	}
 }

@@ -1,4 +1,3 @@
-using System.Windows.Forms;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,32 +15,42 @@ using System.Windows.Forms;
 namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 {
 	using System;
+	using System.Windows.Forms;
 
+	using Castle.Facilities.ActiveRecordGenerator.Forms;
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
 
 	public class NewProjectAction : IAction
 	{
-		public NewProjectAction()
+		private NewProjectForm _newProjectForm;
+
+		public NewProjectAction(NewProjectForm newProjectForm)
 		{
+			_newProjectForm = newProjectForm;
 		}
 
 		#region IAction Members
 
-		public object Execute(Project project)
+		public object Execute(IWin32Window main, Project project)
 		{
-			if (project.IsDirty)
-			{
-				DialogResult result = MessageBox.Show("Save changes?", "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
+//			if (project.IsDirty)
+//			{
+//				DialogResult result = MessageBox.Show("Save changes?", "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
+//
+//				if (result == DialogResult.Cancel)
+//				{
+//					return null;
+//				}
+//				else if (result == DialogResult.Yes)
+//				{
+//					// Save changes
+//				}
+//			}
 
-				if (result == DialogResult.Cancel)
-				{
-					return null;
-				}
-				else if (result == DialogResult.Yes)
-				{
-					// Save changes
-				}
+			if (_newProjectForm.ShowDialog(main) == DialogResult.OK)
+			{
+				
 			}
 			
 			return null;

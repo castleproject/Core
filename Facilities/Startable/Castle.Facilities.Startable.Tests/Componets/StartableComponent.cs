@@ -12,16 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Action
+namespace Castle.Facilities.Startable.Tests.Componets
 {
 	using System;
-	using System.Windows.Forms;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.Model;
 
-
-	public interface IAction
+	[Transient]
+	public class StartableComponent : IStartable
 	{
-		object Execute(IWin32Window main, Project project);
+		private bool _Started = false;
+		private bool _Stopped = false;
+
+		public void Start()
+		{
+			_Started = true;
+		}
+
+		public void Stop()
+		{
+			_Stopped = true;
+		}
+
+		public bool Started
+		{
+			get { return _Started; }
+		}
+
+		public bool Stopped
+		{
+			get { return _Stopped; }
+		}
 	}
 }

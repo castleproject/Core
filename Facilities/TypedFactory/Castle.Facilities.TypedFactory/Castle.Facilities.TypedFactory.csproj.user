@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP LastOpenVersion = "7.10.3077" >
         <Build>
-            <Settings ReferencePath = "E:\dev\projects\digitalgravity\castle\trunk\InversionOfControl\bin\" >
+            <Settings ReferencePath = "E:\dev\projects\digitalgravity\castle\trunk\InversionOfControl\bin\;E:\dev\projects\castle\InversionOfControl\bin\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"

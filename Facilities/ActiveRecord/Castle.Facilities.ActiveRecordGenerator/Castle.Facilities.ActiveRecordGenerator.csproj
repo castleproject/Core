@@ -110,9 +110,9 @@
                     HintPath = "..\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "MSDASC"
-                    AssemblyName = "MSDASC"
-                    HintPath = "..\lib\MSDASC.dll"
+                    Name = "Castle.Facilities.TypedFactory"
+                    AssemblyName = "Castle.Facilities.TypedFactory"
+                    HintPath = "..\..\TypedFactory\bin\Castle.Facilities.TypedFactory.dll"
                 />
             </References>
         </Build>
@@ -137,6 +137,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IApplicationModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Action\IAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -147,9 +152,24 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Action\Standard\ExitAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Action\Standard\NewProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\LocateAssembly.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\LocateAssembly.resx"
+                    DependentUpon = "LocateAssembly.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Forms\MainForm.cs"
@@ -162,14 +182,19 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Forms\NewProject.cs"
+                    RelPath = "Forms\NewProjectForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Forms\NewProject.resx"
-                    DependentUpon = "NewProject.cs"
+                    RelPath = "Forms\NewProjectForm.resx"
+                    DependentUpon = "NewProjectForm.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Utils\Pair.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

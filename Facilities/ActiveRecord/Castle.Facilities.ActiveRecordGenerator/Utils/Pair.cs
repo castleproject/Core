@@ -12,16 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Action
+namespace Castle.Facilities.ActiveRecordGenerator.Utils
 {
 	using System;
-	using System.Windows.Forms;
-
-	using Castle.Facilities.ActiveRecordGenerator.Model;
 
 
-	public interface IAction
+	public class Pair
 	{
-		object Execute(IWin32Window main, Project project);
+		private string _first;
+		private string _second;
+
+		public Pair(String first, String second)
+		{
+			_first = first;
+			_second = second;
+		}
+
+		public string First
+		{
+			get { return _first; }
+		}
+
+		public string Second
+		{
+			get { return _second; }
+		}
+
+		public override string ToString()
+		{
+			return _first;
+		}
 	}
 }
