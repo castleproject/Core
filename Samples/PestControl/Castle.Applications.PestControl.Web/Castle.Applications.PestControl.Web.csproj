@@ -119,6 +119,26 @@
                     Project = "{6C51A1E3-7F20-4696-BFD6-829134678341}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Bamboo.Prevalence.Util"
+                    AssemblyName = "Bamboo.Prevalence.Util"
+                    HintPath = "..\bin\Bamboo.Prevalence.Util.dll"
+                />
+                <Reference
+                    Name = "Bamboo.Prevalence"
+                    AssemblyName = "Bamboo.Prevalence"
+                    HintPath = "..\bin\Bamboo.Prevalence.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -156,9 +176,18 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ProjectController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\RegistrationController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "css\def.css"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "views\footer.ascx"
@@ -196,6 +225,21 @@
                 <File
                     RelPath = "views\home\index.aspx.resx"
                     DependentUpon = "index.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "views\project\new.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\project\new.aspx.cs"
+                    DependentUpon = "new.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\project\new.aspx.resx"
+                    DependentUpon = "new.aspx.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

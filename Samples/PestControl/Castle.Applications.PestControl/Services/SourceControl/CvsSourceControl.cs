@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+ // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,23 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Services.SourceControl
 {
 	using System;
-
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
+	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
-	/// Summary description for DashboardController.
+	/// Summary description for CvsSourceControl.
 	/// </summary>
-	[Transient]
-	public class DashboardController : Controller
+	public class CvsSourceControl : ISourceControl
 	{
-		public void Index()
+		public CvsSourceControl()
 		{
-			
 		}
+
+		#region ISourceControl Members
+
+		public String Name
+		{
+			get { return "CVS Repository"; }
+		}
+
+		public String Key
+		{
+			get { return "cvssc"; }
+		}
+
+		public bool HasModifications(Project project, DateTime since)
+		{
+			return false;
+		}
+
+		#endregion
 	}
 }

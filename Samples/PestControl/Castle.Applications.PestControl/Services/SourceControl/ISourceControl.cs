@@ -12,44 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Services.SourceControl
 {
 	using System;
-
-	using Bamboo.Prevalence;
-
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
 
 	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
-	/// Summary description for RegistrationController.
+	/// Summary description for ISourceControl.
 	/// </summary>
-	[Transient]
-	public class RegistrationController : SmartDispatcherController
+	public interface ISourceControl
 	{
-		private PrevalenceEngine _engine;
+		String Name { get; }
 
-		public RegistrationController( PrevalenceEngine engine )
-		{
-			_engine = engine;
-		}
+		String Key { get; }
 
-		public void Signup()
-		{
-			
-		}
-
-		public void RegisterUser(String name, String email, String passwd)
-		{
-			User user = (User)
-				_engine.ExecuteCommand( new CreateUserCommand(name, passwd, email) );
-
-			Context.User = user;
-
-			Redirect("home", "index");
-		}
+		bool HasModifications(Project project, DateTime since);
 	}
 }

@@ -1,15 +1,16 @@
 <%@ Register TagPrefix="pcontrol" TagName="Footer" Src="../../views/footer.ascx" %>
 <%@ Register TagPrefix="pcontrol" TagName="Header" Src="../../views/header.ascx" %>
-<%@ Page CodeBehind="signup.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.Views.Registration.Index" %>
-<pcontrol:Header title="Home" runat="server" ID="Header1" />
-<form runat="server">
+<%@ Page CodeBehind="new.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.views.project.New" %>
+<pcontrol:Header title="New Project" runat="server" ID="Header1" />
+<form runat="server" ID="Form1">
 	<p>
-		Please fill the fields below to create an account.
+		Please fill the fields below to create a new project
 	</p>
 	<asp:ValidationSummary runat="server" id="ValidationSummary1" />
+	
 	<TABLE class="formtable" width="330" BORDER="0" CELLSPACING="6" CELLPADDING="2">
 		<TR>
-			<TD width="30%">E-mail:</TD>
+			<TD width="30%">Project Name:</TD>
 			<TD><asp:TextBox ID="email" Runat="server" /></TD>
 		</TR>
 		<TR>

@@ -1,3 +1,4 @@
+using System.IO;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +27,7 @@ namespace Castle.Facilities.Prevalence
 	/// <summary>
 	/// Summary description for PrevalenceEngineComponentActivator.
 	/// </summary>
-	public class PrevalenceEngineComponentActivator : AbstractComponentActivator
+	public class PrevalenceEngineComponentActivator : DefaultComponentActivator
 	{
 		public PrevalenceEngineComponentActivator(ComponentModel model, IKernel kernel, 
 			ComponentInstanceDelegate onCreation, 
@@ -34,7 +35,7 @@ namespace Castle.Facilities.Prevalence
 		{
 		}
 
-		protected override object InternalCreate()
+		protected override object Instantiate()
 		{
 			Type systemType = (Type) 
 				Model.ExtendedProperties[PrevalenceFacility.SystemTypePropertyKey];
@@ -42,16 +43,26 @@ namespace Castle.Facilities.Prevalence
 				Model.ExtendedProperties[PrevalenceFacility.StorageDirPropertyKey];
 			bool autoVersionMigration = (bool) 
 				Model.ExtendedProperties[PrevalenceFacility.AutoMigrationPropertyKey];
+			bool resetStorage = (bool) 
+				Model.ExtendedProperties[PrevalenceFacility.ResetStoragePropertyKey];
 			
+			if (resetStorage) DeleteStorageDir(dir);
+
 			return 
 				PrevalenceActivator.CreateEngine( 
 					systemType, 
 					dir, 
-					Convert.ToBoolean(autoVersionMigration) );
+					autoVersionMigration );
 		}
 
-		protected override void InternalDestroy(object instance)
+		private void DeleteStorageDir(String dir)
 		{
+			DirectoryInfo di = new DirectoryInfo(dir);
+			
+			if (di.Exists)
+			{
+				di.Delete(true);
+			}
 		}
 	}
 }

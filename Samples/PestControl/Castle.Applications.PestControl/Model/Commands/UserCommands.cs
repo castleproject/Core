@@ -12,44 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Model
 {
 	using System;
 
 	using Bamboo.Prevalence;
 
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
-
-	using Castle.Applications.PestControl.Model;
-
 	/// <summary>
-	/// Summary description for RegistrationController.
+	/// Summary description for UserCommands.
 	/// </summary>
-	[Transient]
-	public class RegistrationController : SmartDispatcherController
+	[Serializable]
+	public class CreateUserCommand : ICommand
 	{
-		private PrevalenceEngine _engine;
+		String _name; String _pass; String _email;
 
-		public RegistrationController( PrevalenceEngine engine )
+		public CreateUserCommand(String name, String pass, String email)
 		{
-			_engine = engine;
+			_name = name; _pass = pass; _email = email;
 		}
 
-		public void Signup()
+		public object Execute(object system)
 		{
-			
-		}
+			UserCollection users = (system as PestControlModel).Users;
 
-		public void RegisterUser(String name, String email, String passwd)
-		{
-			User user = (User)
-				_engine.ExecuteCommand( new CreateUserCommand(name, passwd, email) );
+			User user = users.FindByEmail( _email);
 
-			Context.User = user;
+			if (user != null)
+			{
+				throw new ApplicationException("User with same email already registered");
+			}
 
-			Redirect("home", "index");
+			user = new User(_name, _email, _pass);
+
+			users.Add( user );
+
+			return user;
 		}
 	}
 }

@@ -16,10 +16,15 @@ namespace Castle.Applications.PestControl.Web.Views.Registration
 		protected System.Web.UI.WebControls.TextBox passwd;
 		protected System.Web.UI.WebControls.Button LoginIn;
 		protected System.Web.UI.WebControls.Button SignUp;
+		protected System.Web.UI.WebControls.TextBox name;
+		protected System.Web.UI.WebControls.TextBox passwd2;
+		protected System.Web.UI.WebControls.Button Save;
+		protected System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
 		private Controller _controller;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
+			Save.Click += new EventHandler(OnSave);
 		}
 
 		#region Web Form Designer generated code
@@ -48,18 +53,17 @@ namespace Castle.Applications.PestControl.Web.Views.Registration
 			_controller = controller;
 		}
 
-		public void OnLogin(object sender, EventArgs args)
+		public void OnSave(object sender, EventArgs args)
 		{
 			// Any validation to perform?
 
-			// Perform login
+			// TODO: Add ASP.Net Validators
 
-			_controller.Send("Login");
-		}
+			// So lets save the content
 
-		public void OnSignUp(object sender, EventArgs args)
-		{
-			_controller.Send( "SignUp" );
+			_controller.Send("RegisterUser");
+
+			Response.End();
 		}
 	}
 }

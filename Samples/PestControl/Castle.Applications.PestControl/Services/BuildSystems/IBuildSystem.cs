@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+ // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,23 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Services.BuildSystems
 {
 	using System;
-
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
+	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
-	/// Summary description for DashboardController.
+	/// Summary description for IBuildSystem.
 	/// </summary>
-	[Transient]
-	public class DashboardController : Controller
+	public interface IBuildSystem
 	{
-		public void Index()
-		{
-			
-		}
+		String Name { get; }
+
+		String Key { get; }
+
+		BuildResult Build(Project project);
 	}
 }

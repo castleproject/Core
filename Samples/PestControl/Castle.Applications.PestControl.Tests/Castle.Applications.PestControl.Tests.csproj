@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}"
+        ProjectGuid = "{5DFDD338-D552-4D1E-B6E7-6E031F00696E}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Applications.PestControl"
+                AssemblyName = "Castle.Applications.PestControl.Tests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Applications.PestControl"
+                RootNamespace = "Castle.Applications.PestControl.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -70,9 +70,25 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
+                />
+                <Reference
+                    Name = "Castle.Facilities.Prevalence"
+                    Project = "{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "Castle.MicroKernel"
@@ -85,116 +101,40 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Facilities.Prevalence"
-                    Project = "{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}"
+                    Name = "Castle.Applications.PestControl"
+                    Project = "{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
                     Name = "Bamboo.Prevalence"
                     AssemblyName = "Bamboo.Prevalence"
                     HintPath = "..\bin\Bamboo.Prevalence.dll"
                 />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AbstractPestControlTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "PestControlContainer.cs"
+                    RelPath = "Castle.Applications.PestControl.Tests.dll.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Model\ProjectsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model\Identifiable.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\PestControlModel.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\Projects.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\Users.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\Commands\ProjectCommands.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\Commands\UserCommands.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\BuildSystems\BuildResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\BuildSystems\BuildSystemManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\BuildSystems\IBuildSystem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\BuildSystems\MSBuildBuildSystem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\BuildSystems\NAntBuildSystem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\SourceControl\CvsSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\SourceControl\ISourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\SourceControl\SourceControlManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\SourceControl\SvnSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\SourceControl\VssSourceControl.cs"
+                    RelPath = "Model\UsersTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -76,6 +76,10 @@ namespace Castle.MicroKernel.Resolvers
 
 				handler = _kernel.GetHandler( value );
 			}
+			else if (dependency.TargetType == typeof(IKernel))
+			{
+				return _kernel;
+			}
 			else
 			{
 				// Default behaviour

@@ -12,44 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Tests.Model
 {
 	using System;
 
-	using Bamboo.Prevalence;
-
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
+	using NUnit.Framework;
 
 	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
-	/// Summary description for RegistrationController.
+	/// Summary description for UsersTestCase.
 	/// </summary>
-	[Transient]
-	public class RegistrationController : SmartDispatcherController
+	[TestFixture]
+	public class ProjectsTestCase : AbstractPestControlTestCase
 	{
-		private PrevalenceEngine _engine;
-
-		public RegistrationController( PrevalenceEngine engine )
+		[Test]
+		public void CreateProject()
 		{
-			_engine = engine;
-		}
+			Assert.AreEqual( 0, _model.Projects.Count );
 
-		public void Signup()
-		{
-			
-		}
+			User user = (User) _engine.ExecuteCommand( 
+				new CreateUserCommand("admin", "pass123", "admin@admin.com") );
 
-		public void RegisterUser(String name, String email, String passwd)
-		{
-			User user = (User)
-				_engine.ExecuteCommand( new CreateUserCommand(name, passwd, email) );
+			_engine.ExecuteCommand( new CreateProjectCommand() );
 
-			Context.User = user;
-
-			Redirect("home", "index");
+			Assert.AreEqual( 1, _model.Projects.Count );
 		}
 	}
 }

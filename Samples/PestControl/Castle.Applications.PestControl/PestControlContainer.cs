@@ -21,6 +21,9 @@ namespace Castle.Applications.PestControl
 
 	using Castle.Facilities.Prevalence;
 
+	using Castle.Applications.PestControl.Services.BuildSystems;
+	using Castle.Applications.PestControl.Services.SourceControl;
+
 	/// <summary>
 	/// Summary description for PestControlContainer.
 	/// </summary>
@@ -31,6 +34,25 @@ namespace Castle.Applications.PestControl
 			Kernel.ConfigurationStore = configStore;
 
 			AddFacility("prevalence", new PrevalenceFacility() );
+
+			// BS Manager
+
+			AddComponent("buildsystemmanager", typeof(BuildSystemManager));
+
+			// Build Systems
+
+			AddComponent("nant", typeof(IBuildSystem), typeof(NAntBuildSystem));
+			AddComponent("msbuild", typeof(IBuildSystem), typeof(MSBuildBuildSystem));
+
+			// SC Manager
+
+			AddComponent("sourcecontrolmanager", typeof(SourceControlManager));
+
+			// Source Controls
+
+			AddComponent("svnsc", typeof(SvnSourceControl));
+			AddComponent("cvssc", typeof(CvsSourceControl));
+			AddComponent("vsssc", typeof(VssSourceControl));
 		}
 	}
 }

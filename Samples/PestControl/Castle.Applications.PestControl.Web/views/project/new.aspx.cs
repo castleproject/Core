@@ -1,23 +1,21 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Web;
 using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-using Castle.CastleOnRails.Framework;
 
-namespace Castle.Applications.PestControl.Web.Views.Home
+namespace Castle.Applications.PestControl.Web.views.project
 {
-	public class Index : System.Web.UI.Page, IControllerAware
+	/// <summary>
+	/// Summary description for _new.
+	/// </summary>
+	public class New : System.Web.UI.Page
 	{
-		protected System.Web.UI.WebControls.TextBox email;
-		protected System.Web.UI.WebControls.TextBox passwd;
-		protected System.Web.UI.WebControls.Button LoginIn;
-		protected System.Web.UI.WebControls.Button SignUp;
-		private Controller _controller;
-
 		private void Page_Load(object sender, System.EventArgs e)
 		{
 		}
@@ -39,31 +37,7 @@ namespace Castle.Applications.PestControl.Web.Views.Home
 		private void InitializeComponent()
 		{    
 			this.Load += new System.EventHandler(this.Page_Load);
-
 		}
 		#endregion
-
-		public void SetController(Controller controller)
-		{
-			_controller = controller;
-		}
-
-		public void OnLogin(object sender, EventArgs args)
-		{
-			// Any validation to perform?
-
-			// Perform login
-
-			_controller.Send("Login");
-
-			Response.End();
-		}
-
-		public void OnSignUp(object sender, EventArgs args)
-		{
-			_controller.Send( "SignUp" );
-
-			Response.End();
-		}
 	}
 }

@@ -12,44 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Services.BuildSystems
 {
 	using System;
-
-	using Bamboo.Prevalence;
-
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
 
 	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
-	/// Summary description for RegistrationController.
+	/// Summary description for MSBuildBuildSystem.
 	/// </summary>
-	[Transient]
-	public class RegistrationController : SmartDispatcherController
+	public class MSBuildBuildSystem : IBuildSystem
 	{
-		private PrevalenceEngine _engine;
-
-		public RegistrationController( PrevalenceEngine engine )
+		public MSBuildBuildSystem()
 		{
-			_engine = engine;
 		}
 
-		public void Signup()
+		#region IBuildSystem Members
+
+		public String Name
 		{
-			
+			get
+			{
+				return "MSBuild";
+			}
 		}
 
-		public void RegisterUser(String name, String email, String passwd)
+		public String Key
 		{
-			User user = (User)
-				_engine.ExecuteCommand( new CreateUserCommand(name, passwd, email) );
-
-			Context.User = user;
-
-			Redirect("home", "index");
+			get
+			{
+				return "msbuild";
+			}
 		}
+
+		public BuildResult Build(Project project)
+		{
+			// Work work work
+
+			return new BuildResult();
+		}
+
+		#endregion
 	}
 }

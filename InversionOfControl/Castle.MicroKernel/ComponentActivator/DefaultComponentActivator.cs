@@ -34,22 +34,9 @@ namespace Castle.MicroKernel.ComponentActivator
 
 		#region AbstractComponentActivator Members
 
-		protected override object InternalCreate()
+		protected override sealed object InternalCreate()
 		{
-			ConstructorCandidate candidate = SelectEligibleConstructor();
-			
-			object[] arguments = CreateConstructorArguments( candidate );
-
-			object instance = null;
-
-			if (Model.Interceptors.HasInterceptors)
-			{
-				instance = Kernel.ProxyFactory.Create(Kernel, Model, arguments);
-			}
-			else
-			{
-				instance = Activator.CreateInstance(Model.Implementation, arguments);
-			}
+			object instance = Instantiate();
 
 			SetUpProperties(instance);
 
@@ -64,6 +51,29 @@ namespace Castle.MicroKernel.ComponentActivator
 		}
 
 		#endregion
+
+		protected virtual object Instantiate()
+		{
+			ConstructorCandidate candidate = SelectEligibleConstructor();
+	
+			object[] arguments = CreateConstructorArguments( candidate );
+	
+			object instance = null;
+	
+			// TODO: Components registered with interface and implementation
+			// should use a interface proxy
+
+			if (Model.Interceptors.HasInterceptors)
+			{
+				instance = Kernel.ProxyFactory.Create(Kernel, Model, arguments);
+			}
+			else
+			{
+				instance = Activator.CreateInstance(Model.Implementation, arguments);
+			}
+			
+			return instance;
+		}
 
 		protected virtual void ApplyCommissionConcerns( object instance )
 		{

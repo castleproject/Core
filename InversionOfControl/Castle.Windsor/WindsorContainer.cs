@@ -17,6 +17,7 @@ namespace Castle.Windsor
 	using System;
 
 	using Castle.MicroKernel;
+
 	using Castle.Windsor.Configuration.AppDomain;
 
 	/// <summary>
@@ -79,6 +80,16 @@ namespace Castle.Windsor
 		public object Resolve(Type service)
 		{
 			return Kernel[service];
+		}
+
+		public object this [String key]
+		{
+			get { return Resolve(key); }
+		}
+
+		public object this [Type service]
+		{
+			get { return Resolve(service); }
 		}
 
 		public void Release(object instance)

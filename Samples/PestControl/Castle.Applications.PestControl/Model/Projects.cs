@@ -23,32 +23,49 @@ namespace Castle.Applications.PestControl.Model
 	[Serializable]
 	public class Project : Identifiable
 	{
-		public bool isPublic;
-		public String name;
-		public User owner;
+		public User _owner;
+		public bool _isPublic;
+		public String _name;
+		public String _sourceControl;
+		public String _buildSystem;
 
-		public Project(String name, User owner)
+		public Project(bool _isPublic, string _name, string _sourceControl, string _buildSystem, User _owner)
 		{
-			this.name = name;
-			this.owner = owner;
-		}
-
-		public String Name
-		{
-			get { return name; }
-			set { name = value; }
+			this._owner = _owner;
+			this._isPublic = _isPublic;
+			this._name = _name;
+			this._sourceControl = _sourceControl;
+			this._buildSystem = _buildSystem;
 		}
 
 		public User Owner
 		{
-			get { return owner; }
-			set { owner = value; }
+			get { return _owner; }
+			set { _owner = value; }
 		}
 
 		public bool IsPublic
 		{
-			get { return isPublic; }
-			set { isPublic = value; }
+			get { return _isPublic; }
+			set { _isPublic = value; }
+		}
+
+		public string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
+		public string SourceControl
+		{
+			get { return _sourceControl; }
+			set { _sourceControl = value; }
+		}
+
+		public string BuildSystem
+		{
+			get { return _buildSystem; }
+			set { _buildSystem = value; }
 		}
 	}
 

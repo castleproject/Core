@@ -148,6 +148,14 @@ namespace Castle.MicroKernel
 		IHandler GetHandler(Type service);
 
 		/// <summary>
+		/// Return handlers for components that 
+		/// implements the specified service.
+		/// </summary>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		IHandler[] GetHandlers(Type service);
+
+		/// <summary>
 		/// 
 		/// </summary>
 		IReleasePolicy ReleasePolicy

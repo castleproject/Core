@@ -33,8 +33,9 @@ namespace Castle.Facilities.Prevalence
 		public static readonly String StorageDirPropertyKey = "prevalence.storagedir";
 		public static readonly String AutoMigrationPropertyKey = "prevalence.autoversionmigration";
 		public static readonly String EngineIdPropertyKey = "prevalence.engineid";
+		public static readonly String ResetStoragePropertyKey = "prevalence.resetStorage";
 
-		public IKernel kernel;
+		private IKernel kernel;
 
 		public PrevalenceFacility()
 		{
@@ -76,13 +77,18 @@ namespace Castle.Facilities.Prevalence
 		{
 			String engineKey = engineConfig.Attributes["id"];
 			String systemId = engineConfig.Attributes["systemId"];
+			String resetStorage = engineConfig.Attributes["resetStorage"];
 
 			Type systemType = ObtainSystemType(engineConfig);
 			bool autoVersion = Convert.ToBoolean( engineConfig.Attributes["autoVersionMigration"] );
 
+			if (resetStorage == null) resetStorage = "false";
+
 			IDictionary properties = new HybridDictionary(true);
+
 			properties.Add(SystemTypePropertyKey, systemType);
 			properties.Add(AutoMigrationPropertyKey, autoVersion);
+			properties.Add(ResetStoragePropertyKey, Convert.ToBoolean(resetStorage) );
 			properties.Add(StorageDirPropertyKey, engineConfig.Attributes["storageDir"]);
 
 			kernel.AddComponentWithProperties(engineKey, typeof(PrevalenceEngine), properties);

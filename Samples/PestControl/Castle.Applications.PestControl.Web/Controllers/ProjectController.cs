@@ -1,5 +1,3 @@
-using System.Web;
-using System.Web.Security;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,46 +23,21 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
-	/// Summary description for HomeController.
+	/// Summary description for ProjectController.
 	/// </summary>
 	[Transient]
-	public class HomeController : SmartDispatcherController
+	public class ProjectController : SmartDispatcherController
 	{
 		private PestControlModel _model;
 
-		public HomeController(PestControlModel model)
+		public ProjectController(PestControlModel model)
 		{
 			_model = model;
 		}
 
-		public void Index()
+		public void New()
 		{
 			
-		}
-
-		public void Login(String email, String passwd)
-		{
-			if (!_model.Users.Authenticate(email, passwd))
-			{
-				// TODO: Error message
-
-				Redirect("home", "index");
-			}
-			else
-			{
-				FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(email, true, 14 * 24 * 60);
-				String cookieContents = FormsAuthentication.Encrypt( ticket );
-				
-				Context.Response.Cookies.Add( 
-					new HttpCookie(FormsAuthentication.FormsCookieName, cookieContents) );
-
-				Redirect("dashboard", "index");
-			}
-		}
-
-		public void SignUp()
-		{
-			Redirect("registration", "signup");
 		}
 	}
 }

@@ -12,23 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Services.BuildSystems
 {
 	using System;
 
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
-
 	/// <summary>
-	/// Summary description for DashboardController.
+	/// Summary description for BuildResult.
 	/// </summary>
-	[Transient]
-	public class DashboardController : Controller
+	public class BuildResult
 	{
-		public void Index()
+		public BuildResult()
 		{
-			
 		}
 	}
 }

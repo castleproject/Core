@@ -4,6 +4,13 @@
 
 <pcontrol:Header runat=server title="Dashboard" />
 
-		Welcome to dashboard
+<p>
+<font size="+1">Welcome to Dashboard</font>
+</p>
+
+<p align=left>
+<a href="../project/new.rails">Add new Project</a>
+</p>
+
 
 <pcontrol:Footer runat=server />

@@ -15,7 +15,27 @@
 	</HEAD>
 	<body>
 		   <div class="titlecontainer">
-		     PestControl - <%= PageTitle %>
+		     <table border=0 width="100%">
+				<tr class="titlecontainer">
+					<td>
+				     PestControl - <%= PageTitle %>
+					</td>
+					<td align=right>
+					    
+					    <% 
+						   if (Context.User != null && Context.User.Identity.IsAuthenticated)
+					       {
+					    %>
+						<font size=-1>Logged as <%= Context.User.Identity.Name %></font>
+					    <% }
+					       else if (!Context.User.Identity.IsAuthenticated) 
+						   {
+					    %>
+						<font size=-1>Not logged on</font>
+					    <% } %>
+					</td>
+				</tr>
+		     </table>
 		   </div>
 
 		   <div class="container" align="center">

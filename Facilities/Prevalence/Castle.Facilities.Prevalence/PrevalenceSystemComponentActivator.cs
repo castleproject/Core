@@ -26,7 +26,7 @@ namespace Castle.Facilities.Prevalence
 	/// <summary>
 	/// Summary description for PrevalenceSystemComponentActivator.
 	/// </summary>
-	public class PrevalenceSystemComponentActivator : AbstractComponentActivator
+	public class PrevalenceSystemComponentActivator : DefaultComponentActivator
 	{
 		public PrevalenceSystemComponentActivator(ComponentModel model, IKernel kernel, 
 			ComponentInstanceDelegate onCreation, 
@@ -40,7 +40,7 @@ namespace Castle.Facilities.Prevalence
 		/// apropriate property
 		/// </summary>
 		/// <returns></returns>
-		protected override object InternalCreate()
+		protected override object Instantiate()
 		{
 			String engineId = (String) 
 				Model.ExtendedProperties[PrevalenceFacility.EngineIdPropertyKey];
@@ -48,10 +48,6 @@ namespace Castle.Facilities.Prevalence
 			PrevalenceEngine engine = (PrevalenceEngine) Kernel[engineId];
 
 			return engine.PrevalentSystem;
-		}
-
-		protected override void InternalDestroy(object instance)
-		{
 		}
 	}
 }

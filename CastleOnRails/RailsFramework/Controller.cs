@@ -17,6 +17,7 @@ namespace Castle.CastleOnRails.Framework
 	using System;
 	using System.IO;
 	using System.Web;
+	using System.Web.SessionState;
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -106,6 +107,11 @@ namespace Castle.CastleOnRails.Framework
 		protected HttpContext Context
 		{
 			get { return __context; }
+		}
+
+		protected HttpSessionState Session
+		{
+			get { return __context.Session; }
 		}
 
 		public virtual void Send( String action )

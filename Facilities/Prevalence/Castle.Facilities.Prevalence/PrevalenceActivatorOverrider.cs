@@ -22,7 +22,8 @@ namespace Castle.Facilities.Prevalence
 	using Castle.MicroKernel.ModelBuilder;
 
 	/// <summary>
-	/// Summary description for PrevalenceActivatorOverriderModelInspector.
+	/// This inspector registers custom activators for PrevalenceEngines and
+	/// PrevalenceSystem.
 	/// </summary>
 	public class PrevalenceActivatorOverriderModelInspector : IContributeComponentModelConstruction
 	{

@@ -18,7 +18,6 @@ namespace Castle.MicroKernel.ComponentActivator
 
 	using Castle.Model;
 
-
 	/// <summary>
 	/// Summary description for AbstractComponentActivator.
 	/// </summary>

@@ -12,44 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Services.BuildSystems
 {
 	using System;
-
-	using Bamboo.Prevalence;
-
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
 
 	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
-	/// Summary description for RegistrationController.
+	/// Summary description for NAntBuildSystem.
 	/// </summary>
-	[Transient]
-	public class RegistrationController : SmartDispatcherController
+	public class NAntBuildSystem : IBuildSystem
 	{
-		private PrevalenceEngine _engine;
-
-		public RegistrationController( PrevalenceEngine engine )
+		public NAntBuildSystem()
 		{
-			_engine = engine;
 		}
 
-		public void Signup()
+		public String Name
 		{
-			
+			get { return "NAnt (0.8.5)"; }
 		}
 
-		public void RegisterUser(String name, String email, String passwd)
+		public String Key
 		{
-			User user = (User)
-				_engine.ExecuteCommand( new CreateUserCommand(name, passwd, email) );
+			get { return "nant085"; }
+		}
 
-			Context.User = user;
+		public BuildResult Build(Project project)
+		{
+			// Work work work
 
-			Redirect("home", "index");
+			return new BuildResult();
 		}
 	}
 }

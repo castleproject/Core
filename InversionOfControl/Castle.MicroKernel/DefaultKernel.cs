@@ -246,6 +246,27 @@ namespace Castle.MicroKernel
 			return handler;
 		}
 
+		/// <summary>
+		/// Return handlers for components that 
+		/// implements the specified service.
+		/// </summary>
+		/// <param name="service"></param>
+		/// <returns></returns>
+		public virtual IHandler[] GetHandlers(Type service)
+		{
+			ArrayList list = new ArrayList();
+
+			foreach( IHandler handler in _key2Handler.Values )
+			{
+				if (handler.ComponentModel.Service == service)
+				{
+					list.Add(handler);
+				}
+			}
+
+			return (IHandler[]) list.ToArray( typeof(IHandler) );
+		}
+
 		public IReleasePolicy ReleasePolicy
 		{
 			get { return _releaserPolicy; }

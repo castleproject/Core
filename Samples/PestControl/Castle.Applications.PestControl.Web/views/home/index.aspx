@@ -4,7 +4,9 @@
 
 <pcontrol:Header title="Home" runat=server />
 	    	
-    <p>If you'd like to administer projects, please login</p>
+    <p>If you'd like to administer projects, please log on.</p>
+    <p>Of course, you have to <a href="../registration/signup.rails">register</a> first.</p>
+    
 		<form runat="server">
 
 			<TABLE class="formtable"  BORDER="0" CELLSPACING="6" CELLPADDING="2">
@@ -20,7 +22,6 @@
 					<TD colspan="2" align="center">
 					    <hr noshade>
 						<asp:Button ID="LoginIn" OnClick="OnLogin" Runat="server" Text="Log In"></asp:Button>
-						<asp:Button ID="SignUp" OnClick="OnSignUp" Runat="server" Text="SignUp"></asp:Button>
 					</TD>
 				</TR>
 			</TABLE>

@@ -15,12 +15,13 @@
 namespace Castle.Applications.PestControl.Web
 {
 	using System;
-
+	using System.Web.Security;
 	using System.Web;
 
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.AppDomain;
 
+	using Castle.Applications.PestControl.Model;
 	using Castle.Applications.PestControl.Web.Controllers;
 
 	/// <summary>
@@ -42,11 +43,27 @@ namespace Castle.Applications.PestControl.Web
 			container.AddComponent( "home", typeof(HomeController) );
 			container.AddComponent( "dashboard", typeof(DashboardController) );
 			container.AddComponent( "registration", typeof(RegistrationController) );
+			container.AddComponent( "project", typeof(ProjectController) );
 		}
 
 		public void Application_OnEnd() 
 		{
 			container.Dispose();
+		}
+
+		public void FormsAuthentication_OnAuthenticate(Object sender, 
+			FormsAuthenticationEventArgs e)
+		{
+			HttpCookie cookie = 
+				e.Context.Request.Cookies[ FormsAuthentication.FormsCookieName ];
+
+			if (cookie == null) return;
+
+			FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+
+			PestControlModel model = (PestControlModel) container[ typeof(PestControlModel) ];
+
+			e.User = model.Users.FindByEmail( ticket.Name );
 		}
 
 		#region IContainerAccessor implementation
