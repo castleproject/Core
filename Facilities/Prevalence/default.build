@@ -5,7 +5,7 @@
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="src.dir" value="${base.dir}/Castle.Facilities.Prevalence" />
 
@@ -28,7 +28,7 @@
 		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
 		<copy todir="${bin.dir}">
-			<fileset basedir="${lib.dir}">
+			<fileset basedir="${library.dir}">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
@@ -89,7 +89,7 @@
 				<include name="*.sln" />
 				<include name="${src.dir}/**/*.*" />
 				<include name="${test.src.dir}/**/*.*" />
-				<include name="${lib.dir}/**/*.*" />
+				<include name="${library.dir}/**/*.*" />
 				
 				<exclude name="**/Debug/*" />
 				<exclude name="**/obj/*" />
@@ -100,7 +100,7 @@
 		<zip zipfile="${name}.bin.${version}.zip">
 			<fileset basedir="${base.dir}">
 				<include name="${bin.dir}/${assembly.name}" />				
-				<include name="${lib.dir}/**/*.*" />
+				<include name="${library.dir}/**/*.*" />
 				<include name="License.txt" />				
 				<include name="Readme.txt" />				
 				<include name="Changes.txt" />				

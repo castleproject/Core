@@ -3,7 +3,7 @@
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/doc" />
 	<property name="src.dir" value="${base.dir}" />
 

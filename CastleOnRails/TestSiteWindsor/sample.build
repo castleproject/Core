@@ -2,7 +2,7 @@
 <project name="rails-testsitewindsor" default="build">
 
 	<property name="base.dir" value="." />
-	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="bin2.dir" value="${base.dir}/bin" />
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
@@ -12,12 +12,12 @@
 	<property name="version" value="1.0.0.0" />
 
 	<target name="clean">
-		<delete dir="${bin.dir}" failonerror="false"/>
-		<mkdir dir="${bin.dir}"/>
+		<delete dir="${bin2.dir}" failonerror="false"/>
+		<mkdir dir="${bin2.dir}"/>
 	</target>
 
 	<target name="init" depends="clean">
-		<copy todir="${bin.dir}">
+		<copy todir="${bin2.dir}">
 			<fileset basedir="../bin">
 				<include name="Castle.CastleOnRails.Engine.dll" />
 				<include name="Castle.CastleOnRails.Framework.dll" />
@@ -36,7 +36,7 @@
 		<csc 
 			define="STRONG"
 			target="library" 
-			output="${bin.dir}/${assembly.name}">
+			output="${bin2.dir}/${assembly.name}">
 			
 			<sources basedir="${src.dir}">
 				<include name="**/*.cs" />
@@ -44,13 +44,13 @@
 
 			<references>
 				<include name="System.Web.dll" />
-				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
-				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
-				<include name="${bin.dir}/Castle.CastleOnRails.WindsorExtension.dll" />
-				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
-				<include name="${bin.dir}/Castle.Model.dll" />
-				<include name="${bin.dir}/Castle.MicroKernel.dll" />
-				<include name="${bin.dir}/Castle.Windsor.dll" />
+				<include name="${bin2.dir}/Castle.CastleOnRails.Engine.dll" />
+				<include name="${bin2.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin2.dir}/Castle.CastleOnRails.WindsorExtension.dll" />
+				<include name="${bin2.dir}/Castle.DynamicProxy.dll" />
+				<include name="${bin2.dir}/Castle.Model.dll" />
+				<include name="${bin2.dir}/Castle.MicroKernel.dll" />
+				<include name="${bin2.dir}/Castle.Windsor.dll" />
 			</references>
 		</csc>
 	</target>

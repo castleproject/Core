@@ -3,7 +3,7 @@
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="name" value="CastleOnRails" />
 	<property name="version" value="beta-1" />
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
@@ -33,10 +33,18 @@
 			</fileset>
 		</copy>
 		<copy todir="${bin.dir}">
-			<fileset basedir="${lib.dir}">
+			<fileset basedir="${library.dir}">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
+		<exec program="gacutil" failonerror="false" verbose="true" workingdir="${bin.dir}">
+			<arg value="/u" />
+			<arg value="Cassini" />
+		</exec>
+		<exec program="gacutil" failonerror="false" verbose="true" workingdir="${bin.dir}">
+			<arg value="/i" />
+			<arg value="Cassini.dll" />
+		</exec>
 	</target>
 	
 	<target name="framework" depends="init">

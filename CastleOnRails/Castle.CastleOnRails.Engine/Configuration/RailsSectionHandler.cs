@@ -1,4 +1,3 @@
-using System.IO;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +15,13 @@ using System.IO;
 namespace Castle.CastleOnRails.Engine.Configuration
 {
 	using System;
+	using System.IO;
 	using System.Xml;
 	using System.Configuration;
 
 	using Castle.CastleOnRails.Framework;
 	using Castle.CastleOnRails.Framework.Internal;
+
 
 	public class RailsSectionHandler : IConfigurationSectionHandler
 	{
@@ -28,6 +29,7 @@ namespace Castle.CastleOnRails.Engine.Configuration
 		private static readonly String Views_Node_Name = "viewEngine";
 		private static readonly String Custom_Controller_Factory_Node_Name = "customControllerFactory";
 		private static readonly String Custom_Filter_Factory_Node_Name = "customFilterFactory";
+		private static readonly String View_Path_Root = "viewPathRoot";
 
 		public object Create(object parent, object configContext, XmlNode section)
 		{
@@ -89,11 +91,12 @@ namespace Castle.CastleOnRails.Engine.Configuration
 
 		private void ProcessViewNode(XmlNode node, RailsConfiguration config)
 		{
-			XmlAttribute viewPath = node.Attributes["viewPathRoot"];
+			XmlAttribute viewPath = node.Attributes[View_Path_Root];
 	
 			if (viewPath == null)
 			{
-				throw new ConfigurationException("The views node must specify the 'viewPathRoot' attribute");
+				throw new ConfigurationException("The views node must specify the '" + View_Path_Root + 
+					"' attribute");
 			}
 	
 			String path = viewPath.Value;
@@ -148,6 +151,14 @@ namespace Castle.CastleOnRails.Engine.Configuration
 			{
 				ValidateType(config.CustomControllerFactory, typeof(IControllerFactory));
 			}
+			else
+			{
+				if (config.Assemblies.Count == 0)
+				{
+					throw new ConfigurationException("Inside the node controllers, you have to specify " + 
+						"at least one assembly entry");
+				}
+			}
 			if (config.CustomFilterFactory != null)
 			{
 				ValidateType(config.CustomFilterFactory, typeof(IFilterFactory));
@@ -155,6 +166,11 @@ namespace Castle.CastleOnRails.Engine.Configuration
 			if (config.CustomEngineTypeName != null)
 			{
 				ValidateType(config.CustomEngineTypeName, typeof(IViewEngine));
+			}
+			if (config.ViewsPhysicalPath == null || config.ViewsPhysicalPath.Length == 0)
+			{
+				throw new ConfigurationException("You must provide a '" + Views_Node_Name + "' node and a " + 
+					"absolute or relative path to the views directory with the attribute " + View_Path_Root);
 			}
 		}
 
