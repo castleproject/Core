@@ -16,5 +16,10 @@ Version 1.0.4
   is important when proxying interfaces and still you want to obtain attributes
   from the method on the concrete class.
 
+Version 1.0.5
+- Fix sbyte enums
+
+
+
 
 

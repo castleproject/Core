@@ -274,6 +274,15 @@ namespace Castle.DynamicProxy.Test
 			Assert.IsNotNull( inter.GooId );
 		}
 
+		[Test]
+		public void ProxyingClassWithSByteEnum()
+		{
+			ClassWithSByteEnum proxy = (ClassWithSByteEnum)
+				_generator.CreateClassProxy(
+					typeof(ClassWithSByteEnum), new StandardInterceptor() );
+			Assert.IsNotNull(proxy);
+		}
+
 		public class MyInterfaceProxy : StandardInterceptor
 		{
 			protected override void PreProceed(IInvocation invocation, params object[] args)

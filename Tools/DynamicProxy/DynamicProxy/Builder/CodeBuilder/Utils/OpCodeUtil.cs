@@ -58,6 +58,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 
 				switch (code)
 				{
+					case TypeCode.SByte:
+						type = typeof (SByte);
+						break;
 					case TypeCode.Byte:
 						type = typeof (Byte);
 						break;
