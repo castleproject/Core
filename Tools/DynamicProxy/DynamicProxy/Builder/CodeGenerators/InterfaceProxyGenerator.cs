@@ -64,14 +64,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		/// <summary>
 		/// Generates one public constructor receiving 
-		/// the <see cref="IInterceptor"/> instance and instantiating a hashtable
+		/// the <see cref="IInterceptor"/> instance and instantiating a HybridCollection
 		/// </summary>
 		protected override void GenerateConstructor()
 		{
+			Type[] signature = GetConstructorSignature();
+
 			ConstructorBuilder consBuilder = MainTypeBuilder.DefineConstructor(
 				MethodAttributes.Public,
 				CallingConventions.Standard,
-				new Type[] {typeof (IInterceptor), typeof(object)});
+				signature);
 
 			ILGenerator ilGenerator = consBuilder.GetILGenerator();
 			
@@ -84,91 +86,22 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ilGenerator.Emit(OpCodes.Ldarg_2);
 			ilGenerator.Emit(OpCodes.Stfld, m_targetField);
 
-			GenerateConstructorCode(ilGenerator, OpCodes.Ldarg_2);
+			GenerateConstructorCode(ilGenerator, OpCodes.Ldarg_2, OpCodes.Ldarg_3);
 
 			ilGenerator.Emit(OpCodes.Ret);
 		}
 
-//		protected override void WriteILForMethod(MethodInfo method, MethodBuilder builder, Type[] parameters)
-//		{
-//			ILGenerator gen = builder.GetILGenerator();
-//
-//			gen.DeclareLocal(typeof (MethodBase));   // 0
-//			gen.DeclareLocal(typeof (object[]));     // 1
-//			gen.DeclareLocal(typeof (IInvocation));  // 2
-//
-//			if (builder.ReturnType != typeof (void))
-//			{
-//				gen.DeclareLocal(builder.ReturnType);// 3
-//			}
-//
-//			// Obtains the MethodBase from ldtoken method
-//			gen.Emit(OpCodes.Ldtoken, method);
-//			gen.Emit(OpCodes.Call, typeof (MethodBase).GetMethod("GetMethodFromHandle"));
-//			gen.Emit(OpCodes.Stloc_0);
-//
-//			// Invokes the Method2Invocation to obtain a proper IInvocation instance
-//			gen.Emit(OpCodes.Ldarg_0);
-//			gen.Emit(OpCodes.Ldnull);
-//			gen.Emit(OpCodes.Ldloc_0);
-//			gen.Emit(OpCodes.Castclass, typeof (MethodInfo)); // Cast MethodBase to MethodInfo
-//			gen.Emit(OpCodes.Ldarg_0);
-//			gen.Emit(OpCodes.Ldfld, m_targetField);
-//			gen.Emit(OpCodes.Call, m_method2Invocation);
-//			gen.Emit(OpCodes.Stloc_2);
-//
-//			gen.Emit(OpCodes.Ldc_I4, parameters.Length); // push the array size
-//			gen.Emit(OpCodes.Newarr, typeof (object)); // creates an array of objects
-//			gen.Emit(OpCodes.Stloc_1); // store the array into local field
-//			
-//			// Here we set all the arguments in the array
-//			for( int i=0; i < parameters.Length; i++ )
-//			{
-//				gen.Emit(OpCodes.Ldloc_1); // load the array
-//				gen.Emit(OpCodes.Ldc_I4, i); // set the index
-//				gen.Emit(OpCodes.Ldarg, i + 1); // set the value
-//				// box if necessary
-//				if (parameters[i].IsValueType)
-//				{
-//					gen.Emit(OpCodes.Box, parameters[i].UnderlyingSystemType);
-//				}
-//				gen.Emit(OpCodes.Stelem_Ref); // set the value
-//			}
-//
-//			gen.Emit(OpCodes.Ldarg_0); // push this
-//			gen.Emit(OpCodes.Ldfld, InterceptorFieldBuilder); // push interceptor reference
-//			
-//			gen.Emit(OpCodes.Ldloc_2); // push the invocation
-//			gen.Emit(OpCodes.Ldloc_1); // push the array into stack
-//
-//			gen.Emit(OpCodes.Callvirt, typeof (IInterceptor).GetMethod("Intercept"));
-//
-//			if (builder.ReturnType == typeof (void))
-//			{
-//				gen.Emit(OpCodes.Pop);
-//			}
-//			else
-//			{
-//				if (!builder.ReturnType.IsValueType)
-//				{
-//					gen.Emit(OpCodes.Castclass, builder.ReturnType);
-//				}
-//				else
-//				{
-//					gen.Emit(OpCodes.Unbox, builder.ReturnType);
-//					OpCodeUtil.ConvertTypeToOpCode(gen, builder.ReturnType);
-//				}
-//
-//				gen.Emit(OpCodes.Stloc, 3);
-//
-//				Label label = gen.DefineLabel();
-//				gen.Emit(OpCodes.Br_S, label);
-//				gen.MarkLabel(label);
-//				gen.Emit(OpCodes.Ldloc, 3); // Push the return value
-//			}
-//
-//			gen.Emit(OpCodes.Ret);
-//		}
+		protected override Type[] GetConstructorSignature()
+		{
+			if (Context.HasMixins)
+			{
+				return new Type[] { typeof(IInterceptor), typeof(object), typeof(object[]) };
+			}
+			else
+			{
+				return new Type[] { typeof(IInterceptor), typeof(object) };
+			}
+		}
 
 		public virtual Type GenerateCode(Type[] interfaces)
 		{

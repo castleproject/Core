@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				sb.Append(inter.Name);
 			}
 			/// Naive implementation
-			return String.Format("CProxyType{0}{1}", type.Name, sb.ToString());
+			return String.Format("CProxyType{0}{1}{2}", type.Name, sb.ToString(), interfaces.Length);
 		}
 
 		/// <summary>
@@ -59,26 +59,46 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		protected override void GenerateConstructor()
 		{
+			Type[] signature = GetConstructorSignature();
+
 			ConstructorBuilder consBuilder = MainTypeBuilder.DefineConstructor(
 				MethodAttributes.Public,
 				CallingConventions.Standard,
-				new Type[] {typeof (IInterceptor)});
+				signature);
 
 			ILGenerator ilGenerator = consBuilder.GetILGenerator();
 			
+			ilGenerator.DeclareLocal( typeof(object) );
+
 			// Calls the base constructor
 			ilGenerator.Emit(OpCodes.Ldarg_0);
 			ilGenerator.Emit(OpCodes.Call, ObtainAvailableConstructor(m_baseType));
 
-			GenerateConstructorCode(ilGenerator, OpCodes.Ldarg_0);
+			GenerateConstructorCode(ilGenerator, OpCodes.Ldarg_0, OpCodes.Ldarg_2);
 
 			ilGenerator.Emit(OpCodes.Ret);
 		}
 
-		public Type GenerateCode(Type baseClass)
+		protected override Type[] GetConstructorSignature()
 		{
-			Type[] interfaces = new Type[0];
-			interfaces = AddISerializable(interfaces);
+			if (Context.HasMixins)
+			{
+				return new Type[] { typeof(IInterceptor), typeof(object[]) };
+			}
+			else
+			{
+				return new Type[] { typeof(IInterceptor) };
+			}
+		}
+
+		public virtual Type GenerateCode(Type baseClass)
+		{
+			return GenerateCode(baseClass, new Type[0]);
+		}	
+		
+		public virtual Type GenerateCode(Type baseClass, Type[] interfaces)
+		{
+			interfaces = AddISerializable( interfaces );
 
 			Type cacheType = GetFromCache(baseClass, interfaces);
 			
@@ -92,12 +112,47 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ImplementGetObjectData();
 			ImplementCacheInvocationCache();
 			GenerateTypeImplementation( baseClass, true );
+			GenerateInterfaceImplementation(interfaces);
 			GenerateConstructor();
 			return CreateType();
 		}
 
+		public virtual Type GenerateCustomCode(Type baseClass)
+		{
+			if (!Context.HasMixins)
+			{
+				return GenerateCode(baseClass);
+			}
+
+			m_mixins = Context.MixinsAsArray();
+			Type[] mixinInterfaces = InspectAndRegisterInterfaces( m_mixins );
+
+			return GenerateCode(baseClass, mixinInterfaces);
+		}
+
+		protected void SkipDefaultInterfaceImplementation(Type[] interfaces)
+		{
+			foreach( Type inter in interfaces )
+			{
+				Context.AddInterfaceToSkip(inter);
+			}
+		}
+
+		protected Type[] Join(Type[] interfaces, Type[] mixinInterfaces)
+		{
+			Type[] union = new Type[ interfaces.Length + mixinInterfaces.Length ];
+			Array.Copy( interfaces, 0, union, 0, interfaces.Length );
+			Array.Copy( mixinInterfaces, 0, union, interfaces.Length, mixinInterfaces.Length );
+			return union;
+		}
+
 		protected override MethodInfo GenerateMethodActualInvoke(MethodInfo method)
 		{
+			if (Context.HasMixins && m_interface2mixinIndex.Contains(method.DeclaringType))
+			{
+				return method;
+			}
+
 			MethodAttributes atts = MethodAttributes.Private;
 
 			ParameterInfo[] parameterInfo = method.GetParameters();

@@ -16,27 +16,27 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
-
-	using Castle.DynamicProxy.Invocation;
 
 	/// <summary>
 	/// Summary description for BaseCodeGenerator.
 	/// </summary>
 	public abstract class BaseCodeGenerator
 	{
+		private ModuleScope m_moduleScope;
+		private GeneratorContext m_context;
+
 		private TypeBuilder m_typeBuilder;
 		private FieldBuilder m_interceptorField;
 		private FieldBuilder m_cacheField;
-		protected MethodBuilder m_method2Invocation;
-		protected Type m_baseType = typeof (Object);
-		
 		private IList m_generated = new ArrayList();
 
-		private ModuleScope m_moduleScope;
-		private GeneratorContext m_context;
+		protected Type m_baseType = typeof (Object);
+		protected MethodBuilder m_method2Invocation;
+		protected object[] m_mixins = new object[0];
 
 		/// <summary>
 		/// Holds instance fields which points to delegates instantiated
@@ -48,10 +48,21 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		protected Hashtable m_method2Delegate = new Hashtable();
 
+		protected HybridDictionary m_interface2mixinIndex = new HybridDictionary();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="moduleScope"></param>
 		protected BaseCodeGenerator(ModuleScope moduleScope) : this(moduleScope, new GeneratorContext())
 		{
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="moduleScope"></param>
+		/// <param name="context"></param>
 		protected BaseCodeGenerator(ModuleScope moduleScope, GeneratorContext context)
 		{
 			m_moduleScope = moduleScope;
@@ -88,11 +99,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get;
 		}
 
-//		protected ConstructorBuilder DefaultConstructorBuilder
-//		{
-//			get { return m_constBuilder; }
-//		}
-
 		protected Type GetFromCache(Type baseClass, Type[] interfaces)
 		{
 			return ModuleScope[GenerateTypeName(baseClass, interfaces)] as Type;
@@ -116,11 +122,21 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return null;
 		}
 
-		protected void RegisterCacheFieldToBeInitialized(FieldBuilder field, CallableDelegateBuilder builder, MethodInfo baseInvokeMethod)
+		protected void RegisterCacheFieldToBeInitialized(
+			MethodInfo method, FieldBuilder field, 
+			CallableDelegateBuilder builder, MethodInfo callbackMethod)
 		{
-			m_cachedFields.Add( new CachedField(field, builder, baseInvokeMethod) );
+			int sourceArgIndex = CachedField.EmptyIndex;
+
+			if (Context.HasMixins && m_interface2mixinIndex.Contains(method.DeclaringType))
+			{
+				sourceArgIndex = ((int)m_interface2mixinIndex[ method.DeclaringType ]);
+			}
+
+			m_cachedFields.Add( new CachedField(field, builder, callbackMethod, sourceArgIndex) );
 		}
 
+		protected abstract Type[] GetConstructorSignature();
 
 		protected virtual TypeBuilder CreateTypeBuilder(Type baseType, Type[] interfaces)
 		{
@@ -140,7 +156,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected virtual void GenerateFields()
 		{
 			m_interceptorField = GenerateField("__interceptor", typeof (IInterceptor));
-			m_cacheField = GenerateField("__cache", typeof (Hashtable), 
+			m_cacheField = GenerateField("__cache", typeof (HybridDictionary), 
 				FieldAttributes.Family|FieldAttributes.NotSerialized);
 		}
 
@@ -193,16 +209,15 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual void ImplementCacheInvocationCache()
 		{
-			Type[] args = new Type[] {typeof (ICallable), typeof (MethodInfo), typeof(object)};
-			Type[] invocation_const_args = new Type[] {typeof (ICallable), typeof(object), typeof(object), typeof (MethodInfo)};
-			Type[] int_invocation_const_args = new Type[] {typeof(object), typeof(object), typeof (MethodInfo)};
+			Type[] args = new Type[] {typeof (ICallable), typeof (MethodInfo) };
+			Type[] invocation_const_args = new Type[] {typeof (ICallable), typeof(object), typeof (MethodInfo)};
 
 			MethodAttributes attrs = MethodAttributes.Private;
 			m_method2Invocation = MainTypeBuilder.DefineMethod("_Method2Invocation", 
 				attrs, typeof (IInvocation), args);
 
 			ILGenerator gen = m_method2Invocation.GetILGenerator();
-			LocalBuilder inv_local = gen.DeclareLocal(typeof (IInvocation));
+			gen.DeclareLocal(typeof (IInvocation));
 
 			Label endMethodBranch = gen.DefineLabel();
 			Label setInCacheBranch = gen.DefineLabel();
@@ -212,7 +227,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			gen.Emit(OpCodes.Ldarg_0);
 			gen.Emit(OpCodes.Ldfld, CacheFieldBuilder);
 			gen.Emit(OpCodes.Ldarg_2);
-			gen.Emit(OpCodes.Callvirt, typeof(Hashtable).GetMethod("get_Item", new Type[] { typeof(object) } ));
+			gen.Emit(OpCodes.Callvirt, typeof(HybridDictionary).GetMethod("get_Item", new Type[] { typeof(object) } ));
 			gen.Emit(OpCodes.Castclass, typeof(IInvocation));
 			gen.Emit(OpCodes.Stloc_0);
 
@@ -223,7 +238,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			// Create the invocation target
 			gen.Emit(OpCodes.Ldarg_1); // Callable
 			gen.Emit(OpCodes.Ldarg_0); // this
-			gen.Emit(OpCodes.Ldarg_0); // this
+//			gen.Emit(OpCodes.Ldarg_0); // this
 			gen.Emit(OpCodes.Ldarg_2); // MethodInfo
 			gen.Emit(OpCodes.Newobj, InvocationType.GetConstructor(invocation_const_args) );
 			gen.Emit(OpCodes.Stloc_0);
@@ -234,14 +249,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			gen.Emit(OpCodes.Ldfld, CacheFieldBuilder); 
 			gen.Emit(OpCodes.Ldarg_2); // MethodInfo as key
 			gen.Emit(OpCodes.Ldloc_0); // IInvocation instance as value
-			gen.Emit(OpCodes.Callvirt, typeof(Hashtable).GetMethod("Add", new Type[] { typeof(object), typeof(object) } ));
+			gen.Emit(OpCodes.Callvirt, typeof(HybridDictionary).GetMethod("Add", new Type[] { typeof(object), typeof(object) } ));
 			
 			gen.MarkLabel(endMethodBranch);
 			gen.Emit(OpCodes.Br_S, retValueBranch);
 
 			gen.MarkLabel(retValueBranch);
 			gen.Emit(OpCodes.Ldloc_0); 
-			gen.Emit(OpCodes.Ret); 
+			gen.Emit(OpCodes.Ret);
 		}
 
 		protected virtual Type[] AddISerializable(Type[] interfaces)
@@ -294,7 +309,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		protected abstract void GenerateConstructor();
 
-		protected virtual void GenerateConstructorCode(ILGenerator ilGenerator, OpCode target)
+		protected virtual void GenerateConstructorCode(ILGenerator ilGenerator, OpCode defaultArg, OpCode mixinArrayArgument)
 		{
 			// Stores the interceptor in the field
 			ilGenerator.Emit(OpCodes.Ldarg_0);
@@ -303,13 +318,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			// Instantiates the hashtable
 			ilGenerator.Emit(OpCodes.Ldarg_0);
-			ilGenerator.Emit(OpCodes.Newobj, typeof(Hashtable).GetConstructor( new Type[0] ));
+			ilGenerator.Emit(OpCodes.Newobj, typeof(HybridDictionary).GetConstructor( new Type[0] ));
 			ilGenerator.Emit(OpCodes.Stfld, CacheFieldBuilder);
 
 			// Initialize the delegate fields
 			foreach(CachedField field in m_cachedFields)
 			{
-				field.WriteInitialization(ilGenerator, target);
+				field.WriteInitialization(ilGenerator, defaultArg, mixinArrayArgument);
 			}
 		}
 
@@ -338,7 +353,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// for each method in it.
 		/// </summary>
 		/// <param name="type">Type class</param>
-		/// <param name="ignoreInterfaces">Interface type</param>
+		/// <param name="ignoreInterfaces">if true, we inspect the 
+		/// type for implemented interfaces</param>
 		protected void GenerateTypeImplementation(Type type, bool ignoreInterfaces)
 		{
 			if (m_generated.Contains(type))
@@ -353,7 +369,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			if (!ignoreInterfaces)
 			{
 				Type[] baseInterfaces = type.FindInterfaces(new TypeFilter(NoFilterImpl), type);
-
 				GenerateInterfaceImplementation(baseInterfaces);
 			}
 
@@ -488,16 +503,18 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual void PreProcessMethod(MethodInfo method)
 		{
-			MethodInfo baseInvokeMethod = GenerateMethodActualInvoke(method);
+			MethodInfo callbackMethod = GenerateMethodActualInvoke(method);
 
 			CallableDelegateBuilder delegateBuilder = CallableDelegateBuilder.BuildForMethod( 
 				MainTypeBuilder, method, ModuleScope );
+
 			m_method2Delegate[method] = delegateBuilder;
 
 			FieldBuilder field = GenerateField( 
 				String.Format("_cached_{0}", delegateBuilder.ID), 
 				typeof(ICallable) );
-			RegisterCacheFieldToBeInitialized(field, delegateBuilder, baseInvokeMethod);
+
+			RegisterCacheFieldToBeInitialized(method, field, delegateBuilder, callbackMethod);
 		}
 
 		protected virtual MethodInfo GenerateMethodActualInvoke(MethodInfo method)
@@ -520,13 +537,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			ILGenerator gen = builder.GetILGenerator();
 
-			gen.DeclareLocal(typeof (MethodBase));   // 0
-			gen.DeclareLocal(typeof (object[]));     // 1
-			gen.DeclareLocal(typeof (IInvocation));  // 2
+			gen.DeclareLocal(typeof (MethodBase));    // 0
+			gen.DeclareLocal(typeof (object[]));      // 1
+			gen.DeclareLocal(typeof (IInvocation));   // 2
 
 			if (builder.ReturnType != typeof (void))
 			{
-				gen.DeclareLocal(builder.ReturnType);// 3
+				gen.DeclareLocal(builder.ReturnType); // 3
 			}
 
 			CallableDelegateBuilder delegateType = m_method2Delegate[method] as CallableDelegateBuilder;
@@ -542,11 +559,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			gen.Emit(OpCodes.Ldarg_0);
 			gen.Emit(OpCodes.Ldfld, fieldDelegate);
-			//			gen.Emit(OpCodes.Ldftn, delegateTarget);
-			//			gen.Emit(OpCodes.Newobj, delegateType.Constructor);
 			gen.Emit(OpCodes.Ldloc_0);
 			gen.Emit(OpCodes.Castclass, typeof (MethodInfo)); // Cast MethodBase to MethodInfo
-			gen.Emit(OpCodes.Ldarg_0);
 			gen.Emit(OpCodes.Call, m_method2Invocation);
 			gen.Emit(OpCodes.Stloc_2);
 
@@ -603,6 +617,42 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			gen.Emit(OpCodes.Ret);
 		}
 
+		protected Type[] InspectAndRegisterInterfaces(object[] mixins)
+		{
+			if (mixins == null) return new Type[0];
+
+			Set interfaces = new Set();
+
+			for(int i = 0; i < mixins.Length; ++i)
+			{
+				object mixin = mixins[i];
+
+				Type[] mixinInterfaces = mixin.GetType().GetInterfaces();
+				mixinInterfaces = Filter(mixinInterfaces);
+				
+				interfaces.AddArray( mixinInterfaces );
+				
+				// Later we gonna need to say which mixin
+				// handle the method of a specific interface
+				foreach(Type inter in mixinInterfaces)
+				{
+					m_interface2mixinIndex.Add(inter, i);
+				}
+			}
+
+			return (Type[]) interfaces.ToArray( typeof(Type) );
+		}
+
+		protected static Type[] Filter(Type[] mixinInterfaces)
+		{
+			if (Array.IndexOf(mixinInterfaces, typeof(ISerializable)) != -1)
+			{
+				// TODO: Implement this
+			}
+			
+			return mixinInterfaces;
+		}
+
 		public static bool NoFilterImpl(Type type, object criteria)
 		{
 			return true;
@@ -617,12 +667,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		private FieldBuilder m_field; 
 		private CallableDelegateBuilder m_callable; 
 		private MethodInfo m_callback;
+		private int m_sourceArgIndex;
 
-		public CachedField(FieldBuilder field, CallableDelegateBuilder callable, MethodInfo callback)
+		public CachedField(FieldBuilder field, CallableDelegateBuilder callable, MethodInfo callback, int sourceArgIndex)
 		{
 			this.m_field = field;
 			this.m_callable = callable;
 			this.m_callback = callback;
+			this.m_sourceArgIndex = sourceArgIndex;
 		}
 
 		public FieldBuilder Field
@@ -635,13 +687,38 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get { return m_callable; }
 		}
 
-		public void WriteInitialization(ILGenerator gen, OpCode target)
+		public int SourceArgIndex
 		{
-			gen.Emit(OpCodes.Ldarg_0);
-			gen.Emit(target);
+			get { return m_sourceArgIndex; }
+		}
+
+		public void WriteInitialization(ILGenerator gen, OpCode argIndex, OpCode arrayArgumentIndex)
+		{
+			if (SourceArgIndex == EmptyIndex)
+			{
+				// target is an argument
+				gen.Emit(OpCodes.Ldarg_0);
+				gen.Emit(argIndex);
+			}
+			else
+			{
+				// Obtain target from array
+				gen.Emit(arrayArgumentIndex);
+				gen.Emit(OpCodes.Ldc_I4, SourceArgIndex);
+				gen.Emit(OpCodes.Ldelem_Ref);
+				gen.Emit(OpCodes.Stloc_0);
+				gen.Emit(OpCodes.Ldarg_0);
+				gen.Emit(OpCodes.Ldloc_0);
+			}
+			
 			gen.Emit(OpCodes.Ldftn, m_callback);
 			gen.Emit(OpCodes.Newobj, m_callable.Constructor);
 			gen.Emit(OpCodes.Stfld, m_field);
+		}
+
+		public static int EmptyIndex
+		{
+			get { return -1; }
 		}
 	}
 }

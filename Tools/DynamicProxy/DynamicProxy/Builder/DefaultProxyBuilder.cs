@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+ // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,38 +26,37 @@ namespace Castle.DynamicProxy.Builder
 
 		public DefaultProxyBuilder()
 		{
-			
 		}
 
-            protected ModuleScope ModuleScope
-            {
-                get { return m_scope; }
-            }
+		protected ModuleScope ModuleScope
+		{
+			get { return m_scope; }
+		}
 
 		#region IProxyBuilder Members
 
 		public virtual Type CreateInterfaceProxy(Type[] interfaces)
 		{
 			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(m_scope);
-			return generator.GenerateCode( interfaces );
+			return generator.GenerateCode(interfaces);
 		}
 
 		public virtual Type CreateClassProxy(Type theClass)
 		{
 			ClassProxyGenerator generator = new ClassProxyGenerator(m_scope);
-			return generator.GenerateCode( theClass );
+			return generator.GenerateCode(theClass);
 		}
 
 		public virtual Type CreateCustomInterfaceProxy(Type[] interfaces, GeneratorContext context)
 		{
 			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(m_scope, context);
-			return generator.GenerateCode( interfaces );
+			return generator.GenerateCode(interfaces);
 		}
 
 		public virtual Type CreateCustomClassProxy(Type theClass, GeneratorContext context)
 		{
 			ClassProxyGenerator generator = new ClassProxyGenerator(m_scope, context);
-			return generator.GenerateCode( theClass );
+			return generator.GenerateCustomCode(theClass);
 		}
 
 		#endregion

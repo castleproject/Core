@@ -105,7 +105,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			m_invokeMethod.SetImplementationFlags(MethodImplAttributes.Runtime|MethodImplAttributes.Managed);
 		}
 
-		private void GenerateCallableImplementation()
+		private void GenerateCall()
 		{
 			MethodAttributes atts = MethodAttributes.Public|MethodAttributes.Virtual;
 
@@ -163,6 +163,33 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			gen.Emit(OpCodes.Ret);
+		}
+
+		private void GenerateTargetProperty()
+		{
+			PropertyAttributes patts = PropertyAttributes.None;
+			PropertyBuilder pbuilder = m_delegateBuilder.DefineProperty("Target", patts, typeof(Object), null);
+			
+			MethodAttributes atts = MethodAttributes.Public|MethodAttributes.Virtual|MethodAttributes.SpecialName;
+			MethodBuilder methodBuilder = m_delegateBuilder.DefineMethod("get_Target", 
+				atts, CallingConventions.Standard, typeof(object), new Type[0]);
+
+			ILGenerator gen = methodBuilder.GetILGenerator();
+
+			gen.DeclareLocal( typeof(object) );
+			gen.Emit(OpCodes.Ldarg_0);
+			gen.Emit(OpCodes.Call, typeof(MulticastDelegate).GetMethod("get_Target"));
+			gen.Emit(OpCodes.Stloc_0);
+			gen.Emit(OpCodes.Ldloc_0);
+			gen.Emit(OpCodes.Ret);
+
+			pbuilder.SetGetMethod(methodBuilder);
+		}
+
+		private void GenerateCallableImplementation()
+		{
+			GenerateCall();
+			GenerateTargetProperty();
 		}
 	}
 }

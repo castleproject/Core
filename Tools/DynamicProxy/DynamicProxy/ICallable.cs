@@ -27,5 +27,13 @@ namespace Castle.DynamicProxy
 		/// <param name="args"></param>
 		/// <returns></returns>
 		object Call(params object[] args);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		object Target
+		{
+			get;
+		}
 	}
 }

@@ -12,35 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Invocation
+namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
-	using System.Reflection;
+	using System;
+	using System.Collections;
 
 	/// <summary>
-	/// 
+	/// Summary description for Set.
 	/// </summary>
-	public class SameClassInvocation : AbstractInvocation
+	internal class Set : DictionaryBase
 	{
-		protected ICallable _callable;
-
-		public SameClassInvocation(ICallable callable, object proxy, MethodInfo method) : 
-			base(callable, proxy, method)
+		public void AddArray( object[] items )
 		{
-			_callable = callable;
+			foreach( object item in items )
+			{
+				Add( item );
+			}
 		}
 
-		public override object Proceed(params object[] args)
+		public void Add( object item )
 		{
-			// If the user changed the target, we use reflection
-			// otherwise the delegate will be used.
-			if (InvocationTarget == m_original_target)
+			if (!Dictionary.Contains( item ))
 			{
-				return _callable.Call( args );
+				Dictionary.Add( item, String.Empty );
 			}
-			else
+		}
+
+		public void Remove( object item )
+		{
+			Dictionary.Remove( item );
+		}
+
+		public Array ToArray( Type elementType )
+		{
+			Array array = Array.CreateInstance( elementType, Dictionary.Keys.Count );
+			
+			int index = 0;
+			foreach( object item in Dictionary.Keys )
 			{
-				return Method.Invoke(InvocationTarget, args);
+				array.SetValue(item, index++);
 			}
+
+			return array;
 		}
 	}
 }

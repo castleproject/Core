@@ -23,22 +23,38 @@ namespace Castle.DynamicProxy
 	public sealed class GeneratorContext : DictionaryBase
 	{
 		private IList m_skipInterfaces = new ArrayList();
+		private ArrayList m_mixins = new ArrayList();
 
 		public GeneratorContext()
 		{
 		}
 
-		public bool ShouldSkip( Type interfaceType )
+		public bool HasMixins
 		{
-			return m_skipInterfaces.Contains( interfaceType );
+			get { return m_mixins.Count != 0; }
 		}
 
-		public void AddInterfaceToSkip( Type interfaceType )
+		public void AddMixinInstance(object instance)
 		{
-			m_skipInterfaces.Add( interfaceType );
+			m_mixins.Add(instance);
 		}
 
-		public object this[ String key ]
+		public object[] MixinsAsArray()
+		{
+			return m_mixins.ToArray();
+		}
+
+		public bool ShouldSkip(Type interfaceType)
+		{
+			return m_skipInterfaces.Contains(interfaceType);
+		}
+
+		public void AddInterfaceToSkip(Type interfaceType)
+		{
+			m_skipInterfaces.Add(interfaceType);
+		}
+
+		public object this[String key]
 		{
 			get { return Dictionary[key]; }
 			set { Dictionary[key] = value; }

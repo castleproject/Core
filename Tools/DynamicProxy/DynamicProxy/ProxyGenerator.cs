@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy
 			AssertCreateClassProxyArguments(baseClass, interceptor, context);
 
 			Type newType = ProxyBuilder.CreateCustomClassProxy(baseClass, context);
-			return CreateProxyInstance( newType, interceptor, context );
+			return CreateCustomProxyInstance( newType, interceptor, context );
 		}
 
 		/// <summary>
@@ -143,7 +143,16 @@ namespace Castle.DynamicProxy
 			return Activator.CreateInstance(type, new object[] {interceptor});
 		}
 
-		protected virtual object CreateProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context, object target)
+		protected virtual object CreateCustomProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context)
+		{
+			if (context.HasMixins)
+			{
+				return Activator.CreateInstance( type, new object[] { interceptor, context.MixinsAsArray() } );
+			}
+			return CreateProxyInstance( type, interceptor );
+		}
+
+		protected virtual object CreateCustomProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context, object target)
 		{
 			return CreateProxyInstance( type, interceptor, target );
 		}

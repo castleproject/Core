@@ -154,17 +154,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Builder\CodeGenerators\OpCodesDictionary.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Builder\CodeGenerators\OpCodeUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Builder\CodeGenerators\ProxyGenerationException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeGenerators\Utils\OpCodesDictionary.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeGenerators\Utils\OpCodeUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeGenerators\Utils\Set.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
