@@ -5,7 +5,7 @@
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="name" value="CastleOnRails" />
 	<property name="version" value="alpha-1" />
-	<property name="container.bin.dir" value="${base.dir}/../../InversionOfControl/bin" />
+	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
 
 	<!-- find out where nunit.framework.dll is -->
 	<property name="nant.lib.dir"
@@ -30,10 +30,14 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-
-	<target name="build" depends="init, framework, engine, sample" />
+	<target name="build" depends="init, framework, engine, integration, sample" />
 	
 	<target name="init">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${container.bin.dir}">
+				<includes name="*.dll" />
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="framework">
@@ -42,6 +46,10 @@
 
 	<target name="engine">
 		<nant buildfile="RailsEngine/default.build" inheritall="true" target="build" />
+	</target>
+
+	<target name="integration">
+		<nant buildfile="WindsorIntegration/default.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="sample">

@@ -6,7 +6,7 @@
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="dynamicproxy" value="${base.dir}/../tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
 	<property name="name" value="InversionOfControl" />
-	<property name="version" value="alpha-1" />
+	<property name="version" value="alpha-2" />
 
 	<target name="build" depends="init, model, microkernel, windsor" />
 	

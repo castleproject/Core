@@ -23,5 +23,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("Copyright (c) 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
-[assembly: AssemblyVersion("1.0.0.1")]
+[assembly: AssemblyVersion("1.0.3.0")]
 

@@ -86,21 +86,6 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Castle.Facilities.Prevalence"
-                    Project = "{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.Windsor"
-                    Project = "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Applications.PestControl"
                     Project = "{3D2C2A39-E0AD-493F-A801-4A475C48A0B0}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -109,6 +94,31 @@
                     Name = "Bamboo.Prevalence"
                     AssemblyName = "Bamboo.Prevalence"
                     HintPath = "..\bin\Bamboo.Prevalence.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.Prevalence"
+                    AssemblyName = "Castle.Facilities.Prevalence"
+                    HintPath = "..\bin\Castle.Facilities.Prevalence.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\bin\Castle.Model.dll"
                 />
             </References>
         </Build>
