@@ -16,7 +16,9 @@ class DynamicproxyController < AbstractApplicationController
   end
 
   def roadmap
+  end
   
+  def whoisusing
   end
 
 end

@@ -1,0 +1,42 @@
+<% @page_title = "DynamicProxy" %>
+<% @main_title = "Who is using it" %>
+<%= render "/dynamicproxy/deflinks" %>
+
+We know about the following projects using DynamicProxy:
+
+<p>
+ <uo>
+  <li><strong><a href="http://aspectsharp.sourceforge.net/">Aspect#</a></strong>:
+  Aspect# relies on DynamicProxy to allow mixins and interceptors.
+  </li>
+ </uo>
+</p>
+
+<p>
+ <uo>
+  <li><strong><a href="http://nhibernate.sourceforge.net/">NHibernate</a></strong>:
+  NHibernate is using DynamicProxy to lazy load collections. Currently this implementation
+  is on a CVS branch.
+  </li>
+ </uo>
+</p>
+
+<p>
+ <uo>
+  <li><strong><a href="http://ibatisnet.sourceforge.net/">iBatis.Net</a></strong>:
+  iBatis.Net uses DynamicProxy to provide the lazy load feature for lists.
+  </li>
+ </uo>
+</p>
+
+<h3>Interesting articles</h3>
+
+<p>
+ <uo>
+  <li><strong><a href="http://pluralsight.com/wiki/default.aspx/Don.TransactionAsks(2004-08-17-12-25-42.5312-JohnDoty-131.107.76.144)">
+  Transaction management</a></strong>:
+  Interesting article, but uses a very old DynamicProxy interface.
+  </li>
+ </uo>
+</p>
+
