@@ -133,7 +133,7 @@ namespace Castle.Facilities.Prevalence
 			}
 			else
 			{
-				properties.Add(SnapshotPeriodPropertyKey, 0);
+				properties.Add(SnapshotPeriodPropertyKey, 0f);
 			}
 		}
 

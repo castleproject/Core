@@ -46,7 +46,7 @@ namespace Castle.Facilities.Prevalence
 				Model.ExtendedProperties[PrevalenceFacility.AutoMigrationPropertyKey];
 			bool resetStorage = (bool) 
 				Model.ExtendedProperties[PrevalenceFacility.ResetStoragePropertyKey];
-			int snapshotPeriod = (Int32)Model.ExtendedProperties[PrevalenceFacility.SnapshotPeriodPropertyKey];
+			float snapshotPeriod = (float)Model.ExtendedProperties[PrevalenceFacility.SnapshotPeriodPropertyKey];
 			
 			if (resetStorage)
 			{
@@ -67,7 +67,7 @@ namespace Castle.Facilities.Prevalence
 			return engine;
 		}
 
-		private void CreateSnapshotTaker(PrevalenceEngine engine, int snapshotPeriod)
+		private void CreateSnapshotTaker(PrevalenceEngine engine, float snapshotPeriod)
 		{
 			TimeSpan period = TimeSpan.FromHours(snapshotPeriod);
 			ICleanUpPolicy policy = (ICleanUpPolicy) Kernel[PrevalenceFacility.CleanupPolicyComponentPropertyKey];
