@@ -22,9 +22,6 @@ namespace Castle.Applications.PestControl.Web.Controllers
 
 	using Castle.Applications.PestControl.Model;
 
-	/// <summary>
-	/// Summary description for DashboardController.
-	/// </summary>
 	[Layout("default")]
 	public class DashboardController : Controller
 	{

@@ -43,6 +43,11 @@ namespace Castle.Applications.PestControl.Web.Views.Home
 		}
 		#endregion
 
+		public String ErrorMessage
+		{
+			get { return (String) _controller.Context.Flash["ErrorMessage"]; }
+		}
+
 		public void SetController(Controller controller)
 		{
 			_controller = controller;
@@ -56,14 +61,14 @@ namespace Castle.Applications.PestControl.Web.Views.Home
 
 			_controller.Send("Login");
 
-			Response.End();
+			// Response.End();
 		}
 
 		public void OnSignUp(object sender, EventArgs args)
 		{
 			_controller.Send( "SignUp" );
 
-			Response.End();
+			// Response.End();
 		}
 	}
 }

@@ -28,6 +28,8 @@ namespace Castle.CastleOnRails.Framework
 
 		bool IsLocal { get; }
 
+		Uri Uri { get; }
+
 		byte[] BinaryRead(int count);
 
 		String this [String key] { get; }

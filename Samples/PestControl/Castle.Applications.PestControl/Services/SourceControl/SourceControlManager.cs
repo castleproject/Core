@@ -25,7 +25,7 @@ namespace Castle.Applications.PestControl.Services.SourceControl
 	/// <summary>
 	/// Summary description for SourceControlManager.
 	/// </summary>
-	public class SourceControlManager : IInitialize, IDisposable
+	public class SourceControlManager : IInitializable, IDisposable
 	{
 		private IKernel _kernel;
 

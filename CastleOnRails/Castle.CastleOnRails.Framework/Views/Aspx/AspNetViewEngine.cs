@@ -46,10 +46,10 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		/// <param name="viewName"></param>
 		public void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
-			if (!Path.IsPathRooted(_viewRootDir))
-			{
-				_viewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _viewRootDir);
-			}
+//			if (!Path.IsPathRooted(_viewRootDir))
+//			{
+//				_viewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _viewRootDir);
+//			}
 
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
 			Page masterHandler = null;
@@ -150,6 +150,8 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 		protected void SetPropertyValue(IHttpHandler handler, object key, object value)
 		{
+			if (value == null) return;
+
 			Type type = handler.GetType();
 
 			PropertyInfo info = 

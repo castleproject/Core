@@ -20,6 +20,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Security.Principal;
+	using System.Web.Caching;
 
 	/// <summary>
 	/// Summary description for RailsEngineContextImpl.
@@ -33,6 +34,8 @@ namespace Castle.CastleOnRails.Framework.Tests
 		private ResponseImpl _response = new ResponseImpl();
 		private Exception _lastException;
 		private Hashtable _session = new Hashtable();
+		private Hashtable _flashItems = new Hashtable();
+		private IPrincipal _user;
 
 		public RailsEngineContextImpl(String url) : this(url, "GET")
 		{
@@ -97,14 +100,14 @@ namespace Castle.CastleOnRails.Framework.Tests
 			get { return _response; }
 		}
 
-		public System.Web.Caching.Cache Cache
+		public Cache Cache
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public IDictionary Items
+		public IDictionary Flash
 		{
-			get { throw new NotImplementedException(); }
+			get { return _flashItems; }
 		}
 
 		public void Transfer(String path, bool preserveForm)
@@ -114,12 +117,10 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 		public IPrincipal CurrentUser
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			get { return _user; }
+			set { _user = value; }
 		}
-
 		
-
 		#endregion
 	}
 
@@ -161,6 +162,11 @@ namespace Castle.CastleOnRails.Framework.Tests
 		public NameValueCollection Params
 		{
 			get { return _params; }
+		}
+
+		public Uri Uri
+		{
+			get { throw new NotImplementedException(); }
 		}
 
 		#endregion
@@ -232,6 +238,16 @@ namespace Castle.CastleOnRails.Framework.Tests
 		}
 
 		public void Redirect(String url, bool endProcess)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Redirect(String controller, String action)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Redirect(String area, String controller, String action)
 		{
 			throw new NotImplementedException();
 		}

@@ -47,7 +47,7 @@ namespace Castle.CastleOnRails.WindsorExtension
 
 			_tree = (ControllerTree) kernel["rails.controllertree"];
 
-			kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
+			kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 		}
 
 		public void Terminate()
@@ -56,24 +56,20 @@ namespace Castle.CastleOnRails.WindsorExtension
 
 		#endregion
 
-		private void OnComponentRegistered(String key, IHandler handler)
+		private void OnComponentModelCreated(ComponentModel model)
 		{
-			if (handler.ComponentModel.Implementation == null)
+			if ( !typeof(Controller).IsAssignableFrom(model.Implementation) )
 			{
 				return;
 			}
 
-			if ( typeof(Controller).IsAssignableFrom(handler.ComponentModel.Implementation) )
-			{
-				// Ensure its transient
-				handler.ComponentModel.LifestyleType = LifestyleType.Transient;
+			// Ensure its transient
+			model.LifestyleType = LifestyleType.Transient;
 
-				// Register controller in the tree of controllers
-				ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(
-					handler.ComponentModel.Implementation);
-				
-				_tree.AddController( descriptor.Area, descriptor.Name, key );
-			}			
+			// Register controller in the tree of controllers
+			ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(model.Implementation);
+			
+			_tree.AddController( descriptor.Area, descriptor.Name, model.Name );
 		}
 	}
 }

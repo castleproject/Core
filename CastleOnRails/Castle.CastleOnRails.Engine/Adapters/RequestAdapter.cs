@@ -44,6 +44,11 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			get { return _request.Url.IsLoopback; } 
 		}
 
+		public Uri Uri
+		{
+			get { return _request.Url; }
+		}
+
 		public byte[] BinaryRead(int count)
 		{
 			return _request.BinaryRead(count);

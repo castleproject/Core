@@ -18,22 +18,11 @@ namespace Castle.MicroKernel.Tests
 
 	using NUnit.Framework;
 
-	public class A
-	{		
-	}
-
-	public class B
-	{
-		public B(A a) {}
-	}
-
-	public class C
-	{
-		public C(B b) {}
-	}
+	using Castle.Model;
+	using Castle.Model.Internal;
 
 	[TestFixture]
-	public class DependencyGraph
+	public class GraphTestCase
 	{
 		private IKernel kernel;
 
@@ -50,46 +39,37 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
-		public void ValidSituation()
+		public void TopologicalSortOnComponents()
 		{
 			kernel.AddComponent( "a", typeof(A) );
 			kernel.AddComponent( "b", typeof(B) );
 			kernel.AddComponent( "c", typeof(C) );
 
-			Assert.IsNotNull( kernel["a"] );
-			Assert.IsNotNull( kernel["b"] );
-			Assert.IsNotNull( kernel["c"] );
+			GraphNode[] nodes = kernel.GraphNodes;
+
+			Assert.IsNotNull( nodes );
+			Assert.AreEqual( 3, nodes.Length );
+
+			IVertex[] vertices = TopologicalSortAlgo.Sort( nodes );
+
+			Assert.AreEqual( "c", (vertices[0] as ComponentModel).Name );
+			Assert.AreEqual( "b", (vertices[1] as ComponentModel).Name );
+			Assert.AreEqual( "a", (vertices[2] as ComponentModel).Name );
 		}
 
 		[Test]
-		public void GraphInvalid()
+		public void RemoveComponent()
 		{
-			kernel.AddComponent( "b", typeof(B) );
-			kernel.AddComponent( "c", typeof(C) );
-
-			IHandler handlerB = kernel.GetHandler( typeof(B) );
-			IHandler handlerC = kernel.GetHandler( typeof(C) );
-
-			Assert.AreEqual( HandlerState.WaitingDependency, handlerB.CurrentState );
-			Assert.AreEqual( HandlerState.WaitingDependency, handlerC.CurrentState );
-		}
-
-		[Test]
-		public void GraphInvalidAndLateValidation()
-		{
-			kernel.AddComponent( "b", typeof(B) );
-			kernel.AddComponent( "c", typeof(C) );
-
-			IHandler handlerB = kernel.GetHandler( typeof(B) );
-			IHandler handlerC = kernel.GetHandler( typeof(C) );
-
-			Assert.AreEqual( HandlerState.WaitingDependency, handlerB.CurrentState );
-			Assert.AreEqual( HandlerState.WaitingDependency, handlerC.CurrentState );
-
 			kernel.AddComponent( "a", typeof(A) );
+			kernel.AddComponent( "b", typeof(B) );
+			kernel.AddComponent( "c", typeof(C) );
 
-			Assert.AreEqual( HandlerState.Valid, handlerB.CurrentState );
-			Assert.AreEqual( HandlerState.Valid, handlerC.CurrentState );
+			Assert.IsFalse( kernel.RemoveComponent("a") );
+			Assert.IsFalse( kernel.RemoveComponent("b") );
+
+			Assert.IsTrue( kernel.RemoveComponent("c") );
+			Assert.IsTrue( kernel.RemoveComponent("b") );
+			Assert.IsTrue( kernel.RemoveComponent("a") );
 		}
 	}
 }

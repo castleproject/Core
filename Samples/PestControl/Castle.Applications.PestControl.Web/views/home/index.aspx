@@ -1,8 +1,14 @@
-<%@ Page CodeBehind="index.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.Views.Home.Index" %
+<%@ Page CodeBehind="index.aspx.cs" Language="c#" AutoEventWireup="false" Inherits="Castle.Applications.PestControl.Web.Views.Home.Index" %>
 
 	    	
     <p>If you'd like to administer projects, please log on.</p>
     <p>Of course, you have to <a href="../registration/signup.rails">register</a> first.</p>
+    
+    <% if (ErrorMessage != null) { %>
+       <p>
+		<font color="red"><%= ErrorMessage %></font>
+	   </p>
+    <% } %>
     
 		<form runat="server">
 

@@ -71,7 +71,8 @@ namespace Castle.MicroKernel.Tests.SubContainers
 
 			kernel.AddChildKernel(subkernel);
 
-			DefaultSpamServiceWithConstructor spamservice = (DefaultSpamServiceWithConstructor) subkernel["spamservice"];
+			DefaultSpamServiceWithConstructor spamservice = 
+				(DefaultSpamServiceWithConstructor) subkernel["spamservice"];
 
 			Assert.IsNotNull(spamservice);
 			Assert.IsNotNull(spamservice.MailSender);

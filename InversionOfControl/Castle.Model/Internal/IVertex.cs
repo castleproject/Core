@@ -12,36 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.Model
 {
 	using System;
 
-	public interface IResponse
+	/// <summary>
+	/// Abstract representation of a vertex.
+	/// </summary>
+	public interface IVertex
 	{
-		void AppendHeader(String name, String value);
-
-		System.IO.TextWriter Output { get; }
-		
-		System.IO.Stream OutputStream { get; }
-
-		void Write(String s);
-
-		void Write(object obj);
-
-		void Write(char ch);
-
-		void Write(char[] buffer, int index, int count);
-
-		void Redirect( String controller, String action );
-
-		void Redirect( String area, String controller, String action );
-
-		void Redirect(String url);
-
-		void Redirect(String url, bool endProcess);
-
-		int StatusCode { get; set; }
-
-		String ContentType { get; set; }
+		IVertex[] Adjacencies { get; }
 	}
 }

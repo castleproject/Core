@@ -114,6 +114,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\GraphNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\GraphSets.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\IVertex.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\LinkedList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\TopologicalSortAlgo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifecycle\LifecycleInterfaces.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -140,11 +165,6 @@
                 />
                 <File
                     RelPath = "Model\DependencyModelCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\GraphNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

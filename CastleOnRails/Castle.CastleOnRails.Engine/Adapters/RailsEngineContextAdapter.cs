@@ -20,7 +20,6 @@ namespace Castle.CastleOnRails.Engine.Adapters
 	using System.Web;
 	using System.Web.Caching;
 	using System.Security.Principal;
-
 	using Castle.CastleOnRails.Framework;
 
 	/// <summary>
@@ -33,7 +32,6 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		private HttpContext _context;
 		private RequestAdapter _request;
 		private ResponseAdapter _response;
-		private IPrincipal _user;
 		private Exception _lastException;
 		private SessionAdapter _session;
 
@@ -98,7 +96,7 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			get { return _context.Cache; }
 		}
 
-		public IDictionary Items
+		public IDictionary Flash
 		{
 			get { return _context.Items; }
 		}
@@ -110,18 +108,8 @@ namespace Castle.CastleOnRails.Engine.Adapters
 
 		public IPrincipal CurrentUser
 		{
-			get
-			{
-				if (_user == null)
-				{
-					_user = _context.User;
-				}
-				return _user;
-			}
-			set
-			{
-				_user = value;
-			}
+			get { return _context.User; }
+			set { _context.User = value; }
 		}
 	}
 }

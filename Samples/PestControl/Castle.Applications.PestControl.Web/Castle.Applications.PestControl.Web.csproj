@@ -166,6 +166,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Controllers\AbstractSecureController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\DashboardController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -182,6 +187,11 @@
                 />
                 <File
                     RelPath = "Controllers\RegistrationController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Filters\CheckAuthenticationFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

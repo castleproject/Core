@@ -238,6 +238,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "Views\Aspx\MasterPageBase.cs"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>

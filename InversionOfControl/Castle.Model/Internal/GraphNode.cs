@@ -17,7 +17,7 @@ namespace Castle.Model
 	using System;
 	using System.Collections;
 
-	public class GraphNode
+	public class GraphNode : IVertex
 	{
 		private ArrayList _incoming;
 		private ArrayList _outgoing;
@@ -25,6 +25,15 @@ namespace Castle.Model
 		public GraphNode()
 		{
 		}
+		
+		#region IVertex Members
+
+		public IVertex[] Adjacencies
+		{
+			get { return Dependents; }
+		}
+
+		#endregion
 
 		public void AddDependent(GraphNode node)
 		{
@@ -85,23 +94,6 @@ namespace Castle.Model
 			Outgoing.Remove(graphNode);
 		}
 
-		public static GraphNode[] TopologicalSort(GraphNode[] graphNodes)
-		{
-			ArrayList sorted = new ArrayList();
-
-			foreach(GraphNode node in graphNodes)
-			{
-				if (node.Dependers.Length == 0)
-				{
-					sorted.Add( node );
-				}
-				else
-				{
-//					if (sorted.Contains(  ))
-				}
-			}
-
-			return null;
-		}
-	}
+		
+	}	
 }

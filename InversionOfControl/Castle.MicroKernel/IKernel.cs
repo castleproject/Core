@@ -249,5 +249,10 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="kernel"></param>
 		void AddChildKernel(IKernel kernel);
+
+		/// <summary>
+		/// Graph of components and iteractions.
+		/// </summary>
+		GraphNode[] GraphNodes { get; }
 	}
 }

@@ -87,9 +87,17 @@ namespace Castle.CastleOnRails.Framework
 		/// <summary>
 		/// Gets the context of this web execution.
 		/// </summary>
-		protected IRailsEngineContext Context
+		public IRailsEngineContext Context
 		{
 			get { return _context; }
+		}
+
+		/// <summary>
+		/// Gets the Session dictionary
+		/// </summary>
+		protected IDictionary Session
+		{
+			get { return _context.Session; }
 		}
 
 		/// <summary>
@@ -131,6 +139,17 @@ namespace Castle.CastleOnRails.Framework
 		}
 
 		/// <summary>
+		/// Redirects to the specified Url
+		/// </summary>
+		/// <param name="url"></param>
+		public void Redirect( String url )
+		{
+			CancelView();
+
+			_context.Response.Redirect( url );
+		}
+
+		/// <summary>
 		/// Redirects to another controller and action.
 		/// </summary>
 		/// <param name="controller"></param>
@@ -139,8 +158,7 @@ namespace Castle.CastleOnRails.Framework
 		{
 			CancelView();
 
-			_context.Response.Redirect( 
-				String.Format("../{0}/{1}.rails", controller, action), false );
+			_context.Response.Redirect( controller, action );
 		}
 
 		/// <summary>
@@ -153,8 +171,7 @@ namespace Castle.CastleOnRails.Framework
 		{
 			CancelView();
 
-			_context.Response.Redirect( 
-				String.Format("../{0}/{1}/{2}.rails", area, controller, action), false );
+			_context.Response.Redirect( area, controller, action );
 		}
 
 		/// <summary>
@@ -208,10 +225,10 @@ namespace Castle.CastleOnRails.Framework
 		/// <param name="action"></param>
 		public void Send( String action )
 		{
-			if ( HttpContext != null )
-			{
-				HttpContext.Response.End();
-			}
+//			if ( HttpContext != null )
+//			{
+//				HttpContext.Response.End();
+//			}
 
 			InternalSend(action);
 		}

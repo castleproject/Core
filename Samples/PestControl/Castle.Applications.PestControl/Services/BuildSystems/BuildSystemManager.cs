@@ -24,7 +24,7 @@ namespace Castle.Applications.PestControl.Services.BuildSystems
 	/// <summary>
 	/// Summary description for BuildSystemManager.
 	/// </summary>
-	public class BuildSystemManager : IInitialize, IDisposable
+	public class BuildSystemManager : IInitializable, IDisposable
 	{
 		private IKernel _kernel;
 

@@ -63,7 +63,7 @@ namespace Castle.Applications.PestControl.Web.Views.Registration
 
 			_controller.Send("RegisterUser");
 
-			Response.End();
+			//Response.End();
 		}
 	}
 }

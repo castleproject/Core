@@ -24,9 +24,6 @@ namespace Castle.Applications.PestControl.Web.Controllers
 
 	using Castle.Applications.PestControl.Model;
 
-	/// <summary>
-	/// Summary description for HomeController.
-	/// </summary>
 	[Layout("default")]
 	public class HomeController : SmartDispatcherController
 	{
@@ -37,34 +34,66 @@ namespace Castle.Applications.PestControl.Web.Controllers
 			_model = model;
 		}
 
+		// Actions
+
 		public void Index()
 		{
-			
+		}
+
+		public void Authentication()
+		{
+			Context.Flash["ErrorMessage"] = "You must authenticate first";
+			RenderView("index");
+		}
+
+		// This is a hack to avoid the infinite cycle with
+		// Asp.Net page processing
+		public void NotFound()
+		{
+			Context.Flash["ErrorMessage"] = "User not found or wrong password.";
+			RenderView("index");
 		}
 
 		public void Login(String email, String passwd)
 		{
 			if (!_model.Users.Authenticate(email, passwd))
 			{
-				// TODO: Error message
-
-				Redirect("home", "index");
+				// This is a hack to avoid the infinite cycle with
+				// Asp.Net page processing
+				Redirect("home", "NotFound");
 			}
 			else
 			{
-				FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(email, true, 14 * 24 * 60);
-				String cookieContents = FormsAuthentication.Encrypt( ticket );
-				
-				HttpContext.Response.Cookies.Add( 
-					new HttpCookie(FormsAuthentication.FormsCookieName, cookieContents) );
+				User user = _model.Users.FindByEmail(email);
 
-				Redirect("dashboard", "index");
+				Session["user"] = user;
+
+				if (HasFromUrl)
+				{
+					Redirect( ObtainAndRemoveFromUrl() );
+				}
+				else
+				{
+					Redirect("dashboard", "index");
+				}
 			}
 		}
 
 		public void SignUp()
 		{
 			Redirect("registration", "signup");
+		}
+
+		private String ObtainAndRemoveFromUrl()
+		{
+			String url = (String) Session["FromUrl"];
+			Session.Remove("FromUrl");
+			return url;
+		}
+
+		private bool HasFromUrl
+		{
+			get { return Session.Contains("FromUrl"); }
 		}
 	}
 }

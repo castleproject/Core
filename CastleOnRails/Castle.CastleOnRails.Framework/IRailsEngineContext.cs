@@ -70,7 +70,7 @@ namespace Castle.CastleOnRails.Framework
 		/// <summary>
 		/// Access a dictionary of volative items.
 		/// </summary>
-		IDictionary Items { get; }
+		IDictionary Flash { get; }
 
 		/// <summary>
 		/// Transfer the execution to another resource.

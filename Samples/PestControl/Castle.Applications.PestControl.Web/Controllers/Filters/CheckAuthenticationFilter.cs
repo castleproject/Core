@@ -12,36 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.Applications.PestControl.Web.Controllers.Filters
 {
 	using System;
+	using System.Security.Principal;
 
-	public interface IResponse
+	using Castle.CastleOnRails.Framework;
+
+	public class CheckAuthenticationFilter : IFilter
 	{
-		void AppendHeader(String name, String value);
+		public bool Perform(ExecuteEnum when, IRailsEngineContext context, Controller controller)
+		{
+			context.CurrentUser = context.Session["user"] as IPrincipal;
 
-		System.IO.TextWriter Output { get; }
-		
-		System.IO.Stream OutputStream { get; }
-
-		void Write(String s);
-
-		void Write(object obj);
-
-		void Write(char ch);
-
-		void Write(char[] buffer, int index, int count);
-
-		void Redirect( String controller, String action );
-
-		void Redirect( String area, String controller, String action );
-
-		void Redirect(String url);
-
-		void Redirect(String url, bool endProcess);
-
-		int StatusCode { get; set; }
-
-		String ContentType { get; set; }
+			if (context.CurrentUser == null || 
+				context.CurrentUser.Identity == null || 
+				!context.CurrentUser.Identity.IsAuthenticated)
+			{
+				context.Session["FromUrl"] = context.Url;
+				
+				context.Response.Redirect("home", "authentication");
+				
+				return false;
+			}
+			return true;
+		}
 	}
 }

@@ -19,6 +19,7 @@ namespace Castle.MicroKernel
 	using System.Collections.Specialized;
 
 	using Castle.Model;
+	using Castle.Model.Internal;
 	
 	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.ModelBuilder;
@@ -195,6 +196,42 @@ namespace Castle.MicroKernel
 
 		public virtual bool RemoveComponent(String key)
 		{
+			if (_key2Handler.Contains(key))
+			{
+				IHandler handler = GetHandler(key);
+
+				if (handler.ComponentModel.Dependers.Length == 0)
+				{
+					_key2Handler.Remove(key);
+
+					if (GetHandler(handler.ComponentModel.Service) == handler)
+					{
+						_service2Handler.Remove(handler.ComponentModel.Service);
+					}
+
+					foreach(ComponentModel model in handler.ComponentModel.Dependents)
+					{
+						model.RemoveDepender(handler.ComponentModel);
+					}
+
+					DisposeHandler(handler);
+
+					return true;
+				}
+				else
+				{
+					// We can't remove this component as there are
+					// others which depends on it
+
+					return false;
+				}
+			}
+			
+			if (Parent != null)
+			{
+				return Parent.RemoveComponent(key);
+			}
+
 			return false;
 		}
 
@@ -449,6 +486,26 @@ namespace Castle.MicroKernel
 			return activator;
 		}
 
+		/// <summary>
+		/// Graph of components and iteractions.
+		/// </summary>
+		public GraphNode[] GraphNodes 
+		{ 
+			get
+			{
+				GraphNode[] nodes = new GraphNode[_key2Handler.Values.Count];
+
+				int index = 0;
+
+				foreach(IHandler handler in _key2Handler.Values)
+				{
+					nodes[index++] = handler.ComponentModel;
+				}
+
+				return nodes;
+			} 
+		}
+
 		#endregion
 
 		#region IDisposable Members
@@ -458,22 +515,60 @@ namespace Castle.MicroKernel
 		/// </summary>
 		public virtual void Dispose()
 		{
-			_releaserPolicy.Dispose();
+			DisposeSubKernels();
+			DisposeComponentsInstancesWithinTracker();
+			DisposeHandlers();
+			UnsubscribeFromParentKernel();
+		}
 
-			foreach (DictionaryEntry entry in _key2Handler)
+		private void DisposeHandlers()
+		{
+			GraphNode[] nodes = GraphNodes;
+			IVertex[] vertices = TopologicalSortAlgo.Sort( nodes );
+	
+			for(int i=0; i < vertices.Length; i++)
 			{
-				IHandler handler = (IHandler) entry.Value;
+				ComponentModel model = (ComponentModel) vertices[i];
 
-				if (handler is IDisposable)
-				{
-					((IDisposable) handler).Dispose();
-				}
+				// Prevent the removal of a component that belongs 
+				// to other container
+				if (!_key2Handler.Contains(model.Name)) continue;
+				
+				bool successOnRemoval = RemoveComponent( model.Name );
+
+				System.Diagnostics.Debug.Assert( successOnRemoval );
 			}
+		}
 
+		private void UnsubscribeFromParentKernel()
+		{
 			if (Parent != null)
 			{
 				Parent.ComponentRegistered -= new ComponentDataDelegate(RaiseComponentRegistered);
 				Parent.ComponentUnregistered -= new ComponentDataDelegate(RaiseComponentUnregistered);
+			}
+		}
+
+		private void DisposeComponentsInstancesWithinTracker()
+		{
+			_releaserPolicy.Dispose();
+		}
+
+		private void DisposeSubKernels()
+		{
+			foreach(IKernel childKernel in _childKernels)
+			{
+				childKernel.Dispose();
+			}
+		}
+
+		protected void DisposeHandler(IHandler handler)
+		{
+			if (handler == null) return;
+
+			if (handler is IDisposable)
+			{
+				((IDisposable) handler).Dispose();
 			}
 		}
 

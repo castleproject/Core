@@ -157,6 +157,7 @@ namespace Castle.MicroKernel.Handlers
 				if (HasValidComponent(service))
 				{
 					DependenciesByService.Remove(service);
+					AddGraphDependency(handler.ComponentModel);
 				}
 			}
 
@@ -165,6 +166,7 @@ namespace Castle.MicroKernel.Handlers
 				if (HasValidComponent(compKey))
 				{
 					DependenciesByKey.Remove(compKey);
+					AddGraphDependency(handler.ComponentModel);
 				}
 			}
 
@@ -216,13 +218,21 @@ namespace Castle.MicroKernel.Handlers
 			if (dependency.TargetType != null)
 			{
 				if (dependency.TargetType == typeof(IKernel)) return;
-				if (HasValidComponent(dependency.TargetType)) return;
+				if (HasValidComponent(dependency.TargetType))
+				{
+					AddGraphDependency(Kernel.GetHandler(dependency.TargetType).ComponentModel);
+					return;
+				}
 
 				DependenciesByService.Add(dependency.TargetType);
 			}
 			else
 			{
-				if (HasValidComponent(dependency.DependencyKey)) return;
+				if (HasValidComponent(dependency.DependencyKey))
+				{
+					AddGraphDependency(Kernel.GetHandler(dependency.DependencyKey).ComponentModel);
+					return;
+				}
 				
 				DependenciesByKey.Add(dependency.DependencyKey, String.Empty);
 			}
@@ -282,6 +292,11 @@ namespace Castle.MicroKernel.Handlers
 					DependencySatisfied(handler);
 				}
 			}
+		}
+
+		private void AddGraphDependency(ComponentModel model)
+		{
+			ComponentModel.AddDependent( model );
 		}
 	}
 }

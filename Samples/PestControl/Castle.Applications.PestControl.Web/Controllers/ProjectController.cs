@@ -31,16 +31,15 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	/// Summary description for ProjectController.
 	/// </summary>
 	[Layout("default")]
-	public class ProjectController : SmartDispatcherController
+	public class ProjectController : AbstractSecureController
 	{
 		private PestControlModel _model;
 		private SourceControlManager _scm;
 		private BuildSystemManager _bsm;
 		private PrevalenceEngine _engine;
 
-		public ProjectController(
-			PestControlModel model, PrevalenceEngine engine,
-			SourceControlManager scm, BuildSystemManager bsm)
+		public ProjectController( PestControlModel model, 
+			PrevalenceEngine engine, SourceControlManager scm, BuildSystemManager bsm)
 		{
 			_engine = engine;
 			_model = model;

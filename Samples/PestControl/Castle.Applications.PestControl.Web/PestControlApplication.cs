@@ -1,3 +1,4 @@
+using Castle.Applications.PestControl.Web.Controllers.Filters;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,11 +39,12 @@ namespace Castle.Applications.PestControl.Web
 			container = new PestControlContainer( new AppDomainConfigurationStore() );
 			container.AddFacility( "rails", new RailsFacility() );
 
-			AddControllers(container);
+			AddFiltersAndControllers(container);
 		}
 
-		private void AddControllers(WindsorContainer container)
+		private void AddFiltersAndControllers(WindsorContainer container)
 		{
+			container.AddComponent( "auth.filter", typeof(CheckAuthenticationFilter) );
 			container.AddComponent( "home", typeof(HomeController) );
 			container.AddComponent( "dashboard", typeof(DashboardController) );
 			container.AddComponent( "registration", typeof(RegistrationController) );

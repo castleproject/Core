@@ -77,12 +77,24 @@ namespace Castle.CastleOnRails.Engine.Adapters
 
 		public void Redirect(String url)
 		{
-			_response.Redirect(url);
+			_response.Redirect(url, false);
 		}
 
 		public void Redirect(String url, bool endProcess)
 		{
 			_response.Redirect(url, endProcess);
+		}
+
+		public void Redirect(String controller, String action)
+		{
+			_response.Redirect( 
+				String.Format("../{0}/{1}.rails", controller, action), false );
+		}
+
+		public void Redirect(String area, String controller, String action)
+		{
+			_response.Redirect( 
+				String.Format("../{0}/{1}/{2}.rails", area, controller, action), false );
 		}
 	}
 }
