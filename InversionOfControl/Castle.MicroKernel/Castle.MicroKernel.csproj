@@ -413,6 +413,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\Naming\BinaryTreeComponentName.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Naming\ComponentName.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Naming\DefaultNamingSubSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Naming\INamingSubSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Naming\NamingPartsSubSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\ReferenceExpressionUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

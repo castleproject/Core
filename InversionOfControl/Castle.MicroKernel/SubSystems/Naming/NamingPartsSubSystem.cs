@@ -12,29 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.MicroKernel.SubSystems.Naming
 {
 	using System;
+	using System.Collections;
 
-	/// <summary>
-	/// Holds the keys used by Kernel to register/request 
-	/// a subsystem.
-	/// </summary>
-	public abstract class SubSystemConstants
+	[Serializable]
+	public class NamingPartsSubSystem : DefaultNamingSubSystem
 	{
-		/// <summary>
-		/// Key used for the configuration store subsystem
-		/// </summary>
-		public static readonly String ConfigurationStoreKey = "config.store";
+		public NamingPartsSubSystem()
+		{
+		}
 
-		/// <summary>
-		/// Key used for the conversion manager
-		/// </summary>
-		public static readonly String ConversionManagerKey  = "conversion.mng";
-
-		/// <summary>
-		/// Key used for the naming subsystem
-		/// </summary>
-		public static readonly String NamingKey             = "naming.sub.key";
+		private ComponentName ToComponentName(String key)
+		{
+			return new ComponentName(key);
+		}
 	}
 }

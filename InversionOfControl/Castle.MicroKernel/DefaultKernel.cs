@@ -17,7 +17,6 @@ namespace Castle.MicroKernel
 	using System;
 	using System.Reflection;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Runtime.Serialization;
 
 	using Castle.Model;
@@ -87,18 +86,6 @@ namespace Castle.MicroKernel
 		/// </summary>
 		private IList _childKernels;
 
-		/// <summary>
-		/// Map(String, IHandler) to map component keys
-		/// to <see cref="IHandler"/>
-		/// </summary>
-		private IDictionary _key2Handler;
-
-		/// <summary>
-		/// Map(Type, IHandler) to map services 
-		/// to <see cref="IHandler"/>
-		/// </summary>
-		private IDictionary _service2Handler;
-
 		#endregion
 
 		#region Constructors
@@ -119,8 +106,6 @@ namespace Castle.MicroKernel
 		{
 			_proxyFactory = proxyFactory;
 
-			_key2Handler = new HybridDictionary();
-			_service2Handler = new Hashtable();
 			_childKernels = new ArrayList();
 			_facilities = new ArrayList();
 			_subsystems = new Hashtable();
@@ -130,6 +115,9 @@ namespace Castle.MicroKernel
 			
 			AddSubSystem( SubSystemConstants.ConversionManagerKey, 
 				new SubSystems.Conversion.DefaultConversionManager() );
+
+			AddSubSystem( SubSystemConstants.NamingKey, 
+				new SubSystems.Naming.DefaultNamingSubSystem() );
 
 			_releaserPolicy = new LifecycledComponentsReleasePolicy();
 			_handlerFactory = new DefaultHandlerFactory(this);
@@ -274,17 +262,17 @@ namespace Castle.MicroKernel
 		{
 			if (key == null) throw new ArgumentNullException("key");
 
-			if (_key2Handler.Contains(key))
+			if (NamingSubSystem.Contains(key))
 			{
 				IHandler handler = GetHandler(key);
 
 				if (handler.ComponentModel.Dependers.Length == 0)
 				{
-					_key2Handler.Remove(key);
+					NamingSubSystem.UnRegister(key);
 
 					if (GetHandler(handler.ComponentModel.Service) == handler)
 					{
-						_service2Handler.Remove(handler.ComponentModel.Service);
+						NamingSubSystem.UnRegister(handler.ComponentModel.Service);
 					}
 
 					foreach(ComponentModel model in handler.ComponentModel.Dependents)
@@ -317,7 +305,7 @@ namespace Castle.MicroKernel
 		{
 			if (key == null) throw new ArgumentNullException("key");
 			
-			if (_key2Handler.Contains(key))
+			if (NamingSubSystem.Contains(key))
 			{
 				return true;
 			}
@@ -334,7 +322,7 @@ namespace Castle.MicroKernel
 		{
 			if (serviceType == null) throw new ArgumentNullException("serviceType");
 
-			if (_service2Handler.Contains(serviceType))
+			if (NamingSubSystem.Contains(serviceType))
 			{
 				return true;
 			}
@@ -422,7 +410,7 @@ namespace Castle.MicroKernel
 		{
 			if (key == null) throw new ArgumentNullException("key");
 
-			IHandler handler = _key2Handler[key] as IHandler;
+			IHandler handler = NamingSubSystem.GetHandler(key);
 
 			if (handler == null && Parent != null)
 			{
@@ -436,7 +424,7 @@ namespace Castle.MicroKernel
 		{
 			if (service == null) throw new ArgumentNullException("service");
 
-			IHandler handler = _service2Handler[service] as IHandler;
+			IHandler handler = NamingSubSystem.GetHandler(service);
 
 			if (handler == null && Parent != null)
 			{
@@ -454,19 +442,7 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		public virtual IHandler[] GetHandlers(Type service)
 		{
-			if (service == null) throw new ArgumentNullException("service");
-
-			ArrayList list = new ArrayList();
-
-			foreach( IHandler handler in _key2Handler.Values )
-			{
-				if (handler.ComponentModel.Service == service)
-				{
-					list.Add(handler);
-				}
-			}
-
-			return (IHandler[]) list.ToArray( typeof(IHandler) );
+			return NamingSubSystem.GetHandlers(service);
 		}
 
 		/// <summary>
@@ -478,17 +454,7 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		public virtual IHandler[] GetAssignableHandlers(Type service)
 		{
-			ArrayList list = new ArrayList();
-
-			foreach( IHandler handler in _key2Handler.Values )
-			{
-				if ( service.IsAssignableFrom(handler.ComponentModel.Service))
-				{
-					list.Add(handler);
-				}
-			}
-
-			return (IHandler[]) list.ToArray( typeof(IHandler) );
+			return NamingSubSystem.GetAssignableHandlers(service);
 		}
 
 		public IReleasePolicy ReleasePolicy
@@ -604,11 +570,13 @@ namespace Castle.MicroKernel
 		{ 
 			get
 			{
-				GraphNode[] nodes = new GraphNode[_key2Handler.Values.Count];
+				GraphNode[] nodes = new GraphNode[ NamingSubSystem.ComponentCount ];
 
 				int index = 0;
 
-				foreach(IHandler handler in _key2Handler.Values)
+				IHandler[] handlers = NamingSubSystem.GetHandlers();
+
+				foreach(IHandler handler in handlers)
 				{
 					nodes[index++] = handler.ComponentModel;
 				}
@@ -643,7 +611,7 @@ namespace Castle.MicroKernel
 
 				// Prevent the removal of a component that belongs 
 				// to other container
-				if (!_key2Handler.Contains(model.Name)) continue;
+				if (!NamingSubSystem.Contains(model.Name)) continue;
 				
 				bool successOnRemoval = RemoveComponent( model.Name );
 
@@ -687,22 +655,28 @@ namespace Castle.MicroKernel
 
 		#region Protected members
 
+		protected INamingSubSystem NamingSubSystem
+		{
+			get { return GetSubSystem(SubSystemConstants.NamingKey) as INamingSubSystem; }
+			set { AddSubSystem(SubSystemConstants.NamingKey, value); }
+		}
+
 		protected void RegisterHandler(String key, IHandler handler)
 		{
 			Type service = handler.ComponentModel.Service;
 
-			if (_key2Handler.Contains(key))
+			if (NamingSubSystem.Contains(key))
 			{
 				throw new ComponentRegistrationException(
 					String.Format("There is a component already registered for the given key {0}", key));
 			}
 
-			if (!_service2Handler.Contains(service))
+			if (!NamingSubSystem.Contains(service))
 			{
-				_service2Handler[service] = handler;
+				NamingSubSystem[service] = handler;
 			}
 
-			_key2Handler[key] = handler;
+			NamingSubSystem[key] = handler;
 
 			base.RaiseHandlerRegistered(handler);
 			base.RaiseComponentRegistered(key, handler);

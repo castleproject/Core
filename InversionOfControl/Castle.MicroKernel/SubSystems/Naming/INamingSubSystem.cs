@@ -17,24 +17,36 @@ namespace Castle.MicroKernel
 	using System;
 
 	/// <summary>
-	/// Holds the keys used by Kernel to register/request 
-	/// a subsystem.
+	/// 
 	/// </summary>
-	public abstract class SubSystemConstants
+	public interface INamingSubSystem : ISubSystem
 	{
-		/// <summary>
-		/// Key used for the configuration store subsystem
-		/// </summary>
-		public static readonly String ConfigurationStoreKey = "config.store";
+		void Register(String key, IHandler handler);
 
-		/// <summary>
-		/// Key used for the conversion manager
-		/// </summary>
-		public static readonly String ConversionManagerKey  = "conversion.mng";
+		void UnRegister(String key);
 
-		/// <summary>
-		/// Key used for the naming subsystem
-		/// </summary>
-		public static readonly String NamingKey             = "naming.sub.key";
+		void UnRegister(Type service);
+
+		bool Contains(String key);
+
+		bool Contains(Type service);
+
+		int ComponentCount { get; }
+
+		IHandler GetHandler(String key);
+
+		IHandler[] GetHandlers(String query);
+
+		IHandler GetHandler(Type service);
+
+		IHandler[] GetHandlers(Type service);
+
+		IHandler[] GetHandlers();
+
+		IHandler[] GetAssignableHandlers(Type service);
+
+		IHandler this[Type service] { set; }
+
+		IHandler this[String key] { set; }
 	}
 }
