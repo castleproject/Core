@@ -23,19 +23,24 @@ namespace Castle.Applications.PestControl.Model
 	[Serializable]
 	public class Project : Identifiable
 	{
-		public User _owner;
-		public bool _isPublic;
-		public String _name;
-		public String _sourceControl;
-		public String _buildSystem;
+		protected User _owner;
+		protected bool _isPublic;
+		protected String _name;
+		protected String _sourceControl;
+		protected String _buildSystem;
+		protected IDictionary _sourceControlProperties;
 
-		public Project(bool _isPublic, string _name, string _sourceControl, string _buildSystem, User _owner)
+		public Project(bool _isPublic, string _name, string _sourceControl, 
+			string _buildSystem, User _owner)
 		{
 			this._owner = _owner;
 			this._isPublic = _isPublic;
 			this._name = _name;
 			this._sourceControl = _sourceControl;
 			this._buildSystem = _buildSystem;
+
+			_sourceControlProperties = new Hashtable(
+				CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 		}
 
 		public User Owner
@@ -66,6 +71,11 @@ namespace Castle.Applications.PestControl.Model
 		{
 			get { return _buildSystem; }
 			set { _buildSystem = value; }
+		}
+
+		public IDictionary SourceControlProperties
+		{
+			get { return _sourceControlProperties; }
 		}
 	}
 

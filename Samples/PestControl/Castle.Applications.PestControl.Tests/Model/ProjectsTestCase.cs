@@ -15,6 +15,7 @@
 namespace Castle.Applications.PestControl.Tests.Model
 {
 	using System;
+	using System.Collections;
 
 	using NUnit.Framework;
 
@@ -34,7 +35,9 @@ namespace Castle.Applications.PestControl.Tests.Model
 			User user = (User) _engine.ExecuteCommand( 
 				new CreateUserCommand("admin", "pass123", "admin@admin.com") );
 
-			_engine.ExecuteCommand( new CreateProjectCommand() );
+			_engine.ExecuteCommand( 
+				new CreateProjectCommand(false, "Castle", "svnsc", "nant", 
+					"admin@admin.com", new Hashtable()) );
 
 			Assert.AreEqual( 1, _model.Projects.Count );
 		}

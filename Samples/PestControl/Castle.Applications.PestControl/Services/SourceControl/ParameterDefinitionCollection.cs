@@ -12,32 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Applications.PestControl.Web.Controllers
+namespace Castle.Applications.PestControl.Services.SourceControl
 {
 	using System;
-
-	using Castle.Model;
-
-	using Castle.CastleOnRails.Framework;
-
-	using Castle.Applications.PestControl.Model;
+	using System.Collections;
 
 	/// <summary>
-	/// Summary description for DashboardController.
+	/// Summary description for ParameterDefinitionCollection.
 	/// </summary>
-	[Transient]
-	public class DashboardController : Controller
+	public class ParameterDefinitionCollection : ReadOnlyCollectionBase
 	{
-		PestControlModel _model;
-
-		public DashboardController(PestControlModel model)
+		public void Add(ParameterDefinition paramDef)
 		{
-			_model = model;
-		}
-
-		public void Index()
-		{
-			PropertyBag.Add("Projects", _model.Projects);
+			InnerList.Add(paramDef);
 		}
 	}
 }

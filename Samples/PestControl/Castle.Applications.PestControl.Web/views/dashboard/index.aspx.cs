@@ -6,6 +6,7 @@ using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using Castle.Applications.PestControl.Model;
 using Castle.CastleOnRails.Framework;
 
 namespace Castle.Applications.PestControl.Web.Views.Dashboard
@@ -13,9 +14,22 @@ namespace Castle.Applications.PestControl.Web.Views.Dashboard
 	public class Index : System.Web.UI.Page, IControllerAware
 	{
 		private Controller _controller;
+		public Repeater projectsRepeater;
+		protected ProjectCollection _projects;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
+			if (!IsPostBack)
+			{
+				projectsRepeater.DataSource = _projects;
+				projectsRepeater.DataBind();
+			}
+		}
+
+		public ProjectCollection Projects
+		{
+			get { return _projects; }
+			set { _projects = value; }
 		}
 
 		#region Web Form Designer generated code
@@ -43,6 +57,5 @@ namespace Castle.Applications.PestControl.Web.Views.Dashboard
 		{
 			_controller = controller;
 		}
-
 	}
 }

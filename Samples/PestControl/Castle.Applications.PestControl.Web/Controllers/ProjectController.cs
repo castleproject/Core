@@ -15,6 +15,9 @@
 namespace Castle.Applications.PestControl.Web.Controllers
 {
 	using System;
+	using System.Collections;
+
+	using Bamboo.Prevalence;
 
 	using Castle.Model;
 
@@ -33,10 +36,13 @@ namespace Castle.Applications.PestControl.Web.Controllers
 		private PestControlModel _model;
 		private SourceControlManager _scm;
 		private BuildSystemManager _bsm;
+		private PrevalenceEngine _engine;
 
-		public ProjectController(PestControlModel model, 
+		public ProjectController(
+			PestControlModel model, PrevalenceEngine engine,
 			SourceControlManager scm, BuildSystemManager bsm)
 		{
+			_engine = engine;
 			_model = model;
 			_scm = scm;
 			_bsm = bsm;
@@ -46,6 +52,18 @@ namespace Castle.Applications.PestControl.Web.Controllers
 		{
 			PropertyBag.Add("SourceControlManager", _scm);
 			PropertyBag.Add("BuildSystemManager", _bsm);
+		}
+
+		public void Insert(String name, String bs, String sc)
+		{
+			bool isPublic = (bool) PropertyBag["isPublic"];
+			String ownerEmail = (String) PropertyBag["ownerEmail"];
+			Hashtable properties = (Hashtable) PropertyBag["properties"];
+
+			_engine.ExecuteCommand( 
+				new CreateProjectCommand(isPublic, name, sc, bs, ownerEmail, properties) );
+
+			Redirect("dashboard", "index");
 		}
 	}
 }

@@ -184,6 +184,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Services\SourceControl\ParameterDefinition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\SourceControl\ParameterDefinitionCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Services\SourceControl\SourceControlManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

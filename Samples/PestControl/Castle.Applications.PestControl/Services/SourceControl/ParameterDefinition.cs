@@ -16,46 +16,46 @@ namespace Castle.Applications.PestControl.Services.SourceControl
 {
 	using System;
 
-	using Castle.Applications.PestControl.Model;
+	public enum ParameterType
+	{
+		Single,
+		Enum
+	}
 
 	/// <summary>
-	/// Summary description for SvnSourceControl.
+	/// Summary description for ParameterDefinition.
 	/// </summary>
-	public class SvnSourceControl : ISourceControl
+	public class ParameterDefinition
 	{
-		ParameterDefinitionCollection _params;
+		ParameterType _parameterType;
+		String _name;
+		String[] _possibleValues;
 
-		public SvnSourceControl()
+		public ParameterDefinition(String name)
 		{
-			_params = new ParameterDefinitionCollection();
-
-			_params.Add( new ParameterDefinition("URL") );
-			_params.Add( new ParameterDefinition("User name") );
-			_params.Add( new ParameterDefinition("Password") );
+			_parameterType = ParameterType.Single;
+			_name = name;
 		}
 
-		#region ISourceControl Members
-
-		public String Name
+		public ParameterDefinition(String name, String[] possibleValues) : this(name)
 		{
-			get { return "SubVersion Repository"; }
+			_parameterType = ParameterType.Enum;
+			_possibleValues = possibleValues;
 		}
 
-		public String Key
+		public ParameterType ParameterType
 		{
-			get { return "svnsc"; }
+			get { return _parameterType; }
 		}
 
-		public bool HasModifications(Project project, DateTime since)
+		public string Name
 		{
-			return false;
+			get { return _name; }
 		}
 
-		public ParameterDefinitionCollection ParametersDefinition
+		public string[] PossibleValues
 		{
-			get { return _params; }
+			get { return _possibleValues; }
 		}
-
-		#endregion
 	}
 }

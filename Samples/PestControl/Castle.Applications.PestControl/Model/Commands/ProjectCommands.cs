@@ -1,3 +1,4 @@
+using System.Collections;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,13 +25,39 @@ namespace Castle.Applications.PestControl.Model
 	[Serializable]
 	public class CreateProjectCommand : ICommand
 	{
-		public CreateProjectCommand()
+		bool _isPublic; 
+		string _name; 
+		string _sourceControl; 
+		string _buildSystem; 
+		String _ownerEmail;
+		IDictionary _sourceControlProperties;
+
+		public CreateProjectCommand(bool _isPublic, string _name, string _sourceControl, 
+			string _buildSystem, string _ownerEmail, IDictionary _sourceControlProperties)
 		{
+			this._isPublic = _isPublic;
+			this._name = _name;
+			this._sourceControl = _sourceControl;
+			this._buildSystem = _buildSystem;
+			this._ownerEmail = _ownerEmail;
+			this._sourceControlProperties = _sourceControlProperties;
 		}
 
 		public object Execute(object system)
 		{
-			throw new NotImplementedException();
+			PestControlModel model = (PestControlModel) system;
+			User owner = model.Users.FindByEmail(_ownerEmail);
+
+			Project project = new Project(_isPublic, _name, _sourceControl, _buildSystem, owner);
+
+			foreach(DictionaryEntry entry in _sourceControlProperties)
+			{
+				project.SourceControlProperties.Add(entry.Key, entry.Value);
+			}
+
+			model.Projects.Add( project );
+
+			return project;
 		}
 	}
 }

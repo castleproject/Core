@@ -22,8 +22,21 @@ namespace Castle.Applications.PestControl.Services.SourceControl
 	/// </summary>
 	public class CvsSourceControl : ISourceControl
 	{
+		ParameterDefinitionCollection _params;
+
 		public CvsSourceControl()
 		{
+			_params = new ParameterDefinitionCollection();
+
+			_params.Add( new ParameterDefinition("CVS Root") );
+			_params.Add( new ParameterDefinition("Protocol", 
+				new string[] { "pserver", "ext", "sspi", "ssh", "gserver", "local" } ) );
+			_params.Add( new ParameterDefinition("Server") );
+			_params.Add( new ParameterDefinition("Port") );
+			_params.Add( new ParameterDefinition("Repository Folder") );
+			_params.Add( new ParameterDefinition("Module") );
+			_params.Add( new ParameterDefinition("User name") );
+			_params.Add( new ParameterDefinition("Password") );
 		}
 
 		#region ISourceControl Members
@@ -41,6 +54,11 @@ namespace Castle.Applications.PestControl.Services.SourceControl
 		public bool HasModifications(Project project, DateTime since)
 		{
 			return false;
+		}
+
+		public ParameterDefinitionCollection ParametersDefinition
+		{
+			get { return _params; }
 		}
 
 		#endregion

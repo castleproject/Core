@@ -28,5 +28,7 @@ namespace Castle.Applications.PestControl.Services.SourceControl
 		String Key { get; }
 
 		bool HasModifications(Project project, DateTime since);
+
+		ParameterDefinitionCollection ParametersDefinition { get; } 
 	}
 }

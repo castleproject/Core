@@ -23,8 +23,15 @@ namespace Castle.Applications.PestControl.Services.SourceControl
 	/// </summary>
 	public class VssSourceControl : ISourceControl
 	{
+		ParameterDefinitionCollection _params;
+
 		public VssSourceControl()
 		{
+			_params = new ParameterDefinitionCollection();
+
+			_params.Add( new ParameterDefinition("Ini file") );
+			_params.Add( new ParameterDefinition("User name") );
+			_params.Add( new ParameterDefinition("Password") );
 		}
 
 		#region ISourceControl Members
@@ -42,6 +49,11 @@ namespace Castle.Applications.PestControl.Services.SourceControl
 		public bool HasModifications(Project project, DateTime since)
 		{
 			return false;
+		}
+
+		public ParameterDefinitionCollection ParametersDefinition
+		{
+			get { return _params; }
 		}
 
 		#endregion

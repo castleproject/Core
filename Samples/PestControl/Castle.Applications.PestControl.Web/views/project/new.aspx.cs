@@ -8,36 +8,70 @@ using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using Castle.Applications.PestControl.Model;
 using Castle.Applications.PestControl.Services.BuildSystems;
 using Castle.Applications.PestControl.Services.SourceControl;
+using Castle.CastleOnRails.Framework;
 
 namespace Castle.Applications.PestControl.Web.views.project
 {
 	/// <summary>
 	/// Summary description for _new.
 	/// </summary>
-	public class New : System.Web.UI.Page
+	public class New : System.Web.UI.Page, IControllerAware
 	{
 		protected System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
 		protected System.Web.UI.WebControls.TextBox name;
 		protected System.Web.UI.WebControls.Button Save;
 		protected System.Web.UI.WebControls.DropDownList sc;
 		protected System.Web.UI.WebControls.DropDownList bs;
+		protected System.Web.UI.WebControls.CheckBox isPublic;
 		
 		private SourceControlManager _sourceControlManager;
+		protected System.Web.UI.WebControls.Repeater dynRep;
 		private BuildSystemManager _buildSystemManager;
+		private Controller _controller;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			sc.DataSource = this.SourceControlManager.AvailableSourceControl();
-			sc.DataTextField = "Name";
-			sc.DataValueField = "Key";
-			sc.DataBind();
+			Save.Click += new EventHandler(OnSave);
 
-			bs.DataSource = this.BuildSystemManager.AvailableBuildSystems();
-			bs.DataTextField = "Name";
-			bs.DataValueField = "Key";
-			bs.DataBind();
+			ISourceControl[] sourceControls = SourceControlManager.AvailableSourceControl();
+
+			if (!IsPostBack)
+			{
+				SelectedSourceControl = -1;
+
+				sc.AutoPostBack = true;
+				sc.DataSource = sourceControls;
+				sc.DataTextField = "Name";
+				sc.DataValueField = "Key";
+				sc.DataBind();
+
+				bs.DataSource = BuildSystemManager.AvailableBuildSystems();
+				bs.DataTextField = "Name";
+				bs.DataValueField = "Key";
+				bs.DataBind();
+			}
+
+			if (sc.SelectedIndex != SelectedSourceControl )
+			{
+				// If the user changed the combo, we rebind the
+				// properties for the selected source control
+
+				ISourceControl control = sourceControls[ sc.SelectedIndex ];
+
+				SelectedSourceControl = sc.SelectedIndex;
+
+				dynRep.DataSource = control.ParametersDefinition;
+				dynRep.DataBind();
+			}
+		}
+
+		public int SelectedSourceControl
+		{
+			get { return (int) this.ViewState["SelectedSourceControl"]; }
+			set { this.ViewState["SelectedSourceControl"] = value; }
 		}
 
 		public SourceControlManager SourceControlManager
@@ -68,9 +102,43 @@ namespace Castle.Applications.PestControl.Web.views.project
 		/// </summary>
 		private void InitializeComponent()
 		{    
+			this.dynRep.ItemCommand += new System.Web.UI.WebControls.RepeaterCommandEventHandler(this.dynRep_ItemCommand);
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}
+		#endregion
+
+		private void dynRep_ItemCommand(object source, System.Web.UI.WebControls.RepeaterCommandEventArgs e)
+		{
+		
+		}
+
+		private void OnSave(object sender, EventArgs e)
+		{
+			Hashtable properties = new Hashtable();
+
+			foreach(RepeaterItem item in dynRep.Items)
+			{
+				HtmlInputControl pKey = (HtmlInputControl) item.FindControl("propKey");
+				TextBox pValue = (TextBox) item.FindControl("propValue");
+			
+				properties.Add(pKey.Value, pValue.Text);
+			}
+
+			_controller.PropertyBag.Add("properties", properties);
+			_controller.PropertyBag.Add("isPublic", isPublic.Checked);
+			_controller.PropertyBag.Add("ownerEmail", ((User) Context.User).Email );
+
+			_controller.Send("insert");
+		}
+
+		#region IControllerAware Members
+
+		public void SetController(Controller controller)
+		{
+			_controller = controller;
+		}
+
 		#endregion
 	}
 }
