@@ -51,7 +51,7 @@ namespace Castle.ActiveRecord.Generator.Components
 					String propertyName = _namingService.CreateClassName(col.RelatedTable.Name);
 					ActiveRecordDescriptor propertyType = null;
 
-					if (col.RelatedTable.RelatedDescriptor == null)
+					if (col.RelatedTable.RelatedDescriptor == null && col.RelatedTable != tableDef)
 					{
 						col.RelatedTable.RelatedDescriptor = new ActiveRecordDescriptor(col.RelatedTable);
 
@@ -86,7 +86,7 @@ namespace Castle.ActiveRecord.Generator.Components
 					{
 						colName = col.Name;
 
-						if (col.RelatedTable.RelatedDescriptor == null)
+						if (col.RelatedTable.RelatedDescriptor == null && col.RelatedTable != fkTable)
 						{
 							col.RelatedTable.RelatedDescriptor = new ActiveRecordDescriptor(fkTable);
 

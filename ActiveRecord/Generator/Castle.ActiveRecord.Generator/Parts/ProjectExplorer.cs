@@ -30,12 +30,6 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-//			treeView1.Nodes[1].Expand();
-//			treeView1.Nodes[2].Expand();
 		}
 
 		public ProjectExplorer(Model model) : this()
@@ -142,8 +136,6 @@ namespace Castle.ActiveRecord.Generator.Parts
 			ProjectExplorerActionSet aset = new ProjectExplorerActionSet();
 			aset.Init(_model);
 			aset.Install(this);
-
-//			treeView1.Nodes.Add(new System.Windows.Forms.TreeNode("DockSample", 3, 3));
 		}
 
 		#region IWorkspace Members
@@ -173,6 +165,12 @@ namespace Castle.ActiveRecord.Generator.Parts
 			get { return null; }
 		}
 
+		public IWorkspace ParentWorkspace
+		{
+			get { return null; }
+			set {  }
+		}
+
 		#endregion
 
 		private void OnProjectReplaced(object sender, Project oldProject, Project newProject)
@@ -189,7 +187,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 		{
 			treeView1.Nodes.Clear();
 
-			TreeNode projectNode = new TreeNode(project.Name, ImageConstants.Classes_Entity, ImageConstants.Classes_Entity);
+			TreeNode projectNode = new TreeNode(project.Name, ImageConstants.Database_Views, ImageConstants.Database_Views);
 
 			treeView1.Nodes.Add(projectNode);
 
@@ -210,6 +208,34 @@ namespace Castle.ActiveRecord.Generator.Parts
 						tableNode.Nodes.Add(colNode);
 					}
 				}
+			}
+
+			Hashtable db2Node = new Hashtable();
+
+			foreach(DictionaryEntry entry in project.BaseClasses)
+			{
+				IActiveRecordDescriptor baseDesc = entry.Value as IActiveRecordDescriptor;
+
+				TreeNode arBaseNode = new TreeNode(baseDesc.ClassName, ImageConstants.Classes_Entity, ImageConstants.Classes_Entity);
+				arBaseNode.Tag = baseDesc;
+
+				projectNode.Nodes.Add(arBaseNode);
+
+				db2Node[entry.Key] = arBaseNode;
+			}
+
+			foreach(IActiveRecordDescriptor desc in project.Descriptors)
+			{
+				ActiveRecordDescriptor arDesc = desc as ActiveRecordDescriptor;
+
+				if (arDesc == null) continue;
+
+				TreeNode arNode = new TreeNode(desc.ClassName, ImageConstants.Classes_Entity, ImageConstants.Classes_Entity);
+				arNode.Tag = arDesc;
+
+				TreeNode parent = db2Node[arDesc.Table.DatabaseDefinition] as TreeNode;
+
+				parent.Nodes.Add(arNode);
 			}
 		}
 	}

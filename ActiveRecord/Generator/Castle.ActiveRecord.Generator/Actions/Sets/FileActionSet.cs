@@ -22,6 +22,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 	{
 		private ProjectNewAction newAction;
 		private ProjectOpenAction openAction;
+		private ProjectSaveAction saveAction;
 
 		public FileActionGroup()
 		{
@@ -33,9 +34,11 @@ namespace Castle.ActiveRecord.Generator.Actions
 		{
 			newAction = new ProjectNewAction();
 			openAction = new ProjectOpenAction();
+			saveAction = new ProjectSaveAction();
 
 			newAction.Init(model);
 			openAction.Init(model);
+			saveAction.Init(model);
 		}
 
 		public void Install(IWorkspace workspace)
@@ -45,6 +48,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 			newAction.Install(workspace, item, null);			
 			openAction.Install(workspace, item, null);
+			saveAction.Install(workspace, item, null);
 		}
 
 		#endregion

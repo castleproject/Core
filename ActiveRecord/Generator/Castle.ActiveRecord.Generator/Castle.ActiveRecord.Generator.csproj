@@ -204,12 +204,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Actions\FileActionSet.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Actions\ProjectExplorerActionSet.cs"
+                    RelPath = "Actions\NewArDescriptorUsingWizard.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -220,6 +215,31 @@
                 />
                 <File
                     RelPath = "Actions\ProjectOpenAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\ProjectSaveAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\ShowPropertiesAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\Sets\ActiveRecordGraphViewActionSet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\Sets\FileActionSet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Actions\Sets\ProjectExplorerActionSet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

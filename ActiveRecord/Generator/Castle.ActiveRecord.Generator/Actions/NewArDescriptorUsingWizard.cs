@@ -1,4 +1,3 @@
-using Castle.ActiveRecord.Generator.Components;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,40 +17,37 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System;
 	using System.Windows.Forms;
 
+	using Castle.ActiveRecord.Generator.Components.Database;
+	using Castle.ActiveRecord.Generator.Dialogs.Wizards;
+	using Castle.ActiveRecord.Generator.Parts.Shapes;
 
-	public class ProjectNewAction : AbstractAction
+
+	public class NewArDescriptorUsingWizard : AbstractAction
 	{
-		private MenuItem _item;
-
-		public ProjectNewAction()
+		public NewArDescriptorUsingWizard()
 		{
 		}
 
-		#region IAction Members
-
-		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
+		public bool Run(ActiveRecordShape shape)
 		{
-			base.Install(workspace, parentMenu, parentGroup);
-
-			_item = new MenuItem("&New");
-
-			_item.Click += new EventHandler(OnNew);
-			(parentMenu as MenuItem).MenuItems.Add(_item);
-		}
-
-		#endregion
-
-		private void OnNew(object sender, EventArgs e)
-		{
-			if (sender == _item)
+			using (NewARClassWizard wizard = new NewARClassWizard(Model))
 			{
-				DoAction();
-			}
-		}
+				if (wizard.ShowDialog(Workspace.ActiveWindow) != DialogResult.OK)
+				{
+					return false;
+				}
 
-		private void DoAction()
-		{
-			base.Model.CurrentProject = new Project();
+				Model.CurrentProject.AddActiveRecordDescriptor(wizard.ActiveRecordDescriptor);
+
+				foreach(ActiveRecordDescriptor dependent in wizard.Dependents)
+				{
+					Model.CurrentProject.AddActiveRecordDescriptor(dependent);
+				}
+
+				Model.Update();
+
+				return true;
+			}
 		}
 	}
 }

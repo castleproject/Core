@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	using System.Collections;
 
 
+	[Serializable]
 	public class TableDefinition
 	{
 		private ArrayList _hasRelation = new ArrayList();

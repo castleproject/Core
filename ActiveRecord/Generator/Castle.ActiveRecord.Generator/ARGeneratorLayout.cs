@@ -42,15 +42,19 @@ namespace Castle.ActiveRecord.Generator
 			// Add parts
 
 			ActiveRecordGraphView arGraph = new ActiveRecordGraphView(_model);
+			arGraph.ParentWorkspace = workspace;
 			arGraph.Show(workspace.MainDockManager);
 
 			OutputView outView = new OutputView(_model);
+//			outView.ParentWorkspace = workspace;
 			outView.Show(workspace.MainDockManager);
 
 			ProjectExplorer projExplorer = new ProjectExplorer(_model);
+			projExplorer.ParentWorkspace = workspace;
 			projExplorer.Show(workspace.MainDockManager);
 
 			AvailableShapes avaShapes = new AvailableShapes(_model);
+			avaShapes.ParentWorkspace = workspace;
 			avaShapes.Show(workspace.MainDockManager);
 		}
 

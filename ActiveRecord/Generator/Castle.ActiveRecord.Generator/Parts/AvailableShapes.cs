@@ -65,6 +65,12 @@ namespace Castle.ActiveRecord.Generator.Parts
 			get { throw new NotImplementedException(); }
 		}
 
+		public IWorkspace ParentWorkspace
+		{
+			get { return null; }
+			set { ; }
+		}
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>

@@ -15,13 +15,13 @@
 namespace Castle.ActiveRecord.Generator.Components.Database
 {
 	using System;
+	using System.Drawing;
 
 
-	[Serializable]
-	public abstract class ActiveRecordOperationDescriptor
+	public interface IActiveRecordDescriptor
 	{
-//		private String _name;
-//		private Type _returnType;
-//		private bool _static;
+		String ClassName { get; set; }
+
+		PointF PositionInView { get; set; }
 	}
 }

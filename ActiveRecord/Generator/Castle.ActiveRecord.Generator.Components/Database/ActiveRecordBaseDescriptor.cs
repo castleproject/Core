@@ -18,10 +18,11 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 
 	[Serializable]
-	public abstract class ActiveRecordOperationDescriptor
+	public class ActiveRecordBaseDescriptor : AbstractActiveRecordDescriptor
 	{
-//		private String _name;
-//		private Type _returnType;
-//		private bool _static;
+		public ActiveRecordBaseDescriptor(String className)
+		{
+			ClassName = className;
+		}
 	}
 }

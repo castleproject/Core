@@ -24,7 +24,6 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 	/// <summary>
 	/// TODO: Map HasOne association
-	/// TODO: Test self association (like Hierarchical categories)
 	/// </summary>
 	[TestFixture]
 	public class RelationshipInferenceServiceTestCase : AbstractContainerTestCase
@@ -85,6 +84,43 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			ActiveRecordDescriptor targetARDescriptor = context.GetNextPendent();
 			Assert.AreSame( blogTable, targetARDescriptor.Table );
+		}
+
+		[Test]
+		public void SelfReference()
+		{
+			InitKernel();
+			IRelationshipInferenceService relService = ObtainService();
+
+			DatabaseDefinition dbdef = new DatabaseDefinition("alias");
+
+			TableDefinition categoryTable = new TableDefinition("categories", dbdef );
+			categoryTable.AddColumn( new ColumnDefinition("id", true, false, true, false, OleDbType.Integer) );
+			categoryTable.AddColumn( new ColumnDefinition("name", false, false, false, false, OleDbType.VarChar) );
+			categoryTable.AddColumn( new ColumnDefinition("parent_id", false, true, false, false, OleDbType.Integer, categoryTable) );
+	
+			categoryTable.AddManyRelation(categoryTable);
+
+			BuildContext context = new BuildContext();
+
+			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( categoryTable, context );
+
+			Assert.IsFalse(context.HasPendents);
+
+			Assert.IsNotNull(descs);
+			Assert.AreEqual( 2, descs.Length );
+
+			ActiveRecordHasManyDescriptor desc1 = descs[0] as ActiveRecordHasManyDescriptor;
+			Assert.IsNotNull(desc1);
+
+			Assert.AreEqual( "Categories", desc1.PropertyName );
+			Assert.AreEqual( "parent_id", desc1.ColumnName );
+			Assert.AreEqual( typeof(IList), desc1.PropertyType );
+
+			ActiveRecordBelongsToDescriptor desc2 = descs[1] as ActiveRecordBelongsToDescriptor;
+			Assert.IsNotNull(desc2);
+			Assert.AreEqual( "Category", desc2.PropertyName );
+			Assert.AreEqual( "parent_id", desc2.ColumnName );
 		}
 
 		private void InitKernel()

@@ -110,6 +110,9 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 				className = _activeRecordDescriptor.ClassName;
 				alias = _activeRecordDescriptor.Table.DatabaseDefinition.Alias;
 				tableName = _activeRecordDescriptor.Table.Name;
+
+				// Lets update the position
+				_activeRecordDescriptor.PositionInView = new PointF(X, Y);
 			}
 			else
 			{

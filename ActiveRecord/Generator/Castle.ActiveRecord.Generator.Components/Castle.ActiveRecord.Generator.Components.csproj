@@ -79,6 +79,11 @@
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -149,6 +154,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Database\AbstractActiveRecordDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\ActiveRecordBaseDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Database\ActiveRecordDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -190,6 +205,11 @@
                 />
                 <File
                     RelPath = "Database\DatabaseDefinitionCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\IActiveRecordDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

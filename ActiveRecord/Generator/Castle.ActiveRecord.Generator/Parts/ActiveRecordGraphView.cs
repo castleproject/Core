@@ -12,110 +12,75 @@ namespace Castle.ActiveRecord.Generator.Parts
 	using Castle.ActiveRecord.Generator.Dialogs;
 	using Castle.ActiveRecord.Generator.Dialogs.Wizards;
 	using Castle.ActiveRecord.Generator.Components.Database;
+	using Castle.ActiveRecord.Generator.Actions;
+	using Castle.ActiveRecord.Generator.Components;
+
 
 	/// <summary>
 	/// Summary description for ActiveRecordGraphView
 	/// </summary>
-	public class ActiveRecordGraphView : Content
+	public class ActiveRecordGraphView : Content, ISubWorkspace
 	{
 		private Netron.GraphLib.UI.GraphControl graphControl1;
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
 		private Model _model;
-		private Hashtable _baseClasses = new Hashtable();
+		private System.Windows.Forms.ContextMenu contextMenu;
+		private System.Windows.Forms.MenuItem menuItem4;
+		private System.Windows.Forms.MenuItem menuItem5;
+		private System.Windows.Forms.MenuItem addSubClassMenu;
+		private System.Windows.Forms.MenuItem addJoinedSubclassMenu;
+		private System.Windows.Forms.MenuItem showCodePreviewMenu;
+		private System.Windows.Forms.MenuItem showPropertiesMenu;
+		private Hashtable _desc2Shape = new Hashtable();
+		private IWorkspace _parentWorkspace;
+		private ActiveRecordGraphViewActionSet _actionSet;
 
 		public ActiveRecordGraphView()
 		{
-			//
-			// Required for Windows Form Designer support
-			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-
-//			graphControl1.AddLibrary("BasicShapes.dll");
 			graphControl1.AddLibrary("Castle.ActiveRecord.Generator.exe");
-			graphControl1.EnableContextMenu = true;
 
-//			ActiveRecordShape shape = (ActiveRecordShape) graphControl1.AddShape(
-//				"castle.ar.shape", new PointF(80,20)); 
-//				
-//			shape.Name = "Company";
-//			shape.Table = "tb_Companies";
-////			shape.Tag = node;
-//			shape.FitSize(false);
-//			Random rnd = new Random(1);
-//			shape.X = rnd.Next(50,this.graphControl1.Width-100);
-//			shape.Y = rnd.Next(50,this.graphControl1.Height-20);
-//
-//			shape = (ActiveRecordShape) graphControl1.AddShape(
-//				"castle.ar.shape", new PointF(80,20)); 
-//			shape.Name = "ActiveRecordBase";
-//			shape.Table = "using 'MyAlias' db";
-//			shape.FitSize(false);
-//			shape.X = rnd.Next(50,this.graphControl1.Width-100);
-//			shape.Y = rnd.Next(50,this.graphControl1.Height-20);
-//
-//
-//
-//			shape = (ActiveRecordShape) graphControl1.AddShape(
-//				"castle.ar.shape", new PointF(80,20)); 
-//				
-//			shape.Name = "Person";
-//			shape.Table = "tb_People";
-//			//			shape.Tag = node;
-//			shape.FitSize(false);
-//			shape.X = rnd.Next(50,this.graphControl1.Width-100);
-//			shape.Y = rnd.Next(50,this.graphControl1.Height-20);
-//
-//			shape = (ActiveRecordShape) graphControl1.AddShape(
-//				"castle.ar.shape", new PointF(80,20)); 
-//				
-//			shape.Name = "Firm";
-//			shape.Table = "extends Company";
-//			//			shape.Tag = node;
-//			shape.FitSize(false);
-//			shape.X = rnd.Next(50,this.graphControl1.Width-100);
-//			shape.Y = rnd.Next(50,this.graphControl1.Height-20);
-//
-//
-//			shape = (ActiveRecordShape) graphControl1.AddShape(
-//				"castle.ar.shape", new PointF(80,20)); 
-//				
-//			shape.Name = "Client";
-//			shape.Table = "extends Company";
-//			//			shape.Tag = node;
-//			shape.FitSize(false);
-//			shape.X = rnd.Next(50,this.graphControl1.Width-100);
-//			shape.Y = rnd.Next(50,this.graphControl1.Height-20);
+			EnableWizard();
 		}
 
 		public ActiveRecordGraphView(Model model) : this()
 		{
 			_model = model;
+
+			_model.OnProjectReplaced += new ProjectReplaceDelegate(_model_OnProjectReplaced);
+			_model.OnProjectChanged += new ProjectDelegate(OnProjectChange);
+		}
+
+		private void ActiveRecordGraphView_Load(object sender, System.EventArgs e)
+		{
+			_actionSet = new ActiveRecordGraphViewActionSet();
+			_actionSet.Init(_model);
+			_actionSet.Install(this);
 		}
 
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -123,6 +88,13 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private void InitializeComponent()
 		{
 			this.graphControl1 = new Netron.GraphLib.UI.GraphControl();
+			this.contextMenu = new System.Windows.Forms.ContextMenu();
+			this.addSubClassMenu = new System.Windows.Forms.MenuItem();
+			this.addJoinedSubclassMenu = new System.Windows.Forms.MenuItem();
+			this.menuItem5 = new System.Windows.Forms.MenuItem();
+			this.showCodePreviewMenu = new System.Windows.Forms.MenuItem();
+			this.menuItem4 = new System.Windows.Forms.MenuItem();
+			this.showPropertiesMenu = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// graphControl1
@@ -157,13 +129,50 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.graphControl1.TabIndex = 0;
 			this.graphControl1.Text = "graphControl1";
 			this.graphControl1.Zoom = 1F;
-			this.graphControl1.OnShapeAdded += new Netron.GraphLib.NewShape(this.graphControl1_OnShapeAdded);
-			this.graphControl1.OnClear += new System.EventHandler(this.graphControl1_OnClear);
-			this.graphControl1.OnShapeRemoved += new Netron.GraphLib.NewShape(this.graphControl1_OnShapeRemoved);
-			this.graphControl1.OnContextMenu += new System.Windows.Forms.MouseEventHandler(this.graphControl1_OnContextMenu);
 			this.graphControl1.ShowNodeProperties += new Netron.GraphLib.ShowPropsDelegate(this.graphControl1_ShowNodeProperties);
-			this.graphControl1.OnInfo += new Netron.GraphLib.InfoDelegate(this.graphControl1_OnInfo);
+			this.graphControl1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.graphControl1_MouseUp);
 			this.graphControl1.OnNewConnection += new Netron.GraphLib.NewConnection(this.graphControl1_OnNewConnection);
+			// 
+			// contextMenu
+			// 
+			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																						this.addSubClassMenu,
+																						this.addJoinedSubclassMenu,
+																						this.menuItem5,
+																						this.showCodePreviewMenu,
+																						this.menuItem4,
+																						this.showPropertiesMenu});
+			// 
+			// addSubClassMenu
+			// 
+			this.addSubClassMenu.Index = 0;
+			this.addSubClassMenu.Text = "Add SubClass";
+			// 
+			// addJoinedSubclassMenu
+			// 
+			this.addJoinedSubclassMenu.Index = 1;
+			this.addJoinedSubclassMenu.Text = "Add Joined SubClass";
+			// 
+			// menuItem5
+			// 
+			this.menuItem5.Index = 2;
+			this.menuItem5.Text = "-";
+			// 
+			// showCodePreviewMenu
+			// 
+			this.showCodePreviewMenu.Index = 3;
+			this.showCodePreviewMenu.Text = "Preview code";
+			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 4;
+			this.menuItem4.Text = "-";
+			// 
+			// showPropertiesMenu
+			// 
+			this.showPropertiesMenu.Index = 5;
+			this.showPropertiesMenu.Text = "Properties";
+			this.showPropertiesMenu.Click += new System.EventHandler(this.showPropertiesMenu_Click);
 			// 
 			// ActiveRecordGraphView
 			// 
@@ -176,19 +185,12 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.DockPadding.All = 2;
 			this.Name = "ActiveRecordGraphView";
 			this.Text = "ActiveRecord Graph";
+			this.Load += new System.EventHandler(this.ActiveRecordGraphView_Load);
 			this.ResumeLayout(false);
 
 		}
+
 		#endregion
-
-		private void graphControl1_OnContextMenu(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-		}
-
-		private void graphControl1_OnInfo(object obj)
-		{
-			
-		}
 
 		private bool graphControl1_OnNewConnection(object sender, Netron.GraphLib.ConnectionEventArgs e)
 		{
@@ -197,118 +199,226 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 		private void graphControl1_OnShapeAdded(object sender, Netron.GraphLib.Shape shape)
 		{
-			ActiveRecordShape arshape = shape as ActiveRecordShape;
+			graphControl1.Nodes.Remove(shape);
 
-			if (arshape != null)
+			if (shape is ActiveRecordShape)
 			{
-				using(NewARClassWizard wizard = new NewARClassWizard(_model, arshape))
+				ActiveRecordShape arshape = shape as ActiveRecordShape;
+				
+				if (_actionSet.DoNewARWizard())
 				{
-					if (wizard.ShowDialog(this) != DialogResult.OK)
-					{
-						graphControl1.Nodes.Remove(shape);
-						return;
-					}
-
-					EnsureHasParent(shape);
-					CreateDependents(wizard.Dependents);
+					ConnectSubToSuperClass(
+						ObtainBaseShape(arshape), 
+						arshape);
 				}
+			}
+			else if (shape is ActiveRecordBaseClassShape)
+			{
+				ActiveRecordBaseClassShape arshape = shape as ActiveRecordBaseClassShape;
+
+//				if (_actionSet.DoAssociateDatabase(arshape))
+//				{
+//				}
 			}
 		}
 
-		private void graphControl1_OnShapeRemoved(object sender, Netron.GraphLib.Shape shape)
+		private Shape ObtainBaseShape(ActiveRecordShape arshape)
 		{
-			// TODO: Do not allow the removal of ARBase
+			return _desc2Shape[arshape.ActiveRecordDescriptor.Table.DatabaseDefinition.ActiveRecordBaseDescriptor] as Shape;
+		}
+
+		private Shape ObtainShape(IActiveRecordDescriptor desc)
+		{
+			return _desc2Shape[desc] as Shape;
 		}
 
 		private void graphControl1_ShowNodeProperties(object sender, Netron.GraphLib.PropertyBag props)
 		{
-			if (props.Owner is ActiveRecordBaseClassShape)
+			ShowShapeProperties(props.Owner as Shape);
+		}
+
+		private void ShowShapeProperties(Shape shape)
+		{
+			if (shape is ActiveRecordBaseClassShape)
 			{
 				ActiveRecordBasePropertiesDialog d = new ActiveRecordBasePropertiesDialog();
 				d.ShowDialog(this);
 			}
-			else if (props.Owner is ActiveRecordShape)
+			else if (shape is ActiveRecordShape)
 			{
-				ActiveRecordPropertiesDialog d = new ActiveRecordPropertiesDialog();
+				ActiveRecordDescriptor ar = (shape as ActiveRecordShape).ActiveRecordDescriptor;
+
+				ActiveRecordPropertiesDialog d = new ActiveRecordPropertiesDialog(ar);
 				d.ShowDialog(this);
 			}
 		}
 
-		private void graphControl1_OnClear(object sender, System.EventArgs e)
-		{
-		}
-
-		private void EnsureHasParent(Shape shape)
-		{
-			ActiveRecordShape arShape = shape as ActiveRecordShape;
-
-			if (arShape != null)
-			{
-				DatabaseDefinition db = arShape.ActiveRecordDescriptor.Table.DatabaseDefinition;
-
-				if (!_baseClasses.Contains(db))
-				{
-					CreateARBaseClass(db);
-				}
-
-				Shape baseShape = _baseClasses[db] as Shape;
-
-				ConnectSubToSuperClass(baseShape, shape);
-			}
-		}
-
-		private void CreateARBaseClass(DatabaseDefinition db)
-		{
-			ActiveRecordBaseClassShape shape = (ActiveRecordBaseClassShape) 
-				graphControl1.AddShape("castle.ar.base.shape", new PointF(80,20)); 
-
-			// TODO: Map these informations
-//			shape.DatabaseDefinition = db;
-
-			if (_baseClasses.Count == 0)
-			{
-				shape.Name = "ActiveRecordBase";
-			}
-			else
-			{
-				shape.Name = "ActiveRecord[ALIAS]Base";
-			}
-
-//			shape.Table = "tb_Companies";
-			shape.FitSize(false);
-			
-			Random rnd = new Random(1);
-			shape.X = rnd.Next(50,this.graphControl1.Width-100);
-			shape.Y = rnd.Next(50,this.graphControl1.Height-20);
-
-			_baseClasses[db] = shape;
-		}
-
 		private Connection ConnectSubToSuperClass(Shape parentShape, Shape childShape)
 		{
-			Connection conn = graphControl1.AddEdge(parentShape.Connectors[1], childShape.Connectors[0]);	
-
-//			conn.From.ConnectorLocation = ConnectorLocations.South;
-//			conn.To.ConnectorLocation = ConnectorLocations.North;
+			Connection conn = graphControl1.AddEdge(parentShape.Connectors[1], childShape.Connectors[0]);
 
 			conn.LineEnd = ConnectionEnds.RightOpenArrow;
-			
+
 			return conn;
 		}
 
-		private void CreateDependents(ActiveRecordDescriptor[] dependents)
+		private void EnableWizard()
 		{
-			if (dependents == null) return;
+			graphControl1.OnShapeAdded += new Netron.GraphLib.NewShape(graphControl1_OnShapeAdded);
+		}
+
+		private void DisableWizard()
+		{
+			graphControl1.OnShapeAdded -= new Netron.GraphLib.NewShape(graphControl1_OnShapeAdded);
+		}
+
+		private void graphControl1_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			if (SelectedShape == null) return;
+
+			if (e.Button == MouseButtons.Right)
+			{
+				contextMenu.Show(sender as Control, new Point(e.X, e.Y));
+			}
+		}
+
+		private Shape SelectedShape
+		{
+			get
+			{
+				if (graphControl1.SelectedShapes == null || graphControl1.SelectedShapes.Count != 1) return null;
+				return graphControl1.SelectedShapes[0];
+			}
+		}
+
+		private void showPropertiesMenu_Click(object sender, System.EventArgs e)
+		{
+			ShowShapeProperties(SelectedShape);
+		}
+
+		#region ISubWorkspace Members
+
+		public IWorkspace ParentWorkspace
+		{
+			get { return _parentWorkspace; }
+			set { _parentWorkspace = value; }
+		}
+
+		#endregion
+
+		#region IWorkspace Members
+
+		public IWin32Window ActiveWindow
+		{
+			get { return this; }
+		}
+
+		public MainMenu MainMenu
+		{
+			get { return null; }
+		}
+
+		public ToolBar MainToolBar
+		{
+			get { return null; }
+		}
+
+		public StatusBar MainStatusBar
+		{
+			get { return null; }
+		}
+
+		public DockManager MainDockManager
+		{
+			get { return null; }
+		}
+
+		#endregion
+
+		private void OnProjectChange(object sender, Project project)
+		{
+			DisableWizard();
 
 			Random rnd = new Random(1);
 
-			foreach(ActiveRecordDescriptor desc in dependents)
+			foreach(IActiveRecordDescriptor descriptor in project.Descriptors)
 			{
-				ActiveRecordShape shape = (ActiveRecordShape) graphControl1.AddShape(
-					"castle.ar.shape", new PointF(80,20)); 
-				shape.ActiveRecordDescriptor = desc;
-				shape.X = rnd.Next(50,graphControl1.Width-100);
-				shape.Y = rnd.Next(50,graphControl1.Height-20);
+				Shape shape = ObtainShape(descriptor);
+
+				if (graphControl1.Nodes.Contains(shape)) continue;
+
+				shape = CreateShapeFrom(descriptor);
+
+				if (shape.X == 0 && shape.Y == 0)
+				{
+					shape.X = rnd.Next(50, graphControl1.Width - 100);
+					shape.Y = rnd.Next(50, graphControl1.Height - 20);
+				}
+
+				CreateConnectionsIfNecessary(shape);
+			}
+
+			RefreshView();
+
+			EnableWizard();
+		}
+
+		private void _model_OnProjectReplaced(object sender, Project oldProject, Project newProject)
+		{
+			// Clear!
+
+			graphControl1.Nodes.Clear();
+			this._desc2Shape.Clear();
+			
+			OnProjectChange(sender, newProject);
+		}
+
+		private void RefreshView()
+		{
+			graphControl1.Invalidate();
+		}
+
+		private Shape CreateShapeFrom(IActiveRecordDescriptor descriptor)
+		{
+			Shape shape = null;
+
+			if (descriptor is ActiveRecordBaseDescriptor)
+			{
+				ActiveRecordBaseClassShape arshape = (ActiveRecordBaseClassShape)
+					graphControl1.AddShape("castle.ar.base.shape", new PointF(80, 20));
+				arshape.RelatedDescriptor = descriptor as ActiveRecordBaseDescriptor;
+
+				arshape.FitSize(false);
+
+				shape = arshape;
+			}
+			else
+			{
+				ActiveRecordShape arshape = (ActiveRecordShape)
+					graphControl1.AddShape("castle.ar.shape", new PointF(80, 20));
+				
+				arshape.ActiveRecordDescriptor = (ActiveRecordDescriptor) descriptor;
+
+				shape = arshape;
+			}
+
+			System.Diagnostics.Debug.Assert( shape != null );
+
+			shape.X = descriptor.PositionInView.X;
+			shape.Y = descriptor.PositionInView.Y;
+
+			_desc2Shape[descriptor] = shape;
+
+			return shape;
+		}
+
+		private void CreateConnectionsIfNecessary(Shape shape)
+		{
+			ActiveRecordShape arshape = shape as ActiveRecordShape;
+
+			if (arshape != null)
+			{
+				ConnectSubToSuperClass( ObtainBaseShape(arshape), shape );
 			}
 		}
 	}

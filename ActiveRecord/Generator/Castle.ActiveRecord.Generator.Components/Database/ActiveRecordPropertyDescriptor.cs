@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 {
 	using System;
 
+	[Serializable]
 	public abstract class ActiveRecordPropertyDescriptor
 	{
 		private String _columnName;
@@ -78,6 +79,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	[Serializable]
 	public class ActiveRecordPrimaryKeyDescriptor : ActiveRecordPropertyDescriptor
 	{
 		private String _generatorType;
@@ -91,6 +93,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	[Serializable]
 	public class ActiveRecordFieldDescriptor : ActiveRecordPropertyDescriptor
 	{
 		private bool _nullable = false;
@@ -104,6 +107,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	[Serializable]
 	public abstract class ActiveRecordPropertyRelationDescriptor : ActiveRecordPropertyDescriptor
 	{
 		private String _relationType;
@@ -128,6 +132,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	[Serializable]
 	public class ActiveRecordBelongsToDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		public ActiveRecordBelongsToDescriptor(string _columnName, 
@@ -137,6 +142,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	[Serializable]
 	public class ActiveRecordHasManyDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		public ActiveRecordHasManyDescriptor(string _columnName, 
@@ -147,6 +153,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	[Serializable]
 	public class ActiveRecordHasOneDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		public ActiveRecordHasOneDescriptor(string _columnName, 
@@ -156,6 +163,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		}
 	}
 
+	[Serializable]
 	public class ActiveRecordHasAndBelongsToManyDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		private String _columnKey;

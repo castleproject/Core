@@ -20,12 +20,13 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Reflection;
-	using System.Windows.Forms;
 
 	using Netron.GraphLib;
 	using Netron.GraphLib.UI;
 	using Netron.GraphLib.Interfaces;
 	using Netron.GraphLib.Attributes;
+
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 
 	[Serializable]
@@ -35,11 +36,14 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		"Represents an ActiveRecord base class that maps a database connection")]
 	public class ActiveRecordBaseClassShape : Shape
 	{
-		private String _name;
+//		private String _name;
 		private float _lineHeight;
 
 		private Connector TopNode;
 		private Connector BottomNode;
+
+		private ActiveRecordBaseDescriptor _relatedDescriptor;
+
 
 		public ActiveRecordBaseClassShape() : base()
 		{
@@ -51,24 +55,10 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 			Init(true);
 		}
 
-//		public override MenuItem[] ShapeMenu()
-//		{
-//			MenuItem[] subitems = new MenuItem[]{new MenuItem("First one",new EventHandler(TheHandler)),new MenuItem("Second one",new EventHandler(TheHandler))};
-//
-//			MenuItem[] items = new MenuItem[]{new MenuItem("Special menu",subitems)};
-//
-//			return items;
-//		}
-//
-//		private void TheHandler(object sender, EventArgs e)
-//		{
-//			MessageBox.Show("Just an example.");
-//		}
-
-		public string Name
+		public ActiveRecordBaseDescriptor RelatedDescriptor
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return _relatedDescriptor; }
+			set { _relatedDescriptor = value; }
 		}
 
 		private void Init(bool resizable)
@@ -120,17 +110,20 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		protected override void Paint(Graphics g)
 		{
 			base.Paint(g);
-			Name = "ActiveRecordBase";
+
+			if (_relatedDescriptor == null) return;
+
+			// Lets update the position
+			_relatedDescriptor.PositionInView = new PointF(X, Y);
 
 			if (recalculateSize)
 			{
-				SizeF size1 = g.MeasureString(Name + "\"\"", mFont);
-				SizeF size3 = g.MeasureString("[not mapped]", mFont);
+				SizeF max = g.MeasureString(_relatedDescriptor.ClassName + "\"\"", mFont);
 
-				_lineHeight = size1.Height;
+				_lineHeight = max.Height;
 
-				SizeF max = new SizeF(Math.Max(size1.Width, size3.Width) + 3,
-				                      (_lineHeight*2) + 10);
+//				SizeF max = new SizeF(Math.Max(size1.Width, size3.Width) + 3,
+//				                      (_lineHeight*2) + 10);
 
 				Rectangle = new RectangleF(new PointF(Rectangle.X, Rectangle.Y), max);
 
@@ -139,19 +132,14 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 
 			g.FillRectangle(BackgroundBrush, Rectangle.X, Rectangle.Y, Rectangle.Width + 1, Rectangle.Height + 1);
 			g.DrawRectangle(pen, Rectangle.X, Rectangle.Y, Rectangle.Width + 1, Rectangle.Height + 1);
-			g.DrawLine(pen, Rectangle.X, Rectangle.Y + _lineHeight + 3, Rectangle.X + Rectangle.Width, Rectangle.Y + _lineHeight + 3);
+//			g.DrawLine(pen, Rectangle.X, Rectangle.Y + _lineHeight + 3, Rectangle.X + Rectangle.Width, Rectangle.Y + _lineHeight + 3);
 
-			//			ComponentModel model = Tag as ComponentModel;
-			//
-			//			if (model != null)
-			{
-				StringFormat sf = new StringFormat();
-				sf.Alignment = StringAlignment.Center;
-				g.DrawString(Name, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
-				//				g.DrawString(mText, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
-				//				g.DrawString(Table, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight*2) + 6, sf);
-				g.DrawString("[not mapped]", mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight) + 6, sf);
-			}
+			StringFormat sf = new StringFormat();
+			sf.Alignment = StringAlignment.Center;
+			g.DrawString(_relatedDescriptor.ClassName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
+			//			g.DrawString(mText, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
+			//			g.DrawString(Table, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight*2) + 6, sf);
+			//			g.DrawString("[not mapped]", mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight) + 6, sf);
 		}
 
 		/// <summary>
@@ -164,19 +152,6 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 			if (c == TopNode) return new PointF(Rectangle.Left + (Rectangle.Width*1/2), Rectangle.Top);
 			if (c == BottomNode) return new PointF(Rectangle.Left + (Rectangle.Width*1/2), Rectangle.Bottom);
 			return new PointF(0, 0);
-		}
-
-		public override void AddProperties()
-		{
-			base.AddProperties ();
-
-			bag.Properties.Remove("Name");
-			bag.Properties.Add(new PropertySpec("Name",typeof(string),"Appearance","The text attached to the entity","[Not set]",typeof(TextUIEditor),typeof(TypeConverter)));
-		}
-
-		protected override void InitEntity()
-		{
-			base.InitEntity();
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Generator.Components;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +16,9 @@
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
+	using System.IO;
 	using System.Windows.Forms;
+	using System.Runtime.Serialization.Formatters.Binary;
 
 
 	public class ProjectOpenAction : AbstractAction
@@ -32,9 +35,30 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 			MenuItem item = new MenuItem("&Open...");
 
+			item.Click += new EventHandler(OnOpen);
+
 			(parentMenu as MenuItem).MenuItems.Add(item);
 		}
 
 		#endregion
+
+		private void OnOpen(object sender, EventArgs e)
+		{
+			try
+			{
+				using(FileStream fs = new FileStream(@"C:\project1.ar", FileMode.Open, FileAccess.Read, FileShare.Read))
+				{
+					BinaryFormatter formatter = new BinaryFormatter();
+
+					Model.CurrentProject = formatter.Deserialize( fs ) as Project;
+				}
+			}
+			catch(Exception ex)
+			{
+				Model.CurrentProject = new Project();
+
+				MessageBox.Show(Workspace.ActiveWindow, ex.Message, "Error opening project");
+			}
+		}
 	}
 }

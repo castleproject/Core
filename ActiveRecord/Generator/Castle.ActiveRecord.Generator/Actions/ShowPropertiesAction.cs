@@ -1,4 +1,3 @@
-using Castle.ActiveRecord.Generator.Components;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,42 +15,12 @@ using Castle.ActiveRecord.Generator.Components;
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
-	using System.Windows.Forms;
 
 
-	public class ProjectNewAction : AbstractAction
+	public class ShowPropertiesAction : AbstractAction
 	{
-		private MenuItem _item;
-
-		public ProjectNewAction()
+		public ShowPropertiesAction()
 		{
-		}
-
-		#region IAction Members
-
-		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
-		{
-			base.Install(workspace, parentMenu, parentGroup);
-
-			_item = new MenuItem("&New");
-
-			_item.Click += new EventHandler(OnNew);
-			(parentMenu as MenuItem).MenuItems.Add(_item);
-		}
-
-		#endregion
-
-		private void OnNew(object sender, EventArgs e)
-		{
-			if (sender == _item)
-			{
-				DoAction();
-			}
-		}
-
-		private void DoAction()
-		{
-			base.Model.CurrentProject = new Project();
 		}
 	}
 }

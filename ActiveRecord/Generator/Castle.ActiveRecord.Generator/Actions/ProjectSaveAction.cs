@@ -1,4 +1,4 @@
-using Castle.ActiveRecord.Generator.Components;
+using System.Runtime.Serialization.Formatters.Binary;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,42 +16,44 @@ using Castle.ActiveRecord.Generator.Components;
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
+	using System.IO;
 	using System.Windows.Forms;
+	using System.Runtime.Serialization;
 
 
-	public class ProjectNewAction : AbstractAction
+	public class ProjectSaveAction : AbstractAction
 	{
 		private MenuItem _item;
 
-		public ProjectNewAction()
+		public ProjectSaveAction()
 		{
 		}
-
-		#region IAction Members
 
 		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
 		{
 			base.Install(workspace, parentMenu, parentGroup);
 
-			_item = new MenuItem("&New");
+			_item = new MenuItem("&Save");
+			_item.Click += new EventHandler(OnSave);
 
-			_item.Click += new EventHandler(OnNew);
 			(parentMenu as MenuItem).MenuItems.Add(_item);
 		}
 
-		#endregion
-
-		private void OnNew(object sender, EventArgs e)
+		private void OnSave(object sender, EventArgs e)
 		{
-			if (sender == _item)
+			try
 			{
-				DoAction();
-			}
-		}
+				using(FileStream fs = new FileStream(@"C:\project1.ar", FileMode.Create, FileAccess.Write, FileShare.Write))
+				{
+					BinaryFormatter formatter = new BinaryFormatter();
 
-		private void DoAction()
-		{
-			base.Model.CurrentProject = new Project();
+					formatter.Serialize( fs, Model.CurrentProject );
+				}
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show(Workspace.ActiveWindow, ex.Message, "Error saving project");
+			}
 		}
 	}
 }

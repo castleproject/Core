@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	using System.Data.OleDb;
 
 
+	[Serializable]
 	public class ColumnDefinition
 	{
 		private String _name;

@@ -41,10 +41,10 @@ namespace Castle.ActiveRecord.Generator.Components
 //		end
 
 		private Pair[] pluralRules = new Pair[] 
-			{
+		{
 				new Pair("(x|ch|ss|sh)$", "$1es"), 
 				new Pair("series$", "$1series"),
-				new Pair("([^aeiouy]|qu)ies$", "$1y"),
+//				new Pair("([^aeiouy]|qu)ies$", "$1y"),
 				new Pair("([^aeiouy]|qu)y$", "$1ies"),
 				new Pair("(?:([^f])fe|([lr])f)$", "$1$2ves"),
 				new Pair("sis$", "ses"),

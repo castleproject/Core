@@ -18,11 +18,12 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	using System.Collections;
 
 
+	[Serializable]
 	public class DatabaseDefinition
 	{
 		private String _alias;
-//		private String _name;
 		private TableDefinitionCollection _tables = new TableDefinitionCollection();
+		private ActiveRecordBaseDescriptor _arBase;
 
 		public DatabaseDefinition(String alias)
 		{
@@ -36,6 +37,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		public TableDefinition AddTable(TableDefinition table)
 		{
 			_tables.Add(table);
+
 			return table;
 		}
 
@@ -45,15 +47,15 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			set { _alias = value; }
 		}
 
-//		public String Name
-//		{
-//			get { return _name; }
-//			set { _name = value; }
-//		}
-
 		public TableDefinitionCollection Tables
 		{
 			get { return _tables; }
+		}
+
+		public ActiveRecordBaseDescriptor ActiveRecordBaseDescriptor
+		{
+			get { return _arBase; }
+			set { _arBase = value; }
 		}
 	}
 }

@@ -16,19 +16,18 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 	public class NewARClassWizard : WizardBaseDialog
 	{
 		private System.ComponentModel.IContainer components = null;
-		private ActiveRecordShape _shape;
+		private ActiveRecordDescriptor _arDesc;
 		private ActiveRecordDescriptor[] _dependents;
 
-		public NewARClassWizard(Model model, ActiveRecordShape shape) : base(model)
+		public NewARClassWizard(Model model) : base(model)
 		{
 //			if (shape.ActiveRecordDescriptor == null)
 //			{
 //				throw new ArgumentException("No AR instance in shape");
 //			}
 
-			_shape = shape;
-
-			Context["ardesc"] = new ActiveRecordDescriptor();
+			_arDesc = new ActiveRecordDescriptor();
+			Context["ardesc"] = _arDesc;
 
 			InitializeComponent();
 
@@ -73,7 +72,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 			ar.Table = (Context["selectedtable"] as TableDefinition);
 			ar.Table.RelatedDescriptor = ar;
-			_shape.ActiveRecordDescriptor = ar;
+//			_shape.ActiveRecordDescriptor = ar;
 
 			// Build dependencies
 
@@ -83,6 +82,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 			BuildContext buildContext = Context["buildcontext"] as BuildContext;
 			Dependents = builder.Build( buildContext );
+		}
+
+		public ActiveRecordDescriptor ActiveRecordDescriptor
+		{
+			get { return _arDesc; }
 		}
 
 		public ActiveRecordDescriptor[] Dependents

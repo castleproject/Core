@@ -36,5 +36,6 @@ namespace Castle.ActiveRecord.Generator
 
 	public interface ISubWorkspace : IWorkspace
 	{
+		IWorkspace ParentWorkspace { get; set; }
 	}
 }

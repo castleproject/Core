@@ -1,4 +1,3 @@
-using Castle.ActiveRecord.Generator.Components;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,42 +15,40 @@ using Castle.ActiveRecord.Generator.Components;
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
-	using System.Windows.Forms;
 
+	using Castle.ActiveRecord.Generator.Parts.Shapes;
 
-	public class ProjectNewAction : AbstractAction
+	public class ActiveRecordGraphViewActionSet : IActionSet
 	{
-		private MenuItem _item;
+		private ShowPropertiesAction showProperties;
+		private NewArDescriptorUsingWizard newUsingWizard;
 
-		public ProjectNewAction()
+		public ActiveRecordGraphViewActionSet()
 		{
 		}
 
-		#region IAction Members
+		#region IActionSet Members
 
-		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
+		public void Init(Model model)
 		{
-			base.Install(workspace, parentMenu, parentGroup);
+			showProperties = new ShowPropertiesAction();
+			newUsingWizard = new NewArDescriptorUsingWizard();
 
-			_item = new MenuItem("&New");
+			showProperties.Init(model);
+			newUsingWizard.Init(model);
+		}
 
-			_item.Click += new EventHandler(OnNew);
-			(parentMenu as MenuItem).MenuItems.Add(_item);
+		public void Install(IWorkspace workspace)
+		{
+			showProperties.Install(workspace, null, null);
+			newUsingWizard.Install(workspace, null, null);
 		}
 
 		#endregion
 
-		private void OnNew(object sender, EventArgs e)
+		public bool DoNewARWizard()
 		{
-			if (sender == _item)
-			{
-				DoAction();
-			}
-		}
-
-		private void DoAction()
-		{
-			base.Model.CurrentProject = new Project();
+			return newUsingWizard.Run(null);
 		}
 	}
 }

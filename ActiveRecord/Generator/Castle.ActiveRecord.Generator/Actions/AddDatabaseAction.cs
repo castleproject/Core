@@ -67,7 +67,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 						DatabaseDefinition def = defBuilder.Build(dialog.Alias, dialog.ConnectionString);
 
-						Model.CurrentProject.Databases.Add(def);
+						Model.CurrentProject.AddDatabaseDefinition(def);
 
 						Model.Update();
 					}

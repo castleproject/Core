@@ -22,10 +22,16 @@ namespace Castle.ActiveRecord.Generator
 
 	public delegate void ProjectReplaceDelegate(object sender, Project oldProject, Project newProject);
 
-	[Serializable]
-	public class Model
+	/// <summary>
+	/// Maintains all data related to a open project
+	/// </summary>
+	public class Model 
 	{
 		private Project _project;
+
+		public Model()
+		{
+		}
 
 		public Project CurrentProject
 		{

@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +19,19 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	using System.Collections;
 	using System.Collections.Specialized;
 
+
+	[Serializable]
 	public class ColumnDefinitionCollection : NameObjectCollectionBase, IEnumerable
 	{
+		public ColumnDefinitionCollection()
+		{
+
+		}
+
+		public ColumnDefinitionCollection(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
+
 		public void Add(ColumnDefinition def)
 		{
 			BaseAdd(def.Name, def);

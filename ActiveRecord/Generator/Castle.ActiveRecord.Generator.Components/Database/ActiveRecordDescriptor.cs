@@ -17,10 +17,9 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	using System;
 	using System.Collections;
 
-
-	public class ActiveRecordDescriptor
+	[Serializable]
+	public class ActiveRecordDescriptor : AbstractActiveRecordDescriptor
 	{
-		private String _className;
 		private String _discriminatorField;
 		private String _discriminatorValue;
 		private String _discriminatorType;
@@ -47,13 +46,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 		public ActiveRecordDescriptor(String className)
 		{
-			_className = className;
-		}
-
-		public String ClassName
-		{
-			get { return _className; }
-			set { _className = value; }
+			ClassName = className;
 		}
 
 		public String DiscriminatorField

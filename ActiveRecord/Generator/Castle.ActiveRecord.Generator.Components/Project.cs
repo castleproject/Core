@@ -15,22 +15,18 @@
 namespace Castle.ActiveRecord.Generator.Components
 {
 	using System;
+	using System.Collections;
 
 	using Castle.ActiveRecord.Generator.Components.Database;
 
 
+	[Serializable]
 	public class Project
 	{
 		private String _name;
-		private String _driver;
-		private String _connectionString;
-		private String _namespace;
-		private DatabaseDefinitionCollection _dbDefinitions = new DatabaseDefinitionCollection();
-		
-//		private IList _activeRecordDescriptors = new ArrayList();
-//		private IDatabaseDefinitionBuilder _definitionBuilder;
-//		private ICodeDomGenerator _codeGenerator;
-//		private ICodeProviderFactory _codeProviderFactory;
+		private IList _databases = new ArrayList();
+		private IList _descriptors = new ArrayList();
+		private IDictionary _dbDef2ArBase = new Hashtable();
 
 		public Project(string name)
 		{
@@ -41,75 +37,58 @@ namespace Castle.ActiveRecord.Generator.Components
 		{
 		}
 
-		public DatabaseDefinitionCollection Databases
-		{
-			get { return _dbDefinitions; }
-		}
-
-//		public Project(IDatabaseDefinitionBuilder definitionBuilder, 
-//			ICodeProviderFactory codeProviderFactory, ICodeDomGenerator codeGenerator)
-//		{
-//			_definitionBuilder = definitionBuilder;
-//			_codeProviderFactory = codeProviderFactory;
-//			_codeGenerator = codeGenerator;
-//		}
-
 		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
 		}
 
-		public String Driver
+		public void AddActiveRecordDescriptor( IActiveRecordDescriptor descriptor )
 		{
-			get { return _driver; }
-			set { _driver = value; }
+			if (descriptor == null) throw new ArgumentNullException("descriptor");
+			if (_descriptors.Contains(descriptor)) throw new ArgumentException("Already exists");
+
+			_descriptors.Add(descriptor);
 		}
 
-		public String ConnectionString
+		public void AddDatabaseDefinition(DatabaseDefinition dbDef)
 		{
-			get { return _connectionString; }
-			set { _connectionString = value; }
+			if (dbDef == null) throw new ArgumentNullException("dbDef");
+
+			ActiveRecordBaseDescriptor baseDesc;
+			
+			if (_dbDef2ArBase.Count == 0)
+			{
+				baseDesc = new ActiveRecordBaseDescriptor("ActiveRecordBase");
+			}
+			else
+			{
+				String name = dbDef.Alias.Replace(" ","") + "Base";
+				baseDesc = new ActiveRecordBaseDescriptor(name);
+			}
+
+			dbDef.ActiveRecordBaseDescriptor = baseDesc;
+			AddActiveRecordDescriptor(baseDesc);
+
+			_databases.Add(dbDef);
+			
+			// Just an optimization for later
+			_dbDef2ArBase[dbDef] = baseDesc;
 		}
 
-		public String CodeNamespace
+		public IList Databases
 		{
-			get { return _namespace; }
-			set { _namespace = value; }
+			get { return ArrayList.ReadOnly(_databases); }
 		}
 
-//		public CodeProviderInfo CodeProvider
-//		{
-//			get { return _codeProvider; }
-//			set { _codeProvider = value; }
-//		}
-//
-//		public bool IsValid()
-//		{
-//			return true;
-//		}
-//
-//		public DatabaseDefinition DatabaseDefinition
-//		{
-//			get { return _dbDefinition; }
-//			set { _dbDefinition = value; }
-//		}
-//
-//		public void RefreshDatabaseDefinition()
-//		{
-//			_dbDefinition = _definitionBuilder.Build( this );
-//		}
-//
-//		public String GenerateCode(ActiveRecordDescriptor arDesc)
-//		{
-//			CodeDomProvider provider = _codeProviderFactory.GetProvider(_codeProvider);
-//
-//			StringWriter writer = new StringWriter();
-//
-//			ICodeGenerator generator = provider.CreateGenerator();
-//			generator.GenerateCodeFromType( _codeGenerator.Generate(arDesc), writer, null ); 
-//
-//			return writer.GetStringBuilder().ToString();
-//		}
+		public IList Descriptors
+		{
+			get { return ArrayList.ReadOnly(_descriptors); }
+		}
+
+		public IDictionary BaseClasses
+		{
+			get { return _dbDef2ArBase; }
+		}
 	}
 }
