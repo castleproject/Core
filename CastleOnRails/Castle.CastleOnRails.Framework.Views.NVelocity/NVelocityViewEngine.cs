@@ -161,7 +161,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 
 			if (HttpContext.Current != null)
 			{
-				innerContext["siteRoot"] = context.ApplicationPath;
+				innerContext["siteRoot"] = GetSiteVirtualDirPath();
 			}
 
 			return new VelocityContext(innerContext);
@@ -170,6 +170,18 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 		private void SendErrorDetails(Exception ex, TextWriter writer)
 		{
 			writer.WriteLine(ex.ToString());
+		}
+
+		private String GetSiteVirtualDirPath()
+		{
+			String path = HttpContext.Current.Request.ApplicationPath;
+			
+			if("/".Equals(path))
+			{
+				return String.Empty;
+			}
+
+			return path;
 		}
 	}
 }
