@@ -27,10 +27,13 @@ body {
 	border-right-color: #666666;
 	border-bottom-color: #666666;
 	border-left-color: #666666;
+	background-color: #333333;
+
 }
 .innercontent {
 	padding: 8px;
 	font-size: small;
+
 
 }
 .menubar {
@@ -68,6 +71,9 @@ body {
 	border-bottom-style: dashed;
 	border-bottom-color: #000000;
 	margin: 10px 8px 20px;
+	letter-spacing: 2px;
+
+
 
 
 }
@@ -86,9 +92,29 @@ body {
 	border-left-color: #999999;
 	margin-left: 4px;
 	border-bottom-style: dashed;
+	text-align: justify;
 
 
 
 
 
+
+}
+.source {
+	font-family: "Courier New", Courier, mono;
+	font-size: small;
+	color: #000000;
+	background-color: #EBEBEB;
+	padding: 8px;
+	border: 1px solid #333333;
+	margin: 4px;
+
+}
+h3 {
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-top-color: #333333;
+	border-right-color: #333333;
+	border-bottom-color: #333333;
+	border-left-color: #333333;
 }
