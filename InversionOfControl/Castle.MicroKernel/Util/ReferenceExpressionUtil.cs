@@ -29,7 +29,7 @@ namespace Castle.MicroKernel.Util
 		public static bool IsReference(String value)
 		{
 			if (value == null || value.Length <= 3 || 
-				!value.StartsWith("#{") || !value.EndsWith("}"))
+				!value.StartsWith("${") || !value.EndsWith("}"))
 			{
 				return false;
 			}

@@ -78,7 +78,7 @@ namespace Castle.MicroKernel.Tests.Configuration
 			IConfiguration parameters = 
 			 	confignode.Children.Add( new MutableConfiguration("parameters") );
 
-			parameters.Children.Add( new MutableConfiguration("common", "#{commonservice2}") );
+			parameters.Children.Add( new MutableConfiguration("common", "${commonservice2}") );
 
 			kernel.ConfigurationStore.AddComponentConfiguration( "commonserviceuser", confignode );
 
@@ -101,7 +101,7 @@ namespace Castle.MicroKernel.Tests.Configuration
 			IConfiguration parameters = 
 				confignode.Children.Add( new MutableConfiguration("parameters") );
 
-			parameters.Children.Add( new MutableConfiguration("CommonService", "#{commonservice2}") );
+			parameters.Children.Add( new MutableConfiguration("CommonService", "${commonservice2}") );
 
 			kernel.ConfigurationStore.AddComponentConfiguration( "commonserviceuser", confignode );
 

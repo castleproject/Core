@@ -178,7 +178,7 @@ namespace Castle.MicroKernel.Resolvers
 
 		/// <summary>
 		/// Extracts the component name from the a ref strings which is
-		/// #{something}
+		/// ${something}
 		/// </summary>
 		/// <param name="keyValue"></param>
 		/// <returns></returns>
