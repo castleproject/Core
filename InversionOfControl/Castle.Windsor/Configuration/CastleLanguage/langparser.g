@@ -78,7 +78,6 @@ nodes[MutableConfiguration conf]
 	
 	 ( (identifier COLON identifier)=> attribute[newNode] | nodes[newNode])*
 
-	
 	DEDENT
 	;
 	
@@ -105,8 +104,7 @@ identifier returns [String value]
 		value = sbuilder.ToString();
 	}
 	( options { greedy = true; }:
-	    DOT!
-	    id2:ID
+	    DOT id2:ID
 	    {
 	        sbuilder.Append('.');
 	        sbuilder.Append(id2.getText());

@@ -16,35 +16,16 @@ options
 COLON      : ':'  ;
 COMMA      : ','  ;
 INHERITS   : '<'  ;
+DOT        : '.'  ;
 
-LBRACK     : '{'  ;
-RBRACK     : '}'  ;
-
-// COMMENT    : "//" (~('\n'|'\r'))* { $setType(Token.SKIP);};   
+SL_COMMENT : 
+	"//" 
+	(~'\n')* '\n'
+	{ $setType(Token.SKIP); newline(); }
+	;
   
-// Literals
-protected 
-DIGIT : 
-    '0'..'9'
-    ;
-
-INTLIT : 
-    (DIGIT)+
-    ;
-
-CHARLIT : 
-    '\''! . '\''!  ;
-
-STRING_LITERAL : 
-    '"'!
-    ( '"' '"'!
-    | ~('"'|'\n'|'\r')
-    )*
-    ( '"'!
-    | // nothing -- write error message
-    )  ;   
-  
-/** Grab everything before a real symbol.  Then if newline, kill it
+/** 
+ *  Grab everything before a real symbol.  Then if newline, kill it
  *  as this is a blank line.  If whitespace followed by comment, kill it
  *  as it's a comment on a line by itself.
  *
@@ -83,7 +64,7 @@ LEADING_WS
 
 ID
     options {testLiterals=true;}
-    : ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
+    : ('a'..'z'|'A'..'Z'|'0'..'9'|'_')+
     ;
 
 NEWLINE

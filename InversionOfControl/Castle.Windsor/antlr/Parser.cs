@@ -4,15 +4,14 @@ using EventHandlerList			= System.ComponentModel.EventHandlerList;
 using BitSet					= antlr.collections.impl.BitSet;
 using AST						= antlr.collections.AST;
 using ASTArray					= antlr.collections.impl.ASTArray;
-using antlr.debug;
 
-using MessageListener				= antlr.debug.MessageListener;
-using ParserListener				= antlr.debug.ParserListener;
-using ParserMatchListener			= antlr.debug.ParserMatchListener;
-using ParserTokenListener			= antlr.debug.ParserTokenListener;
-using SemanticPredicateListener		= antlr.debug.SemanticPredicateListener;
-using SyntacticPredicateListener	= antlr.debug.SyntacticPredicateListener;
-using TraceListener					= antlr.debug.TraceListener;
+//using MessageListener				= antlr.debug.MessageListener;
+//using ParserListener				= antlr.debug.ParserListener;
+//using ParserMatchListener			= antlr.debug.ParserMatchListener;
+//using ParserTokenListener			= antlr.debug.ParserTokenListener;
+//using SemanticPredicateListener		= antlr.debug.SemanticPredicateListener;
+//using SyntacticPredicateListener	= antlr.debug.SyntacticPredicateListener;
+//using TraceListener					= antlr.debug.TraceListener;
 
 /*
 	private Vector messageListeners;
@@ -41,7 +40,7 @@ namespace antlr
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
 
-	public abstract class Parser : IParserDebugSubject
+	public abstract class Parser// : IParserDebugSubject
 	{
 		// Used to store event delegates
 		private EventHandlerList events_ = new EventHandlerList();
@@ -102,6 +101,7 @@ namespace antlr
 		/// 
 		/// </summary>
 
+		/*
 		public event TraceEventHandler EnterRule
 		{
 			add		{	Events.AddHandler(EnterRuleEventKey, value);	}
@@ -192,48 +192,49 @@ namespace antlr
 			remove	{	Events.RemoveHandler(SynPredSucceededEventKey, value);	}
 		}
 
-		
-		public virtual void  addMessageListener(MessageListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("addMessageListener() is only valid if parser built for debugging");
-		}
-		
-		public virtual void  addParserListener(ParserListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("addParserListener() is only valid if parser built for debugging");
-		}
-		
-		public virtual void  addParserMatchListener(ParserMatchListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("addParserMatchListener() is only valid if parser built for debugging");
-		}
-		
-		public virtual void  addParserTokenListener(ParserTokenListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("addParserTokenListener() is only valid if parser built for debugging");
-		}
-		
-		public virtual void  addSemanticPredicateListener(SemanticPredicateListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("addSemanticPredicateListener() is only valid if parser built for debugging");
-		}
-		
-		public virtual void  addSyntacticPredicateListener(SyntacticPredicateListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("addSyntacticPredicateListener() is only valid if parser built for debugging");
-		}
-		
-		public virtual void  addTraceListener(TraceListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("addTraceListener() is only valid if parser built for debugging");
-		}
+		*/
+
+//		public virtual void  addMessageListener(MessageListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("addMessageListener() is only valid if parser built for debugging");
+//		}
+//		
+//		public virtual void  addParserListener(ParserListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("addParserListener() is only valid if parser built for debugging");
+//		}
+//		
+//		public virtual void  addParserMatchListener(ParserMatchListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("addParserMatchListener() is only valid if parser built for debugging");
+//		}
+//		
+//		public virtual void  addParserTokenListener(ParserTokenListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("addParserTokenListener() is only valid if parser built for debugging");
+//		}
+//		
+//		public virtual void  addSemanticPredicateListener(SemanticPredicateListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("addSemanticPredicateListener() is only valid if parser built for debugging");
+//		}
+//		
+//		public virtual void  addSyntacticPredicateListener(SyntacticPredicateListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("addSyntacticPredicateListener() is only valid if parser built for debugging");
+//		}
+//		
+//		public virtual void  addTraceListener(TraceListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("addTraceListener() is only valid if parser built for debugging");
+//		}
 		
 		/*Get another token object from the token stream */
 		public abstract void  consume();
@@ -356,41 +357,41 @@ namespace antlr
 			System.Environment.Exit(1);
 		}
 
-		public virtual void  removeMessageListener(MessageListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.SystemException("removeMessageListener() is only valid if parser built for debugging");
-		}
-		public virtual void  removeParserListener(ParserListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.SystemException("removeParserListener() is only valid if parser built for debugging");
-		}
-		public virtual void  removeParserMatchListener(ParserMatchListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.SystemException("removeParserMatchListener() is only valid if parser built for debugging");
-		}
-		public virtual void  removeParserTokenListener(ParserTokenListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.SystemException("removeParserTokenListener() is only valid if parser built for debugging");
-		}
-		public virtual void  removeSemanticPredicateListener(SemanticPredicateListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("removeSemanticPredicateListener() is only valid if parser built for debugging");
-		}
-		public virtual void  removeSyntacticPredicateListener(SyntacticPredicateListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.ArgumentException("removeSyntacticPredicateListener() is only valid if parser built for debugging");
-		}
-		public virtual void  removeTraceListener(TraceListener l)
-		{
-			if (!ignoreInvalidDebugCalls)
-				throw new System.SystemException("removeTraceListener() is only valid if parser built for debugging");
-		}
+//		public virtual void  removeMessageListener(MessageListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.SystemException("removeMessageListener() is only valid if parser built for debugging");
+//		}
+//		public virtual void  removeParserListener(ParserListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.SystemException("removeParserListener() is only valid if parser built for debugging");
+//		}
+//		public virtual void  removeParserMatchListener(ParserMatchListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.SystemException("removeParserMatchListener() is only valid if parser built for debugging");
+//		}
+//		public virtual void  removeParserTokenListener(ParserTokenListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.SystemException("removeParserTokenListener() is only valid if parser built for debugging");
+//		}
+//		public virtual void  removeSemanticPredicateListener(SemanticPredicateListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("removeSemanticPredicateListener() is only valid if parser built for debugging");
+//		}
+//		public virtual void  removeSyntacticPredicateListener(SyntacticPredicateListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.ArgumentException("removeSyntacticPredicateListener() is only valid if parser built for debugging");
+//		}
+//		public virtual void  removeTraceListener(TraceListener l)
+//		{
+//			if (!ignoreInvalidDebugCalls)
+//				throw new System.SystemException("removeTraceListener() is only valid if parser built for debugging");
+//		}
 		
 		/*Parser error-reporting function can be overridden in subclass */
 		public virtual void reportError(RecognitionException ex)

@@ -99,6 +99,7 @@
                     Name = "Castle.Windsor"
                     Project = "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Private = "True"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"

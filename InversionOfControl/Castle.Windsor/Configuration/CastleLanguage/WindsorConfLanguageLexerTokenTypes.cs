@@ -17,14 +17,9 @@ namespace Castle.Windsor.Configuration.CastleLanguage
 		public const int DOT = 12;
 		public const int COMMA = 13;
 		public const int INHERITS = 14;
-		public const int LBRACK = 15;
-		public const int RBRACK = 16;
-		public const int DIGIT = 17;
-		public const int INTLIT = 18;
-		public const int CHARLIT = 19;
-		public const int STRING_LITERAL = 20;
-		public const int LEADING_WS = 21;
-		public const int WS = 22;
+		public const int SL_COMMENT = 15;
+		public const int LEADING_WS = 16;
+		public const int WS = 17;
 		
 	}
 }

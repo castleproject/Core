@@ -7,7 +7,6 @@ using Assembly			= System.Reflection.Assembly;
 using EventHandlerList	= System.ComponentModel.EventHandlerList;
 
 using BitSet			= antlr.collections.impl.BitSet;
-using antlr.debug;
 
 namespace antlr
 {
@@ -114,6 +113,7 @@ namespace antlr
 	}
 		
 
+		/*
 		public event TraceEventHandler EnterRule
 		{
 			add		{	Events.AddHandler(EnterRuleEventKey, value);	}
@@ -209,6 +209,7 @@ namespace antlr
 			add		{	Events.AddHandler(SynPredSucceededEventKey, value);		}
 			remove	{	Events.RemoveHandler(SynPredSucceededEventKey, value);	}
 		}
+		*/
 
 		// From interface TokenStream
 		public virtual IToken nextToken() { return null; }
