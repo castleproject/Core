@@ -1,0 +1,23 @@
+Everything should compile fine using NAnt 0.85 RC1. Anyway, the 
+following are some usefull tips if things go wrong for some
+reason.
+
+
+- Where to start the build?
+
+  Use the all.build on the root directory. It compiles everything
+  on the right order, copy dependencies and so on. 
+
+
+- Castle on Rails tests are failing
+
+  Not good. If you have more than one CLR runtime installed, try
+  to specify the runtime 1.1
+
+  > nant -t:net-1.1
+
+
+
+More questions? Please check our mailing list.
+
+
