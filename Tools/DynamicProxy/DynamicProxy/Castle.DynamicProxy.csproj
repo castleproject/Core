@@ -304,6 +304,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\LockBlockExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\MarkBranchStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

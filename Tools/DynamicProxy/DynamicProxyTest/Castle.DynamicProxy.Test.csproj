@@ -120,6 +120,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MultithreadTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProxyGeneratorTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

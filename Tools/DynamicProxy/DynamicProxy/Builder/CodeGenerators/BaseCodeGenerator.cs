@@ -249,7 +249,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			LocalReference invocation_local = 
 				_method2Invocation.CodeBuilder.DeclareLocal(Context.Invocation);
 
-			_method2Invocation.CodeBuilder.AddStatement( new AssignStatement( invocation_local,
+			LockBlockExpression block = new LockBlockExpression(SelfReference.Self);
+
+			block.AddStatement( new AssignStatement( invocation_local,
 				new ConvertExpression( Context.Invocation, 
 					new VirtualMethodInvocationExpression(CacheField, 
 					get_ItemMethod, 
@@ -267,7 +269,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				new VirtualMethodInvocationExpression( CacheField, 
 				set_ItemMethod, arg2.ToExpression(), invocation_local.ToExpression())) );
 
-			_method2Invocation.CodeBuilder.AddStatement( new ExpressionStatement(cond1) );
+			block.AddStatement( new ExpressionStatement(cond1) );
+
+			_method2Invocation.CodeBuilder.AddStatement( new ExpressionStatement(block)  );
 			_method2Invocation.CodeBuilder.AddStatement( new ReturnStatement(invocation_local) );
 		}
 

@@ -41,6 +41,7 @@ namespace Castle.DynamicProxy.Test
 		public void RunPEVerify()
 		{
 			if (false && module.SaveAssembly())
+			//if (module.SaveAssembly())
 			{
 				Process process = new Process();
 				process.StartInfo.UseShellExecute = false;
@@ -257,6 +258,39 @@ namespace Castle.DynamicProxy.Test
 			constructor.CodeBuilder.InvokeBaseConstructor();
 			constructor.CodeBuilder.AddStatement( new AssignStatement(cachefield, 
 				new NewInstanceExpression( typeof(ArrayList), new Type[0] ) ) );
+			constructor.CodeBuilder.AddStatement( new ReturnStatement() );
+
+			ReturnReferenceExpression ret = new ReturnReferenceExpression(typeof(ArrayList));
+			EasyMethod getCache = typebuilder.CreateMethod( "GetCache", ret );
+			getCache.CodeBuilder.AddStatement( new ReturnStatement( cachefield ) );
+
+			Type newType = typebuilder.BuildType();
+			Assert.IsNotNull( newType );
+			object instance = Activator.CreateInstance( newType, new object[0] );
+			Assert.IsNotNull( instance );
+
+			MethodInfo method = instance.GetType().GetMethod("GetCache");
+			Assert.IsNotNull( method.Invoke( instance, new object[0] ) );
+
+			RunPEVerify();
+		}
+
+		[Test]
+		public void BlockWithLock()
+		{
+			EasyType typebuilder = new EasyType( module, "mytype" );
+
+			FieldReference cachefield = typebuilder.CreateField( "cache", typeof(ArrayList) );
+
+			EasyConstructor constructor = typebuilder.CreateConstructor( );
+			constructor.CodeBuilder.InvokeBaseConstructor();
+
+			LockBlockExpression block = new LockBlockExpression( SelfReference.Self );
+
+			block.AddStatement( new AssignStatement(cachefield, 
+				new NewInstanceExpression( typeof(ArrayList), new Type[0] ) ) );
+			
+			constructor.CodeBuilder.AddStatement( new ExpressionStatement(block) );
 			constructor.CodeBuilder.AddStatement( new ReturnStatement() );
 
 			ReturnReferenceExpression ret = new ReturnReferenceExpression(typeof(ArrayList));
