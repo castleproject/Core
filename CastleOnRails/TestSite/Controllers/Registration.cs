@@ -42,5 +42,17 @@ namespace TestSite.Controllers
 
 			RenderView( "success" );
 		}
+
+		public void DoAPostBack(int postCount)
+		{
+			PropertyBag["postCount"] = postCount++;
+
+			RenderView( "postback" );
+		}
+
+		public void PostBack()
+		{
+			
+		}
 	}
 }

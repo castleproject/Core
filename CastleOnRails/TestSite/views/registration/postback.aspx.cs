@@ -10,23 +10,33 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using Castle.CastleOnRails.Framework;
 
-namespace AspnetSample.views.registration
+namespace TestSite.views.registration
 {
 	/// <summary>
-	/// Summary description for index.
+	/// Summary description for postback.
 	/// </summary>
-	public class index : System.Web.UI.Page, IControllerAware
+	public class postback : System.Web.UI.Page, IControllerAware
 	{
-		protected System.Web.UI.WebControls.TextBox name;
-		protected System.Web.UI.WebControls.TextBox address;
-		protected System.Web.UI.WebControls.TextBox city;
-		protected System.Web.UI.WebControls.TextBox country;
-		protected System.Web.UI.WebControls.TextBox age;
 		protected System.Web.UI.WebControls.Button Save;
+		protected System.Web.UI.WebControls.Label postCount;
 		private Controller _controller;
+
+		protected int PostCount
+		{
+			get
+			{
+				if (!_controller.PropertyBag.Contains("postCount"))
+				{
+					_controller.PropertyBag["postCount"] = 0;
+				}
+
+				return (int) _controller.PropertyBag["postCount"];
+			}
+		}
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
+			postCount.Text = PostCount.ToString();
 		}
 
 		#region Web Form Designer generated code
@@ -45,7 +55,6 @@ namespace AspnetSample.views.registration
 		/// </summary>
 		private void InitializeComponent()
 		{    
-			//this.Save.Click += new System.EventHandler(this.OnSave);
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}
@@ -56,13 +65,13 @@ namespace AspnetSample.views.registration
 			_controller = controller;
 		}
 
-		public void OnSave(object sender, EventArgs args)
+		public void DoAPostBack(object sender, EventArgs args)
 		{
 			// Validation
 			// Work work work...
 			// Ok, proceed
 
-			_controller.Send( "Save" );
+			_controller.Send( "DoAPostBack" );
 		}
 	}
 }

@@ -226,6 +226,22 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "views\registration\postback.aspx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\registration\postback.aspx.cs"
+                    DependentUpon = "postback.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\registration\postback.aspx.resx"
+                    DependentUpon = "postback.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "views\registration\success.aspx"
                     BuildAction = "Content"
                 />
