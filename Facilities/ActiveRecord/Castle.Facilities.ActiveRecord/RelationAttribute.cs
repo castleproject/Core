@@ -32,7 +32,6 @@ namespace Castle.Facilities.ActiveRecord
 	}
 
 
-
 	/// <summary>
 	/// Summary description for RelationAttribute.
 	/// </summary>

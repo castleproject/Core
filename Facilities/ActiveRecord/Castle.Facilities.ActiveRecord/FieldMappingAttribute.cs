@@ -16,10 +16,8 @@ namespace Castle.Facilities.ActiveRecord
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for FieldMappingAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class FieldMappingAttribute : Attribute
 	{
 		public FieldMappingAttribute(String columnName)

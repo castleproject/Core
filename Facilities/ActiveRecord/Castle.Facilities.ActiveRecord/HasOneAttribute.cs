@@ -16,10 +16,8 @@ namespace Castle.Facilities.ActiveRecord
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for HasOneAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class HasOneAttribute : Attribute
 	{
 		private Type _mapType;

@@ -16,10 +16,8 @@ namespace Castle.Facilities.ActiveRecord
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for IgnoreAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class IgnoreAttribute : Attribute
 	{
 		public IgnoreAttribute()

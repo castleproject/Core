@@ -16,9 +16,7 @@ namespace Castle.Facilities.ActiveRecord
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for ActiveRecordAttribute.
-	/// </summary>
+
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class ActiveRecordAttribute : Attribute
 	{ 

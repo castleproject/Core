@@ -16,10 +16,8 @@ namespace Castle.Facilities.ActiveRecord
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for HasManyAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property)]
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class HasManyAttribute : RelationAttribute
 	{
 		private Type _mapType;

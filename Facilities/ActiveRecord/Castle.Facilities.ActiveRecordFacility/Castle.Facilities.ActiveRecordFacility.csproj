@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Facilities.ActiveRecord"
+                AssemblyName = "Castle.Facilities.ActiveRecordFacility"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Facilities.ActiveRecord"
+                RootNamespace = "Castle.Facilities.ActiveRecordFacility"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -89,12 +89,32 @@
                     AssemblyName = "Castle.Model"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
+                <Reference
+                    Name = "Castle.Facilities.ActiveRecord"
+                    Project = "{46567A8A-4413-495A-8195-EA0AE879AD74}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\lib\NHibernate.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
+                    RelPath = "ActiveRecordFacility.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NHibernateMappingEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
