@@ -1,4 +1,4 @@
- // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
 namespace Castle.Windsor.Proxy
 {
 	using System;
-	using System.Collections;
 	using System.Reflection;
 	using System.Threading;
+
 	using Castle.DynamicProxy;
+	
 	using Castle.Model.Interceptor;
 
 	/// <summary>
@@ -30,7 +31,7 @@ namespace Castle.Windsor.Proxy
 	/// Although we have multithread test cases to ensure the correct 
 	/// behavior, we might have threading synchronization issues.
 	/// </remarks>
-	public sealed class DefaultMethodInvocation : IMethodInvocation
+	public sealed class DefaultMethodInvocation : IMethodInvocation, IInvocation
 	{
 		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
 
@@ -128,5 +129,5 @@ namespace Castle.Windsor.Proxy
 		{
 			set { _interceptorChain = value; }
 		}
-	}
+		}
 }

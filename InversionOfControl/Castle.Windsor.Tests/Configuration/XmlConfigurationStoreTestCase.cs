@@ -1,4 +1,3 @@
-using Castle.MicroKernel;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +19,10 @@ namespace Castle.Windsor.Tests.Configuration
 	using NUnit.Framework;
 
 	using Castle.Model.Configuration;
+
 	using Castle.Windsor.Configuration.Xml;
+
+	using Castle.MicroKernel;
 
 	/// <summary>
 	/// Summary description for XmlConfigurationStoreTestCase.
@@ -33,13 +35,17 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			XmlConfigurationStore store = new XmlConfigurationStore("sample_config.xml");
 
-			Assert.AreEqual(1, store.GetFacilities().Length);
+			Assert.AreEqual(2, store.GetFacilities().Length);
 			Assert.AreEqual(2, store.GetComponents().Length);
 
 			IConfiguration config = store.GetFacilityConfiguration("testidengine");
 			IConfiguration childItem = config.Children["item"];
 			Assert.IsNotNull(childItem);
 			Assert.AreEqual("value", childItem.Value);
+
+			config = store.GetFacilityConfiguration("testidengine2");
+			Assert.IsNotNull(config);
+			Assert.AreEqual("value within CDATA section", config.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent1");
 			childItem = config.Children["item"];

@@ -12,27 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Model.Interceptor
 {
-	using Castle.Model.Configuration;
+	using System;
 
 	/// <summary>
-	/// Unit of extension. A facility should use 
-	/// the extension points offered by the kernel
-	/// to augment its functionality.
+	/// Summary description for IOnBehalfAware.
 	/// </summary>
-	public interface IFacility
+	public interface IOnBehalfAware
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="kernel"></param>
-		/// <param name="facilityConfig"></param>
-		void Init(IKernel kernel, IConfiguration facilityConfig);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void Terminate();
+		void SetInterceptedComponentModel(ComponentModel target);
 	}
 }

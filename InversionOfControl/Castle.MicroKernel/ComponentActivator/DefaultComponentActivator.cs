@@ -58,10 +58,12 @@ namespace Castle.MicroKernel.ComponentActivator
 	
 			object[] arguments = CreateConstructorArguments( candidate );
 	
-			object instance = null;
-	
-			// TODO: Components registered with interface and implementation
-			// should use a interface proxy
+			return CreateInstance(arguments);
+		}
+
+		protected virtual object CreateInstance(object[] arguments)
+		{
+			object instance;
 
 			if (Model.Interceptors.HasInterceptors)
 			{

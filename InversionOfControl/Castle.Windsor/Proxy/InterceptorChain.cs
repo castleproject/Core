@@ -67,9 +67,27 @@ namespace Castle.Windsor.Proxy
 			return minvocation.Proceed( args );
 		}
 
+		/// <summary>
+		/// This method will rarely be used, however, depending on which
+		/// v-table (ie interface) is being exposed, it might be called, so we handle.
+		/// </summary>
+		/// <param name="invocation"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public object Intercept(IInvocation invocation, params object[] args)
 		{
-			throw new NotImplementedException();
+#if DEBUG
+			// Sanity check
+			if (!(invocation is DefaultMethodInvocation))
+			{
+				throw new Exception("Expected 'invocation' to be an instance of DefaultMethodInvocation");
+			}
+#endif
+			
+			// This is not a beatiful cast, I know, 
+			// But if the previous assert was ok, its safe to cast it
+
+			return Intercept( (IMethodInvocation) invocation, args );
 		}
 	}
 }

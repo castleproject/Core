@@ -109,6 +109,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Interceptor\IOnBehalfAware.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifecycle\LifecycleInterfaces.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -6,6 +6,12 @@
 		<item>value</item>
 		</facility>
 
+		<facility id="testidengine2">
+		<![CDATA[
+        value within CDATA section
+		]]>
+		</facility>
+
 	</facilities>
 
 	<components>

@@ -1,5 +1,3 @@
-using System.Configuration;
-using Castle.Model.Configuration;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +17,9 @@ namespace Castle.Windsor.Configuration.Xml
 	using System;
 	using System.IO;
 	using System.Xml;
+	using System.Configuration;
+
+	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel.SubSystems.Configuration;
 
@@ -127,13 +128,21 @@ namespace Castle.Windsor.Configuration.Xml
 
 		private IConfiguration DeserializeNode(XmlNode node)
 		{
-			MutableConfiguration config;
+			MutableConfiguration config = null;
 
-			if (node.HasChildNodes && node.FirstChild.NodeType == XmlNodeType.Text)
+			if (node.HasChildNodes)
 			{
-				config = new MutableConfiguration(node.Name, node.FirstChild.Value);
+				foreach(XmlNode child in node.ChildNodes)
+				{
+					if (child.NodeType == XmlNodeType.Text || child.NodeType == XmlNodeType.CDATA)
+					{
+						config = new MutableConfiguration(node.Name, child.Value.Trim());
+						break;
+					}
+				}
 			}
-			else
+			
+			if (config == null)
 			{
 				config = new MutableConfiguration(node.Name);				
 			}

@@ -19,12 +19,30 @@ namespace Castle.MicroKernel
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for IComponentActivator.
+	/// Implements the instance creation logic. The default
+	/// implementation should rely on an ordinary call to 
+	/// Activator.CreateInstance(). 
 	/// </summary>
+	/// <remarks>
+	/// This interface is provided in order to allow custom components
+	/// to be created using a different logic, such as using a specific factory
+	/// or builder.
+	/// <seealso cref="ComponentActivator.AbstractComponentActivator"/>
+	/// <seealso cref="ComponentActivator.DefaultComponentActivator"/>
+	/// </remarks>
 	public interface IComponentActivator
 	{
+		/// <summary>
+		/// Should return a new component instance.
+		/// </summary>
+		/// <returns></returns>
 		object Create();
 
+		/// <summary>
+		/// Should perform all necessary work to dispose the instance
+		/// and/or any resource related to it.
+		/// </summary>
+		/// <param name="instance"></param>
 		void Destroy(object instance);
 	}
 }

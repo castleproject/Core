@@ -18,9 +18,11 @@ namespace Castle.Windsor.Proxy
 	using System.Reflection;
 
 	using Castle.Model;
-	using Castle.MicroKernel;
-	using Castle.DynamicProxy;
 	using Castle.Model.Interceptor;
+
+	using Castle.MicroKernel;
+	
+	using Castle.DynamicProxy;
 
 	/// <summary>
 	/// This implementation of <see cref="IProxyFactory"/> relies 
@@ -34,7 +36,7 @@ namespace Castle.Windsor.Proxy
 	/// </remarks>
 	public class DefaultProxyFactory : IProxyFactory
 	{
-		private ProxyGenerator _generator;
+		protected ProxyGenerator _generator;
 
 		/// <summary>
 		/// Constructs a DefaultProxyFactory
@@ -68,21 +70,39 @@ namespace Castle.Windsor.Proxy
 			context.SameClassInvocation = typeof(DefaultMethodInvocation);
 			context.InterfaceInvocation = typeof(DefaultMethodInvocation);
 
+			CustomizeContext(context, kernel, model, constructorArguments);
+
+			object proxy = null;
+
 			if (model.Service.IsInterface)
 			{
 				Object target = Activator.CreateInstance( model.Implementation, constructorArguments );
 
-				return _generator.CreateCustomProxy( CollectInterfaces(model.Implementation), 
+				proxy = _generator.CreateCustomProxy( CollectInterfaces(model.Implementation), 
 					interceptorChain, target, context);
 			}
 			else
 			{
-				return _generator.CreateCustomClassProxy(model.Implementation, 
+				proxy = _generator.CreateCustomClassProxy(model.Implementation, 
 					interceptorChain, context, constructorArguments);
 			}
+
+			CustomizeProxy(proxy, context, kernel, model);
+
+			return proxy;
 		}
 
-		private Type[] CollectInterfaces(Type implementation)
+		protected virtual void CustomizeProxy(object proxy, GeneratorContext context, 
+			IKernel kernel, ComponentModel model)
+		{
+		}
+
+		protected virtual void CustomizeContext(GeneratorContext context, IKernel kernel, 
+			ComponentModel model, object[] arguments)
+		{
+		}
+
+		protected Type[] CollectInterfaces(Type implementation)
 		{
 			return implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), null);
 		}
@@ -122,6 +142,8 @@ namespace Castle.Windsor.Proxy
 					IMethodInterceptor interceptor = (IMethodInterceptor) handler.Resolve();
 					
 					interceptors[index++] = interceptor;
+
+					SetOnBehalfAware(interceptor as IOnBehalfAware, model);
 				}
 				catch(InvalidCastException)
 				{
@@ -135,6 +157,14 @@ namespace Castle.Windsor.Proxy
 			}
 
 			return interceptors;
+		}
+
+		protected void SetOnBehalfAware(IOnBehalfAware onBehalfAware, ComponentModel target)
+		{
+			if (onBehalfAware != null)
+			{
+				onBehalfAware.SetInterceptedComponentModel(target);
+			}
 		}
 	}
 }

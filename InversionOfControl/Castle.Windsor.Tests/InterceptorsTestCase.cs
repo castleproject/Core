@@ -97,6 +97,23 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
+		public void OnBehalfOfTest()
+		{
+			_container.AddComponent( "interceptor", typeof(InterceptorWithOnBehalf) );
+			_container.AddComponent( "key", typeof(CalculatorService)  );
+
+			CalculatorService service = 
+				(CalculatorService) _container.Resolve("key");
+
+			Assert.IsNotNull(service);
+			Assert.AreEqual( 4, service.Sum(2,2) );
+			Assert.IsNotNull( InterceptorWithOnBehalf.Model );
+			Assert.AreEqual( "key", InterceptorWithOnBehalf.Model.Name );
+			Assert.AreEqual( typeof(CalculatorService), 
+				InterceptorWithOnBehalf.Model.Implementation );
+		}
+
+		[Test]
 		public void ClassProxyWithAttributes()
 		{
 			_container = new WindsorContainer(); // So we wont use the facilities
@@ -185,6 +202,30 @@ namespace Castle.Windsor.Tests
 			}
 			
 			return invocation.Proceed(args);
+		}
+	}
+
+	public class InterceptorWithOnBehalf : IMethodInterceptor, IOnBehalfAware
+	{
+		private static ComponentModel _model;
+
+		#region IMethodInterceptor Members
+
+		public object Intercept(IMethodInvocation invocation, params object[] args)
+		{
+			return invocation.Proceed(args);
+		}
+
+		#endregion
+
+		public void SetInterceptedComponentModel(ComponentModel target)
+		{
+			_model = target;
+		}
+
+		public static ComponentModel Model
+		{
+			get { return _model; }
 		}
 	}
 }

@@ -32,13 +32,17 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			AppDomainConfigurationStore store = new AppDomainConfigurationStore();
 
-			Assert.AreEqual(1, store.GetFacilities().Length);
+			Assert.AreEqual(2, store.GetFacilities().Length);
 			Assert.AreEqual(2, store.GetComponents().Length);
 
 			IConfiguration config = store.GetFacilityConfiguration("testidengine");
 			IConfiguration childItem = config.Children["item"];
 			Assert.IsNotNull(childItem);
 			Assert.AreEqual("value", childItem.Value);
+
+			config = store.GetFacilityConfiguration("testidengine2");
+			Assert.IsNotNull(config);
+			Assert.AreEqual("value within CDATA section", config.Value);
 
 			config = store.GetComponentConfiguration("testidcomponent1");
 			childItem = config.Children["item"];
