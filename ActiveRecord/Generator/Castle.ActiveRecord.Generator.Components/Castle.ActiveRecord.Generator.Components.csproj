@@ -94,6 +94,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BuildContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IActiveRecordDescriptorBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

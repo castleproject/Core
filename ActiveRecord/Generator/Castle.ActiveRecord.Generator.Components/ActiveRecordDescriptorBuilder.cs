@@ -21,25 +21,61 @@ namespace Castle.ActiveRecord.Generator.Components
 
 	public class ActiveRecordDescriptorBuilder : IActiveRecordDescriptorBuilder
 	{
-		public ActiveRecordDescriptorBuilder()
+		private INamingService _namingService;
+		private IPlainFieldInferenceService _plainFieldsService;
+		private IRelationshipInferenceService _relationsService;
+
+		public ActiveRecordDescriptorBuilder(INamingService namingService,
+			IPlainFieldInferenceService plainFieldsService, 
+			IRelationshipInferenceService relationsService)
 		{
+			_namingService = namingService;
+			_plainFieldsService = plainFieldsService;
+			_relationsService = relationsService;
 		}
 
 		#region IActiveRecordDescriptorBuilder Members
 
-		public ActiveRecordDescriptor Build(TableDefinition tableDef)
+		public ActiveRecordDescriptor Build(TableDefinition tableDef, BuildContext context)
 		{
+			ActiveRecordDescriptor desc = ObtainDescriptor(tableDef);
+
 			// ClassName
+
+			desc.ClassName = _namingService.CreateClassName( tableDef.Name );
 
 			// Plain fields
 
+			desc.Properties.AddRange( _plainFieldsService.InferProperties(tableDef) );
+
 			// Relations
+
+			desc.PropertiesRelations.AddRange( _relationsService.InferRelations(tableDef, context) );
 
 			// Operations
 
-			return null;
+			// TODO!
+
+			while(context.HasPendents)
+			{
+				break;
+			}
+
+			return desc;
 		}
 
 		#endregion
+
+		private ActiveRecordDescriptor ObtainDescriptor(TableDefinition tableDef)
+		{
+			if (tableDef.RelatedDescriptor != null)
+			{
+				return tableDef.RelatedDescriptor;
+			}
+			else
+			{
+				return new ActiveRecordDescriptor(tableDef);
+			}
+		}
 	}
 }

@@ -1,0 +1,40 @@
+<html>
+<head>
+$AjaxHelper.GetJavascriptFunctions()
+</head>
+
+<body>
+Observer field example:
+
+<form>
+  Please enter the zip code:<br>
+  <input type="text" name="zip" id="zip"> 
+  
+  <br>
+  <div id="address">
+  </div>
+
+</form>
+
+$AjaxHelper.ObserveField("zip", 2, "/ajax/inferaddress.rails", "address", "'aa new content'")
+
+<p>
+Observer form example:
+
+<form id="myform">
+  Fill the field below to create an account:<br>
+  Name: <input type="text" name="name" id="name"> <br>
+  Address: <input type="text" name="addressf" id="addressf"> 
+  
+  <br>
+  <div id="message">
+  </div>
+
+</form>
+</p>
+
+$AjaxHelper.ObserveForm("myform", 2, "/ajax/accountformvalidate.rails", "message", null)
+
+</body>
+
+</html>

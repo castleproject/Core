@@ -31,18 +31,18 @@ namespace Castle.ActiveRecord.Generator.Components
 
 		#region IRelationShipInferenceService Members
 
-		public ActiveRecordPropertyDescriptor[] InferRelations(TableDefinition tableDef, IList typesToBeCreated)
+		public ActiveRecordPropertyDescriptor[] InferRelations(TableDefinition tableDef, BuildContext context)
 		{
 			ArrayList list = new ArrayList();
 
-			CreateHasManyRelations(tableDef, list, typesToBeCreated);
+			CreateHasManyRelations(tableDef, list, context);
 
-			CreateBelongsToRelations(tableDef, list, typesToBeCreated);
+			CreateBelongsToRelations(tableDef, list, context);
 
 			return (ActiveRecordPropertyDescriptor[]) list.ToArray( typeof(ActiveRecordPropertyDescriptor) );
 		}
 
-		private void CreateBelongsToRelations(TableDefinition tableDef, IList list, IList typesToBeCreated)
+		private void CreateBelongsToRelations(TableDefinition tableDef, IList list, BuildContext context)
 		{
 			foreach(ColumnDefinition col in tableDef.Columns)
 			{
@@ -55,7 +55,7 @@ namespace Castle.ActiveRecord.Generator.Components
 					{
 						col.RelatedTable.RelatedDescriptor = new ActiveRecordDescriptor(col.RelatedTable);
 
-						typesToBeCreated.Add(col.RelatedTable.RelatedDescriptor);
+						context.AddPendentDescriptor(col.RelatedTable.RelatedDescriptor);
 					}
 					else
 					{
@@ -71,7 +71,7 @@ namespace Castle.ActiveRecord.Generator.Components
 			}
 		}
 
-		private void CreateHasManyRelations(TableDefinition tableDef, IList list, IList typesToBeCreated)
+		private void CreateHasManyRelations(TableDefinition tableDef, IList list, BuildContext context)
 		{
 			foreach(TableDefinition fkTable in tableDef.TablesReferencedByHasRelation)
 			{
@@ -90,7 +90,7 @@ namespace Castle.ActiveRecord.Generator.Components
 						{
 							col.RelatedTable.RelatedDescriptor = new ActiveRecordDescriptor(fkTable);
 
-							typesToBeCreated.Add(col.RelatedTable.RelatedDescriptor);
+							context.AddPendentDescriptor(col.RelatedTable.RelatedDescriptor);
 						}
 						else
 						{

@@ -16,7 +16,6 @@ namespace Castle.CastleOnRails.Framework.Helpers
 {
 	using System;
 
-
 	public class DateFormatHelper
 	{
 		public String FormatDate( DateTime date )

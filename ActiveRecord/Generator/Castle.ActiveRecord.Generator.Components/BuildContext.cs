@@ -20,8 +20,40 @@ namespace Castle.ActiveRecord.Generator.Components
 	using Castle.ActiveRecord.Generator.Components.Database;
 
 
-	public interface IRelationshipInferenceService
+	public class BuildContext
 	{
-		ActiveRecordPropertyDescriptor[] InferRelations(TableDefinition tableDef, BuildContext context);
+		private IList _pendents = new ArrayList();
+
+		public BuildContext()
+		{
+		}
+
+		public void AddPendentDescriptor(ActiveRecordDescriptor descriptor)
+		{
+			if (!_pendents.Contains(descriptor))
+			{
+				_pendents.Add(descriptor);
+			}
+		}
+
+		public void RemovePendent(ActiveRecordDescriptor descriptor)
+		{
+			_pendents.Remove(descriptor);
+		}
+
+		public bool HasPendents
+		{
+			get { return (_pendents.Count != 0); }
+		}
+
+		public ActiveRecordDescriptor GetNextPendent()
+		{
+			if (HasPendents)
+			{
+				return _pendents[0] as ActiveRecordDescriptor;
+			}
+
+			return null;
+		}
 	}
 }

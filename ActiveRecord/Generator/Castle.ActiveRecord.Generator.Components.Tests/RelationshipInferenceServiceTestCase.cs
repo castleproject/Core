@@ -40,9 +40,9 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			BuildBlogPostsStructure(out blogTable, out postTable);
 
-			ArrayList types = new ArrayList();
+			BuildContext context = new BuildContext();
 
-			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( blogTable, types );
+			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( blogTable, context );
 
 			Assert.IsNotNull(descs);
 			Assert.AreEqual( 1, descs.Length );
@@ -54,8 +54,7 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 			Assert.AreEqual( "blog_id", desc1.ColumnName );
 			Assert.AreEqual( typeof(IList), desc1.PropertyType );
 
-			Assert.AreEqual(1, types.Count);
-			ActiveRecordDescriptor targetARDescriptor = types[0] as ActiveRecordDescriptor;
+			ActiveRecordDescriptor targetARDescriptor = context.GetNextPendent();
 			Assert.AreSame( postTable, targetARDescriptor.Table );
 		}
 
@@ -70,9 +69,9 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			BuildBlogPostsStructure(out blogTable, out postTable);
 
-			ArrayList types = new ArrayList();
+			BuildContext context = new BuildContext();
 
-			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( postTable, types );
+			ActiveRecordPropertyDescriptor[] descs = relService.InferRelations( postTable, context );
 
 			Assert.IsNotNull(descs);
 			Assert.AreEqual( 1, descs.Length );
@@ -84,8 +83,7 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 			Assert.AreEqual( "blog_id", desc1.ColumnName );
 //			Assert.AreEqual( , desc1.PropertyType );
 
-			Assert.AreEqual(1, types.Count);
-			ActiveRecordDescriptor targetARDescriptor = types[0] as ActiveRecordDescriptor;
+			ActiveRecordDescriptor targetARDescriptor = context.GetNextPendent();
 			Assert.AreSame( blogTable, targetARDescriptor.Table );
 		}
 

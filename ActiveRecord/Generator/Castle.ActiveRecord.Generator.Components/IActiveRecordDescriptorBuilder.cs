@@ -21,6 +21,6 @@ namespace Castle.ActiveRecord.Generator.Components
 
 	public interface IActiveRecordDescriptorBuilder
 	{
-		ActiveRecordDescriptor Build(TableDefinition tableDef);
+		ActiveRecordDescriptor Build(TableDefinition tableDef, BuildContext context);
 	}
 }

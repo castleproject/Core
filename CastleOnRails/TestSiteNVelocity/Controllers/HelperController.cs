@@ -1,3 +1,4 @@
+using Castle.CastleOnRails.Framework.Helpers;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +19,6 @@ namespace TestSiteNVelocity.Controllers
 
 	using Castle.CastleOnRails.Framework;
 
-	using TestSiteNVelocity.Helpers;
 
 	[Helper(typeof(DateFormatHelper))]	
 	public class HelperController : Controller

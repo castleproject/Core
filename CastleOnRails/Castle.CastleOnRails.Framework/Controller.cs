@@ -121,6 +121,22 @@ namespace Castle.CastleOnRails.Framework
 			get { return _context.UnderlyingContext as HttpContext; }
 		}
 
+		/// <summary>
+		/// Gets the request
+		/// </summary>
+		public IRequest Request
+		{
+			get { return Context.Request; }
+		}
+
+		/// <summary>
+		/// Gets the response
+		/// </summary>
+		public IResponse Response
+		{
+			get { return Context.Response; }
+		}
+
 		#endregion
 
 		#region Usefull operations
@@ -231,6 +247,13 @@ namespace Castle.CastleOnRails.Framework
 			InternalSend( actionName );
 		}
 
+		public void RenderText(String contents)
+		{
+			CancelView();
+
+			Response.Write( contents );
+		}
+
 		/// <summary>
 		/// Used to process the method associated
 		/// with the action name specified.
@@ -238,11 +261,6 @@ namespace Castle.CastleOnRails.Framework
 		/// <param name="action"></param>
 		public void Send( String action )
 		{
-//			if ( HttpContext != null )
-//			{
-//				HttpContext.Response.End();
-//			}
-
 			InternalSend(action);
 		}
 

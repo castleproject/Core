@@ -129,6 +129,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Javascripts.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "RailsException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -160,6 +164,11 @@
                 />
                 <File
                     RelPath = "Attributes\RescueAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\AjaxHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

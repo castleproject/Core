@@ -24,9 +24,9 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		private String _discriminatorField;
 		private String _discriminatorValue;
 		private String _discriminatorType;
-		private IList _properties = new ArrayList();
-		private IList _propertiesRelations = new ArrayList();
-		private IList _operations = new ArrayList();
+		private ArrayList _properties = new ArrayList();
+		private ArrayList _propertiesRelations = new ArrayList();
+		private ArrayList _operations = new ArrayList();
 		private TableDefinition _table;
 
 		public ActiveRecordDescriptor()
@@ -74,17 +74,17 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			set { _discriminatorType = value; }
 		}
 
-		public IList Properties
+		public ArrayList Properties
 		{
 			get { return _properties; }
 		}
 
-		public IList PropertiesRelations
+		public ArrayList PropertiesRelations
 		{
 			get { return _propertiesRelations; }
 		}
 
-		public IList Operations
+		public ArrayList Operations
 		{
 			get { return _operations; }
 		}

@@ -17,6 +17,7 @@ using NVelocity.App;
 using NVelocity.Context;
 using NVelocity.Runtime;
 using Commons.Collections;
+using NVelocity.Runtime.Resource;
 
 namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 {
@@ -44,6 +45,12 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			ExtendedProperties props = new ExtendedProperties();
 
 			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
+
+			/// GOD I HATE THIS NVELOCITY!
+//			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, 
+//				@"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.BetterResourceManager\," + 
+//				"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine");
+//			
 			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, _templateDir);
 
 			Velocity.Init(props);
@@ -73,6 +80,23 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		private IContext CreateContext(IDictionary context)
 		{
 			return new VelocityContext( new Hashtable(context) );
+		}
+	}
+
+	public class BetterResourceManager : NVelocity.Runtime.Resource.ResourceManager
+	{
+		public Resource getResource(string resourceName, int resourceType, string encoding)
+		{
+			return new ContentResource();
+		}
+
+		public void initialize(RuntimeServices rs)
+		{
+		}
+
+		public string getLoaderNameForResource(string resourceName)
+		{
+			return null;
 		}
 	}
 }

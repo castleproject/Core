@@ -137,6 +137,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Controllers\AjaxController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\AppPath.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -187,9 +192,8 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helper\DateFormatHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "views\ajax\index.vm"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "views\apppath\index.vm"

@@ -23,7 +23,7 @@ namespace Castle.Goodies.Viewer
 	public class MainForm : Form
 	{
 		private Random rnd = new Random();
-		
+	
 		private System.ComponentModel.Container components = null;
 
 		private Netron.GraphLib.UI.GraphControl graphControl1;
