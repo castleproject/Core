@@ -131,14 +131,16 @@
                     HintPath = "..\bin\Castle.Windsor.dll"
                 />
                 <Reference
-                    Name = "ICSharpCode.SharpZipLib"
-                    AssemblyName = "ICSharpCode.SharpZipLib"
-                    HintPath = "..\lib\ICSharpCode.SharpZipLib.dll"
+                    Name = "ByteFX.MySqlClient.Design"
+                    AssemblyName = "ByteFX.MySqlClient.Design"
+                    HintPath = "C:\dev\dotnet\tools\ByteFX\ByteFX .Data Provider\ByteFX.MySqlClient.Design.dll"
+                    AssemblyFolderKey = "hklm\dn\bytefx"
                 />
                 <Reference
-                    Name = "MySql.Data"
-                    AssemblyName = "MySql.Data"
-                    HintPath = "..\lib\MySql.Data.dll"
+                    Name = "ByteFX.MySqlClient"
+                    AssemblyName = "ByteFX.MySqlClient"
+                    HintPath = "C:\dev\dotnet\tools\ByteFX\ByteFX .Data Provider\ByteFX.MySqlClient.dll"
+                    AssemblyFolderKey = "hklm\dn\bytefx"
                 />
             </References>
         </Build>
@@ -156,6 +158,11 @@
                 />
                 <File
                     RelPath = "BlogItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ByteFxDriver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

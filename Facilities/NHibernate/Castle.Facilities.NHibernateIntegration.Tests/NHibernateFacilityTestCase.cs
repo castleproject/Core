@@ -1,3 +1,4 @@
+using ByteFX.Data.MySqlClient;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +21,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	using Castle.Windsor;
 	using Castle.Model.Configuration;
 	using Castle.MicroKernel.SubSystems.Configuration;
-	using MySql.Data.MySqlClient;
+//	using MySql.Data.MySqlClient;
 	using NHibernate;
 
 	/// <summary>
@@ -31,7 +32,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	{
 		const string Dialect = "NHibernate.Dialect.MySQLDialect";
 		const string ConnectionProvider = "NHibernate.Connection.DriverConnectionProvider";
-		const string Driver = "NHibernate.Driver.MySqlDataDriver";
+		// const string Driver = "NHibernate.Driver.MySqlDataDriver";
+		const string Driver = "Castle.Facilities.NHibernateIntegration.Tests.ByteFxDriver, Castle.Facilities.NHibernateIntegration.Tests";
 		const string ConnectionString = "Database=Test;Data Source=localhost;User Id=theuser;Password=opauser";
 
 		[SetUp]
@@ -39,7 +41,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		{
 			// Reset tables
 
-			MySql.Data.MySqlClient.MySqlConnection conn = new MySqlConnection(ConnectionString);
+			MySqlConnection conn = new MySqlConnection(ConnectionString);
 			conn.Open();
 
 			try
