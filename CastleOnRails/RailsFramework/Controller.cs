@@ -47,11 +47,6 @@ namespace Castle.CastleOnRails.Framework
 			get { return __controller; }
 		}
 
-		public IDictionary Bag
-		{
-			get { return __bag; }
-		}
-
 		protected void RenderView( String name )
 		{
 			__view = Path.Combine( __controller, name );
@@ -65,7 +60,6 @@ namespace Castle.CastleOnRails.Framework
 		protected void Redirect( String controller, String action )
 		{
 			// Cancel the view processing
-
 			__view = null;
 
 			__context.Response.Redirect( String.Format("../{0}/{1}.rails", controller, action) );
@@ -104,6 +98,11 @@ namespace Castle.CastleOnRails.Framework
 			return method;
 		}
 
+		public IDictionary PropertyBag
+		{
+			get { return __bag; }
+		}
+
 		protected HttpContext Context
 		{
 			get { return __context; }
@@ -128,14 +127,15 @@ namespace Castle.CastleOnRails.Framework
 			}
 			catch(Exception ex)
 			{
-				// TODO: If rescue defined...
+				// TODO: Implement a rescue feature
 
 				throw ex;
 			}
 
+			// Send view 
+
 			if (__view != null)
 			{
-				// Send view 
 				__viewEngine.Process( this, __url, __viewPhysicalPath, __view, Context );
 			}
 		}

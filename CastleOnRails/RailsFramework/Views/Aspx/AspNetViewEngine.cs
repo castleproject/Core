@@ -18,6 +18,8 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	using System.Web;
 	using System.Web.UI;
 	using System.IO;
+	using System.Collections;
+	using System.Reflection;
 
 	/// <summary>
 	/// Summary description for AspNetViewEngine.
@@ -43,12 +45,37 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 			IHttpHandler handler = 
 				PageParser.GetCompiledPageInstance( viewName, physicalPath, context );
+
+			ProcessPropertyBag( controller.PropertyBag, handler );
 			
 			controller.PreSendView( handler );
 
 			handler.ProcessRequest(context);
 
 			controller.PostSendView( handler );
+		}
+
+		protected void ProcessPropertyBag(IDictionary bag, IHttpHandler handler)
+		{
+			foreach(DictionaryEntry entry in bag)
+			{
+				SetPropertyValue( handler, entry.Key, entry.Value );
+			}
+		}
+
+		protected void SetPropertyValue(IHttpHandler handler, object key, object value)
+		{
+			Type type = handler.GetType();
+
+			PropertyInfo info = 
+				type.GetProperty(key.ToString(), 
+				BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase);
+
+			if (info == null || !info.CanWrite) return;
+
+			if (!value.GetType().IsAssignableFrom(info.PropertyType)) return;
+
+			info.GetSetMethod().Invoke( handler, new object[] {value} );
 		}
 	}
 }

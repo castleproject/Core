@@ -50,9 +50,9 @@ namespace Castle.Applications.PestControl
 
 			// Source Controls
 
-			AddComponent("svnsc", typeof(SvnSourceControl));
-			AddComponent("cvssc", typeof(CvsSourceControl));
-			AddComponent("vsssc", typeof(VssSourceControl));
+			AddComponent("svnsc", typeof(ISourceControl), typeof(SvnSourceControl));
+			AddComponent("cvssc", typeof(ISourceControl), typeof(CvsSourceControl));
+			AddComponent("vsssc", typeof(ISourceControl), typeof(VssSourceControl));
 		}
 	}
 }

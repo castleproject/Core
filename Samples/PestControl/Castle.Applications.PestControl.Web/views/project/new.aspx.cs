@@ -8,6 +8,8 @@ using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using Castle.Applications.PestControl.Services.BuildSystems;
+using Castle.Applications.PestControl.Services.SourceControl;
 
 namespace Castle.Applications.PestControl.Web.views.project
 {
@@ -16,8 +18,38 @@ namespace Castle.Applications.PestControl.Web.views.project
 	/// </summary>
 	public class New : System.Web.UI.Page
 	{
+		protected System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
+		protected System.Web.UI.WebControls.TextBox name;
+		protected System.Web.UI.WebControls.Button Save;
+		protected System.Web.UI.WebControls.DropDownList sc;
+		protected System.Web.UI.WebControls.DropDownList bs;
+		
+		private SourceControlManager _sourceControlManager;
+		private BuildSystemManager _buildSystemManager;
+
 		private void Page_Load(object sender, System.EventArgs e)
 		{
+			sc.DataSource = this.SourceControlManager.AvailableSourceControl();
+			sc.DataTextField = "Name";
+			sc.DataValueField = "Key";
+			sc.DataBind();
+
+			bs.DataSource = this.BuildSystemManager.AvailableBuildSystems();
+			bs.DataTextField = "Name";
+			bs.DataValueField = "Key";
+			bs.DataBind();
+		}
+
+		public SourceControlManager SourceControlManager
+		{
+			get { return _sourceControlManager; }
+			set { _sourceControlManager = value; }
+		}
+
+		public BuildSystemManager BuildSystemManager
+		{
+			get { return _buildSystemManager; }
+			set { _buildSystemManager = value; }
 		}
 
 		#region Web Form Designer generated code
@@ -37,6 +69,7 @@ namespace Castle.Applications.PestControl.Web.views.project
 		private void InitializeComponent()
 		{    
 			this.Load += new System.EventHandler(this.Page_Load);
+
 		}
 		#endregion
 	}

@@ -104,5 +104,26 @@ namespace Castle.MicroKernel.Tests
 
 			DefaultSpamService spamservice = (DefaultSpamService) kernel["spamservice"];
 		}
+
+		[Test]
+		public void FactoryPattern()
+		{
+			kernel.AddComponent( "spamservice", typeof(DefaultSpamServiceWithConstructor) );
+			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
+			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
+
+			kernel.AddComponent( "factory", typeof(ComponentFactory) );
+
+			ComponentFactory factory = (ComponentFactory) kernel["factory"];
+
+			Assert.IsNotNull(factory);
+
+			DefaultSpamServiceWithConstructor spamservice = 
+				(DefaultSpamServiceWithConstructor) factory.Create("spamservice");
+
+			Assert.IsNotNull(spamservice);
+			Assert.IsNotNull(spamservice.MailSender);
+			Assert.IsNotNull(spamservice.TemplateEngine);
+		}
 	}
 }

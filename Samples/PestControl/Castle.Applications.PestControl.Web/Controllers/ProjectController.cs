@@ -21,6 +21,8 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	using Castle.CastleOnRails.Framework;
 
 	using Castle.Applications.PestControl.Model;
+	using Castle.Applications.PestControl.Services.BuildSystems;
+	using Castle.Applications.PestControl.Services.SourceControl;
 
 	/// <summary>
 	/// Summary description for ProjectController.
@@ -29,15 +31,21 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	public class ProjectController : SmartDispatcherController
 	{
 		private PestControlModel _model;
+		private SourceControlManager _scm;
+		private BuildSystemManager _bsm;
 
-		public ProjectController(PestControlModel model)
+		public ProjectController(PestControlModel model, 
+			SourceControlManager scm, BuildSystemManager bsm)
 		{
 			_model = model;
+			_scm = scm;
+			_bsm = bsm;
 		}
 
 		public void New()
 		{
-			
+			PropertyBag.Add("SourceControlManager", _scm);
+			PropertyBag.Add("BuildSystemManager", _bsm);
 		}
 	}
 }

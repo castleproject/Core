@@ -203,19 +203,14 @@ namespace Castle.MicroKernel.Handlers
 		{
 			if (dependency.TargetType != null)
 			{
-				if (Kernel.HasComponent(dependency.TargetType))
-				{
-					return;
-				}
+				if (dependency.TargetType == typeof(IKernel)) return;
+				if (Kernel.HasComponent(dependency.TargetType)) return;
 
 				DependenciesByService.Add(dependency.TargetType);
 			}
 			else
 			{
-				if (Kernel.HasComponent(dependency.DependencyKey))
-				{
-					return;
-				}
+				if (Kernel.HasComponent(dependency.DependencyKey)) return;
 				
 				DependenciesByKey.Add(dependency.DependencyKey, String.Empty);
 			}

@@ -7,23 +7,18 @@
 		Please fill the fields below to create a new project
 	</p>
 	<asp:ValidationSummary runat="server" id="ValidationSummary1" />
-	
-	<TABLE class="formtable" width="330" BORDER="0" CELLSPACING="6" CELLPADDING="2">
+	<TABLE class="formtable" width="380px" BORDER="0" CELLSPACING="6" CELLPADDING="2">
 		<TR>
-			<TD width="30%">Project Name:</TD>
-			<TD><asp:TextBox ID="email" Runat="server" /></TD>
-		</TR>
-		<TR>
-			<TD>Name/Nickname:</TD>
+			<TD width="40%">Project Name:</TD>
 			<TD><asp:TextBox ID="name" Runat="server" /></TD>
 		</TR>
 		<TR>
-			<TD>Password:</TD>
-			<TD><asp:TextBox ID="passwd" Runat="server" /></TD>
+			<TD>Source Control:</TD>
+			<TD><asp:DropDownList ID="sc" Runat="server" /></TD>
 		</TR>
 		<TR>
-			<TD>Password confirmation:</TD>
-			<TD><asp:TextBox ID="passwd2" Runat="server" /></TD>
+			<TD>Build System:</TD>
+			<TD><asp:DropDownList ID="bs" Runat="server" /></TD>
 		</TR>
 		<TR>
 			<TD colspan="2" align="center">

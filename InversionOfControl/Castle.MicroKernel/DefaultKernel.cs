@@ -72,7 +72,6 @@ namespace Castle.MicroKernel
 			_resolver = new DefaultDependecyResolver(this);
 		}
 
-
 		#region IKernel Members
 
 		public virtual void AddComponent(String key, Type classType)
