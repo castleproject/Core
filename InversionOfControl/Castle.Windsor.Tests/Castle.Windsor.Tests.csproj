@@ -180,6 +180,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\sample_config.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Configuration\XmlInterpreterTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

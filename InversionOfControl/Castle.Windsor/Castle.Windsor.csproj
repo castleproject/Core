@@ -539,6 +539,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\Sources\ManifestResourceSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\Sources\StaticContentSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
