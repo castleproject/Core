@@ -43,6 +43,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Framew
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteNVelocity", "TestSiteNVelocity\TestSiteNVelocity.csproj", "{824EC872-2992-4518-8C41-4F87640D752A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -93,6 +97,10 @@ Global
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.Build.0 = Debug|.NET
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.ActiveCfg = Release|.NET
 		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.Build.0 = Release|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.ActiveCfg = Debug|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Debug.Build.0 = Debug|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Release.ActiveCfg = Release|.NET
+		{824EC872-2992-4518-8C41-4F87640D752A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

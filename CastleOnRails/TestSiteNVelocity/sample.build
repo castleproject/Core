@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="rails-testsitenvelocity" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="name" value="TestSite" />
+	<property name="assembly.name" value="${name}.dll" />
+
+	<property name="version" value="1.0.0.0" />
+
+	<target name="clean">
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}"/>
+	</target>
+
+	<target name="init" depends="clean">
+		<copy todir="${bin.dir}">
+			<fileset basedir="../bin">
+				<include name="Castle.CastleOnRails.Engine.dll" />
+				<include name="Castle.CastleOnRails.Framework.dll" />
+				<include name="Castle.CastleOnRails.Framework.Views.NVelocity.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build" depends="init,compile" />
+	
+	<target name="compile" depends="init">
+		<csc 
+			define="STRONG"
+			target="library" 
+			output="${bin.dir}/${assembly.name}">
+			
+			<sources basedir="${src.dir}">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
+				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Castle.CastleOnRails.Framework.Views.NVelocity.dll" />
+			</references>
+		</csc>
+	</target>
+
+</project>

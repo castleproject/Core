@@ -1,3 +1,4 @@
+using System.IO;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,7 +96,14 @@ namespace Castle.CastleOnRails.Engine.Configuration
 				throw new ConfigurationException("The views node must specify the 'viewPathRoot' attribute");
 			}
 	
-			config.ViewsPhysicalPath = viewPath.Value;
+			String path = viewPath.Value;
+
+			if (!Path.IsPathRooted(path))
+			{
+				path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, path );
+			}
+
+			config.ViewsPhysicalPath = path;
 	
 			XmlAttribute customEngine = node.Attributes["customEngine"];
 	

@@ -133,7 +133,8 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 
 		private IContext CreateContext(IRailsEngineContext context, Controller controller)
 		{
-			Hashtable innerContext = new Hashtable();
+			Hashtable innerContext = new Hashtable(
+				CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 
 			innerContext.Add("context", context);
 			innerContext.Add("request", context.Request);
