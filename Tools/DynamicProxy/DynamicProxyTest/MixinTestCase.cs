@@ -1,3 +1,4 @@
+using Castle.DynamicProxy.Test.ClassInterfaces;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -134,6 +135,34 @@ namespace Castle.DynamicProxy.Test
 			IFirst inter1 = proxy as IFirst;
 			Assert.IsNotNull(inter1);
 			inter1.DoFirst();
+
+			Assert.IsTrue( interceptor.Invoked );
+			Assert.AreSame( proxy, interceptor.proxy );
+			Assert.AreSame( mixin_instance, interceptor.mixin );
+		}
+
+		[Test]
+		public void MixinForInterfaces()
+		{
+			GeneratorContext context = new GeneratorContext();
+			SimpleMixin mixin_instance = new SimpleMixin();
+			context.AddMixinInstance( mixin_instance );
+
+			AssertInvocationInterceptor interceptor = new AssertInvocationInterceptor();
+
+			MyInterfaceImpl target = new MyInterfaceImpl();
+			
+			object proxy = m_generator.CreateCustomProxy( 
+				typeof(IMyInterface), interceptor, target, context );
+			
+			Assert.IsNotNull(proxy);
+			Assert.IsTrue( typeof(IMyInterface).IsAssignableFrom( proxy.GetType() ) );
+
+			Assert.IsFalse( interceptor.Invoked );
+
+			ISimpleMixin mixin = proxy as ISimpleMixin;
+			Assert.IsNotNull(mixin);
+			Assert.AreEqual(1, mixin.DoSomething());
 
 			Assert.IsTrue( interceptor.Invoked );
 			Assert.AreSame( proxy, interceptor.proxy );

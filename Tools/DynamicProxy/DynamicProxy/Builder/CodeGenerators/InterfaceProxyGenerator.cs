@@ -77,6 +77,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			ILGenerator ilGenerator = consBuilder.GetILGenerator();
 			
+			ilGenerator.DeclareLocal( typeof(object) );
+
 			// Calls the base constructor
 			ilGenerator.Emit(OpCodes.Ldarg_0);
 			ilGenerator.Emit(OpCodes.Call, ObtainAvailableConstructor(m_baseType));
@@ -103,8 +105,23 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 		}
 
+		protected Type[] Join(Type[] interfaces, Type[] mixinInterfaces)
+		{
+			Type[] union = new Type[ interfaces.Length + mixinInterfaces.Length ];
+			Array.Copy( interfaces, 0, union, 0, interfaces.Length );
+			Array.Copy( mixinInterfaces, 0, union, interfaces.Length, mixinInterfaces.Length );
+			return union;
+		}
+
 		public virtual Type GenerateCode(Type[] interfaces)
 		{
+			if (Context.HasMixins)
+			{
+				m_mixins = Context.MixinsAsArray();
+				Type[] mixinInterfaces = InspectAndRegisterInterfaces( m_mixins );
+				interfaces = Join(interfaces, mixinInterfaces);
+			}
+
 			interfaces = AddISerializable(interfaces);
 
 			Type cacheType = GetFromCache(typeof(Object), interfaces);

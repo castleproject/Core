@@ -65,7 +65,7 @@ namespace Castle.DynamicProxy
 			AssertCreateClassProxyArguments(baseClass, interceptor);
 
 			Type newType = ProxyBuilder.CreateClassProxy(baseClass);
-			return CreateProxyInstance( newType, interceptor );
+			return CreateClassProxyInstance( newType, interceptor );
 		}
 
 		public virtual object CreateCustomClassProxy(Type baseClass, 
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy
 			AssertCreateClassProxyArguments(baseClass, interceptor, context);
 
 			Type newType = ProxyBuilder.CreateCustomClassProxy(baseClass, context);
-			return CreateCustomProxyInstance( newType, interceptor, context );
+			return CreateCustomClassProxyInstance( newType, interceptor, context );
 		}
 
 		/// <summary>
@@ -112,10 +112,9 @@ namespace Castle.DynamicProxy
 		/// <param name="context"></param>
 		/// <returns></returns>
 		public virtual object CreateCustomProxy(Type theInterface, 
-			IInterceptor interceptor, 
-			GeneratorContext context )
+			IInterceptor interceptor, object target, GeneratorContext context )
 		{
-			return CreateCustomProxy( new Type[] { theInterface }, interceptor, context );
+			return CreateCustomProxy( new Type[] { theInterface }, interceptor, target, context );
 		}
 
 		/// <summary>
@@ -126,11 +125,11 @@ namespace Castle.DynamicProxy
 		/// <param name="context"></param>
 		/// <returns></returns>
 		public virtual object CreateCustomProxy(Type[] interfaces, 
-			IInterceptor interceptor, GeneratorContext context )
+			IInterceptor interceptor, object target, GeneratorContext context )
 		{
 			AssertCreateProxyArguments( interfaces, interceptor, context );
 			Type newType = ProxyBuilder.CreateCustomInterfaceProxy(interfaces, context);
-			return CreateProxyInstance( newType, interceptor, context );
+			return CreateCustomProxyInstance( newType, interceptor, target, context );
 		}
 
 		protected virtual object CreateProxyInstance(Type type, IInterceptor interceptor, object target)
@@ -138,21 +137,30 @@ namespace Castle.DynamicProxy
 			return Activator.CreateInstance(type, new object[] {interceptor, target});
 		}
 
-		protected virtual object CreateProxyInstance(Type type, IInterceptor interceptor)
+		protected virtual object CreateCustomProxyInstance(Type type, IInterceptor interceptor, object target, GeneratorContext context)
+		{
+			if (context.HasMixins)
+			{
+				return Activator.CreateInstance( type, new object[] { interceptor, target, context.MixinsAsArray() } );
+			}
+			return CreateProxyInstance( type, interceptor, target );
+		}
+
+		protected virtual object CreateClassProxyInstance(Type type, IInterceptor interceptor)
 		{
 			return Activator.CreateInstance(type, new object[] {interceptor});
 		}
 
-		protected virtual object CreateCustomProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context)
+		protected virtual object CreateCustomClassProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context)
 		{
 			if (context.HasMixins)
 			{
 				return Activator.CreateInstance( type, new object[] { interceptor, context.MixinsAsArray() } );
 			}
-			return CreateProxyInstance( type, interceptor );
+			return CreateClassProxyInstance( type, interceptor );
 		}
 
-		protected virtual object CreateCustomProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context, object target)
+		protected virtual object CreateCustomClassProxyInstance(Type type, IInterceptor interceptor, GeneratorContext context, object target)
 		{
 			return CreateProxyInstance( type, interceptor, target );
 		}
