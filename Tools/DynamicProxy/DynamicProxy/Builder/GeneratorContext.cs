@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Reflection;
 	using System.Collections;
 
 	/// <summary>
@@ -23,6 +24,7 @@ namespace Castle.DynamicProxy
 	public sealed class GeneratorContext : DictionaryBase
 	{
 		private IList m_skipInterfaces = new ArrayList();
+		private IList m_skipMethods = new ArrayList();
 		private ArrayList m_mixins = new ArrayList();
 
 		public GeneratorContext()
@@ -49,9 +51,19 @@ namespace Castle.DynamicProxy
 			return m_skipInterfaces.Contains(interfaceType);
 		}
 
+		public bool ShouldSkip(MethodInfo method)
+		{
+			return m_skipMethods.Contains(method);
+		}
+
 		public void AddInterfaceToSkip(Type interfaceType)
 		{
 			m_skipInterfaces.Add(interfaceType);
+		}
+
+		public void AddMethodToSkip(MethodInfo method)
+		{
+			m_skipMethods.Add(method);
 		}
 
 		public object this[String key]

@@ -171,6 +171,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			Type[] get_type_args = new Type[] {typeof (String), typeof (bool), typeof (bool)};
 			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
+			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
 
 			ArgumentReference arg1 = new ArgumentReference( typeof(SerializationInfo) );
 			ArgumentReference arg2 = new ArgumentReference( typeof(StreamingContext) );
@@ -189,8 +190,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				new VirtualMethodInvocationExpression( 
 				arg1, typeof (SerializationInfo).GetMethod("SetType"),
 				typeLocal.ToExpression() ) ) );
-
-			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
 
 			getObjectData.CodeBuilder.AddStatement( new ExpressionStatement(
 				new VirtualMethodInvocationExpression(arg1, addValueMethod, 
@@ -355,10 +354,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			foreach (Type inter in interfaces)
 			{
-				if (!Context.ShouldSkip(inter))
-				{
-					GenerateTypeImplementation(inter, false);
-				}
+				GenerateTypeImplementation(inter, false);
 			}
 		}
 
@@ -371,14 +367,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// type for implemented interfaces</param>
 		protected void GenerateTypeImplementation(Type type, bool ignoreInterfaces)
 		{
-			if (m_generated.Contains(type))
-			{
-				return;
-			}
-			else
-			{
-				m_generated.Add(type);
-			}
+			if (m_generated.Contains(type))	return;
+			if (Context.ShouldSkip(type)) return;
+
+			m_generated.Add(type);
 
 			if (!ignoreInterfaces)
 			{
@@ -442,6 +434,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// <param name="properties"></param>
 		protected void GenerateMethodImplementation(MethodInfo method, EasyProperty[] properties)
 		{
+			if (Context.ShouldSkip(method)) return;
+
 			ParameterInfo[] parameterInfo = method.GetParameters();
 
 			Type[] parameters = new Type[parameterInfo.Length];
@@ -553,7 +547,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// ordinary methods.
 		/// </summary>
 		/// <param name="builder"><see cref="EasyMethod"/> being constructed.</param>
-		protected virtual void WriteInterceptorInvocationMethod(MethodInfo method, EasyMethod builder /*, Type[] parameters*/)
+		protected virtual void WriteInterceptorInvocationMethod(MethodInfo method, EasyMethod builder)
 		{
 			ArgumentReference[] arguments = builder.Arguments;
 

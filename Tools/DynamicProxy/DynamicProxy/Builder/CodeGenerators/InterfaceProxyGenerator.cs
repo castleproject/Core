@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Runtime.Serialization;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,6 +104,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference arg1, ArgumentReference arg2)
 		{
+			Type[] key_and_object = new Type[] {typeof (String), typeof (Object)};
+			MethodInfo addValueMethod = typeof (SerializationInfo).GetMethod("AddValue", key_and_object);
+
+			codebuilder.AddStatement( new ExpressionStatement(
+				new VirtualMethodInvocationExpression(arg1, addValueMethod, 
+				new FixedReference("__target").ToExpression(), 
+				m_targetField.ToExpression() ) ) );
 		}
 
 		public virtual Type GenerateCode(Type[] interfaces)

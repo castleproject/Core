@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -86,27 +87,48 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected void GenerateSerializationConstructor( EasyConstructor defConstructor )
 		{
-			// TODO: Adjust to mixin constructors too
+			ConstructorInfo serializationConstructor = m_baseType.GetConstructor(
+				new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
 			ArgumentReference arg1 = new ArgumentReference( typeof(SerializationInfo) );
 			ArgumentReference arg2 = new ArgumentReference( typeof(StreamingContext) );
 
 			EasyConstructor constr = MainTypeBuilder.CreateConstructor( arg1, arg2 );
 
+			constr.CodeBuilder.AddStatement( new ExpressionStatement(
+				new ConstructorInvocationExpression( serializationConstructor, 
+				arg1.ToExpression(), arg2.ToExpression() )) );
+
 			Type[] object_arg = new Type[] { typeof (String), typeof(Type) };
 			MethodInfo getValueMethod = typeof (SerializationInfo).GetMethod("GetValue", object_arg);
 
-			VirtualMethodInvocationExpression getValueInvocation =
+			VirtualMethodInvocationExpression getInterceptorInvocation =
 				new VirtualMethodInvocationExpression(arg1, getValueMethod, 
 				new FixedReference("__interceptor").ToExpression(), 
 				new TypeTokenExpression( typeof(IInterceptor) ) );
 
-			constr.CodeBuilder.AddStatement( new ExpressionStatement(
-				new ConstructorInvocationExpression( defConstructor.Builder, 
-				new ConvertExpression( typeof(IInterceptor), getValueInvocation ) )) );
-			
-			
-			
+			VirtualMethodInvocationExpression getMixinsInvocation =
+				new VirtualMethodInvocationExpression(arg1, getValueMethod, 
+				new FixedReference("__mixins").ToExpression(), 
+				new TypeTokenExpression( typeof(object[]) ) );
+
+			constr.CodeBuilder.AddStatement( new AssignStatement(
+				InterceptorField, getInterceptorInvocation) );
+
+			constr.CodeBuilder.AddStatement( new AssignStatement(
+				CacheField, new NewInstanceExpression(
+				typeof(HybridDictionary).GetConstructor( new Type[0] )) ) );
+
+			constr.CodeBuilder.AddStatement( new AssignStatement(
+				MixinField,  
+				getMixinsInvocation) );
+
+			// Initialize the delegate fields
+			foreach(CallableField field in m_cachedFields)
+			{
+				field.WriteInitialization(constr.CodeBuilder, SelfReference.Self, MixinField);
+			}
+
 			constr.CodeBuilder.AddStatement( new ReturnStatement() );
 		}
 
@@ -168,6 +190,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			{
 				m_delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(baseClass);
 				interfaces = AddISerializable( interfaces );
+				Context.AddInterfaceToSkip( typeof(ISerializable) );
 			}
 
 			Type cacheType = GetFromCache(baseClass, interfaces);
@@ -188,7 +211,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ImplementCacheInvocationCache();
 			GenerateTypeImplementation( baseClass, true );
 			GenerateInterfaceImplementation(interfaces);
-			GenerateConstructor();
+			EasyConstructor defConstructor = GenerateConstructor();
+
+			if (m_delegateToBaseGetObjectData)
+			{
+				GenerateSerializationConstructor(defConstructor);
+			}
+
 			return CreateType();
 		}
 
@@ -209,6 +238,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			// If base type implements ISerializable, we have to make sure
 			// the GetObjectData is marked as virtual
+			
 			if (typeof(ISerializable).IsAssignableFrom(baseType))
 			{
 				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData", 
@@ -220,6 +250,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 						baseType.FullName);
 					throw new ProxyGenerationException(message);
 				}
+
+				Context.AddMethodToSkip(getObjectDataMethod);
 
 				ConstructorInfo serializationConstructor = baseType.GetConstructor(
 					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });

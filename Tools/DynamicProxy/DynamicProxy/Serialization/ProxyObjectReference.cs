@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Serialization
 		private IInterceptor m_interceptor;
 		private object[] m_mixins;
 		private object[] m_data;
-		private bool m_delegateBaseSer;
+		private object m_proxy;
 
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
 		{
@@ -38,24 +38,85 @@ namespace Castle.DynamicProxy.Serialization
 			m_interfaces = (Type[]) info.GetValue("__interfaces", typeof(Type[]) );
 			m_mixins = (object[]) info.GetValue("__mixins", typeof(object[]) );
 
-			m_delegateBaseSer = info.GetBoolean("__delegateToBase");
+			m_proxy = RecreateProxy(info, context);
+		}
 
-			if (!m_delegateBaseSer)
+		protected virtual object RecreateProxy(SerializationInfo info, StreamingContext context)
+		{
+			if (m_baseType == typeof(object))
 			{
-				m_data = (object[]) info.GetValue("__data", typeof(object[]) );
+				return RecreateInterfaceProxy(info, context);
+			}
+			else
+			{
+				return RecreateClassProxy(info, context);
 			}
 		}
 
-		public object GetRealObject(StreamingContext context)
+		public object RecreateInterfaceProxy(SerializationInfo info, StreamingContext context)
 		{
 			object proxy = null;
 
 			// TODO: ProxyGenerator.Current
 			ProxyGenerator generator = new ProxyGenerator();
 
-			if (m_delegateBaseSer)
+			object target = info.GetValue("__target", typeof(object));
+
+			if (m_mixins.Length == 0)
+			{
+				proxy = generator.CreateProxy( m_interfaces, m_interceptor, target);
+			}
+			else
+			{
+				GeneratorContext genContext = new GeneratorContext();
+				
+				foreach(object mixin in m_mixins)
+				{
+					genContext.AddMixinInstance(mixin);
+				}
+				
+				proxy = generator.CreateCustomProxy( m_interfaces, m_interceptor, target, genContext );
+			}
+
+			return proxy;
+		}
+
+		public object RecreateClassProxy(SerializationInfo info, StreamingContext context)
+		{
+			bool delegateBaseSer = info.GetBoolean("__delegateToBase");
+
+			if (!delegateBaseSer)
+			{
+				m_data = (object[]) info.GetValue("__data", typeof(object[]) );
+			}
+
+			object proxy = null;
+
+			// TODO: ProxyGenerator.Current
+			ProxyGenerator generator = new ProxyGenerator();
+
+			if (delegateBaseSer)
 			{
 				// TODO: Invoke Serialization constructor
+				
+				if (m_mixins.Length == 0)
+				{
+					Type proxy_type = generator.ProxyBuilder.CreateClassProxy( m_baseType );
+					proxy = Activator.CreateInstance( proxy_type, new object[] { info, context } );
+				} 
+				else
+				{
+					GeneratorContext genContext = new GeneratorContext();
+					
+					foreach(object mixin in m_mixins)
+					{
+						genContext.AddMixinInstance(mixin);
+					}
+					
+					Type proxy_type = generator.ProxyBuilder.CreateCustomClassProxy( 
+						m_baseType, genContext );
+					proxy = Activator.CreateInstance( proxy_type, new object[] { info, context } );
+				}
 			}
 			else
 			{
@@ -79,8 +140,12 @@ namespace Castle.DynamicProxy.Serialization
 				FormatterServices.PopulateObjectMembers(proxy, members, m_data);
 			}
 
-
 			return proxy;
+		}
+
+		public object GetRealObject(StreamingContext context)
+		{
+			return m_proxy;
 		}
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
