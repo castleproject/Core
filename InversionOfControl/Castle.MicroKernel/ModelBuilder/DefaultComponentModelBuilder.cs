@@ -33,11 +33,17 @@ namespace Castle.MicroKernel.ModelBuilder
 			_kernel = kernel;
 			_contributors = new ArrayList();
 
+			InitializeContributors();
+		}
+
+		protected virtual void InitializeContributors()
+		{
+			AddContributor( ConfigurationModelInspector.Instance );
 			AddContributor( LifestyleModelInspector.Instance );
 			AddContributor( ConstructorDependenciesModelInspector.Instance );
 			AddContributor( PropertiesDependenciesModelInspector.Instance );
 			AddContributor( LifecycleModelInspector.Instance );
-			AddContributor( ConfigurationModelInspector.Instance );
+			AddContributor( ConfigurationParametersResolver.Instance );
 		}
 
 		public ComponentModel BuildModel(String key, Type service, 

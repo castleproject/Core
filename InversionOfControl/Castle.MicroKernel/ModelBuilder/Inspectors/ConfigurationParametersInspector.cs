@@ -16,28 +16,28 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
 
+	using Castle.Model;
 	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// Uses the ConfigurationStore registered in the kernel to obtain
-	/// an <see cref="IConfiguration"/> associated with the component.
+	/// Summary description for ConfigurationParametersInspector.
 	/// </summary>
-	public class ConfigurationModelInspector : IContributeComponentModelConstruction
+	public class ConfigurationParametersInspector : IContributeComponentModelConstruction
 	{
 		/// <summary>
 		/// We don't need to have multiple instances
 		/// </summary>
-		private static readonly ConfigurationModelInspector instance = new ConfigurationModelInspector();
+		private static readonly ConfigurationParametersInspector instance = new ConfigurationParametersInspector();
 
 		/// <summary>
 		/// Singleton instance
 		/// </summary>
-		public static ConfigurationModelInspector Instance
+		public static ConfigurationParametersInspector Instance
 		{
 			get { return instance; }
 		}
 		
-		protected ConfigurationModelInspector()
+		protected ConfigurationParametersInspector()
 		{
 		}
 
@@ -47,10 +47,18 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		/// </summary>
 		/// <param name="kernel"></param>
 		/// <param name="model"></param>
-		public virtual void ProcessModel(IKernel kernel, Castle.Model.ComponentModel model)
+		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-			model.Configuration = 
-				kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
+			if (model.Configuration == null) return;
+
+			IConfiguration parameters = model.Configuration.Children["parameters"];
+
+			if (parameters == null) return;
+
+			foreach(IConfiguration parameter in parameters.Children)
+			{
+				model.Parameters.Add( parameter.Name, parameter.Value );
+			}
 		}
 	}
 }

@@ -20,24 +20,37 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for PropertiesDependenciesModelInspection.
+	/// This implementation of <see cref="IContributeComponentModelConstruction"/>
+	/// collects all potential writable puplic properties exposed by the component 
+	/// implementation and populates the model with them.
+	/// The Kernel might be able to set some of these properties when the component 
+	/// is requested.
 	/// </summary>
 	public class PropertiesDependenciesModelInspector : IContributeComponentModelConstruction
 	{
+		/// <summary>
+		/// We don't need to have multiple instances
+		/// </summary>
 		private static readonly PropertiesDependenciesModelInspector instance = new PropertiesDependenciesModelInspector();
 
+		/// <summary>
+		/// Singleton instance
+		/// </summary>
 		public static PropertiesDependenciesModelInspector Instance
 		{
 			get { return instance; }
 		}
 
-		public PropertiesDependenciesModelInspector()
+		protected PropertiesDependenciesModelInspector()
 		{
 		}
 
-		#region IContributeComponentModelConstruction Members
-
-		public void ProcessModel(IKernel kernel, ComponentModel model)
+		/// <summary>
+		/// Adds the properties as optional dependencies of this component.
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="model"></param>
+		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			Type targetType = model.Implementation;
 
@@ -51,24 +64,28 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 					continue;
 				}
 
+				DependencyModel dependency = null;
+
 				Type propertyType = property.PropertyType;
 
-				// Values types can be valid in some
-				// contexts, but we'd better wait for the real need
-				// before allowing them
-				if (propertyType.IsPrimitive)
+				// All these dependencies are simple guesses
+				// So we make them optional (the 'true' parameter below)
+
+				if (propertyType.IsPrimitive || propertyType == typeof(String) || propertyType == typeof(Type))
+				{
+					dependency = new DependencyModel(DependencyType.Parameter, property.Name, propertyType, true);
+				}
+				else if (propertyType.IsInterface || propertyType.IsClass)
+				{
+					dependency = new DependencyModel(DependencyType.Service, property.Name, propertyType, true);
+				}
+				else
 				{
 					continue;
 				}
 
-				// All properties dependencies are simple
-				// guesses. So we make them optional
-
-				DependencyModel dependency = new DependencyModel(DependencyType.Service, property.Name, propertyType, true);
 				model.Properties.Add( new PropertySet(property, dependency) );
 			}
 		}
-
-		#endregion
 	}
 }

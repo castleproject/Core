@@ -21,23 +21,34 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using Castle.MicroKernel.LifecycleConcerns;
 
 	/// <summary>
-	/// Summary description for LifecycleModelInspector.
+	/// Inspects the type looking for interfaces that constitutes
+	/// lifecycle interfaces, defined in the Castle.Model namespace.
 	/// </summary>
 	public class LifecycleModelInspector : IContributeComponentModelConstruction
 	{
+		/// <summary>
+		/// We don't need to have multiple instances
+		/// </summary>
 		private static readonly LifecycleModelInspector instance = new LifecycleModelInspector();
 
+		/// <summary>
+		/// Singleton instance
+		/// </summary>
 		public static LifecycleModelInspector Instance
 		{
 			get { return instance; }
 		}
 
-		public LifecycleModelInspector()
+		protected LifecycleModelInspector()
 		{
 		}
 
-		#region IContributeComponentModelConstruction Members
-
+		/// <summary>
+		/// Checks if the type implements <see cref="IInitialize"/> and or
+		/// <see cref="IDisposable"/> interfaces.
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="model"></param>
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (typeof (IInitialize).IsAssignableFrom(model.Implementation))
@@ -49,7 +60,5 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				model.LifecycleSteps.Add( LifecycleStepType.Decommission, DisposalConcern.Instance );
 			}
 		}
-
-		#endregion
 	}
 }

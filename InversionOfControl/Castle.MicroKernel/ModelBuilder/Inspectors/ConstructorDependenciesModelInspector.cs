@@ -20,20 +20,31 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for ConstructorDependenciesModelInspection.
+	/// This implementation of <see cref="IContributeComponentModelConstruction"/>
+	/// collects all available constructors and populates them in the model
+	/// as candidates. The Kernel will pick up one of the candidates
+	/// according to a heuristic.
 	/// </summary>
 	public class ConstructorDependenciesModelInspector : IContributeComponentModelConstruction
 	{
+		/// <summary>
+		/// We don't need to have multiple instances
+		/// </summary>
 		private static readonly ConstructorDependenciesModelInspector instance = new ConstructorDependenciesModelInspector();
 
+		/// <summary>
+		/// Singleton instance
+		/// </summary>
 		public static ConstructorDependenciesModelInspector Instance
 		{
 			get { return instance; }
 		}
 
-		#region IContributeComponentModelConstruction Members
+		protected ConstructorDependenciesModelInspector()
+		{
+		}
 
-		public void ProcessModel(IKernel kernel, ComponentModel model)
+		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			Type targetType = model.Implementation;
 
@@ -49,8 +60,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				model.Constructors.Add( CreateConstructorCandidate(constructor) );
 			}
 		}
-
-		#endregion
 
 		protected virtual ConstructorCandidate CreateConstructorCandidate( ConstructorInfo constructor )
 		{

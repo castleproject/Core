@@ -15,24 +15,86 @@
 namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
+	using System.Configuration;
 
 	using Castle.Model;
-
+	
 	/// <summary>
-	/// Summary description for LifestyleModelInspector.
+	/// Inspects the component configuration and the type looking for a
+	/// definition of lifestyle type. The configuration preceeds whatever
+	/// is defined in the component.
 	/// </summary>
+	/// <remarks>
+	/// This inspector is not guarantee to always set up an lifestyle type. 
+	/// If nothing could be found it wont touch the model. In this case is up to
+	/// the kernel to estabish a default lifestyle for components.
+	/// </remarks>
 	public class LifestyleModelInspector : IContributeComponentModelConstruction
 	{
+		/// <summary>
+		/// We don't need to have multiple instances
+		/// </summary>
 		private static readonly LifestyleModelInspector instance = new LifestyleModelInspector();
 
+		/// <summary>
+		/// Singleton instance
+		/// </summary>
 		public static LifestyleModelInspector Instance
 		{
 			get { return instance; }
 		}
 
-		#region IContributeComponentModelConstruction Members
+		protected LifestyleModelInspector()
+		{
+		}
 
-		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+		/// <summary>
+		/// Reads the attribute "lifestyle" associated with the 
+		/// component configuration and tries to convert to <see cref="LifestyleType"/> 
+		/// enum type. 
+		/// </summary>
+		/// <exception cref="System.Configuration.ConfigurationException">
+		/// If the conversion fails
+		/// </exception>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		protected virtual bool ReadLifestyleFromConfiguration(ComponentModel model)
+		{
+			if (model.Configuration != null)
+			{
+				String lifestyle = model.Configuration.Attributes["lifestyle"];
+				
+				if (lifestyle != null)
+				{
+					try
+					{
+						LifestyleType type = (LifestyleType) 
+							Enum.Parse(typeof(LifestyleType), lifestyle, true);
+
+						model.LifestyleType = type;
+					}
+					catch(Exception ex)
+					{
+						String message = String.Format(
+							"Could not convert the specified attribute value " + 
+							"{0} to a valid LifestyleType enum type", lifestyle);
+						
+						throw new ConfigurationException(message, ex);
+					}
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Check if the type expose one of the lifestyle attributes
+		/// defined in Castle.Model namespace.
+		/// </summary>
+		/// <param name="model"></param>
+		protected virtual void ReadLifestyleFromType(ComponentModel model)
 		{
 			object[] attributes = model.Implementation.GetCustomAttributes( 
 				typeof(LifestyleAttribute), true );
@@ -53,6 +115,18 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Seaches for the lifestyle in the configuration and, if unsuccessful
+		/// look for the lifestyle attribute in the implementation type.
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="model"></param>
+		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+		{
+			if (!ReadLifestyleFromConfiguration(model))
+			{
+				ReadLifestyleFromType(model);
+			}
+		}
 	}
 }
