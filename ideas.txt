@@ -1,0 +1,73 @@
+<component 
+    manageable="true" 
+    id="customerservices" 
+    service="ICustomerServices" 
+    impl="CustomerServicesImpl" >
+
+  <DependeciesOverride>
+    <Dependency type="Castle.Sample.MailService" value="jamesmailsender" />
+  </DependeciesOverride>
+
+  <Properties>
+
+    <!-- Hardcoded value/Parameter -->
+    <timeout>330</timeout>
+
+    <!-- Reference to another service -->
+    <TemplateEngine>{velocitytemplateengine}</TemplateEngine>
+
+  </Properties>
+
+  <aspects>
+    <![CDATA[
+        import AspectSharp.Tests.Classes in AspectSharp.Tests 
+        
+        interceptors [ "key" : DummyInterceptor ] 
+        mixins [ "key" : DummyMixin  ] 
+
+        aspect McBrother for DummyCustomer  
+            include "key" 
+
+            pointcut method(*) 
+                advice("key") 
+            end 
+        end 
+    ]]>
+  </aspects>
+
+  <transactions>
+    <method includes="Save*,Remove*" transactionMode="required" />
+  </transactions>
+
+  <remotecomponent>
+    <uri></uri>
+  </remotecomponent>
+
+  <webserviceproxy>
+    <uri></uri>
+  </webserviceproxy>
+
+<component>
+
+
+[Manageable]
+component myComponet for MyImplementation [ MyService ]
+  
+end
+
+[PrevalenceSystem]
+component myComponet for MyImplementation [ MyService ]
+  
+end
+
+component myComponet for MyImplementation [ MyService ]
+  ignore 
+end
+
+
+
+
+
+
+
+
