@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Generator
 
 	using Castle.Windsor;
 
+	using Castle.ActiveRecord.Generator.Components;
 	using Castle.ActiveRecord.Generator.Components.Database;
 
 
@@ -27,8 +28,12 @@ namespace Castle.ActiveRecord.Generator
 
 		public ServiceRegistry() : base()
 		{
+			// TODO: Put these on the configuration file
+
 			AddComponent("conn.factory", typeof(IConnectionFactory), typeof(ConnectionFactory));
 			AddComponent("db.def.builder", typeof(IDatabaseDefinitionBuilder), typeof(DatabaseDefinitionBuilder));
+			AddComponent("naming.service", typeof(INamingService), typeof(NamingService));
+			AddComponent("typeinfer.service", typeof(ITypeInferenceService), typeof(TypeInferenceService) );
 		}
 
 		public static ServiceRegistry Instance

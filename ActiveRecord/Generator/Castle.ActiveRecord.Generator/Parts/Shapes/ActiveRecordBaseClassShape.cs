@@ -1,5 +1,3 @@
-using System.Windows.Forms;
-using Netron.GraphLib.UI;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +20,10 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Reflection;
+	using System.Windows.Forms;
+
 	using Netron.GraphLib;
+	using Netron.GraphLib.UI;
 	using Netron.GraphLib.Interfaces;
 	using Netron.GraphLib.Attributes;
 
@@ -50,22 +51,19 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 			Init(true);
 		}
 
-
-
-		public override MenuItem[] ShapeMenu()
-		{
-			MenuItem[] subitems = new MenuItem[]{new MenuItem("First one",new EventHandler(TheHandler)),new MenuItem("Second one",new EventHandler(TheHandler))};
-
-			MenuItem[] items = new MenuItem[]{new MenuItem("Special menu",subitems)};
-
-			return items;
-		}
-
-		private void TheHandler(object sender, EventArgs e)
-		{
-			MessageBox.Show("Just an example.");
-		}
-
+//		public override MenuItem[] ShapeMenu()
+//		{
+//			MenuItem[] subitems = new MenuItem[]{new MenuItem("First one",new EventHandler(TheHandler)),new MenuItem("Second one",new EventHandler(TheHandler))};
+//
+//			MenuItem[] items = new MenuItem[]{new MenuItem("Special menu",subitems)};
+//
+//			return items;
+//		}
+//
+//		private void TheHandler(object sender, EventArgs e)
+//		{
+//			MessageBox.Show("Just an example.");
+//		}
 
 		public string Name
 		{
@@ -75,8 +73,8 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 
 		private void Init(bool resizable)
 		{
-
 			Rectangle = new RectangleF(0, 0, 70, 50);
+			this.NodeColor = System.Drawing.SystemColors.Window;
 
 			TopNode = new Connector(this, "Top", true);
 			TopNode.ConnectorLocation = ConnectorLocations.North;
@@ -127,7 +125,7 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 			if (recalculateSize)
 			{
 				SizeF size1 = g.MeasureString(Name + "\"\"", mFont);
-				SizeF size3 = g.MeasureString("aaa", mFont);
+				SizeF size3 = g.MeasureString("[not mapped]", mFont);
 
 				_lineHeight = size1.Height;
 
@@ -152,7 +150,7 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 				g.DrawString(Name, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
 				//				g.DrawString(mText, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
 				//				g.DrawString(Table, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight*2) + 6, sf);
-				g.DrawString("aaa", mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight) + 6, sf);
+				g.DrawString("[not mapped]", mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight) + 6, sf);
 			}
 		}
 
@@ -180,7 +178,5 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		{
 			base.InitEntity();
 		}
-
-
 	}
 }

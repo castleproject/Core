@@ -1,3 +1,6 @@
+using Castle.ActiveRecord.Generator.Dialogs;
+using Castle.ActiveRecord.Generator.Dialogs.Wizards;
+
 namespace Castle.ActiveRecord.Generator.Parts
 {
 	using System;
@@ -7,6 +10,9 @@ namespace Castle.ActiveRecord.Generator.Parts
 	using System.Windows.Forms;
 	using Netron.GraphLib;
 	using WeifenLuo.WinFormsUI;
+
+	using Castle.ActiveRecord.Generator.Parts.Shapes;
+
 
 	/// <summary>
 	/// Summary description for ActiveRecordGraphView
@@ -18,6 +24,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+
+		private Model _model;
 
 		public ActiveRecordGraphView()
 		{
@@ -89,6 +97,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 		public ActiveRecordGraphView(Model model) : this()
 		{
+			_model = model;
 		}
 
 		/// <summary>
@@ -120,7 +129,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			this.graphControl1.AllowAddConnection = true;
 			this.graphControl1.AllowAddShape = true;
-			this.graphControl1.AllowDeleteShape = true;
+			this.graphControl1.AllowDeleteShape = false;
 			this.graphControl1.AllowDrop = true;
 			this.graphControl1.AllowMoveShape = true;
 			this.graphControl1.AutomataPulse = 10;
@@ -149,6 +158,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.graphControl1.Text = "graphControl1";
 			this.graphControl1.Zoom = 1F;
 			this.graphControl1.OnShapeAdded += new Netron.GraphLib.NewShape(this.graphControl1_OnShapeAdded);
+			this.graphControl1.OnClear += new System.EventHandler(this.graphControl1_OnClear);
 			this.graphControl1.OnShapeRemoved += new Netron.GraphLib.NewShape(this.graphControl1_OnShapeRemoved);
 			this.graphControl1.OnContextMenu += new System.Windows.Forms.MouseEventHandler(this.graphControl1_OnContextMenu);
 			this.graphControl1.ShowNodeProperties += new Netron.GraphLib.ShowPropsDelegate(this.graphControl1_ShowNodeProperties);
@@ -187,16 +197,39 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 		private void graphControl1_OnShapeAdded(object sender, Netron.GraphLib.Shape shape)
 		{
+			if (shape is ActiveRecordShape)
+			{
+				using(NewARClassWizard wizard = new NewARClassWizard(_model))
+				{
+					if (wizard.ShowDialog(this) != DialogResult.OK)
+					{
+						graphControl1.Nodes.Remove(shape);
+					}
+				}
+			}
 		}
 
 		private void graphControl1_OnShapeRemoved(object sender, Netron.GraphLib.Shape shape)
 		{
-		
+			// TODO: Do not allow the removal of ARBase
 		}
 
 		private void graphControl1_ShowNodeProperties(object sender, Netron.GraphLib.PropertyBag props)
 		{
-		
+			if (props.Owner is ActiveRecordBaseClassShape)
+			{
+				ActiveRecordBasePropertiesDialog d = new ActiveRecordBasePropertiesDialog();
+				d.ShowDialog(this);
+			}
+			else if (props.Owner is ActiveRecordShape)
+			{
+				ActiveRecordPropertiesDialog d = new ActiveRecordPropertiesDialog();
+				d.ShowDialog(this);
+			}
+		}
+
+		private void graphControl1_OnClear(object sender, System.EventArgs e)
+		{
 		}
 	}
 }

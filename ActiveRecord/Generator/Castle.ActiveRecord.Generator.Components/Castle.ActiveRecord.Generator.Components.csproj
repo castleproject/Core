@@ -89,7 +89,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "INamingService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ITypeInferenceService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NamingService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Project.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeInferenceService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -145,6 +165,11 @@
                 />
                 <File
                     RelPath = "Database\TableDefinitionCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Utils\Pair.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

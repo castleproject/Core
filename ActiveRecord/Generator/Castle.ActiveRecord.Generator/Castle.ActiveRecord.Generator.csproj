@@ -224,6 +224,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dialogs\ActiveRecordBasePropertiesDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\ActiveRecordBasePropertiesDialog.resx"
+                    DependentUpon = "ActiveRecordBasePropertiesDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\ActiveRecordPropertiesDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\ActiveRecordPropertiesDialog.resx"
+                    DependentUpon = "ActiveRecordPropertiesDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Dialogs\DatabaseConnectionDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -231,6 +251,81 @@
                 <File
                     RelPath = "Dialogs\DatabaseConnectionDialog.resx"
                     DependentUpon = "DatabaseConnectionDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\AbstractControlPage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\AbstractControlPage.resx"
+                    DependentUpon = "AbstractControlPage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\IWizardPage.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\MappingPage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\MappingPage.resx"
+                    DependentUpon = "MappingPage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\NewARClassWizard.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\NewARClassWizard.resx"
+                    DependentUpon = "NewARClassWizard.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\RelationsPage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\RelationsPage.resx"
+                    DependentUpon = "RelationsPage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\TableSelectionPage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\TableSelectionPage.resx"
+                    DependentUpon = "TableSelectionPage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\WelcomePage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\WelcomePage.resx"
+                    DependentUpon = "WelcomePage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\WizardBaseDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\Wizards\WizardBaseDialog.resx"
+                    DependentUpon = "WizardBaseDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
