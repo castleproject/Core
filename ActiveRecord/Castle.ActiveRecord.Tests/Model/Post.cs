@@ -16,7 +16,6 @@ namespace Castle.ActiveRecord.Tests
 {
 	using System;
 
-
 	[ActiveRecord("Posts")]
 	public class Post : ActiveRecordBase
 	{
@@ -24,6 +23,8 @@ namespace Castle.ActiveRecord.Tests
 		private String _title;
 		private String _contents;
 		private String _category;
+		private DateTime _created;
+		private bool _published;
 		private Blog _blog;
 
 		public Post()
@@ -72,6 +73,20 @@ namespace Castle.ActiveRecord.Tests
 		{
 			get { return _blog; }
 			set { _blog = value; }
+		}
+
+		[PropertyAttribute("post_created")]
+		public DateTime Created
+		{
+			get { return _created; }
+			set { _created = value; }
+		}
+
+		[PropertyAttribute("post_published")]
+		public bool Published
+		{
+			get { return _published; }
+			set { _published = value; }
 		}
 
 		public static void DeleteAll()

@@ -75,6 +75,42 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsNotNull(blog);
 			Assert.AreEqual(2, blog.Posts.Count);
+
+			foreach(Post post in blog.Posts)
+			{
+				Assert.AreEqual( blog.Id, post.Blog.Id );
+			}
+		}
+
+		[Test]
+		public void RelationsOneToManyWithWhereAndOrder()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			Post post1 = new Post(blog, "title1", "contents", "category1");
+			Post post2 = new Post(blog, "title2", "contents", "category2");
+			Post post3 = new Post(blog, "title3", "contents", "category3");
+
+			post1.Save();
+			System.Threading.Thread.Sleep(1000); // Its a smalldatetime (small precision)
+			post2.Save();
+			System.Threading.Thread.Sleep(1000); // Its a smalldatetime (small precision)
+			post3.Published = true;
+			post3.Save();
+
+			blog = Blog.Find(blog.Id);
+
+			Assert.IsNotNull(blog);
+			Assert.AreEqual(2, blog.UnPublishedPosts.Count);
+			Assert.AreEqual(1, blog.PublishedPosts.Count);
 		}
 	}
 }

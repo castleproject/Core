@@ -25,6 +25,9 @@ namespace Castle.ActiveRecord.Tests
 		private String _name;
 		private String _author;
 		private IList _posts;
+		private IList _publishedposts;
+		private IList _unpublishedposts;
+		private IList _recentposts;
 
 		[PrimaryKey(PrimaryKeyType.Native, "blog_id")]
 		public int Id
@@ -52,6 +55,27 @@ namespace Castle.ActiveRecord.Tests
 		{
 			get { return _posts; }
 			set { _posts = value; }
+		}
+
+		[HasManyAttribute(typeof(Post), Key="PublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 1")]
+		public IList PublishedPosts
+		{
+			get { return _publishedposts; }
+			set { _publishedposts = value; }
+		}
+
+		[HasManyAttribute(typeof(Post), Key="UnPublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 0")]
+		public IList UnPublishedPosts
+		{
+			get { return _unpublishedposts; }
+			set { _unpublishedposts = value; }
+		}
+
+		[HasManyAttribute(typeof(Post), Key="RecentPosts", Table="Posts", Column="post_blogid", OrderBy="post_created desc")]
+		public IList RecentPosts
+		{
+			get { return _recentposts; }
+			set { _recentposts = value; }
 		}
 
 		public static void DeleteAll()
