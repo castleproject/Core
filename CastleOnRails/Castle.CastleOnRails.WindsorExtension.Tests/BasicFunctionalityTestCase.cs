@@ -1,4 +1,3 @@
-using System.IO;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +15,13 @@ using System.IO;
 namespace Castle.CastleOnRails.WindsorExtension.Tests
 {
 	using System;
+	using System.IO;
 	using System.Net;
 
 	using NUnit.Framework;
 
 	using Castle.CastleOnRails.Engine.Tests;
 
-	/// <summary>
-	/// Summary description for BasicFunctionalityTestCase.
-	/// </summary>
 	[TestFixture]
 	public class BasicFunctionalityTestCase : AbstractCassiniTestCase
 	{
@@ -44,7 +41,6 @@ namespace Castle.CastleOnRails.WindsorExtension.Tests
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
 			AssertContents("My View contents for Home\\Index", response);
 		}
-
 
 		[Test]
 		public void Filter()

@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
+        ProjectGuid = "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                AssemblyName = "Castle.CastleOnRails.Framework.Views.NVelocity.Tests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                RootNamespace = "Castle.CastleOnRails.Framework.Views.NVelocity.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
-                    OutputPath = "bin\Release\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -80,14 +80,10 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "NVelocity.Http"
-                    AssemblyName = "NVelocity.Http"
-                    HintPath = "..\lib\NVelocity.Http.dll"
-                />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\lib\Commons.dll"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
                     Name = "log4net"
@@ -100,8 +96,23 @@
                     HintPath = "..\lib\NVelocity.dll"
                 />
                 <Reference
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\lib\Commons.dll"
+                />
+                <Reference
                     Name = "Castle.CastleOnRails.Framework"
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Engine"
+                    Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                    Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
@@ -114,9 +125,56 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NVelocityViewEngine.cs"
+                    RelPath = "FakeControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewEngineTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\LayoutController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\home\bag.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\home\display.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layout\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layout\save.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layout\update.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\general.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\printable.vm"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

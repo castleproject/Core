@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Windso
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Framework.Views.NVelocity.Tests", "Castle.CastleOnRails.Framework.Views.NVelocity.Tests\Castle.CastleOnRails.Framework.Views.NVelocity.Tests.csproj", "{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -85,6 +89,10 @@ Global
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug.Build.0 = Debug|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.ActiveCfg = Release|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.Build.0 = Release|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.ActiveCfg = Debug|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Debug.Build.0 = Debug|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.ActiveCfg = Release|.NET
+		{7FB1D2DC-5CA8-410C-9B9A-3DE517B3BE3A}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

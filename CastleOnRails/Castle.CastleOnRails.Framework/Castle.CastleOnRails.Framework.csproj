@@ -224,6 +224,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\Test\RailsEngineContextImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Views\Aspx\AspNetViewEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

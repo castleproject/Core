@@ -12,32 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests.Controllers
 {
 	using System;
 
-	public interface IResponse
+	[Layout("general")]
+	public class LayoutController : Controller
 	{
-		void AppendHeader(String name, String value);
+		public void Index()
+		{
+		}
 
-		System.IO.TextWriter Output { get; }
-		
-		System.IO.Stream OutputStream { get; }
-
-		void Write(String s);
-
-		void Write(object obj);
-
-		void Write(char ch);
-
-		void Write(char[] buffer, int index, int count);
-
-		void Redirect(String url);
-
-		void Redirect(String url, bool endProcess);
-
-		int StatusCode { get; set; }
-
-		String ContentType { get; set; }
+		public void Save()
+		{
+			LayoutName = "printable";
+		}
+	
+		public void Update()
+		{
+		}
 	}
 }

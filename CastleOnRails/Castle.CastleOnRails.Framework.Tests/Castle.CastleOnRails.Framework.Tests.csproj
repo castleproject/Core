@@ -145,11 +145,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RailsEngineContextImpl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "RailsUrlTokenizerTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

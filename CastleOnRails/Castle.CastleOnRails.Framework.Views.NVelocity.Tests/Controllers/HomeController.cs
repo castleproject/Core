@@ -12,32 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests.Controllers
 {
 	using System;
 
-	public interface IResponse
+	public class HomeController : Controller
 	{
-		void AppendHeader(String name, String value);
+		public HomeController()
+		{
+		}
 
-		System.IO.TextWriter Output { get; }
-		
-		System.IO.Stream OutputStream { get; }
+		public void Index()
+		{
+		}
 
-		void Write(String s);
+		public void Other()
+		{
+			RenderView("display");
+		}
 
-		void Write(object obj);
-
-		void Write(char ch);
-
-		void Write(char[] buffer, int index, int count);
-
-		void Redirect(String url);
-
-		void Redirect(String url, bool endProcess);
-
-		int StatusCode { get; set; }
-
-		String ContentType { get; set; }
+		public void Bag()
+		{
+			PropertyBag["name"] = "hammett";
+			PropertyBag["list"] = new String[] { "a", "b", "c" };
+		}
 	}
 }

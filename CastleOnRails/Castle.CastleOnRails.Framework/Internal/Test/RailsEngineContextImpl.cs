@@ -1,5 +1,3 @@
-using System.IO;
-using System.Text;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +15,8 @@ using System.Text;
 namespace Castle.CastleOnRails.Framework.Tests
 {
 	using System;
+	using System.IO;
+	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Security.Principal;
@@ -32,6 +32,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 		private RequestImpl _request = new RequestImpl();
 		private ResponseImpl _response = new ResponseImpl();
 		private Exception _lastException;
+		private Hashtable _session = new Hashtable();
 
 		public RailsEngineContextImpl(String url) : this(url, "GET")
 		{
@@ -83,7 +84,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 		public IDictionary Session
 		{
-			get { throw new NotImplementedException(); }
+			get { return _session; }
 		}
 
 		public IRequest Request
@@ -167,8 +168,11 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 	public class ResponseImpl : IResponse
 	{
-		internal StringBuilder _contents = new StringBuilder();
+		private String _contentType;
+		private int _statusCode;
 		private StringWriter _writer;
+		
+		internal StringBuilder _contents = new StringBuilder();
 
 		public ResponseImpl()
 		{
@@ -177,14 +181,14 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 		public int StatusCode
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			get { return _statusCode; }
+			set { _statusCode = value; }
 		}
 
 		public String ContentType
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			get { return _contentType; }
+			set { _contentType = value; }
 		}
 
 		public void AppendHeader(String name, String value)

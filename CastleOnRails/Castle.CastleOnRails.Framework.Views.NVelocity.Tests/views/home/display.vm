@@ -1,0 +1,7 @@
+#*
+    Comments!
+*###
+#set( $condition = true)
+#if ($condition)
+Castle on rails is great!
+#end

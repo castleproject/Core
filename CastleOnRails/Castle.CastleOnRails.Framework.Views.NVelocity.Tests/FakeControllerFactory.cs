@@ -12,22 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Internal
+namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 {
 	using System;
 
-	/// <summary>
-	/// Standard implementation of <see cref="IFilterFactory"/>.
-	/// </summary>
-	public class DefaultFilterFactory : IFilterFactory
+	using Castle.CastleOnRails.Engine;
+
+	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.CastleOnRails.Framework.Views.NVelocity.Tests.Controllers;
+
+	public class FakeControllerFactory : IControllerFactory
 	{
-		public virtual IFilter Create(Type filterType)
+		public FakeControllerFactory()
 		{
-			return (IFilter) Activator.CreateInstance(filterType);
 		}
 
-		public virtual void Release(IFilter filter)
+		public Controller GetController(UrlInfo info)
 		{
+			if ("home".Equals(info.Controller))
+			{
+				return new HomeController();
+			}
+			else if ("layout".Equals(info.Controller))
+			{
+				return new LayoutController();
+			}
+
+			throw new RailsException("Unknown controller");
+		}
+
+		public void Release(Controller controller)
+		{
+
 		}
 	}
 }

@@ -16,6 +16,7 @@ namespace Castle.CastleOnRails.Engine
 {
 	using System;
 	using System.Web;
+	using System.Web.SessionState;
 
 	using Castle.CastleOnRails.Engine.Adapters;
 
@@ -27,7 +28,7 @@ namespace Castle.CastleOnRails.Engine
 	/// <see cref="IHttpHandler"/> to dispatch the web
 	/// requests. 
 	/// </summary>
-	public class RailsHttpHandler : ProcessEngine, IHttpHandler
+	public class RailsHttpHandler : ProcessEngine, IHttpHandler, IRequiresSessionState
 	{
 		private String _url;
 
