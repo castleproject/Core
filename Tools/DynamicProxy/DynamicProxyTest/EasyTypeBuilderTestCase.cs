@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Test
 				process.StartInfo.Arguments = ModuleScope.FILE_NAME;
 				// Hack. Should it find in the path? 
 				// I thought it would.
-				process.StartInfo.FileName = @"C:\dev\dotnet\VSNet2003\SDK\v1.1\Bin\PEVerify.exe";
+				process.StartInfo.FileName = @"C:\Arquivos de programas\Microsoft Visual Studio .NET 2003\SDK\v1.1\Bin\PEVerify.exe";
 				process.Start();
 				process.WaitForExit( Int32.MaxValue );
 				if (process.ExitCode != 0)
@@ -493,6 +493,41 @@ namespace Castle.DynamicProxy.Test
 			{
 				return "hello2";
 			}
+		}
+
+		[Test]
+		public void EmptyMethodWithRefArg()
+		{
+			EasyType typebuilder = new EasyType( module, "mytype" );
+
+			object refArgInst = 0;
+			Type refType = GetRefType(ref refArgInst);
+
+			Assert.IsTrue(refType.IsByRef);
+
+			ArgumentReference refArg = new ArgumentReference( refType );
+			ReturnReferenceExpression ret = new ReturnReferenceExpression(typeof(int));
+			
+			EasyMethod emptyMethod = typebuilder.CreateMethod( "DoSomething", ret, refArg );
+
+			Type newType = typebuilder.BuildType();
+			Assert.IsNotNull( newType );
+			object instance = Activator.CreateInstance( newType );
+			Assert.IsNotNull( instance );
+
+			MethodInfo method = instance.GetType().GetMethod("DoSomething");
+			method.Invoke( instance, new object[]{refArgInst} );
+
+			RunPEVerify();
+		}
+
+		public Type GetRefType(ref object refArg)
+		{
+			ParameterInfo[] parameters = this.GetType().GetMethod("GetRefType").GetParameters();
+
+			Assert.AreEqual(1, parameters.Length);
+
+			return parameters[0].ParameterType;
 		}
 	}
 }

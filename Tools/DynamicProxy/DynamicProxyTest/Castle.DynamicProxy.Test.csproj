@@ -180,6 +180,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\RefAndOutClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\SealedMethodsClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -278,5 +278,23 @@ namespace Castle.DynamicProxy.Test
 			int i = 10;
 			Assert.AreEqual(i, proxy.Pong(i));
 		}
+
+		[Test]
+		public void ProxyForRefAndOutClass()
+		{
+			RefAndOutClass proxy = (RefAndOutClass) 
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), new StandardInterceptor());
+
+			Assert.IsNotNull(proxy);
+
+			int arg1 = 0;
+			proxy.RefPongOne(ref arg1);
+			Assert.AreEqual(1, arg1);
+
+			int arg2;
+			proxy.OutPingTwo(out arg2);
+			Assert.AreEqual(2, arg2);
+		}
 	}
 }

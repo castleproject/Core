@@ -60,7 +60,14 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 			
 			if (_target != typeof(Object))
 			{
-				gen.Emit(OpCodes.Castclass, _target);
+				if (_target.IsByRef)
+				{
+					//ignore ref
+				}
+				else
+				{
+					gen.Emit(OpCodes.Castclass, _target);
+				}
 			}
 		}
 	}
