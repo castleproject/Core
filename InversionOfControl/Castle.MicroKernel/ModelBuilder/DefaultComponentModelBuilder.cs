@@ -18,7 +18,6 @@ namespace Castle.MicroKernel.ModelBuilder
 	using System.Collections;
 
 	using Castle.Model;
-
 	using Castle.MicroKernel.ModelBuilder.Inspectors;
 
 	/// <summary>
@@ -26,19 +25,20 @@ namespace Castle.MicroKernel.ModelBuilder
 	/// </summary>
 	public class DefaultComponentModelBuilder : IComponentModelBuilder
 	{
-		private IList _contributors;
+		private readonly IKernel _kernel;
+		private readonly IList _contributors;
 
-		public DefaultComponentModelBuilder()
+		public DefaultComponentModelBuilder(IKernel kernel)
 		{
+			_kernel = kernel;
 			_contributors = new ArrayList();
 
-			AddContributor( new LifestyleModelInspector() );
-			AddContributor( new ConstructorDependenciesModelInspector() );
-			AddContributor( new PropertiesDependenciesModelInspector() );
-			AddContributor( new LifecycleModelInspector() );
+			AddContributor( LifestyleModelInspector.Instance );
+			AddContributor( ConstructorDependenciesModelInspector.Instance );
+			AddContributor( PropertiesDependenciesModelInspector.Instance );
+			AddContributor( LifecycleModelInspector.Instance );
+			AddContributor( ConfigurationModelInspector.Instance );
 		}
-
-		#region IComponentModelBuilder Members
 
 		public ComponentModel BuildModel(String key, Type service, Type classType)
 		{
@@ -46,7 +46,7 @@ namespace Castle.MicroKernel.ModelBuilder
 
 			foreach(IContributeComponentModelConstruction contributor in _contributors)
 			{
-				contributor.ProcessModel( model );
+				contributor.ProcessModel( _kernel, model );
 			}
 			
 			return model;
@@ -61,7 +61,5 @@ namespace Castle.MicroKernel.ModelBuilder
 		{
 			_contributors.Remove(contributor);
 		}
-
-		#endregion
 	}
 }

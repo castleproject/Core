@@ -12,17 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Model.Configuration
 {
-	using Castle.Model.Configuration;
+	using System;
 
 	/// <summary>
-	/// Summary description for IFacility.
+	/// Summary description for MutableConfiguration.
 	/// </summary>
-	public interface IFacility
+	public class MutableConfiguration : AbstractConfiguration
 	{
-		void Init(IKernel kernel, IConfiguration facilityConfig);
+		public MutableConfiguration( String name ) : this(name, null)
+		{
+		}
 
-		void Terminate();
+		public MutableConfiguration( String name, String value )
+		{
+			base.name = name;
+			base.value = value;
+		}
 	}
 }

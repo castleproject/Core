@@ -16,41 +16,32 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 {
 	using System;
 
-	using Castle.Model;
+	using Castle.Model.Configuration;
 
 	/// <summary>
-	/// Summary description for LifestyleModelInspector.
+	/// Summary description for ConfigurationModelInspector.
 	/// </summary>
-	public class LifestyleModelInspector : IContributeComponentModelConstruction
+	public class ConfigurationModelInspector : IContributeComponentModelConstruction
 	{
-		private static readonly LifestyleModelInspector instance = new LifestyleModelInspector();
+		private static readonly ConfigurationModelInspector instance = new ConfigurationModelInspector();
 
-		public static LifestyleModelInspector Instance
+		public static ConfigurationModelInspector Instance
 		{
 			get { return instance; }
+		}
+		
+		public ConfigurationModelInspector()
+		{
 		}
 
 		#region IContributeComponentModelConstruction Members
 
-		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+		public void ProcessModel(IKernel kernel, Castle.Model.ComponentModel model)
 		{
-			object[] attributes = model.Implementation.GetCustomAttributes( 
-				typeof(LifestyleAttribute), true );
+			IConfiguration config = 
+				kernel.ConfigurationStore.GetComponentConfiguration(model.Name);
 
-			if (attributes.Length != 0)
-			{
-				LifestyleAttribute attribute = (LifestyleAttribute)
-					attributes[0];
-
-				model.LifestyleType = attribute.LifestyleType;
-
-				if (model.LifestyleType == LifestyleType.Custom)
-				{
-					CustomLifestyleAttribute custom = (CustomLifestyleAttribute)
-						attribute;
-					model.CustomLifestyle = custom.LifestyleHandlerType;
-				}
-			}
+			model.Configuration = config;
 		}
 
 		#endregion

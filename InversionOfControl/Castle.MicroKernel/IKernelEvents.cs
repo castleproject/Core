@@ -36,6 +36,12 @@ namespace Castle.MicroKernel
 	public delegate void ComponentInstanceDelegate( ComponentModel model, object instance );
 
 	/// <summary>
+	/// Represents a delegate which holds the information about the 
+	/// component
+	/// </summary>
+	public delegate void ComponentModelDelegate( ComponentModel model );
+
+	/// <summary>
 	/// Summary description for IKernelEvents.
 	/// </summary>
 	public interface IKernelEvents
@@ -50,6 +56,12 @@ namespace Castle.MicroKernel
 		/// Event fired when a component is removed from the kernel.
 		/// </summary>
 		event ComponentDataDelegate ComponentUnregistered;
+
+		/// <summary>
+		/// Event fired after the ComponentModel is created.
+		/// Allows customizations that may affect the handler.
+		/// </summary>
+		event ComponentModelDelegate ComponentModelCreated;
 
 		/// <summary>
 		/// Event fired when the kernel was added as child of

@@ -26,12 +26,16 @@ namespace Castle.MicroKernel
 	using Castle.MicroKernel.Releasers;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Proxy;
+	using Castle.MicroKernel.Exceptions;
+	using Castle.MicroKernel.SubSystems.Configuration;
 
 	/// <summary>
 	/// Summary description for DefaultKernel.
 	/// </summary>
 	public class DefaultKernel : KernelEventSupport, IKernel
 	{
+		private static readonly String ConfigurationStoreKey = "config.store";
+
 		private IKernel _parentKernel;
 		private IHandlerFactory _handlerFactory;
 		private IComponentModelBuilder _modelBuilder;
@@ -39,6 +43,7 @@ namespace Castle.MicroKernel
 		private IReleasePolicy _releaserPolicy;
 		private IProxyFactory _proxyFactory;
 		private IList _facilities;
+		private IDictionary _subsystems;
 		private IList _childKernels;
 
 		private IDictionary _key2Handler;
@@ -50,12 +55,14 @@ namespace Castle.MicroKernel
 			_service2Handler = new Hashtable();
 			_childKernels = new ArrayList();
 			_facilities = new ArrayList();
+			_subsystems = new Hashtable();
 
 			_releaserPolicy = new LifecycledComponentsReleasePolicy();
 			_resolver = new DefaultDependecyResolver(this);
 			_handlerFactory = new DefaultHandlerFactory(this);
-			_modelBuilder = new DefaultComponentModelBuilder();
+			_modelBuilder = new DefaultComponentModelBuilder(this);
 			_proxyFactory = new NotSupportedProxyFactory();
+			ConfigurationStore = new DefaultConfigurationStore();
 		}
 
 		public DefaultKernel(IProxyFactory proxyFactory)
@@ -68,6 +75,7 @@ namespace Castle.MicroKernel
 		public void AddComponent(String key, Type classType)
 		{
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType);
+			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
 		}
@@ -75,6 +83,7 @@ namespace Castle.MicroKernel
 		public void AddComponent(String key, Type serviceType, Type classType)
 		{
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType);
+			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
 		}
@@ -177,21 +186,14 @@ namespace Castle.MicroKernel
 
 		public IConfigurationStore ConfigurationStore
 		{
-			get
-			{
-				// TODO:  Add DefaultKernel.ConfigurationStore getter implementation
-				return null;
-			}
-			set
-			{
-				// TODO:  Add DefaultKernel.ConfigurationStore setter implementation
-			}
+			get { return GetSubSystem(ConfigurationStoreKey) as IConfigurationStore; }
+			set { AddSubSystem(ConfigurationStoreKey, value); }
 		}
 
 		public IHandler GetHandler(String key)
 		{
 			IHandler handler = _key2Handler[key] as IHandler;
-			
+
 			if (handler == null && Parent != null)
 			{
 				handler = Parent.GetHandler(key);
@@ -203,7 +205,7 @@ namespace Castle.MicroKernel
 		public IHandler GetHandler(Type service)
 		{
 			IHandler handler = _service2Handler[service] as IHandler;
-			
+
 			if (handler == null && Parent != null)
 			{
 				handler = Parent.GetHandler(service);
@@ -217,16 +219,23 @@ namespace Castle.MicroKernel
 			get { return _releaserPolicy; }
 		}
 
-		public void AddFacility(IFacility facility)
+		public void AddFacility(String key, IFacility facility)
 		{
-			facility.Init( this );
-		
-			_facilities.Add( facility );
+			facility.Init(this, ConfigurationStore.GetFacilityConfiguration(key));
+
+			_facilities.Add(facility);
 		}
 
 		public void AddSubSystem(String key, ISubSystem subsystem)
 		{
-			throw new NotImplementedException("AddSubSystem");
+			subsystem.Init(this);
+
+			_subsystems[key] = subsystem;
+		}
+
+		public ISubSystem GetSubSystem(String key)
+		{
+			return _subsystems[key] as ISubSystem;
 		}
 
 		// void ConfigureExternalComponent(object component);
@@ -249,10 +258,10 @@ namespace Castle.MicroKernel
 				// TODO: Assert value is not null
 
 				_parentKernel = value;
-				
+
 				_parentKernel.ComponentRegistered += new ComponentDataDelegate(RaiseComponentRegistered);
 				_parentKernel.ComponentUnregistered += new ComponentDataDelegate(RaiseComponentUnregistered);
-				
+
 				RaiseAddedAsChildKernel();
 			}
 		}
@@ -264,9 +273,34 @@ namespace Castle.MicroKernel
 
 		public IComponentActivator CreateComponentActivator(ComponentModel model)
 		{
-			return new DefaultComponentActivator(model, this, 
-				new ComponentInstanceDelegate(RaiseComponentCreated), 
-				new ComponentInstanceDelegate(RaiseComponentDestroyed) );
+			IComponentActivator activator = null;
+
+			if (model.CustomComponentActivator == null)
+			{
+				activator = new DefaultComponentActivator(model, this,
+				                                          new ComponentInstanceDelegate(RaiseComponentCreated),
+				                                          new ComponentInstanceDelegate(RaiseComponentDestroyed));
+			}
+			else
+			{
+				try
+				{
+					activator = (IComponentActivator)
+						Activator.CreateInstance(model.CustomComponentActivator,
+						                         new object[]
+						                         	{
+						                         		model, this,
+						                         		new ComponentInstanceDelegate(RaiseComponentCreated),
+						                         		new ComponentInstanceDelegate(RaiseComponentDestroyed)
+						                         	});
+				}
+				catch (Exception e)
+				{
+					throw new KernelException("Could not instantiate custom activator", e);
+				}
+			}
+
+			return activator;
 		}
 
 		#endregion

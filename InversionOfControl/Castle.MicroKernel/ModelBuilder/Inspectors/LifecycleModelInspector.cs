@@ -25,13 +25,20 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class LifecycleModelInspector : IContributeComponentModelConstruction
 	{
+		private static readonly LifecycleModelInspector instance = new LifecycleModelInspector();
+
+		public static LifecycleModelInspector Instance
+		{
+			get { return instance; }
+		}
+
 		public LifecycleModelInspector()
 		{
 		}
 
 		#region IContributeComponentModelConstruction Members
 
-		public virtual void ProcessModel(ComponentModel model)
+		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (typeof (IInitialize).IsAssignableFrom(model.Implementation))
 			{

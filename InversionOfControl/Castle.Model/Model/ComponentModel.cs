@@ -1,3 +1,4 @@
+using Castle.Model.Configuration;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,11 +75,13 @@ namespace Castle.Model
 		private IDictionary _extended;
 		private LifestyleType _lifestyleType;
 		private Type _customLifestyle;
+		private Type _customComponentActivator;
 
 		private ConstructorCandidateCollection _constructors;
 		private PropertySetCollection _properties;
 		private LifecycleStepCollection _lifecycleSteps;
 		private InterceptorCollection _interceptors;
+		private IConfiguration _configuration;
 
 		public ComponentModel(String name, Type service, Type implementation)
 		{
@@ -88,10 +91,10 @@ namespace Castle.Model
 			_lifestyleType = LifestyleType.Undefined;
 
 			_extended = new HybridDictionary(true);
-			_constructors = new ConstructorCandidateCollection();
 			_properties = new PropertySetCollection();
-			_lifecycleSteps = new LifecycleStepCollection();
+			_constructors = new ConstructorCandidateCollection();
 			_interceptors = new InterceptorCollection();
+			_lifecycleSteps = new LifecycleStepCollection();
 		}
 
 		public String Name
@@ -127,6 +130,12 @@ namespace Castle.Model
 			get { return _properties; }
 		}
 
+		public IConfiguration Configuration
+		{
+			get { return _configuration; }
+			set { _configuration = value; }
+		}
+
 		public LifecycleStepCollection LifecycleSteps
 		{
 			get { return _lifecycleSteps; }
@@ -144,15 +153,15 @@ namespace Castle.Model
 			set { _customLifestyle = value; }
 		}
 
+		public Type CustomComponentActivator
+		{
+			get { return _customComponentActivator; }
+			set { _customComponentActivator = value; }
+		}
+
 		public InterceptorCollection Interceptors
 		{
 			get { return _interceptors; }
-		}
-
-		public void Freeze()
-		{
-			// TODO: Is it worthwhile to implement a freeze semantic?
-
 		}
 	}
 }

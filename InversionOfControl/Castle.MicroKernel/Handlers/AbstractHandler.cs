@@ -31,7 +31,6 @@ namespace Castle.MicroKernel.Handlers
 		private IList _dependencies; 
 
 		protected ILifestyleManager _lifestyleManager;
-
 		
 		public AbstractHandler(ComponentModel model)
 		{

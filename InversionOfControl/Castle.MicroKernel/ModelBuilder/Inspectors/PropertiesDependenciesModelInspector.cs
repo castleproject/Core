@@ -24,13 +24,20 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class PropertiesDependenciesModelInspector : IContributeComponentModelConstruction
 	{
+		private static readonly PropertiesDependenciesModelInspector instance = new PropertiesDependenciesModelInspector();
+
+		public static PropertiesDependenciesModelInspector Instance
+		{
+			get { return instance; }
+		}
+
 		public PropertiesDependenciesModelInspector()
 		{
 		}
 
 		#region IContributeComponentModelConstruction Members
 
-		public void ProcessModel(ComponentModel model)
+		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			Type targetType = model.Implementation;
 

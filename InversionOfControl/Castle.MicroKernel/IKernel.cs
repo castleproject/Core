@@ -111,9 +111,11 @@ namespace Castle.MicroKernel
 			get;
 		}
 
-		void AddFacility(IFacility facility);
+		void AddFacility(String key, IFacility facility);
 
 		void AddSubSystem(String key, ISubSystem subsystem);
+
+		ISubSystem GetSubSystem(String key);
 
 		// void ConfigureExternalComponent(object component);
 

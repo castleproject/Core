@@ -49,9 +49,9 @@ namespace Castle.Windsor
 			set { _parent = value; }
 		}
 
-		public void AddFacility(IFacility facility)
+		public void AddFacility(String key, IFacility facility)
 		{
-			_kernel.AddFacility(facility);
+			_kernel.AddFacility(key, facility);
 		}
 
 		public void AddComponent(String key, Type classType)

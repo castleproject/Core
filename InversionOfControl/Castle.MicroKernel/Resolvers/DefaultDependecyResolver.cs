@@ -18,6 +18,8 @@ namespace Castle.MicroKernel.Resolvers
 
 	using Castle.Model;
 
+	using Castle.Model.Configuration;
+
 	/// <summary>
 	/// Summary description for DefaultDependecyResolver.
 	/// </summary>
@@ -30,16 +32,16 @@ namespace Castle.MicroKernel.Resolvers
 			_kernel = kernel;
 		}
 
-		#region IDependecyResolver Members
-
 		public object Resolve(ComponentModel model, DependencyModel dependency)
 		{
 			if(dependency.DependencyType == DependencyType.Service)
 			{
 				return ResolveServiceDependency( model, dependency );
 			}
-		
-			return null;
+			else
+			{
+				return ResolveParameterDependency( model, dependency );
+			}
 		}
 
 		protected virtual object ResolveServiceDependency(ComponentModel model, DependencyModel dependency)
@@ -55,6 +57,32 @@ namespace Castle.MicroKernel.Resolvers
 			return handler.Resolve();
 		}
 
-		#endregion
+		protected virtual object ResolveParameterDependency(ComponentModel model, DependencyModel dependency)
+		{
+			String key = dependency.DependencyKey;
+
+			if (model.Configuration == null)
+			{
+				return null;
+			}
+
+			IConfiguration parameters = model.Configuration.Children["parameters"];
+
+			if (parameters == null)
+			{
+				return null;
+			}
+
+			foreach(IConfiguration parameter in parameters.Children)
+			{
+				if ( String.Compare(key, parameter.Name, true) == 0)
+				{
+					return parameter.Value;
+				}
+			}
+
+			return null;
+		}
+
 	}
 }

@@ -12,17 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.MicroKernel.Exceptions
 {
-	using Castle.Model.Configuration;
+	using System;
+	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for IFacility.
+	/// Summary description for KernelException.
 	/// </summary>
-	public interface IFacility
+	[Serializable]
+	public class KernelException : Exception
 	{
-		void Init(IKernel kernel, IConfiguration facilityConfig);
+		public KernelException(string message) : base(message)
+		{
+		}
 
-		void Terminate();
+		public KernelException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
+		public KernelException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
 	}
 }

@@ -150,6 +150,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\ConfigurationTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\Components\ClassWithConstructors.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifecycle\LifecycleTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -19,10 +19,11 @@ namespace Castle.MicroKernel.ModelBuilder
 	using Castle.Model;
 
 	/// <summary>
-	/// Summary description for IContributeComponentModelConstruction.
+	/// Implementors must inspect the component for 
+	/// a given information or parameter.
 	/// </summary>
 	public interface IContributeComponentModelConstruction
 	{
-		void ProcessModel(ComponentModel model);
+		void ProcessModel(IKernel kernel, ComponentModel model);
 	}
 }

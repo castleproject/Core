@@ -3,23 +3,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel", "Castl
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests", "..\..\MicroKernelTest\Castle.MicroKernel.Tests.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel.Tests", "..\Castle.MicroKernel.Tests\Castle.MicroKernel.Tests.csproj", "{EF9313A4-C6E0-40F7-9E3F-530D547D3AEF}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model", "..\..\Model\Castle.Model.csproj", "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model", "..\Castle.Model\Castle.Model.csproj", "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model.Tests", "..\..\ModelTest\Castle.Model.Tests.csproj", "{0892A412-08B8-4DD8-AA42-142818611E0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model.Tests", "..\Castle.Model.Tests\Castle.Model.Tests.csproj", "{0892A412-08B8-4DD8-AA42-142818611E0B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor", "..\..\Castle.Windsor\Castle.Windsor.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor", "..\Castle.Windsor\Castle.Windsor.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests", "..\..\Castle.Windsor.Tests\Castle.Windsor.Tests.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor.Tests", "..\Castle.Windsor.Tests\Castle.Windsor.Tests.csproj", "{CB3A30A6-56D4-4F4F-9AEF-DA55E1FF6D74}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

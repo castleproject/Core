@@ -16,12 +16,19 @@ namespace Castle.MicroKernel
 {
 	using System;
 
+	using Castle.Model.Configuration;
 
 	/// <summary>
 	/// Summary description for IConfigurationStore.
 	/// </summary>
 	public interface IConfigurationStore : ISubSystem
 	{
+		void AddFacilityConfiguration( String key, IConfiguration config );
 
+		void AddComponentConfiguration( String key, IConfiguration config );
+
+		IConfiguration GetFacilityConfiguration( String key );
+
+		IConfiguration GetComponentConfiguration( String key );
 	}
 }

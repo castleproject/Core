@@ -33,7 +33,7 @@ namespace Castle.Windsor
 			get; set;
 		}
 
-		void AddFacility( IFacility facility );
+		void AddFacility( String key, IFacility facility );
 
 		void AddComponent( String key, Type classType );
 

@@ -24,9 +24,16 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	/// </summary>
 	public class ConstructorDependenciesModelInspector : IContributeComponentModelConstruction
 	{
+		private static readonly ConstructorDependenciesModelInspector instance = new ConstructorDependenciesModelInspector();
+
+		public static ConstructorDependenciesModelInspector Instance
+		{
+			get { return instance; }
+		}
+
 		#region IContributeComponentModelConstruction Members
 
-		public void ProcessModel(ComponentModel model)
+		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			Type targetType = model.Implementation;
 
@@ -57,7 +64,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 				Type paramType = parameter.ParameterType;
 
-				if (paramType.IsPrimitive)
+				if (paramType.IsPrimitive || paramType == typeof(String))
 				{
 					dependencies[i] = new DependencyModel( 
 						DependencyType.Parameter, parameter.Name, null, false );

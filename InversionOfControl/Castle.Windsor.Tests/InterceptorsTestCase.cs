@@ -39,9 +39,9 @@ namespace Castle.Windsor.Tests
 		{
 			_container = new WindsorContainer();
 
-			_container.AddFacility( new MyInterceptorGreedyFacility() );
-			_container.AddFacility( new MyInterceptorGreedyFacility() );
-			_container.AddFacility( new MyInterceptorGreedyFacility() );
+			_container.AddFacility( "1", new MyInterceptorGreedyFacility() );
+			_container.AddFacility( "2", new MyInterceptorGreedyFacility() );
+			_container.AddFacility( "3", new MyInterceptorGreedyFacility() );
 		}
 
 		[TearDown]
@@ -102,7 +102,7 @@ namespace Castle.Windsor.Tests
 	{
 		#region IFacility Members
 
-		public void Init(IKernel kernel)
+		public void Init(IKernel kernel, Model.Configuration.IConfiguration facilityConfig)
 		{
 			kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
 		}
