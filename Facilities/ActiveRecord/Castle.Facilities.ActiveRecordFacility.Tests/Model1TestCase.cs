@@ -27,41 +27,6 @@ namespace Castle.Facilities.ActiveRecord.Tests
 	[TestFixture]
 	public class Model1TestCase
 	{
-		[Test]
-		public void DeleteAll()
-		{
-			IList orders = Order.DeleteAll();
 
-			Order order = new Order();
-			Order.Save( order );
-
-			IList orders = Order.Find();
-
-			Order order2 = Order.FindSingle( 1 );
-		}
-
-		[Test]
-		public void SaveNew()
-		{
-			Order order = new Order();
-			Order.Save( order );
-
-		}
-
-		[Test]
-		public void SaveAndUpdate()
-		{
-			Order order = new Order();
-			Order.Save( order );
-			order.Tag = "";
-			Order.Update( order );
-		}
-
-		[Test]
-		public void FindAndFindSingle()
-		{
-			IList orders = Order.Find();
-			Order order2 = Order.FindSingle( 1 );
-		}
 	}
 }

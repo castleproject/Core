@@ -60,7 +60,14 @@ namespace Castle.ManagementExtensions.Remote.Client
 
 			if (channel != null)
 			{
-				ChannelServices.UnregisterChannel( channel );
+				try
+				{
+					ChannelServices.UnregisterChannel( channel );
+				}
+				catch(RemotingException)
+				{
+					// Somebody removed first
+				}
 				channel = null;
 			}
 		}

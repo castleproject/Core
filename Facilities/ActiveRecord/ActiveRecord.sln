@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernate-1.1", "..\..\..\
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.ActiveRecord", "Castle.Facilities.ActiveRecord\Castle.Facilities.ActiveRecord.csproj", "{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord", "Castle.Facilities.ActiveRecord\Castle.ActiveRecord.csproj", "{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

@@ -124,6 +124,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			foreach(PropertySet property in Model.Properties)
 			{
 				object value = Kernel.Resolver.Resolve(Model, property.Dependency);
+				if (value == null) continue;
 				MethodInfo setMethod = property.Property.GetSetMethod();
 				setMethod.Invoke( instance, new object[] { value } );
 			}

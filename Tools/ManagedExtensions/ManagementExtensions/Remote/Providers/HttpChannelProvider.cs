@@ -54,7 +54,15 @@ namespace Castle.ManagementExtensions.Remote.Providers
 			String objectUrl = null;
 			
 			HttpClientChannel channel = new HttpClientChannel();
-			ChannelServices.RegisterChannel( channel );
+
+			try
+			{
+				ChannelServices.RegisterChannel( channel );
+			}
+			catch(RemotingException)
+			{
+				// Already registered
+			}
 
 			objectUrl = String.Format("{0}://{1}:{2}/{3}", 
 				"http", GetHost(properties), GetPort(properties), objectUri);

@@ -408,6 +408,7 @@ namespace Castle.MicroKernel
 
 			_key2Handler[key] = handler;
 
+			base.RaiseHandlerRegistered(handler);
 			base.RaiseComponentRegistered(key, handler);
 		}
 

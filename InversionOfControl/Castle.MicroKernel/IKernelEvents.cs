@@ -42,6 +42,14 @@ namespace Castle.MicroKernel
 	public delegate void ComponentModelDelegate( ComponentModel model );
 
 	/// <summary>
+	/// Represents a delegate which holds a handler
+	/// </summary>
+	/// <param name="handler">handler that holds a component and is capable of 
+	/// creating an instance of it.
+	/// </param>
+	public delegate void HandlerDelegate( IHandler handler );
+
+	/// <summary>
 	/// Summary description for IKernelEvents.
 	/// </summary>
 	public interface IKernelEvents
@@ -78,5 +86,10 @@ namespace Castle.MicroKernel
 		/// Event fired when a component instance destroyed.
 		/// </summary>
 		event ComponentInstanceDelegate ComponentDestroyed;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		event HandlerDelegate HandlerRegistered;
 	}
 }

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.ActiveRecord
 {
 	using System;
 
@@ -39,16 +39,12 @@ namespace Castle.Facilities.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property)]
 	public abstract class RelationAttribute : Attribute
 	{
-		private MappingType _mapType = MappingType.Guess;
+//		private MappingType _mapType = MappingType.Guess;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="mapType"></param>
-		/// <param name="inverse"></param>
-		/// <param name="condition"></param>
-		/// <param name="order"></param>
-		/// <param name="lazy"></param>
+		public RelationAttribute()
+		{
+		}
+
 		public RelationAttribute( MappingType mapType, bool inverse, 
 			String condition, String order, bool lazy)
 		{

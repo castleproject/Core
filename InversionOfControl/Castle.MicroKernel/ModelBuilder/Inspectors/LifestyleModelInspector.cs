@@ -35,6 +35,21 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		{
 		}
 
+		
+		/// <summary>
+		/// Seaches for the lifestyle in the configuration and, if unsuccessful
+		/// look for the lifestyle attribute in the implementation type.
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="model"></param>
+		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
+		{
+			if (!ReadLifestyleFromConfiguration(model))
+			{
+				ReadLifestyleFromType(model);
+			}
+		}
+
 		/// <summary>
 		/// Reads the attribute "lifestyle" associated with the 
 		/// component configuration and tries to convert to <see cref="LifestyleType"/> 
@@ -99,20 +114,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 						attribute;
 					model.CustomLifestyle = custom.LifestyleHandlerType;
 				}
-			}
-		}
-
-		/// <summary>
-		/// Seaches for the lifestyle in the configuration and, if unsuccessful
-		/// look for the lifestyle attribute in the implementation type.
-		/// </summary>
-		/// <param name="kernel"></param>
-		/// <param name="model"></param>
-		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
-		{
-			if (!ReadLifestyleFromConfiguration(model))
-			{
-				ReadLifestyleFromType(model);
 			}
 		}
 	}

@@ -16,6 +16,8 @@ namespace Castle.Facilities.ActiveRecord.Tests.Model1
 {
 	using System;
 
+	using Castle.ActiveRecord;
+
 	/// <summary>
 	/// Summary description for Product.
 	/// </summary>

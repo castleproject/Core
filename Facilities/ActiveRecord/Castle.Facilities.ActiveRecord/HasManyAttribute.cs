@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecord
+namespace Castle.ActiveRecord
 {
 	using System;
 
@@ -20,7 +20,7 @@ namespace Castle.Facilities.ActiveRecord
 	/// Summary description for HasManyAttribute.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property)]
-	public class HasManyAttribute : Attribute
+	public class HasManyAttribute : RelationAttribute
 	{
 		public HasManyAttribute( Type mapType )
 		{
