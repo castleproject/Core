@@ -353,7 +353,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			foreach (MethodInfo method in methods)
 			{
-				if (method.IsPrivate)
+				if (method.IsPrivate || !method.IsVirtual || method.IsFinal)
 				{
 					continue;
 				}
@@ -397,14 +397,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			MethodAttributes atts = MethodAttributes.Virtual;
-
-			if (!method.IsVirtual || method.IsFinal)
-			{
-				// Sorry. To avoid future problems we
-				// decide to not allow NonVirtual members
-				throw new ProxyGenerationException(String.Format("Can't generate stub for non-virtual member " +
-					"{0} declared by {1}", method.Name, method.DeclaringType.FullName));
-			}
 
 			if (method.IsPublic)
 			{

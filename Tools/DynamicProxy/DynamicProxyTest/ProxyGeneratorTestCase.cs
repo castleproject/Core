@@ -86,19 +86,19 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[ExpectedException(typeof(ProxyGenerationException))]
 		public void ProxyingClassWithoutVirtualMethods()
 		{
-			m_generator.CreateClassProxy( 
-				typeof(NoVirtualMethodClass), new ResultModifiedInvocationHandler( ) );
+			NoVirtualMethodClass proxy = (NoVirtualMethodClass) m_generator.CreateClassProxy( 
+				typeof(NoVirtualMethodClass), new StandardInterceptor( ) );
+			Assert.IsNotNull(proxy);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ProxyGenerationException))]
 		public void ProxyingClassWithSealedMethods()
 		{
-			m_generator.CreateClassProxy( 
-				typeof(SealedMethodsClass), new ResultModifiedInvocationHandler( ) );
+			SealedMethodsClass proxy = (SealedMethodsClass) m_generator.CreateClassProxy( 
+				typeof(SealedMethodsClass), new StandardInterceptor() );
+			Assert.IsNotNull(proxy);
 		}
 
 		[Test]
