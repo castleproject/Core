@@ -17,7 +17,8 @@ namespace Castle.Model
 	using System;
 
 	/// <summary>
-	/// Summary description for DependencyModel.
+	/// Represents a parameter. Usually the parameter
+	/// comes from the external world, ie, an external configuration.
 	/// </summary>
 	public class ParameterModel
 	{
@@ -39,7 +40,5 @@ namespace Castle.Model
 		{
 			get { return _value; }
 		}
-
-		
 	}
 }

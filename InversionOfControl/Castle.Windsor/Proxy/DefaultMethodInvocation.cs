@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+ // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,17 +18,21 @@ namespace Castle.Windsor.Proxy
 	using System.Collections;
 	using System.Reflection;
 	using System.Threading;
-
 	using Castle.DynamicProxy;
 	using Castle.Model.Interceptor;
 
 	/// <summary>
-	/// Summary description for DefaultMethodInvocation.
+	/// This implementation of <see cref="IMethodInvocation"/>
+	/// holds an array of interceptors. When the Proceed method is invoked,
+	/// it just increment the Current index and invoke the next interceptor. 
 	/// </summary>
+	/// <remarks>
+	/// Although we have multithread test cases to ensure the correct 
+	/// behavior, we might have threading synchronization issues.
+	/// </remarks>
 	public sealed class DefaultMethodInvocation : IMethodInvocation
 	{
 		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
-//		private static ReaderWriterLock _locker = new ReaderWriterLock();
 
 		private ICallable _callable;
 		private MethodInfo _method;
@@ -39,10 +43,17 @@ namespace Castle.Windsor.Proxy
 
 		private object key = new object();
 
+		/// <summary>
+		/// Constructs a DefaultMethodInvocation. This is invoked 
+		/// by the DynamicProxy generated code.
+		/// </summary>
+		/// <param name="callable"></param>
+		/// <param name="proxy"></param>
+		/// <param name="method"></param>
 		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method)
 		{
 			_callable = callable;
-			_proxy = proxy; 
+			_proxy = proxy;
 			_method = method;
 			_target = _original_target = callable.Target;
 		}
@@ -74,7 +85,7 @@ namespace Castle.Windsor.Proxy
 			// - we can't lock this execution, though
 
 			int index = CurrentIndex;
-			
+
 			if (index < (_interceptorChain.Length))
 			{
 				CurrentIndex = index + 1;
@@ -99,14 +110,8 @@ namespace Castle.Windsor.Proxy
 
 		private int CurrentIndex
 		{
-			get
-			{
-				return (int) Thread.GetData(_slot);
-			}
-			set
-			{
-				Thread.SetData(_slot, value);
-			}
+			get { return (int) Thread.GetData(_slot); }
+			set { Thread.SetData(_slot, value); }
 		}
 
 		internal void Reset()

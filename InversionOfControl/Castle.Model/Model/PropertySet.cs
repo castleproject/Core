@@ -18,7 +18,8 @@ namespace Castle.Model
 	using System.Reflection;
 
 	/// <summary>
-	/// Summary description for PropertySet.
+	/// Represents a property and the respective optional 
+	/// dependency.
 	/// </summary>
 	public class PropertySet
 	{

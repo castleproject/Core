@@ -18,14 +18,10 @@ namespace Castle.Model
 	using System.Collections;
 
 	/// <summary>
-	/// Summary description for PropertySetCollection.
+	/// Collection of <see cref="PropertySet"/>
 	/// </summary>
 	public class PropertySetCollection : ReadOnlyCollectionBase
 	{
-		public PropertySetCollection()
-		{
-		}
-
 		public void Add(PropertySet property)
 		{
 			InnerList.Add(property);

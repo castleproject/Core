@@ -24,7 +24,7 @@ namespace Castle.Model
 	}
 
 	/// <summary>
-	/// Summary description for LifecycleStepCollection.
+	/// Represents a collection of ordered lifecycle steps.
 	/// </summary>
 	public class LifecycleStepCollection : ICollection
 	{
@@ -37,6 +37,10 @@ namespace Castle.Model
 			_decommissionSteps = new ArrayList();
 		}
 
+		/// <summary>
+		/// Returns all steps for the commission phase
+		/// </summary>
+		/// <returns></returns>
 		public object[] GetCommissionSteps()
 		{
 			object[] steps = new object[_commissionSteps.Count];
@@ -44,6 +48,10 @@ namespace Castle.Model
 			return steps;
 		}
 
+		/// <summary>
+		/// Returns all steps for the decommission phase
+		/// </summary>
+		/// <returns></returns>
 		public object[] GetDecommissionSteps()
 		{
 			object[] steps = new object[_decommissionSteps.Count];
@@ -61,8 +69,15 @@ namespace Castle.Model
 			get { return _decommissionSteps.Count != 0; }
 		}
 
+		/// <summary>
+		/// Adds a step to the commission or decomission phases.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="stepImplementation"></param>
 		public void Add( LifecycleStepType type, object stepImplementation )
 		{
+			if (stepImplementation == null) throw new ArgumentNullException("stepImplementation");
+
 			if (type == LifecycleStepType.Commission)
 			{
 				_commissionSteps.Add( stepImplementation );				

@@ -17,10 +17,19 @@ namespace Castle.Model.Interceptor
 	using System;
 
 	/// <summary>
-	/// Summary description for IMethodInterceptor.
+	/// Interface that should be implemented 
+	/// by any component that wishes to be referenced as interceptor.
 	/// </summary>
 	public interface IMethodInterceptor
 	{
+		/// <summary>
+		/// Method invoked by the proxy in order to allow
+		/// the interceptor to do its work before and after
+		/// the actual invocation.
+		/// </summary>
+		/// <param name="invocation">The invocation holds the details of this interception</param>
+		/// <param name="args">The original method arguments</param>
+		/// <returns>The return value of this invocation</returns>
 		object Intercept( IMethodInvocation invocation, params object[] args );
 	}
 }

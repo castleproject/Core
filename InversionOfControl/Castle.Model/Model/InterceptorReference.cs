@@ -23,7 +23,7 @@ namespace Castle.Model
 	}
 
 	/// <summary>
-	/// Summary description for InterceptorReference.
+	/// Represents an reference to a Interceptor component.
 	/// </summary>
 	public class InterceptorReference
 	{

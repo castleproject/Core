@@ -18,7 +18,8 @@ namespace Castle.Model
 	using System.Reflection;
 
 	/// <summary>
-	/// Summary description for ConstructorCandidate.
+	/// Represents a constructor of the component 
+	/// that the container can use to initialize it properly.
 	/// </summary>
 	public class ConstructorCandidate
 	{

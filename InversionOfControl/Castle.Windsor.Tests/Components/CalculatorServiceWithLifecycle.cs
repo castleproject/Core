@@ -16,28 +16,44 @@ namespace Castle.Windsor.Tests.Components
 {
 	using System;
 
+	using Castle.Model;
+
 	/// <summary>
-	/// Summary description for CalculatorService.
+	/// Summary description for CalculatorServiceWithLifecycle.
 	/// </summary>
-	public class CalculatorService : ICalcService
+	[Transient]
+	public class CalculatorServiceWithLifecycle : ICalcService, IInitialize, IDisposable
 	{
-		public CalculatorService()
+		private bool _initialized;
+		private bool _disposed;
+
+		public CalculatorServiceWithLifecycle()
 		{
 		}
 
-		public virtual int Sum(int x, int y)
+		public int Sum(int x, int y)
 		{
 			return x + y;
 		}
 
+		public void Initialize()
+		{
+			_initialized = true;
+		}
+
+		public void Dispose()
+		{
+			_disposed = true;
+		}
+
 		public bool Initialized
 		{
-			get { throw new NotImplementedException(); }
+			get { return _initialized; }
 		}
 
 		public bool Disposed
 		{
-			get { throw new NotImplementedException(); }
+			get { return _disposed; }
 		}
 	}
 }

@@ -15,12 +15,10 @@
 namespace Castle.Model
 {
 	using System;
-
 	using System.Collections;
-	using System.Collections.Specialized;
 
 	/// <summary>
-	/// Summary description for ParameterModelCollection.
+	/// Collection of <see cref="ParameterModel"/>
 	/// </summary>
 	public class ParameterModelCollection : IEnumerable
 	{

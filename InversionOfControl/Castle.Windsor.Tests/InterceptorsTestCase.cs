@@ -52,6 +52,39 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
+		public void InterfaceProxy()
+		{
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
+			_container.AddComponent( "key", 
+				typeof(ICalcService), typeof(CalculatorService)  );
+
+			ICalcService service = (ICalcService) _container.Resolve("key");
+
+			Assert.IsNotNull(service);
+			Assert.AreEqual( 7, service.Sum(2,2) );
+		}
+
+		[Test]
+		public void InterfaceProxyWithLifecycle()
+		{
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
+			_container.AddComponent( "key", 
+				typeof(ICalcService), typeof(CalculatorServiceWithLifecycle)  );
+
+			ICalcService service = (ICalcService) _container.Resolve("key");
+
+			Assert.IsNotNull(service);
+			Assert.IsTrue( service.Initialized );
+			Assert.AreEqual( 7, service.Sum(2,2) );
+
+			Assert.IsFalse( service.Disposed );
+
+			_container.Release( service );
+
+			Assert.IsTrue( service.Disposed );
+		}
+
+		[Test]
 		public void ClassProxy()
 		{
 			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
@@ -135,7 +168,8 @@ namespace Castle.Windsor.Tests
 		{
 			if (key == "key")
 			{
-				handler.ComponentModel.Interceptors.Add( new InterceptorReference( "interceptor" ) );
+				handler.ComponentModel.Interceptors.Add( 
+					new InterceptorReference( "interceptor" ) );
 			}
 		}
 	}
@@ -144,9 +178,13 @@ namespace Castle.Windsor.Tests
 	{
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-			object result = invocation.Proceed(args);
-
-			return ((int)result) + 1;
+			if (invocation.Method.Name.Equals("Sum"))
+			{
+				object result = invocation.Proceed(args);
+				return ((int)result) + 1;
+			}
+			
+			return invocation.Proceed(args);
 		}
 	}
 }

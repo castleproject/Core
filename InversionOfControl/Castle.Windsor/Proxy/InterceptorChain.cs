@@ -21,26 +21,40 @@ namespace Castle.Windsor.Proxy
 	using Castle.Model.Interceptor;
 
 	/// <summary>
-	/// Summary description for InterceptorChain.
+	/// Represents an ordered chain of <see cref="IMethodInterceptor"/>
+	/// implementations.
 	/// </summary>
-	/// 
 	[Serializable]
 	public sealed class InterceptorChain : IMethodInterceptor, IInterceptor
 	{
 		private IMethodInterceptor[] _interceptors;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="interceptors"></param>
 		public InterceptorChain(IMethodInterceptor[] interceptors)
 		{
+			if (interceptors == null) throw new ArgumentNullException("interceptors");
+
 			_interceptors = interceptors;
 		}
 
+		/// <summary>
+		/// Executes the method Intercept on the chain.
+		/// </summary>
+		/// <param name="invocation"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
+#if DEBUG
 			// Sanity check
 			if (!(invocation is DefaultMethodInvocation))
 			{
-				throw new Exception("Expected invocation to be an instance of DefaultMethodInvocation");
+				throw new Exception("Expected 'invocation' to be an instance of DefaultMethodInvocation");
 			}
+#endif
 
 			DefaultMethodInvocation minvocation = invocation as DefaultMethodInvocation;
 			minvocation.Reset();

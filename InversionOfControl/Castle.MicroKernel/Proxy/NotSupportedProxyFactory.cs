@@ -38,7 +38,7 @@ namespace Castle.MicroKernel.Proxy
 		{
 			throw new NotImplementedException(
 				"You must supply an implementation of IProxyFactory " + 
-				"to use interceptors in the Microkernel");
+				"to use interceptors on the Microkernel");
 		}
 
 		#endregion

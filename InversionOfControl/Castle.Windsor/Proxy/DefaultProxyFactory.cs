@@ -15,6 +15,7 @@
 namespace Castle.Windsor.Proxy
 {
 	using System;
+	using System.Reflection;
 
 	using Castle.Model;
 	using Castle.MicroKernel;
@@ -23,27 +24,40 @@ namespace Castle.Windsor.Proxy
 
 	/// <summary>
 	/// This implementation of <see cref="IProxyFactory"/> relies 
-	/// on DynamicProxy to deliver proxies capabilies.
+	/// on DynamicProxy to expose proxy capabilies.
 	/// </summary>
 	/// <remarks>
 	/// Note that only virtual methods can be intercepted in a 
-	/// concrete class. 
+	/// concrete class. However, if the component 
+	/// was registered with a service interface, we proxy
+	/// the interface and the methods don't need to be virtual,
 	/// </remarks>
 	public class DefaultProxyFactory : IProxyFactory
 	{
 		private ProxyGenerator _generator;
 
+		/// <summary>
+		/// Constructs a DefaultProxyFactory
+		/// </summary>
 		public DefaultProxyFactory()
 		{
 			_generator = new ProxyGenerator();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="model"></param>
+		/// <param name="constructorArguments"></param>
+		/// <returns></returns>
 		public object Create(IKernel kernel, ComponentModel model, params object[] constructorArguments)
 		{
 			IMethodInterceptor[] interceptors = ObtainInterceptors(kernel, model);
 			IInterceptor interceptorChain = new InterceptorChain(interceptors);
 
-			// This is a hack to avoid unnecessary object creations
+			// This is a hack to avoid unnecessary object creation 
+			// and unecessary delegations.
 			// We supply our contracts (Interceptor and Invocation)
 			// and the implementation for Invocation dispatchers
 			// DynamicProxy should be able to use them as long as the 
@@ -52,9 +66,30 @@ namespace Castle.Windsor.Proxy
 			context.Interceptor = typeof(IMethodInterceptor);
 			context.Invocation = typeof(IMethodInvocation);
 			context.SameClassInvocation = typeof(DefaultMethodInvocation);
+			context.InterfaceInvocation = typeof(DefaultMethodInvocation);
 
-			return _generator.CreateCustomClassProxy(model.Implementation, 
-				interceptorChain, context, constructorArguments);
+			if (model.Service.IsInterface)
+			{
+				Object target = Activator.CreateInstance( model.Implementation, constructorArguments );
+
+				return _generator.CreateCustomProxy( CollectInterfaces(model.Implementation), 
+					interceptorChain, target, context);
+			}
+			else
+			{
+				return _generator.CreateCustomClassProxy(model.Implementation, 
+					interceptorChain, context, constructorArguments);
+			}
+		}
+
+		private Type[] CollectInterfaces(Type implementation)
+		{
+			return implementation.FindInterfaces(new TypeFilter(EmptyTypeFilter), null);
+		}
+
+		private bool EmptyTypeFilter(Type type, object criteria)
+		{
+			return true;
 		}
 
 		protected IMethodInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model)

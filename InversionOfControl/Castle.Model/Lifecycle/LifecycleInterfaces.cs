@@ -17,10 +17,15 @@ namespace Castle.Model
 	using System;
 
 	/// <summary>
-	/// Summary description for LifecycleInterfaces.
+	/// Lifecycle interface. If implemented by a component,
+	/// the method Initialized will be invoked by the container
+	/// before making the component available to the external world.
 	/// </summary>
 	public interface IInitialize
 	{
+		/// <summary>
+		/// Implementors should perform any initialization logic.
+		/// </summary>
 		void Initialize();
 	}
 }

@@ -23,7 +23,8 @@ namespace Castle.Model
 	}
 
 	/// <summary>
-	/// Summary description for DependencyModel.
+	/// Represents a dependency (other component or a fixed value available through external
+	/// configuration).
 	/// </summary>
 	public class DependencyModel
 	{
@@ -32,7 +33,8 @@ namespace Castle.Model
 		private bool _isOptional;
 		private DependencyType _dependencyType;
 
-		public DependencyModel( DependencyType type, String dependencyKey, 
+		public DependencyModel( 
+			DependencyType type, String dependencyKey, 
 			Type targetType, bool isOptional)
 		{
 			_dependencyType = type;

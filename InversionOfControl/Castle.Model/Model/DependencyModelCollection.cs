@@ -19,14 +19,10 @@ namespace Castle.Model
 	using System.Collections;
 
 	/// <summary>
-	/// Summary description for DependencyModelCollection.
+	/// Collection of <see cref="DependencyModel"/>.
 	/// </summary>
 	public class DependencyModelCollection : ReadOnlyCollectionBase
 	{
-		public DependencyModelCollection()
-		{
-		}
-
 		public void Add(DependencyModel model)
 		{
 			InnerList.Add(model);

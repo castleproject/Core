@@ -21,8 +21,17 @@ namespace Castle.MicroKernel
 
 	/// <summary>
 	/// The <code>IKernel</code> interface exposes all the functionality
-	/// the MicroKernel must implement.
+	/// the MicroKernel implements.
 	/// </summary>
+	/// <remarks>
+	/// It allows you to register components and
+	/// request them by the key or the service they implemented.
+	/// It also allow you to register facilities and subsystem, thus 
+	/// augmenting the functionality exposed by the kernel alone to fits 
+	/// your needs.
+	/// <seealso cref="IFacility"/>
+	/// <seealso cref="ISubSystem"/>
+	/// </remarks>
 	public interface IKernel : IKernelEvents, IDisposable
 	{
 		/// <summary>
@@ -42,7 +51,8 @@ namespace Castle.MicroKernel
 		void AddComponent( String key, Type serviceType, Type classType );
 
 		/// <summary>
-		/// 
+		/// Adds a concrete class as a component and specify the extended properties.
+		/// Used by facilities, mostly.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
@@ -50,7 +60,9 @@ namespace Castle.MicroKernel
 		void AddComponentWithProperties( String key, Type classType, IDictionary extendedProperties );
 
 		/// <summary>
-		/// 
+		/// Adds a concrete class and an interface 
+		/// as a component and specify the extended properties.
+		/// Used by facilities, mostly.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
@@ -59,7 +71,8 @@ namespace Castle.MicroKernel
 		void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary extendedProperties );
 
 		/// <summary>
-		/// 
+		/// Adds a custom made <see cref="ComponentModel"/>.
+		/// Used by facilities.
 		/// </summary>
 		/// <param name="model"></param>
 		void AddCustomComponent( ComponentModel model );
@@ -87,7 +100,7 @@ namespace Castle.MicroKernel
 		bool HasComponent( Type service );
 
 		/// <summary>
-		/// 
+		/// Returns the component instance by the key
 		/// </summary>
 		object this[String key]
 		{
@@ -95,7 +108,7 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the component instance by the Type
 		/// </summary>
 		object this[Type key]
 		{
@@ -103,20 +116,23 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Releases a component instance. This allows
+		/// the kernel to execute the proper decomission 
+		/// lifecycles on the component instance.
 		/// </summary>
 		/// <param name="instance"></param>
 		void ReleaseComponent( object instance );
 		
 		/// <summary>
-		/// 
+		/// Constructs an implementation of <see cref="IComponentActivator"/>
+		/// for the given <see cref="ComponentModel"/>
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
 		IComponentActivator CreateComponentActivator(ComponentModel model);
 
 		/// <summary>
-		/// 
+		/// Returns the implementation of <see cref="IComponentModelBuilder"/>
 		/// </summary>
 		IComponentModelBuilder ComponentModelBuilder
 		{
@@ -124,7 +140,7 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the implementation of <see cref="IHandlerFactory"/>
 		/// </summary>
 		IHandlerFactory HandlerFactory
 		{
@@ -132,7 +148,7 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Gets or sets the implementation of <see cref="IConfigurationStore"/>
 		/// </summary>
 		IConfigurationStore ConfigurationStore
 		{
@@ -140,14 +156,16 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the <see cref="IHandler"/>
+		/// for the specified component key.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
 		IHandler GetHandler(String key);
 
 		/// <summary>
-		/// 
+		/// Returns the <see cref="IHandler"/>
+		/// for the specified service.
 		/// </summary>
 		/// <param name="service"></param>
 		/// <returns></returns>
@@ -162,7 +180,7 @@ namespace Castle.MicroKernel
 		IHandler[] GetHandlers(Type service);
 
 		/// <summary>
-		/// 
+		/// Returns the implementation for <see cref="IReleasePolicy"/>
 		/// </summary>
 		IReleasePolicy ReleasePolicy
 		{
@@ -170,7 +188,7 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the implementation for <see cref="IDependencyResolver"/>
 		/// </summary>
 		IDependencyResolver Resolver
 		{
@@ -178,28 +196,31 @@ namespace Castle.MicroKernel
 		}
 
 		/// <summary>
-		/// 
+		/// Adds a <see cref="IFacility"/> to the kernel.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="facility"></param>
 		void AddFacility(String key, IFacility facility);
 
 		/// <summary>
-		/// 
+		/// Adds (or replaces) an <see cref="ISubSystem"/>
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="subsystem"></param>
 		void AddSubSystem(String key, ISubSystem subsystem);
 
 		/// <summary>
-		/// 
+		/// Returns an implementation of <see cref="ISubSystem"/>
+		/// for the specified key. 
+		/// <seealso cref="SubSystemConstants"/>
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
 		ISubSystem GetSubSystem(String key);
 
 		/// <summary>
-		/// Allows the customization of Proxy creation
+		/// Gets or sets the implementation of <see cref="IProxyFactory"/>
+		/// allowing different strategies for proxy creation.
 		/// </summary>
 		IProxyFactory ProxyFactory
 		{

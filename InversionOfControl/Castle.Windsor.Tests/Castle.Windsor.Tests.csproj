@@ -138,6 +138,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\CalculatorServiceWithLifecycle.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\ICalcService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\AppDomainConfigurationStoreTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -49,21 +49,21 @@ namespace Castle.Model
 	/// <summary>
 	/// Enumeration to define the component's activation policy.
 	/// </summary>
-	public enum ActivationType
-	{
-		/// <summary>
-		/// No activation policy specified.
-		/// </summary>
-		Undefined,
-		/// <summary>
-		/// The component should be activated as soon as the container is ready.
-		/// </summary>
-		Start,
-		/// <summary>
-		/// The component should be activated only if requested.
-		/// </summary>
-		OnDemand
-	}
+//	public enum ActivationType
+//	{
+//		/// <summary>
+//		/// No activation policy specified.
+//		/// </summary>
+//		Undefined,
+//		/// <summary>
+//		/// The component should be activated as soon as the container is ready.
+//		/// </summary>
+//		Start,
+//		/// <summary>
+//		/// The component should be activated only if requested.
+//		/// </summary>
+//		OnDemand
+//	}
 
 	/// <summary>
 	/// Summary description for ComponentModel.

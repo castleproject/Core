@@ -18,15 +18,11 @@ namespace Castle.Model
 	using System.Collections;
 
 	/// <summary>
-	/// Summary description for ConstructorCandidateCollection.
+	/// Collection of <see cref="ConstructorCandidate"/>
 	/// </summary>
 	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
 	{
 		private ConstructorCandidate _fewerArgumentsCandidate;
-
-		public ConstructorCandidateCollection()
-		{
-		}
 
 		public ConstructorCandidate FewerArgumentsCandidate
 		{

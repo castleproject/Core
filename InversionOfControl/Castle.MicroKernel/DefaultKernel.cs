@@ -29,27 +29,88 @@ namespace Castle.MicroKernel
 	using Castle.MicroKernel.SubSystems.Configuration;
 
 	/// <summary>
-	/// Summary description for DefaultKernel.
+	/// Default implementation of <see cref="IKernel"/>. 
+	/// This implementation is complete and also support a kernel 
+	/// hierarchy (sub containers).
 	/// </summary>
 	public class DefaultKernel : KernelEventSupport, IKernel
 	{
+		#region Fields
+
+		/// <summary>
+		/// The parent kernel, if exists.
+		/// </summary>
 		private IKernel _parentKernel;
+
+		/// <summary>
+		/// The implementation of <see cref="IHandlerFactory"/>
+		/// </summary>
 		private IHandlerFactory _handlerFactory;
+
+		/// <summary>
+		/// The implementation of <see cref="IComponentModelBuilder"/>
+		/// </summary>
 		private IComponentModelBuilder _modelBuilder;
+
+		/// <summary>
+		/// The dependency resolver.
+		/// </summary>
 		private IDependencyResolver _resolver;
+
+		/// <summary>
+		/// Implements a policy to control component's
+		/// disposal that the usef forgot.
+		/// </summary>
 		private IReleasePolicy _releaserPolicy;
+
+		/// <summary>
+		/// Holds the implementation of <see cref="IProxyFactory"/>
+		/// </summary>
 		private IProxyFactory _proxyFactory;
+
+		/// <summary>
+		/// List of <see cref="IFacility"/> registered.
+		/// </summary>
 		private IList _facilities;
+
+		/// <summary>
+		/// Map of subsystems registered.
+		/// </summary>
 		private IDictionary _subsystems;
+		
+		/// <summary>
+		/// List of sub containers.
+		/// </summary>
 		private IList _childKernels;
 
+		/// <summary>
+		/// Map(String, IHandler) to map component keys
+		/// to <see cref="IHandler"/>
+		/// </summary>
 		private IDictionary _key2Handler;
+
+		/// <summary>
+		/// Map(Type, IHandler) to map services 
+		/// to <see cref="IHandler"/>
+		/// </summary>
 		private IDictionary _service2Handler;
 
+		#endregion
+
+		#region Constructors
+
+		/// <summary>
+		/// Constructs a DefaultKernel with no component
+		/// proxy support.
+		/// </summary>
 		public DefaultKernel() : this(new NotSupportedProxyFactory())
 		{
 		}
 
+		/// <summary>
+		/// Constructs a DefaultKernel with the specified
+		/// implementation of <see cref="IProxyFactory"/>
+		/// </summary>
 		public DefaultKernel(IProxyFactory proxyFactory)
 		{
 			_proxyFactory = proxyFactory;
@@ -71,6 +132,8 @@ namespace Castle.MicroKernel
 			_modelBuilder = new DefaultComponentModelBuilder(this);
 			_resolver = new DefaultDependecyResolver(this);
 		}
+
+		#endregion
 
 		#region IKernel Members
 
@@ -368,6 +431,9 @@ namespace Castle.MicroKernel
 
 		#region IDisposable Members
 
+		/// <summary>
+		/// Starts the process of component disposal.
+		/// </summary>
 		public virtual void Dispose()
 		{
 			_releaserPolicy.Dispose();
@@ -390,6 +456,8 @@ namespace Castle.MicroKernel
 		}
 
 		#endregion
+
+		#region Protected members
 
 		protected void RegisterHandler(String key, IHandler handler)
 		{
@@ -420,5 +488,7 @@ namespace Castle.MicroKernel
 
 			return instance;
 		}
+
+		#endregion
 	}
 }

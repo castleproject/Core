@@ -17,27 +17,20 @@ namespace Castle.Windsor.Tests.Components
 	using System;
 
 	/// <summary>
-	/// Summary description for CalculatorService.
+	/// Summary description for ICalcService.
 	/// </summary>
-	public class CalculatorService : ICalcService
+	public interface ICalcService
 	{
-		public CalculatorService()
+		int Sum(int x, int y);
+
+		bool Initialized
 		{
+			get;
 		}
 
-		public virtual int Sum(int x, int y)
+		bool Disposed
 		{
-			return x + y;
-		}
-
-		public bool Initialized
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool Disposed
-		{
-			get { throw new NotImplementedException(); }
+			get;
 		}
 	}
 }
