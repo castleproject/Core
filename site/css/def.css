@@ -132,3 +132,13 @@ h3 {
 	border-bottom-color: #333333;
 	border-left-color: #333333;
 }
+.nicetable {
+	font-size: small;
+	color: #000033;
+	background-color: #A2A3B9;
+
+}
+code {
+	font-family: "Lucida Console", "Courier New", Courier, mono;
+	font-size: small;
+}

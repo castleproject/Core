@@ -21,6 +21,7 @@ namespace Castle.Facilities.BatchRegistration
 
 	using Castle.MicroKernel.Facilities;
 
+
 	public class BatchRegistrationFacility : AbstractFacility
 	{
 		protected override void Init()
