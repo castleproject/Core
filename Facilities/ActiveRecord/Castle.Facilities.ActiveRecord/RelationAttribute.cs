@@ -19,7 +19,7 @@ namespace Castle.Facilities.ActiveRecord
 	/// <summary>
 	/// 
 	/// </summary>
-	public enum MappingType
+	public enum RelationType
 	{
 		Guess,
 		Map,
@@ -38,15 +38,20 @@ namespace Castle.Facilities.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property)]
 	public abstract class RelationAttribute : Attribute
 	{
-//		private MappingType _mapType = MappingType.Guess;
+		private RelationType _relType = RelationType.Guess;
 
 		public RelationAttribute()
 		{
 		}
 
-		public RelationAttribute( MappingType mapType, bool inverse, 
-			String condition, String order, bool lazy)
+//		public RelationAttribute( RelationType relType, bool inverse, 
+//			String condition, String order, bool lazy)
+//		{
+//		}
+		public RelationType RelationType
 		{
+			get { return _relType; }
+			set { _relType = value; }
 		}
 	}
 }
