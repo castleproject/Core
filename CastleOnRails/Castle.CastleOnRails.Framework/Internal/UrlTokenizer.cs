@@ -61,13 +61,11 @@ namespace Castle.CastleOnRails.Framework.Internal
 
 			String controller = parts[ parts.Length - 2 ];
 
-			String area = null;
+			String area = String.Empty;
 			
 			if (parts.Length - 3 >= 0 )
 			{
 				area = parts[ parts.Length - 3 ];
-
-				if (area == String.Empty) area = null;
 			}
 
 			return new UrlInfo(url, area, controller, action);

@@ -1,3 +1,4 @@
+using System.Threading;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,7 +83,7 @@ namespace Castle.CastleOnRails.Framework
 
 		#region Usefull operations
 
-		protected void RenderView( String name )
+		public void RenderView( String name )
 		{
 			String basePath = _controllerName;
 
@@ -94,28 +95,28 @@ namespace Castle.CastleOnRails.Framework
 			_selectedViewName = Path.Combine( basePath, name );
 		}
 
-		protected void RenderView( String controller, String name )
+		public void RenderView( String controller, String name )
 		{
 			_selectedViewName = Path.Combine( controller, name );
 		}
 
-		protected void Redirect( String controller, String action )
+		public void Redirect( String controller, String action )
 		{
 			CancelView();
 
 			_context.Response.Redirect( 
-				String.Format("../{0}/{1}.rails", controller, action), true );
+				String.Format("../{0}/{1}.rails", controller, action), false );
 		}
 
-		protected void Redirect( String area, String controller, String action )
+		public void Redirect( String area, String controller, String action )
 		{
 			CancelView();
 
 			_context.Response.Redirect( 
-				String.Format("../{0}/{1}/{2}.rails", area, controller, action), true );
+				String.Format("../{0}/{1}/{2}.rails", area, controller, action), false );
 		}
 
-		protected void CancelView()
+		public void CancelView()
 		{
 			_selectedViewName = null;
 		}
@@ -175,22 +176,26 @@ namespace Castle.CastleOnRails.Framework
 			MethodInfo method = SelectMethod(action, _context.Request);
 
 			bool skipFilters = _filters == null || method.IsDefined( typeof(SkipFilter), true );
-
 			bool hasError = false;
 
 			try
 			{
 				if (!skipFilters)
 				{
-					if (ProcessFilters( ExecuteEnum.Before ))
+					if (!ProcessFilters( ExecuteEnum.Before ))
 					{
-						InvokeMethod(method);
+						hasError = true;
 					}
 				}
-				else
+
+				if (!hasError)
 				{
 					InvokeMethod(method);
 				}
+			}
+			catch(ThreadAbortException)
+			{
+				hasError = true;
 			}
 			catch(Exception ex)
 			{

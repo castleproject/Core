@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="rails-framework" default="build">
 
+	<property name="debug" value="false" />
+	<property name="optimize" value="true" />
+
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/../bin" />
 	<property name="lib.dir" value="${base.dir}/../lib" />
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../RailsFrameworkTest" />
+	<property name="test.src.dir" value="${src.dir}/../Castle.CastleOnRails.Framework.Tests" />
 	<property name="name" value="Castle.CastleOnRails.Framework" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
@@ -66,32 +69,4 @@
 		</nunit2>
 	</target>
 	
-	<target name="dist">
-		<zip zipfile="${name}.bin.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/${assembly.name}" />				
-				<include name="${base.dir}/../License.txt" />				
-				<include name="${base.dir}/../Readme.txt" />				
-				<include name="Changes.txt" />				
-			</fileset>
-		</zip>
-		
-		<zip zipfile="${name}.src.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${base.dir}/../License.txt" />				
-				<include name="${base.dir}/../Readme.txt" />				
-				<include name="Changes.txt" />				
-				<include name="*.build" />
-				<include name="*.sln" />
-				<include name="${src.dir}/**/*.*" />
-				<include name="${test.src.dir}/**/*.*" />
-				
-				<exclude name="**/Debug/*" />
-				<exclude name="**/obj/*" />
-				<exclude name="**/*.user" />
-				<exclude name="**/*.suo" />
-			</fileset>
-		</zip>
-	</target>
-
 </project>

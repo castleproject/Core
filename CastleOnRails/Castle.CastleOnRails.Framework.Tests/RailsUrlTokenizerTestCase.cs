@@ -33,7 +33,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
-			Assert.AreEqual( null, info.Area );
+			Assert.AreEqual( String.Empty, info.Area );
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
-			Assert.AreEqual( null, info.Area );
+			Assert.AreEqual( String.Empty, info.Area );
 		}
 
 		[Test]
@@ -83,7 +83,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
-			Assert.AreEqual( null, info.Area );
+			Assert.AreEqual( String.Empty, info.Area );
 		}
 	}
 }

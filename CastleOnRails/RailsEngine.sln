@@ -19,10 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Framew
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine.WindsorExtension", "Castle.CastleOnRails.Engine.WindsorExtension\Castle.CastleOnRails.Engine.WindsorExtension.csproj", "{6C51A1E3-7F20-4696-BFD6-829134678341}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite", "TestSite\TestSite.csproj", "{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -35,7 +31,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor", "TestSite
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine.WindsorExtension.Tests", "Castle.CastleOnRails.Engine.WindsorExtension.Tests\Castle.CastleOnRails.Engine.WindsorExtension.Tests.csproj", "{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.WindsorExtension", "Castle.CastleOnRails.WindsorExtension\Castle.CastleOnRails.WindsorExtension.csproj", "{6C51A1E3-7F20-4696-BFD6-829134678341}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.WindsorExtension.Tests", "Castle.CastleOnRails.WindsorExtension.Tests\Castle.CastleOnRails.WindsorExtension.Tests.csproj", "{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -65,10 +65,6 @@ Global
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Debug.Build.0 = Debug|.NET
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Release.ActiveCfg = Release|.NET
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Release.Build.0 = Release|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.ActiveCfg = Debug|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.Build.0 = Debug|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.ActiveCfg = Release|.NET
-		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.Build.0 = Release|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug.ActiveCfg = Debug|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug.Build.0 = Debug|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release.ActiveCfg = Release|.NET
@@ -81,6 +77,10 @@ Global
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.Build.0 = Debug|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.ActiveCfg = Release|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.Build.0 = Release|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.ActiveCfg = Debug|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.Build.0 = Debug|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.ActiveCfg = Release|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.Build.0 = Release|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug.ActiveCfg = Debug|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug.Build.0 = Debug|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.ActiveCfg = Release|.NET

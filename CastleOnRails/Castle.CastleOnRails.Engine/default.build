@@ -7,7 +7,7 @@
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../RailsEngineTest" />
+	<property name="test.src.dir" value="${src.dir}/../Castle.CastleOnRails.Engine.Tests" />
 	<property name="name" value="Castle.CastleOnRails.Engine" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
@@ -37,7 +37,29 @@
 			unless="${property::exists('nant.tasks.nunit2')}" />	
 
 	<target name="clean">
+		<delete dir="${base.dir}/../TestSite/bin" />
+		<delete dir="${base.dir}/../TestSiteDirVir/bin" />
+		
+		<mkdir dir="${base.dir}/../TestSite/bin" />
+		<mkdir dir="${base.dir}/../TestSiteDirVir/bin" />
+		
+		<copy todir="${base.dir}/../TestSite/bin">
+			<fileset basedir="${base.dir}/bin">
+				<includes name="Castle.CastleOnRails.Engine.dll" />
+				<includes name="Castle.CastleOnRails.Framework.dll" />
+			</fileset>
+		</copy>
+		<csc target="library" output="${base.dir}/../TestSite/bin/TestSite.dll">
+			
+			<sources basedir="${base.dir}/../TestSite/">
+				<includes name="**/*.cs" />
+			</sources>
 
+			<references>
+				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
+				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+			</references>
+		</csc>
 	</target>
 
 	<target name="init" depends="clean">
@@ -90,32 +112,4 @@
 		</nunit2>
 	</target>
 	
-	<target name="packfiles">
-		<zip zipfile="${name}.bin.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/${assembly.name}" />				
-				<include name="${base.dir}/../License.txt" />				
-				<include name="${base.dir}/../Readme.txt" />				
-				<include name="Changes.txt" />				
-			</fileset>
-		</zip>
-		
-		<zip zipfile="${name}.src.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${base.dir}/../License.txt" />				
-				<include name="${base.dir}/../Readme.txt" />				
-				<include name="Changes.txt" />				
-				<include name="*.build" />
-				<include name="*.sln" />
-				<include name="${src.dir}/**/*.*" />
-				<include name="${test.src.dir}/**/*.*" />
-				
-				<exclude name="**/Debug/*" />
-				<exclude name="**/obj/*" />
-				<exclude name="**/*.user" />
-				<exclude name="**/*.suo" />
-			</fileset>
-		</zip>
-	</target>
-
 </project>
