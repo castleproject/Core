@@ -39,12 +39,8 @@ namespace Castle.DynamicProxy.Serialization
 			return generator.CreateClassProxy( m_baseType, m_interceptor );
 		}
 
-		#region ISerializable Members
-
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 		}
-
-		#endregion
 	}
 }
