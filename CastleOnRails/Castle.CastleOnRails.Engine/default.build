@@ -70,7 +70,7 @@
 		</csc>
 	</target>
 
-	<target name="tests.compile" depends="compile">
+	<target name="tests.compile" depends="init">
 		<csc 
 			target="library" 
 			debug="${debug}" 
@@ -84,10 +84,13 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Cassini.dll" />
 			</references>
 		</csc>
 	</target>
 	
+	<target name="test" depends="tests.run" />
+
 	<target name="tests.run" depends="tests.compile">
 		<nunit2>
 			<formatter type="Plain" />

@@ -50,22 +50,26 @@
 		</csc>
 	</target>
 
-	<target name="tests.compile" depends="compile">
+	<target name="tests.compile" depends="init">
 		<csc 
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${test.assembly.name}">
 			
-			<sources basedir="${test.src.dir}" defaultexcludes="true">
+			<sources basedir="${test.src.dir}">
 				<include name="**/*.cs" />
 			</sources>
 
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
+				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
+				<include name="${bin.dir}/Cassini.dll" />
 			</references>
 		</csc>
 	</target>
+	
+	<target name="test" depends="tests.run" />
 	
 	<target name="tests.run" depends="tests.compile">
 		<nunit2>

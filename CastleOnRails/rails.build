@@ -3,6 +3,7 @@
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="lib.dir" value="${base.dir}/lib" />
 	<property name="name" value="CastleOnRails" />
 	<property name="version" value="beta-1" />
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
@@ -30,9 +31,9 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="init, framework, engine, integration, samples, tests" />
-	
-	<target name="init">
+	<target name="build" depends="clean, init, framework, engine, integration, samples, tests" />
+
+	<target name="clean">
 		<delete>
 			<fileset>
 				<include name="${bin.dir}\*.dll" />
@@ -40,33 +41,43 @@
 				<include name="${bin.dir}\*.xml" />
 			</fileset>
 		</delete>
+	</target>
+	
+	<target name="init">
 		<copy todir="${bin.dir}">
 			<fileset basedir="${container.bin.dir}">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
+		<copy todir="${bin.dir}">
+			<fileset basedir="${lib.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
 	</target>
 	
-	<target name="framework">
+	<target name="framework" depends="init">
 		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="compile" />
 	</target>
 
-	<target name="engine">
+	<target name="engine" depends="init">
 		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="compile" />
 	</target>
 
-	<target name="integration">
+	<target name="integration" depends="init">
 		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="compile" />
 	</target>
 
-	<target name="samples">
+	<target name="samples" depends="init">
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteDirVir/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 	</target>
 	
-	<target name="tests">
-
+	<target name="tests" depends="init">
+		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="test" />
 	</target>
 
 	<target name="dist">
