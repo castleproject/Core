@@ -1,3 +1,4 @@
+using Bamboo.Prevalence.Util;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,8 +35,13 @@ namespace Castle.Facilities.Prevalence
 		public static readonly String AutoMigrationPropertyKey = "prevalence.autoversionmigration";
 		public static readonly String EngineIdPropertyKey = "prevalence.engineid";
 		public static readonly String ResetStoragePropertyKey = "prevalence.resetStorage";
+		public static readonly String SnapshotPeriodPropertyKey = "prevalence.snapshotPeriod";
+		
+		public static readonly String CleanupPolicyComponentPropertyKey = "prevalence.cleanupPolicyComponent";
+		public static readonly String SnapShotTakerComponentPropertyKey = "prevalence.snapshot.taker";
 
-		private IKernel kernel;
+		private IKernel _kernel;
+		private IConfiguration _facilityConfig;
 
 		public PrevalenceFacility()
 		{
@@ -45,21 +51,35 @@ namespace Castle.Facilities.Prevalence
 
 		public void Init(IKernel kernel, IConfiguration facilityConfig)
 		{
-			this.kernel = kernel;
+			_kernel = kernel;
+			_facilityConfig = facilityConfig;
+
 
 			RegisterExtensions();
-			RegisterEngines(facilityConfig);			
+			RegisterEngines();			
 		}
 
 		public void Terminate()
 		{
+			IConfiguration engines = GetEnginesConfig();
+			
+			foreach(IConfiguration engine in engines.Children)
+			{
+				TakeSnapshotIfRequired(engine);
+				HandsOffFiles(engine);
+			}
 		}
 
 		#endregion
 
-		protected void RegisterEngines(IConfiguration facilityConfig)
+		private IConfiguration GetEnginesConfig()
 		{
-			IConfiguration engines = facilityConfig.Children["engines"];
+			return _facilityConfig.Children["engines"];
+		}
+
+		protected void RegisterEngines()
+		{
+			IConfiguration engines = GetEnginesConfig();
 			
 			foreach(IConfiguration engine in engines.Children)
 			{
@@ -69,7 +89,7 @@ namespace Castle.Facilities.Prevalence
 
 		protected void RegisterExtensions()
 		{
-			kernel.ComponentModelBuilder.AddContributor( 
+			_kernel.ComponentModelBuilder.AddContributor( 
 				new PrevalenceActivatorOverriderModelInspector() );
 		}
 
@@ -90,10 +110,48 @@ namespace Castle.Facilities.Prevalence
 			properties.Add(AutoMigrationPropertyKey, autoVersion);
 			properties.Add(ResetStoragePropertyKey, Convert.ToBoolean(resetStorage) );
 			properties.Add(StorageDirPropertyKey, engineConfig.Attributes["storageDir"]);
+			
+			ConfigureSnapshot(engineConfig, properties);
 
-			kernel.AddComponentWithProperties(engineKey, typeof(PrevalenceEngine), properties);
+			_kernel.AddComponentWithProperties(engineKey, typeof(PrevalenceEngine), properties);
 
 			RegisterSystem(engineKey, systemId, systemType);
+		}
+
+		private void ConfigureSnapshot(IConfiguration engineConfig, IDictionary properties)
+		{
+			int period = GetSnapshotPeriod(engineConfig);
+
+			if (RequiresSnapshots(period))
+			{
+				if (engineConfig.Attributes["cleanupPolicyComponent"] == null)
+				{
+					_kernel.AddComponentInstance(CleanupPolicyComponentPropertyKey, CleanUpAllFilesPolicy.Default);
+				}
+
+				properties.Add(SnapshotPeriodPropertyKey, period);
+			}
+			else
+			{
+				properties.Add(SnapshotPeriodPropertyKey, 0);
+			}
+		}
+
+		private int GetSnapshotPeriod(IConfiguration engineConfig)
+		{
+			try
+			{
+				return Convert.ToInt32(engineConfig.Attributes["snapshotHoursPeriod"]);
+			}
+			catch (FormatException e)
+			{
+				throw new KernelException("Invalid snapshotHoursPeriod.", e);
+			}
+		}
+
+		private bool RequiresSnapshots(int period)
+		{
+			return period > 0;
 		}
 
 		protected Type ObtainSystemType(IConfiguration config)
@@ -107,7 +165,7 @@ namespace Castle.Facilities.Prevalence
 			if (systemType == null)
 			{
 				String message = String.Format(
-					"Could not obtain type for prevalent system '{0}'", systemTypeName);
+					"Could not obtain type for prevalent system '{0}'.", systemTypeName);
 
 				throw new KernelException(message);
 			}
@@ -121,7 +179,26 @@ namespace Castle.Facilities.Prevalence
 
 			properties[EngineIdPropertyKey] = engineKey;
 
-			kernel.AddComponentWithProperties(systemId, systemType, properties);
+			_kernel.AddComponentWithProperties(systemId, systemType, properties);
+		}
+
+		protected void TakeSnapshotIfRequired(IConfiguration engineConfig)
+		{
+			int period = GetSnapshotPeriod(engineConfig);
+
+			if (RequiresSnapshots(period))
+			{
+				PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes["id"]];
+
+				engine.TakeSnapshot();
+			}
+		}
+
+		protected void HandsOffFiles(IConfiguration engineConfig)
+		{
+			PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes["id"]];
+
+			engine.HandsOffOutputLog();
 		}
 	}
 }

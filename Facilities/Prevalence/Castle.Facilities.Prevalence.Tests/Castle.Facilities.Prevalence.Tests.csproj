@@ -100,6 +100,11 @@
                     Project = "{483BE30E-0045-4C3D-9DFF-ED6421CBAB4E}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Bamboo.Prevalence.Util"
+                    AssemblyName = "Bamboo.Prevalence.Util"
+                    HintPath = "..\lib\Bamboo.Prevalence.Util.dll"
+                />
             </References>
         </Build>
         <Files>

@@ -12,28 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Prevalence.Tests
+namespace Castle.MicroKernel.Tests.ClassComponents
 {
 	using System;
 
-	using Bamboo.Prevalence.Attributes;
+	using NUnit.Framework;
 
-	/// <summary>
-	/// Summary description for UserDatabase.
-	/// </summary>
-	[Serializable]
-	[TransparentPrevalence]
-	public class UserDatabase : MarshalByRefObject
+	
+	public class HiperFacility : IFacility
 	{
-		private object _object;
+		public bool Initialized = false;
+		public bool Terminated = false;
 
-		public UserDatabase()
+		public HiperFacility()
 		{
 		}
 
-		public void Init()
+		public void Init(IKernel kernel, Castle.Model.Configuration.IConfiguration facilityConfig)
 		{
-			_object = new object();
+			Assert.IsNotNull(kernel);
+			Assert.IsNotNull(facilityConfig);
+
+			Initialized = true;
+		}
+
+		public void Terminate()
+		{
+			Terminated = true;
 		}
 	}
 }

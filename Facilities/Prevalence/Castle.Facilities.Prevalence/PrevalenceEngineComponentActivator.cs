@@ -1,4 +1,5 @@
 using System.IO;
+using Bamboo.Prevalence.Util;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,20 +40,41 @@ namespace Castle.Facilities.Prevalence
 		{
 			Type systemType = (Type) 
 				Model.ExtendedProperties[PrevalenceFacility.SystemTypePropertyKey];
-			String dir = (String) 
-				Model.ExtendedProperties[PrevalenceFacility.StorageDirPropertyKey];
+			String dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (String) 
+				Model.ExtendedProperties[PrevalenceFacility.StorageDirPropertyKey]);
 			bool autoVersionMigration = (bool) 
 				Model.ExtendedProperties[PrevalenceFacility.AutoMigrationPropertyKey];
 			bool resetStorage = (bool) 
 				Model.ExtendedProperties[PrevalenceFacility.ResetStoragePropertyKey];
+			int snapshotPeriod = (Int32)Model.ExtendedProperties[PrevalenceFacility.SnapshotPeriodPropertyKey];
 			
-			if (resetStorage) DeleteStorageDir(dir);
+			if (resetStorage)
+			{
+				DeleteStorageDir(dir);
+			}
 
-			return 
+			PrevalenceEngine engine =
 				PrevalenceActivator.CreateEngine( 
-					systemType, 
-					dir, 
-					autoVersionMigration );
+				systemType, 
+				dir, 
+				autoVersionMigration );
+
+			if (snapshotPeriod > 0)
+			{
+				CreateSnapshotTaker(engine, snapshotPeriod);
+			}
+
+			return engine;
+		}
+
+		private void CreateSnapshotTaker(PrevalenceEngine engine, int snapshotPeriod)
+		{
+			TimeSpan period = TimeSpan.FromHours(snapshotPeriod);
+			ICleanUpPolicy policy = (ICleanUpPolicy) Kernel[PrevalenceFacility.CleanupPolicyComponentPropertyKey];
+
+			SnapshotTaker taker = new SnapshotTaker(engine, period, policy);
+
+			Kernel.AddComponentInstance(PrevalenceFacility.SnapShotTakerComponentPropertyKey, taker);
 		}
 
 		private void DeleteStorageDir(String dir)
@@ -64,5 +86,16 @@ namespace Castle.Facilities.Prevalence
 				di.Delete(true);
 			}
 		}
+
+		public static void Kernel_ComponentDestroyed(ComponentModel model, object instance)
+		{
+			if (instance is PrevalenceEngine)
+			{
+				PrevalenceEngine engine = (PrevalenceEngine) instance;
+
+				engine.TakeSnapshot();
+			}
+		}
 	}
 }
+;

@@ -595,9 +595,18 @@ namespace Castle.MicroKernel
 		public virtual void Dispose()
 		{
 			DisposeSubKernels();
+			TerminateFacilities();
 			DisposeComponentsInstancesWithinTracker();
 			DisposeHandlers();
 			UnsubscribeFromParentKernel();
+		}
+
+		private void TerminateFacilities()
+		{
+			foreach(IFacility facility in _facilities)
+			{
+				facility.Terminate();
+			}
 		}
 
 		private void DisposeHandlers()
