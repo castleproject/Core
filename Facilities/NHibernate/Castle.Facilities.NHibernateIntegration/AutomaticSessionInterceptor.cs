@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Transaction = Castle.Services.Transaction.ITransaction;
+
 namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
@@ -22,11 +24,11 @@ namespace Castle.Facilities.NHibernateIntegration
 
 	using Castle.Facilities.NHibernateExtension;
 
+	using Castle.Services.Transaction;
+
 	using NHibernate;
 
-	/// <summary>
-	/// Summary description for AutomaticSessionInterceptor.
-	/// </summary>
+
 	public class AutomaticSessionInterceptor : IMethodInterceptor
 	{
 		private IKernel _kernel;
@@ -43,10 +45,16 @@ namespace Castle.Facilities.NHibernateIntegration
 				return invocation.Proceed(args);
 			}
 
-			ISessionFactory sessionFactory = 
-				ObtainSessionFactoryFor(invocation.InvocationTarget);
+			String key = ObtainSessionFactoryKeyFor(invocation.InvocationTarget);
+			ISessionFactory sessionFactory = ObtainSessionFactoryFor(key);
 
-			SessionManager.CurrentSession = sessionFactory.OpenSession();
+			ISession session = sessionFactory.OpenSession();
+			SessionManager.CurrentSession = session;
+
+			if (EnlistSessionIfHasTransactionActive(key, session))
+			{
+				return invocation.Proceed(args);
+			}
 
 			try
 			{
@@ -54,19 +62,57 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 			finally
 			{
-				SessionManager.CurrentSession.Flush();
-				SessionManager.CurrentSession.Close();
+				session.Flush();
+				session.Close();
+				session = null;
 				SessionManager.CurrentSession = null;
 			}
 		}
 
-		protected ISessionFactory ObtainSessionFactoryFor(object target)
+		private bool EnlistSessionIfHasTransactionActive(String key, ISession session)
+		{
+			if (!_kernel.HasComponent(typeof(ITransactionManager))) return false;
+
+			bool enlisted = false;
+
+			if (key == null) key = "nhibernate.sf";
+
+			ITransactionManager manager = (ITransactionManager) _kernel[ typeof(ITransactionManager) ];
+
+			Transaction transaction = manager.CurrentTransaction;
+
+			if (transaction != null)
+			{
+				if (!transaction.Context.Contains(key))
+				{
+					transaction.Context[key] = true;
+					transaction.Enlist(new ResourceSessionAdapter(session.BeginTransaction()));
+					transaction.RegisterSynchronization( new SessionKeeper(session) );
+					enlisted = true;
+				}
+			}
+
+			_kernel.ReleaseComponent(manager);
+
+			return enlisted;
+		}
+
+		protected String ObtainSessionFactoryKeyFor(object target)
 		{
 			// TODO: Use the key specified in the attribute - if any
-
 			// Returns the first ISessionFactory registered, which might
 			// be wrong if more than one factory was registered.
-			return (ISessionFactory) _kernel[ typeof(ISessionFactory) ];
+
+			return null;
+		}
+
+		protected ISessionFactory ObtainSessionFactoryFor(String key)
+		{
+			if (key == null)
+			{
+				return (ISessionFactory) _kernel[ typeof(ISessionFactory) ];
+			}
+			return (ISessionFactory) _kernel[ key ];
 		}
 	}
 }

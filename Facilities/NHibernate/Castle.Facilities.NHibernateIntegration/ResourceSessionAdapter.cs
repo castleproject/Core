@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Tests
+using ITransaction = NHibernate.ITransaction;
+
+namespace Castle.Facilities.NHibernateIntegration
 {
-	using System;
+	using NHibernate;
 
-	using Castle.Facilities.NHibernateExtension;
 
-	using Castle.Services.Transaction;
-
-	/// <summary>
-	/// Summary description for BlogDaoTransactional.
-	/// </summary>
-	[Transactional]
-	public class BlogDaoTransactional : BlogDao
+	public class ResourceSessionAdapter : Castle.Services.Transaction.IResource
 	{
-		[Transaction(TransactionMode.Required)]
-		public override Blog CreateBlog(String name)
+		private ITransaction _transaction;
+
+		public ResourceSessionAdapter(ITransaction transaction)
 		{
-			return base.CreateBlog(name);
+			_transaction = transaction;
+		}
+
+		public void Start()
+		{
+			// Nothing do to
+		}
+
+		public void Commit()
+		{
+			_transaction.Commit();
+		}
+
+		public void Rollback()
+		{
+			_transaction.Rollback();
 		}
 	}
 }

@@ -84,6 +84,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AbstractTransaction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -94,7 +99,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DefaultTransactionManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IResource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ISynchronization.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -105,6 +120,16 @@
                 />
                 <File
                     RelPath = "ITransactionManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StandardTransaction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TransactionException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

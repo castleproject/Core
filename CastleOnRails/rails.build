@@ -7,6 +7,7 @@
 	<property name="name" value="CastleOnRails" />
 	<property name="version" value="beta-1" />
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
+	<property name="rails.test" value="true" />
 
 	<!-- find out where nunit.framework.dll is -->
 	<property name="nant.lib.dir"
@@ -79,7 +80,7 @@
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
 	</target>
 	
-	<target name="tests" depends="init">
+	<target name="tests" depends="init" if="${rails.test}">
 		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.CastleOnRails.Framework.Views.NVelocity/default.build" inheritall="true" target="test" />

@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,27 +17,15 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using System;
 
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
 
-	using Castle.Model.Configuration;
 
-	/// <summary>
-	/// Summary description for TransactionFacility.
-	/// </summary>
-	public class TransactionFacility : IFacility
+	public class TransactionFacility : AbstractFacility
 	{
-		public TransactionFacility()
+		protected override void Init()
 		{
-		}
-
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
-		{
-			kernel.AddComponent( "transaction.interceptor", typeof(TransactionInterceptor) );
-
-			kernel.ComponentModelBuilder.AddContributor( new TransactionComponentInspector() );
-		}
-
-		public void Terminate()
-		{
+			Kernel.AddComponent( "transaction.interceptor", typeof(TransactionInterceptor) );
+			Kernel.ComponentModelBuilder.AddContributor( new TransactionComponentInspector() );
 		}
 	}
 }

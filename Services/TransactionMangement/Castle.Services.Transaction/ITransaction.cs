@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,22 +19,66 @@
 namespace Castle.Services.Transaction
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
-	/// Summary description for ITransaction.
+	/// 
+	/// </summary>
+	public enum TransactionStatus
+	{
+		NoTransaction,
+		Active,
+		Committed,
+		RolledBack,
+		Invalid
+	}
+
+	/// <summary>
+	/// Represents the contract for a transaction.
 	/// </summary>
 	public interface ITransaction
 	{
+		/// <summary>
+		/// Starts the transaction. Implementors
+		/// should activate the apropriate resources
+		/// in order to start the underlying transaction
+		/// </summary>
 		void Begin();
 
+		/// <summary>
+		/// Succeed the transaction, persisting the
+		/// modifications
+		/// </summary>
 		void Commit();
 
+		/// <summary>
+		/// Cancels the transaction, rolling back the 
+		/// modifications
+		/// </summary>
 		void Rollback();
 
-		bool WasRolledBack { get; }
-
-		bool WasCommitted { get; }
+		/// <summary>
+		/// Returns the current transaction status.
+		/// </summary>
+		TransactionStatus Status { get; }
 		
+		/// <summary>
+		/// Register a participant on the transaction.
+		/// </summary>
+		/// <param name="resource"></param>
 		void Enlist(IResource resource);
+
+		/// <summary>
+		/// Registers a synchronization object that will be 
+		/// invoked prior and after the transaction completion
+		/// (commit or rollback)
+		/// </summary>
+		/// <param name="synchronization"></param>
+		void RegisterSynchronization(ISynchronization synchronization);
+
+		/// <summary>
+		/// Transaction context. Can be used by applications.
+		/// </summary>
+		IDictionary Context { get; }
 	}
 }

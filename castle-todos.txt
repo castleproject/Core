@@ -74,7 +74,7 @@ NHibernate/obj.net/iBatis integration
   frameworks
 
 - Try to create a simple web application using castle and one of those frameworks
-  frameworks
+  
 
 Future
 ======

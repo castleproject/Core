@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using ITransaction = Castle.Services.Transaction.ITransaction;
+
 namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
+	using System.Collections;
 
 	using Castle.Model;
 
-	using Castle.MicroKernel;
-
 	using Castle.Services.Transaction;
 
-	using Castle.Facilities.NHibernateExtension;
-	
 	using NHibernate;
 
 	/// <summary>
@@ -31,83 +30,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// Session transaction implementation.
 	/// </summary>
 	[PerThread]
-	public class NHibernateTransactionManager : ITransactionManager
+	public class NHibernateTransactionManager : DefaultTransactionManager
 	{
-		private IKernel _kernel;
-		private NHibernateTransaction _currentTransaction;
-
-		/// <summary>
-		/// Constructs a NHibernateTransactionManager. 
-		/// </summary>
-		/// <param name="kernel"></param>
-		public NHibernateTransactionManager(IKernel kernel)
-		{
-			_kernel = kernel;
-		}
-
-		public Castle.Services.Transaction.ITransaction CreateTransaction(
-			TransactionMode transactionMode, IsolationMode isolationMode)
-		{
-			if (_currentTransaction != null)
-			{
-				if (transactionMode != TransactionMode.RequiresNew)
-				{
-					return _currentTransaction.CreateVoteTransaction();
-				}
-			}
-
-			ISession session = SessionManager.CurrentSession;
-
-			if (session == null)
-			{
-				String message = "The NHibernateTransactionManager requires that " +
-					"the ISession is available through the ISessionManager.";
-				throw new ApplicationException(message);
-			}
-
-			_currentTransaction = new NHibernateTransaction(session);
-
-			return _currentTransaction;
-		}
-
-		public void Dispose(Castle.Services.Transaction.ITransaction transaction)
-		{
-			_currentTransaction = null;
-		}
-
-		public Castle.Services.Transaction.ITransaction CurrentTransaction
-		{
-			get { return _currentTransaction; }
-		}
-	}
-
-	internal class TransactionStack
-	{
-		private NHibernateTransaction[] _transactions;
-		private int _top = -1;
-
-		public TransactionStack(int size)
-		{
-			_transactions = new NHibernateTransaction[size];
-		}
-
-		public TransactionStack() : this(100)
-		{
-		}
-
-		public void Push(NHibernateTransaction transaction)
-		{
-			_transactions[++_top] = transaction;
-		}
-
-		public NHibernateTransaction Peek
-		{
-			get { return _transactions[_top]; }
-		}
-
-		public NHibernateTransaction Pop()
-		{
-			return _transactions[_top--];
-		}
 	}
 }

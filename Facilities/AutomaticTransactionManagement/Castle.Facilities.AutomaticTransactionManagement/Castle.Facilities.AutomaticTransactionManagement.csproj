@@ -75,14 +75,24 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.Services.Transaction"
-                    AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
-                />
-                <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
                 />
             </References>
         </Build>

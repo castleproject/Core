@@ -3,6 +3,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Transaction
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Transaction.Tests", "Castle.Services.Transaction.Tests\Castle.Services.Transaction.Tests.csproj", "{67CDFD3A-450F-4CD4-9401-EF15361E2713}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -13,6 +17,10 @@ Global
 		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Debug.Build.0 = Debug|.NET
 		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Release.ActiveCfg = Release|.NET
 		{0F611C1B-EDFD-46E6-9C3A-95420946E9CC}.Release.Build.0 = Release|.NET
+		{67CDFD3A-450F-4CD4-9401-EF15361E2713}.Debug.ActiveCfg = Debug|.NET
+		{67CDFD3A-450F-4CD4-9401-EF15361E2713}.Debug.Build.0 = Debug|.NET
+		{67CDFD3A-450F-4CD4-9401-EF15361E2713}.Release.ActiveCfg = Release|.NET
+		{67CDFD3A-450F-4CD4-9401-EF15361E2713}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

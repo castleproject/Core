@@ -9,6 +9,7 @@
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="src.dir" value="${base.dir}/Castle.Facilities.NHibernateIntegration" />
 	<property name="src.ext.dir" value="${base.dir}/Castle.Facilities.NHibernateExtension" />
+	<property name="nhibernate.test" value="true" />
 
 	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.NHibernateIntegration.Tests" />
 	<property name="name" value="Castle.Facilities.NHibernateIntegration" />
@@ -101,7 +102,7 @@
 		</csc>
 	</target>
 	
-	<target name="tests.run" depends="tests.compile">
+	<target name="tests.run" depends="tests.compile" if="${nhibernate.test}">
 		<nunit2 >
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />

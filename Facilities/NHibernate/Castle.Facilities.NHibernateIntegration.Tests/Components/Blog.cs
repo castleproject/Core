@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,25 +17,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	using System;
 	using System.Collections;
 
-	public class BlogItem
+	public class Blog
 	{
 		private long id;
-		private DateTime dateTime;
-		private string text;
-		private string title;
-		private Blog blog;
-
-		public Blog ParentBlog
-		{
-			get { return blog; }
-			set { blog = value; }
-		}
-
-		public DateTime ItemDate
-		{
-			get { return dateTime; }
-			set { dateTime = value; }
-		}
+		private string name;
+		private IList items;
 
 		public long Id
 		{
@@ -43,16 +29,16 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			set { id = value; }
 		}
 
-		public string Text
+		public string Name
 		{
-			get { return text; }
-			set { text = value; }
+			get { return name; }
+			set { name = value; }
 		}
 
-		public string Title
+		public IList Items
 		{
-			get { return title; }
-			set { title = value; }
+			get { return items; }
+			set { items = value; }
 		}
 	}
 }

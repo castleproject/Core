@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,11 +25,10 @@ namespace Castle.Services.Transaction
 	/// </summary>
 	public enum TransactionMode 
 	{ 
-		Unspecified,
 		/// <summary>
-		/// no transaction context will be created
+		/// 
 		/// </summary>
-		Disabled = 0,
+		Unspecified,
 		/// <summary>
 		/// transaction context will be created 
 		/// managing internally a connection, no 
@@ -39,11 +38,11 @@ namespace Castle.Services.Transaction
 		/// <summary>
 		/// transaction context will be created if not present 
 		/// </summary>
-		Required,// 
+		Requires,
 		/// <summary>
 		/// a new transaction context will be created 
 		/// </summary>
-		RequiresNew,// 
+		RequiresNew,
 		/// <summary>
 		/// an existing appropriate transaction context 
 		/// will be joined if present
@@ -68,18 +67,15 @@ namespace Castle.Services.Transaction
 	/// Indicates that the target class wants to use
 	/// the transactional services.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class TransactionalAttribute : System.Attribute 
 	{
-		public TransactionalAttribute()
-		{
-		}
 	}
 
 	/// <summary>
 	/// Indicates the transaction support for a method.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Method)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
 	public class TransactionAttribute : System.Attribute 
 	{
 		private TransactionMode _transactionMode;

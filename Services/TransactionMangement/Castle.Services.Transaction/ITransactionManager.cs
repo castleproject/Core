@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@ namespace Castle.Services.Transaction
 	using System;
 
 	/// <summary>
-	/// Manages the creation and disposal of 
-	/// <see cref="ITransaction"/> instances.
+	/// Manages the creation and disposal of <see cref="ITransaction"/> instances.
 	/// </summary>
 	public interface ITransactionManager
 	{
 		/// <summary>
-		/// 
+		/// More information here.
+		/// Can return null!
 		/// </summary>
 		/// <param name="transactionMode"></param>
 		/// <param name="isolationMode"></param>

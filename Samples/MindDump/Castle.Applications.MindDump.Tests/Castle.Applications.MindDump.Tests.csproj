@@ -140,7 +140,17 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AccountServiceTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AuthenticationServiceTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -156,6 +166,11 @@
                 />
                 <File
                     RelPath = "BlogTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PostTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

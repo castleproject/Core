@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilties.AutomaticTransactionManagement", "Castle.Facilities.AutomaticTransactionManagement\Castle.Facilties.AutomaticTransactionManagement.csproj", "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.AutomaticTransactionManagement", "Castle.Facilities.AutomaticTransactionManagement\Castle.Facilities.AutomaticTransactionManagement.csproj", "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

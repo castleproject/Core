@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +26,11 @@ namespace Castle.Model
 		public void Add(InterceptorReference interceptor)
 		{
 			InnerList.Add( interceptor );
+		}
+
+		public void Insert(int index, InterceptorReference interceptor)
+		{
+			InnerList.Insert( index, interceptor );
 		}
 
 		public bool HasInterceptors

@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,30 +15,21 @@
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
-	using System.Collections;
 
-	public class Blog
+	using Castle.Facilities.NHibernateExtension;
+
+	using Castle.Services.Transaction;
+
+	/// <summary>
+	/// Summary description for BlogDaoTransactional.
+	/// </summary>
+	[Transactional]
+	public class BlogDaoTransactional : BlogDao
 	{
-		private long id;
-		private string name;
-		private IList items;
-
-		public long Id
+		[Transaction(TransactionMode.Requires)]
+		public override Blog CreateBlog(String name)
 		{
-			get { return id; }
-			set { id = value; }
-		}
-
-		public string Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		public IList Items
-		{
-			get { return items; }
-			set { items = value; }
+			return base.CreateBlog(name);
 		}
 	}
 }

@@ -131,11 +131,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Services.Transaction"
-                    AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
-                />
-                <Reference
                     Name = "Castle.Facilities.AutomaticTransactionManagement"
                     AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
                     HintPath = "..\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
@@ -144,6 +139,11 @@
                     Name = "MySql.Data"
                     AssemblyName = "MySql.Data"
                     HintPath = "..\lib\MySql.Data.dll"
+                />
+                <Reference
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
                 />
             </References>
         </Build>
@@ -160,32 +160,42 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Blog.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BlogDao.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BlogDaoTransactional.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BlogItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "DaoTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "NHibernateFacilityTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TransactionalPlaceHolderTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Blog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\BlogDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\BlogDaoTransactional.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\BlogItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\MyBusinessClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,4 +1,4 @@
-// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,15 +23,9 @@ namespace Castle.Facilities.NHibernateIntegration
 
 	using Castle.Facilities.NHibernateExtension;
 
-	/// <summary>
-	/// Summary description for AutomaticSessionInspector.
-	/// </summary>
+
 	public class AutomaticSessionInspector : IContributeComponentModelConstruction
 	{
-		public AutomaticSessionInspector()
-		{
-		}
-
 		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (model.Implementation.IsDefined( 
