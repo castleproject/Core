@@ -12,16 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.ActiveRecord.Tests.Model
 {
 	using System;
 
-
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
-	public class IgnoreAttribute : Attribute
+	[ActiveRecord("TableNameHere")]
+	public class SimpleModel2
 	{
-		public IgnoreAttribute()
+		private int _id;
+		private String _name;
+
+		[PrimaryKey(PrimaryKeyType.Native, "t_id")]
+		public int id
 		{
+			get { return _id; }
+			set { _id = value; }
+		}
+
+		[PropertyAttribute("t_name", ColumnType="StringClob")]
+		public String name
+		{
+			get { return _name; }
+			set { _name = value; }
 		}
 	}
 }

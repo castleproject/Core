@@ -21,9 +21,9 @@ namespace Castle.ActiveRecord
 	public class HasOneAttribute : Attribute
 	{
 		private Type _mapType;
-		private string _cascade;
-		private string _constrained;
-		private string _outerJoin;
+		private String _cascade;
+		private String _constrained;
+		private String _outerJoin;
 
 		public HasOneAttribute()
 		{
@@ -40,19 +40,19 @@ namespace Castle.ActiveRecord
 			set { _mapType = value; }
 		}
 
-		public string Cascade
+		public String Cascade
 		{
 			get { return _cascade; }
 			set { _cascade = value; }
 		}
 
-		public string Constrained
+		public String Constrained
 		{
 			get { return _constrained; }
 			set { _constrained = value; }
 		}
 
-		public string OuterJoin
+		public String OuterJoin
 		{
 			get { return _outerJoin; }
 			set { _outerJoin = value; }

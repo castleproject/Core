@@ -134,21 +134,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes\FieldMappingAttribute.cs"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Attributes\HasManyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Attributes\HasOneAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Attributes\IgnoreAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -174,6 +165,16 @@
                 />
                 <File
                     RelPath = "Framework\ActiveRecordStarter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DictionaryAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\HookDispatcher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

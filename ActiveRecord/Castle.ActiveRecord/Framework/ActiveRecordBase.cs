@@ -39,7 +39,7 @@ namespace Castle.ActiveRecord
 			cfg.Properties.Add("hibernate.connection.provider", 
 				"NHibernate.Connection.DriverConnectionProvider");
 			
-			cfg.Properties.Add("hibernate.connection.connection_string", 
+			cfg.Properties.Add("hibernate.connection.connection_String", 
 				"UID=susa;Password=OverKkk;Initial Catalog=test;Data Source=.");
 
 			return cfg;
@@ -47,6 +47,11 @@ namespace Castle.ActiveRecord
 
 		public ActiveRecordBase()
 		{
+		}
+
+		protected internal virtual bool BeforeSave(IDictionary state)
+		{
+			return false;
 		}
 
 		protected static object FindByPrimaryKey(Type targetType, object id)

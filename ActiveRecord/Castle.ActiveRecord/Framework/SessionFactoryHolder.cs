@@ -19,6 +19,9 @@ namespace Castle.ActiveRecord
 
 	using NHibernate;
 	using NHibernate.Cfg;
+	using NHibernate.Type;
+
+	using Castle.ActiveRecord.Framework;
 
 
 	public class SessionFactoryHolder
@@ -29,11 +32,6 @@ namespace Castle.ActiveRecord
 		public SessionFactoryHolder()
 		{
 		}
-
-//		public static ISessionFactory Obtain(Type type)
-//		{
-//			return null;
-//		}
 
 		protected internal void Add(Type rootType, Configuration cfg)
 		{
@@ -77,7 +75,7 @@ namespace Castle.ActiveRecord
 		{
 			ISessionFactory sessionFactory = GetSessionFactory(type);
 
-			return sessionFactory.OpenSession();
+			return sessionFactory.OpenSession( new HookDispatcher() );
 		}
 
 		public void ReleaseSession(ISession session)

@@ -21,15 +21,15 @@ namespace Castle.ActiveRecord
 	public class PrimaryKeyAttribute : Attribute
 	{
 		private PrimaryKeyType _generator = PrimaryKeyType.Native;
-		private string _column;
-		private string _unsavedValue;
-		private string _access;
+		private String _column;
+		private String _unsavedValue;
+		private String _access;
 
 		public PrimaryKeyAttribute()
 		{
 		}
 
-		public PrimaryKeyAttribute(PrimaryKeyType generator, string column)
+		public PrimaryKeyAttribute(PrimaryKeyType generator, String column)
 		{
 			_generator = generator;
 			_column = column;
@@ -41,19 +41,19 @@ namespace Castle.ActiveRecord
 			set { _generator = value; }
 		}
 
-		public string Column
+		public String Column
 		{
 			get { return _column; }
 			set { _column = value; }
 		}
 
-		public string UnsavedValue
+		public String UnsavedValue
 		{
 			get { return _unsavedValue; }
 			set { _unsavedValue = value; }
 		}
 
-		public string Access
+		public String Access
 		{
 			get { return _access; }
 			set { _access = value; }

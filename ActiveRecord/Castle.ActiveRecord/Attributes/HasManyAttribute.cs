@@ -21,19 +21,19 @@ namespace Castle.ActiveRecord
 	public class HasManyAttribute : RelationAttribute
 	{
 		private Type _mapType;
-		private string _key;
-		private string _index;
-		private string _table;
-		private string _schema;
-		private string _lazy;
-		private string _inverse;
-		private string _cascade;
-		private string _sort;
-		private string _orderBy;
-		private string _where;
-		private string _column;
+		private String _key;
+		private String _index;
+		private String _table;
+		private String _schema;
+		private String _lazy;
+		private String _inverse;
+		private String _cascade;
+		private String _sort;
+		private String _orderBy;
+		private String _where;
+		private String _column;
 
-		public HasManyAttribute( Type mapType )
+		public HasManyAttribute( Type mapType, RelationType relationType ) : base(relationType)
 		{
 			_mapType = mapType;
 		}
@@ -44,67 +44,67 @@ namespace Castle.ActiveRecord
 			set { _mapType = value; }
 		}
 
-		public string Key
+		public String Key
 		{
 			get { return _key; }
 			set { _key = value; }
 		}
 
-		public string Column
+		public String Column
 		{
 			get { return _column; }
 			set { _column = value; }
 		}
 
-		public string Index
+		public String Index
 		{
 			get { return _index; }
 			set { _index = value; }
 		}
 
-		public string Table
+		public String Table
 		{
 			get { return _table; }
 			set { _table = value; }
 		}
 
-		public string Schema
+		public String Schema
 		{
 			get { return _schema; }
 			set { _schema = value; }
 		}
 
-		public string Lazy
+		public String Lazy
 		{
 			get { return _lazy; }
 			set { _lazy = value; }
 		}
 
-		public string Inverse
+		public String Inverse
 		{
 			get { return _inverse; }
 			set { _inverse = value; }
 		}
 
-		public string Cascade
+		public String Cascade
 		{
 			get { return _cascade; }
 			set { _cascade = value; }
 		}
 
-		public string Sort
+		public String Sort
 		{
 			get { return _sort; }
 			set { _sort = value; }
 		}
 
-		public string OrderBy
+		public String OrderBy
 		{
 			get { return _orderBy; }
 			set { _orderBy = value; }
 		}
 
-		public string Where
+		public String Where
 		{
 			get { return _where; }
 			set { _where = value; }

@@ -145,12 +145,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MappingEngine\NHibernateMappingEngineTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Blog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Model\Post.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\SimpleModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\SimpleModel2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\SimpleModel3.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

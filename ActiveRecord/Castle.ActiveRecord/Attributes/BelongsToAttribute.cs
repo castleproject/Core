@@ -21,11 +21,11 @@ namespace Castle.ActiveRecord
 	public class BelongsToAttribute : Attribute
 	{
 		private Type _type;
-		private string _column;
-		private string _cascade;
-		private string _outerJoin;
-		private string _update;
-		private string _insert;
+		private String _column;
+		private String _cascade;
+		private String _outerJoin;
+		private String _update;
+		private String _insert;
 
 		public BelongsToAttribute(String column)
 		{
@@ -43,31 +43,31 @@ namespace Castle.ActiveRecord
 			set { _type = value; }
 		}
 
-		public string Column
+		public String Column
 		{
 			get { return _column; }
 			set { _column = value; }
 		}
 
-		public string Cascade
+		public String Cascade
 		{
 			get { return _cascade; }
 			set { _cascade = value; }
 		}
 
-		public string OuterJoin
+		public String OuterJoin
 		{
 			get { return _outerJoin; }
 			set { _outerJoin = value; }
 		}
 
-		public string Update
+		public String Update
 		{
 			get { return _update; }
 			set { _update = value; }
 		}
 
-		public string Insert
+		public String Insert
 		{
 			get { return _insert; }
 			set { _insert = value; }

@@ -65,7 +65,8 @@ namespace Castle.ActiveRecord
 				if (!type.IsAbstract)
 				{
 					NHibernateMappingEngine engine = new NHibernateMappingEngine();
-					engine.CreateMapping(type, cfg);
+					String xml = engine.CreateMapping(type);
+					if (xml != String.Empty) cfg.AddXmlString(xml);
 				}
 			}
 		}

@@ -12,25 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.ActiveRecord.Tests.Model
 {
 	using System;
 
+	[ActiveRecord("TableNameHere")]
+	public class SimpleModel3
+	{
+		private int _id;
+		private String _name;
 
-//	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
-//	public class FieldMappingAttribute : Attribute
-//	{
-//		public FieldMappingAttribute(String columnName)
-//		{
-//		}
-//
-//		public FieldMappingAttribute(String columnName, String defaultValue)
-//		{
-//		}
-//
-//		public FieldMappingAttribute(String columnName, String defaultValue, 
-//			bool unique, bool notNull)
-//		{
-//		}
-//	}
+		[PrimaryKey(PrimaryKeyType.Guid, "t_id")]
+		public int id
+		{
+			get { return _id; }
+			set { _id = value; }
+		}
+
+		[PropertyAttribute("t_name", ColumnType="StringClob", NotNull=true, Length=20)]
+		public String name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+	}
 }

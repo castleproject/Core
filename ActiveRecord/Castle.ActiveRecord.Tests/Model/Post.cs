@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Tests
 {
 	using System;
+	using System.Collections;
 
 	[ActiveRecord("Posts")]
 	public class Post : ActiveRecordBase
@@ -31,7 +32,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 		}
 
-		public Post(Blog blog, string title, string contents, string category)
+		public Post(Blog blog, String title, String contents, String category)
 		{
 			_blog = blog;
 			_title = title;
@@ -47,22 +48,21 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[PropertyAttribute("post_title")]
-		public string Title
+		public String Title
 		{
 			get { return _title; }
 			set { _title = value; }
 		}
 
-		// TODO: Specify Type "StringClob"
-		[PropertyAttribute("post_contents")]
-		public string Contents
+		[PropertyAttribute("post_contents", ColumnType="StringClob")]
+		public String Contents
 		{
 			get { return _contents; }
 			set { _contents = value; }
 		}
 
 		[PropertyAttribute("post_category")]
-		public string Category
+		public String Category
 		{
 			get { return _category; }
 			set { _category = value; }
@@ -87,6 +87,12 @@ namespace Castle.ActiveRecord.Tests
 		{
 			get { return _published; }
 			set { _published = value; }
+		}
+
+		protected override bool BeforeSave(IDictionary state)
+		{
+			state["Created"] = DateTime.Now;
+			return true;
 		}
 
 		public static void DeleteAll()

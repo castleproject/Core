@@ -20,9 +20,9 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class ActiveRecordAttribute : Attribute
 	{ 
-		private string _table;
-		private string _schema;
-		private string _proxy;
+		private String _table;
+		private String _schema;
+		private String _proxy;
 
 		public ActiveRecordAttribute()
 		{
@@ -39,19 +39,19 @@ namespace Castle.ActiveRecord
 			_schema = schema;
 		}
 
-		public string Table
+		public String Table
 		{
 			get { return _table; }
 			set { _table = value; }
 		}
 
-		public string Schema
+		public String Schema
 		{
 			get { return _schema; }
 			set { _schema = value; }
 		}
 
-		public string Proxy
+		public String Proxy
 		{
 			get { return _proxy; }
 			set { _proxy = value; }

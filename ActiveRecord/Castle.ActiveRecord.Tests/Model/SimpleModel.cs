@@ -12,36 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.ActiveRecord.Tests.Model
 {
 	using System;
 
-	public enum RelationType
+	[ActiveRecord("TableNameHere")]
+	public class SimpleModel
 	{
-//		Guess,
-		Map,
-		Set,
-		List,
-		Bag,
-		IdBag,
-		Array,
-		PrimitiveArray
-	}
+		private int _id;
+		private String _name;
 
-	[AttributeUsage(AttributeTargets.Property)]
-	public abstract class RelationAttribute : Attribute
-	{
-		private RelationType _relType = RelationType.Bag;
-
-		public RelationAttribute(RelationType relationType)
+		[PrimaryKey(PrimaryKeyType.Assigned, "t_id")]
+		public int id
 		{
-			_relType = relationType;
+			get { return _id; }
+			set { _id = value; }
 		}
 
-		public RelationType RelationType
+		[PropertyAttribute("t_name")]
+		public String name
 		{
-			get { return _relType; }
-			set { _relType = value; }
+			get { return _name; }
+			set { _name = value; }
 		}
 	}
 }
