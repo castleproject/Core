@@ -16,7 +16,7 @@ Observer field example:
 
 </form>
 
-$AjaxHelper.ObserveField("zip", 2, "/ajax/inferaddress.rails", "address", "'aa new content'")
+$AjaxHelper.ObserveField("zip", 2, "inferaddress.rails", "address", "'aa new content'")
 
 <hr>
 
@@ -35,7 +35,7 @@ Observer form example:
 </form>
 </p>
 
-$AjaxHelper.ObserveForm("myform", 2, "/ajax/accountformvalidate.rails", "message", null)
+$AjaxHelper.ObserveForm("myform", 2, "accountformvalidate.rails", "message", null)
 
 <hr>
 
@@ -47,7 +47,7 @@ $AjaxHelper.ObserveForm("myform", 2, "/ajax/accountformvalidate.rails", "message
 
 <br>
 <b>Add New User:</b>
-$AjaxHelper.BuildFormRemoteTag("/ajax/AddUserWithAjax.rails", "userlist", null, "$('status').innerHTML = 'Saving...'", null, null, "$('status').innerHTML = 'Done!'")
+$AjaxHelper.BuildFormRemoteTag("AddUserWithAjax.rails", "userlist", null, "$('status').innerHTML = 'Saving...'", null, null, "$('status').innerHTML = 'Done!'")
 <table>  
 	<tr>
 		<td>Name:</td>
