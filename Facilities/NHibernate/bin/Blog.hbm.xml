@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.0">
+	<class name="Castle.Facilities.NHibernate.Tests.Blog, Castle.Facilities.NHibernate.Tests" table="BLOGS">
+	<!-- proxy="NHibernate.Examples.Blogger.Blog, NHibernate.Examples" -->
+		<id name="Id" column="BLOG_ID" unsaved-value="0">
+			<generator class="native" />
+		</id>
+		<property name="Name" column="NAME" not-null="true" unique="true" />
+		<bag name="Items" inverse="true" lazy="true" order-by="DATE_TIME" cascade="all">
+			<key column="BLOG_ID" />
+			<one-to-many class="Castle.Facilities.NHibernate.Tests.BlogItem, Castle.Facilities.NHibernate.Tests" />
+		</bag>
+	</class>
+</hibernate-mapping>
+
