@@ -45,10 +45,19 @@ namespace Castle.ActiveRecord.Generator.Components
 				Type   propertyType = _typeInfService.ConvertOleType(col.Type);
 				String colType = col.Type.ToString();
 				String colName = col.Name;
-				
-				ActiveRecordFieldDescriptor field = 
-					new ActiveRecordFieldDescriptor(
+		
+				ActiveRecordFieldDescriptor field = null;
+
+				if (col.PrimaryKey)
+				{
+					field = new ActiveRecordPrimaryKeyDescriptor(
+						colName, colType, propertyName, propertyType, "Native");
+				}
+				else
+				{
+					field = new ActiveRecordFieldDescriptor(
 						colName, colType, propertyName, propertyType, col.Nullable);
+				}
 
 				list.Add(field);
 			}

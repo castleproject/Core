@@ -32,15 +32,12 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		"castle.ar.shape", "ActiveRecord", 
 		"Castle.ActiveRecord.Generator.Parts.Shapes.ActiveRecordShape", 
 		"Represents an ActiveRecord class")]
-	public class ActiveRecordShape : Shape
+	public class ActiveRecordShape : AbstractARShape
 	{
 		private float _lineHeight;
 
 		private Connector TopNode;
 		private Connector BottomNode;
-
-		private ActiveRecordDescriptor _activeRecordDescriptor;
-
 
 		public ActiveRecordShape() : base()
 		{
@@ -105,14 +102,14 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 			String alias = "[Alias]";
 			String tableName = "TableName";
 
-			if (_activeRecordDescriptor != null)
+			if (ActiveRecordDescriptor != null)
 			{
-				className = _activeRecordDescriptor.ClassName;
-				alias = _activeRecordDescriptor.Table.DatabaseDefinition.Alias;
-				tableName = _activeRecordDescriptor.Table.Name;
+				className = ActiveRecordDescriptor.ClassName;
+				alias = ActiveRecordDescriptor.Table.DatabaseDefinition.Alias;
+				tableName = ActiveRecordDescriptor.Table.Name;
 
 				// Lets update the position
-				_activeRecordDescriptor.PositionInView = new PointF(X, Y);
+				ActiveRecordDescriptor.PositionInView = new PointF(X, Y);
 			}
 			else
 			{
@@ -162,8 +159,8 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 
 		public ActiveRecordDescriptor ActiveRecordDescriptor
 		{
-			get { return _activeRecordDescriptor; }
-			set { _activeRecordDescriptor = value; }
+			get { return ARDescriptor as ActiveRecordDescriptor; }
+			set { ARDescriptor = value; }
 		}
 	}
 }

@@ -34,16 +34,12 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		"castle.ar.base.shape", 
 		"ActiveRecord", "Castle.ActiveRecord.Generator.Parts.Shapes.ActiveRecordBaseClassShape", 
 		"Represents an ActiveRecord base class that maps a database connection")]
-	public class ActiveRecordBaseClassShape : Shape
+	public class ActiveRecordBaseClassShape : AbstractARShape
 	{
-//		private String _name;
 		private float _lineHeight;
 
 		private Connector TopNode;
 		private Connector BottomNode;
-
-		private ActiveRecordBaseDescriptor _relatedDescriptor;
-
 
 		public ActiveRecordBaseClassShape() : base()
 		{
@@ -57,8 +53,8 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 
 		public ActiveRecordBaseDescriptor RelatedDescriptor
 		{
-			get { return _relatedDescriptor; }
-			set { _relatedDescriptor = value; }
+			get { return ARDescriptor as ActiveRecordBaseDescriptor; }
+			set { ARDescriptor = value; }
 		}
 
 		private void Init(bool resizable)
@@ -111,14 +107,14 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		{
 			base.Paint(g);
 
-			if (_relatedDescriptor == null) return;
+			if (RelatedDescriptor == null) return;
 
 			// Lets update the position
-			_relatedDescriptor.PositionInView = new PointF(X, Y);
+			RelatedDescriptor.PositionInView = new PointF(X, Y);
 
 			if (recalculateSize)
 			{
-				SizeF max = g.MeasureString(_relatedDescriptor.ClassName + "\"\"", mFont);
+				SizeF max = g.MeasureString(RelatedDescriptor.ClassName + "\"\"", mFont);
 
 				_lineHeight = max.Height;
 
@@ -136,7 +132,7 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 
 			StringFormat sf = new StringFormat();
 			sf.Alignment = StringAlignment.Center;
-			g.DrawString(_relatedDescriptor.ClassName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
+			g.DrawString(RelatedDescriptor.ClassName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
 			//			g.DrawString(mText, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
 			//			g.DrawString(Table, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight*2) + 6, sf);
 			//			g.DrawString("[not mapped]", mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight) + 6, sf);

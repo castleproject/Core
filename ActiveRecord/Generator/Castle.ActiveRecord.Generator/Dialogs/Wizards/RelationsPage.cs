@@ -53,7 +53,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 					ListViewItem item = listView1.Items.Add( property.PropertyName );
 					item.Tag = property;
 					item.Checked = property.Generate;
-					item.SubItems.Add( "TODO!" );
+					
+					if (property.TargetType != null)
+					{
+						item.SubItems.Add( 
+							property.TargetType.ClassName != null ? property.TargetType.ClassName : "<Pendent>" );
+					}
+					else
+					{
+						throw new ApplicationException("Information missing");
+					}
+
 					item.SubItems.Add( property.RelationType );
 					item.SubItems.Add( property.ColumnName );
 				}

@@ -52,23 +52,53 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
+		private System.Windows.Forms.ColumnHeader columnHeader13;
+
+		private ActiveRecordDescriptor _descriptor;
+
 
 		public ActiveRecordPropertiesDialog(ActiveRecordDescriptor descriptor)
 		{
+			_descriptor = descriptor;
+
 			InitializeComponent();
 
 			Title = descriptor.ClassName + " Properties";
 
+			FillClassDetails(descriptor);
+			FillClassProperties(descriptor);
+			FillClassRelationships(descriptor);
+		}
+
+		private void FillClassDetails(ActiveRecordDescriptor descriptor)
+		{
 			className.Text = descriptor.ClassName;
-
+	
 			parentClass.Items.Add( "ActiveRecordBase" );
-
+	
 			foreach(TableDefinition table in descriptor.Table.DatabaseDefinition.Tables)
 			{
 				if (table.RelatedDescriptor == null) continue;
 				if (table.RelatedDescriptor == descriptor) continue;
 
 				parentClass.Items.Add( table.RelatedDescriptor.ClassName );
+			}
+	
+			parentClass.Enabled = false;
+			groupBox2.Enabled = false;
+	
+			discColumn.ValueMember = "Name";
+	
+			foreach(ColumnDefinition col in descriptor.Table.Columns)
+			{
+				discColumn.Items.Add( col );
+			}
+	
+			if (descriptor is ActiveRecordDescriptorSubClass ||
+				descriptor is ActiveRecordDescriptorJoinedSubClass )
+			{
+				useDiscriminator.Enabled = false;
+				isJoinedSubClass.Enabled = false;
 			}
 		}
 
@@ -129,6 +159,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
 			this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
 			this.okButton = new System.Windows.Forms.Button();
+			this.columnHeader13 = new System.Windows.Forms.ColumnHeader();
 			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -284,6 +315,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.useDiscriminator.Size = new System.Drawing.Size(152, 24);
 			this.useDiscriminator.TabIndex = 3;
 			this.useDiscriminator.Text = "Use discriminator column";
+			this.useDiscriminator.CheckedChanged += new System.EventHandler(this.useDiscriminator_CheckedChanged);
 			// 
 			// className
 			// 
@@ -318,7 +350,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 																						this.columnHeader1,
 																						this.columnHeader2,
 																						this.columnHeader3,
-																						this.columnHeader4});
+																						this.columnHeader4,
+																						this.columnHeader13});
+			this.listView1.FullRowSelect = true;
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.listView1.LabelEdit = true;
 			this.listView1.Location = new System.Drawing.Point(36, 27);
@@ -330,7 +364,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// columnHeader1
 			// 
 			this.columnHeader1.Text = "Property";
-			this.columnHeader1.Width = 190;
+			this.columnHeader1.Width = 170;
 			// 
 			// columnHeader2
 			// 
@@ -370,11 +404,13 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// listView2
 			// 
+			this.listView2.CheckBoxes = true;
 			this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 																						this.columnHeader9,
 																						this.columnHeader10,
 																						this.columnHeader11,
 																						this.columnHeader12});
+			this.listView2.FullRowSelect = true;
 			this.listView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.listView2.LabelEdit = true;
 			this.listView2.Location = new System.Drawing.Point(36, 27);
@@ -436,6 +472,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.okButton.TabIndex = 3;
 			this.okButton.Text = "OK";
 			// 
+			// columnHeader13
+			// 
+			this.columnHeader13.Text = "PK";
+			this.columnHeader13.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
 			// ActiveRecordPropertiesDialog
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -460,10 +501,48 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		}
 		#endregion
 
+		private void useDiscriminator_CheckedChanged(object sender, System.EventArgs e)
+		{
+			label2.Enabled = discColumn.Enabled = useDiscriminator.Checked;
+		}
+
 		public String Title
 		{
 			get { return title.Text; }
 			set { title.Text = value; }
+		}
+
+		private void FillClassProperties(ActiveRecordDescriptor descriptor)
+		{
+			foreach(ActiveRecordPropertyDescriptor prop in descriptor.Properties)
+			{
+				ListViewItem item = listView1.Items.Add(prop.PropertyName);
+				item.Tag = prop;
+				item.Checked = true;
+				item.SubItems.Add( prop.PropertyType.ToString() );
+				item.SubItems.Add( prop.ColumnName );
+				item.SubItems.Add( prop.ColumnTypeName );
+				item.SubItems.Add( (prop is ActiveRecordPrimaryKeyDescriptor) ? "Yes" : "" );
+			}
+		}
+
+		private void FillClassRelationships(ActiveRecordDescriptor descriptor)
+		{
+			foreach(ActiveRecordPropertyRelationDescriptor prop in descriptor.PropertiesRelations)
+			{
+				ListViewItem item = listView2.Items.Add(prop.PropertyName);
+				item.Tag = prop;
+				item.Checked = true;
+
+				if (prop.TargetType == null)
+				{
+					throw new ApplicationException("Information missing");
+				}
+
+				item.SubItems.Add( prop.TargetType.ClassName );
+				item.SubItems.Add( prop.RelationType );
+				item.SubItems.Add( prop.ColumnName );
+			}
 		}
 	}
 }

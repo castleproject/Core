@@ -12,36 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Generator.Components.Database
+namespace Castle.ActiveRecord.Generator.Parts.Shapes
 {
 	using System;
-	using System.Drawing;
+
+	using Netron.GraphLib;
+	using Netron.GraphLib.Interfaces;
+
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 
 	[Serializable]
-	public abstract class AbstractActiveRecordDescriptor : IActiveRecordDescriptor
+	public abstract class AbstractARShape : Shape
 	{
-		private String _ClassName;
-		private PointF _PositionInView = new PointF(0.0f, 0.0f);
+		private IActiveRecordDescriptor _relatedDescriptor;
 
-		public AbstractActiveRecordDescriptor()
+		public AbstractARShape()
 		{
 		}
 
-		#region IActiveRecordDescriptor Members
-
-		public String ClassName
+		public AbstractARShape(IGraphSite site) : base(site)
 		{
-			get { return _ClassName; }
-			set { _ClassName = value; }
 		}
 
-		public PointF PositionInView
+		public IActiveRecordDescriptor ARDescriptor
 		{
-			get { return _PositionInView; }
-			set { _PositionInView = value; }
+			get { return _relatedDescriptor; }
+			set { _relatedDescriptor = value; }
 		}
-
-		#endregion
 	}
 }

@@ -48,6 +48,8 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			ActiveRecordHasManyDescriptor desc1 = descs[0] as ActiveRecordHasManyDescriptor;
 			Assert.IsNotNull(desc1);
+			Assert.IsNotNull(desc1.TargetType);
+			Assert.IsNotNull(desc1.PropertyType);
 
 			Assert.AreEqual( "Posts", desc1.PropertyName );
 			Assert.AreEqual( "blog_id", desc1.ColumnName );
@@ -77,10 +79,11 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			ActiveRecordBelongsToDescriptor desc1 = descs[0] as ActiveRecordBelongsToDescriptor;
 			Assert.IsNotNull(desc1);
+			Assert.IsNotNull(desc1.TargetType);
+			Assert.IsNull(desc1.PropertyType);
 
 			Assert.AreEqual( "Blog", desc1.PropertyName );
 			Assert.AreEqual( "blog_id", desc1.ColumnName );
-//			Assert.AreEqual( , desc1.PropertyType );
 
 			ActiveRecordDescriptor targetARDescriptor = context.GetNextPendent();
 			Assert.AreSame( blogTable, targetARDescriptor.Table );
@@ -112,6 +115,8 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			ActiveRecordHasManyDescriptor desc1 = descs[0] as ActiveRecordHasManyDescriptor;
 			Assert.IsNotNull(desc1);
+			Assert.IsNotNull(desc1.TargetType);
+			Assert.IsNotNull(desc1.PropertyType);
 
 			Assert.AreEqual( "Categories", desc1.PropertyName );
 			Assert.AreEqual( "parent_id", desc1.ColumnName );
@@ -119,6 +124,8 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 
 			ActiveRecordBelongsToDescriptor desc2 = descs[1] as ActiveRecordBelongsToDescriptor;
 			Assert.IsNotNull(desc2);
+			Assert.IsNotNull(desc2.TargetType);
+			Assert.IsNull(desc2.PropertyType);
 			Assert.AreEqual( "Category", desc2.PropertyName );
 			Assert.AreEqual( "parent_id", desc2.ColumnName );
 		}

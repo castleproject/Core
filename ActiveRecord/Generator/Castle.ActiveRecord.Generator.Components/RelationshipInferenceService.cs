@@ -49,7 +49,7 @@ namespace Castle.ActiveRecord.Generator.Components
 				if (col.RelatedTable != null)
 				{
 					String propertyName = _namingService.CreateClassName(col.RelatedTable.Name);
-					ActiveRecordDescriptor propertyType = null;
+					ActiveRecordDescriptor targetType = null;
 
 					if (col.RelatedTable.RelatedDescriptor == null && col.RelatedTable != tableDef)
 					{
@@ -57,14 +57,13 @@ namespace Castle.ActiveRecord.Generator.Components
 
 						context.AddPendentDescriptor(col.RelatedTable.RelatedDescriptor);
 					}
-					else
-					{
-						propertyType = col.RelatedTable.RelatedDescriptor;
-					}
+					
+					targetType = col.RelatedTable.RelatedDescriptor;
+
 
 					ActiveRecordBelongsToDescriptor belongsTo = 
 						new ActiveRecordBelongsToDescriptor(col.Name, 
-							propertyName, propertyType);
+							propertyName, targetType);
 
 					list.Add(belongsTo);
 				}
@@ -92,10 +91,12 @@ namespace Castle.ActiveRecord.Generator.Components
 
 							context.AddPendentDescriptor(col.RelatedTable.RelatedDescriptor);
 						}
-						else
+						else if (col.RelatedTable == fkTable)
 						{
 							targetType = col.RelatedTable.RelatedDescriptor;
 						}
+
+						targetType = col.RelatedTable.RelatedDescriptor;
 
 						break;
 					}

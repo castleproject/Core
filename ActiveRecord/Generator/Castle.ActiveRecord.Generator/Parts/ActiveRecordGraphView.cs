@@ -28,7 +28,6 @@ namespace Castle.ActiveRecord.Generator.Parts
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
-		private Model _model;
 		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.Windows.Forms.MenuItem menuItem4;
 		private System.Windows.Forms.MenuItem menuItem5;
@@ -36,9 +35,13 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private System.Windows.Forms.MenuItem addJoinedSubclassMenu;
 		private System.Windows.Forms.MenuItem showCodePreviewMenu;
 		private System.Windows.Forms.MenuItem showPropertiesMenu;
-		private Hashtable _desc2Shape = new Hashtable();
-		private IWorkspace _parentWorkspace;
+
 		private ActiveRecordGraphViewActionSet _actionSet;
+		private Model _model;
+		private Random rnd = new Random(1);
+		private Hashtable _desc2Shape = new Hashtable();
+		private System.Windows.Forms.MenuItem removeMenu;
+		private IWorkspace _parentWorkspace;
 
 		public ActiveRecordGraphView()
 		{
@@ -91,6 +94,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.contextMenu = new System.Windows.Forms.ContextMenu();
 			this.addSubClassMenu = new System.Windows.Forms.MenuItem();
 			this.addJoinedSubclassMenu = new System.Windows.Forms.MenuItem();
+			this.removeMenu = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.showCodePreviewMenu = new System.Windows.Forms.MenuItem();
 			this.menuItem4 = new System.Windows.Forms.MenuItem();
@@ -99,7 +103,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			// graphControl1
 			// 
-			this.graphControl1.AllowAddConnection = true;
+			this.graphControl1.AllowAddConnection = false;
 			this.graphControl1.AllowAddShape = true;
 			this.graphControl1.AllowDeleteShape = false;
 			this.graphControl1.AllowDrop = true;
@@ -138,6 +142,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						this.addSubClassMenu,
 																						this.addJoinedSubclassMenu,
+																						this.removeMenu,
 																						this.menuItem5,
 																						this.showCodePreviewMenu,
 																						this.menuItem4,
@@ -155,25 +160,31 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.addJoinedSubclassMenu.Text = "Add Joined SubClass";
 			this.addJoinedSubclassMenu.Click += new System.EventHandler(this.addJoinedSubclassMenu_Click);
 			// 
+			// removeMenu
+			// 
+			this.removeMenu.Index = 2;
+			this.removeMenu.Text = "Remove";
+			this.removeMenu.Click += new System.EventHandler(this.removeMenu_Click);
+			// 
 			// menuItem5
 			// 
-			this.menuItem5.Index = 2;
+			this.menuItem5.Index = 3;
 			this.menuItem5.Text = "-";
 			// 
 			// showCodePreviewMenu
 			// 
-			this.showCodePreviewMenu.Index = 3;
+			this.showCodePreviewMenu.Index = 4;
 			this.showCodePreviewMenu.Text = "Preview code";
 			this.showCodePreviewMenu.Click += new System.EventHandler(this.showCodePreviewMenu_Click);
 			// 
 			// menuItem4
 			// 
-			this.menuItem4.Index = 4;
+			this.menuItem4.Index = 5;
 			this.menuItem4.Text = "-";
 			// 
 			// showPropertiesMenu
 			// 
-			this.showPropertiesMenu.Index = 5;
+			this.showPropertiesMenu.Index = 6;
 			this.showPropertiesMenu.Text = "Properties";
 			this.showPropertiesMenu.Click += new System.EventHandler(this.showPropertiesMenu_Click);
 			// 
@@ -208,12 +219,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			{
 				ActiveRecordShape arshape = shape as ActiveRecordShape;
 				
-				if (_actionSet.DoNewARWizard())
-				{
-//					ConnectSubToSuperClass(
-//						ObtainBaseShape(arshape), 
-//						arshape);
-				}
+				_actionSet.DoNewARWizard();
 			}
 			else if (shape is ActiveRecordBaseClassShape)
 			{
@@ -281,16 +287,32 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 			if (e.Button == MouseButtons.Right)
 			{
+				if (SelectedShape.ARDescriptor is ActiveRecordDescriptorSubClass)
+				{
+					removeMenu.Enabled = true;
+					addJoinedSubclassMenu.Enabled = false;
+					addSubClassMenu.Enabled = false;
+				}
+				else
+				{
+					removeMenu.Enabled = false;
+					
+					// False cause we haven't implemented it :-)
+					addJoinedSubclassMenu.Enabled = false;
+
+					addSubClassMenu.Enabled = true;
+				}
+
 				contextMenu.Show(sender as Control, new Point(e.X, e.Y));
 			}
 		}
 
-		private Shape SelectedShape
+		private AbstractARShape SelectedShape
 		{
 			get
 			{
 				if (graphControl1.SelectedShapes == null || graphControl1.SelectedShapes.Count != 1) return null;
-				return graphControl1.SelectedShapes[0];
+				return (AbstractARShape) graphControl1.SelectedShapes[0];
 			}
 		}
 
@@ -342,8 +364,6 @@ namespace Castle.ActiveRecord.Generator.Parts
 		{
 			DisableWizard();
 
-			Random rnd = new Random(1);
-
 			foreach(IActiveRecordDescriptor descriptor in project.Descriptors)
 			{
 				Shape shape = ObtainShape(descriptor);
@@ -370,8 +390,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 		{
 			// Clear!
 
+			_desc2Shape.Clear();
 			graphControl1.Nodes.Clear();
-			this._desc2Shape.Clear();
 			
 			OnProjectChange(sender, newProject);
 		}
@@ -398,7 +418,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			else
 			{
 				ActiveRecordShape arshape = (ActiveRecordShape)
-					graphControl1.AddShape("castle.ar.shape", new PointF(80, 20));
+					graphControl1.AddShape("castle.ar.shape", new PointF(30, 20));
 				
 				arshape.ActiveRecordDescriptor = (ActiveRecordDescriptor) descriptor;
 
@@ -452,6 +472,39 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private void showCodePreviewMenu_Click(object sender, System.EventArgs e)
 		{
 //			_actionSet.PreviewCode( SelectedShape );
+		}
+
+		private void removeMenu_Click(object sender, System.EventArgs e)
+		{
+			if (_model.CurrentProject.RemoveDescriptor(SelectedShape.ARDescriptor))
+			{
+				foreach(Connector conn in SelectedShape.Connectors)
+				{
+					Connection toRemove;
+
+					do
+					{
+						toRemove = null;
+
+						foreach(Connection c in conn.BelongsTo.Connectors[0].Connections)
+						{
+							if (c.To != conn) continue;
+							toRemove = c; break;
+						}
+
+						if (toRemove == null) break;
+
+						conn.BelongsTo.Connectors[0].Connections.Remove(toRemove);
+
+					} while(true);
+				}
+
+				_desc2Shape.Remove( SelectedShape.ARDescriptor );
+
+				graphControl1.Nodes.Remove(SelectedShape);
+
+				_model.Update();
+			}
 		}
 	}
 }

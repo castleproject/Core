@@ -544,6 +544,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Parts\Shapes\AbstractARShape.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Parts\Shapes\ActiveRecordBaseClassShape.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

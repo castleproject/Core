@@ -119,5 +119,18 @@ namespace Castle.ActiveRecord.Generator.Components
 			get { return _info; }
 			set { _info = value; }
 		}
+
+		public bool RemoveDescriptor(IActiveRecordDescriptor descriptor)
+		{
+			if (descriptor is ActiveRecordDescriptorSubClass || 
+				descriptor is ActiveRecordDescriptorJoinedSubClass)
+			{
+				_descriptors.Remove(descriptor);
+
+				return true;
+			}
+
+			return false;
+		}
 	}
 }

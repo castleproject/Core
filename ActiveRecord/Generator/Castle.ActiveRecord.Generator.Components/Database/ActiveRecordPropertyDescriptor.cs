@@ -80,14 +80,14 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	}
 
 	[Serializable]
-	public class ActiveRecordPrimaryKeyDescriptor : ActiveRecordPropertyDescriptor
+	public class ActiveRecordPrimaryKeyDescriptor : ActiveRecordFieldDescriptor
 	{
 		private String _generatorType;
 
 		public ActiveRecordPrimaryKeyDescriptor(
 			String columnName, String columnTypeName, 
 			String propertyName, Type propertyType, String _generatorType) : 
-			base(columnName, columnTypeName, propertyName, propertyType)
+			base(columnName, columnTypeName, propertyName, propertyType, false)
 		{
 			this._generatorType = _generatorType;
 		}
