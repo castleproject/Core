@@ -94,6 +94,11 @@
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
                 />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    Project = "{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

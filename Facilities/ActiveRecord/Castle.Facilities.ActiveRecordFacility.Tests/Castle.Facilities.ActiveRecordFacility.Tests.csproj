@@ -125,6 +125,11 @@
                     AssemblyName = "Castle.Facilities.NHibernateExtension"
                     HintPath = "..\..\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
                 />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    Project = "{B9E2BE9B-A7A2-487D-B76B-C73D700AA398}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -150,16 +155,6 @@
                 />
                 <File
                     RelPath = "Model1\Order.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model1\OrderDao.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model1\OrderGenCode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -20,7 +20,7 @@ namespace Castle.Facilities.ActiveRecord.Tests.Model1
 	using Castle.Facilities.ActiveRecord;
 
 
-	[ActiveRecord( ActiveTableType=typeof(OrderDao) )]
+	[ActiveRecord]
 	public class Order : ActiveRecordBase
 	{
 		private int _id;

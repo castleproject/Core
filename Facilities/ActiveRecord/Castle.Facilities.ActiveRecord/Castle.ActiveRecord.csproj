@@ -89,12 +89,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ActiveRecordBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "BelongsToAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ComposedOfAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -115,6 +125,16 @@
                 />
                 <File
                     RelPath = "IgnoreAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PrimaryKeyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PropertyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
