@@ -56,10 +56,12 @@
     <a href="../edit/<%= @page.name %>" class="navlink" accesskey="E">Edit</a>
   <% end %>
 
+<!--
   <% if @page.revisions.length > 1 %>
     | <a href="../revision/<%= @page.name %>?rev=<%= @page.revisions.length - 2 %>" class="navlink" accesskey="R">Back in time</a> 
     <small>(<%= @page.revisions.length - 1 %> revisions)</small>
   <% end %>
+-->
 
   <% if @page.revisions.length > 1 %>
     <span id="show_changes">

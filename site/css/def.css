@@ -1,12 +1,9 @@
 body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	background-color: #EBEBEB;
+	background-color: #FFFFFF;
 	margin: 5px;
 	text-align: justify;
-}
-.maincontainer {
-	background-color: #FFFFFF;
-	border: 1px solid #000000;
+	font-size: small;
 
 }
 .maintitle {
