@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}"
+        ProjectGuid = "{844F5EC4-9224-42A9-986D-CE645AC970F2}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "AspnetSample"
+                AssemblyName = "Castle.CastleOnRails.Framework.Tests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "AspnetSample"
+                RootNamespace = "Castle.CastleOnRails.Framework.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "bin\"
+                    OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -76,18 +76,14 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.Xml"
+                    AssemblyName = "System.XML"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\dev\dotnet\tools\nunit22\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
             </References>
         </Build>
@@ -97,48 +93,6 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "web.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Controllers\HomeController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\Registration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <Folder RelPath = "views\general\" />
-                <File
-                    RelPath = "views\home\index.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\registration\index.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\registration\index.aspx.cs"
-                    DependentUpon = "index.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "views\registration\index.aspx.resx"
-                    DependentUpon = "index.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "views\registration\list.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\registration\success.aspx"
-                    BuildAction = "Content"
                 />
             </Include>
         </Files>

@@ -65,7 +65,16 @@ namespace Castle.CastleOnRails.Framework
 			__context.Response.Redirect( String.Format("../{0}/{1}.rails", controller, action) );
 		}
 
-		public virtual void __Process( String url, String viewPath, String controller, String action, 
+		/// <summary>
+		/// This method should not be virtual.
+		/// </summary>
+		/// <param name="url"></param>
+		/// <param name="viewPath"></param>
+		/// <param name="controller"></param>
+		/// <param name="action"></param>
+		/// <param name="viewEngine"></param>
+		/// <param name="context"></param>
+		public void __Process( String url, String viewPath, String controller, String action, 
 			IViewEngine viewEngine, HttpContext context )
 		{
 			__url = url;

@@ -33,8 +33,6 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		public virtual void Process(Controller controller, String url, String viewPath, 
 			String viewName, HttpContext context)
 		{
-			// String viewUrl = viewName.Replace('\\', '/');
-
 			if (!Path.IsPathRooted(viewPath))
 			{
 				viewPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, viewPath);
