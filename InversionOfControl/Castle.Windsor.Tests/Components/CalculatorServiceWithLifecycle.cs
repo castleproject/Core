@@ -22,7 +22,7 @@ namespace Castle.Windsor.Tests.Components
 	/// Summary description for CalculatorServiceWithLifecycle.
 	/// </summary>
 	[Transient]
-	public class CalculatorServiceWithLifecycle : ICalcService, IInitialize, IDisposable
+	public class CalculatorServiceWithLifecycle : ICalcService, IInitializable, IDisposable
 	{
 		private bool _initialized;
 		private bool _disposed;

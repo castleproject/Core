@@ -38,7 +38,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		/// <param name="model"></param>
 		public virtual void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-			if (typeof (IInitialize).IsAssignableFrom(model.Implementation))
+			if (typeof (IInitializable).IsAssignableFrom(model.Implementation))
 			{
 				model.LifecycleSteps.Add( LifecycleStepType.Commission, InitializationConcern.Instance );
 			}

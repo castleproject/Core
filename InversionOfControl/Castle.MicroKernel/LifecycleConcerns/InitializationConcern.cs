@@ -36,7 +36,7 @@ namespace Castle.MicroKernel.LifecycleConcerns
 
 		public void Apply(ComponentModel model, object component)
 		{
-			((IInitialize)component).Initialize();
+			(component as IInitializable).Initialize();
 		}
 	}
 }

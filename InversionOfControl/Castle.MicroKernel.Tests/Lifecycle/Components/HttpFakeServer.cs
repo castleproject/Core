@@ -22,7 +22,7 @@ namespace Castle.MicroKernel.Tests.Lifecycle.Components
 	/// Summary description for HttpFakeServer.
 	/// </summary>
 	[Transient]
-	public class HttpFakeServer : IInitialize, IDisposable
+	public class HttpFakeServer : IInitializable, IDisposable
 	{
 		private bool _isInitialized;
 		private bool _isDisposed;
