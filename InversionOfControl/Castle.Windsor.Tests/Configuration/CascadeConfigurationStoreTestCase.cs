@@ -12,32 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
+namespace Castle.Windsor.Tests.Configuration
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for NodeBase.
-	/// </summary>
-	[Serializable]
-	public abstract class NodeBase
+	using NUnit.Framework;
+
+	using Castle.Windsor.Configuration;
+	using Castle.Windsor.Configuration.Interpreters;
+
+
+	[TestFixture]
+	public class CascadeConfigurationStoreTestCase
 	{
-		private LexicalInfo _info;
-
-		public NodeBase()
+		[Test]
+		public void SimpleUsage()
 		{
-		}
+			CascadeConfigurationStore store = new CascadeConfigurationStore( 
+				new ConfigLanguageInterpreter("ConfigContents.lang"), 
+				new ConfigLanguageInterpreter("ConfigContents2.lang") );
 
-		public NodeBase(LexicalInfo info)
-		{
-			LexicalInfo = info;
+			Assert.AreEqual(2, store.GetFacilities().Length);
+			Assert.AreEqual(4, store.GetComponents().Length);
 		}
-
-		public LexicalInfo LexicalInfo
-		{
-			get { return _info; }
-			set { _info = value; }
-		}
-
 	}
 }

@@ -12,32 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
+namespace Castle.Windsor
 {
 	using System;
 
+	using Castle.MicroKernel;
+
+
 	/// <summary>
-	/// Summary description for NodeBase.
+	/// Bad name. It also install facilities.
+	/// TODO: Better name!
 	/// </summary>
-	[Serializable]
-	public abstract class NodeBase
+	public interface IComponentsInstaller
 	{
-		private LexicalInfo _info;
-
-		public NodeBase()
-		{
-		}
-
-		public NodeBase(LexicalInfo info)
-		{
-			LexicalInfo = info;
-		}
-
-		public LexicalInfo LexicalInfo
-		{
-			get { return _info; }
-			set { _info = value; }
-		}
-
+		void SetUp(IWindsorContainer container, IConfigurationStore store);
 	}
 }

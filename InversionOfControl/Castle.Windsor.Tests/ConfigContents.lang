@@ -6,19 +6,18 @@ container:
     
     facility:
       id: testidengine
-      item: value
+      item= value
 
-    facility:
+    facility = <<value within CDATA section>>
       id: testidengine2
-      item: value
 
   
   components: 
 
     component: 
       id: testidcomponent1
-      item: value1
+      item= value1
       
     component: 
       id: testidcomponent2
-      item: value2
+      item= value2

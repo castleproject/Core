@@ -42,11 +42,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 	/// </summary>
 	public class XmlInterpreter : AbstractInterpreter
 	{
-		private static readonly String FacilitiesNodeName = "facilities";
-		private static readonly String FacilitieNodeName = "facility";
-		private static readonly String ComponentsNodeName = "components";
-		private static readonly String ComponentNodeName = "component";
-
 		public XmlInterpreter()
 		{
 		}
@@ -102,10 +97,10 @@ namespace Castle.Windsor.Configuration.Interpreters
 				{
 					continue;
 				}
-				if (!FacilitieNodeName.Equals(node.Name))
+				if (!FacilityNodeName.Equals(node.Name))
 				{
 					String message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'", 
-						FacilitiesNodeName, FacilitieNodeName, node.Name);
+						FacilitiesNodeName, FacilityNodeName, node.Name);
 
 					throw new ConfigurationException(message);
 				}
@@ -116,11 +111,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		private void DeserializeFacility(XmlNode node, IConfigurationStore store)
 		{
-			String facilityId = GetRequiredAttributeValue(node, "id");
+			String id = GetRequiredAttributeValue(node, "id");
 			
 			IConfiguration config = DeserializeNode(node);
 
-			store.AddFacilityConfiguration(facilityId, config);
+			AddFacilityConfig(id, config, store);
 		}
 
 		private void DeserializeComponents(XmlNodeList nodes, IConfigurationStore store)
@@ -145,11 +140,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		private void DeserializeComponent(XmlNode node, IConfigurationStore store)
 		{
-			String componentId = GetRequiredAttributeValue(node, "id");
+			String id = GetRequiredAttributeValue(node, "id");
 			
 			IConfiguration config = DeserializeNode(node);
 
-			store.AddComponentConfiguration(componentId, config);
+			AddComponentConfig(id, config, store);
 		}
 
 		private IConfiguration DeserializeNode(XmlNode node)

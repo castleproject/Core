@@ -128,6 +128,14 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "installerconfig.lang"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "installerconfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "InterceptorsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -162,6 +170,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\CascadeConfigurationStoreTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\ConfigLangTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -173,6 +186,11 @@
                 />
                 <File
                     RelPath = "Configuration\CastleLanguage\ParserTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Installer\InstallerTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

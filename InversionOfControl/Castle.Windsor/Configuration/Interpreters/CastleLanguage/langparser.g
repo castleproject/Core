@@ -7,7 +7,7 @@ header
 options 
 {
 	language = "CSharp";
-	namespace = "Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal";
+	namespace = "Castle.Windsor.Configuration.Interpreters.CastleLanguage";
 }
 class WindsorLanguageParser extends Parser;
 options 
@@ -70,18 +70,31 @@ import_directive[ConfigurationDefinition conf]
 nodes[MutableConfiguration conf]
 	{
 		String i = null;
+		String v = null;
 		MutableConfiguration newNode = null;
 	}:
-	i=name COLON NEWLINE
-	{
-		newNode = new MutableConfiguration(i);
-		conf.Children.Add(newNode);
-	}	
+	i=name
+	(
+		COLON! 
+		{
+			newNode = new MutableConfiguration(i);
+			conf.Children.Add(newNode);
+		} |	
+		EQUAL! v=value
+		{
+			newNode = new MutableConfiguration(i, v);
+			conf.Children.Add(newNode);
+		}
+	)
+	NEWLINE!
+	
+	(
 	INDENT 
 	
 	 ( (name COLON value)=> attribute[newNode] | nodes[newNode])*
 
 	DEDENT
+	)?
 	;
 	
 protected

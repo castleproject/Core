@@ -32,7 +32,8 @@ namespace Castle.Windsor
 
 		private IKernel _kernel;
 		private IWindsorContainer _parent;
-		
+		private IComponentsInstaller _installer;
+
 		#endregion
 
 		#region Constructors
@@ -41,8 +42,9 @@ namespace Castle.Windsor
 		/// Constructs a container without any external 
 		/// configuration reference
 		/// </summary>
-		public WindsorContainer() : this(new DefaultKernel())
-		{			
+		public WindsorContainer() : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
+		{
+
 		}
 
 		/// <summary>
@@ -53,6 +55,8 @@ namespace Castle.Windsor
 		public WindsorContainer(IConfigurationStore store) : this()
 		{
 			Kernel.ConfigurationStore = store;
+
+			RunInstaller();
 		}
 
 		/// <summary>
@@ -65,6 +69,8 @@ namespace Castle.Windsor
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
 			interpreter.Process(Kernel.ConfigurationStore);
+
+			RunInstaller();
 		}
 
 		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this()
@@ -73,6 +79,8 @@ namespace Castle.Windsor
 			if (child == null) throw new ArgumentNullException("child");
 
 			Kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+
+			RunInstaller();
 		}
 
 		public WindsorContainer(String xmlFile) : this(new XmlInterpreter(xmlFile))
@@ -89,10 +97,12 @@ namespace Castle.Windsor
 		/// implementation. Rarely used.
 		/// </summary>
 		/// <param name="kernel"></param>
-		public WindsorContainer(IKernel kernel)
+		public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
 		{
 			_kernel = kernel;
 			_kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
+
+			_installer = installer;
 		}
 
 		#endregion
@@ -214,6 +224,18 @@ namespace Castle.Windsor
 		public void Dispose()
 		{
 			_kernel.Dispose();
+		}
+
+		#endregion
+
+		#region Protected Operations Members
+
+		protected virtual void RunInstaller()
+		{
+			if (_installer != null)
+			{
+				_installer.SetUp(this, _kernel.ConfigurationStore);
+			}
 		}
 
 		#endregion

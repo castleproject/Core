@@ -1,7 +1,7 @@
 options
 {
 	language = "CSharp";
-	namespace = "Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal";
+	namespace = "Castle.Windsor.Configuration.Interpreters.CastleLanguage";
 }
 class WindsorConfLanguageLexer extends Lexer;
 options 
@@ -20,6 +20,7 @@ options
 COLON      : ':'  ;
 COMMA      : ','  ;
 DOT        : '.'  ;
+EQUAL      : '='  ;
 LLITERAL   : '<' { implicitLineJoiningLevel++; } ;
 RLITERAL   : '>' { implicitLineJoiningLevel--; } ;
 
@@ -41,14 +42,13 @@ DATA
 	implicitLineJoiningLevel++;
 	}
 	(
-			/* See comment in WS.  Language for combining any flavor
-			 * newline is ambiguous.  Shutting off the warning.
-			 */
-			options {
+			options 
+			{
 				generateAmbigWarnings=false;
 			}
 		:	
-			'\r' '\n'		{newline();}
+			{LA(2) != '>'}? '>' // allow '>' if not ">>"
+		|	'\r' '\n'		{newline();}
 		|	'\r'			{newline();}
 		|	'\n'			{newline();}
 		|	~('>')
@@ -106,7 +106,7 @@ LEADING_WS
 
 ID
     options {testLiterals=true;}
-    : ('a'..'z'|'A'..'Z'|'0'..'9'|'_')+
+    : ('$' | '{' | '}' |'a'..'z'|'A'..'Z'|'0'..'9'|'_')+
     ;
 
 NEWLINE

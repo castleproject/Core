@@ -26,6 +26,10 @@
 	<target name="init" depends="clean">
 		<copy file="${test.src.dir}/sample_config.xml" todir="${bin.dir}" />
 		<copy file="${test.src.dir}/Castle.Windsor.Tests.dll.config" todir="${bin.dir}" />
+		<copy file="${test.src.dir}/ConfigContents.lang" todir="${bin.dir}" />
+		<copy file="${test.src.dir}/ConfigContents2.lang" todir="${bin.dir}" />
+		<copy file="${test.src.dir}/installerconfig.xml" todir="${bin.dir}" />
+		<copy file="${test.src.dir}/installerconfig.lang" todir="${bin.dir}" />
 	</target>
 
 	<target name="build" depends="init,tests.run" />

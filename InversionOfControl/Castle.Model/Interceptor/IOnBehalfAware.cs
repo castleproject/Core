@@ -17,7 +17,9 @@ namespace Castle.Model.Interceptor
 	using System;
 
 	/// <summary>
-	/// Summary description for IOnBehalfAware.
+	/// Interceptors might implement this to receive the
+	/// ComponentModel ob behalf of the component where the
+	/// interceptor is acting.
 	/// </summary>
 	public interface IOnBehalfAware
 	{

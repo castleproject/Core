@@ -1,5 +1,3 @@
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor.Configuration.Interpreters;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +21,15 @@ namespace Castle.Windsor.Tests.Configuration
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.SubSystems.Configuration;
+
+	using Castle.Windsor.Configuration.Interpreters;
 
 	/// <summary>
-	/// Summary description for XmlConfigurationStoreTestCase.
+	/// Summary description for XmlInterpreterTestCase.
 	/// </summary>
 	[TestFixture]
-	public class XmlConfigurationStoreTestCase
+	public class XmlInterpreterTestCase
 	{
 		[Test]
 		public void ProperDeserialization()

@@ -4,7 +4,7 @@
     using System.Text;
     using Castle.Model.Configuration;
 
-namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 {
 	// Generate the header common to all output files.
 	using System;
@@ -33,12 +33,13 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 		public const int EOS = 6;
 		public const int NEWLINE = 7;
 		public const int COLON = 8;
-		public const int INDENT = 9;
-		public const int DEDENT = 10;
-		public const int ID = 11;
-		public const int DOT = 12;
-		public const int STRING_LITERAL = 13;
-		public const int DATA = 14;
+		public const int EQUAL = 9;
+		public const int INDENT = 10;
+		public const int DEDENT = 11;
+		public const int ID = 12;
+		public const int DOT = 13;
+		public const int STRING_LITERAL = 14;
+		public const int DATA = 15;
 		
 		
     protected StringBuilder sbuilder = new StringBuilder();
@@ -225,60 +226,106 @@ _loop7_breakloop:				;
 		
 		
 				String i = null;
+				String v = null;
 				MutableConfiguration newNode = null;
 			
 		
 		try {      // for error handling
 			i=name();
-			match(COLON);
-			match(NEWLINE);
-			if (0==inputState.guessing)
 			{
-				
-						newNode = new MutableConfiguration(i);
-						conf.Children.Add(newNode);
-					
-			}
-			match(INDENT);
-			{    // ( ... )*
-				for (;;)
+				switch ( LA(1) )
 				{
-					bool synPredMatched14 = false;
-					if (((LA(1)==ID)))
+				case COLON:
+				{
+					match(COLON);
+					if (0==inputState.guessing)
 					{
-						int _m14 = mark();
-						synPredMatched14 = true;
-						inputState.guessing++;
-						try {
-							{
-								name();
-								match(COLON);
-								value();
-							}
-						}
-						catch (RecognitionException)
-						{
-							synPredMatched14 = false;
-						}
-						rewind(_m14);
-						inputState.guessing--;
+						
+									newNode = new MutableConfiguration(i);
+									conf.Children.Add(newNode);
+								
 					}
-					if ( synPredMatched14 )
-					{
-						attribute(newNode);
-					}
-					else if ((LA(1)==ID)) {
-						nodes(newNode);
-					}
-					else
-					{
-						goto _loop15_breakloop;
-					}
-					
+					break;
 				}
-_loop15_breakloop:				;
-			}    // ( ... )*
-			match(DEDENT);
+				case EQUAL:
+				{
+					match(EQUAL);
+					v=value();
+					if (0==inputState.guessing)
+					{
+						
+									newNode = new MutableConfiguration(i, v);
+									conf.Children.Add(newNode);
+								
+					}
+					break;
+				}
+				default:
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				 }
+			}
+			match(NEWLINE);
+			{
+				switch ( LA(1) )
+				{
+				case INDENT:
+				{
+					match(INDENT);
+					{    // ( ... )*
+						for (;;)
+						{
+							bool synPredMatched16 = false;
+							if (((LA(1)==ID)))
+							{
+								int _m16 = mark();
+								synPredMatched16 = true;
+								inputState.guessing++;
+								try {
+									{
+										name();
+										match(COLON);
+										value();
+									}
+								}
+								catch (RecognitionException)
+								{
+									synPredMatched16 = false;
+								}
+								rewind(_m16);
+								inputState.guessing--;
+							}
+							if ( synPredMatched16 )
+							{
+								attribute(newNode);
+							}
+							else if ((LA(1)==ID)) {
+								nodes(newNode);
+							}
+							else
+							{
+								goto _loop17_breakloop;
+							}
+							
+						}
+_loop17_breakloop:						;
+					}    // ( ... )*
+					match(DEDENT);
+					break;
+				}
+				case EOF:
+				case DEDENT:
+				case ID:
+				{
+					break;
+				}
+				default:
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				 }
+			}
 		}
 		catch (RecognitionException ex)
 		{
@@ -332,11 +379,11 @@ _loop15_breakloop:				;
 					}
 					else
 					{
-						goto _loop19_breakloop;
+						goto _loop21_breakloop;
 					}
 					
 				}
-_loop19_breakloop:				;
+_loop21_breakloop:				;
 			}    // ( ... )*
 			if (0==inputState.guessing)
 			{
@@ -453,11 +500,11 @@ _loop19_breakloop:				;
 							}
 							default:
 							{
-								goto _loop25_breakloop;
+								goto _loop27_breakloop;
 							}
 							 }
 						}
-_loop25_breakloop:						;
+_loop27_breakloop:						;
 					}    // ( ... )*
 					break;
 				}
@@ -539,6 +586,7 @@ _loop25_breakloop:						;
 		@"""EOS""",
 		@"""NEWLINE""",
 		@"""COLON""",
+		@"""EQUAL""",
 		@"""INDENT""",
 		@"""DEDENT""",
 		@"""ID""",
@@ -555,19 +603,19 @@ _loop25_breakloop:						;
 	public static readonly BitSet tokenSet_0_ = new BitSet(mk_tokenSet_0_());
 	private static long[] mk_tokenSet_1_()
 	{
-		long[] data = { 2082L, 0L};
+		long[] data = { 4130L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_1_ = new BitSet(mk_tokenSet_1_());
 	private static long[] mk_tokenSet_2_()
 	{
-		long[] data = { 3074L, 0L};
+		long[] data = { 6146L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_2_ = new BitSet(mk_tokenSet_2_());
 	private static long[] mk_tokenSet_3_()
 	{
-		long[] data = { 400L, 0L};
+		long[] data = { 912L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_3_ = new BitSet(mk_tokenSet_3_());
@@ -579,7 +627,7 @@ _loop25_breakloop:						;
 	public static readonly BitSet tokenSet_4_ = new BitSet(mk_tokenSet_4_());
 	private static long[] mk_tokenSet_5_()
 	{
-		long[] data = { 3072L, 0L};
+		long[] data = { 6144L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_5_ = new BitSet(mk_tokenSet_5_());

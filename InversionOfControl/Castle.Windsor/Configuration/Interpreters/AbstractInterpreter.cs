@@ -15,19 +15,25 @@
 namespace Castle.Windsor.Configuration.Interpreters
 {
 	using System;
+	using System.Configuration;
 
 	using Castle.MicroKernel;
 
 	using Castle.Model.Configuration;
 
 	using Castle.Windsor.Configuration.Sources;
-	using Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal;
+	using Castle.Windsor.Configuration.Interpreters.CastleLanguage;
 
 	/// <summary>
 	/// 
 	/// </summary>
 	public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
+		protected static readonly String FacilitiesNodeName = "facilities";
+		protected static readonly String FacilityNodeName = "facility";
+		protected static readonly String ComponentsNodeName = "components";
+		protected static readonly String ComponentNodeName = "component";
+
 		private IConfigurationSource _source;
 		private ImportDirectiveCollection _imports = new ImportDirectiveCollection();
 
@@ -59,10 +65,38 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		protected void AddFacilityConfig(IConfiguration facility, IConfigurationStore store)
 		{
+			AddFacilityConfig( facility.Attributes["id"], facility, store );
 		}
 
 		protected void AddComponentConfig(IConfiguration component, IConfigurationStore store)
 		{
+			AddComponentConfig( component.Attributes["id"], component, store );
+		}
+
+		protected void AddFacilityConfig(String id, IConfiguration facility, IConfigurationStore store)
+		{
+			AssertValidId(id);
+
+			// TODO: Use import collection on type attribute (if it exists)
+
+			store.AddFacilityConfiguration( id, facility );
+		}
+
+		protected void AddComponentConfig(String id, IConfiguration component, IConfigurationStore store)
+		{
+			AssertValidId(id);
+
+			// TODO: Use import collection on type and service attribute (if they exist)
+			
+			store.AddComponentConfiguration( id, component );
+		}
+
+		private void AssertValidId(string id)
+		{
+			if (id == null || id.Length == 0)
+			{
+				throw new ConfigurationException("Component or Facility was declared without a proper 'id' attribute");
+			}
 		}
 
 		/// <summary>

@@ -1,0 +1,13 @@
+<configuration>
+
+	<components>
+
+		<component id="calcservice" 
+			service="Castle.Windsor.Tests.Components.ICalcService, Castle.Windsor.Tests" 
+			type="Castle.Windsor.Tests.Components.CalculatorService, Castle.Windsor.Tests">
+		  <item>value1</item>
+		</component>
+
+	</components>
+
+</configuration>

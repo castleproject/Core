@@ -524,6 +524,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Configuration\Interpreters\CastleLanguage\WindsorParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\Sources\AppDomainConfigSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -535,6 +540,16 @@
                 />
                 <File
                     RelPath = "Configuration\Sources\StaticContentSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Installer\DefaultComponentInstaller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Installer\IComponentsInstaller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

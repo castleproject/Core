@@ -1,0 +1,11 @@
+// My Second Config File
+
+container:
+
+  components: 
+
+    component: 
+      id: testidcomponent3
+      
+    component: 
+      id: testidcomponent4

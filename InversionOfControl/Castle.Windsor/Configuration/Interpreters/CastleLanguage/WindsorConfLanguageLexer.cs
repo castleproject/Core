@@ -1,6 +1,6 @@
 // $ANTLR 2.7.5 (20050128): "langlexer.g" -> "WindsorConfLanguageLexer.cs"$
 
-namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 {
 	// Generate header specific to lexer CSharp file
 	using System;
@@ -39,18 +39,19 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 		public const int EOS = 6;
 		public const int NEWLINE = 7;
 		public const int COLON = 8;
-		public const int INDENT = 9;
-		public const int DEDENT = 10;
-		public const int ID = 11;
-		public const int DOT = 12;
-		public const int STRING_LITERAL = 13;
-		public const int DATA = 14;
-		public const int COMMA = 15;
-		public const int LLITERAL = 16;
-		public const int RLITERAL = 17;
-		public const int SL_COMMENT = 18;
-		public const int LEADING_WS = 19;
-		public const int WS = 20;
+		public const int EQUAL = 9;
+		public const int INDENT = 10;
+		public const int DEDENT = 11;
+		public const int ID = 12;
+		public const int DOT = 13;
+		public const int STRING_LITERAL = 14;
+		public const int DATA = 15;
+		public const int COMMA = 16;
+		public const int LLITERAL = 17;
+		public const int RLITERAL = 18;
+		public const int SL_COMMENT = 19;
+		public const int LEADING_WS = 20;
+		public const int WS = 21;
 		
 		
 	int implicitLineJoiningLevel = 0;
@@ -113,6 +114,12 @@ tryAgain:
 							theRetToken = returnToken_;
 							break;
 						}
+						case '=':
+						{
+							mEQUAL(true);
+							theRetToken = returnToken_;
+							break;
+						}
 						case '>':
 						{
 							mRLITERAL(true);
@@ -131,22 +138,23 @@ tryAgain:
 							theRetToken = returnToken_;
 							break;
 						}
-						case '0':  case '1':  case '2':  case '3':
-						case '4':  case '5':  case '6':  case '7':
-						case '8':  case '9':  case 'A':  case 'B':
-						case 'C':  case 'D':  case 'E':  case 'F':
-						case 'G':  case 'H':  case 'I':  case 'J':
-						case 'K':  case 'L':  case 'M':  case 'N':
-						case 'O':  case 'P':  case 'Q':  case 'R':
-						case 'S':  case 'T':  case 'U':  case 'V':
-						case 'W':  case 'X':  case 'Y':  case 'Z':
-						case '_':  case 'a':  case 'b':  case 'c':
-						case 'd':  case 'e':  case 'f':  case 'g':
-						case 'h':  case 'i':  case 'j':  case 'k':
-						case 'l':  case 'm':  case 'n':  case 'o':
-						case 'p':  case 'q':  case 'r':  case 's':
-						case 't':  case 'u':  case 'v':  case 'w':
-						case 'x':  case 'y':  case 'z':
+						case '$':  case '0':  case '1':  case '2':
+						case '3':  case '4':  case '5':  case '6':
+						case '7':  case '8':  case '9':  case 'A':
+						case 'B':  case 'C':  case 'D':  case 'E':
+						case 'F':  case 'G':  case 'H':  case 'I':
+						case 'J':  case 'K':  case 'L':  case 'M':
+						case 'N':  case 'O':  case 'P':  case 'Q':
+						case 'R':  case 'S':  case 'T':  case 'U':
+						case 'V':  case 'W':  case 'X':  case 'Y':
+						case 'Z':  case '_':  case 'a':  case 'b':
+						case 'c':  case 'd':  case 'e':  case 'f':
+						case 'g':  case 'h':  case 'i':  case 'j':
+						case 'k':  case 'l':  case 'm':  case 'n':
+						case 'o':  case 'p':  case 'q':  case 'r':
+						case 's':  case 't':  case 'u':  case 'v':
+						case 'w':  case 'x':  case 'y':  case 'z':
+						case '{':  case '}':
 						{
 							mID(true);
 							theRetToken = returnToken_;
@@ -249,6 +257,20 @@ tryAgain:
 		returnToken_ = _token;
 	}
 	
+	public void mEQUAL(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
+{
+		int _ttype; IToken _token=null; int _begin=text.Length;
+		_ttype = EQUAL;
+		
+		match('=');
+		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
+		{
+			_token = makeToken(_ttype);
+			_token.setText(text.ToString(_begin, text.Length-_begin));
+		}
+		returnToken_ = _token;
+	}
+	
 	public void mLLITERAL(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
@@ -294,11 +316,11 @@ tryAgain:
 				}
 				else
 				{
-					goto _loop8_breakloop;
+					goto _loop9_breakloop;
 				}
 				
 			}
-_loop8_breakloop:			;
+_loop9_breakloop:			;
 		}    // ( ... )*
 		match('\n');
 		_ttype = Token.SKIP; newline();
@@ -330,11 +352,11 @@ _loop8_breakloop:			;
 				}
 				else
 				{
-					goto _loop12_breakloop;
+					goto _loop13_breakloop;
 				}
 				
 			}
-_loop12_breakloop:			;
+_loop13_breakloop:			;
 		}    // ( ... )*
 		_saveIndex = text.Length;
 		match('"');
@@ -360,11 +382,14 @@ _loop12_breakloop:			;
 			implicitLineJoiningLevel++;
 			
 		{ // ( ... )+
-			int _cnt16=0;
+			int _cnt17=0;
 			for (;;)
 			{
-				if ((cached_LA1=='\r') && (cached_LA2=='\n'))
+				if (((cached_LA1=='>') && ((cached_LA2 >= '\u0000' && cached_LA2 <= '\u007f')))&&(LA(2) != '>'))
 				{
+					match('>');
+				}
+				else if ((cached_LA1=='\r') && (cached_LA2=='\n')) {
 					match('\r');
 					match('\n');
 					newline();
@@ -384,12 +409,12 @@ _loop12_breakloop:			;
 				}
 				else
 				{
-					if (_cnt16 >= 1) { goto _loop16_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt17 >= 1) { goto _loop17_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				
-				_cnt16++;
+				_cnt17++;
 			}
-_loop16_breakloop:			;
+_loop17_breakloop:			;
 		}    // ( ... )+
 		_saveIndex = text.Length;
 		match(">>");
@@ -423,7 +448,7 @@ _loop16_breakloop:			;
 		if (!(getColumn()==1))
 		  throw new SemanticException("getColumn()==1");
 		{ // ( ... )+
-			int _cnt19=0;
+			int _cnt20=0;
 			for (;;)
 			{
 				switch ( cached_LA1 )
@@ -442,12 +467,12 @@ _loop16_breakloop:			;
 				}
 				default:
 				{
-					if (_cnt19 >= 1) { goto _loop19_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt20 >= 1) { goto _loop20_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				break; }
-				_cnt19++;
+				_cnt20++;
 			}
-_loop19_breakloop:			;
+_loop20_breakloop:			;
 		}    // ( ... )+
 		
 		if ( implicitLineJoiningLevel>0 ) 
@@ -502,14 +527,14 @@ _loop19_breakloop:			;
 						}
 						else
 						{
-							goto _loop23_breakloop;
+							goto _loop24_breakloop;
 						}
 						
 					}
-_loop23_breakloop:					;
+_loop24_breakloop:					;
 				}    // ( ... )*
 				{ // ( ... )+
-					int _cnt25=0;
+					int _cnt26=0;
 					for (;;)
 					{
 						if ((cached_LA1=='\n'))
@@ -519,12 +544,12 @@ _loop23_breakloop:					;
 						}
 						else
 						{
-							if (_cnt25 >= 1) { goto _loop25_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+							if (_cnt26 >= 1) { goto _loop26_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 						}
 						
-						_cnt25++;
+						_cnt26++;
 					}
-_loop25_breakloop:					;
+_loop26_breakloop:					;
 				}    // ( ... )+
 				_ttype = Token.SKIP;
 			}
@@ -546,11 +571,26 @@ _loop25_breakloop:					;
 		_ttype = ID;
 		
 		{ // ( ... )+
-			int _cnt28=0;
+			int _cnt29=0;
 			for (;;)
 			{
 				switch ( cached_LA1 )
 				{
+				case '$':
+				{
+					match('$');
+					break;
+				}
+				case '{':
+				{
+					match('{');
+					break;
+				}
+				case '}':
+				{
+					match('}');
+					break;
+				}
 				case 'a':  case 'b':  case 'c':  case 'd':
 				case 'e':  case 'f':  case 'g':  case 'h':
 				case 'i':  case 'j':  case 'k':  case 'l':
@@ -587,12 +627,12 @@ _loop25_breakloop:					;
 				}
 				default:
 				{
-					if (_cnt28 >= 1) { goto _loop28_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt29 >= 1) { goto _loop29_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				break; }
-				_cnt28++;
+				_cnt29++;
 			}
-_loop28_breakloop:			;
+_loop29_breakloop:			;
 		}    // ( ... )+
 		_ttype = testLiteralsTable(_ttype);
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -612,7 +652,7 @@ _loop28_breakloop:			;
 		
 		
 		{ // ( ... )+
-			int _cnt32=0;
+			int _cnt33=0;
 			for (;;)
 			{
 				if ((cached_LA1=='\n'||cached_LA1=='\r'))
@@ -640,12 +680,12 @@ _loop28_breakloop:			;
 				}
 				else
 				{
-					if (_cnt32 >= 1) { goto _loop32_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt33 >= 1) { goto _loop33_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				
-				_cnt32++;
+				_cnt33++;
 			}
-_loop32_breakloop:			;
+_loop33_breakloop:			;
 		}    // ( ... )+
 		
 		if ( startCol==1 || implicitLineJoiningLevel>0 )
@@ -665,7 +705,7 @@ _loop32_breakloop:			;
 		_ttype = WS;
 		
 		{ // ( ... )+
-			int _cnt35=0;
+			int _cnt36=0;
 			for (;;)
 			{
 				switch ( cached_LA1 )
@@ -682,12 +722,12 @@ _loop32_breakloop:			;
 				}
 				default:
 				{
-					if (_cnt35 >= 1) { goto _loop35_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt36 >= 1) { goto _loop36_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				break; }
-				_cnt35++;
+				_cnt36++;
 			}
-_loop35_breakloop:			;
+_loop36_breakloop:			;
 		}    // ( ... )+
 		_ttype = Token.SKIP;
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))

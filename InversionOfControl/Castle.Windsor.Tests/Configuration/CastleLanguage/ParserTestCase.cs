@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 
 	using Castle.Model.Configuration;
 
-	using Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal;
+	using Castle.Windsor.Configuration.Interpreters.CastleLanguage;
 
 
 	[TestFixture]
@@ -35,7 +35,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -48,6 +48,103 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 		}
 
 		[Test]
+		public void SingleNodeAndAttribute2s()
+		{
+			String contents = "container: \r\n  item: ${compkey}\r\n  item2: value2\r\n";
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual("${compkey}", conf.Root.Children["container"].Attributes["item"]);
+			Assert.AreEqual("value2", conf.Root.Children["container"].Attributes["item2"]);
+			Assert.AreEqual(2, conf.Root.Children["container"].Attributes.Count);
+		}
+
+		[Test]
+		public void NodesAndAttributes()
+		{
+			String contents = "container: \r\n  item: value\r\n  item2= value2\r\n";
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual(1, conf.Root.Children["container"].Attributes.Count);
+			Assert.AreEqual("value", conf.Root.Children["container"].Attributes["item"]);
+			Assert.AreEqual("value2", conf.Root.Children["container"].Children["item2"].Value);
+		}
+
+		[Test]
+		public void NodesAndAttributes2()
+		{
+			String contents = "container: \r\n  item= \"value\"\r\n  item2= << <myxml /> >>\r\n";
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual(0, conf.Root.Children["container"].Attributes.Count);
+			Assert.AreEqual("value", conf.Root.Children["container"].Children["item"].Value);
+			Assert.AreEqual(" <myxml /> ", conf.Root.Children["container"].Children["item2"].Value);
+		}
+
+		[Test]
+		public void NodesAndAttributes3()
+		{
+			String contents = "container: \r\n" +
+				"   settings: \r\n" + 
+				"     item1 = value \r\n" + 
+				"       key: confkey1 \r\n" + 
+				"     item2 = value \r\n" + 
+				"       key: confkey2 \r\n";
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual(0, conf.Root.Children["container"].Attributes.Count);
+			Assert.AreEqual(1, conf.Root.Children["container"].Children.Count);
+
+			IConfiguration settings = conf.Root.Children["container"].Children["settings"];
+			Assert.IsNotNull(settings);
+			Assert.AreEqual(2, settings.Children.Count);
+
+			IConfiguration item1 = settings.Children["item1"];
+			Assert.IsNotNull(item1);
+			Assert.AreEqual("value", item1.Value);
+			Assert.AreEqual("confkey1", item1.Attributes["key"]);
+
+			IConfiguration item2 = settings.Children["item2"];
+			Assert.IsNotNull(item2);
+			Assert.AreEqual("value", item2.Value);
+			Assert.AreEqual("confkey2", item2.Attributes["key"]);
+		}
+
+		[Test]
 		public void StringLiterals()
 		{
 			String contents = "container: \r\n  item: \"value super value\"\r\n  item2: value2\r\n";
@@ -55,7 +152,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -75,7 +172,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -95,7 +192,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -115,7 +212,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -141,7 +238,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -175,7 +272,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -210,7 +307,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -239,7 +336,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -257,7 +354,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -277,7 +374,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);
@@ -297,7 +394,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			WindsorConfLanguageLexer l = 
 				new WindsorConfLanguageLexer(new StringReader(contents));
 
-			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			WindsorParser p = new WindsorParser(new IndentTokenStream(l));
 			
 			ConfigurationDefinition conf = p.start();
 			Assert.IsNotNull(conf);

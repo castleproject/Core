@@ -4,7 +4,7 @@
     using System.Text;
     using Castle.Model.Configuration;
 
-namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 {
 	public class windsorLanguageTokenTypes
 	{
@@ -15,12 +15,13 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 		public const int EOS = 6;
 		public const int NEWLINE = 7;
 		public const int COLON = 8;
-		public const int INDENT = 9;
-		public const int DEDENT = 10;
-		public const int ID = 11;
-		public const int DOT = 12;
-		public const int STRING_LITERAL = 13;
-		public const int DATA = 14;
+		public const int EQUAL = 9;
+		public const int INDENT = 10;
+		public const int DEDENT = 11;
+		public const int ID = 12;
+		public const int DOT = 13;
+		public const int STRING_LITERAL = 14;
+		public const int DATA = 15;
 		
 	}
 }

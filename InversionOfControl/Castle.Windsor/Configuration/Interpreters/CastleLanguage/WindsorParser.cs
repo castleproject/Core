@@ -16,28 +16,22 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for NodeBase.
-	/// </summary>
-	[Serializable]
-	public abstract class NodeBase
+	using antlr;
+
+
+	public class WindsorParser : WindsorLanguageParser
 	{
-		private LexicalInfo _info;
-
-		public NodeBase()
+		public WindsorParser(TokenBuffer tokenBuf) : base(tokenBuf)
 		{
 		}
 
-		public NodeBase(LexicalInfo info)
+		public WindsorParser(TokenStream lexer) : base(lexer)
 		{
-			LexicalInfo = info;
 		}
 
-		public LexicalInfo LexicalInfo
+		public override void reportError(RecognitionException ex)
 		{
-			get { return _info; }
-			set { _info = value; }
+			throw ex;
 		}
-
 	}
 }

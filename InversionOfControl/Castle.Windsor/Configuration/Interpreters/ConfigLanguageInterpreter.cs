@@ -15,12 +15,13 @@
 namespace Castle.Windsor.Configuration.Interpreters
 {
 	using System;
+	using System.Configuration;
 
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
 	
-	using Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal;
+	using Castle.Windsor.Configuration.Interpreters.CastleLanguage;
 
 	/// <summary>
 	/// 
@@ -47,20 +48,65 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			WindsorConfLanguageLexer lexer = new WindsorConfLanguageLexer(Source.Contents);
 
-			WindsorLanguageParser parser = new WindsorLanguageParser(
-				new IndentTokenStream(lexer));
+			WindsorParser parser = new WindsorParser(new IndentTokenStream(lexer));
 
 			ConfigurationDefinition confDef = parser.start();
 
 			Imports = confDef.Imports;
 
-			foreach(IConfiguration facility in confDef.Root.Children["facilities"].Children)
+			IConfiguration container = confDef.Root.Children["container"];
+
+			if (container == null)
 			{
-				AddFacilityConfig(facility, store);
+				throw new ConfigurationException("Root node 'container' not found.");
 			}
-			foreach(IConfiguration component in confDef.Root.Children["components"].Children)
+
+			foreach(IConfiguration node in container.Children)
 			{
+				if (FacilitiesNodeName.Equals(node.Name))
+				{
+					AddFacilities(node.Children, store);
+				}
+				else if (ComponentsNodeName.Equals(node.Name))
+				{
+					AddComponents(node.Children, store);
+				}
+				else
+				{
+					String message = String.Format("Unexpected node {0}. We were expecting either {1} or {2}", 
+						node.Name, FacilitiesNodeName, ComponentsNodeName);
+					throw new ConfigurationException(message);
+				}
+			}
+		}
+
+		private void AddComponents(ConfigurationCollection components, IConfigurationStore store)
+		{
+			foreach(IConfiguration component in components)
+			{
+				if (!ComponentNodeName.Equals(component.Name))
+				{
+					String message = String.Format("Unexpected node {0}. We were expecting {1}", 
+						component.Name, ComponentNodeName);
+					throw new ConfigurationException(message);
+				}
+
 				AddComponentConfig(component, store);
+			}
+		}
+
+		private void AddFacilities(ConfigurationCollection facilities, IConfigurationStore store)
+		{
+			foreach(IConfiguration facility in facilities)
+			{
+				if (!FacilityNodeName.Equals(facility.Name))
+				{
+					String message = String.Format("Unexpected node {0}. We were expecting {1}", 
+						facility.Name, FacilityNodeName);
+					throw new ConfigurationException(message);
+				}
+
+				AddFacilityConfig(facility, store);
 			}
 		}
 	}
