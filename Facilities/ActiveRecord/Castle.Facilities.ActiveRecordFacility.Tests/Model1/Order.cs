@@ -14,10 +14,9 @@
 
 namespace Castle.Facilities.ActiveRecord.Tests.Model1
 {
-	using System;
 	using System.Collections;
 
-	using Castle.ActiveRecord;
+	using Castle.Facilities.ActiveRecord;
 
 	/// <summary>
 	/// Summary description for Order.

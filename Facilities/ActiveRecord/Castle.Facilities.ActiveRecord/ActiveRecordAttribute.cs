@@ -12,26 +12,51 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.Facilities.ActiveRecord
 {
 	using System;
 
 	/// <summary>
 	/// Summary description for ActiveRecordAttribute.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class ActiveRecordAttribute : Attribute
 	{ 
+		private string _table;
+		private string _schema;
+		private string _proxy;
+
 		public ActiveRecordAttribute()
 		{
 		}
 
 		public ActiveRecordAttribute(String table)
 		{
+			_table = table;
 		}
 
 		public ActiveRecordAttribute(String table, String schema)
 		{
+			_table = table;
+			_schema = schema;
+		}
+
+		public string Table
+		{
+			get { return _table; }
+			set { _table = value; }
+		}
+
+		public string Schema
+		{
+			get { return _schema; }
+			set { _schema = value; }
+		}
+
+		public string Proxy
+		{
+			get { return _proxy; }
+			set { _proxy = value; }
 		}
 	}
 }

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.Facilities.ActiveRecord
 {
 	using System;
 
@@ -22,8 +22,21 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property)]
 	public class HasOneAttribute : Attribute
 	{
+		private Type _type;
+
 		public HasOneAttribute()
 		{
+		}
+
+		public HasOneAttribute( Type _type )
+		{
+			this._type = _type;
+		}
+
+		public Type Type
+		{
+			get { return _type; }
+			set { _type = value; }
 		}
 	}
 }
