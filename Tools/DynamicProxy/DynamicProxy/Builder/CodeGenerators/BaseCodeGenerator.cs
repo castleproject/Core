@@ -628,14 +628,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return (Type[]) interfaces.ToArray( typeof(Type) );
 		}
 
-		protected static Type[] Filter(Type[] mixinInterfaces)
+		protected Type[] Filter(Type[] mixinInterfaces)
 		{
-			if (Array.IndexOf(mixinInterfaces, typeof(ISerializable)) != -1)
+			ArrayList retType = new ArrayList();
+			foreach (Type type in mixinInterfaces)
 			{
-				// TODO: Implement this
+				if ( !Context.ShouldSkip(type) )
+					retType.Add(type);
 			}
-			
-			return mixinInterfaces;
+
+			return (Type[])retType.ToArray(typeof(Type));
 		}
 
 		public static bool NoFilterImpl(Type type, object criteria)
