@@ -104,6 +104,11 @@
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\lib\Iesi.Collections.dll"
                 />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -179,6 +184,21 @@
                 />
                 <File
                     RelPath = "Framework\SessionFactoryHolder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Config\AppDomainConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Config\IConfigurationSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Config\InPlaceConfigurationSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

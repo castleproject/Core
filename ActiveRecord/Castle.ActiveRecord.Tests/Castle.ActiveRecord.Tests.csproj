@@ -120,6 +120,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AbstractActiveRecordTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ActiveRecordTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

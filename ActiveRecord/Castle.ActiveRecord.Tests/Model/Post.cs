@@ -26,6 +26,18 @@ namespace Castle.ActiveRecord.Tests
 		private String _category;
 		private Blog _blog;
 
+		public Post()
+		{
+		}
+
+		public Post(Blog blog, string title, string contents, string category)
+		{
+			_blog = blog;
+			_title = title;
+			_contents = contents;
+			_category = category;
+		}
+
 		[PrimaryKey(PrimaryKeyType.Native, "post_id")]
 		public int Id
 		{

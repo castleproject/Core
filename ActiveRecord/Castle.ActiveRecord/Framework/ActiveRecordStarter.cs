@@ -20,6 +20,10 @@ namespace Castle.ActiveRecord
 
 	using NHibernate.Cfg;
 
+	using Castle.Model.Configuration;
+
+	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Config;
 
 	/// <summary>
 	/// 
@@ -30,13 +34,17 @@ namespace Castle.ActiveRecord
 		/// 
 		/// </summary>
 		/// <param name="types"></param>
-		public static void Initialize( params Type[] types )
+		public static void Initialize( IConfigurationSource source, params Type[] types )
 		{
-			NHibernateMappingEngine engine = new NHibernateMappingEngine();
+			if (source == null) throw new ArgumentNullException("source");
+			if (types == null) throw new ArgumentNullException("types");
 
+			/// First initialization
 			SessionFactoryHolder holder = new SessionFactoryHolder();
-
 			ActiveRecordBase._holder = holder;
+
+			/// Base configuration
+			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
 			foreach( Type type in types )
 			{
@@ -44,26 +52,19 @@ namespace Castle.ActiveRecord
 				{
 					continue;
 				}
-//
-//				MethodInfo m = type.GetMethod("DefineConfiguration", 
-//					BindingFlags.Static|BindingFlags.Public);
-//				
-//				if (m != null)
-//				{
-//					Console.WriteLine( "    {0}.{1}", t.Name, m.Name );
-//
-//					holder.Add( t, (Configuration) m.Invoke(null, new object[] { null }) );
-//				}
+
+				SetUpConfiguration(source, type, holder);
 
 				Configuration cfg = holder.GetConfiguration( type );
 
 				if (cfg == null)
 				{
-					// Add to wait list
+					// TODO: Add to wait list
 				}
 
 				if (!type.IsAbstract)
 				{
+					NHibernateMappingEngine engine = new NHibernateMappingEngine();
 					engine.CreateMapping(type, cfg);
 				}
 			}
@@ -73,7 +74,7 @@ namespace Castle.ActiveRecord
 		/// 
 		/// </summary>
 		/// <param name="assembly"></param>
-		public static void Initialize( Assembly assembly )
+		public static void Initialize( Assembly assembly, IConfigurationSource source )
 		{
 			Type[] types = assembly.GetExportedTypes();
 
@@ -89,12 +90,35 @@ namespace Castle.ActiveRecord
 				list.Add(type);
 			}
 
-			Initialize( (Type[]) list.ToArray( typeof(Type) ) );
+			Initialize( source, (Type[]) list.ToArray( typeof(Type) ) );
 		}
 
 		public static void Initialize( )
 		{
-			Initialize( Assembly.GetExecutingAssembly() );
+			Initialize( Assembly.GetExecutingAssembly(), new AppDomainConfiguration() );
+		}
+
+		private static Configuration CreateConfiguration(IConfiguration config)
+		{
+			Configuration cfg = new Configuration();
+
+			foreach(String key in config.Attributes.AllKeys)
+			{
+				cfg.Properties.Add(key, config.Attributes[key]);
+			}
+
+			return cfg;
+		}
+
+		private static void SetUpConfiguration(IConfigurationSource source, Type type, SessionFactoryHolder holder)
+		{
+			IConfiguration config = source.GetConfiguration(type);
+	
+			if (config != null)
+			{
+				Configuration nconf = CreateConfiguration(config);
+				holder.Add( type, nconf );
+			}
 		}
 	}
 }

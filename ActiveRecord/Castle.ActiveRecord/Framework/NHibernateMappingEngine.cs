@@ -24,47 +24,47 @@ namespace Castle.ActiveRecord
 
 	public class NHibernateMappingEngine
 	{
-		private static readonly String mappingOpen = "<hibernate-mapping xmlns=\"urn:nhibernate-mapping-2.0\" {0}>";
-		private static readonly String mappingClose = "</hibernate-mapping>";
-		private static readonly String classOpen = "<class name=\"{0}\" {1}>";
-		private static readonly String classClose = "</class>";
+		private static readonly String mappingOpen = "\r\n<hibernate-mapping xmlns=\"urn:nhibernate-mapping-2.0\" {0}>";
+		private static readonly String mappingClose = "\r\n</hibernate-mapping>";
+		private static readonly String classOpen = "\r\n<class name=\"{0}\" {1}>";
+		private static readonly String classClose = "\r\n</class>";
 		private static readonly String tableAttribute = "table=\"{0}\" ";
 		private static readonly String proxyAttribute = "proxy=\"{0}\" ";
 		private static readonly String schemaAttribute = "schema=\"{0}\" ";
-		private static readonly String idOpen = "<id {0}>";
-		private static readonly String idClose = "</id>";
+		private static readonly String idOpen = "\r\n<id {0}>";
+		private static readonly String idClose = "\r\n</id>";
 		private static readonly String nameAttribute = "name=\"{0}\" ";
 		private static readonly String typeAttribute = "type=\"{0}\" ";
 		private static readonly String classAttribute = "class=\"{0}\" ";
-		private static readonly String generatorOpen = "<generator class=\"{0}\">";
-		private static readonly String generatorClose = "</generator>";
-		private static readonly String propertyOpen = "<property {0} {1}>";
-		private static readonly String propertyClose = "</property>";
+		private static readonly String generatorOpen = "\r\n<generator class=\"{0}\">";
+		private static readonly String generatorClose = "\r\n</generator>";
+		private static readonly String propertyOpen = "\r\n<property {0} {1}>";
+		private static readonly String propertyClose = "\r\n</property>";
 		private static readonly String updateAttribute = "update=\"{0}\" ";
 		private static readonly String insertAttribute = "insert=\"{0}\" ";
 		private static readonly String formulaAttribute = "formula=\"{0}\" ";
 		private static readonly String columnAttribute = "column=\"{0}\" ";
 		private static readonly String lengthAttribute = "length=\"{0}\" ";
 		private static readonly String notNullAttribute = "not-null=\"{0}\" ";
-		private static readonly String oneToOne = "<one-to-one name=\"{0}\" class=\"{1}\" {2}/>";
-		private static readonly String oneToMany = "<one-to-many class=\"{0}\" />";
-		private static readonly String manyToOne = "<many-to-one {0} {1} />";
+		private static readonly String oneToOne = "\r\n<one-to-one name=\"{0}\" class=\"{1}\" {2}/>";
+		private static readonly String oneToMany = "\r\n<one-to-many class=\"{0}\" />";
+		private static readonly String manyToOne = "\r\n<many-to-one {0} {1} />";
 		private static readonly String cascadeAttribute = "cascade=\"{0}\" ";
 		private static readonly String outerJoinAttribute = "outer-join=\"{0}\" ";
 		private static readonly String accessAttribute = "access=\"{0}\" ";
 		private static readonly String unsavedValueAttribute = "unsaved-value=\"{0}\" ";
 		private static readonly String constrainedAttribute = "constrained=\"{0}\" ";
-		private static readonly String mapOpen = "<map name=\"{0}\" {1}>";
-		private static readonly String mapClose = "</map>";
-		private static readonly String listOpen = "<list name=\"{0}\" {1}>";
-		private static readonly String listClose = "</list>";
-		private static readonly String setOpen = "<set name=\"{0}\" {1}>";
-		private static readonly String setClose = "</set>";
-		private static readonly String bagOpen = "<bag name=\"{0}\" {1}>";
-		private static readonly String bagClose = "</bag>";
-		private static readonly String keyTag = "<key column=\"{0}\"/>";
-		private static readonly String elementTag = "<element column=\"{0}\" class=\"{1}\"/>";
-		private static readonly String indexTag = "<index column=\"{0}\" {1} />";
+		private static readonly String mapOpen = "\r\n<map name=\"{0}\" {1}>";
+		private static readonly String mapClose = "\r\n</map>";
+		private static readonly String listOpen = "\r\n<list name=\"{0}\" {1}>";
+		private static readonly String listClose = "\r\n</list>";
+		private static readonly String setOpen = "\r\n<set name=\"{0}\" {1}>";
+		private static readonly String setClose = "\r\n</set>";
+		private static readonly String bagOpen = "\r\n<bag name=\"{0}\" {1}>";
+		private static readonly String bagClose = "\r\n</bag>";
+		private static readonly String keyTag = "\r\n<key column=\"{0}\"/>";
+		private static readonly String elementTag = "\r\n<element column=\"{0}\" class=\"{1}\"/>";
+		private static readonly String indexTag = "\r\n<index column=\"{0}\" {1} />";
 		private static readonly String lazyAttribute = "lazy=\"{0}\" ";
 		private static readonly String inverseAttribute = "inverse=\"{0}\" ";
 		private static readonly String sortAttribute = "sort=\"{0}\" ";
@@ -467,9 +467,9 @@ namespace Castle.ActiveRecord
 				throw new ConfigurationException("HasManyAttribute must expose a Key");
 			}
 
-			PropertyInfo elementProp = otherType.GetProperty(hasmany.Key);
+//			PropertyInfo elementProp = otherType.GetProperty(hasmany.Key);
 			
-			if (elementProp != null)
+//			if (elementProp != null)
 			{
 //				PropertyInfo indexProp = otherType.GetProperty(hasmany.Index);
 //				if (indexProp != null)
@@ -477,26 +477,28 @@ namespace Castle.ActiveRecord
 //					string type = String.Format(typeAttribute, indexProp.Name);
 //					builder.AppendFormat(indexTag, hasmany.Index, type);
 //				}
-				string column = null;
-				object[] elementAttributes = elementProp.GetCustomAttributes(false);
-				foreach (object attribute in elementAttributes)
-				{
-					if (attribute is PropertyAttribute)
-					{
-						column = (attribute as PropertyAttribute).Column;
-						break;
-					}
-					else if (attribute is PrimaryKeyAttribute)
-					{
-						column = (attribute as PrimaryKeyAttribute).Column;
-						break;
-					}
-					else if (attribute is BelongsToAttribute)
-					{
-						column = (attribute as BelongsToAttribute).Column;
-						break;
-					}
-				}
+
+				string column = hasmany.Column == null ? "" : hasmany.Column;
+
+//				object[] elementAttributes = elementProp.GetCustomAttributes(false);
+//				foreach (object attribute in elementAttributes)
+//				{
+//					if (attribute is PropertyAttribute)
+//					{
+//						column = (attribute as PropertyAttribute).Column;
+//						break;
+//					}
+//					else if (attribute is PrimaryKeyAttribute)
+//					{
+//						column = (attribute as PrimaryKeyAttribute).Column;
+//						break;
+//					}
+//					else if (attribute is BelongsToAttribute)
+//					{
+//						column = (attribute as BelongsToAttribute).Column;
+//						break;
+//					}
+//				}
 
 				builder.AppendFormat(keyTag, column);
 

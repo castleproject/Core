@@ -47,7 +47,7 @@ namespace Castle.ActiveRecord.Tests
 			set { _author = value; }
 		}
 
-		[HasManyAttribute(typeof(Post), Key="Id", Inverse="true")]
+		[HasManyAttribute(typeof(Post), Key="Posts", Table="Posts", Column="post_blogid")]
 		public IList Posts
 		{
 			get { return _posts; }

@@ -31,6 +31,7 @@ namespace Castle.ActiveRecord
 		private string _sort;
 		private string _orderBy;
 		private string _where;
+		private string _column;
 
 		public HasManyAttribute( Type mapType )
 		{
@@ -47,6 +48,12 @@ namespace Castle.ActiveRecord
 		{
 			get { return _key; }
 			set { _key = value; }
+		}
+
+		public string Column
+		{
+			get { return _column; }
+			set { _column = value; }
 		}
 
 		public string Index

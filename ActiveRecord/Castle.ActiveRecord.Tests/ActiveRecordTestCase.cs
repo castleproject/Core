@@ -20,12 +20,12 @@ namespace Castle.ActiveRecord.Tests
 
 
 	[TestFixture]
-	public class ActiveRecordTestCase
+	public class ActiveRecordTestCase : AbstractActiveRecordTest
 	{
 		[Test]
 		public void SimpleOperations()
 		{
-			ActiveRecordStarter.Initialize( typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -50,6 +50,31 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.AreEqual( blog.Name, retrieved.Name );
 			Assert.AreEqual( blog.Author, retrieved.Author );
+		}
+
+		[Test]
+		public void RelationsOneToMany()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			Post post1 = new Post(blog, "title1", "contents", "category1");
+			Post post2 = new Post(blog, "title2", "contents", "category2");
+
+			post1.Save();
+			post2.Save();
+
+			blog = Blog.Find(blog.Id);
+
+			Assert.IsNotNull(blog);
+			Assert.AreEqual(2, blog.Posts.Count);
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Tests
 
 
 	[TestFixture]
-	public class TransactionScopeTestCase
+	public class TransactionScopeTestCase : AbstractActiveRecordTest
 	{
 		[Test]
 		[Ignore("Scope Not implemented")]
@@ -30,7 +30,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 			ISession session1, session2, session3, session4;
 
-			ActiveRecordStarter.Initialize( typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
 
 			using(new TransactionScope())
 			{
