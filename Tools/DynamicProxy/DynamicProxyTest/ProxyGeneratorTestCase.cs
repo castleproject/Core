@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Test
 {
 	using System;
+	using System.Collections;
 	using System.Reflection;
 
 	using NUnit.Framework;
@@ -99,6 +100,20 @@ namespace Castle.DynamicProxy.Test
 			SealedMethodsClass proxy = (SealedMethodsClass) m_generator.CreateClassProxy( 
 				typeof(SealedMethodsClass), new StandardInterceptor() );
 			Assert.IsNotNull(proxy);
+		}
+
+		[Test]
+		public void HashtableProxy()
+		{
+			object proxy = m_generator.CreateClassProxy( 
+				typeof(Hashtable), new HashtableInterceptor() );
+
+			Assert.IsTrue( typeof(Hashtable).IsAssignableFrom( proxy.GetType() ) );
+
+			object value = (proxy as Hashtable)["key"];
+
+			Assert.IsTrue(value is String);
+			Assert.AreEqual("default", value.ToString());
 		}
 
 		[Test]
@@ -201,6 +216,19 @@ namespace Castle.DynamicProxy.Test
 			{
 				return null;
 			}
+		}
+	}
+
+	public class HashtableInterceptor : StandardInterceptor
+	{
+		public override object Intercept(IInvocation invocation, params object[] args)
+		{
+			if (invocation.Method.Name.Equals("get_Item"))
+			{
+				object item = base.Intercept(invocation, args);
+				return (item == null) ? "default" : item;
+			}
+			return base.Intercept(invocation, args);
 		}
 	}
 

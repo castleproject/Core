@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 
 	/// <summary>
@@ -70,14 +71,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public EasyMethod CreateMethod( String name, MethodAttributes attrs, ReturnReferenceExpression returnType, params Type[] args)
 		{
-			ArgumentReference[] arguments = new ArgumentReference[args.Length];
-			
-			for(int i=0; i < args.Length; ++i)
-			{
-				arguments[i] = new ArgumentReference(args[i]);
-			}
-
-			EasyMethod member = new EasyMethod( this, name, attrs, returnType, arguments );
+			EasyMethod member = new EasyMethod( this, name, attrs, returnType, ArgumentsUtil.ConvertToArgumentReference(args) );
 			m_methods.Add(member);
 			return member;
 		}

@@ -445,30 +445,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				parameters[i] = parameterInfo[i].ParameterType;
 			}
 
-			MethodAttributes atts = MethodAttributes.Virtual;
-
-			if (method.IsPublic)
-			{
-				atts |= MethodAttributes.Public;
-			}
-
-			if (method.IsFamilyAndAssembly)
-			{
-				atts |= MethodAttributes.FamANDAssem;
-			}
-			else if (method.IsFamilyOrAssembly)
-			{
-				atts |= MethodAttributes.FamORAssem;
-			}
-			else if (method.IsFamily)
-			{
-				atts |= MethodAttributes.Family;
-			}
-
-			if (method.Name.StartsWith("set_") || method.Name.StartsWith("get_"))
-			{
-				atts |= MethodAttributes.SpecialName;
-			}
+			MethodAttributes atts = ObtainMethodAttributes(method);
 
 			PreProcessMethod(method);
 
@@ -500,12 +477,12 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	
 						if (isSetMethod)
 						{
-							easyMethod = property.CreateSetMethod( new ArgumentReference(parameters[0]) );
+							easyMethod = property.CreateSetMethod( atts, parameters );
 							break;
 						}
 						else
 						{
-							easyMethod = property.CreateGetMethod( );
+							easyMethod = property.CreateGetMethod( atts, parameters );
 							break;
 						}
 					}
@@ -515,6 +492,39 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			WriteInterceptorInvocationMethod(method, easyMethod);
 
 			PostProcessMethod(method);
+		}
+
+		private MethodAttributes ObtainMethodAttributes(MethodInfo method)
+		{
+			MethodAttributes atts = MethodAttributes.Virtual;
+	
+			if (method.IsPublic)
+			{
+				atts |= MethodAttributes.Public;
+			}
+			if (method.IsHideBySig)
+			{
+				atts |= MethodAttributes.HideBySig;
+			}
+	
+			if (method.IsFamilyAndAssembly)
+			{
+				atts |= MethodAttributes.FamANDAssem;
+			}
+			else if (method.IsFamilyOrAssembly)
+			{
+				atts |= MethodAttributes.FamORAssem;
+			}
+			else if (method.IsFamily)
+			{
+				atts |= MethodAttributes.Family;
+			}
+	
+			if (method.Name.StartsWith("set_") || method.Name.StartsWith("get_"))
+			{
+				atts |= MethodAttributes.SpecialName;
+			}
+			return atts;
 		}
 
 		protected virtual void PreProcessMethod(MethodInfo method)

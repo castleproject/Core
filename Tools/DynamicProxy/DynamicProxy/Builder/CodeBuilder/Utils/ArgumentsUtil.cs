@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 {
 	using System;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
@@ -29,11 +30,6 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 			if (reference == null) return;
 
 			EmitLoadOwnerAndReference(reference.OwnerReference, il);
-
-//			if (reference.OwnerReference != null)
-//			{
-//				reference.OwnerReference.LoadReference(il);
-//			}
 
 			reference.LoadReference(il);
 		}
@@ -57,6 +53,30 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 			}
 
 			return types;
+		}
+
+		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
+		{
+			ArgumentReference[] arguments = new ArgumentReference[args.Length];
+			
+			for(int i=0; i < args.Length; ++i)
+			{
+				arguments[i] = new ArgumentReference( args[i] );
+			}
+
+			return arguments;
+		}
+
+		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
+		{
+			ArgumentReference[] arguments = new ArgumentReference[args.Length];
+			
+			for(int i=0; i < args.Length; ++i)
+			{
+				arguments[i] = new ArgumentReference( args[i].ParameterType );
+			}
+
+			return arguments;
 		}
 	}
 }

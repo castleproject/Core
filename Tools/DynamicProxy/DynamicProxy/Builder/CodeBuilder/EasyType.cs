@@ -1,3 +1,4 @@
+using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,15 +67,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public EasyCallable CreateCallable( Type returnType, params ParameterInfo[] args )
 		{
-			ArgumentReference[] arguments = new ArgumentReference[args.Length];
-			
-			for(int i=0; i < args.Length; ++i)
-			{
-				arguments[i] = new ArgumentReference( args[i].ParameterType );
-			}
-			
 			EasyCallable nested = new EasyCallable( this, IncrementAndGetCounterValue, 
-				new ReturnReferenceExpression(returnType), arguments );
+				new ReturnReferenceExpression(returnType), ArgumentsUtil.ConvertToArgumentReference(args) );
 			m_nested.Add( nested );
 			return nested;
 		}
