@@ -89,7 +89,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Invocation.cs"
+                    RelPath = "ICallable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IInvocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -155,6 +165,21 @@
                 />
                 <File
                     RelPath = "Builder\CodeGenerators\ProxyGenerationException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Invocation\AbstractInvocation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Invocation\InterfaceInvocation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Invocation\SameClassInvocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

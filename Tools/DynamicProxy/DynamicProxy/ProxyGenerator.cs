@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Builder;
 

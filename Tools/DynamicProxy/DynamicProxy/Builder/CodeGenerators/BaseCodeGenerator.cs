@@ -21,6 +21,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Runtime.Serialization;
 	using System.Text;
 
+	using Castle.DynamicProxy.Invocation;
+
 	/// <summary>
 	/// Summary description for BaseCodeGenerator.
 	/// </summary>
