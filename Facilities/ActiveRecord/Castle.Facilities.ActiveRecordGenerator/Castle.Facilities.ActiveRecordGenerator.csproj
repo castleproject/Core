@@ -222,6 +222,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Action\Standard\SaveAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Action\Standard\SaveAsAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Forms\ActiveRecordDefForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

@@ -29,7 +29,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 	public class Project
 	{
 		private String _name;
-		private String _location;
 		private String _driver;
 		private String _connectionString;
 		private String _namespace;
@@ -55,12 +54,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Model
 		{
 			get { return _name; }
 			set { _name = value; }
-		}
-
-		public String Location
-		{
-			get { return _location; }
-			set { _location = value; }
 		}
 
 		public String Driver

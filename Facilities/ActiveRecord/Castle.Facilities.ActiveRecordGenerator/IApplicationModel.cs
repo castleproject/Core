@@ -38,6 +38,8 @@ namespace Castle.Facilities.ActiveRecordGenerator
 	{
 		Project CurrentProject { get; set; }
 
+		String SavedFileName { get; set; }
+
 		TableDefinition CurrentTable { get; set; }
 
 		ColumnDefinition CurrentColumn { get; set; }

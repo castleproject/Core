@@ -17,48 +17,34 @@ namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 	using System;
 	using System.Windows.Forms;
 
-	using Castle.Facilities.ActiveRecordGenerator.Forms;
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.Facilities.ActiveRecordGenerator.Prevalence;
 
 
-	public class NewProjectAction : IAction
+	public class SaveAction : IAction
 	{
-		private NewProjectForm _newProjectForm;
+		private IProjectPrevalence _projectPrevalence;
+		private SaveFileDialog _saveFileDialog;
 
-		public NewProjectAction(NewProjectForm newProjectForm)
+		public SaveAction(IProjectPrevalence projectPrevalence)
 		{
-			_newProjectForm = newProjectForm;
+			_projectPrevalence = projectPrevalence;
+			_saveFileDialog = new SaveFileDialog();
 		}
 
 		#region IAction Members
 
 		public object Execute(IApplicationModel model)
 		{
-//			if (project.IsDirty)
-//			{
-//				DialogResult result = MessageBox.Show("Save changes?", "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
-//
-//				if (result == DialogResult.Cancel)
-//				{
-//					return null;
-//				}
-//				else if (result == DialogResult.Yes)
-//				{
-//					// Save changes
-//				}
-//			}
-
-			_newProjectForm.Reset();
-
-			if (_newProjectForm.ShowDialog(model.MainWindow) == DialogResult.OK)
+			if (model.SavedFileName == null)
 			{
-				model.CurrentProject = _newProjectForm.Project;
-
-				model.CurrentProject.RefreshDatabaseDefinition();
-
-				model.UpdateViews();
+				if (_saveFileDialog.ShowDialog(model.MainWindow) == DialogResult.OK)
+				{
+					model.SavedFileName = _saveFileDialog.FileName;
+				}
 			}
-			
+
+			_projectPrevalence.Save( model.CurrentProject, model.SavedFileName );
+
 			return null;
 		}
 

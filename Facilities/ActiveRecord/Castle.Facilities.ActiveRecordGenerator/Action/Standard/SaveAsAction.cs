@@ -12,19 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Prevalence
+namespace Castle.Facilities.ActiveRecordGenerator.Action.Standard
 {
 	using System;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.Facilities.ActiveRecordGenerator.Prevalence;
 
 
-	public interface IProjectPrevalence
+	public class SaveAsAction : IAction
 	{
-		Project Open(String filename);
+		private IProjectPrevalence _projectPrevalence;
 
-		void Save(Project project, String filename);
+		public SaveAsAction(IProjectPrevalence projectPrevalence)
+		{
+			_projectPrevalence = projectPrevalence;
+		}
 
-		void SaveAs(Project project, String filename);
+		#region IAction Members
+
+		public object Execute(IApplicationModel model)
+		{
+//			_projectPrevalence.SaveAs( model.CurrentProject );
+
+			return null;
+		}
+
+		#endregion
 	}
 }

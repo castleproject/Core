@@ -234,6 +234,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 					CurrentActiveRecord = _arDescBuilder.Build( table );
 					table.RelatedDescriptor = CurrentActiveRecord;
 				}
+				else
+				{
+					CurrentActiveRecord = table.RelatedDescriptor;
+				}
 			}
 		}
 

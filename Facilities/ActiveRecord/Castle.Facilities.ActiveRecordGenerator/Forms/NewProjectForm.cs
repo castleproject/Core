@@ -25,24 +25,19 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 
 	public class NewProjectForm : Form
 	{
+		private System.Windows.Forms.TextBox name;
+		private System.Windows.Forms.TextBox connectionString;
+		private System.Windows.Forms.TextBox ns;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Button createButton;
-		private System.Windows.Forms.TextBox name;
 		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.TextBox connectionString;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.ComboBox database;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.TextBox ns;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.FolderBrowserDialog browserDialog1;
-		private System.Windows.Forms.TextBox location;
 		private System.Windows.Forms.ComboBox languages;
 		private System.ComponentModel.Container components = null;
 		private Project _project;
@@ -52,7 +47,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		public NewProjectForm(ICodeProviderFactory factory, IProjectFactory projectFactory)
 		{
 			InitializeComponent();
-			InitializeDatabaseShortcuts();
 
 			_projectFactory = projectFactory;
 
@@ -64,16 +58,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			}
 
 			languages.SelectedIndex = 0;
-
-			location.Text = AppDomain.CurrentDomain.BaseDirectory;
-		}
-
-		private void InitializeDatabaseShortcuts()
-		{
-			database.Items.Add(new Pair("MS SQL Server", "System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"));
-			database.Items.Add(new Pair("Oracle", "Oracle.DataAccess.Client.OracleConnection, Oracle.DataAccess"));
-			database.Items.Add(new Pair("MySQL", "MySql.Data.MySqlClient.MySqlConnection, MySql.Data"));
-			database.Items.Add(new Pair("Odbc", "System.Data.Odbc.OdbcConnection, System.Data, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"));
 		}
 
 		public Project Project
@@ -93,15 +77,12 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			base.Dispose(disposing);
 		}
 
-		private void button1_Click(object sender, System.EventArgs e)
+		public void Reset()
 		{
-			browserDialog1.RootFolder = Environment.SpecialFolder.Personal;
-			browserDialog1.SelectedPath = location.Text;
-
-			if (browserDialog1.ShowDialog(this) == DialogResult.OK)
-			{
-				location.Text = browserDialog1.SelectedPath;
-			}
+			name.Text = String.Empty;
+			connectionString.Text = String.Empty;
+			ns.Text = String.Empty;
+			languages.SelectedIndex = 0;
 		}
 
 		#region Windows Form Designer generated code
@@ -113,25 +94,20 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private void InitializeComponent()
 		{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.button1 = new System.Windows.Forms.Button();
-			this.location = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
 			this.name = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.createButton = new System.Windows.Forms.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.buildConnStringButton = new System.Windows.Forms.Button();
 			this.connectionString = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.database = new System.Windows.Forms.ComboBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.languages = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.ns = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.browserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			this.buildConnStringButton = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -139,42 +115,14 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.button1);
-			this.groupBox1.Controls.Add(this.location);
-			this.groupBox1.Controls.Add(this.label6);
 			this.groupBox1.Controls.Add(this.name);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Location = new System.Drawing.Point(8, 8);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(504, 100);
+			this.groupBox1.Size = new System.Drawing.Size(504, 68);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Project information:";
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(384, 64);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(100, 20);
-			this.button1.TabIndex = 4;
-			this.button1.Text = "&Browse...";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// location
-			// 
-			this.location.Location = new System.Drawing.Point(136, 64);
-			this.location.Name = "location";
-			this.location.Size = new System.Drawing.Size(236, 21);
-			this.location.TabIndex = 3;
-			this.location.Text = "";
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(16, 64);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(116, 16);
-			this.label6.TabIndex = 2;
-			this.label6.Text = "Location";
 			// 
 			// name
 			// 
@@ -195,7 +143,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(344, 364);
+			this.cancelButton.Location = new System.Drawing.Point(344, 300);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 4;
 			this.cancelButton.Text = "Cancel";
@@ -203,7 +151,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// createButton
 			// 
-			this.createButton.Location = new System.Drawing.Point(428, 364);
+			this.createButton.Location = new System.Drawing.Point(428, 300);
 			this.createButton.Name = "createButton";
 			this.createButton.TabIndex = 3;
 			this.createButton.Text = "Create";
@@ -214,18 +162,25 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.groupBox2.Controls.Add(this.buildConnStringButton);
 			this.groupBox2.Controls.Add(this.connectionString);
 			this.groupBox2.Controls.Add(this.label5);
-			this.groupBox2.Controls.Add(this.database);
-			this.groupBox2.Controls.Add(this.label3);
-			this.groupBox2.Location = new System.Drawing.Point(8, 116);
+			this.groupBox2.Location = new System.Drawing.Point(8, 84);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(504, 132);
+			this.groupBox2.Size = new System.Drawing.Size(504, 100);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Database:";
 			// 
+			// buildConnStringButton
+			// 
+			this.buildConnStringButton.Location = new System.Drawing.Point(456, 28);
+			this.buildConnStringButton.Name = "buildConnStringButton";
+			this.buildConnStringButton.Size = new System.Drawing.Size(28, 20);
+			this.buildConnStringButton.TabIndex = 12;
+			this.buildConnStringButton.Text = "...";
+			this.buildConnStringButton.Click += new System.EventHandler(this.buildConnStringButton_Click);
+			// 
 			// connectionString
 			// 
-			this.connectionString.Location = new System.Drawing.Point(138, 60);
+			this.connectionString.Location = new System.Drawing.Point(138, 28);
 			this.connectionString.Multiline = true;
 			this.connectionString.Name = "connectionString";
 			this.connectionString.Size = new System.Drawing.Size(310, 60);
@@ -234,28 +189,11 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(18, 68);
+			this.label5.Location = new System.Drawing.Point(18, 36);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(116, 16);
 			this.label5.TabIndex = 10;
 			this.label5.Text = "Conn. string";
-			// 
-			// database
-			// 
-			this.database.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.database.Location = new System.Drawing.Point(138, 31);
-			this.database.Name = "database";
-			this.database.Size = new System.Drawing.Size(164, 21);
-			this.database.TabIndex = 7;
-			this.database.SelectionChangeCommitted += new System.EventHandler(this.database_SelectionChangeCommitted);
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(18, 35);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(116, 16);
-			this.label3.TabIndex = 6;
-			this.label3.Text = "Database";
 			// 
 			// groupBox3
 			// 
@@ -263,7 +201,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.groupBox3.Controls.Add(this.label7);
 			this.groupBox3.Controls.Add(this.ns);
 			this.groupBox3.Controls.Add(this.label2);
-			this.groupBox3.Location = new System.Drawing.Point(8, 256);
+			this.groupBox3.Location = new System.Drawing.Point(8, 192);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(504, 96);
 			this.groupBox3.TabIndex = 2;
@@ -302,27 +240,18 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.label2.TabIndex = 14;
 			this.label2.Text = "Namespace";
 			// 
-			// buildConnStringButton
-			// 
-			this.buildConnStringButton.Location = new System.Drawing.Point(456, 60);
-			this.buildConnStringButton.Name = "buildConnStringButton";
-			this.buildConnStringButton.Size = new System.Drawing.Size(28, 20);
-			this.buildConnStringButton.TabIndex = 12;
-			this.buildConnStringButton.Text = "...";
-			this.buildConnStringButton.Click += new System.EventHandler(this.buildConnStringButton_Click);
-			// 
 			// NewProjectForm
 			// 
 			this.AcceptButton = this.createButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(520, 400);
+			this.ClientSize = new System.Drawing.Size(520, 328);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.createButton);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.groupBox1);
-			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte) (0)));
+			this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.MaximizeBox = false;
 			this.Name = "NewProjectForm";
@@ -337,14 +266,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 
 		#endregion
 
-		private void database_SelectionChangeCommitted(object sender, System.EventArgs e)
-		{
-//			if (database.SelectedItem != null)
-//			{
-//				driver.Text = (database.SelectedItem as Pair).Second;
-//			}
-		}
-
 		private void createButton_Click(object sender, System.EventArgs e)
 		{
 			if (!ValidateConnectionInformation())
@@ -355,7 +276,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			_project = _projectFactory.Create();
 
 			_project.Name = name.Text;
-			_project.Location = location.Text;
 //			_project.Driver = driver.Text;
 			_project.ConnectionString = connectionString.Text;
 			_project.CodeNamespace = ns.Text;

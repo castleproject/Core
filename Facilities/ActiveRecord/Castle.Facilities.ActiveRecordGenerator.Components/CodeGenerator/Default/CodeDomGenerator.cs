@@ -43,6 +43,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default
 			
 			foreach(ActiveRecordPropertyDescriptor property in arDescriptor.Properties)
 			{
+				if (!property.Generate) continue;
+
 				declaration.Members.Add( new CodeMemberField(property.PropertyType, property.PropertyFieldName) );
 				
 				CodeMemberProperty memberProperty = new CodeMemberProperty();

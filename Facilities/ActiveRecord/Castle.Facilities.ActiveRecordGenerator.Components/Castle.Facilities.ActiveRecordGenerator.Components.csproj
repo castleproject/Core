@@ -229,6 +229,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Prevalence\Default\ProjectPrevalence.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Utils\Pair.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -16,7 +16,6 @@ namespace Castle.Facilities.ActiveRecordGenerator
 {
 	using System;
 	using System.Windows.Forms;
-
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
 
@@ -27,6 +26,7 @@ namespace Castle.Facilities.ActiveRecordGenerator
 		private TableDefinition _table;
 		private ColumnDefinition _column;
 		private ActiveRecordDescriptor _arDescriptor;
+		private String _filename;
 
 		public ApplicationModel()
 		{
@@ -44,7 +44,14 @@ namespace Castle.Facilities.ActiveRecordGenerator
 					OnProjectReplaced(this, _project, value);
 				}
 				_project = value;
+				_filename = null;
 			}
+		}
+
+		public String SavedFileName
+		{
+			get { return _filename; }
+			set { _filename = value; }
 		}
 
 		public TableDefinition CurrentTable
@@ -67,7 +74,7 @@ namespace Castle.Facilities.ActiveRecordGenerator
 			set
 			{
 				_column = value;
-			
+
 				if (OnSelectionChanged != null)
 				{
 					OnSelectionChanged(this, ModelSelectionEnum.Column);
@@ -104,7 +111,7 @@ namespace Castle.Facilities.ActiveRecordGenerator
 		}
 
 		public event ProjectReplaceDelegate OnProjectReplaced;
-		
+
 		public event ProjectDelegate OnProjectChanged;
 
 		public event SelectionDelegate OnSelectionChanged;

@@ -70,6 +70,10 @@ namespace Castle.Facilities.ActiveRecordGenerator
 				typeof(IAction), typeof(NewActiveRecordAction) );
 			container.AddComponent( ActionConstants.Exit, 
 				typeof(IAction), typeof(ExitAction) );
+			container.AddComponent( ActionConstants.Save_Project, 
+				typeof(IAction), typeof(SaveAction) );
+			container.AddComponent( ActionConstants.SaveAs_Project, 
+				typeof(IAction), typeof(SaveAsAction) );
 		}
 
 		private static void AddForms(ActiveRecordGeneratorContainer container)

@@ -59,6 +59,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.RichTextBox codeBox;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private CodeView _codeView;
 
 
@@ -134,6 +135,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.codeBox = new System.Windows.Forms.RichTextBox();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			this.SuspendLayout();
 			// 

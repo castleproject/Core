@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Prevalence
+namespace Castle.Facilities.ActiveRecordGenerator.Components.Tests
 {
 	using System;
 
-	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using NUnit.Framework;
 
 
-	public interface IProjectPrevalence
+	[TestFixture]
+	public class DatabaseDefinitionBuilderTestCase : BaseContainerTestCase
 	{
-		Project Open(String filename);
 
-		void Save(Project project, String filename);
-
-		void SaveAs(Project project, String filename);
 	}
 }

@@ -25,6 +25,8 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 	using Castle.Facilities.ActiveRecordGenerator.CodeGenerator.Default;
 	using Castle.Facilities.ActiveRecordGenerator.Components.Database;
 	using Castle.Facilities.ActiveRecordGenerator.Components.Database.Default;
+	using Castle.Facilities.ActiveRecordGenerator.Prevalence;
+	using Castle.Facilities.ActiveRecordGenerator.Prevalence.Default;
 	using Castle.Facilities.ActiveRecordGenerator.Database;
 	using Castle.Facilities.ActiveRecordGenerator.Model;
 
@@ -69,6 +71,9 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components
 				typeof(IDatabaseDefinitionBuilder), typeof(DatabaseDefinitionBuilder) );
 
 			AddComponent( "model.ar.builder", typeof(ActiveRecordDescriptorBuilder) );
+
+			AddComponent( "project.prevalence", 
+				typeof(IProjectPrevalence), typeof(ProjectPrevalence) );
 		}
 	}
 }

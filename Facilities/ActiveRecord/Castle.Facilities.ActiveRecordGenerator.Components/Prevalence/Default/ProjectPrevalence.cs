@@ -12,19 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordGenerator.Prevalence
+namespace Castle.Facilities.ActiveRecordGenerator.Prevalence.Default
 {
 	using System;
 
 	using Castle.Facilities.ActiveRecordGenerator.Model;
+	using Castle.Facilities.ActiveRecordGenerator.Prevalence;
 
 
-	public interface IProjectPrevalence
+	public class ProjectPrevalence : IProjectPrevalence
 	{
-		Project Open(String filename);
+		public ProjectPrevalence()
+		{
+		}
 
-		void Save(Project project, String filename);
+		public Project Open(String filename)
+		{
+			return null;
+		}
 
-		void SaveAs(Project project, String filename);
+		public void Save(Project project, String filename)
+		{
+		}
+
+		public void SaveAs(Project project, String filename)
+		{
+		}
 	}
 }

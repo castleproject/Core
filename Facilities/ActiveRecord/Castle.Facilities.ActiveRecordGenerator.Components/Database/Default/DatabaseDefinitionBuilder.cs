@@ -37,9 +37,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components.Database.Default
 
 			using(OleDbConnection connection = _connectionFactory.CreateConnection(project))
 			{
-//				object[] objArrRestrict = new object[] {null, null, null, "TABLE_CATALOG"};
-//				DataTable catalogs = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Catalogs, objArrRestrict);
-
 				object[] objArrRestrict = new object[] {null, null, null, "TABLE"};
 				DataTable tables = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, objArrRestrict);
 
@@ -51,14 +48,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Components.Database.Default
 					objArrRestrict = new object[] {null, null, tableDef.Name, null};
 
 					DataTable columns = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, objArrRestrict);
-//					DataTable pks = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Primary_Keys, objArrRestrict);
-//					DataTable fks = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, objArrRestrict);
 
 					foreach(DataRow column in columns.Rows)
 					{
-						tableDef.AddColumn( 
-							new ColumnDefinition( (String) column["COLUMN_NAME"] ) ); 
-
+						tableDef.AddColumn( new ColumnDefinition( (String) column["COLUMN_NAME"] ) );
 					}
 				}
 			}
