@@ -23,6 +23,6 @@ namespace Castle.CastleOnRails.Generator
 	{
 		bool Accept(String name, IDictionary options, TextWriter writer);
 
-		void Execute(String name, IDictionary options, TextWriter writer);
+		void Execute(IDictionary options, TextWriter writer);
 	}
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<configuration>
+
+    <configSections>
+        <section name="rails"
+                 type="Castle.CastleOnRails.Engine.Configuration.RailsSectionHandler, Castle.CastleOnRails.Engine" />
+    </configSections>
+
+    <rails>
+		<viewEngine 
+			viewPathRoot="$viewpath" 
+			customEngine="$viewenginetypename" />
+    </rails>
+
+    <system.web>
+        <httpHandlers>
+            <add verb="*" path="*.rails" 
+               type="Castle.CastleOnRails.Engine.RailsHttpHandlerFactory, Castle.CastleOnRails.Engine" />
+        </httpHandlers>
+    </system.web>
+
+</configuration>

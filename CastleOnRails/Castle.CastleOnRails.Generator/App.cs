@@ -48,7 +48,7 @@ namespace Castle.CastleOnRails.Generator
 				{
 					if (generator.Accept(args[1], dic, Console.Out))
 					{
-						generator.Execute(args[1], dic, Console.Out);
+						generator.Execute(dic, Console.Out);
 						break;
 					}
 				}
@@ -69,7 +69,7 @@ namespace Castle.CastleOnRails.Generator
 				if (index != -1)
 				{
 					key = args[i].Substring(0, index);
-					value = args[i].Substring(index);
+					value = args[i].Substring(index+1);
 					value = NormalizeValue(value);
 				}
 

@@ -1,0 +1,234 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{992ACC07-728E-493D-929B-A684B7135421}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "$basename"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "$basename"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "Castle.Applications.MindDump"
+                    Project = "{992ACC07-728E-493D-929B-A684B7135421}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\lib\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\lib\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\lib\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\lib\Castle.Model.dll"
+                />
+                <Reference
+                    Name = "MySql.Data"
+                    AssemblyName = "MySql.Data"
+                    HintPath = "..\lib\MySql.Data.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\lib\log4net.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Engine"
+                    AssemblyName = "Castle.CastleOnRails.Engine"
+                    HintPath = "..\lib\Castle.CastleOnRails.Engine.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework"
+                    AssemblyName = "Castle.CastleOnRails.Framework"
+                    HintPath = "..\lib\Castle.CastleOnRails.Framework.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                    AssemblyName = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                    HintPath = "..\lib\Castle.CastleOnRails.Framework.Views.NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.WindsorExtension"
+                    AssemblyName = "Castle.CastleOnRails.WindsorExtension"
+                    HintPath = "..\lib\Castle.CastleOnRails.WindsorExtension.dll"
+                />
+                <Reference
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\lib\Commons.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\lib\NVelocity.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "MindDumpHttpApplication.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\account\authentication.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\account\new.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\blogs\view.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\intro\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\anothertheme.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\default.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\defaulttheme.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\printabletheme.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\private.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\accountsettings.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\blogsettings.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\editentry.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\maintenance\newentry.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\errorcreatingaccount.vm"
+                    BuildAction = "None"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{$id}") = "$basename", "${basenameproj}", "{992ACC07-728E-493D-929B-A684B7135421}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{$id}") = "${basename}.Tests", "${projectTestDir}\\${basenameprojtests}", "{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{992ACC07-728E-493D-929B-A684B7135421}.Debug.ActiveCfg = Debug|.NET
+		{992ACC07-728E-493D-929B-A684B7135421}.Debug.Build.0 = Debug|.NET
+		{992ACC07-728E-493D-929B-A684B7135421}.Release.ActiveCfg = Release|.NET
+		{992ACC07-728E-493D-929B-A684B7135421}.Release.Build.0 = Release|.NET
+		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Debug.ActiveCfg = Debug|.NET
+		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Debug.Build.0 = Debug|.NET
+		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Release.ActiveCfg = Release|.NET
+		{6D6FB9BC-B579-4D56-91F7-FD5EB45953D1}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
