@@ -33,7 +33,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, autotransaction, nhibernate, aspectsharp, typedfactory, batchregistration" />
+	<target name="build" depends="init, autotransaction, nhibernate, ibatis, aspectsharp, typedfactory, batchregistration" />
 	
 	<target name="init">
 
@@ -45,6 +45,10 @@
 
 	<target name="nhibernate">
 		<nant buildfile="NHibernate/default.build" inheritall="true" target="build" />
+	</target>
+
+	<target name="ibatis">
+		<nant buildfile="IBatisNet/default.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="autotransaction">
@@ -70,7 +74,7 @@
 		<nant buildfile="AspectSharp/default.build" inheritall="true" target="dist" />
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="dist" />
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="dist" />
+		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" />
 	</target>
 
-	
 </project>
