@@ -129,6 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ComponentActivator\ExternalInstanceActivator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ComponentActivator\IComponentActivator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

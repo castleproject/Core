@@ -12,18 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.MicroKernel.ComponentActivator
 {
 	using System;
 
 	using Castle.Model;
 
-	/// <summary>
-	/// Extension point to allow the developer
-	/// to use his implementation of <see cref="IHandler"/>
-	/// </summary>
-	public interface IHandlerFactory
+
+	public class ExternalInstanceActivator : AbstractComponentActivator
 	{
-		IHandler Create( ComponentModel model );
+		public ExternalInstanceActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
+		{
+		}
+
+		protected override object InternalCreate()
+		{
+			return base.Model.ExtendedProperties["instance"];
+		}
+
+		protected override void InternalDestroy(object instance)
+		{
+			// Nothing to do
+		}
 	}
 }

@@ -78,6 +78,23 @@ namespace Castle.MicroKernel
 		void AddCustomComponent( ComponentModel model );
 
 		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="instance"></param>
+		void AddComponentInstance( String key, object instance );
+
+		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="serviceType"></param>
+		/// <param name="instance"></param>
+		void AddComponentInstance( String key, Type serviceType, object instance );
+
+		/// <summary>
 		/// Returns true if the specified component was 
 		/// found and could be removed (i.e. no other component depends on it)
 		/// </summary>

@@ -224,6 +224,52 @@ namespace Castle.MicroKernel
 			RegisterHandler(model.Name, handler);
 		}
 
+		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="instance"></param>
+		public void AddComponentInstance( String key, object instance )
+		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (instance == null) throw new ArgumentNullException("instance");
+			
+			Type classType = instance.GetType();
+
+			ComponentModel model = new ComponentModel(key, classType, classType);
+			model.CustomComponentActivator = typeof(ExternalInstanceActivator);
+			model.ExtendedProperties["instance"] = instance;
+			
+			RaiseComponentModelCreated(model);
+			IHandler handler = HandlerFactory.Create(model);
+			RegisterHandler(key, handler);
+		}
+
+		/// <summary>
+		/// Used mostly by facilities. Adds an instance
+		/// to be used as a component.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="serviceType"></param>
+		/// <param name="instance"></param>
+		public void AddComponentInstance( String key, Type serviceType, object instance )
+		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (serviceType == null) throw new ArgumentNullException("serviceType");
+			if (instance == null) throw new ArgumentNullException("instance");
+			
+			Type classType = instance.GetType();
+
+			ComponentModel model = new ComponentModel(key, serviceType, classType);
+			model.CustomComponentActivator = typeof(ExternalInstanceActivator);
+			model.ExtendedProperties["instance"] = instance;
+
+			RaiseComponentModelCreated(model);
+			IHandler handler = HandlerFactory.Create(model);
+			RegisterHandler(key, handler);
+		}
+
 		public virtual bool RemoveComponent(String key)
 		{
 			if (key == null) throw new ArgumentNullException("key");
