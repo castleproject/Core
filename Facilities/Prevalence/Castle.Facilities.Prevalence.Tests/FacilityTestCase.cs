@@ -144,7 +144,7 @@ namespace Castle.Facilities.Prevalence.Tests
 			engine.Attributes["systemType"] = typeof(UserDatabase).AssemblyQualifiedName;
 			engine.Attributes["storageDir"] = _storageDir;
 
-			engine.Attributes["snapshotHoursPeriod"] = "1";
+			engine.Attributes["snapshotIntervalInHours"] = "1";
 			engine.Attributes["cleanupPolicyComponent"] = null;
 
 			kernel.ConfigurationStore.AddFacilityConfiguration( "prevalence", confignode );

@@ -30,6 +30,9 @@ namespace Castle.Facilities.Prevalence
 	/// </summary>
 	public class PrevalenceFacility : IFacility
 	{
+		private static readonly String IdKey = "id";
+		private static readonly String IntervalKey = "snapshotIntervalInHours";
+
 		public static readonly String SystemTypePropertyKey = "prevalence.systemtype";
 		public static readonly String StorageDirPropertyKey = "prevalence.storagedir";
 		public static readonly String AutoMigrationPropertyKey = "prevalence.autoversionmigration";
@@ -95,7 +98,7 @@ namespace Castle.Facilities.Prevalence
 
 		protected void RegisterEngine(IConfiguration engineConfig)
 		{
-			String engineKey = engineConfig.Attributes["id"];
+			String engineKey = engineConfig.Attributes[IdKey];
 			String systemId = engineConfig.Attributes["systemId"];
 			String resetStorage = engineConfig.Attributes["resetStorage"];
 
@@ -120,7 +123,7 @@ namespace Castle.Facilities.Prevalence
 
 		private void ConfigureSnapshot(IConfiguration engineConfig, IDictionary properties)
 		{
-			float period = GetSnapshotPeriod(engineConfig);
+			float period = GetSnapshotInterval(engineConfig);
 
 			if (RequiresSnapshots(period))
 			{
@@ -137,11 +140,11 @@ namespace Castle.Facilities.Prevalence
 			}
 		}
 
-		private float GetSnapshotPeriod(IConfiguration engineConfig)
+		private float GetSnapshotInterval(IConfiguration engineConfig)
 		{
 			try
 			{
-				return Convert.ToSingle(engineConfig.Attributes["snapshotHoursPeriod"]);
+				return Convert.ToSingle(engineConfig.Attributes[IntervalKey]);
 			}
 			catch (FormatException e)
 			{
@@ -184,11 +187,11 @@ namespace Castle.Facilities.Prevalence
 
 		protected void TakeSnapshotIfRequired(IConfiguration engineConfig)
 		{
-			float period = GetSnapshotPeriod(engineConfig);
+			float period = GetSnapshotInterval(engineConfig);
 
 			if (RequiresSnapshots(period))
 			{
-				PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes["id"]];
+				PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes[IdKey]];
 
 				engine.TakeSnapshot();
 			}
@@ -196,7 +199,7 @@ namespace Castle.Facilities.Prevalence
 
 		protected void HandsOffFiles(IConfiguration engineConfig)
 		{
-			PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes["id"]];
+			PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes[IdKey]];
 
 			engine.HandsOffOutputLog();
 		}

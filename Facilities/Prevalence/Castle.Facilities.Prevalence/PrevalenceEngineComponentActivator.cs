@@ -53,8 +53,7 @@ namespace Castle.Facilities.Prevalence
 				DeleteStorageDir(dir);
 			}
 
-			PrevalenceEngine engine =
-				PrevalenceActivator.CreateEngine( 
+			PrevalenceEngine engine = PrevalenceActivator.CreateEngine( 
 				systemType, 
 				dir, 
 				autoVersionMigration );
