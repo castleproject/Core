@@ -15,34 +15,17 @@
 namespace Castle.CastleOnRails.Framework
 {
 	using System;
+	using System.Runtime.Serialization;
 
-	/// <summary>
-	/// Summary description for ControllerDetailsAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class ControllerDetailsAttribute : Attribute
+	[Serializable]
+	public class RailsException : Exception
 	{
-		private String _name;
-		private String _area = String.Empty;
-
-		public ControllerDetailsAttribute()
+		public RailsException(string message) : base(message)
 		{
 		}
 
-		public ControllerDetailsAttribute(String name)
+		public RailsException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
-			_name = name;
-		}
-
-		public String Name
-		{
-			get { return _name; }
-		}
-
-		public String Area
-		{
-			get { return _area; }
-			set { _area = value; }
 		}
 	}
 }

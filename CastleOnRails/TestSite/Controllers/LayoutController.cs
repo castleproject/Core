@@ -12,37 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace AspnetSample.Controllers
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for ControllerDetailsAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class ControllerDetailsAttribute : Attribute
+	using Castle.CastleOnRails.Framework;
+
+	[Layout("master")]
+	[ControllerDetails("layoutable")]
+	public class LayoutController : Controller
 	{
-		private String _name;
-		private String _area = String.Empty;
-
-		public ControllerDetailsAttribute()
+		public void Index()
 		{
 		}
 
-		public ControllerDetailsAttribute(String name)
+		public void ChangeLayout()
 		{
-			_name = name;
+			LayoutName = "master2";
 		}
 
-		public String Name
+		public void RedirectAction()
 		{
-			get { return _name; }
-		}
-
-		public String Area
-		{
-			get { return _area; }
-			set { _area = value; }
+			Redirect("home", "index");
 		}
 	}
 }

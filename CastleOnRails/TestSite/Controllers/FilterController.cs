@@ -12,37 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace AspnetSample.Controllers
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for ControllerDetailsAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class ControllerDetailsAttribute : Attribute
+	using Castle.CastleOnRails.Framework;
+
+	[Filter(ExecuteEnum.Before, typeof(FilterBadHeader))]	
+	public class FilterController : Controller
 	{
-		private String _name;
-		private String _area = String.Empty;
-
-		public ControllerDetailsAttribute()
+		public void Index()
 		{
 		}
+	}
 
-		public ControllerDetailsAttribute(String name)
+	public class FilterBadHeader : IFilter
+	{
+		#region IFilter Members
+
+		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
-			_name = name;
+			if (context.Request.Headers["mybadheader"] != null)
+			{
+				context.Response.Write("Denied!");
+
+				return false;
+			}
+
+			return true;
 		}
 
-		public String Name
-		{
-			get { return _name; }
-		}
-
-		public String Area
-		{
-			get { return _area; }
-			set { _area = value; }
-		}
+		#endregion
 	}
 }

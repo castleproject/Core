@@ -12,37 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace AspnetSample.Controllers
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for ControllerDetailsAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class ControllerDetailsAttribute : Attribute
+	using Castle.CastleOnRails.Framework;
+
+	public class ExceptionController : Controller
 	{
-		private String _name;
-		private String _area = String.Empty;
-
-		public ControllerDetailsAttribute()
+		public void Index()
 		{
+			Context.Response.StatusCode = 500;
+			Context.Response.Write("Problems!");
+			CancelView();
 		}
 
-		public ControllerDetailsAttribute(String name)
+		public void Throw()
 		{
-			_name = name;
-		}
-
-		public String Name
-		{
-			get { return _name; }
-		}
-
-		public String Area
-		{
-			get { return _area; }
-			set { _area = value; }
+			throw new ApplicationException("Some error");
 		}
 	}
 }

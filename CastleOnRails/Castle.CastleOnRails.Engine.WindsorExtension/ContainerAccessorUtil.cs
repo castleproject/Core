@@ -20,36 +20,30 @@ namespace Castle.CastleOnRails.Engine.WindsorExtension
 	using Castle.Windsor;
 
 	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Internal;
-	using Castle.CastleOnRails.Framework.Internal.Graph;
 
 
-	public class WindsorControllerFactory : IControllerFactory
+	public abstract class ContainerAccessorUtil
 	{
-		#region IControllerFactory
-
-		public Controller GetController(UrlInfo urlInfo)
+		public static IWindsorContainer ObtainContainer()
 		{
-			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
-
-			ControllerTree tree = (ControllerTree) container["rails.controllertree"];
-
-			String key = (String) tree.GetController(urlInfo.Area, urlInfo.Controller);
-
-			if (container.Kernel.HasComponent(key))
+			IContainerAccessor containerAccessor = 
+				HttpContext.Current.ApplicationInstance as IContainerAccessor;
+	
+			if (containerAccessor == null)
 			{
-				return (Controller) container[key];
+				throw new RailsException("You must extend the HttpApplication in your web project " + 
+					"and implement the IContainerAccessor to properly expose your container instance");
 			}
-			
-			return null;
+	
+			IWindsorContainer container = containerAccessor.Container;
+	
+			if (container == null)
+			{
+				throw new RailsException("The container seems to be unavailable in " + 
+					"your HttpApplication subclass");
+			}
+
+			return container;
 		}
-
-		public void Release(Controller controller)
-		{
-			ContainerAccessorUtil.ObtainContainer().Release(controller);
-		}
-
-		#endregion
-
 	}
 }

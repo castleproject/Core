@@ -12,37 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace AspnetSample.Controllers.SubArea
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for ControllerDetailsAttribute.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class ControllerDetailsAttribute : Attribute
+	using Castle.CastleOnRails.Framework;
+
+	[ControllerDetails(Area="subarea")]
+	public class HomeController : Controller
 	{
-		private String _name;
-		private String _area = String.Empty;
-
-		public ControllerDetailsAttribute()
+		public void Index()
 		{
-		}
-
-		public ControllerDetailsAttribute(String name)
-		{
-			_name = name;
-		}
-
-		public String Name
-		{
-			get { return _name; }
-		}
-
-		public String Area
-		{
-			get { return _area; }
-			set { _area = value; }
+			
 		}
 	}
 }

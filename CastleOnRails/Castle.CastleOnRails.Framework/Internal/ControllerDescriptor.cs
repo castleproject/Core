@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,22 +12,36 @@ using System.Runtime.Serialization;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine
+namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for RailsException.
-	/// </summary>
-	[Serializable]
-	public class RailsException : Exception
+	public class ControllerDescriptor
 	{
-		public RailsException(string message) : base(message)
+		private Type _controllerType;
+		private String _name;
+		private String _area;
+
+		public ControllerDescriptor(Type controllerType, String name, String area)
 		{
+			_controllerType = controllerType;
+			_name = name;
+			_area = area;
 		}
 
-		public RailsException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public Type ControllerType
 		{
+			get { return _controllerType; }
+		}
+
+		public string Name
+		{
+			get { return _name; }
+		}
+
+		public string Area
+		{
+			get { return _area; }
 		}
 	}
 }

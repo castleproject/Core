@@ -104,17 +104,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RailsException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "RailsHttpHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "RailsHttpHandlerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\FileDictionaryAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -18,15 +18,27 @@ namespace AspnetSample.Controllers
 
 	using Castle.CastleOnRails.Framework;
 
-	[Layout("master")]
-	public class HomeController : Controller
+	[Rescue("general")]
+	[ControllerDetails("rescuable")]
+	public class RescueController : Controller
 	{
-		public HomeController()
-		{
-		}
-
 		public void Index()
 		{
+			throw new ApplicationException();
+		}
+
+		[Rescue("saveerror")]
+		public void Save()
+		{
+			throw new ApplicationException();
+		}
+
+		[Rescue("updateerror")]
+		public void Update()
+		{
+			LayoutName = "master";
+
+			throw new ApplicationException();
 		}
 	}
 }

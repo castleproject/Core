@@ -15,16 +15,98 @@
 namespace Castle.CastleOnRails.Engine.Adapters
 {
 	using System;
+	using System.Collections;
 	using System.Web.SessionState;
-	using System.Collections.Specialized;
-
+	
 	/// <summary>
 	/// Summary description for SessionAdapter.
 	/// </summary>
-	public class SessionAdapter : NameObjectCollectionBase
+	public class SessionAdapter : IDictionary
 	{
+		private HttpSessionState _session;
+
 		public SessionAdapter(HttpSessionState session)
 		{
+			_session = session;
+		}
+
+		IDictionaryEnumerator IDictionary.GetEnumerator()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ICollection Keys
+		{
+			get { return _session.Keys; }
+		}
+
+		public void CopyTo(Array array, int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int Count
+		{
+			get { return _session.Count; }
+		}
+
+		public object SyncRoot
+		{
+			get { return _session.SyncRoot; }
+		}
+
+		public bool IsSynchronized
+		{
+			get { return _session.IsSynchronized; }
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return _session.GetEnumerator();
+		}
+
+		public bool Contains(object key)
+		{
+			return _session[(String) key] != null;
+		}
+
+		public void Add(object key, object value)
+		{
+			_session.Add((String) key, value);
+		}
+
+		public void Clear()
+		{
+			_session.Clear();
+		}
+
+		public void Remove(object key)
+		{
+			_session.Remove((String) key);
+		}
+
+		public ICollection Values
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsReadOnly
+		{
+			get { return _session.IsReadOnly; }
+		}
+
+		public bool IsFixedSize
+		{
+			get { return false; }
+		}
+
+		public object this[object key]
+		{
+			get { return _session[(String) key]; }
+			set
+			{
+				_session[(String) key] = value;
+			}
 		}
 	}
 }

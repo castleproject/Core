@@ -81,7 +81,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			get { return _request._params; }
 		}
 
-		public NameValueCollection Session
+		public IDictionary Session
 		{
 			get { throw new NotImplementedException(); }
 		}
@@ -132,6 +132,11 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 		#region IRequest Members
 
+		public NameValueCollection Headers
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		public bool IsLocal
 		{
 			get { return true; }
@@ -168,6 +173,18 @@ namespace Castle.CastleOnRails.Framework.Tests
 		public ResponseImpl()
 		{
 			_writer = new StringWriter(_contents);
+		}
+
+		public int StatusCode
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
+
+		public String ContentType
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 
 		public void AppendHeader(String name, String value)

@@ -17,9 +17,6 @@ namespace Castle.CastleOnRails.Framework.Internal
 	using System;
 	using System.Reflection;
 
-	/// <summary>
-	/// Summary description for DefaultControllerFactory.
-	/// </summary>
 	public class DefaultControllerFactory : AbstractControllerFactory
 	{
 		public DefaultControllerFactory()
@@ -34,10 +31,7 @@ namespace Castle.CastleOnRails.Framework.Internal
 
 		public void Inspect(Assembly assembly)
 		{
-			// Due to our goal to be compabible
-			// with Mono, we use GetTypes instead of GetExportedTypes
-
-			Type[] types = assembly.GetTypes();
+			Type[] types = assembly.GetExportedTypes();
 
 			foreach(Type type in types)
 			{
@@ -48,56 +42,14 @@ namespace Castle.CastleOnRails.Framework.Internal
 
 				if ( typeof(Controller).IsAssignableFrom(type) )
 				{
-					Inspect( type );
+					RegisterController( ControllerInspectionUtil.Inspect(type ) );
 				}
 			}		
 		}
 
-		public virtual void Inspect(Type controllerType)
+		private void RegisterController(ControllerDescriptor descriptor)
 		{
-			if (controllerType.IsDefined(typeof(ControllerDetailsAttribute), false))
-			{
-				object[] attrs = controllerType.GetCustomAttributes( 
-					typeof(ControllerDetailsAttribute), false );
-
-				ControllerDetailsAttribute details = attrs[0] as ControllerDetailsAttribute;
-
-				RegisterController( details, controllerType );
-			}
-			else
-			{
-				RegisterController( controllerType );
-			}
-		}
-
-		private void RegisterController(ControllerDetailsAttribute details, Type controller)
-		{
-			Tree.AddController( 
-				details.Area, ObtainControllerName(details.Name, controller), controller );
-		}
-
-		private void RegisterController(Type controller)
-		{
-			Tree.AddController( 
-				String.Empty, ObtainControllerName(null, controller), controller );
-		}
-
-		private String ObtainControllerName(String name, Type controller)
-		{
-			if (name == null || name.Length == 0)
-			{
-				return Strip(controller.Name);
-			}
-			return name;
-		}
-
-		private String Strip(String name)
-		{
-			if (name.EndsWith("Controller"))
-			{
-				return name.Substring(0, name.IndexOf("Controller"));
-			}
-			return name;
+			Tree.AddController( descriptor.Area, descriptor.Name, descriptor.ControllerType );
 		}
 	}
 }

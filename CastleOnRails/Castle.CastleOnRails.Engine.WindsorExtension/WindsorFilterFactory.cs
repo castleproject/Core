@@ -12,36 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Views.Aspx
+namespace Castle.CastleOnRails.Engine.WindsorExtension
 {
 	using System;
-	using System.Web;
-	using System.Web.UI;
 
-	/// <summary>
-	/// Summary description for Contents.
-	/// </summary>
-	public class Contents : Control
+	using Castle.Windsor;
+
+	using Castle.CastleOnRails.Framework;
+	using Castle.CastleOnRails.Framework.Internal;
+
+
+	public class WindsorFilterFactory : DefaultFilterFactory
 	{
-		public Contents()
+		public override IFilter Create(Type filterType)
 		{
-		}
+			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
 
-		protected override void Render(HtmlTextWriter writer)
-		{
-			byte[] contentsArray = (byte[]) HttpContext.Current.Items["rails.contents"];
-
-			if (contentsArray != null)
+			if (container.Kernel.HasComponent(filterType))
 			{
-				String contents = writer.Encoding.GetString(contentsArray);
-
-				writer.InnerWriter.Write( contents.TrimEnd('\0') );
+				return (IFilter) container[filterType];
 			}
 			else
 			{
-				writer.Write("The child page wasn't processed by the rails engine. " + 
-					"Was this page invoked directly?");
+				return base.Create(filterType);
 			}
+		}
+
+		public override void Release(IFilter filter)
+		{
+			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
+
+			container.Release(filter);
+
+			base.Release(filter);
 		}
 	}
 }

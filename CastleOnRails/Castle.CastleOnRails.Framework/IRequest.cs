@@ -20,14 +20,16 @@ namespace Castle.CastleOnRails.Framework
 
 	public interface IRequest
 	{
+		NameValueCollection Headers { get; }
+
+		IDictionary Files { get; }
+
+		NameValueCollection Params { get; }
+
 		bool IsLocal { get; }
 
 		byte[] BinaryRead(int count);
 
 		String this [String key] { get; }
- 
-		IDictionary Files { get; }
-
-		NameValueCollection Params { get; }
 	}
 }

@@ -19,9 +19,6 @@ namespace Castle.CastleOnRails.Engine.Adapters
 
 	using Castle.CastleOnRails.Framework;
 
-	/// <summary>
-	/// Summary description for ResponseAdapter.
-	/// </summary>
 	public class ResponseAdapter : IResponse
 	{
 		private HttpResponse _response;
@@ -29,6 +26,18 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		public ResponseAdapter(HttpResponse response)
 		{
 			_response = response;
+		}
+
+		public int StatusCode
+		{
+			get { return _response.StatusCode; }
+			set { _response.StatusCode = value; }
+		}
+
+		public String ContentType
+		{
+			get { return _response.ContentType; }
+			set { _response.ContentType = value; }
 		}
 
 		public void AppendHeader(String name, String value)

@@ -67,6 +67,12 @@ namespace Castle.CastleOnRails.Engine
 
 			Controller controller = _controllerFactory.GetController( info );
 
+			if (controller == null)
+			{
+				String message = String.Format("No controller for {0}\\{1}", info.Area, info.Controller);
+				throw new RailsException(message);
+			}
+
 			try
 			{
 				controller.Process( 

@@ -38,5 +38,9 @@ namespace Castle.CastleOnRails.Framework
 		void Redirect(String url);
 
 		void Redirect(String url, bool endProcess);
+
+		int StatusCode { get; set; }
+
+		String ContentType { get; set; }
 	}
 }

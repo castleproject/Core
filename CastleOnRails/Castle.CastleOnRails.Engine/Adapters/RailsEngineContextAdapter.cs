@@ -35,6 +35,7 @@ namespace Castle.CastleOnRails.Engine.Adapters
 		private ResponseAdapter _response;
 		private IPrincipal _user;
 		private Exception _lastException;
+		private SessionAdapter _session;
 
 		public RailsEngineContextAdapter(HttpContext context, String url)
 		{
@@ -70,9 +71,16 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			get { return _context.Request.Params; }
 		}
 
-		public NameValueCollection Session
+		public IDictionary Session
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				if (_session == null)
+				{
+					_session = new SessionAdapter(_context.Session);
+				}
+				return _session;
+			}
 		}
 
 		public IRequest Request

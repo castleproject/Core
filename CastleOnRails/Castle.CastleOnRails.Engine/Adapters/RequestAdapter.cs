@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Specialized;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +16,8 @@ namespace Castle.CastleOnRails.Engine.Adapters
 {
 	using System;
 	using System.Web;
+	using System.Collections;
+	using System.Collections.Specialized;
 
 	using Castle.CastleOnRails.Framework;
 
@@ -27,10 +27,16 @@ namespace Castle.CastleOnRails.Engine.Adapters
 	public class RequestAdapter : IRequest
 	{
 		private HttpRequest _request;
+		private FileDictionaryAdapter _files;
 
 		public RequestAdapter(HttpRequest request)
 		{
 			_request = request;
+		}
+
+		public NameValueCollection Headers
+		{
+			get { return _request.Headers; }
 		}
 
 		public bool IsLocal 
@@ -50,7 +56,14 @@ namespace Castle.CastleOnRails.Engine.Adapters
 
 		public IDictionary Files
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				if (_files != null)
+				{
+					_files = new FileDictionaryAdapter(_request.Files);
+				}
+				return _files;
+			}
 		}
 
 		public NameValueCollection Params

@@ -30,7 +30,7 @@ namespace Castle.CastleOnRails.Framework
 
 		NameValueCollection Params { get; }
 
-		NameValueCollection Session { get; }
+		IDictionary Session { get; }
 
 		IRequest Request { get; }
 

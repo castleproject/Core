@@ -101,11 +101,23 @@ namespace Castle.CastleOnRails.Framework
 
 		protected void Redirect( String controller, String action )
 		{
-			// Cancel the view processing
-			_selectedViewName = null;
+			CancelView();
 
 			_context.Response.Redirect( 
 				String.Format("../{0}/{1}.rails", controller, action), true );
+		}
+
+		protected void Redirect( String area, String controller, String action )
+		{
+			CancelView();
+
+			_context.Response.Redirect( 
+				String.Format("../{0}/{1}/{2}.rails", area, controller, action), true );
+		}
+
+		protected void CancelView()
+		{
+			_selectedViewName = null;
 		}
 
 		#endregion
@@ -164,16 +176,21 @@ namespace Castle.CastleOnRails.Framework
 
 			bool skipFilters = _filters == null || method.IsDefined( typeof(SkipFilter), true );
 
-			if (!skipFilters)
-			{
-				ProcessFilters( ExecuteEnum.Before );
-			}
-
 			bool hasError = false;
 
 			try
 			{
-				InvokeMethod(method);
+				if (!skipFilters)
+				{
+					if (ProcessFilters( ExecuteEnum.Before ))
+					{
+						InvokeMethod(method);
+					}
+				}
+				else
+				{
+					InvokeMethod(method);
+				}
 			}
 			catch(Exception ex)
 			{
@@ -243,25 +260,30 @@ namespace Castle.CastleOnRails.Framework
 			return desc;
 		}
 
-		private void ProcessFilters(ExecuteEnum when)
+		private bool ProcessFilters(ExecuteEnum when)
 		{
 			foreach(FilterDescriptor desc in _filters)
 			{
 				if ((desc.When & when) != 0)
 				{
-					ProcessFilter(when, desc);
+					if (!ProcessFilter(when, desc))
+					{
+						return false;
+					}
 				}
 			}
+
+			return true;
 		}
 
-		private void ProcessFilter(ExecuteEnum when, FilterDescriptor desc)
+		private bool ProcessFilter(ExecuteEnum when, FilterDescriptor desc)
 		{
 			if (desc.FilterInstance == null)
 			{
 				desc.FilterInstance = _filterFactory.Create( desc.FilterType );
 			}
 
-			desc.FilterInstance.Perform( when, _context,  this );
+			return desc.FilterInstance.Perform( when, _context,  this );
 		}
 
 		private void DisposeFilter()

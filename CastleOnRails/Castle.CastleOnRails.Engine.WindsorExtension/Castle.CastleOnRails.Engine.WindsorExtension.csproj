@@ -90,11 +90,6 @@
                     HintPath = "..\..\InversionOfControl\bin\Castle.Windsor.dll"
                 />
                 <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
-                />
-                <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
                     HintPath = "..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
@@ -105,9 +100,9 @@
                     HintPath = "..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Engine"
-                    Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
             </References>
         </Build>
@@ -119,7 +114,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ContainerAccessorUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RailsFacility.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WindsorControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindsorFilterFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
