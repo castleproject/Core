@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Reflection;
 
 	/// <summary>
 	/// Summary description for AssertUtil.
@@ -33,7 +34,7 @@ namespace Castle.DynamicProxy
 		public static void IsInterface(Type type, String argumentName)
 		{
 			NotNull(type, argumentName);
-			
+
 			if (!type.IsInterface)
 			{
 				String message = String.Format("Argument '{0}' must be an interface", argumentName);
@@ -44,8 +45,8 @@ namespace Castle.DynamicProxy
 		public static void IsInterface(Type[] types, String argumentName)
 		{
 			NotNull(types, argumentName);
-			
-			foreach(Type type in types)
+
+			foreach (Type type in types)
 			{
 				IsInterface(type, argumentName);
 			}
@@ -57,7 +58,32 @@ namespace Castle.DynamicProxy
 
 			if (!type.IsClass || type.IsAbstract)
 			{
+				bool hasAbstractMembers = false;
+				
+				if (type.IsAbstract)
+				{ 
+					MethodInfo[] abstractMethods = 
+						type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+					
+					foreach (MethodInfo methodInfo in abstractMethods)
+					{
+						if (methodInfo.IsAbstract)
+						{
+							hasAbstractMembers = true;
+							break;
+						}
+					}
+				}
+				
+				if (!hasAbstractMembers)
+				{
+					// class can be used as a base 
+					// class even if it's abstract
+					return; 
+				}
+
 				String message = String.Format("Argument '{0}' must be a concrete class", argumentName);
+				
 				throw new ArgumentException(message);
 			}
 		}
