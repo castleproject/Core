@@ -1,6 +1,6 @@
-<%@ Page language="c#" Codebehind="helpme.aspx.cs" AutoEventWireup="false" Inherits="TestSite.views.helper.helpme" %>
-<%@ Register tagprefix="rails" namespace="Castle.CastleOnRails.Framework.Views.Aspx" assembly="Castle.CastleOnRails.Framework" %>
 <%@ Import namespace="Castle.CastleOnRails.Framework.Helpers" %>
+<%@ Register tagprefix="rails" namespace="Castle.CastleOnRails.Framework.Views.Aspx" assembly="Castle.CastleOnRails.Framework" %>
+<%@ Page language="c#" Codebehind="helpme.aspx.cs" AutoEventWireup="false" Inherits="TestSite.views.helper.helpme" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
@@ -12,12 +12,11 @@
 	</HEAD>
 	<body>
 		<form id="Form1" method="post" runat="server">
-		
-			<rails:InvokeHelper Name="DateFormatHelper" Method="FormatDate" Arg="<%# DateTime.Now %>" runat="server"/>
+			<rails:InvokeHelper Name="DateFormatHelper" Method="FormatDate" Arg="<%# DateTime.Now %>" runat="server" id="InvokeHelper1" />
 			
-		<%=
-			((DateFormatHelper)_controller.Helpers["DateFormatHelper"]).FormatDate( DateTime.Now )
-		%>
+			<%=
+				((DateFormatHelper)_controller.Helpers["DateFormatHelper"]).FormatDate( DateTime.Now )
+			%>
 		</form>
 	</body>
 </HTML>

@@ -252,8 +252,8 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			options["frequency"] = frequency;
 			options["url"] = url;
 
-			if (idOfElementToBeUpdated != null) options["update"] = idOfElementToBeUpdated;
-			if (with != null) options["with"] = with;
+			if (idOfElementToBeUpdated != null && idOfElementToBeUpdated.Length > 0) options["update"] = idOfElementToBeUpdated;
+			if (with != null && with.Length > 0) options["with"] = with;
 
 			return ObserveForm(formId, options);
 		}

@@ -10,19 +10,29 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using Castle.CastleOnRails.Framework;
 
-namespace TestSite.views.helper
+namespace TestSite.views.ajax
 {
 	/// <summary>
-	/// Summary description for helpme.
+	/// Summary description for index.
 	/// </summary>
-	public class helpme : System.Web.UI.Page, IControllerAware
+	public class index : System.Web.UI.Page, IControllerAware
 	{
-		protected Castle.CastleOnRails.Framework.Views.Aspx.InvokeHelper InvokeHelper1;
-		protected Controller _controller;
+		protected Castle.CastleOnRails.Framework.Views.Aspx.InvokeHelper GetJavascriptFunctions;
+		protected Castle.CastleOnRails.Framework.Views.Aspx.InvokeHelper ObserveField_Zip;
+		protected System.Web.UI.WebControls.DataGrid DataGrid1;
+		protected System.Web.UI.WebControls.TextBox name;
+		protected System.Web.UI.WebControls.TextBox addressf;
+		protected Castle.CastleOnRails.Framework.Views.Aspx.InvokeHelper ObserveForm;
+
+		private Controller _controller;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			// Put user code to initialize the page here
+			if (!IsPostBack)
+			{
+				DataGrid1.DataSource = _controller.PropertyBag["users"];
+				DataGrid1.DataBind();
+			}
 		}
 
 		#region Web Form Designer generated code
