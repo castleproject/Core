@@ -12,42 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Generator.Actions
+namespace Castle.ActiveRecord.Generator
 {
 	using System;
 
+	using Castle.Windsor;
 
-	public abstract class AbstractAction : IAction
+	using Castle.ActiveRecord.Generator.Components.Database;
+
+
+	public class ServiceRegistry : WindsorContainer
 	{
-		private IWorkspace _workspace;
-		private Model _model;
+		private static ServiceRegistry instance = new ServiceRegistry();
 
-		public AbstractAction()
+		public ServiceRegistry() : base()
 		{
+			AddComponent("conn.factory", typeof(IConnectionFactory), typeof(ConnectionFactory));
+			AddComponent("db.def.builder", typeof(IDatabaseDefinitionBuilder), typeof(DatabaseDefinitionBuilder));
 		}
 
-		#region IAction Members
-
-		public virtual void Init(Model model)
+		public static ServiceRegistry Instance
 		{
-			_model = model;
-		}
-
-		public virtual void Install(IWorkspace workspace, object parentMenu, object parentGroup)
-		{
-			_workspace = workspace;
-		}
-
-		#endregion
-
-		protected IWorkspace Workspace
-		{
-			get { return _workspace; }
-		}
-
-		protected Model Model
-		{
-			get { return _model; }
+			get { return instance; }
 		}
 	}
 }

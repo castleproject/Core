@@ -19,16 +19,23 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 	public class ProjectExplorerActionSet : IActionSet
 	{
+		private AddDatabaseAction addDbAction;
+
 		public ProjectExplorerActionSet()
 		{
 		}
 
 		#region IActionSet Members
 
+		public void Init(Model model)
+		{
+			addDbAction = new AddDatabaseAction();
+			addDbAction.Init(model);
+		}
+
 		public void Install(IWorkspace workspace)
 		{
-			AddDatabaseAction db = new AddDatabaseAction();
-			db.Install(workspace, null, null);
+			addDbAction.Install(workspace, null, null);
 		}
 
 		#endregion

@@ -12,42 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Generator.Actions
+namespace Castle.ActiveRecord.Generator.Components.Database
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
 
 
-	public abstract class AbstractAction : IAction
+	public class DatabaseDefinitionCollection : NameObjectCollectionBase, IEnumerable
 	{
-		private IWorkspace _workspace;
-		private Model _model;
-
-		public AbstractAction()
+		public void Add(DatabaseDefinition def)
 		{
+			BaseAdd(def.Alias, def);
 		}
 
-		#region IAction Members
-
-		public virtual void Init(Model model)
+		public DatabaseDefinition this [String alias]
 		{
-			_model = model;
+			get { return BaseGet(alias) as DatabaseDefinition; }
 		}
 
-		public virtual void Install(IWorkspace workspace, object parentMenu, object parentGroup)
+		public new IEnumerator GetEnumerator()
 		{
-			_workspace = workspace;
-		}
-
-		#endregion
-
-		protected IWorkspace Workspace
-		{
-			get { return _workspace; }
-		}
-
-		protected Model Model
-		{
-			get { return _model; }
+			return base.BaseGetAllValues().GetEnumerator();
 		}
 	}
 }

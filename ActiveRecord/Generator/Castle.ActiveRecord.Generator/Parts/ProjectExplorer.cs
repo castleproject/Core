@@ -8,6 +8,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 	using WeifenLuo.WinFormsUI;
 
 	using Castle.ActiveRecord.Generator.Actions;
+	using Castle.ActiveRecord.Generator.Components;
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 
 	/// <summary>
@@ -20,6 +22,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.TreeView treeView1;
 		private System.ComponentModel.IContainer components;
+		private Model _model;
 
 		public ProjectExplorer()
 		{
@@ -35,6 +38,13 @@ namespace Castle.ActiveRecord.Generator.Parts
 //			treeView1.Nodes[2].Expand();
 		}
 
+		public ProjectExplorer(Model model) : this()
+		{
+			_model = model;
+
+			_model.OnProjectReplaced += new ProjectReplaceDelegate(OnProjectReplaced);
+			_model.OnProjectChanged += new ProjectDelegate(OnProjectChange);
+		}
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -60,7 +70,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (ProjectExplorer));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ProjectExplorer));
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.toolBar1 = new System.Windows.Forms.ToolBar();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -69,8 +79,9 @@ namespace Castle.ActiveRecord.Generator.Parts
 			// 
 			// imageList1
 			// 
+			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
 			this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("imageList1.ImageStream")));
+			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// toolBar1
@@ -81,16 +92,15 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.toolBar1.Location = new System.Drawing.Point(0, 0);
 			this.toolBar1.Name = "toolBar1";
 			this.toolBar1.ShowToolTips = true;
-			this.toolBar1.Size = new System.Drawing.Size(246, 28);
+			this.toolBar1.Size = new System.Drawing.Size(246, 42);
 			this.toolBar1.TabIndex = 2;
-//			this.toolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
 			// 
 			// pictureBox1
 			// 
 			this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pictureBox1.Location = new System.Drawing.Point(0, 28);
+			this.pictureBox1.Location = new System.Drawing.Point(0, 42);
 			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(246, 293);
+			this.pictureBox1.Size = new System.Drawing.Size(246, 279);
 			this.pictureBox1.TabIndex = 3;
 			this.pictureBox1.TabStop = false;
 			// 
@@ -99,16 +109,16 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeView1.ImageList = this.imageList1;
 			this.treeView1.Indent = 19;
-			this.treeView1.Location = new System.Drawing.Point(0, 28);
+			this.treeView1.Location = new System.Drawing.Point(0, 42);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(246, 293);
+			this.treeView1.Size = new System.Drawing.Size(246, 279);
 			this.treeView1.TabIndex = 4;
 			// 
 			// ProjectExplorer
 			// 
-			this.AllowedStates = ((WeifenLuo.WinFormsUI.ContentStates) (((((WeifenLuo.WinFormsUI.ContentStates.Float | WeifenLuo.WinFormsUI.ContentStates.DockLeft)
-				| WeifenLuo.WinFormsUI.ContentStates.DockRight)
-				| WeifenLuo.WinFormsUI.ContentStates.DockTop)
+			this.AllowedStates = ((WeifenLuo.WinFormsUI.ContentStates)(((((WeifenLuo.WinFormsUI.ContentStates.Float | WeifenLuo.WinFormsUI.ContentStates.DockLeft) 
+				| WeifenLuo.WinFormsUI.ContentStates.DockRight) 
+				| WeifenLuo.WinFormsUI.ContentStates.DockTop) 
 				| WeifenLuo.WinFormsUI.ContentStates.DockBottom)));
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(246, 323);
@@ -117,7 +127,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			this.Controls.Add(this.toolBar1);
 			this.DockPadding.Bottom = 2;
 			this.HideOnClose = true;
-			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "ProjectExplorer";
 			this.ShowHint = WeifenLuo.WinFormsUI.DockState.DockRight;
 			this.Text = "Project Explorer";
@@ -130,13 +140,10 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private void ProjectExplorer_Load(object sender, System.EventArgs e)
 		{
 			ProjectExplorerActionSet aset = new ProjectExplorerActionSet();
+			aset.Init(_model);
 			aset.Install(this);
 
 //			treeView1.Nodes.Add(new System.Windows.Forms.TreeNode("DockSample", 3, 3));
-		}
-
-		private void toolBar1_ButtonClick(object sender, System.Windows.Forms.ToolBarButtonClickEventArgs e)
-		{
 		}
 
 		#region IWorkspace Members
@@ -167,5 +174,43 @@ namespace Castle.ActiveRecord.Generator.Parts
 		}
 
 		#endregion
+
+		private void OnProjectReplaced(object sender, Project oldProject, Project newProject)
+		{
+			UpdateTree(newProject);
+		}
+
+		private void OnProjectChange(object sender, Project project)
+		{
+			UpdateTree(project);
+		}
+
+		private void UpdateTree(Project project)
+		{
+			treeView1.Nodes.Clear();
+
+			TreeNode projectNode = new TreeNode(project.Name, ImageConstants.Classes_Entity, ImageConstants.Classes_Entity);
+
+			treeView1.Nodes.Add(projectNode);
+
+			foreach(DatabaseDefinition def in project.Databases)
+			{
+				TreeNode dbNode = new TreeNode(def.Alias, ImageConstants.Database_Catalog, ImageConstants.Database_Catalog);
+				projectNode.Nodes.Add(dbNode);
+				dbNode.EnsureVisible();
+
+				foreach(TableDefinition table in def.Tables)
+				{
+					TreeNode tableNode = new TreeNode(table.Name, ImageConstants.Database_Table, ImageConstants.Database_Table);
+					dbNode.Nodes.Add(tableNode);
+
+					foreach(ColumnDefinition colDef in table.Columns)
+					{
+						TreeNode colNode = new TreeNode(colDef.Name, ImageConstants.Database_Field, ImageConstants.Database_Field);
+						tableNode.Nodes.Add(colNode);
+					}
+				}
+			}
+		}
 	}
 }

@@ -28,11 +28,11 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			_connectionFactory = connectionFactory;
 		}
 
-		public DatabaseDefinition Build(Project project)
+		public DatabaseDefinition Build(String alias, String connectionString)
 		{
-			DatabaseDefinition def = new DatabaseDefinition();
+			DatabaseDefinition def = new DatabaseDefinition(alias);
 
-			using(OleDbConnection connection = _connectionFactory.CreateConnection(project.ConnectionString))
+			using(OleDbConnection connection = _connectionFactory.CreateConnection(connectionString))
 			{
 				BuildTables(connection, def);
 				BuildPks(connection, def);

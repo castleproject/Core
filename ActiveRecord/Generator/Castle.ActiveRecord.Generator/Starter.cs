@@ -15,18 +15,23 @@
 namespace Castle.ActiveRecord.Generator
 {
 	using System;
-
 	using System.Windows.Forms;
+
+	using Castle.ActiveRecord.Generator.Components;
 
 
 	public class Starter
 	{
-		private IApplicationLayout _layout = new ARGeneratorLayout();
+		private IApplicationLayout _layout;
 		private MainForm _main;
+		private Model _model;
 
 		public Starter()
 		{
-			_main = new MainForm();
+			_model = new Model();
+			_layout = new ARGeneratorLayout(_model);
+
+			_main = new MainForm(_model);
 			_main.Load += new EventHandler(OnWorkspaceLoad);
 			_main.Closed += new EventHandler(OnWorkspaceClosed);
 
@@ -37,7 +42,6 @@ namespace Castle.ActiveRecord.Generator
 		public static void Main()
 		{
 			new Starter();
-
 		}
 
 		private void OnWorkspaceLoad(object sender, EventArgs e)
@@ -48,7 +52,7 @@ namespace Castle.ActiveRecord.Generator
 			// Restore pesisted changes to layout
 			// layout.Restore();
 
-			_main.Visible = true;
+			_model.CurrentProject = new Project();
 		}
 
 		private void OnWorkspaceClosed(object sender, EventArgs e)

@@ -119,6 +119,26 @@
                     Project = "{F628A61F-FDB0-4680-843C-96707011A68C}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -164,6 +184,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ServiceRegistry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Starter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -189,6 +214,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Actions\ProjectNewAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Actions\ProjectOpenAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -204,8 +234,73 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Parts\ActiveRecordGraphView.cs"
+                    RelPath = "Icons\cl1.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\cl2.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\cl3.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\cl4.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\cl5.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\cl6.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\cl7.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db1.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db2.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db3.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db4.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db5.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db6.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db7.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\db8.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Icons\ImageConstants.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Parts\ActiveRecordGraphView.cs"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -214,8 +309,18 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Parts\AvailableShapes.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Parts\AvailableShapes.resx"
+                    DependentUpon = "AvailableShapes.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Parts\OutputView.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -225,7 +330,7 @@
                 />
                 <File
                     RelPath = "Parts\ProjectExplorer.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -233,7 +338,24 @@
                     DependentUpon = "ProjectExplorer.cs"
                     BuildAction = "EmbeddedResource"
                 />
-                <Folder RelPath = "Parts\Shapes\" />
+                <File
+                    RelPath = "Parts\Shapes\ActiveRecordBaseClassShape.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Parts\Shapes\ActiveRecordShape.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Parts\Shapes\Resources\ARBaseShape.gif"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Parts\Shapes\Resources\ARShape.gif"
+                    BuildAction = "EmbeddedResource"
+                />
             </Include>
         </Files>
     </CSHARP>

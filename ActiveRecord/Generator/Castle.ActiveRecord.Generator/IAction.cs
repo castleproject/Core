@@ -19,6 +19,8 @@ namespace Castle.ActiveRecord.Generator
 
 	public interface IAction
 	{
+		void Init(Model model);
+
 		void Install(IWorkspace workspace, object parentMenu, object parentGroup);
 
 //		void Run();
@@ -27,6 +29,8 @@ namespace Castle.ActiveRecord.Generator
 
 	public interface IActionSet
 	{
+		void Init(Model model);
+
 		void Install(IWorkspace workspace);
 	}
 }

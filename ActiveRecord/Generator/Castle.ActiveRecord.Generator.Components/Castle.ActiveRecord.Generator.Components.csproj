@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
@@ -120,6 +120,11 @@
                 />
                 <File
                     RelPath = "Database\DatabaseDefinitionBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Database\DatabaseDefinitionCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

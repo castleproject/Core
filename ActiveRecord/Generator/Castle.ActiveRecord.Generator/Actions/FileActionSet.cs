@@ -20,19 +20,31 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 	public class FileActionGroup : IActionSet
 	{
+		private ProjectNewAction newAction;
+		private ProjectOpenAction openAction;
+
 		public FileActionGroup()
 		{
 		}
 
 		#region IAction Members
 
+		public void Init(Model model)
+		{
+			newAction = new ProjectNewAction();
+			openAction = new ProjectOpenAction();
+
+			newAction.Init(model);
+			openAction.Init(model);
+		}
+
 		public void Install(IWorkspace workspace)
 		{
-			MenuItem item = new MenuItem("File");
+			MenuItem item = new MenuItem("P&roject");
 			workspace.MainMenu.MenuItems.Add(item);
 
-			ProjectOpenAction action = new ProjectOpenAction();
-			action.Install(workspace, item, null);
+			newAction.Install(workspace, item, null);			
+			openAction.Install(workspace, item, null);
 		}
 
 		#endregion

@@ -33,6 +33,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			//
 			// TODO: Add any constructor code after InitializeComponent call
 			//
+
+#if DEBUG
+			textBox1.Text = "MyAlias";
+			connectionString.Text = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=test;Data Source=.";
+#endif
 		}
 
 		/// <summary>
@@ -72,6 +77,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.button1.Name = "button1";
 			this.button1.TabIndex = 0;
 			this.button1.Text = "OK";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// button2
 			// 
@@ -79,6 +85,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.button2.Name = "button2";
 			this.button2.TabIndex = 1;
 			this.button2.Text = "Cancel";
+			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// label1
 			// 
@@ -134,6 +141,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.Controls.Add(this.button1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.MaximizeBox = false;
 			this.Name = "DatabaseConnectionDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Add Database Connection";
@@ -169,7 +177,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 				
 				try
 				{
-					if ((bool) dataLinks.PromptEdit(ref oConnection))
+					if (dataLinks.PromptEdit(ref oConnection))
 					{
 						connectionString.Text = connection.ConnectionString;
 					}
@@ -179,6 +187,30 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 					MessageBox.Show(ex.ToString());
 				}
 			}
+		}
+
+		private void button2_Click(object sender, System.EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
+			this.Close();
+		}
+
+		private void button1_Click(object sender, System.EventArgs e)
+		{
+			// TODO: Validate fields
+
+			DialogResult = DialogResult.OK;
+			this.Close();
+		}
+
+		public String Alias
+		{
+			get { return textBox1.Text; }
+		}
+
+		public String ConnectionString
+		{
+			get { return connectionString.Text; }
 		}
 	}
 }

@@ -15,39 +15,42 @@
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
+	using System.Windows.Forms;
 
 
-	public abstract class AbstractAction : IAction
+	public class ProjectNewAction : AbstractAction
 	{
-		private IWorkspace _workspace;
-		private Model _model;
+		private MenuItem _item;
 
-		public AbstractAction()
+		public ProjectNewAction()
 		{
 		}
 
 		#region IAction Members
 
-		public virtual void Init(Model model)
+		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
 		{
-			_model = model;
-		}
+			base.Install(workspace, parentMenu, parentGroup);
 
-		public virtual void Install(IWorkspace workspace, object parentMenu, object parentGroup)
-		{
-			_workspace = workspace;
+			_item = new MenuItem("&New");
+
+			(parentMenu as MenuItem).Click += new EventHandler(ProjectNewAction_Click);
+			(parentMenu as MenuItem).MenuItems.Add(_item);
 		}
 
 		#endregion
 
-		protected IWorkspace Workspace
+		private void ProjectNewAction_Click(object sender, EventArgs e)
 		{
-			get { return _workspace; }
+			if (sender == _item)
+			{
+				DoAction();
+			}
 		}
 
-		protected Model Model
+		private void DoAction()
 		{
-			get { return _model; }
+			
 		}
 	}
 }

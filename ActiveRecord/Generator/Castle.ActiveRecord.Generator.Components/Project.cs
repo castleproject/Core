@@ -15,7 +15,8 @@
 namespace Castle.ActiveRecord.Generator.Components
 {
 	using System;
-	using System.Collections;
+
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 
 	public class Project
@@ -24,15 +25,26 @@ namespace Castle.ActiveRecord.Generator.Components
 		private String _driver;
 		private String _connectionString;
 		private String _namespace;
-//		private CodeProviderInfo _codeProvider;		
-//		private DatabaseDefinition _dbDefinition;
+		private DatabaseDefinitionCollection _dbDefinitions = new DatabaseDefinitionCollection();
 		
-		private IList _activeRecordDescriptors = new ArrayList();
-		
+//		private IList _activeRecordDescriptors = new ArrayList();
 //		private IDatabaseDefinitionBuilder _definitionBuilder;
 //		private ICodeDomGenerator _codeGenerator;
 //		private ICodeProviderFactory _codeProviderFactory;
 
+		public Project(string name)
+		{
+			_name = name;
+		}
+
+		public Project() : this("not named yet")
+		{
+		}
+
+		public DatabaseDefinitionCollection Databases
+		{
+			get { return _dbDefinitions; }
+		}
 
 //		public Project(IDatabaseDefinitionBuilder definitionBuilder, 
 //			ICodeProviderFactory codeProviderFactory, ICodeDomGenerator codeGenerator)

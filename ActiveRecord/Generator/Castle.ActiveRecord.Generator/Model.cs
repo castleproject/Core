@@ -16,9 +16,40 @@ namespace Castle.ActiveRecord.Generator
 {
 	using System;
 
+	using Castle.ActiveRecord.Generator.Components;
+
+	public delegate void ProjectDelegate(object sender, Project project);
+
+	public delegate void ProjectReplaceDelegate(object sender, Project oldProject, Project newProject);
+
 	[Serializable]
 	public class Model
 	{
-		
+		private Project _project;
+
+		public Project CurrentProject
+		{
+			get { return _project; }
+			set
+			{
+				if (OnProjectReplaced != null)
+				{
+					OnProjectReplaced(this, _project, value);
+				}
+				_project = value;
+			}
+		}
+
+		public void Update()
+		{
+			if (OnProjectChanged != null)
+			{
+				OnProjectChanged(this, _project);
+			}
+		}
+
+		public event ProjectDelegate OnProjectChanged;
+
+		public event ProjectReplaceDelegate OnProjectReplaced;
 	}
 }

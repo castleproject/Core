@@ -20,8 +20,14 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 	public class DatabaseDefinition
 	{
-		private String _name;
+		private String _alias;
+//		private String _name;
 		private TableDefinitionCollection _tables = new TableDefinitionCollection();
+
+		public DatabaseDefinition(String alias)
+		{
+			_alias = alias;
+		}
 
 		public DatabaseDefinition()
 		{
@@ -33,11 +39,17 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			return table;
 		}
 
-		public String Name
+		public String Alias
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return _alias; }
+			set { _alias = value; }
 		}
+
+//		public String Name
+//		{
+//			get { return _name; }
+//			set { _name = value; }
+//		}
 
 		public TableDefinitionCollection Tables
 		{

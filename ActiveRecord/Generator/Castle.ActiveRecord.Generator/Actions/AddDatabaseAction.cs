@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System.Windows.Forms;
 
 	using Castle.ActiveRecord.Generator.Dialogs;
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 
 	public class AddDatabaseAction : AbstractAction
@@ -38,7 +39,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 			// 
 			// toolBarButton1
 			// 
-			this.toolBarButton1.ImageIndex = 9;
+			this.toolBarButton1.ImageIndex = ImageConstants.Database_Tables;
 
 			workspace.MainToolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[]
 				{
@@ -55,12 +56,21 @@ namespace Castle.ActiveRecord.Generator.Actions
 		{
 			if (e.Button == toolBarButton1)
 			{
-				DatabaseConnectionDialog dialog = new DatabaseConnectionDialog();
-				DialogResult result = dialog.ShowDialog(Workspace.ActiveWindow);
-
-				if (result == DialogResult.OK)
+				using(DatabaseConnectionDialog dialog = new DatabaseConnectionDialog())
 				{
-					
+					DialogResult result = dialog.ShowDialog(Workspace.ActiveWindow);
+
+					if (result == DialogResult.OK)
+					{
+						IDatabaseDefinitionBuilder defBuilder = 
+							ServiceRegistry.Instance[ typeof(IDatabaseDefinitionBuilder) ] as IDatabaseDefinitionBuilder;
+
+						DatabaseDefinition def = defBuilder.Build(dialog.Alias, dialog.ConnectionString);
+
+						Model.CurrentProject.Databases.Add(def);
+
+						Model.Update();
+					}
 				}
 			}
 		}

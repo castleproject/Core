@@ -22,6 +22,13 @@ namespace Castle.ActiveRecord.Generator
 
 	public class ARGeneratorLayout : IApplicationLayout
 	{
+		private Model _model;
+
+		public ARGeneratorLayout(Model model)
+		{
+			_model = model;
+		}
+
 		#region IApplicationLayout Members
 
 		public void Install(IWorkspace workspace)
@@ -29,18 +36,22 @@ namespace Castle.ActiveRecord.Generator
 			// Register Actions
 			
 			FileActionGroup group1 = new FileActionGroup();
+			group1.Init(_model);
 			group1.Install(workspace);
 
 			// Add parts
 
-			ActiveRecordGraphView arGraph = new ActiveRecordGraphView();
+			ActiveRecordGraphView arGraph = new ActiveRecordGraphView(_model);
 			arGraph.Show(workspace.MainDockManager);
 
-			OutputView outView = new OutputView();
+			OutputView outView = new OutputView(_model);
 			outView.Show(workspace.MainDockManager);
 
-			ProjectExplorer projExplorer = new ProjectExplorer();
+			ProjectExplorer projExplorer = new ProjectExplorer(_model);
 			projExplorer.Show(workspace.MainDockManager);
+
+			AvailableShapes avaShapes = new AvailableShapes(_model);
+			avaShapes.Show(workspace.MainDockManager);
 		}
 
 		public void Persist()

@@ -19,6 +19,6 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 	public interface IDatabaseDefinitionBuilder
 	{
-//		DatabaseDefinition Build(Project project);
+		DatabaseDefinition Build(String alias, String connectionString);
 	}
 }

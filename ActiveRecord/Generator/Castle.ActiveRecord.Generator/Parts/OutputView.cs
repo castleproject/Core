@@ -31,6 +31,10 @@ namespace Castle.ActiveRecord.Generator.Parts
 			//
 		}
 
+		public OutputView(Model model) : this()
+		{
+		}
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>

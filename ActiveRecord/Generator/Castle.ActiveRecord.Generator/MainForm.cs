@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Generator.Components;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +35,11 @@ namespace Castle.ActiveRecord.Generator
 		public MainForm()
 		{
 			InitializeComponent();
+		}
+
+		public MainForm(Model model) : this()
+		{
+			model.OnProjectReplaced += new ProjectReplaceDelegate(OnProjectReplaced);
 		}
 
 		#region IWorkspace Members
@@ -154,5 +160,10 @@ namespace Castle.ActiveRecord.Generator
 			this.ResumeLayout(false);
 		}
 		#endregion
+
+		private void OnProjectReplaced(object sender, Project oldProject, Project newProject)
+		{
+			this.Text = String.Format("ActiveRecord Generator - [{0}]", newProject.Name);
+		}
 	}
 }

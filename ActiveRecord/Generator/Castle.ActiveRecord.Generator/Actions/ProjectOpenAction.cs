@@ -1,4 +1,3 @@
-using System.Windows.Forms;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +15,10 @@ using System.Windows.Forms;
 namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
+	using System.Windows.Forms;
 
 
-	public class ProjectOpenAction : IAction
+	public class ProjectOpenAction : AbstractAction
 	{
 		public ProjectOpenAction()
 		{
@@ -26,8 +26,10 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 		#region IAction Members
 
-		public void Install(IWorkspace workspace, object parentMenu, object parentGroup)
+		public override void Install(IWorkspace workspace, object parentMenu, object parentGroup)
 		{
+			base.Install(workspace, parentMenu, parentGroup);
+
 			MenuItem item = new MenuItem("&Open...");
 
 			(parentMenu as MenuItem).MenuItems.Add(item);
