@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Framew
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Engine.WindsorExtension", "..\WindsorIntegration\Castle.CastleOnRails.Engine.WindsorExtension.csproj", "{6C51A1E3-7F20-4696-BFD6-829134678341}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -37,6 +41,10 @@ Global
 		{EC393863-333E-49CE-94A6-654B9F323954}.Debug.Build.0 = Debug|.NET
 		{EC393863-333E-49CE-94A6-654B9F323954}.Release.ActiveCfg = Release|.NET
 		{EC393863-333E-49CE-94A6-654B9F323954}.Release.Build.0 = Release|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.ActiveCfg = Debug|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Debug.Build.0 = Debug|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.ActiveCfg = Release|.NET
+		{6C51A1E3-7F20-4696-BFD6-829134678341}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

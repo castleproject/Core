@@ -24,5 +24,7 @@ namespace Castle.CastleOnRails.Engine
 	public interface IControllerFactory
 	{
 		Controller GetController(String name);
+
+		void Release(Controller controller);
 	}
 }

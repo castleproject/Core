@@ -80,9 +80,24 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
                     HintPath = "..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.Model"
@@ -90,18 +105,8 @@
                     HintPath = "..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.Windsor"
-                    Project = "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+                    Name = "Castle.CastleOnRails.Engine"
+                    Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>

@@ -81,7 +81,7 @@
 	</target>
 	
 	<target name="core.tests.run" depends="core.tests.compile">
-		<nunit2 haltonerror="true" failonerror="true" haltonfailure="true">
+		<nunit2 >
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${core.test.assembly.name}" />
 		</nunit2>

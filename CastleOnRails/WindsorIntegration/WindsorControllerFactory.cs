@@ -32,21 +32,7 @@ namespace Castle.CastleOnRails.Engine.WindsorExtension
 
 		public Controller GetController(string name)
 		{
-			IContainerAccessor containerAccessor = 
-				HttpContext.Current.ApplicationInstance as IContainerAccessor;
-
-			if (containerAccessor == null)
-			{
-				throw new RailsException("You must extend the HttpApplication in your web project " + 
-					"and implement the IContainerAccessor to properly expose your container instance.");
-			}
- 
-			IWindsorContainer container = containerAccessor.Container;
-
-			if (container == null)
-			{
-				throw new RailsException("The container seems to be unavailable in your HttpApplication subclass.");
-			}
+			IWindsorContainer container = ObtainContainer();
 
 			if (container.Kernel.HasComponent(name))
 			{
@@ -69,6 +55,32 @@ namespace Castle.CastleOnRails.Engine.WindsorExtension
 
 			throw new RailsException( String.Format("Could not find controller for {0}",
 				name) );
+		}
+
+		public void Release(Controller controller)
+		{
+			ObtainContainer().Release(controller);
+		}
+
+		private IWindsorContainer ObtainContainer()
+		{
+			IContainerAccessor containerAccessor = 
+				HttpContext.Current.ApplicationInstance as IContainerAccessor;
+	
+			if (containerAccessor == null)
+			{
+				throw new RailsException("You must extend the HttpApplication in your web project " + 
+					"and implement the IContainerAccessor to properly expose your container instance.");
+			}
+	
+			IWindsorContainer container = containerAccessor.Container;
+	
+			if (container == null)
+			{
+				throw new RailsException("The container seems to be unavailable in your HttpApplication subclass.");
+			}
+
+			return container;
 		}
 	}
 }

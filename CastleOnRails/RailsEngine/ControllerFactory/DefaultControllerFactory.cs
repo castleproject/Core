@@ -30,8 +30,6 @@ namespace Castle.CastleOnRails.Engine.ControllerFactory
 			_cache = cache;
 		}
 
-		#region IControllerFactory Members
-
 		public Controller GetController(String name)
 		{
 			Type controllerType = _cache.GetController( name );
@@ -45,7 +43,9 @@ namespace Castle.CastleOnRails.Engine.ControllerFactory
 			return (Controller) Activator.CreateInstance( controllerType );
 		}
 
-
-		#endregion
+		public void Release(Controller controller)
+		{
+			
+		}
 	}
 }

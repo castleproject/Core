@@ -15,7 +15,7 @@
 	</HEAD>
 	<body>
 		   <div class="titlecontainer">
-		     <table border=0 width="100%">
+		     <table border=0 width="98%">
 				<tr class="titlecontainer">
 					<td>
 				     PestControl - <%= PageTitle %>

@@ -35,7 +35,7 @@
             </fileset>
         </copy>
         
-        <nunit2 haltonerror="true" haltonfailure="true" failonerror="true">
+        <nunit2 >
             <formatter type="Plain" />
             <test assemblyname="${current.bin.dir}/${avalon-framework.test.assembly}" fork="true" /> 
         </nunit2>

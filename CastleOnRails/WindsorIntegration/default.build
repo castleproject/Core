@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="rails-framework" default="build">
+<project name="windsor-integration" default="build">
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/../bin" />
@@ -7,8 +7,8 @@
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../RailsFrameworkTest" />
-	<property name="name" value="Castle.CastleOnRails.Framework" />
+	<property name="test.src.dir" value="${src.dir}/../WindsorIntegrationTests" />
+	<property name="name" value="Castle.CastleOnRails.Engine.WindsorExtension" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
@@ -38,6 +38,12 @@
 			</sources>
 
 			<references>
+				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
+				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/Castle.MicroKernel.dll" />
+				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
+				<include name="${bin.dir}/Castle.Windsor.dll" />
 			</references>
 		</csc>
 	</target>

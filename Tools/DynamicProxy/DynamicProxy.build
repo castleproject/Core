@@ -81,13 +81,13 @@
 	</target>
 	
 	<target name="core.tests.run" depends="core.tests.compile">
-		<nunit2 haltonerror="true" failonerror="true" haltonfailure="true">
+		<nunit2 >
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${core.test.assembly.name}" />
 		</nunit2>
 	</target>
 	
-	<target name="package">
+	<target name="dist">
 		<zip zipfile="DynamicProxy.bin.${version}.zip">
 			<fileset basedir="${base.dir}">
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />				

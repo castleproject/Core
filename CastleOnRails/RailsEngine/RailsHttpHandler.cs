@@ -61,9 +61,16 @@ namespace Castle.CastleOnRails.Engine
 
 			Controller controller = _controllerFactory.GetController( info.Controller );
 
-			controller.__Process( _url, 
-				ViewsPhysicalPath, info.Controller, 
-				info.Action, _viewEngine, context );
+			try
+			{
+				controller.__Process( _url, 
+					ViewsPhysicalPath, info.Controller, 
+					info.Action, _viewEngine, context );
+			}
+			finally
+			{
+				_controllerFactory.Release(controller);
+			}
 		}
 
 		public bool IsReusable
