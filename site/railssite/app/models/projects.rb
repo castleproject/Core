@@ -1,9 +1,9 @@
 
 class Project
-  attr_reader :name, :link, :description
+  attr_reader :name, :link, :description, :docs
 
-  def initialize( name, link, description = '' )
-    @name, @link, @description = name, link, description
+  def initialize( name, link, description = '', docs = nil )
+    @name, @link, @description, @docs = name, link, description, docs
   end
 end
 
@@ -12,7 +12,7 @@ class ProjectList
 
   def initialize()
     @list = []
-    @list << Project.new( 'Castle Container', '/container/', 'The inversion of control container' )
+    @list << Project.new( 'Castle Container', '/container/', 'The inversion of control container', '/containerdocs/' )
     @list << Project.new( 'DynamicProxy', '/dynamicproxy/', 'Tool for generating dynamic proxies for interfaces and classes' )
     @list << Project.new( 'ManagementExtensions', '/management/', 'Expose managed components that can be access from anywhere' )
     @list << Project.new( 'Castle on Rails', '/castleonrails/', 'A rails-like web framework' )

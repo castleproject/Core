@@ -1,0 +1,17 @@
+<% @page_title = "Documentation" %>
+<% @main_title = "IHandler" %>
+<%= render "/containerdocs/deflinks" %>
+
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/Handlers/IHandler.cs">Handlers</a> 
+are responsible to coordinate the steps among the 
+kernel (lifestyle, activator) and expose the component 
+to the outside world if the minimum set of dependencies 
+can be satisfied. Otherwise, the handler will throw an 
+exception when a request for the component instance is issued.
+
+<p>
+You can force the kernel to use your implementation of
+IHandler by extending the 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/Handlers/IHandlerFactory.cs">IHandlerFactory</a> interface.
+</p>
+

@@ -1,0 +1,16 @@
+<% @page_title = "Documentation" %>
+<% @main_title = "Dependency Resolver" %>
+<%= render "/containerdocs/deflinks" %>
+
+The <a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/Resolvers/IDependecyResolver.cs">IDependecyResolver</a> 
+interface dictates the responsabily of resolvers. The implementation 
+should rely on all means to satisfy the requested dependency, specially when 
+the dependency is not optional. If a not optional dependency could not 
+be resolved, the implementation should not return null (unless you want to 
+really change the default behavior)
+
+<p>
+The default implementation is 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/InversionOfControl/Castle.MicroKernel/Resolvers/DefaultDependecyResolver.cs">very simple</a>.
+</p>
+
