@@ -12,23 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.AppDomain
+namespace Castle.Windsor.Configuration
 {
-	using System.Configuration;
+	using System;
+	using System.IO;
 
 	/// <summary>
-	/// Implementation of <see cref="IConfigurationSectionHandler"/>.
-	/// Do not support configuration inheritance.
+	/// Abstract a configuration source that might 
+	/// be a file, a config node (CDATA) or a hardcode content.
 	/// </summary>
-	public class CastleSectionHandler : IConfigurationSectionHandler
+	public interface IConfigurationSource : IDisposable
 	{
-		public CastleSectionHandler()
-		{
-		}
-
-		public object Create(object parent, object configContext, System.Xml.XmlNode section)
-		{
-			return section;
-		}
+		TextReader Contents { get; }
 	}
 }

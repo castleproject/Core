@@ -12,33 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.CastleLanguage
+namespace Castle.Windsor.Configuration
 {
-	using System;
+	using Castle.MicroKernel;
 
 	/// <summary>
-	/// Summary description for ImportDirective.
+	/// Interpreter of a specific language to describe 
+	/// configuration nodes in a hierachical manner.
 	/// </summary>
-	public class ImportDirective : NodeBase
+	public interface IConfigurationInterpreter
 	{
-		private String _namespace;
-		private AssemblyReference _assembly;
-
-		public ImportDirective(LexicalInfo lexInfo, String ns) : base(lexInfo)
-		{
-			Namespace = ns;
-		}
-
-		public String Namespace
-		{
-			get { return _namespace; }
-			set { _namespace = value; }
-		}
-
-		public AssemblyReference AssemblyReference
-		{
-			get { return _assembly; }
-			set { _assembly = value; }
-		}
+		/// <summary>
+		/// Implementors should make sure that the 
+		/// Interpreter instance already has a reference 
+		/// to a configuration source.
+		/// </summary>
+		/// <param name="store"></param>
+		void Process(IConfigurationStore store);
 	}
 }

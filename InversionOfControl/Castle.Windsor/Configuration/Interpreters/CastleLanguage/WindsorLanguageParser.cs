@@ -4,7 +4,7 @@
     using System.Text;
     using Castle.Model.Configuration;
 
-namespace Castle.Windsor.Configuration.CastleLanguage
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 {
 	// Generate the header common to all output files.
 	using System;
@@ -37,6 +37,7 @@ namespace Castle.Windsor.Configuration.CastleLanguage
 		public const int DEDENT = 10;
 		public const int ID = 11;
 		public const int DOT = 12;
+		public const int STRING_LITERAL = 13;
 		
 		
     protected StringBuilder sbuilder = new StringBuilder();
@@ -362,6 +363,7 @@ _loop19_breakloop:				;
 {
 		String value;
 		
+		IToken  valueToken = null;
 		IToken  id = null;
 		IToken  id2 = null;
 		IToken  id3 = null;
@@ -370,60 +372,86 @@ _loop19_breakloop:				;
 			
 		
 		try {      // for error handling
-			id = LT(1);
-			match(ID);
-			if (0==inputState.guessing)
 			{
-									
-						sbuilder.Append(id.getText());
-						value = sbuilder.ToString();
-					
-			}
-			{    // ( ... )*
-				for (;;)
+				switch ( LA(1) )
 				{
-					switch ( LA(1) )
+				case STRING_LITERAL:
+				{
+					valueToken = LT(1);
+					match(STRING_LITERAL);
+					if (0==inputState.guessing)
 					{
-					case DOT:
-					{
-						{
-							match(DOT);
-							id2 = LT(1);
-							match(ID);
-							if (0==inputState.guessing)
-							{
+						
+									String val = valueToken.getText();
+									sbuilder.Append(val);
 								
-												sbuilder.Append('.');
-												sbuilder.Append(id2.getText());
-											
-							}
-						}
-						break;
 					}
-					case IN:
-					{
-						{
-							match(IN);
-							id3 = LT(1);
-							match(ID);
-							if (0==inputState.guessing)
-							{
-								
-												sbuilder.Append(" in ");
-												sbuilder.Append(id3.getText());
-											
-							}
-						}
-						break;
-					}
-					default:
-					{
-						goto _loop24_breakloop;
-					}
-					 }
+					break;
 				}
-_loop24_breakloop:				;
-			}    // ( ... )*
+				case ID:
+				{
+					id = LT(1);
+					match(ID);
+					if (0==inputState.guessing)
+					{
+											
+									sbuilder.Append(id.getText());
+									value = sbuilder.ToString();
+								
+					}
+					{    // ( ... )*
+						for (;;)
+						{
+							switch ( LA(1) )
+							{
+							case DOT:
+							{
+								{
+									match(DOT);
+									id2 = LT(1);
+									match(ID);
+									if (0==inputState.guessing)
+									{
+										
+															sbuilder.Append('.');
+															sbuilder.Append(id2.getText());
+														
+									}
+								}
+								break;
+							}
+							case IN:
+							{
+								{
+									match(IN);
+									id3 = LT(1);
+									match(ID);
+									if (0==inputState.guessing)
+									{
+										
+															sbuilder.Append(" in ");
+															sbuilder.Append(id3.getText());
+														
+									}
+								}
+								break;
+							}
+							default:
+							{
+								goto _loop25_breakloop;
+							}
+							 }
+						}
+_loop25_breakloop:						;
+					}    // ( ... )*
+					break;
+				}
+				default:
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				 }
+			}
 			if (0==inputState.guessing)
 			{
 				
@@ -499,7 +527,8 @@ _loop24_breakloop:				;
 		@"""INDENT""",
 		@"""DEDENT""",
 		@"""ID""",
-		@"""DOT"""
+		@"""DOT""",
+		@"""STRING_LITERAL"""
 	};
 	
 	private static long[] mk_tokenSet_0_()

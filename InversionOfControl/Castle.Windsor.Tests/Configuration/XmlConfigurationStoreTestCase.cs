@@ -1,3 +1,5 @@
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Windsor.Configuration.Interpreters;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +22,6 @@ namespace Castle.Windsor.Tests.Configuration
 
 	using Castle.Model.Configuration;
 
-	using Castle.Windsor.Configuration.Xml;
-
 	using Castle.MicroKernel;
 
 	/// <summary>
@@ -33,7 +33,9 @@ namespace Castle.Windsor.Tests.Configuration
 		[Test]
 		public void ProperDeserialization()
 		{
-			XmlConfigurationStore store = new XmlConfigurationStore("sample_config.xml");
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			XmlInterpreter interpreter = new XmlInterpreter("sample_config.xml");
+			interpreter.Process(store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
 			Assert.AreEqual(2, store.GetComponents().Length);
@@ -61,10 +63,11 @@ namespace Castle.Windsor.Tests.Configuration
 		[Test]
 		public void CorrectConfigurationMapping()
 		{
-			WindsorContainer container = new WindsorContainer();			
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			XmlInterpreter interpreter = new XmlInterpreter("sample_config.xml");
+			interpreter.Process(store);
 
-			XmlConfigurationStore store = new XmlConfigurationStore("sample_config.xml");
-			container.Kernel.ConfigurationStore = store;
+			WindsorContainer container = new WindsorContainer(store);			
 
 			container.AddFacility("testidengine", new DummyFacility());
 		}

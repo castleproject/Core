@@ -18,7 +18,8 @@ namespace Castle.Windsor
 
 	using Castle.MicroKernel;
 
-	using Castle.Windsor.Configuration.AppDomain;
+	using Castle.Windsor.Configuration;
+	using Castle.Windsor.Configuration.Interpreters;
 
 	/// <summary>
 	/// Implementation of <see cref="IWindsorContainer"/>
@@ -27,25 +28,60 @@ namespace Castle.Windsor
 	[Serializable]
 	public class WindsorContainer : MarshalByRefObject, IWindsorContainer
 	{
+		#region Fields
+
 		private IKernel _kernel;
 		private IWindsorContainer _parent;
+		
+		#endregion
+
+		#region Constructors
 
 		/// <summary>
-		/// Constructs a container using the <see cref="AppDomainConfigurationStore"/>
-		/// as the <see cref="IConfigurationStore"/>
+		/// Constructs a container without any external 
+		/// configuration reference
 		/// </summary>
-		public WindsorContainer() : this(new AppDomainConfigurationStore())
+		public WindsorContainer() : this(new DefaultKernel())
 		{			
 		}
 
 		/// <summary>
-		/// Constructs a container using the specified <see cref="IConfigurationStore"/>
-		/// implementation.
+		/// Constructs a container using the specified 
+		/// <see cref="IConfigurationStore"/> implementation.
 		/// </summary>
 		/// <param name="store"></param>
-		public WindsorContainer(IConfigurationStore store) : this(new DefaultKernel())
+		public WindsorContainer(IConfigurationStore store) : this()
 		{
 			Kernel.ConfigurationStore = store;
+		}
+
+		/// <summary>
+		/// Constructs a container using the specified 
+		/// <see cref="IConfigurationInterpreter"/> implementation.
+		/// </summary>
+		/// <param name="interpreter"></param>
+		public WindsorContainer(IConfigurationInterpreter interpreter) : this()
+		{
+			if (interpreter == null) throw new ArgumentNullException("interpreter");
+
+			interpreter.Process(Kernel.ConfigurationStore);
+		}
+
+		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this()
+		{
+			if (parent == null) throw new ArgumentNullException("parent");
+			if (child == null) throw new ArgumentNullException("child");
+
+			Kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+		}
+
+		public WindsorContainer(String xmlFile) : this(new XmlInterpreter(xmlFile))
+		{
+		}
+
+		public WindsorContainer(String parentXmlFile, String childXmlFile) : 
+			this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
+		{
 		}
 
 		/// <summary>
@@ -58,6 +94,8 @@ namespace Castle.Windsor
 			_kernel = kernel;
 			_kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
 		}
+
+		#endregion
 
 		#region IWindsorContainer Members
 

@@ -12,32 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.CastleLanguage
+namespace Castle.Windsor.Configuration.Sources
 {
 	using System;
+	using System.IO;
+	using System.Xml;
+	using System.Configuration;
 
 	/// <summary>
-	/// Summary description for NodeBase.
+	/// 
 	/// </summary>
-	[Serializable]
-	public abstract class NodeBase
+	public class AppDomainConfigSource : StaticContentSource
 	{
-		private LexicalInfo _info;
-
-		public NodeBase()
+		public AppDomainConfigSource()
 		{
-		}
+			XmlNode node = (XmlNode) ConfigurationSettings.GetConfig("castle");
 
-		public NodeBase(LexicalInfo info)
-		{
-			LexicalInfo = info;
-		}
+			// Need to decide if this is going to be considered an error or not
+			if (node == null)
+			{
+				String message = String.Format(
+					"Could not find section 'castle' in the configuration file associated with this domain.");
+				throw new ConfigurationException(message);
+			}
 
-		public LexicalInfo LexicalInfo
-		{
-			get { return _info; }
-			set { _info = value; }
-		}
+			if (node == null) return;
 
+			// TODO: Check whether its CData section
+			_reader = new StringReader( node.OuterXml );
+		}
 	}
 }

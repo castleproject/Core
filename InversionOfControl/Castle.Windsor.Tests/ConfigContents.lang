@@ -1,0 +1,23 @@
+// My Config File
+
+container:
+
+  facilities:
+    
+    facility:
+      id: testidengine
+
+    facility:
+      id: testidengine2
+      value: "
+      value within CDATA section
+      "
+
+  
+  components: 
+
+    component: 
+      id: testidcomponent1
+      
+    component: 
+      id: testidcomponent2

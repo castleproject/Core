@@ -12,23 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.AppDomain
+namespace Castle.Windsor.Configuration.Interpreters
 {
-	using System.Configuration;
+	using System;
 
-	/// <summary>
-	/// Implementation of <see cref="IConfigurationSectionHandler"/>.
-	/// Do not support configuration inheritance.
-	/// </summary>
-	public class CastleSectionHandler : IConfigurationSectionHandler
+	using Castle.MicroKernel;
+
+
+	public class ConfigLanguageInterpreter : AbstractInterpreter
 	{
-		public CastleSectionHandler()
+		public ConfigLanguageInterpreter()
 		{
 		}
 
-		public object Create(object parent, object configContext, System.Xml.XmlNode section)
+		public ConfigLanguageInterpreter(String filename) : base(filename)
 		{
-			return section;
+		}
+
+		public ConfigLanguageInterpreter(IConfigurationSource source) : base(source)
+		{
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="store"></param>
+		public override void Process(IConfigurationStore store)
+		{
+			
 		}
 	}
 }

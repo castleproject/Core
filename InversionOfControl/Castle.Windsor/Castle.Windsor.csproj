@@ -413,7 +413,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\AppDomain\AppDomainConfigurationStore.cs"
+                    RelPath = "Configuration\CascadeConfigurationStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\IConfigurationInterpreter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\IConfigurationSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -423,83 +433,108 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\AssemblyReference.cs"
+                    RelPath = "Configuration\Interpreters\AbstractInterpreter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\ConfigurationDefinition.cs"
+                    RelPath = "Configuration\Interpreters\ConfigLanguageInterpreter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\ImportDirective.cs"
+                    RelPath = "Configuration\Interpreters\XmlInterpreter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\ImportDirectiveCollection.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\AssemblyReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\IndentTokenStream.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\ConfigurationDefinition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\langlexer.g"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\ImportDirective.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\Interpreters\CastleLanguage\ImportDirectiveCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\Interpreters\CastleLanguage\IndentTokenStream.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\Interpreters\CastleLanguage\langlexer.g"
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\langparser.g"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\langparser.g"
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\LexicalInfo.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\LexicalInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\NodeBase.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\NodeBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\NodeCollectionBase.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\NodeCollectionBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\WindsorConfLanguageLexer.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\WindsorConfLanguageLexer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\WindsorConfLanguageLexerTokenTypes.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\WindsorConfLanguageLexerTokenTypes.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\WindsorConfLanguageLexerTokenTypes.txt"
-                    BuildAction = "None"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\WindsorConfLanguageLexerTokenTypes.txt"
+                    BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\WindsorLanguageParser.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\WindsorLanguageParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\windsorLanguageTokenTypes.cs"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\windsorLanguageTokenTypes.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\windsorLanguageTokenTypes.txt"
-                    BuildAction = "None"
+                    RelPath = "Configuration\Interpreters\CastleLanguage\windsorLanguageTokenTypes.txt"
+                    BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Configuration\Xml\XmlConfigurationStore.cs"
+                    RelPath = "Configuration\Sources\AppDomainConfigSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\Sources\ExternalFileSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\Sources\StaticContentSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

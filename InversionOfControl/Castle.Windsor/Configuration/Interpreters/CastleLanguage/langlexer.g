@@ -1,7 +1,7 @@
 options
 {
 	language = "CSharp";
-	namespace = "Castle.Windsor.Configuration.CastleLanguage";
+	namespace = "Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal";
 }
 class WindsorConfLanguageLexer extends Lexer;
 options 
@@ -12,18 +12,29 @@ options
     filter=true;
 }
 
+{
+	int implicitLineJoiningLevel = 0;
+}
+
 // Keywords
 COLON      : ':'  ;
 COMMA      : ','  ;
-INHERITS   : '<'  ;
 DOT        : '.'  ;
+LLITERAL   : '<' { implicitLineJoiningLevel++; } ;
+RLITERAL   : '>' { implicitLineJoiningLevel--; } ;
 
 SL_COMMENT : 
 	"//" 
 	(~'\n')* '\n'
 	{ $setType(Token.SKIP); newline(); }
 	;
-  
+
+STRING_LITERAL : 
+    '"'!
+	(~('"'|'\n'))* '"'!
+	;
+
+
 /** 
  *  Grab everything before a real symbol.  Then if newline, kill it
  *  as this is a blank line.  If whitespace followed by comment, kill it
@@ -41,17 +52,24 @@ LEADING_WS
         |	'\t' { spaces += 8; spaces -= (spaces % 8); }
         )+
         {
-                // make a string of n spaces where n is column number - 1
-                char[] indentation = new char[spaces];
-                for (int i=0; i<spaces; i++) {
-                    indentation[i] = ' ';
-                }
-                String s = new String(indentation);
-                $setText(s);
-        }
-
+            if ( implicitLineJoiningLevel>0 ) 
+            {
+                // ignore ws if nested
+                $setType(Token.SKIP);
+            }
+            else
+			{
+				// make a string of n spaces where n is column number - 1
+				char[] indentation = new char[spaces];
+				for (int i=0; i<spaces; i++) {
+					indentation[i] = ' ';
+				}
+				String s = new String(indentation);
+				$setText(s);
+			}
+		}
         // kill trailing newline or comment
-        (   ('\r')? '\n' {newline();}
+        (  {implicitLineJoiningLevel==0}? ('\r')? '\n' {newline();}
             {$setType(Token.SKIP);}
 
         |   // if comment, then only thing on a line; kill so we
@@ -72,11 +90,13 @@ NEWLINE
     int startCol = getColumn();
 }
     :   (options{greedy=true;}:('\r')? '\n' {newline();})+
-        {if ( startCol==1  )
+        {
+        if ( startCol==1 || implicitLineJoiningLevel>0 )
             $setType(Token.SKIP);
         }
     ;
 
 WS  :   (' '|'\t')+ {$setType(Token.SKIP);}
     ;
+
 

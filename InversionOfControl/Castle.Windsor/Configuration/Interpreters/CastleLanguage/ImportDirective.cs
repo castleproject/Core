@@ -12,30 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.CastleLanguage
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 {
 	using System;
 
-	using Castle.Model.Configuration;
-
-
-	public class ConfigurationDefinition
+	/// <summary>
+	/// Summary description for ImportDirective.
+	/// </summary>
+	public class ImportDirective : NodeBase
 	{
-		private ImportDirectiveCollection _imports = new ImportDirectiveCollection();
-		private MutableConfiguration _root = new MutableConfiguration("root");
+		private String _namespace;
+		private AssemblyReference _assembly;
 
-		public ConfigurationDefinition()
+		public ImportDirective(LexicalInfo lexInfo, String ns) : base(lexInfo)
 		{
+			Namespace = ns;
 		}
 
-		public ImportDirectiveCollection Imports
+		public String Namespace
 		{
-			get { return _imports; }
+			get { return _namespace; }
+			set { _namespace = value; }
 		}
 
-		public MutableConfiguration Root
+		public AssemblyReference AssemblyReference
 		{
-			get { return _root; }
+			get { return _assembly; }
+			set { _assembly = value; }
 		}
 	}
 }

@@ -120,6 +120,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "ConfigContents.lang"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "InterceptorsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

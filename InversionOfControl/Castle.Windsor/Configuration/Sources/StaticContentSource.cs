@@ -12,31 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.CastleLanguage
+namespace Castle.Windsor.Configuration.Sources
 {
 	using System;
-	using System.Reflection;
+	using System.IO;
 
-	[Serializable]
-	public class AssemblyReference : NodeBase
+	/// <summary>
+	/// 
+	/// </summary>
+	public class StaticContentSource : IConfigurationSource
 	{
-		private String _assemblyName;
-		private Assembly _assembly;
+		protected StringReader _reader;
 
-		public AssemblyReference( LexicalInfo info, String assemblyName ) : base(info)
+		public StaticContentSource(String contents)
 		{
-			_assemblyName = assemblyName;
+			_reader = new StringReader(contents);
 		}
 
-		public String AssemblyName
+		protected StaticContentSource()
 		{
-			get { return _assemblyName; }
 		}
 
-		public Assembly ResolvedAssembly
+		#region IConfigurationSource Members
+
+		public TextReader Contents
 		{
-			get { return _assembly; }
-			set { _assembly = value; }
+			get { return _reader; }
+		}
+
+		#endregion
+
+		public void Dispose()
+		{
+			_reader = null;
 		}
 	}
 }

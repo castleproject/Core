@@ -12,23 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.AppDomain
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 {
-	using System.Configuration;
+	using System;
 
-	/// <summary>
-	/// Implementation of <see cref="IConfigurationSectionHandler"/>.
-	/// Do not support configuration inheritance.
-	/// </summary>
-	public class CastleSectionHandler : IConfigurationSectionHandler
+	using Castle.Model.Configuration;
+
+
+	public class ConfigurationDefinition
 	{
-		public CastleSectionHandler()
+		private ImportDirectiveCollection _imports = new ImportDirectiveCollection();
+		private MutableConfiguration _root = new MutableConfiguration("root");
+
+		public ConfigurationDefinition()
 		{
 		}
 
-		public object Create(object parent, object configContext, System.Xml.XmlNode section)
+		public ImportDirectiveCollection Imports
 		{
-			return section;
+			get { return _imports; }
+		}
+
+		public MutableConfiguration Root
+		{
+			get { return _root; }
 		}
 	}
 }

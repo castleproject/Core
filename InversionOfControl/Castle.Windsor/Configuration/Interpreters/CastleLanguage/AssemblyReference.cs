@@ -12,16 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.CastleLanguage
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 {
 	using System;
-	using System.Collections;
+	using System.Reflection;
 
-	/// <summary>
-	/// Summary description for NodeCollectionBase.
-	/// </summary>
 	[Serializable]
-	public abstract class NodeCollectionBase : CollectionBase
+	public class AssemblyReference : NodeBase
 	{
+		private String _assemblyName;
+		private Assembly _assembly;
+
+		public AssemblyReference( LexicalInfo info, String assemblyName ) : base(info)
+		{
+			_assemblyName = assemblyName;
+		}
+
+		public String AssemblyName
+		{
+			get { return _assemblyName; }
+		}
+
+		public Assembly ResolvedAssembly
+		{
+			get { return _assembly; }
+			set { _assembly = value; }
+		}
 	}
 }

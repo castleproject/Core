@@ -12,23 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.AppDomain
+namespace Castle.Windsor.Configuration
 {
-	using System.Configuration;
+	using System;
+
+	using Castle.MicroKernel.SubSystems.Configuration;
 
 	/// <summary>
-	/// Implementation of <see cref="IConfigurationSectionHandler"/>.
-	/// Do not support configuration inheritance.
+	/// Enables a hierarchical configuration store. 
 	/// </summary>
-	public class CastleSectionHandler : IConfigurationSectionHandler
+	public class CascadeConfigurationStore : DefaultConfigurationStore
 	{
-		public CastleSectionHandler()
+		public CascadeConfigurationStore(
+			IConfigurationInterpreter parent, IConfigurationInterpreter child)
 		{
-		}
+			if (parent == null) throw new ArgumentNullException("parent");
+			if (child == null) throw new ArgumentNullException("child");
 
-		public object Create(object parent, object configContext, System.Xml.XmlNode section)
-		{
-			return section;
+			/// The parent configuration add the main entries.
+			parent.Process( this );
+
+			// The child may overwrite the config entries.
+			child.Process( this );
 		}
 	}
 }

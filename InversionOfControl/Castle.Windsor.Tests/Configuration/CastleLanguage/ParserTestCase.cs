@@ -21,7 +21,7 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 
 	using Castle.Model.Configuration;
 
-	using Castle.Windsor.Configuration.CastleLanguage;
+	using Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal;
 
 
 	[TestFixture]
@@ -43,6 +43,47 @@ namespace Castle.Windsor.Tests.Configuration.CastleLanguage
 			Assert.IsNotNull(conf.Root);
 			Assert.IsNotNull(conf.Root.Children["container"]);
 			Assert.AreEqual("value", conf.Root.Children["container"].Attributes["item"]);
+			Assert.AreEqual("value2", conf.Root.Children["container"].Attributes["item2"]);
+			Assert.AreEqual(2, conf.Root.Children["container"].Attributes.Count);
+		}
+
+		[Test]
+		public void StringLiterals()
+		{
+			String contents = "container: \r\n  item: \"value super value\"\r\n  item2: value2\r\n";
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual("value super value", conf.Root.Children["container"].Attributes["item"]);
+			Assert.AreEqual("value2", conf.Root.Children["container"].Attributes["item2"]);
+			Assert.AreEqual(2, conf.Root.Children["container"].Attributes.Count);
+		}
+
+		[Test]
+		[Ignore("Need to fix this")]
+		public void MultipleLinesLiterals()
+		{
+			String contents = "container: \r\n  item: <  value\r\n super\r\n value\r\n>\r\n  item2: value2\r\n";
+
+			WindsorConfLanguageLexer l = 
+				new WindsorConfLanguageLexer(new StringReader(contents));
+
+			WindsorLanguageParser p = new WindsorLanguageParser(new IndentTokenStream(l));
+			
+			ConfigurationDefinition conf = p.start();
+			Assert.IsNotNull(conf);
+			Assert.AreEqual(0, conf.Imports.Count);
+			Assert.IsNotNull(conf.Root);
+			Assert.IsNotNull(conf.Root.Children["container"]);
+			Assert.AreEqual("value super value", conf.Root.Children["container"].Attributes["item"]);
 			Assert.AreEqual("value2", conf.Root.Children["container"].Attributes["item2"]);
 			Assert.AreEqual(2, conf.Root.Children["container"].Attributes.Count);
 		}

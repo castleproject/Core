@@ -12,23 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Windsor.Configuration.AppDomain
+namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal
 {
-	using System.Configuration;
+	using System;
 
 	/// <summary>
-	/// Implementation of <see cref="IConfigurationSectionHandler"/>.
-	/// Do not support configuration inheritance.
+	/// Summary description for NodeBase.
 	/// </summary>
-	public class CastleSectionHandler : IConfigurationSectionHandler
+	[Serializable]
+	public abstract class NodeBase
 	{
-		public CastleSectionHandler()
+		private LexicalInfo _info;
+
+		public NodeBase()
 		{
 		}
 
-		public object Create(object parent, object configContext, System.Xml.XmlNode section)
+		public NodeBase(LexicalInfo info)
 		{
-			return section;
+			LexicalInfo = info;
 		}
+
+		public LexicalInfo LexicalInfo
+		{
+			get { return _info; }
+			set { _info = value; }
+		}
+
 	}
 }

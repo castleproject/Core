@@ -18,8 +18,12 @@ namespace Castle.Windsor.Tests.Configuration
 
 	using NUnit.Framework;
 
+	using Castle.MicroKernel.SubSystems.Configuration;
+	
 	using Castle.Model.Configuration;
-	using Castle.Windsor.Configuration.AppDomain;
+
+	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Configuration.Sources;
 
 	/// <summary>
 	/// Summary description for AppDomainConfigurationStoreTestCase.
@@ -30,7 +34,9 @@ namespace Castle.Windsor.Tests.Configuration
 		[Test]
 		public void ProperDeserialization()
 		{
-			AppDomainConfigurationStore store = new AppDomainConfigurationStore();
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			XmlInterpreter interpreter = new XmlInterpreter( new AppDomainConfigSource() );
+			interpreter.Process(store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
 			Assert.AreEqual(2, store.GetComponents().Length);

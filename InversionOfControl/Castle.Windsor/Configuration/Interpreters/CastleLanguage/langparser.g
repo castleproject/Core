@@ -7,7 +7,7 @@ header
 options 
 {
 	language = "CSharp";
-	namespace = "Castle.Windsor.Configuration.CastleLanguage";
+	namespace = "Castle.Windsor.Configuration.Interpreters.CastleLanguage.Internal";
 }
 class WindsorLanguageParser extends Parser;
 options 
@@ -124,33 +124,40 @@ protected
 value returns [String value]
 	{
 		value = null; sbuilder.Length = 0;
-	}:			
-	id:ID			
-	{					
-		sbuilder.Append(id.getText());
-		value = sbuilder.ToString();
-	}
-	( 
-	    options 
-	    { greedy = true; }:
-	    (
-			DOT id2:ID 
-			{
-				sbuilder.Append('.');
-				sbuilder.Append(id2.getText());
-			}
-	    )
-	    |
-	    (
-			IN id3:ID
-			{
-				sbuilder.Append(" in ");
-				sbuilder.Append(id3.getText());
-			}
-	    )
-	)*
+	}:	
+	(		
+		valueToken:STRING_LITERAL
+		{
+			String val = valueToken.getText();
+			sbuilder.Append(val);
+		} |
+		id:ID			
+		{					
+			sbuilder.Append(id.getText());
+			value = sbuilder.ToString();
+		}
+		( 
+			options 
+			{ greedy = true; }:
+			(
+				DOT id2:ID 
+				{
+					sbuilder.Append('.');
+					sbuilder.Append(id2.getText());
+				}
+			)
+			|
+			(
+				IN id3:ID
+				{
+					sbuilder.Append(" in ");
+					sbuilder.Append(id3.getText());
+				}
+			)
+		)*
+	)
 	{
 	    value = sbuilder.ToString();
 	}
 	;
-
+	
