@@ -283,6 +283,16 @@ namespace Castle.DynamicProxy.Test
 			Assert.IsNotNull(proxy);
 		}
 
+		[Test]
+		public void ProxyingClassWithRefArg()
+		{
+			ClassWithRefType proxy = (ClassWithRefType) 
+				_generator.CreateClassProxy(
+				typeof(ClassWithRefType), new StandardInterceptor());
+
+			Assert.IsNotNull(proxy);
+		}
+
 		public class MyInterfaceProxy : StandardInterceptor
 		{
 			protected override void PreProceed(IInvocation invocation, params object[] args)

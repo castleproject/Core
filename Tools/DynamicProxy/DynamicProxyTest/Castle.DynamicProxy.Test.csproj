@@ -76,9 +76,19 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.XML"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
                     Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\bin\Castle.DynamicProxy.dll"
+                    Project = "{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -126,6 +136,16 @@
                 />
                 <File
                     RelPath = "Classes\ClassWithConstructors.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\ClassWithRefType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\ClassWithSByteEnum.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
