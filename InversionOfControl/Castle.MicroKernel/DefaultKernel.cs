@@ -119,6 +119,17 @@ namespace Castle.MicroKernel
 			RegisterHandler(key, handler);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		public virtual void AddCustomComponent( ComponentModel model )
+		{
+			RaiseComponentModelCreated(model);
+			IHandler handler = HandlerFactory.Create(model);
+			RegisterHandler(model.Name, handler);
+		}
+
 		public virtual bool RemoveComponent(String key)
 		{
 			return false;

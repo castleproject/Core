@@ -59,6 +59,12 @@ namespace Castle.MicroKernel
 		void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary extendedProperties );
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="model"></param>
+		void AddCustomComponent( ComponentModel model );
+
+		/// <summary>
 		/// Returns true if the specified component was 
 		/// found and could be removed (i.e. no other component depends on it)
 		/// </summary>

@@ -1,0 +1,161 @@
+[PackageForTheWeb]
+Version=2.0
+
+[Options]
+Title=Cassini
+Company=Microsoft Corporation
+CompanyEMail=aspforum@microsoft.com
+BasePath=C:\webnet\samples\Cassini
+ImportPath=
+UseRTF=2
+SaveFiles=0
+SubFolders=1
+ApplicationName=Cassini
+Description=Cassini Sample Web Server
+Comments=
+Notice=Copyright 2004 Microsoft Corporation
+Version=1.0
+OutputSpec=C:\webnet\samples\Cassini\Cassini.exe
+GUIDs=0
+Type=2
+Compress=1
+Sign=0
+Transfer=0
+Files=17
+
+[Engine]
+Setup=setup.exe
+
+[Web Page]
+Generate=1
+Template=
+MSClient=
+NClient=
+
+[Runtime]
+Welcome=C:\webnet\samples\Cassini\Welcome.rtf
+License=C:\webnet\samples\Cassini\EULA.rtf
+Prompt=
+Password=
+DefaultPath=c:\Cassini
+Language=English
+WindowStyle=0
+Options=33
+Execute=ReadMe.bat
+CmdLine=
+
+[Extension]
+Server=
+Calls=0
+
+[Code Signing]
+CompanyURL=
+SpecFile=
+KeyFile=
+Method=0
+
+; ~~~~~~~~~~ File Section ~~~~~~~~~~~
+[SubFolders]
+Count=0
+
+[File 1]
+Name=AssemblyInfo.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 2]
+Name=build.bat
+Path=C:\webnet\samples\Cassini\
+Flags=65537
+Disk=0
+
+[File 3]
+Name=ByteParser.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 4]
+Name=ByteString.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 5]
+Name=Cassini.snk
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 6]
+Name=CassiniWebServer.ico
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 7]
+Name=CassiniWebServerMain.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 8]
+Name=Connection.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 9]
+Name=EULA.rtf
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 10]
+Name=Host.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 11]
+Name=Messages.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 12]
+Name=ReadMe.bat
+Path=C:\webnet\samples\Cassini\
+Flags=65537
+Disk=0
+
+[File 13]
+Name=ReadMe.txt
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 14]
+Name=Request.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 15]
+Name=Server.cs
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 16]
+Name=Welcome.rtf
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
+
+[File 17]
+Name=Cassini.pfw
+Path=C:\webnet\samples\Cassini\
+Flags=1
+Disk=0
