@@ -34,8 +34,9 @@ namespace Castle.Facilities.ActiveRecord
 		private string _orderBy;
 		private string _where;
 
-		public HasManyAttribute()
+		public HasManyAttribute( Type mapType )
 		{
+			_mapType = mapType;
 		}
 
 		public Type MapType

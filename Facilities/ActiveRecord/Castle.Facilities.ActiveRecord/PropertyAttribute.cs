@@ -12,9 +12,23 @@ namespace Castle.Facilities.ActiveRecord
 		private string _update;
 		private string _insert;
 		private string _formula;
+		private string _length;
+		private string _notNull;
 
 		public PropertyAttribute()
 		{
+		}
+
+		public string NotNull
+		{
+			get { return _notNull; }
+			set { _notNull = value; }
+		}
+
+		public string Length
+		{
+			get { return _length; }
+			set { _length = value; }
 		}
 
 		public string Column

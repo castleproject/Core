@@ -40,10 +40,11 @@
 //		private string unsavedValueAttribute = "unsaved-value=\"{0}\" ";
 //		private string mapOpen = "<map name=\"{0}\" {1}>";
 //		private string mapClose = "</map>";
+//		private string listOpen = "<list name=\"{0}\" {1}>";
+//		private string listClose = "</list>";
 //		private string keyTag = "<key column=\"{0}\"/>";
 //		private string elementTag = "<element column=\"{0}\" type=\"{1}\"/>";
-//		private string indexOpen = "<index column=\"{0}\" {1}>";
-//		private string indexClose = "</index>";
+//		private string indexTag = "<index column=\"{0}\" {1} />";
 //		private string lazyAttribute = "lazy=\"{0}\" ";
 //		private string inverseAttribute = "inverse=\"{0}\" ";
 //		private string sortAttribute = "sort=\"{0}\" ";
@@ -132,11 +133,14 @@
 //					{
 //						if( hasmany.Key != null )
 //						{
-//							AddMapMapping( prop, hasmany, builder );
-//						}
-//						else if( hasmany.Index != null )
-//						{
-//							AddListMapping( prop, hasmany, builder );
+//							if( hasmany.Index != null )
+//							{
+//								AddListMapping( prop, hasmany, builder );
+//							}
+//							else
+//							{
+//								AddMapMapping( prop, hasmany, builder );
+//							}
 //						}
 //						else
 //						{
@@ -168,7 +172,52 @@
 //
 //		private void AddListMapping( PropertyInfo prop, HasManyAttribute hasmany, StringBuilder builder )
 //		{
-//			throw new NotImplementedException();
+//			string name = prop.Name;
+//			string table = ( hasmany.Table == null ? "" : String.Format( tableAttribute, hasmany.Table ) );
+//			string schema = ( hasmany.Schema == null ? "" : String.Format( schemaAttribute, hasmany.Schema ) );
+//			string lazy = ( hasmany.Lazy == null ? "" : String.Format( lazyAttribute, hasmany.Lazy ) );
+//			string inverse = ( hasmany.Inverse == null ? "" : String.Format( inverseAttribute, hasmany.Inverse ) );
+//			string cascade = ( hasmany.Cascade == null ? "" : String.Format( cascadeAttribute, hasmany.Cascade ) );
+//			string sort = ( hasmany.Sort == null ? "" : String.Format( sortAttribute, hasmany.Sort ) );
+//			string orderBy = ( hasmany.OrderBy == null ? "" : String.Format( orderByAttribute, hasmany.OrderBy ) );
+//			string where = ( hasmany.Where == null ? "" : String.Format( whereAttribute, hasmany.Where ) );
+//
+//			builder.AppendFormat( listOpen, name, table + schema + lazy + inverse + cascade + sort + orderBy + where );
+//
+//			Type otherType = hasmany.MapType;
+//			PropertyInfo elementProp = otherType.GetProperty( hasmany.Key );
+//			if( elementProp != null )
+//			{
+//				builder.AppendFormat( keyTag, hasmany.Key );
+//				PropertyInfo indexProp = otherType.GetProperty( hasmany.Index );
+//				if( indexProp != null )
+//				{
+//					string type = String.Format( typeAttribute, indexProp.Name );
+//					builder.AppendFormat( indexTag, hasmany.Index, type );
+//				}
+//				string column = null;
+//				object[] elementAttributes = elementProp.GetCustomAttributes( false );
+//				foreach( object attribute in elementAttributes )
+//				{
+//					if( attribute is PropertyAttribute )
+//					{
+//						column = ( attribute as PropertyAttribute ).Column;
+//					}
+//					else if( attribute is PrimaryKeyAttribute )
+//					{
+//						column = ( attribute as PrimaryKeyAttribute ).Column;
+//					}
+//					else if ( attribute is BelongsToAttribute )
+//					{
+//						column = ( attribute as BelongsToAttribute ).Column;
+//					}
+//				}
+//				if( column != null )
+//				{
+//					builder.AppendFormat( elementTag, column, otherType.Name );
+//				}
+//			}
+//			builder.Append( listClose );
 //		}
 //
 //		private void AddMapMapping( PropertyInfo prop, HasManyAttribute hasmany, StringBuilder builder )
@@ -189,18 +238,30 @@
 //			PropertyInfo elementProp = otherType.GetProperty( hasmany.Key );
 //			if( elementProp != null )
 //			{
+//				builder.AppendFormat( keyTag, hasmany.Key );
+//				string column = null;
 //				object[] elementAttributes = elementProp.GetCustomAttributes( false );
 //				foreach( object attribute in elementAttributes )
 //				{
-//					PropertyInfo columnProp = attribute.GetType().GetProperty( "Column" );
-//					if( columnProp != null )
+//					if( attribute is PropertyAttribute )
 //					{
-//						string column = columnProp.getv
+//						column = ( attribute as PropertyAttribute ).Column;
+//					}
+//					else if( attribute is PrimaryKeyAttribute )
+//					{
+//						column = ( attribute as PrimaryKeyAttribute ).Column;
+//					}
+//					else if ( attribute is BelongsToAttribute )
+//					{
+//						column = ( attribute as BelongsToAttribute ).Column;
 //					}
 //				}
-//				builder.AppendFormat( keyTag, hasmany.Key );
-//				builder.AppendFormat( elementTag, null );
+//				if( column != null )
+//				{
+//					builder.AppendFormat( elementTag, column, otherType.Name );
+//				}
 //			}
+//			builder.Append( mapClose );
 //		}
 //
 //		private void AddManyToOneMapping( PropertyInfo prop, BelongsToAttribute belongs, StringBuilder builder )
@@ -222,10 +283,12 @@
 //			string update = ( property.Update == null ? "" : String.Format( updateAttribute, property.Update ) );
 //			string insert = ( property.Insert == null ? "" : String.Format( insertAttribute, property.Insert ) );
 //			string formula = ( property.Formula == null ? "" : String.Format( formulaAttribute, property.Formula ) );
+//			string length = ( property.Length == null ? "" : String.Format( lengthAttribute, property.Length ) );
+//			string notNull = ( property.NotNull == null ? "" : String.Format( notNullAttribute, property.NotNull ) );
 //			string name = String.Format( nameAttribute, prop.Name );
 //			string type = String.Format( typeAttribute, prop.PropertyType.Name );
 //	
-//			builder.AppendFormat( propertyOpen, name, type + column + update + insert + formula );
+//			builder.AppendFormat( propertyOpen, name, type + column + update + insert + formula + length + notNull );
 //			builder.Append( propertyClose );
 //		}
 //
