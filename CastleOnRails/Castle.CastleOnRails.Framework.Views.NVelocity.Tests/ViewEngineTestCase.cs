@@ -38,14 +38,14 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 			_viewEngine.ViewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
 				"../Castle.CastleOnRails.Framework.Views.NVelocity.Tests/views");
 			
-			_engine = new ProcessEngine("myvirdir", factory, _viewEngine);
+			_engine = new ProcessEngine(factory, _viewEngine);
 		}
 
 		[Test]
 		public void SimpleRequest()
 		{
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/home/index.rails");
+				RailsEngineContextImpl("/home/index.rails");
 
 			_engine.Process( context );
 
@@ -56,7 +56,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 		public void SimpleRequestWithDifferentView()
 		{
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/home/other.rails");
+				RailsEngineContextImpl("/home/other.rails");
 
 			_engine.Process( context );
 
@@ -67,7 +67,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 		public void PropertyBag()
 		{
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/home/bag.rails");
+				RailsEngineContextImpl("/home/bag.rails");
 
 			_engine.Process( context );
 
@@ -78,13 +78,13 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 		public void Layout()
 		{
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/layout/index.rails");
+				RailsEngineContextImpl("/layout/index.rails");
 
 			_engine.Process( context );
 
 			Assert.AreEqual( "My layout\r\n\r\nindex contents\r\n\r\nFooter", context.Output );
 
-			context = new RailsEngineContextImpl("/myvirdir/layout/save.rails");
+			context = new RailsEngineContextImpl("/layout/save.rails");
 
 			_engine.Process( context );
 

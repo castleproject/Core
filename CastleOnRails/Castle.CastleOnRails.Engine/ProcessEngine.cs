@@ -1,3 +1,4 @@
+using System.Web;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,29 +27,22 @@ namespace Castle.CastleOnRails.Engine
 	/// </summary>
 	public class ProcessEngine
 	{
-		private String _virtualRootDir;
 		private IControllerFactory _controllerFactory;
 		private IViewEngine _viewEngine;
 		private IFilterFactory _filterFactory;
 
-		public ProcessEngine(String virtualRootDir, IControllerFactory controllerFactory, 
+		public ProcessEngine(IControllerFactory controllerFactory, 
 			IViewEngine viewEngine) : 
-			this(virtualRootDir, controllerFactory, viewEngine, new DefaultFilterFactory())
+			this(controllerFactory, viewEngine, new DefaultFilterFactory())
 		{
 		}
 
-		public ProcessEngine(String virtualRootDir, IControllerFactory controllerFactory, 
+		public ProcessEngine(IControllerFactory controllerFactory, 
 			IViewEngine viewEngine, IFilterFactory filterFactory)
 		{
-			_virtualRootDir = virtualRootDir;
 			_controllerFactory = controllerFactory;
 			_viewEngine = viewEngine;
 			_filterFactory = filterFactory;
-		}
-
-		public String VirtualRootDir
-		{
-			get { return _virtualRootDir; }
 		}
 
 		public IControllerFactory ControllerFactory
@@ -104,7 +98,15 @@ namespace Castle.CastleOnRails.Engine
 		/// <returns></returns>
 		protected virtual UrlInfo ExtractUrlInfo(IRailsEngineContext context)
 		{
-			return UrlTokenizer.ExtractInfo(context.Url, VirtualRootDir);
+			string vdir = null;
+
+			//Null is Testing mode
+			if (HttpContext.Current != null)
+			{
+				vdir = HttpContext.Current.Request.ApplicationPath;
+			}
+
+			return UrlTokenizer.ExtractInfo(context.Url, vdir);
 		}
 	}
 }

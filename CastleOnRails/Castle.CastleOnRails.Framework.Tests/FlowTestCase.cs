@@ -35,7 +35,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			IControllerFactory factory = new FakeControllerFactory();
 
 			_viewEngine = new FakeViewEngine();
-			_engine = new ProcessEngine("myvirdir", factory, _viewEngine);
+			_engine = new ProcessEngine(factory, _viewEngine);
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			_viewEngine.AddView("home", "index", "hello world!");
 
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/home/index.rails");
+				RailsEngineContextImpl("/home/index.rails");
 
 			_engine.Process( context );
 
@@ -58,7 +58,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			_viewEngine.AddView("home", "display", "hello from display");
 
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/home/other.rails");
+				RailsEngineContextImpl("/home/other.rails");
 
 			_engine.Process( context );
 

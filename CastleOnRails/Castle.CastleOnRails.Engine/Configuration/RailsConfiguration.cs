@@ -24,7 +24,6 @@ namespace Castle.CastleOnRails.Engine.Configuration
 		private String _customControllerFactory;
 		private String _customFilterFactory;
 		private String _customEngineTypeName;
-		private String _VirtualRootDir;
 
 		public RailsConfiguration()
 		{
@@ -51,12 +50,6 @@ namespace Castle.CastleOnRails.Engine.Configuration
 		{
 			get { return _customFilterFactory; }
 			set { _customFilterFactory = value; }
-		}
-
-		public String VirtualRootDir
-		{
-			get { return _VirtualRootDir; }
-			set { _VirtualRootDir = value; }
 		}
 
 		public String CustomEngineTypeName

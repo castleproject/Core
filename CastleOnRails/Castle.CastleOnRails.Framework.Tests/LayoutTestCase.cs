@@ -32,7 +32,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			IControllerFactory factory = new FakeControllerFactory();
 
 			_viewEngine = new FakeViewEngineWithLayoutSupport();
-			_engine = new ProcessEngine("myvirdir", factory, _viewEngine);
+			_engine = new ProcessEngine(factory, _viewEngine);
 		}
 
 		[Test]
@@ -44,15 +44,15 @@ namespace Castle.CastleOnRails.Framework.Tests
 			_viewEngine.AddView("layouts", "general", "My layout! follows the contents {0}");
 
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/layout/index.rails");
+				RailsEngineContextImpl("/layout/index.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "My layout! follows the contents index view contents", context.Output );
 
-			context = new RailsEngineContextImpl("/myvirdir/layout/save.rails");
+			context = new RailsEngineContextImpl("/layout/save.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "My layout! follows the contents save view contents", context.Output );
 
-			context = new RailsEngineContextImpl("/myvirdir/layout/update.rails");
+			context = new RailsEngineContextImpl("/layout/update.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "My layout! follows the contents update view contents", context.Output );
 		}

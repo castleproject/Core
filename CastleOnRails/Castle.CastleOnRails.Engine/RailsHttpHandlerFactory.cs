@@ -49,8 +49,7 @@ namespace Castle.CastleOnRails.Engine
 		public virtual IHttpHandler GetHandler(HttpContext context, 
 			string requestType, String url, String pathTranslated)
 		{
-			return new RailsHttpHandler(_config.VirtualRootDir, url, 
-				_viewEngine, _controllerFactory, _filterFactory);
+			return new RailsHttpHandler(url, _viewEngine, _controllerFactory, _filterFactory);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)

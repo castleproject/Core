@@ -134,6 +134,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "default.htm"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "global.asax"
                     BuildAction = "Content"
                 />

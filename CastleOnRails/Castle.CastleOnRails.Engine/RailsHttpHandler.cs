@@ -32,9 +32,9 @@ namespace Castle.CastleOnRails.Engine
 	{
 		private String _url;
 
-		public RailsHttpHandler( String virtualRootDir, String url, IViewEngine viewEngine, 
+		public RailsHttpHandler( String url, IViewEngine viewEngine, 
 			IControllerFactory controllerFactory, IFilterFactory filterFactory)
-			: base(virtualRootDir, controllerFactory, viewEngine, filterFactory)
+			: base(controllerFactory, viewEngine, filterFactory)
 		{
 			_url = url;
 		}

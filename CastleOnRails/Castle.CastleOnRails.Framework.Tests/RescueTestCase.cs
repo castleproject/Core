@@ -32,7 +32,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			IControllerFactory factory = new FakeControllerFactory();
 
 			_viewEngine = new FakeViewEngine();
-			_engine = new ProcessEngine(null, factory, _viewEngine);
+			_engine = new ProcessEngine(factory, _viewEngine);
 		}
 
 		[Test]

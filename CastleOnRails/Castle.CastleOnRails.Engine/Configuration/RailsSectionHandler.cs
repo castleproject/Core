@@ -118,13 +118,6 @@ namespace Castle.CastleOnRails.Engine.Configuration
 
 		private void ProcessControllersNode(XmlNode controllersNode, RailsConfiguration config)
 		{
-			XmlAttribute virtualRootDir = controllersNode.Attributes["virtualRootDir"];
-	
-			if (virtualRootDir != null)
-			{
-				config.VirtualRootDir = virtualRootDir.Value;
-			}
-	
 			foreach(XmlNode node in controllersNode.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;

@@ -34,7 +34,7 @@ namespace Castle.CastleOnRails.Framework.Internal
 			// Strip the virtualDirectory from the Url
 			if (virtualDirectory != null)
 			{
-				virtualDirectory = virtualDirectory.ToLower();
+				virtualDirectory = virtualDirectory.ToLower().Substring(1);
 
 				if (!url.StartsWith(virtualDirectory))
 				{

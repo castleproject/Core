@@ -32,7 +32,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 			IControllerFactory factory = new FakeControllerFactory();
 
 			_viewEngine = new FakeViewEngine();
-			_engine = new ProcessEngine("myvirdir", factory, _viewEngine);
+			_engine = new ProcessEngine(factory, _viewEngine);
 		}
 
 		[Test]
@@ -44,17 +44,17 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 			// Non filtered action
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/filtered/index.rails");
+				RailsEngineContextImpl("/filtered/index.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "index view contents", context.Output );
 
 			// Filtered action
-			context = new RailsEngineContextImpl("/myvirdir/filtered/save.rails");
+			context = new RailsEngineContextImpl("/filtered/save.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "(before)(after)save view contents", context.Output );
 
 			// Filtered action
-			context = new RailsEngineContextImpl("/myvirdir/filtered/update.rails");
+			context = new RailsEngineContextImpl("/filtered/update.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "(before)(after)update view contents", context.Output );
 		}
@@ -68,17 +68,17 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 			// Non filtered action
 			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/myvirdir/filtered2/index.rails");
+				RailsEngineContextImpl("/filtered2/index.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "index view contents", context.Output );
 
 			// Filtered action
-			context = new RailsEngineContextImpl("/myvirdir/filtered2/save.rails");
+			context = new RailsEngineContextImpl("/filtered2/save.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "(before)save view contents", context.Output );
 
 			// Filtered action
-			context = new RailsEngineContextImpl("/myvirdir/filtered2/update.rails");
+			context = new RailsEngineContextImpl("/filtered2/update.rails");
 			_engine.Process( context );
 			Assert.AreEqual( "(before)update view contents", context.Output );
 		}

@@ -78,9 +78,11 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 			childPage.ProcessRequest(httpContext);
 
+			//Checks if its only returning from a inner process invocation
+			
 			controller.PostSendView(childPage);
 
-			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);
+			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);		
 		}
 
 		#endregion
@@ -93,8 +95,12 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 				{
 					byte[] contents = RestoreFilter(httpContext.Response);
 
-					httpContext.Items.Add("rails.contents", contents);
-					httpContext.Items.Add("rails.child", childPage);
+					if (!Convert.ToBoolean(httpContext.Items["rails.processed"]))
+					{
+						httpContext.Items.Add("rails.contents", contents);
+						httpContext.Items.Add("rails.child", childPage);
+						httpContext.Items["rails.processed"] = true;
+					}
 
 					masterHandler.ProcessRequest(httpContext);
 				}
