@@ -19,6 +19,9 @@ Version 1.0.4
 Version 1.0.5
 - Fix sbyte enums
 
+Version 1.0.6
+- Applied patch from Corneliu I. Tusnea
+
 
 
 
