@@ -16,15 +16,39 @@ namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
+	/// <summary>
+	/// Enum (flag) to indicate when the filter should 
+	/// or is invoked.
+	/// </summary>
 	[Flags]
 	public enum ExecuteEnum
 	{
+		/// <summary>
+		/// The filter is being invoked before the action
+		/// </summary>
 		Before = 0x01,
+		/// <summary>
+		/// The filter is being invoked after the action
+		/// </summary>
 		After = 0x02
 	}
 
+	/// <summary>
+	/// Dictates the contract for filters. Implementors 
+	/// should use filter to perform any logic before and/or
+	/// after the action invocation.
+	/// </summary>
 	public interface IFilter
 	{
+		/// <summary>
+		/// Implementors should perform they filter logic and
+		/// return <c>true</c> if the action should be processed.
+		/// </summary>
+		/// <param name="exec">When this filter is being invoked</param>
+		/// <param name="context">Current context</param>
+		/// <param name="controller">The controller instance</param>
+		/// <returns><c>true</c> if the action 
+		/// should be invoked, otherwise <c>false</c></returns>
 		bool Perform( ExecuteEnum exec, IRailsEngineContext context, Controller controller );
 	}
 }

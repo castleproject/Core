@@ -24,6 +24,11 @@ namespace Castle.CastleOnRails.WindsorExtension
 	using Castle.CastleOnRails.Framework.Internal.Graph;
 
 
+	/// <summary>
+	/// Custom implementation of <see cref="IControllerFactory"/>
+	/// that uses the WindsorContainer to obtain the 
+	/// controller instances.
+	/// </summary>
 	public class WindsorControllerFactory : IControllerFactory
 	{
 		#region IControllerFactory

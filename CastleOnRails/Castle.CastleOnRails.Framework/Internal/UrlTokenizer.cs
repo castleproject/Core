@@ -17,7 +17,8 @@ namespace Castle.CastleOnRails.Framework.Internal
 	using System;
 
 	/// <summary>
-	/// Summary description for UrlTokenizer.
+	/// Extracts the information from a Url Path into
+	/// area, controller name and action.
 	/// </summary>
 	public sealed class UrlTokenizer
 	{

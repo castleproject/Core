@@ -21,7 +21,12 @@ namespace Castle.CastleOnRails.WindsorExtension
 	using Castle.CastleOnRails.Framework;
 	using Castle.CastleOnRails.Framework.Internal;
 
-
+	/// <summary>
+	/// Custom implementation of <see cref="IFilterFactory"/>
+	/// that uses the WindsorContainer to obtain <see cref="IFilter"/>
+	/// instances, and, if not available, uses the default implementation
+	/// of <see cref="IFilterFactory"/>.
+	/// </summary>
 	public class WindsorFilterFactory : DefaultFilterFactory
 	{
 		public override IFilter Create(Type filterType)

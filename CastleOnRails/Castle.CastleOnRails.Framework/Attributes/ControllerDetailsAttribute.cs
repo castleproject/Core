@@ -17,7 +17,8 @@ namespace Castle.CastleOnRails.Framework
 	using System;
 
 	/// <summary>
-	/// Summary description for ControllerDetailsAttribute.
+	/// Decorates a controller with a different name
+	/// and optionaly an area which the controller belongs.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]
 	public class ControllerDetailsAttribute : Attribute
@@ -25,20 +26,33 @@ namespace Castle.CastleOnRails.Framework
 		private String _name;
 		private String _area = String.Empty;
 
+		/// <summary>
+		/// Constructs a ControllerDetailsAttribute
+		/// </summary>
 		public ControllerDetailsAttribute()
 		{
 		}
 
+		/// <summary>
+		/// Constructs a ControllerDetailsAttribute
+		/// with a name for the controller.
+		/// </summary>
 		public ControllerDetailsAttribute(String name)
 		{
 			_name = name;
 		}
 
+		/// <summary>
+		/// The controller's name
+		/// </summary>
 		public String Name
 		{
 			get { return _name; }
 		}
 
+		/// <summary>
+		/// The controller's area
+		/// </summary>
 		public String Area
 		{
 			get { return _area; }

@@ -19,6 +19,11 @@ namespace Castle.CastleOnRails.Engine
 	using Castle.CastleOnRails.Framework;
 	using Castle.CastleOnRails.Framework.Internal;
 
+	/// <summary>
+	/// Core engine. Performs the base work or the
+	/// framework, processing the URL and dispatching 
+	/// the execution to the controller.
+	/// </summary>
 	public class ProcessEngine
 	{
 		private String _virtualRootDir;
@@ -61,6 +66,13 @@ namespace Castle.CastleOnRails.Engine
 			get { return _filterFactory; }
 		}
 
+		/// <summary>
+		/// Performs the base work of Castle on Rails. Extracts 
+		/// the information from the URL, obtain the controller 
+		/// that matches this information and dispatch the execution 
+		/// to it.
+		/// </summary>
+		/// <param name="context"></param>
 		public virtual void Process( IRailsEngineContext context )
 		{
 			UrlInfo info = ExtractUrlInfo(context);
@@ -85,6 +97,11 @@ namespace Castle.CastleOnRails.Engine
 			}
 		}
 
+		/// <summary>
+		/// Can be overriden so new semantics can be supported.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
 		protected virtual UrlInfo ExtractUrlInfo(IRailsEngineContext context)
 		{
 			return UrlTokenizer.ExtractInfo(context.Url, VirtualRootDir);

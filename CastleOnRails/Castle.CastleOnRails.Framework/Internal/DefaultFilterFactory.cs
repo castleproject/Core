@@ -16,6 +16,9 @@ namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Standard implementation of <see cref="IFilterFactory"/>.
+	/// </summary>
 	public class DefaultFilterFactory : IFilterFactory
 	{
 		public virtual IFilter Create(Type filterType)

@@ -21,13 +21,13 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	using System.Collections;
 	using System.Reflection;
 
+	/// <summary>
+	/// Default implementation of a <see cref="IViewEngine"/>.
+	/// Uses ASP.Net WebForms as views.
+	/// </summary>
 	public class AspNetViewEngine : IViewEngine
 	{
 		private String _viewRootDir;
-
-		public AspNetViewEngine()
-		{
-		}
 
 		#region IViewEngine
 
@@ -37,6 +37,13 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 			set { _viewRootDir = value; }
 		}
 
+		/// <summary>
+		/// Obtains the aspx Page from the view name dispatch
+		/// its execution using the standard ASP.Net API.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="viewName"></param>
 		public void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			if (!Path.IsPathRooted(_viewRootDir))
@@ -67,6 +74,13 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 			controller.PostSendView(childPage);
 
+			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);
+		}
+
+		#endregion
+
+		private void ProcessLayoutIfNeeded(Controller controller, HttpContext httpContext, IHttpHandler childPage, Page masterHandler)
+		{
 			if (controller.LayoutName != null)
 			{
 				if (httpContext.Response.StatusCode == 200)
@@ -85,20 +99,28 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 			}
 		}
 
-		#endregion
 
 		private void WriteBuffered(HttpResponse response)
 		{
-//			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
-//			byte[] buffer = filter.GetBuffer();
-//			response.OutputStream.Write( buffer, 0, buffer.Length );
+			response.Flush();
+
+			// Restores the original stream
+			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
+			response.Filter = filter.OriginalStream;
+			
+			// Writes the buffered contents
+			byte[] buffer = filter.GetBuffer();
+			response.OutputStream.Write(buffer, 0, buffer.Length);
 		}
 
 		private byte[] RestoreFilter(HttpResponse response)
 		{
 			response.Flush();
+
+			// Restores the original stream
 			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
 			response.Filter = filter.OriginalStream;
+
 			return filter.GetBuffer();
 		}
 

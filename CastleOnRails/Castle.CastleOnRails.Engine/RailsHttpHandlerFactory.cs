@@ -24,6 +24,11 @@ namespace Castle.CastleOnRails.Engine
 
 	using Castle.CastleOnRails.Engine.Configuration;
 
+	/// <summary>
+	/// Coordinates the creation of new <see cref="RailsHttpHandler"/> 
+	/// and uses the configuration to obtain the correct factories 
+	/// instances.
+	/// </summary>
 	public class RailsHttpHandlerFactory : IHttpHandlerFactory
 	{
 		private RailsConfiguration _config;

@@ -16,6 +16,10 @@ namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Utilities methods to inspect the controller Type
+	/// and gathers its name and area.
+	/// </summary>
 	public abstract class ControllerInspectionUtil
 	{
 		public static ControllerDescriptor Inspect(Type controllerType)

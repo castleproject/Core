@@ -17,12 +17,28 @@ namespace Castle.CastleOnRails.Framework
 	using System;
 
 	/// <summary>
-	/// Summary description for IControllerFactory.
+	/// Depicts the contract the engine has 
+	/// to perform the creation and disposal of
+	/// <see cref="Controller"/> instances.
 	/// </summary>
 	public interface IControllerFactory
 	{
+		/// <summary>
+		/// Implementors should perform their logic to 
+		/// return a instance of <see cref="Controller"/>.
+		/// If the <see cref="Controller"/> can not be found,
+		/// it should return <c>null</c>.
+		/// </summary>
+		/// <param name="urlInfo"></param>
+		/// <returns></returns>
 		Controller GetController(Internal.UrlInfo urlInfo);
 
+		/// <summary>
+		/// Implementors should perform their logic 
+		/// to release the <see cref="Controller"/> instance
+		/// and its resources.
+		/// </summary>
+		/// <param name="controller"></param>
 		void Release(Controller controller);
 	}
 }

@@ -15,15 +15,27 @@
 namespace Castle.CastleOnRails.Framework
 {
 	using System;
-	using System.Web;
 
 	/// <summary>
-	/// Summary description for IViewEngine.
+	/// Depicts the contract used by the engine
+	/// to process views, in an independent manner.
 	/// </summary>
 	public interface IViewEngine
 	{
+		/// <summary>
+		/// The root directory of views, obtained
+		/// from the configuration.
+		/// </summary>
 		String ViewRootDir { get; set; }
 
+		/// <summary>
+		/// Implementors should process the view (using the viewName to
+		/// obtain the correct template) and use the context to output
+		/// the result.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="viewName"></param>
 		void Process(IRailsEngineContext context, Controller controller, String viewName);
 	}
 }

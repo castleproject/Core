@@ -16,11 +16,20 @@ namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
+	/// <summary>
+	/// Associates a rescue template with a <see cref="Controller"/>
+	/// or an action (method). The rescue is invoked in
+	/// response to some exception during the action processing.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=false)]
 	public class RescueAttribute : Attribute
 	{
 		private String _viewName;
-
+		
+		/// <summary>
+		/// Constructs a RescueAttribute with the template name.
+		/// </summary>
+		/// <param name="viewName"></param>
 		public RescueAttribute(String viewName)
 		{
 			if (viewName == null || viewName.Length == 0)

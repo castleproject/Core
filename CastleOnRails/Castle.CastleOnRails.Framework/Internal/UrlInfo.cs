@@ -16,6 +16,9 @@ namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Represents the splitted information on a Url.
+	/// </summary>
 	public class UrlInfo
 	{
 		private readonly String _urlRaw;

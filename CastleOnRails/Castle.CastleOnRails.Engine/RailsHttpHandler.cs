@@ -22,6 +22,11 @@ namespace Castle.CastleOnRails.Engine
 	using Castle.CastleOnRails.Framework;
 	using Castle.CastleOnRails.Framework.Internal;
 
+	/// <summary>
+	/// Extends the <see cref="ProcessEngine"/> and implements 
+	/// <see cref="IHttpHandler"/> to dispatch the web
+	/// requests. 
+	/// </summary>
 	public class RailsHttpHandler : ProcessEngine, IHttpHandler
 	{
 		private String _url;

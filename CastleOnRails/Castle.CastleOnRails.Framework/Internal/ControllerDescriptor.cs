@@ -16,6 +16,9 @@ namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Represents the information about a <see cref="Controller"/>.
+	/// </summary>
 	public class ControllerDescriptor
 	{
 		private Type _controllerType;

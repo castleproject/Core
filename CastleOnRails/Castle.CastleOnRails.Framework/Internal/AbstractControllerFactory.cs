@@ -19,6 +19,11 @@ namespace Castle.CastleOnRails.Framework.Internal
 	using Castle.CastleOnRails.Framework;
 	using Castle.CastleOnRails.Framework.Internal.Graph;
 
+	/// <summary>
+	/// Base implementation of <see cref="IControllerFactory"/>
+	/// using the <see cref="ControllerTree"/> to build an hierarchy
+	/// of controllers and the areas they belong to.
+	/// </summary>
 	public abstract class AbstractControllerFactory : IControllerFactory
 	{
 		private readonly ControllerTree _tree;
@@ -26,11 +31,6 @@ namespace Castle.CastleOnRails.Framework.Internal
 		public AbstractControllerFactory()
 		{
 			_tree = new ControllerTree();
-		}
-
-		public ControllerTree Tree
-		{
-			get { return _tree; }
 		}
 
 		#region IControllerFactory
@@ -48,6 +48,11 @@ namespace Castle.CastleOnRails.Framework.Internal
 		}
 
 		#endregion
+
+		public ControllerTree Tree
+		{
+			get { return _tree; }
+		}
 
 		protected virtual Controller CreateControllerInstance(string area, string name)
 		{

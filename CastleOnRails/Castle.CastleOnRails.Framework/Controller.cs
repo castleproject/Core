@@ -1,4 +1,3 @@
-using System.Threading;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,7 @@ namespace Castle.CastleOnRails.Framework
 	using System;
 	using System.IO;
 	using System.Web;
+	using System.Threading;
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -26,21 +26,23 @@ namespace Castle.CastleOnRails.Framework
 
 	/// <summary>
 	/// Implements the core functionality and expose the
-	/// common methods the concrete controller will usually
-	/// use.
+	/// common methods for concrete controllers.
 	/// </summary>
 	public abstract class Controller
 	{
 		private IViewEngine _viewEngine;
 		private IRailsEngineContext _context;
-		private String _areaName;
-		private String _controllerName;
-		private String _selectedViewName;
 		private IDictionary _bag;
 		private FilterDescriptor[] _filters;
 		private IFilterFactory _filterFactory;
+		private String _areaName;
+		private String _controllerName;
+		private String _selectedViewName;
 		private String _layoutName;
 
+		/// <summary>
+		/// Constructs a Controller
+		/// </summary>
 		public Controller()
 		{
 			_bag = new HybridDictionary();
@@ -48,32 +50,51 @@ namespace Castle.CastleOnRails.Framework
 
 		#region Usefull Properties
 
+		/// <summary>
+		/// Gets the controller's name.
+		/// </summary>
 		public String Name
 		{
 			get { return _controllerName; }
 		}
 
+		/// <summary>
+		/// Gets the controller's area name.
+		/// </summary>
 		public String AreaName
 		{
 			get { return _areaName; }
 		}
 
+		/// <summary>
+		/// Gets or set the controller's layout.
+		/// </summary>
 		public String LayoutName
 		{
 			get { return _layoutName; }
 			set { _layoutName = value; }
 		}
 
+		/// <summary>
+		/// Gets the property bag, which is used
+		/// to pass variables to the view.
+		/// </summary>
 		public IDictionary PropertyBag
 		{
 			get { return _bag; }
 		}
 
+		/// <summary>
+		/// Gets the context of this web execution.
+		/// </summary>
 		protected IRailsEngineContext Context
 		{
 			get { return _context; }
 		}
 
+		/// <summary>
+		/// Gets the web context of ASP.Net API.
+		/// </summary>
 		protected HttpContext HttpContext
 		{
 			get { return _context.UnderlyingContext as HttpContext; }
@@ -83,6 +104,11 @@ namespace Castle.CastleOnRails.Framework
 
 		#region Usefull operations
 
+		/// <summary>
+		/// Defines the View to be presented
+		/// after the action has finished its processing. 
+		/// </summary>
+		/// <param name="name"></param>
 		public void RenderView( String name )
 		{
 			String basePath = _controllerName;
@@ -95,11 +121,20 @@ namespace Castle.CastleOnRails.Framework
 			_selectedViewName = Path.Combine( basePath, name );
 		}
 
+		/// <summary>
+		/// Defines the View to be presented
+		/// after the action has finished its processing. 
+		/// </summary>
 		public void RenderView( String controller, String name )
 		{
 			_selectedViewName = Path.Combine( controller, name );
 		}
 
+		/// <summary>
+		/// Redirects to another controller and action.
+		/// </summary>
+		/// <param name="controller"></param>
+		/// <param name="action"></param>
 		public void Redirect( String controller, String action )
 		{
 			CancelView();
@@ -108,6 +143,12 @@ namespace Castle.CastleOnRails.Framework
 				String.Format("../{0}/{1}.rails", controller, action), false );
 		}
 
+		/// <summary>
+		/// Redirects to another controller and action.
+		/// </summary>
+		/// <param name="area"></param>
+		/// <param name="controller"></param>
+		/// <param name="action"></param>
 		public void Redirect( String area, String controller, String action )
 		{
 			CancelView();
@@ -116,6 +157,9 @@ namespace Castle.CastleOnRails.Framework
 				String.Format("../{0}/{1}/{2}.rails", area, controller, action), false );
 		}
 
+		/// <summary>
+		/// Cancel the view presentation.
+		/// </summary>
 		public void CancelView()
 		{
 			_selectedViewName = null;
@@ -125,6 +169,16 @@ namespace Castle.CastleOnRails.Framework
 
 		#region Core methods
 
+		/// <summary>
+		/// Method invoked by the engine to start 
+		/// the controller process. 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="filterFactory"></param>
+		/// <param name="areaName"></param>
+		/// <param name="controllerName"></param>
+		/// <param name="actionName"></param>
+		/// <param name="viewEngine"></param>
 		public void Process( IRailsEngineContext context, IFilterFactory filterFactory,
 			String areaName, String controllerName, String actionName, IViewEngine viewEngine )
 		{
@@ -147,6 +201,11 @@ namespace Castle.CastleOnRails.Framework
 			InternalSend( actionName );
 		}
 
+		/// <summary>
+		/// Used to process the method associated
+		/// with the action name specified.
+		/// </summary>
+		/// <param name="action"></param>
 		public void Send( String action )
 		{
 			if ( HttpContext != null )
@@ -372,6 +431,11 @@ namespace Castle.CastleOnRails.Framework
 
 		#region Pre And Post view processing (overridables)
 
+		/// <summary>
+		/// Invoked by the view engine to perform
+		/// any logic before the view is sent to the client.
+		/// </summary>
+		/// <param name="view"></param>
 		public virtual void PreSendView(object view)
 		{
 			if ( view is IControllerAware )
@@ -380,6 +444,11 @@ namespace Castle.CastleOnRails.Framework
 			}
 		}
 
+		/// <summary>
+		/// Invoked by the view engine to perform
+		/// any logic after the view had been sent to the client.
+		/// </summary>
+		/// <param name="view"></param>
 		public virtual void PostSendView(object view)
 		{
 		}

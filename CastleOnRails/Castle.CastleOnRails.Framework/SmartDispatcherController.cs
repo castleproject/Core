@@ -21,7 +21,8 @@ namespace Castle.CastleOnRails.Framework
 	using System.Collections.Specialized;
 
 	/// <summary>
-	/// Summary description for SmartDispatcherController.
+	/// Specialization of <see cref="Controller"/> that tries
+	/// to match the request params to method arguments.
 	/// </summary>
 	public abstract class SmartDispatcherController : Controller
 	{

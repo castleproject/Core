@@ -22,6 +22,10 @@ namespace Castle.CastleOnRails.WindsorExtension
 	using Castle.CastleOnRails.Framework;
 
 
+	/// <summary>
+	/// Uses the HttpContext and the <see cref="IContainerAccessor"/> 
+	/// to access the container instance.
+	/// </summary>
 	public abstract class ContainerAccessorUtil
 	{
 		public static IWindsorContainer ObtainContainer()

@@ -19,14 +19,12 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	using System.Web.UI;
 
 	/// <summary>
-	/// Summary description for Contents.
+	/// Control used on master pages to represent 
+	/// the position where the child page contents 
+	/// should be written.
 	/// </summary>
 	public class Contents : Control
 	{
-		public Contents()
-		{
-		}
-
 		protected override void Render(HtmlTextWriter writer)
 		{
 			byte[] contentsArray = (byte[]) HttpContext.Current.Items["rails.contents"];
@@ -39,8 +37,8 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 			}
 			else
 			{
-				writer.Write("The child page wasn't processed by the rails engine. " + 
-					"Was this page invoked directly?");
+				writer.Write("<strong>The child page wasn't processed by the rails engine. " + 
+					"Was this page invoked directly?</strong>");
 			}
 		}
 	}

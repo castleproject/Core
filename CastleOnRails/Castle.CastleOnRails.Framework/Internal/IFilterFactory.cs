@@ -16,6 +16,10 @@ namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Depicts the contract used by the engine
+	/// to obtain implementations of <see cref="IFilter"/>.
+	/// </summary>
 	public interface IFilterFactory
 	{
 		IFilter Create( Type filterType );

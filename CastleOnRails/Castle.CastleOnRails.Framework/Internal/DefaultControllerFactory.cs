@@ -17,18 +17,30 @@ namespace Castle.CastleOnRails.Framework.Internal
 	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// Standard implementation of <see cref="IControllerFactory"/>.
+	/// It inspects assemblies looking for concrete classes
+	/// that extend <see cref="Controller"/>.
+	/// </summary>
 	public class DefaultControllerFactory : AbstractControllerFactory
 	{
 		public DefaultControllerFactory()
 		{
 		}
 
+		/// <summary>
+		/// Loads the assembly and inspect its public types.
+		/// </summary>
+		/// <param name="assemblyFileName"></param>
 		public void Inspect(String assemblyFileName)
 		{
 			Assembly assembly = Assembly.Load( assemblyFileName );
 			Inspect(assembly);
 		}
 
+		/// <summary>
+		/// Inspect the assembly's public types.
+		/// </summary>
 		public void Inspect(Assembly assembly)
 		{
 			Type[] types = assembly.GetExportedTypes();

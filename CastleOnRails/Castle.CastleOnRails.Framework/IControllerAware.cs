@@ -17,7 +17,8 @@ namespace Castle.CastleOnRails.Framework
 	using System;
 
 	/// <summary>
-	/// Summary description for IControllerAware.
+	/// Implemented by the view, if the view desires 
+	/// to have access to the controller instance.
 	/// </summary>
 	public interface IControllerAware
 	{

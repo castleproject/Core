@@ -27,6 +27,10 @@ namespace Castle.CastleOnRails.WindsorExtension
 	using Castle.CastleOnRails.Framework.Internal.Graph;
 
 
+	/// <summary>
+	/// Facility responsible for registering the controllers in
+	/// a tree.
+	/// </summary>
 	public class RailsFacility : IFacility
 	{
 		private ControllerTree _tree;

@@ -16,6 +16,10 @@ namespace Castle.CastleOnRails.Framework.Internal
 {
 	using System;
 
+	/// <summary>
+	/// Represents the meta information and type of
+	/// an implementation of <see cref="IFilter"/>.
+	/// </summary>
 	public class FilterDescriptor
 	{
 		private FilterAttribute _attribute;

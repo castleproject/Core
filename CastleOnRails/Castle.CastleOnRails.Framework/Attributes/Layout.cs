@@ -16,11 +16,21 @@ namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
+	/// <summary>
+	/// Associates a layout name with a controller.
+	/// The layout can later be changed using the LayoutName
+	/// property of the <see cref="Controller"/>.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class LayoutAttribute : Attribute
 	{
 		private String _layoutName;
 
+		/// <summary>
+		/// Constructs a LayoutAttribute with the 
+		/// layout name.
+		/// </summary>
+		/// <param name="layoutName"></param>
 		public LayoutAttribute(String layoutName)
 		{
 			if (layoutName == null || layoutName.Length == 0) 

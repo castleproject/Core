@@ -16,17 +16,32 @@ namespace Castle.CastleOnRails.Framework
 {
 	using System;
 
-	[AttributeUsage(AttributeTargets.Method)]
+	/// <summary>
+	/// Decorates a method, indicating that 
+	/// no filter should be applied when the method
+	/// is invoked.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
 	public class SkipFilter : Attribute
 	{
 	}
 
+	/// <summary>
+	/// Decorates a controller associating a <see cref="IFilter"/>
+	/// implementation with it. More than one can be associated.
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]
 	public class FilterAttribute : Attribute
 	{
 		private Type _filterType;
 		private ExecuteEnum _when;
 
+		/// <summary>
+		/// Constructs a FilterAttribute associating 
+		/// the filter type and when the filter should be invoked.
+		/// </summary>
+		/// <param name="when"></param>
+		/// <param name="filterType"></param>
 		public FilterAttribute( ExecuteEnum when, Type filterType )
 		{
 			if (!typeof(IFilter).IsAssignableFrom(filterType))

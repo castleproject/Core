@@ -18,7 +18,8 @@ namespace Castle.CastleOnRails.Framework
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for ControllerException.
+	/// Represents and Exception during the controller 
+	/// processing.
 	/// </summary>
 	[Serializable]
 	public class ControllerException : Exception

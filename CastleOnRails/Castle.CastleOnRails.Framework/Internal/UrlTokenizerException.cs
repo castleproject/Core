@@ -18,7 +18,8 @@ namespace Castle.CastleOnRails.Framework.Internal
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for UrlTokenizerException.
+	/// Represents a problem during the Url information
+	/// extraction.
 	/// </summary>
 	[Serializable]
 	public class UrlTokenizerException : Exception
