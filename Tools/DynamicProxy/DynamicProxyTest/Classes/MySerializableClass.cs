@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.DynamicProxy.Test.Classes
+namespace Castle.DynamicProxy.Test.Classes
 {
 	using System;
 
@@ -22,6 +22,18 @@ namespace Apache.Avalon.DynamicProxy.Test.Classes
 	[Serializable]
 	public class MySerializableClass
 	{
+		private DateTime current;
+
+		public MySerializableClass()
+		{
+			current = DateTime.Now;
+		}
+
+		public DateTime Current
+		{
+			get { return current; }
+		}
+
 		public double CalculateSumDistanceNow()
 		{
 			return Math.PI;

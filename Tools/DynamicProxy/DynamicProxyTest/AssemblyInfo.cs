@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Avalon DynamicProxy Test cases")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("The Apache Software Foundation")]
+[assembly: AssemblyCompany("DigitalCraftsmen - http://www.digitalcraftsmen.com.br/")]
 [assembly: AssemblyProduct("Avalon DynamicProxy Test cases")]
-[assembly: AssemblyCopyright("Copyright (c) 2004 The Apache Software Foundation")]
+[assembly: AssemblyCopyright("Copyright (c) 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.0.0.1")]

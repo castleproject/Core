@@ -1,5 +1,5 @@
-using Apache.Avalon.DynamicProxy.Test.Classes;
-// Copyright 2004 The Apache Software Foundation
+using Castle.DynamicProxy.Test.Classes;
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@ using Apache.Avalon.DynamicProxy.Test.Classes;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.DynamicProxy.Test
+namespace Castle.DynamicProxy.Test
 {
 	using System;
 	using System.Reflection.Emit;
 
 	using NUnit.Framework;
 
-	using Apache.Avalon.DynamicProxy.Test.ClassInterfaces;
+	using Castle.DynamicProxy.Test.ClassInterfaces;
 
 	/// <summary>
 	/// Summary description for CustomProxyGeneratorTestCase.

@@ -1,4 +1,4 @@
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.DynamicProxy.Test
+namespace Castle.DynamicProxy.Test
 {
 	using System;
+	using System.IO;
+	using System.Runtime.Serialization.Formatters.Binary;
 
 	using NUnit.Framework;
 
-	using Apache.Avalon.DynamicProxy.Test.Classes;
+	using Castle.DynamicProxy.Test.Classes;
 
 	/// <summary>
 	/// Summary description for SerializableClassTestCase.
@@ -36,6 +38,27 @@ namespace Apache.Avalon.DynamicProxy.Test
 				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInvocationHandler(myClass) );
 
 			Assert.IsTrue( proxy.GetType().IsSerializable );
+		}
+
+		[Test]
+		public void ProxySerialization()
+		{
+			MySerializableClass myClass = new MySerializableClass();
+			DateTime current = myClass.Current;
+
+			ProxyGenerator generator = new ProxyGenerator();
+			MySerializableClass proxy = (MySerializableClass) 
+				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInvocationHandler(myClass) );
+
+			MemoryStream stream = new MemoryStream();
+			BinaryFormatter formatter = new BinaryFormatter();
+
+			formatter.Serialize( stream, proxy );
+
+			stream.Position = 0;
+
+			MySerializableClass otherProxy = formatter.Deserialize( stream ) as MySerializableClass;
+			Assert.AreEqual( current, otherProxy.Current );
 		}
 	}
 }

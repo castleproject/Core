@@ -1,5 +1,5 @@
 using System.Reflection.Emit;
-// Copyright 2004 The Apache Software Foundation
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@ using System.Reflection.Emit;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.DynamicProxy.Builder.CodeGenerators
+namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
 	using System.Collections;

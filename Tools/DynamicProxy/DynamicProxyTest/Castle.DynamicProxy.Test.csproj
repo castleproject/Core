@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Apache.Avalon.DynamicProxy.Test"
+                AssemblyName = "Castle.DynamicProxy.Test"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Apache.Avalon.DynamicProxy.Test"
+                RootNamespace = "Castle.DynamicProxy.Test"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -86,7 +86,7 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Apache.Avalon.DynamicProxy"
+                    Name = "Castle.DynamicProxy"
                     Project = "{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
