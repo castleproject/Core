@@ -33,7 +33,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, autotransaction, nhibernate, aspectsharp, typedfactory" />
+	<target name="build" depends="init, autotransaction, nhibernate, aspectsharp, typedfactory, batchregistration" />
 	
 	<target name="init">
 
@@ -58,6 +58,10 @@
 	<target name="typedfactory">
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="build" />
 	</target>
+	
+	<target name="batchregistration">
+		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="build" />
+	</target>
 
 	<target name="dist">
 		<nant buildfile="Prevalence/default.build" inheritall="true" target="dist" />
@@ -65,6 +69,7 @@
 		<nant buildfile="NHibernate/default.build" inheritall="true" target="dist" />
 		<nant buildfile="AspectSharp/default.build" inheritall="true" target="dist" />
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="dist" />
+		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="dist" />
 	</target>
 
 	
