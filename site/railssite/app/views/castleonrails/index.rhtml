@@ -10,24 +10,32 @@ for .Net. Action Pack way of development
 is extremelly productive, its very intuitive and easily testable.
 
 <p>
+<strong>This documentation is out of date with the current 
+release of Castle on Rails, beta 1. Please be patient, as we 
+are working on the new documentation.
+</strong>
+</p>
+
+<p>
 The current alpha release of Castle on Rails is a proof-of-concept. So its not intended to
 go to a production environment.
 </p>
 
 <h3>Task list</h3>
 
-<p>The following points are being discussed on the mailing list:</p>
+<p>The following points are being discussed on the mailing list. Those
+marked with DONE reflects the current state on the beta 1 version.</p>
 
 <p>
   <ul>
-    <li>Abstract the ASP.Net objects (Request, Response, Session etc): 
+    <li>Abstract the ASP.Net objects (Request, Response, Session etc): <b><u>Done</u></b>.
     This is important so we can have a more independent framework thus easily testable
     and adaptable to different environments. This can be tricky as the ViewEngine for ASP.Net
     requires the HttpContext.
     </li>
   </ul>
   <ul>
-    <li>Controllers mapping: instead of using the name of the controller in the URL, 
+    <li>Controllers mapping: <b><u>Done</u></b>. instead of using the name of the controller in the URL, 
     the controllers classes could expose an attribute to specify their name and even a bigger 
     context that they belong, like Area or section.
     </li>
@@ -36,12 +44,12 @@ go to a production environment.
     <li>
     Controllers must be able to pass on instance values: This can be accomplished 
     by inspecting the fields/properties in the controller and transfer them to the view instance
-    or using a property bag or similar construction.
+    or using a property bag or similar construction. <b><u>Done</u></b> using PropertyBag
     </li>
   </ul>
   <ul>
     <li>
-    Integration with Windsor: Done. However the controller must be Transient (instead of singleton), 
+    Integration with Windsor: <b><u>Done</u></b> However the controller must be Transient (instead of singleton), 
     so a facility must be developed to ensure that.
     </li>
   </ul>
@@ -53,8 +61,6 @@ go to a production environment.
     </li>
   </ul>
 </p>
-
-
 
 <h3>Download</h3>
 

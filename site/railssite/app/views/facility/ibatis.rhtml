@@ -1,0 +1,102 @@
+<% @page_title = "iBatis.Net Facility" %>
+<% @subarea = "iBatis.Net" %>
+<% @main_title = "iBatis.Net Facility" %>
+<%= render "/home/deflinks" %>
+
+<% @purpose = "Enables the usage of iBatis.Net O/R framework for your components" %>
+<% @proxy = "No" %>
+<% @wconfig = "Yes" %>
+<% @wattributes = "Only to provide the Session automatically" %>
+<% @version = "Beta 1" %>
+
+<p>
+<i>This facility was kindly donated by Gilles Bayon.</i>
+</p>
+
+<p>
+Provides an integration with <a href="http://incubator.apache.org/ibatis/site/index.html">iBatis.Net</a>
+by exposing the <code>ISessionFactory</code> for the factories configured.
+</p>
+
+<h3>Configuration</h3>
+
+<pre class="source">
+&lt;facilities&gt;
+  &lt;facility id="ibatis"&gt;
+    &lt;sqlMap id="ibatis.sqlMap" config="config file name" /&gt;
+  &lt;/facility&gt;
+&lt;/facilities&gt;
+</pre>
+
+<h3>How to use it</h3>
+
+<p>
+Just register the facility and add the configuration.
+</p>
+
+<pre class="source">
+public class AccountDao
+{
+  private SqlMapper _sqlMap;
+
+  public AccountDao(SqlMapper SqlMap)
+  {
+    _sqlMap = SqlMap;
+  }
+  
+  public Account GetAccount(int id)
+  {
+    return _sqlMap.QueryForObject("GetAccount",id) as Account;
+  }
+
+  public void InsertAccount(Account account)
+  {
+    _sqlMap.Insert("InsertAccount", account);
+  }
+}
+</pre>
+
+<p>
+You can also use the <code>UsesAutomaticSessionCreation</code>
+so the facility can open and close the connection with sql map for you.
+This is also necessary if you want to use the Automatic Transaction Management
+facility with iBatis facility. Otherwise you'll have to enlist the connection
+manually.
+</p>
+
+<pre class="source">
+WindsorContainer container = new WindsorContainer(store);
+container.AddFacility( "ibatis", new IBatisNetFacility() );
+</pre>
+
+<p>
+And follows the configuration:
+</p>
+
+<pre class="source">
+&lt;facilities&gt;
+  &lt;facility id="ibatis"&gt;
+    &lt;sqlMap id="sqlServerSqlMap" config="sqlMap.config" /&gt;
+  &lt;/facility&gt;
+&lt;/facilities&gt;
+</pre>
+
+<h3>Samples</h3>
+
+<p>
+No sample provided.
+</p>
+
+<h3>Download</h3>
+
+<p>
+<a href="http://sourceforge.net/project/showfiles.php?group_id=124416">Release</a> at SourceForge.
+</p>
+
+<h3>Source code</h3>
+
+<p>
+The source can be found on 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/Facilities/IBatisNet/">Castle SVN</a>.
+</p>
+

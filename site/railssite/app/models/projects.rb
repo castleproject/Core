@@ -26,20 +26,28 @@ class ProjectList
 
 end
 
+class Facility
+  attr_reader :name, :link, :description, :docs
+
+  def initialize( name, link, description = '', docs = nil )
+    @name, @link, @description, @docs = name, link, description, docs
+  end
+end
+
 class FacilitiesList 
   include Enumerable
 
   def initialize()
     @list = []
-    @list << Project.new( 'Aspect#', '/aspectsharp/', 'Enable AOP capabilities for components' )
-    @list << Project.new( 'ActiveRecord', '/ar/', 'Simulates the Rail\'s ActiveRecord. Still on early stages' )
-    @list << Project.new( 'Prevalence', '/prevalence/', 'Manages the prevalence of an object model' )
-    @list << Project.new( 'Automatic Transaction Management', '/autotransaction/', 'Manages transactions for methods' )
-    @list << Project.new( 'NHibernate', '/nhibernate/', 'Enables the usage of NHibernate O/R framework for your components' )
-    @list << Project.new( 'iBatisNet', '/ibatis/', 'Enables the usage of iBatis O/R framework for your components' )
-    @list << Project.new( 'Batch Registration', '/batchreg/', 'Registers components based on configuration instructions' )
-    @list << Project.new( 'TypedFactory', '/batchreg/', 'Implements factories for components' )
-    @list << Project.new( 'RemoteComponent', '/remcomponents/', 'Exposes and access remote components in a transparent fashion. Still on early stages' )
+    @list << Facility.new( 'Aspect#', '/facility/aspectsharp/', 'Enable AOP capabilities for components' )
+    @list << Facility.new( 'ActiveRecord', '/facility/activerecord/', 'Simulates the Rail\'s ActiveRecord. Still on early stages' )
+    @list << Facility.new( 'Prevalence', '/facility/prevalence/', 'Manages the prevalence of an object model' )
+    @list << Facility.new( 'Automatic Transaction Management', '/facility/autotransaction/', 'Manages transactions for methods' )
+    @list << Facility.new( 'NHibernate', '/facility/nhibernate/', 'Enables the usage of NHibernate O/R framework for your components' )
+    @list << Facility.new( 'iBatisNet', '/facility/ibatis/', 'Enables the usage of iBatis O/R framework for your components' )
+    @list << Facility.new( 'Batch Registration', '/facility/batchreg/', 'Registers components based on configuration instructions' )
+    @list << Facility.new( 'TypedFactory', '/facility/typedfactory/', 'Implements factories for components' )
+    @list << Facility.new( 'RemoteComponent', '/facility/remcomponents/', 'Exposes and access remote components in a transparent fashion. Still on early stages' )
   end
   
   def each

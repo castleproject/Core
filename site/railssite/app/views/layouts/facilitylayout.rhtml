@@ -14,10 +14,10 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-	<td><div class="maintitle">Castle - Documentation 
+	<td><div class="maintitle">Castle - 
 <% if !@subarea.nil? %>
-for <%= @subarea %>
-<% end %>
+ <%= @subarea %>
+<% end %> Facility
 </div>
   </td>
   </tr>
@@ -39,7 +39,32 @@ for <%= @subarea %>
 	  <tr>
 		<td valign="top">
 		<div class="maincontent">
-<%= @content_for_layout %>
+
+		<table width="90%" border="1" cellpadding="2" bordercolorlight="#4D4D4D" bordercolordark="#4D4D4D" cellspacing="0" class="nicetable">
+		  <tr>
+			<td width="110px">Purpose</td>
+			<td><%= @purpose %></td>
+		  </tr>
+		  <tr>
+			<td width="150px">Requires Proxy?</td>
+			<td><%= @proxy %></td>
+		  </tr>
+		  <tr>
+			<td width="150px">Works with configuration?</td>
+			<td><%= @wconfig %></td>
+		  </tr>
+		  <tr>
+			<td width="150px">Works with attributes?</td>
+			<td><%= @wattributes %></td>
+		  </tr>
+		  <tr>
+			<td width="150px">Version</td>
+			<td><%= @version %></td>
+		  </tr>
+		</table>
+
+		<%= @content_for_layout %>
+
 		</div>
 		</td>
 		<td width="180px" valign="top">

@@ -1,0 +1,100 @@
+<% @page_title = "TypedFactory Facility" %>
+<% @subarea = "TypedFactory" %>
+<% @main_title = "TypedFactory Facility" %>
+<%= render "/home/deflinks" %>
+
+<% @purpose = "Implements factories for components managed by the container" %>
+<% @proxy = "Yes" %>
+<% @wconfig = "Yes" %>
+<% @wattributes = "No" %>
+<% @version = "Beta 1" %>
+
+<p>
+This facility implements the factories you provide by interfaces.
+For example, suppose you have a family of related components implementing
+the service <code>IProtocolHandler</code>. Others components that want 
+to use implementations of <code>IProtocolHandler</code> can use a factory for it.
+So you just need to create this factory interface and this facility implements 
+it for you.
+</p>
+
+
+
+<h3>Configuration</h3>
+
+<p>
+This is an example of a factory interface. Please note that you may
+have a method for the disposal of the component too.
+</p>
+
+<pre class="source">
+public interface IProtocolHandlerFactory
+{
+	IProtocolHandler Create( String id );
+}
+</pre>
+
+<pre class="source">
+public interface IProtocolHandlerFactory2
+{
+	IProtocolHandler Create( String id );
+
+	void Release( IProtocolHandler handler );
+}
+</pre>
+
+<h3>How to use it</h3>
+
+<p>
+Just register the facility and add the configuration so the facility 
+can register the implementations for the factories.
+</p>
+
+<pre class="source">
+WindsorContainer container = new WindsorContainer(store);
+container.AddFacility( "typedfactory", new TypedFactoryFacility() );
+</pre>
+
+<p>
+And follows the configuration:
+</p>
+
+<pre class="source">
+&lt;configuration&gt;
+
+  &lt;facilities&gt;
+    &lt;facility id="typedfactory"&gt;
+      &lt;factories&gt;
+         &lt;factory id="compFactory1" 
+           interface="Castle.Facilities.TypedFactory.Tests.Factories.IProtocolHandlerFactory, Castle.Facilities.TypedFactory.Tests" 
+           creation="Create" destruction="" /&gt;
+  
+         &lt;factory id="protocolFac2" 
+           interface="Castle.Facilities.TypedFactory.Tests.Factories.IProtocolHandlerFactory2, Castle.Facilities.TypedFactory.Tests" 
+           creation="Create" destruction="Release" /&gt;
+      &lt;/factories&gt;
+    &lt;/facility&gt;
+  &lt;/facilities&gt;
+
+&lt;/configuration&gt;
+</pre>
+
+<h3>Samples</h3>
+
+<p>
+No sample provided. You can always check the test cases, though.
+</p>
+
+<h3>Download</h3>
+
+<p>
+<a href="http://sourceforge.net/project/showfiles.php?group_id=124416">Release</a> at SourceForge.
+</p>
+
+<h3>Source code</h3>
+
+<p>
+The source can be found on 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/Facilities/TypedFactory/">Castle SVN</a>.
+</p>
+

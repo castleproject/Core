@@ -1,0 +1,132 @@
+<% @page_title = "NHibernate Facility" %>
+<% @subarea = "NHibernate" %>
+<% @main_title = "NHibernate Facility" %>
+<%= render "/home/deflinks" %>
+
+<% @purpose = "Enables the usage of NHibernate O/R framework for your components" %>
+<% @proxy = "No" %>
+<% @wconfig = "Yes" %>
+<% @wattributes = "Only to provide the Session automatically" %>
+<% @version = "Beta 1" %>
+
+<p>
+Provides an integration with <a href="http://nhibernate.sf.net/">NHibernate</a>
+by exposing the <code>ISessionFactory</code> for the factories configured.
+</p>
+
+<h3>Configuration</h3>
+
+<pre class="source">
+&lt;facilities&gt;
+  &lt;facility id="nhibernate"&gt;
+    &lt;factory id="nhibernate.factory"&gt;
+      &lt;settings&gt;
+        &lt;item key="<b><i>config key 1</i></b>"&gt;<b><i>value</i></b>&lt;/item&gt;
+        &lt;item key="<b><i>config key 2</i></b>"&gt;<b><i>value</i></b>&lt;/item&gt;
+      &lt;/settings&gt;
+      &lt;resources&gt;
+        &lt;resource name="<b><i>hbm.xml file location</i></b>" /&gt;
+        &lt;resource assembly="<b><i>assembly name</i></b>" name="<b><i>hbm.xml file name</i></b>" /&gt;
+      &lt;/resources&gt;
+      &lt;assemblies&gt;
+        &lt;assembly&gt;<b><i>assembly name</i></b>&lt;/assembly&gt;
+      &lt;/assemblies&gt;
+    &lt;/factory&gt;
+  &lt;/facility&gt;
+&lt;/facilities&gt;
+</pre>
+
+<p>
+You can register more than one <code>factory</code> if you're accessing
+more than one database.
+</p>
+
+<h3>How to use it</h3>
+
+<p>
+Just register the facility and add the configuration so the facility 
+can register the factories. By doing so the <code>ISessionFactory</code>
+will be available as a component to be auto wired.
+</p>
+
+<pre class="source">
+<b>[UsesAutomaticSessionCreation]</b>
+public class BlogDao
+{
+  public <u>virtual</u> Blog CreateBlog( String name )
+  {
+    ISession session = <b>SessionManager.CurrentSession</b>;
+
+    Blog blog = new Blog();
+    blog.Name = name;
+    blog.Items = new ArrayList();
+
+    session.Save(blog);
+    return blog;
+  }
+
+  public <u>virtual</u> IList ObtainBlogs()
+  {
+    ISession session = <b>SessionManager.CurrentSession</b>;
+    return session.Find("from Blog");
+  }
+}
+</pre>
+
+
+<p>
+You can also use the <code>UsesAutomaticSessionCreation</code>
+so the facility can open and close the <code>Session</code> for you.
+This is also necessary if you want to use the Automatic Transaction Management
+facility with NHibernate facility. Otherwise you'll have to enlist the session
+manually.
+</p>
+
+<pre class="source">
+WindsorContainer container = new WindsorContainer(store);
+container.AddFacility( "nhibernate", new NHibernateFacility() );
+</pre>
+
+<p>
+And follows the configuration:
+</p>
+
+<pre class="source">
+&lt;facilities&gt;
+  &lt;facility id="nhibernate"&gt;
+    &lt;factory id="nhibernate.factory"&gt;
+      &lt;settings&gt;
+        &lt;item key="hibernate.connection.provider"&gt;NHibernate.Connection.DriverConnectionProvider&lt;/item&gt;
+        &lt;item key="hibernate.connection.driver_class"&gt;NHibernate.Driver.MySqlDataDriver&lt;/item&gt;
+        &lt;item key="hibernate.connection.connection_string"&gt;Database=minddump;Data Source=localhost&lt;/item&gt;
+        &lt;item key="hibernate.dialect"&gt;NHibernate.Dialect.MySQLDialect&lt;/item&gt;
+      &lt;/settings&gt;
+      &lt;resources&gt;
+        &lt;resource name="..\bin\Author.hbm.xml" /&gt;
+        &lt;resource name="..\bin\Blog.hbm.xml" /&gt;
+        &lt;resource name="..\bin\Post.hbm.xml" /&gt;
+      &lt;/resources&gt;
+    &lt;/factory&gt;
+  &lt;/facility&gt;
+&lt;/facilities&gt;
+</pre>
+
+<h3>Samples</h3>
+
+<p>
+Check the MindDump sample application.
+</p>
+
+<h3>Download</h3>
+
+<p>
+<a href="http://sourceforge.net/project/showfiles.php?group_id=124416">Release</a> at SourceForge.
+</p>
+
+<h3>Source code</h3>
+
+<p>
+The source can be found on 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/Facilities/NHibernate/">Castle SVN</a>.
+</p>
+

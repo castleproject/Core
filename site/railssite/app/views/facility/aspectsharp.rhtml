@@ -1,0 +1,95 @@
+<% @page_title = "Aspect# Facility" %>
+<% @subarea = "Aspect#" %>
+<% @main_title = "Aspect# Facility" %>
+<%= render "/home/deflinks" %>
+
+<% @purpose = "Enable AOP capabilities for components" %>
+<% @proxy = "Yes" %>
+<% @wconfig = "Yes" %>
+<% @wattributes = "No" %>
+<% @version = "Beta 1" %>
+
+<p>
+By using this facility you can apply Aspect#'s aspect definitions
+on your components.
+</p>
+
+<h3>Configuration</h3>
+
+<p>
+It's important to define the configuration for the facility. The
+contents of the node should be a CDATA section holding the 
+aspect definitions. You can check <a href="http://aspectsharp.sourceforge.net/">Aspect#</a> 
+site for more details about the 
+<a href="http://aspectsharp.sourceforge.net/languageref.html">configuration</a>
+ language.
+</p>
+<p>
+Please note that your implementations of <code>IMethodInterceptor</code>
+may be registered on the container as well.
+</p>
+
+<h3>How to use it</h3>
+
+<p>
+Just register the facility and add the configuration. Each component 
+registered from now on will be checked against the aspect definitions.
+If some aspect match, the definition will be associated with it, and 
+once you request the component, you will receive the result of the 
+aspects applied to it.
+</p>
+
+<pre class="source">
+WindsorContainer container = new WindsorContainer(store);
+container.AddFacility( "aop", new AspectSharpFacility() );
+</pre>
+
+<p>
+And follows the configuration:
+</p>
+
+<pre class="source">
+&lt;configuration&gt;
+
+	&lt;facilities&gt;
+		&lt;facility id="aspectsharp"&gt;
+	    &lt;![CDATA[
+        import Castle.Facilities.AspectSharp.Tests.Components in Castle.Facilities.AspectSharp.Tests 
+        import Castle.Facilities.AspectSharp.Tests.Interceptors in Castle.Facilities.AspectSharp.Tests 
+        
+        interceptors [ "key" : LoggerTraceInterceptor ] 
+        mixins [ "key" : SecurityMixin  ] 
+
+        aspect ProtocolHandlerLogger for [ assignableFrom(IProtocolHandler) ]  
+            include "key" 
+
+            pointcut method(*) 
+                advice("key") 
+            end 
+        end 
+		]]&gt;
+		&lt;/facility&gt;
+	&lt;/facilities&gt;
+
+&lt;/configuration&gt;
+</pre>
+
+<h3>Samples</h3>
+
+<p>
+No sample provided. You can always check the test cases, though.
+</p>
+
+<h3>Download</h3>
+
+<p>
+<a href="http://sourceforge.net/project/showfiles.php?group_id=124416">Release</a> at SourceForge.
+</p>
+
+<h3>Source code</h3>
+
+<p>
+The source can be found on 
+<a href="http://svn.digitalcraftsmen.com.br/svn/castle/trunk/Facilities/AspectSharp/">Castle SVN</a>.
+</p>
+
