@@ -19,26 +19,46 @@ namespace Castle.CastleOnRails.Engine
 	using Castle.CastleOnRails.Framework;
 	using Castle.CastleOnRails.Framework.Internal;
 
-	/// <summary>
-	/// Summary description for ProcessEngine.
-	/// </summary>
 	public class ProcessEngine
 	{
+		private String _virtualRootDir;
 		private IControllerFactory _controllerFactory;
 		private IViewEngine _viewEngine;
 		private IFilterFactory _filterFactory;
 
-		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine) : 
-			this(controllerFactory, viewEngine, new DefaultFilterFactory())
+		public ProcessEngine(String virtualRootDir, IControllerFactory controllerFactory, 
+			IViewEngine viewEngine) : 
+			this(virtualRootDir, controllerFactory, viewEngine, new DefaultFilterFactory())
 		{
 		}
 
-		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine, 
-			IFilterFactory filterFactory)
+		public ProcessEngine(String virtualRootDir, IControllerFactory controllerFactory, 
+			IViewEngine viewEngine, IFilterFactory filterFactory)
 		{
+			_virtualRootDir = virtualRootDir;
 			_controllerFactory = controllerFactory;
 			_viewEngine = viewEngine;
 			_filterFactory = filterFactory;
+		}
+
+		public String VirtualRootDir
+		{
+			get { return _virtualRootDir; }
+		}
+
+		public IControllerFactory ControllerFactory
+		{
+			get { return _controllerFactory; }
+		}
+
+		public IViewEngine ViewEngine
+		{
+			get { return _viewEngine; }
+		}
+
+		public IFilterFactory FilterFactory
+		{
+			get { return _filterFactory; }
 		}
 
 		public virtual void Process( IRailsEngineContext context )
@@ -61,7 +81,7 @@ namespace Castle.CastleOnRails.Engine
 
 		protected virtual UrlInfo ExtractUrlInfo(IRailsEngineContext context)
 		{
-			return UrlTokenizer.ExtractInfo(context.Url);
+			return UrlTokenizer.ExtractInfo(context.Url, VirtualRootDir);
 		}
 	}
 }

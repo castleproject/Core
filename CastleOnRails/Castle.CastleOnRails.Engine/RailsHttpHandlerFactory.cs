@@ -19,13 +19,16 @@ namespace Castle.CastleOnRails.Engine
 	using System.Configuration;
 
 	using Castle.CastleOnRails.Framework;
+	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.CastleOnRails.Framework.Views.Aspx;
 
 	using Castle.CastleOnRails.Engine.Configuration;
 
 	public class RailsHttpHandlerFactory : IHttpHandlerFactory
 	{
+		private RailsConfiguration _config;
 		private IViewEngine _viewEngine;
-		private GeneralConfiguration _config;
+		private IFilterFactory _filterFactory;
 		private IControllerFactory _controllerFactory;
 
 		public RailsHttpHandlerFactory()
@@ -33,72 +36,81 @@ namespace Castle.CastleOnRails.Engine
 			ObtainConfiguration();
 			InitializeControllerFactory();
 			InitializeViewEngine();
+			InitializeFilterFactory();
 		}
 
-		protected virtual void InitializeControllerFactory()
+		#region IHttpHandlerFactory
+
+		public virtual IHttpHandler GetHandler(HttpContext context, 
+			string requestType, String url, String pathTranslated)
 		{
-			if (_config != null && _config.CustomControllerFactory != null)
-			{
-				String typeName = _config.CustomControllerFactory;
-				Type controllerFactoryType = Type.GetType(typeName, false, false);
-
-				if (controllerFactoryType == null)
-				{
-					String message = 
-						String.Format("Could not obtain controller factory. Type not found {0}", typeName);
-					throw new RailsException(message);
-				}
-
-				_controllerFactory = (IControllerFactory) 
-					Activator.CreateInstance(controllerFactoryType);
-			}
-			else
-			{
-//				ControllersCache cache = new ControllersCache();
-//
-//				if (_config != null)
-//				{
-//					cache.Inspect( _config.ControllersAssembly );
-//				}
-//				
-//				_controllerFactory = new DefaultControllerFactory(cache);
-			}
-		}
-
-		protected virtual void InitializeViewEngine()
-		{
-			// Default view engine
-//			_viewEngine = new AspNetViewEngine();
-		}
-
-		protected virtual void ObtainConfiguration()
-		{
-			_config = (GeneralConfiguration) 
-				ConfigurationSettings.GetConfig("rails");
-		}
-
-		public virtual IHttpHandler GetHandler(HttpContext context, string requestType, string url, string pathTranslated)
-		{
-			RailsHttpHandler handler = 
-				new RailsHttpHandler( 
-					_viewEngine, _controllerFactory, requestType, url);
-			
-			Configure(handler);
-
-			return handler;
+			return new RailsHttpHandler(_config.VirtualRootDir, url, 
+				_viewEngine, _controllerFactory, _filterFactory);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
 		{
 		}
 
-		protected virtual void Configure(RailsHttpHandler handler)
-		{
-			GeneralConfiguration config = (GeneralConfiguration) 
-				ConfigurationSettings.GetConfig("rails");
+		#endregion
 
-//			handler.ControllersAssembly = config.ControllersAssembly;
-//			handler.ViewsPhysicalPath = config.ViewsPhysicalPath;
+		protected virtual void ObtainConfiguration()
+		{
+			_config = (RailsConfiguration) ConfigurationSettings.GetConfig("rails");
+
+			if (_config == null)
+			{
+				throw new ApplicationException("Unfortunatelly you have to provide " + 
+					"the configuration to use Castle on Rails");
+			}
+		}
+
+		protected virtual void InitializeViewEngine()
+		{
+			if (_config.CustomViewEngineType != null)
+			{
+				_viewEngine = (IViewEngine) 
+					Activator.CreateInstance(_config.CustomViewEngineType);
+			}
+			else
+			{
+				_viewEngine = new AspNetViewEngine();
+			}
+
+			_viewEngine.ViewRootDir = _config.ViewsPhysicalPath;
+		}
+
+		protected virtual void InitializeFilterFactory()
+		{
+			if (_config.CustomFilterFactoryType != null)
+			{
+				_filterFactory = (IFilterFactory) 
+					Activator.CreateInstance(_config.CustomFilterFactoryType);
+			}
+			else
+			{
+				_filterFactory = new DefaultFilterFactory();
+			}
+		}
+
+		protected virtual void InitializeControllerFactory()
+		{
+			if (_config.CustomControllerFactoryType != null)
+			{
+				_controllerFactory = (IControllerFactory) 
+					Activator.CreateInstance(_config.CustomControllerFactoryType);
+			}
+			else
+			{
+				DefaultControllerFactory factory = new DefaultControllerFactory();
+
+				foreach(String assemblyName in _config.Assemblies)
+				{
+					factory.Inspect(assemblyName);
+				}
+
+				_controllerFactory = factory;
+			}
 		}
 	}
 }

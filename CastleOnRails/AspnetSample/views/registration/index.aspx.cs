@@ -55,8 +55,6 @@ namespace AspnetSample.views.registration
 			// Ok, proceed
 
 			_controller.Send( "Save" );
-			
-			Response.End();
 		}
 	}
 }

@@ -20,37 +20,29 @@ namespace Castle.CastleOnRails.Engine
 	using Castle.CastleOnRails.Engine.Adapters;
 
 	using Castle.CastleOnRails.Framework;
+	using Castle.CastleOnRails.Framework.Internal;
 
-	/// <summary>
-	/// Summary description for RailsHttpHandler.
-	/// </summary>
 	public class RailsHttpHandler : ProcessEngine, IHttpHandler
 	{
-//		private HttpContext _context;
-		private String _url; 
-//		private String _pathTranslated;
-		private String _requestType;
+		private String _url;
 
-		public RailsHttpHandler( IViewEngine viewEngine, IControllerFactory controllerFactory, 
-			String requestType, String url) : 
-			base(controllerFactory, viewEngine)
+		public RailsHttpHandler( String virtualRootDir, String url, IViewEngine viewEngine, 
+			IControllerFactory controllerFactory, IFilterFactory filterFactory)
+			: base(virtualRootDir, controllerFactory, viewEngine, filterFactory)
 		{
 			_url = url;
-			_requestType = requestType;
 		}
 
 		#region IHttpHandler Members
 
 		public void ProcessRequest(HttpContext context)
 		{
-			IRailsEngineContext railsContext = new RailsEngineContextAdapter(context, _url, _requestType);
-
-			base.Process(railsContext);
+			Process(new RailsEngineContextAdapter(context, _url));
 		}
 
 		public bool IsReusable
 		{
-			get { return false; }
+			get { return true; }
 		}
 
 		#endregion

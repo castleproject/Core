@@ -18,9 +18,7 @@ namespace AspnetSample.Controllers
 
 	using Castle.CastleOnRails.Framework;
 
-	/// <summary>
-	/// Summary description for HomeController.
-	/// </summary>
+	[Layout("master")]
 	public class HomeController : Controller
 	{
 		public HomeController()
@@ -29,8 +27,6 @@ namespace AspnetSample.Controllers
 
 		public void Index()
 		{
-			
 		}
-
 	}
 }

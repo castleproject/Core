@@ -131,7 +131,17 @@ namespace Castle.CastleOnRails.Framework
 				LayoutName = ObtainDefaultLayoutName();
 			}
 
-			Send( actionName );
+			InternalSend( actionName );
+		}
+
+		public void Send( String action )
+		{
+			if ( HttpContext != null )
+			{
+				HttpContext.Response.End();
+			}
+
+			InternalSend(action);
 		}
 
 		/// <summary>
@@ -145,7 +155,7 @@ namespace Castle.CastleOnRails.Framework
 		/// 6. Invoke the view engine<br/>
 		/// </summary>
 		/// <param name="action">Action name</param>
-		public virtual void Send( String action )
+		protected virtual void InternalSend( String action )
 		{
 			// Specifies the default view for this area/controller/action
 			RenderView( action );

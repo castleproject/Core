@@ -18,18 +18,19 @@ namespace Castle.CastleOnRails.Engine.Configuration
 	using System.Xml;
 	using System.Configuration;
 
-	/// <summary>
-	/// Summary description for RailsSectionHandler.
-	/// </summary>
+	using Castle.CastleOnRails.Framework;
+	using Castle.CastleOnRails.Framework.Internal;
+
 	public class RailsSectionHandler : IConfigurationSectionHandler
 	{
 		private static readonly String Controllers_Node_Name = "controllers";
-		private static readonly String Views_Node_Name = "views";
+		private static readonly String Views_Node_Name = "viewEngine";
 		private static readonly String Custom_Controller_Factory_Node_Name = "customControllerFactory";
+		private static readonly String Custom_Filter_Factory_Node_Name = "customFilterFactory";
 
 		public object Create(object parent, object configContext, XmlNode section)
 		{
-			GeneralConfiguration config = new GeneralConfiguration();
+			RailsConfiguration config = new RailsConfiguration();
 
 			foreach( XmlNode node in section.ChildNodes)
 			{
@@ -40,36 +41,19 @@ namespace Castle.CastleOnRails.Engine.Configuration
 
 				if ( String.Compare(Controllers_Node_Name, node.Name, true) == 0 )
 				{
-					XmlAttribute assemblyControllers = node.Attributes["assembly"];
-
-					if (assemblyControllers == null)
-					{
-						throw new ConfigurationException("The controllers node must specify an assembly attribute");
-					}
-
-					config.ControllersAssembly = assemblyControllers.Value;
+					ProcessControllersNode(node, config);
 				}
 				else if ( String.Compare(Views_Node_Name, node.Name, true) == 0 )
 				{
-					XmlAttribute path = node.Attributes["path"];
-
-					if (path == null)
-					{
-						throw new ConfigurationException("The views node must specify a path attribute");
-					}
-
-					config.ViewsPhysicalPath = path.Value;
+					ProcessViewNode(node, config);
 				}
 				else if ( String.Compare(Custom_Controller_Factory_Node_Name, node.Name, true) == 0 )
 				{
-					XmlAttribute type = node.Attributes["type"];
-
-					if (type == null)
-					{
-						throw new ConfigurationException("The custom controller factory node must specify a type attribute");
-					}
-
-					config.CustomControllerFactory = type.Value;
+					ProcessControllerFactoryNode(node, config);
+				}
+				else if ( String.Compare(Custom_Filter_Factory_Node_Name, node.Name, true) == 0 )
+				{
+					ProcessFilterFactoryNode(node, config);
 				}
 			}
 
@@ -78,20 +62,109 @@ namespace Castle.CastleOnRails.Engine.Configuration
 			return config;
 		}
 
-		protected virtual void Validate(GeneralConfiguration config)
+		private void ProcessFilterFactoryNode(XmlNode node, RailsConfiguration config)
+		{
+			XmlAttribute type = node.Attributes["type"];
+	
+			if (type == null)
+			{
+				throw new ConfigurationException("The custom filter factory node must specify a type attribute");
+			}
+	
+			config.CustomFilterFactory = type.Value;
+		}
+
+		private void ProcessControllerFactoryNode(XmlNode node, RailsConfiguration config)
+		{
+			XmlAttribute type = node.Attributes["type"];
+	
+			if (type == null)
+			{
+				throw new ConfigurationException("The custom controller factory node must specify a type attribute");
+			}
+	
+			config.CustomControllerFactory = type.Value;
+		}
+
+		private void ProcessViewNode(XmlNode node, RailsConfiguration config)
+		{
+			XmlAttribute viewPath = node.Attributes["viewPathRoot"];
+	
+			if (viewPath == null)
+			{
+				throw new ConfigurationException("The views node must specify the 'viewPathRoot' attribute");
+			}
+	
+			config.ViewsPhysicalPath = viewPath.Value;
+	
+			XmlAttribute customEngine = node.Attributes["customEngine"];
+	
+			if (customEngine != null)
+			{
+				config.CustomEngineTypeName = customEngine.Value;
+			}
+		}
+
+		private void ProcessControllersNode(XmlNode controllersNode, RailsConfiguration config)
+		{
+			XmlAttribute virtualRootDir = controllersNode.Attributes["virtualRootDir"];
+	
+			if (virtualRootDir != null)
+			{
+				config.VirtualRootDir = virtualRootDir.Value;
+			}
+	
+			foreach(XmlNode node in controllersNode.ChildNodes)
+			{
+				if (node.NodeType != XmlNodeType.Element) continue;
+
+				ProcessControllerEntry( node, config );
+			}
+		}
+
+		private void ProcessControllerEntry(XmlNode controllerEntry, RailsConfiguration config)
+		{
+			if (!controllerEntry.HasChildNodes)
+			{
+				throw new ConfigurationException("Inside the node controllers, you have to specify the assemblies " + 
+												 "through the value of each child node");
+			}
+
+			String assemblyName = controllerEntry.FirstChild.Value;
+			config.Assemblies.Add( assemblyName );
+		}
+
+		protected virtual void Validate(RailsConfiguration config)
 		{
 			if (config.CustomControllerFactory != null)
 			{
-				Type type = Type.GetType(config.CustomControllerFactory, false, false);
-
-				if (type == null)
-				{
-					throw new ConfigurationException("Type for CustomControllerFactory could not be obtained.");
-				}
+				ValidateType(config.CustomControllerFactory, typeof(IControllerFactory));
 			}
-			else if (config.ControllersAssembly == null || config.ControllersAssembly.Length == 0)
+			if (config.CustomFilterFactory != null)
 			{
-				throw new ConfigurationException("The assembly for Rails inspect for controllers must be specified in the controllers node.");
+				ValidateType(config.CustomFilterFactory, typeof(IFilterFactory));
+			}
+			if (config.CustomEngineTypeName != null)
+			{
+				ValidateType(config.CustomEngineTypeName, typeof(IViewEngine));
+			}
+		}
+
+		private void ValidateType(String name, Type expectedType)
+		{
+			Type type = Type.GetType(name, false, false);
+	
+			if (type == null)
+			{
+				String message = String.Format("Type {0} could not be loaded", name);
+				throw new ConfigurationException(message);
+			}
+
+			if (!expectedType.IsAssignableFrom(type))
+			{
+				String message = String.Format("Type {0} does't implement {1}", 
+					type.FullName, expectedType.FullName);
+				throw new ConfigurationException(message);
 			}
 		}
 	}

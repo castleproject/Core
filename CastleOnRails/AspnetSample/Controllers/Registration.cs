@@ -19,9 +19,7 @@ namespace AspnetSample.Controllers
 
 	using Castle.CastleOnRails.Framework;
 
-	/// <summary>
-	/// Summary description for Registration.
-	/// </summary>
+	[Layout("master")]
 	public class Registration : SmartDispatcherController
 	{
 		public void Index()

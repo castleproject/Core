@@ -139,7 +139,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\GeneralConfiguration.cs"
+                    RelPath = "Configuration\RailsConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -89,6 +89,16 @@
                     AssemblyName = "System.Drawing"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
+                <Reference
+                    Name = "Castle.CastleOnRails.Engine"
+                    Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.CastleOnRails.Framework"
+                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -97,6 +107,10 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.htm"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "web.config"
@@ -115,6 +129,10 @@
                 <Folder RelPath = "views\general\" />
                 <File
                     RelPath = "views\home\index.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\layouts\master.aspx"
                     BuildAction = "Content"
                 />
                 <File

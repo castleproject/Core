@@ -21,36 +21,101 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	using System.Collections;
 	using System.Reflection;
 
-	/// <summary>
-	/// Summary description for AspNetViewEngine.
-	/// </summary>
 	public class AspNetViewEngine : IViewEngine
 	{
+		private String _viewRootDir;
+
 		public AspNetViewEngine()
 		{
 		}
 
-		public virtual void Process(Controller controller, String url, String viewPath, 
-			String viewName, HttpContext context)
+		#region IViewEngine
+
+		public String ViewRootDir
 		{
-			if (!Path.IsPathRooted(viewPath))
+			get { return _viewRootDir; }
+			set { _viewRootDir = value; }
+		}
+
+		public void Process(IRailsEngineContext context, Controller controller, String viewName)
+		{
+			if (!Path.IsPathRooted(_viewRootDir))
 			{
-				viewPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, viewPath);
+				_viewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _viewRootDir);
 			}
 
-			String physicalPath = Path.Combine( viewPath, viewName + ".aspx" );
+			HttpContext httpContext = context.UnderlyingContext as HttpContext;
+			Page masterHandler = null;
+
+			if (controller.LayoutName != null)
+			{
+				StartFiltering(httpContext.Response);
+				masterHandler = ObtainMasterPage(httpContext, controller);
+			}
+
+			String physicalPath = Path.Combine( _viewRootDir, viewName + ".aspx" );
 			physicalPath = physicalPath.Replace('/', '\\');
 
-			IHttpHandler handler = 
-				PageParser.GetCompiledPageInstance( viewName, physicalPath, context );
+			IHttpHandler childPage = 
+				PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 
-			ProcessPropertyBag( controller.PropertyBag, handler );
-			
-			controller.PreSendView( handler );
+			ProcessPropertyBag(controller.PropertyBag, childPage);
 
-			handler.ProcessRequest(context);
+			controller.PreSendView(childPage);
 
-			controller.PostSendView( handler );
+			childPage.ProcessRequest(httpContext);
+
+			controller.PostSendView(childPage);
+
+			if (controller.LayoutName != null)
+			{
+				if (httpContext.Response.StatusCode == 200)
+				{
+					byte[] contents = RestoreFilter(httpContext.Response);
+
+					httpContext.Items.Add("rails.contents", contents);
+					httpContext.Items.Add("rails.child", childPage);
+
+					masterHandler.ProcessRequest(httpContext);
+				}
+				else
+				{
+					WriteBuffered(httpContext.Response);
+				}
+			}
+		}
+
+		#endregion
+
+		private void WriteBuffered(HttpResponse response)
+		{
+//			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
+//			byte[] buffer = filter.GetBuffer();
+//			response.OutputStream.Write( buffer, 0, buffer.Length );
+		}
+
+		private byte[] RestoreFilter(HttpResponse response)
+		{
+			response.Flush();
+			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
+			response.Filter = filter.OriginalStream;
+			return filter.GetBuffer();
+		}
+
+		private Page ObtainMasterPage(HttpContext context, Controller controller)
+		{
+			String layout = "layouts/" + controller.LayoutName;
+			String physicalPath = Path.Combine( _viewRootDir, layout + ".aspx" );
+			physicalPath = physicalPath.Replace('/', '\\');
+
+			return PageParser.GetCompiledPageInstance(layout, physicalPath, context) as Page;
+		}
+
+		private void StartFiltering(HttpResponse response)
+		{
+			Stream filter = response.Filter;
+			response.Filter = new DelegateMemoryStream(filter);
+			response.Buffer = true;
 		}
 
 		protected void ProcessPropertyBag(IDictionary bag, IHttpHandler handler)
@@ -74,6 +139,21 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 			if (!value.GetType().IsAssignableFrom(info.PropertyType)) return;
 
 			info.GetSetMethod().Invoke( handler, new object[] {value} );
+		}
+	}
+
+	internal class DelegateMemoryStream : MemoryStream
+	{
+		public Stream _original;
+
+		public DelegateMemoryStream(Stream original)
+		{
+			_original = original;
+		}
+
+		public Stream OriginalStream
+		{
+			get { return _original; }
 		}
 	}
 }

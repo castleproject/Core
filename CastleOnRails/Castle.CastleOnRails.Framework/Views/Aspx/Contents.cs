@@ -12,39 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Configuration
+namespace Castle.CastleOnRails.Framework.Views.Aspx
 {
 	using System;
+	using System.Web;
+	using System.Web.UI;
 
 	/// <summary>
-	/// Summary description for GeneralConfiguration.
+	/// Summary description for Contents.
 	/// </summary>
-	public class GeneralConfiguration
+	public class Contents : Control
 	{
-		private String _controllersAssembly;
-		private String _viewsPhysicalPath;
-		private String _customControllerFactory;
-
-		public GeneralConfiguration()
+		public Contents()
 		{
 		}
 
-		public string ControllersAssembly
+		protected override void Render(HtmlTextWriter writer)
 		{
-			get { return _controllersAssembly; }
-			set { _controllersAssembly = value; }
-		}
+			byte[] contents = (byte[]) HttpContext.Current.Items["rails.contents"];
 
-		public string ViewsPhysicalPath
-		{
-			get { return _viewsPhysicalPath; }
-			set { _viewsPhysicalPath = value; }
-		}
-
-		public string CustomControllerFactory
-		{
-			get { return _customControllerFactory; }
-			set { _customControllerFactory = value; }
+			writer.InnerWriter.Write(writer.Encoding.GetString(contents));
 		}
 	}
 }

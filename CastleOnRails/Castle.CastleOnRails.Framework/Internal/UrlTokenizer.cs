@@ -21,11 +21,26 @@ namespace Castle.CastleOnRails.Framework.Internal
 	/// </summary>
 	public sealed class UrlTokenizer
 	{
-		public static UrlInfo ExtractInfo( String url )
+		public static UrlInfo ExtractInfo( String url, String virtualDirectory )
 		{
 			if ( url == null || url.Length == 0 || url[0] != '/' )
 			{
 				throw new UrlTokenizerException("Invalid url");
+			}
+
+			url = url.ToLower().Substring(1);
+
+			// Strip the virtualDirectory from the Url
+			if (virtualDirectory != null)
+			{
+				virtualDirectory = virtualDirectory.ToLower();
+
+				if (!url.StartsWith(virtualDirectory))
+				{
+					throw new UrlTokenizerException("Invalid url");
+				}
+
+				url = url.Substring( virtualDirectory.Length );
 			}
 
 			String[] parts = url.Split('/');
@@ -46,8 +61,16 @@ namespace Castle.CastleOnRails.Framework.Internal
 
 			String controller = parts[ parts.Length - 2 ];
 
+			String area = null;
+			
+			if (parts.Length - 3 >= 0 )
+			{
+				area = parts[ parts.Length - 3 ];
 
-			return new UrlInfo(url, null, controller, action);
+				if (area == String.Empty) area = null;
+			}
+
+			return new UrlInfo(url, area, controller, action);
 		}
 	}
 

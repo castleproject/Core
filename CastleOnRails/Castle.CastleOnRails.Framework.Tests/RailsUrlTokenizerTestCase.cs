@@ -29,28 +29,61 @@ namespace Castle.CastleOnRails.Framework.Tests
 		[Test]
 		public void SimpleUsage()
 		{
-			UrlInfo info = UrlTokenizer.ExtractInfo( "/home/index.rails" );
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/home/index.rails", null );
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
+			Assert.AreEqual( null, info.Area );
 		}
 
 		[Test]
 		public void ExtensionIgnored()
 		{
-			UrlInfo info = UrlTokenizer.ExtractInfo( "/home/index.something" );
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/home/index.something", null );
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
+			Assert.AreEqual( null, info.Area );
 		}
 
 		[Test]
-		public void VirtualDirectory()
+		public void Area()
 		{
-			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/home/index.rails" );
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/home/index.rails", null );
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
+			Assert.AreEqual( "myvirdirectory", info.Area );
+		}
+
+		[Test]
+		public void Area2()
+		{
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/clients/home/index.rails", "myvirdirectory" );
+			Assert.IsNotNull( info );
+			Assert.AreEqual( "home", info.Controller );
+			Assert.AreEqual( "index", info.Action );
+			Assert.AreEqual( "clients", info.Area );
+		}
+
+		[Test]
+		public void Area3()
+		{
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/mysite/clients/home/index.rails", "myvirdirectory" );
+			Assert.IsNotNull( info );
+			Assert.AreEqual( "home", info.Controller );
+			Assert.AreEqual( "index", info.Action );
+			Assert.AreEqual( "clients", info.Area );
+		}
+
+		[Test]
+		public void VirDir()
+		{
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/home/index.rails", "myvirdirectory" );
+			Assert.IsNotNull( info );
+			Assert.AreEqual( "home", info.Controller );
+			Assert.AreEqual( "index", info.Action );
+			Assert.AreEqual( null, info.Area );
 		}
 	}
 }

@@ -24,23 +24,22 @@ namespace Castle.CastleOnRails.Engine.Adapters
 	using Castle.CastleOnRails.Framework;
 
 	/// <summary>
-	/// Summary description for RailsEngineContextAdapter.
+	/// Adapter to expose a valid <see cref="IRailsEngineContext"/>
+	/// implementation on top of <c>HttpContext</c>.
 	/// </summary>
 	public class RailsEngineContextAdapter : IRailsEngineContext
 	{
-		private HttpContext _context;
 		private String _url;
-		private String _requestType;
+		private HttpContext _context;
 		private RequestAdapter _request;
 		private ResponseAdapter _response;
 		private IPrincipal _user;
 		private Exception _lastException;
 
-		public RailsEngineContextAdapter(HttpContext context, String url, String requestType)
+		public RailsEngineContextAdapter(HttpContext context, String url)
 		{
-			_context = context;
 			_url = url;
-			_requestType = requestType;
+			_context = context;
 			_request = new RequestAdapter(context.Request);
 			_response = new ResponseAdapter(context.Response);
 		}
@@ -53,7 +52,7 @@ namespace Castle.CastleOnRails.Engine.Adapters
 
 		public String RequestType
 		{
-			get { return _requestType; }
+			get { return _context.Request.RequestType; }
 		}
 
 		public String Url
