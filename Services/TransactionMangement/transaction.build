@@ -40,6 +40,8 @@
 				<include name="*.dll" />
 			</fileset>
 		</delete>
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="../bin" />
 	</target>
 
 	<target name="init" depends="clean">
