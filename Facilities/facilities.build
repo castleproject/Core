@@ -30,7 +30,10 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="init, prevalence, autotransaction, nhibernate" />
+        <!-- Removed the build for prevalence til they apply the patch -->
+        <!-- supplied -->
+
+	<target name="build" depends="init, autotransaction, nhibernate" />
 	
 	<target name="init">
 
