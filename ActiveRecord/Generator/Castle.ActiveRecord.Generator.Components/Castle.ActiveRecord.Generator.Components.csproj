@@ -84,12 +84,32 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "ActiveRecordDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IActiveRecordDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "INamingService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IPlainFieldInferenceService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IRelationshipInferenceService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -104,7 +124,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "PlainFieldInferenceService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Project.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RelationshipInferenceService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

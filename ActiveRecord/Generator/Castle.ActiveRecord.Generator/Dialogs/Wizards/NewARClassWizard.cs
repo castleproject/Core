@@ -61,8 +61,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		{
 			ActiveRecordDescriptor ar = Context["ardesc"] as ActiveRecordDescriptor;
 
-			ar.TableName = (Context["selectedtable"] as TableDefinition).Name;
-			ar.DbAlias = (Context["selecteddb"] as DatabaseDefinition).Alias;
+			ar.Table = (Context["selectedtable"] as TableDefinition);
+			ar.Table.RelatedDescriptor = ar;
 
 			(_shape as ActiveRecordShape).ActiveRecordDescriptor = ar;
 		}

@@ -12,13 +12,13 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 	public class RelationsPage : AbstractControlPage
 	{
+		private System.ComponentModel.IContainer components = null;
 		private System.Windows.Forms.ListView listView1;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
-		private System.ComponentModel.IContainer components = null;
 		private System.Windows.Forms.CheckBox acceptSuggestions;
 		private System.Windows.Forms.Label label2;
 		private TableDefinition _oldTable;
@@ -26,10 +26,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		public RelationsPage() : base("Relationships mapping")
 		{
 			InitializeComponent();
-
 		}
 
-		public override void Activated(System.Collections.IDictionary context)
+		public override void Activated(IDictionary context)
 		{
 			TableDefinition table = context["selectedtable"] as TableDefinition;
 			
@@ -70,6 +69,15 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			}
 		}
 
+		public override void Deactivated(IDictionary context)
+		{
+			base.Deactivated(context);
+
+			if (acceptSuggestions.Checked)
+			{
+				
+			}
+		}
 
 		/// <summary>
 		/// Clean up any resources being used.

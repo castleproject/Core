@@ -89,7 +89,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			foreach(DataRow table in tables.Rows)
 			{
 				TableDefinition tableDef = 
-					def.AddTable( new TableDefinition( (String) table["TABLE_NAME"] ) );
+					def.AddTable( new TableDefinition( (String) table["TABLE_NAME"], def ) );
 
 				objArrRestrict = new object[] {null, null, tableDef.Name, null};
 

@@ -38,8 +38,7 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		private Connector TopNode;
 		private Connector BottomNode;
 
-		private ActiveRecordDescriptor _activeRecordDescriptor = 
-			new ActiveRecordDescriptor("ClassName", "TableName", "Database Alias");
+		private ActiveRecordDescriptor _activeRecordDescriptor = new ActiveRecordDescriptor("ClassName");
 
 
 		public ActiveRecordShape() : base()
@@ -101,16 +100,27 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 		{
 			base.Paint(g);
 
+			String className = "ClassName";
+			String alias = "[Alias]";
+			String tableName = "TableName";
+
+			if (_activeRecordDescriptor != null)
+			{
+				className = _activeRecordDescriptor.ClassName;
+				alias = _activeRecordDescriptor.Table.DatabaseDefinition.Alias;
+				tableName = _activeRecordDescriptor.Table.Name;
+			}
+
 			if (recalculateSize)
 			{
-				SizeF size1 = g.MeasureString(_activeRecordDescriptor.ClassName + "\"\"", mFont);
-				SizeF size2 = g.MeasureString(_activeRecordDescriptor.DbAlias + "[]", mFont);
-				SizeF size3 = g.MeasureString(_activeRecordDescriptor.TableName, mFont);
+				SizeF size1 = g.MeasureString(className + "\"\"", mFont);
+				SizeF size2 = g.MeasureString(alias + "[]", mFont);
+				SizeF size3 = g.MeasureString(tableName, mFont);
 
 				_lineHeight = size1.Height;
 
 				SizeF max = new SizeF(Math.Max(size1.Width, Math.Max(size2.Width, size3.Width)) + 3,
-				                      (_lineHeight*3) + 10);
+										(_lineHeight*3) + 10);
 
 				Rectangle = new RectangleF(new PointF(Rectangle.X, Rectangle.Y), max);
 
@@ -123,9 +133,9 @@ namespace Castle.ActiveRecord.Generator.Parts.Shapes
 
 			StringFormat sf = new StringFormat();
 			sf.Alignment = StringAlignment.Center;
-			g.DrawString(_activeRecordDescriptor.ClassName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
-			g.DrawString(_activeRecordDescriptor.ClassName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
-			g.DrawString("[" + _activeRecordDescriptor.DbAlias + "]", mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight * 2) + 6, sf);
+			g.DrawString(className, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + 3, sf);
+			g.DrawString(tableName, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + _lineHeight + 6, sf);
+			g.DrawString(alias, mFont, TextBrush, Rectangle.X + (Rectangle.Width/2), Rectangle.Y + (_lineHeight * 2) + 6, sf);
 		}
 
 		/// <summary>

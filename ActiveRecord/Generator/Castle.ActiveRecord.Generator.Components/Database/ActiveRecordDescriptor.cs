@@ -21,36 +21,39 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	public class ActiveRecordDescriptor
 	{
 		private String _className;
-		private String _tableName;
 		private String _discriminatorField;
 		private String _discriminatorValue;
 		private String _discriminatorType;
-		private String _dbAlias;
 		private IList _properties = new ArrayList();
 		private IList _propertiesRelations = new ArrayList();
 		private IList _operations = new ArrayList();
+		private TableDefinition _table;
 
 		public ActiveRecordDescriptor()
 		{
 		}
 
-		public ActiveRecordDescriptor(String className, String tableName, String dbAlias)
+		public ActiveRecordDescriptor(TableDefinition table)
+		{
+			_table = table;
+
+			if (_table.RelatedDescriptor != null)
+			{
+				throw new ArgumentException("Table has an ARDescriptor already");
+			}
+
+			_table.RelatedDescriptor = this;
+		}
+
+		public ActiveRecordDescriptor(String className)
 		{
 			_className = className;
-			_tableName = tableName;
-			_dbAlias = dbAlias;
 		}
 
 		public String ClassName
 		{
 			get { return _className; }
 			set { _className = value; }
-		}
-
-		public String TableName
-		{
-			get { return _tableName; }
-			set { _tableName = value; }
 		}
 
 		public String DiscriminatorField
@@ -71,17 +74,6 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			set { _discriminatorType = value; }
 		}
 
-		public String DbAlias
-		{
-			get { return _dbAlias; }
-			set { _dbAlias = value; }
-		}
-
-		public void AddProperty( ActiveRecordPropertyDescriptor propertyDescriptor )
-		{
-			_properties.Add(propertyDescriptor);
-		}
-
 		public IList Properties
 		{
 			get { return _properties; }
@@ -95,6 +87,17 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		public IList Operations
 		{
 			get { return _operations; }
+		}
+
+		public TableDefinition Table
+		{
+			get { return _table; }
+			set { _table = value; }
+		}
+
+		public void AddProperty( ActiveRecordPropertyDescriptor propertyDescriptor )
+		{
+			_properties.Add(propertyDescriptor);
 		}
 	}
 }

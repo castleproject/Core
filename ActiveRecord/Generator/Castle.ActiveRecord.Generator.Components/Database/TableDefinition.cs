@@ -20,14 +20,16 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 
 	public class TableDefinition
 	{
-		private String _name;
-//		private ActiveRecordDescriptor _relatedDescriptor;
-		private ColumnDefinitionCollection _columns = new ColumnDefinitionCollection();
 		private ArrayList _hasRelation = new ArrayList();
+		private DatabaseDefinition _db;
+		private String _name;
+		private ActiveRecordDescriptor _relatedDescriptor;
+		private ColumnDefinitionCollection _columns = new ColumnDefinitionCollection();
 
-		public TableDefinition(String name)
+		public TableDefinition(String name, DatabaseDefinition db)
 		{
 			_name = name;
+			_db = db;
 		}
 
 		public void AddManyRelation(TableDefinition def)
@@ -43,11 +45,11 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			get { return _name; }
 		}
 
-//		public ActiveRecordDescriptor RelatedDescriptor
-//		{
-//			get { return _relatedDescriptor; }
-//			set { _relatedDescriptor = value; }
-//		}
+		public ActiveRecordDescriptor RelatedDescriptor
+		{
+			get { return _relatedDescriptor; }
+			set { _relatedDescriptor = value; }
+		}
 
 		public ColumnDefinition AddColumn( ColumnDefinition column )
 		{
@@ -63,6 +65,12 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		public IList TablesReferencedByHasRelation
 		{
 			get { return _hasRelation; }
+		}
+
+		public DatabaseDefinition DatabaseDefinition
+		{
+			get { return _db; }
+			set { _db = value; }
 		}
 
 		public override string ToString()

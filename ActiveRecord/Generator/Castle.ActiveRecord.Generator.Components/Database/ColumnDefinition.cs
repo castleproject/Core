@@ -33,6 +33,24 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			_name = name;
 		}
 
+		public ColumnDefinition(String name, bool primaryKey, 
+			bool foreignKey, bool unique, bool nullable, OleDbType type)
+		{
+			_name = name;
+			_primaryKey = primaryKey;
+			_foreignKey = foreignKey;
+			_unique = unique;
+			_nullable = nullable;
+			_type = type;
+		}
+
+		public ColumnDefinition(String name, bool primaryKey, 
+			bool foreignKey, bool unique, bool nullable, OleDbType type, 
+			TableDefinition relatedTable) : this(name, primaryKey, foreignKey, unique, nullable, type)
+		{
+			_relatedTable = relatedTable;
+		}
+
 		public String Name
 		{
 			get { return _name; }

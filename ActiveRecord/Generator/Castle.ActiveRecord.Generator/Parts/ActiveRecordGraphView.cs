@@ -1,3 +1,5 @@
+using Castle.ActiveRecord.Generator.Components.Database;
+
 namespace Castle.ActiveRecord.Generator.Parts
 {
 	using System;
@@ -25,6 +27,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 		private System.ComponentModel.Container components = null;
 
 		private Model _model;
+		private Hashtable _baseClasses = new Hashtable();
 
 		public ActiveRecordGraphView()
 		{
@@ -203,7 +206,10 @@ namespace Castle.ActiveRecord.Generator.Parts
 					if (wizard.ShowDialog(this) != DialogResult.OK)
 					{
 						graphControl1.Nodes.Remove(shape);
+						return;
 					}
+
+					EnsureHasParent(shape);
 				}
 			}
 		}
@@ -229,6 +235,64 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 		private void graphControl1_OnClear(object sender, System.EventArgs e)
 		{
+		}
+
+		private void EnsureHasParent(Shape shape)
+		{
+			ActiveRecordShape arShape = shape as ActiveRecordShape;
+
+			if (arShape != null)
+			{
+				DatabaseDefinition db = arShape.ActiveRecordDescriptor.Table.DatabaseDefinition;
+
+				if (!_baseClasses.Contains(db))
+				{
+					CreateARBaseClass(db);
+				}
+
+				Shape baseShape = _baseClasses[db] as Shape;
+
+				ConnectSubToSuperClass(baseShape, shape);
+			}
+		}
+
+		private void CreateARBaseClass(DatabaseDefinition db)
+		{
+			ActiveRecordBaseClassShape shape = (ActiveRecordBaseClassShape) 
+				graphControl1.AddShape("castle.ar.base.shape", new PointF(80,20)); 
+
+			// TODO: Map these informations
+//			shape.DatabaseDefinition = db;
+
+			if (_baseClasses.Count == 0)
+			{
+				shape.Name = "ActiveRecordBase";
+			}
+			else
+			{
+				shape.Name = "ActiveRecord[ALIAS]Base";
+			}
+
+//			shape.Table = "tb_Companies";
+			shape.FitSize(false);
+			
+			Random rnd = new Random(1);
+			shape.X = rnd.Next(50,this.graphControl1.Width-100);
+			shape.Y = rnd.Next(50,this.graphControl1.Height-20);
+
+			_baseClasses[db] = shape;
+		}
+
+		private Connection ConnectSubToSuperClass(Shape parentShape, Shape childShape)
+		{
+			Connection conn = graphControl1.AddEdge(parentShape.Connectors[1], childShape.Connectors[0]);	
+
+//			conn.From.ConnectorLocation = ConnectorLocations.South;
+//			conn.To.ConnectorLocation = ConnectorLocations.North;
+
+			conn.LineEnd = ConnectionEnds.RightOpenArrow;
+			
+			return conn;
 		}
 	}
 }

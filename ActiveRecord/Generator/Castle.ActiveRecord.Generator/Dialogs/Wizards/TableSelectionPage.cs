@@ -113,6 +113,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 		public override void Deactivated(System.Collections.IDictionary context)
 		{
 			context["selectedtable"] = listBox1.SelectedItem;
+
+			ActiveRecordDescriptor ar = context["ardesc"] as ActiveRecordDescriptor;
+			ar.Table = listBox1.SelectedItem as TableDefinition;
 		}
 
 		public override bool IsValid()

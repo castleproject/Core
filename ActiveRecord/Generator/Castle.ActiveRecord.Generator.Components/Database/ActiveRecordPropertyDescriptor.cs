@@ -21,7 +21,6 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		private String _columnName;
 		private String _columnTypeName = "VARCHAR";
 		private String _propertyName;
-//		private String _propertyFieldName;
 		private Type _propertyType;
 
 
@@ -32,8 +31,14 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 			_columnName = columnName;
 			_columnTypeName = columnTypeName;
 			_propertyName = propertyName;
-//			_propertyFieldName = propertyFieldName;
 			_propertyType = propertyType;
+		}
+
+		public ActiveRecordPropertyDescriptor(string _columnName, string _columnTypeName, string _propertyName)
+		{
+			this._columnName = _columnName;
+			this._columnTypeName = _columnTypeName;
+			this._propertyName = _propertyName;
 		}
 
 		public string ColumnName
@@ -97,8 +102,8 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	{
 		public ActiveRecordBelongsToDescriptor(
 			string columnName, string columnTypeName, 
-			string propertyName, Type propertyType) : 
-			base(columnName, columnTypeName, propertyName, propertyType)
+			string propertyName, ActiveRecordDescriptor propertyType) : 
+			base(columnName, columnTypeName, propertyName)
 		{
 		}
 	}
@@ -106,13 +111,15 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	public class ActiveRecordHasManyDescriptor : ActiveRecordPropertyDescriptor
 	{
 		private String _relationType;
+		private ActiveRecordDescriptor _targetType;
 
 		public ActiveRecordHasManyDescriptor(
-			string columnName, string columnTypeName, 
-			string propertyName, Type propertyType, string _relationType) : 
-			base(columnName, columnTypeName, propertyName, propertyType)
+			string columnName, 
+			string propertyName, Type propertyType, string _relationType, ActiveRecordDescriptor targetType) : 
+			base(columnName, null, propertyName, propertyType)
 		{
-			this._relationType = _relationType;
+			_relationType = _relationType;
+			_targetType = targetType;
 		}
 	}
 
