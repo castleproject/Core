@@ -16,6 +16,8 @@ namespace Castle.MicroKernel
 {
 	using System;
 
+	using Castle.Model;
+
 	/// <summary>
 	/// Summary description for IKernel.
 	/// </summary>
@@ -123,5 +125,7 @@ namespace Castle.MicroKernel
 		}
 
 		void AddChildKernel(IKernel kernel);
+
+		IComponentFactory CreateComponentFactory(ComponentModel model);
 	}
 }

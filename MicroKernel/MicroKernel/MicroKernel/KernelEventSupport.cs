@@ -26,6 +26,8 @@ namespace Castle.MicroKernel
 	{
 		private static readonly object ComponentRegisteredEvent = new object();
 		private static readonly object ComponentUnregisteredEvent = new object();
+		private static readonly object ComponentCreatedEvent = new object();
+		private static readonly object ComponentDestroyedEvent = new object();
 		private static readonly object AddedAsChildKernelEvent = new object();
 
 		private EventHandlerList _events;
@@ -55,6 +57,27 @@ namespace Castle.MicroKernel
 			remove { _events.RemoveHandler(ComponentUnregisteredEvent, value); }
 		}
 
+
+		/// <summary>
+		/// Pending
+		/// </summary>
+		/// <value></value>
+		public event ComponentInstanceDelegate ComponentCreated
+		{
+			add { _events.AddHandler(ComponentCreatedEvent, value); }
+			remove { _events.RemoveHandler(ComponentCreatedEvent, value); }
+		}
+
+		/// <summary>
+		/// Pending
+		/// </summary>
+		/// <value></value>
+		public event ComponentInstanceDelegate ComponentDestroyed
+		{
+			add { _events.AddHandler(ComponentDestroyedEvent, value); }
+			remove { _events.RemoveHandler(ComponentDestroyedEvent, value); }
+		}
+
 		/// <summary>
 		/// Pending
 		/// </summary>
@@ -75,6 +98,18 @@ namespace Castle.MicroKernel
 		{
 			ComponentDataDelegate eventDelegate = (ComponentDataDelegate) _events[ComponentUnregisteredEvent];
 			if (eventDelegate != null) eventDelegate(key, handler);
+		}
+
+		protected virtual void RaiseComponentCreated(ComponentModel model, object instance)
+		{
+			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) _events[ComponentCreatedEvent];
+			if (eventDelegate != null) eventDelegate(model, instance);
+		}
+
+		protected virtual void RaiseComponentDestroyed(ComponentModel model, object instance)
+		{
+			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) _events[ComponentDestroyedEvent];
+			if (eventDelegate != null) eventDelegate(model, instance);
 		}
 
 		protected virtual void RaiseAddedAsChildKernel()

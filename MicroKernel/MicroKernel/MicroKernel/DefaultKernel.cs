@@ -1,4 +1,4 @@
- // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
+// Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,11 +17,14 @@ namespace Castle.MicroKernel
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+
 	using Castle.Model;
+	
 	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.ModelBuilder;
 	using Castle.MicroKernel.Resolvers;
 	using Castle.MicroKernel.Releasers;
+	using Castle.MicroKernel.ComponentFactory;
 
 	/// <summary>
 	/// Summary description for DefaultKernel.
@@ -34,6 +37,7 @@ namespace Castle.MicroKernel
 		private IDependecyResolver _resolver;
 		private IReleasePolicy _releaserPolicy;
 		private Hashtable _dependencyToSatisfy;
+		private IList _facilities;
 		private IList _childKernels;
 
 		private IDictionary _key2Handler;
@@ -45,6 +49,7 @@ namespace Castle.MicroKernel
 			_service2Handler = new Hashtable();
 			_dependencyToSatisfy = new Hashtable();
 			_childKernels = new ArrayList();
+			_facilities = new ArrayList();
 
 			_releaserPolicy = new LifecycledComponentsReleasePolicy();
 			_resolver = new DefaultDependecyResolver(this);
@@ -202,6 +207,9 @@ namespace Castle.MicroKernel
 
 		public void AddFacility(IFacility facility)
 		{
+			facility.Init( this );
+		
+			_facilities.Add( facility );
 		}
 
 		public void AddSubSystem(String key, ISubSystem subsystem)
@@ -239,6 +247,13 @@ namespace Castle.MicroKernel
 		public IDependecyResolver Resolver
 		{
 			get { return _resolver; }
+		}
+
+		public IComponentFactory CreateComponentFactory(ComponentModel model)
+		{
+			return new DefaultComponentFactory(model, this, 
+				new ComponentInstanceDelegate(RaiseComponentCreated), 
+				new ComponentInstanceDelegate(RaiseComponentDestroyed) );
 		}
 
 		#endregion

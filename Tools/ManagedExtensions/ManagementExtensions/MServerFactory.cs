@@ -1,4 +1,4 @@
-// Copyright 2003-2004 The Apache Software Foundation
+// Copyright 2003-2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.ManagementExtensions
+namespace Castle.ManagementExtensions
 {
 	using System;
 	using System.IO;
@@ -20,7 +20,7 @@ namespace Apache.Avalon.Castle.ManagementExtensions
 	using System.Configuration;
 	using System.Security.Policy;
 
-	using Apache.Avalon.Castle.ManagementExtensions.Default;
+	using Castle.ManagementExtensions.Default;
 
 	/// <summary>
 	/// Summary description for MServerFactory.

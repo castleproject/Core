@@ -1,3 +1,44 @@
+<container>
+
+  <facilities>
+    <facility key="manageable" type="" />
+    <facility key="nhibernate" type="" />
+    <facility key="prevalence" type="" />
+    <facility key="aop" type="" />
+  </facilities>
+
+  <components>
+
+    <component id="aspectengine">
+      <properties>
+        <definition>
+    <![CDATA[
+        import AspectSharp.Tests.Classes in AspectSharp.Tests 
+        
+        interceptors [ "key" : DummyInterceptor ] 
+        mixins [ "key" : DummyMixin  ] 
+
+        aspect McBrother for DummyCustomer  
+            include "key" 
+
+            pointcut method(*) 
+                advice("key") 
+            end 
+        end 
+    ]]>
+        </definition>
+      </properties>
+    </component>
+
+    <component id="mailservice" service="" impl="">
+      
+    </component>
+
+  <components>
+
+</container>
+
+
 <component 
     manageable="true" 
     id="customerservices" 

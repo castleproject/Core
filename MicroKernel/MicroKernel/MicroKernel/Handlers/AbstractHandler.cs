@@ -19,9 +19,6 @@ namespace Castle.MicroKernel.Handlers
 
 	using Castle.Model;
 
-	using Castle.MicroKernel.ComponentFactory;
-
-	// public delegate void ChangeStateListenerDelegate( IHandler handler );
 
 	/// <summary>
 	/// Summary description for AbstractHandler.
@@ -50,7 +47,8 @@ namespace Castle.MicroKernel.Handlers
 			_kernel = kernel;
 			_kernel.AddedAsChildKernel += new EventHandler(OnAddedAsChildKernel);
 
-			IComponentFactory factory = new DefaultComponentFactory(ComponentModel, kernel);
+			IComponentFactory factory = _kernel.CreateComponentFactory(ComponentModel);
+			
 			_lifestyleManager = CreateLifestyleManager(factory);
 
 			EnsureDependenciesCanBeSatisfied();

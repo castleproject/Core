@@ -1,4 +1,4 @@
-// Copyright 2003-2004 The Apache Software Foundation
+// Copyright 2003-2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.ManagementExtensions.Default
+namespace Castle.ManagementExtensions.Default
 {
 	using System;
 	using System.Reflection;
 
-	enum ComponentType
+	public enum ComponentType
 	{
 		None,
 		Standard,
@@ -27,7 +27,7 @@ namespace Apache.Avalon.Castle.ManagementExtensions.Default
 	/// <summary>
 	/// Summary description for MInspector.
 	/// </summary>
-	class MInspector
+	public class MInspector
 	{
 		private MInspector()
 		{
@@ -40,8 +40,11 @@ namespace Apache.Avalon.Castle.ManagementExtensions.Default
 		/// <returns></returns>
 		public static ComponentType Inspect(Object instance)
 		{
-			Type target = instance.GetType();
+			return Inspect( instance.GetType() );
+		}
 
+		public static ComponentType Inspect(Type target)
+		{
 			if (typeof(MDynamicSupport).IsAssignableFrom(target))
 			{
 				return ComponentType.Dynamic;

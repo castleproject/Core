@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Apache.Avalon.Castle.ManagementExtensions"
+                AssemblyName = "Castle.ManagementExtensions"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Apache.Avalon.Castle.ManagementExtensions"
+                RootNamespace = "Castle.ManagementExtensions"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >

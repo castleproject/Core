@@ -16,6 +16,8 @@ namespace Castle.MicroKernel
 {
 	using System;
 
+	using Castle.Model;
+
 	/// <summary>
 	/// Represents a delegate which holds basic information about a component.
 	/// </summary>
@@ -24,6 +26,27 @@ namespace Castle.MicroKernel
 	/// creating an instance of it.
 	/// </param>
 	public delegate void ComponentDataDelegate( String key, IHandler handler );
+
+	/// <summary>
+	/// Represents a delegate which holds basic information about a component
+	/// and its instance.
+	/// </summary>
+	/// <param name="key">Key which identifies the component</param>
+	/// <param name="handler">handler that holds this component and is capable of 
+	/// creating an instance of it.
+	/// </param>
+	/// <param name="instance">Component instance</param>
+	public delegate void ComponentInstanceDelegate( ComponentModel model, object instance );
+
+/// <summary>
+/// Represents a delegate which holds basic information about a component
+/// and allows listeners to intercept (and proxy) the component instance.
+/// </summary>
+/// <param name="key">Key which identifies the component</param>
+/// <param name="handler">handler that holds this component and is capable of 
+/// creating an instance of it.
+/// </param>
+///	public delegate object WrapDelegate( String key, IHandler handler );
 
 	/// <summary>
 	/// Summary description for IKernelEvents.
@@ -53,7 +76,7 @@ namespace Castle.MicroKernel
 		/// Extensions can be applied by listening to this event
 		/// and proxying the component instance
 		/// </summary>
-		// event WrapDelegate ComponentWrap;
+//		event WrapDelegate ComponentWrap;
 
 		/// <summary>
 		/// When the component is given back to the kernel
@@ -62,19 +85,17 @@ namespace Castle.MicroKernel
 		/// will be available to the kernel, allowing it to performe 
 		/// the final lifecycle phases.
 		/// </summary>
-		// event WrapDelegate ComponentUnWrap;
+//		event WrapDelegate ComponentUnWrap;
 
 		/// <summary>
-		/// Event fired before the component is returned to the outside
-		/// world.
+		/// Event fired before the component is created.
 		/// </summary>
-		// event ComponentInstanceDelegate ComponentReady;
+		event ComponentInstanceDelegate ComponentCreated;
 
 		/// <summary>
-		/// Event fired when a component instance is given back to the 
-		/// kernel.
+		/// Event fired when a component instance released.
 		/// </summary>
-		// event ComponentInstanceDelegate ComponentReleased;
+		event ComponentInstanceDelegate ComponentDestroyed;
 
 		/// <summary>
 		/// Event fired when all information about a component was

@@ -1,4 +1,4 @@
-// Copyright 2003-2004 The Apache Software Foundation
+// Copyright 2003-2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.ManagementExtensions.Test
+namespace Castle.ManagementExtensions.Test
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Apache.Avalon.Castle.ManagementExtensions;
-	using Apache.Avalon.Castle.ManagementExtensions.Default.Strategy;
-	using Apache.Avalon.Castle.ManagementExtensions.Test.Components;
+	using Castle.ManagementExtensions;
+	using Castle.ManagementExtensions.Default.Strategy;
+	using Castle.ManagementExtensions.Test.Components;
 
 	/// <summary>
 	/// Summary description for CodeGenerationInvokerStrategyTestCase.

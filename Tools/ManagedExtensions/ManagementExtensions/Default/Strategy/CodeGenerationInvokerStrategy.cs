@@ -1,4 +1,4 @@
-// Copyright 2003-2004 The Apache Software Foundation
+// Copyright 2003-2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.ManagementExtensions.Default.Strategy
+namespace Castle.ManagementExtensions.Default.Strategy
 {
 	using System;
 	using System.IO;
@@ -90,7 +90,7 @@ namespace Apache.Avalon.Castle.ManagementExtensions.Default.Strategy
 
 			Type dynamicType = 
 				result.CompiledAssembly.GetType(
-					"Apache.Avalon.Castle.ManagementExtensions.Generated.DynamicImplementation", true, true);
+					"Castle.ManagementExtensions.Generated.DynamicImplementation", true, true);
 
 			Object inst = Activator.CreateInstance(
 				dynamicType, 
@@ -107,8 +107,8 @@ namespace Apache.Avalon.Castle.ManagementExtensions.Default.Strategy
 
 		private CodeNamespace BuildMDynamicSupportCodeDom()
 		{
-			CodeNamespace ns = new CodeNamespace( "Apache.Avalon.Castle.ManagementExtensions.Generated" );
-			ns.Imports.Add( new CodeNamespaceImport("Apache.Avalon.Castle.ManagementExtensions") );
+			CodeNamespace ns = new CodeNamespace( "Castle.ManagementExtensions.Generated" );
+			ns.Imports.Add( new CodeNamespaceImport("Castle.ManagementExtensions") );
 
 			CodeTypeDeclaration typeDefinition = new CodeTypeDeclaration("DynamicImplementation");
 			ns.Types.Add(typeDefinition);

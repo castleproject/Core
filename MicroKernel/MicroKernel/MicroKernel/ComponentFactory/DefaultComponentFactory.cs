@@ -28,11 +28,16 @@ namespace Castle.MicroKernel.ComponentFactory
 	{
 		private IKernel _kernel;
 		private ComponentModel _model; 
+		private ComponentInstanceDelegate _onCreation;
+		private ComponentInstanceDelegate _onDestruction;
 
-		public DefaultComponentFactory(ComponentModel model, IKernel kernel)
+		public DefaultComponentFactory(ComponentModel model, IKernel kernel, 
+			ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction)
 		{
 			_model = model;
 			_kernel = kernel;
+			_onCreation = onCreation;
+			_onDestruction = onDestruction;
 		}
 
 		#region IComponentFactory Members
@@ -49,12 +54,16 @@ namespace Castle.MicroKernel.ComponentFactory
 
 			ApplyCommissionConcerns( instance );
 
+			_onCreation(_model, instance);
+
 			return instance;
 		}
 
 		public void Destroy(object instance)
 		{
 			ApplyDecommissionConcerns( instance );
+
+			_onDestruction(_model, instance);
 		}
 
 		#endregion

@@ -1,4 +1,4 @@
-// Copyright 2003-2004 The Apache Software Foundation
+// Copyright 2003-2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Apache.Avalon.Castle.ManagementExtensions.Default
+namespace Castle.ManagementExtensions.Default
 {
 	using System;
 
 	/// <summary>
-	/// Default (and simple) implementation of <see cref="Apache.Avalon.Castle.ManagementExtensions.MRegistry"/>.
+	/// Default (and simple) implementation of <see cref="Castle.ManagementExtensions.MRegistry"/>.
 	/// TODO: Implement a lyfecycle for registering managed components.
 	/// </summary>
 	[ManagedComponent]
@@ -119,8 +119,8 @@ namespace Apache.Avalon.Castle.ManagementExtensions.Default
 		}
 
 		/// <summary>
-		/// Returns <see cref="Apache.Avalon.Castle.ManagementExtensions.ManagedInstance"/>
-		/// of specified <see cref="Apache.Avalon.Castle.ManagementExtensions.ManagedObjectName"/>.
+		/// Returns <see cref="Castle.ManagementExtensions.ManagedInstance"/>
+		/// of specified <see cref="Castle.ManagementExtensions.ManagedObjectName"/>.
 		/// </summary>
 		/// <param name="name">The name to be located.</param>
 		/// <returns>A ManagedInstance representing the instance data.</returns>
