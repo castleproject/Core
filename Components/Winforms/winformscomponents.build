@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="Winforms-components" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="name" value="WinformComponents" />
+	<property name="version" value="beta-1" />
+	<property name="container.bin.dir" value="${base.dir}/../../../InversionOfControl/bin" />
+	<property name="services.bin.dir" value="${base.dir}/../../../Services/bin" />
+
+	<include buildfile="../../common.inc" />	
+
+	<property name="debug" value="false" />
+	<property name="optimize" value="true" />
+
+	<target name="build" depends="init, assembly-resolver" />
+	
+	<target name="init">
+	</target>
+	
+	<target name="assembly-resolver">
+		<nant buildfile="AssemblyResolverDialog/default.build" inheritall="true" target="build" />
+	</target>
+
+	<target name="dist">
+		<nant buildfile="AssemblyResolverDialog/default.build" inheritall="true" target="dist" />
+	</target>
+
+</project>

@@ -44,6 +44,10 @@
 	<target name="typedfactory">
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="build" />
 	</target>
+
+	<target name="startable">
+		<nant buildfile="Startable/default.build" inheritall="true" target="build" />
+	</target>
 	
 	<target name="batchregistration">
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="build" />
@@ -57,6 +61,7 @@
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="dist" />
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="dist" />
 		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" />
+		<nant buildfile="Startable/default.build" inheritall="true" target="dist" />
 	</target>
 
 </project>

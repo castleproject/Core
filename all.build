@@ -2,9 +2,9 @@
 <project name="all" default="build">
 
 	<property name="base.dir" value="." />
-	<property name="version" value="alpha-4" />
+	<property name="version" value="beta-1" />
 
-	<target name="build" depends="init, tools, container, rails, services, facilities, samples" />
+	<target name="build" depends="init, tools, container, rails, services, facilities, components, samples" />
 	
 	<target name="init">
 
@@ -24,6 +24,10 @@
 
 	<target name="facilities">
 		<nant buildfile="Facilities\facilities.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="components">
+		<nant buildfile="Components\components.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="rails">
