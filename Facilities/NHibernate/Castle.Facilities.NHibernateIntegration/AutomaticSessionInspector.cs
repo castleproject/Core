@@ -17,35 +17,29 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System;
 
 	using Castle.Model;
-
+	
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.ComponentActivator;
+	using Castle.MicroKernel.ModelBuilder;
 
-	using NHibernate.Cfg;
+	using Castle.Facilities.NHibernateExtension;
 
 	/// <summary>
-	/// Summary description for SessionFactoryActivator.
+	/// Summary description for AutomaticSessionInspector.
 	/// </summary>
-	public class SessionFactoryActivator : AbstractComponentActivator
+	public class AutomaticSessionInspector : IContributeComponentModelConstruction
 	{
-		public SessionFactoryActivator(ComponentModel model, 
-			IKernel kernel, ComponentInstanceDelegate onCreation, 
-			ComponentInstanceDelegate onDestruction) : 
-			base(model, kernel, onCreation, onDestruction)
+		public AutomaticSessionInspector()
 		{
 		}
 
-		protected override object InternalCreate()
+		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-			Configuration config = (Configuration) 
-				Model.ExtendedProperties[ NHibernateFacility.ConfiguredObject ];
-
-			
-			return config.BuildSessionFactory();
-		}
-
-		protected override void InternalDestroy(object instance)
-		{
+			if (model.Implementation.IsDefined( 
+				typeof(UsesAutomaticSessionCreationAttribute), true ))
+			{
+				model.Interceptors.Add( 
+					new InterceptorReference( typeof(AutomaticSessionInterceptor) ) );
+			}
 		}
 	}
 }

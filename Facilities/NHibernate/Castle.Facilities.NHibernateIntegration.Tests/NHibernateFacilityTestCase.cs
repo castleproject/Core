@@ -1,4 +1,3 @@
-using ByteFX.Data.MySqlClient;
 // Copyright 2004 DigitalCraftsmen - http://www.digitalcraftsmen.com.br/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,47 +16,21 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
 	using System.Collections;
+	
 	using NUnit.Framework;
+	
 	using Castle.Windsor;
 	using Castle.Model.Configuration;
 	using Castle.MicroKernel.SubSystems.Configuration;
-//	using MySql.Data.MySqlClient;
+
 	using NHibernate;
 
 	/// <summary>
 	/// Summary description for NHibernateFacilityTestCase.
 	/// </summary>
 	[TestFixture]
-	public class NHibernateFacilityTestCase
+	public class NHibernateFacilityTestCase : AbstractNHibernateTestCase
 	{
-		const string Dialect = "NHibernate.Dialect.MySQLDialect";
-		const string ConnectionProvider = "NHibernate.Connection.DriverConnectionProvider";
-		// const string Driver = "NHibernate.Driver.MySqlDataDriver";
-		const string Driver = "Castle.Facilities.NHibernateIntegration.Tests.ByteFxDriver, Castle.Facilities.NHibernateIntegration.Tests";
-		const string ConnectionString = "Database=Test;Data Source=localhost;User Id=theuser;Password=opauser";
-
-		[SetUp]
-		public void InitDb()
-		{
-			// Reset tables
-
-			MySqlConnection conn = new MySqlConnection(ConnectionString);
-			conn.Open();
-
-			try
-			{
-				MySqlCommand command = conn.CreateCommand();
-				command.CommandText = "DELETE FROM BLOGS";
-				command.ExecuteNonQuery();
-				command.CommandText = "DELETE FROM BLOG_ITEMS";
-				command.ExecuteNonQuery();
-			}
-			finally
-			{
-				conn.Close();
-			}
-		}
-
 		[Test]
 		public void Usage()
 		{
@@ -106,44 +79,5 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			}
 		}
 
-		private IWindsorContainer CreateConfiguredContainer()
-		{
-			IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
-
-			MutableConfiguration confignode = new MutableConfiguration("facility");
-
-			IConfiguration factory =
-				confignode.Children.Add(new MutableConfiguration("factory"));
-			factory.Attributes["id"] = "sessionFactory1";
-
-			IConfiguration settings =
-				factory.Children.Add(new MutableConfiguration("settings"));
-
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				                         ConnectionProvider)).Attributes["key"] = "hibernate.connection.provider";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				                         Driver)).Attributes["key"] = "hibernate.connection.driver_class";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				                         ConnectionString)).Attributes["key"] = "hibernate.connection.connection_string";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				                         Dialect)).Attributes["key"] = "hibernate.dialect";
-
-			IConfiguration resources =
-				factory.Children.Add(new MutableConfiguration("resources"));
-
-			IConfiguration resource;
-			resource = resources.Children.Add(new MutableConfiguration("resource"));
-			resource.Attributes["name"] = "Blog.hbm.xml";
-			resource = resources.Children.Add(new MutableConfiguration("resource"));
-			resource.Attributes["name"] = "BlogItem.hbm.xml";
-
-			container.Kernel.ConfigurationStore.AddFacilityConfiguration("nhibernate", confignode);
-
-			return container;
-		}
 	}
 }

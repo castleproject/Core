@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
+        ProjectGuid = "{B687632A-D2C9-4E48-B878-D9066FB43434}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Facilities.NHibernateIntegration"
+                AssemblyName = "Castle.Facilities.NHibernateExtension"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Facilities.NHibernateIntegration"
+                RootNamespace = "Castle.Facilities.NHibernateExtension"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -80,91 +80,26 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\lib\Iesi.Collections.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
-                />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\lib\Commons.dll"
-                />
-                <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\lib\HashCodeProvider.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
-                    Name = "Castle.Facilities.NHibernateExtension"
-                    Project = "{B687632A-D2C9-4E48-B878-D9066FB43434}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.Services.Transaction"
-                    AssemblyName = "Castle.Services.Transaction"
-                    HintPath = "..\bin\Castle.Services.Transaction.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AbstractTransaction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AutomaticSessionInspector.cs"
+                    RelPath = "Attributes.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AutomaticSessionInterceptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NHibernateFacility.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NHibernateTransaction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NHibernateTransactionManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SessionFactoryActivator.cs"
+                    RelPath = "SessionManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using NHibernate;
-using NHibernate.Cfg;
-
 namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
@@ -22,11 +19,15 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System.Reflection;
 	using System.Configuration;
 
+	using Castle.Model;
+	using Castle.Model.Configuration;
+
 	using Castle.MicroKernel;
 
-	using Castle.Model;
+	using Castle.Services.Transaction;
 
-	using Castle.Model.Configuration;
+	using NHibernate;
+	using NHibernate.Cfg;
 
 	/// <summary>
 	/// 
@@ -56,6 +57,16 @@ namespace Castle.Facilities.NHibernateIntegration
 				throw new ConfigurationException(
 					"You need to configure at least one factory for NHibernateFacility");
 			}
+
+			kernel.ComponentModelBuilder.AddContributor( new AutomaticSessionInspector() );
+
+			kernel.AddComponent( 
+				"nhibernate.session.interceptor", 
+				typeof(AutomaticSessionInterceptor) );
+
+			kernel.AddComponent( 
+				"nhibernate.transaction.manager", 
+				typeof(ITransactionManager), typeof(NHibernateTransactionManager) );
 
 			ConfigureFactories(kernel, factoriesConfig);
 		}

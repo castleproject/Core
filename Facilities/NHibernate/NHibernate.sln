@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernat
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateExtension", "Castle.Facilities.NHibernateExtension\Castle.Facilities.NHibernateExtension.csproj", "{B687632A-D2C9-4E48-B878-D9066FB43434}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -21,6 +25,10 @@ Global
 		{0C9EE31D-A700-485B-948A-68E4A3614E71}.Debug.Build.0 = Debug|.NET
 		{0C9EE31D-A700-485B-948A-68E4A3614E71}.Release.ActiveCfg = Release|.NET
 		{0C9EE31D-A700-485B-948A-68E4A3614E71}.Release.Build.0 = Release|.NET
+		{B687632A-D2C9-4E48-B878-D9066FB43434}.Debug.ActiveCfg = Debug|.NET
+		{B687632A-D2C9-4E48-B878-D9066FB43434}.Debug.Build.0 = Debug|.NET
+		{B687632A-D2C9-4E48-B878-D9066FB43434}.Release.ActiveCfg = Release|.NET
+		{B687632A-D2C9-4E48-B878-D9066FB43434}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

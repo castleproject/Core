@@ -142,10 +142,30 @@
                     HintPath = "C:\dev\dotnet\tools\ByteFX\ByteFX .Data Provider\ByteFX.MySqlClient.dll"
                     AssemblyFolderKey = "hklm\dn\bytefx"
                 />
+                <Reference
+                    Name = "Castle.Facilities.NHibernateExtension"
+                    Project = "{B687632A-D2C9-4E48-B878-D9066FB43434}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilties.AutomaticTransactionManagement"
+                    AssemblyName = "Castle.Facilties.AutomaticTransactionManagement"
+                    HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilties.AutomaticTransactionManagement.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AbstractNHibernateTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
@@ -157,12 +177,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BlogDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BlogDaoTransactional.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "BlogItem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ByteFxDriver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DaoTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
