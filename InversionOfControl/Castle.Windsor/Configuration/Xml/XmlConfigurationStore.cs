@@ -193,9 +193,9 @@ namespace Castle.Windsor.Configuration.Xml
 
 		private String GetRequiredAttributeValue(XmlNode node, String attName)
 		{
-			String value = GetAttributeValue(node, attName);
+			String value = GetAttributeValue(node);
 						
-			if (String.Empty.Equals(value))
+			if (value == null || value.Length == 0)
 			{
 				String message = String.Format("Required attribute {0} was not found in node {1}", 
 					attName, node.Name);
@@ -206,7 +206,7 @@ namespace Castle.Windsor.Configuration.Xml
 			return value;
 		}
 
-		private String GetAttributeValue(XmlNode node, String attName)
+		private String GetAttributeValue(XmlNode node)
 		{
 			XmlAttribute att = node.Attributes["id"];
 

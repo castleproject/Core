@@ -28,4 +28,14 @@ namespace Castle.Model
 		/// </summary>
 		void Initialize();
 	}
+
+	/// <summary>
+	/// Interface for components that wish to be started by the container
+	/// </summary>
+	public interface IStartable
+	{
+		void Start();
+
+		void Stop();
+	}
 }
