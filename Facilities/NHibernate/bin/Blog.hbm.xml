@@ -2,8 +2,8 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.0">
 	<class name="Castle.Facilities.NHibernateIntegration.Tests.Blog, Castle.Facilities.NHibernateIntegration.Tests" table="BLOGS">
 	
-		<id name="Id" column="BLOG_ID" unsaved-value="0">
-			<generator class="native" />
+		<id name="Id" type="String" column="BLOG_ID">
+			<generator class="uuid.hex" />
 		</id>
 		<property name="Name" column="NAME" not-null="true" unique="true" />
 		<bag name="Items" inverse="true" lazy="true" order-by="DATE_TIME" cascade="all">

@@ -36,6 +36,7 @@ Global
 		Changes.txt = Changes.txt
 		default.build = default.build
 		License.txt = License.txt
+		bin\Order.hbm.xml = bin\Order.hbm.xml
 		Readme.txt = Readme.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

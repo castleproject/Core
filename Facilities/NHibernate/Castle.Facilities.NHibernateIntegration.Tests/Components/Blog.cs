@@ -19,11 +19,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 	public class Blog
 	{
-		private long id;
+		private string id;
 		private string name;
 		private IList items;
 
-		public long Id
+		public string Id
 		{
 			get { return id; }
 			set { id = value; }

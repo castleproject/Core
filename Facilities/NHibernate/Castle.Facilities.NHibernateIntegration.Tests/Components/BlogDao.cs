@@ -25,6 +25,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	[UsesAutomaticSessionCreation]
 	public class BlogDao
 	{
+		[SessionFlush(FlushOption.Force)]
 		public virtual Blog CreateBlog( String name )
 		{
 			ISession session = SessionManager.CurrentSession;

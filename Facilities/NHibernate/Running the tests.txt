@@ -1,0 +1,42 @@
+
+-- Please note that you can disable the test cases, check the 'How to build.txt' in --
+--                             the root directory                                   --
+
+The tests run against a MySQL database. Follows the db structure:
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ "test";
+USE "test";
+
+DROP TABLE IF EXISTS "blog_items";
+CREATE TABLE "blog_items" (
+  "BLOG_ITEM_ID" int(11) NOT NULL default '0',
+  "TITLE" varchar(45) NOT NULL default '',
+  "TEXT" text NOT NULL,
+  "DATE_TIME" datetime NOT NULL default '0000-00-00 00:00:00',
+  "BLOG_ID" varchar(32) default '0',
+  PRIMARY KEY  ("BLOG_ITEM_ID")
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='InnoDB free: 4096 kB; (`BLOG_ID`) REFER `test/blogs`(`BLOG_I';
+
+DROP TABLE IF EXISTS "blogs";
+CREATE TABLE "blogs" (
+  "BLOG_ID" varchar(32) NOT NULL default '',
+  "NAME" varchar(45) NOT NULL default '',
+  PRIMARY KEY  ("BLOG_ID")
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ "test2";
+USE "test2";
+
+DROP TABLE IF EXISTS "orders";
+CREATE TABLE "orders" (
+  "id" int(10) unsigned NOT NULL auto_increment,
+  "value" decimal(10,0) NOT NULL default '0',
+  PRIMARY KEY  ("id")
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT;
+SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS;
+SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
