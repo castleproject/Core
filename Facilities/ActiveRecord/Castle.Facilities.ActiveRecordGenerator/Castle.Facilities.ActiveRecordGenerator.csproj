@@ -109,10 +109,20 @@
                     AssemblyName = "Castle.Model"
                     HintPath = "..\bin\Castle.Model.dll"
                 />
+                <Reference
+                    Name = "MSDASC"
+                    AssemblyName = "MSDASC"
+                    HintPath = "..\lib\MSDASC.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "ActionConstants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "App.cs"
                     SubType = "Code"
@@ -124,6 +134,21 @@
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Action\IAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Action\IActionFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Action\Standard\NewProjectAction.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

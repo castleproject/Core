@@ -1,3 +1,4 @@
+using MSDASC;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,9 +45,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.FolderBrowserDialog browserDialog1;
 		private System.Windows.Forms.TextBox location;
 		private System.Windows.Forms.ComboBox languages;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.Container components = null;
 
 		public NewProject(ICodeProviderFactory factory)
@@ -61,9 +59,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			}
 		}
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
 		protected override void Dispose( bool disposing )
 		{
 			if( disposing )
@@ -76,6 +71,17 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			base.Dispose( disposing );
 		}
 
+		private void button1_Click(object sender, System.EventArgs e)
+		{
+			browserDialog1.RootFolder = Environment.SpecialFolder.Personal;
+			browserDialog1.SelectedPath = location.Text;
+			
+			if (browserDialog1.ShowDialog(this) == DialogResult.OK)
+			{
+				location.Text = browserDialog1.SelectedPath;
+			}
+		}
+
 		#region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -84,10 +90,13 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private void InitializeComponent()
 		{
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.button1 = new System.Windows.Forms.Button();
+			this.location = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.name = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.createButton = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.name = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.connectionStringButton = new System.Windows.Forms.Button();
 			this.connectionString = new System.Windows.Forms.TextBox();
@@ -97,13 +106,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.database = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.ns = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
-			this.location = new System.Windows.Forms.TextBox();
-			this.button1 = new System.Windows.Forms.Button();
 			this.languages = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
+			this.ns = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.browserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -124,6 +130,47 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Project information:";
 			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(384, 64);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(100, 20);
+			this.button1.TabIndex = 4;
+			this.button1.Text = "&Browse...";
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// location
+			// 
+			this.location.Location = new System.Drawing.Point(136, 64);
+			this.location.Name = "location";
+			this.location.Size = new System.Drawing.Size(236, 21);
+			this.location.TabIndex = 3;
+			this.location.Text = "";
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(16, 64);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(116, 16);
+			this.label6.TabIndex = 2;
+			this.label6.Text = "Location";
+			// 
+			// name
+			// 
+			this.name.Location = new System.Drawing.Point(136, 32);
+			this.name.Name = "name";
+			this.name.Size = new System.Drawing.Size(160, 21);
+			this.name.TabIndex = 1;
+			this.name.Text = "";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(16, 32);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(116, 16);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "Name";
+			// 
 			// cancelButton
 			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -138,22 +185,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.createButton.Name = "createButton";
 			this.createButton.TabIndex = 3;
 			this.createButton.Text = "Create";
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(16, 32);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(116, 16);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Name";
-			// 
-			// name
-			// 
-			this.name.Location = new System.Drawing.Point(136, 32);
-			this.name.Name = "name";
-			this.name.Size = new System.Drawing.Size(160, 21);
-			this.name.TabIndex = 1;
-			this.name.Text = "";
 			// 
 			// groupBox2
 			// 
@@ -178,6 +209,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.connectionStringButton.Size = new System.Drawing.Size(28, 20);
 			this.connectionStringButton.TabIndex = 12;
 			this.connectionStringButton.Text = "...";
+			this.connectionStringButton.Click += new System.EventHandler(this.connectionStringButton_Click);
 			// 
 			// connectionString
 			// 
@@ -240,47 +272,6 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Code generation:";
 			// 
-			// ns
-			// 
-			this.ns.Location = new System.Drawing.Point(140, 27);
-			this.ns.Name = "ns";
-			this.ns.Size = new System.Drawing.Size(344, 21);
-			this.ns.TabIndex = 15;
-			this.ns.Text = "";
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(20, 32);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(116, 16);
-			this.label2.TabIndex = 14;
-			this.label2.Text = "Namespace";
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(16, 64);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(116, 16);
-			this.label6.TabIndex = 2;
-			this.label6.Text = "Location";
-			// 
-			// location
-			// 
-			this.location.Location = new System.Drawing.Point(136, 64);
-			this.location.Name = "location";
-			this.location.Size = new System.Drawing.Size(236, 21);
-			this.location.TabIndex = 3;
-			this.location.Text = "";
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(384, 64);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(100, 20);
-			this.button1.TabIndex = 4;
-			this.button1.Text = "&Browse...";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
 			// languages
 			// 
 			this.languages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -296,6 +287,22 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.label7.Size = new System.Drawing.Size(116, 16);
 			this.label7.TabIndex = 16;
 			this.label7.Text = "Language";
+			// 
+			// ns
+			// 
+			this.ns.Location = new System.Drawing.Point(140, 27);
+			this.ns.Name = "ns";
+			this.ns.Size = new System.Drawing.Size(344, 21);
+			this.ns.TabIndex = 15;
+			this.ns.Text = "";
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(20, 32);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(116, 16);
+			this.label2.TabIndex = 14;
+			this.label2.Text = "Namespace";
 			// 
 			// NewProject
 			// 
@@ -322,14 +329,22 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		}
 		#endregion
 
-		private void button1_Click(object sender, System.EventArgs e)
+		private void connectionStringButton_Click(object sender, System.EventArgs e)
 		{
-			browserDialog1.RootFolder = Environment.SpecialFolder.Personal;
-			browserDialog1.SelectedPath = location.Text;
-			
-			if (browserDialog1.ShowDialog(this) == DialogResult.OK)
+			DataLinks links = new DataLinksClass();
+
+			if (connectionString.Text.Length == 0)
 			{
-				location.Text = browserDialog1.SelectedPath;
+				connectionString.Text = (String) links.PromptNew();
+			}
+			else
+			{
+				object ocs = connectionString.Text;
+
+				if((bool)links.PromptEdit(ref ocs))
+				{
+					connectionString.Text = (string)ocs;
+				}
 			}
 		}
 	}

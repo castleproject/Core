@@ -1,3 +1,4 @@
+using Castle.Facilities.ActiveRecordGenerator.Action;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,18 +28,10 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 	public class MainForm : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.MainMenu mainMenu1;
-		private System.Windows.Forms.MenuItem menuItem1;
-		private System.Windows.Forms.MenuItem menuItem2;
-		private System.Windows.Forms.MenuItem menuItem3;
 		private System.Windows.Forms.MenuItem menuItem4;
-		private System.Windows.Forms.MenuItem menuItem5;
-		private System.Windows.Forms.MenuItem menuItem6;
 		private System.Windows.Forms.MenuItem menuItem7;
 		private System.Windows.Forms.MenuItem menuItem8;
 		private System.Windows.Forms.MenuItem menuItem9;
-		private System.Windows.Forms.MenuItem menuItem10;
-		private System.Windows.Forms.MenuItem menuItem11;
-		private System.Windows.Forms.MenuItem menuItem12;
 		private System.Windows.Forms.StatusBar statusBar1;
 		private System.Windows.Forms.StatusBarPanel statusBarPanel1;
 		private System.Windows.Forms.Panel panel1;
@@ -46,15 +39,37 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		private System.Windows.Forms.TreeView treeView1;
 		private System.Windows.Forms.Splitter splitter1;
 		private System.Windows.Forms.MenuItem menuItem13;
+		private System.Windows.Forms.MenuItem fileMenu;
+		private System.Windows.Forms.MenuItem newMenu;
+		private System.Windows.Forms.MenuItem openMenu;
+		private System.Windows.Forms.MenuItem saveMenu;
+		private System.Windows.Forms.MenuItem saveAsMenu;
+		private System.Windows.Forms.MenuItem exitMenu;
+		private System.Windows.Forms.MenuItem helpMenu;
+		private System.Windows.Forms.MenuItem aboutMenu;
 		private System.ComponentModel.IContainer components;
+		
+		private Hashtable _translator = new Hashtable();
+		
+		private IActionFactory _actionFactory;
 
 
-		public MainForm()
+		public MainForm(IActionFactory actionFactory)
 		{
-			//
-			// Required for Windows Form Designer support
-			//
+			_actionFactory = actionFactory;
+
 			InitializeComponent();
+
+			InitTranslator();
+		}
+
+		private void InitTranslator()
+		{
+			_translator.Add( newMenu, ActionConstants.New_Project );
+			_translator.Add( openMenu, ActionConstants.Open_Project );
+			_translator.Add( saveMenu, ActionConstants.Save_Project );
+			_translator.Add( saveAsMenu, ActionConstants.SaveAs_Project );
+			_translator.Add( exitMenu, ActionConstants.Exit );
 		}
 
 		/// <summary>
@@ -81,73 +96,77 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.fileMenu = new System.Windows.Forms.MenuItem();
+			this.newMenu = new System.Windows.Forms.MenuItem();
+			this.openMenu = new System.Windows.Forms.MenuItem();
 			this.menuItem4 = new System.Windows.Forms.MenuItem();
-			this.menuItem5 = new System.Windows.Forms.MenuItem();
-			this.menuItem6 = new System.Windows.Forms.MenuItem();
+			this.saveMenu = new System.Windows.Forms.MenuItem();
+			this.saveAsMenu = new System.Windows.Forms.MenuItem();
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			this.menuItem8 = new System.Windows.Forms.MenuItem();
+			this.menuItem13 = new System.Windows.Forms.MenuItem();
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
-			this.menuItem10 = new System.Windows.Forms.MenuItem();
-			this.menuItem11 = new System.Windows.Forms.MenuItem();
-			this.menuItem12 = new System.Windows.Forms.MenuItem();
+			this.exitMenu = new System.Windows.Forms.MenuItem();
+			this.helpMenu = new System.Windows.Forms.MenuItem();
+			this.aboutMenu = new System.Windows.Forms.MenuItem();
 			this.statusBar1 = new System.Windows.Forms.StatusBar();
 			this.statusBarPanel1 = new System.Windows.Forms.StatusBarPanel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.menuItem13 = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
 			// 
 			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem1,
-																					  this.menuItem11});
+																					  this.fileMenu,
+																					  this.helpMenu});
 			// 
-			// menuItem1
+			// fileMenu
 			// 
-			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem2,
-																					  this.menuItem3,
-																					  this.menuItem4,
-																					  this.menuItem5,
-																					  this.menuItem6,
-																					  this.menuItem7,
-																					  this.menuItem8,
-																					  this.menuItem9,
-																					  this.menuItem10});
-			this.menuItem1.Text = "&File";
+			this.fileMenu.Index = 0;
+			this.fileMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.newMenu,
+																					 this.openMenu,
+																					 this.menuItem4,
+																					 this.saveMenu,
+																					 this.saveAsMenu,
+																					 this.menuItem7,
+																					 this.menuItem8,
+																					 this.menuItem9,
+																					 this.exitMenu});
+			this.fileMenu.Text = "&File";
 			// 
-			// menuItem2
+			// newMenu
 			// 
-			this.menuItem2.Index = 0;
-			this.menuItem2.Text = "&New...";
+			this.newMenu.Index = 0;
+			this.newMenu.Text = "&New...";
+			this.newMenu.Click += new System.EventHandler(this.Menu_Click);
 			// 
-			// menuItem3
+			// openMenu
 			// 
-			this.menuItem3.Index = 1;
-			this.menuItem3.Text = "Open...";
+			this.openMenu.Index = 1;
+			this.openMenu.Text = "Open...";
+			this.openMenu.Click += new System.EventHandler(this.Menu_Click);
 			// 
 			// menuItem4
 			// 
 			this.menuItem4.Index = 2;
 			this.menuItem4.Text = "-";
 			// 
-			// menuItem5
+			// saveMenu
 			// 
-			this.menuItem5.Index = 3;
-			this.menuItem5.Text = "&Save";
+			this.saveMenu.Index = 3;
+			this.saveMenu.Text = "&Save";
+			this.saveMenu.Click += new System.EventHandler(this.Menu_Click);
 			// 
-			// menuItem6
+			// saveAsMenu
 			// 
-			this.menuItem6.Index = 4;
-			this.menuItem6.Text = "S&ave As...";
+			this.saveAsMenu.Index = 4;
+			this.saveAsMenu.Text = "S&ave As...";
+			this.saveAsMenu.Click += new System.EventHandler(this.Menu_Click);
 			// 
 			// menuItem7
 			// 
@@ -161,27 +180,34 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 																					  this.menuItem13});
 			this.menuItem8.Text = "Recent Projecs";
 			// 
+			// menuItem13
+			// 
+			this.menuItem13.Index = 0;
+			this.menuItem13.Text = "Sample";
+			// 
 			// menuItem9
 			// 
 			this.menuItem9.Index = 7;
 			this.menuItem9.Text = "-";
 			// 
-			// menuItem10
+			// exitMenu
 			// 
-			this.menuItem10.Index = 8;
-			this.menuItem10.Text = "E&xit";
+			this.exitMenu.Index = 8;
+			this.exitMenu.Text = "E&xit";
+			this.exitMenu.Click += new System.EventHandler(this.Menu_Click);
 			// 
-			// menuItem11
+			// helpMenu
 			// 
-			this.menuItem11.Index = 1;
-			this.menuItem11.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					   this.menuItem12});
-			this.menuItem11.Text = "&Help";
+			this.helpMenu.Index = 1;
+			this.helpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.aboutMenu});
+			this.helpMenu.Text = "&Help";
 			// 
-			// menuItem12
+			// aboutMenu
 			// 
-			this.menuItem12.Index = 0;
-			this.menuItem12.Text = "About...";
+			this.aboutMenu.Index = 0;
+			this.aboutMenu.Text = "About...";
+			this.aboutMenu.Click += new System.EventHandler(this.Menu_Click);
 			// 
 			// statusBar1
 			// 
@@ -228,12 +254,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.splitter1.TabIndex = 9;
 			this.splitter1.TabStop = false;
 			// 
-			// menuItem13
-			// 
-			this.menuItem13.Index = 0;
-			this.menuItem13.Text = "Sample";
-			// 
-			// Form1
+			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(7, 15);
 			this.ClientSize = new System.Drawing.Size(712, 490);
@@ -243,7 +264,7 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 			this.Controls.Add(this.statusBar1);
 			this.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.Menu = this.mainMenu1;
-			this.Name = "Form1";
+			this.Name = "MainForm";
 			this.Text = "Form1";
 			((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).EndInit();
 			this.ResumeLayout(false);
@@ -251,6 +272,16 @@ namespace Castle.Facilities.ActiveRecordGenerator.Forms
 		}
 		#endregion
 
+		private void Menu_Click(object sender, System.EventArgs e)
+		{
+			String actionName = (String) _translator[ sender ];
+			
+			if (actionName != null)
+			{
+				IAction action = _actionFactory.Create(actionName);
 
+				action.Execute()
+			}
+		}
 	}
 }
