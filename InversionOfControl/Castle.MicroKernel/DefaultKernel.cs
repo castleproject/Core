@@ -152,6 +152,9 @@ namespace Castle.MicroKernel
 
 		public virtual void AddComponent(String key, Type classType)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (classType == null) throw new ArgumentNullException("classType");
+
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, null);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
@@ -160,6 +163,10 @@ namespace Castle.MicroKernel
 
 		public virtual void AddComponent(String key, Type serviceType, Type classType)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (serviceType == null) throw new ArgumentNullException("serviceType");
+			if (classType == null) throw new ArgumentNullException("classType");
+
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, serviceType, classType, null);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
@@ -174,6 +181,10 @@ namespace Castle.MicroKernel
 		/// <param name="parameters"></param>
 		public virtual void AddComponentWithProperties( String key, Type classType, IDictionary parameters )
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (parameters == null) throw new ArgumentNullException("parameters");
+			if (classType == null) throw new ArgumentNullException("classType");
+
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, parameters);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
@@ -189,6 +200,11 @@ namespace Castle.MicroKernel
 		/// <param name="parameters"></param>
 		public virtual void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary parameters )
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (parameters == null) throw new ArgumentNullException("parameters");
+			if (serviceType == null) throw new ArgumentNullException("serviceType");
+			if (classType == null) throw new ArgumentNullException("classType");
+
 			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, parameters);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
@@ -201,6 +217,8 @@ namespace Castle.MicroKernel
 		/// <param name="model"></param>
 		public virtual void AddCustomComponent( ComponentModel model )
 		{
+			if (model == null) throw new ArgumentNullException("model");
+
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(model.Name, handler);
@@ -208,6 +226,8 @@ namespace Castle.MicroKernel
 
 		public virtual bool RemoveComponent(String key)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+
 			if (_key2Handler.Contains(key))
 			{
 				IHandler handler = GetHandler(key);
@@ -249,6 +269,8 @@ namespace Castle.MicroKernel
 
 		public virtual bool HasComponent(String key)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			
 			if (_key2Handler.Contains(key))
 			{
 				return true;
@@ -264,6 +286,8 @@ namespace Castle.MicroKernel
 
 		public virtual bool HasComponent(Type serviceType)
 		{
+			if (serviceType == null) throw new ArgumentNullException("serviceType");
+
 			if (_service2Handler.Contains(serviceType))
 			{
 				return true;
@@ -281,6 +305,8 @@ namespace Castle.MicroKernel
 		{
 			get
 			{
+				if (key == null) throw new ArgumentNullException("key");
+
 				if (!HasComponent(key))
 				{
 					throw new ComponentNotFoundException(key);
@@ -296,6 +322,8 @@ namespace Castle.MicroKernel
 		{
 			get
 			{
+				if (service == null) throw new ArgumentNullException("service");
+
 				if (!HasComponent(service))
 				{
 					throw new ComponentNotFoundException(service);
@@ -346,6 +374,8 @@ namespace Castle.MicroKernel
 
 		public virtual IHandler GetHandler(String key)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+
 			IHandler handler = _key2Handler[key] as IHandler;
 
 			if (handler == null && Parent != null)
@@ -358,6 +388,8 @@ namespace Castle.MicroKernel
 
 		public virtual IHandler GetHandler(Type service)
 		{
+			if (service == null) throw new ArgumentNullException("service");
+
 			IHandler handler = _service2Handler[service] as IHandler;
 
 			if (handler == null && Parent != null)
@@ -376,6 +408,8 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		public virtual IHandler[] GetHandlers(Type service)
 		{
+			if (service == null) throw new ArgumentNullException("service");
+
 			ArrayList list = new ArrayList();
 
 			foreach( IHandler handler in _key2Handler.Values )
@@ -418,28 +452,45 @@ namespace Castle.MicroKernel
 
 		public virtual void AddFacility(String key, IFacility facility)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (facility == null) throw new ArgumentNullException("facility");
+
 			facility.Init(this, ConfigurationStore.GetFacilityConfiguration(key));
 
 			_facilities.Add(facility);
 		}
 
+		/// <summary>
+		/// Returns the facilities registered on the kernel.
+		/// </summary>
+		/// <returns></returns>
+		public virtual IFacility[] GetFacilities()
+		{
+			IFacility[] list = new IFacility[ _facilities.Count ];
+			_facilities.CopyTo(list, 0);
+			return list;
+		}
+
 		public virtual void AddSubSystem(String key, ISubSystem subsystem)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			if (subsystem == null) throw new ArgumentNullException("facility");
+
 			subsystem.Init(this);
 			_subsystems[key] = subsystem;
 		}
 
 		public virtual ISubSystem GetSubSystem(String key)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+
 			return _subsystems[key] as ISubSystem;
 		}
 
-		// void ConfigureExternalComponent(object component);
-
-		// void ConfigureExternalComponent(object component, ComponentModel model);
-
 		public virtual void AddChildKernel(IKernel childKernel)
 		{
+			if (childKernel == null) throw new ArgumentNullException("childKernel");
+
 			childKernel.Parent = this;
 			_childKernels.Add(childKernel);
 		}
@@ -468,6 +519,8 @@ namespace Castle.MicroKernel
 
 		public virtual IComponentActivator CreateComponentActivator(ComponentModel model)
 		{
+			if (model == null) throw new ArgumentNullException("model");
+
 			IComponentActivator activator = null;
 
 			if (model.CustomComponentActivator == null)

@@ -212,6 +212,12 @@ namespace Castle.MicroKernel
 		void AddFacility(String key, IFacility facility);
 
 		/// <summary>
+		/// Returns the facilities registered on the kernel.
+		/// </summary>
+		/// <returns></returns>
+		IFacility[] GetFacilities();
+
+		/// <summary>
 		/// Adds (or replaces) an <see cref="ISubSystem"/>
 		/// </summary>
 		/// <param name="key"></param>

@@ -46,6 +46,21 @@ the classes that should be registered as components
 &lt;/facilities&gt;
 </pre>
 
+
+<p>
+The next snippet also register the facility indicated by the <code>type</code>
+with the key specified by <code>id</code>
+</p>
+
+<pre class="source">
+&lt;facilities&gt;
+  &lt;facility id="batchregistration"&gt;
+    &lt;addFacility id="facilitKey" type="My.Assembly.MyFacility, My.Assembly" /&gt;
+  &lt;/facility&gt;
+&lt;/facilities&gt;
+</pre>
+
+
 <p>
 Then just register the facility and voila:
 </p>
