@@ -46,7 +46,7 @@ namespace TestSiteNVelocity.Controllers
 
 		public void BuildFormRemoteTag()
 		{
-			RenderText( new AjaxHelper().BuildFormRemoteTag("url", "post") );
+			RenderText( new AjaxHelper().BuildFormRemoteTag("url", null, null) );
 		}
 
 		public void ObserveField()
@@ -61,7 +61,18 @@ namespace TestSiteNVelocity.Controllers
 
 		public void Index()
 		{
-			
+			IList list = GetList();
+
+			PropertyBag.Add("users", list);
+		}
+
+		public void AddUserWithAjax(String name, String email)
+		{
+			GetList().Add( new User(name, email) );
+
+			Index();
+
+			RenderView("/userlist");
 		}
 
 		public void InferAddress()
@@ -88,6 +99,45 @@ namespace TestSiteNVelocity.Controllers
 			}
 
 			RenderText(message);
+		}
+
+		private IList GetList()
+		{
+			IList list = Context.Session["list"] as IList;
+			
+			if (list == null)
+			{
+				list = new ArrayList();
+
+				list.Add( new User("somefakeuser", "fakeemail@server.net") );
+				list.Add( new User("someotherfakeuser", "otheremail@server.net") );
+
+				Context.Session["list"] = list;
+			}
+			
+			return list;
+		}
+	}
+
+	public class User
+	{
+		private String name;
+		private String email;
+
+		public User(string name, string email)
+		{
+			this.name = name;
+			this.email = email;
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
+
+		public string Email
+		{
+			get { return email; }
 		}
 	}
 }

@@ -77,8 +77,8 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("<form method=\"post\" onsubmit=\"new Ajax.Request('url', " +
-				"{method:post, asynchronous:true, parameters:Form.serialize(this)}); " + 
+			AssertContents("<form onsubmit=\"new Ajax.Request('url', " +
+				"{asynchronous:true, parameters:Form.serialize(this)}); " + 
 				"return false;\">", response);
 		}
 

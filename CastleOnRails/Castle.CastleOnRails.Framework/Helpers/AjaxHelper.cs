@@ -56,7 +56,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 		{
 			ResourceManager rs = new ResourceManager(
 				"Castle.CastleOnRails.Framework.Javascripts", 
-				Assembly.GetExecutingAssembly() );
+				  Assembly.GetAssembly( typeof(AjaxHelper) ) );
 
 			return rs.GetString("jsfunctions");
 		}
@@ -114,13 +114,35 @@ namespace Castle.CastleOnRails.Framework.Helpers
 		///	callbacks is the same as link_to_remote.
 		/// </summary>
 		/// <returns></returns>
-		public String BuildFormRemoteTag(String url, String method)
+		public String BuildFormRemoteTag(String url, String idOfElementToBeUpdated, String with)
 		{
 			IDictionary options = new Hashtable();
 
 			options["form"] = true;
 			options["url"] = url;
-			options["method"] = method;
+//			options["method"] = method;
+
+			if (idOfElementToBeUpdated != null) options["update"] = idOfElementToBeUpdated;
+			if (with != null) options["with"] = with;
+
+			return BuildFormRemoteTag(options);
+		}
+
+		public String BuildFormRemoteTag(String url, String idOfElementToBeUpdated, 
+			String with, String loading, String loaded, String interactive, String complete)
+		{
+			IDictionary options = new Hashtable();
+
+			options["form"] = true;
+			options["url"] = url;
+			//	options["method"] = method;
+
+			if (idOfElementToBeUpdated != null) options["update"] = idOfElementToBeUpdated;
+			if (with != null) options["with"] = with;
+			if (loading != null) options["Loading"] = loading;
+			if (loaded != null) options["Loaded"] = loaded;
+			if (complete != null) options["Complete"] = complete;
+			if (interactive != null) options["Interactive"] = interactive;
 
 			return BuildFormRemoteTag(options);
 		}
@@ -141,10 +163,9 @@ namespace Castle.CastleOnRails.Framework.Helpers
 		{
 			options["form"] = true;
 
-			String method = options.Contains("method") ? options["method"].ToString() : "post";
 			String remoteFunc = RemoteFunction(options);
 
-			return String.Format("<form method=\"{0}\" onsubmit=\"{1}; return false;\">", method, remoteFunc);
+			return String.Format("<form onsubmit=\"{0}; return false;\">", remoteFunc);
 		}
 
 		/// <summary>
