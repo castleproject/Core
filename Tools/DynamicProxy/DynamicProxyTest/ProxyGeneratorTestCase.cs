@@ -112,38 +112,25 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual("default", value.ToString());
 		}
 
-		[Test]
-		public void CreateClassProxyInvalidArguments()
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void CreateClassProxyInvalidBaseClass()
 		{
-			try
-			{
-				_generator.CreateClassProxy( 
+			_generator.CreateClassProxy( 
 					typeof(ICloneable), new StandardInterceptor( ) );
-			}
-			catch(ArgumentException)
-			{
-				// Expected
-			}
+		}
 
-			try
-			{
-				_generator.CreateClassProxy( 
-					null, new StandardInterceptor( ) );
-			}
-			catch(ArgumentNullException)
-			{
-				// Expected
-			}
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void CreateClassProxyNullBaseClass()
+		{
+			_generator.CreateClassProxy( 
+				null, new StandardInterceptor( ) );
+		}
 
-			try
-			{
-				_generator.CreateClassProxy( 
-					typeof(SpecializedServiceClass), null );
-			}
-			catch(ArgumentNullException)
-			{
-				// Expected
-			}
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void CreateClassProxyNullInterceptor()
+		{
+			_generator.CreateClassProxy( 
+				typeof(SpecializedServiceClass), null );
 		}
 
 		[Test]
@@ -252,14 +239,6 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual( State.Valid, inter.ActualState );
 		}
 
-		public class GuidClass 
-		{
-			public virtual Guid GooId 
-			{
-				get { return Guid.NewGuid(); }
-			}
-		}
-
 		[Test]
 		public void ProxyForClassWithGuidProperty() 
 		{
@@ -284,14 +263,19 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore("Somebody do something")]
-		public void ProxyingClassWithRefArg()
+		public void ProxyForMarshalByRefClass()
 		{
-			ClassWithRefType proxy = (ClassWithRefType) 
+			ClassMarshalByRef proxy = (ClassMarshalByRef) 
 				_generator.CreateClassProxy(
-				typeof(ClassWithRefType), new StandardInterceptor());
+				typeof(ClassMarshalByRef), new StandardInterceptor());
 
 			Assert.IsNotNull(proxy);
+
+			object o = new object();
+			Assert.AreEqual(o, proxy.Ping(o));
+
+			int i = 10;
+			Assert.AreEqual(i, proxy.Pong(i));
 		}
 
 		public class MyInterfaceProxy : StandardInterceptor

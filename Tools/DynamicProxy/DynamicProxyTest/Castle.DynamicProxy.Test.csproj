@@ -82,7 +82,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -135,6 +135,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\ClassMarshalByRef.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\ClassWithConstructors.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -146,6 +151,11 @@
                 />
                 <File
                     RelPath = "Classes\ClassWithSByteEnum.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\GuidClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
