@@ -59,7 +59,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 		[Test]
 		public void Area2()
 		{
-			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/clients/home/index.rails", "myvirdirectory" );
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/clients/home/index.rails", "/myvirdirectory" );
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -69,7 +69,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 		[Test]
 		public void Area3()
 		{
-			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/mysite/clients/home/index.rails", "myvirdirectory" );
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/mysite/clients/home/index.rails", "/myvirdirectory" );
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
@@ -79,7 +79,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 		[Test]
 		public void VirDir()
 		{
-			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/home/index.rails", "myvirdirectory" );
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/myvirdirectory/home/index.rails", "/myvirdirectory" );
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
