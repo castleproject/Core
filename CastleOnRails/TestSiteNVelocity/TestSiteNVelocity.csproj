@@ -157,6 +157,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\HelperController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -191,6 +196,14 @@
                 />
                 <File
                     RelPath = "views\filter\index.vm"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\helper\InheritedHelpers.vm"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\helper\MyDeclaredHelpers.vm"
                     BuildAction = "Content"
                 />
                 <File

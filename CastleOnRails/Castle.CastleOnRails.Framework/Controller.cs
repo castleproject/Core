@@ -23,6 +23,7 @@ namespace Castle.CastleOnRails.Framework
 	using System.Collections.Specialized;
 
 	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.CastleOnRails.Framework.Helpers;
 
 	/// <summary>
 	/// Implements the core functionality and expose the
@@ -41,6 +42,7 @@ namespace Castle.CastleOnRails.Framework
 		private String _controllerName;
 		private String _selectedViewName;
 		private String _layoutName;
+		private IList _helpers = new ArrayList();
 
 		/// <summary>
 		/// Constructs a Controller
@@ -48,6 +50,13 @@ namespace Castle.CastleOnRails.Framework
 		public Controller()
 		{
 			_bag = new HybridDictionary();
+
+			_helpers.Add( new DateFormatHelper() );
+		}
+
+		public IList Helpers
+		{
+			get { return _helpers; }
 		}
 
 		#region Usefull Properties

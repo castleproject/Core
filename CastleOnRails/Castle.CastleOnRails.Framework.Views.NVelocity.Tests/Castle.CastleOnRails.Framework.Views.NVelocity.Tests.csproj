@@ -155,6 +155,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NVelocityHelperTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NVelocityLayoutTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

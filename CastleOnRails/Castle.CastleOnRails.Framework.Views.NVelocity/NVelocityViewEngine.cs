@@ -146,6 +146,11 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			innerContext.Add("response", context.Response);
 			innerContext.Add("session", context.Session);
 
+			foreach(object helper in controller.Helpers)
+			{
+				innerContext.Add(helper.GetType().Name, helper);
+			}
+
 			foreach (DictionaryEntry entry in controller.PropertyBag)
 			{
 				innerContext[entry.Key] = entry.Value;
@@ -159,10 +164,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 				innerContext[entry.Key] = entry.Value;
 			}
 
-			if (HttpContext.Current != null)
-			{
-				innerContext["siteRoot"] = GetSiteVirtualDirPath();
-			}
+			innerContext["siteRoot"] = context.ApplicationPath;
 
 			return new VelocityContext(innerContext);
 		}
@@ -170,18 +172,6 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 		private void SendErrorDetails(Exception ex, TextWriter writer)
 		{
 			writer.WriteLine(ex.ToString());
-		}
-
-		private String GetSiteVirtualDirPath()
-		{
-			String path = HttpContext.Current.Request.ApplicationPath;
-			
-			if("/".Equals(path))
-			{
-				return String.Empty;
-			}
-
-			return path;
 		}
 	}
 }
