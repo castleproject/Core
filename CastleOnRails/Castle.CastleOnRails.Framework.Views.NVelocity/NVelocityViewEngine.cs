@@ -146,7 +146,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			innerContext.Add("response", context.Response);
 			innerContext.Add("session", context.Session);
 
-			foreach(object helper in controller.Helpers)
+			foreach(object helper in controller.Helpers.Values)
 			{
 				innerContext.Add(helper.GetType().Name, helper);
 			}

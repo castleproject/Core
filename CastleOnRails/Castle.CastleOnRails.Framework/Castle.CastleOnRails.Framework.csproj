@@ -149,6 +149,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\HelperAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\Layout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -245,6 +250,11 @@
                 />
                 <File
                     RelPath = "Views\Aspx\Contents.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\Aspx\InvokeHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

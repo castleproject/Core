@@ -145,6 +145,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "HelperTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LayoutTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -171,6 +176,11 @@
                 />
                 <File
                     RelPath = "Controllers\FilteredController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HelperController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

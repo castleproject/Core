@@ -23,7 +23,6 @@ namespace Castle.CastleOnRails.Framework
 	using System.Collections.Specialized;
 
 	using Castle.CastleOnRails.Framework.Internal;
-	using Castle.CastleOnRails.Framework.Helpers;
 
 	/// <summary>
 	/// Implements the core functionality and expose the
@@ -42,7 +41,7 @@ namespace Castle.CastleOnRails.Framework
 		private String _controllerName;
 		private String _selectedViewName;
 		private String _layoutName;
-		private IList _helpers = new ArrayList();
+		private IDictionary _helpers = null;
 
 		/// <summary>
 		/// Constructs a Controller
@@ -50,16 +49,19 @@ namespace Castle.CastleOnRails.Framework
 		public Controller()
 		{
 			_bag = new HybridDictionary();
-
-			_helpers.Add( new DateFormatHelper() );
-		}
-
-		public IList Helpers
-		{
-			get { return _helpers; }
 		}
 
 		#region Usefull Properties
+
+		public IDictionary Helpers
+		{
+			get
+			{
+				if (_helpers == null) LoadHelpers();
+
+				return _helpers;
+			}
+		}
 
 		/// <summary>
 		/// Gets the controller's name.
@@ -313,6 +315,18 @@ namespace Castle.CastleOnRails.Framework
 			if (!hasError) ProcessView();
 		}
 
+		protected virtual void LoadHelpers()
+		{
+			_helpers = new HybridDictionary();
+
+			Attribute[] helpers = Attribute.GetCustomAttributes(this.GetType(), typeof(HelperAttribute));
+
+			foreach(HelperAttribute helper in helpers)
+			{
+				_helpers.Add(helper.HelperType.Name, Activator.CreateInstance(helper.HelperType));
+			}
+		}
+
 		#endregion
 
 		#region Action Invocation
@@ -477,6 +491,11 @@ namespace Castle.CastleOnRails.Framework
 			if ( view is IControllerAware )
 			{
 				(view as IControllerAware).SetController(this);
+			}
+
+			if (_context.UnderlyingContext != null)
+			{
+				((HttpContext)_context.UnderlyingContext).Items["rails.controller"] = this;
 			}
 		}
 

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace TestSite.Controllers
 {
 	using System;
 
 	using Castle.CastleOnRails.Framework;
 
-	using TestSiteNVelocity.Helpers;
+	using TestSite.Helpers;
 
-	[Helper(typeof(DateFormatHelper))]	
+	[Helper(typeof(DateFormatHelper))]
 	public class HelperController : Controller
 	{
 		public HelperController()
@@ -35,6 +35,11 @@ namespace TestSiteNVelocity.Controllers
 		public void MyDeclaredHelpers()
 		{
 			PropertyBag.Add( "date", new DateTime(1979, 7, 16) );
+		}
+
+		public void HelpMe()
+		{
+			
 		}
 	}
 }

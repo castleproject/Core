@@ -12,29 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace TestSite.Helpers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
 
-	using TestSiteNVelocity.Helpers;
-
-	[Helper(typeof(DateFormatHelper))]	
-	public class HelperController : Controller
+	public class DateFormatHelper
 	{
-		public HelperController()
+		public String FormatDate( DateTime date )
 		{
-		}
-
-		public void InheritedHelpers()
-		{
-			PropertyBag.Add( "date", new DateTime(1979, 7, 16) );
-		}
-
-		public void MyDeclaredHelpers()
-		{
-			PropertyBag.Add( "date", new DateTime(1979, 7, 16) );
+			return date.ToShortDateString();
 		}
 	}
 }

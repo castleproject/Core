@@ -187,6 +187,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helper\DateFormatHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "views\apppath\index.vm"
                     BuildAction = "None"
                 />

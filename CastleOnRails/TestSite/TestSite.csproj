@@ -136,6 +136,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\HelperController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -166,6 +171,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helper\DateFormatHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "views\cookies\index.aspx"
                     BuildAction = "Content"
                 />
@@ -174,6 +184,22 @@
                     BuildAction = "Content"
                 />
                 <Folder RelPath = "views\general\" />
+                <File
+                    RelPath = "views\helper\helpme.aspx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\helper\helpme.aspx.cs"
+                    DependentUpon = "helpme.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\helper\helpme.aspx.resx"
+                    DependentUpon = "helpme.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
                 <File
                     RelPath = "views\home\bag.aspx"
                     BuildAction = "Content"
