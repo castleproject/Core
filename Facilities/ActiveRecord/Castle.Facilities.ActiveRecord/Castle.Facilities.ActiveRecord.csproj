@@ -92,7 +92,7 @@
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\bin\NHibernate.dll"
+                    HintPath = "..\lib\NHibernate.dll"
                 />
             </References>
         </Build>
@@ -145,6 +145,11 @@
                 />
                 <File
                     RelPath = "PrimaryKeyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PropertyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

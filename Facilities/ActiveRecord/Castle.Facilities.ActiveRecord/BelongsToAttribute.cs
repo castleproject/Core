@@ -23,6 +23,11 @@ namespace Castle.Facilities.ActiveRecord
 	public class BelongsToAttribute : Attribute
 	{
 		private Type _type;
+		private string _column;
+		private string _cascade;
+		private string _outerJoin;
+		private string _update;
+		private string _insert;
 
 		public BelongsToAttribute()
 		{
@@ -37,6 +42,36 @@ namespace Castle.Facilities.ActiveRecord
 		{
 			get { return _type; }
 			set { _type = value; }
+		}
+
+		public string Column
+		{
+			get { return _column; }
+			set { _column = value; }
+		}
+
+		public string Cascade
+		{
+			get { return _cascade; }
+			set { _cascade = value; }
+		}
+
+		public string OuterJoin
+		{
+			get { return _outerJoin; }
+			set { _outerJoin = value; }
+		}
+
+		public string Update
+		{
+			get { return _update; }
+			set { _update = value; }
+		}
+
+		public string Insert
+		{
+			get { return _insert; }
+			set { _insert = value; }
 		}
 	}
 }

@@ -6,8 +6,6 @@ namespace Castle.Facilities.ActiveRecord
 	public class PrimaryKeyAttribute : Attribute
 	{
 		private PrimaryKeyType _generator;
-		private string _name;
-		private string _type;
 		private string _column;
 		private string _unsavedValue;
 		private string _access;
@@ -20,18 +18,6 @@ namespace Castle.Facilities.ActiveRecord
 		{
 			get { return _generator; }
 			set { _generator = value; }
-		}
-
-		public string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-
-		public string Type
-		{
-			get { return _type; }
-			set { _type = value; }
 		}
 
 		public string Column

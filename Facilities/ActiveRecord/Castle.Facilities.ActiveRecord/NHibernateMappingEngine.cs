@@ -1,5 +1,4 @@
 //using System;
-//using System.Collections;
 //using System.Configuration;
 //using System.Reflection;
 //using System.Text;
@@ -27,10 +26,16 @@
 //		private string generatorClose = "</generator>";
 //		private string propertyOpen = "<property name=\"{0}\" {1}>";
 //		private string propertyClose = "</property>";
+//		private string updateAttribute = "update=\"{0}\" ";
+//		private string insertAttribute = "insert=\"{0}\" ";
+//		private string formulaAttribute = "formula=\"{0}\" ";
 //		private string columnAttribute = "column=\"{0}\" ";
 //		private string lengthAttribute = "length=\"{0}\" ";
 //		private string notNullAttribute = "not-null=\"{0}\" ";
 //		private string oneToMany = "<one-to-many class=\"{0}\" />";
+//		private string manyToOne = "<many-to-one name=\"{0}\" {1} />";
+//		private string cascadeAttribute = "cascade=\"{0}\" ";
+//		private string outerJoinAttribute = "outer-join=\"{0}\" ";
 //		private string accessAttribute = "access=\"{0}\" ";
 //		private string unsavedValueAttribute = "unsaved-value=\"{0}\" ";
 //
@@ -56,6 +61,7 @@
 //			{
 //				if( type.GetCustomAttributes( typeof( ActiveRecordAttribute ), false ) != null )
 //				{
+//					_nhibernate.AddClass( type );
 //					CreateMapping( type );
 //				}
 //			}
@@ -77,8 +83,9 @@
 //				AddMappedProperties( xml, type.GetProperties() );
 //
 //				xml.Append( classClose ).Append( mappingClose );
+//
+//				_nhibernate.AddXmlString( xml.ToString() );
 //			}
-//			
 //		}
 //
 //		private void AddMappedProperties( StringBuilder builder, PropertyInfo[] props )
@@ -91,13 +98,13 @@
 //					PrimaryKeyAttribute pk = attribute as PrimaryKeyAttribute;
 //					if( pk != null )
 //					{
-//						string name = ( pk.Name == null ? "" : String.Format( nameAttribute, pk.Name ) );
+//						string name = String.Format( nameAttribute, prop.Name );
+//						string type = String.Format( typeAttribute, prop.PropertyType.Name );
 //						string column = ( pk.Column == null ? "" : String.Format( columnAttribute, pk.Column ) );
-//						string type = ( pk.Type == null ? "" : String.Format( typeAttribute, pk.Type ) );
 //						string unsavedValue = ( pk.UnsavedValue == null ? "" : String.Format( unsavedValueAttribute, pk.UnsavedValue ) );
 //						string access = ( pk.Access == null ? "" : String.Format( accessAttribute, pk.Access ) );
 //
-//						builder.AppendFormat( idOpen, name, type, column, unsavedValue, access );
+//						builder.AppendFormat( idOpen, name + type + column + unsavedValue + access );
 //
 //						if( pk.Generator != PrimaryKeyType.None )
 //						{
@@ -105,6 +112,38 @@
 //						}
 //
 //						builder.Append( idClose );
+//
+//						continue;
+//					}
+//					PropertyAttribute property = attribute as PropertyAttribute;
+//					if( property != null )
+//					{
+//						string column = ( property.Column != null ? "" : String.Format( columnAttribute, property.Column ) );
+//						string update = ( property.Update != null ? "" : String.Format( updateAttribute, property.Update ) );
+//						string insert = ( property.Insert != null ? "" : String.Format( insertAttribute, property.Insert ) );
+//						string formula = ( property.Formula != null ? "" : String.Format( formulaAttribute, property.Formula ) );
+//						string name = String.Format( nameAttribute, prop.Name );
+//						string type = String.Format( typeAttribute, prop.PropertyType.Name );
+//
+//						builder.AppendFormat( propertyOpen, name, type + column + update + insert + formula );
+//						builder.Append( propertyClose );
+//
+//						continue;
+//					}
+//					BelongsToAttribute belongs = attribute as BelongsToAttribute;
+//					if( belongs != null )
+//					{
+//						string name = String.Format( nameAttribute, prop.Name );
+//						string klass = String.Format( classAttribute, prop.PropertyType.Name );
+//						string column = ( belongs.Column != null ? "" : String.Format( columnAttribute, belongs.Column ) );
+//						string cascade = ( belongs.Cascade != null ? "" : String.Format( cascadeAttribute, belongs.Cascade ) );
+//						string outer = ( belongs.OuterJoin != null ? "" : String.Format( outerJoinAttribute, belongs.OuterJoin ) );
+//						string update = ( belongs.Update != null ? "" : String.Format( updateAttribute, belongs.Update ) );
+//						string insert = ( belongs.Insert != null ? "" : String.Format( insertAttribute, belongs.Insert ) );
+//
+//						builder.AppendFormat( manyToOne, name, klass + column + cascade + outer + update + insert );
+//
+//						continue;
 //					}
 //				}
 //			}
