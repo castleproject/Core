@@ -120,7 +120,7 @@ namespace Castle.Facilities.Prevalence
 
 		private void ConfigureSnapshot(IConfiguration engineConfig, IDictionary properties)
 		{
-			int period = GetSnapshotPeriod(engineConfig);
+			float period = GetSnapshotPeriod(engineConfig);
 
 			if (RequiresSnapshots(period))
 			{
@@ -137,11 +137,11 @@ namespace Castle.Facilities.Prevalence
 			}
 		}
 
-		private int GetSnapshotPeriod(IConfiguration engineConfig)
+		private float GetSnapshotPeriod(IConfiguration engineConfig)
 		{
 			try
 			{
-				return Convert.ToInt32(engineConfig.Attributes["snapshotHoursPeriod"]);
+				return Convert.ToSingle(engineConfig.Attributes["snapshotHoursPeriod"]);
 			}
 			catch (FormatException e)
 			{
@@ -149,7 +149,7 @@ namespace Castle.Facilities.Prevalence
 			}
 		}
 
-		private bool RequiresSnapshots(int period)
+		private bool RequiresSnapshots(float period)
 		{
 			return period > 0;
 		}
@@ -184,7 +184,7 @@ namespace Castle.Facilities.Prevalence
 
 		protected void TakeSnapshotIfRequired(IConfiguration engineConfig)
 		{
-			int period = GetSnapshotPeriod(engineConfig);
+			float period = GetSnapshotPeriod(engineConfig);
 
 			if (RequiresSnapshots(period))
 			{
