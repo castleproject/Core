@@ -1,3 +1,4 @@
+using Castle.Model;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,6 +97,11 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 
 				if (_available.Count < _maxsize)
 				{
+					if (instance is IRecyclable)
+					{
+						(instance as IRecyclable).Recycle();
+					}
+
 					_available.Push(instance);
 				}
 				else

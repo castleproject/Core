@@ -69,12 +69,17 @@ namespace Castle.MicroKernel.Tests.Pools
 			Assert.IsNotNull( other1 );
 			Assert.IsTrue( !instances.Contains(other1) );
 
+			foreach(object inst in instances)
+			{
+				kernel.ReleaseComponent(inst);
+			}
+
 			kernel.ReleaseComponent(other1);
 
 			PoolableComponent1 other2 = kernel["a"] as PoolableComponent1;
 			Assert.IsNotNull( other2 );
 			Assert.IsTrue( other1 != other2 );
-			Assert.IsTrue( !instances.Contains(other2) );
+			Assert.IsTrue( instances.Contains(other2) );
 
 			kernel.ReleaseComponent(other2);
 		}
