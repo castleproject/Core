@@ -1,8 +1,8 @@
-<% add_topmenu( 'Castle Container', '/castle/show/Container/' ) %>
-<% add_topmenu( 'Projects', '/castle/show/Projects/' ) %>
-<% add_topmenu( 'Facilites', '/castle/show/Facilities/' ) %>
-<% add_topmenu( 'Documentation', '/castle/show/Documentation/' ) %>
-<% add_topmenu( 'About', '/castle/show/About/' ) %>
+<% add_topmenu( 'Castle Container', '/castle/show/Container' ) %>
+<% add_topmenu( 'Projects', '/castle/show/Projects' ) %>
+<% add_topmenu( 'Facilites', '/castle/show/Facilities' ) %>
+<% add_topmenu( 'Documentation', '/castle/show/Documentation' ) %>
+<% add_topmenu( 'About', '/castle/show/About' ) %>
 <% add_rightmenu( 'Home', '/castle/show/HomePage' ) %>
 <% add_rightmenu( 'Rationale', '/castle/show/Rationale' ) %>
 <% add_rightmenu( 'Mission', '/castle/show/Mission' ) %>
@@ -11,7 +11,7 @@
 <% add_rightmenu( 'PestControl', '/castle/show/PestControl', true ) %>
 <% add_rightmenu( 'MindDump', '/castle/show/MindDump', true ) %>
 <% add_rightmenu_separator( ) %>
-<% add_rightmenu( 'Projects', '/castle/show/Projects/', false ) %>
+<% add_rightmenu( 'Projects', '/castle/show/Projects', false ) %>
 <% projects.each do |project| %>
 <% add_rightmenu( project.name, project.link ) %>
 <% end %>

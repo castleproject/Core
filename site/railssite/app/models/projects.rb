@@ -12,12 +12,12 @@ class ProjectList
 
   def initialize()
     @list = []
-    @list << Project.new( 'Castle Container', '/castle/show/container/', 'The inversion of control container', '/containerdocs/' )
-    @list << Project.new( 'DynamicProxy', '/castle/show/dynamicproxy/', 'Tool for generating dynamic proxies for interfaces and classes' )
-    @list << Project.new( 'ManagementExtensions', '/castle/show/management/', 'Expose managed components that can be access from anywhere' )
-    @list << Project.new( 'Castle on Rails', '/castle/show/castleonrails/', 'A rails-like web framework' )
-    @list << Project.new( 'YAML', '/castle/show/yaml/', 'A formatter for YAML' )
-    @list << Project.new( 'Facilities', '/castle/show/facilities/', 'Extensions for the MicroKernel' )
+    @list << Project.new( 'Castle Container', '/castle/show/container', 'The inversion of control container', '/containerdocs/' )
+    @list << Project.new( 'DynamicProxy', '/castle/show/dynamicproxy', 'Tool for generating dynamic proxies for interfaces and classes' )
+    @list << Project.new( 'ManagementExtensions', '/castle/show/management', 'Expose managed components that can be access from anywhere' )
+    @list << Project.new( 'Castle on Rails', '/castle/show/castleonrails', 'A rails-like web framework' )
+    @list << Project.new( 'YAML', '/castle/show/yaml', 'A formatter for YAML' )
+    @list << Project.new( 'Facilities', '/castle/show/facilities', 'Extensions for the MicroKernel' )
   end
   
   def each
