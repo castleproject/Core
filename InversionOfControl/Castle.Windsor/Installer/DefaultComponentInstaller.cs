@@ -101,7 +101,7 @@ namespace Castle.Windsor.Installer
 
 		private IFacility InstantiateFacility(Type facilityType)
 		{
-			if (!facilityType.IsAssignableFrom( typeof(IFacility) ))
+			if (!typeof(IFacility).IsAssignableFrom( facilityType ))
 			{
 				String message = String.Format("Type {0} does not implement the interface IFacility", facilityType.FullName);
 				throw new ConfigurationException(message);
