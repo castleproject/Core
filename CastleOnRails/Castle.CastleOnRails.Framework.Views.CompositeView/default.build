@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="compositeview-nvelocity" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/../bin" />
+	<property name="library.dir" value="${base.dir}/../lib" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="name" value="Castle.CastleOnRails.Framework.Views.CompositeView" />
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.src.dir" value="${src.dir}/../${name}.Tests" />
+	<property name="test.assembly.name" value="${name}.Tests.dll" />
+
+	<property name="version" value="1.0.0.0" />
+
+	<target name="clean">
+	</target>
+
+	<target name="init" depends="clean">
+
+	</target>
+
+	<target name="build" depends="init,compile" />
+	
+	<target name="compile" depends="init">
+		<!-- doc="${bin.dir}/${name}.xml" -->
+		<csc 
+			define="STRONG"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}">
+			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+			
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
+				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Castle.CastleOnRails.Framework.Views.NVelocity.dll" />
+				<include name="${library.dir}/Commons.dll" />
+				<include name="${library.dir}/log4net.dll" />
+				<include name="${library.dir}/NVelocity.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.compile" depends="init">
+
+	</target>
+	
+	<target name="test" depends="tests.run" />
+
+	<target name="tests.run" depends="tests.compile">
+		<!--
+		<nunit2>
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+		-->
+	</target>
+
+</project>

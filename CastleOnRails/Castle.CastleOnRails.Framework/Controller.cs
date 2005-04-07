@@ -23,6 +23,7 @@ namespace Castle.CastleOnRails.Framework
 	using System.Collections.Specialized;
 
 	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.CastleOnRails.Framework.Helpers;
 
 	/// <summary>
 	/// Implements the core functionality and expose the
@@ -58,7 +59,6 @@ namespace Castle.CastleOnRails.Framework
 			get
 			{
 				if (_helpers == null) LoadHelpers();
-
 				return _helpers;
 			}
 		}
@@ -343,6 +343,10 @@ namespace Castle.CastleOnRails.Framework
 			{
 				_helpers.Add(helper.HelperType.Name, Activator.CreateInstance(helper.HelperType));
 			}
+
+			/// Default helpers 
+			_helpers[ typeof(AjaxHelper).Name ] = new AjaxHelper();
+			_helpers[ typeof(DateFormatHelper).Name ] = new DateFormatHelper();
 		}
 
 		#endregion

@@ -17,7 +17,7 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, samples, tests, generator" />
+	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, composite, samples, tests, generator" />
 
 	<target name="clean">
 		<delete>
@@ -69,6 +69,10 @@
 
 	<target name="nvelocity" depends="init">
 		<nant buildfile="Castle.CastleOnRails.Framework.Views.NVelocity/default.build" inheritall="true" target="compile" />
+	</target>
+
+	<target name="composite" depends="init">
+		<nant buildfile="Castle.CastleOnRails.Framework.Views.CompositeView/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="samples" depends="init">

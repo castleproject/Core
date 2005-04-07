@@ -47,6 +47,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Genera
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.CastleOnRails.Framework.Views.CompositeView", "Castle.CastleOnRails.Framework.Views.CompositeView\Castle.CastleOnRails.Framework.Views.CompositeView.csproj", "{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -101,6 +105,16 @@ Global
 		{30F513CB-9520-4E43-A845-3185D76F38B9}.Debug.Build.0 = Debug|.NET
 		{30F513CB-9520-4E43-A845-3185D76F38B9}.Release.ActiveCfg = Release|.NET
 		{30F513CB-9520-4E43-A845-3185D76F38B9}.Release.Build.0 = Release|.NET
+		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Debug.ActiveCfg = Debug|.NET
+		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Debug.Build.0 = Debug|.NET
+		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Release.ActiveCfg = Release|.NET
+		{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		License.txt = License.txt
+		rails.build = rails.build
+		Readme.txt = Readme.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
