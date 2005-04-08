@@ -111,6 +111,24 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			return LinkToFunction(name, RemoteFunction(options) );
 		}
 
+		public String LinkToRemote(String name, String url, String update, String with)
+		{
+			IDictionary options = new Hashtable();
+			options["with"] = with;
+			options["update"] = update;
+			options["url"] = url;
+			return LinkToFunction(name, RemoteFunction(options) );
+		}
+
+		public String LinkToRemote(String name, String url, String update, bool form)
+		{
+			IDictionary options = new Hashtable();
+			if (form) options["form"] = true;
+			options["update"] = update;
+			options["url"] = url;
+			return LinkToFunction(name, RemoteFunction(options) );
+		}
+
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 
