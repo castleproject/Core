@@ -153,14 +153,18 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 
 			foreach (DictionaryEntry entry in controller.PropertyBag)
 			{
+				if (entry.Value == null) continue;
 				innerContext[entry.Key] = entry.Value;
 			}
 			foreach (String key in context.Params.AllKeys)
 			{
-				innerContext[key] = context.Params[key];
+				object value = context.Params[key];
+				if (value == null) continue;
+				innerContext[key] = value;
 			}
 			foreach (DictionaryEntry entry in context.Flash)
 			{
+				if (entry.Value == null) continue;
 				innerContext[entry.Key] = entry.Value;
 			}
 

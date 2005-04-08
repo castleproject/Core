@@ -190,7 +190,7 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
   
     try {
       if (this.options.method == 'get')
-        url += '?' + this.options.parameters + '&_=';
+        url += '?' + this.options.parameters + '';
     
       this.transport.open(this.options.method, url, true);
       
@@ -206,7 +206,7 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
       }
       
       this.transport.send(this.options.method == 'post' ? 
-        this.options.parameters + '&_=' : null);
+        this.options.parameters + '' : null);
                       
     } catch (e) {
     }    

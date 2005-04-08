@@ -113,51 +113,73 @@ namespace Castle.CastleOnRails.Framework
 		private object[] BuildMethodArguments(ParameterInfo[] parameters, NameValueCollection webParams, IDictionary files)
 		{
 			object[] args = new object[parameters.Length];
+			String paramName = String.Empty;
+			String value = String.Empty;
 
-			for(int i=0; i < args.Length; i++)
+			try
 			{
-				ParameterInfo param = parameters[i];
-				object value = webParams.Get( param.Name );
+				for(int i=0; i < args.Length; i++)
+				{
+					ParameterInfo param = parameters[i];
+					paramName = param.Name;
+					value = webParams.Get( param.Name );
 
-				if (param.ParameterType == typeof(String))
-				{
-					args[i] = value;
-				}
-				else if (param.ParameterType == typeof(Guid))
-				{
-					if (value != null)
+					if (param.ParameterType == typeof(String))
 					{
-						args[i] = new Guid( value.ToString() );
+						args[i] = value;
 					}
-					else
+					else if (param.ParameterType == typeof(Guid))
 					{
-						args[i] = Guid.Empty; 
+						if (value != null)
+						{
+							args[i] = new Guid( value.ToString() );
+						}
+						else
+						{
+							args[i] = Guid.Empty; 
+						}
+					}
+					else if (param.ParameterType == typeof(int))
+					{
+						if (value == String.Empty) value = null;
+						args[i] = System.Convert.ToInt32( value );
+					}
+					else if (param.ParameterType == typeof(long))
+					{
+						if (value == String.Empty) value = null;
+						args[i] = System.Convert.ToInt64( value );
+					}
+					else if (param.ParameterType == typeof(Single))
+					{
+						if (value == String.Empty) value = null;
+						args[i] = System.Convert.ToSingle( value );
+					}
+					else if (param.ParameterType == typeof(Double))
+					{
+						if (value == String.Empty) value = null;
+						args[i] = System.Convert.ToDouble( value );
+					}
+					else if (param.ParameterType == typeof(Boolean))
+					{
+						args[i] = value != null;
+					}
+					else if (param.ParameterType == typeof(HttpPostedFile))
+					{
+						args[i] = files[param.Name];
 					}
 				}
-				else if (param.ParameterType == typeof(int))
-				{
-					args[i] = System.Convert.ToInt32( value );
-				}
-				else if (param.ParameterType == typeof(long))
-				{
-					args[i] = System.Convert.ToInt64( value );
-				}
-				else if (param.ParameterType == typeof(Single))
-				{
-					args[i] = System.Convert.ToSingle( value );
-				}
-				else if (param.ParameterType == typeof(Double))
-				{
-					args[i] = System.Convert.ToDouble( value );
-				}
-				else if (param.ParameterType == typeof(Boolean))
-				{
-					args[i] = value != null;
-				}
-				else if (param.ParameterType == typeof(HttpPostedFile))
-				{
-					args[i] = files[param.Name];
-				}
+			}
+			catch(FormatException ex)
+			{
+				throw new RailsException( 
+					String.Format("Could not convert {0} to request type. " + 
+						"Argument value is '{1}'", paramName, value) );
+			}
+			catch(Exception ex)
+			{
+				throw new RailsException( 
+					String.Format("Error builing method arguments. " + 
+						"Last param analized was {0} with value '{1}'", paramName, value) );
 			}
 
 			return args;
