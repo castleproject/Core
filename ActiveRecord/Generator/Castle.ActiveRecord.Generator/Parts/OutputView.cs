@@ -29,6 +29,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 	public class OutputView : DockContent, ILogger, ISubWorkspace
 	{
 		private System.Windows.Forms.TextBox textBox1;
+		private long _start;
+		private long _end;
 
 		/// <summary>
 		/// Required designer variable.
@@ -117,6 +119,22 @@ namespace Castle.ActiveRecord.Generator.Parts
 			EnsureVisible();
 
 			textBox1.Text += message + "\r\n";
+		}
+
+		public void Start()
+		{
+			textBox1.Text = "--------------------- Starting ---------------------\r\n\r\n";
+			_start = DateTime.Now.Ticks;
+		}
+
+		public void End()
+		{
+			textBox1.Text += "\r\n--------------------- Finished ---------------------";
+			_end = DateTime.Now.Ticks;
+
+			TimeSpan diff = new TimeSpan(_end - _start);
+
+			textBox1.Text += "\r\n\r\nCompleted in " + diff.TotalSeconds + " seconds";
 		}
 
 		private void EnsureVisible()

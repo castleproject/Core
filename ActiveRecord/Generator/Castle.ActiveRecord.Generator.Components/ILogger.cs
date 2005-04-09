@@ -19,6 +19,10 @@ namespace Castle.ActiveRecord.Generator.Components
 
 	public interface ILogger
 	{
+		void Start();
+
 		void Info( String message );
+
+		void End();
 	}
 }

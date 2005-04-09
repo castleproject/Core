@@ -151,6 +151,8 @@
 				<include name="*.build" />
 				<include name="*.sln" />
 				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.dll" />
 				<include name="**/*.csproj" />
 				<include name="**/*.xml" />
 				<include name="**/*.config" />

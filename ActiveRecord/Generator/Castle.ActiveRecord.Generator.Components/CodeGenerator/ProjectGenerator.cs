@@ -44,6 +44,8 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 
 		public void Generate(Project project)
 		{
+			LogStart();
+
 			CodeDomProvider provider = _providerFactory.GetProvider(project.CodeInfo);
 
 			Log( String.Format("Generating project in {0}", project.CodeInfo.Label) );
@@ -73,6 +75,8 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 			}
 
 			Log( "Done!" );
+
+			LogEnd();
 		}
 
 		#endregion
@@ -87,31 +91,43 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 			{
 				Log( String.Format("Skipping {0} as it already exists", filename) );
 			}
-
-			Log( String.Format("Writing {0}...", filename) );
-
-			try
+			else
 			{
-				using(FileStream stream = new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write))
+				Log( String.Format("Writing {0}...", filename) );
+
+				try
 				{
-					StreamWriter writer = new StreamWriter(stream);
-					CodeGeneratorOptions opts = new CodeGeneratorOptions();
-					opts.BracingStyle = "C";
-					opts.BlankLinesBetweenMembers = true;
-					provider.CreateGenerator().GenerateCodeFromNamespace(ns, writer, opts);
-					writer.Flush();
-					writer.Close();
+					using(FileStream stream = new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write))
+					{
+						StreamWriter writer = new StreamWriter(stream);
+						CodeGeneratorOptions opts = new CodeGeneratorOptions();
+						opts.BracingStyle = "C";
+						opts.BlankLinesBetweenMembers = true;
+						provider.CreateGenerator().GenerateCodeFromNamespace(ns, writer, opts);
+						writer.Flush();
+						writer.Close();
+					}
 				}
-			}
-			catch(Exception ex)
-			{
-				Log( String.Format("Error Writing {0} []", filename, ex.Message) );
+				catch(Exception ex)
+				{
+					Log( String.Format("Error Writing {0} []", filename, ex.Message) );
+				}
 			}
 		}
 
 		private void Log(string message)
 		{
 			if (Logger != null) Logger.Info(message);
+		}
+
+		private void LogStart()
+		{
+			if (Logger != null) Logger.Start();
+		}
+
+		private void LogEnd()
+		{
+			if (Logger != null) Logger.End();
 		}
 	}
 }

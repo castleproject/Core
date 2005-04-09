@@ -39,10 +39,10 @@ namespace Castle.ActiveRecord
 		private String _index;
 		private String _table;
 		private String _schema;
-		private String _lazy;
-		private String _inverse;
+		private bool _lazy;
+		private bool _inverse;
 		private String _cascade;
-		private String _sort;
+//		private String _sort;
 		private String _orderBy;
 		private String _where;
 		private String _column;
@@ -88,13 +88,13 @@ namespace Castle.ActiveRecord
 			set { _schema = value; }
 		}
 
-		public String Lazy
+		public bool Lazy
 		{
 			get { return _lazy; }
 			set { _lazy = value; }
 		}
 
-		public String Inverse
+		public bool Inverse
 		{
 			get { return _inverse; }
 			set { _inverse = value; }
@@ -104,12 +104,6 @@ namespace Castle.ActiveRecord
 		{
 			get { return _cascade; }
 			set { _cascade = value; }
-		}
-
-		public String Sort
-		{
-			get { return _sort; }
-			set { _sort = value; }
 		}
 
 		public String OrderBy

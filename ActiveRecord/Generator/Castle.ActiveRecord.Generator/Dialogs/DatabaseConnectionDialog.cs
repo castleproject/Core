@@ -49,8 +49,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			//
 
 #if DEBUG
-			textBox1.Text = "MyAlias";
-			connectionString.Text = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=test;Data Source=.";
+//			textBox1.Text = "MyAlias";
+//			connectionString.Text = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=test;Data Source=.";
 #endif
 		}
 
@@ -89,7 +89,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			this.button1.Location = new System.Drawing.Point(360, 160);
 			this.button1.Name = "button1";
-			this.button1.TabIndex = 0;
+			this.button1.TabIndex = 4;
 			this.button1.Text = "OK";
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
@@ -105,7 +105,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			this.label1.Location = new System.Drawing.Point(16, 24);
 			this.label1.Name = "label1";
-			this.label1.TabIndex = 2;
+			this.label1.TabIndex = 0;
 			this.label1.Text = "Alias:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -114,22 +114,22 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.textBox1.Location = new System.Drawing.Point(128, 24);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(160, 21);
-			this.textBox1.TabIndex = 3;
-			this.textBox1.Text = "textBox1";
+			this.textBox1.TabIndex = 1;
+			this.textBox1.Text = "";
 			// 
 			// connectionString
 			// 
 			this.connectionString.Location = new System.Drawing.Point(128, 64);
 			this.connectionString.Name = "connectionString";
 			this.connectionString.Size = new System.Drawing.Size(272, 21);
-			this.connectionString.TabIndex = 5;
+			this.connectionString.TabIndex = 3;
 			this.connectionString.Text = "";
 			// 
 			// label2
 			// 
 			this.label2.Location = new System.Drawing.Point(16, 64);
 			this.label2.Name = "label2";
-			this.label2.TabIndex = 4;
+			this.label2.TabIndex = 2;
 			this.label2.Text = "Connection String:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 

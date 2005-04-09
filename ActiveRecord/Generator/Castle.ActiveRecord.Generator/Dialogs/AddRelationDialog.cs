@@ -53,7 +53,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		protected System.ComponentModel.Container components = null;
+		private System.ComponentModel.Container components = null;
 		protected System.Windows.Forms.Label label10;
 		protected System.Windows.Forms.Label label11;
 

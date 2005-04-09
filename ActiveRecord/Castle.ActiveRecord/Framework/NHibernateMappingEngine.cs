@@ -73,7 +73,7 @@ namespace Castle.ActiveRecord
 		private static readonly String indexTag = "\r\n<index column=\"{0}\" {1} />";
 		private static readonly String lazyAttribute = "lazy=\"{0}\" ";
 		private static readonly String inverseAttribute = "inverse=\"{0}\" ";
-		private static readonly String sortAttribute = "sort=\"{0}\" ";
+//		private static readonly String sortAttribute = "sort=\"{0}\" ";
 		private static readonly String orderByAttribute = "order-by=\"{0}\" ";
 		private static readonly String whereAttribute = "where=\"{0}\" ";
 
@@ -295,14 +295,14 @@ namespace Castle.ActiveRecord
 			String name = prop.Name;
 			String table = (hasmany.Table == null ? "" : String.Format(tableAttribute, hasmany.Table));
 			String schema = (hasmany.Schema == null ? "" : String.Format(schemaAttribute, hasmany.Schema));
-			String lazy = (hasmany.Lazy == null ? "" : String.Format(lazyAttribute, hasmany.Lazy));
-			String inverse = (hasmany.Inverse == null ? "" : String.Format(inverseAttribute, hasmany.Inverse));
+			String lazy = (hasmany.Lazy == false ? "" : String.Format(lazyAttribute, hasmany.Lazy.ToString().ToLower()));
+			String inverse = (hasmany.Inverse == false ? "" : String.Format(inverseAttribute, hasmany.Inverse.ToString().ToLower()));
 			String cascade = (hasmany.Cascade == null ? "" : String.Format(cascadeAttribute, hasmany.Cascade));
-			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
+//			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
 			String orderBy = (hasmany.OrderBy == null ? "" : String.Format(orderByAttribute, hasmany.OrderBy));
 			String where = (hasmany.Where == null ? "" : String.Format(whereAttribute, hasmany.Where));
 
-			builder.AppendFormat(setOpen, name, table + schema + lazy + inverse + cascade + sort + orderBy + where);
+			builder.AppendFormat(setOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasmany.MapType;
 			if (hasmany.Key != null)
@@ -348,14 +348,14 @@ namespace Castle.ActiveRecord
 			String name = prop.Name;
 			String table = (hasmany.Table == null ? "" : String.Format(tableAttribute, hasmany.Table));
 			String schema = (hasmany.Schema == null ? "" : String.Format(schemaAttribute, hasmany.Schema));
-			String lazy = (hasmany.Lazy == null ? "" : String.Format(lazyAttribute, hasmany.Lazy));
-			String inverse = (hasmany.Inverse == null ? "" : String.Format(inverseAttribute, hasmany.Inverse));
+			String lazy = (hasmany.Lazy == false ? "" : String.Format(lazyAttribute, hasmany.Lazy.ToString().ToLower()));
+			String inverse = (hasmany.Inverse == false ? "" : String.Format(inverseAttribute, hasmany.Inverse.ToString().ToLower()));
 			String cascade = (hasmany.Cascade == null ? "" : String.Format(cascadeAttribute, hasmany.Cascade));
-			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
+//			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
 			String orderBy = (hasmany.OrderBy == null ? "" : String.Format(orderByAttribute, hasmany.OrderBy));
 			String where = (hasmany.Where == null ? "" : String.Format(whereAttribute, hasmany.Where));
 
-			builder.AppendFormat(listOpen, name, table + schema + lazy + inverse + cascade + sort + orderBy + where);
+			builder.AppendFormat(listOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasmany.MapType;
 			PropertyInfo indexProp = otherType.GetProperty(hasmany.Index);
@@ -398,14 +398,14 @@ namespace Castle.ActiveRecord
 			String name = prop.Name;
 			String table = (hasmany.Table == null ? "" : String.Format(tableAttribute, hasmany.Table));
 			String schema = (hasmany.Schema == null ? "" : String.Format(schemaAttribute, hasmany.Schema));
-			String lazy = (hasmany.Lazy == null ? "" : String.Format(lazyAttribute, hasmany.Lazy));
-			String inverse = (hasmany.Inverse == null ? "" : String.Format(inverseAttribute, hasmany.Inverse));
+			String lazy = (hasmany.Lazy == false ? "" : String.Format(lazyAttribute, hasmany.Lazy.ToString().ToLower()));
+			String inverse = (hasmany.Inverse == false ? "" : String.Format(inverseAttribute, hasmany.Inverse.ToString().ToLower()));
 			String cascade = (hasmany.Cascade == null ? "" : String.Format(cascadeAttribute, hasmany.Cascade));
-			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
+//			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
 			String orderBy = (hasmany.OrderBy == null ? "" : String.Format(orderByAttribute, hasmany.OrderBy));
 			String where = (hasmany.Where == null ? "" : String.Format(whereAttribute, hasmany.Where));
 
-			builder.AppendFormat(mapOpen, name, table + schema + lazy + inverse + cascade + sort + orderBy + where);
+			builder.AppendFormat(mapOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasmany.MapType;
 			PropertyInfo elementProp = otherType.GetProperty(hasmany.Key);
@@ -501,14 +501,14 @@ namespace Castle.ActiveRecord
 			String name = prop.Name;
 			String table = (hasAndBelongsTo.Table == null ? "" : String.Format(tableAttribute, hasAndBelongsTo.Table));
 			String schema = (hasAndBelongsTo.Schema == null ? "" : String.Format(schemaAttribute, hasAndBelongsTo.Schema));
-			String lazy = (hasAndBelongsTo.Lazy == null ? "" : String.Format(lazyAttribute, hasAndBelongsTo.Lazy));
-			String inverse = (hasAndBelongsTo.Inverse == null ? "" : String.Format(inverseAttribute, hasAndBelongsTo.Inverse));
+			String lazy = (hasAndBelongsTo.Lazy == false ? "" : String.Format(lazyAttribute, hasAndBelongsTo.Lazy.ToString().ToLower()));
+			String inverse = (hasAndBelongsTo.Inverse == false ? "" : String.Format(inverseAttribute, hasAndBelongsTo.Inverse.ToString().ToLower()));
 			String cascade = (hasAndBelongsTo.Cascade == null ? "" : String.Format(cascadeAttribute, hasAndBelongsTo.Cascade));
-			String sort = (hasAndBelongsTo.Sort == null ? "" : String.Format(sortAttribute, hasAndBelongsTo.Sort));
+//			String sort = (hasAndBelongsTo.Sort == null ? "" : String.Format(sortAttribute, hasAndBelongsTo.Sort));
 			String orderBy = (hasAndBelongsTo.OrderBy == null ? "" : String.Format(orderByAttribute, hasAndBelongsTo.OrderBy));
 			String where = (hasAndBelongsTo.Where == null ? "" : String.Format(whereAttribute, hasAndBelongsTo.Where));
 
-			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + sort + orderBy + where);
+			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasAndBelongsTo.MapType;
 			
@@ -570,14 +570,14 @@ namespace Castle.ActiveRecord
 			String name = prop.Name;
 			String table = (hasmany.Table == null ? "" : String.Format(tableAttribute, hasmany.Table));
 			String schema = (hasmany.Schema == null ? "" : String.Format(schemaAttribute, hasmany.Schema));
-			String lazy = (hasmany.Lazy == null ? "" : String.Format(lazyAttribute, hasmany.Lazy));
-			String inverse = (hasmany.Inverse == null ? "" : String.Format(inverseAttribute, hasmany.Inverse));
+			String lazy = (hasmany.Lazy == false ? "" : String.Format(lazyAttribute, hasmany.Lazy.ToString().ToLower()));
+			String inverse = (hasmany.Inverse == false ? "" : String.Format(inverseAttribute, hasmany.Inverse.ToString().ToLower()));
 			String cascade = (hasmany.Cascade == null ? "" : String.Format(cascadeAttribute, hasmany.Cascade));
-			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
+//			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
 			String orderBy = (hasmany.OrderBy == null ? "" : String.Format(orderByAttribute, hasmany.OrderBy));
 			String where = (hasmany.Where == null ? "" : String.Format(whereAttribute, hasmany.Where));
 
-			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + sort + orderBy + where);
+			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasmany.MapType;
 			

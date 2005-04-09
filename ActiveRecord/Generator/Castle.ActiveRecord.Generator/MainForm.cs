@@ -41,6 +41,7 @@ namespace Castle.ActiveRecord.Generator
 
 		public MainForm(Model model) : this()
 		{
+			model.OnProjectChanged += new ProjectDelegate(OnChanged);
 			model.OnProjectReplaced += new ProjectReplaceDelegate(OnProjectReplaced);
 		}
 
@@ -161,7 +162,12 @@ namespace Castle.ActiveRecord.Generator
 
 		private void OnProjectReplaced(object sender, Project oldProject, Project newProject)
 		{
-			this.Text = String.Format("ActiveRecord Generator - [{0}]", newProject.Name);
+			OnChanged(sender, newProject);
+		}
+
+		private void OnChanged(object sender, Project project)
+		{
+			this.Text = String.Format("ActiveRecord Generator - [{0}]", project.Name);
 		}
 	}
 }
