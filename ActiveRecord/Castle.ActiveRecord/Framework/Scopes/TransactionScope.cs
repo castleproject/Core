@@ -19,7 +19,10 @@ namespace Castle.ActiveRecord
 
 	using NHibernate;
 
-
+	/// <summary>
+	/// Implementation of <see cref="ISessionScope"/> to 
+	/// provide transaction semantics
+	/// </summary>
 	public class TransactionScope : SessionScope
 	{
 		private IList _transactions = new ArrayList();
@@ -36,7 +39,7 @@ namespace Castle.ActiveRecord
 
 		public void VoteCommit()
 		{
-			// Nothing to do as it's always assume commit
+			// Nothing to do as it's always assuming commit
 		}
 
 		protected override void Initialize(ISession session)

@@ -37,17 +37,17 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { _clients = value; }
 		}
 
-		public static void DeleteAll()
+		public new static void DeleteAll()
 		{
 			ActiveRecordBase.DeleteAll( typeof(Firm) );
 		}
 
-		public static Firm[] FindAll()
+		public new static Firm[] FindAll()
 		{
 			return (Firm[]) ActiveRecordBase.FindAll( typeof(Firm) );
 		}
 
-		public static Firm Find(int id)
+		public new static Firm Find(int id)
 		{
 			return (Firm) ActiveRecordBase.FindByPrimaryKey( typeof(Firm), id );
 		}

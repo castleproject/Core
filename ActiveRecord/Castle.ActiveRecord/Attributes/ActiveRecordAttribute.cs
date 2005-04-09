@@ -16,19 +16,31 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-
+	/// <summary>
+	/// Associate meta information related to the
+	/// desired table mapping.
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// [ActiveRecord("tb_Order")]
+	/// public class Order : ActiveRecordBase
+	/// {
+	/// }
+	/// </code>
+	/// </example>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class ActiveRecordAttribute : Attribute
 	{ 
 		private String _table;
 		private String _schema;
-		private String _proxy;
 		private String _discriminatorType;
 		private String _discriminatorValue;
 		private String _discriminatorColumn;
+		private bool _proxy;
 
 		public ActiveRecordAttribute()
 		{
+			
 		}
 
 		public ActiveRecordAttribute(String table)
@@ -54,24 +66,36 @@ namespace Castle.ActiveRecord
 			set { _schema = value; }
 		}
 
-		public String Proxy
+		public bool Proxy
 		{
 			get { return _proxy; }
 			set { _proxy = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the Discriminator column for
+		/// a table inheritance modeling
+		/// </summary>
 		public String DiscriminatorColumn
 		{
 			get { return _discriminatorColumn; }
 			set { _discriminatorColumn = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the column type (like string or integer)
+		/// for the discriminator column
+		/// </summary>
 		public String DiscriminatorType
 		{
 			get { return _discriminatorType; }
 			set { _discriminatorType = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the value that represents the
+		/// target class on the discriminator column
+		/// </summary>
 		public String DiscriminatorValue
 		{
 			get { return _discriminatorValue; }

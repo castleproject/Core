@@ -108,7 +108,7 @@ namespace Castle.ActiveRecord
 
 				String table = (ar.Table == null ? "" : String.Format(tableAttribute, ar.Table));
 				String schema = (ar.Schema == null ? "" : String.Format(schemaAttribute, ar.Schema));
-				String proxy = (ar.Proxy == null ? "" : String.Format(proxyAttribute, ar.Proxy));
+				String proxy = (ar.Proxy == false ? "" : String.Format(proxyAttribute, ar.Proxy.ToString().ToLower()));
 				String disc = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
 
 				xml.AppendFormat(classOpen, type.AssemblyQualifiedName, table + schema + proxy + disc);
@@ -142,7 +142,7 @@ namespace Castle.ActiveRecord
 			if (ar != null)
 			{
 				String table = (ar.Table == null ? "" : String.Format(tableAttribute, ar.Table));
-				String proxy = (ar.Proxy == null ? "" : String.Format(proxyAttribute, ar.Proxy));
+				String proxy = (ar.Proxy == false ? "" : String.Format(proxyAttribute, ar.Proxy.ToString().ToLower()));
 				String discvalue = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
 
 				xml.AppendFormat(subclassOpen, type.AssemblyQualifiedName, table + proxy + discvalue);

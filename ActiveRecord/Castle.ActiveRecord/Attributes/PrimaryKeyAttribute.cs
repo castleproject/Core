@@ -16,7 +16,21 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-
+	/// <summary>
+	/// Indicates the property which is the primary key.
+	/// </summary>
+	/// <example><code>
+	/// public class Blog : ActiveRecordBase
+	/// {
+	///		...
+	///		
+	///		[PrimaryKey(PrimaryKeyType.Native)]
+	///		public int Id
+	///		{
+	///			get { return _id; }
+	///			set { _id = value; }
+	///		}
+	/// </code></example>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class PrimaryKeyAttribute : Attribute
 	{
@@ -25,13 +39,17 @@ namespace Castle.ActiveRecord
 		private String _unsavedValue;
 		private String _access;
 
-		public PrimaryKeyAttribute()
+		public PrimaryKeyAttribute() : this(PrimaryKeyType.Native)
 		{
 		}
 
-		public PrimaryKeyAttribute(PrimaryKeyType generator, String column)
+		public PrimaryKeyAttribute(PrimaryKeyType generator)
 		{
 			_generator = generator;
+		}
+
+		public PrimaryKeyAttribute(PrimaryKeyType generator, String column) : this(generator)
+		{
 			_column = column;
 		}
 

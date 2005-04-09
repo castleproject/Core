@@ -31,49 +31,49 @@ namespace Castle.ActiveRecord.Tests
 		private IList _unpublishedposts;
 		private IList _recentposts;
 
-		[PrimaryKey(PrimaryKeyType.Native, "blog_id")]
+		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id
 		{
 			get { return _id; }
 			set { _id = value; }
 		}
 
-		[Property("blog_name")]
+		[Property]
 		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
 		}
 
-		[Property("blog_author")]
+		[Property]
 		public String Author
 		{
 			get { return _author; }
 			set { _author = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="Posts", Table="Posts", Column="post_blogid")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="Posts", Table="Posts", Column="blogid")]
 		public IList Posts
 		{
 			get { return _posts; }
 			set { _posts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="PublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 1")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="PublishedPosts", Table="Posts", Column="blogid", Where="published = 1")]
 		public IList PublishedPosts
 		{
 			get { return _publishedposts; }
 			set { _publishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="UnPublishedPosts", Table="Posts", Column="post_blogid", Where="post_published = 0")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="UnPublishedPosts", Table="Posts", Column="blogid", Where="published = 0")]
 		public IList UnPublishedPosts
 		{
 			get { return _unpublishedposts; }
 			set { _unpublishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="RecentPosts", Table="Posts", Column="post_blogid", OrderBy="post_created desc")]
+		[HasMany(typeof(Post), RelationType.Bag, Key="RecentPosts", Table="Posts", Column="blogid", OrderBy="created desc")]
 		public IList RecentPosts
 		{
 			get { return _recentposts; }

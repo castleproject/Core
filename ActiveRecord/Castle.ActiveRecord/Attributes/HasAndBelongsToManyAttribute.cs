@@ -17,22 +17,27 @@ namespace Castle.ActiveRecord
 	using System;
 
 	/// <summary>
-	/// Maps a one to many association.
+	/// Maps a many to many association with an association table.
 	/// </summary>
 	/// <example><code>
-	/// public class Blog : ActiveRecordBase
+	/// public class Company : ActiveRecordBase
 	/// {
-	///		...
-	///		
-	/// 	[HasMany(typeof(Post), RelationType.Bag, Key="Posts", Table="Posts", Column="blogid")]
-	///		public IList Posts
-	///		{
-	///			get { return _posts; }
-	///			set { _posts = value; }
-	///		}
+	///   ...
+	///   
+	///   [HasAndBelongsToMany( typeof(Person), RelationType.Bag, Table="PeopleCompanies", Column="person_id", ColumnKey="company_id" )]
+	///   public IList People
+	///   {
+	///   	get { return _people; }
+	///   	set { _people = value; }
+	///   }
+	/// }
 	/// </code></example>
-	[AttributeUsage(AttributeTargets.Property)]
-	public class HasManyAttribute : RelationAttribute
+	/// <remarks>The <see cref="ColumnKey"/> must specify the key on the 
+	/// association table that points to the primary key of this class. In 
+	/// the example, 'company_id' points to 'Company'.
+	/// </remarks>
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	public class HasAndBelongsToManyAttribute : RelationAttribute
 	{
 		private Type _mapType;
 		private String _key;
@@ -46,8 +51,9 @@ namespace Castle.ActiveRecord
 		private String _orderBy;
 		private String _where;
 		private String _column;
+		private String _columnKey;
 
-		public HasManyAttribute( Type mapType, RelationType relationType ) : base(relationType)
+		public HasAndBelongsToManyAttribute( Type mapType, RelationType relationType ) : base(relationType)
 		{
 			_mapType = mapType;
 		}
@@ -68,6 +74,12 @@ namespace Castle.ActiveRecord
 		{
 			get { return _column; }
 			set { _column = value; }
+		}
+
+		public String ColumnKey
+		{
+			get { return _columnKey; }
+			set { _columnKey = value; }
 		}
 
 		public String Index

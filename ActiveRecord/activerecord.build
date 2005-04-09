@@ -7,13 +7,13 @@
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="castle.model" value="${base.dir}/../InversionOfControl/bin/Castle.Model.dll" />
 	<property name="name" value="Castle.ActiveRecord" />
-	<property name="version" value="alpha-1" />
 	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
+	<property name="samples.dir" value="${base.dir}/../Samples/ActiveRecord" />
 
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="name" value="Castle.ActiveRecord" />
 	<property name="src.dir" value="${base.dir}\${name}" />
-	<property name="test.src.dir" value="${src.dir}/../Castle.ActiveRecord.Tests" />
+	<property name="test.src.dir" value="${src.dir}/../${name}.Tests" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 	<property name="test.assembly.appconfig" value="${test.assembly.name}.config" />
 
@@ -108,32 +108,82 @@
 		</nunit2>
 	</target>
 	
-	<target name="packfiles">
-		<zip zipfile="${name}.bin.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/${assembly.name}" />				
-				<include name="${base.dir}/../License.txt" />				
-				<include name="${base.dir}/../Readme.txt" />				
-				<include name="Changes.txt" />				
+	<target name="docs">
+		<ndoc failonerror="true">
+			<assemblies basedir="${bin.dir}">
+				<include name="${assembly.name}" />
+			</assemblies>
+			<documenters>
+				<documenter name="MSDN">
+					<property name="OutputTarget" value="HTMLHelp" />
+					<property name="Preliminary" value="true" />
+					<property name="CleanIntermediates" value="true" />
+					<property name="SdkLinksOnWeb" value="true" />
+					<property name="AutoPropertyBackerSummaries" value="true" />
+					<property name="AutoDocumentConstructors" value="true" />
+					<property name="OutputDirectory" value="${doc.dir}" />
+					<property name="HtmlHelpName" value="ActiveRecord" />
+					<property name="IncludeFavorites" value="False" />
+					<property name="Title" value="Castle's ActiveRecord" />
+					<property name="SplitTOCs" value="False" />
+					<property name="DefaulTOC" value="ActiveRecord" />
+					<property name="ShowVisualBasic" value="True" />
+					<property name="ShowMissingSummaries" value="False" />
+					<property name="ShowMissingRemarks" value="False" />
+					<property name="ShowMissingParams" value="False" />
+					<property name="ShowMissingReturns" value="False" />
+					<property name="ShowMissingValues" value="False" />
+					<property name="DocumentInternals" value="False" />
+					<property name="DocumentProtected" value="True" />
+					<property name="DocumentPrivates" value="False" />
+					<property name="DocumentEmptyNamespaces" value="False" />
+					<property name="IncludeAssemblyVersion" value="True" />
+					<property name="CopyrightText" value="Copyright 2004,2005 - Castle Project (original author or authors)" />
+					<property name="CopyrightHref" value="http://www.castleproject.org" />
+				</documenter>
+			</documenters>
+		</ndoc>
+	</target>
+	
+	<target name="dist" depends="docs">
+		<zip zipfile="${name}-Samples.zip">
+			<fileset basedir="${samples.dir}">
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.txt" />
+				
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\*.user" />
 			</fileset>
 		</zip>
-		
-		<zip zipfile="${name}.src.${version}.zip">
+
+		<zip zipfile="${name}.src.zip">
 			<fileset basedir="${base.dir}">
-				<include name="${base.dir}/../License.txt" />				
-				<include name="${base.dir}/../Readme.txt" />				
-				<include name="Changes.txt" />				
 				<include name="*.build" />
 				<include name="*.sln" />
 				<include name="${src.dir}/**/*.*" />
-				<include name="${test.src.dir}/**/*.*" />
 				
-				<exclude name="**/Debug/*" />
-				<exclude name="**/obj/*" />
-				<exclude name="**/*.user" />
-				<exclude name="**/*.suo" />
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\*.user" />
 			</fileset>
 		</zip>
+		
+		
+		<zip zipfile="${name}.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${doc.dir}/**/*.chm" />
+				<include name="${bin.dir}/*.*" />
+				<include name="${name}.src.zip" />
+				<include name="${name}-Samples.zip" />
+
+				<include name="*.txt" />
+			</fileset>
+		</zip>
+		
 	</target>
 	
 </project>

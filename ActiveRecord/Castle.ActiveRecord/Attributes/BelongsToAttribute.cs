@@ -16,7 +16,26 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-
+	/// <summary>
+	/// Maps a one to one association.
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// public class Post : ActiveRecordBase
+	/// {
+	///		...
+	///		
+	/// 	[BelongsTo("blogid")]
+	///		public Blog Blog
+	///		{
+	/// 		get { return _blog; }
+	/// 		set { _blog = value; }
+	///		}
+	///	</code>
+	/// </example>
+	/// <remarks>
+	/// Please note that the 'blogid' foreign key lies on the 'Post' table.
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class BelongsToAttribute : Attribute
 	{

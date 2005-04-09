@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Tests.Model
 	using System.Collections;
 
 
-	[ActiveRecord("people")]
+	[ActiveRecord("People")]
 	public class Person : ActiveRecordBase
 	{
 		private int _id;
@@ -44,7 +44,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { _name = value; }
 		}
 
-		[HasAndBelongsToMany( typeof(Company), RelationType.Bag, Table="people_companies", Column="company_id", ColumnKey="person_id" )]
+		[HasAndBelongsToMany( typeof(Company), RelationType.Bag, Table="PeopleCompanies", Column="company_id", ColumnKey="person_id" )]
 		public IList Companies
 		{
 			get { return _companies; }

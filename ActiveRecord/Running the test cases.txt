@@ -20,15 +20,15 @@ CREATE TABLE [dbo].[Companies] (
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[people]    Script Date: 26/3/2005 12:28:17 ******/
-CREATE TABLE [dbo].[people] (
+/****** Object:  Table [dbo].[People]    Script Date: 26/3/2005 12:28:17 ******/
+CREATE TABLE [dbo].[People] (
 	[id] [int] IDENTITY (1, 1) NOT NULL ,
 	[name] [varchar] (50) NULL 
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[people_companies]    Script Date: 26/3/2005 12:28:17 ******/
-CREATE TABLE [dbo].[people_companies] (
+/****** Object:  Table [dbo].[PeopleCompanies]    Script Date: 26/3/2005 12:28:17 ******/
+CREATE TABLE [dbo].[PeopleCompanies] (
 	[person_id] [int] NOT NULL ,
 	[company_id] [int] NOT NULL 
 ) ON [PRIMARY]
@@ -36,49 +36,49 @@ GO
 
 /****** Object:  Table [dbo].[Blogs]    Script Date: 19/3/2005 23:53:47 ******/
 CREATE TABLE [dbo].[Blogs] (
-	[blog_id] [int] IDENTITY (1, 1) NOT NULL ,
-	[blog_name] [varchar] (50) NULL ,
-	[blog_author] [varchar] (50) NULL 
+	[id] [int] IDENTITY (1, 1) NOT NULL ,
+	[name] [varchar] (50) NULL ,
+	[author] [varchar] (50) NULL 
 ) ON [PRIMARY]
 GO
 
 /****** Object:  Table [dbo].[Posts]    Script Date: 19/3/2005 23:53:49 ******/
 CREATE TABLE [dbo].[Posts] (
-	[post_id] [int] IDENTITY (1, 1) NOT NULL ,
-	[post_title] [varchar] (50) NULL ,
-	[post_contents] [text] NULL ,
-	[post_category] [varchar] (50) NULL ,
-	[post_blogid] [int] NULL ,
-	[post_created] [datetime] NULL ,
-	[post_published] [bit] NULL 
+	[id] [int] IDENTITY (1, 1) NOT NULL ,
+	[title] [varchar] (50) NULL ,
+	[contents] [text] NULL ,
+	[category] [varchar] (50) NULL ,
+	[blogid] [int] NULL ,
+	[created] [datetime] NULL ,
+	[published] [bit] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
 ALTER TABLE [dbo].[Blogs] WITH NOCHECK ADD 
 	CONSTRAINT [PK_Blogs] PRIMARY KEY  CLUSTERED 
 	(
-		[blog_id]
+		[id]
 	)  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[Posts] WITH NOCHECK ADD 
 	CONSTRAINT [PK_Posts] PRIMARY KEY  CLUSTERED 
 	(
-		[post_id]
+		[id]
 	)  ON [PRIMARY] 
 GO
 
 ALTER TABLE [dbo].[Posts] WITH NOCHECK ADD 
-	CONSTRAINT [DF_Posts_post_created] DEFAULT (getdate()) FOR [post_created],
-	CONSTRAINT [DF_Posts_post_published] DEFAULT (0) FOR [post_published]
+	CONSTRAINT [DF_Posts_post_created] DEFAULT (getdate()) FOR [created],
+	CONSTRAINT [DF_Posts_post_published] DEFAULT (0) FOR [published]
 GO
 
 ALTER TABLE [dbo].[Posts] ADD 
 	CONSTRAINT [FK_Posts_Blogs] FOREIGN KEY 
 	(
-		[post_blogid]
+		[blogid]
 	) REFERENCES [dbo].[Blogs] (
-		[blog_id]
+		[id]
 	) ON DELETE CASCADE  ON UPDATE CASCADE 
 GO
 

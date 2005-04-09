@@ -1,3 +1,5 @@
+- Project name on save
+
 - Context menu on the project explorer
 
 - Add relation Dialog

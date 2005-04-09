@@ -58,7 +58,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="adapter"></param>
 		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-		protected internal virtual bool BeforeLoad(DictionaryAdapter adapter)
+		protected internal virtual bool BeforeLoad(IDictionary adapter)
 		{
 			return false;
 		}
@@ -69,7 +69,7 @@ namespace Castle.ActiveRecord
 		/// from the database.
 		/// </summary>
 		/// <param name="adapter"></param>
-		protected internal virtual void BeforeDelete(DictionaryAdapter adapter)
+		protected internal virtual void BeforeDelete(IDictionary adapter)
 		{
 		}
 

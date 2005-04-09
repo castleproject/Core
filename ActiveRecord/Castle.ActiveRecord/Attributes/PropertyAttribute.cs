@@ -16,7 +16,34 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-
+	/// <summary>
+	/// Maps a standard column of the table.
+	/// </summary>
+	/// <example>
+	/// In the following example, the column is also
+	/// called 'name', so you don't have to specify.
+	/// <code>
+	/// public class Blog : ActiveRecordBase
+	/// {
+	///		...
+	///		
+	///		[Property]
+	///		public int Name
+	///		{
+	///			get { return _id; }
+	///			set { _id = value; }
+	///		}
+	///	</code>
+	/// To map a column name, use 
+	/// <code>
+	///		[Property("blog_name")]
+	///		public int Name
+	///		{
+	///			get { return _id; }
+	///			set { _id = value; }
+	///		}
+	///	</code>
+	/// </example>
 	[AttributeUsage(AttributeTargets.Property)]
 	public class PropertyAttribute : Attribute
 	{

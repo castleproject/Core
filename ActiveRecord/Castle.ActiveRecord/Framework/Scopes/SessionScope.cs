@@ -19,12 +19,11 @@ namespace Castle.ActiveRecord
 
 	using NHibernate;
 
-	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Scopes;
 
 	/// <summary>
 	/// Implementation of <see cref="ISessionScope"/> to 
-	/// augment performance by caching the sessions, thus
+	/// augment performance by caching the session, thus
 	/// avoiding too much opens/flushes/closes.
 	/// </summary>
 	public class SessionScope : AbstractScope

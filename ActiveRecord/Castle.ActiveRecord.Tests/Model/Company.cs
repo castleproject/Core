@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Tests.Model
 	using System.Collections;
 
 
-	[ActiveRecord("companies", DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="company")]
+	[ActiveRecord("Companies", DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="company")]
 	public class Company : ActiveRecordBase
 	{
 		private int id;
@@ -48,7 +48,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { name = value; }
 		}
 
-		[HasAndBelongsToMany( typeof(Person), RelationType.Bag, Table="people_companies", Column="person_id", ColumnKey="company_id" )]
+		[HasAndBelongsToMany( typeof(Person), RelationType.Bag, Table="PeopleCompanies", Column="person_id", ColumnKey="company_id" )]
 		public IList People
 		{
 			get { return _people; }

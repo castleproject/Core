@@ -40,49 +40,49 @@ namespace Castle.ActiveRecord.Tests
 			_category = category;
 		}
 
-		[PrimaryKey(PrimaryKeyType.Native, "post_id")]
+		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id
 		{
 			get { return _id; }
 			set { _id = value; }
 		}
 
-		[Property("post_title")]
+		[Property]
 		public String Title
 		{
 			get { return _title; }
 			set { _title = value; }
 		}
 
-		[Property("post_contents", ColumnType="StringClob")]
+		[Property(ColumnType="StringClob")]
 		public String Contents
 		{
 			get { return _contents; }
 			set { _contents = value; }
 		}
 
-		[Property("post_category")]
+		[Property]
 		public String Category
 		{
 			get { return _category; }
 			set { _category = value; }
 		}
 
-		[BelongsTo("post_blogid")]
+		[BelongsTo("blogid")]
 		public Blog Blog
 		{
 			get { return _blog; }
 			set { _blog = value; }
 		}
 
-		[Property("post_created")]
+		[Property("created")]
 		public DateTime Created
 		{
 			get { return _created; }
 			set { _created = value; }
 		}
 
-		[Property("post_published")]
+		[Property("published")]
 		public bool Published
 		{
 			get { return _published; }

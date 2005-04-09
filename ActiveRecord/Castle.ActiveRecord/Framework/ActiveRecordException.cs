@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord.Framework
 	using System;
 	using System.Runtime.Serialization;
 
+
 	[Serializable]
 	public class ActiveRecordException : Exception
 	{

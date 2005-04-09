@@ -25,14 +25,14 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
-	/// 
+	/// Performs the initialization of the framework
 	/// </summary>
 	public class ActiveRecordStarter
 	{
 		/// <summary>
-		/// 
+		/// Initialize tha mappings using the configuration and 
+		/// the list of types
 		/// </summary>
-		/// <param name="types"></param>
 		public static void Initialize( IConfigurationSource source, params Type[] types )
 		{
 			if (source == null) throw new ArgumentNullException("source");
@@ -72,9 +72,9 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// 
+		/// Initialize tha mappings using the configuration and 
+		/// checking all the types on the specified <c>Assembly</c>
 		/// </summary>
-		/// <param name="assembly"></param>
 		public static void Initialize( Assembly assembly, IConfigurationSource source )
 		{
 			Type[] types = assembly.GetExportedTypes();
@@ -94,9 +94,23 @@ namespace Castle.ActiveRecord
 			Initialize( source, (Type[]) list.ToArray( typeof(Type) ) );
 		}
 
-		public static void Initialize( )
+		/// <summary>
+		/// Initializes the framework reading the configuration from
+		/// the <c>AppDomain</c> and checking all the types on the executing <c>Assembly</c>
+		/// </summary>
+		public static void Initialize()
 		{
-			Initialize( Assembly.GetExecutingAssembly(), System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource );
+			IConfigurationSource source = System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
+			
+			if (source == null)
+			{
+				String message = "Could not obtain configuration from the AppDomain config file." + 
+					" Sorry, but you have to fill the configuration or provide a " + 
+					"IConfigurationSource instance yourself.";
+				throw new System.Configuration.ConfigurationException(message);
+			}
+			
+			Initialize( Assembly.GetExecutingAssembly(), source );
 		}
 
 		private static Configuration CreateConfiguration(IConfiguration config)
