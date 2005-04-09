@@ -15,9 +15,14 @@
 namespace Castle.ActiveRecord.Generator.Components.Database
 {
 	using System;
+	using System.IO;
+	using System.Runtime.Serialization.Formatters.Binary;
 
+	/// <summary>
+	/// Represents a Property to be generated.
+	/// </summary>
 	[Serializable]
-	public abstract class ActiveRecordPropertyDescriptor
+	public abstract class ActiveRecordPropertyDescriptor : ICloneable
 	{
 		private bool _generate = true;
 		private String _columnName;
@@ -105,6 +110,24 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		{
 			return _columnName.GetHashCode();
 		}
+
+		#region ICloneable Members
+
+		public virtual object Clone()
+		{
+			// Using serialization is the best 
+			// way to keep things synchronized.
+			// Otherwise we might forget to include a new field
+			// and terrible/unexplained bugs might raise
+
+			MemoryStream stream = new MemoryStream();
+			BinaryFormatter formatter = new BinaryFormatter();
+			formatter.Serialize(stream, this);
+			stream.Position = 0;
+			return formatter.Deserialize(stream);
+		}
+
+		#endregion
 	}
 
 	[Serializable]

@@ -1,6 +1,7 @@
 - Context menu on the project explorer
 
 - Add relation Dialog
+  Done!
 
 - Operations is not configurable yet
 

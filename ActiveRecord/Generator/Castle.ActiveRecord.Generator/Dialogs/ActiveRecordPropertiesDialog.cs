@@ -1,3 +1,17 @@
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace Castle.ActiveRecord.Generator.Dialogs
 {
 	using System;
@@ -695,29 +709,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			foreach(ListViewItem item in listView2.Items)
 			{
 				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
-				prop.Generate = item.Checked;
 
-				if (item.Checked)
+				if (_parent != null && _parent.PropertiesRelations.Contains(prop))
 				{
-					_descriptor.PropertiesRelations.Add(prop);
+					// This is important as modification here
+					// wont affect the property descriptor on the parent
+					prop = (ActiveRecordPropertyDescriptor) prop.Clone();
 				}
 
-				/// Another option would be to clone 
-				/// the property
-//				if (_parent != null)
-//				{
-//					if (item.Checked)
-//					{
-//						_parent.Properties.Remove(prop);
-//					}
-//					else
-//					{
-//						if (!_parent.Properties.Contains(prop))
-//						{
-//							_parent.Properties.Add(prop);
-//						}
-//					}
-//				}
+				_descriptor.PropertiesRelations.Add( prop );
+
+				prop.Generate = item.Checked;
 			}
 		}
 
@@ -728,29 +730,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			foreach(ListViewItem item in listView1.Items)
 			{
 				ActiveRecordPropertyDescriptor prop = item.Tag as ActiveRecordPropertyDescriptor;
-				prop.Generate = item.Checked;
 
-				if (item.Checked)
+				if (_parent != null && _parent.Properties.Contains(prop))
 				{
-					_descriptor.Properties.Add(prop);
+					// This is important as modification here
+					// wont affect the property descriptor on the parent
+					prop = (ActiveRecordPropertyDescriptor) prop.Clone();
 				}
-				
-				/// Another option would be to clone 
-				/// the property
-//				if (_parent != null)
-//				{
-//					if (item.Checked)
-//					{
-//						_parent.Properties.Remove(prop);
-//					}
-//					else
-//					{
-//						if (!_parent.Properties.Contains(prop))
-//						{
-//							_parent.Properties.Add(prop);
-//						}
-//					}
-//				}
+
+				_descriptor.Properties.Add( prop );
+
+				prop.Generate = item.Checked;
 			}
 		}
 

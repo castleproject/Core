@@ -135,9 +135,9 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "WinFormsUI"
-                    Project = "{D3C782BA-178E-4235-A3BA-8C11DEBB6BEE}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "WeifenLuo.WinFormsUI.Docking"
+                    AssemblyName = "WeifenLuo.WinFormsUI.Docking"
+                    HintPath = "..\lib\WeifenLuo.WinFormsUI.Docking.dll"
                 />
             </References>
         </Build>
