@@ -1,3 +1,5 @@
+- Code preview (context menu)
+
 - Project name on save
 
 - Context menu on the project explorer

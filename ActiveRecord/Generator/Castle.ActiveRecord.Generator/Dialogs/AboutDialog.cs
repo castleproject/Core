@@ -91,9 +91,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(136, 88);
+			this.label2.Location = new System.Drawing.Point(140, 88);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(128, 24);
+			this.label2.Size = new System.Drawing.Size(80, 24);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Version 0.0.1.0";
 			// 

@@ -49,14 +49,39 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 		private void OnSave(object sender, EventArgs e)
 		{
+			if (Model.Filename == null)
+			{
+				using(SaveFileDialog dlg = new SaveFileDialog())
+				{
+					dlg.CheckPathExists = true;
+					dlg.OverwritePrompt = true;
+					dlg.CreatePrompt = false;
+					dlg.DefaultExt = ".arproj";
+
+					if (dlg.ShowDialog(Workspace.ActiveWindow) == DialogResult.OK)
+					{
+						Model.Filename = dlg.FileName;
+					}
+					else
+					{
+						return;
+					}
+				}
+			}
+
+
 			try
 			{
-				using(FileStream fs = new FileStream(@"C:\project1.ar", FileMode.Create, FileAccess.Write, FileShare.Write))
+				Model.CurrentProject.Name = new FileInfo(Model.Filename).Name;
+
+				using(FileStream fs = new FileStream(Model.Filename, FileMode.Create, FileAccess.Write, FileShare.Write))
 				{
 					BinaryFormatter formatter = new BinaryFormatter();
 
 					formatter.Serialize( fs, Model.CurrentProject );
 				}
+
+				Model.Update();
 			}
 			catch(Exception ex)
 			{

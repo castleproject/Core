@@ -487,7 +487,10 @@ namespace Castle.ActiveRecord.Generator.Parts
 
 		private void showCodePreviewMenu_Click(object sender, System.EventArgs e)
 		{
-//			_actionSet.PreviewCode( SelectedShape );
+			if (SelectedShape != null)
+			{
+				_actionSet.PreviewCode( (SelectedShape as AbstractARShape).ARDescriptor );
+			}
 		}
 
 		private void removeMenu_Click(object sender, System.EventArgs e)

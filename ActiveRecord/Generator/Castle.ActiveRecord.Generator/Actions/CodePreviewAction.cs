@@ -12,32 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Generator.Components.Database
+namespace Castle.ActiveRecord.Generator.Actions
 {
 	using System;
 
+	using Castle.ActiveRecord.Generator.Dialogs;
+	using Castle.ActiveRecord.Generator.Components.Database;
 
-	[Serializable]
-	public class ActiveRecordDescriptorSubClass : ActiveRecordDescriptor
+
+	public class CodePreviewAction : AbstractAction
 	{
-		private ActiveRecordDescriptor _baseClass;
-
-		public ActiveRecordDescriptorSubClass(ActiveRecordDescriptor baseClass)
+		public CodePreviewAction()
 		{
-			_baseClass = baseClass;
 		}
 
-		public ActiveRecordDescriptor BaseClass
+		public void Run(IActiveRecordDescriptor descriptor)
 		{
-			get { return _baseClass; }
-			set { _baseClass = value; }
-		}
-
-		public override ActiveRecordPrimaryKeyDescriptor PrimaryKeyProperty
-		{
-			get
+			using(CodePreviewDialog dlg = new CodePreviewDialog(descriptor))
 			{
-				return _baseClass.PrimaryKeyProperty;
+				dlg.ShowDialog(Workspace.ActiveWindow);
 			}
 		}
 	}

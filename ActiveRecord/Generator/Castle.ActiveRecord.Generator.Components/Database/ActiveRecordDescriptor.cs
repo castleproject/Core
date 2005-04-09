@@ -36,10 +36,10 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		{
 			_table = table;
 
-			if (_table.RelatedDescriptor != null)
-			{
-				throw new ArgumentException("Table has an ARDescriptor already");
-			}
+//			if (_table.RelatedDescriptor != null)
+//			{
+//				throw new ArgumentException("Table has an ARDescriptor already");
+//			}
 
 			_table.RelatedDescriptor = this;
 		}
@@ -91,6 +91,20 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		public void AddProperty( ActiveRecordPropertyDescriptor propertyDescriptor )
 		{
 			_properties.Add(propertyDescriptor);
+		}
+
+		public virtual ActiveRecordPrimaryKeyDescriptor PrimaryKeyProperty
+		{
+			get
+			{
+				foreach(ActiveRecordPropertyDescriptor prop in _properties)
+				{
+					if (!(prop is ActiveRecordPrimaryKeyDescriptor)) continue;
+					return prop as ActiveRecordPrimaryKeyDescriptor;
+				}
+			
+				return null;
+			}
 		}
 	}
 }

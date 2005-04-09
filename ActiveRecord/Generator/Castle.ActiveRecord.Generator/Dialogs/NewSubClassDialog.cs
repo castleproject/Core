@@ -82,7 +82,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			this.okButton.Location = new System.Drawing.Point(328, 152);
 			this.okButton.Name = "okButton";
-			this.okButton.TabIndex = 0;
+			this.okButton.TabIndex = 4;
 			this.okButton.Text = "OK";
 			this.okButton.Click += new System.EventHandler(this.okButton_Click);
 			// 
@@ -91,7 +91,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.Location = new System.Drawing.Point(240, 152);
 			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.TabIndex = 1;
+			this.cancelButton.TabIndex = 5;
 			this.cancelButton.Text = "Cancel";
 			this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
 			// 
@@ -100,7 +100,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.cl.Location = new System.Drawing.Point(48, 32);
 			this.cl.Name = "cl";
 			this.cl.Size = new System.Drawing.Size(120, 23);
-			this.cl.TabIndex = 2;
+			this.cl.TabIndex = 0;
 			this.cl.Text = "Class name:";
 			this.cl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -109,7 +109,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.className.Location = new System.Drawing.Point(184, 32);
 			this.className.Name = "className";
 			this.className.Size = new System.Drawing.Size(192, 21);
-			this.className.TabIndex = 3;
+			this.className.TabIndex = 1;
 			this.className.Text = "";
 			// 
 			// discValue
@@ -117,7 +117,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.discValue.Location = new System.Drawing.Point(184, 72);
 			this.discValue.Name = "discValue";
 			this.discValue.Size = new System.Drawing.Size(192, 21);
-			this.discValue.TabIndex = 5;
+			this.discValue.TabIndex = 3;
 			this.discValue.Text = "";
 			// 
 			// label2
@@ -125,7 +125,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.label2.Location = new System.Drawing.Point(48, 72);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(120, 23);
-			this.label2.TabIndex = 4;
+			this.label2.TabIndex = 2;
 			this.label2.Text = "Discriminator Value:";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 

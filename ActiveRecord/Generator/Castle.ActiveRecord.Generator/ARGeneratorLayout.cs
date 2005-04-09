@@ -47,7 +47,7 @@ namespace Castle.ActiveRecord.Generator
 			arGraph.ParentWorkspace = workspace;
 
 			outView = new OutputView(_model);
-//			outView.ParentWorkspace = workspace;
+			outView.ParentWorkspace = workspace;
 
 			projExplorer = new ProjectExplorer(_model);
 			projExplorer.ParentWorkspace = workspace;

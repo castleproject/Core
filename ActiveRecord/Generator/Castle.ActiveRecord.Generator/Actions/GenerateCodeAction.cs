@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 	using System.Windows.Forms;
 
 	using Castle.ActiveRecord.Generator.Dialogs;
+	using Castle.ActiveRecord.Generator.Components.CodeGenerator;
 
 
 	public class GenerateCodeAction : AbstractAction
@@ -40,7 +41,8 @@ namespace Castle.ActiveRecord.Generator.Actions
 			{
 				if (dialog.ShowDialog(Workspace.ActiveWindow) == DialogResult.OK)
 				{
-//					ServiceRegistry.Instance[];
+					IProjectGenerator gen = ServiceRegistry.Instance[ typeof(IProjectGenerator) ] as IProjectGenerator; 
+					gen.Generate( Model.CurrentProject );
 				}
 			}
 		}

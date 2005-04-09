@@ -99,7 +99,6 @@ namespace Castle.ActiveRecord.Generator.Components
 			{
 				String propertyName = _namingService.CreateRelationName(fkTable.Name);
 				ActiveRecordDescriptor targetType = null;
-				Type propertyType = typeof(IList);
 				String colName = null;
 				bool pendentNecessary = false;
 				ColumnDefinition selectedCol = null;
@@ -136,7 +135,7 @@ namespace Castle.ActiveRecord.Generator.Components
 				if (colName == null) continue;
 
 				ActiveRecordHasManyDescriptor hasMany = 
-					new ActiveRecordHasManyDescriptor(colName, propertyName, propertyType, targetType);
+					new ActiveRecordHasManyDescriptor(colName, propertyName, targetType);
 
 				if (pendentNecessary)
 				{

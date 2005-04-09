@@ -25,6 +25,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 		private NewArDescriptorUsingWizard newUsingWizard;
 		private CreateSubClassAction createSubClass;
 		private CreateJoinedSubClassAction createJoinedSub;
+		private CodePreviewAction codePreviewAction;
 
 		public ActiveRecordGraphViewActionSet()
 		{
@@ -38,11 +39,13 @@ namespace Castle.ActiveRecord.Generator.Actions
 			newUsingWizard = new NewArDescriptorUsingWizard();
 			createSubClass = new CreateSubClassAction();
 			createJoinedSub = new CreateJoinedSubClassAction();
+			codePreviewAction = new CodePreviewAction();
 
 			showProperties.Init(model);
 			newUsingWizard.Init(model);
 			createSubClass.Init(model);
 			createJoinedSub.Init(model);
+			codePreviewAction.Init(model);
 		}
 
 		public void Install(IWorkspace workspace)
@@ -51,6 +54,7 @@ namespace Castle.ActiveRecord.Generator.Actions
 			newUsingWizard.Install(workspace, null, null);
 			createSubClass.Install(workspace, null, null);
 			createJoinedSub.Install(workspace, null, null);
+			codePreviewAction.Install(workspace, null, null);
 		}
 
 		#endregion
@@ -68,6 +72,11 @@ namespace Castle.ActiveRecord.Generator.Actions
 		public void CreateJoinedSubClass(ActiveRecordDescriptor descriptor)
 		{
 			createJoinedSub.Run(descriptor);
+		}
+
+		public void PreviewCode(IActiveRecordDescriptor descriptor)
+		{
+			codePreviewAction.Run(descriptor);
 		}
 	}
 }

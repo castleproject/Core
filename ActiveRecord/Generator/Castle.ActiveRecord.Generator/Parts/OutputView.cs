@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,11 +20,13 @@ namespace Castle.ActiveRecord.Generator.Parts
 	using System.ComponentModel;
 	using System.Windows.Forms;
 	using WeifenLuo.WinFormsUI;
+	using Castle.ActiveRecord.Generator.Components;
+
 
 	/// <summary>
 	/// Summary description for OutputView.
 	/// </summary>
-	public class OutputView : DockContent
+	public class OutputView : DockContent, ILogger, ISubWorkspace
 	{
 		private System.Windows.Forms.TextBox textBox1;
 
@@ -33,6 +35,8 @@ namespace Castle.ActiveRecord.Generator.Parts
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 
+		private IWorkspace _parentWs;
+
 		public OutputView()
 		{
 			//
@@ -40,9 +44,7 @@ namespace Castle.ActiveRecord.Generator.Parts
 			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
+			ServiceRegistry.Instance.Kernel.AddComponentInstance("logger", typeof (ILogger), this);
 		}
 
 		public OutputView(Model model) : this()
@@ -52,55 +54,113 @@ namespace Castle.ActiveRecord.Generator.Parts
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
-
+			// 
+			// textBox1
+			// 
+			this.textBox1.BackColor = System.Drawing.Color.White;
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBox1.Location = new System.Drawing.Point(0, 0);
+			this.textBox1.Location = new System.Drawing.Point(0, 2);
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
+			this.textBox1.ReadOnly = true;
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBox1.Size = new System.Drawing.Size(307, 368);
+			this.textBox1.Size = new System.Drawing.Size(255, 361);
 			this.textBox1.TabIndex = 1;
+			this.textBox1.Text = "";
 			this.textBox1.WordWrap = false;
-
-			this.DockableAreas = ((((WeifenLuo.WinFormsUI.DockAreas.Float | WeifenLuo.WinFormsUI.DockAreas.DockLeft) 
+			// 
+			// OutputView
+			// 
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(255, 365);
+			this.Controls.Add(this.textBox1);
+			this.DockableAreas = ((WeifenLuo.WinFormsUI.DockAreas)(((((WeifenLuo.WinFormsUI.DockAreas.Float | WeifenLuo.WinFormsUI.DockAreas.DockLeft) 
 				| WeifenLuo.WinFormsUI.DockAreas.DockRight) 
 				| WeifenLuo.WinFormsUI.DockAreas.DockTop) 
-				| WeifenLuo.WinFormsUI.DockAreas.DockBottom);
-			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
-			this.ClientSize = new System.Drawing.Size(307, 394);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.textBox1});
-			this.DockPadding.Bottom = 3;
-			this.DockPadding.Top = 3;
+				| WeifenLuo.WinFormsUI.DockAreas.DockBottom)));
+			this.DockPadding.Bottom = 2;
+			this.DockPadding.Top = 2;
 			this.HideOnClose = true;
-//			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "OutputView";
 			this.ShowHint = WeifenLuo.WinFormsUI.DockState.DockBottomAutoHide;
 			this.Text = "OutputView";
 			this.ResumeLayout(false);
+
 		}
+
+		#endregion
+
+		public void Info(String message)
+		{
+			EnsureVisible();
+
+			textBox1.Text += message + "\r\n";
+		}
+
+		private void EnsureVisible()
+		{
+			this.Show( _parentWs.MainDockManager );
+		}
+
+		#region ISubWorkspace Members
+
+		public IWorkspace ParentWorkspace
+		{
+			get { return _parentWs; }
+			set { _parentWs = value; }
+		}
+
+		#endregion
+
+		#region IWorkspace Members
+
+		public IWin32Window ActiveWindow
+		{
+			get { return this; }
+		}
+
+		public MainMenu MainMenu
+		{
+			get { return null; }
+		}
+
+		public ToolBar MainToolBar
+		{
+			get { return null; }
+		}
+
+		public StatusBar MainStatusBar
+		{
+			get { return null; }
+		}
+
+		public DockPanel MainDockManager
+		{
+			get { return null; }
+		}
+
 		#endregion
 	}
 }

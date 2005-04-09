@@ -109,6 +109,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ILogger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "INamingService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -164,12 +169,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CodeGenerator\CodeDomGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CodeGenerator\CodeProviderFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "CodeGenerator\CodeProviderInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CodeGenerator\ICodeDomGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

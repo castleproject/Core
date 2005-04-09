@@ -40,6 +40,8 @@ namespace Castle.ActiveRecord.Generator
 			AddComponent("relation.service", typeof(IRelationshipInferenceService), typeof(RelationshipInferenceService) );
 			AddComponent("codeproviderfactory", typeof(ICodeProviderFactory), typeof(CodeProviderFactory) );
 			AddComponent("relationbuilder", typeof(IRelationshipBuilder), typeof(RelationshipBuilder) );
+			AddComponent("codedomgen", typeof(ICodeDomGenerator), typeof(CodeDomGenerator) );
+			AddComponent("projectgen", typeof(IProjectGenerator), typeof(ProjectGenerator));
 		}
 
 		public static ServiceRegistry Instance

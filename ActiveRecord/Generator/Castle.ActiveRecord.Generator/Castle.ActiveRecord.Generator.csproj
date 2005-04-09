@@ -214,6 +214,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Actions\CodePreviewAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Actions\CreateJoinedSubClassAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -334,6 +339,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Dialogs\CodePreviewDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\CodePreviewDialog.resx"
+                    DependentUpon = "CodePreviewDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Dialogs\DatabaseConnectionDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -341,6 +356,16 @@
                 <File
                     RelPath = "Dialogs\DatabaseConnectionDialog.resx"
                     DependentUpon = "DatabaseConnectionDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Dialogs\EditRelationDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dialogs\EditRelationDialog.resx"
+                    DependentUpon = "EditRelationDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

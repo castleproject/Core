@@ -28,9 +28,16 @@ namespace Castle.ActiveRecord.Generator
 	public class Model 
 	{
 		private Project _project;
+		private String _filename;
 
 		public Model()
 		{
+		}
+
+		public string Filename
+		{
+			get { return _filename; }
+			set { _filename = value; }
 		}
 
 		public Project CurrentProject
@@ -38,10 +45,13 @@ namespace Castle.ActiveRecord.Generator
 			get { return _project; }
 			set
 			{
+				_filename = null;
+
 				if (OnProjectReplaced != null)
 				{
 					OnProjectReplaced(this, _project, value);
 				}
+
 				_project = value;
 			}
 		}

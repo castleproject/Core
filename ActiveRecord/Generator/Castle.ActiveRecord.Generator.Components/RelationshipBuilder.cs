@@ -82,7 +82,7 @@ namespace Castle.ActiveRecord.Generator.Components
 			String colName = info.ChildCol.Name;
 			String propName = _namingService.CreateRelationName( info.TargetDescriptor.ClassName );
 	
-			return new ActiveRecordHasManyDescriptor(colName, propName, typeof(IList), info.TargetDescriptor);
+			return new ActiveRecordHasManyDescriptor(colName, propName, info.TargetDescriptor);
 		}
 
 		private ActiveRecordPropertyRelationDescriptor CreateHasManyAndBelongsToRelation(RelationshipInfo info)

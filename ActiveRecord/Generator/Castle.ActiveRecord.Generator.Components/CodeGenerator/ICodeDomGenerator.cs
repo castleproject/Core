@@ -12,33 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Generator.Components.Database
+namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 {
 	using System;
+	using System.CodeDom;
+
+	using Castle.ActiveRecord.Generator.Components.Database;
 
 
-	[Serializable]
-	public class ActiveRecordDescriptorSubClass : ActiveRecordDescriptor
+	public interface ICodeDomGenerator
 	{
-		private ActiveRecordDescriptor _baseClass;
-
-		public ActiveRecordDescriptorSubClass(ActiveRecordDescriptor baseClass)
-		{
-			_baseClass = baseClass;
-		}
-
-		public ActiveRecordDescriptor BaseClass
-		{
-			get { return _baseClass; }
-			set { _baseClass = value; }
-		}
-
-		public override ActiveRecordPrimaryKeyDescriptor PrimaryKeyProperty
-		{
-			get
-			{
-				return _baseClass.PrimaryKeyProperty;
-			}
-		}
+		CodeTypeDeclaration Generate(IActiveRecordDescriptor descriptor);
 	}
 }

@@ -28,49 +28,49 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 	/// </summary>
 	public class AddRelationDialog : System.Windows.Forms.Form
 	{
-		private System.Windows.Forms.Button cancelButton;
-		private System.Windows.Forms.Button okButton;
-		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.TextBox className;
-		private System.Windows.Forms.TabPage tabPage2;
-		private System.Windows.Forms.TabPage tabPage3;
-		private System.Windows.Forms.ListBox parentCols;
-		private System.Windows.Forms.ListBox relatedCols;
-		private System.Windows.Forms.ComboBox associationTable;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.ListBox targetTableList;
-		private System.Windows.Forms.RadioButton hasAndBelongsToManyButton;
-		private System.Windows.Forms.RadioButton belongsToButton;
-		private System.Windows.Forms.RadioButton hasManyButton;
-		private System.Windows.Forms.TextBox where;
-		private System.Windows.Forms.TextBox order;
-		private System.Windows.Forms.CheckBox lazyButton;
-		private System.Windows.Forms.CheckBox inverseButton;
+		protected System.Windows.Forms.Button cancelButton;
+		protected System.Windows.Forms.Button okButton;
+		protected System.Windows.Forms.TabControl tabControl1;
+		protected System.Windows.Forms.TabPage tabPage1;
+		protected System.Windows.Forms.TextBox className;
+		protected System.Windows.Forms.TabPage tabPage2;
+		protected System.Windows.Forms.TabPage tabPage3;
+		protected System.Windows.Forms.ListBox parentCols;
+		protected System.Windows.Forms.ListBox relatedCols;
+		protected System.Windows.Forms.ComboBox associationTable;
+		protected System.Windows.Forms.GroupBox groupBox1;
+		protected System.Windows.Forms.GroupBox groupBox2;
+		protected System.Windows.Forms.Label label4;
+		protected System.Windows.Forms.Label label5;
+		protected System.Windows.Forms.ListBox targetTableList;
+		protected System.Windows.Forms.RadioButton hasAndBelongsToManyButton;
+		protected System.Windows.Forms.RadioButton belongsToButton;
+		protected System.Windows.Forms.RadioButton hasManyButton;
+		protected System.Windows.Forms.TextBox where;
+		protected System.Windows.Forms.TextBox order;
+		protected System.Windows.Forms.CheckBox lazyButton;
+		protected System.Windows.Forms.CheckBox inverseButton;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.Container components = null;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label11;
+		protected System.ComponentModel.Container components = null;
+		protected System.Windows.Forms.Label label10;
+		protected System.Windows.Forms.Label label11;
 
-		private ActiveRecordDescriptor _descriptor;
-		private Project _project;
-		private AssociationEnum _association = AssociationEnum.Undefined;
-		private System.Windows.Forms.Label associationTableLabel;
-		private System.Windows.Forms.Label relatedColsLabel;
-		private System.Windows.Forms.Label parentColsLabel;
-		private System.Windows.Forms.ComboBox outerJoin;
-		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.ComboBox cascade;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.CheckBox updateButton;
-		private System.Windows.Forms.CheckBox insertButton;
-		private ActiveRecordDescriptor _oldDescSelection;
-		private IRelationshipBuilder _relationBuilder;
+		protected ActiveRecordDescriptor _descriptor;
+		protected Project _project;
+		protected AssociationEnum _association = AssociationEnum.Undefined;
+		protected System.Windows.Forms.Label associationTableLabel;
+		protected System.Windows.Forms.Label relatedColsLabel;
+		protected System.Windows.Forms.Label parentColsLabel;
+		protected System.Windows.Forms.ComboBox outerJoin;
+		protected System.Windows.Forms.Label label9;
+		protected System.Windows.Forms.ComboBox cascade;
+		protected System.Windows.Forms.Label label1;
+		protected System.Windows.Forms.CheckBox updateButton;
+		protected System.Windows.Forms.CheckBox insertButton;
+		protected ActiveRecordDescriptor _oldDescSelection;
+		protected IRelationshipBuilder _relationBuilder;
 
 
 		public AddRelationDialog(ActiveRecordDescriptor descriptor, Project project) : this()
@@ -300,6 +300,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.associationTable.Name = "associationTable";
 			this.associationTable.Size = new System.Drawing.Size(160, 21);
 			this.associationTable.TabIndex = 4;
+			this.associationTable.SelectedIndexChanged += new System.EventHandler(this.associationTable_SelectedIndexChanged);
 			// 
 			// relatedCols
 			// 
@@ -542,7 +543,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			}
 		}
 
-		private ActiveRecordDescriptor SelectedTarget
+		protected ActiveRecordDescriptor SelectedTarget
 		{
 			get
 			{
@@ -552,9 +553,13 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 				}
 				return null;
 			}
+			set
+			{
+				targetTableList.SelectedItem = value;
+			}
 		}
 
-		private ColumnDefinition SelectedRelatedCol
+		protected ColumnDefinition SelectedRelatedCol
 		{
 			get
 			{
@@ -566,7 +571,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			}
 		}
 
-		private ColumnDefinition SelectedParentCol
+		protected ColumnDefinition SelectedParentCol
 		{
 			get
 			{
@@ -578,7 +583,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			}
 		}
 
-		private TableDefinition SelectedAssociationTable
+		protected TableDefinition SelectedAssociationTable
 		{
 			get
 			{
@@ -590,7 +595,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			}
 		}
 
-		private void SwitchViewTo(AssociationEnum association)
+		protected void SwitchViewTo(AssociationEnum association)
 		{
 			// Nothing's changed?
 			if (_oldDescSelection == SelectedTarget && association == _association)
@@ -702,6 +707,15 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			}
 
 			DialogResult = DialogResult.OK;
+		}
+
+		private void associationTable_SelectedIndexChanged(object sender, System.EventArgs e)
+		{
+			if (SelectedAssociationTable != null)
+			{
+				PopulateColumnsInListBox(parentCols, SelectedAssociationTable);
+				PopulateColumnsInListBox(relatedCols, SelectedAssociationTable);
+			}
 		}
 	}
 }

@@ -20,6 +20,6 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 
 	public interface IProjectGenerator
 	{
-		void Generate(Project project, CodeCompileUnit unit, String outputDir);
+		void Generate(Project project);
 	}
 }

@@ -54,14 +54,32 @@ namespace Castle.ActiveRecord.Generator.Actions
 
 		private void OnOpen(object sender, EventArgs e)
 		{
+			String filename = null;
+
+			using (OpenFileDialog dlg = new OpenFileDialog())
+			{
+				dlg.CheckFileExists = true;
+				dlg.CheckPathExists = true;
+				dlg.Multiselect = false;
+				dlg.ShowReadOnly = false;
+				dlg.DefaultExt = ".arproj";
+				
+				if (dlg.ShowDialog(Workspace.ActiveWindow) == DialogResult.OK)
+				{
+					filename = dlg.FileName;
+				}
+			}
+
 			try
 			{
-				using(FileStream fs = new FileStream(@"C:\project1.ar", FileMode.Open, FileAccess.Read, FileShare.Read))
+				using(FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
 				{
 					BinaryFormatter formatter = new BinaryFormatter();
 
 					Model.CurrentProject = formatter.Deserialize( fs ) as Project;
 				}
+
+				Model.Filename = filename;
 			}
 			catch(Exception ex)
 			{

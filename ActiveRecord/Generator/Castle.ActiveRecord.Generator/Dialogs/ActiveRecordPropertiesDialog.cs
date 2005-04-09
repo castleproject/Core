@@ -443,6 +443,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// EditRelation
 			// 
+			this.EditRelation.Enabled = false;
 			this.EditRelation.Location = new System.Drawing.Point(392, 256);
 			this.EditRelation.Name = "EditRelation";
 			this.EditRelation.Size = new System.Drawing.Size(104, 23);
@@ -533,6 +534,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			// 
 			// cancelButton
 			// 
+			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.Location = new System.Drawing.Point(504, 376);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.TabIndex = 4;
@@ -580,6 +582,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 		private void FillClassProperties(ActiveRecordDescriptor descriptor)
 		{
+			listView1.Items.Clear();
+
 			IList added = new ArrayList();
 
 			foreach(ActiveRecordPropertyDescriptor prop in descriptor.Properties)
@@ -619,6 +623,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 		private void FillClassRelationships(ActiveRecordDescriptor descriptor)
 		{
+			listView2.Items.Clear();
+
 			IList added = new ArrayList();
 
 			foreach(ActiveRecordPropertyRelationDescriptor prop in descriptor.PropertiesRelations)
@@ -806,7 +812,17 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		{
 			if (listView2.SelectedItems.Count != 0)
 			{
-				
+				ActiveRecordPropertyRelationDescriptor prop = listView2.SelectedItems[0].Tag as ActiveRecordPropertyRelationDescriptor;
+
+				using(EditRelationDialog editDlg = new EditRelationDialog(_descriptor, _project, prop))
+				{
+					if (editDlg.ShowDialog( this ) == DialogResult.OK)
+					{
+						_descriptor.PropertiesRelations.Remove(prop);
+
+						FillClassRelationships( _descriptor );
+					}
+				}
 			}
 			else
 			{

@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 {
 	using System;
 	using System.IO;
+	using System.Collections;
 	using System.Runtime.Serialization.Formatters.Binary;
 
 	/// <summary>
@@ -264,10 +265,10 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 	public class ActiveRecordHasManyDescriptor : ActiveRecordPropertyRelationDescriptor
 	{
 		public ActiveRecordHasManyDescriptor(String columnName,
-			String propertyName, Type propertyType, ActiveRecordDescriptor targetType) : 
+			String propertyName, ActiveRecordDescriptor targetType) : 
 			base(columnName, String.Empty, propertyName, "HasMany", targetType)
 		{
-			_propertyType = propertyType;
+			_propertyType = typeof(IList);
 		}
 	}
 
@@ -300,6 +301,7 @@ namespace Castle.ActiveRecord.Generator.Components.Database
 		{
 			_associationtable = associationtable;
 			_columnKey = columnKey;
+			_propertyType = typeof(IList);
 		}
 
 		public String ColumnKey

@@ -30,12 +30,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 	{
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.TextBox ns;
 		private System.Windows.Forms.TextBox outDir;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Button button3;
 		private System.Windows.Forms.CheckBox overwriteCheck;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
@@ -46,6 +43,9 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 		private System.ComponentModel.Container components = null;
 
 		private ICodeProviderFactory codeproviderFactory;
+		private System.Windows.Forms.Button browseButton;
+		private System.Windows.Forms.Button generateButton;
+		private System.Windows.Forms.Button closeButton;
 		private Model _model;
 
 
@@ -104,13 +104,13 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.languageCombo = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.overwriteCheck = new System.Windows.Forms.CheckBox();
-			this.button3 = new System.Windows.Forms.Button();
+			this.browseButton = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.outDir = new System.Windows.Forms.TextBox();
 			this.ns = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.button1 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
+			this.generateButton = new System.Windows.Forms.Button();
+			this.closeButton = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -120,7 +120,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.groupBox1.Controls.Add(this.languageCombo);
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.overwriteCheck);
-			this.groupBox1.Controls.Add(this.button3);
+			this.groupBox1.Controls.Add(this.browseButton);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.outDir);
 			this.groupBox1.Controls.Add(this.ns);
@@ -157,14 +157,14 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.overwriteCheck.TabIndex = 5;
 			this.overwriteCheck.Text = "Overwrite existing files";
 			// 
-			// button3
+			// browseButton
 			// 
-			this.button3.Location = new System.Drawing.Point(368, 64);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(32, 24);
-			this.button3.TabIndex = 4;
-			this.button3.Text = "...";
-			this.button3.Click += new System.EventHandler(this.button3_Click);
+			this.browseButton.Location = new System.Drawing.Point(368, 64);
+			this.browseButton.Name = "browseButton";
+			this.browseButton.Size = new System.Drawing.Size(32, 24);
+			this.browseButton.TabIndex = 4;
+			this.browseButton.Text = "...";
+			this.browseButton.Click += new System.EventHandler(this.button3_Click);
 			// 
 			// label2
 			// 
@@ -200,31 +200,31 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 			this.label1.Text = "Namespace:";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// button1
+			// generateButton
 			// 
-			this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button1.Location = new System.Drawing.Point(368, 216);
-			this.button1.Name = "button1";
-			this.button1.TabIndex = 1;
-			this.button1.Text = "Generate";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.generateButton.Location = new System.Drawing.Point(368, 216);
+			this.generateButton.Name = "generateButton";
+			this.generateButton.TabIndex = 1;
+			this.generateButton.Text = "Generate";
+			this.generateButton.Click += new System.EventHandler(this.button1_Click);
 			// 
-			// button2
+			// closeButton
 			// 
-			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button2.Location = new System.Drawing.Point(280, 216);
-			this.button2.Name = "button2";
-			this.button2.TabIndex = 2;
-			this.button2.Text = "Close";
-			this.button2.Click += new System.EventHandler(this.button2_Click);
+			this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.closeButton.Location = new System.Drawing.Point(280, 216);
+			this.closeButton.Name = "closeButton";
+			this.closeButton.TabIndex = 2;
+			this.closeButton.Text = "Close";
+			this.closeButton.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// GenCodeDialog
 			// 
+			this.AcceptButton = this.generateButton;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.CancelButton = this.button2;
+			this.CancelButton = this.closeButton;
 			this.ClientSize = new System.Drawing.Size(456, 250);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.closeButton);
+			this.Controls.Add(this.generateButton);
 			this.Controls.Add(this.groupBox1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
