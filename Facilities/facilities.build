@@ -3,7 +3,7 @@
 
 	<property name="base.dir" value="." />
 	<property name="name" value="Facilities" />
-	<property name="version" value="beta-1" />
+	<property name="version" value="beta-2" />
 	<property name="container.bin.dir" value="${base.dir}/../../InversionOfControl/bin" />
 	<property name="services.bin.dir" value="${base.dir}/../../Services/bin" />
 
@@ -62,6 +62,13 @@
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="dist" />
 		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Startable/default.build" inheritall="true" target="dist" />
+		
+		<zip zipfile="Facilities.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="**/*.zip" />				
+			</fileset>
+		</zip>
+
 	</target>
 
 </project>

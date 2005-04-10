@@ -14,7 +14,7 @@
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
-	<property name="version" value="beta-1" />
+	<property name="version" value="beta-2" />
 
 	<target name="clean">
 		<delete failonerror="false">
@@ -89,7 +89,7 @@
 	</target>
 	
 	<target name="dist">
-		<zip zipfile="${name}.src.${version}.zip">
+		<zip zipfile="${name}.src.zip">
 			<fileset basedir="${base.dir}">
 				<include name="License.txt" />				
 				<include name="Readme.txt" />				
@@ -106,15 +106,17 @@
 				<exclude name="**/*.suo" />
 			</fileset>
 		</zip>
-		<zip zipfile="${name}.bin.${version}.zip">
+		<zip zipfile="${name}.${version}.zip">
 			<fileset basedir="${base.dir}">
 				<include name="${bin.dir}/${assembly.name}" />				
 				<include name="${library.dir}/**/*.*" />
 				<include name="License.txt" />				
 				<include name="Readme.txt" />				
 				<include name="Changes.txt" />				
+				<include name="${name}.src.zip" />
 			</fileset>
-		</zip>		
+		</zip>
+		<delete file="${name}.src.zip" />
 	</target>
 
 </project>
