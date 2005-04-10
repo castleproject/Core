@@ -211,6 +211,18 @@ namespace Castle.CastleOnRails.Framework
 			_selectedViewName = null;
 		}
 
+		/// <summary>
+		/// Cancels the view processing and writes
+		/// the specified contents to the browser
+		/// </summary>
+		/// <param name="contents"></param>
+		public void RenderText(String contents)
+		{
+			CancelView();
+
+			Response.Write( contents );
+		}
+
 		#endregion
 
 		#region Core methods
@@ -245,13 +257,6 @@ namespace Castle.CastleOnRails.Framework
 			}
 
 			InternalSend( actionName );
-		}
-
-		public void RenderText(String contents)
-		{
-			CancelView();
-
-			Response.Write( contents );
 		}
 
 		/// <summary>
