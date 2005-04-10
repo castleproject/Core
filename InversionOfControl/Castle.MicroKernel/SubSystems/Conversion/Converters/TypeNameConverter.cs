@@ -31,18 +31,33 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override object PerformConversion(String value, Type targetType)
 		{
-			Type type = Type.GetType(value, false, false);
+			try
+			{
+				Type type = Type.GetType(value, true, false);
 
-			if (type == null)
+				if (type == null)
+				{
+					String message = String.Format(
+						"Could not convert from '{0}' to {1} - Maybe type could not be found", 
+						value, targetType.FullName);
+				
+					throw new ConverterException(message);
+				}
+
+				return type;
+			}
+			catch(ConverterException ex)
+			{
+				throw ex;
+			}
+			catch(Exception ex)
 			{
 				String message = String.Format(
-					"Could not convert from '{0}' to {1} - Maybe type could not be found", 
+					"Could not convert from '{0}' to {1}.", 
 					value, targetType.FullName);
-				
-				throw new ConverterException(message);
-			}
 
-			return type;
+				throw new ConverterException(message, ex);
+			}
 		}
 		
 		public override object PerformConversion(IConfiguration configuration, Type targetType)

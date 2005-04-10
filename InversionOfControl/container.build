@@ -7,6 +7,7 @@
 	<property name="dynamicproxy" value="${base.dir}/../tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
 	<property name="name" value="InversionOfControl" />
 	<property name="version" value="beta-1" />
+	<property name="samples.dir" value="${base.dir}/../Samples/InversionOfControl" />
 
 	<target name="build" depends="init, model, microkernel, windsor" />
 	
@@ -31,8 +32,8 @@
 		<nant buildfile="Castle.Windsor/windsor.build" target="build" />
 	</target>
 
-	<target name="documentation">
-		<ndoc failonerror="false">
+	<target name="docs">
+		<ndoc failonerror="true">
 			<assemblies basedir="${bin.dir}">
 				<include name="Castle.Model.dll" />
 				<include name="Castle.MicroKernel.dll" />
@@ -40,43 +41,57 @@
 			</assemblies>
 			<documenters>
 				<documenter name="MSDN">
-					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
-					<property name="HtmlHelpName" value="Castle.Container" />
+					<property name="OutputTarget" value="HTMLHelp" />
+					<property name="Preliminary" value="true" />
+					<property name="CleanIntermediates" value="true" />
+					<property name="SdkLinksOnWeb" value="true" />
+					<property name="AutoPropertyBackerSummaries" value="true" />
+					<property name="AutoDocumentConstructors" value="true" />
+					<property name="OutputDirectory" value="${doc.dir}" />
+					<property name="HtmlHelpName" value="InversionOfControl" />
 					<property name="IncludeFavorites" value="False" />
-					<property name="Title" value="Castle's Inversion of Control" />
-					<property name="SplitTOCs" value="True" />
-					<property name="DefaulTOC" value="Castle.Windsor" />
-					<property name="ShowVisualBasic" value="False" />
+					<property name="Title" value="Castle's Inversion of Control - Container" />
+					<property name="SplitTOCs" value="False" />
+					<property name="DefaulTOC" value="Windsor" />
+					<property name="ShowVisualBasic" value="True" />
 					<property name="ShowMissingSummaries" value="False" />
 					<property name="ShowMissingRemarks" value="False" />
 					<property name="ShowMissingParams" value="False" />
 					<property name="ShowMissingReturns" value="False" />
 					<property name="ShowMissingValues" value="False" />
-					<property name="DocumentInternals" value="True" />
+					<property name="DocumentInternals" value="False" />
 					<property name="DocumentProtected" value="True" />
 					<property name="DocumentPrivates" value="False" />
 					<property name="DocumentEmptyNamespaces" value="False" />
 					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004-2005 (c) Castle Project" />
-					<property name="CopyrightHref" value="http://www.castleproject.org/" />
+					<property name="CopyrightText" value="Copyright 2004,2005 - Castle Project (original author or authors)" />
+					<property name="CopyrightHref" value="http://www.castleproject.org" />
 				</documenter>
 			</documenters>
 		</ndoc>
 	</target>
-	
-	<target name="dist">
-		<zip zipfile="${name}.src.${version}.zip">
+			
+	<target name="dist" depends="docs">
+		<zip zipfile="${name}-Samples.zip">
+			<fileset basedir="${samples.dir}">
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.dll" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.txt" />
+				
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\Debug\*.*" />
+				<exclude name="**\*.user" />
+			</fileset>
+		</zip>
+		
+		<zip zipfile="${name}.src.zip">
 			<fileset basedir="${base.dir}">
-				<exclude name="**/Debug/*" />
-				<exclude name="**/obj/*" />
-				<exclude name="**/*.user" />
-				<exclude name="**/*.suo" />
-				<exclude name="**/*.projdata" />
-				<exclude name="**/*.resharperoptions" />
-
-				<include name="License.txt" />
-				<include name="Readme.txt" />
-				<include name="Changes.txt" />
 				<include name="*.build" />
 				<include name="*.sln" />
 				<include name="Castle.Model/**/*.*" />
@@ -85,20 +100,27 @@
 				<include name="Castle.MicroKernel.Tests/**/*.*" />
 				<include name="Castle.Windsor/**/*.*" />
 				<include name="Castle.Windsor.Tests/**/*.*" />
-			</fileset>
-		</zip>
-
-		<zip zipfile="${name}.bin-src.${version}.zip">
-			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/*.dll" />				
-				<include name="${base.dir}/License.txt" />				
-				<include name="${base.dir}/Readme.txt" />
-				<include name="${base.dir}/Changes.txt" />
-				<include name="${name}.src.${version}.zip" />				
+				
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\*.*" />
+				<exclude name="**\*.user" />
+				<exclude name="**\*.resharperoptions" />
 			</fileset>
 		</zip>
 		
-	</target>
+		<zip zipfile="${name}.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${doc.dir}/**/*.chm" />
+				<include name="${bin.dir}/*.*" />
+				<include name="${name}.src.zip" />
+				<include name="${name}-Samples.zip" />
 
+				<include name="*.txt" />
+				<exclude name="${bin.dir}/*.Tests*" />
+				<exclude name="${bin.dir}/*.lang" />
+				<exclude name="${bin.dir}/*.xml" />
+			</fileset>
+		</zip>
+	</target>
 	
 </project>

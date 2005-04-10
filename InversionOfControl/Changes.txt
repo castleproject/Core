@@ -1,3 +1,13 @@
+Beta 2  - 10/apr/2005
+------ 
+
+- Bug fixes
+
+- Configuration object model separated into interpreters and sources
+
+- AbstractFacility added
+
+
 Beta 1  - 21/jan/2005
 ------
 
