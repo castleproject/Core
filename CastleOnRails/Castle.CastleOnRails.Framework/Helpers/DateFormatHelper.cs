@@ -16,8 +16,16 @@ namespace Castle.CastleOnRails.Framework.Helpers
 {
 	using System;
 
+	/// <summary>
+	/// Simple helper
+	/// </summary>
 	public class DateFormatHelper
 	{
+		/// <summary>
+		/// Formats to short date
+		/// </summary>
+		/// <param name="date"></param>
+		/// <returns></returns>
 		public String FormatDate( DateTime date )
 		{
 			return date.ToShortDateString();

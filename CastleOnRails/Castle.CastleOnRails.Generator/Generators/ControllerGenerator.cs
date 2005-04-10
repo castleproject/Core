@@ -201,7 +201,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 		private void GenerateController(CodeDomProvider provider, string fileExtension, string ns, string name, 
 			string area, string[] actions, TextWriter output)
 		{
-			CodeCompileUnit unit = GenerateControllerCode(ns, name, area, actions);
+			CodeNamespace thisNs = GenerateControllerCode(ns, name, area, actions);
 
 			FileInfo controllerFile = new FileInfo( 
 				Path.Combine(controllersDir.FullName, name + fileExtension) );
@@ -210,7 +210,9 @@ namespace Castle.CastleOnRails.Generator.Generators
 			{
 				using (StreamWriter sw = new StreamWriter(controllerFile.FullName, false, Encoding.Default))
 				{
-					provider.CreateGenerator().GenerateCodeFromCompileUnit(unit, sw, null);
+					CodeGeneratorOptions opts = new CodeGeneratorOptions();
+					opts.BracingStyle = "C";
+					provider.CreateGenerator().GenerateCodeFromNamespace(thisNs, sw, opts);
 				}
 			}
 			else
@@ -219,15 +221,12 @@ namespace Castle.CastleOnRails.Generator.Generators
 			}
 		}
 
-		private CodeCompileUnit GenerateControllerCode(string ns, string name, string area, string[] actions)
+		private CodeNamespace GenerateControllerCode(string ns, string name, string area, string[] actions)
 		{
-			CodeCompileUnit unit = new CodeCompileUnit();
-	
 			CodeNamespace thisNs = new CodeNamespace(ns);
-			unit.Namespaces.Add(thisNs);
 			thisNs.Imports.Add(new CodeNamespaceImport("System"));
 			thisNs.Imports.Add(new CodeNamespaceImport("Castle.CastleOnRails.Framework"));
-			thisNs.Comments.Add(new CodeCommentStatement("Ignore the above comment or better, delete it"));
+//			thisNs.Comments.Add(new CodeCommentStatement("Ignore the above comment or better, delete it"));
 	
 			CodeTypeDeclaration controllerType = new CodeTypeDeclaration(name);
 			thisNs.Types.Add(controllerType);
@@ -264,7 +263,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 				controllerType.Members.Add(actionMethod);
 			}
 
-			return unit;
+			return thisNs;
 		}
 
 		private void GenerateViews(String name, String[] actions)
@@ -292,7 +291,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 		private void GenerateTestCase(CodeDomProvider provider, string extension, string ns, string name, string area, 
 			string[] actions, TextWriter output)
 		{
-			CodeCompileUnit unit = GenerateControllerTestCode(ns, name, area, actions);
+			CodeNamespace nsunit = GenerateControllerTestCode(ns, name, area, actions);
 
 			FileInfo controllerFile = new FileInfo( 
 				Path.Combine(testsDir.FullName, name + "Tests" + extension) );
@@ -301,7 +300,9 @@ namespace Castle.CastleOnRails.Generator.Generators
 			{
 				using (StreamWriter sw = new StreamWriter(controllerFile.FullName, false, Encoding.Default))
 				{
-					provider.CreateGenerator().GenerateCodeFromCompileUnit(unit, sw, null);
+					CodeGeneratorOptions opts = new CodeGeneratorOptions();
+					opts.BracingStyle = "C";
+					provider.CreateGenerator().GenerateCodeFromNamespace(nsunit, sw, opts);
 				}
 			}
 			else
@@ -310,18 +311,15 @@ namespace Castle.CastleOnRails.Generator.Generators
 			}
 		}
 
-		private CodeCompileUnit GenerateControllerTestCode(string ns, string name, string area, string[] actions)
+		private CodeNamespace GenerateControllerTestCode(string ns, string name, string area, string[] actions)
 		{
 			String controllerName = StripControllerFrom(name);
 
-			CodeCompileUnit unit = new CodeCompileUnit();
-	
 			CodeNamespace thisNs = new CodeNamespace(ns + ".Tests");
-			unit.Namespaces.Add(thisNs);
 			thisNs.Imports.Add(new CodeNamespaceImport("System"));
 			thisNs.Imports.Add(new CodeNamespaceImport("System.Net"));
 			thisNs.Imports.Add(new CodeNamespaceImport("NUnit.Framework"));
-			thisNs.Comments.Add(new CodeCommentStatement("Ignore the above comment or better, delete it"));
+//			thisNs.Comments.Add(new CodeCommentStatement("Ignore the above comment or better, delete it"));
 	
 			CodeTypeDeclaration controllerType = new CodeTypeDeclaration(name + "TestCase");
 			thisNs.Types.Add(controllerType);
@@ -379,7 +377,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 				controllerType.Members.Add(actionTestMethod);
 			}
 
-			return unit;
+			return thisNs;
 		}
 
 		private string StripControllerFrom(string value)
