@@ -1,0 +1,46 @@
+<div align="center">
+  <h2>Ajax Support - LinkToRemote</h2>
+</div>
+
+<div class="container">
+  
+  The LinkToRemote helper creates a anchor tag that invokes 
+  a remote method (controller's action) and inserts the resulting 
+  html on the specified element (update argument)
+  
+</div>
+
+<h3>Overloads:</h3>
+
+<div class="container">
+
+<ul>
+  <li><code>public String LinkToRemote(String name, String url, IDictionary options)</code></li>
+  <li><code>public String LinkToRemote(String name, String url, String update)</code></li>
+  <li><code>public String LinkToRemote(String name, String url, String update, String with)</code></li>
+  <li><code>public String LinkToRemote(String name, String url, String update, bool form)</code></li>
+</ul>
+
+</div>
+
+<h3>Examples:</h3>
+
+<div class="container">
+
+<a href="${siteRoot}/code/showCode.rails?file=Views/AjaxArea/linktoremote/index.vm">Check this view source code</a>.
+
+<p>
+  <div id="results1">
+  </div>
+  $AjaxHelper.LinkToRemote("Show the time on the server", "showtime.rails", "results1")
+</p>
+
+<p>
+  <div id="results2">
+  </div>
+  <input type="text" name="value" value="2"/>
+  $AjaxHelper.LinkToRemote("Calculate Power", "CalcPower.rails", "results2", "'value='+$('value').value")
+</p>
+
+</div>
+
