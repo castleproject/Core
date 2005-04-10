@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+
+<activerecord>
+  <config>
+	<add 
+		key="hibernate.connection.driver_class"		
+		value="NHibernate.Driver.SqlClientDriver" />
+	<add 
+		key="hibernate.dialect"						
+		value="NHibernate.Dialect.MsSql2000Dialect" />
+	<add 
+		key="hibernate.connection.provider"			
+		value="NHibernate.Connection.DriverConnectionProvider" />
+	<add 
+		key="hibernate.connection.connection_string"	
+		value="UID=susa;Password=OverKkk;Initial Catalog=test;Data Source=." />
+  </config>
+</activerecord>

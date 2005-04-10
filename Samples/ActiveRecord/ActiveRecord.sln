@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogSample", "BlogSample\BlogSample.csproj", "{21D53700-22BA-4D9C-92C1-82045B5F7FF9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableHierarchySample", "TableHierarchySample\TableHierarchySample.csproj", "{54A98216-E321-4261-8EC5-92DEB43F3CB5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{21D53700-22BA-4D9C-92C1-82045B5F7FF9}.Debug.ActiveCfg = Debug|.NET
+		{21D53700-22BA-4D9C-92C1-82045B5F7FF9}.Debug.Build.0 = Debug|.NET
+		{21D53700-22BA-4D9C-92C1-82045B5F7FF9}.Release.ActiveCfg = Release|.NET
+		{21D53700-22BA-4D9C-92C1-82045B5F7FF9}.Release.Build.0 = Release|.NET
+		{54A98216-E321-4261-8EC5-92DEB43F3CB5}.Debug.ActiveCfg = Debug|.NET
+		{54A98216-E321-4261-8EC5-92DEB43F3CB5}.Debug.Build.0 = Debug|.NET
+		{54A98216-E321-4261-8EC5-92DEB43F3CB5}.Release.ActiveCfg = Release|.NET
+		{54A98216-E321-4261-8EC5-92DEB43F3CB5}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
