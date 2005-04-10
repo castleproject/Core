@@ -43,13 +43,13 @@
 	<target name="build" depends="init,tests.run" />
 
 	<target name="compileextension" depends="init">
-		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/Castle.Facilities.NHibernateExtension.dll">
+			output="${bin.dir}/Castle.Facilities.NHibernateExtension.dll"
+			doc="${bin.dir}/Castle.Facilities.NHibernateExtension.xml">
 			
 			<nowarn>
 				<warning number="1591" />
@@ -67,13 +67,13 @@
 	</target>
 	
 	<target name="compile" depends="compileextension">
-		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${assembly.name}">
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
 			
 			<nowarn>
 				<warning number="1591" />
@@ -118,6 +118,7 @@
 		<ndoc failonerror="true">
 			<assemblies basedir="${bin.dir}">
 				<include name="${assembly.name}" />
+				<include name="Castle.Facilities.NHibernateExtension.dll" />
 			</assemblies>
 			<documenters>
 				<documenter name="MSDN">

@@ -46,7 +46,8 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${assembly.name}">
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
 			
 			<nowarn>
 				<warning number="1591" />

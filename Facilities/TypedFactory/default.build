@@ -34,13 +34,13 @@
 	<target name="build" depends="init,tests.run" />
 
 	<target name="compile" depends="init">
-		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="STRONG"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${assembly.name}">
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
 			
 			<nowarn>
 				<warning number="1591" />

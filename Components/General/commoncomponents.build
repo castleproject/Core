@@ -3,7 +3,7 @@
 
 	<property name="base.dir" value="." />
 	<property name="name" value="commoncomponents" />
-	<property name="version" value="beta-1" />
+	<property name="version" value="beta-2" />
 	<property name="container.bin.dir" value="${base.dir}/../../../InversionOfControl/bin" />
 	<property name="services.bin.dir" value="${base.dir}/../../../Services/bin" />
 
