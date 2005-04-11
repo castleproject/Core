@@ -24,6 +24,10 @@ namespace Castle.CastleOnRails.Framework
 		{
 		}
 
+		public RailsException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
 		public RailsException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}

@@ -16,8 +16,6 @@ namespace Castle.CastleOnRails.Framework.Views.CompositeView
 {
 	using System;
 	using System.IO;
-	using System.Web;
-	using System.Collections;
 
 	using Castle.CastleOnRails.Framework.Views.Aspx;
 	using Castle.CastleOnRails.Framework.Views.NVelocity;
@@ -49,7 +47,10 @@ namespace Castle.CastleOnRails.Framework.Views.CompositeView
 
 		public String ViewRootDir
 		{
-			get { return _viewRootDir; }
+			get
+			{
+				return _viewRootDir;
+			}
 			set
 			{
 				_viewRootDir = value;
@@ -57,26 +58,52 @@ namespace Castle.CastleOnRails.Framework.Views.CompositeView
 			}
 		}
 
-		public void Process(IRailsEngineContext context, Controller controller, String viewName)
+		public virtual void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
-			FileInfo aspxFile = new FileInfo(Path.Combine( _viewRootDir, viewName + ".aspx" ));
-			FileInfo vmFile = new FileInfo(Path.Combine( _viewRootDir, viewName + ".vm" ));
-			
-			if (aspxFile.Exists)
-			{
-				_aspxViewEngine.Process(context, controller, viewName);
-			}
-			else if (vmFile.Exists)
-			{
-				_nvelocityViewEngine.Process(context, controller, viewName);
-			}
-			else
+			bool aspxProcessed = ProcessAspx(context, controller, viewName);
+
+			bool vmProcessed = ProcessVm(context, controller, viewName);
+
+			if (!aspxProcessed && !vmProcessed)
 			{
 				String message = String.Format("No view file (aspx or vm) found for {0}", viewName);
+
 				throw new RailsException(message);
 			}
 		}
 
 		#endregion
+
+		protected virtual bool ProcessVm(IRailsEngineContext context, Controller controller, string viewName)
+		{
+			FileInfo vmFile = new FileInfo(Path.Combine( _viewRootDir, viewName + ".vm" ));
+
+			if (vmFile.Exists)
+			{
+				_nvelocityViewEngine.Process(context, controller, viewName);
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		protected virtual bool ProcessAspx(IRailsEngineContext context, Controller controller, string viewName)
+		{
+			FileInfo aspxFile = new FileInfo(Path.Combine( _viewRootDir, viewName + ".aspx" ));
+			
+			if (aspxFile.Exists)
+			{
+				_aspxViewEngine.Process(context, controller, viewName);
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 }

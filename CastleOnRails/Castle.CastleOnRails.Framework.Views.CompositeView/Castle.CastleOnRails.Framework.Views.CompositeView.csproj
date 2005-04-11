@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -99,13 +99,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "default.build"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "NVelocityViewEngine.cs"
+                    RelPath = "CompositeViewEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.build"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

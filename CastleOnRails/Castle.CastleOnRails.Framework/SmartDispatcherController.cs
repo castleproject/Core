@@ -139,12 +139,12 @@ namespace Castle.CastleOnRails.Framework
 							args[i] = Guid.Empty; 
 						}
 					}
-					else if (param.ParameterType == typeof(int))
+					else if (param.ParameterType == typeof(Int32))
 					{
 						if (value == String.Empty) value = null;
 						args[i] = System.Convert.ToInt32( value );
 					}
-					else if (param.ParameterType == typeof(long))
+					else if (param.ParameterType == typeof(Int64))
 					{
 						if (value == String.Empty) value = null;
 						args[i] = System.Convert.ToInt64( value );
@@ -173,13 +173,13 @@ namespace Castle.CastleOnRails.Framework
 			{
 				throw new RailsException( 
 					String.Format("Could not convert {0} to request type. " + 
-						"Argument value is '{1}'", paramName, value) );
+						"Argument value is '{1}'", paramName, value), ex );
 			}
 			catch(Exception ex)
 			{
 				throw new RailsException( 
 					String.Format("Error builing method arguments. " + 
-						"Last param analized was {0} with value '{1}'", paramName, value) );
+						"Last param analized was {0} with value '{1}'", paramName, value), ex );
 			}
 
 			return args;
