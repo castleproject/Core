@@ -159,6 +159,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IActionSet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IApplicationLayout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

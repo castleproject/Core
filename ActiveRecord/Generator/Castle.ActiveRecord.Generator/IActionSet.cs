@@ -16,13 +16,11 @@ namespace Castle.ActiveRecord.Generator
 {
 	using System;
 
-
-	public interface IAction
+	
+	public interface IActionSet
 	{
 		void Init(Model model);
 
-		void Install(IWorkspace workspace, object parentMenu, object parentGroup);
-
-//		void Run();
+		void Install(IWorkspace workspace);
 	}
 }

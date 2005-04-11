@@ -45,7 +45,7 @@
 
 	</target>
 
-	<target name="build" depends="init,tests.run" />
+	<target name="build" depends="init,tests.run, generator" />
 	
 	<target name="compile" depends="init">
 		<csc 
@@ -97,6 +97,10 @@
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
 			</references>
 		</csc>
+	</target>
+	
+	<target name="generator">
+		<nant buildfile="Generator\generator.build" target="build" inheritall="false" />
 	</target>
 	
 	<target name="tests.run" depends="tests.compile" if="${nhibernate.test}">
