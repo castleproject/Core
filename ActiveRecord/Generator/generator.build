@@ -69,7 +69,7 @@
 	
 	<target name="generator.compile">
 		<csc 
-			target="exe" 
+			target="winexe" 
 			debug="${debug}"
 			optimize="${optimize}"
 			output="${bin.dir}/${generator.assembly.name}"
