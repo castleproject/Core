@@ -192,13 +192,30 @@
 	</target>
 	
 	<target name="dist" depends="docs">
+		<zip zipfile="${generator.name}.src.zip">
+			<fileset basedir="${base.dir}">
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${generator.src.dir}/**/*.*" />
+				<include name="${cpnts.src.dir}/**/*.*" />
+				<include name="${cpnts.tests.src.dir}/**/*.*" />
+				
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\Debug\*.*" />
+				<exclude name="**\*.user" />
+			</fileset>
+		</zip>
+		
 		<zip zipfile="${generator.name}.${version}.zip">
 			<fileset>
 				<include name="${bin.dir}/*.dll" />
 				<include name="${bin.dir}/*.exe" />
 				<include name="${doc.dir}/**/*.chm" />
+				<include name="${generator.name}.src.zip" />
 			</fileset>
 		</zip>		
+		
+		<delete file="${generator.name}.src.zip" />
 	</target>
 	
 </project>
