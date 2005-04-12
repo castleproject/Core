@@ -58,7 +58,8 @@ namespace Castle.CastleOnRails.Framework
 		{
 			get
 			{
-				if (_helpers == null) LoadHelpers();
+				if (_helpers == null) CreateAndInitializeHelpers();
+				
 				return _helpers;
 			}
 		}
@@ -112,6 +113,15 @@ namespace Castle.CastleOnRails.Framework
 		{
 			get { return _context.Session; }
 		}
+		
+		/// <summary>
+		/// Access a dictionary of volative items.
+		/// Ideal for showing success and failures messages
+		/// </summary>
+		protected IDictionary Flash
+		{
+			get { return _context.Flash; }
+		}
 
 		/// <summary>
 		/// Gets the web context of ASP.Net API.
@@ -158,6 +168,16 @@ namespace Castle.CastleOnRails.Framework
 			_selectedViewName = Path.Combine( basePath, name );
 		}
 
+		/// <summary>
+		/// Renders a shared (a partial view shared 
+		/// by others views and usually on the root folder
+		/// of the view root directory)
+		/// </summary>
+		/// <param name="name"></param>
+		public void RenderSharedView( String name )
+		{
+			_selectedViewName = name;
+		}
 		/// <summary>
 		/// Defines the View to be presented
 		/// after the action has finished its processing. 
@@ -338,7 +358,7 @@ namespace Castle.CastleOnRails.Framework
 			if (!hasError) ProcessView();
 		}
 
-		protected virtual void LoadHelpers()
+		protected virtual void CreateAndInitializeHelpers()
 		{
 			_helpers = new HybridDictionary();
 
@@ -346,7 +366,16 @@ namespace Castle.CastleOnRails.Framework
 
 			foreach(HelperAttribute helper in helpers)
 			{
-				_helpers.Add(helper.HelperType.Name, Activator.CreateInstance(helper.HelperType));
+				object helperInstance = Activator.CreateInstance(helper.HelperType);
+
+				IControllerAware aware = helperInstance as IControllerAware;
+
+				if (aware != null)
+				{
+					aware.SetController(this);
+				}
+
+				_helpers.Add(helper.HelperType.Name, helperInstance);
 			}
 
 			/// Default helpers 

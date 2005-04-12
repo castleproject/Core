@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.CastleOnRails.Framework.Helpers
 {
 	using System;
 
-	/// <summary>
-	/// Implemented by the view or helpers, if they desire
-	/// to have access to the controller instance.
-	/// </summary>
-	public interface IControllerAware
+
+	public class AbstractHelper
 	{
-		void SetController(Controller controller);
+		public AbstractHelper()
+		{
+		}
 	}
 }
