@@ -19,7 +19,6 @@ namespace Castle.Windsor
 	using Castle.MicroKernel;
 
 	using Castle.Windsor.Configuration;
-	using Castle.Windsor.Configuration.Sources;
 	using Castle.Windsor.Configuration.Interpreters;
 
 	/// <summary>
@@ -45,11 +44,6 @@ namespace Castle.Windsor
 		/// </summary>
 		public WindsorContainer() : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
 		{
-			XmlInterpreter interpreter = new XmlInterpreter( new AppDomainConfigSource() );
-			
-			interpreter.Process(Kernel.ConfigurationStore);
-
-			RunInstaller();
 		}
 
 		/// <summary>
@@ -57,7 +51,7 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationStore"/> implementation.
 		/// </summary>
 		/// <param name="store"></param>
-		public WindsorContainer(IConfigurationStore store) : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
+		public WindsorContainer(IConfigurationStore store) : this()
 		{
 			Kernel.ConfigurationStore = store;
 
@@ -69,7 +63,7 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationInterpreter"/> implementation.
 		/// </summary>
 		/// <param name="interpreter"></param>
-		public WindsorContainer(IConfigurationInterpreter interpreter) : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
+		public WindsorContainer(IConfigurationInterpreter interpreter) : this()
 		{
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
