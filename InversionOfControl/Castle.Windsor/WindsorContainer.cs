@@ -19,6 +19,7 @@ namespace Castle.Windsor
 	using Castle.MicroKernel;
 
 	using Castle.Windsor.Configuration;
+	using Castle.Windsor.Configuration.Sources;
 	using Castle.Windsor.Configuration.Interpreters;
 
 	/// <summary>
@@ -44,7 +45,11 @@ namespace Castle.Windsor
 		/// </summary>
 		public WindsorContainer() : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
 		{
+			XmlInterpreter interpreter = new XmlInterpreter( new AppDomainConfigSource() );
+			
+			interpreter.Process(Kernel.ConfigurationStore);
 
+			RunInstaller();
 		}
 
 		/// <summary>
@@ -52,7 +57,7 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationStore"/> implementation.
 		/// </summary>
 		/// <param name="store"></param>
-		public WindsorContainer(IConfigurationStore store) : this()
+		public WindsorContainer(IConfigurationStore store) : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
 		{
 			Kernel.ConfigurationStore = store;
 
@@ -64,7 +69,7 @@ namespace Castle.Windsor
 		/// <see cref="IConfigurationInterpreter"/> implementation.
 		/// </summary>
 		/// <param name="interpreter"></param>
-		public WindsorContainer(IConfigurationInterpreter interpreter) : this()
+		public WindsorContainer(IConfigurationInterpreter interpreter) : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
 		{
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
@@ -73,7 +78,7 @@ namespace Castle.Windsor
 			RunInstaller();
 		}
 
-		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this()
+		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
 			if (child == null) throw new ArgumentNullException("child");
