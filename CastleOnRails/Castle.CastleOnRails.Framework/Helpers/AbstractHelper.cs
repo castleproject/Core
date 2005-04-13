@@ -17,10 +17,22 @@ namespace Castle.CastleOnRails.Framework.Helpers
 	using System;
 
 
-	public class AbstractHelper
+	public abstract class AbstractHelper : IControllerAware
 	{
-		public AbstractHelper()
+		private Controller _controller;
+
+		#region IControllerAware Members
+
+		public void SetController(Controller controller)
 		{
+			_controller = controller;
+		}
+
+		#endregion
+
+		public Controller Controller
+		{
+			get { return _controller; }
 		}
 	}
 }
