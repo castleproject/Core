@@ -94,5 +94,11 @@ namespace Castle.CastleOnRails.Framework
 		/// Returns the application path.
 		/// </summary>
 		string ApplicationPath { get; }
+
+		/// <summary>
+		/// Writes the message to the underlying tracing scheme
+		/// </summary>
+		/// <param name="message"></param>
+		void Trace(String message);
 	}
 }

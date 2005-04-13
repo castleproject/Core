@@ -112,6 +112,15 @@ namespace Castle.CastleOnRails.Engine.Adapters
 			set { _context.User = value; }
 		}
 
+		/// <summary>
+		/// Writes the message to the underlying tracing scheme
+		/// </summary>
+		/// <param name="message"></param>
+		public void Trace(String message)
+		{
+			_context.Trace.Warn(message);
+		}
+
 		public String ApplicationPath
 		{
 			get

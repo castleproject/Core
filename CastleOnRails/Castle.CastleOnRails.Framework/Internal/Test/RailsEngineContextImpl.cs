@@ -129,6 +129,15 @@ namespace Castle.CastleOnRails.Framework.Tests
 			}
 		}
 
+		/// <summary>
+		/// Writes the message to the underlying tracing scheme
+		/// </summary>
+		/// <param name="message"></param>
+		public void Trace(String message)
+		{
+			
+		}
+
 		#endregion
 	}
 
