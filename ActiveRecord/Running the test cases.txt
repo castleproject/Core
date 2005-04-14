@@ -16,7 +16,11 @@ CREATE TABLE [dbo].[Companies] (
 	[id] [int] IDENTITY (1, 1) NOT NULL ,
 	[client_of] [int] NULL ,
 	[name] [varchar] (50) NULL ,
-	[type] [varchar] (50) NULL 
+	[type] [varchar] (50) NULL  ,
+	[address] [varchar] (50) NULL ,
+	[city] [varchar] (30) NULL  ,
+	[state] [varchar] (20) NULL ,
+	[zipcode] [varchar] (12) NULL 
 ) ON [PRIMARY]
 GO
 
@@ -82,4 +86,4 @@ ALTER TABLE [dbo].[Posts] ADD
 	) ON DELETE CASCADE  ON UPDATE CASCADE 
 GO
 
-   -- cut here --
+   --- cut here ---
