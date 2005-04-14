@@ -76,6 +76,8 @@ namespace Castle.ActiveRecord
 //		private static readonly String sortAttribute = "sort=\"{0}\" ";
 		private static readonly String orderByAttribute = "order-by=\"{0}\" ";
 		private static readonly String whereAttribute = "where=\"{0}\" ";
+		private static readonly String componentOpen = "\r\n<component {0} {1}>";
+		private static readonly String componentClose = "\r\n</component>";
 
 		private IList _visited = new ArrayList();
 
@@ -187,6 +189,15 @@ namespace Castle.ActiveRecord
 
 						continue;
 					}
+
+					NestedAttribute nested = attribute as NestedAttribute;
+					if (nested != null)
+					{
+						AddComponentMapping(prop, builder);
+
+						continue;
+					}
+
 					BelongsToAttribute belongs = attribute as BelongsToAttribute;
 					if (belongs != null)
 					{
@@ -278,6 +289,15 @@ namespace Castle.ActiveRecord
 					}
 				}
 			}
+		}
+
+		private void AddComponentMapping(PropertyInfo prop, StringBuilder builder)
+		{
+			String name = String.Format(nameAttribute, prop.Name);
+			String klass = String.Format(classAttribute, prop.PropertyType.AssemblyQualifiedName);
+			builder.AppendFormat(componentOpen, name, klass);
+			AddMappedProperties(builder, prop.PropertyType.GetProperties( PropertiesBindingFlags ));
+			builder.AppendFormat(componentClose);
 		}
 
 		private void AddOneToOneMapping(PropertyInfo prop, HasOneAttribute hasone, StringBuilder builder)

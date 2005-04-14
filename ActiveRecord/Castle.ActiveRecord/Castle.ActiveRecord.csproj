@@ -149,6 +149,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\NestedAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\PrimaryKeyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

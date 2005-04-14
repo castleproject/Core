@@ -18,6 +18,8 @@ namespace Castle.ActiveRecord.Tests
 
 	using NUnit.Framework;
 
+	using Castle.ActiveRecord.Tests.Model;
+
 
 	[TestFixture]
 	public class ActiveRecordTestCase : AbstractActiveRecordTest
@@ -50,6 +52,31 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.AreEqual( blog.Name, retrieved.Name );
 			Assert.AreEqual( blog.Author, retrieved.Author );
+		}
+
+		[Test]
+		public void ComponentAttribute()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), 
+				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
+
+			Company.DeleteAll();
+
+			Company company = new Company("Castle Corp.");
+			company.Address = new PostalAddress(
+				"Embau St., 102", "Sao Paulo", "SP", "040390-060");
+			company.Save();
+
+			Company[] companies = Company.FindAll();
+			Assert.IsNotNull( companies );
+			Assert.AreEqual( 1, companies.Length );
+
+			Company corp = companies[0];
+			Assert.IsNotNull( corp.Address );
+			Assert.AreEqual( corp.Address.Address, company.Address.Address );
+			Assert.AreEqual( corp.Address.City, company.Address.City );
+			Assert.AreEqual( corp.Address.State, company.Address.State );
+			Assert.AreEqual( corp.Address.ZipCode, company.Address.ZipCode );
 		}
 
 		[Test]

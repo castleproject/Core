@@ -24,6 +24,7 @@ namespace Castle.ActiveRecord.Tests.Model
 		private int id;
 		private String name;
 		private IList _people;
+		private PostalAddress _address;
 
 		public Company()
 		{
@@ -48,6 +49,13 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { name = value; }
 		}
 
+		[Nested]
+		public PostalAddress Address
+		{
+			get { return _address; }
+			set { _address = value; }
+		}
+
 		[HasAndBelongsToMany( typeof(Person), RelationType.Bag, Table="PeopleCompanies", Column="person_id", ColumnKey="company_id" )]
 		public IList People
 		{
@@ -68,6 +76,55 @@ namespace Castle.ActiveRecord.Tests.Model
 		public static Company Find(int id)
 		{
 			return (Company) ActiveRecordBase.FindByPrimaryKey( typeof(Company), id );
+		}
+	}
+
+	public class PostalAddress
+	{
+		private String _address;
+		private String _city;
+		private String _state;
+		private String _zipcode;
+
+		public PostalAddress()
+		{
+		}
+
+		public PostalAddress(String address, String city,
+			String state, String zipcode)
+		{
+			_address = address;
+			_city = city;
+			_state = state;
+			_zipcode = zipcode;
+		}
+
+		[Property]
+		public String Address
+		{
+			get { return _address; }
+			set { _address = value; }
+		}
+
+		[Property]
+		public String City
+		{
+			get { return _city; }
+			set { _city = value;}
+		}
+
+		[Property]
+		public String State
+		{
+			get { return _state; }
+			set { _state = value; }
+		}
+
+		[Property]
+		public String ZipCode
+		{
+			get { return _zipcode; }
+			set { _zipcode = value; }
 		}
 	}
 }
