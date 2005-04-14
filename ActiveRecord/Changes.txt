@@ -3,7 +3,7 @@
   
   Applied patch from Luiz César Kuriki <luizck@gmail.com> in order to support NHibernate's Component feature
   
-  TODO: Applied patch from Kevin Williams in order to support joined subclasses and more mappings (IDictionary)
+  TODO: Apply patch from Kevin Williams in order to support joined subclasses and more mappings (IDictionary)
 
 
 - Version 0.0.1.0 Released (not changes to track yet)
