@@ -51,7 +51,7 @@ namespace Castle.ActiveRecord
 		private static readonly String columnAttribute = "column=\"{0}\" ";
 		private static readonly String lengthAttribute = "length=\"{0}\" ";
 		private static readonly String notNullAttribute = "not-null=\"{0}\" ";
-		private static readonly String oneToOne = "\r\n<one-to-one name=\"{0}\" class=\"{1}\" {2}/>";
+		private static readonly String oneToOne = "\r\n<one-to-one name=\"{0}\" {1} {2}/>";
 		private static readonly String oneToMany = "\r\n<one-to-many class=\"{0}\" />";
 		private static readonly String manyToOne = "\r\n<many-to-one {0} {1} />";
 		private static readonly String manyToMany = "\r\n<many-to-many class=\"{0}\" {1} />";
@@ -180,6 +180,7 @@ namespace Castle.ActiveRecord
 			foreach (PropertyInfo prop in props)
 			{
 				object[] attributes = prop.GetCustomAttributes(false);
+
 				foreach (object attribute in attributes)
 				{
 					PropertyAttribute property = attribute as PropertyAttribute;
@@ -269,23 +270,25 @@ namespace Castle.ActiveRecord
 					HasOneAttribute hasone = attribute as HasOneAttribute;
 					if (hasone != null)
 					{
-						Type otherType = hasone.MapType;
-						object[] otherAttributes = otherType.GetCustomAttributes(typeof (BelongsToAttribute), false);
-						BelongsToAttribute inverse = null;
-						foreach (object o in otherAttributes)
-						{
-							if (o is BelongsToAttribute)
-							{
-								inverse = o as BelongsToAttribute;
-								break;
-							}
-						}
-						if (inverse != null && inverse.Type == prop.DeclaringType)
-						{
-							AddOneToOneMapping(prop, hasone, builder);
-						}
+//						Type otherType = prop.PropertyType;
+
+						AddOneToOneMapping(prop, hasone, builder);
+
+//						object[] otherAttributes = otherType.GetCustomAttributes(typeof (BelongsToAttribute), false);
+//						BelongsToAttribute inverse = null;
+//						foreach (object o in otherAttributes)
+//						{
+//							if (o is BelongsToAttribute)
+//							{
+//								inverse = o as BelongsToAttribute;
+//								break;
+//							}
+//						}
+//						if (inverse != null && inverse.Type == prop.DeclaringType)
+//						{
+//							AddOneToOneMapping(prop, hasone, builder);
+//						}
 						// throw exception if no BelongsToAttribute?
-						continue;
 					}
 				}
 			}
@@ -303,7 +306,7 @@ namespace Castle.ActiveRecord
 		private void AddOneToOneMapping(PropertyInfo prop, HasOneAttribute hasone, StringBuilder builder)
 		{
 			String name = prop.Name;
-			String klass = String.Format(classAttribute, prop.PropertyType.Name);
+			String klass = String.Format(classAttribute, prop.PropertyType.AssemblyQualifiedName);
 			String cascade = (hasone.Cascade == null ? "" : String.Format(cascadeAttribute, hasone.Cascade));
 			String outer = (hasone.OuterJoin == null ? "" : String.Format(outerJoinAttribute, hasone.OuterJoin));
 			String constrained = (hasone.Constrained == null ? "" : String.Format(constrainedAttribute, hasone.Constrained));

@@ -86,4 +86,39 @@ ALTER TABLE [dbo].[Posts] ADD
 	) ON DELETE CASCADE  ON UPDATE CASCADE 
 GO
 
+CREATE TABLE [dbo].[Award] (
+ 	[EmployeeID] [int] NOT NULL ,
+ 	[Description] [varchar] (4000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL 
+ ) ON [PRIMARY]
+ GO
+ 
+ CREATE TABLE [dbo].[Employee] (
+ 	[EmployeeID] [int] IDENTITY (1, 1) NOT NULL ,
+ 	[FirstName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+ 	[LastName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL 
+ ) ON [PRIMARY]
+ GO
+ 
+ ALTER TABLE [dbo].[Award] ADD 
+ 	CONSTRAINT [PK_Award] PRIMARY KEY
+ 	(
+ 		[EmployeeID]
+ 	)  ON [PRIMARY] 
+ GO
+ 
+ ALTER TABLE [dbo].[Employee] ADD 
+ 	CONSTRAINT [PK_Person] PRIMARY KEY
+ 	(
+ 		[EmployeeID]
+ 	)  ON [PRIMARY] 
+ GO
+ 
+ ALTER TABLE [dbo].[Award] ADD 
+ 	CONSTRAINT [FK_Award_Person] FOREIGN KEY 
+ 	(
+ 		[EmployeeID]
+ 	) REFERENCES [dbo].[Employee] (
+ 		[EmployeeID]
+ 	) ON UPDATE CASCADE 
+ GO
    --- cut here ---

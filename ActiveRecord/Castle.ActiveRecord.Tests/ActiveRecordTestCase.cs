@@ -146,6 +146,32 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
+		public void RelationsOneToOne()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Employee), typeof(Award) );
+
+			Award.DeleteAll();
+			Employee.DeleteAll();
+
+			Employee emp = new Employee();
+			emp.FirstName = "john";
+			emp.LastName = "doe";
+			emp.Award = new Award();
+			emp.Award.Description = "Invisible employee";
+			emp.Save();
+
+			emp.Award.ID = emp.ID;
+			emp.Award.Save();
+
+			Employee emp2 = Employee.Find(emp.ID);
+			Assert.IsNotNull(emp2);
+			Assert.IsNotNull(emp2.Award);
+			Assert.AreEqual(emp.FirstName, emp2.FirstName);
+			Assert.AreEqual(emp.LastName, emp2.LastName);
+			Assert.AreEqual(emp.Award.Description, emp2.Award.Description);
+		}
+
+		[Test]
 		public void FindLoad()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );

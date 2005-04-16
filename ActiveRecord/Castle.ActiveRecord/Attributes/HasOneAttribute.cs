@@ -20,7 +20,6 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class HasOneAttribute : Attribute
 	{
-		private Type _mapType;
 		private String _cascade;
 		private String _constrained;
 		private String _outerJoin;
@@ -29,16 +28,16 @@ namespace Castle.ActiveRecord
 		{
 		}
 
-		public HasOneAttribute( Type mapType )
-		{
-			this._mapType = mapType;
-		}
-
-		public Type MapType
-		{
-			get { return _mapType; }
-			set { _mapType = value; }
-		}
+//		public HasOneAttribute( Type mapType )
+//		{
+//			this._mapType = mapType;
+//		}
+//
+//		public Type MapType
+//		{
+//			get { return _mapType; }
+//			set { _mapType = value; }
+//		}
 
 		public String Cascade
 		{
