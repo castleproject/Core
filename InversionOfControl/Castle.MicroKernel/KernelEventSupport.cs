@@ -159,8 +159,14 @@ namespace Castle.MicroKernel
 
 		protected virtual void RaiseHandlerRegistered(IHandler handler)
 		{
-			HandlerDelegate eventDelegate = (HandlerDelegate) _events[HandlerRegisteredEvent];
-			if (eventDelegate != null) eventDelegate(handler);
+			bool stateChanged = true;
+
+			while(stateChanged)
+			{
+				stateChanged = false;
+				HandlerDelegate eventDelegate = (HandlerDelegate) _events[HandlerRegisteredEvent];
+				if (eventDelegate != null) eventDelegate(handler, ref stateChanged);
+			}
 		}
 
 		#region IDeserializationCallback Members

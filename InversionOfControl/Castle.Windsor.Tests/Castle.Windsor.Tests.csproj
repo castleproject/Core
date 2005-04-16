@@ -128,6 +128,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "DependencyProblem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "installerconfig.lang"
                     BuildAction = "None"
                 />

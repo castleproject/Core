@@ -163,10 +163,9 @@ namespace Castle.MicroKernel.Handlers
 		/// new components registered.
 		/// </summary>
 		/// <param name="handler"></param>
-		protected virtual void DependencySatisfied(IHandler handler)
+		protected virtual void DependencySatisfied(IHandler handler, ref bool stateChanged)
 		{
-			Type[] services = (Type[]) 
-				DependenciesByService.ToArray( typeof(Type) );
+			Type[] services = (Type[]) DependenciesByService.ToArray( typeof(Type) );
 
 			foreach(Type service in services)
 			{
@@ -188,8 +187,10 @@ namespace Castle.MicroKernel.Handlers
 
 			if (DependenciesByService.Count == 0 && DependenciesByKey.Count == 0)
 			{
-				SetNewState(HandlerState.Valid);
+				SetNewState(HandlerState.Valid); stateChanged = true;
 				Kernel.HandlerRegistered -= new HandlerDelegate(DependencySatisfied);
+
+				// All components with dependencies (that happened to be 
 				
 				// We don't need these anymore
 				_dependenciesByKey = null;
@@ -287,6 +288,8 @@ namespace Castle.MicroKernel.Handlers
 		{
 			if (DependenciesByKey.Count == 0 && DependenciesByService.Count == 0) return;
 
+			bool stateChanged = false;
+
 			Type[] services = new Type[ DependenciesByService.Count ];
 			
 			DependenciesByService.CopyTo( services, 0 );
@@ -296,7 +299,7 @@ namespace Castle.MicroKernel.Handlers
 				if (Kernel.Parent.HasComponent(service))
 				{
 					IHandler handler = Kernel.Parent.GetHandler(service);
-					DependencySatisfied(handler);
+					DependencySatisfied(handler, ref stateChanged);
 				}
 			}
 
@@ -309,7 +312,7 @@ namespace Castle.MicroKernel.Handlers
 				if (Kernel.Parent.HasComponent(key))
 				{
 					IHandler handler = Kernel.Parent.GetHandler(key);
-					DependencySatisfied(handler);
+					DependencySatisfied(handler, ref stateChanged);
 				}
 			}
 		}
