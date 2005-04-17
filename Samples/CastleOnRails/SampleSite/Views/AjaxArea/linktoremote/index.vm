@@ -38,8 +38,8 @@
 <p>
   <div id="results2">
   </div>
-  <input type="text" name="value" value="2"/>
-  $AjaxHelper.LinkToRemote("Calculate Power", "CalcPower.rails", "results2", "'value='+$('value').value")
+  <input type="text" name="value2" id="value2" value="2"/>
+  $AjaxHelper.LinkToRemote("Calculate Power", "CalcPower.rails", "results2", "'value='+$('value2').value")
 </p>
 
 </div>

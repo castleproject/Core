@@ -271,10 +271,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Views\AjaxArea\observerform\statelist.vm"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "Views\Areas\home\index.vm"
                     BuildAction = "None"
                 />

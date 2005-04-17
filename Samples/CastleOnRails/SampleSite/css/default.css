@@ -5,6 +5,13 @@ body {
 	background-color: White;
 	margin: 4px;
 }
+li {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: Black;
+	background-color: White;
+	margin: 4px;
+}
 p
 {
 	color: Black;
@@ -44,4 +51,8 @@ pre {
 	background-color: #F2EDFA;
 	margin: 2px;
 	padding: 15px;
+}
+code {
+	font-family: "Lucida Console", "Courier New", Courier, mono;
+	font-size: 12px;
 }
