@@ -24,9 +24,8 @@ namespace Castle.CastleOnRails.Framework.Views.CompositeView
 	/// Composition of view engines that dispatch to 
 	/// one or other based on the view file extesion.
 	/// </summary>
-	public class CompositeViewEngine : IViewEngine
+	public class CompositeViewEngine : ViewEngineBase
 	{
-		private String _viewRootDir;
 		private AspNetViewEngine _aspxViewEngine;
 		private NVelocityViewEngine _nvelocityViewEngine;
 
@@ -34,31 +33,20 @@ namespace Castle.CastleOnRails.Framework.Views.CompositeView
 		{
 		}
 
-		private void InitViews()
-		{
-			_aspxViewEngine = new AspNetViewEngine();
-			_aspxViewEngine.ViewRootDir = _viewRootDir;
-
-			_nvelocityViewEngine = new NVelocityViewEngine();
-			_nvelocityViewEngine.ViewRootDir = _viewRootDir;
-		}
-
 		#region IViewEngine Members
 
-		public String ViewRootDir
+		public override void Init()
 		{
-			get
-			{
-				return _viewRootDir;
-			}
-			set
-			{
-				_viewRootDir = value;
-				InitViews();
-			}
+			_aspxViewEngine = new AspNetViewEngine();
+			_aspxViewEngine.ViewRootDir = ViewRootDir;
+			_aspxViewEngine.Init();
+
+			_nvelocityViewEngine = new NVelocityViewEngine();
+			_nvelocityViewEngine.ViewRootDir = ViewRootDir;
+			_nvelocityViewEngine.Init();
 		}
 
-		public virtual void Process(IRailsEngineContext context, Controller controller, String viewName)
+		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			bool aspxProcessed = ProcessAspx(context, controller, viewName);
 
@@ -76,7 +64,7 @@ namespace Castle.CastleOnRails.Framework.Views.CompositeView
 
 		protected virtual bool ProcessVm(IRailsEngineContext context, Controller controller, string viewName)
 		{
-			FileInfo vmFile = new FileInfo(Path.Combine( _viewRootDir, viewName + ".vm" ));
+			FileInfo vmFile = new FileInfo(Path.Combine( ViewRootDir, viewName + ".vm" ));
 
 			if (vmFile.Exists)
 			{
@@ -92,7 +80,7 @@ namespace Castle.CastleOnRails.Framework.Views.CompositeView
 
 		protected virtual bool ProcessAspx(IRailsEngineContext context, Controller controller, string viewName)
 		{
-			FileInfo aspxFile = new FileInfo(Path.Combine( _viewRootDir, viewName + ".aspx" ));
+			FileInfo aspxFile = new FileInfo(Path.Combine( ViewRootDir, viewName + ".aspx" ));
 			
 			if (aspxFile.Exists)
 			{

@@ -17,6 +17,7 @@ namespace Castle.CastleOnRails.WindsorExtension
 	using System;
 
 	using Castle.Windsor;
+	using Castle.MicroKernel;
 
 	using Castle.CastleOnRails.Framework;
 	using Castle.CastleOnRails.Framework.Internal;
@@ -36,7 +37,16 @@ namespace Castle.CastleOnRails.WindsorExtension
 		{
 			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
 
-			ControllerTree tree = (ControllerTree) container["rails.controllertree"];
+			ControllerTree tree = null;
+			
+			try
+			{
+				tree = (ControllerTree) container["rails.controllertree"];
+			}
+			catch(ComponentNotFoundException e)
+			{
+				throw new RailsException("ControllerTree not found. Check if the RailsFacility is properly configured", e);
+			}
 
 			String key = (String) tree.GetController(urlInfo.Area, urlInfo.Controller);
 

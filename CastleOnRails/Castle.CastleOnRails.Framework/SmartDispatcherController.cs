@@ -110,7 +110,7 @@ namespace Castle.CastleOnRails.Framework
 			return points;
 		}
 
-		private object[] BuildMethodArguments(ParameterInfo[] parameters, NameValueCollection webParams, IDictionary files)
+		protected virtual object[] BuildMethodArguments(ParameterInfo[] parameters, NameValueCollection webParams, IDictionary files)
 		{
 			object[] args = new object[parameters.Length];
 			String paramName = String.Empty;
@@ -121,8 +121,10 @@ namespace Castle.CastleOnRails.Framework
 				for(int i=0; i < args.Length; i++)
 				{
 					ParameterInfo param = parameters[i];
+
 					paramName = param.Name;
-					value = webParams.Get( param.Name );
+
+					value = webParams.Get( paramName );
 
 					if (param.ParameterType == typeof(String))
 					{
@@ -196,7 +198,7 @@ namespace Castle.CastleOnRails.Framework
 					}
 					else if (param.ParameterType == typeof(HttpPostedFile))
 					{
-						args[i] = files[param.Name];
+						args[i] = files[paramName];
 					}
 					else
 					{

@@ -28,6 +28,7 @@ namespace Castle.CastleOnRails.Framework
 		/// </summary>
 		String ViewRootDir { get; set; }
 
+		
 		/// <summary>
 		/// Implementors should process the view (using the viewName to
 		/// obtain the correct template) and use the context to output
@@ -37,5 +38,10 @@ namespace Castle.CastleOnRails.Framework
 		/// <param name="controller"></param>
 		/// <param name="viewName"></param>
 		void Process(IRailsEngineContext context, Controller controller, String viewName);
+
+		/// <summary>
+		/// Initializes the ViewEngine.
+		/// </summary>
+		void Init();
 	}
 }

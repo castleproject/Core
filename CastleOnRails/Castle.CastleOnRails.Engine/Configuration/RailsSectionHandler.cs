@@ -107,6 +107,7 @@ namespace Castle.CastleOnRails.Engine.Configuration
 			}
 
 			config.ViewsPhysicalPath = path;
+			config.ViewsVirtualPath = viewPath.Value;
 	
 			XmlAttribute customEngine = node.Attributes["customEngine"];
 	

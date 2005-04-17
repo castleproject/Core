@@ -23,7 +23,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	/// </summary>
 	public class MasterPageBase : Page
 	{
-		const string ViewStateKey = "__MASTERVIEWSTATE";
+		private const string ViewStateKey = "__MASTERVIEWSTATE";
 
 		protected override object LoadPageStateFromPersistenceMedium()
 		{
@@ -42,9 +42,11 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 		protected override void SavePageStateToPersistenceMedium(object viewState)
 		{
-			StringWriter writer = new StringWriter();
-			new LosFormatter().Serialize(writer, viewState);
-			RegisterHiddenField( ViewStateKey, writer.GetStringBuilder().ToString() );
+			using(StringWriter writer = new StringWriter())
+			{
+				new LosFormatter().Serialize(writer, viewState);
+				RegisterHiddenField( ViewStateKey, writer.GetStringBuilder().ToString() );
+			}
 		}
 	}
 }

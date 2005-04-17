@@ -121,11 +121,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\AjaxController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Controllers\CookiesController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -179,22 +174,6 @@
                     RelPath = "Helper\DateFormatHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "views\ajax\index.aspx"
-                    SubType = "Form"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\ajax\index.aspx.cs"
-                    DependentUpon = "index.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "views\ajax\index.aspx.resx"
-                    DependentUpon = "index.aspx.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "views\cookies\index.aspx"

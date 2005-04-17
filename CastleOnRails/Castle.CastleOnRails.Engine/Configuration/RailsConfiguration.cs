@@ -21,6 +21,7 @@ namespace Castle.CastleOnRails.Engine.Configuration
 	{
 		private IList _assemblies = new ArrayList();
 		private String _viewsPhysicalPath;
+		private String _viewsVirtualPath;
 		private String _customControllerFactory;
 		private String _customFilterFactory;
 		private String _customEngineTypeName;
@@ -31,31 +32,70 @@ namespace Castle.CastleOnRails.Engine.Configuration
 
 		public IList Assemblies
 		{
-			get { return _assemblies; }
+			get
+			{
+				return _assemblies;
+			}
 		}
 
 		public String ViewsPhysicalPath
 		{
-			get { return _viewsPhysicalPath; }
-			set { _viewsPhysicalPath = value; }
+			get
+			{
+				return _viewsPhysicalPath;
+			}
+			set
+			{
+				_viewsPhysicalPath = value;
+			}
+		}
+
+		public string ViewsVirtualPath
+		{
+			get
+			{
+				return _viewsVirtualPath;
+			}
+			set
+			{
+				_viewsVirtualPath = value;
+			}
 		}
 
 		public String CustomControllerFactory
 		{
-			get { return _customControllerFactory; }
-			set { _customControllerFactory = value; }
+			get
+			{
+				return _customControllerFactory;
+			}
+			set
+			{
+				_customControllerFactory = value;
+			}
 		}
 
 		public String CustomFilterFactory
 		{
-			get { return _customFilterFactory; }
-			set { _customFilterFactory = value; }
+			get
+			{
+				return _customFilterFactory;
+			}
+			set
+			{
+				_customFilterFactory = value;
+			}
 		}
 
 		public String CustomEngineTypeName
 		{
-			get { return _customEngineTypeName; }
-			set { _customEngineTypeName = value; }
+			get
+			{
+				return _customEngineTypeName;
+			}
+			set
+			{
+				_customEngineTypeName = value;
+			}
 		}
 
 		public Type CustomViewEngineType

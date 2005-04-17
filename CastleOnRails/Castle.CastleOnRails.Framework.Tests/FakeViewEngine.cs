@@ -21,7 +21,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 	/// <summary>
 	/// Summary description for FakeViewEngine.
 	/// </summary>
-	public class FakeViewEngine : IViewEngine
+	public class FakeViewEngine : ViewEngineBase
 	{
 		private Hashtable _paths = 
 			new Hashtable( 
@@ -52,13 +52,11 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 		#region IViewEngine Members
 
-		public String ViewRootDir
+		public override void Init()
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
 		}
 
-		public virtual void Process(IRailsEngineContext context, Controller controller, String viewName)
+		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			String path = PathFrom(viewName);
 			String view = ViewFrom(viewName);
@@ -74,7 +72,7 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 			context.Response.Write(contents);
 		}
-		
+
 		#endregion
 
 		protected string ViewFrom(string name)

@@ -31,7 +31,8 @@ namespace Castle.CastleOnRails.Framework
 	/// </summary>
 	public abstract class Controller
 	{
-		internal static readonly String OriginalViewKey = "original_view";
+		public static readonly String ControllerContextKey = "rails.controller";
+		internal static readonly String OriginalViewKey = "rails.original_view";
 
 		private IViewEngine _viewEngine;
 		private IRailsEngineContext _context;
@@ -307,9 +308,9 @@ namespace Castle.CastleOnRails.Framework
 
 			if (HttpContext.Current != null)
 			{
-				if (!HttpContext.Current.Items.Contains("original_view"))
+				if (!HttpContext.Current.Items.Contains(OriginalViewKey))
 				{
-					HttpContext.Current.Items["original_view"] = _selectedViewName;
+					HttpContext.Current.Items[OriginalViewKey] = _selectedViewName;
 				}
 			}
 
@@ -551,7 +552,7 @@ namespace Castle.CastleOnRails.Framework
 
 			if (_context.UnderlyingContext != null)
 			{
-				((HttpContext)_context.UnderlyingContext).Items["rails.controller"] = this;
+				((HttpContext)_context.UnderlyingContext).Items[ControllerContextKey] = this;
 			}
 		}
 

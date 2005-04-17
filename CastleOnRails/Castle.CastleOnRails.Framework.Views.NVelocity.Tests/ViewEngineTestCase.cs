@@ -37,6 +37,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 			_viewEngine = new NVelocityViewEngine();
 			_viewEngine.ViewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
 				"../Castle.CastleOnRails.Framework.Views.NVelocity.Tests/views");
+			_viewEngine.Init();
 			
 			_engine = new ProcessEngine(factory, _viewEngine);
 		}

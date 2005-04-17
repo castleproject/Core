@@ -1,3 +1,4 @@
+using Castle.CastleOnRails.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,18 +26,14 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	/// Default implementation of a <see cref="IViewEngine"/>.
 	/// Uses ASP.Net WebForms as views.
 	/// </summary>
-	public class AspNetViewEngine : IViewEngine
+	public class AspNetViewEngine : ViewEngineBase
 	{
 		private static readonly String ProcessedBeforeKey = "processed_before";
 		
-		private String _viewRootDir;
-
 		#region IViewEngine
 
-		public String ViewRootDir
+		public override void Init()
 		{
-			get { return _viewRootDir; }
-			set { _viewRootDir = value; }
 		}
 
 		/// <summary>
@@ -46,7 +43,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		/// <param name="context"></param>
 		/// <param name="controller"></param>
 		/// <param name="viewName"></param>
-		public void Process(IRailsEngineContext context, Controller controller, String viewName)
+		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
 
@@ -67,23 +64,26 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 			Page masterHandler = null;
 
-			if (controller.LayoutName != null)
+			if (HasLayout(controller))
 			{
 				StartFiltering(httpContext.Response);
 				masterHandler = ObtainMasterPage(httpContext, controller);
 			}
 
-			String physicalPath = Path.Combine( _viewRootDir, viewName + ".aspx" );
-			physicalPath = physicalPath.Replace('/', '\\');
-
-			IHttpHandler childPage = 
-				PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
+			IHttpHandler childPage = GetCompiledPageInstace(viewName, httpContext);
 
 			ProcessPropertyBag(controller.PropertyBag, childPage);
 
 			ProccessPage(controller, childPage, httpContext);
 
 			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);		
+		}
+
+		private IHttpHandler GetCompiledPageInstace(string viewName, HttpContext httpContext)
+		{
+			String physicalPath = Path.Combine( ViewRootDir, viewName + ".aspx" ).Replace('/', '\\');
+
+			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
 
 		private bool IsTheSameView(HttpContext httpContext, string viewName)
@@ -107,7 +107,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 		private void ProcessLayoutIfNeeded(Controller controller, HttpContext httpContext, IHttpHandler childPage, Page masterHandler)
 		{
-			if (controller.LayoutName != null)
+			if (HasLayout(controller))
 			{
 				if (httpContext.Response.StatusCode == 200)
 				{
@@ -131,6 +131,11 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 					WriteBuffered(httpContext.Response);
 				}
 			}
+		}
+
+		private bool HasLayout(Controller controller)
+		{
+			return controller.LayoutName != null;
 		}
 
 		private void WriteBuffered(HttpResponse response)
@@ -160,7 +165,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		private Page ObtainMasterPage(HttpContext context, Controller controller)
 		{
 			String layout = "layouts/" + controller.LayoutName;
-			String physicalPath = Path.Combine( _viewRootDir, layout + ".aspx" );
+			String physicalPath = Path.Combine( ViewRootDir, layout + ".aspx" );
 			physicalPath = physicalPath.Replace('/', '\\');
 
 			return PageParser.GetCompiledPageInstance(layout, physicalPath, context) as Page;

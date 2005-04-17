@@ -247,6 +247,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\ViewEngineBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\Graph\ControllerTree.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -279,6 +284,11 @@
                 <File
                     RelPath = "Views\Aspx\MasterPageBase.cs"
                     SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\Aspx\WebFormsController.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
             </Include>

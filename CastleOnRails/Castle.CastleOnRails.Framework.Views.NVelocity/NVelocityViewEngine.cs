@@ -25,10 +25,8 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 	using System.Collections;
 	using Commons.Collections;
 
-	public class NVelocityViewEngine : IViewEngine
+	public class NVelocityViewEngine : ViewEngineBase
 	{
-		private String _viewRootDir;
-
 		public NVelocityViewEngine()
 		{
 		}
@@ -45,7 +43,12 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 
 		#region IViewEngine Members
 
-		public void Process(IRailsEngineContext context, Controller controller, String viewName)
+		public override void Init()
+		{
+			InitVelocity();
+		}
+
+		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
 			AdjustContentType(ctx, context, controller, viewName);
@@ -91,16 +94,6 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 				ProcessLayout((writer as StringWriter).GetStringBuilder().ToString(), controller, ctx, context);
 			}
 
-		}
-
-		public String ViewRootDir
-		{
-			get { return _viewRootDir; }
-			set
-			{
-				_viewRootDir = value;
-				InitVelocity();
-			}
 		}
 
 		#endregion

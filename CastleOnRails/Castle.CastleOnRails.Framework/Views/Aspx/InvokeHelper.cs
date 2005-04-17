@@ -101,7 +101,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		{
 			get
 			{
-				return (Controller) Context.Items["rails.controller"];
+				return (Controller) Context.Items[Controller.ControllerContextKey];
 			}
 		}
 

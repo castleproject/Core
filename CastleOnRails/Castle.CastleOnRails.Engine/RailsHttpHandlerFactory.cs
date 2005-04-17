@@ -82,6 +82,8 @@ namespace Castle.CastleOnRails.Engine
 			}
 
 			_viewEngine.ViewRootDir = _config.ViewsPhysicalPath;
+
+			_viewEngine.Init();
 		}
 
 		protected virtual void InitializeFilterFactory()
