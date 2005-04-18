@@ -34,8 +34,11 @@ namespace Castle.MicroKernel.Handlers
 		{
 			if (CurrentState == HandlerState.WaitingDependency)
 			{
-				throw new HandlerException(
-					"Can't create component as it has dependencies to be satisfied");
+				String message = 
+					String.Format("Can't create component as it has dependencies to be satisfied. {0}", 
+						ObtainDependencyDetails() );
+
+				throw new HandlerException(message);
 			}
 			
 			return _lifestyleManager.Resolve();

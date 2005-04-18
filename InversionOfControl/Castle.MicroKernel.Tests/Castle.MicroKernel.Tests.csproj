@@ -155,6 +155,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "UnsatisfiedDependenciesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ClassComponents\CommonImpl1.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -181,6 +186,11 @@
                 />
                 <File
                     RelPath = "ClassComponents\CustomerImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ClassComponents\CustomerImpl2.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

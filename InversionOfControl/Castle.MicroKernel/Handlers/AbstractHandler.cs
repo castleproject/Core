@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel.Handlers
 {
 	using System;
+	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
 
@@ -320,6 +321,38 @@ namespace Castle.MicroKernel.Handlers
 		private void AddGraphDependency(ComponentModel model)
 		{
 			ComponentModel.AddDependent( model );
+		}
+
+		/// <summary>
+		/// Returns human readable list of components 
+		/// this handler is waiting for.
+		/// </summary>
+		/// <returns></returns>
+		protected String ObtainDependencyDetails()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if (DependenciesByService.Count != 0)
+			{
+				sb.Append( "\r\nWaiting for the following services: \r\n" );
+
+				foreach(Type type in DependenciesByService)
+				{
+					sb.AppendFormat( "- {0} \r\n", type.FullName );
+				}
+			}
+
+			if (DependenciesByKey.Count != 0)
+			{
+				sb.Append( "\r\nAnd for the following keys {components with specific keys}\r\n" );
+
+				foreach(String key in DependenciesByKey)
+				{
+					sb.AppendFormat( "- {0} \r\n", key );
+				}
+			}
+
+			return sb.ToString();
 		}
 	}
 }

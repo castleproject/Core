@@ -1,3 +1,10 @@
+Beta 3  - 
+------
+
+- Bug in dependency resolution (when chained) fixed
+- Better message description on exceptions related to unresolved dependencies.
+
+
 Beta 2  - 10/apr/2005
 ------ 
 

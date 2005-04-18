@@ -62,9 +62,16 @@ namespace Castle.MicroKernel.Resolvers
 
 			if (value == null && !dependency.IsOptional)
 			{
+				String implementation = String.Empty;
+
+				if (model.Implementation != null)
+				{
+					implementation = model.Implementation.FullName;
+				}
+
 				String message = String.Format(
-					"Could not resolve non-optional dependency for {0}. Parameter '{1}' type {2}", 
-					model.Name, dependency.DependencyKey, dependency.TargetType.Name);
+					"Could not resolve non-optional dependency for '{0}' ({1}). Parameter '{2}' type '{3}'", 
+					model.Name, implementation, dependency.DependencyKey, dependency.TargetType.FullName);
 
 				throw new DependecyResolverException(message);	
 			}
