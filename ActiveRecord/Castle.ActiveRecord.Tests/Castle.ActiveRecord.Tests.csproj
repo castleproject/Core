@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)\Castle.ActiveRecord.Tests.dll.config $(TargetDir)"
+                PostBuildEvent = "copy $(ProjectDir)\$(TargetFileName).config $(TargetDir)"
                 RootNamespace = "Castle.ActiveRecord.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
