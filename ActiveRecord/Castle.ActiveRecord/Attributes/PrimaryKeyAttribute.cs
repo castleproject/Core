@@ -38,6 +38,8 @@ namespace Castle.ActiveRecord
 		private String _column;
 		private String _unsavedValue;
 		private String _access;
+		private bool _composite;
+		private string _name;
 
 		public PrimaryKeyAttribute() : this(PrimaryKeyType.Native)
 		{
@@ -75,6 +77,18 @@ namespace Castle.ActiveRecord
 		{
 			get { return _access; }
 			set { _access = value; }
+		}
+
+		public bool IsComposite
+		{
+			get { return _composite; }
+			set { _composite = value; }
+		}
+
+		public string Name
+		{
+			get { return _name; }
+			set { _name = value; }
 		}
 	}
 

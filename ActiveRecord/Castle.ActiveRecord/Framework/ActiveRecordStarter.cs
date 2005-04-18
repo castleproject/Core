@@ -58,10 +58,10 @@ namespace Castle.ActiveRecord
 
 				Configuration cfg = holder.GetConfiguration( holder.GetRootType(type) );
 
-				if (cfg == null)
-				{
-					// TODO: Add to wait list
-				}
+//				if (cfg == null)
+//				{
+//					// TODO: Add to wait list
+//				}
 
 				if (!type.IsAbstract)
 				{
