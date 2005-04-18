@@ -17,39 +17,6 @@ namespace Castle.Facilities.NHibernateExtension
 	using System;
 
 	/// <summary>
-	/// Declares that a component
-	/// wants to use <see cref="SessionManager"/> to 
-	/// obtain the current NHibernate's ISession.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
-	public class UsesAutomaticSessionCreationAttribute : System.Attribute
-	{
-		private String _sessionFactoryId;
-
-		public UsesAutomaticSessionCreationAttribute()
-		{
-		}
-
-		public UsesAutomaticSessionCreationAttribute(String sessionFactoryId)
-		{
-			_sessionFactoryId = sessionFactoryId;
-		}
-
-		public String SessionFactoryId
-		{
-			get { return _sessionFactoryId; }
-		}
-	}
-
-	public enum FlushOption
-	{
-		Force,
-		Auto,
-		Commit,
-		Never
-	}
-
-	/// <summary>
 	/// Declares the way a method wants to perform 
 	/// the session flush.
 	/// </summary>

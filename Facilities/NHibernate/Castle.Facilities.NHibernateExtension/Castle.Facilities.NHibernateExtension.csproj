@@ -99,12 +99,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes.cs"
+                    RelPath = "FlushOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SessionFlushAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "SessionManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UsesAutomaticSessionCreationAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
