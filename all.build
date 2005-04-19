@@ -40,5 +40,15 @@
 
 	<target name="samples">
 	</target>
+
+	<target name="dist">
+		<nant buildfile="Tools\DynamicProxy\DynamicProxy.build" target="dist" inheritall="true" />
+		<nant buildfile="InversionOfControl\container.build" target="dist" inheritall="true" />
+		<nant buildfile="Components\components.build" target="dist" inheritall="true" />
+		<nant buildfile="ActiveRecord\activerecord.build" target="dist" inheritall="true" />
+		<nant buildfile="CastleOnRails\rails.build" target="dist" inheritall="true" />
+		<nant buildfile="Services\services.build" target="dist" inheritall="true" />
+		<nant buildfile="Facilities\facilities.build" target="dist" inheritall="true" />
+	</target>
 	
 </project>
