@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
+
 <project name="Common Build Properties">
+
 	<!-- find out where nunit.framework.dll is -->
+
 	<property name="lib.dir"
 		value="${path::combine(nant::get-base-directory(), 'lib')}"
 		dynamic="true" />
@@ -14,13 +17,12 @@
 	<property name="lib.framework.dir"
 		value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}"
 		dynamic="true" />
-	
 
-	<!-- Uncomment this block for nant backward compat 
+    <!-- Uncomment this block for nant backward compat 
 	<property name="lib.framework.dir"
 		value="${path::combine(lib.family.dir, framework::get-version(framework::get-target-framework()))}"
 		dynamic="true" />
-        -->
+    -->
 		
 	<property name="nunit.framework.dll"
 			value="${path::combine(lib.framework.dir, 'nunit.framework.dll')}" />
