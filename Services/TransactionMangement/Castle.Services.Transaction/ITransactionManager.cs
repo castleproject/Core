@@ -18,8 +18,6 @@
 
 namespace Castle.Services.Transaction
 {
-	using System;
-
 	/// <summary>
 	/// Manages the creation and disposal of <see cref="ITransaction"/> instances.
 	/// </summary>

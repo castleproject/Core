@@ -17,6 +17,9 @@ namespace Castle.Services.Transaction
 	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// TODO: Ensure this class is thread-safe
+	/// </summary>
 	public class DefaultTransactionManager : ITransactionManager
 	{
 		private Stack _transactions = new Stack(5);
@@ -88,6 +91,21 @@ namespace Castle.Services.Transaction
 
 		public void Dispose(ITransaction transaction)
 		{
+			if (transaction == null)
+			{
+				throw new ArgumentNullException("transaction", "Tried to dispose a null transaction");
+			}
+
+			lock(_transactions)
+			{
+				if (CurrentTransaction != transaction)
+				{
+					throw new ArgumentException("transaction", "Tried to dispose a transaction that is not on the current active transaction");
+				}
+
+				_transactions.Pop();
+			}
+
 			if (transaction is IDisposable)
 			{
 				(transaction as IDisposable).Dispose();

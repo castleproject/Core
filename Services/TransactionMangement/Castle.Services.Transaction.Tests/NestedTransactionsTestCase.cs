@@ -127,5 +127,37 @@ namespace Castle.Services.Transaction.Tests
 			child1.Commit();
 			root.Commit(); // Can't perform
 		}
+
+		[Test]
+		[ExpectedException( typeof(ArgumentException) )]
+		public void InvalidDispose1()
+		{
+			ITransaction root = tm.CreateTransaction( TransactionMode.Requires, IsolationMode.Unspecified );
+			root.Begin();
+
+			ITransaction child1 = tm.CreateTransaction( TransactionMode.Requires, IsolationMode.Unspecified );
+			child1.Begin();
+			
+			ITransaction child2 = tm.CreateTransaction( TransactionMode.Requires, IsolationMode.Unspecified );
+			child2.Begin();
+
+			tm.Dispose(child1);
+		}
+
+		[Test]
+		[ExpectedException( typeof(ArgumentException) )]
+		public void InvalidDispose2()
+		{
+			ITransaction root = tm.CreateTransaction( TransactionMode.Requires, IsolationMode.Unspecified );
+			root.Begin();
+
+			ITransaction child1 = tm.CreateTransaction( TransactionMode.Requires, IsolationMode.Unspecified );
+			child1.Begin();
+			
+			ITransaction child2 = tm.CreateTransaction( TransactionMode.Requires, IsolationMode.Unspecified );
+			child2.Begin();
+
+			tm.Dispose(root);
+		}
 	}
 }
