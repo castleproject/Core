@@ -46,7 +46,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { this.lastName = value; }
 		}
 
-		[HasOne()]
+		[HasOne]
 		public Award Award
 		{
 			get { return this.award; }
@@ -55,7 +55,12 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		public static Employee Find(int id)
 		{
-			return ((Employee) (ActiveRecordBase.FindByPrimaryKey(typeof (Employee), id)));
+			return ((Employee) (ActiveRecordBase.FindByPrimaryKey(typeof(Employee), id)));
+		}
+
+		public static Employee[] FindAll()
+		{
+			return ((Employee[]) (ActiveRecordBase.FindAll(typeof(Employee))));
 		}
 
 		public static void DeleteAll()
@@ -67,25 +72,34 @@ namespace Castle.ActiveRecord.Tests.Model
 	[ActiveRecord("Award")]
 	public class Award : ActiveRecordBase
 	{
-//		private Employee employee;
+		private Employee employee;
 		private string description;
 		private int id;
 
-//		[BelongsTo("EmployeeID")]
-//		public Employee Employee
-//		{
-//			get { return this.employee; }
-//			set { this.employee = value; }
-//		}
+		public Award()
+		{
+		}
 
-		[PrimaryKey(PrimaryKeyType.Assigned, "EmployeeID")]
+		public Award(Employee employee)
+		{
+			this.employee = employee;
+		}
+
+		[HasOne]
+		public Employee Employee
+		{
+			get { return this.employee; }
+			set { this.employee = value; }
+		}
+
+		[PrimaryKey(PrimaryKeyType.Foreign, "EmployeeID")]
 		public int ID
 		{
 			get { return this.id; }
 			set { this.id = value; }
 		}
 
-		[Property()]
+		[Property]
 		public string Description
 		{
 			get { return this.description; }
@@ -94,7 +108,7 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		public static Award[] FindAll()
 		{
-			return ((Award[]) (ActiveRecordBase.FindAll(typeof (Award))));
+			return ((Award[]) (ActiveRecordBase.FindAll(typeof(Award))));
 		}
 
 		public static void DeleteAll()

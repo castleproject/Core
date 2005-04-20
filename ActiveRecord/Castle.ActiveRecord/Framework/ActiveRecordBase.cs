@@ -210,7 +210,7 @@ namespace Castle.ActiveRecord
 
 			try
 			{
-				session.Save(instance);
+				session.SaveOrUpdate(instance);
 
 				session.Flush();
 			}

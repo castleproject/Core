@@ -16,6 +16,22 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	public enum PrimaryKeyType
+	{
+		None,
+		Identity,
+		Sequence,
+		HiLo,
+		SeqHiLo,
+		UuidHex,
+		UuidString,
+		Guid,
+		GuidComb,
+		Native,
+		Assigned,
+		Foreign
+	}
+
 	/// <summary>
 	/// Indicates the property which is the primary key.
 	/// </summary>
@@ -37,9 +53,7 @@ namespace Castle.ActiveRecord
 		private PrimaryKeyType _generator = PrimaryKeyType.Native;
 		private String _column;
 		private String _unsavedValue;
-		private String _access;
 		private bool _composite;
-		private string _name;
 
 		public PrimaryKeyAttribute() : this(PrimaryKeyType.Native)
 		{
@@ -73,38 +87,10 @@ namespace Castle.ActiveRecord
 			set { _unsavedValue = value; }
 		}
 
-		public String Access
-		{
-			get { return _access; }
-			set { _access = value; }
-		}
-
 		public bool IsComposite
 		{
 			get { return _composite; }
 			set { _composite = value; }
 		}
-
-		public string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-	}
-
-	public enum PrimaryKeyType
-	{
-		None,
-		Identity,
-		Sequence,
-		HiLo,
-		SeqHiLo,
-		UuidHex,
-		UuidString,
-		Guid,
-		GuidComb,
-		Native,
-		Assigned,
-		Foreign
 	}
 }

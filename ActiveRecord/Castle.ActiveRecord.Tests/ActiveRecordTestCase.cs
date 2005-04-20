@@ -156,19 +156,22 @@ namespace Castle.ActiveRecord.Tests
 			Employee emp = new Employee();
 			emp.FirstName = "john";
 			emp.LastName = "doe";
-			emp.Award = new Award();
-			emp.Award.Description = "Invisible employee";
 			emp.Save();
 
-			emp.Award.ID = emp.ID;
-			emp.Award.Save();
+			Assert.AreEqual(1, Employee.FindAll().Length );
+
+			Award award = new Award(emp);
+			award.Description = "Invisible employee";
+			award.Save();
+
+			Assert.AreEqual(1, Award.FindAll().Length );
 
 			Employee emp2 = Employee.Find(emp.ID);
 			Assert.IsNotNull(emp2);
 			Assert.IsNotNull(emp2.Award);
 			Assert.AreEqual(emp.FirstName, emp2.FirstName);
 			Assert.AreEqual(emp.LastName, emp2.LastName);
-			Assert.AreEqual(emp.Award.Description, emp2.Award.Description);
+			Assert.AreEqual(award.Description, emp2.Award.Description);
 		}
 
 		[Test]
@@ -181,6 +184,42 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog blog = Blog.Find(0);
 			Assert.IsNull(blog);
+		}
+
+		[Test]
+		public void SaveUpdate()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+
+			blog.Name = "Something else";
+			blog.Author = "changed too";
+			blog.Save();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+
+			Assert.AreEqual( blog.Name, blogs[0].Name );
+			Assert.AreEqual( blog.Author, blogs[0].Author );
 		}
 	}
 }

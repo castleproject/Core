@@ -1,9 +1,11 @@
 
-- Version 0.0.2.0 
+- Version 0.0.1.1
   
   Applied patch from Luiz César Kuriki <luizck@gmail.com> in order to support NHibernate's Component feature
   
   TODO: Apply patch from Kevin Williams in order to support joined subclasses and more mappings (IDictionary)
+
+  Applied modification suggested by Andrew Hallock and Craig Neuwirt in order to support HasOne relations.
 
 
 - Version 0.0.1.0 Released (not changes to track yet)

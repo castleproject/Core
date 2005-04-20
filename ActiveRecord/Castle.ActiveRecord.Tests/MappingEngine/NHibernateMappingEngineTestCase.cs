@@ -29,7 +29,7 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 		{
 			String contents = "\r\n<hibernate-mapping xmlns=\"urn:nhibernate-mapping-2.0\" >\r\n" + 
 				"<class name=\"Castle.ActiveRecord.Tests.Model.SimpleModel, Castle.ActiveRecord.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\" table=\"TableNameHere\" >\r\n" + 
-				"<id name=\"id\" type=\"Int32\" column=\"t_id\" >\r\n" + 
+				"<id name=\"id\" type=\"Int32\" column=\"t_id\" unsaved-value=\"0\" >\r\n" + 
 				"<generator class=\"assigned\">\r\n" + 
 				"</generator>\r\n" + 
 				"</id>\r\n" + 
@@ -48,7 +48,7 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 		{
 			String contents = "\r\n<hibernate-mapping xmlns=\"urn:nhibernate-mapping-2.0\" >\r\n" + 
 				"<class name=\"Castle.ActiveRecord.Tests.Model.SimpleModel2, Castle.ActiveRecord.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\" table=\"TableNameHere\" >\r\n" + 
-				"<id name=\"id\" type=\"Int32\" column=\"t_id\" >\r\n" + 
+				"<id name=\"id\" type=\"Int32\" column=\"t_id\" unsaved-value=\"0\" >\r\n" + 
 				"<generator class=\"native\">\r\n" + 
 				"</generator>\r\n" + 
 				"</id>\r\n" + 
@@ -67,7 +67,7 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 		{
 			String contents = "\r\n<hibernate-mapping xmlns=\"urn:nhibernate-mapping-2.0\" >\r\n" + 
 				"<class name=\"Castle.ActiveRecord.Tests.Model.SimpleModel3, Castle.ActiveRecord.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null\" table=\"TableNameHere\" >\r\n" + 
-				"<id name=\"id\" type=\"Int32\" column=\"t_id\" >\r\n" + 
+				"<id name=\"id\" type=\"Int32\" column=\"t_id\" unsaved-value=\"0\" >\r\n" + 
 				"<generator class=\"guid\">\r\n" + 
 				"</generator>\r\n" + 
 				"</id>\r\n" + 

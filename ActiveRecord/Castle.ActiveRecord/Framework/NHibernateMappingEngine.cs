@@ -381,18 +381,18 @@ namespace Castle.ActiveRecord
 			builder.AppendFormat(listOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasmany.MapType;
+			
 			PropertyInfo indexProp = otherType.GetProperty(hasmany.Index);
+			
 			if (indexProp != null)
 			{
 				String type = String.Format(typeAttribute, indexProp.Name);
 				builder.AppendFormat(indexTag, hasmany.Index, type);
-//				PropertyInfo elementProp = otherType.GetProperty( hasmany.Key );
-//				if( elementProp != null )
-//				{
-//					builder.AppendFormat( keyTag, hasmany.Key );
-//				}
+
 				String column = null;
+				
 				object[] elementAttributes = indexProp.GetCustomAttributes(false);
+				
 				foreach (object attribute in elementAttributes)
 				{
 					if (attribute is PropertyAttribute)
@@ -493,14 +493,40 @@ namespace Castle.ActiveRecord
 			String name = String.Format(nameAttribute, prop.Name);
 			String type = String.Format(typeAttribute, prop.PropertyType.Name);
 			String column = (pk.Column == null ? String.Format(columnAttribute, prop.Name) : String.Format(columnAttribute, pk.Column));
-			String unsavedValue = (pk.UnsavedValue == null ? "" : String.Format(unsavedValueAttribute, pk.UnsavedValue));
-			String access = (pk.Access == null ? "" : String.Format(accessAttribute, pk.Access));
+//			String access = (pk.Access == null ? "" : String.Format(accessAttribute, pk.Access));
 
-			builder.AppendFormat(idOpen, name + type + column + unsavedValue + access);
+			if (pk.UnsavedValue == null)
+			{
+				if (prop.PropertyType.IsPrimitive)
+				{
+					pk.UnsavedValue = "0";
+				}
+				else
+				{
+					// Nasty guess, but for 99.99% of situations it will be OK
+					pk.UnsavedValue = "";
+				}
+			}
+
+			String unsavedValue = (pk.UnsavedValue == null ? "" : String.Format(unsavedValueAttribute, pk.UnsavedValue));
+
+//			builder.AppendFormat(idOpen, name + type + column + unsavedValue + access);
+			builder.AppendFormat(idOpen, name + type + column + unsavedValue);
 
 			if (pk.Generator != PrimaryKeyType.None)
 			{
 				builder.AppendFormat(generatorOpen, pk.Generator.ToString().ToLower());
+
+				if (pk.Generator == PrimaryKeyType.Foreign)
+				{
+					PropertyInfo hasOneProp = GetPropertyWithAttribute( prop.DeclaringType, typeof(HasOneAttribute) );
+
+					if (hasOneProp != null)
+					{
+						builder.AppendFormat("<param name=\"property\">{0}</param>\r\n", hasOneProp.Name);
+					}
+				}
+
 				builder.Append(generatorClose);
 			}
 
@@ -527,7 +553,6 @@ namespace Castle.ActiveRecord
 			String lazy = (hasAndBelongsTo.Lazy == false ? "" : String.Format(lazyAttribute, hasAndBelongsTo.Lazy.ToString().ToLower()));
 			String inverse = (hasAndBelongsTo.Inverse == false ? "" : String.Format(inverseAttribute, hasAndBelongsTo.Inverse.ToString().ToLower()));
 			String cascade = (hasAndBelongsTo.Cascade == null ? "" : String.Format(cascadeAttribute, hasAndBelongsTo.Cascade));
-//			String sort = (hasAndBelongsTo.Sort == null ? "" : String.Format(sortAttribute, hasAndBelongsTo.Sort));
 			String orderBy = (hasAndBelongsTo.OrderBy == null ? "" : String.Format(orderByAttribute, hasAndBelongsTo.OrderBy));
 			String where = (hasAndBelongsTo.Where == null ? "" : String.Format(whereAttribute, hasAndBelongsTo.Where));
 
@@ -535,54 +560,16 @@ namespace Castle.ActiveRecord
 
 			Type otherType = hasAndBelongsTo.MapType;
 			
-			//			if (hasAndBelongsTo.Key == null)
-			//			{
-			//				throw new ConfigurationException("hasAndBelongsToAttribute must expose a Key");
-			//			}
+			String columnkey = hasAndBelongsTo.ColumnKey == null ? "" : hasAndBelongsTo.ColumnKey;
+			String column = hasAndBelongsTo.Column == null ? "" : String.Format(columnAttribute, hasAndBelongsTo.Column);
 
-			//			PropertyInfo elementProp = otherType.GetProperty(hasAndBelongsTo.Key);
-			
-			//			if (elementProp != null)
+			builder.AppendFormat(keyTag, columnkey);
+
+			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
+			// We need to do it wisely
+			if (column != null)
 			{
-				//				PropertyInfo indexProp = otherType.GetProperty(hasAndBelongsTo.Index);
-				//				if (indexProp != null)
-				//				{
-				//					String type = String.Format(typeAttribute, indexProp.Name);
-				//					builder.AppendFormat(indexTag, hasAndBelongsTo.Index, type);
-				//				}
-
-
-				//				object[] elementAttributes = elementProp.GetCustomAttributes(false);
-				//				foreach (object attribute in elementAttributes)
-				//				{
-				//					if (attribute is PropertyAttribute)
-				//					{
-				//						column = (attribute as PropertyAttribute).Column;
-				//						break;
-				//					}
-				//					else if (attribute is PrimaryKeyAttribute)
-				//					{
-				//						column = (attribute as PrimaryKeyAttribute).Column;
-				//						break;
-				//					}
-				//					else if (attribute is BelongsToAttribute)
-				//					{
-				//						column = (attribute as BelongsToAttribute).Column;
-				//						break;
-				//					}
-				//				}
-
-				String columnkey = hasAndBelongsTo.ColumnKey == null ? "" : hasAndBelongsTo.ColumnKey;
-				String column = hasAndBelongsTo.Column == null ? "" : String.Format(columnAttribute, hasAndBelongsTo.Column);
-
-				builder.AppendFormat(keyTag, columnkey);
-
-				// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
-				// We need to do it wisely
-				if (column != null)
-				{
-					builder.AppendFormat(manyToMany, otherType.AssemblyQualifiedName, column);
-				}
+				builder.AppendFormat(manyToMany, otherType.AssemblyQualifiedName, column);
 			}
 		
 			builder.Append(bagClose);
@@ -596,60 +583,22 @@ namespace Castle.ActiveRecord
 			String lazy = (hasmany.Lazy == false ? "" : String.Format(lazyAttribute, hasmany.Lazy.ToString().ToLower()));
 			String inverse = (hasmany.Inverse == false ? "" : String.Format(inverseAttribute, hasmany.Inverse.ToString().ToLower()));
 			String cascade = (hasmany.Cascade == null ? "" : String.Format(cascadeAttribute, hasmany.Cascade));
-//			String sort = (hasmany.Sort == null ? "" : String.Format(sortAttribute, hasmany.Sort));
 			String orderBy = (hasmany.OrderBy == null ? "" : String.Format(orderByAttribute, hasmany.OrderBy));
 			String where = (hasmany.Where == null ? "" : String.Format(whereAttribute, hasmany.Where));
 
 			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasmany.MapType;
-			
-//			if (hasmany.Key == null)
-//			{
-//				throw new ConfigurationException("HasManyAttribute must expose a Key");
-//			}
 
-//			PropertyInfo elementProp = otherType.GetProperty(hasmany.Key);
-			
-//			if (elementProp != null)
+			String column = hasmany.Column == null ? "" : hasmany.Column;
+
+			builder.AppendFormat(keyTag, column);
+
+			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
+			// We need to do it wisely
+			if (column != null)
 			{
-//				PropertyInfo indexProp = otherType.GetProperty(hasmany.Index);
-//				if (indexProp != null)
-//				{
-//					String type = String.Format(typeAttribute, indexProp.Name);
-//					builder.AppendFormat(indexTag, hasmany.Index, type);
-//				}
-
-				String column = hasmany.Column == null ? "" : hasmany.Column;
-
-//				object[] elementAttributes = elementProp.GetCustomAttributes(false);
-//				foreach (object attribute in elementAttributes)
-//				{
-//					if (attribute is PropertyAttribute)
-//					{
-//						column = (attribute as PropertyAttribute).Column;
-//						break;
-//					}
-//					else if (attribute is PrimaryKeyAttribute)
-//					{
-//						column = (attribute as PrimaryKeyAttribute).Column;
-//						break;
-//					}
-//					else if (attribute is BelongsToAttribute)
-//					{
-//						column = (attribute as BelongsToAttribute).Column;
-//						break;
-//					}
-//				}
-
-				builder.AppendFormat(keyTag, column);
-
-				// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
-				// We need to do it wisely
-				if (column != null)
-				{
-					builder.AppendFormat(oneToMany, otherType.AssemblyQualifiedName);
-				}
+				builder.AppendFormat(oneToMany, otherType.AssemblyQualifiedName);
 			}
 		
 			builder.Append(bagClose);
@@ -684,6 +633,21 @@ namespace Castle.ActiveRecord
 					CreateSubClassMapping(xml, sub, types);
 				}
 			}
+		}
+
+		private PropertyInfo GetPropertyWithAttribute(Type targetType, Type attributeType)
+		{
+			PropertyInfo[] props = targetType.GetProperties( BindingFlags.Instance|BindingFlags.Public );
+
+			foreach(PropertyInfo prop in props)
+			{
+				if (prop.IsDefined(attributeType, true))
+				{
+					return prop;
+				}
+			}
+
+			return null;
 		}
 	}
 }
