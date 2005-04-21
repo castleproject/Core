@@ -113,7 +113,7 @@ namespace Castle.ActiveRecord
 				String proxy = (ar.Proxy == false ? "" : String.Format(proxyAttribute, ar.Proxy.ToString().ToLower()));
 				String disc = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
 
-				xml.AppendFormat(classOpen, type.AssemblyQualifiedName, table + schema + proxy + disc);
+				xml.AppendFormat(classOpen, GetNHibernateName( type ), table + schema + proxy + disc);
 
 				AddMappedIdOrCompositeId(xml, type.GetProperties( PropertiesBindingFlags ));
 
@@ -147,7 +147,7 @@ namespace Castle.ActiveRecord
 				String proxy = (ar.Proxy == false ? "" : String.Format(proxyAttribute, ar.Proxy.ToString().ToLower()));
 				String discvalue = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
 
-				xml.AppendFormat(subclassOpen, type.AssemblyQualifiedName, table + proxy + discvalue);
+				xml.AppendFormat(subclassOpen, GetNHibernateName( type ), table + proxy + discvalue);
 
 				AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
 
@@ -463,7 +463,7 @@ namespace Castle.ActiveRecord
 		private void AddManyToOneMapping(PropertyInfo prop, BelongsToAttribute belongs, StringBuilder builder)
 		{
 			String name = String.Format(nameAttribute, prop.Name);
-			String klass = String.Format(classAttribute, prop.PropertyType.AssemblyQualifiedName);
+			String klass = String.Format(classAttribute, GetNHibernateName( prop.PropertyType ) );
 			String column = (belongs.Column == null ? "" : String.Format(columnAttribute, belongs.Column));
 			String cascade = (belongs.Cascade == null ? "" : String.Format(cascadeAttribute, belongs.Cascade));
 			String outer = (belongs.OuterJoin == null ? "" : String.Format(outerJoinAttribute, belongs.OuterJoin));
@@ -569,7 +569,7 @@ namespace Castle.ActiveRecord
 			// We need to do it wisely
 			if (column != null)
 			{
-				builder.AppendFormat(manyToMany, otherType.AssemblyQualifiedName, column);
+				builder.AppendFormat(manyToMany, GetNHibernateName( otherType ), column);
 			}
 		
 			builder.Append(bagClose);
@@ -590,15 +590,15 @@ namespace Castle.ActiveRecord
 
 			Type otherType = hasmany.MapType;
 
-			String column = hasmany.Column == null ? "" : hasmany.Column;
+			String key = hasmany.Key == null ? "" : hasmany.Key;
 
-			builder.AppendFormat(keyTag, column);
+			builder.AppendFormat(keyTag, key);
 
 			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
 			// We need to do it wisely
-			if (column != null)
+			if (key.Length > 0)
 			{
-				builder.AppendFormat(oneToMany, otherType.AssemblyQualifiedName);
+				builder.AppendFormat(oneToMany, GetNHibernateName( otherType ) );
 			}
 		
 			builder.Append(bagClose);
@@ -648,6 +648,11 @@ namespace Castle.ActiveRecord
 			}
 
 			return null;
+		}
+
+		private string GetNHibernateName( Type type )
+		{
+			return string.Format( "{0}, {1}", type.FullName, type.Assembly.GetName().Name );
 		}
 	}
 }
