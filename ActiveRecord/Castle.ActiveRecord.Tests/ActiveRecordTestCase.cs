@@ -101,6 +101,7 @@ namespace Castle.ActiveRecord.Tests
 			blog = Blog.Find(blog.Id);
 
 			Assert.IsNotNull(blog);
+			Assert.IsNotNull( blog.Posts, "posts collection is null" );
 			Assert.AreEqual(2, blog.Posts.Count);
 
 			foreach(Post post in blog.Posts)

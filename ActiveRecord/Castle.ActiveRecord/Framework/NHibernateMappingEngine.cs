@@ -586,12 +586,24 @@ namespace Castle.ActiveRecord
 			String orderBy = (hasmany.OrderBy == null ? "" : String.Format(orderByAttribute, hasmany.OrderBy));
 			String where = (hasmany.Where == null ? "" : String.Format(whereAttribute, hasmany.Where));
 
-			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
-
 			Type otherType = hasmany.MapType;
 
-			String key = hasmany.Key == null ? "" : hasmany.Key;
+			string key = "";
+			if( otherType.IsSubclassOf( typeof( ActiveRecordBase ) ) )
+			{
+				PropertyInfo otherKey = GetPropertyWithAttribute( otherType, typeof( BelongsToAttribute ) );
+				BelongsToAttribute belongs = GetBelongsToAttribute( otherKey );
+				if( otherKey != null && belongs != null && otherKey.PropertyType == prop.DeclaringType )
+				{
+					key = belongs.Column;
+				}
+			}
+			else
+			{
+				return;
+			}
 
+			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 			builder.AppendFormat(keyTag, key);
 
 			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
@@ -647,6 +659,19 @@ namespace Castle.ActiveRecord
 				}
 			}
 
+			return null;
+		}
+
+		private BelongsToAttribute GetBelongsToAttribute( PropertyInfo prop )
+		{
+			object[] attributes = prop.GetCustomAttributes( true );
+			foreach( object attribute in attributes )
+			{
+				if( attribute is BelongsToAttribute )
+				{
+					return attribute as BelongsToAttribute;
+				}
+			}
 			return null;
 		}
 
