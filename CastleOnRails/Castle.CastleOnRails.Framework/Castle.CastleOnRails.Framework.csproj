@@ -187,6 +187,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\HtmlHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\AbstractControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -191,6 +191,11 @@ namespace Castle.CastleOnRails.Framework
 						if (value == String.Empty) value = null;
 						args[i] = System.Convert.ToDouble( value );
 					}
+					else if (param.ParameterType == typeof(DateTime))
+					{
+						if (value == String.Empty) value = null;
+						args[i] = DateTime.Parse(value);
+					}
 					else if (param.ParameterType == typeof(Boolean))
 					{
 						// TODO: Add true/on/1 variants
