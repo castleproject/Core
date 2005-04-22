@@ -48,7 +48,7 @@ namespace Castle.Facilities.Db4oIntegration
 				throw new ConfigurationException("db4o facility requires an external configuration.");
 			}
 
-			Kernel.ComponentModelBuilder.AddContributor(new RequiresDb4oTransactionInspector());
+			Kernel.ComponentModelBuilder.AddContributor(new AutoDb4oTransactionInspector());
 			Kernel.ComponentModelBuilder.AddContributor(new ObjectContainerActivatorOverrider());
 
 			Kernel.AddComponent("db4o.transaction.autocommit.interceptor", typeof(AutoCommitInterceptor), typeof(AutoCommitInterceptor));

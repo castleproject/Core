@@ -18,7 +18,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests.Components
 
 	using com.db4o;
 
-	[RequiresDb4oTransaction]
+	[AutoDb4oTransaction]
 	public class BeerTransactionalDao : BeerDao
 	{
 		public BeerTransactionalDao(ObjectContainer objContainer) : base(objContainer)

@@ -124,6 +124,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AutoDb4oTransactionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AutoDb4oTransactionInspector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Db4oFacility.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -140,16 +150,6 @@
                 />
                 <File
                     RelPath = "ObjectContainerComponentActivator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RequiresDb4oTransactionAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RequiresDb4oTransactionInspector.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
