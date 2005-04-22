@@ -16,8 +16,11 @@ namespace Castle.Facilities.Db4oIntegration
 {
 	using System;
 
+	using Castle.Model;
+
 	using Castle.Services.Transaction;
-	
+
+	[PerThread]
 	public class Db4oTransactionManager : DefaultTransactionManager
 	{
 	}

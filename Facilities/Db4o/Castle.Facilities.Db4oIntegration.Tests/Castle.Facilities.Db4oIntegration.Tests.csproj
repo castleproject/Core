@@ -130,6 +130,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Castle.Facilities.Db4oIntegration.Tests.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "DaoTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -138,10 +142,6 @@
                     RelPath = "Db4oFacilityTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "db4oIntegration.Tests.config"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "TransactionalTestCase.cs"

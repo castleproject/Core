@@ -14,11 +14,10 @@
 
 namespace Castle.Facilities.Db4oIntegration
 {
-	using System;
-
 	using com.db4o;
 
 	using Castle.Services.Transaction;
+
 	
 	public sealed class ResourceObjectContainerAdapter : IResource
 	{

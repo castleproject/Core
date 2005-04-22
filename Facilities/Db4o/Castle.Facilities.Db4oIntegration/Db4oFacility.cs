@@ -64,7 +64,9 @@ namespace Castle.Facilities.Db4oIntegration
 
 			IDictionary properties = new Hashtable();
 
-			properties.Add(IdKey, config.Attributes[IdKey]);
+			String compKey = config.Attributes[IdKey];
+
+			properties.Add(IdKey, compKey);
 			properties.Add(DatabaseFileKey, config.Attributes[DatabaseFileKey]);
 
 			if (config.Attributes[HostNameKey] != null)
@@ -75,7 +77,7 @@ namespace Castle.Facilities.Db4oIntegration
 				properties.Add(PasswordKey, config.Attributes[PasswordKey]);
 			}
 
-			Kernel.AddComponentWithProperties(config.Attributes[IdKey], typeof(ObjectContainer), typeof(ObjectContainer), properties);
+			Kernel.AddComponentWithProperties(compKey, typeof(ObjectContainer), typeof(ObjectContainer), properties);
 		}
 	}
 }

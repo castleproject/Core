@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Db4oIntegration", "db4oIntegration\Db4oIntegration.csproj", "{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Db4oIntegration", "Castle.Facilities.Db4oIntegration\Castle.Facilities.Db4oIntegration.csproj", "{7491F9EB-B0D8-4E40-B5DE-C4CE1229C33A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Db4oIntegration.Tests", "db4oIntegration.Tests\Db4oIntegration.Tests.csproj", "{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Db4oIntegration.Tests", "Castle.Facilities.Db4oIntegration.Tests\Castle.Facilities.Db4oIntegration.Tests.csproj", "{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -23,6 +23,10 @@ Global
 		{EC7ABF4F-A17B-4607-BD56-2C6DA35340C0}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		default.build = default.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

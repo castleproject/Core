@@ -24,9 +24,10 @@ namespace Castle.Facilities.Db4oIntegration
 	
 	public class AutoCommitInterceptor : IMethodInterceptor
 	{
+		private static readonly String ContextKey = "db40.transaction.context";
+
 		private readonly IKernel _kernel;
 		private readonly ObjectContainer _objContainer;
-		private const string ContextKey = "db40.transaction.context";
 
 		public AutoCommitInterceptor(IKernel kernel, ObjectContainer objContainer)
 		{
@@ -36,16 +37,14 @@ namespace Castle.Facilities.Db4oIntegration
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-			EnlistSessionIfHasTransactionActive();
+			EnlistObjectContainerIfHasTransactionActive();
 
 			return invocation.Proceed(args);
 		}
 
-		private bool EnlistSessionIfHasTransactionActive()
+		private void EnlistObjectContainerIfHasTransactionActive()
 		{
-			if (!_kernel.HasComponent(typeof(ITransactionManager))) return false;
-
-			bool enlisted = false;
+			if (!_kernel.HasComponent(typeof(ITransactionManager))) return;
 
 			ITransactionManager manager = (ITransactionManager) _kernel[ typeof(ITransactionManager) ];
 
@@ -57,13 +56,10 @@ namespace Castle.Facilities.Db4oIntegration
 				{
 					transaction.Context[ContextKey] = true;
 					transaction.Enlist(new ResourceObjectContainerAdapter(_objContainer));
-					enlisted = true;
 				}
 			}
 
 			_kernel.ReleaseComponent(manager);
-
-			return enlisted;
 		}
 	}
 }
