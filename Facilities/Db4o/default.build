@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="nhibernate-facility" default="build">
+    
+    <!-- This build file inherits common properties from the ../facilities.build -->
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="library.dir" value="${base.dir}/lib" />
+	<property name="doc.dir" value="${base.dir}/docs" />
+	<property name="src.dir" value="${base.dir}/Db4oIntegration" />
+
+	<property name="test.src.dir" value="${base.dir}/Db4oIntegration.Tests" />
+	<property name="name" value="Castle.Facilities.Db4oIntegration" />
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${name}.Tests.dll" />
+
+	<property name="version" value="beta-2" />
+
+	<target name="clean">
+		<delete failonerror="false">
+			<fileset basedir="${bin.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="init" depends="clean">
+		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
+		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
+		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
+		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
+		<copy file="${services.bin.dir}/Castle.Services.Transaction.dll" todir="${bin.dir}" />
+		<copy file="../AutomaticTransactionManagement/bin/Castle.Facilities.AutomaticTransactionManagement.dll" todir="${bin.dir}" />
+		<copy todir="${bin.dir}">
+			<fileset basedir="${library.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build" depends="init,tests.run" />
+
+	<target name="compile" depends="init">
+		<csc 
+			define="STRONG"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
+			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+
+			<sources basedir="${src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/*.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="tests.compile" depends="compile">
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name}">
+			
+			<sources basedir="${test.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/*.dll" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="tests.run" depends="tests.compile">
+		<nunit2 failonerror="false">
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+	</target>
+	
+	<target name="dist">
+		<zip zipfile="${name}.src.zip">
+			<fileset basedir="${base.dir}">
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="Changes.txt" />				
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${src.dir}/**/*.*" />
+				<include name="${test.src.dir}/**/*.*" />
+				<include name="${library.dir}/**/*.*" />
+				
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+			</fileset>
+		</zip>
+		<zip zipfile="${name}.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${bin.dir}/${assembly.name}" />				
+				<include name="${library.dir}/**/*.*" />
+				<include name="License.txt" />				
+				<include name="Readme.txt" />				
+				<include name="Changes.txt" />				
+				<include name="${name}.src.zip" />
+			</fileset>
+		</zip>
+		<delete file="${name}.src.zip" />
+	</target>
+
+</project>

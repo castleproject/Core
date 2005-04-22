@@ -1,4 +1,3 @@
-using Bamboo.Prevalence.Util;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,15 +19,16 @@ namespace Castle.Facilities.Prevalence
 	using System.Collections.Specialized;
 
 	using Bamboo.Prevalence;
+	using Bamboo.Prevalence.Util;
 
 	using Castle.MicroKernel;
-
+	using Castle.MicroKernel.Facilities;
 	using Castle.Model.Configuration;
 
 	/// <summary>
 	/// Summary description for PrevalenceFacility.
 	/// </summary>
-	public class PrevalenceFacility : IFacility
+	public class PrevalenceFacility : AbstractFacility
 	{
 		private static readonly String IdKey = "id";
 		private static readonly String IntervalKey = "snapshotIntervalInHours";
@@ -43,26 +43,19 @@ namespace Castle.Facilities.Prevalence
 		public static readonly String CleanupPolicyComponentPropertyKey = "prevalence.cleanupPolicyComponent";
 		public static readonly String SnapShotTakerComponentPropertyKey = "prevalence.snapshot.taker";
 
-		private IKernel _kernel;
-		private IConfiguration _facilityConfig;
-
 		public PrevalenceFacility()
 		{
 		}
 
 		#region IFacility implementation
 
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
+		protected override void Init()
 		{
-			_kernel = kernel;
-			_facilityConfig = facilityConfig;
-
-
 			RegisterExtensions();
 			RegisterEngines();			
 		}
 
-		public void Terminate()
+		public override void Dispose()
 		{
 			IConfiguration engines = GetEnginesConfig();
 			
@@ -77,7 +70,7 @@ namespace Castle.Facilities.Prevalence
 
 		private IConfiguration GetEnginesConfig()
 		{
-			return _facilityConfig.Children["engines"];
+			return FacilityConfig.Children["engines"];
 		}
 
 		protected void RegisterEngines()
@@ -92,7 +85,7 @@ namespace Castle.Facilities.Prevalence
 
 		protected void RegisterExtensions()
 		{
-			_kernel.ComponentModelBuilder.AddContributor( 
+			Kernel.ComponentModelBuilder.AddContributor( 
 				new PrevalenceActivatorOverriderModelInspector() );
 		}
 
@@ -116,7 +109,7 @@ namespace Castle.Facilities.Prevalence
 			
 			ConfigureSnapshot(engineConfig, properties);
 
-			_kernel.AddComponentWithProperties(engineKey, typeof(PrevalenceEngine), properties);
+			Kernel.AddComponentWithProperties(engineKey, typeof(PrevalenceEngine), properties);
 
 			RegisterSystem(engineKey, systemId, systemType);
 		}
@@ -129,7 +122,7 @@ namespace Castle.Facilities.Prevalence
 			{
 				if (engineConfig.Attributes["cleanupPolicyComponent"] == null)
 				{
-					_kernel.AddComponentInstance(CleanupPolicyComponentPropertyKey, CleanUpAllFilesPolicy.Default);
+					Kernel.AddComponentInstance(CleanupPolicyComponentPropertyKey, CleanUpAllFilesPolicy.Default);
 				}
 
 				properties.Add(SnapshotPeriodPropertyKey, period);
@@ -182,7 +175,7 @@ namespace Castle.Facilities.Prevalence
 
 			properties[EngineIdPropertyKey] = engineKey;
 
-			_kernel.AddComponentWithProperties(systemId, systemType, properties);
+			Kernel.AddComponentWithProperties(systemId, systemType, properties);
 		}
 
 		protected void TakeSnapshotIfRequired(IConfiguration engineConfig)
@@ -191,7 +184,7 @@ namespace Castle.Facilities.Prevalence
 
 			if (RequiresSnapshots(period))
 			{
-				PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes[IdKey]];
+				PrevalenceEngine engine = (PrevalenceEngine) Kernel[engineConfig.Attributes[IdKey]];
 
 				engine.TakeSnapshot();
 			}
@@ -199,7 +192,7 @@ namespace Castle.Facilities.Prevalence
 
 		protected void HandsOffFiles(IConfiguration engineConfig)
 		{
-			PrevalenceEngine engine = (PrevalenceEngine) _kernel[engineConfig.Attributes[IdKey]];
+			PrevalenceEngine engine = (PrevalenceEngine) Kernel[engineConfig.Attributes[IdKey]];
 
 			engine.HandsOffOutputLog();
 		}

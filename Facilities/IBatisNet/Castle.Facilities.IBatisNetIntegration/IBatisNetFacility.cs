@@ -29,15 +29,13 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 	using Castle.Model;
 	using Castle.Model.Configuration;
-
-	using Castle.MicroKernel;
-
+	using Castle.MicroKernel.Facilities;
 	using Castle.Services.Transaction;
 
 	using IBatisNet.DataMapper;
 
 
-	public class IBatisNetFacility : IFacility
+	public class IBatisNetFacility : AbstractFacility
 	{
 		public static readonly string FILE_CONFIGURATION = "_IBATIS_FILE_CONFIGURATION_";
 
@@ -49,15 +47,15 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		#region IFacility Members
 
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
+		protected override void Init()
 		{
-			if (facilityConfig == null)
+			if (FacilityConfig == null)
 			{
 				throw new ConfigurationException(
 					"The IBatisNetFacility requires an external configuration");
 			}
 
-			IConfiguration factoriesConfig = facilityConfig.Children["sqlMap"];
+			IConfiguration factoriesConfig = FacilityConfig.Children["sqlMap"];
 
 			if (factoriesConfig == null)
 			{
@@ -65,26 +63,22 @@ namespace Castle.Facilities.IBatisNetIntegration
 					"You need to configure at least one sqlMap for IBatisNetFacility");
 			}
 
-			kernel.ComponentModelBuilder.AddContributor( new AutomaticSessionInspector() );
+			Kernel.ComponentModelBuilder.AddContributor( new AutomaticSessionInspector() );
 
-			kernel.AddComponent( 
+			Kernel.AddComponent( 
 				"IBatis.session.interceptor", 
 				typeof(AutomaticSessionInterceptor) );
 
-			kernel.AddComponent( 
+			Kernel.AddComponent( 
 				"IBatis.transaction.manager", 
 				typeof(ITransactionManager), typeof(DataMapperTransactionManager) );
 
-			ConfigureFactories(kernel, factoriesConfig);
-		}
-
-		public void Terminate()
-		{
+			ConfigureFactories(factoriesConfig);
 		}
 
 		#endregion
 
-		private void ConfigureFactories(IKernel kernel, IConfiguration config)
+		private void ConfigureFactories(IConfiguration config)
 		{
 			// A name for this sqlMap
 			// sqlServerMap
@@ -101,7 +95,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 			model.LifestyleType = LifestyleType.Singleton;
 			model.CustomComponentActivator = typeof( SqlMapActivator );
 
-			kernel.AddCustomComponent( model );
+			Kernel.AddCustomComponent( model );
 		}
 	}
 }

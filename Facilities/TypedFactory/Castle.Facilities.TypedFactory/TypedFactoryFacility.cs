@@ -1,3 +1,4 @@
+
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,15 +22,14 @@ namespace Castle.Facilities.TypedFactory
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
 
 	/// <summary>
 	/// Summary description for TypedFactoryFacility.
 	/// </summary>
-	public class TypedFactoryFacility : IFacility
+	public class TypedFactoryFacility : AbstractFacility
 	{
-		private IKernel _kernel;
-
 		public void AddTypedFactoryEntry( FactoryEntry entry )
 		{
 			ComponentModel model = 
@@ -39,19 +39,17 @@ namespace Castle.Facilities.TypedFactory
 			model.ExtendedProperties["typed.fac.entry"] = entry;
 			model.Interceptors.Add( new InterceptorReference( typeof(FactoryInterceptor) ) );
 
-			_kernel.AddCustomComponent( model );
+			Kernel.AddCustomComponent( model );
 		}
 
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
+		protected override void Init()
 		{
-			_kernel = kernel;
-
-			_kernel.AddComponent( "typed.fac.interceptor", typeof(FactoryInterceptor) );
+			Kernel.AddComponent( "typed.fac.interceptor", typeof(FactoryInterceptor) );
 
 			ITypeConverter converter = (ITypeConverter)
-				_kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+				Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 
-			AddFactories(facilityConfig, converter);
+			AddFactories(FacilityConfig, converter);
 		}
 
 		protected virtual void AddFactories(IConfiguration facilityConfig, ITypeConverter converter)
@@ -77,10 +75,6 @@ namespace Castle.Facilities.TypedFactory
 					}
 				}
 			}
-		}
-
-		public void Terminate()
-		{
 		}
 	}
 }

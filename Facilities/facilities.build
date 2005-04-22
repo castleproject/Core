@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="container" default="build">
+<project name="facilities" default="build">
 
 	<property name="base.dir" value="." />
 	<property name="name" value="Facilities" />
@@ -15,7 +15,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, prevalence, autotransaction, nhibernate, ibatis, aspectsharp, typedfactory, batchregistration, startable" />
+	<target name="build" depends="init, prevalence, autotransaction, nhibernate, ibatis, aspectsharp, typedfactory, batchregistration, startable, db4o" />
 	
 	<target name="init">
 
@@ -52,6 +52,10 @@
 	<target name="batchregistration">
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="build" />
 	</target>
+	
+	<target name="db4o">
+		<nant buildfile="db4o/default.build" inheritall="true" target="build" />
+	</target>
 
 	<target name="dist">
 		<nant buildfile="Prevalence/default.build" inheritall="true" target="dist" />
@@ -62,6 +66,7 @@
 		<nant buildfile="BatchRegistration/default.build" inheritall="true" target="dist" />
 		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Startable/default.build" inheritall="true" target="dist" />
+		<nant buildfile="db4o/default.build" inheritall="true" target="dist" />
 		
 		<zip zipfile="Facilities.${version}.zip">
 			<fileset basedir="${base.dir}">

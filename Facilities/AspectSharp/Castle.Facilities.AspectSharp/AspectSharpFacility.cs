@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using AspectSharp.Lang.AST;
-using Castle.Model;
 using AspectEngine = AspectSharp.AspectEngine;
 using AspectSharp.Builder;
 
@@ -21,11 +20,11 @@ namespace Castle.Facilities.AspectSharp
 {
 	using System;
 
-	using Castle.Model.Configuration;
-
+	using Castle.Model;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
 
-	public class AspectSharpFacility : IFacility
+	public class AspectSharpFacility : AbstractFacility
 	{
 		private AspectEngine _engine;
 
@@ -33,28 +32,24 @@ namespace Castle.Facilities.AspectSharp
 		{
 		}
 
-		public void Init(IKernel kernel, IConfiguration facilityConfig)
+		protected override void Init()
 		{
-			if (facilityConfig == null) return;
+			if (FacilityConfig == null) return;
 
-			RegisterAspectEngine(kernel, facilityConfig);
-			RegisterInterceptor(kernel);
+			RegisterAspectEngine();
+			RegisterInterceptor();
 
-			kernel.ProxyFactory = new AopProxyFactory();
+			Kernel.ProxyFactory = new AopProxyFactory();
 
 			// Request the engine:
-			_engine = (AspectEngine) kernel[ typeof(AspectEngine) ];
+			_engine = (AspectEngine) Kernel[ typeof(AspectEngine) ];
 
-			kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
-		}
-		
-		public void Terminate()
-		{
+			Kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
 		}
 
-		private void RegisterAspectEngine(IKernel kernel, IConfiguration facilityConfig)
+		private void RegisterAspectEngine()
 		{
-			String contents = facilityConfig.Value;
+			String contents = FacilityConfig.Value;
 
 			// By now we're supporting only AspectLanguageEngineBuilder
 
@@ -67,12 +62,12 @@ namespace Castle.Facilities.AspectSharp
 			model.ExtendedProperties.Add("builder", builder);
 			model.CustomComponentActivator = typeof(AspectEngineActivator);
 
-			kernel.AddCustomComponent( model );
+			Kernel.AddCustomComponent( model );
 		}
 
-		private void RegisterInterceptor(IKernel kernel)
+		private void RegisterInterceptor()
 		{
-			kernel.AddComponent( "aspectsharp.interceptor", typeof(AopInterceptor) );
+			Kernel.AddComponent( "aspectsharp.interceptor", typeof(AopInterceptor) );
 		}
 
 		private void OnComponentRegistered(String key, IHandler handler)
