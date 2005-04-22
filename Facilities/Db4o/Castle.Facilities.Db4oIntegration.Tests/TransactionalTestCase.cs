@@ -101,7 +101,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 		{
 			Thread[] threads = new Thread[ThreadsNumber];
 
-			for(int i = 0; i < threads.Length; i++)
+			for (int i = 0; i < threads.Length; i++)
 			{
 				threads[i] = new Thread(new ThreadStart(BeerFactory));
 			}
@@ -114,7 +114,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 
 		private void Join(Thread[] threads)
 		{
-			foreach(Thread t in threads)
+			foreach (Thread t in threads)
 			{
 				t.Join();
 			}
@@ -122,7 +122,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 
 		private void Start(Thread[] threads)
 		{
-			foreach(Thread t in threads)
+			foreach (Thread t in threads)
 			{
 				t.Start();
 			}
@@ -130,7 +130,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 
 		public void BeerFactory()
 		{
-			for(int i = 0; i < InvocationsNumber; i++)
+			for (int i = 0; i < InvocationsNumber; i++)
 			{
 				AddToBox();
 			}
