@@ -58,6 +58,15 @@ namespace Castle.Facilities.Db4oIntegration
 			ConfigureAndAddContainer();
 		}
 
+		public override void Dispose()
+		{
+			ObjectContainer objContainer = (ObjectContainer) Kernel[typeof(ObjectContainer)];
+
+			objContainer.close();
+
+			base.Dispose();
+		}
+
 		private void ConfigureAndAddContainer()
 		{
 			IConfiguration config = FacilityConfig.Children["container"];

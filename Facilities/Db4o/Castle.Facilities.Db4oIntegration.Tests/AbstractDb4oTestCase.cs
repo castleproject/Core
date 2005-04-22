@@ -60,9 +60,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 		[TearDown]
 		public void Clean()
 		{
-			ObjectContainer db4oContainer = (ObjectContainer) Container["db4o.container"];
-
-			db4oContainer.close();
+			_container.Dispose();
 
 			File.Delete("dump.yap");
 		}
