@@ -43,6 +43,7 @@ namespace Castle.CastleOnRails.Framework
 		private String _controllerName;
 		private String _selectedViewName;
 		private String _layoutName;
+		private String _evaluatedAction;
 		private IDictionary _helpers = null;
 
 		/// <summary>
@@ -88,6 +89,14 @@ namespace Castle.CastleOnRails.Framework
 		{
 			get { return _layoutName; }
 			set { _layoutName = value; }
+		}
+
+		/// <summary>
+		/// Returns the name of the action being processed
+		/// </summary>
+		public String Action
+		{
+			get { return _evaluatedAction; }
 		}
 
 		/// <summary>
@@ -252,12 +261,6 @@ namespace Castle.CastleOnRails.Framework
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="filterFactory"></param>
-		/// <param name="areaName"></param>
-		/// <param name="controllerName"></param>
-		/// <param name="actionName"></param>
-		/// <param name="viewEngine"></param>
 		public void Process( IRailsEngineContext context, IFilterFactory filterFactory,
 			String areaName, String controllerName, String actionName, IViewEngine viewEngine )
 		{
@@ -303,6 +306,8 @@ namespace Castle.CastleOnRails.Framework
 		/// <param name="action">Action name</param>
 		protected virtual void InternalSend( String action )
 		{
+			_evaluatedAction = action;
+
 			// Specifies the default view for this area/controller/action
 			RenderView( action );
 

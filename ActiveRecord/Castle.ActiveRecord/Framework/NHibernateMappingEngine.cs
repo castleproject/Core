@@ -57,7 +57,7 @@ namespace Castle.ActiveRecord
 		private static readonly String manyToMany = "\r\n<many-to-many class=\"{0}\" {1} />";
 		private static readonly String cascadeAttribute = "cascade=\"{0}\" ";
 		private static readonly String outerJoinAttribute = "outer-join=\"{0}\" ";
-		private static readonly String accessAttribute = "access=\"{0}\" ";
+//		private static readonly String accessAttribute = "access=\"{0}\" ";
 		private static readonly String unsavedValueAttribute = "unsaved-value=\"{0}\" ";
 		private static readonly String constrainedAttribute = "constrained=\"{0}\" ";
 		private static readonly String mapOpen = "\r\n<map name=\"{0}\" {1}>";

@@ -674,6 +674,12 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 		private void okButton_Click(object sender, System.EventArgs e)
 		{
+			if (className.Text.Length == 0 || className.Text.IndexOf(' ') != -1)
+			{
+				MessageBox.Show("Invalid class name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
 			// What's common can be updated without any problems:
 
 			SaveCommonFields();
@@ -688,12 +694,8 @@ namespace Castle.ActiveRecord.Generator.Dialogs
 
 			// Now here, semantic matters
 
-//			if (_descriptor is ActiveRecordDescriptorSubClass ||
-//				_descriptor is ActiveRecordDescriptorJoinedSubClass )
-//			{
-//			}
-
 			DialogResult = DialogResult.OK;
+
 			Close();
 		}
 

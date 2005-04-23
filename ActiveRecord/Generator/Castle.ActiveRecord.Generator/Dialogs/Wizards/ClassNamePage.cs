@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 	using Castle.ActiveRecord.Generator.Components;
 	using Castle.ActiveRecord.Generator.Components.Database;
 
-	public class ClassNamePage : Castle.ActiveRecord.Generator.Dialogs.Wizards.AbstractControlPage
+	public class ClassNamePage : AbstractControlPage
 	{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox className;
@@ -79,6 +79,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			this.className.Size = new System.Drawing.Size(232, 20);
 			this.className.TabIndex = 1;
 			this.className.Text = "";
+			this.className.TextChanged += new System.EventHandler(this.className_TextChanged);
 			// 
 			// ClassNamePage
 			// 
@@ -93,7 +94,7 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 
 		public override bool IsValid()
 		{
-			return className.Text.Trim().Length != 0;
+			return className.Text.Trim().Length != 0 && className.Text.IndexOf(' ') == -1;
 		}
 
 		public override void Activated(System.Collections.IDictionary context)
@@ -117,6 +118,11 @@ namespace Castle.ActiveRecord.Generator.Dialogs.Wizards
 			ActiveRecordDescriptor desc = context["ardesc"] as ActiveRecordDescriptor;
 
 			desc.ClassName = className.Text;
+		}
+
+		private void className_TextChanged(object sender, System.EventArgs e)
+		{
+			RaiseChange(sender, e);
 		}
 	}
 }

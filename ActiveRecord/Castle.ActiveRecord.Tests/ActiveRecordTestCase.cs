@@ -222,5 +222,35 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( blog.Name, blogs[0].Name );
 			Assert.AreEqual( blog.Author, blogs[0].Author );
 		}
+
+		public void Delete()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+
+			blog.Delete();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+		}
 	}
 }

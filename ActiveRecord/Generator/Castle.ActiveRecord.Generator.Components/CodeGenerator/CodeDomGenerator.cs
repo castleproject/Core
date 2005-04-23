@@ -131,6 +131,12 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 				codeAttribute = new CodeAttributeDeclaration("PrimaryKey"); 
 				codeAttribute.Arguments.Add( new CodeAttributeArgument( 
 					new CodeSnippetExpression("PrimaryKeyType.Native") ) );
+			
+				if (needExplicitColumnName)
+				{
+					codeAttribute.Arguments.Add( new CodeAttributeArgument(
+						new CodeSnippetExpression(Quote(property.ColumnName)) ) );
+				}
 			}
 			else 
 			{
@@ -146,12 +152,12 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 					codeAttribute.Arguments.Add( new CodeAttributeArgument("Update", 
 						new CodeSnippetExpression("false") ) );
 				}
-			}
 
-			if (needExplicitColumnName)
-			{
-				codeAttribute.Arguments.Add( new CodeAttributeArgument("Column",
-					new CodeSnippetExpression(Quote(property.ColumnName)) ) );
+				if (needExplicitColumnName)
+				{
+					codeAttribute.Arguments.Add( new CodeAttributeArgument("Column",
+						new CodeSnippetExpression(Quote(property.ColumnName)) ) );
+				}
 			}
 
 			memberProperty.CustomAttributes.Add( codeAttribute );
@@ -272,7 +278,6 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 
 		private void AddOperations(ActiveRecordDescriptor descriptor, CodeTypeDeclaration declaration)
 		{
-			// ActiveRecordBase.DeleteAll( typeof(Blog) );
 			CodeMemberMethod deleteAll = new CodeMemberMethod();
 			deleteAll.Name = "DeleteAll";
 			deleteAll.Attributes = MemberAttributes.Static|MemberAttributes.Public;
@@ -281,18 +286,15 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 					"DeleteAll", new CodeTypeOfExpression(descriptor.ClassName) ) ));
 			declaration.Members.Add(deleteAll);
 
-			// return (Blog[]) ActiveRecordBase.FindAll( typeof(Blog) );
 			CodeMemberMethod findAll = new CodeMemberMethod();
 			findAll.Name = "FindAll";
 			findAll.ReturnType = new CodeTypeReference( descriptor.ClassName, 1 );
 			findAll.Attributes = MemberAttributes.Static|MemberAttributes.Public;
-			findAll.Statements.Add( new CodeExpressionStatement(
+			findAll.Statements.Add( new CodeMethodReturnStatement(
 				new CodeCastExpression(findAll.ReturnType,
 				new CodeMethodInvokeExpression(new CodeTypeReferenceExpression("ActiveRecordBase"), 
 				"FindAll", new CodeTypeOfExpression(descriptor.ClassName) ) )));
 			declaration.Members.Add(findAll);
-
-			// return (Blog) ActiveRecordBase.FindByPrimaryKey( typeof(Blog), id );
 
 			CodeMemberMethod find = new CodeMemberMethod();
 
@@ -303,7 +305,7 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 				find.ReturnType = new CodeTypeReference( descriptor.ClassName );
 				find.Attributes = MemberAttributes.Static|MemberAttributes.Public;
 				find.Parameters.Add( new CodeParameterDeclarationExpression(primaryKey.PropertyType, primaryKey.PropertyName) );
-				find.Statements.Add( new CodeExpressionStatement(
+				find.Statements.Add( new CodeMethodReturnStatement(
 					new CodeCastExpression(find.ReturnType,
 					new CodeMethodInvokeExpression(new CodeTypeReferenceExpression("ActiveRecordBase"), 
 					"FindByPrimaryKey", new CodeTypeOfExpression(descriptor.ClassName), new CodeArgumentReferenceExpression(primaryKey.PropertyName) ) )));
@@ -315,6 +317,5 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 		{
 			return String.Format("\"{0}\"", value);
 		}
-
 	}
 }
