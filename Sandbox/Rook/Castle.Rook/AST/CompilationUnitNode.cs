@@ -12,29 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Parse.Tests
+namespace Castle.Rook.AST
 {
 	using System;
 
-	using NUnit.Framework;
-
-	[TestFixture]
-	public class AssignmentsTestCase
+	public class CompilationUnitNode
 	{
-		[Test]
-		public void SimpleAssignment()
-		{
-			String contents = "x = 10;";
-
-			RookParser.ParseContents(contents);
-		}
-
-		[Test]
-		public void MultipleAssignments()
-		{
-			String contents = "x, y = 10, 11;";
-
-			RookParser.ParseContents(contents);
-		}
 	}
 }

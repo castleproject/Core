@@ -25,13 +25,13 @@ tokens
 	CLASS = "class";
 }
 
-compilation_unit returns [CompilationUnit unit] 
+compilation_unit returns [CompilationUnitNode unit] 
 	{
-		unit = new CompilationUnit();
+		unit = new CompilationUnitNode();
 	}
 	:	
 	(options { greedy=true;}: EOS!)*			 
-	(statement_list[unit.Statements])*  
+	(statement_list)*  
 	EOF!
 	;
 
@@ -39,30 +39,45 @@ literal
 	:	
 	INTEGER_LITERAL				
 	;
-
+	
 identifier!
 	:	
 	id:IDENTIFIER 
-	{ 
-	}
-	;
-
-statement_list [StatementCollection stmts] 
-	:	
-	(statement[stmts])+
-	;
-
-statement [StatementCollection stmts]
-	:	
-	declaration_statement[stmts] (SEMI!)?
-	;
-
-declaration_statement [StatementCollection stmts]
-	:	
-	local_variable_declaration[stmts]
 	;
 	
-local_variable_declaration [StatementCollection stmts]
+// ***** A.2.1 Basic concepts *****
+type_name
+	:	
+	namespace_or_type_name
+	;
+	
+namespace_or_type_name
+	:	
+	simple_name (DOT! simple_name)*
+	;
+
+simple_name
+	:	identifier
+//		{#simple_name = #([QualIdent], id);}
+	;
+
+
+statement_list 
+	:	
+	(statement)+
+	;
+
+statement 
+	:	
+	declaration_statement (SEMI!)?
+	;
+
+declaration_statement 
+	:	
+	local_variable_declaration
+	;
+	
+local_variable_declaration 
 	:	
 	(multiple_local_variable_declarators)=>multiple_local_variable_declarators
 	{ 
@@ -73,7 +88,7 @@ local_variable_declaration [StatementCollection stmts]
 	
 multiple_local_variable_declarators
 	:	
-	identifier (COMMA! identifier)*
+	type:type_name identifier (COMMA! (type2:type_name)? identifier)*
 	(
 		ASSIGN!
 		expression_list
@@ -82,7 +97,7 @@ multiple_local_variable_declarators
 
 local_variable_declarator!
 	:	
-	id:identifier (ASSIGN! expression)?
+	type:type_name id:identifier (ASSIGN! expression)?
 	;
 
 literal_expression
@@ -90,9 +105,16 @@ literal_expression
 	literal
 	;
 
+assign_expression
+	:
+	id:identifier ASSIGN expression
+	;
+
 expression
 	:	
 	literal_expression
+	|
+	assign_expression
 	;
 	
 expression_list
@@ -110,7 +132,7 @@ class RookLexer extends Lexer;
 
 options 
 {
-	k=2;                       // four characters of lookahead
+	k=4;                       // four characters of lookahead
 	charVocabulary='\u0003'..'\u7FFF'; 	// to avoid hanging eof on comments (eof = -1)
     importVocab=Rook;
 	testLiterals=false;

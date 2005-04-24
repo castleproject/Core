@@ -42,18 +42,19 @@ namespace Castle.Rook.Parse
 		public const int EOS = 5;
 		public const int INTEGER_LITERAL = 6;
 		public const int IDENTIFIER = 7;
-		public const int SEMI = 8;
-		public const int COMMA = 9;
-		public const int ASSIGN = 10;
-		public const int NEW_LINE = 11;
-		public const int NEW_LINE_CHARACTER = 12;
-		public const int NOT_NEW_LINE = 13;
-		public const int WHITESPACE = 14;
-		public const int SINGLE_LINE_COMMENT = 15;
-		public const int IDENTIFIER_START_CHARACTER = 16;
-		public const int IDENTIFIER_PART_CHARACTER = 17;
-		public const int NUMERIC_LITERAL = 18;
-		public const int DECIMAL_DIGIT = 19;
+		public const int DOT = 8;
+		public const int SEMI = 9;
+		public const int COMMA = 10;
+		public const int ASSIGN = 11;
+		public const int NEW_LINE = 12;
+		public const int NEW_LINE_CHARACTER = 13;
+		public const int NOT_NEW_LINE = 14;
+		public const int WHITESPACE = 15;
+		public const int SINGLE_LINE_COMMENT = 16;
+		public const int IDENTIFIER_START_CHARACTER = 17;
+		public const int IDENTIFIER_PART_CHARACTER = 18;
+		public const int NUMERIC_LITERAL = 19;
+		public const int DECIMAL_DIGIT = 20;
 		
 		public RookLexer(Stream ins) : this(new ByteBuffer(ins))
 		{
@@ -250,12 +251,12 @@ tryAgain:
 				break;
 			}
 			default:
-				if (((cached_LA1=='\r') && (cached_LA2=='\n'))&&( LA(2)=='\u000A' ))
+				if (((cached_LA1=='\r') && (cached_LA2=='\n') && (true) && (true))&&( LA(2)=='\u000A' ))
 				{
 					match('\u000D');
 					match('\u000A');
 				}
-				else if ((cached_LA1=='\r') && (true)) {
+				else if ((cached_LA1=='\r') && (true) && (true) && (true)) {
 					match('\u000D');
 				}
 			else
@@ -337,7 +338,7 @@ tryAgain:
 		_ttype = WHITESPACE;
 		
 		{ // ( ... )+
-			int _cnt39=0;
+			int _cnt46=0;
 			for (;;)
 			{
 				switch ( cached_LA1 )
@@ -369,12 +370,12 @@ tryAgain:
 				}
 				default:
 				{
-					if (_cnt39 >= 1) { goto _loop39_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt46 >= 1) { goto _loop46_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				break; }
-				_cnt39++;
+				_cnt46++;
 			}
-_loop39_breakloop:			;
+_loop46_breakloop:			;
 		}    // ( ... )+
 		_ttype = Token.SKIP;
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -400,11 +401,11 @@ _loop39_breakloop:			;
 				}
 				else
 				{
-					goto _loop42_breakloop;
+					goto _loop49_breakloop;
 				}
 				
 			}
-_loop42_breakloop:			;
+_loop49_breakloop:			;
 		}    // ( ... )*
 		{
 			if ((tokenSet_1_.member(cached_LA1)))
@@ -439,11 +440,11 @@ _loop42_breakloop:			;
 				}
 				else
 				{
-					goto _loop46_breakloop;
+					goto _loop53_breakloop;
 				}
 				
 			}
-_loop46_breakloop:			;
+_loop53_breakloop:			;
 		}    // ( ... )*
 		_ttype = testLiteralsTable(_ttype);
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -575,7 +576,7 @@ _loop46_breakloop:			;
 		_ttype = NUMERIC_LITERAL;
 		
 		{ // ( ... )+
-			int _cnt53=0;
+			int _cnt60=0;
 			for (;;)
 			{
 				if (((cached_LA1 >= '0' && cached_LA1 <= '9')))
@@ -584,12 +585,12 @@ _loop46_breakloop:			;
 				}
 				else
 				{
-					if (_cnt53 >= 1) { goto _loop53_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt60 >= 1) { goto _loop60_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				
-				_cnt53++;
+				_cnt60++;
 			}
-_loop53_breakloop:			;
+_loop60_breakloop:			;
 		}    // ( ... )+
 		
 				_ttype = INTEGER_LITERAL;

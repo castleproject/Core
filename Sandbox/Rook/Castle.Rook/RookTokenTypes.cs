@@ -14,9 +14,10 @@ namespace Castle.Rook.Parse
 		public const int EOS = 5;
 		public const int INTEGER_LITERAL = 6;
 		public const int IDENTIFIER = 7;
-		public const int SEMI = 8;
-		public const int COMMA = 9;
-		public const int ASSIGN = 10;
+		public const int DOT = 8;
+		public const int SEMI = 9;
+		public const int COMMA = 10;
+		public const int ASSIGN = 11;
 		
 	}
 }

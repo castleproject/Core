@@ -15,12 +15,11 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
 
-	public class StatementCollection : CollectionBase
+	public class IdentifierNode
 	{
-		public StatementCollection()
+		public IdentifierNode()
 		{
 		}
 	}

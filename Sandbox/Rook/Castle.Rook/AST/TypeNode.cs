@@ -12,33 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook
+namespace Castle.Rook.AST
 {
 	using System;
-	using System.IO;
-
-	using antlr;
-
-	using Castle.Rook.Parse;
-	using Castle.Rook.AST;
 
 
-	public class RookParser : RookLangParser
+	public class TypeNode
 	{
-		public RookParser(TokenStream lexer) : base(lexer)
+		public TypeNode()
 		{
-		}
-
-		public CompilationUnitNode Parse()
-		{
-			return compilation_unit();
-		}
-
-		public static CompilationUnitNode ParseContents(String contents)
-		{
-			RookLexer lexer = new RookLexer( new StringReader(contents) );
-			RookParser parser = new RookParser(lexer);
-			return parser.Parse();
 		}
 	}
 }

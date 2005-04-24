@@ -12,15 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.AST
+namespace Castle.Rook.Services
 {
 	using System;
 
 
-	public class Statement
+	public class IdentifierNameValidation
 	{
-		public Statement()
+		private static readonly String[] reserved = new string[]
+			{
+				"self", "int", "int32", "int16", "string", "String"
+			};
+
+		public bool IsValidIdentifier(String name)
 		{
+			foreach(String reservedId in reserved)
+			{
+				if (reservedId.Equals(name)) return false;
+			}
+
+			return true;
 		}
 	}
 }
