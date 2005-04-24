@@ -187,6 +187,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\EffectsFatHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\HtmlHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

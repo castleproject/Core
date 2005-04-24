@@ -388,6 +388,7 @@ namespace Castle.CastleOnRails.Framework
 			_helpers[ typeof(AjaxHelper).Name ] = new AjaxHelper();
 			_helpers[ typeof(DateFormatHelper).Name ] = new DateFormatHelper();
 			_helpers[ typeof(HtmlHelper).Name ] = new HtmlHelper();
+			_helpers[ typeof(EffectsFatHelper).Name ] = new EffectsFatHelper(); 
 		}
 
 		#endregion
