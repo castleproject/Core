@@ -116,6 +116,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 		public String LinkToRemote(String name, String url, IDictionary options)
 		{
 			options["url"] = url;
+
 			return LinkToFunction(name, RemoteFunction(options) );
 		}
 
@@ -124,6 +125,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			IDictionary options = new Hashtable();
 			options["update"] = update;
 			options["url"] = url;
+
 			return LinkToFunction(name, RemoteFunction(options) );
 		}
 
@@ -133,6 +135,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			options["with"] = with;
 			options["update"] = update;
 			options["url"] = url;
+
 			return LinkToFunction(name, RemoteFunction(options) );
 		}
 
@@ -142,6 +145,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			if (form) options["form"] = true;
 			options["update"] = update;
 			options["url"] = url;
+
 			return LinkToFunction(name, RemoteFunction(options) );
 		}
 
@@ -369,7 +373,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 
 			if (!options.Contains("url")) throw new ArgumentException("url is required");
 
-			contents.Append( "'" + options["url"] + "'" );
+			contents.Append( GetUrlOption(options) );
 			contents.Append( ", " + javascriptOptionsString + ")" );
 
 			if (options.Contains("before"))
@@ -386,6 +390,18 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			}
 
 			return contents.ToString();
+		}
+
+		private string GetUrlOption(IDictionary options)
+		{
+			string url = (string) options["url"];
+
+			if (url.StartsWith("<") && url.EndsWith(">"))
+			{
+				return url.Substring(1, url.Length - 2);
+			}
+
+			return "'" + url + "'";
 		}
 
 		protected String BuildAjaxOptions(IDictionary jsOptions, IDictionary options)
