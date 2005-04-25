@@ -26,12 +26,5 @@ namespace Castle.Rook.AST
 	}
 
 
-	public abstract class MemberContainer : AbstractASTNode
-	{ 
-		private AccessLevel accessLevel = AccessLevel.Public;
-
-		public MemberContainer()
-		{
-		}
-	}
+	
 }

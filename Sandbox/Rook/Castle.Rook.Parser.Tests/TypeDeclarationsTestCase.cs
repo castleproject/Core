@@ -86,5 +86,51 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual( "IList", (classNode.BaseTypes[1] as QualifiedIdentifier).Name );
 			Assert.AreEqual( "Collections.IBindable", (classNode.BaseTypes[2] as QualifiedIdentifier).Name );
 		}
+
+		[Test]
+		public void StaticFields()
+		{
+			String contents = 
+				"class MyClass \r\n" + 
+				"  @@myfield " + 
+				"  @@otherfield " + 
+				"end \r\n";
+
+			CompilationUnitNode unit = RookParser.ParseContents(contents);
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(0, unit.Namespaces.Count);
+			Assert.AreEqual(1, unit.ClassesTypes.Count);
+			
+			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
+			Assert.IsNotNull(classNode);
+			Assert.AreEqual("MyClass", classNode.Name);
+			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			Assert.AreEqual(2, classNode.StaticFields.Count);
+			Assert.AreEqual(0, classNode.InstanceFields.Count);
+		}
+
+		[Test]
+		public void StaticFieldsAndAccessLevels()
+		{
+			String contents = 
+				"class MyClass \r\n" + 
+				"private \r\n" +
+				"  @@myfield \r\n" + 
+				"public \r\n" +
+				"  @@otherfield \r\n" + 
+				"end \r\n";
+
+			CompilationUnitNode unit = RookParser.ParseContents(contents);
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(0, unit.Namespaces.Count);
+			Assert.AreEqual(1, unit.ClassesTypes.Count);
+			
+			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
+			Assert.IsNotNull(classNode);
+			Assert.AreEqual("MyClass", classNode.Name);
+			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			Assert.AreEqual(2, classNode.StaticFields.Count);
+			Assert.AreEqual(0, classNode.InstanceFields.Count);
+		}
 	}
 }

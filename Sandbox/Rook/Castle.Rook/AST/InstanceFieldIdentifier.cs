@@ -17,7 +17,10 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public interface IIdentifierScope
+	public class InstanceFieldIdentifier : Identifier
 	{
+		public InstanceFieldIdentifier(string name) : base(name)
+		{
+		}
 	}
 }

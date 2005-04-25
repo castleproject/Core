@@ -17,9 +17,9 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class IdentifierNode
+	public class StaticFieldIdentifier : Identifier
 	{
-		public IdentifierNode()
+		public StaticFieldIdentifier(string name) : base(name)
 		{
 		}
 	}

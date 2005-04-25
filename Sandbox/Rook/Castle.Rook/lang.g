@@ -30,6 +30,14 @@ tokens
 	INIT2	  = "init";
 	END       = "end";
 }
+{
+	AccessLevel currentAccessLevel = AccessLevel.Public;
+	
+	public override void reportError(RecognitionException ex)
+	{
+		throw ex;
+	}
+}
 
 compilation_unit returns[CompilationUnitNode unit]
 	{
@@ -82,6 +90,7 @@ class_declaration![IList types]
 		Identifier id = null;
 	}
 	:
+	/* TODO:visibility public/private/etc */ 
 	CLASS_DEF! id=identifier 
 	{
 		classNode = new ClassNode(id.Name);
@@ -112,6 +121,7 @@ mixin_body[MixinNode mixinNode]
 
 class_body[ClassNode classNode]
 	:
+	type_fields[classNode]
 	
 	END!
 	;
@@ -130,6 +140,44 @@ baseTypes![TypeNode type]
 	{
 		type.BaseTypes.Add( qi );
 	})*
+	;
+	
+protected 
+type_fields![TypeNode type]
+	:
+	(access_level static_fields[type] | instance_fields[type])*
+	;
+
+protected
+static_fields![TypeNode type]
+	:
+	id:STATIC_IDENTIFIER
+	{
+		type.StaticFields.Add( new StaticFieldIdentifier(id.getText()) );
+	}
+	;
+
+protected
+instance_fields![TypeNode type]
+	:
+	id:INSTANCE_IDENTIFIER
+	{
+		type.InstanceFields.Add( new InstanceFieldIdentifier(id.getText()) );
+	}
+	;
+	
+protected
+access_level!
+	:
+	"public" { currentAccessLevel = AccessLevel.Public; }
+	|
+	"private" { currentAccessLevel = AccessLevel.Private; }
+	|
+	"protected" { currentAccessLevel = AccessLevel.Protected; }
+	| 
+	"internal" { currentAccessLevel = AccessLevel.Internal; }
+	|
+		/* nothing */  { currentAccessLevel = AccessLevel.Public; }
 	;
 
 protected
@@ -160,7 +208,6 @@ qualified_identifier returns [QualifiedIdentifier ident]
 		sb.Append(id.Name);
 	}
 	)*
-	 
 	{
 		ident = new QualifiedIdentifier( sb.ToString() );
 	}
@@ -367,9 +414,27 @@ options
 	IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
 	;
 	
+STATIC_IDENTIFIER
+options 
+	{
+	 testLiterals=false; 
+	}
+	:	
+	"@@" IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
+	;
+
+INSTANCE_IDENTIFIER
+options 
+	{
+	 testLiterals=false; 
+	}
+	:	
+	"@" IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
+	;
+	
 protected
 IDENTIFIER_START_CHARACTER
-	:	('@'|'a'..'z'|'A'..'Z'|'_'|'$') 
+	:	('a'..'z'|'A'..'Z'|'_'|'$') 
 	;
 	
 protected

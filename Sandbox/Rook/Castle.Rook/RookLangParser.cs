@@ -39,9 +39,22 @@ namespace Castle.Rook.Parse
 		public const int EOS = 11;
 		public const int LESSTHAN = 12;
 		public const int COMMA = 13;
-		public const int IDENTIFIER = 14;
-		public const int DOT = 15;
+		public const int STATIC_IDENTIFIER = 14;
+		public const int INSTANCE_IDENTIFIER = 15;
+		public const int LITERAL_public = 16;
+		public const int LITERAL_private = 17;
+		public const int LITERAL_protected = 18;
+		public const int LITERAL_internal = 19;
+		public const int IDENTIFIER = 20;
+		public const int DOT = 21;
 		
+		
+	AccessLevel currentAccessLevel = AccessLevel.Public;
+	
+	public override void reportError(RecognitionException ex)
+	{
+		throw ex;
+	}
 		
 		protected void initialize()
 		{
@@ -210,6 +223,12 @@ _loop5_breakloop:				;
 					break;
 				}
 				case END:
+				case STATIC_IDENTIFIER:
+				case INSTANCE_IDENTIFIER:
+				case LITERAL_public:
+				case LITERAL_private:
+				case LITERAL_protected:
+				case LITERAL_internal:
 				{
 					break;
 				}
@@ -301,11 +320,11 @@ _loop5_breakloop:				;
 					}
 					else
 					{
-						goto _loop23_breakloop;
+						goto _loop29_breakloop;
 					}
 					
 				}
-_loop23_breakloop:				;
+_loop29_breakloop:				;
 			}    // ( ... )*
 			
 					ident = new QualifiedIdentifier( sb.ToString() );
@@ -421,6 +440,7 @@ _loop19_breakloop:				;
 		
 		
 		try {      // for error handling
+			type_fields(classNode);
 			match(END);
 		}
 		catch (RecognitionException ex)
@@ -446,6 +466,140 @@ _loop19_breakloop:				;
 		}
 	}
 	
+	protected void type_fields(
+		TypeNode type
+	) //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			{    // ( ... )*
+				for (;;)
+				{
+					switch ( LA(1) )
+					{
+					case STATIC_IDENTIFIER:
+					case LITERAL_public:
+					case LITERAL_private:
+					case LITERAL_protected:
+					case LITERAL_internal:
+					{
+						access_level();
+						static_fields(type);
+						break;
+					}
+					case INSTANCE_IDENTIFIER:
+					{
+						instance_fields(type);
+						break;
+					}
+					default:
+					{
+						goto _loop22_breakloop;
+					}
+					 }
+				}
+_loop22_breakloop:				;
+			}    // ( ... )*
+		}
+		catch (RecognitionException ex)
+		{
+			reportError(ex);
+			recover(ex,tokenSet_5_);
+		}
+	}
+	
+	protected void access_level() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			switch ( LA(1) )
+			{
+			case LITERAL_public:
+			{
+				match(LITERAL_public);
+				currentAccessLevel = AccessLevel.Public;
+				break;
+			}
+			case LITERAL_private:
+			{
+				match(LITERAL_private);
+				currentAccessLevel = AccessLevel.Private;
+				break;
+			}
+			case LITERAL_protected:
+			{
+				match(LITERAL_protected);
+				currentAccessLevel = AccessLevel.Protected;
+				break;
+			}
+			case LITERAL_internal:
+			{
+				match(LITERAL_internal);
+				currentAccessLevel = AccessLevel.Internal;
+				break;
+			}
+			case STATIC_IDENTIFIER:
+			{
+				currentAccessLevel = AccessLevel.Public;
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			 }
+		}
+		catch (RecognitionException ex)
+		{
+			reportError(ex);
+			recover(ex,tokenSet_6_);
+		}
+	}
+	
+	protected void static_fields(
+		TypeNode type
+	) //throws RecognitionException, TokenStreamException
+{
+		
+		IToken  id = null;
+		
+		try {      // for error handling
+			id = LT(1);
+			match(STATIC_IDENTIFIER);
+			
+					type.StaticFields.Add( new StaticFieldIdentifier(id.getText()) );
+				
+		}
+		catch (RecognitionException ex)
+		{
+			reportError(ex);
+			recover(ex,tokenSet_4_);
+		}
+	}
+	
+	protected void instance_fields(
+		TypeNode type
+	) //throws RecognitionException, TokenStreamException
+{
+		
+		IToken  id = null;
+		
+		try {      // for error handling
+			id = LT(1);
+			match(INSTANCE_IDENTIFIER);
+			
+					type.InstanceFields.Add( new InstanceFieldIdentifier(id.getText()) );
+				
+		}
+		catch (RecognitionException ex)
+		{
+			reportError(ex);
+			recover(ex,tokenSet_4_);
+		}
+	}
+	
 	private void initializeFactory()
 	{
 	}
@@ -465,6 +619,12 @@ _loop19_breakloop:				;
 		@"""EOS""",
 		@"""LESSTHAN""",
 		@"""COMMA""",
+		@"""STATIC_IDENTIFIER""",
+		@"""INSTANCE_IDENTIFIER""",
+		@"""public""",
+		@"""private""",
+		@"""protected""",
+		@"""internal""",
 		@"""IDENTIFIER""",
 		@"""DOT"""
 	};
@@ -483,22 +643,34 @@ _loop19_breakloop:				;
 	public static readonly BitSet tokenSet_1_ = new BitSet(mk_tokenSet_1_());
 	private static long[] mk_tokenSet_2_()
 	{
-		long[] data = { 9328L, 0L};
+		long[] data = { 1041520L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_2_ = new BitSet(mk_tokenSet_2_());
 	private static long[] mk_tokenSet_3_()
 	{
-		long[] data = { 46192L, 0L};
+		long[] data = { 3142768L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_3_ = new BitSet(mk_tokenSet_3_());
 	private static long[] mk_tokenSet_4_()
 	{
-		long[] data = { 1024L, 0L};
+		long[] data = { 1033216L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_4_ = new BitSet(mk_tokenSet_4_());
+	private static long[] mk_tokenSet_5_()
+	{
+		long[] data = { 1024L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_5_ = new BitSet(mk_tokenSet_5_());
+	private static long[] mk_tokenSet_6_()
+	{
+		long[] data = { 16384L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_6_ = new BitSet(mk_tokenSet_6_());
 	
 }
 }

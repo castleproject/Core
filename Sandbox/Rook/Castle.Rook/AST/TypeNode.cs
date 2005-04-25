@@ -20,8 +20,11 @@ namespace Castle.Rook.AST
 
 	public abstract class TypeNode : AbstractASTNode
 	{
-		private String name;
 		private IList baseTypes = new ArrayList();
+		private IList staticFields = new ArrayList();
+		private IList instanceFields = new ArrayList();
+
+		private String name;
 
 		public TypeNode(String name)
 		{
@@ -36,6 +39,16 @@ namespace Castle.Rook.AST
 		public IList BaseTypes
 		{
 			get { return baseTypes; }
+		}
+
+		public IList StaticFields
+		{
+			get { return staticFields; }
+		}
+
+		public IList InstanceFields
+		{
+			get { return instanceFields; }
 		}
 	}
 }

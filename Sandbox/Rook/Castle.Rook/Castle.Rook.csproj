@@ -651,12 +651,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\IdentifierNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\IIdentifierScope.cs"
+                    RelPath = "AST\InstanceFieldIdentifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -687,6 +682,11 @@
                 />
                 <File
                     RelPath = "AST\QualifiedIdentifier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\StaticFieldIdentifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
