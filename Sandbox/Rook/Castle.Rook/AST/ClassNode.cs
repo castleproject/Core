@@ -15,10 +15,12 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer
+
+	public class ClassNode : TypeNode
 	{
-		
+		public ClassNode(string name) : base(name)
+		{
+		}
 	}
 }

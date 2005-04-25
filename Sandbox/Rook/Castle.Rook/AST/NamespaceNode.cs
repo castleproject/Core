@@ -18,19 +18,13 @@ namespace Castle.Rook.AST
 	using System.Collections;
 
 
-	public class NamespaceNode : AbstractASTNode
+	public class NamespaceNode : AbstractDeclarationContainer
 	{
 		private QualifiedIdentifier _qi;
-		private IList namespaces = new ArrayList();
 
 		public NamespaceNode( QualifiedIdentifier qi )
 		{
 			_qi = qi;
-		}
-
-		public IList Namespaces
-		{
-			get { return namespaces; }
 		}
 
 		public QualifiedIdentifier Identifier

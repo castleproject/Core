@@ -17,8 +17,38 @@ namespace Castle.Rook.AST
 	using System;
 	using System.Collections;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer
+
+	public abstract class AbstractDeclarationContainer : AbstractASTNode
 	{
-		
+		private IList namespaces = new ArrayList();
+		private IList mixintypes = new ArrayList();
+		private IList interfaces = new ArrayList();
+		private IList classes = new ArrayList();
+		private IList structs = new ArrayList();
+
+		public IList Namespaces
+		{
+			get { return namespaces; }
+		}
+
+		public IList MixinTypes
+		{
+			get { return mixintypes; }
+		}
+
+		public IList ClassesTypes
+		{
+			get { return classes; }
+		}
+
+		public IList InterfaceTypes
+		{
+			get { return interfaces; }
+		}
+
+		public IList StructTypes
+		{
+			get { return structs; }
+		}
 	}
 }

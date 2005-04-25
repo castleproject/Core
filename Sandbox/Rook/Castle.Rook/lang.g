@@ -25,6 +25,9 @@ tokens
 	CLASS_DEF = "class";
 	MIXIN_DEF = "mixin";
 	NAMESPACE = "namespace";
+	INTERFACE = "interface";
+	INIT	  = "initialize";
+	INIT2	  = "init";
 	END       = "end";
 }
 
@@ -33,16 +36,23 @@ compilation_unit returns[CompilationUnitNode unit]
 		unit = new CompilationUnitNode();
 	}
 	:	
-	(options { greedy=true;}: EOS!)*			 
-	(namespace_member_declaration[unit.Namespaces])*
+	(options { greedy=true;}: EOS!)*
+	(declaration[unit])*
 	EOF!
+	;
+	
+declaration[AbstractDeclarationContainer container]
+	:
+	mixin_declaration[container.MixinTypes] 
+	| 
+	class_declaration[container.ClassesTypes] 
+	| 
+	namespace_member_declaration[container.Namespaces]
 	;
 
 namespace_member_declaration[IList namespaces]
 	:	
 	namespace_declaration[namespaces]
-	/*|	
-	type_declaration*/
 	;
 
 namespace_declaration![IList namespaces]
@@ -60,14 +70,76 @@ namespace_declaration![IList namespaces]
 		namespaces.Add(ns);
 	}
 	;
+	
+namespace_body[NamespaceNode ns]
+	:	
+	(declaration[ns])* END!
+	;
+
+class_declaration![IList types]
+	{
+		ClassNode classNode = null;
+		Identifier id = null;
+	}
+	:
+	CLASS_DEF! id=identifier 
+	{
+		classNode = new ClassNode(id.Name);
+		types.Add(classNode);
+	}
+	(baseTypes[classNode])?
+	class_body[classNode]
+	;
+
+mixin_declaration![IList mixins]
+	{
+		MixinNode mixinNode = null;
+		Identifier id = null;
+	}
+	:
+	MIXIN_DEF! id=identifier 
+	{
+		mixinNode = new MixinNode(id.Name);
+		mixins.Add(mixinNode);
+	}
+	mixin_body[mixinNode]
+	;
+
+mixin_body[MixinNode mixinNode]
+	:
+	END!
+	;
+
+class_body[ClassNode classNode]
+	:
+	
+	END!
+	;
+
+protected
+baseTypes![TypeNode type]
+	{
+		QualifiedIdentifier qi = null;
+	}
+	:
+	LESSTHAN! qi=qualified_identifier 
+	{
+		type.BaseTypes.Add( qi );
+	}
+	(COMMA! qi=qualified_identifier
+	{
+		type.BaseTypes.Add( qi );
+	})*
+	;
 
 protected
 identifier! returns [Identifier ident]
 	{
 		ident = null;
 	}
-	:	id:IDENTIFIER 
-		{ ident = new Identifier(id.getText()); }
+	:	
+	id:IDENTIFIER 
+	{ ident = new Identifier(id.getText()); }
 	;
 
 protected
@@ -82,21 +154,16 @@ qualified_identifier returns [QualifiedIdentifier ident]
 	{
 		sb.Append(id.Name);
 	}
-	 (DOT! id=identifier
-	 {
+	(DOT! id=identifier
+	{
 		sb.Append('.');
 		sb.Append(id.Name);
-	 }
-	 )*
+	}
+	)*
 	 
-	 {
+	{
 		ident = new QualifiedIdentifier( sb.ToString() );
-	 }
-	;
-	
-namespace_body[NamespaceNode ns]
-	:	
-	(namespace_member_declaration[ns.Namespaces])* END!
+	}
 	;
 
 /*
@@ -242,6 +309,7 @@ LCURLY			:	'{'		;
 RCURLY			:	'}'		;
 COLON			:	':'		;
 DOT             :   '.'     ;
+LESSTHAN        :   '<'     ;
 
 	
 // ***** A.1.1 LINE TERMINATORS *****

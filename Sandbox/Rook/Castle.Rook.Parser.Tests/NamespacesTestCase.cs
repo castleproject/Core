@@ -83,5 +83,28 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual("Declaration", ns.Identifier.Name);
 			Assert.AreEqual(0, ns.Namespaces.Count);
 		}
+
+		[Test]
+		public void MixinTypes()
+		{
+			String contents = 
+				"namespace My \r\n" + 
+				"  mixin MyMixin \r\n" + 
+				"  end \r\n" + 
+				"  class MyClass \r\n" + 
+				"  end \r\n" + 
+				"end \r\n";
+
+			CompilationUnitNode unit = RookParser.ParseContents(contents);
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(1, unit.Namespaces.Count);
+			
+			NamespaceNode ns = unit.Namespaces[0] as NamespaceNode;
+			Assert.IsNotNull(ns);
+			Assert.AreEqual("My", ns.Identifier.Name);
+			Assert.AreEqual(0, ns.Namespaces.Count);
+			Assert.AreEqual(1, ns.MixinTypes.Count);
+			Assert.AreEqual(1, ns.ClassesTypes.Count);
+		}
 	}
 }

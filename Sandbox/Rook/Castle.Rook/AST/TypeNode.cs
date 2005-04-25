@@ -15,12 +15,27 @@
 namespace Castle.Rook.AST
 {
 	using System;
+	using System.Collections;
 
 
-	public class TypeNode
+	public abstract class TypeNode : AbstractASTNode
 	{
-		public TypeNode()
+		private String name;
+		private IList baseTypes = new ArrayList();
+
+		public TypeNode(String name)
 		{
+			this.name = name;
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
+
+		public IList BaseTypes
+		{
+			get { return baseTypes; }
 		}
 	}
 }

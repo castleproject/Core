@@ -15,10 +15,23 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer
+	public enum AccessLevel
 	{
-		
+		Public,
+		Private,
+		Protected,
+		Internal,
+		ProtectedAndInternal
+	}
+
+
+	public abstract class MemberContainer : AbstractASTNode
+	{ 
+		private AccessLevel accessLevel = AccessLevel.Public;
+
+		public MemberContainer()
+		{
+		}
 	}
 }

@@ -42,28 +42,32 @@ namespace Castle.Rook.Parse
 		public const int CLASS_DEF = 4;
 		public const int MIXIN_DEF = 5;
 		public const int NAMESPACE = 6;
-		public const int END = 7;
-		public const int EOS = 8;
-		public const int IDENTIFIER = 9;
-		public const int DOT = 10;
-		public const int ASSIGN = 11;
-		public const int SEMI = 12;
+		public const int INTERFACE = 7;
+		public const int INIT = 8;
+		public const int INIT2 = 9;
+		public const int END = 10;
+		public const int EOS = 11;
+		public const int LESSTHAN = 12;
 		public const int COMMA = 13;
-		public const int LPAREN = 14;
-		public const int RPAREN = 15;
-		public const int LBRACK = 16;
-		public const int RBRACK = 17;
-		public const int LCURLY = 18;
-		public const int RCURLY = 19;
-		public const int COLON = 20;
-		public const int NEW_LINE = 21;
-		public const int NEW_LINE_CHARACTER = 22;
-		public const int NOT_NEW_LINE = 23;
-		public const int WHITESPACE = 24;
-		public const int SINGLE_LINE_COMMENT = 25;
-		public const int IDENTIFIER_START_CHARACTER = 26;
-		public const int IDENTIFIER_PART_CHARACTER = 27;
-		public const int DECIMAL_DIGIT = 28;
+		public const int IDENTIFIER = 14;
+		public const int DOT = 15;
+		public const int ASSIGN = 16;
+		public const int SEMI = 17;
+		public const int LPAREN = 18;
+		public const int RPAREN = 19;
+		public const int LBRACK = 20;
+		public const int RBRACK = 21;
+		public const int LCURLY = 22;
+		public const int RCURLY = 23;
+		public const int COLON = 24;
+		public const int NEW_LINE = 25;
+		public const int NEW_LINE_CHARACTER = 26;
+		public const int NOT_NEW_LINE = 27;
+		public const int WHITESPACE = 28;
+		public const int SINGLE_LINE_COMMENT = 29;
+		public const int IDENTIFIER_START_CHARACTER = 30;
+		public const int IDENTIFIER_PART_CHARACTER = 31;
+		public const int DECIMAL_DIGIT = 32;
 		
 		public RookLexer(Stream ins) : this(new ByteBuffer(ins))
 		{
@@ -87,9 +91,12 @@ namespace Castle.Rook.Parse
 			setCaseSensitive(true);
 			literals = new Hashtable(100, (float) 0.4, null, Comparer.Default);
 			literals.Add("class", 4);
-			literals.Add("end", 7);
+			literals.Add("initialize", 8);
+			literals.Add("end", 10);
 			literals.Add("mixin", 5);
 			literals.Add("namespace", 6);
+			literals.Add("init", 9);
+			literals.Add("interface", 7);
 		}
 		
 		override public IToken nextToken()			//throws TokenStreamException
@@ -171,6 +178,12 @@ tryAgain:
 						case '.':
 						{
 							mDOT(true);
+							theRetToken = returnToken_;
+							break;
+						}
+						case '<':
+						{
+							mLESSTHAN(true);
 							theRetToken = returnToken_;
 							break;
 						}
@@ -391,6 +404,20 @@ tryAgain:
 		returnToken_ = _token;
 	}
 	
+	public void mLESSTHAN(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
+{
+		int _ttype; IToken _token=null; int _begin=text.Length;
+		_ttype = LESSTHAN;
+		
+		match('<');
+		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
+		{
+			_token = makeToken(_ttype);
+			_token.setText(text.ToString(_begin, text.Length-_begin));
+		}
+		returnToken_ = _token;
+	}
+	
 	protected void mNEW_LINE(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
@@ -502,7 +529,7 @@ tryAgain:
 		_ttype = WHITESPACE;
 		
 		{ // ( ... )+
-			int _cnt34=0;
+			int _cnt44=0;
 			for (;;)
 			{
 				switch ( cached_LA1 )
@@ -534,12 +561,12 @@ tryAgain:
 				}
 				default:
 				{
-					if (_cnt34 >= 1) { goto _loop34_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt44 >= 1) { goto _loop44_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				break; }
-				_cnt34++;
+				_cnt44++;
 			}
-_loop34_breakloop:			;
+_loop44_breakloop:			;
 		}    // ( ... )+
 		_ttype = Token.SKIP;
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -565,11 +592,11 @@ _loop34_breakloop:			;
 				}
 				else
 				{
-					goto _loop37_breakloop;
+					goto _loop47_breakloop;
 				}
 				
 			}
-_loop37_breakloop:			;
+_loop47_breakloop:			;
 		}    // ( ... )*
 		{
 			if ((tokenSet_1_.member(cached_LA1)))
@@ -604,11 +631,11 @@ _loop37_breakloop:			;
 				}
 				else
 				{
-					goto _loop41_breakloop;
+					goto _loop51_breakloop;
 				}
 				
 			}
-_loop41_breakloop:			;
+_loop51_breakloop:			;
 		}    // ( ... )*
 		_ttype = testLiteralsTable(_ttype);
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))

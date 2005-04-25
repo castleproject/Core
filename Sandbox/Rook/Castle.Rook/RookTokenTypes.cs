@@ -14,10 +14,15 @@ namespace Castle.Rook.Parse
 		public const int CLASS_DEF = 4;
 		public const int MIXIN_DEF = 5;
 		public const int NAMESPACE = 6;
-		public const int END = 7;
-		public const int EOS = 8;
-		public const int IDENTIFIER = 9;
-		public const int DOT = 10;
+		public const int INTERFACE = 7;
+		public const int INIT = 8;
+		public const int INIT2 = 9;
+		public const int END = 10;
+		public const int EOS = 11;
+		public const int LESSTHAN = 12;
+		public const int COMMA = 13;
+		public const int IDENTIFIER = 14;
+		public const int DOT = 15;
 		
 	}
 }
