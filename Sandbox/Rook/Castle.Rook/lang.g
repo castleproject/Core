@@ -1,10 +1,10 @@
 header 
 {
-	using CommonAST					= antlr.CommonAST; 
+	// using CommonAST					= antlr.CommonAST; 
+	using System.Text;
 	using System.Collections;
 	using Castle.Rook.AST;
 }
-
 options 
 {	
 	language = "CSharp";
@@ -22,22 +22,87 @@ options
 }
 tokens
 {
-	CLASS = "class";
+	CLASS_DEF = "class";
+	MIXIN_DEF = "mixin";
+	NAMESPACE = "namespace";
+	END       = "end";
 }
 
-compilation_unit returns [CompilationUnitNode unit] 
+compilation_unit returns[CompilationUnitNode unit]
 	{
 		unit = new CompilationUnitNode();
 	}
 	:	
 	(options { greedy=true;}: EOS!)*			 
-	(statement_list)*  
+	(namespace_member_declaration[unit.Namespaces])*
 	EOF!
 	;
 
+namespace_member_declaration[IList namespaces]
+	:	
+	namespace_declaration[namespaces]
+	/*|	
+	type_declaration*/
+	;
+
+namespace_declaration![IList namespaces]
+	{
+		NamespaceNode ns = null;
+		QualifiedIdentifier qi = null;
+	}
+	:	
+	NAMESPACE qi=qualified_identifier 
+	{ 
+		ns = new NamespaceNode( qi );
+	}
+	namespace_body[ns]
+	{
+		namespaces.Add(ns);
+	}
+	;
+
+protected
+identifier! returns [Identifier ident]
+	{
+		ident = null;
+	}
+	:	id:IDENTIFIER 
+		{ ident = new Identifier(id.getText()); }
+	;
+
+protected
+qualified_identifier returns [QualifiedIdentifier ident]
+	{
+		ident = null;
+		StringBuilder sb = new StringBuilder();
+		Identifier id = null;
+	}
+	:	
+	id=identifier
+	{
+		sb.Append(id.Name);
+	}
+	 (DOT! id=identifier
+	 {
+		sb.Append('.');
+		sb.Append(id.Name);
+	 }
+	 )*
+	 
+	 {
+		ident = new QualifiedIdentifier( sb.ToString() );
+	 }
+	;
+	
+namespace_body[NamespaceNode ns]
+	:	
+	(namespace_member_declaration[ns.Namespaces])* END!
+	;
+
+/*
 literal
 	:	
-	INTEGER_LITERAL				
+	INTEGER_LITERAL
 	;
 	
 identifier!
@@ -48,7 +113,7 @@ identifier!
 // ***** A.2.1 Basic concepts *****
 type_name
 	:	
-	namespace_or_type_name
+	t:namespace_or_type_name
 	;
 	
 namespace_or_type_name
@@ -69,7 +134,12 @@ statement_list
 
 statement 
 	:	
-	declaration_statement (SEMI!)?
+	(
+		declaration_statement 
+		|
+		expression_statement 
+	)
+	(SEMI!)?
 	;
 
 declaration_statement 
@@ -110,11 +180,25 @@ assign_expression
 	id:identifier ASSIGN expression
 	;
 
+multiple_assign_expression
+	:
+	id:identifier (COMMA! identifier)+ ASSIGN expression_list
+	;
+
+invocation_expression
+	:
+	(type_name DOT!)? id:identifier LPAREN! (expression_list)? RPAREN!
+	;
+
 expression
 	:	
 	literal_expression
 	|
+	(multiple_assign_expression) => multiple_assign_expression
+	|
 	assign_expression
+	|
+	invocation_expression
 	;
 	
 expression_list
@@ -122,7 +206,15 @@ expression_list
 	expression (COMMA! expression)*
 	;
 
-
+expression_statement
+	:
+	(multiple_assign_expression) => multiple_assign_expression
+	|
+	assign_expression
+	|
+	invocation_expression
+	;
+*/
 
 /// 
 /// Lexer
@@ -139,10 +231,17 @@ options
 	filter=true;
 }
 
-ASSIGN : '=';
-SEMI   : ';';
-COMMA  : ',';
-
+ASSIGN			:   '='		;
+SEMI  			:   ';'		;
+COMMA 			:   ','		;
+LPAREN			:	'('		;
+RPAREN			:	')'		;
+LBRACK			:	'['		;
+RBRACK			:	']'		;
+LCURLY			:	'{'		;
+RCURLY			:	'}'		;
+COLON			:	':'		;
+DOT             :   '.'     ;
 
 	
 // ***** A.1.1 LINE TERMINATORS *****
@@ -210,6 +309,7 @@ IDENTIFIER_PART_CHARACTER
 	:	('a'..'z'|'A'..'Z'|'_'|'0'..'9') 
 	;
 
+/*
 NUMERIC_LITERAL
 	:
 	// integer
@@ -218,6 +318,7 @@ NUMERIC_LITERAL
 		$setType(INTEGER_LITERAL);
 	}
 	;
+*/
 
 // nums
 protected

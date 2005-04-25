@@ -115,7 +115,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ExpressionsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ModulesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NamespacesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

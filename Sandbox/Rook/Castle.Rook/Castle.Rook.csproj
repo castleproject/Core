@@ -626,7 +626,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\AbstractASTNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\CompilationUnitNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Identifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -642,6 +652,16 @@
                 />
                 <File
                     RelPath = "AST\ModuleNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\NamespaceNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\QualifiedIdentifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

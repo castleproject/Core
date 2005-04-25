@@ -1,10 +1,9 @@
 // $ANTLR 2.7.5 (20050128): lang.g -> RookTokenTypes.txt$
 Rook    // output token vocab name
-CLASS="class"=4
-EOS=5
-INTEGER_LITERAL=6
-IDENTIFIER=7
-DOT=8
-SEMI=9
-COMMA=10
-ASSIGN=11
+CLASS_DEF="class"=4
+MIXIN_DEF="mixin"=5
+NAMESPACE="namespace"=6
+END="end"=7
+EOS=8
+IDENTIFIER=9
+DOT=10

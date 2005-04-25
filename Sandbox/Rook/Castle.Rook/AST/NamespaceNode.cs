@@ -17,13 +17,25 @@ namespace Castle.Rook.AST
 	using System;
 	using System.Collections;
 
-	public class CompilationUnitNode : AbstractASTNode
+
+	public class NamespaceNode : AbstractASTNode
 	{
+		private QualifiedIdentifier _qi;
 		private IList namespaces = new ArrayList();
+
+		public NamespaceNode( QualifiedIdentifier qi )
+		{
+			_qi = qi;
+		}
 
 		public IList Namespaces
 		{
 			get { return namespaces; }
+		}
+
+		public QualifiedIdentifier Identifier
+		{
+			get { return _qi; }
 		}
 	}
 }

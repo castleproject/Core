@@ -15,15 +15,12 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
-	public class CompilationUnitNode : AbstractASTNode
+
+	public abstract class AbstractASTNode
 	{
-		private IList namespaces = new ArrayList();
-
-		public IList Namespaces
+		public AbstractASTNode()
 		{
-			get { return namespaces; }
 		}
 	}
 }

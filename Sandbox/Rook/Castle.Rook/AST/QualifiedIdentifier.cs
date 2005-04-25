@@ -15,15 +15,20 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
-	public class CompilationUnitNode : AbstractASTNode
+
+	public class QualifiedIdentifier : AbstractASTNode
 	{
-		private IList namespaces = new ArrayList();
+		private string _name;
 
-		public IList Namespaces
+		public QualifiedIdentifier(String name)
 		{
-			get { return namespaces; }
+			_name = name;
+		}
+
+		public string Name
+		{
+			get { return _name; }
 		}
 	}
 }

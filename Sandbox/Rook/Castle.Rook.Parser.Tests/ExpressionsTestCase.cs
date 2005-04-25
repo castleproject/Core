@@ -19,28 +19,46 @@ namespace Castle.Rook.Parse.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class DeclarationsTestCase
+	public class ExpressionsTestCase
 	{
 		[Test]
-		public void SimpleDeclarationNoInitializerExp()
+		public void SimpleAssignment()
 		{
-			String contents = "int x;";
+			String contents = "x = 10;";
 
 			RookParser.ParseContents(contents);
 		}
 
 		[Test]
-		public void SimpleDeclaration()
+		public void MultipleAssignment()
 		{
-			String contents = "int x = 10;";
+			String contents = "x, y = 10;";
 
 			RookParser.ParseContents(contents);
 		}
 
 		[Test]
-		public void MultipleDeclaration()
+		public void MultipleAssignment2()
 		{
-			String contents = "int x, y = 10, 11;";
+			String contents = "x, y = 10, 11;";
+
+			RookParser.ParseContents(contents);
+		}
+
+		[Test]
+		public void AssignmentAndInvocation()
+		{
+			String contents = "x = 10 \r\n" +
+					"puts (x) \r\n";
+
+			RookParser.ParseContents(contents);
+		}
+
+		[Test]
+		public void AssignmentAndInvocation2()
+		{
+			String contents = "x = 10 \r\n" +
+				"System.Console.WriteLine x \r\n";
 
 			RookParser.ParseContents(contents);
 		}
