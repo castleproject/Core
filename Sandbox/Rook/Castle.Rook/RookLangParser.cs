@@ -542,7 +542,7 @@ _loop22_breakloop:				;
 			}
 			case STATIC_IDENTIFIER:
 			{
-				currentAccessLevel = AccessLevel.Public;
+				/* currentAccessLevel = AccessLevel.Public; */
 				break;
 			}
 			default:
@@ -569,7 +569,7 @@ _loop22_breakloop:				;
 			id = LT(1);
 			match(STATIC_IDENTIFIER);
 			
-					type.StaticFields.Add( new StaticFieldIdentifier(id.getText()) );
+					type.StaticFields.Add( new StaticFieldIdentifier(id.getText(), currentAccessLevel) );
 				
 		}
 		catch (RecognitionException ex)
@@ -590,7 +590,7 @@ _loop22_breakloop:				;
 			id = LT(1);
 			match(INSTANCE_IDENTIFIER);
 			
-					type.InstanceFields.Add( new InstanceFieldIdentifier(id.getText()) );
+					type.InstanceFields.Add( new InstanceFieldIdentifier(id.getText(), currentAccessLevel) );
 				
 		}
 		catch (RecognitionException ex)

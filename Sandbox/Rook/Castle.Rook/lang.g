@@ -153,7 +153,7 @@ static_fields![TypeNode type]
 	:
 	id:STATIC_IDENTIFIER
 	{
-		type.StaticFields.Add( new StaticFieldIdentifier(id.getText()) );
+		type.StaticFields.Add( new StaticFieldIdentifier(id.getText(), currentAccessLevel) );
 	}
 	;
 
@@ -162,7 +162,7 @@ instance_fields![TypeNode type]
 	:
 	id:INSTANCE_IDENTIFIER
 	{
-		type.InstanceFields.Add( new InstanceFieldIdentifier(id.getText()) );
+		type.InstanceFields.Add( new InstanceFieldIdentifier(id.getText(), currentAccessLevel) );
 	}
 	;
 	
@@ -177,7 +177,7 @@ access_level!
 	| 
 	"internal" { currentAccessLevel = AccessLevel.Internal; }
 	|
-		/* nothing */  { currentAccessLevel = AccessLevel.Public; }
+		/* nothing */  { /* currentAccessLevel = AccessLevel.Public; */ }
 	;
 
 protected

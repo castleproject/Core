@@ -19,8 +19,16 @@ namespace Castle.Rook.AST
 
 	public class InstanceFieldIdentifier : Identifier
 	{
-		public InstanceFieldIdentifier(string name) : base(name)
+		private AccessLevel _level;
+
+		public InstanceFieldIdentifier(string name, AccessLevel level) : base(name)
 		{
+			_level = level;
+		}
+
+		public AccessLevel Level
+		{
+			get { return _level; }
 		}
 	}
 }

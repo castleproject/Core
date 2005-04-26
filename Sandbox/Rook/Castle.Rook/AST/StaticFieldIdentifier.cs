@@ -19,8 +19,16 @@ namespace Castle.Rook.AST
 
 	public class StaticFieldIdentifier : Identifier
 	{
-		public StaticFieldIdentifier(string name) : base(name)
+		private AccessLevel _level;
+
+		public StaticFieldIdentifier(string name, AccessLevel level) : base(name)
 		{
+			_level = level;
+		}
+
+		public AccessLevel Level
+		{
+			get { return _level; }
 		}
 	}
 }
