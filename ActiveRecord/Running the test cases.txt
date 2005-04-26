@@ -92,33 +92,59 @@ CREATE TABLE [dbo].[Award] (
  ) ON [PRIMARY]
  GO
  
- CREATE TABLE [dbo].[Employee] (
- 	[EmployeeID] [int] IDENTITY (1, 1) NOT NULL ,
- 	[FirstName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
- 	[LastName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL 
- ) ON [PRIMARY]
- GO
- 
- ALTER TABLE [dbo].[Award] ADD 
- 	CONSTRAINT [PK_Award] PRIMARY KEY
- 	(
- 		[EmployeeID]
- 	)  ON [PRIMARY] 
- GO
- 
- ALTER TABLE [dbo].[Employee] ADD 
- 	CONSTRAINT [PK_Person] PRIMARY KEY
- 	(
- 		[EmployeeID]
- 	)  ON [PRIMARY] 
- GO
- 
- ALTER TABLE [dbo].[Award] ADD 
- 	CONSTRAINT [FK_Award_Person] FOREIGN KEY 
- 	(
- 		[EmployeeID]
- 	) REFERENCES [dbo].[Employee] (
- 		[EmployeeID]
- 	) ON UPDATE CASCADE 
- GO
+CREATE TABLE [dbo].[Employee] (
+    [EmployeeID] [int] IDENTITY (1, 1) NOT NULL ,
+    [FirstName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+    [LastName] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL 
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Award] ADD 
+    CONSTRAINT [PK_Award] PRIMARY KEY
+    (
+	    [EmployeeID]
+    )  ON [PRIMARY] 
+GO
+
+ALTER TABLE [dbo].[Employee] ADD 
+    CONSTRAINT [PK_Person] PRIMARY KEY
+    (
+	    [EmployeeID]
+    )  ON [PRIMARY] 
+GO
+
+ALTER TABLE [dbo].[Award] ADD 
+    CONSTRAINT [FK_Award_Person] FOREIGN KEY 
+    (
+	    [EmployeeID]
+    ) REFERENCES [dbo].[Employee] (
+	    [EmployeeID]
+    ) ON UPDATE CASCADE 
+GO
+CREATE TABLE [dbo].[order] (
+    OrderID int IDENTITY(1,1) PRIMARY KEY, 
+    OrderedDate datetime,
+    IsShipped bit
+)
+
+CREATE TABLE [dbo].[line_item] (
+    line_number int IDENTITY(1,1), 
+    order_id int NOT NULL, 
+    product_id int, 
+    quantity INTEGER, 
+    PRIMARY KEY (order_id, line_number)
+)
+
+CREATE TABLE [dbo].[product] (
+    ProductID int IDENTITY(1,1) PRIMARY KEY, 
+    serialNumber VARCHAR(255), 
+    name VARCHAR(255),
+    price float
+)
+
+ALTER TABLE [dbo].[line_item]
+    ADD CONSTRAINT line_itemsFK0 FOREIGN KEY (product_id) REFERENCES [dbo].[product]
+ALTER TABLE [dbo].[line_item]
+    ADD CONSTRAINT line_itemsFK1 FOREIGN KEY (order_id) REFERENCES [dbo].[order]
+GO
    --- cut here ---

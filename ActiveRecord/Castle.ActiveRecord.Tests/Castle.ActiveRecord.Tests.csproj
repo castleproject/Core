@@ -184,12 +184,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\LineItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Order.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Person.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Model\Post.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Product.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -207,6 +222,10 @@
                     RelPath = "Model\SimpleModel3.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TestXmlMappings\Order.xml"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

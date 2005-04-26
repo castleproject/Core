@@ -221,10 +221,10 @@ namespace Castle.ActiveRecord
 //						{
 //							AddListMapping(prop, hasmany, builder);
 //						}
-//						else if (hasmany.RelationType == RelationType.Set)
-//						{
-//							AddSetMapping(prop, hasmany, builder);
-//						}
+						else if (hasAndBelongs.RelationType == RelationType.Set)
+						{
+							AddSetMapping(prop, hasAndBelongs, builder);
+						}
 						else
 						{
 							String message = String.Format("Sorry but we do not support " + 
@@ -312,6 +312,37 @@ namespace Castle.ActiveRecord
 			String constrained = (hasone.Constrained == null ? "" : String.Format(constrainedAttribute, hasone.Constrained));
 			builder.AppendFormat(oneToOne, name, klass, cascade + outer + constrained);
 		}
+		
+	  private void AddSetMapping(PropertyInfo prop, HasAndBelongsToManyAttribute hasAndBelongsTo, StringBuilder builder)
+	  {
+		String name = prop.Name;
+		String table = ( hasAndBelongsTo.Table == null ? "" : String.Format(tableAttribute, hasAndBelongsTo.Table) );
+		String schema = ( hasAndBelongsTo.Schema == null ? "" : String.Format(schemaAttribute, hasAndBelongsTo.Schema) );
+		String lazy = ( hasAndBelongsTo.Lazy == false ? "" : String.Format(lazyAttribute, hasAndBelongsTo.Lazy.ToString().ToLower()) );
+		String inverse = ( hasAndBelongsTo.Inverse == false ? "" : String.Format(inverseAttribute, hasAndBelongsTo.Inverse.ToString().ToLower()) );
+		String cascade = ( hasAndBelongsTo.Cascade == null ? "" : String.Format(cascadeAttribute, hasAndBelongsTo.Cascade) );
+		//			String sort = (hasAndBelongsTo.Sort == null ? "" : String.Format(sortAttribute, hasAndBelongsTo.Sort));
+		String orderBy = ( hasAndBelongsTo.OrderBy == null ? "" : String.Format(orderByAttribute, hasAndBelongsTo.OrderBy) );
+		String where = ( hasAndBelongsTo.Where == null ? "" : String.Format(whereAttribute, hasAndBelongsTo.Where) );
+
+		builder.AppendFormat(setOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
+
+		Type otherType = hasAndBelongsTo.MapType;
+		String columnkey = hasAndBelongsTo.ColumnKey == null ? "" : hasAndBelongsTo.ColumnKey;
+		String column = hasAndBelongsTo.Column == null ? "" : String.Format(columnAttribute, hasAndBelongsTo.Column);
+
+		builder.AppendFormat(keyTag, columnkey);
+
+		// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
+		// We need to do it wisely
+		if (column != null)
+		{
+		  builder.AppendFormat(manyToMany, otherType.AssemblyQualifiedName, column);
+		}
+
+		builder.Append(setClose);
+	  }
+
 
 		private void AddSetMapping(PropertyInfo prop, HasManyAttribute hasmany, StringBuilder builder)
 		{

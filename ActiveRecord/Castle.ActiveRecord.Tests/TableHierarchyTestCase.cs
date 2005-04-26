@@ -1,3 +1,4 @@
+
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +20,7 @@ namespace Castle.ActiveRecord.Tests
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model;
-
+	using Iesi.Collections;
 
 	[TestFixture]
 	public class TableHierarchyTestCase : AbstractActiveRecordTest
@@ -86,6 +87,38 @@ namespace Castle.ActiveRecord.Tests
 
 			company = Company.Find( company.Id );
 			Assert.AreEqual(1, company.People.Count );
+		}
+		
+		[Test]
+		public void ManyToManyUsingSet()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), 
+				typeof(Order), typeof(LineItem), typeof(Product));
+			
+			Order.DeleteAll();
+			Product.DeleteAll();
+			
+			Order myOrder = new Order();
+			myOrder.OrderedDate = DateTime.Parse("05/09/2004");
+			Product coolGadget = new Product();
+			coolGadget.Name = "PSP";
+			coolGadget.Price = 250.39f;
+			
+			using (new SessionScope())
+			{
+				coolGadget.Save();
+				ISet products = new ListSet();
+				products.Add(coolGadget);
+				myOrder.Products = products;
+				myOrder.Save();
+			}
+			
+			Order secondRef2Order = Order.Find(myOrder.ID);
+			Assert.IsFalse(secondRef2Order.Products.IsEmpty);
+			
+			Product secondRef2Product = Product.Find(coolGadget.ID);
+			Assert.AreEqual(1, secondRef2Product.Orders.Count);
+			
 		}
 	}
 }

@@ -15,15 +15,15 @@
 namespace Castle.ActiveRecord.Tests.MappingEngine
 {
 	using System;
-
 	using NUnit.Framework;
-
 	using Castle.ActiveRecord.Tests.Model;
-
+	using System.IO;
+	using System.Reflection;
+	using System.Xml;
 
 	[TestFixture]
 	public class NHibernateMappingEngineTestCase
-	{
+	{		
 		[Test]
 		public void SimpleModelNoRelations()
 		{
@@ -79,6 +79,24 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 			NHibernateMappingEngine engine = new NHibernateMappingEngine();
 			String xml = engine.CreateMapping( typeof(SimpleModel3), new Type[] { typeof(SimpleModel3) } );
 			Assert.AreEqual(contents, xml);
+		}
+		
+		[Test]
+		public void ManyToManySetMapping()
+		{
+			string resourceName = Assembly.GetExecutingAssembly().GetName().Name + ".TestXmlMappings.Order.xml";
+			Stream xmlStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+			Assert.IsNotNull(xmlStream);
+			
+			XmlDocument xmlDoc = new XmlDocument();
+			xmlDoc.Load(xmlStream);
+			string expected = xmlDoc.SelectSingleNode("/xml_sample/text()").InnerText;
+			Assert.IsTrue(expected.Length > 0);
+			
+			NHibernateMappingEngine engine = new NHibernateMappingEngine();
+			string xml = engine.CreateMapping(typeof(Order), new Type[] { typeof(Order) });
+			Console.Write("Xml string is " + xml);
+			Assert.AreEqual(expected, xml);
 		}
 	}
 }
