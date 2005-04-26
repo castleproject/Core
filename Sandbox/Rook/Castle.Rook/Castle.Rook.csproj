@@ -666,6 +666,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\MethodNodeBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\MixinNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

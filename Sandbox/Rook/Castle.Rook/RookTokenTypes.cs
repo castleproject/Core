@@ -18,17 +18,29 @@ namespace Castle.Rook.Parse
 		public const int INIT = 8;
 		public const int INIT2 = 9;
 		public const int END = 10;
-		public const int EOS = 11;
-		public const int LESSTHAN = 12;
-		public const int COMMA = 13;
-		public const int STATIC_IDENTIFIER = 14;
-		public const int INSTANCE_IDENTIFIER = 15;
-		public const int LITERAL_public = 16;
-		public const int LITERAL_private = 17;
-		public const int LITERAL_protected = 18;
-		public const int LITERAL_internal = 19;
-		public const int IDENTIFIER = 20;
-		public const int DOT = 21;
+		public const int DEF = 11;
+		public const int ATTR = 12;
+		public const int GET = 13;
+		public const int SET = 14;
+		public const int AS = 15;
+		public const int EOS = 16;
+		public const int LESSTHAN = 17;
+		public const int COMMA = 18;
+		public const int LITERAL_public = 19;
+		public const int LITERAL_private = 20;
+		public const int LITERAL_protected = 21;
+		public const int LITERAL_internal = 22;
+		public const int IDENTIFIER = 23;
+		public const int DOT = 24;
+		public const int SEMI = 25;
+		public const int LPAREN = 26;
+		public const int RPAREN = 27;
+		public const int REF = 28;
+		public const int OUT = 29;
+		public const int STATIC_IDENTIFIER = 30;
+		public const int INSTANCE_IDENTIFIER = 31;
+		public const int ASSIGN = 32;
+		public const int INTEGER_LITERAL = 33;
 		
 	}
 }

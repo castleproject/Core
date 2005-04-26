@@ -29,6 +29,11 @@ tokens
 	INIT	  = "initialize";
 	INIT2	  = "init";
 	END       = "end";
+	DEF       = "def";
+	ATTR      = "attr";
+	GET       = "get";
+	SET       = "set";
+	AS        = "as";
 }
 {
 	AccessLevel currentAccessLevel = AccessLevel.Public;
@@ -120,8 +125,12 @@ mixin_body[MixinNode mixinNode]
 	;
 
 class_body[ClassNode classNode]
+	{
+		// Default access level for the method body
+		currentAccessLevel = AccessLevel.Public;
+	}
 	:
-	type_fields[classNode]
+	(access_level class_level_supported_statements)*
 	
 	END!
 	;
@@ -141,43 +150,19 @@ baseTypes![TypeNode type]
 		type.BaseTypes.Add( qi );
 	})*
 	;
-	
-protected 
-type_fields![TypeNode type]
-	:
-	(access_level static_fields[type] | instance_fields[type])*
-	;
 
-protected
-static_fields![TypeNode type]
-	:
-	id:STATIC_IDENTIFIER
-	{
-		type.StaticFields.Add( new StaticFieldIdentifier(id.getText(), currentAccessLevel) );
-	}
-	;
-
-protected
-instance_fields![TypeNode type]
-	:
-	id:INSTANCE_IDENTIFIER
-	{
-		type.InstanceFields.Add( new InstanceFieldIdentifier(id.getText(), currentAccessLevel) );
-	}
-	;
-	
 protected
 access_level!
 	:
-	"public" { currentAccessLevel = AccessLevel.Public; }
+	"public"    { currentAccessLevel = AccessLevel.Public; }
 	|
-	"private" { currentAccessLevel = AccessLevel.Private; }
+	"private"   { currentAccessLevel = AccessLevel.Private; }
 	|
 	"protected" { currentAccessLevel = AccessLevel.Protected; }
 	| 
-	"internal" { currentAccessLevel = AccessLevel.Internal; }
+	"internal"  { currentAccessLevel = AccessLevel.Internal; }
 	|
-		/* nothing */  { /* currentAccessLevel = AccessLevel.Public; */ }
+		/* nothing - inherits the access level defined previously */  
 	;
 
 protected
@@ -213,122 +198,134 @@ qualified_identifier returns [QualifiedIdentifier ident]
 	}
 	;
 
-/*
-literal
+protected
+method_name returns [String[] parts]
+	{
+		parts = new String[2];
+		Identifier id = null;
+	}
 	:	
-	INTEGER_LITERAL
-	;
-	
-identifier!
-	:	
-	id:IDENTIFIER 
-	;
-	
-// ***** A.2.1 Basic concepts *****
-type_name
-	:	
-	t:namespace_or_type_name
-	;
-	
-namespace_or_type_name
-	:	
-	simple_name (DOT! simple_name)*
-	;
-
-simple_name
-	:	identifier
-//		{#simple_name = #([QualIdent], id);}
-	;
-
-
-statement_list 
-	:	
-	(statement)+
-	;
-
-statement 
-	:	
-	(
-		declaration_statement 
-		|
-		expression_statement 
-	)
-	(SEMI!)?
-	;
-
-declaration_statement 
-	:	
-	local_variable_declaration
-	;
-	
-local_variable_declaration 
-	:	
-	(multiple_local_variable_declarators)=>multiple_local_variable_declarators
-	{ 
-	}	
-	|
-	local_variable_declarator
-	;
-	
-multiple_local_variable_declarators
-	:	
-	type:type_name identifier (COMMA! (type2:type_name)? identifier)*
-	(
-		ASSIGN!
-		expression_list
+	id=identifier
+	{
+		parts[0] = id.Name;
+	}
+	(DOT! id=identifier
+	{
+		parts[1] = id.Name;
+	}
 	)?
 	;
 
-local_variable_declarator!
+protected
+type_name returns [QualifiedIdentifier qi]
+	{
+		qi = null;
+		Identifier id = null;
+	}
 	:	
-	type:type_name id:identifier (ASSIGN! expression)?
+	(AS! id=identifier
+	{
+		qi = new QualifiedIdentifier( id.Name );
+	}
+	)?
 	;
 
-literal_expression
+///
+/// Statements
+///
+
+method_def_stmt
+	{
+		String[] nameParts;
+		QualifiedIdentifier retType = null;
+	}
 	:
-	literal
-	;
-
-assign_expression
-	:
-	id:identifier ASSIGN expression
-	;
-
-multiple_assign_expression
-	:
-	id:identifier (COMMA! identifier)+ ASSIGN expression_list
-	;
-
-invocation_expression
-	:
-	(type_name DOT!)? id:identifier LPAREN! (expression_list)? RPAREN!
-	;
-
-expression
-	:	
-	literal_expression
-	|
-	(multiple_assign_expression) => multiple_assign_expression
-	|
-	assign_expression
-	|
-	invocation_expression
+	DEF! nameParts=method_name 
+	{
+		MethodNodeBuilder.Build(nameParts);
+	}
+	formal_param_list 
+	retType=type_name
+	method_body
+	(SEMI)?
 	;
 	
-expression_list
-	:	
-	expression (COMMA! expression)*
+protected
+formal_param_list
+	:
+	LPAREN! ( method_param (COMMA! method_param)* )? RPAREN!
+	;
+	
+protected
+method_param
+	{
+		Identifier id = null;
+		QualifiedIdentifier qi = null;
+	}
+	:
+	(REF|OUT)? id=identifier qi=type_name
 	;
 
-expression_statement
+protected
+method_body
 	:
-	(multiple_assign_expression) => multiple_assign_expression
-	|
-	assign_expression
-	|
-	invocation_expression
+	(statement_list)?
+	END!
 	;
-*/
+
+protected 
+statement
+	:
+	assign_stmt
+	| 
+	method_def_stmt
+	;
+
+protected
+statement_list
+	:
+	statement
+	;
+	
+protected
+class_level_supported_statements
+	:
+	assign_stmt
+	| 
+	method_def_stmt
+	;
+	
+protected 
+assign_stmt
+	{
+		QualifiedIdentifier qi = null;
+	}
+	:
+	(id:STATIC_IDENTIFIER|id2:INSTANCE_IDENTIFIER|qi=qualified_identifier) ASSIGN expression 
+	{
+		
+	}
+	(SEMI)?
+	;
+
+///	
+/// Expressions
+/// 
+
+protected
+expression
+	:
+	literal_exp
+	;
+
+
+
+
+literal_exp
+	:	
+	INTEGER_LITERAL
+	;
+		
 
 /// 
 /// Lexer
@@ -414,6 +411,16 @@ options
 	IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
 	;
 	
+protected
+IDENTIFIER_START_CHARACTER
+	:	('a'..'z'|'A'..'Z'|'_'|'$') 
+	;
+	
+protected
+IDENTIFIER_PART_CHARACTER
+	:	('a'..'z'|'A'..'Z'|'_'|'0'..'9') 
+	;
+	
 STATIC_IDENTIFIER
 options 
 	{
@@ -431,18 +438,7 @@ options
 	:	
 	"@" IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
 	;
-	
-protected
-IDENTIFIER_START_CHARACTER
-	:	('a'..'z'|'A'..'Z'|'_'|'$') 
-	;
-	
-protected
-IDENTIFIER_PART_CHARACTER
-	:	('a'..'z'|'A'..'Z'|'_'|'0'..'9') 
-	;
 
-/*
 NUMERIC_LITERAL
 	:
 	// integer
@@ -451,7 +447,6 @@ NUMERIC_LITERAL
 		$setType(INTEGER_LITERAL);
 	}
 	;
-*/
 
 // nums
 protected
