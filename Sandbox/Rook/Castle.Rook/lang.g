@@ -34,6 +34,10 @@ tokens
 	GET       = "get";
 	SET       = "set";
 	AS        = "as";
+	INC       = "++";
+	DEC       = "--";
+	SELF      = "self";
+	BASE      = "base";
 }
 {
 	AccessLevel currentAccessLevel = AccessLevel.Public;
@@ -205,10 +209,17 @@ method_name returns [String[] parts]
 		Identifier id = null;
 	}
 	:	
-	id=identifier
-	{
-		parts[0] = id.Name;
-	}
+	(
+		id=identifier
+		{
+			parts[0] = id.Name;
+		}
+		|
+		SELF
+		{
+			parts[0] = "self";
+		}
+	)
 	(DOT! id=identifier
 	{
 		parts[1] = id.Name;
@@ -269,16 +280,18 @@ method_param
 protected
 method_body
 	:
-	(statement_list)?
+	(statement_list)*
 	END!
 	;
 
 protected 
 statement
 	:
-	assign_stmt
+	(assign_stmt)=> assign_stmt
 	| 
 	method_def_stmt
+	|
+	expression_statement
 	;
 
 protected
@@ -294,38 +307,98 @@ class_level_supported_statements
 	| 
 	method_def_stmt
 	;
-	
-protected 
-assign_stmt
+
+protected
+var_reference
 	{
 		QualifiedIdentifier qi = null;
 	}
 	:
-	(id:STATIC_IDENTIFIER|id2:INSTANCE_IDENTIFIER|qi=qualified_identifier) ASSIGN expression 
+	id:STATIC_IDENTIFIER|id2:INSTANCE_IDENTIFIER|qi=qualified_identifier
+	;	
+	
+protected 
+assign_stmt
+	:
+	unary_exp ASSIGN expression
 	{
-		
 	}
 	(SEMI)?
 	;
 
+protected
+expression_statement
+	:
+	unary_exp
+	;
+	
 ///	
 /// Expressions
 /// 
 
 protected
-expression
+unary_exp
 	:
-	literal_exp
+	primary_exp
 	;
 
-
-
+protected
+expression
+	:
+	primary_exp
+	;
 
 literal_exp
 	:	
 	INTEGER_LITERAL
 	;
-		
+	
+protected 
+method_invoke_exp
+	:
+	LPAREN ( expression (COMMA! expression)* )? RPAREN
+	( options {greedy=true;} :  SEMI)?
+	;
+	
+protected
+primary_start
+	:	
+	literal_exp
+	|	
+	identifier	
+	|	
+	SELF
+	|	
+	BASE
+	;
+
+protected
+primary_exp
+	:
+	primary_start
+	(	options {greedy=true;}:	
+		postfix_exp
+		|
+		method_invoke_exp
+		|	
+		member_access
+	)*
+	;	
+
+protected
+member_access
+	:	
+	DOT id:identifier 
+	;
+
+
+protected
+postfix_exp
+	:
+	INC
+	|
+	DEC
+	;	
 
 /// 
 /// Lexer
@@ -406,6 +479,7 @@ IDENTIFIER
 options 
 	{
 	 testLiterals=true; 
+ 	 paraphrase = "an identifier";
 	}
 	:	
 	IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
@@ -425,6 +499,7 @@ STATIC_IDENTIFIER
 options 
 	{
 	 testLiterals=false; 
+	 paraphrase = "an static variable name";
 	}
 	:	
 	"@@" IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
@@ -434,6 +509,7 @@ INSTANCE_IDENTIFIER
 options 
 	{
 	 testLiterals=false; 
+	 paraphrase = "an instance variable name";
 	}
 	:	
 	"@" IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*

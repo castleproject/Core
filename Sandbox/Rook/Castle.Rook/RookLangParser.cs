@@ -41,24 +41,28 @@ namespace Castle.Rook.Parse
 		public const int GET = 13;
 		public const int SET = 14;
 		public const int AS = 15;
-		public const int EOS = 16;
-		public const int LESSTHAN = 17;
-		public const int COMMA = 18;
-		public const int LITERAL_public = 19;
-		public const int LITERAL_private = 20;
-		public const int LITERAL_protected = 21;
-		public const int LITERAL_internal = 22;
-		public const int IDENTIFIER = 23;
-		public const int DOT = 24;
-		public const int SEMI = 25;
-		public const int LPAREN = 26;
-		public const int RPAREN = 27;
-		public const int REF = 28;
-		public const int OUT = 29;
-		public const int STATIC_IDENTIFIER = 30;
-		public const int INSTANCE_IDENTIFIER = 31;
-		public const int ASSIGN = 32;
-		public const int INTEGER_LITERAL = 33;
+		public const int INC = 16;
+		public const int DEC = 17;
+		public const int SELF = 18;
+		public const int BASE = 19;
+		public const int EOS = 20;
+		public const int LESSTHAN = 21;
+		public const int COMMA = 22;
+		public const int LITERAL_public = 23;
+		public const int LITERAL_private = 24;
+		public const int LITERAL_protected = 25;
+		public const int LITERAL_internal = 26;
+		public const int IDENTIFIER = 27;
+		public const int DOT = 28;
+		public const int SEMI = 29;
+		public const int LPAREN = 30;
+		public const int RPAREN = 31;
+		public const int REF = 32;
+		public const int OUT = 33;
+		public const int STATIC_IDENTIFIER = 34;
+		public const int INSTANCE_IDENTIFIER = 35;
+		public const int ASSIGN = 36;
+		public const int INTEGER_LITERAL = 37;
 		
 		
 	AccessLevel currentAccessLevel = AccessLevel.Public;
@@ -140,8 +144,15 @@ _loop5_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_0_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_0_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 		return unit;
 	}
@@ -178,8 +189,15 @@ _loop5_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -196,16 +214,26 @@ _loop5_breakloop:				;
 		try {      // for error handling
 			match(MIXIN_DEF);
 			id=identifier();
-			
-					mixinNode = new MixinNode(id.Name);
-					mixins.Add(mixinNode);
+			if (0==inputState.guessing)
+			{
 				
+						mixinNode = new MixinNode(id.Name);
+						mixins.Add(mixinNode);
+					
+			}
 			mixin_body(mixinNode);
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -222,10 +250,13 @@ _loop5_breakloop:				;
 		try {      // for error handling
 			match(CLASS_DEF);
 			id=identifier();
-			
-					classNode = new ClassNode(id.Name);
-					types.Add(classNode);
+			if (0==inputState.guessing)
+			{
 				
+						classNode = new ClassNode(id.Name);
+						types.Add(classNode);
+					
+			}
 			{
 				switch ( LA(1) )
 				{
@@ -236,13 +267,14 @@ _loop5_breakloop:				;
 				}
 				case END:
 				case DEF:
+				case SELF:
+				case BASE:
 				case LITERAL_public:
 				case LITERAL_private:
 				case LITERAL_protected:
 				case LITERAL_internal:
 				case IDENTIFIER:
-				case STATIC_IDENTIFIER:
-				case INSTANCE_IDENTIFIER:
+				case INTEGER_LITERAL:
 				{
 					break;
 				}
@@ -256,8 +288,15 @@ _loop5_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -272,8 +311,15 @@ _loop5_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -290,18 +336,31 @@ _loop5_breakloop:				;
 		try {      // for error handling
 			match(NAMESPACE);
 			qi=qualified_identifier();
-			
-					ns = new NamespaceNode( qi );
+			if (0==inputState.guessing)
+			{
 				
+						ns = new NamespaceNode( qi );
+					
+			}
 			namespace_body(ns);
-			
-					namespaces.Add(ns);
+			if (0==inputState.guessing)
+			{
 				
+						namespaces.Add(ns);
+					
+			}
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -317,9 +376,12 @@ _loop5_breakloop:				;
 		
 		try {      // for error handling
 			id=identifier();
-			
-					sb.Append(id.Name);
+			if (0==inputState.guessing)
+			{
 				
+						sb.Append(id.Name);
+					
+			}
 			{    // ( ... )*
 				for (;;)
 				{
@@ -327,10 +389,13 @@ _loop5_breakloop:				;
 					{
 						match(DOT);
 						id=identifier();
-						
-								sb.Append('.');
-								sb.Append(id.Name);
+						if (0==inputState.guessing)
+						{
 							
+									sb.Append('.');
+									sb.Append(id.Name);
+								
+						}
 					}
 					else
 					{
@@ -340,14 +405,24 @@ _loop5_breakloop:				;
 				}
 _loop26_breakloop:				;
 			}    // ( ... )*
-			
-					ident = new QualifiedIdentifier( sb.ToString() );
+			if (0==inputState.guessing)
+			{
 				
+						ident = new QualifiedIdentifier( sb.ToString() );
+					
+			}
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_2_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_2_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 		return ident;
 	}
@@ -378,8 +453,15 @@ _loop11_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -395,12 +477,22 @@ _loop11_breakloop:				;
 		try {      // for error handling
 			id = LT(1);
 			match(IDENTIFIER);
-			ident = new Identifier(id.getText());
+			if (0==inputState.guessing)
+			{
+				ident = new Identifier(id.getText());
+			}
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_3_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_3_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 		return ident;
 	}
@@ -417,9 +509,12 @@ _loop11_breakloop:				;
 		try {      // for error handling
 			match(LESSTHAN);
 			qi=qualified_identifier();
-			
-					type.BaseTypes.Add( qi );
+			if (0==inputState.guessing)
+			{
 				
+						type.BaseTypes.Add( qi );
+					
+			}
 			{    // ( ... )*
 				for (;;)
 				{
@@ -427,9 +522,12 @@ _loop11_breakloop:				;
 					{
 						match(COMMA);
 						qi=qualified_identifier();
-						
-								type.BaseTypes.Add( qi );
+						if (0==inputState.guessing)
+						{
 							
+									type.BaseTypes.Add( qi );
+								
+						}
 					}
 					else
 					{
@@ -442,8 +540,15 @@ _loop21_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_4_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_4_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -478,8 +583,15 @@ _loop18_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -494,8 +606,15 @@ _loop18_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_1_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_1_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -509,31 +628,44 @@ _loop18_breakloop:				;
 			case LITERAL_public:
 			{
 				match(LITERAL_public);
-				currentAccessLevel = AccessLevel.Public;
+				if (0==inputState.guessing)
+				{
+					currentAccessLevel = AccessLevel.Public;
+				}
 				break;
 			}
 			case LITERAL_private:
 			{
 				match(LITERAL_private);
-				currentAccessLevel = AccessLevel.Private;
+				if (0==inputState.guessing)
+				{
+					currentAccessLevel = AccessLevel.Private;
+				}
 				break;
 			}
 			case LITERAL_protected:
 			{
 				match(LITERAL_protected);
-				currentAccessLevel = AccessLevel.Protected;
+				if (0==inputState.guessing)
+				{
+					currentAccessLevel = AccessLevel.Protected;
+				}
 				break;
 			}
 			case LITERAL_internal:
 			{
 				match(LITERAL_internal);
-				currentAccessLevel = AccessLevel.Internal;
+				if (0==inputState.guessing)
+				{
+					currentAccessLevel = AccessLevel.Internal;
+				}
 				break;
 			}
 			case DEF:
+			case SELF:
+			case BASE:
 			case IDENTIFIER:
-			case STATIC_IDENTIFIER:
-			case INSTANCE_IDENTIFIER:
+			case INTEGER_LITERAL:
 			{
 				break;
 			}
@@ -545,8 +677,15 @@ _loop18_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_6_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_6_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -557,9 +696,10 @@ _loop18_breakloop:				;
 		try {      // for error handling
 			switch ( LA(1) )
 			{
+			case SELF:
+			case BASE:
 			case IDENTIFIER:
-			case STATIC_IDENTIFIER:
-			case INSTANCE_IDENTIFIER:
+			case INTEGER_LITERAL:
 			{
 				assign_stmt();
 				break;
@@ -577,8 +717,15 @@ _loop18_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_4_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_4_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -592,10 +739,37 @@ _loop18_breakloop:				;
 			
 		
 		try {      // for error handling
-			id=identifier();
-			
-					parts[0] = id.Name;
-				
+			{
+				switch ( LA(1) )
+				{
+				case IDENTIFIER:
+				{
+					id=identifier();
+					if (0==inputState.guessing)
+					{
+						
+									parts[0] = id.Name;
+								
+					}
+					break;
+				}
+				case SELF:
+				{
+					match(SELF);
+					if (0==inputState.guessing)
+					{
+						
+									parts[0] = "self";
+								
+					}
+					break;
+				}
+				default:
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				 }
+			}
 			{
 				switch ( LA(1) )
 				{
@@ -603,9 +777,12 @@ _loop18_breakloop:				;
 				{
 					match(DOT);
 					id=identifier();
-					
-							parts[1] = id.Name;
+					if (0==inputState.guessing)
+					{
 						
+								parts[1] = id.Name;
+							
+					}
 					break;
 				}
 				case LPAREN:
@@ -621,8 +798,15 @@ _loop18_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_7_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_7_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 		return parts;
 	}
@@ -644,18 +828,22 @@ _loop18_breakloop:				;
 				{
 					match(AS);
 					id=identifier();
-					
-							qi = new QualifiedIdentifier( id.Name );
+					if (0==inputState.guessing)
+					{
 						
+								qi = new QualifiedIdentifier( id.Name );
+							
+					}
 					break;
 				}
 				case END:
 				case DEF:
+				case SELF:
+				case BASE:
 				case COMMA:
 				case IDENTIFIER:
 				case RPAREN:
-				case STATIC_IDENTIFIER:
-				case INSTANCE_IDENTIFIER:
+				case INTEGER_LITERAL:
 				{
 					break;
 				}
@@ -668,8 +856,15 @@ _loop18_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_8_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_8_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 		return qi;
 	}
@@ -685,9 +880,12 @@ _loop18_breakloop:				;
 		try {      // for error handling
 			match(DEF);
 			nameParts=method_name();
-			
-					MethodNodeBuilder.Build(nameParts);
+			if (0==inputState.guessing)
+			{
 				
+						MethodNodeBuilder.Build(nameParts);
+					
+			}
 			formal_param_list();
 			retType=type_name();
 			method_body();
@@ -701,13 +899,14 @@ _loop18_breakloop:				;
 				}
 				case END:
 				case DEF:
+				case SELF:
+				case BASE:
 				case LITERAL_public:
 				case LITERAL_private:
 				case LITERAL_protected:
 				case LITERAL_internal:
 				case IDENTIFIER:
-				case STATIC_IDENTIFIER:
-				case INSTANCE_IDENTIFIER:
+				case INTEGER_LITERAL:
 				{
 					break;
 				}
@@ -720,8 +919,15 @@ _loop18_breakloop:				;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_4_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_4_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -749,11 +955,11 @@ _loop18_breakloop:				;
 							}
 							else
 							{
-								goto _loop36_breakloop;
+								goto _loop37_breakloop;
 							}
 							
 						}
-_loop36_breakloop:						;
+_loop37_breakloop:						;
 					}    // ( ... )*
 					break;
 				}
@@ -771,8 +977,15 @@ _loop36_breakloop:						;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_9_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_9_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -781,33 +994,34 @@ _loop36_breakloop:						;
 		
 		
 		try {      // for error handling
-			{
-				switch ( LA(1) )
+			{    // ( ... )*
+				for (;;)
 				{
-				case DEF:
-				case IDENTIFIER:
-				case STATIC_IDENTIFIER:
-				case INSTANCE_IDENTIFIER:
-				{
-					statement_list();
-					break;
+					if ((tokenSet_6_.member(LA(1))))
+					{
+						statement_list();
+					}
+					else
+					{
+						goto _loop42_breakloop;
+					}
+					
 				}
-				case END:
-				{
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(LT(1), getFilename());
-				}
-				 }
-			}
+_loop42_breakloop:				;
+			}    // ( ... )*
 			match(END);
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_10_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_10_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -848,8 +1062,15 @@ _loop36_breakloop:						;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_11_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_11_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -862,8 +1083,15 @@ _loop36_breakloop:						;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_12_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_12_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -872,74 +1100,67 @@ _loop36_breakloop:						;
 		
 		
 		try {      // for error handling
-			switch ( LA(1) )
+			bool synPredMatched45 = false;
+			if (((tokenSet_13_.member(LA(1))) && (tokenSet_14_.member(LA(2)))))
 			{
-			case IDENTIFIER:
-			case STATIC_IDENTIFIER:
-			case INSTANCE_IDENTIFIER:
+				int _m45 = mark();
+				synPredMatched45 = true;
+				inputState.guessing++;
+				try {
+					{
+						assign_stmt();
+					}
+				}
+				catch (RecognitionException)
+				{
+					synPredMatched45 = false;
+				}
+				rewind(_m45);
+				inputState.guessing--;
+			}
+			if ( synPredMatched45 )
 			{
 				assign_stmt();
-				break;
 			}
-			case DEF:
-			{
+			else if ((LA(1)==DEF)) {
 				method_def_stmt();
-				break;
 			}
-			default:
+			else if ((tokenSet_13_.member(LA(1))) && (tokenSet_15_.member(LA(2)))) {
+				expression_statement();
+			}
+			else
 			{
 				throw new NoViableAltException(LT(1), getFilename());
 			}
-			 }
+			
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_12_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_12_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
 	protected void assign_stmt() //throws RecognitionException, TokenStreamException
 {
 		
-		IToken  id = null;
-		IToken  id2 = null;
-		
-				QualifiedIdentifier qi = null;
-			
 		
 		try {      // for error handling
-			{
-				switch ( LA(1) )
-				{
-				case STATIC_IDENTIFIER:
-				{
-					id = LT(1);
-					match(STATIC_IDENTIFIER);
-					break;
-				}
-				case INSTANCE_IDENTIFIER:
-				{
-					id2 = LT(1);
-					match(INSTANCE_IDENTIFIER);
-					break;
-				}
-				case IDENTIFIER:
-				{
-					qi=qualified_identifier();
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(LT(1), getFilename());
-				}
-				 }
-			}
+			unary_exp();
 			match(ASSIGN);
 			expression();
-			
-					
+			if (0==inputState.guessing)
+			{
 				
+					
+			}
 			{
 				switch ( LA(1) )
 				{
@@ -950,13 +1171,14 @@ _loop36_breakloop:						;
 				}
 				case END:
 				case DEF:
+				case SELF:
+				case BASE:
 				case LITERAL_public:
 				case LITERAL_private:
 				case LITERAL_protected:
 				case LITERAL_internal:
 				case IDENTIFIER:
-				case STATIC_IDENTIFIER:
-				case INSTANCE_IDENTIFIER:
+				case INTEGER_LITERAL:
 				{
 					break;
 				}
@@ -969,8 +1191,106 @@ _loop36_breakloop:						;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_4_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_4_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void expression_statement() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			unary_exp();
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_12_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void var_reference() //throws RecognitionException, TokenStreamException
+{
+		
+		IToken  id = null;
+		IToken  id2 = null;
+		
+				QualifiedIdentifier qi = null;
+			
+		
+		try {      // for error handling
+			switch ( LA(1) )
+			{
+			case STATIC_IDENTIFIER:
+			{
+				id = LT(1);
+				match(STATIC_IDENTIFIER);
+				break;
+			}
+			case INSTANCE_IDENTIFIER:
+			{
+				id2 = LT(1);
+				match(INSTANCE_IDENTIFIER);
+				break;
+			}
+			case IDENTIFIER:
+			{
+				qi=qualified_identifier();
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			 }
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_0_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void unary_exp() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			primary_exp();
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_16_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -979,12 +1299,69 @@ _loop36_breakloop:						;
 		
 		
 		try {      // for error handling
-			literal_exp();
+			primary_exp();
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_10_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_17_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void primary_exp() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			primary_start();
+			{    // ( ... )*
+				for (;;)
+				{
+					switch ( LA(1) )
+					{
+					case INC:
+					case DEC:
+					{
+						postfix_exp();
+						break;
+					}
+					case LPAREN:
+					{
+						method_invoke_exp();
+						break;
+					}
+					case DOT:
+					{
+						member_access();
+						break;
+					}
+					default:
+					{
+						goto _loop63_breakloop;
+					}
+					 }
+				}
+_loop63_breakloop:				;
+			}    // ( ... )*
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_18_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -997,8 +1374,193 @@ _loop36_breakloop:						;
 		}
 		catch (RecognitionException ex)
 		{
-			reportError(ex);
-			recover(ex,tokenSet_10_);
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_19_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void method_invoke_exp() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			match(LPAREN);
+			{
+				switch ( LA(1) )
+				{
+				case SELF:
+				case BASE:
+				case IDENTIFIER:
+				case INTEGER_LITERAL:
+				{
+					expression();
+					{    // ( ... )*
+						for (;;)
+						{
+							if ((LA(1)==COMMA))
+							{
+								match(COMMA);
+								expression();
+							}
+							else
+							{
+								goto _loop58_breakloop;
+							}
+							
+						}
+_loop58_breakloop:						;
+					}    // ( ... )*
+					break;
+				}
+				case RPAREN:
+				{
+					break;
+				}
+				default:
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				 }
+			}
+			match(RPAREN);
+			{
+				if ((LA(1)==SEMI) && (tokenSet_19_.member(LA(2))))
+				{
+					match(SEMI);
+				}
+				else if ((tokenSet_19_.member(LA(1))) && (tokenSet_20_.member(LA(2)))) {
+				}
+				else
+				{
+					throw new NoViableAltException(LT(1), getFilename());
+				}
+				
+			}
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_19_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void primary_start() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			switch ( LA(1) )
+			{
+			case INTEGER_LITERAL:
+			{
+				literal_exp();
+				break;
+			}
+			case IDENTIFIER:
+			{
+				identifier();
+				break;
+			}
+			case SELF:
+			{
+				match(SELF);
+				break;
+			}
+			case BASE:
+			{
+				match(BASE);
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			 }
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_19_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void postfix_exp() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			switch ( LA(1) )
+			{
+			case INC:
+			{
+				match(INC);
+				break;
+			}
+			case DEC:
+			{
+				match(DEC);
+				break;
+			}
+			default:
+			{
+				throw new NoViableAltException(LT(1), getFilename());
+			}
+			 }
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_19_);
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+	}
+	
+	protected void member_access() //throws RecognitionException, TokenStreamException
+{
+		
+		
+		try {      // for error handling
+			match(DOT);
+			identifier();
+		}
+		catch (RecognitionException ex)
+		{
+			if (0 == inputState.guessing)
+			{
+				reportError(ex);
+				recover(ex,tokenSet_19_);
+			}
+			else
+			{
+				throw ex;
+			}
 		}
 	}
 	
@@ -1023,6 +1585,10 @@ _loop36_breakloop:						;
 		@"""get""",
 		@"""set""",
 		@"""as""",
+		@"""++""",
+		@"""--""",
+		@"""self""",
+		@"""base""",
 		@"""EOS""",
 		@"""LESSTHAN""",
 		@"""COMMA""",
@@ -1030,15 +1596,15 @@ _loop36_breakloop:						;
 		@"""private""",
 		@"""protected""",
 		@"""internal""",
-		@"""IDENTIFIER""",
+		@"""an identifier""",
 		@"""DOT""",
 		@"""SEMI""",
 		@"""LPAREN""",
 		@"""RPAREN""",
 		@"""REF""",
 		@"""OUT""",
-		@"""STATIC_IDENTIFIER""",
-		@"""INSTANCE_IDENTIFIER""",
+		@"""an static variable name""",
+		@"""an instance variable name""",
 		@"""ASSIGN""",
 		@"""INTEGER_LITERAL"""
 	};
@@ -1057,70 +1623,118 @@ _loop36_breakloop:						;
 	public static readonly BitSet tokenSet_1_ = new BitSet(mk_tokenSet_1_());
 	private static long[] mk_tokenSet_2_()
 	{
-		long[] data = { 7532711024L, 0L};
+		long[] data = { 137703984242L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_2_ = new BitSet(mk_tokenSet_2_());
 	private static long[] mk_tokenSet_3_()
 	{
-		long[] data = { 7750978672L, 0L};
+		long[] data = { 210452319346L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_3_ = new BitSet(mk_tokenSet_3_());
 	private static long[] mk_tokenSet_4_()
 	{
-		long[] data = { 3237481472L, 0L};
+		long[] data = { 137699789824L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_4_ = new BitSet(mk_tokenSet_4_());
 	private static long[] mk_tokenSet_5_()
 	{
-		long[] data = { 3237480448L, 0L};
+		long[] data = { 137699788800L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_5_ = new BitSet(mk_tokenSet_5_());
 	private static long[] mk_tokenSet_6_()
 	{
-		long[] data = { 3229616128L, 0L};
+		long[] data = { 137573959680L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_6_ = new BitSet(mk_tokenSet_6_());
 	private static long[] mk_tokenSet_7_()
 	{
-		long[] data = { 67108864L, 0L};
+		long[] data = { 1073741824L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_7_ = new BitSet(mk_tokenSet_7_());
 	private static long[] mk_tokenSet_8_()
 	{
-		long[] data = { 3364097024L, 0L};
+		long[] data = { 139725638656L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_8_ = new BitSet(mk_tokenSet_8_());
 	private static long[] mk_tokenSet_9_()
 	{
-		long[] data = { 3229649920L, 0L};
+		long[] data = { 137573993472L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_9_ = new BitSet(mk_tokenSet_9_());
 	private static long[] mk_tokenSet_10_()
 	{
-		long[] data = { 3271035904L, 0L};
+		long[] data = { 138236660736L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_10_ = new BitSet(mk_tokenSet_10_());
 	private static long[] mk_tokenSet_11_()
 	{
-		long[] data = { 134479872L, 0L};
+		long[] data = { 2151677952L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_11_ = new BitSet(mk_tokenSet_11_());
 	private static long[] mk_tokenSet_12_()
 	{
-		long[] data = { 1024L, 0L};
+		long[] data = { 137573960704L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_12_ = new BitSet(mk_tokenSet_12_());
+	private static long[] mk_tokenSet_13_()
+	{
+		long[] data = { 137573957632L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_13_ = new BitSet(mk_tokenSet_13_());
+	private static long[] mk_tokenSet_14_()
+	{
+		long[] data = { 70061850624L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_14_ = new BitSet(mk_tokenSet_14_());
+	private static long[] mk_tokenSet_15_()
+	{
+		long[] data = { 138916334592L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_15_ = new BitSet(mk_tokenSet_15_());
+	private static long[] mk_tokenSet_16_()
+	{
+		long[] data = { 206293437440L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_16_ = new BitSet(mk_tokenSet_16_());
+	private static long[] mk_tokenSet_17_()
+	{
+		long[] data = { 140388338688L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_17_ = new BitSet(mk_tokenSet_17_());
+	private static long[] mk_tokenSet_18_()
+	{
+		long[] data = { 209107815424L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_18_ = new BitSet(mk_tokenSet_18_());
+	private static long[] mk_tokenSet_19_()
+	{
+		long[] data = { 210450189312L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_19_ = new BitSet(mk_tokenSet_19_());
+	private static long[] mk_tokenSet_20_()
+	{
+		long[] data = { 210450189426L, 0L};
+		return data;
+	}
+	public static readonly BitSet tokenSet_20_ = new BitSet(mk_tokenSet_20_());
 	
 }
 }
