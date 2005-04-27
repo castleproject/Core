@@ -19,11 +19,13 @@ namespace Castle.Rook.AST
 
 	public class AssignmentStatement : AbstractStatement
 	{
-		public IdentifierReferenceExpression target;
-		public Expression value;
+		private IdentifierReferenceExpression target;
+		private Expression value;
+		private AccessLevel scopeAccessLevel;
 
-		public AssignmentStatement(IdentifierReferenceExpression target, Expression value)
+		public AssignmentStatement(AccessLevel scopeAccessLevel, IdentifierReferenceExpression target, Expression value)
 		{
+			this.scopeAccessLevel = scopeAccessLevel;
 			this.target = target;
 			this.value = value;
 		}
@@ -36,6 +38,11 @@ namespace Castle.Rook.AST
 		public Expression Value
 		{
 			get { return this.value; }
+		}
+
+		public AccessLevel ScopeAccessLevel
+		{
+			get { return scopeAccessLevel; }
 		}
 	}
 }

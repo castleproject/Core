@@ -254,7 +254,7 @@ method_def_stmt returns [MethodDefinitionStatement method]
 	:
 	DEF! nameParts=method_name 
 	{
-		method = new MethodDefinitionStatement(nameParts);
+		method = new MethodDefinitionStatement(currentAccessLevel, nameParts);
 	}
 	formal_param_list[method]
 	retType=type_name
@@ -348,7 +348,7 @@ assign_stmt returns [AssignmentStatement stmt]
 	:
 	target=var_reference ASSIGN value=expression
 	{
-		stmt = new AssignmentStatement(target, value);
+		stmt = new AssignmentStatement(currentAccessLevel, target, value);
 	}
 	;
 

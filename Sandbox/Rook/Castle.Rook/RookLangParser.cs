@@ -897,7 +897,7 @@ _loop18_breakloop:				;
 			if (0==inputState.guessing)
 			{
 				
-						method = new MethodDefinitionStatement(nameParts);
+						method = new MethodDefinitionStatement(currentAccessLevel, nameParts);
 					
 			}
 			formal_param_list(method);
@@ -1265,7 +1265,7 @@ _loop44_breakloop:				;
 			if (0==inputState.guessing)
 			{
 				
-						stmt = new AssignmentStatement(target, value);
+						stmt = new AssignmentStatement(currentAccessLevel, target, value);
 					
 			}
 		}

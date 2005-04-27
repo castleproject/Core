@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{6ED043EF-37C0-4DB4-A288-E08388985970}"
+        ProjectGuid = "{891394B0-5AB3-4E12-AED1-C0A7F3EF54C0}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Rook.RuntimeSupport"
+                AssemblyName = "Castle.Rook.RuntimeSupport.Tests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Rook.RuntimeSupport"
+                RootNamespace = "Castle.Rook.RuntimeSupport.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -76,8 +76,24 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.Xml"
+                    AssemblyName = "System.XML"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "Castle.Rook"
+                    Project = "{D97E576A-FFAF-468F-B196-26799CE07F15}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Rook.RuntimeSupport"
+                    Project = "{6ED043EF-37C0-4DB4-A288-E08388985970}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
             </References>
         </Build>
@@ -89,12 +105,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dispatcher.cs"
+                    RelPath = "DynamicDispatchTableTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DynamicDispatchTable.cs"
+                    RelPath = "OrdinaryClasses\MySimpleClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

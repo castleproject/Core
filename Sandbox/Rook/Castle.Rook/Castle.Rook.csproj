@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
-                    OutputPath = "bin\Release\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -636,7 +636,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\AssignmentStatement.cs"
+                    RelPath = "AST\AccessLevel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -657,11 +657,6 @@
                 />
                 <File
                     RelPath = "AST\InterfaceNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\MemberContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -762,6 +757,11 @@
                 />
                 <File
                     RelPath = "AST\Statement\AbstractStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Statement\AssignmentStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

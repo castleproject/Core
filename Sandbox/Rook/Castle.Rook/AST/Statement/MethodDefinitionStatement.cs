@@ -25,17 +25,20 @@ namespace Castle.Rook.AST
 		private String boundTo;
 		private IList parameters = new ArrayList();
 		private IList statements = new ArrayList();
+		private AccessLevel scopeAccessLevel;
 
-		public MethodDefinitionStatement(String[] nameParts)
+		public MethodDefinitionStatement(AccessLevel scopeAccessLevel, String[] nameParts)
 		{
+			this.scopeAccessLevel = scopeAccessLevel;
+
 			if (nameParts[1] == null)
 			{
 				name = nameParts[0];
 			}
 			else
 			{
-				name = nameParts[0];
-				boundTo = nameParts[1]; // self, interface and so on
+				boundTo = nameParts[0]; // self, interface and so on
+				name = nameParts[1];
 			}
 		}
 
@@ -63,6 +66,11 @@ namespace Castle.Rook.AST
 		public string BoundTo
 		{
 			get { return boundTo; }
+		}
+
+		public AccessLevel ScopeAccessLevel
+		{
+			get { return scopeAccessLevel; }
 		}
 	}
 }

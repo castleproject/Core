@@ -139,6 +139,25 @@ namespace Castle.Rook.Parse.Tests
 			Assert.IsNotNull(classNode);
 			Assert.AreEqual("MyClass", classNode.Name);
 			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			Assert.AreEqual(3, classNode.Statements.Count);
+
+			AssignmentStatement stmt = classNode.Statements[0] as AssignmentStatement;
+			Assert.IsNotNull(stmt);
+			Assert.AreEqual(AccessLevel.Private, stmt.ScopeAccessLevel);
+			Assert.AreEqual("@@myfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+			Assert.AreEqual("1", (stmt.Value as LiteralExpression).Value);
+
+			stmt = classNode.Statements[1] as AssignmentStatement;
+			Assert.IsNotNull(stmt);
+			Assert.AreEqual(AccessLevel.Public, stmt.ScopeAccessLevel);
+			Assert.AreEqual("@@otherfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+			Assert.AreEqual("2", (stmt.Value as LiteralExpression).Value);
+
+			stmt = classNode.Statements[2] as AssignmentStatement;
+			Assert.IsNotNull(stmt);
+			Assert.AreEqual(AccessLevel.Public, stmt.ScopeAccessLevel);
+			Assert.AreEqual("@@someother", (stmt.Target as StaticFieldReferenceExpression).Name);
+			Assert.AreEqual("3", (stmt.Value as LiteralExpression).Value);
 		}
 
 		[Test]
@@ -165,20 +184,19 @@ namespace Castle.Rook.Parse.Tests
 			Assert.IsNotNull(classNode);
 			Assert.AreEqual("MyClass", classNode.Name);
 			Assert.AreEqual(0, classNode.BaseTypes.Count);
-//			Assert.AreEqual(3, classNode.StaticFields.Count);
-//			Assert.AreEqual(0, classNode.InstanceFields.Count);
-//
-//			StaticFieldIdentifier staticField = classNode.StaticFields[0] as StaticFieldIdentifier;
-//			Assert.AreEqual("@@myfield", staticField.Name);
-//			Assert.AreEqual(AccessLevel.Private, staticField.Level);
-//			
-//			staticField = classNode.StaticFields[1] as StaticFieldIdentifier;
-//			Assert.AreEqual("@@otherfield", staticField.Name);
-//			Assert.AreEqual(AccessLevel.Public, staticField.Level);
-//
-//			staticField = classNode.StaticFields[2] as StaticFieldIdentifier;
-//			Assert.AreEqual("@@someother", staticField.Name);
-//			Assert.AreEqual(AccessLevel.Public, staticField.Level);
+			Assert.AreEqual(3, classNode.Statements.Count);
+
+			AssignmentStatement assignStmt = classNode.Statements[0] as AssignmentStatement;
+			MethodDefinitionStatement method1Stmt = classNode.Statements[1] as MethodDefinitionStatement;
+			MethodDefinitionStatement method2Stmt = classNode.Statements[2] as MethodDefinitionStatement;
+
+			Assert.IsNotNull(assignStmt);
+			Assert.IsNotNull(method1Stmt);
+			Assert.IsNotNull(method2Stmt);
+
+			Assert.AreEqual("method1", method1Stmt.Name);
+			Assert.AreEqual("method2", method2Stmt.Name);
+			Assert.AreEqual("self", method2Stmt.BoundTo);
 		}
 	}
 }
