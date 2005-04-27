@@ -15,7 +15,6 @@
 namespace Castle.ActiveRecord.Tests.Model
 {
   using System;
-  using System.Collections;
   using Iesi.Collections;
 
 
