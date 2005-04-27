@@ -395,9 +395,7 @@ member_access
 protected
 postfix_exp
 	:
-	INC
-	|
-	DEC
+	INC	| DEC
 	;	
 
 /// 

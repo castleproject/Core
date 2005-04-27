@@ -128,6 +128,7 @@ namespace Castle.Rook.Parse.Tests
 				"     " + 
 				"     self.method2(10, 11)" + 
 				"     self.propertyx.save(100)" + 
+				"     self(100)" + 
 				"     " + 
 				" end " + 
 				"" + 

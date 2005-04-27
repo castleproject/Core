@@ -96,6 +96,10 @@
 				<include name="${bin.dir}/HashCodeProvider.dll" />
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
 			</references>
+
+			<resources basedir="${test.src.dir}" prefix="Castle.ActiveRecord.Tests" dynamicprefix="true">
+				<include name="TestXmlMappings\Order.xml" />
+			</resources>
 		</csc>
 	</target>
 	

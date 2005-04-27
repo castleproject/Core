@@ -95,7 +95,6 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 			
 			NHibernateMappingEngine engine = new NHibernateMappingEngine();
 			string xml = engine.CreateMapping(typeof(Order), new Type[] { typeof(Order) });
-			Console.Write("Xml string is " + xml);
 			Assert.AreEqual(expected, xml);
 		}
 	}

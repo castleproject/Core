@@ -38,11 +38,11 @@ namespace Castle.ActiveRecord
 			if (source == null) throw new ArgumentNullException("source");
 			if (types == null) throw new ArgumentNullException("types");
 
-			/// First initialization
+			// First initialization
 			SessionFactoryHolder holder = new SessionFactoryHolder();
 			ActiveRecordBase._holder = holder;
 
-			/// Base configuration
+			// Base configuration
 			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
 			NHibernateMappingEngine engine = new NHibernateMappingEngine();
@@ -57,11 +57,6 @@ namespace Castle.ActiveRecord
 				SetUpConfiguration(source, type, holder);
 
 				Configuration cfg = holder.GetConfiguration( holder.GetRootType(type) );
-
-//				if (cfg == null)
-//				{
-//					// TODO: Add to wait list
-//				}
 
 				if (!type.IsAbstract)
 				{
