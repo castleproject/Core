@@ -29,28 +29,37 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 		public Controller GetController(UrlInfo info)
 		{
-			if ("home".Equals(info.Controller))
+			switch(info.Controller)
 			{
-				return new HomeController();
+				case "home":
+				{
+					return new HomeController();
+				}
+				case "filtered":
+				{
+					return new FilteredController();
+				}
+				case "filtered2":
+				{
+					return new Filtered2Controller();
+				}
+				case "exception":
+				{
+					return new ExceptionController();
+				}
+				case "layout":
+				{
+					return new LayoutController();
+				}
+				case "smart":
+				{
+					return new SmartController();
+				}
+				default:
+				{
+					throw new RailsException("Unknown controller");
+				}
 			}
-			else if ("filtered".Equals(info.Controller))
-			{
-				return new FilteredController();
-			}
-			else if ("filtered2".Equals(info.Controller))
-			{
-				return new Filtered2Controller();
-			}
-			else if ("exception".Equals(info.Controller))
-			{
-				return new ExceptionController();
-			}
-			else if ("layout".Equals(info.Controller))
-			{
-				return new LayoutController();
-			}
-
-			throw new RailsException("Unknown controller");
 		}
 
 		public void Release(Controller controller)

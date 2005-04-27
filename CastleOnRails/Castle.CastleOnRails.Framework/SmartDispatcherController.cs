@@ -1,3 +1,4 @@
+using System.ComponentModel;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -130,6 +131,10 @@ namespace Castle.CastleOnRails.Framework
 					{
 						args[i] = value;
 					}
+					else if (param.ParameterType == typeof(String[]))
+					{
+						args[i] = value.Split(',');
+					}
 					else if (param.ParameterType == typeof(Guid))
 					{
 						if (value != null)
@@ -165,6 +170,17 @@ namespace Castle.CastleOnRails.Framework
 					{
 						if (value == String.Empty) value = null;
 						args[i] = System.Convert.ToInt32( value );
+					}
+					else if (param.ParameterType == typeof(Int32[]))
+					{
+						if (value == String.Empty)
+						{
+							args[i] = null;
+						}
+						else
+						{
+							args[i] = ToInt32Array(value);
+						}
 					}
 					else if (param.ParameterType == typeof(Int64))
 					{
@@ -227,6 +243,20 @@ namespace Castle.CastleOnRails.Framework
 			}
 
 			return args;
+		}
+
+		private Int32[] ToInt32Array(string value)
+		{
+			String[] splited = value.Split(',');
+
+			ArrayList array = new ArrayList(splited.Length);
+
+			foreach (String val in splited)
+			{
+				array.Add(Convert.ToInt32(val));
+			}
+
+			return (Int32[]) array.ToArray(typeof(Int32));
 		}
 	}
 }

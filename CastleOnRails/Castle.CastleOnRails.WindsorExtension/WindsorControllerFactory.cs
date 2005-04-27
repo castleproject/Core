@@ -43,9 +43,9 @@ namespace Castle.CastleOnRails.WindsorExtension
 			{
 				tree = (ControllerTree) container["rails.controllertree"];
 			}
-			catch(ComponentNotFoundException e)
+			catch(ComponentNotFoundException)
 			{
-				throw new RailsException("ControllerTree not found. Check if the RailsFacility is properly configured", e);
+				throw new RailsException("ControllerTree not found. Check if the RailsFacility is properly configured");
 			}
 
 			String key = (String) tree.GetController(urlInfo.Area, urlInfo.Controller);

@@ -31,7 +31,9 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 		{
 		}
 
-		private void InitVelocity()
+		#region IViewEngine Members
+
+		public override void Init()
 		{
 			ExtendedProperties props = new ExtendedProperties();
 
@@ -39,13 +41,6 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
 
 			Velocity.Init(props);
-		}
-
-		#region IViewEngine Members
-
-		public override void Init()
-		{
-			InitVelocity();
 		}
 
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
@@ -149,12 +144,14 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 				if (entry.Value == null) continue;
 				innerContext[entry.Key] = entry.Value;
 			}
+
 			foreach (String key in context.Params.AllKeys)
 			{
 				object value = context.Params[key];
 				if (value == null) continue;
 				innerContext[key] = value;
 			}
+
 			foreach (DictionaryEntry entry in context.Flash)
 			{
 				if (entry.Value == null) continue;

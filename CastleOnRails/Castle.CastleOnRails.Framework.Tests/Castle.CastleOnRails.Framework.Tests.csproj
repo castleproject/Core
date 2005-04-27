@@ -165,6 +165,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SmartDispatchTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\ExceptionController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -201,6 +206,11 @@
                 />
                 <File
                     RelPath = "Controllers\SecureController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\SmartController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
