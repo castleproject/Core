@@ -36,6 +36,8 @@ namespace Castle.Facilities.Db4oIntegration
 		internal const string RemotePortKey = "remotePort";
 		internal const string UserKey = "user";
 		internal const string PasswordKey = "password";
+		internal const string ActivationDepth = "activationDepth";
+		internal const string UpdateDepth = "updateDepth";
 
 		public Db4oFacility()
 		{
@@ -77,6 +79,16 @@ namespace Castle.Facilities.Db4oIntegration
 
 			properties.Add(IdKey, compKey);
 			properties.Add(DatabaseFileKey, config.Attributes[DatabaseFileKey]);
+
+			if (config.Attributes[ActivationDepth] != null)
+			{
+				properties.Add(ActivationDepth, Convert.ToInt32(config.Attributes[ActivationDepth]));
+			}
+
+			if (config.Attributes[UpdateDepth] != null)
+			{
+				properties.Add(UpdateDepth, Convert.ToInt32(config.Attributes[UpdateDepth]));
+			}
 
 			if (config.Attributes[HostNameKey] != null)
 			{

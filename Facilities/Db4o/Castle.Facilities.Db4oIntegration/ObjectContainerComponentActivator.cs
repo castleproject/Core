@@ -33,20 +33,58 @@ namespace Castle.Facilities.Db4oIntegration
 
 		protected override object Instantiate()
 		{
+			SetActivationDepth();
+
+			SetUpdateDepth();
+
 			if (Model.ExtendedProperties[Db4oFacility.HostNameKey] != null)
 			{
-				string hostName = (string) Model.ExtendedProperties[Db4oFacility.HostNameKey];
-				int remotePort = (int) Model.ExtendedProperties[Db4oFacility.RemotePortKey];
-				string user = (string) Model.ExtendedProperties[Db4oFacility.UserKey];
-				string password = (string) Model.ExtendedProperties[Db4oFacility.PasswordKey];
-
-				return Db4o.openClient(hostName, remotePort, user, password);
+				return OpenClient();
 			}
 			else
 			{
-				string databaseFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (string) Model.ExtendedProperties[Db4oFacility.DatabaseFileKey]);
+				return OpenLocal();
+			}
+		}
 
-				return Db4o.openFile(databaseFile);
+		private ObjectContainer OpenLocal()
+		{
+			string databaseFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (string) Model.ExtendedProperties[Db4oFacility.DatabaseFileKey]);
+	
+			return Db4o.openFile(databaseFile);
+		}
+
+		private ObjectContainer OpenClient()
+		{
+			string hostName = (string) Model.ExtendedProperties[Db4oFacility.HostNameKey];
+			int remotePort = (int) Model.ExtendedProperties[Db4oFacility.RemotePortKey];
+			string user = (string) Model.ExtendedProperties[Db4oFacility.UserKey];
+			string password = (string) Model.ExtendedProperties[Db4oFacility.PasswordKey];
+	
+			return Db4o.openClient(hostName, remotePort, user, password);
+		}
+
+		private void SetActivationDepth()
+		{
+			if (Model.ExtendedProperties.Contains(Db4oFacility.ActivationDepth))
+			{
+				Db4o.configure().activationDepth((int) Model.ExtendedProperties[Db4oFacility.ActivationDepth]);
+			}
+			else
+			{
+				Db4o.configure().activationDepth(int.MaxValue);
+			}
+		}
+
+		private void SetUpdateDepth()
+		{
+			if (Model.ExtendedProperties.Contains(Db4oFacility.UpdateDepth))
+			{
+				Db4o.configure().updateDepth((int) Model.ExtendedProperties[Db4oFacility.UpdateDepth]);
+			}
+			else
+			{
+				Db4o.configure().updateDepth(int.MaxValue);
 			}
 		}
 	}

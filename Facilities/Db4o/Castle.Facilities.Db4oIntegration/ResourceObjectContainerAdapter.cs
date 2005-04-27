@@ -1,3 +1,4 @@
+using Castle.Model;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +15,20 @@
 
 namespace Castle.Facilities.Db4oIntegration
 {
+	using System;
+
 	using com.db4o;
 
 	using Castle.Services.Transaction;
 
-	
-	public sealed class ResourceObjectContainerAdapter : IResource
+	public class ResourceObjectContainerAdapter : IResource
 	{
 		private readonly ObjectContainer _objectContainer;
 
 		public ResourceObjectContainerAdapter(ObjectContainer objectContainer)
 		{
 			_objectContainer = objectContainer;
+
 		}
 
 		public void Start()
@@ -35,11 +38,15 @@ namespace Castle.Facilities.Db4oIntegration
 		public void Commit()
 		{
 			_objectContainer.commit();
+
+			System.Diagnostics.Debug.WriteLine("[castle][db4o facility] Resource Adapter Commit");
 		}
 
 		public void Rollback()
 		{
 			_objectContainer.rollback();
+
+			System.Diagnostics.Debug.WriteLine("[castle][db4o facility] Resource Adapter Rollback");
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.Facilities.Db4oIntegration
 
 	
 	public class AutoDb4oTransactionInspector : IContributeComponentModelConstruction
-								{
+	{
 		public void ProcessModel(IKernel kernel, ComponentModel model)
 		{
 			if (model.Implementation.IsDefined( 
