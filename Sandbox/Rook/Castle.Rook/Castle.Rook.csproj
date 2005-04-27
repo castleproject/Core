@@ -636,6 +636,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\AssignmentStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\ClassNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -651,11 +656,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\InstanceFieldIdentifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\InterfaceNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -666,7 +666,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\MethodNodeBuilder.cs"
+                    RelPath = "AST\MethodParameterNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -691,12 +691,87 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\StaticFieldIdentifier.cs"
+                    RelPath = "AST\TypeNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\TypeNode.cs"
+                    RelPath = "AST\Expressions\AssignmentExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\BaseReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\Expression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\IdentifierReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\InstanceFieldReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\MemberAccessExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\MethodInvokeExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\PostFixExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\SelfReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\StaticFieldReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\UnaryExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\Literals\LiteralExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Expressions\Literals\LiteralIntegerExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Statement\AbstractStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Statement\ExpressionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Statement\MethodDefinitionStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

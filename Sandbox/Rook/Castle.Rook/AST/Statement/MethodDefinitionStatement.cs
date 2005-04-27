@@ -18,16 +18,41 @@ namespace Castle.Rook.AST
 	using System.Collections;
 
 
-	public abstract class TypeNode : AbstractASTNode
+	public class MethodDefinitionStatement : AbstractStatement
 	{
-		private IList baseTypes = new ArrayList();
+		private QualifiedIdentifier returnType;
+		private String name;
+		private String boundTo;
+		private IList parameters = new ArrayList();
 		private IList statements = new ArrayList();
 
-		private String name;
-
-		public TypeNode(String name)
+		public MethodDefinitionStatement(String[] nameParts)
 		{
-			this.name = name;
+			if (nameParts[1] == null)
+			{
+				name = nameParts[0];
+			}
+			else
+			{
+				name = nameParts[0];
+				boundTo = nameParts[1]; // self, interface and so on
+			}
+		}
+
+		public IList Parameters
+		{
+			get { return parameters; }
+		}
+
+		public IList Statements
+		{
+			get { return statements; }
+		}
+
+		public QualifiedIdentifier ReturnType
+		{
+			get { return returnType; }
+			set { returnType = value; }
 		}
 
 		public string Name
@@ -35,14 +60,9 @@ namespace Castle.Rook.AST
 			get { return name; }
 		}
 
-		public IList BaseTypes
+		public string BoundTo
 		{
-			get { return baseTypes; }
-		}
-
-		public IList Statements
-		{
-			get { return statements; }
+			get { return boundTo; }
 		}
 	}
 }

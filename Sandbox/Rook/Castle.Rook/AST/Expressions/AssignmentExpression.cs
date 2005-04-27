@@ -15,34 +15,33 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
 
-	public abstract class TypeNode : AbstractASTNode
+	public class AssignmentExpression : Expression
 	{
-		private IList baseTypes = new ArrayList();
-		private IList statements = new ArrayList();
+		public Expression target;
+		public Expression value;
 
-		private String name;
-
-		public TypeNode(String name)
+		/// <summary>
+		/// TODO: Add operator and change from AssignmentExpression
+		/// to BinaryExpression 
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="value"></param>
+		public AssignmentExpression(Expression target, Expression value)
 		{
-			this.name = name;
+			this.target = target;
+			this.value = value;
 		}
 
-		public string Name
+		public Expression Target
 		{
-			get { return name; }
+			get { return target; }
 		}
 
-		public IList BaseTypes
+		public Expression Value
 		{
-			get { return baseTypes; }
-		}
-
-		public IList Statements
-		{
-			get { return statements; }
+			get { return this.value; }
 		}
 	}
 }

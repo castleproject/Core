@@ -12,37 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Parse.Tests
+namespace Castle.Rook.AST
 {
 	using System;
 
-	using NUnit.Framework;
 
-	[TestFixture]
-	public class DeclarationsTestCase
+	public class MemberAccessExpression : Expression
 	{
-		[Test]
-		public void SimpleDeclarationNoInitializerExp()
+		public MemberAccessExpression(Expression target, Identifier id)
 		{
-			String contents = "int x;";
-
-			RookParser.ParseContents(contents);
-		}
-
-		[Test]
-		public void SimpleDeclaration()
-		{
-			String contents = "int x = 10;";
-
-			RookParser.ParseContents(contents);
-		}
-
-		[Test]
-		public void MultipleDeclaration()
-		{
-			String contents = "int x, y = 10, 11;";
-
-			RookParser.ParseContents(contents);
 		}
 	}
 }

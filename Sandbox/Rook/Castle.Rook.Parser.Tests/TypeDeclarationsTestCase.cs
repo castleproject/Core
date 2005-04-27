@@ -88,13 +88,12 @@ namespace Castle.Rook.Parse.Tests
 		}
 
 		[Test]
-		[Ignore("Review this")]
 		public void StaticFields()
 		{
 			String contents = 
 				"class MyClass \r\n" + 
-				"  @@myfield " + 
-				"  @@otherfield " + 
+				"  @@myfield = 1 " + 
+				"  @@otherfield = 22 " + 
 				"end \r\n";
 
 			CompilationUnitNode unit = RookParser.ParseContents(contents);
@@ -106,8 +105,17 @@ namespace Castle.Rook.Parse.Tests
 			Assert.IsNotNull(classNode);
 			Assert.AreEqual("MyClass", classNode.Name);
 			Assert.AreEqual(0, classNode.BaseTypes.Count);
-			Assert.AreEqual(2, classNode.StaticFields.Count);
-			Assert.AreEqual(0, classNode.InstanceFields.Count);
+			Assert.AreEqual(2, classNode.Statements.Count);
+
+			AssignmentStatement stmt = classNode.Statements[0] as AssignmentStatement;
+			Assert.IsNotNull(stmt);
+			Assert.AreEqual("@@myfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+			Assert.AreEqual("1", (stmt.Value as LiteralExpression).Value);
+
+			stmt = classNode.Statements[1] as AssignmentStatement;
+			Assert.IsNotNull(stmt);
+			Assert.AreEqual("@@otherfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+			Assert.AreEqual("22", (stmt.Value as LiteralExpression).Value);
 		}
 
 		[Test]
@@ -131,20 +139,6 @@ namespace Castle.Rook.Parse.Tests
 			Assert.IsNotNull(classNode);
 			Assert.AreEqual("MyClass", classNode.Name);
 			Assert.AreEqual(0, classNode.BaseTypes.Count);
-//			Assert.AreEqual(3, classNode.StaticFields.Count);
-//			Assert.AreEqual(0, classNode.InstanceFields.Count);
-//
-//			StaticFieldIdentifier staticField = classNode.StaticFields[0] as StaticFieldIdentifier;
-//			Assert.AreEqual("@@myfield", staticField.Name);
-//			Assert.AreEqual(AccessLevel.Private, staticField.Level);
-//			
-//			staticField = classNode.StaticFields[1] as StaticFieldIdentifier;
-//			Assert.AreEqual("@@otherfield", staticField.Name);
-//			Assert.AreEqual(AccessLevel.Public, staticField.Level);
-//
-//			staticField = classNode.StaticFields[2] as StaticFieldIdentifier;
-//			Assert.AreEqual("@@someother", staticField.Name);
-//			Assert.AreEqual(AccessLevel.Public, staticField.Level);
 		}
 
 		[Test]

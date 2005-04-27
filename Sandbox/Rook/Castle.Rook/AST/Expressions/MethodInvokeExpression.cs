@@ -18,31 +18,19 @@ namespace Castle.Rook.AST
 	using System.Collections;
 
 
-	public abstract class TypeNode : AbstractASTNode
+	public class MethodInvokeExpression : Expression
 	{
-		private IList baseTypes = new ArrayList();
-		private IList statements = new ArrayList();
+		private Expression target;
+		private IList arguments = new ArrayList();
 
-		private String name;
-
-		public TypeNode(String name)
+		public MethodInvokeExpression(Expression target)
 		{
-			this.name = name;
+			this.target = target;
 		}
 
-		public string Name
+		public IList Arguments
 		{
-			get { return name; }
-		}
-
-		public IList BaseTypes
-		{
-			get { return baseTypes; }
-		}
-
-		public IList Statements
-		{
-			get { return statements; }
+			get { return arguments; }
 		}
 	}
 }

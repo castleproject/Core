@@ -15,19 +15,17 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
 
-	public abstract class TypeNode : AbstractASTNode
+	public class MethodParameterNode : AbstractASTNode
 	{
-		private IList baseTypes = new ArrayList();
-		private IList statements = new ArrayList();
+		public QualifiedIdentifier type;
+		public string name;
 
-		private String name;
-
-		public TypeNode(String name)
+		public MethodParameterNode(String name, QualifiedIdentifier type)
 		{
 			this.name = name;
+			this.type = type;
 		}
 
 		public string Name
@@ -35,14 +33,9 @@ namespace Castle.Rook.AST
 			get { return name; }
 		}
 
-		public IList BaseTypes
+		public QualifiedIdentifier Type
 		{
-			get { return baseTypes; }
-		}
-
-		public IList Statements
-		{
-			get { return statements; }
+			get { return type; }
 		}
 	}
 }

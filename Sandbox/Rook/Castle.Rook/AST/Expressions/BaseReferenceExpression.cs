@@ -17,18 +17,10 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class StaticFieldIdentifier : Identifier
+	public class BaseReferenceExpression : Expression
 	{
-		private AccessLevel _level;
-
-		public StaticFieldIdentifier(string name, AccessLevel level) : base(name)
+		public BaseReferenceExpression()
 		{
-			_level = level;
-		}
-
-		public AccessLevel Level
-		{
-			get { return _level; }
 		}
 	}
 }

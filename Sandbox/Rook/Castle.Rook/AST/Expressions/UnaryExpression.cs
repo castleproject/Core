@@ -17,18 +17,10 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class InstanceFieldIdentifier : Identifier
+	public class UnaryExpression : Expression
 	{
-		private AccessLevel _level;
-
-		public InstanceFieldIdentifier(string name, AccessLevel level) : base(name)
+		public UnaryExpression()
 		{
-			_level = level;
-		}
-
-		public AccessLevel Level
-		{
-			get { return _level; }
 		}
 	}
 }

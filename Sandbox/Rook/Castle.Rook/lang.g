@@ -134,7 +134,7 @@ class_body[ClassNode classNode]
 		currentAccessLevel = AccessLevel.Public;
 	}
 	:
-	(access_level class_level_supported_statements)*
+	(access_level class_level_supported_statements[classNode.Statements])*
 	
 	END!
 	;
@@ -191,7 +191,7 @@ qualified_identifier returns [QualifiedIdentifier ident]
 	{
 		sb.Append(id.Name);
 	}
-	(DOT! id=identifier
+	( options { greedy=true; } : DOT! id=identifier
 	{
 		sb.Append('.');
 		sb.Append(id.Name);
@@ -245,157 +245,238 @@ type_name returns [QualifiedIdentifier qi]
 /// Statements
 ///
 
-method_def_stmt
+method_def_stmt returns [MethodDefinitionStatement method]
 	{
 		String[] nameParts;
 		QualifiedIdentifier retType = null;
+		method = null;
 	}
 	:
 	DEF! nameParts=method_name 
 	{
-		MethodNodeBuilder.Build(nameParts);
+		method = new MethodDefinitionStatement(nameParts);
 	}
-	formal_param_list 
+	formal_param_list[method]
 	retType=type_name
-	method_body
+	{
+		method.ReturnType = retType;
+	}
+	method_body[method]
 	(SEMI)?
 	;
 	
 protected
-formal_param_list
+formal_param_list[MethodDefinitionStatement method]
 	:
-	LPAREN! ( method_param (COMMA! method_param)* )? RPAREN!
+	LPAREN! ( method_param[method] (COMMA! method_param[method])* )? RPAREN!
 	;
 	
 protected
-method_param
+method_param[MethodDefinitionStatement method]
 	{
 		Identifier id = null;
 		QualifiedIdentifier qi = null;
 	}
 	:
 	(REF|OUT)? id=identifier qi=type_name
+	{
+		method.Parameters.Add( new MethodParameterNode(id.Name, qi) );
+	}
 	;
 
 protected
-method_body
+method_body[MethodDefinitionStatement method]
 	:
-	(statement_list)*
+	statement_list[method.Statements]
 	END!
 	;
 
 protected 
-statement
+statement returns [AbstractStatement stmt]
+	{
+		stmt = null;
+	}
 	:
-	(assign_stmt)=> assign_stmt
-	| 
-	method_def_stmt
+	stmt=method_def_stmt
 	|
-	expression_statement
+	stmt=expression_statement
 	;
 
 protected
-statement_list
+statement_list[IList statements]
+	{
+		AbstractStatement stmt = null;
+	}
 	:
-	statement
+	(stmt=statement { statements.Add( stmt ); } )*
 	;
 	
 protected
-class_level_supported_statements
+class_level_supported_statements[IList statements]
+	{
+		AbstractStatement stmt = null;
+	}
 	:
-	assign_stmt
-	| 
-	method_def_stmt
+	(
+		stmt=assign_stmt
+		| 
+		stmt=method_def_stmt
+	)
+	{
+		statements.Add( stmt );
+	}
 	;
 
 protected
-var_reference
+var_reference returns [IdentifierReferenceExpression exp]
 	{
-		QualifiedIdentifier qi = null;
+		QualifiedIdentifier qi = null; exp = null;
 	}
 	:
-	id:STATIC_IDENTIFIER|id2:INSTANCE_IDENTIFIER|qi=qualified_identifier
+	id:STATIC_IDENTIFIER { exp = new StaticFieldReferenceExpression(id.getText()); }
+	|
+	id2:INSTANCE_IDENTIFIER { exp = new InstanceFieldReferenceExpression(id2.getText()); }
+	|
+	qi=qualified_identifier { exp = new IdentifierReferenceExpression(qi); }
 	;	
-	
-protected 
-assign_stmt
-	:
-	unary_exp ASSIGN expression
+
+protected
+assign_stmt returns [AssignmentStatement stmt]
 	{
+		stmt = null; IdentifierReferenceExpression target; Expression value;
+	} 
+	:
+	target=var_reference ASSIGN value=expression
+	{
+		stmt = new AssignmentStatement(target, value);
 	}
-	(SEMI)?
 	;
 
 protected
-expression_statement
+expression_statement returns [ExpressionStatement stmt]
+	{
+		stmt = null;
+		Expression exp = null;
+	}
 	:
-	unary_exp
+	(
+		(assign_exp) => exp=assign_exp
+		|
+		exp=unary_exp
+	)
+	{
+		stmt = new ExpressionStatement(exp);
+	}
 	;
 	
 ///	
 /// Expressions
 /// 
 
-protected
-unary_exp
+protected 
+assign_exp returns [AssignmentExpression ue]
+	{
+		Expression target, value = null; ue = null;
+	}
 	:
-	primary_exp
+	target=unary_exp ASSIGN value=expression
+	{
+		ue = new AssignmentExpression(target, value);
+	}
 	;
 
 protected
-expression
+unary_exp returns [Expression exp]
+	{ exp = null; }
 	:
-	primary_exp
+	exp=primary_exp
 	;
 
-literal_exp
+protected
+expression returns [Expression exp]
+	{ exp = null; }
+	:
+	exp=primary_exp
+	;
+
+literal_exp returns [LiteralExpression le]
+	{ le = null; }
 	:	
-	INTEGER_LITERAL
+	t:INTEGER_LITERAL
+	{
+		le = new LiteralIntegerExpression( t.getText() );
+	}
 	;
 	
 protected 
-method_invoke_exp
+method_invoke_exp[Expression target] returns [MethodInvokeExpression mie]
+	{
+		mie = new MethodInvokeExpression(target);
+		Expression exp;
+	}
 	:
-	LPAREN ( expression (COMMA! expression)* )? RPAREN
+	LPAREN ( exp=expression { mie.Arguments.Add( exp ); }
+	(COMMA! exp=expression { mie.Arguments.Add( exp ); } )* )? RPAREN
 	( options {greedy=true;} :  SEMI)?
 	;
 	
 protected
-primary_start
+primary_start returns [Expression exp]
+	{ exp = null; }
 	:	
-	literal_exp
+	exp=literal_exp
+	|
+	exp=var_reference
 	|	
-	identifier	
+	SELF { exp = new SelfReferenceExpression(); }
 	|	
-	SELF
-	|	
-	BASE
+	BASE { exp = new BaseReferenceExpression(); }
 	;
 
 protected
-primary_exp
+primary_exp returns [Expression exp]
+	{
+		Expression ps = null; exp = null;
+	}
 	:
-	primary_start
-	(	options {greedy=true;}:	
-		postfix_exp
-		|
-		method_invoke_exp
-		|	
-		member_access
-	)*
+	(
+		ps=primary_start
+		(	options {greedy=true;}:	
+			exp=postfix_exp[ps]
+			|
+			exp=method_invoke_exp[ps]
+			|	
+			exp=member_access[ps]
+		)*
+	)
+	{
+		if (exp == null) exp = ps;
+	}
 	;	
 
 protected
-member_access
+member_access[Expression target] returns [MemberAccessExpression mae]
+	{
+		mae = null;
+		Identifier id;
+	}
 	:	
-	DOT id:identifier 
+	DOT id=identifier 
+	{
+		mae = new MemberAccessExpression(target, id);
+	}
 	;
 
 
 protected
-postfix_exp
+postfix_exp[Expression target] returns [PostFixExpression pfe]
+	{
+		pfe = null;
+	}
 	:
-	INC	| DEC
+	INC	{ pfe = new PostFixExpression( target, 1 ); }
+	| 
+	DEC	{ pfe = new PostFixExpression( target, 2 ); }
 	;	
 
 /// 

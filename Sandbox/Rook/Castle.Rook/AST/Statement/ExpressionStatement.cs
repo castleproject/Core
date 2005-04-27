@@ -17,11 +17,10 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class MethodNodeBuilder
+	public class ExpressionStatement : AbstractStatement
 	{
-		public static void Build(String[] nameParts)
+		public ExpressionStatement(Expression exp)
 		{
-			
 		}
 	}
 }

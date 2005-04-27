@@ -15,34 +15,27 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
 
-	public abstract class TypeNode : AbstractASTNode
+	public class AssignmentStatement : AbstractStatement
 	{
-		private IList baseTypes = new ArrayList();
-		private IList statements = new ArrayList();
+		public IdentifierReferenceExpression target;
+		public Expression value;
 
-		private String name;
-
-		public TypeNode(String name)
+		public AssignmentStatement(IdentifierReferenceExpression target, Expression value)
 		{
-			this.name = name;
+			this.target = target;
+			this.value = value;
 		}
 
-		public string Name
+		public IdentifierReferenceExpression Target
 		{
-			get { return name; }
+			get { return target; }
 		}
 
-		public IList BaseTypes
+		public Expression Value
 		{
-			get { return baseTypes; }
-		}
-
-		public IList Statements
-		{
-			get { return statements; }
+			get { return this.value; }
 		}
 	}
 }

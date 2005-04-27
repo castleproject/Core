@@ -77,7 +77,7 @@ namespace Castle.Rook.Parse.Tests
 				"     " + 
 				"   def method1(x, y, z as int) as int  " + 
 				"   end  " + 
-				"   myvariable = 1;  " + 
+				"   myvariable = 1  " + 
 				" end " + 
 				"" + 
 				"end \r\n";
