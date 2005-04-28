@@ -34,7 +34,16 @@ namespace Castle.MVC.States
 	/// </summary>
 	public interface IStateFactory
 	{
+		/// <summary>
+		/// Create an IState
+		/// </summary>
+		/// <returns></returns>
 		IState Create();
+
+		/// <summary>
+		/// Release an IState
+		/// </summary>
+		/// <param name="handler">The IState to release</param>
 		void Release(IState handler);
 	}
 }

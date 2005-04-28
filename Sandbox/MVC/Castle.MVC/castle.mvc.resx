@@ -46,12 +46,12 @@
 		<value>The view named '{0}'  has already been configured.</value>
 	</data>
 	<data name="CantGetNextView">
-		<value>Can not find the next view id '{0}' for the command id '{1}'.</value>
+		<value>Can't find the next view for the view id '{0}' and the command id '{1}', check your command id.</value>
 	</data>
 	<data name="DocumentNotValidated">
 		<value>The MVC configuration section does not conforms to the XMLSchema provided, please check the document to fix the document. The validation error message is: {0}.</value>
 	</data>
 	<data name="CantFindCommandMapping">
-		<value>Can find the mapping configuration for the view id '{0}', verifiy your configuration.</value>
+		<value>Can't find the mapping configuration for the view id '{0}', verifiy your configuration.</value>
 	</data>
 </root>

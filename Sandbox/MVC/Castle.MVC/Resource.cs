@@ -44,7 +44,8 @@ namespace Castle.MVC
 
 		#region Fields
 
-		private const string RESOURCE_FILENAME = "Castle.MVC";
+		private const string RESOURCE_FILENAME = ".castle.mvc";//RESOURCE_FILENAME = "Castle.MVC";
+
 		private static Resource _internalResource = new Resource();
 		private ResourceManager _resourceManager= null;
 
