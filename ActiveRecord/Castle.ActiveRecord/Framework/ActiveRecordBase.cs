@@ -225,6 +225,55 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Creates (Saves) a new instance to the database.
+		/// </summary>
+		/// <param name="instance"></param>
+		protected static void Create(object instance)
+		{
+			ISession session = _holder.CreateSession( instance.GetType() );
+
+			try
+			{
+				session.Save(instance);
+
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
+		/// Persists the modification on the instance
+		/// state to the database.
+		/// </summary>
+		/// <param name="instance"></param>
+		protected static void Update(object instance)
+		{
+			ISession session = _holder.CreateSession( instance.GetType() );
+
+			try
+			{
+				session.Update(instance);
+
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
 		/// Deletes the instance from the database.
 		/// </summary>
 		/// <param name="instance"></param>
@@ -252,10 +301,29 @@ namespace Castle.ActiveRecord
 
 		/// <summary>
 		/// Saves the instance information to the database.
+		/// May Create or Update the instance depending 
+		/// on whether it has a valid ID.
 		/// </summary>
 		public virtual void Save()
 		{
 			Save(this);
+		}
+
+		/// <summary>
+		/// Creates (Saves) a new instance to the database.
+		/// </summary>
+		public virtual void Create()
+		{
+			Create(this);
+		}
+
+		/// <summary>
+		/// Persists the modification on the instance
+		/// state to the database.
+		/// </summary>
+		public virtual void Update()
+		{
+			Update(this);
 		}
 
 		/// <summary>

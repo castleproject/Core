@@ -55,6 +55,43 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
+		public void SimpleOperations2()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Create();
+
+			blogs = Blog.FindAll();
+			Assert.AreEqual( blog.Name, blogs[0].Name );
+			Assert.AreEqual( blog.Author, blogs[0].Author );
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+
+			blog.Name = "something else1";
+			blog.Author = "something else2";
+			blog.Update();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+			Assert.AreEqual( blog.Name, blogs[0].Name );
+			Assert.AreEqual( blog.Author, blogs[0].Author );
+		}
+
+		[Test]
 		public void ComponentAttribute()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), 

@@ -524,7 +524,6 @@ namespace Castle.ActiveRecord
 			String name = String.Format(nameAttribute, prop.Name);
 			String type = String.Format(typeAttribute, prop.PropertyType.Name);
 			String column = (pk.Column == null ? String.Format(columnAttribute, prop.Name) : String.Format(columnAttribute, pk.Column));
-//			String access = (pk.Access == null ? "" : String.Format(accessAttribute, pk.Access));
 
 			if (pk.UnsavedValue == null)
 			{
@@ -532,16 +531,15 @@ namespace Castle.ActiveRecord
 				{
 					pk.UnsavedValue = "0";
 				}
-				else
+				else if (prop.PropertyType != typeof(Guid))
 				{
-					// Nasty guess, but for 99.99% of situations it will be OK
+					// Nasty guess, but for 99.98% of situations it will be OK
 					pk.UnsavedValue = "";
 				}
 			}
 
 			String unsavedValue = (pk.UnsavedValue == null ? "" : String.Format(unsavedValueAttribute, pk.UnsavedValue));
 
-//			builder.AppendFormat(idOpen, name + type + column + unsavedValue + access);
 			builder.AppendFormat(idOpen, name + type + column + unsavedValue);
 
 			if (pk.Generator != PrimaryKeyType.None)
