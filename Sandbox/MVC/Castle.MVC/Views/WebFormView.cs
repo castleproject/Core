@@ -135,6 +135,33 @@ namespace Castle.MVC.Views
 			this.State.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
 		}
 
+		/// <summary>
+		/// Set the focus on a control
+		/// </summary>
+		/// <param name="clientID">The client id of the control.</param>
+		public void SetFocus(string clientID ) 
+		{
+			System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+		
+			stringBuilder.Append("<script language='javascript'>"); 
+			stringBuilder.Append(" document.getElementById('" + clientID + "').focus()");
+			stringBuilder.Append("</script>");
+			this.RegisterStartupScript("Onload", stringBuilder.ToString());			
+		}
+
+		/// <summary>
+		/// Set the focus on a control
+		/// </summary>
+		/// <param name="control">The control</param>
+		public void SetFocus(WebControl control ) 
+		{
+			System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+		
+			stringBuilder.Append("<script language='javascript'>"); 
+			stringBuilder.Append(" document.getElementById('" + control.ClientID + "').focus()");
+			stringBuilder.Append("</script>");
+			this.RegisterStartupScript("Onload", stringBuilder.ToString());			
+		}
 
 		/// <summary>
 		/// ToString Override
