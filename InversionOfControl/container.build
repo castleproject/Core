@@ -4,7 +4,7 @@
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="dynamicproxy" value="${base.dir}/../tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
+	<property name="dynamicproxy" value="${base.dir}/../Tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
 	<property name="name" value="InversionOfControl" />
 	<property name="version" value="beta-2" />
 	<property name="samples.dir" value="${base.dir}/../Samples/InversionOfControl" />
