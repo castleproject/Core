@@ -31,4 +31,6 @@
 			value="False"
 			unless="${property::exists('nant.tasks.nunit2')}" />
 
+	<echo message="NUnit on ${lib.framework.dir} ${nunit.framework.dll} " />
+
 </project>
