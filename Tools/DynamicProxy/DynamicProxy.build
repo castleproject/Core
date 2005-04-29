@@ -50,7 +50,7 @@
 		</csc>
 	</target>
 
-	<target name="core.tests.compile" depends="core.compile">
+	<target name="core.tests.compile" depends="core.compile"  if="${isWindows}">
 		<csc 
 			target="library" 
 			debug="${debug}" 
@@ -68,7 +68,6 @@
 	</target>
 	
 	<target name="core.tests.run" depends="core.tests.compile" if="${isWindows}">
-                <echo message="${os} ${isWindows}" />
 		<nunit2 >
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${core.test.assembly.name}" />
