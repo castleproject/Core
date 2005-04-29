@@ -19,5 +19,9 @@ namespace Castle.Rook.AST
 
 	public abstract class AbstractStatement : AbstractASTNode
 	{
+		public override void Visit(IVisitor visitor)
+		{
+			visitor.OnStatement(this);
+		}
 	}
 }

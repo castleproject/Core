@@ -37,5 +37,10 @@ namespace Castle.Rook.AST
 		{
 			get { return type; }
 		}
+
+		public override void Visit(IVisitor visitor)
+		{
+			
+		}
 	}
 }

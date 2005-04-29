@@ -19,7 +19,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 	using NHibernate;
 
-
+	/// <summary>
+	/// Abstract <seealso cref="ISessionScope"/> implementation
+	/// </summary>
 	public abstract class AbstractScope : ISessionScope
 	{
 		protected Hashtable _key2Session = new Hashtable();

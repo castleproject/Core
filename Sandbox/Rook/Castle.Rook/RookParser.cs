@@ -36,7 +36,12 @@ namespace Castle.Rook
 
 		public static CompilationUnitNode ParseContents(String contents)
 		{
-			RookLexer lexer = new RookLexer( new StringReader(contents) );
+			return ParseContents(new StringReader(contents));
+		}
+
+		public static CompilationUnitNode ParseContents(TextReader source)
+		{
+			RookLexer lexer = new RookLexer( source );
 			RookParser parser = new RookParser(lexer);
 			return parser.Parse();
 		}

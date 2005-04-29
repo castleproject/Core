@@ -44,5 +44,10 @@ namespace Castle.Rook.AST
 		{
 			get { return statements; }
 		}
+
+		public override void Visit(IVisitor visitor)
+		{
+			visitor.OnType(this);
+		}
 	}
 }

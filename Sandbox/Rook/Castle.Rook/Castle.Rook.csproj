@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "..\bin\"
+                    OutputPath = "..\bin\temp\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -85,6 +85,11 @@
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Compiler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -651,6 +656,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\IASTNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\Identifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -772,6 +782,46 @@
                 />
                 <File
                     RelPath = "AST\Statement\MethodDefinitionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Visitors\BreadthFirstVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Visitors\IVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Chains\AbstractCompilationChain.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Chains\CompilationContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Chains\DefaultCompilationChain.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Chains\ICompilationChain.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Chains\SourceParsing.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Chains\TreeSemanticAnalizer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

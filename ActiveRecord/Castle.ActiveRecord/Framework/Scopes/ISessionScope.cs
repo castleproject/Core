@@ -19,14 +19,31 @@ namespace Castle.ActiveRecord
 	using NHibernate;
 
 	/// <summary>
-	/// 
+	/// Contract for implementation of scopes.
 	/// </summary>
 	public interface ISessionScope : IDisposable
 	{
+		/// <summary>
+		/// Implementors should return true 
+		/// if the key is know. The key might be whatever the
+		/// scope implementation wants
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		bool IsKeyKnown(object key);
 
+		/// <summary>
+		/// Associates a session with this scope
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="session"></param>
 		void RegisterSession(object key, ISession session);
 
+		/// <summary>
+		/// Returns the session associated with the key
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		ISession GetSession(object key);
 	}
 }

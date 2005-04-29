@@ -25,7 +25,7 @@ namespace Castle.ActiveRecord.Framework
 	using Castle.ActiveRecord.Framework.Scopes;
 
 	/// <summary>
-	/// 
+	/// Default implementation of <seealso cref="ISessionFactoryHolder"/>
 	/// </summary>
 	public class SessionFactoryHolder : ISessionFactoryHolder
 	{

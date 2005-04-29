@@ -88,6 +88,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="targetType">The target ActiveRecordType</param>
 		/// <param name="call">The delegate instance</param>
+		/// <param name="instance">The ActiveRecord instance</param>
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		protected static object Execute(Type targetType, NHibernateDelegate call, object instance)
 		{

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +19,11 @@ namespace Castle.Rook.RuntimeSupport.Tests.OrdinaryClasses
 
 	public class MySimpleClass
 	{
-		private static readonly Dispatcher staticDisp = new Dispatcher( typeof(MySimpleClass).GetMethod("MyStaticMethod") );
-		private readonly Dispatcher instanceDisp = new Dispatcher( typeof(MySimpleClass).GetMethod("SomeMethod") );
+		private static readonly DispatcherBag staticDisp = new DispatcherBag( typeof(MySimpleClass), 
+			typeof(MySimpleClass).GetMethod("MyStaticMethod") );
+		
+		private readonly DispatcherBag instanceDisp = new DispatcherBag( typeof(MySimpleClass), 
+			typeof(MySimpleClass).GetMethod("SomeMethod") );
 
 		public MySimpleClass()
 		{
@@ -66,7 +68,7 @@ namespace Castle.Rook.RuntimeSupport.Tests.OrdinaryClasses
 
 		public static object method_missing(object instance, String symbol, params object[] args)
 		{
-			
+			throw new MethodAccessException("No method " + symbol);
 		}
 	}
 }

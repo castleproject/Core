@@ -17,18 +17,15 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class QualifiedIdentifier : AbstractASTNode
+	public class QualifiedIdentifier : Identifier
 	{
-		private string _name;
-
-		public QualifiedIdentifier(String name)
+		public QualifiedIdentifier(string name) : base(name)
 		{
-			_name = name;
 		}
 
-		public string Name
+		public override void Visit(IVisitor visitor)
 		{
-			get { return _name; }
+			visitor.OnIdentifier(this);
 		}
 	}
 }

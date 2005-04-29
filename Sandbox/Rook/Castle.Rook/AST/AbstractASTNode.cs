@@ -17,10 +17,16 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public abstract class AbstractASTNode
+	public abstract class AbstractASTNode : IASTNode
 	{
 		public AbstractASTNode()
 		{
 		}
+
+		#region IASTNode Members
+
+		public abstract void Visit(IVisitor visitor);
+
+		#endregion
 	}
 }

@@ -43,6 +43,7 @@ namespace Castle.ActiveRecord.Generator.Components
 				case OleDbType.BSTR:
 				case OleDbType.Char:
 				case OleDbType.VarChar:
+				case OleDbType.WChar:
 				case OleDbType.LongVarChar:
 				case OleDbType.LongVarWChar:
 					return typeof(String);

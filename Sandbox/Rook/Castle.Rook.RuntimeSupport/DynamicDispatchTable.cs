@@ -25,11 +25,12 @@ namespace Castle.Rook.RuntimeSupport
 
 		public object StaticSend(ref bool matched, string symbol, object[] args)
 		{
+			return null;
 		}
 
 		public object Send(object instance, ref bool matched, string symbol, object[] args)
 		{
-			
+			return null;
 		}
 	}
 }

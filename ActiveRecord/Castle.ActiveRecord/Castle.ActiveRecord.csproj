@@ -129,11 +129,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes\ComposedOfAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Attributes\HasAndBelongsToManyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

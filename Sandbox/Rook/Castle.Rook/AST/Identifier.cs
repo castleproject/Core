@@ -30,5 +30,10 @@ namespace Castle.Rook.AST
 		{
 			get { return _name; }
 		}
+
+		public override void Visit(IVisitor visitor)
+		{
+			visitor.OnIdentifier(this);
+		}
 	}
 }

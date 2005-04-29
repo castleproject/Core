@@ -3,11 +3,14 @@
 
 	<property name="base.dir" value="." />
 	<property name="version" value="beta-1" />
+	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
+	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
 
 	<target name="build" depends="init, tools, container, components, activerecord, rails, services, facilities, samples" />
 	
 	<target name="init">
-
+		<echo message="${os}" />
+		<echo message="Running on Windows? ${isWindows}" />
 	</target>
 
 	<target name="activerecord">

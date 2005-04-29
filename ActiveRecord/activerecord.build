@@ -19,7 +19,7 @@
 
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
-	<property name="version" value="0.0.1.0" />
+	<property name="version" value="0.0.1.2" />
 
 	<target name="init">
 		<delete dir="${bin.dir}" failonerror="false" />

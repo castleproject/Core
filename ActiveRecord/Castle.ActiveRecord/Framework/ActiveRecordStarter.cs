@@ -25,7 +25,7 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
-	/// Performs the initialization of the framework
+	/// Performs the framework initialization 
 	/// </summary>
 	public class ActiveRecordStarter
 	{

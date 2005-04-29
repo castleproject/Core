@@ -19,6 +19,9 @@ namespace Castle.Rook.AST
 
 	public class CompilationUnitNode : AbstractDeclarationContainer
 	{
-		
+		public override void Visit(IVisitor visitor)
+		{
+			visitor.OnCompilationUnit(this);
+		}
 	}
 }

@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "..\bin\"
+                    OutputPath = "..\bin\temp4\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -89,7 +89,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dispatcher.cs"
+                    RelPath = "DispatcherBag.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

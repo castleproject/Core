@@ -15,8 +15,6 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
-
 
 	public class NamespaceNode : AbstractDeclarationContainer
 	{
@@ -30,6 +28,11 @@ namespace Castle.Rook.AST
 		public QualifiedIdentifier Identifier
 		{
 			get { return _qi; }
+		}
+
+		public override void Visit(IVisitor visitor)
+		{
+			visitor.OnNamespace(this);
 		}
 	}
 }

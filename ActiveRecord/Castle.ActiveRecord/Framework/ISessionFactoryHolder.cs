@@ -20,18 +20,43 @@ namespace Castle.ActiveRecord.Framework
 	using NHibernate.Cfg;
 
 	/// <summary>
-	/// 
+	/// Keeps an association of SessionFactories to a object model 
+	/// tree;
 	/// </summary>
 	public interface ISessionFactoryHolder
 	{
+		/// <summary>
+		/// Associates a Configuration object to a root type
+		/// </summary>
+		/// <param name="rootType"></param>
+		/// <param name="cfg"></param>
 		void Register(Type rootType, Configuration cfg);
 
+		/// <summary>
+		/// Requests the Configuration associated to the type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		Configuration GetConfiguration(Type type);
 
+		/// <summary>
+		/// Obtains the SessionFactory associated to the type.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		ISessionFactory GetSessionFactory(Type type);
 
+		/// <summary>
+		/// Creates a session for the associated type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		ISession CreateSession(Type type);
 
+		/// <summary>
+		/// Releases the specified session
+		/// </summary>
+		/// <param name="session"></param>
 		void ReleaseSession(ISession session);
 	}
 }
