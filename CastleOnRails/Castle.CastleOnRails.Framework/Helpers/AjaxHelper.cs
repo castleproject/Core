@@ -149,32 +149,6 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			return LinkToFunction(name, RemoteFunction(options) );
 		}
 
-		public String RemoteForm(String formId, String url, String idOfElementToBeUpdated, 
-			String with, String loading, String loaded, String interactive, String complete)
-		{
-			IDictionary options = GetOptions(url, idOfElementToBeUpdated, with, loading, loaded, complete, interactive);
-
-			return BuildFormRemoteScript(formId, options);
-		}
-
-		public String RemoteForm(String formId, String url, String idOfElementToBeUpdated, String with)
-		{
-			IDictionary options = GetOptions(url, idOfElementToBeUpdated, with, null, null, null, null);
-
-			return BuildFormRemoteScript(formId, options);
-		}
-
-		public String BuildFormRemoteScript(string formID, IDictionary options)
-		{
-			options["form"] = true;
-
-			String remoteFunc = RemoteFunction(options);
-
-			string scriptSkeleton = ResourceManager.GetString("ajax_aspx_overloader");
-
-			return String.Format(scriptSkeleton, remoteFunc, formID);
-		}
-
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 
