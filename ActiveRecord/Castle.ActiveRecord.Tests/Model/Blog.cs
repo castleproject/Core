@@ -1,3 +1,4 @@
+using NHibernate;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,6 +102,19 @@ namespace Castle.ActiveRecord.Tests
 		public static ISessionFactoryHolder Holder
 		{
 			get { return _holder; }
+		}
+
+		public void CustomAction()
+		{
+			Execute(new NHibernateDelegate(MyCustomMethod));
+		}
+
+		private object MyCustomMethod(ISession session, object blogInstance)
+		{
+			session.Delete(blogInstance);
+			session.Flush();
+			
+			return null;
 		}
 	}
 }

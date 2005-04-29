@@ -260,6 +260,7 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( blog.Author, blogs[0].Author );
 		}
 
+		[Test]
 		public void Delete()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
@@ -283,6 +284,37 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( 1, blogs.Length );
 
 			blog.Delete();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+		}
+
+		[Test]
+		public void ExecuteAndCallback()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+
+			blog.CustomAction();
 
 			blogs = Blog.FindAll();
 

@@ -23,6 +23,11 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
+	/// Allow custom executions using the NHibernate's ISession.
+	/// </summary>
+	public delegate object NHibernateDelegate(ISession session, object instance);
+
+	/// <summary>
 	/// Base class for all ActiveRecord classes. Implements 
 	/// all the functionality to simplify the code on the 
 	/// subclasses.
@@ -78,6 +83,34 @@ namespace Castle.ActiveRecord
 		#region Base static methods
 
 		/// <summary>
+		/// Invokes the specified delegate passing a valid 
+		/// NHibernate session. Used for custom NHibernate queries.
+		/// </summary>
+		/// <param name="targetType">The target ActiveRecordType</param>
+		/// <param name="call">The delegate instance</param>
+		/// <returns>Whatever is returned by the delegate invocation</returns>
+		protected static object Execute(Type targetType, NHibernateDelegate call, object instance)
+		{
+			if (targetType == null) throw new ArgumentNullException("targetType", "Target type must be informed");
+			if (call == null) throw new ArgumentNullException("call", "Delegate must be passed");
+
+			ISession session = _holder.CreateSession( targetType );
+
+			try
+			{
+				return call(session, instance);
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Error performing Execute for " + targetType.Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
 		/// Finds an object instance by a unique ID
 		/// </summary>
 		/// <param name="targetType">The AR subclass type</param>
@@ -105,6 +138,50 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		/// <summary>
+		/// Returns all instances found for the specified type.
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <returns></returns>
+		protected static Array FindAll(Type targetType)
+		{
+			ISession session = _holder.CreateSession( targetType );
+
+			try
+			{
+				ICriteria criteria = session.CreateCriteria(targetType);
+
+				IList result = criteria.List();
+		
+				Array array = Array.CreateInstance(targetType, result.Count);
+	
+				int index = 0;
+
+				foreach(object item in result)
+				{
+					array.SetValue(item, index++);
+				}
+
+				return array;
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
+		/// Returns all instances found for the specified type 
+		/// using sort orders and criterias.
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <param name="orders"></param>
+		/// <param name="expressions"></param>
+		/// <returns></returns>
 		protected static Array FindAll(Type targetType, Order[] orders, params Expression[] expressions)
 		{
 			ISession session = _holder.CreateSession( targetType );
@@ -112,6 +189,11 @@ namespace Castle.ActiveRecord
 			try
 			{
 				ICriteria criteria = session.CreateCriteria(targetType);
+
+				foreach( Expression ex in expressions )
+				{
+					criteria.Add( ex );
+				}
 
 				if (orders != null)
 				{
@@ -144,6 +226,13 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		/// <summary>
+		/// Returns all instances found for the specified type 
+		/// using criterias.
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <param name="expressions"></param>
+		/// <returns></returns>
 		protected static Array FindAll(Type targetType, params Expression[] expressions)
 		{
 			ISession session = _holder.CreateSession( targetType );
@@ -298,6 +387,17 @@ namespace Castle.ActiveRecord
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Invokes the specified delegate passing a valid 
+		/// NHibernate session. Used for custom NHibernate queries.
+		/// </summary>
+		/// <param name="call">The delegate instance</param>
+		/// <returns>Whatever is returned by the delegate invocation</returns>
+		protected object Execute(NHibernateDelegate call)
+		{
+			return Execute( this.GetType(), call, this );
+		}
 
 		/// <summary>
 		/// Saves the instance information to the database.

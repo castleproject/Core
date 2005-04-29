@@ -3,6 +3,7 @@
 
   Applied patch from John Morales (support for sets)
 
+  Applied suggestion and fixes from "jianxiao jiang" <jiangjianxiao@gmail.com> (NHibernateDelegate)
 
 
 - Version 0.0.1.1
