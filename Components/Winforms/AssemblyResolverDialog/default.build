@@ -29,7 +29,7 @@
 		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
 	</target>
 
-	<target name="build" depends="init,tests.run" />
+	<target name="build" depends="init,tests.run" if="${isWindows}" />
 
 	<target name="compile" depends="init">
 		<!-- doc="${bin.dir}/${name}.xml" -->
@@ -76,7 +76,7 @@
 		</csc>
 	</target>
 	
-	<target name="tests.run" depends="tests.compile">
+	<target name="tests.run" depends="tests.compile" >
 		<nunit2 >
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
