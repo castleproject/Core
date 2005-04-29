@@ -1,4 +1,3 @@
-using System.ComponentModel;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +34,6 @@ namespace Castle.CastleOnRails.Framework
 
 			object[] methodArgs = BuildMethodArguments( parameters, webParams, files );
             method.Invoke(this, methodArgs);
-
 		}
 
 		protected override MethodInfo SelectMethod(String action, IRequest request)
@@ -127,106 +125,7 @@ namespace Castle.CastleOnRails.Framework
 
 					value = webParams.Get( paramName );
 
-					if (param.ParameterType == typeof(String))
-					{
-						args[i] = value;
-					}
-					else if (param.ParameterType == typeof(String[]))
-					{
-						args[i] = value.Split(',');
-					}
-					else if (param.ParameterType == typeof(Guid))
-					{
-						if (value != null)
-						{
-							args[i] = new Guid( value.ToString() );
-						}
-						else
-						{
-							args[i] = Guid.Empty; 
-						}
-					}
-					else if (param.ParameterType == typeof(UInt16))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToUInt16( value );
-					}
-					else if (param.ParameterType == typeof(UInt32))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToUInt32( value );
-					}
-					else if (param.ParameterType == typeof(UInt64))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToUInt64( value );
-					}
-					else if (param.ParameterType == typeof(Int16))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToInt16( value );
-					}
-					else if (param.ParameterType == typeof(Int32))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToInt32( value );
-					}
-					else if (param.ParameterType == typeof(Int32[]))
-					{
-						if (value == String.Empty)
-						{
-							args[i] = null;
-						}
-						else
-						{
-							args[i] = ToInt32Array(value);
-						}
-					}
-					else if (param.ParameterType == typeof(Int64))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToInt64( value );
-					}
-					else if (param.ParameterType == typeof(Byte))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToByte( value );
-					}
-					else if (param.ParameterType == typeof(SByte))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToSByte( value );
-					}
-					else if (param.ParameterType == typeof(Single))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToSingle( value );
-					}
-					else if (param.ParameterType == typeof(Double))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = System.Convert.ToDouble( value );
-					}
-					else if (param.ParameterType == typeof(DateTime))
-					{
-						if (value == String.Empty) value = null;
-						args[i] = DateTime.Parse(value);
-					}
-					else if (param.ParameterType == typeof(Boolean))
-					{
-						// TODO: Add true/on/1 variants
-						args[i] = value != null;
-					}
-					else if (param.ParameterType == typeof(HttpPostedFile))
-					{
-						args[i] = files[paramName];
-					}
-					else
-					{
-						String message = String.Format("Ignoring argument {0} with value {1} " + 
-							" as we don't know how to convert from this value to its type", paramName, value);
-						Context.Trace(message);
-					}
+					args[i] = ConvertParam(param.ParameterType, files, paramName, value);
 				}
 			}
 			catch(FormatException ex)
@@ -245,18 +144,121 @@ namespace Castle.CastleOnRails.Framework
 			return args;
 		}
 
-		private Int32[] ToInt32Array(string value)
+		private object ConvertParam(Type desiredType, IDictionary files, string paramName, string value)
 		{
-			String[] splited = value.Split(',');
-
-			ArrayList array = new ArrayList(splited.Length);
-
-			foreach (String val in splited)
+			if (desiredType == typeof(String))
 			{
-				array.Add(Convert.ToInt32(val));
+				return value;
+			}
+			else if (desiredType == typeof(Guid))
+			{
+				if (value != null)
+				{
+					return new Guid( value.ToString() );
+				}
+				else
+				{
+					return Guid.Empty; 
+				}
+			}
+			else if (desiredType == typeof(UInt16))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToUInt16( value );
+			}
+			else if (desiredType == typeof(UInt32))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToUInt32( value );
+			}
+			else if (desiredType == typeof(UInt64))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToUInt64( value );
+			}
+			else if (desiredType == typeof(Int16))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToInt16( value );
+			}
+			else if (desiredType == typeof(Int32))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToInt32( value );
+			}
+			else if (desiredType == typeof(Int64))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToInt64( value );
+			}
+			else if (desiredType == typeof(Byte))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToByte( value );
+			}
+			else if (desiredType == typeof(SByte))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToSByte( value );
+			}
+			else if (desiredType == typeof(Single))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToSingle( value );
+			}
+			else if (desiredType == typeof(Double))
+			{
+				if (value == String.Empty) value = null;
+				return System.Convert.ToDouble( value );
+			}
+			else if (desiredType == typeof(DateTime))
+			{
+				if (value == String.Empty) value = null;
+				return DateTime.Parse(value);
+			}
+			else if (desiredType == typeof(Boolean))
+			{
+				// TODO: Add true/on/1 variants
+				return value != null;
+			}
+			else if (desiredType == typeof(HttpPostedFile))
+			{
+				return files[paramName];
+			}
+			else if (desiredType == typeof(String[]))
+			{
+				return value.Split(',');
+			}
+			else if (desiredType == typeof(Int16[]) || desiredType == typeof(Int32[]) || desiredType == typeof(Int64[]) || 
+				desiredType == typeof(UInt16[]) || desiredType == typeof(UInt32[]) || desiredType == typeof(UInt64[]) || 
+				desiredType == typeof(byte[]) || desiredType == typeof(byte[])  || desiredType == typeof(sbyte[]))
+			{
+				return ConvertToArray(desiredType, value, files, paramName);
+			}
+			else
+			{
+				String message = String.Format("Ignoring argument {0} with value {1} " + 
+					" as we don't know how to convert from this value to its type", paramName, value);
+				Context.Trace(message);
 			}
 
-			return (Int32[]) array.ToArray(typeof(Int32));
+			return null;
+		}
+
+		private object ConvertToArray(Type desiredType, string value, IDictionary files, string paramName)
+		{
+			Type elemType = desiredType.GetElementType();
+	
+			String[] args = value.Split(',');
+	
+			Array newArray = Array.CreateInstance(elemType, args.Length);
+	
+			for(int i=0; i < args.Length; i++)
+			{
+				newArray.SetValue( ConvertParam(elemType, files, paramName, args[i]), i );
+			}
+	
+			return newArray;
 		}
 	}
 }

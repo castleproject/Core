@@ -165,7 +165,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SmartDispatchTestCase.cs"
+                    RelPath = "SmartDispatcherTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
