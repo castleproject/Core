@@ -193,7 +193,7 @@ namespace Castle.MicroKernel
 			if (serviceType == null) throw new ArgumentNullException("serviceType");
 			if (classType == null) throw new ArgumentNullException("classType");
 
-			ComponentModel model = ComponentModelBuilder.BuildModel(key, classType, classType, parameters);
+			ComponentModel model = ComponentModelBuilder.BuildModel(key, serviceType, classType, parameters);
 			RaiseComponentModelCreated(model);
 			IHandler handler = HandlerFactory.Create(model);
 			RegisterHandler(key, handler);
