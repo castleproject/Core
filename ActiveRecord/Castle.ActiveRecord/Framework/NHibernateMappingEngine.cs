@@ -37,6 +37,8 @@ namespace Castle.ActiveRecord
 		private static readonly String proxyAttribute = "proxy=\"{0}\" ";
 		private static readonly String schemaAttribute = "schema=\"{0}\" ";
 		private static readonly String idOpen = "\r\n<id {0}>";
+		private static readonly String collectionIdOpen = "\r\n<collection-id {0}>";
+		private static readonly String collectionIdClose = "\r\n</collection-id>";
 		private static readonly String idClose = "\r\n</id>";
 		private static readonly String nameAttribute = "name=\"{0}\" ";
 		private static readonly String typeAttribute = "type=\"{0}\" ";
@@ -65,6 +67,8 @@ namespace Castle.ActiveRecord
 		private static readonly String listOpen = "\r\n<list name=\"{0}\" {1}>";
 		private static readonly String listClose = "\r\n</list>";
 		private static readonly String setOpen = "\r\n<set name=\"{0}\" {1}>";
+		private static readonly String idbagOpen = "\r\n<idbag name=\"{0}\" {1}>";
+		private static readonly String idbagClose = "\r\n</idbag>";
 		private static readonly String setClose = "\r\n</set>";
 		private static readonly String bagOpen = "\r\n<bag name=\"{0}\" {1}>";
 		private static readonly String bagClose = "\r\n</bag>";
@@ -78,6 +82,7 @@ namespace Castle.ActiveRecord
 		private static readonly String whereAttribute = "where=\"{0}\" ";
 		private static readonly String componentOpen = "\r\n<component {0} {1}>";
 		private static readonly String componentClose = "\r\n</component>";
+		private static readonly String paramElement = "\r\n<param name=\"{0}\">{1}</param>";
 
 		private IList _visited = new ArrayList();
 
@@ -221,6 +226,13 @@ namespace Castle.ActiveRecord
 //						{
 //							AddListMapping(prop, hasmany, builder);
 //						}
+						else if (hasAndBelongs.RelationType == RelationType.IdBag)
+						{
+							CollectionIDAttribute collectionID = GetCollectionIDAttribute(attributes);
+							if (collectionID == null)
+								throw new NullReferenceException("Collection-id attribute required for idbag mapping");
+							AddIDBagMapping(prop, hasAndBelongs, collectionID, builder);
+						}
 						else if (hasAndBelongs.RelationType == RelationType.Set)
 						{
 							AddSetMapping(prop, hasAndBelongs, builder);
@@ -292,6 +304,14 @@ namespace Castle.ActiveRecord
 					}
 				}
 			}
+		}
+
+		private static CollectionIDAttribute GetCollectionIDAttribute(object[] attributes)
+		{
+			CollectionIDAttribute collectionID = null;
+			foreach (object collectionid in attributes)
+				if (collectionid is CollectionIDAttribute && (collectionID = (CollectionIDAttribute) collectionid) != null) break;
+			return collectionID;
 		}
 
 		private void AddComponentMapping(PropertyInfo prop, StringBuilder builder)
@@ -707,6 +727,80 @@ namespace Castle.ActiveRecord
 		private string GetNHibernateName( Type type )
 		{
 			return string.Format( "{0}, {1}", type.FullName, type.Assembly.GetName().Name );
+		}
+
+		private void AddIDBagMapping(PropertyInfo prop, HasAndBelongsToManyAttribute belongs, CollectionIDAttribute collection, StringBuilder builder)
+		{
+			String name = prop.Name;
+			String table = ( belongs.Table == null ? "" : String.Format(tableAttribute, belongs.Table) );
+			String schema = ( belongs.Schema == null ? "" : String.Format(schemaAttribute, belongs.Schema) );
+			String lazy = ( belongs.Lazy == false ? "" : String.Format(lazyAttribute, belongs.Lazy.ToString().ToLower()) );
+			String inverse = ( belongs.Inverse == false ? "" : String.Format(inverseAttribute, belongs.Inverse.ToString().ToLower()) );
+			String cascade = ( belongs.Cascade == null ? "" : String.Format(cascadeAttribute, belongs.Cascade) );
+			//			String sort = (hasAndBelongsTo.Sort == null ? "" : String.Format(sortAttribute, hasAndBelongsTo.Sort));
+			String orderBy = ( belongs.OrderBy == null ? "" : String.Format(orderByAttribute, belongs.OrderBy) );
+			String where = ( belongs.Where == null ? "" : String.Format(whereAttribute, belongs.Where) );
+
+			builder.AppendFormat(idbagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
+			
+			string colColumn = GetXmlString(columnAttribute, ConvertString(collection.Column));
+			string colType = GetXmlString(typeAttribute, ConvertString(collection.ColumnType));
+
+			builder.AppendFormat(collectionIdOpen, colColumn + colType);
+			if (collection.Generator != CollectionIDType.None)
+			{
+				builder.AppendFormat(generatorOpen, collection.Generator.ToString().ToLower());
+				
+				//TODO: map other collectionID types.
+				if (collection.Generator == CollectionIDType.HiLo)
+				{
+					HiloAttribute hilo = GetHiloAttribute(prop.GetCustomAttributes(false));
+					builder.AppendFormat(paramElement, "table", hilo.Table);
+					builder.AppendFormat(paramElement, "column", hilo.Column);
+					builder.AppendFormat(paramElement, "max_lo", hilo.MaxLo);
+				}
+				builder.Append(generatorClose);
+			}
+			builder.Append(collectionIdClose);
+
+			Type otherType = belongs.MapType;
+			String columnkey = ConvertString(belongs.ColumnKey);
+			String column = GetXmlString(columnAttribute, ConvertString(belongs.Column));
+
+			builder.AppendFormat(keyTag, columnkey);
+
+			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
+			// We need to do it wisely
+			if (column != null)
+			{
+				builder.AppendFormat(manyToMany, otherType.AssemblyQualifiedName, column);
+			}
+
+			builder.Append(idbagClose);
+		}
+
+		public static string ConvertString(object checkString)
+		{
+			if (checkString == null) return String.Empty;
+			if (checkString is string && ((string)checkString).Trim().Length > 0) return checkString as string;
+			if (checkString is bool)	
+				if ((bool)checkString)
+					return ((bool)checkString).ToString().ToLower(); 
+			
+			return String.Empty;
+
+		} 
+		public static string GetXmlString(string format, string stuff)
+		{
+			return (stuff == String.Empty) ? stuff : String.Format(format, stuff);	
+		}
+
+		private HiloAttribute GetHiloAttribute(object[] attributes)
+		{
+			HiloAttribute attrib = null;
+			foreach (object a in attributes)
+				if (a is HiloAttribute && (attrib = (HiloAttribute) a) != null) break;
+			return (attrib == null) ? new HiloAttribute() : attrib;
 		}
 	}
 }

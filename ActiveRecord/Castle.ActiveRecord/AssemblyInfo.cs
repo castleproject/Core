@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("Copyright (c) Original author or authors")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
-[assembly: AssemblyVersion("0.0.1.2")]
+[assembly: AssemblyVersion("0.0.1.3")]
 
 #if STRONG
 [assembly: AssemblyDelaySign(false)]

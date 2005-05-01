@@ -1,4 +1,3 @@
-
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,7 @@
 namespace Castle.ActiveRecord.Tests
 {
 	using System;
-
+	using System.Collections;
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model;
@@ -119,6 +118,37 @@ namespace Castle.ActiveRecord.Tests
 			Product secondRef2Product = Product.Find(coolGadget.ID);
 			Assert.AreEqual(1, secondRef2Product.Orders.Count);
 			
+		}
+
+		[Test]
+		public void ManyToManyUsingIDBag()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), 
+				typeof(OrderWithIDBag), typeof(ProductWithIDBag));
+			
+			OrderWithIDBag.DeleteAll();
+			ProductWithIDBag.DeleteAll();
+			
+			OrderWithIDBag myOrder = new OrderWithIDBag();
+			myOrder.OrderedDate = new DateTime(2006, 12, 25);
+			ProductWithIDBag coolGadget = new ProductWithIDBag();
+			coolGadget.Name = "Xbox 2";
+			coolGadget.Price = 330.23f;
+			
+			using (new SessionScope())
+			{
+				coolGadget.Save();
+				IList products = new ArrayList();
+				products.Add(coolGadget);
+				myOrder.Products = products;
+				myOrder.Save();
+			}
+			
+			OrderWithIDBag secondRef2Order = OrderWithIDBag.Find(myOrder.ID);
+			Assert.IsTrue(secondRef2Order.Products.Count > 0);
+			
+			ProductWithIDBag secondRef2Product = ProductWithIDBag.Find(coolGadget.ID);
+			Assert.AreEqual(1, secondRef2Product.Orders.Count);
 		}
 	}
 }

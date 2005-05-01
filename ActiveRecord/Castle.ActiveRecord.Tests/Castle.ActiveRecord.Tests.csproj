@@ -224,7 +224,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "TestXmlMappings\Order.xml"
+                    RelPath = "TestXmlMappings\Mappings.xml"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>

@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Tests.Model
 {
   using System;
+  using System.Collections;
   using Iesi.Collections;
 
 
@@ -66,4 +67,55 @@ namespace Castle.ActiveRecord.Tests.Model
 	  ActiveRecordBase.DeleteAll( typeof(Order) );
 	}
   }
+
+	[ActiveRecord("`Order`")]
+	public class OrderWithIDBag : ActiveRecordBase
+	{
+		private int id;
+		private DateTime ordered_date;
+		private Boolean shipped;
+		private IList _products;
+	
+		[PrimaryKey(PrimaryKeyType.Native, "OrderID")]
+		public int ID
+		{
+			get { return this.id; }
+			set { this.id = value; }
+		}
+
+		[Property()]
+		public DateTime OrderedDate
+		{
+			get { return this.ordered_date; }
+			set { this.ordered_date = value; }
+		}
+
+		[Property()]
+		public Boolean IsShipped
+		{
+			get { return this.shipped; }
+			set { this.shipped = value; }
+		}
+
+		public static OrderWithIDBag Find(int id)
+		{
+			return ((OrderWithIDBag) (ActiveRecordBase.FindByPrimaryKey(typeof (OrderWithIDBag), id)));
+		}
+
+		[HasAndBelongsToMany( typeof(ProductWithIDBag), RelationType.IdBag, 
+			 Table="line_item_non_ident", 
+			 Column="product_id", ColumnKey="order_id"), 
+		CollectionID(CollectionIDType.HiLo, "line_number", "Int32"),
+		Hilo(Table="testing_hilo", Column="sequence", MaxLo=150)]
+		public IList Products
+		{
+			get { return _products; }
+			set { _products = value; }
+		}
+	
+		public static void DeleteAll()
+		{
+			ActiveRecordBase.DeleteAll( typeof(OrderWithIDBag) );
+		}
+	}
 }

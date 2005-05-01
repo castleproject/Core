@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Tests.MappingEngine
 {
 	using System;
+	using System.Collections;
 	using NUnit.Framework;
 	using Castle.ActiveRecord.Tests.Model;
 	using System.IO;
@@ -24,6 +25,25 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 	[TestFixture]
 	public class NHibernateMappingEngineTestCase
 	{		
+		private Hashtable mappings = new Hashtable();
+
+		[SetUp]
+		public void init()
+		{
+			string resourceName = Assembly.GetExecutingAssembly().GetName().Name + ".TestXmlMappings.Mappings.xml";
+			Stream xmlStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+			Assert.IsNotNull(xmlStream);
+			
+			XmlDocument xmlDoc = new XmlDocument();
+			xmlDoc.Load(xmlStream);
+			XmlNodeList nodes = xmlDoc.SelectNodes("/xml_samples/xml_mapping");
+			Assert.IsTrue(nodes.Count > 0);
+			foreach (XmlNode node in nodes)
+				mappings[node.Attributes["name"].Value] = node.FirstChild.InnerText;
+			xmlStream.Close();
+		}
+
+
 		[Test]
 		public void SimpleModelNoRelations()
 		{
@@ -84,17 +104,22 @@ namespace Castle.ActiveRecord.Tests.MappingEngine
 		[Test]
 		public void ManyToManySetMapping()
 		{
-			string resourceName = Assembly.GetExecutingAssembly().GetName().Name + ".TestXmlMappings.Order.xml";
-			Stream xmlStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
-			Assert.IsNotNull(xmlStream);
-			
-			XmlDocument xmlDoc = new XmlDocument();
-			xmlDoc.Load(xmlStream);
-			string expected = xmlDoc.SelectSingleNode("/xml_sample/text()").InnerText;
+			string expected = (string) mappings["ManyToManyWithSet"];
 			Assert.IsTrue(expected.Length > 0);
 			
 			NHibernateMappingEngine engine = new NHibernateMappingEngine();
 			string xml = engine.CreateMapping(typeof(Order), new Type[] { typeof(Order) });
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
+		public void ManyToManyIDMapping()
+		{
+			string expected = (string) mappings["ManyToManyWithIDBag"];
+			Assert.IsTrue(expected.Length > 0);
+			
+			NHibernateMappingEngine engine = new NHibernateMappingEngine();
+			string xml = engine.CreateMapping(typeof(OrderWithIDBag), new Type[] { typeof(OrderWithIDBag) });
 			Assert.AreEqual(expected, xml);
 		}
 	}

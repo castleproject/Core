@@ -135,6 +135,14 @@ CREATE TABLE [dbo].[line_item] (
     PRIMARY KEY (order_id, line_number)
 )
 
+CREATE TABLE [dbo].[line_item_non_ident] (
+    line_number int not null unique, 
+    order_id int NOT NULL, 
+    product_id int, 
+    quantity INTEGER, 
+    PRIMARY KEY (order_id, line_number)
+)
+
 CREATE TABLE [dbo].[product] (
     ProductID int IDENTITY(1,1) PRIMARY KEY, 
     serialNumber VARCHAR(255), 
@@ -142,9 +150,28 @@ CREATE TABLE [dbo].[product] (
     price float
 )
 
+create table [dbo].[testing_hilo] (
+	sequence int
+)
+
+-- populate the hilo table.
+declare @counter int, @sql nvarchar(200)
+set @counter = 0
+while @counter < 10
+	begin
+		set @sql = N'insert into [dbo].[testing_hilo] values (' + cast(@counter as nvarchar(4))+ ')'
+		exec sp_executesql @sql
+		set @counter = @counter + 1
+	end
+
 ALTER TABLE [dbo].[line_item]
-    ADD CONSTRAINT line_itemsFK0 FOREIGN KEY (product_id) REFERENCES [dbo].[product]
+    ADD CONSTRAINT line_itemsFK0 FOREIGN KEY (product_id) REFERENCES [dbo].[product] ON DELETE CASCADE 
 ALTER TABLE [dbo].[line_item]
-    ADD CONSTRAINT line_itemsFK1 FOREIGN KEY (order_id) REFERENCES [dbo].[order]
+    ADD CONSTRAINT line_itemsFK1 FOREIGN KEY (order_id) REFERENCES [dbo].[order] ON DELETE CASCADE 
+
+ALTER TABLE [dbo].[line_item_non_ident]
+    ADD CONSTRAINT line_items_non_FK0 FOREIGN KEY (product_id) REFERENCES [dbo].[product] ON DELETE CASCADE 
+ALTER TABLE [dbo].[line_item_non_ident]
+    ADD CONSTRAINT line_items_non_FK1 FOREIGN KEY (order_id) REFERENCES [dbo].[order] ON DELETE CASCADE 
 GO
    --- cut here ---

@@ -19,7 +19,7 @@
 
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
-	<property name="version" value="0.0.1.2" />
+	<property name="version" value="0.0.1.3" />
 
 	<target name="init">
 		<delete dir="${bin.dir}" failonerror="false" />
@@ -98,7 +98,7 @@
 			</references>
 
 			<resources basedir="${test.src.dir}" prefix="Castle.ActiveRecord.Tests" dynamicprefix="true">
-				<include name="TestXmlMappings\Order.xml" />
+				<include name="TestXmlMappings\Mappings.xml" />
 			</resources>
 		</csc>
 	</target>
