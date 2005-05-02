@@ -38,6 +38,8 @@ namespace Castle.Facilities.Db4oIntegration
 		internal const string PasswordKey = "password";
 		internal const string ActivationDepth = "activationDepth";
 		internal const string UpdateDepth = "updateDepth";
+		internal const string ExceptionsOnNotStorableKey = "exceptionsOnNotStorable";
+		internal const string CallConstructorsKey = "callConstructors";
 
 		public Db4oFacility()
 		{
@@ -79,6 +81,13 @@ namespace Castle.Facilities.Db4oIntegration
 
 			properties.Add(IdKey, compKey);
 			properties.Add(DatabaseFileKey, config.Attributes[DatabaseFileKey]);
+
+			properties.Add(ExceptionsOnNotStorableKey, Convert.ToBoolean(config.Attributes[ExceptionsOnNotStorableKey]));
+			
+			if (config.Attributes[CallConstructorsKey] != null)
+			{
+				properties.Add(CallConstructorsKey, Convert.ToBoolean(config.Attributes[CallConstructorsKey]));
+			}
 
 			if (config.Attributes[ActivationDepth] != null)
 			{

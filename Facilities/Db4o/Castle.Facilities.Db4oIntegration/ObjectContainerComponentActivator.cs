@@ -16,8 +16,10 @@ namespace Castle.Facilities.Db4oIntegration
 {
 	using System;
 	using System.IO;
+	using System.Globalization;
 
 	using com.db4o;
+	using com.db4o.config;
 	
 	using Castle.Model;
 	using Castle.MicroKernel;
@@ -33,9 +35,7 @@ namespace Castle.Facilities.Db4oIntegration
 
 		protected override object Instantiate()
 		{
-			SetActivationDepth();
-
-			SetUpdateDepth();
+			SetupDb4o();
 
 			if (Model.ExtendedProperties[Db4oFacility.HostNameKey] != null)
 			{
@@ -64,28 +64,31 @@ namespace Castle.Facilities.Db4oIntegration
 			return Db4o.openClient(hostName, remotePort, user, password);
 		}
 
-		private void SetActivationDepth()
+		private void SetupDb4o()
 		{
+			Db4o.configure().exceptionsOnNotStorable((bool) Model.ExtendedProperties[Db4oFacility.ExceptionsOnNotStorableKey]); 
+
+			if(Model.ExtendedProperties[Db4oFacility.CallConstructorsKey] != null)
+			{
+				Db4o.configure().callConstructors((bool) Model.ExtendedProperties[Db4oFacility.CallConstructorsKey]);
+			}
+
 			if (Model.ExtendedProperties.Contains(Db4oFacility.ActivationDepth))
 			{
 				Db4o.configure().activationDepth((int) Model.ExtendedProperties[Db4oFacility.ActivationDepth]);
 			}
-			else
-			{
-				Db4o.configure().activationDepth(int.MaxValue);
-			}
-		}
-
-		private void SetUpdateDepth()
-		{
+	
 			if (Model.ExtendedProperties.Contains(Db4oFacility.UpdateDepth))
 			{
 				Db4o.configure().updateDepth((int) Model.ExtendedProperties[Db4oFacility.UpdateDepth]);
 			}
-			else
-			{
-				Db4o.configure().updateDepth(int.MaxValue);
-			}
+
+			SetupTranslators();
+		}
+
+		private void SetupTranslators()
+		{
+			Db4o.configure().objectClass(typeof(CompareInfo)).translate(new TSerializable());
 		}
 	}
 }
