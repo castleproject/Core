@@ -27,7 +27,6 @@ namespace Castle.CastleOnRails.Framework
 		/// from the configuration.
 		/// </summary>
 		String ViewRootDir { get; set; }
-
 		
 		/// <summary>
 		/// Implementors should process the view (using the viewName to
