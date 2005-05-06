@@ -35,10 +35,10 @@ namespace Castle.DynamicProxy.Builder
 
 		#region IProxyBuilder Members
 
-		public virtual Type CreateInterfaceProxy(Type[] interfaces)
+		public virtual Type CreateInterfaceProxy(Type[] interfaces, Type type)
 		{
 			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(_scope);
-			return generator.GenerateCode(interfaces);
+			return generator.GenerateCode(interfaces, type);
 		}
 
 		public virtual Type CreateClassProxy(Type theClass)
@@ -47,10 +47,10 @@ namespace Castle.DynamicProxy.Builder
 			return generator.GenerateCode(theClass);
 		}
 
-		public virtual Type CreateCustomInterfaceProxy(Type[] interfaces, GeneratorContext context)
+		public virtual Type CreateCustomInterfaceProxy(Type[] interfaces, Type type, GeneratorContext context)
 		{
 			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(_scope, context);
-			return generator.GenerateCode(interfaces);
+			return generator.GenerateCode(interfaces, type);
 		}
 
 		public virtual Type CreateCustomClassProxy(Type theClass, GeneratorContext context)

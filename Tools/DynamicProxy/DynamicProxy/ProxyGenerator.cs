@@ -111,7 +111,7 @@ namespace Castle.DynamicProxy
 			AssertUtil.NotNull(interceptor, "interceptor");
 			AssertUtil.NotNull(target, "target");
 
-			Type newType = ProxyBuilder.CreateInterfaceProxy(interfaces);
+			Type newType = ProxyBuilder.CreateInterfaceProxy(interfaces, target.GetType());
 			return CreateProxyInstance( newType, interceptor, target );
 		}
 
@@ -143,7 +143,7 @@ namespace Castle.DynamicProxy
 			AssertUtil.NotNull(target, "target");
 			AssertUtil.NotNull(context, "context");
 
-			Type newType = ProxyBuilder.CreateCustomInterfaceProxy(interfaces, context);
+			Type newType = ProxyBuilder.CreateCustomInterfaceProxy(interfaces, target.GetType(), context);
 			return CreateCustomProxyInstance( newType, interceptor, target, context );
 		}
 

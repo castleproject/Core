@@ -28,6 +28,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	public class InterfaceProxyGenerator : BaseCodeGenerator
 	{
 		protected FieldReference _targetField;
+		protected Type _targetType;
 
 		public InterfaceProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -47,6 +48,26 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
 			{
 				return method;
+			}
+
+			if (method.IsAbstract)
+			{
+				ParameterInfo[] paramsInfo = method.GetParameters();
+				Type[] argTypes = new Type[paramsInfo.Length];
+
+				for(int i=0;i < argTypes.Length; i++)
+				{
+					argTypes[i] = paramsInfo[i].ParameterType;
+				}
+
+				MethodInfo newMethod = _targetType.GetMethod(method.Name, argTypes);
+
+				if (newMethod == null)
+				{
+					throw new ApplicationException("Target class does not offer the method " + method.Name);
+				}
+
+				method = newMethod;
 			}
 
 			String name = String.Format("callback__{0}", method.Name);
@@ -146,7 +167,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				_targetField.ToExpression() ) ) );
 		}
 
-		public virtual Type GenerateCode(Type[] interfaces)
+		public virtual Type GenerateCode(Type[] interfaces, Type targetType)
 		{
 			if (Context.HasMixins)
 			{
@@ -157,12 +178,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			interfaces = AddISerializable(interfaces);
 
-			Type cacheType = GetFromCache(typeof(Object), interfaces);
+			Type cacheType = GetFromCache(targetType, interfaces);
 			
 			if (cacheType != null)
 			{
 				return cacheType;
 			}
+
+			_targetType = targetType;
 
 			CreateTypeBuilder( typeof(Object), interfaces );
 			GenerateFields();

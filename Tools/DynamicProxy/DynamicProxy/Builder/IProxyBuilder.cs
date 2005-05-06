@@ -21,9 +21,9 @@ namespace Castle.DynamicProxy.Builder
 	/// </summary>
 	public interface IProxyBuilder
 	{
-		Type CreateInterfaceProxy( Type[] interfaces );
+		Type CreateInterfaceProxy( Type[] interfaces, Type target );
 
-		Type CreateCustomInterfaceProxy( Type[] interfaces, GeneratorContext context );
+		Type CreateCustomInterfaceProxy( Type[] interfaces, Type target, GeneratorContext context );
 
 		Type CreateClassProxy( Type theClass );
 
