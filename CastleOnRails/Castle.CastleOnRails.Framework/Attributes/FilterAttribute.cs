@@ -24,6 +24,39 @@ namespace Castle.CastleOnRails.Framework
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
 	public class SkipFilter : Attribute
 	{
+        private Type _filterType;
+        private ExecuteEnum _when;
+
+        /// <summary>
+        /// Constructs a SkipFilterAttribute which skips all filters.
+        /// </summary>
+        public SkipFilter(){
+        }
+
+        /// <summary>
+        /// Constructs a SkipFilterAttribute associating 
+        /// the filter type and when the filter should be skipped.
+        /// </summary>
+        /// <param name="when"></param>
+        /// <param name="filterType"></param>
+        public SkipFilter(ExecuteEnum when, Type filterType){
+            _filterType = filterType;
+            _when = when;
+        }
+
+        public Type FilterType {
+            get { return _filterType; }
+        }
+
+        public ExecuteEnum When {
+            get { return _when; }
+        }
+
+        public bool BlanketSkip {
+            get {
+                return _filterType == null;
+            }
+        }
 	}
 
 	/// <summary>

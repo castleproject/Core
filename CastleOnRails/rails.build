@@ -10,7 +10,7 @@
 	<property name="samples.dir" value="${base.dir}/../Samples/CastleOnRails" />
 
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
-	<property name="template.component.bin.dir" value="${base.dir}/../Components\General\TemplateEngine\bin" />
+	<property name="template.component.bin.dir" value="${base.dir}/../Components/General/TemplateEngine/bin" />
 
 	<property name="rails.test" value="true" unless="${property::exists('rails.test')}" />
 
@@ -24,9 +24,9 @@
 	<target name="clean">
 		<delete>
 			<fileset>
-				<include name="${bin.dir}\*.dll" />
-				<include name="${bin.dir}\*.pdb" />
-				<include name="${bin.dir}\*.xml" />
+				<include name="${bin.dir}/*.dll" />
+				<include name="${bin.dir}/*.pdb" />
+				<include name="${bin.dir}/*.xml" />
 			</fileset>
 		</delete>
 	</target>
@@ -155,10 +155,10 @@
 				<include name="**/*.jpg" />
 				<include name="**/*.gif" />
 
-				<exclude name="**\obj\Debug\*.*" />
-				<exclude name="**\bin\Debug\*.*" />
-				<exclude name="**\*.user" />
-				<exclude name="**\*.log" />
+				<exclude name="**/obj/Debug/*.*" />
+				<exclude name="**/bin/Debug/*.*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.log" />
 			</fileset>
 		</zip>
 		
@@ -184,16 +184,16 @@
 				<include name="${library.dir}/*.rtf" />
 				<include name="${library.dir}/*.exe" />
 				
-				<exclude name="**\obj\Debug\*.*" />
-				<exclude name="**\bin\Debug\*.*" />
-				<exclude name="**\bin\*.*" />
-				<exclude name="**\*.user" />
-				<exclude name="**\*.resharperoptions" />
-				<exclude name="**\*.obj" />
-				<exclude name="**\*.pch" />
-				<exclude name="**\*.pdb" />
-				<exclude name="**\*.idb" />
-				<exclude name="**\*.log*" />
+				<exclude name="**/obj/Debug/*.*" />
+				<exclude name="**/bin/Debug/*.*" />
+				<exclude name="**/bin/*.*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.resharperoptions" />
+				<exclude name="**/*.obj" />
+				<exclude name="**/*.pch" />
+				<exclude name="**/*.pdb" />
+				<exclude name="**/*.idb" />
+				<exclude name="**/*.log*" />
 			</fileset>
 		</zip>
 		
@@ -208,7 +208,7 @@
 				<exclude name="${bin.dir}/*.Tests*" />
 				<exclude name="${bin.dir}/*.lang" />
 				<exclude name="${bin.dir}/*.xml" />
-				<exclude name="**\*.log*" />
+				<exclude name="**/*.log*" />
 			</fileset>
 		</zip>
 	</target>

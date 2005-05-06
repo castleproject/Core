@@ -172,6 +172,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Filters\AntiGoogleWebAcceleratorFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\AbstractHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
