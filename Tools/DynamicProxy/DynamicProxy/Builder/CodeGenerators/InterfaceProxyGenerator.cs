@@ -43,7 +43,25 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			get { return Context.InterfaceInvocation; }
 		}
 
-		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
+		protected override String GenerateTypeName(Type type, Type[] interfaces)
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (Type inter in interfaces)
+			{
+				sb.Append('_');
+				sb.Append(inter.Name);
+			}
+			/// Naive implementation
+			return String.Format("ProxyInterface{0}{1}", type.Name, sb.ToString());
+		}
+
+		protected override void GenerateFields()
+		{
+			base.GenerateFields ();
+			_targetField = MainTypeBuilder.CreateField("__target", typeof (object));
+		}
+
+		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method, Reference invocationTarget)
 		{
 			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
 			{
@@ -70,51 +88,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				method = newMethod;
 			}
 
-			String name = String.Format("callback__{0}", method.Name);
-
-			ParameterInfo[] parameters = method.GetParameters();
-
-			ArgumentReference[] args = new ArgumentReference[ parameters.Length ];
-			
-			for(int i=0; i < args.Length; i++)
-			{
-				args[i] = new ArgumentReference( parameters[i].ParameterType );
-			}
-
-			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
-				new ReturnReferenceExpression(method.ReturnType), 
-				MethodAttributes.HideBySig | MethodAttributes.Public, args);
-
-			Expression[] exps = new Expression[ parameters.Length ];
-			
-			for(int i=0; i < args.Length; i++)
-			{
-				exps[i] = args[i].ToExpression();
-			}
-
-			easymethod.CodeBuilder.AddStatement(
-				new ReturnStatement( 
-				new MethodInvocationExpression(_targetField, method, exps) ) );
-
-			return easymethod.MethodBuilder;
-		}
-
-		protected override String GenerateTypeName(Type type, Type[] interfaces)
-		{
-			StringBuilder sb = new StringBuilder();
-			foreach (Type inter in interfaces)
-			{
-				sb.Append('_');
-				sb.Append(inter.Name);
-			}
-			/// Naive implementation
-			return String.Format("ProxyInterface{0}{1}", type.Name, sb.ToString());
-		}
-
-		protected override void GenerateFields()
-		{
-			base.GenerateFields ();
-			_targetField = MainTypeBuilder.CreateField("__target", typeof (object));
+			return base.GenerateCallbackMethodIfNecessary(method, _targetField);
 		}
 
 		/// <summary>

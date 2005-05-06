@@ -539,7 +539,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual void PreProcessMethod(MethodInfo method)
 		{
-			MethodInfo callbackMethod = GenerateCallbackMethodIfNecessary(method);
+			MethodInfo callbackMethod = GenerateCallbackMethodIfNecessary(method, null);
 
 			EasyCallable callable = MainTypeBuilder.CreateCallable( method.ReturnType, method.GetParameters() );
 
@@ -552,10 +552,50 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			RegisterDelegateFieldToBeInitialized(method, field, callable, callbackMethod);
 		}
 
-		protected abstract MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method);
-//		{
-//			return method;
-//		}
+		protected virtual MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method, Reference invocationTarget)
+		{
+			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
+			{
+				return method;
+			}
+
+			String name = String.Format("callback__{0}", method.Name);
+
+			ParameterInfo[] parameters = method.GetParameters();
+
+			ArgumentReference[] args = new ArgumentReference[ parameters.Length ];
+			
+			for(int i=0; i < args.Length; i++)
+			{
+				args[i] = new ArgumentReference( parameters[i].ParameterType );
+			}
+
+			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
+				new ReturnReferenceExpression(method.ReturnType), 
+				MethodAttributes.HideBySig | MethodAttributes.Public, args);
+
+			Expression[] exps = new Expression[ parameters.Length ];
+			
+			for(int i=0; i < args.Length; i++)
+			{
+				exps[i] = args[i].ToExpression();
+			}
+
+			if (invocationTarget == null)
+			{
+				easymethod.CodeBuilder.AddStatement(
+					new ReturnStatement( 
+					new MethodInvocationExpression(method, exps) ) );
+			}
+			else
+			{
+				easymethod.CodeBuilder.AddStatement(
+					new ReturnStatement( 
+					new MethodInvocationExpression(invocationTarget, method, exps) ) );
+			}
+
+			return easymethod.MethodBuilder;
+		}
 
 		protected virtual void PostProcessMethod(MethodInfo method)
 		{

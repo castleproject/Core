@@ -216,9 +216,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			ImplementCacheInvocationCache();
 			GenerateTypeImplementation( baseClass, true );
 			GenerateInterfaceImplementation(interfaces);
-
 			GenerateConstructors(baseClass);
-//			EasyConstructor defConstructor = GenerateConstructor();
 
 			if (_delegateToBaseGetObjectData)
 			{
@@ -309,40 +307,40 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return union;
 		}
 
-		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
-		{
-			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
-			{
-				return method;
-			}
-
-			String name = String.Format("callback__{0}", method.Name);
-
-			ParameterInfo[] parameters = method.GetParameters();
-
-			ArgumentReference[] args = new ArgumentReference[ parameters.Length ];
-			
-			for(int i=0; i < args.Length; i++)
-			{
-				args[i] = new ArgumentReference( parameters[i].ParameterType );
-			}
-
-			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
-				new ReturnReferenceExpression(method.ReturnType), 
-				MethodAttributes.HideBySig | MethodAttributes.Public, args);
-
-			Expression[] exps = new Expression[ parameters.Length ];
-			
-			for(int i=0; i < args.Length; i++)
-			{
-				exps[i] = args[i].ToExpression();
-			}
-
-			easymethod.CodeBuilder.AddStatement(
-				new ReturnStatement( 
-					new MethodInvocationExpression(method, exps) ) );
-
-			return easymethod.MethodBuilder;
-		}
+//		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
+//		{
+//			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
+//			{
+//				return method;
+//			}
+//
+//			String name = String.Format("callback__{0}", method.Name);
+//
+//			ParameterInfo[] parameters = method.GetParameters();
+//
+//			ArgumentReference[] args = new ArgumentReference[ parameters.Length ];
+//			
+//			for(int i=0; i < args.Length; i++)
+//			{
+//				args[i] = new ArgumentReference( parameters[i].ParameterType );
+//			}
+//
+//			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
+//				new ReturnReferenceExpression(method.ReturnType), 
+//				MethodAttributes.HideBySig | MethodAttributes.Public, args);
+//
+//			Expression[] exps = new Expression[ parameters.Length ];
+//			
+//			for(int i=0; i < args.Length; i++)
+//			{
+//				exps[i] = args[i].ToExpression();
+//			}
+//
+//			easymethod.CodeBuilder.AddStatement(
+//				new ReturnStatement( 
+//					new MethodInvocationExpression(method, exps) ) );
+//
+//			return easymethod.MethodBuilder;
+//		}
 	}
 }
