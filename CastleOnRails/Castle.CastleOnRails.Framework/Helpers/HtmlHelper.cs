@@ -1,4 +1,3 @@
-using Castle.CastleOnRails.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,22 +18,22 @@ namespace Castle.CastleOnRails.Framework.Helpers
 	using System.Text;
 	using System.Reflection;
 
+	using Castle.CastleOnRails.Framework.Internal;
+
 
 	public class HtmlHelper : AbstractHelper
 	{
-		private const string linkFormat = "<a href=\"{0}{1}/{2}.{3}\">{4}</a>";
-
-		public string LinkTo( string name, string action )
+		public String LinkTo( string name, string action )
 		{
 			return LinkTo( name, base.Controller.Name, action );
 		}
 
-		public string LinkTo( string name, string controller, string action )
+		public String LinkTo( string name, string controller, string action )
 		{
 			string url = base.Controller.Context.ApplicationPath;
 			string extension = UrlTokenizer.GetExtension( base.Controller.Request.Uri.ToString() );
 
-			return string.Format( linkFormat, url, controller, action, extension, name );
+			return string.Format( "<a href=\"{0}{1}/{2}.{3}\">{4}</a>", url, controller, action, extension, name );
 		}
 
 		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty)

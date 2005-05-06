@@ -139,12 +139,6 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 				innerContext.Add(helper.GetType().Name, helper);
 			}
 
-			foreach (DictionaryEntry entry in controller.PropertyBag)
-			{
-				if (entry.Value == null) continue;
-				innerContext[entry.Key] = entry.Value;
-			}
-
 			foreach (String key in context.Params.AllKeys)
 			{
 				object value = context.Params[key];
@@ -153,6 +147,12 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity
 			}
 
 			foreach (DictionaryEntry entry in context.Flash)
+			{
+				if (entry.Value == null) continue;
+				innerContext[entry.Key] = entry.Value;
+			}
+
+			foreach (DictionaryEntry entry in controller.PropertyBag)
 			{
 				if (entry.Value == null) continue;
 				innerContext[entry.Key] = entry.Value;

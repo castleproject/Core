@@ -231,7 +231,7 @@ namespace Castle.CastleOnRails.Framework
 			}
 			else if (desiredType == typeof(Int16[]) || desiredType == typeof(Int32[]) || desiredType == typeof(Int64[]) || 
 				desiredType == typeof(UInt16[]) || desiredType == typeof(UInt32[]) || desiredType == typeof(UInt64[]) || 
-				desiredType == typeof(byte[]) || desiredType == typeof(byte[])  || desiredType == typeof(sbyte[]))
+				desiredType == typeof(byte[]) || desiredType == typeof(sbyte[]))
 			{
 				return ConvertToArray(desiredType, value, files, paramName);
 			}

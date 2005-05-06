@@ -62,7 +62,7 @@ namespace AspnetSample.views.registration
 			// Work work work...
 			// Ok, proceed
 
-			_controller.Send( "Save" );
+//			_controller.Send( "Save" );
 		}
 	}
 }

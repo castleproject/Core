@@ -14,44 +14,44 @@
 	</target>
 
 	<target name="activerecord">
-		<nant buildfile="ActiveRecord\activerecord.build" target="build" inheritall="true" />
+		<nant buildfile="ActiveRecord/activerecord.build" target="build" inheritall="true" />
 	</target>
 	
 	<target name="tools">
-		<nant buildfile="Tools\DynamicProxy\DynamicProxy.build" target="build" inheritall="true" />
+		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="container">
-		<nant buildfile="InversionOfControl\container.build" target="build" inheritall="true" />
+		<nant buildfile="InversionOfControl/container.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="services">
-		<nant buildfile="Services\services.build" target="build" inheritall="true" />
+		<nant buildfile="Services/services.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="facilities">
-		<nant buildfile="Facilities\facilities.build" target="build" inheritall="true" />
+		<nant buildfile="Facilities/facilities.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="components">
-		<nant buildfile="Components\components.build" target="build" inheritall="true" />
+		<nant buildfile="Components/components.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="rails">
-		<nant buildfile="CastleOnRails\rails.build" target="build" inheritall="true" />
+		<nant buildfile="CastleOnRails/rails.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="samples">
 	</target>
 
 	<target name="dist">
-		<nant buildfile="Tools\DynamicProxy\DynamicProxy.build" target="dist" inheritall="true" />
-		<nant buildfile="InversionOfControl\container.build" target="dist" inheritall="true" />
-		<nant buildfile="Components\components.build" target="dist" inheritall="true" />
-		<nant buildfile="ActiveRecord\activerecord.build" target="dist" inheritall="true" />
-		<nant buildfile="CastleOnRails\rails.build" target="dist" inheritall="true" />
-		<nant buildfile="Services\services.build" target="dist" inheritall="true" />
-		<nant buildfile="Facilities\facilities.build" target="dist" inheritall="true" />
+		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="dist" inheritall="true" />
+		<nant buildfile="InversionOfControl/container.build" target="dist" inheritall="true" />
+		<nant buildfile="Components/components.build" target="dist" inheritall="true" />
+		<nant buildfile="ActiveRecord/activerecord.build" target="dist" inheritall="true" />
+		<nant buildfile="CastleOnRails/rails.build" target="dist" inheritall="true" />
+		<nant buildfile="Services/services.build" target="dist" inheritall="true" />
+		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
 	</target>
 	
 </project>

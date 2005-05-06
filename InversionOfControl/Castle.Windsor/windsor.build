@@ -84,7 +84,7 @@
 		</csc>
 	</target>
 	
-	<target name="tests.run" depends="tests.compile" if="${isWindows}">
+	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
 			<formatter type="Plain" />
 			<test 

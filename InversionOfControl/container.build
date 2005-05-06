@@ -41,7 +41,7 @@
 			</assemblies>
 			<documenters>
 				<documenter name="MSDN">
-					<property name="OutputTarget" value="HTMLHelp" />
+					<!-- <property name="OutputTarget" value="HTMLHelp" /> -->
 					<property name="Preliminary" value="true" />
 					<property name="CleanIntermediates" value="true" />
 					<property name="SdkLinksOnWeb" value="true" />
