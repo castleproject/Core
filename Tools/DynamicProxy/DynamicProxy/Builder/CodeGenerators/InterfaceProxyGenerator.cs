@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
-	using Castle.DynamicProxy.Invocation;
 	using Castle.DynamicProxy.Builder.CodeBuilder;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 
@@ -41,6 +40,42 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		protected override Type InvocationType
 		{
 			get { return Context.InterfaceInvocation; }
+		}
+
+		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
+		{
+			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
+			{
+				return method;
+			}
+
+			String name = String.Format("callback__{0}", method.Name);
+
+			ParameterInfo[] parameters = method.GetParameters();
+
+			ArgumentReference[] args = new ArgumentReference[ parameters.Length ];
+			
+			for(int i=0; i < args.Length; i++)
+			{
+				args[i] = new ArgumentReference( parameters[i].ParameterType );
+			}
+
+			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
+				new ReturnReferenceExpression(method.ReturnType), 
+				MethodAttributes.HideBySig | MethodAttributes.Public, args);
+
+			Expression[] exps = new Expression[ parameters.Length ];
+			
+			for(int i=0; i < args.Length; i++)
+			{
+				exps[i] = args[i].ToExpression();
+			}
+
+			easymethod.CodeBuilder.AddStatement(
+				new ReturnStatement( 
+				new MethodInvocationExpression(_targetField, method, exps) ) );
+
+			return easymethod.MethodBuilder;
 		}
 
 		protected override String GenerateTypeName(Type type, Type[] interfaces)
@@ -87,7 +122,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			constructor.CodeBuilder.AddStatement( new AssignStatement(
 				_targetField, arg2.ToExpression()) );
 
-			GenerateConstructorCode(constructor.CodeBuilder, arg1, arg2, arg3);
+			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg3);
 			
 			return constructor;
 		}

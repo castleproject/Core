@@ -38,10 +38,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-//			if (_owner != null)
-//			{
-//				_owner.LoadReference(gen);
-//			}
+			bool abs = _method.IsAbstract;
 			gen.Emit(OpCodes.Ldftn, _method);
 		}
 	}

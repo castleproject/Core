@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	using Castle.DynamicProxy.Invocation;
 	using Castle.DynamicProxy.Builder.CodeBuilder;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
@@ -329,7 +328,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			}
 
 			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
-				new ReturnReferenceExpression(method.ReturnType), args);
+				new ReturnReferenceExpression(method.ReturnType), 
+				MethodAttributes.HideBySig | MethodAttributes.Public, args);
 
 			Expression[] exps = new Expression[ parameters.Length ];
 			

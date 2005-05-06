@@ -22,6 +22,12 @@ Global
 		{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}.Release.ActiveCfg = Release|.NET
 		{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		DynamicProxy.build = DynamicProxy.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution

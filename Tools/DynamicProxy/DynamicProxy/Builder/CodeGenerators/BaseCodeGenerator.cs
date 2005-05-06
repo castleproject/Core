@@ -552,10 +552,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			RegisterDelegateFieldToBeInitialized(method, field, callable, callbackMethod);
 		}
 
-		protected virtual MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
-		{
-			return method;
-		}
+		protected abstract MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method);
+//		{
+//			return method;
+//		}
 
 		protected virtual void PostProcessMethod(MethodInfo method)
 		{
