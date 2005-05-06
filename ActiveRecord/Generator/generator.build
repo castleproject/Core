@@ -14,9 +14,9 @@
 	<property name="cpnts.assembly.name" value="${cpnts.name}.dll" />
 	<property name="cpnts.tests.assembly.name" value="${cpnts.name}.tests.dll" />
 	
-	<property name="generator.src.dir" value="${base.dir}\${generator.name}" />
-	<property name="cpnts.src.dir" value="${base.dir}\${cpnts.name}" />
-	<property name="cpnts.tests.src.dir" value="${base.dir}\${cpnts.name}.Tests" />
+	<property name="generator.src.dir" value="${base.dir}/${generator.name}" />
+	<property name="cpnts.src.dir" value="${base.dir}/${cpnts.name}" />
+	<property name="cpnts.tests.src.dir" value="${base.dir}/${cpnts.name}.Tests" />
 	<property name="test.assembly.name" value="${cpnts.name}.Tests.dll" />
 
 	<property name="debug" value="false" />
@@ -200,9 +200,9 @@
 				<include name="${cpnts.src.dir}/**/*.*" />
 				<include name="${cpnts.tests.src.dir}/**/*.*" />
 				
-				<exclude name="**\obj\Debug\*.*" />
-				<exclude name="**\bin\Debug\*.*" />
-				<exclude name="**\*.user" />
+				<exclude name="**/obj/Debug/*.*" />
+				<exclude name="**/bin/Debug/*.*" />
+				<exclude name="**/*.user" />
 			</fileset>
 		</zip>
 		

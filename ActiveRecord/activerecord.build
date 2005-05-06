@@ -104,7 +104,7 @@
 	</target>
 	
 	<target name="generator">
-		<nant buildfile="Generator\generator.build" target="build" inheritall="false" />
+		<nant buildfile="Generator/generator.build" target="build" inheritall="false" />
 	</target>
 	
 	<target name="tests.run" depends="tests.compile" if="${nhibernate.test}">
