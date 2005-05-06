@@ -40,23 +40,23 @@ namespace Castle.DynamicProxy.Test
 
 		public void RunPEVerify()
 		{
-			if (false && module.SaveAssembly())
+//			if (false && module.SaveAssembly())
 			//if (module.SaveAssembly())
-			{
-				Process process = new Process();
-				process.StartInfo.UseShellExecute = false;
-				process.StartInfo.RedirectStandardOutput = true;
-				process.StartInfo.Arguments = ModuleScope.FILE_NAME;
-				// Hack. Should it find in the path? 
-				// I thought it would.
-				process.StartInfo.FileName = @"C:\Arquivos de programas\Microsoft Visual Studio .NET 2003\SDK\v1.1\Bin\PEVerify.exe";
-				process.Start();
-				process.WaitForExit( Int32.MaxValue );
-				if (process.ExitCode != 0)
-				{
-					Assert.Fail( process.StandardOutput.ReadToEnd() );
-				}
-			}
+//			{
+//				Process process = new Process();
+//				process.StartInfo.UseShellExecute = false;
+//				process.StartInfo.RedirectStandardOutput = true;
+//				process.StartInfo.Arguments = ModuleScope.FILE_NAME;
+//				// Hack. Should it find in the path? 
+//				// I thought it would.
+//				process.StartInfo.FileName = @"C:\Arquivos de programas\Microsoft Visual Studio .NET 2003\SDK\v1.1\Bin\PEVerify.exe";
+//				process.Start();
+//				process.WaitForExit( Int32.MaxValue );
+//				if (process.ExitCode != 0)
+//				{
+//					Assert.Fail( process.StandardOutput.ReadToEnd() );
+//				}
+//			}
 		}
 
 		[Test]
