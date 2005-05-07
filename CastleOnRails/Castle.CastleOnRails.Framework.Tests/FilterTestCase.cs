@@ -59,6 +59,17 @@ namespace Castle.CastleOnRails.Framework.Tests
 			Assert.AreEqual( "(before)(after)update view contents", context.Output );
 		}
 
+        [Test]
+        public void SelectiveSkipFilter()
+		{
+            _viewEngine.AddView("filtered", "selectiveSkip", "selectiveSkip view contents");
+
+            // Non filtered action
+            RailsEngineContextImpl context = new RailsEngineContextImpl("/filtered/selectiveSkip.rails");
+            _engine.Process( context );
+            Assert.AreEqual( "selectiveSkip view contents", context.Output );
+        }
+
 		[Test]
 		public void BeforeFilters()
 		{

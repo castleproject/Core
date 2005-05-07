@@ -17,46 +17,40 @@ namespace Castle.CastleOnRails.Framework
 	using System;
 
 	/// <summary>
-	/// Decorates a method, indicating that 
-	/// no filter should be applied when the method
-	/// is invoked.
+	/// Declares that for the specific method (action)
+	/// no filter should be applied.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
-	public class SkipFilter : Attribute
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true)]
+	public class SkipFilterAttribute : Attribute
 	{
-        private Type _filterType;
-        private ExecuteEnum _when;
+		private Type _filterType;
 
-        /// <summary>
-        /// Constructs a SkipFilterAttribute which skips all filters.
-        /// </summary>
-        public SkipFilter(){
-        }
+		/// <summary>
+		/// Constructs a SkipFilterAttribute which skips all filters.
+		/// </summary>
+		public SkipFilterAttribute()
+		{
+		}
 
-        /// <summary>
-        /// Constructs a SkipFilterAttribute associating 
-        /// the filter type and when the filter should be skipped.
-        /// </summary>
-        /// <param name="when"></param>
-        /// <param name="filterType"></param>
-        public SkipFilter(ExecuteEnum when, Type filterType){
-            _filterType = filterType;
-            _when = when;
-        }
+		/// <summary>
+		/// Constructs a SkipFilterAttribute associating 
+		/// the filter type that should be skipped.
+		/// </summary>
+		/// <param name="filterType"></param>
+		public SkipFilterAttribute(Type filterType)
+		{
+			_filterType = filterType;
+		}
 
-        public Type FilterType {
-            get { return _filterType; }
-        }
+		public Type FilterType
+		{
+			get { return _filterType; }
+		}
 
-        public ExecuteEnum When {
-            get { return _when; }
-        }
-
-        public bool BlanketSkip {
-            get {
-                return _filterType == null;
-            }
-        }
+		public bool BlanketSkip
+		{
+			get { return _filterType == null; }
+		}
 	}
 
 	/// <summary>
@@ -75,9 +69,9 @@ namespace Castle.CastleOnRails.Framework
 		/// </summary>
 		/// <param name="when"></param>
 		/// <param name="filterType"></param>
-		public FilterAttribute( ExecuteEnum when, Type filterType )
+		public FilterAttribute(ExecuteEnum when, Type filterType)
 		{
-			if (!typeof(IFilter).IsAssignableFrom(filterType))
+			if (!typeof (IFilter).IsAssignableFrom(filterType))
 			{
 				throw new ArgumentException("The specified filter does not implement IFilter");
 			}

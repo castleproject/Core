@@ -14,9 +14,7 @@
 
 namespace Castle.CastleOnRails.Framework.Filters
 {
-	using System;
 	using System.Diagnostics;
-
 
 	public class AntiGoogleWebAcceleratorFilter : IFilter
 	{

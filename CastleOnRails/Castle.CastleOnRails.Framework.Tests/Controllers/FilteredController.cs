@@ -37,6 +37,11 @@ namespace Castle.CastleOnRails.Framework.Tests.Controllers
 		public void Update()
 		{
 		}
+
+        [SkipFilter( typeof(MyFilter))]
+        public void SelectiveSkip()
+        {
+        }
 	}
 
 	public class MyFilter : IFilter

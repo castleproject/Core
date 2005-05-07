@@ -321,14 +321,16 @@ namespace Castle.CastleOnRails.Framework
 
 			MethodInfo method = SelectMethod(action, _context.Request);
 
-			bool skipFilters = _filters == null || method.IsDefined( typeof(SkipFilter), true );
+			HybridDictionary filtersToSkip = new HybridDictionary();
+
+			bool skipFilters = ShouldSkip(method, filtersToSkip);
 			bool hasError = false;
 
 			try
 			{
 				if (!skipFilters)
 				{
-					if (!ProcessFilters( ExecuteEnum.Before ))
+					if (!ProcessFilters( ExecuteEnum.Before, filtersToSkip ))
 					{
 						hasError = true;
 					}
@@ -356,7 +358,7 @@ namespace Castle.CastleOnRails.Framework
 			{
 				if (!skipFilters)
 				{
-					ProcessFilters( ExecuteEnum.After );
+					ProcessFilters( ExecuteEnum.After, filtersToSkip );
 				}
 				DisposeFilter();
 			}
@@ -425,6 +427,33 @@ namespace Castle.CastleOnRails.Framework
 
 		#region Filters
 
+		protected internal bool ShouldSkip(MethodInfo method, IDictionary filtersToSkip)
+		{
+			if (_filters == null)
+			{
+				// No filters, so skip 
+				return true;
+			}
+			
+			if (!method.IsDefined( typeof(SkipFilterAttribute), true ))
+			{
+				// Nothing against filters declared for this action
+				return false;
+			}
+
+			object[] skipInfo = method.GetCustomAttributes( typeof(SkipFilterAttribute), true );
+			
+			foreach(SkipFilterAttribute skipfilter in skipInfo)
+			{
+				// If the user declared a [SkipFilterAttribute] then skip all filters
+				if (skipfilter.BlanketSkip) return true;
+
+				filtersToSkip[skipfilter.FilterType] = String.Empty;
+			}
+
+			return false;
+		}
+
 		protected internal FilterDescriptor[] CollectFilterDescriptor()
 		{
 			object[] attrs = GetType().GetCustomAttributes( typeof(FilterAttribute), true );
@@ -438,10 +467,12 @@ namespace Castle.CastleOnRails.Framework
 			return desc;
 		}
 
-		private bool ProcessFilters(ExecuteEnum when)
+		private bool ProcessFilters(ExecuteEnum when, IDictionary filtersToSkip)
 		{
 			foreach(FilterDescriptor desc in _filters)
 			{
+				if (filtersToSkip.Contains(desc.FilterType)) continue;
+
 				if ((desc.When & when) != 0)
 				{
 					if (!ProcessFilter(when, desc))
