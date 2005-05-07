@@ -29,8 +29,6 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 		{
 		}
 
-		#region IMyInterface Members
-
 		public virtual String Name
 		{
 			get
@@ -55,16 +53,16 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 			}
 		}
 
+		[MyAttribute("Calc1")]
 		public virtual int Calc(int x, int y)
 		{
 			return x + y;
 		}
 
+		[MyAttribute("Calc2")]
 		public virtual int Calc(int x, int y, int z, Single k)
 		{
 			return x + y + z + (int)k;
 		}
-
-		#endregion
 	}
 }

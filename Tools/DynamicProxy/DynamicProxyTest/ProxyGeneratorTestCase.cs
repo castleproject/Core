@@ -138,14 +138,14 @@ namespace Castle.DynamicProxy.Test
 		public void TestGenerationSimpleInterface()
 		{
 			object proxy = _generator.CreateProxy( 
-				typeof(IMyInterface), new StandardInterceptor( ), new MyInterfaceImpl() );
+				typeof(IMyInterface), new ResultModifiedInvocationHandler(), new MyInterfaceImpl() );
 			
 			Assert.IsNotNull( proxy );
 			Assert.IsTrue( typeof(IMyInterface).IsAssignableFrom( proxy.GetType() ) );
 
 			IMyInterface inter = (IMyInterface) proxy;
 
-			Assert.AreEqual( 45, inter.Calc( 20, 25 ) );
+			Assert.AreEqual( 44, inter.Calc( 20, 25 ) );
 
 			inter.Name = "opa";
 			Assert.AreEqual( "opa", inter.Name );

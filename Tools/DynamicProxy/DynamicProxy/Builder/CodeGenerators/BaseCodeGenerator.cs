@@ -54,19 +54,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected HybridDictionary _interface2mixinIndex = new HybridDictionary();
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="moduleScope"></param>
 		protected BaseCodeGenerator(ModuleScope moduleScope) : this(moduleScope, new GeneratorContext())
 		{
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="moduleScope"></param>
-		/// <param name="context"></param>
 		protected BaseCodeGenerator(ModuleScope moduleScope, GeneratorContext context)
 		{
 			_moduleScope = moduleScope;
@@ -620,7 +611,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				new AssignStatement( local_inv, 
 					new VirtualMethodInvocationExpression(_method2Invocation, 
 						fieldDelegate.ToExpression(),
-						new MethodTokenExpression(method)) ) );
+						new MethodTokenExpression( GetCorrectMethod(method) )) ) );
 
 			LocalReference ret_local = builder.CodeBuilder.DeclareLocal( typeof(object) );
 
@@ -640,6 +631,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				builder.CodeBuilder.AddStatement( new ReturnStatement(
 					new ConvertExpression(builder.ReturnType, ret_local.ToExpression())) );
 			}
+		}
+
+		protected virtual MethodInfo GetCorrectMethod(MethodInfo method)
+		{
+			return method;
 		}
 
 		protected Type[] InspectAndRegisterInterfaces(object[] mixins)

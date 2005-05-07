@@ -70,25 +70,41 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			if (method.IsAbstract)
 			{
-				ParameterInfo[] paramsInfo = method.GetParameters();
-				Type[] argTypes = new Type[paramsInfo.Length];
-
-				for(int i=0;i < argTypes.Length; i++)
-				{
-					argTypes[i] = paramsInfo[i].ParameterType;
-				}
-
-				MethodInfo newMethod = _targetType.GetMethod(method.Name, argTypes);
-
-				if (newMethod == null)
-				{
-					throw new ApplicationException("Target class does not offer the method " + method.Name);
-				}
-
-				method = newMethod;
+				method = GetCorrectMethod(method);
 			}
 
 			return base.GenerateCallbackMethodIfNecessary(method, _targetField);
+		}
+
+		/// <summary>
+		/// From an interface method (abstract) look up 
+		/// for a matching method on the target
+		/// </summary>
+		/// <param name="method"></param>
+		/// <returns></returns>
+		protected override MethodInfo GetCorrectMethod(MethodInfo method)
+		{
+			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
+			{
+				return method;
+			}
+
+			ParameterInfo[] paramsInfo = method.GetParameters();
+			Type[] argTypes = new Type[paramsInfo.Length];
+
+			for(int i=0;i < argTypes.Length; i++)
+			{
+				argTypes[i] = paramsInfo[i].ParameterType;
+			}
+
+			MethodInfo newMethod = _targetType.GetMethod(method.Name, argTypes);
+
+			if (newMethod == null)
+			{
+				throw new ApplicationException("Target class does not offer the method " + method.Name);
+			}
+
+			return newMethod;
 		}
 
 		/// <summary>

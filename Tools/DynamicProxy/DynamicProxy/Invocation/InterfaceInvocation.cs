@@ -17,9 +17,7 @@ namespace Castle.DynamicProxy.Invocation
 	using System;
 	using System.Reflection;
 
-	/// <summary>
-	/// 
-	/// </summary>
+
 	public class InterfaceInvocation : SameClassInvocation
 	{
 		private MethodInfo _methodInvocationTarget;
@@ -29,28 +27,28 @@ namespace Castle.DynamicProxy.Invocation
 		{
 		}
 
-		public override MethodInfo MethodInvocationTarget
-		{
-			get
-			{
-				if (_methodInvocationTarget == null)
-				{
-					ParameterInfo[] paramsInfo = Method.GetParameters();
-					Type[] parameters = new Type[paramsInfo.Length];
-
-					int index = 0;
-
-					foreach(ParameterInfo paramInfo in paramsInfo)
-					{
-						parameters[index++] = paramInfo.ParameterType;
-					}
-
-					_methodInvocationTarget = InvocationTarget.GetType().GetMethod(
-						Method.Name, parameters);
-				}
-
-				return _methodInvocationTarget;
-			}
-		}
+//		public override MethodInfo MethodInvocationTarget
+//		{
+//			get
+//			{
+//				if (_methodInvocationTarget == null)
+//				{
+//					ParameterInfo[] paramsInfo = Method.GetParameters();
+//					Type[] parameters = new Type[paramsInfo.Length];
+//
+//					int index = 0;
+//
+//					foreach(ParameterInfo paramInfo in paramsInfo)
+//					{
+//						parameters[index++] = paramInfo.ParameterType;
+//					}
+//
+//					_methodInvocationTarget = InvocationTarget.GetType().GetMethod(
+//						Method.Name, parameters);
+//				}
+//
+//				return _methodInvocationTarget;
+//			}
+//		}
 	}
 }

@@ -115,6 +115,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MethodInvocationTargetTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MixinTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
