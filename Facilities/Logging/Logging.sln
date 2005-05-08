@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Logging", "Castle.Facilities.Logging\Castle.Facilities.Logging.csproj", "{32D54D33-206F-44EE-8329-8480ABE049B1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Logging.Tests", "Castle.Facilities.Logging.Tests\Castle.Facilities.Logging.Tests.csproj", "{8F649EDC-B84C-4F20-81AD-221ACA465E1D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging", "..\..\Services\Logging\Castle.Services.Logging\Castle.Services.Logging.csproj", "{1AFAEC30-152C-43E2-B37C-E713419D20B8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{32D54D33-206F-44EE-8329-8480ABE049B1}.Debug.ActiveCfg = Debug|.NET
+		{32D54D33-206F-44EE-8329-8480ABE049B1}.Debug.Build.0 = Debug|.NET
+		{32D54D33-206F-44EE-8329-8480ABE049B1}.Release.ActiveCfg = Release|.NET
+		{32D54D33-206F-44EE-8329-8480ABE049B1}.Release.Build.0 = Release|.NET
+		{8F649EDC-B84C-4F20-81AD-221ACA465E1D}.Debug.ActiveCfg = Debug|.NET
+		{8F649EDC-B84C-4F20-81AD-221ACA465E1D}.Debug.Build.0 = Debug|.NET
+		{8F649EDC-B84C-4F20-81AD-221ACA465E1D}.Release.ActiveCfg = Release|.NET
+		{8F649EDC-B84C-4F20-81AD-221ACA465E1D}.Release.Build.0 = Release|.NET
+		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Debug.ActiveCfg = Debug|.NET
+		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Debug.Build.0 = Debug|.NET
+		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Release.ActiveCfg = Release|.NET
+		{1AFAEC30-152C-43E2-B37C-E713419D20B8}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
