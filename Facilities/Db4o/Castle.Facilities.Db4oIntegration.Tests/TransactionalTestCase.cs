@@ -29,8 +29,8 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 	{
 		private BeerBox _box;
 
-		private int InvocationsNumber = 20;
-		private int ThreadsNumber = 10;
+		private const int InvocationsNumber = 20;
+		private const int ThreadsNumber = 10;
 
 		private ObjectContainer _objContainer;
 
