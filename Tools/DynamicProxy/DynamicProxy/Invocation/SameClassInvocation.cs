@@ -25,19 +25,5 @@ namespace Castle.DynamicProxy.Invocation
 			base(callable, proxy, method)
 		{
 		}
-
-		public override object Proceed(params object[] args)
-		{
-			// If the user changed the target, we use reflection
-			// otherwise the delegate will be used.
-			if (InvocationTarget == _original_target)
-			{
-				return _callable.Call( args );
-			}
-			else
-			{
-				return Method.Invoke(InvocationTarget, args);
-			}
-		}
 	}
 }

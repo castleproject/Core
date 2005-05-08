@@ -101,7 +101,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			if (newMethod == null)
 			{
-				throw new ApplicationException("Target class does not offer the method " + method.Name);
+				System.Diagnostics.Trace.Write("Target class does not offer the method " + method.Name);
+				newMethod = method;
 			}
 
 			return newMethod;
@@ -177,7 +178,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			_targetType = targetType;
 
-			CreateTypeBuilder( typeof(Object), interfaces );
+			CreateTypeBuilder( GenerateTypeName(targetType, interfaces), 
+				typeof(Object), interfaces );
 			GenerateFields();
 			ImplementGetObjectData( interfaces );
 			ImplementCacheInvocationCache();

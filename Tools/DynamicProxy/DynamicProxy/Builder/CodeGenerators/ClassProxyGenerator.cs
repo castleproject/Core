@@ -205,7 +205,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				return cacheType;
 			}
 
-			CreateTypeBuilder( baseClass, interfaces );
+			CreateTypeBuilder( GenerateTypeName(baseClass, interfaces), baseClass, interfaces );
 			GenerateFields();
 
 			if (baseClass.IsSerializable)

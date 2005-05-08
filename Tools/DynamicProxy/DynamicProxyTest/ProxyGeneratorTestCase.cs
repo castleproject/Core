@@ -155,6 +155,19 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
+		public void UsingCache()
+		{
+			object proxy = _generator.CreateProxy( 
+				typeof(IMyInterface), new StandardInterceptor(), new MyInterfaceImpl() );
+			
+			Assert.IsNotNull( proxy );
+			Assert.IsTrue( typeof(IMyInterface).IsAssignableFrom( proxy.GetType() ) );
+
+			proxy = _generator.CreateProxy( 
+				typeof(IMyInterface), new StandardInterceptor(), new MyInterfaceImpl() );
+		}
+
+		[Test]
 		public void TestGenerationWithInterfaceHeritage()
 		{
 			object proxy = _generator.CreateProxy( 

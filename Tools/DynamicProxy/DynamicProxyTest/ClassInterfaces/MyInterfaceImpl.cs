@@ -65,4 +65,9 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 			return x + y + z + (int)k;
 		}
 	}
+
+	public class MyInterfaceImplX : MyInterfaceImpl
+	{
+		
+	}
 }

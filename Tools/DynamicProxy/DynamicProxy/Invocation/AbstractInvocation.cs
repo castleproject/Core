@@ -1,4 +1,3 @@
-using System;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,11 +48,23 @@ namespace Castle.DynamicProxy.Invocation
 			get { return _method; }
 		}
 
-		public virtual MethodInfo MethodInvocationTarget
+		public MethodInfo MethodInvocationTarget
 		{
 			get { return Method; }
 		}
 
-		public abstract object Proceed(params object[] args);
+		public virtual object Proceed(params object[] args)
+		{
+			// If the user changed the target, we use reflection
+			// otherwise the delegate will be used.
+			if (InvocationTarget == _original_target)
+			{
+				return _callable.Call( args );
+			}
+			else
+			{
+				return Method.Invoke(InvocationTarget, args);
+			}
+		}
 	}
 }

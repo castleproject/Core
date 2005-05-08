@@ -136,9 +136,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			_cachedFields.Add( new CallableField(field, builder, callbackMethod, sourceArgIndex) );
 		}
 
-		protected virtual EasyType CreateTypeBuilder(Type baseType, Type[] interfaces)
+		protected virtual EasyType CreateTypeBuilder(String typeName, Type baseType, Type[] interfaces)
 		{
-			String typeName = GenerateTypeName(baseType, interfaces);
+//			String typeName = GenerateTypeName(baseType, interfaces);
 
 			_baseType = baseType;
 			_typeBuilder = new EasyType(ModuleScope, typeName, baseType, interfaces, true);
