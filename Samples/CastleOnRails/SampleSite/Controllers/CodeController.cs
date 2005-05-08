@@ -4,7 +4,7 @@ namespace SampleSite.Controllers
 	using System.IO;
 	using System.Text;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 
 	public class CodeController : SmartDispatcherController

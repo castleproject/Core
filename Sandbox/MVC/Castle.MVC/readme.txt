@@ -15,5 +15,5 @@ LICENSE
 
 CREDITS
 
-	Inspired by Castle on Rails and the UIP block of Microsoft.
+	Inspired by MonoRail and the UIP block of Microsoft.
 

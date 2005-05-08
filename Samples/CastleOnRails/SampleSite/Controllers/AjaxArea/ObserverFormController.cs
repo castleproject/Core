@@ -2,7 +2,7 @@ namespace SampleSite.Controllers.AjaxArea
 {
     using System;
 
-    using Castle.CastleOnRails.Framework;
+    using Castle.MonoRail.Framework;
     
 	[ControllerDetails(Area="AjaxArea")]
     public class ObserverFormController : AbstractAjaxApplicationController

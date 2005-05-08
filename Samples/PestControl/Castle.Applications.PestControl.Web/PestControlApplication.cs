@@ -22,7 +22,7 @@ namespace Castle.Applications.PestControl.Web
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.AppDomain;
 
-	using Castle.CastleOnRails.WindsorExtension;
+	using Castle.MonoRail.WindsorExtension;
 
 	using Castle.Applications.PestControl.Model;
 	using Castle.Applications.PestControl.Web.Controllers;

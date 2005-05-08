@@ -2,7 +2,7 @@ namespace SampleSite.Controllers.LayoutsArea
 {
     using System;
 
-    using Castle.CastleOnRails.Framework;
+    using Castle.MonoRail.Framework;
     
 	[ControllerDetails("Home", Area="LayoutsArea")]
     public class HomeController : AbstractApplicationController

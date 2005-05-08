@@ -4,7 +4,7 @@ namespace SampleSite.Controllers.AjaxArea
 	using System.Threading;
 	using System.Collections;
 
-    using Castle.CastleOnRails.Framework;
+    using Castle.MonoRail.Framework;
     
 	[ControllerDetails(Area="AjaxArea")]
     public class FormRemoteTagController : AbstractAjaxApplicationController

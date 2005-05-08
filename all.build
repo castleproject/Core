@@ -6,7 +6,7 @@
 	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
 	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
 
-	<target name="build" depends="init, tools, container, components, activerecord, rails, services, facilities, samples" />
+	<target name="build" depends="init, tools, container, components, activerecord, monorail, services, facilities, samples" />
 	
 	<target name="init">
 		<echo message="${os}" />
@@ -37,8 +37,8 @@
 		<nant buildfile="Components/components.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="rails">
-		<nant buildfile="CastleOnRails/rails.build" target="build" inheritall="true" />
+	<target name="monorail">
+		<nant buildfile="MonoRail/rails.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="samples">
@@ -49,7 +49,7 @@
 		<nant buildfile="InversionOfControl/container.build" target="dist" inheritall="true" />
 		<nant buildfile="Components/components.build" target="dist" inheritall="true" />
 		<nant buildfile="ActiveRecord/activerecord.build" target="dist" inheritall="true" />
-		<nant buildfile="CastleOnRails/rails.build" target="dist" inheritall="true" />
+		<nant buildfile="MonoRail/rails.build" target="dist" inheritall="true" />
 		<nant buildfile="Services/services.build" target="dist" inheritall="true" />
 		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
 	</target>

@@ -2,7 +2,7 @@ namespace SampleSite.Controllers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	[Filter(ExecuteEnum.After, typeof(FooterLinkFilter))]
 	[Layout("default")]

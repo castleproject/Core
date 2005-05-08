@@ -2,7 +2,7 @@ namespace SampleSite.Controllers.RescuesArea
 {
     using System;
 
-    using Castle.CastleOnRails.Framework;
+    using Castle.MonoRail.Framework;
     
 	[Rescue("lie")]
 	[ControllerDetails("Home", Area="RescuesArea")]

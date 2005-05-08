@@ -7,7 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using Castle.Applications.PestControl.Model;
-using Castle.CastleOnRails.Framework;
+using Castle.MonoRail.Framework;
 
 namespace Castle.Applications.PestControl.Web.Views.Dashboard
 {

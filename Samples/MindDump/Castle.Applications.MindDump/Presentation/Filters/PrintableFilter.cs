@@ -16,7 +16,7 @@ namespace Castle.Applications.MindDump.Presentation.Filters
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 
 	public class PrintableFilter : IFilter

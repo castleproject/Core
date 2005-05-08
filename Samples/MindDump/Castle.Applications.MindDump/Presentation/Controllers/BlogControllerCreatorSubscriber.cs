@@ -23,7 +23,7 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	using Castle.Applications.MindDump.Model;
 	using Castle.Applications.MindDump.Services;
 
-	using Castle.CastleOnRails.Framework.Internal.Graph;
+	using Castle.MonoRail.Framework.Internal.Graph;
 
 
 	public class BlogControllerCreatorSubscriber : IMindDumpEventSubscriber, IInitializable

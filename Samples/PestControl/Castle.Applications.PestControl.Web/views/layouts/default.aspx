@@ -1,5 +1,5 @@
-<%@ Page Inherits="Castle.CastleOnRails.Framework.Views.Aspx.MasterPageBase" %>
-<%@ Register tagprefix="rails" namespace="Castle.CastleOnRails.Framework.Views.Aspx" assembly="Castle.CastleOnRails.Framework" %>
+<%@ Page Inherits="Castle.MonoRail.Framework.Views.Aspx.MasterPageBase" %>
+<%@ Register tagprefix="rails" namespace="Castle.MonoRail.Framework.Views.Aspx" assembly="Castle.MonoRail.Framework" %>
 <script language="C#" runat="server">
   
   public String PageTitle

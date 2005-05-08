@@ -16,7 +16,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	using Castle.Applications.PestControl.Web.Controllers.Filters;
 

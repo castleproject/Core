@@ -2,7 +2,7 @@ namespace SampleSite.Controllers.AdvancedArea
 {
     using System;
 
-    using Castle.CastleOnRails.Framework;
+    using Castle.MonoRail.Framework;
     
 	[ControllerDetails("Home", Area="AdvancedArea")]
     public class HomeController : AbstractApplicationController

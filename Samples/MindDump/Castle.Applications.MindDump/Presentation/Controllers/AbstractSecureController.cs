@@ -16,7 +16,7 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	using Castle.Applications.MindDump.Presentation.Filters;
 

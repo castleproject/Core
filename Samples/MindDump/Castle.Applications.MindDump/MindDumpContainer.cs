@@ -29,7 +29,7 @@ namespace Castle.Applications.MindDump
 	using Castle.Applications.MindDump.Presentation.Controllers;
 	using Castle.Applications.MindDump.Presentation.Filters;
 
-	using Castle.CastleOnRails.WindsorExtension;
+	using Castle.MonoRail.WindsorExtension;
 
 
 	public class MindDumpContainer : WindsorContainer

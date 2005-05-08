@@ -1,4 +1,4 @@
-This sample illustrates the integration between Castle Windsor and Castle on Rails. It depicts how the application overall development can benefit from them.
+This sample illustrates the integration between Castle Windsor and MonoRail. It depicts how the application overall development can benefit from them.
 
 
 

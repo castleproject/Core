@@ -11,7 +11,7 @@ using System.Web.UI.HtmlControls;
 using Castle.Applications.PestControl.Model;
 using Castle.Applications.PestControl.Services.BuildSystems;
 using Castle.Applications.PestControl.Services.SourceControl;
-using Castle.CastleOnRails.Framework;
+using Castle.MonoRail.Framework;
 
 namespace Castle.Applications.PestControl.Web.views.project
 {

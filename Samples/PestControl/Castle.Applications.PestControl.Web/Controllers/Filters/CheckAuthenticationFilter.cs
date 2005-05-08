@@ -17,7 +17,7 @@ namespace Castle.Applications.PestControl.Web.Controllers.Filters
 	using System;
 	using System.Security.Principal;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	public class CheckAuthenticationFilter : IFilter
 	{
