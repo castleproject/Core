@@ -17,7 +17,7 @@ namespace Castle.Applications.MindDump
 	using System;
 
 	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Xml;
+    using Castle.Windsor.Configuration.Interpreters;
 
 	using Castle.MicroKernel;
 
@@ -34,11 +34,11 @@ namespace Castle.Applications.MindDump
 
 	public class MindDumpContainer : WindsorContainer
 	{
-		public MindDumpContainer() : this( new XmlConfigurationStore("../app_config.xml") )
+		public MindDumpContainer() : this( new XmlInterpreter("../app_config.xml") )
 		{
 		}
 
-		public MindDumpContainer(IConfigurationStore store) : base(store)
+		public MindDumpContainer(Castle.Windsor.Configuration.IConfigurationInterpreter store) : base(store)
 		{
 			Init();
 		}
