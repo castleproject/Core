@@ -7,7 +7,7 @@
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="name" value="Castle.CastleOnRails.Generator" />
+	<property name="name" value="Castle.MonoRail.Generator" />
 	<property name="assembly.name" value="Generator.exe" />
 	
 	<property name="version" value="1.0.0.0" />

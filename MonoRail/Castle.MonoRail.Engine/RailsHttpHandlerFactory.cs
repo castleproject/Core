@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine
+namespace Castle.MonoRail.Engine
 {
 	using System;
 	using System.Web;
 	using System.Configuration;
 
-	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Internal;
-	using Castle.CastleOnRails.Framework.Views.Aspx;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Views.Aspx;
 
-	using Castle.CastleOnRails.Engine.Configuration;
+	using Castle.MonoRail.Engine.Configuration;
 
 	/// <summary>
 	/// Coordinates the creation of new <see cref="RailsHttpHandler"/> 
@@ -65,7 +65,7 @@ namespace Castle.CastleOnRails.Engine
 			if (_config == null)
 			{
 				throw new ApplicationException("Unfortunatelly you have to provide " + 
-					"the configuration to use Castle on Rails");
+					"the configuration to use MonoRail");
 			}
 		}
 

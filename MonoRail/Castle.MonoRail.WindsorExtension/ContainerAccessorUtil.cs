@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.WindsorExtension
+namespace Castle.MonoRail.WindsorExtension
 {
 	using System;
 	using System.Web;
 
 	using Castle.Windsor;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 
 	/// <summary>

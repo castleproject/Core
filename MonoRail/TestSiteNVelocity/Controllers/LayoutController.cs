@@ -16,7 +16,7 @@ namespace TestSiteNVelocity.Controllers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	[Layout("master")]
 	[ControllerDetails("layoutable")]

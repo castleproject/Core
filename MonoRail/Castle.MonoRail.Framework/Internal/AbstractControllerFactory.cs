@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Internal
+namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Internal.Graph;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal.Graph;
 
 	/// <summary>
 	/// Base implementation of <see cref="IControllerFactory"/>

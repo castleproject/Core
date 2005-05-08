@@ -3,5 +3,5 @@
 *###
 #set( $condition = true)
 #if ($condition)
-Castle on rails is great!
+MonoRail is great!
 #end

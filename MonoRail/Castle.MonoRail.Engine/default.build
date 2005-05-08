@@ -7,8 +7,8 @@
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.CastleOnRails.Engine.Tests" />
-	<property name="name" value="Castle.CastleOnRails.Engine" />
+	<property name="test.src.dir" value="${src.dir}/../Castle.MonoRail.Engine.Tests" />
+	<property name="name" value="Castle.MonoRail.Engine" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
@@ -47,7 +47,7 @@
 			</sources>
 
 			<references>
-				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 			</references>
 		</csc>
 	</target>
@@ -65,7 +65,7 @@
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
-				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Cassini.dll" />
 			</references>
 		</csc>

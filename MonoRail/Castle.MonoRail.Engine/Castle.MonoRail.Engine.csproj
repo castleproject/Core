@@ -3,22 +3,22 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{30F513CB-9520-4E43-A845-3185D76F38B9}"
+        ProjectGuid = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
     >
         <Build>
             <Settings
-                ApplicationIcon = "App.ico"
+                ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Generator"
+                AssemblyName = "Castle.MonoRail.Engine"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Exe"
+                OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.CastleOnRails.Generator"
+                RootNamespace = "Castle.MonoRail.Engine"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -70,117 +70,83 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "NVelocity"
-                    AssemblyName = "NVelocity"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\NVelocity.dll"
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
                 <Reference
-                    Name = "Castle.Components.Common.TemplateEngine"
-                    AssemblyName = "Castle.Components.Common.TemplateEngine"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.dll"
+                    Name = "Castle.MonoRail.Framework"
+                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
-                    AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
-                />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\Commons.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\log4net.dll"
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "App.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "App.ico"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IGenerator.cs"
+                    RelPath = "ProcessEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\AbstractGenerator.cs"
+                    RelPath = "RailsHttpHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\ControllerGenerator.cs"
+                    RelPath = "RailsHttpHandlerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generators\ProjectGenerator.cs"
+                    RelPath = "Adapters\FileDictionaryAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "templates\abstractcassini.vm"
-                    BuildAction = "None"
+                    RelPath = "Adapters\RailsEngineContextAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "templates\container.vm"
-                    BuildAction = "None"
+                    RelPath = "Adapters\RequestAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "templates\csproj.vm"
-                    BuildAction = "None"
+                    RelPath = "Adapters\ResponseAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "templates\csprojtest.vm"
-                    BuildAction = "None"
+                    RelPath = "Adapters\SessionAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "templates\global.vm"
-                    BuildAction = "None"
+                    RelPath = "Configuration\RailsConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "templates\httpapp.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "templates\newview.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "templates\newviewaspx.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "templates\solution.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "templates\webconfig.vm"
-                    BuildAction = "None"
+                    RelPath = "Configuration\RailsSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

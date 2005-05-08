@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Tests
+namespace Castle.MonoRail.Engine.Tests
 {
 	using System;
 	using System.IO;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Adapters
+namespace Castle.MonoRail.Engine.Adapters
 {
 	using System;
 	using System.Collections;
@@ -20,7 +20,7 @@ namespace Castle.CastleOnRails.Engine.Adapters
 	using System.Web;
 	using System.Web.Caching;
 	using System.Security.Principal;
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	/// <summary>
 	/// Adapter to expose a valid <see cref="IRailsEngineContext"/>

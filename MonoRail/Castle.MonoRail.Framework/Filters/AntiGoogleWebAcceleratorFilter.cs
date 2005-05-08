@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Filters
+namespace Castle.MonoRail.Framework.Filters
 {
 	using System.Diagnostics;
 

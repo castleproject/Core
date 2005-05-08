@@ -17,8 +17,8 @@ namespace TestSiteNVelocity.Controllers
 	using System;
 	using System.Collections;
 
-	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Helpers;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Helpers;
 
 
 	[Helper( typeof(AjaxHelper) )]

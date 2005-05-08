@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests
+namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
 
 	using NUnit.Framework;
 
-	using Castle.CastleOnRails.Engine;
-	using Castle.CastleOnRails.Framework.Tests.Controllers;
+	using Castle.MonoRail.Engine;
+	using Castle.MonoRail.Framework.Tests.Controllers;
 
 	[TestFixture]
 	public class SmartDispatcherTestCase

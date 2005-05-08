@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Generator.Generators
+namespace Castle.MonoRail.Generator.Generators
 {
 	using System;
 	using System.IO;
@@ -36,7 +36,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 			String templatePath = Path.Combine( 
 				AppDomain.CurrentDomain.BaseDirectory, 
-				@"../Castle.CastleOnRails.Generator/templates" );
+				@"../Castle.MonoRail.Generator/templates" );
 
 			engine = new NVelocityTemplateEngine(templatePath);
 			(engine as ISupportInitialize).BeginInit();

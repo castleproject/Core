@@ -1,5 +1,5 @@
 <%@ Page language="c#" Codebehind="actionto.aspx.cs" AutoEventWireup="false" Inherits="TestSite.views.registration.actionto" %>
-<%@ Register tagprefix="rails" namespace="Castle.CastleOnRails.Framework.Views.Aspx" assembly="Castle.CastleOnRails.Framework" %>
+<%@ Register tagprefix="rails" namespace="Castle.MonoRail.Framework.Views.Aspx" assembly="Castle.MonoRail.Framework" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>

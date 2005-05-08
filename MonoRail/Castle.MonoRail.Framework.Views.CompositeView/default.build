@@ -7,7 +7,7 @@
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="name" value="Castle.CastleOnRails.Framework.Views.CompositeView" />
+	<property name="name" value="Castle.MonoRail.Framework.Views.CompositeView" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.src.dir" value="${src.dir}/../${name}.Tests" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
@@ -42,9 +42,9 @@
 			</sources>
 
 			<references>
-				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
-				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
-				<include name="${bin.dir}/Castle.CastleOnRails.Framework.Views.NVelocity.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="${library.dir}/Commons.dll" />
 				<include name="${library.dir}/log4net.dll" />
 				<include name="${library.dir}/NVelocity.dll" />

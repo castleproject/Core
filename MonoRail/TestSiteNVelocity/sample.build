@@ -19,9 +19,9 @@
 	<target name="init" depends="clean">
 		<copy todir="${bin2.dir}">
 			<fileset basedir="../bin">
-				<include name="Castle.CastleOnRails.Engine.dll" />
-				<include name="Castle.CastleOnRails.Framework.dll" />
-				<include name="Castle.CastleOnRails.Framework.Views.NVelocity.dll" />
+				<include name="Castle.MonoRail.Engine.dll" />
+				<include name="Castle.MonoRail.Framework.dll" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="Commons.dll" />
 				<include name="log4net.dll" />
 				<include name="NVelocity.dll" />
@@ -42,9 +42,9 @@
 			</sources>
 
 			<references>
-				<include name="${bin2.dir}/Castle.CastleOnRails.Engine.dll" />
-				<include name="${bin2.dir}/Castle.CastleOnRails.Framework.dll" />
-				<include name="${bin2.dir}/Castle.CastleOnRails.Framework.Views.NVelocity.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Engine.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="${bin2.dir}/Commons.dll" />
 				<include name="${bin2.dir}/log4net.dll" />
 				<include name="${bin2.dir}/NVelocity.dll" />

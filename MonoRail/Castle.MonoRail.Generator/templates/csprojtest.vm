@@ -95,9 +95,9 @@
                     HintPath = "..\lib\Cassini.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework"
-                    AssemblyName = "Castle.CastleOnRails.Framework"
-                    HintPath = "..\lib\Castle.CastleOnRails.Framework.dll"
+                    Name = "Castle.MonoRail.Framework"
+                    AssemblyName = "Castle.MonoRail.Framework"
+                    HintPath = "..\lib\Castle.MonoRail.Framework.dll"
                 />
              </References>
         </Build>

@@ -16,7 +16,7 @@ namespace TestSite.Controllers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	[Rescue("general")]
 	[ControllerDetails("rescuable")]

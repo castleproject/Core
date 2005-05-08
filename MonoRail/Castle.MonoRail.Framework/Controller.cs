@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
@@ -22,8 +22,8 @@ namespace Castle.CastleOnRails.Framework
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	using Castle.CastleOnRails.Framework.Internal;
-	using Castle.CastleOnRails.Framework.Helpers;
+	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Helpers;
 
 	/// <summary>
 	/// Implements the core functionality and expose the

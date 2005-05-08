@@ -1,5 +1,5 @@
-<%@ Implements Interface="Castle.CastleOnRails.Framework.IControllerAware" %>
-<%@ Import Namespace="Castle.CastleOnRails.Framework" %>
+<%@ Implements Interface="Castle.MonoRail.Framework.IControllerAware" %>
+<%@ Import Namespace="Castle.MonoRail.Framework" %>
 <script runat=server>
 
 	private Controller _controller;

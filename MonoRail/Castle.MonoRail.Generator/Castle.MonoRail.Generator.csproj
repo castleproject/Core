@@ -3,22 +3,22 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{22432F75-FD21-474A-AB8F-43100DE79FDB}"
+        ProjectGuid = "{30F513CB-9520-4E43-A845-3185D76F38B9}"
     >
         <Build>
             <Settings
-                ApplicationIcon = ""
+                ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "TestSiteWindsor"
+                AssemblyName = "Generator"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Library"
+                OutputType = "Exe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "TestSiteWindsor"
+                RootNamespace = "Castle.MonoRail.Generator"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "bin\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
-                    OutputPath = "bin\"
+                    OutputPath = "bin\Release\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -80,111 +80,107 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Framework"
-                    AssemblyName = "Castle.MonoRail.Framework"
-                    HintPath = "..\bin\Castle.MonoRail.Framework.dll"
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\..\Components\General\TemplateEngine\bin\NVelocity.dll"
                 />
                 <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\bin\Castle.DynamicProxy.dll"
+                    Name = "Castle.Components.Common.TemplateEngine"
+                    AssemblyName = "Castle.Components.Common.TemplateEngine"
+                    HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.dll"
                 />
                 <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\bin\Castle.MicroKernel.dll"
+                    Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
+                    AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
+                    HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
                 />
                 <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\bin\Castle.Model.dll"
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\..\Components\General\TemplateEngine\bin\Commons.dll"
                 />
                 <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\bin\Castle.Windsor.dll"
-                />
-                <Reference
-                    Name = "Castle.MonoRail.Engine"
-                    AssemblyName = "Castle.MonoRail.Engine"
-                    HintPath = "..\bin\Castle.MonoRail.Engine.dll"
-                />
-                <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-                <Reference
-                    Name = "Castle.MonoRail.WindsorExtension"
-                    Project = "{6C51A1E3-7F20-4696-BFD6-829134678341}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\Components\General\TemplateEngine\bin\log4net.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
+                    RelPath = "App.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "App.ico"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "default.htm"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "global.asax"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "MyHttpApplication.cs"
+                    RelPath = "IGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sample.build"
+                    RelPath = "Generators\AbstractGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\ControllerGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Generators\ProjectGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "templates\abstractcassini.vm"
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "web.config"
+                    RelPath = "templates\container.vm"
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\AccountController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "templates\csproj.vm"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\AuthenticationFilter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "templates\csprojtest.vm"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\HomeController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "templates\global.vm"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\MyController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "templates\httpapp.vm"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "views\account\login.aspx"
-                    BuildAction = "Content"
+                    RelPath = "templates\newview.vm"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "views\home\index.aspx"
-                    BuildAction = "Content"
+                    RelPath = "templates\newviewaspx.vm"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "views\home\list.aspx"
-                    BuildAction = "Content"
+                    RelPath = "templates\solution.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\webconfig.vm"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

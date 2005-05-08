@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.CastleOnRails.WindsorExtension"
+                AssemblyName = "Castle.MonoRail.WindsorExtension"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.CastleOnRails.WindsorExtension"
+                RootNamespace = "Castle.MonoRail.WindsorExtension"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -75,7 +75,7 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework"
+                    Name = "Castle.MonoRail.Framework"
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />

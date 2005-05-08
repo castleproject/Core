@@ -4,10 +4,10 @@
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="name" value="CastleOnRails" />
+	<property name="name" value="MonoRail" />
 	<property name="version" value="beta-2" />
 	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="samples.dir" value="${base.dir}/../Samples/CastleOnRails" />
+	<property name="samples.dir" value="${base.dir}/../Samples/MonoRail" />
 
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
 	<property name="template.component.bin.dir" value="${base.dir}/../Components/General/TemplateEngine/bin" />
@@ -60,23 +60,23 @@
 	</target>
 	
 	<target name="framework" depends="init">
-		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="compile" />
+		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="engine" depends="init">
-		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="compile" />
+		<nant buildfile="Castle.MonoRail.Engine/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="integration" depends="init">
-		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="compile" />
+		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="nvelocity" depends="init">
-		<nant buildfile="Castle.CastleOnRails.Framework.Views.NVelocity/default.build" inheritall="true" target="compile" />
+		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="composite" depends="init">
-		<nant buildfile="Castle.CastleOnRails.Framework.Views.CompositeView/default.build" inheritall="true" target="compile" />
+		<nant buildfile="Castle.MonoRail.Framework.Views.CompositeView/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="samples" depends="init">
@@ -86,24 +86,24 @@
 	</target>
 	
 	<target name="tests" depends="init" if="${rails.test}">
-		<nant buildfile="Castle.CastleOnRails.Framework/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.CastleOnRails.Engine/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.CastleOnRails.Framework.Views.NVelocity/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.CastleOnRails.WindsorExtension/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.Engine/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
 	</target>
 
 	<target name="generator" depends="init">
-		<nant buildfile="Castle.CastleOnRails.Generator/default.build" inheritall="true" target="compile" />
+		<nant buildfile="Castle.MonoRail.Generator/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="docs">
 		<ndoc failonerror="true">
 			<assemblies basedir="${bin.dir}">
-				<include name="Castle.CastleOnRails.Engine.dll" />
-				<include name="Castle.CastleOnRails.Framework.dll" />
-				<include name="Castle.CastleOnRails.Framework.Views.CompositeView.dll" />
-				<include name="Castle.CastleOnRails.Framework.Views.NVelocity.dll" />
-				<include name="Castle.CastleOnRails.WindsorExtension.dll" />
+				<include name="Castle.MonoRail.Engine.dll" />
+				<include name="Castle.MonoRail.Framework.dll" />
+				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="Castle.MonoRail.WindsorExtension.dll" />
 			</assemblies>
 			<documenters>
 				<documenter name="MSDN">
@@ -114,11 +114,11 @@
 					<property name="AutoPropertyBackerSummaries" value="true" />
 					<property name="AutoDocumentConstructors" value="true" />
 					<property name="OutputDirectory" value="${doc.dir}" />
-					<property name="HtmlHelpName" value="CastleOnRails" />
+					<property name="HtmlHelpName" value="MonoRail" />
 					<property name="IncludeFavorites" value="False" />
-					<property name="Title" value="Castle on Rails" />
+					<property name="Title" value="MonoRail" />
 					<property name="SplitTOCs" value="False" />
-					<property name="DefaulTOC" value="Castle.CastleOnRails.Framework" />
+					<property name="DefaulTOC" value="Castle.MonoRail.Framework" />
 					<property name="ShowVisualBasic" value="True" />
 					<property name="ShowMissingSummaries" value="False" />
 					<property name="ShowMissingRemarks" value="False" />
@@ -166,16 +166,16 @@
 			<fileset basedir="${base.dir}">
 				<include name="*.build" />
 				<include name="*.sln" />
-				<include name="Castle.CastleOnRails.Engine/**/*.*" />
-				<include name="Castle.CastleOnRails.Engine.Tests/**/*.*" />
-				<include name="Castle.CastleOnRails.Framework/**/*.*" />
-				<include name="Castle.CastleOnRails.Framework.Tests/**/*.*" />
-				<include name="Castle.CastleOnRails.Framework.Views.NVelocity/**/*.*" />
-				<include name="Castle.CastleOnRails.Framework.Views.NVelocity.Tests/**/*.*" />
-				<include name="Castle.CastleOnRails.Framework.Views.CompositeView/**/*.*" />
-				<include name="Castle.CastleOnRails.WindsorExtension/**/*.*" />
-				<include name="Castle.CastleOnRails.WindsorExtension.Tests.Tests/**/*.*" />
-				<include name="Castle.CastleOnRails.Generator/**/*.*" />
+				<include name="Castle.MonoRail.Engine/**/*.*" />
+				<include name="Castle.MonoRail.Engine.Tests/**/*.*" />
+				<include name="Castle.MonoRail.Framework/**/*.*" />
+				<include name="Castle.MonoRail.Framework.Tests/**/*.*" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity/**/*.*" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/**/*.*" />
+				<include name="Castle.MonoRail.Framework.Views.CompositeView/**/*.*" />
+				<include name="Castle.MonoRail.WindsorExtension/**/*.*" />
+				<include name="Castle.MonoRail.WindsorExtension.Tests.Tests/**/*.*" />
+				<include name="Castle.MonoRail.Generator/**/*.*" />
 				<include name="SimpleUrlRewrite/**/*.*" />
 				<include name="TestSite/**/*.*" />
 				<include name="TestSiteNVelocity/**/*.*" />

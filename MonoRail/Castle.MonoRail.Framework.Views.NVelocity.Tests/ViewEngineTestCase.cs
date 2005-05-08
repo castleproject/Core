@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
+namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
 	using System.IO;
 
 	using NUnit.Framework;
 
-	using Castle.CastleOnRails.Engine;
+	using Castle.MonoRail.Engine;
 
-	using Castle.CastleOnRails.Framework.Tests;
+	using Castle.MonoRail.Framework.Tests;
 
 	[TestFixture]
 	public class ViewEngineTestCase
@@ -36,7 +36,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 
 			_viewEngine = new NVelocityViewEngine();
 			_viewEngine.ViewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
-				"../Castle.CastleOnRails.Framework.Views.NVelocity.Tests/views");
+				"../Castle.MonoRail.Framework.Views.NVelocity.Tests/views");
 			_viewEngine.Init();
 			
 			_engine = new ProcessEngine(factory, _viewEngine);
@@ -61,7 +61,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 
 			_engine.Process( context );
 
-			Assert.AreEqual( "Castle on rails is great!\r\n", context.Output );
+			Assert.AreEqual( "MonoRail is great!\r\n", context.Output );
 		}
 
 		[Test]

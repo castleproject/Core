@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Helpers
+namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Reflection;
@@ -49,7 +49,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 				if (_resourceManager == null)
 				{
 					Assembly assembly = Assembly.GetAssembly( typeof(EffectsFatHelper) );
-					_resourceManager = new ResourceManager("Castle.CastleOnRails.Framework.Javascripts", assembly);
+					_resourceManager = new ResourceManager("Castle.MonoRail.Framework.Javascripts", assembly);
 				}
 
 				return _resourceManager;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Helpers
+namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Text;
@@ -60,7 +60,7 @@ namespace Castle.CastleOnRails.Framework.Helpers
 			{
 				if (_resourceManager == null)
 				{
-					_resourceManager = new ResourceManager("Castle.CastleOnRails.Framework.Javascripts",
+					_resourceManager = new ResourceManager("Castle.MonoRail.Framework.Javascripts",
 						Assembly.GetAssembly(typeof (AjaxHelper)));
 				}
 

@@ -1,5 +1,5 @@
-<%@ Import namespace="Castle.CastleOnRails.Framework.Helpers" %>
-<%@ Register tagprefix="rails" namespace="Castle.CastleOnRails.Framework.Views.Aspx" assembly="Castle.CastleOnRails.Framework" %>
+<%@ Import namespace="Castle.MonoRail.Framework.Helpers" %>
+<%@ Register tagprefix="rails" namespace="Castle.MonoRail.Framework.Views.Aspx" assembly="Castle.MonoRail.Framework" %>
 <%@ Page language="c#" Codebehind="helpme.aspx.cs" AutoEventWireup="false" Inherits="TestSite.views.helper.helpme" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>

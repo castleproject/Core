@@ -90,17 +90,17 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Engine"
+                    Name = "Castle.MonoRail.Engine"
                     Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework"
+                    Name = "Castle.MonoRail.Framework"
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />

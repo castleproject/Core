@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Web;
 // ${Copyrigth}
 
-namespace Castle.CastleOnRails.Framework.Views.Aspx
+namespace Castle.MonoRail.Framework.Views.Aspx
 {
 	using System;
 

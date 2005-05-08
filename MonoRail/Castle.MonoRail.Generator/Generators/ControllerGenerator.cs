@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Generator.Generators
+namespace Castle.MonoRail.Generator.Generators
 {
 	using System;
 	using System.IO;
@@ -225,7 +225,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 		{
 			CodeNamespace thisNs = new CodeNamespace(ns);
 			thisNs.Imports.Add(new CodeNamespaceImport("System"));
-			thisNs.Imports.Add(new CodeNamespaceImport("Castle.CastleOnRails.Framework"));
+			thisNs.Imports.Add(new CodeNamespaceImport("Castle.MonoRail.Framework"));
 //			thisNs.Comments.Add(new CodeCommentStatement("Ignore the above comment or better, delete it"));
 	
 			CodeTypeDeclaration controllerType = new CodeTypeDeclaration(name);

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers.Products
+namespace Castle.MonoRail.Framework.Tests.Controllers.Products
 {
 	using System;
 

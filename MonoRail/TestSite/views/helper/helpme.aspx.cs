@@ -8,7 +8,7 @@ using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-using Castle.CastleOnRails.Framework;
+using Castle.MonoRail.Framework;
 
 namespace TestSite.views.helper
 {
@@ -17,7 +17,7 @@ namespace TestSite.views.helper
 	/// </summary>
 	public class helpme : System.Web.UI.Page, IControllerAware
 	{
-		protected Castle.CastleOnRails.Framework.Views.Aspx.InvokeHelper InvokeHelper1;
+		protected Castle.MonoRail.Framework.Views.Aspx.InvokeHelper InvokeHelper1;
 		protected Controller _controller;
 
 		private void Page_Load(object sender, System.EventArgs e)

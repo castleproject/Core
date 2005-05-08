@@ -10,8 +10,8 @@
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.CastleOnRails.Framework.Tests" />
-	<property name="name" value="Castle.CastleOnRails.Framework" />
+	<property name="test.src.dir" value="${src.dir}/../Castle.MonoRail.Framework.Tests" />
+	<property name="name" value="Castle.MonoRail.Framework" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
@@ -41,7 +41,7 @@
 				<warning number="1572" />
 			</nowarn>
 
-			<resources basedir="${src.dir}" prefix="Castle.CastleOnRails.Framework" dynamicprefix="true">
+			<resources basedir="${src.dir}" prefix="Castle.MonoRail.Framework" dynamicprefix="true">
 				<include name="Javascripts.resx" />
 			</resources>
 			
@@ -67,7 +67,7 @@
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
-				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin.dir}/Cassini.dll" />
 			</references>
 		</csc>

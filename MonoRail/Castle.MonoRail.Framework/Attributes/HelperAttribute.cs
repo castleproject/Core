@@ -1,6 +1,6 @@
 // ${Copyrigth}
 
-namespace Castle.CastleOnRails.Framework
+namespace Castle.MonoRail.Framework
 {
 	using System;
 

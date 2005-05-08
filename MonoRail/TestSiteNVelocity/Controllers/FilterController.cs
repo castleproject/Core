@@ -16,7 +16,7 @@ namespace TestSiteNVelocity.Controllers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	[Filter(ExecuteEnum.Before, typeof(FilterBadHeader))]	
 	public class FilterController : Controller

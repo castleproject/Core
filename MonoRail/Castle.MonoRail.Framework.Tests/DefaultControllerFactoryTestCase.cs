@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests
+namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
 	using System.Reflection;
 
 	using NUnit.Framework;
 
-	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Inspect this assembly registering 
@@ -40,35 +40,35 @@ namespace Castle.CastleOnRails.Framework.Tests
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
-				"Castle.CastleOnRails.Framework.Tests.Controllers.HomeController", 
+				"Castle.MonoRail.Framework.Tests.Controllers.HomeController", 
 				controller.GetType().FullName );
 
 			controller = factory.GetController( new UrlInfo("", "clients", "home", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
-				"Castle.CastleOnRails.Framework.Tests.Controllers.Clients.HomeController", 
+				"Castle.MonoRail.Framework.Tests.Controllers.Clients.HomeController", 
 				controller.GetType().FullName );
 
 			controller = factory.GetController( new UrlInfo("", "clients", "hire-us", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
-				"Castle.CastleOnRails.Framework.Tests.Controllers.Clients.OtherController", 
+				"Castle.MonoRail.Framework.Tests.Controllers.Clients.OtherController", 
 				controller.GetType().FullName );
 
 			controller = factory.GetController( new UrlInfo("", "ourproducts", "shoppingcart", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
-				"Castle.CastleOnRails.Framework.Tests.Controllers.Products.CartController", 
+				"Castle.MonoRail.Framework.Tests.Controllers.Products.CartController", 
 				controller.GetType().FullName );
 
 			controller = factory.GetController( new UrlInfo("", "ourproducts", "lista", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
-				"Castle.CastleOnRails.Framework.Tests.Controllers.Products.ListController", 
+				"Castle.MonoRail.Framework.Tests.Controllers.Products.ListController", 
 				controller.GetType().FullName );
 		}
 	}

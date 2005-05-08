@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Configuration
+namespace Castle.MonoRail.Engine.Configuration
 {
 	using System;
 	using System.IO;
 	using System.Xml;
 	using System.Configuration;
 
-	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 
 	public class RailsSectionHandler : IConfigurationSectionHandler

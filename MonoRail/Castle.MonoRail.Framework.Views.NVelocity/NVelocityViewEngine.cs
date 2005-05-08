@@ -17,7 +17,7 @@ using NVelocity.App;
 using NVelocity.Context;
 using NVelocity.Runtime;
 
-namespace Castle.CastleOnRails.Framework.Views.NVelocity
+namespace Castle.MonoRail.Framework.Views.NVelocity
 {
 	using System;
 	using System.IO;

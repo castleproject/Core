@@ -19,8 +19,8 @@
 	<target name="init" depends="clean">
 		<copy todir="${bin.dir}">
 			<fileset basedir="../bin">
-				<include name="Castle.CastleOnRails.Engine.dll" />
-				<include name="Castle.CastleOnRails.Framework.dll" />
+				<include name="Castle.MonoRail.Engine.dll" />
+				<include name="Castle.MonoRail.Framework.dll" />
 			</fileset>
 		</copy>
 	</target>
@@ -38,8 +38,8 @@
 			</sources>
 
 			<references>
-				<include name="${bin.dir}/Castle.CastleOnRails.Engine.dll" />
-				<include name="${bin.dir}/Castle.CastleOnRails.Framework.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 			</references>
 		</csc>
 	</target>

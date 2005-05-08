@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine.Adapters
+namespace Castle.MonoRail.Engine.Adapters
 {
 	using System;
 	using System.Web;

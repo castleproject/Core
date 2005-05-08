@@ -18,7 +18,7 @@ namespace TestSiteWindsor
 	using System.Web;
 
 	using Castle.Windsor;
-	using Castle.CastleOnRails.WindsorExtension;
+	using Castle.MonoRail.WindsorExtension;
 
 	using TestSiteWindsor.Controllers;
 

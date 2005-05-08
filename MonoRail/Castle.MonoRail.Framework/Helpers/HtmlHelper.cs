@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Helpers
+namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Text;
 	using System.Reflection;
 
-	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.MonoRail.Framework.Internal;
 
 
 	public class HtmlHelper : AbstractHelper

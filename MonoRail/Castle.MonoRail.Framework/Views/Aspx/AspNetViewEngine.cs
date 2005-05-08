@@ -1,4 +1,4 @@
-using Castle.CastleOnRails.Framework.Internal;
+using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@ using Castle.CastleOnRails.Framework.Internal;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Views.Aspx
+namespace Castle.MonoRail.Framework.Views.Aspx
 {
 	using System;
 	using System.Web;

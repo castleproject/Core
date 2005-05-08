@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
+namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
 	using System.Net;
@@ -20,7 +20,7 @@ namespace Castle.CastleOnRails.Framework.Views.NVelocity.Tests
 
 	using NUnit.Framework;
 
-	using Castle.CastleOnRails.Engine.Tests;
+	using Castle.MonoRail.Engine.Tests;
 
 
 	[TestFixture]

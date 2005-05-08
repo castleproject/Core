@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine
+namespace Castle.MonoRail.Engine
 {
 	using System;
 	using System.Web;
 
-	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Core engine. Performs the base work or the
@@ -61,7 +61,7 @@ namespace Castle.CastleOnRails.Engine
 		}
 
 		/// <summary>
-		/// Performs the base work of Castle on Rails. Extracts 
+		/// Performs the base work of MonoRail. Extracts 
 		/// the information from the URL, obtain the controller 
 		/// that matches this information and dispatch the execution 
 		/// to it.

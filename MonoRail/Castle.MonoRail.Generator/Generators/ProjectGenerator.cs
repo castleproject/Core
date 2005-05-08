@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Generator.Generators
+namespace Castle.MonoRail.Generator.Generators
 {
 	using System;
 	using System.IO;
@@ -169,12 +169,12 @@ namespace Castle.CastleOnRails.Generator.Generators
 			if (isNVelocity)
 			{
 				ctx["viewenginetypename"] = 
-					"Castle.CastleOnRails.Framework.Views.NVelocity.NVelocityViewEngine, Castle.CastleOnRails.Framework.Views.NVelocity";
+					"Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine, Castle.MonoRail.Framework.Views.NVelocity";
 			}
 			else
 			{
 				ctx["viewenginetypename"] = 
-					"Castle.CastleOnRails.Framework.Views.Aspx.AspNetViewEngine, Castle.CastleOnRails.Framework";
+					"Castle.MonoRail.Framework.Views.Aspx.AspNetViewEngine, Castle.MonoRail.Framework";
 			}
 
 			WriteTemplateFile(Path.Combine(projectDir.FullName, "web.config"), ctx, templateName);
@@ -218,13 +218,13 @@ namespace Castle.CastleOnRails.Generator.Generators
 		{
 			String sourcedir = AppDomain.CurrentDomain.BaseDirectory;
 
-			CopyFileToLib(sourcedir, "Castle.CastleOnRails.Engine.dll");
-			CopyFileToLib(sourcedir, "Castle.CastleOnRails.Framework.dll");
+			CopyFileToLib(sourcedir, "Castle.MonoRail.Engine.dll");
+			CopyFileToLib(sourcedir, "Castle.MonoRail.Framework.dll");
 			CopyFileToLib(sourcedir, "Cassini.dll");
 			
 			if (isNVelocity)
 			{
-				CopyFileToLib(sourcedir, "Castle.CastleOnRails.Framework.Views.NVelocity.dll");
+				CopyFileToLib(sourcedir, "Castle.MonoRail.Framework.Views.NVelocity.dll");
 				CopyFileToLib(sourcedir, "Commons.dll");
 				CopyFileToLib(sourcedir, "log4net.dll");
 				CopyFileToLib(sourcedir, "NVelocity.dll");
@@ -232,7 +232,7 @@ namespace Castle.CastleOnRails.Generator.Generators
 
 			if (useWindsorIntegration)
 			{
-				CopyFileToLib(sourcedir, "Castle.CastleOnRails.WindsorExtension.dll");
+				CopyFileToLib(sourcedir, "Castle.MonoRail.WindsorExtension.dll");
 				CopyFileToLib(sourcedir, "Castle.DynamicProxy.dll");
 				CopyFileToLib(sourcedir, "Castle.MicroKernel.dll");
 				CopyFileToLib(sourcedir, "Castle.Model.dll");

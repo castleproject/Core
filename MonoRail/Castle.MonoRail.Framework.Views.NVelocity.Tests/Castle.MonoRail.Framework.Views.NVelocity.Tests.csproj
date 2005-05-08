@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.CastleOnRails.Framework.Views.NVelocity.Tests"
+                AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity.Tests"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.CastleOnRails.Framework.Views.NVelocity.Tests"
+                RootNamespace = "Castle.MonoRail.Framework.Views.NVelocity.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -101,22 +101,22 @@
                     HintPath = "..\lib\Commons.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework"
+                    Name = "Castle.MonoRail.Framework"
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Engine"
+                    Name = "Castle.MonoRail.Engine"
                     Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework.Views.NVelocity"
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Engine.Tests"
+                    Name = "Castle.MonoRail.Engine.Tests"
                     Project = "{12A3B0DA-079D-4337-AF70-798596FDB9FE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />

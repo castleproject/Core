@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Generator
+namespace Castle.MonoRail.Generator
 {
 	using System;
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	using Castle.CastleOnRails.Generator.Generators;
+	using Castle.MonoRail.Generator.Generators;
 
 
 	/// <summary>
@@ -99,7 +99,7 @@ namespace Castle.CastleOnRails.Generator
 
 		private static void ShowHeader()
 		{
-			Console.WriteLine("Castle on Rails Generator - " + Assembly.GetExecutingAssembly().GetName().Version.ToString() );
+			Console.WriteLine("MonoRail Generator - " + Assembly.GetExecutingAssembly().GetName().Version.ToString() );
 			Console.WriteLine("Released under Apache Software License 2.0");
 			Console.WriteLine("Copyright (c) 2004-2005 the original author/authors");
 			Console.WriteLine("http://www.castleproject.org/");

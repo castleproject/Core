@@ -8,7 +8,7 @@ namespace ${basename}
 
 	using Castle.MicroKernel;
 
-	using Castle.CastleOnRails.WindsorExtension;
+	using Castle.MonoRail.WindsorExtension;
 
 
 	public class MyContainer : WindsorContainer

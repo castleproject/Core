@@ -1,6 +1,6 @@
 // ${Copyrigth}
 
-namespace Castle.CastleOnRails.Framework.Tests.Controllers
+namespace Castle.MonoRail.Framework.Tests.Controllers
 {
 	using System;
 

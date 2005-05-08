@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Tests
+namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
 
-	using Castle.CastleOnRails.Engine;
+	using Castle.MonoRail.Engine;
 
-	using Castle.CastleOnRails.Framework.Internal;
-	using Castle.CastleOnRails.Framework.Tests.Controllers;
+	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Tests.Controllers;
 
 	public class FakeControllerFactory : IControllerFactory
 	{

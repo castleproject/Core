@@ -17,7 +17,7 @@ namespace TestSite.Controllers
 	using System;
 	using System.Collections;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	[Layout("master")]
 	public class Registration : SmartDispatcherController

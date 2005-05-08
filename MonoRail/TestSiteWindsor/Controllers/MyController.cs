@@ -16,7 +16,7 @@ namespace TestSiteWindsor.Controllers
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	[ControllerDetails("registration")]
 	[Filter( ExecuteEnum.Before, typeof(AuthenticationFilter) )]

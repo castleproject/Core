@@ -85,27 +85,27 @@
                     HintPath = "${frameworkpath}\System.Web.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Engine"
-                    AssemblyName = "Castle.CastleOnRails.Engine"
-                    HintPath = "..\lib\Castle.CastleOnRails.Engine.dll"
+                    Name = "Castle.MonoRail.Engine"
+                    AssemblyName = "Castle.MonoRail.Engine"
+                    HintPath = "..\lib\Castle.MonoRail.Engine.dll"
                 />
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework"
-                    AssemblyName = "Castle.CastleOnRails.Framework"
-                    HintPath = "..\lib\Castle.CastleOnRails.Framework.dll"
+                    Name = "Castle.MonoRail.Framework"
+                    AssemblyName = "Castle.MonoRail.Framework"
+                    HintPath = "..\lib\Castle.MonoRail.Framework.dll"
                 />
 #if ($isNVelocity)
                 <Reference
-                    Name = "Castle.CastleOnRails.Framework.Views.NVelocity"
-                    AssemblyName = "Castle.CastleOnRails.Framework.Views.NVelocity"
-                    HintPath = "..\lib\Castle.CastleOnRails.Framework.Views.NVelocity.dll"
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
+                    AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
+                    HintPath = "..\lib\Castle.MonoRail.Framework.Views.NVelocity.dll"
                 />
 #end
 #if ($useWindsorIntegration)
                 <Reference
-                    Name = "Castle.CastleOnRails.WindsorExtension"
-                    AssemblyName = "Castle.CastleOnRails.WindsorExtension"
-                    HintPath = "..\lib\Castle.CastleOnRails.WindsorExtension.dll"
+                    Name = "Castle.MonoRail.WindsorExtension"
+                    AssemblyName = "Castle.MonoRail.WindsorExtension"
+                    HintPath = "..\lib\Castle.MonoRail.WindsorExtension.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"

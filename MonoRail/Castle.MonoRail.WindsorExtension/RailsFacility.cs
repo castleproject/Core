@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.WindsorExtension
+namespace Castle.MonoRail.WindsorExtension
 {
 	using System;
 
@@ -22,9 +22,9 @@ namespace Castle.CastleOnRails.WindsorExtension
 
 	using Castle.Model.Configuration;
 
-	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Internal;
-	using Castle.CastleOnRails.Framework.Internal.Graph;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Internal.Graph;
 
 
 	/// <summary>

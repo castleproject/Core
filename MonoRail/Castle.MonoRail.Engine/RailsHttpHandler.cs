@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Engine
+namespace Castle.MonoRail.Engine
 {
 	using System;
 	using System.Web;
 	using System.Web.SessionState;
 
-	using Castle.CastleOnRails.Engine.Adapters;
+	using Castle.MonoRail.Engine.Adapters;
 
-	using Castle.CastleOnRails.Framework;
-	using Castle.CastleOnRails.Framework.Internal;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Extends the <see cref="ProcessEngine"/> and implements 

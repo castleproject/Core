@@ -16,7 +16,7 @@ namespace TestSite.Controllers.SubArea
 {
 	using System;
 
-	using Castle.CastleOnRails.Framework;
+	using Castle.MonoRail.Framework;
 
 	[ControllerDetails(Area="subarea")]
 	public class HomeController : Controller

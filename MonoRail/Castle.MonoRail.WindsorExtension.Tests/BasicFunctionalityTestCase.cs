@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.WindsorExtension.Tests
+namespace Castle.MonoRail.WindsorExtension.Tests
 {
 	using System;
 	using System.IO;
@@ -20,7 +20,7 @@ namespace Castle.CastleOnRails.WindsorExtension.Tests
 
 	using NUnit.Framework;
 
-	using Castle.CastleOnRails.Engine.Tests;
+	using Castle.MonoRail.Engine.Tests;
 
 	[TestFixture]
 	public class BasicFunctionalityTestCase : AbstractCassiniTestCase

@@ -12,6 +12,6 @@ to compile and test everything
 
 -- More
 
-More information about Castle on Rails
+More information about MonoRail
 can be found at http://www.castleproject.org/
 
