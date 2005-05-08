@@ -79,7 +79,7 @@
 			</references>
 
 			<resources basedir="${test.src.dir}" prefix="Castle.Windsor.Tests" dynamicprefix="true">
-				<include name="Configuration\sample_config.xml" />
+				<include name="Configuration/sample_config.xml" />
 			</resources>
 		</csc>
 	</target>

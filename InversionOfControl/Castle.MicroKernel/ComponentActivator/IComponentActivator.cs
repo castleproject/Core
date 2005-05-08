@@ -14,10 +14,6 @@
 
 namespace Castle.MicroKernel
 {
-	using System;
-
-	using Castle.Model;
-
 	/// <summary>
 	/// Implements the instance creation logic. The default
 	/// implementation should rely on an ordinary call to 

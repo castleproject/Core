@@ -84,9 +84,9 @@
 				<include name="**/*.config" />
 				<include name="**/*.txt" />
 				
-				<exclude name="**\obj\Debug\*.*" />
-				<exclude name="**\bin\Debug\*.*" />
-				<exclude name="**\*.user" />
+				<exclude name="**/obj/Debug/*.*" />
+				<exclude name="**/bin/Debug/*.*" />
+				<exclude name="**/*.user" />
 			</fileset>
 		</zip>
 		
@@ -101,10 +101,10 @@
 				<include name="Castle.Windsor/**/*.*" />
 				<include name="Castle.Windsor.Tests/**/*.*" />
 				
-				<exclude name="**\obj\Debug\*.*" />
-				<exclude name="**\bin\*.*" />
-				<exclude name="**\*.user" />
-				<exclude name="**\*.resharperoptions" />
+				<exclude name="**/obj/Debug/*.*" />
+				<exclude name="**/bin/*.*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.resharperoptions" />
 			</fileset>
 		</zip>
 		

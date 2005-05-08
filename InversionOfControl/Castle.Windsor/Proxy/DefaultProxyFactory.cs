@@ -71,7 +71,7 @@ namespace Castle.Windsor.Proxy
 			context.Interceptor = typeof(IMethodInterceptor);
 			context.Invocation = typeof(IMethodInvocation);
 			context.SameClassInvocation = typeof(DefaultMethodInvocation);
-			context.InterfaceInvocation = typeof(DefaultInterfaceMethodInvocation);
+			context.InterfaceInvocation = typeof(DefaultMethodInvocation);
 
 			CustomizeContext(context, kernel, model, constructorArguments);
 
