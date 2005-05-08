@@ -1,5 +1,4 @@
-For updated version check:
-http://www.castleproject.org/castle/show/How+To+Build
+For an updated version check: http://www.castleproject.org/index.php/How+To+Build
 
 Everything should compile fine using NAnt 0.85 RC1. Anyway, the following are some usefull tips if things go wrong for some reason.
 
@@ -9,15 +8,15 @@ Everything should compile fine using NAnt 0.85 RC1. Anyway, the following are so
 Use the all.build on the root directory. It compiles everything on the right order, copy dependencies and so on. 
 
 
-- Castle on Rails tests are failing
+- MonoRail tests are failing
 
 Not good. If you have more than one CLR runtime installed, try to specify the runtime 1.1:
 
-> nant -t:net-1.1
+  > nant -t:net-1.1
 
 If the problem persist, just disable the rails tests:
   
-> nant -D:rails.test=false
+  > nant -D:rails.test=false
 
 
 - NHibernate Facility
@@ -26,10 +25,12 @@ Well, this test is bound to fail. You must adjust the connection string and crea
 
 > nant -D:nhibernate.test=false
 
+
 - Building with NAnt RC2 or higher.
 
 You gona need modify the common.inc file, on the root directory. The instructions are in the file. When NAnt's Team releases the 0.85 we'll switch the to release version.
 
+
 - More questions? 
 
-Please check our mailing list at http://www.castleproject.org/home/lists
+Please check our mailing list at http://www.castleproject.org/
