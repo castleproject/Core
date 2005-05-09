@@ -64,7 +64,7 @@ namespace Castle.MonoRail.Engine
 
 			if (_config == null)
 			{
-				throw new ApplicationException("Unfortunatelly, you have to provide " + 
+				throw new ApplicationException("Unfortunately, you have to provide " + 
 					"the configuration to use MonoRail");
 			}
 		}

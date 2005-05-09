@@ -38,7 +38,7 @@
 	</target>
 
 	<target name="monorail">
-		<nant buildfile="MonoRail/rails.build" target="build" inheritall="true" />
+		<nant buildfile="MonoRail/monorail.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="samples">
@@ -49,7 +49,7 @@
 		<nant buildfile="InversionOfControl/container.build" target="dist" inheritall="true" />
 		<nant buildfile="Components/components.build" target="dist" inheritall="true" />
 		<nant buildfile="ActiveRecord/activerecord.build" target="dist" inheritall="true" />
-		<nant buildfile="MonoRail/rails.build" target="dist" inheritall="true" />
+		<nant buildfile="MonoRail/monorail.build" target="dist" inheritall="true" />
 		<nant buildfile="Services/services.build" target="dist" inheritall="true" />
 		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
 	</target>

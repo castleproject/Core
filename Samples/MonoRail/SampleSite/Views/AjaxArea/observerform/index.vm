@@ -24,7 +24,7 @@
 
 <div class="container">
 
-<a href="${siteRoot}/code/showCode.rails?file=Views/AjaxArea/observerform/index.vm">Check this view source code</a>.
+<a href="${siteRoot}/code/showCode.mr?file=Views/AjaxArea/observerform/index.vm">Check this view source code</a>.
 
 <p>
   <form id="mainform">
@@ -36,7 +36,7 @@
   <span id="message"></span>
   
   </form>
-  $AjaxHelper.ObserveForm("mainform", 3, "Validate.rails", "message", null) 
+  $AjaxHelper.ObserveForm("mainform", 3, "Validate.mr", "message", null) 
 </p>
 
 </div>

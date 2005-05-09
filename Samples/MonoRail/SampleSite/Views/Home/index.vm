@@ -23,19 +23,19 @@
 <p align="center">
 <table width="75%" border="0" cellpadding="9" cellspacing="8" align="center">
   <tr>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/controllersarea/home/index.rails">Controllers</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/filtersarea/home/index.rails">Filters</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/layoutsarea/home/index.rails">Layouts</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/controllersarea/home/index.mr">Controllers</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/filtersarea/home/index.mr">Filters</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/layoutsarea/home/index.mr">Layouts</a></td>
   </tr>
   <tr>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/rescuesarea/home/index.rails">Rescues</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/areas/home/index.rails">Areas</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/helpersarea/home/index.rails">Helpers</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/rescuesarea/home/index.mr">Rescues</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/areas/home/index.mr">Areas</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/helpersarea/home/index.mr">Helpers</a></td>
   </tr>
   <tr>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/home/index.rails">Ajax support</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/advancedarea/home/index.rails">Advanced</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/morearea/home/index.rails">More</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/home/index.mr">Ajax support</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/advancedarea/home/index.mr">Advanced</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/morearea/home/index.mr">More</a></td>
   </tr>
 </table>
 </p>

@@ -24,7 +24,7 @@
 
 <div class="container">
 
-<a href="${siteRoot}/code/showCode.rails?file=Views/AjaxArea/linktofunction/index.vm">Check this view source code</a>.
+<a href="${siteRoot}/code/showCode.mr?file=Views/AjaxArea/linktofunction/index.vm">Check this view source code</a>.
 
 <p>
   Back link:

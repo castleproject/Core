@@ -24,7 +24,7 @@
 </code></pre>
 
 <p>
-  And this controller will be accessible from http://yousite/yourvirtualdir/admin/home/index.rails
+  And this controller will be accessible from http://yousite/yourvirtualdir/admin/home/index.mr
 </p>
 
 </div>

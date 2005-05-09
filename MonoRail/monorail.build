@@ -12,7 +12,7 @@
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
 	<property name="template.component.bin.dir" value="${base.dir}/../Components/General/TemplateEngine/bin" />
 
-	<property name="rails.test" value="true" unless="${property::exists('rails.test')}" />
+	<property name="monorail.test" value="true" unless="${property::exists('monorail.test')}" />
 
 	<include buildfile="../common.inc" />		
 
@@ -85,7 +85,7 @@
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
 	</target>
 	
-	<target name="tests" depends="init" if="${rails.test}">
+	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.Engine/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test" />

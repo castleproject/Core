@@ -25,14 +25,14 @@
 
 <div class="container">
 
-<a href="${siteRoot}/code/showCode.rails?file=Views/AjaxArea/observerfield/index.vm">Check this view source code</a>.
+<a href="${siteRoot}/code/showCode.mr?file=Views/AjaxArea/observerfield/index.vm">Check this view source code</a>.
 
 <p>
   Zip Code: <input type="text" name="zipcode" id="zipcode">
   <br>Address:
   <div id="address">
   </div>
-  $AjaxHelper.ObserveField("zipcode", 2, "AddressFromZip.rails", "address", "'value='+value") 
+  $AjaxHelper.ObserveField("zipcode", 2, "AddressFromZip.mr", "address", "'value='+value") 
 </p>
 
 <hr>
@@ -55,7 +55,7 @@
 	</select>
   </span>
   
-  $AjaxHelper.ObserveField("country", 2, "GetStatesFromCountry.rails", "statesplaceholder", "'value='+value")
+  $AjaxHelper.ObserveField("country", 2, "GetStatesFromCountry.mr", "statesplaceholder", "'value='+value")
 </p>
 
 </div>

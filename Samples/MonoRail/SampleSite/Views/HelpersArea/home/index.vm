@@ -19,7 +19,7 @@
   {
     public String BuildUserLink(User user)
     {
-      return String.Format("&lt;a href='/users/showuser.rails?id={0}'&gt;{1}&lt;/a&gt;", user.Id, user.Name);  
+      return String.Format("&lt;a href='/users/showuser.mr?id={0}'&gt;{1}&lt;/a&gt;", user.Id, user.Name);  
     }
   }
 
