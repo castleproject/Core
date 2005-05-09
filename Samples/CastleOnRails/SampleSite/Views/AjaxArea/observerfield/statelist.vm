@@ -1,5 +1,0 @@
-<select name="states">
-#foreach( $s in $states )
-	<option>$s</option>
-#end
-</select>
