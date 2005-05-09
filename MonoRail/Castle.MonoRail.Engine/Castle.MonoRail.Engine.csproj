@@ -99,17 +99,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MonoRailHttpHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MonoRailHttpHandlerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProcessEngine.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RailsHttpHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RailsHttpHandlerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -139,12 +139,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\RailsConfiguration.cs"
+                    RelPath = "Configuration\MonoRailConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\RailsSectionHandler.cs"
+                    RelPath = "Configuration\MonoRailSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

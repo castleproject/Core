@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Engine.Configuration
 	using Castle.MonoRail.Framework.Internal;
 
 
-	public class RailsSectionHandler : IConfigurationSectionHandler
+	public class MonoRailSectionHandler : IConfigurationSectionHandler
 	{
 		private static readonly String Controllers_Node_Name = "controllers";
 		private static readonly String Views_Node_Name = "viewEngine";
@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Engine.Configuration
 
 		public object Create(object parent, object configContext, XmlNode section)
 		{
-			RailsConfiguration config = new RailsConfiguration();
+			MonoRailConfiguration config = new MonoRailConfiguration();
 
 			foreach( XmlNode node in section.ChildNodes)
 			{
@@ -65,7 +65,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			return config;
 		}
 
-		private void ProcessFilterFactoryNode(XmlNode node, RailsConfiguration config)
+		private void ProcessFilterFactoryNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute type = node.Attributes["type"];
 	
@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			config.CustomFilterFactory = type.Value;
 		}
 
-		private void ProcessControllerFactoryNode(XmlNode node, RailsConfiguration config)
+		private void ProcessControllerFactoryNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute type = node.Attributes["type"];
 	
@@ -89,7 +89,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			config.CustomControllerFactory = type.Value;
 		}
 
-		private void ProcessViewNode(XmlNode node, RailsConfiguration config)
+		private void ProcessViewNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute viewPath = node.Attributes[View_Path_Root];
 	
@@ -117,7 +117,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			}
 		}
 
-		private void ProcessControllersNode(XmlNode controllersNode, RailsConfiguration config)
+		private void ProcessControllersNode(XmlNode controllersNode, MonoRailConfiguration config)
 		{
 			foreach(XmlNode node in controllersNode.ChildNodes)
 			{
@@ -127,7 +127,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			}
 		}
 
-		private void ProcessControllerEntry(XmlNode controllerEntry, RailsConfiguration config)
+		private void ProcessControllerEntry(XmlNode controllerEntry, MonoRailConfiguration config)
 		{
 			if (!controllerEntry.HasChildNodes)
 			{
@@ -139,7 +139,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			config.Assemblies.Add( assemblyName );
 		}
 
-		protected virtual void Validate(RailsConfiguration config)
+		protected virtual void Validate(MonoRailConfiguration config)
 		{
 			if (config.CustomControllerFactory != null)
 			{

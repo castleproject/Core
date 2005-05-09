@@ -1,3 +1,4 @@
+using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +18,6 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 	using System;
 	using System.Web.UI;
 
-	using Castle.CastleOnRails.Framework.Internal;
-	
 	/// <summary>
 	/// Redirects the post for an especified Action, Controller and Area.
 	/// </summary>

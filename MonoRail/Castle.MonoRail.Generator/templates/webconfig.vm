@@ -4,7 +4,7 @@
 
     <configSections>
         <section name="rails"
-                 type="Castle.MonoRail.Engine.Configuration.RailsSectionHandler, Castle.MonoRail.Engine" />
+                 type="Castle.MonoRail.Engine.Configuration.MonoRailSectionHandler, Castle.MonoRail.Engine" />
 #if($useWindsorIntegration)
         <section name="castle"
                  type="Castle.Windsor.Configuration.AppDomain.CastleSectionHandler, Castle.Windsor" />
@@ -40,7 +40,7 @@
     <system.web>
         <httpHandlers>
             <add verb="*" path="*.rails" 
-               type="Castle.MonoRail.Engine.RailsHttpHandlerFactory, Castle.MonoRail.Engine" />
+               type="Castle.MonoRail.Engine.MonoRailHttpHandlerFactory, Castle.MonoRail.Engine" />
         </httpHandlers>
     </system.web>
 

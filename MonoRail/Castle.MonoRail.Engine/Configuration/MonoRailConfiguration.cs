@@ -17,8 +17,10 @@ namespace Castle.MonoRail.Engine.Configuration
 	using System;
 	using System.Collections;
 
-	public class RailsConfiguration
+	public class MonoRailConfiguration
 	{
+		public static readonly string SectionName = "monoRail";
+
 		private IList _assemblies = new ArrayList();
 		private String _viewsPhysicalPath;
 		private String _viewsVirtualPath;
@@ -26,7 +28,7 @@ namespace Castle.MonoRail.Engine.Configuration
 		private String _customFilterFactory;
 		private String _customEngineTypeName;
 
-		public RailsConfiguration()
+		public MonoRailConfiguration()
 		{
 		}
 

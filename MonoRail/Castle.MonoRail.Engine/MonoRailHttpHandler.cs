@@ -28,11 +28,11 @@ namespace Castle.MonoRail.Engine
 	/// <see cref="IHttpHandler"/> to dispatch the web
 	/// requests. 
 	/// </summary>
-	public class RailsHttpHandler : ProcessEngine, IHttpHandler, IRequiresSessionState
+	public class MonoRailHttpHandler : ProcessEngine, IHttpHandler, IRequiresSessionState
 	{
 		private String _url;
 
-		public RailsHttpHandler( String url, IViewEngine viewEngine, 
+		public MonoRailHttpHandler( String url, IViewEngine viewEngine, 
 			IControllerFactory controllerFactory, IFilterFactory filterFactory)
 			: base(controllerFactory, viewEngine, filterFactory)
 		{

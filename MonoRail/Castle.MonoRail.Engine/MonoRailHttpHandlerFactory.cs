@@ -25,18 +25,18 @@ namespace Castle.MonoRail.Engine
 	using Castle.MonoRail.Engine.Configuration;
 
 	/// <summary>
-	/// Coordinates the creation of new <see cref="RailsHttpHandler"/> 
+	/// Coordinates the creation of new <see cref="MonoRailHttpHandler"/> 
 	/// and uses the configuration to obtain the correct factories 
 	/// instances.
 	/// </summary>
-	public class RailsHttpHandlerFactory : IHttpHandlerFactory
+	public class MonoRailHttpHandlerFactory : IHttpHandlerFactory
 	{
-		private RailsConfiguration _config;
+		private MonoRailConfiguration _config;
 		private IViewEngine _viewEngine;
 		private IFilterFactory _filterFactory;
 		private IControllerFactory _controllerFactory;
 
-		public RailsHttpHandlerFactory()
+		public MonoRailHttpHandlerFactory()
 		{
 			ObtainConfiguration();
 			InitializeControllerFactory();
@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Engine
 		public virtual IHttpHandler GetHandler(HttpContext context, 
 			string requestType, String url, String pathTranslated)
 		{
-			return new RailsHttpHandler(url, _viewEngine, _controllerFactory, _filterFactory);
+			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, _filterFactory);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
@@ -60,11 +60,11 @@ namespace Castle.MonoRail.Engine
 
 		protected virtual void ObtainConfiguration()
 		{
-			_config = (RailsConfiguration) ConfigurationSettings.GetConfig("rails");
+			_config = (MonoRailConfiguration) ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
 
 			if (_config == null)
 			{
-				throw new ApplicationException("Unfortunatelly you have to provide " + 
+				throw new ApplicationException("Unfortunatelly, you have to provide " + 
 					"the configuration to use MonoRail");
 			}
 		}
