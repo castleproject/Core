@@ -102,6 +102,18 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<a href=\"#\" onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, name );
 		}
 
+		public string ButtonToFunction(string name, string functionCodeOrName, string styleClass) 
+		{
+			return String.Format("<input type=\"button\" class=\"{2}\" onclick=\"{0}; return false;\" value=\"{1}\" />", 
+				functionCodeOrName, name, styleClass);
+		}
+
+		public String ButtonToFunction(String name, String functionCodeOrName) 
+		{
+			return String.Format("<input type=\"button\" onclick=\"{0}; return false;\" value=\"{1}\" />", 
+				functionCodeOrName, name );
+		}
+
 		/// <summary>
 		/// Returns a link to a remote action defined by <tt>options[:url]</tt> 
 		/// (using the url_for format) that's called in the background using 
@@ -116,38 +128,28 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToRemote(String name, String url, IDictionary options)
 		{
-			options["url"] = url;
+			return LinkToFunction(name, BuildRemoteFunction(url, options) );
+		}
 
+<<<<<<< .mine
+=======
 			return LinkToFunction(name, RemoteFunction(options) );
 		}
 
+>>>>>>> .r548
 		public String LinkToRemote(String name, String url, String update)
 		{
-			IDictionary options = new Hashtable();
-			options["update"] = update;
-			options["url"] = url;
-
-			return LinkToFunction(name, RemoteFunction(options) );
+			return LinkToFunction(name, BuildRemoteFunction(update, url) );
 		}
 
 		public String LinkToRemote(String name, String url, String update, String with)
 		{
-			IDictionary options = new Hashtable();
-			options["with"] = with;
-			options["update"] = update;
-			options["url"] = url;
-
-			return LinkToFunction(name, RemoteFunction(options) );
+			return LinkToFunction(name, BuildRemoteFunction(with, update, url) );
 		}
 
 		public String LinkToRemote(String name, String url, String update, bool form)
 		{
-			IDictionary options = new Hashtable();
-			if (form) options["form"] = true;
-			options["update"] = update;
-			options["url"] = url;
-
-			return LinkToFunction(name, RemoteFunction(options) );
+			return LinkToFunction(name, BuildRemoteFunction(form, update, url) );
 		}
 
 		/// <summary>
@@ -333,11 +335,42 @@ namespace Castle.MonoRail.Framework.Helpers
 			return BuildObserver("Form.Observer", formId, options);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="options"></param>
-		/// <returns></returns>
+		private String BuildRemoteFunction(String url, String update)
+		{
+			IDictionary options = new Hashtable();
+			options["update"] = update;
+			options["url"] = url;
+
+			return RemoteFunction(options);
+		}
+
+		private String BuildRemoteFunction(String url, IDictionary options)
+		{
+			options["url"] = url;
+
+			return RemoteFunction(options);
+		}
+
+		private String BuildRemoteFunction(String with, String update, String url)
+		{
+			IDictionary options = new Hashtable();
+			options["update"] = update;
+			options["url"] = url;
+			options["with"] = with;
+
+			return RemoteFunction(options);
+		}
+
+		private String BuildRemoteFunction(bool form, String update, String url)
+		{
+			IDictionary options = new Hashtable();
+			if (form) options["form"] = true;
+			options["update"] = update;
+			options["url"] = url;
+
+			return RemoteFunction(options);
+		}
+
 		protected String RemoteFunction(IDictionary options)
 		{
 			IDictionary jsOptions = new Hashtable();
