@@ -124,6 +124,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "default.htm"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "web.config"
                     BuildAction = "None"
                 />
