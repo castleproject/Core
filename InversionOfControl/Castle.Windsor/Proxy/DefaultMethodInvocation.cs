@@ -32,7 +32,7 @@ namespace Castle.Windsor.Proxy
 	/// Although we have multithread test cases to ensure the correct 
 	/// behavior, we might have threading synchronization issues.
 	/// </remarks>
-	public class DefaultMethodInvocation : SameClassInvocation, IMethodInvocation
+	public class DefaultMethodInvocation : AbstractInvocation, IMethodInvocation
 	{
 		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
 
@@ -47,7 +47,7 @@ namespace Castle.Windsor.Proxy
 		/// <param name="callable"></param>
 		/// <param name="proxy"></param>
 		/// <param name="method"></param>
-		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method) : base(callable, proxy, method)
+		public DefaultMethodInvocation(ICallable callable, object proxy, MethodInfo method, object fieldTarget) : base(callable, proxy, method, fieldTarget)
 		{
 		}
 
@@ -70,13 +70,13 @@ namespace Castle.Windsor.Proxy
 			{
 				// If the user changed the target, we use reflection
 				// otherwise the delegate will be used.
-				if (InvocationTarget == _original_target)
+				if (_changed_target == null)
 				{
 					return _callable.Call(args);
 				}
 				else
 				{
-					return Method.Invoke(InvocationTarget, args);
+					return Method.Invoke(_changed_target, args);
 				}
 			}
 		}

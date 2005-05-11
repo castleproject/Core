@@ -21,8 +21,8 @@ namespace Castle.DynamicProxy.Invocation
 	/// </summary>
 	public class SameClassInvocation : AbstractInvocation
 	{
-		public SameClassInvocation(ICallable callable, object proxy, MethodInfo method) : 
-			base(callable, proxy, method)
+		public SameClassInvocation(ICallable callable, object proxy, MethodInfo method, object newtarget) : 
+			base(callable, proxy, method, newtarget)
 		{
 		}
 	}

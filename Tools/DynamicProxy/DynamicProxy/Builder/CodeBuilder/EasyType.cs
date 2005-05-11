@@ -1,3 +1,5 @@
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
@@ -54,7 +56,6 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		public EasyType( ModuleScope modulescope, String name ) : this(modulescope, name, typeof(object), new Type[0])
 		{
 		}
-
 
 		public EasyCallable CreateCallable( ReturnReferenceExpression returnType, 
 			params ArgumentReference[] args )

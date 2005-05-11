@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,9 +15,7 @@
 namespace Castle.DynamicProxy.Test
 {
 	using System;
-
 	using NUnit.Framework;
-
 	using Castle.DynamicProxy.Test.ClassInterfaces;
 
 	[TestFixture]
@@ -29,22 +27,22 @@ namespace Castle.DynamicProxy.Test
 			ProxyGenerator _generator = new ProxyGenerator();
 
 			AttributeCheckerInterceptor interceptor = new AttributeCheckerInterceptor();
-			
-			object proxy = _generator.CreateClassProxy( typeof(MyInterfaceImpl), interceptor );
-			
+
+			object proxy = _generator.CreateClassProxy(typeof (MyInterfaceImpl), interceptor);
+
 			IMyInterface inter = (IMyInterface) proxy;
 
-			Assert.AreEqual( 45, inter.Calc( 20, 25 ) );
-			Assert.IsTrue( interceptor.LastTargethasAttribute );
-			Assert.IsTrue( interceptor.LastMethodHasAttribute );
-			
-			Assert.AreEqual( 48, inter.Calc( 20, 25, 1, 2 ) );
-			Assert.IsTrue( interceptor.LastMethodHasAttribute );
-			Assert.IsTrue( interceptor.LastTargethasAttribute );
-			
+			Assert.AreEqual(45, inter.Calc(20, 25));
+			Assert.IsTrue(interceptor.LastTargethasAttribute);
+			Assert.IsTrue(interceptor.LastMethodHasAttribute);
+
+			Assert.AreEqual(48, inter.Calc(20, 25, 1, 2));
+			Assert.IsTrue(interceptor.LastMethodHasAttribute);
+			Assert.IsTrue(interceptor.LastTargethasAttribute);
+
 			inter.Name = "hammett";
-			Assert.IsFalse( interceptor.LastMethodHasAttribute );
-			Assert.IsTrue( interceptor.LastTargethasAttribute );
+			Assert.IsFalse(interceptor.LastMethodHasAttribute);
+			Assert.IsTrue(interceptor.LastTargethasAttribute);
 		}
 
 		[Test]
@@ -53,22 +51,22 @@ namespace Castle.DynamicProxy.Test
 			ProxyGenerator _generator = new ProxyGenerator();
 
 			AttributeCheckerInterceptor interceptor = new AttributeCheckerInterceptor();
-			
-			object proxy = _generator.CreateProxy( typeof(IMyInterface), interceptor, new MyInterfaceImpl() );
-			
+
+			object proxy = _generator.CreateProxy(typeof (IMyInterface), interceptor, new MyInterfaceImpl());
+
 			IMyInterface inter = (IMyInterface) proxy;
 
-			Assert.AreEqual( 45, inter.Calc( 20, 25 ) );
-			Assert.IsTrue( interceptor.LastMethodHasAttribute );
-			Assert.IsTrue( interceptor.LastTargethasAttribute );
-			
-			Assert.AreEqual( 48, inter.Calc( 20, 25, 1, 2 ) );
-			Assert.IsTrue( interceptor.LastMethodHasAttribute );
-			Assert.IsTrue( interceptor.LastTargethasAttribute );
-			
+			Assert.AreEqual(45, inter.Calc(20, 25));
+			Assert.IsTrue(interceptor.LastMethodHasAttribute);
+			Assert.IsTrue(interceptor.LastTargethasAttribute);
+
+			Assert.AreEqual(48, inter.Calc(20, 25, 1, 2));
+			Assert.IsTrue(interceptor.LastMethodHasAttribute);
+			Assert.IsTrue(interceptor.LastTargethasAttribute);
+
 			inter.Name = "hammett";
-			Assert.IsFalse( interceptor.LastMethodHasAttribute );
-			Assert.IsTrue( interceptor.LastTargethasAttribute );
+			Assert.IsFalse(interceptor.LastMethodHasAttribute);
+			Assert.IsTrue(interceptor.LastTargethasAttribute);
 		}
 
 		public class AttributeCheckerInterceptor : StandardInterceptor
@@ -78,24 +76,18 @@ namespace Castle.DynamicProxy.Test
 
 			protected override void PreProceed(IInvocation invocation, params object[] args)
 			{
-				lastMethodHasAttribute = invocation.MethodInvocationTarget.IsDefined( typeof(MyAttribute), false );
-				lastTargethasAttribute = invocation.InvocationTarget.GetType().IsDefined( typeof(MyAttribute), false );
+				lastMethodHasAttribute = invocation.MethodInvocationTarget.IsDefined(typeof (MyAttribute), false);
+				lastTargethasAttribute = invocation.InvocationTarget.GetType().IsDefined(typeof (MyAttribute), true);
 			}
 
 			public bool LastMethodHasAttribute
 			{
-				get
-				{
-					return lastMethodHasAttribute;
-				}
+				get { return lastMethodHasAttribute; }
 			}
 
 			public bool LastTargethasAttribute
 			{
-				get
-				{
-					return lastTargethasAttribute;
-				}
+				get { return lastTargethasAttribute; }
 			}
 		}
 	}

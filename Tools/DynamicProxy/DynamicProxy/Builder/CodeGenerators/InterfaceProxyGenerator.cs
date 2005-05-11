@@ -27,8 +27,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// </summary>
 	public class InterfaceProxyGenerator : BaseCodeGenerator
 	{
-		protected FieldReference _targetField;
 		protected Type _targetType;
+		protected FieldReference _targetField;
 
 		public InterfaceProxyGenerator(ModuleScope scope) : base(scope)
 		{
@@ -158,6 +158,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				_targetField.ToExpression() ) ) );
 		}
 
+		protected override Expression GetPseudoInvocationTarget(MethodInfo method)
+		{
+			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
+			{
+				return base.GetPseudoInvocationTarget(method);
+			}
+
+			return _targetField.ToExpression();
+		}
+
 		public virtual Type GenerateCode(Type[] interfaces, Type targetType)
 		{
 			if (Context.HasMixins)
@@ -178,8 +188,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			_targetType = targetType;
 
-			CreateTypeBuilder( GenerateTypeName(targetType, interfaces), 
-				typeof(Object), interfaces );
+			CreateTypeBuilder( GenerateTypeName(targetType, interfaces), typeof(Object), interfaces );
 			GenerateFields();
 			ImplementGetObjectData( interfaces );
 			ImplementCacheInvocationCache();

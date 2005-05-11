@@ -16,10 +16,10 @@ namespace Castle.DynamicProxy.Invocation
 {
 	using System.Reflection;
 
-	public class InterfaceInvocation : SameClassInvocation
+	public class InterfaceInvocation : AbstractInvocation
 	{
-		public InterfaceInvocation(ICallable callable, object proxy, MethodInfo method) : 
-			base(callable, proxy, method)
+		public InterfaceInvocation(ICallable callable, object proxy, MethodInfo method, object newtarget) : 
+			base(callable, proxy, method, newtarget)
 		{
 		}
 	}

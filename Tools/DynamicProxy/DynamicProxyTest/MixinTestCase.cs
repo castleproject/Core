@@ -186,5 +186,4 @@ namespace Castle.DynamicProxy.Test
 			base.PreProceed(invocation, args);
 		}
 	}
-
 }

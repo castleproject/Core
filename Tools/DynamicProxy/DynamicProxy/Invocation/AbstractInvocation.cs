@@ -19,16 +19,23 @@ namespace Castle.DynamicProxy.Invocation
 	public abstract class AbstractInvocation : IInvocation
 	{
 		protected ICallable _callable;
-		protected object _original_target;
 		private MethodInfo _method;
 		private object _proxy;
 		private object _target;
+		protected object _changed_target;
 
-		public AbstractInvocation( ICallable callable, object proxy, MethodInfo method )
+		public AbstractInvocation( ICallable callable, object proxy, MethodInfo method, object newtarget )
 		{
 			_callable = callable;
 			_proxy = proxy;
-			_target = _original_target = callable.Target;
+
+			_target = callable.Target;
+			
+			if (newtarget != null)
+			{
+				_target = newtarget;
+			}
+
 			_method = method;
 		}
 
@@ -39,8 +46,8 @@ namespace Castle.DynamicProxy.Invocation
 
 		public object InvocationTarget
 		{
-			get { return _target; }
-			set { _target = value; }
+			get { return _changed_target != null ? _changed_target : _target; }
+			set { _changed_target = value; }
 		}
 
 		public MethodInfo Method
@@ -57,13 +64,13 @@ namespace Castle.DynamicProxy.Invocation
 		{
 			// If the user changed the target, we use reflection
 			// otherwise the delegate will be used.
-			if (InvocationTarget == _original_target)
+			if (_changed_target == null)
 			{
 				return _callable.Call( args );
 			}
 			else
 			{
-				return Method.Invoke(InvocationTarget, args);
+				return Method.Invoke(_changed_target, args);
 			}
 		}
 	}

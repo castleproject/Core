@@ -230,12 +230,15 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			MethodInfo set_ItemMethod = typeof(HybridDictionary).GetMethod("Add", new Type[] { typeof(object), typeof(object) });
 
 			Type[] args = new Type[] {typeof (ICallable), typeof (MethodInfo) };
-			Type[] invocation_const_args = new Type[] {typeof (ICallable), typeof(object), typeof (MethodInfo)};
+			Type[] invocation_const_args = new Type[] {typeof (ICallable), typeof(object), typeof (MethodInfo), typeof (object)};
 
 			ArgumentReference arg1 = new ArgumentReference( typeof(ICallable) );
 			ArgumentReference arg2 = new ArgumentReference( typeof(MethodInfo) );
+			ArgumentReference arg3 = new ArgumentReference( typeof(object) );
+
 			_method2Invocation = MainTypeBuilder.CreateMethod("_Method2Invocation", 
-				new ReturnReferenceExpression(Context.Invocation), arg1, arg2);
+				new ReturnReferenceExpression(Context.Invocation), 
+				MethodAttributes.Family|MethodAttributes.HideBySig, arg1, arg2, arg3);
 
 			LocalReference invocation_local = 
 				_method2Invocation.CodeBuilder.DeclareLocal(Context.Invocation);
@@ -254,7 +257,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			cond1.AddTrueStatement( new AssignStatement( 
 				invocation_local, 
 				new NewInstanceExpression( InvocationType.GetConstructor(invocation_const_args), 
-				arg1.ToExpression(), SelfReference.Self.ToExpression(), arg2.ToExpression() ) ) );
+				arg1.ToExpression(), SelfReference.Self.ToExpression(), 
+				arg2.ToExpression(), arg3.ToExpression() ) ) );
 			
 			cond1.AddTrueStatement( new ExpressionStatement( 
 				new VirtualMethodInvocationExpression( CacheField, 
@@ -609,9 +613,10 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			builder.CodeBuilder.AddStatement( 
 				new AssignStatement( local_inv, 
-					new VirtualMethodInvocationExpression(_method2Invocation, 
+					new MethodInvocationExpression(_method2Invocation, 
 						fieldDelegate.ToExpression(),
-						new MethodTokenExpression( GetCorrectMethod(method) )) ) );
+						new MethodTokenExpression( GetCorrectMethod(method) ),
+						GetPseudoInvocationTarget(method) ) ) );
 
 			LocalReference ret_local = builder.CodeBuilder.DeclareLocal( typeof(object) );
 
@@ -631,6 +636,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				builder.CodeBuilder.AddStatement( new ReturnStatement(
 					new ConvertExpression(builder.ReturnType, ret_local.ToExpression())) );
 			}
+		}
+
+		protected virtual Expression GetPseudoInvocationTarget(MethodInfo method)
+		{
+			return NullExpression.Instance;
 		}
 
 		protected virtual MethodInfo GetCorrectMethod(MethodInfo method)
