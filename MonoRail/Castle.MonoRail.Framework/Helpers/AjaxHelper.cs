@@ -111,6 +111,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// either render_partial or render_partial_collection. 
 		/// </summary>
 		/// <param name="name"></param>
+        /// <param name="url"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>
 		public String LinkToRemote(String name, String url, IDictionary options)
@@ -301,6 +302,10 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// serialized (request string) value of the form.
 		/// </summary>
 		/// <param name="formId"></param>
+        /// <param name="frequency"></param>
+        /// <param name="idOfElementToBeUpdated"></param>
+        /// <param name="url"></param>
+        /// <param name="with"></param>
 		/// <returns></returns>
 		public String ObserveForm(String formId, int frequency, String url, String idOfElementToBeUpdated, String with)
 		{

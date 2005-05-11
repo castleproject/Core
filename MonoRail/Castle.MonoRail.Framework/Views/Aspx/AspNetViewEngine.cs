@@ -47,9 +47,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
 
-			/// 
-			/// To Do: document this hack for the sake of our users
-			/// 
+			// 
+			// To Do: document this hack for the sake of our users
+			// 
 			if (httpContext != null)
 			{
 				if (!httpContext.Items.Contains(ProcessedBeforeKey))

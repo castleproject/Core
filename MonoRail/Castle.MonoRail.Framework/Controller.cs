@@ -386,7 +386,7 @@ namespace Castle.MonoRail.Framework
 				_helpers.Add(helper.HelperType.Name, helperInstance);
 			}
 
-			/// Default helpers 
+			// Default helpers 
 			_helpers[ typeof(AjaxHelper).Name ] = new AjaxHelper();
 			_helpers[ typeof(DateFormatHelper).Name ] = new DateFormatHelper();
 			_helpers[ typeof(HtmlHelper).Name ] = new HtmlHelper();
