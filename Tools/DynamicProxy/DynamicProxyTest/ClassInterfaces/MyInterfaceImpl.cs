@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Test.ClassInterfaces
 	/// Summary description for MyInterfaceImpl.
 	/// </summary>
 	[Serializable]
+	[MyAttribute("MyInterfaceImpl")]
 	public class MyInterfaceImpl : IMyInterface
 	{
 		private String _name;
