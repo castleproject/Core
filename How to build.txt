@@ -16,7 +16,7 @@ Not good. If you have more than one CLR runtime installed, try to specify the ru
 
 If the problem persist, just disable the rails tests:
   
-  > nant -D:rails.test=false
+  > nant -D:monorail.test=false
 
 
 - NHibernate Facility
