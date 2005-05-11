@@ -43,13 +43,13 @@
 <p align="center">
 <table width="75%" border="0" cellpadding="9" cellspacing="8" align="center">
   <tr>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/linktofunction/index.mr">LinkToFunction</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/linktoremote/index.mr">LinkToRemote</a></td>
-    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/formremotetag/index.mr">BuildFormRemoteTag</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/linktofunction/index.rails">LinkToFunction</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/linktoremote/index.rails">LinkToRemote</a></td>
+    <td width="33%" class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/formremotetag/index.rails">BuildFormRemoteTag</a></td>
   </tr>
   <tr>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/observerfield/index.mr">ObserverField</a></td>
-    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/observerform/index.mr">ObserverForm</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/observerfield/index.rails">ObserverField</a></td>
+    <td class="smallstrong" align="center"><a href="${siteRoot}/ajaxarea/observerform/index.rails">ObserverForm</a></td>
     <td class="smallstrong" align="center">&nbsp;</td>
   </tr>
 </table>

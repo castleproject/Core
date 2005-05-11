@@ -16,7 +16,7 @@ ${childContent}
 
 <p align="center">
 #if ($controllerfile)
-  <a href="${siteRoot}/code/showCode.mr?file=${controllerfile}">View this controller code</a>
+  <a href="${siteRoot}/code/showCode.rails?file=${controllerfile}">View this controller code</a>
   <br><br>
 #end  
   <a href="javascript:window.history.back();">Back</a>

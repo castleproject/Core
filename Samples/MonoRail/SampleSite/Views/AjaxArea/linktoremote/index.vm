@@ -27,19 +27,19 @@
 
 <div class="container">
 
-<a href="${siteRoot}/code/showCode.mr?file=Views/AjaxArea/linktoremote/index.vm">Check this view source code</a>.
+<a href="${siteRoot}/code/showCode.rails?file=Views/AjaxArea/linktoremote/index.vm">Check this view source code</a>.
 
 <p>
   <div id="results1">
   </div>
-  $AjaxHelper.LinkToRemote("Show the time on the server", "showtime.mr", "results1")
+  $AjaxHelper.LinkToRemote("Show the time on the server", "showtime.rails", "results1")
 </p>
 
 <p>
   <div id="results2">
   </div>
   <input type="text" name="value2" id="value2" value="2"/>
-  $AjaxHelper.LinkToRemote("Calculate Power", "CalcPower.mr", "results2", "'value='+$('value2').value")
+  $AjaxHelper.LinkToRemote("Calculate Power", "CalcPower.rails", "results2", "'value='+$('value2').value")
 </p>
 
 </div>

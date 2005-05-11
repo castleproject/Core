@@ -6,8 +6,8 @@
 
 <p>
   Layouts allow you to set a, well, layout for your pages. 
-  This very site is using a NVelocity layout, <a href="${siteRoot}/code/showCode.mr?file=Views/Layouts/default.vm">click here</a> to see its source
-  and <a href="${siteRoot}/code/showCode.mr?file=Views/LayoutsArea/home/index.vm">click here</a> to see this page source.
+  This very site is using a NVelocity layout, <a href="${siteRoot}/code/showCode.rails?file=Views/Layouts/default.vm">click here</a> to see its source
+  and <a href="${siteRoot}/code/showCode.rails?file=Views/LayoutsArea/home/index.vm">click here</a> to see this page source.
 </p>
 
 <p>
