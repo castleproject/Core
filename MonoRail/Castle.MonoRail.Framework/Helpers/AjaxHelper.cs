@@ -131,12 +131,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			return LinkToFunction(name, BuildRemoteFunction(url, options) );
 		}
 
-<<<<<<< .mine
-=======
-			return LinkToFunction(name, RemoteFunction(options) );
-		}
-
->>>>>>> .r548
 		public String LinkToRemote(String name, String url, String update)
 		{
 			return LinkToFunction(name, BuildRemoteFunction(update, url) );
