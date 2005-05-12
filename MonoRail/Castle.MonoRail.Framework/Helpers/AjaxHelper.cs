@@ -102,17 +102,30 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<a href=\"#\" onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, name );
 		}
 
-		public string ButtonToFunction(string name, string functionCodeOrName, string styleClass) 
-		{
-			return String.Format("<input type=\"button\" class=\"{2}\" onclick=\"{0}; return false;\" value=\"{1}\" />", 
-				functionCodeOrName, name, styleClass);
-		}
+        /// <summary>
+        /// Returns a button that'll trigger a javascript +function+ using the 
+        /// onclick handler and return false after the fact.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="functionCodeOrName"></param>
+        /// <param name="styleClass"></param>
+        /// <returns></returns>
+        public String ButtonToFunction(String name, String functionCodeOrName, String styleClass) {
+            return string.Format("<input type=\"button\" class=\"{2}\" onclick=\"{0}; return false;\" value=\"{1}\" />",
+                functionCodeOrName, name, styleClass);
+        }
 
-		public String ButtonToFunction(String name, String functionCodeOrName) 
-		{
-			return String.Format("<input type=\"button\" onclick=\"{0}; return false;\" value=\"{1}\" />", 
-				functionCodeOrName, name );
-		}
+        /// <summary>
+        /// Returns a button that'll trigger a javascript +function+ using the 
+        /// onclick handler and return false after the fact.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="functionCodeOrName"></param>
+        /// <returns></returns>
+        public String ButtonToFunction(String name, String functionCodeOrName) {
+            return String.Format("<input type=\"button\" onclick=\"{0}; return false;\" value=\"{1}\" />",
+                functionCodeOrName, name );
+        }
 
 		/// <summary>
 		/// Returns a link to a remote action defined by <tt>options[:url]</tt> 
@@ -146,6 +159,21 @@ namespace Castle.MonoRail.Framework.Helpers
 			return LinkToFunction(name, BuildRemoteFunction(form, update, url) );
 		}
 
+        public String ButtonToRemote(String name, String url, String update)
+        {
+            return ButtonToFunction(name, BuildRemoteFunction(url, update));
+        }
+        public String ButtonToRemote(String name, String url, String update, String with)
+        {
+            return ButtonToFunction(name, BuildRemoteFunction(url, update, with) );   
+        }
+        public String ButtonToRemote(String name, String url, String update, bool form)
+        {
+            return ButtonToFunction(name, BuildRemoteFunction(form, update, url));
+        }
+        public String ButtonToRemote(String name, String url, IDictionary options) {
+            return ButtonToFunction(name, BuildRemoteFunction(url, options) );
+        }
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 
@@ -200,7 +228,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			String remoteFunc = RemoteFunction(options);
 
-			return String.Format("<form onsubmit=\"{0}; return false;\">", remoteFunc);
+			return String.Format("<form onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc);
 		}
 
 		public IDictionary GetOptions(string url, string idOfElementToBeUpdated, string with, string loading, string loaded, string complete, string interactive)
@@ -506,5 +534,6 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return js.ToString();
 		}
+
 	}
 }
