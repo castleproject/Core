@@ -69,7 +69,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			try
 			{
 				blog = (Blog) 
-					session.Find("from Blog as b where b.Name=:name", BlogName, NHibernate.String)[0];
+					session.Find("from Blog as b where b.Name=:name", BlogName, NHibernateUtil.String)[0];
 				Assert.IsNotNull(blog);
 				Assert.AreEqual(0, blog.Items.Count);
 			}
