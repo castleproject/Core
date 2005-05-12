@@ -143,15 +143,16 @@ window.onload = function ()
 <value>
 <![CDATA[
 <script type="text/javascript">
-/*  Prototype: an object-oriented Javascript library, version 1.0.1
+/*  Prototype: an object-oriented Javascript library, version 1.2.0
  *  (c) 2005 Sam Stephenson <sam@conio.net>
  *
- *  Prototype is freely distributable under the terms of an MIT-style license. 
- *  For details, see http://prototype.conio.net/
- */
+ *  Prototype is freely distributable under the terms of an MIT-style license.
+ *  For details, see the Prototype web site: http://prototype.conio.net/
+ *
+/*--------------------------------------------------------------------------*/
 
 var Prototype = {
-  Version: '1.1.0'
+  Version: '1.2.0'
 }
 
 var Class = {
@@ -207,13 +208,33 @@ var Try = {
   }
 }
 
-var Toggle = {
-  display: function() {
-    for (var i = 0; i < arguments.length; i++) {
-      var element = $(arguments[i]);
-      element.style.display = 
-        (element.style.display == 'none' ? '' : 'none');
+/*--------------------------------------------------------------------------*/
+
+var PeriodicalExecuter = Class.create();
+PeriodicalExecuter.prototype = {
+  initialize: function(callback, frequency) {
+    this.callback = callback;
+    this.frequency = frequency;
+    this.currentlyExecuting = false;
+    
+    this.registerCallback();
+  },
+  
+  registerCallback: function() {
+    setTimeout(this.onTimerEvent.bind(this), this.frequency * 1000);
+  },
+  
+  onTimerEvent: function() {
+    if (!this.currentlyExecuting) {
+      try { 
+        this.currentlyExecuting = true;
+        this.callback(); 
+      } finally { 
+        this.currentlyExecuting = false;
+      }
     }
+    
+    this.registerCallback();
   }
 }
 
@@ -236,22 +257,34 @@ function $() {
   return elements;
 }
 
-function getElementsByClassName(className) {
-  var children = document.getElementsByTagName('*') || document.all;
-  var elements = new Array();
-  
-  for (var i = 0; i < children.length; i++) {
-    var child = children[i];
-    var classNames = child.className.split(' ');
-    for (var j = 0; j < classNames.length; j++) {
-      if (classNames[j] == className) {
-        elements.push(child);
-        break;
-      }
-    }
+/*--------------------------------------------------------------------------*/
+
+if (!Array.prototype.push) {
+  Array.prototype.push = function() {
+		var startLength = this.length;
+		for (var i = 0; i < arguments.length; i++)
+      this[startLength + i] = arguments[i];
+	  return this.length;
   }
-  
-  return elements;
+}
+
+if (!Function.prototype.apply) {
+  // Based on code from http://www.youngpup.net/
+  Function.prototype.apply = function(object, parameters) {
+    var parameterStrings = new Array();
+    if (!object)     object = window;
+    if (!parameters) parameters = new Array();
+    
+    for (var i = 0; i < parameters.length; i++)
+      parameterStrings[i] = 'x[' + i + ']';
+    
+    object.__apply__ = this;
+    var result = eval('obj.__apply__(' + 
+      parameterStrings[i].join(', ') + ')');
+    object.__apply__ = null;
+    
+    return result;
+  }
 }
 
 /*--------------------------------------------------------------------------*/
@@ -290,7 +323,7 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
   
     try {
       if (this.options.method == 'get')
-        url += '?' + this.options.parameters + '';
+        url += '?' + this.options.parameters + '&_=';
     
       this.transport.open(this.options.method, url, true);
       
@@ -299,6 +332,9 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
         setTimeout((function() {this.respondToReadyState(1)}).bind(this), 10);
       }
               
+      this.transport.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      this.transport.setRequestHeader('X-Prototype-Version', Prototype.Version);
+
       if (this.options.method == 'post') {
         this.transport.setRequestHeader('Connection', 'close');
         this.transport.setRequestHeader('Content-type',
@@ -306,7 +342,7 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
       }
       
       this.transport.send(this.options.method == 'post' ? 
-        this.options.parameters + '' : null);
+        this.options.parameters + '&_=' : null);
                       
     } catch (e) {
     }    
@@ -371,6 +407,15 @@ var Field = {
     for (var i = 0; i < arguments.length; i++)
       if ($(arguments[i]).value == '') return false;
     return true;
+  },
+  
+  select: function(element) {
+    $(element).select();
+  },
+   
+  activate: function(element) {
+    $(element).focus();
+    $(element).select();
   }
 }
 
@@ -400,6 +445,31 @@ var Form = {
         elements.push(tagElements[j]);
     }
     return elements;
+  },
+  
+  disable: function(form) {
+    var elements = Form.getElements(form);
+    for (var i = 0; i < elements.length; i++) {
+      var element = elements[i];
+      element.blur();
+      element.disable = 'true';
+    }
+  },
+
+  focusFirstElement: function(form) {
+    form = $(form);
+    var elements = Form.getElements(form);
+    for (var i = 0; i < elements.length; i++) {
+      var element = elements[i];
+      if (element.type != 'hidden' && !element.disabled) {
+        Field.activate(element);
+        break;
+      }
+    }
+  },
+
+  reset: function(form) {
+    $(form).reset();
   }
 }
 
@@ -449,9 +519,14 @@ Form.Element.Serializers = {
 
   select: function(element) {
     var index = element.selectedIndex;
-    return [element.name, (index >= 0) ? element.options[index].value : ''];
+    var value = element.options[index].value || element.options[index].text;
+    return [element.name, (index >= 0) ? value : ''];
   }
 }
+
+/*--------------------------------------------------------------------------*/
+
+var $F = Form.Element.getValue;
 
 /*--------------------------------------------------------------------------*/
 
@@ -495,6 +570,65 @@ Form.Observer.prototype = (new Abstract.TimedObserver()).extend({
   }
 });
 
+
+/*--------------------------------------------------------------------------*/
+
+document.getElementsByClassName = function(className) {
+  var children = document.getElementsByTagName('*') || document.all;
+  var elements = new Array();
+  
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i];
+    var classNames = child.className.split(' ');
+    for (var j = 0; j < classNames.length; j++) {
+      if (classNames[j] == className) {
+        elements.push(child);
+        break;
+      }
+    }
+  }
+  
+  return elements;
+}
+
+/*--------------------------------------------------------------------------*/
+
+var Element = {
+  toggle: function() {
+    for (var i = 0; i < arguments.length; i++) {
+      var element = $(arguments[i]);
+      element.style.display = 
+        (element.style.display == 'none' ? '' : 'none');
+    }
+  },
+
+  hide: function() {
+    for (var i = 0; i < arguments.length; i++) {
+      var element = $(arguments[i]);
+      element.style.display = 'none';
+    }
+  },
+
+  show: function() {
+    for (var i = 0; i < arguments.length; i++) {
+      var element = $(arguments[i]);
+      element.style.display = '';
+    }
+  },
+
+  remove: function(element) {
+    element = $(element);
+    element.parentNode.removeChild(element);
+  },
+   
+  getHeight: function(element) {
+    element = $(element);
+    return element.offsetHeight; 
+  }
+}
+
+var Toggle = new Object();
+Toggle.display = Element.toggle;
 
 /*--------------------------------------------------------------------------*/
 
@@ -597,6 +731,179 @@ Effect.Highlight.prototype = {
     element.style.backgroundColor = "#ffff" + current.toColorPart();
   }
 }
+
+
+Effect.Fade = Class.create();
+Effect.Fade.prototype = {
+  initialize: function(element) {
+    this.element = $(element);
+    this.start  = 100;
+    this.finish = 0;
+    this.current = this.start;
+    this.fade();
+  },
+  
+  fade: function() {
+    if (this.isFinished()) { this.element.style.display = 'none'; return; }
+    if (this.timer) clearTimeout(this.timer);
+    this.setOpacity(this.element, this.current);
+    this.current -= 10;
+    this.timer = setTimeout(this.fade.bind(this), 50);
+  },
+  
+  isFinished: function() {
+    return this.current <= this.finish;
+  },
+  
+  setOpacity: function(element, opacity) {
+    opacity = (opacity == 100) ? 99.999 : opacity;
+    element.style.filter = "alpha(opacity:"+opacity+")";
+    element.style.opacity = opacity/100 /*//*/;
+  }
+}
+
+Effect.Scale = Class.create();
+Effect.Scale.prototype = {
+  initialize: function(element, percent) {
+    this.element = $(element);
+    this.startScale    = 1.0;
+    this.startHeight   = this.element.offsetHeight;
+    this.startWidth    = this.element.offsetWidth;
+    this.currentHeight = this.startHeight;
+    this.currentWidth  = this.startWidth;
+    this.finishScale   = (percent/100) /*//*/;
+    if (this.element.style.fontSize=="") this.sizeEm = 1.0;
+    if (this.element.style.fontSize.indexOf("em")>0)
+       this.sizeEm      = parseFloat(this.element.style.fontSize);
+    if(this.element.effect_scale) {
+      clearTimeout(this.element.effect_scale.timer);
+      this.startScale  = this.element.effect_scale.currentScale;
+      this.startHeight = this.element.effect_scale.startHeight;
+      this.startWidth  = this.element.effect_scale.startWidth;
+      if(this.element.effect_scale.sizeEm) 
+        this.sizeEm    = this.element.effect_scale.sizeEm;      
+    }
+    this.element.effect_scale = this;
+    this.currentScale  = this.startScale;
+    this.factor        = this.finishScale - this.startScale;
+    this.options       = arguments[2] || {}; 
+    this.scale();
+  },
+  
+  scale: function() {
+    if (this.isFinished()) { 
+      this.setDimensions(this.element, this.startWidth*this.finishScale, this.startHeight*this.finishScale);
+      if(this.sizeEm) this.element.style.fontSize = this.sizeEm*this.finishScale + "em";
+      if(this.options.complete) this.options.complete(this);
+      return; 
+    }
+    if (this.timer) clearTimeout(this.timer);
+    if (this.options.step) this.options.step(this);
+    this.setDimensions(this.element, this.currentWidth, this.currentHeight);
+    if(this.sizeEm) this.element.style.fontSize = this.sizeEm*this.currentScale + "em";
+    this.currentScale += (this.factor/10) /*//*/;
+    this.currentWidth = this.startWidth * this.currentScale;
+    this.currentHeight = this.startHeight * this.currentScale;
+    this.timer = setTimeout(this.scale.bind(this), 50);
+  },
+  
+  isFinished: function() {
+    return (this.factor < 0) ? 
+      this.currentScale <= this.finishScale : this.currentScale >= this.finishScale;
+  },
+  
+  setDimensions: function(element, width, height) {
+    element.style.width = width + 'px';
+    element.style.height = height + 'px';
+  }
+}
+
+Effect.Squish = Class.create();
+Effect.Squish.prototype = {
+  initialize: function(element) {
+    this.element = $(element);
+    new Effect.Scale(this.element, 1, { complete: this.hide.bind(this) } );
+  },
+  hide: function() {
+    this.element.style.display = 'none';
+  } 
+}
+
+Effect.Puff = Class.create();
+Effect.Puff.prototype = {
+  initialize: function(element) {
+    this.element = $(element);
+    this.opacity = 100;
+    this.startTop  = this.element.top || this.element.offsetTop;
+    this.startLeft = this.element.left || this.element.offsetLeft;
+    new Effect.Scale(this.element, 200, { step: this.fade.bind(this), complete: this.hide.bind(this) } );
+  },
+  fade: function(effect) {
+    topd    = (((effect.currentScale)*effect.startHeight) - effect.startHeight)/2;
+    leftd   = (((effect.currentScale)*effect.startWidth) - effect.startWidth)/2;
+    this.element.style.position='absolute';
+    this.element.style.top = this.startTop-topd + "px";
+    this.element.style.left = this.startLeft-leftd + "px";
+    this.opacity -= 10;
+    this.setOpacity(this.element, this.opacity); 
+    if(navigator.appVersion.indexOf('AppleWebKit')>0) this.element.innerHTML += ''; //force redraw on safari
+  },
+  hide: function() {
+    this.element.style.display = 'none';
+  },
+  setOpacity: function(element, opacity) {
+    opacity = (opacity == 100) ? 99.999 : opacity;
+    element.style.filter = "alpha(opacity:"+opacity+")";
+    element.style.opacity = opacity/100 /*//*/;
+  }
+}
+
+Effect.Appear = Class.create();
+Effect.Appear.prototype = {
+  initialize: function(element) {
+    this.element = $(element);
+    this.start  = 0;
+    this.finish = 100;
+    this.current = this.start;
+    this.fade();
+  },
+  
+  fade: function() {
+    if (this.isFinished()) return;
+    if (this.timer) clearTimeout(this.timer);
+    this.setOpacity(this.element, this.current);
+    this.current += 10;
+    this.timer = setTimeout(this.fade.bind(this), 50);
+  },
+  
+  isFinished: function() {
+    return this.current > this.finish;
+  },
+  
+  setOpacity: function(element, opacity) {
+    opacity = (opacity == 100) ? 99.999 : opacity;
+    element.style.filter = "alpha(opacity:"+opacity+")";
+    element.style.opacity = opacity/100 /*//*/;
+    element.style.display = '';
+  }
+}
+
+Effect.ContentZoom = Class.create();
+Effect.ContentZoom.prototype = {
+  initialize: function(element, percent) {
+    this.element = $(element);
+    if (this.element.style.fontSize=="") this.sizeEm = 1.0;
+    if (this.element.style.fontSize.indexOf("em")>0)
+       this.sizeEm = parseFloat(this.element.style.fontSize);
+    if(this.element.effect_contentzoom) {
+      this.sizeEm = this.element.effect_contentzoom.sizeEm;
+    }
+    this.element.effect_contentzoom = this;
+    this.element.style.fontSize = this.sizeEm*(percent/100) + "em" /*//*/;
+    if(navigator.appVersion.indexOf('AppleWebKit')>0) { this.element.scrollTop -= 1; };
+  }
+}
+
 </script>
 ]]>
 </value>
