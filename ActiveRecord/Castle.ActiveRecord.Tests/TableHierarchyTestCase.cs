@@ -41,12 +41,12 @@ namespace Castle.ActiveRecord.Tests
 			Client client = new Client("castle", firm);
 			client.Save();
 
+			Client[] clients = Client.FindAll();
+			Assert.AreEqual( 1, clients.Length );
+
 			Firm[] firms = Firm.FindAll();
 			Assert.AreEqual( 1, firms.Length );
 
-			Client[] clients = Client.FindAll();
-			Assert.AreEqual( 1, clients.Length );
-			
 			Assert.AreEqual( firm.Id, firms[0].Id );
 			Assert.AreEqual( client.Id, clients[0].Id );
 

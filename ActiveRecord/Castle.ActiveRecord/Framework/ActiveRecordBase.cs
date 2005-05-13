@@ -181,9 +181,9 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="targetType"></param>
 		/// <param name="orders"></param>
-		/// <param name="expressions"></param>
+		/// <param name="criterias"></param>
 		/// <returns></returns>
-		protected static Array FindAll(Type targetType, Order[] orders, params Expression[] expressions)
+		protected static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
 		{
 			ISession session = _holder.CreateSession( targetType );
 
@@ -191,9 +191,9 @@ namespace Castle.ActiveRecord
 			{
 				ICriteria criteria = session.CreateCriteria(targetType);
 
-				foreach( Expression ex in expressions )
+				foreach( ICriterion cond in criterias )
 				{
-					criteria.Add( ex );
+					criteria.Add( cond );
 				}
 
 				if (orders != null)
@@ -232,9 +232,9 @@ namespace Castle.ActiveRecord
 		/// using criterias.
 		/// </summary>
 		/// <param name="targetType"></param>
-		/// <param name="expressions"></param>
+		/// <param name="criterias"></param>
 		/// <returns></returns>
-		protected static Array FindAll(Type targetType, params Expression[] expressions)
+		protected static Array FindAll(Type targetType, params ICriterion[] criterias)
 		{
 			ISession session = _holder.CreateSession( targetType );
 
@@ -242,7 +242,7 @@ namespace Castle.ActiveRecord
 			{
 				ICriteria criteria = session.CreateCriteria(targetType);
 
-				foreach( Expression ex in expressions )
+				foreach( ICriterion ex in criterias )
 				{
 					criteria.Add( ex );
 				}
