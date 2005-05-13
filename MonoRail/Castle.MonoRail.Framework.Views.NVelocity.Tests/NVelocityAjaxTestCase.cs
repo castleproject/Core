@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
 			AssertContents("<form onsubmit=\"new Ajax.Request('url', " +
 				"{asynchronous:true, parameters:Form.serialize(this)}); " + 
-				"return false;\">", response);
+				"return false;\" enctype=\"multipart/form-data\">", response);
 		}
 
 		[Test]
