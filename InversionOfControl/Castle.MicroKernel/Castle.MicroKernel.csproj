@@ -163,6 +163,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Facilities\FacilityException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Facilities\IFacility.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
