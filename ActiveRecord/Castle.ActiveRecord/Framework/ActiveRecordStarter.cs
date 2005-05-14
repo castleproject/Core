@@ -90,6 +90,33 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
+		/// Initialize tha mappings using the configuration and 
+		/// checking all the types on the specified Assemblies
+		/// </summary>
+		public static void Initialize( Assembly[] assemblies, IConfigurationSource source )
+		{
+			ArrayList list = new ArrayList();
+
+			foreach(Assembly assembly in assemblies)
+			{
+				Type[] types = assembly.GetExportedTypes();
+
+				foreach( Type type in types )
+				{
+					if ( !typeof(ActiveRecordBase).IsAssignableFrom( type ) )
+					{
+						continue;
+					}
+
+					list.Add(type);
+				}
+			}
+
+
+			Initialize( source, (Type[]) list.ToArray( typeof(Type) ) );
+		}
+
+		/// <summary>
 		/// Initializes the framework reading the configuration from
 		/// the <c>AppDomain</c> and checking all the types on the executing <c>Assembly</c>
 		/// </summary>
@@ -112,9 +139,9 @@ namespace Castle.ActiveRecord
 		{
 			Configuration cfg = new Configuration();
 
-			foreach(String key in config.Attributes.AllKeys)
+			foreach(IConfiguration childConfig in config.Children)
 			{
-				cfg.Properties.Add(key, config.Attributes[key]);
+				cfg.Properties.Add(childConfig.Name, childConfig.Value);
 			}
 
 			return cfg;

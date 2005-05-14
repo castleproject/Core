@@ -33,7 +33,12 @@ namespace Castle.ActiveRecord.Framework.Config
 
 		public void Add(Type type, IDictionary properties)
 		{
-			_type2Config[type] = ConvertToConfiguration(properties);
+			Add(type, ConvertToConfiguration(properties));
+		}
+
+		public void Add(Type type, IConfiguration config)
+		{
+			_type2Config[type] = config;
 		}
 
 		#region IConfigurationSource Members
@@ -51,7 +56,7 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			foreach(DictionaryEntry entry in properties)
 			{
-				conf.Attributes.Add(entry.Key.ToString(), entry.Value.ToString());
+				conf.Children.Add( new MutableConfiguration(entry.Key.ToString(), entry.Value.ToString()));
 			}
 
 			return conf;

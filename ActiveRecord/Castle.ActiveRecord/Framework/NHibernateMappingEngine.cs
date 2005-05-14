@@ -28,6 +28,9 @@ namespace Castle.ActiveRecord
 		private const BindingFlags PropertiesBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.Instance;
 		private static readonly String subclassOpen = "\r\n<subclass name=\"{0}\" {1}>";
 		private static readonly String subclassClose = "\r\n</subclass>";
+		private static readonly String joinedsubclassOpen = "\r\n<joined-subclass name=\"{0}\" {1}>";
+		private static readonly String joinedsubclassClose = "\r\n</joined-subclass>";
+		private static readonly String keyElement = "<key column=\"{0}\"/>";
 		private static readonly String mappingOpen = "\r\n<hibernate-mapping xmlns=\"urn:nhibernate-mapping-2.0\" {0}>";
 		private static readonly String mappingClose = "\r\n</hibernate-mapping>";
 		private static readonly String classOpen = "\r\n<class name=\"{0}\" {1}>";
@@ -77,7 +80,6 @@ namespace Castle.ActiveRecord
 		private static readonly String indexTag = "\r\n<index column=\"{0}\" {1} />";
 		private static readonly String lazyAttribute = "lazy=\"{0}\" ";
 		private static readonly String inverseAttribute = "inverse=\"{0}\" ";
-//		private static readonly String sortAttribute = "sort=\"{0}\" ";
 		private static readonly String orderByAttribute = "order-by=\"{0}\" ";
 		private static readonly String whereAttribute = "where=\"{0}\" ";
 		private static readonly String componentOpen = "\r\n<component {0} {1}>";
@@ -85,13 +87,12 @@ namespace Castle.ActiveRecord
 		private static readonly String paramElement = "\r\n<param name=\"{0}\">{1}</param>";
 
 		private IList _visited = new ArrayList();
-
 		
 		public String CreateMapping(Type type, Type[] sefOfTypes)
 		{
 			if (_visited.Contains(type)) return String.Empty;
+			
 			_visited.Add(type);
-
 
 			if (!type.IsDefined(typeof(ActiveRecordAttribute), true))
 			{
@@ -104,10 +105,12 @@ namespace Castle.ActiveRecord
 			{
 				// Is it a child?
 
-				if (ar.DiscriminatorValue != null && ar.DiscriminatorColumn == null)
+				if (IsChildActiveRecord(ar, type))
 				{
-					// In this case, it must be 
-					// mapped as a subclass later
+					// In this case, it must be mapped as a subclass later
+					
+					_visited.Remove(type);
+
 					return String.Empty;
 				}
 
@@ -127,6 +130,11 @@ namespace Castle.ActiveRecord
 					AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
 					AddSubClasses(xml, ar, type, sefOfTypes);
 				}
+				else if (type.IsDefined( typeof(JoinedBaseAttribute), false ))
+				{
+					AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+					AddJoinedSubClasses(xml, ar, type, sefOfTypes);
+				}
 				else
 				{
 					AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
@@ -140,7 +148,34 @@ namespace Castle.ActiveRecord
 			return String.Empty;
 		}
 
+		/// <summary>
+		/// Is it a SubClass or Joined Subclass?
+		/// </summary>
+		private bool IsChildActiveRecord(ActiveRecordAttribute ar, Type type)
+		{
+			return (ar.DiscriminatorValue != null && ar.DiscriminatorColumn == null) || GetPropertyWithAttribute(type, typeof(KeyAttribute)) != null;
+		}
+
 		private void CreateSubClassMapping(StringBuilder xml, Type type, Type[] sefOfTypes)
+		{
+			_visited.Add(type);
+
+			ActiveRecordAttribute ar = GetActiveRecord(type);
+
+			if (ar != null)
+			{
+				String proxy = (ar.Proxy == false ? "" : String.Format(proxyAttribute, ar.Proxy.ToString().ToLower()));
+				String discvalue = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
+
+				xml.AppendFormat(subclassOpen, GetNHibernateName( type ), proxy + discvalue);
+
+				AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+
+				xml.Append(subclassClose);
+			}
+		}
+
+		private void CreateJoinedSubClassMapping(StringBuilder xml, Type type, Type[] sefOfTypes)
 		{
 			_visited.Add(type);
 
@@ -150,13 +185,31 @@ namespace Castle.ActiveRecord
 			{
 				String table = (ar.Table == null ? "" : String.Format(tableAttribute, ar.Table));
 				String proxy = (ar.Proxy == false ? "" : String.Format(proxyAttribute, ar.Proxy.ToString().ToLower()));
-				String discvalue = (ar.DiscriminatorValue == null ? "" : String.Format(discValueAttribute, ar.DiscriminatorValue));
 
-				xml.AppendFormat(subclassOpen, GetNHibernateName( type ), table + proxy + discvalue);
+				xml.AppendFormat(joinedsubclassOpen, GetNHibernateName( type ), table + proxy);
+
+				PropertyInfo keyProp = GetPropertyWithAttribute(type, typeof(KeyAttribute));
+				
+				object[] attrs = keyProp.GetCustomAttributes(typeof(KeyAttribute), false);
+
+				KeyAttribute keyAtt = attrs[0] as KeyAttribute;
+
+				if (keyAtt == null)
+				{
+					String message = String.Format("The type {0} extends another class " + 
+						"and bounds itself to a different table, which implies it's a joined subclass. " + 
+						"However it does not defines a key property. Use the KeyAttribute", type.FullName);
+					
+					throw new ConfigurationException(message);
+				}
+
+				String columnKey = keyAtt.ColumnName == null ? keyProp.Name : keyAtt.ColumnName;
+
+				xml.AppendFormat(keyElement, columnKey);
 
 				AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
 
-				xml.Append(subclassClose);
+				xml.Append(joinedsubclassClose);
 			}
 		}
 
@@ -692,6 +745,20 @@ namespace Castle.ActiveRecord
 				if (sub.BaseType == type)
 				{
 					CreateSubClassMapping(xml, sub, types);
+				}
+			}
+		}
+
+		private void AddJoinedSubClasses(StringBuilder xml, ActiveRecordAttribute ar, Type type, Type[] types)
+		{
+			foreach(Type sub in types)
+			{
+				if (sub.BaseType == type)
+				{
+					if (ar.Table != null)
+					{
+						CreateJoinedSubClassMapping(xml, sub, types);
+					}
 				}
 			}
 		}

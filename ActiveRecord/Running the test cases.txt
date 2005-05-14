@@ -11,6 +11,26 @@ like.
 
    --- cut here ---
 
+CREATE TABLE [dbo].[Entity] (
+	[id] [int] IDENTITY (1, 1) NOT NULL ,
+	[name] [varchar] (50) NULL ,
+	[type] [varchar] (10) NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[EntityCompany] (
+	[comp_id] [int] NOT NULL ,
+	[company_type] [tinyint] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[EntityPerson] (
+	[person_id] [int] NOT NULL ,
+	[email] [varchar] (50) NULL ,
+	[phone] [varchar] (12) NULL 
+) ON [PRIMARY]
+GO
+
 /****** Object:  Table [dbo].[Companies]    Script Date: 26/3/2005 12:28:17 ******/
 CREATE TABLE [dbo].[Companies] (
 	[id] [int] IDENTITY (1, 1) NOT NULL ,

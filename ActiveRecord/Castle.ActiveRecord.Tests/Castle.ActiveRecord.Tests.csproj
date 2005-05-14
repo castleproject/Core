@@ -139,6 +139,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "JoinedSubClassTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SessionScopeTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -175,6 +180,11 @@
                 />
                 <File
                     RelPath = "Model\Employee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Entity.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

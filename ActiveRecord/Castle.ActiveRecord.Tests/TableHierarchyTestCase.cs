@@ -30,9 +30,9 @@ namespace Castle.ActiveRecord.Tests
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
 				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
 
-			Company.DeleteAll();
 			Client.DeleteAll();
 			Firm.DeleteAll();
+			Company.DeleteAll();
 			Person.DeleteAll();
 
 			Firm firm = new Firm("keldor");

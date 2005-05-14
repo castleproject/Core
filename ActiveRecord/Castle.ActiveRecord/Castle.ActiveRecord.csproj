@@ -154,6 +154,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\JoinedBaseAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\KeyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\NestedAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
