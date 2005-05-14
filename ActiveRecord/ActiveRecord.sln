@@ -27,6 +27,7 @@ Global
 		Changes.txt = Changes.txt
 		License.txt = License.txt
 		Readme.txt = Readme.txt
+		Running the test cases.txt = Running the test cases.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

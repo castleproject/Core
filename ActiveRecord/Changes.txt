@@ -1,4 +1,9 @@
 
+- Version 0.0.1.4
+
+  Implemented support for Joined Subclasses
+
+
 - Version 0.0.1.3
 
   Applied patch from John Morales (support for idbags)
