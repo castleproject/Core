@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+
+<configuration>
+
+	<facilities>
+	
+	  <facility id="arfacility">
+	    
+	    <assemblies>
+			<item>Castle.Facilities.ActiveRecordIntegration.Tests</item>
+	    </assemblies>
+	    
+		<config>
+			<add key="hibernate.connection.driver_class" value="NHibernate.Driver.SqlClientDriver" />
+			<add key="hibernate.dialect"                 value="NHibernate.Dialect.MsSql2000Dialect" />
+			<add key="hibernate.connection.provider"     value="NHibernate.Connection.DriverConnectionProvider" />
+			<add key="hibernate.connection.connection_string" value="Data Source=.;Initial Catalog=test;Integrated Security=SSPI" />
+		</config>
+		
+	  </facility>
+	
+	</facilities>
+      
+</configuration>

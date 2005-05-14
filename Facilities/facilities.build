@@ -6,6 +6,7 @@
 	<property name="version" value="beta-2" />
 	<property name="container.bin.dir" value="${base.dir}/../../InversionOfControl/bin" />
 	<property name="services.bin.dir" value="${base.dir}/../../Services/bin" />
+	<property name="ar.bin.dir" value="${base.dir}/../../ActiveRecord/bin" />
 
 	<include buildfile="../common.inc" />	
 
@@ -15,10 +16,14 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, prevalence, autotransaction, nhibernate, ibatis, aspectsharp, typedfactory, batchregistration, startable, db4o" />
+	<target name="build" depends="init, prevalence, autotransaction, arintegration, nhibernate, ibatis, aspectsharp, typedfactory, batchregistration, startable, db4o" />
 	
 	<target name="init">
 
+	</target>
+	
+	<target name="arintegration">
+		<nant buildfile="ActiveRecordIntegration/default.build" inheritall="true" target="build" />
 	</target>
 	
 	<target name="prevalence">
