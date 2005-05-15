@@ -227,12 +227,14 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (desiredType == typeof(String[]))
 			{
+				if (value == null) return null;
 				return value.Split(',');
 			}
 			else if (desiredType == typeof(Int16[]) || desiredType == typeof(Int32[]) || desiredType == typeof(Int64[]) || 
 				desiredType == typeof(UInt16[]) || desiredType == typeof(UInt32[]) || desiredType == typeof(UInt64[]) || 
 				desiredType == typeof(byte[]) || desiredType == typeof(sbyte[]))
 			{
+				if (value == null) return null;
 				return ConvertToArray(desiredType, value, files, paramName);
 			}
 			else

@@ -85,6 +85,13 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			OkMessage();
 		}
 
+		public void ToNullInt32Array(Int32[] i)
+		{
+			Assert.IsNull(i);
+
+			OkMessage();
+		}
+
 		public void ToInt32(Int32 i)
 		{
 			Assert.AreEqual(1, i);
@@ -127,6 +134,13 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			Assert.AreEqual("a", str[0]);
 			Assert.AreEqual("b", str[1]);
 			Assert.AreEqual("c", str[2]);
+
+			OkMessage();
+		}
+
+		public void ToNullStringArray(string[] str)
+		{
+			Assert.IsNull(str);
 
 			OkMessage();
 		}

@@ -100,6 +100,12 @@ namespace Castle.MonoRail.Framework.Tests
 
 			_engine.Process( GetContext("ToStringArray", "str", "a,b,c") );
 			AssertResponse();
+
+			_engine.Process( GetContext("ToNullStringArray", "str", null) );
+			AssertResponse();
+
+			_engine.Process( GetContext("ToNullInt32Array", "i", null) );
+			AssertResponse();
 		}
 
 		[Test]
@@ -122,8 +128,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 		private RailsEngineContextImpl GetContext(string action, string name, string value)
 		{
-			_context = new 
-				RailsEngineContextImpl("/smart/"+ action +".rails");
+			_context = new RailsEngineContextImpl("/smart/"+ action +".rails");
 	
 			_context.Request.Params[name] = value;
 
