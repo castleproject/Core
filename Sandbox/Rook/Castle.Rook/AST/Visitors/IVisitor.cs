@@ -19,26 +19,8 @@ namespace Castle.Rook.AST
 
 	public interface IVisitor
 	{
-		void OnCompilationUnit(CompilationUnitNode node);
-
+		void OnCompilationUnit(CompilationUnitNode unitNode);
+		
 		void OnNamespace(NamespaceNode namespaceNode);
-		
-		void OnType(TypeNode typeNode);
-
-		void OnType(ClassNode typeNode);
-
-		void OnType(InterfaceNode typeNode);
-
-//		void OnType(StructNode typeNode);
-
-		void OnIdentifier(String identifier);
-
-		void OnIdentifier(Identifier identifier);
-		
-		void OnIdentifier(QualifiedIdentifier qualifiedIdentifier);
-		
-		void OnStatement(AbstractStatement statement);
-		
-		void OnExpression(Expression expression);
 	}
 }

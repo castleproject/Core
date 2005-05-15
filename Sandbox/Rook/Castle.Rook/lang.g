@@ -95,14 +95,14 @@ namespace_body[NamespaceNode ns]
 
 class_declaration![IList types]
 	{
-		ClassNode classNode = null;
+		ClassDefinitionStatement classNode = null;
 		Identifier id = null;
 	}
 	:
 	/* TODO:visibility public/private/etc */ 
 	CLASS_DEF! id=identifier 
 	{
-		classNode = new ClassNode(id.Name);
+		classNode = new ClassDefinitionStatement(id.Name);
 		types.Add(classNode);
 	}
 	(baseTypes[classNode])?
@@ -111,24 +111,24 @@ class_declaration![IList types]
 
 mixin_declaration![IList mixins]
 	{
-		MixinNode mixinNode = null;
+		MixinDefinitionStatement mixinNode = null;
 		Identifier id = null;
 	}
 	:
 	MIXIN_DEF! id=identifier 
 	{
-		mixinNode = new MixinNode(id.Name);
+		mixinNode = new MixinDefinitionStatement(id.Name);
 		mixins.Add(mixinNode);
 	}
 	mixin_body[mixinNode]
 	;
 
-mixin_body[MixinNode mixinNode]
+mixin_body[MixinDefinitionStatement mixinNode]
 	:
 	END!
 	;
 
-class_body[ClassNode classNode]
+class_body[ClassDefinitionStatement classNode]
 	{
 		// Default access level for the method body
 		currentAccessLevel = AccessLevel.Public;
@@ -140,7 +140,7 @@ class_body[ClassNode classNode]
 	;
 
 protected
-baseTypes![TypeNode type]
+baseTypes![TypeDefinitionStatement type]
 	{
 		QualifiedIdentifier qi = null;
 	}
@@ -292,7 +292,7 @@ method_body[MethodDefinitionStatement method]
 	;
 
 protected 
-statement returns [AbstractStatement stmt]
+statement returns [Statement stmt]
 	{
 		stmt = null;
 	}
@@ -305,7 +305,7 @@ statement returns [AbstractStatement stmt]
 protected
 statement_list[IList statements]
 	{
-		AbstractStatement stmt = null;
+		Statement stmt = null;
 	}
 	:
 	(stmt=statement { statements.Add( stmt ); } )*
@@ -314,7 +314,7 @@ statement_list[IList statements]
 protected
 class_level_supported_statements[IList statements]
 	{
-		AbstractStatement stmt = null;
+		Statement stmt = null;
 	}
 	:
 	(

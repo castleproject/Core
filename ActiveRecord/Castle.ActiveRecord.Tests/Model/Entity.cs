@@ -48,17 +48,17 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { type = value; }
 		}
 
-		public new static void DeleteAll()
+		public static void DeleteAll()
 		{
 			ActiveRecordBase.DeleteAll( typeof(Entity) );
 		}
 
-		public new static Entity[] FindAll()
+		public static Entity[] FindAll()
 		{
 			return (Entity[]) ActiveRecordBase.FindAll( typeof(Entity) );
 		}
 
-		public new static Entity Find(int id)
+		public static Entity Find(int id)
 		{
 			return (Entity) ActiveRecordBase.FindByPrimaryKey( typeof(Entity), id );
 		}

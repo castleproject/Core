@@ -18,7 +18,7 @@ namespace Castle.Rook.AST
 	using System.Collections;
 
 
-	public class MethodDefinitionStatement : AbstractStatement
+	public class MethodDefinitionStatement : Statement
 	{
 		private QualifiedIdentifier returnType;
 		private String name;

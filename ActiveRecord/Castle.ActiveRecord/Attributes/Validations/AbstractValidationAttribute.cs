@@ -12,34 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.AST
+namespace Castle.ActiveRecord
 {
 	using System;
-	using System.Collections;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer, INamingScope
+	using Castle.ActiveRecord.Framework;
+
+
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=true)]
+	public abstract class AbstractValidationAttribute : Attribute
 	{
-		private NamingScope scope = new NamingScope();
+		private IValidator _validator;
 
-		public override void Visit(IVisitor visitor)
+		public AbstractValidationAttribute(IValidator validator)
 		{
-			visitor.OnCompilationUnit(this);
+			_validator = validator;
 		}
 
-		public bool HasName(String name)
+		public AbstractValidationAttribute(IValidator validator, String errorMessage) : this(validator)
 		{
-			return scope.HasName(name);
+			validator.ErrorMessage = errorMessage;
 		}
 
-		public INamingScope Parent
+		public IValidator Validator
 		{
-			get { return scope.Parent; }
-			set { scope.Parent = value; }
-		}
-
-		public void Register(String name)
-		{
-			scope.Register(name);
+			get { return _validator; }
 		}
 	}
 }

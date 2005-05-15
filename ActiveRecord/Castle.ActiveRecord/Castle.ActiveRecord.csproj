@@ -184,6 +184,36 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\Validations\AbstractValidationAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\Validations\ValidateConfirmationAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\Validations\ValidateEmailAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\Validations\ValidateIsUniqueAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\Validations\ValidateNotEmptyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\Validations\ValidateRegExpAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\ActiveRecordBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -195,6 +225,11 @@
                 />
                 <File
                     RelPath = "Framework\ActiveRecordStarter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\ActiveRecordValidationBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -220,6 +255,11 @@
                 />
                 <File
                     RelPath = "Framework\SessionFactoryHolder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\ValidationException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -270,6 +310,41 @@
                 />
                 <File
                     RelPath = "Framework\Scopes\TransactionScope.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\AbstractValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\ConfirmationValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\EmailValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\IsUniqueValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\IValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\NullCheckValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\RegularExpressionValidator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,34 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.AST
+namespace Castle.ActiveRecord.Framework.Validators
 {
 	using System;
-	using System.Collections;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer, INamingScope
+	[Serializable]
+	public class NullCheckValidator : AbstractValidator
 	{
-		private NamingScope scope = new NamingScope();
-
-		public override void Visit(IVisitor visitor)
+		public NullCheckValidator()
 		{
-			visitor.OnCompilationUnit(this);
 		}
 
-		public bool HasName(String name)
+		public override bool Perform(object instance, object fieldValue)
 		{
-			return scope.HasName(name);
+			return fieldValue != null && fieldValue.ToString().Length != 0;
 		}
 
-		public INamingScope Parent
+		protected override string BuildErrorMessage()
 		{
-			get { return scope.Parent; }
-			set { scope.Parent = value; }
-		}
-
-		public void Register(String name)
-		{
-			scope.Register(name);
+			return String.Format("{0} is not optional.", Property.Name);
 		}
 	}
 }

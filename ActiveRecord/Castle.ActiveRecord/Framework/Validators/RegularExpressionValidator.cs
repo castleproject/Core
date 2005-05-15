@@ -12,34 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.AST
+namespace Castle.ActiveRecord.Framework.Validators
 {
 	using System;
-	using System.Collections;
+	using System.Text.RegularExpressions;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer, INamingScope
+
+	[Serializable]
+	public class RegularExpressionValidator : AbstractValidator
 	{
-		private NamingScope scope = new NamingScope();
+		private readonly Regex _regexRule;
 
-		public override void Visit(IVisitor visitor)
+		public RegularExpressionValidator(String expression)
 		{
-			visitor.OnCompilationUnit(this);
+			_regexRule = new Regex(expression);
 		}
 
-		public bool HasName(String name)
+		public override bool Perform(object instance, object fieldValue)
 		{
-			return scope.HasName(name);
+			if (fieldValue != null)
+			{
+				return _regexRule.IsMatch( fieldValue.ToString() );
+			}
+
+			return true;
 		}
 
-		public INamingScope Parent
+		protected override string BuildErrorMessage()
 		{
-			get { return scope.Parent; }
-			set { scope.Parent = value; }
-		}
-
-		public void Register(String name)
-		{
-			scope.Register(name);
+			return String.Format("Field {0} is not a valid entry for the expected pattern.", Property.Name);
 		}
 	}
 }

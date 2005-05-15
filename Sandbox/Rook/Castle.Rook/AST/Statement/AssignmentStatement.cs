@@ -17,7 +17,7 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class AssignmentStatement : AbstractStatement
+	public class AssignmentStatement : Statement
 	{
 		private IdentifierReferenceExpression target;
 		private Expression value;

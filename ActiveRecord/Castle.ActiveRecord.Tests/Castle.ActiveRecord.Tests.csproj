@@ -237,6 +237,21 @@
                     RelPath = "TestXmlMappings\Mappings.xml"
                     BuildAction = "EmbeddedResource"
                 />
+                <File
+                    RelPath = "Validation\ValidationTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\Model\User.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validators\ValidatorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>

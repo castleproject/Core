@@ -12,34 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.AST
+namespace Castle.ActiveRecord.Framework
 {
 	using System;
-	using System.Collections;
+	using System.Runtime.Serialization;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer, INamingScope
+	[Serializable]
+	public class ValidationException : Exception
 	{
-		private NamingScope scope = new NamingScope();
-
-		public override void Visit(IVisitor visitor)
+		public ValidationException(string message) : base(message)
 		{
-			visitor.OnCompilationUnit(this);
 		}
 
-		public bool HasName(String name)
+		public ValidationException(string message, Exception innerException) : base(message, innerException)
 		{
-			return scope.HasName(name);
 		}
 
-		public INamingScope Parent
+		public ValidationException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
-			get { return scope.Parent; }
-			set { scope.Parent = value; }
-		}
-
-		public void Register(String name)
-		{
-			scope.Register(name);
 		}
 	}
 }

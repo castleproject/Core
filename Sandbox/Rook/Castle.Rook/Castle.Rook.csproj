@@ -98,10 +98,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "langold.g"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "RookLangParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -646,11 +642,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\ClassNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\CompilationUnitNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -666,7 +657,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\InterfaceNode.cs"
+                    RelPath = "AST\IdentifierCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\INamingScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -676,17 +672,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\MixinNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\ModuleNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\NamespaceNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\NamingScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -696,7 +687,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\TypeNode.cs"
+                    RelPath = "AST\StatementCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -766,12 +757,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\Statement\AbstractStatement.cs"
+                    RelPath = "AST\Statement\AssignmentStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\Statement\AssignmentStatement.cs"
+                    RelPath = "AST\Statement\ClassDefinitionStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -781,12 +772,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\Statement\InterfaceDefinitionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\Statement\MethodDefinitionStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\Visitors\BreadthFirstVisitor.cs"
+                    RelPath = "AST\Statement\MixinDefinitionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Statement\Statement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Statement\TypeDefinitionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Visitors\DepthVisitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -11,7 +11,6 @@
 	<property name="samples.dir" value="${base.dir}/../Samples/ActiveRecord" />
 
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="name" value="Castle.ActiveRecord" />
 	<property name="src.dir" value="${base.dir}\${name}" />
 	<property name="test.src.dir" value="${src.dir}/../${name}.Tests" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />

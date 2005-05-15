@@ -207,7 +207,7 @@ _loop5_breakloop:				;
 {
 		
 		
-				MixinNode mixinNode = null;
+				MixinDefinitionStatement mixinNode = null;
 				Identifier id = null;
 			
 		
@@ -217,7 +217,7 @@ _loop5_breakloop:				;
 			if (0==inputState.guessing)
 			{
 				
-						mixinNode = new MixinNode(id.Name);
+						mixinNode = new MixinDefinitionStatement(id.Name);
 						mixins.Add(mixinNode);
 					
 			}
@@ -243,7 +243,7 @@ _loop5_breakloop:				;
 {
 		
 		
-				ClassNode classNode = null;
+				ClassDefinitionStatement classNode = null;
 				Identifier id = null;
 			
 		
@@ -253,7 +253,7 @@ _loop5_breakloop:				;
 			if (0==inputState.guessing)
 			{
 				
-						classNode = new ClassNode(id.Name);
+						classNode = new ClassDefinitionStatement(id.Name);
 						types.Add(classNode);
 					
 			}
@@ -497,7 +497,7 @@ _loop11_breakloop:				;
 	}
 	
 	protected void baseTypes(
-		TypeNode type
+		TypeDefinitionStatement type
 	) //throws RecognitionException, TokenStreamException
 {
 		
@@ -552,7 +552,7 @@ _loop21_breakloop:				;
 	}
 	
 	public void class_body(
-		ClassNode classNode
+		ClassDefinitionStatement classNode
 	) //throws RecognitionException, TokenStreamException
 {
 		
@@ -595,7 +595,7 @@ _loop18_breakloop:				;
 	}
 	
 	public void mixin_body(
-		MixinNode mixinNode
+		MixinDefinitionStatement mixinNode
 	) //throws RecognitionException, TokenStreamException
 {
 		
@@ -693,7 +693,7 @@ _loop18_breakloop:				;
 {
 		
 		
-				AbstractStatement stmt = null;
+				Statement stmt = null;
 			
 		
 		try {      // for error handling
@@ -1101,7 +1101,7 @@ _loop37_breakloop:						;
 {
 		
 		
-				AbstractStatement stmt = null;
+				Statement stmt = null;
 			
 		
 		try {      // for error handling
@@ -1139,9 +1139,9 @@ _loop44_breakloop:				;
 		}
 	}
 	
-	protected AbstractStatement  statement() //throws RecognitionException, TokenStreamException
+	protected Statement  statement() //throws RecognitionException, TokenStreamException
 {
-		AbstractStatement stmt;
+		Statement stmt;
 		
 		
 				stmt = null;

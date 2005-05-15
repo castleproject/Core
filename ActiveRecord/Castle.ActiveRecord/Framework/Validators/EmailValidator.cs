@@ -12,34 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.AST
+namespace Castle.ActiveRecord.Framework.Validators
 {
 	using System;
-	using System.Collections;
 
-	public class CompilationUnitNode : AbstractDeclarationContainer, INamingScope
+
+	/// <summary>
+	/// 
+	/// </summary>
+	[Serializable]
+	public class EmailValidator : RegularExpressionValidator
 	{
-		private NamingScope scope = new NamingScope();
+		/// <summary>
+		/// From http://www.codeproject.com/aspnet/Valid_Email_Addresses.asp
+		/// </summary>
+		private static readonly String emailRule = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+			 @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" + 
+			 @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
 
-		public override void Visit(IVisitor visitor)
+		public EmailValidator() : base(emailRule)
 		{
-			visitor.OnCompilationUnit(this);
 		}
 
-		public bool HasName(String name)
+		protected override string BuildErrorMessage()
 		{
-			return scope.HasName(name);
-		}
-
-		public INamingScope Parent
-		{
-			get { return scope.Parent; }
-			set { scope.Parent = value; }
-		}
-
-		public void Register(String name)
-		{
-			scope.Register(name);
+			return String.Format("Field {0} doesn't seem like a valid e-mail.", Property.Name);
 		}
 	}
 }

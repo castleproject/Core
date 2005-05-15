@@ -17,7 +17,7 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class ExpressionStatement : AbstractStatement
+	public class ExpressionStatement : Statement
 	{
 		public ExpressionStatement(Expression exp)
 		{
