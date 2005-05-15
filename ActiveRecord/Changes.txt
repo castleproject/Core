@@ -3,6 +3,8 @@
 
   Implemented support for Joined Subclasses
 
+  Implemented support for validations
+
 
 - Version 0.0.1.3
 
