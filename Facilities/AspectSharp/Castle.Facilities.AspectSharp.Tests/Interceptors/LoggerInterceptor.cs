@@ -28,7 +28,7 @@ namespace Castle.Facilities.AspectSharp.Tests.Interceptors
 
 		public object Invoke(IMethodInvocation invocation)
 		{
-			_builder.Append( String.Format("Enter {0}\r\n", invocation.GetMethod().Name) );
+			_builder.Append( String.Format("Enter {0}\r\n", invocation.Method.Name) );
 
 			return invocation.Proceed();
 		}

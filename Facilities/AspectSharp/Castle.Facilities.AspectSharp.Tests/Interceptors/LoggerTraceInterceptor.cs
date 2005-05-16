@@ -34,11 +34,11 @@ namespace Castle.Facilities.AspectSharp.Tests.Interceptors
 
 		public object Invoke(IMethodInvocation invocation)
 		{
-			_logger.Enter( invocation.GetMethod().Name );
+			_logger.Enter( invocation.Method.Name );
 
 			object value = invocation.Proceed();
 
-			_logger.Leave( invocation.GetMethod().Name );
+			_logger.Leave( invocation.Method.Name );
 
 			return value;
 		}
