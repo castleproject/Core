@@ -8548,6 +8548,11 @@
             </summary>
             <param name="cacheRegion"></param>
         </member>
+        <member name="P:NHibernate.ISessionFactory.ConnectionProvider">
+            <summary>
+            Get the <see cref="T:NHibernate.Connection.IConnectionProvider"/> used.
+            </summary>
+        </member>
         <member name="M:NHibernate.Engine.ISessionFactoryImplementor.GetPersister(System.Type)">
             <summary>
             Get the persister for a class
@@ -23145,7 +23150,7 @@
             <summary>
             Create a <see cref="T:NHibernate.Property.BasicGetter"/> for the mapped property.
             </summary>
-            <param name="theClass">The <see cref="T:System.Type"/> to find the Property in.</param>
+            <param name="type">The <see cref="T:System.Type"/> to find the Property in.</param>
             <param name="propertyName">The name of the mapped Property to get.</param>
             <returns>
             The <see cref="T:NHibernate.Property.BasicGetter"/> to use to get the value of the Property from an
@@ -23362,7 +23367,7 @@
             <summary>
             Helper method to find the Field.
             </summary>
-            <param name="clazz">The <see cref="T:System.Type"/> to find the Field in.</param>
+            <param name="type">The <see cref="T:System.Type"/> to find the Field in.</param>
             <param name="fieldName">The name of the Field to find.</param>
             <returns>
             The <see cref="T:System.Reflection.FieldInfo"/> for the field.
@@ -23496,7 +23501,7 @@
             <summary>
             Creates an <see cref="T:NHibernate.Property.BasicGetter"/> to <c>get</c> the value from the Property.
             </summary>
-            <param name="theClass">The <see cref="T:System.Type"/> to find the Property in.</param>
+            <param name="type">The <see cref="T:System.Type"/> to find the Property in.</param>
             <param name="propertyName">The name of the mapped Property to get.</param>
             <returns>
             The <see cref="T:NHibernate.Property.BasicGetter"/> to use to get the value of the Property from an
@@ -23511,7 +23516,7 @@
             Create a <see cref="T:NHibernate.Property.FieldSetter"/> to <c>set</c> the value of the mapped Property
             through a <c>Field</c>.
             </summary>
-            <param name="theClass">The <see cref="T:System.Type"/> to find the mapped Property in.</param>
+            <param name="type">The <see cref="T:System.Type"/> to find the mapped Property in.</param>
             <param name="propertyName">The name of the mapped Property to set.</param>
             <returns>
             The <see cref="T:NHibernate.Property.FieldSetter"/> to use to set the value of the Property on an
@@ -25269,9 +25274,9 @@
             <param name="whereType">The Hibernate Type</param>
             <returns>The SqlSelectBuilder</returns>
         </member>
-        <member name="M:NHibernate.SqlCommand.SqlSelectBuilder.AddWhereClause(NHibernate.SqlCommand.SqlString)">
+        <member name="M:NHibernate.SqlCommand.SqlSelectBuilder.SetWhereClause(NHibernate.SqlCommand.SqlString)">
             <summary>
-            Adds a prebuilt SqlString to the Where clause
+            Sets the prebuilt SqlString to the Where clause
             </summary>
             <param name="whereSqlString">The SqlString that contains the sql and parameters to add to the WHERE</param>
             <returns>This SqlSelectBuilder</returns>
@@ -25535,6 +25540,16 @@
             If a SqlPart contains a SqlString then this recursively looks at each SqlPart
             for the Count.
             </remarks>
+        </member>
+        <member name="P:NHibernate.SqlCommand.SqlString.IsEmpty">
+            <summary>
+            Determines if this <see cref="T:NHibernate.SqlCommand.SqlString"/> contains no parts
+            or only has parts containing an empty string.
+            </summary>
+            <value>
+            <c>true</c> if there are no parts containing a valid string or if one
+            of the parts has a parameter in it, <c>false</c> otherwise.
+            </value>
         </member>
         <member name="P:NHibernate.SqlCommand.SqlString.ParameterIndexes">
             <summary>
@@ -34345,27 +34360,23 @@
             Indicates that an expected getter or setter method could not be found on a class
             </summary>
         </member>
-        <member name="M:NHibernate.PropertyNotFoundException.#ctor">
+        <member name="M:NHibernate.PropertyNotFoundException.#ctor(System.Type,System.String,System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.PropertyNotFoundException"/> class.
+            Initializes a new instance of the <see cref="T:NHibernate.PropertyNotFoundException"/> class,
+            used when a property get/set accessor is missing.
             </summary>
+            <param name="type">The <see cref="T:System.Type"/> that is missing the property</param>
+            <param name="propertyName">The name of the missing property</param>
+            <param name="accessorType">The type of the missing accessor
+            ("getter" or "setter")</param>
         </member>
-        <member name="M:NHibernate.PropertyNotFoundException.#ctor(System.String)">
+        <member name="M:NHibernate.PropertyNotFoundException.#ctor(System.Type,System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.PropertyNotFoundException"/> class.
+            Initializes a new instance of the <see cref="T:NHibernate.PropertyNotFoundException"/> class,
+            used when a field is missing.
             </summary>
-            <param name="message">The message that describes the error. </param>
-        </member>
-        <member name="M:NHibernate.PropertyNotFoundException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:NHibernate.PropertyNotFoundException"/> class.
-            </summary>
-            <param name="message">The message that describes the error. </param>
-            <param name="innerException">
-            The exception that is the cause of the current exception. If the innerException parameter 
-            is not a null reference, the current exception is raised in a catch block that handles 
-            the inner exception.
-            </param>
+            <param name="type">The <see cref="T:System.Type"/> that is missing the field</param>
+            <param name="fieldName">The name of the missing property</param>
         </member>
         <member name="M:NHibernate.PropertyNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>

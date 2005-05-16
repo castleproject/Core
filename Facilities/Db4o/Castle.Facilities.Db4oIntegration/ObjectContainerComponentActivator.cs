@@ -1,3 +1,4 @@
+using System.Configuration;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,14 +48,22 @@ namespace Castle.Facilities.Db4oIntegration
 			}
 		}
 
-		private ObjectContainer OpenLocal()
+		protected virtual ObjectContainer OpenLocal()
 		{
 			string databaseFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (string) Model.ExtendedProperties[Db4oFacility.DatabaseFileKey]);
+
+			ObjectContainer container =  Db4o.openFile(databaseFile);
+
+			//TODO: Remove it when db4o's team fix it.
+			if (container == null)
+			{
+				throw new ConfigurationException("The ObjectContainer is null. Check the permissions of your YAP file.");
+			}
 	
-			return Db4o.openFile(databaseFile);
+			return container;
 		}
 
-		private ObjectContainer OpenClient()
+		protected virtual ObjectContainer OpenClient()
 		{
 			string hostName = (string) Model.ExtendedProperties[Db4oFacility.HostNameKey];
 			int remotePort = (int) Model.ExtendedProperties[Db4oFacility.RemotePortKey];
@@ -64,7 +73,7 @@ namespace Castle.Facilities.Db4oIntegration
 			return Db4o.openClient(hostName, remotePort, user, password);
 		}
 
-		private void SetupDb4o()
+		protected virtual void SetupDb4o()
 		{
 			Db4o.configure().exceptionsOnNotStorable((bool) Model.ExtendedProperties[Db4oFacility.ExceptionsOnNotStorableKey]); 
 
@@ -86,8 +95,9 @@ namespace Castle.Facilities.Db4oIntegration
 			SetupTranslators();
 		}
 
-		private void SetupTranslators()
+		protected virtual void SetupTranslators()
 		{
+			//TODO: Remove it when db4o's team fix it.
 			Db4o.configure().objectClass(typeof(CompareInfo)).translate(new TSerializable());
 		}
 	}
