@@ -165,7 +165,9 @@ namespace Castle.ActiveRecord.Framework
 				}
 				else
 				{
-					throw new ArgumentException("Could not find value related to key " + key);
+					throw new ArgumentException(
+						"DictionaryAdapter: Could not find value related to key {" + key + "}. " + 
+						"This column is probably not mapped on ActiveRecord");
 				}	
 			}
 		}

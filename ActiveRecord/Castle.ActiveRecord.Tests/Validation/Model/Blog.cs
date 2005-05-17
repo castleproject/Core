@@ -15,11 +15,6 @@
 namespace Castle.ActiveRecord.Tests.Validation.Model
 {
 	using System;
-	using System.Collections;
-
-	using Castle.ActiveRecord.Framework;
-
-	using NHibernate;
 
 	[ActiveRecord("Blogs")]
 	public class Blog : ActiveRecordValidationBase
@@ -27,10 +22,6 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 		private int _id;
 		private String _name;
 		private String _author;
-		private IList _posts;
-		private IList _publishedposts;
-		private IList _unpublishedposts;
-		private IList _recentposts;
 
 		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id

@@ -101,8 +101,11 @@ namespace Castle.ActiveRecord
 
 			ActiveRecordAttribute ar = GetActiveRecord(type);
 
-			if (ar != null)
+			if (ar == null)
 			{
+				return String.Empty;
+			}
+
 				// Is it a child?
 
 				if (IsChildActiveRecord(ar, type))
@@ -143,9 +146,6 @@ namespace Castle.ActiveRecord
 				xml.Append(classClose).Append(mappingClose);
 
 				return xml.ToString();
-			}
-
-			return String.Empty;
 		}
 
 		/// <summary>
@@ -189,10 +189,14 @@ namespace Castle.ActiveRecord
 				xml.AppendFormat(joinedsubclassOpen, GetNHibernateName( type ), table + proxy);
 
 				PropertyInfo keyProp = GetPropertyWithAttribute(type, typeof(KeyAttribute));
-				
-				object[] attrs = keyProp.GetCustomAttributes(typeof(KeyAttribute), false);
 
-				KeyAttribute keyAtt = attrs[0] as KeyAttribute;
+				KeyAttribute keyAtt = null;
+
+				if (keyProp != null)
+				{
+					object[] attrs = keyProp.GetCustomAttributes(typeof(KeyAttribute), false);
+					keyAtt = attrs[0] as KeyAttribute;
+				}
 
 				if (keyAtt == null)
 				{
@@ -207,7 +211,16 @@ namespace Castle.ActiveRecord
 
 				xml.AppendFormat(keyElement, columnKey);
 
-				AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+				if (type.IsDefined( typeof(JoinedBaseAttribute), false ))
+				{
+					AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+					AddJoinedSubClasses(xml, ar, type, sefOfTypes);
+				}
+				else
+				{
+					AddMappedProperties(xml, type.GetProperties( PropertiesBindingFlags ));
+				}
+
 
 				xml.Append(joinedsubclassClose);
 			}
@@ -755,10 +768,30 @@ namespace Castle.ActiveRecord
 			{
 				if (sub.BaseType == type)
 				{
-					if (ar.Table != null)
+					ActiveRecordAttribute arsub = GetActiveRecord(sub);
+
+					if (arsub == null)
 					{
-						CreateJoinedSubClassMapping(xml, sub, types);
+						String message = String.Format("Type {0} is a joined subclass, " + 
+							"but does not even used the ActiveRecordAttribute to declare " + 
+							"which table it belongs to.", sub.FullName);
+						throw new ConfigurationException(message);
 					}
+					else if (arsub.Table == null)
+					{
+						String message = String.Format("Type {0} is a joined subclass, but " + 
+							"does not declare which table it's mapping to.", sub.FullName);
+						throw new ConfigurationException(message);
+					}
+					else if (arsub.Table.Equals(ar.Table))
+					{
+						String message = String.Format("Type {0} is a joined subclass, " + 
+							"but it's pointing to the same table than its parent. In this " + 
+							"case, you should use discriminator columns.", sub.FullName);
+						throw new ConfigurationException(message);
+					}
+
+					CreateJoinedSubClassMapping(xml, sub, types);
 				}
 			}
 		}

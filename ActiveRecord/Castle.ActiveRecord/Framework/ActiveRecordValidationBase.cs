@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// List of validators that should be executed for this class
 		/// </summary>
-		private static IValidator[] __validators;
+		private IValidator[] __validators;
 
 		/// <summary>
 		/// List of error messages
