@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System.Reflection;
 
 	using NHibernate;
+	using NHibernate.Expression;
 
 
 	[Serializable]
@@ -43,12 +44,9 @@ namespace Castle.ActiveRecord.Framework.Validators
 		{
 			ICriteria criteria = session.CreateCriteria( instance.GetType() );
 
-			// TODO: Finish this when NHibernate team change expression 
-			// constructors from internal to public
+			criteria.Add( Expression.Eq(Property.Name, _fieldValue) );
 
-			// criteria.Add( new EqCriterion() );
-
-			return true;
+			return criteria.List().Count == 0;
 		}
 
 		protected override string BuildErrorMessage()

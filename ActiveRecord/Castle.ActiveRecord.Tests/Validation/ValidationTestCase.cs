@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 	using Castle.ActiveRecord.Tests.Validation.Model;
 
 	[TestFixture]
-	public class ValidationTestCase
+	public class ValidationTestCase : AbstractActiveRecordTest
 	{
 		[Test]
 		public void IsValid()
@@ -66,6 +66,28 @@ namespace Castle.ActiveRecord.Tests.Validation
 
 			Assert.IsTrue(user.IsValid()); 
 			Assert.AreEqual(0, user.ValidationErrorMessages.Length);
+		}
+
+		[Test]
+		[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
+		public void IsUnique()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog) );
+
+			Blog.DeleteAll();
+
+			Blog blog = new Blog();
+			blog.Name = "hammett";
+			blog.Save();
+
+			blog = new Blog();
+			blog.Name = "hammett";
+			
+			String[] messages = blog.ValidationErrorMessages;
+			Assert.IsTrue(messages.Length == 1);
+			Assert.AreEqual("Name is currently in use. Please pick up a new Name.", messages[0]);
+
+			blog.Save();
 		}
 	}
 }
