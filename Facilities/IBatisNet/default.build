@@ -13,6 +13,8 @@
 	<property name="name" value="Castle.Facilities.IBatisNetIntegration" />
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	
+	<property name="ibatis.test" value="true" unless="${property::exists('ibatis.test')}" />
 
 	<property name="version" value="beta-2" />
 
@@ -81,7 +83,7 @@
 		</csc>
 	</target>
 	
-	<target name="tests.run" depends="tests.compile">
+	<target name="tests.run" depends="tests.compile" if="${ibatis.test}">
 		<nunit2 >
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
