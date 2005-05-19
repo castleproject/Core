@@ -15,17 +15,20 @@
 namespace Castle.Rook.AST
 {
 	using System;
+	using System.Collections;
 
 
-	public class MethodParameterNode : AbstractASTNode
+	public abstract class TypeDefinitionStatement : Statement, INamingScope
 	{
-		public Identifier type;
-		public string name;
+		private IdentifierCollection baseTypes = new IdentifierCollection();
+		private StatementCollection statements = new StatementCollection();
+		private NamingScope scope = new NamingScope();
 
-		public MethodParameterNode(String name, Identifier type)
+		private String name;
+
+		public TypeDefinitionStatement(String name)
 		{
 			this.name = name;
-			this.type = type;
 		}
 
 		public string Name
@@ -33,14 +36,39 @@ namespace Castle.Rook.AST
 			get { return name; }
 		}
 
-		public Identifier Type
+		public IdentifierCollection BaseTypes
 		{
-			get { return type; }
+			get { return baseTypes; }
+		}
+
+		public IList Statements
+		{
+			get { return statements; }
 		}
 
 //		public override void Visit(IVisitor visitor)
 //		{
-//			
+//			visitor.OnTypeDefinition(this);
 //		}
+
+		#region INamingScope Members
+
+		public INamingScope Parent
+		{
+			get { return scope.Parent; }
+			set { scope.Parent = value; }
+		}
+
+		public void Register(String name)
+		{
+			scope.Register(name);
+		}
+
+		public bool HasName(String name)
+		{
+			return scope.HasName(name);
+		}
+
+		#endregion
 	}
 }

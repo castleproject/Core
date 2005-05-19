@@ -37,10 +37,10 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
 		}
 
 		[Test]
@@ -57,11 +57,11 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(1, classNode.BaseTypes.Count);
-			Assert.AreEqual( "MyBaseType", (classNode.BaseTypes[0] as QualifiedIdentifier).Name );
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(1, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual( "MyBaseType", (ClassDefinitionStatement.BaseTypes[0] as Identifier).Name );
 		}
 
 		[Test]
@@ -78,13 +78,13 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(3, classNode.BaseTypes.Count);
-			Assert.AreEqual( "MyBaseType", (classNode.BaseTypes[0] as QualifiedIdentifier).Name );
-			Assert.AreEqual( "IList", (classNode.BaseTypes[1] as QualifiedIdentifier).Name );
-			Assert.AreEqual( "Collections.IBindable", (classNode.BaseTypes[2] as QualifiedIdentifier).Name );
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(3, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual( "MyBaseType", (ClassDefinitionStatement.BaseTypes[0] as Identifier).Name );
+			Assert.AreEqual( "IList", (ClassDefinitionStatement.BaseTypes[1] as Identifier).Name );
+			Assert.AreEqual( "Collections.IBindable", (ClassDefinitionStatement.BaseTypes[2] as Identifier).Name );
 		}
 
 		[Test]
@@ -101,21 +101,119 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
-			Assert.AreEqual(2, classNode.Statements.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(2, ClassDefinitionStatement.Statements.Count);
 
-			AssignmentStatement stmt = classNode.Statements[0] as AssignmentStatement;
+			FieldDeclarationStatement stmt = ClassDefinitionStatement.Statements[0] as FieldDeclarationStatement;
 			Assert.IsNotNull(stmt);
 			Assert.AreEqual("@@myfield", (stmt.Target as StaticFieldReferenceExpression).Name);
 			Assert.AreEqual("1", (stmt.Value as LiteralExpression).Value);
 
-			stmt = classNode.Statements[1] as AssignmentStatement;
+			stmt = ClassDefinitionStatement.Statements[1] as FieldDeclarationStatement;
 			Assert.IsNotNull(stmt);
 			Assert.AreEqual("@@otherfield", (stmt.Target as StaticFieldReferenceExpression).Name);
 			Assert.AreEqual("22", (stmt.Value as LiteralExpression).Value);
+		}
+
+		[Test]
+		public void ExplicitFieldsDeclaration()
+		{
+			String contents = 
+				"class MyClass \r\n" + 
+				"  @myfield:int " + 
+				"  @otherfield:string " + 
+				"end \r\n";
+
+			CompilationUnitNode unit = RookParser.ParseContents(contents);
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(0, unit.Namespaces.Count);
+			Assert.AreEqual(1, unit.ClassesTypes.Count);
+			
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(2, ClassDefinitionStatement.Statements.Count);
+
+//			FieldDeclarationStatement stmt = ClassDefinitionStatement.Statements[0] as FieldDeclarationStatement;
+//			Assert.IsNotNull(stmt);
+//			Assert.AreEqual("@@myfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+//			Assert.AreEqual("1", (stmt.Value as LiteralExpression).Value);
+//
+//			stmt = ClassDefinitionStatement.Statements[1] as FieldDeclarationStatement;
+//			Assert.IsNotNull(stmt);
+//			Assert.AreEqual("@@otherfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+//			Assert.AreEqual("22", (stmt.Value as LiteralExpression).Value);
+		}
+
+		[Test]
+		public void ExplicitFieldsDeclarationWithInitialization()
+		{
+			String contents = 
+				"class MyClass \r\n" + 
+				"  @myfield:int = 1" + 
+				"  @otherfield:string = \"hammett\" " + 
+				"end \r\n";
+
+			CompilationUnitNode unit = RookParser.ParseContents(contents);
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(0, unit.Namespaces.Count);
+			Assert.AreEqual(1, unit.ClassesTypes.Count);
+			
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(2, ClassDefinitionStatement.Statements.Count);
+
+//			FieldDeclarationStatement stmt = ClassDefinitionStatement.Statements[0] as FieldDeclarationStatement;
+//			Assert.IsNotNull(stmt);
+//			Assert.AreEqual("@@myfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+//			Assert.AreEqual("1", (stmt.Value as LiteralExpression).Value);
+//
+//			stmt = ClassDefinitionStatement.Statements[1] as FieldDeclarationStatement;
+//			Assert.IsNotNull(stmt);
+//			Assert.AreEqual("@@otherfield", (stmt.Target as StaticFieldReferenceExpression).Name);
+//			Assert.AreEqual("22", (stmt.Value as LiteralExpression).Value);
+		}
+
+		[Test]
+		[Ignore("Currently not supported")]
+		public void MethodInvocationsOnClassBody()
+		{
+			String contents = 
+				"class MyClass \r\n" + 
+				"  attr_accessor (:name) \r\n" + 
+				"end \r\n";
+
+			CompilationUnitNode unit = RookParser.ParseContents(contents);
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(0, unit.Namespaces.Count);
+			Assert.AreEqual(1, unit.ClassesTypes.Count);
+			
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(1, ClassDefinitionStatement.Statements.Count);
+
+			ExpressionStatement stmt = ClassDefinitionStatement.Statements[0] as ExpressionStatement;
+			Assert.IsNotNull(stmt);
+			Assert.IsNotNull(stmt.Expression);
+
+			MethodInvokeExpression minv = stmt.Expression as MethodInvokeExpression;
+			Assert.IsNotNull(minv);
+			Assert.IsNotNull(minv.Target);
+			Assert.IsNotNull(minv.Arguments);
+			Assert.AreEqual(1, minv.Arguments.Count);
+			Assert.AreEqual("attr_accessor", (minv.Target as IdentifierReferenceExpression).Name);
+			
+			SymbolExpression se = minv.Arguments[0] as SymbolExpression;
+			Assert.IsNotNull(se);
+			Assert.AreEqual(":name", se.Name);
 		}
 
 		[Test]
@@ -135,25 +233,25 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
-			Assert.AreEqual(3, classNode.Statements.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(3, ClassDefinitionStatement.Statements.Count);
 
-			AssignmentStatement stmt = classNode.Statements[0] as AssignmentStatement;
+			FieldDeclarationStatement stmt = ClassDefinitionStatement.Statements[0] as FieldDeclarationStatement;
 			Assert.IsNotNull(stmt);
 			Assert.AreEqual(AccessLevel.Private, stmt.ScopeAccessLevel);
 			Assert.AreEqual("@@myfield", (stmt.Target as StaticFieldReferenceExpression).Name);
 			Assert.AreEqual("1", (stmt.Value as LiteralExpression).Value);
 
-			stmt = classNode.Statements[1] as AssignmentStatement;
+			stmt = ClassDefinitionStatement.Statements[1] as FieldDeclarationStatement;
 			Assert.IsNotNull(stmt);
 			Assert.AreEqual(AccessLevel.Public, stmt.ScopeAccessLevel);
 			Assert.AreEqual("@@otherfield", (stmt.Target as StaticFieldReferenceExpression).Name);
 			Assert.AreEqual("2", (stmt.Value as LiteralExpression).Value);
 
-			stmt = classNode.Statements[2] as AssignmentStatement;
+			stmt = ClassDefinitionStatement.Statements[2] as FieldDeclarationStatement;
 			Assert.IsNotNull(stmt);
 			Assert.AreEqual(AccessLevel.Public, stmt.ScopeAccessLevel);
 			Assert.AreEqual("@@someother", (stmt.Target as StaticFieldReferenceExpression).Name);
@@ -180,15 +278,15 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
-			Assert.AreEqual(3, classNode.Statements.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(3, ClassDefinitionStatement.Statements.Count);
 
-			AssignmentStatement assignStmt = classNode.Statements[0] as AssignmentStatement;
-			MethodDefinitionStatement method1Stmt = classNode.Statements[1] as MethodDefinitionStatement;
-			MethodDefinitionStatement method2Stmt = classNode.Statements[2] as MethodDefinitionStatement;
+			FieldDeclarationStatement assignStmt = ClassDefinitionStatement.Statements[0] as FieldDeclarationStatement;
+			MethodDefinitionStatement method1Stmt = ClassDefinitionStatement.Statements[1] as MethodDefinitionStatement;
+			MethodDefinitionStatement method2Stmt = ClassDefinitionStatement.Statements[2] as MethodDefinitionStatement;
 
 			Assert.IsNotNull(assignStmt);
 			Assert.IsNotNull(method1Stmt);

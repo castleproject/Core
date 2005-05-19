@@ -32,7 +32,7 @@ namespace Castle.Rook.Compile.Tests
 				"end " + 
 				"";
 
-			Compiler.Compile( new StringReader(contents) );
+//			Compiler.Compile( new StringReader(contents) );
 		}
 	}
 }

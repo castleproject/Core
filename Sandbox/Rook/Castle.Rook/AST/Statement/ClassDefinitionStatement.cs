@@ -17,9 +17,9 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class ModuleNode
+	public class ClassDefinitionStatement : TypeDefinitionStatement
 	{
-		public ModuleNode()
+		public ClassDefinitionStatement(string name) : base(name)
 		{
 		}
 	}

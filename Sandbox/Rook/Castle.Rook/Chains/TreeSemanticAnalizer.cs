@@ -30,7 +30,7 @@ namespace Castle.Rook.Chains
 
 		public override void Process(CompilationContext context)
 		{
-			BreadthFirstVisitor visitor = new BreadthFirstVisitor();
+//			BreadthFirstVisitor visitor = new BreadthFirstVisitor();
 		}
 	}
 }

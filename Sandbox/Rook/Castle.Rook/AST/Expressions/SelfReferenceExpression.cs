@@ -19,8 +19,15 @@ namespace Castle.Rook.AST
 
 	public class SelfReferenceExpression : Expression
 	{
-		public SelfReferenceExpression()
+		private static readonly SelfReferenceExpression instance = new SelfReferenceExpression();
+
+		private SelfReferenceExpression()
 		{
+		}
+
+		public static SelfReferenceExpression Instance
+		{
+			get { return instance; }
 		}
 	}
 }

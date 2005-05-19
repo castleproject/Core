@@ -642,6 +642,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\BlockStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\CompilationUnitNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -678,11 +683,6 @@
                 />
                 <File
                     RelPath = "AST\NamingScope.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\QualifiedIdentifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -742,6 +742,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\Expressions\SymbolExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\Expressions\UnaryExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -757,17 +762,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\Statement\AssignmentStatement.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\Statement\ClassDefinitionStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "AST\Statement\ExpressionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Statement\FieldDeclarationStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,30 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.AST
+namespace Castle.Rook.AST.Visitors
 {
 	using System;
 	using System.Collections;
 
 
-	public class MethodInvokeExpression : Expression
-	{
-		private Expression target;
-		private IList arguments = new ArrayList();
-
-		public MethodInvokeExpression(Expression target)
-		{
-			this.target = target;
-		}
-
-		public IList Arguments
-		{
-			get { return arguments; }
-		}
-
-		public Expression Target
-		{
-			get { return target; }
-		}
-	}
+//	public class DepthVisitor : IVisitor
+//	{
+//		Queue scheduled = new Queue();
+//
+//		public void OnCompilationUnit(CompilationUnitNode node)
+//		{
+//			Visit(node.Namespaces);
+//			Visit(node.ClassesTypes);
+//			Visit(node.MixinTypes);
+//			Visit(node.StructTypes);
+//		}
+//
+//		protected void Visit(IList list)
+//		{
+//			foreach(IASTNode node in list)
+//			{
+//				node.Visit(this);
+//			}
+//		}
+//	}
 }

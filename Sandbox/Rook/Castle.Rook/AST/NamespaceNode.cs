@@ -18,21 +18,21 @@ namespace Castle.Rook.AST
 
 	public class NamespaceNode : AbstractDeclarationContainer
 	{
-		private QualifiedIdentifier _qi;
+		private Identifier _qi;
 
-		public NamespaceNode( QualifiedIdentifier qi )
+		public NamespaceNode( Identifier qi )
 		{
 			_qi = qi;
 		}
 
-		public QualifiedIdentifier Identifier
+		public Identifier Identifier
 		{
 			get { return _qi; }
 		}
 
-		public override void Visit(IVisitor visitor)
-		{
-			visitor.OnNamespace(this);
-		}
+//		public override void Visit(IVisitor visitor)
+//		{
+//			visitor.OnNamespace(this);
+//		}
 	}
 }

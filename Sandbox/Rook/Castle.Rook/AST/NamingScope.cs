@@ -15,12 +15,39 @@
 namespace Castle.Rook.AST
 {
 	using System;
+	using System.Collections.Specialized;
 
 
-	public class MixinNode : TypeNode
+	public class NamingScope : INamingScope
 	{
-		public MixinNode(string name) : base(name)
+		private INamingScope parent;
+		private HybridDictionary dict = new HybridDictionary();
+
+		public NamingScope()
 		{
+		}
+
+		public bool HasName(String name)
+		{
+			if (dict.Contains(name))
+			{
+				return true;
+			}
+
+			if (Parent != null) return Parent.HasName(name);
+
+			return false;
+		}
+
+		public void Register(String name)
+		{
+			
+		}
+
+		public INamingScope Parent
+		{
+			get { return parent; }
+			set { parent = value; }
 		}
 	}
 }

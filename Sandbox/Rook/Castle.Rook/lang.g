@@ -33,12 +33,14 @@ tokens
 	ATTR      = "attr";
 	GET       = "get";
 	SET       = "set";
-	AS        = "as";
 	INC       = "++";
 	DEC       = "--";
 	SELF      = "self";
 	BASE      = "base";
+	COLON     = ":";
+	DO        = "do";
 }
+
 {
 	AccessLevel currentAccessLevel = AccessLevel.Public;
 	
@@ -75,7 +77,7 @@ namespace_member_declaration[IList namespaces]
 namespace_declaration![IList namespaces]
 	{
 		NamespaceNode ns = null;
-		QualifiedIdentifier qi = null;
+		Identifier qi = null;
 	}
 	:	
 	NAMESPACE qi=qualified_identifier 
@@ -134,15 +136,13 @@ class_body[ClassDefinitionStatement classNode]
 		currentAccessLevel = AccessLevel.Public;
 	}
 	:
-	(access_level class_level_supported_statements[classNode.Statements])*
-	
-	END!
+	(access_level class_level_supported_statements[classNode.Statements])* END!
 	;
 
 protected
 baseTypes![TypeDefinitionStatement type]
 	{
-		QualifiedIdentifier qi = null;
+		Identifier qi = null;
 	}
 	:
 	LESSTHAN! qi=qualified_identifier 
@@ -180,7 +180,7 @@ identifier! returns [Identifier ident]
 	;
 
 protected
-qualified_identifier returns [QualifiedIdentifier ident]
+qualified_identifier returns [Identifier ident]
 	{
 		ident = null;
 		StringBuilder sb = new StringBuilder();
@@ -198,7 +198,7 @@ qualified_identifier returns [QualifiedIdentifier ident]
 	}
 	)*
 	{
-		ident = new QualifiedIdentifier( sb.ToString() );
+		ident = new Identifier( sb.ToString() );
 	}
 	;
 
@@ -228,27 +228,32 @@ method_name returns [String[] parts]
 	;
 
 protected
-type_name returns [QualifiedIdentifier qi]
+type_name returns [Identifier qi]
 	{
 		qi = null;
-		Identifier id = null;
 	}
 	:	
-	(AS! id=identifier
-	{
-		qi = new QualifiedIdentifier( id.Name );
-	}
-	)?
+	(COLON qi=qualified_identifier)?
 	;
 
 ///
 /// Statements
 ///
 
+block_statement returns [BlockStatement block]
+	{
+		block = new BlockStatement();
+	}
+	:
+	DO
+		statement_list[block.Statements]
+	END	(SEMI)?
+	;
+
 method_def_stmt returns [MethodDefinitionStatement method]
 	{
 		String[] nameParts;
-		QualifiedIdentifier retType = null;
+		Identifier retType = null;
 		method = null;
 	}
 	:
@@ -275,7 +280,7 @@ protected
 method_param[MethodDefinitionStatement method]
 	{
 		Identifier id = null;
-		QualifiedIdentifier qi = null;
+		Identifier qi = null;
 	}
 	:
 	(REF|OUT)? id=identifier qi=type_name
@@ -300,6 +305,10 @@ statement returns [Statement stmt]
 	stmt=method_def_stmt
 	|
 	stmt=expression_statement
+	|
+	stmt=block_statement
+	|
+	stmt=simple_field_decl_stmt
 	;
 
 protected
@@ -318,8 +327,8 @@ class_level_supported_statements[IList statements]
 	}
 	:
 	(
-		stmt=assign_stmt
-		| 
+		stmt=field_decl_stmt
+		|
 		stmt=method_def_stmt
 	)
 	{
@@ -330,7 +339,7 @@ class_level_supported_statements[IList statements]
 protected
 var_reference returns [IdentifierReferenceExpression exp]
 	{
-		QualifiedIdentifier qi = null; exp = null;
+		Identifier qi = null; exp = null;
 	}
 	:
 	id:STATIC_IDENTIFIER { exp = new StaticFieldReferenceExpression(id.getText()); }
@@ -340,6 +349,33 @@ var_reference returns [IdentifierReferenceExpression exp]
 	qi=qualified_identifier { exp = new IdentifierReferenceExpression(qi); }
 	;	
 
+protected
+simple_field_decl_stmt returns [FieldDeclarationStatement stmt]
+	{
+		stmt = null; IdentifierReferenceExpression var; 
+		Expression initializer = null; Identifier tn = null;
+	} 
+	:
+	var=var_reference tn=type_name (ASSIGN initializer=expression)?
+	{
+		stmt = new FieldDeclarationStatement(currentAccessLevel, var, tn, initializer);
+	}
+	;
+
+protected
+field_decl_stmt returns [FieldDeclarationStatement stmt]
+	{
+		stmt = null; IdentifierReferenceExpression var; 
+		Expression initializer = null; Identifier tn = null;
+	} 
+	:
+	var=var_reference tn=type_name (ASSIGN initializer=expression)?
+	{
+		stmt = new FieldDeclarationStatement(currentAccessLevel, var, tn, initializer);
+	}
+	;
+
+/*
 protected
 assign_stmt returns [AssignmentStatement stmt]
 	{
@@ -351,6 +387,7 @@ assign_stmt returns [AssignmentStatement stmt]
 		stmt = new AssignmentStatement(currentAccessLevel, target, value);
 	}
 	;
+*/
 
 protected
 expression_statement returns [ExpressionStatement stmt]
@@ -407,6 +444,17 @@ literal_exp returns [LiteralExpression le]
 		le = new LiteralIntegerExpression( t.getText() );
 	}
 	;
+
+/*
+symbol_exp returns [SymbolExpression se]
+	{ se = null; }
+	:	
+	t:SYMBOLID
+	{
+		se = new SymbolExpression( t.getText() );
+	}
+	;
+*/
 	
 protected 
 method_invoke_exp[Expression target] returns [MethodInvokeExpression mie]
@@ -423,14 +471,18 @@ method_invoke_exp[Expression target] returns [MethodInvokeExpression mie]
 protected
 primary_start returns [Expression exp]
 	{ exp = null; }
-	:	
+	:
+	/* 
+	exp=symbol_exp
+	|
+	*/
 	exp=literal_exp
 	|
 	exp=var_reference
-	|	
-	SELF { exp = new SelfReferenceExpression(); }
-	|	
-	BASE { exp = new BaseReferenceExpression(); }
+	|
+	SELF { exp = SelfReferenceExpression.Instance; }
+	|
+	BASE { exp = BaseReferenceExpression.Instance; }
 	;
 
 protected
@@ -563,6 +615,18 @@ options
 	:	
 	IDENTIFIER_START_CHARACTER (IDENTIFIER_PART_CHARACTER)*
 	;
+	
+	/*
+SYMBOLID
+options 
+	{
+	 testLiterals=false; 
+ 	 paraphrase = "a symbol";
+	}
+	:	
+	COLON IDENTIFIER
+	;
+	*/
 	
 protected
 IDENTIFIER_START_CHARACTER

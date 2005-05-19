@@ -25,7 +25,7 @@ namespace Castle.Rook.AST
 
 		#region IASTNode Members
 
-		public abstract void Visit(IVisitor visitor);
+//		public abstract void Visit(IVisitor visitor);
 
 		#endregion
 	}

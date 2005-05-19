@@ -19,8 +19,18 @@ namespace Castle.Rook.AST
 
 	public class ExpressionStatement : Statement
 	{
+		private Expression expression;
+
 		public ExpressionStatement(Expression exp)
 		{
+			if (exp == null) throw new ArgumentNullException("exp");
+
+			this.expression = exp;
+		}
+
+		public Expression Expression
+		{
+			get { return expression; }
 		}
 	}
 }

@@ -25,6 +25,6 @@ namespace Castle.Rook.AST
 		/// 
 		/// </summary>
 		/// <param name="visitor"></param>
-		void Visit(IVisitor visitor);
+//		void Visit(IVisitor visitor);
 	}
 }

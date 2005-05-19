@@ -17,9 +17,9 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class ClassNode : TypeNode
+	public class MixinDefinitionStatement : TypeDefinitionStatement
 	{
-		public ClassNode(string name) : base(name)
+		public MixinDefinitionStatement(string name) : base(name)
 		{
 		}
 	}

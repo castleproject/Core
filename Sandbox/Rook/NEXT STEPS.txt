@@ -1,0 +1,13 @@
+
+Keep tracking of what's on my brain:
+
+- There's currently enough of semantics to go on beyond parser and lexer
+
+- The next step is to populate the NamingScopes
+
+- Then build a better AST (closer to what is going to be actually compiled)
+
+- Finally emit the textual IL at first and compile it using ilasm
+
+
+

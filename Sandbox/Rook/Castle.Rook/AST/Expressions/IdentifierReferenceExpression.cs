@@ -26,7 +26,7 @@ namespace Castle.Rook.AST
 			this.name = name;
 		}
 
-		public IdentifierReferenceExpression( QualifiedIdentifier qi ) : this(qi.Name)
+		public IdentifierReferenceExpression( Identifier qi ) : this(qi.Name)
 		{
 		}
 

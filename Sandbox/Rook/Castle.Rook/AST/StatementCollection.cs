@@ -18,24 +18,20 @@ namespace Castle.Rook.AST
 	using System.Collections;
 
 
-	public class MethodInvokeExpression : Expression
+	public class StatementCollection : CollectionBase
 	{
-		private Expression target;
-		private IList arguments = new ArrayList();
-
-		public MethodInvokeExpression(Expression target)
+		public StatementCollection()
 		{
-			this.target = target;
 		}
 
-		public IList Arguments
+		public void Add(Statement stmt)
 		{
-			get { return arguments; }
+			InnerList.Add(stmt);
 		}
 
-		public Expression Target
+		public Statement this[int index]
 		{
-			get { return target; }
+			get { return InnerList[index] as Statement; }
 		}
 	}
 }

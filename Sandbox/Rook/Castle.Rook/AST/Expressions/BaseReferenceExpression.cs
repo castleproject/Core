@@ -19,8 +19,15 @@ namespace Castle.Rook.AST
 
 	public class BaseReferenceExpression : Expression
 	{
-		public BaseReferenceExpression()
+		private static readonly BaseReferenceExpression instance = new BaseReferenceExpression();
+
+		private BaseReferenceExpression()
 		{
+		}
+
+		public static BaseReferenceExpression Instance
+		{
+			get { return instance; }
 		}
 	}
 }

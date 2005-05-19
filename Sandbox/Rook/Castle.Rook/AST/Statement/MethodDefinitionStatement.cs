@@ -20,7 +20,7 @@ namespace Castle.Rook.AST
 
 	public class MethodDefinitionStatement : Statement
 	{
-		private QualifiedIdentifier returnType;
+		private Identifier returnType;
 		private String name;
 		private String boundTo;
 		private IList parameters = new ArrayList();
@@ -52,7 +52,7 @@ namespace Castle.Rook.AST
 			get { return statements; }
 		}
 
-		public QualifiedIdentifier ReturnType
+		public Identifier ReturnType
 		{
 			get { return returnType; }
 			set { returnType = value; }

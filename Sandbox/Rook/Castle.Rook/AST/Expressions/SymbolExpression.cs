@@ -15,27 +15,20 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
 
-	public class MethodInvokeExpression : Expression
+	public class SymbolExpression : Expression
 	{
-		private Expression target;
-		private IList arguments = new ArrayList();
+		private String name;
 
-		public MethodInvokeExpression(Expression target)
+		public SymbolExpression(String name)
 		{
-			this.target = target;
+			this.name = name;
 		}
 
-		public IList Arguments
+		public string Name
 		{
-			get { return arguments; }
-		}
-
-		public Expression Target
-		{
-			get { return target; }
+			get { return name; }
 		}
 	}
 }

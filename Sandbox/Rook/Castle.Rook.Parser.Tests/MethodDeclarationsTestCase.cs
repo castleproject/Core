@@ -29,7 +29,7 @@ namespace Castle.Rook.Parse.Tests
 			String contents = 
 				"class MyClass \r\n" + 
 				"" + 
-				" def self.method1() as int" + 
+				" def self.method1() : int" + 
 				" end " + 
 				"" + 
 				"end \r\n";
@@ -39,11 +39,15 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
-		}	
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(1, ClassDefinitionStatement.Statements.Count);
+			
+			MethodDefinitionStatement stmt = ClassDefinitionStatement.Statements[0] as MethodDefinitionStatement;
+			Assert.IsNotNull(stmt);
+		}
 
 		[Test]
 		public void MethodDefWithArguments()
@@ -51,7 +55,7 @@ namespace Castle.Rook.Parse.Tests
 			String contents = 
 				"class MyClass \r\n" + 
 				"" + 
-				" def self.method1(x, y, z as int) as int" + 
+				" def self.method1(x, y, z: int) : int" + 
 				" end " + 
 				"" + 
 				"end \r\n";
@@ -61,10 +65,14 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+			Assert.AreEqual(1, ClassDefinitionStatement.Statements.Count);
+
+			MethodDefinitionStatement stmt = ClassDefinitionStatement.Statements[0] as MethodDefinitionStatement;
+			Assert.IsNotNull(stmt);
 		}	
 
 		[Test]
@@ -73,9 +81,9 @@ namespace Castle.Rook.Parse.Tests
 			String contents = 
 				"class MyClass \r\n" + 
 				"" + 
-				" def method1(x, y, z as int) as int" + 
+				" def method1(x, y, z:int):int" + 
 				"     " + 
-				"   def method1(x, y, z as int) as int  " + 
+				"   def method1(x, y, z:int):int  " + 
 				"   end  " + 
 				"   myvariable = 1  " + 
 				" end " + 
@@ -87,10 +95,10 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
 		}
 
 		[Test]
@@ -99,7 +107,7 @@ namespace Castle.Rook.Parse.Tests
 			String contents = 
 				"class MyClass \r\n" + 
 				"" + 
-				" def method1(x, y, z as int) as int" + 
+				" def method1(x:long, y:string, z:int) :int" + 
 				"     " + 
 				"     x.call()" + 
 				"     " + 
@@ -112,10 +120,10 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
 		}
 
 		[Test]
@@ -124,7 +132,7 @@ namespace Castle.Rook.Parse.Tests
 			String contents = 
 				"class MyClass \r\n" + 
 				"" + 
-				" def method1(x, y, z as int) as int" + 
+				" def method1(x, y, z: int): System.Int32" + 
 				"     " + 
 				"     self.method2(10, 11)" + 
 				"     self.propertyx.save(100)" + 
@@ -139,10 +147,37 @@ namespace Castle.Rook.Parse.Tests
 			Assert.AreEqual(0, unit.Namespaces.Count);
 			Assert.AreEqual(1, unit.ClassesTypes.Count);
 			
-			ClassNode classNode = unit.ClassesTypes[0] as ClassNode;
-			Assert.IsNotNull(classNode);
-			Assert.AreEqual("MyClass", classNode.Name);
-			Assert.AreEqual(0, classNode.BaseTypes.Count);
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
+		}
+
+		[Test]
+		public void Block()
+		{
+			String contents = 
+				"class MyClass \r\n" + 
+				"" + 
+				" def method1() : void" + 
+				"     " + 
+				"     do " + 
+				"       method(10, 12);  " + 
+				"     end " + 
+				"     " + 
+				" end " + 
+				"" + 
+				"end \r\n";
+
+			CompilationUnitNode unit = RookParser.ParseContents(contents);
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(0, unit.Namespaces.Count);
+			Assert.AreEqual(1, unit.ClassesTypes.Count);
+			
+			ClassDefinitionStatement ClassDefinitionStatement = unit.ClassesTypes[0] as ClassDefinitionStatement;
+			Assert.IsNotNull(ClassDefinitionStatement);
+			Assert.AreEqual("MyClass", ClassDefinitionStatement.Name);
+			Assert.AreEqual(0, ClassDefinitionStatement.BaseTypes.Count);
 		}
 	}
 }

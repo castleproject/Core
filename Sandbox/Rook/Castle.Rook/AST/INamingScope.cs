@@ -17,15 +17,12 @@ namespace Castle.Rook.AST
 	using System;
 
 
-	public class QualifiedIdentifier : Identifier
+	public interface INamingScope
 	{
-		public QualifiedIdentifier(string name) : base(name)
-		{
-		}
+		INamingScope Parent { get; set; }
 
-		public override void Visit(IVisitor visitor)
-		{
-			visitor.OnIdentifier(this);
-		}
+		void Register(String name);
+
+		bool HasName(String name);
 	}
 }

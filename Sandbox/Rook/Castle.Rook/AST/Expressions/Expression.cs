@@ -23,9 +23,9 @@ namespace Castle.Rook.AST
 		{
 		}
 
-		public override void Visit(IVisitor visitor)
-		{
-			visitor.OnExpression(this);
-		}
+//		public override void Visit(IVisitor visitor)
+//		{
+//			visitor.OnExpression(this);
+//		}
 	}
 }

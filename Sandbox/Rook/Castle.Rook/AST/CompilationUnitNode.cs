@@ -21,10 +21,10 @@ namespace Castle.Rook.AST
 	{
 		private NamingScope scope = new NamingScope();
 
-		public override void Visit(IVisitor visitor)
-		{
-			visitor.OnCompilationUnit(this);
-		}
+//		public override void Visit(IVisitor visitor)
+//		{
+//			visitor.OnCompilationUnit(this);
+//		}
 
 		public bool HasName(String name)
 		{

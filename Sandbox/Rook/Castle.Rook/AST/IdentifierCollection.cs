@@ -15,12 +15,23 @@
 namespace Castle.Rook.AST
 {
 	using System;
+	using System.Collections;
 
 
-	public class InterfaceNode : TypeNode
+	public class IdentifierCollection : CollectionBase
 	{
-		public InterfaceNode(string name) : base(name)
+		public IdentifierCollection()
 		{
+		}
+
+		public void Add(Identifier identifier)
+		{
+			InnerList.Add(identifier);
+		}
+
+		public Identifier this[int index]
+		{
+			get { return InnerList[index] as Identifier; }
 		}
 	}
 }

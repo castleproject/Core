@@ -11,34 +11,34 @@ DEF="def"=11
 ATTR="attr"=12
 GET="get"=13
 SET="set"=14
-AS="as"=15
-INC="++"=16
-DEC="--"=17
-SELF="self"=18
-BASE="base"=19
-EOS=20
-LESSTHAN=21
-COMMA=22
-LITERAL_public="public"=23
-LITERAL_private="private"=24
-LITERAL_protected="protected"=25
-LITERAL_internal="internal"=26
-IDENTIFIER("an identifier")=27
-DOT=28
-SEMI=29
-LPAREN=30
-RPAREN=31
-REF=32
-OUT=33
-STATIC_IDENTIFIER("an static variable name")=34
-INSTANCE_IDENTIFIER("an instance variable name")=35
-ASSIGN=36
-INTEGER_LITERAL=37
-LBRACK=38
-RBRACK=39
-LCURLY=40
-RCURLY=41
-COLON=42
+INC="++"=15
+DEC="--"=16
+SELF="self"=17
+BASE="base"=18
+COLON=":"=19
+DO="do"=20
+EOS=21
+LESSTHAN=22
+COMMA=23
+LITERAL_public="public"=24
+LITERAL_private="private"=25
+LITERAL_protected="protected"=26
+LITERAL_internal="internal"=27
+IDENTIFIER("an identifier")=28
+DOT=29
+SEMI=30
+LPAREN=31
+RPAREN=32
+REF=33
+OUT=34
+STATIC_IDENTIFIER("an static variable name")=35
+INSTANCE_IDENTIFIER("an instance variable name")=36
+ASSIGN=37
+INTEGER_LITERAL=38
+LBRACK=39
+RBRACK=40
+LCURLY=41
+RCURLY=42
 NEW_LINE=43
 NEW_LINE_CHARACTER=44
 NOT_NEW_LINE=45

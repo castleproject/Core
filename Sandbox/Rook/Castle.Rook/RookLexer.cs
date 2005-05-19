@@ -50,34 +50,34 @@ namespace Castle.Rook.Parse
 		public const int ATTR = 12;
 		public const int GET = 13;
 		public const int SET = 14;
-		public const int AS = 15;
-		public const int INC = 16;
-		public const int DEC = 17;
-		public const int SELF = 18;
-		public const int BASE = 19;
-		public const int EOS = 20;
-		public const int LESSTHAN = 21;
-		public const int COMMA = 22;
-		public const int LITERAL_public = 23;
-		public const int LITERAL_private = 24;
-		public const int LITERAL_protected = 25;
-		public const int LITERAL_internal = 26;
-		public const int IDENTIFIER = 27;
-		public const int DOT = 28;
-		public const int SEMI = 29;
-		public const int LPAREN = 30;
-		public const int RPAREN = 31;
-		public const int REF = 32;
-		public const int OUT = 33;
-		public const int STATIC_IDENTIFIER = 34;
-		public const int INSTANCE_IDENTIFIER = 35;
-		public const int ASSIGN = 36;
-		public const int INTEGER_LITERAL = 37;
-		public const int LBRACK = 38;
-		public const int RBRACK = 39;
-		public const int LCURLY = 40;
-		public const int RCURLY = 41;
-		public const int COLON = 42;
+		public const int INC = 15;
+		public const int DEC = 16;
+		public const int SELF = 17;
+		public const int BASE = 18;
+		public const int COLON = 19;
+		public const int DO = 20;
+		public const int EOS = 21;
+		public const int LESSTHAN = 22;
+		public const int COMMA = 23;
+		public const int LITERAL_public = 24;
+		public const int LITERAL_private = 25;
+		public const int LITERAL_protected = 26;
+		public const int LITERAL_internal = 27;
+		public const int IDENTIFIER = 28;
+		public const int DOT = 29;
+		public const int SEMI = 30;
+		public const int LPAREN = 31;
+		public const int RPAREN = 32;
+		public const int REF = 33;
+		public const int OUT = 34;
+		public const int STATIC_IDENTIFIER = 35;
+		public const int INSTANCE_IDENTIFIER = 36;
+		public const int ASSIGN = 37;
+		public const int INTEGER_LITERAL = 38;
+		public const int LBRACK = 39;
+		public const int RBRACK = 40;
+		public const int LCURLY = 41;
+		public const int RCURLY = 42;
 		public const int NEW_LINE = 43;
 		public const int NEW_LINE_CHARACTER = 44;
 		public const int NOT_NEW_LINE = 45;
@@ -109,25 +109,26 @@ namespace Castle.Rook.Parse
 			caseSensitiveLiterals = true;
 			setCaseSensitive(true);
 			literals = new Hashtable(100, (float) 0.4, null, Comparer.Default);
-			literals.Add("public", 23);
+			literals.Add("public", 24);
 			literals.Add("get", 13);
 			literals.Add("class", 4);
 			literals.Add("initialize", 8);
-			literals.Add("self", 18);
+			literals.Add("self", 17);
 			literals.Add("def", 11);
 			literals.Add("end", 10);
 			literals.Add("mixin", 5);
-			literals.Add("private", 24);
+			literals.Add("private", 25);
 			literals.Add("namespace", 6);
-			literals.Add("++", 16);
+			literals.Add("++", 15);
 			literals.Add("init", 9);
-			literals.Add("protected", 25);
+			literals.Add("protected", 26);
 			literals.Add("attr", 12);
-			literals.Add("--", 17);
+			literals.Add("--", 16);
+			literals.Add(":", 19);
 			literals.Add("interface", 7);
-			literals.Add("as", 15);
-			literals.Add("base", 19);
-			literals.Add("internal", 26);
+			literals.Add("do", 20);
+			literals.Add("base", 18);
+			literals.Add("internal", 27);
 			literals.Add("set", 14);
 		}
 		
@@ -579,7 +580,7 @@ tryAgain:
 		_ttype = WHITESPACE;
 		
 		{ // ( ... )+
-			int _cnt89=0;
+			int _cnt94=0;
 			for (;;)
 			{
 				switch ( cached_LA1 )
@@ -611,12 +612,12 @@ tryAgain:
 				}
 				default:
 				{
-					if (_cnt89 >= 1) { goto _loop89_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt94 >= 1) { goto _loop94_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				break; }
-				_cnt89++;
+				_cnt94++;
 			}
-_loop89_breakloop:			;
+_loop94_breakloop:			;
 		}    // ( ... )+
 		_ttype = Token.SKIP;
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -642,11 +643,11 @@ _loop89_breakloop:			;
 				}
 				else
 				{
-					goto _loop92_breakloop;
+					goto _loop97_breakloop;
 				}
 				
 			}
-_loop92_breakloop:			;
+_loop97_breakloop:			;
 		}    // ( ... )*
 		{
 			if ((tokenSet_2_.member(cached_LA1)))
@@ -681,11 +682,11 @@ _loop92_breakloop:			;
 				}
 				else
 				{
-					goto _loop96_breakloop;
+					goto _loop101_breakloop;
 				}
 				
 			}
-_loop96_breakloop:			;
+_loop101_breakloop:			;
 		}    // ( ... )*
 		_ttype = testLiteralsTable(_ttype);
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -822,11 +823,11 @@ _loop96_breakloop:			;
 				}
 				else
 				{
-					goto _loop103_breakloop;
+					goto _loop108_breakloop;
 				}
 				
 			}
-_loop103_breakloop:			;
+_loop108_breakloop:			;
 		}    // ( ... )*
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -852,11 +853,11 @@ _loop103_breakloop:			;
 				}
 				else
 				{
-					goto _loop106_breakloop;
+					goto _loop111_breakloop;
 				}
 				
 			}
-_loop106_breakloop:			;
+_loop111_breakloop:			;
 		}    // ( ... )*
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -872,7 +873,7 @@ _loop106_breakloop:			;
 		_ttype = NUMERIC_LITERAL;
 		
 		{ // ( ... )+
-			int _cnt109=0;
+			int _cnt114=0;
 			for (;;)
 			{
 				if (((cached_LA1 >= '0' && cached_LA1 <= '9')))
@@ -881,12 +882,12 @@ _loop106_breakloop:			;
 				}
 				else
 				{
-					if (_cnt109 >= 1) { goto _loop109_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt114 >= 1) { goto _loop114_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				
-				_cnt109++;
+				_cnt114++;
 			}
-_loop109_breakloop:			;
+_loop114_breakloop:			;
 		}    // ( ... )+
 		
 				_ttype = INTEGER_LITERAL;

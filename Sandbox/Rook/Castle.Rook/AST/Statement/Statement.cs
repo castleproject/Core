@@ -15,27 +15,13 @@
 namespace Castle.Rook.AST
 {
 	using System;
-	using System.Collections;
 
 
-	public class MethodInvokeExpression : Expression
+	public abstract class Statement : AbstractASTNode
 	{
-		private Expression target;
-		private IList arguments = new ArrayList();
-
-		public MethodInvokeExpression(Expression target)
-		{
-			this.target = target;
-		}
-
-		public IList Arguments
-		{
-			get { return arguments; }
-		}
-
-		public Expression Target
-		{
-			get { return target; }
-		}
+//		public override void Visit(IVisitor visitor)
+//		{
+//			visitor.OnStatement(this);
+//		}
 	}
 }

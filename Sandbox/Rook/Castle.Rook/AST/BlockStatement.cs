@@ -18,36 +18,17 @@ namespace Castle.Rook.AST
 	using System.Collections;
 
 
-	public abstract class TypeNode : AbstractASTNode
+	public class BlockStatement : Statement
 	{
-		private IList baseTypes = new ArrayList();
-		private IList statements = new ArrayList();
+		private StatementCollection statements = new StatementCollection();
 
-		private String name;
-
-		public TypeNode(String name)
+		public BlockStatement()
 		{
-			this.name = name;
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
-
-		public IList BaseTypes
-		{
-			get { return baseTypes; }
 		}
 
 		public IList Statements
 		{
 			get { return statements; }
-		}
-
-		public override void Visit(IVisitor visitor)
-		{
-			visitor.OnType(this);
 		}
 	}
 }
