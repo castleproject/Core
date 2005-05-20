@@ -707,6 +707,13 @@ namespace Castle.ActiveRecord
 			if( otherType.IsSubclassOf( typeof( ActiveRecordBase ) ) )
 			{
 				PropertyInfo otherKey = GetPropertyWithAttribute( otherType, typeof( BelongsToAttribute ) );
+
+				if (otherKey == null)
+				{
+					String message = String.Format("While mapping {0} we looked for a 'belongsto' association on {1} but haven't found it.", prop.DeclaringType.FullName, otherType.FullName);
+					throw new ConfigurationException(message);
+				}
+
 				BelongsToAttribute belongs = GetBelongsToAttribute( otherKey );
 				if( otherKey != null && belongs != null && otherKey.PropertyType == prop.DeclaringType )
 				{
@@ -715,7 +722,7 @@ namespace Castle.ActiveRecord
 			}
 			else
 			{
-				return;
+				throw new ConfigurationException("Association with a class that does not extends ActiveRecordBase is invalid. Check " + otherType.FullName);
 			}
 
 			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
