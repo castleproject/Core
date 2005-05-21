@@ -146,7 +146,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
-		protected String ObtainSessionFactoryKeyFor(object target)
+		protected virtual String ObtainSessionFactoryKeyFor(object target)
 		{
 			object[] attributes = target.GetType().GetCustomAttributes( 
 				typeof(UsesAutomaticSessionCreationAttribute), true );
