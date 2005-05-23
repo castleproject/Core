@@ -26,6 +26,34 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class SmartDispatcherController : Controller
 	{
+		internal override void CollectActions()
+		{
+			MethodInfo[] methods = 
+				GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
+			
+			foreach(MethodInfo m in methods)
+			{
+				if (_actions.Contains(m.Name))
+				{
+					ArrayList list = _actions[m.Name] as ArrayList;
+
+					if (list == null)
+					{
+						list = new ArrayList();
+						list.Add(_actions[m.Name]);
+
+						_actions[m.Name] = list;
+					}
+
+					list.Add(m);
+				}
+				else
+				{
+					_actions[m.Name] = m;
+				}
+			}
+		}
+
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
 		{
 			NameValueCollection webParams = request.Params;
@@ -36,25 +64,21 @@ namespace Castle.MonoRail.Framework
             method.Invoke(this, methodArgs);
 		}
 
-		protected override MethodInfo SelectMethod(String action, IRequest request)
+		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
 		{
 			NameValueCollection webParams = request.Params;
 
-			Type type = this.GetType();
+			object methods = actions[action];
 
-			MethodInfo[] methods = type.GetMethods( BindingFlags.Public|BindingFlags.Instance );
-			
-			ArrayList candidates = new ArrayList();
+			ArrayList candidates = methods as ArrayList;
 
-			foreach(MethodInfo method in methods)
+			if (candidates == null && methods != null)
 			{
-				if ( String.Compare(method.Name, action, true) == 0 )
-				{
-					candidates.Add(method);
-				}
+				candidates = new ArrayList();
+				candidates.Add(methods);
 			}
 
-			if (candidates.Count == 0)
+			if (candidates == null)
 			{
 				throw new ControllerException( String.Format("No action for '{0}' found", action) );
 			}

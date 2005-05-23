@@ -46,12 +46,27 @@ namespace Castle.MonoRail.Framework
 		private String _evaluatedAction;
 		private IDictionary _helpers = null;
 
+		internal IDictionary _actions = new HybridDictionary(true);
+
 		/// <summary>
 		/// Constructs a Controller
 		/// </summary>
 		public Controller()
 		{
 			_bag = new HybridDictionary();
+
+			CollectActions();
+		}
+
+		internal virtual void CollectActions()
+		{
+			MethodInfo[] methods = 
+				GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
+			
+			foreach(MethodInfo m in methods)
+			{
+				_actions[m.Name] = m;
+			}
 		}
 
 		#region Usefull Properties
@@ -319,7 +334,7 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			MethodInfo method = SelectMethod(action, _context.Request);
+			MethodInfo method = SelectMethod(action, _actions, _context.Request);
 
 			HybridDictionary filtersToSkip = new HybridDictionary();
 
@@ -397,13 +412,9 @@ namespace Castle.MonoRail.Framework
 
 		#region Action Invocation
 
-		protected virtual MethodInfo SelectMethod(String action, IRequest request)
+		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
 		{
-			Type type = this.GetType();
-
-			MethodInfo method = type.GetMethod( action, 
-				BindingFlags.IgnoreCase|BindingFlags.Public|BindingFlags.Instance,
-				null, CallingConventions.Standard, new Type[0], new ParameterModifier[0]);
+			MethodInfo method = actions[action] as MethodInfo;
 	
 			if (method == null)
 			{
