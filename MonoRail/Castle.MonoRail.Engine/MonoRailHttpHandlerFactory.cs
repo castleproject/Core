@@ -60,13 +60,7 @@ namespace Castle.MonoRail.Engine
 
 		protected virtual void ObtainConfiguration()
 		{
-			_config = (MonoRailConfiguration) ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
-
-			if (_config == null)
-			{
-				throw new ApplicationException("Unfortunately, you have to provide " + 
-					"the configuration to use MonoRail");
-			}
+			_config = MonoRailConfiguration.GetConfig();
 		}
 
 		protected virtual void InitializeViewEngine()

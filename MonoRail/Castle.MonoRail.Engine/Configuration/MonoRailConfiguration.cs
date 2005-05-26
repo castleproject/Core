@@ -16,12 +16,16 @@ namespace Castle.MonoRail.Engine.Configuration
 {
 	using System;
 	using System.Collections;
+	using System.Configuration;
+	using System.Text.RegularExpressions;
+
 
 	public class MonoRailConfiguration
 	{
 		public static readonly string SectionName = "monoRail";
 
 		private IList _assemblies = new ArrayList();
+		private IList _routingRules = new ArrayList();
 		private String _viewsPhysicalPath;
 		private String _viewsVirtualPath;
 		private String _customControllerFactory;
@@ -34,70 +38,42 @@ namespace Castle.MonoRail.Engine.Configuration
 
 		public IList Assemblies
 		{
-			get
-			{
-				return _assemblies;
-			}
+			get { return _assemblies; }
+		}
+
+		public IList RoutingRules
+		{
+			get { return _routingRules; }
 		}
 
 		public String ViewsPhysicalPath
 		{
-			get
-			{
-				return _viewsPhysicalPath;
-			}
-			set
-			{
-				_viewsPhysicalPath = value;
-			}
+			get { return _viewsPhysicalPath; }
+			set { _viewsPhysicalPath = value; }
 		}
 
 		public string ViewsVirtualPath
 		{
-			get
-			{
-				return _viewsVirtualPath;
-			}
-			set
-			{
-				_viewsVirtualPath = value;
-			}
+			get { return _viewsVirtualPath; }
+			set { _viewsVirtualPath = value; }
 		}
 
 		public String CustomControllerFactory
 		{
-			get
-			{
-				return _customControllerFactory;
-			}
-			set
-			{
-				_customControllerFactory = value;
-			}
+			get { return _customControllerFactory; }
+			set { _customControllerFactory = value; }
 		}
 
 		public String CustomFilterFactory
 		{
-			get
-			{
-				return _customFilterFactory;
-			}
-			set
-			{
-				_customFilterFactory = value;
-			}
+			get { return _customFilterFactory; }
+			set { _customFilterFactory = value; }
 		}
 
 		public String CustomEngineTypeName
 		{
-			get
-			{
-				return _customEngineTypeName;
-			}
-			set
-			{
-				_customEngineTypeName = value;
-			}
+			get { return _customEngineTypeName; }
+			set { _customEngineTypeName = value; }
 		}
 
 		public Type CustomViewEngineType
@@ -125,6 +101,48 @@ namespace Castle.MonoRail.Engine.Configuration
 				return _customControllerFactory != null ?
 					Type.GetType(_customControllerFactory, false, false) : null;
 			}
+		}
+
+		internal static MonoRailConfiguration GetConfig()
+		{
+			MonoRailConfiguration config = (MonoRailConfiguration) ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
+
+			if (config == null)
+			{
+				throw new ApplicationException("Unfortunately, you have to provide " + 
+					"a small configuration to use MonoRail. Check the samples or the documentation.");
+			}
+
+			return config;
+		}
+	}
+
+	public class RoutingRule
+	{
+		private String _pattern, _replace;
+		private Regex _rule;
+
+		public RoutingRule(String pattern, String replace)
+		{
+			_pattern = pattern;
+			_replace = replace;
+
+			_rule = new Regex(pattern, RegexOptions.Compiled|RegexOptions.IgnoreCase|RegexOptions.Singleline);
+		}
+
+		public string Pattern
+		{
+			get { return _pattern; }
+		}
+
+		public string Replace
+		{
+			get { return _replace; }
+		}
+
+		public Regex CompiledRule
+		{
+			get { return _rule; }
 		}
 	}
 }

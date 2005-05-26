@@ -27,6 +27,7 @@ namespace Castle.MonoRail.Engine.Configuration
 	{
 		private static readonly String Controllers_Node_Name = "controllers";
 		private static readonly String Views_Node_Name = "viewEngine";
+		private static readonly String Routing_Node_Name = "routing";
 		private static readonly String Custom_Controller_Factory_Node_Name = "customControllerFactory";
 		private static readonly String Custom_Filter_Factory_Node_Name = "customFilterFactory";
 		private static readonly String View_Path_Root = "viewPathRoot";
@@ -58,11 +59,49 @@ namespace Castle.MonoRail.Engine.Configuration
 				{
 					ProcessFilterFactoryNode(node, config);
 				}
+				else if ( String.Compare(Routing_Node_Name, node.Name, true) == 0 )
+				{
+					ProcessRoutingNode(node, config);
+				}
+				else
+				{
+					throw new ConfigurationException("Unknown node: " + node.Name);
+				}
 			}
 
 			Validate(config);
 
 			return config;
+		}
+
+		private void ProcessRoutingNode(XmlNode routingNode, MonoRailConfiguration config)
+		{
+			foreach(XmlNode node in routingNode.ChildNodes)
+			{
+				if (node.NodeType != XmlNodeType.Element) continue;
+
+				ProcessRuleEntry( node, config );
+			}
+		}
+
+		private void ProcessRuleEntry(XmlNode node, MonoRailConfiguration config)
+		{
+			XmlNode patternNode = node.SelectSingleNode("pattern");
+			XmlNode replaceNode = node.SelectSingleNode("replace");
+
+			if (patternNode == null || patternNode.ChildNodes[0] == null)
+			{
+				throw new ConfigurationException("A rule node must have a pattern (child) node denoting the regular expression to be matched");
+			}
+			if (replaceNode == null || replaceNode.ChildNodes[0] == null)
+			{
+				throw new ConfigurationException("A rule node must have a replace (child) node denoting the string to be replaced");
+			}
+
+			String pattern = patternNode.ChildNodes[0].Value;
+			String replace = replaceNode.ChildNodes[0].Value;
+
+			config.RoutingRules.Add( new RoutingRule(pattern.Trim(), replace.Trim()) ); 
 		}
 
 		private void ProcessFilterFactoryNode(XmlNode node, MonoRailConfiguration config)

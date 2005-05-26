@@ -147,6 +147,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\BlogController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\CookiesController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -173,6 +178,11 @@
                 />
                 <File
                     RelPath = "Controllers\LayoutController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\NewsController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
