@@ -12,32 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Services
 {
 	using System;
-	using System.Collections;
+	using System.IO;
+
+	using Castle.Rook.Compiler.AST;
 
 
-	public class ForStatement : IStatement
+	public interface IParser
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		CompilationUnit Parse(TextReader reader);
 
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
-
-		public IList Statements
-		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
-		}
+		CompilationUnit Parse(String contents);
 	}
 }

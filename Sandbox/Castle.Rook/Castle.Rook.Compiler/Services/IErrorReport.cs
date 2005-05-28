@@ -12,32 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Services
 {
 	using System;
-	using System.Collections;
 
 
-	public class ForStatement : IStatement
+	public enum Severity
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		High,
+		Medium,
+		Low
+	}
 
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
+	public interface IErrorReport
+	{
+		void Error(String filename, LexicalPosition pos, String contents, params object[] args);
 
-		public IList Statements
-		{
-			get { return statements; }
-		}
+		void Error(String contents, params object[] args);
 
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
-		}
+		void Warning(String filename, LexicalPosition pos, Severity severity, String contents, params object[] args);
+
+		void Warning(String contents, params object[] args);
+
+		bool HasErrors { get; }
+
+		bool HasWarnings { get; }
 	}
 }

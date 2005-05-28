@@ -4,11 +4,12 @@ header
 	using System.Text;
 	using System.Collections;
 	using Castle.Rook.Compiler.AST;
+	using Castle.Rook.Compiler.Services;
 }
 options 
 {	
 	language = "CSharp";
-	namespace = "Castle.Rook.Parse";
+	namespace = "Castle.Rook.Compiler.Parser";
 }
 
 class RookBaseParser extends Parser;
@@ -35,34 +36,70 @@ tokens
 	NUM_INT; NUM_DOUBLE; NUM_FLOAT; NUM_LONG;
 	STATEMENT_END;
 }
+
 {
+	public IErrorReport ErrorReport;
+
 	AccessLevel currentAccessLevel = AccessLevel.Public;
 	
 	public override void reportError(RecognitionException ex)
 	{
-		throw ex;
+		LexicalPosition lpos = new LexicalPosition( ex.getLine(), ex.getColumn() );
+		
+		ErrorReport.Error( ex.getFilename(), lpos, ex.Message );
+	}
+	
+	private Hashtable typeRefs = new Hashtable();
+	
+	private TypeReference ObtainTypeReference(String name)
+	{
+		if (typeRefs.ContainsKey(name))
+		{
+			return typeRefs[name] as TypeReference;
+		}
+		else
+		{
+			TypeReference typeRef = new TypeReference(name);
+			typeRefs[name] = typeRef;
+			return typeRef;
+		}
 	}
 }
 
 protected 
 statement_term!
     :
-    STATEMENT_END | SEMI
+    (options { greedy=true; }:STATEMENT_END | SEMI)
     ;
 
 protected 
 nothing
 	:
-	(options { generateAmbigWarnings=false; }:STATEMENT_END)?
+	(options { greedy=true; generateAmbigWarnings=false; }:STATEMENT_END)?
 	;
 
 compilationUnit returns[CompilationUnit comp]
 	{ comp = new CompilationUnit(); }
 	:
 	nothing
-	suite[comp.Statements]
+	(
+		("namespace" qualified_name) => namespace_declaration[comp.Namespaces]
+		|
+		suite[comp.Statements]
+	)
 	nothing
-	EOF!
+	EOF
+	;
+
+namespace_declaration[IList namespaces]
+	options { defaultErrorHandler=true; }
+	{ NamespaceDeclaration nsdec = new NamespaceDeclaration(); 
+	  namespaces.Add(nsdec); String qn = null; }
+	:
+	"namespace" qn=qualified_name statement_term
+	{ nsdec.Name = qn; }
+	suite[nsdec.Statements]
+	END
 	;
 
 suite[IList stmts]
@@ -74,9 +111,10 @@ suite[IList stmts]
 statement returns[IStatement stmt]
 	{ stmt = null; }
 	:
+	access_level
 	(
-		// declaration_statement
-		// |
+		(declaration_statement) => stmt=declaration_statement
+		|
 		// operator_def_statement
 		// |
 		stmt=type_def_statement
@@ -87,158 +125,179 @@ statement returns[IStatement stmt]
 		|
 		stmt=for_statement
 		|
-		flow_statements
+		stmt=flow_statements
 		|
 		stmt=if_statement
 		|
 		(unless_statement) => stmt=unless_statement
 		|
-		expression_statement
+		stmt=expression_statement
 	)
 	statement_term
 	;
 
 while_statement returns[RepeatStatement rs]
-	{ rs = new RepeatStatement(RepeatType.While); }
+	{ rs = null; IExpression testexp; }
 	:
-	WHILE^ test (DO|statement_term) suite[rs.Statements] END!
+	WHILE^ testexp=test (DO|statement_term) 
+	{ rs = new RepeatStatement(RepeatType.While, testexp); }
+	suite[rs.Statements] END
 	;
 
 until_statement returns[RepeatStatement rs]
-	{ rs = new RepeatStatement(RepeatType.Until); }
+	{ rs = null; IExpression testexp; }
 	:
-	UNTIL^ test (DO|statement_term) statement_term suite[rs.Statements] END!
+	UNTIL^ testexp=test (DO|statement_term) 
+	{ rs = new RepeatStatement(RepeatType.Until, testexp); }
+	suite[rs.Statements] END
 	;
 
 for_statement returns[ForStatement fors]
-	{ fors = new ForStatement(); }
+	{ fors = new ForStatement(); VariableReferenceExpression vre = null;
+	  IExpression evalexp; }
 	:
-	"for" IDENT (COMMA! IDENT)* "in" test (DO|statement_term) 
+	"for" vre=varref { fors.AddVarRef(vre); } /* (COMMA vre=varref { fors.AddVarRef(vre); } )*  */
+	"in" evalexp=test { fors.EvalExp = evalexp; } (DO|statement_term) 
 	suite[fors.Statements]
-	END!
+	END
 	;
 
 if_statement returns[IfStatement ifs]
-	{ ifs = new IfStatement(IfType.If); }
+	{ ifs = new IfStatement(IfType.If); IfStatement inner = ifs; 
+	  IExpression testexp; }
 	: 
-	"if" test ("then"|statement_term) suite[ifs.TrueStatements] 
-	("elsif" test ("then"|statement_term) suite[ifs.TrueStatements])*  // TODO: Add Else ifs to the AST
-	("else" statement_term suite[ifs.FalseStatements])?
-	END!
+	"if" testexp=test ("then"|statement_term) { ifs.Condition = testexp; } 
+	suite[ifs.TrueStatements] 
+	("elsif" testexp=test ("then"|statement_term) { inner = new IfStatement(IfType.If); inner.Condition = testexp; }
+	suite[inner.TrueStatements])*  
+	("else" statement_term suite[inner.FalseStatements])?
+	END
 	;
 
 unless_statement returns[IfStatement ifs]
-	{ ifs = new IfStatement(IfType.Unless); }
+	{ ifs = new IfStatement(IfType.Unless); IExpression testexp; }
 	: 
-	"unless" test ("then"|statement_term) suite[ifs.TrueStatements]
+	"unless" testexp=test ("then"|statement_term) { ifs.Condition = testexp; } 
+	suite[ifs.TrueStatements]
 	("else" statement_term suite[ifs.FalseStatements])?
 	END
 	;
 
-flow_statements
+flow_statements returns[IStatement stmt]
+	{ stmt = null; }
 	:
-	"redo"
+	"redo"	{ stmt = new RedoStatement(); }
 	|
-	"break"
+	"break"	{ stmt = new BreakStatement(); }
 	|
-	"next"
+	"next"	{ stmt = new NextStatement(); }
 	|
-	"retry"
+	"retry"	{ stmt = new RetryStatement(); }
 	;
 
 protected
 access_level
 	:
 	(
-		"public"^    (COLON)? // { currentAccessLevel = AccessLevel.Public; }
+		"public"^    (COLON)? { currentAccessLevel = AccessLevel.Public; }
 		|
-		"private"^   (COLON)? // { currentAccessLevel = AccessLevel.Private; }
+		"private"^   (COLON)? { currentAccessLevel = AccessLevel.Private; }
 		|
-		"protected"^ (COLON)? // { currentAccessLevel = AccessLevel.Protected; }
+		"protected"^ (COLON)? { currentAccessLevel = AccessLevel.Protected; }
 		| 
-		"internal"^  (COLON)? // { currentAccessLevel = AccessLevel.Internal; }
+		"internal"^  (COLON)? { currentAccessLevel = AccessLevel.Internal; }
 		|
 			/* nothing - inherits the access level defined previously */  
 	)
 	;
 
-// declaration_statement
-// 	:
-// 	type_name (COMMA! type_name)* (ASSIGN testlist)?
-// 	{#declaration_statement = #(#[EXPR,"DECLS"],#declaration_statement);}
-// 	;
+declaration_statement returns [VariableDeclarationStatement vdstmt]
+	{ vdstmt = new VariableDeclarationStatement(); TypeDeclarationExpression tdstmt = null; }
+	:
+ 	tdstmt=type_name_withtype (COMMA tdstmt=type_name_withtype)* (ASSIGN test (COMMA test)* )?
+ 	  {  }
+ 	;
 
-type_def_statement returns[TypeDefinitionStatement tdstmt]
+type_def_statement returns [TypeDefinitionStatement tdstmt]
 	{ tdstmt = null; }
 	:
 	tdstmt=class_def_statement
 	;
 
-class_def_statement returns[TypeDefinitionStatement tdstmt]
-	{ tdstmt = new TypeDefinitionStatement(); } // TODO: Create ClassDefinitionStatement 
-												// and support modifiers like visibility and abstract etc
+class_def_statement returns [TypeDefinitionStatement tdstmt]
+	{ tdstmt = null; }	// TODO: Create ClassDefinitionStatement 
+						// and support modifiers like visibility and abstract etc
 	:
-	CLASS IDENT ( (LT|SL) qualified_name (COMMA! qualified_name)* )? statement_term
+	CLASS t:IDENT 
+	{ tdstmt = new TypeDefinitionStatement( t.getText() ); }
+	( (LTHAN|SL) qualified_name (COMMA qualified_name)* )? statement_term
 	suite[tdstmt.Statements]
 	END
 	;
 
-method_def_statement returns[MethodDefinitionStatement mdstmt]
-	{ mdstmt = new MethodDefinitionStatement(); }
+method_def_statement returns [MethodDefinitionStatement mdstmt]
+	{ mdstmt = null; String qn = null; TypeReference retType = null; }
 	:
-	DEF^ qualified_name LPAREN (methodParams)? RPAREN (type)? statement_term
+	DEF^ qn=qualified_name 
+	{ mdstmt = new MethodDefinitionStatement(qn); }
+	LPAREN (methodParams[mdstmt])? RPAREN (retType=type)? statement_term
+	{ mdstmt.ReturnType = retType; }
 	suite[mdstmt.Statements]
-	END!
+	END
 	;
 
 // operator_def_statement
 //	:
 //	OPERATOR^ qualified_name LPAREN (methodParams)? RPAREN (type)? statement_term
 //	suite
-//	END!
+//	END
 //	;
 
-methodParams
+methodParams[MethodDefinitionStatement mdstmt]
 	:
-	methodParam (COMMA! methodParam)*
+	methodParam[mdstmt] (COMMA methodParam[mdstmt])*
 	;
 
-methodParam
+methodParam[MethodDefinitionStatement mdstmt]
+	{ IExpression exp = null; TypeDeclarationExpression typeName = null; }
 	:
-	type_name (ASSIGN expression)?
+	typeName=type_name (ASSIGN exp=expression { typeName.InitExp = exp; } )?
 	|
-	STAR IDENT
+	STAR type_name		// TODO: Infer List or array
 	|
-	BAND IDENT
+	BAND IDENT			// TODO: block/delegate signature
 	;
 
 expression_statement returns[IStatement stmt]
-	{ stmt = null; PostfixCondition pfc = null; }
+	{ stmt = null; PostfixCondition pfc = null; IExpression exp = null; IExpression rhs = null;
+	  AugType rel = AugType.Undefined; }
 	:
 	(
-		test
+		exp=test
 		(	
-			augassign test
+			rel=augassign rhs=test	{ exp = new AugAssignmentExpression(exp, rhs, rel); }
 			|
-			(ASSIGN test)+
+			(ASSIGN rhs=test		{ exp = new AssignmentExpression(exp, rhs); } )+
 		)?
 		|
-		compound		
+		exp=compound		
 	)
-	(pfc=postFixCondition)?
+	(pfc=postFixCondition { exp.PostFixStatement = pfc; } )?
+	{ stmt = new ExpressionStatement(exp); }
 	|
 	stmt=method_def_statement
 	;
 
-augassign
-    : PLUS_ASSIGN
-	| MINUS_ASSIGN
-	| STAR_ASSIGN
-	| DIV_ASSIGN
-	| MOD_ASSIGN
-	| BAND_ASSIGN
-	| BOR_ASSIGN
-	| BXOR_ASSIGN
+augassign returns [AugType rel]
+	{ rel = AugType.Undefined; }
+    : PLUS_ASSIGN		{ rel = AugType.PlusAssign; }
+	| MINUS_ASSIGN		{ rel = AugType.MinusAssign; }
+	| STAR_ASSIGN		{ rel = AugType.MultAssign; }
+	| DIV_ASSIGN		{ rel = AugType.DivAssign; }
+	| MOD_ASSIGN		{ rel = AugType.ModAssign; }
+	| BAND_ASSIGN		{ rel = AugType.BitwiseAndAssign; }
+	| BOR_ASSIGN		{ rel = AugType.BitwiseOrAssign; }
+	| BXOR_ASSIGN		{ rel = AugType.BitwiseXorAssign; }
 //	| LEFTSHIFTEQUAL
 //	| RIGHTSHIFTEQUAL
 //	| DOUBLESTAREQUAL
@@ -246,111 +305,167 @@ augassign
 	;
 
 postFixCondition returns[PostfixCondition pfc]
-	{ pfc = null; }
+	{ pfc = null; IExpression exp; }
 	:
 	(
-		("if" { pfc = new PostfixCondition(PostfixConditionType.If); }
-		|"unless" { pfc = new PostfixCondition(PostfixConditionType.Unless); }
-		|"while" { pfc = new PostfixCondition(PostfixConditionType.While); }
-		|"until" { pfc = new PostfixCondition(PostfixConditionType.Until); }
+		("if"			{ pfc = new PostfixCondition(PostfixConditionType.If); }
+		|"unless"		{ pfc = new PostfixCondition(PostfixConditionType.Unless); }
+		|"while"		{ pfc = new PostfixCondition(PostfixConditionType.While); }
+		|"until"		{ pfc = new PostfixCondition(PostfixConditionType.Until); }
 		) 
-		test
+		exp=test		{ pfc.Condition = exp; }
 	)
 	;
 
-type_name
+type_name_withtype returns [TypeDeclarationExpression tdexp]
+	{ tdexp = null; String n=null; TypeReference tr = null; }
 	:
-	IDENT^ (type)?
+	n=name tr=type
+	{ tdexp = new TypeDeclarationExpression(n, tr); }
 	;
 
-type
+type_name returns [TypeDeclarationExpression tdexp]
+	{ tdexp = null; String n=null; TypeReference tr = null; }
 	:
-	qualified_symbol // (LBRACK RBRACK)? // We do not support multi-dimensional arrays yet
+	n=name (tr=type)? 
+	{ tdexp = new TypeDeclarationExpression(n, tr); }
 	;
 
-qualified_name
+type returns [ TypeReference tr ]
+	{ tr = null; String n; }
 	:
-	IDENT 
-    (options{greedy=true;}:DOT! IDENT)*
+	n=qualified_symbol	{ tr = ObtainTypeReference(n); }
+	
+	// (LBRACK RBRACK)? // We do not support multi-dimensional arrays yet
+	;
+
+name returns[String name]
+	{ name = null; }
+	:
+	t1:IDENT		{ name = t1.getText(); }
+	|
+	t2:STATICIDENT	{ name = t2.getText(); }
+	|
+	t3:INSTIDENT	{ name = t3.getText(); }
     ;
 
-qualified_symbol
+qualified_name returns[String name]
+	{ name = null; }
 	:
-	SYMBOL
-    (options{greedy=true;}:DOT! IDENT)*
+	t:IDENT { name = t.getText(); }
+    (options{greedy=true;}:DOT t2:IDENT { name += "." + t2.getText(); } )*
+    ;
+
+qualified_symbol returns[String name]
+	{ name = null; }
+	:
+	t:SYMBOL { name = t.getText(); }
+    (options{greedy=true;}:DOT t2:IDENT { name += "." + t2.getText(); } )*
     ;
 
 // Expressions
 
-testlist
-    :   
-    test (options {greedy=true;}:COMMA! test)*
-    // (options {greedy=true;}:COMMA)?
-    ;
-
-test
-	: 
-	and_test ("or" and_test)*
-	| 
-	lambda
-	|
-	block
-	| 
-	raise
-	;
-
-lambda returns[LambdaExpression lexp]
-	{ BlockExpression bexp=null;
-	  lexp = null; }
+lambda returns [LambdaExpression lexp]
+	{ BlockExpression bexp=null; lexp = null; }
 	:
 	"lambda"^ bexp=block
 	{ lexp = new LambdaExpression(bexp); }
 	;
 
-block returns[BlockExpression bexp]
+block returns [BlockExpression bexp]
 	{ bexp = new BlockExpression(); }
 	:
 	(
-		(DO^ (statement_term)? (blockargs[bexp])? (statement_term)? suite[bexp.Statements] END!)
+		(DO^ (statement_term)? (blockargs[bexp])? (statement_term)? suite[bexp.Statements] END)
 		|
-		(LCURLY^ (statement_term)? (blockargs[bexp])? (statement_term)? suite[bexp.Statements] RCURLY!)
+		(LCURLY^ (statement_term)? (blockargs[bexp])? (statement_term)? suite[bexp.Statements] RCURLY)
 	)
 	;
 
-raise
+raise returns [RaiseExpression rexp]
+	{ rexp = null; IExpression exp; }
 	:
-	"raise" expression
+	"raise" exp=expression	{ rexp = new RaiseExpression(exp); }
+	;
+
+yield returns [YieldExpression rexp]
+	{ rexp = null; ExpressionCollection expColl; }
+	:
+	"yield" expColl=expressionList	{ rexp = new YieldExpression(expColl); }
 	;
 
 blockargs[BlockExpression bexp]
+	{ bexp = new BlockExpression(); TypeDeclarationExpression tdexp = null; }
 	:
-	BOR^ IDENT (options {greedy=true;}:COMMA! IDENT)* BOR!
+	BOR tdexp=type_name 
+	  { bexp.AddBlockArgument(tdexp); }
+	(options {greedy=true;}:COMMA tdexp=type_name { bexp.AddBlockArgument(tdexp); } )* 
+	BOR
 	;
 
-compound returns[CompoundStatement cstmt]
-	{ cstmt = new CompoundStatement(); }
+compound returns[CompoundExpression cexp]
+	{ cexp = new CompoundExpression(); }
 	:
 	(DO^|BEGIN^) statement_term
-	suite[cstmt.Statements]
-	END! 
+	suite[cexp.Statements]
+	END 
 	;
 
-and_test
-	: not_test ("and" not_test)*
-	;
+// testlist
+//     :
+//     test (options {greedy=true;}:COMMA test)*
+    // (options {greedy=true;}:COMMA)?
+//     ;
 
-not_test
-	: "not" not_test
-	| comparison
-	;
-
-comparison
+test returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; }
 	: 
-	expression (comp_op expression)*
+	exp=and_test ("or" rhs=and_test { exp = new BinaryExpression(exp, rhs, BinaryOp.Or); })*
+	| 
+	exp=lambda
+	|
+	exp=block
+	| 
+	exp=raise
+	| 
+	exp=yield
 	;
 
-comp_op: 
-	LT	|	GT	|	EQUAL	|	GE	|	LE	|	NOT_EQUAL
+and_test returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; }
+	: 
+	exp=not_test ("and" rhs=not_test { exp = new BinaryExpression(exp, rhs, BinaryOp.And); })*
+	;
+
+not_test returns [IExpression exp]
+	{ exp = null; IExpression inner = null; }
+	: 
+	("not"|LNOT) inner=not_test { exp = new UnaryExpression(inner, UnaryOp.Not); }
+	| 
+	exp=comparison
+	;
+
+comparison returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; BinaryOp op = BinaryOp.Undefined; }
+	: 
+	exp=expression (op=comp_op rhs=expression { exp = new BinaryExpression(exp, rhs, op); } )*
+	;
+
+comp_op returns [BinaryOp op]
+	{ op = BinaryOp.Undefined; }
+	: 
+	LTHAN		{ op = BinaryOp.LessThan; }
+	|
+	GT			{ op = BinaryOp.GreaterThan; }
+	|
+	EQUAL		{ op = BinaryOp.Equal; }
+	|
+	GE			{ op = BinaryOp.GreaterEqual; }
+	|
+	LE			{ op = BinaryOp.LessEqual; }
+	|
+	NOT_EQUAL	{ op = BinaryOp.NotEqual; }
+	
 //	|ALT_NOTEQUAL
 // 	|"in"
 //	|"not" "in"
@@ -358,82 +473,135 @@ comp_op:
 //	|"is" "not"
 	;
 
-expressionList
+expressionList returns [ExpressionCollection expColl]
+	{ expColl = new ExpressionCollection(); IExpression exp = null; }
  	:
- 	expression (options {greedy=true;}:COMMA! expression)*
+ 	exp=expression { expColl.Add(exp); } 
+ 	(options {greedy=true;}:COMMA exp=expression { expColl.Add(exp); } )*
  	;	
 
-expression
+expression returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; }
 	: 
-	xor_expr (BXOR xor_expr)*
-	// {#expression = #(#[EXPR,"expression"],#expression);}
+	exp=xor_expr (BXOR rhs=xor_expr { exp = new BinaryExpression(exp, rhs, BinaryOp.Xor); })*
 	;
 
-xor_expr
+xor_expr returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; }
 	: 
-	and_expr (BOR and_expr)*
+	exp=and_expr (BOR rhs=and_expr { exp = new BinaryExpression(exp, rhs, BinaryOp.Or2); })*
 	;
 
-and_expr
+and_expr returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; }
 	: 
 	// shift_expr (BAND shift_expr)*
-	arith_expr (BAND arith_expr)*
+	exp=arith_expr (BAND rhs=arith_expr { exp = new BinaryExpression(exp, rhs, BinaryOp.And2); })*
 	;
 
 // shift_expr: arith_expr ((LEFTSHIFT|RIGHTSHIFT) arith_expr)*
 //	;
 
-arith_expr
+arith_expr returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; }
 	: 
-	term ((PLUS|MINUS) term)*
+	exp=term ((t:PLUS|MINUS) rhs=term { exp = new BinaryExpression(exp, rhs, t != null ? BinaryOp.Plus : BinaryOp.Minus); })*
 	;
 
-term: 
-	factor ((STAR | SLASH | PERCENT) factor)*
+term returns [IExpression exp]
+	{ exp = null; IExpression rhs = null; BinaryOp op = BinaryOp.Undefined; }
+	: 
+	exp=unary 
+	(
+		(
+			STAR		{ op = BinaryOp.Mult; }
+			| SLASH 	{ op = BinaryOp.Div; }
+			| PERCENT	{ op = BinaryOp.Mod; }
+		) 
+		rhs=unary { exp = new BinaryExpression(exp, rhs, op); }
+	)*
 	;
 
-factor
+unary returns [IExpression exp]
+	{ exp = null; IExpression inner = null; UnaryOp op = UnaryOp.Plus; }
 	: 
-	(PLUS|MINUS|BNOT) factor
+	(
+	    PLUS	{ op = UnaryOp.Plus; }
+	  | MINUS	{ op = UnaryOp.Minus; }
+	  | BNOT	{ op = UnaryOp.BitwiseNot; }
+	) 
+	inner=unary { exp = new UnaryExpression(inner, op); }
 	| 
-	primary
+	exp=primary
 	;
 
-primary
+primary returns [IExpression exp]
+	{ exp = null; }
 	:
-	atom (trailer)* // (options {greedy=true;}:DOUBLESTAR factor)?
+	exp=atom (exp=trailer[exp])* 
 	;
 
-atom: 
-	(interval) => interval
-	| LPAREN (testlist)? RPAREN
-	| LBRACK (listmaker)? RBRACK
-	| LCURLY (dictmaker)? RCURLY
+atom returns [IExpression exp]
+	{ exp = null; }
+	: 
+	(range) => exp=range
+	| LPAREN (exp=test)? RPAREN // LPAREN (testlist)? RPAREN
+	| LBRACK (exp=listmaker)? RBRACK
+	| LCURLY (exp=dictmaker)? RCURLY
 //	| BACKQUOTE testlist BACKQUOTE
-	| IDENT
-	| NUM_INT
-	| NUM_LONG
-	| NUM_FLOAT
-	| SYMBOL
-	| STRING_LITERAL
-	| CHAR_LITERAL
+	| exp=varref
+	| exp=constantref
+	;
+
+varref returns [VariableReferenceExpression vre]
+	{ vre = null; }
+	:
+	t1:IDENT 
+	  { vre = new VariableReferenceExpression(t1.getText(), VariableReferenceType.LocalOrArgument); }
+	|
+	t2:STATICIDENT  
+	  { vre = new VariableReferenceExpression(t2.getText(), VariableReferenceType.StaticField); }
+	| 
+	t3:INSTIDENT  
+	  { vre = new VariableReferenceExpression(t3.getText(), VariableReferenceType.InstanceField); }
+	;
+
+constantref returns [LiteralReferenceExpression lre]
+	{ lre = null; }
+	:
+	| t1:NUM_INT
+	  { lre = new LiteralReferenceExpression(t1.getText(), LiteralReferenceType.IntLiteral); }
+	| t2:NUM_LONG
+	  { lre = new LiteralReferenceExpression(t2.getText(), LiteralReferenceType.LongLiteral); }
+	| t3:NUM_FLOAT
+	  { lre = new LiteralReferenceExpression(t3.getText(), LiteralReferenceType.FloatLiteral); }
+	| t4:SYMBOL
+	  { lre = new LiteralReferenceExpression(t4.getText(), LiteralReferenceType.SymbolLiteral); }
+	| t5:STRING_LITERAL
+	  { lre = new LiteralReferenceExpression(t5.getText(), LiteralReferenceType.StringLiteral); }
+	| t6:CHAR_LITERAL
+	  { lre = new LiteralReferenceExpression(t6.getText(), LiteralReferenceType.CharLiteral); }
 //    | LONGINT
 //    | FLOAT
 //    | COMPLEX
 //	| (STRING)+
 	;
 
-trailer: 
-	LPAREN (arglist)? RPAREN
+trailer[IExpression inner] returns [IExpression exp]
+	{ exp = null; ExpressionCollection args = null; }
+	: 
+	LPAREN (args=arglist)? RPAREN { exp = new MethodInvocationExpression(inner, args); }
 	| 
-	LBRACK subscriptlist RBRACK
+	LBRACK subscriptlist RBRACK // TODO: Array/list/indexer access
 	| 
-	DOT IDENT
+	DOT IDENT { exp = new MemberAccessExpression(inner); }
 	;
 
-interval
+range returns[IExpression rex]
+	{ rex = null; IExpression lhs = null; IExpression rhs = null; }
 	:
-	LPAREN expression (DOTDOT|DOTDOTDOT) expression RPAREN
+	LPAREN lhs=expression (t:DOTDOT|DOTDOTDOT) rhs=expression RPAREN
+	{ rex = new RangeExpression(lhs, rhs, t != null); }
 	;
 
 subscriptlist
@@ -446,9 +614,11 @@ subscript
     expression
     ;
 
-arglist: 
-	argument (options {greedy=true;}:COMMA! argument)*
-//	{#arglist = #[ELIST,"ELIST"];}
+arglist returns [ExpressionCollection expcoll]
+	{ IExpression exp; expcoll = new ExpressionCollection(); }
+	: 
+	exp=argument		{ expcoll.Add(exp); }
+	(options {greedy=true;}:COMMA exp=argument { expcoll.Add(exp); } )*
 	/*
         ( COMMA
           ( STAR test (COMMA DOUBLESTAR test)?
@@ -460,20 +630,28 @@ arglist:
     */
     ;
 
-argument : test //(ASSIGN test)?
-         ;
-
-listmaker
+argument returns [IExpression exp]
+	{ exp = null; }
 	: 
-	test (options {greedy=true;}:COMMA! test)* 
+	exp=test //(ASSIGN test)?
 	;
 
-dictmaker
-    :   
-    expression MAPASSIGN test
-    (options {greedy=true;}:COMMA! expression MAPASSIGN test)* 
-    ;
+listmaker returns [ListExpression exp]
+	{ exp = new ListExpression(); IExpression item; }
+	: 
+	item=test 
+	  { exp.Add(item); }
+	(options {greedy=true;}:COMMA item=test { exp.Add(item); } )* 
+	;
 
+dictmaker returns [DictExpression exp]
+	{ exp = new DictExpression(); IExpression key, value; }
+    :   
+    key=expression MAPASSIGN value=test
+      { exp.Add(key, exp); }
+    (options {greedy=true;}:COMMA key=expression MAPASSIGN value=test 
+      { exp.Add(key, exp); } )* 
+    ;
 
 
 
@@ -490,7 +668,7 @@ options {
 	codeGenBitsetTestThreshold=20;
 }
 {
-    private int lastToken;
+    private int lastToken = 0;
 
     private int getProperType() 
     {
@@ -506,7 +684,7 @@ options {
         return result;
     }
 
-	protected override IToken makeToken(int type) {
+	protected internal override IToken makeToken(int type) {
 		lastToken = type;
 		return base.makeToken(type);
 	}
@@ -551,7 +729,7 @@ GT				:	">"		;
 SL				:	"<<"	;
 SL_ASSIGN		:	"<<="	;
 LE				:	"<="	;
-LT				:	'<'		;
+LTHAN			:	'<'		;
 BXOR			:	'^'		;
 BXOR_ASSIGN		:	"^="	;
 BOR				:	'|'		;
@@ -565,26 +743,54 @@ MAPASSIGN		:	"=>"	;
 
 NEWLINE
 	options { paraphrase = "a new line"; }
-	: 
-	( '\r' '\n' | '\n' | '\r') {
-    newline();
-    $setType(getProperType());
-	};
+	:
+	SL_NEWLINE 
+	{
+		newline();
+		$setType(getProperType());
+	}
+	(   
+		(SL_NEWLINE | WS | SL_COMMENT)+
+	)?
+	;
 
-// Single-line comments
+/*
+	options { paraphrase = "a new line"; }
+	: 
+	( '\r' '\n' | '\n' | '\r') 
+	{
+		newline();
+		$setType(getProperType());
+	}
+	(   (WS | SL_COMMENT)+   )?
+	;
+
+*/
+
+protected 
+SL_NEWLINE
+	:
+	(   options {generateAmbigWarnings=false;}:
+		"\r\n"
+		|   
+		'\r'
+		|   
+		'\n'
+	)
+    ;
+
 SL_COMMENT
 	options { paraphrase = "comments"; }
 	:	'#'
-		(~('\n'|'\r'))* ('\n'|'\r'('\n')?)
-		{$setType(Token.SKIP); newline();}
+		( options {  greedy = true;  }: ~('\n'|'\r'|'\uffff') )*
+		{$setType(Token.SKIP); }
 	;
 
 WS
 	:	
-	( ' ' | '\t' | '\f' )+
+	( options { greedy=true; }:' ' | '\t' | '\f' )+
 	{ $setType(Token.SKIP); }
 	;
-
 
 // multiple-line comments
 // 
@@ -677,12 +883,19 @@ VOCAB
 	:	'\3'..'\377'
 	;
 
-// an identifier.  Note that testLiterals is set to true!  This means
-// that after we match the rule, we look in the literals table to see
-// if it's a literal or really an identifer
 IDENT
 	options {testLiterals=true;}
 	:	('a'..'z'|'A'..'Z'|'_'|'$') ('a'..'z'|'A'..'Z'|'_'|'0'..'9'|'$')* ('?'|'!')?
+	;
+
+INSTIDENT
+	:	
+	'@' IDENT
+	;
+
+STATICIDENT
+	:	
+	"@@" IDENT
 	;
 
 SYMBOL

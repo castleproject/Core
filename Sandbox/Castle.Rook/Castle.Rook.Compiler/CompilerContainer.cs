@@ -12,32 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler
 {
 	using System;
-	using System.Collections;
+
+	using Castle.MicroKernel;
+
+	using Castle.Rook.Compiler.Services;
+	using Castle.Rook.Compiler.Services.Default;
 
 
-	public class ForStatement : IStatement
+	public class CompilerContainer : DefaultKernel
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
-
-		public void AddVarRef(VariableReferenceExpression vre)
+		public CompilerContainer()
 		{
-			varRefs.Add(vre);
+			AddServices();
 		}
 
-		public IList Statements
+		public virtual void AddServices()
 		{
-			get { return statements; }
+			this.AddComponent( "parser", typeof(IParser), typeof(RookParser) );
+			this.AddComponent( "error", typeof(IErrorReport), typeof(ErrorReport) );
 		}
 
-		public IExpression EvalExp
+		public IErrorReport ErrorReportService
 		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			get
+			{
+				return this[ typeof(IErrorReport) ] as IErrorReport;
+			}
+		}
+
+		public IParser ParserService
+		{
+			get
+			{
+				return this[ typeof(IParser) ] as IParser;
+			}
 		}
 	}
 }

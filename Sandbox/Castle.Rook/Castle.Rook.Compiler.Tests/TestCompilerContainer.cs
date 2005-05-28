@@ -12,32 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Tests
 {
 	using System;
-	using System.Collections;
+
+	using Castle.Rook.Compiler.Services;
+	using Castle.Rook.Compiler.Services.Default;
 
 
-	public class ForStatement : IStatement
+	public class TestCompilerContainer : CompilerContainer
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		private DebugErrorReport errorReport = new DebugErrorReport();
 
-		public void AddVarRef(VariableReferenceExpression vre)
+		public TestCompilerContainer()
 		{
-			varRefs.Add(vre);
 		}
 
-		public IList Statements
+		public override void AddServices()
 		{
-			get { return statements; }
+			this.AddComponentInstance( "error.first", typeof(IErrorReport), errorReport );
+
+			base.AddServices();
 		}
 
-		public IExpression EvalExp
+		public DebugErrorReport ErrorReport
 		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			get { return errorReport; }
 		}
 	}
 }

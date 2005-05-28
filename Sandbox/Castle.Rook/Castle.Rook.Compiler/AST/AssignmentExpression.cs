@@ -15,16 +15,17 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
 
-	public class CompoundStatement : IStatement
+	public class AssignmentExpression : AbstractExpression
 	{
-		private IList statements = new ArrayList();
+		private readonly IExpression value;
+		private readonly IExpression target;
 
-		public IList Statements
+		public AssignmentExpression(IExpression target, IExpression value)
 		{
-			get { return statements; }
+			this.value = value;
+			this.target = target;
 		}
 	}
 }

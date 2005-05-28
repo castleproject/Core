@@ -27,11 +27,18 @@ namespace Castle.Rook.Compiler.AST
 
 	public class PostfixCondition : IStatement
 	{
-		private PostfixConditionType type;
+		private readonly PostfixConditionType type;
+		private IExpression condition;
 
 		public PostfixCondition(PostfixConditionType type)
 		{
 			this.type = type;
+		}
+
+		public IExpression Condition
+		{
+			get { return condition; }
+			set { condition = value; }
 		}
 	}
 }

@@ -20,12 +20,24 @@ namespace Castle.Rook.Compiler.AST
 
 	public class MethodDefinitionStatement : IStatement
 	{
-		private IList statements = new ArrayList();
+		private readonly IList statements = new ArrayList();
+		private readonly string fullname;
+		private TypeReference returnType;
+
+		public MethodDefinitionStatement(String fullname)
+		{
+			this.fullname = fullname;
+		}
 
 		public IList Statements
 		{
 			get { return statements; }
 		}
 
+		public TypeReference ReturnType
+		{
+			get { return returnType; }
+			set { returnType = value; }
+		}
 	}
 }

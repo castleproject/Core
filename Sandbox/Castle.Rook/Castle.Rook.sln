@@ -3,6 +3,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Rook.Compiler", "Cas
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Rook.Compiler.Tests", "Castle.Rook.Compiler.Tests\Castle.Rook.Compiler.Tests.csproj", "{B6A5B14A-90DD-4830-A765-86DF60BE7D63}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -13,6 +17,10 @@ Global
 		{62EC7F2C-16DD-40B1-A8FA-1C448C1486C6}.Debug.Build.0 = Debug|.NET
 		{62EC7F2C-16DD-40B1-A8FA-1C448C1486C6}.Release.ActiveCfg = Release|.NET
 		{62EC7F2C-16DD-40B1-A8FA-1C448C1486C6}.Release.Build.0 = Release|.NET
+		{B6A5B14A-90DD-4830-A765-86DF60BE7D63}.Debug.ActiveCfg = Debug|.NET
+		{B6A5B14A-90DD-4830-A765-86DF60BE7D63}.Debug.Build.0 = Debug|.NET
+		{B6A5B14A-90DD-4830-A765-86DF60BE7D63}.Release.ActiveCfg = Release|.NET
+		{B6A5B14A-90DD-4830-A765-86DF60BE7D63}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

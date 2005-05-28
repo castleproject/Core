@@ -15,29 +15,31 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
-
-	public class ForStatement : IStatement
+	public enum AugType
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		Undefined,
+		PlusAssign,
+		MinusAssign,
+		MultAssign,
+		DivAssign,
+		ModAssign,
+		BitwiseAndAssign,
+		BitwiseOrAssign,
+		BitwiseXorAssign
+	}
 
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
+	public class AugAssignmentExpression : AbstractExpression
+	{
+		private readonly IExpression target;
+		private readonly IExpression value;
+		private readonly AugType augType;
 
-		public IList Statements
+		public AugAssignmentExpression(IExpression target, IExpression value, AugType augType)
 		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			this.augType = augType;
+			this.target = target;
+			this.value = value;
 		}
 	}
 }

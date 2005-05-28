@@ -15,29 +15,24 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
-
-	public class ForStatement : IStatement
+	public enum UnaryOp
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		Plus,
+		Minus,
+		Not,
+		BitwiseNot
+	}
 
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
+	public class UnaryExpression : AbstractExpression
+	{
+		private readonly UnaryOp op;
+		private readonly IExpression inner;
 
-		public IList Statements
+		public UnaryExpression(IExpression inner, UnaryOp op)
 		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			this.op = op;
+			this.inner = inner;
 		}
 	}
 }

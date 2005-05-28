@@ -18,13 +18,19 @@ namespace Castle.Rook.Compiler.AST
 	using System.Collections;
 
 
-	public class BlockExpression : IExpression
+	public class BlockExpression : AbstractExpression
 	{
+		private IList args = new ArrayList();
 		private IList statements = new ArrayList();
 
 		public IList Statements
 		{
 			get { return statements; }
+		}
+
+		public void AddBlockArgument(TypeDeclarationExpression tdexp)
+		{
+			args.Add(tdexp);
 		}
 	}
 }

@@ -12,32 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Services.Default
 {
 	using System;
-	using System.Collections;
+	using System.IO;
+
+	using Castle.Rook.Compiler.Parser;
 
 
-	public class ForStatement : IStatement
+	public class RookParser : IParser
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		public IErrorReport errorReport;
 
-		public void AddVarRef(VariableReferenceExpression vre)
+		public RookParser(IErrorReport errorReport)
 		{
-			varRefs.Add(vre);
+			this.errorReport = errorReport;
 		}
 
-		public IList Statements
+		#region IParser Members
+
+		public Castle.Rook.Compiler.AST.CompilationUnit Parse(TextReader reader)
 		{
-			get { return statements; }
+			RookLexer lexer = new RookLexer(reader);
+
+			RookBaseParser parser = new RookBaseParser(lexer);
+			parser.ErrorReport = errorReport;
+
+			return parser.compilationUnit();
 		}
 
-		public IExpression EvalExp
+		public Castle.Rook.Compiler.AST.CompilationUnit Parse(String contents)
 		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			return Parse(new StringReader(contents));
 		}
+
+		#endregion
 	}
 }

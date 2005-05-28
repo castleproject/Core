@@ -18,26 +18,17 @@ namespace Castle.Rook.Compiler.AST
 	using System.Collections;
 
 
-	public class ForStatement : IStatement
+	public class ListExpression : AbstractExpression
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		private ArrayList items = new ArrayList();
 
-		public void AddVarRef(VariableReferenceExpression vre)
+		public ListExpression()
 		{
-			varRefs.Add(vre);
 		}
 
-		public IList Statements
+		public void Add(IExpression item)
 		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			items.Add(item);
 		}
 	}
 }

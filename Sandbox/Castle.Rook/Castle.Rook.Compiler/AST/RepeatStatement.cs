@@ -28,10 +28,12 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private IList statements = new ArrayList();
 		private RepeatType type;
+		private IExpression conditionExp;
 
-		public RepeatStatement(RepeatType type)
+		public RepeatStatement(RepeatType type, IExpression conditionExp)
 		{
 			this.type = type;
+			this.conditionExp = conditionExp;
 		}
 
 		public RepeatType Type

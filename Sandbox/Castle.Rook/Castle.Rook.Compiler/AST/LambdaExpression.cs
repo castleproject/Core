@@ -17,7 +17,7 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 
 
-	public class LambdaExpression : IExpression
+	public class LambdaExpression : AbstractExpression
 	{
 		public BlockExpression block;
 

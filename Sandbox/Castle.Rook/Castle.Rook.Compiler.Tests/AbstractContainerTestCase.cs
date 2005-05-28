@@ -12,32 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Tests
 {
 	using System;
-	using System.Collections;
+
+	using NUnit.Framework;
 
 
-	public class ForStatement : IStatement
+	public abstract class AbstractContainerTestCase
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		protected TestCompilerContainer container;
 
-		public void AddVarRef(VariableReferenceExpression vre)
+		[SetUp]
+		public void Init()
 		{
-			varRefs.Add(vre);
+			container = new TestCompilerContainer();
 		}
 
-		public IList Statements
+		protected void AssertNoErrorOrWarnings()
 		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			Assert.IsFalse( container.ErrorReport.HasErrors );
+			Assert.IsFalse( container.ErrorReport.HasWarnings );
 		}
 	}
 }

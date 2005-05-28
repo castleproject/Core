@@ -28,6 +28,7 @@ namespace Castle.Rook.Compiler.AST
 		protected IfType iftype;
 		protected IList trueStmts = new ArrayList();
 		protected IList falseStmts = new ArrayList();
+		private IExpression condition;
 
 		public IfStatement(IfType iftype)
 		{
@@ -42,6 +43,12 @@ namespace Castle.Rook.Compiler.AST
 		public IList FalseStatements
 		{
 			get { return falseStmts; }
+		}
+
+		public IExpression Condition
+		{
+			get { return condition; }
+			set { condition = value; }
 		}
 	}
 }

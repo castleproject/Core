@@ -4,8 +4,9 @@
 	using System.Text;
 	using System.Collections;
 	using Castle.Rook.Compiler.AST;
+	using Castle.Rook.Compiler.Services;
 
-namespace Castle.Rook.Parse
+namespace Castle.Rook.Compiler.Parser
 {
 	// Generate header specific to lexer CSharp file
 	using System;
@@ -64,97 +65,102 @@ namespace Castle.Rook.Parse
 		public const int NUM_LONG = 26;
 		public const int STATEMENT_END = 27;
 		public const int SEMI = 28;
-		public const int UNTIL = 29;
-		public const int LITERAL_for = 30;
-		public const int IDENT = 31;
-		public const int COMMA = 32;
-		public const int LITERAL_in = 33;
-		public const int LITERAL_if = 34;
-		public const int LITERAL_then = 35;
-		public const int LITERAL_elsif = 36;
-		public const int LITERAL_else = 37;
-		public const int LITERAL_unless = 38;
-		public const int LITERAL_redo = 39;
-		public const int LITERAL_break = 40;
-		public const int LITERAL_next = 41;
-		public const int LITERAL_retry = 42;
-		public const int LITERAL_public = 43;
-		public const int COLON = 44;
-		public const int LITERAL_private = 45;
-		public const int LITERAL_protected = 46;
-		public const int LITERAL_internal = 47;
-		public const int LT = 48;
-		public const int SL = 49;
-		public const int LPAREN = 50;
-		public const int RPAREN = 51;
-		public const int ASSIGN = 52;
-		public const int STAR = 53;
-		public const int BAND = 54;
-		public const int PLUS_ASSIGN = 55;
-		public const int MINUS_ASSIGN = 56;
-		public const int STAR_ASSIGN = 57;
-		public const int DIV_ASSIGN = 58;
-		public const int MOD_ASSIGN = 59;
-		public const int BAND_ASSIGN = 60;
-		public const int BOR_ASSIGN = 61;
-		public const int BXOR_ASSIGN = 62;
-		public const int LITERAL_until = 63;
-		public const int DOT = 64;
-		public const int SYMBOL = 65;
-		public const int LITERAL_or = 66;
-		public const int LITERAL_lambda = 67;
-		public const int LCURLY = 68;
-		public const int RCURLY = 69;
-		public const int LITERAL_raise = 70;
-		public const int BOR = 71;
-		public const int LITERAL_and = 72;
-		public const int LITERAL_not = 73;
-		public const int GT = 74;
-		public const int EQUAL = 75;
-		public const int GE = 76;
-		public const int LE = 77;
-		public const int NOT_EQUAL = 78;
-		public const int BXOR = 79;
-		public const int PLUS = 80;
-		public const int MINUS = 81;
-		public const int SLASH = 82;
-		public const int PERCENT = 83;
-		public const int BNOT = 84;
-		public const int LBRACK = 85;
-		public const int RBRACK = 86;
-		public const int STRING_LITERAL = 87;
-		public const int CHAR_LITERAL = 88;
-		public const int DOTDOT = 89;
-		public const int DOTDOTDOT = 90;
-		public const int MAPASSIGN = 91;
-		public const int QUESTION = 92;
-		public const int LNOT = 93;
-		public const int DIV = 94;
-		public const int INC = 95;
-		public const int DEC = 96;
-		public const int MOD = 97;
-		public const int SR = 98;
-		public const int SR_ASSIGN = 99;
-		public const int BSR = 100;
-		public const int BSR_ASSIGN = 101;
-		public const int SL_ASSIGN = 102;
-		public const int LOR = 103;
-		public const int LAND = 104;
-		public const int NEWLINE = 105;
-		public const int SL_COMMENT = 106;
-		public const int WS = 107;
-		public const int ESC = 108;
-		public const int HEX_DIGIT = 109;
-		public const int VOCAB = 110;
-		public const int NUMBER = 111;
-		public const int Int = 112;
-		public const int NonZeroDigit = 113;
-		public const int FloatTrailer = 114;
-		public const int Exponent = 115;
-		public const int CONTINUED_LINE = 116;
+		public const int LITERAL_namespace = 29;
+		public const int UNTIL = 30;
+		public const int LITERAL_for = 31;
+		public const int LITERAL_in = 32;
+		public const int LITERAL_if = 33;
+		public const int LITERAL_then = 34;
+		public const int LITERAL_elsif = 35;
+		public const int LITERAL_else = 36;
+		public const int LITERAL_unless = 37;
+		public const int LITERAL_redo = 38;
+		public const int LITERAL_break = 39;
+		public const int LITERAL_next = 40;
+		public const int LITERAL_retry = 41;
+		public const int LITERAL_public = 42;
+		public const int COLON = 43;
+		public const int LITERAL_private = 44;
+		public const int LITERAL_protected = 45;
+		public const int LITERAL_internal = 46;
+		public const int COMMA = 47;
+		public const int ASSIGN = 48;
+		public const int IDENT = 49;
+		public const int LTHAN = 50;
+		public const int SL = 51;
+		public const int LPAREN = 52;
+		public const int RPAREN = 53;
+		public const int STAR = 54;
+		public const int BAND = 55;
+		public const int PLUS_ASSIGN = 56;
+		public const int MINUS_ASSIGN = 57;
+		public const int STAR_ASSIGN = 58;
+		public const int DIV_ASSIGN = 59;
+		public const int MOD_ASSIGN = 60;
+		public const int BAND_ASSIGN = 61;
+		public const int BOR_ASSIGN = 62;
+		public const int BXOR_ASSIGN = 63;
+		public const int LITERAL_until = 64;
+		public const int STATICIDENT = 65;
+		public const int INSTIDENT = 66;
+		public const int DOT = 67;
+		public const int SYMBOL = 68;
+		public const int LITERAL_lambda = 69;
+		public const int LCURLY = 70;
+		public const int RCURLY = 71;
+		public const int LITERAL_raise = 72;
+		public const int LITERAL_yield = 73;
+		public const int BOR = 74;
+		public const int LITERAL_or = 75;
+		public const int LITERAL_and = 76;
+		public const int LITERAL_not = 77;
+		public const int LNOT = 78;
+		public const int GT = 79;
+		public const int EQUAL = 80;
+		public const int GE = 81;
+		public const int LE = 82;
+		public const int NOT_EQUAL = 83;
+		public const int BXOR = 84;
+		public const int PLUS = 85;
+		public const int MINUS = 86;
+		public const int SLASH = 87;
+		public const int PERCENT = 88;
+		public const int BNOT = 89;
+		public const int LBRACK = 90;
+		public const int RBRACK = 91;
+		public const int STRING_LITERAL = 92;
+		public const int CHAR_LITERAL = 93;
+		public const int DOTDOT = 94;
+		public const int DOTDOTDOT = 95;
+		public const int MAPASSIGN = 96;
+		public const int QUESTION = 97;
+		public const int DIV = 98;
+		public const int INC = 99;
+		public const int DEC = 100;
+		public const int MOD = 101;
+		public const int SR = 102;
+		public const int SR_ASSIGN = 103;
+		public const int BSR = 104;
+		public const int BSR_ASSIGN = 105;
+		public const int SL_ASSIGN = 106;
+		public const int LOR = 107;
+		public const int LAND = 108;
+		public const int NEWLINE = 109;
+		public const int SL_NEWLINE = 110;
+		public const int SL_COMMENT = 111;
+		public const int WS = 112;
+		public const int ESC = 113;
+		public const int HEX_DIGIT = 114;
+		public const int VOCAB = 115;
+		public const int NUMBER = 116;
+		public const int Int = 117;
+		public const int NonZeroDigit = 118;
+		public const int FloatTrailer = 119;
+		public const int Exponent = 120;
+		public const int CONTINUED_LINE = 121;
 		
 		
-    private int lastToken;
+    private int lastToken = 0;
 
     private int getProperType() 
     {
@@ -170,7 +176,7 @@ namespace Castle.Rook.Parse
         return result;
     }
 
-	protected override IToken makeToken(int type) {
+	protected internal override IToken makeToken(int type) {
 		lastToken = type;
 		return base.makeToken(type);
 	}
@@ -195,34 +201,36 @@ namespace Castle.Rook.Parse
 			caseSensitiveLiterals = true;
 			setCaseSensitive(true);
 			literals = new Hashtable(100, (float) 0.4, null, Comparer.Default);
-			literals.Add("raise", 70);
-			literals.Add("for", 30);
+			literals.Add("raise", 72);
+			literals.Add("for", 31);
 			literals.Add("class", 4);
-			literals.Add("redo", 39);
-			literals.Add("internal", 47);
-			literals.Add("and", 72);
+			literals.Add("redo", 38);
+			literals.Add("internal", 46);
+			literals.Add("and", 76);
 			literals.Add("def", 7);
-			literals.Add("elsif", 36);
-			literals.Add("retry", 42);
-			literals.Add("private", 45);
+			literals.Add("elsif", 35);
+			literals.Add("retry", 41);
+			literals.Add("private", 44);
 			literals.Add("end", 6);
-			literals.Add("next", 41);
-			literals.Add("until", 63);
+			literals.Add("next", 40);
+			literals.Add("until", 64);
 			literals.Add("begin", 9);
 			literals.Add("do", 5);
-			literals.Add("in", 33);
+			literals.Add("in", 32);
+			literals.Add("namespace", 29);
 			literals.Add("operator", 8);
-			literals.Add("lambda", 67);
+			literals.Add("lambda", 69);
 			literals.Add("while", 10);
-			literals.Add("or", 66);
-			literals.Add("protected", 46);
-			literals.Add("break", 40);
-			literals.Add("if", 34);
-			literals.Add("public", 43);
-			literals.Add("else", 37);
-			literals.Add("unless", 38);
-			literals.Add("not", 73);
-			literals.Add("then", 35);
+			literals.Add("or", 75);
+			literals.Add("protected", 45);
+			literals.Add("break", 39);
+			literals.Add("if", 33);
+			literals.Add("yield", 73);
+			literals.Add("public", 42);
+			literals.Add("else", 36);
+			literals.Add("unless", 37);
+			literals.Add("not", 77);
+			literals.Add("then", 34);
 		}
 		
 		override public IToken nextToken()			//throws TokenStreamException
@@ -306,15 +314,15 @@ tryAgain:
 							theRetToken = returnToken_;
 							break;
 						}
-						case '#':
-						{
-							mSL_COMMENT(true);
-							theRetToken = returnToken_;
-							break;
-						}
 						case '\t':  case '\u000c':  case ' ':
 						{
 							mWS(true);
+							theRetToken = returnToken_;
+							break;
+						}
+						case '#':
+						{
+							mSL_COMMENT(true);
 							theRetToken = returnToken_;
 							break;
 						}
@@ -465,6 +473,14 @@ tryAgain:
 								mMAPASSIGN(true);
 								theRetToken = returnToken_;
 							}
+							else if ((cached_LA1=='@') && (tokenSet_0_.member(cached_LA2))) {
+								mINSTIDENT(true);
+								theRetToken = returnToken_;
+							}
+							else if ((cached_LA1=='@') && (cached_LA2=='@')) {
+								mSTATICIDENT(true);
+								theRetToken = returnToken_;
+							}
 							else if ((cached_LA1==':') && (tokenSet_0_.member(cached_LA2))) {
 								mSYMBOL(true);
 								theRetToken = returnToken_;
@@ -510,7 +526,7 @@ tryAgain:
 								theRetToken = returnToken_;
 							}
 							else if ((cached_LA1=='<') && (true)) {
-								mLT(true);
+								mLTHAN(true);
 								theRetToken = returnToken_;
 							}
 							else if ((cached_LA1=='^') && (true)) {
@@ -1083,10 +1099,10 @@ tryAgain:
 		returnToken_ = _token;
 	}
 	
-	public void mLT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
+	public void mLTHAN(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
 {
 		int _ttype; IToken _token=null; int _begin=text.Length;
-		_ttype = LT;
+		_ttype = LTHAN;
 		
 		match('<');
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -1242,17 +1258,75 @@ tryAgain:
 		int _ttype; IToken _token=null; int _begin=text.Length;
 		_ttype = NEWLINE;
 		
+		mSL_NEWLINE(false);
+		if (0==inputState.guessing)
 		{
-			if ((cached_LA1=='\r') && (cached_LA2=='\n'))
+			
+					newline();
+					_ttype = getProperType();
+				
+		}
+		{
+			if ((cached_LA1=='\t'||cached_LA1=='\n'||cached_LA1=='\u000c'||cached_LA1=='\r'||cached_LA1==' '||cached_LA1=='#'))
 			{
+				{ // ( ... )+
+					int _cnt215=0;
+					for (;;)
+					{
+						switch ( cached_LA1 )
+						{
+						case '\n':  case '\r':
+						{
+							mSL_NEWLINE(false);
+							break;
+						}
+						case '\t':  case '\u000c':  case ' ':
+						{
+							mWS(false);
+							break;
+						}
+						case '#':
+						{
+							mSL_COMMENT(false);
+							break;
+						}
+						default:
+						{
+							if (_cnt215 >= 1) { goto _loop215_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+						}
+						break; }
+						_cnt215++;
+					}
+_loop215_breakloop:					;
+				}    // ( ... )+
+			}
+			else {
+			}
+			
+		}
+		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
+		{
+			_token = makeToken(_ttype);
+			_token.setText(text.ToString(_begin, text.Length-_begin));
+		}
+		returnToken_ = _token;
+	}
+	
+	protected void mSL_NEWLINE(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
+{
+		int _ttype; IToken _token=null; int _begin=text.Length;
+		_ttype = SL_NEWLINE;
+		
+		{
+			if ((cached_LA1=='\r') && (cached_LA2=='\n') && (true) && (true))
+			{
+				match("\r\n");
+			}
+			else if ((cached_LA1=='\r') && (true) && (true) && (true)) {
 				match('\r');
-				match('\n');
 			}
 			else if ((cached_LA1=='\n')) {
 				match('\n');
-			}
-			else if ((cached_LA1=='\r') && (true)) {
-				match('\r');
 			}
 			else
 			{
@@ -1260,12 +1334,45 @@ tryAgain:
 			}
 			
 		}
+		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
+		{
+			_token = makeToken(_ttype);
+			_token.setText(text.ToString(_begin, text.Length-_begin));
+		}
+		returnToken_ = _token;
+	}
+	
+	public void mWS(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
+{
+		int _ttype; IToken _token=null; int _begin=text.Length;
+		_ttype = WS;
+		
+		{ // ( ... )+
+			int _cnt224=0;
+			for (;;)
+			{
+				if ((cached_LA1==' ') && (true) && (true) && (true))
+				{
+					match(' ');
+				}
+				else if ((cached_LA1=='\t') && (true) && (true) && (true)) {
+					match('\t');
+				}
+				else if ((cached_LA1=='\u000c') && (true) && (true) && (true)) {
+					match('\f');
+				}
+				else
+				{
+					if (_cnt224 >= 1) { goto _loop224_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+				}
+				
+				_cnt224++;
+			}
+_loop224_breakloop:			;
+		}    // ( ... )+
 		if (0==inputState.guessing)
 		{
-			
-			newline();
-			_ttype = getProperType();
-				
+			_ttype = Token.SKIP;
 		}
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -1284,7 +1391,7 @@ tryAgain:
 		{    // ( ... )*
 			for (;;)
 			{
-				if ((tokenSet_1_.member(cached_LA1)))
+				if ((tokenSet_1_.member(cached_LA1)) && (true) && (true) && (true))
 				{
 					{
 						match(tokenSet_1_);
@@ -1292,87 +1399,12 @@ tryAgain:
 				}
 				else
 				{
-					goto _loop203_breakloop;
+					goto _loop221_breakloop;
 				}
 				
 			}
-_loop203_breakloop:			;
+_loop221_breakloop:			;
 		}    // ( ... )*
-		{
-			switch ( cached_LA1 )
-			{
-			case '\n':
-			{
-				match('\n');
-				break;
-			}
-			case '\r':
-			{
-				match('\r');
-				{
-					if ((cached_LA1=='\n'))
-					{
-						match('\n');
-					}
-					else {
-					}
-					
-				}
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());
-			}
-			 }
-		}
-		if (0==inputState.guessing)
-		{
-			_ttype = Token.SKIP; newline();
-		}
-		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
-		{
-			_token = makeToken(_ttype);
-			_token.setText(text.ToString(_begin, text.Length-_begin));
-		}
-		returnToken_ = _token;
-	}
-	
-	public void mWS(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
-{
-		int _ttype; IToken _token=null; int _begin=text.Length;
-		_ttype = WS;
-		
-		{ // ( ... )+
-			int _cnt208=0;
-			for (;;)
-			{
-				switch ( cached_LA1 )
-				{
-				case ' ':
-				{
-					match(' ');
-					break;
-				}
-				case '\t':
-				{
-					match('\t');
-					break;
-				}
-				case '\u000c':
-				{
-					match('\f');
-					break;
-				}
-				default:
-				{
-					if (_cnt208 >= 1) { goto _loop208_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
-				}
-				break; }
-				_cnt208++;
-			}
-_loop208_breakloop:			;
-		}    // ( ... )+
 		if (0==inputState.guessing)
 		{
 			_ttype = Token.SKIP;
@@ -1466,7 +1498,7 @@ _loop208_breakloop:			;
 			case 'u':
 			{
 				{ // ( ... )+
-					int _cnt218=0;
+					int _cnt234=0;
 					for (;;)
 					{
 						if ((cached_LA1=='u'))
@@ -1475,12 +1507,12 @@ _loop208_breakloop:			;
 						}
 						else
 						{
-							if (_cnt218 >= 1) { goto _loop218_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+							if (_cnt234 >= 1) { goto _loop234_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 						}
 						
-						_cnt218++;
+						_cnt234++;
 					}
-_loop218_breakloop:					;
+_loop234_breakloop:					;
 				}    // ( ... )+
 				mHEX_DIGIT(false);
 				mHEX_DIGIT(false);
@@ -1571,11 +1603,11 @@ _loop218_breakloop:					;
 				}
 				else
 				{
-					goto _loop214_breakloop;
+					goto _loop230_breakloop;
 				}
 				
 			}
-_loop214_breakloop:			;
+_loop230_breakloop:			;
 		}    // ( ... )*
 		match('"');
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
@@ -1733,11 +1765,11 @@ _loop214_breakloop:			;
 				}
 				default:
 				{
-					goto _loop228_breakloop;
+					goto _loop244_breakloop;
 				}
 				 }
 			}
-_loop228_breakloop:			;
+_loop244_breakloop:			;
 		}    // ( ... )*
 		{
 			switch ( cached_LA1 )
@@ -1758,6 +1790,36 @@ _loop228_breakloop:			;
 			break; }
 		}
 		_ttype = testLiteralsTable(_ttype);
+		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
+		{
+			_token = makeToken(_ttype);
+			_token.setText(text.ToString(_begin, text.Length-_begin));
+		}
+		returnToken_ = _token;
+	}
+	
+	public void mINSTIDENT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
+{
+		int _ttype; IToken _token=null; int _begin=text.Length;
+		_ttype = INSTIDENT;
+		
+		match('@');
+		mIDENT(false);
+		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
+		{
+			_token = makeToken(_ttype);
+			_token.setText(text.ToString(_begin, text.Length-_begin));
+		}
+		returnToken_ = _token;
+	}
+	
+	public void mSTATICIDENT(bool _createToken) //throws RecognitionException, CharStreamException, TokenStreamException
+{
+		int _ttype; IToken _token=null; int _begin=text.Length;
+		_ttype = STATICIDENT;
+		
+		match("@@");
+		mIDENT(false);
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
 			_token = makeToken(_ttype);
@@ -1809,7 +1871,7 @@ _loop228_breakloop:			;
 				 }
 			}
 			{ // ( ... )+
-				int _cnt238=0;
+				int _cnt256=0;
 				for (;;)
 				{
 					switch ( cached_LA1 )
@@ -1835,12 +1897,12 @@ _loop228_breakloop:			;
 					}
 					default:
 					{
-						if (_cnt238 >= 1) { goto _loop238_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+						if (_cnt256 >= 1) { goto _loop256_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 					}
 					break; }
-					_cnt238++;
+					_cnt256++;
 				}
-_loop238_breakloop:				;
+_loop256_breakloop:				;
 			}    // ( ... )+
 			if (0==inputState.guessing)
 			{
@@ -1870,11 +1932,11 @@ _loop238_breakloop:				;
 			}
 		}
 		else {
-			bool synPredMatched233 = false;
+			bool synPredMatched251 = false;
 			if ((((cached_LA1 >= '0' && cached_LA1 <= '9')) && (true) && (true) && (true)))
 			{
-				int _m233 = mark();
-				synPredMatched233 = true;
+				int _m251 = mark();
+				synPredMatched251 = true;
 				inputState.guessing++;
 				try {
 					{
@@ -1884,12 +1946,12 @@ _loop238_breakloop:				;
 				}
 				catch (RecognitionException)
 				{
-					synPredMatched233 = false;
+					synPredMatched251 = false;
 				}
-				rewind(_m233);
+				rewind(_m251);
 				inputState.guessing--;
 			}
-			if ( synPredMatched233 )
+			if ( synPredMatched251 )
 			{
 				mInt(false);
 				if (0==inputState.guessing)
@@ -1898,11 +1960,11 @@ _loop238_breakloop:				;
 				}
 			}
 			else {
-				bool synPredMatched235 = false;
+				bool synPredMatched253 = false;
 				if ((((cached_LA1 >= '0' && cached_LA1 <= '9')) && (true) && (true) && (true)))
 				{
-					int _m235 = mark();
-					synPredMatched235 = true;
+					int _m253 = mark();
+					synPredMatched253 = true;
 					inputState.guessing++;
 					try {
 						{
@@ -1912,12 +1974,12 @@ _loop238_breakloop:				;
 					}
 					catch (RecognitionException)
 					{
-						synPredMatched235 = false;
+						synPredMatched253 = false;
 					}
-					rewind(_m235);
+					rewind(_m253);
 					inputState.guessing--;
 				}
-				if ( synPredMatched235 )
+				if ( synPredMatched253 )
 				{
 					mInt(false);
 					if (0==inputState.guessing)
@@ -1995,7 +2057,7 @@ _loop238_breakloop:				;
 		_ttype = Int;
 		
 		{ // ( ... )+
-			int _cnt244=0;
+			int _cnt262=0;
 			for (;;)
 			{
 				if (((cached_LA1 >= '0' && cached_LA1 <= '9')))
@@ -2004,12 +2066,12 @@ _loop238_breakloop:				;
 				}
 				else
 				{
-					if (_cnt244 >= 1) { goto _loop244_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
+					if (_cnt262 >= 1) { goto _loop262_breakloop; } else { throw new NoViableAltForCharException(cached_LA1, getFilename(), getLine(), getColumn());; }
 				}
 				
-				_cnt244++;
+				_cnt262++;
 			}
-_loop244_breakloop:			;
+_loop262_breakloop:			;
 		}    // ( ... )+
 		if (_createToken && (null == _token) && (_ttype != Token.SKIP))
 		{
@@ -2158,11 +2220,11 @@ _loop244_breakloop:			;
 				}
 				default:
 				{
-					goto _loop254_breakloop;
+					goto _loop272_breakloop;
 				}
 				 }
 			}
-_loop254_breakloop:			;
+_loop272_breakloop:			;
 		}    // ( ... )*
 		if (0==inputState.guessing)
 		{
@@ -2190,7 +2252,8 @@ _loop254_breakloop:			;
 	{
 		long[] data = new long[2048];
 		data[0]=-9224L;
-		for (int i = 1; i<=1023; i++) { data[i]=-1L; }
+		for (int i = 1; i<=1022; i++) { data[i]=-1L; }
+		data[1023]=9223372036854775807L;
 		for (int i = 1024; i<=2047; i++) { data[i]=0L; }
 		return data;
 	}

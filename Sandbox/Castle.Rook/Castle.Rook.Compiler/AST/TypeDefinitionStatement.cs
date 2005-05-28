@@ -20,12 +20,20 @@ namespace Castle.Rook.Compiler.AST
 	public enum AccessLevel
 	{
 		Protected,
-		Public
+		Public,
+		Private,
+		Internal,
 	}
 
 	public class TypeDefinitionStatement : IStatement
 	{
-		private IList statements = new ArrayList();
+		private readonly string name;
+		private readonly IList statements = new ArrayList();
+
+		public TypeDefinitionStatement(String name)
+		{
+			this.name = name;
+		}
 
 		public IList Statements
 		{

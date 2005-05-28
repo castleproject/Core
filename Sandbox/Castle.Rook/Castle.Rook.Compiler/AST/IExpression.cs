@@ -19,5 +19,6 @@ namespace Castle.Rook.Compiler.AST
 
 	public interface IExpression
 	{
+		PostfixCondition PostFixStatement { get; set; }
 	}
 }

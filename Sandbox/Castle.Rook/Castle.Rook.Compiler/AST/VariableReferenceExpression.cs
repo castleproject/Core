@@ -15,29 +15,23 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
-
-	public class ForStatement : IStatement
+	public enum VariableReferenceType
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		LocalOrArgument,
+		InstanceField,
+		StaticField
+	}
 
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
+	public class VariableReferenceExpression : AbstractExpression
+	{
+		private readonly string name;
+		private readonly VariableReferenceType type;
 
-		public IList Statements
+		public VariableReferenceExpression(String name, VariableReferenceType type)
 		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			this.name = name;
+			this.type = type;
 		}
 	}
 }

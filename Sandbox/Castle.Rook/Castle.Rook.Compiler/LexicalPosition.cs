@@ -12,32 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler
 {
 	using System;
-	using System.Collections;
 
 
-	public class ForStatement : IStatement
+	public class LexicalPosition
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		private readonly int line;
+		private readonly int column;
 
-		public void AddVarRef(VariableReferenceExpression vre)
+		public LexicalPosition(int line, int column)
 		{
-			varRefs.Add(vre);
+			this.line = line;
+			this.column = column;
 		}
 
-		public IList Statements
+		public int Line
 		{
-			get { return statements; }
+			get { return line; }
 		}
 
-		public IExpression EvalExp
+		public int Column
 		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			get { return column; }
 		}
 	}
 }

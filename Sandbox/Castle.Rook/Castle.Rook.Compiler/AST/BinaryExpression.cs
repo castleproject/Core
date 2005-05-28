@@ -15,29 +15,39 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
-
-	public class ForStatement : IStatement
+	public enum BinaryOp
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		Undefined,
+		And,
+		And2,
+		Or,
+		Or2,
+		Xor,
+		LessThan,
+		GreaterThan,
+		Equal,
+		GreaterEqual,
+		LessEqual,
+		NotEqual,
+		Mult,
+		Div,
+		Mod,
+		Plus, 
+		Minus
+	}
 
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
+	public class BinaryExpression : AbstractExpression
+	{
+		private readonly BinaryOp op;
+		private readonly IExpression lhs;
+		private readonly IExpression rhs;
 
-		public IList Statements
+		public BinaryExpression(IExpression lhs, IExpression rhs, BinaryOp op)
 		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			this.op = op;
+			this.lhs = lhs;
+			this.rhs = rhs;
 		}
 	}
 }

@@ -21,10 +21,16 @@ namespace Castle.Rook.Compiler.AST
 	public class CompilationUnit
 	{
 		private IList statements = new ArrayList();
+		private IList namespaces = new ArrayList();
 
 		public IList Statements
 		{
 			get { return statements; }
+		}
+
+		public IList Namespaces
+		{
+			get { return namespaces; }
 		}
 	}
 }

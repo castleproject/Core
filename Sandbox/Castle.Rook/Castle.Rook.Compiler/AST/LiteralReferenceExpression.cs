@@ -15,29 +15,26 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
-
-	public class ForStatement : IStatement
+	public enum LiteralReferenceType
 	{
-		private IList statements = new ArrayList();
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
+		IntLiteral,
+		LongLiteral,
+		FloatLiteral,
+		StringLiteral,
+		CharLiteral,
+		SymbolLiteral
+	}
 
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
+	public class LiteralReferenceExpression : AbstractExpression
+	{
+		private readonly LiteralReferenceType type;
+		private readonly string content;
 
-		public IList Statements
+		public LiteralReferenceExpression( String content, LiteralReferenceType type )
 		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
+			this.type = type;
+			this.content = content;
 		}
 	}
 }
