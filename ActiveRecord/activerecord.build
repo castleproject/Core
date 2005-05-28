@@ -7,7 +7,7 @@
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="castle.model" value="${base.dir}/../InversionOfControl/bin/Castle.Model.dll" />
 	<property name="name" value="Castle.ActiveRecord" />
-	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
+	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
 	<property name="samples.dir" value="${base.dir}/../Samples/ActiveRecord" />
 
 	<property name="assembly.name" value="${name}.dll" />
@@ -106,7 +106,7 @@
 		<nant buildfile="Generator/generator.build" target="build" inheritall="false" />
 	</target>
 	
-	<target name="tests.run" depends="tests.compile" if="${nhibernate.test}">
+	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">
 		<nunit2 >
 			<formatter type="Plain" />
 			<test 

@@ -25,6 +25,11 @@ Well, this test is bound to fail. You must adjust the connection string and crea
 
 > nant -D:nhibernate.test=false
 
+- ActiveRecord
+
+Well, this test is bound to fail. You must adjust the connection string and create a small structure on your data. So to avoid all this aggravation, simply disable it:
+
+> nant -D:activerecord.test=false
 
 - Building with NAnt RC2 or higher.
 
