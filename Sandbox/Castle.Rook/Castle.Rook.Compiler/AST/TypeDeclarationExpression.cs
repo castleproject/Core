@@ -16,11 +16,13 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class TypeDeclarationExpression : AbstractExpression
 	{
 		private readonly string name;
-		private readonly TypeReference typeRef;
+		private TypeReference typeRef;
 		private IExpression initExp;
 
 		public TypeDeclarationExpression(String name, TypeReference typeRef)
@@ -33,6 +35,17 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return initExp; }
 			set { initExp = value; }
+		}
+
+		public TypeReference TypeReference
+		{
+			get { return typeRef; }
+			set { typeRef = value; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitTypeDeclarationExpression(this);
 		}
 	}
 }

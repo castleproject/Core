@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class LambdaExpression : AbstractExpression
 	{
@@ -24,6 +26,11 @@ namespace Castle.Rook.Compiler.AST
 		public LambdaExpression(BlockExpression block)
 		{
 			this.block = block;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitLambdaExpression(this);
 		}
 	}
 }

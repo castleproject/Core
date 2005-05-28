@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class MethodInvocationExpression : AbstractExpression
 	{
@@ -26,6 +28,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			this.target = target;
 			this.args = args;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitMethodInvocationExpression(this);
 		}
 	}
 }

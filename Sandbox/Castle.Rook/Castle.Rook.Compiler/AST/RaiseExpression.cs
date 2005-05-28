@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class RaiseExpression : AbstractExpression
 	{
@@ -24,6 +26,11 @@ namespace Castle.Rook.Compiler.AST
 		public RaiseExpression(IExpression exp)
 		{
 			this.exp = exp;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitRaiseExpression(this);
 		}
 	}
 }

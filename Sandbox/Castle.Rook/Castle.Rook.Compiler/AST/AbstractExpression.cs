@@ -16,13 +16,17 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public abstract class AbstractExpression : IExpression
+
+	public abstract class AbstractExpression : AbstractCodeNode, IExpression
 	{
+		private PostfixCondition postfixCondition;
+
 		public PostfixCondition PostFixStatement
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			get { return postfixCondition; }
+			set { postfixCondition = value; }
 		}
 	}
 }

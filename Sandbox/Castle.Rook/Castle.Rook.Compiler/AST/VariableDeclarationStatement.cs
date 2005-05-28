@@ -16,11 +16,41 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class VariableDeclarationStatement : AbstractStatement
 	{
+		private ExpressionCollection decls = new ExpressionCollection();
+		private ExpressionCollection initExps = new ExpressionCollection();
+
 		public VariableDeclarationStatement()
 		{
+		}
+
+		public void Add(TypeDeclarationExpression tdstmt)
+		{
+			decls.Add(tdstmt);
+		}
+
+		public void AddInitExp(IExpression exp)
+		{
+			initExps.Add(exp);
+		}
+
+		public ExpressionCollection Declarations
+		{
+			get { return decls; }
+		}
+
+		public ExpressionCollection InitExpressions
+		{
+			get { return initExps; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitVariableDeclarationStatement(this);
 		}
 	}
 }

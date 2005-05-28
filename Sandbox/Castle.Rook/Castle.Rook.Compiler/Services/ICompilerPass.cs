@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Services
 {
 	using System;
 
+	using Castle.Rook.Compiler.AST;
 
-	public class BreakStatement : AbstractStatement
+
+	public interface ICompilerPass
 	{
-		public BreakStatement()
-		{
-		}
+		void ExecutePass(CompilationUnit unit);
 	}
 }

@@ -109,6 +109,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\AbstractCodeNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\AbstractExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -139,7 +144,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\BreakStatement.cs"
+                    RelPath = "AST\BreakExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -224,7 +229,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\NextStatement.cs"
+                    RelPath = "AST\NextExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -244,7 +249,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\RedoStatement.cs"
+                    RelPath = "AST\RedoExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -254,7 +259,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\RetryStatement.cs"
+                    RelPath = "AST\RetryExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -818,6 +823,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Services\ICompilerPass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Services\IErrorReport.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -839,6 +849,36 @@
                 />
                 <File
                     RelPath = "Services\Default\RookParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\Passes\ScopeBinding.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Visitors\AbstractVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Visitors\DepthFirstVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Visitors\IASTVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Visitors\ITypeMemberVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Visitors\IVisitableNode.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

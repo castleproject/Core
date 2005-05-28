@@ -1,4 +1,3 @@
-using Castle.Rook.Compiler.Visitors;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,12 +12,24 @@ using Castle.Rook.Compiler.Visitors;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Services.Passes
 {
 	using System;
 
+	using Castle.Rook.Compiler.AST;
+	using Castle.Rook.Compiler.Visitors;
 
-	public interface IStatement : IVisitableNode
+
+	public class ScopeBinding : AbstractVisitor, ICompilerPass
 	{
+		public ScopeBinding()
+		{
+		}
+
+		public void ExecutePass(CompilationUnit unit)
+		{
+			VisitNode(unit);
+		}
+
 	}
 }

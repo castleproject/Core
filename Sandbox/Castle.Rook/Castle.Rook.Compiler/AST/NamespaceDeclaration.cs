@@ -17,8 +17,10 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class NamespaceDeclaration
+
+	public class NamespaceDeclaration : AbstractCodeNode
 	{
 		private String name;
 
@@ -37,6 +39,11 @@ namespace Castle.Rook.Compiler.AST
 		public IList Statements
 		{
 			get { return statements; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitNamespace(this);
 		}
 	}
 }

@@ -17,8 +17,10 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class ForStatement : IStatement
+
+	public class ForStatement : AbstractStatement
 	{
 		private IList statements = new ArrayList();
 		private IList varRefs = new ArrayList();
@@ -38,6 +40,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return evalExp; }
 			set { evalExp = value; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitForStatement(this);
 		}
 	}
 }

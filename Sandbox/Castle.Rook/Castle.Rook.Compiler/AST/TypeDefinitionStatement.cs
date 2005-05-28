@@ -17,6 +17,8 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
+
 	public enum AccessLevel
 	{
 		Protected,
@@ -25,7 +27,7 @@ namespace Castle.Rook.Compiler.AST
 		Internal,
 	}
 
-	public class TypeDefinitionStatement : IStatement
+	public class TypeDefinitionStatement : AbstractStatement
 	{
 		private readonly string name;
 		private readonly IList statements = new ArrayList();
@@ -38,6 +40,11 @@ namespace Castle.Rook.Compiler.AST
 		public IList Statements
 		{
 			get { return statements; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitTypeDefinitionStatement(this);
 		}
 	}
 }

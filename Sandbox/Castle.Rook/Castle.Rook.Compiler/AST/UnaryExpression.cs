@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 	public enum UnaryOp
 	{
 		Plus,
@@ -33,6 +35,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			this.op = op;
 			this.inner = inner;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitUnaryExpression(this);
 		}
 	}
 }

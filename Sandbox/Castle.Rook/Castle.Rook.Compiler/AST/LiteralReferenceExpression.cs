@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 	public enum LiteralReferenceType
 	{
 		IntLiteral,
@@ -35,6 +37,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			this.type = type;
 			this.content = content;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitLiteralReferenceExpression(this);
 		}
 	}
 }

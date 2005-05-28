@@ -125,8 +125,6 @@ statement returns[IStatement stmt]
 		|
 		stmt=for_statement
 		|
-		stmt=flow_statements
-		|
 		stmt=if_statement
 		|
 		(unless_statement) => stmt=unless_statement
@@ -183,16 +181,16 @@ unless_statement returns[IfStatement ifs]
 	END
 	;
 
-flow_statements returns[IStatement stmt]
-	{ stmt = null; }
+flow_expressions returns[IExpression exp]
+	{ exp = null; }
 	:
-	"redo"	{ stmt = new RedoStatement(); }
+	"redo"	{ exp = new RedoExpression(); }
 	|
-	"break"	{ stmt = new BreakStatement(); }
+	"break"	{ exp = new BreakExpression(); }
 	|
-	"next"	{ stmt = new NextStatement(); }
+	"next"	{ exp = new NextExpression(); }
 	|
-	"retry"	{ stmt = new RetryStatement(); }
+	"retry"	{ exp = new RetryExpression(); }
 	;
 
 protected
@@ -212,10 +210,13 @@ access_level
 	;
 
 declaration_statement returns [VariableDeclarationStatement vdstmt]
-	{ vdstmt = new VariableDeclarationStatement(); TypeDeclarationExpression tdstmt = null; }
+	{ vdstmt = new VariableDeclarationStatement(); TypeDeclarationExpression tdstmt = null;
+	  IExpression initExp = null; }
 	:
- 	tdstmt=type_name_withtype (COMMA tdstmt=type_name_withtype)* (ASSIGN test (COMMA test)* )?
- 	  {  }
+ 	tdstmt=type_name_withtype			{ vdstmt.Add(tdstmt); }
+ 	(COMMA tdstmt=type_name_withtype	{ vdstmt.Add(tdstmt); })* 
+ 	(ASSIGN initExp=test { vdstmt.AddInitExp(initExp); } 
+ 	(COMMA initExp=test { vdstmt.AddInitExp(initExp); } )* )?
  	;
 
 type_def_statement returns [TypeDefinitionStatement tdstmt]
@@ -280,7 +281,9 @@ expression_statement returns[IStatement stmt]
 			(ASSIGN rhs=test		{ exp = new AssignmentExpression(exp, rhs); } )+
 		)?
 		|
-		exp=compound		
+		exp=compound
+		|
+		exp=flow_expressions
 	)
 	(pfc=postFixCondition { exp.PostFixStatement = pfc; } )?
 	{ stmt = new ExpressionStatement(exp); }

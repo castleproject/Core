@@ -469,14 +469,6 @@ _loop12_breakloop:			;
 				stmt=for_statement();
 				break;
 			}
-			case LITERAL_redo:
-			case LITERAL_break:
-			case LITERAL_next:
-			case LITERAL_retry:
-			{
-				stmt=flow_statements();
-				break;
-			}
 			default:
 				bool synPredMatched16 = false;
 				if (((tokenSet_5_.member(LA(1))) && (LA(2)==SYMBOL)))
@@ -969,8 +961,13 @@ _loop12_breakloop:			;
 		VariableDeclarationStatement vdstmt;
 		
 		vdstmt = new VariableDeclarationStatement(); TypeDeclarationExpression tdstmt = null;
+			  IExpression initExp = null;
 		
 		tdstmt=type_name_withtype();
+		if (0==inputState.guessing)
+		{
+			vdstmt.Add(tdstmt);
+		}
 		{    // ( ... )*
 			for (;;)
 			{
@@ -978,6 +975,10 @@ _loop12_breakloop:			;
 				{
 					match(COMMA);
 					tdstmt=type_name_withtype();
+					if (0==inputState.guessing)
+					{
+						vdstmt.Add(tdstmt);
+					}
 				}
 				else
 				{
@@ -993,14 +994,22 @@ _loop43_breakloop:			;
 			case ASSIGN:
 			{
 				match(ASSIGN);
-				test();
+				initExp=test();
+				if (0==inputState.guessing)
+				{
+					vdstmt.AddInitExp(initExp);
+				}
 				{    // ( ... )*
 					for (;;)
 					{
 						if ((LA(1)==COMMA))
 						{
 							match(COMMA);
-							test();
+							initExp=test();
+							if (0==inputState.guessing)
+							{
+								vdstmt.AddInitExp(initExp);
+							}
 						}
 						else
 						{
@@ -1022,10 +1031,6 @@ _loop46_breakloop:					;
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			 }
-		}
-		if (0==inputState.guessing)
-		{
-			
 		}
 		return vdstmt;
 	}
@@ -1156,58 +1161,6 @@ _loop46_breakloop:					;
 		suite(fors.Statements);
 		match(END);
 		return fors;
-	}
-	
-	public IStatement  flow_statements() //throws RecognitionException, TokenStreamException
-{
-		IStatement stmt;
-		
-		stmt = null;
-		
-		switch ( LA(1) )
-		{
-		case LITERAL_redo:
-		{
-			match(LITERAL_redo);
-			if (0==inputState.guessing)
-			{
-				stmt = new RedoStatement();
-			}
-			break;
-		}
-		case LITERAL_break:
-		{
-			match(LITERAL_break);
-			if (0==inputState.guessing)
-			{
-				stmt = new BreakStatement();
-			}
-			break;
-		}
-		case LITERAL_next:
-		{
-			match(LITERAL_next);
-			if (0==inputState.guessing)
-			{
-				stmt = new NextStatement();
-			}
-			break;
-		}
-		case LITERAL_retry:
-		{
-			match(LITERAL_retry);
-			if (0==inputState.guessing)
-			{
-				stmt = new RetryStatement();
-			}
-			break;
-		}
-		default:
-		{
-			throw new NoViableAltException(LT(1), getFilename());
-		}
-		 }
-		return stmt;
 	}
 	
 	public IfStatement  if_statement() //throws RecognitionException, TokenStreamException
@@ -1385,6 +1338,10 @@ _loop29_breakloop:			;
 		case SEMI:
 		case LITERAL_if:
 		case LITERAL_unless:
+		case LITERAL_redo:
+		case LITERAL_break:
+		case LITERAL_next:
+		case LITERAL_retry:
 		case ASSIGN:
 		case IDENT:
 		case LTHAN:
@@ -1496,6 +1453,9 @@ _loop65_breakloop:								;
 				}
 				else if ((LA(1)==DO||LA(1)==BEGIN) && (LA(2)==STATEMENT_END||LA(2)==SEMI)) {
 					exp=compound();
+				}
+				else if (((LA(1) >= LITERAL_redo && LA(1) <= LITERAL_retry))) {
+					exp=flow_expressions();
 				}
 				else
 				{
@@ -1654,6 +1614,58 @@ _loop102_breakloop:					;
 		}
 		 }
 		return vre;
+	}
+	
+	public IExpression  flow_expressions() //throws RecognitionException, TokenStreamException
+{
+		IExpression exp;
+		
+		exp = null;
+		
+		switch ( LA(1) )
+		{
+		case LITERAL_redo:
+		{
+			match(LITERAL_redo);
+			if (0==inputState.guessing)
+			{
+				exp = new RedoExpression();
+			}
+			break;
+		}
+		case LITERAL_break:
+		{
+			match(LITERAL_break);
+			if (0==inputState.guessing)
+			{
+				exp = new BreakExpression();
+			}
+			break;
+		}
+		case LITERAL_next:
+		{
+			match(LITERAL_next);
+			if (0==inputState.guessing)
+			{
+				exp = new NextExpression();
+			}
+			break;
+		}
+		case LITERAL_retry:
+		{
+			match(LITERAL_retry);
+			if (0==inputState.guessing)
+			{
+				exp = new RetryExpression();
+			}
+			break;
+		}
+		default:
+		{
+			throw new NoViableAltException(LT(1), getFilename());
+		}
+		 }
+		return exp;
 	}
 	
 	public TypeDeclarationExpression  type_name_withtype() //throws RecognitionException, TokenStreamException
@@ -3639,7 +3651,7 @@ _loop151_breakloop:			;
 	public static readonly BitSet tokenSet_7_ = new BitSet(mk_tokenSet_7_());
 	private static long[] mk_tokenSet_8_()
 	{
-		long[] data = { -11540327504542048L, 939523967L, 0L, 0L};
+		long[] data = { -11536204335937888L, 939523967L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_8_ = new BitSet(mk_tokenSet_8_());

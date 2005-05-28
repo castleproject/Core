@@ -1,3 +1,4 @@
+using Castle.Rook.Compiler.Visitors;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,15 +32,37 @@ namespace Castle.Rook.Compiler.AST
 
 	public class AugAssignmentExpression : AbstractExpression
 	{
-		private readonly IExpression target;
-		private readonly IExpression value;
 		private readonly AugType augType;
+		private IExpression target;
+		private IExpression value;
 
 		public AugAssignmentExpression(IExpression target, IExpression value, AugType augType)
 		{
 			this.augType = augType;
 			this.target = target;
 			this.value = value;
+		}
+
+		public IExpression Target
+		{
+			get { return target; }
+			set { target = value; }
+		}
+
+		public IExpression Value
+		{
+			get { return this.value; }
+			set { this.value = value; }
+		}
+
+		public AugType AugType
+		{
+			get { return augType; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitAusAssignmentExpression(this);
 		}
 	}
 }

@@ -16,11 +16,18 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class RangeExpression : AbstractExpression
 	{
 		public RangeExpression(IExpression lhs, IExpression rhs, bool inclusive)
 		{
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitRangeExpression(this);
 		}
 	}
 }

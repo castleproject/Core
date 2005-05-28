@@ -16,11 +16,18 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class RedoStatement : AbstractStatement
+
+	public class BreakExpression : AbstractExpression
 	{
-		public RedoStatement()
+		public BreakExpression()
 		{
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitBreakExpression(this);
 		}
 	}
 }

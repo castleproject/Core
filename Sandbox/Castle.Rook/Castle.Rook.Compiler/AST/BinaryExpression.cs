@@ -1,3 +1,4 @@
+using Castle.Rook.Compiler.Visitors;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,6 +49,11 @@ namespace Castle.Rook.Compiler.AST
 			this.op = op;
 			this.lhs = lhs;
 			this.rhs = rhs;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitBinaryExpression(this);
 		}
 	}
 }

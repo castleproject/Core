@@ -17,6 +17,8 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public enum RepeatType
 	{
@@ -24,7 +26,7 @@ namespace Castle.Rook.Compiler.AST
 		While
 	}
 
-	public class RepeatStatement : IStatement
+	public class RepeatStatement : AbstractStatement
 	{
 		private IList statements = new ArrayList();
 		private RepeatType type;
@@ -44,6 +46,16 @@ namespace Castle.Rook.Compiler.AST
 		public IList Statements
 		{
 			get { return statements; }
+		}
+
+		public IExpression ConditionExp
+		{
+			get { return conditionExp; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitRepeatStatement(this);
 		}
 	}
 }

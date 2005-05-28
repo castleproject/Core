@@ -17,6 +17,8 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class ListExpression : AbstractExpression
 	{
@@ -29,6 +31,11 @@ namespace Castle.Rook.Compiler.AST
 		public void Add(IExpression item)
 		{
 			items.Add(item);
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitListExpression(this);
 		}
 	}
 }

@@ -17,6 +17,8 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class CompoundExpression : AbstractExpression
 	{
@@ -25,6 +27,11 @@ namespace Castle.Rook.Compiler.AST
 		public IList Statements
 		{
 			get { return statements; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitCompoundExpression(this);
 		}
 	}
 }

@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class YieldExpression : AbstractExpression
 	{
@@ -24,6 +26,11 @@ namespace Castle.Rook.Compiler.AST
 		public YieldExpression(ExpressionCollection expColl)
 		{
 			this.expColl = expColl;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitYieldExpression(this);
 		}
 	}
 }

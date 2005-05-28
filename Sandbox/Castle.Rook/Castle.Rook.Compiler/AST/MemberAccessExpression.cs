@@ -16,14 +16,27 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public class MemberAccessExpression : AbstractExpression
 	{
-		private readonly IExpression target;
+		private IExpression target;
 
 		public MemberAccessExpression(IExpression target)
 		{
 			this.target = target;
+		}
+
+		public IExpression Target
+		{
+			get { return target; }
+			set { target = value; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitMemberAccessExpression(this);
 		}
 	}
 }

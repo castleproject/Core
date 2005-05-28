@@ -16,14 +16,21 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class TypeReference
+
+	public class TypeReference : AbstractCodeNode
 	{
 		private readonly string symbol;
 
 		public TypeReference(String symbol)
 		{
 			this.symbol = symbol;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitTypeReference(this);
 		}
 	}
 }

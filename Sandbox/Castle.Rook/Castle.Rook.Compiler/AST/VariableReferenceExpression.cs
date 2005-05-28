@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 	public enum VariableReferenceType
 	{
 		LocalOrArgument,
@@ -32,6 +34,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			this.name = name;
 			this.type = type;
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitVariableReferenceExpression(this);
 		}
 	}
 }

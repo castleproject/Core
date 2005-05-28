@@ -17,8 +17,10 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class MethodDefinitionStatement : IStatement
+
+	public class MethodDefinitionStatement : AbstractStatement
 	{
 		private readonly IList statements = new ArrayList();
 		private readonly string fullname;
@@ -38,6 +40,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return returnType; }
 			set { returnType = value; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitMethodDefinitionStatement(this);
 		}
 	}
 }

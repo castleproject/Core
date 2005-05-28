@@ -17,8 +17,10 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class CompilationUnit
+
+	public class CompilationUnit : AbstractCodeNode
 	{
 		private IList statements = new ArrayList();
 		private IList namespaces = new ArrayList();
@@ -31,6 +33,12 @@ namespace Castle.Rook.Compiler.AST
 		public IList Namespaces
 		{
 			get { return namespaces; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			visitor.VisitCompilationUnit(this);
+			return true;
 		}
 	}
 }

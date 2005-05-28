@@ -16,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
+
 
 	public enum PostfixConditionType
 	{
@@ -25,7 +27,7 @@ namespace Castle.Rook.Compiler.AST
 		Until
 	}
 
-	public class PostfixCondition : IStatement
+	public class PostfixCondition : AbstractStatement
 	{
 		private readonly PostfixConditionType type;
 		private IExpression condition;
@@ -39,6 +41,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return condition; }
 			set { condition = value; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitPostfixCondition(this);
 		}
 	}
 }

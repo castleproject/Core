@@ -16,8 +16,10 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class ExpressionStatement : IStatement
+
+	public class ExpressionStatement : AbstractStatement
 	{
 		public IExpression expression;
 
@@ -29,6 +31,11 @@ namespace Castle.Rook.Compiler.AST
 		public IExpression Expression
 		{
 			get { return expression; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitExpressionStatement(this);
 		}
 	}
 }
