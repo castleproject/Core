@@ -102,30 +102,32 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<a href=\"#\" onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, name );
 		}
 
-        /// <summary>
-        /// Returns a button that'll trigger a javascript +function+ using the 
-        /// onclick handler and return false after the fact.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="functionCodeOrName"></param>
-        /// <param name="styleClass"></param>
-        /// <returns></returns>
-        public String ButtonToFunction(String name, String functionCodeOrName, String styleClass) {
-            return string.Format("<input type=\"button\" class=\"{2}\" onclick=\"{0}; return false;\" value=\"{1}\" />",
-                functionCodeOrName, name, styleClass);
-        }
+		/// <summary>
+		/// Returns a button that'll trigger a javascript +function+ using the 
+		/// onclick handler and return false after the fact.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="functionCodeOrName"></param>
+		/// <param name="styleClass"></param>
+		/// <returns></returns>
+		public String ButtonToFunction(String name, String functionCodeOrName, String styleClass) 
+		{
+			return string.Format("<input type=\"button\" class=\"{2}\" onclick=\"{0}; return false;\" value=\"{1}\" />",
+				functionCodeOrName, name, styleClass);
+		}
 
-        /// <summary>
-        /// Returns a button that'll trigger a javascript +function+ using the 
-        /// onclick handler and return false after the fact.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="functionCodeOrName"></param>
-        /// <returns></returns>
-        public String ButtonToFunction(String name, String functionCodeOrName) {
-            return String.Format("<input type=\"button\" onclick=\"{0}; return false;\" value=\"{1}\" />",
-                functionCodeOrName, name );
-        }
+		/// <summary>
+		/// Returns a button that'll trigger a javascript +function+ using the 
+		/// onclick handler and return false after the fact.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="functionCodeOrName"></param>
+		/// <returns></returns>
+		public String ButtonToFunction(String name, String functionCodeOrName) 
+		{
+			return String.Format("<input type=\"button\" onclick=\"{0}; return false;\" value=\"{1}\" />",
+				functionCodeOrName, name);
+		}
 
 		/// <summary>
 		/// Returns a link to a remote action defined by <tt>options[:url]</tt> 
@@ -136,44 +138,49 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// either render_partial or render_partial_collection. 
 		/// </summary>
 		/// <param name="name"></param>
-        /// <param name="url"></param>
+		/// <param name="url"></param>
 		/// <param name="options"></param>
 		/// <returns></returns>
 		public String LinkToRemote(String name, String url, IDictionary options)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(url, options) );
+			return LinkToFunction(name, BuildRemoteFunction(url, options));
 		}
 
 		public String LinkToRemote(String name, String url, String update)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(update, url) );
+			return LinkToFunction(name, BuildRemoteFunction(update, url));
 		}
 
 		public String LinkToRemote(String name, String url, String update, String with)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(with, update, url) );
+			return LinkToFunction(name, BuildRemoteFunction(with, update, url));
 		}
 
 		public String LinkToRemote(String name, String url, String update, bool form)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(form, update, url) );
+			return LinkToFunction(name, BuildRemoteFunction(form, update, url));
 		}
 
-        public String ButtonToRemote(String name, String url, String update)
-        {
-            return ButtonToFunction(name, BuildRemoteFunction(url, update));
-        }
-        public String ButtonToRemote(String name, String url, String update, String with)
-        {
-            return ButtonToFunction(name, BuildRemoteFunction(url, update, with) );   
-        }
-        public String ButtonToRemote(String name, String url, String update, bool form)
-        {
-            return ButtonToFunction(name, BuildRemoteFunction(form, update, url));
-        }
-        public String ButtonToRemote(String name, String url, IDictionary options) {
-            return ButtonToFunction(name, BuildRemoteFunction(url, options) );
-        }
+		public String ButtonToRemote(String name, String url, String update)
+		{
+			return ButtonToFunction(name, BuildRemoteFunction(url, update));
+		}
+
+		public String ButtonToRemote(String name, String url, String update, String with)
+		{
+			return ButtonToFunction(name, BuildRemoteFunction(url, update, with));   
+		}
+
+		public String ButtonToRemote(String name, String url, String update, bool form)
+		{
+			return ButtonToFunction(name, BuildRemoteFunction(form, update, url));
+		}
+
+		public String ButtonToRemote(String name, String url, IDictionary options) 
+		{
+			return ButtonToFunction(name, BuildRemoteFunction(url, options));
+		}
+
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 
@@ -210,6 +217,16 @@ namespace Castle.MonoRail.Framework.Helpers
 			return BuildFormRemoteTag(options);
 		}
 
+		public String BuildFormRemoteTag(String url, String idOfElementToBeUpdated, 
+			String with, String loading, String loaded, String interactive, String complete, String formId)
+		{
+			IDictionary options = GetOptions(url, idOfElementToBeUpdated, with, loading, loaded, complete, interactive);
+
+			options["formId"] = formId;
+
+			return BuildFormRemoteTag(options);
+		}
+
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 
@@ -228,7 +245,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			String remoteFunc = RemoteFunction(options);
 
-			return String.Format("<form onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc);
+			String formId = options.Contains("formId") ? ("id=\"" + (String)options["formId"] + "\"") : String.Empty;
+
+			return String.Format("<form {1} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, formId);
 		}
 
 		public IDictionary GetOptions(string url, string idOfElementToBeUpdated, string with, string loading, string loaded, string complete, string interactive)
@@ -326,10 +345,10 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// serialized (request string) value of the form.
 		/// </summary>
 		/// <param name="formId"></param>
-        /// <param name="frequency"></param>
-        /// <param name="idOfElementToBeUpdated"></param>
-        /// <param name="url"></param>
-        /// <param name="with"></param>
+		/// <param name="frequency"></param>
+		/// <param name="idOfElementToBeUpdated"></param>
+		/// <param name="url"></param>
+		/// <param name="with"></param>
 		/// <returns></returns>
 		public String ObserveForm(String formId, int frequency, String url, String idOfElementToBeUpdated, String with)
 		{
@@ -529,11 +548,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			js.Append( "<script type=\"text/javascript\">" );
 			js.Append( String.Format("new {0}('{1}', {2}, function(element, value) {{ {3} }})", 
-					clazz, name, options["frequency"], call) );
+				clazz, name, options["frequency"], call) );
 			js.Append( "</script>" ); 
 
 			return js.ToString();
 		}
-
 	}
 }
