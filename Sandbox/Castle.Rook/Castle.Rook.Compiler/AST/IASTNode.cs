@@ -18,40 +18,9 @@ namespace Castle.Rook.Compiler.AST
 
 	using Castle.Rook.Compiler.Visitors;
 
-	public enum LiteralReferenceType
+
+	public interface IASTNode : IVisitableNode
 	{
-		IntLiteral,
-		LongLiteral,
-		FloatLiteral,
-		StringLiteral,
-		CharLiteral,
-		SymbolLiteral
-	}
-
-	public class LiteralReferenceExpression : AbstractExpression
-	{
-		private readonly LiteralReferenceType type;
-		private readonly string content;
-
-		public LiteralReferenceExpression( String content, LiteralReferenceType type )
-		{
-			this.type = type;
-			this.content = content;
-		}
-
-		public LiteralReferenceType Type
-		{
-			get { return type; }
-		}
-
-		public string Content
-		{
-			get { return content; }
-		}
-
-		public override bool Accept(IASTVisitor visitor)
-		{
-			return visitor.VisitLiteralReferenceExpression(this);
-		}
+		LexicalPosition Position { get; }
 	}
 }

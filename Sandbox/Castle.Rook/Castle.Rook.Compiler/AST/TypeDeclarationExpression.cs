@@ -17,23 +17,38 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 
 	using Castle.Rook.Compiler.Visitors;
+	using Castle.Rook.Compiler.AST.Util;
 
+	public enum DefinitionScope
+	{
+		Local,
+		Instance, 
+		Static
+	}
 
 	public class TypeDeclarationExpression : AbstractExpression
 	{
 		private readonly string name;
 		private TypeReference typeRef;
 		private IExpression initExp;
+		private readonly DefinitionScope defScope;
 
 		public TypeDeclarationExpression(String name, TypeReference typeRef)
 		{
 			this.name = name;
 			this.typeRef = typeRef;
+
+			defScope = ASTUtils.GetScopeFromName(name);
 		}
 
 		public string Name
 		{
 			get { return name; }
+		}
+
+		public DefinitionScope DefScope
+		{
+			get { return defScope; }
 		}
 
 		public IExpression InitExp

@@ -12,14 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Services.Default
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
 
-
-	public interface IStatement : IASTNode
+	public class IdentifierNameService : IIdentifierNameService
 	{
+		public IdentifierNameService()
+		{
+		}
+
+		#region IIdentifierNameService Members
+
+		public bool IsValidVarOrFieldName(string name)
+		{
+			return true;
+		}
+
+		#endregion
 	}
 }

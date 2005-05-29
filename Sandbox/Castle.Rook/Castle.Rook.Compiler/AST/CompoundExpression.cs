@@ -20,9 +20,15 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class CompoundExpression : AbstractExpression
+	public class CompoundExpression : AbstractExpression, INameScopeAccessor
 	{
 		private IList statements = new ArrayList();
+		private INameScope namescope;
+
+		public CompoundExpression(INameScope parentScope)
+		{
+			this.namescope = new NameScope(NameScopeType.Compound, parentScope);
+		}
 
 		public IList Statements
 		{
@@ -32,6 +38,11 @@ namespace Castle.Rook.Compiler.AST
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitCompoundExpression(this);
+		}
+
+		public INameScope Namescope
+		{
+			get { return namescope; }
 		}
 	}
 }

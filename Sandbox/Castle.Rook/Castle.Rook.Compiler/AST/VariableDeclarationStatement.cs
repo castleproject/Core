@@ -21,11 +21,13 @@ namespace Castle.Rook.Compiler.AST
 
 	public class VariableDeclarationStatement : AbstractStatement
 	{
+		private readonly AccessLevel accessLevel;
 		private ExpressionCollection decls = new ExpressionCollection();
 		private ExpressionCollection initExps = new ExpressionCollection();
 
-		public VariableDeclarationStatement()
+		public VariableDeclarationStatement(AccessLevel accessLevel)
 		{
+			this.accessLevel = accessLevel;
 		}
 
 		public void Add(TypeDeclarationExpression tdstmt)
@@ -46,6 +48,11 @@ namespace Castle.Rook.Compiler.AST
 		public ExpressionCollection InitExpressions
 		{
 			get { return initExps; }
+		}
+
+		public AccessLevel AccessLevel
+		{
+			get { return accessLevel; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

@@ -30,6 +30,16 @@ namespace Castle.Rook.Compiler.AST
 			this.args = args;
 		}
 
+		public IExpression Target
+		{
+			get { return target; }
+		}
+
+		public ExpressionCollection Arguments
+		{
+			get { return args; }
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitMethodInvocationExpression(this);

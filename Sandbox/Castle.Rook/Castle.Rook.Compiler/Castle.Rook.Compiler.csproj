@@ -104,6 +104,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CompilerException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LexicalPosition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -179,12 +184,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\IASTNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\IExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "AST\IfStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\INameScope.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\INameScopeAccessor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -220,6 +240,11 @@
                 />
                 <File
                     RelPath = "AST\MethodInvocationExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\NameScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -264,6 +289,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\RootNameScope.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\TypeDeclarationExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -295,6 +325,11 @@
                 />
                 <File
                     RelPath = "AST\YieldExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Util\ASTUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -833,6 +868,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Services\IIdentifierNameService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Services\IParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -848,6 +888,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Services\Default\IdentifierNameService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Services\Default\RookParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -857,6 +902,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "TypeGraph\" />
                 <File
                     RelPath = "Visitors\AbstractVisitor.cs"
                     SubType = "Code"

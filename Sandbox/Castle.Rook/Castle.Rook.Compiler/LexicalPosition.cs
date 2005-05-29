@@ -19,8 +19,12 @@ namespace Castle.Rook.Compiler
 
 	public class LexicalPosition
 	{
-		private readonly int line;
-		private readonly int column;
+		private int line;
+		private int column;
+
+		public LexicalPosition()
+		{
+		}
 
 		public LexicalPosition(int line, int column)
 		{
@@ -31,11 +35,13 @@ namespace Castle.Rook.Compiler
 		public int Line
 		{
 			get { return line; }
+			set { line = value; }
 		}
 
 		public int Column
 		{
 			get { return column; }
+			set { column = value; }
 		}
 	}
 }

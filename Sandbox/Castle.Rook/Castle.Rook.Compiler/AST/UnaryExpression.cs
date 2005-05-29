@@ -37,6 +37,16 @@ namespace Castle.Rook.Compiler.AST
 			this.inner = inner;
 		}
 
+		public UnaryOp Operation
+		{
+			get { return op; }
+		}
+
+		public IExpression Inner
+		{
+			get { return inner; }
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitUnaryExpression(this);

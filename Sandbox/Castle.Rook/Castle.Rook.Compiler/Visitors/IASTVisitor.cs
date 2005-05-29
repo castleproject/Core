@@ -20,24 +20,18 @@ namespace Castle.Rook.Compiler.Visitors
 
 	public interface IASTVisitor
 	{
+		void VisitCompilationUnit(CompilationUnit compilationUnit);
+
 		// Members
 
 		bool VisitNamespace(NamespaceDeclaration ns);
-
 		bool VisitEnter(NamespaceDeclaration ns);
-
 		bool VisitLeave(NamespaceDeclaration ns);
-
 		bool VisitTypeDefinitionStatement(TypeDefinitionStatement typeDef);
-
 		bool VisitEnter(TypeDefinitionStatement typeDef);
-
 		bool VisitLeave(TypeDefinitionStatement typeDef);
-
 		bool VisitMethodDefinitionStatement(MethodDefinitionStatement methodDef);
-
 		bool VisitEnter(MethodDefinitionStatement methodDef);
-
 		bool VisitLeave(MethodDefinitionStatement methodDef);
 
 		// References
@@ -73,10 +67,8 @@ namespace Castle.Rook.Compiler.Visitors
 		bool VisitExpressionStatement(ExpressionStatement statement);
 		bool VisitDictExpression(DictExpression expression);
 		bool VisitCompoundExpression(CompoundExpression expression);
-		void VisitCompilationUnit(CompilationUnit compilationUnit);
 		bool VisitBreakExpression(BreakExpression breakExpression);
 		bool VisitBlockExpression(BlockExpression expression);
 		bool VisitBinaryExpression(BinaryExpression expression);
-		bool VisitAusAssignmentExpression(AugAssignmentExpression expression);
 	}
 }

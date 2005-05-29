@@ -48,6 +48,14 @@ tokens
 		
 		ErrorReport.Error( ex.getFilename(), lpos, ex.Message );
 	}
+
+	// TODO: Research for a better way to set lexical information
+	// on our AST	
+	private void SetLexical(IASTNode node, IToken t)
+	{
+		node.Position.Line = t.getLine();
+		node.Position.Column = t.getColumn();
+	}
 	
 	private Hashtable typeRefs = new Hashtable();
 	
@@ -64,6 +72,23 @@ tokens
 			return typeRef;
 		}
 	}
+	
+	private Stack scopes = new Stack();
+	
+	private void PushScope(INameScopeAccessor scope)
+	{
+		scopes.Push(scope.Namescope);
+	}
+
+	private void PopScope()
+	{
+		scopes.Pop();
+	}
+	
+	private INameScope GetCurrentScope()
+	{
+		return scopes.Peek() as INameScope;
+	}
 }
 
 protected 
@@ -79,7 +104,7 @@ nothing
 	;
 
 compilationUnit returns[CompilationUnit comp]
-	{ comp = new CompilationUnit(); }
+	{ comp = new CompilationUnit(); PushScope(comp); }
 	:
 	nothing
 	(
@@ -89,17 +114,22 @@ compilationUnit returns[CompilationUnit comp]
 	)
 	nothing
 	EOF
+	{ 
+	  PopScope(); if (!ErrorReport.HasErrors && scopes.Count != 0) ErrorReport.Error("Invalid scope count. " + 
+		"Something seems to be very wrong. Contact Castle's team and report the " + 
+		"code that caused this error.");  
+	}
 	;
 
 namespace_declaration[IList namespaces]
 	options { defaultErrorHandler=true; }
-	{ NamespaceDeclaration nsdec = new NamespaceDeclaration(); 
-	  namespaces.Add(nsdec); String qn = null; }
+	{ NamespaceDeclaration nsdec = new NamespaceDeclaration(GetCurrentScope()); 
+	  namespaces.Add(nsdec); String qn = null; PushScope(nsdec); }
 	:
-	"namespace" qn=qualified_name statement_term
+	t:"namespace" qn=qualified_name statement_term
 	{ nsdec.Name = qn; }
 	suite[nsdec.Statements]
-	END
+	END	{ PopScope(); }
 	;
 
 suite[IList stmts]
@@ -108,10 +138,15 @@ suite[IList stmts]
 	(stmt=statement { if (stmt != null) stmts.Add(stmt); } )*
 	;
 
+type_suite[IList stmts]
+	{ IStatement stmt = null; }
+	:
+	(access_level stmt=statement { if (stmt != null) stmts.Add(stmt); } )*
+	;
+
 statement returns[IStatement stmt]
 	{ stmt = null; }
 	:
-	access_level
 	(
 		(declaration_statement) => stmt=declaration_statement
 		|
@@ -210,7 +245,8 @@ access_level
 	;
 
 declaration_statement returns [VariableDeclarationStatement vdstmt]
-	{ vdstmt = new VariableDeclarationStatement(); TypeDeclarationExpression tdstmt = null;
+	{ vdstmt = new VariableDeclarationStatement(currentAccessLevel); 
+	  TypeDeclarationExpression tdstmt = null;
 	  IExpression initExp = null; }
 	:
  	tdstmt=type_name_withtype			{ vdstmt.Add(tdstmt); }
@@ -220,7 +256,7 @@ declaration_statement returns [VariableDeclarationStatement vdstmt]
  	;
 
 type_def_statement returns [TypeDefinitionStatement tdstmt]
-	{ tdstmt = null; }
+	{ tdstmt = null; currentAccessLevel = AccessLevel.Public; }
 	:
 	tdstmt=class_def_statement
 	;
@@ -230,21 +266,22 @@ class_def_statement returns [TypeDefinitionStatement tdstmt]
 						// and support modifiers like visibility and abstract etc
 	:
 	CLASS t:IDENT 
-	{ tdstmt = new TypeDefinitionStatement( t.getText() ); }
+	{ tdstmt = new TypeDefinitionStatement( GetCurrentScope(), currentAccessLevel, t.getText() );
+	  PushScope(tdstmt); }
 	( (LTHAN|SL) qualified_name (COMMA qualified_name)* )? statement_term
-	suite[tdstmt.Statements]
-	END
+	type_suite[tdstmt.Statements]
+	END { PopScope(); }
 	;
 
 method_def_statement returns [MethodDefinitionStatement mdstmt]
 	{ mdstmt = null; String qn = null; TypeReference retType = null; }
 	:
 	DEF^ qn=qualified_name 
-	{ mdstmt = new MethodDefinitionStatement(qn); }
+	{ mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn); PushScope(mdstmt); }
 	LPAREN (methodParams[mdstmt])? RPAREN (retType=type)? statement_term
 	{ mdstmt.ReturnType = retType; }
 	suite[mdstmt.Statements]
-	END
+	END { PopScope(); }
 	;
 
 // operator_def_statement
@@ -408,11 +445,11 @@ blockargs[BlockExpression bexp]
 	;
 
 compound returns[CompoundExpression cexp]
-	{ cexp = new CompoundExpression(); }
+	{ cexp = new CompoundExpression(GetCurrentScope()); PushScope(cexp); }
 	:
 	(DO^|BEGIN^) statement_term
 	suite[cexp.Statements]
-	END 
+	END  { PopScope(); }
 	;
 
 // testlist
@@ -652,11 +689,10 @@ dictmaker returns [DictExpression exp]
 	{ exp = new DictExpression(); IExpression key, value; }
     :   
     key=expression MAPASSIGN value=test
-      { exp.Add(key, exp); }
+      { exp.Add(key, value); }
     (options {greedy=true;}:COMMA key=expression MAPASSIGN value=test 
-      { exp.Add(key, exp); } )* 
+      { exp.Add(key, value); } )* 
     ;
-
 
 
 class RookLexer extends Lexer;

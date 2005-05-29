@@ -21,11 +21,16 @@ namespace Castle.Rook.Compiler.AST
 
 	public class LambdaExpression : AbstractExpression
 	{
-		public BlockExpression block;
+		private BlockExpression block;
 
 		public LambdaExpression(BlockExpression block)
 		{
 			this.block = block;
+		}
+
+		public BlockExpression Block
+		{
+			get { return block; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

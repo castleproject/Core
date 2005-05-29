@@ -28,6 +28,11 @@ namespace Castle.Rook.Compiler.AST
 			this.exp = exp;
 		}
 
+		public IExpression Inner
+		{
+			get { return exp; }
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitRaiseExpression(this);

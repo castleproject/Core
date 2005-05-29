@@ -20,14 +20,15 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class NamespaceDeclaration : AbstractCodeNode
+	public class NamespaceDeclaration : AbstractCodeNode, INameScopeAccessor
 	{
 		private String name;
-
 		private IList statements = new ArrayList();
+		private INameScope namescope;
 
-		public NamespaceDeclaration()
+		public NamespaceDeclaration(INameScope parentScope)
 		{
+			this.namescope = new NameScope(NameScopeType.Namespace, parentScope);
 		}
 
 		public string Name
@@ -44,6 +45,11 @@ namespace Castle.Rook.Compiler.AST
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitNamespace(this);
+		}
+
+		public INameScope Namescope
+		{
+			get { return namescope; }
 		}
 	}
 }

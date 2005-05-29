@@ -22,7 +22,7 @@ namespace Castle.Rook.Compiler.AST
 
 	public class ListExpression : AbstractExpression
 	{
-		private ArrayList items = new ArrayList();
+		private ExpressionCollection items = new ExpressionCollection();
 
 		public ListExpression()
 		{
@@ -31,6 +31,11 @@ namespace Castle.Rook.Compiler.AST
 		public void Add(IExpression item)
 		{
 			items.Add(item);
+		}
+
+		public ExpressionCollection Items
+		{
+			get { return items; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

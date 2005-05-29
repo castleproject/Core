@@ -20,6 +20,7 @@ namespace Castle.Rook.Compiler
 
 	using Castle.Rook.Compiler.Services;
 	using Castle.Rook.Compiler.Services.Default;
+	using Castle.Rook.Compiler.Services.Passes;
 
 
 	public class CompilerContainer : DefaultKernel
@@ -31,6 +32,8 @@ namespace Castle.Rook.Compiler
 
 		public virtual void AddServices()
 		{
+			this.AddComponent( "scope.pass", typeof(ScopeBinding) );
+			this.AddComponent( "ident", typeof(IIdentifierNameService), typeof(IdentifierNameService) );
 			this.AddComponent( "parser", typeof(IParser), typeof(RookParser) );
 			this.AddComponent( "error", typeof(IErrorReport), typeof(ErrorReport) );
 		}

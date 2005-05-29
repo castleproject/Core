@@ -41,10 +41,11 @@ namespace Castle.Rook.Compiler.Tests.ASTConstruction
 			CompilationUnit unit = container.ParserService.Parse("\r\n namespace MyNamespace end\r\n");
 
 			Assert.IsTrue( container.ErrorReport.HasErrors );
-			String message = container.ErrorReport.ErrorSBuilder.ToString();
 
 			Assert.IsNotNull(unit);
 			Assert.AreEqual(1, unit.Namespaces.Count);
+
+			String message = container.ErrorReport.ErrorSBuilder.ToString();
 			Assert.AreEqual(":2,24\terror:  unexpected token: [\"end\",<6>,line=2,col=24]\r\n", message);
 		}	
 	}

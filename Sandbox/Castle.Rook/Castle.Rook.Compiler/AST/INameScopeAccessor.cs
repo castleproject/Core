@@ -16,10 +16,11 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
-
-
-	public interface IStatement : IASTNode
+	/// <summary>
+	/// Declares that the implementor starts a new naming scope
+	/// </summary>
+	public interface INameScopeAccessor
 	{
+		INameScope Namescope { get; }
 	}
 }

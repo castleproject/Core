@@ -12,14 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler
 {
 	using System;
+	using System.Runtime.Serialization;
 
-	using Castle.Rook.Compiler.Visitors;
-
-
-	public interface IStatement : IASTNode
+	[Serializable]
+	public class CompilerException : Exception
 	{
+		public CompilerException(string message) : base(message)
+		{
+		}
+
+		public CompilerException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
+		public CompilerException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
 	}
 }

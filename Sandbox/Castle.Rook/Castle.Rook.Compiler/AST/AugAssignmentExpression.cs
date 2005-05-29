@@ -62,7 +62,7 @@ namespace Castle.Rook.Compiler.AST
 
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitAusAssignmentExpression(this);
+			return visitor.VisitAugAssignmentExpression(this);
 		}
 	}
 }

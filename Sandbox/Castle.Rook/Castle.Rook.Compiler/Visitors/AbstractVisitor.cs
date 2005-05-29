@@ -30,29 +30,37 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 			if (node == null) return true;
 
-			return node.Accept(this);
+			BeforeVisitingNode(node);
+
+			bool res = node.Accept(this);
+
+			AfterVisitingNode(node);
+
+			return res;
 		}
 
 		public virtual bool VisitNodes(IList nodes)
 		{
-			BeforeVisitingNodes();
-
 			foreach(IVisitableNode node in nodes)
 			{
 				VisitNode(node);
 			}
 
-			AfterVisitingNodes();
-
 			return true;
 		}
 
-		protected virtual void AfterVisitingNodes()
+		protected virtual void AfterVisitingNode(IVisitableNode node)
 		{
 		}
 
-		protected virtual void BeforeVisitingNodes()
+		protected virtual void BeforeVisitingNode(IVisitableNode node)
 		{
+		}
+
+		public virtual void VisitCompilationUnit(CompilationUnit compilationUnit)
+		{
+			VisitNodes(compilationUnit.Namespaces);
+			VisitNodes(compilationUnit.Statements);
 		}
 
 		public virtual bool VisitNamespace(NamespaceDeclaration ns)
@@ -105,6 +113,7 @@ namespace Castle.Rook.Compiler.Visitors
 			{
 				VisitNode(methodDef.ReturnType);
 				VisitNodes(methodDef.Statements);
+				// TODO: methodDef.Arguments
 
 				return VisitLeave(methodDef);
 			}
@@ -122,155 +131,238 @@ namespace Castle.Rook.Compiler.Visitors
 			return true;
 		}
 
+		//
+		// References
+		//
+
 		public virtual bool VisitTypeReference(TypeReference reference)
 		{
 			return true;
 		}
 
-		public virtual bool VisitVariableDeclarationStatement(VariableDeclarationStatement varDecl)
-		{
-			return true;
-		}
-
-		public virtual bool VisitRepeatStatement(RepeatStatement statement)
-		{
-			return true;
-		}
-
-		public virtual bool VisitPostfixCondition(PostfixCondition postfixCondition)
-		{
-			return true;
-		}
-
-		public virtual bool VisitAssignmentExpression(AssignmentExpression assignExp)
-		{
-			return true;
-		}
-
-		public virtual bool VisitAugAssignmentExpression(AugAssignmentExpression auAssignExp)
-		{
-			return true;
-		}
-
-		public virtual bool VisitYieldExpression(YieldExpression yieldExpression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitVariableReferenceExpression(VariableReferenceExpression variableReferenceExpression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitUnaryExpression(UnaryExpression unaryExpression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitTypeDeclarationExpression(TypeDeclarationExpression typeDeclarationExpression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitRetryExpression(RetryExpression expression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitNextExpression(NextExpression expression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitRedoExpression(RedoExpression expression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitRangeExpression(RangeExpression rangeExpression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitRaiseExpression(RaiseExpression expression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitMethodInvocationExpression(MethodInvocationExpression invocationExpression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitLiteralReferenceExpression(LiteralReferenceExpression expression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitListExpression(ListExpression expression)
-		{
-			return true;
-		}
-
-		public virtual bool VisitLambdaExpression(LambdaExpression expression)
-		{
-			return true;
-		}
+		//
+		// Statements
+		//
 
 		public virtual bool VisitIfStatement(IfStatement ifStatement)
 		{
+			VisitNode(ifStatement.Condition);
+			VisitNodes(ifStatement.TrueStatements);
+			VisitNodes(ifStatement.FalseStatements);
 			return true;
 		}
 
 		public virtual bool VisitForStatement(ForStatement statement)
 		{
+			VisitNode(statement.EvalExp);
+			VisitNodes(statement.Statements);
+
 			return true;
 		}
 
 		public virtual bool VisitExpressionStatement(ExpressionStatement statement)
 		{
+			VisitNode(statement.Expression);
+
+			return true;
+		}
+
+		public virtual bool VisitVariableDeclarationStatement(VariableDeclarationStatement varDecl)
+		{
+			VisitNodes(varDecl.Declarations);
+			
+			// TODO: Decide if we shall visit the InitExpressions
+
+			return true;
+		}
+
+		public virtual bool VisitRepeatStatement(RepeatStatement statement)
+		{
+			VisitNode(statement.ConditionExp);
+			VisitNodes(statement.Statements);
+
+			return true;
+		}
+
+		public virtual bool VisitPostfixCondition(PostfixCondition postfixCondition)
+		{
+			VisitNode(postfixCondition.Condition);
+
+			return true;
+		}
+
+		//
+		// Expressions
+		//
+
+		public virtual bool VisitAssignmentExpression(AssignmentExpression assignExp)
+		{
+			VisitNode(assignExp.Target);
+			VisitNode(assignExp.Value);
+			VisitExpression(assignExp);
+
+			return true;
+		}
+
+		public virtual bool VisitAugAssignmentExpression(AugAssignmentExpression auAssignExp)
+		{
+			VisitNode(auAssignExp.Target);
+			VisitNode(auAssignExp.Value);
+			VisitExpression(auAssignExp);
+
+			return true;
+		}
+
+		public virtual bool VisitYieldExpression(YieldExpression yieldExpression)
+		{
+			VisitExpression(yieldExpression);
+			return true;
+		}
+
+		public virtual bool VisitVariableReferenceExpression(VariableReferenceExpression variableReferenceExpression)
+		{
+			VisitExpression(variableReferenceExpression);
+			return true;
+		}
+
+		public virtual bool VisitUnaryExpression(UnaryExpression unaryExpression)
+		{
+			VisitNode(unaryExpression.Inner);
+			VisitExpression(unaryExpression);
+			return true;
+		}
+
+		public virtual bool VisitTypeDeclarationExpression(TypeDeclarationExpression typeDeclarationExpression)
+		{
+			VisitNode(typeDeclarationExpression.TypeReference);
+			VisitNode(typeDeclarationExpression.InitExp);
+			VisitExpression(typeDeclarationExpression);
+
+			return true;
+		}
+
+		public virtual bool VisitRetryExpression(RetryExpression expression)
+		{
+			VisitExpression(expression);
+
+			return true;
+		}
+
+		public virtual bool VisitNextExpression(NextExpression expression)
+		{
+			VisitExpression(expression);
+
+			return true;
+		}
+
+		public virtual bool VisitRedoExpression(RedoExpression expression)
+		{
+			VisitExpression(expression);
+
+			return true;
+		}
+
+		public virtual bool VisitRangeExpression(RangeExpression expression)
+		{
+			VisitNode(expression.LeftHandSide);
+			VisitNode(expression.RightHandSide);
+			VisitExpression(expression);
+
+			return true;
+		}
+
+		public virtual bool VisitRaiseExpression(RaiseExpression expression)
+		{
+			VisitNode(expression.Inner);
+			VisitExpression(expression);
+
+			return true;
+		}
+
+		public virtual bool VisitMethodInvocationExpression(MethodInvocationExpression invocationExpression)
+		{
+			VisitNode(invocationExpression.Target);
+			VisitNodes(invocationExpression.Arguments);
+			VisitExpression(invocationExpression);
+
+			return true;
+		}
+
+		public virtual bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
+		{
+			VisitNode(accessExpression.Target);
+			VisitExpression(accessExpression);
+
+			return true;
+		}
+
+		public virtual bool VisitLiteralReferenceExpression(LiteralReferenceExpression expression)
+		{
+			VisitExpression(expression);
+
+			return true;
+		}
+
+		public virtual bool VisitListExpression(ListExpression expression)
+		{
+			VisitNodes(expression.Items);
+			VisitExpression(expression);
+
+			return true;
+		}
+
+		public virtual bool VisitLambdaExpression(LambdaExpression expression)
+		{
+			VisitNode(expression.Block);
+			VisitExpression(expression);
+
 			return true;
 		}
 
 		public virtual bool VisitDictExpression(DictExpression expression)
 		{
+			// TODO: Expose keys and values expressions
+
+			VisitExpression(expression);
+
 			return true;
 		}
 
 		public virtual bool VisitCompoundExpression(CompoundExpression expression)
 		{
-			return true;
-		}
+			VisitNodes(expression.Statements);
+			VisitExpression(expression);
 
-		public virtual void VisitCompilationUnit(CompilationUnit compilationUnit)
-		{
-			VisitNodes(compilationUnit.Namespaces);
-			VisitNodes(compilationUnit.Statements);
+			return true;
 		}
 
 		public virtual bool VisitBreakExpression(BreakExpression breakExpression)
 		{
+			VisitExpression(breakExpression);
+
 			return true;
 		}
 
 		public virtual bool VisitBlockExpression(BlockExpression expression)
 		{
+			VisitNodes(expression.Statements);
+			VisitExpression(expression);
+
 			return true;
 		}
 
 		public virtual bool VisitBinaryExpression(BinaryExpression expression)
 		{
+			VisitNode(expression.LeftHandSide);
+			VisitNode(expression.RightHandSide);
+			VisitExpression(expression);
+
 			return true;
 		}
 
-		public virtual bool VisitAusAssignmentExpression(AugAssignmentExpression expression)
+		private void VisitExpression(IExpression exp)
 		{
-			return true;
+			VisitNode(exp.PostFixStatement);
 		}
 	}
 }

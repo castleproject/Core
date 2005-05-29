@@ -20,10 +20,11 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class CompilationUnit : AbstractCodeNode
+	public class CompilationUnit : AbstractCodeNode, INameScopeAccessor
 	{
 		private IList statements = new ArrayList();
 		private IList namespaces = new ArrayList();
+		private INameScope namescope = new RootNameScope();
 
 		public IList Statements
 		{
@@ -39,6 +40,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			visitor.VisitCompilationUnit(this);
 			return true;
+		}
+
+		public INameScope Namescope
+		{
+			get { return namescope; }
 		}
 	}
 }

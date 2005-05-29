@@ -51,6 +51,21 @@ namespace Castle.Rook.Compiler.AST
 			this.rhs = rhs;
 		}
 
+		public BinaryOp Operation
+		{
+			get { return op; }
+		}
+
+		public IExpression LeftHandSide
+		{
+			get { return lhs; }
+		}
+
+		public IExpression RightHandSide
+		{
+			get { return rhs; }
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitBinaryExpression(this);

@@ -16,42 +16,12 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
 
-	public enum LiteralReferenceType
+	public class RootNameScope : NameScope
 	{
-		IntLiteral,
-		LongLiteral,
-		FloatLiteral,
-		StringLiteral,
-		CharLiteral,
-		SymbolLiteral
-	}
-
-	public class LiteralReferenceExpression : AbstractExpression
-	{
-		private readonly LiteralReferenceType type;
-		private readonly string content;
-
-		public LiteralReferenceExpression( String content, LiteralReferenceType type )
+		public RootNameScope() : base(NameScopeType.Global)
 		{
-			this.type = type;
-			this.content = content;
-		}
-
-		public LiteralReferenceType Type
-		{
-			get { return type; }
-		}
-
-		public string Content
-		{
-			get { return content; }
-		}
-
-		public override bool Accept(IASTVisitor visitor)
-		{
-			return visitor.VisitLiteralReferenceExpression(this);
+//			AddMethodDef("puts", );
 		}
 	}
 }

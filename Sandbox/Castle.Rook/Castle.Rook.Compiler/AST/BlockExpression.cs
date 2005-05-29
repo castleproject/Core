@@ -1,4 +1,3 @@
-using Castle.Rook.Compiler.Visitors;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,8 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 	using System.Collections;
+
+	using Castle.Rook.Compiler.Visitors;
 
 
 	public class BlockExpression : AbstractExpression

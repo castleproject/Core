@@ -27,14 +27,28 @@ namespace Castle.Rook.Compiler.AST
 		Internal,
 	}
 
-	public class TypeDefinitionStatement : AbstractStatement
+	public class TypeDefinitionStatement : AbstractStatement, INameScopeAccessor
 	{
 		private readonly string name;
+		private readonly AccessLevel accessLevel;
 		private readonly IList statements = new ArrayList();
+		private INameScope namescope;
 
-		public TypeDefinitionStatement(String name)
+		public TypeDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String name)
 		{
+			this.namescope = new NameScope(NameScopeType.Type, parentScope);
 			this.name = name;
+			this.accessLevel = accessLevel;
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
+
+		public AccessLevel AccessLevel
+		{
+			get { return accessLevel; }
 		}
 
 		public IList Statements
@@ -45,6 +59,11 @@ namespace Castle.Rook.Compiler.AST
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitTypeDefinitionStatement(this);
+		}
+
+		public INameScope Namescope
+		{
+			get { return namescope; }
 		}
 	}
 }

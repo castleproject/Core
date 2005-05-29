@@ -36,6 +36,16 @@ namespace Castle.Rook.Compiler.AST
 			this.type = type;
 		}
 
+		public string Name
+		{
+			get { return name; }
+		}
+
+		public VariableReferenceType Type
+		{
+			get { return type; }
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitVariableReferenceExpression(this);

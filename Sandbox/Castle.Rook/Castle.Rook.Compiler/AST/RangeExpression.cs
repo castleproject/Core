@@ -21,8 +21,30 @@ namespace Castle.Rook.Compiler.AST
 
 	public class RangeExpression : AbstractExpression
 	{
+		private readonly IExpression lhs;
+		private readonly IExpression rhs;
+		private readonly bool inclusive;
+
 		public RangeExpression(IExpression lhs, IExpression rhs, bool inclusive)
 		{
+			this.lhs = lhs;
+			this.rhs = rhs;
+			this.inclusive = inclusive;
+		}
+
+		public IExpression LeftHandSide
+		{
+			get { return lhs; }
+		}
+
+		public IExpression RightHandSide
+		{
+			get { return rhs; }
+		}
+
+		public bool Inclusive
+		{
+			get { return inclusive; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

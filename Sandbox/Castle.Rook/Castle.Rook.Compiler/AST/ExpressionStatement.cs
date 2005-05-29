@@ -21,7 +21,7 @@ namespace Castle.Rook.Compiler.AST
 
 	public class ExpressionStatement : AbstractStatement
 	{
-		public IExpression expression;
+		private IExpression expression;
 
 		public ExpressionStatement(IExpression exp)
 		{

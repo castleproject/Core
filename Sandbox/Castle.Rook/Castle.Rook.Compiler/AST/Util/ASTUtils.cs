@@ -12,14 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.AST.Util
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
 
-
-	public interface IStatement : IASTNode
+	public class ASTUtils
 	{
+		public ASTUtils()
+		{
+		}
+
+		public static DefinitionScope GetScopeFromName(string name)
+		{
+			if (name.StartsWith("@@"))
+			{
+				return DefinitionScope.Static;
+			}
+			else if (name.StartsWith("@"))
+			{
+				return DefinitionScope.Instance;
+			}
+			return DefinitionScope.Local;
+		}
 	}
 }

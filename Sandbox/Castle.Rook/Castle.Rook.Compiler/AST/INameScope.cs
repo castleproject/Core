@@ -16,10 +16,22 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
 
-
-	public interface IStatement : IASTNode
+	public interface INameScope
 	{
+		bool IsDefined(String name);
+
+		/// <summary>
+		/// Recursive search in parents
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		bool IsDefinedInParent(String name);
+
+		INameScope Parent { get; }
+
+		NameScopeType NameScopeType { get; }
+		
+		void AddVariable(string name, TypeReference reference);
 	}
 }

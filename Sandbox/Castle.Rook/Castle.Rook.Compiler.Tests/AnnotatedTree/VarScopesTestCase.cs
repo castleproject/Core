@@ -19,6 +19,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 	using NUnit.Framework;
 
 	using Castle.Rook.Compiler.AST;
+	using Castle.Rook.Compiler.Services.Passes;
 
 
 	[TestFixture]
@@ -28,7 +29,6 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 		public void VariableBindings()
 		{
 			CompilationUnit unit = container.ParserService.Parse("x:int = 1\r\nputs(x)\r\n");
-
 
 			AssertNoErrorOrWarnings();
 
@@ -41,21 +41,28 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 		public void MethodUsingGlobals()
 		{
 			String contents = 
-				"x:int = 1        \r\n" + 
+				"@x:int = 1        \r\n" + 
 				"                 \r\n" + 
 				"def some()       \r\n" + 
-				"                 \r\n" + 
-				"  x += 1         \r\n" + 
+				"  @x += 1         \r\n" + 
 				"end              \r\n" + 
 				"";
 
 			CompilationUnit unit = container.ParserService.Parse(contents);
 
-
 			AssertNoErrorOrWarnings();
 
 			Assert.IsNotNull(unit);
 			Assert.AreEqual(2, unit.Statements.Count);
+
+			ScopeBinding sb = container[ typeof(ScopeBinding) ] as ScopeBinding;
+
+			sb.ExecutePass(unit);
+
+			AssertNoErrorOrWarnings();
+
+			// String message = container.ErrorReport.ErrorSBuilder.ToString();
+			// Assert.AreEqual(":2,24\terror:  unexpected token: [\"end\",<6>,line=2,col=24]\r\n", message);
 		}
 	}
 }
