@@ -262,7 +262,8 @@ methodParams[MethodDefinitionStatement mdstmt]
 methodParam[MethodDefinitionStatement mdstmt]
 	{ IExpression exp = null; TypeDeclarationExpression typeName = null; }
 	:
-	typeName=type_name (ASSIGN exp=expression { typeName.InitExp = exp; } )?
+	typeName=type_name { mdstmt.AddArgument(typeName); } 
+	(ASSIGN exp=expression { typeName.InitExp = exp; } )?
 	|
 	STAR type_name		// TODO: Infer List or array
 	|

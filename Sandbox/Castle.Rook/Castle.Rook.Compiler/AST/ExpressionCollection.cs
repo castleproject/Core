@@ -28,5 +28,10 @@ namespace Castle.Rook.Compiler.AST
 		{
 			InnerList.Add(exp);
 		}
+
+		public IExpression this [int index]
+		{
+			get { return InnerList[index] as IExpression; }
+		}
 	}
 }

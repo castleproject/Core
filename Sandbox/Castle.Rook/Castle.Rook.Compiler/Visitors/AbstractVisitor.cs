@@ -26,24 +26,45 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 		}
 
-		public void VisitNode(IVisitableNode node)
+		public virtual bool VisitNode(IVisitableNode node)
 		{
-			if (node == null) return;
+			if (node == null) return true;
 
-			node.Accept(this);
+			return node.Accept(this);
 		}
 
-		public void VisitNodes(IList nodes)
+		public virtual bool VisitNodes(IList nodes)
 		{
+			BeforeVisitingNodes();
+
 			foreach(IVisitableNode node in nodes)
 			{
 				VisitNode(node);
 			}
+
+			AfterVisitingNodes();
+
+			return true;
+		}
+
+		protected virtual void AfterVisitingNodes()
+		{
+		}
+
+		protected virtual void BeforeVisitingNodes()
+		{
 		}
 
 		public virtual bool VisitNamespace(NamespaceDeclaration ns)
 		{
-			return true;
+			if (VisitEnter(ns))
+			{
+				VisitNodes(ns.Statements);
+
+				return VisitLeave(ns);
+			}
+
+			return false;
 		}
 
 		public virtual bool VisitEnter(NamespaceDeclaration ns)
@@ -58,7 +79,14 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual bool VisitTypeDefinitionStatement(TypeDefinitionStatement typeDef)
 		{
-			return true;
+			if (VisitEnter(typeDef))
+			{
+				VisitNodes(typeDef.Statements);
+
+				return VisitLeave(typeDef);
+			}
+
+			return false;
 		}
 
 		public virtual bool VisitEnter(TypeDefinitionStatement typeDef)
@@ -73,7 +101,15 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual bool VisitMethodDefinitionStatement(MethodDefinitionStatement methodDef)
 		{
-			return true;
+			if (VisitEnter(methodDef))
+			{
+				VisitNode(methodDef.ReturnType);
+				VisitNodes(methodDef.Statements);
+
+				return VisitLeave(methodDef);
+			}
+
+			return false;
 		}
 
 		public virtual bool VisitEnter(MethodDefinitionStatement methodDef)
@@ -213,6 +249,8 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual void VisitCompilationUnit(CompilationUnit compilationUnit)
 		{
+			VisitNodes(compilationUnit.Namespaces);
+			VisitNodes(compilationUnit.Statements);
 		}
 
 		public virtual bool VisitBreakExpression(BreakExpression breakExpression)

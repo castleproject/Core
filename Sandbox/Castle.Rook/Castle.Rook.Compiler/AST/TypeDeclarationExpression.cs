@@ -31,6 +31,11 @@ namespace Castle.Rook.Compiler.AST
 			this.typeRef = typeRef;
 		}
 
+		public string Name
+		{
+			get { return name; }
+		}
+
 		public IExpression InitExp
 		{
 			get { return initExp; }

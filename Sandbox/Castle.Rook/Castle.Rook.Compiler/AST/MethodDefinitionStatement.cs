@@ -23,12 +23,18 @@ namespace Castle.Rook.Compiler.AST
 	public class MethodDefinitionStatement : AbstractStatement
 	{
 		private readonly IList statements = new ArrayList();
+		private readonly IList args = new ArrayList();
 		private readonly string fullname;
 		private TypeReference returnType;
 
 		public MethodDefinitionStatement(String fullname)
 		{
 			this.fullname = fullname;
+		}
+
+		public IList Arguments
+		{
+			get { return args; }
 		}
 
 		public IList Statements
@@ -40,6 +46,11 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return returnType; }
 			set { returnType = value; }
+		}
+
+		public void AddArgument(TypeDeclarationExpression tde)
+		{
+			args.Add(tde);
 		}
 
 		public override bool Accept(IASTVisitor visitor)

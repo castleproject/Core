@@ -20,7 +20,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class ScopeBinding : AbstractVisitor, ICompilerPass
+	public class ScopeBinding : BreadthFirstVisitor, ICompilerPass
 	{
 		public ScopeBinding()
 		{

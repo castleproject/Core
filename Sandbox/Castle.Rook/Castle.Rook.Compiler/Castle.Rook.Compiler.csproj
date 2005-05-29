@@ -863,6 +863,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Visitors\BreadthFirstVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Visitors\DepthFirstVisitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
