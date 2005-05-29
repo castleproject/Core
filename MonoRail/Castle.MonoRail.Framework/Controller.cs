@@ -172,6 +172,7 @@ namespace Castle.MonoRail.Framework
 			get { return Context.Response; }
 		}
 
+
 		#endregion
 
 		#region Usefull operations

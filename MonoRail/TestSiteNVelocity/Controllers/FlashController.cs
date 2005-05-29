@@ -12,34 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+
+namespace TestSiteNVelocity.Controllers
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 
-	public interface IRequest
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Filters;
+
+	[Filter(ExecuteEnum.Before, typeof(RequestValidatorFilter))]
+	public class FlashController : SmartDispatcherController
 	{
-		NameValueCollection Headers { get; }
+		public FlashController()
+		{
+		}
 
-		IDictionary Files { get; }
+		public void FlashIt()
+		{
+			Flash["flashMessage"] = "It's a flash message";
+		}
 
-		NameValueCollection Params { get; }
-
-		bool IsLocal { get; }
-
-		Uri Uri { get; }
-
-		byte[] BinaryRead(int count);
-
-		String this [String key] { get; }
-
-		String ReadCookie( String name );
-
-		void ValidateInput();
-
-		NameValueCollection QueryString { get; }
-
-		NameValueCollection Form { get; }
+		public void ValidateRequest()
+		{
+			
+		}
 	}
 }

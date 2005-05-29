@@ -12,34 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.MonoRail.Framework.Filters
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
-
-	public interface IRequest
+	using System.Web;
+	
+	public class RequestValidatorFilter : IFilter
 	{
-		NameValueCollection Headers { get; }
+		public RequestValidatorFilter()
+		{
+		}
 
-		IDictionary Files { get; }
+		#region IFilter Members
 
-		NameValueCollection Params { get; }
+		public bool Perform(Castle.MonoRail.Framework.ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		{
+			try
+			{
 
-		bool IsLocal { get; }
+				context.Request.ValidateInput();
+				
+				object honeyPot = null;
+				
+				honeyPot = context.Request.Form;
+				honeyPot = context.Request.QueryString;
+			}
+			catch (HttpRequestValidationException e)
+			{
+				context.Flash["validationError"] = context.Server.HtmlEncode(e.Message);
+			}
 
-		Uri Uri { get; }
+			return true;
+		}
 
-		byte[] BinaryRead(int count);
-
-		String this [String key] { get; }
-
-		String ReadCookie( String name );
-
-		void ValidateInput();
-
-		NameValueCollection QueryString { get; }
-
-		NameValueCollection Form { get; }
+		#endregion
 	}
 }

@@ -1,3 +1,4 @@
+using System.Web;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,34 +13,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.MonoRail.Engine.Adapters
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 
-	public interface IRequest
+	using Castle.MonoRail.Framework;
+	
+	public class ServerUtilityAdapter : IServerUtility
 	{
-		NameValueCollection Headers { get; }
+		private readonly HttpServerUtility _server;
 
-		IDictionary Files { get; }
+		public ServerUtilityAdapter(HttpServerUtility server)
+		{
+			_server = server;
+		}
 
-		NameValueCollection Params { get; }
-
-		bool IsLocal { get; }
-
-		Uri Uri { get; }
-
-		byte[] BinaryRead(int count);
-
-		String this [String key] { get; }
-
-		String ReadCookie( String name );
-
-		void ValidateInput();
-
-		NameValueCollection QueryString { get; }
-
-		NameValueCollection Form { get; }
+		public string HtmlEncode(string content)
+		{
+			return _server.HtmlEncode(content);
+		}
 	}
 }

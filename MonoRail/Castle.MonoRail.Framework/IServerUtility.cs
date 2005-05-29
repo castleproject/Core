@@ -15,31 +15,10 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 
-	public interface IRequest
+	
+	public interface IServerUtility
 	{
-		NameValueCollection Headers { get; }
-
-		IDictionary Files { get; }
-
-		NameValueCollection Params { get; }
-
-		bool IsLocal { get; }
-
-		Uri Uri { get; }
-
-		byte[] BinaryRead(int count);
-
-		String this [String key] { get; }
-
-		String ReadCookie( String name );
-
-		void ValidateInput();
-
-		NameValueCollection QueryString { get; }
-
-		NameValueCollection Form { get; }
+		string HtmlEncode(string content);
 	}
 }

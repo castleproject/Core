@@ -1,3 +1,4 @@
+using Castle.MonoRail.Framework.Internal.Test;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,6 +33,7 @@ namespace Castle.MonoRail.Framework.Tests
 		private String _requestType;
 		private RequestImpl _request = new RequestImpl();
 		private ResponseImpl _response = new ResponseImpl();
+		private ServerUtilityImpl _server = new ServerUtilityImpl();
 		private Exception _lastException;
 		private Hashtable _session = new Hashtable();
 		private Hashtable _flashItems = new Hashtable();
@@ -135,155 +137,13 @@ namespace Castle.MonoRail.Framework.Tests
 		/// <param name="message"></param>
 		public void Trace(String message)
 		{
-			
+			Console.WriteLine(message);
+			System.Diagnostics.Trace.WriteLine(message);
 		}
 
-		#endregion
-	}
-
-	public class RequestImpl : IRequest
-	{
-		internal NameValueCollection _params = new NameValueCollection();
-
-		public RequestImpl()
+		public IServerUtility Server
 		{
-		}
-
-		#region IRequest Members
-
-		public NameValueCollection Headers
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public bool IsLocal
-		{
-			get { return true; }
-		}
-
-		public String this[string key]
-		{
-			get { return _params[key]; }
-		}
-
-		public IDictionary Files
-		{
-			get { return null; }
-		}
-
-		public byte[] BinaryRead(int count)
-		{
-			return null;
-		}
-
-		public NameValueCollection Params
-		{
-			get { return _params; }
-		}
-
-		public Uri Uri
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public String ReadCookie(String name)
-		{
-			throw new NotImplementedException();
-		}
-
-		#endregion
-	}
-
-	public class ResponseImpl : IResponse
-	{
-		private String _contentType;
-		private int _statusCode;
-		private StringWriter _writer;
-		
-		internal StringBuilder _contents = new StringBuilder();
-
-		public ResponseImpl()
-		{
-			_writer = new StringWriter(_contents);
-		}
-
-		#region IResponse
-
-		public int StatusCode
-		{
-			get { return _statusCode; }
-			set { _statusCode = value; }
-		}
-
-		public String ContentType
-		{
-			get { return _contentType; }
-			set { _contentType = value; }
-		}
-
-		public void AppendHeader(String name, String value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public System.IO.TextWriter Output
-		{
-			get { return _writer; }
-		}
-
-		public System.IO.Stream OutputStream
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public void Write(String s)
-		{
-			_writer.Write(s);
-		}
-
-		public void Write(object obj)
-		{
-			_writer.Write(obj);
-		}
-
-		public void Write(char ch)
-		{
-			_writer.Write(ch);
-		}
-
-		public void Write(char[] buffer, int index, int count)
-		{
-			_writer.Write(buffer, index, count);
-		}
-
-		public void Redirect(String url)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Redirect(String url, bool endProcess)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Redirect(String controller, String action)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Redirect(String area, String controller, String action)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void CreateCookie(String name, String value)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void CreateCookie(String name, String value, DateTime expiration)
-		{
-			throw new NotImplementedException();
+			get { return _server; }
 		}
 
 		#endregion

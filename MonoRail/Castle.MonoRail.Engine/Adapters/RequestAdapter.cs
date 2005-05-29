@@ -49,6 +49,16 @@ namespace Castle.MonoRail.Engine.Adapters
 			get { return _request.Url; }
 		}
 
+		public NameValueCollection QueryString
+		{
+			get { return _request.QueryString; }
+		}
+
+		public NameValueCollection Form
+		{
+			get { return _request.Form; }
+		}
+
 		public byte[] BinaryRead(int count)
 		{
 			return _request.BinaryRead(count);
@@ -84,6 +94,11 @@ namespace Castle.MonoRail.Engine.Adapters
 				return null;
 			}
 			return cookie.Value;
+		}
+
+		public void ValidateInput()
+		{
+			_request.ValidateInput();
 		}
 	}
 }

@@ -34,6 +34,7 @@ namespace Castle.MonoRail.Engine.Adapters
 		private ResponseAdapter _response;
 		private Exception _lastException;
 		private SessionAdapter _session;
+		private ServerUtilityAdapter _server;
 
 		public RailsEngineContextAdapter(HttpContext context, String url)
 		{
@@ -41,6 +42,7 @@ namespace Castle.MonoRail.Engine.Adapters
 			_context = context;
 			_request = new RequestAdapter(context.Request);
 			_response = new ResponseAdapter(context.Response, _url, ApplicationPath);
+			_server = new ServerUtilityAdapter(context.Server);
 		}
 
 		public Exception LastException
@@ -89,6 +91,11 @@ namespace Castle.MonoRail.Engine.Adapters
 		public IResponse Response
 		{
 			get { return _response; }
+		}
+
+		public IServerUtility Server
+		{
+			get { return _server; }
 		}
 
 		public Cache Cache

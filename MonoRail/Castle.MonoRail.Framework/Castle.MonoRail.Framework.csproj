@@ -133,6 +133,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IServerUtility.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Javascripts.resx"
                     BuildAction = "EmbeddedResource"
                 />
@@ -173,6 +178,11 @@
                 />
                 <File
                     RelPath = "Filters\AntiGoogleWebAcceleratorFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Filters\RequestValidatorFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -273,6 +283,21 @@
                 />
                 <File
                     RelPath = "Internal\Test\RailsEngineContextImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Test\RequestImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Test\ResponseImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Test\ServerUtilityImpl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

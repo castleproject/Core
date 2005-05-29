@@ -139,6 +139,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Adapters\ServerUtilityAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Adapters\SessionAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

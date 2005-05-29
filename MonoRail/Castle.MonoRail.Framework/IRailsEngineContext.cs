@@ -100,5 +100,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="message"></param>
 		void Trace(String message);
+
+		IServerUtility Server { get; }
 	}
 }
