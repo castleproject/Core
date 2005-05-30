@@ -28,7 +28,9 @@ Global
 		DataBase.config = DataBase.config
 		default.build = default.build
 		License.txt = License.txt
+		bin\providers.config = bin\providers.config
 		Readme.txt = Readme.txt
+		bin\SqlMap.config = bin\SqlMap.config
 		usage.txt = usage.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
