@@ -28,10 +28,10 @@ namespace Castle.Rook.Compiler.AST
 
 	public class TypeDeclarationExpression : AbstractExpression
 	{
-		private readonly string name;
+		private DefinitionScope defScope;
 		private TypeReference typeRef;
 		private IExpression initExp;
-		private readonly DefinitionScope defScope;
+		private string name;
 
 		public TypeDeclarationExpression(String name, TypeReference typeRef)
 		{
@@ -54,7 +54,11 @@ namespace Castle.Rook.Compiler.AST
 		public IExpression InitExp
 		{
 			get { return initExp; }
-			set { initExp = value; }
+			set
+			{
+				initExp = value; 
+				if (value != null) value.Parent = this;
+			}
 		}
 
 		public TypeReference TypeReference

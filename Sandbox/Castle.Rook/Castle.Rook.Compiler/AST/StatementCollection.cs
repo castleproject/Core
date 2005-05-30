@@ -19,29 +19,47 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.AST.Util;
 
 
-	public class ExpressionCollection : LinkedListBase
+	public class StatementCollection : LinkedListBase
 	{
 		private readonly IASTNode owner;
 
-		public ExpressionCollection(IASTNode owner)
+		public StatementCollection(IASTNode owner)
 		{
 			this.owner = owner;
 		}
 
-		public int Add(IExpression exp)
-		{
-			exp.Parent = owner;
-			return InnerList.Add(exp);
-		}
-
 		protected override void PrepareNode(object value)
 		{
-			((IExpression) value).Parent = owner;
+			((IStatement) value).Parent = owner;
 		}
 
-		public IExpression this [int index]
+		public int Add(IStatement node)
 		{
-			get { return InnerList[index] as IExpression; }
+			node.Parent = owner;
+			return InnerList.Add(node);
+		}
+
+		public IStatement this [int index]
+		{
+			get { return InnerList[index] as IStatement; }
+		}
+
+		public void Replace(IASTNode originalNode, IASTNode replace)
+		{
+			if (!InnerList.Contains(originalNode))
+			{
+				throw new ArgumentException("Tried to replace inexistent node " + originalNode.ToString());
+			}
+
+			int index = InnerList.IndexOf(originalNode);
+			
+			InnerList.RemoveAt(index);
+
+			if (replace != null)
+			{
+				PrepareNode(replace);
+				InnerList.Insert(index, replace);
+			}
 		}
 	}
 }

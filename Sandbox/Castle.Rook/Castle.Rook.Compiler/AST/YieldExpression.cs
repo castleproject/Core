@@ -23,9 +23,14 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private readonly ExpressionCollection expColl;
 
-		public YieldExpression(ExpressionCollection expColl)
+		public YieldExpression()
 		{
-			this.expColl = expColl;
+			this.expColl = new ExpressionCollection(this);
+		}
+
+		public ExpressionCollection ExpColl
+		{
+			get { return expColl; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

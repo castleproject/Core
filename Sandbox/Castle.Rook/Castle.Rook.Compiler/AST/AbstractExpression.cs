@@ -23,6 +23,14 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private PostfixCondition postfixCondition;
 
+		public AbstractExpression() : this(NodeType.Expression)
+		{
+		}
+
+		public AbstractExpression(NodeType nodeType) : base(nodeType)
+		{
+		}
+
 		public PostfixCondition PostFixStatement
 		{
 			get { return postfixCondition; }

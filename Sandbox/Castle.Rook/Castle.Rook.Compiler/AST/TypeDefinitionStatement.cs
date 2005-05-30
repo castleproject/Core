@@ -27,15 +27,16 @@ namespace Castle.Rook.Compiler.AST
 		Internal,
 	}
 
-	public class TypeDefinitionStatement : AbstractStatement, INameScopeAccessor
+	public class TypeDefinitionStatement : AbstractStatement, INameScopeAccessor, IStatementContainer
 	{
-		private readonly string name;
-		private readonly AccessLevel accessLevel;
-		private readonly IList statements = new ArrayList();
+		private AccessLevel accessLevel;
+		private StatementCollection statements;
 		private INameScope namescope;
+		private string name;
 
-		public TypeDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String name)
+		public TypeDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String name) : base(NodeType.TypeDefinition)
 		{
+			statements = new StatementCollection(this);
 			this.namescope = new NameScope(NameScopeType.Type, parentScope);
 			this.name = name;
 			this.accessLevel = accessLevel;
@@ -51,7 +52,7 @@ namespace Castle.Rook.Compiler.AST
 			get { return accessLevel; }
 		}
 
-		public IList Statements
+		public StatementCollection Statements
 		{
 			get { return statements; }
 		}

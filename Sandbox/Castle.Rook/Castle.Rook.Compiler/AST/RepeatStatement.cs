@@ -28,12 +28,13 @@ namespace Castle.Rook.Compiler.AST
 
 	public class RepeatStatement : AbstractStatement
 	{
-		private IList statements = new ArrayList();
+		private StatementCollection statements;
 		private RepeatType type;
 		private IExpression conditionExp;
 
 		public RepeatStatement(RepeatType type, IExpression conditionExp)
 		{
+			statements = new StatementCollection(this);
 			this.type = type;
 			this.conditionExp = conditionExp;
 		}
@@ -43,7 +44,7 @@ namespace Castle.Rook.Compiler.AST
 			get { return type; }
 		}
 
-		public IList Statements
+		public StatementCollection Statements
 		{
 			get { return statements; }
 		}

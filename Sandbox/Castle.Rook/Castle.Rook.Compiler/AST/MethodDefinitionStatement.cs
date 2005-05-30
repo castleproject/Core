@@ -20,18 +20,19 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class MethodDefinitionStatement : AbstractStatement, INameScopeAccessor
+	public class MethodDefinitionStatement : AbstractStatement, INameScopeAccessor, IStatementContainer
 	{
-		private readonly IList statements = new ArrayList();
+		private readonly StatementCollection statements;
 		private readonly IList args = new ArrayList();
 		private readonly string fullname;
 		private readonly AccessLevel accessLevel;
 		private TypeReference returnType;
 		private INameScope namescope;
 
-		public MethodDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String fullname)
+		public MethodDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String fullname) : base(NodeType.MethodDefinition)
 		{
-			this.namescope = new NameScope(NameScopeType.Method, parentScope);
+			statements = new StatementCollection(this);
+			namescope = new NameScope(NameScopeType.Method, parentScope);
 			this.fullname = fullname;
 			this.accessLevel = accessLevel;
 		}
@@ -51,7 +52,7 @@ namespace Castle.Rook.Compiler.AST
 			get { return args; }
 		}
 
-		public IList Statements
+		public StatementCollection Statements
 		{
 			get { return statements; }
 		}

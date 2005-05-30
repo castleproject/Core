@@ -130,7 +130,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AnnotatedTree\VarScopesTestCase.cs"
+                    RelPath = "AnnotatedTree\DeclarationBindingTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

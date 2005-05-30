@@ -22,15 +22,16 @@ namespace Castle.Rook.Compiler.AST
 
 	public class CompoundExpression : AbstractExpression, INameScopeAccessor
 	{
-		private IList statements = new ArrayList();
+		private StatementCollection statements;
 		private INameScope namescope;
 
-		public CompoundExpression(INameScope parentScope)
+		public CompoundExpression(INameScope parentScope) : base(NodeType.CompoundExpression)
 		{
-			this.namescope = new NameScope(NameScopeType.Compound, parentScope);
+			statements = new StatementCollection(this);
+			namescope = new NameScope(NameScopeType.Compound, parentScope);
 		}
 
-		public IList Statements
+		public StatementCollection Statements
 		{
 			get { return statements; }
 		}

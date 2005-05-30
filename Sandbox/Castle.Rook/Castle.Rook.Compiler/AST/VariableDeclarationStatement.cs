@@ -22,11 +22,13 @@ namespace Castle.Rook.Compiler.AST
 	public class VariableDeclarationStatement : AbstractStatement
 	{
 		private readonly AccessLevel accessLevel;
-		private ExpressionCollection decls = new ExpressionCollection();
-		private ExpressionCollection initExps = new ExpressionCollection();
+		private ExpressionCollection decls;
+		private ExpressionCollection initExps;
 
 		public VariableDeclarationStatement(AccessLevel accessLevel)
 		{
+			decls = new ExpressionCollection(this);
+			initExps = new ExpressionCollection(this);
 			this.accessLevel = accessLevel;
 		}
 

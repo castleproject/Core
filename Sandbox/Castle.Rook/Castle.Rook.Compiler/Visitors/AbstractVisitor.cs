@@ -41,10 +41,16 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual bool VisitNodes(IList nodes)
 		{
-			foreach(IVisitableNode node in nodes)
+			String message = nodes.ToString();
+			System.Diagnostics.Debug.WriteLine("before " + message);
+
+			for(int i=0; i < nodes.Count; i++)
 			{
-				VisitNode(node);
+				VisitNode( (IVisitableNode) nodes[i] );
 			}
+
+			message = nodes.ToString();
+			System.Diagnostics.Debug.WriteLine("after " + message);
 
 			return true;
 		}

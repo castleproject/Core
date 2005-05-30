@@ -1,0 +1,9 @@
+
++ Change TypeDeclarationExpression to something else - its not really an expression
+
+  This affects the parser rules:
+
+    type_name_withtype
+    type_name
+
+  They could return a kind of TypeName/VariableReference  (identifier + type name)

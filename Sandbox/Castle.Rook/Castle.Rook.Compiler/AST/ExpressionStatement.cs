@@ -25,7 +25,7 @@ namespace Castle.Rook.Compiler.AST
 
 		public ExpressionStatement(IExpression exp)
 		{
-			this.expression = exp;
+			this.expression = exp; exp.Parent = this;
 		}
 
 		public IExpression Expression

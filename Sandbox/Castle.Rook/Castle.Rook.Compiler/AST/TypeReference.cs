@@ -23,7 +23,7 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private readonly string symbol;
 
-		public TypeReference(String symbol)
+		public TypeReference(String symbol) : base(NodeType.TypeReference)
 		{
 			this.symbol = symbol;
 		}

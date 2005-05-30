@@ -72,7 +72,7 @@ tokens
 			return typeRef;
 		}
 	}
-	
+		
 	private Stack scopes = new Stack();
 	
 	private void PushScope(INameScopeAccessor scope)
@@ -124,7 +124,8 @@ compilationUnit returns[CompilationUnit comp]
 namespace_declaration[IList namespaces]
 	options { defaultErrorHandler=true; }
 	{ NamespaceDeclaration nsdec = new NamespaceDeclaration(GetCurrentScope()); 
-	  namespaces.Add(nsdec); String qn = null; PushScope(nsdec); }
+	  namespaces.Add(nsdec); String qn = null; PushScope(nsdec); 
+	}
 	:
 	t:"namespace" qn=qualified_name statement_term
 	{ nsdec.Name = qn; }
@@ -277,7 +278,9 @@ method_def_statement returns [MethodDefinitionStatement mdstmt]
 	{ mdstmt = null; String qn = null; TypeReference retType = null; }
 	:
 	DEF^ qn=qualified_name 
-	{ mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn); PushScope(mdstmt); }
+	{ 
+		mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn); PushScope(mdstmt); 
+	}
 	LPAREN (methodParams[mdstmt])? RPAREN (retType=type)? statement_term
 	{ mdstmt.ReturnType = retType; }
 	suite[mdstmt.Statements]
@@ -430,9 +433,9 @@ raise returns [RaiseExpression rexp]
 	;
 
 yield returns [YieldExpression rexp]
-	{ rexp = null; ExpressionCollection expColl; }
+	{ rexp = new YieldExpression(); }
 	:
-	"yield" expColl=expressionList	{ rexp = new YieldExpression(expColl); }
+	"yield" expressionList[rexp.ExpColl]
 	;
 
 blockargs[BlockExpression bexp]
@@ -514,8 +517,8 @@ comp_op returns [BinaryOp op]
 //	|"is" "not"
 	;
 
-expressionList returns [ExpressionCollection expColl]
-	{ expColl = new ExpressionCollection(); IExpression exp = null; }
+expressionList[ExpressionCollection expColl]
+	{ IExpression exp = null; }
  	:
  	exp=expression { expColl.Add(exp); } 
  	(options {greedy=true;}:COMMA exp=expression { expColl.Add(exp); } )*
@@ -629,9 +632,9 @@ constantref returns [LiteralReferenceExpression lre]
 	;
 
 trailer[IExpression inner] returns [IExpression exp]
-	{ exp = null; ExpressionCollection args = null; }
+	{ exp = null; }
 	: 
-	LPAREN (args=arglist)? RPAREN { exp = new MethodInvocationExpression(inner, args); }
+	LPAREN { exp = new MethodInvocationExpression(inner); } (arglist[(exp as MethodInvocationExpression).Arguments])? RPAREN 
 	| 
 	LBRACK subscriptlist RBRACK // TODO: Array/list/indexer access
 	| 
@@ -655,8 +658,8 @@ subscript
     expression
     ;
 
-arglist returns [ExpressionCollection expcoll]
-	{ IExpression exp; expcoll = new ExpressionCollection(); }
+arglist[ExpressionCollection expcoll]
+	{ IExpression exp; }
 	: 
 	exp=argument		{ expcoll.Add(exp); }
 	(options {greedy=true;}:COMMA exp=argument { expcoll.Add(exp); } )*

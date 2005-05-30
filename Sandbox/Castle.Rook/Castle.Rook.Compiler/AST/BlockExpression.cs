@@ -22,10 +22,15 @@ namespace Castle.Rook.Compiler.AST
 
 	public class BlockExpression : AbstractExpression
 	{
+		private StatementCollection statements;
 		private IList args = new ArrayList();
-		private IList statements = new ArrayList();
 
-		public IList Statements
+		public BlockExpression() : base(NodeType.BlockExpression)
+		{
+			statements = new StatementCollection(this);
+		}
+
+		public StatementCollection Statements
 		{
 			get { return statements; }
 		}

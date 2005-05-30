@@ -18,9 +18,25 @@ namespace Castle.Rook.Compiler.AST
 
 	using Castle.Rook.Compiler.Visitors;
 
+	public enum NodeType
+	{
+		Expression,
+		Statement,
+		Global,
+		NamespaceDefinition,
+		TypeDefinition,
+		MethodDefinition,
+		CompoundExpression,
+		BlockExpression,
+		TypeReference
+	}
 
 	public interface IASTNode : IVisitableNode
 	{
 		LexicalPosition Position { get; }
+
+		IASTNode Parent { get; set; }
+
+		NodeType NodeType { get; set; }
 	}
 }

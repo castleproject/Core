@@ -20,13 +20,18 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class CompilationUnit : AbstractCodeNode, INameScopeAccessor
+	public class CompilationUnit : AbstractCodeNode, INameScopeAccessor, IStatementContainer
 	{
-		private IList statements = new ArrayList();
+		private StatementCollection statements;
 		private IList namespaces = new ArrayList();
 		private INameScope namescope = new RootNameScope();
 
-		public IList Statements
+		public CompilationUnit() : base(NodeType.Global)
+		{
+			statements = new StatementCollection(this);
+		}
+
+		public StatementCollection Statements
 		{
 			get { return statements; }
 		}

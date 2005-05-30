@@ -89,6 +89,11 @@
                     AssemblyName = "Castle.Model"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
+                <Reference
+                    Name = "FoleyUtilities"
+                    AssemblyName = "FoleyUtilities"
+                    HintPath = "..\lib\FoleyUtilities.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -214,6 +219,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\IStatementContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\LambdaExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -294,6 +304,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\StatementCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\TypeDeclarationExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -330,6 +345,11 @@
                 />
                 <File
                     RelPath = "AST\Util\ASTUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Util\LinkedListBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -898,7 +918,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Services\Passes\ScopeBinding.cs"
+                    RelPath = "Services\Passes\DeclarationBinding.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

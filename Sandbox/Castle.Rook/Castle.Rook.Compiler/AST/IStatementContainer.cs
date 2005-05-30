@@ -15,41 +15,10 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
-
-	using Castle.Rook.Compiler.Visitors;
 
 
-	public class ForStatement : AbstractStatement
+	public interface IStatementContainer
 	{
-		private StatementCollection statements;
-		private IList varRefs = new ArrayList();
-		private IExpression evalExp;
-
-		public ForStatement()
-		{
-			statements = new StatementCollection(this);
-		}
-
-		public void AddVarRef(VariableReferenceExpression vre)
-		{
-			varRefs.Add(vre);
-		}
-
-		public StatementCollection Statements
-		{
-			get { return statements; }
-		}
-
-		public IExpression EvalExp
-		{
-			get { return evalExp; }
-			set { evalExp = value; }
-		}
-
-		public override bool Accept(IASTVisitor visitor)
-		{
-			return visitor.VisitForStatement(this);
-		}
+		StatementCollection Statements { get; }
 	}
 }

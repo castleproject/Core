@@ -24,10 +24,10 @@ namespace Castle.Rook.Compiler.AST
 		private readonly IExpression target;
 		private readonly ExpressionCollection args;
 
-		public MethodInvocationExpression(IExpression target, ExpressionCollection args)
+		public MethodInvocationExpression(IExpression target)
 		{
 			this.target = target;
-			this.args = args;
+			this.args = new ExpressionCollection(this);
 		}
 
 		public IExpression Target

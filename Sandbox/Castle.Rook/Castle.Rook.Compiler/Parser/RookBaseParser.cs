@@ -184,7 +184,7 @@ namespace Castle.Rook.Compiler.Parser
 			return typeRef;
 		}
 	}
-	
+		
 	private Stack scopes = new Stack();
 	
 	private void PushScope(INameScopeAccessor scope)
@@ -419,7 +419,8 @@ _loop81_breakloop:			;
 		
 		IToken  t = null;
 		NamespaceDeclaration nsdec = new NamespaceDeclaration(GetCurrentScope()); 
-			  namespaces.Add(nsdec); String qn = null; PushScope(nsdec);
+			  namespaces.Add(nsdec); String qn = null; PushScope(nsdec); 
+			
 		
 		try {      // for error handling
 			t = LT(1);
@@ -1837,7 +1838,9 @@ _loop55_breakloop:					;
 		qn=qualified_name();
 		if (0==inputState.guessing)
 		{
-			mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn); PushScope(mdstmt);
+			
+					mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn); PushScope(mdstmt); 
+				
 		}
 		match(LPAREN);
 		{
@@ -2518,22 +2521,19 @@ _loop100_breakloop:			;
 {
 		YieldExpression rexp;
 		
-		rexp = null; ExpressionCollection expColl;
+		rexp = new YieldExpression();
 		
 		match(LITERAL_yield);
-		expColl=expressionList();
-		if (0==inputState.guessing)
-		{
-			rexp = new YieldExpression(expColl);
-		}
+		expressionList(rexp.ExpColl);
 		return rexp;
 	}
 	
-	public ExpressionCollection  expressionList() //throws RecognitionException, TokenStreamException
+	public void expressionList(
+		ExpressionCollection expColl
+	) //throws RecognitionException, TokenStreamException
 {
-		ExpressionCollection expColl;
 		
-		expColl = new ExpressionCollection(); IExpression exp = null;
+		IExpression exp = null;
 		
 		exp=expression();
 		if (0==inputState.guessing)
@@ -2560,7 +2560,6 @@ _loop100_breakloop:			;
 			}
 _loop117_breakloop:			;
 		}    // ( ... )*
-		return expColl;
 	}
 	
 	public IExpression  and_test() //throws RecognitionException, TokenStreamException
@@ -3189,17 +3188,21 @@ _loop139_breakloop:			;
 {
 		IExpression exp;
 		
-		exp = null; ExpressionCollection args = null;
+		exp = null;
 		
 		switch ( LA(1) )
 		{
 		case LPAREN:
 		{
 			match(LPAREN);
+			if (0==inputState.guessing)
+			{
+				exp = new MethodInvocationExpression(inner);
+			}
 			{
 				if ((tokenSet_30_.member(LA(1))) && (tokenSet_16_.member(LA(2))))
 				{
-					args=arglist();
+					arglist((exp as MethodInvocationExpression).Arguments);
 				}
 				else if ((LA(1)==RPAREN) && (tokenSet_27_.member(LA(2)))) {
 				}
@@ -3210,10 +3213,6 @@ _loop139_breakloop:			;
 				
 			}
 			match(RPAREN);
-			if (0==inputState.guessing)
-			{
-				exp = new MethodInvocationExpression(inner, args);
-			}
 			break;
 		}
 		case LBRACK:
@@ -3479,11 +3478,12 @@ _loop165_breakloop:			;
 		return lre;
 	}
 	
-	public ExpressionCollection  arglist() //throws RecognitionException, TokenStreamException
+	public void arglist(
+		ExpressionCollection expcoll
+	) //throws RecognitionException, TokenStreamException
 {
-		ExpressionCollection expcoll;
 		
-		IExpression exp; expcoll = new ExpressionCollection();
+		IExpression exp;
 		
 		exp=argument();
 		if (0==inputState.guessing)
@@ -3510,7 +3510,6 @@ _loop165_breakloop:			;
 			}
 _loop158_breakloop:			;
 		}    // ( ... )*
-		return expcoll;
 	}
 	
 	public void subscriptlist() //throws RecognitionException, TokenStreamException

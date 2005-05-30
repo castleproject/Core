@@ -18,18 +18,32 @@ namespace Castle.Rook.Compiler.AST
 
 	using Castle.Rook.Compiler.Visitors;
 
-
 	public abstract class AbstractCodeNode : IASTNode
 	{
+		private NodeType nodeType;
 		private LexicalPosition position = new LexicalPosition();
+		private IASTNode parent;
 
-		public AbstractCodeNode()
+		public AbstractCodeNode(NodeType nodeType)
 		{
+			this.nodeType = nodeType;
 		}
 
 		public LexicalPosition Position
 		{
 			get { return position; }
+		}
+
+		public IASTNode Parent
+		{
+			get { return parent; }
+			set { parent = value; }
+		}
+
+		public NodeType NodeType
+		{
+			get { return nodeType; }
+			set { nodeType = value; }
 		}
 
 		public abstract bool Accept(IASTVisitor visitor);

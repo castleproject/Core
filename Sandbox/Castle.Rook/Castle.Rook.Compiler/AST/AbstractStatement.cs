@@ -15,14 +15,18 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-
 	using Castle.Rook.Compiler.Visitors;
 
 
 	public abstract class AbstractStatement : AbstractCodeNode, IStatement
 	{
-		public AbstractStatement()
+		public AbstractStatement() : this(NodeType.Statement)
 		{
 		}
+
+		public AbstractStatement(NodeType nodeType) : base(nodeType)
+		{
+		}
+
 	}
 }

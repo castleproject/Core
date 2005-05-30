@@ -1,4 +1,3 @@
-using Castle.Rook.Compiler.Visitors;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,8 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections;
 
+	using Castle.Rook.Compiler.Visitors;
+
 	public enum IfType
 	{
 		If,
@@ -26,22 +27,24 @@ namespace Castle.Rook.Compiler.AST
 
 	public class IfStatement : AbstractStatement
 	{
-		protected IfType iftype;
-		protected IList trueStmts = new ArrayList();
-		protected IList falseStmts = new ArrayList();
+		private StatementCollection trueStmts;
+		private StatementCollection falseStmts;
 		private IExpression condition;
+		private IfType iftype;
 
 		public IfStatement(IfType iftype)
 		{
+			trueStmts = new StatementCollection(this);
+			falseStmts = new StatementCollection(this);
 			this.iftype = iftype;
 		}
 
-		public IList TrueStatements
+		public StatementCollection TrueStatements
 		{
 			get { return trueStmts; }
 		}
 
-		public IList FalseStatements
+		public StatementCollection FalseStatements
 		{
 			get { return falseStmts; }
 		}

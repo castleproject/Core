@@ -22,10 +22,11 @@ namespace Castle.Rook.Compiler.AST
 
 	public class ListExpression : AbstractExpression
 	{
-		private ExpressionCollection items = new ExpressionCollection();
+		private ExpressionCollection items;
 
 		public ListExpression()
 		{
+			items = new ExpressionCollection(this);
 		}
 
 		public void Add(IExpression item)
