@@ -35,7 +35,7 @@
 	</target>
 
 	<target name="ibatis">
-		<!-- <nant buildfile="IBatisNet/default.build" inheritall="true" target="build" /> -->
+		<nant buildfile="IBatisNet/default.build" inheritall="true" target="build" /> 
 	</target>
 
 	<target name="autotransaction">
