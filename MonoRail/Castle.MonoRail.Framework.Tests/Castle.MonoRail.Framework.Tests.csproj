@@ -105,6 +105,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AjaxHelperTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

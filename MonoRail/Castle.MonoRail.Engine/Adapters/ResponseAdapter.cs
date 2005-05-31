@@ -82,6 +82,11 @@ namespace Castle.MonoRail.Engine.Adapters
 			_response.Write(buffer, index, count);
 		}
 
+		public void WriteFile(string fileName)
+		{
+			_response.WriteFile(fileName);
+		}
+
 		public void Redirect(String url)
 		{
 			_response.Redirect(url, false);

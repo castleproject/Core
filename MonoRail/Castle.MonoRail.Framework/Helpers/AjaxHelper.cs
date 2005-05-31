@@ -148,7 +148,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String LinkToRemote(String name, String url, String update)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(update, url));
+			return LinkToFunction(name, BuildRemoteFunction(url, update));
 		}
 
 		public String LinkToRemote(String name, String url, String update, String with)
@@ -376,7 +376,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return BuildObserver("Form.Observer", formId, options);
 		}
 
-		private String BuildRemoteFunction(String url, String update)
+		public String BuildRemoteFunction(String url, String update)
 		{
 			IDictionary options = new Hashtable();
 			options["update"] = update;
@@ -433,10 +433,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				contents = new StringBuilder( String.Format("{0}; {1}", options["before"], contents.ToString()) );
 			}
+
 			if (options.Contains("after"))
 			{
 				contents = new StringBuilder( String.Format("{1}; {0}", options["after"], contents.ToString()) );
 			}
+
 			if (options.Contains("condition"))
 			{
 				contents = new StringBuilder( String.Format("if ({0}) { {1}; }", options["condition"], contents.ToString()) );

@@ -80,6 +80,11 @@ namespace Castle.MonoRail.Framework.Tests
 			_writer.Write(buffer, index, count);
 		}
 
+		public void WriteFile(string fileName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Redirect(String url)
 		{
 			throw new NotImplementedException();

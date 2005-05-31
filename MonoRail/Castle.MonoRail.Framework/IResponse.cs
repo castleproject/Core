@@ -32,6 +32,8 @@ namespace Castle.MonoRail.Framework
 
 		void Write(char[] buffer, int index, int count);
 
+		void WriteFile(string fileName);
+
 		void Redirect( String controller, String action );
 
 		void Redirect( String area, String controller, String action );
