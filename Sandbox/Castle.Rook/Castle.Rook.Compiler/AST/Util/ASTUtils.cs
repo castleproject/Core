@@ -23,17 +23,6 @@ namespace Castle.Rook.Compiler.AST.Util
 		{
 		}
 
-		public static DefinitionScope GetScopeFromName(string name)
-		{
-			if (name.StartsWith("@@"))
-			{
-				return DefinitionScope.Static;
-			}
-			else if (name.StartsWith("@"))
-			{
-				return DefinitionScope.Instance;
-			}
-			return DefinitionScope.Local;
-		}
+		
 	}
 }

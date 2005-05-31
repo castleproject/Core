@@ -15,7 +15,6 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Specialized;
 
 	public enum NameScopeType
@@ -73,15 +72,25 @@ namespace Castle.Rook.Compiler.AST
 			get { return parent; }
 		}
 
-		public void AddVariable(string name, TypeReference reference)
+		public void AddVariable(Identifier ident)
 		{
-			if (scope.Contains(name))
+			if (scope.Contains(ident.Name))
 			{
-				throw new CompilerException("Scope " + ToString() + " already has a definition for " + name);
+				throw new CompilerException("Scope " + ToString() + " already has a definition for " + ident.Name);
 			}
 
-			scope.Add(name, new ScopeItem(ScopeItemType.Variable, reference) );
+			scope.Add(ident.Name, new ScopeItem(ScopeItemType.Variable, ident) );
 		}
+
+//		public void AddVariable(string name, TypeReference reference)
+//		{
+//			if (scope.Contains(name))
+//			{
+//				throw new CompilerException("Scope " + ToString() + " already has a definition for " + name);
+//			}
+//
+//			scope.Add(name, new ScopeItem(ScopeItemType.Variable, reference) );
+//		}
 	}
 
 	public enum ScopeItemType
@@ -94,9 +103,9 @@ namespace Castle.Rook.Compiler.AST
 	public class ScopeItem
 	{
 		private readonly ScopeItemType type;
-		private readonly TypeReference reference;
+		private readonly Identifier reference;
 
-		public ScopeItem(ScopeItemType type, TypeReference reference)
+		public ScopeItem(ScopeItemType type, Identifier reference)
 		{
 			this.type = type;
 			this.reference = reference;
@@ -107,7 +116,7 @@ namespace Castle.Rook.Compiler.AST
 			get { return type; }
 		}
 
-		public TypeReference Reference
+		public Identifier Reference
 		{
 			get { return reference; }
 		}

@@ -23,7 +23,7 @@ namespace Castle.Rook.Compiler.AST
 	public class BlockExpression : AbstractExpression
 	{
 		private StatementCollection statements;
-		private IList args = new ArrayList();
+		private IList parameters = new ArrayList();
 
 		public BlockExpression() : base(NodeType.BlockExpression)
 		{
@@ -35,9 +35,14 @@ namespace Castle.Rook.Compiler.AST
 			get { return statements; }
 		}
 
-		public void AddBlockArgument(TypeDeclarationExpression tdexp)
+		public void AddBlockParameter(ParameterIdentifier pi)
 		{
-			args.Add(tdexp);
+			parameters.Add(pi);
+		}
+
+		public IList Parameters
+		{
+			get { return parameters; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

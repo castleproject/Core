@@ -124,11 +124,11 @@ compilationUnit returns[CompilationUnit comp]
 namespace_declaration[IList namespaces]
 	options { defaultErrorHandler=true; }
 	{ NamespaceDeclaration nsdec = new NamespaceDeclaration(GetCurrentScope()); 
-	  namespaces.Add(nsdec); String qn = null; PushScope(nsdec); 
+	  namespaces.Add(nsdec); Identifier qn = null; PushScope(nsdec); 
 	}
 	:
 	t:"namespace" qn=qualified_name statement_term
-	{ nsdec.Name = qn; }
+	{ nsdec.Name = qn.Name; }
 	suite[nsdec.Statements]
 	END	{ PopScope(); }
 	;
@@ -245,15 +245,15 @@ access_level
 	)
 	;
 
-declaration_statement returns [VariableDeclarationStatement vdstmt]
-	{ vdstmt = new VariableDeclarationStatement(currentAccessLevel); 
-	  TypeDeclarationExpression tdstmt = null;
+declaration_statement returns [MultipleVariableDeclarationStatement stmt]
+	{ stmt = new MultipleVariableDeclarationStatement(currentAccessLevel); 
+	  Identifier ident = null;
 	  IExpression initExp = null; }
 	:
- 	tdstmt=type_name_withtype			{ vdstmt.Add(tdstmt); }
- 	(COMMA tdstmt=type_name_withtype	{ vdstmt.Add(tdstmt); })* 
- 	(ASSIGN initExp=test { vdstmt.AddInitExp(initExp); } 
- 	(COMMA initExp=test { vdstmt.AddInitExp(initExp); } )* )?
+ 	ident=identifier_withtype			{ stmt.AddIdentifier(ident); }
+ 	(COMMA ident=identifier_withtype	{ stmt.AddIdentifier(ident); })* 
+ 	(ASSIGN initExp=test { stmt.AddInitExp(initExp); } 
+ 	(COMMA initExp=test { stmt.AddInitExp(initExp); } )* )?
  	;
 
 type_def_statement returns [TypeDefinitionStatement tdstmt]
@@ -275,11 +275,11 @@ class_def_statement returns [TypeDefinitionStatement tdstmt]
 	;
 
 method_def_statement returns [MethodDefinitionStatement mdstmt]
-	{ mdstmt = null; String qn = null; TypeReference retType = null; }
+	{ mdstmt = null; Identifier qn = null; TypeReference retType = null; }
 	:
 	DEF^ qn=qualified_name 
 	{ 
-		mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn); PushScope(mdstmt); 
+		mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn.Name); PushScope(mdstmt); 
 	}
 	LPAREN (methodParams[mdstmt])? RPAREN (retType=type)? statement_term
 	{ mdstmt.ReturnType = retType; }
@@ -295,19 +295,26 @@ method_def_statement returns [MethodDefinitionStatement mdstmt]
 //	;
 
 methodParams[MethodDefinitionStatement mdstmt]
+	{ ParameterIdentifier param = null; } 
 	:
-	methodParam[mdstmt] (COMMA methodParam[mdstmt])*
+	param=methodParam 			{ mdstmt.AddParameter( param ); } 
+	  (COMMA param=methodParam 	{ mdstmt.AddParameter( param ); } )*
 	;
 
-methodParam[MethodDefinitionStatement mdstmt]
-	{ IExpression exp = null; TypeDeclarationExpression typeName = null; }
+methodParam returns [ParameterIdentifier param]
+	{ IExpression exp = null; Identifier ident = null; param = null; }
 	:
-	typeName=type_name { mdstmt.AddArgument(typeName); } 
-	(ASSIGN exp=expression { typeName.InitExp = exp; } )?
+	(
+	ident=identifier				{ param = ParameterIdentifier.FromIdentifier(ParameterType.Common, ident); } 
 	|
-	STAR type_name		// TODO: Infer List or array
+	(STAR identifier_withtype) => 
+	STAR ident=identifier_withtype	{ param = ParameterIdentifier.FromIdentifier(ParameterType.Params, ident); } 
 	|
-	BAND IDENT			// TODO: block/delegate signature
+	STAR ident=identifier			{ param = ParameterIdentifier.FromIdentifier(ParameterType.List, ident); } 
+	|
+	BAND ident=identifier			{ param = ParameterIdentifier.FromIdentifier(ParameterType.Block, ident); } 
+	)
+	(ASSIGN exp=expression	{ param.InitExpression = exp; } )?
 	;
 
 expression_statement returns[IStatement stmt]
@@ -361,18 +368,16 @@ postFixCondition returns[PostfixCondition pfc]
 	)
 	;
 
-type_name_withtype returns [TypeDeclarationExpression tdexp]
-	{ tdexp = null; String n=null; TypeReference tr = null; }
+identifier_withtype returns [Identifier ident]
+	{ ident = null; TypeReference tr = null; }
 	:
-	n=name tr=type
-	{ tdexp = new TypeDeclarationExpression(n, tr); }
+	ident=name tr=type	{ ident.TypeReference = tr; }
 	;
 
-type_name returns [TypeDeclarationExpression tdexp]
-	{ tdexp = null; String n=null; TypeReference tr = null; }
+identifier returns [Identifier ident]
+	{ ident = null; TypeReference tr = null; }
 	:
-	n=name (tr=type)? 
-	{ tdexp = new TypeDeclarationExpression(n, tr); }
+	ident=name (tr=type { ident.TypeReference = tr; })? 
 	;
 
 type returns [ TypeReference tr ]
@@ -383,21 +388,22 @@ type returns [ TypeReference tr ]
 	// (LBRACK RBRACK)? // We do not support multi-dimensional arrays yet
 	;
 
-name returns[String name]
-	{ name = null; }
+name returns [Identifier ident]
+	{ ident = null; }
 	:
-	t1:IDENT		{ name = t1.getText(); }
+	t1:IDENT		{ ident = new Identifier(IdentifierType.Local, t1.getText(), null); }
 	|
-	t2:STATICIDENT	{ name = t2.getText(); }
+	t2:STATICIDENT	{ ident = new Identifier(IdentifierType.StaticField, t2.getText(), null); }
 	|
-	t3:INSTIDENT	{ name = t3.getText(); }
+	t3:INSTIDENT	{ ident = new Identifier(IdentifierType.InstanceField, t3.getText(), null); }
     ;
 
-qualified_name returns[String name]
-	{ name = null; }
+qualified_name returns [Identifier ident]
+	{ String name = null; ident = null; }
 	:
 	t:IDENT { name = t.getText(); }
     (options{greedy=true;}:DOT t2:IDENT { name += "." + t2.getText(); } )*
+    { ident = new Identifier(IdentifierType.Qualified, name, null); }
     ;
 
 qualified_symbol returns[String name]
@@ -439,11 +445,10 @@ yield returns [YieldExpression rexp]
 	;
 
 blockargs[BlockExpression bexp]
-	{ bexp = new BlockExpression(); TypeDeclarationExpression tdexp = null; }
+	{ bexp = new BlockExpression(); ParameterIdentifier ident = null; }
 	:
-	BOR tdexp=type_name 
-	  { bexp.AddBlockArgument(tdexp); }
-	(options {greedy=true;}:COMMA tdexp=type_name { bexp.AddBlockArgument(tdexp); } )* 
+	BOR ident=methodParam	{ bexp.AddBlockParameter(ident); }
+	(options {greedy=true;}:COMMA ident=methodParam { bexp.AddBlockParameter(ident); } )* 
 	BOR
 	;
 
@@ -598,16 +603,10 @@ atom returns [IExpression exp]
 	;
 
 varref returns [VariableReferenceExpression vre]
-	{ vre = null; }
+	{ Identifier ident = null; vre = null; }
 	:
-	t1:IDENT 
-	  { vre = new VariableReferenceExpression(t1.getText(), VariableReferenceType.LocalOrArgument); }
-	|
-	t2:STATICIDENT  
-	  { vre = new VariableReferenceExpression(t2.getText(), VariableReferenceType.StaticField); }
-	| 
-	t3:INSTIDENT  
-	  { vre = new VariableReferenceExpression(t3.getText(), VariableReferenceType.InstanceField); }
+	ident=name
+	{ vre = new VariableReferenceExpression(ident); }
 	;
 
 constantref returns [LiteralReferenceExpression lre]

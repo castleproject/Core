@@ -37,12 +37,15 @@ namespace Castle.Rook.Compiler.Visitors
 		// References
 
 		bool VisitTypeReference(TypeReference reference);
+		bool VisitIdentifier(Identifier identifier);
+		bool VisitParameterIdentifier(ParameterIdentifier parameterIdentifier);
 
 		// Statements
 
-		bool VisitVariableDeclarationStatement(VariableDeclarationStatement varDecl);
+		bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl);
 		bool VisitRepeatStatement(RepeatStatement statement);
 		bool VisitPostfixCondition(PostfixCondition postfixCondition);
+		bool VisitSingleVariableDeclarationStatement(SingleVariableDeclarationStatement declarationStatement);
 
 		// Expressions
 
@@ -51,7 +54,6 @@ namespace Castle.Rook.Compiler.Visitors
 		bool VisitYieldExpression(YieldExpression yieldExpression);
 		bool VisitVariableReferenceExpression(VariableReferenceExpression variableReferenceExpression);
 		bool VisitUnaryExpression(UnaryExpression unaryExpression);
-		bool VisitTypeDeclarationExpression(TypeDeclarationExpression typeDeclarationExpression);
 		bool VisitRetryExpression(RetryExpression expression);
 		bool VisitNextExpression(NextExpression expression);
 		bool VisitRedoExpression(RedoExpression expression);
@@ -70,5 +72,6 @@ namespace Castle.Rook.Compiler.Visitors
 		bool VisitBreakExpression(BreakExpression breakExpression);
 		bool VisitBlockExpression(BlockExpression expression);
 		bool VisitBinaryExpression(BinaryExpression expression);
+//		bool VisitTypeDeclarationExpression(TypeDeclarationExpression typeDeclarationExpression);
 	}
 }

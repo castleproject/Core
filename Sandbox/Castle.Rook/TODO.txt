@@ -7,3 +7,11 @@
     type_name
 
   They could return a kind of TypeName/VariableReference  (identifier + type name)
+
++ Support unary exp CAST and ISA and AS
+
+  x = (int) something
+
+  x = something is int
+
+  x = something as int

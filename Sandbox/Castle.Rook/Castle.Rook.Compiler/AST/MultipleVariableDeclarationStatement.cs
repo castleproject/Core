@@ -15,26 +15,27 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
+	using System.Collections;
 
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class VariableDeclarationStatement : AbstractStatement
+	public class MultipleVariableDeclarationStatement : AbstractStatement
 	{
 		private readonly AccessLevel accessLevel;
-		private ExpressionCollection decls;
+		private IList idents = new ArrayList();
 		private ExpressionCollection initExps;
 
-		public VariableDeclarationStatement(AccessLevel accessLevel)
+		public MultipleVariableDeclarationStatement(AccessLevel accessLevel)
 		{
-			decls = new ExpressionCollection(this);
+//			decls = new ExpressionCollection(this);
 			initExps = new ExpressionCollection(this);
 			this.accessLevel = accessLevel;
 		}
 
-		public void Add(TypeDeclarationExpression tdstmt)
+		public void AddIdentifier(Identifier identifier)
 		{
-			decls.Add(tdstmt);
+			idents.Add(identifier);
 		}
 
 		public void AddInitExp(IExpression exp)
@@ -42,9 +43,9 @@ namespace Castle.Rook.Compiler.AST
 			initExps.Add(exp);
 		}
 
-		public ExpressionCollection Declarations
+		public IList Identifiers
 		{
-			get { return decls; }
+			get { return idents; }
 		}
 
 		public ExpressionCollection InitExpressions
@@ -59,7 +60,7 @@ namespace Castle.Rook.Compiler.AST
 
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitVariableDeclarationStatement(this);
+			return visitor.VisitMultipleVariableDeclarationStatement(this);
 		}
 	}
 }

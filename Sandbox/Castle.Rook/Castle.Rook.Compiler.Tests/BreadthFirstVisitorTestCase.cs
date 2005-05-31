@@ -60,29 +60,29 @@ namespace Castle.Rook.Compiler.Tests
 			MyBreadthFirstVisitor visitor = new MyBreadthFirstVisitor();
 			visitor.VisitNode( unit );
 			Assert.AreEqual( 8, visitor.VisitedNodes.Count );
-			Assert.AreEqual( typeof(VariableDeclarationStatement), visitor.VisitedNodes[0].GetType() );
-			Assert.AreEqual( typeof(VariableDeclarationStatement), visitor.VisitedNodes[1].GetType() );
+			Assert.AreEqual( typeof(MultipleVariableDeclarationStatement), visitor.VisitedNodes[0].GetType() );
+			Assert.AreEqual( typeof(MultipleVariableDeclarationStatement), visitor.VisitedNodes[1].GetType() );
 			Assert.AreEqual( typeof(TypeDefinitionStatement), visitor.VisitedNodes[2].GetType() );
-			Assert.AreEqual( typeof(VariableDeclarationStatement), visitor.VisitedNodes[3].GetType() );
+			Assert.AreEqual( typeof(MultipleVariableDeclarationStatement), visitor.VisitedNodes[3].GetType() );
 			Assert.AreEqual( typeof(MethodDefinitionStatement), visitor.VisitedNodes[4].GetType() );
-			Assert.AreEqual( typeof(VariableDeclarationStatement), visitor.VisitedNodes[5].GetType() );
+			Assert.AreEqual( typeof(MultipleVariableDeclarationStatement), visitor.VisitedNodes[5].GetType() );
 			Assert.AreEqual( typeof(MethodDefinitionStatement), visitor.VisitedNodes[6].GetType() );
-			Assert.AreEqual( typeof(VariableDeclarationStatement), visitor.VisitedNodes[7].GetType() );
+			Assert.AreEqual( typeof(MultipleVariableDeclarationStatement), visitor.VisitedNodes[7].GetType() );
 
-			TypeDeclarationExpression tde = null;
-			tde = (visitor.VisitedNodes[0] as VariableDeclarationStatement).Declarations[0] as TypeDeclarationExpression;
+			Identifier tde = null;
+			tde = (visitor.VisitedNodes[0] as MultipleVariableDeclarationStatement).Identifiers[0] as Identifier;
 			Assert.AreEqual("gx1", tde.Name);
 
-			tde = (visitor.VisitedNodes[1] as VariableDeclarationStatement).Declarations[0] as TypeDeclarationExpression;
+			tde = (visitor.VisitedNodes[1] as MultipleVariableDeclarationStatement).Identifiers[0] as Identifier;
 			Assert.AreEqual("gx2", tde.Name);
 
-			tde = (visitor.VisitedNodes[3] as VariableDeclarationStatement).Declarations[0] as TypeDeclarationExpression;
+			tde = (visitor.VisitedNodes[3] as MultipleVariableDeclarationStatement).Identifiers[0] as Identifier;
 			Assert.AreEqual("@inst1", tde.Name);
 
-			tde = (visitor.VisitedNodes[5] as VariableDeclarationStatement).Declarations[0] as TypeDeclarationExpression;
+			tde = (visitor.VisitedNodes[5] as MultipleVariableDeclarationStatement).Identifiers[0] as Identifier;
 			Assert.AreEqual("@inst2", tde.Name);
 
-			tde = (visitor.VisitedNodes[7] as VariableDeclarationStatement).Declarations[0] as TypeDeclarationExpression;
+			tde = (visitor.VisitedNodes[7] as MultipleVariableDeclarationStatement).Identifiers[0] as Identifier;
 			Assert.AreEqual("@inst3", tde.Name);
 		}	
 	}
@@ -118,11 +118,11 @@ namespace Castle.Rook.Compiler.Tests
 			return base.VisitMethodDefinitionStatement(methodDef);
 		}
 
-		public override bool VisitVariableDeclarationStatement(VariableDeclarationStatement varDecl)
+		public override bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
 		{
 			visitedNodes.Add(varDecl);
 
-			return base.VisitVariableDeclarationStatement(varDecl);
+			return base.VisitMultipleVariableDeclarationStatement(varDecl);
 		}
 	}
 }

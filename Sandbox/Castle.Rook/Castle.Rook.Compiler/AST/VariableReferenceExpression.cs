@@ -18,32 +18,18 @@ namespace Castle.Rook.Compiler.AST
 
 	using Castle.Rook.Compiler.Visitors;
 
-	public enum VariableReferenceType
-	{
-		LocalOrArgument,
-		InstanceField,
-		StaticField
-	}
-
 	public class VariableReferenceExpression : AbstractExpression
 	{
-		private readonly string name;
-		private readonly VariableReferenceType type;
+		private readonly Identifier identifier;
 
-		public VariableReferenceExpression(String name, VariableReferenceType type)
+		public VariableReferenceExpression(Identifier identifier)
 		{
-			this.name = name;
-			this.type = type;
+			this.identifier = identifier;
 		}
 
-		public string Name
+		public Identifier Identifier
 		{
-			get { return name; }
-		}
-
-		public VariableReferenceType Type
-		{
-			get { return type; }
+			get { return identifier; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

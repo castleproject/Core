@@ -1,3 +1,4 @@
+using Castle.Rook.Compiler.Visitors;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,42 +17,43 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
-
-	public enum TypeReferenceType
+	public enum ParameterType
 	{
-		Opaque,
-		Primitive,
-		String,
-		Interface,
-		AbstractClass,
-		ConcreteClass
+		Common,
+		List,
+		Params,
+		Block
 	}
 
-	public class TypeReference : AbstractCodeNode
+	public class ParameterIdentifier : Identifier
 	{
-		private readonly string symbol;
-		private TypeReferenceType refType = TypeReferenceType.Opaque;
+		private readonly ParameterType type;
+		private IExpression initExpression;
 
-		public TypeReference(String symbol) : base(NodeType.TypeReference)
+		protected ParameterIdentifier(ParameterType type, String name, TypeReference typeRef) : base(IdentifierType.Parameter, name, typeRef)
 		{
-			this.symbol = symbol;
+			this.type = type;
 		}
 
-		public string Symbol
+		public ParameterType ParameterType
 		{
-			get { return symbol; }
+			get { return type; }
 		}
 
-		public TypeReferenceType RefType
+		public IExpression InitExpression
 		{
-			get { return refType; }
-			set { refType = value; }
+			get { return initExpression; }
+			set { initExpression = value; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitTypeReference(this);
+			return visitor.VisitParameterIdentifier(this);
+		}
+
+		public static ParameterIdentifier FromIdentifier(ParameterType type, Identifier identifier)
+		{
+			return new ParameterIdentifier(type, identifier.Name, identifier.TypeReference);
 		}
 	}
 }

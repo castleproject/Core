@@ -18,26 +18,35 @@ namespace Castle.Rook.Compiler.AST
 
 	using Castle.Rook.Compiler.Visitors;
 
-	public enum NodeType
+
+	public class SingleVariableDeclarationStatement : AbstractStatement
 	{
-		Expression,
-		Statement,
-		Global,
-		NamespaceDefinition,
-		TypeDefinition,
-		MethodDefinition,
-		CompoundExpression,
-		BlockExpression,
-		TypeReference,
-		Identifier
-	}
+		private readonly Identifier ident;
+		private IExpression initExp;
 
-	public interface IASTNode : IVisitableNode
-	{
-		LexicalPosition Position { get; }
+		public SingleVariableDeclarationStatement(Identifier ident)
+		{
+			this.ident = ident;
+		}
 
-		IASTNode Parent { get; set; }
+		public Identifier Identifier
+		{
+			get { return ident; }
+		}
 
-		NodeType NodeType { get; set; }
+		public IExpression InitExp
+		{
+			get { return initExp; }
+			set
+			{
+				initExp = value; 
+				if (value != null) value.Parent = this;
+			}
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitSingleVariableDeclarationStatement(this);
+		}
 	}
 }

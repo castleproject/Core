@@ -17,28 +17,27 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 
 	using Castle.Rook.Compiler.Visitors;
-	using Castle.Rook.Compiler.AST.Util;
 
-	public enum DefinitionScope
+	public enum IdentifierType
 	{
 		Local,
-		Instance, 
-		Static
-	}
+		InstanceField,
+		StaticField,
+		Parameter,
+		Qualified,
+}
 
-	public class TypeDeclarationExpression : AbstractExpression
+	public class Identifier : AbstractCodeNode
 	{
-		private DefinitionScope defScope;
-		private TypeReference typeRef;
-		private IExpression initExp;
 		private string name;
+		private IdentifierType type;
+		private TypeReference typeRef;
 
-		public TypeDeclarationExpression(String name, TypeReference typeRef)
+		public Identifier(IdentifierType type, String name, TypeReference typeRef) : base(NodeType.Identifier)
 		{
 			this.name = name;
+			this.type = type;
 			this.typeRef = typeRef;
-
-			defScope = ASTUtils.GetScopeFromName(name);
 		}
 
 		public string Name
@@ -46,19 +45,10 @@ namespace Castle.Rook.Compiler.AST
 			get { return name; }
 		}
 
-		public DefinitionScope DefScope
+		public IdentifierType Type
 		{
-			get { return defScope; }
-		}
-
-		public IExpression InitExp
-		{
-			get { return initExp; }
-			set
-			{
-				initExp = value; 
-				if (value != null) value.Parent = this;
-			}
+			get { return type; }
+			set { type = value; }
 		}
 
 		public TypeReference TypeReference
@@ -69,7 +59,7 @@ namespace Castle.Rook.Compiler.AST
 
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitTypeDeclarationExpression(this);
+			return visitor.VisitIdentifier(this);
 		}
 	}
 }

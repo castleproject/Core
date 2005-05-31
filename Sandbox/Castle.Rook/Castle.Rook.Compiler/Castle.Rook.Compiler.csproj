@@ -194,6 +194,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\Identifier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\IExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -254,6 +259,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\MultipleVariableDeclarationStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\NameScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -265,6 +275,11 @@
                 />
                 <File
                     RelPath = "AST\NextExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\ParameterIdentifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -304,12 +319,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\StatementCollection.cs"
+                    RelPath = "AST\SingleVariableDeclarationStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\TypeDeclarationExpression.cs"
+                    RelPath = "AST\StatementCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -325,11 +340,6 @@
                 />
                 <File
                     RelPath = "AST\UnaryExpression.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\VariableDeclarationStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

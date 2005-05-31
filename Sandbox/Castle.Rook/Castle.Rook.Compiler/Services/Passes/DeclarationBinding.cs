@@ -39,28 +39,29 @@ namespace Castle.Rook.Compiler.Services.Passes
 			VisitNode(unit);
 		}
 
-		public override bool VisitVariableDeclarationStatement(VariableDeclarationStatement varDecl)
+		public override bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
 		{
-			BindInitExpressions(varDecl);
+			IList stmts = CreateSimpleExpressions(varDecl);
 
-			ReplaceVarDeclByTypeDecls(varDecl);
+			ReplaceVarDeclBySingleDecls(varDecl, stmts);
 
-			// Check wheter Type Declarations belongs here and if not, move then
-			EnsureTypeDeclarationsBelongsToThisScope(varDecl);
+			EnsureTypeDeclarationsBelongsToThisScope(varDecl, stmts);
 
-			return base.VisitVariableDeclarationStatement(varDecl);
+			return base.VisitMultipleVariableDeclarationStatement(varDecl);
 		}
 
-		private void EnsureTypeDeclarationsBelongsToThisScope(VariableDeclarationStatement varDecl)
+		private void EnsureTypeDeclarationsBelongsToThisScope(MultipleVariableDeclarationStatement varDecl, IList stmts)
 		{
 			INameScope namescope = (varDecl.Parent as INameScopeAccessor).Namescope;
 	
-			foreach(TypeDeclarationExpression typeDecl in varDecl.Declarations)
+			foreach(SingleVariableDeclarationStatement typeDecl in stmts)
 			{
-				if (namescope.IsDefined(typeDecl.Name))
+				Identifier ident = typeDecl.Identifier;
+
+				if (namescope.IsDefined(ident.Name))
 				{
 					errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-					                   "Sorry but '{0}' is already defined.", typeDecl.Name );
+					                   "Sorry but '{0}' is already defined.", ident.Name );
 				}
 				else
 				{
@@ -68,15 +69,15 @@ namespace Castle.Rook.Compiler.Services.Passes
 					// in an inner block, we need to move these statments
 					// to the type/class level statements list
 
-					if (typeDecl.DefScope == DefinitionScope.Local)
+					if (ident.Type == IdentifierType.Local)
 					{
-						namescope.AddVariable( typeDecl.Name, typeDecl.TypeReference );
+						namescope.AddVariable( ident );
 					}
 					else if (namescope.NameScopeType == NameScopeType.Global || 
 						namescope.NameScopeType == NameScopeType.Type ||
 						namescope.NameScopeType == NameScopeType.Namespace)
 					{
-						namescope.AddVariable( typeDecl.Name, typeDecl.TypeReference );
+						namescope.AddVariable( ident );
 					}
 					else
 					{
@@ -98,14 +99,14 @@ namespace Castle.Rook.Compiler.Services.Passes
 							System.Diagnostics.Debug.Assert( accessor != null );
 							System.Diagnostics.Debug.Assert( typeOrGlobalStmtsContainer != null );
 
-							if (accessor.Namescope.IsDefined(typeDecl.Name))
+							if (accessor.Namescope.IsDefined(ident.Name))
 							{
 								errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-								                   "Sorry but '{0}' is already defined.", typeDecl.Name );
+								                   "Sorry but '{0}' is already defined.", ident.Name );
 							}
 							else
 							{
-								accessor.Namescope.AddVariable(typeDecl.Name, typeDecl.TypeReference);
+								accessor.Namescope.AddVariable(ident);
 
 								// We can replace the declaration on the method 
 								// body with an assignment if and only if this type decl has
@@ -117,89 +118,88 @@ namespace Castle.Rook.Compiler.Services.Passes
 								typeDecl.InitExp = null;
 							
 								// Replace the declaration with an assignment
-								(varDecl.Parent as IStatementContainer).Statements.Replace(typeDecl.Parent, assingExpStmt);
+								(varDecl.Parent as IStatementContainer).Statements.Replace(typeDecl, assingExpStmt);
 
 								// Add the member/field declaration to the parent
-								typeOrGlobalStmtsContainer.Statements.Add( new ExpressionStatement(typeDecl) );
+								typeOrGlobalStmtsContainer.Statements.Add( typeDecl );
 							}
 						}
 						else
 						{
 							errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-							                   "The instance of static declaration '{0}' could not be mapped to the parent type", typeDecl.Name );
+							                   "The instance of static declaration '{0}' could not be mapped to the parent type", ident.Name );
 						}
 					}
 				}
 			}
 		}
 
-		private void BindInitExpressions(VariableDeclarationStatement varDecl)
+		private IList CreateSimpleExpressions(MultipleVariableDeclarationStatement varDecl)
 		{
+			IList newStmts = new ArrayList();
+
 			int index = 0;
 			ExpressionCollection initExps = varDecl.InitExpressions; 
 	
-			foreach(TypeDeclarationExpression typeDecl in varDecl.Declarations)
+			foreach(Identifier ident in varDecl.Identifiers)
 			{
-				if (!EnsureNoPostFixStatement(typeDecl)) continue;
-
 				// Here we are converting expression from 
 				// x:int, y:long = 1, 2L
 				// to an AST representation equivalent to
 				// x:int = 1; y:long = 2L
 
+				SingleVariableDeclarationStatement svStmt = new SingleVariableDeclarationStatement(ident);
+
 				if (index < initExps.Count)
 				{
-					typeDecl.InitExp = initExps[index];
+					svStmt.InitExp = initExps[index];
+					EnsureNoPostFixStatement(svStmt.InitExp);
 				}
 				
 				index++;
+
+				newStmts.Add(svStmt);
 			}
 	
 			// We don't need them anymore
 			initExps.Clear();
+
+			return newStmts;
 		}
 
-		private void ReplaceVarDeclByTypeDecls(VariableDeclarationStatement varDecl)
+		private void ReplaceVarDeclBySingleDecls(MultipleVariableDeclarationStatement varDecl, IList stmts)
 		{
 			int index;
+
 			// Replace the VariableDeclarationStatement node by a 
-			// (possible) sequence of TypeDeclarationExpressions
+			// (possible) sequence of SingleVariableDeclarationStatement
 	
-			IStatementContainer stmts = varDecl.Parent as IStatementContainer;
+			IStatementContainer stmtContainer = varDecl.Parent as IStatementContainer;
 	
-			index = stmts.Statements.IndexOf(varDecl);
-			stmts.Statements.RemoveAt(index);
+			index = stmtContainer.Statements.IndexOf(varDecl);
+			stmtContainer.Statements.RemoveAt(index);
 	
-			foreach(TypeDeclarationExpression typeDecl in varDecl.Declarations)
+			foreach(SingleVariableDeclarationStatement svDecl in stmts)
 			{
-				stmts.Statements.Insert( index++, new ExpressionStatement(typeDecl) );
+				stmtContainer.Statements.Insert( index++, svDecl );
 			}
 		}
 
-		private bool EnsureNoPostFixStatement(TypeDeclarationExpression typeDecl)
+		private void EnsureNoPostFixStatement(IExpression initExpression)
 		{
-			bool isValid = true;
-
-			if (typeDecl.PostFixStatement != null)
+			if (initExpression.PostFixStatement != null)
 			{
-				errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-				                   "Sorry but '{0}' a variable declaration can not be conditional or " + 
-				                   	"has a while/until statement attached.", typeDecl.Name );
-					
-				isValid = false;
+				errorReport.Error( "TODOFILENAME", initExpression.Position, 
+				                   "Sorry but a variable initializer can not be conditional or " + 
+				                   	"has a while/until statement attached.");
 			}
-
-			return isValid;
 		}
 
-		private AssignmentExpression CreateAssignmentFromTypeDecl(TypeDeclarationExpression decl)
+		private AssignmentExpression CreateAssignmentFromTypeDecl(SingleVariableDeclarationStatement decl)
 		{
 			if (decl.InitExp == null) return null;
 
-			return new AssignmentExpression( 
-				new VariableReferenceExpression(decl.Name, 
-					decl.DefScope == DefinitionScope.Instance ? VariableReferenceType.InstanceField : VariableReferenceType.StaticField), 
-					decl.InitExp );
+			return new AssignmentExpression( new VariableReferenceExpression(decl.Identifier), decl.InitExp );
 		} 
 
 		public override bool VisitAssignmentExpression(AssignmentExpression assignExp)
@@ -234,17 +234,6 @@ namespace Castle.Rook.Compiler.Services.Passes
 		public override bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
 		{
 			return base.VisitMemberAccessExpression(accessExpression);
-		}
-
-		public override bool VisitTypeDeclarationExpression(TypeDeclarationExpression typeDeclarationExpression)
-		{
-			if (!identifierService.IsValidVarOrFieldName( typeDeclarationExpression.Name ))
-			{
-				errorReport.Error( "TODOFILENAME", 
-					typeDeclarationExpression.Position, "Invalid name '{0}'. It possible conflits with an identifier or built-in method.", typeDeclarationExpression.Name );
-			}
-
-			return base.VisitTypeDeclarationExpression(typeDeclarationExpression);
 		}
 	}
 }

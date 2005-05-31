@@ -32,6 +32,6 @@ namespace Castle.Rook.Compiler.AST
 
 		NameScopeType NameScopeType { get; }
 		
-		void AddVariable(string name, TypeReference reference);
+		void AddVariable(Identifier ident);
 	}
 }

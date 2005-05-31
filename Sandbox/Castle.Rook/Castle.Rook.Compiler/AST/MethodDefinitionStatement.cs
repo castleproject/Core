@@ -47,7 +47,7 @@ namespace Castle.Rook.Compiler.AST
 			get { return accessLevel; }
 		}
 
-		public IList Arguments
+		public IList Parameters
 		{
 			get { return args; }
 		}
@@ -63,9 +63,9 @@ namespace Castle.Rook.Compiler.AST
 			set { returnType = value; }
 		}
 
-		public void AddArgument(TypeDeclarationExpression tde)
+		public void AddParameter(ParameterIdentifier paramIdent)
 		{
-			args.Add(tde);
+			args.Add(paramIdent);
 		}
 
 		public override bool Accept(IASTVisitor visitor)

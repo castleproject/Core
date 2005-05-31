@@ -146,6 +146,21 @@ namespace Castle.Rook.Compiler.Visitors
 			return true;
 		}
 
+		public virtual bool VisitIdentifier(Identifier identifier)
+		{
+			VisitNode(identifier.TypeReference);
+
+			return true;
+		}
+
+		public virtual bool VisitParameterIdentifier(ParameterIdentifier parameterIdentifier)
+		{
+			VisitNode(parameterIdentifier.InitExpression);
+			VisitNode(parameterIdentifier.TypeReference);
+
+			return true;
+		}
+
 		//
 		// Statements
 		//
@@ -173,9 +188,9 @@ namespace Castle.Rook.Compiler.Visitors
 			return true;
 		}
 
-		public virtual bool VisitVariableDeclarationStatement(VariableDeclarationStatement varDecl)
+		public virtual bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
 		{
-			VisitNodes(varDecl.Declarations);
+			VisitNodes(varDecl.Identifiers);
 			
 			// TODO: Decide if we shall visit the InitExpressions
 
@@ -227,6 +242,7 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual bool VisitVariableReferenceExpression(VariableReferenceExpression variableReferenceExpression)
 		{
+			VisitNode(variableReferenceExpression.Identifier);
 			VisitExpression(variableReferenceExpression);
 			return true;
 		}
@@ -238,11 +254,10 @@ namespace Castle.Rook.Compiler.Visitors
 			return true;
 		}
 
-		public virtual bool VisitTypeDeclarationExpression(TypeDeclarationExpression typeDeclarationExpression)
+		public virtual bool VisitSingleVariableDeclarationStatement(SingleVariableDeclarationStatement varDecl)
 		{
-			VisitNode(typeDeclarationExpression.TypeReference);
-			VisitNode(typeDeclarationExpression.InitExp);
-			VisitExpression(typeDeclarationExpression);
+			VisitNode(varDecl.InitExp);
+			VisitNode(varDecl.Identifier);
 
 			return true;
 		}

@@ -70,14 +70,11 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			AssertNoErrorOrWarnings();
 
-			ExpressionStatement varDecl = unit.Statements[0] as ExpressionStatement;
-			TypeDeclarationExpression decl1 = varDecl.Expression as TypeDeclarationExpression;
+			SingleVariableDeclarationStatement decl1 = unit.Statements[0] as SingleVariableDeclarationStatement;
 			
-			varDecl = unit.Statements[1] as ExpressionStatement;
-			TypeDeclarationExpression decl2 = varDecl.Expression as TypeDeclarationExpression;
+			SingleVariableDeclarationStatement decl2 = unit.Statements[1] as SingleVariableDeclarationStatement;
 			
-			varDecl = unit.Statements[2] as ExpressionStatement;
-			TypeDeclarationExpression decl3 = varDecl.Expression as TypeDeclarationExpression;
+			SingleVariableDeclarationStatement decl3 = unit.Statements[2] as SingleVariableDeclarationStatement;
 
 			Assert.IsNotNull(decl1.InitExp);
 			Assert.IsNotNull(decl2.InitExp);
@@ -172,8 +169,8 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			MethodDefinitionStatement m1Stmt = unit.Statements[0] as MethodDefinitionStatement;
 			MethodDefinitionStatement m2Stmt = unit.Statements[1] as MethodDefinitionStatement;
-			ExpressionStatement varDecl1 = unit.Statements[2] as ExpressionStatement;
-			ExpressionStatement varDecl2 = unit.Statements[3] as ExpressionStatement;
+			SingleVariableDeclarationStatement varDecl1 = unit.Statements[2] as SingleVariableDeclarationStatement;
+			SingleVariableDeclarationStatement varDecl2 = unit.Statements[3] as SingleVariableDeclarationStatement;
 
 			Assert.IsNotNull(m1Stmt);
 			Assert.IsNotNull(m2Stmt);
@@ -183,13 +180,13 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 			Assert.AreEqual( "some", m1Stmt.FullName );
 			ExpressionStatement expStmt = m1Stmt.Statements[0] as ExpressionStatement;
 			AssignmentExpression assignExp = expStmt.Expression as AssignmentExpression;
-			Assert.AreEqual( "@x", (assignExp.Target as VariableReferenceExpression).Name );
+			Assert.AreEqual( "@x", (assignExp.Target as VariableReferenceExpression).Identifier.Name );
 			Assert.AreEqual( "1", (assignExp.Value as LiteralReferenceExpression).Content );
 		
 			Assert.AreEqual( "some2", m2Stmt.FullName );
 			expStmt = m2Stmt.Statements[0] as ExpressionStatement;
 			AugAssignmentExpression augExp = expStmt.Expression as AugAssignmentExpression;
-			Assert.AreEqual( "@y", (augExp.Target as VariableReferenceExpression).Name );
+			Assert.AreEqual( "@y", (augExp.Target as VariableReferenceExpression).Identifier.Name );
 			Assert.AreEqual( "2", (augExp.Value as LiteralReferenceExpression).Content );
 		}
 
