@@ -219,5 +219,56 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 			String message = container.ErrorReport.ErrorSBuilder.ToString();
 			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but '@x' is already defined.\r\n", message);
 		}
+
+		[Test]
+		public void RedefinitionOfMethodParameters()
+		{
+			String contents = 
+				"                 \r\n" + 
+				"def some(x:int)  \r\n" + 
+				"  x:int = 1      \r\n" + 
+				"end              \r\n" + 
+				"                 \r\n" + 
+				"";
+
+			CompilationUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(1, unit.Statements.Count);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit);
+
+			String message = container.ErrorReport.ErrorSBuilder.ToString();
+			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but 'x' is already defined.\r\n", message);
+		}
+
+		[Test]
+		public void UsingMethodArgument()
+		{
+			String contents = 
+				"                 \r\n" + 
+				"def some(x:int)  \r\n" + 
+				"  x += 1      \r\n" + 
+				"end              \r\n" + 
+				"                 \r\n" + 
+				"";
+
+			CompilationUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(1, unit.Statements.Count);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit);
+
+			AssertNoErrorOrWarnings();
+		}
 	}
 }

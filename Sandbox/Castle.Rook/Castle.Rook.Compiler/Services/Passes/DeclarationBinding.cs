@@ -39,6 +39,26 @@ namespace Castle.Rook.Compiler.Services.Passes
 			VisitNode(unit);
 		}
 
+		public override bool VisitParameterIdentifier(ParameterIdentifier parameterIdentifier)
+		{
+			INameScope namescope = (parameterIdentifier.Parent as INameScopeAccessor).Namescope;
+
+			System.Diagnostics.Debug.Assert( namescope != null );
+			System.Diagnostics.Debug.Assert( namescope.NameScopeType == NameScopeType.Method || namescope.NameScopeType == NameScopeType.Block );
+
+			if (parameterIdentifier.Name.StartsWith("@"))
+			{
+
+				return false;
+			}
+
+			System.Diagnostics.Debug.Assert( !namescope.IsDefined(parameterIdentifier.Name) );
+
+			namescope.AddVariable( parameterIdentifier );
+
+			return base.VisitParameterIdentifier(parameterIdentifier);
+		}
+
 		public override bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
 		{
 			IList stmts = CreateSimpleExpressions(varDecl);

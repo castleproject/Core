@@ -62,6 +62,7 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 			if (VisitEnter(methodDef))
 			{
+				EnqueueNodes(methodDef.Parameters);
 				EnqueueNode(methodDef.ReturnType);
 				EnqueueNodes(methodDef.Statements);
 

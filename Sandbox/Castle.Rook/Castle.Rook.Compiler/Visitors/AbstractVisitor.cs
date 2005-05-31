@@ -117,9 +117,9 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 			if (VisitEnter(methodDef))
 			{
+				VisitNodes(methodDef.Parameters);
 				VisitNode(methodDef.ReturnType);
 				VisitNodes(methodDef.Statements);
-				// TODO: methodDef.Arguments
 
 				return VisitLeave(methodDef);
 			}
@@ -366,6 +366,7 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual bool VisitBlockExpression(BlockExpression expression)
 		{
+			VisitNodes(expression.Parameters);
 			VisitNodes(expression.Statements);
 			VisitExpression(expression);
 

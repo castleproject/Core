@@ -65,7 +65,7 @@ namespace Castle.Rook.Compiler.AST
 
 		public void AddParameter(ParameterIdentifier paramIdent)
 		{
-			args.Add(paramIdent);
+			args.Add(paramIdent); paramIdent.Parent = this;
 		}
 
 		public override bool Accept(IASTVisitor visitor)
