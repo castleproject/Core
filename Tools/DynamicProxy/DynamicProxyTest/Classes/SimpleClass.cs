@@ -21,9 +21,9 @@ namespace Castle.DynamicProxy.Test.Classes
 	[Serializable]
 	public class SimpleClass
 	{
-		public SimpleClass()
-		{
-		}
+//		public SimpleClass()
+//		{
+//		}
 
 		public virtual void DoSome()
 		{

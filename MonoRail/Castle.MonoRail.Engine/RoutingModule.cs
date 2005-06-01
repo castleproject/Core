@@ -79,6 +79,22 @@ namespace Castle.MonoRail.Engine
 				if (rule.CompiledRule.IsMatch(currentPath))
 				{
 					newPath = rule.CompiledRule.Replace(currentPath, rule.Replace);
+
+					// Append the query string
+					string queryString = HttpContext.Current.Request.Url.Query;
+
+					if(queryString.Length > 0)
+					{
+						bool hasParams = (newPath.LastIndexOf("?") != -1);
+
+						if(hasParams)
+						{
+							queryString = queryString.Replace("?", "&");
+						}
+
+						newPath += queryString;
+					}
+
 					return true;
 				}
 			}

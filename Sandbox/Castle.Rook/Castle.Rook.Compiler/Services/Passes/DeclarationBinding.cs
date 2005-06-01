@@ -20,17 +20,13 @@ namespace Castle.Rook.Compiler.Services.Passes
 	using Castle.Rook.Compiler.AST;
 	using Castle.Rook.Compiler.Visitors;
 
-	/// <summary>
-	/// 
-	/// </summary>
+
 	public class DeclarationBinding : BreadthFirstVisitor, ICompilerPass
 	{
-		private readonly IIdentifierNameService identifierService;
 		private readonly IErrorReport errorReport;
 
-		public DeclarationBinding(IIdentifierNameService identifierService, IErrorReport errorReport)
+		public DeclarationBinding(IErrorReport errorReport)
 		{
-			this.identifierService = identifierService;
 			this.errorReport = errorReport;
 		}
 
@@ -48,7 +44,8 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 			if (parameterIdentifier.Name.StartsWith("@"))
 			{
-
+				errorReport.Error( "TODOFILENAME", parameterIdentifier.Position, 
+					"'{0}' is an invalid parameter name.", parameterIdentifier.Name );
 				return false;
 			}
 
@@ -61,13 +58,28 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 		public override bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
 		{
-			IList stmts = CreateSimpleExpressions(varDecl);
-
-			ReplaceVarDeclBySingleDecls(varDecl, stmts);
-
-			EnsureTypeDeclarationsBelongsToThisScope(varDecl, stmts);
+			ProcessMultipleVariableDeclarationStatement(varDecl);
 
 			return base.VisitMultipleVariableDeclarationStatement(varDecl);
+		}
+
+		private void ProcessMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement decl)
+		{
+			IList stmts = ConvertToSingleDeclarationStatements(decl);
+
+			ReplaceOriginalMultDeclarations(decl, stmts);
+
+			EnsureTypeDeclarationsBelongsToThisScope(decl, stmts);
+		}
+
+		public override bool VisitAssignmentExpression(AssignmentExpression assignExp)
+		{
+			return base.VisitAssignmentExpression(assignExp);
+		}
+
+		public override bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
+		{
+			return base.VisitMemberAccessExpression(accessExpression);
 		}
 
 		private void EnsureTypeDeclarationsBelongsToThisScope(MultipleVariableDeclarationStatement varDecl, IList stmts)
@@ -81,7 +93,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 				if (namescope.IsDefined(ident.Name))
 				{
 					errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-					                   "Sorry but '{0}' is already defined.", ident.Name );
+						"Sorry but '{0}' is already defined.", ident.Name );
 				}
 				else
 				{
@@ -122,7 +134,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 							if (accessor.Namescope.IsDefined(ident.Name))
 							{
 								errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-								                   "Sorry but '{0}' is already defined.", ident.Name );
+									"Sorry but '{0}' is already defined.", ident.Name );
 							}
 							else
 							{
@@ -147,14 +159,14 @@ namespace Castle.Rook.Compiler.Services.Passes
 						else
 						{
 							errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-							                   "The instance of static declaration '{0}' could not be mapped to the parent type", ident.Name );
+								"The instance of static declaration '{0}' could not be mapped to the parent type", ident.Name );
 						}
 					}
 				}
 			}
 		}
 
-		private IList CreateSimpleExpressions(MultipleVariableDeclarationStatement varDecl)
+		private IList ConvertToSingleDeclarationStatements(MultipleVariableDeclarationStatement varDecl)
 		{
 			IList newStmts = new ArrayList();
 
@@ -187,7 +199,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 			return newStmts;
 		}
 
-		private void ReplaceVarDeclBySingleDecls(MultipleVariableDeclarationStatement varDecl, IList stmts)
+		private void ReplaceOriginalMultDeclarations(MultipleVariableDeclarationStatement varDecl, IList stmts)
 		{
 			int index;
 
@@ -210,8 +222,8 @@ namespace Castle.Rook.Compiler.Services.Passes
 			if (initExpression.PostFixStatement != null)
 			{
 				errorReport.Error( "TODOFILENAME", initExpression.Position, 
-				                   "Sorry but a variable initializer can not be conditional or " + 
-				                   	"has a while/until statement attached.");
+					"Sorry but a variable initializer can not be conditional or " + 
+					"has a while/until statement attached.");
 			}
 		}
 
@@ -221,39 +233,5 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 			return new AssignmentExpression( new VariableReferenceExpression(decl.Identifier), decl.InitExp );
 		} 
-
-		public override bool VisitAssignmentExpression(AssignmentExpression assignExp)
-		{
-			return base.VisitAssignmentExpression(assignExp);
-		}
-
-//		public override bool VisitVariableReferenceExpression(VariableReferenceExpression variableReferenceExpression)
-//		{
-//			if (variableReferenceExpression.Type == VariableReferenceType.LocalOrArgument)
-//			{
-//				if (!namescope.IsDefined(variableReferenceExpression.Name))
-//				{
-//					errorReport.Error( "TODOFILENAME", variableReferenceExpression.Position, 
-//						"'{0}' is undefined. You can defined it through a formal declaration - '{0}':sometype - or just an " + 
-//						"assignment ('{0} = something').", variableReferenceExpression.Name );
-//				}
-//			}
-//			else 
-//			{
-//				if (!namescope.IsDefinedInParent(variableReferenceExpression.Name))
-//				{
-//					errorReport.Error( "TODOFILENAME", variableReferenceExpression.Position, 
-//						"'{0}' is undefined. You can defined it through a formal declaration - '{0}':sometype, an assignment " + 
-//						"('{0} = something'), or using the attr family.", variableReferenceExpression.Name );
-//				}
-//			}
-//
-//			return base.VisitVariableReferenceExpression(variableReferenceExpression);
-//		}
-
-		public override bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
-		{
-			return base.VisitMemberAccessExpression(accessExpression);
-		}
 	}
 }

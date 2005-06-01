@@ -98,7 +98,6 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore("To compile on Mono")]
 		public void MixinSerialization()
 		{
 			GeneratorContext context = new GeneratorContext();
@@ -129,10 +128,35 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		public void HashtableSerialization()
+		[Ignore("XmlSerializer does not respect the ObjectReference protocol so it wont work")]
+		public void XmlSerialization()
 		{
 			GeneratorContext context = new GeneratorContext();
+			SimpleMixin mixin1 = new SimpleMixin();
+			OtherMixin mixin2 = new OtherMixin();
 
+			context.AddMixinInstance( mixin1 );
+			context.AddMixinInstance( mixin2 );
+
+			object proxy = generator.CreateCustomClassProxy( 
+				typeof(SimpleClass), new StandardInterceptor(), context );
+
+			System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(SimpleClass));
+			MemoryStream stream = new MemoryStream();
+			serializer.Serialize(stream, proxy);
+			stream.Position = 0;
+			SimpleClass otherProxy = (SimpleClass) serializer.Deserialize( stream );
+
+			ISimpleMixin mixin = otherProxy as ISimpleMixin;
+			Assert.AreEqual(1, mixin.DoSomething());
+
+			IOtherMixin other = otherProxy as IOtherMixin;
+			Assert.AreEqual(3, other.Sum(1,2));
+		}
+
+		[Test]
+		public void HashtableSerialization()
+		{
 			object proxy = generator.CreateClassProxy( 
 				typeof(Hashtable), new StandardInterceptor() );
 

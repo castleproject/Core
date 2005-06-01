@@ -1,5 +1,5 @@
 The test cases run against a MSSQL Server database, but due to 
-NHibernate's features, you can change the database to whathever you 
+NHibernate's features, you can change the database to whatever you 
 like. 
 
 
