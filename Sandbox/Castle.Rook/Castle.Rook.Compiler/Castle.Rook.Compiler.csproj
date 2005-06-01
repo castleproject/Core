@@ -314,6 +314,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\ReturnStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\RootNameScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

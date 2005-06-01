@@ -166,6 +166,8 @@ statement returns[IStatement stmt]
 		(unless_statement) => stmt=unless_statement
 		|
 		stmt=expression_statement
+		|
+		stmt=return_statement
 	)
 	statement_term
 	;
@@ -227,6 +229,12 @@ flow_expressions returns[IExpression exp]
 	"next"	{ exp = new NextExpression(); }
 	|
 	"retry"	{ exp = new RetryExpression(); }
+	;
+
+return_statement returns[ReturnStatement stmt]
+	{ stmt = null; IExpression exp = null; } 
+	:
+	"return" exp=test { stmt = new ReturnStatement(exp); }
 	;
 
 protected
