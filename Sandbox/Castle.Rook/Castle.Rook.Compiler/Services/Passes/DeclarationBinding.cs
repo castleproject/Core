@@ -74,12 +74,23 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 		public override bool VisitAssignmentExpression(AssignmentExpression assignExp)
 		{
-			return base.VisitAssignmentExpression(assignExp);
-		}
+			VariableReferenceExpression varRef = (assignExp.Target as VariableReferenceExpression);
 
-		public override bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
-		{
-			return base.VisitMemberAccessExpression(accessExpression);
+			// TODO: Convert assignment to declaration if and only 
+			// if the identifier is not found on the scope.
+			// It might also be good to issue a warning when doing that
+
+//			if (varRef != null)
+//			{
+//				// varRef.Identifier
+//				
+//				if (varRef.Identifier.Type == IdentifierType.Local)
+//				{
+//					
+//				}
+//			}
+
+			return base.VisitAssignmentExpression(assignExp);
 		}
 
 		private void EnsureTypeDeclarationsBelongsToThisScope(MultipleVariableDeclarationStatement varDecl, IList stmts)

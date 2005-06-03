@@ -18,6 +18,8 @@ namespace Castle.Rook.Compiler.Tests
 
 	using NUnit.Framework;
 
+	using Castle.Rook.Compiler.AST;
+
 	[TestFixture]
 	public class SourceFileTestCase : AbstractContainerTestCase
 	{
@@ -49,6 +51,21 @@ namespace Castle.Rook.Compiler.Tests
 		public void NamespaceDecl()
 		{
 			container.ParserService.Parse("namespace My.First.Namespace \r\n\r\nend\r\n");
+
+			AssertNoErrorOrWarnings();
+		}
+
+		[Test]
+		public void QualifiedRefs1()
+		{
+			CompilationUnit unit = 
+				container.ParserService.Parse("System::Console.WriteLine(\"something\") \r\n\r\n");
+
+			IStatement stmt = unit.Statements[0];
+
+			AssertNoErrorOrWarnings();
+
+			container.ParserService.Parse("puts(\"something\") \r\n\r\n");
 
 			AssertNoErrorOrWarnings();
 		}

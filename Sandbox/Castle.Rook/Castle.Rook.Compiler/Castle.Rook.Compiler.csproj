@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\RequireStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\RetryExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

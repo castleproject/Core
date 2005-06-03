@@ -19,31 +19,30 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class MemberAccessExpression : AbstractExpression
+	public class RequireStatement : AbstractStatement		
 	{
-		private IExpression target;
-		private readonly string member;
+		private readonly Identifier qualifiedIdentifier;
+		private readonly INameScope definedScope;
 
-		public MemberAccessExpression(IExpression target, String member)
+		public RequireStatement(Identifier qualifiedIdentifier, INameScope namescope)
 		{
-			this.target = target;
-			this.member = member;
+			this.qualifiedIdentifier = qualifiedIdentifier;
+			this.definedScope = namescope;
 		}
 
-		public string Member
+		public Identifier QualifiedIdentifier
 		{
-			get { return member; }
+			get { return qualifiedIdentifier; }
 		}
 
-		public IExpression Target
+		public INameScope DefinedScope
 		{
-			get { return target; }
-			set { target = value; }
+			get { return definedScope; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitMemberAccessExpression(this);
+			return visitor.VisitRequireStatement(this);
 		}
 	}
 }

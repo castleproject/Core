@@ -19,31 +19,23 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class MemberAccessExpression : AbstractExpression
+	public class ReturnStatement : AbstractStatement
 	{
-		private IExpression target;
-		private readonly string member;
+		private readonly IExpression expression;
 
-		public MemberAccessExpression(IExpression target, String member)
+		public ReturnStatement(IExpression expression)
 		{
-			this.target = target;
-			this.member = member;
+			this.expression = expression;
 		}
 
-		public string Member
+		public IExpression Expression
 		{
-			get { return member; }
-		}
-
-		public IExpression Target
-		{
-			get { return target; }
-			set { target = value; }
+			get { return expression; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitMemberAccessExpression(this);
+			return visitor.VisitReturnStatement(this);
 		}
 	}
 }

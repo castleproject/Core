@@ -212,6 +212,16 @@ namespace Castle.Rook.Compiler.Visitors
 			return true;
 		}
 
+		public virtual bool VisitReturnStatement(ReturnStatement statement)
+		{
+			return true;
+		}
+
+		public virtual bool VisitRequireStatement(RequireStatement statement)
+		{
+			return true;
+		}
+
 		//
 		// Expressions
 		//

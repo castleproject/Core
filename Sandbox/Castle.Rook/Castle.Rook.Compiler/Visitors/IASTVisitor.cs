@@ -47,6 +47,7 @@ namespace Castle.Rook.Compiler.Visitors
 		bool VisitPostfixCondition(PostfixCondition postfixCondition);
 		bool VisitSingleVariableDeclarationStatement(SingleVariableDeclarationStatement declarationStatement);
 		bool VisitReturnStatement(ReturnStatement statement);
+		bool VisitRequireStatement(RequireStatement statement);
 
 		// Expressions
 

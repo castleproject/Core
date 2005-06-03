@@ -21,6 +21,8 @@ options
 	codeGenBitsetTestThreshold = 3;
 	defaultErrorHandler = false;     // Don't generate parser error handlers
 	// buildAST = true;
+	analyzerDebug = false;
+	codeGenDebug = false;
 }
 tokens 
 {
@@ -151,6 +153,8 @@ statement returns[IStatement stmt]
 	(
 		(declaration_statement) => stmt=declaration_statement
 		|
+		// property_def_statement
+		// |
 		// operator_def_statement
 		// |
 		stmt=type_def_statement
@@ -168,6 +172,8 @@ statement returns[IStatement stmt]
 		stmt=expression_statement
 		|
 		stmt=return_statement
+		|
+		stmt=require_statement
 	)
 	statement_term
 	;
@@ -237,17 +243,23 @@ return_statement returns[ReturnStatement stmt]
 	"return" exp=test { stmt = new ReturnStatement(exp); }
 	;
 
+require_statement returns[RequireStatement stmt]
+	{ stmt = null; Identifier ident = null; } 
+	:
+	"require" ident=qualified_name { stmt = new RequireStatement(ident, GetCurrentScope()); }
+	;
+
 protected
 access_level
 	:
 	(
-		"public"^    (COLON)? { currentAccessLevel = AccessLevel.Public; }
+		"public"^    { currentAccessLevel = AccessLevel.Public; }
 		|
-		"private"^   (COLON)? { currentAccessLevel = AccessLevel.Private; }
+		"private"^   { currentAccessLevel = AccessLevel.Private; }
 		|
-		"protected"^ (COLON)? { currentAccessLevel = AccessLevel.Protected; }
+		"protected"^ { currentAccessLevel = AccessLevel.Protected; }
 		| 
-		"internal"^  (COLON)? { currentAccessLevel = AccessLevel.Internal; }
+		"internal"^  { currentAccessLevel = AccessLevel.Internal; }
 		|
 			/* nothing - inherits the access level defined previously */  
 	)
@@ -289,7 +301,10 @@ method_def_statement returns [MethodDefinitionStatement mdstmt]
 	{ 
 		mdstmt = new MethodDefinitionStatement( GetCurrentScope(), currentAccessLevel, qn.Name); PushScope(mdstmt); 
 	}
-	LPAREN (methodParams[mdstmt])? RPAREN (retType=type)? statement_term
+	(
+		LPAREN (methodParams[mdstmt])? RPAREN (retType=type)? 
+	)?
+	statement_term
 	{ mdstmt.ReturnType = retType; }
 	suite[mdstmt.Statements]
 	END { PopScope(); }
@@ -330,14 +345,14 @@ expression_statement returns[IStatement stmt]
 	  AugType rel = AugType.Undefined; }
 	:
 	(
+		(compound) => exp=compound
+		|
 		exp=test
 		(	
 			rel=augassign rhs=test	{ exp = new AugAssignmentExpression(exp, rhs, rel); }
 			|
 			(ASSIGN rhs=test		{ exp = new AssignmentExpression(exp, rhs); } )+
 		)?
-		|
-		exp=compound
 		|
 		exp=flow_expressions
 	)
@@ -410,9 +425,24 @@ qualified_name returns [Identifier ident]
 	{ String name = null; ident = null; }
 	:
 	t:IDENT { name = t.getText(); }
-    (options{greedy=true;}:DOT t2:IDENT { name += "." + t2.getText(); } )*
+	( options{greedy=true;}:DOT t2:IDENT { name += "." + t2.getText(); } )*
     { ident = new Identifier(IdentifierType.Qualified, name, null); }
     ;
+
+/* protected
+qualified_postfix returns [String name]
+	{ name = String.Empty; }
+	:
+	( options{greedy=true;}:
+		(
+			DOT			{ name += "."; }
+			| 
+			COLONCOLON	{ name += "::"; }
+		)
+		t2:IDENT { name += t2.getText(); } 
+	)*
+    ;
+*/
 
 qualified_symbol returns[String name]
 	{ name = null; }
@@ -434,9 +464,9 @@ block returns [BlockExpression bexp]
 	{ bexp = new BlockExpression(); }
 	:
 	(
-		(DO^ (statement_term)? (blockargs[bexp])? (statement_term)? suite[bexp.Statements] END)
+		(DO nothing (blockargs[bexp])? (statement_term)? suite[bexp.Statements] END)
 		|
-		(LCURLY^ (statement_term)? (blockargs[bexp])? (statement_term)? suite[bexp.Statements] RCURLY)
+		(LCURLY nothing (blockargs[bexp])? (statement_term)? suite[bexp.Statements] RCURLY)
 	)
 	;
 
@@ -477,12 +507,12 @@ compound returns[CompoundExpression cexp]
 test returns [IExpression exp]
 	{ exp = null; IExpression rhs = null; }
 	: 
+	(block) => exp=block
+	| 
 	exp=and_test ("or" rhs=and_test { exp = new BinaryExpression(exp, rhs, BinaryOp.Or); })*
 	| 
 	exp=lambda
 	|
-	exp=block
-	| 
 	exp=raise
 	| 
 	exp=yield
@@ -546,7 +576,7 @@ expression returns [IExpression exp]
 xor_expr returns [IExpression exp]
 	{ exp = null; IExpression rhs = null; }
 	: 
-	exp=and_expr (BOR rhs=and_expr { exp = new BinaryExpression(exp, rhs, BinaryOp.Or2); })*
+	exp=and_expr (options {greedy=true;}:BOR rhs=and_expr { exp = new BinaryExpression(exp, rhs, BinaryOp.Or2); })*
 	;
 
 and_expr returns [IExpression exp]
@@ -605,7 +635,6 @@ atom returns [IExpression exp]
 	| LPAREN (exp=test)? RPAREN // LPAREN (testlist)? RPAREN
 	| LBRACK (exp=listmaker)? RBRACK
 	| LCURLY (exp=dictmaker)? RCURLY
-//	| BACKQUOTE testlist BACKQUOTE
 	| exp=varref
 	| exp=constantref
 	;
@@ -620,7 +649,7 @@ varref returns [VariableReferenceExpression vre]
 constantref returns [LiteralReferenceExpression lre]
 	{ lre = null; }
 	:
-	| t1:NUM_INT
+	  t1:NUM_INT
 	  { lre = new LiteralReferenceExpression(t1.getText(), LiteralReferenceType.IntLiteral); }
 	| t2:NUM_LONG
 	  { lre = new LiteralReferenceExpression(t2.getText(), LiteralReferenceType.LongLiteral); }
@@ -632,20 +661,19 @@ constantref returns [LiteralReferenceExpression lre]
 	  { lre = new LiteralReferenceExpression(t5.getText(), LiteralReferenceType.StringLiteral); }
 	| t6:CHAR_LITERAL
 	  { lre = new LiteralReferenceExpression(t6.getText(), LiteralReferenceType.CharLiteral); }
-//    | LONGINT
-//    | FLOAT
-//    | COMPLEX
-//	| (STRING)+
 	;
 
 trailer[IExpression inner] returns [IExpression exp]
-	{ exp = null; }
+	{ exp = null; String qp = String.Empty; }
 	: 
 	LPAREN { exp = new MethodInvocationExpression(inner); } (arglist[(exp as MethodInvocationExpression).Arguments])? RPAREN 
 	| 
-	LBRACK subscriptlist RBRACK // TODO: Array/list/indexer access
-	| 
-	DOT IDENT { exp = new MemberAccessExpression(inner); }
+//	LBRACK subscriptlist RBRACK // TODO: Array/list/indexer access
+//	| 
+//	(DOT|COLONCOLON) => qp=qualified_postfix	{ exp = new MemberAccessExpression(inner, qp); }
+	COLONCOLON IDENT	{ exp = new MemberAccessExpression(inner, qp); }
+	|
+	DOT IDENT { exp = new MemberAccessExpression(inner, qp); }
 	;
 
 range returns[IExpression rex]
@@ -748,7 +776,6 @@ LBRACK			:	'['		;
 RBRACK			:	']'		;
 LCURLY			:	'{'		;
 RCURLY			:	'}'		;
-COLON			:	':'		;
 COMMA			:	','		;
 DOT				:	'.'		;
 DOTDOT			:	".."	;
@@ -790,6 +817,8 @@ BAND_ASSIGN		:	"&="	;
 LAND			:	"&&"	;
 SEMI			:	';'		;
 MAPASSIGN		:	"=>"	;
+COLON			:	':'		;
+COLONCOLON		:	"::"	;
 
 NEWLINE
 	options { paraphrase = "a new line"; }
