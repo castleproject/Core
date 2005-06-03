@@ -8,6 +8,40 @@
 
   They could return a kind of TypeName/VariableReference  (identifier + type name)
 
+  DONE!!!
+
+
++ Redesign the AST, maybe instead of just "statements" group things by their meaning:
+
+  TypeDeclaration
+    StaticFieldsDeclarations
+    FieldsDeclarations
+    Constructors
+    StaticMethod
+    Methods
+
+  MethodDefinition
+    FormalParameters
+    Locals
+
+
+  Scope/NamingContainer
+    subclasses:
+      FileUnit (see below)
+      Namespace
+      TypeDeclaration
+      MethodDefinition
+      Block
+      Compound
+
+
++ Add another level of abstraction to represent a file
+
+  CompilationUnit 
+    FileUnit/SourceUnit
+      Namespaces/TypeDeclarations  
+
+
 + Support unary exp CAST and ISA and AS
 
   x = (int) something
