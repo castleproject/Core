@@ -1,0 +1,1240 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>antlr.runtime</name>
+    </assembly>
+    <members>
+        <member name="T:antlr.ASTFactory">
+            <summary>
+            AST Support code shared by TreeParser and Parser.
+            </summary>
+            <remarks>
+            <para>
+            We use delegation to share code (and have only one 
+            bit of code to maintain) rather than subclassing
+            or superclassing (forces AST support code to be
+            loaded even when you don't want to do AST stuff).
+            </para>
+            <para>
+            Typically, <see cref="M:antlr.ASTFactory.setASTNodeType(System.String)"/>  is used to specify the
+            homogeneous type of node to create, but you can override
+            <see cref="M:antlr.ASTFactory.create"/>  to make heterogeneous nodes etc...
+            </para>
+            </remarks>
+        </member>
+        <member name="M:antlr.ASTFactory.#ctor">
+            <summary>
+            Constructs an <c>ASTFactory</c> with the default AST node type of
+            <see cref="T:antlr.CommonAST"/>.
+            </summary>
+        </member>
+        <member name="M:antlr.ASTFactory.#ctor(System.String)">
+            <summary>
+            Constructs an <c>ASTFactory</c> and use the specified AST node type
+            as the default.
+            </summary>
+            <param name="nodeTypeName">
+            	Name of default AST node type for this factory.
+            </param>
+        </member>
+        <member name="F:antlr.ASTFactory.defaultASTNodeTypeObject_">
+            <summary>
+            Stores the Type of the default AST node class to be used during tree construction.
+            </summary>
+        </member>
+        <member name="F:antlr.ASTFactory.nodeTypeObjectList_">
+            <summary>
+            Stores the mapping between custom AST NodeTypes and their NodeTypeName/NodeTypeClass.
+            </summary>
+        </member>
+        <member name="F:antlr.ASTFactory.typename2creator_">
+            <summary>
+            Stores the mapping between AST node typenames and their token ID.
+            </summary>
+        </member>
+        <member name="M:antlr.ASTFactory.setTokenTypeASTNodeType(System.Int32,System.String)">
+            <summary>
+            Specify an "override" for the <see cref="T:antlr.collections.AST"/> type created for
+            the specified Token type.
+            </summary>
+            <remarks>
+            This method is useful for situations that ANTLR cannot oridinarily deal 
+            with (i.e., when you  create a token based upon a nonliteral token symbol 
+            like #[LT(1)].  This is a runtime value and ANTLR cannot determine the token 
+            type (and hence the AST) statically.
+            </remarks>
+            <param name="tokenType">Token type to override.</param>
+            <param name="NodeTypeName">
+            	Fully qualified AST typename (or null to specify 
+            	the factory's default AST type).
+            </param>
+        </member>
+        <member name="M:antlr.ASTFactory.registerFactory(System.Int32,System.String)">
+            <summary>
+            Register an AST Node Type for a given Token type ID.
+            </summary>
+            <param name="NodeType">The Token type ID.</param>
+            <param name="NodeTypeName">The AST Node Type to register.</param>
+        </member>
+        <member name="M:antlr.ASTFactory.setTokenTypeASTNodeCreator(System.Int32,antlr.ASTNodeCreator)">
+            <summary>
+            Register an ASTNodeCreator for a given Token type ID.
+            </summary>
+            <param name="NodeType">The Token type ID.</param>
+            <param name="NodeTypeName">The AST Node Type to register.</param>
+        </member>
+        <member name="M:antlr.ASTFactory.setASTNodeCreator(antlr.ASTNodeCreator)">
+            <summary>
+            Register an ASTNodeCreator to be used for creating node by default.
+            </summary>
+            <param name="creator">The ASTNodeCreator.</param>
+        </member>
+        <member name="M:antlr.ASTFactory.setMaxNodeType(System.Int32)">
+            <summary>
+            Pre-expands the internal list of TokenTypeID-to-ASTNodeType mappings
+            to the specified size.
+            This is primarily a convenience method that can be used to prevent 
+            unnecessary and costly re-org of the mappings list.
+            </summary>
+            <param name="NodeType">Maximum Token Type ID.</param>
+        </member>
+        <member name="M:antlr.ASTFactory.addASTChild(antlr.ASTPair,antlr.collections.AST)">
+            <summary>
+            Add a child to the current AST
+            </summary>
+            <param name="currentAST">The AST to add a child to</param>
+            <param name="child">The child AST to be added</param>
+        </member>
+        <member name="M:antlr.ASTFactory.create">
+            <summary>
+            Creates a new uninitialized AST node. Since a specific AST Node Type
+            wasn't indicated, the new AST node is created using the current default
+            AST Node type - <see cref="F:antlr.ASTFactory.defaultASTNodeTypeObject_"/>
+            </summary>
+            <returns>An uninitialized AST node object.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.create(System.Int32)">
+            <summary>
+            Creates and initializes a new AST node using the specified Token Type ID.
+            The <see cref="T:System.Type"/> used for creating this new AST node is 
+            determined by the following:
+            <list type="bullet">
+            	<item>the current TokenTypeID-to-ASTNodeType mapping (if any) or,</item>
+            	<item>the <see cref="F:antlr.ASTFactory.defaultASTNodeTypeObject_"/> otherwise</item>
+            </list>
+            </summary>
+            <param name="type">Token type ID to be used to create new AST Node.</param>
+            <returns>An initialized AST node object.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.create(System.Int32,System.String)">
+            <summary>
+            Creates and initializes a new AST node using the specified Token Type ID.
+            The <see cref="T:System.Type"/> used for creating this new AST node is 
+            determined by the following:
+            <list type="bullet">
+            	<item>the current TokenTypeID-to-ASTNodeType mapping (if any) or,</item>
+            	<item>the <see cref="F:antlr.ASTFactory.defaultASTNodeTypeObject_"/> otherwise</item>
+            </list>
+            </summary>
+            <param name="type">Token type ID to be used to create new AST Node.</param>
+            <param name="txt">Text for initializing the new AST Node.</param>
+            <returns>An initialized AST node object.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.create(System.Int32,System.String,System.String)">
+            <summary>
+            Creates a new AST node using the specified AST Node Type name. Once created,
+            the new AST node is initialized with the specified Token type ID and string.
+            The <see cref="T:System.Type"/> used for creating this new AST node is 
+            determined solely by <c>ASTNodeTypeName</c>.
+            The AST Node type must have a default/parameterless constructor.
+            </summary>
+            <param name="type">Token type ID to be used to create new AST Node.</param>
+            <param name="txt">Text for initializing the new AST Node.</param>
+            <param name="ASTNodeTypeName">Fully qualified name of the Type to be used for creating the new AST Node.</param>
+            <returns>An initialized AST node object.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.create(antlr.Token,System.String)">
+            <summary>
+            Creates a new AST node using the specified AST Node Type name.
+            </summary>
+            <param name="Token">Token instance to be used to initialize the new AST Node.</param>
+            <param name="ASTNodeTypeName">
+            	Fully qualified name of the Type to be used for creating the new AST Node.
+            </param>
+            <returns>A newly created and initialized AST node object.</returns>
+            <remarks>
+            Once created, the new AST node is initialized with the specified Token 
+            instance. The <see cref="T:System.Type"/> used for creating this new AST 
+            node is  determined solely by <c>ASTNodeTypeName</c>.
+            <para>The AST Node type must have a default/parameterless constructor.</para>
+            </remarks>
+        </member>
+        <member name="M:antlr.ASTFactory.create(antlr.collections.AST)">
+            <summary>
+            Creates and initializes a new AST node using the specified AST Node instance.
+            the new AST node is initialized with the specified Token type ID and string.
+            The <see cref="T:System.Type"/> used for creating this new AST node is 
+            determined solely by <c>aNode</c>.
+            The AST Node type must have a default/parameterless constructor.
+            </summary>
+            <param name="aNode">AST Node instance to be used for creating the new AST Node.</param>
+            <returns>An initialized AST node object.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.create(antlr.Token)">
+            <summary>
+            Creates and initializes a new AST node using the specified Token instance.
+            The <see cref="T:System.Type"/> used for creating this new AST node is 
+            determined by the following:
+            <list type="bullet">
+            	<item>the current TokenTypeID-to-ASTNodeType mapping (if any) or,</item>
+            	<item>the <see cref="F:antlr.ASTFactory.defaultASTNodeTypeObject_"/> otherwise</item>
+            </list>
+            </summary>
+            <param name="tok">Token instance to be used to create new AST Node.</param>
+            <returns>An initialized AST node object.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.dup(antlr.collections.AST)">
+            <summary>
+            Returns a copy of the specified AST Node instance. The copy is obtained by
+            using the <see cref="T:System.ICloneable"/> method Clone().
+            </summary>
+            <param name="t">AST Node to copy.</param>
+            <returns>An AST Node (or null if <c>t</c> is null).</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.dupList(antlr.collections.AST)">
+            <summary>
+            Duplicate AST Node tree rooted at specified AST node and all of it's siblings.
+            </summary>
+            <param name="t">Root of AST Node tree.</param>
+            <returns>Root node of new AST Node tree (or null if <c>t</c> is null).</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.dupTree(antlr.collections.AST)">
+            <summary>
+            Duplicate AST Node tree rooted at specified AST node. Ignore it's siblings.
+            </summary>
+            <param name="t">Root of AST Node tree.</param>
+            <returns>Root node of new AST Node tree (or null if <c>t</c> is null).</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.make(antlr.collections.AST[])">
+            <summary>
+            Make a tree from a list of nodes.  The first element in the
+            array is the root.  If the root is null, then the tree is
+            a simple list not a tree.  Handles null children nodes correctly.
+            For example, build(a, b, null, c) yields tree (a b c).  build(null,a,b)
+            yields tree (nil a b).
+            </summary>
+            <param name="nodes">List of Nodes.</param>
+            <returns>AST Node tree.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.make(antlr.collections.impl.ASTArray)">
+            <summary>
+            Make a tree from a list of nodes, where the nodes are contained
+            in an ASTArray object.
+            </summary>
+            <param name="nodes">List of Nodes.</param>
+            <returns>AST Node tree.</returns>
+        </member>
+        <member name="M:antlr.ASTFactory.makeASTRoot(antlr.ASTPair,antlr.collections.AST)">
+            <summary>
+            Make an AST the root of current AST.
+            </summary>
+            <param name="currentAST"></param>
+            <param name="root"></param>
+        </member>
+        <member name="M:antlr.ASTFactory.setASTNodeType(System.String)">
+            <summary>
+            Sets the global default AST Node Type for this ASTFactory instance.
+            This method also attempts to load the <see cref="T:System.Type"/> instance
+            for the specified typename.
+            </summary>
+            <param name="t">Fully qualified AST Node Type name.</param>
+        </member>
+        <member name="M:antlr.ASTFactory.error(System.String)">
+            <summary>
+            To change where error messages go, can subclass/override this method
+            and then setASTFactory in Parser and TreeParser.  This method removes
+            a prior dependency on class antlr.Tool.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="T:antlr.ASTNodeCreator">
+            <summary>
+            A creator of AST node instances.
+            </summary>
+            <remarks>
+            <para>
+            This class and it's sub-classes exists primarily as an optimization
+            of the reflection-based mechanism(s) previously used exclusively to 
+            create instances of AST node objects.
+            </para>
+            <para>
+            Parsers and TreeParsers already use the ASTFactory class in ANTLR whenever
+            they need to create an AST node objeect. What this class does is to support
+            performant extensibility of the basic ASTFactory. The ASTFactory can now be
+            extnded as run-time to support more new AST node types without using needing
+            to use reflection.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:antlr.ASTNodeCreator.Create">
+            <summary>
+            Constructs an <see cref="T:antlr.collections.AST"/> instance.
+            </summary>
+        </member>
+        <member name="P:antlr.ASTNodeCreator.ASTNodeTypeName">
+            <summary>
+            Returns the fully qualified name of the AST type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="M:antlr.collections.AST.getNumberOfChildren">
+            <summary>
+            Get number of children of this node; if leaf, returns 0
+            </summary>
+            <returns>Number of children</returns>
+        </member>
+        <member name="T:antlr.ASTVisitor">
+            <summary>
+            Summary description for ASTVisitor.
+            </summary>
+        </member>
+        <member name="M:antlr.BaseAST.getNumberOfChildren">
+            <summary>
+            Get number of children of this node; if leaf, returns 0
+            </summary>
+            <returns>Number of children</returns>
+        </member>
+        <member name="T:antlr.InputBuffer">
+            <summary>
+            Represents a stream of characters fed to the lexer from that can be rewound 
+            via mark()/rewind() methods.
+            </summary>
+            <remarks>
+            <para>
+            A dynamic array is used to buffer up all the input characters.  Normally,
+            "k" characters are stored in the buffer.  More characters may be stored 
+            during guess mode (testing syntactic predicate), or when LT(i>k) is referenced.
+            Consumption of characters is deferred.  In other words, reading the next
+            character is not done by conume(), but deferred until needed by LA or LT.
+            </para>
+            </remarks>
+        </member>
+        <member name="F:antlr.ByteBuffer.buf">
+            <summary>
+            Small buffer used to avoid reading individual chars
+            </summary>
+        </member>
+        <member name="F:antlr.CharBuffer.buf">
+            <summary>
+            Small buffer used to avoid reading individual chars
+            </summary>
+        </member>
+        <member name="F:antlr.CharScanner.tokenCreator">
+            <summary>Used for creating Token instances.</summary>
+        </member>
+        <member name="M:antlr.CharScanner.panic(System.String)">
+            <summary>
+            This method is executed by ANTLR internally when it detected an illegal
+            state that cannot be recovered from.
+            The previous implementation of this method called <see cref="M:System.Environment.Exit(System.Int32)"/>
+            and writes directly to <see cref="P:System.Console.Error"/>, which is usually not 
+            appropriate when a translator is embedded into a larger application.
+            </summary>
+            <param name="s">Error message.</param>
+        </member>
+        <member name="T:antlr.TokenCreator">
+            <summary>
+            A creator of Token object instances.
+            </summary>
+            <remarks>
+            <para>
+            This class and it's sub-classes exists primarily as an optimization
+            of the reflection-based mechanism(s) previously used exclusively to 
+            create instances of Token objects.
+            </para>
+            <para>
+            Since Lexers in ANTLR use a single Token type, each TokenCreator can 
+            create one class of Token objects (that's why it's not called TokenFactory).
+            </para>
+            </remarks>
+        </member>
+        <member name="M:antlr.TokenCreator.Create">
+            <summary>
+            Constructs a <see cref="T:antlr.Token"/> instance.
+            </summary>
+        </member>
+        <member name="P:antlr.TokenCreator.TokenTypeName">
+            <summary>
+            Returns the fully qualified name of the Token type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="F:antlr.CharScanner.ReflectionBasedTokenCreator.tokenTypeName">
+            <summary>
+            The fully qualified name of the Token type to create.
+            </summary>
+        </member>
+        <member name="F:antlr.CharScanner.ReflectionBasedTokenCreator.tokenTypeObject">
+            <summary>
+            Type object used as a template for creating tokens by reflection.
+            </summary>
+        </member>
+        <member name="M:antlr.CharScanner.ReflectionBasedTokenCreator.SetTokenType(System.String)">
+            <summary>
+            Returns the fully qualified name of the Token type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="M:antlr.CharScanner.ReflectionBasedTokenCreator.Create">
+            <summary>
+            Constructs a <see cref="T:antlr.Token"/> instance.
+            </summary>
+        </member>
+        <member name="P:antlr.CharScanner.ReflectionBasedTokenCreator.TokenTypeName">
+            <summary>
+            Returns the fully qualified name of the Token type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="M:antlr.CommonAST.CommonASTCreator.Create">
+            <summary>
+            Constructs a <see cref="T:antlr.collections.AST"/> instance.
+            </summary>
+        </member>
+        <member name="P:antlr.CommonAST.CommonASTCreator.ASTNodeTypeName">
+            <summary>
+            Returns the fully qualified name of the AST type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="M:antlr.CommonASTWithHiddenTokens.CommonASTWithHiddenTokensCreator.Create">
+            <summary>
+            Constructs a <see cref="T:antlr.collections.AST"/> instance.
+            </summary>
+        </member>
+        <member name="P:antlr.CommonASTWithHiddenTokens.CommonASTWithHiddenTokensCreator.ASTNodeTypeName">
+            <summary>
+            Returns the fully qualified name of the AST type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="M:antlr.CommonToken.CommonTokenCreator.Create">
+            <summary>
+            Constructs a <see cref="T:antlr.Token"/> instance.
+            </summary>
+        </member>
+        <member name="P:antlr.CommonToken.CommonTokenCreator.TokenTypeName">
+            <summary>
+            Returns the fully qualified name of the Token type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="M:antlr.CommonHiddenStreamToken.CommonHiddenStreamTokenCreator.Create">
+            <summary>
+            Constructs a <see cref="T:antlr.Token"/> instance.
+            </summary>
+        </member>
+        <member name="P:antlr.CommonHiddenStreamToken.CommonHiddenStreamTokenCreator.TokenTypeName">
+            <summary>
+            Returns the fully qualified name of the Token type that this
+            class creates.
+            </summary>
+        </member>
+        <member name="T:antlr.DumpASTVisitor">
+            <summary>
+            Summary description for DumpASTVisitor.
+            </summary>
+            Simple class to dump the contents of an AST to the output 
+        </member>
+        <member name="M:antlr.Parser.panic">
+            <summary>
+            @deprecated as of 2.7.2. This method calls System.exit() and writes
+            directly to stderr, which is usually not appropriate when
+            a parser is embedded into a larger application. Since the method is
+            <code>static</code>, it cannot be overridden to avoid these problems.
+            ANTLR no longer uses this method internally or in generated code.
+            </summary>
+            
+        </member>
+        <member name="M:antlr.Parser.setASTFactory(antlr.ASTFactory)">
+            <summary>
+            Specify an object with support code (shared by Parser and TreeParser.
+            Normally, the programmer does not play with this, using 
+            <see cref="M:antlr.Parser.setASTNodeClass(System.String)"/> instead.
+            </summary>
+            <param name="f"></param>
+        </member>
+        <member name="M:antlr.Parser.setASTNodeClass(System.String)">
+            <summary>
+            Specify the type of node to create during tree building. 
+            </summary>
+            <param name="cl">Fully qualified AST Node type name.</param>
+        </member>
+        <member name="M:antlr.Parser.setASTNodeType(System.String)">
+            <summary>
+            Specify the type of node to create during tree building. 
+            use <see cref="M:antlr.Parser.setASTNodeClass(System.String)"/> now to be consistent with 
+            Token Object Type accessor.
+            </summary>
+            <param name="nodeType">Fully qualified AST Node type name.</param>
+        </member>
+        <member name="E:antlr.Parser.EnterRule">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:antlr.MismatchedCharException.appendCharName(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Append a char to the msg buffer.  If special, then show escaped version
+            </summary>
+            <param name="sb">Message buffer</param>
+            <param name="c">Char to append</param>
+        </member>
+        <member name="M:antlr.ParseTree.getLeftmostDerivationStep(System.Int32)">
+            <summary>
+            Walk parse tree and return requested number of derivation steps.
+            If steps less-than 0, return node text.  If steps equals 1, return derivation
+            string at step.
+            </summary>
+            <param name="step">derivation steps</param>
+            <returns></returns>
+        </member>
+        <member name="M:antlr.ParseTree.getLeftmostDerivation(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Get derivation and return how many you did (less than requested for
+            subtree roots.
+            </summary>
+            <param name="buf">string buffer</param>
+            <param name="step">derivation steps</param>
+            <returns></returns>
+        </member>
+        <member name="M:antlr.ParseTreeRule.getLeftmostDerivation(System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Do a step-first walk, building up a buffer of tokens until
+            you've reached a particular step and print out any rule subroots
+            insteads of descending.
+            </summary>
+            <param name="buf">derivation buffer</param>
+            <param name="step">derivation steps</param>
+            <returns></returns>
+        </member>
+        <member name="T:antlr.TokenStreamRewriteEngine">
+            <summary>
+            This token stream tracks the *entire* token stream coming from
+            a lexer, but does not pass on the whitespace (or whatever else
+            you want to discard) to the parser.
+            </summary>
+            <remarks>
+            <para>
+            This class can then be asked for the ith token in the input stream.
+            Useful for dumping out the input stream exactly after doing some
+            augmentation or other manipulations.  Tokens are index from 0..n-1
+            </para>
+            <para>
+            You can insert stuff, replace, and delete chunks.  Note that the
+            operations are done lazily--only if you convert the buffer to a
+            string.  This is very efficient because you are not moving data around
+            all the time.  As the buffer of tokens is converted to strings, the
+            toString() method(s) check to see if there is an operation at the
+            current index.  If so, the operation is done and then normal string
+            rendering continues on the buffer.  This is like having multiple Turing
+            machine instruction streams (programs) operating on a single input tape. :)
+            </para>
+            <para>
+            Since the operations are done lazily at toString-time, operations do not
+            screw up the token index values.  That is, an insert operation at token
+            index i does not change the index values for tokens i+1..n-1.
+            </para>
+            <para>
+            Because operations never actually alter the buffer, you may always get
+            the original token stream back without undoing anything.  Since
+            the instructions are queued up, you can easily simulate transactions and
+            roll back any changes if there is an error just by removing instructions.
+            For example,
+            </para>
+            <example>For example:
+            <code>
+            TokenStreamRewriteEngine rewriteEngine = new TokenStreamRewriteEngine(lexer);
+            JavaRecognizer           parser        = new JavaRecognizer(rewriteEngine);
+            ...
+            rewriteEngine.insertAfter("pass1", t, "foobar");}
+            rewriteEngine.insertAfter("pass2", u, "start");}
+            System.Console.Out.WriteLine(rewriteEngine.ToString("pass1"));
+            System.Console.Out.WriteLine(rewriteEngine.ToString("pass2"));
+            </code>
+            </example>
+            <para>
+            You can also have multiple "instruction streams" and get multiple
+            rewrites from a single pass over the input.  Just name the instruction
+            streams and use that name again when printing the buffer.  This could be
+            useful for generating a C file and also its header file--all from the
+            same buffer.
+            </para>
+            <para>
+            If you don't use named rewrite streams, a "default" stream is used.
+            </para>
+            <para>
+            Terence Parr, parrt@cs.usfca.edu
+            University of San Francisco
+            February 2004
+            </para>
+            </remarks>
+        </member>
+        <member name="F:antlr.TokenStreamRewriteEngine.tokens">
+            <summary>
+            Track the incoming list of tokens
+            </summary>
+        </member>
+        <member name="F:antlr.TokenStreamRewriteEngine.programs">
+            <summary>
+            You may have multiple, named streams of rewrite operations.
+            I'm calling these things "programs."
+            Maps string (name) -> rewrite (List)
+            </summary>
+        </member>
+        <member name="F:antlr.TokenStreamRewriteEngine.lastRewriteTokenIndexes">
+            <summary>
+            Map string (program name) -> Integer index
+            </summary>
+        </member>
+        <member name="F:antlr.TokenStreamRewriteEngine.index">
+            <summary>
+            track index of tokens
+            </summary>
+        </member>
+        <member name="F:antlr.TokenStreamRewriteEngine.stream">
+            <summary>
+            Who do we suck tokens from?
+            </summary>
+        </member>
+        <member name="F:antlr.TokenStreamRewriteEngine.discardMask">
+            <summary>
+            Which (whitespace) token(s) to throw out
+            </summary>
+        </member>
+        <member name="M:antlr.TokenStreamRewriteEngine.rollback(System.String,System.Int32)">
+            <summary>
+            Rollback the instruction stream for a program so that
+            the indicated instruction (via instructionIndex) is no
+            longer in the stream.
+            </summary>
+            <remarks>
+            UNTESTED!
+            </remarks>
+            <param name="programName"></param>
+            <param name="instructionIndex"></param>
+        </member>
+        <member name="M:antlr.TokenStreamRewriteEngine.deleteProgram(System.String)">
+            <summary>
+            Reset the program so that no instructions exist
+            </summary>
+            <param name="programName"></param>
+        </member>
+        <member name="M:antlr.TokenStreamRewriteEngine.addToSortedRewriteList(antlr.TokenStreamRewriteEngine.RewriteOperation)">
+            <summary>
+            If op.index > lastRewriteTokenIndexes, just add to the end.
+            Otherwise, do linear
+            </summary>
+            <param name="op"></param>
+        </member>
+        <member name="M:antlr.TokenStreamRewriteEngine.RewriteOperation.execute(System.Text.StringBuilder)">
+            <summary>
+            Execute the rewrite operation by possibly adding to the buffer.
+            </summary>
+            <param name="buf">rewrite buffer</param>
+            <returns>The index of the next token to operate on.</returns>
+        </member>
+        <member name="T:antlr.TokenWithIndex">
+            <summary>
+            This token tracks it's own index 0..n-1 relative to the beginning 
+            of the stream. It is designed to work with 
+            <see cref="T:antlr.TokenStreamRewriteEngine"/> in TokenStreamRewriteEngine.cs
+            </summary> 
+        </member>
+        <member name="F:antlr.TokenWithIndex.index">
+            <summary>
+            Index into token array indicating position in input stream
+            </summary>
+        </member>
+        <member name="M:antlr.TreeParser.panic">
+            <summary>
+            @deprecated as of 2.7.2. This method calls System.exit() and writes
+            directly to stderr, which is usually not appropriate when
+            a parser is embedded into a larger application. Since the method is
+            <code>static</code>, it cannot be overridden to avoid these problems.
+            ANTLR no longer uses this method internally or in generated code.
+            </summary>
+            
+        </member>
+        <member name="F:antlr.debug.ANTLREventArgs.type_">
+            <summary>
+            Event type.
+            </summary>
+        </member>
+        <member name="T:antlr.debug.DebuggingParser">
+            <summary> This type was created in VisualAge.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.DebuggingCharScanner.reportError(antlr.MismatchedCharException)">
+            <summary>Report exception errors caught in nextToken() 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.DebuggingCharScanner.reportError(System.String)">
+            <summary>Parser error-reporting function can be overridden in subclass 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.DebuggingCharScanner.reportWarning(System.String)">
+            <summary>Parser warning-reporting function can be overridden in subclass 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.GuessingEventArgs.setValues(System.Int32,System.Int32)">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.InputBufferEventArgs.setValues(System.Int32,System.Char,System.Int32)">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="T:antlr.debug.InputBufferListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.InputBufferListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.InputBufferListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.InputBufferListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.InputBufferListenerBase.inputBufferConsume(System.Object,antlr.debug.InputBufferEventArgs)">
+            <summary>
+            Handle the "CharConsumed" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.InputBufferListenerBase.inputBufferLA(System.Object,antlr.debug.InputBufferEventArgs)">
+            <summary>
+            Handle the "CharLA" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.InputBufferListenerBase.inputBufferMark(System.Object,antlr.debug.InputBufferEventArgs)">
+            <summary>
+            Handle the "Mark" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.InputBufferListenerBase.inputBufferRewind(System.Object,antlr.debug.InputBufferEventArgs)">
+            <summary>
+            Handle the "Rewind" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.InputBufferReporter.inputBufferConsume(System.Object,antlr.debug.InputBufferEventArgs)">
+            <summary> charBufferConsume method comment.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.InputBufferReporter.inputBufferLA(System.Object,antlr.debug.InputBufferEventArgs)">
+            <summary> charBufferLA method comment.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.consume">
+            <summary>Get another token object from the token stream 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.LA(System.Int32)">
+            <summary>Return the token type of the ith token of lookahead where i=1
+            is the current token being examined by the parser (i.e., it
+            has not been matched yet).
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.match(System.Int32)">
+            <summary>Make sure current lookahead symbol matches token type <tt>t</tt>.
+            Throw an exception upon mismatch, which is catch by either the
+            error handler or by the syntactic predicate.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.match(antlr.collections.impl.BitSet)">
+            <summary>Make sure current lookahead symbol matches the given set
+            Throw an exception upon mismatch, which is catch by either the
+            error handler or by the syntactic predicate.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.reportError(antlr.RecognitionException)">
+            <summary>Parser error-reporting function can be overridden in subclass 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.reportError(System.String)">
+            <summary>Parser error-reporting function can be overridden in subclass 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.reportWarning(System.String)">
+            <summary>Parser warning-reporting function can be overridden in subclass 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.LLkDebuggingParser.setupDebugging(antlr.TokenStream,antlr.TokenBuffer)">
+            <summary>User can override to do their own debugging 
+            </summary>
+        </member>
+        <member name="M:antlr.debug.MessageEventArgs.setValues(System.Int32,System.String)">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="T:antlr.debug.MessageListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.MessageListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.MessageListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.MessageListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.MessageListenerBase.reportError(System.Object,antlr.debug.MessageEventArgs)">
+            <summary>
+            Handle the "ReportError" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.MessageListenerBase.reportWarning(System.Object,antlr.debug.MessageEventArgs)">
+            <summary>
+            Handle the "ReportWarning" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.NewLineEventArgs.ToString">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="T:antlr.debug.ParserEventSupport">
+            <summary>A class to assist in firing parser events
+            NOTE: I intentionally _did_not_ synchronize the event firing and
+            add/remove listener methods.  This is because the add/remove should
+            _only_ be called by the parser at its start/end, and the _same_thread_
+            should be performing the parsing.  This should help performance a tad...
+            </summary>
+        </member>
+        <member name="T:antlr.debug.ParserListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.ParserListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.ParserListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.enterRule(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "EnterRule" event
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.exitRule(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "ExitRule" event
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.parserConsume(System.Object,antlr.debug.TokenEventArgs)">
+            <summary>
+            Handle the "Consume" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.parserLA(System.Object,antlr.debug.TokenEventArgs)">
+            <summary>
+            Handle the "ParserLA" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.parserMatch(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "Match" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.parserMatchNot(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "MatchNot" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.parserMismatch(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "MisMatch" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.parserMismatchNot(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "MisMatchNot" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.reportError(System.Object,antlr.debug.MessageEventArgs)">
+            <summary>
+            Handle the "ReportError" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.reportWarning(System.Object,antlr.debug.MessageEventArgs)">
+            <summary>
+            Handle the "ReportWarning" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.semanticPredicateEvaluated(System.Object,antlr.debug.SemanticPredicateEventArgs)">
+            <summary>
+            Handle the "SemPreEvaluated" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.syntacticPredicateFailed(System.Object,antlr.debug.SyntacticPredicateEventArgs)">
+            <summary>
+            Handle the "SynPredFailed" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.syntacticPredicateStarted(System.Object,antlr.debug.SyntacticPredicateEventArgs)">
+            <summary>
+            Handle the "SynPredStarted" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserListenerBase.syntacticPredicateSucceeded(System.Object,antlr.debug.SyntacticPredicateEventArgs)">
+            <summary>
+            Handle the "SynPredSucceeded" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.MatchEventArgs.setValues(System.Int32,System.Int32,System.Object,System.String,System.Int32,System.Boolean,System.Boolean)">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="T:antlr.debug.ParserMatchListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.ParserMatchListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.ParserMatchListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.ParserMatchListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserMatchListenerBase.parserMatch(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "Match" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserMatchListenerBase.parserMatchNot(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "MatchNot" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserMatchListenerBase.parserMismatch(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "MisMatch" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserMatchListenerBase.parserMismatchNot(System.Object,antlr.debug.MatchEventArgs)">
+            <summary>
+            Handle the "MisMatchNot" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="T:antlr.debug.TraceListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.TraceListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.TraceListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.TraceListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.TraceListenerBase.enterRule(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "EnterRule" event
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.TraceListenerBase.exitRule(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "ExitRule" event
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.TokenEventArgs.setValues(System.Int32,System.Int32,System.Int32)">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="T:antlr.debug.ParserTokenListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.ParserTokenListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.ParserTokenListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.ParserTokenListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserTokenListenerBase.parserConsume(System.Object,antlr.debug.TokenEventArgs)">
+            <summary>
+            Handle the "Consume" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.ParserTokenListenerBase.parserLA(System.Object,antlr.debug.TokenEventArgs)">
+            <summary>
+            Handle the "ParserLA" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:antlr.debug.ParseTreeDebugParser" -->
+        <member name="F:antlr.debug.ParseTreeDebugParser.currentParseTreeRoot">
+            <summary>
+            Each new rule invocation must have it's own subtree. Tokens are
+            added to the current root so we must have a stack of subtree roots.
+            </summary>
+        </member>
+        <member name="F:antlr.debug.ParseTreeDebugParser.mostRecentParseTreeRoot">
+            <summary>
+            Track most recently created parse subtree so that when parsing
+            is finished, we can get to the root.
+            </summary>
+        </member>
+        <member name="F:antlr.debug.ParseTreeDebugParser.numberOfDerivationSteps">
+            <summary>
+            For every rule replacement with a production, we bump up count.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.ParseTreeDebugParser.addCurrentTokenToParseTree">
+            <summary>
+            Adds LT(1) to the current parse subtree.
+            </summary>
+            <remarks>
+            <para>
+            Note that the match() routines add the node before checking for 
+            correct match.  This means that, upon mismatched token, there 
+            will a token node in the tree corresponding to where that token 
+            was expected.  For no viable alternative errors, no node will 
+            be in the tree as nothing was matched() (the lookahead failed 
+            to predict an alternative).
+            </para>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.ParseTreeDebugParser.traceIn(System.String)">
+            <summary>
+            Create a rule node, add to current tree, and make it current root
+            </summary>
+            <param name="s"></param>
+        </member>
+        <member name="M:antlr.debug.ParseTreeDebugParser.traceOut(System.String)">
+            <summary>
+            Pop current root; back to adding to old root
+            </summary>
+            <param name="s"></param>
+        </member>
+        <member name="T:antlr.debug.ScannerEventSupport">
+            <summary>A class to assist in firing parser events
+            NOTE: I intentionally _did_not_ synchronize the event firing and
+            add/remove listener methods.  This is because the add/remove should
+            _only_ be called by the parser at its start/end, and the _same_thread_
+            should be performing the parsing.  This should help performance a tad...
+            </summary>
+        </member>
+        <member name="M:antlr.debug.SemanticPredicateEventArgs.setValues(System.Int32,System.Int32,System.Boolean,System.Int32)">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="T:antlr.debug.SemanticPredicateListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.SemanticPredicateListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.SemanticPredicateListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.SemanticPredicateListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.SemanticPredicateListenerBase.semanticPredicateEvaluated(System.Object,antlr.debug.SemanticPredicateEventArgs)">
+            <summary>
+            Handle the "SemPreEvaluated" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="T:antlr.debug.SyntacticPredicateListenerBase">
+            <summary>
+            Provides an abstract base for implementing <see cref="T:antlr.debug.SyntacticPredicateListener"/> subclasses.
+            </summary>
+            <remarks>
+            	<param>
+            	This abstract class is provided to make it easier to create <see cref="T:antlr.debug.SyntacticPredicateListener"/>s. 
+            	You should extend this base class rather than creating your own.
+            	</param>
+            </remarks>
+        </member>
+        <member name="M:antlr.debug.SyntacticPredicateListenerBase.doneParsing(System.Object,antlr.debug.TraceEventArgs)">
+            <summary>
+            Handle the "Done" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.SyntacticPredicateListenerBase.syntacticPredicateFailed(System.Object,antlr.debug.SyntacticPredicateEventArgs)">
+            <summary>
+            Handle the "SynPredFailed" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.SyntacticPredicateListenerBase.syntacticPredicateStarted(System.Object,antlr.debug.SyntacticPredicateEventArgs)">
+            <summary>
+            Handle the "SynPredStarted" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.SyntacticPredicateListenerBase.syntacticPredicateSucceeded(System.Object,antlr.debug.SyntacticPredicateEventArgs)">
+            <summary>
+            Handle the "SynPredSucceeded" event.
+            </summary>
+            <param name="source">Event source object</param>
+            <param name="e">Event data object</param>
+        </member>
+        <member name="M:antlr.debug.TraceEventArgs.setValues(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>This should NOT be called from anyone other than ParserEventSupport! 
+            </summary>
+        </member>
+        <member name="T:antlr.debug.misc.ASTFrame">
+            <summary>
+            Summary description for myASTFrame.
+            </summary>
+        </member>
+        <member name="F:antlr.debug.misc.ASTFrame.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.misc.ASTFrame.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.misc.ASTFrame.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:antlr.debug.misc.JTreeASTPanel">
+            <summary>
+            Summary description for myJTreeASTPanel.
+            </summary>
+        </member>
+        <member name="F:antlr.debug.misc.JTreeASTPanel.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.misc.JTreeASTPanel.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:antlr.debug.misc.JTreeASTPanel.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>

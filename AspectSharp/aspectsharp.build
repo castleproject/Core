@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+
+<project name="aspectsharp" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="doc.dir" value="${base.dir}/doc" />
+	<property name="src.dir" value="${base.dir}" />
+	<property name="pack.dir" value="${base.dir}/pack" />
+
+	<property name="core.src.dir" value="${src.dir}/AspectSharp" />
+	<property name="core.test.src.dir" value="${src.dir}/AspectSharp.Tests" />
+	<property name="core.name" value="AspectSharp" />
+	<property name="core.assembly.name" value="${core.name}.dll" />
+	<property name="core.test.assembly.name" value="${core.name}.Tests.dll" />
+	<property name="lang.src.dir" value="${src.dir}/AspectSharp.Lang" />
+	<property name="lang.test.src.dir" value="${src.dir}/AspectSharp.Lang.Tests" />
+	<property name="lang.name" value="AspectSharp.Lang" />
+	<property name="lang.assembly.name" value="${lang.name}.dll" />
+	<property name="lang.test.assembly.name" value="${lang.name}.Tests.dll" />
+	<property name="aopalliance.src.dir" value="${src.dir}/AopAlliance" />
+	<property name="aopalliance.name" value="AopAlliance" />
+	<property name="aopalliance.assembly.name" value="${aopalliance.name}.dll" />
+	
+	<property name="strong" value="false" unless="${property::exists('strong')}" />
+	<property name="debug" value="false" />
+	<property name="optimize" value="true" />
+	<property name="version" value="2.1.1.0" />
+
+	<property name="skip.antlr" value="false" />
+
+	<property name="antlr.home" value="lib/antlr-2.7.4" />
+        <property name="antlr.runtime.dll" value="lib/antlr.runtime.dll" />
+	<property name="java" value="java" />
+	
+	<!-- find out where nunit.framework.dll is -->
+	<property name="nant.lib.dir"
+		value="${path::combine(nant::get-base-directory(), 'lib')}"
+		dynamic="true" />
+		
+	<property name="nant.lib.family.dir"
+		value="${path::combine(nant.lib.dir,framework::get-family(framework::get-target-framework()))}"
+		dynamic="true" />
+		
+	<property name="nant.lib.framework.dir"
+		value="${path::combine(nant.lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}"
+		dynamic="true" />
+		
+	<property name="nunit.framework.dll"
+			value="${path::combine(nant.lib.framework.dir, 'nunit.framework.dll')}" />
+
+	<property name="nant.tasks.nunit2"
+			value="False"
+			unless="${property::exists('nant.tasks.nunit2')}" />	
+
+	<target name="clean">
+		<delete dir="bin" failonerror="false" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="bin" />
+		<!-- <copy file="${antlr.runtime.dll}" todir="build" /> -->
+	</target>
+
+	<target name="build" depends="init,lang.tests.run,core.tests.run" />
+	
+	<target name="distribution" depends="build, documentation, packfiles" />
+
+	<target name="compile-grammar" depends="init" unless="${skip.antlr}">
+	
+		<delete>
+			<fileset basedir="src/AspectSharp.Lang">
+				<include name="*TokenTypes.*" />
+			</fileset>
+		</delete>			 
+			
+		<exec program="${java}" failonerror="true">
+			<arg value="-cp" />
+			<arg value="${antlr.jar}" />
+			<arg value="antlr.Tool" />
+			<arg value="-o" />
+			<arg value="src/AspectSharpLang/" />
+			<arg value="src/AspectSharpLang/langparser.g" />
+		</exec>
+			
+		<exec program="${java}" failonerror="true">
+			<arg value="-cp" />
+			<arg value="${antlr.jar}" />
+			<arg value="antlr.Tool" />
+			<arg value="-o" />
+			<arg value="src/AspectSharpLang/" />
+			<arg value="src/AspectSharpLang/langlexer.g" />
+		</exec>
+			
+		<touch file="src/AspectSharpLang/AspectLanguageParser.cs" />
+	</target>
+	
+	<target name="tests.copyfiles">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${core.test.src.dir}">
+				<include name="*.config" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${bin.dir}">
+			<fileset basedir="${lib.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="aopalliance.compile" depends="init">
+		<csc
+		    define="${strong}" 
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${lib.dir}/${aopalliance.assembly.name}">
+			
+			<sources basedir="${aopalliance.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+		</csc>
+	</target>
+	
+	<target name="lang.compile" depends="init">
+		<csc
+		    	define="${strong}" 
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${lang.assembly.name}">
+			
+			<sources basedir="${lang.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+			
+			<references basedir="${lib.dir}">
+				<include name="AopAlliance.dll" />
+				<include name="antlr.runtime.dll" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="lang.tests.compile" depends="lang.compile,core.compile,tests.copyfiles">
+		<csc
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${lang.test.assembly.name}">
+			
+			<sources basedir="${lang.test.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+			
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${lib.dir}/*.dll" />
+				<include name="${bin.dir}/${lang.assembly.name}" />
+				<include name="${bin.dir}/${core.assembly.name}" />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="lang.tests.run" depends="lang.tests.compile">
+		<nunit2>
+			<formatter type="Plain" />
+			<test 
+				assemblyname="${bin.dir}/${lang.test.assembly.name}" 
+				appconfig="${bin.dir}/${lang.test.assembly.name}.config" />
+		</nunit2>
+	</target>
+
+	<target name="core.compile" depends="init">
+		<csc
+		    	define="${strong}" 
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/${core.assembly.name}">
+			
+			<sources basedir="${core.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+			
+			<references>
+				<include name="${lib.dir}/antlr.runtime.dll"  />
+				<include name="${lib.dir}/AopAlliance.dll"  />
+				<include name="${lib.dir}/Castle.DynamicProxy.dll"  />
+				<include name="${bin.dir}/${lang.assembly.name}" />
+			</references>
+		</csc>
+	</target>
+
+	<target name="core.tests.compile" depends="core.compile">
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${core.test.assembly.name}">
+			
+			<sources basedir="${core.test.src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${lib.dir}/antlr.runtime.dll"  />
+				<include name="${lib.dir}/AopAlliance.dll"  />
+				<include name="${lib.dir}/Castle.DynamicProxy.dll"  />
+				<include name="${bin.dir}/${core.assembly.name}" />
+				<include name="${bin.dir}/${lang.assembly.name}"  />
+			</references>
+		</csc>
+	</target>
+	
+	<target name="core.tests.run" depends="core.tests.compile, tests.copyfiles">
+		<nunit2>
+			<formatter type="Plain" />
+			<test 
+				assemblyname="${bin.dir}/${core.test.assembly.name}" 
+				appconfig="${bin.dir}/${core.test.assembly.name}.config" />
+		</nunit2>
+	</target>
+	
+	<target name="documentation">
+		<ndoc failonerror="false">
+			<assemblies basedir="${bin.dir}">
+				<include name="${core.assembly.name}" />
+			</assemblies>
+			<documenters>
+				<documenter name="MSDN">
+					<property name="OutputDirectory" value="${doc.dir}\MSDN" />
+					<property name="HtmlHelpName" value="AspectSharp" />
+					<property name="IncludeFavorites" value="False" />
+					<property name="Title" value="AspectSharp - .NET AOP Implementation" />
+					<property name="SplitTOCs" value="False" />
+					<property name="DefaulTOC" value="AspectSharp.Framework" />
+					<property name="ShowVisualBasic" value="False" />
+					<property name="ShowMissingSummaries" value="True" />
+					<property name="ShowMissingRemarks" value="False" />
+					<property name="ShowMissingParams" value="True" />
+					<property name="ShowMissingReturns" value="True" />
+					<property name="ShowMissingValues" value="False" />
+					<property name="DocumentInternals" value="True" />
+					<property name="DocumentProtected" value="True" />
+					<property name="DocumentPrivates" value="False" />
+					<property name="DocumentEmptyNamespaces" value="False" />
+					<property name="IncludeAssemblyVersion" value="True" />
+					<property name="CopyrightText" value="Copyright 2004 Henry Conceição / Rafael Steil" />
+					<property name="CopyrightHref" value="" />
+				</documenter>
+			</documenters>
+		</ndoc>
+	</target>
+	
+	<target name="packfiles">
+		<mkdir dir="${pack.dir}" />
+		
+		<zip zipfile="${pack.dir}/AspectSharp.bin.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="${doc.dir}/**/*.*" />
+				<include name="${bin.dir}/*.*" />
+				
+				<exclude name="${doc.dir}/**/*.hhc" />
+				<exclude name="${doc.dir}/**/*.hhk" />
+				<exclude name="${doc.dir}/**/*.hhp" />
+			</fileset>
+		</zip>
+		
+		<zip zipfile="${pack.dir}/AspectSharp.src.${version}.zip">
+			<fileset basedir="${base.dir}">
+				<include name="*.build" />
+				<include name="*.sln" />
+				<include name="${lib.dir}/**/*.*" />
+				<include name="${src.dir}/**/*.*" />
+				
+				<exclude name="**/Debug/*" />
+				<exclude name="**/obj/*" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.suo" />
+			</fileset>
+		</zip>
+	</target>
+
+</project>
