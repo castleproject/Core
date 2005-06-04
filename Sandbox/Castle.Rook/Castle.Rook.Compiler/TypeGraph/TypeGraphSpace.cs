@@ -22,7 +22,7 @@ namespace Castle.Rook.Compiler.TypeGraph
 
 	public class TypeGraphSpace : NamespaceGraph
 	{
-		private readonly TypeGraphSpace parent;
+		private TypeGraphSpace parent;
 		private IDictionary ambiguities = new HybridDictionary();
 
 		public TypeGraphSpace() : base(String.Empty)
@@ -37,18 +37,21 @@ namespace Castle.Rook.Compiler.TypeGraph
 		public void AddAssemblyReference(String assemblyName)
 		{
 			Assembly assembly = Assembly.Load(assemblyName);
-			
-			foreach(Type type in assembly.GetExportedTypes())
-			{
-				if (type.IsNestedPublic) continue;
 
-				AddType(type);
-			}
+			AddAssemblyExportedTypes(assembly);
 		}
 
 		public void AddAssemblyFileReference(String assemblyName)
 		{
 			
+		}
+
+		private void AddAssemblyExportedTypes(Assembly assembly)
+		{
+			foreach(Type type in assembly.GetExportedTypes())
+			{
+				AddType(type);
+			}
 		}
 
 		private void AddType(Type type)
@@ -58,13 +61,34 @@ namespace Castle.Rook.Compiler.TypeGraph
 			ng.AddExternalType(type);
 		}
 
+		/// <summary>
+		/// Make the types and subnamespaces available on the 
+		/// root of this space.
+		/// </summary>
+		/// <param name="namespaceName"></param>
 		public void AddRequire(String namespaceName)
 		{
-			NamespaceGraph ng = GetNamespace(namespaceName);
+			if (parent == null)
+			{
+				throw new ApplicationException("You can use require on a root type space");
+			}
+
+			NamespaceGraph ng = parent.GetNamespace(namespaceName);
 
 			if (ng == null)
 			{
 				throw new ArgumentException("Could not found namespace " + namespaceName);
+			}
+
+			foreach(NamespaceGraph sub in ng.Namespaces)
+			{
+				if (namespaces.Contains(sub.Name))
+				{
+					RegisterAmbiguity(sub);
+					continue;
+				}
+
+				namespaces.Add( sub.Name, sub );
 			}
 
 			foreach(AbstractType type in ng.Types.Values)
@@ -79,9 +103,43 @@ namespace Castle.Rook.Compiler.TypeGraph
 			}
 		}
 
+		public override AbstractType GetType(String path)
+		{
+			AbstractType type = base.GetType(path);
+
+			if (type == null && parent != null)
+			{
+				type = parent.GetType(path);
+			}
+
+			return type;
+		}
+
+		public override NamespaceGraph GetNamespace(String path)
+		{
+			NamespaceGraph ng = base.GetNamespace(path);
+
+			if (ng == null && parent != null)
+			{
+				ng = parent.GetNamespace(path);
+			}
+
+			return ng;
+		}
+
+		public bool HasAmbiguity(String path)
+		{
+			return (ambiguities.Contains(path));
+		}
+
 		private void RegisterAmbiguity(AbstractType type)
 		{
 			ambiguities.Add(type.Name, type);
+		}
+
+		private void RegisterAmbiguity(NamespaceGraph ns)
+		{
+			ambiguities.Add(ns.Name, ns);
 		}
 	}
 }

@@ -51,6 +51,8 @@ namespace Castle.Rook.Compiler.TypeGraph
 		{
 			if (types.Contains(type.Name))
 			{
+				if (type.IsNestedPublic) return null;
+
 				throw new ArgumentNullException("Type " + type.Name + " already exists.");
 			}
 
@@ -61,7 +63,7 @@ namespace Castle.Rook.Compiler.TypeGraph
 			return et;
 		}
 
-		public AbstractType GetType(String path)
+		public virtual AbstractType GetType(String path)
 		{
 			int index = path.LastIndexOf("::");
 			
@@ -74,12 +76,16 @@ namespace Castle.Rook.Compiler.TypeGraph
 
 			NamespaceGraph ng = GetNamespace(ns);
 
-			System.Diagnostics.Debug.Assert( ng != null );
+			if (ng == null)
+			{
+				// throw new ArgumentException("Namespace "+ ns + " could not be found");
+				return null;
+			}
 
-			return ng.GetType( path.Substring(index + 1) );
+			return ng.GetType( path.Substring(index + 2) );
 		}
 
-		public NamespaceGraph GetNamespace(String path)
+		public virtual NamespaceGraph GetNamespace(String path)
 		{
 			if (path.Length == 0) return this;
 
@@ -95,9 +101,14 @@ namespace Castle.Rook.Compiler.TypeGraph
 				
 				NamespaceGraph ng = namespaces[ partial ] as NamespaceGraph;
 
-				System.Diagnostics.Debug.Assert( ng != null );
+				if (ng == null)
+				{
+					// ng = AddNamespace(new NamespaceGraph(partial));
+					// throw new ArgumentException("Namespace part " + partial + " wasn't found for " + path);
+					return null;
+				}
 
-				return ng.GetOrCreateNamespace(path.Substring( index + 2 ));
+				return ng.GetNamespace(path.Substring( index + 2 ));
 			}
 		}
 
@@ -130,6 +141,11 @@ namespace Castle.Rook.Compiler.TypeGraph
 		public IDictionary Types
 		{
 			get { return types; }
+		}
+
+		public ICollection Namespaces
+		{
+			get { return namespaces.Values; }
 		}
 	}
 }

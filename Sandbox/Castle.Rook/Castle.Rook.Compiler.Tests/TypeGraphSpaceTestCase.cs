@@ -1,3 +1,4 @@
+using System.Reflection;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,7 @@
 namespace Castle.Rook.Compiler.Tests
 {
 	using System;
+	using System.Collections.Specialized;
 
 	using NUnit.Framework;
 
@@ -29,6 +31,7 @@ namespace Castle.Rook.Compiler.Tests
 		{
 			TypeGraphSpace graph = new TypeGraphSpace();
 			graph.AddAssemblyReference( "mscorlib" );
+			graph.AddAssemblyReference( "System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" );
 
 			NamespaceGraph ng = graph.GetNamespace("System");
 			Assert.IsNotNull( ng );
@@ -48,7 +51,7 @@ namespace Castle.Rook.Compiler.Tests
 		{
 			TypeGraphSpace graph = new TypeGraphSpace();
 			graph.AddAssemblyReference( "mscorlib" );
-			graph.AddAssemblyReference( "Castle.Rook.Compiler.Tests" );
+			graph.AddAssemblyReference( "System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" );
 
 			TypeGraphSpace sub = new TypeGraphSpace(graph);
 			sub.AddRequire( "System" );
@@ -76,16 +79,25 @@ namespace Castle.Rook.Compiler.Tests
 		{
 			TypeGraphSpace graph = new TypeGraphSpace();
 			graph.AddAssemblyReference( "mscorlib" );
+			graph.AddAssemblyReference( "System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" );
 			graph.AddAssemblyReference( "Castle.Rook.Compiler.Tests" );
 
 			TypeGraphSpace sub = new TypeGraphSpace(graph);
 			sub.AddRequire( "System" );
 			sub.AddRequire( "Castle::Rook::Compiler::Tests" );
+
+			Assert.IsFalse( sub.HasAmbiguity("System::Console") ); 
+
+			AbstractType type = sub.GetType( "System::Console" );
+			Assert.IsNotNull( type );
+			Assert.AreEqual( "Console", type.Name );
+
+			Assert.IsTrue( sub.HasAmbiguity("Console") ); 
 		}
 	}
 
 	/// <summary>
-	/// Just to force a ambiguity
+	/// Just to force an ambiguity
 	/// </summary>
 	public class Console
 	{
