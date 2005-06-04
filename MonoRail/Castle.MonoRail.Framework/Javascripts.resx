@@ -130,10 +130,15 @@ return c;
 }
 }
 
-window.onload = function () 
-{
-//Fat.fade_all();
-}
+var oldonload = window.onload;
+if (typeof window.onload != 'function')
+	window.onload = func;
+else
+	window.onload = function()
+	{
+		oldonload();
+		Fat.fade_all();
+	}
 </script>
 ]]>
 </value>

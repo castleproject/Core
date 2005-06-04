@@ -31,8 +31,6 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	/// <remarks>
 	/// NOTE: All elements to be faded must have an id tag!
-	/// NOTE: it adds itself to the window.onload event in a way that may
-	/// screw other things up still and is still beta code.
 	/// BASIC USE: <p id="paragraph1" class="fade">Watch me fade</p>
 	/// ADVANCED USE: Change the default fade from color:
 	/// <p id="paragraph1" class="fade-0066FF">Watch me fade from Blue (#0066FF)</p>
