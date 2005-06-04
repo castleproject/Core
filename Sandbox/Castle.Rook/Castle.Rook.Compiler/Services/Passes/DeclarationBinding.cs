@@ -117,8 +117,8 @@ namespace Castle.Rook.Compiler.Services.Passes
 						namescope.AddVariable( ident );
 					}
 					else if (namescope.NameScopeType == NameScopeType.Global || 
-						namescope.NameScopeType == NameScopeType.Type ||
-						namescope.NameScopeType == NameScopeType.Namespace)
+						namescope.NameScopeType == NameScopeType.Type) //||
+						// namescope.NameScopeType == NameScopeType.Namespace)
 					{
 						namescope.AddVariable( ident );
 					}
@@ -128,7 +128,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 						
 						while(parent != null && 
 							parent.NodeType != NodeType.TypeDefinition && 
-							parent.NodeType != NodeType.NamespaceDefinition && 
+							// parent.NodeType != NodeType.NamespaceDefinition && 
 							parent.NodeType != NodeType.Global)
 						{
 							parent = parent.Parent;
@@ -155,16 +155,19 @@ namespace Castle.Rook.Compiler.Services.Passes
 								// body with an assignment if and only if this type decl has
 								// an init expression, so CreateAssignmentFromTypeDecl can return null
 								AssignmentExpression assignExp = CreateAssignmentFromTypeDecl(typeDecl);
-								ExpressionStatement assingExpStmt = new ExpressionStatement(assignExp);
+								ExpressionStatement assignExpStmt = new ExpressionStatement(assignExp);
 
 								// Clear the InitExp as it might be invalid aside from this context
 								typeDecl.InitExp = null;
 							
 								// Replace the declaration with an assignment
-								(varDecl.Parent as IStatementContainer).Statements.Replace(typeDecl, assingExpStmt);
+								(varDecl.Parent as IStatementContainer).Statements.Replace(typeDecl, assignExpStmt);
 
 								// Add the member/field declaration to the parent
 								typeOrGlobalStmtsContainer.Statements.Add( typeDecl );
+
+								// TODO: Link assignment expression and typeDecl to help
+								// find out the type of the field later
 							}
 						}
 						else

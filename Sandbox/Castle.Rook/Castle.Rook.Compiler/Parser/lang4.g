@@ -422,10 +422,18 @@ name returns [Identifier ident]
     ;
 
 qualified_name returns [Identifier ident]
-	{ String name = null; ident = null; }
+	{ String name = String.Empty; ident = null; }
 	:
 	t:IDENT { name = t.getText(); }
-	( options{greedy=true;}:DOT t2:IDENT { name += "." + t2.getText(); } )*
+//	( options{greedy=true;}:DOT t2:IDENT { name += "." + t2.getText(); } )*
+	( options{greedy=true;}:
+		(
+			DOT			{ name += "."; }
+			| 
+			COLONCOLON	{ name += "::"; }
+		)
+		t2:IDENT { name += t2.getText(); } 
+	)*
     { ident = new Identifier(IdentifierType.Qualified, name, null); }
     ;
 

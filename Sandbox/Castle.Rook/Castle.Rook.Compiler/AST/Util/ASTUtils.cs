@@ -23,6 +23,37 @@ namespace Castle.Rook.Compiler.AST.Util
 		{
 		}
 
-		
+
+		public static void CollectMethodInformation(string fullname, out string boundTo, out string name, out bool isStatic)
+		{
+			isStatic = false;
+			boundTo = null;
+
+			int point = fullname.IndexOf('.');
+			
+			if (point == -1)
+			{
+				name = fullname;
+			}
+			else
+			{
+				String firstPart = fullname.Substring(0, point);
+
+				if ("self".Equals(firstPart))
+				{
+					// TODO: If fullname contains addition '.' when signalize the error
+
+					isStatic = true;
+
+					name = fullname.Substring(++point);
+				}
+				else
+				{
+					point = fullname.LastIndexOf('.');
+					boundTo = fullname.Substring(0, point);
+					name = fullname.Substring(++point);
+				}
+			}
+		}
 	}
 }

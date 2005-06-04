@@ -18,6 +18,7 @@ namespace Castle.Rook.Compiler.AST
 	using System.Collections;
 
 	using Castle.Rook.Compiler.Visitors;
+	using Castle.Rook.Compiler.AST.Util;
 
 
 	public class MethodDefinitionStatement : AbstractStatement, INameScopeAccessor, IStatementContainer
@@ -28,6 +29,9 @@ namespace Castle.Rook.Compiler.AST
 		private readonly AccessLevel accessLevel;
 		private TypeReference returnType;
 		private INameScope namescope;
+		private bool isStatic;
+		private String name;
+		private TypeReference boundTo;
 
 		public MethodDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String fullname) : base(NodeType.MethodDefinition)
 		{
@@ -35,6 +39,14 @@ namespace Castle.Rook.Compiler.AST
 			namescope = new NameScope(NameScopeType.Method, parentScope);
 			this.fullname = fullname;
 			this.accessLevel = accessLevel;
+
+			String boundToName;
+			ASTUtils.CollectMethodInformation(fullname, out boundToName, out name, out isStatic);
+
+			if (boundToName != null)
+			{
+				boundTo = new TypeReference( ":" + boundToName );
+			}
 		}
 
 		public string FullName
@@ -42,9 +54,24 @@ namespace Castle.Rook.Compiler.AST
 			get { return fullname; }
 		}
 
+		public bool IsStatic
+		{
+			get { return isStatic; }
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
+
 		public AccessLevel AccessLevel
 		{
 			get { return accessLevel; }
+		}
+
+		public TypeReference BoundTo
+		{
+			get { return boundTo; }
 		}
 
 		public IList Parameters

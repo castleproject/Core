@@ -12,17 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.TypeGraph
 {
 	using System;
+	using System.Reflection;
 
-
-	public class RootNameScope : NameScope
+	public class AbstractType
 	{
-		public RootNameScope() : base(NameScopeType.Global)
+		private readonly string name;
+
+		public AbstractType(String name)
 		{
-			AddMethodDefintion( new MethodDefinitionStatement(null, AccessLevel.Public, "self.puts") );
-			AddMethodDefintion( new MethodDefinitionStatement(null, AccessLevel.Public, "self.reads") );
+			this.name = name;
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
+	}
+
+	public class ExternalType : AbstractType
+	{
+		private TypeDelegator delegator;
+
+		public ExternalType(Type type) : base(type.Name)
+		{
+			delegator = new TypeDelegator(type);
+		}
+
+		public TypeDelegator Type
+		{
+			get { return delegator; }
 		}
 	}
 }

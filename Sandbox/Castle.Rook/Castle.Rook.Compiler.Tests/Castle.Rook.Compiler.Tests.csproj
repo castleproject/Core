@@ -130,7 +130,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TypeGraphSpaceTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AnnotatedTree\DeclarationBindingTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AnnotatedTree\NameScopeBindingTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -141,6 +151,11 @@
                 />
                 <File
                     RelPath = "ASTConstruction\StatementsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Utils\ASTUtilsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -159,11 +159,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\CompilationUnit.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\CompoundExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -339,11 +334,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\TypeDefinitionStatement.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\TypeReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -360,6 +350,16 @@
                 />
                 <File
                     RelPath = "AST\YieldExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Nodes\CompilationUnit.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Nodes\TypeDefinitionStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -942,7 +942,26 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "TypeGraph\" />
+                <File
+                    RelPath = "Services\Passes\NameScopeBinding.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeGraph\ExternalType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeGraph\NamespaceGraph.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeGraph\TypeGraphSpace.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "Visitors\AbstractVisitor.cs"
                     SubType = "Code"

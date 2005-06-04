@@ -31,7 +31,21 @@ namespace Castle.Rook.Compiler.AST
 		INameScope Parent { get; }
 
 		NameScopeType NameScopeType { get; }
+
+		void AddRequire(String qualifiedName);
 		
 		void AddVariable(Identifier ident);
+
+		bool HasMethod(String name);
+		
+		void AddMethodDefintion(MethodDefinitionStatement def);
+		
+		bool HasNamespace(String name);
+		
+		void AddNamespace(NamespaceDeclaration ns);
+		
+		bool HasTypeDefinition(String name);
+		
+		void AddTypeDefinition(TypeDefinitionStatement def);
 	}
 }

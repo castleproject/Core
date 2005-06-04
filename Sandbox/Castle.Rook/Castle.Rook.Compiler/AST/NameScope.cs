@@ -29,8 +29,8 @@ namespace Castle.Rook.Compiler.AST
 
 	public class NameScope : INameScope
 	{
-		private readonly NameScopeType nstype;
 		private HybridDictionary scope = new HybridDictionary();
+		private NameScopeType nstype;
 		private INameScope parent;
 
 		public NameScope(NameScopeType nstype)
@@ -74,51 +74,144 @@ namespace Castle.Rook.Compiler.AST
 
 		public void AddVariable(Identifier ident)
 		{
-			if (scope.Contains(ident.Name))
+			EnsureUniqueKey(ident.Name);
+
+//			scope.Add(ident.Name, new VarScopeItem(ident) );
+		}
+
+		public bool HasMethod(String name)
+		{
+			// TODO: Fix that
+			return IsDefined(name);
+		}
+
+		public void AddMethodDefintion(MethodDefinitionStatement def)
+		{
+			EnsureUniqueKey(def.Name);
+
+//			scope.Add(def.Name, new MethodScopeItem(def) );
+		}
+
+		public bool HasNamespace(String name)
+		{
+			// TODO: Fix that
+			return IsDefined(name);
+		}
+
+		public void AddNamespace(NamespaceDeclaration ns)
+		{
+			EnsureUniqueKey(ns.Name);
+
+//			scope.Add(ns.Name, new NamespaceScopeItem(ns) );
+		}
+
+		public bool HasTypeDefinition(String name)
+		{
+			// TODO: Fix that
+			return IsDefined(name);
+		}
+
+		public void AddTypeDefinition(TypeDefinitionStatement def)
+		{
+			EnsureUniqueKey(def.Name);
+
+//			scope.Add(def.Name, new TypeScopeItem(def) );
+		}
+
+		public void AddRequire(String qualifiedName)
+		{
+			
+		}
+
+		private void EnsureUniqueKey(String name)
+		{
+			if (scope.Contains(name))
 			{
-				throw new CompilerException("Scope " + ToString() + " already has a definition for " + ident.Name);
+				throw new CompilerException("Scope " + ToString() + " already has a definition for " + name);
 			}
-
-			scope.Add(ident.Name, new ScopeItem(ScopeItemType.Variable, ident) );
 		}
+	}
 
-//		public void AddVariable(string name, TypeReference reference)
-//		{
-//			if (scope.Contains(name))
-//			{
-//				throw new CompilerException("Scope " + ToString() + " already has a definition for " + name);
-//			}
+//	public enum ScopeItemType
+//	{
+//		Variable,
+//		Namespace,
+//		Method,
+//		Type
+//	}
 //
-//			scope.Add(name, new ScopeItem(ScopeItemType.Variable, reference) );
+//	public abstract class AbstractScopeItem
+//	{
+//		private readonly ScopeItemType type;
+//
+//		public AbstractScopeItem(ScopeItemType type)
+//		{
+//			this.type = type;
 //		}
-	}
-
-	public enum ScopeItemType
-	{
-		Variable,
-		Method,
-		Type
-	}
-
-	public class ScopeItem
-	{
-		private readonly ScopeItemType type;
-		private readonly Identifier reference;
-
-		public ScopeItem(ScopeItemType type, Identifier reference)
-		{
-			this.type = type;
-			this.reference = reference;
-		}
-
-		public ScopeItemType Type
-		{
-			get { return type; }
-		}
-
-		public Identifier Reference
-		{
-			get { return reference; }
-		}
-	}
+//
+//		public ScopeItemType Type
+//		{
+//			get { return type; }
+//		}
+//	}
+//
+//	public class VarScopeItem : AbstractScopeItem
+//	{
+//		private readonly Identifier identifier;
+//
+//		public VarScopeItem(Identifier identifier) : base(ScopeItemType.Variable)
+//		{
+//			this.identifier = identifier;
+//		}
+//
+//		public Identifier Identifier
+//		{
+//			get { return identifier; }
+//		}
+//	}
+//
+//	public class NamespaceScopeItem : AbstractScopeItem
+//	{
+//		private readonly NamespaceDeclaration ns;
+//
+//		public NamespaceScopeItem(NamespaceDeclaration ns) : base(ScopeItemType.Namespace)
+//		{
+//			this.ns = ns;
+//		}
+//
+//		public NamespaceDeclaration Ns
+//		{
+//			get { return ns; }
+//		}
+//	}
+//
+//	public class TypeScopeItem : AbstractScopeItem
+//	{
+//		private readonly TypeDefinitionStatement typeDecl;
+//
+//		public TypeScopeItem(TypeDefinitionStatement typeDecl) : base(ScopeItemType.Type)
+//		{
+//			this.typeDecl = typeDecl;
+//		}
+//
+//		public TypeDefinitionStatement TypeDecl
+//		{
+//			get { return typeDecl; }
+//		}
+//	}
+//
+//	public class MethodScopeItem : AbstractScopeItem
+//	{
+//		private readonly MethodDefinitionStatement methodDecl;
+//
+//		public MethodScopeItem(MethodDefinitionStatement methodDecl) : base(ScopeItemType.Method)
+//		{
+//			this.methodDecl = methodDecl;
+//		}
+//
+//		public MethodDefinitionStatement MethodDecl
+//		{
+//			get { return methodDecl; }
+//		}
+//	}
 }
