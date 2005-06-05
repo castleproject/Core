@@ -12,33 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Visitors
 {
 	using System;
 	using System.Collections;
 
-	using Castle.Rook.Compiler.Visitors;
+	using Castle.Rook.Compiler.AST;
 
-
-	public class CompoundExpression : AbstractExpression, IStatementContainer
+	public class CyclicCheckVisitor : DepthFirstVisitor
 	{
-		private StatementCollection statements;
+//		private IVisitableNode hare = null;
+//		private IVisitableNode tortoise = null;
+		IList visited = new ArrayList();
 
-		public CompoundExpression(INameScope parentScope) : base(NodeType.CompoundExpression)
+		public override bool VisitNode(IVisitableNode node)
 		{
-			nameScope = new NameScope(NameScopeType.Compound, parentScope);
+			if (visited.Contains(node))
+			{
+				throw new Exception("Cycle detected");
+			}
+			else
+			{
+				visited.Add(node);
+			}
 
-			statements = new StatementCollection(this);
+			return base.VisitNode(node);
 		}
 
-		public StatementCollection Statements
-		{
-			get { return statements; }
-		}
 
-		public override bool Accept(IASTVisitor visitor)
-		{
-			return visitor.VisitCompoundExpression(this);
-		}
 	}
 }

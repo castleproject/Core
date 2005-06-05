@@ -15,30 +15,10 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
-
-	using Castle.Rook.Compiler.Visitors;
 
 
-	public class CompoundExpression : AbstractExpression, IStatementContainer
+	public interface IStatementContainer
 	{
-		private StatementCollection statements;
-
-		public CompoundExpression(INameScope parentScope) : base(NodeType.CompoundExpression)
-		{
-			nameScope = new NameScope(NameScopeType.Compound, parentScope);
-
-			statements = new StatementCollection(this);
-		}
-
-		public StatementCollection Statements
-		{
-			get { return statements; }
-		}
-
-		public override bool Accept(IASTVisitor visitor)
-		{
-			return visitor.VisitCompoundExpression(this);
-		}
+		StatementCollection Statements { get; }
 	}
 }

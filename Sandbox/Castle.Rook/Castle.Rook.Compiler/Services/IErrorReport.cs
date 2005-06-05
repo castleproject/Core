@@ -37,5 +37,9 @@ namespace Castle.Rook.Compiler.Services
 		bool HasErrors { get; }
 
 		bool HasWarnings { get; }
+		
+		void Enable();
+
+		void Disable();
 	}
 }

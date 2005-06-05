@@ -25,9 +25,10 @@ namespace Castle.Rook.Compiler.AST
 		private StatementCollection statements;
 		private IList parameters = new ArrayList();
 
-		public BlockExpression() : base(NodeType.BlockExpression)
+		public BlockExpression(INameScope parentScope) : base(NodeType.BlockExpression)
 		{
 			statements = new StatementCollection(this);
+			nameScope = new NameScope(NameScopeType.Block, parentScope);
 		}
 
 		public StatementCollection Statements

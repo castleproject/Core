@@ -475,13 +475,16 @@ lambda returns [LambdaExpression lexp]
 	;
 
 block returns [BlockExpression bexp]
-	{ bexp = new BlockExpression(); }
+	{ bexp = new BlockExpression(GetCurrentScope()); }
 	:
+	{ PushScope(bexp); }
 	(
+		
 		(DO nothing (blockargs[bexp])? (statement_term)? suite[bexp.Statements] END)
 		|
 		(LCURLY nothing (blockargs[bexp])? (statement_term)? suite[bexp.Statements] RCURLY)
 	)
+	{ PopScope(); }
 	;
 
 raise returns [RaiseExpression rexp]
@@ -497,7 +500,7 @@ yield returns [YieldExpression rexp]
 	;
 
 blockargs[BlockExpression bexp]
-	{ bexp = new BlockExpression(); ParameterIdentifier ident = null; }
+	{ ParameterIdentifier ident = null; }
 	:
 	BOR ident=methodParam	{ bexp.AddBlockParameter(ident); }
 	(options {greedy=true;}:COMMA ident=methodParam { bexp.AddBlockParameter(ident); } )* 
@@ -505,9 +508,10 @@ blockargs[BlockExpression bexp]
 	;
 
 compound returns[CompoundExpression cexp]
-	{ cexp = new CompoundExpression(GetCurrentScope()); PushScope(cexp); }
+	{ cexp = new CompoundExpression(GetCurrentScope()); }
 	:
-	(DO^|BEGIN^) statement_term
+	(DO^|BEGIN^) { PushScope(cexp); } 
+	statement_term
 	suite[cexp.Statements]
 	END  { PopScope(); }
 	;

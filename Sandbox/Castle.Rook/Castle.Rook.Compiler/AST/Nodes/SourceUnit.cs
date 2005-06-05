@@ -15,20 +15,24 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class CompoundExpression : AbstractExpression, IStatementContainer
+	public class SourceUnit : AbstractCodeNode, IStatementContainer
 	{
+		private readonly CompilationUnit unit;
 		private StatementCollection statements;
+		private NamespaceCollection namespaces;
 
-		public CompoundExpression(INameScope parentScope) : base(NodeType.CompoundExpression)
+		public SourceUnit(CompilationUnit unit, INameScope parentScope) : base(NodeType.SourceUnit)
 		{
-			nameScope = new NameScope(NameScopeType.Compound, parentScope);
+			this.unit = unit;
+
+			nameScope = new NameScope(NameScopeType.SourceUnit, parentScope);
 
 			statements = new StatementCollection(this);
+			namespaces = new NamespaceCollection(this);
 		}
 
 		public StatementCollection Statements
@@ -36,9 +40,19 @@ namespace Castle.Rook.Compiler.AST
 			get { return statements; }
 		}
 
+		public NamespaceCollection Namespaces
+		{
+			get { return namespaces; }
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitCompoundExpression(this);
+			return visitor.VisitSourceUnit(this);
+		}
+
+		public CompilationUnit CompilationUnit
+		{
+			get { return unit; }
 		}
 	}
 }

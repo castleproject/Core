@@ -221,6 +221,68 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 		}
 
 		[Test]
+		public void InvalidRedefinition4()
+		{
+			String contents = 
+				"                 \r\n" + 
+				"def some()       \r\n" + 
+				"  @x:int = 1     \r\n" + 
+				"                 \r\n" + 
+				"  begin          \r\n" + 
+				"    @x:int = 3   \r\n" + 
+				"  end            \r\n" + 
+				"                 \r\n" + 
+				"end              \r\n" + 
+				"                 \r\n" + 
+				"";
+
+			SourceUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(1, unit.Statements.Count);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit.CompilationUnit);
+
+			String message = container.ErrorReport.ErrorSBuilder.ToString();
+			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but '@x' is already defined.\r\n", message);
+		}
+
+		[Test]
+		public void InvalidRedefinition5()
+		{
+			String contents = 
+				"                 \r\n" + 
+				"def some()       \r\n" + 
+				"  @x:int = 1     \r\n" + 
+				"                 \r\n" + 
+				"  exp = {        \r\n" + 
+				"    @x:int = 3   \r\n" + 
+				"  }              \r\n" + 
+				"                 \r\n" + 
+				"end              \r\n" + 
+				"                 \r\n" + 
+				"";
+
+			SourceUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(1, unit.Statements.Count);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit.CompilationUnit);
+
+			String message = container.ErrorReport.ErrorSBuilder.ToString();
+			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but '@x' is already defined.\r\n", message);
+		}
+
+		[Test]
 		public void RedefinitionOfMethodParameters()
 		{
 			String contents = 
@@ -269,6 +331,123 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 			sb.ExecutePass(unit.CompilationUnit);
 
 			AssertNoErrorOrWarnings();
+		}
+
+		[Test]
+		public void AssignConvertedToDeclaration1()
+		{
+			String contents = 
+				"                 \r\n" + 
+				"def some()       \r\n" + 
+				"  x = 1          \r\n" + 
+				"end              \r\n" + 
+				"                 \r\n" + 
+				"";
+
+			SourceUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(1, unit.Statements.Count);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit.CompilationUnit);
+
+			AssertNoErrorOrWarnings();
+
+			MethodDefinitionStatement m1Stmt = unit.Statements[0] as MethodDefinitionStatement;
+			SingleVariableDeclarationStatement varDecl1 = m1Stmt.Statements[0] as SingleVariableDeclarationStatement;
+			ExpressionStatement assignStmt = m1Stmt.Statements[1] as ExpressionStatement;
+
+			Assert.IsNotNull(m1Stmt);
+			Assert.IsNotNull(varDecl1);
+			Assert.IsNotNull(assignStmt);
+
+			AssignmentExpression assignExp = assignStmt.Expression as AssignmentExpression;
+			Assert.AreEqual( "x", (assignExp.Target as VariableReferenceExpression).Identifier.Name );
+			Assert.AreEqual( "1", (assignExp.Value as LiteralReferenceExpression).Content );
+		}
+
+		[Test]
+		public void AssignConvertedToDeclaration2()
+		{
+			String contents = 
+				"                 \r\n" + 
+				"def some()       \r\n" + 
+				"  @x = 1         \r\n" + 
+				"end              \r\n" + 
+				"                 \r\n" + 
+				"";
+
+			SourceUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+			Assert.AreEqual(1, unit.Statements.Count);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit.CompilationUnit);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.AreEqual(2, unit.Statements.Count);
+
+			MethodDefinitionStatement m1Stmt = unit.Statements[0] as MethodDefinitionStatement;
+			SingleVariableDeclarationStatement varDecl1 = unit.Statements[1] as SingleVariableDeclarationStatement;
+			ExpressionStatement assignStmt = m1Stmt.Statements[0] as ExpressionStatement;
+
+			Assert.IsNotNull(m1Stmt);
+			Assert.IsNotNull(varDecl1);
+			Assert.IsNotNull(assignStmt);
+
+			AssignmentExpression assignExp = assignStmt.Expression as AssignmentExpression;
+			Assert.AreEqual( "@x", (assignExp.Target as VariableReferenceExpression).Identifier.Name );
+			Assert.AreEqual( "1", (assignExp.Value as LiteralReferenceExpression).Content );
+
+			Assert.AreEqual( "@x", varDecl1.Identifier.Name );
+		}
+
+		[Test]
+		public void AssignConvertedToDeclaration3()
+		{
+			String contents = 
+				"def some()       \r\n" + 
+				"  @x = 1         \r\n" + 
+				"end              \r\n" + 
+				"@x:int           \r\n" + 
+				"";
+
+			SourceUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit.CompilationUnit);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.AreEqual(2, unit.Statements.Count);
+
+			MethodDefinitionStatement m1Stmt = unit.Statements[0] as MethodDefinitionStatement;
+			SingleVariableDeclarationStatement varDecl1 = unit.Statements[1] as SingleVariableDeclarationStatement;
+			ExpressionStatement assignStmt = m1Stmt.Statements[0] as ExpressionStatement;
+
+			Assert.IsNotNull(m1Stmt);
+			Assert.IsNotNull(varDecl1);
+			Assert.IsNotNull(assignStmt);
+
+			AssignmentExpression assignExp = assignStmt.Expression as AssignmentExpression;
+			Assert.AreEqual( "@x", (assignExp.Target as VariableReferenceExpression).Identifier.Name );
+			Assert.AreEqual( "1", (assignExp.Value as LiteralReferenceExpression).Content );
+
+			Assert.AreEqual( "@x", varDecl1.Identifier.Name );
 		}
 	}
 }

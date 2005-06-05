@@ -22,7 +22,7 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private readonly Identifier identifier;
 
-		public VariableReferenceExpression(Identifier identifier)
+		public VariableReferenceExpression(Identifier identifier) : base(NodeType.VariableRefExpression)
 		{
 			this.identifier = identifier;
 		}

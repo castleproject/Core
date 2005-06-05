@@ -19,6 +19,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 	using Castle.Rook.Compiler.AST;
 	using Castle.Rook.Compiler.Visitors;
+	using Castle.Rook.Compiler.AST.Util;
 
 
 	public class DeclarationBinding : BreadthFirstVisitor, ICompilerPass
@@ -81,6 +82,70 @@ namespace Castle.Rook.Compiler.Services.Passes
 			return base.VisitMultipleVariableDeclarationStatement(varDecl);
 		}
 
+		public override bool VisitAssignmentExpression(AssignmentExpression assignExp)
+		{
+			if (assignExp.Target.NodeType == NodeType.VariableRefExpression)
+			{
+				// Convert to declaration if not found on the scope
+
+				VariableReferenceExpression varRef = (VariableReferenceExpression) assignExp.Target; 
+
+				INameScope scope = varRef.NameScope;
+
+				System.Diagnostics.Debug.Assert( scope != null );
+
+				String name = varRef.Identifier.Name;
+
+				if (!scope.IsDefined(name)) // TODO: The rules are slighly more complicated than that.
+				{
+					errorReport.Disable();
+
+					SingleVariableDeclarationStatement varDecl = new SingleVariableDeclarationStatement(varRef.Identifier);
+
+					IStatement stmt = ASTUtils.GetParentStatement(varRef);
+
+					System.Diagnostics.Debug.Assert( stmt != null );
+
+					IStatementContainer stmts = stmt.Parent as IStatementContainer;
+
+					int index = stmts.Statements.IndexOf(stmt);
+
+					varDecl.InitExp = assignExp.Value;
+
+					stmts.Statements.Insert(index, varDecl);
+
+					if (!ApplyDeclarationRules(varRef.Identifier, scope, varDecl, stmt))
+					{
+						stmts.Statements.Remove(varDecl);
+					}
+
+					errorReport.Enable();
+				}
+			}
+
+			return base.VisitAssignmentExpression(assignExp);
+		}
+
+		public override bool VisitParameterIdentifier(ParameterIdentifier parameterIdentifier)
+		{
+			INameScope namescope = parameterIdentifier.Parent.NameScope;
+
+			System.Diagnostics.Debug.Assert( namescope != null );
+			System.Diagnostics.Debug.Assert( namescope.NameScopeType == NameScopeType.Method || namescope.NameScopeType == NameScopeType.Block );
+
+			if (!identifierService.IsValidFormatParameterName(parameterIdentifier.Name))
+			{
+				errorReport.Error( "TODOFILENAME", parameterIdentifier.Position, "'{0}' is an invalid parameter name.", parameterIdentifier.Name );
+				return false;
+			}
+
+			System.Diagnostics.Debug.Assert( !namescope.IsDefined(parameterIdentifier.Name) );
+
+			namescope.AddVariable( parameterIdentifier );
+
+			return base.VisitParameterIdentifier(parameterIdentifier);
+		}
+
 		private void ProcessMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement decl)
 		{
 			IList stmts = ConvertToSingleDeclarationStatements(decl);
@@ -109,26 +174,6 @@ namespace Castle.Rook.Compiler.Services.Passes
 			}
 		}
 
-		public override bool VisitParameterIdentifier(ParameterIdentifier parameterIdentifier)
-		{
-			INameScope namescope = parameterIdentifier.Parent.NameScope;
-
-			System.Diagnostics.Debug.Assert( namescope != null );
-			System.Diagnostics.Debug.Assert( namescope.NameScopeType == NameScopeType.Method || namescope.NameScopeType == NameScopeType.Block );
-
-			if (!identifierService.IsValidFormatParameterName(parameterIdentifier.Name))
-			{
-				errorReport.Error( "TODOFILENAME", parameterIdentifier.Position, "'{0}' is an invalid parameter name.", parameterIdentifier.Name );
-				return false;
-			}
-
-			System.Diagnostics.Debug.Assert( !namescope.IsDefined(parameterIdentifier.Name) );
-
-			namescope.AddVariable( parameterIdentifier );
-
-			return base.VisitParameterIdentifier(parameterIdentifier);
-		}
-
 		private void EnsureTypeDeclarationsBelongsToThisScope(MultipleVariableDeclarationStatement varDecl, IList stmts)
 		{
 			INameScope namescope = varDecl.Parent.NameScope;
@@ -146,103 +191,113 @@ namespace Castle.Rook.Compiler.Services.Passes
 					continue;
 				}
 
-				// Second simple case: a local var and we are on the right place to 
-				// declare it
-				if (ident.Type == IdentifierType.Local && 
-					(namescope.NameScopeType == NameScopeType.Method || 
+				ApplyDeclarationRules(ident, namescope, typeDecl, varDecl);
+			}
+		}
+
+		private bool ApplyDeclarationRules(Identifier ident, INameScope namescope, SingleVariableDeclarationStatement typeDecl, IStatement statem)
+		{
+			// Second simple case: a local var and we are on the right place to 
+			// declare it
+			if (ident.Type == IdentifierType.Local && 
+				(namescope.NameScopeType == NameScopeType.Method || 
 					namescope.NameScopeType == NameScopeType.Compound || 
 					namescope.NameScopeType == NameScopeType.Block))
+			{
+				namescope.AddVariable(ident);
+				return true;
+			}
+	
+			// More complex: a block or compound tries to redefine a variable
+			if (ident.Type == IdentifierType.Local && 
+				(namescope.NameScopeType == NameScopeType.Compound || 
+					namescope.NameScopeType == NameScopeType.Block))
+			{
+				if (namescope.Parent.IsDefined(ident.Name))
+				{
+					errorReport.Error( "TODOFILENAME", typeDecl.Position, "Sorry but '{0}' is already defined in a parent scope.", ident.Name );
+					return false;
+				}
+			}
+	
+			// Local variables at class level?
+			// We will support that as a type initializer, but not now.
+			if (ident.Type == IdentifierType.Local && namescope.NameScopeType == NameScopeType.Type)
+			{
+				errorReport.Error( "TODOFILENAME", typeDecl.Position, "At type level, just instance or static fields are allowed (yet)" );
+				return false;
+			}
+	
+			// Static or instance in a method/block/compound are moved
+			// to the parent class or source unit level
+			if (ident.Type == IdentifierType.InstanceField || 
+				ident.Type == IdentifierType.StaticField)
+			{
+				if (namescope.NameScopeType == NameScopeType.SourceUnit || 
+					namescope.NameScopeType == NameScopeType.Type)
 				{
 					namescope.AddVariable(ident);
-					continue;
 				}
-
-				// More complex: a block or compound tries to redefine a variable
-				if (ident.Type == IdentifierType.Local && 
-					(namescope.NameScopeType == NameScopeType.Compound || 
-					namescope.NameScopeType == NameScopeType.Block))
+				else if (namescope.NameScopeType == NameScopeType.Method || 
+					namescope.NameScopeType == NameScopeType.Compound || 
+					namescope.NameScopeType == NameScopeType.Block)
 				{
-					if (namescope.Parent.IsDefined(ident.Name))
+					IASTNode node = statem.Parent;
+
+					while(node != null && 
+						node.NodeType != NodeType.TypeDefinition && 
+						node.NodeType != NodeType.SourceUnit)
 					{
-						errorReport.Error( "TODOFILENAME", typeDecl.Position, "Sorry but '{0}' is already defined in a parent scope.", ident.Name );
-						continue;
+						node = node.Parent;
 					}
-				}
 
-				// Local variables at class level?
-				// We will support that as a type initializer, but not now.
-				if (ident.Type == IdentifierType.Local && namescope.NameScopeType == NameScopeType.Type)
-				{
-					errorReport.Error( "TODOFILENAME", typeDecl.Position, "At type level, just instance or static fields are allowed (yet)" );
-					continue;
-				}
-
-				// Static or instance in a method/block/compound are moved
-				// to the parent class or source unit level
-				if (ident.Type == IdentifierType.InstanceField || 
-					ident.Type == IdentifierType.StaticField)
-				{
-					if (namescope.NameScopeType == NameScopeType.SourceUnit || 
-						namescope.NameScopeType == NameScopeType.Type)
+					if (node == null || node.NameScope == null)
 					{
-						namescope.AddVariable(ident);
+						errorReport.Error( "TODOFILENAME", typeDecl.Position, 
+						                   "Compiler error: The instance of static declaration '{0}' could not be mapped to a parent type", ident.Name );							
+						return false;
 					}
-					else if (namescope.NameScopeType == NameScopeType.Method || 
-						namescope.NameScopeType == NameScopeType.Compound || 
-						namescope.NameScopeType == NameScopeType.Block)
+
+					INameScope parentScope = node.NameScope;
+
+					IStatementContainer typeStmtsContainer = node as IStatementContainer;
+							
+					System.Diagnostics.Debug.Assert( parentScope != null );
+					System.Diagnostics.Debug.Assert( typeStmtsContainer != null );
+
+					if (parentScope.IsDefined(ident.Name))
 					{
-						IASTNode node = varDecl.Parent;
+						errorReport.Error( "TODOFILENAME", typeDecl.Position, 
+						                   "Sorry but '{0}' is already defined.", ident.Name );
+						return false;
+					}
+					else
+					{
+						parentScope.AddVariable(ident);
 
-						while(node != null && 
-							node.NodeType != NodeType.TypeDefinition && 
-							node.NodeType != NodeType.SourceUnit)
-						{
-							node = node.Parent;
-						}
+						// We can replace the declaration on the method 
+						// body with an assignment if and only if this type decl has
+						// an init expression, so CreateAssignmentFromTypeDecl can return null
+						AssignmentExpression assignExp = CreateAssignmentFromTypeDecl(typeDecl);
+						ExpressionStatement assignExpStmt = new ExpressionStatement(assignExp);
 
-						if (node == null || node.NameScope == null)
-						{
-							errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-								"Compiler error: The instance of static declaration '{0}' could not be mapped to a parent type", ident.Name );							
-							continue;
-						}
-
-						INameScope parentScope = node.NameScope;
-
-						IStatementContainer typeStmtsContainer = node as IStatementContainer;
+						typeDecl.ConvertInitExpressionToDependency();
 							
-						System.Diagnostics.Debug.Assert( parentScope != null );
-						System.Diagnostics.Debug.Assert( typeStmtsContainer != null );
+						// Replace the declaration with an assignment
+						(statem.Parent as IStatementContainer).Statements.Replace(typeDecl, assignExpStmt);
 
-						if (parentScope.IsDefined(ident.Name))
-						{
-							errorReport.Error( "TODOFILENAME", typeDecl.Position, 
-								"Sorry but '{0}' is already defined.", ident.Name );
-						}
-						else
-						{
-							parentScope.AddVariable(ident);
+						// Add the member/field declaration to the parent
+						typeStmtsContainer.Statements.Add( typeDecl );
 
-							// We can replace the declaration on the method 
-							// body with an assignment if and only if this type decl has
-							// an init expression, so CreateAssignmentFromTypeDecl can return null
-							AssignmentExpression assignExp = CreateAssignmentFromTypeDecl(typeDecl);
-							ExpressionStatement assignExpStmt = new ExpressionStatement(assignExp);
+						// TODO: Link assignment expression and typeDecl to help
+						// find out the type of the field later
 
-							typeDecl.ConvertInitExpressionToDependency();
-							
-							// Replace the declaration with an assignment
-							(varDecl.Parent as IStatementContainer).Statements.Replace(typeDecl, assignExpStmt);
-
-							// Add the member/field declaration to the parent
-							typeStmtsContainer.Statements.Add( typeDecl );
-
-							// TODO: Link assignment expression and typeDecl to help
-							// find out the type of the field later
-						}
+						return true;
 					}
 				}
 			}
+
+			return false;
 		}
 
 		private IList ConvertToSingleDeclarationStatements(MultipleVariableDeclarationStatement varDecl)

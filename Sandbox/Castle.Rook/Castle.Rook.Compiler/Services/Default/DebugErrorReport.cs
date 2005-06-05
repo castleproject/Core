@@ -27,10 +27,10 @@ namespace Castle.Rook.Compiler.Services.Default
 		public DebugErrorReport()
 		{
 			sbout = new StringBuilder();
-			outWriter = new StringWriter(sbout);
+			outWriter = new DebugWriter(sbout);
 
 			sberror = new StringBuilder();
-			errorWriter = new StringWriter(sberror);
+			errorWriter = new DebugWriter(sberror);
 		}
 
 		protected override TextWriter OutWriter
@@ -51,6 +51,19 @@ namespace Castle.Rook.Compiler.Services.Default
 		public StringBuilder ErrorSBuilder
 		{
 			get { return sberror; }
+		}
+	}
+
+	class DebugWriter : StringWriter
+	{
+		public DebugWriter(StringBuilder sb) : base(sb)
+		{
+		}
+
+		public override void Write(string value)
+		{
+			System.Diagnostics.Debug.WriteLine( value );
+			base.Write(value);
 		}
 	}
 }

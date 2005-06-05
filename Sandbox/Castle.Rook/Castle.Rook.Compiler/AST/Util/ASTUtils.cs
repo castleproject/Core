@@ -16,14 +16,11 @@ namespace Castle.Rook.Compiler.AST.Util
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public class ASTUtils
+
+	public abstract class ASTUtils
 	{
-		public ASTUtils()
-		{
-		}
-
-
 		public static void CollectMethodInformation(string fullname, out string boundTo, out string name, out bool isStatic)
 		{
 			isStatic = false;
@@ -54,6 +51,36 @@ namespace Castle.Rook.Compiler.AST.Util
 					name = fullname.Substring(++point);
 				}
 			}
+		}
+
+		public static bool IsCycled(IASTNode node)
+		{
+			CyclicCheckVisitor vis = new CyclicCheckVisitor();
+
+			try
+			{
+				vis.VisitNode(node);
+			}
+			catch(Exception)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		public static IStatement GetParentStatement(IASTNode node)
+		{
+			if (node == null)
+			{
+				return null;
+			}
+			else if (node is IStatement)
+			{
+				return node as IStatement;
+			}
+
+			return GetParentStatement(node.Parent);
 		}
 	}
 }

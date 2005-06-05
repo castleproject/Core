@@ -20,14 +20,15 @@ namespace Castle.Rook.Compiler.AST
 
 	public enum NodeType
 	{
-		Expression,
-		Statement,
 //		Global,
+		Statement,
 		CompilationUnit,
 		SourceUnit,
 		NamespaceDefinition,
 		TypeDefinition,
 		MethodDefinition,
+		Expression,
+		VariableRefExpression,
 		CompoundExpression,
 		BlockExpression,
 		TypeReference,

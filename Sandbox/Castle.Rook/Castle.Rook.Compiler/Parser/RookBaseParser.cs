@@ -1834,7 +1834,7 @@ _loop127_breakloop:			;
 {
 		CompoundExpression cexp;
 		
-		cexp = new CompoundExpression(GetCurrentScope()); PushScope(cexp);
+		cexp = new CompoundExpression(GetCurrentScope());
 		
 		{
 			switch ( LA(1) )
@@ -1854,6 +1854,10 @@ _loop127_breakloop:			;
 				throw new NoViableAltException(LT(1), getFilename());
 			}
 			 }
+		}
+		if (0==inputState.guessing)
+		{
+			PushScope(cexp);
 		}
 		statement_term();
 		suite(cexp.Statements);
@@ -2120,8 +2124,12 @@ _loop91_breakloop:			;
 {
 		BlockExpression bexp;
 		
-		bexp = new BlockExpression();
+		bexp = new BlockExpression(GetCurrentScope());
 		
+		if (0==inputState.guessing)
+		{
+			PushScope(bexp);
+		}
 		{
 			switch ( LA(1) )
 			{
@@ -2369,6 +2377,10 @@ _loop91_breakloop:			;
 			}
 			 }
 		}
+		if (0==inputState.guessing)
+		{
+			PopScope();
+		}
 		return bexp;
 	}
 	
@@ -2377,7 +2389,7 @@ _loop91_breakloop:			;
 	) //throws RecognitionException, TokenStreamException
 {
 		
-		bexp = new BlockExpression(); ParameterIdentifier ident = null;
+		ParameterIdentifier ident = null;
 		
 		match(BOR);
 		ident=methodParam();

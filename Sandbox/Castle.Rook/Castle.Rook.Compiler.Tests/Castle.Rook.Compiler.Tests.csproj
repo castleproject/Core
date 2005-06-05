@@ -120,6 +120,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CyclicDependencyDetectionTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SourceFileTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

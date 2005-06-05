@@ -50,7 +50,17 @@ namespace Castle.Rook.Compiler.AST
 
 		public INameScope NameScope
 		{
-			get { return nameScope; }
+			get
+			{
+				if (nameScope == null)
+				{
+					if (parent != null)
+					{
+						return parent.NameScope;
+					}
+				}
+				return nameScope;
+			}
 		}
 
 		public abstract bool Accept(IASTVisitor visitor);

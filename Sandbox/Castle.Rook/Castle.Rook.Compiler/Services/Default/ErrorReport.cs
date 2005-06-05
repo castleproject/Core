@@ -23,6 +23,7 @@ namespace Castle.Rook.Compiler.Services.Default
 	public class ErrorReport : IErrorReport
 	{
 		private int errorCount, warningCount;
+		private int enableLevel = 0;
 
 		public ErrorReport()
 		{
@@ -30,8 +31,20 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		#region IErrorReport Members
 
+		public void Enable()
+		{
+			enableLevel--;
+		}
+
+		public void Disable()
+		{
+			enableLevel++;
+		}
+
 		public void Error(String filename, LexicalPosition pos, String contents, params object[] args)
 		{
+			if (enableLevel > 0) return;
+
 			errorCount++;
 
 			if (pos.Column == 0)
@@ -48,6 +61,8 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public void Error(String contents, params object[] args)
 		{
+			if (enableLevel > 0) return;
+
 			errorCount++;
 
 			ErrorWriter.Write("compiler error:  ");
@@ -56,6 +71,8 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public void Warning(String filename, LexicalPosition pos, Severity severity, String contents, params object[] args)
 		{
+			if (enableLevel > 0) return;
+
 			warningCount++;
 
 			if (pos.Column == 0)
@@ -72,6 +89,8 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public void Warning(String contents, params object[] args)
 		{
+			if (enableLevel > 0) return;
+
 			warningCount++;
 
 			OutWriter.Write("warning:  ");
