@@ -209,17 +209,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\INameScopeAccessor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\IStatement.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\IStatementContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -244,11 +234,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\MethodDefinitionStatement.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\MethodInvocationExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -264,7 +249,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\NamespaceDeclaration.cs"
+                    RelPath = "AST\NamespaceCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -329,6 +314,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\SourceUnitCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\StatementCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -355,6 +345,21 @@
                 />
                 <File
                     RelPath = "AST\Nodes\CompilationUnit.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Nodes\MethodDefinitionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Nodes\NamespaceDeclaration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\Nodes\SourceUnit.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

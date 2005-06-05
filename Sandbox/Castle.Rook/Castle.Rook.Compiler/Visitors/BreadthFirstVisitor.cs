@@ -22,67 +22,93 @@ namespace Castle.Rook.Compiler.Visitors
 
 	public class BreadthFirstVisitor : AbstractVisitor
 	{
+		private bool nowQueue = false;
 		private Queue nodesToBeVisited = new Queue();
+
+		public override bool VisitNode(IVisitableNode node)
+		{
+			if (nowQueue)
+			{
+				EnqueueNode(node);
+				return true;
+			}
+			else
+			{
+				return base.VisitNode(node);
+			}
+		}
 
 		public override void VisitCompilationUnit(CompilationUnit compilationUnit)
 		{
 			base.VisitCompilationUnit(compilationUnit);
 
+			ProcessNodesInQueue();
+		}
+
+		public override bool VisitSourceUnit(SourceUnit unit)
+		{
+			base.VisitSourceUnit(unit);
+
+			ProcessNodesInQueue();
+
+			return true;
+		}
+
+		public override bool VisitEnter(NamespaceDeclaration ns)
+		{
+			nowQueue = true;
+			return base.VisitEnter(ns);
+		}
+
+		public override bool VisitLeave(NamespaceDeclaration ns)
+		{
+			nowQueue = false;
+			return base.VisitLeave(ns);
+		}
+
+		public override bool VisitEnter(TypeDefinitionStatement typeDef)
+		{
+			nowQueue = true;
+			return base.VisitEnter(typeDef);
+		}
+
+		public override bool VisitLeave(TypeDefinitionStatement typeDef)
+		{
+			nowQueue = false;
+			return base.VisitLeave(typeDef);
+		}
+
+		public override bool VisitEnter(MethodDefinitionStatement methodDef)
+		{
+			nowQueue = true;
+			return base.VisitEnter(methodDef);
+		}
+
+		public override bool VisitLeave(MethodDefinitionStatement methodDef)
+		{
+			nowQueue = false;
+			return base.VisitLeave(methodDef);
+		}
+
+//		private void EnqueueNodes(IList nodes)
+//		{
+//			foreach(IVisitableNode node in nodes)
+//			{
+//				EnqueueNode(node);
+//			}
+//		}
+//
+		private void EnqueueNode(IVisitableNode node)
+		{
+			nodesToBeVisited.Enqueue(node);
+		}
+
+		private void ProcessNodesInQueue()
+		{
 			while(nodesToBeVisited.Count != 0)
 			{
 				VisitNode(nodesToBeVisited.Dequeue() as IVisitableNode);
 			}
-		}
-
-		public override bool VisitNamespace(NamespaceDeclaration ns)
-		{
-			if (VisitEnter(ns))
-			{
-				EnqueueNodes(ns.Statements);
-
-				return VisitLeave(ns);
-			}
-
-			return false;
-		}
-
-		public override bool VisitTypeDefinitionStatement(TypeDefinitionStatement typeDef)
-		{
-			if (VisitEnter(typeDef))
-			{
-				EnqueueNodes(typeDef.Statements);
-
-				return VisitLeave(typeDef);
-			}
-
-			return false;
-		}
-
-		public override bool VisitMethodDefinitionStatement(MethodDefinitionStatement methodDef)
-		{
-			if (VisitEnter(methodDef))
-			{
-				EnqueueNodes(methodDef.Parameters);
-				EnqueueNode(methodDef.ReturnType);
-				EnqueueNodes(methodDef.Statements);
-
-				return VisitLeave(methodDef);
-			}
-
-			return false;
-		}
-
-		private void EnqueueNodes(IList nodes)
-		{
-			foreach(IVisitableNode node in nodes)
-			{
-				EnqueueNode(node);
-			}
-		}
-
-		private void EnqueueNode(IVisitableNode node)
-		{
-			nodesToBeVisited.Enqueue(node);
 		}
 	}
 }

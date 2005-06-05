@@ -16,36 +16,35 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.TypeGraph;
+
 
 	public interface INameScope
 	{
-		bool IsDefined(String name);
-
-		/// <summary>
-		/// Recursive search in parents
-		/// </summary>
-		/// <param name="name"></param>
-		/// <returns></returns>
-		bool IsDefinedInParent(String name);
-
 		INameScope Parent { get; }
 
 		NameScopeType NameScopeType { get; }
 
-		void AddRequire(String qualifiedName);
-		
-		void AddVariable(Identifier ident);
+		TypeGraphSpace CurrentTypeGraph { get; }
 
-		bool HasMethod(String name);
-		
-		void AddMethodDefintion(MethodDefinitionStatement def);
-		
-		bool HasNamespace(String name);
-		
-		void AddNamespace(NamespaceDeclaration ns);
-		
-		bool HasTypeDefinition(String name);
-		
-		void AddTypeDefinition(TypeDefinitionStatement def);
+		bool IsDefined(String name);
+
+		bool IsDefinedInParent(String name);
+
+//		void AddRequire(String qualifiedName);
+//		
+//		void AddVariable(Identifier ident);
+//
+//		bool HasMethod(String name);
+//		
+//		void AddMethodDefintion(MethodDefinitionStatement def);
+//		
+//		bool HasNamespace(String name);
+//		
+//		void AddNamespace(NamespaceDeclaration ns);
+//		
+//		bool HasTypeDefinition(String name);
+//		
+//		void AddTypeDefinition(TypeDefinitionStatement def);
 	}
 }

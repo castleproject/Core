@@ -121,5 +121,23 @@ namespace Castle.Rook.Compiler.AST.Util
 
 			return content;
 		}
+
+		public void Replace(IASTNode originalNode, IASTNode replace)
+		{
+			if (!InnerList.Contains(originalNode))
+			{
+				throw new ArgumentException("Tried to replace inexistent node " + originalNode.ToString());
+			}
+
+			int index = InnerList.IndexOf(originalNode);
+			
+			InnerList.RemoveAt(index);
+
+			if (replace != null)
+			{
+				PrepareNode(replace);
+				InnerList.Insert(index, replace);
+			}
+		}
 	}
 }

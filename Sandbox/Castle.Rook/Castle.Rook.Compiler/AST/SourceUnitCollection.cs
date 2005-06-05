@@ -16,11 +16,32 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
-	/// <summary>
-	/// Declares that the implementor starts a new naming scope
-	/// </summary>
-	public interface INameScopeAccessor
+	using Castle.Rook.Compiler.AST.Util;
+
+
+	public class SourceUnitCollection : LinkedListBase
 	{
-		INameScope Namescope { get; }
+		private readonly IASTNode owner;
+
+		public SourceUnitCollection(IASTNode owner)
+		{
+			this.owner = owner;
+		}
+
+		public int Add(SourceUnit node)
+		{
+			node.Parent = owner;
+			return InnerList.Add(node);
+		}
+
+		public SourceUnit this [int index]
+		{
+			get { return InnerList[index] as SourceUnit; }
+		}
+
+		protected override void PrepareNode(object value)
+		{
+			((SourceUnit) value).Parent = owner;
+		}
 	}
 }

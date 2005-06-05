@@ -50,7 +50,7 @@ namespace Castle.Rook.Compiler.Tests
 				"end				\r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 

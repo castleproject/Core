@@ -34,54 +34,54 @@ namespace Castle.Rook.Compiler.Services.Passes
 			VisitNode(unit);
 		}
 
-		public override bool VisitTypeDefinitionStatement(TypeDefinitionStatement typeDef)
-		{
-			INameScope namescope = (typeDef.Parent as INameScopeAccessor).Namescope;
-			
-			if (namescope.HasTypeDefinition(typeDef.Name))
-			{
-				errorReport.Error("TODOFILENAME", typeDef.Position, "This identifier in being used elsewhere.", typeDef.Name);
-			}
-			else
-			{
-				namescope.AddTypeDefinition(typeDef);
-			}
-
-			return base.VisitTypeDefinitionStatement(typeDef);
-		}
-
-		public override bool VisitNamespace(NamespaceDeclaration ns)
-		{
-			INameScope namescope = (ns.Parent as INameScopeAccessor).Namescope;
-			
-			if (!namescope.HasNamespace(ns.Name))
-			{
-				namescope.AddNamespace(ns);
-			}
-
-			return base.VisitNamespace(ns);
-		}
-
-		public override bool VisitMethodDefinitionStatement(MethodDefinitionStatement methodDef)
-		{
-			INameScope namescope = (methodDef.Parent as INameScopeAccessor).Namescope;
-			
-			// TODO: Support overloads!
-			if (namescope.HasMethod(methodDef.Name))
-			{
-				errorReport.Error("TODOFILENAME", methodDef.Position, "This identifier in being used elsewhere.", methodDef.Name);
-			}
-			else
-			{
-				namescope.AddMethodDefintion(methodDef);
-			}
-
-			return base.VisitMethodDefinitionStatement(methodDef);
-		}
-
-		public override bool VisitVariableReferenceExpression(VariableReferenceExpression variableReferenceExpression)
-		{
-			return base.VisitVariableReferenceExpression(variableReferenceExpression);
-		}
+//		public override bool VisitTypeDefinitionStatement(TypeDefinitionStatement typeDef)
+//		{
+//			INameScope namescope = (typeDef.Parent as INameScopeAccessor).Namescope;
+//			
+//			if (namescope.HasTypeDefinition(typeDef.Name))
+//			{
+//				errorReport.Error("TODOFILENAME", typeDef.Position, "This identifier in being used elsewhere.", typeDef.Name);
+//			}
+//			else
+//			{
+//				namescope.AddTypeDefinition(typeDef);
+//			}
+//
+//			return base.VisitTypeDefinitionStatement(typeDef);
+//		}
+//
+//		public override bool VisitNamespace(NamespaceDeclaration ns)
+//		{
+//			INameScope namescope = (ns.Parent as INameScopeAccessor).Namescope;
+//			
+//			if (!namescope.HasNamespace(ns.Name))
+//			{
+//				namescope.AddNamespace(ns);
+//			}
+//
+//			return base.VisitNamespace(ns);
+//		}
+//
+//		public override bool VisitMethodDefinitionStatement(MethodDefinitionStatement methodDef)
+//		{
+//			INameScope namescope = (methodDef.Parent as INameScopeAccessor).Namescope;
+//			
+//			// TODO: Support overloads!
+//			if (namescope.HasMethod(methodDef.Name))
+//			{
+//				errorReport.Error("TODOFILENAME", methodDef.Position, "This identifier in being used elsewhere.", methodDef.Name);
+//			}
+//			else
+//			{
+//				namescope.AddMethodDefintion(methodDef);
+//			}
+//
+//			return base.VisitMethodDefinitionStatement(methodDef);
+//		}
+//
+//		public override bool VisitVariableReferenceExpression(VariableReferenceExpression variableReferenceExpression)
+//		{
+//			return base.VisitVariableReferenceExpression(variableReferenceExpression);
+//		}
 	}
 }

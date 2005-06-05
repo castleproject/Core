@@ -27,7 +27,7 @@ namespace Castle.Rook.Compiler.Tests.ASTConstruction
 		[Test]
 		public void EmptyNamespace()
 		{
-			CompilationUnit unit = container.ParserService.Parse("\r\n namespace MyNamespace; end\r\n");
+			SourceUnit unit = container.ParserService.Parse("\r\n namespace MyNamespace; end\r\n");
 
 			AssertNoErrorOrWarnings();
 
@@ -38,7 +38,7 @@ namespace Castle.Rook.Compiler.Tests.ASTConstruction
 		[Test]
 		public void InvalidNamespace()
 		{
-			CompilationUnit unit = container.ParserService.Parse("\r\n namespace MyNamespace end\r\n");
+			SourceUnit unit = container.ParserService.Parse("\r\n namespace MyNamespace end\r\n");
 
 			Assert.IsTrue( container.ErrorReport.HasErrors );
 

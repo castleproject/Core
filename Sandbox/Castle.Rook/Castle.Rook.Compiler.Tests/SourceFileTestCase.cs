@@ -58,7 +58,7 @@ namespace Castle.Rook.Compiler.Tests
 		[Test]
 		public void QualifiedRefs1()
 		{
-			CompilationUnit unit = 
+			SourceUnit unit = 
 				container.ParserService.Parse("System::Console.WriteLine(\"something\") \r\n\r\n");
 
 			IStatement stmt = unit.Statements[0];

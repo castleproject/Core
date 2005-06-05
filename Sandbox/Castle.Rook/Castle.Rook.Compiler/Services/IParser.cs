@@ -22,8 +22,10 @@ namespace Castle.Rook.Compiler.Services
 
 	public interface IParser
 	{
-		CompilationUnit Parse(TextReader reader);
+		SourceUnit Parse(CompilationUnit unit, TextReader reader);
 
-		CompilationUnit Parse(String contents);
+		SourceUnit Parse(CompilationUnit unit, String contents);
+
+		SourceUnit Parse(String contents);
 	}
 }

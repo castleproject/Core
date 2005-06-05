@@ -22,7 +22,9 @@ namespace Castle.Rook.Compiler.AST
 	{
 		Expression,
 		Statement,
-		Global,
+//		Global,
+		CompilationUnit,
+		SourceUnit,
 		NamespaceDefinition,
 		TypeDefinition,
 		MethodDefinition,
@@ -39,5 +41,7 @@ namespace Castle.Rook.Compiler.AST
 		IASTNode Parent { get; set; }
 
 		NodeType NodeType { get; set; }
+
+		INameScope NameScope { get; }
 	}
 }

@@ -18,6 +18,7 @@ namespace Castle.Rook.Compiler.Services.Default
 	using System.IO;
 
 	using Castle.Rook.Compiler.Parser;
+	using Castle.Rook.Compiler.AST;
 
 
 	public class RookParser : IParser
@@ -31,19 +32,29 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		#region IParser Members
 
-		public Castle.Rook.Compiler.AST.CompilationUnit Parse(TextReader reader)
+		public SourceUnit Parse(CompilationUnit unit, TextReader reader)
 		{
 			RookLexer lexer = new RookLexer(reader);
 
 			RookBaseParser parser = new RookBaseParser(lexer);
 			parser.ErrorReport = errorReport;
 
-			return parser.compilationUnit();
+			return parser.sourceUnit(unit);
 		}
 
-		public Castle.Rook.Compiler.AST.CompilationUnit Parse(String contents)
+		public SourceUnit Parse(CompilationUnit unit, String contents)
 		{
-			return Parse(new StringReader(contents));
+			return Parse(unit, new StringReader(contents));
+		}
+
+		/// <summary>
+		/// Handy for the test cases
+		/// </summary>
+		public SourceUnit Parse(String contents)
+		{
+			CompilationUnit unit = new CompilationUnit();
+
+			return Parse(unit, new StringReader(contents));
 		}
 
 		#endregion

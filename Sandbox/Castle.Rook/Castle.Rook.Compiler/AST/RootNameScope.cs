@@ -16,13 +16,16 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.TypeGraph;
+
 
 	public class RootNameScope : NameScope
 	{
 		public RootNameScope() : base(NameScopeType.Global)
 		{
-			AddMethodDefintion( new MethodDefinitionStatement(null, AccessLevel.Public, "self.puts") );
-			AddMethodDefintion( new MethodDefinitionStatement(null, AccessLevel.Public, "self.reads") );
+			graphSpace = new TypeGraphSpace();
+
+			graphSpace.AddAssemblyReference( "mscorlib" );
 		}
 	}
 }

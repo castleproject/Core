@@ -15,41 +15,29 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class CompilationUnit : AbstractCodeNode, INameScopeAccessor, IStatementContainer
+	public class CompilationUnit : AbstractCodeNode
 	{
-		private StatementCollection statements;
-		private IList namespaces = new ArrayList();
-		private INameScope namescope = new RootNameScope();
+		private SourceUnitCollection sourceUnits;
 
-		public CompilationUnit() : base(NodeType.Global)
+		public CompilationUnit() : base(NodeType.CompilationUnit)
 		{
-			statements = new StatementCollection(this);
+			nameScope = new RootNameScope();
+			sourceUnits = new SourceUnitCollection(this);
 		}
 
-		public StatementCollection Statements
+		public SourceUnitCollection SourceUnits
 		{
-			get { return statements; }
-		}
-
-		public IList Namespaces
-		{
-			get { return namespaces; }
+			get { return sourceUnits; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)
 		{
 			visitor.VisitCompilationUnit(this);
 			return true;
-		}
-
-		public INameScope Namescope
-		{
-			get { return namescope; }
 		}
 	}
 }

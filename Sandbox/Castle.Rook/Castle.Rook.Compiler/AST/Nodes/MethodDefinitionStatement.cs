@@ -21,22 +21,21 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.AST.Util;
 
 
-	public class MethodDefinitionStatement : AbstractStatement, INameScopeAccessor, IStatementContainer
+	public class MethodDefinitionStatement : AbstractStatement
 	{
-		private readonly StatementCollection statements;
-		private readonly IList args = new ArrayList();
-		private readonly string fullname;
-		private readonly AccessLevel accessLevel;
-		private TypeReference returnType;
-		private INameScope namescope;
-		private bool isStatic;
 		private String name;
+		private String fullname;
 		private TypeReference boundTo;
+		private TypeReference returnType;
+		private bool isStatic;
+		private readonly AccessLevel accessLevel;
+		private readonly IList args = new ArrayList();
+		private readonly StatementCollection statements;
 
 		public MethodDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String fullname) : base(NodeType.MethodDefinition)
 		{
 			statements = new StatementCollection(this);
-			namescope = new NameScope(NameScopeType.Method, parentScope);
+			nameScope = new NameScope(NameScopeType.Method, parentScope);
 			this.fullname = fullname;
 			this.accessLevel = accessLevel;
 
@@ -98,11 +97,6 @@ namespace Castle.Rook.Compiler.AST
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitMethodDefinitionStatement(this);
-		}
-
-		public INameScope Namescope
-		{
-			get { return namescope; }
 		}
 	}
 }

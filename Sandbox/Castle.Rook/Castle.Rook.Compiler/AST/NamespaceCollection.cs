@@ -19,29 +19,47 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.AST.Util;
 
 
-	public class StatementCollection : LinkedListBase
+	public class NamespaceCollection : LinkedListBase
 	{
 		private readonly IASTNode owner;
 
-		public StatementCollection(IASTNode owner)
+		public NamespaceCollection(IASTNode owner)
 		{
 			this.owner = owner;
 		}
 
 		protected override void PrepareNode(object value)
 		{
-			((IStatement) value).Parent = owner;
+			((NamespaceDeclaration) value).Parent = owner;
 		}
 
-		public int Add(IStatement node)
+		public int Add(NamespaceDeclaration node)
 		{
 			node.Parent = owner;
 			return InnerList.Add(node);
 		}
 
-		public IStatement this [int index]
+		public NamespaceDeclaration this [int index]
 		{
-			get { return InnerList[index] as IStatement; }
+			get { return InnerList[index] as NamespaceDeclaration; }
+		}
+
+		public void Replace(NamespaceDeclaration originalNode, NamespaceDeclaration replace)
+		{
+			if (!InnerList.Contains(originalNode))
+			{
+				throw new ArgumentException("Tried to replace inexistent node " + originalNode.ToString());
+			}
+
+			int index = InnerList.IndexOf(originalNode);
+			
+			InnerList.RemoveAt(index);
+
+			if (replace != null)
+			{
+				PrepareNode(replace);
+				InnerList.Insert(index, replace);
+			}
 		}
 	}
 }

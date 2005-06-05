@@ -41,16 +41,16 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual bool VisitNodes(IList nodes)
 		{
-			String message = nodes.ToString();
-			System.Diagnostics.Debug.WriteLine("before " + message);
+//			String message = nodes.ToString();
+//			System.Diagnostics.Debug.WriteLine("before " + message);
 
 			for(int i=0; i < nodes.Count; i++)
 			{
 				VisitNode( (IVisitableNode) nodes[i] );
 			}
 
-			message = nodes.ToString();
-			System.Diagnostics.Debug.WriteLine("after " + message);
+//			message = nodes.ToString();
+//			System.Diagnostics.Debug.WriteLine("after " + message);
 
 			return true;
 		}
@@ -65,20 +65,27 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual void VisitCompilationUnit(CompilationUnit compilationUnit)
 		{
-			VisitNodes(compilationUnit.Namespaces);
-			VisitNodes(compilationUnit.Statements);
+			VisitNodes(compilationUnit.SourceUnits);
+		}
+
+		public virtual bool VisitSourceUnit(SourceUnit unit)
+		{
+			VisitNodes(unit.Namespaces);
+			VisitNodes(unit.Statements);
+
+			return true;
 		}
 
 		public virtual bool VisitNamespace(NamespaceDeclaration ns)
 		{
 			if (VisitEnter(ns))
 			{
-				VisitNodes(ns.Statements);
+				VisitNodes(ns.TypeDeclarations);
 
 				return VisitLeave(ns);
 			}
 
-			return false;
+			return true;
 		}
 
 		public virtual bool VisitEnter(NamespaceDeclaration ns)
@@ -95,6 +102,9 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 			if (VisitEnter(typeDef))
 			{
+				VisitNodes(typeDef.Fields);
+				VisitNodes(typeDef.Constructors);
+				VisitNodes(typeDef.Methods);
 				VisitNodes(typeDef.Statements);
 
 				return VisitLeave(typeDef);

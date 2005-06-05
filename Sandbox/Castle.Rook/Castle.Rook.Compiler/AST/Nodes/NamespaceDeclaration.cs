@@ -16,9 +16,35 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
+	using Castle.Rook.Compiler.Visitors;
 
-	public interface IStatementContainer
+
+	public class NamespaceDeclaration : AbstractCodeNode
 	{
-		StatementCollection Statements { get; }
+		private String name;
+		private StatementCollection typeDeclarations;
+
+		public NamespaceDeclaration(INameScope parentScope) : base(NodeType.NamespaceDefinition)
+		{
+			nameScope = new NameScope(NameScopeType.Namespace, parentScope);
+
+			typeDeclarations = new StatementCollection(this);
+		}
+
+		public String Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public StatementCollection TypeDeclarations
+		{
+			get { return typeDeclarations; }
+		}
+
+		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitNamespace(this);
+		}
 	}
 }

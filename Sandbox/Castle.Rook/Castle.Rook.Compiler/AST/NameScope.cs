@@ -17,9 +17,12 @@ namespace Castle.Rook.Compiler.AST
 	using System;
 	using System.Collections.Specialized;
 
+	using Castle.Rook.Compiler.TypeGraph;
+
 	public enum NameScopeType
 	{
 		Global,
+		SourceUnit,
 		Namespace,
 		Type,
 		Method,
@@ -29,23 +32,34 @@ namespace Castle.Rook.Compiler.AST
 
 	public class NameScope : INameScope
 	{
-		private HybridDictionary scope = new HybridDictionary();
 		private NameScopeType nstype;
 		private INameScope parent;
+		protected TypeGraphSpace graphSpace;
+		private HybridDictionary scope = new HybridDictionary();
 
-		public NameScope(NameScopeType nstype)
+		protected NameScope(NameScopeType nstype)
 		{
 			this.nstype = nstype;
 		}
 
-		public NameScope(NameScopeType nstype, INameScope parent) : this(nstype)
+		public NameScope(NameScopeType nstype, INameScope parent) : this(nstype, parent.CurrentTypeGraph)
 		{
 			this.parent = parent;
+		}
+
+		public NameScope(NameScopeType nstype, TypeGraphSpace parentGraphSpace) : this(nstype)
+		{
+			this.graphSpace = new TypeGraphSpace(parentGraphSpace);
 		}
 
 		public NameScopeType NameScopeType
 		{
 			get { return nstype; }
+		}
+
+		public TypeGraphSpace CurrentTypeGraph
+		{
+			get { return graphSpace; }
 		}
 
 		public bool IsDefined(String name)
@@ -72,64 +86,64 @@ namespace Castle.Rook.Compiler.AST
 			get { return parent; }
 		}
 
-		public void AddVariable(Identifier ident)
-		{
-			EnsureUniqueKey(ident.Name);
-
-//			scope.Add(ident.Name, new VarScopeItem(ident) );
-		}
-
-		public bool HasMethod(String name)
-		{
-			// TODO: Fix that
-			return IsDefined(name);
-		}
-
-		public void AddMethodDefintion(MethodDefinitionStatement def)
-		{
-			EnsureUniqueKey(def.Name);
-
-//			scope.Add(def.Name, new MethodScopeItem(def) );
-		}
-
-		public bool HasNamespace(String name)
-		{
-			// TODO: Fix that
-			return IsDefined(name);
-		}
-
-		public void AddNamespace(NamespaceDeclaration ns)
-		{
-			EnsureUniqueKey(ns.Name);
-
-//			scope.Add(ns.Name, new NamespaceScopeItem(ns) );
-		}
-
-		public bool HasTypeDefinition(String name)
-		{
-			// TODO: Fix that
-			return IsDefined(name);
-		}
-
-		public void AddTypeDefinition(TypeDefinitionStatement def)
-		{
-			EnsureUniqueKey(def.Name);
-
-//			scope.Add(def.Name, new TypeScopeItem(def) );
-		}
-
-		public void AddRequire(String qualifiedName)
-		{
-			
-		}
-
-		private void EnsureUniqueKey(String name)
-		{
-			if (scope.Contains(name))
-			{
-				throw new CompilerException("Scope " + ToString() + " already has a definition for " + name);
-			}
-		}
+//		public void AddVariable(Identifier ident)
+//		{
+//			EnsureUniqueKey(ident.Name);
+//
+////			scope.Add(ident.Name, new VarScopeItem(ident) );
+//		}
+//
+//		public bool HasMethod(String name)
+//		{
+//			// TODO: Fix that
+//			return IsDefined(name);
+//		}
+//
+//		public void AddMethodDefintion(MethodDefinitionStatement def)
+//		{
+//			EnsureUniqueKey(def.Name);
+//
+////			scope.Add(def.Name, new MethodScopeItem(def) );
+//		}
+//
+//		public bool HasNamespace(String name)
+//		{
+//			// TODO: Fix that
+//			return IsDefined(name);
+//		}
+//
+//		public void AddNamespace(NamespaceDeclaration ns)
+//		{
+//			EnsureUniqueKey(ns.Name);
+//
+////			scope.Add(ns.Name, new NamespaceScopeItem(ns) );
+//		}
+//
+//		public bool HasTypeDefinition(String name)
+//		{
+//			// TODO: Fix that
+//			return IsDefined(name);
+//		}
+//
+//		public void AddTypeDefinition(TypeDefinitionStatement def)
+//		{
+//			EnsureUniqueKey(def.Name);
+//
+////			scope.Add(def.Name, new TypeScopeItem(def) );
+//		}
+//
+//		public void AddRequire(String qualifiedName)
+//		{
+//			
+//		}
+//
+//		private void EnsureUniqueKey(String name)
+//		{
+//			if (scope.Contains(name))
+//			{
+//				throw new CompilerException("Scope " + ToString() + " already has a definition for " + name);
+//			}
+//		}
 	}
 
 //	public enum ScopeItemType

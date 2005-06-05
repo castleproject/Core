@@ -77,9 +77,13 @@ tokens
 		
 	private Stack scopes = new Stack();
 	
-	private void PushScope(INameScopeAccessor scope)
+	private void PushScope(IASTNode node)
 	{
-		scopes.Push(scope.Namescope);
+		INameScope scope = node.NameScope;
+		
+		if (scope == null) throw new ArgumentNullException("null scope?");
+		
+		scopes.Push(scope);
 	}
 
 	private void PopScope()
@@ -105,14 +109,14 @@ nothing
 	(options { greedy=true; generateAmbigWarnings=false; }:STATEMENT_END)?
 	;
 
-compilationUnit returns[CompilationUnit comp]
-	{ comp = new CompilationUnit(); PushScope(comp); }
+sourceUnit[CompilationUnit cunit] returns[SourceUnit unit]
+	{ unit = new SourceUnit(cunit.NameScope); PushScope(unit); }
 	:
 	nothing
 	(
-		("namespace" qualified_name) => namespace_declaration[comp.Namespaces]
+		("namespace" qualified_name) => namespace_declaration[unit.Namespaces]
 		|
-		suite[comp.Statements]
+		suite[unit.Statements]
 	)
 	nothing
 	EOF
@@ -123,15 +127,16 @@ compilationUnit returns[CompilationUnit comp]
 	}
 	;
 
-namespace_declaration[IList namespaces]
+namespace_declaration[NamespaceCollection namespaces]
 	options { defaultErrorHandler=true; }
 	{ NamespaceDeclaration nsdec = new NamespaceDeclaration(GetCurrentScope()); 
 	  namespaces.Add(nsdec); Identifier qn = null; PushScope(nsdec); 
+	  TypeDefinitionStatement typeDef = null;
 	}
 	:
 	t:"namespace" qn=qualified_name statement_term
 	{ nsdec.Name = qn.Name; }
-	suite[nsdec.Statements]
+	(typeDef=type_def_statement { nsdec.TypeDeclarations.Add(typeDef); } )*
 	END	{ PopScope(); }
 	;
 

@@ -21,6 +21,7 @@ namespace Castle.Rook.Compiler.Visitors
 	public interface IASTVisitor
 	{
 		void VisitCompilationUnit(CompilationUnit compilationUnit);
+		bool VisitSourceUnit(SourceUnit unit);
 
 		// Members
 

@@ -27,7 +27,7 @@ namespace Castle.Rook.Compiler.Tests.ASTConstruction
 		[Test]
 		public void SimpleStatements()
 		{
-			CompilationUnit unit = container.ParserService.Parse("x:int = 1\r\nputs(x)\r\n");
+			SourceUnit unit = container.ParserService.Parse("x:int = 1\r\nputs(x)\r\n");
 
 			AssertNoErrorOrWarnings();
 

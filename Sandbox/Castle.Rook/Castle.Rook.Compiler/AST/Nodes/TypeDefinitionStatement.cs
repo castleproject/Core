@@ -15,7 +15,6 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
 	using Castle.Rook.Compiler.Visitors;
 
@@ -27,22 +26,29 @@ namespace Castle.Rook.Compiler.AST
 		Internal,
 	}
 
-	public class TypeDefinitionStatement : AbstractStatement, INameScopeAccessor, IStatementContainer
+	public class TypeDefinitionStatement : AbstractStatement
 	{
+		private String name;
 		private AccessLevel accessLevel;
+		private StatementCollection methods;
+		private StatementCollection fields;
+		private StatementCollection constructors;
 		private StatementCollection statements;
-		private INameScope namescope;
-		private string name;
 
 		public TypeDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String name) : base(NodeType.TypeDefinition)
 		{
-			statements = new StatementCollection(this);
-			this.namescope = new NameScope(NameScopeType.Type, parentScope);
 			this.name = name;
 			this.accessLevel = accessLevel;
+			
+			nameScope = new NameScope(NameScopeType.Type, parentScope);
+
+			statements = new StatementCollection(this);
+			methods = new StatementCollection(this);
+			fields = new StatementCollection(this);
+			constructors = new StatementCollection(this);
 		}
 
-		public string Name
+		public String Name
 		{
 			get { return name; }
 		}
@@ -57,14 +63,24 @@ namespace Castle.Rook.Compiler.AST
 			get { return statements; }
 		}
 
+		public StatementCollection Methods
+		{
+			get { return methods; }
+		}
+
+		public StatementCollection Fields
+		{
+			get { return fields; }
+		}
+
+		public StatementCollection Constructors
+		{
+			get { return constructors; }
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitTypeDefinitionStatement(this);
-		}
-
-		public INameScope Namescope
-		{
-			get { return namescope; }
 		}
 	}
 }
