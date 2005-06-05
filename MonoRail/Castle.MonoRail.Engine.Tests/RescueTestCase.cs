@@ -61,5 +61,18 @@ namespace Castle.MonoRail.Engine.Tests
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
 			AssertContents("\r\nWelcome!\r\n<p>An error happened during update</p>\r\nFooter", response);
 		}
+
+		[Test]
+		public void RescueMessage()
+		{
+			HttpWebRequest myReq = (HttpWebRequest) 
+				WebRequest.Create("http://localhost:8083/rescuable/updateMsg.rails");
+			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+
+			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.AreEqual("/rescuable/updateMsg.rails", response.ResponseUri.PathAndQuery);
+			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+			AssertContents("custom msg", response);
+		}
 	}
 }

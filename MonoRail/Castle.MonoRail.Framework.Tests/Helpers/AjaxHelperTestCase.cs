@@ -71,11 +71,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
         }
         #endregion
 
+
         #region LinkToRemote
         [Test]
         public void LinkToRemote3stringArgs()
         {
-            string expected = "<a href=\"#\" onclick=\"new Ajax.Updater('url', 'update', {asynchronous:true}); return false;\" >name</a>";
+            string expected = "<a href=\"#\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true}); return false;\" >name</a>";
             string actual = this._hlp.LinkToRemote("name", "url", "update");
             Assert.AreEqual(expected, actual);
         }

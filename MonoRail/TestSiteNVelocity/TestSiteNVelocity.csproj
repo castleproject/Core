@@ -292,6 +292,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\rescues\updateerrormsg.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\SubArea\home\index.vm"
                     BuildAction = "None"
                 />

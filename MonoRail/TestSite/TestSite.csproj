@@ -300,6 +300,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "views\rescues\updateerrormsg.aspx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "views\SubArea\home\index.aspx"
                     BuildAction = "Content"
                 />

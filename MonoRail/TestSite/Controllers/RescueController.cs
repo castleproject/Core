@@ -40,5 +40,11 @@ namespace TestSite.Controllers
 
 			throw new ApplicationException();
 		}
+
+		[Rescue("updateerrormsg")]
+		public void UpdateMsg()
+		{
+			throw new ApplicationException("custom msg");
+		}
 	}
 }
