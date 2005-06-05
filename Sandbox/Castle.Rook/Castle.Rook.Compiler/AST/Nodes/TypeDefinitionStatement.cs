@@ -26,7 +26,7 @@ namespace Castle.Rook.Compiler.AST
 		Internal,
 	}
 
-	public class TypeDefinitionStatement : AbstractStatement
+	public class TypeDefinitionStatement : AbstractStatement, IStatementContainer
 	{
 		private String name;
 		private AccessLevel accessLevel;

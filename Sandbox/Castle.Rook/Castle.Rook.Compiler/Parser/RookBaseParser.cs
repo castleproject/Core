@@ -288,7 +288,7 @@ namespace Castle.Rook.Compiler.Parser
 {
 		SourceUnit unit;
 		
-		unit = new SourceUnit(cunit.NameScope); PushScope(unit);
+		unit = new SourceUnit(cunit, cunit.NameScope); PushScope(unit);
 		
 		nothing();
 		{
@@ -351,6 +351,7 @@ namespace Castle.Rook.Compiler.Parser
 		if (0==inputState.guessing)
 		{
 			
+				  cunit.SourceUnits.Add(unit); 
 				  PopScope(); if (!ErrorReport.HasErrors && scopes.Count != 0) ErrorReport.Error("Invalid scope count. " + 
 					"Something seems to be very wrong. Contact Castle's team and report the " + 
 					"code that caused this error.");  

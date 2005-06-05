@@ -1,3 +1,4 @@
+using Castle.Rook.Compiler.AST;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +46,16 @@ namespace Castle.Rook.Compiler.TypeGraph
 			namespaces[graph.name] = graph;
 
 			return graph;
+		}
+
+		public void AddUserType(TypeDefinitionStatement typeDef)
+		{
+			if (types.Contains(typeDef.Name))
+			{
+				throw new ArgumentNullException("Type " + typeDef.Name + " already exists.");
+			}
+
+			types[typeDef.Name] = typeDef;
 		}
 
 		public ExternalType AddExternalType(Type type)

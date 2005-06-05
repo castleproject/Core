@@ -134,7 +134,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "AnnotatedTree\" />
+                <File
+                    RelPath = "AnnotatedTree\DeclarationBindingTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "ASTConstruction\NamespaceDeclTestCase.cs"
                     SubType = "Code"

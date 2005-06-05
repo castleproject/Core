@@ -202,7 +202,7 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 			VisitNodes(varDecl.Identifiers);
 			
-			// TODO: Decide if we shall visit the InitExpressions
+			// TODO: Decide if we shall visit the InitExpressions as this node is a kind of transient node
 
 			return true;
 		}
@@ -277,6 +277,7 @@ namespace Castle.Rook.Compiler.Visitors
 		public virtual bool VisitSingleVariableDeclarationStatement(SingleVariableDeclarationStatement varDecl)
 		{
 			VisitNode(varDecl.InitExp);
+			VisitNode(varDecl.DependencyExpression);
 			VisitNode(varDecl.Identifier);
 
 			return true;

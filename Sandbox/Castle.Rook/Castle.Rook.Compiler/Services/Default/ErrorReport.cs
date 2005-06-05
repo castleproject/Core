@@ -22,8 +22,7 @@ namespace Castle.Rook.Compiler.Services.Default
 	/// </summary>
 	public class ErrorReport : IErrorReport
 	{
-		private bool hasErrors;
-		private bool hasWarnings;
+		private int errorCount, warningCount;
 
 		public ErrorReport()
 		{
@@ -33,7 +32,7 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public void Error(String filename, LexicalPosition pos, String contents, params object[] args)
 		{
-			hasErrors = true;
+			errorCount++;
 
 			if (pos.Column == 0)
 			{
@@ -49,14 +48,15 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public void Error(String contents, params object[] args)
 		{
-			hasErrors = true;
+			errorCount++;
+
 			ErrorWriter.Write("compiler error:  ");
 			ErrorWriter.WriteLine(contents, args);
 		}
 
 		public void Warning(String filename, LexicalPosition pos, Severity severity, String contents, params object[] args)
 		{
-			hasWarnings = true;
+			warningCount++;
 
 			if (pos.Column == 0)
 			{
@@ -72,7 +72,7 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public void Warning(String contents, params object[] args)
 		{
-			hasWarnings = true;
+			warningCount++;
 
 			OutWriter.Write("warning:  ");
 			OutWriter.WriteLine(contents, args);
@@ -80,12 +80,12 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public bool HasErrors
 		{
-			get { return hasErrors; }
+			get { return errorCount != 0; }
 		}
 
 		public bool HasWarnings
 		{
-			get { return hasWarnings; }
+			get { return warningCount != 0; }
 		}
 
 		#endregion

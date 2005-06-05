@@ -31,10 +31,8 @@ namespace Castle.Rook.Compiler.AST
 
 		bool IsDefinedInParent(String name);
 
-//		void AddRequire(String qualifiedName);
-//		
-//		void AddVariable(Identifier ident);
-//
+		void AddVariable(Identifier ident);
+
 //		bool HasMethod(String name);
 //		
 //		void AddMethodDefintion(MethodDefinitionStatement def);

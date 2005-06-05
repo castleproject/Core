@@ -25,7 +25,22 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		#region IIdentifierNameService Members
 
-		public bool IsValidVarOrFieldName(string name)
+		public bool IsValidNamespaceName(String name)
+		{
+			return false;
+		}
+
+		public bool IsValidVarOrFieldName(String name)
+		{
+			return true;
+		}
+
+		public bool IsValidFormatParameterName(string name)
+		{
+			return true;
+		}
+
+		public bool IsValidTypeName(String name)
 		{
 			return true;
 		}

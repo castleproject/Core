@@ -21,7 +21,7 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.AST.Util;
 
 
-	public class MethodDefinitionStatement : AbstractStatement
+	public class MethodDefinitionStatement : AbstractStatement, IStatementContainer
 	{
 		private String name;
 		private String fullname;

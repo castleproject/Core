@@ -23,6 +23,7 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private readonly Identifier ident;
 		private IExpression initExp;
+		private IExpression depExp;
 
 		public SingleVariableDeclarationStatement(Identifier ident)
 		{
@@ -44,9 +45,28 @@ namespace Castle.Rook.Compiler.AST
 			}
 		}
 
+		/// <summary>
+		/// Used to resolve the type of the target variable/field
+		/// </summary>
+		public IExpression DependencyExpression
+		{
+			get { return depExp; }
+			set
+			{
+				depExp = value; 
+				if (value != null) value.Parent = this;
+			}
+		}
+
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitSingleVariableDeclarationStatement(this);
+		}
+
+		public void ConvertInitExpressionToDependency()
+		{
+			depExp = initExp;
+			initExp = null;
 		}
 	}
 }

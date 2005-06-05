@@ -20,7 +20,7 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class BlockExpression : AbstractExpression
+	public class BlockExpression : AbstractExpression, IStatementContainer
 	{
 		private StatementCollection statements;
 		private IList parameters = new ArrayList();

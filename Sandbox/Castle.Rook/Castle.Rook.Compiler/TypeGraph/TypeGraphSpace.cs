@@ -1,3 +1,4 @@
+using Castle.Rook.Compiler.AST;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +24,7 @@ namespace Castle.Rook.Compiler.TypeGraph
 	public class TypeGraphSpace : NamespaceGraph
 	{
 		private TypeGraphSpace parent;
+		private NamespaceGraph definedNamespace;
 		private IDictionary ambiguities = new HybridDictionary();
 
 		public TypeGraphSpace() : base(String.Empty)
@@ -32,6 +34,41 @@ namespace Castle.Rook.Compiler.TypeGraph
 		public TypeGraphSpace(TypeGraphSpace graph) : this()
 		{
 			parent = graph;
+		}
+
+		public NamespaceGraph DefinedNamespace
+		{
+			get { return definedNamespace; }
+		}
+
+		public void DefineType(TypeDefinitionStatement typeDefinition)
+		{
+			if (definedNamespace == null && parent != null)
+			{
+				parent.DefineType(typeDefinition);
+			}
+			else if (definedNamespace != null)
+			{
+				definedNamespace.AddUserType(typeDefinition);
+			}
+			else
+			{
+				AddUserType(typeDefinition);
+			}
+		}
+
+		public NamespaceGraph DefineNamespace(String namespaceName)
+		{
+			if (parent == null)
+			{
+				return GetOrCreateNamespace( namespaceName.Replace("::", ".") );
+			}
+			else
+			{
+				definedNamespace = parent.DefineNamespace(namespaceName);
+
+				return definedNamespace;
+			}
 		}
 
 		public void AddAssemblyReference(String assemblyName)

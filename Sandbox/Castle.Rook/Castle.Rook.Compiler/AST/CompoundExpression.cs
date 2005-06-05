@@ -20,7 +20,7 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class CompoundExpression : AbstractExpression
+	public class CompoundExpression : AbstractExpression, IStatementContainer
 	{
 		private StatementCollection statements;
 		private INameScope namescope;

@@ -36,7 +36,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"end              \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -45,7 +45,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			AssertNoErrorOrWarnings();
 		}
@@ -57,7 +57,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"@x:int, @y:long, @z:int = 1,2       \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -66,7 +66,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			AssertNoErrorOrWarnings();
 
@@ -97,7 +97,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"end              \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -106,7 +106,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			String message = container.ErrorReport.ErrorSBuilder.ToString();
 			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but '@x' is already defined.\r\n", message);
@@ -120,7 +120,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"@x:int = 2       \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -129,7 +129,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			String message = container.ErrorReport.ErrorSBuilder.ToString();
 			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but '@x' is already defined.\r\n", message);
@@ -151,7 +151,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"@y:int = 1       \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -160,7 +160,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			Assert.IsNotNull(unit);
 			Assert.AreEqual(4, unit.Statements.Count);
@@ -205,7 +205,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"                 \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -214,7 +214,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			String message = container.ErrorReport.ErrorSBuilder.ToString();
 			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but '@x' is already defined.\r\n", message);
@@ -231,7 +231,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"                 \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -240,7 +240,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			String message = container.ErrorReport.ErrorSBuilder.ToString();
 			Assert.AreEqual("TODOFILENAME:0\terror:  Sorry but 'x' is already defined.\r\n", message);
@@ -257,7 +257,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 				"                 \r\n" + 
 				"";
 
-			CompilationUnit unit = container.ParserService.Parse(contents);
+			SourceUnit unit = container.ParserService.Parse(contents);
 
 			AssertNoErrorOrWarnings();
 
@@ -266,7 +266,7 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
 
-			sb.ExecutePass(unit);
+			sb.ExecutePass(unit.CompilationUnit);
 
 			AssertNoErrorOrWarnings();
 		}
