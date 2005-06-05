@@ -27,7 +27,7 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public bool IsValidNamespaceName(String name)
 		{
-			return false;
+			return true;
 		}
 
 		public bool IsValidVarOrFieldName(String name)
@@ -41,6 +41,11 @@ namespace Castle.Rook.Compiler.Services.Default
 		}
 
 		public bool IsValidTypeName(String name)
+		{
+			return true;
+		}
+
+		public bool IsValidMethodName(String name)
 		{
 			return true;
 		}

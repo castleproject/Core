@@ -55,7 +55,7 @@ namespace Castle.Rook.Compiler.TypeGraph
 				throw new ArgumentNullException("Type " + typeDef.Name + " already exists.");
 			}
 
-			types[typeDef.Name] = typeDef;
+			types[typeDef.Name] = new InternalType(typeDef);
 		}
 
 		public ExternalType AddExternalType(Type type)

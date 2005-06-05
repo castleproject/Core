@@ -448,6 +448,6 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 			Assert.AreEqual( "1", (assignExp.Value as LiteralReferenceExpression).Content );
 
 			Assert.AreEqual( "@x", varDecl1.Identifier.Name );
-		}
+		}		
 	}
 }

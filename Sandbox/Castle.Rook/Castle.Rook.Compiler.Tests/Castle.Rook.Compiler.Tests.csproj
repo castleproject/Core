@@ -145,6 +145,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AnnotatedTree\TypeGraphConstructionTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ASTConstruction\NamespaceDeclTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

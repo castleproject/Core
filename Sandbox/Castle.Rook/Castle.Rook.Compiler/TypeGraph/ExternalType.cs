@@ -17,6 +17,8 @@ namespace Castle.Rook.Compiler.TypeGraph
 	using System;
 	using System.Reflection;
 
+	using Castle.Rook.Compiler.AST;
+
 	public class AbstractType
 	{
 		private readonly string name;
@@ -29,6 +31,21 @@ namespace Castle.Rook.Compiler.TypeGraph
 		public string Name
 		{
 			get { return name; }
+		}
+	}
+
+	public class InternalType : AbstractType
+	{
+		private readonly TypeDefinitionStatement typeDef;
+
+		public InternalType(TypeDefinitionStatement typeDef) : base(typeDef.Name)
+		{
+			this.typeDef = typeDef;
+		}
+
+		public TypeDefinitionStatement TypeDef
+		{
+			get { return typeDef; }
 		}
 	}
 

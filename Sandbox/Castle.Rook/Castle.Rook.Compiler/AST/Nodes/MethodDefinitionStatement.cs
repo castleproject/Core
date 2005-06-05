@@ -28,6 +28,7 @@ namespace Castle.Rook.Compiler.AST
 		private TypeReference boundTo;
 		private TypeReference returnType;
 		private bool isStatic;
+		private bool isConstructor;
 		private readonly AccessLevel accessLevel;
 		private readonly IList args = new ArrayList();
 		private readonly StatementCollection statements;
@@ -46,6 +47,8 @@ namespace Castle.Rook.Compiler.AST
 			{
 				boundTo = new TypeReference( ":" + boundToName );
 			}
+
+			isConstructor = "initialize".Equals(fullname);
 		}
 
 		public string FullName
@@ -56,6 +59,11 @@ namespace Castle.Rook.Compiler.AST
 		public bool IsStatic
 		{
 			get { return isStatic; }
+		}
+
+		public bool IsConstructor
+		{
+			get { return isConstructor; }
 		}
 
 		public string Name

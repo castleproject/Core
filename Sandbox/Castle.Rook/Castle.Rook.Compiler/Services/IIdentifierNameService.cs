@@ -19,12 +19,14 @@ namespace Castle.Rook.Compiler.Services
 
 	public interface IIdentifierNameService
 	{
-		bool IsValidFormatParameterName(string name);
+		bool IsValidFormatParameterName(String name);
 
 		bool IsValidNamespaceName(String name);
 
 		bool IsValidVarOrFieldName(String name);
 		
 		bool IsValidTypeName(String name);
+
+		bool IsValidMethodName(String name);
 	}
 }

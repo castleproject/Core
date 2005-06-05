@@ -75,6 +75,29 @@ namespace Castle.Rook.Compiler.Services.Passes
 			return base.VisitTypeDefinitionStatement(typeDef);
 		}
 
+		public override bool VisitMethodDefinitionStatement(MethodDefinitionStatement methodDef)
+		{
+			if (!identifierService.IsValidMethodName(methodDef.Name))
+			{
+				errorReport.Error( "TODOFILENAME", methodDef.Position, "'{0}' is an invalid method name.", methodDef.Name );
+
+				return false;
+			}
+
+			try
+			{
+				methodDef.NameScope.Parent.CurrentTypeGraph.DefineMethod(methodDef);
+			}
+			catch(Exception)
+			{
+				errorReport.Error( "TODOFILENAME", methodDef.Position, "'{0}' has multiple definitions.", methodDef.Name );
+
+				return false;
+			}
+
+			return base.VisitMethodDefinitionStatement(methodDef);
+		}
+
 		public override bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
 		{
 			ProcessMultipleVariableDeclarationStatement(varDecl);

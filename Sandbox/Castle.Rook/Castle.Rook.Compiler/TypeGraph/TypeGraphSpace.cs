@@ -57,6 +57,11 @@ namespace Castle.Rook.Compiler.TypeGraph
 			}
 		}
 
+		public void DefineMethod(MethodDefinitionStatement methodDefinition)
+		{
+			throw new NotImplementedException();
+		}
+
 		public NamespaceGraph DefineNamespace(String namespaceName)
 		{
 			if (parent == null)

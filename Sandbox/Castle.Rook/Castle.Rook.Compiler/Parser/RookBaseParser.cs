@@ -458,6 +458,7 @@ _loop88_breakloop:			;
 						{
 							nsdec.TypeDeclarations.Add(typeDef);
 						}
+						nothing();
 					}
 					else
 					{

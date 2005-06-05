@@ -137,7 +137,7 @@ namespace_declaration[NamespaceCollection namespaces]
 	:
 	t:"namespace" qn=qualified_name statement_term
 	{ nsdec.Name = qn.Name; }
-	(typeDef=type_def_statement { nsdec.TypeDeclarations.Add(typeDef); } )*
+	(typeDef=type_def_statement { nsdec.TypeDeclarations.Add(typeDef); } nothing)*
 	END	{ PopScope(); }
 	;
 
