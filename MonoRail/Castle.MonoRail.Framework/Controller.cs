@@ -551,7 +551,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual bool PerformRescue(MethodInfo method, Type controllerType, Exception ex)
 		{
-			_context.LastException = ex;
+			_context.LastException = ex.InnerException;
 
 			RescueAttribute att = null;
 
