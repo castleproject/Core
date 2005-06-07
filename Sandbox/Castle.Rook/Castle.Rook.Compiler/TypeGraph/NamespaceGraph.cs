@@ -48,14 +48,18 @@ namespace Castle.Rook.Compiler.TypeGraph
 			return graph;
 		}
 
-		public void AddUserType(TypeDefinitionStatement typeDef)
+		public InternalType AddUserType(TypeDefinitionStatement typeDef)
 		{
 			if (types.Contains(typeDef.Name))
 			{
 				throw new ArgumentNullException("Type " + typeDef.Name + " already exists.");
 			}
 
-			types[typeDef.Name] = new InternalType(typeDef);
+			InternalType type = new InternalType(typeDef);
+
+			types[typeDef.Name] = type;
+
+			return type;
 		}
 
 		public ExternalType AddExternalType(Type type)

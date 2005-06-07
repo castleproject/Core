@@ -38,6 +38,13 @@ namespace Castle.Rook.Compiler.Services.Passes
 			VisitNode(unit);
 		}
 
+		public override bool VisitSourceUnit(SourceUnit unit)
+		{
+			unit.NameScope.ScopeGraphNamespace = unit.NameScope.CurrentTypeGraph.DefineNamespace("Castle.Rook.Code");
+
+			return base.VisitSourceUnit(unit);
+		}
+
 		public override bool VisitNamespace(NamespaceDeclaration ns)
 		{
 			if (!identifierService.IsValidNamespaceName(ns.Name))
@@ -47,7 +54,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 				return false;
 			}
 
-			ns.NameScope.CurrentTypeGraph.DefineNamespace(ns.Name);
+			ns.NameScope.ScopeGraphNamespace = ns.NameScope.CurrentTypeGraph.DefineNamespace(ns.Name);
 
 			return base.VisitNamespace(ns);
 		}
@@ -63,7 +70,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 			try
 			{
-				typeDef.NameScope.Parent.CurrentTypeGraph.DefineType(typeDef);
+				typeDef.NameScope.ScopeType = typeDef.NameScope.Parent.CurrentTypeGraph.DefineType(typeDef);
 			}
 			catch(Exception)
 			{
@@ -86,7 +93,18 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 			try
 			{
-				methodDef.NameScope.Parent.CurrentTypeGraph.DefineMethod(methodDef);
+				if (methodDef.IsConstructor)
+				{
+					methodDef.NameScope.Parent.CurrentTypeGraph.DefineConstructorMethod(methodDef);
+				}
+				else if (methodDef.IsStatic)
+				{
+					methodDef.NameScope.Parent.CurrentTypeGraph.DefineStaticMethod(methodDef);
+				}
+				else 
+				{
+					methodDef.NameScope.Parent.CurrentTypeGraph.DefineMethod(methodDef);
+				}
 			}
 			catch(Exception)
 			{

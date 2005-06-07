@@ -14,6 +14,7 @@
 
 namespace Castle.Rook.Compiler.Services.Default
 {
+	using System;
 	using System.IO;
 	using System.Text;
 
@@ -62,8 +63,14 @@ namespace Castle.Rook.Compiler.Services.Default
 
 		public override void Write(string value)
 		{
-			System.Diagnostics.Debug.WriteLine( value );
+			System.Diagnostics.Debug.Write( value );
 			base.Write(value);
+		}
+
+		public override void WriteLine(string format, params object[] args)
+		{
+			System.Diagnostics.Debug.WriteLine( String.Format(format, args) );
+			base.WriteLine(format, args);
 		}
 	}
 }

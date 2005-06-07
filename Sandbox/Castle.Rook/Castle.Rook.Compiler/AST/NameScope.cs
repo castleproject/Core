@@ -32,10 +32,12 @@ namespace Castle.Rook.Compiler.AST
 
 	public class NameScope : INameScope
 	{
-		private NameScopeType nstype;
-		private INameScope parent;
+		protected NameScopeType nstype;
+		protected INameScope parent;
 		protected TypeGraphSpace graphSpace;
-		private HybridDictionary scope = new HybridDictionary();
+		protected NamespaceGraph scopedNamespace;
+		protected AbstractType scopedType;
+		protected HybridDictionary scope = new HybridDictionary();
 
 		protected NameScope(NameScopeType nstype)
 		{
@@ -60,6 +62,18 @@ namespace Castle.Rook.Compiler.AST
 		public TypeGraphSpace CurrentTypeGraph
 		{
 			get { return graphSpace; }
+		}
+
+		public NamespaceGraph ScopeGraphNamespace
+		{
+			get { return scopedNamespace; }
+			set { scopedNamespace = value; }
+		}
+
+		public AbstractType ScopeType
+		{
+			get { return scopedType; }
+			set { scopedType = value; }
 		}
 
 		public bool IsDefined(String name)

@@ -47,6 +47,21 @@ namespace Castle.Rook.Compiler.TypeGraph
 		{
 			get { return typeDef; }
 		}
+
+		public void AddConstructor(MethodDefinitionStatement methodDef)
+		{
+			
+		}
+
+		public void AddStaticMethod(MethodDefinitionStatement methodDef)
+		{
+			
+		}
+
+		public void AddMethod(MethodDefinitionStatement methodDef)
+		{
+			
+		}
 	}
 
 	public class ExternalType : AbstractType

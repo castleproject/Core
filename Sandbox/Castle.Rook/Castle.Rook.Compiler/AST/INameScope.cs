@@ -27,6 +27,10 @@ namespace Castle.Rook.Compiler.AST
 
 		TypeGraphSpace CurrentTypeGraph { get; }
 
+		NamespaceGraph ScopeGraphNamespace { get; set; }
+
+		AbstractType ScopeType { get; set; }
+
 		bool IsDefined(String name);
 
 		bool IsDefinedInParent(String name);

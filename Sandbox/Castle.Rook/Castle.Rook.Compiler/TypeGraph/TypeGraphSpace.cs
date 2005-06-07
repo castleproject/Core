@@ -1,4 +1,3 @@
-using Castle.Rook.Compiler.AST;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,8 @@ namespace Castle.Rook.Compiler.TypeGraph
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
+
+	using Castle.Rook.Compiler.AST;
 
 
 	public class TypeGraphSpace : NamespaceGraph
@@ -41,20 +42,30 @@ namespace Castle.Rook.Compiler.TypeGraph
 			get { return definedNamespace; }
 		}
 
-		public void DefineType(TypeDefinitionStatement typeDefinition)
+		public InternalType DefineType(TypeDefinitionStatement typeDefinition)
 		{
 			if (definedNamespace == null && parent != null)
 			{
-				parent.DefineType(typeDefinition);
+				return parent.DefineType(typeDefinition);
 			}
 			else if (definedNamespace != null)
 			{
-				definedNamespace.AddUserType(typeDefinition);
+				return definedNamespace.AddUserType(typeDefinition);
 			}
 			else
 			{
-				AddUserType(typeDefinition);
+				return AddUserType(typeDefinition);
 			}
+		}
+
+		public void DefineConstructorMethod(MethodDefinitionStatement methodDefinition)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DefineStaticMethod(MethodDefinitionStatement methodDefinition)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void DefineMethod(MethodDefinitionStatement methodDefinition)
@@ -85,7 +96,6 @@ namespace Castle.Rook.Compiler.TypeGraph
 
 		public void AddAssemblyFileReference(String assemblyName)
 		{
-			
 		}
 
 		private void AddAssemblyExportedTypes(Assembly assembly)
