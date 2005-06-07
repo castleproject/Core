@@ -14,7 +14,8 @@
 
 namespace Castle.MonoRail.Framework.Tests.Helpers
 {
-    using System.Collections;
+	using System;
+	using System.Collections;
 
     using NUnit.Framework;
 
@@ -34,12 +35,11 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
             this._hlp = new AjaxHelper();
 		}
 
-        #region LinkToFunction
         [Test]
         public void LinkToFunction2args() 
         {
-            string expected = "<a href=\"#\" onclick=\"function; return false;\" >name</a>";
-            string actual = this._hlp.LinkToFunction("name", "function");
+            String expected = "<a href=\"#\" onclick=\"function; return false;\" >name</a>";
+            String actual = this._hlp.LinkToFunction("name", "function");
             Assert.AreEqual(expected, actual);
 
         }
@@ -47,98 +47,96 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
         [Test]
         public void LinkToFunction3args()
         {
-            string expected = "<a href=\"#\" class=\"styleClass\" onclick=\"function; return false;\" >name</a>";
-            string actual = this._hlp.LinkToFunction("name", "function", "styleClass");
+            String expected = "<a href=\"#\" class=\"styleClass\" onclick=\"function; return false;\" >name</a>";
+            String actual = this._hlp.LinkToFunction("name", "function", "styleClass");
             Assert.AreEqual(expected, actual);
 
         }
-        #endregion
 
-        #region ButtonToFunction
         [Test]
         public void ButtonToFunction2args()
         {
-            string expected = "<input type=\"button\" onclick=\"function; return false;\" value=\"name\" />";
-            string actual = this._hlp.ButtonToFunction("name", "function");
+            String expected = "<input type=\"button\" onclick=\"function; return false;\" value=\"name\" />";
+            String actual = this._hlp.ButtonToFunction("name", "function");
             Assert.AreEqual(expected, actual);
         }
-        [Test]
+
+		[Test]
         public void ButtonToFunction3args() 
         {
-            string expected = "<input type=\"button\" class=\"styleClass\" onclick=\"function; return false;\" value=\"name\" />";
-            string actual = this._hlp.ButtonToFunction("name", "function", "styleClass");
+            String expected = "<input type=\"button\" class=\"styleClass\" onclick=\"function; return false;\" value=\"name\" />";
+            String actual = this._hlp.ButtonToFunction("name", "function", "styleClass");
             Assert.AreEqual(expected, actual);
         }
-        #endregion
 
-
-        #region LinkToRemote
         [Test]
-        public void LinkToRemote3stringArgs()
+        public void LinkToRemote3StringArgs()
         {
-            string expected = "<a href=\"#\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true}); return false;\" >name</a>";
-            string actual = this._hlp.LinkToRemote("name", "url", "update");
+            String expected = "<a href=\"#\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true}); return false;\" >name</a>";
+            String actual = this._hlp.LinkToRemote("name", "url", "update");
             Assert.AreEqual(expected, actual);
         }
-        [Test]
+
+		[Test]
         public void LinkToRemote2String1DictArgs()
         {
             Hashtable dict = new Hashtable();
             dict.Add("key", "value");
-            string expected = "<a href=\"#\" onclick=\"new Ajax.Request('url', {asynchronous:true}); return false;\" >name</a>";
-            string actual = this._hlp.LinkToRemote("name", "url", dict);
+            String expected = "<a href=\"#\" onclick=\"new Ajax.Request('url', {asynchronous:true}); return false;\" >name</a>";
+            String actual = this._hlp.LinkToRemote("name", "url", dict);
             Assert.AreEqual(expected, actual);
         }
-        [Test]
+        
+		[Test]
         public void LinkToRemote4StringArgs()
         {
-            string expected = "<a href=\"#\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true, parameters:with}); return false;\" >name</a>";
-            string actual = this._hlp.LinkToRemote("name", "url", "update", "with");
+            String expected = "<a href=\"#\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true, parameters:with}); return false;\" >name</a>";
+            String actual = this._hlp.LinkToRemote("name", "url", "update", "with");
             Assert.AreEqual(expected, actual);
         }
-        [Test]
+        
+		[Test]
         public void LinkToRemote3String1BoolArgs()
         {
             Hashtable dict = new Hashtable();
             dict.Add("key", "value");
-            string expected = "<a href=\"#\" onclick=\"new Ajax.Updater('with', 'url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" >name</a>";
-            string actual = this._hlp.LinkToRemote("name", "url", "with", true);
+            String expected = "<a href=\"#\" onclick=\"new Ajax.Updater('with', 'url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" >name</a>";
+            String actual = this._hlp.LinkToRemote("name", "url", "with", true);
             Assert.AreEqual(expected, actual);
         }
-        #endregion
 
-        #region ButtonToRemote
         [Test]
-        public void ButtonToRemote3stringArgs() 
+        public void ButtonToRemote3StringArgs() 
         {
-            string expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true}); return false;\" value=\"name\" />";
-            string actual = this._hlp.ButtonToRemote("name", "url", "update");
+            String expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true}); return false;\" value=\"name\" />";
+            String actual = this._hlp.ButtonToRemote("name", "url", "update");
             Assert.AreEqual(expected, actual);
         }
-        [Test]
+
+		[Test]
         public void ButtonToRemote2String1DictArgs() 
         {
             Hashtable dict = new Hashtable();
             dict.Add("key", "value");
-            string expected = "<input type=\"button\" onclick=\"new Ajax.Request('url', {asynchronous:true}); return false;\" value=\"name\" />";
-            string actual = this._hlp.ButtonToRemote("name", "url", dict);
+            String expected = "<input type=\"button\" onclick=\"new Ajax.Request('url', {asynchronous:true}); return false;\" value=\"name\" />";
+            String actual = this._hlp.ButtonToRemote("name", "url", dict);
             Assert.AreEqual(expected, actual);
         }
-        [Test]
-        public void ButtonToRemote4stringArgs() 
+        
+		[Test]
+        public void ButtonToRemote4StringArgs() 
         {
-            string expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'with', {asynchronous:true, parameters:url}); return false;\" value=\"name\" />";
-            string actual = this._hlp.ButtonToRemote("name", "url", "update", "with");
+            String expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'with', {asynchronous:true, parameters:url}); return false;\" value=\"name\" />";
+            String actual = this._hlp.ButtonToRemote("name", "url", "update", "with");
             Assert.AreEqual(expected, actual);
         }
-        [Test]
-        public void ButtonToRemote3string1BoolArgs() 
+        
+		[Test]
+        public void ButtonToRemote3String1BoolArgs() 
         {
-            string expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" value=\"name\" />";
-            string actual = this._hlp.ButtonToRemote("name", "url", "update", true);
+            String expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" value=\"name\" />";
+            String actual = this._hlp.ButtonToRemote("name", "url", "update", true);
             Assert.AreEqual(expected, actual);
         }
-        #endregion
-
 	}
 }

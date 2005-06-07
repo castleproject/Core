@@ -26,10 +26,9 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class SmartDispatcherController : Controller
 	{
-		internal override void CollectActions()
+		protected internal override void CollectActions()
 		{
-			MethodInfo[] methods = 
-				GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
+			MethodInfo[] methods = GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
 			
 			foreach(MethodInfo m in methods)
 			{
@@ -52,6 +51,8 @@ namespace Castle.MonoRail.Framework
 					_actions[m.Name] = m;
 				}
 			}
+
+			base.ScreenCommonPublicMethods(_actions);
 		}
 
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
@@ -113,7 +114,7 @@ namespace Castle.MonoRail.Framework
 			return bestCandidate;
 		}
 
-		protected virtual int CalculatePoints(MethodInfo candidate, NameValueCollection webParams)
+		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams)
 		{
 			int points = 0;
 

@@ -58,15 +58,30 @@ namespace Castle.MonoRail.Framework
 			CollectActions();
 		}
 
-		internal virtual void CollectActions()
+		protected internal virtual void CollectActions()
 		{
-			MethodInfo[] methods = 
-				GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
+			MethodInfo[] methods = GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
 			
 			foreach(MethodInfo m in methods)
 			{
 				_actions[m.Name] = m;
 			}
+
+			ScreenCommonPublicMethods(_actions);
+		}
+
+		protected void ScreenCommonPublicMethods(IDictionary actions)
+		{
+			actions.Remove("ToString");
+			actions.Remove("GetHashCode");
+			actions.Remove("RenderView");
+			actions.Remove("RenderText");
+			actions.Remove("RenderSharedView");
+			actions.Remove("Redirect");
+			actions.Remove("Process");
+			actions.Remove("Send");
+			actions.Remove("PreSendView");
+			actions.Remove("PostSendView");
 		}
 
 		#region Usefull Properties
@@ -551,7 +566,9 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual bool PerformRescue(MethodInfo method, Type controllerType, Exception ex)
 		{
-			_context.LastException = ex.InnerException;
+			// InnerException might be null !
+			// _context.LastException = ex.InnerException;
+			_context.LastException = ex;
 
 			RescueAttribute att = null;
 
@@ -576,7 +593,7 @@ namespace Castle.MonoRail.Framework
 				}
 				catch(Exception)
 				{
-					// In this situation, the view could not be found
+					// In this situation, the rescue view could not be found
 					// So we're back to the default error exibition
 				}
 			}
