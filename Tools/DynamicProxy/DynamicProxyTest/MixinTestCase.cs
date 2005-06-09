@@ -27,6 +27,7 @@ namespace Castle.DynamicProxy.Test
 	/// </summary>
 	[TestFixture]
 //	[Ignore("To compile on Mono")]
+	[Category("DotNetOnly")]
 	public class MixinTestCase
 	{
 		private ProxyGenerator _generator;

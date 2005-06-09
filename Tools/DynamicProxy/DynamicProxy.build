@@ -68,9 +68,25 @@
 	</target>
 	
 	<target name="core.tests.run" depends="core.tests.compile">
-		<nunit2 >
+		<property name="isMono" value="${string::contains(framework::get-target-framework(),'mono')}" />
+		<echo message="target is Mono? ${isMono}" />
+		
+		<nunit2 if="${not isMono}">
 			<formatter type="Plain" />
-			<test assemblyname="${bin.dir}/${core.test.assembly.name}" />
+			<test assemblyname="${bin.dir}/${core.test.assembly.name}">
+				<categories>
+					<include name="DotNetOnly" if="${not isMono}" />
+				</categories>
+			</test>
+		</nunit2>
+		
+		<nunit2 if="${isMono}">
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${core.test.assembly.name}">
+				<categories>
+					<exclude name="DotNetOnly" if="${isMono}" />
+				</categories>
+			</test>
 		</nunit2>
 	</target>
 	

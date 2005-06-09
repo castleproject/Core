@@ -98,6 +98,7 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
+		[Category("DotNetOnly")]
 		public void MixinSerialization()
 		{
 			GeneratorContext context = new GeneratorContext();
