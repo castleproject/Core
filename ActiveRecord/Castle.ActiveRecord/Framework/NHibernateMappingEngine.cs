@@ -706,18 +706,31 @@ namespace Castle.ActiveRecord
 			string key = "";
 			if( otherType.IsSubclassOf( typeof( ActiveRecordBase ) ) )
 			{
-				PropertyInfo otherKey = GetPropertyWithAttribute( otherType, typeof( BelongsToAttribute ) );
+				PropertyInfo[] props = GetPropertiesWithAttribute( otherType, typeof( BelongsToAttribute ) );
 
-				if (otherKey == null)
+				if (props.Length == 0)
 				{
 					String message = String.Format("While mapping {0} we looked for a 'belongsto' association on {1} but haven't found it.", prop.DeclaringType.FullName, otherType.FullName);
 					throw new ConfigurationException(message);
 				}
 
-				BelongsToAttribute belongs = GetBelongsToAttribute( otherKey );
-				if( otherKey != null && belongs != null && otherKey.PropertyType == prop.DeclaringType )
+				bool resolved = false;
+
+				foreach(PropertyInfo pinfo in props)
 				{
-					key = belongs.Column;
+					BelongsToAttribute belongs = GetBelongsToAttribute( pinfo );
+
+					if( pinfo != null && belongs != null && pinfo.PropertyType == prop.DeclaringType )
+					{
+						key = belongs.Column; resolved = true;
+						break;
+					}
+				}
+
+				if (!resolved)
+				{
+					String message = String.Format("While mapping {0} we looked for a 'belongsto' association on {1} but haven't found any that helped us to create the association.", prop.DeclaringType.FullName, otherType.FullName);
+					throw new ConfigurationException(message);
 				}
 			}
 			else
@@ -816,6 +829,23 @@ namespace Castle.ActiveRecord
 			}
 
 			return null;
+		}
+
+		private PropertyInfo[] GetPropertiesWithAttribute(Type targetType, Type attributeType)
+		{
+			ArrayList list = new ArrayList();
+
+			PropertyInfo[] props = targetType.GetProperties( BindingFlags.Instance|BindingFlags.Public );
+
+			foreach(PropertyInfo prop in props)
+			{
+				if (prop.IsDefined(attributeType, true))
+				{
+					list.Add( prop );
+				}
+			}
+
+			return (PropertyInfo[]) list.ToArray( typeof(PropertyInfo) );
 		}
 
 		private BelongsToAttribute GetBelongsToAttribute( PropertyInfo prop )
