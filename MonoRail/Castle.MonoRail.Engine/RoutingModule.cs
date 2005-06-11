@@ -1,5 +1,3 @@
-using System.Collections;
-using Castle.MonoRail.Engine.Configuration;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +15,18 @@ using Castle.MonoRail.Engine.Configuration;
 namespace Castle.MonoRail.Engine
 {
 	using System;
+	using System.Collections;
 	using System.Web;
 
+	using Castle.MonoRail.Engine.Configuration;
+
 	/// <summary>
-	/// 
+	/// Provides routing services in response to rules defined in <see cref="MonoRailConfiguration.RoutingRules"/>.
 	/// </summary>
 	public class RoutingModule : IHttpModule
 	{
+		internal static readonly String OriginalPathKey = "rails.original_path";
+
 		private IList routingRules;
 
 		public RoutingModule()
@@ -32,12 +35,10 @@ namespace Castle.MonoRail.Engine
 
 		public void Init(HttpApplication context)
 		{
-			// Subcribe to BeginRequest
-
+			//Subcribe to BeginRequest
 			context.BeginRequest += new EventHandler(OnBeginRequest);
 
-			// Load the rules
-
+			//Load the rules
 			routingRules = MonoRailConfiguration.GetConfig().RoutingRules;
 		}
 
@@ -49,23 +50,28 @@ namespace Castle.MonoRail.Engine
 		{
 			if (routingRules.Count == 0) return;
 
-			HttpRequest request = HttpContext.Current.Request;
+			HttpContext context = HttpContext.Current;
+			HttpRequest request = context.Request;
 
-			String newPath;
+			string virtualPath = request.FilePath;
+			string newPath;
 
-			if(FindMatchAndReplace(request.FilePath, out newPath))
+			//Store the original path in case this needs to be used later
+			context.Items.Add(OriginalPathKey, virtualPath);
+
+			if(FindMatchAndReplace(virtualPath, out newPath))
 			{
-				int qsIndex = newPath.IndexOf('?');
-
-				if (qsIndex == -1)
+				//Handle things differently depending on wheter we need to keep a query string or not
+				int queryStringIndex = newPath.IndexOf('?');
+				if (queryStringIndex == -1)
 				{
-					HttpContext.Current.RewritePath(newPath);
+					context.RewritePath(newPath);
 				}
 				else
 				{
-					String path = newPath.Substring(0, qsIndex);
-					String qs = newPath.Substring(qsIndex + 1);
-					HttpContext.Current.RewritePath(path, request.PathInfo, qs);
+					string path = newPath.Substring(0, queryStringIndex);
+					string queryString = newPath.Substring(queryStringIndex + 1);
+					context.RewritePath(path, request.PathInfo, queryString);
 				}
 			}
 		}
@@ -80,15 +86,15 @@ namespace Castle.MonoRail.Engine
 				{
 					newPath = rule.CompiledRule.Replace(currentPath, rule.Replace);
 
-					// Append the query string
+					//Append the query string
 					string queryString = HttpContext.Current.Request.Url.Query;
-
 					if(queryString.Length > 0)
 					{
+						//If we already have some query string params on the new path...
 						bool hasParams = (newPath.LastIndexOf("?") != -1);
-
 						if(hasParams)
 						{
+							//...make sure we append the query string nicely rather than adding another ?
 							queryString = queryString.Replace("?", "&");
 						}
 
