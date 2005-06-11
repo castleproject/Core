@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ namespace AspectSharp.Core.Matchers
 {
 	using System;
 	using System.Collections;
-
 	using AspectSharp.Lang.AST;
 
 	/// <summary>
@@ -35,7 +34,7 @@ namespace AspectSharp.Core.Matchers
 
 			ArrayList list = new ArrayList();
 
-			foreach(AspectDefinition aspect in aspects)
+			foreach (AspectDefinition aspect in aspects)
 			{
 				IClassMatcher matcher = ObtainClassMatcher(aspect);
 
@@ -45,7 +44,7 @@ namespace AspectSharp.Core.Matchers
 				}
 			}
 
-			return (AspectDefinition[]) list.ToArray( typeof(AspectDefinition) );
+			return (AspectDefinition[]) list.ToArray(typeof (AspectDefinition));
 		}
 
 		#endregion
@@ -71,17 +70,17 @@ namespace AspectSharp.Core.Matchers
 		{
 			Type customType = target.CustomMatcherType.ResolvedType;
 
-			IClassMatcher matcher = GetCustomMatcherFromCache( customType );
+			IClassMatcher matcher = GetCustomMatcherFromCache(customType);
 
 			try
 			{
-				matcher = (IClassMatcher) Activator.CreateInstance( customType );
+				matcher = (IClassMatcher) Activator.CreateInstance(customType);
 			}
-			catch(InvalidCastException ex)
+			catch (InvalidCastException ex)
 			{
 				throw new MatcherException("Error trying to cast your custom class matcher to IClassMatcher", ex);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				throw new MatcherException("Error trying to instantiate your custom class matcher", ex);
 			}
@@ -91,14 +90,14 @@ namespace AspectSharp.Core.Matchers
 			return matcher;
 		}
 
-		private void RegisterMatcherInCache(IClassMatcher matcher, Type customType )
+		private void RegisterMatcherInCache(IClassMatcher matcher, Type customType)
 		{
-			_customMatcherCache[ customType ] = matcher;
+			_customMatcherCache[customType] = matcher;
 		}
 
 		private IClassMatcher GetCustomMatcherFromCache(Type customType)
 		{
-			return (IClassMatcher) _customMatcherCache[ customType ];
+			return (IClassMatcher) _customMatcherCache[customType];
 		}
 	}
 }

@@ -370,7 +370,6 @@ namespace AspectSharp.Lang.Tests
 				" end \n" +
 				"end", method, access, type, name, allparams));
 			string s = string.Format("{0}({1} {2} {3}{4})", method, access, type, name, allparams);
-			Console.WriteLine(s);
 			EngineConfiguration conf = parser.Parse();
 			AspectDefinition def = conf.Aspects[0];
 			PointCutDefinition pc = def.PointCuts[0];

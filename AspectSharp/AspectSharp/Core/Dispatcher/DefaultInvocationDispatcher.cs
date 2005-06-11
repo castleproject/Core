@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@ namespace AspectSharp.Core.Dispatcher
 	using System.Collections;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-
 	using AopAlliance.Intercept;
-
 	using AspectSharp.Lang.AST;
 	using AspectSharp.Core.Matchers;
 
@@ -33,15 +31,13 @@ namespace AspectSharp.Core.Dispatcher
 		private AspectDefinition _aspect;
 		private IJoinPointMatcher _matcher;
 
-		[NonSerialized]
-		private IDictionary _type2AdviceInstance = new Hashtable();
-		[NonSerialized]
-		private IDictionary _method2Advices = new Hashtable();
+		[NonSerialized] private IDictionary _type2AdviceInstance = new Hashtable();
+		[NonSerialized] private IDictionary _method2Advices = new Hashtable();
 
 		public DefaultInvocationDispatcher(AspectDefinition aspect)
 		{
 			_aspect = aspect;
-			_matcher = new DefaultJoinPointMatcher( aspect.PointCuts );
+			_matcher = new DefaultJoinPointMatcher(aspect.PointCuts);
 		}
 
 		public void Init(AspectEngine engine)
@@ -56,9 +52,9 @@ namespace AspectSharp.Core.Dispatcher
 
 		public object Intercept(Castle.DynamicProxy.IInvocation invocation, params object[] arguments)
 		{
-			IMethodInterceptor[] interceptors = ObtainAdvicesForMethod(invocation.Method, 
-				invocation.InvocationTarget, arguments);
-			
+			IMethodInterceptor[] interceptors = ObtainAdvicesForMethod(invocation.Method,
+			                                                           invocation.InvocationTarget, arguments);
+
 			if (interceptors.Length == 0)
 			{
 				// Nothing to intercept. 
@@ -79,14 +75,15 @@ namespace AspectSharp.Core.Dispatcher
 			if (interceptors == null)
 			{
 				PointCutDefinition[] pointcuts = _matcher.Match(method);
-		
+
 				if (pointcuts.Length != 0)
 				{
 					interceptors = ObtainAdvices(pointcuts);
 				}
 				else
 				{
-					interceptors = new IMethodInterceptor[0];;
+					interceptors = new IMethodInterceptor[0];
+					;
 				}
 
 				RegisterInCache(method, interceptors);
@@ -97,7 +94,7 @@ namespace AspectSharp.Core.Dispatcher
 
 		protected IMethodInterceptor[] ObtainFromCache(MethodInfo method)
 		{
-			return (IMethodInterceptor[]) _method2Advices[ method ];
+			return (IMethodInterceptor[]) _method2Advices[method];
 		}
 
 		protected void RegisterInCache(MethodInfo method, IMethodInterceptor[] interceptors)
@@ -109,22 +106,22 @@ namespace AspectSharp.Core.Dispatcher
 		{
 			ArrayList advices = new ArrayList();
 
-			foreach(PointCutDefinition pointcut in pointcuts)
+			foreach (PointCutDefinition pointcut in pointcuts)
 			{
-				advices.AddRange( CreateInterceptor( pointcut.Advices ) );
+				advices.AddRange(CreateInterceptor(pointcut.Advices));
 			}
 
-			return (IMethodInterceptor[]) advices.ToArray( typeof(IMethodInterceptor) );
+			return (IMethodInterceptor[]) advices.ToArray(typeof (IMethodInterceptor));
 		}
 
 		protected IMethodInterceptor[] CreateInterceptor(InterceptorDefinitionCollection advices)
 		{
-			IMethodInterceptor[] interceptors = new IMethodInterceptor[ advices.Count ];
+			IMethodInterceptor[] interceptors = new IMethodInterceptor[advices.Count];
 
-			for(int i=0; i < interceptors.Length; i++)
+			for (int i = 0; i < interceptors.Length; i++)
 			{
 				Type adviceType = advices[i].TypeReference.ResolvedType;
-				interceptors[i] = ObtainInterceptorInstance( adviceType );
+				interceptors[i] = ObtainInterceptorInstance(adviceType);
 			}
 
 			return interceptors;
@@ -136,7 +133,7 @@ namespace AspectSharp.Core.Dispatcher
 
 			if (interceptor == null)
 			{
-				interceptor = Activator.CreateInstance( adviceType ) as IMethodInterceptor;
+				interceptor = Activator.CreateInstance(adviceType) as IMethodInterceptor;
 				InitializeInterceptor(interceptor);
 				_type2AdviceInstance[adviceType] = interceptor;
 			}

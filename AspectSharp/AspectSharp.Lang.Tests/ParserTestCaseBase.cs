@@ -1,4 +1,3 @@
-using AspectSharp.Lang.AST;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +18,7 @@ namespace AspectSharp.Lang.Tests
 	using System.IO;
 	using System.Text;
 
+	using AspectSharp.Lang.AST;
 	using AspectSharp.Lang.Steps;
 
 	using NUnit.Framework;

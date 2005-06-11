@@ -15,7 +15,6 @@
 namespace AspectSharp.Core
 {
 	using System;
-
 	using AspectSharp.Lang.AST;
 
 	/// <summary>
@@ -23,6 +22,6 @@ namespace AspectSharp.Core
 	/// </summary>
 	public interface IInvocationDispatcherFactory
 	{
-		IInvocationDispatcher Create( AspectDefinition aspect, AspectEngine engine );
+		IInvocationDispatcher Create(AspectDefinition aspect, AspectEngine engine);
 	}
 }

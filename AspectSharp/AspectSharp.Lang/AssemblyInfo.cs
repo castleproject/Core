@@ -21,23 +21,12 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Aspect#")]
 [assembly: AssemblyProduct("Aspect#")]
-[assembly: AssemblyCopyright("2004 Henry Conceição / Rafael Steil")]
 [assembly: AssemblyTrademark("Aspect#")]
 [assembly: AssemblyCulture("")]		
-
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-
 [assembly: AssemblyVersion("2.1.1.0")]
 
 #if STRONG
-[assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("../AspectSharp.key")]
-[assembly: AssemblyKeyName("")]
+[assembly : AssemblyDelaySign(false)]
+[assembly : AssemblyKeyFile("../../CastleKey.snk")]
+[assembly : AssemblyKeyName("")]
 #endif
-

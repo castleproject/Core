@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 namespace AspectSharp
 {
 	using System;
-
 	using AspectSharp.Core;
 	using AspectSharp.Core.Matchers;
 	using AspectSharp.Core.Proxy;
@@ -38,12 +37,12 @@ namespace AspectSharp
 		/// </summary>
 		/// <param name="config">From where to gather the 
 		/// configuration</param>
-		public AspectEngine( EngineConfiguration config )
+		public AspectEngine(EngineConfiguration config)
 		{
-			AssertUtil.ArgumentNotNull( config, "config" );
+			AssertUtil.ArgumentNotNull(config, "config");
 			_config = config;
 			_aspectMatcher = new DefaultAspectMatcher();
-			_proxyFactory = new DefaultProxyFactory( this );
+			_proxyFactory = new DefaultProxyFactory(this);
 		}
 
 		/// <summary>
@@ -86,8 +85,8 @@ namespace AspectSharp
 		[Obsolete("Use the WrapClass(Type) instead", false)]
 		public virtual object Wrap(object instance)
 		{
-			AssertUtil.ArgumentNotNull( instance, "instance" );
-			return WrapClass( instance.GetType() );
+			AssertUtil.ArgumentNotNull(instance, "instance");
+			return WrapClass(instance.GetType());
 		}
 
 		/// <summary>
@@ -97,10 +96,10 @@ namespace AspectSharp
 		/// </summary>
 		/// <param name="classType">Concrete class with a available constructor (public or protected) to be wrapped</param>
 		/// <returns>A proxy</returns>
-		public virtual object WrapClass( Type classType )
+		public virtual object WrapClass(Type classType)
 		{
-			AssertUtil.ArgumentNotNull( classType, "classType" );
-			AssertUtil.ArgumentNotInterface( classType, "classType" );
+			AssertUtil.ArgumentNotNull(classType, "classType");
+			AssertUtil.ArgumentNotInterface(classType, "classType");
 
 			AspectDefinition[] aspects = AspectMatcher.Match(classType, Configuration.Aspects);
 
@@ -122,11 +121,11 @@ namespace AspectSharp
 		/// <param name="inter">Interface to be wrapped</param>
 		/// <param name="target">The object that responds to the interface messages</param>
 		/// <returns>A proxy</returns>
-		public virtual object WrapInterface( Type inter, object target )
+		public virtual object WrapInterface(Type inter, object target)
 		{
-			AssertUtil.ArgumentNotNull( target, "target" );
-			AssertUtil.ArgumentIsInterface( inter, "interface" );
-			
+			AssertUtil.ArgumentNotNull(target, "target");
+			AssertUtil.ArgumentIsInterface(inter, "interface");
+
 			AspectDefinition[] aspects = AspectMatcher.Match(inter, Configuration.Aspects);
 
 			AspectDefinition aspectdef = Union(aspects);
@@ -149,11 +148,11 @@ namespace AspectSharp
 
 			AspectDefinition aspect = new AspectDefinition(LexicalInfo.Empty, String.Empty);
 
-			foreach(AspectDefinition item in aspects)
+			foreach (AspectDefinition item in aspects)
 			{
 				aspect.Name += item.Name + "$";
-				aspect.Mixins.AddRange( item.Mixins );
-				aspect.PointCuts.AddRange( item.PointCuts );
+				aspect.Mixins.AddRange(item.Mixins);
+				aspect.PointCuts.AddRange(item.PointCuts);
 			}
 
 			return aspect;

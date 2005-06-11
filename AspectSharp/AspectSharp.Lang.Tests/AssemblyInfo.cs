@@ -21,7 +21,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Aspect#")]
 [assembly: AssemblyProduct("Aspect#")]
-[assembly: AssemblyCopyright("2004 Henry Conceição / Rafael Steil")]
 [assembly: AssemblyTrademark("Aspect#")]
 [assembly: AssemblyCulture("")]		
 

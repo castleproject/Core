@@ -15,7 +15,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 
 #if STRONG
-[assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("../AspectSharp.key")]
-[assembly: AssemblyKeyName("")]
+[assembly : AssemblyDelaySign(false)]
+[assembly : AssemblyKeyFile("../../CastleKey.snk")]
+[assembly : AssemblyKeyName("")]
 #endif

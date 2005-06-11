@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 namespace AspectSharp.Core
 {
 	using System;
-
 	using Castle.DynamicProxy;
 
 	/// <summary>
@@ -44,8 +43,8 @@ namespace AspectSharp.Core
 		/// <param name="mixins">Array of instances (mixins) to be introducted.</param>
 		/// <param name="interceptor">Instance of <see cref="IInterceptor"/>.</param>
 		/// <returns>Proxy Instance.</returns>
-		public object CreateProxy(Type inter, object target, object[] mixins, 
-			IInterceptor interceptor)
+		public object CreateProxy(Type inter, object target, object[] mixins,
+		                          IInterceptor interceptor)
 		{
 			GeneratorContext context = CreateGeneratorContext(mixins);
 			return base.CreateCustomProxy(inter, interceptor, target, context);
@@ -59,8 +58,8 @@ namespace AspectSharp.Core
 		/// <param name="mixins">Array of mixins to be implemented by the proxy</param>
 		/// <param name="interceptor">Instance of <see cref="IInterceptor"/></param>
 		/// <returns>Proxy instance</returns>
-		public object CreateClassProxy(Type baseClass, object[] mixins, 
-			IInterceptor interceptor)
+		public object CreateClassProxy(Type baseClass, object[] mixins,
+		                               IInterceptor interceptor)
 		{
 			GeneratorContext context = CreateGeneratorContext(mixins);
 			return base.CreateCustomClassProxy(baseClass, interceptor, context);
@@ -75,7 +74,7 @@ namespace AspectSharp.Core
 		protected GeneratorContext CreateGeneratorContext(object[] mixins)
 		{
 			GeneratorContext context = new GeneratorContext();
-			foreach(object mixin in mixins)
+			foreach (object mixin in mixins)
 			{
 				context.AddMixinInstance(mixin);
 			}

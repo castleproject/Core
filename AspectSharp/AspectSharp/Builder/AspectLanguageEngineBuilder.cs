@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ namespace AspectSharp.Builder
 {
 	using System;
 	using System.IO;
-
 	using AspectSharp.Lang;
 	using AspectSharp.Lang.AST;
 
@@ -34,13 +33,13 @@ namespace AspectSharp.Builder
 		{
 		}
 
-		public AspectLanguageEngineBuilder(String contents) : this( new StringReader(contents))
+		public AspectLanguageEngineBuilder(String contents) : this(new StringReader(contents))
 		{
 		}
 
 		public AspectLanguageEngineBuilder(TextReader reader)
 		{
-			AssertUtil.ArgumentNotNull( reader, "reader" );
+			AssertUtil.ArgumentNotNull(reader, "reader");
 			_reader = reader;
 		}
 
@@ -65,7 +64,7 @@ namespace AspectSharp.Builder
 			{
 				return parser.Parse();
 			}
-			catch(antlr.RecognitionException e)
+			catch (antlr.RecognitionException e)
 			{
 				int line = e.getLine();
 				int startColumn = e.getColumn();

@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 namespace AspectSharp.Builder
 {
 	using System;
-
 	using AspectSharp.Lang.AST;
 	using AspectSharp.Lang.Steps;
 	using AspectSharp.Lang.Steps.Semantic;
@@ -30,7 +29,7 @@ namespace AspectSharp.Builder
 
 		public virtual AspectEngine Build()
 		{
-			AssertUtil.NotNull( Configuration, "Configuration" );
+			AssertUtil.NotNull(Configuration, "Configuration");
 
 			ExecuteSteps();
 
@@ -49,7 +48,7 @@ namespace AspectSharp.Builder
 
 			Context context = new Context();
 			context.Error += new ErrorDelegate(OnError);
-			firstStep.Process( context, Configuration );
+			firstStep.Process(context, Configuration);
 		}
 
 		protected virtual void AddSemanticStep(StepChainBuilder chain)
@@ -76,7 +75,7 @@ namespace AspectSharp.Builder
 		protected virtual void OnError(LexicalInfo info, String message)
 		{
 			String detailedMessage = String.Format(
-				"{0}. On {1}, Line {2} - from {3} until {4}", message, 
+				"{0}. On {1}, Line {2} - from {3} until {4}", message,
 				info.Filename, info.Line, info.StartCol, info.EndCol);
 
 			throw new BuilderException(info, detailedMessage);

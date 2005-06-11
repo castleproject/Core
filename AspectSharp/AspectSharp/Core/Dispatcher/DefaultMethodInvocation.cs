@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ namespace AspectSharp.Core.Dispatcher
 {
 	using System;
 	using System.Reflection;
-
 	using AopAlliance.Intercept;
 
 	/// <summary>
@@ -29,8 +28,8 @@ namespace AspectSharp.Core.Dispatcher
 		private object[] _arguments;
 		private int _currentIndex;
 
-		public InvocationComposite(IMethodInterceptor[] interceptors, 
-			Castle.DynamicProxy.IInvocation innerInvocation, object[] arguments)
+		public InvocationComposite(IMethodInterceptor[] interceptors,
+		                           Castle.DynamicProxy.IInvocation innerInvocation, object[] arguments)
 		{
 			_interceptors = interceptors;
 			_innerInvocation = innerInvocation;
@@ -39,18 +38,12 @@ namespace AspectSharp.Core.Dispatcher
 
 		public MethodBase Method
 		{
-			get
-			{
-				return _innerInvocation.Method;
-			}
+			get { return _innerInvocation.Method; }
 		}
 
 		public object[] Arguments
 		{
-			get
-			{
-				return _arguments;
-			}
+			get { return _arguments; }
 		}
 
 		public void SetArguments(object[] arguments)
@@ -60,18 +53,12 @@ namespace AspectSharp.Core.Dispatcher
 
 		public MemberInfo StaticPart
 		{
-			get
-			{
-				return _innerInvocation.Method;
-			}
+			get { return _innerInvocation.Method; }
 		}
 
 		public object This
 		{
-			get
-			{
-				return _innerInvocation.Proxy;
-			}
+			get { return _innerInvocation.Proxy; }
 		}
 
 		public object Proceed()
@@ -80,11 +67,11 @@ namespace AspectSharp.Core.Dispatcher
 
 			if (_currentIndex + 1 <= _interceptors.Length)
 			{
-				retVal = _interceptors[_currentIndex++].Invoke( this );
+				retVal = _interceptors[_currentIndex++].Invoke(this);
 			}
 			else
 			{
-				retVal = _innerInvocation.Proceed( _arguments );
+				retVal = _innerInvocation.Proceed(_arguments);
 			}
 
 			return retVal;

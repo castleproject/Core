@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ namespace AspectSharp
 
 		public static void ArgumentIsInterface(Type[] args, String argName)
 		{
-			foreach(Type type in args)
+			foreach (Type type in args)
 			{
 				ArgumentIsInterface(type, argName);
 			}

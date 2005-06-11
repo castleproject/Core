@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
 namespace AspectSharp.Core.Matchers
 {
 	using System;
-
 	using AspectSharp.Lang.AST;
 
 	/// <summary>
 	/// Summary description for NamespaceMatcher.
 	/// </summary>
-	public class NamespaceMatcher: IClassMatcher
+	public class NamespaceMatcher : IClassMatcher
 	{
 		private static readonly NamespaceMatcher _instance = new NamespaceMatcher();
 
@@ -41,9 +40,9 @@ namespace AspectSharp.Core.Matchers
 
 			if (typeNamespace.Equals(namespaceRoot))
 			{
-				foreach(TypeReference typeRef in aspect.TargetType.Excludes)
+				foreach (TypeReference typeRef in aspect.TargetType.Excludes)
 				{
-					if (typeRef.ResolvedType.Equals( targetType ))
+					if (typeRef.ResolvedType.Equals(targetType))
 					{
 						return false;
 					}

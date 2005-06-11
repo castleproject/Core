@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ namespace AspectSharp.Core.Matchers
 	using System.Text.RegularExpressions;
 	using System.Collections;
 	using System.Reflection;
-
 	using AspectSharp.Lang.AST;
 
 	/// <summary>
@@ -29,7 +28,7 @@ namespace AspectSharp.Core.Matchers
 	{
 		private PointCutDefinitionCollection _pointcuts;
 
-		public DefaultJoinPointMatcher( PointCutDefinitionCollection pointcuts )
+		public DefaultJoinPointMatcher(PointCutDefinitionCollection pointcuts)
 		{
 			_pointcuts = pointcuts;
 		}
@@ -40,7 +39,7 @@ namespace AspectSharp.Core.Matchers
 		{
 			ArrayList list = new ArrayList();
 
-			foreach(PointCutDefinition pointcut in _pointcuts)
+			foreach (PointCutDefinition pointcut in _pointcuts)
 			{
 				MethodSignature signature = pointcut.Method;
 
@@ -51,8 +50,8 @@ namespace AspectSharp.Core.Matchers
 
 				if (signature != AllMethodSignature.Instance)
 				{
-					if (!NameMatch(signature, method, pointcut.Flags) || 
-						!ReturnTypeMatch(signature, method) || 
+					if (!NameMatch(signature, method, pointcut.Flags) ||
+						!ReturnTypeMatch(signature, method) ||
 						!AccessMatch(signature, method) ||
 						!ArgumentsMatch(signature, method))
 					{
@@ -60,10 +59,10 @@ namespace AspectSharp.Core.Matchers
 					}
 				}
 
-				list.Add( pointcut );
+				list.Add(pointcut);
 			}
 
-			return (PointCutDefinition[]) list.ToArray( typeof(PointCutDefinition) );
+			return (PointCutDefinition[]) list.ToArray(typeof (PointCutDefinition));
 		}
 
 		#endregion
@@ -75,11 +74,11 @@ namespace AspectSharp.Core.Matchers
 
 			if (sign.IndexOf('*') != -1)
 			{
-				return Regex.IsMatch( name, sign );
+				return Regex.IsMatch(name, sign);
 			}
-			else if (( method.IsSpecialName && (((int)(flags & PointCutFlags.Property)) != 0)) || 
-				( name.StartsWith("get_") && (((int)(flags & PointCutFlags.PropertyRead)) != 0)) ||
-				( name.StartsWith("set_") && (((int)(flags & PointCutFlags.PropertyWrite)) != 0)))
+			else if ((method.IsSpecialName && (((int) (flags & PointCutFlags.Property)) != 0)) ||
+				(name.StartsWith("get_") && (((int) (flags & PointCutFlags.PropertyRead)) != 0)) ||
+				(name.StartsWith("set_") && (((int) (flags & PointCutFlags.PropertyWrite)) != 0)))
 			{
 				name = name.Substring(4);
 			}
@@ -117,7 +116,7 @@ namespace AspectSharp.Core.Matchers
 			String[] arguments = signature.Arguments;
 			ParameterInfo[] parameters = method.GetParameters();
 
-			for(int i=0; i < arguments.Length; i++ )
+			for (int i = 0; i < arguments.Length; i++)
 			{
 				String argName = arguments[i];
 
@@ -134,7 +133,7 @@ namespace AspectSharp.Core.Matchers
 					return false;
 				}
 
-				if (!TypeMatch( argName, parameters[i].ParameterType ))
+				if (!TypeMatch(argName, parameters[i].ParameterType))
 				{
 					return false;
 				}
@@ -150,46 +149,46 @@ namespace AspectSharp.Core.Matchers
 
 			if (argSignature.IndexOf('*') != -1)
 			{
-				return Regex.IsMatch( name, argSignature );
+				return Regex.IsMatch(name, argSignature);
 			}
 			else
 			{
-				return String.Compare( name, argSignature, true ) == 0;
+				return String.Compare(name, argSignature, true) == 0;
 			}
 		}
 
 		protected virtual String NormalizeTypeName(String type)
 		{
-			String fullTypeName = TypeAliasDictionary.Instance[ type ];
+			String fullTypeName = TypeAliasDictionary.Instance[type];
 			return fullTypeName != null ? fullTypeName : type;
 		}
 
 		protected virtual bool FlagsMatchMethodType(MethodInfo method, PointCutDefinition pointcut)
 		{
-			if ( !method.IsSpecialName && ((int)(pointcut.Flags & PointCutFlags.Method)) == 0 )
+			if (!method.IsSpecialName && ((int) (pointcut.Flags & PointCutFlags.Method)) == 0)
 			{
 				return false;
 			}
-	
+
 			if (method.IsSpecialName)
 			{
-				if ( pointcut.Flags == PointCutFlags.Method )
+				if (pointcut.Flags == PointCutFlags.Method)
 				{
 					return false;
 				}
-					
-				if ( ((int)(pointcut.Flags & PointCutFlags.Property)) == 0 )
+
+				if (((int) (pointcut.Flags & PointCutFlags.Property)) == 0)
 				{
 					bool isPropertyGet = method.Name.StartsWith("get");
 
-					if ( (!isPropertyGet && ((int)(pointcut.Flags & PointCutFlags.PropertyRead)) != 0) ||
-						(isPropertyGet && ((int)(pointcut.Flags & PointCutFlags.PropertyWrite) != 0) ))
+					if ((!isPropertyGet && ((int) (pointcut.Flags & PointCutFlags.PropertyRead)) != 0) ||
+						(isPropertyGet && ((int) (pointcut.Flags & PointCutFlags.PropertyWrite) != 0)))
 					{
 						return false;
 					}
 				}
 			}
-			
+
 			return true;
 		}
 	}

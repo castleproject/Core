@@ -15,7 +15,6 @@
 namespace AspectSharp.Core.Matchers
 {
 	using System;
-
 	using AspectSharp.Lang.AST;
 
 	/// <summary>
@@ -38,7 +37,7 @@ namespace AspectSharp.Core.Matchers
 		{
 			Type type = GetTypeToCompare(aspect);
 
-			if ( type.IsAssignableFrom( targetType ) )
+			if (type.IsAssignableFrom(targetType))
 			{
 				return true;
 			}

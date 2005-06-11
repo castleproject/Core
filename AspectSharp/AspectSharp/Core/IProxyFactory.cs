@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 namespace AspectSharp.Core
 {
 	using System;
-
 	using AspectSharp.Lang.AST;
 
 	/// <summary>
@@ -35,7 +34,7 @@ namespace AspectSharp.Core
 		/// <param name="target">The invocation default target</param>
 		/// <param name="aspect">Definitions</param>
 		/// <returns>The proxy instance</returns>
-		object CreateInterfaceProxy( Type inter, object target, AspectDefinition aspect );
+		object CreateInterfaceProxy(Type inter, object target, AspectDefinition aspect);
 
 		/// <summary>
 		/// Implementors must return a proxy (concrete class) that extends
@@ -44,6 +43,6 @@ namespace AspectSharp.Core
 		/// <param name="classType">The proxy super class</param>
 		/// <param name="aspect">Definitions</param>
 		/// <returns>The proxy instance</returns>
-		object CreateClassProxy( Type classType, AspectDefinition aspect );
+		object CreateClassProxy(Type classType, AspectDefinition aspect);
 	}
 }

@@ -21,7 +21,7 @@ namespace AspectSharp.Builder.SectionHandler
 	/// <summary>
 	/// Summary description for AspectSharpConfigurationHandler.
 	/// </summary>
-	public class AspectSharpConfigurationHandler : IConfigurationSectionHandler 
+	public class AspectSharpConfigurationHandler : IConfigurationSectionHandler
 	{
 		public object Create(object parent, object configContext, XmlNode section)
 		{

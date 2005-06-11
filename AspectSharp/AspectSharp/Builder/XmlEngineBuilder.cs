@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ namespace AspectSharp.Builder
 	using System;
 	using System.IO;
 	using System.Xml;
-
 	using AspectSharp.Lang;
 	using AspectSharp.Lang.AST;
 
@@ -35,14 +34,14 @@ namespace AspectSharp.Builder
 		{
 		}
 
-		public XmlEngineBuilder( String xmlContents )
+		public XmlEngineBuilder(String xmlContents)
 		{
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml( xmlContents );
+			doc.LoadXml(xmlContents);
 			_node = doc.DocumentElement;
 		}
 
-		public XmlEngineBuilder( XmlNode node )
+		public XmlEngineBuilder(XmlNode node)
 		{
 			_node = node;
 		}
@@ -65,7 +64,7 @@ namespace AspectSharp.Builder
 			if (contentNode.FirstChild.NodeType == XmlNodeType.Whitespace ||
 				contentNode.FirstChild.NodeType == XmlNodeType.Text)
 			{
-				base.Reader = new StringReader( contentNode.InnerText );
+				base.Reader = new StringReader(contentNode.InnerText);
 				return base.Build();
 			}
 			else if (contentNode.FirstChild.NodeType == XmlNodeType.CDATA)
@@ -73,7 +72,7 @@ namespace AspectSharp.Builder
 				// CData node containing language configuration
 				// Parse it 
 
-				base.Reader = new StringReader( contentNode.FirstChild.Value );
+				base.Reader = new StringReader(contentNode.FirstChild.Value);
 				return base.Build();
 			}
 
@@ -91,7 +90,7 @@ namespace AspectSharp.Builder
 		private void LoadAspects()
 		{
 			XmlNodeList aspects = _node.SelectNodes("aspect");
-			foreach(XmlNode node in aspects)
+			foreach (XmlNode node in aspects)
 			{
 				String name = GetRequiredAttribute(node, "name");
 				AspectDefinition aspect = new AspectDefinition(LexicalInfo.Empty, name);
@@ -102,18 +101,18 @@ namespace AspectSharp.Builder
 				aspect.TargetType.SingleType = CreateTypeReference(singleType);
 
 				XmlNodeList mixins = node.SelectNodes("mixin");
-				foreach(XmlNode inner in mixins)
+				foreach (XmlNode inner in mixins)
 				{
 					MixinDefinition def = new MixinDefinition(LexicalInfo.Empty);
 					def.TypeReference = CreateTypeReference(inner);
-					aspect.Mixins.Add( def );
+					aspect.Mixins.Add(def);
 				}
 
 				XmlNodeList pointcuts = node.SelectNodes("pointcut");
-				foreach(XmlNode inner in pointcuts)
+				foreach (XmlNode inner in pointcuts)
 				{
 					PointCutDefinition def = CreatePointCutDefinition(inner);
-					aspect.PointCuts.Add( def );
+					aspect.PointCuts.Add(def);
 				}
 			}
 		}
@@ -121,7 +120,7 @@ namespace AspectSharp.Builder
 		private PointCutDefinition CreatePointCutDefinition(XmlNode inner)
 		{
 			String flags = GetRequiredAttribute(inner, "symbol");
-			PointCutFlags pcflags = (PointCutFlags) Enum.Parse( typeof(PointCutFlags), flags );
+			PointCutFlags pcflags = (PointCutFlags) Enum.Parse(typeof (PointCutFlags), flags);
 			PointCutDefinition def = new PointCutDefinition(LexicalInfo.Empty, pcflags);
 
 			ParseSignature(inner, def);
@@ -133,7 +132,7 @@ namespace AspectSharp.Builder
 		private void LoadAdvices(XmlNode inner, PointCutDefinition def)
 		{
 			XmlNodeList advices = inner.SelectNodes("interceptor");
-			foreach(XmlNode advice in advices)
+			foreach (XmlNode advice in advices)
 			{
 				InterceptorDefinition inter = new InterceptorDefinition(LexicalInfo.Empty);
 				inter.TypeReference = CreateTypeReference(advice);
@@ -159,7 +158,7 @@ namespace AspectSharp.Builder
 		private void LoadInterceptors()
 		{
 			XmlNodeList interceptors = _node.SelectNodes("interceptors/interceptor");
-			foreach(XmlNode node in interceptors)
+			foreach (XmlNode node in interceptors)
 			{
 				String key = GetRequiredAttribute(node, "key");
 				InterceptorEntryDefinition inter = new InterceptorEntryDefinition(key, LexicalInfo.Empty);
@@ -172,7 +171,7 @@ namespace AspectSharp.Builder
 		private void LoadMixins()
 		{
 			XmlNodeList mixins = _node.SelectNodes("mixins/mixin");
-			foreach(XmlNode node in mixins)
+			foreach (XmlNode node in mixins)
 			{
 				String key = GetRequiredAttribute(node, "key");
 				MixinEntryDefinition mixin = new MixinEntryDefinition(key, LexicalInfo.Empty);
@@ -185,7 +184,7 @@ namespace AspectSharp.Builder
 		private void LoadImports()
 		{
 			XmlNodeList imports = _node.SelectNodes("import");
-			foreach(XmlNode node in imports)
+			foreach (XmlNode node in imports)
 			{
 				String ns = GetRequiredAttribute(node, "namespace");
 				ImportDirective import = new ImportDirective(LexicalInfo.Empty, ns);
@@ -199,15 +198,15 @@ namespace AspectSharp.Builder
 		{
 			String type = GetRequiredAttribute(node, "type");
 			String refTypeEnum = GetRequiredAttribute(node, "refTypeEnum");
-			TargetTypeEnum typeEnum = (TargetTypeEnum) Enum.Parse( typeof(TargetTypeEnum), refTypeEnum);
-			
+			TargetTypeEnum typeEnum = (TargetTypeEnum) Enum.Parse(typeof (TargetTypeEnum), refTypeEnum);
+
 			return new TypeReference(LexicalInfo.Empty, type, typeEnum);
 		}
 
 		private AssemblyReference CreateAssemblyReference(XmlNode node)
 		{
 			String assemblyName = GetAttribute(node, "assembly", null);
-			
+
 			if (assemblyName != null)
 			{
 				return new AssemblyReference(LexicalInfo.Empty, assemblyName);

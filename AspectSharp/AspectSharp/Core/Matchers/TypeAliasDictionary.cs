@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,26 +24,26 @@ namespace AspectSharp.Core.Matchers
 	{
 		private static readonly TypeAliasDictionary _instance = new TypeAliasDictionary();
 
-		private Hashtable _map = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
+		private Hashtable _map = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 
 		private TypeAliasDictionary()
 		{
-			_map[ "int" ] = typeof(int).FullName;
-			_map[ "string" ] = typeof(string).FullName;
-			_map[ "float" ] = typeof(float).FullName;
-			_map[ "double" ] = typeof(double).FullName;
-			_map[ "byte" ] = typeof(byte).FullName;
-			_map[ "long" ] = typeof(long).FullName;
-			_map[ "short" ] = typeof(Int16).FullName;
-			_map[ "int32" ] = typeof(Int32).FullName;
-			_map[ "int64" ] = typeof(Int64).FullName;
-			_map[ "single" ] = typeof(Single).FullName;
-			_map[ "single" ] = typeof(Single).FullName;
+			_map["int"] = typeof (int).FullName;
+			_map["string"] = typeof (string).FullName;
+			_map["float"] = typeof (float).FullName;
+			_map["double"] = typeof (double).FullName;
+			_map["byte"] = typeof (byte).FullName;
+			_map["long"] = typeof (long).FullName;
+			_map["short"] = typeof (Int16).FullName;
+			_map["int32"] = typeof (Int32).FullName;
+			_map["int64"] = typeof (Int64).FullName;
+			_map["single"] = typeof (Single).FullName;
+			_map["single"] = typeof (Single).FullName;
 		}
 
-		public String this[ String name ]
+		public String this[String name]
 		{
-			get { return _map[ name ] as String; }
+			get { return _map[name] as String; }
 		}
 
 		public static TypeAliasDictionary Instance

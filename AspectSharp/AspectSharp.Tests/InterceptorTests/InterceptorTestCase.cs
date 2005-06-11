@@ -32,7 +32,7 @@ namespace AspectSharp.Tests.InterceptorTests
 	public class InterceptorTestCase
 	{
 		[SetUp]
-		public void Clear()
+		public void Reset()
 		{
 			LogInvocationInterceptor.Clear();
 		}

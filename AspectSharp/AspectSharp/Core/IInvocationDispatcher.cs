@@ -15,7 +15,6 @@
 namespace AspectSharp.Core
 {
 	using System;
-
 	using Castle.DynamicProxy;
 
 	/// <summary>
