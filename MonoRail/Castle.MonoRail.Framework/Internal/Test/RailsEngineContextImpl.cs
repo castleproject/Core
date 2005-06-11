@@ -77,6 +77,11 @@ namespace Castle.MonoRail.Framework.Tests
 			get { return _url; }
 		}
 
+		public String UrlReferrer
+		{
+			get { return null; }
+		}
+
 		public object UnderlyingContext
 		{
 			get { return _context; }

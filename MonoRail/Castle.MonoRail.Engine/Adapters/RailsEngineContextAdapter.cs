@@ -20,6 +20,7 @@ namespace Castle.MonoRail.Engine.Adapters
 	using System.Web;
 	using System.Web.Caching;
 	using System.Security.Principal;
+
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -59,6 +60,23 @@ namespace Castle.MonoRail.Engine.Adapters
 		public String Url
 		{
 			get { return _url; }
+		}
+
+		public String UrlReferrer
+		{
+			get
+			{
+				Uri referrer = _context.Request.UrlReferrer;
+
+				if (referrer != null)
+				{
+					return referrer.ToString();
+				}
+				else
+				{
+					return null;
+				}
+			}
 		}
 
 		public object UnderlyingContext

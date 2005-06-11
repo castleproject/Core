@@ -32,9 +32,14 @@ namespace Castle.MonoRail.Framework
 		String RequestType { get; }
 
 		/// <summary>
-		/// Gets the Url.
+		/// Gets the URL.
 		/// </summary>
 		String Url { get; }
+
+		/// <summary>
+		/// Gets the referring URL.
+		/// </summary>
+		String UrlReferrer { get; }
 
 		/// <summary>
 		/// Gets the underlying context of the API being used.
