@@ -55,6 +55,32 @@ namespace AspectSharp.Tests
 		}
 
 		[Test]
+		public void BuildUsingLanguageWithDifferingKeys()
+		{
+			String contents = "import AspectSharp.Tests.Classes in AspectSharp.Tests " + 
+				" interceptors [" + 
+				" \"interceptor\" : DummyInterceptor " + 
+				" ]" + 
+				" mixins [" + 
+				" \"mixin\" : DummyMixin " + 
+				" ]" + 
+				" " + 
+				" aspect McBrother for DummyCustomer " + 
+				"   include \"mixin\"" + 
+				"   " + 
+				"   pointcut method(*)" + 
+				"     advice(\"interceptor\")" + 
+				"   end" + 
+				"   " + 
+				" end ";
+
+			AspectEngineBuilder builder = new AspectLanguageEngineBuilder(contents);
+
+			AspectEngine engine = builder.Build();
+			AssertEngineConfiguration(engine);
+		}
+
+		[Test]
 		public void BuildUsingXmlWithLanguageInCData()
 		{
 			String xmlContents = "<configuration>" + 
@@ -76,6 +102,32 @@ namespace AspectSharp.Tests
 				"   " + 
 				" end " +
 				" ]]>" +
+				"</configuration>";
+			XmlEngineBuilder builder = new XmlEngineBuilder(xmlContents);
+			AspectEngine engine = builder.Build();
+			AssertEngineConfiguration(engine);
+		}
+
+		[Test]
+		public void BuildUsingXmlWithLanguageInConfigurationNode()
+		{
+			String xmlContents = "<configuration>" + 
+				" import AspectSharp.Tests.Classes in AspectSharp.Tests " + 
+				" interceptors [" + 
+				" \"key\" : DummyInterceptor " + 
+				" ]" + 
+				" mixins [" + 
+				" \"key\" : DummyMixin " + 
+				" ]" + 
+				" " + 
+				" aspect McBrother for DummyCustomer " + 
+				"   include \"key\"" + 
+				"   " + 
+				"   pointcut method(*)" + 
+				"     advice(\"key\")" + 
+				"   end" + 
+				"   " + 
+				" end " +
 				"</configuration>";
 			XmlEngineBuilder builder = new XmlEngineBuilder(xmlContents);
 			AspectEngine engine = builder.Build();

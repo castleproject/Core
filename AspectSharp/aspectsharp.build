@@ -8,6 +8,7 @@
 	<property name="doc.dir" value="${base.dir}/doc" />
 	<property name="src.dir" value="${base.dir}" />
 	<property name="pack.dir" value="${base.dir}/pack" />
+	<property name="dynamicproxy" value="${base.dir}/../Tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
 
 	<property name="core.src.dir" value="${src.dir}/AspectSharp" />
 	<property name="core.test.src.dir" value="${src.dir}/AspectSharp.Tests" />
@@ -60,6 +61,7 @@
 
 	<target name="init" depends="clean">
 		<mkdir dir="bin" />
+	    <copy file="${dynamicproxy}" todir="${bin.dir}" />
 		<!-- <copy file="${antlr.runtime.dll}" todir="build" /> -->
 	</target>
 

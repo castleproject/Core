@@ -62,7 +62,8 @@ namespace AspectSharp.Builder
 
 			XmlNode contentNode = _node;
 
-			if (contentNode.FirstChild.NodeType == XmlNodeType.Whitespace)
+			if (contentNode.FirstChild.NodeType == XmlNodeType.Whitespace ||
+				contentNode.FirstChild.NodeType == XmlNodeType.Text)
 			{
 				base.Reader = new StringReader( contentNode.InnerText );
 				return base.Build();

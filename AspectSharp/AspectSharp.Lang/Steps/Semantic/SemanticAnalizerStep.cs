@@ -97,7 +97,7 @@ namespace AspectSharp.Lang.Steps.Semantic
 			{
 				if (advice.TypeReference.TargetType == TargetTypeEnum.Link)
 				{
-					AssertKeyExists( _globalMixins, advice, advice.TypeReference.LinkRef, "The referenced mixin is not declared in the global mixins section" );
+					AssertKeyExists( _globalInterceptors, advice, advice.TypeReference.LinkRef, "The referenced interceptor is not declared in the global interceptor section" );
 				}
 
 				AssertUnique( advicesDefined, advice, advice.TypeReference.ToString(), "Duplicated advices found" );
