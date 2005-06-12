@@ -42,21 +42,21 @@ namespace Castle.Rook.Compiler.TypeGraph
 			get { return definedNamespace; }
 		}
 
-		public InternalType DefineType(TypeDefinitionStatement typeDefinition)
-		{
-			if (definedNamespace == null && parent != null)
-			{
-				return parent.DefineType(typeDefinition);
-			}
-			else if (definedNamespace != null)
-			{
-				return definedNamespace.AddUserType(typeDefinition);
-			}
-			else
-			{
-				return AddUserType(typeDefinition);
-			}
-		}
+//		public InternalType DefineType(TypeDefinitionStatement typeDefinition)
+//		{
+//			if (definedNamespace == null && parent != null)
+//			{
+//				return parent.DefineType(typeDefinition);
+//			}
+//			else if (definedNamespace != null)
+//			{
+//				return definedNamespace.AddUserType(typeDefinition);
+//			}
+//			else
+//			{
+//				return AddUserType(typeDefinition);
+//			}
+//		}
 
 		public void DefineConstructorMethod(MethodDefinitionStatement methodDefinition)
 		{
@@ -143,7 +143,7 @@ namespace Castle.Rook.Compiler.TypeGraph
 				namespaces.Add( sub.Name, sub );
 			}
 
-			foreach(AbstractType type in ng.Types.Values)
+			foreach(TypeDefinition type in ng.Types.Values)
 			{
 				if (types.Contains(type.Name))
 				{
@@ -155,9 +155,9 @@ namespace Castle.Rook.Compiler.TypeGraph
 			}
 		}
 
-		public override AbstractType GetType(String path)
+		public override TypeDefinition GetType(String path)
 		{
-			AbstractType type = base.GetType(path);
+			TypeDefinition type = base.GetType(path);
 
 			if (type == null && parent != null)
 			{
@@ -184,7 +184,7 @@ namespace Castle.Rook.Compiler.TypeGraph
 			return (ambiguities.Contains(path));
 		}
 
-		private void RegisterAmbiguity(AbstractType type)
+		private void RegisterAmbiguity(TypeDefinition type)
 		{
 			ambiguities.Add(type.Name, type);
 		}

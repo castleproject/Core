@@ -22,9 +22,9 @@ namespace Castle.Rook.Compiler.AST
 	public class RequireStatement : AbstractStatement		
 	{
 		private readonly Identifier qualifiedIdentifier;
-		private readonly INameScope definedScope;
+		private readonly ISymbolTable definedScope;
 
-		public RequireStatement(Identifier qualifiedIdentifier, INameScope namescope)
+		public RequireStatement(Identifier qualifiedIdentifier, ISymbolTable namescope)
 		{
 			this.qualifiedIdentifier = qualifiedIdentifier;
 			this.definedScope = namescope;
@@ -35,7 +35,7 @@ namespace Castle.Rook.Compiler.AST
 			get { return qualifiedIdentifier; }
 		}
 
-		public INameScope DefinedScope
+		public ISymbolTable DefinedScope
 		{
 			get { return definedScope; }
 		}

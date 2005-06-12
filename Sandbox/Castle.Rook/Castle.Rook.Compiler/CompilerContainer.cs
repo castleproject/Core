@@ -33,7 +33,7 @@ namespace Castle.Rook.Compiler
 		public virtual void AddServices()
 		{
 			this.AddComponent( "decl.pass", typeof(DeclarationBinding) );
-			this.AddComponent( "naming.pass", typeof(NameScopeBinding) );
+//			this.AddComponent( "naming.pass", typeof(SymbolTableBinding) );
 			this.AddComponent( "ident", typeof(IIdentifierNameService), typeof(IdentifierNameService) );
 			this.AddComponent( "parser", typeof(IParser), typeof(RookParser) );
 			this.AddComponent( "error", typeof(IErrorReport), typeof(ErrorReport) );

@@ -1,4 +1,3 @@
-using Castle.Rook.Compiler.AST;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,8 @@ namespace Castle.Rook.Compiler.TypeGraph
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+
+	using Castle.Rook.Compiler.AST;
 
 
 	public class NamespaceGraph
@@ -48,14 +49,14 @@ namespace Castle.Rook.Compiler.TypeGraph
 			return graph;
 		}
 
-		public InternalType AddUserType(TypeDefinitionStatement typeDef)
+		public TransientType AddTransientType(TypeDefinitionStatement typeDef)
 		{
 			if (types.Contains(typeDef.Name))
 			{
 				throw new ArgumentNullException("Type " + typeDef.Name + " already exists.");
 			}
 
-			InternalType type = new InternalType(typeDef);
+			TransientType type = new TransientType(typeDef);
 
 			types[typeDef.Name] = type;
 
@@ -78,13 +79,13 @@ namespace Castle.Rook.Compiler.TypeGraph
 			return et;
 		}
 
-		public virtual AbstractType GetType(String path)
+		public virtual TypeDefinition GetType(String path)
 		{
 			int index = path.LastIndexOf("::");
 			
 			if (index == -1)
 			{
-				return types[path] as AbstractType;
+				return types[path] as TypeDefinition;
 			}
 
 			String ns = path.Substring(0, index);

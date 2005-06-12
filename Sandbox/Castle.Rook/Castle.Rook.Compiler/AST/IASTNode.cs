@@ -43,6 +43,6 @@ namespace Castle.Rook.Compiler.AST
 
 		NodeType NodeType { get; set; }
 
-		INameScope NameScope { get; }
+		ISymbolTable SymbolTable { get; }
 	}
 }

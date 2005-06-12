@@ -19,61 +19,39 @@ namespace Castle.Rook.Compiler.AST
 
 	using Castle.Rook.Compiler.TypeGraph;
 
-	public enum NameScopeType
-	{
-		Global,
-		SourceUnit,
-		Namespace,
-		Type,
-		Method,
-		Block,
-		Compound
-	}
 
-	public class NameScope : INameScope
+	public class SymbolTable : ISymbolTable
 	{
-		protected NameScopeType nstype;
-		protected INameScope parent;
+		protected ScopeType nstype;
+		protected ISymbolTable parent;
 		protected TypeGraphSpace graphSpace;
-		protected NamespaceGraph scopedNamespace;
-		protected AbstractType scopedType;
+		protected TransientType curType;
+		protected NamespaceGraph curNamespace;
 		protected HybridDictionary scope = new HybridDictionary();
 
-		protected NameScope(NameScopeType nstype)
+		protected SymbolTable(ScopeType nstype)
 		{
 			this.nstype = nstype;
 		}
 
-		public NameScope(NameScopeType nstype, INameScope parent) : this(nstype, parent.CurrentTypeGraph)
+		public SymbolTable(ScopeType nstype, ISymbolTable parent) : this(nstype, parent.TypeGraphView)
 		{
 			this.parent = parent;
 		}
 
-		public NameScope(NameScopeType nstype, TypeGraphSpace parentGraphSpace) : this(nstype)
+		public SymbolTable(ScopeType nstype, TypeGraphSpace parentGraphSpace) : this(nstype)
 		{
 			this.graphSpace = new TypeGraphSpace(parentGraphSpace);
 		}
 
-		public NameScopeType NameScopeType
+		public ScopeType ScopeType
 		{
 			get { return nstype; }
 		}
 
-		public TypeGraphSpace CurrentTypeGraph
+		public TypeGraphSpace TypeGraphView
 		{
 			get { return graphSpace; }
-		}
-
-		public NamespaceGraph ScopeGraphNamespace
-		{
-			get { return scopedNamespace; }
-			set { scopedNamespace = value; }
-		}
-
-		public AbstractType ScopeType
-		{
-			get { return scopedType; }
-			set { scopedType = value; }
 		}
 
 		public bool IsDefined(String name)
@@ -83,7 +61,7 @@ namespace Castle.Rook.Compiler.AST
 
 		public bool IsDefinedInParent(String name)
 		{
-			INameScope scopeRef = parent;
+			ISymbolTable scopeRef = parent;
 			
 			while(scopeRef != null)
 			{
@@ -95,9 +73,21 @@ namespace Castle.Rook.Compiler.AST
 			return false;
 		}
 
-		public INameScope Parent
+		public ISymbolTable Parent
 		{
 			get { return parent; }
+		}
+
+		public NamespaceGraph CurrentNamespace
+		{
+			get { return curNamespace != null ? curNamespace : (parent != null ? parent.CurrentNamespace : null) ; }
+			set { curNamespace = value; }
+		}
+
+		public TransientType CurrentTypeDefinition
+		{
+			get { return curType != null ? curType : (parent != null ? parent.CurrentTypeDefinition : null) ; }
+			set { curType = value; }
 		}
 
 		public void AddVariable(Identifier ident)

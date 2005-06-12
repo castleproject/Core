@@ -12,20 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.TypeGraph
 {
 	using System;
 
-	using Castle.Rook.Compiler.TypeGraph;
-
-
-	public class RootNameScope : NameScope
+	
+	/// <summary>
+	/// Abstract external types and internal user types being compiled
+	/// behind a single access interface
+	/// </summary>
+	public abstract class TypeDefinition
 	{
-		public RootNameScope() : base(NameScopeType.Global)
-		{
-			graphSpace = new TypeGraphSpace();
+		public abstract String Name { get; }
 
-			graphSpace.AddAssemblyReference( "mscorlib" );
-		}
+		public abstract String FullName { get; }
+
+		public abstract bool HasInstanceMember(String name);
+
+		public abstract bool HasStaticMember(String name);
 	}
 }

@@ -204,11 +204,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AST\INameScope.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AST\IStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -245,11 +240,6 @@
                 />
                 <File
                     RelPath = "AST\MultipleVariableDeclarationStatement.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\NameScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -305,11 +295,6 @@
                 />
                 <File
                     RelPath = "AST\ReturnStatement.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\RootNameScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -370,6 +355,21 @@
                 />
                 <File
                     RelPath = "AST\Nodes\TypeDefinitionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\SymTab\ISymbolTable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\SymTab\RootSymbolTable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\SymTab\SymbolTable.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -953,17 +953,27 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Services\Passes\NameScopeBinding.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "TypeGraph\ExternalType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TypeGraph\ListValueDictionary.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "TypeGraph\NamespaceGraph.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeGraph\TransientType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeGraph\TypeDefinition.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

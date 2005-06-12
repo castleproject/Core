@@ -102,9 +102,9 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 			if (VisitEnter(typeDef))
 			{
-				VisitNodes(typeDef.Fields);
-				VisitNodes(typeDef.Constructors);
-				VisitNodes(typeDef.Methods);
+//				VisitNodes(typeDef.Fields);
+//				VisitNodes(typeDef.Constructors);
+//				VisitNodes(typeDef.Methods);
 				VisitNodes(typeDef.Statements);
 
 				return VisitLeave(typeDef);

@@ -15,7 +15,6 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-
 	using Castle.Rook.Compiler.Visitors;
 
 	public enum AccessLevel
@@ -29,28 +28,41 @@ namespace Castle.Rook.Compiler.AST
 	public class TypeDefinitionStatement : AbstractStatement, IStatementContainer
 	{
 		private String name;
+		private String namespaceName;
 		private AccessLevel accessLevel;
-		private StatementCollection methods;
-		private StatementCollection fields;
-		private StatementCollection constructors;
+//		private StatementCollection methods;
+//		private StatementCollection fields;
+//		private StatementCollection constructors;
 		private StatementCollection statements;
 
-		public TypeDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String name) : base(NodeType.TypeDefinition)
+		public TypeDefinitionStatement(ISymbolTable parentScope, AccessLevel accessLevel, String name) : base(NodeType.TypeDefinition)
 		{
 			this.name = name;
 			this.accessLevel = accessLevel;
-			
-			nameScope = new NameScope(NameScopeType.Type, parentScope);
 
+			nameScope = new SymbolTable(ScopeType.Type, parentScope);
+			
 			statements = new StatementCollection(this);
-			methods = new StatementCollection(this);
-			fields = new StatementCollection(this);
-			constructors = new StatementCollection(this);
+
+//			constructors = new StatementCollection(this);
+//			methods = new StatementCollection(this);
+//			fields = new StatementCollection(this);
 		}
 
 		public String Name
 		{
 			get { return name; }
+		}
+
+		public String FullName
+		{
+			get { return String.Format("{0}.{1}", namespaceName, name); }
+		}
+
+		public String NamespaceName
+		{
+			get { return namespaceName; }
+			set { namespaceName = value; }
 		}
 
 		public AccessLevel AccessLevel
@@ -63,20 +75,20 @@ namespace Castle.Rook.Compiler.AST
 			get { return statements; }
 		}
 
-		public StatementCollection Methods
-		{
-			get { return methods; }
-		}
-
-		public StatementCollection Fields
-		{
-			get { return fields; }
-		}
-
-		public StatementCollection Constructors
-		{
-			get { return constructors; }
-		}
+//		public StatementCollection Methods
+//		{
+//			get { return methods; }
+//		}
+//
+//		public StatementCollection Fields
+//		{
+//			get { return fields; }
+//		}
+//
+//		public StatementCollection Constructors
+//		{
+//			get { return constructors; }
+//		}
 
 		public override bool Accept(IASTVisitor visitor)
 		{

@@ -16,28 +16,16 @@ namespace Castle.Rook.Compiler.AST
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
+	using Castle.Rook.Compiler.TypeGraph;
 
 
-	public class CompilationUnit : AbstractCodeNode
+	public class RootSymbolTable : SymbolTable
 	{
-		private SourceUnitCollection sourceUnits;
-
-		public CompilationUnit() : base(NodeType.CompilationUnit)
+		public RootSymbolTable() : base(ScopeType.Global)
 		{
-			nameScope = new RootSymbolTable();
-			sourceUnits = new SourceUnitCollection(this);
-		}
+			graphSpace = new TypeGraphSpace();
 
-		public SourceUnitCollection SourceUnits
-		{
-			get { return sourceUnits; }
-		}
-
-		public override bool Accept(IASTVisitor visitor)
-		{
-			visitor.VisitCompilationUnit(this);
-			return true;
+			graphSpace.AddAssemblyReference( "mscorlib" );
 		}
 	}
 }

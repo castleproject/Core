@@ -1,3 +1,4 @@
+using Castle.Rook.Compiler.TypeGraph;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +26,11 @@ namespace Castle.Rook.Compiler.AST
 		private StatementCollection statements;
 		private NamespaceCollection namespaces;
 
-		public SourceUnit(CompilationUnit unit, INameScope parentScope) : base(NodeType.SourceUnit)
+		public SourceUnit(CompilationUnit unit, ISymbolTable parentScope) : base(NodeType.SourceUnit)
 		{
 			this.unit = unit;
 
-			nameScope = new NameScope(NameScopeType.SourceUnit, parentScope);
+			nameScope = new SymbolTable(ScopeType.SourceUnit, parentScope);
 
 			statements = new StatementCollection(this);
 			namespaces = new NamespaceCollection(this);

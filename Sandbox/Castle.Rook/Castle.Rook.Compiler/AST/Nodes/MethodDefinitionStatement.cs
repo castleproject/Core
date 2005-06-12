@@ -33,10 +33,10 @@ namespace Castle.Rook.Compiler.AST
 		private readonly IList args = new ArrayList();
 		private readonly StatementCollection statements;
 
-		public MethodDefinitionStatement(INameScope parentScope, AccessLevel accessLevel, String fullname) : base(NodeType.MethodDefinition)
+		public MethodDefinitionStatement(ISymbolTable parentScope, AccessLevel accessLevel, String fullname) : base(NodeType.MethodDefinition)
 		{
 			statements = new StatementCollection(this);
-			nameScope = new NameScope(NameScopeType.Method, parentScope);
+			nameScope = new SymbolTable(ScopeType.Method, parentScope);
 			this.fullname = fullname;
 			this.accessLevel = accessLevel;
 

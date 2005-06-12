@@ -17,58 +17,12 @@ namespace Castle.Rook.Compiler.TypeGraph
 	using System;
 	using System.Reflection;
 
-	using Castle.Rook.Compiler.AST;
 
-	public class AbstractType
-	{
-		private readonly string name;
-
-		public AbstractType(String name)
-		{
-			this.name = name;
-		}
-
-		public string Name
-		{
-			get { return name; }
-		}
-	}
-
-	public class InternalType : AbstractType
-	{
-		private readonly TypeDefinitionStatement typeDef;
-
-		public InternalType(TypeDefinitionStatement typeDef) : base(typeDef.Name)
-		{
-			this.typeDef = typeDef;
-		}
-
-		public TypeDefinitionStatement TypeDef
-		{
-			get { return typeDef; }
-		}
-
-		public void AddConstructor(MethodDefinitionStatement methodDef)
-		{
-			
-		}
-
-		public void AddStaticMethod(MethodDefinitionStatement methodDef)
-		{
-			
-		}
-
-		public void AddMethod(MethodDefinitionStatement methodDef)
-		{
-			
-		}
-	}
-
-	public class ExternalType : AbstractType
+	public class ExternalType : TypeDefinition
 	{
 		private TypeDelegator delegator;
 
-		public ExternalType(Type type) : base(type.Name)
+		public ExternalType(Type type)
 		{
 			delegator = new TypeDelegator(type);
 		}
@@ -76,6 +30,28 @@ namespace Castle.Rook.Compiler.TypeGraph
 		public TypeDelegator Type
 		{
 			get { return delegator; }
+		}
+
+		public override String Name
+		{
+			get { return delegator.Name; }
+		}
+
+		public override String FullName
+		{
+			get { return delegator.FullName; }
+		}
+
+		public override bool HasInstanceMember(String name)
+		{
+			MemberInfo[] members = delegator.GetMember(name, BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
+			return members.Length != 0;
+		}
+
+		public override bool HasStaticMember(String name)
+		{
+			MemberInfo[] members = delegator.GetMember(name, BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic);
+			return members.Length != 0;
 		}
 	}
 }

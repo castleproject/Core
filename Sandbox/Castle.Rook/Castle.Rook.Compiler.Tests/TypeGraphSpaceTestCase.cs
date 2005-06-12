@@ -1,4 +1,3 @@
-using System.Reflection;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,7 @@ using System.Reflection;
 namespace Castle.Rook.Compiler.Tests
 {
 	using System;
-	using System.Collections.Specialized;
+	using System.Reflection;
 
 	using NUnit.Framework;
 
@@ -57,7 +56,7 @@ namespace Castle.Rook.Compiler.Tests
 			sub.AddRequire( "System" );
 			sub.AddRequire( "System::Diagnostics" );
 
-			AbstractType type = sub.GetType( "Console" );
+			TypeDefinition type = sub.GetType( "Console" );
 			Assert.IsNotNull( type );
 			Assert.AreEqual( "Console", type.Name );
 
@@ -88,7 +87,7 @@ namespace Castle.Rook.Compiler.Tests
 
 			Assert.IsFalse( sub.HasAmbiguity("System::Console") ); 
 
-			AbstractType type = sub.GetType( "System::Console" );
+			TypeDefinition type = sub.GetType( "System::Console" );
 			Assert.IsNotNull( type );
 			Assert.AreEqual( "Console", type.Name );
 

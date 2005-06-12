@@ -24,7 +24,7 @@ namespace Castle.Rook.Compiler.AST
 		private NodeType nodeType;
 		private IASTNode parent;
 		private LexicalPosition position = new LexicalPosition();
-		protected INameScope nameScope;
+		protected ISymbolTable nameScope;
 
 		public AbstractCodeNode(NodeType nodeType)
 		{
@@ -48,7 +48,7 @@ namespace Castle.Rook.Compiler.AST
 			set { nodeType = value; }
 		}
 
-		public INameScope NameScope
+		public ISymbolTable SymbolTable
 		{
 			get
 			{
@@ -56,7 +56,7 @@ namespace Castle.Rook.Compiler.AST
 				{
 					if (parent != null)
 					{
-						return parent.NameScope;
+						return parent.SymbolTable;
 					}
 				}
 				return nameScope;

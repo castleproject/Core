@@ -56,19 +56,19 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			AssertNoErrorOrWarnings();
 
-			TypeGraphSpace graph = unit.NameScope.Parent.CurrentTypeGraph;
+			TypeGraphSpace graph = unit.SymbolTable.Parent.TypeGraphView;
 
-			AbstractType boatType = graph.GetType("Family::Guy::Boat");
+			TypeDefinition boatType = graph.GetType("Family::Guy::Boat");
 			Assert.IsNotNull(boatType);
-			Assert.IsNotNull(boatType as InternalType);
-			Assert.IsNotNull((boatType as InternalType).TypeDef);
-			Assert.AreEqual("Boat", (boatType as InternalType).TypeDef.Name);
+			Assert.IsNotNull(boatType as TransientType);
+			Assert.IsNotNull((boatType as TransientType).TypeDef);
+			Assert.AreEqual("Boat", (boatType as TransientType).TypeDef.Name);
 
-			AbstractType shipType = graph.GetType("Family::Guy::Ship");
+			TypeDefinition shipType = graph.GetType("Family::Guy::Ship");
 			Assert.IsNotNull(shipType);
-			Assert.IsNotNull(shipType as InternalType);
-			Assert.IsNotNull((shipType as InternalType).TypeDef);
-			Assert.AreEqual("Ship", (shipType as InternalType).TypeDef.Name);
+			Assert.IsNotNull(shipType as TransientType);
+			Assert.IsNotNull((shipType as TransientType).TypeDef);
+			Assert.AreEqual("Ship", (shipType as TransientType).TypeDef.Name);
 		}
 
 		[Test]
@@ -98,19 +98,19 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			AssertNoErrorOrWarnings();
 
-			TypeGraphSpace graph = unit.NameScope.Parent.CurrentTypeGraph;
+			TypeGraphSpace graph = unit.SymbolTable.Parent.TypeGraphView;
 
-			AbstractType boatType = graph.GetType("Boat");
+			TypeDefinition boatType = graph.GetType("Castle::Rook::Code::Boat");
 			Assert.IsNotNull(boatType);
-			Assert.IsNotNull(boatType as InternalType);
-			Assert.IsNotNull((boatType as InternalType).TypeDef);
-			Assert.AreEqual("Boat", (boatType as InternalType).TypeDef.Name);
+			Assert.IsNotNull(boatType as TransientType);
+			Assert.IsNotNull((boatType as TransientType).TypeDef);
+			Assert.AreEqual("Boat", (boatType as TransientType).TypeDef.Name);
 
-			AbstractType shipType = graph.GetType("Ship");
+			TypeDefinition shipType = graph.GetType("Castle::Rook::Code::Ship");
 			Assert.IsNotNull(shipType);
-			Assert.IsNotNull(shipType as InternalType);
-			Assert.IsNotNull((shipType as InternalType).TypeDef);
-			Assert.AreEqual("Ship", (shipType as InternalType).TypeDef.Name);
+			Assert.IsNotNull(shipType as TransientType);
+			Assert.IsNotNull((shipType as TransientType).TypeDef);
+			Assert.AreEqual("Ship", (shipType as TransientType).TypeDef.Name);
 		}
 
 		[Test]
@@ -161,19 +161,19 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			AssertNoErrorOrWarnings();
 
-			TypeGraphSpace graph = unit.NameScope.Parent.CurrentTypeGraph;
+			TypeGraphSpace graph = unit.SymbolTable.Parent.TypeGraphView;
 
-			AbstractType boatType = graph.GetType("Family::Guy::Boat");
+			TypeDefinition boatType = graph.GetType("Family::Guy::Boat");
 			Assert.IsNotNull(boatType);
-			Assert.IsNotNull(boatType as InternalType);
-			Assert.IsNotNull((boatType as InternalType).TypeDef);
-			Assert.AreEqual("Boat", (boatType as InternalType).TypeDef.Name);
+			Assert.IsNotNull(boatType as TransientType);
+			Assert.IsNotNull((boatType as TransientType).TypeDef);
+			Assert.AreEqual("Boat", (boatType as TransientType).TypeDef.Name);
 
-			AbstractType shipType = graph.GetType("Family::Guy::Ship");
+			TypeDefinition shipType = graph.GetType("Family::Guy::Ship");
 			Assert.IsNotNull(shipType);
-			Assert.IsNotNull(shipType as InternalType);
-			Assert.IsNotNull((shipType as InternalType).TypeDef);
-			Assert.AreEqual("Ship", (shipType as InternalType).TypeDef.Name);
+			Assert.IsNotNull(shipType as TransientType);
+			Assert.IsNotNull((shipType as TransientType).TypeDef);
+			Assert.AreEqual("Ship", (shipType as TransientType).TypeDef.Name);
 		}
 	}
 }

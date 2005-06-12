@@ -24,9 +24,9 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private StatementCollection statements;
 
-		public CompoundExpression(INameScope parentScope) : base(NodeType.CompoundExpression)
+		public CompoundExpression(ISymbolTable parentScope) : base(NodeType.CompoundExpression)
 		{
-			nameScope = new NameScope(NameScopeType.Compound, parentScope);
+			nameScope = new SymbolTable(ScopeType.Compound, parentScope);
 
 			statements = new StatementCollection(this);
 		}

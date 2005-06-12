@@ -24,9 +24,9 @@ namespace Castle.Rook.Compiler.AST
 		private String name;
 		private StatementCollection typeDeclarations;
 
-		public NamespaceDeclaration(INameScope parentScope) : base(NodeType.NamespaceDefinition)
+		public NamespaceDeclaration(ISymbolTable parentScope) : base(NodeType.NamespaceDefinition)
 		{
-			nameScope = new NameScope(NameScopeType.Namespace, parentScope);
+			nameScope = new SymbolTable(ScopeType.Namespace, parentScope);
 
 			typeDeclarations = new StatementCollection(this);
 		}

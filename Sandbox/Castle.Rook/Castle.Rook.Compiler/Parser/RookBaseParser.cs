@@ -192,7 +192,7 @@ namespace Castle.Rook.Compiler.Parser
 	
 	private void PushScope(IASTNode node)
 	{
-		INameScope scope = node.NameScope;
+		ISymbolTable scope = node.SymbolTable;
 		
 		if (scope == null) throw new ArgumentNullException("null scope?");
 		
@@ -204,9 +204,9 @@ namespace Castle.Rook.Compiler.Parser
 		scopes.Pop();
 	}
 	
-	private INameScope GetCurrentScope()
+	private ISymbolTable GetCurrentScope()
 	{
-		return scopes.Peek() as INameScope;
+		return scopes.Peek() as ISymbolTable;
 	}
 		
 		protected void initialize()
@@ -288,7 +288,7 @@ namespace Castle.Rook.Compiler.Parser
 {
 		SourceUnit unit;
 		
-		unit = new SourceUnit(cunit, cunit.NameScope); PushScope(unit);
+		unit = new SourceUnit(cunit, cunit.SymbolTable); PushScope(unit);
 		
 		nothing();
 		{

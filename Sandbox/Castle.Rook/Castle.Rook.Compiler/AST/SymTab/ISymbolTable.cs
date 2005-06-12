@@ -18,18 +18,24 @@ namespace Castle.Rook.Compiler.AST
 
 	using Castle.Rook.Compiler.TypeGraph;
 
-
-	public interface INameScope
+	public enum ScopeType
 	{
-		INameScope Parent { get; }
+		Global,
+		SourceUnit,
+		Namespace,
+		Type,
+		Method,
+		Block,
+		Compound
+	}
 
-		NameScopeType NameScopeType { get; }
+	public interface ISymbolTable
+	{
+		TypeGraphSpace TypeGraphView { get; }
 
-		TypeGraphSpace CurrentTypeGraph { get; }
+		ISymbolTable Parent { get; }
 
-		NamespaceGraph ScopeGraphNamespace { get; set; }
-
-		AbstractType ScopeType { get; set; }
+		ScopeType ScopeType { get; }
 
 		bool IsDefined(String name);
 
@@ -37,16 +43,8 @@ namespace Castle.Rook.Compiler.AST
 
 		void AddVariable(Identifier ident);
 
-//		bool HasMethod(String name);
-//		
-//		void AddMethodDefintion(MethodDefinitionStatement def);
-//		
-//		bool HasNamespace(String name);
-//		
-//		void AddNamespace(NamespaceDeclaration ns);
-//		
-//		bool HasTypeDefinition(String name);
-//		
-//		void AddTypeDefinition(TypeDefinitionStatement def);
+		NamespaceGraph CurrentNamespace { get; set; }
+
+		TransientType CurrentTypeDefinition { get; set; }
 	}
 }

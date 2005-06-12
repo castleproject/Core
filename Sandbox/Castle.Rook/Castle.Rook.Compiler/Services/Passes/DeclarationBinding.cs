@@ -18,14 +18,16 @@ namespace Castle.Rook.Compiler.Services.Passes
 	using System.Collections;
 
 	using Castle.Rook.Compiler.AST;
-	using Castle.Rook.Compiler.Visitors;
 	using Castle.Rook.Compiler.AST.Util;
+	using Castle.Rook.Compiler.TypeGraph;
+	using Castle.Rook.Compiler.Visitors;
 
 
 	public class DeclarationBinding : BreadthFirstVisitor, ICompilerPass
 	{
 		private readonly IErrorReport errorReport;
 		private readonly IIdentifierNameService identifierService;
+		private int globalClassesCount = 1;
 
 		public DeclarationBinding(IErrorReport errorReport, IIdentifierNameService identifierService)
 		{
@@ -36,12 +38,25 @@ namespace Castle.Rook.Compiler.Services.Passes
 		public void ExecutePass(CompilationUnit unit)
 		{
 			VisitNode(unit);
+
+			if (errorReport.HasErrors) return;
+
+			// Now we register the single var declaration as type members (fields)
+			// and ensure they are on the symbol table - sanity check
+			FieldsVisitor visitor = new FieldsVisitor();
+			visitor.VisitCompilationUnit(unit);
 		}
 
 		public override bool VisitSourceUnit(SourceUnit unit)
 		{
-			unit.NameScope.ScopeGraphNamespace = unit.NameScope.CurrentTypeGraph.DefineNamespace("Castle.Rook.Code");
+			NamespaceGraph nsGraph = unit.SymbolTable.TypeGraphView.DefineNamespace("Castle.Rook.Code");
 
+			unit.SymbolTable.CurrentNamespace = nsGraph;
+
+			TypeDefinitionStatement typeDef = new TypeDefinitionStatement(unit.SymbolTable, AccessLevel.Private, String.Format("Global{0}", globalClassesCount++));
+
+			unit.SymbolTable.CurrentTypeDefinition = typeDef.SymbolTable.CurrentNamespace.AddTransientType( typeDef );
+			
 			return base.VisitSourceUnit(unit);
 		}
 
@@ -54,7 +69,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 				return false;
 			}
 
-			ns.NameScope.ScopeGraphNamespace = ns.NameScope.CurrentTypeGraph.DefineNamespace(ns.Name);
+			ns.SymbolTable.CurrentNamespace = ns.SymbolTable.TypeGraphView.DefineNamespace(ns.Name);
 
 			return base.VisitNamespace(ns);
 		}
@@ -68,16 +83,18 @@ namespace Castle.Rook.Compiler.Services.Passes
 				return false;
 			}
 
-			try
-			{
-				typeDef.NameScope.ScopeType = typeDef.NameScope.Parent.CurrentTypeGraph.DefineType(typeDef);
-			}
-			catch(Exception)
+			System.Diagnostics.Debug.Assert( typeDef.SymbolTable.CurrentNamespace != null );
+
+			typeDef.NamespaceName = typeDef.SymbolTable.CurrentNamespace.Name;
+
+			if (typeDef.SymbolTable.CurrentNamespace.GetType(typeDef.Name) != null)
 			{
 				errorReport.Error( "TODOFILENAME", typeDef.Position, "'{0}' has multiple definitions.", typeDef.Name );
 
 				return false;
 			}
+
+			typeDef.SymbolTable.CurrentTypeDefinition = typeDef.SymbolTable.CurrentNamespace.AddTransientType( typeDef );
 
 			return base.VisitTypeDefinitionStatement(typeDef);
 		}
@@ -91,24 +108,17 @@ namespace Castle.Rook.Compiler.Services.Passes
 				return false;
 			}
 
+			TransientType owner = methodDef.SymbolTable.CurrentTypeDefinition;
+
+			System.Diagnostics.Debug.Assert( owner != null );
+
 			try
 			{
-				if (methodDef.IsConstructor)
-				{
-					methodDef.NameScope.Parent.CurrentTypeGraph.DefineConstructorMethod(methodDef);
-				}
-				else if (methodDef.IsStatic)
-				{
-					methodDef.NameScope.Parent.CurrentTypeGraph.DefineStaticMethod(methodDef);
-				}
-				else 
-				{
-					methodDef.NameScope.Parent.CurrentTypeGraph.DefineMethod(methodDef);
-				}
+				owner.AddMethod(methodDef);
 			}
-			catch(Exception)
+			catch(Exception ex)
 			{
-				errorReport.Error( "TODOFILENAME", methodDef.Position, "'{0}' has multiple definitions.", methodDef.Name );
+				errorReport.Error( "TODOFILENAME", methodDef.Position, ex.Message, methodDef.Name );
 
 				return false;
 			}
@@ -131,7 +141,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 				VariableReferenceExpression varRef = (VariableReferenceExpression) assignExp.Target; 
 
-				INameScope scope = varRef.NameScope;
+				ISymbolTable scope = varRef.SymbolTable;
 
 				System.Diagnostics.Debug.Assert( scope != null );
 
@@ -169,10 +179,10 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 		public override bool VisitParameterIdentifier(ParameterIdentifier parameterIdentifier)
 		{
-			INameScope namescope = parameterIdentifier.Parent.NameScope;
+			ISymbolTable namescope = parameterIdentifier.Parent.SymbolTable;
 
 			System.Diagnostics.Debug.Assert( namescope != null );
-			System.Diagnostics.Debug.Assert( namescope.NameScopeType == NameScopeType.Method || namescope.NameScopeType == NameScopeType.Block );
+			System.Diagnostics.Debug.Assert( namescope.ScopeType == ScopeType.Method || namescope.ScopeType == ScopeType.Block );
 
 			if (!identifierService.IsValidFormatParameterName(parameterIdentifier.Name))
 			{
@@ -217,7 +227,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 		private void EnsureTypeDeclarationsBelongsToThisScope(MultipleVariableDeclarationStatement varDecl, IList stmts)
 		{
-			INameScope namescope = varDecl.Parent.NameScope;
+			ISymbolTable namescope = varDecl.Parent.SymbolTable;
 
 			System.Diagnostics.Debug.Assert( namescope != null );
 	
@@ -236,14 +246,14 @@ namespace Castle.Rook.Compiler.Services.Passes
 			}
 		}
 
-		private bool ApplyDeclarationRules(Identifier ident, INameScope namescope, SingleVariableDeclarationStatement typeDecl, IStatement statem)
+		private bool ApplyDeclarationRules(Identifier ident, ISymbolTable namescope, SingleVariableDeclarationStatement typeDecl, IStatement statem)
 		{
 			// Second simple case: a local var and we are on the right place to 
 			// declare it
 			if (ident.Type == IdentifierType.Local && 
-				(namescope.NameScopeType == NameScopeType.Method || 
-					namescope.NameScopeType == NameScopeType.Compound || 
-					namescope.NameScopeType == NameScopeType.Block))
+				(namescope.ScopeType == ScopeType.Method || 
+					namescope.ScopeType == ScopeType.Compound || 
+					namescope.ScopeType == ScopeType.Block))
 			{
 				namescope.AddVariable(ident);
 				return true;
@@ -251,8 +261,8 @@ namespace Castle.Rook.Compiler.Services.Passes
 	
 			// More complex: a block or compound tries to redefine a variable
 			if (ident.Type == IdentifierType.Local && 
-				(namescope.NameScopeType == NameScopeType.Compound || 
-					namescope.NameScopeType == NameScopeType.Block))
+				(namescope.ScopeType == ScopeType.Compound || 
+					namescope.ScopeType == ScopeType.Block))
 			{
 				if (namescope.Parent.IsDefined(ident.Name))
 				{
@@ -263,7 +273,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 	
 			// Local variables at class level?
 			// We will support that as a type initializer, but not now.
-			if (ident.Type == IdentifierType.Local && namescope.NameScopeType == NameScopeType.Type)
+			if (ident.Type == IdentifierType.Local && namescope.ScopeType == ScopeType.Type)
 			{
 				errorReport.Error( "TODOFILENAME", typeDecl.Position, "At type level, just instance or static fields are allowed (yet)" );
 				return false;
@@ -274,14 +284,14 @@ namespace Castle.Rook.Compiler.Services.Passes
 			if (ident.Type == IdentifierType.InstanceField || 
 				ident.Type == IdentifierType.StaticField)
 			{
-				if (namescope.NameScopeType == NameScopeType.SourceUnit || 
-					namescope.NameScopeType == NameScopeType.Type)
+				if (namescope.ScopeType == ScopeType.SourceUnit || 
+					namescope.ScopeType == ScopeType.Type)
 				{
 					namescope.AddVariable(ident);
 				}
-				else if (namescope.NameScopeType == NameScopeType.Method || 
-					namescope.NameScopeType == NameScopeType.Compound || 
-					namescope.NameScopeType == NameScopeType.Block)
+				else if (namescope.ScopeType == ScopeType.Method || 
+					namescope.ScopeType == ScopeType.Compound || 
+					namescope.ScopeType == ScopeType.Block)
 				{
 					IASTNode node = statem.Parent;
 
@@ -292,14 +302,14 @@ namespace Castle.Rook.Compiler.Services.Passes
 						node = node.Parent;
 					}
 
-					if (node == null || node.NameScope == null)
+					if (node == null || node.SymbolTable == null)
 					{
 						errorReport.Error( "TODOFILENAME", typeDecl.Position, 
 						                   "Compiler error: The instance of static declaration '{0}' could not be mapped to a parent type", ident.Name );							
 						return false;
 					}
 
-					INameScope parentScope = node.NameScope;
+					ISymbolTable parentScope = node.SymbolTable;
 
 					IStatementContainer typeStmtsContainer = node as IStatementContainer;
 							
@@ -390,5 +400,38 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 			return new AssignmentExpression( new VariableReferenceExpression(decl.Identifier), decl.InitExp );
 		} 
+	}
+
+	public class FieldsVisitor : BreadthFirstVisitor
+	{
+		public override bool VisitSingleVariableDeclarationStatement(SingleVariableDeclarationStatement varDecl)
+		{
+			PerformSanityCheck(varDecl);
+
+			CreateField(varDecl);
+
+			return base.VisitSingleVariableDeclarationStatement(varDecl);
+		}
+
+		private void CreateField(SingleVariableDeclarationStatement decl)
+		{
+			if (decl.Identifier.Type == IdentifierType.Local) return;
+
+			TransientType type = decl.SymbolTable.CurrentTypeDefinition;
+
+			System.Diagnostics.Debug.Assert( type != null );
+
+			type.AddField( decl );
+		}
+
+		private void PerformSanityCheck(SingleVariableDeclarationStatement decl)
+		{
+			// TODO: Ensure that the symbol table are capable of holding a var declaration
+
+			if (!decl.SymbolTable.IsDefined( decl.Identifier.Name ))
+			{
+				throw new CompilerException("Found single var declaration node that was not on the symbol table: " + decl.Identifier.Name);
+			}
+		}
 	}
 }
