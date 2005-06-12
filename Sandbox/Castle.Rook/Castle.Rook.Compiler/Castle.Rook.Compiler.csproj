@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\BaseReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\BinaryExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -254,6 +259,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\NullCheckExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\ParameterIdentifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -310,6 +320,11 @@
                 />
                 <File
                     RelPath = "AST\StatementCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AST\ThisReferenceExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

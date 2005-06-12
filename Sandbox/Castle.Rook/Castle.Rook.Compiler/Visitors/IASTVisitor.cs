@@ -76,5 +76,8 @@ namespace Castle.Rook.Compiler.Visitors
 		bool VisitBlockExpression(BlockExpression expression);
 		bool VisitBinaryExpression(BinaryExpression expression);
 //		bool VisitTypeDeclarationExpression(TypeDeclarationExpression typeDeclarationExpression);
+		bool VisitBaseReferenceExpression(BaseReferenceExpression expression);
+		bool VisitSelfReferenceExpression(SelfReferenceExpression expression);
+		bool VisitNullCheckExpression(NullCheckExpression expression);
 	}
 }

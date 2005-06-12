@@ -403,6 +403,24 @@ namespace Castle.Rook.Compiler.Visitors
 			return true;
 		}
 
+		public bool VisitBaseReferenceExpression(BaseReferenceExpression expression)
+		{
+			return true;
+		}
+
+		public bool VisitSelfReferenceExpression(SelfReferenceExpression expression)
+		{
+			return true;
+		}
+
+		public bool VisitNullCheckExpression(NullCheckExpression expression)
+		{
+			VisitNode(expression.Expression);
+			VisitExpression(expression);
+
+			return true;
+		}
+
 		private void VisitExpression(IExpression exp)
 		{
 			VisitNode(exp.PostFixStatement);

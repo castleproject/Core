@@ -655,6 +655,8 @@ atom returns [IExpression exp]
 	| LCURLY (exp=dictmaker)? RCURLY
 	| exp=varref
 	| exp=constantref
+	| "self" { exp = SelfReferenceExpression.Instance; }
+	| "base" { exp = BaseReferenceExpression.Instance; }
 	;
 
 varref returns [VariableReferenceExpression vre]
@@ -690,6 +692,8 @@ trailer[IExpression inner] returns [IExpression exp]
 //	| 
 //	(DOT|COLONCOLON) => qp=qualified_postfix	{ exp = new MemberAccessExpression(inner, qp); }
 	COLONCOLON IDENT	{ exp = new MemberAccessExpression(inner, qp); }
+	|
+	DOT "nil?" { exp = new NullCheckExpression(inner); }
 	|
 	DOT IDENT { exp = new MemberAccessExpression(inner, qp); }
 	;

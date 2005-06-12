@@ -120,37 +120,40 @@ namespace Castle.Rook.Compiler.Parser
 		public const int BNOT = 91;
 		public const int LBRACK = 92;
 		public const int RBRACK = 93;
-		public const int STRING_LITERAL = 94;
-		public const int CHAR_LITERAL = 95;
-		public const int DOTDOT = 96;
-		public const int DOTDOTDOT = 97;
-		public const int MAPASSIGN = 98;
-		public const int QUESTION = 99;
-		public const int DIV = 100;
-		public const int INC = 101;
-		public const int DEC = 102;
-		public const int MOD = 103;
-		public const int SR = 104;
-		public const int SR_ASSIGN = 105;
-		public const int BSR = 106;
-		public const int BSR_ASSIGN = 107;
-		public const int SL_ASSIGN = 108;
-		public const int LOR = 109;
-		public const int LAND = 110;
-		public const int COLON = 111;
-		public const int NEWLINE = 112;
-		public const int SL_NEWLINE = 113;
-		public const int SL_COMMENT = 114;
-		public const int WS = 115;
-		public const int ESC = 116;
-		public const int HEX_DIGIT = 117;
-		public const int VOCAB = 118;
-		public const int NUMBER = 119;
-		public const int Int = 120;
-		public const int NonZeroDigit = 121;
-		public const int FloatTrailer = 122;
-		public const int Exponent = 123;
-		public const int CONTINUED_LINE = 124;
+		public const int LITERAL_self = 94;
+		public const int LITERAL_base = 95;
+		public const int STRING_LITERAL = 96;
+		public const int CHAR_LITERAL = 97;
+		// "nil?" = 98
+		public const int DOTDOT = 99;
+		public const int DOTDOTDOT = 100;
+		public const int MAPASSIGN = 101;
+		public const int QUESTION = 102;
+		public const int DIV = 103;
+		public const int INC = 104;
+		public const int DEC = 105;
+		public const int MOD = 106;
+		public const int SR = 107;
+		public const int SR_ASSIGN = 108;
+		public const int BSR = 109;
+		public const int BSR_ASSIGN = 110;
+		public const int SL_ASSIGN = 111;
+		public const int LOR = 112;
+		public const int LAND = 113;
+		public const int COLON = 114;
+		public const int NEWLINE = 115;
+		public const int SL_NEWLINE = 116;
+		public const int SL_COMMENT = 117;
+		public const int WS = 118;
+		public const int ESC = 119;
+		public const int HEX_DIGIT = 120;
+		public const int VOCAB = 121;
+		public const int NUMBER = 122;
+		public const int Int = 123;
+		public const int NonZeroDigit = 124;
+		public const int FloatTrailer = 125;
+		public const int Exponent = 126;
+		public const int CONTINUED_LINE = 127;
 		
 		
 	public IErrorReport ErrorReport;
@@ -334,6 +337,8 @@ namespace Castle.Rook.Compiler.Parser
 			case MINUS:
 			case BNOT:
 			case LBRACK:
+			case LITERAL_self:
+			case LITERAL_base:
 			case STRING_LITERAL:
 			case CHAR_LITERAL:
 			{
@@ -716,6 +721,8 @@ _loop17_breakloop:			;
 			case MINUS:
 			case BNOT:
 			case LBRACK:
+			case LITERAL_self:
+			case LITERAL_base:
 			case STRING_LITERAL:
 			case CHAR_LITERAL:
 			{
@@ -1116,6 +1123,8 @@ _loop34_breakloop:			;
 		case MINUS:
 		case BNOT:
 		case LBRACK:
+		case LITERAL_self:
+		case LITERAL_base:
 		case STRING_LITERAL:
 		case CHAR_LITERAL:
 		{
@@ -2183,6 +2192,8 @@ _loop91_breakloop:			;
 						case MINUS:
 						case BNOT:
 						case LBRACK:
+						case LITERAL_self:
+						case LITERAL_base:
 						case STRING_LITERAL:
 						case CHAR_LITERAL:
 						{
@@ -2237,6 +2248,8 @@ _loop91_breakloop:			;
 						case MINUS:
 						case BNOT:
 						case LBRACK:
+						case LITERAL_self:
+						case LITERAL_base:
 						case STRING_LITERAL:
 						case CHAR_LITERAL:
 						{
@@ -2302,6 +2315,8 @@ _loop91_breakloop:			;
 						case MINUS:
 						case BNOT:
 						case LBRACK:
+						case LITERAL_self:
+						case LITERAL_base:
 						case STRING_LITERAL:
 						case CHAR_LITERAL:
 						{
@@ -2356,6 +2371,8 @@ _loop91_breakloop:			;
 						case MINUS:
 						case BNOT:
 						case LBRACK:
+						case LITERAL_self:
+						case LITERAL_base:
 						case STRING_LITERAL:
 						case CHAR_LITERAL:
 						{
@@ -2561,6 +2578,8 @@ _loop115_breakloop:			;
 		case MINUS:
 		case BNOT:
 		case LBRACK:
+		case LITERAL_self:
+		case LITERAL_base:
 		case STRING_LITERAL:
 		case CHAR_LITERAL:
 		{
@@ -2915,6 +2934,8 @@ _loop141_breakloop:			;
 		case SYMBOL:
 		case LCURLY:
 		case LBRACK:
+		case LITERAL_self:
+		case LITERAL_base:
 		case STRING_LITERAL:
 		case CHAR_LITERAL:
 		{
@@ -2987,6 +3008,8 @@ _loop146_breakloop:			;
 				case MINUS:
 				case BNOT:
 				case LBRACK:
+				case LITERAL_self:
+				case LITERAL_base:
 				case STRING_LITERAL:
 				case CHAR_LITERAL:
 				{
@@ -3025,6 +3048,8 @@ _loop146_breakloop:			;
 				case MINUS:
 				case BNOT:
 				case LBRACK:
+				case LITERAL_self:
+				case LITERAL_base:
 				case STRING_LITERAL:
 				case CHAR_LITERAL:
 				{
@@ -3059,6 +3084,24 @@ _loop146_breakloop:			;
 		case CHAR_LITERAL:
 		{
 			exp=constantref();
+			break;
+		}
+		case LITERAL_self:
+		{
+			match(LITERAL_self);
+			if (0==inputState.guessing)
+			{
+				exp = SelfReferenceExpression.Instance;
+			}
+			break;
+		}
+		case LITERAL_base:
+		{
+			match(LITERAL_base);
+			if (0==inputState.guessing)
+			{
+				exp = BaseReferenceExpression.Instance;
+			}
 			break;
 		}
 		default:
@@ -3108,6 +3151,8 @@ _loop146_breakloop:			;
 					case MINUS:
 					case BNOT:
 					case LBRACK:
+					case LITERAL_self:
+					case LITERAL_base:
 					case STRING_LITERAL:
 					case CHAR_LITERAL:
 					{
@@ -3173,6 +3218,8 @@ _loop146_breakloop:			;
 				case MINUS:
 				case BNOT:
 				case LBRACK:
+				case LITERAL_self:
+				case LITERAL_base:
 				case STRING_LITERAL:
 				case CHAR_LITERAL:
 				{
@@ -3202,21 +3249,29 @@ _loop146_breakloop:			;
 			}
 			break;
 		}
-		case DOT:
-		{
-			match(DOT);
-			match(IDENT);
-			if (0==inputState.guessing)
-			{
-				exp = new MemberAccessExpression(inner, qp);
-			}
-			break;
-		}
 		default:
+			if ((LA(1)==DOT) && (LA(2)==98))
+			{
+				match(DOT);
+				match(98);
+				if (0==inputState.guessing)
+				{
+					exp = new NullCheckExpression(inner);
+				}
+			}
+			else if ((LA(1)==DOT) && (LA(2)==IDENT)) {
+				match(DOT);
+				match(IDENT);
+				if (0==inputState.guessing)
+				{
+					exp = new MemberAccessExpression(inner, qp);
+				}
+			}
+		else
 		{
 			throw new NoViableAltException(LT(1), getFilename());
 		}
-		 }
+		break; }
 		return exp;
 	}
 	
@@ -3585,8 +3640,11 @@ _loop161_breakloop:			;
 		@"""BNOT""",
 		@"""LBRACK""",
 		@"""RBRACK""",
+		@"""self""",
+		@"""base""",
 		@"""STRING_LITERAL""",
 		@"""CHAR_LITERAL""",
+		@"""nil?""",
 		@"""DOTDOT""",
 		@"""DOTDOTDOT""",
 		@"""MAPASSIGN""",
@@ -3620,13 +3678,13 @@ _loop161_breakloop:			;
 	
 	private static long[] mk_tokenSet_0_()
 	{
-		long[] data = { 10150566768412402L, 3649150924L, 0L, 0L};
+		long[] data = { 10150566768412402L, 16534052812L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_0_ = new BitSet(mk_tokenSet_0_());
 	private static long[] mk_tokenSet_1_()
 	{
-		long[] data = { -4767590354254094L, 4294967295L, 0L, 0L};
+		long[] data = { -4767590354254094L, 17179869183L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_1_ = new BitSet(mk_tokenSet_1_());
@@ -3638,7 +3696,7 @@ _loop161_breakloop:			;
 	public static readonly BitSet tokenSet_2_ = new BitSet(mk_tokenSet_2_());
 	private static long[] mk_tokenSet_3_()
 	{
-		long[] data = { 10150565828888240L, 3649146316L, 0L, 0L};
+		long[] data = { 10150565828888240L, 16534048204L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_3_ = new BitSet(mk_tokenSet_3_());
@@ -3650,49 +3708,49 @@ _loop161_breakloop:			;
 	public static readonly BitSet tokenSet_4_ = new BitSet(mk_tokenSet_4_());
 	private static long[] mk_tokenSet_5_()
 	{
-		long[] data = { 10137222439240352L, 3649146316L, 0L, 0L};
+		long[] data = { 10137222439240352L, 16534048204L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_5_ = new BitSet(mk_tokenSet_5_());
 	private static long[] mk_tokenSet_6_()
 	{
-		long[] data = { -5049082510833936L, 4294967295L, 0L, 0L};
+		long[] data = { -5049082510833936L, 17179869183L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_6_ = new BitSet(mk_tokenSet_6_());
 	private static long[] mk_tokenSet_7_()
 	{
-		long[] data = { 10414448619554480L, 3649146316L, 0L, 0L};
+		long[] data = { 10414448619554480L, 16534048204L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_7_ = new BitSet(mk_tokenSet_7_());
 	private static long[] mk_tokenSet_8_()
 	{
-		long[] data = { 10133099270635552L, 3649146316L, 0L, 0L};
+		long[] data = { 10133099270635552L, 16534048204L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_8_ = new BitSet(mk_tokenSet_8_());
 	private static long[] mk_tokenSet_9_()
 	{
-		long[] data = { 10150566231541488L, 3649150924L, 0L, 0L};
+		long[] data = { 10150566231541488L, 16534052812L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_9_ = new BitSet(mk_tokenSet_9_());
 	private static long[] mk_tokenSet_10_()
 	{
-		long[] data = { 10133099270635520L, 3649143116L, 0L, 0L};
+		long[] data = { 10133099270635520L, 16534045004L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_10_ = new BitSet(mk_tokenSet_10_());
 	private static long[] mk_tokenSet_11_()
 	{
-		long[] data = { -4784910883617760L, 4294967295L, 0L, 0L};
+		long[] data = { -4784910883617760L, 17179869183L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_11_ = new BitSet(mk_tokenSet_11_());
 	private static long[] mk_tokenSet_12_()
 	{
-		long[] data = { 10133099270635520L, 3649044812L, 0L, 0L};
+		long[] data = { 10133099270635520L, 16533946700L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_12_ = new BitSet(mk_tokenSet_12_());
@@ -3716,7 +3774,7 @@ _loop161_breakloop:			;
 	public static readonly BitSet tokenSet_15_ = new BitSet(mk_tokenSet_15_());
 	private static long[] mk_tokenSet_16_()
 	{
-		long[] data = { 28147497780117536L, 3649146316L, 0L, 0L};
+		long[] data = { 28147497780117536L, 16534048204L, 0L, 0L};
 		return data;
 	}
 	public static readonly BitSet tokenSet_16_ = new BitSet(mk_tokenSet_16_());
