@@ -12,38 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace ASTViewer
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
+	using Castle.Rook.Compiler;
+	using Castle.Rook.Compiler.Services;
 
 
-	public class MethodInvocationExpression : AbstractExpression
+	public class UICompilerContainer : CompilerContainer
 	{
-		private readonly IExpression target;
-		private readonly ExpressionCollection args;
-
-		public MethodInvocationExpression(IExpression target)
+		public UICompilerContainer()
 		{
-			this.target = target;	
-			this.target.Parent = this;
-			this.args = new ExpressionCollection(this);
 		}
 
-		public IExpression Target
+		public override void AddServices()
 		{
-			get { return target; }
-		}
+			base.AddComponent( "error.ui", typeof(IErrorReport), typeof(UIErrorReport) );
 
-		public ExpressionCollection Arguments
-		{
-			get { return args; }
-		}
-
-		public override bool Accept(IASTVisitor visitor)
-		{
-			return visitor.VisitMethodInvocationExpression(this);
+			base.AddServices();
 		}
 	}
 }

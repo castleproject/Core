@@ -126,6 +126,88 @@ namespace Castle.Rook.Compiler.Services.Passes
 			return base.VisitMethodDefinitionStatement(methodDef);
 		}
 
+		public override bool VisitRequireStatement(RequireStatement statement)
+		{
+			String name = statement.QualifiedIdentifier.Name;
+
+			if (!identifierService.IsValidNamespaceName( name ))
+			{
+				errorReport.Error( "TODOFILENAME", statement.Position, "You used a required statement for an invalid namespace '{0}'", name );
+
+				return false;
+			}
+
+			try
+			{
+				statement.SymbolTable.TypeGraphView.AddRequire( name );
+			}
+			catch(Exception ex)
+			{
+				errorReport.Error( "TODOFILENAME", statement.Position, ex.Message );
+
+				return false;
+			}
+
+			return base.VisitRequireStatement(statement);
+		}
+
+		public override bool VisitVariableReferenceExpression(VariableReferenceExpression varRef)
+		{
+			if (varRef.Identifier.Type == IdentifierType.Local)
+			{
+				String name = varRef.Identifier.Name;
+				ISymbolTable table = varRef.SymbolTable;
+
+				// It might be a variable or might be something else. 
+				// First of all, let's see whether it is a var
+
+				bool isDefinedAsVar = false;
+
+				isDefinedAsVar = varRef.SymbolTable.IsDefined(name);
+				
+				if (!isDefinedAsVar)
+				{
+					if (table.ScopeType == ScopeType.Block || table.ScopeType == ScopeType.Compound)
+					{
+						isDefinedAsVar = table.IsDefinedInParent(name);
+					}
+				}
+
+				if (!isDefinedAsVar)
+				{
+					// Ok, this might be two things now: 
+					// an undeclared variable, a type ref or a member access... Let's check the type graph
+
+					TypeDefinition typeDef = varRef.SymbolTable.CurrentTypeDefinition;
+
+					System.Diagnostics.Debug.Assert( typeDef != null );
+
+					if (typeDef.HasInstanceMember(name) || typeDef.HasStaticMember(name))
+					{
+						// Wow! Finally
+
+						// TODO: Replace node by MemberAccess or method invocation, depending on the case
+					}
+					else 
+					{
+						NamespaceGraph nsGraph = table.TypeGraphView.GetNamespace( name );
+
+						if (nsGraph == null)
+						{
+							TypeDefinition typedef = table.TypeGraphView.GetType( name );
+
+							if (typedef == null)
+							{
+								errorReport.Error( "TODOFILENAME", varRef.Position, "'{0}' undeclared identifier", name );
+							}
+						}
+					}
+				}
+			}
+
+			return base.VisitVariableReferenceExpression(varRef);
+		}
+
 		public override bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
 		{
 			ProcessMultipleVariableDeclarationStatement(varDecl);
@@ -163,7 +245,8 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 					varDecl.InitExp = assignExp.Value;
 
-					stmts.Statements.Insert(index, varDecl);
+					// stmts.Statements.Insert(index, varDecl);
+					stmts.Statements.Replace(stmt, varDecl);
 
 					if (!ApplyDeclarationRules(varRef.Identifier, scope, varDecl, stmt))
 					{

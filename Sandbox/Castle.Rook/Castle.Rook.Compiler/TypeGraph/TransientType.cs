@@ -52,12 +52,12 @@ namespace Castle.Rook.Compiler.TypeGraph
 
 		public override bool HasInstanceMember(String name)
 		{
-			throw new NotImplementedException();
+			return methods.Contains(name) || fields.Contains(name);
 		}
 
 		public override bool HasStaticMember(String name)
 		{
-			throw new NotImplementedException();
+			return smethods.Contains(name) || sfields.Contains(name);
 		}
 
 		public void AddMethod(MethodDefinitionStatement methodDef)

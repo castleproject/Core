@@ -22,22 +22,15 @@ namespace Castle.Rook.Compiler.AST
 	public class RequireStatement : AbstractStatement		
 	{
 		private readonly Identifier qualifiedIdentifier;
-		private readonly ISymbolTable definedScope;
 
-		public RequireStatement(Identifier qualifiedIdentifier, ISymbolTable namescope)
+		public RequireStatement(Identifier qualifiedIdentifier)
 		{
 			this.qualifiedIdentifier = qualifiedIdentifier;
-			this.definedScope = namescope;
 		}
 
 		public Identifier QualifiedIdentifier
 		{
 			get { return qualifiedIdentifier; }
-		}
-
-		public ISymbolTable DefinedScope
-		{
-			get { return definedScope; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

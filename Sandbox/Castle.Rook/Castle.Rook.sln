@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Rook.Compiler.Tests"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASTViewer", "ASTViewer\ASTViewer.csproj", "{A13A2FE6-98D8-4745-8A19-8DEDBEF01334}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -21,6 +25,10 @@ Global
 		{B6A5B14A-90DD-4830-A765-86DF60BE7D63}.Debug.Build.0 = Debug|.NET
 		{B6A5B14A-90DD-4830-A765-86DF60BE7D63}.Release.ActiveCfg = Release|.NET
 		{B6A5B14A-90DD-4830-A765-86DF60BE7D63}.Release.Build.0 = Release|.NET
+		{A13A2FE6-98D8-4745-8A19-8DEDBEF01334}.Debug.ActiveCfg = Debug|.NET
+		{A13A2FE6-98D8-4745-8A19-8DEDBEF01334}.Debug.Build.0 = Debug|.NET
+		{A13A2FE6-98D8-4745-8A19-8DEDBEF01334}.Release.ActiveCfg = Release|.NET
+		{A13A2FE6-98D8-4745-8A19-8DEDBEF01334}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

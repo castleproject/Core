@@ -449,5 +449,82 @@ namespace Castle.Rook.Compiler.Tests.AnnotatedTree
 
 			Assert.AreEqual( "@x", varDecl1.Identifier.Name );
 		}		
+
+		[Test]
+		public void AssignConvertedToDeclaration4()
+		{
+			String contents = 
+				"namespace Family::Guy					\r\n" + 
+				"  										\r\n" + 
+				"  class Boat							\r\n" + 
+				"										\r\n" + 
+				"    def initialize						\r\n" + 
+				"      @x = 1							\r\n" + 
+				"    end    							\r\n" + 
+				"										\r\n" + 
+				"  end									\r\n" + 
+				"										\r\n" + 
+				"  class Song							\r\n" + 
+				"										\r\n" + 
+				"    def save							\r\n" + 
+				"      @name = 1						\r\n" + 
+				"    end								\r\n" + 
+				" 										\r\n" + 
+				"  end 									\r\n" + 
+				"   									\r\n" + 
+				"end									\r\n" + 
+				"";
+
+			SourceUnit unit = container.ParserService.Parse(contents);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.IsNotNull(unit);
+
+			DeclarationBinding sb = container[ typeof(DeclarationBinding) ] as DeclarationBinding;
+
+			sb.ExecutePass(unit.CompilationUnit);
+
+			AssertNoErrorOrWarnings();
+
+			Assert.AreEqual(1, unit.Namespaces.Count);
+
+			NamespaceDeclaration nsDecl = unit.Namespaces[0] as NamespaceDeclaration;
+
+			Assert.AreEqual(2, nsDecl.TypeDeclarations.Count);
+
+			TypeDefinitionStatement boatType = nsDecl.TypeDeclarations[0] as TypeDefinitionStatement;
+			TypeDefinitionStatement songType = nsDecl.TypeDeclarations[1] as TypeDefinitionStatement;
+
+			Assert.AreEqual(2, boatType.Statements.Count);
+			Assert.AreEqual(2, songType.Statements.Count);
+
+			MethodDefinitionStatement initMethod = boatType.Statements[0] as MethodDefinitionStatement;
+			SingleVariableDeclarationStatement boatVarDecl = boatType.Statements[1] as SingleVariableDeclarationStatement;
+			
+			MethodDefinitionStatement saveMethod = songType.Statements[0] as MethodDefinitionStatement;
+			SingleVariableDeclarationStatement songVarDecl = songType.Statements[1] as SingleVariableDeclarationStatement;
+
+			Assert.AreEqual(1, initMethod.Statements.Count);
+			Assert.AreEqual(1, saveMethod.Statements.Count);
+
+			ExpressionStatement assignStmt1 = initMethod.Statements[0] as ExpressionStatement;
+			ExpressionStatement assignStmt2 = saveMethod.Statements[0] as ExpressionStatement;
+
+			Assert.IsNotNull(assignStmt1);
+			Assert.IsNotNull(assignStmt2);
+
+			AssignmentExpression assignExp1 = assignStmt1.Expression as AssignmentExpression;
+			AssignmentExpression assignExp2 = assignStmt2.Expression as AssignmentExpression;
+
+			Assert.IsNotNull(assignExp1);
+			Assert.IsNotNull(assignExp2);
+
+			Assert.AreEqual( "@x", (assignExp1.Target as VariableReferenceExpression).Identifier.Name );
+			Assert.AreEqual( "1", (assignExp1.Value as LiteralReferenceExpression).Content );
+
+			Assert.AreEqual( "@name", (assignExp2.Target as VariableReferenceExpression).Identifier.Name );
+			Assert.AreEqual( "1", (assignExp2.Value as LiteralReferenceExpression).Content );
+		}		
 	}
 }

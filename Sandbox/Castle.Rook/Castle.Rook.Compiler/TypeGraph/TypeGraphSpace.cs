@@ -122,14 +122,14 @@ namespace Castle.Rook.Compiler.TypeGraph
 		{
 			if (parent == null)
 			{
-				throw new ApplicationException("You can use require on a root type space");
+				throw new ApplicationException("You can't use require on a root type space view - this is a compiler error");
 			}
 
 			NamespaceGraph ng = parent.GetNamespace(namespaceName);
 
 			if (ng == null)
 			{
-				throw new ArgumentException("Could not found namespace " + namespaceName);
+				throw new ArgumentException("Could not find namespace " + namespaceName + ". Aren't you forgetting to reference some assembly?");
 			}
 
 			foreach(NamespaceGraph sub in ng.Namespaces)

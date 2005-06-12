@@ -48,6 +48,11 @@ namespace Castle.Rook.Compiler.TypeGraph
 				Dictionary[key] = bucket;
 			}
 		}
+
+		public bool Contains(String name)
+		{
+			return Dictionary.Contains(name);
+		}
 	}
 
 	public class Bucket : CollectionBase

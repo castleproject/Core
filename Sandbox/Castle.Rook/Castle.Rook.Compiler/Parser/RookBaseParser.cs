@@ -1285,7 +1285,7 @@ _loop74_breakloop:								;
 		ident=qualified_name();
 		if (0==inputState.guessing)
 		{
-			stmt = new RequireStatement(ident, GetCurrentScope());
+			stmt = new RequireStatement(ident);
 		}
 		return stmt;
 	}

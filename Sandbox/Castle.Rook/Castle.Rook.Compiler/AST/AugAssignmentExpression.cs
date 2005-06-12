@@ -40,8 +40,8 @@ namespace Castle.Rook.Compiler.AST
 		public AugAssignmentExpression(IExpression target, IExpression value, AugType augType)
 		{
 			this.augType = augType;
-			this.target = target;
-			this.value = value;
+			this.target = target;	target.Parent = this;
+			this.value = value;		value.Parent = this;
 		}
 
 		public IExpression Target

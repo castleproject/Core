@@ -252,7 +252,7 @@ return_statement returns[ReturnStatement stmt]
 require_statement returns[RequireStatement stmt]
 	{ stmt = null; Identifier ident = null; } 
 	:
-	"require" ident=qualified_name { stmt = new RequireStatement(ident, GetCurrentScope()); }
+	"require" ident=qualified_name { stmt = new RequireStatement(ident); }
 	;
 
 protected

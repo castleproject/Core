@@ -26,7 +26,7 @@ namespace Castle.Rook.Compiler.AST
 
 		public MemberAccessExpression(IExpression target, String member)
 		{
-			this.target = target;
+			this.target = target;	target.Parent = this;
 			this.member = member;
 		}
 
