@@ -3185,6 +3185,8 @@ _loop146_breakloop:			;
 {
 		IExpression exp;
 		
+		IToken  t1 = null;
+		IToken  t = null;
 		exp = null; String qp = String.Empty;
 		
 		switch ( LA(1) )
@@ -3242,10 +3244,11 @@ _loop146_breakloop:			;
 		case COLONCOLON:
 		{
 			match(COLONCOLON);
+			t1 = LT(1);
 			match(IDENT);
 			if (0==inputState.guessing)
 			{
-				exp = new MemberAccessExpression(inner, qp);
+				exp = new MemberAccessExpression(inner, t1.getText());
 			}
 			break;
 		}
@@ -3261,10 +3264,11 @@ _loop146_breakloop:			;
 			}
 			else if ((LA(1)==DOT) && (LA(2)==IDENT)) {
 				match(DOT);
+				t = LT(1);
 				match(IDENT);
 				if (0==inputState.guessing)
 				{
-					exp = new MemberAccessExpression(inner, qp);
+					exp = new MemberAccessExpression(inner, t.getText());
 				}
 			}
 		else

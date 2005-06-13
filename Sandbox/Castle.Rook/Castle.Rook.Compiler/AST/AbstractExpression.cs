@@ -36,5 +36,7 @@ namespace Castle.Rook.Compiler.AST
 			get { return postfixCondition; }
 			set { postfixCondition = value; }
 		}
+
+		public abstract IExpression Accept(IExpressionAttrVisitor visitor);
 	}
 }

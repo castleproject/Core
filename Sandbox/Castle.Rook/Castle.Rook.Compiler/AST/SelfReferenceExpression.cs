@@ -15,38 +15,27 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
-	using System.Collections;
 
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public class ListExpression : AbstractExpression
+	public class SelfReferenceExpression : AbstractExpression
 	{
-		private ExpressionCollection items;
+		private static readonly SelfReferenceExpression instance = new SelfReferenceExpression();
 
-		public ListExpression()
+		public static SelfReferenceExpression Instance
 		{
-			items = new ExpressionCollection(this);
-		}
-
-		public void Add(IExpression item)
-		{
-			items.Add(item);
-		}
-
-		public ExpressionCollection Items
-		{
-			get { return items; }
+			get { return instance; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)
 		{
-			return visitor.VisitListExpression(this);
+			return visitor.VisitSelfReferenceExpression(this);
 		}
 
 		public override IExpression Accept(IExpressionAttrVisitor visitor)
 		{
-			return visitor.VisitListExpression(this);
+			return visitor.VisitSelfReferenceExpression(this);
 		}
 	}
 }

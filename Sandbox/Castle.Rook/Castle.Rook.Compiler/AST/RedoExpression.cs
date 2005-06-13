@@ -29,5 +29,10 @@ namespace Castle.Rook.Compiler.AST
 		{
 			return visitor.VisitRedoExpression(this);
 		}
+
+		public override IExpression Accept(IExpressionAttrVisitor visitor)
+		{
+			return visitor.VisitRedoExpression(this);
+		}
 	}
 }

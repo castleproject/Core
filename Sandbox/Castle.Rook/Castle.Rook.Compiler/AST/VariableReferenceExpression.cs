@@ -36,5 +36,10 @@ namespace Castle.Rook.Compiler.AST
 		{
 			return visitor.VisitVariableReferenceExpression(this);
 		}
+
+		public override IExpression Accept(IExpressionAttrVisitor visitor)
+		{
+			return visitor.VisitVariableReferenceExpression(this);
+		}
 	}
 }

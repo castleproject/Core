@@ -30,11 +30,7 @@ namespace Castle.Rook.Compiler.Visitors
 		{
 			if (node == null) return true;
 
-			BeforeVisitingNode(node);
-
 			bool res = node.Accept(this);
-
-			AfterVisitingNode(node);
 
 			return res;
 		}
@@ -53,14 +49,6 @@ namespace Castle.Rook.Compiler.Visitors
 //			System.Diagnostics.Debug.WriteLine("after " + message);
 
 			return true;
-		}
-
-		protected virtual void AfterVisitingNode(IVisitableNode node)
-		{
-		}
-
-		protected virtual void BeforeVisitingNode(IVisitableNode node)
-		{
 		}
 
 		public virtual void VisitCompilationUnit(CompilationUnit compilationUnit)

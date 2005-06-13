@@ -12,25 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Rook.Compiler.AST
+namespace Castle.Rook.Compiler.Visitors
 {
 	using System;
 
-	using Castle.Rook.Compiler.Visitors;
+	using Castle.Rook.Compiler.AST;
 
 
-	public class SelfReferenceExpression : AbstractExpression
+	public interface IVisitableExpression
 	{
-		private static readonly SelfReferenceExpression instance = new SelfReferenceExpression();
-
-		public static SelfReferenceExpression Instance
-		{
-			get { return instance; }
-		}
-
-		public override bool Accept(IASTVisitor visitor)
-		{
-			return visitor.VisitSelfReferenceExpression(this);
-		}
+		IExpression Accept(IExpressionAttrVisitor visitor);
 	}
 }

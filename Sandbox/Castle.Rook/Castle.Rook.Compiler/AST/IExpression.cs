@@ -19,7 +19,7 @@ namespace Castle.Rook.Compiler.AST
 	using Castle.Rook.Compiler.Visitors;
 
 
-	public interface IExpression : IASTNode
+	public interface IExpression : IASTNode, IVisitableExpression
 	{
 		PostfixCondition PostFixStatement { get; set; }
 	}

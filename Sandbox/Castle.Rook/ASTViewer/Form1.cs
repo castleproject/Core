@@ -118,10 +118,11 @@ namespace ASTViewer
 			// 
 			// sourceCode
 			// 
+			this.sourceCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.sourceCode.Font = new System.Drawing.Font("Lucida Console", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.sourceCode.Location = new System.Drawing.Point(8, 8);
+			this.sourceCode.Location = new System.Drawing.Point(0, 0);
 			this.sourceCode.Name = "sourceCode";
-			this.sourceCode.Size = new System.Drawing.Size(576, 416);
+			this.sourceCode.Size = new System.Drawing.Size(872, 548);
 			this.sourceCode.TabIndex = 0;
 			this.sourceCode.Text = "";
 			// 
@@ -137,6 +138,7 @@ namespace ASTViewer
 			// rawAST
 			// 
 			this.rawAST.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.rawAST.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.rawAST.ImageIndex = -1;
 			this.rawAST.Location = new System.Drawing.Point(0, 0);
 			this.rawAST.Name = "rawAST";
@@ -157,6 +159,7 @@ namespace ASTViewer
 			// resultingAST
 			// 
 			this.resultingAST.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.resultingAST.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.resultingAST.ImageIndex = -1;
 			this.resultingAST.Location = new System.Drawing.Point(0, 0);
 			this.resultingAST.Name = "resultingAST";
@@ -590,7 +593,7 @@ namespace ASTViewer
 
 		public override bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
 		{
-			nodeStack.Push( CurrentNode.Nodes.Add("MemberAccessExpression"));
+			nodeStack.Push( CurrentNode.Nodes.Add("MemberAccessExpression " + accessExpression.Member));
 			CurrentNode.Tag = accessExpression;
 
 			CurrentNode.EnsureVisible();

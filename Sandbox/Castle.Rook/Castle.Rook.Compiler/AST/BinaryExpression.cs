@@ -70,5 +70,10 @@ namespace Castle.Rook.Compiler.AST
 		{
 			return visitor.VisitBinaryExpression(this);
 		}
+
+		public override IExpression Accept(IExpressionAttrVisitor visitor)
+		{
+			return visitor.VisitBinaryExpression(this);
+		}
 	}
 }

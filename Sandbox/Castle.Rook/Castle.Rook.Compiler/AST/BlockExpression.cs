@@ -50,5 +50,10 @@ namespace Castle.Rook.Compiler.AST
 		{
 			return visitor.VisitBlockExpression(this);
 		}
+
+		public override IExpression Accept(IExpressionAttrVisitor visitor)
+		{
+			return visitor.VisitBlockExpression(this);
+		}
 	}
 }

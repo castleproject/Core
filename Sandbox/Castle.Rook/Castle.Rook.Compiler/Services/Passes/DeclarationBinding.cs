@@ -280,6 +280,11 @@ namespace Castle.Rook.Compiler.Services.Passes
 			return base.VisitParameterIdentifier(parameterIdentifier);
 		}
 
+		public override bool VisitMemberAccessExpression(MemberAccessExpression accessExpression)
+		{
+			return base.VisitMemberAccessExpression(accessExpression);
+		}
+
 		private void ProcessMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement decl)
 		{
 			IList stmts = ConvertToSingleDeclarationStatements(decl);

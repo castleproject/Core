@@ -24,7 +24,7 @@ namespace Castle.Rook.Compiler.AST
 		private IExpression target;
 		private readonly string member;
 
-		public MemberAccessExpression(IExpression target, String member)
+		public MemberAccessExpression(IExpression target, String member) : base(NodeType.MemberAccessExpression)
 		{
 			this.target = target;	target.Parent = this;
 			this.member = member;
@@ -42,6 +42,11 @@ namespace Castle.Rook.Compiler.AST
 		}
 
 		public override bool Accept(IASTVisitor visitor)
+		{
+			return visitor.VisitMemberAccessExpression(this);
+		}
+
+		public override IExpression Accept(IExpressionAttrVisitor visitor)
 		{
 			return visitor.VisitMemberAccessExpression(this);
 		}

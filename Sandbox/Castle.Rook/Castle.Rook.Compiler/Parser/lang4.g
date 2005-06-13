@@ -691,11 +691,11 @@ trailer[IExpression inner] returns [IExpression exp]
 //	LBRACK subscriptlist RBRACK // TODO: Array/list/indexer access
 //	| 
 //	(DOT|COLONCOLON) => qp=qualified_postfix	{ exp = new MemberAccessExpression(inner, qp); }
-	COLONCOLON IDENT	{ exp = new MemberAccessExpression(inner, qp); }
+	COLONCOLON t1:IDENT	{ exp = new MemberAccessExpression(inner, t1.getText()); }
 	|
 	DOT "nil?" { exp = new NullCheckExpression(inner); }
 	|
-	DOT IDENT { exp = new MemberAccessExpression(inner, qp); }
+	DOT t:IDENT { exp = new MemberAccessExpression(inner, t.getText()); }
 	;
 
 range returns[IExpression rex]

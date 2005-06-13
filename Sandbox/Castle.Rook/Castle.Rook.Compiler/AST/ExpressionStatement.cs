@@ -31,11 +31,14 @@ namespace Castle.Rook.Compiler.AST
 		public IExpression Expression
 		{
 			get { return expression; }
+			set { expression = value; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)
 		{
 			return visitor.VisitExpressionStatement(this);
 		}
+
+
 	}
 }

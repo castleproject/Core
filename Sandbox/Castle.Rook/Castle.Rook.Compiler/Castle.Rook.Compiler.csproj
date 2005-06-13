@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\SelfReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\SingleVariableDeclarationStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -320,11 +325,6 @@
                 />
                 <File
                     RelPath = "AST\StatementCollection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AST\ThisReferenceExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1023,7 +1023,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Visitors\IExpressionVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Visitors\ITypeMemberVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Visitors\IVisitableExpression.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
