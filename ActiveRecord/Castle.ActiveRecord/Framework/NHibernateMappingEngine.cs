@@ -445,42 +445,56 @@ namespace Castle.ActiveRecord
 			builder.AppendFormat(setOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
 
 			Type otherType = hasmany.MapType;
-			if (hasmany.Key != null)
+
+			string key = ObtainKey(otherType, prop);
+
+			builder.AppendFormat(keyTag, key);
+
+			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
+			// We need to do it wisely
+			if (key.Length > 0)
 			{
-				PropertyInfo elementProp = otherType.GetProperty(hasmany.Key);
-				if (elementProp != null)
-				{
-					builder.AppendFormat(keyTag, hasmany.Key);
-					PropertyInfo indexProp = otherType.GetProperty(hasmany.Index);
-					if (indexProp != null)
-					{
-						String type = String.Format(typeAttribute, indexProp.Name);
-						builder.AppendFormat(indexTag, hasmany.Index, type);
-					}
-					String column = null;
-					object[] elementAttributes = elementProp.GetCustomAttributes(false);
-					foreach (object attribute in elementAttributes)
-					{
-						if (attribute is PropertyAttribute)
-						{
-							column = (attribute as PropertyAttribute).Column;
-						}
-						else if (attribute is PrimaryKeyAttribute)
-						{
-							column = (attribute as PrimaryKeyAttribute).Column;
-						}
-						else if (attribute is BelongsToAttribute)
-						{
-							column = (attribute as BelongsToAttribute).Column;
-						}
-					}
-					if (column != null)
-					{
-						builder.AppendFormat(elementTag, column, otherType.Name);
-					}
-				}
+				builder.AppendFormat(oneToMany, GetNHibernateName( otherType ) );
 			}
+		
 			builder.Append(setClose);
+
+//			if (hasmany.Key != null)
+//			{
+//				PropertyInfo elementProp = otherType.GetProperty(hasmany.Key);
+//				if (elementProp != null)
+//				{
+//					builder.AppendFormat(keyTag, hasmany.Key);
+//					PropertyInfo indexProp = otherType.GetProperty(hasmany.Index);
+//					if (indexProp != null)
+//					{
+//						String type = String.Format(typeAttribute, indexProp.Name);
+//						builder.AppendFormat(indexTag, hasmany.Index, type);
+//					}
+//					String column = null;
+//					object[] elementAttributes = elementProp.GetCustomAttributes(false);
+//					foreach (object attribute in elementAttributes)
+//					{
+//						if (attribute is PropertyAttribute)
+//						{
+//							column = (attribute as PropertyAttribute).Column;
+//						}
+//						else if (attribute is PrimaryKeyAttribute)
+//						{
+//							column = (attribute as PrimaryKeyAttribute).Column;
+//						}
+//						else if (attribute is BelongsToAttribute)
+//						{
+//							column = (attribute as BelongsToAttribute).Column;
+//						}
+//					}
+//					if (column != null)
+//					{
+//						builder.AppendFormat(elementTag, column, otherType.Name);
+//					}
+//				}
+//			}
+			
 		}
 
 		private void AddListMapping(PropertyInfo prop, HasManyAttribute hasmany, StringBuilder builder)
@@ -703,6 +717,23 @@ namespace Castle.ActiveRecord
 
 			Type otherType = hasmany.MapType;
 
+			string key = ObtainKey(otherType, prop);
+
+			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
+			builder.AppendFormat(keyTag, key);
+
+			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
+			// We need to do it wisely
+			if (key.Length > 0)
+			{
+				builder.AppendFormat(oneToMany, GetNHibernateName( otherType ) );
+			}
+		
+			builder.Append(bagClose);
+		}
+
+		private string ObtainKey(Type otherType, PropertyInfo prop)
+		{
 			string key = "";
 			if( otherType.IsSubclassOf( typeof( ActiveRecordBase ) ) )
 			{
@@ -737,18 +768,7 @@ namespace Castle.ActiveRecord
 			{
 				throw new ConfigurationException("Association with a class that does not extends ActiveRecordBase is invalid. Check " + otherType.FullName);
 			}
-
-			builder.AppendFormat(bagOpen, name, table + schema + lazy + inverse + cascade + orderBy + where);
-			builder.AppendFormat(keyTag, key);
-
-			// We need to choose from element, one-to-many, many-to-many, composite-element, many-to-any
-			// We need to do it wisely
-			if (key.Length > 0)
-			{
-				builder.AppendFormat(oneToMany, GetNHibernateName( otherType ) );
-			}
-		
-			builder.Append(bagClose);
+			return key;
 		}
 
 		private bool AddDiscrimitator(StringBuilder xml, ActiveRecordAttribute ar)
