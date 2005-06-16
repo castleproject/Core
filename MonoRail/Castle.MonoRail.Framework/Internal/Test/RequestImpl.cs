@@ -89,6 +89,11 @@ namespace Castle.MonoRail.Framework.Tests
 			}
 		}
 
+		public string[] UserLanguages
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		#endregion
 	}
 }

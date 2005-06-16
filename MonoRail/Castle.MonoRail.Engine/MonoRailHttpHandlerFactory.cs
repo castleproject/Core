@@ -34,6 +34,7 @@ namespace Castle.MonoRail.Engine
 		private MonoRailConfiguration _config;
 		private IViewEngine _viewEngine;
 		private IFilterFactory _filterFactory;
+		private IResourceFactory _resourceFactory;
 		private IControllerFactory _controllerFactory;
 
 		public MonoRailHttpHandlerFactory()
@@ -42,6 +43,7 @@ namespace Castle.MonoRail.Engine
 			InitializeControllerFactory();
 			InitializeViewEngine();
 			InitializeFilterFactory();
+			InitializeResourceFactory();
 		}
 
 		#region IHttpHandlerFactory
@@ -49,7 +51,7 @@ namespace Castle.MonoRail.Engine
 		public virtual IHttpHandler GetHandler(HttpContext context, 
 			string requestType, String url, String pathTranslated)
 		{
-			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, _filterFactory);
+			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, _filterFactory, _resourceFactory);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
@@ -90,6 +92,19 @@ namespace Castle.MonoRail.Engine
 			else
 			{
 				_filterFactory = new DefaultFilterFactory();
+			}
+		}
+
+		protected virtual void InitializeResourceFactory()
+		{
+			if (_config.CustomResourceFactoryType != null)
+			{
+				_resourceFactory = (IResourceFactory) 
+					Activator.CreateInstance(_config.CustomResourceFactoryType);
+			}
+			else
+			{
+				_resourceFactory = new DefaultResourceFactory();
 			}
 		}
 

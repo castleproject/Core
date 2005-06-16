@@ -87,11 +87,13 @@ namespace Castle.MonoRail.Engine
 					newPath = rule.CompiledRule.Replace(currentPath, rule.Replace);
 
 					//Append the query string
-					string queryString = HttpContext.Current.Request.Url.Query;
+					String queryString = HttpContext.Current.Request.Url.Query;
+
 					if(queryString.Length > 0)
 					{
 						//If we already have some query string params on the new path...
 						bool hasParams = (newPath.LastIndexOf("?") != -1);
+
 						if(hasParams)
 						{
 							//...make sure we append the query string nicely rather than adding another ?

@@ -12,36 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.MonoRail.Framework.Internal
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Reflection;
 
-	public interface IRequest
+	/// <summary>
+	/// Depicts the contract used by the engine
+	/// to obtain implementations of <see cref="IResource"/>.
+	/// </summary>
+	public interface IResourceFactory
 	{
-		NameValueCollection Headers { get; }
+		IResource Create( IResourceDefinition definition, Assembly appAssembly );
 
-		IDictionary Files { get; }
-
-		NameValueCollection Params { get; }
-
-		bool IsLocal { get; }
-
-		Uri Uri { get; }
-
-		byte[] BinaryRead(int count);
-
-		String this [String key] { get; }
-
-		String ReadCookie( String name );
-
-		void ValidateInput();
-
-		NameValueCollection QueryString { get; }
-
-		NameValueCollection Form { get; }
-
-		string[] UserLanguages { get; }
+		void Release( IResource resource );
 	}
 }

@@ -128,6 +128,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IResource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IResponse.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -152,6 +157,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\AbstractResourceAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\ControllerDetailsAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -172,12 +182,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\LocalizationFilterAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\RescueAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\ResourceAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Filters\AntiGoogleWebAcceleratorFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Filters\LocalizationFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -237,6 +262,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\DefaultResourceFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\FilterDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -252,7 +282,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\IResourceFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\IViewEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\ResourceFacade.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

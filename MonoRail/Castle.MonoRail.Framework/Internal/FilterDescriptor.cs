@@ -30,6 +30,11 @@ namespace Castle.MonoRail.Framework.Internal
 			_attribute = attribute;
 		}
 
+		public FilterAttribute Attribute
+		{
+			get { return _attribute; }
+		}
+
 		public Type FilterType
 		{
 			get { return _attribute.FilterType; }

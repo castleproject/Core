@@ -39,12 +39,14 @@ namespace Castle.MonoRail.Framework
 		private IDictionary _bag;
 		private FilterDescriptor[] _filters;
 		private IFilterFactory _filterFactory;
+		private IResourceFactory _resourceFactory;
 		private String _areaName;
 		private String _controllerName;
 		private String _selectedViewName;
 		private String _layoutName;
 		private String _evaluatedAction;
 		private IDictionary _helpers = null;
+		private IDictionary _resources = null;
 
 		internal IDictionary _actions = new HybridDictionary(true);
 
@@ -85,6 +87,11 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#region Usefull Properties
+
+		public IDictionary Resources
+		{
+			get { return _resources; }
+		}
 
 		public IDictionary Helpers
 		{
@@ -292,7 +299,7 @@ namespace Castle.MonoRail.Framework
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		public void Process( IRailsEngineContext context, IFilterFactory filterFactory,
+		public void Process( IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
 			String areaName, String controllerName, String actionName, IViewEngine viewEngine )
 		{
 			_areaName = areaName;
@@ -300,6 +307,7 @@ namespace Castle.MonoRail.Framework
 			_viewEngine = viewEngine;
 			_context = context;
 			_filterFactory = filterFactory;
+			_resourceFactory = resourceFactory;
 
 			if (GetType().IsDefined( typeof(FilterAttribute), true ))
 			{
@@ -394,7 +402,12 @@ namespace Castle.MonoRail.Framework
 				DisposeFilter();
 			}
 
-			if (!hasError) ProcessView();
+			if (!hasError)
+			{
+				CreateResources( method );
+				ProcessView();
+				ReleaseResources();
+			}
 		}
 
 		protected virtual void CreateAndInitializeHelpers()
@@ -448,6 +461,32 @@ namespace Castle.MonoRail.Framework
 		protected virtual void InvokeMethod(MethodInfo method, IRequest request)
 		{
 			method.Invoke( this, new object[0] );
+		}
+
+		#endregion
+
+		#region Resources
+
+		protected virtual void CreateResources( MethodInfo method )
+		{
+			_resources				= new HybridDictionary();
+			Assembly typeAssembly	= this.GetType().Assembly;
+			
+			Attribute[] resources	= Attribute.GetCustomAttributes( this.GetType(), typeof(AbstractResourceAttribute) );
+			
+			foreach ( AbstractResourceAttribute resource in resources )
+				_resources.Add( resource.Name, _resourceFactory.Create( resource, typeAssembly ) );
+
+			resources				= Attribute.GetCustomAttributes( method, typeof(AbstractResourceAttribute) );
+			
+			foreach ( AbstractResourceAttribute resource in resources )
+				_resources[ resource.Name ] = _resourceFactory.Create( resource, typeAssembly );
+		}
+
+		protected virtual void ReleaseResources()
+		{
+			foreach ( IResource resource in _resources.Values )
+				_resourceFactory.Release( resource );
 		}
 
 		#endregion
@@ -517,6 +556,9 @@ namespace Castle.MonoRail.Framework
 			if (desc.FilterInstance == null)
 			{
 				desc.FilterInstance = _filterFactory.Create( desc.FilterType );
+
+				if ( typeof(IFilterAttributeAware).IsInstanceOfType( desc.FilterInstance ) )
+					(desc.FilterInstance as IFilterAttributeAware).FilterAttribute = desc.Attribute;
 			}
 
 			return desc.FilterInstance.Perform( when, _context,  this );

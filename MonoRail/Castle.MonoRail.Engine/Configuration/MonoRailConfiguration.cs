@@ -30,6 +30,7 @@ namespace Castle.MonoRail.Engine.Configuration
 		private String _viewsVirtualPath;
 		private String _customControllerFactory;
 		private String _customFilterFactory;
+		private String _customResourceFactory;
 		private String _customEngineTypeName;
 
 		public MonoRailConfiguration()
@@ -70,6 +71,12 @@ namespace Castle.MonoRail.Engine.Configuration
 			set { _customFilterFactory = value; }
 		}
 
+		public String CustomResourceFactory
+		{
+			get { return _customResourceFactory; }
+			set { _customResourceFactory = value; }
+		}
+
 		public String CustomEngineTypeName
 		{
 			get { return _customEngineTypeName; }
@@ -91,6 +98,15 @@ namespace Castle.MonoRail.Engine.Configuration
 			{
 				return _customFilterFactory != null ?
 					Type.GetType(_customFilterFactory, false, false) : null;
+			}
+		}
+
+		public Type CustomResourceFactoryType
+		{
+			get
+			{
+				return _customResourceFactory != null ?
+					Type.GetType(_customResourceFactory, false, false) : null;
 			}
 		}
 

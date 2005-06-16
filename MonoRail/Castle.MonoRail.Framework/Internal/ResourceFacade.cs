@@ -12,36 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Filters
+namespace Castle.MonoRail.Framework.Internal
 {
-	using System;
-	using System.Web;
-	
-	public class RequestValidatorFilter : IFilter
+	using System.Resources;
+
+	/// <summary>
+	/// Simple facade that provides the IResource interface to a
+	/// ResourceSet instance.
+	/// </summary>
+	public class ResourceFacade : IResource
 	{
-		public RequestValidatorFilter()
+		private ResourceSet resourceSet;
+
+		public ResourceFacade( ResourceSet resourceSet )
 		{
+			this.resourceSet = resourceSet;
 		}
 
-		#region IFilter Members
+		#region IResource Members
 
-		public bool Perform(Castle.MonoRail.Framework.ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public object this[ string key ]
 		{
-			try
+			get
 			{
-				context.Request.ValidateInput();
-				
-				object honeyPot = null;
-				
-				honeyPot = context.Request.Form;
-				honeyPot = context.Request.QueryString;
+				return resourceSet.GetString( key, true );
 			}
-			catch (HttpRequestValidationException e)
-			{
-				context.Flash["validationError"] = context.Server.HtmlEncode(e.Message);
-			}
+		}
 
-			return true;
+		public string GetString( string key )
+		{
+			return resourceSet.GetString( key, true );
+		}
+
+		public object GetObject(string key)
+		{
+			return resourceSet.GetObject( key, true );
 		}
 
 		#endregion

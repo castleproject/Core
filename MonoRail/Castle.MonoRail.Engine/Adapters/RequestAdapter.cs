@@ -86,6 +86,11 @@ namespace Castle.MonoRail.Engine.Adapters
 			get { return _request.Params; }
 		}
 
+		public string[] UserLanguages
+		{
+			get { return _request.UserLanguages; }
+		}
+
 		public String ReadCookie(String name)
 		{
 			HttpCookie cookie = _request.Cookies[name];

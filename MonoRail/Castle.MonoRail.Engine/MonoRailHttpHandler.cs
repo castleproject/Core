@@ -33,8 +33,8 @@ namespace Castle.MonoRail.Engine
 		private String _url;
 
 		public MonoRailHttpHandler( String url, IViewEngine viewEngine, 
-			IControllerFactory controllerFactory, IFilterFactory filterFactory)
-			: base(controllerFactory, viewEngine, filterFactory)
+			IControllerFactory controllerFactory, IFilterFactory filterFactory, IResourceFactory resourceFactory)
+			: base(controllerFactory, viewEngine, filterFactory, resourceFactory)
 		{
 			_url = url;
 		}

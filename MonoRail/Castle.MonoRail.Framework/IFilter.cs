@@ -51,4 +51,12 @@ namespace Castle.MonoRail.Framework
 		/// should be invoked, otherwise <c>false</c></returns>
 		bool Perform( ExecuteEnum exec, IRailsEngineContext context, Controller controller );
 	}
+
+	/// <summary>
+	/// Dictates a contract that the defining FilterAttribute can be set
+	/// </summary>
+	public interface IFilterAttributeAware
+	{
+		FilterAttribute FilterAttribute { set; }
+	}
 }

@@ -30,19 +30,21 @@ namespace Castle.MonoRail.Engine
 		private IControllerFactory _controllerFactory;
 		private IViewEngine _viewEngine;
 		private IFilterFactory _filterFactory;
+		private IResourceFactory _resourceFactory;
 
 		public ProcessEngine(IControllerFactory controllerFactory, 
 			IViewEngine viewEngine) : 
-			this(controllerFactory, viewEngine, new DefaultFilterFactory())
+			this(controllerFactory, viewEngine, new DefaultFilterFactory(), new DefaultResourceFactory())
 		{
 		}
 
 		public ProcessEngine(IControllerFactory controllerFactory, 
-			IViewEngine viewEngine, IFilterFactory filterFactory)
+			IViewEngine viewEngine, IFilterFactory filterFactory, IResourceFactory resourceFactory)
 		{
 			_controllerFactory = controllerFactory;
 			_viewEngine = viewEngine;
 			_filterFactory = filterFactory;
+			_resourceFactory = resourceFactory;
 		}
 
 		public IControllerFactory ControllerFactory
@@ -58,6 +60,11 @@ namespace Castle.MonoRail.Engine
 		public IFilterFactory FilterFactory
 		{
 			get { return _filterFactory; }
+		}
+
+		public IResourceFactory ResourceFactory
+		{
+			get { return _resourceFactory; }
 		}
 
 		/// <summary>
@@ -82,7 +89,7 @@ namespace Castle.MonoRail.Engine
 			try
 			{
 				controller.Process( 
-					context, _filterFactory, 
+					context, _filterFactory, _resourceFactory,
 					info.Area, info.Controller, info.Action, _viewEngine );
 			}
 			finally
@@ -98,9 +105,9 @@ namespace Castle.MonoRail.Engine
 		/// <returns></returns>
 		protected virtual UrlInfo ExtractUrlInfo(IRailsEngineContext context)
 		{
-			string vdir = null;
+			String vdir = null;
 
-			//Null is Testing mode
+			// Null means 'testing' mode
 			if (HttpContext.Current != null)
 			{
 				vdir = HttpContext.Current.Request.ApplicationPath;
