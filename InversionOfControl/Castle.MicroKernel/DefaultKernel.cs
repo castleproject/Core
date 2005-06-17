@@ -457,7 +457,7 @@ namespace Castle.MicroKernel
 			return NamingSubSystem.GetAssignableHandlers(service);
 		}
 
-		public IReleasePolicy ReleasePolicy
+		public virtual IReleasePolicy ReleasePolicy
 		{
 			get { return _releaserPolicy; }
 		}
