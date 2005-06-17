@@ -639,7 +639,7 @@ namespace Castle.MicroKernel
 
 		private void DisposeComponentsInstancesWithinTracker()
 		{
-			_releaserPolicy.Dispose();
+			ReleasePolicy.Dispose();
 		}
 
 		private void DisposeSubKernels()
