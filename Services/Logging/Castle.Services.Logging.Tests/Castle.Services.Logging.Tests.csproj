@@ -76,8 +76,19 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\publicassemblies"
+                />
+                <Reference
+                    Name = "Castle.Services.Logging"
+                    Project = "{1AFAEC30-152C-43E2-B37C-E713419D20B8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -85,6 +96,16 @@
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LevelFilteredLoggerTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StreamLoggerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
