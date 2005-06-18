@@ -26,17 +26,6 @@ namespace Castle.ActiveRecord.Tests
 		protected IConfigurationSource GetConfigSource()
 		{
 			return System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
-
-//			InPlaceConfigurationSource source = new InPlaceConfigurationSource();
-//			Hashtable properties = new Hashtable();
-//			properties.Add("hibernate.connection.driver_class", "NHibernate.Driver.SqlClientDriver");
-//			properties.Add("hibernate.dialect", "NHibernate.Dialect.MsSql2000Dialect");
-//			properties.Add("hibernate.connection.provider", "NHibernate.Connection.DriverConnectionProvider");
-//			properties.Add("hibernate.connection.connection_string", "UID=susa;Password=OverKkk;Initial Catalog=test;Data Source=.");
-//
-//			source.Add( typeof(ActiveRecordBase), properties );
-//
-//			return source;
 		}
 	}
 }
