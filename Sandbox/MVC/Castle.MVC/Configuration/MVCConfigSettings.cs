@@ -1,3 +1,4 @@
+
 #region Apache Notice
 /*****************************************************************************
  * 
@@ -25,11 +26,13 @@
 *************************************************/
 #endregion 
 
+#region Using
+
 using System;
-using System.Collections;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Xml;
+#endregion 
 
 namespace Castle.MVC.Configuration
 {
@@ -40,19 +43,27 @@ namespace Castle.MVC.Configuration
 	{
 		#region Const
 		/// <summary>
-		/// Keys to retrieve configuration node
+		/// Token to retrieve configuration node
 		/// </summary>
-		private const string NODE_VIEW_XPATH = "webViews/view";
+		private const string NODE_WEB_VIEW_XPATH = "webViews/view";
+		private const string NODE_WIN_VIEW_XPATH = "winViews/view";
 		private const string ATTRIBUTE_ID = "id";
+		private const string ATTRIBUTE_VIEW = "view";
 		private const string ATTRIBUTE_PATH = "path";
-		private const string NODE_MAPPING_XPATH = "command-mappings/commands";
+		private const string ATTRIBUTE_TYPE = "type";
+		private const string NODE_COMMANDS_XPATH = "command-mappings/commands";
+		private const string NODE_GLOBAL_COMMANDS_XPATH = "global-commands/command";
+
 		#endregion
 
 		#region Fields
 
 		private StringDictionary _urls = new StringDictionary();
 		private StringDictionary _webViews= new StringDictionary();
+		private HybridDictionary _types = new HybridDictionary();
+		private HybridDictionary _winViews= new HybridDictionary();
 		private HybridDictionary _mappings = new HybridDictionary();
+		private StringDictionary _globalCommands = new StringDictionary();
 
 		#endregion 
 
@@ -66,20 +77,35 @@ namespace Castle.MVC.Configuration
 		public MVCConfigSettings(XmlNode configNode, IFormatProvider formatProvider) 
 		{
 			LoadWebViews(configNode, formatProvider);
-			//LoadWinViews(configNode, formatProvider);
-			LoadMapping(configNode);
+			LoadWinViews(configNode, formatProvider);
+			LoadGlobalCommand(configNode);
+			LoadCommandMapping(configNode);
 		}
 		#endregion 
 
 		#region Methods
 
 		/// <summary>
+		/// Load the global commands
+		/// </summary>
+		/// <param name="configNode">The XmlNode from the configuration file.</param>
+		private void LoadGlobalCommand(XmlNode configNode)
+		{
+			foreach(XmlNode commandNode in configNode.SelectNodes( NODE_GLOBAL_COMMANDS_XPATH ) )
+			{
+				string id = commandNode.Attributes[ATTRIBUTE_ID].Value;
+				string view = commandNode.Attributes[ATTRIBUTE_VIEW].Value;
+				_globalCommands.Add( id, view );
+			}
+		}
+
+		/// <summary>
 		/// Load the command mapping
 		/// </summary>
 		/// <param name="configNode">The XmlNode from the configuration file.</param>
-		private void LoadMapping(XmlNode configNode)
+		private void LoadCommandMapping(XmlNode configNode)
 		{		
-			foreach( XmlNode currentNode in configNode.SelectNodes( NODE_MAPPING_XPATH ) )
+			foreach( XmlNode currentNode in configNode.SelectNodes( NODE_COMMANDS_XPATH ) )
 			{
 				CommandsSetting setting = new CommandsSetting( currentNode );
 				_mappings.Add( setting.View, setting );
@@ -94,7 +120,7 @@ namespace Castle.MVC.Configuration
 		private void LoadWebViews(XmlNode configNode, IFormatProvider formatProvider)
 		{
 			//Get the views
-			foreach( XmlNode viewNode in configNode.SelectNodes( NODE_VIEW_XPATH ) )
+			foreach( XmlNode viewNode in configNode.SelectNodes( NODE_WEB_VIEW_XPATH ) )
 			{
 				string viewName = viewNode.Attributes[ATTRIBUTE_ID].Value;
 				string viewUrl = viewNode.Attributes[ATTRIBUTE_PATH].Value;
@@ -107,6 +133,33 @@ namespace Castle.MVC.Configuration
 				else 
 				{
 					throw new ConfigurationException( Resource.ResourceManager.FormatMessage( Resource.MessageKeys.ViewAlreadyConfigured, viewName ) ); 
+				}
+			}
+		}
+
+		/// <summary>
+		/// Load the windows views
+		/// </summary>
+		/// <param name="configNode">The XmlNode from the configuration file.</param>
+		/// <param name="formatProvider">The provider.</param>
+		private void LoadWinViews(XmlNode configNode, IFormatProvider formatProvider)
+		{
+			//Get the views
+			foreach( XmlNode viewNode in configNode.SelectNodes( NODE_WIN_VIEW_XPATH ) )
+			{
+				string viewId = viewNode.Attributes[ATTRIBUTE_ID].Value;
+				string viewType = viewNode.Attributes[ATTRIBUTE_TYPE].Value;
+
+				// infer type from viewType
+				Type type = null;
+				if( !_winViews.Contains( type ) )
+				{
+					_types.Add( viewId, type ); 
+					//_winViews.Add( type, viewId ); 
+				}
+				else 
+				{
+					throw new ConfigurationException( Resource.ResourceManager.FormatMessage( Resource.MessageKeys.ViewAlreadyConfigured, viewId ) ); 
 				}
 			}
 		}
@@ -130,6 +183,15 @@ namespace Castle.MVC.Configuration
 		}
 
 		///<summary>
+		/// Looks up a windows view based on his type.
+		///</summary>  
+		///<param name="type">The view type.</param>
+		public virtual string GetView(Type type)
+		{
+			return _winViews[type] as string;
+		}
+
+		///<summary>
 		///Looks up a next view based on current command id and and current view id.
 		///</summary>  
 		///<param name="commandID">The id of the current command.</param>
@@ -137,20 +199,30 @@ namespace Castle.MVC.Configuration
 		///<returns>The next web view to go.</returns>
 		public virtual string GetNextView(string viewID, string commandID)
 		{
-			CommandsSetting setting= null;
-			if( _mappings.Contains( viewID ) )
+			string nextView = string.Empty;
+
+			if (_globalCommands.ContainsKey(commandID))
 			{
-				setting = _mappings[viewID] as CommandsSetting;
+				nextView = _globalCommands[commandID];
 			}
 			else
 			{
-				throw new ConfigurationException( Resource.ResourceManager.FormatMessage( Resource.MessageKeys.CantFindCommandMapping, viewID ) ); 
+				CommandsSetting setting= null;
+				if( _mappings.Contains( viewID ) )
+				{
+					setting = _mappings[viewID] as CommandsSetting;
+				}
+				else
+				{
+					throw new ConfigurationException( Resource.ResourceManager.FormatMessage( Resource.MessageKeys.CantFindCommandMapping, viewID ) ); 
+				}
+				nextView = setting[commandID];
+				if( nextView==null )
+				{
+					throw new ConfigurationException( Resource.ResourceManager.FormatMessage( Resource.MessageKeys.CantGetNextView, viewID, commandID ) ); 
+				}				
 			}
-			string nextView = setting[commandID];
-			if( nextView==null )
-			{
-				throw new ConfigurationException( Resource.ResourceManager.FormatMessage( Resource.MessageKeys.CantGetNextView, viewID, commandID ) ); 
-			}
+
 			return nextView;
 		}
 		#endregion 

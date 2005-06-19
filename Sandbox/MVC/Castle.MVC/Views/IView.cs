@@ -25,10 +25,10 @@
 *************************************************/
 #endregion 
 
-using System;
+#region Using
 
-using Castle.MVC.Controllers;
 using Castle.MVC.States;
+#endregion 
 
 namespace Castle.MVC.Views
 {
@@ -37,10 +37,6 @@ namespace Castle.MVC.Views
 	/// </summary>
 	public interface IView
 	{
-		/// <summary>
-		/// Provides access to the current view controller.
-		/// </summary>
-		IController ControllerBase { get; }
 
 		/// <summary>
 		/// Gets the view id.

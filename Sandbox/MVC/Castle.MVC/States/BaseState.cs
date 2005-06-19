@@ -30,11 +30,9 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Security.Principal;
-using System.Runtime.Serialization;
-
-using Castle.MVC.StatePersister;
 using Castle.Model;
+using Castle.MVC.StatePersister;
+
 #endregion 
 
 namespace Castle.MVC.States
@@ -72,16 +70,6 @@ namespace Castle.MVC.States
 		{
 		}
 		#endregion 
-
-
-		/// <summary>
-		/// Gets or sets an element saved on the state with the specified key.
-		/// </summary>
-		public object this[ string key ]
-		{
-			set{this.Dictionary[ key ] = value;}
-			get{ return this.Dictionary[ key ]; }
-		}
 
 		#region IState members
 
@@ -138,16 +126,24 @@ namespace Castle.MVC.States
 
 		#endregion 
 
+		#region Methods
+
+		/// <summary>
+		/// Gets or sets an element saved on the state with the specified key.
+		/// </summary>
+		public object this[ string key ]
+		{
+			set{this.Dictionary[ key ] = value;}
+			get{ return this.Dictionary[ key ]; }
+		}
 
 		/// <summary>
 		/// Reset state.
 		/// </summary>
 		public void Reset() 
 		{
-			_command = string.Empty;
 			_items.Clear();
 		}
-
 
 		/// <summary>
 		/// Save the state
@@ -156,5 +152,8 @@ namespace Castle.MVC.States
 		{
 			_statePersister.Save(this);
 		}
+		#endregion 
+
+
 	}
 }

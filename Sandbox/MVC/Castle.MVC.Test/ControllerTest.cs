@@ -1,15 +1,11 @@
-using System;
-
-using NUnit.Framework;
-using Castle.Windsor;
-using Castle.MVC.States;
-using Castle.MVC.Navigation;
-using Castle.MVC.Views;
-using Castle.MVC.StatePersister;
-
-using Castle.MVC.Web;
-using Castle.MVC.Web.Controllers;
 using Castle.Facilities.TypedFactory;
+using Castle.MVC.Navigation;
+using Castle.MVC.StatePersister;
+using Castle.MVC.States;
+using Castle.MVC.Test.Presentation;
+using Castle.MVC.Views;
+using Castle.Windsor;
+using NUnit.Framework;
 
 namespace Castle.MVC.Test
 {
@@ -22,7 +18,6 @@ namespace Castle.MVC.Test
 		private WindsorContainer _container;
 		private HomeController _homeController = null;
 		private MyApplicationState _state = null;
-		private AccountController _accountController = null;
 
 		#region SetUp & TearDown
 
@@ -35,7 +30,6 @@ namespace Castle.MVC.Test
 			 _container = null;
 			 _homeController = null;
 			 _state = null;
-			_accountController = null;
 
 			_container = new WindsorContainer();
 
@@ -46,10 +40,10 @@ namespace Castle.MVC.Test
 				new FactoryEntry("stateFactory", typeof(IStateFactory), "Create", "Release") );
 
 
-			AddControllers(_container);
+			AddControllers();
 		}
  
-		private void AddControllers(WindsorContainer container)
+		private void AddControllers()
 		{
 			_container.AddComponent( "state", typeof(IState), typeof(MyApplicationState));
 			_container.AddComponent( "statePersister", typeof(IStatePersister), typeof(MemoryStatePersister));
@@ -60,7 +54,6 @@ namespace Castle.MVC.Test
 			_container.AddComponent( "AccountController", typeof(AccountController) );
 
 			_homeController = _container.Resolve("HomeController") as HomeController;
-			_accountController = _container.Resolve("AccountController") as AccountController;
 			_state = _homeController.State as MyApplicationState;
 		}
 
@@ -95,7 +88,7 @@ namespace Castle.MVC.Test
 		public void TestController() 
 		{
 			_state.CurrentView = "index";
-			_state.Command = "Login";
+			_state.Command = "GoToPage2";
 			_homeController.Login("email", "pass");
 
 			Assert.IsTrue(_state.PreviousView=="index");
@@ -109,7 +102,7 @@ namespace Castle.MVC.Test
 		public void TestState() 
 		{
 			_state.CurrentView = "index";
-			_state.Command = "Login";
+			_state.Command = "GoToPage2";
 			_state.SomeSessionString = "toto";
 			_homeController.Login("email", "pass");
 

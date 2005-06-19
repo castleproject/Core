@@ -1,3 +1,4 @@
+
 #region Apache Notice
 /*****************************************************************************
  * 
@@ -28,14 +29,16 @@
 #region Using
 
 using System;
-using System.Web;
+using System.Reflection;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using Castle.Windsor;
-using Castle.MVC.Controllers;
-using Castle.MVC.States;
 using Castle.MVC.Configuration;
+using Castle.MVC.Controllers;
+using Castle.MVC.StatePersister;
+using Castle.MVC.States;
+using Castle.Windsor;
+
 #endregion 
 
 namespace Castle.MVC.Views
@@ -44,13 +47,22 @@ namespace Castle.MVC.Views
 	/// Base class for user interaction in Web application. You can inherit from
 	/// this class when developing your Web forms.
 	/// </summary>
-	public class WebFormView : System.Web.UI.Page, IView
+	public class WebFormView : Page, IView
 	{
 
 		#region Fields
 
-		private IController _controller = null;
+		private IState _state = null;
 
+		/// <summary>
+		/// Binding token
+		/// </summary>
+		private BindingFlags BINDING_FLAGS_SET
+			= BindingFlags.Public 
+			| BindingFlags.SetProperty
+			| BindingFlags.Instance 
+			| BindingFlags.SetField
+			;
 		#endregion 
 
 		#region Constructor
@@ -71,21 +83,7 @@ namespace Castle.MVC.Views
 		/// </summary>
 		public string View
 		{
-			get
-			{
-				return _controller.State.CurrentView;
-			}
-		}
-
-		/// <summary>
-		/// Provides access to the controller.
-		/// </summary>
-		public IController ControllerBase
-		{
-			get
-			{
-				return _controller;
-			}
+			get { return _state.CurrentView; }
 		}
 
 		/// <summary>
@@ -93,46 +91,71 @@ namespace Castle.MVC.Views
 		/// </summary>
 		public IState State
 		{
-			get
-			{
-				return _controller.State;
-			}
+			get { return _state; }
 		}		
 		#endregion
 
 		#region Methods
 
 
-		private void WebFormView_Load(object sender, System.EventArgs e)
+		private void WebFormView_Load(object sender, EventArgs e)
 		{
 			IWindsorContainer container = ContainerWebAccessorUtil.ObtainContainer();
 
-			// Retrieve the controller name from the attribute
-			ControllerAttribute attribute = null;
-			object[] attrs = this.GetType().GetCustomAttributes( typeof(ControllerAttribute), true );
-			if (attrs.Length > 0)
+			// Get the State
+			IStatePersister statePersister = (IStatePersister) container[typeof(IStatePersister)];
+			_state = statePersister.Load();
+			// Acquire current view
+			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
+
+			// Set the properties controllers
+			PropertyInfo[] properties = this.GetType().GetProperties(BINDING_FLAGS_SET);
+			for (int i = 0; i < properties.Length; i++) 
 			{
-				attribute = (ControllerAttribute) attrs[0];
-				if (attribute != null)
+				if (properties[i].PropertyType.IsSubclassOf(typeof(Controller)))
 				{
-					_controller = container[ attribute.ControllerType ] as IController;
-				}
-			}
-			// Set the command name on the state object
-			foreach(string controllName in this.Request.Form)
-			{
-				Control control = this.FindControl(controllName);
-				if (control is IPostBackEventHandler)
-				{
-					// The commandName is in the control.ViewState["CommandName"]
-					// wich is protected !!! Thanks Microsoft :-(
-					// so we will use the control id for the command Name
-					this.State.Command = control.ID;
+					IController controller = container[properties[i].PropertyType ] as IController;
+					properties[i].SetValue(this, controller, null);
 				}
 			}
 
-			// Acquire current view
-			this.State.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
+			// Try to set the command name on the state object
+			Control control = null;
+			bool findControl = false;
+			foreach(string controllName in this.Request.Form)
+			{
+				control = this.FindControl(controllName);
+				if (control is IPostBackEventHandler)
+				{
+					findControl =true;
+					break;
+				}
+			}
+			// Another try
+			if (!findControl && this.Request.Form["__EVENTTARGET"]!=null)
+			{
+					control = this.FindControl(this.Request.Form["__EVENTTARGET"]);
+			}
+
+			// The Control.ViewState property is associated with each server control 
+			// in your web form 
+			// The commandName is in the control.ViewState["CommandName"]
+			// wich is protected :-(
+			if (control!=null)
+			{
+				PropertyInfo propertyInfo = typeof(Control).GetProperty("ViewState",BindingFlags.Instance 
+					| BindingFlags.IgnoreReturn 
+					| BindingFlags.Public 
+					| BindingFlags.NonPublic); 
+				StateBag statebag = propertyInfo.GetValue(control,null) as StateBag;
+						
+				_state.Command = statebag["CommandName"] as string;				
+			}
+			else
+			{
+				_state.Command = string.Empty;	
+			}
+			_state.Save();
 		}
 
 		/// <summary>
@@ -141,7 +164,7 @@ namespace Castle.MVC.Views
 		/// <param name="clientID">The client id of the control.</param>
 		public void SetFocus(string clientID ) 
 		{
-			System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+			StringBuilder stringBuilder = new StringBuilder();
 		
 			stringBuilder.Append("<script language='javascript'>"); 
 			stringBuilder.Append(" document.getElementById('" + clientID + "').focus()");
@@ -155,7 +178,7 @@ namespace Castle.MVC.Views
 		/// <param name="control">The control</param>
 		public void SetFocus(WebControl control ) 
 		{
-			System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+			StringBuilder stringBuilder = new StringBuilder();
 		
 			stringBuilder.Append("<script language='javascript'>"); 
 			stringBuilder.Append(" document.getElementById('" + control.ClientID + "').focus()");
@@ -169,7 +192,7 @@ namespace Castle.MVC.Views
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return this._controller.Navigator.GetType().FullName + ":" + this._controller.State.GetType().FullName + ":" + this._controller.State.CurrentView;
+			return _state.GetType().FullName + ":" + _state.CurrentView;
 		}
 		#endregion 
 

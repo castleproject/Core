@@ -96,11 +96,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.MVC.Web"
-                    Project = "{85B7EB48-8535-4203-AEAF-B71FA0AC8CB8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Facilities.TypedFactory"
                     AssemblyName = "Castle.Facilities.TypedFactory"
                     HintPath = "..\Lib\Castle.Facilities.TypedFactory.dll"
@@ -109,6 +104,21 @@
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
                     HintPath = "..\Lib\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.MVC.Test.Presentation"
+                    Project = "{E5EB3D18-2F9B-4131-9653-4B1277D36336}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "NUnitAsp"
+                    AssemblyName = "NUnitAsp"
+                    HintPath = "..\Lib\NUnitAsp.dll"
+                />
+                <Reference
+                    Name = "Castle.MVC.Test.Web"
+                    Project = "{AB057784-A68E-460F-A4BD-63181296FD07}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -121,6 +131,11 @@
                 />
                 <File
                     RelPath = "ControllerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebFormTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
