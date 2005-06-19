@@ -23,9 +23,6 @@ namespace Castle.ActiveRecord
 		Set,
 		IdBag,
 		// Map,
-		// List,
-		// Array,
-		// PrimitiveArray
 	}
 
 	[AttributeUsage(AttributeTargets.Property)]

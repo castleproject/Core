@@ -1,4 +1,4 @@
- // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ namespace Castle.ActiveRecord
 		UuidString,
 		Guid,
 		GuidComb,
-//		Native,
 		Assigned,
 		Foreign
 	} 
@@ -54,22 +53,6 @@ namespace Castle.ActiveRecord
 		private CollectionIDType _generator = CollectionIDType.Assigned;
 		private String _column;
 		private String _type;
-		//		private String _unsavedValue;
-//		private bool _composite;
-
-//		public CollectionIDAttribute() : this(CollectionIDType.Native)
-//		{
-//		}
-//
-//		public CollectionIDAttribute(CollectionIDType generator)
-//		{
-//			_generator = generator;
-//		}
-//
-//		public CollectionIDAttribute(CollectionIDType generator, String column) : this(generator)
-//		{
-//			_column = column;
-//		}
 
 		public CollectionIDAttribute(CollectionIDType generator, String column, String ColumnType)
 		{
@@ -95,20 +78,5 @@ namespace Castle.ActiveRecord
 			get { return _type; }
 			set { _type = value; }
 		}
-
-		/// <summary>
-		/// Not sure if CollectionID supports unsaved value.
-		/// </summary>
-//		public String UnsavedValue
-//		{
-//			get { return _unsavedValue; }
-//			set { _unsavedValue = value; }
-//		}
-//
-//		public bool IsComposite
-//		{
-//			get { return _composite; }
-//			set { _composite = value; }
-//		}
 	}
 }
