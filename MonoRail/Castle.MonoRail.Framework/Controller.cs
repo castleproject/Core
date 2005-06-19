@@ -60,32 +60,6 @@ namespace Castle.MonoRail.Framework
 			CollectActions();
 		}
 
-		protected internal virtual void CollectActions()
-		{
-			MethodInfo[] methods = GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
-			
-			foreach(MethodInfo m in methods)
-			{
-				_actions[m.Name] = m;
-			}
-
-			ScreenCommonPublicMethods(_actions);
-		}
-
-		protected void ScreenCommonPublicMethods(IDictionary actions)
-		{
-			actions.Remove("ToString");
-			actions.Remove("GetHashCode");
-			actions.Remove("RenderView");
-			actions.Remove("RenderText");
-			actions.Remove("RenderSharedView");
-			actions.Remove("Redirect");
-			actions.Remove("Process");
-			actions.Remove("Send");
-			actions.Remove("PreSendView");
-			actions.Remove("PostSendView");
-		}
-
 		#region Usefull Properties
 
 		public IDictionary Resources
@@ -98,7 +72,7 @@ namespace Castle.MonoRail.Framework
 			get
 			{
 				if (_helpers == null) CreateAndInitializeHelpers();
-				
+
 				return _helpers;
 			}
 		}
@@ -160,7 +134,7 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return _context.Session; }
 		}
-		
+
 		/// <summary>
 		/// Access a dictionary of volative items.
 		/// Ideal for showing success and failures messages
@@ -194,7 +168,6 @@ namespace Castle.MonoRail.Framework
 			get { return Context.Response; }
 		}
 
-
 		#endregion
 
 		#region Usefull operations
@@ -204,16 +177,16 @@ namespace Castle.MonoRail.Framework
 		/// after the action has finished its processing. 
 		/// </summary>
 		/// <param name="name"></param>
-		public void RenderView( String name )
+		public void RenderView(String name)
 		{
 			String basePath = _controllerName;
 
 			if (_areaName != null)
 			{
-				basePath = Path.Combine( _areaName, _controllerName );
+				basePath = Path.Combine(_areaName, _controllerName);
 			}
 
-			_selectedViewName = Path.Combine( basePath, name );
+			_selectedViewName = Path.Combine(basePath, name);
 		}
 
 		/// <summary>
@@ -222,28 +195,29 @@ namespace Castle.MonoRail.Framework
 		/// of the view root directory)
 		/// </summary>
 		/// <param name="name"></param>
-		public void RenderSharedView( String name )
+		public void RenderSharedView(String name)
 		{
 			_selectedViewName = name;
 		}
+
 		/// <summary>
 		/// Defines the View to be presented
 		/// after the action has finished its processing. 
 		/// </summary>
-		public void RenderView( String controller, String name )
+		public void RenderView(String controller, String name)
 		{
-			_selectedViewName = Path.Combine( controller, name );
+			_selectedViewName = Path.Combine(controller, name);
 		}
 
 		/// <summary>
 		/// Redirects to the specified Url
 		/// </summary>
 		/// <param name="url"></param>
-		public void Redirect( String url )
+		public void Redirect(String url)
 		{
 			CancelView();
 
-			_context.Response.Redirect( url );
+			_context.Response.Redirect(url);
 		}
 
 		/// <summary>
@@ -251,11 +225,11 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="controller"></param>
 		/// <param name="action"></param>
-		public void Redirect( String controller, String action )
+		public void Redirect(String controller, String action)
 		{
 			CancelView();
 
-			_context.Response.Redirect( controller, action );
+			_context.Response.Redirect(controller, action);
 		}
 
 		/// <summary>
@@ -264,11 +238,11 @@ namespace Castle.MonoRail.Framework
 		/// <param name="area"></param>
 		/// <param name="controller"></param>
 		/// <param name="action"></param>
-		public void Redirect( String area, String controller, String action )
+		public void Redirect(String area, String controller, String action)
 		{
 			CancelView();
-			
-			_context.Response.Redirect( area, controller, action );
+
+			_context.Response.Redirect(area, controller, action);
 		}
 
 		/// <summary>
@@ -288,19 +262,45 @@ namespace Castle.MonoRail.Framework
 		{
 			CancelView();
 
-			Response.Write( contents );
+			Response.Write(contents);
 		}
 
 		#endregion
 
 		#region Core methods
 
+		protected internal virtual void CollectActions()
+		{
+			MethodInfo[] methods = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+			foreach (MethodInfo m in methods)
+			{
+				_actions[m.Name] = m;
+			}
+
+			ScreenCommonPublicMethods(_actions);
+		}
+
+		protected void ScreenCommonPublicMethods(IDictionary actions)
+		{
+			actions.Remove("ToString");
+			actions.Remove("GetHashCode");
+			actions.Remove("RenderView");
+			actions.Remove("RenderText");
+			actions.Remove("RenderSharedView");
+			actions.Remove("Redirect");
+			actions.Remove("Process");
+			actions.Remove("Send");
+			actions.Remove("PreSendView");
+			actions.Remove("PostSendView");
+		}
+
 		/// <summary>
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		public void Process( IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
-			String areaName, String controllerName, String actionName, IViewEngine viewEngine )
+		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
+		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine)
 		{
 			_areaName = areaName;
 			_controllerName = controllerName;
@@ -309,17 +309,17 @@ namespace Castle.MonoRail.Framework
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
 
-			if (GetType().IsDefined( typeof(FilterAttribute), true ))
+			if (GetType().IsDefined(typeof (FilterAttribute), true))
 			{
 				_filters = CollectFilterDescriptor();
 			}
 
-			if (GetType().IsDefined( typeof(LayoutAttribute), true ))
+			if (GetType().IsDefined(typeof (LayoutAttribute), true))
 			{
 				LayoutName = ObtainDefaultLayoutName();
 			}
 
-			InternalSend( actionName );
+			InternalSend(actionName);
 		}
 
 		/// <summary>
@@ -327,7 +327,7 @@ namespace Castle.MonoRail.Framework
 		/// with the action name specified.
 		/// </summary>
 		/// <param name="action"></param>
-		public void Send( String action )
+		public void Send(String action)
 		{
 			InternalSend(action);
 		}
@@ -343,12 +343,12 @@ namespace Castle.MonoRail.Framework
 		/// 6. Invoke the view engine<br/>
 		/// </summary>
 		/// <param name="action">Action name</param>
-		protected virtual void InternalSend( String action )
+		protected virtual void InternalSend(String action)
 		{
 			_evaluatedAction = action;
 
 			// Specifies the default view for this area/controller/action
-			RenderView( action );
+			RenderView(action);
 
 			if (HttpContext.Current != null)
 			{
@@ -369,7 +369,7 @@ namespace Castle.MonoRail.Framework
 			{
 				if (!skipFilters)
 				{
-					if (!ProcessFilters( ExecuteEnum.Before, filtersToSkip ))
+					if (!ProcessFilters(ExecuteEnum.Before, filtersToSkip))
 					{
 						hasError = true;
 					}
@@ -380,11 +380,11 @@ namespace Castle.MonoRail.Framework
 					InvokeMethod(method);
 				}
 			}
-			catch(ThreadAbortException)
+			catch (ThreadAbortException)
 			{
 				hasError = true;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				hasError = true;
 
@@ -397,14 +397,14 @@ namespace Castle.MonoRail.Framework
 			{
 				if (!skipFilters)
 				{
-					ProcessFilters( ExecuteEnum.After, filtersToSkip );
+					ProcessFilters(ExecuteEnum.After, filtersToSkip);
 				}
 				DisposeFilter();
 			}
 
 			if (!hasError)
 			{
-				CreateResources( method );
+				CreateResources(method);
 				ProcessView();
 				ReleaseResources();
 			}
@@ -414,9 +414,9 @@ namespace Castle.MonoRail.Framework
 		{
 			_helpers = new HybridDictionary();
 
-			Attribute[] helpers = Attribute.GetCustomAttributes(this.GetType(), typeof(HelperAttribute));
+			Attribute[] helpers = Attribute.GetCustomAttributes(this.GetType(), typeof (HelperAttribute));
 
-			foreach(HelperAttribute helper in helpers)
+			foreach (HelperAttribute helper in helpers)
 			{
 				object helperInstance = Activator.CreateInstance(helper.HelperType);
 
@@ -431,10 +431,10 @@ namespace Castle.MonoRail.Framework
 			}
 
 			// Default helpers 
-			_helpers[ typeof(AjaxHelper).Name ] = new AjaxHelper();
-			_helpers[ typeof(DateFormatHelper).Name ] = new DateFormatHelper();
-			_helpers[ typeof(HtmlHelper).Name ] = new HtmlHelper();
-			_helpers[ typeof(EffectsFatHelper).Name ] = new EffectsFatHelper(); 
+			_helpers[typeof (AjaxHelper).Name] = new AjaxHelper();
+			_helpers[typeof (DateFormatHelper).Name] = new DateFormatHelper();
+			_helpers[typeof (HtmlHelper).Name] = new HtmlHelper();
+			_helpers[typeof (EffectsFatHelper).Name] = new EffectsFatHelper();
 		}
 
 		#endregion
@@ -444,10 +444,10 @@ namespace Castle.MonoRail.Framework
 		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
 		{
 			MethodInfo method = actions[action] as MethodInfo;
-	
+
 			if (method == null)
 			{
-				throw new ControllerException( String.Format("No action for '{0}' found", action) );
+				throw new ControllerException(String.Format("No action for '{0}' found", action));
 			}
 
 			return method;
@@ -460,33 +460,33 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual void InvokeMethod(MethodInfo method, IRequest request)
 		{
-			method.Invoke( this, new object[0] );
+			method.Invoke(this, new object[0]);
 		}
 
 		#endregion
 
 		#region Resources
 
-		protected virtual void CreateResources( MethodInfo method )
+		protected virtual void CreateResources(MethodInfo method)
 		{
-			_resources				= new HybridDictionary();
-			Assembly typeAssembly	= this.GetType().Assembly;
-			
-			Attribute[] resources	= Attribute.GetCustomAttributes( this.GetType(), typeof(AbstractResourceAttribute) );
-			
-			foreach ( AbstractResourceAttribute resource in resources )
-				_resources.Add( resource.Name, _resourceFactory.Create( resource, typeAssembly ) );
+			_resources = new HybridDictionary();
+			Assembly typeAssembly = this.GetType().Assembly;
 
-			resources				= Attribute.GetCustomAttributes( method, typeof(AbstractResourceAttribute) );
-			
-			foreach ( AbstractResourceAttribute resource in resources )
-				_resources[ resource.Name ] = _resourceFactory.Create( resource, typeAssembly );
+			Attribute[] resources = Attribute.GetCustomAttributes(this.GetType(), typeof (AbstractResourceAttribute));
+
+			foreach (AbstractResourceAttribute resource in resources)
+				_resources.Add(resource.Name, _resourceFactory.Create(resource, typeAssembly));
+
+			resources = Attribute.GetCustomAttributes(method, typeof (AbstractResourceAttribute));
+
+			foreach (AbstractResourceAttribute resource in resources)
+				_resources[resource.Name] = _resourceFactory.Create(resource, typeAssembly);
 		}
 
 		protected virtual void ReleaseResources()
 		{
-			foreach ( IResource resource in _resources.Values )
-				_resourceFactory.Release( resource );
+			foreach (IResource resource in _resources.Values)
+				_resourceFactory.Release(resource);
 		}
 
 		#endregion
@@ -500,16 +500,16 @@ namespace Castle.MonoRail.Framework
 				// No filters, so skip 
 				return true;
 			}
-			
-			if (!method.IsDefined( typeof(SkipFilterAttribute), true ))
+
+			if (!method.IsDefined(typeof (SkipFilterAttribute), true))
 			{
 				// Nothing against filters declared for this action
 				return false;
 			}
 
-			object[] skipInfo = method.GetCustomAttributes( typeof(SkipFilterAttribute), true );
-			
-			foreach(SkipFilterAttribute skipfilter in skipInfo)
+			object[] skipInfo = method.GetCustomAttributes(typeof (SkipFilterAttribute), true);
+
+			foreach (SkipFilterAttribute skipfilter in skipInfo)
 			{
 				// If the user declared a [SkipFilterAttribute] then skip all filters
 				if (skipfilter.BlanketSkip) return true;
@@ -522,10 +522,10 @@ namespace Castle.MonoRail.Framework
 
 		protected internal FilterDescriptor[] CollectFilterDescriptor()
 		{
-			object[] attrs = GetType().GetCustomAttributes( typeof(FilterAttribute), true );
+			object[] attrs = GetType().GetCustomAttributes(typeof (FilterAttribute), true);
 			FilterDescriptor[] desc = new FilterDescriptor[attrs.Length];
 
-			for(int i=0; i < attrs.Length; i++)
+			for (int i = 0; i < attrs.Length; i++)
 			{
 				desc[i] = new FilterDescriptor(attrs[i] as FilterAttribute);
 			}
@@ -535,7 +535,7 @@ namespace Castle.MonoRail.Framework
 
 		private bool ProcessFilters(ExecuteEnum when, IDictionary filtersToSkip)
 		{
-			foreach(FilterDescriptor desc in _filters)
+			foreach (FilterDescriptor desc in _filters)
 			{
 				if (filtersToSkip.Contains(desc.FilterType)) continue;
 
@@ -555,20 +555,20 @@ namespace Castle.MonoRail.Framework
 		{
 			if (desc.FilterInstance == null)
 			{
-				desc.FilterInstance = _filterFactory.Create( desc.FilterType );
+				desc.FilterInstance = _filterFactory.Create(desc.FilterType);
 
-				if ( typeof(IFilterAttributeAware).IsInstanceOfType( desc.FilterInstance ) )
+				if (typeof (IFilterAttributeAware).IsInstanceOfType(desc.FilterInstance))
 					(desc.FilterInstance as IFilterAttributeAware).FilterAttribute = desc.Attribute;
 			}
 
-			return desc.FilterInstance.Perform( when, _context,  this );
+			return desc.FilterInstance.Perform(when, _context, this);
 		}
 
 		private void DisposeFilter()
 		{
 			if (_filters == null) return;
 
-			foreach(FilterDescriptor desc in _filters)
+			foreach (FilterDescriptor desc in _filters)
 			{
 				if (desc.FilterInstance != null)
 				{
@@ -583,7 +583,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual String ObtainDefaultLayoutName()
 		{
-			object[] attrs = GetType().GetCustomAttributes( typeof(LayoutAttribute), true );
+			object[] attrs = GetType().GetCustomAttributes(typeof (LayoutAttribute), true);
 
 			if (attrs.Length == 1)
 			{
@@ -598,7 +598,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (_selectedViewName != null)
 			{
-				_viewEngine.Process( _context, this, _selectedViewName );
+				_viewEngine.Process(_context, this, _selectedViewName);
 			}
 		}
 
@@ -614,26 +614,26 @@ namespace Castle.MonoRail.Framework
 
 			RescueAttribute att = null;
 
-			if (method.IsDefined( typeof(RescueAttribute), true ))
+			if (method.IsDefined(typeof (RescueAttribute), true))
 			{
-				att = method.GetCustomAttributes( 
-					typeof(RescueAttribute), true )[0] as RescueAttribute;
+				att = method.GetCustomAttributes(
+					typeof (RescueAttribute), true)[0] as RescueAttribute;
 			}
-			else if (controllerType.IsDefined( typeof(RescueAttribute), true ))
+			else if (controllerType.IsDefined(typeof (RescueAttribute), true))
 			{
-				att = controllerType.GetCustomAttributes( 
-					typeof(RescueAttribute), true )[0] as RescueAttribute;
+				att = controllerType.GetCustomAttributes(
+					typeof (RescueAttribute), true)[0] as RescueAttribute;
 			}
 
 			if (att != null)
 			{
 				try
 				{
-					_selectedViewName = String.Format( "rescues\\{0}", att.ViewName );
+					_selectedViewName = String.Format("rescues\\{0}", att.ViewName);
 					ProcessView();
 					return true;
 				}
-				catch(Exception)
+				catch (Exception)
 				{
 					// In this situation, the rescue view could not be found
 					// So we're back to the default error exibition
@@ -654,14 +654,14 @@ namespace Castle.MonoRail.Framework
 		/// <param name="view"></param>
 		public virtual void PreSendView(object view)
 		{
-			if ( view is IControllerAware )
+			if (view is IControllerAware)
 			{
 				(view as IControllerAware).SetController(this);
 			}
 
 			if (_context.UnderlyingContext != null)
 			{
-				((HttpContext)_context.UnderlyingContext).Items[ControllerContextKey] = this;
+				((HttpContext) _context.UnderlyingContext).Items[ControllerContextKey] = this;
 			}
 		}
 
