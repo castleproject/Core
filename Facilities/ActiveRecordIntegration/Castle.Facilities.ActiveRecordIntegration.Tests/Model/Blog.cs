@@ -52,28 +52,28 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 			set { _author = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Table="Posts", Column="blogid")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid")]
 		public IList Posts
 		{
 			get { return _posts; }
 			set { _posts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Table="Posts", Column="blogid", Where="published = 1")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 1")]
 		public IList PublishedPosts
 		{
 			get { return _publishedposts; }
 			set { _publishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Table="Posts", Column="blogid", Where="published = 0")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 0")]
 		public IList UnPublishedPosts
 		{
 			get { return _unpublishedposts; }
 			set { _unpublishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Table="Posts", Column="blogid", OrderBy="created desc")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", OrderBy="created desc")]
 		public IList RecentPosts
 		{
 			get { return _recentposts; }

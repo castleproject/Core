@@ -89,6 +89,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "model.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Attributes\CastleComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
