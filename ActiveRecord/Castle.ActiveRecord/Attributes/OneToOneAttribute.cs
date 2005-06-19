@@ -99,29 +99,29 @@ namespace Castle.ActiveRecord
 	/// generator type <c>PrimaryKeyType.Foreign</c>
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
-	public class HasOneAttribute : Attribute
+	public class OneToOneAttribute : Attribute
 	{
-		private String _cascade;
-		private String _constrained;
-		private String _outerJoin;
+		private bool _constrained;
+		private OuterJoinEnum _outerJoin = OuterJoinEnum.Auto;
+		private CascadeEnum _cascade = CascadeEnum.None;
 
-		public HasOneAttribute()
+		public OneToOneAttribute()
 		{
 		}
 
-		public String Cascade
+		public CascadeEnum Cascade
 		{
 			get { return _cascade; }
 			set { _cascade = value; }
 		}
 
-		public String Constrained
+		public bool Constrained
 		{
 			get { return _constrained; }
 			set { _constrained = value; }
 		}
 
-		public String OuterJoin
+		public OuterJoinEnum OuterJoin
 		{
 			get { return _outerJoin; }
 			set { _outerJoin = value; }

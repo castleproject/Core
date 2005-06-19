@@ -39,41 +39,24 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class HasAndBelongsToManyAttribute : RelationAttribute
 	{
-		private Type _mapType;
-		private String _key;
 		private String _index;
-		private String _table;
-		private String _schema;
-		private bool _lazy;
-		private bool _inverse;
-		private String _cascade;
-//		private String _sort;
-		private String _orderBy;
-		private String _where;
-		private String _column;
+		private String _columnRef;	
 		private String _columnKey;
 
-		public HasAndBelongsToManyAttribute( Type mapType, RelationType relationType ) : base(relationType)
+		public HasAndBelongsToManyAttribute( Type mapType )
 		{
 			_mapType = mapType;
 		}
 
-		public Type MapType
+		public HasAndBelongsToManyAttribute( Type mapType, RelationType type ) : this(mapType)
 		{
-			get { return _mapType; }
-			set { _mapType = value; }
+			_relType = type;
 		}
 
-		public String Key
+		public String ColumnRef
 		{
-			get { return _key; }
-			set { _key = value; }
-		}
-
-		public String Column
-		{
-			get { return _column; }
-			set { _column = value; }
+			get { return _columnRef; }
+			set { _columnRef = value; }
 		}
 
 		public String ColumnKey
@@ -86,48 +69,6 @@ namespace Castle.ActiveRecord
 		{
 			get { return _index; }
 			set { _index = value; }
-		}
-
-		public String Table
-		{
-			get { return _table; }
-			set { _table = value; }
-		}
-
-		public String Schema
-		{
-			get { return _schema; }
-			set { _schema = value; }
-		}
-
-		public bool Lazy
-		{
-			get { return _lazy; }
-			set { _lazy = value; }
-		}
-
-		public bool Inverse
-		{
-			get { return _inverse; }
-			set { _inverse = value; }
-		}
-
-		public String Cascade
-		{
-			get { return _cascade; }
-			set { _cascade = value; }
-		}
-
-		public String OrderBy
-		{
-			get { return _orderBy; }
-			set { _orderBy = value; }
-		}
-
-		public String Where
-		{
-			get { return _where; }
-			set { _where = value; }
 		}
 	}
 }

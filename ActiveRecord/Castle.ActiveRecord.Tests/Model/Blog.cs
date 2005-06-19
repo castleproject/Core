@@ -1,4 +1,3 @@
-using NHibernate;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,8 @@ namespace Castle.ActiveRecord.Tests
 {
 	using System;
 	using System.Collections;
+
+	using NHibernate;
 
 	using Castle.ActiveRecord.Framework;
 
@@ -53,28 +54,28 @@ namespace Castle.ActiveRecord.Tests
 			set { _author = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="Posts", Table="Posts", Column="blogid")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid")]
 		public IList Posts
 		{
 			get { return _posts; }
 			set { _posts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="PublishedPosts", Table="Posts", Column="blogid", Where="published = 1")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 1")]
 		public IList PublishedPosts
 		{
 			get { return _publishedposts; }
 			set { _publishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="UnPublishedPosts", Table="Posts", Column="blogid", Where="published = 0")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 0")]
 		public IList UnPublishedPosts
 		{
 			get { return _unpublishedposts; }
 			set { _unpublishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), RelationType.Bag, Key="RecentPosts", Table="Posts", Column="blogid", OrderBy="created desc")]
+		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", OrderBy="created desc")]
 		public IList RecentPosts
 		{
 			get { return _recentposts; }

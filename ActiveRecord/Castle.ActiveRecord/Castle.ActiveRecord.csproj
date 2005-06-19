@@ -144,11 +144,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes\HasOneAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Attributes\HiLoAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -159,12 +154,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes\KeyAttribute.cs"
+                    RelPath = "Attributes\JoinedKeyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Attributes\NestedAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\OneToOneAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -180,6 +180,16 @@
                 />
                 <File
                     RelPath = "Attributes\RelationAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\TimestampAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\VersionAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -249,11 +259,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\NHibernateMappingEngine.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Framework\SessionFactoryHolder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -280,6 +285,116 @@
                 />
                 <File
                     RelPath = "Framework\Config\XmlConfigurationSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\ActiveRecordModelBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\ActiveRecordModelCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\IVisitable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\IVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\ActiveRecordModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\BelongsToModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\CollectionIDModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\HasAndBelongsToManyModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\HasManyModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\HiloModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\IModelNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\KeyModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\NestedModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\OneToOneModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\PrimaryKeyModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\PropertyModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\TimestampModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\VersionModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Visitors\AbstractDepthFirstVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Visitors\GraphConnectorVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Visitors\SemanticVerifierVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Visitors\XmlGenerationVisitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -70,7 +70,7 @@ namespace Castle.ActiveRecord.Tests.Model
 		private byte company_type;
 		private int comp_id;
 
-		[Key("comp_id")]
+		[JoinedKey("comp_id")]
 		public int CompId
 		{
 			get { return comp_id; }
@@ -105,7 +105,7 @@ namespace Castle.ActiveRecord.Tests.Model
 	{
 		private int person_id;
 
-		[Key]
+		[JoinedKey]
 		public int Person_Id
 		{
 			get { return person_id; }

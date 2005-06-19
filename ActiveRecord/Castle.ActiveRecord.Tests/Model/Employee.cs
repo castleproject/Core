@@ -46,7 +46,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { this.lastName = value; }
 		}
 
-		[HasOne]
+		[OneToOne]
 		public Award Award
 		{
 			get { return this.award; }
@@ -85,7 +85,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			this.employee = employee;
 		}
 
-		[HasOne]
+		[OneToOne]
 		public Employee Employee
 		{
 			get { return this.employee; }

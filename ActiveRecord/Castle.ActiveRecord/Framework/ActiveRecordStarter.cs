@@ -23,6 +23,7 @@ namespace Castle.ActiveRecord
 	using Castle.Model.Configuration;
 
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Internal;
 
 	/// <summary>
 	/// Performs the framework initialization 
@@ -45,23 +46,44 @@ namespace Castle.ActiveRecord
 			// Base configuration
 			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
 
-			NHibernateMappingEngine engine = new NHibernateMappingEngine();
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+
+			ActiveRecordModelCollection models = builder.Models;
 
 			foreach( Type type in types )
 			{
-				if ( !typeof(ActiveRecordBase).IsAssignableFrom( type ) )
+				if ( models.Contains(type) || !typeof(ActiveRecordBase).IsAssignableFrom( type ) )
 				{
 					continue;
 				}
 
-				SetUpConfiguration(source, type, holder);
+				builder.Create( type );
+			}
 
-				Configuration cfg = holder.GetConfiguration( holder.GetRootType(type) );
+			GraphConnectorVisitor connectorVisitor = new GraphConnectorVisitor(models);
+			connectorVisitor.VisitNodes( models );
 
-				if (!type.IsAbstract)
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(models);
+			semanticVisitor.VisitNodes( models );
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+
+			foreach(ActiveRecordModel model in models)
+			{
+				SetUpConfiguration(source, model.Type, holder);
+				
+				Configuration cfg = holder.GetConfiguration( holder.GetRootType(model.Type) );
+
+				if (!model.Type.IsAbstract && !model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
 				{
-					String xml = engine.CreateMapping(type, types);
-					if (xml != String.Empty) cfg.AddXmlString(xml);
+					xmlVisitor.Reset(); xmlVisitor.CreateXml(model);
+
+					String xml = xmlVisitor.Xml;
+					
+					if (xml != String.Empty)
+					{
+						cfg.AddXmlString(xml);
+					}
 				}
 			}
 		}
@@ -111,7 +133,6 @@ namespace Castle.ActiveRecord
 					list.Add(type);
 				}
 			}
-
 
 			Initialize( source, (Type[]) list.ToArray( typeof(Type) ) );
 		}

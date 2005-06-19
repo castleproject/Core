@@ -12,29 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord
+namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 {
 	using System;
 
-	/// <summary>
-	/// Used for joined subclasses.
-	/// </summary>
-	public class KeyAttribute : Attribute
+	[ActiveRecord( DiscriminatorColumn="type", DiscriminatorValue="person" )]
+	public class Person : ActiveRecordBase
 	{
-		private string _column;
+	}
 
-		public KeyAttribute()
-		{
-		}
-
-		public KeyAttribute(String column)
-		{
-			_column = column;
-		}
-
-		public string ColumnName
-		{
-			get { return _column; }
-		}
+	[ActiveRecord( DiscriminatorValue="customer" )]
+	public class Customer : Person
+	{
+		
 	}
 }

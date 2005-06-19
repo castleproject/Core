@@ -48,12 +48,14 @@ namespace Castle.ActiveRecord
 	public class PropertyAttribute : Attribute
 	{
 		private String _column;
-		private String _update;
-		private String _insert;
 		private String _formula;
 		private String _type;
+		private String _unsavedValue;
 		private int _length;
 		private bool _notNull;
+		private bool _unique;
+		private bool _update = true;
+		private bool _insert = true;
 
 		public PropertyAttribute()
 		{
@@ -62,6 +64,12 @@ namespace Castle.ActiveRecord
 		public PropertyAttribute(String column)
 		{
 			_column = column;
+		}
+
+		public PropertyAttribute(String column, String type)
+		{
+			_column = column;
+			_type = type;
 		}
 
 		public bool NotNull
@@ -82,16 +90,22 @@ namespace Castle.ActiveRecord
 			set { _column = value; }
 		}
 
-		public String Update
+		public bool Update
 		{
 			get { return _update; }
 			set { _update = value; }
 		}
 
-		public String Insert
+		public bool Insert
 		{
 			get { return _insert; }
 			set { _insert = value; }
+		}
+
+		public bool Unique
+		{
+			get { return _unique; }
+			set { _unique = value; }
 		}
 
 		public String Formula
@@ -104,6 +118,12 @@ namespace Castle.ActiveRecord
 		{
 			get { return _type; }
 			set { _type = value; }
+		}
+
+		public String UnsavedValue
+		{
+			get { return _unsavedValue; }
+			set { _unsavedValue = value; }
 		}
 	}
 }

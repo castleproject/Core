@@ -36,7 +36,9 @@ namespace Castle.ActiveRecord
 		private String _discriminatorType;
 		private String _discriminatorValue;
 		private String _discriminatorColumn;
-		private bool _proxy;
+		private String where;
+		private Type _proxy;
+		private bool lazy;
 
 		public ActiveRecordAttribute()
 		{
@@ -66,7 +68,7 @@ namespace Castle.ActiveRecord
 			set { _schema = value; }
 		}
 
-		public bool Proxy
+		public Type Proxy
 		{
 			get { return _proxy; }
 			set { _proxy = value; }
@@ -100,6 +102,21 @@ namespace Castle.ActiveRecord
 		{
 			get { return _discriminatorValue; }
 			set { _discriminatorValue = value; }
+		}
+
+		/// <summary>
+		/// SQL condition to retrieve objects
+		/// </summary>
+		public String Where
+		{
+			get { return where; }
+			set { where = value; }
+		}
+
+		public bool Lazy
+		{
+			get { return lazy; }
+			set { lazy = value; }
 		}
 	}
 }

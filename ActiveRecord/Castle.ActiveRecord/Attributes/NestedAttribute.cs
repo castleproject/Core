@@ -94,5 +94,19 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class NestedAttribute : Attribute
 	{
+		private bool update = true;
+		private bool insert = true;
+
+		public bool Update
+		{
+			get { return update; }
+			set { update = value; }
+		}
+
+		public bool Insert
+		{
+			get { return insert; }
+			set { insert = value; }
+		}
 	}
 }

@@ -16,6 +16,21 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	public enum OuterJoinEnum
+	{
+		Auto,
+		Yes,
+		No
+	}
+
+	public enum CascadeEnum
+	{
+		None,
+		All,
+		SaveUpdate,
+		Delete
+	}
+
 	/// <summary>
 	/// Maps a one to one association.
 	/// </summary>
@@ -41,17 +56,19 @@ namespace Castle.ActiveRecord
 	{
 		private Type _type;
 		private String _column;
-		private String _cascade;
-		private String _outerJoin;
-		private String _update;
-		private String _insert;
+		private bool _update = true;
+		private bool _insert = true;
+		private bool _notnull;
+		private bool _unique;
+		private OuterJoinEnum _outerJoin = OuterJoinEnum.Auto;
+		private CascadeEnum _cascade = CascadeEnum.None;
 
 		public BelongsToAttribute(String column)
 		{
 			_column = column;
 		}
 
-		public BelongsToAttribute( Type type )
+		public BelongsToAttribute(Type type)
 		{
 			_type = type;
 		}
@@ -68,28 +85,40 @@ namespace Castle.ActiveRecord
 			set { _column = value; }
 		}
 
-		public String Cascade
+		public CascadeEnum Cascade
 		{
 			get { return _cascade; }
 			set { _cascade = value; }
 		}
 
-		public String OuterJoin
+		public OuterJoinEnum OuterJoin
 		{
 			get { return _outerJoin; }
 			set { _outerJoin = value; }
 		}
 
-		public String Update
+		public bool Update
 		{
 			get { return _update; }
 			set { _update = value; }
 		}
 
-		public String Insert
+		public bool Insert
 		{
 			get { return _insert; }
 			set { _insert = value; }
+		}
+
+		public bool NotNull
+		{
+			get { return _notnull; }
+			set { _notnull = value; }
+		}
+
+		public bool Unique
+		{
+			get { return _unique; }
+			set { _unique = value; }
 		}
 	}
 }

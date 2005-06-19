@@ -55,7 +55,7 @@ namespace Castle.ActiveRecord.Tests.Model
 
 	[HasAndBelongsToMany( typeof(Product), RelationType.Set, 
 	   Table="line_item", 
-	   Column="product_id", ColumnKey="order_id" )]
+	   ColumnRef="product_id", ColumnKey="order_id" )]
 	public ISet Products
 	{
 	  get { return _products; }
@@ -104,7 +104,7 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		[HasAndBelongsToMany( typeof(ProductWithIDBag), RelationType.IdBag, 
 			 Table="line_item_non_ident", 
-			 Column="product_id", ColumnKey="order_id"), 
+			 ColumnRef="product_id", ColumnKey="order_id"), 
 		CollectionID(CollectionIDType.HiLo, "line_number", "Int32"),
 		Hilo(Table="testing_hilo", Column="sequence", MaxLo=150)]
 		public IList Products

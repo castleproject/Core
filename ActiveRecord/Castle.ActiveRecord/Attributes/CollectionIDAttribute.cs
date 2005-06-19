@@ -27,11 +27,10 @@ namespace Castle.ActiveRecord
 		UuidString,
 		Guid,
 		GuidComb,
-		Native,
+//		Native,
 		Assigned,
 		Foreign
-	}
-
+	} 
 
 	/// <summary>
 	/// Used for a collection that requires a collection id.
@@ -52,32 +51,32 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
 	public class CollectionIDAttribute : Attribute
 	{
-		private CollectionIDType _generator = CollectionIDType.Native;
+		private CollectionIDType _generator = CollectionIDType.Assigned;
 		private String _column;
-		private String _unsavedValue;
 		private String _type;
-		private bool _composite;
+		//		private String _unsavedValue;
+//		private bool _composite;
 
-		public CollectionIDAttribute() : this(CollectionIDType.Native)
-		{
-		}
+//		public CollectionIDAttribute() : this(CollectionIDType.Native)
+//		{
+//		}
+//
+//		public CollectionIDAttribute(CollectionIDType generator)
+//		{
+//			_generator = generator;
+//		}
+//
+//		public CollectionIDAttribute(CollectionIDType generator, String column) : this(generator)
+//		{
+//			_column = column;
+//		}
 
-		public CollectionIDAttribute(CollectionIDType generator)
+		public CollectionIDAttribute(CollectionIDType generator, String column, String ColumnType)
 		{
 			_generator = generator;
-		}
-
-		public CollectionIDAttribute(CollectionIDType generator, String column) : this(generator)
-		{
-			_column = column;
-		}
-
-		public CollectionIDAttribute(CollectionIDType generator, String column, String ColumnType) : this(generator)
-		{
 			_column = column;
 			_type = ColumnType;
 		}
-
 
 		public CollectionIDType Generator
 		{
@@ -100,16 +99,16 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Not sure if CollectionID supports unsaved value.
 		/// </summary>
-		public String UnsavedValue
-		{
-			get { return _unsavedValue; }
-			set { _unsavedValue = value; }
-		}
-
-		public bool IsComposite
-		{
-			get { return _composite; }
-			set { _composite = value; }
-		}
+//		public String UnsavedValue
+//		{
+//			get { return _unsavedValue; }
+//			set { _unsavedValue = value; }
+//		}
+//
+//		public bool IsComposite
+//		{
+//			get { return _composite; }
+//			set { _composite = value; }
+//		}
 	}
 }

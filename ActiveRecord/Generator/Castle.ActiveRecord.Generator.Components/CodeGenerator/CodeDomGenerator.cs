@@ -106,6 +106,7 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 			declaration.Members.Add( new CodeMemberField(targetTypeName, fieldName ) );
 	
 			CodeMemberProperty memberProperty = new CodeMemberProperty();
+			memberProperty.Attributes = MemberAttributes.Public|MemberAttributes.Final;
 			memberProperty.Name = property.PropertyName;
 			memberProperty.Type = new CodeTypeReference(targetTypeName);
 	

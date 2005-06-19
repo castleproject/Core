@@ -12,9 +12,12 @@
 
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="src.dir" value="${base.dir}\${name}" />
-	<property name="test.src.dir" value="${src.dir}/../${name}.Tests" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
-	<property name="test.assembly.appconfig" value="${test.assembly.name}.config" />
+	<property name="test.src.dir1" value="${src.dir}/../${name}.Framework.Internal.Tests" />
+	<property name="test.src.dir2" value="${src.dir}/../${name}.Tests" />
+	<property name="test.assembly.name1" value="${name}.Framework.Internal.Tests.dll" />
+	<property name="test.assembly.appconfig1" value="${test.assembly.name1}.config" />
+	<property name="test.assembly.name2" value="${name}.Tests.dll" />
+	<property name="test.assembly.appconfig2" value="${test.assembly.name2}.config" />
 
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
@@ -27,7 +30,8 @@
 		<delete dir="${doc.dir}" failonerror="false" />
 		<mkdir dir="${doc.dir}" />
 
-		<copy file="${test.src.dir}/${test.assembly.appconfig}" todir="${bin.dir}" />
+		<copy file="${test.src.dir1}/${test.assembly.appconfig1}" todir="${bin.dir}" />
+		<copy file="${test.src.dir2}/${test.assembly.appconfig2}" todir="${bin.dir}" />
 
 		<copy file="${castle.model}" todir="${bin.dir}" />
 
@@ -79,9 +83,9 @@
 		<csc 
 			target="library" 
 			debug="${debug}" 
-			output="${bin.dir}/${test.assembly.name}">
+			output="${bin.dir}/${test.assembly.name1}">
 			
-			<sources basedir="${test.src.dir}" defaultexcludes="true">
+			<sources basedir="${test.src.dir1}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
 
@@ -95,10 +99,27 @@
 				<include name="${bin.dir}/HashCodeProvider.dll" />
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
 			</references>
+		</csc>
 
-			<resources basedir="${test.src.dir}" prefix="Castle.ActiveRecord.Tests" dynamicprefix="true">
-				<include name="TestXmlMappings\Mappings.xml" />
-			</resources>
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name2}">
+			
+			<sources basedir="${test.src.dir2}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/${assembly.name}" />
+				<include name="${bin.dir}/Castle.Model.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
+				<include name="${bin.dir}/log4net.dll" />
+				<include name="${bin.dir}/Iesi.Collections.dll" />
+				<include name="${bin.dir}/HashCodeProvider.dll" />
+				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
+			</references>
 		</csc>
 	</target>
 	
@@ -110,8 +131,14 @@
 		<nunit2 >
 			<formatter type="Plain" />
 			<test 
-				assemblyname="${bin.dir}/${test.assembly.name}" 
-				appconfig="${bin.dir}/${test.assembly.appconfig}"/>
+				assemblyname="${bin.dir}/${test.assembly.name1}" 
+				appconfig="${bin.dir}/${test.assembly.appconfig1}"/>
+		</nunit2>
+		<nunit2 >
+			<formatter type="Plain" />
+			<test 
+				assemblyname="${bin.dir}/${test.assembly.name2}" 
+				appconfig="${bin.dir}/${test.assembly.appconfig2}"/>
 		</nunit2>
 	</target>
 	
