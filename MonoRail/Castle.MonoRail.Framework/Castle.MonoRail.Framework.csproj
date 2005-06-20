@@ -376,11 +376,6 @@
                     SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Views\Aspx\WebFormsController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
             </Include>
         </Files>
     </CSHARP>
