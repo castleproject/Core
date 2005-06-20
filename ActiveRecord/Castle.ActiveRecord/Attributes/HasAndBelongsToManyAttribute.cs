@@ -36,7 +36,7 @@ namespace Castle.ActiveRecord
 	/// association table that points to the primary key of this class. In 
 	/// the example, 'company_id' points to 'Company'.
 	/// </remarks>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class HasAndBelongsToManyAttribute : RelationAttribute
 	{
 		private String _index;

@@ -51,7 +51,7 @@ namespace Castle.ActiveRecord
 	/// <remarks>
 	/// Please note that the 'blogid' foreign key lies on the 'Post' table.
 	/// </remarks>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class BelongsToAttribute : Attribute
 	{
 		private Type _type;

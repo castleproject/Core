@@ -91,7 +91,7 @@ namespace Castle.ActiveRecord
 	/// 	}
 	/// </code>
 	/// </example>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class NestedAttribute : Attribute
 	{
 		private bool update = true;

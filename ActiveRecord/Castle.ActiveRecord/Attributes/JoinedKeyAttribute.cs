@@ -19,6 +19,7 @@ namespace Castle.ActiveRecord
 	/// <summary>
 	/// Used for joined subclasses.
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class JoinedKeyAttribute : Attribute
 	{
 		private string _column;

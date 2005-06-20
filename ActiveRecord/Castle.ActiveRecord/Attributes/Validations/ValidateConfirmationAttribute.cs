@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord
 
 	using Castle.ActiveRecord.Framework.Validators;
 
-
+	[Serializable]
 	public class ValidateConfirmationAttribute : AbstractValidationAttribute
 	{
 		public ValidateConfirmationAttribute(String confirmationFieldOrProperty) : 

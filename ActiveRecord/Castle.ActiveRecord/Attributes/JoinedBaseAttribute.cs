@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord
 	/// Denotes that a class is the parent class of one or 
 	/// more subclasses using a join
 	/// </summary>
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
 	public class JoinedBaseAttribute : Attribute
 	{
 		public JoinedBaseAttribute()

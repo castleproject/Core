@@ -1,3 +1,4 @@
+using System.Reflection;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -154,23 +155,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitHasMany(HasManyModel model)
 		{
-			if (model.HasManyAtt.RelationType == RelationType.Guess)
-			{
-				if (model.Property.PropertyType == typeof(IList))
-				{
-					model.HasManyAtt.RelationType = RelationType.Bag;
-				}
-				else if (model.Property.PropertyType == typeof(ISet))
-				{
-					model.HasManyAtt.RelationType = RelationType.Set;
-				}
-				else
-				{
-					throw new ActiveRecordException( String.Format(
-						"Could not guess type for property {0}.{1}  ", 
-						model.Property.DeclaringType.Name, model.Property.Name) );
-				}
-			}
+			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
 
 			if (model.HasManyAtt.RelationType == RelationType.IdBag)
 			{
@@ -232,6 +217,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
 		{
+			model.HasManyAtt.RelationType = GuessRelation(model.Property, model.HasManyAtt.RelationType);
+
 			Type otherend = model.HasManyAtt.MapType;
 
 			if (model.HasManyAtt.Table == null)
@@ -270,6 +257,31 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 
 			base.VisitHasAndBelongsToMany(model);
+		}
+
+		private RelationType GuessRelation(PropertyInfo property, RelationType type)
+		{
+			if (type == RelationType.Guess)
+			{
+				if (property.PropertyType == typeof(IList))
+				{
+					return RelationType.Bag;
+				}
+				else if (property.PropertyType == typeof(ISet))
+				{
+					return RelationType.Set;
+				}
+				else
+				{
+					throw new ActiveRecordException( String.Format(
+						"Could not guess relation type for property {0}.{1}  ", 
+						property.DeclaringType.Name, property.Name) );
+				}
+			}
+			else
+			{
+				return type;
+			}
 		}
 	}
 }

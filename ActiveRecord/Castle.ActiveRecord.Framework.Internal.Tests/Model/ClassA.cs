@@ -21,7 +21,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	public class ClassA : ActiveRecordBase
 	{
 		private int id;
-		private String name;
+		private String name1;
+		private String name2;
+		private String name3;
 		private String text;
 
 		[PrimaryKey]
@@ -31,11 +33,25 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			set { id = value; }
 		}
 
-		[Property]
-		public string Name
+		[Property(Insert=false, Update=false)]
+		public string Name1
 		{
-			get { return name; }
-			set { name = value; }
+			get { return name1; }
+			set { name1 = value; }
+		}
+
+		[Property(UnsavedValue="hammett")]
+		public string Name2
+		{
+			get { return name2; }
+			set { name2 = value; }
+		}
+
+		[Property(Unique=true, NotNull=true)]
+		public string Name3
+		{
+			get { return name3; }
+			set { name3 = value; }
 		}
 
 		[Property(ColumnType="StringClob")]

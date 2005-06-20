@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	[Serializable]
 	public enum ManyRelationCascadeEnum
 	{
 		None,
@@ -40,7 +41,7 @@ namespace Castle.ActiveRecord
 	///			set { _posts = value; }
 	///		}
 	/// </code></example>
-	[AttributeUsage(AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public class HasManyAttribute : RelationAttribute
 	{
 		protected String _keyColumn;

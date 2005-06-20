@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	[Serializable]
 	public enum CollectionIDType
 	{
 		None,
@@ -47,7 +48,7 @@ namespace Castle.ActiveRecord
 	///			set { _id = value; }
 	///		}
 	/// </code></example>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class CollectionIDAttribute : Attribute
 	{
 		private CollectionIDType _generator = CollectionIDType.Assigned;

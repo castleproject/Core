@@ -188,7 +188,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitProperty(PropertyModel model)
 		{
-			AppendF("<property {0} {1} {2} {3} {4} />",
+			AppendF("<property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} />",
 				MakeAtt("name", model.Property.Name), 
 				MakeAtt("column", model.PropertyAtt.Column),
 				MakeTypeAtt(model.Property, model.PropertyAtt.ColumnType),

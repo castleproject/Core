@@ -28,7 +28,7 @@ namespace Castle.ActiveRecord
 	/// }
 	/// </code>
 	/// </example>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
 	public class ActiveRecordAttribute : Attribute
 	{ 
 		private String _table;

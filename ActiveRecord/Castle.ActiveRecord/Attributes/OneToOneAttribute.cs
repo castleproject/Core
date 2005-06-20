@@ -98,7 +98,7 @@ namespace Castle.ActiveRecord
 	/// generated elsewhere (foreign) uses the PrimaryKey attribute with the
 	/// generator type <c>PrimaryKeyType.Foreign</c>
 	/// </remarks>
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class OneToOneAttribute : Attribute
 	{
 		private bool _constrained;

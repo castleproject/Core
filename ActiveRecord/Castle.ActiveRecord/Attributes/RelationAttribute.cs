@@ -16,6 +16,7 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
+	[Serializable]
 	public enum RelationType
 	{
 		Guess,
@@ -25,7 +26,7 @@ namespace Castle.ActiveRecord
 		// Map,
 	}
 
-	[AttributeUsage(AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public abstract class RelationAttribute : Attribute
 	{
 		protected Type _mapType;

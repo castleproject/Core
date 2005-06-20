@@ -44,7 +44,7 @@ namespace Castle.ActiveRecord
 	///		}
 	///	</code>
 	/// </example>
-	[AttributeUsage(AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public class PropertyAttribute : Attribute
 	{
 		private String _column;
@@ -57,18 +57,17 @@ namespace Castle.ActiveRecord
 		private bool _update = true;
 		private bool _insert = true;
 
-		public PropertyAttribute()
+		public PropertyAttribute() 
 		{
 		}
 
-		public PropertyAttribute(String column)
+		public PropertyAttribute(String column) : this()
 		{
 			_column = column;
 		}
 
-		public PropertyAttribute(String column, String type)
+		public PropertyAttribute(String column, String type) : this(column)
 		{
-			_column = column;
 			_type = type;
 		}
 

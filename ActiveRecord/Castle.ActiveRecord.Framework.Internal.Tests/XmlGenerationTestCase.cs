@@ -46,8 +46,10 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"   />\r\n" +
-				"    <property name=\"Text\" column=\"Text\" type=\"StringClob\"   />\r\n" +
+				"    <property name=\"Name1\" column=\"Name1\" type=\"System.String\"     insert=\"false\" update=\"false\"  />\r\n" + 
+				"    <property name=\"Name2\" column=\"Name2\" type=\"System.String\"  unsaved-value=\"hammett\"      />\r\n" + 
+				"    <property name=\"Name3\" column=\"Name3\" type=\"System.String\"   not-null=\"true\" unique=\"true\"    />\r\n" + 
+				"    <property name=\"Text\" column=\"Text\" type=\"StringClob\"        />\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 
@@ -73,9 +75,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <discriminator column=\"type\" type=\"String\" />\r\n" + 
-				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"   />\r\n" + 
+				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"        />\r\n" + 
 				"    <subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassDiscriminatorA, Castle.ActiveRecord.Framework.Internal.Tests\"  discriminator-value=\"A\">\r\n" + 
-				"      <property name=\"Age\" column=\"Age\" type=\"Int32\"   />\r\n" + 
+				"      <property name=\"Age\" column=\"Age\" type=\"Int32\"        />\r\n" + 
 				"    </subclass>\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
@@ -101,10 +103,10 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"   />\r\n" +
+				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"        />\r\n" +
 				"    <joined-subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassJoinedSubClassA, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctablea\"   >\r\n" +
 				"      <key column=\"AId\" />\r\n" +
-				"      <property name=\"Age\" column=\"Age\" type=\"Int32\"   />\r\n" +
+				"      <property name=\"Age\" column=\"Age\" type=\"Int32\"        />\r\n" +
 				"    </joined-subclass>\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
@@ -130,7 +132,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <version name=\"Ver\" column=\"Ver\" type=\"System.String\" />\r\n" + 
-				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"   />\r\n" + 
+				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"        />\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
 
@@ -155,7 +157,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <timestamp name=\"Ts\" column=\"Ts\" />\r\n" + 
-				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"   />\r\n" + 
+				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"        />\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
 
@@ -278,7 +280,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"   />\r\n" +
+				"    <property name=\"Name\" column=\"Name\" type=\"System.String\"        />\r\n" +
 				"    <many-to-one name=\"Parent\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Category, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\"      />\r\n" +
 				"    <bag name=\"SubCategories\" table=\"Category\"       >\r\n" +
 				"      <key column=\"parent_id\" />\r\n" +
