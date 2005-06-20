@@ -19,6 +19,5 @@ namespace Castle.MonoRail.Framework.Scaffold
 
 	public class ScaffoldingSupport
 	{
-		public String 
 	}
 }

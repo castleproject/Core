@@ -29,8 +29,9 @@ namespace Castle.MonoRail.Framework.Filters
 			{
 				context.Request.ValidateInput();
 				
-				context.Request.Form;
-				context.Request.QueryString;
+				// Yeah compiler, this is an assignment
+				object dummy = context.Request.Form;
+				dummy = context.Request.QueryString;
 			}
 			catch (HttpRequestValidationException e)
 			{
