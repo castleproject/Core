@@ -95,8 +95,7 @@ namespace Castle.MonoRail.Framework.Filters
 			}
 			catch
 			{
-				if ( setup.FailOnError )
-					throw;
+				if ( setup.FailOnError ) throw;
 			}
 			
 			return true;

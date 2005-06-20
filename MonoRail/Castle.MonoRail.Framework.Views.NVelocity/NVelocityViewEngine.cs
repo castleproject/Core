@@ -21,7 +21,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 {
 	using System;
 	using System.IO;
-	using System.Web;
 	using System.Collections;
 	using Commons.Collections;
 

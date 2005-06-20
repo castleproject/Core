@@ -23,6 +23,11 @@ namespace Castle.MonoRail.Framework
 	public interface IViewEngine
 	{
 		/// <summary>
+		/// Initializes the View Engine.
+		/// </summary>
+		void Init();
+
+		/// <summary>
 		/// The root directory of views, obtained
 		/// from the configuration.
 		/// </summary>
@@ -37,10 +42,5 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller"></param>
 		/// <param name="viewName"></param>
 		void Process(IRailsEngineContext context, Controller controller, String viewName);
-
-		/// <summary>
-		/// Initializes the ViewEngine.
-		/// </summary>
-		void Init();
 	}
 }

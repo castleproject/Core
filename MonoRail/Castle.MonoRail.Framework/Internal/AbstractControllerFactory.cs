@@ -33,8 +33,6 @@ namespace Castle.MonoRail.Framework.Internal
 			_tree = new ControllerTree();
 		}
 
-		#region IControllerFactory
-
 		public virtual Controller GetController(UrlInfo urlInfo)
 		{
 			String area = urlInfo.Area == null ? String.Empty : urlInfo.Area;
@@ -46,8 +44,6 @@ namespace Castle.MonoRail.Framework.Internal
 		public virtual void Release(Controller controller)
 		{			
 		}
-
-		#endregion
 
 		public ControllerTree Tree
 		{

@@ -74,7 +74,6 @@ namespace Castle.MonoRail.Framework.Attributes
 				
 				return CultureInfo.CurrentCulture;
 			}
-
 			set { _Culture = value; }
 		}
 
@@ -95,7 +94,6 @@ namespace Castle.MonoRail.Framework.Attributes
 
 				return null;
 			}
-
 			set { _Assembly = value; }
 		}
 

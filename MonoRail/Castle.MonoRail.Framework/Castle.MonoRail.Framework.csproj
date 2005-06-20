@@ -197,6 +197,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\ScaffoldingAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Filters\AntiGoogleWebAcceleratorFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -338,6 +343,11 @@
                 />
                 <File
                     RelPath = "Internal\Test\ServerUtilityImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Scaffold\ScaffoldingSupport.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -31,10 +31,7 @@ namespace Castle.MonoRail.Framework
 
 		public Type HelperType
 		{
-			get
-			{
-				return _helperType;
-			}
+			get { return _helperType; }
 		}
 	}
 }

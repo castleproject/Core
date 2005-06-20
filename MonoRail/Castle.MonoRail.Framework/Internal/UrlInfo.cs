@@ -38,42 +38,27 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public String Controller
 		{
-			get
-			{
-				return _controller;
-			}
+			get { return _controller; }
 		}
 
 		public String Action
 		{
-			get
-			{
-				return _action;
-			}
+			get { return _action; }
 		}
 
 		public String Area
 		{
-			get
-			{
-				return _area;
-			}
+			get { return _area; }
 		}
 
 		public String UrlRaw
 		{
-			get
-			{
-				return _urlRaw;
-			}
+			get { return _urlRaw; }
 		}
 
 		public string Extension
 		{
-			get
-			{
-				return _extension;
-			}
+			get { return _extension; }
 		}
 
 		/// <summary>

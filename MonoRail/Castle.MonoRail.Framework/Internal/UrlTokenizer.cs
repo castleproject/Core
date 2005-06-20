@@ -83,5 +83,4 @@ namespace Castle.MonoRail.Framework.Internal
 			return extension;
 		}
 	}
-
 }

@@ -66,7 +66,6 @@ namespace Castle.MonoRail.WindsorExtension
 			// Ensure its transient
 			model.LifestyleType = LifestyleType.Transient;
 
-			// Register controller in the tree of controllers
 			ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(model.Implementation);
 			
 			_tree.AddController( descriptor.Area, descriptor.Name, model.Name );

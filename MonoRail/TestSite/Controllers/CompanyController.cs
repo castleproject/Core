@@ -12,36 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace TestSite.Controllers
 {
-	using System.Resources;
+	using System;
 
-	/// <summary>
-	/// Simple facade that provides the IResource interface to a
-	/// ResourceSet instance.
-	/// </summary>
-	public class ResourceFacade : IResource
+	using Castle.MonoRail.Framework;
+
+	using TestSite.Model;
+
+
+	[Scaffolding( typeof(Company) )]
+	public class CompanyController : Controller
 	{
-		private ResourceSet resourceSet;
-
-		public ResourceFacade(ResourceSet resourceSet)
+		public CompanyController()
 		{
-			this.resourceSet = resourceSet;
-		}
-
-		public object this[string key]
-		{
-			get { return resourceSet.GetString(key, true); }
-		}
-
-		public string GetString(string key)
-		{
-			return resourceSet.GetString(key, true);
-		}
-
-		public object GetObject(string key)
-		{
-			return resourceSet.GetObject(key, true);
 		}
 	}
 }

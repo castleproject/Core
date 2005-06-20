@@ -1,4 +1,3 @@
-using Castle.MonoRail.Framework.Internal.Test;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +15,12 @@ using Castle.MonoRail.Framework.Internal.Test;
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
-	using System.IO;
-	using System.Text;
+	using System.Web.Caching;
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Security.Principal;
-	using System.Web.Caching;
+
+	using Castle.MonoRail.Framework.Internal.Test;
 
 	/// <summary>
 	/// Summary description for RailsEngineContextImpl.
@@ -130,10 +129,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 		public string ApplicationPath
 		{
-			get
-			{
-				return AppDomain.CurrentDomain.BaseDirectory;
-			}
+			get { return AppDomain.CurrentDomain.BaseDirectory; }
 		}
 
 		/// <summary>

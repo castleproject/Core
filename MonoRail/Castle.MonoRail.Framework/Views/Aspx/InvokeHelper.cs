@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	using System;
 	using System.Web.UI;
 	using System.Reflection;
-	
+
 	/// <summary>
 	/// Control used to invoke method os a specified Helper.
 	/// </summary>
@@ -38,14 +38,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// <value>A <see cref="String"/> representing the Helper's Name.</value>
 		public string Name
 		{
-			get
-			{
-				return _name;
-			}
-			set
-			{
-				_name = value;
-			}
+			get { return _name; }
+			set { _name = value; }
 		}
 
 		/// <summary>
@@ -54,14 +48,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// <value>A <see cref="String"/> rerprsenting the method's name</value>
 		public string Method
 		{
-			get
-			{
-				return _method;
-			}
-			set
-			{
-				_method = value;
-			}
+			get { return _method; }
+			set { _method = value; }
 		}
 
 		/// <summary>
@@ -70,14 +58,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// <value>An object[] representing the arguments.</value>
 		public object[] Args
 		{
-			get
-			{
-				return _args;
-			}
-			set
-			{
-				_args = value;
-			}
+			get { return _args; }
+			set { _args = value; }
 		}
 
 		/// <summary>
@@ -86,23 +68,14 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// <value>An <see cref="Object"/> representing the argument.</value>
 		public object Arg
 		{
-			get
-			{
-				return _arg;
-			}
-			set
-			{
-				_arg = value;
-			}
+			get { return _arg; }
+			set { _arg = value; }
 		}
 
 
 		protected Controller Controller
 		{
-			get
-			{
-				return (Controller) Context.Items[Controller.ControllerContextKey];
-			}
+			get { return (Controller) Context.Items[Controller.ControllerContextKey]; }
 		}
 
 		public override void DataBind()
@@ -115,7 +88,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			if (Args == null && Arg != null)
 			{
-				Args = new object[]{ Arg };
+				Args = new object[] {Arg};
 			}
 		}
 
@@ -135,7 +108,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private object GetHelper()
 		{
 			object helper = Controller.Helpers[Name];
-	
+
 			if (helper == null)
 			{
 				throw new RailsException("Helper not found. Helper name: " + Name);
@@ -147,7 +120,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private MethodInfo GetMethod(object helper)
 		{
 			Type[] argsTypes = null;
-	
+
 			if (Args == null)
 			{
 				argsTypes = new Type[0];
@@ -156,9 +129,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			{
 				argsTypes = Type.GetTypeArray(Args);
 			}
-	
-			MethodInfo method = helper.GetType().GetMethod( Method, BindingFlags.Instance | BindingFlags.Public, null, argsTypes, null);
-	
+
+			MethodInfo method = helper.GetType().GetMethod(Method, BindingFlags.Instance | BindingFlags.Public, null, argsTypes, null);
+
 			if (method == null)
 			{
 				throw new RailsException(string.Format("Helper's method not found. Method: {0}.{1}", Name, Method));

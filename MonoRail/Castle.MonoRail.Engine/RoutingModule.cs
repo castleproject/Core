@@ -29,10 +29,6 @@ namespace Castle.MonoRail.Engine
 
 		private IList routingRules;
 
-		public RoutingModule()
-		{
-		}
-
 		public void Init(HttpApplication context)
 		{
 			//Subcribe to BeginRequest

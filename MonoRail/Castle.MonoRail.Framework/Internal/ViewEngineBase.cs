@@ -27,24 +27,14 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
-		#region IViewEngine Members
-
 		public String ViewRootDir
 		{
-			get
-			{
-				return _viewRootDir;
-			}
-			set
-			{
-				_viewRootDir = value;
-			}
+			get { return _viewRootDir; }
+			set { _viewRootDir = value; }
 		}
 
 		public abstract void Init();
 
 		public abstract void Process(IRailsEngineContext context, Controller controller, String viewName);
-
-		#endregion
 	}
 }

@@ -23,18 +23,14 @@ namespace Castle.MonoRail.Framework.Filters
 		{
 		}
 
-		#region IFilter Members
-
 		public bool Perform(Castle.MonoRail.Framework.ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
 			try
 			{
 				context.Request.ValidateInput();
 				
-				object honeyPot = null;
-				
-				honeyPot = context.Request.Form;
-				honeyPot = context.Request.QueryString;
+				context.Request.Form;
+				context.Request.QueryString;
 			}
 			catch (HttpRequestValidationException e)
 			{
@@ -43,7 +39,5 @@ namespace Castle.MonoRail.Framework.Filters
 
 			return true;
 		}
-
-		#endregion
 	}
 }

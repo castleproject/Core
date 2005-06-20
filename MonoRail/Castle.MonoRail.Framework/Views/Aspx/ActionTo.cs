@@ -1,4 +1,3 @@
-using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 {
 	using System;
 	using System.Web.UI;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Redirects the post for an especified Action, Controller and Area.
@@ -33,38 +33,20 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 		public string Area
 		{
-			get
-			{
-				return _area;
-			}
-			set
-			{
-				_area = value;
-			}
+			get { return _area; }
+			set { _area = value; }
 		}
 
 		public string Controller
 		{
-			get
-			{
-				return _controller;
-			}
-			set
-			{
-				_controller = value;
-			}
+			get { return _controller; }
+			set { _controller = value; }
 		}
 
 		public string Action
 		{
-			get
-			{
-				return _action;
-			}
-			set
-			{
-				_action = value;
-			}
+			get { return _action; }
+			set { _action = value; }
 		}
 
 		/// <summary>
@@ -73,14 +55,8 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 		/// <value>A string represeting the FormID.</value>
 		public string FormID
 		{
-			get
-			{
-				return _formID;
-			}
-			set
-			{
-				_formID = value;
-			}
+			get { return _formID; }
+			set { _formID = value; }
 		}
 
 
@@ -105,7 +81,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 			if (Area == null || Area.Length == 0)
 			{
 				Area = urlInfo.Area;
-			}	
+			}
 		}
 
 		protected override void Render(HtmlTextWriter writer)
@@ -114,7 +90,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 
 			string redirectFunction = GetRedirectFunction();
 
-			Page.RegisterStartupScript("rails.actionTo", string.Format(scriptTag, redirectFunction) );	
+			Page.RegisterStartupScript("rails.actionTo", string.Format(scriptTag, redirectFunction));
 		}
 
 		private string GetRedirectFunction()
@@ -130,7 +106,7 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 				url = UrlInfo.GetRailsUrl(Area, Controller, Action, _extension);
 			}
 
-			if(FormID == null || FormID.Length == 0)
+			if (FormID == null || FormID.Length == 0)
 			{
 				return string.Format("document.forms[0].action = '{0}';", url);
 			}

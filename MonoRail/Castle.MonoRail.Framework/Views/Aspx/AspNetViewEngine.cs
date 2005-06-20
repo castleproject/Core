@@ -1,4 +1,3 @@
-using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,10 +73,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			ProcessPropertyBag(controller.PropertyBag, childPage);
 
-			ProccessPage(controller, childPage, httpContext);
+			ProcessPage(controller, childPage, httpContext);
 
 			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);		
 		}
+
+		#endregion
 
 		private IHttpHandler GetCompiledPageInstace(string viewName, HttpContext httpContext)
 		{
@@ -94,7 +95,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return String.Compare(original, actual, true) == 0;
 		}
 
-		private void ProccessPage(Controller controller, IHttpHandler page, HttpContext httpContext)
+		private void ProcessPage(Controller controller, IHttpHandler page, HttpContext httpContext)
 		{
 			controller.PreSendView(page);
 	
@@ -102,8 +103,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	
 			controller.PostSendView(page);
 		}
-
-		#endregion
 
 		private void ProcessLayoutIfNeeded(Controller controller, HttpContext httpContext, IHttpHandler childPage, Page masterHandler)
 		{
@@ -124,7 +123,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 						httpContext.Response.RedirectLocation = "foo";
 					}
 
-					ProccessPage(controller, masterHandler, httpContext);
+					ProcessPage(controller, masterHandler, httpContext);
 				}
 				else
 				{

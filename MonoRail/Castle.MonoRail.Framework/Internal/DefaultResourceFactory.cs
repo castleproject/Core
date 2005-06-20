@@ -25,8 +25,6 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public class DefaultResourceFactory : IResourceFactory
 	{
-		#region IResourceFactory Members
-
 		public IResource Create( IResourceDefinition definition, Assembly appAssembly )
 		{
 			if ( definition is ResourceAttribute )
@@ -48,7 +46,5 @@ namespace Castle.MonoRail.Framework.Internal
 		public void Release( IResource resource )
 		{
 		}
-
-		#endregion
 	}
 }

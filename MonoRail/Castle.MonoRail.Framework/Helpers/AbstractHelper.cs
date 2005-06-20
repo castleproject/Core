@@ -14,9 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Helpers
 {
-	using System;
-
-
 	public abstract class AbstractHelper : IControllerAware
 	{
 		private Controller _controller;
