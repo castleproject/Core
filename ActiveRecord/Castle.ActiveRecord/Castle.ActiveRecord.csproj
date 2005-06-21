@@ -124,6 +124,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\ActiveRecordSkip.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\BelongsToAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

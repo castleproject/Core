@@ -32,6 +32,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (type == null) throw new ArgumentNullException("type");
 
+			if (type.IsDefined( typeof(ActiveRecordSkip), true )) return null;
+
 			ActiveRecordModel model = new ActiveRecordModel(type);
 
 			coll.Add(model);

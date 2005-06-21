@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using NHibernate.Tool.hbm2ddl;
+
 namespace Castle.ActiveRecord
 {
 	using System;
@@ -26,8 +28,11 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Internal;
 
 	/// <summary>
-	/// Performs the framework initialization 
+	/// Performs the framework initialization.
 	/// </summary>
+	/// <remarks>
+	/// This class is not thread safe.
+	/// </remarks>
 	public class ActiveRecordStarter
 	{
 		/// <summary>
@@ -154,6 +159,60 @@ namespace Castle.ActiveRecord
 			}
 			
 			Initialize( Assembly.GetExecutingAssembly(), source );
+		}
+
+		/// <summary>
+		/// Generates and executes the creation scripts for the database.
+		/// </summary>
+		public static void CreateSchema()
+		{
+			SchemaExport export = CreateSchemaExport();
+
+			try
+			{
+				export.Create( false, true );
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException( "Could not create the schema", ex );
+			}
+		}
+
+		/// <summary>
+		/// Generates and executes the creation scripts for the database.
+		/// </summary>
+		public static void GenerateCreationScripts( String fileName )
+		{
+			SchemaExport export = CreateSchemaExport();
+
+			try
+			{
+				export.SetOutputFile( fileName );
+				export.Create( false, false );
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException( "Could not create the schema", ex );
+			}
+		}
+
+		private static SchemaExport CreateSchemaExport()
+		{
+			CheckInitialized();
+
+			Configuration cfg = ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) );
+
+			return new SchemaExport( cfg );
+		}
+
+		
+
+		private static void CheckInitialized()
+		{
+			if (ActiveRecordBase._holder == null)
+			{
+				throw new ActiveRecordException("Framework must be Initialize(d) first.");
+			}
 		}
 
 		private static Configuration CreateConfiguration(IConfiguration config)

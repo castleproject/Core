@@ -27,6 +27,9 @@ namespace Castle.ActiveRecord.Framework
 	/// <summary>
 	/// Default implementation of <seealso cref="ISessionFactoryHolder"/>
 	/// </summary>
+	/// <remarks>
+	/// This class is thread safe
+	/// </remarks>
 	public class SessionFactoryHolder : ISessionFactoryHolder
 	{
 		private Hashtable type2Conf = Hashtable.Synchronized(new Hashtable());
