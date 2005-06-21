@@ -72,6 +72,7 @@ namespace Castle.MVC.Views
 		/// </summary>
 		public WebFormView():base()
 		{
+			this.Init += new EventHandler(WebFormView_Init);
 			this.Load += new EventHandler(WebFormView_Load);
 		}
 		#endregion 
@@ -97,16 +98,9 @@ namespace Castle.MVC.Views
 
 		#region Methods
 
-
-		private void WebFormView_Load(object sender, EventArgs e)
+		private void WebFormView_Init(object sender, EventArgs e)
 		{
 			IWindsorContainer container = ContainerWebAccessorUtil.ObtainContainer();
-
-			// Get the State
-			IStatePersister statePersister = (IStatePersister) container[typeof(IStatePersister)];
-			_state = statePersister.Load();
-			// Acquire current view
-			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
 
 			// Set the properties controllers
 			PropertyInfo[] properties = this.GetType().GetProperties(BINDING_FLAGS_SET);
@@ -118,6 +112,17 @@ namespace Castle.MVC.Views
 					properties[i].SetValue(this, controller, null);
 				}
 			}
+		}
+
+		private void WebFormView_Load(object sender, EventArgs e)
+		{
+			IWindsorContainer container = ContainerWebAccessorUtil.ObtainContainer();
+
+			// Get the State
+			IStatePersister statePersister = (IStatePersister) container[typeof(IStatePersister)];
+			_state = statePersister.Load();
+			// Acquire current view
+			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
 
 			// Try to set the command name on the state object
 			Control control = null;
@@ -157,6 +162,7 @@ namespace Castle.MVC.Views
 			}
 			_state.Save();
 		}
+
 
 		/// <summary>
 		/// Set the focus on a control

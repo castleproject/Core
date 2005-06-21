@@ -85,21 +85,16 @@ namespace Castle.MVC.Views
 		/// </summary>
 		public WebUserControlView():base()
 		{
+			this.Init +=new EventHandler(WebUserControlView_Init);
 			this.Load +=new System.EventHandler(WebUserControlView_Load);
 		}
 		#endregion 
 
 		#region Methods
 
-		private void WebUserControlView_Load(object sender, EventArgs e)
+		private void WebUserControlView_Init(object sender, EventArgs e)
 		{
 			IWindsorContainer container = ContainerWebAccessorUtil.ObtainContainer();
-
-			// Get the State
-			IStatePersister statePersister = (IStatePersister) container[typeof(IStatePersister)];
-			_state = statePersister.Load();
-			// Acquire current view
-			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
 
 			// Set the properties controllers
 			PropertyInfo[] properties = this.GetType().GetProperties(BINDING_FLAGS_SET);
@@ -111,6 +106,17 @@ namespace Castle.MVC.Views
 					properties[i].SetValue(this, controller, null);
 				}
 			}
+		}
+
+		private void WebUserControlView_Load(object sender, EventArgs e)
+		{
+			IWindsorContainer container = ContainerWebAccessorUtil.ObtainContainer();
+
+			// Get the State
+			IStatePersister statePersister = (IStatePersister) container[typeof(IStatePersister)];
+			_state = statePersister.Load();
+			// Acquire current view
+			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
 
 			// Try to set the command name on the state object
 			Control control = null;
@@ -133,7 +139,7 @@ namespace Castle.MVC.Views
 			// The Control.ViewState property is associated with each server control 
 			// in your web form 
 			// The commandName is in the control.ViewState["CommandName"]
-			// wich is protected !!! Thanks Microsoft :-(
+			// wich is protected :-(
 			if (control!=null)
 			{
 				PropertyInfo propertyInfo = typeof(Control).GetProperty("ViewState",BindingFlags.Instance 
@@ -144,6 +150,7 @@ namespace Castle.MVC.Views
 						
 				_state.Command = statebag["CommandName"] as string;				
 			}
+			_state.Save();
 		}
 
 		/// <summary>
