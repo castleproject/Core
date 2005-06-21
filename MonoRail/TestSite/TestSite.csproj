@@ -121,11 +121,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\CompanyController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Controllers\CookiesController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -177,11 +172,6 @@
                 />
                 <File
                     RelPath = "Helper\DateFormatHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\Company.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

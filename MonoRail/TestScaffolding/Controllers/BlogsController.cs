@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSite.Controllers
+namespace TestScaffolding.Controllers
 {
 	using System;
 
 	using Castle.MonoRail.Framework;
+	
+	using TestScaffolding.Model;
 
-	using TestSite.Model;
 
-
-	[Scaffolding( typeof(Company) )]
-	public class CompanyController : Controller
+	[Scaffolding( typeof(Blog) )]
+	public class BlogsController : Controller
 	{
-		public CompanyController()
+		public BlogsController()
 		{
 		}
 	}

@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
+        ProjectGuid = "{C4107B52-109E-4629-A202-58E93917C80B}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.MonoRail.ActiveRecordScaffold"
+                AssemblyName = "TestScaffolding"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.MonoRail.ActiveRecordScaffold"
+                RootNamespace = "TestScaffolding"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "bin\Debug\"
+                    OutputPath = "bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -80,14 +80,59 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
+                    Name = "Castle.MonoRail.ActiveRecordScaffold"
+                    Project = "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Engine"
+                    Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
                     Name = "Castle.MonoRail.Framework"
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
+                    Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\lib\Commons.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\lib\log4net.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\lib\NVelocity.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\ActiveRecord\bin\NHibernate.dll"
+                />
+                <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
                     HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
+                />
+                <Reference
+                    Name = "HashCodeProvider"
+                    AssemblyName = "HashCodeProvider"
+                    HintPath = "..\..\ActiveRecord\bin\HashCodeProvider.dll"
+                />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\ActiveRecord\bin\Iesi.Collections.dll"
                 />
             </References>
         </Build>
@@ -99,10 +144,20 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ScaffoldingSupport.cs"
+                    RelPath = "web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\BlogsController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "Model\Blog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <Folder RelPath = "Views\" />
             </Include>
         </Files>
     </CSHARP>

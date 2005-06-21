@@ -16,6 +16,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 
+	using Castle.ActiveRecord;
 	using Castle.MonoRail.Framework;
 
 
@@ -44,7 +45,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		public void Execute(Controller controller)
 		{
-			
+			controller.RenderText( modelType.FullName );
 		}
 	}
 }

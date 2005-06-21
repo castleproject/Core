@@ -44,7 +44,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		public override bool HasTemplate(String templateName)
 		{
-			throw new NotImplementedException();
+			return RuntimeSingleton.getTemplate(templateName + ".vm") != null;
 		}
 
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)

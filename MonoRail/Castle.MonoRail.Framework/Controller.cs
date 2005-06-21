@@ -576,6 +576,9 @@ namespace Castle.MonoRail.Framework
 		protected virtual void CreateResources(MethodInfo method)
 		{
 			_resources = new HybridDictionary();
+
+			if (method == null) return;
+
 			Assembly typeAssembly = this.GetType().Assembly;
 
 			Attribute[] resources = Attribute.GetCustomAttributes(this.GetType(), typeof (AbstractResourceAttribute));
