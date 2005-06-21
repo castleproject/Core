@@ -46,7 +46,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void BuildSimpleArgs()
 		{
-			_engine.Process( GetContext("ToString", "str", "strv") );
+			_engine.Process( GetContext("ToStr", "str", "strv") );
 			AssertResponse();
 
 			_engine.Process( GetContext("ToGuid", "gd", Guid.Empty.ToString()) );

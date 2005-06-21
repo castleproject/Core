@@ -207,6 +207,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ResourcedController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ResourceFile.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controllers\SubArea\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -293,6 +302,10 @@
                 />
                 <File
                     RelPath = "views\rescues\updateerrormsg.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\resourced\getresources.vm"
                     BuildAction = "None"
                 />
                 <File

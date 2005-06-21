@@ -138,12 +138,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			innerContext.Add("response", context.Response);
 			innerContext.Add("session", context.Session);
 
-			foreach(String key in controller.Resources.Keys)
+			if (controller.Resources != null)
 			{
-				innerContext.Add( key, controller.Resources[ key ] );
+				foreach (String key in controller.Resources.Keys)
+				{
+					innerContext.Add( key, controller.Resources[ key ] );
+				}
 			}
 
-			foreach(object helper in controller.Helpers.Values)
+			foreach( object helper in controller.Helpers.Values)
 			{
 				innerContext.Add(helper.GetType().Name, helper);
 			}

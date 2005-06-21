@@ -714,9 +714,14 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual bool PerformRescue(MethodInfo method, Type controllerType, Exception ex)
 		{
-			// InnerException might be null !
-			// _context.LastException = ex.InnerException;
-			_context.LastException = ex;
+			if (ex is TargetInvocationException)
+			{
+				_context.LastException = ex.InnerException;
+			}
+			else
+			{
+				_context.LastException = ex;
+			}
 
 			RescueAttribute att = null;
 
@@ -739,10 +744,11 @@ namespace Castle.MonoRail.Framework
 					ProcessView();
 					return true;
 				}
-				catch (Exception)
+				catch (Exception e)
 				{
 					// In this situation, the rescue view could not be found
 					// So we're back to the default error exibition
+					Console.WriteLine(e);
 				}
 			}
 

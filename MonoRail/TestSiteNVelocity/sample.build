@@ -41,6 +41,10 @@
 				<include name="**/*.cs" />
 			</sources>
 
+			<resources prefix="TestSiteNVelocity" dynamicprefix="true">
+				<include name="**/*.resx" />
+			</resources>
+
 			<references>
 				<include name="${bin2.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />

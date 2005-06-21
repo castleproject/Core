@@ -30,5 +30,10 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return date.ToShortDateString();
 		}
+
+		public String ToShortDateTime(DateTime date)
+		{
+			return date.ToShortDateString() + " " + date.ToShortTimeString();
+		}
 	}
 }

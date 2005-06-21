@@ -145,7 +145,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			OkMessage();
 		}
 
-		public void ToString(string str)
+		public void ToStr(string str)
 		{
 			Assert.AreEqual("strv", "strv");
 			OkMessage();
@@ -166,7 +166,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 		public void Overloaded(string str)
 		{
-			ToString(str);
+			ToStr(str);
 
 			StrInvoked = true;
 		}
