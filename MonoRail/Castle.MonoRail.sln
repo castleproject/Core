@@ -51,6 +51,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSiteWindsor", "TestSite
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordScaffold", "Castle.MonoRail.ActiveRecordScaffold\Castle.MonoRail.ActiveRecordScaffold.csproj", "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -109,6 +113,10 @@ Global
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Debug.Build.0 = Debug|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.ActiveCfg = Release|.NET
 		{22432F75-FD21-474A-AB8F-43100DE79FDB}.Release.Build.0 = Release|.NET
+		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug.ActiveCfg = Debug|.NET
+		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug.Build.0 = Debug|.NET
+		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release.ActiveCfg = Release|.NET
+		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// 
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
+	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple=true, Inherited=true), Serializable]
 	public abstract class AbstractResourceAttribute : Attribute, IResourceDefinition
 	{
 		private string _Name;

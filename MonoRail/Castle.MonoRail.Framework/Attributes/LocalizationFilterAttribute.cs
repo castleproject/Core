@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework.Attributes
 
 	using Castle.MonoRail.Framework.Filters;
 
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=true)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=true), Serializable]
 	public class LocalizationFilterAttribute : FilterAttribute
 	{
 		private bool _FailOnError = false, _UseBrowser = true;

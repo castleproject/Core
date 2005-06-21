@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// Associates a helper class with the controller.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
 	public class HelperAttribute : Attribute
 	{
 		private readonly Type _helperType;

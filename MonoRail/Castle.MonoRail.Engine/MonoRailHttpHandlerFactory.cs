@@ -36,6 +36,7 @@ namespace Castle.MonoRail.Engine
 		private IFilterFactory _filterFactory;
 		private IResourceFactory _resourceFactory;
 		private IControllerFactory _controllerFactory;
+		private IScaffoldingSupport _scaffoldingSupport;
 
 		public MonoRailHttpHandlerFactory()
 		{
@@ -44,6 +45,7 @@ namespace Castle.MonoRail.Engine
 			InitializeViewEngine();
 			InitializeFilterFactory();
 			InitializeResourceFactory();
+			InitializeScaffoldingSupport();
 		}
 
 		#region IHttpHandlerFactory
@@ -51,7 +53,8 @@ namespace Castle.MonoRail.Engine
 		public virtual IHttpHandler GetHandler(HttpContext context, 
 			string requestType, String url, String pathTranslated)
 		{
-			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, _filterFactory, _resourceFactory);
+			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, 
+				_filterFactory, _resourceFactory, _scaffoldingSupport);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
@@ -69,8 +72,7 @@ namespace Castle.MonoRail.Engine
 		{
 			if (_config.CustomViewEngineType != null)
 			{
-				_viewEngine = (IViewEngine) 
-					Activator.CreateInstance(_config.CustomViewEngineType);
+				_viewEngine = (IViewEngine) Activator.CreateInstance(_config.CustomViewEngineType);
 			}
 			else
 			{
@@ -86,8 +88,7 @@ namespace Castle.MonoRail.Engine
 		{
 			if (_config.CustomFilterFactoryType != null)
 			{
-				_filterFactory = (IFilterFactory) 
-					Activator.CreateInstance(_config.CustomFilterFactoryType);
+				_filterFactory = (IFilterFactory) Activator.CreateInstance(_config.CustomFilterFactoryType);
 			}
 			else
 			{
@@ -99,12 +100,19 @@ namespace Castle.MonoRail.Engine
 		{
 			if (_config.CustomResourceFactoryType != null)
 			{
-				_resourceFactory = (IResourceFactory) 
-					Activator.CreateInstance(_config.CustomResourceFactoryType);
+				_resourceFactory = (IResourceFactory) Activator.CreateInstance(_config.CustomResourceFactoryType);
 			}
 			else
 			{
 				_resourceFactory = new DefaultResourceFactory();
+			}
+		}
+		
+		protected virtual void InitializeScaffoldingSupport()
+		{
+			if (_config.ScaffoldingType != null)
+			{
+				_scaffoldingSupport = (IScaffoldingSupport) Activator.CreateInstance(_config.ScaffoldingType);
 			}
 		}
 

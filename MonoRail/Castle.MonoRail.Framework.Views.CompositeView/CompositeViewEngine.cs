@@ -46,6 +46,11 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 			_nvelocityViewEngine.Init();
 		}
 
+		public override bool HasTemplate(String templateName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			bool aspxProcessed = ProcessAspx(context, controller, viewName);

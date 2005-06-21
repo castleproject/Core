@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Framework
 	/// or an action (method). The rescue is invoked in
 	/// response to some exception during the action processing.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=false)]
+	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=false), Serializable]
 	public class RescueAttribute : Attribute
 	{
 		private String _viewName;

@@ -22,16 +22,20 @@ namespace Castle.MonoRail.Engine.Configuration
 
 	public class MonoRailConfiguration
 	{
+		private static readonly string DefaultScaffoldType = "Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold";
+
 		public static readonly string SectionName = "monoRail";
 
 		private IList _assemblies = new ArrayList();
 		private IList _routingRules = new ArrayList();
+
 		private String _viewsPhysicalPath;
 		private String _viewsVirtualPath;
 		private String _customControllerFactory;
 		private String _customFilterFactory;
 		private String _customResourceFactory;
 		private String _customEngineTypeName;
+		private String _scaffoldingTypeName = DefaultScaffoldType;
 
 		public MonoRailConfiguration()
 		{
@@ -83,12 +87,17 @@ namespace Castle.MonoRail.Engine.Configuration
 			set { _customEngineTypeName = value; }
 		}
 
+		public String ScaffoldingTypeName
+		{
+			get { return _scaffoldingTypeName; }
+			set { _scaffoldingTypeName = value; }
+		}
+
 		public Type CustomViewEngineType
 		{
 			get
 			{
-				return _customEngineTypeName != null ?
-					Type.GetType(_customEngineTypeName, false, false) : null;
+				return _customEngineTypeName != null ? Type.GetType(_customEngineTypeName, false, false) : null;
 			}
 		}
 
@@ -96,8 +105,7 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get
 			{
-				return _customFilterFactory != null ?
-					Type.GetType(_customFilterFactory, false, false) : null;
+				return _customFilterFactory != null ? Type.GetType(_customFilterFactory, false, false) : null;
 			}
 		}
 
@@ -105,8 +113,7 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get
 			{
-				return _customResourceFactory != null ?
-					Type.GetType(_customResourceFactory, false, false) : null;
+				return _customResourceFactory != null ? Type.GetType(_customResourceFactory, false, false) : null;
 			}
 		}
 
@@ -114,8 +121,15 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get
 			{
-				return _customControllerFactory != null ?
-					Type.GetType(_customControllerFactory, false, false) : null;
+				return _customControllerFactory != null ? Type.GetType(_customControllerFactory, false, false) : null;
+			}
+		}
+
+		public Type ScaffoldingType
+		{
+			get
+			{
+				return _scaffoldingTypeName != null ? Type.GetType(_scaffoldingTypeName, false, false) : null;
 			}
 		}
 

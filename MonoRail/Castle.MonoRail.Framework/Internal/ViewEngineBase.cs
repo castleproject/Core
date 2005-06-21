@@ -35,6 +35,8 @@ namespace Castle.MonoRail.Framework
 
 		public abstract void Init();
 
-		public abstract void Process(IRailsEngineContext context, Controller controller, String viewName);
+		public abstract bool HasTemplate(String templateName);
+
+		public abstract void Process(IRailsEngineContext context, Controller controller, String templateName);
 	}
 }

@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Framework
 	/// Declares that for the specific method (action)
 	/// no filter should be applied.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true), Serializable]
 	public class SkipFilterAttribute : Attribute
 	{
 		private Type _filterType;

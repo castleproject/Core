@@ -31,24 +31,93 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class Controller
 	{
+		#region Static and Instance Fields
+
+		/// <summary>
+		/// TODO: Document why this is necessary
+		/// </summary>
 		public static readonly String ControllerContextKey = "rails.controller";
+
+		/// <summary>
+		/// TODO: Document why this is necessary
+		/// </summary>
 		internal static readonly String OriginalViewKey = "rails.original_view";
 
+		/// <summary>
+		/// The reference to the <see cref="IViewEngine"/> instance
+		/// </summary>
 		private IViewEngine _viewEngine;
+
+		/// <summary>
+		/// Holds the request/context information
+		/// </summary>
 		private IRailsEngineContext _context;
+
+		/// <summary>
+		/// Holds information to pass to the view
+		/// </summary>
 		private IDictionary _bag;
+		
+		/// <summary>
+		/// Holds the filters associated with the action
+		/// </summary>
 		private FilterDescriptor[] _filters;
+		
+		/// <summary>
+		/// Reference to the <see cref="IFilterFactory"/> instance
+		/// </summary>
 		private IFilterFactory _filterFactory;
+
+		/// <summary>
+		/// Reference to the <see cref="IResourceFactory"/> instance
+		/// </summary>
 		private IResourceFactory _resourceFactory;
+
+		/// <summary>
+		/// The area name which was used to access this controller
+		/// </summary>
 		private String _areaName;
+
+		/// <summary>
+		/// The controller name which was used to access this controller
+		/// </summary>
 		private String _controllerName;
+
+		/// <summary>
+		/// The view name selected to be rendered after the execution 
+		/// of the action
+		/// </summary>
 		private String _selectedViewName;
+
+		/// <summary>
+		/// The layout name that the view engine should use
+		/// </summary>
 		private String _layoutName;
+
+		/// <summary>
+		/// The original action requested
+		/// </summary>
 		private String _evaluatedAction;
+
+		/// <summary>
+		/// The helper instances collected
+		/// </summary>
 		private IDictionary _helpers = null;
+
+		/// <summary>
+		/// The resources associated with this controller
+		/// </summary>
 		private IDictionary _resources = null;
 
 		internal IDictionary _actions = new HybridDictionary(true);
+
+		internal IDictionary _customActions = new HybridDictionary(true);
+
+		private IScaffoldingSupport _scaffoldSupport;
+
+		#endregion
+
+		#region Constructors
 
 		/// <summary>
 		/// Constructs a Controller
@@ -59,6 +128,8 @@ namespace Castle.MonoRail.Framework
 
 			CollectActions();
 		}
+
+		#endregion
 
 		#region Usefull Properties
 
@@ -267,7 +338,12 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		#region Core methods
+		#region Core members
+
+		public IDictionary CustomActions
+		{
+			get { return _customActions; }
+		}
 
 		protected internal virtual void CollectActions()
 		{
@@ -300,7 +376,8 @@ namespace Castle.MonoRail.Framework
 		/// the controller process. 
 		/// </summary>
 		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
-		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine)
+		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine, 
+							IScaffoldingSupport scaffoldSupport)
 		{
 			_areaName = areaName;
 			_controllerName = controllerName;
@@ -308,6 +385,7 @@ namespace Castle.MonoRail.Framework
 			_context = context;
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
+			_scaffoldSupport = scaffoldSupport;
 
 			if (GetType().IsDefined(typeof (FilterAttribute), true))
 			{
@@ -317,6 +395,19 @@ namespace Castle.MonoRail.Framework
 			if (GetType().IsDefined(typeof (LayoutAttribute), true))
 			{
 				LayoutName = ObtainDefaultLayoutName();
+			}
+
+			if (GetType().IsDefined(typeof (ScaffoldingAttribute), false))
+			{
+				if (_scaffoldSupport == null)
+				{
+					String message = "You must enable scaffolding support on the " + 
+						"configuration file, or, to use the standard ActiveRecord support, " + 
+						"copy the necessary assemblies to the bin folder.";
+					throw new Exception(message);
+				}
+
+				_scaffoldSupport.Process( this );
 			}
 
 			InternalSend(actionName);
@@ -360,6 +451,21 @@ namespace Castle.MonoRail.Framework
 
 			MethodInfo method = SelectMethod(action, _actions, _context.Request);
 
+			IDynamicAction dynAction = null;
+
+			if (method == null)
+			{
+				dynAction = CustomActions[ action ] as IDynamicAction;
+
+				if (dynAction == null)
+				{
+					if (method == null)
+					{
+						throw new ControllerException(String.Format("No action for '{0}' found", action));
+					}
+				}
+			}
+
 			HybridDictionary filtersToSkip = new HybridDictionary();
 
 			bool skipFilters = ShouldSkip(method, filtersToSkip);
@@ -377,7 +483,14 @@ namespace Castle.MonoRail.Framework
 
 				if (!hasError)
 				{
-					InvokeMethod(method);
+					if (method != null)
+					{
+						InvokeMethod(method);
+					}
+					else
+					{
+						dynAction.Execute(this);
+					}
 				}
 			}
 			catch (ThreadAbortException)
@@ -443,14 +556,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
 		{
-			MethodInfo method = actions[action] as MethodInfo;
-
-			if (method == null)
-			{
-				throw new ControllerException(String.Format("No action for '{0}' found", action));
-			}
-
-			return method;
+			return actions[action] as MethodInfo;
 		}
 
 		private void InvokeMethod(MethodInfo method)

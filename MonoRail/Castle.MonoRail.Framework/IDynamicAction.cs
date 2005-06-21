@@ -16,22 +16,9 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
-	public class ScaffoldingAttribute : Attribute
+
+	public interface IDynamicAction
 	{
-		private readonly Type model;
-
-		public ScaffoldingAttribute( Type model )
-		{
-			this.model = model;
-		}
-
-		public Type Model
-		{
-			get { return model; }
-		}
+		void Execute( Controller controller );
 	}
 }

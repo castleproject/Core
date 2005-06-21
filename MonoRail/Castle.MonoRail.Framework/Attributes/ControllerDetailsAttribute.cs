@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Framework
 	/// Decorates a controller with a different name
 	/// and optionaly an area which the controller belongs.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class)]
+	[AttributeUsage(AttributeTargets.Class), Serializable]
 	public class ControllerDetailsAttribute : Attribute
 	{
 		private String _name;

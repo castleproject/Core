@@ -35,6 +35,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 		}
 
+		public override bool HasTemplate(String templateName)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Obtains the aspx Page from the view name dispatch
 		/// its execution using the standard ASP.Net API.

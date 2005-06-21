@@ -56,6 +56,11 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 		}
 
+		public override bool HasTemplate(String templateName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			String path = PathFrom(viewName);

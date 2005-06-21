@@ -42,6 +42,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			Velocity.Init(props);
 		}
 
+		public override bool HasTemplate(String templateName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);

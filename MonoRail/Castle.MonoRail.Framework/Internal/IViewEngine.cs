@@ -34,13 +34,21 @@ namespace Castle.MonoRail.Framework
 		String ViewRootDir { get; set; }
 		
 		/// <summary>
-		/// Implementors should process the view (using the viewName to
+		/// Implementors should check if the specified
+		/// template exists
+		/// </summary>
+		/// <param name="templateName"></param>
+		/// <returns><c>true</c> if it exists</returns>
+		bool HasTemplate(String templateName);
+
+		/// <summary>
+		/// Implementors should process the view (using the templateName to
 		/// obtain the correct template) and use the context to output
 		/// the result.
 		/// </summary>
 		/// <param name="context"></param>
 		/// <param name="controller"></param>
-		/// <param name="viewName"></param>
-		void Process(IRailsEngineContext context, Controller controller, String viewName);
+		/// <param name="templateName"></param>
+		void Process(IRailsEngineContext context, Controller controller, String templateName);
 	}
 }

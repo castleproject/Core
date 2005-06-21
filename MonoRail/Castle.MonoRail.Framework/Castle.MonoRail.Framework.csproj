@@ -113,6 +113,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IDynamicAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -292,6 +297,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\IScaffoldingSupport.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\IViewEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -343,11 +353,6 @@
                 />
                 <File
                     RelPath = "Internal\Test\ServerUtilityImpl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Scaffold\ScaffoldingSupport.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,5 +1,12 @@
 Change history
 
+Beta 3
+------
+
+- Routing feature
+- Localization support
+
+
 Beta 2
 ------ 
 

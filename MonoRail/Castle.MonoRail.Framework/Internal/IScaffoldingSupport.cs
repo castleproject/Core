@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Scaffold
+namespace Castle.MonoRail.Framework
 {
 	using System;
 
-
-	public class ScaffoldingSupport
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface IScaffoldingSupport
 	{
+		void Process( Controller controller );
 	}
 }
