@@ -1,4 +1,3 @@
-using System;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +14,7 @@ using System;
 
 namespace Castle.Applications.MindDump.Services
 {
+	using System;
 	using System.Text;
 	using System.Security.Cryptography;
 
