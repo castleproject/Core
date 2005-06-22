@@ -1,9 +1,16 @@
 
+- Version 0.0.1.5
+
+  Inner workings fully rewritten, better test cases coverage
+
+  Added SlicedFindAll
+
+
 - Version 0.0.1.4
 
   Implemented support for Joined Subclasses
 
-  Implemented support for validations
+  Implemented initial support for validations
 
 
 - Version 0.0.1.3
