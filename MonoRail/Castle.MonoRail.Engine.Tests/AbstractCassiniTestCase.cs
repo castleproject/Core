@@ -53,12 +53,37 @@ namespace Castle.MonoRail.Engine.Tests
 
 		protected void AssertContents(String expected, HttpWebResponse response)
 		{
+			string contents = GetContents(expected, response);
+
+			Assert.AreEqual( expected, contents );
+		}
+
+		private static string GetContents(string expected, HttpWebResponse response)
+		{
 			int size = expected.Length;
 			byte[] contentsArray = new byte[size];
 			response.GetResponseStream().Read(contentsArray, 0, size);
 			Encoding encoding = Encoding.Default;
-			String contents = encoding.GetString(contentsArray);
-			Assert.AreEqual( expected, contents );
+
+			return encoding.GetString(contentsArray);
+		}
+
+		protected void Execute(string url, string expected)
+		{
+			Execute(url, expected, url);
+		}
+
+		protected void Execute(string url, string expected, string expectedUrl)
+		{
+			HttpWebRequest myReq = (HttpWebRequest) 
+				WebRequest.Create("http://localhost:8083" + url);
+	
+			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+	
+			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+			Assert.AreEqual(expectedUrl, response.ResponseUri.PathAndQuery);
+			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+			AssertContents(expected, response);
 		}
 	}
 }

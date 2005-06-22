@@ -1,3 +1,4 @@
+
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +16,8 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
-	using System.Reflection;
-	using System.Resources;
-
+	using System.IO;
+	
 	/// <summary>
 	/// Just apply the CSS class "fade" to any element and it will fade from yellow
 	/// to its background color or white if none is specified.
@@ -36,31 +36,17 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <p id="paragraph1" class="fade-0066FF">Watch me fade from Blue (#0066FF)</p>
 	/// SEE MORE HERE: http://www.axentric.com/posts/default/7
 	/// </remarks>
-	public class EffectsFatHelper 
+	public class EffectsFatHelper : AbstractHelper
 	{
-		private static ResourceManager _resourceManager;
-
-		protected ResourceManager ResourceManager
-		{
-			get
-			{
-				if (_resourceManager == null)
-				{
-					Assembly assembly = Assembly.GetAssembly( typeof(EffectsFatHelper) );
-					_resourceManager = new ResourceManager("Castle.MonoRail.Framework.Javascripts", assembly);
-				}
-
-				return _resourceManager;
-			}
-		}
-
 		/// <summary>
 		/// Renders a Javascript library inside a single script tag.
 		/// </summary>
 		/// <returns></returns>
 		public String GetJavascriptFunctions()
 		{
-			return ResourceManager.GetString("fatfunctions");
+			return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
+			                     Controller.Context.ApplicationPath + "/MonoRail/Files/EffectsFatScripts", 
+								 Controller.Context.UrlInfo.Extension);
 		}
 	}
 }

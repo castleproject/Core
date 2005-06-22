@@ -1,3 +1,4 @@
+using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -130,6 +131,14 @@ namespace Castle.MonoRail.Framework.Tests
 		public string ApplicationPath
 		{
 			get { return AppDomain.CurrentDomain.BaseDirectory; }
+		}
+
+		public UrlInfo UrlInfo
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		/// <summary>

@@ -29,15 +29,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void InheritedHelpers()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/helper/inheritedhelpers.rails");
+			string url = "/helper/inheritedhelpers.rails";
+			string expected = "Date formatted " + new DateTime(1979, 7, 16).ToShortDateString();
 
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/helper/inheritedhelpers.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("Date formatted " + new DateTime(1979, 7, 16).ToShortDateString(), response);
+			Execute(url, expected);
 		}
 
 		protected override String ObtainPhysicalDir()

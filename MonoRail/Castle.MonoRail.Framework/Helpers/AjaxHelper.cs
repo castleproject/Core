@@ -1,3 +1,4 @@
+using System.IO;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,26 +47,10 @@ namespace Castle.MonoRail.Framework.Helpers
 	}
 
 
-	public class AjaxHelper
+	public class AjaxHelper : AbstractHelper
 	{
-		private static ResourceManager _resourceManager;
-
 		public AjaxHelper()
 		{
-		}
-
-		protected ResourceManager ResourceManager
-		{
-			get
-			{
-				if (_resourceManager == null)
-				{
-					_resourceManager = new ResourceManager("Castle.MonoRail.Framework.Javascripts",
-						Assembly.GetAssembly(typeof (AjaxHelper)));
-				}
-
-				return _resourceManager;
-			}
 		}
 
 		/// <summary>
@@ -74,7 +59,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String GetJavascriptFunctions()
 		{
-			return ResourceManager.GetString("jsfunctions");
+			return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
+				Controller.Context.ApplicationPath + "/MonoRail/Files/AjaxScripts", 
+				Controller.Context.UrlInfo.Extension);
 		}
 
 		/// <summary>

@@ -1,3 +1,4 @@
+using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -144,6 +145,14 @@ namespace Castle.MonoRail.Engine.Adapters
 		public void Trace(String message)
 		{
 			_context.Trace.Warn(message);
+		}
+
+		public UrlInfo UrlInfo
+		{
+			get
+			{
+				return UrlTokenizer.ExtractInfo(_url, ApplicationPath);
+			}
 		}
 
 		public String ApplicationPath

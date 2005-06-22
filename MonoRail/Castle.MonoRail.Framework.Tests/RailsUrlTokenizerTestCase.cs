@@ -87,5 +87,15 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual( "index", info.Action );
 			Assert.AreEqual( String.Empty, info.Area );
 		}
+
+		[Test]
+		public void EmptyVirDir()
+		{
+			UrlInfo info = UrlTokenizer.ExtractInfo( "/home/index.rails", "" );
+			Assert.IsNotNull( info );
+			Assert.AreEqual( "home", info.Controller );
+			Assert.AreEqual( "index", info.Action );
+			Assert.AreEqual( String.Empty, info.Area );
+		}
 	}
 }

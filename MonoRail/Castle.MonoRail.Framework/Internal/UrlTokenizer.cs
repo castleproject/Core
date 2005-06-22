@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Framework.Internal
 			url = url.ToLower().Substring(1);
 
 			// Strip the virtualDirectory from the Url
-			if (virtualDirectory != null)
+			if (virtualDirectory != null && virtualDirectory != "")
 			{
 				virtualDirectory = virtualDirectory.ToLower().Substring(1);
 

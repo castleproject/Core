@@ -1,3 +1,4 @@
+using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,11 +102,19 @@ namespace Castle.MonoRail.Framework
 		string ApplicationPath { get; }
 
 		/// <summary>
-		/// Writes the message to the underlying tracing scheme
+		/// Returns the <see cref="UrlInfo"/> of the the current request.
+		/// </summary>
+		UrlInfo UrlInfo { get; }
+
+		/// <summary>
+		/// Writes the message to the underlying tracing scheme.
 		/// </summary>
 		/// <param name="message"></param>
 		void Trace(String message);
 
+		/// <summary>
+		/// Returns an <see cref="IServerUtility"/>.
+		/// </summary>
 		IServerUtility Server { get; }
 	}
 }

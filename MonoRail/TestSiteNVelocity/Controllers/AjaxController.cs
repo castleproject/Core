@@ -20,43 +20,49 @@ namespace TestSiteNVelocity.Controllers
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
-
-	[Helper( typeof(AjaxHelper) )]
 	public class AjaxController : SmartDispatcherController
 	{
+		private AjaxHelper Helper
+		{
+			get
+			{
+				return (AjaxHelper) Helpers["AjaxHelper"];
+			}
+		}
+
 		public AjaxController()
 		{
 		}
 
 		public void JsFunctions()
 		{
-			RenderText( new AjaxHelper().GetJavascriptFunctions() );
+			RenderText( Helper.GetJavascriptFunctions() );
 		}
 
 		public void LinkToFunction()
 		{
-			RenderText( new AjaxHelper().LinkToFunction("<img src='myimg.gid'>", "alert('Ok')") );
+			RenderText( Helper.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')") );
 		}
 
 		public void LinkToRemote()
 		{
 			Hashtable options = new Hashtable();
-			RenderText( new AjaxHelper().LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options) );
+			RenderText( Helper.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options) );
 		}
 
 		public void BuildFormRemoteTag()
 		{
-			RenderText( new AjaxHelper().BuildFormRemoteTag("url", null, null) );
+			RenderText( Helper.BuildFormRemoteTag("url", null, null) );
 		}
 
 		public void ObserveField()
 		{
-			RenderText( new AjaxHelper().ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent") );
+			RenderText( Helper.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent") );
 		}
 
 		public void ObserveForm()
 		{
-			RenderText( new AjaxHelper().ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent") );
+			RenderText( Helper.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent") );
 		}
 
 		public void Index()

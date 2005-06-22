@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP LastOpenVersion = "7.10.3077" >
         <Build>
-            <Settings ReferencePath = "E:\dev\projects\castle\ActiveRecord\bin\" >
+            <Settings ReferencePath = "E:\dev\projects\castle\ActiveRecord\bin\;D:\Dev\DotNet\Castle\src\ActiveRecord\bin\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"

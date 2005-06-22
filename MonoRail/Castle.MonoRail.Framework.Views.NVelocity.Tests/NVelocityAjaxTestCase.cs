@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-	using System.Net;
 	using System.IO;
 
 	using NUnit.Framework;
@@ -29,87 +28,63 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void JsFunctions()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/ajax/JsFunctions.rails");
+			string url = "/ajax/JsFunctions.rails";
+			string expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails\"></script>";
 
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("\r\n<script type=\"text/javascript\">", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void LinkToFunction()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/ajax/LinkToFunction.rails");
+			string url = "/ajax/LinkToFunction.rails";
+			string expected = "<a href=\"#\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>";
 
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("<a href=\"#\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void LinkToRemote()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/ajax/LinkToRemote.rails");
-
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("<a href=\"#\" onclick=\"new " + 
+			string url = "/ajax/LinkToRemote.rails";
+			string expected = "<a href=\"#\" onclick=\"new " + 
 				"Ajax.Request('/controller/action.rails', {asynchronous:true}); " + 
-				"return false;\" ><img src='myimg.gid'></a>", response);
+				"return false;\" ><img src='myimg.gid'></a>";
+
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void BuildFormRemoteTag()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/ajax/BuildFormRemoteTag.rails");
-
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("<form  onsubmit=\"new Ajax.Request('url', " +
+			string url = "/ajax/BuildFormRemoteTag.rails";
+			string expected = "<form  onsubmit=\"new Ajax.Request('url', " +
 				"{asynchronous:true, parameters:Form.serialize(this)}); " + 
-				"return false;\" enctype=\"multipart/form-data\">", response);
+				"return false;\" enctype=\"multipart/form-data\">";
+
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void ObserveField()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/ajax/ObserveField.rails");
-
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("<script type=\"text/javascript\">new Form.Element.Observer('myfieldid', 2, " + 
+			string url = "/ajax/ObserveField.rails";
+			string expected = "<script type=\"text/javascript\">new Form.Element.Observer('myfieldid', 2, " + 
 				"function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', " + 
-				"{asynchronous:true, parameters:newcontent}) })</script>", response);
+				"{asynchronous:true, parameters:newcontent}) })</script>";
+
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void ObserveForm()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/ajax/ObserveForm.rails");
-
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, " + 
+			string url = "/ajax/ObserveForm.rails";
+			string expected = "<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, " + 
 				"function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', " + 
-				"{asynchronous:true, parameters:newcontent}) ", response);
+				"{asynchronous:true, parameters:newcontent}) ";
+
+			Execute(url, expected);
 		}
 
 		protected override String ObtainPhysicalDir()

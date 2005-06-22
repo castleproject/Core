@@ -28,77 +28,56 @@ namespace Castle.MonoRail.Engine.Tests
 		[Test]
 		public void SimpleControllerAction()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/home/index.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/home/index.rails";
+			string expected = "My View contents for Home\\Index";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("My View contents for Home\\Index", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void RenderView()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/home/welcome.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("Contents for heyhello View", response);
+			string url = "/home/welcome.rails";
+			string expected = "Contents for heyhello View";
+			
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void Redirect()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/home/redirectAction.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/home/redirectAction.rails";
+			string expectedUrl = "/home/index.rails";
+			string expected = "My View contents for Home\\Index";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/home/index.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("My View contents for Home\\Index", response);
+			Execute(url, expected, expectedUrl);
 		}
 
 		[Test]
 		public void RedirectForArea()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/home/redirectForOtherArea.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/subarea/home/index.rails";
+			string expected = "My View contents for SubArea\\Home\\Index";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/subarea/home/index.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("My View contents for SubArea\\Home\\Index", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void PropertyBagNoFieldSetting()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/home/bag.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/home/bag.rails";
+			string expected = "\r\nCustomer is hammett\r\n<br>\r\n123";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/home/bag.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("\r\nCustomer is hammett\r\n<br>\r\n123", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void PropertyBagUsingFieldSetting()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/home/bag2.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/home/bag2.rails";
+			string expected = "\r\nCustomer is hammett\r\n<br>\r\n123";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/home/bag2.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("\r\nCustomer is hammett\r\n<br>\r\n123", response);
+			Execute(url, expected);
 		}
 
 		[Test]

@@ -33,13 +33,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void AppPath()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/apppath/index.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/apppath/index.rails";
+			string expected = "Current apppath is ";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("Current apppath is ", response);
+			Execute(url, expected);
 		}
 	}
 }

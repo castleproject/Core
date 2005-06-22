@@ -54,7 +54,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 				if ( typeof(Controller).IsAssignableFrom(type) )
 				{
-					RegisterController( ControllerInspectionUtil.Inspect(type ) );
+					RegisterController( ControllerInspectionUtil.Inspect(type) );
 				}
 			}		
 		}

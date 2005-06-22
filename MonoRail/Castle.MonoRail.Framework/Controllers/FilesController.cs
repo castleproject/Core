@@ -12,39 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
+namespace Castle.MonoRail.Framework.Controllers
 {
 	using System;
-	using System.IO;
 
-	using NUnit.Framework;
+	using Castle.MonoRail.Framework.Attributes;
 
-	using Castle.MonoRail.Engine.Tests;
-
-	[TestFixture]
-	public class RoutingTestCase : AbstractCassiniTestCase
+	[Resource("Ajax","Castle.MonoRail.Framework.Controllers.Ajax")]
+	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat")]
+	public class FilesController : Controller
 	{
-		protected override String ObtainPhysicalDir()
+		public FilesController()
 		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
-		}
-		
-		[Test]
-		public void BlogRoutingRule()
-		{
-			string url = "/blog/posts/2005/07/";
-			string expected = "Blog: year=2005 month=7";
-
-			Execute(url, expected);
 		}
 
-		[Test]
-		public void NewsRoutingRule()
+		private string GetResourceValue(string resName, string resKey)
 		{
-			string url = "/news/2004/11/";
-			string expected = "News: year=2004 month=11";
+			return (string)((IResource)Resources[resName])[resKey];
+		}
 
-			Execute(url, expected);
+		public void AjaxScripts()
+		{
+			RenderText(GetResourceValue("Ajax", "jsfunctions"));
+		}
+
+		public void EffectsFatScripts()
+		{
+			RenderText(GetResourceValue("EffectsFat", "fatfunctions"));
 		}
 	}
 }

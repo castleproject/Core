@@ -12,42 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Engine.Tests
+namespace Castle.MonoRail.WindsorExtension.Tests
 {
 	using System;
-	using System.Net;
 
 	using NUnit.Framework;
 
-
 	[TestFixture]
-	public class LayoutTestCase : AbstractCassiniTestCase
+	public class FilesTestCase : Castle.MonoRail.Engine.Tests.FilesTestCase
 	{
-		[Test]
-		public void ContentWithLayout()
+		public FilesTestCase()
 		{
-			string url = "/layoutable/index.rails";
-			string expected = "\r\nWelcome!\r\n<p>Inner Content</p>\r\nFooter";
-
-			Execute(url, expected);
-		}
-
-		[Test]
-		public void LayoutChanged()
-		{
-			string url = "/layoutable/ChangeLayout.rails";
-			string expected = "\r\nDifferent master page\r\n<p>Another Inner Content</p>\r\nFooter";
-
-			Execute(url, expected);
-		}
-
-		[Test]
-		public void Redirect()
-		{
-			string url = "/home/index.rails";
-			string expected = "My View contents for Home\\Index";
-
-			Execute(url, expected);
 		}
 	}
 }

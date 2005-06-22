@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String LinkTo( string name, string controller, string action )
 		{
 			string url = base.Controller.Context.ApplicationPath;
-			string extension = UrlTokenizer.GetExtension( base.Controller.Request.Uri.ToString() );
+			string extension = base.Controller.Context.UrlInfo.Extension;
 
 			return string.Format( "<a href=\"{0}{1}/{2}.{3}\">{4}</a>", url, controller, action, extension, name );
 		}

@@ -26,53 +26,37 @@ namespace Castle.MonoRail.Engine.Tests
 		[Test]
 		public void GeneralRescue()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/rescuable/index.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/rescuable/index.rails";
+			string expected = "An error happened";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/rescuable/index.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("An error happened", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void RescueForMethod()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/rescuable/save.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/rescuable/save.rails";
+			string expected = "An error happened during save";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/rescuable/save.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("An error happened during save", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void RescueForMethodWithLayout()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/rescuable/update.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/rescuable/update.rails";
+			string expected = "\r\nWelcome!\r\n<p>An error happened during update</p>\r\nFooter";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/rescuable/update.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("\r\nWelcome!\r\n<p>An error happened during update</p>\r\nFooter", response);
+			Execute(url, expected);
 		}
 
 		[Test]
 		public void RescueMessage()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/rescuable/updateMsg.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string url = "/rescuable/updateMsg.rails";
+			string expected = "custom msg";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/rescuable/updateMsg.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("custom msg", response);
+			Execute(url, expected);
 		}
 	}
 }

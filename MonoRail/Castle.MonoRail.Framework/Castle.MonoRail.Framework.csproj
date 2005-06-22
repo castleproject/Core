@@ -148,10 +148,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Javascripts.resx"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "RailsException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -203,6 +199,19 @@
                 />
                 <File
                     RelPath = "Attributes\ScaffoldingAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Ajax.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controllers\EffectsFat.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Controllers\FilesController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

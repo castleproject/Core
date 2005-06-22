@@ -40,15 +40,10 @@ namespace Castle.MonoRail.Engine.Tests
 		[Test]
 		public void ValidCondition()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/filter/index.rails");
+			string url = "/filter/index.rails";
+			string expected = "View contents!";
 
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/filter/index.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("View contents!", response);
+			Execute(url, expected);
 		}
 	}
 }

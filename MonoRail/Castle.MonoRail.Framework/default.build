@@ -41,8 +41,8 @@
 				<warning number="1572" />
 			</nowarn>
 
-			<resources basedir="${src.dir}" prefix="Castle.MonoRail.Framework" dynamicprefix="true">
-				<include name="Javascripts.resx" />
+			<resources prefix="Castle.MonoRail.Framework" dynamicprefix="true">
+				<include name="**/*.resx" />
 			</resources>
 			
 			<sources basedir="${src.dir}" defaultexcludes="true">

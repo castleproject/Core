@@ -12,42 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Tests
+namespace Castle.MonoRail.Engine.Tests
 {
 	using System;
-	using System.Reflection;
-
-	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Tests.Controllers;
 
 	using NUnit.Framework;
-	
+
 	[TestFixture]
-	public class HelperTestCase
+	public class FilesTestCase : AbstractCassiniTestCase
 	{
-		private DefaultControllerFactory _factory;
-
-		public HelperTestCase()
+		public FilesTestCase()
 		{
-		}
-
-		[SetUp]
-		public void Init()
-		{
-			_factory = new DefaultControllerFactory();
-			_factory.Inspect( Assembly.GetExecutingAssembly() );
 		}
 
 		[Test]
-		public void GetHelpersFromAttributes()
+		public void Ajax()
 		{
-			HelperController controller = _factory.GetController(new UrlInfo("", "", "helper", "", "rails")) as HelperController;
+			string expected = "\r\n/*  Prototype: an object-oriented Javascript library, version 1.2.0";
+			string url = "/MonoRail/Files/AjaxScripts.rails";
 
-			object helper = controller.Helpers[typeof(BarHelper).Name];
-
-			Assert.IsNotNull(helper);
-			Assert.IsTrue(helper is BarHelper);
+			Execute(url, expected);
 		}
 
+		[Test]
+		public void Fade()
+		{
+			string expected = "\r\n// @name      The Fade Anything Technique";
+			string url = "/MonoRail/Files/EffectsFatScripts.rails";
+
+			Execute(url, expected);
+		}
 	}
 }

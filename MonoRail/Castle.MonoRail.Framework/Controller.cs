@@ -467,6 +467,8 @@ namespace Castle.MonoRail.Framework
 
 			MethodInfo method = SelectMethod(action, _actions, _context.Request);
 
+			CreateResources(method);
+
 			IDynamicAction dynAction = null;
 
 			if (method == null)
@@ -533,7 +535,6 @@ namespace Castle.MonoRail.Framework
 
 			if (!hasError)
 			{
-				CreateResources(method);
 				ProcessView();
 				ReleaseResources();
 			}
@@ -559,11 +560,21 @@ namespace Castle.MonoRail.Framework
 				_helpers.Add(helper.HelperType.Name, helperInstance);
 			}
 
+			// TODO: Unify Helper Instation
 			// Default helpers 
-			_helpers[typeof (AjaxHelper).Name] = new AjaxHelper();
+			AjaxHelper ajaxHelper = new AjaxHelper();
+			ajaxHelper.SetController(this);
+			_helpers[typeof (AjaxHelper).Name] = ajaxHelper;
+
+			EffectsFatHelper effectsFatHelper = new EffectsFatHelper();
+			effectsFatHelper.SetController(this);
+			_helpers[typeof (EffectsFatHelper).Name] = effectsFatHelper;
+
 			_helpers[typeof (DateFormatHelper).Name] = new DateFormatHelper();
-			_helpers[typeof (HtmlHelper).Name] = new HtmlHelper();
-			_helpers[typeof (EffectsFatHelper).Name] = new EffectsFatHelper();
+
+			HtmlHelper htmlHelper = new HtmlHelper();
+			htmlHelper.SetController(this);
+			_helpers[typeof (HtmlHelper).Name] = htmlHelper;
 		}
 
 		#endregion
@@ -591,7 +602,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual void CreateResources(MethodInfo method)
 		{
-			_resources = new HybridDictionary();
+			_resources = new HybridDictionary(true);
 
 			if (method == null) return;
 

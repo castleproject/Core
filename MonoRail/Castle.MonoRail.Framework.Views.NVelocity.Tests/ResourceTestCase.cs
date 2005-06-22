@@ -1,12 +1,24 @@
-using System.IO;
-using System.Net;
-using Castle.MonoRail.Engine.Tests;
-using NUnit.Framework;
-// ${Copyrigth}
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
+	using System.IO;
+	
+	using Castle.MonoRail.Engine.Tests;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class ResourceTestCase : AbstractCassiniTestCase
@@ -23,14 +35,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void GetResources()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/resourced/getresources.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			string expected = "testValue";
+			string url = "/resourced/getresources.rails";
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/resourced/getresources.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("testValue", response);
+			Execute(url, expected);
 		}
 	}
 }

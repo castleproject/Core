@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal.Graph;
+	using Castle.MonoRail.Framework.Controllers;
 
 	/// <summary>
 	/// Base implementation of <see cref="IControllerFactory"/>
@@ -31,6 +32,13 @@ namespace Castle.MonoRail.Framework.Internal
 		public AbstractControllerFactory()
 		{
 			_tree = new ControllerTree();
+
+			AddBuitInControllers();
+		}
+
+		protected virtual void AddBuitInControllers()
+		{
+			Tree.AddController("MonoRail", "Files", typeof(FilesController));
 		}
 
 		public virtual Controller GetController(UrlInfo urlInfo)
@@ -57,7 +65,7 @@ namespace Castle.MonoRail.Framework.Internal
 			if (type == null)
 			{
 				throw new RailsException(
-					string.Format("Controller not found. Area: '{0}'. Controller Name: '{0}'.", area, name ) );
+					string.Format("Controller not found. Area: '{0}'. Controller Name: '{1}'.", area, name ) );
 			}
 
 			return (Controller) Activator.CreateInstance( type );
