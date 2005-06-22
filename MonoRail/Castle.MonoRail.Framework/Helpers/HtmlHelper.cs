@@ -23,6 +23,21 @@ namespace Castle.MonoRail.Framework.Helpers
 
 	public class HtmlHelper : AbstractHelper
 	{
+		public String Form( String action )
+		{
+			return String.Format( "<form method=\"post\" action=\"{0}\" >\r\n", action );
+		}
+
+		public String EndForm( )
+		{
+			return "</form>";
+		}
+
+		public String CreateSubmit(String name)
+		{
+			return String.Format( "<input type=\"submit\" value=\"{0}\" />\r\n", name );
+		}
+
 		public String LinkTo( string name, string action )
 		{
 			return LinkTo( name, base.Controller.Name, action );

@@ -1,4 +1,3 @@
-using Castle.ActiveRecord.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +15,7 @@ using Castle.ActiveRecord.Framework.Internal;
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Text;
-	using System.Reflection;
 
-	using Castle.ActiveRecord;
 	using Castle.MonoRail.Framework;
 
 
@@ -34,42 +30,12 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			String name = scaffoldAtt.Model.Name;
 
 			controller.CustomActions[ String.Format("new{0}", name) ] = new NewAction( scaffoldAtt.Model ); 
-		}
-	}
-
-	public class NewAction : IDynamicAction
-	{
-		private readonly Type modelType;
-
-		public NewAction( Type modelType )
-		{
-			this.modelType = modelType;
-		}
-
-		public void Execute(Controller controller)
-		{
-			ActiveRecordModel model = ActiveRecordBase._GetModel( modelType );
-
-			if (model == null)
-			{
-				throw new ScaffoldException("Specified type does look like an ActiveRecord type or the ActiveRecord framework wasn't started properly");
-			}
-
-			StringBuilder sb = new StringBuilder();
-
-			foreach( PropertyModel prop in model.Properties )
-			{
-				sb.Append( "<p>\r\n" );
-
-				sb.AppendFormat( "<label>{0}</label>\r\n", prop.Property.Name );
-				sb.AppendFormat( "<input type=\"text\" >\r\n", prop.Property.Name );
-
-				sb.Append( "</p>\r\n" );
-			}
-
-			sb.Append( "<p>Insert</p>" );
-
-			controller.DirectRender( sb.ToString() );
+			controller.CustomActions[ String.Format("create{0}", name) ] = new CreateAction( scaffoldAtt.Model ); 
+			controller.CustomActions[ String.Format("edit{0}", name) ] = new EditAction( scaffoldAtt.Model ); 
+			controller.CustomActions[ String.Format("update{0}", name) ] = new UpdateAction( scaffoldAtt.Model ); 
+			controller.CustomActions[ String.Format("remove{0}", name) ] = new RemoveAction( scaffoldAtt.Model ); 
+			controller.CustomActions[ String.Format("confirm{0}", name) ] = new ConfirmRemoveAction( scaffoldAtt.Model ); 
+			controller.CustomActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model ); 
 		}
 	}
 }

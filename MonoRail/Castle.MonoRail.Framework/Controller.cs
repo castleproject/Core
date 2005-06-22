@@ -352,6 +352,15 @@ namespace Castle.MonoRail.Framework
 			Response.Write(contents);
 		}
 
+		/// <summary>
+		/// Returns true if the specified template exists.
+		/// </summary>
+		/// <param name="templateName"></param>
+		public bool HasTemplate(String templateName)
+		{
+			return _viewEngine.HasTemplate(templateName);
+		}
+
 		#endregion
 
 		#region Core members
