@@ -171,33 +171,54 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		protected static Array FindAll(Type targetType)
 		{
+			return FindAll(targetType, (Order[]) null);
+		}
+
+		/// <summary>
+		/// Returns a portion of the query results (sliced)
+		/// </summary>
+		protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
+		{
 			ISession session = _holder.CreateSession( targetType );
 
 			try
 			{
 				ICriteria criteria = session.CreateCriteria(targetType);
 
-				IList result = criteria.List();
-		
-				Array array = Array.CreateInstance(targetType, result.Count);
-	
-				int index = 0;
-
-				foreach(object item in result)
+				foreach( ICriterion cond in criterias )
 				{
-					array.SetValue(item, index++);
+					criteria.Add( cond );
 				}
 
-				return array;
+				if (orders != null)
+				{
+					foreach( Order order in orders )
+					{
+						criteria.AddOrder( order );
+					}
+				}
+
+				criteria.SetFirstResult(firstResult);
+				criteria.SetMaxResults(maxresults);
+
+				return CreateReturnArray(criteria, targetType);
 			}
 			catch(Exception ex)
 			{
-				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
+				throw new ActiveRecordException("Could not perform SlicedFindAll for " + targetType.Name, ex);
 			}
 			finally
 			{
 				_holder.ReleaseSession(session);
 			}
+		}
+
+		/// <summary>
+		/// Returns a portion of the query results (sliced)
+		/// </summary>
+		protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
+		{
+			return SlicedFindAll(targetType, firstResult, maxresults, null, criterias);
 		}
 
 		/// <summary>
@@ -229,18 +250,7 @@ namespace Castle.ActiveRecord
 					}
 				}
 
-				IList result = criteria.List();
-		
-				Array array = Array.CreateInstance(targetType, result.Count);
-	
-				int index = 0;
-
-				foreach(object item in result)
-				{
-					array.SetValue(item, index++);
-				}
-
-				return array;
+				return CreateReturnArray(criteria, targetType);
 			}
 			catch(Exception ex)
 			{
@@ -261,38 +271,23 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		protected static Array FindAll(Type targetType, params ICriterion[] criterias)
 		{
-			ISession session = _holder.CreateSession( targetType );
+			return FindAll(targetType, null, criterias);
+		}
 
-			try
-			{
-				ICriteria criteria = session.CreateCriteria(targetType);
-
-				foreach( ICriterion ex in criterias )
-				{
-					criteria.Add( ex );
-				}
-
-				IList result = criteria.List();
-		
-				Array array = Array.CreateInstance(targetType, result.Count);
+		private static Array CreateReturnArray(ICriteria criteria, Type targetType)
+		{
+			IList result = criteria.List();
 	
-				int index = 0;
-
-				foreach(object item in result)
-				{
-					array.SetValue(item, index++);
-				}
-
-				return array;
-			}
-			catch(Exception ex)
+			Array array = Array.CreateInstance(targetType, result.Count);
+	
+			int index = 0;
+	
+			foreach(object item in result)
 			{
-				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
+				array.SetValue(item, index++);
 			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+	
+			return array;
 		}
 
 		protected static void DeleteAll(Type type)
