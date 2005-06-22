@@ -312,6 +312,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\ScaffoldException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\UrlInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

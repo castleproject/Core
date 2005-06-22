@@ -50,7 +50,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
-			AdjustContentType(ctx, context, controller, viewName);
+			AdjustContentType(ctx, context, controller);
 
 			Template template = null;
 
@@ -92,7 +92,23 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				ProcessLayout((writer as StringWriter).GetStringBuilder().ToString(), controller, ctx, context);
 			}
+		}
 
+		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
+		{
+			IContext ctx = CreateContext(context, controller);
+			AdjustContentType(ctx, context, controller);
+
+			bool hasLayout = controller.LayoutName != null;
+
+			if (hasLayout)
+			{
+				ProcessLayout(contents, controller, ctx, context);
+			}
+			else
+			{
+				context.Response.Output.Write(contents);
+			}
 		}
 
 		#endregion
@@ -123,7 +139,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 		}
 
-		private void AdjustContentType(IContext ctx, IRailsEngineContext context, Controller controller, string name)
+		private void AdjustContentType(IContext ctx, IRailsEngineContext context, Controller controller)
 		{
 			context.Response.ContentType = "text/html";
 		}

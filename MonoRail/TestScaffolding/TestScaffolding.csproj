@@ -120,11 +120,6 @@
                     HintPath = "..\..\ActiveRecord\bin\NHibernate.dll"
                 />
                 <Reference
-                    Name = "Castle.ActiveRecord"
-                    AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
-                />
-                <Reference
                     Name = "HashCodeProvider"
                     AssemblyName = "HashCodeProvider"
                     HintPath = "..\..\ActiveRecord\bin\HashCodeProvider.dll"
@@ -134,6 +129,16 @@
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\ActiveRecord\bin\Iesi.Collections.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    AssemblyName = "Castle.ActiveRecord"
+                    HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -142,6 +147,21 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "global.asax.cs"
+                    DependentUpon = "global.asax"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "global.asax.resx"
+                    DependentUpon = "global.asax.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "web.config"

@@ -1,3 +1,4 @@
+using Castle.ActiveRecord.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +16,8 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
+	using System.Text;
+	using System.Reflection;
 
 	using Castle.ActiveRecord;
 	using Castle.MonoRail.Framework;
@@ -45,7 +48,28 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		public void Execute(Controller controller)
 		{
-			controller.RenderText( modelType.FullName );
+			ActiveRecordModel model = ActiveRecordBase._GetModel( modelType );
+
+			if (model == null)
+			{
+				throw new ScaffoldException("Specified type does look like an ActiveRecord type or the ActiveRecord framework wasn't started properly");
+			}
+
+			StringBuilder sb = new StringBuilder();
+
+			foreach( PropertyModel prop in model.Properties )
+			{
+				sb.Append( "<p>\r\n" );
+
+				sb.AppendFormat( "<label>{0}</label>\r\n", prop.Property.Name );
+				sb.AppendFormat( "<input type=\"text\" >\r\n", prop.Property.Name );
+
+				sb.Append( "</p>\r\n" );
+			}
+
+			sb.Append( "<p>Insert</p>" );
+
+			controller.DirectRender( sb.ToString() );
 		}
 	}
 }

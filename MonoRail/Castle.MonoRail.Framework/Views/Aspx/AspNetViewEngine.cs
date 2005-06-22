@@ -83,6 +83,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);		
 		}
 
+		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
+		{
+			throw new NotImplementedException();
+		}
+
 		#endregion
 
 		private IHttpHandler GetCompiledPageInstace(string viewName, HttpContext httpContext)

@@ -48,14 +48,22 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 
 		public override bool HasTemplate(String templateName)
 		{
-			throw new NotImplementedException();
+			return _nvelocityViewEngine.HasTemplate(templateName) || _aspxViewEngine.HasTemplate(templateName);
 		}
 
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
-			bool aspxProcessed = ProcessAspx(context, controller, viewName);
+			bool aspxProcessed, vmProcessed; aspxProcessed = vmProcessed = false;
 
-			bool vmProcessed = ProcessVm(context, controller, viewName);
+			if (_aspxViewEngine.HasTemplate(viewName))
+			{
+				aspxProcessed = ProcessAspx(context, controller, viewName);
+			}
+
+			if (!aspxProcessed && _nvelocityViewEngine.HasTemplate(viewName))
+			{
+				vmProcessed = ProcessVm(context, controller, viewName);
+			}
 
 			if (!aspxProcessed && !vmProcessed)
 			{
@@ -65,38 +73,25 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 			}
 		}
 
+		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
+		{
+			_nvelocityViewEngine.ProcessContents(context, controller, contents);
+		}
+
 		#endregion
 
 		protected virtual bool ProcessVm(IRailsEngineContext context, Controller controller, string viewName)
 		{
-			FileInfo vmFile = new FileInfo(Path.Combine( ViewRootDir, viewName + ".vm" ));
+			_nvelocityViewEngine.Process(context, controller, viewName);
 
-			if (vmFile.Exists)
-			{
-				_nvelocityViewEngine.Process(context, controller, viewName);
-
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return true;
 		}
 
 		protected virtual bool ProcessAspx(IRailsEngineContext context, Controller controller, string viewName)
 		{
-			FileInfo aspxFile = new FileInfo(Path.Combine( ViewRootDir, viewName + ".aspx" ));
+			_aspxViewEngine.Process(context, controller, viewName);
 			
-			if (aspxFile.Exists)
-			{
-				_aspxViewEngine.Process(context, controller, viewName);
-
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return true;
 		}
 	}
 }

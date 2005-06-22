@@ -115,6 +115,8 @@ namespace Castle.MonoRail.Framework
 
 		private IScaffoldingSupport _scaffoldSupport;
 
+		internal bool _directRenderInvoked;
+
 		#endregion
 
 		#region Constructors
@@ -278,6 +280,20 @@ namespace Castle.MonoRail.Framework
 		public void RenderView(String controller, String name)
 		{
 			_selectedViewName = Path.Combine(controller, name);
+		}
+
+		public void DirectRender(String contents)
+		{
+			CancelView();
+
+			if (_directRenderInvoked)
+			{
+				throw new ControllerException("DirectRender should be called only once.");
+			}
+
+			_directRenderInvoked = true;
+
+			_viewEngine.ProcessContents( _context, this, contents );
 		}
 
 		/// <summary>
@@ -728,7 +744,7 @@ namespace Castle.MonoRail.Framework
 
 			RescueAttribute att = null;
 
-			if (method.IsDefined(typeof (RescueAttribute), true))
+			if (method != null && method.IsDefined(typeof (RescueAttribute), true))
 			{
 				att = method.GetCustomAttributes(
 					typeof (RescueAttribute), true)[0] as RescueAttribute;

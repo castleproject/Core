@@ -50,5 +50,13 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller"></param>
 		/// <param name="templateName"></param>
 		void Process(IRailsEngineContext context, Controller controller, String templateName);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="controller"></param>
+		/// <param name="contents"></param>
+		void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 	}
 }

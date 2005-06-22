@@ -31,25 +31,6 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 		}
 
-		public void AddView( String path, String name, String contents )
-		{
-			ViewCollection viewColl = ObtainViewCollection(path);
-			viewColl.Add(name, contents);
-		}
-
-		protected ViewCollection ObtainViewCollection(string path)
-		{
-			ViewCollection coll = _paths[path] as ViewCollection;
-
-			if (coll == null)
-			{
-				coll = new ViewCollection();
-				_paths[path] = coll;
-			}
-
-			return coll;
-		}
-
 		#region IViewEngine Members
 
 		public override void Init()
@@ -78,7 +59,31 @@ namespace Castle.MonoRail.Framework.Tests
 			context.Response.Write(contents);
 		}
 
+		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
+		{
+			throw new NotImplementedException();
+		}
+
 		#endregion
+
+		public void AddView( String path, String name, String contents )
+		{
+			ViewCollection viewColl = ObtainViewCollection(path);
+			viewColl.Add(name, contents);
+		}
+
+		protected ViewCollection ObtainViewCollection(string path)
+		{
+			ViewCollection coll = _paths[path] as ViewCollection;
+
+			if (coll == null)
+			{
+				coll = new ViewCollection();
+				_paths[path] = coll;
+			}
+
+			return coll;
+		}
 
 		protected string ViewFrom(string name)
 		{
