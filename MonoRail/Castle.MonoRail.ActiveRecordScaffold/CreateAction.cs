@@ -27,7 +27,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		public override void Execute(Controller controller)
 		{
-			
+			controller.DirectRender("Created! Thanks!");
 		}
 	}
 }

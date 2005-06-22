@@ -177,7 +177,10 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Views\" />
+                <File
+                    RelPath = "Views\layouts\scaffold.vm"
+                    BuildAction = "None"
+                />
             </Include>
         </Files>
     </CSHARP>
