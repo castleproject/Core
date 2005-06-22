@@ -102,6 +102,13 @@ namespace Castle.MVC.Views
 		{
 			IWindsorContainer container = ContainerWebAccessorUtil.ObtainContainer();
 
+			// Get the State
+			IStatePersister statePersister = (IStatePersister) container[typeof(IStatePersister)];
+			_state = statePersister.Load();
+			// Acquire current view
+			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
+			_state.Save();
+
 			// Set the properties controllers
 			PropertyInfo[] properties = this.GetType().GetProperties(BINDING_FLAGS_SET);
 			for (int i = 0; i < properties.Length; i++) 
@@ -116,14 +123,6 @@ namespace Castle.MVC.Views
 
 		private void WebFormView_Load(object sender, EventArgs e)
 		{
-			IWindsorContainer container = ContainerWebAccessorUtil.ObtainContainer();
-
-			// Get the State
-			IStatePersister statePersister = (IStatePersister) container[typeof(IStatePersister)];
-			_state = statePersister.Load();
-			// Acquire current view
-			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
-
 			// Try to set the command name on the state object
 			Control control = null;
 			bool findControl = false;

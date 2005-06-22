@@ -169,11 +169,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\ControllerAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Controllers\IController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
