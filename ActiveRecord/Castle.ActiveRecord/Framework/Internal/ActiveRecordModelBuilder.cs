@@ -40,6 +40,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			PopulateModel(model, type);
 
+			ActiveRecordBase._Register( type, model );
+
 			return model;
 		}
 
@@ -94,21 +96,26 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			foreach( PropertyInfo prop in props )
 			{
+				bool isArProperty = false;
+
 				if (prop.IsDefined( typeof(PrimaryKeyAttribute), false ))
 				{
 					PrimaryKeyAttribute propAtt = prop.GetCustomAttributes( typeof(PrimaryKeyAttribute), false )[0] as PrimaryKeyAttribute;
+					isArProperty = true;
 
 					model.Ids.Add( new PrimaryKeyModel( prop, propAtt ) );
 				}
 				else if (prop.IsDefined( typeof(PropertyAttribute), false ))
 				{
 					PropertyAttribute propAtt = prop.GetCustomAttributes( typeof(PropertyAttribute), false )[0] as PropertyAttribute;
+					isArProperty = true;
 
 					model.Properties.Add( new PropertyModel( prop, propAtt ) );
 				}
 				else if (prop.IsDefined( typeof(NestedAttribute), false ))
 				{
 					NestedAttribute propAtt = prop.GetCustomAttributes( typeof(NestedAttribute), false )[0] as NestedAttribute;
+					isArProperty = true;
 
 					ActiveRecordModel nestedModel = new ActiveRecordModel(prop.PropertyType);
 
@@ -121,6 +128,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				else if (prop.IsDefined( typeof(JoinedKeyAttribute), false ))
 				{
 					JoinedKeyAttribute propAtt = prop.GetCustomAttributes( typeof(JoinedKeyAttribute), false )[0] as JoinedKeyAttribute;
+					isArProperty = true;
 
 					if (model.Key != null)
 					{
@@ -133,6 +141,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				else if (prop.IsDefined( typeof(VersionAttribute), false ))
 				{
 					VersionAttribute propAtt = prop.GetCustomAttributes( typeof(VersionAttribute), false )[0] as VersionAttribute;
+					isArProperty = true;
 
 					if (model.Version != null)
 					{
@@ -145,6 +154,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				else if (prop.IsDefined( typeof(TimestampAttribute), false ))
 				{
 					TimestampAttribute propAtt = prop.GetCustomAttributes( typeof(TimestampAttribute), false )[0] as TimestampAttribute;
+					isArProperty = true;
 
 					if (model.Timestamp != null)
 					{
@@ -158,24 +168,28 @@ namespace Castle.ActiveRecord.Framework.Internal
 				else if (prop.IsDefined( typeof(OneToOneAttribute), false ))
 				{
 					OneToOneAttribute propAtt = prop.GetCustomAttributes( typeof(OneToOneAttribute), false )[0] as OneToOneAttribute;
+					isArProperty = true;
 
 					model.OneToOnes.Add(new OneToOneModel( prop, propAtt ));
 				}
 				else if (prop.IsDefined( typeof(BelongsToAttribute), false ))
 				{
 					BelongsToAttribute propAtt = prop.GetCustomAttributes( typeof(BelongsToAttribute), false )[0] as BelongsToAttribute;
+					isArProperty = true;
 
 					model.BelongsTo.Add(new BelongsToModel( prop, propAtt ));
 				}
 				else if (prop.IsDefined( typeof(HasManyAttribute), false ))
 				{
 					HasManyAttribute propAtt = prop.GetCustomAttributes( typeof(HasManyAttribute), false )[0] as HasManyAttribute;
+					isArProperty = true;
 
 					model.HasMany.Add(new HasManyModel( prop, propAtt ));
 				}
 				else if (prop.IsDefined( typeof(HasAndBelongsToManyAttribute), false ))
 				{
 					HasAndBelongsToManyAttribute propAtt = prop.GetCustomAttributes( typeof(HasAndBelongsToManyAttribute), false )[0] as HasAndBelongsToManyAttribute;
+					isArProperty = true;
 
 					model.HasAndBelongsToMany.Add(new HasAndBelongsToManyModel( prop, propAtt ));
 				}
@@ -191,6 +205,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 					HiloAttribute propAtt = prop.GetCustomAttributes( typeof(HiloAttribute), false )[0] as HiloAttribute;
 
 					model.Hilos.Add(new HiloModel( prop, propAtt ));
+				}
+
+				if (!isArProperty)
+				{
+					model.NotMappedProperties.Add(prop);
 				}
 			}
 		}

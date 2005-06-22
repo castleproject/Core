@@ -39,6 +39,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private IList oneToOne = new ArrayList();
 		private IList collectionIds = new ArrayList();
 		private IList hilos = new ArrayList();
+		private IList notMappedProperties = new ArrayList();
 		private KeyModel key;
 		private TimestampModel timestamp;
 		private VersionModel version;
@@ -163,6 +164,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public IList Hilos
 		{
 			get { return hilos; }
+		}
+
+		public IList NotMappedProperties
+		{
+			get { return notMappedProperties; }
 		}
 
 		#region IVisitable Members

@@ -35,6 +35,7 @@ namespace Castle.ActiveRecord
 	public abstract class ActiveRecordBase
 	{
 		protected internal static ISessionFactoryHolder _holder;
+		protected internal static IDictionary type2Model = Hashtable.Synchronized( new Hashtable() );
 
 		/// <summary>
 		/// Constructs an ActiveRecordBase subclass.
@@ -42,6 +43,30 @@ namespace Castle.ActiveRecord
 		public ActiveRecordBase()
 		{
 		}
+
+		#region Internal core methods
+
+		/// <summary>
+		/// Internally used
+		/// </summary>
+		/// <param name="arType"></param>
+		/// <param name="model"></param>
+		public static void _Register(Type arType, Framework.Internal.ActiveRecordModel model)
+		{
+			type2Model[ arType ] = model;
+		}
+
+		/// <summary>
+		/// Internally used
+		/// </summary>
+		/// <param name="arType"></param>
+		/// <returns></returns>
+		public static Framework.Internal.ActiveRecordModel _GetModel( Type arType )
+		{
+			return (Framework.Internal.ActiveRecordModel) type2Model[ arType ];
+		}
+
+		#endregion
 
 		#region Overridable Hooks
 
@@ -389,6 +414,8 @@ namespace Castle.ActiveRecord
 
 		#endregion
 
+		#region Base methods
+
 		/// <summary>
 		/// Invokes the specified delegate passing a valid 
 		/// NHibernate session. Used for custom NHibernate queries.
@@ -434,5 +461,7 @@ namespace Castle.ActiveRecord
 		{
 			Delete(this);
 		}
+
+		#endregion
 	}
 }

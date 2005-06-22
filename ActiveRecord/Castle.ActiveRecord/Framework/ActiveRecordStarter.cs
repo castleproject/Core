@@ -57,7 +57,9 @@ namespace Castle.ActiveRecord
 
 			foreach( Type type in types )
 			{
-				if ( models.Contains(type) || !typeof(ActiveRecordBase).IsAssignableFrom( type ) )
+				if ( models.Contains(type) || 
+					type == typeof(ActiveRecordBase) || type == typeof(ActiveRecordValidationBase) || 
+					!typeof(ActiveRecordBase).IsAssignableFrom( type ) )
 				{
 					continue;
 				}
@@ -204,8 +206,6 @@ namespace Castle.ActiveRecord
 
 			return new SchemaExport( cfg );
 		}
-
-		
 
 		private static void CheckInitialized()
 		{
