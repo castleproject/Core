@@ -429,7 +429,8 @@ namespace Castle.MonoRail.Framework
 					String message = "You must enable scaffolding support on the " + 
 						"configuration file, or, to use the standard ActiveRecord support, " + 
 						"copy the necessary assemblies to the bin folder.";
-					throw new Exception(message);
+
+					throw new RailsException(message);
 				}
 
 				_scaffoldSupport.Process( this );
@@ -476,8 +477,6 @@ namespace Castle.MonoRail.Framework
 
 			MethodInfo method = SelectMethod(action, _actions, _context.Request);
 
-			CreateResources(method);
-
 			IDynamicAction dynAction = null;
 
 			if (method == null)
@@ -492,6 +491,8 @@ namespace Castle.MonoRail.Framework
 					}
 				}
 			}
+
+			CreateResources(method);
 
 			HybridDictionary filtersToSkip = new HybridDictionary();
 
