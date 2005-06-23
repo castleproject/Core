@@ -8,6 +8,7 @@
 	<property name="version" value="beta-2" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="samples.dir" value="${base.dir}/../Samples/MonoRail" />
+	<property name="gacutil.file" value="${framework::get-framework-directory( framework::get-target-framework() )}/gacutil"/>
 
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
 	<property name="template.component.bin.dir" value="${base.dir}/../Components/General/TemplateEngine/bin" />
@@ -49,11 +50,11 @@
 		</copy>
 		<delete dir="${doc.dir}" failonerror="false" />
 		<mkdir dir="${doc.dir}" />
-		<exec program="gacutil" failonerror="false" verbose="true" workingdir="${bin.dir}">
+		<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}">
 			<arg value="/u" />
 			<arg value="Cassini" />
 		</exec>
-		<exec program="gacutil" failonerror="false" verbose="true" workingdir="${bin.dir}">
+		<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}">
 			<arg value="/i" />
 			<arg value="Cassini.dll" />
 		</exec>
