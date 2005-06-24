@@ -18,8 +18,10 @@ namespace Castle.MonoRail.Framework.Controllers
 
 	using Castle.MonoRail.Framework.Attributes;
 
+	[ControllerDetails(Area="MonoRail")]
 	[Resource("Ajax","Castle.MonoRail.Framework.Controllers.Ajax")]
 	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat")]
+	[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation")]
 	public class FilesController : Controller
 	{
 		public FilesController()

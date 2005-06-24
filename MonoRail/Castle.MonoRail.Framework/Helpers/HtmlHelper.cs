@@ -18,9 +18,6 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Text;
 	using System.Reflection;
 
-	using Castle.MonoRail.Framework.Internal;
-
-
 	public class HtmlHelper : AbstractHelper
 	{
 		public String Form( String action )

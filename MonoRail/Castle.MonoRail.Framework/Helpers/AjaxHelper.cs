@@ -47,6 +47,9 @@ namespace Castle.MonoRail.Framework.Helpers
 	}
 
 
+	/// <summary>
+	/// MonoRail Helper that delivers AJAX capabilities.
+	/// </summary>
 	public class AjaxHelper : AbstractHelper
 	{
 		public AjaxHelper()
