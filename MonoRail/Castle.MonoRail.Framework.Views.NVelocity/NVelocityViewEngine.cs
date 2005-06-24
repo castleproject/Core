@@ -176,6 +176,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			foreach (String key in context.Params.AllKeys)
 			{
+				if (key == null)  continue; // Nasty bug?
 				object value = context.Params[key];
 				if (value == null) continue;
 				innerContext[key] = value;
