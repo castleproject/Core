@@ -25,6 +25,7 @@ namespace Castle.MonoRail.WindsorExtension
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Internal.Graph;
+	using Castle.MonoRail.Framework.Controllers;
 
 
 	/// <summary>
@@ -48,6 +49,13 @@ namespace Castle.MonoRail.WindsorExtension
 			_tree = (ControllerTree) kernel["rails.controllertree"];
 
 			kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
+
+			AddBuitInControllers(kernel);
+		}
+
+		protected virtual void AddBuitInControllers(IKernel kernel)
+		{
+			kernel.AddComponent("files", typeof(FilesController), typeof(FilesController));
 		}
 
 		public void Terminate()

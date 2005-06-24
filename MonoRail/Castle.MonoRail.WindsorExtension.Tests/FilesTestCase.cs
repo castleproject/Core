@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.WindsorExtension.Tests
 {
 	using System;
+	using System.IO;
 
 	using NUnit.Framework;
 
@@ -23,6 +24,11 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 	{
 		public FilesTestCase()
 		{
+		}
+
+		protected override String ObtainPhysicalDir()
+		{
+			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteWindsor" );
 		}
 	}
 }
