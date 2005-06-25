@@ -46,6 +46,22 @@ namespace Castle.ActiveRecord
 
 		#region Internal core methods
 
+		private static void EnsureInitialized( Type type )
+		{
+			if (_holder == null)
+			{
+				String message = String.Format("An ActiveRecord class ({0}) was used but the framework seems not " + 
+					"properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?", type.FullName);
+				throw new ActiveRecordException( message );
+			}
+			if (!type2Model.Contains(type))
+			{
+				String message = String.Format("You have accessed an ActiveRecord class that wasn't properly initialized. " + 
+					"The only explanation is that the call to ActiveRecordStarter.Initialize() didn't include {0} class", type.FullName);
+				throw new ActiveRecordException( message );
+			}
+		}
+
 		/// <summary>
 		/// Internally used
 		/// </summary>
@@ -117,6 +133,8 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		protected static object Execute(Type targetType, NHibernateDelegate call, object instance)
 		{
+			EnsureInitialized(targetType);
+
 			if (targetType == null) throw new ArgumentNullException("targetType", "Target type must be informed");
 			if (call == null) throw new ArgumentNullException("call", "Delegate must be passed");
 
@@ -144,6 +162,8 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		protected static object FindByPrimaryKey(Type targetType, object id)
 		{
+			EnsureInitialized(targetType);
+
 			ISession session = _holder.CreateSession( targetType );
 
 			try
@@ -179,6 +199,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
 		{
+			EnsureInitialized(targetType);
+
 			ISession session = _holder.CreateSession( targetType );
 
 			try
@@ -231,6 +253,8 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		protected static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
 		{
+			EnsureInitialized(targetType);
+
 			ISession session = _holder.CreateSession( targetType );
 
 			try
@@ -292,6 +316,8 @@ namespace Castle.ActiveRecord
 
 		protected static void DeleteAll(Type type)
 		{
+			EnsureInitialized(type);
+
 			ISession session = _holder.CreateSession( type );
 
 			try
@@ -316,6 +342,10 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Save(object instance)
 		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
 			ISession session = _holder.CreateSession( instance.GetType() );
 
 			try
@@ -340,6 +370,10 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Create(object instance)
 		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
 			ISession session = _holder.CreateSession( instance.GetType() );
 
 			try
@@ -365,6 +399,10 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Update(object instance)
 		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
 			ISession session = _holder.CreateSession( instance.GetType() );
 
 			try
@@ -389,6 +427,10 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Delete(object instance)
 		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
 			ISession session = _holder.CreateSession( instance.GetType() );
 
 			try
