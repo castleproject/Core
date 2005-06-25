@@ -30,8 +30,7 @@ namespace ${basename}
 			AddFacility( "rails", new RailsFacility() );
 			
 			// You can use more :-)
-			// AddFacility( "nhibernate", new NHibernateFacility() );
-			// AddFacility( "transaction", new TransactionFacility() );
+			// AddFacility( "activerecord", new ActiveRecordFacility() );
 		}
 
 		protected void RegisterComponents()

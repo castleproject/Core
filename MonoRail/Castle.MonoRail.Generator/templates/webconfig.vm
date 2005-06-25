@@ -3,7 +3,7 @@
 <configuration>
 
     <configSections>
-        <section name="rails"
+        <section name="monoRail"
                  type="Castle.MonoRail.Engine.Configuration.MonoRailSectionHandler, Castle.MonoRail.Engine" />
 #if($useWindsorIntegration)
         <section name="castle"
@@ -11,7 +11,7 @@
 #end
     </configSections>
 
-    <rails>
+    <monoRail>
 		<viewEngine 
 			viewPathRoot="$viewpath" 
 			customEngine="$viewenginetypename" />
@@ -23,12 +23,45 @@
 			<assembly>${name}</assembly>
 		</controllers>
 #end
-    </rails>
+		<!-- These are a few routing rules samples 
+		  (dont forget to enable the http module below)
+		<routing>
+			<rule> 
+				<pattern>(/blog/posts/)(\d+)/(\d+)/(.)*$</pattern>
+				<replace><![CDATA[ /blog/view.rails?year=$2&month=$3 ]]></replace>
+			</rule>
+			<rule> 
+				<pattern>(/news/)(\d+)/(\d+)/(.)*$</pattern>
+				<replace><![CDATA[ /news/view.rails?year=$2&month=$3 ]]></replace>
+			</rule>
+		</routing>
+		-->
+    </monoRail>
 #if($useWindsorIntegration)
 
 	<castle>
 		<facilities>
-		  <!-- Facilities declarations goes here -->
+		    <!-- Facilities declarations goes here -->
+		  
+		    <!-- For example, to use the active record integration: -->
+		    
+		    <!-- 
+			<facility id="arintegration" type="Castle.Facilities.ActiveRecordIntegration.ActiveRecordFacility, Castle.Facilities.ActiveRecordIntegration">
+
+				<assemblies>
+					<item>${name}</item>
+				</assemblies>
+
+				<config>
+					<add key="hibernate.connection.driver_class" value="NHibernate.Driver.SqlClientDriver" />
+					<add key="hibernate.dialect"                 value="NHibernate.Dialect.MsSql2000Dialect" />
+					<add key="hibernate.connection.provider"     value="NHibernate.Connection.DriverConnectionProvider" />
+					<add key="hibernate.connection.connection_string" value="Data Source=.;Initial Catalog=yourdb;Integrated Security=SSPI" />
+				</config>
+		    
+			</facility>
+			-->
+
 		</facilities>
 
 		<components>
@@ -42,6 +75,12 @@
             <add verb="*" path="*.rails" 
                type="Castle.MonoRail.Engine.MonoRailHttpHandlerFactory, Castle.MonoRail.Engine" />
         </httpHandlers>
+
+	    <!-- If'd like to enable Routing...
+		<httpModules>
+			<add name="routing" type="Castle.MonoRail.Engine.RoutingModule, Castle.MonoRail.Engine" /> 
+		</httpModules> 
+		-->
     </system.web>
 
 </configuration>
