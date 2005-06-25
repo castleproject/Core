@@ -30,7 +30,8 @@ namespace Castle.MonoRail.Engine.Tests
 		[SetUp]
 		public void Init()
 		{
-			server = new Server(8083, ObtainVirtualDir(), ObtainPhysicalDir());
+			String physicalDir = Normalize(ObtainPhysicalDir());
+			server = new Server(8083, ObtainVirtualDir(), physicalDir);
 			server.Start();
 		}
 
@@ -40,10 +41,15 @@ namespace Castle.MonoRail.Engine.Tests
 			server.Stop();
 		}
 
+		private string Normalize(String possibleRelativePath)
+		{
+			DirectoryInfo dir = new DirectoryInfo( possibleRelativePath );
+			return dir.FullName;
+		}
+
 		protected virtual String ObtainPhysicalDir()
 		{
-			String path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSite" );
-			return path;
+			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSite" );
 		}
 
 		protected virtual String ObtainVirtualDir()
