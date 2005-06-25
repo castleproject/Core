@@ -173,9 +173,23 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\PersonController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Blog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Person.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\blogs\newBlog.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Views\layouts\scaffold.vm"

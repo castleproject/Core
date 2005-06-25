@@ -216,10 +216,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\Validation.resx"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Filters\AntiGoogleWebAcceleratorFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -256,11 +252,6 @@
                 />
                 <File
                     RelPath = "Helpers\HtmlHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Helpers\ValidationHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

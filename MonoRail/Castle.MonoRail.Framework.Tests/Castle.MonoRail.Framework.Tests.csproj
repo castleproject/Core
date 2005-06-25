@@ -250,7 +250,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helpers\ValidationHelperTestCase.cs"
+                    RelPath = "Helpers\HtmlHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -28,7 +28,7 @@ namespace TestScaffolding
 		{
 			IConfigurationSource source = System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
 
-			ActiveRecordStarter.Initialize( source, typeof(Blog) );
+			ActiveRecordStarter.Initialize( source, typeof(Blog), typeof(Person) );
 		}
  
 		protected void Session_Start(Object sender, EventArgs e)

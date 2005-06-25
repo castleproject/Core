@@ -36,7 +36,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			if (model == null)
 			{
-				throw new ScaffoldException("Specified type does look like an ActiveRecord type or the ActiveRecord framework wasn't started properly");
+				throw new ScaffoldException("Specified type isn't an ActiveRecord type or the ActiveRecord " + 
+					"framework wasn't started properly. Did you forget about the Initialize method?");
 			}
 
 			if (controller.LayoutName == null)
@@ -57,38 +58,9 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 			else
 			{
-				GenerateHtml(name, model, controller);
+				object instance = Activator.CreateInstance( model.Type );
+				GenerateHtml(name, model, instance, controller);
 			}
-		}
-
-		private void GenerateHtml(string name, ActiveRecordModel model, Controller controller)
-		{
-			HtmlHelper helper = new HtmlHelper();
-	
-			// In this case it's up to us to create the insertion form
-	
-			StringBuilder sb = new StringBuilder();
-	
-			sb.AppendFormat( "<h3>New {0}</h3>\r\n", name );
-			
-			sb.Append( helper.Form( String.Format("create{0}.{1}", 
-				name, controller.Context.UrlInfo.Extension) ) );
-	
-			foreach( PropertyModel prop in model.Properties )
-			{
-				sb.Append( "<p>\r\n" );
-
-				sb.AppendFormat( "<label>{0}:</label><br>\r\n", prop.Property.Name );
-				sb.AppendFormat( "<input type=\"text\" name=\"{0}\" />\r\n", prop.Property.Name );
-
-				sb.Append( "</p>\r\n" );
-			}
-	
-			sb.Append( helper.CreateSubmit( "Save" ) );
-	
-			sb.Append( helper.EndForm() );
-	
-			controller.DirectRender( sb.ToString() );
 		}
 	}
 }

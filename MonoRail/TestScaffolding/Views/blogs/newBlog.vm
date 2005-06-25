@@ -1,0 +1,12 @@
+</p><h3>New Blog</h3>
+<form method="post" action="createBlog.rails">
+<p>
+<label>Name:</label>
+<input name="Name" type="text">
+</p>
+<p>
+<label>Author:</label>
+<input name="Author" type="text">
+</p>
+<input value="Save" type="submit">
+</form>
