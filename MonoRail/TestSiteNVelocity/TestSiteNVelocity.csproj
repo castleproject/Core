@@ -216,6 +216,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Controllers\ValidatedController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\SubArea\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -310,6 +315,10 @@
                 />
                 <File
                     RelPath = "views\SubArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\validated\default.vm"
                     BuildAction = "None"
                 />
             </Include>

@@ -12,28 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Helpers
+namespace TestSiteNVelocity.Controllers
 {
 	using System;
+	using System.Threading;
 
-	/// <summary>
-	/// Simple helper
-	/// </summary>
-	public class DateFormatHelper : AbstractHelper
+	using Castle.MonoRail.Framework;
+	
+	public class ValidatedController : Controller
 	{
-		/// <summary>
-		/// Formats to short date
-		/// </summary>
-		/// <param name="date"></param>
-		/// <returns></returns>
-		public String FormatDate( DateTime date )
+		public ValidatedController()
 		{
-			return date.ToShortDateString();
 		}
 
-		public String ToShortDateTime(DateTime date)
+		public void Default()
 		{
-			return date.ToShortDateString() + " " + date.ToShortTimeString();
+			
+		}
+
+		public void Custom()
+		{
+			
+		}
+
+		public void Validate()
+		{
+			Thread.Sleep(1000);
+
+			CancelView();
 		}
 	}
 }

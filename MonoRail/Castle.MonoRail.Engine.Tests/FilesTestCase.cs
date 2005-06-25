@@ -42,5 +42,25 @@ namespace Castle.MonoRail.Engine.Tests
 
 			Execute(url, expected);
 		}
+
+		[Test]
+		public void Validation()
+		{
+			string expected = " \r\n\t\t\t/*************************************";
+			string url = "/MonoRail/Files/ValidateCore.rails";
+			Execute(url, expected);
+
+			expected = " \r\n\t\t\t\tfunction fValConfig()\r\n\t\t\t\t{";
+			url = "/MonoRail/Files/ValidateConfig.rails";
+			Execute(url, expected);
+
+			expected = " \r\n\t\t\t/*< blank basic ******************";
+			url = "/MonoRail/Files/ValidateValidators.rails";
+			Execute(url, expected);
+
+			expected = " \r\n\t\t\t/*--	fValidate US-English language file.";
+			url = "/MonoRail/Files/ValidateLang.rails";
+			Execute(url, expected);
+		}
 	}
 }

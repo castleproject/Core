@@ -551,6 +551,7 @@ namespace Castle.MonoRail.Framework
 				{
 					ProcessFilters(ExecuteEnum.After, filtersToSkip);
 				}
+
 				DisposeFilter();
 			}
 
@@ -581,21 +582,22 @@ namespace Castle.MonoRail.Framework
 				_helpers.Add(helper.HelperType.Name, helperInstance);
 			}
 
-			// TODO: Unify Helper Instation
-			// Default helpers 
-			AjaxHelper ajaxHelper = new AjaxHelper();
-			ajaxHelper.SetController(this);
-			_helpers[typeof (AjaxHelper).Name] = ajaxHelper;
 
-			EffectsFatHelper effectsFatHelper = new EffectsFatHelper();
-			effectsFatHelper.SetController(this);
-			_helpers[typeof (EffectsFatHelper).Name] = effectsFatHelper;
+			AbstractHelper[] builtInHelpers = 
+				new AbstractHelper[] {new AjaxHelper(), new EffectsFatHelper(), new DateFormatHelper(), 
+									  new HtmlHelper(), new ValidationHelper()};
+			
+			foreach(AbstractHelper helper in builtInHelpers)
+			{
+				helper.SetController(this);
 
-			_helpers[typeof (DateFormatHelper).Name] = new DateFormatHelper();
+				string helperName = helper.GetType().Name;
 
-			HtmlHelper htmlHelper = new HtmlHelper();
-			htmlHelper.SetController(this);
-			_helpers[typeof (HtmlHelper).Name] = htmlHelper;
+				if (!_helpers.Contains(helperName))
+				{
+					_helpers.Add(helperName, helper);
+				}
+			}
 		}
 
 		#endregion

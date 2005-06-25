@@ -14,12 +14,18 @@
 
 namespace Castle.MonoRail.Framework.Controllers
 {
+	using Castle.MonoRail.Framework.Helpers;
+
+	/// <summary>
+	/// Buit in <see cref="Controller"/> containing the files requireds by helpers and other 
+	/// parts of MonoRail.
+	/// </summary>
 	[ControllerDetails(Area="MonoRail")]
 	[Resource("Ajax","Castle.MonoRail.Framework.Controllers.Ajax")]
 	[Resource("Effects2", "Castle.MonoRail.Framework.Controllers.Effects2")]
 	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat")]
-	//[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation")]
-	public class FilesController : Controller
+	[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation")]
+	public sealed class FilesController : Controller
 	{
 		public FilesController()
 		{
@@ -27,22 +33,68 @@ namespace Castle.MonoRail.Framework.Controllers
 
 		private string GetResourceValue(string resName, string resKey)
 		{
-			return (string)((IResource)Resources[resName])[resKey];
+			return (string)(Resources[resName])[resKey];
 		}
 
+		private void RenderFile(string resourceName, string resourceKey)
+		{
+			RenderText(GetResourceValue(resourceName, resourceKey));
+		}
+
+		/// <summary>
+		/// Script used by <see cref="AjaxHelper"/>.
+		/// </summary>
 		public void AjaxScripts()
 		{
-			RenderText(GetResourceValue("Ajax", "jsfunctions"));
+			RenderFile("Ajax", "jsfunctions");
 		}
 
+		/// <summary>
+		/// Script used by <see cref="EffectsFatHelper"/>.
+		/// </summary>
 		public void EffectsFatScripts()
 		{
-			RenderText(GetResourceValue("EffectsFat", "fatfunctions"));
+			RenderFile("EffectsFat", "fatfunctions");
 		}
 
+		/// <summary>
+		/// Script used by <see cref="Effects2Helper"/>.
+		/// </summary>
 		public void Effects2()
 		{
-			RenderText(GetResourceValue("Effects2", "functions"));
+			RenderFile("Effects2", "functions");
+		}
+
+		/// <summary>
+		/// Script used by <see cref="ValidationHelper"/>.
+		/// </summary>
+		public void ValidateConfig()
+		{
+			RenderFile("Validation", "fValidateConfig");
+		}
+
+		/// <summary>
+		/// Script used by <see cref="ValidationHelper"/>.
+		/// </summary>
+		public void ValidateCore()
+		{
+			RenderFile("Validation", "fValidateCore");
+		}
+
+		/// <summary>
+		/// Script used by <see cref="ValidationHelper"/>.
+		/// </summary>
+		public void ValidateValidators()
+		{
+			RenderFile("Validation", "fValidateValidators");
+		}
+
+		/// <summary>
+		/// Script used by <see cref="ValidationHelper"/>.
+		/// </summary>
+		public void ValidateLang()
+		{
+			RenderFile("Validation", "fValidateLang");
 		}
 	}
 }
