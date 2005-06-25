@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Text;
 	using System.Collections;
+	using System.Collections.Specialized;
 
 	public enum CallbackEnum
 	{
@@ -239,7 +240,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public IDictionary GetOptions(string url, string idOfElementToBeUpdated, string with, string loading, string loaded, string complete, string interactive)
 		{
-			IDictionary options = new Hashtable();
+			IDictionary options = new HybridDictionary();
 	
 			options["form"] = true;
 			options["url"] = url;
@@ -281,7 +282,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String ObserveField(String fieldId, int frequency, String url, String idOfElementToBeUpdated, String with)
 		{
-			IDictionary options = new Hashtable();
+			IDictionary options = new HybridDictionary();
 			options["frequency"] = frequency;
 			options["url"] = url;
 			
@@ -339,7 +340,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String ObserveForm(String formId, int frequency, String url, String idOfElementToBeUpdated, String with)
 		{
-			IDictionary options = new Hashtable();
+			IDictionary options = new HybridDictionary();
 			options["frequency"] = frequency;
 			options["url"] = url;
 
@@ -365,7 +366,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String BuildRemoteFunction(String url, String update)
 		{
-			IDictionary options = new Hashtable();
+			IDictionary options = new HybridDictionary();
 			options["update"] = update;
 			options["url"] = url;
 
@@ -381,7 +382,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private String BuildRemoteFunction(String with, String update, String url)
 		{
-			IDictionary options = new Hashtable();
+			IDictionary options = new HybridDictionary();
 			options["update"] = update;
 			options["url"] = url;
 			options["with"] = with;
@@ -391,7 +392,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private String BuildRemoteFunction(bool form, String update, String url)
 		{
-			IDictionary options = new Hashtable();
+			IDictionary options = new HybridDictionary();
 			if (form) options["form"] = true;
 			options["update"] = update;
 			options["url"] = url;
@@ -401,7 +402,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		protected String RemoteFunction(IDictionary options)
 		{
-			IDictionary jsOptions = new Hashtable();
+			IDictionary jsOptions = new HybridDictionary();
 
 			String javascriptOptionsString = BuildAjaxOptions(jsOptions, options);
 

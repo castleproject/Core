@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		public override bool HasTemplate(String templateName)
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("HasTemplate is not implemented for webforms view engine");
 		}
 
 		/// <summary>
@@ -51,9 +51,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
 
-			// 
 			// To Do: document this hack for the sake of our users
-			// 
 			if (httpContext != null)
 			{
 				if (!httpContext.Items.Contains(ProcessedBeforeKey))
@@ -85,14 +83,16 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("ProcessContents is not implemented for webforms view engine");
 		}
 
 		#endregion
 
 		private IHttpHandler GetCompiledPageInstace(string viewName, HttpContext httpContext)
 		{
-			String physicalPath = Path.Combine( ViewRootDir, viewName + ".aspx" ).Replace('/', '\\');
+			viewName += ".aspx";
+
+			String physicalPath = Path.Combine( ViewRootDir, viewName ).Replace('/', '\\');
 
 			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
@@ -173,8 +173,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		private Page ObtainMasterPage(HttpContext context, Controller controller)
 		{
-			String layout = "layouts/" + controller.LayoutName;
-			String physicalPath = Path.Combine( ViewRootDir, layout + ".aspx" );
+			String layout = "layouts/" + controller.LayoutName + ".aspx";
+			String physicalPath = Path.Combine( ViewRootDir, layout );
 			physicalPath = physicalPath.Replace('/', '\\');
 
 			return PageParser.GetCompiledPageInstance(layout, physicalPath, context) as Page;

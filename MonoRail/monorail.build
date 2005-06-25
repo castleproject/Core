@@ -33,7 +33,6 @@
 	</target>
 	
 	<target name="init">
-    <echo message="ALLOOWWW ${gacutil.file}"/>
 		<copy todir="${bin.dir}">
 			<fileset basedir="${container.bin.dir}">
 				<include name="*.dll" />
