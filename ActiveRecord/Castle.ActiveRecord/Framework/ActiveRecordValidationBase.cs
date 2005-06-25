@@ -15,10 +15,10 @@
 namespace Castle.ActiveRecord
 {
 	using System;
-	using System.Reflection;
 	using System.Collections;
 
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Internal;
 
 	/// <summary>
 	/// 
@@ -26,14 +26,11 @@ namespace Castle.ActiveRecord
 	public abstract class ActiveRecordValidationBase : ActiveRecordBase
 	{
 		/// <summary>
-		/// Just to ensure only one thread creates the validators array
-		/// </summary>
-		private static readonly object __locker = new object();
-		
-		/// <summary>
 		/// List of validators that should be executed for this class
 		/// </summary>
-		private IValidator[] __validators;
+		private IList __validators;
+
+		private IDictionary __failedProperties;
 
 		/// <summary>
 		/// List of error messages
@@ -45,13 +42,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public ActiveRecordValidationBase()
 		{
-			lock(__locker)
-			{
-				if (__validators == null)
-				{
-					CollectValidators( this.GetType() );
-				}
-			}
+			CollectValidators( this.GetType() );
 		}
 
 		/// <summary>
@@ -60,23 +51,14 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType"></param>
 		private void CollectValidators( Type targetType )
 		{
-			ArrayList list = new ArrayList();
+			ActiveRecordModel model = _GetModel( targetType );
 
-			PropertyInfo[] properties = targetType.GetProperties(BindingFlags.Public|BindingFlags.Instance);
-
-			foreach(PropertyInfo prop in properties)
+			if (model == null)
 			{
-				object[] attributes = prop.GetCustomAttributes( typeof(AbstractValidationAttribute), true );
-				
-				foreach(AbstractValidationAttribute attribute in attributes)
-				{
-					attribute.Validator.Initialize(prop);
-
-					list.Add( attribute.Validator );
-				}
+				throw new ActiveRecordException("Seems that the framework wasn't initialized properly. (ActiveRecordModel could not obtained)");
 			}
 
-			__validators = (IValidator[]) list.ToArray( typeof(IValidator) );
+			__validators = model.Validators;
 		}
 
 		/// <summary>
@@ -87,12 +69,29 @@ namespace Castle.ActiveRecord
 		public bool IsValid()
 		{
 			ArrayList errorlist = new ArrayList();
+			__failedProperties = new Hashtable();
 
 			foreach(IValidator validator in __validators)
 			{
 				if (!validator.Perform(this))
 				{
-					errorlist.Add( validator.ErrorMessage );
+					String errorMessage = validator.ErrorMessage;
+					
+					errorlist.Add( errorMessage );
+
+					ArrayList items = null;
+
+					if (__failedProperties.Contains(validator.Property))
+					{
+						items = (ArrayList) __failedProperties[validator.Property];
+					}
+					else
+					{
+						items = new ArrayList();
+						__failedProperties[validator.Property] = items;
+					}
+
+					items.Add(errorMessage);
 				}
 			}
 
@@ -115,6 +114,15 @@ namespace Castle.ActiveRecord
 
 				return _errorMessages;
 			}
+		}
+
+		/// <summary>
+		/// Maps a specific PropertyInfo to a list of
+		/// error messages. Useful for frameworks.
+		/// </summary>
+		public IDictionary PropertiesValidationErrorMessage
+		{
+			get { return __failedProperties; }
 		}
 
 		/// <summary>

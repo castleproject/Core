@@ -98,6 +98,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				bool isArProperty = false;
 
+				// Validation
+
+				object[] valAtts = prop.GetCustomAttributes( typeof(AbstractValidationAttribute), true ); 
+
+				foreach(AbstractValidationAttribute valAtt in valAtts)
+				{
+					valAtt.Validator.Initialize( prop );
+
+					model.Validators.Add( valAtt.Validator );
+				}
+
 				if (prop.IsDefined( typeof(PrimaryKeyAttribute), false ))
 				{
 					PrimaryKeyAttribute propAtt = prop.GetCustomAttributes( typeof(PrimaryKeyAttribute), false )[0] as PrimaryKeyAttribute;

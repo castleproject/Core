@@ -16,6 +16,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 {
 	using System;
 
+	/// <summary>
+	/// Ensures that a property was 
+	/// filled with some value
+	/// </summary>
 	[Serializable]
 	public class NullCheckValidator : AbstractValidator
 	{

@@ -26,6 +26,8 @@ namespace Castle.ActiveRecord.Tests.Validation
 		[Test]
 		public void IsValid()
 		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(User) );
+
 			User user = new User();
 
 			Assert.IsFalse(user.IsValid()); 
@@ -42,6 +44,8 @@ namespace Castle.ActiveRecord.Tests.Validation
 		[Test]
 		public void ErrorMessages()
 		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(User) );
+
 			User user = new User();
 
 			Assert.IsFalse(user.IsValid()); 

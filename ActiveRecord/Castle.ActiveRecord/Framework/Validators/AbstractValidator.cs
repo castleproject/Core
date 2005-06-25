@@ -17,39 +17,64 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System;
 	using System.Reflection;
 
-
+	/// <summary>
+	/// Abstract <see cref="IValidator"/> implementation
+	/// </summary>
 	[Serializable]
 	public abstract class AbstractValidator : IValidator
 	{
-		private PropertyInfo _property;
-		private String _errorMessage;
+		private String errorMessage;
+		private PropertyInfo property;
 
-		public PropertyInfo Property
-		{
-			get { return _property; }
-		}
-
+		/// <summary>
+		/// Implementors should perform any initialization logic
+		/// </summary>
+		/// <param name="property">The target property</param>
 		public void Initialize(PropertyInfo property)
 		{
-			_property = property;
+			this.property = property;
 
-			if (_errorMessage == null)
+			if (errorMessage == null)
 			{
-				_errorMessage = BuildErrorMessage();
+				errorMessage = BuildErrorMessage();
 			}
 		}
 
-		public string ErrorMessage
+		/// <summary>
+		/// The target property
+		/// </summary>
+		public PropertyInfo Property
 		{
-			get { return _errorMessage; }
-			set { _errorMessage = value; }
+			get { return property; }
 		}
 
+		/// <summary>
+		/// The error message to be displayed if the validation fails
+		/// </summary>
+		public String ErrorMessage
+		{
+			get { return errorMessage; }
+			set { errorMessage = value; }
+		}
+
+		/// <summary>
+		/// Implementors should perform the actual validation upon
+		/// the property value
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public bool Perform(object instance)
 		{
 			return this.Perform( instance, Property.GetValue(instance, null) );
 		}
 
+		/// <summary>
+		/// Implementors should perform the actual validation upon
+		/// the property value
+		/// </summary>
+		/// <param name="instance"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns><c>true</c> if the field is OK</returns>
 		public abstract bool Perform(object instance, object fieldValue);
 
 		protected abstract string BuildErrorMessage();
