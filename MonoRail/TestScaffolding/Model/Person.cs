@@ -20,10 +20,11 @@ namespace TestScaffolding.Model
 
 
 	[ActiveRecord("Persons", DiscriminatorColumn="type", DiscriminatorValue="person")]
-	public class Person : ActiveRecordBase
+	public class Person : ActiveRecordValidationBase
 	{
 		private int id;
 		private String name;
+		private String email;
 		private int age;
 		private DateTime dob;
 
@@ -39,11 +40,18 @@ namespace TestScaffolding.Model
 			set { id = value; }
 		}
 
-		[Property]
+		[Property, ValidateNotEmpty]
 		public String Name
 		{
 			get { return name; }
 			set { name = value; }
+		}
+
+		[Property, ValidateNotEmpty, ValidateEmail]
+		public String Email
+		{
+			get { return email; }
+			set { email = value; }
 		}
 
 		[Property]

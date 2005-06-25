@@ -21,6 +21,8 @@ namespace Castle.MonoRail.Framework.Tests
 	public class RequestImpl : IRequest
 	{
 		internal NameValueCollection _params = new NameValueCollection();
+		internal NameValueCollection _query = new NameValueCollection();
+		internal NameValueCollection _form = new NameValueCollection();
 
 		public RequestImpl()
 		{
@@ -75,12 +77,12 @@ namespace Castle.MonoRail.Framework.Tests
 
 		public NameValueCollection QueryString
 		{
-			get { return _params; }
+			get { return _query; }
 		}
 
 		public NameValueCollection Form
 		{
-			get { return _params; }
+			get { return _form; }
 		}
 
 		public string[] UserLanguages

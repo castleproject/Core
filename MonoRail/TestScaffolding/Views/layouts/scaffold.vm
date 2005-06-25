@@ -1,7 +1,28 @@
 <html>
-<p>
+<head>
+  <style>
 
-$childContent
+	body
+	{
+		font-family: Verdana, Arial;
+		font-size: small;
+		background-color: white;
+	}
+	.errorList
+	{
+	}
+	.errorMessage
+	{
+		color: #993333;
+	}
 
-</p>
+  </style>
+</head>
+
+<body>
+
+  $childContent
+
+</body>
+
 </html>

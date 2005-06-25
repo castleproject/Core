@@ -35,6 +35,7 @@ namespace Castle.MonoRail.Engine
 		private IViewEngine _viewEngine;
 		private IFilterFactory _filterFactory;
 		private IResourceFactory _resourceFactory;
+		private IInstanceFactory _instanceFactory;
 		private IControllerFactory _controllerFactory;
 		private IScaffoldingSupport _scaffoldingSupport;
 
@@ -45,6 +46,7 @@ namespace Castle.MonoRail.Engine
 			InitializeViewEngine();
 			InitializeFilterFactory();
 			InitializeResourceFactory();
+			InitializeInstanceFactory();
 			InitializeScaffoldingSupport();
 		}
 
@@ -54,7 +56,7 @@ namespace Castle.MonoRail.Engine
 			string requestType, String url, String pathTranslated)
 		{
 			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, 
-				_filterFactory, _resourceFactory, _scaffoldingSupport);
+				_filterFactory, _resourceFactory, _instanceFactory, _scaffoldingSupport);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
@@ -113,6 +115,18 @@ namespace Castle.MonoRail.Engine
 			if (_config.ScaffoldingType != null)
 			{
 				_scaffoldingSupport = (IScaffoldingSupport) Activator.CreateInstance(_config.ScaffoldingType);
+			}
+		}
+
+		protected virtual void InitializeInstanceFactory()
+		{
+			if (_config.CustomInstanceFactoryType != null)
+			{
+				_instanceFactory = (IInstanceFactory) Activator.CreateInstance(_config.CustomInstanceFactoryType);
+			}
+			else
+			{
+				_instanceFactory = new DefaultInstanceFactory();
 			}
 		}
 

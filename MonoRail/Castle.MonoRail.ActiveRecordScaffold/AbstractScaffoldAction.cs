@@ -17,6 +17,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 	using System.Text;
 	using System.Reflection;
+	using System.Collections;
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
@@ -29,8 +30,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	{
 		protected readonly Type modelType;
 		protected readonly HtmlHelper helper = new HtmlHelper();
-		protected readonly AjaxHelper ajax = new AjaxHelper();
-		protected readonly Effects2Helper effects = new Effects2Helper();
+		
+		protected IDictionary prop2Validation = new Hashtable();
 
 		public AbstractScaffoldAction( Type modelType )
 		{
@@ -49,12 +50,17 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		protected void GenerateHtml(string name, ActiveRecordModel model, object instance, Controller controller)
 		{
 			StringBuilder sb = new StringBuilder();
-
-			sb.Append( ajax.GetJavascriptFunctions() );
-			sb.Append( effects.GetJavascriptFunctions() );
 				
 			sb.Append( helper.Form( String.Format("create{0}.{1}", 
 				name, controller.Context.UrlInfo.Extension) ) );
+
+			ArrayList errors = (ArrayList) controller.Context.Flash["errors"];
+
+			if (errors != null)
+			{
+				sb.Append( HtmlHelper.BuildUnorderedList( (String[]) errors.ToArray( typeof(String) ), 
+					"errorList", "errorMessage" ) );
+			}
 
 			sb.Append( helper.FieldSet( "New " + name + ':' ) );
 

@@ -55,6 +55,10 @@ namespace Castle.MonoRail.Framework.Tests
 				{
 					return new SmartController();
 				}
+				case "databind":
+				{
+					return new DataBindController();
+				}
 				default:
 				{
 					throw new RailsException("Unknown controller");

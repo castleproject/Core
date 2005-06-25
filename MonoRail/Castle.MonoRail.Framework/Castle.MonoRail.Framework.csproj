@@ -104,6 +104,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DataBinder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "default.build"
                     BuildAction = "None"
                 />
@@ -164,6 +169,11 @@
                 />
                 <File
                     RelPath = "Attributes\ControllerDetailsAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\DataBindAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -290,6 +300,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\DefaultInstanceFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\DefaultResourceFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -310,6 +325,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\IInstanceFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\IResourceFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -321,6 +341,11 @@
                 />
                 <File
                     RelPath = "Internal\IViewEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\ResourceDictionary.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

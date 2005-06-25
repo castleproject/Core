@@ -87,6 +87,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				if (!instanceBase.IsValid())
 				{
 					errors.AddRange(instanceBase.ValidationErrorMessages);
+					prop2Validation = instanceBase.PropertiesValidationErrorMessage;
 				}
 				else
 				{

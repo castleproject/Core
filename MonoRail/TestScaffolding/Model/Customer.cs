@@ -43,12 +43,12 @@ namespace TestScaffolding.Model
 			set { info = value; }
 		}
 
-		[Property("call", "Int32")]
-		public CallBy Callby
-		{
-			get { return callby; }
-			set { callby = value; }
-		}
+//		[Property("call", "Int32")]
+//		public CallBy Callby
+//		{
+//			get { return callby; }
+//			set { callby = value; }
+//		}
 	}
 
 	public class ContactInfo

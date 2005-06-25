@@ -183,6 +183,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "css\style.css"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Model\Blog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

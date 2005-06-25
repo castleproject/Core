@@ -15,13 +15,11 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Text;
+	using System.Collections;
 
-	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Helpers;
 
 
 	public class NewAction : AbstractScaffoldAction

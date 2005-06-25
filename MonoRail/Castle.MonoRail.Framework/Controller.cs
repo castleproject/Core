@@ -74,6 +74,11 @@ namespace Castle.MonoRail.Framework
 		private IResourceFactory _resourceFactory;
 
 		/// <summary>
+		/// Reference to the <see cref="IInstanceFactory"/> instance
+		/// </summary>
+		protected IInstanceFactory _instanceFactory;
+
+		/// <summary>
 		/// The area name which was used to access this controller
 		/// </summary>
 		private String _areaName;
@@ -107,7 +112,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// The resources associated with this controller
 		/// </summary>
-		private IDictionary _resources = null;
+		private ResourceDictionary _resources = null;
 
 		internal IDictionary _actions = new HybridDictionary(true);
 
@@ -135,7 +140,12 @@ namespace Castle.MonoRail.Framework
 
 		#region Usefull Properties
 
-		public IDictionary Resources
+		public IInstanceFactory InstanceFactory
+		{
+			get { return _instanceFactory; }
+		}
+
+		public ResourceDictionary Resources
 		{
 			get { return _resources; }
 		}
@@ -400,7 +410,7 @@ namespace Castle.MonoRail.Framework
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
+		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory, IInstanceFactory instanceFactory,
 		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine, 
 							IScaffoldingSupport scaffoldSupport)
 		{
@@ -410,6 +420,7 @@ namespace Castle.MonoRail.Framework
 			_context = context;
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
+			_instanceFactory = instanceFactory;
 			_scaffoldSupport = scaffoldSupport;
 
 			if (GetType().IsDefined(typeof (FilterAttribute), true))
@@ -492,8 +503,6 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			CreateResources(method);
-
 			HybridDictionary filtersToSkip = new HybridDictionary();
 
 			bool skipFilters = ShouldSkip(method, filtersToSkip);
@@ -511,6 +520,8 @@ namespace Castle.MonoRail.Framework
 
 				if (!hasError)
 				{
+					CreateResources(method);
+
 					if (method != null)
 					{
 						InvokeMethod(method);
@@ -612,7 +623,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual void CreateResources(MethodInfo method)
 		{
-			_resources = new HybridDictionary(true);
+			_resources = new ResourceDictionary();
 
 			if (method == null) return;
 

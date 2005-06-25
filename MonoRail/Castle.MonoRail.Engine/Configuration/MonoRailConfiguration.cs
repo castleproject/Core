@@ -28,12 +28,12 @@ namespace Castle.MonoRail.Engine.Configuration
 
 		private IList _assemblies = new ArrayList();
 		private IList _routingRules = new ArrayList();
-
 		private String _viewsPhysicalPath;
 		private String _viewsVirtualPath;
 		private String _customControllerFactory;
 		private String _customFilterFactory;
 		private String _customResourceFactory;
+		private String _customInstanceFactory;
 		private String _customEngineTypeName;
 		private String _scaffoldingTypeName = DefaultScaffoldType;
 
@@ -81,6 +81,12 @@ namespace Castle.MonoRail.Engine.Configuration
 			set { _customResourceFactory = value; }
 		}
 
+		public String CustomInstanceFactory
+		{
+			get { return _customInstanceFactory; }
+			set { _customInstanceFactory = value; }
+		}
+
 		public String CustomEngineTypeName
 		{
 			get { return _customEngineTypeName; }
@@ -97,7 +103,8 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get
 			{
-				return _customEngineTypeName != null ? Type.GetType(_customEngineTypeName, false, false) : null;
+				return _customEngineTypeName != null ?
+					Type.GetType(_customEngineTypeName, false, false) : null;
 			}
 		}
 
@@ -105,7 +112,8 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get
 			{
-				return _customFilterFactory != null ? Type.GetType(_customFilterFactory, false, false) : null;
+				return _customFilterFactory != null ?
+					Type.GetType(_customFilterFactory, false, false) : null;
 			}
 		}
 
@@ -113,7 +121,17 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get
 			{
-				return _customResourceFactory != null ? Type.GetType(_customResourceFactory, false, false) : null;
+				return _customResourceFactory != null ?
+					Type.GetType(_customResourceFactory, false, false) : null;
+			}
+		}
+
+		public Type CustomInstanceFactoryType
+		{
+			get
+			{
+				return _customInstanceFactory != null ?
+					Type.GetType(_customInstanceFactory, false, false) : null;
 			}
 		}
 
@@ -121,7 +139,8 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get
 			{
-				return _customControllerFactory != null ? Type.GetType(_customControllerFactory, false, false) : null;
+				return _customControllerFactory != null ?
+					Type.GetType(_customControllerFactory, false, false) : null;
 			}
 		}
 
