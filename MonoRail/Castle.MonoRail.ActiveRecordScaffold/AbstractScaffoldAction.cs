@@ -39,10 +39,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		public abstract void Execute(Controller controller);
 
+		/// <summary>
+		/// Constructs a html form
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="model"></param>
+		/// <param name="instance"></param>
+		/// <param name="controller"></param>
 		protected void GenerateHtml(string name, ActiveRecordModel model, object instance, Controller controller)
 		{
-			// In this case it's up to us to create the insertion form
-		
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append( ajax.GetJavascriptFunctions() );
