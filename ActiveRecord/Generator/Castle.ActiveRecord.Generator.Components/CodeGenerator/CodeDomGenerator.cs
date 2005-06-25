@@ -218,13 +218,13 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 
 					att.Arguments.Add( new CodeAttributeArgument(new CodeTypeOfExpression(property.TargetType.ClassName) ) );
 
-					att.Arguments.Add( new CodeAttributeArgument(new CodeSnippetExpression("RelationType.Bag") ) );
+//					att.Arguments.Add( new CodeAttributeArgument(new CodeSnippetExpression("RelationType.Bag") ) );
 
 //					att.Arguments.Add( new CodeAttributeArgument("Key", new CodeSnippetExpression(Quote(property.PropertyName)) ) );
 
 					att.Arguments.Add( new CodeAttributeArgument("Table", new CodeSnippetExpression(Quote(property.TargetType.Table.Name)) ) );
 
-					att.Arguments.Add( new CodeAttributeArgument("Column", new CodeSnippetExpression(Quote(property.ColumnName)) ) );
+					att.Arguments.Add( new CodeAttributeArgument("ColumnRef", new CodeSnippetExpression(Quote(property.ColumnName)) ) );
 					
 					att.Arguments.Add( new CodeAttributeArgument("ColumnKey", new CodeSnippetExpression(Quote(hasAndBelongsProp.ColumnKey)) ) );
 				}
@@ -234,13 +234,11 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 
 					att.Arguments.Add( new CodeAttributeArgument(new CodeTypeOfExpression(property.TargetType.ClassName) ) );
 
-					att.Arguments.Add( new CodeAttributeArgument(new CodeSnippetExpression("RelationType.Bag") ) );
-
-//					att.Arguments.Add( new CodeAttributeArgument("Key", new CodeSnippetExpression(Quote(property.PropertyName)) ) );
+//					att.Arguments.Add( new CodeAttributeArgument(new CodeSnippetExpression("RelationType.Bag") ) );
 
 					att.Arguments.Add( new CodeAttributeArgument("Table", new CodeSnippetExpression(Quote(property.TargetType.Table.Name)) ) );
 
-					att.Arguments.Add( new CodeAttributeArgument("Column", new CodeSnippetExpression(Quote(property.ColumnName)) ) );
+					att.Arguments.Add( new CodeAttributeArgument("ColumnKey", new CodeSnippetExpression(Quote(property.ColumnName)) ) );
 				}
 				else if (property is ActiveRecordHasOneDescriptor)
 				{
