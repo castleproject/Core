@@ -226,7 +226,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return CreateType();
 		}
 
-		public virtual Type GenerateCustomCode(Type baseClass)
+		public virtual Type GenerateCustomCode(Type baseClass, Type[] interfaces)
 		{
 			if (!Context.HasMixins)
 			{
@@ -235,6 +235,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			_mixins = Context.MixinsAsArray();
 			Type[] mixinInterfaces = InspectAndRegisterInterfaces( _mixins );
+			interfaces = Join(interfaces, mixinInterfaces);
 
 			return GenerateCode(baseClass, mixinInterfaces);
 		}
@@ -301,46 +302,12 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected Type[] Join(Type[] interfaces, Type[] mixinInterfaces)
 		{
+			if (interfaces == null) interfaces = new Type[0];
+			if (mixinInterfaces == null) mixinInterfaces = new Type[0];
 			Type[] union = new Type[ interfaces.Length + mixinInterfaces.Length ];
 			Array.Copy( interfaces, 0, union, 0, interfaces.Length );
 			Array.Copy( mixinInterfaces, 0, union, interfaces.Length, mixinInterfaces.Length );
 			return union;
 		}
-
-//		protected override MethodInfo GenerateCallbackMethodIfNecessary(MethodInfo method)
-//		{
-//			if (Context.HasMixins && _interface2mixinIndex.Contains(method.DeclaringType))
-//			{
-//				return method;
-//			}
-//
-//			String name = String.Format("callback__{0}", method.Name);
-//
-//			ParameterInfo[] parameters = method.GetParameters();
-//
-//			ArgumentReference[] args = new ArgumentReference[ parameters.Length ];
-//			
-//			for(int i=0; i < args.Length; i++)
-//			{
-//				args[i] = new ArgumentReference( parameters[i].ParameterType );
-//			}
-//
-//			EasyMethod easymethod = MainTypeBuilder.CreateMethod(name, 
-//				new ReturnReferenceExpression(method.ReturnType), 
-//				MethodAttributes.HideBySig | MethodAttributes.Public, args);
-//
-//			Expression[] exps = new Expression[ parameters.Length ];
-//			
-//			for(int i=0; i < args.Length; i++)
-//			{
-//				exps[i] = args[i].ToExpression();
-//			}
-//
-//			easymethod.CodeBuilder.AddStatement(
-//				new ReturnStatement( 
-//					new MethodInvocationExpression(method, exps) ) );
-//
-//			return easymethod.MethodBuilder;
-//		}
 	}
 }

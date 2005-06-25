@@ -24,6 +24,7 @@ namespace Castle.DynamicProxy.Test
 	using Castle.DynamicProxy.Test.Classes;
 	using Castle.DynamicProxy.Test.Mixins;
 	using Castle.DynamicProxy.Test.ClassInterfaces;
+	using Castle.DynamicProxy.Builder.CodeGenerators;
 
 	/// <summary>
 	/// Summary description for SerializableClassTestCase.
@@ -42,8 +43,6 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void CreateSerializable()
 		{
-			MySerializableClass myClass = new MySerializableClass();
-
 			MySerializableClass proxy = (MySerializableClass) 
 				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInterceptor() );
 
@@ -98,6 +97,24 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
+		public void CustomMarkerInterface()
+		{
+			ClassProxyGenerator classGenerator = new ClassProxyGenerator( 
+				new ModuleScope(), new GeneratorContext() );
+			
+			Type proxyType = classGenerator.GenerateCode( typeof(ClassWithMarkerInterface), new Type[] { typeof(IMarkerInterface) } );
+
+			object proxy = Activator.CreateInstance( proxyType, new object[] { new StandardInterceptor() } );
+
+			Assert.IsNotNull( proxy );
+			Assert.IsTrue( proxy is IMarkerInterface );
+
+			object otherProxy = SerializeAndDeserialize(proxy);
+
+			Assert.IsTrue( otherProxy is IMarkerInterface );
+		}
+
+		[Test]
 		[Category("DotNetOnly")]
 		public void MixinSerialization()
 		{
@@ -113,6 +130,8 @@ namespace Castle.DynamicProxy.Test
 
 			Assert.IsTrue( typeof(SimpleClass).IsAssignableFrom( proxy.GetType() ) );
 
+			(proxy as SimpleClass).DoSome();
+
 			ISimpleMixin mixin = proxy as ISimpleMixin;
 			Assert.AreEqual(1, mixin.DoSomething());
 
@@ -120,6 +139,8 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual(3, other.Sum(1,2));
 
 			SimpleClass otherProxy = (SimpleClass) SerializeAndDeserialize(proxy);
+
+			otherProxy.DoSome();
 
 			mixin = otherProxy as ISimpleMixin;
 			Assert.AreEqual(1, mixin.DoSomething());

@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Builder
 		public virtual Type CreateCustomClassProxy(Type theClass, GeneratorContext context)
 		{
 			ClassProxyGenerator generator = new ClassProxyGenerator(_scope, context);
-			return generator.GenerateCustomCode(theClass);
+			return generator.GenerateCustomCode(theClass, null);
 		}
 
 		#endregion

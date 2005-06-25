@@ -16,15 +16,16 @@ namespace Castle.DynamicProxy.Test.Classes
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for SimpleClass.
-	/// </summary>
-	[Serializable]
-	public class SimpleClass
+	public interface IMarkerInterface
 	{
-		public virtual void DoSome()
+		
+	}
+
+	[Serializable]
+	public class ClassWithMarkerInterface
+	{
+		public ClassWithMarkerInterface()
 		{
-			
 		}
 	}
 }

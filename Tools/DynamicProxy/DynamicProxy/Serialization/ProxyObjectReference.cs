@@ -1,3 +1,5 @@
+using System.Collections;
+using Castle.DynamicProxy.Builder.CodeGenerators;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -102,46 +104,46 @@ namespace Castle.DynamicProxy.Serialization
 
 			object proxy = null;
 
-			// TODO: ProxyGenerator.Current
-			ProxyGenerator generator = new ProxyGenerator();
+			GeneratorContext genContext = new GeneratorContext();
+			
+			if (_mixins.Length != 0)
+			{
+				foreach(object mixin in _mixins)
+				{
+					genContext.AddMixinInstance(mixin);
+				}
+			}
+
+			ClassProxyGenerator cpGen = new ClassProxyGenerator( new ModuleScope(), genContext );
+
+			Type proxy_type;
+
+			if (_mixins.Length == 0)
+			{
+				proxy_type = cpGen.GenerateCode( _baseType, _interfaces );
+			}
+			else
+			{
+				proxy_type = cpGen.GenerateCustomCode( _baseType, _interfaces );
+			}
 
 			if (delegateBaseSer)
 			{
-				if (_mixins.Length == 0)
-				{
-					Type proxy_type = generator.ProxyBuilder.CreateClassProxy( _baseType );
-					proxy = Activator.CreateInstance( proxy_type, new object[] { info, context } );
-				} 
-				else
-				{
-					GeneratorContext genContext = new GeneratorContext();
-					
-					foreach(object mixin in _mixins)
-					{
-						genContext.AddMixinInstance(mixin);
-					}
-					
-					Type proxy_type = generator.ProxyBuilder.CreateCustomClassProxy( 
-						_baseType, genContext );
-					proxy = Activator.CreateInstance( proxy_type, new object[] { info, context } );
-				}
+				proxy = Activator.CreateInstance( proxy_type, new object[] { info, context } );
 			}
 			else
 			{
 				if (_mixins.Length == 0)
 				{
-					proxy = generator.CreateClassProxy( _baseType, _interceptor );
+					proxy = Activator.CreateInstance( proxy_type, new object[] { _interceptor } );
 				}
 				else
 				{
-					GeneratorContext genContext = new GeneratorContext();
+					ArrayList args = new ArrayList();
+					args.Add(_interceptor);
+					args.Add(genContext.MixinsAsArray());
 					
-					foreach(object mixin in _mixins)
-					{
-						genContext.AddMixinInstance(mixin);
-					}
-					
-					proxy = generator.CreateCustomClassProxy( _baseType, _interceptor, genContext );
+					proxy = Activator.CreateInstance( proxy_type, args.ToArray() );
 				}
 
 				MemberInfo[] members = FormatterServices.GetSerializableMembers( _baseType );
