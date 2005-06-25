@@ -19,10 +19,22 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Text;
 	using System.Web.UI;
 	using System.Reflection;
-	using System.Collections;
 
+	/// <summary>
+	/// Provides usefull common methods to output html
+	/// </summary>
 	public class HtmlHelper : AbstractHelper
 	{
+		public String FieldSet(String legend)
+		{
+			return String.Format( "<fieldset><legend>{0}</legend>", legend );
+		}
+
+		public String EndFieldSet()
+		{
+			return "</fieldset>";
+		}
+
 		public String Form( String action )
 		{
 			StringWriter sbWriter = new StringWriter();

@@ -207,6 +207,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Controllers\Effects2.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controllers\EffectsFat.resx"
                     BuildAction = "EmbeddedResource"
                 />
@@ -242,6 +246,11 @@
                 />
                 <File
                     RelPath = "Helpers\DateFormatHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\Effects2Helper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

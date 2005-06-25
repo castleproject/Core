@@ -173,6 +173,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\CustomerController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\PersonController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -183,12 +188,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\Customer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Person.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Views\blogs\newBlog.vm"
+                    RelPath = "Views\blogs\newBlog.vm.old"
                     BuildAction = "None"
                 />
                 <File

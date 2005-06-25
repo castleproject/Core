@@ -19,7 +19,7 @@ namespace TestScaffolding.Model
 	using Castle.ActiveRecord;
 
 
-	[ActiveRecord("Blogs")]
+	[ActiveRecord("Persons", DiscriminatorColumn="type", DiscriminatorValue="person")]
 	public class Person : ActiveRecordBase
 	{
 		private int id;
@@ -29,6 +29,7 @@ namespace TestScaffolding.Model
 
 		public Person()
 		{
+			dob = DateTime.Now;
 		}
 
 		[PrimaryKey]

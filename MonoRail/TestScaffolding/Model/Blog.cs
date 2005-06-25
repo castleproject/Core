@@ -21,7 +21,7 @@ namespace TestScaffolding.Model
 
 
 	[ActiveRecord("Blogs")]
-	public class Blog : ActiveRecordBase
+	public class Blog : ActiveRecordValidationBase
 	{
 		private int _id;
 		private String _name;
@@ -35,14 +35,14 @@ namespace TestScaffolding.Model
 			set { _id = value; }
 		}
 
-		[Property]
+		[Property, ValidateNotEmptyAttribute]
 		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
 		}
 
-		[Property]
+		[Property, ValidateNotEmptyAttribute]
 		public String Author
 		{
 			get { return _author; }

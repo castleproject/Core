@@ -14,14 +14,11 @@
 
 namespace Castle.MonoRail.Framework.Controllers
 {
-	using System;
-
-	using Castle.MonoRail.Framework.Attributes;
-
 	[ControllerDetails(Area="MonoRail")]
 	[Resource("Ajax","Castle.MonoRail.Framework.Controllers.Ajax")]
+	[Resource("Effects2", "Castle.MonoRail.Framework.Controllers.Effects2")]
 	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat")]
-	[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation")]
+	//[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation")]
 	public class FilesController : Controller
 	{
 		public FilesController()
@@ -41,6 +38,11 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void EffectsFatScripts()
 		{
 			RenderText(GetResourceValue("EffectsFat", "fatfunctions"));
+		}
+
+		public void Effects2()
+		{
+			RenderText(GetResourceValue("Effects2", "functions"));
 		}
 	}
 }

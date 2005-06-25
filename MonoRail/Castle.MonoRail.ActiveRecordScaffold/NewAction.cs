@@ -26,24 +26,17 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 	public class NewAction : AbstractScaffoldAction
 	{
+		protected object instance;
+
 		public NewAction( Type modelType ) : base(modelType)
 		{
 		}
 
 		public override void Execute(Controller controller)
 		{
-			ActiveRecordModel model = ActiveRecordBase._GetModel( modelType );
+			ActiveRecordModel model = GetARModel();
 
-			if (model == null)
-			{
-				throw new ScaffoldException("Specified type isn't an ActiveRecord type or the ActiveRecord " + 
-					"framework wasn't started properly. Did you forget about the Initialize method?");
-			}
-
-			if (controller.LayoutName == null)
-			{
-				controller.LayoutName = "Scaffold";
-			}
+			SetDefaultLayout(controller);
 
 			String name = model.Type.Name;
 			String viewName = String.Format(@"{0}\new{1}", controller.Name, name);
@@ -58,7 +51,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 			else
 			{
-				object instance = Activator.CreateInstance( model.Type );
+				if (instance == null)
+				{
+					instance = Activator.CreateInstance( model.Type );
+				}
+
 				GenerateHtml(name, model, instance, controller);
 			}
 		}
