@@ -143,6 +143,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{1}\" value=\"{2}\" />", name, id, value);
 		}
 
+		public String InputHidden( String name, String value )
+		{
+			return String.Format("<input type=\"hidden\" name=\"{0}\" id=\"{0}\" value=\"{1}\" />", name, value);
+		}
+
 		public String SubmitButton( String value )
 		{
 			return String.Format("<input type=\"submit\" value=\"{0}\" />", value);
@@ -153,7 +158,15 @@ namespace Castle.MonoRail.Framework.Helpers
 			String url = base.Controller.Context.ApplicationPath;
 			String extension = base.Controller.Context.UrlInfo.Extension;
 
-			return String.Format( "<a href=\"{0}{1}/{2}.{3}\">{4}</a>", url, controller, action, extension, name );
+			return String.Format( "<a href=\"{0}/{1}/{2}.{3}\">{4}</a>", url, controller, action, extension, name );
+		}
+
+		public String LinkTo( String name, String controller, String action, object id )
+		{
+			String url = base.Controller.Context.ApplicationPath;
+			String extension = base.Controller.Context.UrlInfo.Extension;
+
+			return String.Format( "<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>", url, controller, action, extension, id, name );
 		}
 
 		public String Select( String name )

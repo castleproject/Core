@@ -25,9 +25,19 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		{
 		}
 
-		public override void Execute(Controller controller)
+		protected override string ComputeTemplateName(Controller controller)
 		{
-			
+			throw new NotImplementedException();
+		}
+
+		protected override void PerformActionProcess(Controller controller)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override void RenderStandardHtml(Controller controller)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

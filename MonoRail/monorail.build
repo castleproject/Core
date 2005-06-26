@@ -11,6 +11,7 @@
 	<property name="gacutil.framework.file" value="${framework::get-framework-directory( framework::get-target-framework() )}\gacutil.exe"/>
 	<property name="gacutil.sdk.file" value="${framework::get-sdk-directory( framework::get-target-framework() )}\gacutil.exe"/>
 
+	<property name="ar.bin.dir" value="${base.dir}/../ActiveRecord/bin" />
 	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
 	<property name="template.component.bin.dir" value="${base.dir}/../Components/General/TemplateEngine/bin" />
 

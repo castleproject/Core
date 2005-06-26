@@ -8,12 +8,31 @@
 		font-size: small;
 		background-color: white;
 	}
+	th
+	{
+		background-color: #DDDDDD;
+		font-size: small;
+	}
+	td
+	{
+		font-size: small;
+		border-left:  #A0A0A0 0.5px solid;
+		border-right: #C0C0C0 0.5px solid;
+	}
 	.errorList
 	{
 	}
 	.errorMessage
 	{
 		color: #993333;
+	}
+	.scaffoldrow
+	{
+		background-color: #C0C0C0;
+	}
+	.scaffoldaltrow
+	{
+		background-color: White;
 	}
 
   </style>

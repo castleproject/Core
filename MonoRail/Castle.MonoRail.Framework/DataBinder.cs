@@ -32,8 +32,8 @@ namespace Castle.MonoRail.Framework
 		private IRailsEngineContext context;
 		private IInstanceFactory instanceFactory;
 
-		private string root = null;
-		private string parent = string.Empty;
+		private String root = null;
+		private String parent = String.Empty;
 		
 		public DataBinder( IInstanceFactory instanceFactory, IRailsEngineContext context )
 		{
@@ -41,11 +41,21 @@ namespace Castle.MonoRail.Framework
 			this.instanceFactory = instanceFactory;
 		}
 
-		public object BindObject( Type instanceType, string paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
+		public object BindObject( Type instanceType )
+		{
+			return BindObject( instanceType, String.Empty, context.Params, context.Request.Files, null );
+		}
+
+		public object BindObject( Type instanceType, String paramPrefix, IList errorList )
+		{
+			return BindObject( instanceType, paramPrefix, context.Params, context.Request.Files, errorList );
+		}
+
+		public object BindObject( Type instanceType, String paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
 		{
 			if ( root == null ) root = instanceType.Name;
 
-			string prefix = (paramPrefix != null && paramPrefix != string.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : string.Empty;
+			String prefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
 			object instance = instanceFactory.GetInstance( instanceType, context );
 			
 			PropertyInfo[] props = instanceType.GetProperties( BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
@@ -58,7 +68,7 @@ namespace Castle.MonoRail.Framework
 
 					object value = null;
 
-					string oldParent = parent;
+					String oldParent = parent;
 					
 					try
 					{
@@ -71,7 +81,7 @@ namespace Castle.MonoRail.Framework
 						}
 						else
 						{
-							value = Convert( prop.PropertyType, paramList.GetValues( prefix + prop.Name ), prop.Name, files );
+							value = Convert( prop.PropertyType, paramList.GetValues( prefix + prop.Name ), prop.Name, files, context );
 						}
 						
 						prop.SetValue( instance, value, null );
@@ -88,14 +98,19 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			if ( parent == string.Empty ) root = null;
+			if ( parent == String.Empty ) root = null;
 
 			return instance;
 		}
 
-		public object Convert( Type desiredType, string[] values, string paramName, IDictionary files )
+		public static object Convert( Type desiredType, String value, String paramName, IDictionary files, IRailsEngineContext context )
 		{
-			string value = ( values != null && values.Length > 0 ) ? values[0] : null;
+			return Convert(desiredType, new string[] { value }, paramName, files, context );
+		}
+
+		public static object Convert( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context )
+		{
+			String value = ( values != null && values.Length > 0 ) ? values[0] : null;
 
 			if (desiredType == typeof(String))
 			{
@@ -164,7 +179,29 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (desiredType == typeof(DateTime))
 			{
-				return value == null || value == string.Empty ? new DateTime(): DateTime.Parse(value);
+				if (value == null)
+				{
+					String day = context.Params[paramName + "day"];
+					String month = context.Params[paramName + "month"];
+					String year = context.Params[paramName + "year"];
+
+					if (day != null && day != null && day != null)
+					{
+						try
+						{
+							return new DateTime( 
+								System.Convert.ToInt32(year), 
+								System.Convert.ToInt32(month), 
+								System.Convert.ToInt32(day) );
+						}
+						catch(Exception)
+						{
+							throw new ArgumentException("Invalid date");
+						}
+					}
+				}
+
+				return value == null || value == String.Empty ? new DateTime(): DateTime.Parse(value);
 			}
 			else if (desiredType == typeof(Boolean))
 			{
@@ -178,7 +215,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (desiredType.IsArray)
 			{
-				return values != null ? ConvertToArray( desiredType, values, paramName, files ) : null;
+				return values != null ? ConvertToArray( desiredType, values, paramName, files, context ) : null;
 			}
 			else if ( context != null )
 			{
@@ -190,14 +227,14 @@ namespace Castle.MonoRail.Framework
 			return null;
 		}
 
-		private object ConvertToArray( Type desiredType, string[] values, string paramName, IDictionary files )
+		private static object ConvertToArray( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context )
 		{
 			Type elemType	= desiredType.GetElementType();
 			Array newArray	= Array.CreateInstance(elemType, values.Length);
 	
 			for( int i=0; i < values.Length; i++)
 			{
-				newArray.SetValue( Convert(elemType, new string[] { values[i] }, paramName, files), i );
+				newArray.SetValue( Convert(elemType, new String[] { values[i] }, paramName, files, context), i );
 			}
 	
 			return newArray;

@@ -15,19 +15,97 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
+	using System.Collections;
 
 	using Castle.MonoRail.Framework;
 
+	using Castle.ActiveRecord;
 
-	public class UpdateAction : AbstractScaffoldAction
+
+	public class UpdateAction : EditAction
 	{
+		private IRailsEngineContext context;
+		private ArrayList errors = new ArrayList();
+		private DataBinder binder;
+
 		public UpdateAction(Type modelType) : base(modelType)
 		{
 		}
 
-		public override void Execute(Controller controller)
+		protected override string ComputeTemplateName(Controller controller)
 		{
+			if (controller.Context.Flash["errors"] != null)
+			{
+				return base.ComputeTemplateName(controller);
+			}
+			else
+			{
+				return String.Format(@"{0}\create{1}", controller.Name, Model.Type.Name);
+			}
+		}
+
+		protected override void PerformActionProcess(Controller controller)
+		{
+			ReadPkFromParams(controller);
+
+			context = controller.Context;
+
+			binder = new DataBinder(controller.InstanceFactory, controller.Context);
 			
+			instance = binder.BindObject( Model.Type );
+
+			try
+			{
+				SaveInstance(instance, controller);
+			}
+			catch(Exception ex)
+			{
+				errors.Add( "Could not save " + Model.Type.Name + ". " + ex.Message );
+			}
+
+			if (errors.Count != 0)
+			{
+				controller.Context.Flash["errors"] = errors;
+			}
+
+			controller.PropertyBag["armodel"] = Model;
+			controller.PropertyBag["instance"] = instance;
+		}
+
+		protected override void RenderStandardHtml(Controller controller)
+		{
+			if (controller.Context.Flash["errors"] != null)
+			{
+				base.RenderStandardHtml(controller);
+			}
+			else
+			{
+				controller.Redirect( controller.Name, "list" + Model.Type.Name );
+			}
+		}
+
+		protected void SaveInstance(object instance, Controller controller)
+		{
+			if (instance is ActiveRecordValidationBase)
+			{
+				ActiveRecordValidationBase instanceBase = instance as ActiveRecordValidationBase;
+
+				if (!instanceBase.IsValid())
+				{
+					errors.AddRange(instanceBase.ValidationErrorMessages);
+					prop2Validation = instanceBase.PropertiesValidationErrorMessage;
+				}
+				else
+				{
+					instanceBase.Update();
+				}
+			}
+			else
+			{
+				ActiveRecordBase instanceBase = instance as ActiveRecordBase;
+
+				instanceBase.Update();
+			}
 		}
 	}
 }

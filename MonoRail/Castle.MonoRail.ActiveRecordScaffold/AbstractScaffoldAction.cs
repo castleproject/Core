@@ -1,3 +1,4 @@
+using System.Reflection;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +16,6 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Text;
-	using System.Reflection;
 	using System.Collections;
 
 	using Castle.MonoRail.Framework;
@@ -31,121 +30,47 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		protected readonly Type modelType;
 		protected readonly HtmlHelper helper = new HtmlHelper();
 		
+		protected PropertyInfo keyProperty;
 		protected IDictionary prop2Validation = new Hashtable();
+
+		private ActiveRecordModel model;
 
 		public AbstractScaffoldAction( Type modelType )
 		{
 			this.modelType = modelType;
 		}
 
-		public abstract void Execute(Controller controller);
-
-		/// <summary>
-		/// Constructs a html form
-		/// </summary>
-		protected void GenerateHtml(string name, ActiveRecordModel model, object instance, Controller controller)
+		public void Execute(Controller controller)
 		{
-			StringBuilder sb = new StringBuilder();
-				
-			sb.Append( helper.Form( String.Format("create{0}.{1}", 
-				name, controller.Context.UrlInfo.Extension) ) );
+			model = GetARModel();
 
-			ArrayList errors = (ArrayList) controller.Context.Flash["errors"];
+			helper.SetController(controller);
 
-			if (errors != null)
+			SetDefaultLayout(controller);
+
+			PerformActionProcess(controller);
+
+			String templateName = ComputeTemplateName(controller);
+
+			if (controller.HasTemplate(templateName))
 			{
-				sb.Append( HtmlHelper.BuildUnorderedList( (String[]) errors.ToArray( typeof(String) ), 
-					"errorList", "errorMessage" ) );
+				controller.RenderView(controller.Name, templateName);
 			}
-
-			sb.Append( helper.FieldSet( "New " + name + ':' ) );
-
-			RecursiveGenerateHtml( model, model.Type, instance, controller, sb );
-		
-			sb.Append( helper.EndFieldSet() );
-
-			sb.Append( "<p>\r\n" );
-			sb.Append( helper.CreateSubmit( "Save" ) );
-			sb.Append( "  " );
-			sb.Append( helper.CreateSubmit( "Cancel" ) );
-			sb.Append( "</p>\r\n" );
-	
-			sb.Append( helper.EndForm() );
-	
-			controller.DirectRender( sb.ToString() );
+			else
+			{
+				RenderStandardHtml( controller );
+			}
 		}
 
-		protected void RecursiveGenerateHtml(ActiveRecordModel model, Type type, object instance, Controller controller, StringBuilder sb)
+		protected abstract string ComputeTemplateName(Controller controller);
+
+		protected abstract void PerformActionProcess(Controller controller);
+
+		protected abstract void RenderStandardHtml(Controller controller);
+
+		protected ActiveRecordModel Model
 		{
-			if ( type.BaseType != typeof(object) && 
-				type.BaseType != typeof(ActiveRecordBase) && 
-				type.BaseType != typeof(ActiveRecordValidationBase) )
-			{
-				RecursiveGenerateHtml( ActiveRecordBase._GetModel( type.BaseType ), type.BaseType, instance, controller, sb );
-			}
-
-			foreach( PropertyModel prop in model.Properties )
-			{
-				// Skip non standard properties
-				if (!prop.Property.CanWrite || !prop.Property.CanRead) continue;
-
-				// Skip indexers
-				if (prop.Property.GetGetMethod().GetParameters().Length != 0) continue;
-
-				sb.Append( "<p>\r\n" );
-
-				Type propType = prop.Property.PropertyType;
-				String propName = prop.Property.Name;
-				object value = null;
-				
-				if (instance != null)
-				{
-					value = prop.Property.GetGetMethod().Invoke( instance, null );
-				}
-
-				sb.AppendFormat( helper.LabelFor( propName, propName + ':' ) );
-
-				RenderHtmlControl(propType, prop, sb, propName, value);
-
-				sb.Append( "</p>\r\n" );
-			}
-
-			foreach( PropertyInfo prop in model.NotMappedProperties )
-			{
-				// Skip non standard properties
-				if (!prop.CanWrite || !prop.CanRead) continue;
-
-				// Skip indexers
-				if (prop.GetGetMethod().GetParameters().Length != 0) continue;
-
-				sb.Append( "<p>\r\n" );
-
-				Type propType = prop.PropertyType;
-				String propName = prop.Name;
-				object value = null;
-				
-				if (instance != null)
-				{
-					value = prop.GetGetMethod().Invoke( instance, null );
-				}
-
-				sb.AppendFormat( helper.LabelFor( propName, propName + ':' ) );
-
-				RenderHtmlControl(propType, null, sb, propName, value);
-
-				sb.Append( "</p>\r\n" );
-			}
-
-			foreach( NestedModel nested in model.Components )
-			{
-				object nestedInstance = nested.Property.GetGetMethod().Invoke( instance, null );
-
-				sb.Append( helper.FieldSet( nested.Property.Name + ':' ) );
-				
-				RecursiveGenerateHtml( nested.Model, nested.Model.Type, nestedInstance, controller, sb );
-		
-				sb.Append( helper.EndFieldSet() );
-			}
+			get { return model; }
 		}
 
 		protected ActiveRecordModel GetARModel()
@@ -165,45 +90,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		{
 			if (controller.LayoutName == null)
 			{
-				controller.LayoutName = "Scaffold";
+				controller.LayoutName = "scaffold";
 			}
 		}
 
-		private void RenderHtmlControl(Type propType, PropertyModel prop, StringBuilder sb, string propName, object value)
+		protected void ObtainPKProperty()
 		{
-			// TODO: Add proper validation scripts
-	
-			if (propType == typeof(String) && prop != null && String.Compare("stringclob", prop.PropertyAtt.ColumnType, true) == 0)
+			foreach(PrimaryKeyModel keyModel in Model.Ids)
 			{
-				sb.AppendFormat( helper.TextArea( propName, 30, 3, (String) value ) );
-			}
-			else if (propType == typeof(String) && prop != null && prop.PropertyAtt.Length != 0)
-			{
-				sb.AppendFormat( helper.InputText( propName, (String) value, prop.PropertyAtt.Length, prop.PropertyAtt.Length ) );
-			}
-			else if (propType == typeof(String))
-			{
-				sb.AppendFormat( helper.InputText( propName, (String) value ) );
-			}
-			else if (propType == typeof(Int16) || propType == typeof(Int32) || propType == typeof(Int64))
-			{
-				sb.AppendFormat( helper.InputText( propName, value.ToString(), 10, 4 ) );
-			}
-			else if (propType == typeof(Single) || propType == typeof(Double))
-			{
-				sb.AppendFormat( helper.InputText( propName, value.ToString() ) );
-			}
-			else if (propType == typeof(DateTime))
-			{
-				sb.AppendFormat( helper.DateTime( propName, (DateTime) value ) );
-			}
-			else if (propType == typeof(bool))
-			{
-				// TODO
-			}
-			else if (propType == typeof(Enum))
-			{
-				// TODO
+				keyProperty = keyModel.Property;
 			}
 		}
 	}

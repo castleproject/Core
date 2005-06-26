@@ -26,11 +26,11 @@ namespace TestScaffolding.Model
 		Duke
 	}
 
-	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="person")]
+	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="customer")]
 	public class Customer : Person
 	{
 		private ContactInfo info;
-		private CallBy callby;
+//		private CallBy callby;
 
 		public Customer()
 		{

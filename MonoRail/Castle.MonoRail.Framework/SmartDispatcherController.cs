@@ -192,7 +192,7 @@ namespace Castle.MonoRail.Framework
 					}
 					else
 					{
-						args[i] = binder.Convert( param.ParameterType, allParams.GetValues( paramName ), param.Name, files );
+						args[i] = DataBinder.Convert( param.ParameterType, allParams.GetValues( paramName ), param.Name, files, Context );
 					}
 				}
 			}

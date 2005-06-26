@@ -28,18 +28,32 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	public class CreateAction : NewAction
 	{
 		private ArrayList errors = new ArrayList();
+		private DataBinder binder;
+		private IRailsEngineContext context;
 
 		public CreateAction(Type modelType) : base(modelType)
 		{
 		}
 
-		public override void Execute(Controller controller)
+		protected override string ComputeTemplateName(Controller controller)
 		{
-			ActiveRecordModel model = GetARModel();
+			if (controller.Context.Flash["errors"] != null)
+			{
+				return base.ComputeTemplateName(controller);
+			}
+			else
+			{
+				return String.Format(@"{0}\create{1}", controller.Name, Model.Type.Name);
+			}
+		}
 
-			instance = Activator.CreateInstance( model.Type );
+		protected override void PerformActionProcess(Controller controller)
+		{
+			context = controller.Context;
 
-			RecursiveSetData( instance, model, controller.Context.Params );
+			binder = new DataBinder(controller.InstanceFactory, controller.Context);
+			
+			instance = binder.BindObject( Model.Type );
 
 			try
 			{
@@ -47,38 +61,31 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 			catch(Exception ex)
 			{
-				errors.Add( "Could not save " + model.Type.Name + ". " + ex.Message );
+				errors.Add( "Could not save " + Model.Type.Name + ". " + ex.Message );
 			}
 
 			if (errors.Count != 0)
 			{
 				controller.Context.Flash["errors"] = errors;
-				base.Execute(controller);
+			}
+
+			controller.PropertyBag["armodel"] = Model;
+			controller.PropertyBag["instance"] = instance;
+		}
+
+		protected override void RenderStandardHtml(Controller controller)
+		{
+			if (controller.Context.Flash["errors"] != null)
+			{
+				base.RenderStandardHtml(controller);
 			}
 			else
 			{
-				String name = model.Type.Name;
-				String viewName = String.Format(@"{0}\create{1}", controller.Name, name);
-
-				if (controller.HasTemplate(viewName))
-				{
-					controller.PropertyBag.Add( "armodel", model );
-					controller.PropertyBag.Add( "instance", instance );
-					controller.RenderView(controller.Name, "create" + name);
-				}
-				else
-				{
-					GenerateSuccessMessage(name, model, instance, controller);
-				}
+				controller.Redirect( controller.Name, "list" + Model.Type.Name );
 			}
 		}
 
-		private void GenerateSuccessMessage(string name, ActiveRecordModel model, object instance, Controller controller)
-		{
-			controller.DirectRender( "Successfully created!" );
-		}
-
-		private void SaveInstance(object instance, Controller controller)
+		protected void SaveInstance(object instance, Controller controller)
 		{
 			if (instance is ActiveRecordValidationBase)
 			{
@@ -102,102 +109,106 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 		}
 
-		private void RecursiveSetData(object instance, ActiveRecordModel model, NameValueCollection valueCollection)
-		{
-			Type type = model.Type;
+//		private void RecursiveSetData(object instance, ActiveRecordModel model, NameValueCollection valueCollection)
+//		{
+//			Type type = model.Type;
+//
+//			if ( type.BaseType != typeof(object) && 
+//				 type.BaseType != typeof(ActiveRecordBase) && 
+//				 type.BaseType != typeof(ActiveRecordValidationBase) )
+//			{
+//				RecursiveSetData( instance, ActiveRecordBase._GetModel( type.BaseType ), valueCollection );
+//			}
+//
+//			foreach( PropertyModel prop in model.Properties )
+//			{
+//				object value = DataBinder.Convert( 
+//					prop.Property.PropertyType, valueCollection[prop.Property.Name], prop.Property.Name, null, context );
+//
+//				if (value == null) continue;
+//
+//				prop.Property.SetValue( instance, value, null );
+//			}
+//
+//			foreach( PropertyInfo prop in model.NotMappedProperties )
+//			{
+//				object value = DataBinder.Convert( 
+//					prop.PropertyType, valueCollection[prop.Name], prop.Name, null, context );
+//
+//				if (value == null) continue;
+//
+//				prop.SetValue( instance, value, null );
+//			}
+//
+//			foreach( NestedModel nested in model.Components )
+//			{
+//				object nestedInstace = nested.Property.GetGetMethod().Invoke( instance, null );
+//
+//				if (nestedInstace == null)
+//				{
+//					nestedInstace = Activator.CreateInstance( nested.Property.PropertyType );
+//					nested.Property.SetValue( instance, nestedInstace, null );
+//				}
+//
+//				RecursiveSetData( nestedInstace, nested.Model, valueCollection );
+//			}
+//		}
 
-			if ( type.BaseType != typeof(object) && 
-				 type.BaseType != typeof(ActiveRecordBase) && 
-				 type.BaseType != typeof(ActiveRecordValidationBase) )
-			{
-				RecursiveSetData( instance, ActiveRecordBase._GetModel( type.BaseType ), valueCollection );
-			}
-
-			foreach( PropertyModel prop in model.Properties )
-			{
-				object value = GetConvertedValue( prop.Property.Name, prop.Property.PropertyType, valueCollection );
-
-				if (value == null) continue;
-
-				prop.Property.SetValue( instance, value, null );
-			}
-
-			foreach( PropertyInfo prop in model.NotMappedProperties )
-			{
-				object value = GetConvertedValue( prop.Name, prop.PropertyType, valueCollection );
-
-				if (value == null) continue;
-
-				prop.SetValue( instance, value, null );
-			}
-
-			foreach( NestedModel nested in model.Components )
-			{
-				object nestedInstace = nested.Property.GetGetMethod().Invoke( instance, null );
-
-				if (nestedInstace == null)
-				{
-					nestedInstace = Activator.CreateInstance( nested.Property.PropertyType );
-					nested.Property.SetValue( instance, nestedInstace, null );
-				}
-
-				RecursiveSetData( nestedInstace, nested.Model, valueCollection );
-			}
-		}
-
-		private object GetConvertedValue(String name, Type type, NameValueCollection collection)
-		{
-			if (type == typeof(DateTime))
-			{
-				String day = collection[name + "day"];
-				String month = collection[name + "month"];
-				String year = collection[name + "year"];
-
-				try
-				{
-					return new DateTime( Convert.ToInt32(year), Convert.ToInt32(month), Convert.ToInt32(day) );
-				}
-				catch(Exception ex)
-				{
-					errors.Add( "Invalid date." );
-					return null;
-				}
-			}
-			else
-			{
-				String value = collection[name];
-
-				if (value == null) return null;
-
-				if (type == typeof(String))
-				{
-					return value;
-				}
-				else if (type == typeof(Int16))
-				{
-					return Convert.ToInt16( value );
-				}
-				else if (type == typeof(Int32))
-				{
-					return Convert.ToInt32( value );
-				} 
-				else if (type == typeof(Int64))
-				{
-					return Convert.ToInt64( value );
-				}
-				else if (type == typeof(Single))
-				{
-					return Convert.ToSingle( value );
-				}
-				else if (type == typeof(Double))
-				{
-					return Convert.ToDouble( value );
-				}
-				else 
-				{
-					throw new ArgumentException("Type " + type.FullName + " is not handled yet");
-				}
-			}
-		}
+//		private object GetConvertedValue(String name, Type type, NameValueCollection collection)
+//		{
+//			if (type == typeof(DateTime))
+//			{
+//				String day = collection[name + "day"];
+//				String month = collection[name + "month"];
+//				String year = collection[name + "year"];
+//
+//				try
+//				{
+//					return new DateTime( Convert.ToInt32(year), Convert.ToInt32(month), Convert.ToInt32(day) );
+//				}
+//				catch(Exception)
+//				{
+//					errors.Add( "Invalid date." );
+//					return null;
+//				}
+//			}
+//			else
+//			{
+//				return DataBinder.Convert(type, )
+//
+//				String value = collection[name];
+//
+//				if (value == null) return null;
+//
+//				if (type == typeof(String))
+//				{
+//					return value;
+//				}
+//				else if (type == typeof(Int16))
+//				{
+//					return Convert.ToInt16( value );
+//				}
+//				else if (type == typeof(Int32))
+//				{
+//					return Convert.ToInt32( value );
+//				} 
+//				else if (type == typeof(Int64))
+//				{
+//					return Convert.ToInt64( value );
+//				}
+//				else if (type == typeof(Single))
+//				{
+//					return Convert.ToSingle( value );
+//				}
+//				else if (type == typeof(Double))
+//				{
+//					return Convert.ToDouble( value );
+//				}
+//				else 
+//				{
+//					throw new ArgumentException("Type " + type.FullName + " is not handled yet");
+//				}
+//			}
+//		}
 	}
 }

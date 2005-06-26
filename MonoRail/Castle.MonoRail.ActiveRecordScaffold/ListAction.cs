@@ -27,19 +27,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 	public class ListAction : AbstractScaffoldAction
 	{
+		private PropertyInfo keyProperty;
+
 		public ListAction(Type modelType) : base(modelType)
 		{
 		}
 
-		public override void Execute(Controller controller)
+		protected override void PerformActionProcess(Controller controller)
 		{
-			ActiveRecordModel model = GetARModel();
-
-			SetDefaultLayout(controller);
-
-			// TODO: Implement pagination and use the Sliced version of find all
-
-			MethodInfo findAll = model.Type.GetMethod( "FindAll", BindingFlags.Static|BindingFlags.Public, null, new Type[0], null );
+			MethodInfo findAll = Model.Type.GetMethod( "FindAll", BindingFlags.Static|BindingFlags.Public, null, new Type[0], null );
 
 			object[] items = null;
 
@@ -49,47 +45,63 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 			else
 			{
-				IList list = SupportingUtils.FindAll( model.Type );
+				IList list = SupportingUtils.FindAll( Model.Type );
 
 				items = new object[list.Count];
 
 				list.CopyTo(items, 0);
 			}
 
-			String name = model.Type.Name;
-			String viewName = String.Format(@"{0}\list{1}", controller.Name, name);
+			controller.PropertyBag["items"] = items;
 
-			if (controller.HasTemplate(viewName))
-			{
-				// The programmer provided a custom view
-
-				controller.PropertyBag.Add( "items", items );
-
-				controller.RenderView(controller.Name, "list" + name);
-			}
-			else
-			{
-				GenerateListHtml(name, model, items, controller);
-			}
+			controller.RenderView(controller.Name, "list" + Model.Type.Name);
 		}
 
-		private void GenerateListHtml(String name, ActiveRecordModel model, object[] items, Controller controller)
+		protected override string ComputeTemplateName(Controller controller)
+		{
+			return String.Format(@"{0}\list{1}", controller.Name, Model.Type.Name);
+		}
+
+		protected override void RenderStandardHtml(Controller controller)
+		{
+			object[] items = (object[]) controller.PropertyBag["items"];
+
+			GenerateHtmlList(Model.Type.Name, Model, items, controller);
+		}
+
+		private void GenerateHtmlList(String name, ActiveRecordModel model, object[] items, Controller controller)
 		{
 			StringBuilder sb = new StringBuilder();
 
 			IList properties = ObtainListableProperties(model);
 
-			sb.AppendFormat( "<h3>{0}:</h3>\r\n", controller.Name );
-
 			StartTable(sb, properties);
+
+			int index = 0;
 
 			foreach(object item in items)
 			{
-				sb.Append( "\r\n\t<tr>" );
+				String styleClass = "scaffoldrow";
+
+				if (index++ % 2 == 0) styleClass = "scaffoldaltrow";
+
+				sb.AppendFormat( "\r\n\t<tr class=\"{0}\">", styleClass );
+
+				object idVal = null;
+
+				if (keyProperty != null)
+				{
+					idVal = keyProperty.GetGetMethod().Invoke( item, null );
+
+					sb.AppendFormat( "\r\n\t\t<td align=\"center\">{0}</td>", idVal );
+				}
 
 				foreach(PropertyInfo prop in properties)
 				{
-					sb.Append( "\r\n\t\t<td>" );
+					if (prop.PropertyType == typeof(String))
+						sb.Append( "\r\n\t\t<td>" );
+					else
+						sb.Append( "\r\n\t\t<td align=\"center\">" );
 
 					object value = prop.GetGetMethod().Invoke( item, null );
 
@@ -101,13 +113,26 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 					sb.Append( "</td>" );
 				}
 
+				if (idVal != null)
+				{
+					sb.Append( "\r\n\t\t<td align=\"center\">" );
+					sb.Append( helper.LinkTo( "Edit", controller.Name, "edit" + name, idVal ) );
+					sb.Append( " | " );
+					sb.Append( helper.LinkTo( "Delete", controller.Name, "remove" + name, idVal ) );
+					sb.Append( "</td>" );
+				}
+				else
+				{
+					sb.Append( "\r\n\t\t<td>&nbsp;</td>" );
+				}
+
 				sb.Append( "\r\n\t</tr>" );
 			}
 
 			EndTable(sb);
 
 			sb.Append( "<p>\r\n" );
-			sb.Append( helper.CreateSubmit( "New" ) );
+			sb.Append( helper.LinkTo( "New", controller.Name, "new" + name ) );
 			sb.Append( "</p>\r\n" );
 
 			controller.DirectRender( sb.ToString() );
@@ -115,15 +140,21 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		private void StartTable(StringBuilder sb, IList properties)
 		{
-			sb.Append( "<table cellpadding=0 cellspacing=0 border=\"1\" width=\"100%\">\r\n" );
-			sb.Append( "<tr>" );
+			sb.Append( "<table class=\"scaffoldtable\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\" width=\"100%\">\r\n" );
+			sb.Append( "\t<tr>" );
+
+			// ID Column
+			sb.AppendFormat( "\t\t<th>{0}</th>\r\n", "&nbsp;" );
 
 			foreach(PropertyInfo prop in properties)
 			{
-				sb.AppendFormat( "<th>{0}</th>\r\n", prop.Name );
+				sb.AppendFormat( "\t\t<th>{0}</th>\r\n", prop.Name );
 			}
 
-			sb.Append( "</tr>\r\n" );
+			// Commands Columns
+			sb.AppendFormat( "\t\t<th>{0}</th>\r\n", "&nbsp;" );
+
+			sb.Append( "\t</tr>\r\n" );
 		}
 
 		private void EndTable(StringBuilder sb)
@@ -137,7 +168,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	
 			foreach(PrimaryKeyModel keyModel in model.Ids)
 			{
-				properties.Add(keyModel.Property);
+				keyProperty = keyModel.Property;
 			}
 	
 			foreach(PropertyModel propModel in model.Properties)
