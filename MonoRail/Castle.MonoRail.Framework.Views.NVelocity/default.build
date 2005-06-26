@@ -79,7 +79,7 @@
 
 	<target name="tests.run" depends="tests.compile">
 		<nunit2>
-			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${bin.dir}" />
+			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>
