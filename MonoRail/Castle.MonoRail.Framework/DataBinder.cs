@@ -31,6 +31,9 @@ namespace Castle.MonoRail.Framework
 	{
 		private IRailsEngineContext context;
 		private IInstanceFactory instanceFactory;
+
+		private string root = null;
+		private string parent = string.Empty;
 		
 		public DataBinder( IInstanceFactory instanceFactory, IRailsEngineContext context )
 		{
@@ -38,8 +41,10 @@ namespace Castle.MonoRail.Framework
 			this.instanceFactory = instanceFactory;
 		}
 
-		public object BindObject( Type instanceType, string paramPrefix, NameValueCollection paramList, IDictionary files )
+		public object BindObject( Type instanceType, string paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
 		{
+			if ( root == null ) root = instanceType.Name;
+
 			string prefix = (paramPrefix != null && paramPrefix != string.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : string.Empty;
 			object instance = instanceFactory.GetInstance( instanceType, context );
 			
@@ -53,19 +58,37 @@ namespace Castle.MonoRail.Framework
 
 					object value = null;
 
-					if ( !propType.IsPrimitive && !propType.IsArray && propType != typeof(String) && propType != typeof(Guid)
-							&& propType != typeof(DateTime) && propType != typeof(HttpPostedFile) )
-					{
-						value = BindObject( prop.PropertyType, prefix + prop.Name, paramList, files );
-					}
-					else
-					{
-						value = Convert( prop.PropertyType, paramList.GetValues( prefix + prop.Name ), prop.Name, files );
-					}
+					string oldParent = parent;
 					
-					prop.SetValue( instance, value, null );
+					try
+					{
+						if ( !propType.IsPrimitive && !propType.IsArray && propType != typeof(String) && propType != typeof(Guid)
+								&& propType != typeof(DateTime) && propType != typeof(HttpPostedFile) )
+						{
+							parent += prop.Name + ".";		
+
+							value = BindObject( prop.PropertyType, prefix + prop.Name, paramList, files, errorList );
+						}
+						else
+						{
+							value = Convert( prop.PropertyType, paramList.GetValues( prefix + prop.Name ), prop.Name, files );
+						}
+						
+						prop.SetValue( instance, value, null );
+					}
+					catch ( Exception e )
+					{
+						if ( errorList != null )
+							errorList.Add( new DataBindError( root, parent + prop.Name, e ) );
+						else
+							throw e;
+					}
+
+					parent = oldParent;
 				}
 			}
+
+			if ( parent == string.Empty ) root = null;
 
 			return instance;
 		}

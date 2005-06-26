@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Tests.Controllers
 {
 	using System;
+
 	using NUnit.Framework;
 
 	
@@ -32,11 +33,6 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			Assert.IsTrue(bol);
 
 			OkMessage();
-		}
-
-		private void OkMessage()
-		{
-			RenderText("ok");
 		}
 
 		public void ToDatetime(DateTime dt)
@@ -169,6 +165,11 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			ToStr(str);
 
 			StrInvoked = true;
+		}
+
+		private void OkMessage()
+		{
+			RenderText("ok");
 		}
 	}
 }

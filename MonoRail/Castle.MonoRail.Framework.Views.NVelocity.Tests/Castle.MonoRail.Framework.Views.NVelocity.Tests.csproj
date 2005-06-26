@@ -125,6 +125,11 @@
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Tests"
+                    Project = "{844F5EC4-9224-42A9-986D-CE645AC970F2}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -209,6 +214,10 @@
                 />
                 <File
                     RelPath = "views\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\home\resource.vm"
                     BuildAction = "None"
                 />
                 <File

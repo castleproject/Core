@@ -36,5 +36,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests.Controllers
 			PropertyBag["name"] = "hammett";
 			PropertyBag["list"] = new String[] { "a", "b", "c" };
 		}
+
+		[Resource( "text", "Castle.MonoRail.Framework.Tests.Resources.Language,Castle.MonoRail.Framework.Tests", CultureName="en" )]
+		public void Resource()
+		{
+			
+		}
 	}
 }

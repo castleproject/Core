@@ -1,4 +1,3 @@
-using Castle.MonoRail.Framework.Attributes;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,11 @@ using Castle.MonoRail.Framework.Attributes;
 namespace Castle.MonoRail.Framework.Tests.Controllers
 {
 	using System;
+
 	using NUnit.Framework;
+
+	using Castle.MonoRail.Framework.Attributes;
+
 
 	public class DataBindController : SmartDispatcherController
 	{
@@ -44,6 +47,36 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 		public void MapFromQueryBad( [DataBind(From=ParamStore.Form)] BindObject instance )
 		{
 			Validate( instance );
+		}
+
+		public void MapWithErrors( [DataBind] BindObject instance )
+		{
+			ErrorList errors = GetDataBindErrors( instance );
+
+			Assert.AreEqual( 2, errors.Count );
+			Assert.IsTrue( errors.Contains( "value" ) );
+			Assert.IsTrue( errors.Contains( "internal.date" ) );
+			Assert.IsFalse( errors.Contains( "internal.text" ) );
+
+			foreach ( IPropertyError e in errors )
+			{
+				if ( e.Property == "Value" )
+				{
+					Assert.AreEqual( "BindObject.Value", e.Key );
+					Assert.AreEqual( "BindError.BindObject.Value", e.ToString() );
+					Assert.IsNotNull( e.Exception );
+				}
+				else if ( e.Property == "Internal.Date" )
+				{
+					Assert.AreEqual( "BindObject.Internal.Date", e.Key );
+					Assert.AreEqual( "BindError.BindObject.Internal.Date", e.ToString() );
+					Assert.IsNotNull( e.Exception );
+				}
+				else
+					throw new RailsException( "Invalid property error: " + e.Property );
+			}
+
+			RenderText( "ok" );
 		}
 
 		private void Validate( BindObject instance )

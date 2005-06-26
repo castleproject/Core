@@ -153,6 +153,20 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 
 		[Test]
+		public void DataBindWithErrors()
+		{
+			IRailsEngineContext ctx = GetDataBindContext( "MapWithErrors" );
+
+			ctx.Params.Add( "value", "thisisnotanint" );
+			ctx.Params.Add( "internal.text", DataBindController.Text );
+			ctx.Params.Add( "internal.date", "thisisnotadate" );
+
+			_engine.Process( ctx );
+
+			AssertResponse();
+		}
+
+		[Test]
 		public void DataBindFromQueryString()
 		{
 			IRailsEngineContext ctx = GetDataBindContext( "MapFromQueryGood" );

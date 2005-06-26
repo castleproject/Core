@@ -12,28 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace Castle.MonoRail.Framework
 {
 	using System;
 
-	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Filters;
-
-	[Filter(ExecuteEnum.Before, typeof(RequestValidatorFilter))]
-	public class FlashController : SmartDispatcherController
+	public interface IPropertyError
 	{
-		public FlashController()
-		{
-		}
+		/// <summary>
+		/// Key identifying this error.
+		/// </summary>
+		string Key { get; }
 
-		public void FlashIt()
-		{
-			Flash["flashMessage"] = "It's a flash message";
-		}
+		/// <summary>
+		/// Name of the property this error occured on.
+		/// </summary>
+		string Property { get; }
+		
+		/// <summary>
+		/// Name of the parent class this property belongs to.
+		/// </summary>
+		string Parent { get; }
 
-		public void ValidateRequest()
-		{
-			
-		}
+		/// <summary>
+		/// Exception that was raised.
+		/// </summary>
+		Exception Exception { get; }
+
+		/// <summary>
+		/// ToString combines key with interface implementation.
+		/// </summary>
+		string ToString();
 	}
 }

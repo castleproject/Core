@@ -91,5 +91,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			Assert.AreEqual( "My printable layout\r\n\r\nsave contents\r\n\r\nFooter", context.Output );
 		}
+
+		[Test]
+		public void Resource()
+		{
+			RailsEngineContextImpl context = new 
+				RailsEngineContextImpl("/home/resource.rails");
+
+			_engine.Process( context );
+
+			Assert.AreEqual( "current language = english\r\n", context.Output );
+		}
 	}
 }

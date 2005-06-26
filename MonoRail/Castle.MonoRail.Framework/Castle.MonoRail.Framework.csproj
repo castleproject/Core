@@ -109,8 +109,18 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DataBindError.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "default.build"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "ErrorList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IControllerAware.cs"
@@ -124,6 +134,11 @@
                 />
                 <File
                     RelPath = "IFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IPropertyError.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

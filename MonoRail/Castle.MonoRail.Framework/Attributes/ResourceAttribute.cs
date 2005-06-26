@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework
 	/// file should be loaded and set available in the PropertyBag with the 
 	/// specified name.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true), Serializable]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true, Inherited=true), Serializable]
 	public class ResourceAttribute : AbstractResourceAttribute
 	{
 		private string _ResourceName, _CultureName, _AssemblyName;

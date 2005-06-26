@@ -215,6 +215,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ResourceController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\SecureController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -263,6 +268,18 @@
                     RelPath = "Helpers\ValidationHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Resources\Language.de.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Language.nl.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Language.resx"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

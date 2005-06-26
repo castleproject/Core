@@ -59,6 +59,10 @@ namespace Castle.MonoRail.Framework.Tests
 				{
 					return new DataBindController();
 				}
+				case "resource":
+				{
+					return new ResourceController();
+				}
 				default:
 				{
 					throw new RailsException("Unknown controller");

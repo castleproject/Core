@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class SmartDispatcherController : Controller
 	{
-		protected IList boundInstances = new ArrayList();
+		private IDictionary boundInstances = new ListDictionary();
 
 		protected internal override void CollectActions()
 		{
@@ -62,7 +62,7 @@ namespace Castle.MonoRail.Framework
 			base.InternalSend( action );
 
 			// Release any bound instances
-			foreach ( object o in boundInstances )
+			foreach ( object o in boundInstances.Keys )
 				_instanceFactory.Release( o, Context );
 		}
 
@@ -185,7 +185,10 @@ namespace Castle.MonoRail.Framework
 								break;
 						}
 
-						args[i]	= binder.BindObject( param.ParameterType, dba.Prefix, webParams, files );
+						ArrayList errorList = new ArrayList();
+						args[i]	= binder.BindObject( param.ParameterType, dba.Prefix, webParams, files, errorList );
+						
+						boundInstances.Add( args[i], errorList );
 					}
 					else
 					{
@@ -207,6 +210,13 @@ namespace Castle.MonoRail.Framework
 			}
 
 			return args;
+		}
+
+		protected virtual ErrorList GetDataBindErrors( object instance )
+		{
+			ArrayList list = boundInstances[ instance ] as ArrayList;
+
+			return new ErrorList( list );
 		}
 
 		protected virtual void CreateParamCollections( IRequest request, out NameValueCollection allParams, 

@@ -1,4 +1,3 @@
-using Castle.MonoRail.Framework.Helpers;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +17,7 @@ namespace TestSiteNVelocity.Controllers
 	using System;
 
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Helpers;
 
 
 	[Helper(typeof(DateFormatHelper))]	

@@ -31,17 +31,17 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public object this[string key]
 		{
-			get { return resourceSet.GetString(key, true); }
+			get { return GetObject( key ); }
 		}
 
 		public string GetString(string key)
 		{
-			return resourceSet.GetString(key, true);
+			return key != null ? resourceSet.GetString(key, true) : null;
 		}
 
 		public object GetObject(string key)
 		{
-			return resourceSet.GetObject(key, true);
+			return key != null ? resourceSet.GetObject(key, true) : null;
 		}
 	}
 }

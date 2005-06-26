@@ -41,7 +41,7 @@
 				<include name="**/*.cs" />
 			</sources>
 
-			<resources prefix="TestSiteNVelocity" dynamicprefix="true">
+			<resources basedir="${src.dir}" prefix="TestSiteNVelocity" dynamicprefix="true">
 				<include name="**/*.resx" />
 			</resources>
 
