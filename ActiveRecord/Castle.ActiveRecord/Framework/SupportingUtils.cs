@@ -12,38 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Tests
+namespace Castle.ActiveRecord.Framework
 {
 	using System;
+	using System.Collections;
 
-	using NUnit.Framework;
+	using NHibernate;
 
-	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Framework.Config;
 
-	public abstract class AbstractActiveRecordTest
+	public abstract class SupportingUtils
 	{
-		protected IConfigurationSource GetConfigSource()
+		public SupportingUtils()
 		{
-			return System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
 		}
 
-		protected void Recreate()
+		public static IList FindAll( Type type )
 		{
-			ActiveRecordStarter.CreateSchema();
-		}
+			ISession session = ActiveRecordBase._holder.CreateSession( type );
 
-		[TearDown]
-		public void Drop()
-		{
-			try
-			{
-				ActiveRecordStarter.DropSchema();
-			}
-			catch(Exception)
-			{
-				
-			}
+			ICriteria criteria = session.CreateCriteria( type );
+
+			IList results = criteria.List();
+
+			session.Close();
+
+			return results;
 		}
 	}
 }

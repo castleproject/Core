@@ -16,8 +16,8 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 {
 	using System;
 
-	[ActiveRecord("Blogs")]
-	public class Blog : ActiveRecordValidationBase
+	[ActiveRecord("Blogs2")]
+	public class Blog2 : ActiveRecordValidationBase
 	{
 		private int _id;
 		private String _name;
@@ -46,17 +46,17 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll( typeof(Blog) );
+			ActiveRecordBase.DeleteAll( typeof(Blog2) );
 		}
 
-		public static Blog[] FindAll()
+		public static Blog2[] FindAll()
 		{
-			return (Blog[]) ActiveRecordBase.FindAll( typeof(Blog) );
+			return (Blog2[]) ActiveRecordBase.FindAll( typeof(Blog2) );
 		}
 
-		public static Blog Find(int id)
+		public static Blog2 Find(int id)
 		{
-			return (Blog) ActiveRecordBase.FindByPrimaryKey( typeof(Blog), id );
+			return (Blog2) ActiveRecordBase.FindByPrimaryKey( typeof(Blog2), id );
 		}
 	}
 }

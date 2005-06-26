@@ -26,6 +26,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
 				typeof(Entity), typeof(CompanyEntity), typeof(PersonEntity) );
+			Recreate();
 
 			Entity.DeleteAll();
 			CompanyEntity.DeleteAll();

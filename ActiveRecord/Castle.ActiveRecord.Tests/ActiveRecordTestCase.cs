@@ -28,6 +28,7 @@ namespace Castle.ActiveRecord.Tests
 		public void SimpleOperations()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -58,6 +59,7 @@ namespace Castle.ActiveRecord.Tests
 		public void SimpleOperations2()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -96,6 +98,7 @@ namespace Castle.ActiveRecord.Tests
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
 				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
+			Recreate();
 
 			Company.DeleteAll();
 
@@ -120,6 +123,7 @@ namespace Castle.ActiveRecord.Tests
 		public void RelationsOneToMany()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -151,6 +155,7 @@ namespace Castle.ActiveRecord.Tests
 		public void RelationsOneToManyWithWhereAndOrder()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -187,6 +192,7 @@ namespace Castle.ActiveRecord.Tests
 		public void RelationsOneToOne()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Employee), typeof(Award) );
+			Recreate();
 
 			Award.DeleteAll();
 			Employee.DeleteAll();
@@ -216,6 +222,7 @@ namespace Castle.ActiveRecord.Tests
 		public void FindLoad()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -228,6 +235,7 @@ namespace Castle.ActiveRecord.Tests
 		public void SaveUpdate()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -264,6 +272,7 @@ namespace Castle.ActiveRecord.Tests
 		public void Delete()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -295,6 +304,7 @@ namespace Castle.ActiveRecord.Tests
 		public void ExecuteAndCallback()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();

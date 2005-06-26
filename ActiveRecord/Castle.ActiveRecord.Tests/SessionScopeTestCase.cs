@@ -30,6 +30,7 @@ namespace Castle.ActiveRecord.Tests
 			ISession session1, session2, session3, session4;
 
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			// No scope here
 			// So no optimization, thus different sessions
@@ -99,6 +100,7 @@ namespace Castle.ActiveRecord.Tests
 		public void SessionScopeUsage()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();

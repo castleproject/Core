@@ -30,6 +30,7 @@ namespace Castle.ActiveRecord.Tests
 			ISession session1, session2, session3, session4;
 
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			using(new TransactionScope())
 			{
@@ -65,6 +66,7 @@ namespace Castle.ActiveRecord.Tests
 		public void RollbackVote()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();
@@ -95,6 +97,7 @@ namespace Castle.ActiveRecord.Tests
 		public void CommitVote()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
 
 			Post.DeleteAll();
 			Blog.DeleteAll();

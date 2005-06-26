@@ -46,6 +46,7 @@ namespace Castle.ActiveRecord
 
 			// First initialization
 			SessionFactoryHolder holder = new SessionFactoryHolder();
+			ActiveRecordBase.type2Model.Clear();
 			ActiveRecordBase._holder = holder;
 
 			// Base configuration
@@ -181,7 +182,42 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Generates and executes the creation scripts for the database.
+		/// Generates and executes the Drop scripts for the database.
+		/// </summary>
+		public static void DropSchema()
+		{
+			SchemaExport export = CreateSchemaExport();
+
+			try
+			{
+				export.Drop( false, true );
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException( "Could not drop the schema", ex );
+			}
+		}
+
+		/// <summary>
+		/// Generates and executes the drop scripts for the database.
+		/// </summary>
+		public static void GenerateDropScripts( String fileName )
+		{
+			SchemaExport export = CreateSchemaExport();
+
+			try
+			{
+				export.SetOutputFile( fileName );
+				export.Drop( false, false );
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException( "Could not drop the schema", ex );
+			}
+		}
+
+		/// <summary>
+		/// Generates the creation scripts for the database
 		/// </summary>
 		public static void GenerateCreationScripts( String fileName )
 		{

@@ -14,59 +14,60 @@
 
 namespace Castle.ActiveRecord.Tests.Model
 {
-  using System;
-  using System.Collections;
-  using Iesi.Collections;
+	using System;
+	using System.Collections;
+
+	using Iesi.Collections;
 
 
-  [ActiveRecord("`Order`")]
-  public class Order : ActiveRecordBase
-  {
-	private int id;
-	private DateTime ordered_date;
-	private Boolean shipped;
-	private ISet _products;
-	
-	[PrimaryKey(PrimaryKeyType.Native, "OrderID")]
-	public int ID
+	[ActiveRecord("`Order`")]
+	public class Order : ActiveRecordBase
 	{
-	  get { return this.id; }
-	  set { this.id = value; }
-	}
+		private int id;
+		private DateTime ordered_date;
+		private Boolean shipped;
+		private ISet _products;
 
-	[Property()]
-	public DateTime OrderedDate
-	{
-	  get { return this.ordered_date; }
-	  set { this.ordered_date = value; }
-	}
+		[PrimaryKey(PrimaryKeyType.Native, "OrderID")]
+		public int ID
+		{
+			get { return this.id; }
+			set { this.id = value; }
+		}
 
-	[Property()]
-	public Boolean IsShipped
-	{
-	  get { return this.shipped; }
-	  set { this.shipped = value; }
-	}
+		[Property()]
+		public DateTime OrderedDate
+		{
+			get { return this.ordered_date; }
+			set { this.ordered_date = value; }
+		}
 
-	public static Order Find(int id)
-	{
-	  return ((Order) (ActiveRecordBase.FindByPrimaryKey(typeof (Order), id)));
-	}
+		[Property()]
+		public Boolean IsShipped
+		{
+			get { return this.shipped; }
+			set { this.shipped = value; }
+		}
 
-	[HasAndBelongsToMany( typeof(Product), RelationType.Set, 
-	   Table="line_item", 
-	   ColumnRef="product_id", ColumnKey="order_id" )]
-	public ISet Products
-	{
-	  get { return _products; }
-	  set { _products = value; }
+		public static Order Find(int id)
+		{
+			return ((Order) (ActiveRecordBase.FindByPrimaryKey(typeof (Order), id)));
+		}
+
+		[HasAndBelongsToMany(typeof (Product), RelationType.Set,
+			Table="line_item",
+			ColumnRef="product_id", ColumnKey="order_id")]
+		public ISet Products
+		{
+			get { return _products; }
+			set { _products = value; }
+		}
+
+		public static void DeleteAll()
+		{
+			ActiveRecordBase.DeleteAll(typeof (Order));
+		}
 	}
-	
-	public static void DeleteAll()
-	{
-	  ActiveRecordBase.DeleteAll( typeof(Order) );
-	}
-  }
 
 	[ActiveRecord("`Order`")]
 	public class OrderWithIDBag : ActiveRecordBase
@@ -75,7 +76,7 @@ namespace Castle.ActiveRecord.Tests.Model
 		private DateTime ordered_date;
 		private Boolean shipped;
 		private IList _products;
-	
+
 		[PrimaryKey(PrimaryKeyType.Native, "OrderID")]
 		public int ID
 		{
@@ -102,20 +103,20 @@ namespace Castle.ActiveRecord.Tests.Model
 			return ((OrderWithIDBag) (ActiveRecordBase.FindByPrimaryKey(typeof (OrderWithIDBag), id)));
 		}
 
-		[HasAndBelongsToMany( typeof(ProductWithIDBag), RelationType.IdBag, 
-			 Table="line_item_non_ident", 
-			 ColumnRef="product_id", ColumnKey="order_id"), 
-		CollectionID(CollectionIDType.HiLo, "line_number", "Int32"),
-		Hilo(Table="testing_hilo", Column="sequence", MaxLo=150)]
+		[HasAndBelongsToMany(typeof (ProductWithIDBag), RelationType.IdBag,
+			Table="line_item_non_ident",
+			ColumnRef="product_id", ColumnKey="order_id"),
+			CollectionID(CollectionIDType.HiLo, "line_number", "Int32"),
+			Hilo(Table="testing_hilo", Column="sequence", MaxLo=150)]
 		public IList Products
 		{
 			get { return _products; }
 			set { _products = value; }
 		}
-	
+
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll( typeof(OrderWithIDBag) );
+			ActiveRecordBase.DeleteAll(typeof (OrderWithIDBag));
 		}
 	}
 }
