@@ -18,8 +18,6 @@ namespace Castle.MonoRail.Framework.Internal
 	using System.Reflection;
 	using System.Resources;
 
-	using Castle.MonoRail.Framework.Attributes;
-
 	/// <summary>
 	/// Standard implementation of <see cref="IResourceFactory" />
 	/// </summary>

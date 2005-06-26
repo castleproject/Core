@@ -43,10 +43,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		/// <summary>
 		/// Constructs a html form
 		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="model"></param>
-		/// <param name="instance"></param>
-		/// <param name="controller"></param>
 		protected void GenerateHtml(string name, ActiveRecordModel model, object instance, Controller controller)
 		{
 			StringBuilder sb = new StringBuilder();
