@@ -73,6 +73,28 @@ namespace Castle.MonoRail.Framework.Helpers
 			return LinkTo( name, Controller.Name, action );
 		}
 
+		public String MapToVirtual( String target ) 
+		{
+			String appPath = this.Controller.Context.ApplicationPath.EndsWith("/")?
+			this.Controller.Context.ApplicationPath : this.Controller.Context.ApplicationPath + "/";
+ 
+		 	String targetPath = target.StartsWith("/")? target.Substring(1): target;
+		 	return String.Concat(appPath, targetPath);
+		}
+ 
+		public String LinkToAbsolute( String name, String action ) 
+		{
+			return LinkTo( name, base.Controller.Name, action );
+		}
+ 
+		public String LinkToAbsolute(String name, String controller, String action) 
+		{
+			String extension = UrlTokenizer.GetExtension( base.Controller.Request.Uri.ToString() );
+			String url = this.MapToVirtual(String.Format("/{0}/{1}.{2}", controller, action, extension));
+ 
+			return String.Format( "<a href=\"{0}\">{1}</a>", url, name );
+		}
+
 		public String LabelFor( String forId, String label )
 		{
 			StringWriter sbWriter = new StringWriter();
