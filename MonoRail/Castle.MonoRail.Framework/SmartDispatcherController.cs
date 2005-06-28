@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using Castle.MonoRail.Framework.Attributes;
 
 	/// <summary>
 	/// Specialization of <see cref="Controller"/> that tries
@@ -212,14 +211,14 @@ namespace Castle.MonoRail.Framework
 			return args;
 		}
 
-		protected virtual ErrorList GetDataBindErrors( object instance )
+		protected ErrorList GetDataBindErrors( object instance )
 		{
 			ArrayList list = boundInstances[ instance ] as ArrayList;
 
 			return new ErrorList( list );
 		}
 
-		protected virtual void CreateParamCollections( IRequest request, out NameValueCollection allParams, 
+		protected void CreateParamCollections( IRequest request, out NameValueCollection allParams, 
 														out NameValueCollection formParams, out NameValueCollection queryParams )
 		{
 			formParams		= request.Form;

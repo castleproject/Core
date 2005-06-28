@@ -63,5 +63,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual( "<ul class=\"style1\">\r\n<li class=\"style2\">arg1</li>\r\n</ul>\r\n", 
 				HtmlHelper.BuildUnorderedList(args, "style1", "style2") );
 		}
+
+		
 	}
 }

@@ -27,8 +27,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 	public class ListAction : AbstractScaffoldAction
 	{
-		private PropertyInfo keyProperty;
-
 		public ListAction(Type modelType) : base(modelType)
 		{
 		}

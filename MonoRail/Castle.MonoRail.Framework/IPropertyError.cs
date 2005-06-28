@@ -21,17 +21,17 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Key identifying this error.
 		/// </summary>
-		string Key { get; }
+		String Key { get; }
 
 		/// <summary>
 		/// Name of the property this error occured on.
 		/// </summary>
-		string Property { get; }
+		String Property { get; }
 		
 		/// <summary>
 		/// Name of the parent class this property belongs to.
 		/// </summary>
-		string Parent { get; }
+		String Parent { get; }
 
 		/// <summary>
 		/// Exception that was raised.
@@ -41,6 +41,6 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// ToString combines key with interface implementation.
 		/// </summary>
-		string ToString();
+		String ToString();
 	}
 }

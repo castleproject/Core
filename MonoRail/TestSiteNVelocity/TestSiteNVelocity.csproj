@@ -216,6 +216,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Controllers\SmartController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\ValidatedController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

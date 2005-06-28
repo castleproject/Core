@@ -190,6 +190,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SmartControllerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ViewEngineTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

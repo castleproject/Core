@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Engine
 {
 	using System;
 	using System.Web;
-	using System.Configuration;
+	using System.Web.SessionState;
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Engine
 	/// and uses the configuration to obtain the correct factories 
 	/// instances.
 	/// </summary>
-	public class MonoRailHttpHandlerFactory : IHttpHandlerFactory
+	public class MonoRailHttpHandlerFactory : IHttpHandlerFactory, IRequiresSessionState
 	{
 		private MonoRailConfiguration _config;
 		private IViewEngine _viewEngine;

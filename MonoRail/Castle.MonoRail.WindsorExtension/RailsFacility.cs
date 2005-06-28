@@ -30,7 +30,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 	/// <summary>
 	/// Facility responsible for registering the controllers in
-	/// a tree.
+	/// the tree.
 	/// </summary>
 	public class RailsFacility : IFacility
 	{

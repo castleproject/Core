@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	{
 		public String FieldSet(String legend)
 		{
-			return String.Format( "<fieldset><legend>{0}</legend>", legend );
+			return String.Format("<fieldset><legend>{0}</legend>", legend);
 		}
 
 		public String EndFieldSet()
@@ -35,21 +35,21 @@ namespace Castle.MonoRail.Framework.Helpers
 			return "</fieldset>";
 		}
 
-		public String Form( String action )
+		public String Form(String action)
 		{
 			StringWriter sbWriter = new StringWriter();
-			HtmlTextWriter writer = new HtmlTextWriter( sbWriter );
+			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
-			writer.WriteBeginTag( "form" );
-			writer.WriteAttribute( "method", "post" );
-			writer.WriteAttribute( "action", action );
-			writer.Write( HtmlTextWriter.TagRightChar );
+			writer.WriteBeginTag("form");
+			writer.WriteAttribute("method", "post");
+			writer.WriteAttribute("action", action);
+			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.WriteLine();
 
 			return sbWriter.ToString();
 		}
 
-		public String EndForm( )
+		public String EndForm()
 		{
 			return "</form>";
 		}
@@ -57,54 +57,54 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String CreateSubmit(String name)
 		{
 			StringWriter sbWriter = new StringWriter();
-			HtmlTextWriter writer = new HtmlTextWriter( sbWriter );
+			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
-			writer.WriteBeginTag( "input" );
-			writer.WriteAttribute( "type", "submit" );
-			writer.WriteAttribute( "value", name );
-			writer.Write( HtmlTextWriter.SelfClosingTagEnd );
+			writer.WriteBeginTag("input");
+			writer.WriteAttribute("type", "submit");
+			writer.WriteAttribute("value", name);
+			writer.Write(HtmlTextWriter.SelfClosingTagEnd);
 			writer.WriteLine();
 
 			return sbWriter.ToString();
 		}
 
-		public String LinkTo( String name, String action )
+		public String LinkTo(String name, String action)
 		{
-			return LinkTo( name, Controller.Name, action );
+			return LinkTo(name, Controller.Name, action);
 		}
 
-		public String MapToVirtual( String target ) 
+		public String MapToVirtual(String target)
 		{
-			String appPath = this.Controller.Context.ApplicationPath.EndsWith("/")?
-			this.Controller.Context.ApplicationPath : this.Controller.Context.ApplicationPath + "/";
- 
-		 	String targetPath = target.StartsWith("/")? target.Substring(1): target;
-		 	return String.Concat(appPath, targetPath);
+			String appPath = this.Controller.Context.ApplicationPath.EndsWith("/") ?
+				this.Controller.Context.ApplicationPath : this.Controller.Context.ApplicationPath + "/";
+
+			String targetPath = target.StartsWith("/") ? target.Substring(1) : target;
+			return String.Concat(appPath, targetPath);
 		}
- 
-		public String LinkToAbsolute( String name, String action ) 
+
+		public String LinkToAbsolute(String name, String action)
 		{
-			return LinkTo( name, base.Controller.Name, action );
+			return LinkTo(name, base.Controller.Name, action);
 		}
- 
-		public String LinkToAbsolute(String name, String controller, String action) 
+
+		public String LinkToAbsolute(String name, String controller, String action)
 		{
-			String extension = UrlTokenizer.GetExtension( base.Controller.Request.Uri.ToString() );
+			String extension = base.Controller.Context.UrlInfo.Extension;
 			String url = this.MapToVirtual(String.Format("/{0}/{1}.{2}", controller, action, extension));
- 
-			return String.Format( "<a href=\"{0}\">{1}</a>", url, name );
+
+			return String.Format("<a href=\"{0}\">{1}</a>", url, name);
 		}
 
-		public String LabelFor( String forId, String label )
+		public String LabelFor(String forId, String label)
 		{
 			StringWriter sbWriter = new StringWriter();
-			HtmlTextWriter writer = new HtmlTextWriter( sbWriter );
+			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
-			writer.WriteBeginTag( "label" );
-			writer.WriteAttribute( "for", forId );
-			writer.Write( HtmlTextWriter.TagRightChar );
+			writer.WriteBeginTag("label");
+			writer.WriteAttribute("for", forId);
+			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.Write(label);
-			writer.WriteEndTag( "label" );
+			writer.WriteEndTag("label");
 			writer.WriteLine();
 
 			return sbWriter.ToString();
@@ -112,86 +112,89 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String DateTime(String name, DateTime value)
 		{
-			String[] days = new String[31]; int index = 0;
-			for(int i=1; i < 32; i++)
+			String[] days = new String[31];
+			int index = 0;
+			for (int i = 1; i < 32; i++)
 				days[index++] = i.ToString();
-			
-			String[] months = new String[12]; index = 0;
-			for(int i=1; i < 13; i++)
+
+			String[] months = new String[12];
+			index = 0;
+			for (int i = 1; i < 13; i++)
 				months[index++] = i.ToString();
-			
-			String[] years = new String[100]; index = 0;
-			for(int i=1930; i < 2030; i++)
+
+			String[] years = new String[100];
+			index = 0;
+			for (int i = 1930; i < 2030; i++)
 				years[index++] = i.ToString();
 
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append( Select(name+"day") );
-			sb.Append( CreateOptionsFromPrimitiveArray(days, value.Day.ToString()) );
-			sb.Append( EndSelect() );
-			sb.Append( ' ' );
-			sb.Append( Select(name+"month") );
-			sb.Append( CreateOptionsFromPrimitiveArray(months, value.Month.ToString()) );
-			sb.Append( EndSelect() );
-			sb.Append( ' ' );
-			sb.Append( Select(name+"year") );
-			sb.Append( CreateOptionsFromPrimitiveArray(years, value.Year.ToString()) );
-			sb.Append( EndSelect() );
+			sb.Append(Select(name + "day"));
+			sb.Append(CreateOptionsFromPrimitiveArray(days, value.Day.ToString()));
+			sb.Append(EndSelect());
+			sb.Append(' ');
+			sb.Append(Select(name + "month"));
+			sb.Append(CreateOptionsFromPrimitiveArray(months, value.Month.ToString()));
+			sb.Append(EndSelect());
+			sb.Append(' ');
+			sb.Append(Select(name + "year"));
+			sb.Append(CreateOptionsFromPrimitiveArray(years, value.Year.ToString()));
+			sb.Append(EndSelect());
 
 			return sb.ToString();
 		}
 
 		public String TextArea(String name, int cols, int rows, String value)
 		{
-			return String.Format("<textarea id=\"{0}\" name=\"{0}\" cols=\"{1}\" rows=\"{2}\">{3}</textarea>", 
-				name, cols, rows, value);
+			return String.Format("<textarea id=\"{0}\" name=\"{0}\" cols=\"{1}\" rows=\"{2}\">{3}</textarea>",
+			                     name, cols, rows, value);
 		}
 
-		public String InputText( String name, String value )
+		public String InputText(String name, String value)
 		{
-			return InputText( name, value, null );
+			return InputText(name, value, null);
 		}
 
-		public String InputText( String name, String value, int size, int maxlength )
+		public String InputText(String name, String value, int size, int maxlength)
 		{
-			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" />", 
-				name, value, size, maxlength);
+			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" />",
+			                     name, value, size, maxlength);
 		}
 
-		public String InputText( String name, String value, String id )
+		public String InputText(String name, String value, String id)
 		{
 			if (id == null) id = name;
 
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{1}\" value=\"{2}\" />", name, id, value);
 		}
 
-		public String InputHidden( String name, String value )
+		public String InputHidden(String name, String value)
 		{
 			return String.Format("<input type=\"hidden\" name=\"{0}\" id=\"{0}\" value=\"{1}\" />", name, value);
 		}
 
-		public String SubmitButton( String value )
+		public String SubmitButton(String value)
 		{
 			return String.Format("<input type=\"submit\" value=\"{0}\" />", value);
 		}
 
-		public String LinkTo( String name, String controller, String action )
+		public String LinkTo(String name, String controller, String action)
 		{
 			String url = base.Controller.Context.ApplicationPath;
 			String extension = base.Controller.Context.UrlInfo.Extension;
 
-			return String.Format( "<a href=\"{0}/{1}/{2}.{3}\">{4}</a>", url, controller, action, extension, name );
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}\">{4}</a>", url, controller, action, extension, name);
 		}
 
-		public String LinkTo( String name, String controller, String action, object id )
+		public String LinkTo(String name, String controller, String action, object id)
 		{
 			String url = base.Controller.Context.ApplicationPath;
 			String extension = base.Controller.Context.UrlInfo.Extension;
 
-			return String.Format( "<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>", url, controller, action, extension, id, name );
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>", url, controller, action, extension, id, name);
 		}
 
-		public String Select( String name )
+		public String Select(String name)
 		{
 			return String.Format("<select name=\"{0}\" id=\"{0}\">", name);
 		}
@@ -207,7 +210,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			StringBuilder sb = new StringBuilder();
 
-			foreach(object elem in elems)
+			foreach (object elem in elems)
 			{
 				sb.AppendFormat("\t<option{0}>{1}</option>\r\n", elem.Equals(selected) ? " selected" : "", elem);
 			}
@@ -238,55 +241,55 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			StringBuilder sb = new StringBuilder();
 
-			foreach(object elem in elems)
+			foreach (object elem in elems)
 			{
 				object value = null;
-				
+
 				if (valueMethodInfo != null) value = valueMethodInfo.Invoke(elem, new object[0]);
-				
+
 				object text = textMethodInfo.Invoke(elem, new object[0]);
 
 				if (value != null)
 				{
-					sb.AppendFormat("\t<option {0} value=\"{1}\">{2}</option>\r\n", 
-						value.Equals(selected) ? "selected" : "", value, text);
+					sb.AppendFormat("\t<option {0} value=\"{1}\">{2}</option>\r\n",
+					                value.Equals(selected) ? "selected" : "", value, text);
 				}
 				else
 				{
-					sb.AppendFormat("\t<option {0}>{1}</option>\r\n", 
-						text.Equals(selected) ? "selected" : "", text);
+					sb.AppendFormat("\t<option {0}>{1}</option>\r\n",
+					                text.Equals(selected) ? "selected" : "", text);
 				}
 			}
 
 			return sb.ToString();
 		}
 
-		public static String BuildUnorderedList( String[] array )
+		public static String BuildUnorderedList(String[] array)
 		{
-			return BuildUnorderedList( array, null, null );
+			return BuildUnorderedList(array, null, null);
 		}
 
-		public static String BuildOrderedList( String[] array )
+		public static String BuildOrderedList(String[] array)
 		{
-			return BuildOrderedList( array, null, null );
+			return BuildOrderedList(array, null, null);
 		}
 
-		public static String BuildOrderedList( String[] array, String styleClass, String itemClass )
+		public static String BuildOrderedList(String[] array, String styleClass, String itemClass)
 		{
-			return BuildList( "ol", array, styleClass, itemClass );
+			return BuildList("ol", array, styleClass, itemClass);
 		}
 
-		public static String BuildUnorderedList( String[] array, String styleClass, String itemClass )
+		public static String BuildUnorderedList(String[] array, String styleClass, String itemClass)
 		{
-			return BuildList( "ul", array, styleClass, itemClass );
+			return BuildList("ul", array, styleClass, itemClass);
 		}
 
 		private static String BuildList(String tag, String[] array, String styleClass, String itemClass)
 		{
 			StringWriter sbWriter = new StringWriter();
-			HtmlTextWriter writer = new HtmlTextWriter( sbWriter );
+			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
-			writer.WriteBeginTag( tag );
+			writer.WriteBeginTag(tag);
 
 			if (styleClass != null)
 			{
@@ -296,12 +299,12 @@ namespace Castle.MonoRail.Framework.Helpers
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.WriteLine();
 
-			foreach(String item in array)
+			foreach (String item in array)
 			{
-				writer.WriteLine( BuildListItem( item, itemClass ) );
+				writer.WriteLine(BuildListItem(item, itemClass));
 			}
 
-			writer.WriteEndTag( tag );
+			writer.WriteEndTag(tag);
 			writer.WriteLine();
 
 			return sbWriter.ToString();
@@ -311,11 +314,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			if (itemClass == null)
 			{
-				return String.Format( "<li>{0}</li>", item );
+				return String.Format("<li>{0}</li>", item);
 			}
 			else
 			{
-				return String.Format( "<li class=\"{0}\">{1}</li>", itemClass, item );
+				return String.Format("<li class=\"{0}\">{1}</li>", itemClass, item);
 			}
 		}
 
@@ -324,7 +327,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (elem == null) throw new ArgumentNullException("elem");
 			if (property == null) return null;
 
-			return elem.GetType().GetMethod("get_" + property, BindingFlags.Instance|BindingFlags.Public|BindingFlags.IgnoreCase);
+			return elem.GetType().GetMethod("get_" + property, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
 		}
 	}
 }

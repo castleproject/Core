@@ -227,10 +227,14 @@ namespace Castle.MonoRail.Framework.Tests
 			if ( values != null )
 			{
 				foreach ( string s in values )
+				{
 					_context.Request.Params.Add( name, s );
+				}
 			}
 			else
+			{
 				_context.Request.Params.Add( name, null );
+			}
 
 			Assert.AreEqual("", _context.Response.Output.ToString());
 

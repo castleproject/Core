@@ -16,9 +16,8 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
-	
 	public interface IServerUtility
 	{
-		string HtmlEncode(string content);
+		String HtmlEncode(String content);
 	}
 }
