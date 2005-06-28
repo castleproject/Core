@@ -33,7 +33,6 @@ namespace Castle.MonoRail.Engine.Configuration
 		private String _customControllerFactory;
 		private String _customFilterFactory;
 		private String _customResourceFactory;
-		private String _customInstanceFactory;
 		private String _customEngineTypeName;
 		private String _scaffoldingTypeName = DefaultScaffoldType;
 
@@ -81,12 +80,6 @@ namespace Castle.MonoRail.Engine.Configuration
 			set { _customResourceFactory = value; }
 		}
 
-		public String CustomInstanceFactory
-		{
-			get { return _customInstanceFactory; }
-			set { _customInstanceFactory = value; }
-		}
-
 		public String CustomEngineTypeName
 		{
 			get { return _customEngineTypeName; }
@@ -123,15 +116,6 @@ namespace Castle.MonoRail.Engine.Configuration
 			{
 				return _customResourceFactory != null ?
 					Type.GetType(_customResourceFactory, false, false) : null;
-			}
-		}
-
-		public Type CustomInstanceFactoryType
-		{
-			get
-			{
-				return _customInstanceFactory != null ?
-					Type.GetType(_customInstanceFactory, false, false) : null;
 			}
 		}
 

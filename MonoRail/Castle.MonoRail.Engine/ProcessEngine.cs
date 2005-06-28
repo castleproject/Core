@@ -31,23 +31,21 @@ namespace Castle.MonoRail.Engine
 		private IViewEngine _viewEngine;
 		private IFilterFactory _filterFactory;
 		private IResourceFactory _resourceFactory;
-		private IInstanceFactory _instanceFactory;
 		private IScaffoldingSupport _scaffoldingSupport;
 
 		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine) : 
-			this(controllerFactory, viewEngine, new DefaultFilterFactory(), new DefaultResourceFactory(), new DefaultInstanceFactory(), null)
+			this(controllerFactory, viewEngine, new DefaultFilterFactory(), new DefaultResourceFactory(), null)
 		{
 		}
 
 		public ProcessEngine(IControllerFactory controllerFactory, 
 			IViewEngine viewEngine, IFilterFactory filterFactory, 
-			IResourceFactory resourceFactory, IInstanceFactory instanceFactory, IScaffoldingSupport scaffoldingSupport)
+			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport)
 		{
 			_controllerFactory = controllerFactory;
 			_viewEngine = viewEngine;
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
-			_instanceFactory = instanceFactory;
 			_scaffoldingSupport = scaffoldingSupport;
 		}
 
@@ -69,11 +67,6 @@ namespace Castle.MonoRail.Engine
 		public IResourceFactory ResourceFactory
 		{
 			get { return _resourceFactory; }
-		}
-
-		public IInstanceFactory InstanceFactory
-		{
-			get { return _instanceFactory; }
 		}
 
 		public IScaffoldingSupport ScaffoldingSupport
@@ -103,7 +96,7 @@ namespace Castle.MonoRail.Engine
 			try
 			{
 				controller.Process( 
-					context, _filterFactory, _resourceFactory, _instanceFactory,
+					context, _filterFactory, _resourceFactory, 
 					info.Area, info.Controller, info.Action, _viewEngine, _scaffoldingSupport );
 			}
 			finally

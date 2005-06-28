@@ -324,11 +324,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\DefaultInstanceFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Internal\DefaultResourceFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -345,11 +340,6 @@
                 />
                 <File
                     RelPath = "Internal\IFilterFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\IInstanceFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

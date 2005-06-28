@@ -30,15 +30,13 @@ namespace Castle.MonoRail.Framework
 	public class DataBinder
 	{
 		private IRailsEngineContext context;
-		private IInstanceFactory instanceFactory;
 
 		private String root = null;
 		private String parent = String.Empty;
 		
-		public DataBinder( IInstanceFactory instanceFactory, IRailsEngineContext context )
+		public DataBinder( IRailsEngineContext context )
 		{
 			this.context = context;
-			this.instanceFactory = instanceFactory;
 		}
 
 		public object BindObject( Type instanceType )
@@ -56,7 +54,7 @@ namespace Castle.MonoRail.Framework
 			if ( root == null ) root = instanceType.Name;
 
 			String prefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
-			object instance = instanceFactory.GetInstance( instanceType, context );
+			object instance = Activator.CreateInstance( instanceType );
 			
 			PropertyInfo[] props = instanceType.GetProperties( BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
 

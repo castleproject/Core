@@ -51,7 +51,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		{
 			context = controller.Context;
 
-			binder = new DataBinder(controller.InstanceFactory, controller.Context);
+			binder = new DataBinder(controller.Context);
 			
 			instance = binder.BindObject( Model.Type );
 

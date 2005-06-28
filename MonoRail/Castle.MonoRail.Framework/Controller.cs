@@ -74,11 +74,6 @@ namespace Castle.MonoRail.Framework
 		private IResourceFactory _resourceFactory;
 
 		/// <summary>
-		/// Reference to the <see cref="IInstanceFactory"/> instance
-		/// </summary>
-		protected IInstanceFactory _instanceFactory;
-
-		/// <summary>
 		/// The area name which was used to access this controller
 		/// </summary>
 		private String _areaName;
@@ -139,11 +134,6 @@ namespace Castle.MonoRail.Framework
 		#endregion
 
 		#region Usefull Properties
-
-		public IInstanceFactory InstanceFactory
-		{
-			get { return _instanceFactory; }
-		}
 
 		public ResourceDictionary Resources
 		{
@@ -410,7 +400,7 @@ namespace Castle.MonoRail.Framework
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory, IInstanceFactory instanceFactory,
+		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
 		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine, 
 							IScaffoldingSupport scaffoldSupport)
 		{
@@ -420,7 +410,6 @@ namespace Castle.MonoRail.Framework
 			_context = context;
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
-			_instanceFactory = instanceFactory;
 			_scaffoldSupport = scaffoldSupport;
 
 			if (GetType().IsDefined(typeof (FilterAttribute), true))

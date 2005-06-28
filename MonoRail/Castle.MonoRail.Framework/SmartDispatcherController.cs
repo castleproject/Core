@@ -59,10 +59,6 @@ namespace Castle.MonoRail.Framework
 		protected override void InternalSend(String action)
 		{
 			base.InternalSend( action );
-
-			// Release any bound instances
-			foreach ( object o in boundInstances.Keys )
-				_instanceFactory.Release( o, Context );
 		}
 
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
@@ -156,7 +152,7 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				DataBinder binder = new DataBinder( _instanceFactory, Context );
+				DataBinder binder = new DataBinder( Context );
 
 				for(int i=0; i < args.Length; i++)
 				{
