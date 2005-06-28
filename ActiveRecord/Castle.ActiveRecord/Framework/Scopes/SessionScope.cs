@@ -30,10 +30,15 @@ namespace Castle.ActiveRecord
 	{
 		protected override void PerformDisposal(ICollection sessions)
 		{
+			PerformDisposal(sessions, true, true);
+		}
+
+		protected internal void PerformDisposal( ICollection sessions, bool flush, bool close )
+		{
 			foreach(ISession session in sessions)
 			{
-				session.Flush();
-				session.Close();
+				if (flush) session.Flush();
+				if (close) session.Close();
 			}
 		}
 	}

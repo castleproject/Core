@@ -104,5 +104,12 @@ namespace Castle.ActiveRecord.Tests
 		{
 			return (Post[]) ActiveRecordBase.FindAll( typeof(Post) );
 		}
+
+		public void SaveWithException()
+		{
+			Save();
+
+			throw new ApplicationException("Fake Exception");
+		}
 	}
 }

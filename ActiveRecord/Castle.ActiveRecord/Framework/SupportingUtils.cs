@@ -19,24 +19,39 @@ namespace Castle.ActiveRecord.Framework
 
 	using NHibernate;
 
-
+	/// <summary>
+	/// Usefull for frameworks
+	/// </summary>
 	public abstract class SupportingUtils
 	{
-		public SupportingUtils()
-		{
-		}
-
 		public static IList FindAll( Type type )
 		{
 			ISession session = ActiveRecordBase._holder.CreateSession( type );
 
-			ICriteria criteria = session.CreateCriteria( type );
+			try
+			{
+				ICriteria criteria = session.CreateCriteria( type );
 
-			IList results = criteria.List();
+				return criteria.List();
+			}
+			finally
+			{
+				session.Close();
+			}
+		}
 
-			session.Close();
+		public static object FindByPK( Type type, object id )
+		{
+			ISession session = ActiveRecordBase._holder.CreateSession( type );
 
-			return results;
+			try
+			{
+				return session.Load( type, id );
+			}
+			finally
+			{
+				session.Close();
+			}
 		}
 	}
 }

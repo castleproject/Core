@@ -154,7 +154,7 @@ namespace Castle.ActiveRecord.Framework
 				System.Diagnostics.Debug.Assert( session != null );
 #endif
 
-				scope.RegisterSession(sessionFactory,  session);
+				scope.RegisterSession(sessionFactory, session);
 
 				return session;
 			}

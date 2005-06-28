@@ -121,5 +121,157 @@ namespace Castle.ActiveRecord.Tests
 			Post[] posts = Post.FindAll();
 			Assert.AreEqual( 1, posts.Length );
 		}
+
+		[Test]
+		public void RollbackUponException()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(TransactionScope transaction = new TransactionScope())
+			{
+				Blog blog = new Blog();
+				blog.Author = "hammett";
+				blog.Name = "some name";
+				blog.Save();
+
+				Post post = new Post(blog, "title", "post contents", "Castle");
+				
+				try
+				{
+					post.SaveWithException();
+				}
+				catch(Exception)
+				{
+					transaction.VoteRollBack();
+				}
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 0, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 0, posts.Length );
+		}
+
+		[Test]
+		public void NestedTransactions()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(TransactionScope root = new TransactionScope())
+			{
+				Blog blog = new Blog();
+
+				using(TransactionScope t1 = new TransactionScope(TransactionMode.Inherits))
+				{
+					blog.Author = "hammett";
+					blog.Name = "some name";
+					blog.Save();
+
+					t1.VoteCommit();
+				}
+
+				using(TransactionScope t2 = new TransactionScope(TransactionMode.Inherits))
+				{
+					Post post = new Post(blog, "title", "post contents", "Castle");
+				
+					try
+					{
+						post.SaveWithException();
+					}
+					catch(Exception)
+					{
+						t2.VoteRollBack();
+					}
+				}
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 0, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 0, posts.Length );
+		}
+
+		[Test]
+		public void LotsOsNestedTransactionWithDifferentConfigurations()
+		{
+			disableDrop = true;
+
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(TransactionScope root = new TransactionScope())
+			{
+				using(TransactionScope t1 = new TransactionScope()) // Isolated
+				{
+					Blog blog = new Blog();
+
+					Blog.FindAll(); // Just to force a session association
+
+					using(TransactionScope t1n = new TransactionScope(TransactionMode.Inherits))
+					{
+						Blog.FindAll(); // Just to force a session association
+
+						blog.Author = "hammett";
+						blog.Name = "some name";
+						blog.Save();
+					}
+
+					using(TransactionScope t1n = new TransactionScope(TransactionMode.Inherits))
+					{
+						Post post = new Post(blog, "title", "post contents", "Castle");
+				
+						post.Save();
+					}
+
+					t1.VoteRollBack();
+				}
+
+				Blog.FindAll(); // Cant be locked
+
+				using(TransactionScope t2 = new TransactionScope()) 
+				{
+					Blog blog = new Blog();
+					Blog.FindAll(); // Just to force a session association
+
+					using(TransactionScope t1n = new TransactionScope())
+					{
+						Blog.FindAll(); // Just to force a session association
+
+						blog.Author = "hammett";
+						blog.Name = "some name";
+						blog.Save();
+					}
+
+					using(TransactionScope t1n = new TransactionScope(TransactionMode.Inherits)) 
+					{
+						Post post = new Post(blog, "title", "post contents", "Castle");
+				
+						try{ post.SaveWithException(); } 
+						catch(Exception) { t1n.VoteRollBack(); }
+					}
+				}
+
+				root.VoteCommit();
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 1, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 0, posts.Length );
+		}
 	}
 }

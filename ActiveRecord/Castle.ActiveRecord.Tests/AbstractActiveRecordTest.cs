@@ -23,6 +23,8 @@ namespace Castle.ActiveRecord.Tests
 
 	public abstract class AbstractActiveRecordTest
 	{
+		protected bool disableDrop = false;
+
 		protected IConfigurationSource GetConfigSource()
 		{
 			return System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
@@ -36,6 +38,7 @@ namespace Castle.ActiveRecord.Tests
 		[TearDown]
 		public void Drop()
 		{
+			if (disableDrop) return;
 			try
 			{
 				ActiveRecordStarter.DropSchema();

@@ -12,19 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Framework.Scopes
+namespace Castle.ActiveRecord.Framework
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	[Serializable]
-	public class ScopeMachineryException : Exception
+	public class TransactionException : ActiveRecordException
 	{
-		public ScopeMachineryException(String message) : base(message)
+		public TransactionException(string message) : base(message)
 		{
 		}
 
-		public ScopeMachineryException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public TransactionException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
+		public TransactionException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

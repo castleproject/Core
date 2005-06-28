@@ -16,8 +16,27 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 
 	using NHibernate;
+
+	using Castle.ActiveRecord.Framework.Scopes;
+
+	/// <summary>
+	/// Defines the transaction scope behavior
+	/// </summary>
+	public enum TransactionMode
+	{
+		/// <summary>
+		/// Inherits a transaction previously create on 
+		/// the current context.
+		/// </summary>
+		Inherits,
+		/// <summary>
+		/// Always create an isolated transaction context.
+		/// </summary>
+		New
+	}
 
 	/// <summary>
 	/// Implementation of <see cref="ISessionScope"/> to 
@@ -25,34 +44,112 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public class TransactionScope : SessionScope
 	{
-		private IList _transactions = new ArrayList();
+		private readonly TransactionMode mode;
+		private IDictionary _transactions = new HybridDictionary();
 		private bool _rollbackOnly;
+		private TransactionScope parentScope;
 
-		public TransactionScope()
+		public TransactionScope(TransactionMode mode)
+		{
+			this.mode = mode;
+
+			if (mode == TransactionMode.Inherits)
+			{
+				object[] items = ThreadScopeInfo.CurrentStack.ToArray();
+
+				for(int i=0; i < items.Length; i++)
+				{
+					if (items[i] is TransactionScope && items[i] != this)
+					{
+						parentScope = items[i] as TransactionScope;
+						break;
+					}
+				}
+			}
+		}
+
+		public TransactionScope() : this(TransactionMode.New)
 		{
 		}
 
 		public void VoteRollBack()
 		{
+			if (mode == TransactionMode.Inherits && parentScope != null)
+			{
+				parentScope.VoteRollBack();
+			}
 			_rollbackOnly = true;
 		}
 
 		public void VoteCommit()
 		{
-			// Nothing to do as it's always assuming commit
+			if (_rollbackOnly)
+			{
+				throw new TransactionException("The transaction was marked as rollback only - by itself or one of the nested transactions");
+			}
+		}
+
+		public override bool IsKeyKnown(object key)
+		{
+			if (mode == TransactionMode.Inherits && parentScope != null)
+			{
+				return parentScope.IsKeyKnown(key);
+			}
+
+			return base.IsKeyKnown(key);
+		}
+
+		public override void RegisterSession(object key, ISession session)
+		{
+			if (mode == TransactionMode.Inherits && parentScope != null)
+			{
+				parentScope.RegisterSession(key, session);
+			}
+
+			base.RegisterSession(key, session);
+		}
+
+		public override ISession GetSession(object key)
+		{
+			if (mode == TransactionMode.Inherits && parentScope != null)
+			{
+				return parentScope.GetSession(key);
+			}
+
+			return base.GetSession(key);
+		}
+
+		protected void EnsureHasTransaction(ISession session)
+		{
+			if (!_transactions.Contains(session))
+			{
+				session.FlushMode = FlushMode.Commit;
+				ITransaction transaction = session.BeginTransaction();
+
+				_transactions.Add(session, transaction);
+			}
 		}
 
 		protected override void Initialize(ISession session)
 		{
-			session.FlushMode = FlushMode.Commit;
-			ITransaction transaction = session.BeginTransaction();
+			if (mode == TransactionMode.Inherits && parentScope != null)
+			{
+				parentScope.EnsureHasTransaction(session);
+				return;
+			}
 
-			_transactions.Add(transaction);
+			EnsureHasTransaction(session);
 		}
 
 		protected override void PerformDisposal(ICollection sessions)
 		{
-			foreach(ITransaction transaction in _transactions)
+			if (mode == TransactionMode.Inherits && parentScope != null)
+			{
+				// In this case it's not up to this instance to perform the clean up
+				return;
+			}
+
+			foreach(ITransaction transaction in _transactions.Values)
 			{
 				if (_rollbackOnly)
 				{
@@ -64,7 +161,9 @@ namespace Castle.ActiveRecord
 				}
 			}
 
-			base.PerformDisposal(sessions);
+			// No flush necessary, but we should close the session
+
+			base.PerformDisposal(sessions, false, true);
 		}
 	}
 }

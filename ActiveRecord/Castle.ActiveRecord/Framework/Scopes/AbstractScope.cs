@@ -31,19 +31,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			ThreadScopeInfo.RegisterScope(this);
 		}
 
-		public bool IsKeyKnown(object key)
+		public virtual bool IsKeyKnown(object key)
 		{
 			return _key2Session.Contains(key);
 		}
 
-		public void RegisterSession(object key, ISession session)
+		public virtual void RegisterSession(object key, ISession session)
 		{
 			_key2Session[key] = session;
 
 			Initialize(session);
 		}
 
-		public ISession GetSession(object key)
+		public virtual ISession GetSession(object key)
 		{
 			return _key2Session[key] as ISession;
 		}
