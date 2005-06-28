@@ -84,7 +84,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String LinkToAbsolute(String name, String action)
 		{
-			return LinkTo(name, base.Controller.Name, action);
+			return LinkToAbsolute(name, base.Controller.Name, action);
 		}
 
 		public String LinkToAbsolute(String name, String controller, String action)
