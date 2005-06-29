@@ -19,12 +19,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 
 	using NUnit.Framework;
 
-	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework;
-
 	using Castle.MonoRail.Engine.Tests;
-
-	using TestScaffolding.Model;
 
 
 	[TestFixture]

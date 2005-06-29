@@ -15,30 +15,65 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
+	using System.Text;
+
+	using Castle.ActiveRecord.Framework;
 
 	using Castle.MonoRail.Framework;
 
 
-	public class ConfirmRemoveAction : AbstractScaffoldAction
+	/// <summary>
+	/// Displays a confirmation message before performing 
+	/// the removal of the instance
+	/// </summary>
+	/// <remarks>
+	/// Searchs for a template named <c>confirm{name}</c>
+	/// </remarks>
+	public class ConfirmRemoveAction : EditAction
 	{
 		public ConfirmRemoveAction(Type modelType) : base(modelType)
 		{
-
 		}
 
 		protected override string ComputeTemplateName(Controller controller)
 		{
-			throw new NotImplementedException();
+			return String.Format(@"{0}\confirm{1}remove", controller.Name, Model.Type.Name);
 		}
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			throw new NotImplementedException();
+			ReadPkFromParams(controller);
+
+			try
+			{
+				instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				
+				controller.PropertyBag["armodel"] = Model;
+				controller.PropertyBag["item"] = instance;
+			}
+			catch(Exception ex)
+			{
+				throw new ScaffoldException("Could not obtain instance by using this id", ex);
+			}
 		}
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			throw new NotImplementedException();
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append("<p>");
+
+			sb.AppendFormat("Confirm removal of {0} ?", instance.ToString());
+
+			sb.Append("</p>");
+
+			sb.Append("<p>");
+			sb.Append( helper.LinkTo( "Yes", controller.Name, "remove" + Model.Type.Name, idVal ) );
+			sb.Append("  |  ");
+			sb.Append( helper.LinkTo( "No", "list" + Model.Type.Name ) );
+			sb.Append("</p>");
+
+			controller.DirectRender(sb.ToString());
 		}
 	}
 }

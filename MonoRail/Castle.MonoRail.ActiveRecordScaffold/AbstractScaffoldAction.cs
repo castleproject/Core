@@ -96,9 +96,16 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected void ObtainPKProperty()
 		{
-			foreach(PrimaryKeyModel keyModel in Model.Ids)
+			ActiveRecordModel curModel = model;
+
+			while (keyProperty == null && curModel != null)
 			{
-				keyProperty = keyModel.Property;
+				foreach(PrimaryKeyModel keyModel in curModel.Ids)
+				{
+					keyProperty = keyModel.Property;
+				}
+
+				curModel = curModel.Parent;
 			}
 		}
 	}

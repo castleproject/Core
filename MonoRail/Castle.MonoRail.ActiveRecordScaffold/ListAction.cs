@@ -116,7 +116,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 					sb.Append( "\r\n\t\t<td align=\"center\">" );
 					sb.Append( helper.LinkTo( "Edit", controller.Name, "edit" + name, idVal ) );
 					sb.Append( " | " );
-					sb.Append( helper.LinkTo( "Delete", controller.Name, "remove" + name, idVal ) );
+					sb.Append( helper.LinkTo( "Delete", controller.Name, "confirm" + name, idVal ) );
 					sb.Append( "</td>" );
 				}
 				else
@@ -162,11 +162,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		private IList ObtainListableProperties(ActiveRecordModel model)
 		{
-			IList properties = new ArrayList();
+			ArrayList properties = new ArrayList();
 	
-			foreach(PrimaryKeyModel keyModel in model.Ids)
+			ObtainPKProperty();
+
+			if (model.Parent != null)
 			{
-				keyProperty = keyModel.Property;
+				properties.AddRange( ObtainListableProperties(model.Parent) );
 			}
 	
 			foreach(PropertyModel propModel in model.Properties)

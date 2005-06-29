@@ -73,7 +73,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			sb.Append( helper.FieldSet( fieldSetTitle + " " + name + ':' ) );
 
-			RecursiveGenerateHtmlForm( model, model.Type, instance, controller, sb );
+			RecursiveGenerateHtmlForm( name, model, model.Type, instance, controller, sb );
 		
 			sb.Append( helper.EndFieldSet() );
 
@@ -100,13 +100,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			                                      name, controller.Context.UrlInfo.Extension) ) );
 		}
 
-		protected void RecursiveGenerateHtmlForm(ActiveRecordModel model, Type type, object instance, Controller controller, StringBuilder sb)
+		protected void RecursiveGenerateHtmlForm(String name, ActiveRecordModel model, Type type, object instance, Controller controller, StringBuilder sb)
 		{
 			if ( type.BaseType != typeof(object) && 
 				type.BaseType != typeof(ActiveRecordBase) && 
 				type.BaseType != typeof(ActiveRecordValidationBase) )
 			{
-				RecursiveGenerateHtmlForm( ActiveRecordBase._GetModel( type.BaseType ), type.BaseType, instance, controller, sb );
+				RecursiveGenerateHtmlForm( name, ActiveRecordBase._GetModel( type.BaseType ), type.BaseType, instance, controller, sb );
 			}
 
 			foreach( PropertyModel prop in model.Properties )
@@ -136,7 +136,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				}
 				else
 				{
-					RenderHtmlControl(propType, prop, sb, model.Type.Name + "." + propName, value);
+					RenderHtmlControl(propType, prop, sb, name + "." + propName, value);
 				}
 
 				sb.Append( "</p>\r\n" );
@@ -174,7 +174,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 				sb.Append( helper.FieldSet( nested.Property.Name + ':' ) );
 				
-				RecursiveGenerateHtmlForm( nested.Model, nested.Model.Type, nestedInstance, controller, sb );
+				RecursiveGenerateHtmlForm( nested.Property.Name, nested.Model, nested.Model.Type, nestedInstance, controller, sb );
 		
 				sb.Append( helper.EndFieldSet() );
 			}
