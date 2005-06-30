@@ -131,7 +131,7 @@ return c;
 
 var oldonload = window.onload;
 if (typeof window.onload != 'function')
-	window.onload = func;
+	window.onload = oldonload;
 else
 	window.onload = function()
 	{
