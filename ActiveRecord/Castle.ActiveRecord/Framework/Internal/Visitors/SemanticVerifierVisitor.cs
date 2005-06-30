@@ -1,4 +1,3 @@
-using System.Reflection;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +16,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Collections;
+	using System.Reflection;
 
 	using Iesi.Collections;
-	
+
+	/// <summary>
+	/// Traverse the tree checking the semantics of the relation and
+	/// association. The goal is to raise clear exceptions if tips of how 
+	/// to fix any error.
+	/// </summary>
 	public class SemanticVerifierVisitor : AbstractDepthFirstVisitor
 	{
 		private readonly ActiveRecordModelCollection arCollection;

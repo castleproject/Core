@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 
 	/// <summary>
-	/// 
+	/// Traverse the tree emitting proper xml configuration
 	/// </summary>
 	public class XmlGenerationVisitor : AbstractDepthFirstVisitor
 	{
@@ -428,6 +428,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeTypeAtt(PropertyInfo prop, String typeName)
 		{
+			if (prop.PropertyType.IsEnum) return String.Empty;
+
 			if (typeName != null)
 			{
 				return MakeAtt("type", typeName);

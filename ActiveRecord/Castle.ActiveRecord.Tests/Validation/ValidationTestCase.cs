@@ -94,5 +94,34 @@ namespace Castle.ActiveRecord.Tests.Validation
 
 			blog.Save();
 		}
+
+		[Test]
+		public void Hierarchy()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Person), typeof(Customer) );
+			// Recreate();
+
+			Person p1 = new Person();
+			
+			Assert.IsFalse( p1.IsValid() );
+
+			p1.Name = "hammett";
+			p1.Age = 25;
+
+			Assert.IsTrue( p1.IsValid() );
+
+			Customer c1 = new Customer();
+
+			Assert.IsFalse( c1.IsValid() );
+
+			c1.ContactName = "someone";
+			c1.Phone = "11";
+
+			Assert.IsFalse( c1.IsValid() );
+
+			c1.Name = "hammett";
+
+			Assert.IsTrue( c1.IsValid() );
+		}
 	}
 }

@@ -44,6 +44,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					{
 						child.IsDiscriminatorSubClass = child.Key == null;
 						child.IsJoinedSubClass = child.Key != null;
+						child.Parent = model;
 
 						if (child.Key != null)
 						{

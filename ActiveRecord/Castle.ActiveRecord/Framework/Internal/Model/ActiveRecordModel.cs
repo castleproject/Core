@@ -28,6 +28,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private bool isJoinedSubClass;
 		private bool isNestedType;
 		private ActiveRecordAttribute arAtt;
+		private ActiveRecordModel parent;
 		private IList ids = new ArrayList();
 		private IList properties = new ArrayList();
 		private IList classes = new ArrayList();
@@ -48,6 +49,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public ActiveRecordModel(Type type)
 		{
 			this.type = type;
+		}
+
+		public ActiveRecordModel Parent
+		{
+			get { return parent; }
+			set { parent = value; }
 		}
 
 		public Type Type

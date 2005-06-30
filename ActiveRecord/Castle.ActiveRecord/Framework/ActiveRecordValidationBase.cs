@@ -28,7 +28,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// List of validators that should be executed for this class
 		/// </summary>
-		private IList __validators;
+		private ArrayList __validators = new ArrayList();
 
 		private IDictionary __failedProperties;
 
@@ -58,7 +58,14 @@ namespace Castle.ActiveRecord
 				throw new ActiveRecordException("Seems that the framework wasn't initialized properly. (ActiveRecordModel could not obtained)");
 			}
 
-			__validators = model.Validators;
+			__validators.AddRange( model.Validators );
+
+			while( model.Parent != null )
+			{
+				__validators.AddRange( model.Parent.Validators );
+
+				model = model.Parent;
+			}
 		}
 
 		/// <summary>

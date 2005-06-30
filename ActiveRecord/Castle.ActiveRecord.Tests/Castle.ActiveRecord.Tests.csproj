@@ -239,6 +239,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Validation\Model\Customer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Validation\Model\Person.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Validation\Model\User.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

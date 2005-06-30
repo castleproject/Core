@@ -204,8 +204,6 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void LotsOsNestedTransactionWithDifferentConfigurations()
 		{
-			disableDrop = true;
-
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
 			Recreate();
 
