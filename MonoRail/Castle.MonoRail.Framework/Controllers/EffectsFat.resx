@@ -130,14 +130,14 @@ return c;
 }
 
 var oldonload = window.onload;
-if (typeof window.onload != 'function')
-	window.onload = oldonload;
-else
-	window.onload = function()
-	{
-		oldonload();
-		Fat.fade_all();
-	}
+if (typeof window.onload != 'function') {
+ 	window.onload = function() { Fat.fade_all(); };
+} else {
+ 	window.onload = function() {
+ 		oldonload();
+ 		Fat.fade_all();
+	};
+}
 ]]>
 </value>
 </data>
