@@ -160,7 +160,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\ClassWithIndexer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\ClassWithMarkerInterface.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\ClassWithProtectedMethods.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -171,6 +181,16 @@
                 />
                 <File
                     RelPath = "Classes\ClassWithSByteEnum.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\DummyReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\IDataReaderProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

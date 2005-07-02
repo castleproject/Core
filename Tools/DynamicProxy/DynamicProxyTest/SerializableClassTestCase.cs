@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Test
 	using System.Collections;
 	using System.IO;
 	using System.Runtime.Serialization.Formatters.Binary;
-
+	using Castle.DynamicProxy.Serialization;
 	using NUnit.Framework;
 
 	using Castle.DynamicProxy.Test.Classes;
@@ -43,6 +43,8 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void CreateSerializable()
 		{
+			ProxyObjectReference.ResetScope();
+
 			MySerializableClass proxy = (MySerializableClass) 
 				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInterceptor() );
 
@@ -52,6 +54,8 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void SimpleProxySerialization()
 		{
+			ProxyObjectReference.ResetScope();
+
 			MySerializableClass proxy = (MySerializableClass) 
 				generator.CreateClassProxy( typeof(MySerializableClass), new StandardInterceptor() );
 
@@ -65,6 +69,8 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void SerializationDelegate()
 		{
+			ProxyObjectReference.ResetScope();
+
 			MySerializableClass2 proxy = (MySerializableClass2) 
 				generator.CreateClassProxy( typeof(MySerializableClass2), new StandardInterceptor() );
 
@@ -78,6 +84,8 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void SimpleInterfaceProxy()
 		{
+			ProxyObjectReference.ResetScope();
+
 			object proxy = generator.CreateProxy( 
 				typeof(IMyInterface), new StandardInterceptor( ), new MyInterfaceImpl() );
 
@@ -99,6 +107,8 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void CustomMarkerInterface()
 		{
+			ProxyObjectReference.ResetScope();
+
 			ClassProxyGenerator classGenerator = new ClassProxyGenerator( 
 				new ModuleScope(), new GeneratorContext() );
 			
@@ -118,6 +128,8 @@ namespace Castle.DynamicProxy.Test
 		[Category("DotNetOnly")]
 		public void MixinSerialization()
 		{
+			ProxyObjectReference.ResetScope();
+
 			GeneratorContext context = new GeneratorContext();
 			SimpleMixin mixin1 = new SimpleMixin();
 			OtherMixin mixin2 = new OtherMixin();
@@ -153,6 +165,8 @@ namespace Castle.DynamicProxy.Test
 		[Ignore("XmlSerializer does not respect the ObjectReference protocol so it wont work")]
 		public void XmlSerialization()
 		{
+			ProxyObjectReference.ResetScope();
+
 			GeneratorContext context = new GeneratorContext();
 			SimpleMixin mixin1 = new SimpleMixin();
 			OtherMixin mixin2 = new OtherMixin();
@@ -179,6 +193,8 @@ namespace Castle.DynamicProxy.Test
 		[Test]
 		public void HashtableSerialization()
 		{
+			ProxyObjectReference.ResetScope();
+
 			object proxy = generator.CreateClassProxy( 
 				typeof(Hashtable), new StandardInterceptor() );
 

@@ -26,7 +26,6 @@ namespace Castle.DynamicProxy.Test
 	/// Summary description for CachedTypeTestCase.
 	/// </summary>
 	[TestFixture]
-//	[Ignore("To compile on Mono")]
 	[Category("DotNetOnly")]
 	public class MixinTestCase
 	{

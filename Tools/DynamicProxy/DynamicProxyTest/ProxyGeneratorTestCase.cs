@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Test
 {
 	using System;
 	using System.Collections;
+	using System.Data;
 
 	using NUnit.Framework;
 
@@ -293,7 +294,7 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		[Ignore("To compile on Mono")]
+		[Category("DotNetOnly")]
 		public void ProxyForRefAndOutClass()
 		{
 			LogInvokeInterceptor interceptor = new LogInvokeInterceptor();
@@ -313,6 +314,31 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual(2, arg2);
 
 			Assert.AreEqual("RefPongOne OutPingTwo ", interceptor.LogContents);
+		}
+
+		[Test]
+		public void ProtectedProperties()
+		{
+			object proxy = _generator.CreateClassProxy( 
+				typeof(ClassWithProtectedMethods), new StandardInterceptor() );
+
+			Assert.IsTrue( proxy is ClassWithProtectedMethods );
+		}
+
+		[Test]
+		public void Indexer()
+		{
+			object proxy = _generator.CreateClassProxy( 
+				typeof(ClassWithIndexer), new StandardInterceptor() );
+
+			Assert.IsTrue( proxy is ClassWithIndexer );
+			
+		}
+
+		[Test]
+		public void IDataReaderProxyGeneration()
+		{
+			IDataReader reader = IDataReaderProxy.NewInstance( new DummyReader() );
 		}
 	}
 }
