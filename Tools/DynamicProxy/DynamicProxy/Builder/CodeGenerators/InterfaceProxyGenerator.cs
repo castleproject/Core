@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -128,14 +129,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			{
 				constructor = MainTypeBuilder.CreateConstructor( arg1, arg2 );
 			}
+			
+			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg3);
 
 			constructor.CodeBuilder.InvokeBaseConstructor();
 
 			constructor.CodeBuilder.AddStatement( new AssignStatement(
 				_targetField, arg2.ToExpression()) );
 
-			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg3);
-			
+			constructor.CodeBuilder.AddStatement( new ReturnStatement() );
+
 			return constructor;
 		}
 

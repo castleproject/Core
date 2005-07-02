@@ -87,10 +87,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			EasyConstructor constructor = MainTypeBuilder.CreateConstructor( 
 				(ArgumentReference[]) arguments.ToArray( typeof(ArgumentReference) ) );
 
+			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg2);
+
 			constructor.CodeBuilder.InvokeBaseConstructor( baseConstructor, originalArguments );
 
-			GenerateConstructorCode(constructor.CodeBuilder, arg1, SelfReference.Self, arg2);
-		
+			constructor.CodeBuilder.AddStatement( new ReturnStatement() );
+
+
 			return constructor;
 		}
 

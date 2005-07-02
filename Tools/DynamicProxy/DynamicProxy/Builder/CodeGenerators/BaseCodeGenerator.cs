@@ -318,10 +318,6 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			codebuilder.AddStatement( new AssignStatement(
 				InterceptorField, interceptorArg.ToExpression()) );
 
-			codebuilder.AddStatement( new AssignStatement(
-				CacheField, new NewInstanceExpression(
-					typeof(HybridDictionary).GetConstructor( new Type[0] )) ) );
-
 			int mixins = Context.MixinsAsArray().Length;
 
 			codebuilder.AddStatement( new AssignStatement(
@@ -336,14 +332,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 						new LoadRefArrayElementExpression(i, mixinArray)) );
 				}
 			}
+			
+			codebuilder.AddStatement( new AssignStatement(
+				CacheField, new NewInstanceExpression(
+				typeof(HybridDictionary).GetConstructor( new Type[0] )) ) );
 
 			// Initialize the delegate fields
 			foreach(CallableField field in _cachedFields)
 			{
 				field.WriteInitialization(codebuilder, targetArgument, mixinArray);
 			}
-
-			codebuilder.AddStatement( new ReturnStatement() );
 		}
 
 		protected ConstructorInfo ObtainAvailableConstructor(Type target)

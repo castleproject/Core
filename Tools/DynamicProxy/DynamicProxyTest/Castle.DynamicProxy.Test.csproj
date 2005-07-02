@@ -110,6 +110,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ClassWithCtorAndVirtualCall.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "EasyTypeBuilderTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
