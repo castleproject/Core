@@ -25,6 +25,12 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using Castle.ActiveRecord.Framework.Internal;
 
 
+	/// <summary>
+	/// Renders a list of entities
+	/// </summary>
+	/// <remarks>
+	/// Searchs for a template named <c>list{name}</c>
+	/// </remarks>
 	public class ListAction : AbstractScaffoldAction
 	{
 		public ListAction(Type modelType) : base(modelType)

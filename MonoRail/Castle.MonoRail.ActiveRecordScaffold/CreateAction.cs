@@ -15,16 +15,18 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Reflection;
 	using System.Collections;
-	using System.Collections.Specialized;
 
 	using Castle.MonoRail.Framework;
 
 	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework.Internal;
 
-
+	/// <summary>
+	/// Performs the inclusion
+	/// </summary>
+	/// <remarks>
+	/// Searchs for a template named <c>create{name}</c>
+	/// </remarks>
 	public class CreateAction : NewAction
 	{
 		private ArrayList errors = new ArrayList();
@@ -108,107 +110,5 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				instanceBase.Save();
 			}
 		}
-
-//		private void RecursiveSetData(object instance, ActiveRecordModel model, NameValueCollection valueCollection)
-//		{
-//			Type type = model.Type;
-//
-//			if ( type.BaseType != typeof(object) && 
-//				 type.BaseType != typeof(ActiveRecordBase) && 
-//				 type.BaseType != typeof(ActiveRecordValidationBase) )
-//			{
-//				RecursiveSetData( instance, ActiveRecordBase._GetModel( type.BaseType ), valueCollection );
-//			}
-//
-//			foreach( PropertyModel prop in model.Properties )
-//			{
-//				object value = DataBinder.Convert( 
-//					prop.Property.PropertyType, valueCollection[prop.Property.Name], prop.Property.Name, null, context );
-//
-//				if (value == null) continue;
-//
-//				prop.Property.SetValue( instance, value, null );
-//			}
-//
-//			foreach( PropertyInfo prop in model.NotMappedProperties )
-//			{
-//				object value = DataBinder.Convert( 
-//					prop.PropertyType, valueCollection[prop.Name], prop.Name, null, context );
-//
-//				if (value == null) continue;
-//
-//				prop.SetValue( instance, value, null );
-//			}
-//
-//			foreach( NestedModel nested in model.Components )
-//			{
-//				object nestedInstace = nested.Property.GetGetMethod().Invoke( instance, null );
-//
-//				if (nestedInstace == null)
-//				{
-//					nestedInstace = Activator.CreateInstance( nested.Property.PropertyType );
-//					nested.Property.SetValue( instance, nestedInstace, null );
-//				}
-//
-//				RecursiveSetData( nestedInstace, nested.Model, valueCollection );
-//			}
-//		}
-
-//		private object GetConvertedValue(String name, Type type, NameValueCollection collection)
-//		{
-//			if (type == typeof(DateTime))
-//			{
-//				String day = collection[name + "day"];
-//				String month = collection[name + "month"];
-//				String year = collection[name + "year"];
-//
-//				try
-//				{
-//					return new DateTime( Convert.ToInt32(year), Convert.ToInt32(month), Convert.ToInt32(day) );
-//				}
-//				catch(Exception)
-//				{
-//					errors.Add( "Invalid date." );
-//					return null;
-//				}
-//			}
-//			else
-//			{
-//				return DataBinder.Convert(type, )
-//
-//				String value = collection[name];
-//
-//				if (value == null) return null;
-//
-//				if (type == typeof(String))
-//				{
-//					return value;
-//				}
-//				else if (type == typeof(Int16))
-//				{
-//					return Convert.ToInt16( value );
-//				}
-//				else if (type == typeof(Int32))
-//				{
-//					return Convert.ToInt32( value );
-//				} 
-//				else if (type == typeof(Int64))
-//				{
-//					return Convert.ToInt64( value );
-//				}
-//				else if (type == typeof(Single))
-//				{
-//					return Convert.ToSingle( value );
-//				}
-//				else if (type == typeof(Double))
-//				{
-//					return Convert.ToDouble( value );
-//				}
-//				else 
-//				{
-//					throw new ArgumentException("Type " + type.FullName + " is not handled yet");
-//				}
-//			}
-//		}
 	}
 }

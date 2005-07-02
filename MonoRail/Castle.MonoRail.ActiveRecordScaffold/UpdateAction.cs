@@ -22,9 +22,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using Castle.ActiveRecord;
 
 
+	/// <summary>
+	/// Performs the update
+	/// </summary>
+	/// <remarks>
+	/// Searchs for a template named <c>create{name}</c>
+	/// </remarks>
 	public class UpdateAction : EditAction
 	{
-		private IRailsEngineContext context;
+		// private IRailsEngineContext context;
 		private ArrayList errors = new ArrayList();
 		private DataBinder binder;
 
@@ -47,8 +53,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		protected override void PerformActionProcess(Controller controller)
 		{
 			ReadPkFromParams(controller);
-
-			context = controller.Context;
 
 			binder = new DataBinder(controller.Context);
 			

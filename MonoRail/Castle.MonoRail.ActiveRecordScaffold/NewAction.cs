@@ -26,6 +26,12 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using Castle.MonoRail.Framework.Helpers;
 
 
+	/// <summary>
+	/// Renders an inclusion form
+	/// </summary>
+	/// <remarks>
+	/// Searchs for a template named <c>new{name}</c>
+	/// </remarks>
 	public class NewAction : AbstractScaffoldAction
 	{
 		protected object instance;

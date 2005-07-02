@@ -16,14 +16,17 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 	using System.Text;
-	using System.Reflection;
 
 	using Castle.MonoRail.Framework;
 
 	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Framework.Internal;
 
-
+	/// <summary>
+	/// Renders an edit form
+	/// </summary>
+	/// <remarks>
+	/// Searchs for a template named <c>edit{name}</c>
+	/// </remarks>
 	public class EditAction : NewAction
 	{
 		protected object idVal;

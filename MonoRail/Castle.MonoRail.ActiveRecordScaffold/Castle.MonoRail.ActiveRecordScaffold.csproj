@@ -104,11 +104,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AjaxScaffoldingSupport.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -122,6 +117,10 @@
                     RelPath = "CreateAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.build"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "EditAction.cs"

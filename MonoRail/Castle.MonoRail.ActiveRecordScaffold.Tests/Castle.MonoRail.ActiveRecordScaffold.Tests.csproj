@@ -125,6 +125,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "bloglist.txt"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Castle.MonoRail.ActiveRecordScaffold.Tests.dll.config"
                     BuildAction = "None"
                 />

@@ -1,0 +1,87 @@
+<html>
+<head>
+  <style>
+
+	body
+	{
+		font-family: Verdana, Arial;
+		font-size: small;
+		background-color: white;
+	}
+	th
+	{
+		background-color: #DDDDDD;
+		font-size: small;
+	}
+	td
+	{
+		font-size: small;
+		border-left:  #A0A0A0 0.5px solid;
+		border-right: #C0C0C0 0.5px solid;
+	}
+	.errorList
+	{
+	}
+	.errorMessage
+	{
+		color: #993333;
+	}
+	.scaffoldrow
+	{
+		background-color: #C0C0C0;
+	}
+	.scaffoldaltrow
+	{
+		background-color: White;
+	}
+
+  </style>
+</head>
+
+<body>
+
+  <table class="scaffoldtable" cellpadding="2" cellspacing="0" border="0" width="100%">
+	<tr>		<th>&nbsp;</th>
+		<th>Name</th>
+		<th>Author</th>
+		<th>&nbsp;</th>
+	</tr>
+
+	<tr class="scaffoldaltrow">
+		<td align="center">1</td>
+		<td>Name 1</td>
+		<td>Author 1</td>
+		<td align="center"><a href="/blogs/editBlog.rails?id=1">Edit</a> | <a href="/blogs/confirmBlog.rails?id=1">Delete</a></td>
+	</tr>
+	<tr class="scaffoldrow">
+		<td align="center">2</td>
+		<td>Name 2</td>
+		<td>Author 2</td>
+		<td align="center"><a href="/blogs/editBlog.rails?id=2">Edit</a> | <a href="/blogs/confirmBlog.rails?id=2">Delete</a></td>
+	</tr>
+	<tr class="scaffoldaltrow">
+		<td align="center">3</td>
+		<td>Name 3</td>
+		<td>Author 3</td>
+		<td align="center"><a href="/blogs/editBlog.rails?id=3">Edit</a> | <a href="/blogs/confirmBlog.rails?id=3">Delete</a></td>
+	</tr>
+	<tr class="scaffoldrow">
+		<td align="center">4</td>
+		<td>Name 4</td>
+		<td>Author 4</td>
+		<td align="center"><a href="/blogs/editBlog.rails?id=4">Edit</a> | <a href="/blogs/confirmBlog.rails?id=4">Delete</a></td>
+	</tr>
+	<tr class="scaffoldaltrow">
+		<td align="center">5</td>
+		<td>Name 5</td>
+		<td>Author 5</td>
+		<td align="center"><a href="/blogs/editBlog.rails?id=5">Edit</a> | <a href="/blogs/confirmBlog.rails?id=5">Delete</a></td>
+	</tr>
+</table>
+<p>
+<a href="/blogs/newBlog.rails">New</a></p>
+
+
+</body>
+
+</html>

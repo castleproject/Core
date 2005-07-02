@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="rails-testsitescaffolding" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin2.dir" value="${base.dir}/bin" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="name" value="TestScaffolding" />
+	<property name="assembly.name" value="${name}.dll" />
+
+	<property name="version" value="1.0.0.0" />
+
+	<target name="clean">
+		<delete dir="${bin2.dir}" failonerror="false" />
+		<mkdir dir="${bin2.dir}"/>
+	</target>
+
+	<target name="init" depends="clean">
+		<copy todir="${bin2.dir}">
+			<fileset basedir="../bin">
+				<include name="Castle.MonoRail.Engine.dll" />
+				<include name="Castle.MonoRail.Framework.dll" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="Castle.MonoRail.ActiveRecordScaffold.dll" />
+				<include name="Commons.dll" />
+				<include name="log4net.dll" />
+				<include name="NVelocity.dll" />
+				<include name="Castle.ActiveRecord.dll" />
+				<include name="Castle.Model.dll" />
+				<include name="HashCodeProvider.dll" />
+				<include name="Iesi.Collections.dll" />
+				<include name="log4net.dll" />
+				<include name="NHibernate.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build" depends="init,compile" />
+	
+	<target name="compile" depends="init">
+		<csc 
+			define="STRONG"
+			target="library" 
+			output="${bin2.dir}/${assembly.name}">
+			
+			<sources basedir="${src.dir}">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin2.dir}/Castle.MonoRail.Engine.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.ActiveRecordScaffold.dll" />
+				<include name="${bin2.dir}/Castle.ActiveRecord.dll" />
+				<include name="${bin2.dir}/Commons.dll" />
+				<include name="${bin2.dir}/log4net.dll" />
+				<include name="${bin2.dir}/NVelocity.dll" />
+			</references>
+		</csc>
+		<copy todir="../bin">
+			<fileset basedir="${bin2.dir}">
+				<include name="${assembly.name}" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>

@@ -3,8 +3,11 @@ Change history
 Beta 3
 ------
 
+- Databind
+- Initial Scaffolding support
 - Routing feature
 - Localization support
+- More helpers and improvements
 
 
 Beta 2

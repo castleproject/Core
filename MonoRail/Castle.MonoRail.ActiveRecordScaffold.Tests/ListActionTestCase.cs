@@ -23,7 +23,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 
 
 	[TestFixture]
-	public class ListActionTestCase : AbstractCassiniTestCase
+	public class BlogTestCase : AbstractCassiniTestCase
 	{
 		[Test]
 		public void ListBlog()
@@ -31,10 +31,52 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 			TestDBUtils.Recreate();
 			
 			string url = "/blogs/listblog.rails";
-			string expected = "My View contents for Home\\Index";
+			FileStream expFS = File.OpenRead("../Castle.MonoRail.ActiveRecordScaffold.Tests/bloglist.txt");
+			byte[] barray = new byte[expFS.Length];
+			expFS.Read( barray, 0, barray.Length );
 
-			Execute(url, expected);
+			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
 		}
+
+		[Test]
+		public void NewBlog()
+		{
+			TestDBUtils.Recreate();
+			
+			string url = "/blogs/newblog.rails";
+			FileStream expFS = File.OpenRead("../Castle.MonoRail.ActiveRecordScaffold.Tests/blognew.txt");
+			byte[] barray = new byte[expFS.Length];
+			expFS.Read( barray, 0, barray.Length );
+
+			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
+		}
+
+		[Test]
+		public void EditBlog()
+		{
+			TestDBUtils.Recreate();
+			
+			string url = "/blogs/editblog.rails?id=1";
+			FileStream expFS = File.OpenRead("../Castle.MonoRail.ActiveRecordScaffold.Tests/blogedit.txt");
+			byte[] barray = new byte[expFS.Length];
+			expFS.Read( barray, 0, barray.Length );
+
+			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
+		}
+
+		[Test]
+		public void RemoveBlog()
+		{
+			TestDBUtils.Recreate();
+			
+			string url = "/blogs/confirmblog.rails?id=1";
+			FileStream expFS = File.OpenRead("../Castle.MonoRail.ActiveRecordScaffold.Tests/blogconfirmremoval.txt");
+			byte[] barray = new byte[expFS.Length];
+			expFS.Read( barray, 0, barray.Length );
+
+			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
+		}
+
 
 		protected override String ObtainPhysicalDir()
 		{

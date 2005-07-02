@@ -8,6 +8,21 @@ run the tests. Just use nant:
 
 to compile and test everything
 
+
+-- Scaffolding
+
+The scaffolding support tests requires a database. The schema is created automatically. 
+
+You need to change the connection string information on
+
+   MonoRail\TestScaffolding\web.config
+
+  and   
+
+   MonoRail\Castle.MonoRail.ActiveRecordScaffold.Tests\Castle.MonoRail.ActiveRecordScaffold.Tests.dll.config
+
+
+
 -- More
 
 More information about MonoRail

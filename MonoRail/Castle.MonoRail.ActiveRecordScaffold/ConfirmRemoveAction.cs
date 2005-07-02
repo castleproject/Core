@@ -27,7 +27,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// the removal of the instance
 	/// </summary>
 	/// <remarks>
-	/// Searchs for a template named <c>confirm{name}</c>
+	/// Searchs for a template named <c>confirm{name}remove</c>
 	/// </remarks>
 	public class ConfirmRemoveAction : EditAction
 	{
