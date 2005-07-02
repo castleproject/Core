@@ -23,7 +23,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("Copyright (c) 2004,2005 Castle Project - http://www.castleproject.org/")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
-[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.5.0")]
 
 #if STRONG
 [assembly: AssemblyDelaySign(false)]
