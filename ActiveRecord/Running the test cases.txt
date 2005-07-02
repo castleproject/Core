@@ -9,6 +9,15 @@ like.
 
 2. Create the database schema
 
+
+  ** Warning **
+
+  Test cases will generate all the necessary schema. 
+  
+
+  ** The following schema is just provided for history **
+
+
    --- cut here ---
 
 CREATE TABLE [dbo].[Entity] (

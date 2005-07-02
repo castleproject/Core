@@ -158,7 +158,7 @@
 					<property name="OutputDirectory" value="${doc.dir}" />
 					<property name="HtmlHelpName" value="ActiveRecord" />
 					<property name="IncludeFavorites" value="False" />
-					<property name="Title" value="Castle's ActiveRecord" />
+					<property name="Title" value="Castle ActiveRecord" />
 					<property name="SplitTOCs" value="False" />
 					<property name="DefaulTOC" value="ActiveRecord" />
 					<property name="ShowVisualBasic" value="True" />
