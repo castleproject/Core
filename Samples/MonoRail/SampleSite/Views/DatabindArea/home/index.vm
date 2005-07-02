@@ -1,0 +1,40 @@
+<div align="center">
+  <h2>Databind</h2>
+</div>
+
+<div class="container">
+
+<p>
+  Within a <code>SmartDispatcherController</code> you can now associate classes to be 
+  populated with data from your form. Just use the 
+  DataBindAttribute on one or more arguments on your controller:
+</p>
+
+<pre><code>
+namespace Yournamespace
+{
+  public class AccountController : SmartDispatcherController
+  {
+    public void Update([DataBind] Account account)
+    {
+    }
+  }
+}
+</code></pre>
+
+<p>
+  You may want to use prefixes to avoid collisions as well:
+</p>
+
+<pre><code>
+namespace Yournamespace
+{
+  public class AccountController : SmartDispatcherController
+  {
+    public void Update([DataBind(Prefix="account")] Account account)
+    {
+    }
+  }
+}
+</code></pre>
+
