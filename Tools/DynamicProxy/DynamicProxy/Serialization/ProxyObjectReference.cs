@@ -1,5 +1,3 @@
-using System.Collections;
-using Castle.DynamicProxy.Builder.CodeGenerators;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +15,11 @@ using Castle.DynamicProxy.Builder.CodeGenerators;
 namespace Castle.DynamicProxy.Serialization
 {
 	using System;
+	using System.Collections;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+
+	using Castle.DynamicProxy.Builder.CodeGenerators;
 
 	/// <summary>
 	/// Handles the deserialization of proxies.
@@ -26,12 +27,22 @@ namespace Castle.DynamicProxy.Serialization
 	[Serializable]
 	public class ProxyObjectReference : IObjectReference, ISerializable
 	{
+		private static ModuleScope _scope = new ModuleScope();
+
 		private Type _baseType;
 		private Type[] _interfaces;
 		private IInterceptor _interceptor;
 		private object[] _mixins;
 		private object[] _data;
 		private object _proxy;
+
+		/// <summary>
+		/// Usefull for test cases
+		/// </summary>
+		public static void ResetScope()
+		{
+			_scope = new ModuleScope();
+		}
 
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
 		{
@@ -69,25 +80,28 @@ namespace Castle.DynamicProxy.Serialization
 		{
 			object proxy = null;
 
-			// TODO: ProxyGenerator.Current
-			ProxyGenerator generator = new ProxyGenerator();
+			GeneratorContext genContext = new GeneratorContext();
+
+			foreach(object mixin in _mixins)
+			{
+				genContext.AddMixinInstance(mixin);
+			}
+
+			InterfaceProxyGenerator gen = new InterfaceProxyGenerator( _scope, genContext );
 
 			object target = info.GetValue("__target", typeof(object));
 
 			if (_mixins.Length == 0)
 			{
-				proxy = generator.CreateProxy( _interfaces, _interceptor, target);
+				Type proxy_type = gen.GenerateCode( _interfaces, target.GetType());
+
+				proxy = Activator.CreateInstance( proxy_type, new object[] { _interceptor, target } );
 			}
 			else
 			{
-				GeneratorContext genContext = new GeneratorContext();
-				
-				foreach(object mixin in _mixins)
-				{
-					genContext.AddMixinInstance(mixin);
-				}
-				
-				proxy = generator.CreateCustomProxy( _interfaces, _interceptor, target, genContext );
+				Type proxy_type = gen.GenerateCode( _interfaces, target.GetType() );
+
+				proxy = Activator.CreateInstance( proxy_type, new object[] { _interceptor, target, genContext.MixinsAsArray() } );
 			}
 
 			return proxy;
@@ -114,7 +128,7 @@ namespace Castle.DynamicProxy.Serialization
 				}
 			}
 
-			ClassProxyGenerator cpGen = new ClassProxyGenerator( new ModuleScope(), genContext );
+			ClassProxyGenerator cpGen = new ClassProxyGenerator( _scope, genContext );
 
 			Type proxy_type;
 

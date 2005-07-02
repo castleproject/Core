@@ -387,7 +387,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		protected virtual EasyProperty[] GenerateProperties(Type inter)
 		{
-			PropertyInfo[] properties = inter.GetProperties();
+			PropertyInfo[] properties = inter.GetProperties( BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance );
 			
 			EasyProperty[] propertiesBuilder = new EasyProperty[properties.Length];
 
@@ -417,6 +417,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				{
 					continue;
 				}
+
 				GenerateMethodImplementation(method, properties);
 			}
 		}
@@ -427,7 +428,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// <param name="property"></param>
 		protected EasyProperty CreateProperty(PropertyInfo property)
 		{
-			return _typeBuilder.CreateProperty(property.Name, property.PropertyType);
+			return _typeBuilder.CreateProperty(property);
 		}
 
 		/// <summary>
@@ -476,6 +477,22 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 						if (!property.Name.Equals(method.Name.Substring(4)))
 						{
 							continue;
+						}
+
+						if (property.IndexParameters != null)
+						{
+							bool signatureMatches = true;
+
+							for(int i=0; i < property.IndexParameters.Length; i++)
+							{
+								if (property.IndexParameters[i].ParameterType != parameterInfo[i].ParameterType)
+								{
+									signatureMatches = false;
+									break;
+								}
+							}
+
+							if (!signatureMatches) continue;
 						}
 	
 						if (isSetMethod)

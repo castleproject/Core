@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
-
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
@@ -30,8 +29,9 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		private AbstractEasyType _maintype;
 		private EasyMethod _getMethod;
 		private EasyMethod _setMethod;
+		private ParameterInfo[] _indexParameters;
 
-		public EasyProperty( AbstractEasyType maintype, String name, Type returnType )
+		public EasyProperty(AbstractEasyType maintype, String name, Type returnType)
 		{
 			_maintype = maintype;
 			_builder = maintype.TypeBuilder.DefineProperty(
@@ -46,28 +46,28 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 		public EasyMethod CreateGetMethod()
 		{
 			return CreateGetMethod(
-				MethodAttributes.Public|MethodAttributes.Virtual|MethodAttributes.SpecialName);
+				MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.SpecialName);
 		}
 
-		public EasyMethod CreateGetMethod( MethodAttributes attrs, params Type[] parameters )
+		public EasyMethod CreateGetMethod(MethodAttributes attrs, params Type[] parameters)
 		{
 			if (_getMethod != null)
 			{
 				return _getMethod;
 			}
 
-			_getMethod = new EasyMethod(_maintype, "get_" + _builder.Name, 
-				attrs,
-				new ReturnReferenceExpression(ReturnType), 
-				ArgumentsUtil.ConvertToArgumentReference(parameters) );
-			
+			_getMethod = new EasyMethod(_maintype, "get_" + _builder.Name,
+			                            attrs,
+			                            new ReturnReferenceExpression(ReturnType),
+			                            ArgumentsUtil.ConvertToArgumentReference(parameters));
+
 			return _getMethod;
 		}
 
 		public EasyMethod CreateSetMethod(Type arg)
 		{
 			return CreateSetMethod(
-				MethodAttributes.Public|MethodAttributes.Virtual|MethodAttributes.SpecialName, arg);
+				MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.SpecialName, arg);
 		}
 
 		public EasyMethod CreateSetMethod(MethodAttributes attrs, params Type[] parameters)
@@ -77,11 +77,11 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				return _setMethod;
 			}
 
-			_setMethod = new EasyMethod(_maintype, "set_" + _builder.Name, 
-				attrs,
-				new ReturnReferenceExpression( typeof(void) ), 
-				ArgumentsUtil.ConvertToArgumentReference(parameters));
-			
+			_setMethod = new EasyMethod(_maintype, "set_" + _builder.Name,
+			                            attrs,
+			                            new ReturnReferenceExpression(typeof(void)),
+			                            ArgumentsUtil.ConvertToArgumentReference(parameters));
+
 			return _setMethod;
 		}
 
@@ -94,7 +94,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				_setMethod.Generate();
 				_builder.SetSetMethod(_setMethod.MethodBuilder);
 			}
-			
+
 			if (_getMethod != null)
 			{
 				_getMethod.Generate();
@@ -108,7 +108,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			{
 				_setMethod.EnsureValidCodeBlock();
 			}
-			
+
 			if (_getMethod != null)
 			{
 				_getMethod.EnsureValidCodeBlock();
@@ -117,18 +117,18 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public MethodBase Member
 		{
-			get
-			{
-				return null;
-			}
+			get { return null; }
 		}
 
 		public Type ReturnType
 		{
-			get
-			{
-				return _builder.PropertyType;
-			}
+			get { return _builder.PropertyType; }
+		}
+
+		public ParameterInfo[] IndexParameters
+		{
+			get { return _indexParameters; }
+			set { _indexParameters = value; }
 		}
 
 		#endregion

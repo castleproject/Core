@@ -118,6 +118,14 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			return prop;
 		}
 
+		public EasyProperty CreateProperty( PropertyInfo property )
+		{
+			EasyProperty prop = new EasyProperty( this, property.Name, property.PropertyType );
+			prop.IndexParameters = property.GetIndexParameters();
+			_properties.Add(prop);
+			return prop;
+		}
+
 		public EasyEvent CreateEvent( String name, Type eventHandlerType )
 		{
 			EasyEvent easyEvent = new EasyEvent( this, name, eventHandlerType );
