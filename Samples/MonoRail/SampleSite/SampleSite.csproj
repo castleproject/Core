@@ -211,6 +211,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\DatabindArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\FiltersArea\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -232,6 +237,16 @@
                 />
                 <File
                     RelPath = "Controllers\RescuesArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ResourcesArea\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ScaffoldArea\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -301,6 +316,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Views\DatabindArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Views\FiltersArea\home\index.vm"
                     BuildAction = "None"
                 />
@@ -338,6 +357,14 @@
                 />
                 <File
                     RelPath = "Views\RescuesArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\ResourcesArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\ScaffoldArea\home\index.vm"
                     BuildAction = "None"
                 />
             </Include>

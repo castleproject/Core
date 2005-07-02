@@ -50,7 +50,7 @@ namespace TableHierarchySample
 			set { name = value; }
 		}
 
-		[HasAndBelongsToMany( typeof(Person), RelationType.Bag, Table="PeopleCompanies", Column="person_id", ColumnKey="company_id" )]
+		[HasAndBelongsToMany( typeof(Person), Table="PeopleCompanies", ColumnRef="person_id", ColumnKey="company_id" )]
 		public IList People
 		{
 			get { return _people; }

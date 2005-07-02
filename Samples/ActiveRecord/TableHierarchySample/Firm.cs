@@ -32,7 +32,7 @@ namespace TableHierarchySample
 		{
 		}
 
-		[HasMany( typeof(Client), RelationType.Bag, Column="client_of" )]
+		[HasMany( typeof(Client), ColumnKey="client_of" )]
 		public IList Clients
 		{
 			get { return _clients; }
