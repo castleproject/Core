@@ -37,7 +37,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		public override bool HasTemplate(String templateName)
 		{
-			throw new NotImplementedException("HasTemplate is not implemented for webforms view engine");
+			String physicalPath = Path.Combine( ViewRootDir, templateName + ".aspx" );
+			FileInfo info = new FileInfo( physicalPath );
+			return info.Exists;
 		}
 
 		/// <summary>
@@ -83,7 +85,13 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
-			throw new NotImplementedException("ProcessContents is not implemented for webforms view engine");
+			HttpContext httpContext = (context.UnderlyingContext as HttpContext);
+
+			Page masterHandler = ObtainMasterPage(httpContext, controller);
+
+			httpContext.Items.Add("rails.contents", contents);
+
+			ProcessPage(controller, masterHandler, httpContext);
 		}
 
 		#endregion

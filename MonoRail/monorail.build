@@ -203,6 +203,8 @@
 			<fileset basedir="${base.dir}">
 				<include name="*.build" />
 				<include name="*.sln" />
+				<include name="Castle.MonoRail.ActiveRecordScaffold/**/*.*" />
+				<include name="Castle.MonoRail.ActiveRecordScaffold.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Engine/**/*.*" />
 				<include name="Castle.MonoRail.Engine.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Framework/**/*.*" />
@@ -213,10 +215,10 @@
 				<include name="Castle.MonoRail.WindsorExtension/**/*.*" />
 				<include name="Castle.MonoRail.WindsorExtension.Tests.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Generator/**/*.*" />
-				<include name="SimpleUrlRewrite/**/*.*" />
 				<include name="TestSite/**/*.*" />
 				<include name="TestSiteNVelocity/**/*.*" />
 				<include name="TestSiteWindsor/**/*.*" />
+				<include name="TestScaffolding/**/*.*" />
 				<include name="${library.dir}/*.dll" />
 				<include name="${library.dir}/*.rtf" />
 				<include name="${library.dir}/*.exe" />
