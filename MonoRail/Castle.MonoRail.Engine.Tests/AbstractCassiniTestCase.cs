@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Engine.Tests
 	{
 		private Server server;
 
-		[SetUp]
+		[TestFixtureSetUp]
 		public void Init()
 		{
 			String physicalDir = Normalize(ObtainPhysicalDir());
@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Engine.Tests
 			server.Start();
 		}
 
-		[TearDown]
+		[TestFixtureTearDown]
 		public void Terminate()
 		{
 			server.Stop();
