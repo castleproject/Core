@@ -21,7 +21,6 @@ namespace Castle.MonoRail.Framework
 	using System.Reflection;
 	using System.Web;
 
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// A DataBinder can be used to map properties from 
