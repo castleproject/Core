@@ -37,7 +37,7 @@ namespace Castle.ActiveRecord
 	/// 			set { this.id = value; }
 	/// 		}
 	/// 	
-	/// 		[HasOne]
+	/// 		[OneToOne]
 	/// 		public Award Award
 	/// 		{
 	/// 			get { return this.award; }
@@ -60,7 +60,7 @@ namespace Castle.ActiveRecord
 	/// 			this.employee = employee;
 	/// 		}
 	/// 	
-	/// 		[HasOne]
+	/// 		[OneToOne]
 	/// 		public Employee Employee
 	/// 		{
 	/// 			get { return this.employee; }
