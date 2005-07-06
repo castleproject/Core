@@ -90,14 +90,14 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\lib\Castle.DynamicProxy.dll"
-                />
-                <Reference
                     Name = "antlr.runtime"
                     AssemblyName = "antlr.runtime"
                     HintPath = "..\lib\antlr.runtime.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\bin\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

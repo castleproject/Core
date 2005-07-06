@@ -4,7 +4,7 @@
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="lib.dir" value="${base.dir}/lib" />
+	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/doc" />
 	<property name="src.dir" value="${base.dir}" />
 	<property name="pack.dir" value="${base.dir}/pack" />
@@ -32,16 +32,16 @@
 	<property name="skip.antlr" value="false" />
 
 	<property name="antlr.home" value="lib/antlr-2.7.4" />
-        <property name="antlr.runtime.dll" value="lib/antlr.runtime.dll" />
+    <property name="antlr.runtime.dll" value="lib/antlr.runtime.dll" />
 	<property name="java" value="java" />
 	
 	<!-- find out where nunit.framework.dll is -->
-	<property name="nant.lib.dir"
+	<property name="nant.library.dir"
 		value="${path::combine(nant::get-base-directory(), 'lib')}"
 		dynamic="true" />
 		
 	<property name="nant.lib.family.dir"
-		value="${path::combine(nant.lib.dir,framework::get-family(framework::get-target-framework()))}"
+		value="${path::combine(nant.library.dir,framework::get-family(framework::get-target-framework()))}"
 		dynamic="true" />
 		
 	<property name="nant.lib.framework.dir"
@@ -63,6 +63,12 @@
 		<mkdir dir="bin" />
 	    <copy file="${dynamicproxy}" todir="${bin.dir}" />
 		<!-- <copy file="${antlr.runtime.dll}" todir="build" /> -->
+
+		<copy todir="${bin.dir}">
+			<fileset basedir="${library.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="build" depends="init,lang.tests.run,core.tests.run" />
@@ -104,12 +110,6 @@
 				<include name="*.config" />
 			</fileset>
 		</copy>
-		
-		<copy todir="${bin.dir}">
-			<fileset basedir="${lib.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
 	</target>
 	
 	<target name="aopalliance.compile" depends="init">
@@ -118,7 +118,7 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${lib.dir}/${aopalliance.assembly.name}">
+			output="${bin.dir}/${aopalliance.assembly.name}">
 			
 			<sources basedir="${aopalliance.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
@@ -138,8 +138,8 @@
 				<include name="**/*.cs" />
 			</sources>
 			
-			<references basedir="${lib.dir}">
-				<include name="AopAlliance.dll" />
+			<references basedir="${bin.dir}">
+				<include name="${aopalliance.assembly.name}" />
 				<include name="antlr.runtime.dll" />
 			</references>
 		</csc>
@@ -155,11 +155,11 @@
 				<include name="**/*.cs" />
 			</sources>
 			
-			<references>
+			<references basedir="${bin.dir}">
 				<include name="${nunit.framework.dll}" />
-				<include name="${lib.dir}/*.dll" />
-				<include name="${bin.dir}/${lang.assembly.name}" />
-				<include name="${bin.dir}/${core.assembly.name}" />
+				<include name="*.dll" />
+				<include name="${lang.assembly.name}" />
+				<include name="${core.assembly.name}" />
 			</references>
 		</csc>
 	</target>
@@ -185,11 +185,11 @@
 				<include name="**/*.cs" />
 			</sources>
 			
-			<references>
-				<include name="${lib.dir}/antlr.runtime.dll"  />
-				<include name="${lib.dir}/AopAlliance.dll"  />
-				<include name="${lib.dir}/Castle.DynamicProxy.dll"  />
-				<include name="${bin.dir}/${lang.assembly.name}" />
+			<references basedir="${bin.dir}">
+				<include name="antlr.runtime.dll"  />
+				<include name="${aopalliance.assembly.name}"  />
+				<include name="Castle.DynamicProxy.dll"  />
+				<include name="${lang.assembly.name}" />
 			</references>
 		</csc>
 	</target>
@@ -204,13 +204,13 @@
 				<include name="**/*.cs" />
 			</sources>
 
-			<references>
+			<references basedir="${bin.dir}">
 				<include name="${nunit.framework.dll}" />
-				<include name="${lib.dir}/antlr.runtime.dll"  />
-				<include name="${lib.dir}/AopAlliance.dll"  />
-				<include name="${lib.dir}/Castle.DynamicProxy.dll"  />
-				<include name="${bin.dir}/${core.assembly.name}" />
-				<include name="${bin.dir}/${lang.assembly.name}"  />
+				<include name="antlr.runtime.dll"  />
+				<include name="${aopalliance.assembly.name}"  />
+				<include name="Castle.DynamicProxy.dll"  />
+				<include name="${core.assembly.name}" />
+				<include name="${lang.assembly.name}"  />
 			</references>
 		</csc>
 	</target>
@@ -248,7 +248,7 @@
 					<property name="DocumentPrivates" value="False" />
 					<property name="DocumentEmptyNamespaces" value="False" />
 					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004 Henry Conceição / Rafael Steil" />
+					<property name="CopyrightText" value="Copyright 2004 2005 Castle Project" />
 					<property name="CopyrightHref" value="" />
 				</documenter>
 			</documenters>
@@ -273,7 +273,7 @@
 			<fileset basedir="${base.dir}">
 				<include name="*.build" />
 				<include name="*.sln" />
-				<include name="${lib.dir}/**/*.*" />
+				<include name="${library.dir}/**/*.*" />
 				<include name="${src.dir}/**/*.*" />
 				
 				<exclude name="**/Debug/*" />
