@@ -8,7 +8,7 @@
 	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="src.dir" value="${base.dir}/Castle.Facilities.AspectSharp" />
-
+	
 	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.AspectSharp.Tests" />
 	<property name="name" value="Castle.Facilities.AspectSharp" />
 	<property name="assembly.name" value="${name}.dll" />
@@ -32,6 +32,15 @@
 		<copy todir="${bin.dir}">
 			<fileset basedir="${library.dir}">
 				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="${bin.dir}">
+			<fileset basedir="${aspectsharp.bin.dir}">
+				<include name="antlr.runtime.dll" />
+				<include name="AopAlliance.dll" />
+				<include name="AspectSharp.dll" />
+				<include name="AspectSharp.Lang.dll" />
+				<include name="Castle.DynamicProxy.dll" />
 			</fileset>
 		</copy>
 	</target>

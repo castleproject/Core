@@ -7,6 +7,7 @@
 	<property name="container.bin.dir" value="${base.dir}/../../InversionOfControl/bin" />
 	<property name="services.bin.dir" value="${base.dir}/../../Services/bin" />
 	<property name="ar.bin.dir" value="${base.dir}/../../ActiveRecord/bin" />
+	<property name="aspectsharp.bin.dir" value="${base.dir}/../../AspectSharp/bin" />
 
 	<include buildfile="../common.inc" />	
 

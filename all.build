@@ -6,7 +6,7 @@
 	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
 	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
 
-	<target name="build" depends="init, tools, container, components, activerecord, monorail, services, facilities, samples" />
+	<target name="build" depends="init, tools, container, components, activerecord, monorail, services, aspectsharp, facilities, samples" />
 	
 	<target name="init">
 		<echo message="${os}" />
@@ -39,6 +39,10 @@
 
 	<target name="monorail">
 		<nant buildfile="MonoRail/monorail.build" target="build" inheritall="true" />
+	</target>
+
+	<target name="aspectsharp">
+		<nant buildfile="AspectSharp/aspectsharp.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="samples">
