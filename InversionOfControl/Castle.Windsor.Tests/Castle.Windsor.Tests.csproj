@@ -150,6 +150,21 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Adapters\ComponentModel\ContainerAdapterTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\TestComponent.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\TestComponent.resx"
+                    DependentUpon = "TestComponent.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Components\CalculatorService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
