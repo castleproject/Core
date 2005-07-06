@@ -123,6 +123,36 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Adapters\ComponentModel\ContainerAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\ContainerAdapter.resx"
+                    DependentUpon = "ContainerAdapter.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\ContainerAdapterSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\IContainerAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\IContainerAdapterSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\ServiceCreatorCallbackActivator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "antlr\ANTLRException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
