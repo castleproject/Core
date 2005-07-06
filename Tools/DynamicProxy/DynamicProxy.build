@@ -63,6 +63,7 @@
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${core.assembly.name}" />
+				<include name="System.Data.dll" />
 			</references>
 		</csc>
 	</target>
