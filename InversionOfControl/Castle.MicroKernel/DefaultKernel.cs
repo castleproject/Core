@@ -280,6 +280,8 @@ namespace Castle.MicroKernel
 						model.RemoveDepender(handler.ComponentModel);
 					}
 
+					RaiseComponentUnregistered(key, handler);
+
 					DisposeHandler(handler);
 
 					return true;
