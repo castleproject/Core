@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<configuration>
+
+	<facilities>
+		<facility id="logging">
+            <logfile-location>log4net.config</logfile-location>
+		</facility>
+	</facilities>
+
+</configuration>
