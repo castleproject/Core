@@ -281,7 +281,22 @@ Ajax.Updater.prototype = (new Ajax.Base()).extend({
       new this.options.insertion(this.container,
         this.request.transport.responseText);
     } else {
-      this.container.innerHTML = this.request.transport.responseText;
+      var content = this.request.transport.responseText;
+      try {
+        this.container.innerHTML = content;
+      } catch (e) {
+        var doc = document.implementation.createDocument("", "doc", null);
+        var r = doc.createRange();
+        r.selectNode(doc.documentElement);
+        var f = r.createContextualFragment(content);
+        
+        while (this.container.childNodes.length > 0)
+          this.container.removeChild(this.container.childNodes[0]);
+        
+        var l = f.childNodes;
+        while (l.length > 0)
+          this.container.appendChild(l[0]);
+      }
     }
 
     if (this.onComplete) {
