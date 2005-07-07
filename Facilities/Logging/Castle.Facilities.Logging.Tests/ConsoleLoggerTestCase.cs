@@ -49,7 +49,7 @@ namespace Castle.Facilities.Logging.Tests
 			log.Warn("Some warn message");
 
 			String logcontents = outWriter.GetStringBuilder().ToString();
-			Assert.AreEqual("[Info] 'Logger' Some info message\r\n[Error] 'Logger' Some error message\r\n[Fatal] 'Logger' Some fatal error message\r\n[Warn] 'Logger' Some warn message\r\n", logcontents);
+			Assert.AreEqual("[Info] 'Logger' Some info message\r\n[Error] 'Logger' Some error message\r\n[Fatal] 'Logger' Some fatal error message\r\n[Warn] 'Logger' Some warn message\r\n", logcontents, "logcontents don't match");
 		}
 
 		[Test]
@@ -66,6 +66,20 @@ namespace Castle.Facilities.Logging.Tests
 			String logcontents = outWriter.GetStringBuilder().ToString();
 			Assert.AreEqual("[Debug] 'Logger' Some debug message\r\n[Info] 'Logger' Some info message\r\n[Error] 'Logger' Some error message\r\n[Fatal] 'Logger' Some fatal error message\r\n[Warn] 'Logger' Some warn message\r\n", logcontents);
 		}
+
+        [Test]
+        public void WarnLogger() {
+            ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Warn);
+
+            log.Debug("Some debug message");
+            log.Info("Some info message");
+            log.Error("Some error message");
+            log.FatalError("Some fatal error message");
+            log.Warn("Some warn message");
+
+            String logcontents = outWriter.GetStringBuilder().ToString();
+            Assert.AreEqual("[Error] 'Logger' Some error message\r\n[Fatal] 'Logger' Some fatal error message\r\n[Warn] 'Logger' Some warn message\r\n", logcontents);            
+        }
 
 		[Test]
 		public void ExceptionLogging()
