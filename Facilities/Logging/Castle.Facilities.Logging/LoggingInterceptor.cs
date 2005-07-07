@@ -37,16 +37,13 @@ namespace Castle.Facilities.Logging
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
             object result = null;
+            String logoutput = null;
             try
             {
-                StringBuilder loginfo = new StringBuilder();         
-                loginfo.Append("Method Name: ");
-                loginfo.Append(invocation.Method.Name);
-                for (int i = 0; i < args.Length; i++)
-                {
-                    loginfo.AppendFormat(", Parameter {0}: {1}", i, args[i]);   
-                }
-                //log loginfo.ToString()
+                logoutput = ExtractLogInfo(invocation, args);
+                
+                //log logoutput
+
             }
             catch
             {
@@ -58,5 +55,18 @@ namespace Castle.Facilities.Logging
             }
             return result;
 		}
+
+	    private string ExtractLogInfo(IMethodInvocation invocation, object[] args)
+	    {
+	        StringBuilder loginfo = new StringBuilder();         
+	        loginfo.Append("Method Name: ");
+	        loginfo.Append(invocation.Method.Name);
+	        for (int i = 0; i < args.Length; i++)
+	        {
+	            loginfo.AppendFormat(", Parameter {0}: {1}", i, args[i]);   
+	        }
+
+            return loginfo.ToString();
+	    }
 	}
 }

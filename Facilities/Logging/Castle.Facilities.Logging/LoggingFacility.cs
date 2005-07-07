@@ -1,3 +1,6 @@
+using Castle.MicroKernel;
+using Castle.Model;
+using Castle.Services.Logging;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +32,48 @@ namespace Castle.Facilities.Logging
 
 		protected override void Init()
 		{
-			
+            //Get some config information
+            //ideally just a string to a log4net / NLog config file.
+
+            //setup log4net/NLog and get rocking
+
+            Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
+            Kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
+
+            Kernel.AddComponent("logging.logger.default", typeof(ILogger), typeof(NullLogger));
 		}
+
+        private void OnComponentModelCreated(ComponentModel model) {
+            ////////////////////////
+            //for attributal logging
+            bool logable;
+            logable = false /*= model.Implementation.GetCustomAttributes(typeof(Logable), true).Length > 0*/;
+
+            model.ExtendedProperties["logable"] = logable;
+
+            if(logable)
+            {
+                //add to loggable things to watch or something
+            }
+
+            ///////////////////////////
+            //For Constructor Injection
+            foreach(DependencyModel d in model.Dependencies)
+            {
+                if(d.TargetType == typeof(ILogger))
+                {
+                    //check the config if a logger type is specified
+                    //if not give it the default.
+                }
+            }
+
+        }
+
+        private void OnComponentRegistered(String key, IHandler handler) {
+            //attributal logging
+            bool logable = (bool) handler.ComponentModel.ExtendedProperties["logable"];
+            //don't realy know what to do here
+        }
+
 	}
 }
