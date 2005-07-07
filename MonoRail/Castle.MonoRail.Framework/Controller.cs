@@ -319,6 +319,20 @@ namespace Castle.MonoRail.Framework
 			_context.Response.Redirect(controller, action);
 		}
 
+        /// <summary>
+        /// Redirects to another controller and action.
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="action"></param>
+        /// <param name="parameters"></param>
+        public void Redirect(String controller, String action, NameValueCollection parameters) {
+            CancelView();
+
+            _context.Params.Add(parameters);
+
+            _context.Response.Redirect(controller, action);
+        }
+
 		/// <summary>
 		/// Redirects to another controller and action.
 		/// </summary>
@@ -331,6 +345,21 @@ namespace Castle.MonoRail.Framework
 
 			_context.Response.Redirect(area, controller, action);
 		}
+
+        /// <summary>
+        /// Redirects to another controller and action with the specified paramters.
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="controller"></param>
+        /// <param name="action"></param>
+        /// <param name="parameters"></param>
+        public void Redirect(String area, String controller, String action, NameValueCollection parameters) {
+            CancelView();
+            
+            _context.Params.Add(parameters);
+
+            _context.Response.Redirect(area, controller, action);
+        }
 
 		/// <summary>
 		/// Cancel the view presentation.
