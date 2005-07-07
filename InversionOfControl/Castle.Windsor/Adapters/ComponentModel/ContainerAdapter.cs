@@ -79,7 +79,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		{
 			if (container == null)
 			{
-				container = new WindsorContainer();
+				container = CreateDefaultWindsorContainer();
 			}
 
 			_container = container;
@@ -171,7 +171,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 						try
 						{
-							Kernel.AddComponentInstance( newSite.EffectiveName, component );
+							Kernel.AddComponentInstance( newSite.EffectiveName, typeof(IComponent), component );
 						}
 						catch (ComponentRegistrationException ex)
 						{
@@ -240,6 +240,12 @@ namespace Castle.Windsor.Adapters.ComponentModel
 			return new ContainerAdapterSite( component, this, name );
 		}
  
+
+		protected virtual IWindsorContainer CreateDefaultWindsorContainer()
+		{
+			return new WindsorContainer();
+		}
+
 		#endregion
 
 		#region IServiceContainer Members
@@ -614,13 +620,15 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 		private void RegisterAdapterWithKernel()
 		{
-			Kernel.AddComponentInstance("#ContainerAdapter", this);
+			string adapterName = string.Format("#ContainerAdapter:{0}#", Guid.NewGuid());
+			Kernel.AddComponentInstance(adapterName, this);
+
 			Kernel.ComponentUnregistered += new ComponentDataDelegate(OnComponentUnregistered);
 		}
 
 		private string GetServiceName(Type serviceType)
 		{
-			return "#ContainerAdapterService:" + serviceType.FullName;
+			return string.Format("#ContainerAdapterService:{0}#", serviceType.FullName);
 		}
 
 		#endregion
