@@ -134,34 +134,60 @@ namespace Castle.MonoRail.Framework.Helpers
 			return LinkToFunction(name, BuildRemoteFunction(url, options));
 		}
 
-		public String LinkToRemote(String name, String url, String update)
+		public String LinkToRemote(String name, String url, String idOfElementToBeUpdated, String with, String styleClass)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(url, update));
+			return LinkToFunction(name, BuildRemoteFunction(with, idOfElementToBeUpdated, url), styleClass);
 		}
 
-		public String LinkToRemote(String name, String url, String update, String with)
+		public String LinkToRemote(String name, String url, String idOfElementToBeUpdated)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(with, update, url));
+			return LinkToFunction(name, BuildRemoteFunction(url, idOfElementToBeUpdated));
 		}
 
-		public String LinkToRemote(String name, String url, String update, bool form)
+		public String LinkToRemote(String name, String url, String idOfElementToBeUpdated, String with)
 		{
-			return LinkToFunction(name, BuildRemoteFunction(form, update, url));
+			return LinkToFunction(name, BuildRemoteFunction(with, idOfElementToBeUpdated, url));
 		}
 
-		public String ButtonToRemote(String name, String url, String update)
+		/// <summary>
+		/// Creates an anchor that if clicked will fire an Ajax invocation. 
+		/// </summary>
+		/// <param name="name">html contents for the link</param>
+		/// <param name="url">The target Ajax invocation</param>
+		/// <param name="idOfElementToBeUpdated">Id of html element to be updated with the results of the invocation</param>
+		/// <param name="with">Any argument/parameter to send within the Ajax call</param>
+		/// <param name="loading">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <param name="loaded">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <param name="complete">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <param name="interactive">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <returns>The handcrafted link</returns>
+		public String LinkToRemote(String name, String url, String idOfElementToBeUpdated, String with, 
+			String loading, String loaded, String complete, String interactive)
 		{
-			return ButtonToFunction(name, BuildRemoteFunction(url, update));
+			IDictionary options = GetOptions(url, idOfElementToBeUpdated, with, 
+				loading, loaded, complete, interactive);
+
+			return LinkToFunction(name, BuildRemoteFunction(url, options));
 		}
 
-		public String ButtonToRemote(String name, String url, String update, String with)
+		public String LinkToRemote(String name, String url, String idOfElementToBeUpdated, bool form)
 		{
-			return ButtonToFunction(name, BuildRemoteFunction(url, update, with));   
+			return LinkToFunction(name, BuildRemoteFunction(form, idOfElementToBeUpdated, url));
 		}
 
-		public String ButtonToRemote(String name, String url, String update, bool form)
+		public String ButtonToRemote(String name, String url, String idOfElementToBeUpdated)
 		{
-			return ButtonToFunction(name, BuildRemoteFunction(form, update, url));
+			return ButtonToFunction(name, BuildRemoteFunction(url, idOfElementToBeUpdated));
+		}
+
+		public String ButtonToRemote(String name, String url, String idOfElementToBeUpdated, String with)
+		{
+			return ButtonToFunction(name, BuildRemoteFunction(url, idOfElementToBeUpdated, with));   
+		}
+
+		public String ButtonToRemote(String name, String url, String idOfElementToBeUpdated, bool form)
+		{
+			return ButtonToFunction(name, BuildRemoteFunction(form, idOfElementToBeUpdated, url));
 		}
 
 		public String ButtonToRemote(String name, String url, IDictionary options) 
