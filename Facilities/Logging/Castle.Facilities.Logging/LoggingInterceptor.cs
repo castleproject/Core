@@ -15,6 +15,7 @@
 namespace Castle.Facilities.Logging
 {
 	using System;
+    using System.Text;
 
 	using Castle.Model;
 	using Castle.Model.Interceptor;
@@ -35,8 +36,27 @@ namespace Castle.Facilities.Logging
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
-			
-			return invocation.Proceed(args);
+            object result = null;
+            try
+            {
+                StringBuilder loginfo = new StringBuilder();         
+                loginfo.Append("Method Name: ");
+                loginfo.Append(invocation.Method.Name);
+                for (int i = 0; i < args.Length; i++)
+                {
+                    loginfo.AppendFormat(", Parameter {0}: {1}", i, args[i]);   
+                }
+                //log loginfo.ToString()
+            }
+            catch
+            {
+                //silently fails?
+            }
+            finally
+            {
+                result = invocation.Proceed(args);
+            }
+            return result;
 		}
 	}
 }
