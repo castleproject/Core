@@ -176,6 +176,18 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		}
 
 		[Test]
+		public void GetComponentHandlers()
+		{
+			IComponent component = new Component();
+
+			container.Add( component );
+
+			IHandler[] handlers = container.Container.Kernel.GetHandlers( typeof(IComponent) );
+			Assert.AreEqual( 1, handlers.Length );
+			Assert.AreEqual( handlers[0].Resolve(), component );
+		}
+
+		[Test]
 		public void AddServiceInstance()
 		{
 			ICalcService service = new CalculatorService();
