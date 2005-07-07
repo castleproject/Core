@@ -74,6 +74,20 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 		}
 
 		[Test]
+		public void GetExistingServiceFromKernel()
+		{
+			WindsorContainer windsor = new WindsorContainer();
+			
+			windsor.AddComponent( "calculator", typeof(ICalcService), typeof(CalculatorService) );
+
+			IContainerAdapter adapter = new ContainerAdapter( windsor );
+
+			ICalcService service = (ICalcService) adapter.GetService( typeof(ICalcService) );
+
+			Assert.IsNotNull( service );
+		}
+
+		[Test]
 		public void AddUnamedComponent()
 		{
 			IComponent component = new Component();
@@ -263,6 +277,16 @@ namespace Castle.Windsor.Tests.Adapters.ComponentModel
 			child.RemoveService( typeof(ICalcService), true );
 			Assert.IsNull( child.GetService( typeof(ICalcService) ) );
 			Assert.IsNull( container.GetService( typeof(ICalcService) ) );
+		}
+
+		public void ChainContainers()
+		{
+			ICalcService service = new CalculatorService();
+			container.AddService( typeof(ICalcService), service );
+
+			IContainerAdapter adapter = new ContainerAdapter( container );
+
+			Assert.AreSame( service, container.GetService( typeof(ICalcService) ) );
 		}
 
 		[Test]
