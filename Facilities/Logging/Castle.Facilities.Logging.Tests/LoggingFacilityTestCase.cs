@@ -44,7 +44,13 @@ namespace Castle.Facilities.Logging.Tests
 
         [Test]
         public void SimpleTest() {
-            
+            String expectedLogOutput = "hello world";
+            String actualLogOutput = "";
+
+            //do something to cause a log message "hello world"
+            //dump log output to the actualLogOutput variable
+
+            Assert.IsTrue(expectedLogOutput.Equals(actualLogOutput));
         }
     }
 }
