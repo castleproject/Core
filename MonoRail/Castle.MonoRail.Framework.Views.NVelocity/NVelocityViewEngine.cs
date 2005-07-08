@@ -26,9 +26,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 	public class NVelocityViewEngine : ViewEngineBase
 	{
+		/// <summary>
+		/// Creates a new <see cref="NVelocityViewEngine"/> instance.
+		/// </summary>
 		public NVelocityViewEngine()
-		{
-		}
+		{}
 
 		#region IViewEngine Members
 
@@ -36,17 +38,17 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			ExtendedProperties props = new ExtendedProperties();
 
-			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
-			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
+			InitializeVelocityProperties(props);
 
-			Velocity.Init(props);
+			Velocity.ExtendedProperties = props;
+			Velocity.Init();
 		}
 
 		public override bool HasTemplate(String templateName)
 		{
 			try
 			{
-				return RuntimeSingleton.getTemplate(templateName + ".vm") != null;
+				return RuntimeSingleton.getTemplate(ResolveTemplateName(templateName)) != null;
 			}
 			catch(Exception)
 			{
@@ -63,16 +65,19 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			bool hasLayout = controller.LayoutName != null;
 
-			TextWriter writer = context.Response.Output;
-
+			TextWriter writer;
 			if (hasLayout)
 			{
-				writer = new StringWriter();
+				writer = new StringWriter();		//Because we are rendering within a layout we need to catch it first
+			}
+			else
+			{
+				writer = context.Response.Output;	//No layout so render direct to the output
 			}
 
 			try
 			{
-				template = RuntimeSingleton.getTemplate(viewName + ".vm");
+				template = RuntimeSingleton.getTemplate(ResolveTemplateName(viewName));
 
 				template.Merge(ctx, writer);
 			}
@@ -80,7 +85,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				if (hasLayout)
 				{
-					// Restore original writer
+					//Restore original writer
 					writer = context.Response.Output;
 				}
 
@@ -119,10 +124,37 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		}
 
 		#endregion
-
+	
+		/// <summary>
+		/// Initializes basic velocity properties. The main purpose of this method is to
+		/// allow this logic to be overrided.
+		/// </summary>
+		/// <param name="props">The <see cref="ExtendedProperties"/> collection to populate.</param>
+		protected virtual void InitializeVelocityProperties(ExtendedProperties props)
+		{
+			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
+			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
+		}
+	
+		/// <summary>
+		/// Resolves the template name into a velocity template file name.
+		/// </summary>
+		protected virtual string ResolveTemplateName(string templateName)
+		{
+			return templateName + ".vm";
+		}
+		
+		/// <summary>
+		/// Resolves the template name into a velocity template file name.
+		/// </summary>
+		protected virtual string ResolveTemplateName(string area, string templateName)
+		{
+			return String.Format("{0}/{1}", area, ResolveTemplateName(templateName));
+		}
+		
 		private void ProcessLayout(String contents, Controller controller, IContext ctx, IRailsEngineContext context)
 		{
-			String layout = String.Format("layouts/{0}.vm", controller.LayoutName);
+			String layout = ResolveTemplateName("layouts", controller.LayoutName);
 
 			try
 			{
@@ -148,6 +180,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private void AdjustContentType(IContext ctx, IRailsEngineContext context, Controller controller)
 		{
+			//TODO: Allow users to turn on XHTML support, then send the correct mime type here
+			//		Tatham has a method that does the mime type negotiation already
 			context.Response.ContentType = "text/html";
 		}
 
