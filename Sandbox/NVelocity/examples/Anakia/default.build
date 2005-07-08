@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<project name="NAnt" default="xdocs" basedir=".">
+	
+	<!-- add task to NAnt, this task must be in the global section for now -->
+	<!-- must get taskdef.Tasks.dll from NAntContrib -->
+	<taskdef assembly="..\..\build\nant\NVelocity.NAnt.dll" />
+
+	<target name="xdocs">
+            <anakia basedir="xdocs" 
+        	    destdir="results"
+                    extension=".html" 
+        	    style="xdocs/stylesheets/site.vsl"
+                    projectFile="xdocs/stylesheets/project.xml"
+                    templatePath="xdocs/stylesheets"
+                    lastModifiedCheck="false">
+			<fileset basedir="xdocs">
+		                <includes name="*.xml"/>
+				<excludes name="**/stylesheets/*" />
+			</fileset>
+            </anakia>
+	</target>
+</project>
+
+

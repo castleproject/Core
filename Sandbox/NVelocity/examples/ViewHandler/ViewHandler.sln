@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewHandler", "http://localhost/nvelocity/examples/viewhandler/ViewHandler.csproj", "{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Debug.ActiveCfg = Debug|.NET
+		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Debug.Build.0 = Debug|.NET
+		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Release.ActiveCfg = Release|.NET
+		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

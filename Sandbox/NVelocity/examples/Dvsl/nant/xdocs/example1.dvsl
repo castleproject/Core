@@ -1,0 +1,26 @@
+#match("document")
+<html>
+  <body>
+    <b>Infile:</b> $context.getAppValue("infilename")
+    <br/>
+    <b>Outfile:</b> $context.getAppValue("outfilename")
+    <br/>
+    There are $node.valueOf('count(section)') sections.
+   <br/>
+$context.applyTemplates()
+  </body>
+</html>
+#end
+
+#match("section")
+<hr>
+<b>Section:</b> $attrib.name
+$context.applyTemplates("p")
+#end
+
+#match("p")
+<blockquote>
+$node.copy( $node.children() )
+</blockquote>
+#end
+

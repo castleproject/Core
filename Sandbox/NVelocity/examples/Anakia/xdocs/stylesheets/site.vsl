@@ -1,0 +1,93 @@
+<!-- Content Stylesheet for Site -->
+
+    ## Defined variables
+    #set ($bodybg = "#ffffff")
+    #set ($bodyfg = "#000000")
+    #set ($bodylink = "#525D76")
+    #set ($bannerbg = "#525D76")
+    #set ($bannerfg = "#ffffff")
+    #set ($tablethbg = "#039acc")
+    #set ($tabletdbg = "#a0ddf0")
+    
+<!-- start the processing -->
+#document
+<!-- end the processing -->
+
+## This is where the macro's live
+
+#macro ( makeProject )
+    #set ($menus = $project.selectNodes("body/menu"))
+
+    #foreach ( $menu in $menus )
+        <strong>$menu.GetAttribute("name")</strong>
+        <ul>
+        #foreach ( $item in $menu.GetChildren() )
+            #set ($name = $item.GetAttribute("name"))
+            <li>#projectanchor($name $item.GetAttribute("href"))</li>
+        #end
+        </ul>
+    #end
+#end
+
+#macro ( image $value )
+#if ($value.GetAttribute("width"))
+#set ($width=$value.GetAttribute("width"))
+#end
+#if ($value.GetAttribute("height"))
+#set ($height=$value.GetAttribute("height"))
+#end
+#if ($value.GetAttribute("align"))
+#set ($align=$value.GetAttribute("align"))
+#end
+<img src="$relativePath$value.GetAttribute("src")" width="$!width" height="$!height" align="$!align">
+#end
+
+#macro ( projectanchor $name $value )
+    <a href="$relativePath$value">$name</a>
+#end
+#macro ( metaauthor $author $email )
+            <meta name="author" value="$author">
+            <meta name="email" value="$email">
+#end
+
+#macro (document)
+    <!-- ====================================================================== -->
+    <!-- Main Page Section -->
+    <!-- ====================================================================== -->
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+<!--
+            #set ($au = $root.GetChild("properties/author"))
+            #set ($em = $root.GetChild("properties/author/@email"))
+-->
+            #metaauthor ( $au.InnerText $em.Value )
+
+            <title>$root.GetChild("properties").GetChild("title").InnerText</title>
+        </head>
+
+        <body bgcolor="$bodybg" text="$bodyfg" link="$bodylink">        
+            <table border="1">
+                <tr>
+                <td>
+                #makeProject()
+                </td>
+                <td>
+                #set ($allSections = $root.selectNodes("body/section"))
+
+                #foreach ( $section in $allSections )
+		    <span style="width=100%; background-color=blue; color: white; ">$section.GetAttribute("name")</span>
+                    #foreach ( $item in $section.GetChildren() )                
+                        #if ($item.Name.Equals("img"))
+                            #image ($item)
+                        #else
+                            $item
+                        #end
+                    #end
+                #end
+                </td>
+                </tr>
+            </table>
+        </body>
+    </html>
+#end

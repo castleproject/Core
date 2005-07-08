@@ -1,0 +1,25 @@
+#set ( $sourceFile = "Turbine${baseName}Service.java" )
+$generator.parse("ServiceImplementation.vm",$sourceFile)
+
+#set ( $sourceFile = "${baseName}Service.java" )
+$generator.parse("ServiceInterface.vm",$sourceFile)
+
+#set ( $sourceFile = "Turbine${baseName}.java" )
+$generator.parse("ServiceStaticHelper.vm",$sourceFile)
+
+#set ( $sourceFile = "Test.txt" )
+$generator.parse("Test.vm",$sourceFile)
+
+#set ( $props = $properties.load("test.props") )
+
+## This is to test a properties file that was once taken from
+## the file system but is now taken from a JAR. We have to
+## deprecate the use of $generator.TemplatePath if we want
+## templates to work the same way from JARs and the file
+## system. I have a hack in PropsUtil right now to deal
+## with it.
+
+#set ( $props2 = $properties.load("$generator.TemplatePath/test.props") )
+##$generator.TemplatePath/test.props
+#set ( $sourceFile = "book.txt" )
+$generator.parse("book.vm",$sourceFile)

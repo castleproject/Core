@@ -1,0 +1,26 @@
+package $package;
+
+$license
+
+import org.apache.turbine.services.TurbineServices;
+
+/**
+ *
+ *
+ * @author <a href="mailto:$email">$name</a>
+ * @occupation $occupation
+ */
+public class Turbine$baseName
+{
+    /**
+     * Utility method for accessing the service 
+     * implementation
+     *
+     * @return a ${baseName}Service implementation instance
+     */
+    protected static ${baseName}Service getService()
+    {
+        return (${baseName}Service)TurbineServices
+            .getInstance().getService(${baseName}Service.SERVICE_NAME);
+    }
+}

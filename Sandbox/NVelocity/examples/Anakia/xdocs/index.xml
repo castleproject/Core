@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="jon@latchkey.com">Jon S. Stevens</author>
+    <title>The Jakarta Project</title>
+  </properties>
+
+<body>
+
+  <section name="Section 1">
+
+<p>
+This is an example template that gets processed.
+</p>
+
+<img src="/images/velocity.gif" width="329" height="105"/>
+
+<table border="1">
+<tr>
+    <td>
+        It even has a table in it!
+    </td>
+</tr>
+</table>
+
+<h3>And an h3 tag</h3>
+
+  </section>
+
+
+    <section name="Section 2">
+
+    <p> here is another section </p>
+    
+    </section>
+
+    <section name="section 3">
+    
+    <p><a href="./about/index.html">A link to a sub page</a></p>
+
+    </section>
+
+</body>
+</document>

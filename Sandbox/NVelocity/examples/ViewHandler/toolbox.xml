@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<toolbox>
+
+  <tool>
+     <key>toytool</key>
+     <scope>session</scope>
+     <class>ToyTool,ViewHandler</class>
+  </tool>
+
+</toolbox>
+

@@ -1,0 +1,15 @@
+package $package;
+
+$license
+
+import org.apache.turbine.services.Service;
+
+/**
+ *
+ * @author <a href="mailto:$email">$name</a>
+ * @occupation $occupation
+ */
+public interface ${baseName}Service extends Service
+{
+    public static final String SERVICE_NAME = "Turbine${baseName}Service";
+}

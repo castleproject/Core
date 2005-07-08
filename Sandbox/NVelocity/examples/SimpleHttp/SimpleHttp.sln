@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleHttp", "http://localhost/nvelocity/examples/simplehttp/SimpleHttp.csproj", "{260900BD-9ADF-4250-AEEB-F2C1200E6312}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{260900BD-9ADF-4250-AEEB-F2C1200E6312}.Debug.ActiveCfg = Debug|.NET
+		{260900BD-9ADF-4250-AEEB-F2C1200E6312}.Debug.Build.0 = Debug|.NET
+		{260900BD-9ADF-4250-AEEB-F2C1200E6312}.Release.ActiveCfg = Release|.NET
+		{260900BD-9ADF-4250-AEEB-F2C1200E6312}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

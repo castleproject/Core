@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<project name="NAnt" default="xdocs" basedir=".">
+	
+	<!-- add task to NAnt, this task must be in the global section for now -->
+	<!-- must get taskdef.Tasks.dll from NAntContrib -->
+	<taskdef assembly="..\..\..\build\NVelocity.NAnt.dll" />
+
+	<!-- 
+		The test task is referenced in the newly created UserTask.dll but can 
+		only be referenced in a target.
+
+		This should change in the future but its probally not that common to 
+		build your task AND	use it in the SAME build file.
+	-->
+	
+	<target name="xdocs">
+		<dvsl style="xdocs/example1.dvsl"
+		      destdir="output"
+		      extention=".html"
+            	      force="true"
+                      logfile="dvsl.log">
+			<fileset basedir="xdocs">
+		                <includes name="*.xml"/>
+			</fileset>
+		</dvsl>
+	</target>
+</project>

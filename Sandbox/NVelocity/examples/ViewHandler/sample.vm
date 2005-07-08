@@ -1,0 +1,45 @@
+#*
+    SimpleHttp sample.vm - just a sample template that can be called via extension mapping and handling
+*###
+<html>
+<body>
+
+<h3>ServerVariables:</h3>
+<table border=1>
+#foreach($key in $request.ServerVariables) 
+    <tr><td>$key</td><td>$request.ServerVariables.get_Item($key)</td></tr>
+#end
+</table>
+
+<h3>QueryString:</h3>
+<table border=1>
+#foreach($key in $request.QueryString) 
+    <tr><td>$key</td><td>$request.QueryString.get_Item($key)</td></tr>
+#end
+</table>
+
+<h3>Cookies:</h3>
+<table border=1>
+#foreach($key in $request.Cookies) 
+    <tr><td>$key</td><td>$request.Cookies.get_Item($key).Value</td></tr>
+#end
+</table>
+
+<h3>Form:</h3>
+<table border=1>
+#foreach($key in $request.Form) 
+    <tr><td>$key</td><td>$request.Form.get_Item($key)</td></tr>
+#end
+</table>
+
+<h3>Session:</h3>
+<table border=1>
+#foreach($key in $context.Session) 
+    <tr><td>$key</td><td>$context.Session.get_Item($key)</td></tr>
+#end
+</table>
+
+This is a message from ToyTool: $toytool.Message
+
+</body>
+</html>

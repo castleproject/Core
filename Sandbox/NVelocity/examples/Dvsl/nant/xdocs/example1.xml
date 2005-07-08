@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<document>
+  <section name="foo">
+    <p>
+       Hello from section foo
+    </p>
+  </section>
+  <section name="bar">
+    <p>
+       Hello from section bar
+    </p>
+  </section>
+</document>
+

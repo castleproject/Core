@@ -1,0 +1,11 @@
+# These should all evaluate to true
+
+$one
+$two
+$three
+
+# These should all evaluate to false
+
+$four
+$five
+$six

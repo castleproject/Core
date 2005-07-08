@@ -1,0 +1,21 @@
+baseName=Weather
+package=org.apache.turbine.services.weather
+name=Jason van Zyl
+email=jvanzyl@apache.org
+
+## The contents of the file license.txt
+## will be available in the context
+## as $license.
+
+license.file.contents = license.txt
+
+# Test some properties that have be give some boolean
+# values.
+
+one = true
+two = yes
+three = on
+
+four = false
+five = no
+six = off

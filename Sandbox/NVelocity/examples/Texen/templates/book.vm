@@ -1,0 +1,15 @@
+This is the book of the week:
+
+Props retrieved using new method:
+
+Title: $props.GetString("title")
+Author: $props.GetString("author")
+Publisher: $props.GetString("publisher")
+ISBN: $props.GetString("isbn")
+
+Props retrieved using old method:
+
+Title: $props2.GetString("title")
+Author: $props2.GetString("author")
+Publisher: $props2.GetString("publisher")
+ISBN: $props2.GetString("isbn")
