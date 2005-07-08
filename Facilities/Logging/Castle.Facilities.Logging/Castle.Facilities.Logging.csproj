@@ -94,6 +94,16 @@
                     AssemblyName = "System.Data"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
+                <Reference
+                    Name = "Castle.Facilities.Logging.log4netIntegration"
+                    Project = "{3CD5FD7D-D0AE-4DB6-A2C8-11B064C2F784}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Facilities.Logging.NLogIntegration"
+                    Project = "{948B7F46-BC76-4323-BDC9-5A05BA7C8232}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
