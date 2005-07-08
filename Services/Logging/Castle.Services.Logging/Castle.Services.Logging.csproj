@@ -94,12 +94,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ILogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ILoggerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LoggingException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NullLogFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
