@@ -272,8 +272,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			options["url"] = url;
 			//	options["method"] = method;
 	
-			if (idOfElementToBeUpdated != null && idOfElementToBeUpdated.Length > 0) options["update"] = idOfElementToBeUpdated;
 			if (with != null && with.Length > 0) options["with"] = with;
+			if (idOfElementToBeUpdated != null && idOfElementToBeUpdated.Length > 0) options["update"] = idOfElementToBeUpdated;
 			if (loading != null && loading.Length > 0) options["Loading"] = loading;
 			if (loaded != null && loaded.Length > 0) options["Loaded"] = loaded;
 			if (complete != null && complete.Length > 0) options["Complete"] = complete;

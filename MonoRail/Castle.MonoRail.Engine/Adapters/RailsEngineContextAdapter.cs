@@ -1,4 +1,3 @@
-using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +22,7 @@ namespace Castle.MonoRail.Engine.Adapters
 	using System.Security.Principal;
 
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Adapter to expose a valid <see cref="IRailsEngineContext"/>
