@@ -1,5 +1,4 @@
-using Castle.MicroKernel;
-using Castle.Model;
+using Castle.Model.Configuration;
 using Castle.Services.Logging;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
@@ -19,60 +18,89 @@ namespace Castle.Facilities.Logging
 {
 	using System;
 
-	using Castle.MicroKernel.Facilities;
+    using Castle.MicroKernel;
+    using Castle.MicroKernel.Facilities;
+    using Castle.Model;
 
+    public enum LoggingFramework{None,log4net,NLog}
 	/// <summary>
 	/// 
 	/// </summary>
 	public class LoggingFacility : AbstractFacility
 	{
+        private LoggingFramework framework;
+        private ILoggerFactory factory;
+        private bool intercept = true;
+
 		public LoggingFacility()
 		{
+            this.framework = LoggingFramework.None;
 		}
 
 		protected override void Init()
 		{
+            /////////////////////////////
             //Get some config information
-            //ideally just a string to a log4net / NLog config file.
+		    GetConfigurationInformation();
 
+		    ////////////////////////////////////
             //setup log4net/NLog and get rocking
+            SetupLogManager();
 
-            Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
-            Kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
-
-            Kernel.AddComponent("logging.logger.default", typeof(ILogger), typeof(NullLogger));
-		}
-
-        private void OnComponentModelCreated(ComponentModel model) {
             ////////////////////////
-            //for attributal logging
-            bool logable;
-            logable = false /*= model.Implementation.GetCustomAttributes(typeof(Logable), true).Length > 0*/;
+            //For base level logging
+            this.Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
 
-            model.ExtendedProperties["logable"] = logable;
-
-            if(logable)
-            {
-                //add to loggable things to watch or something
-            }
+            ////////////////////////
+            //For Attributal Logging
+            // Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
+            // Kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
 
             ///////////////////////////
             //For Constructor Injection
-            foreach(DependencyModel d in model.Dependencies)
+            // ???????
+            // this.Kernel.AddComponentInstance("logging.factory", typeof(ILoggerFactory), this.factory);
+            // How can I detect requests for ILogger and then supply them with a logger with the class full name?
+            // can they request a ILoggerFactory?
+		}
+
+	    private void GetConfigurationInformation()
+	    {
+	        if(this.FacilityConfig != null)
+	        {
+	            IConfiguration frameworkConfig = FacilityConfig.Children["framework"];
+                String fw = frameworkConfig.Value;
+                this.framework = (LoggingFramework) Enum.Parse(typeof(LoggingFramework), fw, true);
+                this.intercept = bool.Parse(FacilityConfig.Children["interception"].Value);
+	        }
+            else
+	        {
+	            this.framework = LoggingFramework.None;
+                this.intercept = true;
+	        }
+	    }
+
+        private void SetupLogManager()
+        {
+            if(this.FacilityConfig == null)
             {
-                if(d.TargetType == typeof(ILogger))
+                //setup NullLogger
+            }
+            else
+            {
+                if(this.framework == LoggingFramework.log4net)
                 {
-                    //check the config if a logger type is specified
-                    //if not give it the default.
+                    this.factory = null; /*log4netFactory*/
+                }
+                else if(this.framework == LoggingFramework.NLog)
+                {
+                    this.factory = null; /*NLogFactory*/
+                }
+                else
+                {
+                    this.factory = null; /*NullFactory*/
                 }
             }
-
-        }
-
-        private void OnComponentRegistered(String key, IHandler handler) {
-            //attributal logging
-            bool logable = (bool) handler.ComponentModel.ExtendedProperties["logable"];
-            //don't realy know what to do here
         }
 
 	}
