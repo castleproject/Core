@@ -47,13 +47,6 @@ namespace Castle.MonoRail.Framework.Tests
 			_viewEngine.AddView("databind", "databind", "databinding view");
 		}
 
-        [TearDown]
-            public void TearDown()
-        {
-            SmartController.IntInvoked = false;
-            SmartController.StrInvoked = false;
-        }
-
 		[Test]
 		public void BuildSimpleArgs()
 		{
@@ -118,60 +111,6 @@ namespace Castle.MonoRail.Framework.Tests
 			_engine.Process( GetContext("ToNullInt32Array", "i", (string[]) null) );
 			AssertResponse();
 		}
-
-		[Test]
-		public void InvokeOverloadedString()
-		{
-			_engine.Process( GetContext("Overloaded", "str", "a") );
-			Assert.IsTrue(SmartController.StrInvoked);
-            Assert.IsFalse(SmartController.IntInvoked);
-			AssertResponse();
-		}
-        [Test]
-        public void InvokeOverloadedInteger() {
-            _engine.Process( GetContext("Overloaded", "i", "1") );
-            Assert.IsTrue(SmartController.IntInvoked);
-            Assert.IsFalse(SmartController.StrInvoked);
-            AssertResponse();
-        }
-
-        [Test]
-        public void InvokeOverloadedWithParametersInteger() {
-            NameValueCollection c1 = new NameValueCollection();
-            c1.Add("i", "1");
-            _engine.Process( GetContext("Overloaded", c1) );
-            Assert.IsTrue(SmartController.IntInvoked);
-            Assert.IsFalse(SmartController.StrInvoked);
-            AssertResponse();
-        }
-
-        [Test]
-        public void InvokeOverloadedWithParametersString() {
-            NameValueCollection c2 = new NameValueCollection();
-            c2.Add("str", "a");
-            _engine.Process( GetContext("Overloaded", c2) );
-            Assert.IsTrue(SmartController.StrInvoked);
-            Assert.IsFalse(SmartController.IntInvoked);
-            AssertResponse();
-        }
-
-        [Test]
-        [ExpectedException(typeof(NullReferenceException))]
-        public void InvokeOverloadedWithNullParameters() {
-            _engine.Process( GetContext("Overloaded", null) );
-            Assert.IsFalse(SmartController.StrInvoked);
-            Assert.IsFalse(SmartController.IntInvoked);
-            AssertResponse();
-        }
-
-        [Test]
-        [ExpectedException(typeof(TargetInvocationException))]
-        public void InvokeOverloadedWithEmptyParameters() {
-            _engine.Process( GetContext("Overloaded", new NameValueCollection()) );
-            Assert.IsFalse(SmartController.StrInvoked);
-            Assert.IsFalse(SmartController.IntInvoked);
-            AssertResponse();
-        }
 
 		[Test]
 		public void DataBindNoPrefix()
@@ -289,14 +228,5 @@ namespace Castle.MonoRail.Framework.Tests
 
 			return _context;
 		}
-        private RailsEngineContextImpl GetContext(string action, NameValueCollection c) {
-            _context = new RailsEngineContextImpl("/smart/"+ action +".rails");
-	
-            _context.Params.Add(c);
-
-            Assert.AreEqual("", _context.Response.Output.ToString());
-
-            return _context;
-        }
 	}
 }
