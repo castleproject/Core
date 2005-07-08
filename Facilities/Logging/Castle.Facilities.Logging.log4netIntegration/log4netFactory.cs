@@ -41,7 +41,7 @@ namespace Cystem.Facilities.Logging.log4netIntegration
 
         public override ILogger Create(string name, LoggerLevel level) {
             ILog log = LogManager.GetLogger(name);
-            throw new NotSupportedException("Logger levels cannot be changed at runtime. Please review your configuration file.");
+            throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
             //return new log4netLogger(log);
         }
 
