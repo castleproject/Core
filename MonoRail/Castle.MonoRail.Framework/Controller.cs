@@ -282,6 +282,11 @@ namespace Castle.MonoRail.Framework
 			_selectedViewName = Path.Combine(controller, name);
 		}
 
+		/// <summary>
+		/// Sends a contents to be render directly by the view engine.
+		/// It's up to the view engine just applying the layout and nothing else.
+		/// </summary>
+		/// <param name="contents">Contents to be rendered</param>
 		public void DirectRender(String contents)
 		{
 			CancelView();
@@ -319,19 +324,31 @@ namespace Castle.MonoRail.Framework
 			_context.Response.Redirect(controller, action);
 		}
 
-        /// <summary>
-        /// Redirects to another controller and action.
-        /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="action"></param>
-        /// <param name="parameters"></param>
-        public void Redirect(String controller, String action, NameValueCollection parameters) {
-            CancelView();
+		/// <summary>
+		/// Redirects to another controller and action.
+		/// </summary>
+		/// <param name="controller">Controller's name</param>
+		/// <param name="action">action name</param>
+		/// <param name="parameters">pairs of key/values</param>
+		public void Redirect(String controller, String action, NameValueCollection parameters) 
+		{
+			CancelView();
 
-            _context.Params.Add(parameters);
+			String querystring = String.Empty;
 
-            _context.Response.Redirect(controller, action);
-        }
+			HttpServerUtility serverUtility = HttpContext.Server;
+
+			foreach(String key in parameters.Keys)
+			{
+				querystring += String.Format( "{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
+					serverUtility.HtmlEncode(key), 
+					serverUtility.HtmlEncode(parameters[key]) );
+			}
+
+			String url = UrlInfo.GetRailsUrl(controller, action, Context.UrlInfo.Extension);
+
+			_context.Response.Redirect( String.Format("{0}?{1}", url, querystring) );
+		}
 
 		/// <summary>
 		/// Redirects to another controller and action.
