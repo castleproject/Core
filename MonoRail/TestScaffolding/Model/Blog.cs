@@ -15,10 +15,8 @@
 namespace TestScaffolding.Model
 {
 	using System;
-	using System.Collections;
 
 	using Castle.ActiveRecord;
-
 
 	[ActiveRecord("Blogs")]
 	public class Blog : ActiveRecordValidationBase
@@ -26,7 +24,7 @@ namespace TestScaffolding.Model
 		private int _id;
 		private String _name;
 		private String _author;
-		private IList _posts;
+//		private IList _posts;
 
 		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id
