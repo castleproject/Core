@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Test
 	using System;
 	using System.Collections;
 	using System.Data;
+	using System.Reflection;
 
 	using NUnit.Framework;
 
@@ -333,6 +334,21 @@ namespace Castle.DynamicProxy.Test
 
 			Assert.IsTrue( proxy is ClassWithIndexer );
 			
+		}
+
+		[Test]
+		public void ReflectionTest()
+		{
+			object proxy = _generator.CreateClassProxy( 
+				typeof(MySerializableClass), new StandardInterceptor() );
+
+			Type type = proxy.GetType();
+			
+			Assert.IsNotNull(type);
+
+			PropertyInfo info = type.GetProperty("Current", BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.Instance);
+
+			Assert.IsNotNull(info);
 		}
 
 		[Test]
