@@ -1,5 +1,3 @@
-using Castle.Model.Configuration;
-using Castle.Services.Logging;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +15,17 @@ using Castle.Services.Logging;
 namespace Castle.Facilities.Logging
 {
 	using System;
+    using System.IO;
+	using System.Reflection;
 
-    using Castle.MicroKernel;
+	using Castle.Facilities.Logging.NLogIntegration;
+	using Cystem.Facilities.Logging.log4netIntegration;	
     using Castle.MicroKernel.Facilities;
-    using Castle.Model;
+    using Castle.Model.Configuration;
+    using Castle.Services.Logging;
 
     public enum LoggingFramework{None,log4net,NLog}
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -31,6 +34,7 @@ namespace Castle.Facilities.Logging
         private LoggingFramework framework;
         private ILoggerFactory factory;
         private bool intercept = true;
+        private FileInfo configFile;
 
 		public LoggingFacility()
 		{
@@ -72,33 +76,41 @@ namespace Castle.Facilities.Logging
                 String fw = frameworkConfig.Value;
                 this.framework = (LoggingFramework) Enum.Parse(typeof(LoggingFramework), fw, true);
                 this.intercept = bool.Parse(FacilityConfig.Children["interception"].Value);
+                this.configFile = new FileInfo(FacilityConfig.Children["config"].Value);
 	        }
             else
 	        {
 	            this.framework = LoggingFramework.None;
                 this.intercept = true;
+                this.configFile = null;
 	        }
 	    }
 
+        /// <summary>
+        /// Setups the log manager.
+        /// </summary>
+        /// <remarks>
+        /// How do I decide which logfactory to install?
+        /// </remarks>
         private void SetupLogManager()
         {
             if(this.FacilityConfig == null)
             {
-                //setup NullLogger
+                this.factory = new NullLogFactory();
             }
             else
             {
                 if(this.framework == LoggingFramework.log4net)
                 {
-                    this.factory = null; /*log4netFactory*/
+                    this.factory = new log4netFactory(configFile);
                 }
                 else if(this.framework == LoggingFramework.NLog)
                 {
-                    this.factory = null; /*NLogFactory*/
+                    this.factory = new NLogFactory();
                 }
                 else
                 {
-                    this.factory = null; /*NullFactory*/
+                    this.factory = new NullLogFactory();
                 }
             }
         }
