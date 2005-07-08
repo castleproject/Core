@@ -1,0 +1,62 @@
+#*
+
+@test diabolical.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression
+test doesn't fail incorrectly.
+
+This is for wierd strangeness that doesn't have any other home.
+
+*#
+
+$f.
+$f
+$f. $f
+#set($f = "foo")
+$f.
+$f
+$f. $f
+$thingy.dingy
+"#FFFFFF"
+"$ow"
+
+"$row","var"
+#333333
+#FFFFFF
+"#FFFFF
+#FFFFF"
+"#000000">
+"#ffffff"
+
+$strings.getVillageType($col.Type)
+$strings.getVillageType( $col.Type)
+$strings.getVillageType($col.Type )
+
+
+-#-# Inline loops #-#-
+
+blargh>#foreach($a in  $stringarray)<$a>#end<blargh
+blargh>#foreach($a in  $stringarray) <$a>#end<blargh
+blargh>#foreach($a in  $stringarray)<$a> #end<blargh
+blargh>#foreach($a in  $stringarray) <$a> #end<blargh
+
+#"FFFF
+-#-#-#-#-#
+#-#-#-#
+$-$-$-$-
+#FF00FF00
+#'FF
+
+$tstrings.chop($generator.parse("sql/mysql/columns", "", "table", $tbl),1)
+$provider.chop("stringy",1)
+
+#set($foo = "foo") 
+#if ($foo.length>0)$foo#end 
+#set($bar = "bar") 
+#if ($bar.length>0)$bar#end 
+
+
+#set($a=1)
+#0F

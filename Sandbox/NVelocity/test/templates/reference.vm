@@ -1,0 +1,104 @@
+#*
+
+@test reference.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+#set($_foo = "bar")
+$_foo
+#if ($_foo.Equals("bar"))
+   \$_foo equals "bar" : $_foo
+#end
+
+Late introspection :
+
+$vector.get_Item(0).Length
+
+
+More stupid reference escaping ...
+
+When it does exist in the context :
+
+#set($foo = "foo")
+$foo
+\$foo
+\$!foo
+$\!foo
+$\\!foo
+\$\!foo
+
+And when it doesn't :
+
+$bar
+\$bar
+
+\$!bar  (because it's just text...)
+
+$\!foo
+$\\!foo
+$\\\!foo
+$\\\\!foo
+\\$\!foo
+
+Misc tests :
+
+[$foo.bar]
+
+
+Test lower case property names 
+
+$provider.Title
+$provider.title
+
+#foreach($i in $provider.vector)
+ $i
+#end
+#foreach($i in $provider.Vector)
+ $i
+#end
+
+Now test if we can use lowercase for propertes in set
+#set($oldtitle = $provider.title)
+Was : $oldtitle
+#set($provider.title = "geir")
+Now : $provider.title
+#set($provider.title = $oldtitle)
+Back : $provider.title
+
+Test what was a bug :
+
+#set($b = 'boy')
+#set($c = 'cat')
+$b${c}.java
+${b}${c}.java
+
+
+More tests :
+
+$provider.title
+$$provider.title
+#$provider.title
+
+$foo.bar#if( $foo ) ($bar) #end
+
+
+Test boolean introspection isFoo()
+
+#if( $boolobj.isBoolean == true )
+  Correct
+#else
+  Wrong
+#end
+
+
+#if ( $boolobj.isNotboolean == true )
+   Wrong
+#else
+   Correct
+#end
+

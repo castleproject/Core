@@ -1,0 +1,127 @@
+#*
+@test escape2.vm
+
+More interesting cases...
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+--- Schmoo ---
+
+These are not in the context, so they should render as they are here (schmoo).
+$foo
+\$foo
+\\$foo
+
+\#woogie
+\\#woogie
+\\\#woogie
+
+Now put $foo in the context :
+#set($foo = "bar")
+\$foo = $foo
+\\\$foo =\\$foo
+\\\\\$foo =\\\\$foo
+
+As we increase the number of \'s, we alternate renderings :
+$foo
+\$foo
+\\$foo
+\\\$foo
+\\\\$foo
+
+--- Pluggable Directives ----
+
+We are doing an \#include("test.txt"), starting with 0 '\' preceeding :
+
+#include("test.txt")
+\#include("test.txt")
+\\#include("test.txt")
+\\\#include("test.txt")
+\\\\#include("test.txt")
+
+Now, foreach is a PD.  Escape the first one, and then not the second so it
+renders.  The third and fourth examples show the single 'unpleasantry' about this.  The \
+is only an escape when 'touching' VTL, otherwise, it's just schmoo.
+
+\#foreach(
+
+\\#foreach($a in $stringarray) $a \\#end
+
+\\#foreach($a in $stringarray) $a \ \\#end
+
+\\#foreach($a in $stringarray)$a\ \\#end
+
+
+--- Control Structures ----
+
+First should be escaped...
+\#if(true) hi \#end
+
+This isn't.  Note then that it has to render the \\ as a \ because it's stuck to the VTL
+
+\\#if(true) hi \\#end
+
+\\#if(true) hi #end
+
+And so forth...
+\\\#if(true) hi \\\#end
+
+\\\\#if(true) hi \\\\#end
+
+And more...
+
+\#if(true)
+	hi
+\#else
+	there
+\#end
+
+\\#if(true)
+	hi
+\\#else
+	there
+\\#end
+
+\\\#if(true)
+	hi
+\\\#else
+	there
+\\\#end
+
+\\#if(false)
+	hi
+\\#elseif(true)
+	there
+\\#end
+
+\\\#if(false)
+	hi
+\\\#elseif(true)
+	there
+\\\#end
+
+## testing combinations like #$foo
+
+#$foo1
+\#$foo1
+#${foo1}
+\#$${foo1}
+#set($foo1 = "C0C0C0")
+#$foo1
+\#$foo1
+#${foo1}
+\#$${foo1}
+#\$${foo1}
+
+## and wacky stuff that are not references, but
+## because of the MORE tokens, get screwed up
+
+$(QUERY_STRING{forumid})
+\$(QUERY_STRING{forumid})
+\\$(QUERY_STRING{forumid})
+
+

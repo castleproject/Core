@@ -1,0 +1,74 @@
+#**
+
+@test velocimacro.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+## inline VM : shows how a tablerow might be generated
+
+#macro( tablerow  $array $color )
+#foreach( $element in $array )
+   <tr><tdi bgcolor=$color>$element</td></tr>
+#end
+#end
+
+Now, use the \#quietnull example from the global library VM_global_library.vm : 
+Now, there should be nothing in the brackets : >#quietnull($nada)<
+
+#set($foo = "hello!")
+Where there should be something here : >#quietnull($foo)<
+
+#set($arr = ["$10.24","$15.32","$12.15"])
+#set($col = "blue")
+
+<table>
+#tablerow( $arr $col)
+</table>
+
+
+Further tests.  The following VMs and non-VM should be properly escaped :
+\#tablerow
+\#quietnull
+\#notavm
+>\\#quietnull($nada)<
+
+Now try to define a new quietnull VM :
+#macro( quietnull $a )
+	QuietNull : $a
+#end
+
+It should have been rejected, as the default is to not let inlines override existing, and there
+should be a message in velocity.log.
+Therefore it should still function normally :
+>#quietnull($foo)<
+>#quietnull($nada)<
+
+We should be able to use argless VMs (and directives....)
+#macro( noargs )
+Hello! I have no args!
+#end
+
+#noargs()
+
+
+And there was a bug where I wasn't getting the params right for the use-instance :
+
+#macro( showarg $i )
+Arg :>$i<
+#end
+
+#showarg( $jdom.getRootElement().getChild("properties").getChild("author").getTextTrim() )
+
+String literals should work as you expect :
+#showarg( "stringliteral")
+
+
+Test boolean args :
+
+#testbool(true)
+#testbool(false)
+- Another fine Velocity Production -

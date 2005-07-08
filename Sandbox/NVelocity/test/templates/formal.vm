@@ -1,0 +1,46 @@
+#*
+
+@test formal.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+1. $!{provider.Title}
+
+2. $provider.Title
+
+3. $!provider.Title
+
+4. ${provider.Title}
+
+${provider.Title}${provider.Title}
+
+${provider.Title}MapBuilder
+
+${provider.Title}.map.${provider.Title}MapBuilder
+
+#set($this = "this")
+#set($that = "that")
+
+${this}${that}
+
+${provider.Title}
+
+$provider.Hashtable.get_Item( "key0")
+$provider.Hashtable.get_Item("key1" )
+$provider.Hashtable.get_Item(   "key2"                 )
+$provider.Hashtable.get_Item("floogie!")
+
+## curly wierdness
+
+{$provider.Title
+$provider.Title}
+{$provider.Title}
+$provider}.Title
+${provider}.Title
+$provider{.Title
+

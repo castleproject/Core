@@ -1,0 +1,55 @@
+#*
+
+@test escape.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+\A
+
+\#set($woo = "bar")
+#set($woo = "bar")
+
+\$woo => $woo
+
+The following should print 'as is' : 
+$f\oo
+\a
+"\r"
+
+Now, test the built in directives. Note that $foo isn't in the context :
+\#set($foo = $foo + 1)
+\#set(\$foo = $foo + 1)
+\#if($foo)
+\#if ( $foo )
+\#else
+\#end
+\#elseif(
+
+Now, a reference not in the context:
+\$foo -> $foo
+\#if($foo)
+\#if(\$foo)
+
+Put it in :
+#set($foo = 1)
+\$foo -> $foo
+\#if($foo)
+\#if(\$foo)
+
+This isn't in the context, so we get the full monty :
+	\$woobie.blagh()
+
+The following two are references :
+	\$provider.Title = $provider.Title
+	\$provider.getTitleMethod() = $provider.getTitleMethod()
+
+Now, pluggable directives:
+
+\#notadirective
+\#foreach
+

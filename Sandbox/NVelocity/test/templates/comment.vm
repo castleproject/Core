@@ -1,0 +1,43 @@
+#*
+
+@test comment.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression
+test doesn't fail incorrectly.
+
+*#
+
+## this is a single line comment
+
+#*
+
+this is a multi line comment
+
+#if (
+
+*#
+
+#**
+
+@author jason van zyl
+
+*#
+
+this is some text.
+
+The following is a 'Christoph Comment' ;)
+##  ##
+foo
+
+We can now comment after the inline set :
+
+#set( $foo = 1 ) ## and this is a set statement
+
+
+## here is a Nathan Bubna bug :
+
+$bar##
+#set($foo = 'foo!' )
+$foo

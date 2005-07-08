@@ -1,0 +1,22 @@
+#*
+
+@test if.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+#if (true)
+    this is true
+#end
+
+#if (false)
+    this is false
+#end
+
+#if ($foo)
+    this isn't defined yet.
+#end

@@ -1,0 +1,74 @@
+From: nvelocity-user-admin@lists.sourceforge.net on behalf of Mike
+Bridge [mike@mymailout.com]
+Sent: Friday, December 31, 2004 1:35 PM
+To: nvelocity-user@lists.sourceforge.net
+Subject: [NVelocity-user] Problem with reading latin-1 accented chars
+
+I'm having a problem reading accented characters from a template with the last NVelocity release version.  I'm certain that the template itself is encoded in iso-8859-1, and I'm explicitly reading it with that encoding.  The accented characters are being removed entirely.  (My nvelocity.properties file also has the line
+"input.encoding=ISO-8859-1".)
+
+I can't quite see where this is going wrong....  Any ideas?
+
+Here's my test code:
+
+   try
+   {
+    NVManager.VelocityInit();
+   }
+   catch (System.Exception e)
+   {
+    log.Error("Problem initializing Velocity : " + e);
+    Assert.Fail("Could not initialize velocity");
+   }
+
+   VelocityContext context = new VelocityContext();
+
+   StringWriter writer = new StringWriter();
+
+   try
+   {
+    Velocity.MergeTemplate("Tests\\accentedchars.vm", "iso-8859-1", context, writer);
+   }
+   catch (System.Exception e)
+   {
+    log.Error(e.StackTrace);
+    log.Error("Problem merging template : " + e);
+    Assert.Fail("Problem merging template");
+   }
+   String result=writer.ToString();
+
+   //log.Debug("FOUND "+result);
+   Assert.IsTrue(result.IndexOf("איטח") > 0);
+   Assert.IsTrue(result.IndexOf("הרזו") > 0);
+
+
+
+And this is what's in the "accentedchars.vm" template:
+
+====================
+TEST ISO-8859-1 ACCENTS
+איטח
+הרזו
+DONE
+====================
+
+Thanks,
+
+-Mike
+
+
+
+
+
+
+
+-------------------------------------------------------
+The SF.Net email is sponsored by: Beat the post-holiday blues Get a FREE limited edition SourceForge.net t-shirt from ThinkGeek.
+It's fun and FREE -- well, almost....http://www.thinkgeek.com/sfshirt
+_______________________________________________
+NVelocity-user mailing list
+NVelocity-user@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/nvelocity-user
+
+
+

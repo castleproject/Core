@@ -1,0 +1,24 @@
+#**
+
+@test vm_test2.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression
+test doesn't fail incorrectly.
+
+Tests VM recursion *and* the local template namespace feature.
+This version of recurse should override the global version
+when called by the global VM callrecurse()
+*#
+#macro( recurse $a )
+  local recurse $a
+  #set( $a = $a - 1)
+  #if ($a > 0)
+    #recurse( $a )
+  #end
+#end
+
+#set($count = 5)
+
+#callrecurse()

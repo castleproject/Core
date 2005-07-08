@@ -1,0 +1,42 @@
+#*
+
+@test array.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+#set( $foo = [$this, $that, $woog.Bar, [$this, "this"] ])
+
+$provider.concat(["a", "b", "c"])
+
+#set($foo = "a")
+$provider.objConcat( [1..2] )
+$provider.objConcat( ["a","b"] )
+$provider.objConcat( [1..2 ] )
+$provider.objConcat( [$foo] )
+$provider.objConcat( [ $foo] )
+$provider.objConcat( [$foo ] )
+
+#macro( showme $array )
+ #foreach( $i in $array )
+   > $i <#end
+
+#end
+
+#set($woog = "a")
+#set($floog = "b")
+#showme( [ $woog] )
+#showme( [ $woog,$floog] )
+#showme( [1..2])
+#showme( [1 ..2 ])
+
+##  and more....
+
+$p.m( [ $A.g(1), $title ])
+$pp.messageFormat( [ $Abc.get($sti), $title, $ti, $sti, 'bodytext' ], $subtopicTemplate)
+#set ($args = [ $pp.nQuestions, $pass, $units ] )
+

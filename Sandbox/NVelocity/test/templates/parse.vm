@@ -1,0 +1,18 @@
+#*
+
+@test parse.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+Test the \#parse pluggable directive 
+
+Now calling parse1.vm :
+---
+#parse("parse1.vm")
+---
+all done!

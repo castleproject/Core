@@ -1,0 +1,38 @@
+#**
+
+@test arithmetic.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+#set($foo = 5)
+#set($foo = $foo + 1)
+$foo
+
+#set($foo = $foo - 1)
+$foo
+
+#set($foo = $foo * 2)
+$foo
+
+#set($foo = $foo / 2)
+$foo
+
+And the whole thing again with inline set statements
+
+#set( $foo = 5)
+#set( $foo = $foo + 1)
+$foo
+
+#set ( $foo = $foo - 1 )
+$foo
+
+#set( $foo = $foo * 2)
+$foo
+
+#set ($foo = $foo / 2)
+$foo

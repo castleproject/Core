@@ -1,0 +1,25 @@
+#*
+
+@test map.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+## This is a valid Map and Bar is a valid
+## element.
+
+$hashtable.Bar
+
+## test the new Map support
+
+#set( $hashtable.Foo = "foovalue")
+$hashtable.get_Item("Foo")
+$hashtable.Foo
+
+#set( $hashmap.Foo = "foovalue")
+$hashmap.Foo
+$hashmap.get_Item("Foo")
