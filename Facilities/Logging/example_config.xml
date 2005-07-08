@@ -3,7 +3,9 @@
 
 	<facilities>
 		<facility id="logging">
-            <logfile-location>log4net.config</logfile-location>
+		    <framework>log4net|nlog|none</framework>
+            <config>logging.config</config>
+            <interception>true|false</interception>
 		</facility>
 	</facilities>
 
