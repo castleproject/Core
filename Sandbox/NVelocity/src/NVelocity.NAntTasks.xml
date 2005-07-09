@@ -1,0 +1,873 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NVelocity.NAntTasks</name>
+    </assembly>
+    <members>
+        <member name="F:NVelocity.NAnt.Dvsl.DvslTask.INFILENAME">
+            Supported app values
+        </member>
+        <member name="M:NVelocity.NAnt.Dvsl.DvslTask.PutAppValue(System.String,System.Object)">
+            <summary>
+            Sets an application value from outside of the DVSL task
+            </summary>
+            <param name="name"></param>
+            <param name="o"></param>
+        </member>
+        <member name="M:NVelocity.NAnt.Dvsl.DvslTask.Process(System.IO.DirectoryInfo,System.IO.FileInfo,System.IO.DirectoryInfo,System.IO.FileInfo)">
+            <summary>
+            Processes the given input XML file and stores the result in the given resultFile.
+            </summary>
+            <param name="baseDir"></param>
+            <param name="xmlFile"></param>
+            <param name="destDir"></param>
+            <param name="stylesheet"></param>
+        </member>
+        <member name="M:NVelocity.NAnt.Dvsl.DvslTask.Transform(System.IO.FileInfo,System.IO.FileInfo)">
+            <summary>
+            Does the actual transform
+            </summary>
+            <param name="inFile"></param>
+            <param name="outFile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Dvsl.DvslTask.EnsureDirectoryFor(System.IO.FileInfo)">
+            <summary>
+            create directories as needed
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.Style">
+            <summary>
+            Sets the file to use for stylesheet.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.FileSet">
+            <summary>
+            The set of files to be included in the archive.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.Force">
+            <summary>
+            Set whether to check dependencies, or always generate.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.Destdir">
+            <summary>
+            Set the destination directory where the generated files should be directed.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.Extension">
+            <summary>
+            Set the desired file extension to be used for the target files.
+            If not specified, &quot;<code>.html</code>&quot; is used.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.LogFile">
+            <summary>
+            Sets the file to use for logging.  If not specified, all logging
+            is directed through NAnt's logging system.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.ToolboxFile">
+            <summary>
+            Sets the Toolbox properties file to use.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.Out">
+            <summary>
+            Sets an output file
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.In">
+            <summary>
+            Sets an input xml file to be styled
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.OutputEncoding">
+            <summary>
+            Sets the character encoding for output files.  If not specified,
+            output is written with UTF-8 encodin6g.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Dvsl.DvslTask.ValidatingParser">
+            <summary>
+            Sets the flag to have DVSL use a validating parser for the
+            input documents
+            </summary>
+        </member>
+        <member name="T:NVelocity.NAnt.Texen.Generator">
+            <summary>
+            A text/code generator class
+            </summary>
+            <author><a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a></author>
+            <author><a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.OUTPUT_PATH">
+            <summary> Where the texen output will placed.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.TEMPLATE_PATH">
+            <summary> Where the velocity templates live.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.DEFAULT_TEXEN_PROPERTIES">
+            <summary> Default properties file used for controlling the
+            tools placed in the context.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.props">
+            <summary>
+            Default properties used by texen.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.controlContext">
+            <summary> Context used for generating the texen output.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.writers">
+            <summary> Keep track of the file writers used for outputting
+            to files. If we come across a file writer more
+            then once then the additional output will be
+            appended to the file instead of overwritting
+            the contents.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.instance">
+            <summary> The generator tools used for creating additional
+            output withing the control template. This could
+            use some cleaning up.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.outputEncoding">
+            <summary> This is the encoding for the output file(s).
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.inputEncoding">
+            <summary> This is the encoding for the input file(s)
+            (templates).
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.Generator.ve">
+            <summary> Velocity engine.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.#ctor">
+            <summary> Default constructor.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.#ctor(System.String)">
+            <summary> Create a new generator object with properties loaded from
+            a file.  If the file does not exist or any other exception
+            occurs during the reading operation the default properties
+            are used.
+            *
+            </summary>
+            <param name="String">properties used to help populate the control context.
+            </param>
+            <returns>Generator generator used in the control context.
+            
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.#ctor(Commons.Collections.ExtendedProperties)">
+            <summary> Create a new Generator object with a given property
+            set. The property set will be duplicated.
+            *
+            </summary>
+            <param name="Properties">properties object to help populate the control context.
+            
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.setDefaultProps">
+            <summary> Set default properties.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.getWriter(System.String,System.String)">
+            <summary> Returns a writer, based on encoding and path.
+            *
+            </summary>
+            <param name="path">     path to the output file
+            </param>
+            <param name="encoding"> output encoding
+            
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.getTemplate(System.String,System.String)">
+            <summary> Returns a template, based on encoding and path.
+            *
+            </summary>
+            <param name="templateName"> name of the template
+            </param>
+            <param name="encoding">     template encoding
+            
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.parse(System.String,System.String)">
+            <summary> Parse an input and write the output to an output file.  If the
+            output file parameter is null or an empty string the result is
+            returned as a string object.  Otherwise an empty string is returned.
+            *
+            </summary>
+            <param name="String">input template
+            </param>
+            <param name="String">output file
+            
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.parse(System.String,System.String,System.String,System.Object)">
+            <summary> Parse an input and write the output to an output file.  If the
+            output file parameter is null or an empty string the result is
+            returned as a string object.  Otherwise an empty string is returned.
+            You can add objects to the context with the objs Hashtable.
+            *
+            </summary>
+            <param name="String">input template
+            </param>
+            <param name="String">output file
+            </param>
+            <param name="String">id for object to be placed in the control context
+            </param>
+            <param name="String">object to be placed in the context
+            </param>
+            <returns>String generated output from velocity
+            
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.parse(System.String,System.String,System.String,System.String,System.String,System.Object)">
+            <summary> Parse an input and write the output to an output file.  If the
+            output file parameter is null or an empty string the result is
+            returned as a string object.  Otherwise an empty string is returned.
+            You can add objects to the context with the objs Hashtable.
+            *
+            </summary>
+            <param name="String">input template
+            </param>
+            <param name="String">inputEncoding template encoding
+            </param>
+            <param name="String">output file
+            </param>
+            <param name="String">outputEncoding encoding of output file
+            </param>
+            <param name="String">id for object to be placed in the control context
+            </param>
+            <param name="String">object to be placed in the context
+            </param>
+            <returns>String generated output from velocity
+            
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.parse(System.String,NVelocity.Context.IContext)">
+            <summary> Parse the control template and merge it with the control
+            context. This is the starting point in texen.
+            *
+            </summary>
+            <param name="String">control template
+            </param>
+            <param name="Context">control context
+            </param>
+            <returns>String generated output
+            
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.getContext(System.Collections.Hashtable)">
+            <summary> Create a new context and fill it with the elements of the
+            objs Hashtable.  Default objects and objects that comes from
+            the properties of this Generator object is also added.
+            *
+            </summary>
+            <param name="Hashtable">objects to place in the control context
+            </param>
+            <returns>Context context filled with objects
+            
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.fillContextHash(NVelocity.Context.IContext,System.Collections.Hashtable)">
+            
+            <summary> Add all the contents of a Hashtable to the context.
+            *
+            </summary>
+            <param name="Context">context to fill with objects
+            </param>
+            <param name="Hashtable">source of objects
+            
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.fillContextDefaults(NVelocity.Context.IContext)">
+            <summary> Add properties that will aways be in the context by default
+            *
+            </summary>
+            <param name="Context">control context to fill with default values.
+            
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.fillContextProperties(NVelocity.Context.IContext)">
+            <summary> Add objects to the context from the current properties.
+            *
+            </summary>
+            <param name="Context">control context to fill with objects
+            that are specified in the default.properties
+            file
+            
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.Generator.shutdown">
+            <summary> Properly shut down the generator, right now
+            this is simply flushing and closing the file
+            writers that we have been holding on to.
+            </summary>
+        </member>
+        <member name="T:NVelocity.NAnt.Anakia.Escape">
+            <summary>
+            This class is for escaping CDATA sections. The code was
+            "borrowed" from the JDOM code. I also added in escaping
+            of the " -> &amp;quot; character.
+            </summary>
+            <author><a href="mailto:jon@latchkey.com">Jon S. Stevens</a></author>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.Escape.#ctor">
+            <summary>
+            Empty constructor
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.Escape.GetText(System.String)">
+            <summary>
+            Do the escaping.
+            </summary>
+        </member>
+        <member name="T:NVelocity.NAnt.Texen.TexenTask">
+            <summary>
+            An ant task for generating output by using Velocity
+            </summary>
+            <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
+            <author><a href="robertdonkin@mac.com">Robert Burrell Donkin</a></author>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.ERR_MSG_FRAGMENT">
+            <summary> This message fragment (telling users to consult the log or
+            invoke ant with the -debug flag) is appended to rethrown
+            exception messages.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.controlTemplate">
+            <summary> This is the control template that governs the output.
+            It may or may not invoke the services of worker
+            templates.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.templatePath">
+            <summary> This is where Velocity will look for templates
+            using the file template loader.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.outputDirectory">
+            <summary>
+            This is where texen will place all the output
+            that is a product of the generation process.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.outputFile">
+            <summary>
+            This is the file where the generated text
+            will be placed.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.outputEncoding">
+            <summary> This is the encoding for the output file(s).
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.inputEncoding">
+            <summary> This is the encoding for the input file(s)
+            (templates).
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:NVelocity.NAnt.Texen.TexenTask.contextProperties" -->
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.useClasspath">
+            <summary>
+            Property which controls whether the classpath
+            will be used when trying to locate templates.
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Texen.TexenTask.fileSeparator">
+            <summary>
+            Path separator.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.TexenTask.initControlContext">
+            <summary> Creates a VelocityContext.
+            *
+            </summary>
+            <returns>new Context
+            @throws Exception the execute method will catch
+            and rethrow as a <code>BuildException</code>
+            
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.TexenTask.ExecuteTask">
+            <summary>
+            Execute the input script with Velocity
+            @throws BuildException
+            BuildExceptions are thrown when required attributes are missing.
+            Exceptions thrown by Velocity are rethrown as BuildExceptions.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.TexenTask.populateInitialContext(NVelocity.Context.IContext)">
+            <summary>
+            <p>Place useful objects into the initial context.</p>
+            <p>TexenTask places <code>Date().toString()</code> into the
+            context as <code>$now</code>.  Subclasses who want to vary the
+            objects in the context should override this method.</p>
+            <p><code>$generator</code> is not put into the context in this
+            method.</p>
+            </summary>
+            <param name="context">The context to populate, as retrieved from
+            {@link #initControlContext()}.
+            @throws Exception Error while populating context.  The {@link
+            #execute()} method will catch and rethrow as a
+            <code>BuildException</code>.
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.TexenTask.cleanup">
+            <summary>
+            A hook method called at the end of {@link #execute()} which can
+            be overridden to perform any necessary cleanup activities (such
+            as the release of database connections, etc.).  By default,
+            does nothing.
+            </summary>
+            <exception cref="!:">Exception Problem cleaning up.</exception>
+        </member>
+        <member name="P:NVelocity.NAnt.Texen.TexenTask.ControlTemplate">
+            <summary> [REQUIRED] Set the control template for the
+            generating process.
+            </summary>
+        </member>
+        <member name="T:NVelocity.NAnt.Texen.FileUtil">
+            <summary>
+            A general file utility for use in the context
+            </summary>
+            <author><a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a></author>
+            <author><a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.FileUtil.mkdir(System.String)">
+            <summary>
+            Creates the directory s (and any parent directories needed).
+            </summary>
+            <param name="String">path/directory to create.</param>
+            <param name="String">report of path/directory creation.</param>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.FileUtil.file(System.String)">
+            <summary>
+            A method to get a File object.
+            </summary>
+            <param name="String">path to file object to create.</param>
+            <returns>File created file object.</returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.FileUtil.file(System.String,System.String)">
+            <summary> A method to get a File object.
+            *
+            </summary>
+            <param name="String">base path
+            </param>
+            <param name="String">file name
+            </param>
+            <returns>File created file object.
+            
+            </returns>
+        </member>
+        <member name="T:NVelocity.NAnt.Anakia.AnakiaXmlElement">
+            <summary>
+            A JDOM {@link Element} that is tailored for Anakia needs. It has
+            {@link #selectNodes(String)} method as well as a {@link #toString()} that
+            outputs the XML serialized form of the element. This way it acts in much the
+            same way as a single-element {@link NodeList} would.
+            </summary>
+            <author><a href="mailto:szegedia@freemail.hu">Attila Szegedi</a></author>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaXmlElement.ToString">
+            <summary>
+            Returns the XML serialized form of this element, as produced by the default
+            {@link XMLOutputter}.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaXmlElement.GetContent">
+            <summary>
+            <p>
+            This returns the full content of the element as a NodeList which
+            may contain objects of type <code>String</code>, <code>Element</code>,
+            <code>Comment</code>, <code>ProcessingInstruction</code>,
+            <code>CDATA</code>, and <code>EntityRef</code>.
+            The List returned is "live" in document order and modifications
+            to it affect the element's actual contents.  Whitespace content is
+            returned in its entirety.
+            </p>
+            </summary>
+            <returns>a <code>List</code> containing the mixed content of the
+            element: may contain <code>String</code>,
+            <code>{@link Element}</code>, <code>{@link Comment}</code>,
+            <code>{@link ProcessingInstruction}</code>,
+            <code>{@link CDATA}</code>, and
+            <code>{@link EntityRef}</code> objects.
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaXmlElement.GetChildren">
+            <summary>
+            <p>
+            This returns a <code>NodeList</code> of all the child elements
+            nested directly (one level deep) within this element, as
+            <code>Element</code> objects.  If this target element has no nested
+            elements, an empty List is returned.  The returned list is "live"
+            in document order and changes to it affect the element's actual
+            contents.
+            </p>
+            <p>
+            This performs no recursion, so elements nested two levels
+            deep would have to be obtained with:
+            <pre>
+            <code>
+            Iterator itr = currentElement.getChildren().iterator();
+            while (itr.hasNext()) {
+            Element oneLevelDeep = (Element)nestedElements.next();
+            List twoLevelsDeep = oneLevelDeep.getChildren();
+            // Do something with these children
+            }
+            </code>
+            </pre>
+            </p>
+            </summary>
+            <returns>list of child <code>Element</code> objects for this element</returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaXmlElement.GetChildren(System.String)">
+            <summary>
+            <p>
+            This returns a <code>NodeList</code> of all the child elements
+            nested directly (one level deep) within this element with the given
+            local name and belonging to no namespace, returned as
+            <code>Element</code> objects.  If this target element has no nested
+            elements with the given name outside a namespace, an empty List
+            is returned.  The returned list is "live" in document order
+            and changes to it affect the element's actual contents.
+            </p>
+            <p>
+            Please see the notes for <code>{@link #getChildren}</code>
+            for a code example.
+            </p>
+            </summary>
+            <param name="name">local name for the children to match</param>
+            <returns>all matching child elements</returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaXmlElement.GetChildren(System.String,System.String)">
+            <summary>
+            <p>
+            This returns a <code>NodeList</code> of all the child elements
+            nested directly (one level deep) within this element with the given
+            local name and belonging to the given Namespace, returned as
+            <code>Element</code> objects.  If this target element has no nested
+            elements with the given name in the given Namespace, an empty List
+            is returned.  The returned list is "live" in document order
+            and changes to it affect the element's actual contents.
+            </p>
+            <p>
+            Please see the notes for <code>{@link #getChildren}</code>
+            for a code example.
+            </p>
+            </summary>
+            <param name="name">local name for the children to match</param>
+            <param name="ns"><code>Namespace</code> to search within</param>
+            <returns>all matching child elements</returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaXmlElement.GetAttributes">
+            <summary>
+            <p>
+            This returns the complete set of attributes for this element, as a
+            <code>NodeList</code> of <code>Attribute</code> objects in no particular
+            order, or an empty list if there are none.
+            The returned list is "live" and changes to it affect the
+            element's actual attributes.
+            </p>
+            </summary>
+            <returns>attributes for the element</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:NVelocity.NAnt.Anakia.AnakiaTask" -->
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.destDir">
+            <summary>
+            the destination directory
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.styleFile">
+            <summary>
+            the File to the style file
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.projectFile">
+            <summary>
+            the File for the project.xml file
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.lastModifiedCheck">
+            <summary>
+            check the last modified date on files. defaults to true
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.extension">
+            <summary>
+            the default output extension is .html
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.templatePath">
+            <summary>
+            the template path
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.velocityPropertiesFile">
+            <summary>
+            the file to get the velocity properties file
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.ve">
+            <summary>
+            the VelocityEngine instance to use
+            </summary>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.AnakiaTask.fileset">
+            <summary>
+            list of files to be processed
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaTask.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaTask.ExecuteTask">
+            <summary>
+            Main body of the application
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaTask.Process(System.String,System.String,System.IO.FileInfo,NVelocity.NAnt.Anakia.AnakiaXmlDocument)">
+            <summary>
+            Process an XML file using Velocity
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaTask.getRelativePath(System.String)">
+            <summary>
+            Hacky method to figure out the relative path
+            that we are currently in. This is good for getting
+            the relative path for images and anchor's.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.AnakiaTask.EnsureDirectoryFor(System.IO.FileInfo)">
+            <summary>
+            create directories as needed
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.Destdir">
+            <summary>
+            Set the destination directory into which the VSL result
+            files should be copied to
+            </summary>
+            <param name="dirName">the name of the destination directory</param>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.Extension">
+            <summary>
+            Allow people to set the default output file extension
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.Style">
+            <summary>
+            Allow people to set the path to the .vsl file
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.ProjectFile">
+            <summary>
+            Allow people to set the path to the project.xml file
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.TemplatePath">
+            <summary>
+            Set the path to the templates.
+            The way it works is this:
+            If you have a Velocity.properties file defined, this method
+            will <strong>override</strong> whatever is set in the
+            Velocity.properties file. This allows one to not have to define
+            a Velocity.properties file, therefore using Velocity's defaults
+            only.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.VelocityPropertiesFile">
+            <summary>
+            Allow people to set the path to the velocity.properties file
+            This file is found relative to the path where the JVM was run.
+            For example, if build.sh was executed in the ./build directory,
+            then the path would be relative to this directory.
+            This is optional based on the setting of setTemplatePath().
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.LastModifiedCheck">
+            <summary>
+            Turn on/off last modified checking. by default, it is on.
+            </summary>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.AnakiaTask.FileSet">
+            <summary>
+            The set of files to be included in the archive.
+            </summary>
+        </member>
+        <member name="T:NVelocity.NAnt.Anakia.AnakiaXmlDocument">
+            <summary>
+            Customized XmlDocument for Anakia so that AnakiaXmlElements can be created
+            </summary>
+        </member>
+        <member name="T:NVelocity.NAnt.Texen.PropertiesUtil">
+            <summary>
+            A property utility class for the texen text/code generator
+            Usually this class is only used from a Velocity context.
+            </summary>
+            <author> <a href="mailto:leon@opticode.co.za">Leon Messerschmidt</a></author>
+            <author> <a href="mailto:sbailliez@apache.org">Stephane Bailliez</a></author>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.PropertiesUtil.load(System.String)">
+            <summary>
+            Load properties from either a file in the templatePath if there
+            is one or the classPath.
+            </summary>
+            <param name="propertiesFile">the properties file to load through
+            either the templatePath or the classpath.
+            </param>
+            <returns>a properties instance filled with the properties found
+            in the file or an empty instance if no file was found.
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.PropertiesUtil.loadFromTemplatePath(System.String)">
+            <summary>
+            Load a properties file from the templatePath defined in the
+            generator. As the templatePath can contains multiple paths,
+            it will cycle through them to find the file. The first file
+            that can be successfully loaded is considered. (kind of
+            like the java classpath), it is done to clone the Velocity
+            process of loading templates.
+            </summary>
+            <param name="propertiesFile">the properties file to load. It must be
+            a relative pathname.
+            </param>
+            <returns>a properties instance loaded with the properties from
+            the file. If no file can be found it returns an empty instance.
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Texen.PropertiesUtil.loadFromClassPath(System.String)">
+            <summary>
+            Load a properties file from the classpath
+            </summary>
+            <param name="propertiesFile">the properties file to load.</param>
+            <returns>a properties instance loaded with the properties from
+            the file. If no file can be found it returns an empty instance.
+            </returns>
+        </member>
+        <member name="T:NVelocity.NAnt.Anakia.NodeList">
+            <summary>
+            Provides a class for wrapping a list of JDOM objects primarily for use in template
+            engines and other kinds of text transformation tools.
+            It has a {@link #toString()} method that will output the XML serialized form of the
+            nodes it contains - again focusing on template engine usage, as well as the
+            {@link #selectNodes(String)} method that helps selecting a different set of nodes
+            starting from the nodes in this list. The class also implements the {@link java.util.List}
+            interface by simply delegating calls to the contained list (the {@link #subList(int, int)}
+            method is implemented by delegating to the contained list and wrapping the returned
+            sublist into a <code>NodeList</code>).
+            </summary>
+            <author><a href="mailto:szegedia@freemail.hu">Attila Szegedi</a></author>
+        </member>
+        <member name="F:NVelocity.NAnt.Anakia.NodeList.nodes">
+            <summary>
+            The contained nodes
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.#ctor">
+            <summary>
+            Creates an empty node list.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.#ctor(System.Xml.XmlDocument)">
+            <summary>
+            Creates a node list that holds a single {@link Document} node.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.#ctor(System.Xml.XmlElement)">
+            <summary>
+            Creates a node list that holds a single {@link Element} node.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.#ctor(System.Collections.IList)">
+            <summary>
+            Creates a node list that holds a list of nodes.
+            </summary>
+            <param name="nodes">the list of nodes this template should hold. The created
+            template will copy the passed nodes list, so changes to the passed list
+            will not affect the model.
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.#ctor(System.Collections.IList,System.Boolean)">
+            <summary>
+            Creates a node list that holds a list of nodes.
+            </summary>
+            <param name="nodes">the list of nodes this template should hold.</param>
+            <param name="copy">if true, the created template will copy the passed nodes
+            list, so changes to the passed list will not affect the model. If false,
+            the model will reference the passed list and will sense changes in it,
+            altough no operations on the list will be synchronized.
+            </param>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.ToString">
+            <summary>
+            This method returns the string resulting from concatenation of string
+            representations of its nodes. Each node is rendered using its XML
+            serialization format. This greatly simplifies creating XML-transformation
+            templates, as to output a node contained in variable x as XML fragment,
+            you simply write ${x} in the template (or whatever your template engine
+            uses as its expression syntax).
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.Clone">
+            <summary>
+            Returns a NodeList that contains the same nodes as this node list.
+            @throws CloneNotSupportedException if the contained list's class does
+            not have an accessible no-arg constructor.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.GetHashCode">
+            <summary> Returns the hash code of the contained list.
+            </summary>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.Equals(System.Object)">
+            <summary> Tests for equality with another object.
+            </summary>
+            <param name="o">the object to test for equality
+            </param>
+            <returns>true if the other object is also a NodeList and their contained
+            {@link List} objects evaluate as equals.
+            
+            </returns>
+        </member>
+        <member name="M:NVelocity.NAnt.Anakia.NodeList.selectNodes(System.String)">
+            <summary>
+            Applies an XPath expression to the node list and returns the resulting
+            node list. In order for this method to work, your application must have
+            access to <a href="http://code.werken.com">werken.xpath</a> library
+            classes. The implementation does cache the parsed format of XPath
+            expressions in a weak hash map, keyed by the string representation of
+            the XPath expression. As the string object passed as the argument is
+            usually kept in the parsed template, this ensures that each XPath
+            expression is parsed only once during the lifetime of the template that
+            first invoked it.
+            </summary>
+            <param name="xpathExpression">the XPath expression you wish to apply</param>
+            <returns>a NodeList representing the nodes that are the result of
+            application of the XPath to the current node list. It can be empty.
+            </returns>
+        </member>
+        <member name="P:NVelocity.NAnt.Anakia.NodeList.List">
+            <summary>
+            Retrieves the underlying list used to store the nodes. Note however, that
+            you can fully use the underlying list through the <code>List</code> interface
+            of this class itself. You would probably access the underlying list only for
+            synchronization purposes.
+            </summary>
+        </member>
+    </members>
+</doc>
