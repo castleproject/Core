@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.CastleOnRails.Framework.Views.Aspx
+namespace Castle.MonoRail.Framework.Views.Aspx
 {
-	using System;
 	using System.Web.UI;
+
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
@@ -58,7 +58,6 @@ namespace Castle.CastleOnRails.Framework.Views.Aspx
 			get { return _formID; }
 			set { _formID = value; }
 		}
-
 
 		public override void DataBind()
 		{

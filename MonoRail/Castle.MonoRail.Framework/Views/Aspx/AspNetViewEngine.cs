@@ -100,7 +100,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			viewName += ".aspx";
 
-			String physicalPath = Path.Combine( ViewRootDir, viewName ); //.Replace('/', '\\');
+			String physicalPath = Path.Combine( ViewRootDir, viewName ).Replace('/', '\\');
 
 			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
