@@ -1,0 +1,140 @@
+<project>
+    <assemblies>
+        <assembly location="..\build\NVelocity.dll" documentation="..\build\NVelocity.xml" />
+        <assembly location="..\build\NVelocity.Http.dll" documentation="..\build\NVelocity.Http.xml" />
+        <assembly location="..\build\NVelocity.NAntTasks.dll" documentation="..\build\NVelocity.NAntTasks.xml" />
+        <assembly location="..\build\Commons.dll" documentation="..\build\Commons.xml" />
+    </assemblies>
+    <namespaces>
+        <namespace name="Commons.Collections">Utility classes based on Jakarta Commons project</namespace>
+        <namespace name="NVelocity"></namespace>
+        <namespace name="NVelocity.App"></namespace>
+        <namespace name="NVelocity.App.Events"></namespace>
+        <namespace name="NVelocity.App.Tools"></namespace>
+        <namespace name="NVelocity.Context"></namespace>
+        <namespace name="NVelocity.Dvsl"></namespace>
+        <namespace name="NVelocity.Dvsl.Directive"></namespace>
+        <namespace name="NVelocity.Exception"></namespace>
+        <namespace name="NVelocity.Http"></namespace>
+        <namespace name="NVelocity.Http.Context"></namespace>
+        <namespace name="NVelocity.Http.Resource.Loader"></namespace>
+        <namespace name="NVelocity.Http.Tool"></namespace>
+        <namespace name="NVelocity.IO"></namespace>
+        <namespace name="NVelocity.NAnt.Anakia"></namespace>
+        <namespace name="NVelocity.NAnt.Dvsl"></namespace>
+        <namespace name="NVelocity.NAnt.Texen"></namespace>
+        <namespace name="NVelocity.Runtime"></namespace>
+        <namespace name="NVelocity.Runtime.Directive"></namespace>
+        <namespace name="NVelocity.Runtime.Exception"></namespace>
+        <namespace name="NVelocity.Runtime.Log"></namespace>
+        <namespace name="NVelocity.Runtime.Parser"></namespace>
+        <namespace name="NVelocity.Runtime.Parser.Node"></namespace>
+        <namespace name="NVelocity.Runtime.Resource"></namespace>
+        <namespace name="NVelocity.Runtime.Resource.Loader"></namespace>
+        <namespace name="NVelocity.Runtime.Visitor"></namespace>
+        <namespace name="NVelocity.Tool"></namespace>
+        <namespace name="NVelocity.Util"></namespace>
+        <namespace name="NVelocity.Util.Introspection"></namespace>
+    </namespaces>
+    <documenters>
+        <documenter name="JavaDoc">
+            <property name="OutputDirectory" value="..\www\api\" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="ReferencesPath" value="..\build" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="True" />
+            <property name="DocumentedAttributes" value="" />
+            <property name="GetExternalSummaries" value="True" />
+        </documenter>
+        <documenter name="Latex">
+            <property name="OutputDirectory" value="Tex" />
+            <property name="TextFileFullName" value="Documentation.tex" />
+            <property name="TexFileBaseName" value="Documentation" />
+            <property name="LatexCompiler" value="latex" />
+            <property name="TexFileFullPath" value="Tex\Documentation.tex" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
+            <property name="GetExternalSummaries" value="True" />
+        </documenter>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="Documentation" />
+            <property name="IncludeFavorites" value="False" />
+            <property name="Title" value="An NDoc Documented Class Library" />
+            <property name="SplitTOCs" value="False" />
+            <property name="DefaulTOC" value="" />
+            <property name="IncludeHierarchy" value="False" />
+            <property name="ShowVisualBasic" value="False" />
+            <property name="OmitObjectTags" value="False" />
+            <property name="RootPageContainsNamespaces" value="False" />
+            <property name="SortTOCByNamespace" value="True" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
+            <property name="GetExternalSummaries" value="True" />
+        </documenter>
+        <documenter name="XML">
+            <property name="OutputFile" value=".\doc\doc.xml" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+            <property name="SkipNamespacesWithoutSummaries" value="False" />
+            <property name="AutoPropertyBackerSummaries" value="False" />
+            <property name="AutoDocumentConstructors" value="True" />
+            <property name="DocumentAttributes" value="False" />
+            <property name="DocumentedAttributes" value="" />
+            <property name="GetExternalSummaries" value="True" />
+        </documenter>
+    </documenters>
+</project>
