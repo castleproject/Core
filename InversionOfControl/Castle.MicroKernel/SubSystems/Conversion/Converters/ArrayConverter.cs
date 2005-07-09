@@ -28,7 +28,12 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override bool CanHandleType(Type type)
 		{
-			return (type.IsArray);
+			if (! type.IsArray) 
+			{
+				return false;
+			}
+
+			return Context.Composition.CanHandleType(type.GetElementType());
 		}
 
 		public override object PerformConversion(String value, Type targetType)
