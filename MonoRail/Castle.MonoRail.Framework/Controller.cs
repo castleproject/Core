@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Helpers;
 
 	/// <summary>
-	/// Implements the core functionality and expose the
+	/// Implements the core functionality and exposes the
 	/// common methods for concrete controllers.
 	/// </summary>
 	public abstract class Controller
@@ -167,7 +167,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets or set the controller's layout.
+		/// Gets or set the layout being used.
 		/// </summary>
 		public String LayoutName
 		{
@@ -176,7 +176,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Returns the name of the action being processed
+		/// Gets the name of the action being processed.
 		/// </summary>
 		public String Action
 		{
@@ -201,7 +201,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets the Session dictionary
+		/// Gets the Session dictionary.
 		/// </summary>
 		protected IDictionary Session
 		{
@@ -209,8 +209,8 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Access a dictionary of volative items.
-		/// Ideal for showing success and failures messages
+		/// Gets a dictionary of volative items.
+		/// Ideal for showing success and failures messages.
 		/// </summary>
 		protected IDictionary Flash
 		{
@@ -218,7 +218,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets the web context of ASP.Net API.
+		/// Gets the web context of ASP.NET API.
 		/// </summary>
 		protected HttpContext HttpContext
 		{
@@ -226,7 +226,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets the request
+		/// Gets the request object.
 		/// </summary>
 		public IRequest Request
 		{
@@ -234,7 +234,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets the response
+		/// Gets the response object.
 		/// </summary>
 		public IResponse Response
 		{
@@ -246,10 +246,8 @@ namespace Castle.MonoRail.Framework
 		#region Usefull operations
 
 		/// <summary>
-		/// Defines the View to be presented
-		/// after the action has finished its processing. 
+		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
-		/// <param name="name"></param>
 		public void RenderView(String name)
 		{
 			String basePath = _controllerName;
@@ -263,19 +261,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Renders a shared (a partial view shared 
-		/// by others views and usually on the root folder
-		/// of the view root directory)
-		/// </summary>
-		/// <param name="name"></param>
-		public void RenderSharedView(String name)
-		{
-			_selectedViewName = name;
-		}
-
-		/// <summary>
-		/// Defines the View to be presented
-		/// after the action has finished its processing. 
+		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
 		public void RenderView(String controller, String name)
 		{
@@ -283,10 +269,41 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Sends a contents to be render directly by the view engine.
-		/// It's up to the view engine just applying the layout and nothing else.
+		/// Specifies the shared view to be processed after the action has finished its
+		/// processing. (A partial view shared 
+		/// by others views and usually in the root folder
+		/// of the view directory).
 		/// </summary>
-		/// <param name="contents">Contents to be rendered</param>
+		public void RenderSharedView(String name)
+		{
+			_selectedViewName = name;
+		}
+
+		/// <summary>
+		/// Cancel the view processing.
+		/// </summary>
+		public void CancelView()
+		{
+			_selectedViewName = null;
+		}
+
+		/// <summary>
+		/// Cancels the view processing and writes
+		/// the specified contents to the browser
+		/// </summary>
+		/// <param name="contents"></param>
+		public void RenderText(String contents)
+		{
+			CancelView();
+
+			Response.Write(contents);
+		}
+
+		/// <summary>
+		/// Sends raw contents to be rendered directly by the view engine.
+		/// It's up to the view engine just to apply the layout and nothing else.
+		/// </summary>
+		/// <param name="contents">Contents to be rendered.</param>
 		public void DirectRender(String contents)
 		{
 			CancelView();
@@ -302,9 +319,18 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Redirects to the specified Url
+		/// Returns true if the specified template exists.
 		/// </summary>
-		/// <param name="url"></param>
+		/// <param name="templateName"></param>
+		public bool HasTemplate(String templateName)
+		{
+			return _viewEngine.HasTemplate(templateName);
+		}
+
+		/// <summary>
+		/// Redirects to the specified URL.
+		/// </summary>
+		/// <param name="url">Target URL</param>
 		public void Redirect(String url)
 		{
 			CancelView();
@@ -315,8 +341,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Redirects to another controller and action.
 		/// </summary>
-		/// <param name="controller"></param>
-		/// <param name="action"></param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
 		public void Redirect(String controller, String action)
 		{
 			CancelView();
@@ -327,9 +353,22 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Redirects to another controller and action.
 		/// </summary>
-		/// <param name="controller">Controller's name</param>
-		/// <param name="action">action name</param>
-		/// <param name="parameters">pairs of key/values</param>
+		/// <param name="area">Area name</param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		public void Redirect(String area, String controller, String action)
+		{
+			CancelView();
+
+			_context.Response.Redirect(area, controller, action);
+		}
+
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(String controller, String action, NameValueCollection parameters) 
 		{
 			CancelView();
@@ -350,62 +389,20 @@ namespace Castle.MonoRail.Framework
 			_context.Response.Redirect( String.Format("{0}?{1}", url, querystring) );
 		}
 
-		/// <summary>
-		/// Redirects to another controller and action.
-		/// </summary>
-		/// <param name="area"></param>
-		/// <param name="controller"></param>
-		/// <param name="action"></param>
-		public void Redirect(String area, String controller, String action)
-		{
-			CancelView();
-
-			_context.Response.Redirect(area, controller, action);
-		}
-
         /// <summary>
         /// Redirects to another controller and action with the specified paramters.
         /// </summary>
-        /// <param name="area"></param>
-        /// <param name="controller"></param>
-        /// <param name="action"></param>
-        /// <param name="parameters"></param>
-        public void Redirect(String area, String controller, String action, NameValueCollection parameters) {
+        /// <param name="area">Area name</param>
+		/// <param name="controller">Controller name</param>
+		/// <param name="action">Action name</param>
+		/// <param name="parameters">Key/value pairings</param>
+		public void Redirect(String area, String controller, String action, NameValueCollection parameters) {
             CancelView();
             
             _context.Params.Add(parameters);
 
             _context.Response.Redirect(area, controller, action);
         }
-
-		/// <summary>
-		/// Cancel the view presentation.
-		/// </summary>
-		public void CancelView()
-		{
-			_selectedViewName = null;
-		}
-
-		/// <summary>
-		/// Cancels the view processing and writes
-		/// the specified contents to the browser
-		/// </summary>
-		/// <param name="contents"></param>
-		public void RenderText(String contents)
-		{
-			CancelView();
-
-			Response.Write(contents);
-		}
-
-		/// <summary>
-		/// Returns true if the specified template exists.
-		/// </summary>
-		/// <param name="templateName"></param>
-		public bool HasTemplate(String templateName)
-		{
-			return _viewEngine.HasTemplate(templateName);
-		}
 
 		#endregion
 
@@ -433,8 +430,10 @@ namespace Castle.MonoRail.Framework
 			actions.Remove("ToString");
 			actions.Remove("GetHashCode");
 			actions.Remove("RenderView");
-			actions.Remove("RenderText");
 			actions.Remove("RenderSharedView");
+			actions.Remove("CancelView");
+			actions.Remove("RenderText");
+			actions.Remove("DirectRender");
 			actions.Remove("Redirect");
 			actions.Remove("Process");
 			actions.Remove("Send");
@@ -473,7 +472,7 @@ namespace Castle.MonoRail.Framework
 				if (_scaffoldSupport == null)
 				{
 					String message = "You must enable scaffolding support on the " + 
-						"configuration file, or, to use the standard ActiveRecord support, " + 
+						"configuration file, or, to use the standard ActiveRecord support " + 
 						"copy the necessary assemblies to the bin folder.";
 
 					throw new RailsException(message);
@@ -496,23 +495,25 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Performs the Action, which means:
+		/// Performs the specified action, which means:
 		/// <br/>
 		/// 1. Define the default view name<br/>
-		/// 2. Runs the Before Filters<br/>
+		/// 2. Run the before filters<br/>
 		/// 3. Select the method related to the action name and invoke it<br/>
-		/// 4. On error, executes the rescues if available<br/>
-		/// 5. Runs the After Filters<br/>
+		/// 4. On error, execute the rescues if available<br/>
+		/// 5. Run the after filters<br/>
 		/// 6. Invoke the view engine<br/>
 		/// </summary>
 		/// <param name="action">Action name</param>
 		protected virtual void InternalSend(String action)
 		{
+			//Recored the action
 			_evaluatedAction = action;
 
-			// Specifies the default view for this area/controller/action
+			//Record the default view for this area/controller/action
 			RenderView(action);
 
+			//If we have an HttpContext available, store the original view name
 			if (HttpContext.Current != null)
 			{
 				if (!HttpContext.Current.Items.Contains(OriginalViewKey))
@@ -521,10 +522,11 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
+			//Look for the target method
 			MethodInfo method = SelectMethod(action, _actions, _context.Request);
 
+			//If we couldn't find a method for this action, look for a dynamic action
 			IDynamicAction dynAction = null;
-
 			if (method == null)
 			{
 				dynAction = CustomActions[ action ] as IDynamicAction;
@@ -545,18 +547,23 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
+				//If we are supposed to run the filters...
 				if (!skipFilters)
 				{
+					//...run them. If they fail...
 					if (!ProcessFilters(ExecuteEnum.Before, filtersToSkip))
 					{
+						//Record that they failed.
 						hasError = true;
 					}
 				}
 
+				//If we haven't failed anywhere yet...
 				if (!hasError)
 				{
 					CreateResources(method);
 
+					//Execute the method / dynamic action
 					if (method != null)
 					{
 						InvokeMethod(method);
@@ -575,13 +582,16 @@ namespace Castle.MonoRail.Framework
 			{
 				hasError = true;
 
+				//Try and perform the rescue
 				if (!PerformRescue(method, GetType(), ex))
 				{
+					//If the rescue fails, let the exception bubble
 					throw ex;
 				}
 			}
 			finally
 			{
+				//Run the filters if required
 				if (!skipFilters)
 				{
 					ProcessFilters(ExecuteEnum.After, filtersToSkip);
@@ -590,8 +600,10 @@ namespace Castle.MonoRail.Framework
 				DisposeFilter();
 			}
 
+			//If we haven't failed anywhere yet...
 			if (!hasError)
 			{
+				//Render the actual view then cleanup
 				ProcessView();
 				ReleaseResources();
 			}
