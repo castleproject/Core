@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,41 +53,48 @@ namespace NVelocity.Runtime.Parser.Node
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Parser = NVelocity.Runtime.Parser.Parser;
-    using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
+	using System;
+	using NVelocity.Context;
 
-    public class ASTNumberLiteral:SimpleNode {
-	//UPGRADE_NOTE: Field value was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
-	private System.Int32 value_Renamed_Field;
+	public class ASTNumberLiteral : SimpleNode
+	{
+		//UPGRADE_NOTE: Field value was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
+		private Int32 value__Field;
 
-	public ASTNumberLiteral(int id):base(id) {}
+		public ASTNumberLiteral(int id) : base(id)
+		{
+		}
 
-	public ASTNumberLiteral(Parser p, int id):base(p, id) {}
+		public ASTNumberLiteral(Parser p, int id) : base(p, id)
+		{
+		}
 
-	/// <summary>Accept the visitor. *
-	/// </summary>
-	public override System.Object jjtAccept(ParserVisitor visitor, System.Object data) {
-	    return visitor.visit(this, data);
-	}
+		/// <summary>Accept the visitor. *
+		/// </summary>
+		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		{
+			return visitor.visit(this, data);
+		}
 
-	/// <summary>  Initialization method - doesn't do much but do the object
-	/// creation.  We only need to do it once.
-	/// </summary>
-	public override System.Object init(InternalContextAdapter context, System.Object data) {
-	    /*
+		/// <summary>  Initialization method - doesn't do much but do the object
+		/// creation.  We only need to do it once.
+		/// </summary>
+		public override Object init(InternalContextAdapter context, Object data)
+		{
+			/*
 	    *  init the tree correctly
 	    */
 
-	    base.init(context, data);
+			base.init(context, data);
 
-	    value_Renamed_Field = System.Int32.Parse(FirstToken.image);
+			value__Field = Int32.Parse(FirstToken.image);
 
-	    return data;
+			return data;
+		}
+
+		public override Object Value(InternalContextAdapter context)
+		{
+			return value__Field;
+		}
 	}
-
-	public override System.Object value_Renamed(InternalContextAdapter context) {
-	    return value_Renamed_Field;
-	}
-    }
 }

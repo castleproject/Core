@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Directive
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,61 +53,73 @@ namespace NVelocity.Runtime.Directive
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
+	using System;
+	using System.Collections;
 
-    /// <summary> Exception for #parse() problems
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: ParseDirectiveException.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-    ///
-    /// </version>
-    public class ParseDirectiveException:System.Exception {
-	private void  InitBlock() {
-	    filenameStack = new System.Collections.Stack();
-	}
-	public override System.String Message
+	/// <summary> Exception for #parse() problems
+	/// *
+	/// </summary>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: ParseDirectiveException.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
+	///
+	/// </version>
+	public class ParseDirectiveException : Exception
 	{
-	    get {
-		System.String returnStr = "#parse() exception : depth = " + depthCount + " -> " + msg;
+		private void InitBlock()
+		{
+			filenameStack = new Stack();
+		}
 
-		returnStr += " File stack : ";
+		public override String Message
+		{
+			get
+			{
+				String returnStr = "#parse() exception : depth = " + depthCount + " -> " + msg;
 
-		try {
-		    while (!(filenameStack.Count == 0)) {
-			returnStr += (System.String) filenameStack.Pop();
-			returnStr += " -> ";
-		    }
-		} catch (System.Exception e) {}
+				returnStr += " File stack : ";
 
-		return returnStr;
-	    }
+				try
+				{
+					while (!(filenameStack.Count == 0))
+					{
+						returnStr += (String) filenameStack.Pop();
+						returnStr += " -> ";
+					}
+				}
+				catch (Exception e)
+				{
+				}
 
+				return returnStr;
+			}
+
+		}
+
+		//UPGRADE_NOTE: The initialization of  'filenameStack' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		private Stack filenameStack;
+		private String msg = "";
+		private int depthCount = 0;
+
+		/// <summary> Constructor
+		/// </summary>
+		internal ParseDirectiveException(String m, int i)
+		{
+			InitBlock();
+			msg = m;
+			depthCount = i;
+		}
+
+		/// <summary> Get a message.
+		/// </summary>
+		/// <summary> Add a file to the filename stack
+		/// </summary>
+		public void addFile(String s)
+		{
+			Object temp_object;
+			temp_object = s;
+			Object generatedAux = temp_object;
+			filenameStack.Push(temp_object);
+		}
 	}
-	//UPGRADE_NOTE: The initialization of  'filenameStack' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-	private System.Collections.Stack filenameStack;
-	private System.String msg = "";
-	private int depthCount = 0;
-
-	/// <summary> Constructor
-	/// </summary>
-	internal ParseDirectiveException(System.String m, int i) {
-	    InitBlock();
-	    msg = m;
-	    depthCount = i;
-	}
-
-	/// <summary> Get a message.
-	/// </summary>
-
-	/// <summary> Add a file to the filename stack
-	/// </summary>
-	public virtual void  addFile(System.String s) {
-	    System.Object temp_object;
-	    temp_object = s;
-	    System.Object generatedAux = temp_object;
-	    filenameStack.Push(temp_object);
-	}
-    }
 }

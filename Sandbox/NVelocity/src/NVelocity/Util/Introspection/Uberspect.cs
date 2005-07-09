@@ -1,9 +1,7 @@
-using System;
-using RuntimeLogger = NVelocity.Runtime.RuntimeLogger;
-using NVelocity.Util;
-
-namespace NVelocity.Util.Introspection {
-    /*
+namespace NVelocity.Util.Introspection
+{
+	using System;
+	/*
 	* Copyright 2002-2004 The Apache Software Foundation.
 	*
 	* Licensed under the Apache License, Version 2.0 (the "License")
@@ -18,6 +16,7 @@ namespace NVelocity.Util.Introspection {
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 	*/
+
 	/// <summary> 'Federated' introspection/reflection interface to allow the introspection
 	/// behavior in Velocity to be customized.
 	/// *
@@ -28,21 +27,25 @@ namespace NVelocity.Util.Introspection {
 	/// 
 	/// </version>
 	public interface Uberspect
-		{
-			/// <summary>  Initializer - will be called before use
-			/// </summary>
-			void  init();
-			/// <summary>  To support iteratives - #foreach()
-			/// </summary>
-			Iterator getIterator(System.Object obj, Info info);
-			/// <summary>  Returns a general method, corresponding to $foo.bar( $woogie )
-			/// </summary>
-			VelMethod getMethod(System.Object obj, System.String method, System.Object[] args, Info info);
-			/// <summary> Property getter - returns VelPropertyGet appropos for #set($foo = $bar.woogie)
-			/// </summary>
-			VelPropertyGet getPropertyGet(System.Object obj, System.String identifier, Info info);
-			/// <summary> Property setter - returns VelPropertySet appropos for #set($foo.bar = "geir")
-			/// </summary>
-			VelPropertySet getPropertySet(System.Object obj, System.String identifier, System.Object arg, Info info);
-		}
+	{
+		/// <summary>  Initializer - will be called before use
+		/// </summary>
+		void init();
+
+		/// <summary>  To support iteratives - #foreach()
+		/// </summary>
+		Iterator getIterator(Object obj, Info info);
+
+		/// <summary>  Returns a general method, corresponding to $foo.bar( $woogie )
+		/// </summary>
+		VelMethod getMethod(Object obj, String method, Object[] args, Info info);
+
+		/// <summary> Property getter - returns VelPropertyGet appropos for #set($foo = $bar.woogie)
+		/// </summary>
+		VelPropertyGet getPropertyGet(Object obj, String identifier, Info info);
+
+		/// <summary> Property setter - returns VelPropertySet appropos for #set($foo.bar = "geir")
+		/// </summary>
+		VelPropertySet getPropertySet(Object obj, String identifier, Object arg, Info info);
+	}
 }

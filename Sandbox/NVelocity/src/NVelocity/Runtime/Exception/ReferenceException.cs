@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Exception
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -53,17 +53,21 @@ namespace NVelocity.Runtime.Exception
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using NVelocity.Runtime.Parser.Node;
+	using System;
+	using NVelocity.Runtime.Parser.Node;
 
-    /// <summary> Exception thrown when a bad reference is found.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: ReferenceException.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-    ///
-    /// </version>
-    public class ReferenceException:System.Exception {
-	public ReferenceException(System.String exceptionMessage, INode node):base(exceptionMessage + " [line " + node.Line + ",column " + node.Column + "] : " + node.literal() + " is not a valid reference.") {}}
+	/// <summary> Exception thrown when a bad reference is found.
+	/// *
+	/// </summary>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: ReferenceException.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
+	///
+	/// </version>
+	public class ReferenceException : Exception
+	{
+		public ReferenceException(String exceptionMessage, INode node) : base(exceptionMessage + " [line " + node.Line + ",column " + node.Column + "] : " + node.literal() + " is not a valid reference.")
+		{
+		}
+	}
 }

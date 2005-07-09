@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,50 +53,57 @@ namespace NVelocity.Runtime.Parser.Node
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Parser = NVelocity.Runtime.Parser.Parser;
-    using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-    using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
+	using System;
+	using NVelocity.Context;
 
-    public class ASTLTNode:SimpleNode {
-	public ASTLTNode(int id):base(id) {}
+	public class ASTLTNode : SimpleNode
+	{
+		public ASTLTNode(int id) : base(id)
+		{
+		}
 
-	public ASTLTNode(Parser p, int id):base(p, id) {}
+		public ASTLTNode(Parser p, int id) : base(p, id)
+		{
+		}
 
-	/// <summary>Accept the visitor. *
-	/// </summary>
-	public override System.Object jjtAccept(ParserVisitor visitor, System.Object data) {
-	    return visitor.visit(this, data);
-	}
+		/// <summary>Accept the visitor. *
+		/// </summary>
+		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		{
+			return visitor.visit(this, data);
+		}
 
-	public override bool evaluate(InternalContextAdapter context) {
-	    /*
+		public override bool evaluate(InternalContextAdapter context)
+		{
+			/*
 	    *  get the two args
 	    */
 
-	    System.Object left = jjtGetChild(0).value_Renamed(context);
-	    System.Object right = jjtGetChild(1).value_Renamed(context);
+			Object left = jjtGetChild(0).Value(context);
+			Object right = jjtGetChild(1).Value(context);
 
-	    /*
+			/*
 	    *  if either is null, lets log and bail
 	    */
 
-	    if (left == null || right == null) {
-		rsvc.error((left == null?"Left":"Right") + " side (" + jjtGetChild((left == null?0:1)).literal() + ") of '<' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
-		return false;
-	    }
+			if (left == null || right == null)
+			{
+				rsvc.error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).literal() + ") of '<' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				return false;
+			}
 
-	    /*
+			/*
 	    *  if not an Integer, not much we can do either
 	    */
 
-	    if (!(left is System.Int32) || !(right is System.Int32)) {
-		rsvc.error((!(left is System.Int32)?"Left":"Right") + " side of '<' operation is not a valid type. " + " It is a " + (!(left is System.Int32)?left.GetType():right.GetType()) + ". Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+			if (!(left is Int32) || !(right is Int32))
+			{
+				rsvc.error((!(left is Int32) ? "Left" : "Right") + " side of '<' operation is not a valid type. " + " It is a " + (!(left is Int32) ? left.GetType() : right.GetType()) + ". Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 
-		return false;
-	    }
+				return false;
+			}
 
-	    return ((System.Int32) left) < ((System.Int32) right);
+			return ((Int32) left) < ((Int32) right);
+		}
 	}
-    }
 }

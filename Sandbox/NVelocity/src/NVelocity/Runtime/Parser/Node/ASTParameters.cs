@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,18 +53,23 @@ namespace NVelocity.Runtime.Parser.Node
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Parser = NVelocity.Runtime.Parser.Parser;
+	using System;
 
-    public class ASTParameters:SimpleNode {
-	public ASTParameters(int id):base(id) {}
+	public class ASTParameters : SimpleNode
+	{
+		public ASTParameters(int id) : base(id)
+		{
+		}
 
-	public ASTParameters(Parser p, int id):base(p, id) {}
+		public ASTParameters(Parser p, int id) : base(p, id)
+		{
+		}
 
-	/// <summary>Accept the visitor. *
-	/// </summary>
-	public override System.Object jjtAccept(ParserVisitor visitor, System.Object data) {
-	    return visitor.visit(this, data);
+		/// <summary>Accept the visitor. *
+		/// </summary>
+		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		{
+			return visitor.visit(this, data);
+		}
 	}
-    }
 }

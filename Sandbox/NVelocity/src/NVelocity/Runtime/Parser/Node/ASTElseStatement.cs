@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,39 +53,45 @@ namespace NVelocity.Runtime.Parser.Node
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Parser = NVelocity.Runtime.Parser.Parser;
-    using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
+	using System;
+	using NVelocity.Context;
 
-    /// <summary> This class is responsible for handling the Else VTL control statement.
-    ///
-    /// Please look at the Parser.jjt file which is
-    /// what controls the generation of this class.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-    /// </author>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: ASTElseStatement.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-    ///
-    /// </version>
-    public class ASTElseStatement:SimpleNode {
-	public ASTElseStatement(int id):base(id) {}
-
-	public ASTElseStatement(Parser p, int id):base(p, id) {}
-
-	/// <summary>Accept the visitor. *
+	/// <summary> This class is responsible for handling the Else VTL control statement.
+	///
+	/// Please look at the Parser.jjt file which is
+	/// what controls the generation of this class.
+	/// *
 	/// </summary>
-	public override System.Object jjtAccept(ParserVisitor visitor, System.Object data) {
-	    return visitor.visit(this, data);
-	}
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+	/// </author>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: ASTElseStatement.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
+	///
+	/// </version>
+	public class ASTElseStatement : SimpleNode
+	{
+		public ASTElseStatement(int id) : base(id)
+		{
+		}
 
-	/// <summary> An ASTElseStatement always evaluates to
-	/// true. Basically behaves like an #if(true).
-	/// </summary>
-	public override bool evaluate(InternalContextAdapter context) {
-	    return true;
+		public ASTElseStatement(Parser p, int id) : base(p, id)
+		{
+		}
+
+		/// <summary>Accept the visitor. *
+		/// </summary>
+		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		{
+			return visitor.visit(this, data);
+		}
+
+		/// <summary> An ASTElseStatement always evaluates to
+		/// true. Basically behaves like an #if(true).
+		/// </summary>
+		public override bool evaluate(InternalContextAdapter context)
+		{
+			return true;
+		}
 	}
-    }
 }

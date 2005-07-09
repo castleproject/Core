@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Directive
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,82 +53,71 @@ namespace NVelocity.Runtime.Directive
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-    using ParseErrorException = NVelocity.Exception.ParseErrorException;
-    using ResourceNotFoundException = NVelocity.Exception.ResourceNotFoundException;
-    using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
-    using INode = NVelocity.Runtime.Parser.Node.INode;
+	using System;
+	using System.IO;
+	using NVelocity.Context;
+	using NVelocity.Runtime.Parser.Node;
 
-    /// <summary> Base class for all directives used in Velocity.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-    /// </author>
-    /// <version> $Id: Directive.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-    ///
-    /// </version>
-    public abstract class Directive : DirectiveConstants  //,System.ICloneable
-    {
-	public abstract System.String Name{get
-					   ;
-					   set
-					       ;
-					      }
-	    public abstract int Type{get
-				     ;
-				    }
-	    public virtual int Line
-	    {
-		get {
-		    return line;
+	/// <summary> Base class for all directives used in Velocity.
+	/// *
+	/// </summary>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+	/// </author>
+	/// <version> $Id: Directive.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
+	///
+	/// </version>
+	public abstract class Directive : DirectiveConstants //,System.ICloneable
+	{
+		public abstract String Name { get; set; }
+
+		public abstract int Type { get; }
+
+		public int Line
+		{
+			get { return line; }
 		}
 
+		public int Column
+		{
+			get { return column; }
+
+		}
+
+		private int line = 0;
+		private int column = 0;
+
+		protected internal RuntimeServices rsvc = null;
+
+		/// <summary>Return the name of this directive
+		/// </summary>
+		/// <summary>Get the directive type BLOCK/LINE
+		/// </summary>
+		/// <summary>Allows the template location to be set
+		/// </summary>
+		public void setLocation(int line, int column)
+		{
+			this.line = line;
+			this.column = column;
+		}
+
+		/// <summary>for log msg purposes
+		/// </summary>
+		/// <summary>for log msg purposes
+		/// </summary>
+		/// <summary> How this directive is to be initialized.
+		/// </summary>
+		public virtual void init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		{
+			rsvc = rs;
+
+			//        int i, k = node.jjtGetNumChildren();
+
+			//for (i = 0; i < k; i++)
+			//    node.jjtGetChild(i).init(context, rs);
+		}
+
+		/// <summary> How this directive is to be rendered
+		/// </summary>
+		public abstract bool render(InternalContextAdapter context, TextWriter writer, INode node);
 	}
-	public virtual int Column
-	{
-	    get {
-		return column;
-	    }
-
-	}
-	private int line = 0;
-	private int column = 0;
-
-	protected internal RuntimeServices rsvc = null;
-
-	/// <summary>Return the name of this directive
-	/// </summary>
-
-	/// <summary>Get the directive type BLOCK/LINE
-	/// </summary>
-
-	/// <summary>Allows the template location to be set
-	/// </summary>
-	public virtual void  setLocation(int line, int column) {
-	    this.line = line;
-	    this.column = column;
-	}
-
-	/// <summary>for log msg purposes
-	/// </summary>
-
-	/// <summary>for log msg purposes
-	/// </summary>
-
-	/// <summary> How this directive is to be initialized.
-	/// </summary>
-	public virtual void  init(RuntimeServices rs, InternalContextAdapter context, INode node) {
-	    rsvc = rs;
-
-	    //        int i, k = node.jjtGetNumChildren();
-
-	    //for (i = 0; i < k; i++)
-	    //    node.jjtGetChild(i).init(context, rs);
-	}
-
-	/// <summary> How this directive is to be rendered
-	/// </summary>
-	public abstract bool render(InternalContextAdapter context, System.IO.TextWriter writer, INode node);
-    }
 }

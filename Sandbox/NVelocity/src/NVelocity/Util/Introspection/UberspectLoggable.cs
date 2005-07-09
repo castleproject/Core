@@ -1,8 +1,7 @@
-using System;
-using RuntimeLogger = NVelocity.Runtime.RuntimeLogger;
-
-namespace NVelocity.Util.Introspection {
-    /*
+namespace NVelocity.Util.Introspection
+{
+	using NVelocity.Runtime;
+	/*
 	* Copyright 2002-2004 The Apache Software Foundation.
 	*
 	* Licensed under the Apache License, Version 2.0 (the "License")
@@ -17,6 +16,7 @@ namespace NVelocity.Util.Introspection {
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 	*/
+
 	/// <summary>  Marker interface to let an uberspector indicate it can and wants to
 	/// log
 	/// *
@@ -30,14 +30,10 @@ namespace NVelocity.Util.Introspection {
 	/// 
 	/// </version>
 	public interface UberspectLoggable
-		{
-			/// <summary>  Sets the logger.  This will be called before any calls to the
-			/// uberspector
-			/// </summary>
-			RuntimeLogger RuntimeLogger
-			{
-				set;
-				
-			}
-		}
+	{
+		/// <summary>  Sets the logger.  This will be called before any calls to the
+		/// uberspector
+		/// </summary>
+		RuntimeLogger RuntimeLogger { set; }
+	}
 }

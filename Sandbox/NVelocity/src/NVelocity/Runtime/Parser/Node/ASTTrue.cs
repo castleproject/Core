@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,30 +53,37 @@ namespace NVelocity.Runtime.Parser.Node
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Parser = NVelocity.Runtime.Parser.Parser;
-    using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
+	using System;
+	using NVelocity.Context;
 
-    public class ASTTrue:SimpleNode {
-	//UPGRADE_NOTE: Field value was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
-	private static System.Boolean value_Renamed_Field = true;
+	public class ASTTrue : SimpleNode
+	{
+		//UPGRADE_NOTE: Field value was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
+		private static Boolean value__Field = true;
 
-	public ASTTrue(int id):base(id) {}
+		public ASTTrue(int id) : base(id)
+		{
+		}
 
-	public ASTTrue(Parser p, int id):base(p, id) {}
+		public ASTTrue(Parser p, int id) : base(p, id)
+		{
+		}
 
-	/// <summary>Accept the visitor. *
-	/// </summary>
-	public override System.Object jjtAccept(ParserVisitor visitor, System.Object data) {
-	    return visitor.visit(this, data);
+		/// <summary>Accept the visitor. *
+		/// </summary>
+		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		{
+			return visitor.visit(this, data);
+		}
+
+		public override bool evaluate(InternalContextAdapter context)
+		{
+			return true;
+		}
+
+		public override Object Value(InternalContextAdapter context)
+		{
+			return value__Field;
+		}
 	}
-
-	public override bool evaluate(InternalContextAdapter context) {
-	    return true;
-	}
-
-	public override System.Object value_Renamed(InternalContextAdapter context) {
-	    return value_Renamed_Field;
-	}
-    }
 }

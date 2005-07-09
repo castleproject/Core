@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Resource
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -53,38 +53,39 @@ namespace NVelocity.Runtime.Resource
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Template = NVelocity.Template;
+	using System;
 
-    /// <summary> Class responsible for instantiating <code>Resource</code> objects,
-    /// given name and type.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-    /// </author>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: ResourceFactory.cs,v 1.3 2003/10/27 13:54:11 corts Exp $
-    ///
-    /// </version>
-    public class ResourceFactory {
-	public static Resource getResource(System.String resourceName, int resourceType) {
-	    Resource resource = null;
+	/// <summary> Class responsible for instantiating <code>Resource</code> objects,
+	/// given name and type.
+	/// *
+	/// </summary>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+	/// </author>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: ResourceFactory.cs,v 1.3 2003/10/27 13:54:11 corts Exp $
+	///
+	/// </version>
+	public class ResourceFactory
+	{
+		public static Resource getResource(String resourceName, int resourceType)
+		{
+			Resource resource = null;
 
-	    switch (resourceType) {
-		case NVelocity.Runtime.Resource.ResourceManager_Fields.RESOURCE_TEMPLATE:
-		    resource = new Template();
-		    break;
+			switch (resourceType)
+			{
+				case ResourceManager_Fields.RESOURCE_TEMPLATE:
+					resource = new Template();
+					break;
 
 
+				case ResourceManager_Fields.RESOURCE_CONTENT:
+					resource = new ContentResource();
+					break;
 
-		case NVelocity.Runtime.Resource.ResourceManager_Fields.RESOURCE_CONTENT:
-		    resource = new ContentResource();
-		    break;
+			}
 
-	    }
-
-	    return resource;
+			return resource;
+		}
 	}
-    }
 }

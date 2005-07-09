@@ -1,6 +1,6 @@
-namespace NVelocity.Util.Introspection {
-    using System;
-	
+namespace NVelocity.Util.Introspection
+{
+	using System;
 	/*
 	* Copyright 2002-2004 The Apache Software Foundation.
 	*
@@ -16,7 +16,7 @@ namespace NVelocity.Util.Introspection {
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 	*/
-	
+
 	/// <summary>  Interface defining a 'getter'.  For uses when looking for resolution of
 	/// property references
 	/// *
@@ -29,29 +29,23 @@ namespace NVelocity.Util.Introspection {
 	/// 
 	/// </version>
 	public interface VelPropertyGet
-		{
-			/// <summary>  specifies if this VelPropertyGet is cacheable and able to be
-			/// reused for this class of object it was returned for
-			/// *
-			/// </summary>
-			/// <returns> true if can be reused for this class, false if not
-			/// 
-			/// </returns>
-			bool Cacheable
-			{
-				get;
-				
-			}
-			/// <summary>  returns the method name used to return this 'property'
-			/// </summary>
-			System.String MethodName
-			{
-				get;
-				
-			}
-			/// <summary>  invocation method - called when the 'get action' should be
-			/// preformed and a value returned
-			/// </summary>
-			System.Object invoke(System.Object o);
-		}
+	{
+		/// <summary>  specifies if this VelPropertyGet is cacheable and able to be
+		/// reused for this class of object it was returned for
+		/// *
+		/// </summary>
+		/// <returns> true if can be reused for this class, false if not
+		/// 
+		/// </returns>
+		bool Cacheable { get; }
+
+		/// <summary>  returns the method name used to return this 'property'
+		/// </summary>
+		String MethodName { get; }
+
+		/// <summary>  invocation method - called when the 'get action' should be
+		/// preformed and a value returned
+		/// </summary>
+		Object invoke(Object o);
+	}
 }

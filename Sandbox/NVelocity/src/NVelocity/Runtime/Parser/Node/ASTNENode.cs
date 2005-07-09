@@ -1,6 +1,6 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-    /*
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -53,50 +53,59 @@ namespace NVelocity.Runtime.Parser.Node
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Parser = NVelocity.Runtime.Parser.Parser;
-    using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-    using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
+	using System;
+	using NVelocity.Context;
 
-    public class ASTNENode:SimpleNode {
-	public ASTNENode(int id):base(id) {}
+	public class ASTNENode : SimpleNode
+	{
+		public ASTNENode(int id) : base(id)
+		{
+		}
 
-	public ASTNENode(Parser p, int id):base(p, id) {}
+		public ASTNENode(Parser p, int id) : base(p, id)
+		{
+		}
 
-	/// <summary>Accept the visitor. *
-	/// </summary>
-	public override System.Object jjtAccept(ParserVisitor visitor, System.Object data) {
-	    return visitor.visit(this, data);
-	}
+		/// <summary>Accept the visitor. *
+		/// </summary>
+		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		{
+			return visitor.visit(this, data);
+		}
 
-	public override bool evaluate(InternalContextAdapter context) {
-	    System.Object left = jjtGetChild(0).value_Renamed(context);
-	    System.Object right = jjtGetChild(1).value_Renamed(context);
+		public override bool evaluate(InternalContextAdapter context)
+		{
+			Object left = jjtGetChild(0).Value(context);
+			Object right = jjtGetChild(1).Value(context);
 
-	    /*
+			/*
 	    *  null check
 	    */
 
-	    if (left == null || right == null) {
-		rsvc.error((left == null?"Left":"Right") + " side (" + jjtGetChild((left == null?0:1)).literal() + ") of '!=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
-		return false;
+			if (left == null || right == null)
+			{
+				rsvc.error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).literal() + ") of '!=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				return false;
 
-	    }
+			}
 
 
-	    /*
+			/*
 	    *  check to see if they are the same class.  I don't think this is slower
 	    *  as I don't think that getClass() results in object creation, and we can
 	    *  extend == to handle all classes
 	    */
 
-	    if (left.GetType().Equals(right.GetType())) {
-		return !(left.Equals(right));
-	    } else {
-		rsvc.error("Error in evaluation of != expression." + " Both arguments must be of the same Class." + " Currently left = " + left.GetType() + ", right = " + right.GetType() + ". " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "] (ASTEQNode)");
+			if (left.GetType().Equals(right.GetType()))
+			{
+				return !(left.Equals(right));
+			}
+			else
+			{
+				rsvc.error("Error in evaluation of != expression." + " Both arguments must be of the same Class." + " Currently left = " + left.GetType() + ", right = " + right.GetType() + ". " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "] (ASTEQNode)");
 
-		return false;
-	    }
+				return false;
+			}
+		}
 	}
-    }
 }

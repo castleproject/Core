@@ -1,9 +1,9 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity", "NVelocity.csproj", "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity", "NVelocity\NVelocity.csproj", "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.Test", "NVelocity.Test.csproj", "{E1B10210-6A42-4993-B383-0F6AAC255A24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.Test", "NVelocity.Tests\NVelocity.Test.csproj", "{E1B10210-6A42-4993-B383-0F6AAC255A24}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -23,7 +23,6 @@ Global
 		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
-		nvelocity.build = nvelocity.build
 		ToDo.txt = ToDo.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

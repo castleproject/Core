@@ -1,8 +1,7 @@
 namespace NVelocity.Runtime.Parser.Node
 {
-    using System;
-
-    /*
+	using System;
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -56,41 +55,42 @@ namespace NVelocity.Runtime.Parser.Node
     * <http://www.apache.org/>.
     */
 
-    public interface ParserVisitor {
-	System.Object visit(SimpleNode node, System.Object data);
-	System.Object visit(ASTprocess node, System.Object data);
-	System.Object visit(ASTComment node, System.Object data);
-	System.Object visit(ASTNumberLiteral node, System.Object data);
-	System.Object visit(ASTStringLiteral node, System.Object data);
-	System.Object visit(ASTIdentifier node, System.Object data);
-	System.Object visit(ASTWord node, System.Object data);
-	System.Object visit(ASTDirective node, System.Object data);
-	System.Object visit(ASTBlock node, System.Object data);
-	System.Object visit(ASTObjectArray node, System.Object data);
-	System.Object visit(ASTMethod node, System.Object data);
-	System.Object visit(ASTReference node, System.Object data);
-	System.Object visit(ASTTrue node, System.Object data);
-	System.Object visit(ASTFalse node, System.Object data);
-	System.Object visit(ASTText node, System.Object data);
-	System.Object visit(ASTIfStatement node, System.Object data);
-	System.Object visit(ASTElseStatement node, System.Object data);
-	System.Object visit(ASTElseIfStatement node, System.Object data);
-	System.Object visit(ASTSetDirective node, System.Object data);
-	System.Object visit(ASTExpression node, System.Object data);
-	System.Object visit(ASTAssignment node, System.Object data);
-	System.Object visit(ASTOrNode node, System.Object data);
-	System.Object visit(ASTAndNode node, System.Object data);
-	System.Object visit(ASTEQNode node, System.Object data);
-	System.Object visit(ASTNENode node, System.Object data);
-	System.Object visit(ASTLTNode node, System.Object data);
-	System.Object visit(ASTGTNode node, System.Object data);
-	System.Object visit(ASTLENode node, System.Object data);
-	System.Object visit(ASTGENode node, System.Object data);
-	System.Object visit(ASTAddNode node, System.Object data);
-	System.Object visit(ASTSubtractNode node, System.Object data);
-	System.Object visit(ASTMulNode node, System.Object data);
-	System.Object visit(ASTDivNode node, System.Object data);
-	System.Object visit(ASTModNode node, System.Object data);
-	System.Object visit(ASTNotNode node, System.Object data);
-    }
+	public interface ParserVisitor
+	{
+		Object visit(SimpleNode node, Object data);
+		Object visit(ASTprocess node, Object data);
+		Object visit(ASTComment node, Object data);
+		Object visit(ASTNumberLiteral node, Object data);
+		Object visit(ASTStringLiteral node, Object data);
+		Object visit(ASTIdentifier node, Object data);
+		Object visit(ASTWord node, Object data);
+		Object visit(ASTDirective node, Object data);
+		Object visit(ASTBlock node, Object data);
+		Object visit(ASTObjectArray node, Object data);
+		Object visit(ASTMethod node, Object data);
+		Object visit(ASTReference node, Object data);
+		Object visit(ASTTrue node, Object data);
+		Object visit(ASTFalse node, Object data);
+		Object visit(ASTText node, Object data);
+		Object visit(ASTIfStatement node, Object data);
+		Object visit(ASTElseStatement node, Object data);
+		Object visit(ASTElseIfStatement node, Object data);
+		Object visit(ASTSetDirective node, Object data);
+		Object visit(ASTExpression node, Object data);
+		Object visit(ASTAssignment node, Object data);
+		Object visit(ASTOrNode node, Object data);
+		Object visit(ASTAndNode node, Object data);
+		Object visit(ASTEQNode node, Object data);
+		Object visit(ASTNENode node, Object data);
+		Object visit(ASTLTNode node, Object data);
+		Object visit(ASTGTNode node, Object data);
+		Object visit(ASTLENode node, Object data);
+		Object visit(ASTGENode node, Object data);
+		Object visit(ASTAddNode node, Object data);
+		Object visit(ASTSubtractNode node, Object data);
+		Object visit(ASTMulNode node, Object data);
+		Object visit(ASTDivNode node, Object data);
+		Object visit(ASTModNode node, Object data);
+		Object visit(ASTNotNode node, Object data);
+	}
 }

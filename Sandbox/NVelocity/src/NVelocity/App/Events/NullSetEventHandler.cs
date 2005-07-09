@@ -1,8 +1,7 @@
 namespace NVelocity.App.Events
 {
-    using System;
-
-    /*
+	using System;
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -56,27 +55,28 @@ namespace NVelocity.App.Events
     * <http://www.apache.org/>.
     */
 
-    /// <summary>  Event handler : lets an app approve / veto
-    /// writing a log message when RHS of #set() is null.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: NullSetEventHandler.cs,v 1.3 2003/10/27 13:54:07 corts Exp $
-    ///
-    /// </version>
-    public interface NullSetEventHandler : EventHandler {
-	/// <summary>  Called when the RHS of a #set() is null, which will result
-	/// in a null LHS.
+	/// <summary>  Event handler : lets an app approve / veto
+	/// writing a log message when RHS of #set() is null.
 	/// *
 	/// </summary>
-	/// <param name="lhs"> reference literal of left-hand-side of set statement
-	/// </param>
-	/// <param name="rhs"> reference literal of right-hand-side of set statement
-	/// </param>
-	/// <returns>true if log message should be written, false otherwise
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: NullSetEventHandler.cs,v 1.3 2003/10/27 13:54:07 corts Exp $
 	///
-	/// </returns>
-	bool shouldLogOnNullSet(System.String lhs, System.String rhs);
-    }
+	/// </version>
+	public interface NullSetEventHandler : EventHandler
+	{
+		/// <summary>  Called when the RHS of a #set() is null, which will result
+		/// in a null LHS.
+		/// *
+		/// </summary>
+		/// <param name="lhs"> reference literal of left-hand-side of set statement
+		/// </param>
+		/// <param name="rhs"> reference literal of right-hand-side of set statement
+		/// </param>
+		/// <returns>true if log message should be written, false otherwise
+		///
+		/// </returns>
+		bool shouldLogOnNullSet(String lhs, String rhs);
+	}
 }

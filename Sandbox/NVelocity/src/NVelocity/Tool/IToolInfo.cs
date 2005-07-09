@@ -1,34 +1,29 @@
-using System;
+namespace NVelocity.Tool
+{
+	using System;
 
-namespace NVelocity.Tool {
 
-
-    /// <summary> Interface to simplify and abstract tool handling.
-    /// *
-    /// Implementations of this class should hold both the context
-    /// key for the tool and sufficient information to return
-    /// an instance of the tool.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a>
-    /// *
-    /// </author>
-    /// <version> $Id: IToolInfo.cs,v 1.2 2003/10/27 13:54:12 corts Exp $
-    ///
-    /// </version>
-    public interface IToolInfo {
-	System.String Key
+	/// <summary> Interface to simplify and abstract tool handling.
+	/// *
+	/// Implementations of this class should hold both the context
+	/// key for the tool and sufficient information to return
+	/// an instance of the tool.
+	/// *
+	/// </summary>
+	/// <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a>
+	/// *
+	/// </author>
+	/// <version> $Id: IToolInfo.cs,v 1.2 2003/10/27 13:54:12 corts Exp $
+	///
+	/// </version>
+	public interface IToolInfo
 	{
-	    get
-		;
+		String Key { get
+			; }
 
-	    }
-	    System.String Classname
-	    {
-		get
-		    ;
+		String Classname { get
+			; }
 
-		}
 		/// <returns>the context key for the tool
 		///
 		/// </returns>
@@ -49,6 +44,6 @@ namespace NVelocity.Tool {
 		/// <returns>an instance of the tool
 		///
 		/// </returns>
-		System.Object getInstance(System.Object initData);
-    }
+		Object getInstance(Object initData);
+	}
 }

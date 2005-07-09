@@ -1,5 +1,6 @@
-namespace NVelocity.Runtime.Directive {
-    /*
+namespace NVelocity.Runtime.Directive
+{
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -52,59 +53,59 @@ namespace NVelocity.Runtime.Directive {
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using NVelocity.Context;
-    using NVelocity.Runtime.Parser.Node;
+	using System;
+	using System.IO;
+	using NVelocity.Context;
+	using NVelocity.Runtime.Parser.Node;
 
-    /// <summary> A very simple directive that leverages the Node.literal()
-    /// to grab the literal rendition of a node. We basically
-    /// grab the literal value on init(), then repeatedly use
-    /// that during render().
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-    /// </author>
-    /// <version> $Id: Literal.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-    ///
-    /// </version>
-    public class Literal:Directive {
-	public override System.String Name {
-	    get {
-		return "literal";
-	    }
-	    set {
-		throw new NotSupportedException();
-	    }
-	}
-	public override int Type {
-	    get {
-		return NVelocity.Runtime.Directive.DirectiveConstants_Fields.BLOCK;
-	    }
-
-	}
-	internal System.String literalText;
-
-	/// <summary> Return name of this directive.
+	/// <summary> A very simple directive that leverages the Node.literal()
+	/// to grab the literal rendition of a node. We basically
+	/// grab the literal value on init(), then repeatedly use
+	/// that during render().
+	/// *
 	/// </summary>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+	/// </author>
+	/// <version> $Id: Literal.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
+	///
+	/// </version>
+	public class Literal : Directive
+	{
+		public override String Name
+		{
+			get { return "literal"; }
+			set { throw new NotSupportedException(); }
+		}
 
-	/// <summary> Return type of this directive.
-	/// </summary>
+		public override int Type
+		{
+			get { return DirectiveConstants_Fields.BLOCK; }
 
-	/// <summary> Store the literal rendition of a node using
-	/// the Node.literal().
-	/// </summary>
-	public override void  init(RuntimeServices rs, InternalContextAdapter context, INode node) {
-	    base.init(rs, context, node);
+		}
 
-	    literalText = node.jjtGetChild(0).literal();
+		internal String literalText;
+
+		/// <summary> Return name of this directive.
+		/// </summary>
+		/// <summary> Return type of this directive.
+		/// </summary>
+		/// <summary> Store the literal rendition of a node using
+		/// the Node.literal().
+		/// </summary>
+		public override void init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		{
+			base.init(rs, context, node);
+
+			literalText = node.jjtGetChild(0).literal();
+		}
+
+		/// <summary> Throw the literal rendition of the block between
+		/// #literal()/#end into the writer.
+		/// </summary>
+		public override bool render(InternalContextAdapter context, TextWriter writer, INode node)
+		{
+			writer.Write(literalText);
+			return true;
+		}
 	}
-
-	/// <summary> Throw the literal rendition of the block between
-	/// #literal()/#end into the writer.
-	/// </summary>
-	public override bool render(InternalContextAdapter context, System.IO.TextWriter writer, INode node) {
-	    writer.Write(literalText);
-	    return true;
-	}
-    }
 }

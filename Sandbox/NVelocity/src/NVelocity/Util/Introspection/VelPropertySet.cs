@@ -1,6 +1,6 @@
-namespace NVelocity.Util.Introspection {
-    using System;
-	
+namespace NVelocity.Util.Introspection
+{
+	using System;
 	/*
 	* Copyright 2002-2004 The Apache Software Foundation.
 	*
@@ -16,7 +16,7 @@ namespace NVelocity.Util.Introspection {
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 	*/
-	
+
 	/// <summary>  Interface used for setting values that appear to be properties in
 	/// Velocity.  Ex.
 	/// *
@@ -29,36 +29,30 @@ namespace NVelocity.Util.Introspection {
 	/// 
 	/// </version>
 	public interface VelPropertySet
-		{
-			/// <summary>  specifies if this VelPropertySet is cacheable and able to be
-			/// reused for this class of object it was returned for
-			/// *
-			/// </summary>
-			/// <returns> true if can be reused for this class, false if not
-			/// 
-			/// </returns>
-			bool Cacheable
-			{
-				get;
-				
-			}
-			/// <summary>  returns the method name used to set this 'property'
-			/// </summary>
-			System.String MethodName
-			{
-				get;
-				
-			}
-			/// <summary>  method used to set the value in the object
-			/// *
-			/// </summary>
-			/// <param name="o">Object on which the method will be called with the arg
-			/// </param>
-			/// <param name="arg">value to be set
-			/// </param>
-			/// <returns> the value returned from the set operation (impl specific)
-			/// 
-			/// </returns>
-			System.Object invoke(System.Object o, System.Object arg);
-		}
+	{
+		/// <summary>  specifies if this VelPropertySet is cacheable and able to be
+		/// reused for this class of object it was returned for
+		/// *
+		/// </summary>
+		/// <returns> true if can be reused for this class, false if not
+		/// 
+		/// </returns>
+		bool Cacheable { get; }
+
+		/// <summary>  returns the method name used to set this 'property'
+		/// </summary>
+		String MethodName { get; }
+
+		/// <summary>  method used to set the value in the object
+		/// *
+		/// </summary>
+		/// <param name="o">Object on which the method will be called with the arg
+		/// </param>
+		/// <param name="arg">value to be set
+		/// </param>
+		/// <returns> the value returned from the set operation (impl specific)
+		/// 
+		/// </returns>
+		Object invoke(Object o, Object arg);
+	}
 }

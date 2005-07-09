@@ -29,14 +29,14 @@
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
                     DefineConstants = ""
-                    DocumentationFile = "NVelocity.xml"
+                    DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "..\build\nvelocity\"
+                    OutputPath = "..\bin\temp\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "bin\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -81,11 +81,6 @@
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
                 />
             </References>
         </Build>
@@ -326,11 +321,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IO\VelocityWriter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Runtime\RuntimeConstants.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -434,11 +424,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Runtime\Log\Log4NetExtensionLogSystem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Runtime\Log\LogManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -455,11 +440,6 @@
                 />
                 <File
                     RelPath = "Runtime\Log\PrimordialLogSystem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Runtime\Log\SimpleLog4NetLogSystem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

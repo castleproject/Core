@@ -1,8 +1,7 @@
 namespace NVelocity.Util.Introspection
 {
-    using System;
-
-    /*
+	using System;
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -56,27 +55,28 @@ namespace NVelocity.Util.Introspection
     * <http://www.apache.org/>.
     */
 
-    /// <summary>  Holds information for node-local context data introspection
-    /// information.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: IntrospectionCacheData.cs,v 1.3 2003/10/27 13:54:12 corts Exp $
-    ///
-    /// </version>
-    public class IntrospectionCacheData {
-	///
-	/// <summary>  Object to pair with class - currently either a Method or
-	/// AbstractExecutor. It can be used in any way the using node
-	/// wishes.
+	/// <summary>  Holds information for node-local context data introspection
+	/// information.
+	/// *
 	/// </summary>
-	public System.Object thingy;
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: IntrospectionCacheData.cs,v 1.3 2003/10/27 13:54:12 corts Exp $
+	///
+	/// </version>
+	public class IntrospectionCacheData
+	{
+		///
+		/// <summary>  Object to pair with class - currently either a Method or
+		/// AbstractExecutor. It can be used in any way the using node
+		/// wishes.
+		/// </summary>
+		public Object thingy;
 
-	/*
+		/*
 	*  Class of context data object associated with the introspection
 	*  information
 	*/
-	public System.Type contextData;
-    }
+		public Type contextData;
+	}
 }

@@ -1,5 +1,6 @@
-namespace NVelocity.Runtime.Log {
-    /*
+namespace NVelocity.Runtime.Log
+{
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -52,25 +53,33 @@ namespace NVelocity.Runtime.Log {
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
+	using System;
 
-    /// <summary>  Logger used in case of failure. Does nothing.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: NullLogSystem.cs,v 1.4 2003/10/27 13:54:10 corts Exp $
-    ///
-    /// </version>
-    public class NullLogSystem : LogSystem {
-	public NullLogSystem() {}
-
-	public virtual void Init(RuntimeServices rs) {}
-
-	/// <summary>
-	/// logs messages to the great Garbage Collector in the sky
+	/// <summary>  Logger used in case of failure. Does nothing.
+	/// *
 	/// </summary>
-	/// <param name="level">severity level</param>
-	/// <param name="message">complete error message</param>
-	public virtual void LogVelocityMessage(int level, System.String message) {}}
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: NullLogSystem.cs,v 1.4 2003/10/27 13:54:10 corts Exp $
+	///
+	/// </version>
+	public class NullLogSystem : LogSystem
+	{
+		public NullLogSystem()
+		{
+		}
+
+		public void Init(RuntimeServices rs)
+		{
+		}
+
+		/// <summary>
+		/// logs messages to the great Garbage Collector in the sky
+		/// </summary>
+		/// <param name="level">severity level</param>
+		/// <param name="message">complete error message</param>
+		public void LogVelocityMessage(int level, String message)
+		{
+		}
+	}
 }

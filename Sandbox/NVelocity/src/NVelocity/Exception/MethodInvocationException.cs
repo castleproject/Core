@@ -1,8 +1,8 @@
 namespace NVelocity.Exception
 {
-    using System;
-
-    /*
+	using System;
+	using System.Runtime.Serialization;
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -56,97 +56,61 @@ namespace NVelocity.Exception
     * <http://www.apache.org/>.
     */
 
-    /// <summary>  Application-level exception thrown when a reference method is
-    /// invoked and an exception is thrown.
-    /// <br>
-    /// When this exception is thrown, a best effort will be made to have
-    /// useful information in the exception's message.  For complete
-    /// information, consult the runtime log.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: MethodInvocationException.cs,v 1.3 2003/10/27 13:54:08 corts Exp $
-    ///
-    /// </version>
-    public class MethodInvocationException:VelocityException {
-	public virtual System.String MethodName
+	/// <summary>  Application-level exception thrown when a reference method is
+	/// invoked and an exception is thrown.
+	/// <br>
+	/// When this exception is thrown, a best effort will be made to have
+	/// useful information in the exception's message.  For complete
+	/// information, consult the runtime log.
+	/// *
+	/// </summary>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: MethodInvocationException.cs,v 1.3 2003/10/27 13:54:08 corts Exp $
+	///
+	/// </version>
+	[Serializable]
+	public class MethodInvocationException : VelocityException
 	{
-	    get {
-		return methodName;
-	    }
+		private String methodName = "";
+		private String referenceName = "";
+		private Exception wrapped = null;
 
+		/// <summary>  CTOR - wraps the passed in exception for
+		/// examination later
+		/// *
+		/// </summary>
+		/// <param name="message">
+		/// </param>
+		/// <param name="e">Throwable that we are wrapping
+		/// </param>
+		/// <param name="methodName">name of method that threw the exception
+		///
+		/// </param>
+		public MethodInvocationException(String message, Exception e, String methodName) : base(message)
+		{
+			this.wrapped = e;
+			this.methodName = methodName;
+		}
+
+		public MethodInvocationException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
+
+		public String MethodName
+		{
+			get { return methodName; }
+		}
+
+		public Exception WrappedThrowable
+		{
+			get { return wrapped; }
+		}
+
+		public String ReferenceName
+		{
+			get { return referenceName; }
+			set { referenceName = value; }
+		}
 	}
-	public virtual System.Exception WrappedThrowable
-	{
-	    get {
-		return wrapped;
-	    }
-
-	}
-	public virtual System.String ReferenceName
-	{
-	    get {
-		return referenceName;
-	    }
-
-	    set {
-		referenceName = value;
-	    }
-
-	}
-	private System.String methodName = "";
-	private System.String referenceName = "";
-	//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
-	private System.Exception wrapped = null;
-
-	/// <summary>  CTOR - wraps the passed in exception for
-	/// examination later
-	/// *
-	/// </summary>
-	/// <param name="message">
-	/// </param>
-	/// <param name="e">Throwable that we are wrapping
-	/// </param>
-	/// <param name="methodName">name of method that threw the exception
-	///
-	/// </param>
-	//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
-	public MethodInvocationException(System.String message, System.Exception e, System.String methodName):base(message) {
-	    this.wrapped = e;
-	    this.methodName = methodName;
-	}
-
-	/// <summary>  Returns the name of the method that threw the
-	/// exception
-	/// *
-	/// </summary>
-	/// <returns>String name of method
-	///
-	/// </returns>
-
-	/// <summary>  returns the wrapped Throwable that caused this
-	/// MethodInvocationException to be thrown
-	///
-	/// </summary>
-	/// <returns>Throwable thrown by method invocation
-	///
-	/// </returns>
-	//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
-
-	/// <summary>  Sets the reference name that threw this exception
-	/// *
-	/// </summary>
-	/// <param name="reference">name of reference
-	///
-	/// </param>
-
-	/// <summary>  Retrieves the name of the reference that caused the
-	/// exception
-	/// *
-	/// </summary>
-	/// <returns>name of reference
-	///
-	/// </returns>
-    }
 }

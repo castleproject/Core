@@ -1,8 +1,9 @@
-using System;
-using NVelocity.Exception;
-
-namespace NVelocity.Runtime.Resource {
-    /*
+namespace NVelocity.Runtime.Resource
+{
+	using System;
+	using System.IO;
+	using NVelocity.Exception;
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2001 The Apache Software Foundation.  All rights
@@ -56,67 +57,82 @@ namespace NVelocity.Runtime.Resource {
     * <http://www.apache.org/>.
     */
 
-    /// <summary> This class represent a general text resource that
-    /// may have been retrieved from any number of possible
-    /// sources.
-    /// 
-    /// Also of interest is Velocity's {@link org.apache.velocity.Template}
-    /// <code>Resource</code>.
-    /// </summary>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-    /// </author>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version> $Id: ContentResource.cs,v 1.5 2004/01/02 00:09:23 corts Exp $
-    ///
-    /// </version>
-    public class ContentResource:Resource {
-	/// <summary>Default empty constructor
+	/// <summary> This class represent a general text resource that
+	/// may have been retrieved from any number of possible
+	/// sources.
+	/// 
+	/// Also of interest is Velocity's {@link org.apache.velocity.Template}
+	/// <code>Resource</code>.
 	/// </summary>
-	public ContentResource() {}
-
-	/// <summary>
-	/// Pull in static content and store it.
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+	/// </author>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <version> $Id: ContentResource.cs,v 1.5 2004/01/02 00:09:23 corts Exp $
 	///
-	/// @exception ResourceNotFoundException Resource could not be
-	/// found.
-	/// </summary>
-	public override bool Process() {
-	    System.IO.StreamReader reader = null;
-	    try {
-		System.IO.StringWriter sw = new System.IO.StringWriter();
-
-		//UPGRADE_ISSUE: The equivalent of constructor 'java.io.BufferedReader.BufferedReader' is incompatible with the expected type in C#. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1109"'
-		reader = new System.IO.StreamReader(new System.IO.StreamReader(resourceLoader.getResourceStream(name), System.Text.Encoding.GetEncoding(encoding)).BaseStream);
-
-		char[] buf = new char[1024];
-		int len = 0;
-
-		// -1 in java, 0 in .Net
-		while ((len = reader.Read(buf, 0, 1024)) > 0) {
-		    sw.Write(buf, 0, len);
+	/// </version>
+	public class ContentResource : Resource
+	{
+		/// <summary>Default empty constructor
+		/// </summary>
+		public ContentResource()
+		{
 		}
 
-		data = sw.ToString();
+		/// <summary>
+		/// Pull in static content and store it.
+		///
+		/// @exception ResourceNotFoundException Resource could not be
+		/// found.
+		/// </summary>
+		public override bool Process()
+		{
+			StreamReader reader = null;
+			try
+			{
+				StringWriter sw = new StringWriter();
 
-		return true;
-	    } catch (ResourceNotFoundException e) {
-		// Tell the ContentManager to continue to look through any
-		// remaining configured ResourceLoaders.
-		throw e;
-	    } catch (System.Exception e) {
-		rsvc.error("Cannot process content resource : " + e.ToString());
-		return false;
-	    } finally {
-		if (reader != null) {
-		    try {
-			reader.Close();
-		    }
-		    catch (System.Exception ignored) {
-		    }
+				//UPGRADE_ISSUE: The equivalent of constructor 'java.io.BufferedReader.BufferedReader' is incompatible with the expected type in C#. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1109"'
+				reader = new StreamReader(new StreamReader(resourceLoader.getResourceStream(name), System.Text.Encoding.GetEncoding(encoding)).BaseStream);
+
+				char[] buf = new char[1024];
+				int len = 0;
+
+				// -1 in java, 0 in .Net
+				while ((len = reader.Read(buf, 0, 1024)) > 0)
+				{
+					sw.Write(buf, 0, len);
+				}
+
+				data = sw.ToString();
+
+				return true;
+			}
+			catch (ResourceNotFoundException e)
+			{
+				// Tell the ContentManager to continue to look through any
+				// remaining configured ResourceLoaders.
+				throw e;
+			}
+			catch (Exception e)
+			{
+				rsvc.error("Cannot process content resource : " + e.ToString());
+				return false;
+			}
+			finally
+			{
+				if (reader != null)
+				{
+					try
+					{
+						reader.Close();
+					}
+					catch (Exception ignored)
+					{
+					}
+				}
+			}
+
 		}
-	    }
-
 	}
-    }
 }

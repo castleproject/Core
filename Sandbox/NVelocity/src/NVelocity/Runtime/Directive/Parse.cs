@@ -1,5 +1,6 @@
-namespace NVelocity.Runtime.Directive {
-    /*
+namespace NVelocity.Runtime.Directive
+{
+	/*
     * The Apache Software License, Version 1.1
     *
     * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
@@ -52,178 +53,193 @@ namespace NVelocity.Runtime.Directive {
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-    using System;
-    using Template = NVelocity.Template;
-    using SimpleNode = NVelocity.Runtime.Parser.Node.SimpleNode;
-    using Resource = NVelocity.Runtime.Resource.Resource;
-    using StringUtils = NVelocity.Util.StringUtils;
-    using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-    using ParseErrorException = NVelocity.Exception.ParseErrorException;
-    using ResourceNotFoundException = NVelocity.Exception.ResourceNotFoundException;
-    using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
-    using Node = NVelocity.Runtime.Parser.Node.INode;
-    using NVelocity.Runtime;
+	using System;
+	using System.IO;
+	using System.Text;
+	using NVelocity.Context;
+	using NVelocity.Exception;
+	using NVelocity.Runtime.Parser.Node;
+	using NVelocity.Runtime.Resource;
+	using Node = Parser.Node.INode;
 
-    /// <summary> Pluggable directive that handles the #parse() statement in VTL.
-    /// *
-    /// Notes:
-    /// -----
-    /// 1) The parsed source material can only come from somewhere in
-    /// the TemplateRoot tree for security reasons. There is no way
-    /// around this.  If you want to include content from elsewhere on
-    /// your disk, use a link from somwhere under Template Root to that
-    /// content.
-    /// *
-    /// 2) There is a limited parse depth.  It is set as a property
-    /// "parse_directive.maxdepth = 10"  for example.  There is a 20 iteration
-    /// safety in the event that the parameter isn't set.
-    /// *
-    /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-    /// </author>
-    /// <author> <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a>
-    /// </author>
-    /// <version> $Id: Parse.cs,v 1.4 2003/10/27 13:54:10 corts Exp $
-    ///
-    /// </version>
-    public class Parse:Directive {
-	public override System.String Name {
-	    get {
-		return "parse";
-	    }
-	    set {
-		throw new NotSupportedException();
-	    }
-	}
-	public override int Type {
-	    get {
-		return NVelocity.Runtime.Directive.DirectiveConstants_Fields.LINE;
-	    }
-
-	}
-	private bool ready = false;
-
-	/// <summary> Return name of this directive.
+	/// <summary> Pluggable directive that handles the #parse() statement in VTL.
+	/// *
+	/// Notes:
+	/// -----
+	/// 1) The parsed source material can only come from somewhere in
+	/// the TemplateRoot tree for security reasons. There is no way
+	/// around this.  If you want to include content from elsewhere on
+	/// your disk, use a link from somwhere under Template Root to that
+	/// content.
+	/// *
+	/// 2) There is a limited parse depth.  It is set as a property
+	/// "parse_directive.maxdepth = 10"  for example.  There is a 20 iteration
+	/// safety in the event that the parameter isn't set.
+	/// *
 	/// </summary>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+	/// </author>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+	/// </author>
+	/// <author> <a href="mailto:Christoph.Reck@dlr.de">Christoph Reck</a>
+	/// </author>
+	/// <version> $Id: Parse.cs,v 1.4 2003/10/27 13:54:10 corts Exp $
+	///
+	/// </version>
+	public class Parse : Directive
+	{
+		public override String Name
+		{
+			get { return "parse"; }
+			set { throw new NotSupportedException(); }
+		}
 
-	/// <summary> Return type of this directive.
-	/// </summary>
+		public override int Type
+		{
+			get { return DirectiveConstants_Fields.LINE; }
 
-	/// <summary>  iterates through the argument list and renders every
-	/// argument that is appropriate.  Any non appropriate
-	/// arguments are logged, but render() continues.
-	/// </summary>
-	public override bool render(InternalContextAdapter context, System.IO.TextWriter writer, Node node) {
-	    /*
+		}
+
+		private bool ready = false;
+
+		/// <summary> Return name of this directive.
+		/// </summary>
+		/// <summary> Return type of this directive.
+		/// </summary>
+		/// <summary>  iterates through the argument list and renders every
+		/// argument that is appropriate.  Any non appropriate
+		/// arguments are logged, but render() continues.
+		/// </summary>
+		public override bool render(InternalContextAdapter context, TextWriter writer, Node node)
+		{
+			/*
 	    *  did we get an argument?
 	    */
-	    if (node.jjtGetChild(0) == null) {
-		rsvc.error("#parse() error :  null argument");
-		return false;
-	    }
+			if (node.jjtGetChild(0) == null)
+			{
+				rsvc.error("#parse() error :  null argument");
+				return false;
+			}
 
-	    /*
+			/*
 	    *  does it have a value?  If you have a null reference, then no.
 	    */
-	    System.Object value_Renamed = node.jjtGetChild(0).value_Renamed(context);
+			Object value_ = node.jjtGetChild(0).Value(context);
 
-	    if (value_Renamed == null) {
-		rsvc.error("#parse() error :  null argument");
-		return false;
-	    }
+			if (value_ == null)
+			{
+				rsvc.error("#parse() error :  null argument");
+				return false;
+			}
 
-	    /*
+			/*
 	    *  get the path
 	    */
-	    //UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
-	    System.String arg = value_Renamed.ToString();
+			//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
+			String arg = value_.ToString();
 
-	    /*
+			/*
 	    *   see if we have exceeded the configured depth.
 	    *   If it isn't configured, put a stop at 20 just in case.
 	    */
 
-	    System.Object[] templateStack = context.TemplateNameStack;
+			Object[] templateStack = context.TemplateNameStack;
 
-	    if (templateStack.Length >= rsvc.getInt(NVelocity.Runtime.RuntimeConstants_Fields.PARSE_DIRECTIVE_MAXDEPTH, 20)) {
-		System.Text.StringBuilder path = new System.Text.StringBuilder();
+			if (templateStack.Length >= rsvc.getInt(RuntimeConstants_Fields.PARSE_DIRECTIVE_MAXDEPTH, 20))
+			{
+				StringBuilder path = new StringBuilder();
 
-		for (int i = 0; i < templateStack.Length; ++i) {
-		    path.Append(" > " + templateStack[i]);
-		}
+				for (int i = 0; i < templateStack.Length; ++i)
+				{
+					path.Append(" > " + templateStack[i]);
+				}
 
-		rsvc.error("Max recursion depth reached (" + templateStack.Length + ")" + " File stack:" + path);
-		return false;
-	    }
+				rsvc.error("Max recursion depth reached (" + templateStack.Length + ")" + " File stack:" + path);
+				return false;
+			}
 
-	    Resource current = context.CurrentResource;
+			Resource current = context.CurrentResource;
 
-	    /*
+			/*
 	    *  get the resource, and assume that we use the encoding of the current template
 	    *  the 'current resource' can be null if we are processing a stream....
 	    */
 
-	    System.String encoding = null;
+			String encoding = null;
 
-	    if (current != null) {
-		encoding = current.Encoding;
-	    } else {
-		encoding = (System.String) rsvc.getProperty(NVelocity.Runtime.RuntimeConstants_Fields.INPUT_ENCODING);
-	    }
+			if (current != null)
+			{
+				encoding = current.Encoding;
+			}
+			else
+			{
+				encoding = (String) rsvc.getProperty(RuntimeConstants_Fields.INPUT_ENCODING);
+			}
 
-	    /*
+			/*
 	    *  now use the Runtime resource loader to get the template
 	    */
 
-	    Template t = null;
+			Template t = null;
 
-	    try {
-		t = rsvc.getTemplate(arg, encoding);
-	    } catch (ResourceNotFoundException rnfe) {
-		/*
+			try
+			{
+				t = rsvc.getTemplate(arg, encoding);
+			}
+			catch (ResourceNotFoundException rnfe)
+			{
+				/*
 				* the arg wasn't found.  Note it and throw
 				*/
 
-		rsvc.error("#parse(): cannot find template '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
-		throw rnfe;
-	    } catch (ParseErrorException pee) {
-		/*
+				rsvc.error("#parse(): cannot find template '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
+				throw rnfe;
+			}
+			catch (ParseErrorException pee)
+			{
+				/*
 				* the arg was found, but didn't parse - syntax error
 				*  note it and throw
 				*/
 
-		rsvc.error("#parse(): syntax error in #parse()-ed template '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
+				rsvc.error("#parse(): syntax error in #parse()-ed template '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
 
-		throw pee;
-	    } catch (System.Exception e) {
-		rsvc.error("#parse() : arg = " + arg + ".  Exception : " + e);
-		return false;
-	    }
+				throw pee;
+			}
+			catch (Exception e)
+			{
+				rsvc.error("#parse() : arg = " + arg + ".  Exception : " + e);
+				return false;
+			}
 
-	    /*
+			/*
 	    *  and render it
 	    */
-	    try {
-		context.PushCurrentTemplateName(arg);
-		((SimpleNode) t.Data).render(context, writer);
-	    } catch (System.Exception e) {
-		/*
+			try
+			{
+				context.PushCurrentTemplateName(arg);
+				((SimpleNode) t.Data).render(context, writer);
+			}
+			catch (Exception e)
+			{
+				/*
 				*  if it's a MIE, it came from the render.... throw it...
 				*/
 
-		if (e is MethodInvocationException) {
-		    throw (MethodInvocationException) e;
+				if (e is MethodInvocationException)
+				{
+					throw (MethodInvocationException) e;
+				}
+
+				rsvc.error("Exception rendering #parse( " + arg + " )  : " + e);
+				return false;
+			}
+			finally
+			{
+				context.PopCurrentTemplateName();
+			}
+
+			return true;
 		}
-
-		rsvc.error("Exception rendering #parse( " + arg + " )  : " + e);
-		return false;
-	    } finally {
-		context.PopCurrentTemplateName();
-	    }
-
-	    return true;
 	}
-    }
 }
