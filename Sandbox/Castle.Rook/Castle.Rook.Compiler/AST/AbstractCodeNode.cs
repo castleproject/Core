@@ -63,6 +63,12 @@ namespace Castle.Rook.Compiler.AST
 			}
 		}
 
+		public abstract void ReplaceBy(IASTNode newNode);
+
+		public abstract void RemoveChild(IASTNode child);
+
+		public abstract void ReplaceChild(IASTNode oldNode, IASTNode newNode);
+
 		public abstract bool Accept(IASTVisitor visitor);
 	}
 }

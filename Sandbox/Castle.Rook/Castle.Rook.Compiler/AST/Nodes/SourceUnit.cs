@@ -1,4 +1,3 @@
-using Castle.Rook.Compiler.TypeGraph;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");

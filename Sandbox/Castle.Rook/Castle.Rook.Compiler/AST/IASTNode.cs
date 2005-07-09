@@ -40,10 +40,16 @@ namespace Castle.Rook.Compiler.AST
 	{
 		LexicalPosition Position { get; }
 
+		ISymbolTable SymbolTable { get; }
+
 		IASTNode Parent { get; set; }
 
 		NodeType NodeType { get; set; }
 
-		ISymbolTable SymbolTable { get; }
+		void ReplaceBy(IASTNode newNode);
+
+		void RemoveChild(IASTNode child);
+
+		void ReplaceChild(IASTNode oldNode, IASTNode newNode);
 	}
 }

@@ -35,8 +35,6 @@
 		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
-		<copy file="${library.dir}/Commons.dll"   todir="${bin.dir}" />
-		<copy file="${library.dir}/log4net.dll"   todir="${bin.dir}" />
 		<copy file="${library.dir}/NVelocity.dll" todir="${bin.dir}" />
 	</target>
 

@@ -1,5 +1,3 @@
-using System.IO;
-using Bamboo.Prevalence.Util;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +15,10 @@ using Bamboo.Prevalence.Util;
 namespace Castle.Facilities.Prevalence
 {
 	using System;
+	using System.IO;
 
 	using Bamboo.Prevalence;
+	using Bamboo.Prevalence.Util;
 
 	using Castle.Model;
 
@@ -97,4 +97,3 @@ namespace Castle.Facilities.Prevalence
 		}
 	}
 }
-;
