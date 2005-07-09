@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<project name="NAnt" default="xdocs" basedir=".">
+    <property name="debug" value="true" />
+    <property name="build.root" value="c:\data\work\SourceForge\NVelocity" />
+    <property name="build.dir" value="${build.root}\build" />
+	
+	<target name="xdocs">
+	<loadtasks assembly="..\build\NVelocity.NAntTasks.dll" />
+                <anakia basedir="../xdocs" 
+                    destdir="../www"
+                    extension=".html" 
+                    style="../xdocs/stylesheets/site.vsl"
+                    projectFile="../xdocs/stylesheets/project.xml"
+                    templatePath="../xdocs/stylesheets"
+                    lastModifiedCheck="true">
+                	<fileset basedir="../xdocs">
+                        	<includes name="**/*.xml"/>
+                		<excludes name="**/stylesheets/*" />
+                	</fileset>
+                </anakia>
+                
+                <copy todir="../www">
+                    <fileset basedir="../xdocs">
+                        <includes name="**/*.jpg"/>
+                	<includes name="**/*.gif"/>
+                	<includes name="**/*.ico"/>
+                	<includes name="**/*.css"/>
+                    </fileset>
+                </copy>
+	</target>
+
+    <target name="clean">
+	<delete dir="${build.dir}" failonerror="false" />
+<!--	<delete>
+	    <fileset>
+		<include name="${build.root}\src\web\bin\*.*" />
+	    </fileset>
+	</delete>
+-->
+    </target>    
+
+    <target name="compile" depends="compile.core" />
+	
+	<target name="compile.core">
+		<solution solutionfile="NVelocity.sln" configuration="debug" outputdir="${build.dir}">
+		<webmap>
+                    <map url="http://localhost/nvelocity/examples/viewhandler/ViewHandler.csproj" path="..\examples\viewhandler\ViewHandler.csproj" />
+                </webmap>
+                </solution>
+	</target>
+
+    <target name="regress" description="runs unit tests">
+	<exec program="..\bin\NUnit\nunit-console.exe" commandline="..\build\NVelocity.Test.dll /xml=ccnet-nunit-results.xml" failonerror="true" />
+    </target>
+
+    <target name="package" depends="clean, compile,regress" />
+	
+</project>
+
+

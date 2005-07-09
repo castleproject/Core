@@ -1,0 +1,12 @@
+##
+##  This is the default root template, to make it behave like XSLT
+##
+
+#match( "/" )$context.applyTemplates()#end
+
+#match("*")$context.applyTemplates()#end
+
+## #match("text()")$node.value()#end
+
+## #match("@*")$node.value()#end
+

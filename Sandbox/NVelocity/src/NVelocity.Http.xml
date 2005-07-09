@@ -1,0 +1,642 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NVelocity.Http</name>
+    </assembly>
+    <members>
+        <member name="T:NVelocity.Http.Tool.ServletToolInfo">
+            <summary>
+            ToolInfo implementation that holds scope information for tools
+            used in a servlet environment.
+            </summary>
+            <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a></author>
+        </member>
+        <member name="T:NVelocity.Http.Tool.ViewToolInfo">
+            <summary>
+            ToolInfo implementation for view tools. New instances
+            are returned for every call to getInstance(obj), and tools
+            that implement (@link ViewTool} are initialized with the
+            given object before being returned.
+            </summary>
+            <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a></author>
+        </member>
+        <member name="M:NVelocity.Http.Tool.ViewToolInfo.#ctor(System.String,System.String)">
+            <summary>
+            Constructor.  If an instance of the tool cannot be created from
+            the classname, it will throw an exception.
+            </summary>
+            <param name="key">the context key for the tool</param>
+            <param name="classname">the fully qualified java.lang.Class of the tool</param>
+        </member>
+        <member name="M:NVelocity.Http.Tool.ViewToolInfo.getInstance(System.Object)">
+            <summary>
+            Returns a new instance of the tool. If the tool
+            implements {@link ViewTool}, the new instance
+            will be initialized using the given data.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.ServletToolInfo.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new tool of the specified class with the given key and scope.
+            </summary>
+        </member>
+        <member name="P:NVelocity.Http.Tool.ServletToolInfo.Scope">
+            <returns>
+            the scope of the tool
+            </returns>
+        </member>
+        <member name="T:NVelocity.Http.Context.IViewContext">
+            <summary>
+            <p>Objects implementing this interface are passed to view tools
+            upon initialization by the
+            {@link org.apache.velocity.tools.view.servlet.ServletToolboxManager}.</p>
+            <p>The interface provides view tools in a servlet environment
+            access to relevant context information, like servlet request, servlet
+            context and the velocity context.</p>
+            </summary>
+            <author> <a href="mailto:sidler@teamup.com">Gabe Sidler</a></author>
+            <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
+        </member>
+        <member name="P:NVelocity.Http.Context.IViewContext.HttpContext">
+            <summary>
+            Returns the instance of {@link HttpContext} for this request.
+            </summary>
+        </member>
+        <member name="P:NVelocity.Http.Context.IViewContext.VelocityContext">
+            <summary>
+            Returns a reference to the current Velocity context.
+            </summary>
+        </member>
+        <member name="T:NVelocity.Http.Tool.IToolboxManager">
+            <summary>
+            Common interface for toolbox manager implementations.
+            </summary>
+            <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a></author>
+            <author> <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a></author>
+            <author> <a href="mailto:sidler@teamup.com">Gabe Sidler</a></author>
+        </member>
+        <member name="M:NVelocity.Http.Tool.IToolboxManager.AddTool(NVelocity.Tool.IToolInfo)">
+            <summary>
+            Adds a tool to be managed
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.IToolboxManager.getToolboxContext(System.Object)">
+            <summary>
+            Creates a {@link ToolboxContext} from the tools and data
+            in this manager.  Tools that implement the ViewTool
+            interface should be initialized using the given initData.
+            </summary>
+            <param name="initData">data used to initialize ViewTools</param>
+            <returns>the created ToolboxContext</returns>
+        </member>
+        <member name="T:NVelocity.Http.Context.ToolboxContext">
+            <summary>
+            <p>Read-only context used to carry a set of view tools.</p>
+            <p>Writes get dropped.</p>
+            </summary>
+            <author> <a href="mailto:sidler@apache.org">Gabriel Sidler</a></author>
+            <author> <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a></author>
+        </member>
+        <member name="F:NVelocity.Http.Context.ToolboxContext.toolbox">
+            <summary>
+            The collection of view tools in this toolbox.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Context.ToolboxContext.#ctor(System.Collections.Hashtable)">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Context.ToolboxContext.InternalGet(System.String)">
+            <summary>
+            Get value for key.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Context.ToolboxContext.InternalPut(System.String,System.Object)">
+            <summary>
+            Does nothing. Returns <code>null</code> always.
+            </summary>
+        </member>
+        <member name="T:NVelocity.Http.Tool.XMLToolboxManager">
+            <summary>
+            A ToolboxManager for loading a toolbox from xml.
+            
+            <p>A toolbox manager is responsible for automatically filling the Velocity
+            context with a set of view tools. This class provides the following
+            features:</p>
+            <ul>
+            <li>configurable through an XML-based configuration file</li>
+            <li>assembles a set of view tools (the toolbox) on request</li>
+            <li>supports any class with a public constructor without parameters
+            to be used as a view tool</li>
+            <li>supports adding primitive data values to the context(String,Number,Boolean)</li>
+            </ul>
+            
+            <p><strong>Configuration</strong></p>
+            <p>The toolbox manager is configured through an XML-based configuration
+            file. The configuration file is passed to the {@link #load(java.io.InputStream input)}
+            method. The required format is shown in the following example:</p>
+            <pre>
+            &lt;?xml version="1.0"?&gt;
+            
+            &lt;toolbox&gt;
+            &lt;tool&gt;
+            &lt;key&gt;toolLoader&lt;/key&gt;
+            &lt;class&gt;org.apache.velocity.tools.tools.ToolLoader&lt;/class&gt;
+            &lt;/tool&gt;
+            &lt;tool&gt;
+            &lt;key&gt;math&lt;/key&gt;
+            &lt;class&gt;org.apache.velocity.tools.tools.MathTool&lt;/class&gt;
+            &lt;/tool&gt;
+            &lt;data type="Number"&gt;
+            &lt;key&gt;luckynumber&lt;/key&gt;
+            &lt;value&gt;1.37&lt;/class&gt;
+            &lt;/data&gt;
+            &lt;data type="String"&gt;
+            &lt;key&gt;greeting&lt;/key&gt;
+            &lt;value&gt;Hello World!&lt;/class&gt;
+            &lt;/data&gt;
+            &lt;/toolbox&gt;
+            </pre>
+            </summary>
+            <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a></author>
+            <author> <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a></author>
+        </member>
+        <member name="M:NVelocity.Http.Tool.XMLToolboxManager.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.XMLToolboxManager.log(System.String)">
+            <summary>
+            Default implementation logs messages to system out.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.XMLToolboxManager.load(System.IO.Stream)">
+            <summary>
+            Reads an XML document from an {@link InputStream}
+            using <a href="http://dom4j.org">dom4j</a> and
+            sets up the toolbox from that.
+            
+            The DTD for toolbox schema is:
+            <pre>
+            &lt;?xml version="1.0"?&gt;
+            &lt;!ELEMENT toolbox (tool*,data*)&gt;
+            &lt;!ELEMENT tool    (key,class,#PCDATA)&gt;
+            &lt;!ELEMENT data    (key,value)&gt;
+            &lt;!ATTLIST data type (string|number|boolean) "string"&gt;
+            &lt;!ELEMENT key     (#CDATA)&gt;
+            &lt;!ELEMENT class   (#CDATA)&gt;
+            &lt;!ELEMENT value   (#CDATA)&gt;
+            </pre>
+            </summary>
+            <param name="input">the InputStream to read from</param>
+        </member>
+        <member name="T:NVelocity.Http.NVelocityHandlerFactory">
+            <summary>
+            Factory class that creates a handler object based on a request
+            for either abc.aspx or xyz.aspx as specified in the Web.config file.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityHandlerFactory.GetHandler(System.Web.HttpContext,System.String,System.String,System.String)">
+            <summary>
+            IHttpHandlerFactory method to
+            </summary>
+            <param name="context"></param>
+            <param name="requestType"></param>
+            <param name="url"></param>
+            <param name="pathTranslated"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityHandlerFactory.ReleaseHandler(System.Web.IHttpHandler)">
+            <summary>
+            IHttpHandlerFactory must override method
+            </summary>
+            <param name="handler"></param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:NVelocity.Http.Tool.ServletToolboxManager" -->
+        <member name="M:NVelocity.Http.Tool.ServletToolboxManager.#ctor(System.Web.HttpContext)">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.ServletToolboxManager.log(System.String)">
+            <summary>
+            Overrides XMLToolboxManager to log to the servlet context
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.ServletToolboxManager.readToolInfo(System.Xml.XmlElement)">
+            <summary>
+            Overrides XMLToolboxManager to read a {@link ServletToolInfo}
+            instead of a {@link org.apache.velocity.tools.view.ViewToolInfo}.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.ServletToolboxManager.AddTool(NVelocity.Tool.IToolInfo)">
+            <summary>
+            Overrides XMLToolboxManager to separate tools by scope.
+            For this to work, we obviously override getToolboxContext as well.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.ServletToolboxManager.getToolboxContext(System.Object)">
+            <summary>
+            Overrides XMLToolboxManager to handle the separate
+            scopes.
+            
+            Application scope tools were initialized when the toolbox was loaded.
+            Session scope tools are initialized once per session and stored in a
+            map in the session attributes.
+            Request scope tools are initialized on every request.
+            </summary>
+        </member>
+        <member name="T:NVelocity.Http.Tool.MultiViewsTool">
+            <summary>
+            <p>Allows for transparent content negotiation in a manner mimicking
+            Apache httpd's <a
+            href="http://httpd.apache.org/docs-2.0/content-negotiation.html">MultiViews</a>.</p>
+            <p>Reads the default language out of the ViewContext as
+            <code>org.apache.velocity.tools.view.i18n.defaultLanguage</code>.
+            See {@link #findLocalizedResource(String, String)} and {@link
+            #findLocalizedResource(String, Locale)} for usage.</p>
+            </summary>
+            <author> <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a></author>
+        </member>
+        <member name="T:NVelocity.Http.Tool.IViewTool">
+            <summary>
+            Generic view tool interface to assist in tool management.
+            This interface provides the {@link #init(Object initData)} method
+            as a hook for ToolboxManager implementations to pass data in to
+            tools to initialize them.  See
+            {@link org.apache.velocity.tools.view.ViewToolInfo} for more on this.
+            </summary>
+            <author> <a href="mailto:nathan@esha.com">Nathan Bubna</a></author>
+        </member>
+        <member name="M:NVelocity.Http.Tool.IViewTool.Init(System.Object)">
+            <summary>
+            Initializes this instance using the given data
+            </summary>
+            <param name="initData">the initialization data</param>
+        </member>
+        <member name="F:NVelocity.Http.Tool.MultiViewsTool.DEFAULT_LANGUAGE_KEY">
+            <summary>
+            The key used to search initialization, context, and JVM
+            parameters for the default language to use.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Tool.MultiViewsTool.defaultLanguage">
+            <summary>
+            The two character abbreviation for the request's default
+            language.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.MultiViewsTool.#ctor">
+            <summary>
+            Creates a new uninitialized instance.  Call {@link #init}
+            to initialize it.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Tool.MultiViewsTool.Init(System.Object)">
+            <summary>
+            Extracts the default language from the specified
+            <code>ViewContext</code>, looking first at the Velocity
+            context, then the servlet context, then lastly at the JVM
+            default.  This "narrow scope to wide scope" pattern makes it
+            easy to setup language overrides at different levels within
+            your application.
+            </summary>
+            <param name="obj">the current ViewContext
+            @throws IllegalArgumentException if the param is not a ViewContext
+            </param>
+        </member>
+        <member name="M:NVelocity.Http.Tool.MultiViewsTool.findLocalizedResource(System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Calls {@link #findLocalizedResource(String, String)} using the
+            language extracted from <code>locale</code>.
+            </summary>
+            <seealso cref="!:#findLocalizedResource(String, String)"/>
+        </member>
+        <member name="M:NVelocity.Http.Tool.MultiViewsTool.findLocalizedResource(System.String)">
+            <summary>
+            Calls {@link #findLocalizedResource(String, String)} using the
+            default language.
+            </summary>
+            <seealso cref="!:#findLocalizedResource(String, String)"/>
+        </member>
+        <member name="M:NVelocity.Http.Tool.MultiViewsTool.findLocalizedResource(System.String,System.String)">
+            <summary>
+            <p>Finds the a localized version of the requested Velocity
+            resource (such as a file or template) which is most appropriate
+            for the locale of the current request.  Use in conjuction with
+            Apache httpd's <code>MultiViews</code>, or by itself.</p>
+            
+            <p>Usage from a template would be something like the following:
+            <blockquote><code><pre>
+            #parse ($multiviews.findLocalizedResource("header.vm", "en"))
+            #include ($multiviews.findLocalizedResource("my_page.html", "en"))
+            #parse ($multiviews.findLocalizedResource("footer.vm", "en"))
+            </pre></code></blockquote>
+            
+            You might also wrap this method using another pull/view tool
+            which does internationalization/localization/content negation
+            for a single point of access.</p>
+            </summary>
+            <param name="name">The unlocalized name of the file to find.
+            </param>
+            <param name="language">The language to find localized context for.
+            </param>
+            <returns>The localized file name, or <code>name</code> if it is
+            not localizable.
+            </returns>
+        </member>
+        <member name="T:NVelocity.Http.Resource.Loader.WebappLoaderAppContext">
+            <summary>
+            Wrapper class to safely pass the http context to the web app loader.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Resource.Loader.WebappLoaderAppContext.httpContext">
+            <summary>
+            A reference to the http context
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Resource.Loader.WebappLoaderAppContext.#ctor(System.Web.HttpContext)">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="P:NVelocity.Http.Resource.Loader.WebappLoaderAppContext.HttpContext">
+            <summary>
+            Returns a reference to the http context.
+            </summary>
+        </member>
+        <member name="T:NVelocity.Http.Context.ChainedContext">
+            <summary>
+            <p>Velocity context implementation specific to the Servlet environment.</p>
+            <p>It provides the following special features:</p>
+            <ul>
+            <li>puts the request, response, session, and servlet context objects
+            into the Velocity context for direct access, and keeps them
+            read-only</li>
+            <li>supports a read-only toolbox of view tools</li>
+            <li>auto-searches servlet request attributes, session attributes and
+            servlet context attribues for objects</li>
+            </ul>
+            <p>The {@link #internalGet(String key)} method implements the following search order
+            for objects:</p>
+            <ol>
+            <li>servlet request, servlet response, servlet session, servlet context</li>
+            <li>toolbox</li>
+            <li>local hashtable of objects (traditional use)</li>
+            <li>servlet request attribues, servlet session attribute, servlet context
+            attributes</li>
+            </ol>
+            <p>The purpose of this class is to make it easy for web designer to work
+            with Java servlet based web applications. They do not need to be concerned
+            with the concepts of request, session or application attributes and the
+            live time of objects in these scopes.</p>
+            <p>Note that the put() method always puts objects into the local hashtable.
+            </p>
+            </summary>
+            <author><a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
+            <author><a href="mailto:sidler@teamup.com">Gabe Sidler</a></author>
+        </member>
+        <member name="F:NVelocity.Http.Context.ChainedContext.REQUEST">
+            <summary>
+            Key to the HTTP request object.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Context.ChainedContext.RESPONSE">
+            <summary>
+            Key to the HTTP response object.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Context.ChainedContext.SESSION">
+            <summary>
+            Key to the HTTP session object.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Context.ChainedContext.APPLICATION">
+            <summary>
+            Key to the HttpContext application object.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Context.ChainedContext.CONTEXT">
+            <summary>
+            Key to the HttpContext object.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Context.ChainedContext.httpContext">
+            <summary>
+            A local reference to the http context.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.Context.ChainedContext.toolboxContext">
+            <summary>
+            The toolbox.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Context.ChainedContext.#ctor(NVelocity.Context.IContext,System.Web.HttpContext)">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.Context.ChainedContext.InternalGet(System.String)">
+            <summary>
+            <p>Looks up and returns the object with the specified key.</p>
+            <p>See the class documentation for more details.</p>
+            </summary>
+            <param name="key">the key of the object requested</param>
+            <returns>the requested object or null if not found</returns>
+        </member>
+        <member name="P:NVelocity.Http.Context.ChainedContext.Toolbox">
+            <summary>
+            <p>Sets the toolbox of view tools.</p>
+            </summary>
+            <param name="box">toolbox of view tools</param>
+        </member>
+        <member name="P:NVelocity.Http.Context.ChainedContext.HttpContext">
+            <summary>
+            <p>Returns the servlet context.</p>
+            </summary>
+        </member>
+        <member name="P:NVelocity.Http.Context.ChainedContext.VelocityContext">
+            <summary>
+            <p>Returns a reference to the Velocity context (this object).</p>
+            </summary>
+        </member>
+        <member name="T:NVelocity.Http.NVelocityViewHandler">
+            <summary>
+            <p>A servlet to process Velocity templates. This is comparable to the
+            the JspServlet for JSP-based applications.</p>
+            <p>The servlet provides the following features:</p>
+            <ul>
+            <li>renders Velocity templates</li>
+            <li>provides support for an auto-loaded, configurable toolbox</li>
+            <li>provides transparent access to the servlet request attributes,
+            servlet session attributes and servlet context attributes by
+            auto-searching them</li>
+            <li>logs to the logging facility of the servlet API</li>
+            </ul>
+            <p>VelocityViewServlet supports the following configuration parameters
+            in webl.xml:</p>
+            <dl>
+            <dt>toolbox</dt>
+            <dd>Path and name of the toolbox configuration file. The path must be
+            relative to the web application root directory. If this parameter is
+            not found, no toolbox is instantiated.</dd>
+            <dt>org.apache.velocity.properties</dt>
+            <dd>Path and name of the Velocity configuration file. The path must be
+            relative to the web application root directory. If this parameter
+            is not present, Velocity is initialized with default settings.</dd>
+            </dl>
+            </summary>
+            <author> <a href="mailto:sidler@teamup.com">Gabe Sidler</a></author>
+            <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
+        </member>
+        <member name="T:NVelocity.Http.HandlerSkeleton">
+            <summary>
+            Summary description for NVelocityHandlerSkeleton.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.HandlerSkeleton.INIT_TOOLBOX_KEY">
+            <summary>
+            Key used to access the toolbox configuration file path from the
+            Servlet init parameters.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.HandlerSkeleton.INIT_PROPERTIES_KEY">
+            <summary>
+            Key used to access the Velocity configuration file path from the
+            Servlet init parameters. This is the string that is looked for when
+            getInitParameter is called.
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.HandlerSkeleton.initialized">
+            <summary>
+            has the NVelocity initialization taken place
+            </summary>
+        </member>
+        <member name="F:NVelocity.Http.HandlerSkeleton.toolboxManager">
+            <summary>
+            A reference to the toolbox manager.
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.HandlerSkeleton.InitVelocity">
+            <summary>
+            Initializes the Velocity runtime, first calling
+            loadConfiguration(ServletConvig) to get a
+            java.util.Properties of configuration information
+            and then calling Velocity.init().  Override this
+            to do anything to the environment before the
+            initialization of the singelton takes place, or to
+            initialize the singleton in other ways.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:NVelocity.Http.HandlerSkeleton.LoadConfiguration" -->
+        <member name="M:NVelocity.Http.NVelocityHandler.Init(System.Web.HttpContext,System.String,System.String,System.String)">
+            <summary>
+            Implementation of IHttpHandler method, called by container upon
+            loading (is Isreusable returns true, instances may be pooled)
+            </summary>
+            <param name="context"></param>
+            <param name="requestType"></param>
+            <param name="url"></param>
+            <param name="pathTranslated"></param>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            Handles all requests
+            </summary>
+            <param name="context">HttpContext for current request</param>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityHandler.RequestCleanup(System.Web.HttpContext,NVelocity.Context.IContext)">
+            <summary>
+            cleanup routine called at the end of the request processing sequence
+            allows a derived class to do resource cleanup or other end of
+            process cycle tasks
+            </summary>
+            <param name="context">HttpContext passed from client</param>
+            <param name="ctx">velocity context create by the CreateContext() method</param>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityHandler.MergeTemplate(NVelocity.Template,NVelocity.Context.IContext,System.IO.TextWriter)">
+            <summary>
+            merges the template with the context.  Only override this if you really, really
+            really need to. (And don't call us with questions if it breaks :)
+            </summary>
+            <param name="template">template object returned by the handleRequest() method</param>
+            <param name="ctx">context created by the CreateContext() method</param>
+            <param name="response">TextWriter to write to (i.e. Response.Output)</param>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityHandler.SetContentType(System.Web.HttpContext)">
+            <summary>
+            Sets the content type of the response.  This is available to be overriden
+            by a derived class.
+            
+            The default implementation is :
+            
+            response.setContentType( defaultContentType );
+            
+            where defaultContentType is set to the value of the default.contentType
+            property, or "text/html" if that is not set.
+            </summary>
+            <param name="context">HttpContext for current request</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:NVelocity.Http.NVelocityHandler.CreateContext(System.Web.HttpContext)" -->
+        <member name="M:NVelocity.Http.NVelocityHandler.GetTemplate(System.String)">
+            <summary>
+            Retrieves the requested template.
+            </summary>
+            <param name="name">The file name of the template to retrieve relative to the template root.</param>
+            <returns>teh requested template</returns>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityHandler.GetTemplate(System.String,System.String)">
+            <summary>
+            Retrieves the requested template with the specified
+            character encoding.
+            </summary>
+            <param name="name">The file name of the template to retrieve relative to the template root.</param>
+            <param name="encoding">encoding the character encoding of the template</param>
+            <returns>The requested template.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:NVelocity.Http.NVelocityHandler.HandleRequest(System.Web.HttpContext,NVelocity.Context.IContext)" -->
+        <!-- Badly formed XML comment ignored for member "M:NVelocity.Http.NVelocityHandler.Error(System.Web.HttpContext,System.Exception)" -->
+        <member name="P:NVelocity.Http.NVelocityHandler.IsReusable">
+            <summary>
+            Implement the IHttpHandler interface method, return true because the class is poolable
+            </summary>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityViewHandler.Init(System.Web.HttpContext,System.String,System.String,System.String)">
+            <summary>
+            <p>Initializes servlet, toolbox and Velocity template engine.</p>
+            </summary>
+            <param name="config">servlet configuation
+            </param>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityViewHandler.InitVelocity">
+            <summary>
+            Initializes Velocity.
+            </summary>
+            <param name="config">servlet configuration parameters
+            </param>
+        </member>
+        <member name="M:NVelocity.Http.NVelocityViewHandler.HandleRequest(System.Web.HttpContext,NVelocity.Context.IContext)">
+            <summary>
+            <p>Handle the template processing request.</p>
+            </summary>
+            <param name="request">client request</param>
+            <param name="response">client response</param>
+            <param name="ctx"> VelocityContext to fill</param>
+            <returns>Velocity Template object or null</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:NVelocity.Http.NVelocityViewHandler.CreateContext(System.Web.HttpContext)" -->
+        <member name="T:NVelocity.Http.Resource.Loader.WebappLoader">
+            <summary>
+            a resource loader for use with web applications, sets up the path list with the physical application path.
+            </summary>
+            <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
+        </member>
+        <member name="M:NVelocity.Http.Resource.Loader.WebappLoader.init(Commons.Collections.ExtendedProperties)">
+            <summary>
+            This is abstract in the base class, so we need it
+            </summary>
+        </member>
+    </members>
+</doc>
