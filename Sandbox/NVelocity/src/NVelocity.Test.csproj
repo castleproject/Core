@@ -102,24 +102,9 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "NVelocity.NAnt"
-                    Project = "{FA9AD745-36B4-4B97-B99D-1291CA7198CB}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "NVelocity.Http"
-                    Project = "{AFFB9410-9280-40D8-BD99-75C13B1D79FD}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\lib\nunit.framework.dll"
-                />
-                <Reference
-                    Name = "Commons"
-                    Project = "{2A71607F-DF74-4FC4-BD9B-BF3837883172}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

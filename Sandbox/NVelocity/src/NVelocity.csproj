@@ -87,11 +87,6 @@
                     AssemblyName = "log4net"
                     HintPath = "..\lib\log4net.dll"
                 />
-                <Reference
-                    Name = "Commons"
-                    Project = "{2A71607F-DF74-4FC4-BD9B-BF3837883172}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>
@@ -163,6 +158,51 @@
                 />
                 <File
                     RelPath = "App\Tools\VelocityFormatter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\CollectionsUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\ExtendedProperties.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\IOrderedDictionary.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\KeyedList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\KeyedListEnumerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\LRUMap.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\PropertiesReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\PropertiesTokenizer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Commons\Collections\StringTokenizer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

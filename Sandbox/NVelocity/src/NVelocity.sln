@@ -7,24 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.Test", "NVelocity
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.NAnt", "NVelocity.NAnt.csproj", "{FA9AD745-36B4-4B97-B99D-1291CA7198CB}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewHandler", "http://localhost/nvelocity/examples/viewhandler/ViewHandler.csproj", "{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.Http", "NVelocity.Http.csproj", "{AFFB9410-9280-40D8-BD99-75C13B1D79FD}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons", "Commons.csproj", "{2A71607F-DF74-4FC4-BD9B-BF3837883172}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -39,22 +21,6 @@ Global
 		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Debug.Build.0 = Debug|.NET
 		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Release.ActiveCfg = Release|.NET
 		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Release.Build.0 = Release|.NET
-		{FA9AD745-36B4-4B97-B99D-1291CA7198CB}.Debug.ActiveCfg = Debug|.NET
-		{FA9AD745-36B4-4B97-B99D-1291CA7198CB}.Debug.Build.0 = Debug|.NET
-		{FA9AD745-36B4-4B97-B99D-1291CA7198CB}.Release.ActiveCfg = Release|.NET
-		{FA9AD745-36B4-4B97-B99D-1291CA7198CB}.Release.Build.0 = Release|.NET
-		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Debug.ActiveCfg = Debug|.NET
-		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Debug.Build.0 = Debug|.NET
-		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Release.ActiveCfg = Release|.NET
-		{B0F3F674-CD69-4900-9FBA-4A9C8FB60333}.Release.Build.0 = Release|.NET
-		{AFFB9410-9280-40D8-BD99-75C13B1D79FD}.Debug.ActiveCfg = Debug|.NET
-		{AFFB9410-9280-40D8-BD99-75C13B1D79FD}.Debug.Build.0 = Debug|.NET
-		{AFFB9410-9280-40D8-BD99-75C13B1D79FD}.Release.ActiveCfg = Release|.NET
-		{AFFB9410-9280-40D8-BD99-75C13B1D79FD}.Release.Build.0 = Release|.NET
-		{2A71607F-DF74-4FC4-BD9B-BF3837883172}.Debug.ActiveCfg = Debug|.NET
-		{2A71607F-DF74-4FC4-BD9B-BF3837883172}.Debug.Build.0 = Debug|.NET
-		{2A71607F-DF74-4FC4-BD9B-BF3837883172}.Release.ActiveCfg = Release|.NET
-		{2A71607F-DF74-4FC4-BD9B-BF3837883172}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		nvelocity.build = nvelocity.build
