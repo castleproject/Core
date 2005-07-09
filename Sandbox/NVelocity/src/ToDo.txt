@@ -1,0 +1,24 @@
+----------
+::ToDo
+----------
+- move ResourceLocator to Commons package
+- move SupportClass to Commons package
+- move StringUtils to Commons package
+- ?bug? - when generating xdocs for site, if template caching is not on, sometimes the #document() gets parsed as ASTDirective and ASTText with "()" in it.
+- cleanup doc comments all over the place - make sure they still make sense for the ported code
+- remove the code stuff that is in the /src directory
+- write test that can call both the Java and C# versions of the AST Parser to make sure that both parse templates exactly the same.
+- evaluate use of streams
+
+----------
+::ToDone
+----------
+- consider making all NAnt tasks in a seperate package (and moving Dvsl into the core package?)
+- ViewServlet from Tools subproject - needed for Maverick.net
+- figure out how to be able to pass a category and an appdomain across appdomain boundries.
+	    // use the logger category from this class to initialize NVelocity
+	    log4net.ILog logger = log4net.LogManager.GetLogger(CATEGORY_NAME);
+	    logger.Info("Initializing logging category for NVelocity");
+	    Velocity.SetProperty("runtime.log.logsystem.log4net.category", CATEGORY_NAME);
+	** use runtime.log.logsystem.log4net.category to set the category for logging.  NVelocity uses the default log domain and should be able to join whatever logger is setup.
+- update to NUnit 2.1
