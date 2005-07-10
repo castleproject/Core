@@ -89,16 +89,6 @@
                     AssemblyName = "NVelocity"
                     HintPath = "..\lib\NVelocity.dll"
                 />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\lib\Commons.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
-                />
             </References>
         </Build>
         <Files>

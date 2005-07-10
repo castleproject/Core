@@ -26,11 +26,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 	public class NVelocityViewEngine : ViewEngineBase
 	{
+		protected VelocityEngine velocity = new VelocityEngine();
+
 		/// <summary>
 		/// Creates a new <see cref="NVelocityViewEngine"/> instance.
 		/// </summary>
 		public NVelocityViewEngine()
-		{}
+		{
+			
+		}
 
 		#region IViewEngine Members
 
@@ -40,15 +44,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			InitializeVelocityProperties(props);
 
-			Velocity.ExtendedProperties = props;
-			Velocity.Init();
+			velocity.Init(props);
 		}
 
 		public override bool HasTemplate(String templateName)
 		{
 			try
 			{
-				return RuntimeSingleton.getTemplate(ResolveTemplateName(templateName)) != null;
+				return velocity.GetTemplate(ResolveTemplateName(templateName)) != null;
 			}
 			catch(Exception)
 			{
@@ -77,7 +80,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			try
 			{
-				template = RuntimeSingleton.getTemplate(ResolveTemplateName(viewName));
+				template = velocity.GetTemplate(ResolveTemplateName(viewName));
 
 				template.Merge(ctx, writer);
 			}
@@ -149,7 +152,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// </summary>
 		protected virtual string ResolveTemplateName(string area, string templateName)
 		{
-			return String.Format("{0}/{1}", area, ResolveTemplateName(templateName));
+			return String.Format("{0}{1}{2}", area, Path.AltDirectorySeparatorChar, ResolveTemplateName(templateName));
 		}
 		
 		private void ProcessLayout(String contents, Controller controller, IContext ctx, IRailsEngineContext context)
@@ -160,7 +163,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				ctx.Put("childContent", contents);
 
-				Template template = RuntimeSingleton.getTemplate(layout);
+				Template template = velocity.GetTemplate(layout);
 
 				template.Merge(ctx, context.Response.Output);
 			}

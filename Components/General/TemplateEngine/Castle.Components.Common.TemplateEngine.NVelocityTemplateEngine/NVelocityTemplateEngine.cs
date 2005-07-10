@@ -16,8 +16,6 @@ using NVelocity;
 using NVelocity.App;
 using NVelocity.Context;
 using NVelocity.Runtime;
-using Commons.Collections;
-using NVelocity.Runtime.Resource;
 
 namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 {
@@ -28,11 +26,14 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 
 	using Castle.Components.Common.TemplateEngine;
 
+	using Commons.Collections;
+
 	/// <summary>
 	/// 
 	/// </summary>
 	public class NVelocityTemplateEngine : ITemplateEngine, ISupportInitialize
 	{
+		private VelocityEngine vengine = new VelocityEngine();
 		private String _templateDir;
 
 		public NVelocityTemplateEngine(String templateDir)
@@ -46,14 +47,13 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 
 			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
 
-			/// GOD I HATE THIS NVELOCITY!
 //			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, 
 //				@"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.BetterResourceManager\," + 
 //				"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine");
 //			
 			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, _templateDir);
 
-			Velocity.Init(props);
+			vengine.Init(props);
 		}
 
 		public void EndInit()
@@ -70,7 +70,7 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		/// <returns></returns>
 		public bool Process(IDictionary context, String templateName, TextWriter output)
 		{
-			Template template = RuntimeSingleton.getTemplate(templateName);
+			Template template = vengine.GetTemplate(templateName);
 
 			template.Merge(CreateContext(context), output);
 
@@ -83,20 +83,20 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		}
 	}
 
-	public class BetterResourceManager : NVelocity.Runtime.Resource.ResourceManager
-	{
-		public Resource getResource(string resourceName, int resourceType, string encoding)
-		{
-			return new ContentResource();
-		}
-
-		public void initialize(RuntimeServices rs)
-		{
-		}
-
-		public string getLoaderNameForResource(string resourceName)
-		{
-			return null;
-		}
-	}
+//	public class BetterResourceManager : NVelocity.Runtime.Resource.ResourceManager
+//	{
+//		public Resource getResource(string resourceName, int resourceType, string encoding)
+//		{
+//			return new ContentResource();
+//		}
+//
+//		public void initialize(RuntimeServices rs)
+//		{
+//		}
+//
+//		public string getLoaderNameForResource(string resourceName)
+//		{
+//			return null;
+//		}
+//	}
 }
