@@ -118,6 +118,27 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Creates a button that if clicked will fire an Ajax invocation. 
+		/// </summary>
+		/// <param name="name">html contents for the link</param>
+		/// <param name="url">The target Ajax invocation</param>
+		/// <param name="idOfElementToBeUpdated">Id of html element to be updated with the results of the invocation</param>
+		/// <param name="with">Any argument/parameter to send within the Ajax call</param>
+		/// <param name="loading">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <param name="loaded">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <param name="complete">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <param name="interactive">Any javascript to be executed upon this XmlHttp callback</param>
+		/// <returns>The handcrafted link</returns>
+		public String ButtonToFunction(String name, String url, String idOfElementToBeUpdated, String with, 
+			String loading, String loaded, String complete, String interactive)
+		{
+			IDictionary options = GetOptions(url, idOfElementToBeUpdated, with, 
+				loading, loaded, complete, interactive);
+
+			return ButtonToFunction(name, BuildRemoteFunction(url, options));
+		}
+
+		/// <summary>
 		/// Returns a link to a remote action defined by <tt>options[:url]</tt> 
 		/// (using the url_for format) that's called in the background using 
 		/// XMLHttpRequest. The result of that request can then be inserted into a
