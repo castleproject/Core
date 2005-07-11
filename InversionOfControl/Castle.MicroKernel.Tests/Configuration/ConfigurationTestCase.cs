@@ -43,7 +43,7 @@ namespace Castle.MicroKernel.Tests.Configuration
 		}
 
 		[Test]
-		[ExpectedException(typeof(DependecyResolverException))]
+		[ExpectedException(typeof(DependencyResolverException))]
 		public void ConstructorWithUnsatisfiedParameters()
 		{
 			kernel.AddComponent( "key", typeof(ClassWithConstructors) );

@@ -122,7 +122,7 @@ namespace Castle.MicroKernel
 			_releaserPolicy = new LifecycledComponentsReleasePolicy();
 			_handlerFactory = new DefaultHandlerFactory(this);
 			_modelBuilder = new DefaultComponentModelBuilder(this);
-			_resolver = new DefaultDependecyResolver(this);
+			_resolver = new DefaultDependencyResolver(this);
 		}
 
 		public DefaultKernel(SerializationInfo info, StreamingContext context) : base(info, context)

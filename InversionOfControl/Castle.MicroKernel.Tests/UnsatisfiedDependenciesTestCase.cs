@@ -50,7 +50,7 @@ namespace Castle.MicroKernel.Tests
 		}
 		
 		[Test]
-		[ExpectedException( typeof(DependecyResolverException), "Could not resolve non-optional dependency for 'key' (Castle.MicroKernel.Tests.ClassComponents.CustomerImpl2). Parameter 'name' type 'System.String'" )]
+		[ExpectedException( typeof(DependencyResolverException), "Could not resolve non-optional dependency for 'key' (Castle.MicroKernel.Tests.ClassComponents.CustomerImpl2). Parameter 'name' type 'System.String'" )]
 		public void UnsatisfiedConfigValues()
 		{
 			MutableConfiguration config = new MutableConfiguration("component");

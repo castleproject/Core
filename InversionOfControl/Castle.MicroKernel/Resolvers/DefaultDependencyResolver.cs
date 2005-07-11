@@ -27,12 +27,12 @@ namespace Castle.MicroKernel.Resolvers
 	/// for 99% of situations. 
 	/// </summary>
 	[Serializable]
-	public class DefaultDependecyResolver : IDependencyResolver
+	public class DefaultDependencyResolver : IDependencyResolver
 	{
 		private readonly IKernel _kernel;
 		private readonly ITypeConverter _converter;
 
-		public DefaultDependecyResolver(IKernel kernel)
+		public DefaultDependencyResolver(IKernel kernel)
 		{
 			_kernel = kernel;
 
@@ -73,7 +73,7 @@ namespace Castle.MicroKernel.Resolvers
 					"Could not resolve non-optional dependency for '{0}' ({1}). Parameter '{2}' type '{3}'", 
 					model.Name, implementation, dependency.DependencyKey, dependency.TargetType.FullName);
 
-				throw new DependecyResolverException(message);	
+				throw new DependencyResolverException(message);	
 			}
 
 			return value;
@@ -194,7 +194,7 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			if (!ReferenceExpressionUtil.IsReference(keyValue))
 			{
-				throw new DependecyResolverException( 
+				throw new DependencyResolverException( 
 					String.Format("Key invalid for parameter {0}. " + 
 					"Thus the kernel was unable to override the service dependency", name) );
 			}

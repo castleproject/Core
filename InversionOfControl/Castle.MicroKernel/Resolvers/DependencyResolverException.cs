@@ -18,16 +18,16 @@ namespace Castle.MicroKernel.Resolvers
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Summary description for DependecyResolverException.
+	/// Summary description for DependencyResolverException.
 	/// </summary>
 	[Serializable]
-	public class DependecyResolverException : Exception
+	public class DependencyResolverException : Exception
 	{
-		public DependecyResolverException(string message) : base(message)
+		public DependencyResolverException(string message) : base(message)
 		{
 		}
 
-		public DependecyResolverException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public DependencyResolverException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}
