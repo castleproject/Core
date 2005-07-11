@@ -39,10 +39,8 @@
 	<resheader name="Writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
-	
-	<data name="fValidateConfig" type="String" mimetype="text">
-		<value>
-			<![CDATA[ 
+	<data name="fValidateConfig" type="System.String" mimetype="text">
+		<value><![CDATA[ 
 				function fValConfig()
 				{
 					/*	Globals.  Modify these to suit your setup
@@ -102,13 +100,10 @@
 					
 					this.displayName= 'displayName';
 				}
-			]]>
-		</value>
+			]]></value>
 	</data>
-	
-	<data name="fValidateCore" type="String" mimetype="text">
-		<value>
-			<![CDATA[ 
+	<data name="fValidateCore" type="System.String" mimetype="text">
+		<value><![CDATA[ 
 			/***************************************************************************************************
 			*
 			*-- Form validation script by Peter Bailey, Copyright (c) 2001-2003
@@ -937,13 +932,10 @@
 			{
 				return this.replace( /([\.\*\+\{\}\(\)\<\>\^\$\\])/g, "\\$1" );
 			}
-			]]>
-		</value>
+			]]></value>
 	</data>
-	
-	<data name="fValidateValidators" type="String" mimetype="text">
-		<value>
-			<![CDATA[ 
+	<data name="fValidateValidators" type="System.String" mimetype="text">
+		<value><![CDATA[ 
 			/*< blank basic *******************************************************************/
 			fValidate.prototype.blank = function()
 			{
@@ -1817,13 +1809,10 @@
 				}
 			}
 			/*/>*/
-			]]>
-		</value>
+			]]></value>
 	</data>
-	
-	<data name="fValidateLang" type="String" mimetype="text">
-		<value>
-			<![CDATA[ 
+	<data name="fValidateLang" type="System.String" mimetype="text">
+		<value><![CDATA[ 
 			/*--	fValidate US-English language file.
 			*
 			*	Translation by: Peter Bailey
@@ -2010,8 +1999,6 @@
 				//	Literal translation of the English 'or', include padding spaces.
 				or:			" or "
 			}
-			]]>
-		</value>
+			]]></value>
 	</data>
-	
 </root>
