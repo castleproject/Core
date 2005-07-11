@@ -138,6 +138,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Adapters\ComponentModel\ContainerWrapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\ComponentModel\ContainerWrapper.resx"
+                    DependentUpon = "ContainerWrapper.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Adapters\ComponentModel\IContainerAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

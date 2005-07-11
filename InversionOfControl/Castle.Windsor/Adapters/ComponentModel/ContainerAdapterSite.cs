@@ -26,9 +26,9 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		private string _name;
 		private string _effectiveName;
 		private IComponent _component;
-		private ContainerAdapter _container;
+		private IContainerAdapter _container;
 
-		public ContainerAdapterSite(IComponent component, ContainerAdapter container, string name)
+		public ContainerAdapterSite(IComponent component, IContainerAdapter container, string name)
 		{
 			_component = component;
 			_container = container;
@@ -76,7 +76,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 			}
 			else if (service == typeof(IHandler))
 			{
-				return _container.Kernel.GetHandler(_effectiveName);
+				return _container.Container.Kernel.GetHandler(_effectiveName);
 			}
 			else
 			{
