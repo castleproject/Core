@@ -23,6 +23,7 @@
 	</target>
 
 	<target name="init" depends="clean">
+		<copy file="${test.src.dir}/Castle.MonoRail.ActiveRecordScaffold.Tests.dll.config" todir="${bin.dir}" />
 	</target>
 
 	<target name="build" depends="init,compile" />

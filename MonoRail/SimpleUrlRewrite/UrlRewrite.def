@@ -1,5 +1,0 @@
-LIBRARY	SimpleUrlRewrite
-
-EXPORTS
-	HttpFilterProc
-	GetFilterVersion
