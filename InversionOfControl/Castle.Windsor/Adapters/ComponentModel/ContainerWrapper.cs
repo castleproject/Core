@@ -31,7 +31,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 	/// </summary>
 	public class ContainerWrapper : IContainerAdapter
 	{
-		#region ContainerAdapter Fields
+		#region ContainerWrapper Fields
 
 		private ISite _site;
 		private IWindsorContainer _container;
