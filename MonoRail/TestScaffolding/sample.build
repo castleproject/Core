@@ -10,6 +10,7 @@
 	<property name="assembly.name" value="${name}.dll" />
 
 	<property name="version" value="1.0.0.0" />
+	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 
 	<target name="clean">
 		<delete dir="${bin2.dir}" failonerror="false" />
@@ -40,7 +41,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="STRONG"
+			define="${strong}"
 			target="library" 
 			output="${bin2.dir}/${assembly.name}">
 			

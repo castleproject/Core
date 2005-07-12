@@ -19,6 +19,7 @@
 	<property name="test.assembly.name2" value="${name}.Tests.dll" />
 	<property name="test.assembly.appconfig2" value="${test.assembly.name2}.config" />
 
+	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 	<property name="version" value="0.0.1.3" />
@@ -52,7 +53,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="STRONG"
+		    define="${strong}" 
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"

@@ -24,7 +24,7 @@
 	<target name="compile" depends="init">
 		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
-			define="STRONG"
+			define="${strong}"
 			target="exe" 
 			debug="${debug}"
 			optimize="${optimize}"

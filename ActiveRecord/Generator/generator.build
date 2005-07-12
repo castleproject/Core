@@ -19,6 +19,7 @@
 	<property name="cpnts.tests.src.dir" value="${base.dir}/${cpnts.name}.Tests" />
 	<property name="test.assembly.name" value="${cpnts.name}.Tests.dll" />
 
+	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 	<property name="version" value="0.0.1.0" />
@@ -109,7 +110,7 @@
 	
 	<target name="cpnts.compile">
 		<csc 
-			define="STRONG"
+			define="${strong}"
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${cpnts.assembly.name}">

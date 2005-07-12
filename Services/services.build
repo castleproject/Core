@@ -8,6 +8,7 @@
 	<property name="version" value="beta-1" />
 	<property name="optimize" value="true" />
 	<property name="debug" value="false" />
+	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 
 	<target name="build" depends="init, transaction" />
 	

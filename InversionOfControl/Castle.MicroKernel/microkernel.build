@@ -12,6 +12,7 @@
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
+	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 	<property name="version" value="1.0.0.0" />
@@ -30,7 +31,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="STRONG"
+			define="${strong}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"

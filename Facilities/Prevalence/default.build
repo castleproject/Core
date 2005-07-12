@@ -38,7 +38,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="STRONG"
+			define="${strong}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
