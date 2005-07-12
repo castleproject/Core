@@ -54,8 +54,13 @@ namespace Castle.MonoRail.Framework
 
 			String prefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
 			object instance = Activator.CreateInstance( instanceType );
-			
-			PropertyInfo[] props = instanceType.GetProperties( BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
+
+			return BindObjectInstance(instance, prefix, paramList, files, errorList);			
+		}
+
+		public object BindObjectInstance( object instance, String paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
+		{
+			PropertyInfo[] props = instance.GetType().GetProperties( BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
 
 			foreach ( PropertyInfo prop in props )
 			{
@@ -70,15 +75,15 @@ namespace Castle.MonoRail.Framework
 					try
 					{
 						if ( !propType.IsPrimitive && !propType.IsArray && propType != typeof(String) && propType != typeof(Guid)
-								&& propType != typeof(DateTime) && propType != typeof(HttpPostedFile) )
+							&& propType != typeof(DateTime) && propType != typeof(HttpPostedFile) )
 						{
 							parent += prop.Name + ".";		
 
-							value = BindObject( prop.PropertyType, prefix + prop.Name, paramList, files, errorList );
+							value = BindObject( prop.PropertyType, paramPrefix + prop.Name, paramList, files, errorList );
 						}
 						else
 						{
-							value = Convert( prop.PropertyType, paramList.GetValues( prefix + prop.Name ), prop.Name, files, context );
+							value = Convert( prop.PropertyType, paramList.GetValues( paramPrefix + prop.Name ), prop.Name, files, context );
 						}
 						
 						prop.SetValue( instance, value, null );
