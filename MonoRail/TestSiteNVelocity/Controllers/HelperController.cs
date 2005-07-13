@@ -36,5 +36,10 @@ namespace TestSiteNVelocity.Controllers
 		{
 			PropertyBag.Add( "date", new DateTime(1979, 7, 16) );
 		}
+
+		public void DictHelperUsage()
+		{
+			
+		}
 	}
 }

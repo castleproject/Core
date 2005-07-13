@@ -35,6 +35,15 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			Execute(url, expected);
 		}
 
+		[Test]
+		public void DictHelperUsage()
+		{
+			string url = "/helper/DictHelperUsage.rails";
+			string expected = "Date formatted ";
+
+			Execute(url, expected);
+		}
+
 		protected override String ObtainPhysicalDir()
 		{
 			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );

@@ -631,8 +631,9 @@ namespace Castle.MonoRail.Framework
 
 
 			AbstractHelper[] builtInHelpers = 
-				new AbstractHelper[] {new AjaxHelper(), new EffectsFatHelper(), new DateFormatHelper(), 
-									  new HtmlHelper(), new ValidationHelper()};
+				new AbstractHelper[] {new AjaxHelper(), new EffectsFatHelper(), 
+										new DateFormatHelper(), new HtmlHelper(), 
+										new ValidationHelper(), new DictHelper() };
 			
 			foreach(AbstractHelper helper in builtInHelpers)
 			{

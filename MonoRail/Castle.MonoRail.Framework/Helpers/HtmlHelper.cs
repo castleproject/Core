@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
+	using System.Collections;
 	using System.IO;
 	using System.Text;
 	using System.Web.UI;
@@ -25,16 +26,39 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class HtmlHelper : AbstractHelper
 	{
+		/// <summary>
+		/// Creates a fieldset tag with a legend
+		/// <code>
+		/// &lt;fieldset&gt; &lt;legend&gt; legend &lt;/legend&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="legend">Legend that should be used within the fieldset</param>
+		/// <returns></returns>
 		public String FieldSet(String legend)
 		{
 			return String.Format("<fieldset><legend>{0}</legend>", legend);
 		}
 
+		/// <summary>
+		/// Creates a closing fieldset tag
+		/// <code>
+		/// &lt;/fieldset&gt; 
+		/// </code>
+		/// </summary>
+		/// <returns></returns>
 		public String EndFieldSet()
 		{
 			return "</fieldset>";
 		}
-
+		
+		/// <summary>
+		/// Creates a form tag 
+		/// <code>
+		/// &lt;form method="post" action="action"&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="action">The target action</param>
+		/// <returns></returns>
 		public String Form(String action)
 		{
 			StringWriter sbWriter = new StringWriter();
@@ -49,6 +73,56 @@ namespace Castle.MonoRail.Framework.Helpers
 			return sbWriter.ToString();
 		}
 
+		/// <summary>
+		/// Creates a form tag 
+		/// <code>
+		/// &lt;form method="post" method="method" id="id" action="action"&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="action">The target action</param>
+		/// <param name="id">the form html id</param>
+		/// <param name="method">form method (get, post, etc)</param>
+		/// <returns></returns>
+		public String Form(String action, String id, String method)
+		{
+			return Form(action, id, method, null);
+		}
+
+		/// <summary>
+		/// Creates a form tag 
+		/// <code>
+		/// &lt;form method="post" method="method" id="id" action="action" onsubmit="onSubmit" &gt;
+		/// </code>
+		/// </summary>
+		/// <param name="action">The target action</param>
+		/// <param name="id">the form html id</param>
+		/// <param name="method">form method (get, post, etc)</param>
+		/// <param name="onSubmit">a javascript inline code to be invoked upon form submission</param>
+		/// <returns></returns>
+		public String Form(String action, String id, String method, String onSubmit)
+		{
+			StringWriter sbWriter = new StringWriter();
+			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
+
+			writer.WriteBeginTag("form");
+			writer.WriteAttribute("method", method);
+			writer.WriteAttribute("action", action);
+			writer.WriteAttribute("id", id);
+			if (onSubmit != null)
+				writer.WriteAttribute("onsubmit", onSubmit);
+			writer.Write(HtmlTextWriter.TagRightChar);
+			writer.WriteLine();
+
+			return sbWriter.ToString();
+		}
+
+		/// <summary>
+		/// Creates a form closing tag
+		/// <code>
+		/// &lt;/form&gt;
+		/// </code>
+		/// </summary>
+		/// <returns></returns>
 		public String EndForm()
 		{
 			return "</form>";
@@ -158,7 +232,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputText(String name, String value, int size, int maxlength)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" />",
-			                     name, value, size, maxlength);
+				name, value, size, maxlength);
+		}
+
+		public String InputText(String name, String value, int size, int maxlength, IDictionary attributes)
+		{
+			String attrs = GetAttributes(attributes);
+
+			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" {4}/>",
+			                     name, value, size, maxlength, attrs);
 		}
 
 		public String InputText(String name, String value, String id)
@@ -328,6 +410,27 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (property == null) return null;
 
 			return elem.GetType().GetMethod("get_" + property, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+		}
+
+		private string GetAttributes(IDictionary attributes)
+		{
+			if (attributes == null) return String.Empty;
+
+			String contents = "";
+
+			foreach(DictionaryEntry entry in attributes)
+			{
+				if (entry.Value == null || entry.Value.ToString() == String.Empty)
+				{
+					contents += String.Format("{0} ", entry.Key);
+				}
+				else
+				{
+					contents += String.Format("{0}=\"{1}\" ", entry.Key, entry.Value);
+				}
+			}
+
+			return contents;
 		}
 	}
 }

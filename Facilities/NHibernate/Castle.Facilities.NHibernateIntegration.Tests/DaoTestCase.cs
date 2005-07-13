@@ -82,6 +82,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 				_dao.CreateBlog("my blog");
 				IList blogs = _dao.ObtainBlogs();
 				Assert.IsNotNull( blogs );
+				Assert.IsTrue( blogs.Count > 0 );
 			}
 		}
 
@@ -112,8 +113,9 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 			container.AddComponent("blogdao", typeof(BlogDaoTransactional));
 			_dao = (BlogDao) container["blogdao"];
+			_dao.DeleteAll();
 			
-			const int threadCount = 10;
+			const int threadCount = 1;
 
 			Thread[] threads = new Thread[threadCount];
 			

@@ -94,16 +94,6 @@
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
                 />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\Commons.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\log4net.dll"
-                />
             </References>
         </Build>
         <Files>
