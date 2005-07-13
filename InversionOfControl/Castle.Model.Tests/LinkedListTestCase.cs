@@ -23,7 +23,6 @@ namespace Castle.Model.Tests
 	[TestFixture]
 	public class LinkedListTestCase
 	{
-
 		[Test]
 		public void Enumerable()
 		{
@@ -86,6 +85,262 @@ namespace Castle.Model.Tests
 			list.Add( "3" );
 			Assert.AreEqual( "1", list.Head );
 			Assert.AreEqual( 3, list.Count );
+		}
+
+		[Test]
+		public void RemoveBoundary1()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+
+			list.Add( "2" );
+
+			list.Add( "3" );
+
+			list.Remove( "1" );
+
+			Assert.AreEqual( "2", list.Head );
+			Assert.AreEqual( 2, list.Count );
+
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "2,3", String.Join(",", array) );
+		}
+
+		[Test]
+		public void RemoveBoundary2()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+
+			list.Add( "2" );
+
+			list.Add( "3" );
+
+			list.Remove( "3" );
+
+			Assert.AreEqual( "1", list.Head );
+			Assert.AreEqual( 2, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "1,2", String.Join(",", array) );
+		}
+
+		[Test]
+		public void RemoveBoundary3()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+
+			list.Remove( "2" );
+
+			Assert.AreEqual( "1", list.Head );
+			Assert.AreEqual( 1, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "1", String.Join(",", array) );
+		}
+
+		[Test]
+		public void RemoveMiddle1()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+
+			list.Add( "2" );
+
+			list.Add( "3" );
+
+			list.Remove( "2" );
+
+			Assert.AreEqual( "1", list.Head );
+			Assert.AreEqual( 2, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "1,3", String.Join(",", array) );
+		}
+
+		[Test]
+		public void RemoveMiddle2()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Add( "4" );
+			list.Add( "5" );
+
+			list.Remove( "3" );
+
+			Assert.AreEqual( "1", list.Head );
+			Assert.AreEqual( 4, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "1,2,4,5", String.Join(",", array) );
+		}
+
+		[Test]
+		public void IndexOf1()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Add( "4" );
+			list.Add( "5" );
+
+			Assert.AreEqual( 0, list.IndexOf("1") );
+			Assert.AreEqual( -1, list.IndexOf("10") );
+		}
+
+		[Test]
+		public void IndexOf2()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Add( "4" );
+			list.Add( "5" );
+
+			Assert.AreEqual( 4, list.IndexOf("5") );
+			Assert.AreEqual( -1, list.IndexOf("10") );
+		}
+
+		[Test]
+		public void Insert1()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Insert(0, "x");
+
+			Assert.AreEqual( 4, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "x,1,2,3", String.Join(",", array) );
+		}
+
+		[Test]
+		public void Insert2()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Insert(2, "x");
+
+			Assert.AreEqual( 4, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "1,2,3,x", String.Join(",", array) );
+		}
+
+		[Test]
+		public void Insert3()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Insert(1, "x");
+
+			Assert.AreEqual( 4, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "1,x,2,3", String.Join(",", array) );
+		}
+
+		[Test]
+		public void Insert4()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "0" );
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Add( "4" );
+			list.Add( "5" );
+			list.Insert(2, "x");
+
+			Assert.AreEqual( 7, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "0,1,x,2,3,4,5", String.Join(",", array) );
+		}
+
+		[Test]
+		public void Replace1()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "0" );
+			list.Add( "1" );
+			Assert.IsTrue( list.Replace("0", "x") );
+
+			Assert.AreEqual( 2, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "x,1", String.Join(",", array) );
+		}
+
+		[Test]
+		public void Replace2()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "0" );
+			list.Add( "1" );
+			Assert.IsTrue( list.Replace("1", "x") ); 
+
+			Assert.AreEqual( 2, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "0,x", String.Join(",", array) );
+		}
+
+		[Test]
+		public void Replace3()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "0" );
+			list.Add( "1" );
+			Assert.IsFalse( list.Replace("11", "x") ); 
+
+			Assert.AreEqual( 2, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "0,1", String.Join(",", array) );
+		}
+
+		[Test]
+		public void Replace4()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "0" );
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			Assert.IsTrue( list.Replace("2", "x") ); 
+
+			Assert.AreEqual( 4, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "0,1,x,3", String.Join(",", array) );
 		}
 
 		[Test]
