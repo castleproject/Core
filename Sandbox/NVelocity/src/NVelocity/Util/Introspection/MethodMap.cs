@@ -305,17 +305,34 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		private static bool isApplicable(MethodInfo method, Type[] classes)
 		{
-			//UPGRADE_TODO: The equivalent in .NET for method 'java.lang.reflect.Method.getParameterTypes' may return a different value. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1043"'
 			ParameterInfo[] methodArgs = method.GetParameters();
 
-			if (methodArgs.Length != classes.Length)
+			int indexOfParamArray = Int32.MaxValue;
+
+			for (int i = 0; i < methodArgs.Length; ++i)
+			{
+				ParameterInfo paramInfo = methodArgs[i];
+
+				if (paramInfo.IsDefined( typeof(ParamArrayAttribute), false ))
+				{
+					indexOfParamArray = i; break;
+				}
+			}
+
+			if (indexOfParamArray == Int32.MaxValue && methodArgs.Length != classes.Length)
 			{
 				return false;
 			}
 
 			for (int i = 0; i < classes.Length; ++i)
 			{
-				if (!isMethodInvocationConvertible(methodArgs[i], classes[i]))
+				ParameterInfo paramInfo = null;
+				if (i < indexOfParamArray)
+					paramInfo = methodArgs[i];
+				else
+					paramInfo = methodArgs[indexOfParamArray];
+
+				if (!isMethodInvocationConvertible(paramInfo, classes[i]))
 				{
 					return false;
 				}
@@ -347,19 +364,26 @@ namespace NVelocity.Util.Introspection
 		/// </returns>
 		private static bool isMethodInvocationConvertible(ParameterInfo formal, Type actual)
 		{
+			Type underlyingType = formal.ParameterType;
+
+			if (formal.IsDefined( typeof(ParamArrayAttribute), false ))
+			{
+				underlyingType = formal.ParameterType.GetElementType();
+			}
+
 			/*
-	    * if it's a null, it means the arg was null
-	    */
-			if (actual == null && !formal.ParameterType.IsPrimitive)
+			* if it's a null, it means the arg was null
+			*/
+			if (actual == null && !underlyingType.IsPrimitive)
 			{
 				return true;
 			}
 
 			/*
-	    *  Check for identity or widening reference conversion
-	    */
+			*  Check for identity or widening reference conversion
+			*/
 
-			if (actual != null && formal.ParameterType.IsAssignableFrom(actual))
+			if (actual != null && underlyingType.IsAssignableFrom(actual))
 			{
 				return true;
 			}
@@ -369,23 +393,23 @@ namespace NVelocity.Util.Introspection
 	    * actual parameters are never primitives.
 	    */
 
-			if (formal.ParameterType.IsPrimitive)
+			if (underlyingType.IsPrimitive)
 			{
-				if (formal.ParameterType == Type.GetType("Boolean") && actual == (Object) typeof(Boolean))
+				if (underlyingType == Type.GetType("Boolean") && actual == (Object) typeof(Boolean))
 					return true;
-				if (formal.ParameterType == Type.GetType("Char") && actual == typeof(Char))
+				if (underlyingType == Type.GetType("Char") && actual == typeof(Char))
 					return true;
-				if (formal.ParameterType == Type.GetType("Byte") && actual == (Object) typeof(Byte))
+				if (underlyingType == Type.GetType("Byte") && actual == (Object) typeof(Byte))
 					return true;
-				if (formal.ParameterType == Type.GetType("Int16") && (actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
+				if (underlyingType == Type.GetType("Int16") && (actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
 					return true;
-				if (formal.ParameterType == Type.GetType("Int32") && (actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
+				if (underlyingType == Type.GetType("Int32") && (actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
 					return true;
-				if (formal.ParameterType == Type.GetType("Int64") && (actual == (Object) typeof(Int64) || actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
+				if (underlyingType == Type.GetType("Int64") && (actual == (Object) typeof(Int64) || actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
 					return true;
-				if (formal.ParameterType == Type.GetType("Single") && (actual == (Object) typeof(Single) || actual == (Object) typeof(Int64) || actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
+				if (underlyingType == Type.GetType("Single") && (actual == (Object) typeof(Single) || actual == (Object) typeof(Int64) || actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
 					return true;
-				if (formal.ParameterType == Type.GetType("Double") && (actual == (Object) typeof(Double) || actual == (Object) typeof(Single) || actual == (Object) typeof(Int64) || actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
+				if (underlyingType == Type.GetType("Double") && (actual == (Object) typeof(Double) || actual == (Object) typeof(Single) || actual == (Object) typeof(Int64) || actual == (Object) typeof(Int32) || actual == (Object) typeof(Int16) || actual == (Object) typeof(Byte)))
 					return true;
 			}
 

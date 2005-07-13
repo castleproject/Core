@@ -252,7 +252,47 @@ namespace NVelocity.Runtime.Parser.Node
 				Object obj = null;
 				if (method != null)
 				{
-					obj = method.Invoke(o, (Object[]) params_Renamed);
+					ParameterInfo[] methodArgs = method.GetParameters();
+
+					int indexOfParamArray = -1;
+
+					for (int i = 0; i < methodArgs.Length; ++i)
+					{
+						ParameterInfo paramInfo = methodArgs[i];
+
+						if (paramInfo.IsDefined( typeof(ParamArrayAttribute), false ))
+						{
+							indexOfParamArray = i; break;
+						}
+					}
+
+					if (indexOfParamArray != -1)
+					{
+						Type arrayParamType = methodArgs[indexOfParamArray].ParameterType;
+
+						object[] newParams = new object[ methodArgs.Length ];
+
+						Array.Copy( params_Renamed, newParams, methodArgs.Length - 1 );
+
+						if (params_Renamed.Length < (indexOfParamArray + 1))
+						{
+							newParams[indexOfParamArray] = Array.CreateInstance( 
+								arrayParamType.GetElementType(), 0 );
+						}
+						else
+						{
+							Array args = Array.CreateInstance( arrayParamType.GetElementType(), (params_Renamed.Length + 1) - newParams.Length );
+
+							Array.Copy( params_Renamed, methodArgs.Length - 1, args, 0, args.Length );
+
+							newParams[indexOfParamArray] = args;
+						}
+
+						params_Renamed = newParams;
+					}
+
+					obj = method.Invoke(o, params_Renamed);
+
 					if (obj == null && method.ReturnType == System.Type.GetType("System.Void"))
 					{
 						obj = String.Empty;
