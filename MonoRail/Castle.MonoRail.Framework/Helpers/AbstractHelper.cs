@@ -14,6 +14,8 @@
 
 namespace Castle.MonoRail.Framework.Helpers
 {
+	using System.Collections;
+
 	public abstract class AbstractHelper : IControllerAware
 	{
 		private Controller _controller;
@@ -30,6 +32,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		public Controller Controller
 		{
 			get { return _controller; }
+		}
+
+		protected void MergeOptions(IDictionary userOptions, IDictionary defaultOptions)
+		{
+			foreach(DictionaryEntry entry in defaultOptions)
+			{
+				if (!userOptions.Contains(entry.Key))
+				{
+					userOptions[entry.Key] = entry.Value;
+				}
+			}
 		}
 	}
 }

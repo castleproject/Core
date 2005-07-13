@@ -17,9 +17,9 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Reflection;
 	using System.Text;
 	using System.Web.UI;
-	using System.Reflection;
 
 	/// <summary>
 	/// Provides usefull common methods to output html
@@ -50,7 +50,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return "</fieldset>";
 		}
-		
+
 		/// <summary>
 		/// Creates a form tag 
 		/// <code>
@@ -186,6 +186,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String DateTime(String name, DateTime value)
 		{
+			return DateTime(name, value, null);
+		}
+
+		public String DateTime(String name, DateTime value, IDictionary attributes)
+		{
 			String[] days = new String[31];
 			int index = 0;
 			for (int i = 1; i < 32; i++)
@@ -203,15 +208,15 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(Select(name + "day"));
+			sb.Append(Select(name + "day", attributes));
 			sb.Append(CreateOptionsFromPrimitiveArray(days, value.Day.ToString()));
 			sb.Append(EndSelect());
 			sb.Append(' ');
-			sb.Append(Select(name + "month"));
+			sb.Append(Select(name + "month", attributes));
 			sb.Append(CreateOptionsFromPrimitiveArray(months, value.Month.ToString()));
 			sb.Append(EndSelect());
 			sb.Append(' ');
-			sb.Append(Select(name + "year"));
+			sb.Append(Select(name + "year", attributes));
 			sb.Append(CreateOptionsFromPrimitiveArray(years, value.Year.ToString()));
 			sb.Append(EndSelect());
 
@@ -232,7 +237,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String InputText(String name, String value, int size, int maxlength)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" />",
-				name, value, size, maxlength);
+			                     name, value, size, maxlength);
 		}
 
 		public String InputText(String name, String value, int size, int maxlength, IDictionary attributes)
@@ -279,6 +284,13 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String Select(String name)
 		{
 			return String.Format("<select name=\"{0}\" id=\"{0}\">", name);
+		}
+
+		public String Select(String name, IDictionary attributes)
+		{
+			String htmlAttrs = GetAttributes(attributes);
+
+			return String.Format("<select name=\"{0}\" id=\"{0}\" {1}>", name, htmlAttrs);
 		}
 
 		public String EndSelect()
@@ -418,7 +430,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			String contents = "";
 
-			foreach(DictionaryEntry entry in attributes)
+			foreach (DictionaryEntry entry in attributes)
 			{
 				if (entry.Value == null || entry.Value.ToString() == String.Empty)
 				{

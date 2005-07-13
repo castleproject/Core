@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.IO;
 	using System.Collections;
 
-
 	/// <summary>
 	/// Helper that provides client-side validation.
 	/// </summary>
@@ -61,10 +60,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				return _virtualDir;
 			}
-			set
-			{
-				_virtualDir = value;
-			}
+			set { _virtualDir = value; }
 		}
 
 		protected string Extension
@@ -82,7 +78,7 @@ namespace Castle.MonoRail.Framework.Helpers
 						_extension = "rails";
 					}
 				}
-				
+
 				return _extension;
 			}
 		}
@@ -96,7 +92,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			string baseDir = VirtualDir + @"/MonoRail/Files";
 
 			return BuildScriptInclude(baseDir, "ValidateConfig", Extension) +
-				BuildScriptInclude(baseDir, "ValidateCore", Extension) + 
+				BuildScriptInclude(baseDir, "ValidateCore", Extension) +
 				BuildScriptInclude(baseDir, "ValidateValidators", Extension) +
 				BuildScriptInclude(baseDir, "ValidateLang", Extension);
 		}
@@ -109,14 +105,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Install the script with a custom message file(based on the fValidate I18N file).
 		/// </summary>
-		/// <param name="scriptFilePath">A <see cref="String"/> represeting the path and file name</param>
+		/// <param name="scriptFilePath">A <see cref="string"/> represeting the path and file name</param>
 		/// <returns></returns>
 		public string InstallWithCustomMsg(string scriptFilePath)
 		{
 			string baseDir = VirtualDir + @"/MonoRail/Files";
 
 			return BuildScriptInclude(baseDir, "ValidateConfig", Extension) +
-				BuildScriptInclude(baseDir, "ValidateCore", Extension) + 
+				BuildScriptInclude(baseDir, "ValidateCore", Extension) +
 				BuildScriptInclude(baseDir, "ValidateValidators", Extension) +
 				string.Format(UserIncludeTag, scriptFilePath);
 		}
@@ -142,14 +138,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		public string InstallScripts(string baseDir, string lang)
 		{
 			return BuildScriptInclude(baseDir, "fValidate.config.js") +
-				BuildScriptInclude(baseDir, "fValidate.core.js") + 
+				BuildScriptInclude(baseDir, "fValidate.core.js") +
 				BuildScriptInclude(baseDir, "fValidate.validators.js") +
-				BuildScriptInclude(baseDir, "fValidate.lang-"+ lang +".js");
+				BuildScriptInclude(baseDir, "fValidate.lang-" + lang + ".js");
 		}
 
 		private string BuildScriptInclude(string baseDir, string js)
 		{
-			return string.Format(UserIncludeTag, Path.Combine(baseDir, js).Replace('\\','/'));
+			return string.Format(UserIncludeTag, Path.Combine(baseDir, js).Replace('\\', '/'));
 		}
 
 		/// <summary>
@@ -168,8 +164,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public string GetValidationTriggerFunction(string formElement)
 		{
-			return string.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );", 
-				formElement,
+			return string.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );",
+			                     formElement,
 			                     _submitOptions["confirm"].ToString().ToLower(),
 			                     _submitOptions["disable"].ToString().ToLower(),
 			                     _submitOptions["disable"].ToString().ToLower(),
@@ -178,12 +174,42 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Returns the form validation function where you can override the options:
+		/// </summary>
+		/// <remarks>
+		/// The options that can be overriden:
+		/// confirm (bool), disable (bool), groupError (bool), errorMode (int)
+		/// </remarks>
+		/// <param name="formElement">Javascript expression that return the desired form.</param>
+		/// <param name="options">Custom options</param>
+		/// <returns></returns>
+		public string GetValidationTriggerFunction(String formElement, IDictionary options)
+		{
+			if (options == null)
+			{
+				options = new Hashtable(_submitOptions);
+			}
+			else
+			{
+				MergeOptions(options, _submitOptions);
+			}
+
+			return string.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );",
+				formElement,
+				options["confirm"].ToString().ToLower(),
+				options["disable"].ToString().ToLower(),
+				options["disable"].ToString().ToLower(),
+				options["groupError"].ToString().ToLower(),
+				options["errorMode"]);
+		}
+
+		/// <summary>
 		/// Configure the submit and validation options.
 		/// </summary>
 		/// <param name="confirm"><b>True</b> for submit confirmation. Otherwise, <b>false</b>.</param>
 		/// <param name="disable"><b>True</b> for submit buttons disabling.</param>
 		/// <param name="groupError"><b>True</b> for error grouping.</param>
-		/// <param name="errorMode"><see cref="Int32"/> representing the error mode.</param>
+		/// <param name="errorMode"><see cref="int"/> representing the error mode.</param>
 		public void SetSubmitOptions(bool confirm, bool disable, bool groupError, int errorMode)
 		{
 			_submitOptions["confirm"] = confirm;
