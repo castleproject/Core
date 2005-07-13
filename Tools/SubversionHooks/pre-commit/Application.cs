@@ -158,15 +158,18 @@ namespace Castle.SvnHooks
 									return 3;
 							}
 
-							RepositoryFile file = new RepositoryFile(repository, m.Groups["file"].Value, contentsStatus, propertiesStatus);
+							using(RepositoryFile file = new RepositoryFile(repository, m.Groups["file"].Value, contentsStatus, propertiesStatus))
+							{
 
-							// If HooksAllow returns false we should not allow
-							// the transaction, but rather than exiting we store
-							// that fact in a boolean so that the user will be
-							// told all errors his files contain rather than just
-							// one at a time.
+								// If HooksAllow returns false we should not allow
+								// the transaction, but rather than exiting we store
+								// that fact in a boolean so that the user will be
+								// told all errors his files contain rather than just
+								// one at a time.
 
-							hooksOK &= HooksAllow(file, hooks);
+								hooksOK &= HooksAllow(file, hooks);
+
+							}
 
 						}
 						
