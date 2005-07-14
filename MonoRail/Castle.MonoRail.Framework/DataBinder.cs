@@ -86,7 +86,10 @@ namespace Castle.MonoRail.Framework
 							value = Convert( prop.PropertyType, paramList.GetValues( paramPrefix + prop.Name ), prop.Name, files, context );
 						}
 						
-						prop.SetValue( instance, value, null );
+						if (value != null)
+						{
+							prop.SetValue( instance, value, null );
+						}
 					}
 					catch ( Exception e )
 					{
@@ -203,7 +206,14 @@ namespace Castle.MonoRail.Framework
 					}
 				}
 
-				return value == null || value == String.Empty ? new DateTime(): DateTime.Parse(value);
+				if (value == null || value == String.Empty)
+				{
+					return null;
+				}
+				else
+				{
+					return DateTime.Parse(value);
+				}
 			}
 			else if (desiredType == typeof(Boolean))
 			{
@@ -212,7 +222,6 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (desiredType == typeof(HttpPostedFile))
 			{
-				// TODO: An array of posted files ??
 				return files[paramName];
 			}
 			else if (desiredType.IsArray)

@@ -84,6 +84,24 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			Execute(url, expected);
 		}
 
+		[Test]
+		public void FillingBehavior1()
+		{
+			string url = "/smart/FillingBehavior.rails?name=someone&date1day=11&date1month=10&date1year=2005";
+			string expected = "incoming someone 11/10/2005 " + DateTime.Now.AddDays(1).ToShortDateString();
+
+			Execute(url, expected);
+		}
+
+		[Test]
+		public void FillingBehavior2()
+		{
+			string url = "/smart/FillingBehavior.rails";
+			string expected = "incoming hammett " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
+
+			Execute(url, expected);
+		}
+
 		protected override String ObtainPhysicalDir()
 		{
 			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );

@@ -45,6 +45,43 @@ namespace TestSiteNVelocity.Controllers
 		{
 			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
 		}
+
+		public void FillingBehavior( [DataBind] ClassWithInitializers clazz )
+		{
+			RenderText( String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString() ) );
+		}
+	}
+
+	public class ClassWithInitializers
+	{
+		private String name;
+		private DateTime date1;
+		private DateTime date2;
+
+		public ClassWithInitializers()
+		{
+			name = "hammett";
+			date1 = DateTime.Now;
+			date2 = DateTime.Now.AddDays(1);
+		}
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public DateTime Date1
+		{
+			get { return date1; }
+			set { date1 = value; }
+		}
+
+		public DateTime Date2
+		{
+			get { return date2; }
+			set { date2 = value; }
+		}
 	}
 
 	public class Order
