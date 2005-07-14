@@ -85,6 +85,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
+		[Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
 		public void FillingBehavior1()
 		{
 			string url = "/smart/FillingBehavior.rails?name=someone&date1day=11&date1month=10&date1year=2005";
@@ -94,6 +95,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
+		[Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
 		public void FillingBehavior2()
 		{
 			string url = "/smart/FillingBehavior.rails";
