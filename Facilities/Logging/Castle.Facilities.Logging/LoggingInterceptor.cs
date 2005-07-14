@@ -19,15 +19,18 @@ namespace Castle.Facilities.Logging
 
 	using Castle.Model;
 	using Castle.Model.Interceptor;
+	using Castle.Services.Logging;
 
-	[Transient]
+    [Transient]
 	public class LoggingInterceptor : IMethodInterceptor, IOnBehalfAware
 	{
 		private ComponentModel _target;
+        private ILogger _log;
 
-//		public LoggingInterceptor(ILoggerFactory)
-//		{
-//		}
+		public LoggingInterceptor(ILoggerFactory factory)
+		{
+            this._log = factory.Create(this.GetType());
+		}
 
 		public void SetInterceptedComponentModel(ComponentModel target)
 		{
@@ -42,7 +45,7 @@ namespace Castle.Facilities.Logging
             {
                 logoutput = ExtractLogInfo(invocation, args);
                 
-                //log logoutput
+                this._log.Debug(logoutput);
 
             }
             catch
