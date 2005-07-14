@@ -15,7 +15,9 @@
 namespace Castle.Facilities.Logging.Tests
 {
     using System;
-
+    using Castle.MicroKernel.SubSystems.Configuration;
+    using Castle.Model.Configuration;
+    using Castle.Windsor;
     using NUnit.Framework;
 
     using Castle.MicroKernel;
@@ -26,12 +28,12 @@ namespace Castle.Facilities.Logging.Tests
 	/// </summary>
     [TestFixture]
     public class LoggingFacilityTestCase {
-        private IKernel kernel;
+        private IWindsorContainer kernel;
 
         [SetUp]
         public void Setup()
         {
-            kernel = new DefaultKernel();
+            kernel = CreateConfiguredContainer();
             kernel.AddFacility("logging", new LoggingFacility());
         }
 
@@ -44,13 +46,35 @@ namespace Castle.Facilities.Logging.Tests
 
         [Test]
         public void SimpleTest() {
-            String expectedLogOutput = "hello world";
+            String expectedLogOutput = "HellowWorld";
             String actualLogOutput = "";
 
-            //do something to cause a log message "hello world"
+            kernel.AddComponent("component", typeof(Classes.LoggingComponent));
+
+            Classes.LoggingComponent test = kernel["component"] as Classes.LoggingComponent;
+
+            test.HelloWorld(); //should cause some kind of HelloWorld to be logged.
+
+            
             //dump log output to the actualLogOutput variable
 
             Assert.IsTrue(expectedLogOutput.Equals(actualLogOutput));
+        }
+
+        protected virtual IWindsorContainer CreateConfiguredContainer()
+        {
+            IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
+
+            MutableConfiguration confignode = new MutableConfiguration("facility");
+
+            confignode.Children.Add(new MutableConfiguration("framework", "log4net"));
+            confignode.Children.Add(new MutableConfiguration("config", "logging.config"));
+            confignode.Children.Add(new MutableConfiguration("intercept", "false"));
+            
+
+            container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);
+
+            return container;
         }
     }
 }
