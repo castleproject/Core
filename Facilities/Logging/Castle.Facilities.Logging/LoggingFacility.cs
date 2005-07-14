@@ -16,7 +16,6 @@ namespace Castle.Facilities.Logging
 {
 	using System;
     using System.IO;
-	using System.Reflection;
 
 	using Castle.Facilities.Logging.NLogIntegration;
 	using Cystem.Facilities.Logging.log4netIntegration;	
@@ -53,7 +52,7 @@ namespace Castle.Facilities.Logging
 
             ////////////////////////
             //For base level logging
-            this.Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
+            if (intercept) this.Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
 
             ////////////////////////
             //For Attributal Logging
@@ -62,10 +61,8 @@ namespace Castle.Facilities.Logging
 
             ///////////////////////////
             //For Constructor Injection
-            // ???????
-            // this.Kernel.AddComponentInstance("logging.factory", typeof(ILoggerFactory), this.factory);
-            // How can I detect requests for ILogger and then supply them with a logger with the class full name?
-            // can they request a ILoggerFactory?
+            this.Kernel.AddComponentInstance("logging.factory", typeof(ILoggerFactory), this.factory);
+            //ILogger Injection
 		}
 
 	    private void GetConfigurationInformation()
