@@ -52,14 +52,21 @@ namespace Castle.MonoRail.Framework
 		{
 			if ( root == null ) root = instanceType.Name;
 
-			String prefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
+			//String prefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
 			object instance = Activator.CreateInstance( instanceType );
 
-			return BindObjectInstance(instance, prefix, paramList, files, errorList);			
+			return BindObjectInstance(instance, paramPrefix, paramList, files, errorList);			
+		}
+
+		public object BindObjectInstance( object instance, String paramPrefix)
+		{
+			return BindObjectInstance(instance,  paramPrefix, context.Params, context.Request.Files, null );
 		}
 
 		public object BindObjectInstance( object instance, String paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
 		{
+			paramPrefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
+
 			PropertyInfo[] props = instance.GetType().GetProperties( BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
 
 			foreach ( PropertyInfo prop in props )
@@ -67,9 +74,7 @@ namespace Castle.MonoRail.Framework
 				if ( prop.CanWrite )
 				{
 					Type propType = prop.PropertyType;
-
-					object value = null;
-
+					
 					String oldParent = parent;
 					
 					try
@@ -78,25 +83,43 @@ namespace Castle.MonoRail.Framework
 							&& propType != typeof(DateTime) && propType != typeof(HttpPostedFile) )
 						{
 							parent += prop.Name + ".";		
-
-							value = BindObject( prop.PropertyType, paramPrefix + prop.Name, paramList, files, errorList );
+						
+							// if the property is an object, we look if it is already instanciated
+							object value = prop.GetValue(instance, null);
+							
+							if (value == null) // if it's not there, we create it
+							{
+								value = BindObject( prop.PropertyType, paramPrefix + prop.Name, paramList, files, errorList );
+								
+								prop.SetValue( instance, value, null );
+							}
+							else // if the object already instanciated, then we use it 
+							{
+								BindObjectInstance( value, paramPrefix + prop.Name, paramList, files, errorList );
+							}
 						}
 						else
 						{
-							value = Convert( prop.PropertyType, paramList.GetValues( paramPrefix + prop.Name ), prop.Name, files, context );
-						}
-						
-						if (value != null)
-						{
-							prop.SetValue( instance, value, null );
-						}
+							string[] values = paramList.GetValues( paramPrefix + prop.Name );
+							
+							object value = Convert( prop.PropertyType, values, prop.Name, files, context );
+
+							if (value != null)
+							{
+								prop.SetValue( instance, value, null );
+							}
+						}						
 					}
 					catch ( Exception e )
 					{
 						if ( errorList != null )
+						{
 							errorList.Add( new DataBindError( root, parent + prop.Name, e ) );
+						}
 						else
+						{
 							throw e;
+						}
 					}
 
 					parent = oldParent;
