@@ -22,53 +22,23 @@ namespace Castle.SvnHooks
 	/// </summary>
 	public struct Transaction
 	{
-		public Transaction(int fromRevision, int toRevision)
+		public Transaction(String text)
 		{
-			this.fromRevision = fromRevision;
-			this.toRevision = toRevision;
-		}
-
-		public static Transaction FromRevisions(int fromRevision, int toRevision)
-		{
-			return new Transaction(fromRevision, toRevision);
+			this.text = text;
 		}
 
 		public static Transaction Parse(String s)
 		{
-			String[] split = s.Split('-');
-
-			Transaction t = new Transaction(
-				Int32.Parse(split[0]),
-				Int32.Parse(split[1]));
-
-			// Please refer to the ignore message on the tests
-
-//			if (t.FromRevision < 0)
-//				throw new FormatException("From revision number cannot be negative");
-//			if (t.ToRevision <= t.FromRevision)
-//				throw new FormatException("From revision number must be lower than To revision: " + s);
-
-			return t;
+			return new Transaction(s);
 		}
+
 
 		public override string ToString()
 		{
-			return String.Concat(fromRevision, "-", toRevision);
+			return text;
 		}
 
 
-		public int FromRevision
-		{
-			get { return this.fromRevision; }
-		}
-
-		public int ToRevision
-		{
-			get { return this.toRevision; }
-		}
-
-
-		private int fromRevision;
-		private int toRevision;
+		private String text;
 	}
 }

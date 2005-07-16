@@ -19,31 +19,24 @@ namespace Castle.SvnHooks.Tests
 	using NUnit.Framework;
 
 	/// <summary>
-	/// Summary description for TransactionTestCase.
+	/// As far as I can determine subversion uses
+	/// different formats for the transaction string
+	/// on windows and unix.
 	/// </summary>
 	[TestFixture] public class TransactionTestCase
 	{
-		[Test] public void Parse()
+		[Test] public void ParseWindowsFormat()
 		{
 			Transaction t = Transaction.Parse("0-1");
 			
-			Assert.AreEqual(0, t.FromRevision, "Transaction.FromRevision does not match the parsed string");
-			Assert.AreEqual(1, t.ToRevision, "Transaction.ToRevision does not match the parsed string");
+			Assert.AreEqual("0-1", t.ToString(), "Transaction.ToString does not match the parsed string");
 		}
-		[Test] public void ParseHighNumbers()
+		[Test] public void ParseUnixFormat()
 		{
-			Transaction t = Transaction.Parse(String.Concat(Int32.MaxValue - 1, '-', Int32.MaxValue));
+			Transaction t = Transaction.Parse("1u");
 			
-			Assert.AreEqual(Int32.MaxValue-1, t.FromRevision, "Transaction.FromRevision does not match the parsed string");
-			Assert.AreEqual(Int32.MaxValue, t.ToRevision, "Transaction.ToRevision does not match the parsed string");
+			Assert.AreEqual("1u", t.ToString(), "Transaction.ToString does not match the parsed string");
 		}
-		
-		[ExpectedException(typeof(OverflowException))]
-		[Test] public void ParseTooHighNumbers()
-		{
-			Transaction t = Transaction.Parse(String.Concat(Int64.MaxValue - 1, '-', Int64.MaxValue));
-		}
-		
 
 		[Ignore("The transaction numbers dont seem to be from revision - to reveision, but rather something else")]
 		[ExpectedException(typeof(FormatException))]
