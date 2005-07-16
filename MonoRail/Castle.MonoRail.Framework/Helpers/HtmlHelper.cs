@@ -423,26 +423,5 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return elem.GetType().GetMethod("get_" + property, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
 		}
-
-		private string GetAttributes(IDictionary attributes)
-		{
-			if (attributes == null) return String.Empty;
-
-			String contents = "";
-
-			foreach (DictionaryEntry entry in attributes)
-			{
-				if (entry.Value == null || entry.Value.ToString() == String.Empty)
-				{
-					contents += String.Format("{0} ", entry.Key);
-				}
-				else
-				{
-					contents += String.Format("{0}=\"{1}\" ", entry.Key, entry.Value);
-				}
-			}
-
-			return contents;
-		}
 	}
 }

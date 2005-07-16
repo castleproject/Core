@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Engine.Tests
 		[Test]
 		public void Ajax()
 		{
-			string expected = "\r\n/*  Prototype: an object-oriented Javascript library, version 1.2.0";
+			string expected = "\r\n\r\n/*  Prototype JavaScript framework";
 			string url = "/MonoRail/Files/AjaxScripts.rails";
 
 			Execute(url, expected);

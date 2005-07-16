@@ -225,8 +225,16 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\ajax\autocom.vm"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "views\ajax\index.vm"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\ajax\periodinvocation.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "views\apppath\index.vm"

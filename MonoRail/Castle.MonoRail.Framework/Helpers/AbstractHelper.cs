@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Helpers
 {
+	using System;
 	using System.Collections;
 
 	public abstract class AbstractHelper : IControllerAware
@@ -43,6 +44,27 @@ namespace Castle.MonoRail.Framework.Helpers
 					userOptions[entry.Key] = entry.Value;
 				}
 			}
+		}
+
+		protected string GetAttributes(IDictionary attributes)
+		{
+			if (attributes == null) return String.Empty;
+
+			String contents = "";
+
+			foreach (DictionaryEntry entry in attributes)
+			{
+				if (entry.Value == null || entry.Value.ToString() == String.Empty)
+				{
+					contents += String.Format("{0} ", entry.Key);
+				}
+				else
+				{
+					contents += String.Format("{0}=\"{1}\" ", entry.Key, entry.Value);
+				}
+			}
+
+			return contents;
 		}
 	}
 }

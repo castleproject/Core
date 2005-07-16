@@ -72,6 +72,32 @@ namespace TestSiteNVelocity.Controllers
 			PropertyBag.Add("users", list);
 		}
 
+		/// <summary>
+		/// Auto completion action
+		/// </summary>
+		public void AutoCom()
+		{
+			
+		}
+
+		public void PeriodInvocation()
+		{
+			
+		}
+
+		public void PeriodInvokeTarget()
+		{
+			RenderText("Ok");
+		}
+
+		/// <summary>
+		/// Auto completion results
+		/// </summary>
+		public void NameAutoCompletion(String name)
+		{
+			RenderText( "<ul class=\"names\"><li class=\"name\">Jisheng Johnny</li><li class=\"name\">John Diana</li><li class=\"name\">Johnathan Maurice</li></ul>" );
+		}
+
 		public void AddUserWithAjax(String name, String email)
 		{
 			GetList().Add( new User(name, email) );

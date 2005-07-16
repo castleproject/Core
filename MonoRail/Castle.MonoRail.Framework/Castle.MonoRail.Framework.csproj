@@ -274,6 +274,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\AjaxHelper2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\DateFormatHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -103,8 +103,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			//TODO: There needs to be a more efficient way to do this than two replace operations
 			String physicalPath = Path.Combine(ViewRootDir, viewName).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
 
-			Console.WriteLine(physicalPath);
-
 			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
 
