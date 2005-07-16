@@ -79,7 +79,6 @@ namespace NVelocity.Runtime.Parser
 			int[] newbufline = new int[bufsize + 2048];
 			int[] newbufcolumn = new int[bufsize + 2048];
 
-			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				if (wrapAround)
@@ -150,9 +149,6 @@ namespace NVelocity.Runtime.Parser
 			int i;
 			try
 			{
-				// NOTE:  java streams return -1 when done
-				// NOTE: java throws java.io.IOException when anything goes wrong - .Net will throw
-				// a System.ObjectDisposedException when the reader is closed
 				try
 				{
 					i = inputStream.Read(buffer, maxNextCharInd, available - maxNextCharInd);
@@ -240,8 +236,8 @@ namespace NVelocity.Runtime.Parser
 				--inBuf;
 
 				/*
-		*  was : return (char)((char)0xff & buffer[(bufpos == bufsize - 1) ? (bufpos = 0) : ++bufpos]);
-		*/
+				*  was : return (char)((char)0xff & buffer[(bufpos == bufsize - 1) ? (bufpos = 0) : ++bufpos]);
+				*/
 				return buffer[(bufpos == bufsize - 1) ? (bufpos = 0) : ++bufpos];
 			}
 
@@ -249,24 +245,14 @@ namespace NVelocity.Runtime.Parser
 				FillBuff();
 
 			/*
-	    *  was : char c = (char)((char)0xff & buffer[bufpos]);
-	    */
+			*  was : char c = (char)((char)0xff & buffer[bufpos]);
+			*/
 			char c = buffer[bufpos];
 
 			UpdateLineColumn(c);
 			return (c);
 		}
 
-		/// <deprecated>
-		/// </deprecated>
-		/// <seealso cref=" #getEndColumn
-		///
-		/// "/>
-		/// <deprecated>
-		/// </deprecated>
-		/// <seealso cref=" #getEndLine
-		///
-		/// "/>
 		public void backup(int amount)
 		{
 			inBuf += amount;
@@ -313,19 +299,6 @@ namespace NVelocity.Runtime.Parser
 			ReInit(dstream, startline, startcolumn, 4096);
 		}
 
-		// TODO - I am still not sure what place regular Streams will play - so I will just stick with Text* streams
-		//	public VelocityCharStream(System.IO.Stream dstream, int startline, int startcolumn, int buffersize):this(new System.IO.TextReader(dstream), startline, startcolumn, 4096) {
-		//	}
-		//
-		//	public VelocityCharStream(System.IO.Stream dstream, int startline, int startcolumn):this(dstream, startline, startcolumn, 4096) {
-		//	}
-		//
-		//	public void  ReInit(System.IO.Stream dstream, int startline, int startcolumn, int buffersize) {
-		//	    ReInit(new System.IO.TextReader(dstream), startline, startcolumn, 4096);
-		//	}
-		//	public void  ReInit(System.IO.Stream dstream, int startline, int startcolumn) {
-		//	    ReInit(dstream, startline, startcolumn, 4096);
-		//	}
 		public String GetImage()
 		{
 			if (bufpos >= tokenBegin)
