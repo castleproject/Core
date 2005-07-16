@@ -24,10 +24,7 @@ namespace TestSiteNVelocity.Controllers
 	{
 		private AjaxHelper Helper
 		{
-			get
-			{
-				return (AjaxHelper) Helpers["AjaxHelper"];
-			}
+			get { return (AjaxHelper) Helpers["AjaxHelper"]; }
 		}
 
 		public AjaxController()
@@ -36,33 +33,33 @@ namespace TestSiteNVelocity.Controllers
 
 		public void JsFunctions()
 		{
-			RenderText( Helper.GetJavascriptFunctions() );
+			RenderText(Helper.GetJavascriptFunctions());
 		}
 
 		public void LinkToFunction()
 		{
-			RenderText( Helper.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')") );
+			RenderText(Helper.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')"));
 		}
 
 		public void LinkToRemote()
 		{
 			Hashtable options = new Hashtable();
-			RenderText( Helper.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options) );
+			RenderText(Helper.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options));
 		}
 
 		public void BuildFormRemoteTag()
 		{
-			RenderText( Helper.BuildFormRemoteTag("url", null, null) );
+			RenderText(Helper.BuildFormRemoteTag("url", null, null));
 		}
 
 		public void ObserveField()
 		{
-			RenderText( Helper.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent") );
+			RenderText(Helper.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
 		}
 
 		public void ObserveForm()
 		{
-			RenderText( Helper.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent") );
+			RenderText(Helper.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
 		}
 
 		public void Index()
@@ -72,17 +69,8 @@ namespace TestSiteNVelocity.Controllers
 			PropertyBag.Add("users", list);
 		}
 
-		/// <summary>
-		/// Auto completion action
-		/// </summary>
-		public void AutoCom()
-		{
-			
-		}
-
 		public void PeriodInvocation()
 		{
-			
 		}
 
 		public void PeriodInvokeTarget()
@@ -91,16 +79,23 @@ namespace TestSiteNVelocity.Controllers
 		}
 
 		/// <summary>
+		/// Auto completion action
+		/// </summary>
+		public void AutoCom()
+		{
+		}
+
+		/// <summary>
 		/// Auto completion results
 		/// </summary>
 		public void NameAutoCompletion(String name)
 		{
-			RenderText( "<ul class=\"names\"><li class=\"name\">Jisheng Johnny</li><li class=\"name\">John Diana</li><li class=\"name\">Johnathan Maurice</li></ul>" );
+			RenderText("<ul class=\"names\"><li class=\"name\">Jisheng Johnny</li><li class=\"name\">John Diana</li><li class=\"name\">Johnathan Maurice</li></ul>");
 		}
 
 		public void AddUserWithAjax(String name, String email)
 		{
-			GetList().Add( new User(name, email) );
+			GetList().Add(new User(name, email));
 
 			Index();
 
@@ -136,17 +131,17 @@ namespace TestSiteNVelocity.Controllers
 		private IList GetList()
 		{
 			IList list = Context.Session["list"] as IList;
-			
+
 			if (list == null)
 			{
 				list = new ArrayList();
 
-				list.Add( new User("somefakeuser", "fakeemail@server.net") );
-				list.Add( new User("someotherfakeuser", "otheremail@server.net") );
+				list.Add(new User("somefakeuser", "fakeemail@server.net"));
+				list.Add(new User("someotherfakeuser", "otheremail@server.net"));
 
 				Context.Session["list"] = list;
 			}
-			
+
 			return list;
 		}
 	}
