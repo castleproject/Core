@@ -51,6 +51,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// <param name="viewName"></param>
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
+			AdjustContentType(context);
+
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
 
 			//TODO: document this hack for the sake of our users
@@ -81,12 +83,12 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessPage(controller, childPage, httpContext);
 
 			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);
-
-			AdjustContentType(context);
 		}
 
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
+			AdjustContentType(context);
+
 			HttpContext httpContext = (context.UnderlyingContext as HttpContext);
 
 			Page masterHandler = ObtainMasterPage(httpContext, controller);
@@ -94,8 +96,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			httpContext.Items.Add("rails.contents", contents);
 
 			ProcessPage(controller, masterHandler, httpContext);
-
-			AdjustContentType(context);
 		}
 
 		#endregion
