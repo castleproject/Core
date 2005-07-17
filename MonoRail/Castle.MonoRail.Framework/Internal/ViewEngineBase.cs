@@ -21,15 +21,13 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class ViewEngineBase : IViewEngine
 	{
+		/// <summary>
+		/// Stores the root directory of views, obtained from the configuration.
+		/// </summary>
 		private string _viewRootDir;
 
-		public ViewEngineBase()
-		{
-		}
-
 		/// <summary>
-		/// The root directory of views, obtained
-		/// from the configuration.
+		/// Gets/sets the root directory of views, obtained from the configuration.
 		/// </summary>
 		public String ViewRootDir
 		{
@@ -38,25 +36,25 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Initializes the View Engine.
+		/// Initializes the view engine.
 		/// </summary>
 		public abstract void Init();
 
 		/// <summary>
-		/// Implementors should check if the specified
-		/// template exists
+		/// Evaluates whether the specified template exists.
 		/// </summary>
-		/// <param name="templateName"></param>
 		/// <returns><c>true</c> if it exists</returns>
 		public abstract bool HasTemplate(String templateName);
 
 		/// <summary>
-		/// Implementors should process the view (using the templateName to
-		/// obtain the correct template) and use the context to output
-		/// the result.
+		/// Processes the view - using the templateName to obtain the correct template,
+		/// and using the context to output the result.
 		/// </summary>
 		public abstract void Process(IRailsEngineContext context, Controller controller, String templateName);
 
+		/// <summary>
+		/// Wraps the specified content in the layout using the context to output the result.
+		/// </summary>
 		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 	}
 }

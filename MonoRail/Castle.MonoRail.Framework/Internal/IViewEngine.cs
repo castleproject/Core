@@ -23,40 +23,30 @@ namespace Castle.MonoRail.Framework
 	public interface IViewEngine
 	{
 		/// <summary>
-		/// Initializes the View Engine.
+		/// Initializes the view engine.
 		/// </summary>
 		void Init();
 
 		/// <summary>
-		/// The root directory of views, obtained
-		/// from the configuration.
+		/// Gets/sets the root directory of views, obtained from the configuration.
 		/// </summary>
 		String ViewRootDir { get; set; }
 		
 		/// <summary>
-		/// Implementors should check if the specified
-		/// template exists
+		/// Evaluates whether the specified template exists.
 		/// </summary>
-		/// <param name="templateName"></param>
 		/// <returns><c>true</c> if it exists</returns>
 		bool HasTemplate(String templateName);
 
 		/// <summary>
-		/// Implementors should process the view (using the templateName to
-		/// obtain the correct template) and use the context to output
-		/// the result.
+		/// Processes the view - using the templateName to obtain the correct template,
+		/// and using the context to output the result.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="controller"></param>
-		/// <param name="templateName"></param>
 		void Process(IRailsEngineContext context, Controller controller, String templateName);
 
 		/// <summary>
-		/// 
+		/// Wraps the specified content in the layout using the context to output the result.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="controller"></param>
-		/// <param name="contents"></param>
 		void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 	}
 }
