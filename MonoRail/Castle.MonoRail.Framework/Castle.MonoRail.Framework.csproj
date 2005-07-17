@@ -453,6 +453,11 @@
                     SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "Views\Xslt\XsltViewEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>
