@@ -467,7 +467,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 				if (options.Contains("update"))
 				{
-					contents.AppendFormat( "'{0}'", options["update"] );
+					contents.AppendFormat( "'{0}', ", options["update"] );
 				}
 				else
 				{
@@ -486,7 +486,7 @@ namespace Castle.MonoRail.Framework.Helpers
 						contents.AppendFormat( "failure:'{0}'", options["failure"] );
 					}
 
-					contents.Append("}");
+					contents.Append("}, ");
 				}
 			}
 
