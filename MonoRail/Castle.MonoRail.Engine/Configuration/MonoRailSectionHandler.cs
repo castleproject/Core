@@ -131,13 +131,13 @@ namespace Castle.MonoRail.Engine.Configuration
 		private void ProcessViewNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute viewPath = node.Attributes[View_Path_Root];
-	
+			
 			if (viewPath == null)
 			{
 				throw new ConfigurationException("The views node must specify the '" + View_Path_Root + 
 					"' attribute");
 			}
-	
+
 			String path = viewPath.Value;
 
 			if (!Path.IsPathRooted(path))
@@ -147,9 +147,26 @@ namespace Castle.MonoRail.Engine.Configuration
 
 			config.ViewsPhysicalPath = path;
 			config.ViewsVirtualPath = viewPath.Value;
-	
-			XmlAttribute customEngine = node.Attributes["customEngine"];
-	
+
+			XmlAttribute xhtmlRendering = node.Attributes["xhtmlRendering"];
+			if (xhtmlRendering != null)
+			{
+				try
+				{
+					config.ViewsXhtmlRendering = bool.Parse(xhtmlRendering.Value);
+				}
+				catch (FormatException ex)
+				{
+					config.ViewsXhtmlRendering = false;
+					throw new ConfigurationException("The xhtmlRendering attribute of the views node must be a boolean value.", ex);
+				}
+			}
+			else
+			{
+				config.ViewsXhtmlRendering = false;
+			}
+
+			XmlAttribute customEngine = node.Attributes["customEngine"];	
 			if (customEngine != null)
 			{
 				config.CustomEngineTypeName = customEngine.Value;

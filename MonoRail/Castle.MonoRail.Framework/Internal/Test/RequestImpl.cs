@@ -23,6 +23,7 @@ namespace Castle.MonoRail.Framework.Tests
 		internal NameValueCollection _params = new NameValueCollection();
 		internal NameValueCollection _query = new NameValueCollection();
 		internal NameValueCollection _form = new NameValueCollection();
+		internal NameValueCollection _headers = new NameValueCollection();
 
 		public RequestImpl()
 		{
@@ -32,7 +33,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 		public NameValueCollection Headers
 		{
-			get { throw new NotImplementedException(); }
+			get { return _headers; }
 		}
 
 		public bool IsLocal

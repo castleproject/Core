@@ -30,6 +30,7 @@ namespace Castle.MonoRail.Engine.Configuration
 		private IList _routingRules = new ArrayList();
 		private String _viewsPhysicalPath;
 		private String _viewsVirtualPath;
+		private bool _viewsXhtmlRendering;
 		private String _customControllerFactory;
 		private String _customFilterFactory;
 		private String _customResourceFactory;
@@ -60,6 +61,12 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get { return _viewsVirtualPath; }
 			set { _viewsVirtualPath = value; }
+		}
+
+		public bool ViewsXhtmlRendering
+		{
+			get { return _viewsXhtmlRendering; }
+			set { _viewsXhtmlRendering = value; }
 		}
 
 		public String CustomControllerFactory

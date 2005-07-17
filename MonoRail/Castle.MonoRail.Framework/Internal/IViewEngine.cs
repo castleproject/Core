@@ -31,6 +31,11 @@ namespace Castle.MonoRail.Framework
 		/// Gets/sets the root directory of views, obtained from the configuration.
 		/// </summary>
 		String ViewRootDir { get; set; }
+
+		/// <summary>
+		/// Gets/sets whether rendering should aim to be XHTML compliant, obtained from the configuration.
+		/// </summary>
+		bool XhtmlRendering { get; set; }
 		
 		/// <summary>
 		/// Evaluates whether the specified template exists.

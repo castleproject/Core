@@ -80,6 +80,7 @@ namespace Castle.MonoRail.Engine
 			}
 
 			_viewEngine.ViewRootDir = _config.ViewsPhysicalPath;
+			_viewEngine.XhtmlRendering = _config.ViewsXhtmlRendering;
 
 			_viewEngine.Init();
 		}

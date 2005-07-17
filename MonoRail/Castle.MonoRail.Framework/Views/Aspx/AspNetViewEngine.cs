@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			HttpContext httpContext = context.UnderlyingContext as HttpContext;
 
-			// To Do: document this hack for the sake of our users
+			//TODO: document this hack for the sake of our users
 			if (httpContext != null)
 			{
 				if (!httpContext.Items.Contains(ProcessedBeforeKey))
@@ -80,7 +80,9 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			ProcessPage(controller, childPage, httpContext);
 
-			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);		
+			ProcessLayoutIfNeeded(controller, httpContext, childPage, masterHandler);
+
+			AdjustContentType(context);
 		}
 
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
@@ -92,6 +94,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			httpContext.Items.Add("rails.contents", contents);
 
 			ProcessPage(controller, masterHandler, httpContext);
+
+			AdjustContentType(context);
 		}
 
 		#endregion

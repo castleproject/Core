@@ -32,9 +32,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// Creates a new <see cref="NVelocityViewEngine"/> instance.
 		/// </summary>
 		public NVelocityViewEngine()
-		{
-			
-		}
+		{}
 
 		#region IViewEngine Members
 
@@ -62,7 +60,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
-			AdjustContentType(ctx, context, controller);
+			AdjustContentType(context);
 
 			Template template = null;
 
@@ -112,7 +110,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			IContext ctx = CreateContext(context, controller);
-			AdjustContentType(ctx, context, controller);
+			AdjustContentType(context);
 
 			bool hasLayout = controller.LayoutName != null;
 
@@ -179,13 +177,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					throw new RailsException("Could not obtain layout");
 				}
 			}
-		}
-
-		private void AdjustContentType(IContext ctx, IRailsEngineContext context, Controller controller)
-		{
-			//TODO: Allow users to turn on XHTML support, then send the correct mime type here
-			//		Tatham has a method that does the mime type negotiation already
-			context.Response.ContentType = "text/html";
 		}
 
 		private IContext CreateContext(IRailsEngineContext context, Controller controller)

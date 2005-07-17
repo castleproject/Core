@@ -15,14 +15,15 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
+	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
 	
 	public class ResponseImpl : IResponse
 	{
-		private String _contentType;
 		private int _statusCode;
 		private StringWriter _writer;
+		private NameValueCollection _headers = new NameValueCollection();
 		
 		internal StringBuilder _contents = new StringBuilder();
 
@@ -41,13 +42,30 @@ namespace Castle.MonoRail.Framework.Tests
 
 		public String ContentType
 		{
-			get { return _contentType; }
-			set { _contentType = value; }
+			get
+			{
+				if (_headers.GetValues("Content-Type").Length == 1)
+				{
+					return _headers.GetValues("Content-Type")[0];
+				}
+				else
+				{
+					return "text/html";
+				}
+			}
+			set 
+			{
+				if (_headers.GetValues("Content-Type") != null && _headers.GetValues("Content-Type").Length != 0)
+				{
+					_headers.Remove("Content-Type");
+				}
+				_headers.Add("Content-Type", value);
+			}
 		}
 
 		public void AppendHeader(String name, String value)
 		{
-			throw new NotImplementedException();
+			_headers.Add(name, value);
 		}
 
 		public System.IO.TextWriter Output

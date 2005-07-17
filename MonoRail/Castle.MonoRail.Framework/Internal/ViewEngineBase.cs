@@ -21,10 +21,8 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class ViewEngineBase : IViewEngine
 	{
-		/// <summary>
-		/// Stores the root directory of views, obtained from the configuration.
-		/// </summary>
 		private string _viewRootDir;
+		private bool _xhtmlRendering;
 
 		/// <summary>
 		/// Gets/sets the root directory of views, obtained from the configuration.
@@ -33,6 +31,15 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return _viewRootDir; }
 			set { _viewRootDir = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets whether rendering should aim to be XHTML compliant, obtained from the configuration.
+		/// </summary>
+		public bool XhtmlRendering
+		{
+			get { return _xhtmlRendering; }
+			set { _xhtmlRendering = value; }
 		}
 
 		/// <summary>
@@ -56,5 +63,46 @@ namespace Castle.MonoRail.Framework
 		/// Wraps the specified content in the layout using the context to output the result.
 		/// </summary>
 		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
+
+		#region | Render Helpers 
+
+		/// <summary>
+		/// Sets the HTTP Content-Type header appropriately.
+		/// </summary>
+		protected virtual void AdjustContentType(IRailsEngineContext context)
+		{
+			if (XhtmlRendering)
+			{
+				//Find out what they'll accept
+				string httpAccept = context.Request.Headers["Accept"];
+
+				//TODO: Evaluate the q-values of the Accept header
+
+				//Do they accept application/xhtml+xml?
+				if(httpAccept != null && httpAccept.IndexOf("application/xhtml+xml") != -1)
+				{
+					//Send them the proper content type
+					context.Response.ContentType = "application/xhtml+xml";
+
+					//TODO: Add the xml prolog for browsers that support it
+					//response.Write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+				}
+				else
+				{
+					//Fall back to text/html for older folk
+					context.Response.ContentType = "text/html";
+				}
+
+				//Fix up the proxy
+				context.Response.AppendHeader("Vary", "Accept");
+			}
+			else
+			{
+				//Just use HTML
+				context.Response.ContentType = "text/html";
+			}
+		}
+
+		#endregion
 	}
 }

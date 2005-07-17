@@ -57,6 +57,8 @@ namespace Castle.MonoRail.Framework.Tests
 			}
 
 			context.Response.Write(contents);
+
+			AdjustContentType(context);
 		}
 
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
