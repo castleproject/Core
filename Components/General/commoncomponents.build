@@ -13,13 +13,17 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="init, templateengine" />
+	<target name="build" depends="init, templateengine, emailsender" />
 	
 	<target name="init">
 	</target>
 	
 	<target name="templateengine">
 		<nant buildfile="TemplateEngine/default.build" inheritall="true" target="build" />
+	</target>
+
+	<target name="emailsender">
+		<nant buildfile="EmailSender/default.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="dist">
