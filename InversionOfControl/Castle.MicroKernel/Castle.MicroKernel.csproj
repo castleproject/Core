@@ -363,12 +363,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Resolvers\DefaultDependecyResolver.cs"
+                    RelPath = "Resolvers\DefaultDependencyResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Resolvers\DependecyResolverException.cs"
+                    RelPath = "Resolvers\DependencyResolverException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

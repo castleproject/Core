@@ -111,7 +111,7 @@ namespace Castle.Windsor.Installer
 			{
 				return (IFacility) Activator.CreateInstance(facilityType);
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				String message = String.Format("Could not instantiate {0}. Does it have a public default constructor?", facilityType.FullName);
 				throw new ConfigurationException(message);
