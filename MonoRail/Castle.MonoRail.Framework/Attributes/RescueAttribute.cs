@@ -45,4 +45,13 @@ namespace Castle.MonoRail.Framework
 			get { return _viewName; }
 		}
 	}
+
+	/// <summary>
+	/// Declares that for the specific method (action)
+	/// no rescue should be performed.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true), Serializable]
+	public class SkipRescueAttribute : Attribute
+	{
+	}
 }

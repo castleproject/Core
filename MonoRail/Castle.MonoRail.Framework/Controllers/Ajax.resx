@@ -272,6 +272,9 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
       this.setRequestHeaders();
 
       var body = this.options.postBody ? this.options.postBody : parameters;
+      
+      if (body == '') body = null;
+      
       this.transport.send(this.options.method == 'post' ? body : null);
 
     } catch (e) {

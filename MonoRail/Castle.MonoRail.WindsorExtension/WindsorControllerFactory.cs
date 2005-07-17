@@ -31,8 +31,6 @@ namespace Castle.MonoRail.WindsorExtension
 	/// </summary>
 	public class WindsorControllerFactory : IControllerFactory
 	{
-		#region IControllerFactory
-
 		public Controller GetController(UrlInfo urlInfo)
 		{
 			IWindsorContainer container = ContainerAccessorUtil.ObtainContainer();
@@ -67,7 +65,5 @@ namespace Castle.MonoRail.WindsorExtension
 		{
 			ContainerAccessorUtil.ObtainContainer().Release(controller);
 		}
-
-		#endregion
 	}
 }

@@ -542,7 +542,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 			else
 			{
-				jsOptions["evalScripts"] = true;
+				jsOptions["evalScripts"] = "true";
 			}
 
 			if (options.Contains("position"))

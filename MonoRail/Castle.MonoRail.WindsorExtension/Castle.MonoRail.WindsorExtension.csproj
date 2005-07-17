@@ -104,6 +104,11 @@
                     AssemblyName = "System.Data"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
+                />
             </References>
         </Build>
         <Files>

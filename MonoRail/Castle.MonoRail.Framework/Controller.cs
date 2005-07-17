@@ -15,15 +15,15 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.IO;
-	using System.Web;
-	using System.Threading;
-	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.IO;
+	using System.Web;
+	using System.Reflection;
+	using System.Threading;
 
-	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Helpers;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Implements the core functionality and exposes the
@@ -57,12 +57,12 @@ namespace Castle.MonoRail.Framework
 		/// Holds information to pass to the view
 		/// </summary>
 		private IDictionary _bag;
-		
+
 		/// <summary>
 		/// Holds the filters associated with the action
 		/// </summary>
 		private FilterDescriptor[] _filters;
-		
+
 		/// <summary>
 		/// Reference to the <see cref="IFilterFactory"/> instance
 		/// </summary>
@@ -315,7 +315,7 @@ namespace Castle.MonoRail.Framework
 
 			_directRenderInvoked = true;
 
-			_viewEngine.ProcessContents( _context, this, contents );
+			_viewEngine.ProcessContents(_context, this, contents);
 		}
 
 		/// <summary>
@@ -369,7 +369,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
 		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(String controller, String action, NameValueCollection parameters) 
+		public void Redirect(String controller, String action, NameValueCollection parameters)
 		{
 			CancelView();
 
@@ -377,32 +377,33 @@ namespace Castle.MonoRail.Framework
 
 			HttpServerUtility serverUtility = HttpContext.Server;
 
-			foreach(String key in parameters.Keys)
+			foreach (String key in parameters.Keys)
 			{
-				querystring += String.Format( "{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
-					serverUtility.HtmlEncode(key), 
-					serverUtility.HtmlEncode(parameters[key]) );
+				querystring += String.Format("{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
+				                             serverUtility.HtmlEncode(key),
+				                             serverUtility.HtmlEncode(parameters[key]));
 			}
 
 			String url = UrlInfo.GetRailsUrl(controller, action, Context.UrlInfo.Extension);
 
-			_context.Response.Redirect( String.Format("{0}?{1}", url, querystring) );
+			_context.Response.Redirect(String.Format("{0}?{1}", url, querystring));
 		}
 
-        /// <summary>
-        /// Redirects to another controller and action with the specified paramters.
-        /// </summary>
-        /// <param name="area">Area name</param>
+		/// <summary>
+		/// Redirects to another controller and action with the specified paramters.
+		/// </summary>
+		/// <param name="area">Area name</param>
 		/// <param name="controller">Controller name</param>
 		/// <param name="action">Action name</param>
 		/// <param name="parameters">Key/value pairings</param>
-		public void Redirect(String area, String controller, String action, NameValueCollection parameters) {
-            CancelView();
-            
-            _context.Params.Add(parameters);
+		public void Redirect(String area, String controller, String action, NameValueCollection parameters)
+		{
+			CancelView();
 
-            _context.Response.Redirect(area, controller, action);
-        }
+			_context.Params.Add(parameters);
+
+			_context.Response.Redirect(area, controller, action);
+		}
 
 		#endregion
 
@@ -446,8 +447,8 @@ namespace Castle.MonoRail.Framework
 		/// the controller process. 
 		/// </summary>
 		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
-		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine, 
-							IScaffoldingSupport scaffoldSupport)
+		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine,
+		                    IScaffoldingSupport scaffoldSupport)
 		{
 			_areaName = areaName;
 			_controllerName = controllerName;
@@ -457,28 +458,28 @@ namespace Castle.MonoRail.Framework
 			_resourceFactory = resourceFactory;
 			_scaffoldSupport = scaffoldSupport;
 
-			if (GetType().IsDefined(typeof (FilterAttribute), true))
+			if (GetType().IsDefined(typeof(FilterAttribute), true))
 			{
 				_filters = CollectFilterDescriptor();
 			}
 
-			if (GetType().IsDefined(typeof (LayoutAttribute), true))
+			if (GetType().IsDefined(typeof(LayoutAttribute), true))
 			{
 				LayoutName = ObtainDefaultLayoutName();
 			}
 
-			if (GetType().IsDefined(typeof (ScaffoldingAttribute), false))
+			if (GetType().IsDefined(typeof(ScaffoldingAttribute), false))
 			{
 				if (_scaffoldSupport == null)
 				{
-					String message = "You must enable scaffolding support on the " + 
-						"configuration file, or, to use the standard ActiveRecord support " + 
+					String message = "You must enable scaffolding support on the " +
+						"configuration file, or, to use the standard ActiveRecord support " +
 						"copy the necessary assemblies to the bin folder.";
 
 					throw new RailsException(message);
 				}
 
-				_scaffoldSupport.Process( this );
+				_scaffoldSupport.Process(this);
 			}
 
 			InternalSend(actionName);
@@ -507,13 +508,13 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">Action name</param>
 		protected virtual void InternalSend(String action)
 		{
-			//Recored the action
+			// Record the action
 			_evaluatedAction = action;
 
-			//Record the default view for this area/controller/action
+			// Record the default view for this area/controller/action
 			RenderView(action);
 
-			//If we have an HttpContext available, store the original view name
+			// If we have an HttpContext available, store the original view name
 			if (HttpContext.Current != null)
 			{
 				if (!HttpContext.Current.Items.Contains(OriginalViewKey))
@@ -522,14 +523,14 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
-			//Look for the target method
+			// Look for the target method
 			MethodInfo method = SelectMethod(action, _actions, _context.Request);
 
-			//If we couldn't find a method for this action, look for a dynamic action
+			// If we couldn't find a method for this action, look for a dynamic action
 			IDynamicAction dynAction = null;
 			if (method == null)
 			{
-				dynAction = CustomActions[ action ] as IDynamicAction;
+				dynAction = CustomActions[action] as IDynamicAction;
 
 				if (dynAction == null)
 				{
@@ -547,23 +548,23 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				//If we are supposed to run the filters...
+				// If we are supposed to run the filters...
 				if (!skipFilters)
 				{
-					//...run them. If they fail...
+					// ...run them. If they fail...
 					if (!ProcessFilters(ExecuteEnum.Before, filtersToSkip))
 					{
-						//Record that they failed.
+						// Record that they failed.
 						hasError = true;
 					}
 				}
 
-				//If we haven't failed anywhere yet...
+				// If we haven't failed anywhere yet...
 				if (!hasError)
 				{
 					CreateResources(method);
 
-					//Execute the method / dynamic action
+					// Execute the method / dynamic action
 					if (method != null)
 					{
 						InvokeMethod(method);
@@ -582,7 +583,7 @@ namespace Castle.MonoRail.Framework
 			{
 				hasError = true;
 
-				//Try and perform the rescue
+				// Try and perform the rescue
 				if (!PerformRescue(method, GetType(), ex))
 				{
 					//If the rescue fails, let the exception bubble
@@ -591,7 +592,7 @@ namespace Castle.MonoRail.Framework
 			}
 			finally
 			{
-				//Run the filters if required
+				// Run the filters if required
 				if (!skipFilters)
 				{
 					ProcessFilters(ExecuteEnum.After, filtersToSkip);
@@ -600,11 +601,12 @@ namespace Castle.MonoRail.Framework
 				DisposeFilter();
 			}
 
-			//If we haven't failed anywhere yet...
+			// If we haven't failed anywhere yet...
 			if (!hasError)
 			{
-				//Render the actual view then cleanup
+				// Render the actual view then cleanup
 				ProcessView();
+
 				ReleaseResources();
 			}
 		}
@@ -613,7 +615,7 @@ namespace Castle.MonoRail.Framework
 		{
 			_helpers = new HybridDictionary();
 
-			Attribute[] helpers = Attribute.GetCustomAttributes(this.GetType(), typeof (HelperAttribute));
+			Attribute[] helpers = Attribute.GetCustomAttributes(this.GetType(), typeof(HelperAttribute));
 
 			foreach (HelperAttribute helper in helpers)
 			{
@@ -629,14 +631,16 @@ namespace Castle.MonoRail.Framework
 				_helpers.Add(helper.HelperType.Name, helperInstance);
 			}
 
+			AbstractHelper[] builtInHelpers =
+				new AbstractHelper[]
+					{
+						new AjaxHelper(), new AjaxHelper2(),
+						new EffectsFatHelper(), new Effects2Helper(),
+						new DateFormatHelper(), new HtmlHelper(),
+						new ValidationHelper(), new DictHelper()
+					};
 
-			AbstractHelper[] builtInHelpers = 
-				new AbstractHelper[] {new AjaxHelper(), new AjaxHelper2(), 
-										new EffectsFatHelper(), new Effects2Helper(), 
-										new DateFormatHelper(), new HtmlHelper(), 
-										new ValidationHelper(), new DictHelper() };
-			
-			foreach(AbstractHelper helper in builtInHelpers)
+			foreach (AbstractHelper helper in builtInHelpers)
 			{
 				helper.SetController(this);
 
@@ -680,12 +684,12 @@ namespace Castle.MonoRail.Framework
 
 			Assembly typeAssembly = this.GetType().Assembly;
 
-			Attribute[] resources = Attribute.GetCustomAttributes(this.GetType(), typeof (AbstractResourceAttribute));
+			Attribute[] resources = Attribute.GetCustomAttributes(this.GetType(), typeof(AbstractResourceAttribute));
 
 			foreach (AbstractResourceAttribute resource in resources)
 				_resources.Add(resource.Name, _resourceFactory.Create(resource, typeAssembly));
 
-			resources = Attribute.GetCustomAttributes(method, typeof (AbstractResourceAttribute));
+			resources = Attribute.GetCustomAttributes(method, typeof(AbstractResourceAttribute));
 
 			foreach (AbstractResourceAttribute resource in resources)
 				_resources[resource.Name] = _resourceFactory.Create(resource, typeAssembly);
@@ -694,7 +698,9 @@ namespace Castle.MonoRail.Framework
 		protected virtual void ReleaseResources()
 		{
 			foreach (IResource resource in _resources.Values)
+			{
 				_resourceFactory.Release(resource);
+			}
 		}
 
 		#endregion
@@ -709,13 +715,13 @@ namespace Castle.MonoRail.Framework
 				return true;
 			}
 
-			if (!method.IsDefined(typeof (SkipFilterAttribute), true))
+			if (!method.IsDefined(typeof(SkipFilterAttribute), true))
 			{
 				// Nothing against filters declared for this action
 				return false;
 			}
 
-			object[] skipInfo = method.GetCustomAttributes(typeof (SkipFilterAttribute), true);
+			object[] skipInfo = method.GetCustomAttributes(typeof(SkipFilterAttribute), true);
 
 			foreach (SkipFilterAttribute skipfilter in skipInfo)
 			{
@@ -730,7 +736,7 @@ namespace Castle.MonoRail.Framework
 
 		protected internal FilterDescriptor[] CollectFilterDescriptor()
 		{
-			object[] attrs = GetType().GetCustomAttributes(typeof (FilterAttribute), true);
+			object[] attrs = GetType().GetCustomAttributes(typeof(FilterAttribute), true);
 			FilterDescriptor[] desc = new FilterDescriptor[attrs.Length];
 
 			for (int i = 0; i < attrs.Length; i++)
@@ -765,7 +771,7 @@ namespace Castle.MonoRail.Framework
 			{
 				desc.FilterInstance = _filterFactory.Create(desc.FilterType);
 
-				if (typeof (IFilterAttributeAware).IsInstanceOfType(desc.FilterInstance))
+				if (typeof(IFilterAttributeAware).IsInstanceOfType(desc.FilterInstance))
 					(desc.FilterInstance as IFilterAttributeAware).FilterAttribute = desc.Attribute;
 			}
 
@@ -791,7 +797,7 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual String ObtainDefaultLayoutName()
 		{
-			object[] attrs = GetType().GetCustomAttributes(typeof (LayoutAttribute), true);
+			object[] attrs = GetType().GetCustomAttributes(typeof(LayoutAttribute), true);
 
 			if (attrs.Length == 1)
 			{
@@ -825,17 +831,22 @@ namespace Castle.MonoRail.Framework
 				_context.LastException = ex;
 			}
 
+			if (method.IsDefined(typeof(SkipRescueAttribute), true))
+			{
+				return false;
+			}
+
 			RescueAttribute att = null;
 
-			if (method != null && method.IsDefined(typeof (RescueAttribute), true))
+			if (method != null && method.IsDefined(typeof(RescueAttribute), true))
 			{
 				att = method.GetCustomAttributes(
-					typeof (RescueAttribute), true)[0] as RescueAttribute;
+					typeof(RescueAttribute), true)[0] as RescueAttribute;
 			}
-			else if (controllerType.IsDefined(typeof (RescueAttribute), true))
+			else if (controllerType.IsDefined(typeof(RescueAttribute), true))
 			{
 				att = controllerType.GetCustomAttributes(
-					typeof (RescueAttribute), true)[0] as RescueAttribute;
+					typeof(RescueAttribute), true)[0] as RescueAttribute;
 			}
 
 			if (att != null)

@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "NVelocity"
-                    AssemblyName = "NVelocity"
-                    HintPath = "..\..\Components\General\TemplateEngine\bin\NVelocity.dll"
-                />
-                <Reference
                     Name = "Castle.Components.Common.TemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine"
                     HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.dll"
@@ -93,6 +88,11 @@
                     Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\lib\NVelocity.dll"
                 />
             </References>
         </Build>
