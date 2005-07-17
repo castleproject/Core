@@ -195,6 +195,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\IndexerClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\MySerializableClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

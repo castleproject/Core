@@ -333,7 +333,19 @@ namespace Castle.DynamicProxy.Test
 				typeof(ClassWithIndexer), new StandardInterceptor() );
 
 			Assert.IsTrue( proxy is ClassWithIndexer );
-			
+		}
+
+		[Test]
+		public void Indexer2()
+		{
+			IndexerInterface proxy = (IndexerInterface) 
+				_generator.CreateProxy( typeof(IndexerInterface), 
+					new StandardInterceptor(), new IndexerClass() );
+
+			Assert.IsNotNull( proxy );
+
+			string dummy = proxy["1"];
+			dummy = proxy[1];
 		}
 
 		[Test]
