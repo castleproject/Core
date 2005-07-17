@@ -15,8 +15,7 @@
 namespace Castle.MonoRail.Framework.Views.CompositeView
 {
 	using System;
-	using System.IO;
-
+	
 	using Castle.MonoRail.Framework.Views.Aspx;
 	using Castle.MonoRail.Framework.Views.NVelocity;
 
