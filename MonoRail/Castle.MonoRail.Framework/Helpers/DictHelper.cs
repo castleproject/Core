@@ -33,9 +33,13 @@ namespace Castle.MonoRail.Framework.Helpers
 				{
 					dict[arg] = "";
 				}
-				else
+				else if (parts.Length == 2)
 				{
 					dict[ parts[0] ] = parts[1];
+				}
+				else
+				{
+					dict[ parts[0] ] = String.Join("=", parts, 1, parts.Length - 1);
 				}
 			}
 

@@ -441,6 +441,11 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private String BuildRemoteFunction(String url, IDictionary options)
 		{
+			if (options == null)
+			{
+				options = new HybridDictionary();
+			}
+
 			options["url"] = url;
 
 			return RemoteFunction(options);

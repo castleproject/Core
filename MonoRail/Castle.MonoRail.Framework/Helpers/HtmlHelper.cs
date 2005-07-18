@@ -242,10 +242,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String InputText(String name, String value, int size, int maxlength, IDictionary attributes)
 		{
-			String attrs = GetAttributes(attributes);
-
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" {4}/>",
-			                     name, value, size, maxlength, attrs);
+			                     name, value, size, maxlength, GetAttributes(attributes));
 		}
 
 		public String InputText(String name, String value, String id)
@@ -263,6 +261,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String SubmitButton(String value)
 		{
 			return String.Format("<input type=\"submit\" value=\"{0}\" />", value);
+		}
+
+		public String SubmitButton(String value, IDictionary attributes)
+		{
+			return String.Format("<input type=\"submit\" value=\"{0}\" {1}/>", value, GetAttributes(attributes));
 		}
 
 		public String LinkTo(String name, String controller, String action)
