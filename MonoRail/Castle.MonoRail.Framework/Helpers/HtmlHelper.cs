@@ -314,18 +314,31 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty)
 		{
-			return CreateOptionsFromArray(elems, textProperty, valueProperty, null);
+			return CreateOptions(elems, textProperty, valueProperty);
 		}
 
-		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty, object selected)
+		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty, object selectedValue)
+		{
+			return CreateOptions(elems, textProperty, valueProperty, selectedValue);
+		}
+
+		public String CreateOptions(ICollection elems, String textProperty, String valueProperty)
+		{
+			return CreateOptions(elems, textProperty, valueProperty, null);
+		}
+
+		public String CreateOptions(ICollection elems, String textProperty, String valueProperty, object selectedValue)
 		{
 			if (elems == null) throw new ArgumentNullException("elems");
 			if (textProperty == null) throw new ArgumentNullException("textProperty");
 
-			if (elems.GetLength(0) == 0) return String.Empty;
+			if (elems.Count == 0) return String.Empty;
 
-			MethodInfo valueMethodInfo = GetMethod(elems.GetValue(0), valueProperty);
-			MethodInfo textMethodInfo = GetMethod(elems.GetValue(0), textProperty);
+			IEnumerator enumerator = elems.GetEnumerator(); enumerator.MoveNext(); 
+			object guidanceElem = enumerator.Current;
+
+			MethodInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
+			MethodInfo textMethodInfo = GetMethod(guidanceElem, textProperty);
 
 			if (textMethodInfo == null)
 			{
@@ -346,12 +359,12 @@ namespace Castle.MonoRail.Framework.Helpers
 				if (value != null)
 				{
 					sb.AppendFormat("\t<option {0} value=\"{1}\">{2}</option>\r\n",
-					                value.Equals(selected) ? "selected" : "", value, text);
+					                value.Equals(selectedValue) ? "selected" : "", value, text);
 				}
 				else
 				{
 					sb.AppendFormat("\t<option {0}>{1}</option>\r\n",
-					                text.Equals(selected) ? "selected" : "", text);
+					                text.Equals(selectedValue) ? "selected" : "", text);
 				}
 			}
 
