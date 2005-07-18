@@ -13,14 +13,14 @@ namespace ${basename}
 	{
 		protected Server server;
 
-		[SetUp]
+		[TestFixtureSetUp]
 		public void Init()
 		{
 			server = new Server(ObtainPort(), ObtainVirtualDir(), ObtainPhysicalDir());
 			server.Start();
 		}
 
-		[TearDown]
+		[TestFixtureTearDown]
 		public void Terminate()
 		{
 			server.Stop();

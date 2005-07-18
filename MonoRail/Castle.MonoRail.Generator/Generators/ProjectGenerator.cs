@@ -225,8 +225,6 @@ namespace Castle.MonoRail.Generator.Generators
 			if (isNVelocity)
 			{
 				CopyFileToLib(sourcedir, "Castle.MonoRail.Framework.Views.NVelocity.dll");
-				CopyFileToLib(sourcedir, "Commons.dll");
-				CopyFileToLib(sourcedir, "log4net.dll");
 				CopyFileToLib(sourcedir, "NVelocity.dll");
 			}
 
