@@ -130,6 +130,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Test\StringInterpolationTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Test\TemplateTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

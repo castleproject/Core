@@ -142,35 +142,68 @@ namespace NVelocity.Runtime.Parser.Node
 
 			MethodInfo method = null;
 			PropertyInfo property = null;
+			bool preparedAlready = false;
 
 			try
 			{
 				/*
-		*   check the cache 
-		*/
+				*   check the cache 
+				*/
 
 				IntrospectionCacheData icd = context.ICacheGet(this);
 				Type c = o.GetType();
 
 				/*
-		*  like ASTIdentifier, if we have cache information, and the
-		*  Class of Object o is the same as that in the cache, we are
-		*  safe.
-		*/
+				*  like ASTIdentifier, if we have cache information, and the
+				*  Class of Object o is the same as that in the cache, we are
+				*  safe.
+				*/
 
 				if (icd != null && icd.contextData == c)
 				{
-					/*
-		    * sadly, we do need recalc the values of the args, as this can 
-		    * change from visit to visit
-		    */
+					// We blindly assume that if there's an array, 
+					// we're dealing with a "params array[] args" and 
+					// if so, we create an array with an appropriate size
+
+					int arrayArg = int.MaxValue;
 
 					for (int j = 0; j < paramCount; j++)
-						params_Renamed[j] = jjtGetChild(j + 1).Value(context);
+					{
+						if (params_Renamed[j] != null && params_Renamed[j].GetType().IsArray)
+						{
+							Array array = Array.CreateInstance( 
+								params_Renamed[j].GetType().GetElementType(), paramCount - j );
+							
+							params_Renamed[j] = array;
+							
+							arrayArg = j; break;
+						}
+					}
 
 					/*
-		    * and get the method from the cache
-		    */
+					* sadly, we do need recalc the values of the args, as this can 
+					* change from visit to visit
+					*/
+
+					for (int j = 0; j < paramCount; j++)
+					{
+						if (j >= arrayArg)
+						{
+							Array array = (Array) params_Renamed[arrayArg];
+							
+							array.SetValue( jjtGetChild(j + 1).Value(context), j - arrayArg );
+						}
+						else
+						{
+							params_Renamed[j] = jjtGetChild(j + 1).Value(context);
+						}
+					}
+
+					preparedAlready = true;
+
+					/*
+					* and get the method from the cache
+					*/
 					if (icd.thingy is MethodInfo)
 					{
 						method = (MethodInfo) icd.thingy;
@@ -184,11 +217,12 @@ namespace NVelocity.Runtime.Parser.Node
 				else
 				{
 					/*
-		    *  otherwise, do the introspection, and then
-		    *  cache it
-		    */
+					*  otherwise, do the introspection, and then
+					*  cache it
+					*/
 
 					Object obj = doIntrospection(context, c);
+
 					if (obj is MethodInfo)
 					{
 						method = (MethodInfo) obj;
@@ -250,45 +284,49 @@ namespace NVelocity.Runtime.Parser.Node
 		*/
 
 				Object obj = null;
+
 				if (method != null)
 				{
-					ParameterInfo[] methodArgs = method.GetParameters();
-
-					int indexOfParamArray = -1;
-
-					for (int i = 0; i < methodArgs.Length; ++i)
+					if (!preparedAlready)
 					{
-						ParameterInfo paramInfo = methodArgs[i];
+						ParameterInfo[] methodArgs = method.GetParameters();
 
-						if (paramInfo.IsDefined( typeof(ParamArrayAttribute), false ))
+						int indexOfParamArray = -1;
+
+						for (int i = 0; i < methodArgs.Length; ++i)
 						{
-							indexOfParamArray = i; break;
-						}
-					}
+							ParameterInfo paramInfo = methodArgs[i];
 
-					if (indexOfParamArray != -1)
-					{
-						Type arrayParamType = methodArgs[indexOfParamArray].ParameterType;
-
-						object[] newParams = new object[ methodArgs.Length ];
-
-						Array.Copy( params_Renamed, newParams, methodArgs.Length - 1 );
-
-						if (params_Renamed.Length < (indexOfParamArray + 1))
-						{
-							newParams[indexOfParamArray] = Array.CreateInstance( 
-								arrayParamType.GetElementType(), 0 );
-						}
-						else
-						{
-							Array args = Array.CreateInstance( arrayParamType.GetElementType(), (params_Renamed.Length + 1) - newParams.Length );
-
-							Array.Copy( params_Renamed, methodArgs.Length - 1, args, 0, args.Length );
-
-							newParams[indexOfParamArray] = args;
+							if (paramInfo.IsDefined( typeof(ParamArrayAttribute), false ))
+							{
+								indexOfParamArray = i; break;
+							}
 						}
 
-						params_Renamed = newParams;
+						if (indexOfParamArray != -1)
+						{
+							Type arrayParamType = methodArgs[indexOfParamArray].ParameterType;
+
+							object[] newParams = new object[ methodArgs.Length ];
+
+							Array.Copy( params_Renamed, newParams, methodArgs.Length - 1 );
+
+							if (params_Renamed.Length < (indexOfParamArray + 1))
+							{
+								newParams[indexOfParamArray] = Array.CreateInstance( 
+									arrayParamType.GetElementType(), 0 );
+							}
+							else
+							{
+								Array args = Array.CreateInstance( arrayParamType.GetElementType(), (params_Renamed.Length + 1) - newParams.Length );
+
+								Array.Copy( params_Renamed, methodArgs.Length - 1, args, 0, args.Length );
+
+								newParams[indexOfParamArray] = args;
+							}
+
+							params_Renamed = newParams;
+						}
 					}
 
 					obj = method.Invoke(o, params_Renamed);

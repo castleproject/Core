@@ -100,6 +100,132 @@ namespace NVelocity.Test
 		}
 
 		[Test]
+		public void ParamArraySupportMultipleCalls()
+		{
+			VelocityContext c = new VelocityContext();
+			c.Put("x", new Something() );
+			
+			StringWriter sw = new StringWriter();
+
+			VelocityEngine ve = new VelocityEngine();
+			ve.Init();
+
+			Boolean ok = false;
+
+			ok = ve.Evaluate(c, sw, 
+				"ContextTest.CaseInsensitive", 
+				"$x.Contents( \"x\", \"y\" )\r\n$x.Contents( \"w\", \"z\" )\r\n$x.Contents( \"j\", \"f\", \"a\" )");
+
+			Assertion.Assert("Evalutation returned failure", ok);
+			Assertion.AssertEquals("x,y\r\nw,z\r\nj,f,a", sw.ToString());			
+
+			sw = new StringWriter();
+
+			ok = ve.Evaluate(c, sw, 
+				"ContextTest.CaseInsensitive", 
+				"$x.Contents( \"x\", \"y\" )\r\n$x.Contents( \"w\", \"z\" )\r\n$x.Contents( \"j\", \"f\", \"a\" )");
+
+			Assertion.Assert("Evalutation returned failure", ok);
+			Assertion.AssertEquals("x,y\r\nw,z\r\nj,f,a", sw.ToString());			
+		}
+
+		[Test]
+		public void ParamArraySupportAndForEach()
+		{
+			ArrayList items = new ArrayList();
+
+			items.Add("a");
+			items.Add("b");
+			items.Add("c");
+			items.Add("d");
+
+			VelocityContext c = new VelocityContext();
+			c.Put("x", new Something() );
+			c.Put("items", items );
+			
+			StringWriter sw = new StringWriter();
+
+			VelocityEngine ve = new VelocityEngine();
+			ve.Init();
+
+			Boolean ok = false;
+
+			ok = ve.Evaluate(c, sw, 
+				"ContextTest.CaseInsensitive", 
+				"#foreach( $item in $items )\r\n$x.Contents( \"x\", \"y\" )\r\n#end\r\n");
+
+			Assertion.Assert("Evalutation returned failure", ok);
+			Assertion.AssertEquals("x,y\r\nx,y\r\nx,y\r\nx,y\r\n", sw.ToString());			
+		}
+
+		[Test]
+		public void ParamArraySupportAndForEach2()
+		{
+			ArrayList items = new ArrayList();
+
+			items.Add("a");
+			items.Add("b");
+			items.Add("c");
+
+			VelocityContext c = new VelocityContext();
+			c.Put("x", new Something() );
+			c.Put("items", items );
+			
+			StringWriter sw = new StringWriter();
+
+			VelocityEngine ve = new VelocityEngine();
+			ve.Init();
+
+			Boolean ok = false;
+
+			ok = ve.Evaluate(c, sw, 
+				"ContextTest.CaseInsensitive", 
+				"#foreach( $item in $items )\r\n" + 
+				"#if($item == \"a\")\r\n $x.Contents( \"x\", \"y\" )#end\r\n" + 
+				"#if($item == \"b\")\r\n $x.Contents( \"x\" )#end\r\n" + 
+				"#if($item == \"c\")\r\n $x.Contents( \"c\", \"d\", \"e\" )#end\r\n" + 
+				"#end\r\n");
+
+			Assertion.Assert("Evalutation returned failure", ok);
+			Assertion.AssertEquals(" x,y x c,d,e", sw.ToString());			
+		}
+
+		[Test]
+		public void ForEachSimpleCase()
+		{
+			ArrayList items = new ArrayList();
+
+			items.Add("a");
+			items.Add("b");
+			items.Add("c");
+
+			VelocityContext c = new VelocityContext();
+			c.Put("x", new Something2() );
+			c.Put("items", items );
+			c.Put("d1", new DateTime(2005, 7, 16) );
+			c.Put("d2", new DateTime(2005, 7, 17) );
+			c.Put("d3", new DateTime(2005, 7, 18) );
+			
+			StringWriter sw = new StringWriter();
+
+			VelocityEngine ve = new VelocityEngine();
+			ve.Init();
+
+			Boolean ok = false;
+
+			ok = ve.Evaluate(c, sw, 
+				"ContextTest.CaseInsensitive", 
+				"#foreach( $item in $items )\r\n" + 
+				"#if($item == \"a\")\r\n $x.FormatDate( $d1 )#end\r\n" + 
+				"#if($item == \"b\")\r\n $x.FormatDate( $d2 )#end\r\n" + 
+				"#if($item == \"c\")\r\n $x.FormatDate( $d3 )#end\r\n" + 
+				"#end\r\n");
+
+			Assertion.Assert("Evalutation returned failure", ok);
+			Assertion.AssertEquals(" 16 17 18", sw.ToString());			
+		}
+
+		[Test]
 		public void Hashtable1()
 		{
 			VelocityContext c = new VelocityContext();
@@ -183,6 +309,11 @@ namespace NVelocity.Test
 
 	public class Something2
 	{
+		public String FormatDate( DateTime dt )
+		{
+			return dt.Day.ToString();
+		}
+
 		public String Contents( String name, int age, params String[] args )
 		{
 			return name + age + String.Join( ",", args );
