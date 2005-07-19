@@ -29,7 +29,8 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 	using Commons.Collections;
 
 	/// <summary>
-	/// 
+	/// Implementation of <see cref="ITemplateEngine"/> 
+	/// that uses NVelocity
 	/// </summary>
 	public class NVelocityTemplateEngine : ITemplateEngine, ISupportInitialize
 	{
