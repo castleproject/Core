@@ -78,5 +78,36 @@ namespace Castle.MicroKernel.Tests.SubContainers
 			Assert.IsNotNull(spamservice.MailSender);
 			Assert.IsNotNull(spamservice.TemplateEngine);
 		}
+
+		[Test]
+		public void ChildKernelFindsAndCreateParentComponent()
+		{
+			IKernel subkernel = new DefaultKernel();
+
+			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
+
+			kernel.AddChildKernel(subkernel);
+
+
+			Assert.IsTrue(subkernel.HasComponent(typeof(DefaultTemplateEngine)));
+			Assert.IsNotNull(subkernel[typeof(DefaultTemplateEngine)]);
+
+		}
+
+		[Test]
+		[ExpectedException(typeof(ComponentNotFoundException))]
+		public void ParentKernelFindsAndCreateChildComponent()
+		{
+			IKernel subkernel = new DefaultKernel();
+
+			subkernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
+
+			kernel.AddChildKernel(subkernel);
+
+
+			Assert.IsFalse(kernel.HasComponent(typeof(DefaultTemplateEngine)));
+			object engine = kernel[typeof(DefaultTemplateEngine)];
+
+		}
 	}
 }

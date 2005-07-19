@@ -19,6 +19,12 @@ namespace Castle.MicroKernel
 	using Castle.Model;
 
 	/// <summary>
+	/// Represents a delegate which holds dependency
+	/// resolving information.
+	/// </summary>
+	public delegate void DependancyDelegate(ComponentModel client, DependencyModel model, ref Object dependency);
+
+	/// <summary>
 	/// Implementors should use a strategy to obtain 
 	/// valid references to properties and/or services 
 	/// requested in the dependency model.
@@ -44,5 +50,12 @@ namespace Castle.MicroKernel
 		/// <param name="dependency"></param>
 		/// <returns></returns>
 		bool CanResolve(ComponentModel model, DependencyModel dependency);
+
+		/// <summary>
+		/// Event fired when a dependency is being resolved,
+		/// it allows the dependency to be changed or replaced,
+		/// but the client ComponentModel must not be altered.
+		/// </summary>
+		event DependancyDelegate DependencyResolving;
 	}
 }
