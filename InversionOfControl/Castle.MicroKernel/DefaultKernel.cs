@@ -100,6 +100,17 @@ namespace Castle.MicroKernel
 
 		/// <summary>
 		/// Constructs a DefaultKernel with the specified
+		/// implementation of <see cref="IProxyFactory"/> and <see cref="IDependencyResolver"/>
+		/// </summary>
+		/// <param name="resolver"></param>
+		/// <param name="proxyFactory"></param>
+		public DefaultKernel(IDependencyResolver resolver, IProxyFactory proxyFactory) : this(proxyFactory)
+		{
+			_resolver = resolver;
+		}
+
+		/// <summary>
+		/// Constructs a DefaultKernel with the specified
 		/// implementation of <see cref="IProxyFactory"/>
 		/// </summary>
 		public DefaultKernel(IProxyFactory proxyFactory)
