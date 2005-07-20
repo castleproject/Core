@@ -15,7 +15,8 @@
 namespace Castle.Facilities.Logging
 {
 	using System;
-    using System.Text;
+	using System.Reflection;
+	using System.Text;
 
 	using Castle.Model;
 	using Castle.Model.Interceptor;
@@ -61,12 +62,15 @@ namespace Castle.Facilities.Logging
 
 	    private string ExtractLogInfo(IMethodInvocation invocation, object[] args)
 	    {
-	        StringBuilder loginfo = new StringBuilder();         
+	        StringBuilder loginfo = new StringBuilder();
+            ParameterInfo[] param = invocation.Method.GetParameters();
+
 	        loginfo.Append("Method Name: ");
 	        loginfo.Append(invocation.Method.Name);
+	        
 	        for (int i = 0; i < args.Length; i++)
 	        {
-	            loginfo.AppendFormat(", Parameter {0}: {1}", i, args[i]);   
+	            loginfo.AppendFormat(", Parameter {0}: {1}", param[i].Name, args[i]);   
 	        }
 
             return loginfo.ToString();
