@@ -189,6 +189,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\IntlName.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\LineItem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -225,6 +230,11 @@
                 />
                 <File
                     RelPath = "Model\SimpleModel3.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Snippet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

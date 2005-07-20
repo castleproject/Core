@@ -39,7 +39,6 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class HasAndBelongsToManyAttribute : RelationAttribute
 	{
-		private String _index;
 		private String _columnRef;	
 		private String _columnKey;
 
@@ -63,12 +62,6 @@ namespace Castle.ActiveRecord
 		{
 			get { return _columnKey; }
 			set { _columnKey = value; }
-		}
-
-		public String Index
-		{
-			get { return _index; }
-			set { _index = value; }
 		}
 	}
 }

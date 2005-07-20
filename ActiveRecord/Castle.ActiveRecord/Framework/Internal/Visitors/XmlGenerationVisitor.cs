@@ -256,7 +256,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name, 
 				att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
-				att.Where, att.Sort, att.ColumnKey, null, null);
+				att.Where, att.Sort, att.ColumnKey, null, null, att.Index, att.IndexType);
 		}
 
 		public override void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
@@ -265,7 +265,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name, 
 				att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
-				att.Where, att.Sort, att.ColumnKey, att.ColumnRef, model.CollectionID);
+				att.Where, att.Sort, att.ColumnKey, att.ColumnRef, model.CollectionID, 
+				att.Index, att.IndexType);
 		}
 
 		public override void VisitNested(NestedModel model)
@@ -306,7 +307,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private void WriteCollection(ManyRelationCascadeEnum cascadeEnum, Type targetType,
 			RelationType type, String name, 
 			String table, String schema, bool lazy, bool inverse, String orderBy, 
-			String where, String sort, String columnKey, String columnRef, CollectionIDModel collectionId)
+			String where, String sort, String columnKey, String columnRef, CollectionIDModel collectionId,
+			String index, String indexType)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 
@@ -356,10 +358,30 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				VisitNode( collectionId );
 			}
+			else if (type == RelationType.Map)
+			{
+				closingTag = "</map>";
+
+				AppendF("<map {0} {1} {2} {3} {4} {5} {6} {7} {8}>", 
+					MakeAtt("name", name),
+					WriteIfNonNull("table", table ), 
+					WriteIfNonNull("schema", schema ),
+					WriteIfTrue("lazy", lazy), 
+					WriteIfTrue("inverse", inverse), 
+					WriteIfNonNull("cascade", cascade), 
+					WriteIfNonNull("order-by", orderBy),
+					WriteIfNonNull("where", where), 
+					WriteIfNonNull("sort", sort));
+			}
 	
 			Ident();
 			
 			WriteKey(columnKey);
+
+			if (type == RelationType.Map)
+			{
+				WriteIndex(index, indexType);
+			}
 
 			if (columnRef == null)
 			{
@@ -462,6 +484,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private void WriteKey(String column)
 		{
 			AppendF("<key {0} />", MakeAtt("column", column));
+		}
+
+		private void WriteIndex(String column, String type)
+		{
+			AppendF("<index {0} {1} />", MakeAtt("column", column), WriteIfNonNull("type", type));
 		}
 
 		private void EnsureOnlyOneKey(ActiveRecordModel model)

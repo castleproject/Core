@@ -1,4 +1,9 @@
 
+- beta 2
+
+  Added support for map relations. Necessary to specify Index and IndexType on the HasMany (or HasAndBelongsToMany)
+
+
 - Version 0.0.1.5
 
   Inner workings fully rewritten, better test cases coverage

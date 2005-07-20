@@ -331,5 +331,18 @@ namespace Castle.ActiveRecord.Tests
 			Assert.IsNotNull( blogs );
 			Assert.AreEqual( 0, blogs.Length );
 		}
+
+		[Test]
+		[Ignore("Need to complete this test case!")]
+		public void RelationMap()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(IntlName), typeof(Snippet) );
+			Recreate();
+
+			IntlName n1 = new IntlName();
+			n1.AddSnippet( "pt-br", "bom dia" );
+			n1.AddSnippet( "en-us", "good morning" );
+			n1.Save();
+		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Castle.ActiveRecord
 		Bag,
 		Set,
 		IdBag,
-		// Map,
+		Map
 	}
 
 	[AttributeUsage(AttributeTargets.Property), Serializable]
@@ -35,6 +35,8 @@ namespace Castle.ActiveRecord
 		protected String _orderBy;
 		protected String _where;
 		protected String _sort;
+		protected String _index;
+		protected String _indexType;
 		protected bool _lazy;
 		protected bool _inverse;
 		protected ManyRelationCascadeEnum _cascade = ManyRelationCascadeEnum.None;
@@ -101,6 +103,24 @@ namespace Castle.ActiveRecord
 		{
 			get { return _sort; }
 			set { _sort = value; }
+		}
+
+		/// <summary>
+		/// Only used with maps
+		/// </summary>
+		public string Index
+		{
+			get { return _index; }
+			set { _index = value; }
+		}
+
+		/// <summary>
+		/// Only used with maps
+		/// </summary>
+		public string IndexType
+		{
+			get { return _indexType; }
+			set { _indexType = value; }
 		}
 	}
 }

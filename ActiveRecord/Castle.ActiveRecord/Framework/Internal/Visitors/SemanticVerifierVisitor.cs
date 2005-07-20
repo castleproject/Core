@@ -169,6 +169,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 					model.Property.DeclaringType.Name, model.Property.Name) );
 			}
 
+			if (model.HasManyAtt.RelationType == RelationType.Map && model.HasManyAtt.Index == null)
+			{
+				throw new ActiveRecordException( String.Format(
+					"A HasMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ", 
+					model.Property.DeclaringType.Name, model.Property.Name) );
+			}
+
 			// Infer table and column based on possible belongs to 
 			// on the target class
 
@@ -261,6 +268,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 					currentModel.Type.Name, model.Property.Name, otherend.Name) );
 			}
 
+			if (model.HasManyAtt.RelationType == RelationType.Map && model.HasManyAtt.Index == null)
+			{
+				throw new ActiveRecordException( String.Format(
+					"A HasAndBelongsToMany with type Map requires that you specify an 'Index', use the Index property {0}.{1}  ", 
+					model.Property.DeclaringType.Name, model.Property.Name) );
+			}
+
 			base.VisitHasAndBelongsToMany(model);
 		}
 
@@ -275,6 +289,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 				else if (property.PropertyType == typeof(ISet))
 				{
 					return RelationType.Set;
+				}
+				else if (property.PropertyType == typeof(IDictionary))
+				{
+					return RelationType.Map;
 				}
 				else
 				{
