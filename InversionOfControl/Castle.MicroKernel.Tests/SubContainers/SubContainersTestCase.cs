@@ -107,7 +107,6 @@ namespace Castle.MicroKernel.Tests.SubContainers
 
 			Assert.IsFalse(kernel.HasComponent(typeof(DefaultTemplateEngine)));
 			object engine = kernel[typeof(DefaultTemplateEngine)];
-
 		}
 	}
 }

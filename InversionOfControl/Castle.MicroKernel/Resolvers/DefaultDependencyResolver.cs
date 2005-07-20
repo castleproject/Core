@@ -30,23 +30,8 @@ namespace Castle.MicroKernel.Resolvers
 	[Serializable]
 	public class DefaultDependencyResolver : IDependencyResolver
 	{
-		private static readonly object DependencyResolvingEvent = new object();
-
 		private readonly IKernel _kernel;
 		private readonly ITypeConverter _converter;
-		private readonly EventHandlerList _events = new EventHandlerList();
-
-		public event DependancyDelegate DependencyResolving
-		{
-			add { _events.AddHandler(DependencyResolvingEvent, value); }
-			remove { _events.RemoveHandler(DependencyResolvingEvent, value); }
-		}
-
-		protected virtual void RaiseDependencyResolving(ComponentModel client, DependencyModel model, ref Object dependency)
-		{
-			DependancyDelegate eventDelegate = (DependancyDelegate) _events[DependencyResolvingEvent];
-			if (eventDelegate != null) eventDelegate(client, model, ref dependency);
-		}
 
 		public DefaultDependencyResolver(IKernel kernel)
 		{
@@ -75,8 +60,6 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				value = ResolveParameterDependency( model, dependency );
 			}
-
-			RaiseDependencyResolving(model, dependency, ref value);
 
 			if (value == null && !dependency.IsOptional)
 			{
