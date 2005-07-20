@@ -15,21 +15,19 @@
 namespace Castle.Facilities.Logging.NLogIntegration
 {
     using System;
-
+    using System.IO;
     using Castle.Services.Logging;
-
     using NLog;
+    using NLog.Config;
 
-	/// <summary>
+    /// <summary>
 	/// Summary description for NLogFactory.
 	/// </summary>
 	public class NLogFactory : AbstractLoggerFactory
 	{
-		public NLogFactory()
+		public NLogFactory(FileInfo configFile)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
+		    LogManager.Configuration = new XmlLoggingConfiguration(configFile.FullName);
 		}
 
         public override ILogger Create(String name) {
@@ -38,9 +36,7 @@ namespace Castle.Facilities.Logging.NLogIntegration
         }
 
         public override ILogger Create(String name, LoggerLevel level) {
-            Logger log = LogManager.GetLogger(name);
             throw new NotImplementedException("Logger levels cannot be set at runtime. Please review your configuration file.");
-            //return new NLogLogger(log);
         }
 
 
