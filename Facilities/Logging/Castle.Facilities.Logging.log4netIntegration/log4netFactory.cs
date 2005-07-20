@@ -14,11 +14,10 @@
 
 
 
-namespace Cystem.Facilities.Logging.log4netIntegration
+namespace Castle.Facilities.Logging.log4netIntegration
 {
     using System;
     using System.IO;
-
     using Castle.Services.Logging;
     
     using log4net;

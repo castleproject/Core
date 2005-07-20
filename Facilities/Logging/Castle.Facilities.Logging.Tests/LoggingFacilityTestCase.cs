@@ -46,7 +46,7 @@ namespace Castle.Facilities.Logging.Tests
 
         [Test]
         public void SimpleTest() {
-            String expectedLogOutput = "HellowWorld";
+            String expectedLogOutput = "HelloWorld";
             String actualLogOutput = "";
 
             kernel.AddComponent("component", typeof(Classes.LoggingComponent));
@@ -68,8 +68,8 @@ namespace Castle.Facilities.Logging.Tests
             MutableConfiguration confignode = new MutableConfiguration("facility");
 
             confignode.Children.Add(new MutableConfiguration("framework", "log4net"));
-            confignode.Children.Add(new MutableConfiguration("config", "logging.config"));
-            confignode.Children.Add(new MutableConfiguration("intercept", "false"));
+            confignode.Children.Add(new MutableConfiguration("config", "log4net.config"));
+            confignode.Children.Add(new MutableConfiguration("interception", "false"));
             
 
             container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);

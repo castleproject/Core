@@ -1,4 +1,3 @@
-using NLog;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,10 @@ using NLog;
 namespace Castle.Facilities.Logging.NLogIntegration
 {
     using System;
+
     using Castle.Services.Logging;
+
+    using NLog;
 
 	/// <summary>
 	/// Summary description for NLogFactory.

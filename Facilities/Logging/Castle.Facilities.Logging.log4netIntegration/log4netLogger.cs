@@ -14,7 +14,7 @@
 
 
 
-namespace Cystem.Facilities.Logging.log4netIntegration
+namespace Castle.Facilities.Logging.log4netIntegration
 {
     using System;
 
@@ -28,6 +28,10 @@ namespace Cystem.Facilities.Logging.log4netIntegration
 	public class log4netLogger : ILogger
 	{
         private ILog _log;
+        public log4netLogger()
+        {
+            
+        }
 
 		internal log4netLogger(ILog log)
 		{

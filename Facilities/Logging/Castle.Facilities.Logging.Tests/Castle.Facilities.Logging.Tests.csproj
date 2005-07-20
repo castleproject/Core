@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "xcopy >nul /d/y $(ProjectDir)*.config $(TargetDir)"
                 RootNamespace = "Castle.Facilities.Logging.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -130,12 +130,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "log4net.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "LoggingFacilityTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Classes\ISmtpServer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\LoggingComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -15,102 +15,110 @@
 namespace Castle.Facilities.Logging
 {
 	using System;
-    using System.IO;
+	using System.IO;
 
+	using Castle.Facilities.Logging.log4netIntegration;
 	using Castle.Facilities.Logging.NLogIntegration;
-	using Cystem.Facilities.Logging.log4netIntegration;	
-    using Castle.MicroKernel.Facilities;
-    using Castle.Model.Configuration;
-    using Castle.Services.Logging;
+	using Castle.MicroKernel.Facilities;
+	using Castle.Model;
+	using Castle.Model.Configuration;
+	using Castle.Services.Logging;
 
-    public enum LoggingFramework{None,log4net,NLog}
+	public enum LoggingFramework
+	{
+		None,
+		log4net,
+		NLog
+	}
 
 	/// <summary>
 	/// 
 	/// </summary>
 	public class LoggingFacility : AbstractFacility
 	{
-        private LoggingFramework framework;
-        private ILoggerFactory factory;
-        private bool intercept = true;
-        private FileInfo configFile;
+		private LoggingFramework framework;
+		private ILoggerFactory factory;
+		private bool intercept = true;
+		private FileInfo configFile;
 
 		public LoggingFacility()
 		{
-            this.framework = LoggingFramework.None;
+			this.framework = LoggingFramework.None;
 		}
 
 		protected override void Init()
 		{
-            /////////////////////////////
-            //Get some config information
-		    GetConfigurationInformation();
+			GetConfigurationInformation();
 
-		    ////////////////////////////////////
-            //setup log4net/NLog and get rocking
-            SetupLogManager();
+			SetupLogManager();
 
-            ////////////////////////
-            //For base level logging
-            if (intercept) this.Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
+			if (intercept) this.Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
 
-            ////////////////////////
-            //For Attributal Logging
-            // Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
-            // Kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
+			////////////////////////
+			//For Attributal Logging
+			// Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
+			// Kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
 
-            ///////////////////////////
-            //For Constructor Injection
-            this.Kernel.AddComponentInstance("logging.factory", typeof(ILoggerFactory), this.factory);
-            //ILogger Injection
+			// For ILogger Injection
+
+			// This is going to be deffered
+			// this.Kernel.Resolver.DependencyResolving += new Castle.MicroKernel.DependancyDelegate(Resolver_DependencyResolving);
 		}
 
-	    private void GetConfigurationInformation()
-	    {
-	        if(this.FacilityConfig != null)
-	        {
-	            IConfiguration frameworkConfig = FacilityConfig.Children["framework"];
-                String fw = frameworkConfig.Value;
-                this.framework = (LoggingFramework) Enum.Parse(typeof(LoggingFramework), fw, true);
-                this.intercept = bool.Parse(FacilityConfig.Children["interception"].Value);
-                this.configFile = new FileInfo(FacilityConfig.Children["config"].Value);
-	        }
-            else
-	        {
-	            this.framework = LoggingFramework.None;
-                this.intercept = true;
-                this.configFile = null;
-	        }
-	    }
+		private void GetConfigurationInformation()
+		{
+			if (this.FacilityConfig != null)
+			{
+				IConfiguration frameworkConfig = FacilityConfig.Children["framework"];
+				String fw = frameworkConfig.Value;
+				this.framework = (LoggingFramework) Enum.Parse(typeof(LoggingFramework), fw, true);
+				this.intercept = bool.Parse(FacilityConfig.Children["interception"].Value);
+				this.configFile = new FileInfo(FacilityConfig.Children["config"].Value);
+			}
+			else
+			{
+				this.framework = LoggingFramework.None;
+				this.intercept = true;
+				this.configFile = null;
+			}
+		}
 
-        /// <summary>
-        /// Setups the log manager.
-        /// </summary>
-        /// <remarks>
-        /// How do I decide which logfactory to install?
-        /// </remarks>
-        private void SetupLogManager()
-        {
-            if(this.FacilityConfig == null)
-            {
-                this.factory = new NullLogFactory();
-            }
-            else
-            {
-                if(this.framework == LoggingFramework.log4net)
-                {
-                    this.factory = new log4netFactory(configFile);
-                }
-                else if(this.framework == LoggingFramework.NLog)
-                {
-                    this.factory = new NLogFactory();
-                }
-                else
-                {
-                    this.factory = new NullLogFactory();
-                }
-            }
-        }
+		/// <summary>
+		/// Setups the log manager.
+		/// </summary>
+		/// <remarks>
+		/// How do I decide which logfactory to install?
+		/// </remarks>
+		private void SetupLogManager()
+		{
+			if (this.FacilityConfig == null)
+			{
+				this.factory = new NullLogFactory();
+				this.Kernel.AddComponent("logging.logger", typeof(ILogger), typeof(NullLogger));
+			}
+			else
+			{
+				if (this.framework == LoggingFramework.log4net)
+				{
+					this.factory = new log4netFactory(configFile);
+					this.Kernel.AddComponent("logging.logger", typeof(ILogger), typeof(NullLogger));
+				}
+				else if (this.framework == LoggingFramework.NLog)
+				{
+					this.factory = new NLogFactory();
+					this.Kernel.AddComponent("logging.logger", typeof(ILogger), typeof(NullLogger));
+				}
+				else
+				{
+					this.factory = new NullLogFactory();
+					this.Kernel.AddComponent("logging.logger", typeof(ILogger), typeof(NullLogger));
+				}
+			}
+		}
 
+		private void Resolver_DependencyResolving(ComponentModel client, DependencyModel model, ref object dependency)
+		{
+			dependency = factory.Create(client.Implementation);
+		}
 	}
 }
