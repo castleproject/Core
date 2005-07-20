@@ -139,6 +139,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NLog.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Classes\ISmtpServer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
