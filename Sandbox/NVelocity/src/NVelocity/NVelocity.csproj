@@ -724,6 +724,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Runtime\Parser\Node\ObjectComparer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\Parser\Node\ParserVisitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
