@@ -30,7 +30,7 @@ namespace Castle.Facilities.Logging.log4netIntegration
 	{
 		public log4netFactory(FileInfo configFile)
 		{
-			DOMConfigurator.ConfigureAndWatch(configFile);
+			XmlConfigurator.ConfigureAndWatch(configFile);
         }
 
         public override ILogger Create(string name) {
@@ -39,11 +39,7 @@ namespace Castle.Facilities.Logging.log4netIntegration
         }
 
         public override ILogger Create(string name, LoggerLevel level) {
-            ILog log = LogManager.GetLogger(name);
             throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
-            //return new log4netLogger(log);
         }
-
-
     }
 }
