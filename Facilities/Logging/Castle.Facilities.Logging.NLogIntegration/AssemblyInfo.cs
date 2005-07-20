@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("NLog integration into Castle.Services.Logging")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
