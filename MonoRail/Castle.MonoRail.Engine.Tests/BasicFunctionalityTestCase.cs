@@ -92,7 +92,7 @@ namespace Castle.MonoRail.Engine.Tests
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.AreEqual("/cookies/addcookie.rails", response.ResponseUri.PathAndQuery);
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents(@"My View contents for Home\Index", response);
+			AssertContents(@"My View contents for Cookies\Index", response);
 			CookieCollection cookies = 
 				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
 			
@@ -167,7 +167,7 @@ namespace Castle.MonoRail.Engine.Tests
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.AreEqual("/cookies/AddCookieExpiration.rails", response.ResponseUri.PathAndQuery);
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("My View contents for Home\\Index", response);
+			AssertContents(@"My View contents for Cookies\Index", response);
 			CookieCollection cookies = 
 				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
 			

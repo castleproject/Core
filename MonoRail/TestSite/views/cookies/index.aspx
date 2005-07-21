@@ -1,1 +1,1 @@
-My View contents for Home\Index
+My View contents for Cookies\Index
