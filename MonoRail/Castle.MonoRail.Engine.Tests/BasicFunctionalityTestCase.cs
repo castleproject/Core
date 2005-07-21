@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Engine.Tests
 			string url = "/home/index.rails";
 			string expected = "My View contents for Home\\Index";
 
-			Execute(url, expected);
+			Execute(url, expected, true);
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Engine.Tests
 		{
 			string url = "/home/redirectAction.rails";
 			string expectedUrl = "/home/index.rails";
-			string expected = "My View contents for Home\\Index";
+			string expected = @"My View contents for Home\Index";
 
 			Execute(url, expected, expectedUrl);
 		}
@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Engine.Tests
 		public void RedirectForArea()
 		{
 			string url = "/subarea/home/index.rails";
-			string expected = "My View contents for SubArea\\Home\\Index";
+			string expected = @"My View contents for SubArea\Home\Index";
 
 			Execute(url, expected);
 		}
@@ -92,7 +92,7 @@ namespace Castle.MonoRail.Engine.Tests
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.AreEqual("/cookies/addcookie.rails", response.ResponseUri.PathAndQuery);
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("My View contents for Home\\Index", response);
+			AssertContents(@"My View contents for Home\Index", response);
 			CookieCollection cookies = 
 				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
 			
@@ -100,8 +100,8 @@ namespace Castle.MonoRail.Engine.Tests
 			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
 			foreach(Cookie cookie in cookies)
 			{
-				Assert.AreEqual( "cookiename", cookie.Name );
-				Assert.AreEqual( "value", cookie.Value );
+				Assert.AreEqual("cookiename", cookie.Name);
+				Assert.AreEqual("value", cookie.Value);
 			}
 		}
 
@@ -117,14 +117,14 @@ namespace Castle.MonoRail.Engine.Tests
 			Assert.AreEqual(HttpStatusCode.Found, response.StatusCode);
 
 			CookieCollection cookies = 
-				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+				myReq.CookieContainer.GetCookies(new Uri("http://localhost:8083/"));
 			
 			/// The server may use two headers for SetCookie
 			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
 			foreach(Cookie cookie in cookies)
 			{
-				Assert.AreEqual( "cookiename", cookie.Name );
-				Assert.AreEqual( "value", cookie.Value );
+				Assert.AreEqual("cookiename", cookie.Name);
+				Assert.AreEqual("value", cookie.Value);
 			}
 		}
 

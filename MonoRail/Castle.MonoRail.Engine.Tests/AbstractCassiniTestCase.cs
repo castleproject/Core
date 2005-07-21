@@ -59,27 +59,47 @@ namespace Castle.MonoRail.Engine.Tests
 
 		protected void AssertContents(String expected, HttpWebResponse response)
 		{
+			AssertContents(expected, response, false);
+		}
+		protected void AssertContents(String expected, HttpWebResponse response, bool startsWith)
+		{
 			string contents = GetContents(expected, response);
 
-			Assert.AreEqual( expected, contents );
+			if(startsWith)
+			{
+				if (expected.Length>contents.Length)
+					Assert.Fail("Expected string with length "+expected.Length +" but was "+contents.Length);
+
+				Assert.AreEqual(expected,contents.Substring(0,expected.Length));
+			}
+			else
+			{
+				Assert.AreEqual( expected, contents );
+			}
 		}
 
 		private static string GetContents(string expected, HttpWebResponse response)
 		{
-			int size = expected.Length;
-			byte[] contentsArray = new byte[size];
-			response.GetResponseStream().Read(contentsArray, 0, size);
-			Encoding encoding = Encoding.Default;
-
-			return encoding.GetString(contentsArray);
+			StreamReader sr = new StreamReader(response.GetResponseStream());
+			return sr.ReadToEnd();
 		}
 
 		protected void Execute(string url, string expected)
 		{
-			Execute(url, expected, url);
+			Execute(url, expected, url, false);
+		}
+
+		protected void Execute(string url, string expected, bool startsWith)
+		{
+			Execute(url, expected, url, startsWith);
 		}
 
 		protected void Execute(string url, string expected, string expectedUrl)
+		{
+			Execute(url, expected, expectedUrl, false);
+		}
+
+		protected void Execute(string url, string expected, string expectedUrl, bool startsWith)
 		{
 			HttpWebRequest myReq = (HttpWebRequest) 
 				WebRequest.Create("http://localhost:8083" + url);
@@ -89,7 +109,7 @@ namespace Castle.MonoRail.Engine.Tests
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.AreEqual(expectedUrl, response.ResponseUri.PathAndQuery);
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents(expected, response);
+			AssertContents(expected, response, startsWith);
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Engine.Tests
 			string expected = "\r\n\r\n/*  Prototype JavaScript framework";
 			string url = "/MonoRail/Files/AjaxScripts.rails";
 
-			Execute(url, expected);
+			Execute(url, expected, true);
 		}
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Castle.MonoRail.Engine.Tests
 			string expected = "\r\n// @name      The Fade Anything Technique";
 			string url = "/MonoRail/Files/EffectsFatScripts.rails";
 
-			Execute(url, expected);
+			Execute(url, expected, true);
 		}
 
 		[Test]
@@ -48,19 +48,19 @@ namespace Castle.MonoRail.Engine.Tests
 		{
 			string expected = " \r\n\t\t\t/*************************************";
 			string url = "/MonoRail/Files/ValidateCore.rails";
-			Execute(url, expected);
+			Execute(url, expected, true);
 
 			expected = " \r\n\t\t\t\tfunction fValConfig()\r\n\t\t\t\t{";
 			url = "/MonoRail/Files/ValidateConfig.rails";
-			Execute(url, expected);
+			Execute(url, expected, true);
 
 			expected = " \r\n\t\t\t/*< blank basic ******************";
 			url = "/MonoRail/Files/ValidateValidators.rails";
-			Execute(url, expected);
+			Execute(url, expected, true);
 
 			expected = " \r\n\t\t\t/*--	fValidate US-English language file.";
 			url = "/MonoRail/Files/ValidateLang.rails";
-			Execute(url, expected);
+			Execute(url, expected, true);
 		}
 	}
 }

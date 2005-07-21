@@ -82,7 +82,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			string url = "/ajax/ObserveForm.rails";
 			string expected = "<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, " + 
 				"function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', " + 
-				"{asynchronous:true, parameters:newcontent}) ";
+				"{asynchronous:true, parameters:newcontent}) })</script>";
 
 			Execute(url, expected);
 		}
