@@ -58,147 +58,132 @@ namespace Castle.Services.Logging
 		/// Logs a debug message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		void Debug( string message );
+		void Debug(String message);
 
 		/// <summary>
 		/// Logs a debug message. 
 		/// </summary>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		void Debug( string message, Exception exception);
+		void Debug(String message, Exception exception);
 
 		/// <summary>
 		/// Logs a debug message.
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		void Debug( string format, params Object[] args );
+		void Debug(String format, params Object[] args);
 
 		/// <summary>
 		/// Determines if messages of priority "debug" will be logged.
 		/// </summary>
 		/// <value>True if "debug" messages will be logged.</value> 
-		bool IsDebugEnabled 
-		{
-			get;
-		}
+		bool IsDebugEnabled { get; }
 
 		/// <summary>
 		/// Logs an info message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		void Info( string message );
+		void Info(String message);
 
 		/// <summary>
 		/// Logs an info message. 
 		/// </summary>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		void Info( string message, Exception exception);
+		void Info(String message, Exception exception);
 
 		/// <summary>
 		/// Logs an info message.
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		void Info( string format, params Object[] args );
+		void Info(String format, params Object[] args);
 
 		/// <summary>
 		/// Determines if messages of priority "info" will be logged.
 		/// </summary>
 		/// <value>True if "info" messages will be logged.</value>
-		bool IsInfoEnabled
-		{
-			get;
-		}
+		bool IsInfoEnabled { get; }
 
 		/// <summary>
 		/// Logs a warn message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		void Warn( string message );
+		void Warn(String message);
 
 		/// <summary>
 		/// Logs a warn message. 
 		/// </summary>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		void Warn( string message, Exception exception);
+		void Warn(String message, Exception exception);
 
 		/// <summary>
 		/// Logs a warn message.
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		void Warn( string format, params Object[] args );
+		void Warn(String format, params Object[] args);
 
 		/// <summary>
 		/// Determines if messages of priority "warn" will be logged.
 		/// </summary>
 		/// <value>True if "warn" messages will be logged.</value>
-		bool IsWarnEnabled
-		{
-			get;
-		}
+		bool IsWarnEnabled { get; }
 
 		/// <summary>
 		/// Logs an error message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		void Error( string message );
+		void Error(String message);
 
 		/// <summary>
 		/// Logs an error message. 
 		/// </summary>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		void Error( string message, Exception exception);
+		void Error(String message, Exception exception);
 
 		/// <summary>
 		/// Logs an error message.
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		void Error( string format, params Object[] args );
+		void Error(String format, params Object[] args);
 
 		/// <summary>
 		/// Determines if messages of priority "error" will be logged.
 		/// </summary>
 		/// <value>True if "error" messages will be logged.</value>
-		bool IsErrorEnabled
-		{
-			get;
-		}
+		bool IsErrorEnabled { get; }
 
 		/// <summary>
 		/// Logs a fatal error message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		void FatalError( string message );
+		void FatalError(String message);
 
 		/// <summary>
 		/// Logs a fatal error message.
 		/// </summary>
 		/// <param name="message">The Message</param>
 		/// <param name="exception">The Exception</param>
-		void FatalError( string message, Exception exception);
+		void FatalError(String message, Exception exception);
 
 		/// <summary>
 		/// Logs a fatal error message.
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		void FatalError( string format, params Object[] args );
+		void FatalError(String format, params Object[] args);
 
 		/// <summary>
 		/// Determines if messages of priority "fatalError" will be logged.
 		/// </summary>
 		/// <value>True if "fatalError" messages will be logged.</value>
-		bool IsFatalErrorEnabled
-		{
-			get;
-		}
-		
+		bool IsFatalErrorEnabled { get; }
+
 		/// <summary>
 		/// Create a new child logger.
 		/// The name of the child logger is [current-loggers-name].[passed-in-name]
@@ -206,6 +191,6 @@ namespace Castle.Services.Logging
 		/// <param name="name">The Subname of this logger.</param>
 		/// <returns>The New ILogger instance.</returns> 
 		/// <exception cref="System.ArgumentException">If the name has an empty element name.</exception>
-		ILogger CreateChildLogger( string name );
-	}		
+		ILogger CreateChildLogger(String name);
+	}
 }

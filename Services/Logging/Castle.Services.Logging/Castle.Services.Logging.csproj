@@ -109,7 +109,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "LoggingException.cs"
+                    RelPath = "LoggerException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

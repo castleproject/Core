@@ -12,16 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.Services.Logging
 {
     using System;
 
-    /// <summary>
-    /// Indicates that the target class wants to use
-    /// the transactional services.
-    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
-    public class LogAttribute : System.Attribute {
+    public class LogAttribute : Attribute 
+	{
     }
 }

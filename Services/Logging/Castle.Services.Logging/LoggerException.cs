@@ -14,22 +14,23 @@
 
 namespace Castle.Services.Logging
 {
-    using System;
-    using System.Runtime.Serialization;
+	using System;
+	using System.Runtime.Serialization;
 
-	/// <summary>
-	/// Summary description for LoggingException.
-	/// </summary>
+
 	[Serializable]
-	public class LoggingException : Exception
+	public class LoggerException : Exception
 	{
-        public LoggingException(string message) : base(message) {
-    }
+		public LoggerException(String message) : base(message)
+		{
+		}
 
-        public LoggingException(string message, Exception innerException) : base(message, innerException) {
-    }
+		public LoggerException(String message, Exception innerException) : base(message, innerException)
+		{
+		}
 
-        public LoggingException(SerializationInfo info, StreamingContext context) : base(info, context) {
-    }
+		public LoggerException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
 	}
 }
