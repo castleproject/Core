@@ -240,7 +240,11 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (desiredType == typeof(Boolean))
 			{
-				// TODO: Add true/on/1 variants
+				if (value == null || String.Compare( "false", value, true ) == 0)
+				{
+					return false;
+				}
+
 				return value != null;
 			}
 			else if (desiredType == typeof(HttpPostedFile))

@@ -17,11 +17,10 @@ namespace Castle.MonoRail.Engine.Tests
 	using System;
 	using System.IO;
 	using System.Net;
-	using System.Text;
-
-	using NUnit.Framework;
 
 	using Cassini;
+	
+	using NUnit.Framework;
 
 	public abstract class AbstractCassiniTestCase
 	{
@@ -41,15 +40,15 @@ namespace Castle.MonoRail.Engine.Tests
 			server.Stop();
 		}
 
-		private string Normalize(String possibleRelativePath)
+		private String Normalize(String possibleRelativePath)
 		{
-			DirectoryInfo dir = new DirectoryInfo( possibleRelativePath );
+			DirectoryInfo dir = new DirectoryInfo(possibleRelativePath);
 			return dir.FullName;
 		}
 
 		protected virtual String ObtainPhysicalDir()
 		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSite" );
+			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\TestSite");
 		}
 
 		protected virtual String ObtainVirtualDir()
@@ -61,51 +60,52 @@ namespace Castle.MonoRail.Engine.Tests
 		{
 			AssertContents(expected, response, false);
 		}
+
 		protected void AssertContents(String expected, HttpWebResponse response, bool startsWith)
 		{
-			string contents = GetContents(expected, response);
+			String contents = GetContents(response);
 
-			if(startsWith)
+			if (startsWith)
 			{
-				if (expected.Length>contents.Length)
-					Assert.Fail("Expected string with length "+expected.Length +" but was "+contents.Length);
+				if (expected.Length > contents.Length)
+					Assert.Fail("Expected String with length " + expected.Length + " but was " + contents.Length);
 
-				Assert.AreEqual(expected,contents.Substring(0,expected.Length));
+				Assert.AreEqual(expected, contents.Substring(0, expected.Length));
 			}
 			else
 			{
-				Assert.AreEqual( expected, contents );
+				Assert.AreEqual(expected, contents);
 			}
 		}
 
-		private static string GetContents(string expected, HttpWebResponse response)
+		private static String GetContents(HttpWebResponse response)
 		{
 			StreamReader sr = new StreamReader(response.GetResponseStream());
 			return sr.ReadToEnd();
 		}
 
-		protected void Execute(string url, string expected)
+		protected void Execute(String url, String expected)
 		{
 			Execute(url, expected, url, false);
 		}
 
-		protected void Execute(string url, string expected, bool startsWith)
+		protected void Execute(String url, String expected, bool startsWith)
 		{
 			Execute(url, expected, url, startsWith);
 		}
 
-		protected void Execute(string url, string expected, string expectedUrl)
+		protected void Execute(String url, String expected, String expectedUrl)
 		{
 			Execute(url, expected, expectedUrl, false);
 		}
 
-		protected void Execute(string url, string expected, string expectedUrl, bool startsWith)
+		protected void Execute(String url, String expected, String expectedUrl, bool startsWith)
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
+			HttpWebRequest myReq = (HttpWebRequest)
 				WebRequest.Create("http://localhost:8083" + url);
-	
+
 			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-	
+
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.AreEqual(expectedUrl, response.ResponseUri.PathAndQuery);
 			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
