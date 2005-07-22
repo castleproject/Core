@@ -15,7 +15,8 @@
 namespace Castle.ActiveRecord.Framework.Validators
 {
 	using System;
-	using System.Reflection;
+	
+	using Castle.ActiveRecord.Framework.Internal;
 
 	using NHibernate;
 	using NHibernate.Expression;
@@ -26,6 +27,8 @@ namespace Castle.ActiveRecord.Framework.Validators
 	{
 		[ThreadStatic]
 		private static object _fieldValue;
+		[ThreadStatic]
+		private static PrimaryKeyModel _pkModel;
 
 		public IsUniqueValidator()
 		{
@@ -34,6 +37,23 @@ namespace Castle.ActiveRecord.Framework.Validators
 		public override bool Perform(object instance, object fieldValue)
 		{
 			ActiveRecordValidationBase arInstance = (ActiveRecordValidationBase) instance;
+			ActiveRecordModel model = ActiveRecordValidationBase._GetModel( arInstance.GetType() );
+
+			while (model != null)
+			{
+				if (model.Ids.Count != 0)
+				{
+					_pkModel = model.Ids[0] as PrimaryKeyModel;
+				}
+
+				model = model.Parent;
+			}
+
+			if (_pkModel == null)
+			{
+				throw new ValidationFailure("We couldn't find the primary key for " + arInstance.GetType().FullName + 
+					" so we can't ensure the uniqueness of any field. Validatior failed");
+			}
 
 			_fieldValue = fieldValue;
 
@@ -44,7 +64,11 @@ namespace Castle.ActiveRecord.Framework.Validators
 		{
 			ICriteria criteria = session.CreateCriteria( instance.GetType() );
 
-			criteria.Add( Expression.Eq(Property.Name, _fieldValue) );
+			object id = _pkModel.Property.GetValue( instance, new object[0] );
+
+			criteria.Add( Expression.And(
+				Expression.Eq(Property.Name, _fieldValue), 
+				Expression.Not(Expression.Eq(_pkModel.Property.Name, id))) );
 
 			return criteria.List().Count == 0;
 		}

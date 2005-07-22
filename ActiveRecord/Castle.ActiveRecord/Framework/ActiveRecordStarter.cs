@@ -82,7 +82,7 @@ namespace Castle.ActiveRecord
 				
 				Configuration cfg = holder.GetConfiguration( holder.GetRootType(model.Type) );
 
-				if (!model.Type.IsAbstract && !model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
+				if (!model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
 				{
 					xmlVisitor.Reset(); xmlVisitor.CreateXml(model);
 
