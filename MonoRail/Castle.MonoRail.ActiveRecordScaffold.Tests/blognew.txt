@@ -42,10 +42,10 @@
 
   <form method="post" action="createBlog.rails">
 <fieldset><legend>New Blog:</legend><p>
-<label for="Name">Name:</label>
+<label  for="Name">Name:</label>
 <input type="text" name="Name" id="Name" value="" /></p>
 <p>
-<label for="Author">Author:</label>
+<label  for="Author">Author:</label>
 <input type="text" name="Author" id="Author" value="" /></p>
 </fieldset><p>
 <input type="submit" value="Save" />

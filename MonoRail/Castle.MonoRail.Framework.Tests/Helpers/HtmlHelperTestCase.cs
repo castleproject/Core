@@ -43,7 +43,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void LabelFor()
 		{
 			HtmlHelper helper = new HtmlHelper();
-			Assert.AreEqual( "<label for=\"x\">name</label>\r\n", helper.LabelFor("x", "name") );
+			Assert.AreEqual( "<label  for=\"x\">name</label>\r\n", helper.LabelFor("x", "name") );
 		}
 		
 		[Test]

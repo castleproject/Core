@@ -373,7 +373,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				{
 					bool selected = IsSelected(value, selectedValue, isMultiple);
 
-					sb.AppendFormat("\t<option {0} value=\"{1}\">{2}</option>\r\n",
+					sb.AppendFormat("\t<option value=\"{1}\" {0}>{2}</option>\r\n",
 					                selected ? "selected" : "", value, text);
 				}
 				else
