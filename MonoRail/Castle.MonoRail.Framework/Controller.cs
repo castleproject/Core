@@ -263,9 +263,29 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
 		/// </summary>
+		public void RenderView(String name, bool skipLayout)
+		{
+			if (skipLayout) CancelLayout();
+
+			RenderView(name);
+		}
+
+		/// <summary>
+		/// Specifies the view to be processed after the action has finished its processing. 
+		/// </summary>
 		public void RenderView(String controller, String name)
 		{
 			_selectedViewName = Path.Combine(controller, name);
+		}
+
+		/// <summary>
+		/// Specifies the view to be processed after the action has finished its processing. 
+		/// </summary>
+		public void RenderView(String controller, String name, bool skipLayout)
+		{
+			if (skipLayout) CancelLayout();
+
+			RenderView(controller, name);
 		}
 
 		/// <summary>
@@ -280,11 +300,32 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Cancel the view processing.
+		/// Specifies the shared view to be processed after the action has finished its
+		/// processing. (A partial view shared 
+		/// by others views and usually in the root folder
+		/// of the view directory).
+		/// </summary>
+		public void RenderSharedView(String name, bool skipLayout)
+		{
+			if (skipLayout) CancelLayout();
+			
+			RenderSharedView(name);
+		}
+
+		/// <summary>
+		/// Cancels the view processing.
 		/// </summary>
 		public void CancelView()
 		{
 			_selectedViewName = null;
+		}
+
+		/// <summary>
+		/// Cancels the layout processing.
+		/// </summary>
+		public void CancelLayout()
+		{
+			LayoutName = null;
 		}
 
 		/// <summary>
@@ -831,7 +872,7 @@ namespace Castle.MonoRail.Framework
 				_context.LastException = ex;
 			}
 
-			if (method.IsDefined(typeof(SkipRescueAttribute), true))
+			if (method != null && method.IsDefined(typeof(SkipRescueAttribute), true))
 			{
 				return false;
 			}

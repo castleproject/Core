@@ -171,10 +171,17 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String LabelFor(String forId, String label)
 		{
+			return LabelFor(forId, label, null);
+		}
+
+		public String LabelFor(String forId, String label, IDictionary attributes)
+		{
 			StringWriter sbWriter = new StringWriter();
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			writer.WriteBeginTag("label");
+			writer.Write( " " );
+			writer.Write( GetAttributes(attributes) );
 			writer.WriteAttribute("for", forId);
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.Write(label);
@@ -333,45 +340,64 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String CreateOptions(ICollection elems, String textProperty, String valueProperty, object selectedValue)
 		{
 			if (elems == null) throw new ArgumentNullException("elems");
-			if (textProperty == null) throw new ArgumentNullException("textProperty");
-
+			
 			if (elems.Count == 0) return String.Empty;
 
-			IEnumerator enumerator = elems.GetEnumerator(); enumerator.MoveNext(); 
+			IEnumerator enumerator = elems.GetEnumerator(); 
+			enumerator.MoveNext(); 
 			object guidanceElem = enumerator.Current;
 
+			bool isMultiple = (selectedValue != null && selectedValue.GetType().IsArray);
+			
 			MethodInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
-			MethodInfo textMethodInfo = GetMethod(guidanceElem, textProperty);
-
-			if (textMethodInfo == null)
+			MethodInfo textMethodInfo = null;
+			
+			if (textProperty != null)
 			{
-				String message = String.Format("Specified {0] could not be identified as a valid readable property", textProperty);
-				throw new ArgumentException(message);
+				textMethodInfo = GetMethod(guidanceElem, textProperty);
 			}
 
 			StringBuilder sb = new StringBuilder();
 
 			foreach (object elem in elems)
 			{
+				if (elem == null) continue;
+
 				object value = null;
 
 				if (valueMethodInfo != null) value = valueMethodInfo.Invoke(elem, new object[0]);
 
-				object text = textMethodInfo.Invoke(elem, new object[0]);
+				object text = textMethodInfo != null ? textMethodInfo.Invoke(elem, new object[0]) : elem.ToString();
 
 				if (value != null)
 				{
+					bool selected = IsSelected(value, selectedValue, isMultiple);
+
 					sb.AppendFormat("\t<option {0} value=\"{1}\">{2}</option>\r\n",
-					                value.Equals(selectedValue) ? "selected" : "", value, text);
+					                selected ? "selected" : "", value, text);
 				}
 				else
 				{
+					bool selected = IsSelected(text, selectedValue, isMultiple);
+
 					sb.AppendFormat("\t<option {0}>{1}</option>\r\n",
-					                text.Equals(selectedValue) ? "selected" : "", text);
+					                selected ? "selected" : "", text);
 				}
 			}
 
 			return sb.ToString();
+		}
+
+		private bool IsSelected(object value, object selectedValue, bool isMultiple)
+		{
+			if (!isMultiple)
+			{
+				return value.Equals(selectedValue);
+			}
+			else
+			{
+				return Array.IndexOf( (Array) selectedValue, value ) != -1;
+			}
 		}
 
 		public static String BuildUnorderedList(String[] array)

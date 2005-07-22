@@ -17,9 +17,10 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 	using System.Collections;
 
-	using Castle.MonoRail.Framework;
-
 	using Castle.ActiveRecord;
+	using Castle.ActiveRecord.Framework;
+	
+	using Castle.MonoRail.Framework;
 
 
 	/// <summary>
@@ -30,10 +31,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class UpdateAction : EditAction
 	{
-		// private IRailsEngineContext context;
-		private ArrayList errors = new ArrayList();
-		private DataBinder binder;
-
 		public UpdateAction(Type modelType) : base(modelType)
 		{
 		}
@@ -54,9 +51,17 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		{
 			ReadPkFromParams(controller);
 
-			binder = new DataBinder(controller.Context);
-			
-			instance = binder.BindObject( Model.Type );
+			try
+			{
+				instance = SupportingUtils.FindByPK( Model.Type, idVal );
+
+				CreateInstanceFromFormData(instance, controller);
+			}
+			catch(Exception ex)
+			{
+				errors.Add( "Could not save " + Model.Type.Name + ". " + ex.Message );
+				return;
+			}
 
 			try
 			{

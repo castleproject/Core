@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Framework"
-                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
                     HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
@@ -93,6 +88,16 @@
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\lib\log4net.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\ActiveRecord\lib\Iesi.Collections.dll"
                 />
             </References>
         </Build>
@@ -105,6 +110,11 @@
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CommonOperationUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

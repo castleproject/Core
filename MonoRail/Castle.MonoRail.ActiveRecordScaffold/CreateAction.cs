@@ -15,11 +15,10 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Collections;
-
-	using Castle.MonoRail.Framework;
 
 	using Castle.ActiveRecord;
+	
+	using Castle.MonoRail.Framework;
 
 	/// <summary>
 	/// Performs the inclusion
@@ -29,10 +28,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class CreateAction : NewAction
 	{
-		private ArrayList errors = new ArrayList();
-		private DataBinder binder;
-		private IRailsEngineContext context;
-
 		public CreateAction(Type modelType) : base(modelType)
 		{
 		}
@@ -51,11 +46,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			context = controller.Context;
-
-			binder = new DataBinder(controller.Context);
-			
-			instance = binder.BindObject( Model.Type );
+			CreateInstanceFromFormData(controller);
 
 			try
 			{
@@ -73,18 +64,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			controller.PropertyBag["armodel"] = Model;
 			controller.PropertyBag["instance"] = instance;
-		}
-
-		protected override void RenderStandardHtml(Controller controller)
-		{
-			if (controller.Context.Flash["errors"] != null)
-			{
-				base.RenderStandardHtml(controller);
-			}
-			else
-			{
-				controller.Redirect( controller.Name, "list" + Model.Type.Name );
-			}
 		}
 
 		protected void SaveInstance(object instance, Controller controller)
@@ -108,6 +87,18 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				ActiveRecordBase instanceBase = instance as ActiveRecordBase;
 
 				instanceBase.Save();
+			}
+		}
+
+		protected override void RenderStandardHtml(Controller controller)
+		{
+			if (controller.Context.Flash["errors"] != null)
+			{
+				base.RenderStandardHtml(controller);
+			}
+			else
+			{
+				controller.Redirect( controller.Name, "list" + Model.Type.Name );
 			}
 		}
 	}

@@ -51,8 +51,8 @@ namespace Castle.MonoRail.Framework
 		public object BindObject( Type instanceType, String paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
 		{
 			if ( root == null ) root = instanceType.Name;
+			if ( instanceType.IsAbstract || instanceType.IsInterface ) return null;
 
-			//String prefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
 			object instance = Activator.CreateInstance( instanceType );
 
 			return BindObjectInstance(instance, paramPrefix, paramList, files, errorList);			
@@ -79,8 +79,10 @@ namespace Castle.MonoRail.Framework
 					
 					try
 					{
-						if ( !propType.IsPrimitive && !propType.IsArray && propType != typeof(String) && propType != typeof(Guid)
-							&& propType != typeof(DateTime) && propType != typeof(HttpPostedFile) )
+						if ( !propType.IsPrimitive && !propType.IsArray && 
+							propType != typeof(String) && propType != typeof(Guid) && 
+							propType != typeof(DateTime) && propType != typeof(HttpPostedFile) &&
+							!typeof(ICollection).IsAssignableFrom( propType ) )
 						{
 							parent += prop.Name + ".";		
 						

@@ -27,6 +27,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 	public abstract class AbstractScaffoldAction : IDynamicAction
 	{
+		protected static readonly object[] Empty = new object[0];
+
 		protected readonly Type modelType;
 		protected readonly HtmlHelper helper = new HtmlHelper();
 		
@@ -96,17 +98,28 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected void ObtainPKProperty()
 		{
+			PrimaryKeyModel keyModel = ObtainPKProperty(model);
+			
+			if (keyModel != null) keyProperty = keyModel.Property;
+		}
+
+		protected static PrimaryKeyModel ObtainPKProperty(ActiveRecordModel model)
+		{
+			if (model == null) return null;
+
 			ActiveRecordModel curModel = model;
 
-			while (keyProperty == null && curModel != null)
+			while (curModel != null)
 			{
 				foreach(PrimaryKeyModel keyModel in curModel.Ids)
 				{
-					keyProperty = keyModel.Property;
+					return keyModel;
 				}
 
 				curModel = curModel.Parent;
 			}
+
+			return null;
 		}
 	}
 }

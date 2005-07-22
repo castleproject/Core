@@ -21,7 +21,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 	using Castle.MonoRail.Framework;
 
-	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
 
 
@@ -39,22 +38,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			MethodInfo findAll = Model.Type.GetMethod( "FindAll", BindingFlags.Static|BindingFlags.Public, null, new Type[0], null );
-
-			object[] items = null;
-
-			if (findAll != null)
-			{
-				items = (object[]) findAll.Invoke( null, null );
-			}
-			else
-			{
-				IList list = SupportingUtils.FindAll( Model.Type );
-
-				items = new object[list.Count];
-
-				list.CopyTo(items, 0);
-			}
+			object[] items = CommonOperationUtils.FindAll( Model.Type );
 
 			controller.PropertyBag["items"] = items;
 
