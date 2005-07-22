@@ -12,16 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-
 namespace Castle.Facilities.Logging.log4netIntegration
 {
-    using System;
-    using System.IO;
-    using Castle.Services.Logging;
-    
-    using log4net;
-    using log4net.Config;    
+	using System;
+	using System.IO;
+	using Castle.Services.Logging;
+	using log4net;
+	using log4net.Config;
 
 	/// <summary>
 	/// Summary description for log4netFactory.
@@ -31,15 +28,17 @@ namespace Castle.Facilities.Logging.log4netIntegration
 		public log4netFactory(FileInfo configFile)
 		{
 			XmlConfigurator.ConfigureAndWatch(configFile);
-        }
+		}
 
-        public override ILogger Create(string name) {
-            ILog log = LogManager.GetLogger(name);
-            return new log4netLogger(log);
-        }
+		public override ILogger Create(String name)
+		{
+			ILog log = LogManager.GetLogger(name);
+			return new log4netLogger(log);
+		}
 
-        public override ILogger Create(string name, LoggerLevel level) {
-            throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
-        }
-    }
+		public override ILogger Create(String name, LoggerLevel level)
+		{
+			throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
+		}
+	}
 }

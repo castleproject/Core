@@ -12,128 +12,137 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-
 namespace Castle.Facilities.Logging.log4netIntegration
 {
-    using System;
+	using System;
 
-    using Castle.Services.Logging;
-    
-    using log4net;    
+	using log4net;
+
+	using Castle.Services.Logging;
 
 	/// <summary>
 	/// Summary description for log4netLogger.
 	/// </summary>
 	public class log4netLogger : ILogger
 	{
-        private ILog _log;
-        public log4netLogger()
-        {
-            
-        }
+		private ILog _log;
+
+		public log4netLogger()
+		{
+		}
 
 		internal log4netLogger(ILog log)
 		{
-			this._log = log;
-        }
+			_log = log;
+		}
 
-        #region ILogger Members
+		#region ILogger Members
 
-        public ILogger CreateChildLogger(string name) {
-            throw new NotImplementedException();
-        }
+		public ILogger CreateChildLogger(String name)
+		{
+			throw new NotImplementedException();
+		}
 
-        public void Info(string format, params object[] args) {
-            this._log.InfoFormat(format, args);
-        }
+		public void Info(String format, params object[] args)
+		{
+			_log.InfoFormat(format, args);
+		}
 
-        void Castle.Services.Logging.ILogger.Info(string message, Exception exception) {
-            this._log.Info(message, exception);
-        }
+		void ILogger.Info(String message, Exception exception)
+		{
+			_log.Info(message, exception);
+		}
 
-        void Castle.Services.Logging.ILogger.Info(string message) {
-            this._log.Info(message);
-        }
+		void ILogger.Info(String message)
+		{
+			_log.Info(message);
+		}
 
-        public void Debug(string format, params object[] args) {
-            // TODO:  Add log4netLogger.Debug implementation
-        }
+		public void Debug(String format, params object[] args)
+		{
+			// TODO:  Add log4netLogger.Debug implementation
+		}
 
-        void Castle.Services.Logging.ILogger.Debug(string message, Exception exception) {
-            this._log.Debug(message, exception);
-        }
+		void ILogger.Debug(String message, Exception exception)
+		{
+			_log.Debug(message, exception);
+		}
 
-        void Castle.Services.Logging.ILogger.Debug(string message) {
-            this._log.Debug(message);
-        }
+		void ILogger.Debug(String message)
+		{
+			_log.Debug(message);
+		}
 
-        public bool IsErrorEnabled {
-            get {
-                return this._log.IsErrorEnabled;
-            }
-        }
+		public bool IsErrorEnabled
+		{
+			get { return _log.IsErrorEnabled; }
+		}
 
-        public bool IsWarnEnabled {
-            get {
-                return this._log.IsWarnEnabled;
-            }
-        }
+		public bool IsWarnEnabled
+		{
+			get { return _log.IsWarnEnabled; }
+		}
 
-        public void Warn(string format, params object[] args) {
-            this._log.WarnFormat(format, args);
-        }
+		public void Warn(String format, params object[] args)
+		{
+			_log.WarnFormat(format, args);
+		}
 
-        void Castle.Services.Logging.ILogger.Warn(string message, Exception exception) {
-            this._log.Warn(message, exception);
-        }
+		void ILogger.Warn(String message, Exception exception)
+		{
+			_log.Warn(message, exception);
+		}
 
-        void Castle.Services.Logging.ILogger.Warn(string message) {
-            this._log.Warn(message);
-        }
+		void ILogger.Warn(String message)
+		{
+			_log.Warn(message);
+		}
 
-        public bool IsFatalErrorEnabled {
-            get {
-                return this._log.IsFatalEnabled;
-            }
-        }
+		public bool IsFatalErrorEnabled
+		{
+			get { return _log.IsFatalEnabled; }
+		}
 
-        public bool IsInfoEnabled {
-            get {
-                return this._log.IsInfoEnabled;
-            }
-        }
+		public bool IsInfoEnabled
+		{
+			get { return _log.IsInfoEnabled; }
+		}
 
-        public void FatalError(string format, params object[] args) {
-            this._log.FatalFormat(format, args);
-        }
+		public void FatalError(String format, params object[] args)
+		{
+			_log.FatalFormat(format, args);
+		}
 
-        void Castle.Services.Logging.ILogger.FatalError(string message, Exception exception) {
-            this._log.Fatal(message, exception);
-        }
+		void ILogger.FatalError(String message, Exception exception)
+		{
+			_log.Fatal(message, exception);
+		}
 
-        void Castle.Services.Logging.ILogger.FatalError(string message) {
-            this._log.Fatal(message);
-        }
+		void ILogger.FatalError(String message)
+		{
+			_log.Fatal(message);
+		}
 
-        public bool IsDebugEnabled {
-            get {
-                return this._log.IsDebugEnabled;
-            }
-        }
+		public bool IsDebugEnabled
+		{
+			get { return _log.IsDebugEnabled; }
+		}
 
-        public void Error(string format, params object[] args) {
-            this._log.ErrorFormat(format, args);
-        }
+		public void Error(String format, params object[] args)
+		{
+			_log.ErrorFormat(format, args);
+		}
 
-        void Castle.Services.Logging.ILogger.Error(string message, Exception exception) {
-            this._log.Error(message, exception);
-        }
+		void ILogger.Error(String message, Exception exception)
+		{
+			_log.Error(message, exception);
+		}
 
-        void Castle.Services.Logging.ILogger.Error(string message) {
-            this._log.Error(message);
-        }
+		void ILogger.Error(String message)
+		{
+			_log.Error(message);
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

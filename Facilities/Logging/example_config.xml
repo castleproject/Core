@@ -1,11 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
+
 <configuration>
 
 	<facilities>
 		<facility id="logging">
-		    <framework>log4net|nlog|none</framework>
-            <config>logging.config</config>
-            <interception>true|false</interception>
+			
+			<default 
+					enableInterception="true" 
+					type="Null | Console | Diagnostics | Web | Log4net" 
+					custom="typename, assemblyname" />
+		
+            <!-- <config>logging.config</config>  Why? -->
+            
+            <!-- <interception>true|false</interception> -->
+            
 		</facility>
 	</facilities>
 
