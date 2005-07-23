@@ -56,7 +56,17 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			ISessionFactory sessionFactory = ObtainSessionFactoryFor(key);
 
-			ISession session = sessionFactory.OpenSession();
+			ISession session = null;
+
+			if (_kernel.HasComponent( typeof(NHibernate.IInterceptor) ))
+			{
+				session = sessionFactory.OpenSession( (NHibernate.IInterceptor) _kernel[typeof(NHibernate.IInterceptor)] );
+			}
+			else
+			{
+				session = sessionFactory.OpenSession();
+			}
+
 			SessionManager.Push(session, key);
 
 			FlushOption flushOption = ExtractFlushOption(invocation.MethodInvocationTarget);

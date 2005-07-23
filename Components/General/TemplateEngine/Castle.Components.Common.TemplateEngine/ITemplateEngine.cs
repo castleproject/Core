@@ -33,5 +33,13 @@ namespace Castle.Components.Common.TemplateEngine
 		/// <param name="output"></param>
 		/// <returns></returns>
 		bool Process(IDictionary context, String templateName, TextWriter output);
+
+		/// <summary>
+		/// Implementors should return <c>true</c> only if the 
+		/// specified template exists and can be used
+		/// </summary>
+		/// <param name="templateName"></param>
+		/// <returns></returns>
+		bool HasTemplate(String templateName);
 	}
 }

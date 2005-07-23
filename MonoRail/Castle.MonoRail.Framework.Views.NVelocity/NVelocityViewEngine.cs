@@ -22,7 +22,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	using System;
 	using System.IO;
 	using System.Collections;
+
 	using Commons.Collections;
+
 
 	public class NVelocityViewEngine : ViewEngineBase
 	{
@@ -32,13 +34,25 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// Creates a new <see cref="NVelocityViewEngine"/> instance.
 		/// </summary>
 		public NVelocityViewEngine()
-		{}
+		{
+			
+		}
 
 		#region IViewEngine Members
 
 		public override void Init()
 		{
 			ExtendedProperties props = new ExtendedProperties();
+
+			String externalProperties = Path.Combine( ViewRootDir, "nvelocity.properties" );
+
+			if (File.Exists( externalProperties ))
+			{
+				using(FileStream fs = File.OpenRead( externalProperties ))
+				{
+ 					props.Load( fs );
+				}
+			}
 
 			InitializeVelocityProperties(props);
 
@@ -60,6 +74,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			IContext ctx = CreateContext(context, controller);
+			
 			AdjustContentType(context);
 
 			Template template = null;
@@ -86,7 +101,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				if (hasLayout)
 				{
-					//Restore original writer
+					// Restore original writer
 					writer = context.Response.Output;
 				}
 

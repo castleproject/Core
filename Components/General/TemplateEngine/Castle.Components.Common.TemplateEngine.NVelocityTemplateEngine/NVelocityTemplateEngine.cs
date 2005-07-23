@@ -62,6 +62,17 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		}
 
 		/// <summary>
+		/// Returns <c>true</c> only if the 
+		/// specified template exists and can be used
+		/// </summary>
+		/// <param name="templateName"></param>
+		/// <returns></returns>
+		public bool HasTemplate(String templateName)
+		{
+			return File.Exists( Path.Combine(_templateDir, templateName) );
+		}
+
+		/// <summary>
 		/// Implementors should process the template with
 		/// data from the context.
 		/// </summary>
@@ -83,21 +94,4 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 			return new VelocityContext( new Hashtable(context) );
 		}
 	}
-
-//	public class BetterResourceManager : NVelocity.Runtime.Resource.ResourceManager
-//	{
-//		public Resource getResource(string resourceName, int resourceType, string encoding)
-//		{
-//			return new ContentResource();
-//		}
-//
-//		public void initialize(RuntimeServices rs)
-//		{
-//		}
-//
-//		public string getLoaderNameForResource(string resourceName)
-//		{
-//			return null;
-//		}
-//	}
 }
