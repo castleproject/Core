@@ -25,7 +25,7 @@ namespace Castle.Components.Common.EmailSender
 	public enum Format
 	{
 		Html,
-		Plain
+		Text
 	}
 
 	public enum MessagePriority
@@ -43,7 +43,7 @@ namespace Castle.Components.Common.EmailSender
 		private String bcc;
 		private String body;
 		private String subject;
-		private Format format = Format.Plain;
+		private Format format = Format.Text;
 		private Encoding encoding = Encoding.ASCII;
 		private IDictionary headers = new HybridDictionary();
 		private MessagePriority priority = MessagePriority.Normal;
