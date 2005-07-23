@@ -3,6 +3,7 @@
 
   Added support for map relations. Necessary to specify Index and IndexType on the HasMany (or HasAndBelongsToMany)
 
+  IsUnique validator fix
 
 - Version 0.0.1.5
 

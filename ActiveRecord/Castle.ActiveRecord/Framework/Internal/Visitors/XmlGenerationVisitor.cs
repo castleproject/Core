@@ -111,6 +111,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					WriteIfTrue("lazy", model.ActiveRecordAtt.Lazy));
 				Ident();
 				EnsureOnlyOneKey(model);
+				WriteCache( model.ActiveRecordAtt.Cache );
 				VisitNodes( model.Ids );
 				WriteDiscriminator(model);
 				VisitNode( model.Version );
@@ -256,7 +257,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name, 
 				att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
-				att.Where, att.Sort, att.ColumnKey, null, null, att.Index, att.IndexType);
+				att.Where, att.Sort, att.ColumnKey, null, null, att.Index, att.IndexType, 
+				att.Cache);
 		}
 
 		public override void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
@@ -266,7 +268,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name, 
 				att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
 				att.Where, att.Sort, att.ColumnKey, att.ColumnRef, model.CollectionID, 
-				att.Index, att.IndexType);
+				att.Index, att.IndexType, att.Cache);
 		}
 
 		public override void VisitNested(NestedModel model)
@@ -308,7 +310,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			RelationType type, String name, 
 			String table, String schema, bool lazy, bool inverse, String orderBy, 
 			String where, String sort, String columnKey, String columnRef, CollectionIDModel collectionId,
-			String index, String indexType)
+			String index, String indexType, CacheEnum cache)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
 
@@ -375,7 +377,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 	
 			Ident();
-			
+
+			WriteCache( cache );
 			WriteKey(columnKey);
 
 			if (type == RelationType.Map)
@@ -437,6 +440,22 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return cascade;
 		}
 
+		private static string TranslateCacheEnum(CacheEnum cacheEnum)
+		{
+			if (cacheEnum == CacheEnum.ReadOnly)
+			{
+				return "read-only";
+			}
+			else if (cacheEnum == CacheEnum.ReadWrite)
+			{
+				return "read-write";
+			}
+			else 
+			{
+				return "nonstrict-read-write";
+			}
+		}
+
 		private static string TranslateOuterJoin(OuterJoinEnum ojEnum)
 		{
 			String outerJoin = null;
@@ -489,6 +508,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private void WriteIndex(String column, String type)
 		{
 			AppendF("<index {0} {1} />", MakeAtt("column", column), WriteIfNonNull("type", type));
+		}
+
+		private void WriteCache(CacheEnum cacheEnum)
+		{
+			if (cacheEnum != CacheEnum.Undefined)
+			{
+				AppendF("<jcs-cache usage=\"{0}\" />", TranslateCacheEnum(cacheEnum) );
+			}
 		}
 
 		private void EnsureOnlyOneKey(ActiveRecordModel model)

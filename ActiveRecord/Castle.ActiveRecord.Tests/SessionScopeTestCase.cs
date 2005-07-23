@@ -20,6 +20,8 @@ namespace Castle.ActiveRecord.Tests
 
 	using NHibernate;
 
+	using Castle.ActiveRecord.Tests.Model.LazyModel;
+
 
 	[TestFixture]
 	public class SessionScopeTestCase : AbstractActiveRecordTest
@@ -121,6 +123,93 @@ namespace Castle.ActiveRecord.Tests
 
 			Post[] posts = Post.FindAll();
 			Assert.AreEqual( 1, posts.Length );
+		}
+
+		[Test]
+		public void NestedSessionScopeUsage()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(new SessionScope())
+			{
+				Blog blog = new Blog();
+
+				using(new SessionScope())
+				{
+					blog.Author = "hammett";
+					blog.Name = "some name";
+					blog.Save();
+				}
+
+				using(new SessionScope())
+				{
+					Post post = new Post(blog, "title", "post contents", "Castle");
+					post.Save();
+				}
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 1, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 1, posts.Length );
+		}
+
+		[Test]
+		public void NestedSessionScopeAndLazyLoad()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(ProductLazy), typeof(CategoryLazy) );
+			Recreate();
+
+			ProductLazy product = new ProductLazy();
+
+			product.Categories.Add( new CategoryLazy("x") );
+			product.Categories.Add( new CategoryLazy("y") );
+			product.Categories.Add( new CategoryLazy("z") );
+
+			foreach(CategoryLazy cat in product.Categories)
+			{
+				cat.Save();
+			}
+
+			product.Save();
+
+			using(new SessionScope())
+			{
+				ProductLazy product1 = ProductLazy.Find(product.Id);
+				Assert.AreEqual( 3, product1.Categories.Count );
+
+				foreach(CategoryLazy cat in product1.Categories)
+				{
+					object dummy = cat.Name;
+				}
+
+				ProductLazy product2 = ProductLazy.Find(product.Id);
+				Assert.AreEqual( 3, product2.Categories.Count );
+
+				using(new SessionScope())
+				{
+					foreach(CategoryLazy cat in product2.Categories)
+					{
+						object dummy = cat.Name;
+					}
+				}
+
+				using(new SessionScope())
+				{
+					ProductLazy product3 = ProductLazy.Find(product.Id);
+					Assert.AreEqual( 3, product3.Categories.Count );
+
+					foreach(CategoryLazy cat in product3.Categories)
+					{
+						object dummy = cat.Name;
+					}
+				}
+			}
 		}
 	}
 }

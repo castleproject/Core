@@ -239,6 +239,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\LazyModel\ProductLazy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Validation\ValidationTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -129,6 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\BaseAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\BelongsToAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

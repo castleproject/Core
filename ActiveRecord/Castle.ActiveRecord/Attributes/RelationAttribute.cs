@@ -27,7 +27,7 @@ namespace Castle.ActiveRecord
 	}
 
 	[AttributeUsage(AttributeTargets.Property), Serializable]
-	public abstract class RelationAttribute : Attribute
+	public abstract class RelationAttribute : BaseAttribute
 	{
 		protected Type _mapType;
 		protected String _table;

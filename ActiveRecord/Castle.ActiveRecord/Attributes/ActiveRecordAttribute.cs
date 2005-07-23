@@ -29,7 +29,7 @@ namespace Castle.ActiveRecord
 	/// </code>
 	/// </example>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
-	public class ActiveRecordAttribute : Attribute
+	public class ActiveRecordAttribute : BaseAttribute
 	{ 
 		private String _table;
 		private String _schema;
