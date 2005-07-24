@@ -48,7 +48,7 @@
 <label  for="Author">Author:</label>
 <input type="text" name="Author" id="Author" value="" /></p>
 </fieldset><p>
-<input type="submit" value="Save" />
+<input type="submit" value="Save"  />
   <a href="/blogs/listBlog.rails">Cancel</a></p>
 </form>
 

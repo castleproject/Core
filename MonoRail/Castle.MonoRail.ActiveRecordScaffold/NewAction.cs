@@ -89,7 +89,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			sb.Append( helper.EndFieldSet() );
 
 			sb.Append( "<p>\r\n" );
-			sb.Append( helper.CreateSubmit( "Save" ) );
+			sb.Append( helper.SubmitButton( "Save" ) );
 			sb.Append( "  " );
 			sb.Append( helper.LinkTo( "Cancel", controller.Name, "list" + name ) );
 			sb.Append( "</p>\r\n" );
