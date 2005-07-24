@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 
 	/// <summary>
-	/// Simple helper
+	/// Simple helper for date formatting
 	/// </summary>
 	public class DateFormatHelper : AbstractHelper
 	{
@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="date"></param>
 		/// <returns></returns>
-		public String FormatDate( DateTime date )
+		public String FormatDate(DateTime date)
 		{
 			return date.ToShortDateString();
 		}

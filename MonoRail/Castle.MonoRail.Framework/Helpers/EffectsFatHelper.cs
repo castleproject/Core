@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
-	using System.IO;
 	
 	/// <summary>
 	/// Just apply the CSS class "fade" to any element and it will fade from yellow

@@ -17,18 +17,20 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 
+	/// <summary>
+	/// Optional base class for helpers. 
+	/// Extend from this class only if your helpers needs
+	/// a reference to the controller which is using it or
+	/// if you need to use one of the protected methods.
+	/// </summary>
 	public abstract class AbstractHelper : IControllerAware
 	{
 		private Controller _controller;
-
-		#region IControllerAware Members
 
 		public void SetController(Controller controller)
 		{
 			_controller = controller;
 		}
-
-		#endregion
 
 		public Controller Controller
 		{
@@ -46,11 +48,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
-		protected string GetAttributes(IDictionary attributes)
+		protected String GetAttributes(IDictionary attributes)
 		{
 			if (attributes == null) return String.Empty;
 
-			String contents = "";
+			String contents = String.Empty;
 
 			foreach (DictionaryEntry entry in attributes)
 			{
@@ -65,6 +67,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 
 			return contents;
+		}
+
+		protected String ScriptBlock( String scriptContents )
+		{
+			return String.Format( "\r\n<script>\r\n{0}</script>\r\n", scriptContents );
 		}
 	}
 }

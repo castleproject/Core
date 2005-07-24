@@ -18,9 +18,20 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections;
 	using System.Collections.Specialized;
 
-
+	/// <summary>
+	/// Helper used to create <see cref="IDictionary"/> instances
+	/// </summary>
 	public class DictHelper : AbstractHelper
 	{
+		/// <summary>
+		/// Creates an <see cref="IDictionary"/> with entries
+		/// infered from the arguments. 
+		/// <code>
+		/// CreateDict( "style=display: none;", "selected" )
+		/// </code>
+		/// </summary>
+		/// <param name="args"></param>
+		/// <returns></returns>
 		public IDictionary CreateDict( params String[] args )
 		{
 			IDictionary dict = new HybridDictionary();

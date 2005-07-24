@@ -21,7 +21,8 @@ namespace Castle.MonoRail.Engine
 	using Castle.MonoRail.Engine.Configuration;
 
 	/// <summary>
-	/// Provides routing services in response to rules defined in <see cref="MonoRailConfiguration.RoutingRules"/>.
+	/// Provides routing services in response to rules defined in 
+	/// <see cref="MonoRailConfiguration.RoutingRules"/>.
 	/// </summary>
 	public class RoutingModule : IHttpModule
 	{

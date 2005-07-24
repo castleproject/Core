@@ -25,6 +25,9 @@ namespace Castle.MonoRail.Engine
 	/// framework, processing the URL and dispatching 
 	/// the execution to the controller.
 	/// </summary>
+	/// <remarks>
+	/// This is were all fun begins.
+	/// </remarks>
 	public class ProcessEngine
 	{
 		private IControllerFactory _controllerFactory;

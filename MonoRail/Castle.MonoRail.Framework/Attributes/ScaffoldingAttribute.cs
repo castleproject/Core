@@ -16,9 +16,6 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
-	/// <summary>
-	/// 
-	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
 	public class ScaffoldingAttribute : Attribute
 	{

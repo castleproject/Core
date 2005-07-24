@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Engine
 		#region IHttpHandlerFactory
 
 		public virtual IHttpHandler GetHandler(HttpContext context, 
-			string requestType, String url, String pathTranslated)
+			String requestType, String url, String pathTranslated)
 		{
 			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, 
 				_filterFactory, _resourceFactory, _scaffoldingSupport);

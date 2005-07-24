@@ -128,31 +128,46 @@ namespace Castle.MonoRail.Framework.Helpers
 			return "</form>";
 		}
 
-		public String CreateSubmit(String name)
-		{
-			StringWriter sbWriter = new StringWriter();
-			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
-
-			writer.WriteBeginTag("input");
-			writer.WriteAttribute("type", "submit");
-			writer.WriteAttribute("value", name);
-			writer.Write(HtmlTextWriter.SelfClosingTagEnd);
-			writer.WriteLine();
-
-			return sbWriter.ToString();
-		}
-
+		/// <summary>
+		/// Creates an anchor (link)
+		/// <code>
+		/// &lt;a href="action" &gt;name&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
 		public String LinkTo(String name, String action)
 		{
 			return LinkTo(name, Controller.Name, action);
 		}
 
+		public String LinkTo(String name, String controller, String action)
+		{
+			String url = Controller.Context.ApplicationPath;
+			String extension = Controller.Context.UrlInfo.Extension;
+
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}\">{4}</a>", 
+				url, controller, action, extension, name);
+		}
+
+		public String LinkTo(String name, String controller, String action, object id)
+		{
+			String url = Controller.Context.ApplicationPath;
+			String extension = Controller.Context.UrlInfo.Extension;
+
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>", 
+				url, controller, action, extension, id, name);
+		}
+
 		public String MapToVirtual(String target)
 		{
-			String appPath = this.Controller.Context.ApplicationPath.EndsWith("/") ?
-				this.Controller.Context.ApplicationPath : this.Controller.Context.ApplicationPath + "/";
+			String appPath = Controller.Context.ApplicationPath.EndsWith("/") ?
+				Controller.Context.ApplicationPath : 
+				Controller.Context.ApplicationPath + "/";
 
 			String targetPath = target.StartsWith("/") ? target.Substring(1) : target;
+
 			return String.Concat(appPath, targetPath);
 		}
 
@@ -169,11 +184,32 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<a href=\"{0}\">{1}</a>", url, name);
 		}
 
+		/// <summary>
+		/// Creates a label for the element indicated with 
+		/// the specified text
+		/// <code>
+		/// &lt;label for="forId" &gt;name&lt;/label&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="forId"></param>
+		/// <param name="label"></param>
+		/// <returns></returns>
 		public String LabelFor(String forId, String label)
 		{
 			return LabelFor(forId, label, null);
 		}
 
+		/// <summary>
+		/// Creates a label for the element indicated with 
+		/// the specified text
+		/// <code>
+		/// &lt;label for="forId" &gt;name&lt;/label&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="forId"></param>
+		/// <param name="label"></param>
+		/// <param name="attributes"></param>
+		/// <returns></returns>
 		public String LabelFor(String forId, String label, IDictionary attributes)
 		{
 			StringWriter sbWriter = new StringWriter();
@@ -191,11 +227,24 @@ namespace Castle.MonoRail.Framework.Helpers
 			return sbWriter.ToString();
 		}
 
+		/// <summary>
+		/// Creates three inputs for day, month and year
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public String DateTime(String name, DateTime value)
 		{
 			return DateTime(name, value, null);
 		}
 
+		/// <summary>
+		/// Creates three inputs for day, month and year
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <param name="attributes"></param>
+		/// <returns></returns>
 		public String DateTime(String name, DateTime value, IDictionary attributes)
 		{
 			String[] days = new String[31];
@@ -230,29 +279,52 @@ namespace Castle.MonoRail.Framework.Helpers
 			return sb.ToString();
 		}
 
+		/// <summary>
+		/// Creates a text area element 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="cols"></param>
+		/// <param name="rows"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public String TextArea(String name, int cols, int rows, String value)
 		{
 			return String.Format("<textarea id=\"{0}\" name=\"{0}\" cols=\"{1}\" rows=\"{2}\">{3}</textarea>",
 			                     name, cols, rows, value);
 		}
 
+		/// <summary>
+		/// Creates an input element of text type
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public String InputText(String name, String value)
 		{
 			return InputText(name, value, null);
 		}
 
+		/// <summary>
+		/// Creates an input element of text type
+		/// </summary>
 		public String InputText(String name, String value, int size, int maxlength)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" />",
 			                     name, value, size, maxlength);
 		}
 
+		/// <summary>
+		/// Creates an input element of text type
+		/// </summary>
 		public String InputText(String name, String value, int size, int maxlength, IDictionary attributes)
 		{
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{0}\" value=\"{1}\" size=\"{2}\" maxlength=\"{3}\" {4}/>",
 			                     name, value, size, maxlength, GetAttributes(attributes));
 		}
 
+		/// <summary>
+		/// Creates an input element of text type
+		/// </summary>
 		public String InputText(String name, String value, String id)
 		{
 			if (id == null) id = name;
@@ -260,42 +332,65 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<input type=\"text\" name=\"{0}\" id=\"{1}\" value=\"{2}\" />", name, id, value);
 		}
 
+		/// <summary>
+		/// Creates an input hidden element
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public String InputHidden(String name, String value)
 		{
 			return String.Format("<input type=\"hidden\" name=\"{0}\" id=\"{0}\" value=\"{1}\" />", name, value);
 		}
 
+		/// <summary>
+		/// Creates a submit button
+		/// <code>
+		/// &lt;input type="submit" value="value" /&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public String SubmitButton(String value)
 		{
-			return String.Format("<input type=\"submit\" value=\"{0}\" />", value);
+			return SubmitButton(value, null);
 		}
 
+		/// <summary>
+		/// Creates a submit button
+		/// <code>
+		/// &lt;input type="submit" value="value" /&gt;
+		/// </code>
+		/// </summary>
 		public String SubmitButton(String value, IDictionary attributes)
 		{
-			return String.Format("<input type=\"submit\" value=\"{0}\" {1}/>", value, GetAttributes(attributes));
+			StringWriter sbWriter = new StringWriter();
+			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
+
+			writer.WriteBeginTag("input");
+			writer.WriteAttribute("type", "submit");
+			writer.WriteAttribute("value", value);
+			writer.Write(" ");
+			writer.Write( GetAttributes(attributes) );
+			writer.Write(HtmlTextWriter.SelfClosingTagEnd);
+			writer.WriteLine();
+
+			return sbWriter.ToString();
 		}
 
-		public String LinkTo(String name, String controller, String action)
-		{
-			String url = base.Controller.Context.ApplicationPath;
-			String extension = base.Controller.Context.UrlInfo.Extension;
-
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}\">{4}</a>", url, controller, action, extension, name);
-		}
-
-		public String LinkTo(String name, String controller, String action, object id)
-		{
-			String url = base.Controller.Context.ApplicationPath;
-			String extension = base.Controller.Context.UrlInfo.Extension;
-
-			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>", url, controller, action, extension, id, name);
-		}
-
+		/// <summary>
+		/// Starts a select element
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public String Select(String name)
 		{
 			return String.Format("<select name=\"{0}\" id=\"{0}\">", name);
 		}
 
+		/// <summary>
+		/// Starts a select element
+		/// </summary>
 		public String Select(String name, IDictionary attributes)
 		{
 			String htmlAttrs = GetAttributes(attributes);
@@ -303,11 +398,21 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<select name=\"{0}\" id=\"{0}\" {1}>", name, htmlAttrs);
 		}
 
+		/// <summary>
+		/// Ends a select element
+		/// </summary>
 		public String EndSelect()
 		{
 			return String.Format("</select>");
 		}
 
+		/// <summary>
+		/// Create options elements from an array. Marks the
+		/// option that matches the <c>selected</c> argument (if provided)
+		/// </summary>
+		/// <param name="elems"></param>
+		/// <param name="selected"></param>
+		/// <returns></returns>
 		public String CreateOptionsFromPrimitiveArray(Array elems, String selected)
 		{
 			if (elems.GetLength(0) == 0) return String.Empty;
@@ -316,27 +421,59 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			foreach (object elem in elems)
 			{
-				sb.AppendFormat("\t<option{0}>{1}</option>\r\n", elem.Equals(selected) ? " selected" : "", elem);
+				sb.AppendFormat("\t<option{0}>{1}</option>\r\n", 
+					elem.Equals(selected) ? " selected" : "", elem);
 			}
 
 			return sb.ToString();
 		}
 
+		/// <summary>
+		/// Create options elements from an array with the text provided by 
+		/// the <c>textProperty</c> and the value provided by the <c>valueProperty</c>
+		/// </summary>
+		/// <param name="elems"></param>
+		/// <param name="textProperty"></param>
+		/// <param name="valueProperty"></param>
+		/// <returns></returns>
 		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty)
 		{
 			return CreateOptions(elems, textProperty, valueProperty);
 		}
 
+		/// <summary>
+		/// Create options elements from an array with the text provided by 
+		/// the <c>textProperty</c> and the value provided by the <c>valueProperty</c>
+		/// Marks the option that matches the <c>selected</c> argument (if provided)
+		/// </summary>
+		/// <param name="elems"></param>
+		/// <param name="textProperty"></param>
+		/// <param name="valueProperty"></param>
+		/// <param name="selectedValue"></param>
+		/// <returns></returns>
 		public String CreateOptionsFromArray(Array elems, String textProperty, String valueProperty, object selectedValue)
 		{
 			return CreateOptions(elems, textProperty, valueProperty, selectedValue);
 		}
 
+		/// <summary>
+		/// Create options elements from an <see cref="ICollection"/> with the text provided by 
+		/// the <c>textProperty</c> and the value provided by the <c>valueProperty</c>
+		/// </summary>
+		/// <param name="elems"></param>
+		/// <param name="textProperty"></param>
+		/// <param name="valueProperty"></param>
+		/// <returns></returns>
 		public String CreateOptions(ICollection elems, String textProperty, String valueProperty)
 		{
 			return CreateOptions(elems, textProperty, valueProperty, null);
 		}
 
+		/// <summary>
+		/// Create options elements from an <see cref="ICollection"/> with the text provided by 
+		/// the <c>textProperty</c> and the value provided by the <c>valueProperty</c>
+		/// Marks the option that matches the <c>selected</c> argument (if provided)
+		/// </summary>
 		public String CreateOptions(ICollection elems, String textProperty, String valueProperty, object selectedValue)
 		{
 			if (elems == null) throw new ArgumentNullException("elems");
@@ -388,33 +525,34 @@ namespace Castle.MonoRail.Framework.Helpers
 			return sb.ToString();
 		}
 
-		private bool IsSelected(object value, object selectedValue, bool isMultiple)
-		{
-			if (!isMultiple)
-			{
-				return value.Equals(selectedValue);
-			}
-			else
-			{
-				return Array.IndexOf( (Array) selectedValue, value ) != -1;
-			}
-		}
-
+		/// <summary>
+		/// Builds an unordered list with the elements on the specified array
+		/// </summary>
+		/// <param name="array"></param>
+		/// <returns></returns>
 		public static String BuildUnorderedList(String[] array)
 		{
 			return BuildUnorderedList(array, null, null);
 		}
-
+		/// <summary>
+		/// Builds an ordered list with the elements on the specified array
+		/// </summary>
 		public static String BuildOrderedList(String[] array)
 		{
 			return BuildOrderedList(array, null, null);
 		}
 
+		/// <summary>
+		/// Builds an ordered list with the elements on the specified array
+		/// </summary>
 		public static String BuildOrderedList(String[] array, String styleClass, String itemClass)
 		{
 			return BuildList("ol", array, styleClass, itemClass);
 		}
 
+		/// <summary>
+		/// Builds an unordered list with the elements on the specified array
+		/// </summary>
 		public static String BuildUnorderedList(String[] array, String styleClass, String itemClass)
 		{
 			return BuildList("ul", array, styleClass, itemClass);
@@ -444,6 +582,18 @@ namespace Castle.MonoRail.Framework.Helpers
 			writer.WriteLine();
 
 			return sbWriter.ToString();
+		}
+
+		private bool IsSelected(object value, object selectedValue, bool isMultiple)
+		{
+			if (!isMultiple)
+			{
+				return value.Equals(selectedValue);
+			}
+			else
+			{
+				return Array.IndexOf( (Array) selectedValue, value ) != -1;
+			}
 		}
 
 		private static String BuildListItem(String item, String itemClass)

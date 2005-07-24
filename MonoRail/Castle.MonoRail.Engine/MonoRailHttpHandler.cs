@@ -40,8 +40,6 @@ namespace Castle.MonoRail.Engine
 			_url = url;
 		}
 
-		#region IHttpHandler Members
-
 		public void ProcessRequest(HttpContext context)
 		{
 			Process(new RailsEngineContextAdapter(context, _url));
@@ -51,7 +49,5 @@ namespace Castle.MonoRail.Engine
 		{
 			get { return true; }
 		}
-
-		#endregion
 	}
 }
