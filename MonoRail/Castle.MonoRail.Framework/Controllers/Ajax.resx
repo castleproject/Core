@@ -328,7 +328,7 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
 });
 
 Ajax.Updater = Class.create();
-Ajax.Updater.ScriptFragment = '(?:<script.*?>)((\n|.)*?)(?:<\/script>)';
+Ajax.Updater.ScriptFragment = '(?:<script.*?>)((\n|.|\r)*?)(?:<\/script>)';
 
 Ajax.Updater.prototype.extend(Ajax.Request.prototype).extend({
   initialize: function(container, url, options) {
