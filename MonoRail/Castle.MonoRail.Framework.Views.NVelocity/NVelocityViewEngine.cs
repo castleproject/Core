@@ -112,7 +112,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 				else
 				{
-					throw new RailsException("Could not obtain view");
+					throw new RailsException("Could not obtain view", ex);
 				}
 			}
 
@@ -189,7 +189,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 				else
 				{
-					throw new RailsException("Could not obtain layout");
+					throw new RailsException("Could not obtain layout", ex);
 				}
 			}
 		}
