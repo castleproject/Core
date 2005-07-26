@@ -275,8 +275,9 @@ Ajax.Request.prototype = (new Ajax.Base()).extend({
       
       if (body == '') body = null;
       
-      this.transport.send(this.options.method == 'post' ? body : null);
-
+      // this.transport.send(this.options.method == 'post' ? body : null);
+      // see http://forum.castleproject.org/posts/list/125.page
+      this.transport.send( (this.options.method == 'post' && body) ? body: "");
     } catch (e) {
     }
   },
