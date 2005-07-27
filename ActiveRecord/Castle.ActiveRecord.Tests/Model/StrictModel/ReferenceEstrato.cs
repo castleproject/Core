@@ -22,9 +22,6 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 	[ActiveRecord(DiscriminatorValue="1")]
 	public class ReferenceEstrato : Estrato
 	{
-		private Estrato parentEstrato;
-		private ISet subestratos = new ListSet();
-
 		public ReferenceEstrato()
 		{
 		}
@@ -48,7 +45,7 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 
 			this.EstratoType = EstratoType.Survey;
 
-			this.parentEstrato = parentEstrato;
+			this.ParentEstrato = parentEstrato;
 
 			if (repository == null)
 			{
@@ -60,25 +57,10 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 			}
 		}
 
-		[BelongsTo("container_id")]
 		public Repository Repository
 		{
 			get { return (Repository) Container; }
 			set { Container = value; }
-		}
-
-		[BelongsTo("parent_id", Type=typeof(ReferenceEstrato))]
-		public override Estrato ParentEstrato
-		{
-			get { return parentEstrato; }
-			set { parentEstrato = value; }
-		}
-
-		[HasMany( typeof(ReferenceEstrato), Inverse=true, Cascade=ManyRelationCascadeEnum.All)]
-		public override ISet SubEstratos
-		{
-			get { return subestratos; }
-			set { subestratos = value; }
 		}
 
 		#region Static methods

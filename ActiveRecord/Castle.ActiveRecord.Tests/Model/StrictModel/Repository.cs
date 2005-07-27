@@ -21,26 +21,9 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 	[ActiveRecord(DiscriminatorValue="1")]
 	public class Repository : QuestionContainer
 	{
-		private ISet estratos = new ListSet();
-		private ISet questions = new ListSet();
-
 		public Repository()
 		{
 		}
-
-		[HasMany( typeof(ReferenceEstrato), Inverse=true)]
-		public override ISet Estratos
-		{
-			get { return estratos; }
-			set { estratos = value; }
-		}
-
-//		[HasMany( typeof(ReferenceQuestion), Inverse=true, OrderBy="id" )]
-//		public override ISet Questions
-//		{
-//			get { return questions; }
-//			set { questions = value; }
-//		}
 
 		public new static void DeleteAll()
 		{

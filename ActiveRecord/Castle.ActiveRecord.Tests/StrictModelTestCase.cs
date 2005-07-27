@@ -37,8 +37,6 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void Creation()
 		{
-			Init();
-
 			Repository repos = new Repository();
 			repos.Save();
 

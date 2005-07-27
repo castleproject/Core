@@ -25,13 +25,14 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 		Survey
 	}
 
-
 	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorType="Int16", DiscriminatorValue="0")]
-	public abstract class Estrato : ActiveRecordValidationBase
+	public class Estrato : ActiveRecordValidationBase
 	{
 		private int id;
 		private EstratoType type;
 		private QuestionContainer container;
+		private Estrato parentEstrato;
+		private ISet subestratos = new ListSet();
 		private ISet references = new ListSet();
 
 		public Estrato()
@@ -52,6 +53,7 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 			set { type = value; }
 		}
 
+		[BelongsTo("container_id")]
 		public QuestionContainer Container
 		{
 			get { return container != null ? container : ParentEstrato.Container; }
@@ -65,20 +67,23 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 			set { references = value; }
 		}
 
-		public abstract Estrato ParentEstrato
+		[BelongsTo("parent_id", Type=typeof(Estrato))]
+		public Estrato ParentEstrato
 		{
-			get; set;
+			get { return parentEstrato; }
+			set { parentEstrato = value; }
 		}
 
-		public abstract ISet SubEstratos
+		[HasMany( typeof(Estrato), Inverse=true, Cascade=ManyRelationCascadeEnum.All)]
+		public ISet SubEstratos
 		{
-			get; set;
+			get { return subestratos; }
+			set { subestratos = value; }
 		}
 
 		public bool IsLeaf
 		{
 			get { return SubEstratos == null || SubEstratos.Count == 0; }
 		}
-
 	}
 }

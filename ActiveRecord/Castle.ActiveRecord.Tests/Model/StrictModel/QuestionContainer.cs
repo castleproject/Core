@@ -26,10 +26,11 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 	}
 
 	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorType="Int16", DiscriminatorValue="0")]
-	public abstract class QuestionContainer : ActiveRecordValidationBase
+	public class QuestionContainer : ActiveRecordValidationBase
 	{
 		private int id;
 		private ContainerType type;
+		private ISet estratos = new ListSet();
 
 		public QuestionContainer()
 		{
@@ -49,25 +50,17 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 			set { type = value; }
 		}
 
-		public abstract ISet Estratos
+		[HasMany( typeof(Estrato), Inverse=true)]
+		public ISet Estratos
 		{
-			get; set;
+			get { return estratos; }
+			set { estratos = value; }
 		}
-
-//		public abstract ISet Questions
-//		{
-//			get; set;
-//		}
 
 		public static void DeleteAll()
 		{
 			ActiveRecordBase.DeleteAll( typeof(QuestionContainer) );
 		}
-
-//		public static QuestionContainer[] FindAll()
-//		{
-//			return (QuestionContainer[]) ActiveRecordBase.FindAll( typeof(QuestionContainer) );
-//		}
 
 		public static QuestionContainer Find(int id)
 		{

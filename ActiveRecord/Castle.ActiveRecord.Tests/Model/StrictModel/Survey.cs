@@ -21,26 +21,9 @@ namespace Castle.ActiveRecord.Tests.Model.StrictModel
 	[ActiveRecord(DiscriminatorValue="2")]
 	public class Survey : QuestionContainer
 	{
-		private ISet estratos = new ListSet();
-		private ISet questions = new ListSet();
-
 		public Survey()
 		{
 		}
-
-		[HasMany( typeof(SurveyEstrato), Inverse=true)]
-		public override ISet Estratos
-		{
-			get { return estratos; }
-			set { estratos = value; }
-		}
-
-//		[HasMany( typeof(SurveyQuestion), Inverse=true, OrderBy="id" )]
-//		public override ISet Questions
-//		{
-//			get { return questions; }
-//			set { questions = value; }
-//		}
 
 		#region static methods
 
