@@ -149,6 +149,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "StrictModelTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "TableHierarchyTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -240,6 +245,36 @@
                 />
                 <File
                     RelPath = "Model\LazyModel\ProductLazy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\StrictModel\Estrato.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\StrictModel\QuestionContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\StrictModel\ReferenceEstrato.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\StrictModel\Repository.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\StrictModel\Survey.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\StrictModel\SurveyEstrato.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
