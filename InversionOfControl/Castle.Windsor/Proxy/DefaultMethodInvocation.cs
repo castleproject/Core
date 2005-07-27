@@ -38,8 +38,6 @@ namespace Castle.Windsor.Proxy
 
 		private IMethodInterceptor[] _interceptorChain;
 
-		private object key = new object();
-
 		/// <summary>
 		/// Constructs a DefaultMethodInvocation. This is invoked 
 		/// by the DynamicProxy generated code.
@@ -55,9 +53,6 @@ namespace Castle.Windsor.Proxy
 		{
 			// In a multithreaded application, the Proceed on the same 
 			// invocation instance can be called at the same time
-
-			// TODO: Keep the index on the threadslot or something similar
-			// - we can't lock this execution, though
 
 			int index = CurrentIndex;
 
@@ -101,5 +96,5 @@ namespace Castle.Windsor.Proxy
 		{
 			set { _interceptorChain = value; }
 		}
-		}
+	}
 }

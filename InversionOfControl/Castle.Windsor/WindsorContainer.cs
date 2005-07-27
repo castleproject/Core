@@ -95,6 +95,10 @@ namespace Castle.Windsor
 		/// Constructs a container using the specified <see cref="IKernel"/>
 		/// implementation. Rarely used.
 		/// </summary>
+		/// <remarks>
+		/// This constructs sets the Kernel.ProxyFactory property to
+		/// <see cref="Proxy.DefaultProxyFactory"/>
+		/// </remarks>
 		/// <param name="kernel"></param>
 		public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
 		{
@@ -102,6 +106,13 @@ namespace Castle.Windsor
 			_kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
 
 			_installer = installer;
+		}
+
+		public WindsorContainer(IProxyFactory proxyFactory) 
+		{
+			_kernel = new DefaultKernel(proxyFactory);
+
+			_installer = new Installer.DefaultComponentInstaller();
 		}
 
 		#endregion

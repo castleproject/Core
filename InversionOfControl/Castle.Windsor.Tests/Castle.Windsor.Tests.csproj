@@ -146,6 +146,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RealProxyTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sample_config.xml"
                     BuildAction = "Content"
                 />
@@ -181,6 +186,11 @@
                 />
                 <File
                     RelPath = "Components\ICalcService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\MarshalCalculatorService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -604,6 +604,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Proxy\AbstractProxyFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\ComponentRealProxy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Proxy\DefaultMethodInvocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -615,6 +625,16 @@
                 />
                 <File
                     RelPath = "Proxy\InterceptorChain.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\MessageProxyInvocation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Proxy\RealProxyProxyFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

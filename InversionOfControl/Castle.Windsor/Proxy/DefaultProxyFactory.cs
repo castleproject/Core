@@ -36,7 +36,7 @@ namespace Castle.Windsor.Proxy
 	/// the interface and the methods don't need to be virtual,
 	/// </remarks>
 	[Serializable]
-	public class DefaultProxyFactory : IProxyFactory, IDeserializationCallback
+	public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallback
 	{
 		[NonSerialized]
 		protected ProxyGenerator _generator;
@@ -56,7 +56,7 @@ namespace Castle.Windsor.Proxy
 		/// <param name="model"></param>
 		/// <param name="constructorArguments"></param>
 		/// <returns></returns>
-		public object Create(IKernel kernel, ComponentModel model, params object[] constructorArguments)
+		public override object Create(IKernel kernel, ComponentModel model, params object[] constructorArguments)
 		{
 			IMethodInterceptor[] interceptors = ObtainInterceptors(kernel, model);
 			IInterceptor interceptorChain = new InterceptorChain(interceptors);
@@ -120,61 +120,6 @@ namespace Castle.Windsor.Proxy
 		private bool EmptyTypeFilter(Type type, object criteria)
 		{
 			return true;
-		}
-
-		protected IMethodInterceptor[] ObtainInterceptors(IKernel kernel, ComponentModel model)
-		{
-			IMethodInterceptor[] interceptors = new IMethodInterceptor[model.Interceptors.Count];
-			int index = 0;
-
-			foreach(InterceptorReference interceptorRef in model.Interceptors)
-			{
-				IHandler handler = null;
-
-				if (interceptorRef.ReferenceType == InterceptorReferenceType.Interface)
-				{
-					handler = kernel.GetHandler( interceptorRef.ServiceType );
-				}
-				else
-				{
-					handler = kernel.GetHandler( interceptorRef.ComponentKey );
-				}
-
-				if (handler == null)
-				{
-					// This shoul be virtually impossible to happen
-					// Seriously!
-					throw new ApplicationException("The interceptor could not be resolved");
-				}
-
-				try
-				{
-					IMethodInterceptor interceptor = (IMethodInterceptor) handler.Resolve();
-					
-					interceptors[index++] = interceptor;
-
-					SetOnBehalfAware(interceptor as IOnBehalfAware, model);
-				}
-				catch(InvalidCastException)
-				{
-					String message = String.Format(
-						"An interceptor registered for {0} doesnt implement " + 
-						"the IMethodInterceptor interface", 
-						model.Name);
-
-					throw new ApplicationException(message);
-				}
-			}
-
-			return interceptors;
-		}
-
-		protected void SetOnBehalfAware(IOnBehalfAware onBehalfAware, ComponentModel target)
-		{
-			if (onBehalfAware != null)
-			{
-				onBehalfAware.SetInterceptedComponentModel(target);
-			}
 		}
 
 		#region IDeserializationCallback

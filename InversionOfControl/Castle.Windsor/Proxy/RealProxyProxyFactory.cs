@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MicroKernel
+namespace Castle.Windsor.Proxy
 {
+	using System;
+
+	using Castle.MicroKernel;
 	using Castle.Model;
 
-	/// <summary>
-	/// Defines the contract used by the kernel 
-	/// to obtain proxies for components. The implementor
-	/// must return a proxied instance that dispatch 
-	/// the invocation to the registered interceptors in the model
-	/// </summary>
-	public interface IProxyFactory
+
+	public class RealProxyProxyFactory : AbstractProxyFactory
 	{
+		public RealProxyProxyFactory()
+		{
+		}
+
 		/// <summary>
 		/// Implementors must create a proxy based on 
 		/// the information exposed by ComponentModel
@@ -32,6 +34,19 @@ namespace Castle.MicroKernel
 		/// <param name="model"></param>
 		/// <param name="constructorArguments"></param>
 		/// <returns></returns>
-		object Create( IKernel kernel, ComponentModel model, params object[] constructorArguments );
+		public override object Create(IKernel kernel, ComponentModel model, params object[] constructorArguments)
+		{
+			object target = Activator.CreateInstance( model.Implementation, constructorArguments );
+
+			if (!(target is MarshalByRefObject))
+			{
+				throw new Exception("RealProxyProxyFactory can only proxy types that extend MarshalByRefObject");
+			}
+
+			ComponentRealProxy proxy = new ComponentRealProxy( (MarshalByRefObject) target, 
+				model.Implementation, ObtainInterceptors(kernel, model));
+
+			return proxy.GetTransparentProxy();
+		}
 	}
 }
