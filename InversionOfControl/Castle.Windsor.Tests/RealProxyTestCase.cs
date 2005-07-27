@@ -56,5 +56,50 @@ namespace Castle.Windsor.Tests
 			Assert.AreEqual( 5, service.Sum(2,2) );
 		}
 
+		[Test]
+		public void ConcreteClassProxy()
+		{
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
+			_container.AddComponent( "key", typeof(MarshalCalculatorService), typeof(MarshalCalculatorService)  );
+
+			MarshalCalculatorService service = (MarshalCalculatorService) 
+				_container.Resolve("key");
+
+			Assert.IsNotNull(service);
+			Assert.AreEqual( 5, service.Sum(2,2) );
+		}
+
+		[Test]
+		public void InterfaceProxyWithLifecycle()
+		{
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
+			_container.AddComponent( "key", 
+				typeof(ICalcService), typeof(CalculatorServiceWithLifecycle)  );
+
+			ICalcService service = (ICalcService) _container.Resolve("key");
+
+			Assert.IsNotNull(service);
+			Assert.IsTrue( service.Initialized );
+			Assert.AreEqual( 5, service.Sum(2,2) );
+
+			Assert.IsFalse( service.Disposed );
+
+			_container.Release( service );
+		}
+
+		[Test]
+		public void ClassProxyWithAttributes()
+		{
+			_container = new WindsorContainer(); // So we wont use the facilities
+
+			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
+			_container.AddComponent( "key", typeof(CalculatorServiceWithAttributes)  );
+
+			CalculatorServiceWithAttributes service = 
+				(CalculatorServiceWithAttributes) _container.Resolve("key");
+
+			Assert.IsNotNull(service);
+			Assert.AreEqual( 5, service.Sum(2,2) );
+		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.Windsor.Tests.Components
 	/// Summary description for CalculatorServiceWithAttributes.
 	/// </summary>
 	[Interceptor( typeof(ResultModifierInterceptor) )]
-	public class CalculatorServiceWithAttributes
+	public class CalculatorServiceWithAttributes : MarshalByRefObject
 	{
 		public CalculatorServiceWithAttributes()
 		{
