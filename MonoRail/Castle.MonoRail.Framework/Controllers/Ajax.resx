@@ -206,7 +206,7 @@ String.prototype.extend({
 
   unescapeHTML: function() {
     var div = document.createElement('div');
-    div.innerHTML = this.stripTags();
+    Element.setInnerContent(div, this.stripTags());
     return div.childNodes[0].nodeValue;
   }
 });
@@ -363,7 +363,7 @@ Ajax.Updater.prototype.extend(Ajax.Request.prototype).extend({
       if (this.options.insertion) {
         new this.options.insertion(receiver, response);
       } else {
-        receiver.innerHTML = response;
+        Element.setInnerContent(receiver, response);
       }
     }
 
@@ -451,6 +451,29 @@ if (!window.Element) {
 }
 
 Object.extend(Element, {
+	setInnerContent: function(element, content) {
+		try {
+			element.innerHTML = content;
+		} catch (e) {
+			if (this.domParser == null && typeof(DOMParser) != 'undefined')
+				this.domParser = new DOMParser();
+			
+			if (!this.domParser)
+				throw e;
+			
+			var f = this.domParser.parseFromString("<doc>"+content+"</doc>", "text/xml").documentElement;
+			
+			var r = document.createRange();
+			r.selectNodeContents(element);
+			r.deleteContents();
+			
+			var l = f.childNodes;
+			var len = l.length;
+			while (len-- > 0)
+				element.appendChild(l[0]);
+		}
+	},
+
   toggle: function() {
     for (var i = 0; i < arguments.length; i++) {
       var element = $(arguments[i]);
@@ -1346,7 +1369,7 @@ Autocompleter.Base.prototype = {
   
   updateChoices: function(choices) {
     if(!this.changed && this.has_focus) {
-      this.update.innerHTML = choices;
+      Element.setInnerContent(this.update, choices);
       Element.cleanWhitespace(this.update);
       Element.cleanWhitespace(this.update.firstChild);
 
