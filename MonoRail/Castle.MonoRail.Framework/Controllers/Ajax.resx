@@ -432,7 +432,7 @@ document.getElementsByClassName = function(className) {
   
   for (var i = 0; i < children.length; i++) {
     var child = children[i];
-    var classNames = child.className.split(' ');
+    var classNames = (child.className || '').split(' ');
     for (var j = 0; j < classNames.length; j++) {
       if (classNames[j] == className) {
         elements.push(child);
@@ -487,7 +487,7 @@ Object.extend(Element, {
     element = $(element);
     if (!element)
       return;
-    var a = element.className.split(' ');
+    var a = (element.className || '').split(' ');
     for (var i = 0; i < a.length; i++) {
       if (a[i] == className)
         return true;
@@ -506,7 +506,7 @@ Object.extend(Element, {
     if (!element)
       return;
     var newClassName = '';
-    var a = element.className.split(' ');
+    var a = (element.className || '').split(' ');
     for (var i = 0; i < a.length; i++) {
       if (a[i] != className) {
         if (i > 0)
@@ -1117,7 +1117,7 @@ Element.collectTextNodesIgnoreClass = function(element, ignoreclass) {
     if(children[i].nodeType==3) {
       text+=children[i].nodeValue;
     } else {
-      if((!children[i].className.match(classtest)) && children[i].hasChildNodes())
+      if((!(children[i].className || '').match(classtest)) && children[i].hasChildNodes())
         text += Element.collectTextNodesIgnoreClass(children[i], ignoreclass);
     }
   }
