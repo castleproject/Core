@@ -22,43 +22,48 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class DataBindError : IPropertyError
 	{
-		private string _Parent;
-		private string _Property;
-		private Exception _Exception;
+		private String _parent;
+		private String _property;
+		private Exception _exception;
 
-		public DataBindError( string parent, string property ) : this( parent, property, null )
+		public DataBindError( String parent, String property ) : this( parent, property, null )
 		{
 		}
 
-		public DataBindError( string parent, string property, Exception exception )
+		public DataBindError( String parent, String property, Exception exception )
 		{
-			_Parent = parent;
-			_Property = property;
-			_Exception = exception;
+			_parent = parent;
+			_property = property;
+			_exception = exception;
 		}
 
-        public string Key
+        public String Key
 		{
-			get { return _Parent + "." + Property; }
+			get { return _parent + "." + Property; }
 		}
 
-		public string Parent
+		public String Parent
 		{
-			get { return _Parent; }
+			get { return _parent; }
 		}
 
-		public string Property
+		public String Property
 		{
-			get { return _Property; }
+			get { return _property; }
 		}
 
 		public Exception Exception
 		{
-			get { return _Exception; }
+			get { return _exception; }
 		}
 
-		public override string ToString()
+		public override String ToString()
 		{
+			if (Exception != null) 
+			{
+				return Exception.Message;
+			}
+
 			return "BindError." + Key;
 		}
 	}

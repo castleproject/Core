@@ -526,39 +526,39 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
-		/// Builds an unordered list with the elements on the specified array
+		/// Builds an unordered list with the elements on the specified <see cref="ICollection"/>
 		/// </summary>
-		/// <param name="array"></param>
+		/// <param name="elements"></param>
 		/// <returns></returns>
-		public static String BuildUnorderedList(String[] array)
+		public static String BuildUnorderedList(ICollection elements)
 		{
-			return BuildUnorderedList(array, null, null);
+			return BuildUnorderedList(elements, null, null);
 		}
 		/// <summary>
-		/// Builds an ordered list with the elements on the specified array
+		/// Builds an ordered list with the elements on the specified <see cref="ICollection"/>
 		/// </summary>
-		public static String BuildOrderedList(String[] array)
+		public static String BuildOrderedList(ICollection elements)
 		{
-			return BuildOrderedList(array, null, null);
+			return BuildOrderedList(elements, null, null);
 		}
 
 		/// <summary>
-		/// Builds an ordered list with the elements on the specified array
+		/// Builds an ordered list with the elements on the specified <see cref="ICollection"/>
 		/// </summary>
-		public static String BuildOrderedList(String[] array, String styleClass, String itemClass)
+		public static String BuildOrderedList(ICollection elements, String styleClass, String itemClass)
 		{
-			return BuildList("ol", array, styleClass, itemClass);
+			return BuildList("ol", elements, styleClass, itemClass);
 		}
 
 		/// <summary>
-		/// Builds an unordered list with the elements on the specified array
+		/// Builds an unordered list with the elements on the specified <see cref="ICollection"/>
 		/// </summary>
-		public static String BuildUnorderedList(String[] array, String styleClass, String itemClass)
+		public static String BuildUnorderedList(ICollection elements, String styleClass, String itemClass)
 		{
-			return BuildList("ul", array, styleClass, itemClass);
+			return BuildList("ul", elements, styleClass, itemClass);
 		}
 
-		private static String BuildList(String tag, String[] array, String styleClass, String itemClass)
+		private static String BuildList(String tag, ICollection elements, String styleClass, String itemClass)
 		{
 			StringWriter sbWriter = new StringWriter();
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
@@ -573,9 +573,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			writer.Write(HtmlTextWriter.TagRightChar);
 			writer.WriteLine();
 
-			foreach (String item in array)
+			foreach (object item in elements)
 			{
-				writer.WriteLine(BuildListItem(item, itemClass));
+				if (item == null) continue;
+				
+				writer.WriteLine(BuildListItem(item.ToString(), itemClass));
 			}
 
 			writer.WriteEndTag(tag);

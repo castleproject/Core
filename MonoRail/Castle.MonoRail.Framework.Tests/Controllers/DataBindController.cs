@@ -63,13 +63,13 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 				if ( e.Property == "Value" )
 				{
 					Assert.AreEqual( "BindObject.Value", e.Key );
-					Assert.AreEqual( "BindError.BindObject.Value", e.ToString() );
+					Assert.AreEqual( "Input string was not in a correct format.", e.ToString() );
 					Assert.IsNotNull( e.Exception );
 				}
 				else if ( e.Property == "Internal.Date" )
 				{
 					Assert.AreEqual( "BindObject.Internal.Date", e.Key );
-					Assert.AreEqual( "BindError.BindObject.Internal.Date", e.ToString() );
+					Assert.AreEqual( "The string was not recognized as a valid DateTime. There is a unknown word starting at index 0.", e.ToString() );
 					Assert.IsNotNull( e.Exception );
 				}
 				else

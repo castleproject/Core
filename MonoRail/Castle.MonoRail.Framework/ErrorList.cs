@@ -14,24 +14,27 @@
 
 namespace Castle.MonoRail.Framework
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
 
 	/// <summary>
 	/// A useful representation of a set of IPropertyError instances.
 	/// </summary>
-	public class ErrorList : IEnumerable
+	public class ErrorList : ICollection
 	{
 		private IList list;
 		private IDictionary map;
 
-		public ErrorList( IList list )
+		public ErrorList( IList initialContents )
 		{
-			this.list = ( list != null ? list : new ArrayList(0) );
-			map	= CollectionsUtil.CreateCaseInsensitiveHashtable( list.Count );
+			this.list = ( initialContents != null ? initialContents : new ArrayList(0) );
+			map	= new HybridDictionary( list.Count, true );
 			
-			foreach ( IPropertyError e in list )
-				map.Add( e.Property, e );
+			foreach ( IPropertyError error in list )
+			{
+				map.Add( error.Property, error );
+			}
 		}
 
 		public int Count
@@ -48,6 +51,25 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return map[ property ] as IPropertyError; }
 		}
+
+		#region ICollection Members
+
+		public void CopyTo(Array array, int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object SyncRoot
+		{
+			get { return this; }
+		}
+
+		public bool IsSynchronized
+		{
+			get { return false; }
+		}
+
+		#endregion
 
 		#region IEnumerable Members
 

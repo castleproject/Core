@@ -102,9 +102,11 @@ namespace Castle.MonoRail.Framework
 						}
 						else
 						{
-							string[] values = paramList.GetValues( paramPrefix + prop.Name );
+							String paramName = paramPrefix + prop.Name;
+
+							string[] values = paramList.GetValues( paramName );
 							
-							object value = Convert( prop.PropertyType, values, prop.Name, files, context );
+							object value = Convert( prop.PropertyType, values, paramName, files, context );
 
 							if (value != null)
 							{
@@ -215,7 +217,7 @@ namespace Castle.MonoRail.Framework
 					String month = context.Params[paramName + "month"];
 					String year = context.Params[paramName + "year"];
 
-					if (day != null && day != null && day != null)
+					if (day != null && month != null && year != null)
 					{
 						try
 						{
@@ -224,9 +226,12 @@ namespace Castle.MonoRail.Framework
 								System.Convert.ToInt32(month), 
 								System.Convert.ToInt32(day) );
 						}
-						catch(Exception)
+						catch(Exception inner)
 						{
-							throw new ArgumentException("Invalid date");
+							String message = String.Format("Invalid date (day {0} month {1} year {2}) for {3} ", 
+								day, month, year, paramName);
+
+							throw new ArgumentException(message, inner);
 						}
 					}
 				}
