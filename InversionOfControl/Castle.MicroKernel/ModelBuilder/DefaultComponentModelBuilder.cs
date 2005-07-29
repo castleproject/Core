@@ -18,7 +18,9 @@ namespace Castle.MicroKernel.ModelBuilder
 	using System.Collections;
 
 	using Castle.Model;
+
 	using Castle.MicroKernel.ModelBuilder.Inspectors;
+
 
 	/// <summary>
 	/// Summary description for DefaultComponentModelBuilder.

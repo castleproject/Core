@@ -76,11 +76,25 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			if (Model.Interceptors.HasInterceptors)
 			{
-				instance = Kernel.ProxyFactory.Create(Kernel, Model, arguments);
+				try
+				{
+					instance = Kernel.ProxyFactory.Create(Kernel, Model, arguments);
+				}
+				catch(Exception ex)
+				{
+					throw new ComponentActivatorException("ComponentActivator: could not proxy " + Model.Implementation.FullName, ex);
+				}
 			}
 			else
 			{
-				instance = Activator.CreateInstance(Model.Implementation, arguments);
+				try
+				{
+					instance = Activator.CreateInstance(Model.Implementation, arguments);
+				}
+				catch(Exception ex)
+				{
+					throw new ComponentActivatorException("ComponentActivator: could not instantiate " + Model.Implementation.FullName, ex);
+				}
 			}
 			
 			return instance;

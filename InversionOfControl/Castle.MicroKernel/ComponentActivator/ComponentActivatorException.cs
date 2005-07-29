@@ -27,6 +27,10 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 		}
 
+		public ComponentActivatorException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+
 		public ComponentActivatorException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
