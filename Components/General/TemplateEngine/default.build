@@ -97,6 +97,10 @@
 				<include name="**/*.cs" />
 			</sources>
 
+			<resources basedir="${test.src.dir}" prefix="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests" dynamicprefix="true">
+				<include name="**/*.vm" />
+			</resources>
+			
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/*.dll" />
