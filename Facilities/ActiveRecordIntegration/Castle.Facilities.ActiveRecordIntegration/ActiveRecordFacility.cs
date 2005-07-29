@@ -23,9 +23,12 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using Castle.ActiveRecord.Framework.Config;
 	using Castle.MicroKernel.Facilities;
 	using Castle.Model.Configuration;
+	using Castle.Services.Transaction;
+
+	using TransactionMode = Castle.Services.Transaction.TransactionMode;
 
 	/// <summary>
-	/// Provides a small integration with ActiveRecord framework.
+	/// Provides integration with ActiveRecord framework.
 	/// </summary>
 	public class ActiveRecordFacility : AbstractFacility
 	{
@@ -49,14 +52,22 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 			if (assemblies.Count == 0)
 			{
-				throw new FacilityException("You need to specify at least one assembly that have the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
+				throw new FacilityException("You need to specify at least one assembly that contains " + 
+					"the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
 			}
 
+			SetUpTransactionManager();
+
+			InitializeFramework(assemblies);
+		}
+
+		private void InitializeFramework(ArrayList assemblies)
+		{
 			try
 			{
 				ActiveRecord.ActiveRecordStarter.Initialize( 
 					(Assembly[]) assemblies.ToArray( typeof(Assembly) ), 
-						new ConfigurationSourceAdapter(FacilityConfig) );
+					new ConfigurationSourceAdapter(FacilityConfig) );
 			}
 			catch(Exception ex)
 			{
@@ -64,11 +75,30 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			}
 		}
 
+		private void SetUpTransactionManager()
+		{
+			if (!Kernel.HasComponent( typeof(ITransactionManager) ))
+			{
+				Kernel.AddComponent( "ar.transaction.manager", 
+				                     typeof(ITransactionManager), typeof(ActiveRecordTransactionManager) );
+			}
+	
+			ITransactionManager transactionManager = (ITransactionManager) Kernel[ typeof(ITransactionManager) ];
+	
+			transactionManager.TransactionCreated += new TransactionCreationInfoDelegate(OnNewTransaction);
+		}
+
+		private void OnNewTransaction(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
+		{
+			transaction.Enlist( new TransactionScopeResourceAdapter(transactionMode) );
+		}
+
 		private Assembly ObtainAssembly(String assemblyName)
 		{
 			return Assembly.Load(assemblyName);
 		}
 	}
+
 
 	internal class ConfigurationSourceAdapter : InPlaceConfigurationSource
 	{

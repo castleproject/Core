@@ -129,7 +129,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ActiveRecordTransactionManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TransactionScopeResourceAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

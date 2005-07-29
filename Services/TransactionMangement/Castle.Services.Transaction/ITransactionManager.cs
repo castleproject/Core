@@ -18,11 +18,24 @@
 
 namespace Castle.Services.Transaction
 {
+	public delegate void TransactionCreationInfoDelegate(
+		ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode );
+
+	public delegate void TransactionDelegate(ITransaction transaction);
+
 	/// <summary>
 	/// Manages the creation and disposal of <see cref="ITransaction"/> instances.
 	/// </summary>
 	public interface ITransactionManager
 	{
+		event TransactionCreationInfoDelegate TransactionCreated;
+
+//		event TransactionDelegate TransactionCommitted;
+//
+//		event TransactionDelegate TransactionRolledback;
+//
+//		event TransactionDelegate TransactionDisposed;
+
 		/// <summary>
 		/// More information here.
 		/// Can return null!

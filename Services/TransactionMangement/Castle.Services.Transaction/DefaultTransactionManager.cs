@@ -16,12 +16,20 @@ namespace Castle.Services.Transaction
 {
 	using System;
 	using System.Collections;
+	using System.ComponentModel;
 
 	/// <summary>
 	/// TODO: Ensure this class is thread-safe
 	/// </summary>
 	public class DefaultTransactionManager : ITransactionManager
 	{
+		private static readonly object TransactionCreatedEvent = new object();
+		private static readonly object TransactionCommittedEvent = new object();
+		private static readonly object TransactionRolledbackEvent = new object();
+		private static readonly object TransactionDisposedEvent = new object();
+
+		private EventHandlerList _events = new EventHandlerList();
+
 		private Stack _transactions = new Stack(5);
 
 		public DefaultTransactionManager()
@@ -30,7 +38,31 @@ namespace Castle.Services.Transaction
 
 		#region ITransactionManager Members
 
-		public ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode)
+		public event TransactionCreationInfoDelegate TransactionCreated
+		{
+			add { _events.AddHandler(TransactionCreatedEvent, value); }
+			remove { _events.RemoveHandler(TransactionCreatedEvent, value); }
+		}
+
+		public event TransactionDelegate TransactionCommitted
+		{
+			add { _events.AddHandler(TransactionCommittedEvent, value); }
+			remove { _events.RemoveHandler(TransactionCommittedEvent, value); }
+		}
+
+		public event TransactionDelegate TransactionRolledback
+		{
+			add { _events.AddHandler(TransactionRolledbackEvent, value); }
+			remove { _events.RemoveHandler(TransactionRolledbackEvent, value); }
+		}
+
+		public event TransactionDelegate TransactionDisposed
+		{
+			add { _events.AddHandler(TransactionDisposedEvent, value); }
+			remove { _events.RemoveHandler(TransactionDisposedEvent, value); }
+		}
+
+		public virtual ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode)
 		{
 			if (transactionMode == TransactionMode.Unspecified)
 			{
@@ -61,6 +93,8 @@ namespace Castle.Services.Transaction
 				transaction = new StandardTransaction();
 			}
 
+			RaiseTransactionCreated(transaction, transactionMode, isolationMode);
+
 			_transactions.Push(transaction);
 
 			return transaction;
@@ -77,7 +111,7 @@ namespace Castle.Services.Transaction
 			}
 		}
 
-		public ITransaction CurrentTransaction
+		public virtual ITransaction CurrentTransaction
 		{
 			get
 			{
@@ -89,7 +123,7 @@ namespace Castle.Services.Transaction
 			}
 		}
 
-		public void Dispose(ITransaction transaction)
+		public virtual void Dispose(ITransaction transaction)
 		{
 			if (transaction == null)
 			{
@@ -113,6 +147,12 @@ namespace Castle.Services.Transaction
 		}
 
 		#endregion
+
+		protected void RaiseTransactionCreated(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
+		{
+			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) _events[TransactionCreatedEvent];
+			if (eventDelegate != null) eventDelegate(transaction, transactionMode, isolationMode);
+		}
 
 		protected virtual TransactionMode ObtainDefaultTransactionMode(TransactionMode transactionMode)
 		{

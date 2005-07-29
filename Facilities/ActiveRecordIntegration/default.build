@@ -36,6 +36,7 @@
 		<copy file="${ar.bin.dir}/HashCodeProvider.dll" todir="${bin.dir}" />
 		<copy file="${ar.bin.dir}/Iesi.Collections.dll" todir="${bin.dir}" />
 		<copy file="${ar.bin.dir}/log4net.dll" todir="${bin.dir}" />
+		<copy file="${services.bin.dir}/Castle.Services.Transaction.dll" todir="${bin.dir}" />
 		<copy todir="${bin.dir}">
 			<fileset basedir="${library.dir}">
 				<include name="*.dll" />

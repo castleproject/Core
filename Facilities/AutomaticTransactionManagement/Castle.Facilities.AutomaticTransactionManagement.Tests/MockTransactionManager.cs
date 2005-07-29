@@ -32,6 +32,8 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 		{
 		}
 
+		public event TransactionCreationInfoDelegate TransactionCreated;
+
 		public ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode)
 		{
 			_current = new MockTransaction();

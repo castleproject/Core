@@ -15,14 +15,17 @@
 namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
+	using System.Collections;
+	using System.Reflection;
 
 	using Castle.Model;
 	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ModelBuilder;
+	using Castle.MicroKernel.Facilities;
 
 	using Castle.Facilities.NHibernateExtension;
-
+	
 
 	public class AutomaticSessionInspector : IContributeComponentModelConstruction
 	{
@@ -31,11 +34,40 @@ namespace Castle.Facilities.NHibernateIntegration
 			if (model.Implementation.IsDefined( 
 				typeof(UsesAutomaticSessionCreationAttribute), true ))
 			{
+				EnsureRelevantMethodsAreVirtual( model.Implementation );
+
 				model.Dependencies.Add( 
 					new DependencyModel( DependencyType.Service, null, typeof(AutomaticSessionInterceptor), false ) );
 
 				model.Interceptors.Add( 
 					new InterceptorReference( typeof(AutomaticSessionInterceptor) ) );
+			}
+		}
+
+		private void EnsureRelevantMethodsAreVirtual(Type implementation)
+		{
+			MethodInfo[] methods = implementation.GetMethods( 
+				BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly );
+
+			ArrayList problematicMethods = new ArrayList();
+
+			foreach( MethodInfo method in methods )
+			{
+				if (!method.IsVirtual && method.IsDefined( typeof(SessionFlushAttribute), true ))
+				{
+					problematicMethods.Add( method.Name );
+				}
+			}
+			
+			if (problematicMethods.Count != 0)
+			{
+				String[] methodNames = (String[]) problematicMethods.ToArray( typeof(String) );
+
+				String message = String.Format( "The class {0} wants to use transaction interception, " + 
+					"however the methods must be marked as virtual in order to do so. Please correct " + 
+					"the following methods: {1}", implementation.FullName, String.Join(", ", methodNames) );
+
+				throw new FacilityException(message);
 			}
 		}
 	}
