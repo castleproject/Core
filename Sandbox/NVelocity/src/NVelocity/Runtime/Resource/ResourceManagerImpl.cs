@@ -1,3 +1,17 @@
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Resource
 {
 	using System;
@@ -7,19 +21,9 @@ namespace NVelocity.Runtime.Resource
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Resource.Loader;
 
-	/// <summary> Class to manage the text resource for the Velocity
-	/// Runtime.
-	/// *
+	/// <summary> 
+	/// Class to manage the text resource for the Velocity Runtime.
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:paulo.gaspar@krankikom.de">Paulo Gaspar</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ResourceManagerImpl.cs,v 1.7 2004/01/19 20:33:14 corts Exp $
-	///
-	/// </version>
 	public class ResourceManagerImpl : ResourceManager
 	{
 		public ResourceManagerImpl()
@@ -50,10 +54,10 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		protected internal ResourceCache globalCache = null;
 
-		/// <summary> The List of templateLoaders that the Runtime will
+		/// <summary> 
+		/// The List of templateLoaders that the Runtime will
 		/// use to locate the InputStream source of a template.
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'resourceLoaders' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		protected internal ArrayList resourceLoaders;
 
 		/// <summary> This is a list of the template input stream source
@@ -63,7 +67,6 @@ namespace NVelocity.Runtime.Resource
 		/// *
 		/// <loader-id>.resource.loader.<property> = <value>
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'sourceInitializerList' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private ArrayList sourceInitializerList;
 
 		/// <summary> Each loader needs a configuration object for
@@ -385,7 +388,7 @@ namespace NVelocity.Runtime.Resource
 						break;
 					}
 				}
-				catch (ResourceNotFoundException rnfe)
+				catch (ResourceNotFoundException)
 				{
 					/*
 		    *  that's ok - it's possible to fail in

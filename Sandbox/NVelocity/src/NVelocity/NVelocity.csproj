@@ -779,6 +779,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Runtime\Resource\Loader\AssemblyResourceLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\Resource\Loader\FileResourceLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -790,11 +795,6 @@
                 />
                 <File
                     RelPath = "Runtime\Resource\Loader\ResourceLoaderFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Runtime\Resource\Loader\ResourceLocator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

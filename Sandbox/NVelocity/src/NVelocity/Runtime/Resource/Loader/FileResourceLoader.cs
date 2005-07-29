@@ -1,3 +1,17 @@
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 namespace NVelocity.Runtime.Resource.Loader
 {
 	using System;
@@ -34,22 +48,13 @@ namespace NVelocity.Runtime.Resource.Loader
 			rsvc.info("FileResourceLoader : initialization starting.");
 
 			paths = configuration.GetVector("path");
-
-			// lets tell people what paths we will be using
-			foreach (String path in paths)
-			{
-				rsvc.info("FileResourceLoader : adding path '" + path + "'");
-			}
-
-			rsvc.info("FileResourceLoader : initialization complete.");
 		}
-
 
 		/// <summary>
 		/// Get an InputStream so that the Runtime can build a
 		/// template with it.
 		/// </summary>
-		/// <param name="name">name of template to get</param>
+		/// <param name="templateName">name of template to get</param>
 		/// <returns>InputStream containing the template
 		/// @throws ResourceNotFoundException if template not found
 		/// in the file template path.
@@ -61,42 +66,35 @@ namespace NVelocity.Runtime.Resource.Loader
 				String template = null;
 				int size = paths.Count;
 
+				// Make sure we have a valid templateName.
+				if (templateName == null || templateName.Length == 0)
+				{
+					// If we don't get a properly formed templateName
+					// then there's not much we can do. So
+					// we'll forget about trying to search
+					// any more paths for the template.
+					throw new ResourceNotFoundException("Need to specify a file name or file path!");
+				}
+
+				template = StringUtils.normalizePath(templateName);
+
+				if (template == null || template.Length == 0)
+				{
+					String msg = "File resource error : argument " + template + " contains .. and may be trying to access " + "content outside of template root.  Rejected.";
+
+					throw new ResourceNotFoundException(msg);
+				}
+
+				if (template.StartsWith("/"))
+				{
+					template = template.Substring(1);
+				}
+
 				for (int i = 0; i < size; i++)
 				{
-					String path = (String)
-						paths[i];
+					String path = (String) paths[i];
 
-					// Make sure we have a valid templateName.
-					if (templateName == null || templateName.Length == 0)
-					{
-						// If we don't get a properly formed templateName
-						// then there's not much we can do. So
-						// we'll forget about trying to search
-						// any more paths for the template.
-						throw new ResourceNotFoundException("Need to specify a file name or file path!");
-					}
-
-					template = StringUtils.normalizePath(templateName)
-						;
-					if (template == null || template.Length == 0)
-					{
-						String msg = "File resource error : argument " + template + " contains .. and may be trying to access " + "content outside of template root.  Rejected.";
-
-						rsvc.error("FileResourceLoader : " + msg)
-							;
-
-						throw new ResourceNotFoundException(msg);
-					}
-
-					// if a / leads off, then just nip that :)
-					if (template.StartsWith("/"))
-					{
-						template = template.Substring(1)
-							;
-					}
-
-					Stream inputStream = findTemplate(path, template)
-						;
+					Stream inputStream = findTemplate(path, template);
 
 					if (inputStream != null)
 					{
@@ -119,26 +117,34 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary>
 		/// Try to find a template given a normalized path.
 		/// </summary>
-		/// <param name="String">a normalized path</param>
+		/// <param name="path">a normalized path</param>
 		/// <returns>InputStream input stream that will be parsed</returns>
 		private Stream findTemplate(String path, String template)
 		{
 			try
 			{
-				ResourceLocator rl = new ResourceLocator(path, template);
+				string filename;
 
-				if (rl.Exists)
+				if (path != null)
 				{
-					return new BufferedStream(rl.OpenRead());
+					filename = path + Path.AltDirectorySeparatorChar + template;
 				}
 				else
 				{
+					filename = template;
+				}
+
+				FileInfo file = new FileInfo(filename);
+
+				if (!file.Exists)
+				{
 					return null;
 				}
+
+				return new BufferedStream(file.OpenRead());
 			}
-			catch (FileNotFoundException fnfe)
+			catch (FileNotFoundException)
 			{
-				// log and convert to a general Velocity ResourceNotFoundException
 				return null;
 			}
 		}
