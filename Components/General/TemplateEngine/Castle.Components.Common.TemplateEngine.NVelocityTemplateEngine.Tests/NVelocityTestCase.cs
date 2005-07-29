@@ -41,5 +41,24 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests
 
 			Assert.AreEqual("This is a simple template", writer.GetStringBuilder().ToString());
 		}
+
+		[Test]
+		public void SimpleTemplateProcessingWithinResource()
+		{
+			NVelocityTemplateEngine engine = new NVelocityTemplateEngine();
+
+			engine.AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests";
+			
+			(engine as ISupportInitialize).BeginInit();
+
+			StringWriter writer = new StringWriter();
+
+			Assert.IsTrue( engine.Process(
+				new Hashtable(), 
+				"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests/compiledres/simple.vm", 
+				writer) );
+
+			Assert.AreEqual("This is a simple template", writer.GetStringBuilder().ToString());
+		}
 	}
 }

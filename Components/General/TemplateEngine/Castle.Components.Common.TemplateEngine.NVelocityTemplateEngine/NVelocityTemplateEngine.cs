@@ -34,25 +34,79 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 	/// </summary>
 	public class NVelocityTemplateEngine : ITemplateEngine, ISupportInitialize
 	{
-		private VelocityEngine vengine = new VelocityEngine();
-		private String _templateDir;
+		private readonly VelocityEngine vengine = new VelocityEngine();
+		
+		private String assemblyName;
+		private String templateDir = ".";
+		private bool enableCache = true;
 
-		public NVelocityTemplateEngine(String templateDir)
+		/// <summary>
+		/// Constructs a NVelocityTemplateEngine instance
+		/// assuming the default values
+		/// </summary>
+		public NVelocityTemplateEngine()
 		{
-			_templateDir = templateDir;
 		}
 
+		/// <summary>
+		/// Constructs a NVelocityTemplateEngine instance
+		/// specifing the template directory
+		/// </summary>
+		/// <param name="templateDir"></param>
+		public NVelocityTemplateEngine(String templateDir)
+		{
+			this.templateDir = templateDir;
+		}
+
+		/// <summary>
+		/// Gets or sets the assembly name. This
+		/// forces NVelocityTemplateEngine to use an assembly resource loader
+		/// instead of File resource loader (which is the default) 
+		/// </summary>
+		public string AssemblyName
+		{
+			get { return assemblyName; }
+			set { assemblyName = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the template directory
+		/// </summary>
+		public string TemplateDir
+		{
+			get { return templateDir; }
+			set { templateDir = value; }
+		}
+
+		/// <summary>
+		/// Enable/Disable caching. Default is <c>true</c>
+		/// </summary>
+		public bool EnableCache
+		{
+			get { return enableCache; }
+			set { enableCache = value; }
+		}
+
+		/// <summary>
+		/// Starts/configure NVelocity based on the properties.
+		/// </summary>
 		public void BeginInit()
 		{
 			ExtendedProperties props = new ExtendedProperties();
 
-			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
-
-//			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, 
-//				@"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.BetterResourceManager\," + 
-//				"Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine");
-//			
-			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, _templateDir);
+			if (assemblyName != null)
+			{
+				props.SetProperty(RuntimeConstants_Fields.RESOURCE_LOADER, "assembly");
+				props.SetProperty("assembly.resource.loader.class", "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader;NVelocity");
+				props.SetProperty("assembly.resource.loader.cache", EnableCache.ToString().ToLower() );
+				props.SetProperty("assembly.resource.loader.assembly", assemblyName);
+			}
+			else
+			{
+				props.SetProperty(RuntimeConstants_Fields.RESOURCE_LOADER, "file");
+				props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, templateDir);
+				props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_CACHE, EnableCache.ToString().ToLower() );
+			}
 
 			vengine.Init(props);
 		}
@@ -69,7 +123,16 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 		/// <returns></returns>
 		public bool HasTemplate(String templateName)
 		{
-			return File.Exists( Path.Combine(_templateDir, templateName) );
+			try
+			{
+				vengine.GetTemplate(templateName);
+				
+				return true;
+			}
+			catch(Exception)
+			{
+				return false;
+			}
 		}
 
 		/// <summary>

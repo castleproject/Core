@@ -135,6 +135,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "compiledres\simple.vm"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "templates\simple.vm"
                     BuildAction = "None"
                 />
