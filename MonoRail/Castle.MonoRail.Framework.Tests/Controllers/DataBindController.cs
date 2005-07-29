@@ -18,8 +18,6 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Framework.Attributes;
-
 
 	public class DataBindController : SmartDispatcherController
 	{
@@ -69,7 +67,8 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 				else if ( e.Property == "Internal.Date" )
 				{
 					Assert.AreEqual( "BindObject.Internal.Date", e.Key );
-					Assert.AreEqual( "The string was not recognized as a valid DateTime.  There is a unknown word starting at index 0.", e.ToString() );
+					// The error message is different on Net 1.1 and 2.0
+					// Assert.AreEqual( "The string was not recognized as a valid DateTime.  There is a unknown word starting at index 0.", e.ToString() );
 					Assert.IsNotNull( e.Exception );
 				}
 				else
