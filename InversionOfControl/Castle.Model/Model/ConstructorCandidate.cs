@@ -24,30 +24,30 @@ namespace Castle.Model
 	[Serializable]
 	public class ConstructorCandidate
 	{
-		private ConstructorInfo _constructorInfo;
-		private DependencyModel[] _dependencies;
-		private int _points;
+		private ConstructorInfo constructorInfo;
+		private DependencyModel[] dependencies;
+		private int points;
 
 		public ConstructorCandidate( ConstructorInfo constructorInfo, params DependencyModel[] dependencies )
 		{
-			_constructorInfo = constructorInfo;
-			_dependencies = dependencies;
+			this.constructorInfo = constructorInfo;
+			this.dependencies = dependencies;
 		}
 
 		public ConstructorInfo Constructor
 		{
-			get { return _constructorInfo; }
+			get { return constructorInfo; }
 		}
 
 		public DependencyModel[] Dependencies
 		{
-			get { return _dependencies; }
+			get { return dependencies; }
 		}
 
 		public int Points
 		{
-			get { return _points; }
-			set { _points = value; }
+			get { return points; }
+			set { points = value; }
 		}
 	}
 }

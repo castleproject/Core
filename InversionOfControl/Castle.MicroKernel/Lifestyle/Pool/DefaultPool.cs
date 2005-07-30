@@ -1,4 +1,3 @@
-using Castle.Model;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,23 +18,25 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 	using System.Threading;
 	using System.Collections;
 
+	using Castle.Model;
+
 	[Serializable]
 	public class DefaultPool : IPool, IDisposable
 	{
-		private readonly Stack _available = Stack.Synchronized(new Stack());
-		private readonly IList _inUse = ArrayList.Synchronized(new ArrayList());
-		private readonly int _initialsize;
-		private readonly int _maxsize;
-		private readonly ReaderWriterLock _lock;
-		private readonly IComponentActivator _componentActivator;
+		private readonly Stack available = Stack.Synchronized(new Stack());
+		private readonly IList inUse = ArrayList.Synchronized(new ArrayList());
+		private readonly int initialsize;
+		private readonly int maxsize;
+		private readonly ReaderWriterLock rwlock;
+		private readonly IComponentActivator componentActivator;
 
 		public DefaultPool(int initialsize, int maxsize, IComponentActivator componentActivator)
 		{
-			_initialsize = initialsize;
-			_maxsize = maxsize;
-			_componentActivator = componentActivator;
+			this.initialsize = initialsize;
+			this.maxsize = maxsize;
+			this.componentActivator = componentActivator;
 
-			_lock = new ReaderWriterLock();
+			this.rwlock = new ReaderWriterLock();
 
 			// Thread thread = new Thread(new ThreadStart(InitPool));
 			// thread.Start();
@@ -46,16 +47,16 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 
 		public virtual object Request()
 		{
-			_lock.AcquireWriterLock(-1);
+			rwlock.AcquireWriterLock(-1);
 
 			object instance = null;
 
 			try
 			{
 
-				if (_available.Count != 0)
+				if (available.Count != 0)
 				{
-					instance = _available.Pop();
+					instance = available.Pop();
 
 					if (instance == null)
 					{
@@ -64,7 +65,7 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 				}
 				else
 				{
-					instance = _componentActivator.Create();
+					instance = componentActivator.Create();
 
 					if (instance == null)
 					{
@@ -72,11 +73,11 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 					}
 				}
 
-				_inUse.Add(instance);
+				inUse.Add(instance);
 			}
 			finally
 			{
-				_lock.ReleaseWriterLock();
+				rwlock.ReleaseWriterLock();
 			}
 
 			return instance;
@@ -84,35 +85,35 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 
 		public virtual void Release(object instance)
 		{
-			_lock.AcquireWriterLock(-1);
+			rwlock.AcquireWriterLock(-1);
 
 			try
 			{
-				if (!_inUse.Contains(instance))
+				if (!inUse.Contains(instance))
 				{
 					throw new PoolException("Trying to release a component that does not belong to this pool");
 				}
 
-				_inUse.Remove(instance);
+				inUse.Remove(instance);
 
-				if (_available.Count < _maxsize)
+				if (available.Count < maxsize)
 				{
 					if (instance is IRecyclable)
 					{
 						(instance as IRecyclable).Recycle();
 					}
 
-					_available.Push(instance);
+					available.Push(instance);
 				}
 				else
 				{
 					// Pool is full
-					_componentActivator.Destroy(instance);
+					componentActivator.Destroy(instance);
 				}
 			}
 			finally
 			{
-				_lock.ReleaseWriterLock();
+				rwlock.ReleaseWriterLock();
 			}
 		}
 
@@ -124,9 +125,9 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 		{
 			// Release all components 
 
-			foreach(object instance in _available)
+			foreach(object instance in available)
 			{
-				_componentActivator.Destroy(instance);
+				componentActivator.Destroy(instance);
 			}
 		}
 
@@ -140,12 +141,12 @@ namespace Castle.MicroKernel.Lifestyle.Pool
 		{
 			ArrayList tempInstance = new ArrayList();
 
-			for(int i=0; i < _initialsize; i++)
+			for(int i=0; i < initialsize; i++)
 			{
 				tempInstance.Add( Request() );
 			}
 
-			for(int i=0; i < _initialsize; i++)
+			for(int i=0; i < initialsize; i++)
 			{
 				Release( tempInstance[i] );
 			}

@@ -43,11 +43,11 @@ namespace Castle.MicroKernel.SubSystems.Naming
 	[Serializable]
 	public class NamingPartsSubSystem : DefaultNamingSubSystem
 	{
-		private BinaryTreeComponentName _tree;
+		private BinaryTreeComponentName tree;
 
 		public NamingPartsSubSystem()
 		{
-			_tree = new BinaryTreeComponentName();
+			tree = new BinaryTreeComponentName();
 		}
 
 		private ComponentName ToComponentName(String key)
@@ -57,37 +57,37 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public override bool Contains(String key)
 		{
-			return _tree.Contains( ToComponentName(key) );
+			return tree.Contains( ToComponentName(key) );
 		}
 
 		public override void UnRegister(String key)
 		{
-			_tree.Remove( ToComponentName(key) );
+			tree.Remove( ToComponentName(key) );
 		}
 
 		public override IHandler GetHandler(String key)
 		{
-			return _tree.GetHandler( ToComponentName(key) );
+			return tree.GetHandler( ToComponentName(key) );
 		}
 
 		public override IHandler[] GetHandlers(String query)
 		{
-			return _tree.GetHandlers( ToComponentName(query) );
+			return tree.GetHandlers( ToComponentName(query) );
 		}
 
 		public override IHandler[] GetHandlers()
 		{
-			return _tree.Handlers;
+			return tree.Handlers;
 		}
 
 		public override IHandler this[String key]
 		{
-			set { _tree.Add( ToComponentName(key), value ); }
+			set { tree.Add( ToComponentName(key), value ); }
 		}
 
 		public override int ComponentCount
 		{
-			get { return _tree.Count; }
+			get { return tree.Count; }
 		}
 	}
 }

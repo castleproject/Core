@@ -24,17 +24,17 @@ namespace Castle.MicroKernel.Handlers
 	[Serializable]
 	public class DefaultHandlerFactory : IHandlerFactory
 	{
-		private IKernel _kernel;
+		private IKernel kernel;
 
 		public DefaultHandlerFactory(IKernel kernel)
 		{
-			_kernel = kernel;
+			this.kernel = kernel;
 		}
 
 		public virtual IHandler Create(ComponentModel model)
 		{
 			IHandler handler = new DefaultHandler(model);
-			handler.Init(_kernel);
+			handler.Init(kernel);
 			return handler;
 		}
 	}

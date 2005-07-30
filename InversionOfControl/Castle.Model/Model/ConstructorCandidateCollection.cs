@@ -23,21 +23,21 @@ namespace Castle.Model
 	[Serializable]
 	public class ConstructorCandidateCollection : ReadOnlyCollectionBase
 	{
-		private ConstructorCandidate _fewerArgumentsCandidate;
-		private ConstructorCandidate _bestCandidate;
+		private ConstructorCandidate fewerArgumentsCandidate;
+		private ConstructorCandidate bestCandidate;
 
 		public void Add(ConstructorCandidate candidate)
 		{
-			if (_fewerArgumentsCandidate == null)
+			if (fewerArgumentsCandidate == null)
 			{
-				_fewerArgumentsCandidate = candidate;
+				fewerArgumentsCandidate = candidate;
 			}
 			else
 			{
 				if (candidate.Constructor.GetParameters().Length < 
-					_fewerArgumentsCandidate.Constructor.GetParameters().Length)
+					fewerArgumentsCandidate.Constructor.GetParameters().Length)
 				{
-					_fewerArgumentsCandidate = candidate;
+					fewerArgumentsCandidate = candidate;
 				}
 			}
 
@@ -46,13 +46,13 @@ namespace Castle.Model
 
 		public ConstructorCandidate FewerArgumentsCandidate
 		{
-			get { return _fewerArgumentsCandidate; }
+			get { return fewerArgumentsCandidate; }
 		}
 
 		public ConstructorCandidate BestCandidate
 		{
-			get { return _bestCandidate; }
-			set { _bestCandidate = value; }
+			get { return bestCandidate; }
+			set { bestCandidate = value; }
 		}
 	}
 }

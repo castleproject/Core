@@ -26,22 +26,22 @@ namespace Castle.MicroKernel.Lifestyle
 	public class PerThreadLifestyleManager : AbstractLifestyleManager, IDeserializationCallback
 	{
 		[NonSerialized]
-		private static LocalDataStoreSlot _slot = Thread.AllocateNamedDataSlot("CastlePerThread");
+		private static LocalDataStoreSlot slot = Thread.AllocateNamedDataSlot("CastlePerThread");
 
 		[NonSerialized]
-		private IList _instances = new ArrayList();
+		private IList instances = new ArrayList();
 
 		/// <summary>
 		/// 
 		/// </summary>
 		public override void Dispose()
 		{
-			foreach( object instance in _instances )
+			foreach( object instance in instances )
 			{
 				base.Release( instance );
 			}
 
-			_instances.Clear();
+			instances.Clear();
 
 			Thread.FreeNamedDataSlot( "CastlePerThread" );
 		}
@@ -50,15 +50,15 @@ namespace Castle.MicroKernel.Lifestyle
 
 		public override object Resolve()
 		{
-			lock(_slot)
+			lock(slot)
 			{
-				Hashtable map = (Hashtable) Thread.GetData( _slot );
+				Hashtable map = (Hashtable) Thread.GetData( slot );
 
 				if (map == null)
 				{
 					map = new Hashtable();
 
-					Thread.SetData( _slot, map );
+					Thread.SetData( slot, map );
 				}
 
 				Object instance = map[ ComponentActivator ];
@@ -67,7 +67,7 @@ namespace Castle.MicroKernel.Lifestyle
 				{
 					instance = base.Resolve();
 					map.Add( ComponentActivator, instance );
-					_instances.Add( instance );
+					instances.Add( instance );
 				}
 
 				return instance;
@@ -83,8 +83,8 @@ namespace Castle.MicroKernel.Lifestyle
 
 		public void OnDeserialization(object sender)
 		{
-			_slot = Thread.AllocateNamedDataSlot("CastlePerThread");
-			_instances = new ArrayList();
+			slot = Thread.AllocateNamedDataSlot("CastlePerThread");
+			instances = new ArrayList();
 		}
 	}
 }

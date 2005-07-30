@@ -29,13 +29,13 @@ namespace Castle.Model
 	[Serializable]
 	public class LifecycleStepCollection : ICollection
 	{
-		private IList _commissionSteps;
-		private IList _decommissionSteps;
+		private IList commissionSteps;
+		private IList decommissionSteps;
 
 		public LifecycleStepCollection()
 		{
-			_commissionSteps = new ArrayList();
-			_decommissionSteps = new ArrayList();
+			commissionSteps = new ArrayList();
+			decommissionSteps = new ArrayList();
 		}
 
 		/// <summary>
@@ -44,8 +44,8 @@ namespace Castle.Model
 		/// <returns></returns>
 		public object[] GetCommissionSteps()
 		{
-			object[] steps = new object[_commissionSteps.Count];
-			_commissionSteps.CopyTo( steps, 0 );
+			object[] steps = new object[commissionSteps.Count];
+			commissionSteps.CopyTo( steps, 0 );
 			return steps;
 		}
 
@@ -55,19 +55,19 @@ namespace Castle.Model
 		/// <returns></returns>
 		public object[] GetDecommissionSteps()
 		{
-			object[] steps = new object[_decommissionSteps.Count];
-			_decommissionSteps.CopyTo( steps, 0 );
+			object[] steps = new object[decommissionSteps.Count];
+			decommissionSteps.CopyTo( steps, 0 );
 			return steps;
 		}
 
 		public bool HasCommissionSteps
 		{
-			get { return _commissionSteps.Count != 0; }
+			get { return commissionSteps.Count != 0; }
 		}
 
 		public bool HasDecommissionSteps
 		{
-			get { return _decommissionSteps.Count != 0; }
+			get { return decommissionSteps.Count != 0; }
 		}
 
 		/// <summary>
@@ -81,11 +81,11 @@ namespace Castle.Model
 
 			if (type == LifecycleStepType.Commission)
 			{
-				_commissionSteps.Add( stepImplementation );				
+				commissionSteps.Add( stepImplementation );				
 			}
 			else
 			{
-				_decommissionSteps.Add( stepImplementation );
+				decommissionSteps.Add( stepImplementation );
 			}
 		}
 
@@ -96,23 +96,23 @@ namespace Castle.Model
 
 		public int Count
 		{
-			get { return _commissionSteps.Count + _decommissionSteps.Count; }
+			get { return commissionSteps.Count + decommissionSteps.Count; }
 		}
 
 		public object SyncRoot
 		{
-			get { return _commissionSteps.SyncRoot; }
+			get { return commissionSteps.SyncRoot; }
 		}
 
 		public bool IsSynchronized
 		{
-			get { return _commissionSteps.IsSynchronized; }
+			get { return commissionSteps.IsSynchronized; }
 		}
 
 		public IEnumerator GetEnumerator()
 		{
-			ArrayList newList = new ArrayList(_commissionSteps);
-			newList.AddRange(_decommissionSteps);
+			ArrayList newList = new ArrayList(commissionSteps);
+			newList.AddRange(decommissionSteps);
 			return newList.GetEnumerator();
 		}
 	}

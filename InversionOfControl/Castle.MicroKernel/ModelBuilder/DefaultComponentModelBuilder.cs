@@ -28,13 +28,13 @@ namespace Castle.MicroKernel.ModelBuilder
 	[Serializable]
 	public class DefaultComponentModelBuilder : IComponentModelBuilder
 	{
-		private readonly IKernel _kernel;
-		private readonly IList _contributors;
+		private readonly IKernel kernel;
+		private readonly IList contributors;
 
 		public DefaultComponentModelBuilder(IKernel kernel)
 		{
-			_kernel = kernel;
-			_contributors = new ArrayList();
+			this.kernel = kernel;
+			this.contributors = new ArrayList();
 
 			InitializeContributors();
 		}
@@ -60,9 +60,9 @@ namespace Castle.MicroKernel.ModelBuilder
 				model.ExtendedProperties = extendedProperties;
 			}
 
-			foreach(IContributeComponentModelConstruction contributor in _contributors)
+			foreach(IContributeComponentModelConstruction contributor in contributors)
 			{
-				contributor.ProcessModel( _kernel, model );
+				contributor.ProcessModel( kernel, model );
 			}
 			
 			return model;
@@ -70,12 +70,12 @@ namespace Castle.MicroKernel.ModelBuilder
 
 		public void AddContributor(IContributeComponentModelConstruction contributor)
 		{
-			_contributors.Add(contributor);
+			contributors.Add(contributor);
 		}
 
 		public void RemoveContributor(IContributeComponentModelConstruction contributor)
 		{
-			_contributors.Remove(contributor);
+			contributors.Remove(contributor);
 		}
 	}
 }

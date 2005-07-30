@@ -19,6 +19,7 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 	using antlr;
 
 
+	[CLSCompliant(false)]
 	public class IndentTokenStream : TokenStream
 	{
 		public static readonly int MAX_INDENTS = 100;
@@ -32,11 +33,11 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 
 		ArrayList tokens = new ArrayList();
 
-		private WindsorConfLanguageLexer _lexer;
+		private WindsorConfLanguageLexer lexer;
 
 		public IndentTokenStream(WindsorConfLanguageLexer lexer)
 		{
-			_lexer = lexer;
+			this.lexer = lexer;
 			Push(FIRST_COLUMN);
 		}
 
@@ -58,7 +59,7 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 
 		protected void insertImaginaryIndentDedentTokens()
 		{
-			IToken t = _lexer.nextToken();
+			IToken t = lexer.nextToken();
 
 			// if not a NEWLINE, doesn't signal indent/dedent work; just enqueue
 			if (t.Type != WindsorConfLanguageLexer.NEWLINE)
@@ -71,7 +72,7 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 			tokens.Add(t);
 			
 			// grab first token of next line
-			t = _lexer.nextToken();
+			t = lexer.nextToken();
 
 			// compute col as the column number of next non-WS token in line
 			int col = t.getColumn(); // column dictates indent/dedent

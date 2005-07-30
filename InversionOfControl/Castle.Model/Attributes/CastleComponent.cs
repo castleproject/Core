@@ -25,8 +25,8 @@ namespace Castle.Model
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class CastleComponentAttribute : LifestyleAttribute
 	{
-		private Type _service;
-		private String _key;
+		private Type service;
+		private String key;
 
 		public CastleComponentAttribute( String key ) : this(key, null)
 		{
@@ -34,18 +34,18 @@ namespace Castle.Model
 
 		public CastleComponentAttribute( String key, Type service ) : base(LifestyleType.Undefined)
 		{
-			_key = key;
-			_service = service;
+			this.key = key;
+			this.service = service;
 		}
 
 		public Type Service
 		{
-			get { return _service; }
+			get { return service; }
 		}
 
 		public String Key
 		{
-			get { return _key; }
+			get { return key; }
 		}
 	}
 }

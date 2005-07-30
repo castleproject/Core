@@ -22,35 +22,35 @@ namespace Castle.MicroKernel.Lifestyle
 	[Serializable]
 	public abstract class AbstractLifestyleManager : ILifestyleManager
 	{
-		private IKernel _kernel;
-		private IComponentActivator _componentActivator;
+		private IKernel kernel;
+		private IComponentActivator componentActivator;
 
 		public virtual void Init(IComponentActivator componentActivator, IKernel kernel)
 		{
-			_componentActivator = componentActivator;
-			_kernel = kernel;
+			this.componentActivator = componentActivator;
+			this.kernel = kernel;
 		}
 
 		public virtual object Resolve()
 		{
-			return _componentActivator.Create();
+			return componentActivator.Create();
 		}
 
 		public virtual void Release(object instance)
 		{
-			_componentActivator.Destroy( instance );
+			componentActivator.Destroy( instance );
 		}	
 
 		public abstract void Dispose();
 
 		protected IKernel Kernel
 		{
-			get { return _kernel; }
+			get { return kernel; }
 		}
 
 		protected IComponentActivator ComponentActivator
 		{
-			get { return _componentActivator; }
+			get { return componentActivator; }
 		}
 	}
 }

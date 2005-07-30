@@ -28,8 +28,8 @@ namespace Castle.Model.Configuration
 
 		public MutableConfiguration( String name, String value )
 		{
-			base.name = name;
-			base.value = value;
+			base.internalName = name;
+			base.internalValue = value;
 		}
 	}
 }

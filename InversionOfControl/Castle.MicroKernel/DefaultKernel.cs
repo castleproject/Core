@@ -43,48 +43,48 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// The parent kernel, if exists.
 		/// </summary>
-		private IKernel _parentKernel;
+		private IKernel parentKernel;
 
 		/// <summary>
 		/// The implementation of <see cref="IHandlerFactory"/>
 		/// </summary>
-		private IHandlerFactory _handlerFactory;
+		private IHandlerFactory handlerFactory;
 
 		/// <summary>
 		/// The implementation of <see cref="IComponentModelBuilder"/>
 		/// </summary>
-		private IComponentModelBuilder _modelBuilder;
+		private IComponentModelBuilder modelBuilder;
 
 		/// <summary>
 		/// The dependency resolver.
 		/// </summary>
-		private IDependencyResolver _resolver;
+		private IDependencyResolver resolver;
 
 		/// <summary>
 		/// Implements a policy to control component's
 		/// disposal that the usef forgot.
 		/// </summary>
-		private IReleasePolicy _releaserPolicy;
+		private IReleasePolicy releaserPolicy;
 
 		/// <summary>
 		/// Holds the implementation of <see cref="IProxyFactory"/>
 		/// </summary>
-		private IProxyFactory _proxyFactory;
+		private IProxyFactory proxyFactory;
 
 		/// <summary>
 		/// List of <see cref="IFacility"/> registered.
 		/// </summary>
-		private IList _facilities;
+		private IList facilities;
 
 		/// <summary>
 		/// Map of subsystems registered.
 		/// </summary>
-		private IDictionary _subsystems;
+		private IDictionary subsystems;
 		
 		/// <summary>
 		/// List of sub containers.
 		/// </summary>
-		private IList _childKernels;
+		private IList childKernels;
 
 		#endregion
 
@@ -106,7 +106,7 @@ namespace Castle.MicroKernel
 		/// <param name="proxyFactory"></param>
 		public DefaultKernel(IDependencyResolver resolver, IProxyFactory proxyFactory) : this(proxyFactory)
 		{
-			_resolver = resolver;
+			this.resolver = resolver;
 		}
 
 		/// <summary>
@@ -115,11 +115,11 @@ namespace Castle.MicroKernel
 		/// </summary>
 		public DefaultKernel(IProxyFactory proxyFactory)
 		{
-			_proxyFactory = proxyFactory;
+			this.proxyFactory = proxyFactory;
 
-			_childKernels = new ArrayList();
-			_facilities = new ArrayList();
-			_subsystems = new Hashtable();
+			this.childKernels = new ArrayList();
+			this.facilities = new ArrayList();
+			this.subsystems = new Hashtable();
 
 			AddSubSystem( SubSystemConstants.ConfigurationStoreKey, 
 				new DefaultConfigurationStore() );
@@ -130,10 +130,10 @@ namespace Castle.MicroKernel
 			AddSubSystem( SubSystemConstants.NamingKey, 
 				new SubSystems.Naming.DefaultNamingSubSystem() );
 
-			_releaserPolicy = new LifecycledComponentsReleasePolicy();
-			_handlerFactory = new DefaultHandlerFactory(this);
-			_modelBuilder = new DefaultComponentModelBuilder(this);
-			_resolver = new DefaultDependencyResolver(this);
+			this.releaserPolicy = new LifecycledComponentsReleasePolicy();
+			this.handlerFactory = new DefaultHandlerFactory(this);
+			this.modelBuilder = new DefaultComponentModelBuilder(this);
+			this.resolver = new DefaultDependencyResolver(this);
 		}
 
 		public DefaultKernel(SerializationInfo info, StreamingContext context) : base(info, context)
@@ -399,18 +399,18 @@ namespace Castle.MicroKernel
 
 		public IHandlerFactory HandlerFactory
 		{
-			get { return _handlerFactory; }
+			get { return handlerFactory; }
 		}
 
 		public IComponentModelBuilder ComponentModelBuilder
 		{
-			get { return _modelBuilder; }
+			get { return modelBuilder; }
 		}
 
 		public IProxyFactory ProxyFactory
 		{
-			get { return _proxyFactory; }
-			set { _proxyFactory = value; }
+			get { return proxyFactory; }
+			set { proxyFactory = value; }
 		}
 
 		public virtual IConfigurationStore ConfigurationStore
@@ -472,7 +472,7 @@ namespace Castle.MicroKernel
 
 		public virtual IReleasePolicy ReleasePolicy
 		{
-			get { return _releaserPolicy; }
+			get { return releaserPolicy; }
 		}
 
 		public virtual void AddFacility(String key, IFacility facility)
@@ -482,7 +482,7 @@ namespace Castle.MicroKernel
 
 			facility.Init(this, ConfigurationStore.GetFacilityConfiguration(key));
 
-			_facilities.Add(facility);
+			facilities.Add(facility);
 		}
 
 		/// <summary>
@@ -491,8 +491,8 @@ namespace Castle.MicroKernel
 		/// <returns></returns>
 		public virtual IFacility[] GetFacilities()
 		{
-			IFacility[] list = new IFacility[ _facilities.Count ];
-			_facilities.CopyTo(list, 0);
+			IFacility[] list = new IFacility[ facilities.Count ];
+			facilities.CopyTo(list, 0);
 			return list;
 		}
 
@@ -502,14 +502,14 @@ namespace Castle.MicroKernel
 			if (subsystem == null) throw new ArgumentNullException("facility");
 
 			subsystem.Init(this);
-			_subsystems[key] = subsystem;
+			subsystems[key] = subsystem;
 		}
 
 		public virtual ISubSystem GetSubSystem(String key)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 
-			return _subsystems[key] as ISubSystem;
+			return subsystems[key] as ISubSystem;
 		}
 
 		public virtual void AddChildKernel(IKernel childKernel)
@@ -517,21 +517,21 @@ namespace Castle.MicroKernel
 			if (childKernel == null) throw new ArgumentNullException("childKernel");
 
 			childKernel.Parent = this;
-			_childKernels.Add(childKernel);
+			childKernels.Add(childKernel);
 		}
 
 		public virtual IKernel Parent
 		{
-			get { return _parentKernel; }
+			get { return parentKernel; }
 			set
 			{
 				// TODO: Assert no previous parent was setted
 				// TODO: Assert value is not null
 
-				_parentKernel = value;
+				parentKernel = value;
 
-				_parentKernel.ComponentRegistered += new ComponentDataDelegate(RaiseComponentRegistered);
-				_parentKernel.ComponentUnregistered += new ComponentDataDelegate(RaiseComponentUnregistered);
+				parentKernel.ComponentRegistered += new ComponentDataDelegate(RaiseComponentRegistered);
+				parentKernel.ComponentUnregistered += new ComponentDataDelegate(RaiseComponentUnregistered);
 
 				RaiseAddedAsChildKernel();
 			}
@@ -539,7 +539,7 @@ namespace Castle.MicroKernel
 
 		public IDependencyResolver Resolver
 		{
-			get { return _resolver; }
+			get { return resolver; }
 		}
 
 		public virtual IComponentActivator CreateComponentActivator(ComponentModel model)
@@ -616,7 +616,7 @@ namespace Castle.MicroKernel
 
 		private void TerminateFacilities()
 		{
-			foreach(IFacility facility in _facilities)
+			foreach(IFacility facility in facilities)
 			{
 				facility.Terminate();
 			}
@@ -657,7 +657,7 @@ namespace Castle.MicroKernel
 
 		private void DisposeSubKernels()
 		{
-			foreach(IKernel childKernel in _childKernels)
+			foreach(IKernel childKernel in childKernels)
 			{
 				childKernel.Dispose();
 			}

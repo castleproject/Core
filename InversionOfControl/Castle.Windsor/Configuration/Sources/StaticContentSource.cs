@@ -22,11 +22,11 @@ namespace Castle.Windsor.Configuration.Sources
 	/// </summary>
 	public class StaticContentSource : AbstractConfigurationSource
 	{
-		protected StringReader _reader;
+		protected StringReader reader;
 
 		public StaticContentSource(String contents)
 		{
-			_reader = new StringReader(contents);
+			reader = new StringReader(contents);
 		}
 
 		protected StaticContentSource()
@@ -37,7 +37,7 @@ namespace Castle.Windsor.Configuration.Sources
 
 		public override TextReader Contents
 		{
-			get { return _reader; }
+			get { return reader; }
 		}
 
 		#endregion

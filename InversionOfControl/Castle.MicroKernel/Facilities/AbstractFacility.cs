@@ -23,17 +23,17 @@ namespace Castle.MicroKernel.Facilities
 	/// </summary>
 	public abstract class AbstractFacility : IFacility, IDisposable
 	{
-		private IKernel _kernel;
-		private IConfiguration _facilityConfig;
+		private IKernel kernel;
+		private IConfiguration facilityConfig;
 
 		public IKernel Kernel
 		{
-			get { return _kernel; }
+			get { return kernel; }
 		}
 
 		public IConfiguration FacilityConfig
 		{
-			get { return _facilityConfig; }
+			get { return facilityConfig; }
 		}
 
 		protected abstract void Init();
@@ -42,8 +42,8 @@ namespace Castle.MicroKernel.Facilities
 
 		public void Init(IKernel kernel, IConfiguration facilityConfig)
 		{
-			_kernel = kernel;
-			_facilityConfig = facilityConfig;
+			this.kernel = kernel;
+			this.facilityConfig = facilityConfig;
 
 			Init();
 		}
@@ -52,7 +52,7 @@ namespace Castle.MicroKernel.Facilities
 		{
 			Dispose();
 			
-			_kernel = null;
+			kernel = null;
 		}
 
 		#endregion

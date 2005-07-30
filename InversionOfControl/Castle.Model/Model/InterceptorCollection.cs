@@ -17,8 +17,6 @@ namespace Castle.Model
 	using System;
 	using System.Collections;
 
-	using Castle.Model.Interceptor;
-
 	/// <summary>
 	/// Collection of <see cref="InterceptorReference"/>
 	/// </summary>

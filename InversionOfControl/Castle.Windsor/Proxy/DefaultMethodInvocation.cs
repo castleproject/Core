@@ -34,9 +34,9 @@ namespace Castle.Windsor.Proxy
 	/// </remarks>
 	public class DefaultMethodInvocation : AbstractInvocation, IMethodInvocation
 	{
-		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
+		private static readonly LocalDataStoreSlot slot = Thread.AllocateDataSlot();
 
-		private IMethodInterceptor[] _interceptorChain;
+		private IMethodInterceptor[] interceptorChain;
 
 		/// <summary>
 		/// Constructs a DefaultMethodInvocation. This is invoked 
@@ -56,30 +56,30 @@ namespace Castle.Windsor.Proxy
 
 			int index = CurrentIndex;
 
-			if (index < (_interceptorChain.Length))
+			if (index < (interceptorChain.Length))
 			{
 				CurrentIndex = index + 1;
-				return _interceptorChain[index].Intercept(this, args);
+				return interceptorChain[index].Intercept(this, args);
 			}
 			else
 			{
 				// If the user changed the target, we use reflection
 				// otherwise the delegate will be used.
-				if (_changed_target == null)
+				if (changed_target == null)
 				{
-					return _callable.Call(args);
+					return callable.Call(args);
 				}
 				else
 				{
-					return Method.Invoke(_changed_target, args);
+					return Method.Invoke(changed_target, args);
 				}
 			}
 		}
 
 		private int CurrentIndex
 		{
-			get { return (int) Thread.GetData(_slot); }
-			set { Thread.SetData(_slot, value); }
+			get { return (int) Thread.GetData(slot); }
+			set { Thread.SetData(slot, value); }
 		}
 
 		internal void Reset()
@@ -89,12 +89,12 @@ namespace Castle.Windsor.Proxy
 
 		internal bool IsInitialized
 		{
-			get { return _interceptorChain != null; }
+			get { return interceptorChain != null; }
 		}
 
 		internal IMethodInterceptor[] InterceptorChain
 		{
-			set { _interceptorChain = value; }
+			set { interceptorChain = value; }
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Castle.MicroKernel.Releasers
 	[Serializable]
 	public class AllComponentsReleasePolicy : IReleasePolicy
 	{
-		private IDictionary _instance2Handler = Hashtable.Synchronized(new Hashtable());
+		private IDictionary instance2Handler = Hashtable.Synchronized(new Hashtable());
 
 		public AllComponentsReleasePolicy()
 		{
@@ -33,21 +33,21 @@ namespace Castle.MicroKernel.Releasers
 
 		public virtual void Track(object instance, IHandler handler)
 		{
-			_instance2Handler[instance] = handler;
+			instance2Handler[instance] = handler;
 		}
 
 		public bool HasTrack(object instance)
 		{
-			return _instance2Handler.Contains(instance);
+			return instance2Handler.Contains(instance);
 		}
 
 		public void Release(object instance)
 		{
-			IHandler handler = (IHandler) _instance2Handler[instance];
+			IHandler handler = (IHandler) instance2Handler[instance];
 			
 			if (handler != null)
 			{
-				_instance2Handler.Remove(instance);
+				instance2Handler.Remove(instance);
 
 				handler.Release(instance);
 			}
@@ -59,14 +59,14 @@ namespace Castle.MicroKernel.Releasers
 
 		public void Dispose()
 		{
-			foreach(DictionaryEntry entry in _instance2Handler)
+			foreach(DictionaryEntry entry in instance2Handler)
 			{
 				object instance = entry.Key;
 				IHandler handler = (IHandler) entry.Value;
 				handler.Release(instance);
 			}
 
-			_instance2Handler.Clear();
+			instance2Handler.Clear();
 		}
 
 		#endregion

@@ -29,10 +29,10 @@ namespace Castle.Model.Configuration
 	[Serializable]
 	public abstract class AbstractConfiguration : IConfiguration
 	{
-		protected String name;
-		protected String value;
-		protected NameValueCollection attributes = new NameValueCollection();
-		protected ConfigurationCollection children = new ConfigurationCollection();
+		protected String internalName;
+		protected String internalValue;
+		private NameValueCollection attributes = new NameValueCollection();
+		private ConfigurationCollection children = new ConfigurationCollection();
 
 		/// <summary>
 		/// Gets the name of the <see cref="IConfiguration"/>.
@@ -42,7 +42,7 @@ namespace Castle.Model.Configuration
 		/// </value>
 		public virtual String Name
 		{
-			get { return name; }
+			get { return internalName; }
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Castle.Model.Configuration
 		/// </value>
 		public virtual String Value
 		{
-			get { return value; }
+			get { return internalValue; }
 		}
 
 		/// <summary>

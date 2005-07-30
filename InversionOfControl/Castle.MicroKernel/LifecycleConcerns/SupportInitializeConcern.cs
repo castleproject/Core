@@ -25,11 +25,11 @@ namespace Castle.MicroKernel.LifecycleConcerns
 	[Serializable]
 	public class SupportInitializeConcern : ILifecycleConcern
 	{
-		private static readonly SupportInitializeConcern _instance = new SupportInitializeConcern();
+		private static readonly SupportInitializeConcern instance = new SupportInitializeConcern();
 
 		public static SupportInitializeConcern Instance
 		{
-			get { return _instance; }
+			get { return instance; }
 		}
 
 		protected SupportInitializeConcern()

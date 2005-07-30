@@ -43,7 +43,7 @@ namespace Castle.Windsor.Configuration.Sources
 			if (node == null) return;
 
 			// TODO: Check whether its CData section
-			_reader = new StringReader( node.OuterXml );
+			reader = new StringReader( node.OuterXml );
 		}
 	}
 }

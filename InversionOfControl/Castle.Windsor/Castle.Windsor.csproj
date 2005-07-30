@@ -92,7 +92,7 @@
                 <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\bin\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>

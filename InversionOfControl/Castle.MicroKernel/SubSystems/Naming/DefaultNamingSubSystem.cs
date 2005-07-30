@@ -30,19 +30,19 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// Map(String, IHandler) to map component keys
 		/// to <see cref="IHandler"/>
 		/// </summary>
-		protected IDictionary _key2Handler;
+		protected IDictionary key2Handler;
 
 		/// <summary>
 		/// Map(Type, IHandler) to map services 
 		/// to <see cref="IHandler"/>
 		/// </summary>
-		protected IDictionary _service2Handler;
+		protected IDictionary service2Handler;
 
 
 		public DefaultNamingSubSystem()
 		{
-			_key2Handler = Hashtable.Synchronized(new Hashtable());
-			_service2Handler = Hashtable.Synchronized(new Hashtable());
+			key2Handler = Hashtable.Synchronized(new Hashtable());
+			service2Handler = Hashtable.Synchronized(new Hashtable());
 		}
 
 		#region ISubSystem Members
@@ -63,13 +63,13 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		{
 			Type service = handler.ComponentModel.Service;
 
-			if (_key2Handler.Contains(key))
+			if (key2Handler.Contains(key))
 			{
 				throw new ComponentRegistrationException(
 					String.Format("There is a component already registered for the given key {0}", key));
 			}
 
-			if (!_service2Handler.Contains(service))
+			if (!service2Handler.Contains(service))
 			{
 				this[service] = handler;
 			}
@@ -79,34 +79,34 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public virtual bool Contains(String key)
 		{
-			return _key2Handler.Contains(key);
+			return key2Handler.Contains(key);
 		}
 
 		public virtual bool Contains(Type service)
 		{
-			return _service2Handler.Contains(service);
+			return service2Handler.Contains(service);
 		}
 
 		public virtual void UnRegister(String key)
 		{
-			_key2Handler.Remove(key);
+			key2Handler.Remove(key);
 		}
 
 		public virtual void UnRegister(Type service)
 		{
-			_service2Handler.Remove(service);
+			service2Handler.Remove(service);
 		}
 
 		public virtual int ComponentCount
 		{
-			get { return _key2Handler.Count; }
+			get { return key2Handler.Count; }
 		}
 
 		public virtual IHandler GetHandler(String key)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 
-			return _key2Handler[key] as IHandler;
+			return key2Handler[key] as IHandler;
 		}
 
 		public virtual IHandler[] GetHandlers(String query)
@@ -118,7 +118,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		{
 			if (service == null) throw new ArgumentNullException("service");
 
-			return _service2Handler[service] as IHandler;
+			return service2Handler[service] as IHandler;
 		}
 
 		public virtual IHandler[] GetHandlers(Type service)
@@ -157,11 +157,11 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public virtual IHandler[] GetHandlers()
 		{
-			IHandler[] list = new IHandler[_key2Handler.Values.Count];
+			IHandler[] list = new IHandler[key2Handler.Values.Count];
 
 			int index = 0;
 
-			foreach( IHandler handler in _key2Handler.Values )
+			foreach( IHandler handler in key2Handler.Values )
 			{
 				list[index++] = handler;
 			}
@@ -171,12 +171,12 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public virtual IHandler this[Type service]
 		{
-			set { _service2Handler[service] = value; }
+			set { service2Handler[service] = value; }
 		}
 
 		public virtual IHandler this[String key]
 		{
-			set { _key2Handler[key] = value; }
+			set { key2Handler[key] = value; }
 		}
 
 		#endregion

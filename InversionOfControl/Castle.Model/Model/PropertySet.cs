@@ -24,23 +24,23 @@ namespace Castle.Model
 	[Serializable]
 	public class PropertySet
 	{
-		private PropertyInfo _propertyInfo;
-		private DependencyModel _dependency;
+		private PropertyInfo propertyInfo;
+		private DependencyModel dependency;
 
 		public PropertySet( PropertyInfo propertyInfo, DependencyModel dependency )
 		{
-			_propertyInfo = propertyInfo;
-			_dependency = dependency;
+			this.propertyInfo = propertyInfo;
+			this.dependency = dependency;
 		}
 
 		public PropertyInfo Property
 		{
-			get { return _propertyInfo; }
+			get { return propertyInfo; }
 		}
 
 		public DependencyModel Dependency
 		{
-			get { return _dependency; }
+			get { return dependency; }
 		}
 	}
 }

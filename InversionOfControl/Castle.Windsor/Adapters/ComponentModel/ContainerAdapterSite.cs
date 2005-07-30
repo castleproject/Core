@@ -1,4 +1,3 @@
-#region Copyright
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#endregion
 
 namespace Castle.Windsor.Adapters.ComponentModel
 {
@@ -23,20 +21,20 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 	internal class ContainerAdapterSite : IContainerAdapterSite
 	{
-		private string _name;
-		private string _effectiveName;
-		private IComponent _component;
-		private IContainerAdapter _container;
+		private string name;
+		private string effectiveName;
+		private IComponent component;
+		private IContainerAdapter container;
 
 		public ContainerAdapterSite(IComponent component, IContainerAdapter container, string name)
 		{
-			_component = component;
-			_container = container;
-			_name = name;
+			this.component = component;
+			this.container = container;
+			this.name = name;
 
-			if ((_effectiveName = _name) == null)
+			if ((effectiveName = name) == null)
 			{
-				_effectiveName = Guid.NewGuid().ToString();
+				effectiveName = Guid.NewGuid().ToString();
 			}
 		}
 
@@ -44,8 +42,8 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 		public string Name
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return name; }
+			set { name = value; }
 		}
 
 		public bool DesignMode
@@ -55,17 +53,17 @@ namespace Castle.Windsor.Adapters.ComponentModel
  
 		public IComponent Component
 		{
-			get { return _component; }
+			get { return component; }
 		}
  
 		public IContainer Container
 		{
-			get { return _container; }
+			get { return container; }
 		}
 
 		public string EffectiveName
 		{
-			get { return _effectiveName; }
+			get { return effectiveName; }
 		}
 
 		public object GetService(Type service)
@@ -76,11 +74,11 @@ namespace Castle.Windsor.Adapters.ComponentModel
 			}
 			else if (service == typeof(IHandler))
 			{
-				return _container.Container.Kernel.GetHandler(_effectiveName);
+				return container.Container.Kernel.GetHandler(effectiveName);
 			}
 			else
 			{
-				return _container.GetService(service);
+				return container.GetService(service);
 			}
 		}
 

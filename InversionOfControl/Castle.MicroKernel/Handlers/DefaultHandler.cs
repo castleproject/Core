@@ -41,12 +41,12 @@ namespace Castle.MicroKernel.Handlers
 				throw new HandlerException(message);
 			}
 			
-			return _lifestyleManager.Resolve();
+			return lifestyleManager.Resolve();
 		}
 
 		public override void Release(object instance)
 		{
-			_lifestyleManager.Release( instance );
+			lifestyleManager.Release( instance );
 		}
 
 		#endregion

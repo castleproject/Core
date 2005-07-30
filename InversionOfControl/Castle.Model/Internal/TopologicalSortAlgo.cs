@@ -14,8 +14,6 @@
 
 namespace Castle.Model.Internal
 {
-	using System;
-
 	public abstract class TopologicalSortAlgo
 	{
 		public static IVertex[] Sort(IVertex[] graphNodes)

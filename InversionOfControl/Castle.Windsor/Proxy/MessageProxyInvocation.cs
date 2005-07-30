@@ -25,20 +25,20 @@ namespace Castle.Windsor.Proxy
 
 	public class MessageProxyInvocation : IMethodInvocation
 	{
-		private readonly MarshalByRefObject _proxy;
-		private readonly IMethodCallMessage _methodCall;
+		private readonly MarshalByRefObject proxy;
+		private readonly IMethodCallMessage methodCall;
 		
-		private IMethodInterceptor[] _interceptorChain;
-		private MethodInfo _methodInfo;
+		private IMethodInterceptor[] interceptorChain;
+		private MethodInfo methodInfo;
 
-		private int _index = 0;
-		private object _changed_target;
+		private int index = 0;
+		private object changed_target;
 
 		public MessageProxyInvocation(MarshalByRefObject target, IMethodCallMessage methodCall, IMethodInterceptor[] interceptorChain)
 		{
-			_proxy = target;
-			_methodCall = methodCall;
-			_interceptorChain = interceptorChain;
+			this.proxy = target;
+			this.methodCall = methodCall;
+			this.interceptorChain = interceptorChain;
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Castle.Windsor.Proxy
 		/// </summary>
 		public object Proxy
 		{
-			get { return _proxy; }
+			get { return proxy; }
 		}
 
 		/// <summary>
@@ -57,8 +57,8 @@ namespace Castle.Windsor.Proxy
 		/// </summary>
 		public object InvocationTarget
 		{
-			get { return _changed_target != null ? _changed_target : _proxy; }
-			set { _changed_target = value; }
+			get { return changed_target != null ? changed_target : proxy; }
+			set { changed_target = value; }
 		}
 
 		/// <summary>
@@ -68,11 +68,11 @@ namespace Castle.Windsor.Proxy
 		{
 			get
 			{
-				if (_methodInfo == null)
+				if (methodInfo == null)
 				{
-					_methodInfo = (MethodInfo) _methodCall.MethodBase;
+					methodInfo = (MethodInfo) methodCall.MethodBase;
 				}
-				return _methodInfo;
+				return methodInfo;
 			}
 		}
 
@@ -93,19 +93,19 @@ namespace Castle.Windsor.Proxy
 		{
 			int index = CurrentIndex;
 
-			if (index < (_interceptorChain.Length))
+			if (index < (interceptorChain.Length))
 			{
 				CurrentIndex = index + 1;
-				return _interceptorChain[index].Intercept(this, args);
+				return interceptorChain[index].Intercept(this, args);
 			}
 			else
 			{
 				// If the user changed the target, we use reflection
 				// otherwise the delegate will be used.
 
-				if (_changed_target == null)
+				if (changed_target == null)
 				{
-					IMethodReturnMessage retMessage = RemotingServices.ExecuteMessage(_proxy, _methodCall);
+					IMethodReturnMessage retMessage = RemotingServices.ExecuteMessage(proxy, methodCall);
 
 					if (retMessage.Exception != null)
 					{
@@ -116,15 +116,15 @@ namespace Castle.Windsor.Proxy
 				}
 				else
 				{
-					return Method.Invoke(_changed_target, args);
+					return Method.Invoke(changed_target, args);
 				}
 			}
 		}
 
 		private int CurrentIndex
 		{
-			get { return _index; }
-			set { _index = value; }
+			get { return index; }
+			set { index = value; }
 		}
 	}
 }

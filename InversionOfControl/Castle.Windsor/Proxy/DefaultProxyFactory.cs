@@ -39,7 +39,7 @@ namespace Castle.Windsor.Proxy
 	public class DefaultProxyFactory : AbstractProxyFactory, IDeserializationCallback
 	{
 		[NonSerialized]
-		protected ProxyGenerator _generator;
+		protected ProxyGenerator generator;
 
 		/// <summary>
 		/// Constructs a DefaultProxyFactory
@@ -81,12 +81,12 @@ namespace Castle.Windsor.Proxy
 			{
 				Object target = Activator.CreateInstance( model.Implementation, constructorArguments );
 
-				proxy = _generator.CreateCustomProxy( CollectInterfaces(model.Service, model.Implementation), 
+				proxy = generator.CreateCustomProxy( CollectInterfaces(model.Service, model.Implementation), 
 					interceptorChain, target, context);
 			}
 			else
 			{
-				proxy = _generator.CreateCustomClassProxy(model.Implementation, 
+				proxy = generator.CreateCustomClassProxy(model.Implementation, 
 					interceptorChain, context, constructorArguments);
 			}
 
@@ -133,7 +133,7 @@ namespace Castle.Windsor.Proxy
 
 		private void Init()
 		{
-			_generator = new ProxyGenerator();
+			generator = new ProxyGenerator();
 		}
 	}
 }

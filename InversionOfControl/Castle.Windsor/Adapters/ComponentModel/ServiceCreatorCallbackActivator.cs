@@ -1,4 +1,3 @@
-#region Copyright
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#endregion
 
 namespace Castle.Windsor.Adapters.ComponentModel
 {
 	using System;
 	using System.ComponentModel.Design;
-
-	using Castle.Model;
+	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
+	using Castle.Model;
 
 	/// <summary>
 	/// Custom activator to create the instance on demand.
@@ -31,27 +29,27 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		public static readonly String ServiceContainerKey = "serviceContainer";
 		public static readonly String ServiceCreatorCallbackKey = "serviceCreatorCallback";
 
-		public ServiceCreatorCallbackActivator(ComponentModel model, 
-			IKernel kernel, ComponentInstanceDelegate onCreation, 
-			ComponentInstanceDelegate onDestruction) : 
-		base( model, kernel, onCreation, onDestruction )
+		public ServiceCreatorCallbackActivator(ComponentModel model,
+		                                       IKernel kernel, ComponentInstanceDelegate onCreation,
+		                                       ComponentInstanceDelegate onDestruction) :
+		                                       	base(model, kernel, onCreation, onDestruction)
 		{
 			// Nothing to do
 		}
 
 		protected override object InternalCreate()
 		{
-			IServiceContainer container = (IServiceContainer) 
-				Model.ExtendedProperties[ ServiceContainerKey ];
+			IServiceContainer container = (IServiceContainer)
+				Model.ExtendedProperties[ServiceContainerKey];
 
-			ServiceCreatorCallback callback = (ServiceCreatorCallback) 
-				Model.ExtendedProperties[ ServiceCreatorCallbackKey ];
+			ServiceCreatorCallback callback = (ServiceCreatorCallback)
+				Model.ExtendedProperties[ServiceCreatorCallbackKey];
 
 			Type serviceType = Model.Service;
 			object service = callback(container, serviceType);
 
-			if (!( service == null || service.GetType().IsCOMObject ||
-				serviceType.IsAssignableFrom( service.GetType()) ) )
+			if (!(service == null || service.GetType().IsCOMObject ||
+				serviceType.IsAssignableFrom(service.GetType())))
 			{
 				service = null;
 			}

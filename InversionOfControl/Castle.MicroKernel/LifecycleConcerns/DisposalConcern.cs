@@ -22,11 +22,11 @@ namespace Castle.MicroKernel.LifecycleConcerns
 	[Serializable]
 	public class DisposalConcern : ILifecycleConcern
 	{
-		private static readonly DisposalConcern _instance = new DisposalConcern();
+		private static readonly DisposalConcern instance = new DisposalConcern();
 
 		public static DisposalConcern Instance
 		{
-			get { return _instance; }
+			get { return instance; }
 		}
 
 		protected DisposalConcern()

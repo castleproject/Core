@@ -21,8 +21,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
 	[Serializable]
 	public class BinaryTreeComponentName
 	{
-		private TreeNode _root;
-		private int _count;
+		private TreeNode root;
+		private int count;
 
 		public BinaryTreeComponentName()
 		{
@@ -30,7 +30,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public int Count
 		{
-			get { return _count; }
+			get { return count; }
 		}
 
 		public IHandler[] Handlers
@@ -38,7 +38,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			get
 			{
 				ArrayList list = new ArrayList();
-				Visit(_root, list);
+				Visit(root, list);
 				return (IHandler[]) list.ToArray( typeof(IHandler) );
 			}
 		}
@@ -55,14 +55,14 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public void Add(ComponentName name, IHandler handler)
 		{
-			if (_root == null)
+			if (root == null)
 			{
-				_root = new TreeNode(name, handler);
-				_count++;
+				root = new TreeNode(name, handler);
+				count++;
 				return;
 			}
 
-			TreeNode current = _root;
+			TreeNode current = root;
 
 			while(true)
 			{
@@ -77,7 +77,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 					else
 					{
 						current.Left = new TreeNode(name, handler);
-						_count++;
+						count++;
 						break;
 					}
 				}
@@ -90,14 +90,14 @@ namespace Castle.MicroKernel.SubSystems.Naming
 					else
 					{
 						current.Right = new TreeNode(name, handler);
-						_count++;
+						count++;
 						break;
 					}
 				}
 				else
 				{
 					current.AddSibling(new TreeNode(name, handler));
-					_count++;
+					count++;
 					break;
 				}
 			}
@@ -155,7 +155,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		internal TreeNode FindNode(ComponentName name)
 		{
-			TreeNode current = _root;
+			TreeNode current = root;
 
 			while(true)
 			{
@@ -195,53 +195,53 @@ namespace Castle.MicroKernel.SubSystems.Naming
 	[Serializable]
 	internal class TreeNode
 	{
-		private ComponentName _CompName;
-		private IHandler _Handler;
+		private ComponentName compName;
+		private IHandler handler;
 
 		/// <summary>Node's left</summary>
-		private TreeNode _Left;
+		private TreeNode left;
 
 		/// <summary>Node's right</summary>
-		private TreeNode _Right;
+		private TreeNode right;
 		
 		/// <summary>DA Linked List</summary>
-		private TreeNode _NextSibling;
+		private TreeNode nextSibling;
 
 		public TreeNode(ComponentName compName, IHandler handler)
 		{
 			if (compName == null) throw new ArgumentNullException("compName");
 			if (handler == null) throw new ArgumentNullException("handler");
 
-			_CompName = compName;
-			_Handler = handler;
+			this.compName = compName;
+			this.handler = handler;
 		}
 
 		public ComponentName CompName
 		{
-			get { return _CompName; }
+			get { return compName; }
 		}
 
 		public IHandler Handler
 		{
-			get { return _Handler; }
+			get { return handler; }
 		}
 
 		public TreeNode Left
 		{
-			get { return _Left; }
-			set { _Left = value; }
+			get { return left; }
+			set { left = value; }
 		}
 
 		public TreeNode Right
 		{
-			get { return _Right; }
-			set { _Right = value; }
+			get { return right; }
+			set { right = value; }
 		}
 
 		public TreeNode NextSibling
 		{
-			get { return _NextSibling; }
-			set { _NextSibling = value; }
+			get { return nextSibling; }
+			set { nextSibling = value; }
 		}
 
 		public void AddSibling(TreeNode node)

@@ -24,12 +24,12 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	[Serializable]
 	public abstract class AbstractTypeConverter : ITypeConverter
 	{
-		private ITypeConverterContext _context;
+		private ITypeConverterContext context;
 
 		public ITypeConverterContext Context
 		{
-			get { return _context; }
-			set { _context = value; }
+			get { return context; }
+			set { context = value; }
 		}
 
 		public abstract bool CanHandleType(Type type);

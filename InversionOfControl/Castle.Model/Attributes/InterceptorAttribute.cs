@@ -16,15 +16,13 @@ namespace Castle.Model
 {
 	using System;
 
-	using Castle.Model.Interceptor;
-
 	/// <summary>
 	/// Used to declare that a component wants interceptors acting on it.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true)]
 	public class InterceptorAttribute : Attribute
 	{
-		private InterceptorReference _interceptorRef;
+		private InterceptorReference interceptorRef;
 
 		/// <summary>
 		/// Constructs the InterceptorAttribute pointing to
@@ -33,7 +31,7 @@ namespace Castle.Model
 		/// <param name="componentKey"></param>
 		public InterceptorAttribute( String componentKey )
 		{
-			_interceptorRef = new InterceptorReference(componentKey);
+			this.interceptorRef = new InterceptorReference(componentKey);
 		}
 
 		/// <summary>
@@ -43,12 +41,12 @@ namespace Castle.Model
 		/// <param name="interceptorType"></param>
 		public InterceptorAttribute( Type interceptorType )
 		{
-			_interceptorRef = new InterceptorReference(interceptorType);
+			this.interceptorRef = new InterceptorReference(interceptorType);
 		}
 
 		public InterceptorReference Interceptor
 		{
-			get { return _interceptorRef; }
+			get { return interceptorRef; }
 		}
 	}
 }

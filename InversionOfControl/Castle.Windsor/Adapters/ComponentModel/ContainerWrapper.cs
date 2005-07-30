@@ -1,4 +1,3 @@
-#region Copyright
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#endregion
 
 namespace Castle.Windsor.Adapters.ComponentModel
 {
@@ -22,8 +20,8 @@ namespace Castle.Windsor.Adapters.ComponentModel
 	using System.ComponentModel.Design;
 	using System.Threading;
 
-	using Castle.Model;
 	using Castle.MicroKernel;
+	using Castle.Model;
 
 	/// <summary>
 	/// Implementation of <see cref="IContainerAdapter"/> that does not assume ownership of the
@@ -33,11 +31,11 @@ namespace Castle.Windsor.Adapters.ComponentModel
 	{
 		#region ContainerWrapper Fields
 
-		private ISite _site;
-		private IWindsorContainer _container;
-		private IServiceProvider _parentProvider;
-		private IList _sites = new ArrayList();
-		private readonly ReaderWriterLock _lock;
+		private ISite site;
+		private IWindsorContainer container;
+		private IServiceProvider parentProvider;
+		private IList sites = new ArrayList();
+		private readonly ReaderWriterLock rwlock;
 
 		#endregion
 
@@ -48,7 +46,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		/// </summary>
 		/// <param name="container">The <see cref="IWindsorContainer"/> to adapt.</param>
 		public ContainerWrapper(IWindsorContainer container)
-			: this( container, null )
+			: this(container, null)
 		{
 			// Empty
 		}
@@ -70,9 +68,9 @@ namespace Castle.Windsor.Adapters.ComponentModel
 				throw new ArgumentNullException("container");
 			}
 
-			_container = container;
-			_parentProvider = parentProvider;
-			_lock = new ReaderWriterLock();
+			this.container = container;
+			this.parentProvider = parentProvider;
+			this.rwlock = new ReaderWriterLock();
 
 			RegisterAdapterWithKernel();
 		}
@@ -87,10 +85,10 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
 		public virtual ISite Site
 		{
-			get { return _site; }
-			set { _site = value; }
+			get { return site; }
+			set { site = value; }
 		}
- 
+
 		/// <summary>
 		/// Event that notifies the disposal of the <see cref="IComponent"/>.
 		/// </summary>
@@ -108,22 +106,22 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		{
 			get
 			{
-				_lock.AcquireReaderLock( Timeout.Infinite );
+				rwlock.AcquireReaderLock(Timeout.Infinite);
 
 				try
 				{
-					IComponent[] components = new IComponent[_sites.Count];
+					IComponent[] components = new IComponent[sites.Count];
 
-					for (int i = 0; i < _sites.Count; ++i)
+					for (int i = 0; i < sites.Count; ++i)
 					{
-						components[i] = ((ISite)_sites[i]).Component;
+						components[i] = ((ISite) sites[i]).Component;
 					}
-					
+
 					return new ComponentCollection(components);
 				}
 				finally
 				{
-					_lock.ReleaseReaderLock();
+					rwlock.ReleaseReaderLock();
 				}
 			}
 		}
@@ -134,7 +132,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		/// <param name="component">The <see cref="IComponent"/> to add.</param>
 		public virtual void Add(IComponent component)
 		{
-			Add( component, null );
+			Add(component, null);
 		}
 
 		/// <summary>
@@ -147,37 +145,37 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		{
 			if (component != null)
 			{
-				_lock.AcquireWriterLock( Timeout.Infinite );
+				rwlock.AcquireWriterLock(Timeout.Infinite);
 
 				try
 				{
 					ISite site = component.Site;
-				
+
 					if ((site == null) || (site.Container != this))
 					{
-						IContainerAdapterSite newSite = CreateSite( component, name );
+						IContainerAdapterSite newSite = CreateSite(component, name);
 
 						try
 						{
-							Kernel.AddComponentInstance( newSite.EffectiveName, typeof(IComponent), component );
+							Kernel.AddComponentInstance(newSite.EffectiveName, typeof(IComponent), component);
 						}
 						catch (ComponentRegistrationException ex)
 						{
-							throw new ArgumentException( ex.Message );
+							throw new ArgumentException(ex.Message);
 						}
 
 						if (site != null)
 						{
-							site.Container.Remove( component );
+							site.Container.Remove(component);
 						}
 
 						component.Site = newSite;
-						_sites.Add( newSite );
+						sites.Add(newSite);
 					}
 				}
 				finally
 				{
-					_lock.ReleaseWriterLock();
+					rwlock.ReleaseWriterLock();
 				}
 			}
 		}
@@ -195,17 +193,17 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		{
 			if (component != null)
 			{
-				_lock.AcquireWriterLock( Timeout.Infinite );
-				
+				rwlock.AcquireWriterLock(Timeout.Infinite);
+
 				try
 				{
 					IContainerAdapterSite site = component.Site as ContainerAdapterSite;
-				
+
 					if (site != null && site.Container == this)
 					{
 						if (fromKernel)
 						{
-							if (!Kernel.RemoveComponent( site.EffectiveName ))
+							if (!Kernel.RemoveComponent(site.EffectiveName))
 							{
 								throw new ArgumentException("Unable to remove the requested component");
 							}
@@ -213,12 +211,12 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 						component.Site = null;
 
-						_sites.Remove( site );
+						sites.Remove(site);
 					}
 				}
 				finally
 				{
-					_lock.ReleaseWriterLock();
+					rwlock.ReleaseWriterLock();
 				}
 			}
 		}
@@ -230,7 +228,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 		protected virtual IContainerAdapterSite CreateSite(IComponent component, String name)
 		{
-			return new ContainerAdapterSite( component, this, name );
+			return new ContainerAdapterSite(component, this, name);
 		}
 
 		#endregion
@@ -251,7 +249,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 				serviceType == typeof(IServiceContainer) ||
 				serviceType == typeof(IContainer))
 			{
-				service =  this;
+				service = this;
 			}
 			else if (serviceType == typeof(IKernel))
 			{
@@ -262,7 +260,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 				// Then, check the Windsor Container.
 				try
 				{
-					service = _container[serviceType];
+					service = container[serviceType];
 				}
 				catch (ComponentNotFoundException)
 				{
@@ -270,15 +268,15 @@ namespace Castle.Windsor.Adapters.ComponentModel
 				}
 
 				// Otherwise, check the parent service provider.
-				if ((service == null) && (_parentProvider != null))
+				if ((service == null) && (parentProvider != null))
 				{
-					service = _parentProvider.GetService( serviceType );
+					service = parentProvider.GetService(serviceType);
 				}
 
 				// Finally, check the chained container.
-				if ((service  == null) && (_site != null))
+				if ((service == null) && (site != null))
 				{
-					service = _site.GetService( serviceType );
+					service = site.GetService(serviceType);
 				}
 			}
 
@@ -292,7 +290,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		/// <param name="serviceInstance">The instance of the service to add.</param>
 		public virtual void AddService(Type serviceType, object serviceInstance)
 		{
-			AddService( serviceType, serviceInstance, false );
+			AddService(serviceType, serviceInstance, false);
 		}
 
 		/// <summary>
@@ -302,7 +300,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		/// <param name="callback">A callback object that is used to create the service.</param>
 		public virtual void AddService(Type serviceType, ServiceCreatorCallback callback)
 		{
-			AddService( serviceType, callback, false );
+			AddService(serviceType, callback, false);
 		}
 
 		/// <summary>
@@ -316,7 +314,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		{
 			if (serviceInstance is ServiceCreatorCallback)
 			{
-				AddService( serviceType, (ServiceCreatorCallback) serviceInstance, promote);
+				AddService(serviceType, (ServiceCreatorCallback) serviceInstance, promote);
 				return;
 			}
 
@@ -326,7 +324,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 				if (parentServices != null)
 				{
-					parentServices.AddService( serviceType, serviceInstance, promote );
+					parentServices.AddService(serviceType, serviceInstance, promote);
 					return;
 				}
 			}
@@ -341,22 +339,22 @@ namespace Castle.Windsor.Adapters.ComponentModel
 				throw new ArgumentNullException("serviceInstance");
 			}
 
-			if (!( serviceInstance.GetType().IsCOMObject || 
-				serviceType.IsAssignableFrom( serviceInstance.GetType() ) ))
+			if (!(serviceInstance.GetType().IsCOMObject ||
+				serviceType.IsAssignableFrom(serviceInstance.GetType())))
 			{
-				throw new ArgumentException( String.Format(
+				throw new ArgumentException(String.Format(
 					"Invalid service '{0}' for type '{1}'",
-					serviceInstance.GetType().FullName, serviceType.FullName ) );
+					serviceInstance.GetType().FullName, serviceType.FullName));
 			}
 
-			if (HasService( serviceType ))
+			if (HasService(serviceType))
 			{
-				throw new ArgumentException( String.Format(
-					"A service for type '{0}' already exists", serviceType.FullName ) );
+				throw new ArgumentException(String.Format(
+					"A service for type '{0}' already exists", serviceType.FullName));
 			}
 
-			String serviceName = GetServiceName( serviceType );
-			Kernel.AddComponentInstance( serviceName, serviceType, serviceInstance );
+			String serviceName = GetServiceName(serviceType);
+			Kernel.AddComponentInstance(serviceName, serviceType, serviceInstance);
 		}
 
 		/// <summary>
@@ -374,7 +372,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 				if (parentServices != null)
 				{
-					parentServices.AddService( serviceType, callback, promote );
+					parentServices.AddService(serviceType, callback, promote);
 					return;
 				}
 			}
@@ -389,21 +387,21 @@ namespace Castle.Windsor.Adapters.ComponentModel
 				throw new ArgumentNullException("callback");
 			}
 
-			if (HasService( serviceType ))
+			if (HasService(serviceType))
 			{
-				throw new ArgumentException( String.Format(
-					"A service for type '{0}' already exists", serviceType.FullName ),
-					"serviceType" );
+				throw new ArgumentException(String.Format(
+					"A service for type '{0}' already exists", serviceType.FullName),
+				                            "serviceType");
 			}
 
-			String serviceName = GetServiceName( serviceType );
-			ComponentModel model = new ComponentModel( serviceName, serviceType, null );
-			model.ExtendedProperties.Add( ServiceCreatorCallbackActivator.ServiceContainerKey,
-				GetService(typeof(IServiceContainer)) );
-			model.ExtendedProperties.Add( ServiceCreatorCallbackActivator.ServiceCreatorCallbackKey, callback );
+			String serviceName = GetServiceName(serviceType);
+			ComponentModel model = new ComponentModel(serviceName, serviceType, null);
+			model.ExtendedProperties.Add(ServiceCreatorCallbackActivator.ServiceContainerKey,
+			                             GetService(typeof(IServiceContainer)));
+			model.ExtendedProperties.Add(ServiceCreatorCallbackActivator.ServiceCreatorCallbackKey, callback);
 			model.LifestyleType = LifestyleType.Singleton;
-			model.CustomComponentActivator = typeof( ServiceCreatorCallbackActivator );
-			Kernel.AddCustomComponent( model );
+			model.CustomComponentActivator = typeof(ServiceCreatorCallbackActivator);
+			Kernel.AddCustomComponent(model);
 		}
 
 		/// <summary>
@@ -429,24 +427,24 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 				if (parentServices != null)
 				{
-					parentServices.RemoveService( serviceType, promote );
+					parentServices.RemoveService(serviceType, promote);
 					return;
 				}
 			}
 
 			if (serviceType == null)
 			{
-				throw new ArgumentNullException( "serviceType" );
+				throw new ArgumentNullException("serviceType");
 			}
 
-			if (IsIntrinsicService( serviceType ))
+			if (IsIntrinsicService(serviceType))
 			{
-				throw new ArgumentException( "Cannot remove an instrinsic service" );
+				throw new ArgumentException("Cannot remove an instrinsic service");
 			}
 
-			String serviceName = GetServiceName( serviceType );
+			String serviceName = GetServiceName(serviceType);
 
-			if (!Kernel.RemoveComponent( serviceName ))
+			if (!Kernel.RemoveComponent(serviceName))
 			{
 				throw new ArgumentException("Unable to remove the requested service");
 			}
@@ -472,8 +470,8 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		/// <returns>true if the service type exists.</returns>
 		private bool HasService(Type serviceType)
 		{
-			return IsIntrinsicService( serviceType ) ||
-				Kernel.HasComponent( serviceType );
+			return IsIntrinsicService(serviceType) ||
+				Kernel.HasComponent(serviceType);
 		}
 
 		#endregion
@@ -486,7 +484,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IWindsorContainer Container
 		{
-			get { return _container; }
+			get { return container; }
 		}
 
 		#endregion
@@ -510,7 +508,7 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		{
 			if (disposing)
 			{
-				_lock.AcquireWriterLock( Timeout.Infinite );
+				rwlock.AcquireWriterLock(Timeout.Infinite);
 
 				try
 				{
@@ -520,16 +518,16 @@ namespace Castle.Windsor.Adapters.ComponentModel
 				}
 				finally
 				{
-					_lock.ReleaseWriterLock();
+					rwlock.ReleaseWriterLock();
 				}
 			}
 		}
 
 		private void DisposeComponent()
 		{
-			if ((_site != null) && (_site.Container != null))
+			if ((site != null) && (site.Container != null))
 			{
-				_site.Container.Remove(this);
+				site.Container.Remove(this);
 			}
 		}
 
@@ -537,13 +535,13 @@ namespace Castle.Windsor.Adapters.ComponentModel
 		{
 			Kernel.ComponentUnregistered -= new ComponentDataDelegate(OnComponentUnregistered);
 
-			for (int i = 0; i < _sites.Count; ++i)
+			for (int i = 0; i < sites.Count; ++i)
 			{
-				ISite site = (ISite) _sites[i];
+				ISite site = (ISite) sites[i];
 				site.Component.Site = null;
 				site.Component.Dispose();
 			}
-			_sites.Clear();
+			sites.Clear();
 
 			InternalDisposeContainer();
 		}
@@ -561,15 +559,15 @@ namespace Castle.Windsor.Adapters.ComponentModel
 			{
 				Dispose();
 			}
-			else if (component != null) 
+			else if (component != null)
 			{
-				Remove( component, false );
+				Remove(component, false);
 			}
 		}
 
 		private void RaiseDisposed()
 		{
-			if (Disposed != null) 
+			if (Disposed != null)
 			{
 				Disposed(this, EventArgs.Empty);
 				Disposed = null;
@@ -587,23 +585,23 @@ namespace Castle.Windsor.Adapters.ComponentModel
 
 		private IKernel Kernel
 		{
-			get { return _container.Kernel; }
+			get { return container.Kernel; }
 		}
-		
+
 		private IServiceContainer ParentServices
 		{
 			get
 			{
 				IServiceContainer parentServices = null;
 
-				if (_parentProvider != null)
+				if (parentProvider != null)
 				{
-					parentServices = (IServiceContainer) _parentProvider.GetService( typeof(IServiceContainer) );
+					parentServices = (IServiceContainer) parentProvider.GetService(typeof(IServiceContainer));
 				}
 
-				if (_site != null)
+				if (site != null)
 				{
-					parentServices = (IServiceContainer) _site.GetService( typeof(IServiceContainer) );
+					parentServices = (IServiceContainer) site.GetService(typeof(IServiceContainer));
 				}
 
 				return parentServices;

@@ -23,10 +23,10 @@ namespace Castle.MicroKernel.SubSystems.Naming
 	[Serializable]
 	public class ComponentName : ISerializable
 	{
-		protected String _service;
-		protected String _literalProperties = String.Empty;
-		protected HybridDictionary _properties;
-		protected bool _allProperties;
+		protected String internalService;
+		protected String internalliteralProperties = String.Empty;
+		protected HybridDictionary internalproperties;
+		protected bool allProperties;
 
 		/// <summary>
 		/// Creates a ComponentName using a name pattern like
@@ -52,7 +52,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		internal IDictionary Properties
 		{
-			get { return _properties; }
+			get { return internalproperties; }
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 				throw new ArgumentNullException("service");
 			}
 
-			_service = service;
+			internalService = service;
 		}
 
 		/// <summary>
@@ -124,13 +124,13 @@ namespace Castle.MicroKernel.SubSystems.Naming
 			}
 			if (properties.Equals("*"))
 			{
-				_literalProperties = "*";
-				_allProperties = true;
+				internalliteralProperties = "*";
+				allProperties = true;
 				return;
 			}
 			if (properties == String.Empty)
 			{
-				_literalProperties = "";
+				internalliteralProperties = "";
 				SetupProperties(new HybridDictionary(true));
 				return;
 			}
@@ -163,7 +163,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// <param name="properties">Property list.</param>
 		protected virtual void SetupProperties(IDictionary properties)
 		{
-			_properties = new HybridDictionary(true);
+			internalproperties = new HybridDictionary(true);
 
 			StringBuilder sb = new StringBuilder();
 
@@ -198,20 +198,20 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 				sb.AppendFormat("{0}={1}", key, value);
 
-				_properties[key] = value;
+				Properties[key] = value;
 			}
 
-			_literalProperties = sb.ToString();
+			internalliteralProperties = sb.ToString();
 		}
 
 		public String Service
 		{
-			get { return _service; }
+			get { return internalService; }
 		}
 
 		public String LiteralProperties
 		{
-			get { return _literalProperties; }
+			get { return internalliteralProperties; }
 		}
 
 		public String this[String key]
@@ -223,7 +223,7 @@ namespace Castle.MicroKernel.SubSystems.Naming
 					throw new ArgumentNullException("key");
 				}
 
-				return (String) _properties[key];
+				return (String) internalproperties[key];
 			}
 		}
 
@@ -233,8 +233,8 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 			if (other != null)
 			{
-				return other._service.Equals(_service) &&
-					other._literalProperties.Equals(_literalProperties);
+				return other.internalService.Equals(internalService) &&
+					other.internalliteralProperties.Equals(internalliteralProperties);
 			}
 
 			return false;
@@ -242,22 +242,22 @@ namespace Castle.MicroKernel.SubSystems.Naming
 
 		public override int GetHashCode()
 		{
-			return _service.GetHashCode() ^ _literalProperties.GetHashCode();
+			return internalService.GetHashCode() ^ internalliteralProperties.GetHashCode();
 		}
 
 		public override string ToString()
 		{
 			return
 				String.Format("Service: {0} Properties: {1}",
-				              _service, _literalProperties);
+				              internalService, internalliteralProperties);
 		}
 
 		#region ISerializable Members
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue("service", _service);
-			info.AddValue("props", _literalProperties);
+			info.AddValue("service", internalService);
+			info.AddValue("props", internalliteralProperties);
 		}
 
 		#endregion

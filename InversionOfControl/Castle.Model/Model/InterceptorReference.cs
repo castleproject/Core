@@ -28,9 +28,9 @@ namespace Castle.Model
 	[Serializable]
 	public class InterceptorReference
 	{
-		private readonly Type _serviceType;
-		private readonly String _componentKey;
-		private readonly InterceptorReferenceType _refType;
+		private readonly InterceptorReferenceType refType;
+		private Type serviceType;
+		private String componentKey;
 
 		public InterceptorReference( String componentKey )
 		{
@@ -39,8 +39,8 @@ namespace Castle.Model
 				throw new ArgumentNullException( "componentKey cannot be null" );
 			}
 
-			_refType = InterceptorReferenceType.Key;
-			_componentKey = componentKey;
+			this.refType = InterceptorReferenceType.Key;
+			this.componentKey = componentKey;
 		}
 
 		public InterceptorReference( Type serviceType )
@@ -50,23 +50,23 @@ namespace Castle.Model
 				throw new ArgumentNullException( "'serviceType' cannot be null" );
 			}		
 
-			_refType = InterceptorReferenceType.Interface;
-			_serviceType = serviceType;
+			this.refType = InterceptorReferenceType.Interface;
+			this.serviceType = serviceType;
 		}
 
 		public Type ServiceType
 		{
-			get { return _serviceType; }
+			get { return serviceType; }
 		}
 
 		public String ComponentKey
 		{
-			get { return _componentKey; }
+			get { return componentKey; }
 		}
 
 		public InterceptorReferenceType ReferenceType
 		{
-			get { return _refType; }
+			get { return refType; }
 		}
 	}
 }

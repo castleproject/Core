@@ -24,11 +24,11 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	[Serializable]
 	public class PrimitiveConverter : AbstractTypeConverter
 	{
-		private Type[] _types;
+		private Type[] types;
 
 		public PrimitiveConverter()
 		{
-			_types = new Type[]
+			types = new Type[]
 				{
 					typeof (Char),
 					typeof (DateTime),
@@ -50,7 +50,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public override bool CanHandleType(Type type)
 		{
-			return Array.IndexOf(_types, type) != -1;
+			return Array.IndexOf(types, type) != -1;
 		}
 
 		public override object PerformConversion(String value, Type targetType)

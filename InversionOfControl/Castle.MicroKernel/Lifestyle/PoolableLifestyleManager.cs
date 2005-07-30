@@ -25,21 +25,21 @@ namespace Castle.MicroKernel.Lifestyle
 	[Serializable]
 	public class PoolableLifestyleManager : AbstractLifestyleManager
 	{
-		private IPool _pool;
-		private int _initialSize;
-		private int _maxSize;
+		private IPool pool;
+		private int initialSize;
+		private int maxSize;
 
 		public PoolableLifestyleManager(int initialSize, int maxSize)
 		{
-			_initialSize = initialSize;
-			_maxSize = maxSize;
+			this.initialSize = initialSize;
+			this.maxSize = maxSize;
 		}
 
 		public override void Init(IComponentActivator componentActivator, IKernel kernel)
 		{
 			base.Init(componentActivator, kernel);
 
-			_pool = InitPool(_initialSize, _maxSize);
+			pool = InitPool(initialSize, maxSize);
 		}
 
 		protected IPool InitPool(int initialSize, int maxSize)
@@ -57,17 +57,17 @@ namespace Castle.MicroKernel.Lifestyle
 
 		public override object Resolve()
 		{
-			return _pool.Request();
+			return pool.Request();
 		}
 
 		public override void Release(object instance)
 		{
-			_pool.Release(instance);
+			pool.Release(instance);
 		}	
 
 		public override void Dispose()
 		{
-			_pool.Dispose();
+			pool.Dispose();
 		}
 	}
 }

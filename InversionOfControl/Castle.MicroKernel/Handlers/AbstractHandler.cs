@@ -27,30 +27,30 @@ namespace Castle.MicroKernel.Handlers
 	[Serializable]
 	public abstract class AbstractHandler : IHandler, IDisposable
 	{
-		private IKernel _kernel;
-		private ComponentModel _model;
-		private HandlerState _state;
-		private ArrayList _dependenciesByService; 
-		private IDictionary _dependenciesByKey; 
+		private IKernel kernel;
+		private ComponentModel model;
+		private HandlerState state;
+		private ArrayList dependenciesByService; 
+		private IDictionary dependenciesByKey; 
 
-		protected ILifestyleManager _lifestyleManager;
+		protected ILifestyleManager lifestyleManager;
 		
 		public AbstractHandler(ComponentModel model)
 		{
-			_model = model;
-			_state = HandlerState.Valid;
+			this.model = model;
+			this.state = HandlerState.Valid;
 		}
 
 		#region IHandler Members
 
 		public virtual void Init(IKernel kernel)
 		{
-			_kernel = kernel;
-			_kernel.AddedAsChildKernel += new EventHandler(OnAddedAsChildKernel);
+			this.kernel = kernel;
+			this.kernel.AddedAsChildKernel += new EventHandler(OnAddedAsChildKernel);
 
-			IComponentActivator activator = _kernel.CreateComponentActivator(ComponentModel);
+			IComponentActivator activator = kernel.CreateComponentActivator(ComponentModel);
 			
-			_lifestyleManager = CreateLifestyleManager(activator);
+			lifestyleManager = CreateLifestyleManager(activator);
 
 			EnsureDependenciesCanBeSatisfied();
 		}
@@ -61,12 +61,12 @@ namespace Castle.MicroKernel.Handlers
 
 		public HandlerState CurrentState
 		{
-			get { return _state; }
+			get { return state; }
 		}
 
 		public ComponentModel ComponentModel
 		{
-			get { return _model; }
+			get { return model; }
 		}
 		
 		#endregion
@@ -75,30 +75,30 @@ namespace Castle.MicroKernel.Handlers
 
 		public virtual void Dispose()
 		{
-			_lifestyleManager.Dispose();
+			lifestyleManager.Dispose();
 		}
 
 		#endregion
 
 		protected IKernel Kernel
 		{
-			get { return _kernel; }
+			get { return kernel; }
 		}
 
 		protected void SetNewState( HandlerState newState )
 		{
-			_state = newState;
+			state = newState;
 		}
 
 		protected ArrayList DependenciesByService
 		{
 			get
 			{
-				if (_dependenciesByService == null) 
+				if (dependenciesByService == null) 
 				{
-					_dependenciesByService = new ArrayList();
+					dependenciesByService = new ArrayList();
 				}
-				return _dependenciesByService;
+				return dependenciesByService;
 			}
 		}
 
@@ -106,11 +106,11 @@ namespace Castle.MicroKernel.Handlers
 		{
 			get
 			{
-				if (_dependenciesByKey == null) 
+				if (dependenciesByKey == null) 
 				{
-					_dependenciesByKey = new HybridDictionary();
+					dependenciesByKey = new HybridDictionary();
 				}
-				return _dependenciesByKey;
+				return dependenciesByKey;
 			}
 		}
 
@@ -194,8 +194,8 @@ namespace Castle.MicroKernel.Handlers
 				// All components with dependencies (that happened to be 
 				
 				// We don't need these anymore
-				_dependenciesByKey = null;
-				_dependenciesByService = null;
+				dependenciesByKey = null;
+				dependenciesByService = null;
 			}
 		}
 
@@ -270,12 +270,12 @@ namespace Castle.MicroKernel.Handlers
 
 		private bool HasValidComponent(Type service)
 		{
-			return IsValidHandlerState( _kernel.GetHandler(service) );
+			return IsValidHandlerState( kernel.GetHandler(service) );
 		}
 
 		private bool HasValidComponent(String key)
 		{
-			return IsValidHandlerState( _kernel.GetHandler(key) );
+			return IsValidHandlerState( kernel.GetHandler(key) );
 		}
 
 		private bool IsValidHandlerState(IHandler handler)

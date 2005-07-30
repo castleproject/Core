@@ -35,18 +35,18 @@ namespace Castle.MicroKernel
 		private static readonly object ComponentModelCreatedEvent = new object();
 
 		[NonSerialized]
-		private EventHandlerList _events;
+		private EventHandlerList events;
 
 		public KernelEventSupport()
 		{
-			_events = new EventHandlerList();
+			events = new EventHandlerList();
 		}
 
 		public KernelEventSupport(SerializationInfo info, StreamingContext context)
 		{
-			_events = new EventHandlerList();
+			events = new EventHandlerList();
 
-			_events[HandlerRegisteredEvent] = (Delegate) 
+			events[HandlerRegisteredEvent] = (Delegate) 
 				 info.GetValue("HandlerRegisteredEvent", typeof(Delegate));
 		}
 
@@ -55,8 +55,8 @@ namespace Castle.MicroKernel
 		/// </summary>
 		public event HandlerDelegate HandlerRegistered
 		{
-			add { _events.AddHandler(HandlerRegisteredEvent, value); }
-			remove { _events.RemoveHandler(HandlerRegisteredEvent, value); }
+			add { events.AddHandler(HandlerRegisteredEvent, value); }
+			remove { events.RemoveHandler(HandlerRegisteredEvent, value); }
 		}
 
 		/// <summary>
@@ -65,8 +65,8 @@ namespace Castle.MicroKernel
 		/// <value></value>
 		public event ComponentDataDelegate ComponentRegistered
 		{
-			add { _events.AddHandler(ComponentRegisteredEvent, value); }
-			remove { _events.RemoveHandler(ComponentRegisteredEvent, value); }
+			add { events.AddHandler(ComponentRegisteredEvent, value); }
+			remove { events.RemoveHandler(ComponentRegisteredEvent, value); }
 		}
 
 		/// <summary>
@@ -75,8 +75,8 @@ namespace Castle.MicroKernel
 		/// <value></value>
 		public event ComponentDataDelegate ComponentUnregistered
 		{
-			add { _events.AddHandler(ComponentUnregisteredEvent, value); }
-			remove { _events.RemoveHandler(ComponentUnregisteredEvent, value); }
+			add { events.AddHandler(ComponentUnregisteredEvent, value); }
+			remove { events.RemoveHandler(ComponentUnregisteredEvent, value); }
 		}
 
 
@@ -86,8 +86,8 @@ namespace Castle.MicroKernel
 		/// <value></value>
 		public event ComponentInstanceDelegate ComponentCreated
 		{
-			add { _events.AddHandler(ComponentCreatedEvent, value); }
-			remove { _events.RemoveHandler(ComponentCreatedEvent, value); }
+			add { events.AddHandler(ComponentCreatedEvent, value); }
+			remove { events.RemoveHandler(ComponentCreatedEvent, value); }
 		}
 
 		/// <summary>
@@ -96,8 +96,8 @@ namespace Castle.MicroKernel
 		/// <value></value>
 		public event ComponentInstanceDelegate ComponentDestroyed
 		{
-			add { _events.AddHandler(ComponentDestroyedEvent, value); }
-			remove { _events.RemoveHandler(ComponentDestroyedEvent, value); }
+			add { events.AddHandler(ComponentDestroyedEvent, value); }
+			remove { events.RemoveHandler(ComponentDestroyedEvent, value); }
 		}
 
 		/// <summary>
@@ -106,8 +106,8 @@ namespace Castle.MicroKernel
 		/// <value></value>
 		public event EventHandler AddedAsChildKernel
 		{
-			add { _events.AddHandler(AddedAsChildKernelEvent, value); }
-			remove { _events.RemoveHandler(AddedAsChildKernelEvent, value); }
+			add { events.AddHandler(AddedAsChildKernelEvent, value); }
+			remove { events.RemoveHandler(AddedAsChildKernelEvent, value); }
 		}
 
 		/// <summary>
@@ -116,44 +116,44 @@ namespace Castle.MicroKernel
 		/// <value></value>
 		public event ComponentModelDelegate ComponentModelCreated
 		{
-			add { _events.AddHandler(ComponentModelCreatedEvent, value); }
-			remove { _events.RemoveHandler(ComponentModelCreatedEvent, value); }
+			add { events.AddHandler(ComponentModelCreatedEvent, value); }
+			remove { events.RemoveHandler(ComponentModelCreatedEvent, value); }
 		}
 
 		protected virtual void RaiseComponentRegistered(String key, IHandler handler)
 		{
-			ComponentDataDelegate eventDelegate = (ComponentDataDelegate) _events[ComponentRegisteredEvent];
+			ComponentDataDelegate eventDelegate = (ComponentDataDelegate) events[ComponentRegisteredEvent];
 			if (eventDelegate != null) eventDelegate(key, handler);
 		}
 
 
 		protected virtual void RaiseComponentUnregistered(String key, IHandler handler)
 		{
-			ComponentDataDelegate eventDelegate = (ComponentDataDelegate) _events[ComponentUnregisteredEvent];
+			ComponentDataDelegate eventDelegate = (ComponentDataDelegate) events[ComponentUnregisteredEvent];
 			if (eventDelegate != null) eventDelegate(key, handler);
 		}
 
 		public virtual void RaiseComponentCreated(ComponentModel model, object instance)
 		{
-			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) _events[ComponentCreatedEvent];
+			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) events[ComponentCreatedEvent];
 			if (eventDelegate != null) eventDelegate(model, instance);
 		}
 
 		public virtual void RaiseComponentDestroyed(ComponentModel model, object instance)
 		{
-			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) _events[ComponentDestroyedEvent];
+			ComponentInstanceDelegate eventDelegate = (ComponentInstanceDelegate) events[ComponentDestroyedEvent];
 			if (eventDelegate != null) eventDelegate(model, instance);
 		}
 
 		protected virtual void RaiseAddedAsChildKernel()
 		{
-			EventHandler eventDelegate = (EventHandler) _events[AddedAsChildKernelEvent];
+			EventHandler eventDelegate = (EventHandler) events[AddedAsChildKernelEvent];
 			if (eventDelegate != null) eventDelegate(this, EventArgs.Empty);
 		}
 
 		protected virtual void RaiseComponentModelCreated(ComponentModel model)
 		{
-			ComponentModelDelegate eventDelegate = (ComponentModelDelegate) _events[ComponentModelCreatedEvent];
+			ComponentModelDelegate eventDelegate = (ComponentModelDelegate) events[ComponentModelCreatedEvent];
 			if (eventDelegate != null) eventDelegate(model);
 		}
 
@@ -164,7 +164,7 @@ namespace Castle.MicroKernel
 			while(stateChanged)
 			{
 				stateChanged = false;
-				HandlerDelegate eventDelegate = (HandlerDelegate) _events[HandlerRegisteredEvent];
+				HandlerDelegate eventDelegate = (HandlerDelegate) events[HandlerRegisteredEvent];
 				if (eventDelegate != null) eventDelegate(handler, ref stateChanged);
 			}
 		}
@@ -173,7 +173,7 @@ namespace Castle.MicroKernel
 
 		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue("HandlerRegisteredEvent", _events[HandlerRegisteredEvent]);
+			info.AddValue("HandlerRegisteredEvent", events[HandlerRegisteredEvent]);
 		}
 
 		#endregion

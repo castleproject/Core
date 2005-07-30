@@ -32,7 +32,7 @@ namespace Castle.Model.Internal
 	/// </summary>
 	internal class ColorsSet
 	{
-		private Hashtable _items = new Hashtable();
+		private Hashtable items = new Hashtable();
 
 		public ColorsSet( IVertex[] items )
 		{
@@ -44,13 +44,13 @@ namespace Castle.Model.Internal
 
 		public void Set(IVertex item, VertexColor color)
 		{
-			_items[item] = color;
+			items[item] = color;
 		}
 
 		public VertexColor ColorOf(IVertex item)
 		{
-			if (!_items.ContainsKey(item)) return VertexColor.NotInThisSet;
-			return (VertexColor) _items[item];
+			if (!items.ContainsKey(item)) return VertexColor.NotInThisSet;
+			return (VertexColor) items[item];
 		}
 	}
 
@@ -60,7 +60,7 @@ namespace Castle.Model.Internal
 	/// </summary>
 	internal class TimestampSet
 	{
-		private Hashtable _items = new Hashtable();
+		private Hashtable items = new Hashtable();
 
 		public TimestampSet()
 		{
@@ -68,12 +68,12 @@ namespace Castle.Model.Internal
 
 		public void Register(IVertex item, int time)
 		{
-			_items[item] = time;
+			items[item] = time;
 		}
 
 		public int TimeOf(IVertex item)
 		{
-			return (int) _items[item];
+			return (int) items[item];
 		}
 	}
 }

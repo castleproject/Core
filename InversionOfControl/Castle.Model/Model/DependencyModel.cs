@@ -29,39 +29,39 @@ namespace Castle.Model
 	[Serializable]
 	public class DependencyModel
 	{
-		private String _dependencyKey;
-		private Type _targetType;
-		private bool _isOptional;
-		private DependencyType _dependencyType;
+		private String dependencyKey;
+		private Type targetType;
+		private bool isOptional;
+		private DependencyType dependencyType;
 
 		public DependencyModel( 
 			DependencyType type, String dependencyKey, 
 			Type targetType, bool isOptional)
 		{
-			_dependencyType = type;
-			_dependencyKey = dependencyKey;
-			_targetType = targetType;
-			_isOptional = isOptional;
+			this.dependencyType = type;
+			this.dependencyKey = dependencyKey;
+			this.targetType = targetType;
+			this.isOptional = isOptional;
 		}
 
 		public DependencyType DependencyType
 		{
-			get { return _dependencyType; }
+			get { return dependencyType; }
 		}
 
 		public String DependencyKey
 		{
-			get { return _dependencyKey; }
+			get { return dependencyKey; }
 		}
 
 		public Type TargetType
 		{
-			get { return _targetType; }
+			get { return targetType; }
 		}
 
 		public bool IsOptional
 		{
-			get { return _isOptional; }
+			get { return isOptional; }
 		}
 	}
 }

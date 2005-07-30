@@ -30,15 +30,15 @@ namespace Castle.MicroKernel.Resolvers
 	[Serializable]
 	public class DefaultDependencyResolver : IDependencyResolver
 	{
-		private readonly IKernel _kernel;
-		private readonly ITypeConverter _converter;
+		private readonly IKernel kernel;
+		private readonly ITypeConverter converter;
 
 		public DefaultDependencyResolver(IKernel kernel)
 		{
-			_kernel = kernel;
+			this.kernel = kernel;
 
-			_converter = (ITypeConverter) 
-				_kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+			this.converter = (ITypeConverter) 
+				kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Castle.MicroKernel.Resolvers
 
 				String value = ExtractComponentKey( parameter.Value, parameter.Name );
 
-				return _kernel.HasComponent( value );
+				return kernel.HasComponent( value );
 			}
 			else if (dependency.TargetType == typeof(IKernel))
 			{
@@ -118,7 +118,7 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				// Default behaviour
 
-				return _kernel.HasComponent( dependency.TargetType );
+				return kernel.HasComponent( dependency.TargetType );
 			}
 		}
 
@@ -141,17 +141,17 @@ namespace Castle.MicroKernel.Resolvers
 
 				String value = ExtractComponentKey( parameter.Value, parameter.Name );
 
-				handler = _kernel.GetHandler( value );
+				handler = kernel.GetHandler( value );
 			}
 			else if (dependency.TargetType == typeof(IKernel))
 			{
-				return _kernel;
+				return kernel;
 			}
 			else
 			{
 				// Default behaviour
 
-				handler = _kernel.GetHandler( dependency.TargetType );
+				handler = kernel.GetHandler( dependency.TargetType );
 			}
 
 			if (handler == null) return null;
@@ -167,11 +167,11 @@ namespace Castle.MicroKernel.Resolvers
 			{
 				if (parameter.Value != null)
 				{
-					return _converter.PerformConversion( parameter.Value, dependency.TargetType );
+					return converter.PerformConversion( parameter.Value, dependency.TargetType );
 				}
 				else
 				{
-					return _converter.PerformConversion( parameter.ConfigValue, dependency.TargetType );
+					return converter.PerformConversion( parameter.ConfigValue, dependency.TargetType );
 				}
 			}
 

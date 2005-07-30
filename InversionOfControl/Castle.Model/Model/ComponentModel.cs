@@ -63,47 +63,47 @@ namespace Castle.Model
 		#region Fields
 
 		/// <summary>Name (key) of the component</summary>
-		private String _name;
+		private String name;
 
 		/// <summary>Service exposed</summary>
-		private Type _service;
+		private Type service;
 
 		/// <summary>Implementation for the service</summary>
-		private Type _implementation;
+		private Type implementation;
 
 		/// <summary>Extended properties</summary>
 		[NonSerialized]
-		private IDictionary _extended;
+		private IDictionary extended;
 
 		/// <summary>Lifestyle for the component</summary>
-		private LifestyleType _lifestyleType;
+		private LifestyleType lifestyleType;
 
 		/// <summary>Custom lifestyle, if any</summary>
-		private Type _customLifestyle;
+		private Type customLifestyle;
 
 		/// <summary>Custom activator, if any</summary>
-		private Type _customComponentActivator;
+		private Type customComponentActivator;
 
 		/// <summary>Dependencies the kernel must resolve</summary>
-		private DependencyModelCollection _dependencies;
+		private DependencyModelCollection dependencies;
 		
 		/// <summary>All available constructors</summary>
-		private ConstructorCandidateCollection _constructors;
+		private ConstructorCandidateCollection constructors;
 		
 		/// <summary>All potential properties that can be setted by the kernel</summary>
-		private PropertySetCollection _properties;
+		private PropertySetCollection properties;
 		
 		/// <summary>Steps of lifecycle</summary>
-		private LifecycleStepCollection _lifecycleSteps;
+		private LifecycleStepCollection lifecycleSteps;
 		
 		/// <summary>External parameters</summary>
-		private ParameterModelCollection _parameters;
+		private ParameterModelCollection parameters;
 		
 		/// <summary>Configuration node associated</summary>
-		private IConfiguration _configuration;
+		private IConfiguration configuration;
 		
 		/// <summary>Interceptors associated</summary>
-		private InterceptorReferenceCollection _interceptors;
+		private InterceptorReferenceCollection interceptors;
 
 		#endregion
 
@@ -112,18 +112,18 @@ namespace Castle.Model
 		/// </summary>
 		public ComponentModel(String name, Type service, Type implementation)
 		{
-			_name = name;
-			_service = service;
-			_implementation = implementation;
-			_lifestyleType = LifestyleType.Undefined;
+			this.name = name;
+			this.service = service;
+			this.implementation = implementation;
+			this.lifestyleType = LifestyleType.Undefined;
 
-			_extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
-			_properties = new PropertySetCollection();
-			_parameters = new ParameterModelCollection();
-			_constructors = new ConstructorCandidateCollection();
-			_interceptors = new InterceptorReferenceCollection();
-			_lifecycleSteps = new LifecycleStepCollection();
-			_dependencies = new DependencyModelCollection();
+			this.extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
+			this.properties = new PropertySetCollection();
+			this.parameters = new ParameterModelCollection();
+			this.constructors = new ConstructorCandidateCollection();
+			this.interceptors = new InterceptorReferenceCollection();
+			this.lifecycleSteps = new LifecycleStepCollection();
+			this.dependencies = new DependencyModelCollection();
 		}
 
 		/// <summary>
@@ -131,75 +131,75 @@ namespace Castle.Model
 		/// </summary>
 		public String Name
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return name; }
+			set { name = value; }
 		}
 
 		public Type Service
 		{
-			get { return _service; }
-			set { _service = value; }
+			get { return service; }
+			set { service = value; }
 		}
 
 		public Type Implementation
 		{
-			get { return _implementation; }
-			set { _implementation = value; }
+			get { return implementation; }
+			set { implementation = value; }
 		}
 
 		public IDictionary ExtendedProperties
 		{
-			get { return _extended; }
-			set { _extended = value; }
+			get { return extended; }
+			set { extended = value; }
 		}
 
 		public ConstructorCandidateCollection Constructors
 		{
-			get { return _constructors; }
+			get { return constructors; }
 		}
 
 		public PropertySetCollection Properties
 		{
-			get { return _properties; }
+			get { return properties; }
 		}
 
 		public IConfiguration Configuration
 		{
-			get { return _configuration; }
-			set { _configuration = value; }
+			get { return configuration; }
+			set { configuration = value; }
 		}
 
 		public LifecycleStepCollection LifecycleSteps
 		{
-			get { return _lifecycleSteps; }
+			get { return lifecycleSteps; }
 		}
 
 		public LifestyleType LifestyleType
 		{
-			get { return _lifestyleType; }
-			set { _lifestyleType = value; }
+			get { return lifestyleType; }
+			set { lifestyleType = value; }
 		}
 
 		public Type CustomLifestyle
 		{
-			get { return _customLifestyle; }
-			set { _customLifestyle = value; }
+			get { return customLifestyle; }
+			set { customLifestyle = value; }
 		}
 
 		public Type CustomComponentActivator
 		{
-			get { return _customComponentActivator; }
-			set { _customComponentActivator = value; }
+			get { return customComponentActivator; }
+			set { customComponentActivator = value; }
 		}
 
 		public InterceptorReferenceCollection Interceptors
 		{
-			get { return _interceptors; }
+			get { return interceptors; }
 		}
 
 		public ParameterModelCollection Parameters
 		{
-			get { return _parameters; }
+			get { return parameters; }
 		}
 
 		/// <summary>
@@ -209,14 +209,14 @@ namespace Castle.Model
 		/// </summary>
 		public DependencyModelCollection Dependencies
 		{
-			get { return _dependencies; }
+			get { return dependencies; }
 		}
 
 		#region IDeserializationCallback
 
 		public void OnDeserialization(object sender)
 		{
-			_extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
+			extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
 		}
 
 		#endregion

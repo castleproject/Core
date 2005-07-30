@@ -20,8 +20,8 @@ namespace Castle.Model
 	[Serializable]
 	public class GraphNode : MarshalByRefObject, IVertex
 	{
-		private ArrayList _incoming;
-		private ArrayList _outgoing;
+		private ArrayList incoming;
+		private ArrayList outgoing;
 
 		public GraphNode()
 		{
@@ -33,8 +33,8 @@ namespace Castle.Model
 		/// <param name="copy"></param>
 		public GraphNode(GraphNode copy)
 		{
-			_incoming = new ArrayList(Incoming);
-			_outgoing = new ArrayList(Outgoing);
+			incoming = new ArrayList(Incoming);
+			outgoing = new ArrayList(Outgoing);
 		}
 
 		#region IVertex Members
@@ -56,8 +56,8 @@ namespace Castle.Model
 		{
 			get
 			{
-				if (_incoming == null) _incoming = new ArrayList();
-				return _incoming;
+				if (incoming == null) incoming = new ArrayList();
+				return incoming;
 			}
 		}
 
@@ -65,8 +65,8 @@ namespace Castle.Model
 		{
 			get
 			{
-				if (_outgoing == null) _outgoing = new ArrayList();
-				return _outgoing;
+				if (outgoing == null) outgoing = new ArrayList();
+				return outgoing;
 			}
 		}
 
@@ -77,8 +77,8 @@ namespace Castle.Model
 		{
 			get
 			{
-				if (_incoming == null) return new GraphNode[0];
-				return (GraphNode[]) _incoming.ToArray( typeof(GraphNode) );
+				if (incoming == null) return new GraphNode[0];
+				return (GraphNode[]) incoming.ToArray( typeof(GraphNode) );
 			}
 		}
 
@@ -89,8 +89,8 @@ namespace Castle.Model
 		{
 			get
 			{
-				if (_outgoing == null) return new GraphNode[0];
-				return (GraphNode[]) _outgoing.ToArray( typeof(GraphNode) );
+				if (outgoing == null) return new GraphNode[0];
+				return (GraphNode[]) outgoing.ToArray( typeof(GraphNode) );
 			}
 		}
 
@@ -103,8 +103,6 @@ namespace Castle.Model
 		private void RemoveDependent(GraphNode graphNode)
 		{
 			Outgoing.Remove(graphNode);
-		}
-
-		
+		}		
 	}	
 }

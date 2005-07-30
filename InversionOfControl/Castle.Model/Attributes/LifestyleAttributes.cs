@@ -23,17 +23,17 @@ namespace Castle.Model
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public abstract class LifestyleAttribute : Attribute
 	{
-		private LifestyleType _type;
+		private LifestyleType type;
 
 		protected LifestyleAttribute(LifestyleType type)
 		{
-			_type = type;
+			this.type = type;
 		}
 
 		public LifestyleType Lifestyle
 		{
-			get { return _type; }
-			set { _type = value; }
+			get { return type; }
+			set { type = value; }
 		}
 	}
 
@@ -86,8 +86,8 @@ namespace Castle.Model
 		private static readonly int Initial_PoolSize = 5;
 		private static readonly int Max_PoolSize = 15;
 		
-		private readonly int _initialPoolSize;
-		private readonly int _maxPoolSize;
+		private readonly int initialPoolSize;
+		private readonly int maxPoolSize;
 
 		public PooledAttribute() : this(Initial_PoolSize, Max_PoolSize)
 		{
@@ -96,18 +96,18 @@ namespace Castle.Model
 
 		public PooledAttribute(int initialPoolSize, int maxPoolSize) : base(LifestyleType.Pooled)
 		{
-			_initialPoolSize = initialPoolSize;
-			_maxPoolSize = maxPoolSize;
+			this.initialPoolSize = initialPoolSize;
+			this.maxPoolSize = maxPoolSize;
 		}
 
 		public int InitialPoolSize
 		{
-			get { return _initialPoolSize; }
+			get { return initialPoolSize; }
 		}
 
 		public int MaxPoolSize
 		{
-			get { return _maxPoolSize; }
+			get { return maxPoolSize; }
 		}
 	}
 
@@ -118,16 +118,16 @@ namespace Castle.Model
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class CustomLifestyleAttribute : LifestyleAttribute
 	{
-		private Type _lifestyleHandler;
+		private Type lifestyleHandler;
 
 		public CustomLifestyleAttribute( Type lifestyleHandler ) : base(LifestyleType.Custom)
 		{
-			_lifestyleHandler = lifestyleHandler;
+			this.lifestyleHandler = lifestyleHandler;
 		}
 
 		public Type LifestyleHandlerType
 		{
-			get { return _lifestyleHandler; }
+			get { return lifestyleHandler; }
 		}
 	}
 }

@@ -27,10 +27,10 @@ namespace Castle.MicroKernel.ComponentActivator
 	[Serializable]
 	public abstract class AbstractComponentActivator : IComponentActivator
 	{
-		private IKernel _kernel;
-		private ComponentModel _model; 
-		private ComponentInstanceDelegate _onCreation;
-		private ComponentInstanceDelegate _onDestruction;
+		private IKernel kernel;
+		private ComponentModel model; 
+		private ComponentInstanceDelegate onCreation;
+		private ComponentInstanceDelegate onDestruction;
 
 		/// <summary>
 		/// Constructs an AbstractComponentActivator
@@ -43,30 +43,30 @@ namespace Castle.MicroKernel.ComponentActivator
 			ComponentInstanceDelegate onCreation, 
 			ComponentInstanceDelegate onDestruction)
 		{
-			_model = model;
-			_kernel = kernel;
-			_onCreation = onCreation;
-			_onDestruction = onDestruction;
+			this.model = model;
+			this.kernel = kernel;
+			this.onCreation = onCreation;
+			this.onDestruction = onDestruction;
 		}
 
 		public IKernel Kernel
 		{
-			get { return _kernel; }
+			get { return kernel; }
 		}
 
 		public ComponentModel Model
 		{
-			get { return _model; }
+			get { return model; }
 		}
 
 		public ComponentInstanceDelegate OnCreation
 		{
-			get { return _onCreation; }
+			get { return onCreation; }
 		}
 
 		public ComponentInstanceDelegate OnDestruction
 		{
-			get { return _onDestruction; }
+			get { return onDestruction; }
 		}
 
 		protected abstract object InternalCreate();
@@ -79,7 +79,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			object instance = InternalCreate();
 
-			_onCreation(_model, instance);
+			onCreation(model, instance);
 
 			return instance;
 		}
@@ -88,7 +88,7 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			InternalDestroy(instance);
 
-			_onDestruction(_model, instance);
+			onDestruction(model, instance);
 		}
 
 		#endregion

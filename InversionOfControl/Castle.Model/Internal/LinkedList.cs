@@ -19,9 +19,9 @@ namespace Castle.Model.Internal
 
 	public class LinkedList : IList
 	{
-		private LinkNode _head;
-		private LinkNode _tail;
-		private int _count;
+		private LinkNode internalhead;
+		private LinkNode internaltail;
+		private int internalcount;
 
 		public LinkedList()
 		{
@@ -31,41 +31,41 @@ namespace Castle.Model.Internal
 		{
 			get
 			{
-				if (_head == null) return null;
-				return _head.Value;
+				if (internalhead == null) return null;
+				return internalhead.Value;
 			}
 		}
 
 		public void AddFirst(object value)
 		{
-			if (_head == null)
+			if (internalhead == null)
 			{
-				_head = new LinkNode(value);
+				internalhead = new LinkNode(value);
 			}
 			else
 			{
-				_head = new LinkNode(value, _head, null);
+				internalhead = new LinkNode(value, internalhead, null);
 			}
 
-			_count++;
+			internalcount++;
 		}
 
 		public int Add(object value)
 		{
-			if (_head == null)
+			if (internalhead == null)
 			{
-				_head = new LinkNode(value);
+				internalhead = new LinkNode(value);
 				
-				_tail = _head;
+				internaltail = internalhead;
 			}
 			else
 			{
-				_tail.Next = new LinkNode(value, null, _tail);
+				internaltail.Next = new LinkNode(value, null, internaltail);
 				
-				_tail = _tail.Next;
+				internaltail = internaltail.Next;
 			}
 
-			return _count++;
+			return internalcount++;
 		}
 
 		public bool Contains(object value)
@@ -85,13 +85,13 @@ namespace Castle.Model.Internal
 
 		public void Clear()
 		{
-			_head = _tail = null;
-			_count = 0;
+			internalhead = internaltail = null;
+			internalcount = 0;
 		}
 
 		public bool Replace(object old, object value)
 		{
-			LinkNode node = _head;
+			LinkNode node = internalhead;
 
 			while(node != null)
 			{
@@ -128,7 +128,7 @@ namespace Castle.Model.Internal
 
 		public void Insert(int index, object value)
 		{
-			if (index > _count - 1)
+			if (index > internalcount - 1)
 			{
 				throw new ArgumentOutOfRangeException("index");
 			}
@@ -137,20 +137,20 @@ namespace Castle.Model.Internal
 			{
 				AddFirst(value);
 			}
-			else if (index == _count -1)
+			else if (index == internalcount -1)
 			{
 				Add(value);
 			}
 			else
 			{
-				LinkNode node = _head.Next; int indexCur = 0;
+				LinkNode node = internalhead.Next; int indexCur = 0;
 
 				while(node != null)
 				{
 					if (++indexCur == index)
 					{
 						node.Previous.Next = new LinkNode(value, node, node.Previous);
-						_count++;
+						internalcount++;
 						break;
 					}
 
@@ -161,26 +161,26 @@ namespace Castle.Model.Internal
 
 		public void Remove(object value)
 		{
-			if (_head != null)
+			if (internalhead != null)
 			{
-				if (_head.Value.Equals( value ))
+				if (internalhead.Value.Equals( value ))
 				{
-					if (_head == _tail) _tail = null;
+					if (internalhead == internaltail) internaltail = null;
 					
-					_head = _head.Next;
+					internalhead = internalhead.Next;
 					
-					_count--;
+					internalcount--;
 				}
-				else if (_tail.Value.Equals( value ))
+				else if (internaltail.Value.Equals( value ))
 				{
-					_tail.Previous.Next = null;
-					_tail = _tail.Previous;
+					internaltail.Previous.Next = null;
+					internaltail = internaltail.Previous;
 					
-					_count--;
+					internalcount--;
 				}
 				else
 				{
-					LinkNode node = _head.Next;
+					LinkNode node = internalhead.Next;
 
 					while(node != null)
 					{
@@ -188,7 +188,7 @@ namespace Castle.Model.Internal
 						{
 							node.Previous.Next = node.Next;
 							node.Next.Previous = node.Previous;
-							_count--;
+							internalcount--;
 							break;
 						}
 
@@ -221,7 +221,7 @@ namespace Castle.Model.Internal
 
 		public int Count
 		{
-			get { return _count; }
+			get { return internalcount; }
 		}
 
 		public Array ToArray(Type type)
@@ -242,7 +242,7 @@ namespace Castle.Model.Internal
 
 		public IEnumerator GetEnumerator()
 		{
-			return new LinkedListEnumerator(_head);
+			return new LinkedListEnumerator(internalhead);
 		}
 
 		#endregion
@@ -301,19 +301,19 @@ namespace Castle.Model.Internal
 
 	class LinkedListEnumerator : IEnumerator
 	{
-		private LinkNode _head;
+		private LinkNode internalhead;
 		private LinkNode _current;
 		private bool _isFirst;
 
 		public LinkedListEnumerator(LinkNode node)
 		{
-			_head = node;
+			internalhead = node;
 			Reset();
 		}
 
 		public void Reset()
 		{
-			_current = _head;
+			_current = internalhead;
 			_isFirst = true;
 		}
 

@@ -25,35 +25,35 @@ namespace Castle.Model
 	[Serializable]
 	public class ParameterModel
 	{
-		private String _name;
-		private String _value;
-		private IConfiguration _configValue;
+		private String name;
+		private String value;
+		private IConfiguration configValue;
 
 		public ParameterModel( String name, String value )
 		{
-			_name = name;
-			_value = value;
+			this.name = name;
+			this.value = value;
 		}
 
 		public ParameterModel( String name, IConfiguration value )
 		{
-			_name = name;
-			_configValue = value;
+			this.name = name;
+			this.configValue = value;
 		}
 
 		public String Name
 		{
-			get { return _name; }
+			get { return name; }
 		}
 
 		public String Value
 		{
-			get { return _value; }
+			get { return value; }
 		}
 
 		public IConfiguration ConfigValue
 		{
-			get { return _configValue; }
+			get { return configValue; }
 		}
 	}
 }

@@ -25,11 +25,11 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	[Serializable]
 	public class DefaultConversionManager : IConversionManager, ITypeConverterContext
 	{
-		private IList _converters;
+		private IList converters;
 
 		public DefaultConversionManager()
 		{
-			_converters = new ArrayList();
+			converters = new ArrayList();
 
 			InitDefaultConverters();
 		}
@@ -61,7 +61,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			converter.Context = this;
 
-			_converters.Add(converter);
+			converters.Add(converter);
 		}
 
 		#endregion
@@ -76,7 +76,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public bool CanHandleType(Type type)
 		{
-			foreach(ITypeConverter converter in _converters)
+			foreach(ITypeConverter converter in converters)
 			{
 				if (converter.CanHandleType(type)) return true;
 			}
@@ -86,7 +86,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public object PerformConversion(String value, Type targetType)
 		{
-			foreach(ITypeConverter converter in _converters)
+			foreach(ITypeConverter converter in converters)
 			{
 				if (converter.CanHandleType(targetType)) 
 					return converter.PerformConversion(value, targetType);
@@ -100,7 +100,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public object PerformConversion(IConfiguration configuration, Type targetType)
 		{
-			foreach(ITypeConverter converter in _converters)
+			foreach(ITypeConverter converter in converters)
 			{
 				if (converter.CanHandleType(targetType)) 
 					return converter.PerformConversion(configuration, targetType);
