@@ -80,5 +80,7 @@ namespace Castle.Services.Transaction
 		/// Transaction context. Can be used by applications.
 		/// </summary>
 		IDictionary Context { get; }
+
+		bool IsChildTransaction { get; }
 	}
 }

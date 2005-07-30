@@ -120,10 +120,25 @@
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\ActiveRecord\bin\NHibernate.dll"
                 />
+                <Reference
+                    Name = "Castle.Facilities.AutomaticTransactionManagement"
+                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
+                    HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
+                />
+                <Reference
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AbstractActiveRecordTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
@@ -135,12 +150,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TransactionTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Blog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\BlogService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\FirstService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Post.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\PostService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

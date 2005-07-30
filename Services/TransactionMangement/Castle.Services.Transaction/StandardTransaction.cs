@@ -22,14 +22,36 @@ namespace Castle.Services.Transaction
 	/// </summary>
 	public class StandardTransaction : AbstractTransaction
 	{
-		private IList _childs = new ArrayList();
+		private readonly TransactionDelegate onTransactionCommitted;
+		private readonly TransactionDelegate onTransactionRolledback;
+
+		private IList _childs = ArrayList.Synchronized( new ArrayList() );
+		
 		private bool _rollbackOnly;
+
+
+		public StandardTransaction(TransactionDelegate onTransactionCommitted, TransactionDelegate onTransactionRolledback)
+		{
+			this.onTransactionCommitted = onTransactionCommitted;
+			this.onTransactionRolledback = onTransactionRolledback;
+		}
+
+		public StandardTransaction()
+		{
+		}
 
 		public StandardTransaction CreateChildTransaction()
 		{
 			ChildTransaction child = new ChildTransaction(this);
+			
 			_childs.Add(child);
+
 			return child;
+		}
+
+		public override bool IsChildTransaction
+		{
+			get { return false; }
 		}
 
 		public override void Commit()
@@ -40,6 +62,15 @@ namespace Castle.Services.Transaction
 			}
 
 			base.Commit();
+
+			if (onTransactionCommitted != null) onTransactionCommitted(this);
+		}
+
+		public override void Rollback()
+		{
+			base.Rollback();
+
+			if (onTransactionRolledback != null) onTransactionRolledback(this);
 		}
 
 		/// <summary>
@@ -95,6 +126,11 @@ namespace Castle.Services.Transaction
 		public override IDictionary Context
 		{
 			get { return _parent.Context; }
+		}
+
+		public override bool IsChildTransaction
+		{
+			get { return true; }
 		}
 
 		public override void ChildTransactionRolledBack()

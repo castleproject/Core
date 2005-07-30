@@ -24,6 +24,7 @@ namespace Castle.Services.Transaction
 	public class DefaultTransactionManager : ITransactionManager
 	{
 		private static readonly object TransactionCreatedEvent = new object();
+		private static readonly object ChildTransactionCreatedEvent = new object();
 		private static readonly object TransactionCommittedEvent = new object();
 		private static readonly object TransactionRolledbackEvent = new object();
 		private static readonly object TransactionDisposedEvent = new object();
@@ -42,6 +43,12 @@ namespace Castle.Services.Transaction
 		{
 			add { _events.AddHandler(TransactionCreatedEvent, value); }
 			remove { _events.RemoveHandler(TransactionCreatedEvent, value); }
+		}
+
+		public event TransactionCreationInfoDelegate ChildTransactionCreated
+		{
+			add { _events.AddHandler(ChildTransactionCreatedEvent, value); }
+			remove { _events.RemoveHandler(ChildTransactionCreatedEvent, value); }
 		}
 
 		public event TransactionDelegate TransactionCommitted
@@ -85,15 +92,19 @@ namespace Castle.Services.Transaction
 				if (transactionMode == TransactionMode.Requires || transactionMode == TransactionMode.Supported)
 				{
 					transaction = (CurrentTransaction as StandardTransaction).CreateChildTransaction();
+
+					RaiseChildTransactionCreated(transaction, transactionMode, isolationMode);
 				}
 			}
 
 			if (transaction == null)
 			{
-				transaction = new StandardTransaction();
-			}
+				transaction = new StandardTransaction(
+					new TransactionDelegate(RaiseTransactionCommitted), 
+					new TransactionDelegate(RaiseTransactionRolledback) );
 
-			RaiseTransactionCreated(transaction, transactionMode, isolationMode);
+				RaiseTransactionCreated(transaction, transactionMode, isolationMode);
+			}
 
 			_transactions.Push(transaction);
 
@@ -144,6 +155,8 @@ namespace Castle.Services.Transaction
 			{
 				(transaction as IDisposable).Dispose();
 			}
+
+			RaiseTransactionDisposed(transaction);
 		}
 
 		#endregion
@@ -151,7 +164,51 @@ namespace Castle.Services.Transaction
 		protected void RaiseTransactionCreated(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
 		{
 			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) _events[TransactionCreatedEvent];
-			if (eventDelegate != null) eventDelegate(transaction, transactionMode, isolationMode);
+			
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction, transactionMode, isolationMode);
+			}
+		}
+
+		protected void RaiseChildTransactionCreated(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
+		{
+			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) _events[ChildTransactionCreatedEvent];
+			
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction, transactionMode, isolationMode);
+			}
+		}
+
+		protected void RaiseTransactionDisposed(ITransaction transaction)
+		{
+			TransactionDelegate eventDelegate = (TransactionDelegate) _events[TransactionDisposedEvent];
+			
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction);
+			}
+		}
+
+		protected void RaiseTransactionCommitted(ITransaction transaction)
+		{
+			TransactionDelegate eventDelegate = (TransactionDelegate) _events[TransactionCommittedEvent];
+			
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction);
+			}
+		}
+
+		protected void RaiseTransactionRolledback(ITransaction transaction)
+		{
+			TransactionDelegate eventDelegate = (TransactionDelegate) _events[TransactionRolledbackEvent];
+			
+			if (eventDelegate != null)
+			{
+				eventDelegate(transaction);
+			}
 		}
 
 		protected virtual TransactionMode ObtainDefaultTransactionMode(TransactionMode transactionMode)

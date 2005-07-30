@@ -119,6 +119,11 @@
                     AssemblyName = "Castle.MicroKernel"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
+                <Reference
+                    Name = "Castle.Services.Transaction"
+                    AssemblyName = "Castle.Services.Transaction"
+                    HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
+                />
             </References>
         </Build>
         <Files>

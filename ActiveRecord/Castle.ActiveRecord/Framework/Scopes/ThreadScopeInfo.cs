@@ -30,18 +30,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			get
 			{
 				Stack stack = Thread.GetData(_slot) as Stack;
-			
+
 				if (stack == null)
 				{
-					stack = new Stack();
+					stack = Stack.Synchronized( new Stack() );
+
 					Thread.SetData(_slot, stack);
 				}
-			
+
 				return stack;
 			}
 		}
 
-		public static void RegisterScope( ISessionScope scope )
+		public static void RegisterScope(ISessionScope scope)
 		{
 			CurrentStack.Push(scope);
 		}
@@ -49,8 +50,8 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		public static ISessionScope GetRegisteredScope()
 		{
 			Stack stack = CurrentStack;
-			
-			if (stack.Count == 0 ) 
+
+			if (stack.Count == 0)
 			{
 				return null;
 			}
@@ -60,9 +61,9 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			}
 		}
 
-		public static void UnRegisterScope( ISessionScope scope )
+		public static void UnRegisterScope(ISessionScope scope)
 		{
-			if( GetRegisteredScope() != scope )
+			if (GetRegisteredScope() != scope)
 			{
 				throw new ScopeMachineryException("Tried to unregister a scope that is not the active one");
 			}
@@ -72,10 +73,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public static bool HasInitializedScope
 		{
-			get
-			{
-				return GetRegisteredScope() != null;
-			}
+			get { return GetRegisteredScope() != null; }
 		}
 	}
 }

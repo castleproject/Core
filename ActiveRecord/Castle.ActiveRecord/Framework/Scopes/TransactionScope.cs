@@ -14,12 +14,11 @@
 
 namespace Castle.ActiveRecord
 {
-	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
 
 	using NHibernate;
-
+	
 	using Castle.ActiveRecord.Framework.Scopes;
 
 	/// <summary>
@@ -57,7 +56,7 @@ namespace Castle.ActiveRecord
 			{
 				object[] items = ThreadScopeInfo.CurrentStack.ToArray();
 
-				for(int i=0; i < items.Length; i++)
+				for (int i = 0; i < items.Length; i++)
 				{
 					if (items[i] is TransactionScope && items[i] != this)
 					{
@@ -149,7 +148,7 @@ namespace Castle.ActiveRecord
 				return;
 			}
 
-			foreach(ITransaction transaction in _transactions.Values)
+			foreach (ITransaction transaction in _transactions.Values)
 			{
 				if (_rollbackOnly)
 				{

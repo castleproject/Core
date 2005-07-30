@@ -160,6 +160,8 @@ namespace Castle.Services.Transaction
 			get { return _context; }
 		}
 
+		public abstract bool IsChildTransaction { get; }
+
 		#endregion
 
 		#region IDisposable Members
@@ -171,6 +173,8 @@ namespace Castle.Services.Transaction
 		}
 
 		#endregion
+
+		#region Helper methods
 
 		protected virtual void AssertState(TransactionStatus state)
 		{
@@ -202,5 +206,7 @@ namespace Castle.Services.Transaction
 				}
 			}
 		}
+
+		#endregion
 	}
 }

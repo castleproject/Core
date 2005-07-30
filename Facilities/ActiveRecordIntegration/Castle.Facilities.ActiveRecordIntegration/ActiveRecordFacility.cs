@@ -21,8 +21,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Config;
+
 	using Castle.MicroKernel.Facilities;
+	
 	using Castle.Model.Configuration;
+	
 	using Castle.Services.Transaction;
 
 	using TransactionMode = Castle.Services.Transaction.TransactionMode;

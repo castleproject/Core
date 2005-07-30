@@ -34,6 +34,14 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 
 		public event TransactionCreationInfoDelegate TransactionCreated;
 
+		public event TransactionCreationInfoDelegate ChildTransactionCreated;
+		
+		public event TransactionDelegate TransactionCommitted;
+		
+		public event TransactionDelegate TransactionRolledback;
+		
+		public event TransactionDelegate TransactionDisposed;
+
 		public ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode)
 		{
 			_current = new MockTransaction();
@@ -82,6 +90,9 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 
 	public class MockTransaction : AbstractTransaction
 	{
-
+		public override bool IsChildTransaction
+		{
+			get { return false; }
+		}
 	}
 }

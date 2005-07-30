@@ -151,6 +151,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ReportedProblemTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sample_config.xml"
                     BuildAction = "Content"
                 />
@@ -185,12 +190,42 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\Employee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Components\ICalcService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\IEmployee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\IReviewableEmployee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\IReviewer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Components\MarshalCalculatorService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\ReviewableEmployee.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Reviewer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

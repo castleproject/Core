@@ -30,11 +30,13 @@ namespace Castle.Services.Transaction
 	{
 		event TransactionCreationInfoDelegate TransactionCreated;
 
-//		event TransactionDelegate TransactionCommitted;
-//
-//		event TransactionDelegate TransactionRolledback;
-//
-//		event TransactionDelegate TransactionDisposed;
+		event TransactionCreationInfoDelegate ChildTransactionCreated;
+
+		event TransactionDelegate TransactionCommitted;
+
+		event TransactionDelegate TransactionRolledback;
+
+		event TransactionDelegate TransactionDisposed;
 
 		/// <summary>
 		/// More information here.

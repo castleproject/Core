@@ -12,40 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.ActiveRecordIntegration.Tests
+namespace Castle.Windsor.Tests
 {
+	using System;
+
 	using NUnit.Framework;
+
+	using Castle.Windsor.Tests.Components;
 
 
 	[TestFixture]
-	public class IntegrationTestCase : AbstractActiveRecordTest
+	public class ReportedProblemTestCase
 	{
-		[Test]
-		public void SimpleUsage()
+		private IWindsorContainer container;
+
+		[SetUp]
+		public void Init()
 		{
-			Post.DeleteAll();
-			Blog.DeleteAll();
+			container = new WindsorContainer();
+		}
 
-			Blog[] blogs = Blog.FindAll();
+		[Test]
+		public void StackOverflowProblem()
+		{
+			container.AddComponent("C", typeof(Employee));
+			container.AddComponent("B", typeof(Reviewer));
+			container.AddComponent("A", typeof(ReviewableEmployee));
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
-
-			Blog blog = new Blog();
-			blog.Name = "hammett's blog";
-			blog.Author = "hamilton verissimo";
-			blog.Save();
-
-			blogs = Blog.FindAll();
-
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
-
-			Blog retrieved = blogs[0];
-			Assert.IsNotNull( retrieved );
-
-			Assert.AreEqual( blog.Name, retrieved.Name );
-			Assert.AreEqual( blog.Author, retrieved.Author );
+			Assert.IsNotNull(container["A"]);			
+			Assert.IsNotNull(container["B"]);
+			Assert.IsNotNull(container["C"]);
 		}
 	}
 }

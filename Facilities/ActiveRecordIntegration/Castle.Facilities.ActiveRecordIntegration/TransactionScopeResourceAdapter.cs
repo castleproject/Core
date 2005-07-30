@@ -15,7 +15,9 @@
 namespace Castle.Facilities.ActiveRecordIntegration
 {
 	using System;
+	
 	using Castle.ActiveRecord;
+
 	using Castle.Services.Transaction;
 
 	using TransactionMode = Castle.Services.Transaction.TransactionMode;
@@ -44,11 +46,20 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public void Commit()
 		{
 			scope.VoteCommit();
+
+			Dispose();
 		}
 
 		public void Rollback()
 		{
 			scope.VoteRollBack();
+
+			Dispose();
+		}
+
+		protected void Dispose()
+		{
+			scope.Dispose();
 		}
 	}
 }

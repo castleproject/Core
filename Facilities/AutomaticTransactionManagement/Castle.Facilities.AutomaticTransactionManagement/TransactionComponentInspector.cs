@@ -17,11 +17,12 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using System;
 	using System.Collections;
 	using System.Reflection;
-	using Castle.MicroKernel.Facilities;
+
 	using Castle.Model;
 
-	using Castle.MicroKernel.ModelBuilder;
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.ModelBuilder;
+	using Castle.MicroKernel.Facilities;
 
 	using Castle.Services.Transaction;
 
@@ -34,7 +35,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 		{
 			if (model.Implementation.IsDefined( typeof(TransactionalAttribute), true ))
 			{
-				EnsureRelevantMethodsAreVirtual( model.Implementation );
+				EnsureRelevantMethodsAreVirtual( model.Service, model.Implementation );
 
 				model.Dependencies.Add( 
 					new DependencyModel( DependencyType.Service, null, typeof(TransactionInterceptor), false ) );
@@ -44,8 +45,10 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 			}
 		}
 
-		private void EnsureRelevantMethodsAreVirtual(Type implementation)
+		private void EnsureRelevantMethodsAreVirtual(Type service, Type implementation)
 		{
+			if (service.IsInterface) return;
+
 			MethodInfo[] methods = implementation.GetMethods( 
 				BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly );
 
