@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for Statement.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class Statement : IEmitter
 	{
 		public Statement()

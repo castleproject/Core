@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for PopValueFromStackStatement.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class PopValueFromStackStatement : Statement
 	{
 		public PopValueFromStackStatement()

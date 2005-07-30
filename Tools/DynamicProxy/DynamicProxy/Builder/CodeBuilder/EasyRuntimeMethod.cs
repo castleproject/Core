@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyRuntimeMethod.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyRuntimeMethod : EasyMethod
 	{
 		public EasyRuntimeMethod(AbstractEasyType maintype, string name, 

@@ -24,6 +24,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyMethod.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyMethod : IEasyMember
 	{
 		protected MethodBuilder _builder;

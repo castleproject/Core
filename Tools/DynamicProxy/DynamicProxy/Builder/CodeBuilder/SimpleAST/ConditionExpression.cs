@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ConditionExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ConditionExpression : Expression
 	{
 		private OpCode _operation = OpCodes.Brfalse_S;

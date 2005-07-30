@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ReferenceExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ReferenceExpression : Expression
 	{
 		private Reference _reference;

@@ -1,6 +1,3 @@
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +15,16 @@ using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 namespace Castle.DynamicProxy.Builder.CodeBuilder
 {
 	using System;
-	using System.Collections;
 	using System.Reflection;
-	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Builder.CodeGenerators;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
 	/// <summary>
 	/// Summary description for EasyType.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyType : AbstractEasyType
 	{
 		protected EasyType() : base()

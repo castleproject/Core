@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Test.Classes
 	{
 		private int age;
 		private string name;
-		private int privateField;
 
 		public virtual int Age
 		{

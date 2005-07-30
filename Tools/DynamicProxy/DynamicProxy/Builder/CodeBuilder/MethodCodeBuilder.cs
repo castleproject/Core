@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for MethodCodeBuilder.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class MethodCodeBuilder : AbstractCodeBuilder
 	{
 		private Type _baseType;

@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ArgumentReference.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ArgumentReference : TypeReference
 	{
 		private int _position = -1;

@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyCallable.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyCallable : EasyNested
 	{
 		private ArgumentReference[] _args;

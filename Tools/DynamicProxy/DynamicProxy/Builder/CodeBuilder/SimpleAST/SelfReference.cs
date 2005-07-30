@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for SelfReference.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class SelfReference : Reference
 	{
 		public static readonly SelfReference Self = new SelfReference();

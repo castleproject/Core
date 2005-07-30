@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +25,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// <summary>
 	/// Summary description for InterfaceProxyGenerator.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class InterfaceProxyGenerator : BaseCodeGenerator
 	{
 		protected Type _targetType;

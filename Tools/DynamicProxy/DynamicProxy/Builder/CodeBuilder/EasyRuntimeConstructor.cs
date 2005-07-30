@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyRuntimeConstructor.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyRuntimeConstructor : EasyConstructor
 	{
 		public EasyRuntimeConstructor(AbstractEasyType maintype, params ArgumentReference[] arguments )

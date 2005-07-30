@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ReferencesToObjectArrayExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ReferencesToObjectArrayExpression : Expression
 	{
 		private TypeReference[] _args;

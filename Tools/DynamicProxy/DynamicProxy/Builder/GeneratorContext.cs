@@ -25,6 +25,7 @@ namespace Castle.DynamicProxy
 	/// <summary>
 	/// Summary description for GeneratorContext.
 	/// </summary>
+	[CLSCompliant(true)]
 	public sealed class GeneratorContext : DictionaryBase
 	{
 		private IList _skipInterfaces = new ArrayList();

@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for AssignStatement.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class AssignStatement : Statement
 	{
 		private Reference _target;

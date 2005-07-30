@@ -208,7 +208,7 @@ namespace Castle.DynamicProxy.Test
 			Assert.AreEqual("helloooo!", otherProxy["key"]);
 		}
 
-		public object SerializeAndDeserialize( object proxy )
+		public static object SerializeAndDeserialize( object proxy )
 		{
 			MemoryStream stream = new MemoryStream();
 			BinaryFormatter formatter = new BinaryFormatter();

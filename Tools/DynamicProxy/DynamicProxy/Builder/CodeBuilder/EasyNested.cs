@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyNested.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyNested : AbstractEasyType
 	{
 		public EasyNested(AbstractEasyType maintype, 

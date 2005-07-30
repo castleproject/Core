@@ -1,3 +1,16 @@
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace Castle.DynamicProxy.Builder.CodeBuilder
 {
@@ -11,17 +24,18 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyEvent.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyEvent : IEasyMember
 	{
 		private EventBuilder m_builder;
 		private AbstractEasyType m_maintype;
 		private EasyMethod m_addOnMethod;
-    private EasyMethod m_removeOnMethod;
-    private string m_name;
+		private EasyMethod m_removeOnMethod;
+		private string m_name;
 
-		public EasyEvent( AbstractEasyType maintype, String name, Type eventHandlerType )
+		public EasyEvent(AbstractEasyType maintype, String name, Type eventHandlerType)
 		{
-      m_name = name;
+			m_name = name;
 			m_maintype = maintype;
 			m_builder = maintype.TypeBuilder.DefineEvent(
 				name, EventAttributes.None, eventHandlerType);
@@ -34,25 +48,25 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public EasyMethod CreateAddOnMethod(MethodAttributes atts, params Type[] parameters)
 		{
-      if (m_addOnMethod == null)
-      {
-        m_addOnMethod = 
-          new EasyMethod(m_maintype, "add_" + Name, atts, new ReturnReferenceExpression(typeof(void)), ArgumentsUtil.ConvertToArgumentReference(parameters) );
-      }
+			if (m_addOnMethod == null)
+			{
+				m_addOnMethod =
+					new EasyMethod(m_maintype, "add_" + Name, atts, new ReturnReferenceExpression(typeof(void)), ArgumentsUtil.ConvertToArgumentReference(parameters));
+			}
 
-      return m_addOnMethod;
+			return m_addOnMethod;
 		}
 
-    public EasyMethod CreateRemoveOnMethod(MethodAttributes atts, params Type[] parameters)
-    {
-      if (m_removeOnMethod == null)
-      {
-        m_removeOnMethod = 
-          new EasyMethod(m_maintype, "remove_" + Name, atts, new ReturnReferenceExpression(typeof(void)), ArgumentsUtil.ConvertToArgumentReference(parameters) );
-      }
+		public EasyMethod CreateRemoveOnMethod(MethodAttributes atts, params Type[] parameters)
+		{
+			if (m_removeOnMethod == null)
+			{
+				m_removeOnMethod =
+					new EasyMethod(m_maintype, "remove_" + Name, atts, new ReturnReferenceExpression(typeof(void)), ArgumentsUtil.ConvertToArgumentReference(parameters));
+			}
 
-      return m_removeOnMethod;
-    }
+			return m_removeOnMethod;
+		}
 
 		#region IEasyMember Members
 
@@ -63,7 +77,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				m_addOnMethod.Generate();
 				m_builder.SetAddOnMethod(m_addOnMethod.MethodBuilder);
 			}
-			
+
 			if (m_removeOnMethod != null)
 			{
 				m_removeOnMethod.Generate();
@@ -77,7 +91,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			{
 				m_addOnMethod.EnsureValidCodeBlock();
 			}
-			
+
 			if (m_removeOnMethod != null)
 			{
 				m_removeOnMethod.EnsureValidCodeBlock();
@@ -86,21 +100,14 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 
 		public MethodBase Member
 		{
-			get
-			{
-				return null;
-			}
+			get { return null; }
 		}
 
 		public Type ReturnType
 		{
-			get
-			{
-        throw new Exception("TBD");
-			}
+			get { throw new Exception("TBD"); }
 		}
 
 		#endregion
 	}
 }
-

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Threading;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +16,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
 	using System.Reflection.Emit;
+	using System.Collections;
+	using System.Threading;
 
 	/// <summary>
 	/// Summary description for LockBlockExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class LockBlockExpression : Expression
 	{
 		private Reference _syncLockSource;

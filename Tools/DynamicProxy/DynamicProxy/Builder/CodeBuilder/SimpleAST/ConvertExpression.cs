@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ConvertExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ConvertExpression : Expression
 	{
 		private Type _target;

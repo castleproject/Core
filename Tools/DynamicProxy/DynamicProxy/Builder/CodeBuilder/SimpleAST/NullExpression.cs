@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for NullExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class NullExpression : Expression
 	{
 		public static readonly NullExpression Instance = new NullExpression();

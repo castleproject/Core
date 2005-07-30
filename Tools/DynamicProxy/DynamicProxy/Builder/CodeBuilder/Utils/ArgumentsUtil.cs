@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	/// <summary>
 	/// Summary description for ArgumentsUtil.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class ArgumentsUtil
 	{
 		public static void EmitLoadOwnerAndReference(Reference reference, ILGenerator il)

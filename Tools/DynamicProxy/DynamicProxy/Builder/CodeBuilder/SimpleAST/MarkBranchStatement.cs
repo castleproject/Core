@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for MarkBranchStatement.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class MarkBranchStatement : Statement
 	{
 		private LabelReference _label;

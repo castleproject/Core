@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for MethodPointerExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class MethodPointerExpression : Expression
 	{
 		private Reference _owner;

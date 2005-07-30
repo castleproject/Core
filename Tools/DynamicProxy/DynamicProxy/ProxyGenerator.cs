@@ -42,6 +42,7 @@ namespace Castle.DynamicProxy
 	///		generator.CreateProxy( new Type[] { typeof(IInterfaceExposed) }, interceptor );
 	/// </code>
 	/// </example>
+	[CLSCompliant(true)]
 	public class ProxyGenerator
 	{
 		private IProxyBuilder _builder;

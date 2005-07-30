@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ConstructorInvocationExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ConstructorInvocationExpression : Expression
 	{
 		private ConstructorInfo _cmethod;

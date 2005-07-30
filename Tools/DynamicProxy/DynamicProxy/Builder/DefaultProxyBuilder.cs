@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder
 	/// <summary>
 	/// Summary description for DefaultProxyBuilder.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
 		ModuleScope _scope = new ModuleScope();

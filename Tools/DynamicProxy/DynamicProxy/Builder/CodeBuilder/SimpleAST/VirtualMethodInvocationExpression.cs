@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for VirtualMethodInvocationExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class VirtualMethodInvocationExpression : MethodInvocationExpression
 	{
 		public VirtualMethodInvocationExpression(MethodInfo method, params Expression[] args) : base(method, args)

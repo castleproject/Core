@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ReturnStatement.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ReturnStatement : Statement
 	{
 		private Reference _reference;

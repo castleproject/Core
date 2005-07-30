@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ExpressionStatement.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ExpressionStatement : Statement
 	{
 		private Expression _expression;

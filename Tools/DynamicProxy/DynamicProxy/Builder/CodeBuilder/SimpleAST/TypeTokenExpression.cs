@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for TypeTokenExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class TypeTokenExpression : Expression
 	{
 		private Type _type;

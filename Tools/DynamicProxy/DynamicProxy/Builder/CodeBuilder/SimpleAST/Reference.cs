@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for Reference.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class Reference
 	{
 		private Reference _owner = SelfReference.Self;

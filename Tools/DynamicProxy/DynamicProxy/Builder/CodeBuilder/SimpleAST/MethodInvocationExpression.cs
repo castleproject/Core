@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for MethodInvocationExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class MethodInvocationExpression : Expression
 	{
 		protected MethodInfo _method;

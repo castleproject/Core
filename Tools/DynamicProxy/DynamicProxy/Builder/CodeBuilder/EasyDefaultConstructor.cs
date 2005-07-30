@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyDefaultConstructor.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyDefaultConstructor : EasyConstructor
 	{
 		internal EasyDefaultConstructor( AbstractEasyType maintype ) : base()

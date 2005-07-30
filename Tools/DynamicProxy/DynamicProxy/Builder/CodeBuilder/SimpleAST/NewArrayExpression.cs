@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for NewArrayExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class NewArrayExpression : Expression
 	{
 		private int _size;

@@ -27,6 +27,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// <summary>
 	/// Summary description for BaseCodeGenerator.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class BaseCodeGenerator
 	{
 		private ModuleScope _moduleScope;

@@ -24,6 +24,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for AbstractCodeBuilder.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class AbstractCodeBuilder
 	{
 		private ILGenerator _generator;

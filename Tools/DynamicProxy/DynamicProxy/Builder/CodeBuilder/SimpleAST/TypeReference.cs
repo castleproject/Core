@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for TypeReference.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class TypeReference : Reference
 	{
 		private Type _type;

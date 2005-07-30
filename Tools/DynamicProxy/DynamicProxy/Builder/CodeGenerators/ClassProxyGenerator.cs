@@ -28,6 +28,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// <summary>
 	/// Summary description for ClassProxyGenerator.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ClassProxyGenerator : BaseCodeGenerator
 	{
 		private bool _delegateToBaseGetObjectData;
@@ -265,8 +266,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			
 			if (typeof(ISerializable).IsAssignableFrom(baseType))
 			{
-				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData", 
+				MethodInfo getObjectDataMethod = baseType.GetMethod("GetObjectData",  
 					new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+				if (getObjectDataMethod==null)//explicit interface implementation
+				{
+					return false;
+				}
 
 				if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
 				{

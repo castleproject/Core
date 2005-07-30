@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for Expression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class Expression : IEmitter
 	{
 		public Expression()

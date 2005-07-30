@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for PropertiesCollection.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class PropertiesCollection : CollectionBase
 	{
 		public void Add(EasyProperty property)

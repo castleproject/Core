@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// Summary description for ProxyGenerationException.
 	/// </summary>
 	[Serializable]
+	[CLSCompliant(false)]
 	public class ProxyGenerationException : Exception
 	{
 		public ProxyGenerationException(string message) : base(message)

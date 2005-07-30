@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for BinaryExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class BinaryExpression : Expression
 	{
 		public static readonly OpCode Add = OpCodes.Add;

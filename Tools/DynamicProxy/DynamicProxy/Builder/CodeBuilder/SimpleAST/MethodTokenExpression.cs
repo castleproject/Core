@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for MethodTokenExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class MethodTokenExpression : Expression
 	{
 		private MethodInfo _method;

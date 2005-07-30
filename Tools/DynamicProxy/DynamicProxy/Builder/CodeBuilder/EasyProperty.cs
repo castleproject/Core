@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EasyProperty.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EasyProperty : IEasyMember
 	{
 		private PropertyBuilder _builder;

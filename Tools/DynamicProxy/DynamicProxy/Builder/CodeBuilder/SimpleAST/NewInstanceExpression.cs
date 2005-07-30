@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for NewInstanceExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class NewInstanceExpression : Expression
 	{
 		private Type _type;

@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for ReturnReferenceExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ReturnReferenceExpression : TypeReference
 	{
 		public ReturnReferenceExpression( Type argumentType ) : base(argumentType)

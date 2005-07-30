@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for MethodCollection.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class MethodCollection : CollectionBase
 	{
 		public void Add(EasyMethod method)

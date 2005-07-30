@@ -14,45 +14,47 @@
 
 namespace Castle.DynamicProxy.Invocation
 {
+	using System;
 	using System.Reflection;
 
+	[CLSCompliant(true)]
 	public abstract class AbstractInvocation : IInvocation
 	{
-		protected ICallable _callable;
-		private MethodInfo _method;
-		private object _proxy;
-		private object _target;
-		protected object _changed_target;
+		protected ICallable callable;
+		private MethodInfo method;
+		private object proxy;
+		private object target;
+		protected object changed_target;
 
 		public AbstractInvocation( ICallable callable, object proxy, MethodInfo method, object newtarget )
 		{
-			_callable = callable;
-			_proxy = proxy;
+			this.callable = callable;
+			this.proxy = proxy;
 
-			_target = callable.Target;
+			this.target = callable.Target;
 			
 			if (newtarget != null)
 			{
-				_target = newtarget;
+				this.target = newtarget;
 			}
 
-			_method = method;
+			this.method = method;
 		}
 
 		public object Proxy
 		{
-			get { return _proxy; }
+			get { return proxy; }
 		}
 
 		public object InvocationTarget
 		{
-			get { return _changed_target != null ? _changed_target : _target; }
-			set { _changed_target = value; }
+			get { return changed_target != null ? changed_target : target; }
+			set { changed_target = value; }
 		}
 
 		public MethodInfo Method
 		{
-			get { return _method; }
+			get { return method; }
 		}
 
 		public MethodInfo MethodInvocationTarget
@@ -64,13 +66,13 @@ namespace Castle.DynamicProxy.Invocation
 		{
 			// If the user changed the target, we use reflection
 			// otherwise the delegate will be used.
-			if (_changed_target == null)
+			if (changed_target == null)
 			{
-				return _callable.Call( args );
+				return callable.Call( args );
 			}
 			else
 			{
-				return Method.Invoke(_changed_target, args);
+				return Method.Invoke( changed_target, args );
 			}
 		}
 	}

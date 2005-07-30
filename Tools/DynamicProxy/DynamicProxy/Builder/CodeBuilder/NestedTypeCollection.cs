@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for NestedTypeCollection.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class NestedTypeCollection : CollectionBase
 	{
 		public void Add(EasyNested nested)

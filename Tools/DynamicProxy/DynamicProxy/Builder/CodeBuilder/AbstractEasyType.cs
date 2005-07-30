@@ -24,6 +24,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for AbstractEasyType.
 	/// </summary>
+	[CLSCompliant(false)]
 	public abstract class AbstractEasyType
 	{
 		private int _counter;

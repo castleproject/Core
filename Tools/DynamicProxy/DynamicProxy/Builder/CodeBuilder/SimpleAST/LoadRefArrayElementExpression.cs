@@ -1,4 +1,3 @@
-using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +17,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
+
 	/// <summary>
 	/// Summary description for LoadRefArrayElementExpression.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class LoadRefArrayElementExpression : Expression
 	{
 		private FixedReference _index; 

@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for EventsCollection.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class EventsCollection : CollectionBase
 	{
 		public void Add(EasyEvent easyEvent)

@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	/// <summary>
 	/// Summary description for ConstructorCollection.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ConstructorCollection : CollectionBase
  	{
 		public void Add(EasyConstructor constructor )

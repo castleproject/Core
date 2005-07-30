@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	/// <summary>
 	/// Summary description for FieldReference.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class FieldReference : Reference
 	{
 		private FieldBuilder _fieldbuilder;

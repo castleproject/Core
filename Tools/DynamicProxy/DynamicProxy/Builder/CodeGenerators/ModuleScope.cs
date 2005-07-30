@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	/// <summary>
 	/// Summary description for ModuleScope.
 	/// </summary>
+	[CLSCompliant(false)]
 	public class ModuleScope
 	{
 		public static readonly String FILE_NAME = "GeneratedAssembly.dll";
