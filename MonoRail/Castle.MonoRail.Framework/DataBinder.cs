@@ -104,11 +104,15 @@ namespace Castle.MonoRail.Framework
 						{
 							String paramName = paramPrefix + prop.Name;
 
-							string[] values = paramList.GetValues( paramName );
-							
-							object value = Convert( prop.PropertyType, values, paramName, files, context );
+							bool conversionSucceeded;
 
-							if (value != null)
+							string[] values = paramList.GetValues( paramName );
+
+							object value = Convert( prop.PropertyType, values, paramName, files, context, out conversionSucceeded );
+							
+							// we don't want to set the value if the form param was missing
+							// to avoid loosing existing values in the object instance
+							if (conversionSucceeded && value != null)
 							{
 								prop.SetValue( instance, value, null );
 							}
@@ -142,7 +146,23 @@ namespace Castle.MonoRail.Framework
 
 		public static object Convert( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context )
 		{
-			String value = ( values != null && values.Length > 0 ) ? values[0] : null;
+			bool conversionSucceeded; 
+			return Convert(desiredType, values, paramName, files, context, out conversionSucceeded );
+		}
+		
+		private static object Convert( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context, out bool conversionSucceeded )
+		{
+			String value = null;
+
+			if ( values != null && values.Length > 0 ) 
+			{
+				value = values[0];
+				conversionSucceeded = true;
+			}
+			else
+			{
+				conversionSucceeded = false;
+			}
 
 			if (desiredType == typeof(String))
 			{
@@ -221,6 +241,10 @@ namespace Castle.MonoRail.Framework
 					{
 						try
 						{
+							// we have found a composite date so we 
+							// consider the convertion successful
+							conversionSucceeded = true; 
+
 							return new DateTime( 
 								System.Convert.ToInt32(year), 
 								System.Convert.ToInt32(month), 
@@ -256,6 +280,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (desiredType == typeof(HttpPostedFile))
 			{
+				conversionSucceeded = true; // if we get some files we don't care about the values being null
 				return files[paramName];
 			}
 			else if (desiredType.IsArray)
@@ -264,8 +289,11 @@ namespace Castle.MonoRail.Framework
 			}
 			else if ( context != null )
 			{
+				conversionSucceeded = false;
+
 				String message = String.Format("Ignoring argument {0} with value {1} " + 
 					" as we don't know how to convert from this value to its type", paramName, value);
+
 				context.Trace(message);
 			}
 
