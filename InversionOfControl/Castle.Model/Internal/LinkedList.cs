@@ -36,7 +36,7 @@ namespace Castle.Model.Internal
 			}
 		}
 
-		public void AddFirst(object value)
+		public virtual void AddFirst(object value)
 		{
 			if (internalhead == null)
 			{
@@ -50,7 +50,7 @@ namespace Castle.Model.Internal
 			internalcount++;
 		}
 
-		public int Add(object value)
+		public virtual int Add(object value)
 		{
 			if (internalhead == null)
 			{
@@ -89,7 +89,7 @@ namespace Castle.Model.Internal
 			internalcount = 0;
 		}
 
-		public bool Replace(object old, object value)
+		public virtual bool Replace(object old, object value)
 		{
 			LinkNode node = internalhead;
 
@@ -126,7 +126,7 @@ namespace Castle.Model.Internal
 			return -1;
 		}
 
-		public void Insert(int index, object value)
+		public virtual void Insert(int index, object value)
 		{
 			if (index > internalcount - 1)
 			{
@@ -159,7 +159,7 @@ namespace Castle.Model.Internal
 			}
 		}
 
-		public void Remove(object value)
+		public virtual void Remove(object value)
 		{
 			if (internalhead != null)
 			{
@@ -198,7 +198,7 @@ namespace Castle.Model.Internal
 			}
 		}
 
-		public void RemoveAt(int index)
+		public virtual void RemoveAt(int index)
 		{
 			throw new NotImplementedException();
 		}

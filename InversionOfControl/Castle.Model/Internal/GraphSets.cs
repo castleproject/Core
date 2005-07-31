@@ -14,7 +14,6 @@
 
 namespace Castle.Model.Internal
 {
-	using System;
 	using System.Collections;
 	
 	internal enum VertexColor
