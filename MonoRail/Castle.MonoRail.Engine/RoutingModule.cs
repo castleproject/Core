@@ -106,5 +106,20 @@ namespace Castle.MonoRail.Engine
 
 			return false;
 		}
+		
+		/// <summary>
+		/// Returns the original path (before rewriting occured), or <c>null</c> if rewriting didn't occur on this request.
+		/// </summary>
+		public static string OriginalPath
+		{
+			get
+			{
+				HttpContext context = HttpContext.Current;
+				if (context.Items.Contains(OriginalPathKey))
+					return context.Items[OriginalPathKey] as string;
+				else
+					return null;
+			}
+		}
 	}
 }
