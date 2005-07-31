@@ -97,7 +97,7 @@ namespace Castle.ActiveRecord.Generator.Components.CodeGenerator
 			}
 			else
 			{
-				throw new ApplicationException("Could not discover property type");
+				throw new ApplicationException("Could not resolve property type");
 			}
 
 

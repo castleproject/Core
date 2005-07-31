@@ -1,4 +1,3 @@
-using System.ComponentModel;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,13 +50,13 @@ namespace Castle.ActiveRecord.Generator.Components.Tests
 		{
 			INamingService service = (INamingService) Kernel[ typeof(INamingService) ];
 
-			Assert.AreEqual( "orderName", service.CreateFieldName("order_name") );
-			Assert.AreEqual( "name", service.CreateFieldName("name") );
-			Assert.AreEqual( "customerName", service.CreateFieldName("customerName") );
-			Assert.AreEqual( "customerName", service.CreateFieldName("customer_name") );
-			Assert.AreEqual( "customerName", service.CreateFieldName("customer_Name") );
-			Assert.AreEqual( "customerName", service.CreateFieldName("CustomerName") );
-			Assert.AreEqual( "name", service.CreateFieldName("_name") );
+			Assert.AreEqual( "_orderName", service.CreateFieldName("order_name") );
+			Assert.AreEqual( "_name", service.CreateFieldName("name") );
+			Assert.AreEqual( "_customerName", service.CreateFieldName("customerName") );
+			Assert.AreEqual( "_customerName", service.CreateFieldName("customer_name") );
+			Assert.AreEqual( "_customerName", service.CreateFieldName("customer_Name") );
+			Assert.AreEqual( "_customerName", service.CreateFieldName("CustomerName") );
+			Assert.AreEqual( "_name", service.CreateFieldName("_name") );
 		}
 
 		[Test]

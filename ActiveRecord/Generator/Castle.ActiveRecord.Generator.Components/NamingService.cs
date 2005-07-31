@@ -93,7 +93,7 @@ namespace Castle.ActiveRecord.Generator.Components
 			columnName = Regex.Replace(columnName, "(tb_|_)", "");
 			columnName = Regex.Replace(columnName, "^[A-Z]",  DownCaser);
 
-			return columnName;
+			return String.Format("_{0}", columnName);
 		}
 
 		private String UpCaserDef(Match match)
