@@ -128,6 +128,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "TreeWalker.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "UICompilerContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

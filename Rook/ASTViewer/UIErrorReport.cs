@@ -34,38 +34,38 @@ namespace ASTViewer
 
 		public void Error(String filename, LexicalPosition pos, String contents, params object[] args)
 		{
-			if (disabled == 0) return;
+			if (disabled != 0) return;
 
 			errors++;
 
-			list.Add( new ErrorEntry(true, filename, pos.ToString(), String.Format(contents, args) ) );
+			list.Add( new ErrorEntry(true, filename, pos, String.Format(contents, args) ) );
 		}
 
 		public void Error(String contents, params object[] args)
 		{
-			if (disabled == 0) return;
+			if (disabled != 0) return;
 
 			errors++;
 
-			list.Add( new ErrorEntry(true, "", "", String.Format(contents, args) ) );
+			list.Add( new ErrorEntry(true, "", new LexicalPosition(), String.Format(contents, args) ) );
 		}
 
 		public void Warning(String filename, LexicalPosition pos, Severity severity, String contents, params object[] args)
 		{
-			if (disabled == 0) return;
+			if (disabled != 0) return;
 
 			warnings++;
 
-			list.Add( new ErrorEntry(false, "", "", String.Format(contents, args) ) );
+			list.Add( new ErrorEntry(false, "", new LexicalPosition(), String.Format(contents, args) ) );
 		}
 
 		public void Warning(String contents, params object[] args)
 		{
-			if (disabled == 0) return;
+			if (disabled != 0) return;
 
 			warnings++;
 
-			list.Add( new ErrorEntry(false, "", "", String.Format(contents, args) ) );
+			list.Add( new ErrorEntry(false, "", new LexicalPosition(), String.Format(contents, args) ) );
 		}
 
 		public bool HasErrors
@@ -98,10 +98,10 @@ namespace ASTViewer
 	{
 		private readonly string filename;
 		private readonly bool isError;
-		private readonly string pos;
+		private readonly LexicalPosition pos;
 		private readonly string contents;
 
-		public ErrorEntry(bool error, string filename, string pos, string contents)
+		public ErrorEntry(bool error, string filename, LexicalPosition pos, string contents)
 		{
 			this.filename = filename;
 			this.isError = error;
@@ -119,7 +119,7 @@ namespace ASTViewer
 			get { return filename; }
 		}
 
-		public string Pos
+		public LexicalPosition Pos
 		{
 			get { return pos; }
 		}

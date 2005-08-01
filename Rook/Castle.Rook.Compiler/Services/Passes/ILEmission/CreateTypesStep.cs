@@ -16,14 +16,13 @@ namespace Castle.Rook.Compiler.Services.Passes.ILEmission
 {
 	using System;
 	using System.Collections;
+
 	using Castle.Rook.Compiler.AST;
 	using Castle.Rook.Compiler.Visitors;
 
 
 	public class CreateTypesStep : DepthFirstVisitor, ICompilerPassStep
 	{
-		private IList visited = new ArrayList();
-
 		public CreateTypesStep()
 		{
 		}

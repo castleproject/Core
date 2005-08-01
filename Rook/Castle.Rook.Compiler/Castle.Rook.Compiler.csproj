@@ -103,6 +103,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Compiler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CompilerContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

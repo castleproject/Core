@@ -34,6 +34,7 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 		private String currentNamespace;
 		private String currentFileName;
+		private bool enableErrorReporting;
 
 		public TypeBuilderSkeletonStep(ModuleBuilder modBuilder, ITypeContainer container, 
 			INameResolver resolver, IErrorReport errorReport)
@@ -88,7 +89,10 @@ namespace Castle.Rook.Compiler.Services.Passes
 				if (lastCount == toProcess.Count)
 				{
 					// Something that couldn't be resolved!
-					// TODO: Error message
+					
+					enableErrorReporting = true;
+
+					ReProcessTypesOnQueue();
 
 					break;
 				}
@@ -196,6 +200,13 @@ namespace Castle.Rook.Compiler.Services.Passes
 			{
 				if (!resolver.Resolve( typeRef ))
 				{
+					if (enableErrorReporting)
+					{
+						errorReport.Error( "TODO:FILENAME", typeDef.Position, 
+							"Could not resolve type {0}. Are you forgetting about " + 
+							"a reference to an assembly?", typeRef.TypeName );
+					}
+
 					weAreHappy = false;
 				}
 			}
@@ -229,7 +240,9 @@ namespace Castle.Rook.Compiler.Services.Passes
 				}
 				else if (typeDef == head)
 				{
-					// Back to the first?
+					// Back to the first
+
+					toProcess.Enqueue(typeDef);
 					break;
 				}
 

@@ -1,16 +1,27 @@
-using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Data;
-using Castle.Rook.Compiler.AST;
-using Castle.Rook.Compiler.Services;
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace ASTViewer
 {
-	using Castle.Rook.Compiler.Services.Passes;
-	using Castle.Rook.Compiler.Visitors;
+	using System;
+	using System.IO;
+	using System.Windows.Forms;
+
+	using Castle.Rook.Compiler;
+	using Castle.Rook.Compiler.AST;
+	using Castle.Rook.Compiler.Services;
+	
 
 	/// <summary>
 	/// Summary description for Form1.
@@ -48,6 +59,15 @@ namespace ASTViewer
 			InitializeComponent();
 
 			errorReport = container[ typeof(IErrorReport) ] as UIErrorReport;
+
+			FileInfo info = new FileInfo( "source.rook.txt" );
+
+			if (!info.Exists) return;
+
+			using(StreamReader reader = new StreamReader(info.FullName))
+			{
+				sourceCode.Text = reader.ReadToEnd();
+			}
 		}
 
 		/// <summary>
@@ -283,24 +303,44 @@ namespace ASTViewer
 
 		private void button1_Click_1(object sender, System.EventArgs e)
 		{
-			SourceUnit unit = container.ParserService.Parse(sourceCode.Text);
+			listView1.Items.Clear();
 
-			CreateAst(unit, rawAST.Nodes);
+			SaveSource();
 
-			if (checkBox1.Enabled)
-			{
-				CreateBuilderSkeleton sb = container[ typeof(CreateBuilderSkeleton) ] as CreateBuilderSkeleton;
+			Compiler comp = new Compiler( container );
 
-				sb.ExecutePass(unit.CompilationUnit);
+			comp.PrePassExecution += new PassInfoHandler(PrePassExecution);
+			comp.PostPassExecution += new PassInfoHandler(PostPassExecution);
 
-				CreateAst(unit, resultingAST.Nodes);
-
-				ICompilerPass emissionPass = container[ typeof(Emission) ] as ICompilerPass;
-
-				emissionPass.ExecutePass(unit.CompilationUnit);
-			}
+			comp.Compile( sourceCode.Text );
 
 			ShowErrors();
+		}
+
+		private void SaveSource()
+		{
+			FileInfo info = new FileInfo( "source.rook.txt" );
+
+			if (info.Exists)
+			{
+				info.Delete();
+			}
+
+			using( StreamWriter writer = new StreamWriter(info.FullName) )
+			{
+				writer.Write( sourceCode.Text );
+				writer.Flush();
+			}
+		}
+
+		private void PrePassExecution(object sender, ICompilerPass pass, CompilationUnit unit, IErrorReport errorService)
+		{
+			CreateAst(unit, rawAST.Nodes);
+		}
+
+		private void PostPassExecution(object sender, ICompilerPass pass, CompilationUnit unit, IErrorReport errorService)
+		{
+			CreateAst(unit, resultingAST.Nodes);
 		}
 
 		private void ShowErrors()
@@ -310,13 +350,14 @@ namespace ASTViewer
 			foreach(ErrorEntry entry in errorReport.List)
 			{
 				ListViewItem item = listView1.Items.Add( entry.Filename );
-				item.SubItems.Add( entry.Pos );
+				// item.SubItems.Add( entry.Pos );
+				item.SubItems.Add( "" );
 				item.SubItems.Add( entry.IsError ? "error" : "warning" );
 				item.SubItems.Add( entry.Contents );
 			}
 		}
 
-		private void CreateAst(SourceUnit unit, TreeNodeCollection nodes)
+		private void CreateAst(CompilationUnit unit, TreeNodeCollection nodes)
 		{
 			nodes.Clear(); new TreeWalker(unit, nodes);
 		}
@@ -329,237 +370,6 @@ namespace ASTViewer
 		private void resultingAST_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			propertyGrid1.SelectedObject = e.Node.Tag;
-		}
-	}
-
-
-	public class TreeWalker : DepthFirstVisitor
-	{
-		private TreeNodeCollection nodes;
-		private Stack nodeStack = new Stack();
-
-		public TreeWalker(SourceUnit unit, TreeNodeCollection nodes)
-		{
-			this.nodes = nodes;
-
-			VisitNode(unit.CompilationUnit);
-		}
-
-		public TreeNode CurrentNode
-		{
-			get { return nodeStack.Peek() as TreeNode; }
-		}
-
-		public override void VisitCompilationUnit(CompilationUnit compilationUnit)
-		{
-			nodeStack.Push( nodes.Add("CompilationUnit") );
-			CurrentNode.Tag = compilationUnit;
-
-			base.VisitCompilationUnit(compilationUnit);
-
-			nodeStack.Pop();
-		}
-
-		public override bool VisitSourceUnit(SourceUnit unit)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("SourceUnit") );
-			CurrentNode.Tag = unit;
-
-			base.VisitSourceUnit(unit);
-
-			nodeStack.Pop();
-
-			return true;
-		}
-
-		public override bool VisitNamespace(NamespaceDescriptor ns)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("Namespace " + ns.Name) );
-			CurrentNode.Tag = ns;
-
-			CurrentNode.EnsureVisible();
-
-			base.VisitNamespace(ns);
-
-			nodeStack.Pop();
-
-			return true;
-		}
-
-		public override bool VisitTypeDefinitionStatement(TypeDefinitionStatement typeDef)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("Type " + typeDef.Name + " (" + typeDef.Name + ")") );
-			CurrentNode.Tag = typeDef;
-
-			CurrentNode.EnsureVisible();
-
-			base.VisitTypeDefinitionStatement(typeDef);
-
-			nodeStack.Pop();
-
-			return true;
-		}
-
-		public override bool VisitMethodDefinitionStatement(MethodDefinitionStatement methodDef)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("Method " + methodDef.Name + "[ret " + methodDef.ReturnType + "]" ));
-			CurrentNode.Tag = methodDef;
-
-			CurrentNode.EnsureVisible();
-
-			base.VisitMethodDefinitionStatement(methodDef);
-
-			nodeStack.Pop();
-
-			return true;
-		}
-
-//		public override bool VisitSingleVariableDeclarationStatement(SingleVariableDeclarationStatement varDecl)
-//		{
-//			nodeStack.Push( CurrentNode.Nodes.Add("SingleVariableDeclarationStatement"));
-//			CurrentNode.Tag = varDecl;
-//
-//			CurrentNode.EnsureVisible();
-//
-//			base.VisitSingleVariableDeclarationStatement(varDecl);
-//
-//			nodeStack.Pop();
-//
-//			return true;
-//		}
-//
-//		public override bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl)
-//		{
-//			nodeStack.Push( CurrentNode.Nodes.Add("MultipleVariableDeclarationStatement"));
-//			CurrentNode.Tag = varDecl;
-//
-//			CurrentNode.EnsureVisible();
-//
-//			base.VisitMultipleVariableDeclarationStatement(varDecl);
-//
-//			nodeStack.Pop();
-//
-//			return true;
-//		}
-
-		public override bool VisitTypeReference(TypeReference reference)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("TypeReference " + reference.TypeName));
-			CurrentNode.Tag = reference;
-
-			CurrentNode.EnsureVisible();
-
-			base.VisitTypeReference(reference);
-
-			nodeStack.Pop();
-
-			return true;
-		}
-
-		public override bool VisitIdentifier(Identifier identifier)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("Identifier " + identifier.Name + " - " + identifier.TypeReference ));
-			CurrentNode.Tag = identifier;
-
-			CurrentNode.EnsureVisible();
-
-			base.VisitIdentifier(identifier);
-
-			nodeStack.Pop();
-
-			return true;
-		}
-
-		public override bool VisitParameterIdentifier(ParameterVarIdentifier identifier)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("ParameterVarIdentifier " + identifier.Name + " - " + identifier.TypeReference ));
-			CurrentNode.Tag = identifier;
-			
-			base.VisitParameterIdentifier(identifier);
-
-			nodeStack.Pop();
-
-			return true;
-		}
-
-		public override void VisitOpaqueIdentifier(OpaqueIdentifier identifier)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("OpaqueIdentifier " + identifier.Name + " - " + identifier.TypeReference ));
-			CurrentNode.Tag = identifier;
-			
-			base.VisitOpaqueIdentifier(identifier);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitExpressionStatement(ExpressionStatement statement)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("ExpressionStatement "));
-			CurrentNode.Tag = statement;
-
-			base.VisitExpressionStatement(statement);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitMethodInvocationExpression(MethodInvocationExpression invocationExpression)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("MethodInvocationExpression " + invocationExpression.Designator));
-			CurrentNode.Tag = invocationExpression;
-
-			base.VisitMethodInvocationExpression(invocationExpression);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitVariableReferenceExpression(VariableReferenceExpression expression)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("VariableReferenceExpression - " + expression.Identifier.Name));
-			CurrentNode.Tag = expression;
-
-			base.VisitVariableReferenceExpression(expression);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitConstExpression(ConstExpression expression)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("ConstExpression " + expression.Value + " " + expression.ValueType ));
-			CurrentNode.Tag = expression;
-
-			base.VisitConstExpression(expression);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitParameterVarIdentifier(ParameterVarIdentifier varIdentifier)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("ParameterVarIdentifier " + varIdentifier.Name + " " + varIdentifier.InitExpression ));
-			CurrentNode.Tag = varIdentifier;
-
-			base.VisitParameterVarIdentifier(varIdentifier);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitBlockExpression(BlockExpression expression)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("BlockExpression [" + expression.Parameters.Count + " params ] " ));
-			CurrentNode.Tag = expression;
-
-			base.VisitBlockExpression(expression);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitMemberAccessExpression(MemberAccessExpression accessExpression)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("MemberAccessExpression [" + accessExpression.Name + " ] " ));
-			CurrentNode.Tag = accessExpression;
-
-			base.VisitMemberAccessExpression(accessExpression);
-
-			nodeStack.Pop();
 		}
 	}
 }
