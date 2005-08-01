@@ -42,9 +42,9 @@ tokens
 {
 	public IErrorReport ErrorReport;
 	
+	private bool withinStatic, withinVirtual, withinAbstract, withinNew, withinOverride;
+	
 	private ISymbolTable topLevelScope;
-
-	private int withinStaticBlock = 0;
 
 	AccessLevel currentAccessLevel = AccessLevel.Public;
 	
@@ -213,20 +213,62 @@ type_suite[IList stmts]
 		(
 			stmt=statement { if (stmt != null) stmts.Add(stmt); } 
 			|
-			static_scope[stmts]
+			method_scope[stmts]
 		)
 	)*
 	;
 
+// class << self
+//   def method <- will be static
+// end
+//
+// class << override
+//   def method <- will be override
+// end
+//
+// class << new
+//   def method <- will be new
+// end
+//
+// class << virtual
+//   def method <- will be virtual
+// end
 protected 
-static_scope[IList stmts]
-	{ IStatement stmt = null; }
+method_scope[IList stmts]
+	{ IStatement stmt = null; int index=0; }
 	:
-	CLASS SL "self" 
-	{ withinStaticBlock++; }
-	(access_level stmt=statement { if (stmt != null) stmts.Add(stmt); } )*
+	CLASS SL 
+	
+	(
+	  "self"		{ withinStatic = true; }
+	  |
+	  "override"	{ index = 1; withinOverride = true; }
+	  |
+  	  "abstract"	{ index = 2; withinAbstract = true; }
+	  |
+  	  "new"			{ index = 3; withinNew = true; }
+	  |
+  	  "virtual"		{ index = 4; withinVirtual = true; }
+	)
+
+	statement_term
+
+    (access_level stmt=statement { if (stmt != null) stmts.Add(stmt); } )*
+	
 	END
-	{ withinStaticBlock--; }
+	{ 
+	  if (index == 0)
+		withinStatic = false;
+	  else if (index == 1)
+		withinOverride = false;
+	  else if (index == 2)
+		withinAbstract = false;
+	  else if (index == 3)
+		withinNew = false;
+	  else if (index == 4)
+		withinVirtual = false;
+	}
+	statement_term
 	;
 
 protected
@@ -294,11 +336,14 @@ declaration_statement returns [MultipleVariableDeclarationStatement stmt]
  	;
 
 method_def_statement returns [MethodDefinitionStatement mdstmt]
-	{ mdstmt = null; String qn = null; TypeReference retType = null; }
-	:
-	DEF^ qn=qualified_name 
 	{ 
-		mdstmt = new MethodDefinitionStatement( currentAccessLevel, qn); 
+	  mdstmt = new MethodDefinitionStatement( currentAccessLevel ); 
+	  String qn = null; TypeReference retType = null; 
+	}
+	:
+	DEF^ modifier[mdstmt] qn=qualified_name 
+	{ 
+		mdstmt.Name = qn;
 		PushScope(mdstmt, ScopeType.Method); 
 	}
 	(
@@ -308,6 +353,31 @@ method_def_statement returns [MethodDefinitionStatement mdstmt]
 	{ mdstmt.ReturnType = retType; }
 	suite[mdstmt.Statements]
 	END { PopScope(); }
+	;
+
+protected
+modifier[MethodDefinitionStatement mdstmt]
+	:
+	"override"			{ mdstmt.IsOverride = true; }
+	|
+	{ withinOverride }? { mdstmt.IsOverride = true; }
+	|
+	"new"				{ mdstmt.IsNewSlot  = true; }
+	|
+	{ withinNew }?		{ mdstmt.IsNewSlot  = true; }
+	|
+	"abstract"			{ mdstmt.IsAbstract = true; }
+	|
+	{ withinAbstract }?	{ mdstmt.IsAbstract = true; }
+	|
+	"virtual"			{ mdstmt.IsVirtual  = true; }
+	|
+	{ withinVirtual }?	{ mdstmt.IsVirtual  = true; }
+	|
+	{ withinStatic }?	{ mdstmt.IsStatic   = true; }
+
+	|
+	// nothing
 	;
 
 require_statement returns[RequireDirectiveStatement rd]

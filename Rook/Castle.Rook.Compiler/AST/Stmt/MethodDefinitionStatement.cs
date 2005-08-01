@@ -27,12 +27,13 @@ namespace Castle.Rook.Compiler.AST
 		private ASTNodeCollection statements;
 		private ASTNodeCollection arguments;
 
-		public MethodDefinitionStatement(AccessLevel accessLevel, String name) : base(StatementType.MethodDef)
+		private bool isOverride, isNewSlot, isAbstract, isVirtual, isStatic;
+
+		public MethodDefinitionStatement(AccessLevel accessLevel) : base(StatementType.MethodDef)
 		{
 			statements = new ASTNodeCollection(this);
 			arguments = new ASTNodeCollection(this);
 			this.accessLevel = accessLevel;
-			this.name = name;
 		}
 
 		public AccessLevel AccessLevel
@@ -44,7 +45,18 @@ namespace Castle.Rook.Compiler.AST
 		public string Name
 		{
 			get { return name; }
-			set { name = value; }
+			set
+			{
+				if (value.StartsWith("self."))
+				{
+					name = value.Substring( "self.".Length );
+					isStatic = true;
+				}
+				else
+				{
+					name = value;
+				}
+			}
 		}
 
 		public TypeReference ReturnType
@@ -66,6 +78,36 @@ namespace Castle.Rook.Compiler.AST
 		public void AddFormalParameter(ParameterVarIdentifier param)
 		{
 			arguments.Add(param);
+		}
+
+		public bool IsOverride
+		{
+			get { return isOverride; }
+			set { isOverride = value; }
+		}
+
+		public bool IsNewSlot
+		{
+			get { return isNewSlot; }
+			set { isNewSlot = value; }
+		}
+
+		public bool IsAbstract
+		{
+			get { return isAbstract; }
+			set { isAbstract = value; }
+		}
+
+		public bool IsVirtual
+		{
+			get { return isVirtual; }
+			set { isVirtual = value; }
+		}
+
+		public bool IsStatic
+		{
+			get { return isStatic; }
+			set { isStatic = value; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

@@ -69,7 +69,8 @@ namespace Castle.Rook.Compiler.Services.Passes
 	
 			globalUnit.Statements.Add( globalType );
 	
-			MethodDefinitionStatement entryPoint = new MethodDefinitionStatement( AccessLevel.Public, "RookMain" );
+			MethodDefinitionStatement entryPoint = new MethodDefinitionStatement( AccessLevel.Public );
+			entryPoint.Name = "self.main";
 	
 			foreach(SourceUnit sunit in unit.SourceUnits)
 			{
