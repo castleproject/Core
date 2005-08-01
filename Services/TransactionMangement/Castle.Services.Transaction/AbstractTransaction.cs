@@ -109,7 +109,7 @@ namespace Castle.Services.Transaction
 
 			if (error != null)
 			{
-				throw error;
+				throw new TransactionException("Could not rollback transaction, one of the resources failed", error);
 			}
 		}
 
@@ -139,7 +139,7 @@ namespace Castle.Services.Transaction
 
 			if (error != null)
 			{
-				throw error;
+				throw new TransactionException("Could not commit transaction, one of the resources failed", error);
 			}
 		}
 

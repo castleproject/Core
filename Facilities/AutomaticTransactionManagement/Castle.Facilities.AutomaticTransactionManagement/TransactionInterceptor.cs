@@ -16,7 +16,8 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 {
 	using System;
 	using System.Reflection;
-
+	using Castle.MicroKernel;
+	using Castle.Model;
 	using Castle.Model.Interceptor;
 
 	using Castle.Services.Transaction;
@@ -24,13 +25,14 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	/// <summary>
 	/// Summary description for TransactionInterceptor.
 	/// </summary>
+	[Transient]
 	public class TransactionInterceptor : IMethodInterceptor
 	{
-		private ITransactionManager _manager;
+		private IKernel _kernel;
 
-		public TransactionInterceptor(ITransactionManager manager)
+		public TransactionInterceptor(IKernel kernel)
 		{
-            _manager = manager;
+            _kernel = kernel;
 		}
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
@@ -48,8 +50,10 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 				TransactionAttribute transactionAtt = (TransactionAttribute) attrs[0];
 
+				ITransactionManager manager = (ITransactionManager) _kernel[ typeof(ITransactionManager) ];
+
 				ITransaction transaction = 
-					_manager.CreateTransaction( 
+					manager.CreateTransaction( 
 						transactionAtt.TransactionMode, transactionAtt.IsolationMode );
 
 				if (transaction == null)
@@ -67,6 +71,13 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 					transaction.Commit();
 				}
+				catch(TransactionException)
+				{
+					// Whoops. Special case, let's throw without 
+					// attempt to rollback anything
+
+					throw;
+				}
 				catch(Exception)
 				{
 					transaction.Rollback();
@@ -75,7 +86,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 				}
 				finally
 				{
-					_manager.Dispose(transaction); 
+					manager.Dispose(transaction); 
 				}
 
 				return value;
