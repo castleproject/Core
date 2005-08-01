@@ -169,6 +169,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\BlogLazy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Client.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -215,6 +220,11 @@
                 />
                 <File
                     RelPath = "Model\Post.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\PostLazy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

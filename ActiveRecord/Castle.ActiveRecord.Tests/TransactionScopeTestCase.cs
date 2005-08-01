@@ -244,7 +244,7 @@ namespace Castle.ActiveRecord.Tests
 					Blog blog = new Blog();
 					Blog.FindAll(); // Just to force a session association
 
-					using(TransactionScope t1n = new TransactionScope())
+					using(new TransactionScope())
 					{
 						Blog.FindAll(); // Just to force a session association
 
@@ -269,6 +269,133 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( 1, blogs.Length );
 
 			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 0, posts.Length );
+		}
+
+		[Test]
+		public void MixingSessionScopeAndTransactionScopes()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			using(new SessionScope())
+			{
+			using(TransactionScope root = new TransactionScope())
+			{
+				using(TransactionScope t1 = new TransactionScope()) // Isolated
+				{
+					Blog blog = new Blog();
+
+					Blog.FindAll(); // Just to force a session association
+
+					using(new TransactionScope(TransactionMode.Inherits))
+					{
+						Blog.FindAll(); // Just to force a session association
+
+						blog.Author = "hammett";
+						blog.Name = "some name";
+						blog.Save();
+					}
+
+					using(new TransactionScope(TransactionMode.Inherits))
+					{
+						Post post = new Post(blog, "title", "post contents", "Castle");
+				
+						post.Save();
+					}
+
+					t1.VoteRollBack();
+				}
+
+				Blog.FindAll(); // Cant be locked
+
+				using(new TransactionScope()) 
+				{
+					Blog blog = new Blog();
+					Blog.FindAll(); // Just to force a session association
+
+					using(new TransactionScope())
+					{
+						Blog.FindAll(); // Just to force a session association
+
+						blog.Author = "hammett";
+						blog.Name = "some name";
+						blog.Save();
+					}
+
+					using(TransactionScope t1n = new TransactionScope(TransactionMode.Inherits)) 
+					{
+						Post post = new Post(blog, "title", "post contents", "Castle");
+				
+						try{ post.SaveWithException(); } 
+						catch(Exception) { t1n.VoteRollBack(); }
+					}
+				}
+
+				root.VoteCommit();
+			}
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 1, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 0, posts.Length );
+		}
+
+		[Test]
+		public void MixingSessionScopeAndTransactionScopes2()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(PostLazy), typeof(BlogLazy) );
+			Recreate();
+
+			PostLazy.DeleteAll();
+			BlogLazy.DeleteAll();
+
+			BlogLazy b = new BlogLazy();
+
+			using(new SessionScope())
+			{
+				b.Name = "a";
+				b.Author = "x";
+				b.Save();
+
+				using(new TransactionScope())
+				{
+					for(int i=1; i <= 10; i++)
+					{
+						PostLazy post = new PostLazy(b, "t", "c", "General");
+						post.Save();
+					}
+				}
+			}
+
+			using(new SessionScope())
+			{
+				using(new TransactionScope())
+				{
+					// We should load this outside the transaction scope
+
+					b = BlogLazy.Find(b.Id);
+
+					int total = b.Posts.Count;
+					
+					foreach(PostLazy p in b.Posts)
+					{
+						p.Delete();
+					}
+
+					b.Delete();
+				}
+			}
+
+			BlogLazy[] blogs = BlogLazy.FindAll();
+			Assert.AreEqual( 0, blogs.Length );
+
+			PostLazy[] posts = PostLazy.FindAll();
 			Assert.AreEqual( 0, posts.Length );
 		}
 	}
