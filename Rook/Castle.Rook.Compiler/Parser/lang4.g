@@ -255,7 +255,7 @@ method_scope[IList stmts]
 
     (access_level stmt=statement { if (stmt != null) stmts.Add(stmt); } )*
 	
-	END
+	END statement_term
 	{ 
 	  if (index == 0)
 		withinStatic = false;
@@ -268,7 +268,6 @@ method_scope[IList stmts]
 	  else if (index == 4)
 		withinVirtual = false;
 	}
-	statement_term
 	;
 
 protected

@@ -950,6 +950,7 @@ _loop29_breakloop:			;
 _loop33_breakloop:			;
 		}    // ( ... )*
 		match(END);
+		statement_term();
 		if (0==inputState.guessing)
 		{
 			
