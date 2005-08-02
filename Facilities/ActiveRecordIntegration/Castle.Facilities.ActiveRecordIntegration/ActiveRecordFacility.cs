@@ -23,7 +23,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using Castle.ActiveRecord.Framework.Config;
 
 	using Castle.MicroKernel.Facilities;
-	
+	using Castle.Model;
 	using Castle.Model.Configuration;
 	
 	using Castle.Services.Transaction;
@@ -59,6 +59,8 @@ namespace Castle.Facilities.ActiveRecordIntegration
 					"the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
 			}
 
+			Kernel.ComponentCreated += new Castle.MicroKernel.ComponentInstanceDelegate(Kernel_ComponentCreated);
+
 			SetUpTransactionManager();
 
 			InitializeFramework(assemblies);
@@ -85,10 +87,6 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				Kernel.AddComponent( "ar.transaction.manager", 
 				                     typeof(ITransactionManager), typeof(ActiveRecordTransactionManager) );
 			}
-	
-			ITransactionManager transactionManager = (ITransactionManager) Kernel[ typeof(ITransactionManager) ];
-	
-			transactionManager.TransactionCreated += new TransactionCreationInfoDelegate(OnNewTransaction);
 		}
 
 		private void OnNewTransaction(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
@@ -99,6 +97,14 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		private Assembly ObtainAssembly(String assemblyName)
 		{
 			return Assembly.Load(assemblyName);
+		}
+
+		private void Kernel_ComponentCreated(ComponentModel model, object instance)
+		{
+			if (model.Service != null && model.Service == typeof(ITransactionManager))
+			{
+				(instance as ITransactionManager).TransactionCreated += new TransactionCreationInfoDelegate(OnNewTransaction);
+			}
 		}
 	}
 

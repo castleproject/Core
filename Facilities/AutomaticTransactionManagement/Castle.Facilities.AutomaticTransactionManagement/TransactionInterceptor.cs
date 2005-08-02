@@ -25,7 +25,6 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	/// <summary>
 	/// Summary description for TransactionInterceptor.
 	/// </summary>
-	[Transient]
 	public class TransactionInterceptor : IMethodInterceptor
 	{
 		private IKernel _kernel;
@@ -45,8 +44,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 			}
 			else
 			{
-				object[] attrs = methodInfo.GetCustomAttributes( 
-					typeof(TransactionAttribute), true );
+				object[] attrs = methodInfo.GetCustomAttributes( typeof(TransactionAttribute), true );
 
 				TransactionAttribute transactionAtt = (TransactionAttribute) attrs[0];
 

@@ -130,10 +130,13 @@ namespace Castle.ActiveRecord
 			if (parentSimpleScope != null)
 			{
 				session = parentSimpleScope.GetSession(key);
-				EnsureHasTransaction(session);
 			}
 
-			return session != null ? session : base.GetSession(key);
+			session = session != null ? session : base.GetSession(key);
+
+			EnsureHasTransaction(session);
+
+			return session;
 		}
 
 		protected void EnsureHasTransaction(ISession session)
