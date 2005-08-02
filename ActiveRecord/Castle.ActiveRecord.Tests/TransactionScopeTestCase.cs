@@ -375,12 +375,12 @@ namespace Castle.ActiveRecord.Tests
 
 			using(new SessionScope())
 			{
+				// We should load this outside the transaction scope
+
+				b = BlogLazy.Find(b.Id);
+
 				using(new TransactionScope())
 				{
-					// We should load this outside the transaction scope
-
-					b = BlogLazy.Find(b.Id);
-
 					int total = b.Posts.Count;
 					
 					foreach(PostLazy p in b.Posts)
@@ -398,5 +398,61 @@ namespace Castle.ActiveRecord.Tests
 			PostLazy[] posts = PostLazy.FindAll();
 			Assert.AreEqual( 0, posts.Length );
 		}
+
+		[Test]
+		public void MixingSessionScopeAndTransactionScopes3()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(PostLazy), typeof(BlogLazy) );
+			Recreate();
+
+			PostLazy.DeleteAll();
+			BlogLazy.DeleteAll();
+
+			BlogLazy b = new BlogLazy();
+
+			using(new SessionScope())
+			{
+				b.Name = "a";
+				b.Author = "x";
+				b.Save();
+
+				using(new TransactionScope())
+				{
+					for(int i=1; i <= 10; i++)
+					{
+						PostLazy post = new PostLazy(b, "t", "c", "General");
+						post.Save();
+					}
+				}
+			}
+
+			using(new SessionScope())
+			{
+				// We should load this outside the transaction scope
+
+				b = BlogLazy.Find(b.Id);
+
+				using(TransactionScope transaction = new TransactionScope())
+				{
+					int total = b.Posts.Count;
+					
+					foreach(PostLazy p in b.Posts)
+					{
+						p.Delete();
+					}
+
+					b.Delete();
+
+					transaction.VoteRollBack();
+				}
+			}
+
+			BlogLazy[] blogs = BlogLazy.FindAll();
+			Assert.AreEqual( 1, blogs.Length );
+
+			PostLazy[] posts = PostLazy.FindAll();
+			Assert.AreEqual( 10, posts.Length );
+		}
+
 	}
 }

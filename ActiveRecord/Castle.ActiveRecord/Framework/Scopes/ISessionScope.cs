@@ -18,11 +18,20 @@ namespace Castle.ActiveRecord
 
 	using NHibernate;
 
+	public enum SessionScopeType
+	{
+		Undefined,
+		Simple,
+		Transactional
+	}
+
 	/// <summary>
 	/// Contract for implementation of scopes.
 	/// </summary>
 	public interface ISessionScope : IDisposable
 	{
+		SessionScopeType ScopeType { get; }
+
 		/// <summary>
 		/// Implementors should return true 
 		/// if the key is know. The key might be whatever the

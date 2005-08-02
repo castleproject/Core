@@ -28,6 +28,14 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public class SessionScope : AbstractScope
 	{
+		protected SessionScope(SessionScopeType type) : base(type)
+		{
+		}
+
+		public SessionScope() : base(SessionScopeType.Simple)
+		{
+		}
+
 		protected override void PerformDisposal(ICollection sessions)
 		{
 			PerformDisposal(sessions, true, true);

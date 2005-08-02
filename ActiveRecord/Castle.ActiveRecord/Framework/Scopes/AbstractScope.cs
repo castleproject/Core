@@ -24,11 +24,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	/// </summary>
 	public abstract class AbstractScope : ISessionScope
 	{
+		private readonly SessionScopeType type;
+
 		protected Hashtable _key2Session = new Hashtable();
 
-		public AbstractScope()
+		public AbstractScope( SessionScopeType type )
 		{
+			this.type = type;
 			ThreadScopeInfo.RegisterScope(this);
+		}
+
+		public SessionScopeType ScopeType
+		{
+			get { return type; }
 		}
 
 		public virtual bool IsKeyKnown(object key)

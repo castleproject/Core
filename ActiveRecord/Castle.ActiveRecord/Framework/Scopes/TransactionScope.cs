@@ -14,6 +14,7 @@
 
 namespace Castle.ActiveRecord
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
 
@@ -45,24 +46,26 @@ namespace Castle.ActiveRecord
 	{
 		private readonly TransactionMode mode;
 		private IDictionary _transactions = new HybridDictionary();
+		private TransactionScope parentTransactionScope;
+		private ISessionScope parentSimpleScope;
 		private bool _rollbackOnly;
-		private TransactionScope parentScope;
 
-		public TransactionScope(TransactionMode mode)
+		public TransactionScope(TransactionMode mode) : base(SessionScopeType.Transactional)
 		{
 			this.mode = mode;
 
-			if (mode == TransactionMode.Inherits)
-			{
-				object[] items = ThreadScopeInfo.CurrentStack.ToArray();
+			ISessionScope previousScope = FindPreviousScope( 
+				mode == TransactionMode.Inherits ? true : false );
 
-				for (int i = 0; i < items.Length; i++)
+			if (previousScope != null)
+			{
+				if (previousScope.ScopeType == SessionScopeType.Transactional)
 				{
-					if (items[i] is TransactionScope && items[i] != this)
-					{
-						parentScope = items[i] as TransactionScope;
-						break;
-					}
+					parentTransactionScope = previousScope as TransactionScope;
+				}
+				else
+				{
+					parentSimpleScope = previousScope;
 				}
 			}
 		}
@@ -73,9 +76,9 @@ namespace Castle.ActiveRecord
 
 		public void VoteRollBack()
 		{
-			if (mode == TransactionMode.Inherits && parentScope != null)
+			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
 			{
-				parentScope.VoteRollBack();
+				parentTransactionScope.VoteRollBack();
 			}
 			_rollbackOnly = true;
 		}
@@ -90,19 +93,26 @@ namespace Castle.ActiveRecord
 
 		public override bool IsKeyKnown(object key)
 		{
-			if (mode == TransactionMode.Inherits && parentScope != null)
+			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
 			{
-				return parentScope.IsKeyKnown(key);
+				return parentTransactionScope.IsKeyKnown(key);
+			}
+			
+			bool keyKnown = false;
+
+			if (parentSimpleScope != null)
+			{
+				keyKnown = parentSimpleScope.IsKeyKnown(key);
 			}
 
-			return base.IsKeyKnown(key);
+			return keyKnown ? true : base.IsKeyKnown(key);
 		}
 
 		public override void RegisterSession(object key, ISession session)
 		{
-			if (mode == TransactionMode.Inherits && parentScope != null)
+			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
 			{
-				parentScope.RegisterSession(key, session);
+				parentTransactionScope.RegisterSession(key, session);
 			}
 
 			base.RegisterSession(key, session);
@@ -110,12 +120,20 @@ namespace Castle.ActiveRecord
 
 		public override ISession GetSession(object key)
 		{
-			if (mode == TransactionMode.Inherits && parentScope != null)
+			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
 			{
-				return parentScope.GetSession(key);
+				return parentTransactionScope.GetSession(key);
 			}
 
-			return base.GetSession(key);
+			ISession session = null;
+
+			if (parentSimpleScope != null)
+			{
+				session = parentSimpleScope.GetSession(key);
+				EnsureHasTransaction(session);
+			}
+
+			return session != null ? session : base.GetSession(key);
 		}
 
 		protected void EnsureHasTransaction(ISession session)
@@ -131,9 +149,9 @@ namespace Castle.ActiveRecord
 
 		protected override void Initialize(ISession session)
 		{
-			if (mode == TransactionMode.Inherits && parentScope != null)
+			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
 			{
-				parentScope.EnsureHasTransaction(session);
+				parentTransactionScope.EnsureHasTransaction(session);
 				return;
 			}
 
@@ -142,7 +160,7 @@ namespace Castle.ActiveRecord
 
 		protected override void PerformDisposal(ICollection sessions)
 		{
-			if (mode == TransactionMode.Inherits && parentScope != null)
+			if (mode == TransactionMode.Inherits && parentTransactionScope != null)
 			{
 				// In this case it's not up to this instance to perform the clean up
 				return;
@@ -163,6 +181,31 @@ namespace Castle.ActiveRecord
 			// No flush necessary, but we should close the session
 
 			base.PerformDisposal(sessions, false, true);
+		}
+
+		private ISessionScope FindPreviousScope(bool transactional)
+		{
+			object[] items = ThreadScopeInfo.CurrentStack.ToArray();
+
+			ISessionScope first = null;
+
+			for (int i = 0; i < items.Length; i++)
+			{
+				ISessionScope scope = items[i] as ISessionScope;
+
+				if (scope == this) continue;
+
+				if (first == null) first = scope;
+
+				if (!transactional) break;
+
+				if (transactional && scope.ScopeType == SessionScopeType.Transactional)
+				{
+					return scope;
+				}
+			}
+
+			return first;
 		}
 	}
 }
