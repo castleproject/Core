@@ -85,5 +85,12 @@ namespace NVelocity.Test
 
 			return name + " " + url + " " + options["with"];
 		}
+
+		public String LinkToRemote2(String name, String url, IDictionary options)
+		{
+			if (options == null) throw new ArgumentNullException("options");
+
+			return name + " " + url + " " + options["success"] + options["failure"];
+		}
 	}
 }

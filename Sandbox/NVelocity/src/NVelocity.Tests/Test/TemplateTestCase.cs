@@ -5,9 +5,12 @@ namespace NVelocity.Test
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Text;
 	using NUnit.Framework;
 	using NVelocity.App;
 	using NVelocity.Runtime;
+	using NVelocity.Runtime.Resource;
+	using NVelocity.Runtime.Resource.Loader;
 	using NVelocity.Test.Provider;
 
 	/// <summary>
@@ -136,6 +139,36 @@ namespace NVelocity.Test
 			context.Put("intarr", intarr);
 		}
 
+		[Test]
+		public void CacheProblems()
+		{
+			VelocityContext context = new VelocityContext();
+
+			context.Put( "AjaxHelper2", new AjaxHelper2() );
+			context.Put( "DictHelper", new DictHelper() );
+
+			Template template = ve.GetTemplate(
+				getFileName(null, "dicthelper", TemplateTestBase_Fields.TMPL_FILE_EXT));
+			
+			StringWriter writer = new StringWriter();
+
+			template.Merge(context, writer);
+
+			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+
+			writer = new StringWriter();
+
+			template.Merge(context, writer);
+
+			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+
+			writer = new StringWriter();
+
+			template.Merge(context, writer);
+
+			System.Console.WriteLine( writer.GetStringBuilder().ToString() );
+		}
+
 		/// <summary>
 		/// Adds the template test cases to run to this test suite.  Template test
 		/// cases are listed in the <code>TEST_CASE_PROPERTIES</code> file.
@@ -226,6 +259,6 @@ namespace NVelocity.Test
 
 			return true;
 		}
-
 	}
+
 }

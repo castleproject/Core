@@ -335,17 +335,17 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			/*
-	    * Iteratively work 'down' (it's flat...) the reference
-	    * to get the value, but check to make sure that
-	    * every result along the path is valid. For example:
-	    *
-	    * $hashtable.Customer.Name
-	    *
-	    * The $hashtable may be valid, but there is no key
-	    * 'Customer' in the hashtable so we want to stop
-	    * when we find a null value and return the null
-	    * so the error gets logged.
-	    */
+			* Iteratively work 'down' (it's flat...) the reference
+			* to get the value, but check to make sure that
+			* every result along the path is valid. For example:
+			*
+			* $hashtable.Customer.Name
+			*
+			* The $hashtable may be valid, but there is no key
+			* 'Customer' in the hashtable so we want to stop
+			* when we find a null value and return the null
+			* so the error gets logged.
+			*/
 
 			try
 			{
@@ -364,8 +364,8 @@ namespace NVelocity.Runtime.Parser.Node
 			catch (MethodInvocationException mie)
 			{
 				/*
-		*  someone tossed their cookies
-		*/
+				*  someone tossed their cookies
+				*/
 
 				rsvc.error("Method " + mie.MethodName + " threw exception for reference $" + rootString + " in template " + context.CurrentTemplateName + " at " + " [" + this.Line + "," + this.Column + "]");
 
@@ -417,10 +417,10 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			/*
-	    *  the normal processing
-	    *
-	    *  if we have an event cartridge, get a new value object
-	    */
+			*  the normal processing
+			*
+			*  if we have an event cartridge, get a new value object
+			*/
 			EventCartridge ec = context.EventCartridge;
 
 			if (ec != null)
@@ -429,14 +429,14 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			/*
-	    *  if value is null...
-	    */
+			*  if value is null...
+			*/
 
 			if (value_ == null)
 			{
 				/*
-		*  write prefix twice, because it's shmoo, so the \ don't escape each other...
-		*/
+				*  write prefix twice, because it's shmoo, so the \ don't escape each other...
+				*/
 
 				writer.Write(escPrefix);
 				writer.Write(escPrefix);
@@ -453,8 +453,8 @@ namespace NVelocity.Runtime.Parser.Node
 			else
 			{
 				/*
-		*  non-null processing
-		*/
+				*  non-null processing
+				*/
 
 				writer.Write(escPrefix);
 				writer.Write(morePrefix);
@@ -465,7 +465,8 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
-		/// <summary>   Computes boolean value of this reference
+		/// <summary>   
+		/// Computes boolean value of this reference
 		/// Returns the actual value of reference return type
 		/// boolean, and 'true' if value is not null
 		/// *
@@ -543,10 +544,10 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			/*
-	    *  We support two ways of setting the value in a #set($ref.foo = $value ) :
-	    *  1) ref.setFoo( value )
-	    *  2) ref,put("foo", value ) to parallel the get() map introspection
-	    */
+			*  We support two ways of setting the value in a #set($ref.foo = $value ) :
+			*  1) ref.setFoo( value )
+			*  2) ref,put("foo", value ) to parallel the get() map introspection
+			*/
 
 			try
 			{

@@ -76,15 +76,14 @@ namespace NVelocity.Runtime.Resource
 			return (Resource) cache[key];
 		}
 
-		public Resource put(Object key, Resource value_)
+		public Resource put(Object key, Resource value)
 		{
 			Object o = cache[key];
-			cache[key] = value_;
+			cache[key] = value;
 			return (Resource) o;
 		}
 
-		public Resource remove
-			(Object key)
+		public Resource remove(Object key)
 		{
 			Object o = cache[key];
 			cache.Remove(key);

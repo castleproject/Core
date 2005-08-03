@@ -63,6 +63,30 @@ namespace NVelocity.Runtime.Parser.Node
 
 	public class SimpleNode : INode
 	{
+		protected internal RuntimeServices rsvc = null;
+
+		protected internal INode parent;
+		protected internal INode[] children;
+		protected internal int id;
+		protected internal Parser parser;
+
+		protected internal int info; // added
+		public bool state;
+		protected internal bool invalid = false;
+
+		/* Added */
+		protected internal Token first, last;
+
+		public SimpleNode(int i)
+		{
+			id = i;
+		}
+
+		public SimpleNode(Parser p, int i) : this(i)
+		{
+			parser = p;
+		}
+
 		public Token FirstToken
 		{
 			get { return first; }
@@ -101,30 +125,6 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			get { return first.beginColumn; }
 
-		}
-
-		protected internal RuntimeServices rsvc = null;
-
-		protected internal INode parent;
-		protected internal INode[] children;
-		protected internal int id;
-		protected internal Parser parser;
-
-		protected internal int info; // added
-		public bool state;
-		protected internal bool invalid = false;
-
-		/* Added */
-		protected internal Token first, last;
-
-		public SimpleNode(int i)
-		{
-			id = i;
-		}
-
-		public SimpleNode(Parser p, int i) : this(i)
-		{
-			parser = p;
 		}
 
 		public void jjtOpen()

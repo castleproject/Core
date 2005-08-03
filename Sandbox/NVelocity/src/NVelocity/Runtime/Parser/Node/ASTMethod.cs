@@ -27,6 +27,7 @@ namespace NVelocity.Runtime.Parser.Node
 		private String methodName = "";
 		private int paramCount = 0;
 		private Object[] params_Renamed;
+		private int paramArrayIndex = -1;
 
 		public ASTMethod(int id) : base(id)
 		{
@@ -144,6 +145,8 @@ namespace NVelocity.Runtime.Parser.Node
 			PropertyInfo property = null;
 			bool preparedAlready = false;
 
+			Object[] methodArguments = params_Renamed;
+
 			try
 			{
 				/*
@@ -165,20 +168,20 @@ namespace NVelocity.Runtime.Parser.Node
 					// we're dealing with a "params array[] args" and 
 					// if so, we create an array with an appropriate size
 
-					int arrayArg = int.MaxValue;
+//					int arrayArg = paramArrayIndex == -1 ? int.MaxValue : paramArrayIndex;
 
-					for (int j = 0; j < paramCount; j++)
-					{
-						if (params_Renamed[j] != null && params_Renamed[j].GetType().IsArray)
-						{
-							Array array = Array.CreateInstance( 
-								params_Renamed[j].GetType().GetElementType(), paramCount - j );
-							
-							params_Renamed[j] = array;
-							
-							arrayArg = j; break;
-						}
-					}
+//					for (int j = 0; j < paramCount; j++)
+//					{
+//						if (params_Renamed[j] != null && params_Renamed[j].GetType().IsArray)
+//						{
+//							Array array = Array.CreateInstance( 
+//								params_Renamed[j].GetType().GetElementType(), paramCount - j );
+//							
+//							params_Renamed[j] = array;
+//							
+//							arrayArg = j; break;
+//						}
+//					}
 
 					/*
 					* sadly, we do need recalc the values of the args, as this can 
@@ -187,16 +190,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 					for (int j = 0; j < paramCount; j++)
 					{
-						if (j >= arrayArg)
-						{
-							Array array = (Array) params_Renamed[arrayArg];
-							
-							array.SetValue( jjtGetChild(j + 1).Value(context), j - arrayArg );
-						}
-						else
-						{
-							params_Renamed[j] = jjtGetChild(j + 1).Value(context);
-						}
+						params_Renamed[j] = jjtGetChild(j + 1).Value(context);
 					}
 
 					preparedAlready = true;
@@ -207,12 +201,13 @@ namespace NVelocity.Runtime.Parser.Node
 					if (icd.thingy is MethodInfo)
 					{
 						method = (MethodInfo) icd.thingy;
+
+						methodArguments = BuildMethodArgs(method, paramArrayIndex);
 					}
 					if (icd.thingy is PropertyInfo)
 					{
 						property = (PropertyInfo) icd.thingy;
 					}
-
 				}
 				else
 				{
@@ -252,36 +247,26 @@ namespace NVelocity.Runtime.Parser.Node
 					return null;
 				}
 			}
-			catch (MethodInvocationException mie)
-			{
-				/*
-		*  this can come from the doIntrospection(), as the arg values
-		*  are evaluated to find the right method signature.  We just
-		*  want to propogate it here, not do anything fancy
-		*/
-
-				throw mie;
-			}
 			catch (Exception e)
 			{
 				/*
-		*  can come from the doIntropection() also, from Introspector
-		*/
+				*  can come from the doIntropection() also, from Introspector
+				*/
 
 				rsvc.error("ASTMethod.execute() : exception from introspection : " + e);
-				return null;
+				throw;
 			}
 
 			try
 			{
 				/*
-		*  get the returned object.  It may be null, and that is
-		*  valid for something declared with a void return type.
-		*  Since the caller is expecting something to be returned,
-		*  as long as things are peachy, we can return an empty 
-		*  String so ASTReference() correctly figures out that
-		*  all is well.
-		*/
+				*  get the returned object.  It may be null, and that is
+				*  valid for something declared with a void return type.
+				*  Since the caller is expecting something to be returned,
+				*  as long as things are peachy, we can return an empty 
+				*  String so ASTReference() correctly figures out that
+				*  all is well.
+				*/
 
 				Object obj = null;
 
@@ -289,49 +274,12 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					if (!preparedAlready)
 					{
-						ParameterInfo[] methodArgs = method.GetParameters();
-
-						int indexOfParamArray = -1;
-
-						for (int i = 0; i < methodArgs.Length; ++i)
-						{
-							ParameterInfo paramInfo = methodArgs[i];
-
-							if (paramInfo.IsDefined( typeof(ParamArrayAttribute), false ))
-							{
-								indexOfParamArray = i; break;
-							}
-						}
-
-						if (indexOfParamArray != -1)
-						{
-							Type arrayParamType = methodArgs[indexOfParamArray].ParameterType;
-
-							object[] newParams = new object[ methodArgs.Length ];
-
-							Array.Copy( params_Renamed, newParams, methodArgs.Length - 1 );
-
-							if (params_Renamed.Length < (indexOfParamArray + 1))
-							{
-								newParams[indexOfParamArray] = Array.CreateInstance( 
-									arrayParamType.GetElementType(), 0 );
-							}
-							else
-							{
-								Array args = Array.CreateInstance( arrayParamType.GetElementType(), (params_Renamed.Length + 1) - newParams.Length );
-
-								Array.Copy( params_Renamed, methodArgs.Length - 1, args, 0, args.Length );
-
-								newParams[indexOfParamArray] = args;
-							}
-
-							params_Renamed = newParams;
-						}
+						methodArguments = BuildMethodArgs(method);
 					}
 
-					obj = method.Invoke(o, params_Renamed);
+					obj = method.Invoke(o, methodArguments);
 
-					if (obj == null && method.ReturnType == System.Type.GetType("System.Void"))
+					if (obj == null && method.ReturnType == typeof(void))
 					{
 						obj = String.Empty;
 					}
@@ -383,10 +331,62 @@ namespace NVelocity.Runtime.Parser.Node
 			catch (Exception e)
 			{
 				rsvc.error("ASTMethod.execute() : exception invoking method '" + methodName + "' in " + o.GetType() + " : " + e);
-				return null;
+				throw e;
 			}
 		}
 
+		private object[] BuildMethodArgs(MethodInfo method, int paramArrayIndex )
+		{
+			object[] methodArguments = params_Renamed;
+			ParameterInfo[] methodArgs = method.GetParameters();
 
+			if (paramArrayIndex != -1)
+			{
+				Type arrayParamType = methodArgs[paramArrayIndex].ParameterType;
+
+				object[] newParams = new object[ methodArgs.Length ];
+
+				Array.Copy( params_Renamed, newParams, methodArgs.Length - 1 );
+
+				if (params_Renamed.Length < (paramArrayIndex + 1))
+				{
+					newParams[paramArrayIndex] = Array.CreateInstance( 
+						arrayParamType.GetElementType(), 0 );
+				}
+				else
+				{
+					Array args = Array.CreateInstance( arrayParamType.GetElementType(), (params_Renamed.Length + 1) - newParams.Length );
+
+					Array.Copy( params_Renamed, methodArgs.Length - 1, args, 0, args.Length );
+
+					newParams[paramArrayIndex] = args;
+				}
+
+				methodArguments = newParams;
+			}
+
+			return methodArguments;
+		}
+
+		private object[] BuildMethodArgs(MethodInfo method)
+		{
+			ParameterInfo[] methodArgs = method.GetParameters();
+	
+			int indexOfParamArray = -1;
+	
+			for (int i = 0; i < methodArgs.Length; ++i)
+			{
+				ParameterInfo paramInfo = methodArgs[i];
+
+				if (paramInfo.IsDefined( typeof(ParamArrayAttribute), false ))
+				{
+					indexOfParamArray = i; break;
+				}
+			}
+	
+			paramArrayIndex = indexOfParamArray;
+	
+			return BuildMethodArgs(method, indexOfParamArray);
+		}
 	}
 }

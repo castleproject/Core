@@ -15,6 +15,7 @@
 namespace NVelocity.Runtime.Resource.Loader
 {
 	using System;
+
 	using NVelocity.Util;
 
 
