@@ -3,12 +3,6 @@
 		<title>Validation Test</title>
 		$ValidationHelper.InstallScripts()
 		$ValidationHelper.SetSubmitOptions(true, true, false, 0)
-		<script>
-			function ChangeCCType(combo)
-			{
-				
-			}
-		</script>
 	</head>
 	<body>
 		<form method="post" id="demoForm" action="validate.rails" onsubmit="$ValidationHelper.GetValidationTriggerFunction()">
