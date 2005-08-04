@@ -16,7 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
 	using System.Collections;
-
+	using Castle.Facilities.AutomaticTransactionManagement;
 	using Castle.Windsor;
 
 	using NUnit.Framework;
@@ -30,6 +30,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
 			container.AddFacility("nhibernate", new NHibernateFacility());
+			container.AddFacility("transaction", new TransactionFacility());
+
 			container.AddComponent("blogdao", typeof(BlogDao));
 			
 			BlogDao dao = (BlogDao) container["blogdao"];
@@ -53,6 +55,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
 			container.AddFacility("nhibernate", new NHibernateFacility());
+			container.AddFacility("transaction", new TransactionFacility());
+
 			container.AddComponent("blogdao", typeof(BlogDaoTransactional));
 			
 			BlogDao dao = (BlogDao) container["blogdao"];

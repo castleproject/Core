@@ -16,15 +16,24 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
 	using System.Collections;
-
+	using Castle.MicroKernel;
 	using NHibernate;
 
+	using Castle.Services.Transaction;
 	using Castle.Facilities.NHibernateExtension;
+	using NUnit.Framework;
 
 
 	[UsesAutomaticSessionCreation]
 	public class BlogDao
 	{
+		protected readonly IKernel kernel;
+
+		public BlogDao(IKernel kernel)
+		{
+			this.kernel = kernel;
+		}
+
 		[SessionFlush(FlushOption.Force)]
 		public virtual Blog CreateBlog( String name )
 		{

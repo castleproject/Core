@@ -18,8 +18,9 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	using System;
 
 	using Castle.Facilities.NHibernateExtension;
-
+	using Castle.MicroKernel;
 	using Castle.Services.Transaction;
+	using NUnit.Framework;
 
 	/// <summary>
 	/// Summary description for BlogDaoTransactional.
@@ -27,15 +28,31 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	[Transactional]
 	public class BlogDaoTransactional : BlogDao
 	{
+		public BlogDaoTransactional(IKernel kernel) : base(kernel)
+		{
+		}
+
 		[Transaction(TransactionMode.Requires)]
 		public override Blog CreateBlog(String name)
 		{
+			ITransactionManager transactionManager = 
+				kernel[ typeof(ITransactionManager) ] as ITransactionManager;
+
+			Assert.IsNotNull( transactionManager );
+			Assert.IsNotNull( transactionManager.CurrentTransaction );
+
 			return base.CreateBlog(name);
 		}
 
 		[Transaction(TransactionMode.Requires)]
 		public override void DeleteAll()
 		{
+			ITransactionManager transactionManager = 
+				kernel[ typeof(ITransactionManager) ] as ITransactionManager;
+
+			Assert.IsNotNull( transactionManager );
+			Assert.IsNotNull( transactionManager.CurrentTransaction );
+
 			base.DeleteAll();
 		}
 	}

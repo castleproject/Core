@@ -15,29 +15,44 @@
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
-
+	using Castle.MicroKernel;
 	using Castle.Services.Transaction;
+	using NUnit.Framework;
 
 
 	[Transactional]
 	public class MyBusinessClass
 	{
 		private BlogDao _blogDao;
+		private readonly IKernel kernel;
 
-		public MyBusinessClass(BlogDao blogDao)
+		public MyBusinessClass(BlogDao blogDao, IKernel kernel)
 		{
 			_blogDao = blogDao;
+			this.kernel = kernel;
 		}
 
-		[Transaction(TransactionMode.Requires)]
+		[Transaction(TransactionMode.RequiresNew)]
 		public virtual Blog Create( String name )
 		{
+			ITransactionManager transactionManager = 
+				kernel[ typeof(ITransactionManager) ] as ITransactionManager;
+
+			Assert.IsNotNull( transactionManager );
+			Assert.IsNotNull( transactionManager.CurrentTransaction );
+
 			return _blogDao.CreateBlog( name );
 		}
 
 		[Transaction(TransactionMode.Requires)]
 		public virtual Blog CreateWithError( String name )
 		{
+			ITransactionManager transactionManager = 
+				kernel[ typeof(ITransactionManager) ] as ITransactionManager;
+
+			Assert.IsNotNull( transactionManager );
+			Assert.IsNotNull( transactionManager.CurrentTransaction );
+
 			_blogDao.CreateBlog( name );
 
 			throw new ApplicationException("Ugh!");

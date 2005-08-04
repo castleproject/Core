@@ -59,6 +59,22 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		}
 
 		[Test]
+		public void BusinessLayerWithTransactionsAndThread()
+		{
+			IWindsorContainer container = CreateConfiguredContainer();
+			container.AddFacility("nhibernate", new NHibernateFacility());
+			container.AddFacility("transaction", new TransactionFacility());
+			
+			container.AddComponent("blogdao", typeof(BlogDao));
+			container.AddComponent("orderdao", typeof(OrderDao));
+			container.AddComponent("business", typeof(MyBusinessClass));
+			container.AddComponent("business2", typeof(MyOtherBusinessClass));
+
+
+
+		}
+
+		[Test]
 		public void Rollback()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();

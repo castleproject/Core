@@ -16,7 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
 	using System.Collections;
-
+	using System.Threading;
 	using Castle.Windsor;
 	using Castle.Facilities.AutomaticTransactionManagement;
 
@@ -26,6 +26,10 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	[TestFixture]
 	public class TransactionalPlaceHolderTestCase : AbstractNHibernateTestCase
 	{
+		private ManualResetEvent _startEvent = new ManualResetEvent(false);
+		private ManualResetEvent _stopEvent = new ManualResetEvent(false);
+		private BlogDao _dao;
+
 		[Test]
 		public void BusinessLayerWithTransactions()
 		{
@@ -45,6 +49,74 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 			Assert.IsNotNull( blogs );
 			Assert.AreEqual( 1, blogs.Count );
+		}
+
+		[Test]
+		public void BusinessLayerWithTransactionsAndThreads()
+		{
+			IWindsorContainer container = CreateConfiguredContainer();
+			container.AddFacility("nhibernate", new NHibernateFacility());
+			container.AddFacility("transaction", new TransactionFacility());
+			
+			container.AddComponent("blogdao", typeof(BlogDao));
+			container.AddComponent("business", typeof(MyBusinessClass));
+			
+			const int threadCount = 10;
+
+			Thread[] threads = new Thread[threadCount];
+			
+			for(int i = 0; i < threadCount; i++)
+			{
+				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal));
+				threads[i].Start();
+			}
+
+			_startEvent.Set();
+
+			Thread.CurrentThread.Join(1 * 2000);
+
+			_stopEvent.Set();
+		}
+
+		[Test]
+		public void BusinessLayerWithTransactionsAndThreads2()
+		{
+			IWindsorContainer container = CreateConfiguredContainer();
+			container.AddFacility("nhibernate", new NHibernateFacility());
+			container.AddFacility("transaction", new TransactionFacility());
+			
+			container.AddComponent("blogdao", typeof(BlogDaoTransactional));
+			container.AddComponent("business", typeof(MyBusinessClass));
+
+						
+			const int threadCount = 10;
+
+			Thread[] threads = new Thread[threadCount];
+			
+			for(int i = 0; i < threadCount; i++)
+			{
+				threads[i] = new Thread(new ThreadStart(ExecuteMethodUntilSignal));
+				threads[i].Start();
+			}
+
+			_startEvent.Set();
+
+			Thread.CurrentThread.Join(1 * 2000);
+
+			_stopEvent.Set();
+		}
+
+		public void ExecuteMethodUntilSignal()
+		{
+			_startEvent.WaitOne(int.MaxValue, false);
+
+			while (!_stopEvent.WaitOne(1, false))
+			{
+				_dao.CreateBlog("my blog");
+				IList blogs = _dao.ObtainBlogs();
+				Assert.IsNotNull( blogs );
+				Assert.IsTrue( blogs.Count > 0 );
+			}
 		}
 
 		[Test]
