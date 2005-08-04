@@ -55,5 +55,15 @@ namespace Castle.Windsor.Tests.Components
 		{
 			get { return _disposed; }
 		}
+
+		public override bool Equals(object obj)
+		{
+			return base.Equals(obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
 	}
 }

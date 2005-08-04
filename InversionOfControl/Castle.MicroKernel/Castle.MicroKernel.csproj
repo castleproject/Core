@@ -478,6 +478,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\ReferenceComparer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\ReferenceExpressionUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

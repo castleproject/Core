@@ -22,16 +22,22 @@ namespace Castle.Windsor.Tests
 	using Castle.Windsor.Tests.Components;
 
 	[TestFixture]
-	public class RealProxyTestCase
+	public class SmartProxyTestCase
 	{
 		private IWindsorContainer _container;
+
+		public SmartProxyTestCase()
+		{
+		}
 
 		[SetUp]
 		public void Init()
 		{
-			_container = new WindsorContainer( new RealProxyProxyFactory() );
+			_container = new WindsorContainer();
 
 			_container.AddFacility( "1", new MyInterceptorGreedyFacility() );
+			_container.AddFacility( "2", new MyInterceptorGreedyFacility() );
+			_container.AddFacility( "3", new MyInterceptorGreedyFacility() );
 		}
 
 		[TearDown]
@@ -41,7 +47,7 @@ namespace Castle.Windsor.Tests
 		}
 
 		[Test]
-		public void InterfaceProxy()
+		public void MBRInterfaceProxy()
 		{
 			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
 			_container.AddComponent( "key", typeof(ICalcService), typeof(MarshalCalculatorService)  );
@@ -50,11 +56,11 @@ namespace Castle.Windsor.Tests
 
 			Assert.IsNotNull(service);
 			Assert.IsTrue(RemotingServices.IsTransparentProxy(service));
-			Assert.AreEqual( 5, service.Sum(2,2) );
+			Assert.AreEqual( 7, service.Sum(2,2) );
 		}
 
 		[Test]
-		public void ConcreteClassProxy()
+		public void MBRConcreteClassProxy()
 		{
 			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
 			_container.AddComponent( "key", typeof(MarshalCalculatorService), typeof(MarshalCalculatorService)  );
@@ -64,42 +70,34 @@ namespace Castle.Windsor.Tests
 
 			Assert.IsNotNull(service);
 			Assert.IsTrue(RemotingServices.IsTransparentProxy(service));
-			Assert.AreEqual( 5, service.Sum(2,2) );
+			Assert.AreEqual( 7, service.Sum(2,2) );
 		}
 
 		[Test]
-		public void InterfaceProxyWithLifecycle()
+		public void InterfaceProxy()
 		{
 			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
 			_container.AddComponent( "key", 
-				typeof(ICalcService), typeof(CalculatorServiceWithLifecycle)  );
+				typeof(ICalcService), typeof(CalculatorService)  );
 
 			ICalcService service = (ICalcService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.IsTrue(RemotingServices.IsTransparentProxy(service));
-			Assert.IsTrue( service.Initialized );
-			Assert.AreEqual( 5, service.Sum(2,2) );
-
-			Assert.IsFalse( service.Disposed );
-
-			_container.Release( service );
+			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
+			Assert.AreEqual( 7, service.Sum(2,2) );
 		}
 
 		[Test]
-		public void ClassProxyWithAttributes()
+		public void ConcreteClassProxy()
 		{
-			_container = new WindsorContainer(); // So we wont use the facilities
-
 			_container.AddComponent( "interceptor", typeof(ResultModifierInterceptor) );
-			_container.AddComponent( "key", typeof(CalculatorServiceWithAttributes)  );
+			_container.AddComponent( "key", typeof(CalculatorService)  );
 
-			CalculatorServiceWithAttributes service = 
-				(CalculatorServiceWithAttributes) _container.Resolve("key");
+			CalculatorService service = (CalculatorService) _container.Resolve("key");
 
 			Assert.IsNotNull(service);
-			Assert.IsTrue(RemotingServices.IsTransparentProxy(service));
-			Assert.AreEqual( 5, service.Sum(2,2) );
+			Assert.IsFalse(RemotingServices.IsTransparentProxy(service));
+			Assert.AreEqual( 7, service.Sum(2,2) );
 		}
 	}
 }

@@ -160,6 +160,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "SmartProxyTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Adapters\ComponentModel\ContainerAdapterTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

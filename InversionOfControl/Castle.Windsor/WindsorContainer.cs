@@ -103,7 +103,7 @@ namespace Castle.Windsor
 		public WindsorContainer(IKernel kernel, IComponentsInstaller installer)
 		{
 			_kernel = kernel;
-			_kernel.ProxyFactory = new Proxy.DefaultProxyFactory();
+			_kernel.ProxyFactory = new Proxy.ProxySmartFactory();
 
 			_installer = installer;
 		}

@@ -23,7 +23,8 @@ namespace Castle.MicroKernel.Releasers
 	[Serializable]
 	public class AllComponentsReleasePolicy : IReleasePolicy
 	{
-		private IDictionary instance2Handler = Hashtable.Synchronized(new Hashtable());
+		private IDictionary instance2Handler = Hashtable.Synchronized(
+			new Hashtable(CaseInsensitiveHashCodeProvider.Default, new Util.ReferenceComparer()));
 
 		public AllComponentsReleasePolicy()
 		{

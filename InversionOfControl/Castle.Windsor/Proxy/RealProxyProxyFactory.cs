@@ -40,7 +40,7 @@ namespace Castle.Windsor.Proxy
 
 			if (!(target is MarshalByRefObject))
 			{
-				throw new Exception("RealProxyProxyFactory can only proxy types that extend MarshalByRefObject");
+				throw new ApplicationException("RealProxyProxyFactory can only proxy types that extend MarshalByRefObject");
 			}
 
 			ComponentRealProxy proxy = new ComponentRealProxy( (MarshalByRefObject) target, 
