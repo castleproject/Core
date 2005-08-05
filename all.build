@@ -58,4 +58,146 @@
 		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
 	</target>
 	
+	<description>Documentation generation.</description><property name="base.dir" value="." />
+	<property name="doc.dir" value="${base.dir}/docs" />
+	<property name="tempBin.dir" value="${doc.dir}/bin"/>
+	<property name="outputDocs.file" value="Castle"/>
+	
+	<description>Docs generation properties.</description>
+	<property name="ShowMissing" value="false"/>
+	<property name="ShowPrivate" value="false"/>
+	<property name="OutputTarget" value="HTMLHelp"/>
+
+	<description>Generates documentation with default propreties.</description>
+	<target name="releaseDocs" depends="cleanup">
+		<call target="copyFilesToDocument"/>
+		<call target="generateReleaseDocs"/>
+	</target>
+	
+	<description>Generates documentation for developers, with all missing information indicated and private members visible.</description>
+	<target name="devDocs" depends="cleanup">
+		<property name="ShowMissing" value="true"/>
+		<property name="ShowPrivate" value="true"/>
+		<property name="outputDocs.file" value="CastleDev"/>
+		<call target="copyFilesToDocument"/>
+		<call target="generateReleaseDocs"/>
+	</target>
+	
+	<description>Generates documentation for release.</description>
+	<target name="generateReleaseDocs">
+		<ndoc failonerror="true">
+			<assemblies basedir="${tempBin.dir}">
+				<include name="Castle.*.dll"/>
+			</assemblies>
+			<referencepaths>
+				<include name="ActiveRecord/lib"/>
+				<include name="AspectSharp/bin"/>
+				<include name="Monorail/lib"/>
+				<include name="Tools/DynamicProxy/bin"/>
+				
+				<!-- Components -->
+				<include name="Facilities/Prevalence/lib"/>
+			</referencepaths>
+			<documenters>
+				<documenter name="MSDN">
+					<property name="OutputTarget" value="${OutputTarget}" />
+					<property name="Preliminary" value="true" />
+					<property name="BinaryTOC" value="true" />
+					<property name="CleanIntermediates" value="true" />
+					<property name="SdkLinksOnWeb" value="true" />
+					
+					<property name="OutputDirectory" value="${doc.dir}" />
+					<property name="HtmlHelpName" value="${outputDocs.file}" />
+					<property name="IncludeFavorites" value="True" />
+					<property name="SplitTOCs" value="False" />
+					
+					<property name="Title" value="Castle API documentation" />	
+					<property name="DefaulTOC" value="Castle" />
+					
+					<property name="ShowVisualBasic" value="True" />
+					<property name="ShowMissingSummaries" value="${ShowMissing}" />
+					<property name="ShowMissingRemarks" value="${ShowMissing}" />
+					<property name="ShowMissingParams" value="${ShowMissing}" />
+					<property name="ShowMissingReturns" value="${ShowMissing}" />
+					<property name="ShowMissingValues" value="${ShowMissing}" />
+					<property name="DocumentEmptyNamespaces" value="${ShowMissing}" />
+					
+					<property name="AutoPropertyBackerSummaries" value="true" />
+					<property name="AutoDocumentConstructors" value="true" />
+					<property name="DocumentProtected" value="True" />
+					<property name="DocumentInternals" value="${ShowPrivate}" />
+					<property name="DocumentPrivates" value="${ShowPrivate}" />
+					
+					<property name="IncludeAssemblyVersion" value="True" />
+					<property name="CopyrightText" value="Copyright 2004,2005 - Castle Project (original author or authors)" />
+					<property name="CopyrightHref" value="http://www.castleproject.org" />
+				</documenter>
+			</documenters>
+		</ndoc>
+	</target>
+	
+	<description>Copies all files to be documented to a single location to speed up the documentation process.</description>
+	<target name="copyFilesToDocument">
+		<foreach item="Folder" property="foldername">
+			<in>
+				<!-- Hardcode projects folders to speed up assemblies search -->
+				<items>
+					<include name="ActiveRecord"/>
+					<include name="InversionOfControl"/>
+					<include name="MonoRail"/>
+					
+					<!-- Components -->
+					<include name="Components/General/EmailSender"/>
+					<include name="Components/General/TemplateEngine"/>
+					
+					<!-- Facilities -->
+					<include name="Facilities/ActiveRecordIntegration"/>
+					<include name="Facilities/AspectSharp"/>
+					<include name="Facilities/AutomaticTransactionManagement"/>
+					<include name="Facilities/BatchRegistration"/>
+					<include name="Facilities/Db4o"/>
+					<include name="Facilities/IBatisNet"/>
+					<include name="Facilities/Logging"/>
+					<include name="Facilities/ManagementExtensions"/>
+					<include name="Facilities/NHibernate"/>
+					<include name="Facilities/Prevalence"/>
+					<include name="Facilities/Startable"/>
+					
+					<!-- Services -->
+					<include name="Services/TransactionMangement"/>
+				</items>
+			</in>
+			<do>
+			   <echo message="${foldername}" />
+
+				<foreach item="File" property="file">
+					<in>
+						<items>
+							<include name="${foldername}/bin/Castle.*.dll"/>
+							<exclude name="Castle.*.Tests.dll"/>
+						</items>
+					</in>
+					<do>
+						<property name="xml.file" value="${path::change-extension( file, 'xml' )}"/>
+						<copy todir="${tempBin.dir}" if="${file::exists( xml.file )}" flatten="true">
+							<fileset>
+								<include name="${file}"/>
+								<include name="${xml.file}"/>
+							</fileset>
+						</copy>
+					</do>
+				</foreach>
+			</do>
+		</foreach>
+	</target>
+	
+	<description>Cleans up prior to documentation generation.</description>
+	<target name="cleanup">
+		<delete>
+			<fileset>
+				<include name="${doc.dir}/**"/>
+				<exclude name="**/*.chm"/>
+			</fileset>
+		</delete>
+	</target>
 </project>
