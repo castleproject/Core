@@ -502,17 +502,20 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (options.Contains("before"))
 			{
-				contents = new StringBuilder( String.Format("{0}; {1}", options["before"], contents.ToString()) );
+				contents = new StringBuilder( String.Format("{0}; {1}", 
+					options["before"].ToString(), contents.ToString()) );
 			}
 
 			if (options.Contains("after"))
 			{
-				contents = new StringBuilder( String.Format("{1}; {0}", options["after"], contents.ToString()) );
+				contents = new StringBuilder( String.Format("{1}; {0}", 
+					options["after"].ToString(), contents.ToString()) );
 			}
 
 			if (options.Contains("condition"))
 			{
-				contents = new StringBuilder( String.Format("if ({0}) { {1}; }", options["condition"], contents.ToString()) );
+				contents = new StringBuilder( String.Format("if ({0}) { {1}; }", 
+					options["condition"].ToString(), contents.ToString()) );
 			}
 
 			return contents.ToString();
