@@ -41,24 +41,28 @@ namespace Castle.Rook.Compiler.Services.Passes
 		{
 			DeclareAndPopulateGlobalSourceUnit(unit);
 
-			AssemblyName assemblyName = new AssemblyName();
-			
-			assemblyName.Name = "RookGenAssembly";
-
-			AssemblyBuilder assembly = Thread.GetDomain().DefineDynamicAssembly( 
-				assemblyName, AssemblyBuilderAccess.Save );
-
-			ModuleBuilder module = assembly.DefineDynamicModule(
-				"RookModule", "RookModule.mod", true);
-
-			unit.AssemblyBuilder = assembly;
-
-			unit.ModuleBuilder = module;
-
-			TypeBuilderSkeletonStep builderVisitor = 
-				new TypeBuilderSkeletonStep( module, typeContainer, resolver, errorReport );
+			TypeBuilderSkeletonStep builderVisitor = CreateAssemblyStructure(unit);
 
 			builderVisitor.VisitNode( unit );
+		}
+
+		private TypeBuilderSkeletonStep CreateAssemblyStructure(CompilationUnit unit)
+		{
+			AssemblyName assemblyName = new AssemblyName();
+	
+			assemblyName.Name = "RookGenAssembly";
+	
+			AssemblyBuilder assembly = Thread.GetDomain().DefineDynamicAssembly( 
+				assemblyName, AssemblyBuilderAccess.Save );
+	
+			ModuleBuilder module = assembly.DefineDynamicModule(
+				"RookModule", "RookModule.mod", true);
+	
+			unit.AssemblyBuilder = assembly;
+	
+			unit.ModuleBuilder = module;
+
+			return new TypeBuilderSkeletonStep( module, typeContainer, resolver, errorReport );
 		}
 
 		private void DeclareAndPopulateGlobalSourceUnit(CompilationUnit unit)
@@ -82,11 +86,11 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 					if (stmt.StatementType == StatementType.MethodDef)
 					{
-						// (stmt as MethodDefinitionStatement).IsStatic = true;
+						(stmt as MethodDefinitionStatement).IsStatic = true;
 					}
 					if (stmt.StatementType == StatementType.MultipleVarDeclaration)
 					{
-						// (stmt as MultipleVariableDeclarationStatement).IsStatic = true;
+						// TODO: Ensure no instance vars defined
 					}
 
 					if (stmt.StatementType == StatementType.ExpressionStmt || 

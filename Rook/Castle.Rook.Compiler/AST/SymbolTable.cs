@@ -25,7 +25,8 @@ namespace Castle.Rook.Compiler.AST
 
 		private ScopeType scopeType;
 
-		private IDictionary table = new HybridDictionary();
+		private IDictionary identifierMap = new HybridDictionary();
+		private IDictionary methodMap = new HybridDictionary();
 
 
 		public SymbolTable()
@@ -42,7 +43,7 @@ namespace Castle.Rook.Compiler.AST
 		{
 			if (name == null) throw new ArgumentNullException("name");
 
-			return table.Contains(name);
+			return IsIdentifierDefined(name) || IsMethodDefined(name);
 		}
 
 		public bool IsDefinedRecursive(String name)
@@ -53,6 +54,27 @@ namespace Castle.Rook.Compiler.AST
 				parent.IsDefinedRecursive(name) : false;
 		}
 
+		public void AddMethod(MethodDefinitionStatement methodDef)
+		{
+			if (methodDef == null) throw new ArgumentNullException("methodDef");
+
+			String name = methodDef.Name;
+
+			IList list = null;
+
+			if (!methodMap.Contains(name))
+			{
+				list = new ArrayList();
+				methodMap[name] = list;
+			}
+			else
+			{
+				list = (IList) methodMap[name];
+			}
+
+			list.Add(methodDef);
+		}
+
 		public void AddIdentifier(Identifier identifier)
 		{
 			if (identifier == null) throw new ArgumentNullException("identifier");
@@ -61,19 +83,47 @@ namespace Castle.Rook.Compiler.AST
 
 			if (name == null) throw new ArgumentNullException("identifier.name");
 
-			if (table.Contains(name))
+			if (identifierMap.Contains(name))
 			{
 				throw new Exception(name + " is already defined within this scope");
 			}
 
-			table[name] = identifier;
+			identifierMap[name] = identifier;
 		}
 
 		public Identifier GetIdentifier(String name)
 		{
-			if (IsDefined(name))
+			if (IsIdentifierDefined(name))
 			{
-				return (Identifier) table[name];
+				return (Identifier) identifierMap[name];
+			}
+
+			throw new Exception(name + " is not defined on this scope");
+		}
+
+		public MethodDefinitionStatement GetMethod(String name)
+		{
+			if (name == null) throw new ArgumentNullException("name");
+
+			if (IsMethodDefined(name))
+			{
+				IList list = (IList) methodMap[name];
+				return list[0] as MethodDefinitionStatement;
+			}
+
+			throw new Exception(name + " is not defined on this scope");
+		}
+
+		public MethodDefinitionStatement[] GetMethods(String name)
+		{
+			if (name == null) throw new ArgumentNullException("name");
+
+			if (IsMethodDefined(name))
+			{
+				IList list = (IList) methodMap[name];
+				Array array = Array.CreateInstance( typeof(MethodDefinitionStatement), list.Count );
+				list.CopyTo( array, 0 );
+				return (MethodDefinitionStatement[]) array;
 			}
 
 			throw new Exception(name + " is not defined on this scope");
@@ -87,6 +137,16 @@ namespace Castle.Rook.Compiler.AST
 		public ScopeType ScopeType
 		{
 			get { return scopeType; }
+		}
+
+		private bool IsIdentifierDefined(String name)
+		{
+			return identifierMap.Contains(name);
+		}
+
+		private bool IsMethodDefined(String name)
+		{
+			return methodMap.Contains(name);
 		}
 	}
 }

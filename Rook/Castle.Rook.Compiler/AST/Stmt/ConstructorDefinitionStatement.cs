@@ -15,36 +15,19 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
+	using Castle.Rook.Compiler.Visitors;
 
-	public enum ScopeType
+
+	public class ConstructorDefinitionStatement : MethodDefinitionStatement
 	{
-		Global,
-		SourceUnit,
-		Namespace,
-		Type,
-		Method,
-		Block,
-		Compound
-	}
+		public ConstructorDefinitionStatement(AccessLevel accessLevel) : base(accessLevel)
+		{
+		}
 
-	public interface ISymbolTable
-	{
-		bool IsDefined(String name);
-
-		bool IsDefinedRecursive(String name);
-	
-		void AddIdentifier(Identifier identifier);
-
-		void AddMethod(MethodDefinitionStatement methodDef);
-
-		Identifier GetIdentifier(String name);
-
-		MethodDefinitionStatement GetMethod(String name);
-		
-		MethodDefinitionStatement[] GetMethods(String name);
-
-		ISymbolTable Parent { get; }
-
-		ScopeType ScopeType { get; }
+		public override bool Accept(IASTVisitor visitor)
+		{
+			visitor.VisitConstructorDefinitionStatement(this);
+			return true;
+		}
 	}
 }

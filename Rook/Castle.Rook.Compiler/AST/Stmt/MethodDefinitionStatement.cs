@@ -27,7 +27,7 @@ namespace Castle.Rook.Compiler.AST
 		private ASTNodeCollection statements;
 		private ASTNodeCollection arguments;
 
-		private bool isOverride, isNewSlot, isAbstract, isVirtual, isStatic;
+		private bool isOverride, isNewSlot, isAbstract, isVirtual, isStatic, isFinal;
 
 		public MethodDefinitionStatement(AccessLevel accessLevel) : base(StatementType.MethodDef)
 		{
@@ -108,6 +108,12 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return isStatic; }
 			set { isStatic = value; }
+		}
+
+		public bool IsFinal
+		{
+			get { return isFinal; }
+			set { isFinal = value; }
 		}
 
 		public override bool Accept(IASTVisitor visitor)

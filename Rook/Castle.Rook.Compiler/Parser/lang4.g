@@ -42,7 +42,7 @@ tokens
 {
 	public IErrorReport ErrorReport;
 	
-	private bool withinStatic, withinVirtual, withinAbstract, withinNew, withinOverride;
+	private bool withinStatic, withinFinal, withinAbstract, withinNew, withinOverride;
 	
 	private ISymbolTable topLevelScope;
 
@@ -124,7 +124,7 @@ identifier_withtype returns [Identifier ident]
 type returns [ TypeReference tr ]
 	{ tr = null; String n; }
 	:
-	"as" n=qualified_name	
+	COLON n=qualified_name	
 	{ 
 	  tr = new TypeReference(n); 
 	}
@@ -230,8 +230,8 @@ type_suite[IList stmts]
 //   def method <- will be new
 // end
 //
-// class << virtual
-//   def method <- will be virtual
+// class << final
+//   def method <- will be final (not virtual or sealed)
 // end
 protected 
 method_scope[IList stmts]
@@ -248,7 +248,7 @@ method_scope[IList stmts]
 	  |
   	  "new"			{ index = 3; withinNew = true; }
 	  |
-  	  "virtual"		{ index = 4; withinVirtual = true; }
+  	  "final"		{ index = 4; withinFinal = true; }
 	)
 
 	statement_term
@@ -266,7 +266,7 @@ method_scope[IList stmts]
 	  else if (index == 3)
 		withinNew = false;
 	  else if (index == 4)
-		withinVirtual = false;
+		withinFinal = false;
 	}
 	;
 
@@ -334,6 +334,20 @@ declaration_statement returns [MultipleVariableDeclarationStatement stmt]
  	)?
  	;
 
+constructor_def_statement returns [ConstructorDefinitionStatement mdstmt]
+	{ 
+	  mdstmt = new ConstructorDefinitionStatement( currentAccessLevel ); 
+	}
+	:
+	DEF "initialize"
+	(
+		LPAREN (methodParams[mdstmt])? RPAREN
+	)?
+	statement_term
+	suite[mdstmt.Statements]
+	END 
+	;
+
 method_def_statement returns [MethodDefinitionStatement mdstmt]
 	{ 
 	  mdstmt = new MethodDefinitionStatement( currentAccessLevel ); 
@@ -342,7 +356,15 @@ method_def_statement returns [MethodDefinitionStatement mdstmt]
 	:
 	DEF^ modifier[mdstmt] qn=qualified_name 
 	{ 
-		mdstmt.Name = qn;
+	    if (qn.StartsWith("self."))
+	    {
+	      mdstmt.IsStatic = true;
+	      mdstmt.Name = qn.Substring( "self.".Length );
+	    }
+	    else
+	    {
+		  mdstmt.Name = qn;
+	    }
 		PushScope(mdstmt, ScopeType.Method); 
 	}
 	(
@@ -350,8 +372,11 @@ method_def_statement returns [MethodDefinitionStatement mdstmt]
 	)?
 	statement_term
 	{ mdstmt.ReturnType = retType; }
+
 	suite[mdstmt.Statements]
-	END { PopScope(); }
+	END 
+	
+	{ PopScope(); }
 	;
 
 protected
@@ -369,9 +394,9 @@ modifier[MethodDefinitionStatement mdstmt]
 	|
 	{ withinAbstract }?	{ mdstmt.IsAbstract = true; }
 	|
-	"virtual"			{ mdstmt.IsVirtual  = true; }
+	"final"				{ mdstmt.IsFinal    = true; }
 	|
-	{ withinVirtual }?	{ mdstmt.IsVirtual  = true; }
+	{ withinFinal }?	{ mdstmt.IsFinal    = true; }
 	|
 	{ withinStatic }?	{ mdstmt.IsStatic   = true; }
 
@@ -454,6 +479,8 @@ expression_statement returns[IStatement stmt]
 	{ stmt = new ExpressionStatement(exp); }
 	|
 	stmt=method_def_statement
+	|
+	stmt=constructor_def_statement
 	;
 
 augassign returns [AugType rel]
@@ -707,8 +734,8 @@ constantref returns [ConstExpression lre]
 	  { lre = new ConstExpression(t2.getText(), ConstExpressionType.LongLiteral); }
 	| t3:NUM_FLOAT
 	  { lre = new ConstExpression(t3.getText(), ConstExpressionType.FloatLiteral); }
-	| t4:SYMBOL
-	  { lre = new ConstExpression(t4.getText(), ConstExpressionType.SymbolLiteral); }
+//	| t4:SYMBOL
+//	  { lre = new ConstExpression(t4.getText(), ConstExpressionType.SymbolLiteral); }
 	| t5:STRING_LITERAL
 	  { lre = new ConstExpression(t5.getText(), ConstExpressionType.StringLiteral); }
 	| t6:CHAR_LITERAL
@@ -1041,10 +1068,10 @@ STATICIDENT
 	"@@" IDENT
 	;
 
-SYMBOL
-	:
-	COLON IDENT 
-	;
+// SYMBOL
+// 	:
+// 	COLON IDENT 
+// 	;
 
 // a numeric literal
 /*

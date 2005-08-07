@@ -41,6 +41,7 @@ namespace Castle.Rook.Compiler
 
 			this.AddComponent("builder.skeleton.pass", typeof(CreateBuilderSkeleton) );
 			this.AddComponent("emission.pass", typeof(Emission) );
+			this.AddComponent("scope.pass", typeof(ScopePass) );
 		}
 
 		public IErrorReport ErrorReportService

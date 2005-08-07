@@ -46,6 +46,7 @@ namespace Castle.Rook.Compiler.Visitors
 		// Statements
 
 		void VisitExpressionStatement(ExpressionStatement statement);
+		void VisitConstructorDefinitionStatement(ConstructorDefinitionStatement statement);
 
 //		bool VisitMultipleVariableDeclarationStatement(MultipleVariableDeclarationStatement varDecl);
 //		bool VisitRepeatStatement(RepeatStatement statement);

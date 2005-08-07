@@ -115,6 +115,17 @@ namespace Castle.Rook.Compiler.Visitors
 			return false;
 		}
 
+		public virtual void VisitConstructorDefinitionStatement(ConstructorDefinitionStatement statement)
+		{
+			if (VisitEnter(statement))
+			{
+				VisitNodes(statement.Arguments);
+				VisitNodes(statement.Statements);
+
+				VisitLeave(statement);
+			}
+		}
+
 		public virtual bool VisitEnter(MethodDefinitionStatement methodDef)
 		{
 			return true;

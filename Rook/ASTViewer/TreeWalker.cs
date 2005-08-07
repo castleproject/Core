@@ -104,6 +104,18 @@ namespace ASTViewer
 			return true;
 		}
 
+		public override void VisitConstructorDefinitionStatement(ConstructorDefinitionStatement statement)
+		{
+			nodeStack.Push( CurrentNode.Nodes.Add("Constructor " + statement.Name ));
+			CurrentNode.Tag = statement;
+
+			CurrentNode.EnsureVisible();
+
+			base.VisitConstructorDefinitionStatement(statement);
+
+			nodeStack.Pop();
+		}
+
 		public override bool VisitTypeReference(TypeReference reference)
 		{
 			nodeStack.Push( CurrentNode.Nodes.Add("TypeReference " + reference.TypeName));

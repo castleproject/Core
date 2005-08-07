@@ -348,6 +348,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AST\Stmt\ConstructorDefinitionStatement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AST\Stmt\ExpressionStatement.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -978,6 +983,11 @@
                 />
                 <File
                     RelPath = "Services\Passes\Emission.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Services\Passes\ScopePass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
