@@ -82,6 +82,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			bool hasLayout = controller.LayoutName != null;
 
 			TextWriter writer;
+
 			if (hasLayout)
 			{
 				writer = new StringWriter();		//Because we are rendering within a layout we need to catch it first
@@ -244,7 +245,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private void SendErrorDetails(Exception ex, TextWriter writer)
 		{
+			writer.WriteLine("<pre>");
 			writer.WriteLine(ex.ToString());
+			writer.WriteLine("</pre>");
 		}
 	}
 }

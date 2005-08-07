@@ -15,9 +15,9 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
-	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
+	using System.Collections.Specialized;
 	
 	public class ResponseImpl : IResponse
 	{
@@ -44,9 +44,10 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			get
 			{
-				if (_headers.GetValues("Content-Type").Length == 1)
+				string[] headers = _headers.GetValues("Content-Type");
+				if (headers != null && headers.Length == 1)
 				{
-					return _headers.GetValues("Content-Type")[0];
+					return headers[0];
 				}
 				else
 				{

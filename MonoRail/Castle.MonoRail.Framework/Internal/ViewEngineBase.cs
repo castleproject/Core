@@ -96,7 +96,7 @@ namespace Castle.MonoRail.Framework
 				//Fix up the proxy
 				context.Response.AppendHeader("Vary", "Accept");
 			}
-			else
+			else if (context.Response.ContentType == null)
 			{
 				//Just use HTML
 				context.Response.ContentType = "text/html";
