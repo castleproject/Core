@@ -86,20 +86,25 @@ namespace Castle.MonoRail.Engine.Tests
 
 		protected void Execute(String url, String expected)
 		{
-			Execute(url, expected, url, false);
+			Execute(url, expected, url, false, "text/html");
 		}
 
 		protected void Execute(String url, String expected, bool startsWith)
 		{
-			Execute(url, expected, url, startsWith);
+			Execute(url, expected, url, startsWith, "text/html");
 		}
 
 		protected void Execute(String url, String expected, String expectedUrl)
 		{
-			Execute(url, expected, expectedUrl, false);
+			Execute(url, expected, expectedUrl, false, "text/html");
 		}
 
 		protected void Execute(String url, String expected, String expectedUrl, bool startsWith)
+		{
+			Execute(url, expected, expectedUrl, startsWith, "text/html");
+		}
+
+		protected void Execute(String url, String expected, String expectedUrl, bool startsWith, string contentType)
 		{
 			HttpWebRequest myReq = (HttpWebRequest)
 				WebRequest.Create("http://localhost:8083" + url);
@@ -108,7 +113,7 @@ namespace Castle.MonoRail.Engine.Tests
 
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.AreEqual(expectedUrl, response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+			Assert.IsTrue(response.ContentType.StartsWith(contentType));
 			AssertContents(expected, response, startsWith);
 		}
 	}

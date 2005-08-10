@@ -47,6 +47,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void AjaxScripts()
 		{
 			RenderFile("Ajax", "jsfunctions");
+			Response.ContentType = "text/javascript";
 		}
 
 		/// <summary>
@@ -55,6 +56,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void EffectsFatScripts()
 		{
 			RenderFile("EffectsFat", "fatfunctions");
+			Response.ContentType = "text/javascript";
 		}
 
 		/// <summary>
@@ -63,6 +65,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void Effects2()
 		{
 			RenderFile("Effects2", "functions");
+			Response.ContentType = "text/javascript";
 		}
 
 		/// <summary>
@@ -71,6 +74,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateConfig()
 		{
 			RenderFile("Validation", "fValidateConfig");
+			Response.ContentType = "text/javascript";
 		}
 
 		/// <summary>
@@ -79,6 +83,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateCore()
 		{
 			RenderFile("Validation", "fValidateCore");
+			Response.ContentType = "text/javascript";
 		}
 
 		/// <summary>
@@ -87,6 +92,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateValidators()
 		{
 			RenderFile("Validation", "fValidateValidators");
+			Response.ContentType = "text/javascript";
 		}
 
 		/// <summary>
@@ -95,6 +101,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateLang()
 		{
 			RenderFile("Validation", "fValidateLang");
+			Response.ContentType = "text/javascript";
 		}
 	}
 }
