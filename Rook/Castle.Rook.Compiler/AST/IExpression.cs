@@ -22,5 +22,9 @@ namespace Castle.Rook.Compiler.AST
 		PostfixCondition PostfixCondition { get; set; }
 
 		BlockExpression Block { get; set; }
+
+		bool IsResolved { get; }
+
+		Type ResolvedType { get; set; }
 	}
 }

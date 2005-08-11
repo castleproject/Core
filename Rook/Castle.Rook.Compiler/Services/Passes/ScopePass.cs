@@ -22,16 +22,19 @@ namespace Castle.Rook.Compiler.Services.Passes
 
 	public class ScopePass : ICompilerPass
 	{
-		public ScopePass()
-		{
-		}
-
 		public void ExecutePass(CompilationUnit unit)
 		{
 			Method2ScopeVisitor method2scope = new Method2ScopeVisitor();
-
 			method2scope.VisitNode(unit);
+
+			IdentifierNormalizationVisitor identVisitor = new IdentifierNormalizationVisitor();
+			identVisitor.VisitNode(unit);
 		}
+	}
+
+	public class IdentifierNormalizationVisitor : DepthFirstVisitor
+	{
+		
 	}
 
 	public class Method2ScopeVisitor : DepthFirstVisitor

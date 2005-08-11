@@ -21,6 +21,7 @@ namespace Castle.Rook.Compiler.AST
 	{
 		private PostfixCondition condition;
 		private BlockExpression blockExp;
+		private Type resolvedType;
 
 		public Expression()
 		{
@@ -36,6 +37,17 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return blockExp; }
 			set { blockExp = value; }
+		}
+
+		public bool IsResolved
+		{
+			get { return resolvedType != null; }
+		}
+
+		public Type ResolvedType
+		{
+			get { return resolvedType; }
+			set { resolvedType = value; }
 		}
 	}
 }

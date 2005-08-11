@@ -36,10 +36,23 @@ namespace Castle.Rook.Compiler.TypeSystem
 		public DefaultTypeContainer(ICompilerOptionsSet compilerOptions)
 		{
 			this.compilerOptions = compilerOptions;
+
+			InitializeStandardTypes();
 		}
 
 		protected DefaultTypeContainer()
 		{
+		}
+
+		private void InitializeStandardTypes()
+		{
+			name2Type["string"] = typeof(String);
+			name2Type["int"] = typeof(Int32);
+			name2Type["short"] = typeof(Int16);
+			name2Type["long"] = typeof(Int64);
+			name2Type["bool"] = typeof(Boolean);
+			name2Type["date"] = typeof(DateTime);
+			name2Type["char"] = typeof(Char);
 		}
 
 		public void Initialize()

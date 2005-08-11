@@ -560,11 +560,11 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    * Grab all the values of the properties. These
-	    * are all class names for example:
-	    *
-	    * NVelocity.Runtime.Directive.Foreach
-	    */
+			* Grab all the values of the properties. These
+			* are all class names for example:
+			*
+			* NVelocity.Runtime.Directive.Foreach
+			*/
 			IEnumerator directiveClasses = directiveProperties.Values.GetEnumerator();
 
 			while (directiveClasses.MoveNext())
@@ -574,8 +574,8 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    *  now the user's directives
-	    */
+			*  now the user's directives
+			*/
 			String[] userdirective = configuration.GetStringArray("userdirective");
 			for (int i = 0; i < userdirective.Length; i++)
 			{

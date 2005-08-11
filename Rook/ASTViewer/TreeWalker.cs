@@ -116,9 +116,9 @@ namespace ASTViewer
 			nodeStack.Pop();
 		}
 
-		public override bool VisitTypeReference(TypeReference reference)
+		public override void VisitTypeReference(TypeReference reference)
 		{
-			nodeStack.Push( CurrentNode.Nodes.Add("TypeReference " + reference.TypeName));
+			nodeStack.Push( CurrentNode.Nodes.Add("TypeReference " + reference.TypeName + " Resolved to [" + reference.ResolvedType + "]"));
 			CurrentNode.Tag = reference;
 
 			CurrentNode.EnsureVisible();
@@ -126,8 +126,6 @@ namespace ASTViewer
 			base.VisitTypeReference(reference);
 
 			nodeStack.Pop();
-
-			return true;
 		}
 
 		public override bool VisitIdentifier(Identifier identifier)
@@ -144,16 +142,14 @@ namespace ASTViewer
 			return true;
 		}
 
-		public override bool VisitParameterIdentifier(ParameterVarIdentifier identifier)
+		public override void VisitParameterVarIdentifier(ParameterVarIdentifier identifier)
 		{
 			nodeStack.Push( CurrentNode.Nodes.Add("ParameterVarIdentifier " + identifier.Name + " - " + identifier.TypeReference ));
 			CurrentNode.Tag = identifier;
 			
-			base.VisitParameterIdentifier(identifier);
+			base.VisitParameterVarIdentifier(identifier);
 
 			nodeStack.Pop();
-
-			return true;
 		}
 
 		public override void VisitOpaqueIdentifier(OpaqueIdentifier identifier)
@@ -202,16 +198,6 @@ namespace ASTViewer
 			CurrentNode.Tag = expression;
 
 			base.VisitConstExpression(expression);
-
-			nodeStack.Pop();
-		}
-
-		public override void VisitParameterVarIdentifier(ParameterVarIdentifier varIdentifier)
-		{
-			nodeStack.Push( CurrentNode.Nodes.Add("ParameterVarIdentifier " + varIdentifier.Name + " " + varIdentifier.InitExpression ));
-			CurrentNode.Tag = varIdentifier;
-
-			base.VisitParameterVarIdentifier(varIdentifier);
 
 			nodeStack.Pop();
 		}

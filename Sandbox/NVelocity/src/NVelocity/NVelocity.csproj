@@ -364,6 +364,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Runtime\Directive\Component.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\Directive\Directive.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

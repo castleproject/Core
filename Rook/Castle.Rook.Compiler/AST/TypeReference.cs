@@ -15,9 +15,10 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
+	using Castle.Rook.Compiler.Visitors;
 
 
-	public class TypeReference
+	public class TypeReference : IVisitableNode
 	{
 		private readonly String typeName;
 		private Type resolvedType;
@@ -36,6 +37,13 @@ namespace Castle.Rook.Compiler.AST
 		{
 			get { return resolvedType; }
 			set { resolvedType = value; }
+		}
+
+		public bool Accept(IASTVisitor visitor)
+		{
+			visitor.VisitTypeReference(this);
+
+			return true;
 		}
 	}
 }

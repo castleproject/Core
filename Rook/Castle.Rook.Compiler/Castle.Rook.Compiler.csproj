@@ -1002,6 +1002,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Services\Passes\TypeResolutionPass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Services\Passes\ILEmission\CreateTypesStep.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

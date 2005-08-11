@@ -15,12 +15,14 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
+	using System.Collections;
 
 
 	public class ListExpression : Expression
 	{
 		public ListExpression()
 		{
+			this.ResolvedType = typeof(IList);
 		}
 
 		public void Add(IExpression item)

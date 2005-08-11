@@ -110,6 +110,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Test\ComponentDirectiveTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Test\ContextTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

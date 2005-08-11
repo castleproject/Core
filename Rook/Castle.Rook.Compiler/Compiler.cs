@@ -121,6 +121,14 @@ namespace Castle.Rook.Compiler
 
 			if (!container.ErrorReportService.HasErrors)
 			{
+				ICompilerPass typeResPass = 
+					container[ typeof(TypeResolutionPass) ] as ICompilerPass;
+
+				ExecutePass( typeResPass, cunit );
+			}
+
+			if (!container.ErrorReportService.HasErrors)
+			{
 				ICompilerPass emission = 
 					container[ typeof(Emission) ] as ICompilerPass;
 

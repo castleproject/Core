@@ -47,6 +47,7 @@ namespace Castle.Rook.Compiler.Visitors
 
 		public virtual void VisitCompilationUnit(CompilationUnit compilationUnit)
 		{
+			VisitNode(compilationUnit.EntryPointSourceUnit);
 			VisitNodes(compilationUnit.SourceUnits);
 		}
 
@@ -140,32 +141,26 @@ namespace Castle.Rook.Compiler.Visitors
 		// References
 		//
 
-		public virtual bool VisitTypeReference(TypeReference reference)
+		public virtual void VisitTypeReference(TypeReference reference)
 		{
-			return true;
 		}
 
 		public virtual bool VisitIdentifier(Identifier identifier)
 		{
-			VisitNode(identifier);
+			VisitNode(identifier.TypeReference);
 
 			return true;
 		}
 
-		public virtual bool VisitParameterIdentifier(ParameterVarIdentifier parameterIdentifier)
+		public virtual void VisitParameterVarIdentifier(ParameterVarIdentifier parameterIdentifier)
 		{
+			VisitNode(parameterIdentifier.TypeReference);
 			VisitNode(parameterIdentifier.InitExpression);
-
-			return true;
 		}
 
 		public virtual void VisitOpaqueIdentifier(OpaqueIdentifier opaqueIdentifier)
 		{
-			
-		}
-
-		public virtual void VisitParameterVarIdentifier(ParameterVarIdentifier varIdentifier)
-		{
+			VisitNode(opaqueIdentifier.TypeReference);
 			
 		}
 

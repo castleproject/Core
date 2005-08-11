@@ -13,6 +13,10 @@ namespace NVelocity.Runtime.Directive
 	/// </summary>
 	public class Foreach : Directive
 	{
+		public Foreach()
+		{
+		}
+
 		public override String Name
 		{
 			get { return "foreach"; }

@@ -15,12 +15,14 @@
 namespace Castle.Rook.Compiler.AST
 {
 	using System;
+	using System.Collections;
 
 
 	public class DictExpression : Expression
 	{
 		public DictExpression()
 		{
+			ResolvedType = typeof(IDictionary);
 		}
 
 		public void Add(IExpression key, IExpression value)

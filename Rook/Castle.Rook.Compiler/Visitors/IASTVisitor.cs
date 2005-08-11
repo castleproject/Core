@@ -42,6 +42,7 @@ namespace Castle.Rook.Compiler.Visitors
 //		bool VisitParameterIdentifier(ParameterIdentifier parameterIdentifier);
 		void VisitOpaqueIdentifier(OpaqueIdentifier opaqueIdentifier);
 		void VisitParameterVarIdentifier(ParameterVarIdentifier varIdentifier);
+		void VisitTypeReference(TypeReference reference);
 
 		// Statements
 
