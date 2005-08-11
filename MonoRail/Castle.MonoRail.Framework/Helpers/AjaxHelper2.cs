@@ -514,8 +514,9 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (options.Contains("condition"))
 			{
-				contents = new StringBuilder( String.Format("if ({0}) { {1}; }", 
-					options["condition"].ToString(), contents.ToString()) );
+				String old = contents.ToString();
+				contents = new StringBuilder( 
+					String.Format("if ( {0} ) {{ {1}; }}", options["condition"], old) );
 			}
 
 			return contents.ToString();

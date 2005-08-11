@@ -344,6 +344,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Creates an input hidden element
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public String InputHidden(String name, object value)
+		{
+			return InputHidden(name, value != null ? value.ToString() : String.Empty );
+		}
+
+		/// <summary>
 		/// Creates a submit button
 		/// <code>
 		/// &lt;input type="submit" value="value" /&gt;
