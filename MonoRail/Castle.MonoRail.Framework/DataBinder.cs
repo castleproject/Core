@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework
 					
 					try
 					{
-						if ( !propType.IsPrimitive && !propType.IsArray && 
+						if (!propType.IsPrimitive && !propType.IsArray && 
 							propType != typeof(String) && propType != typeof(Guid) && 
 							propType != typeof(DateTime) && propType != typeof(HttpPostedFile) &&
 							!typeof(ICollection).IsAssignableFrom( propType ) )
@@ -282,6 +282,12 @@ namespace Castle.MonoRail.Framework
 			{
 				conversionSucceeded = true; // if we get some files we don't care about the values being null
 				return files[paramName];
+			}
+			else if (desiredType.IsEnum)
+			{
+				if (value == String.Empty) return null;
+				
+				return Enum.Parse( desiredType, value, true );
 			}
 			else if (desiredType.IsArray)
 			{
