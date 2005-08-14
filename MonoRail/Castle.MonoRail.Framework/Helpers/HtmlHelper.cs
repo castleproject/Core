@@ -22,35 +22,58 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Web.UI;
 
 	/// <summary>
-	/// Provides usefull common methods to output html
+	/// Provides usefull common methods to generate HTML tags.
 	/// </summary>
+	/// <remarks>This helper provides the means to generate commonly used HTML tags. All of it's methods 
+	/// return <see cref="string"/> that holds resulting HTML.</remarks>
 	public class HtmlHelper : AbstractHelper
 	{
+		#region Fieldset
 		/// <summary>
-		/// Creates a fieldset tag with a legend
+		/// Creates a fieldset tag with a legend.
 		/// <code>
-		/// &lt;fieldset&gt; &lt;legend&gt; legend &lt;/legend&gt;
+		/// &lt;fieldset&gt;&lt;legend&gt;legendArg&lt;/legend&gt;
 		/// </code>
 		/// </summary>
-		/// <param name="legend">Legend that should be used within the fieldset</param>
-		/// <returns></returns>
+		/// <param name="legend">Legend to use within the fieldset.</param>
+		/// <returns>HTML string opening a fieldset tag, followed by a legend tag.</returns>
+		/// <remarks>Calling <c>FieldSet( "legendArg" )</c> results in:
+		/// <code>&lt;fieldset&gt;&lt;legend&gt;legendArg&lt;/legend&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <see cref="FieldSet"/> together with <see cref="EndFieldSet"/>:
+		/// <code>
+		/// $HtmlHelper.FieldSet( "legendArg" )
+		/// ...
+		/// $HtmlHelper.EndFieldSet()
+		/// </code>
+		/// </example>
 		public String FieldSet(String legend)
 		{
 			return String.Format("<fieldset><legend>{0}</legend>", legend);
 		}
-
 		/// <summary>
-		/// Creates a closing fieldset tag
+		/// Creates a closing fieldset tag.
 		/// <code>
-		/// &lt;/fieldset&gt; 
+		/// &lt;/fieldset&gt;
 		/// </code>
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>HTML string closing the fieldset.</returns>
+		/// <remarks>This method should be invoked after <see cref="FieldSet"/> to close the fieldset.
+		/// Calling <c>EndFieldSet(  )</c> results in:
+		/// <code>&lt;/fieldset&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <see cref="FieldSet"/> together with <see cref="EndFieldSet"/>:
+		/// <code>
+		/// $HtmlHelper.FieldSet( "legendArg" )
+		/// ...
+		/// $HtmlHelper.EndFieldSet()
+		/// </code>
+		/// </example>
 		public String EndFieldSet()
 		{
 			return "</fieldset>";
 		}
-
+		#endregion
 		/// <summary>
 		/// Creates a form tag 
 		/// <code>
