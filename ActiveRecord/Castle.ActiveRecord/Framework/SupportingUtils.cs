@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord.Framework
 	using NHibernate;
 
 	/// <summary>
-	/// Usefull for frameworks
+	/// Usefull for external frameworks
 	/// </summary>
 	public abstract class SupportingUtils
 	{
@@ -36,7 +36,7 @@ namespace Castle.ActiveRecord.Framework
 			}
 			finally
 			{
-				session.Close();
+				ActiveRecordBase._holder.ReleaseSession(session);
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace Castle.ActiveRecord.Framework
 			}
 			finally
 			{
-				session.Close();
+				ActiveRecordBase._holder.ReleaseSession(session);
 			}
 		}
 	}
