@@ -18,7 +18,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, prevalence, autotransaction, arintegration, nhibernate, aspectsharp, typedfactory, batchregistration, startable" />
+	<target name="build" depends="init, prevalence, autotransaction, arintegration, nhibernate, aspectsharp, typedfactory, batchregistration, startable, factorysupport" />
 	
 	<target name="init">
 
@@ -52,6 +52,10 @@
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="build" />
 	</target>
 
+	<target name="factorysupport">
+		<nant buildfile="FactorySupport/default.build" inheritall="true" target="build" />
+	</target>
+
 	<target name="startable">
 		<nant buildfile="Startable/default.build" inheritall="true" target="build" />
 	</target>
@@ -74,6 +78,7 @@
 		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Startable/default.build" inheritall="true" target="dist" />
 		<nant buildfile="db4o/default.build" inheritall="true" target="dist" />
+		<nant buildfile="FactorySupport/default.build" inheritall="true" target="dist" />
 		
 		<zip zipfile="Facilities.${version}.zip">
 			<fileset basedir="${base.dir}">
