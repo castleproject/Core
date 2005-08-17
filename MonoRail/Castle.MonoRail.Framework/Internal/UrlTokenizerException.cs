@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Internal
 	/// extraction.
 	/// </summary>
 	[Serializable]
-	public class UrlTokenizerException : Exception
+	public class UrlTokenizerException : RailsException
 	{
 		public UrlTokenizerException(string message) : base(message)
 		{

@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework
 	/// processing.
 	/// </summary>
 	[Serializable]
-	public class ControllerException : Exception
+	public class ControllerException : RailsException
 	{
 		public ControllerException(string message) : base(message)
 		{

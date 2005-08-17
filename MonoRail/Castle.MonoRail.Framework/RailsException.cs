@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework
 	using System.Runtime.Serialization;
 
 	[Serializable]
-	public class RailsException : Exception
+	public class RailsException : ApplicationException
 	{
 		public RailsException(string message) : base(message)
 		{
