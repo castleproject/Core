@@ -21,7 +21,7 @@ namespace Castle.MicroKernel.Resolvers
 	/// Summary description for DependencyResolverException.
 	/// </summary>
 	[Serializable]
-	public class DependencyResolverException : Exception
+	public class DependencyResolverException : ApplicationException
 	{
 		public DependencyResolverException(string message) : base(message)
 		{

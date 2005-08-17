@@ -21,7 +21,7 @@ namespace Castle.MicroKernel
 	/// Summary description for ComponentNotFoundException.
 	/// </summary>
 	[Serializable]
-	public class ComponentNotFoundException : Exception
+	public class ComponentNotFoundException : ApplicationException
 	{
 		public ComponentNotFoundException(String name) : 
 			base( String.Format("No component for key {0} was found", name) )

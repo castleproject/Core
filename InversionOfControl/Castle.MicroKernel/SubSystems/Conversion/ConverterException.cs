@@ -21,7 +21,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	/// Summary description for ConverterException.
 	/// </summary>
 	[Serializable]
-	public class ConverterException : Exception
+	public class ConverterException : ApplicationException
 	{
 		public ConverterException(string message) : base(message)
 		{

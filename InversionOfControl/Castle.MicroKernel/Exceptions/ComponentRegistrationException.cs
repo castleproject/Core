@@ -21,7 +21,7 @@ namespace Castle.MicroKernel
 	/// Summary description for ComponentRegistrationException.
 	/// </summary>
 	[Serializable]
-	public class ComponentRegistrationException : Exception
+	public class ComponentRegistrationException : ApplicationException
 	{
 		public ComponentRegistrationException(string message) : base(message)
 		{

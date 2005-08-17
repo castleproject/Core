@@ -21,7 +21,7 @@ namespace Castle.MicroKernel
 	/// Summary description for KernelException.
 	/// </summary>
 	[Serializable]
-	public class KernelException : Exception
+	public class KernelException : ApplicationException
 	{
 		public KernelException(string message) : base(message)
 		{
