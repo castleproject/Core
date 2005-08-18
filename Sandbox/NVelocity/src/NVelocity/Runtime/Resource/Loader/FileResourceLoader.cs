@@ -17,7 +17,9 @@ namespace NVelocity.Runtime.Resource.Loader
 	using System;
 	using System.Collections;
 	using System.IO;
+
 	using Commons.Collections;
+	
 	using NVelocity.Exception;
 	using NVelocity.Util;
 
@@ -127,12 +129,14 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				if (path != null)
 				{
-					filename = path + Path.AltDirectorySeparatorChar + template;
+					filename = path + Path.DirectorySeparatorChar + template;
 				}
 				else
 				{
 					filename = template;
 				}
+
+				rsvc.debug("FileResourceLoader attempting to load " + filename);
 
 				FileInfo file = new FileInfo(filename);
 
