@@ -87,7 +87,7 @@ namespace NVelocity.Runtime.Resource.Loader
 					throw new ResourceNotFoundException(msg);
 				}
 
-				if (template.StartsWith("/"))
+				if (template.StartsWith("/") || template.StartsWith("\\"))
 				{
 					template = template.Substring(1);
 				}
@@ -95,6 +95,12 @@ namespace NVelocity.Runtime.Resource.Loader
 				for (int i = 0; i < size; i++)
 				{
 					String path = (String) paths[i];
+
+					//This fixes the Directory Seperators making sure that they are correct for the platform.
+					//This is a hack and very inefficient location to perform the fix.
+					//It should be done when the paths are first loaded and then its only done once.
+					if(path.IndexOf(Path.AltDirectorySeparatorChar) >= 0)
+						path = path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
 					Stream inputStream = findTemplate(path, template);
 
@@ -140,15 +146,21 @@ namespace NVelocity.Runtime.Resource.Loader
 
 				FileInfo file = new FileInfo(filename);
 
+				/**
+				 * This is not needed, the call below will error if the file does not exist as well
+				 * as if there are permission errors
 				if (!file.Exists)
 				{
+					rsvc.debug("FileResourceLoader : File does not exist " + filename);
 					return null;
 				}
+				**/
 
 				return new BufferedStream(file.OpenRead());
 			}
-			catch (FileNotFoundException)
+			catch (Exception ex)
 			{
+				rsvc.debug("FileResourceLoader : " + ex.Message);
 				return null;
 			}
 		}

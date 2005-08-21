@@ -484,10 +484,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			else if (value_ is Boolean)
 			{
-				if (((Boolean) value_))
-					return true;
-				else
-					return false;
+				return (bool) value_;
 			}
 			else
 				return true;

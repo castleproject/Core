@@ -89,29 +89,17 @@ namespace NVelocity.Util
 	/// </version>
 	public class StringUtils
 	{
-		public StringUtils()
-		{
-			InitBlock();
-		}
-
-		private void InitBlock()
-		{
-			//UPGRADE_ISSUE: Method 'java.lang.System.getProperty' was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1000_javalangSystemgetProperty_javalangString"'
-			EOL = Environment.NewLine;
-			EOL_LENGTH = EOL.Length;
-		}
-
 		/// <summary> Line separator for the OS we are operating on.
 		/// </summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'EOL '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
 		//UPGRADE_NOTE: The initialization of  'EOL' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private static String EOL;
+		private readonly static String EOL = Environment.NewLine;
 
 		/// <summary> Length of the line separator.
 		/// </summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'EOL_LENGTH '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
 		//UPGRADE_NOTE: The initialization of  'EOL_LENGTH' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private static int EOL_LENGTH;
+		// private static int EOL_LENGTH = Environment.NewLine.Length;
 
 		/// <summary> Concatenates a list of objects as a String.
 		/// *
@@ -614,23 +602,20 @@ namespace NVelocity.Util
 		public static String normalizePath(String path)
 		{
 			// Normalize the slashes and add leading slash if necessary
-			String normalized = path;
-			if (normalized.IndexOf('\\') >= 0)
-			{
-				normalized = normalized.Replace('\\', '/');
-			}
+			string normalized = path;
+			if(normalized.IndexOf(Path.AltDirectorySeparatorChar) >=0)
+				normalized = normalized.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
-			if (!normalized.StartsWith("/"))
+			if (!normalized.StartsWith(Path.DirectorySeparatorChar.ToString()))
 			{
-				normalized = "/" + normalized;
+				normalized = Path.DirectorySeparatorChar + normalized;
 			}
 
 			// Resolve occurrences of "//" in the normalized path
 			while (true)
 			{
 				int index = normalized.IndexOf("//");
-				if (index < 0)
-					break;
+				if (index < 0) break;
 				normalized = normalized.Substring(0, (index) - (0)) + normalized.Substring(index + 1);
 			}
 
@@ -638,8 +623,7 @@ namespace NVelocity.Util
 			while (true)
 			{
 				int index = normalized.IndexOf("%20");
-				if (index < 0)
-					break;
+				if (index < 0) break;
 				normalized = normalized.Substring(0, (index) - (0)) + " " + normalized.Substring(index + 3);
 			}
 
