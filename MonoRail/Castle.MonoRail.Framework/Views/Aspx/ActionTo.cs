@@ -98,11 +98,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			if (Area == null || Area.Length == 0)
 			{
-				url = UrlInfo.GetRailsUrl(Controller, Action, _extension);
+				url = UrlInfo.CreateAbsoluteRailsUrl(Context.Request.Path, Controller, Action, _extension);
 			}
 			else
 			{
-				url = UrlInfo.GetRailsUrl(Area, Controller, Action, _extension);
+				url = UrlInfo.CreateAbsoluteRailsUrl(Context.Request.Path, Area, Controller, Action, _extension);
 			}
 
 			if (FormID == null || FormID.Length == 0)

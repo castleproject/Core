@@ -100,7 +100,7 @@ namespace Castle.MonoRail.Engine.Adapters
 		public void Redirect(String controller, String action)
 		{
 			_response.Redirect( 
-				UrlInfo.GetRailsUrl(controller, action, _extension), false );
+				UrlInfo.CreateAbsoluteRailsUrl(_appPath, controller, action, _extension), false );
 		}
 
 		public void Redirect(String area, String controller, String action)
@@ -108,12 +108,12 @@ namespace Castle.MonoRail.Engine.Adapters
 			if (area == null || area.Length == 0)
 			{
 				_response.Redirect(
-					UrlInfo.GetAbsoluteRailsUrl(_appPath, controller, action, _extension), false);
+					UrlInfo.CreateAbsoluteRailsUrl(_appPath, controller, action, _extension), false);
 			}
 			else
 			{
 				_response.Redirect( 
-					UrlInfo.GetRailsUrl(area, controller, action, _extension), false );
+					UrlInfo.CreateAbsoluteRailsUrl(_appPath, area, controller, action, _extension), false );
 			}
 		}
 

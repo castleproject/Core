@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// 
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=true )]
+	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
 	public class DataBindAttribute : Attribute
 	{
 		private String _Prefix		= string.Empty;

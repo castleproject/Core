@@ -425,7 +425,8 @@ namespace Castle.MonoRail.Framework
 				                             serverUtility.HtmlEncode(parameters[key]));
 			}
 
-			String url = UrlInfo.GetRailsUrl(controller, action, Context.UrlInfo.Extension);
+			String url = UrlInfo.CreateAbsoluteRailsUrl(
+				Context.ApplicationPath, controller, action, Context.UrlInfo.Extension);
 
 			_context.Response.Redirect(String.Format("{0}?{1}", url, querystring));
 		}
@@ -522,6 +523,8 @@ namespace Castle.MonoRail.Framework
 
 				_scaffoldSupport.Process(this);
 			}
+
+			Initialize();
 
 			InternalSend(actionName);
 		}
@@ -911,7 +914,12 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		#region Pre And Post view processing (overridables)
+		#region Lifecycle (overridables)
+
+		protected virtual void Initialize()
+		{
+			
+		}
 
 		/// <summary>
 		/// Invoked by the view engine to perform

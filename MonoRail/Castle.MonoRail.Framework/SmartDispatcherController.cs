@@ -27,6 +27,26 @@ namespace Castle.MonoRail.Framework
 	{
 		private IDictionary boundInstances = new ListDictionary();
 
+		private DataBinder binder;
+
+		private NameValueCollection queryParams;
+		private NameValueCollection formParams;
+		private NameValueCollection allParams;
+
+		public SmartDispatcherController()
+		{
+		}
+
+		public DataBinder Binder
+		{
+			get { return binder; }
+		}
+
+		protected override void Initialize()
+		{
+			binder = new DataBinder( Context );
+		}
+
 		protected internal override void CollectActions()
 		{
 			MethodInfo[] methods = GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
@@ -144,46 +164,24 @@ namespace Castle.MonoRail.Framework
 			String paramName = String.Empty;
 			String value = String.Empty;
 
-			// Get case insensitive versions of the collections
-			NameValueCollection allParams, formParams, queryParams, webParams = request.Params;
-			CreateParamCollections( request, out allParams, out formParams, out queryParams );
+			CreateParamCollections(request);
 
 			IDictionary files = request.Files;
 
 			try
 			{
-				DataBinder binder = new DataBinder( Context );
-
 				for(int i=0; i < args.Length; i++)
 				{
-					ParameterInfo param		= parameters[i];
-					paramName				= param.Name;
+					ParameterInfo param	= parameters[i];
+					paramName = param.Name;
 
-					object[] bindAttributes	= param.GetCustomAttributes( typeof(DataBindAttribute), true );
+					object[] bindAttributes	= param.GetCustomAttributes( typeof(DataBindAttribute), false );
 					
 					if ( bindAttributes.Length > 0 )
 					{
 						DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
 	
-						switch ( dba.From )
-						{
-							case ParamStore.Form: 
-								webParams = formParams; 
-								break;
-
-							case ParamStore.QueryString:
-								webParams = queryParams;
-								break;
-
-							default:
-								webParams = allParams;
-								break;
-						}
-
-						ArrayList errorList = new ArrayList();
-						args[i]	= binder.BindObject( param.ParameterType, dba.Prefix, webParams, files, errorList );
-						
-						boundInstances.Add( args[i], errorList );
+						args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix );
 					}
 					else
 					{
@@ -195,7 +193,7 @@ namespace Castle.MonoRail.Framework
 			{
 				throw new RailsException( 
 					String.Format("Could not convert {0} to request type. " + 
-						"Argument value is '{1}'", paramName, webParams.Get( paramName ) ), ex );
+						"Argument value is '{1}'", paramName, allParams.Get( paramName ) ), ex );
 			}
 			catch(Exception ex)
 			{
@@ -207,6 +205,62 @@ namespace Castle.MonoRail.Framework
 			return args;
 		}
 
+		protected object BindObject(ParamStore from, Type paramType, String prefix)
+		{
+			NameValueCollection webParams = null;
+
+			switch ( from )
+			{
+				case ParamStore.Form: 
+					webParams = formParams; 
+					break;
+
+				case ParamStore.QueryString:
+					webParams = queryParams;
+					break;
+
+				default:
+					webParams = allParams;
+					break;
+			}
+
+			ArrayList errorList = new ArrayList();
+			
+			object instance = binder.BindObject( paramType, prefix, webParams, Context.Request.Files, errorList );
+						
+			boundInstances[instance] = errorList;
+
+			return instance;
+		}
+
+		protected object BindObjectInstance(object instance, ParamStore from, String prefix)
+		{
+			NameValueCollection webParams = null;
+
+			switch ( from )
+			{
+				case ParamStore.Form: 
+					webParams = formParams; 
+					break;
+
+				case ParamStore.QueryString:
+					webParams = queryParams;
+					break;
+
+				default:
+					webParams = allParams;
+					break;
+			}
+
+			ArrayList errorList = new ArrayList();
+			
+			binder.BindObjectInstance( instance, prefix, webParams, Context.Request.Files, errorList );
+						
+			boundInstances[instance] = errorList;
+
+			return instance;
+		}
+
 		protected ErrorList GetDataBindErrors( object instance )
 		{
 			ArrayList list = boundInstances[ instance ] as ArrayList;
@@ -214,8 +268,7 @@ namespace Castle.MonoRail.Framework
 			return new ErrorList( list );
 		}
 
-		protected void CreateParamCollections( IRequest request, out NameValueCollection allParams, 
-														out NameValueCollection formParams, out NameValueCollection queryParams )
+		protected void CreateParamCollections( IRequest request )
 		{
 			formParams		= request.Form;
 			queryParams		= request.QueryString;
