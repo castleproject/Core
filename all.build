@@ -97,6 +97,8 @@
 				
 				<!-- Components -->
 				<include name="Facilities/Prevalence/lib"/>
+				<include name="Facilities/Db4o/lib"/>
+				<include name="Facilities/IBatisNet/lib"/>
 			</referencepaths>
 			<documenters>
 				<documenter name="MSDN">
