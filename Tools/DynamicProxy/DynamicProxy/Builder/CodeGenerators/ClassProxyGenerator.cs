@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				sb.Append(inter.Name);
 			}
 			/// Naive implementation
-			return String.Format("CProxyType{0}{1}{2}", type.Name, sb.ToString(), interfaces.Length);
+			return String.Format("{3}_CProxyType{0}{1}{2}", type.Name, sb.ToString(), interfaces.Length, type.Namespace.Replace('.', '_'));
 		}
 
 		/// <summary>

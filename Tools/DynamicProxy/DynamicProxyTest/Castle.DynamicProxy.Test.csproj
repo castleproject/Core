@@ -249,6 +249,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\SubSimpleClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ClassInterfaces\IMyInterface.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

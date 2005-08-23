@@ -43,5 +43,19 @@ namespace Castle.DynamicProxy.Test
 			Assert.IsNotNull(proxy);
 			Assert.IsTrue( typeof(ServiceClass).IsAssignableFrom( proxy.GetType() ) );
 		}
+
+		[Test]
+		public void GenerateProxyClassSameNameDistinctNamespace()
+		{
+			object proxyA = _generator.CreateClassProxy(typeof(Classes.SimpleClass),new StandardInterceptor());
+			object proxyB = _generator.CreateClassProxy(typeof(Classes.SubNamespace.SimpleClass), new StandardInterceptor());
+
+			Assert.IsTrue(proxyA is Classes.SimpleClass,
+				string.Format("Proxy {0} is not a subclass of {1} ", proxyA.GetType(), typeof(Classes.SimpleClass)));
+
+			Assert.IsTrue(proxyB is Classes.SubNamespace.SimpleClass,
+				string.Format("Proxy {0} is not a subclass of {1}", proxyA.GetType(), typeof(Classes.SubNamespace.SimpleClass)));
+		}
+
 	}
 }
