@@ -41,8 +41,8 @@ namespace Castle.DynamicProxy
 		{
 			// By default we skip a few interfaces
 			AddInterfaceToSkip( typeof(ISerializable) );
-			AddInterfaceToSkip( typeof(IDeserializationCallback) );
-			AddInterfaceToSkip( typeof(ICloneable) );
+			// AddInterfaceToSkip( typeof(IDeserializationCallback) );
+			// AddInterfaceToSkip( typeof(ICloneable) );
 
 			// And their methods
 			AddMethodToSkip( typeof(ISerializable).GetMethod("GetObjectData") );
