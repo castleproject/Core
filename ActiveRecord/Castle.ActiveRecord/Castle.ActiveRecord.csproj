@@ -269,6 +269,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\NotFoundException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\SessionFactoryHolder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -219,6 +219,7 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
+		[ExpectedException( typeof(NotFoundException) )]
 		public void FindLoad()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );

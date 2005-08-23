@@ -154,13 +154,7 @@ namespace Castle.ActiveRecord
 			}
 		}
 
-		/// <summary>
-		/// Finds an object instance by a unique ID
-		/// </summary>
-		/// <param name="targetType">The AR subclass type</param>
-		/// <param name="id">ID value</param>
-		/// <returns></returns>
-		protected static object FindByPrimaryKey(Type targetType, object id)
+		protected static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
 		{
 			EnsureInitialized(targetType);
 
@@ -170,8 +164,14 @@ namespace Castle.ActiveRecord
 			{
 				return session.Load( targetType, id );
 			}
-			catch(ObjectNotFoundException)
+			catch(ObjectNotFoundException ex)
 			{
+				if (throwOnNotFound)
+				{
+					String message = String.Format("Could not find {0} with id {1}", targetType.Name, id);
+					throw new NotFoundException(message, ex);
+				}
+
 				return null;
 			}
 			catch(Exception ex)
@@ -181,7 +181,18 @@ namespace Castle.ActiveRecord
 			finally
 			{
 				_holder.ReleaseSession(session);
-			}
+			}		
+		}
+
+		/// <summary>
+		/// Finds an object instance by a unique ID
+		/// </summary>
+		/// <param name="targetType">The AR subclass type</param>
+		/// <param name="id">ID value</param>
+		/// <returns></returns>
+		protected static object FindByPrimaryKey(Type targetType, object id)
+		{
+			return FindByPrimaryKey(targetType, id, true);
 		}
 
 		/// <summary>
