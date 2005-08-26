@@ -125,6 +125,49 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
+		[Ignore("Jira issue for NH team")]
+		public void InvalidSessionCache()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), 
+				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
+			Recreate();
+
+			Company.DeleteAll();
+			Client.DeleteAll();
+			Firm.DeleteAll();
+			Person.DeleteAll();
+
+			Firm firm = new Firm("keldor");
+			Client client = new Client("castle", firm);
+			Company company = new Company("vs");
+
+			using(new SessionScope())
+			{
+				firm.Save();
+				client.Save();
+				company.Save();
+			}
+
+			using(new SessionScope())
+			{
+				try
+				{
+					Client c = Client.Find( firm.Id );
+
+					Assert.Fail("Exception was expected");
+				}
+				catch(Exception)
+				{
+					// Phew!!
+				}
+
+				Firm firm2 = Firm.Find( firm.Id );
+
+				Assert.IsNotNull(firm2);
+			}
+		}
+
+		[Test]
 		[Ignore("Create schema does not create all necessary tables for this test case")]
 		public void ManyToManyUsingIDBag()
 		{
