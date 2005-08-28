@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.EventWiring", "Castle.Facilities.EventWiring\Castle.Facilities.EventWiring.csproj", "{3B341A93-96C8-4560-A078-4384253BF679}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.EventWiring.Tests", "Castle.Facilities.EventWiring.Tests\Castle.Facilities.EventWiring.Tests.csproj", "{89FC2739-BEAB-4926-9899-5B2CA43A39BB}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{3B341A93-96C8-4560-A078-4384253BF679}.Debug.ActiveCfg = Debug|.NET
+		{3B341A93-96C8-4560-A078-4384253BF679}.Debug.Build.0 = Debug|.NET
+		{3B341A93-96C8-4560-A078-4384253BF679}.Release.ActiveCfg = Release|.NET
+		{3B341A93-96C8-4560-A078-4384253BF679}.Release.Build.0 = Release|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Debug.ActiveCfg = Debug|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Debug.Build.0 = Debug|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Release.ActiveCfg = Release|.NET
+		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		bin\Castle.Facilities.EventWiring.Tests.dll.config = bin\Castle.Facilities.EventWiring.Tests.dll.config
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
