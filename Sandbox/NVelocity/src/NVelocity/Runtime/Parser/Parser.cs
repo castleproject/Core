@@ -287,9 +287,8 @@ namespace NVelocity.Runtime.Parser
 						throw (ParseException) jjte000;
 
 				}
-				if (true)
-					throw (ApplicationException) jjte000;
 
+				throw;
 			}
 			finally
 			{
@@ -690,7 +689,7 @@ namespace NVelocity.Runtime.Parser
 				t = jj_consume_token(ParserConstants.WORD);
 				String directiveName = t.image.Substring(1);
 
-				d = (Directive) directives.Create(directiveName);
+				d = directives.Create(directiveName);
 
 				/*
 		*  Velocimacro support : if the directive is macro directive

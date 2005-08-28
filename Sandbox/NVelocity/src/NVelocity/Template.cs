@@ -103,7 +103,7 @@ namespace NVelocity
 				{
 					// who knows?  Something from initDocument()
 					errorCondition = e;
-					throw e;
+					throw;
 				}
 				finally
 				{
