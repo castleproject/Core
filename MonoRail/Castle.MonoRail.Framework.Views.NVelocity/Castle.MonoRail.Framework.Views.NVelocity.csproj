@@ -104,11 +104,36 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CustomDirectiveManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "default.build"
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "NVelocityViewContextAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NVelocityViewEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CustomDirectives\AbstractComponentDirective.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CustomDirectives\BlockComponentDirective.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CustomDirectives\ComponentDirective.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

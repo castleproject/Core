@@ -130,6 +130,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ComponentsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "FakeControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -190,6 +195,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\BlockViewComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\InlineComponentWithParam1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent3.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -198,6 +228,19 @@
                     RelPath = "Controllers\LayoutController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\UsingComponentsController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\components\SimpleInlineViewComponent2\mycompview1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\components\SimpleInlineViewComponent3\default.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "views\home\bag.vm"
@@ -233,6 +276,26 @@
                 />
                 <File
                     RelPath = "views\layouts\printable.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\usingcomponents\index1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\usingcomponents\index2.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\usingcomponents\index3.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\usingcomponents\index4.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\usingcomponents\index5.vm"
                     BuildAction = "None"
                 />
             </Include>

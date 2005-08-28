@@ -22,12 +22,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	using System;
 	using System.IO;
 	using System.Collections;
-
+	using Castle.MonoRail.Framework.Internal;
 	using Commons.Collections;
-
 
 	public class NVelocityViewEngine : ViewEngineBase
 	{
+		private static IViewComponentFactory staticViewComponentFactory;
+
 		protected VelocityEngine velocity = new VelocityEngine();
 
 		/// <summary>
@@ -53,6 +54,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
  					props.Load( fs );
 				}
 			}
+
+			staticViewComponentFactory = this.ViewComponentFactory;
+
+			// Set up a custom directive manager
+			props.SetProperty("directive.manager", "Castle.MonoRail.Framework.Views.NVelocity.CustomDirectiveManager; Castle.MonoRail.Framework.Views.NVelocity");
 
 			InitializeVelocityProperties(props);
 
@@ -141,7 +147,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		}
 
 		#endregion
-	
+
+		public static IViewComponentFactory StaticViewComponentFactory
+		{
+			get { return staticViewComponentFactory; }
+		}
+
 		/// <summary>
 		/// Initializes basic velocity properties. The main purpose of this method is to
 		/// allow this logic to be overrided.
@@ -197,8 +208,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private IContext CreateContext(IRailsEngineContext context, Controller controller)
 		{
-			Hashtable innerContext = new Hashtable(
-				CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
+			Hashtable innerContext = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 
 			innerContext.Add("context", context);
 			innerContext.Add("request", context.Request);
@@ -207,18 +217,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (controller.Resources != null)
 			{
-				foreach (String key in controller.Resources.Keys)
+				foreach(String key in controller.Resources.Keys)
 				{
 					innerContext.Add( key, controller.Resources[ key ] );
 				}
 			}
 
-			foreach( object helper in controller.Helpers.Values)
+			foreach(object helper in controller.Helpers.Values)
 			{
 				innerContext.Add(helper.GetType().Name, helper);
 			}
 
-			foreach (String key in context.Params.AllKeys)
+			foreach(String key in context.Params.AllKeys)
 			{
 				if (key == null)  continue; // Nasty bug?
 				object value = context.Params[key];
@@ -226,13 +236,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				innerContext[key] = value;
 			}
 
-			foreach (DictionaryEntry entry in context.Flash)
+			foreach(DictionaryEntry entry in context.Flash)
 			{
 				if (entry.Value == null) continue;
 				innerContext[entry.Key] = entry.Value;
 			}
 
-			foreach (DictionaryEntry entry in controller.PropertyBag)
+			foreach(DictionaryEntry entry in controller.PropertyBag)
 			{
 				if (entry.Value == null) continue;
 				innerContext[entry.Key] = entry.Value;

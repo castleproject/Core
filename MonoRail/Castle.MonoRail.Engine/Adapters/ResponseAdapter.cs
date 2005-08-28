@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2005 Castle Proje\ct - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,7 +33,32 @@ namespace Castle.MonoRail.Engine.Adapters
 			_appPath = appPath;
 		}
 
-		#region IResponse
+		/// <summary>
+		/// Gets the caching policy (expiration time, privacy, 
+		/// vary clauses) of a Web page.
+		/// </summary>
+		public HttpCachePolicy CachePolicy
+		{
+			get { return _response.Cache; }
+		}
+
+		/// <summary>
+		/// Sets the Cache-Control HTTP header to Public or Private.
+		/// </summary>
+		public String CacheControlHeader
+		{
+			get { return _response.CacheControl; }
+			set { _response.CacheControl = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the HTTP character set of the output stream.
+		/// </summary>
+		public String Charset
+		{
+			get { return _response.Charset; }
+			set { _response.Charset = value; }
+		}
 
 		public int StatusCode
 		{
@@ -125,12 +150,11 @@ namespace Castle.MonoRail.Engine.Adapters
 		public void CreateCookie(String name, String value, DateTime expiration)
 		{
 			HttpCookie cookie = new HttpCookie(name, value);
+			
 			cookie.Expires = expiration;
 			cookie.Path = "/";
 
 			_response.Cookies.Add( cookie );
 		}
-
-		#endregion
 	}
 }

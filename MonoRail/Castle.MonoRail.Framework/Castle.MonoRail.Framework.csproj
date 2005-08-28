@@ -168,12 +168,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IViewComponentContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RailsException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "SmartDispatcherController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SmartViewComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -339,6 +354,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\DefaultViewComponentFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\FilterDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -360,6 +380,11 @@
                 />
                 <File
                     RelPath = "Internal\IScaffoldingSupport.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\IViewComponentFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -409,17 +434,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\Test\MockRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Test\MockResponse.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\Test\RailsEngineContextImpl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Test\RequestImpl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Test\ResponseImpl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

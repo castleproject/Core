@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace Castle.MonoRail.Framework.Views.NVelocity.Tests.Components
 {
 	using System;
 
-	using Castle.MonoRail.Framework;
-	
-	[Resource("resx", "TestSiteNVelocity.Controllers.ResourceFile")]
-	public class ResourcedController : SmartDispatcherController
-	{
-		public ResourcedController()
-		{
-		}
 
-		public void GetResources()
+	public class SimpleInlineViewComponent2 : ViewComponent
+	{
+		public override void Render()
 		{
-			
+			RenderView("mycompview1");
 		}
 	}
 }

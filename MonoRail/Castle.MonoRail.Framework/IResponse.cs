@@ -15,9 +15,30 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Web;
 
 	public interface IResponse
 	{
+		int StatusCode { get; set; }
+
+		String ContentType { get; set; }
+
+		/// <summary>
+		/// Gets the caching policy (expiration time, privacy, 
+		/// vary clauses) of a Web page.
+		/// </summary>
+		HttpCachePolicy CachePolicy  { get; }
+
+		/// <summary>
+		/// Sets the Cache-Control HTTP header to Public or Private.
+		/// </summary>
+		String CacheControlHeader { get; set; } 
+
+		/// <summary>
+		/// Gets or sets the HTTP character set of the output stream.
+		/// </summary>
+		String Charset { get; set; } 
+
 		void AppendHeader(String name, String value);
 
 		System.IO.TextWriter Output { get; }
@@ -32,22 +53,18 @@ namespace Castle.MonoRail.Framework
 
 		void Write(char[] buffer, int index, int count);
 
-		void WriteFile(string fileName);
+		void WriteFile(String fileName);
 
-		void Redirect( String controller, String action );
+		void Redirect(String controller, String action);
 
-		void Redirect( String area, String controller, String action );
+		void Redirect(String area, String controller, String action);
 
 		void Redirect(String url);
 
 		void Redirect(String url, bool endProcess);
 
-		int StatusCode { get; set; }
-
-		String ContentType { get; set; }
-
-		void CreateCookie( String name, String value );
+		void CreateCookie(String name, String value);
 		
-		void CreateCookie( String name, String value, DateTime expiration );
+		void CreateCookie(String name, String value, DateTime expiration);
 	}
 }

@@ -115,6 +115,8 @@ namespace Castle.MonoRail.Framework
 
 		private IScaffoldingSupport _scaffoldSupport;
 
+		private IViewComponentFactory _viewComponentFactory;
+
 		internal bool _directRenderInvoked;
 
 		#endregion
@@ -239,6 +241,14 @@ namespace Castle.MonoRail.Framework
 		public IResponse Response
 		{
 			get { return Context.Response; }
+		}
+
+		/// <summary>
+		/// Shortcut to Request.Params
+		/// </summary>
+		public NameValueCollection Params
+		{
+			get { return Request.Params; }
 		}
 
 		#endregion
@@ -490,7 +500,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
 		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine,
-		                    IScaffoldingSupport scaffoldSupport)
+		                    IScaffoldingSupport scaffoldSupport, IViewComponentFactory viewComponentFactory)
 		{
 			_areaName = areaName;
 			_controllerName = controllerName;
@@ -499,6 +509,7 @@ namespace Castle.MonoRail.Framework
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
 			_scaffoldSupport = scaffoldSupport;
+			_viewComponentFactory = viewComponentFactory;
 
 			if (GetType().IsDefined(typeof(FilterAttribute), true))
 			{

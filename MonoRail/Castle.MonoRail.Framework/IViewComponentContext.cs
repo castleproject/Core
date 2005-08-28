@@ -12,22 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.IO;
+	using System.Collections;
 
-	using Castle.MonoRail.Framework;
-	
-	[Resource("resx", "TestSiteNVelocity.Controllers.ResourceFile")]
-	public class ResourcedController : SmartDispatcherController
+	public interface IViewComponentContext
 	{
-		public ResourcedController()
-		{
-		}
+		String ComponentName { get; }
 
-		public void GetResources()
-		{
-			
-		}
+		void RenderBody();
+
+		TextWriter Writer { get; }
+
+		IDictionary ContextVars { get; }
+
+		IDictionary ComponentParameters { get; }
+
+		String ViewToRender { get; set; }
 	}
 }

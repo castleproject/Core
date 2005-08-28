@@ -18,21 +18,48 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.IO;
 	using System.Text;
 	using System.Collections.Specialized;
-	
-	public class ResponseImpl : IResponse
+	using System.Web;
+
+	public class MockResponse : IResponse
 	{
 		private int _statusCode;
+		private String charset;
 		private StringWriter _writer;
 		private NameValueCollection _headers = new NameValueCollection();
 		
 		internal StringBuilder _contents = new StringBuilder();
 
-		public ResponseImpl()
+		public MockResponse()
 		{
 			_writer = new StringWriter(_contents);
 		}
 
-		#region IResponse
+		/// <summary>
+		/// Gets the caching policy (expiration time, privacy, 
+		/// vary clauses) of a Web page.
+		/// </summary>
+		public HttpCachePolicy CachePolicy
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		/// <summary>
+		/// Sets the Cache-Control HTTP header to Public or Private.
+		/// </summary>
+		public String CacheControlHeader
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
+
+		/// <summary>
+		/// Gets or sets the HTTP character set of the output stream.
+		/// </summary>
+		public String Charset
+		{
+			get { return charset; }
+			set { charset = value; }
+		}
 
 		public int StatusCode
 		{
@@ -133,7 +160,5 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			throw new NotImplementedException();
 		}
-
-		#endregion
 	}
 }

@@ -37,6 +37,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			{
 				return new LayoutController();
 			}
+			else if ("usingcomponents".Equals(info.Controller))
+			{
+				return new UsingComponentsController();
+			}
 
 			throw new RailsException("Unknown controller");
 		}

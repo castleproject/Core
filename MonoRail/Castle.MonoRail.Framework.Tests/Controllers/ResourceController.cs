@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Framework.Attributes;
 	using Castle.MonoRail.Framework.Filters;
 	
 

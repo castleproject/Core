@@ -28,10 +28,11 @@ namespace Castle.MonoRail.Engine.Configuration
 
 		private IList _assemblies = new ArrayList();
 		private IList _routingRules = new ArrayList();
+		private bool _viewsXhtmlRendering;
 		private String _viewsPhysicalPath;
 		private String _viewsVirtualPath;
-		private bool _viewsXhtmlRendering;
 		private String _customControllerFactory;
+		private String _customViewComponentFactory;
 		private String _customFilterFactory;
 		private String _customResourceFactory;
 		private String _customEngineTypeName;
@@ -67,6 +68,12 @@ namespace Castle.MonoRail.Engine.Configuration
 		{
 			get { return _viewsXhtmlRendering; }
 			set { _viewsXhtmlRendering = value; }
+		}
+
+		public String CustomViewComponentFactory
+		{
+			get { return _customViewComponentFactory; }
+			set { _customViewComponentFactory = value; }
 		}
 
 		public String CustomControllerFactory
@@ -105,6 +112,15 @@ namespace Castle.MonoRail.Engine.Configuration
 			{
 				return _customEngineTypeName != null ?
 					Type.GetType(_customEngineTypeName, false, false) : null;
+			}
+		}
+
+		public Type CustomViewComponentFactoryType
+		{
+			get
+			{
+				return _customViewComponentFactory != null ?
+					Type.GetType(_customViewComponentFactory, false, false) : null;
 			}
 		}
 

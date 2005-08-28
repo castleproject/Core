@@ -50,7 +50,8 @@ namespace Castle.MonoRail.Framework.Internal
 		}
 
 		public virtual void Release(Controller controller)
-		{			
+		{
+
 		}
 
 		public ControllerTree Tree

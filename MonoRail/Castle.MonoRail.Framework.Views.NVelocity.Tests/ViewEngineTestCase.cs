@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		NVelocityViewEngine _viewEngine;
 		ProcessEngine _engine;
 
-		[SetUp]
+		[TestFixtureSetUp]
 		public void Init()
 		{
 			IControllerFactory factory = new FakeControllerFactory();

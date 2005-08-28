@@ -35,21 +35,33 @@ namespace Castle.MonoRail.Engine
 		private IFilterFactory _filterFactory;
 		private IResourceFactory _resourceFactory;
 		private IScaffoldingSupport _scaffoldingSupport;
+		private IViewComponentFactory _viewCompFactory;
 
 		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine) : 
-			this(controllerFactory, viewEngine, new DefaultFilterFactory(), new DefaultResourceFactory(), null)
+			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
+			     new DefaultResourceFactory(), null, new DefaultViewComponentFactory())
 		{
 		}
 
+		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine, IViewComponentFactory viewCompFactory) : 
+			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
+			new DefaultResourceFactory(), null, viewCompFactory)
+		{
+		}
+
+
 		public ProcessEngine(IControllerFactory controllerFactory, 
 			IViewEngine viewEngine, IFilterFactory filterFactory, 
-			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport)
+			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, IViewComponentFactory viewCompFactory)
 		{
 			_controllerFactory = controllerFactory;
 			_viewEngine = viewEngine;
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
 			_scaffoldingSupport = scaffoldingSupport;
+			_viewCompFactory = viewCompFactory;
+
+			ConnectViewComponentFactoryToViewEngine();
 		}
 
 		public IControllerFactory ControllerFactory
@@ -77,6 +89,11 @@ namespace Castle.MonoRail.Engine
 			get { return _scaffoldingSupport; }
 		}
 
+		public IViewComponentFactory ViewComponentFactory
+		{
+			get { return _viewCompFactory; }
+		}
+
 		/// <summary>
 		/// Performs the base work of MonoRail. Extracts 
 		/// the information from the URL, obtain the controller 
@@ -100,7 +117,7 @@ namespace Castle.MonoRail.Engine
 			{
 				controller.Process( 
 					context, _filterFactory, _resourceFactory, 
-					info.Area, info.Controller, info.Action, _viewEngine, _scaffoldingSupport );
+					info.Area, info.Controller, info.Action, _viewEngine, _scaffoldingSupport, _viewCompFactory );
 			}
 			finally
 			{
@@ -124,6 +141,12 @@ namespace Castle.MonoRail.Engine
 			}
 
 			return UrlTokenizer.ExtractInfo(context.Url, vdir);
+		}
+
+		private void ConnectViewComponentFactoryToViewEngine()
+		{
+			_viewCompFactory.ViewEngine = _viewEngine;
+			_viewEngine.ViewComponentFactory = _viewCompFactory;
 		}
 	}
 }

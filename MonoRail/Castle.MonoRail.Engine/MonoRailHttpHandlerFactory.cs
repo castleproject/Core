@@ -37,14 +37,16 @@ namespace Castle.MonoRail.Engine
 		private IResourceFactory _resourceFactory;
 		private IControllerFactory _controllerFactory;
 		private IScaffoldingSupport _scaffoldingSupport;
+		private IViewComponentFactory _viewCompFactory;
 
 		public MonoRailHttpHandlerFactory()
 		{
 			ObtainConfiguration();
 			InitializeControllerFactory();
-			InitializeViewEngine();
+			InitializeViewComponentFactory();
 			InitializeFilterFactory();
 			InitializeResourceFactory();
+			InitializeViewEngine();
 			InitializeScaffoldingSupport();
 		}
 
@@ -54,7 +56,7 @@ namespace Castle.MonoRail.Engine
 			String requestType, String url, String pathTranslated)
 		{
 			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, 
-				_filterFactory, _resourceFactory, _scaffoldingSupport);
+				_filterFactory, _resourceFactory, _scaffoldingSupport, _viewCompFactory);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
@@ -76,6 +78,8 @@ namespace Castle.MonoRail.Engine
 			}
 			else
 			{
+				// If nothing was specified, we use the default view engine 
+				// based on webforms
 				_viewEngine = new AspNetViewEngine();
 			}
 
@@ -94,6 +98,25 @@ namespace Castle.MonoRail.Engine
 			else
 			{
 				_filterFactory = new DefaultFilterFactory();
+			}
+		}
+
+		protected virtual void InitializeViewComponentFactory()
+		{
+			if (_config.CustomViewComponentFactoryType != null)
+			{
+				_viewCompFactory = (IViewComponentFactory) Activator.CreateInstance(_config.CustomViewComponentFactoryType);
+			}
+			else
+			{
+				DefaultViewComponentFactory compFactory = new DefaultViewComponentFactory();
+
+				foreach(String assemblyName in _config.Assemblies)
+				{
+					compFactory.Inspect(assemblyName);
+				}
+
+				_viewCompFactory = compFactory;
 			}
 		}
 

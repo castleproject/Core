@@ -12,22 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+using DirectiveConstants_Fields = NVelocity.Runtime.Directive.DirectiveConstants_Fields;
+
+namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
 	using System;
 
-	using Castle.MonoRail.Framework;
-	
-	[Resource("resx", "TestSiteNVelocity.Controllers.ResourceFile")]
-	public class ResourcedController : SmartDispatcherController
+	using Castle.MonoRail.Framework.Internal;
+
+
+	public class ComponentDirective : AbstractComponentDirective
 	{
-		public ResourcedController()
+		public ComponentDirective(IViewComponentFactory viewComponentFactory) : base(viewComponentFactory)
 		{
 		}
 
-		public void GetResources()
+		public override String Name
 		{
-			
+			get { return "component"; }
+			set {  }
+		}
+
+		public override int Type
+		{
+			get { return DirectiveConstants_Fields.LINE; }
 		}
 	}
 }

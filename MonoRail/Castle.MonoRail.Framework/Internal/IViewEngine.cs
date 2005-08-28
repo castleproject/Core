@@ -16,6 +16,8 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Depicts the contract used by the engine
 	/// to process views, in an independent manner.
@@ -36,6 +38,11 @@ namespace Castle.MonoRail.Framework
 		/// Gets/sets whether rendering should aim to be XHTML compliant, obtained from the configuration.
 		/// </summary>
 		bool XhtmlRendering { get; set; }
+
+		/// <summary>
+		/// Gets/sets the factory for <see cref="ViewComponent"/>s
+		/// </summary>
+		IViewComponentFactory ViewComponentFactory { get; set; }
 		
 		/// <summary>
 		/// Evaluates whether the specified template exists.

@@ -15,17 +15,19 @@
 namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Reflection;
 
-	/// <summary>
-	/// Standard implementation of <see cref="IControllerFactory"/>.
-	/// It inspects assemblies looking for concrete classes
-	/// that extend <see cref="Controller"/>.
-	/// </summary>
-	public class DefaultControllerFactory : AbstractControllerFactory
+
+	public class DefaultViewComponentFactory : IViewComponentFactory
 	{
-		public DefaultControllerFactory()
+		private IViewEngine viewEngine;
+		private readonly IDictionary components;
+
+		public DefaultViewComponentFactory()
 		{
+			components = new HybridDictionary(true);
 		}
 
 		/// <summary>
@@ -52,16 +54,34 @@ namespace Castle.MonoRail.Framework.Internal
 					continue;
 				}
 
-				if ( typeof(Controller).IsAssignableFrom(type) )
-				{
-					RegisterController( ControllerInspectionUtil.Inspect(type) );
+				if ( typeof(ViewComponent).IsAssignableFrom(type) )
+				{					
+					components[ type.Name ] = type;
 				}
 			}		
 		}
 
-		private void RegisterController(ControllerDescriptor descriptor)
+		public IViewEngine ViewEngine
 		{
-			Tree.AddController( descriptor.Area, descriptor.Name, descriptor.ControllerType );
+			get { return viewEngine; }
+			set { viewEngine = value; }
+		}
+
+		public virtual ViewComponent Create(String name)
+		{
+			Type viewCompType = (Type) components[name];
+
+			if (viewCompType == null)
+			{
+				throw new RailsException("No ViewComponent found for name " + name);
+			}
+
+			return (ViewComponent) Activator.CreateInstance( viewCompType );
+		}
+
+		public virtual void Release(ViewComponent instance)
+		{
+			
 		}
 	}
 }

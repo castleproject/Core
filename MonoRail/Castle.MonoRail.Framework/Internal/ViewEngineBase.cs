@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Abstract base class for View Engines.
@@ -23,6 +24,7 @@ namespace Castle.MonoRail.Framework
 	{
 		private string _viewRootDir;
 		private bool _xhtmlRendering;
+		private IViewComponentFactory viewComponentFactory;
 
 		/// <summary>
 		/// Gets/sets the root directory of views, obtained from the configuration.
@@ -40,6 +42,15 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return _xhtmlRendering; }
 			set { _xhtmlRendering = value; }
+		}
+
+		/// <summary>
+		/// Gets/sets the factory for <see cref="ViewComponent"/>s
+		/// </summary>
+		public IViewComponentFactory ViewComponentFactory
+		{
+			get { return viewComponentFactory; }
+			set { viewComponentFactory = value; }
 		}
 
 		/// <summary>
@@ -64,7 +75,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 
-		#region | Render Helpers 
+		#region Render Helpers 
 
 		/// <summary>
 		/// Sets the HTTP Content-Type header appropriately.

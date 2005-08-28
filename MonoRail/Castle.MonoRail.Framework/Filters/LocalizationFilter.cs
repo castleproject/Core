@@ -18,8 +18,6 @@ namespace Castle.MonoRail.Framework.Filters
 	using System.Globalization;
 	using System.Threading;
 
-	using Castle.MonoRail.Framework.Attributes;
-
 	/// <summary>
 	/// Enum to identify where a value is stored.
 	/// </summary>

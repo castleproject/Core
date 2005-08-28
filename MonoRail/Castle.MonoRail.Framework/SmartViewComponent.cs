@@ -12,22 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
 
-	using Castle.MonoRail.Framework;
-	
-	[Resource("resx", "TestSiteNVelocity.Controllers.ResourceFile")]
-	public class ResourcedController : SmartDispatcherController
+
+	public class SmartViewComponent : ViewComponent
 	{
-		public ResourcedController()
+		public override void Initialize()
 		{
-		}
+			base.Initialize();
 
-		public void GetResources()
-		{
+			NameValueCollection allParams = new NameValueCollection(Request.Params);
 			
+			foreach(DictionaryEntry entry in this.ComponentParams)
+			{
+				allParams[ entry.Key.ToString() ] = entry.ToString();
+			}
+
+			DataBinder binder = new DataBinder(RailsContext);
+
+			binder.BindObjectInstance( this, String.Empty, allParams, Request.Files, null );
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using Castle.MonoRail.Framework.Internal;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.Collections.Specialized;
 	using System.Security.Principal;
 
+	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Internal.Test;
 
 	/// <summary>
@@ -31,8 +31,8 @@ namespace Castle.MonoRail.Framework.Tests
 		private object _context = new object();
 		private String _url;
 		private String _requestType;
-		private RequestImpl _request = new RequestImpl();
-		private ResponseImpl _response = new ResponseImpl();
+		private MockRequest _request = new MockRequest();
+		private MockResponse _response = new MockResponse();
 		private ServerUtilityImpl _server = new ServerUtilityImpl();
 		private Exception _lastException;
 		private Hashtable _session = new Hashtable();
@@ -58,8 +58,6 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			get { return _response._contents.ToString(); }
 		}
-
-		#region IRailsEngineContext
 
 		public Exception LastException
 		{
@@ -135,10 +133,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 		public UrlInfo UrlInfo
 		{
-			get
-			{
-				throw new NotImplementedException();
-			}
+			get { throw new NotImplementedException(); }
 		}
 
 		/// <summary>
@@ -155,7 +150,5 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			get { return _server; }
 		}
-
-		#endregion
 	}
 }
