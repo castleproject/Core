@@ -42,6 +42,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			
 			_engine = new ProcessEngine(factory, _viewEngine, viewFactory);
 
+			viewFactory.ViewEngine = _viewEngine;
+
+			_viewEngine.ViewComponentFactory = viewFactory;
+
 			_viewEngine.Init();
 		}
 

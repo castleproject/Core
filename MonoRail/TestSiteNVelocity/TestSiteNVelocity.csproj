@@ -127,6 +127,16 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Components\BlockComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SmartComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\AjaxController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -207,6 +217,11 @@
                 />
                 <File
                     RelPath = "Controllers\SmartController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\UsingComponentController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -322,6 +337,14 @@
                 />
                 <File
                     RelPath = "views\SubArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index2.vm"
                     BuildAction = "None"
                 />
                 <File

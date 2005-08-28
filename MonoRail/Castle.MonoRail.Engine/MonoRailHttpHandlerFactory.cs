@@ -48,6 +48,8 @@ namespace Castle.MonoRail.Engine
 			InitializeResourceFactory();
 			InitializeViewEngine();
 			InitializeScaffoldingSupport();
+
+			ConnectViewComponentFactoryToViewEngine();
 		}
 
 		#region IHttpHandlerFactory
@@ -111,7 +113,7 @@ namespace Castle.MonoRail.Engine
 			{
 				DefaultViewComponentFactory compFactory = new DefaultViewComponentFactory();
 
-				foreach(String assemblyName in _config.Assemblies)
+				foreach(String assemblyName in _config.ComponentsAssemblies)
 				{
 					compFactory.Inspect(assemblyName);
 				}
@@ -151,13 +153,19 @@ namespace Castle.MonoRail.Engine
 			{
 				DefaultControllerFactory factory = new DefaultControllerFactory();
 
-				foreach(String assemblyName in _config.Assemblies)
+				foreach(String assemblyName in _config.ControllerAssemblies)
 				{
 					factory.Inspect(assemblyName);
 				}
 
 				_controllerFactory = factory;
 			}
+		}
+		
+		private void ConnectViewComponentFactoryToViewEngine()
+		{
+			_viewCompFactory.ViewEngine = _viewEngine;
+			_viewEngine.ViewComponentFactory = _viewCompFactory;
 		}
 	}
 }

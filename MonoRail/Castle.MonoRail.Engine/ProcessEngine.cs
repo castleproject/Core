@@ -45,10 +45,9 @@ namespace Castle.MonoRail.Engine
 
 		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine, IViewComponentFactory viewCompFactory) : 
 			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
-			new DefaultResourceFactory(), null, viewCompFactory)
+				new DefaultResourceFactory(), null, viewCompFactory)
 		{
 		}
-
 
 		public ProcessEngine(IControllerFactory controllerFactory, 
 			IViewEngine viewEngine, IFilterFactory filterFactory, 
@@ -60,8 +59,6 @@ namespace Castle.MonoRail.Engine
 			_resourceFactory = resourceFactory;
 			_scaffoldingSupport = scaffoldingSupport;
 			_viewCompFactory = viewCompFactory;
-
-			ConnectViewComponentFactoryToViewEngine();
 		}
 
 		public IControllerFactory ControllerFactory
@@ -141,12 +138,6 @@ namespace Castle.MonoRail.Engine
 			}
 
 			return UrlTokenizer.ExtractInfo(context.Url, vdir);
-		}
-
-		private void ConnectViewComponentFactoryToViewEngine()
-		{
-			_viewCompFactory.ViewEngine = _viewEngine;
-			_viewEngine.ViewComponentFactory = _viewCompFactory;
 		}
 	}
 }

@@ -1,5 +1,10 @@
 Change history
 
+Beta 4
+------
+
+- Added useWindsorIntegration attribute to monoRail configuration section
+
 Beta 3
 ------
 

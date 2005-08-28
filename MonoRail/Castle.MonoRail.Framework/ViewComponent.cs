@@ -20,14 +20,29 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.Web;
 
-
+	/// <summary>
+	/// Base class for UI Components
+	/// </summary>
 	public abstract class ViewComponent
 	{
+		/// <summary>
+		/// Holds the component context
+		/// </summary>
 		private IViewComponentContext context;
+
+		/// <summary>
+		/// Holds the <see cref="IRailsEngineContext"/> associated
+		/// to the request lifetime.
+		/// </summary>
 		private IRailsEngineContext railsContext;
 
 		#region "Internal" core methods
 
+		/// <summary>
+		/// Invoked by the framework.
+		/// </summary>
+		/// <param name="railsContext"></param>
+		/// <param name="context"></param>
 		public void Init(IRailsEngineContext railsContext, IViewComponentContext context)
 		{
 			this.railsContext = railsContext;
@@ -40,11 +55,19 @@ namespace Castle.MonoRail.Framework
 
 		#region Lifecycle methods (overridables)
 
+		/// <summary>
+		/// Called by the framework once the component instance
+		/// is initialized
+		/// </summary>
 		public virtual void Initialize()
 		{
 			
 		}
 
+		/// <summary>
+		/// Called by the framework so the component can 
+		/// render its content
+		/// </summary>
 		public virtual void Render()
 		{
 			RenderView("default");
@@ -54,16 +77,26 @@ namespace Castle.MonoRail.Framework
 
 		#region Usefull properties
 
+		/// <summary>
+		/// Gets the Component Context
+		/// </summary>
 		public IViewComponentContext Context
 		{
 			get { return context; }
 		}
 
+		/// <summary>
+		/// Gets the <see cref="IRailsEngineContext"/>
+		/// associated with the current request
+		/// </summary>
 		protected IRailsEngineContext RailsContext
 		{
 			get { return railsContext; }
 		}
 
+		/// <summary>
+		/// Gets the component parameters
+		/// </summary>
 		protected IDictionary ComponentParams
 		{
 			get { return context.ComponentParameters; }

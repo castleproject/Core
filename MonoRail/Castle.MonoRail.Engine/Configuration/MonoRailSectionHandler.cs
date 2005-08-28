@@ -26,15 +26,24 @@ namespace Castle.MonoRail.Engine.Configuration
 	public class MonoRailSectionHandler : IConfigurationSectionHandler
 	{
 		private static readonly String Controllers_Node_Name = "controllers";
+		private static readonly String Components_Node_Name = "components";
 		private static readonly String Views_Node_Name = "viewEngine";
 		private static readonly String Routing_Node_Name = "routing";
 		private static readonly String Custom_Controller_Factory_Node_Name = "customControllerFactory";
+		private static readonly String Custom_Component_Factory_Node_Name = "customComponentFactory";
 		private static readonly String Custom_Filter_Factory_Node_Name = "customFilterFactory";
 		private static readonly String View_Path_Root = "viewPathRoot";
 
 		public object Create(object parent, object configContext, XmlNode section)
 		{
 			MonoRailConfiguration config = new MonoRailConfiguration();
+
+			XmlAttribute useWindsorAtt = section.Attributes["useWindsorIntegration"];
+
+			if (useWindsorAtt != null && "true".Equals(useWindsorAtt.Value))
+			{
+				ConfigureWinsorIntegration(config);
+			}
 
 			foreach( XmlNode node in section.ChildNodes)
 			{
@@ -47,6 +56,10 @@ namespace Castle.MonoRail.Engine.Configuration
 				{
 					ProcessControllersNode(node, config);
 				}
+				else if ( String.Compare(Components_Node_Name, node.Name, true) == 0 )
+				{
+					ProcessComponentsNode(node, config);
+				}
 				else if ( String.Compare(Views_Node_Name, node.Name, true) == 0 )
 				{
 					ProcessViewNode(node, config);
@@ -54,6 +67,10 @@ namespace Castle.MonoRail.Engine.Configuration
 				else if ( String.Compare(Custom_Controller_Factory_Node_Name, node.Name, true) == 0 )
 				{
 					ProcessControllerFactoryNode(node, config);
+				}
+				else if ( String.Compare(Custom_Component_Factory_Node_Name, node.Name, true) == 0 )
+				{
+					ProcessComponentFactoryNode(node, config);
 				}
 				else if ( String.Compare(Custom_Filter_Factory_Node_Name, node.Name, true) == 0 )
 				{
@@ -72,6 +89,134 @@ namespace Castle.MonoRail.Engine.Configuration
 			Validate(config);
 
 			return config;
+		}
+
+		private void ConfigureWinsorIntegration(MonoRailConfiguration config)
+		{
+			config.CustomControllerFactory = "Castle.MonoRail.WindsorExtension.WindsorControllerFactory, Castle.MonoRail.WindsorExtension";
+			config.CustomFilterFactory = "Castle.MonoRail.WindsorExtension.WindsorFilterFactory, Castle.MonoRail.WindsorExtension";
+			config.CustomViewComponentFactory = "Castle.MonoRail.WindsorExtension.WindsorViewComponentFactory, Castle.MonoRail.WindsorExtension";
+		}
+
+		private void ProcessFilterFactoryNode(XmlNode node, MonoRailConfiguration config)
+		{
+			XmlAttribute type = node.Attributes["type"];
+	
+			if (type == null)
+			{
+				throw new ConfigurationException("The custom filter factory node must specify a 'type' attribute");
+			}
+	
+			config.CustomFilterFactory = type.Value;
+		}
+
+		private void ProcessControllerFactoryNode(XmlNode node, MonoRailConfiguration config)
+		{
+			XmlAttribute type = node.Attributes["type"];
+	
+			if (type == null)
+			{
+				throw new ConfigurationException("The custom controller factory node must specify a 'type' attribute");
+			}
+	
+			config.CustomControllerFactory = type.Value;
+		}
+
+		private void ProcessComponentFactoryNode(XmlNode node, MonoRailConfiguration config)
+		{
+			XmlAttribute type = node.Attributes["type"];
+	
+			if (type == null)
+			{
+				throw new ConfigurationException("The custom controller factory node must specify a 'type' attribute");
+			}
+	
+			config.CustomViewComponentFactory = type.Value;
+		}
+
+		private void ProcessViewNode(XmlNode node, MonoRailConfiguration config)
+		{
+			XmlAttribute viewPath = node.Attributes[View_Path_Root];
+			
+			if (viewPath == null)
+			{
+				throw new ConfigurationException("The views node must specify the '" + View_Path_Root + 
+					"' attribute");
+			}
+
+			String path = viewPath.Value;
+
+			if (!Path.IsPathRooted(path))
+			{
+				path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, path );
+			}
+
+			config.ViewsPhysicalPath = path;
+
+			XmlAttribute xhtmlRendering = node.Attributes["xhtmlRendering"];
+
+			if (xhtmlRendering != null)
+			{
+				try
+				{
+					config.ViewsXhtmlRendering = bool.Parse(xhtmlRendering.Value);
+				}
+				catch (FormatException ex)
+				{
+					throw new ConfigurationException("The xhtmlRendering attribute of the views node must be a boolean value.", ex);
+				}
+			}
+
+			XmlAttribute customEngine = node.Attributes["customEngine"];
+
+			if (customEngine != null)
+			{
+				config.CustomEngineTypeName = customEngine.Value;
+			}
+		}
+
+		private void ProcessControllersNode(XmlNode controllersNode, MonoRailConfiguration config)
+		{
+			foreach(XmlNode node in controllersNode.ChildNodes)
+			{
+				if (node.NodeType != XmlNodeType.Element) continue;
+
+				ProcessControllerEntry( node, config );
+			}
+		}
+
+		private void ProcessComponentsNode(XmlNode controllersNode, MonoRailConfiguration config)
+		{
+			foreach(XmlNode node in controllersNode.ChildNodes)
+			{
+				if (node.NodeType != XmlNodeType.Element) continue;
+
+				ProcessComponentEntry( node, config );
+			}
+		}
+
+		private void ProcessComponentEntry(XmlNode componentNode, MonoRailConfiguration config)
+		{
+			if (!componentNode.HasChildNodes)
+			{
+				throw new ConfigurationException("Inside the node components, you have to specify the assemblies " + 
+					"through the value of each child node");
+			}
+
+			String assemblyName = componentNode.FirstChild.Value;
+			config.ComponentsAssemblies.Add( assemblyName );
+		}
+
+		private void ProcessControllerEntry(XmlNode controllerEntry, MonoRailConfiguration config)
+		{
+			if (!controllerEntry.HasChildNodes)
+			{
+				throw new ConfigurationException("Inside the node controllers, you have to specify the assemblies " + 
+					"through the value of each child node");
+			}
+
+			String assemblyName = controllerEntry.FirstChild.Value;
+			config.ControllerAssemblies.Add( assemblyName );
 		}
 
 		private void ProcessRoutingNode(XmlNode routingNode, MonoRailConfiguration config)
@@ -104,98 +249,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			config.RoutingRules.Add( new RoutingRule(pattern.Trim(), replace.Trim()) ); 
 		}
 
-		private void ProcessFilterFactoryNode(XmlNode node, MonoRailConfiguration config)
-		{
-			XmlAttribute type = node.Attributes["type"];
-	
-			if (type == null)
-			{
-				throw new ConfigurationException("The custom filter factory node must specify a type attribute");
-			}
-	
-			config.CustomFilterFactory = type.Value;
-		}
-
-		private void ProcessControllerFactoryNode(XmlNode node, MonoRailConfiguration config)
-		{
-			XmlAttribute type = node.Attributes["type"];
-	
-			if (type == null)
-			{
-				throw new ConfigurationException("The custom controller factory node must specify a type attribute");
-			}
-	
-			config.CustomControllerFactory = type.Value;
-		}
-
-		private void ProcessViewNode(XmlNode node, MonoRailConfiguration config)
-		{
-			XmlAttribute viewPath = node.Attributes[View_Path_Root];
-			
-			if (viewPath == null)
-			{
-				throw new ConfigurationException("The views node must specify the '" + View_Path_Root + 
-					"' attribute");
-			}
-
-			String path = viewPath.Value;
-
-			if (!Path.IsPathRooted(path))
-			{
-				path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, path );
-			}
-
-			config.ViewsPhysicalPath = path;
-			config.ViewsVirtualPath = viewPath.Value;
-
-			XmlAttribute xhtmlRendering = node.Attributes["xhtmlRendering"];
-			if (xhtmlRendering != null)
-			{
-				try
-				{
-					config.ViewsXhtmlRendering = bool.Parse(xhtmlRendering.Value);
-				}
-				catch (FormatException ex)
-				{
-					config.ViewsXhtmlRendering = false;
-					throw new ConfigurationException("The xhtmlRendering attribute of the views node must be a boolean value.", ex);
-				}
-			}
-			else
-			{
-				config.ViewsXhtmlRendering = false;
-			}
-
-			XmlAttribute customEngine = node.Attributes["customEngine"];	
-			if (customEngine != null)
-			{
-				config.CustomEngineTypeName = customEngine.Value;
-			}
-		}
-
-		private void ProcessControllersNode(XmlNode controllersNode, MonoRailConfiguration config)
-		{
-			foreach(XmlNode node in controllersNode.ChildNodes)
-			{
-				if (node.NodeType != XmlNodeType.Element) continue;
-
-				ProcessControllerEntry( node, config );
-			}
-		}
-
-		private void ProcessControllerEntry(XmlNode controllerEntry, MonoRailConfiguration config)
-		{
-			if (!controllerEntry.HasChildNodes)
-			{
-				throw new ConfigurationException("Inside the node controllers, you have to specify the assemblies " + 
-												 "through the value of each child node");
-			}
-
-			String assemblyName = controllerEntry.FirstChild.Value;
-			config.Assemblies.Add( assemblyName );
-		}
-
-		protected virtual void Validate(MonoRailConfiguration config)
+		protected void Validate(MonoRailConfiguration config)
 		{
 			if (config.CustomControllerFactory != null)
 			{
@@ -203,7 +257,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			}
 			else
 			{
-				if (config.Assemblies.Count == 0)
+				if (config.ControllerAssemblies.Count == 0)
 				{
 					throw new ConfigurationException("Inside the node controllers, you have to specify " + 
 						"at least one assembly entry");
@@ -213,6 +267,10 @@ namespace Castle.MonoRail.Engine.Configuration
 			{
 				ValidateType(config.CustomFilterFactory, typeof(IFilterFactory));
 			}
+			if (config.CustomViewComponentFactory != null)
+			{
+				ValidateType(config.CustomViewComponentFactory, typeof(IViewComponentFactory));
+			}
 			if (config.CustomEngineTypeName != null)
 			{
 				ValidateType(config.CustomEngineTypeName, typeof(IViewEngine));
@@ -221,6 +279,16 @@ namespace Castle.MonoRail.Engine.Configuration
 			{
 				throw new ConfigurationException("You must provide a '" + Views_Node_Name + "' node and a " + 
 					"absolute or relative path to the views directory with the attribute " + View_Path_Root);
+			}
+
+			// Reasonable assumption
+
+			if (config.ControllerAssemblies.Count != 0 && config.ComponentsAssemblies.Count == 0)
+			{
+				foreach(String entry in config.ControllerAssemblies)
+				{
+					config.ComponentsAssemblies.Add(entry);
+				}
 			}
 		}
 
@@ -236,7 +304,7 @@ namespace Castle.MonoRail.Engine.Configuration
 
 			if (!expectedType.IsAssignableFrom(type))
 			{
-				String message = String.Format("Type {0} does't implement {1}", 
+				String message = String.Format("Type {0} does not implement {1}", 
 					type.FullName, expectedType.FullName);
 				throw new ConfigurationException(message);
 			}

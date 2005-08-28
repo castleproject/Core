@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets/sets the factory for <see cref="ViewComponent"/>s
 		/// </summary>
-		public IViewComponentFactory ViewComponentFactory
+		public virtual IViewComponentFactory ViewComponentFactory
 		{
 			get { return viewComponentFactory; }
 			set { viewComponentFactory = value; }

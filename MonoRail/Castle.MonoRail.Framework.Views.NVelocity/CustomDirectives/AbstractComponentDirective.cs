@@ -149,7 +149,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				return (new DictHelper()).CreateDict( (String[]) list.ToArray( typeof(String) ) );
 			}
 
-			return null;
+			return new Hashtable(0);
 		}
 
 		private bool RenderComponentView(InternalContextAdapter context, 

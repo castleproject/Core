@@ -12,31 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace TestSiteNVelocity.Components
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 
-	/// <summary>
-	/// Extends the <see cref="ViewComponent"/> and
-	/// provides automatic mapping of the parameters
-	/// to public writable properties of the component instance
-	/// </summary>
-	public class SmartViewComponent : ViewComponent
+	using Castle.MonoRail.Framework;
+
+
+	public class BlockComponent1 : ViewComponent
 	{
 		public override void Initialize()
 		{
-			NameValueCollection allParams = new NameValueCollection(Request.Params);
 			
-			foreach(DictionaryEntry entry in this.ComponentParams)
-			{
-				allParams[ entry.Key.ToString() ] = entry.ToString();
-			}
+		}
 
-			DataBinder binder = new DataBinder(RailsContext);
-
-			binder.BindObjectInstance( this, String.Empty, allParams, Request.Files, null );
+		public override void Render()
+		{
+			Context.RenderBody();
 		}
 	}
 }

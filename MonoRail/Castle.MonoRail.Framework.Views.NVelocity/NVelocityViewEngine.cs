@@ -55,14 +55,21 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 			}
 
-			staticViewComponentFactory = this.ViewComponentFactory;
-
 			// Set up a custom directive manager
 			props.SetProperty("directive.manager", "Castle.MonoRail.Framework.Views.NVelocity.CustomDirectiveManager; Castle.MonoRail.Framework.Views.NVelocity");
 
 			InitializeVelocityProperties(props);
 
 			velocity.Init(props);
+		}
+
+		/// <summary>
+		/// Gets/sets the factory for <see cref="ViewComponent"/>s
+		/// </summary>
+		public override IViewComponentFactory ViewComponentFactory
+		{
+			get { return base.ViewComponentFactory; }
+			set { base.ViewComponentFactory = value; staticViewComponentFactory = value; }
 		}
 
 		public override bool HasTemplate(String templateName)
