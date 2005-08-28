@@ -15,37 +15,14 @@
 namespace NVelocity.Runtime.Directive
 {
 	using System;
-	using System.IO;
-	using NVelocity.Context;
-	using NVelocity.Runtime.Parser.Node;
 
 
-	public class Component : Directive
+	public interface IDirectiveManager
 	{
-		public Component()
-		{
-		}
+		void Register(String directiveTypeName);
 
-		public override void init(RuntimeServices rs, InternalContextAdapter context, INode node)
-		{
-			base.init(rs, context, node);
-		}
+		Directive Create(String name);
 
-		public override bool render(InternalContextAdapter context, TextWriter writer, INode node)
-		{
-
-			return true;
-		}
-
-		public override String Name
-		{
-			get { return "component"; }
-			set {  }
-		}
-
-		public override int Type
-		{
-			get { return DirectiveConstants_Fields.LINE; }
-		}
+		bool Contains(String name);
 	}
 }

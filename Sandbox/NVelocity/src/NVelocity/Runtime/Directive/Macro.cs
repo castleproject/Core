@@ -11,8 +11,6 @@ namespace NVelocity.Runtime.Directive
 	using NVelocity.Runtime.Parser.Node;
 
 	/// <summary>
-	/// Macro.java
-	///
 	/// Macro implements the macro definition directive of VTL.
 	///
 	/// example :

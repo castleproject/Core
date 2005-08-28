@@ -19,37 +19,6 @@ namespace NVelocity.Runtime.Parser
 	/// </summary>
 	public class Parser
 	{
-		private void InitBlock()
-		{
-			jjtree = new JJTParserState();
-			directives = new Hashtable(0);
-			jj_la1 = new int[53];
-			jj_2_rtns = new JJCalls[12];
-			jj_expentries = new ArrayList();
-			jj_lasttokens = new int[100];
-		}
-
-		public Hashtable Directives
-		{
-			set { this.directives = value; }
-
-		}
-
-		public Token NextToken
-		{
-			get
-			{
-				if (token.next != null)
-					token = token.next;
-				else
-					token = token.next = token_source.NextToken;
-				jj_ntk_Renamed_Field = - 1;
-				jj_gen++;
-				return token;
-			}
-
-		}
-
 		/*@bgen(jjtree)*/
 		//UPGRADE_NOTE: The initialization of  'jjtree' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		internal JJTParserState jjtree;
@@ -57,7 +26,7 @@ namespace NVelocity.Runtime.Parser
 		/// <summary>  This Hashtable contains a list of all of the dynamic directives.
 		/// </summary>
 		//UPGRADE_NOTE: The initialization of  'directives' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private Hashtable directives;
+		private IDirectiveManager directives;
 
 		/// <summary>  Name of current template we are parsing.  Passed to us in parse()
 		/// </summary>
@@ -79,14 +48,43 @@ namespace NVelocity.Runtime.Parser
 			InitBlock();
 
 			/*
-	    * now setup a VCS for later use
-	    */
+			* now setup a VCS for later use
+			*/
 			velcharstream = new VelocityCharStream(new StringReader("\n"), 1, 1);
 
 			/*
-	    *  and save the RuntimeServices
-	    */
+			*  and save the RuntimeServices
+			*/
 			rsvc = rs;
+		}
+
+		private void InitBlock()
+		{
+			jjtree = new JJTParserState();
+			directives = null;
+			jj_la1 = new int[53];
+			jj_2_rtns = new JJCalls[12];
+			jj_expentries = new ArrayList();
+			jj_lasttokens = new int[100];
+		}
+
+		public IDirectiveManager Directives
+		{
+			set { this.directives = value; }
+		}
+
+		public Token NextToken
+		{
+			get
+			{
+				if (token.next != null)
+					token = token.next;
+				else
+					token = token.next = token_source.NextToken;
+				jj_ntk_Renamed_Field = - 1;
+				jj_gen++;
+				return token;
+			}
 		}
 
 		///
@@ -149,7 +147,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public Directive getDirective(String directive)
 		{
-			return (Directive) directives[directive];
+			return directives.Create(directive);
 		}
 
 		/// <summary>  This method finds out of the directive exists in the directives
@@ -157,12 +155,8 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public bool isDirective(String directive)
 		{
-			if (directives.ContainsKey(directive))
-				return true;
-			else
-				return false;
+			return (directives.Contains(directive));
 		}
-
 
 		/// <summary> Produces a processed output for an escaped control or
 		/// pluggable directive
@@ -696,7 +690,7 @@ namespace NVelocity.Runtime.Parser
 				t = jj_consume_token(ParserConstants.WORD);
 				String directiveName = t.image.Substring(1);
 
-				d = (Directive) directives[directiveName];
+				d = (Directive) directives.Create(directiveName);
 
 				/*
 		*  Velocimacro support : if the directive is macro directive

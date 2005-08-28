@@ -364,6 +364,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Runtime\Directive\BlockComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\Directive\Component.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -379,7 +384,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Runtime\Directive\DirectiveManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\Directive\Foreach.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Runtime\Directive\IDirectiveManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

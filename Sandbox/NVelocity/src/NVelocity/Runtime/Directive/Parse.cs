@@ -135,7 +135,6 @@ namespace NVelocity.Runtime.Directive
 			/*
 	    *  get the path
 	    */
-			//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
 			String arg = value_.ToString();
 
 			/*
@@ -228,7 +227,7 @@ namespace NVelocity.Runtime.Directive
 
 				if (e is MethodInvocationException)
 				{
-					throw (MethodInvocationException) e;
+					throw;
 				}
 
 				rsvc.error("Exception rendering #parse( " + arg + " )  : " + e);

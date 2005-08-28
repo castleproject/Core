@@ -1686,12 +1686,15 @@ namespace Commons.Collections
 		{
 			ExtendedProperties c = new ExtendedProperties();
 
-			for (IEnumerator e = (IEnumerator) p.Keys; e.MoveNext(); )
+			for (IEnumerator e = p.Keys; e.MoveNext(); )
 			{
 				String key = (String) e.Current;
-				String value = p.GetProperty(key).ToString();
+				object value = p.GetProperty(key);
 				// if the value is a String, escape it so that if there are delmiters that the value is not converted to a list
-				value.Replace(",", @"\,");
+				if (value is String)
+				{
+					value = value.ToString().Replace(",", @"\,");
+				}
 				c.SetProperty(key, value);
 			}
 

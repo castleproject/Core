@@ -41,6 +41,7 @@ namespace NVelocity.Test
 			ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_ERROR_STACKTRACE, "true");
 			ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_WARN_STACKTRACE, "true");
 			ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_INFO_STACKTRACE, "true");
+			ep.SetProperty("userdirective", "NVelocity.Runtime.Directive.Component;NVelocity,NVelocity.Runtime.Directive.BlockComponent;NVelocity");
 
 			ve.Init(ep);
 
@@ -49,7 +50,7 @@ namespace NVelocity.Test
 		}
 
 		[Test]
-		public void ComponentUsage1()
+		public void LineComponent1()
 		{
 			VelocityContext context = new VelocityContext();
 

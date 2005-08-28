@@ -6,6 +6,7 @@ namespace NVelocity.Runtime
 	using System.IO;
 	using System.Reflection;
 	using Commons.Collections;
+	using NVelocity.Runtime.Directive;
 	using NVelocity.Runtime.Log;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Runtime.Resource;
@@ -126,7 +127,7 @@ namespace NVelocity.Runtime
 		/// property file. This hashtable is passed
 		/// to each parser that is created.
 		/// </summary>
-		private Hashtable runtimeDirectives;
+		// private Hashtable runtimeDirectives;
 
 		/// <summary> Object that houses the configuration options for
 		/// the velocity runtime. The ExtendedProperties object allows
@@ -161,6 +162,8 @@ namespace NVelocity.Runtime
 		private Hashtable applicationAttributes = null;
 
 		private Uberspect uberSpect;
+
+		private IDirectiveManager directiveManager;
 
 		public RuntimeInstance()
 		{
@@ -536,11 +539,13 @@ namespace NVelocity.Runtime
 		/// </summary>
 		private void initializeDirectives()
 		{
+			initializeDirectiveManager();
+
 			/*
 			* Initialize the runtime directive table.
 			* This will be used for creating parsers.
 			*/
-			runtimeDirectives = new Hashtable();
+			// runtimeDirectives = new Hashtable();
 
 			ExtendedProperties directiveProperties = new ExtendedProperties();
 
@@ -551,7 +556,6 @@ namespace NVelocity.Runtime
 
 			try
 			{
-				// TODO: this was modified in v1.4 to use the classloader
 				directiveProperties.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants_Fields.DEFAULT_RUNTIME_DIRECTIVES));
 			}
 			catch (System.Exception ex)
@@ -570,7 +574,8 @@ namespace NVelocity.Runtime
 			while (directiveClasses.MoveNext())
 			{
 				String directiveClass = (String) directiveClasses.Current;
-				loadDirective(directiveClass, "System");
+				// loadDirective(directiveClass);
+				directiveManager.Register(directiveClass);
 			}
 
 			/*
@@ -579,48 +584,33 @@ namespace NVelocity.Runtime
 			String[] userdirective = configuration.GetStringArray("userdirective");
 			for (int i = 0; i < userdirective.Length; i++)
 			{
-				loadDirective(userdirective[i], "User");
+				// loadDirective(userdirective[i]);
+				directiveManager.Register(userdirective[i]);
 			}
 		}
 
-		/// <summary>  instantiates and loads the directive with some basic checks
-		///
-		/// </summary>
-		/// <param name="directiveClass">classname of directive to load
-		///
-		/// </param>
-		private void loadDirective(String directiveClass, String caption)
+		private void initializeDirectiveManager()
 		{
-			try
+			String directiveManagerTypeName = configuration.GetString("directive.manager");
+
+			if (directiveManagerTypeName == null)
 			{
-				Type directiveType = Type.GetType(directiveClass);
-
-				if (directiveType == null)
-				{
-					error("Exception Loading " + caption + " Directive: " + directiveClass + " - you might need to specify the assembly");
-					return;
-				}
-
-				Object o = Activator.CreateInstance(directiveType);
-
-				if (o is Directive.Directive)
-				{
-					Directive.Directive directive = (Directive.Directive) o;
-					SupportClass.PutElement(runtimeDirectives, directive.Name, directive);
-
-					info("Loaded " + caption + " Directive: " + directiveClass);
-				}
-				else
-				{
-					error(caption + " Directive " + directiveClass + " is not NVelocity.Runtime.Directive.Directive." + " Ignoring. ");
-				}
+				throw new System.Exception("Looks like there's no 'directive.manager' " + 
+					"configured. NVelocity can't go any further");
 			}
-			catch (System.Exception e)
+
+			directiveManagerTypeName = directiveManagerTypeName.Replace(';', ',');
+
+			Type dirMngType = Type.GetType( directiveManagerTypeName, false, false );
+
+			if (dirMngType == null)
 			{
-				error("Exception Loading " + caption + " Directive: " + directiveClass + " : " + e);
+				throw new System.Exception( 
+					String.Format("The type {0} could not be resolved", directiveManagerTypeName) );
 			}
+
+			this.directiveManager = (IDirectiveManager) Activator.CreateInstance( dirMngType );
 		}
-
 
 		/// <summary> Initializes the Velocity parser pool.
 		/// This still needs to be implemented.
@@ -647,7 +637,7 @@ namespace NVelocity.Runtime
 		public Parser.Parser createNewParser()
 		{
 			Parser.Parser parser = new Parser.Parser(this);
-			parser.Directives = runtimeDirectives;
+			parser.Directives = directiveManager;
 			return parser;
 		}
 
@@ -1102,6 +1092,5 @@ namespace NVelocity.Runtime
 		{
 			get { return uberSpect; }
 		}
-
 	}
 }

@@ -63,10 +63,7 @@ namespace NVelocity.Runtime.Parser.Node
 				isDirective = true;
 
 				// create a new instance of the directive
-				Type t = parser.getDirective(directiveName).GetType();
-				Object o = Activator.CreateInstance(t);
-				directive = (Directive) o;
-
+				directive = parser.getDirective(directiveName);
 				directive.init(rsvc, context, this);
 				directive.setLocation(Line, Column);
 			}
@@ -77,7 +74,7 @@ namespace NVelocity.Runtime.Parser.Node
 		*/
 
 				isDirective = true;
-				directive = (Directive) rsvc.getVelocimacro(directiveName, context.CurrentTemplateName);
+				directive = rsvc.getVelocimacro(directiveName, context.CurrentTemplateName);
 
 				directive.init(rsvc, context, this);
 				directive.setLocation(Line, Column);

@@ -98,33 +98,27 @@ namespace NVelocity.Runtime.Parser.Node
 		public Token LastToken
 		{
 			get { return last; }
-
 		}
 
 		public int Type
 		{
 			get { return id; }
-
 		}
 
 		public int Info
 		{
 			get { return info; }
-
 			set { this.info = value; }
-
 		}
 
 		public int Line
 		{
 			get { return first.beginLine; }
-
 		}
 
 		public int Column
 		{
 			get { return first.beginColumn; }
-
 		}
 
 		public void jjtOpen()
@@ -295,7 +289,6 @@ namespace NVelocity.Runtime.Parser.Node
 			return null;
 		}
 
-
 		public void setInvalid()
 		{
 			invalid = true;
@@ -305,7 +298,5 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			return invalid;
 		}
-
-
 	}
 }

@@ -2,7 +2,9 @@ namespace NVelocity.Runtime
 {
 	using System;
 	using System.IO;
+
 	using Commons.Collections;
+
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
@@ -16,39 +18,39 @@ namespace NVelocity.Runtime
 	public interface RuntimeServices : RuntimeLogger
 	{
 		/**
-	 * Return the velocity runtime configuration object.
-	 *
-	 * @return ExtendedProperties configuration object which houses
-	 *                       the velocity runtime properties.
-	 */
+		* Return the velocity runtime configuration object.
+		*
+		* @return ExtendedProperties configuration object which houses
+		*                       the velocity runtime properties.
+		*/
 		ExtendedProperties Configuration { get; set; }
 
 		/**
-	 * Returns the configured class introspection/reflection
-	 * implemenation.
-	 */
+		* Returns the configured class introspection/reflection
+		* implemenation.
+		*/
 		Uberspect Uberspect { get; }
 
 		/**
-	 * Returns the configured method introspection/reflection
-	 * implemenation.
-	 */
+		* Returns the configured method introspection/reflection
+		* implemenation.
+		*/
 		Introspector Introspector { get; }
 
 		/*
-	* This is the primary initialization method in the Velocity
-	* Runtime. The systems that are setup/initialized here are
-	* as follows:
-	* 
-	* <ul>
-	*   <li>Logging System</li>
-	*   <li>ResourceManager</li>
-	*   <li>Parser Pool</li>
-	*   <li>Global Cache</li>
-	*   <li>Static Content Include System</li>
-	*   <li>Velocimacro System</li>
-	* </ul>
-	*/
+		* This is the primary initialization method in the Velocity
+		* Runtime. The systems that are setup/initialized here are
+		* as follows:
+		* 
+		* <ul>
+		*   <li>Logging System</li>
+		*   <li>ResourceManager</li>
+		*   <li>Parser Pool</li>
+		*   <li>Global Cache</li>
+		*   <li>Static Content Include System</li>
+		*   <li>Velocimacro System</li>
+		* </ul>
+		*/
 		void init();
 
 		/// <summary> Allows an external system to set a property in
@@ -354,6 +356,5 @@ namespace NVelocity.Runtime
 	*  Return the specified applcation attribute
 	*/
 		Object getApplicationAttribute(Object key);
-
 	}
 }

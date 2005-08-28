@@ -13,21 +13,6 @@ namespace NVelocity.Runtime.Directive
 	/// </summary>
 	public class Foreach : Directive
 	{
-		public Foreach()
-		{
-		}
-
-		public override String Name
-		{
-			get { return "foreach"; }
-			set { throw new NotSupportedException(); }
-		}
-
-		public override int Type
-		{
-			get { return DirectiveConstants_Fields.BLOCK; }
-		}
-
 		/// <summary> Return name of this directive.
 		/// </summary>
 		/// <summary> Return type of this directive.
@@ -85,6 +70,21 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private String elementKey;
 
+		public Foreach()
+		{
+		}
+
+		public override String Name
+		{
+			get { return "foreach"; }
+			set { throw new NotSupportedException(); }
+		}
+
+		public override int Type
+		{
+			get { return DirectiveConstants_Fields.BLOCK; }
+		}
+
 		/// <summary>  
 		/// simple init - init the tree and get the elementKey from
 		/// the AST
@@ -96,10 +96,10 @@ namespace NVelocity.Runtime.Directive
 			counterName = rsvc.getString(RuntimeConstants_Fields.COUNTER_NAME);
 			counterInitialValue = rsvc.getInt(RuntimeConstants_Fields.COUNTER_INITIAL_VALUE);
 
-		/*
-	     *  this is really the only thing we can do here as everything
-	     *  else is context sensitive
-	     */
+			/*
+			*  this is really the only thing we can do here as everything
+			*  else is context sensitive
+			*/
 
 			elementKey = node.jjtGetChild(0).FirstToken.image.Substring(1);
 		}
