@@ -117,7 +117,10 @@ namespace Castle.ActiveRecord.Framework
 
 		private static ISession OpenSession(ISessionFactory sessionFactory)
 		{
-			return sessionFactory.OpenSession( HookDispatcher.Instance );
+			lock(sessionFactory)
+			{
+				return sessionFactory.OpenSession( HookDispatcher.Instance );
+			}
 		}
 
 		public void ReleaseSession(ISession session)
