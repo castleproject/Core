@@ -46,8 +46,8 @@ namespace Castle.DynamicProxy
 
 			// And their methods
 			AddMethodToSkip( typeof(ISerializable).GetMethod("GetObjectData") );
-			AddMethodToSkip( typeof(IDeserializationCallback).GetMethod("OnDeserialization") );
-			AddMethodToSkip( typeof(ICloneable).GetMethod("Clone") );
+			//AddMethodToSkip( typeof(IDeserializationCallback).GetMethod("OnDeserialization") );
+			//AddMethodToSkip( typeof(ICloneable).GetMethod("Clone") );
 		}
 
 		/// <summary>

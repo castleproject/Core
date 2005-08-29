@@ -8,9 +8,9 @@ using System.Reflection;
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 
-// #if STRONG
+#if STRONG
 [assembly: AssemblyDelaySign(false)]
-// [assembly: AssemblyKeyFile("../../CastleKey.snk")]
-[assembly: AssemblyKeyFile(@"E:\dev\projects\castle\CastleKey.snk")]
+[assembly: AssemblyKeyFile("../../CastleKey.snk")]
+// [assembly: AssemblyKeyFile(@"E:\dev\projects\castle\CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
-// #endif
+#endif
