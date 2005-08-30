@@ -40,8 +40,6 @@ namespace Castle.MonoRail.WindsorExtension
 		{
 		}
 
-		#region IFacility
-
 		public void Init(IKernel kernel, IConfiguration facilityConfig)
 		{
 			kernel.AddComponent( "rails.controllertree", typeof(ControllerTree) );
@@ -53,30 +51,33 @@ namespace Castle.MonoRail.WindsorExtension
 			AddBuitInControllers(kernel);
 		}
 
+		public void Terminate()
+		{
+		}
+
 		protected virtual void AddBuitInControllers(IKernel kernel)
 		{
 			kernel.AddComponent("files", typeof(FilesController), typeof(FilesController));
 		}
 
-		public void Terminate()
-		{
-		}
-
-		#endregion
-
 		private void OnComponentModelCreated(ComponentModel model)
 		{
-			if ( !typeof(Controller).IsAssignableFrom(model.Implementation) )
+			bool isController = typeof(Controller).IsAssignableFrom(model.Implementation);
+
+			if ( !isController && !typeof(ViewComponent).IsAssignableFrom(model.Implementation) )
 			{
 				return;
 			}
 
-			// Ensure its transient
+			// Ensure it's transient
 			model.LifestyleType = LifestyleType.Transient;
 
-			ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(model.Implementation);
+			if (isController)
+			{
+				ControllerDescriptor descriptor = ControllerInspectionUtil.Inspect(model.Implementation);
 			
-			_tree.AddController( descriptor.Area, descriptor.Name, model.Name );
+				_tree.AddController( descriptor.Area, descriptor.Name, model.Name );
+			}
 		}
 	}
 }

@@ -26,7 +26,9 @@ namespace Castle.MonoRail.Framework.Internal
 		public IResource Create( IResourceDefinition definition, Assembly appAssembly )
 		{
 			if ( definition is ResourceAttribute )
+			{
 				return Create( definition as ResourceAttribute, appAssembly );
+			}
 
 			throw new ArgumentException( "Can't create resource of type " + definition.ToString() );
 		}

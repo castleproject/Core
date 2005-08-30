@@ -735,19 +735,23 @@ namespace Castle.MonoRail.Framework
 		{
 			_resources = new ResourceDictionary();
 
-			if (method == null) return;
-
 			Assembly typeAssembly = this.GetType().Assembly;
 
 			Attribute[] resources = Attribute.GetCustomAttributes(this.GetType(), typeof(AbstractResourceAttribute));
 
 			foreach (AbstractResourceAttribute resource in resources)
+			{
 				_resources.Add(resource.Name, _resourceFactory.Create(resource, typeAssembly));
+			}
+
+			if (method == null) return;
 
 			resources = Attribute.GetCustomAttributes(method, typeof(AbstractResourceAttribute));
 
 			foreach (AbstractResourceAttribute resource in resources)
+			{
 				_resources[resource.Name] = _resourceFactory.Create(resource, typeAssembly);
+			}
 		}
 
 		protected virtual void ReleaseResources()

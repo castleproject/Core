@@ -155,17 +155,32 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		private bool RenderComponentView(InternalContextAdapter context, 
 			TextWriter writer, NVelocityViewContextAdapter contextAdapter)
 		{
-			String viewToRender = contextAdapter.ViewToRender;
+			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
+			{
+				context.Put(entry.Key.ToString(), entry.Value);
+			}
 
-			viewToRender = String.Format("{0}.vm", viewToRender);
+			try
+			{
+				String viewToRender = contextAdapter.ViewToRender;
 
-			CheckTemplateStack(context);
+				viewToRender = String.Format("{0}.vm", viewToRender);
 
-			String encoding = SetUpEncoding(context);
+				CheckTemplateStack(context);
 
-			Template t = GetTemplate(viewToRender, encoding);
+				String encoding = SetUpEncoding(context);
 
-			return RenderView(context, viewToRender, t, writer);
+				Template template = GetTemplate(viewToRender, encoding);
+
+				return RenderView(context, viewToRender, template, writer);
+			}
+			finally
+			{
+				foreach(DictionaryEntry entry in contextAdapter.ContextVars)
+				{
+					context.Remove( entry.Key );
+				}
+			}
 		}
 
 		private bool RenderView(InternalContextAdapter context, 
