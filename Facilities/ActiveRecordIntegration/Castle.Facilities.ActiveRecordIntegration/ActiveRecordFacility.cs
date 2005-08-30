@@ -68,6 +68,8 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		private void InitializeFramework(ArrayList assemblies)
 		{
+			ActiveRecord.ActiveRecordStarter.SessionFactoryHolderCreated += new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
+
 			try
 			{
 				ActiveRecord.ActiveRecordStarter.Initialize( 
@@ -77,6 +79,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			catch(Exception ex)
 			{
 				throw new FacilityException("Error trying to start the ActiveRecord Framework", ex);
+			}
+			finally
+			{
+				ActiveRecord.ActiveRecordStarter.SessionFactoryHolderCreated -= new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
 			}
 		}
 
@@ -106,8 +112,15 @@ namespace Castle.Facilities.ActiveRecordIntegration
 				(instance as ITransactionManager).TransactionCreated += new TransactionCreationInfoDelegate(OnNewTransaction);
 			}
 		}
-	}
 
+		private void OnSessionFactoryHolderCreated(Castle.ActiveRecord.Framework.ISessionFactoryHolder holder)
+		{
+			Kernel.AddComponentInstance( 
+				"activerecord.sessionfactoryholder", 
+				typeof(Castle.ActiveRecord.Framework.ISessionFactoryHolder), 
+				holder );
+		}
+	}
 
 	internal class ConfigurationSourceAdapter : InPlaceConfigurationSource
 	{
