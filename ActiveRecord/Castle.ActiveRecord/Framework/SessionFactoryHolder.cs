@@ -152,11 +152,9 @@ namespace Castle.ActiveRecord.Framework
 			else
 			{
 				ISession session = OpenSession(sessionFactory);
-
 #if DEBUG
 				System.Diagnostics.Debug.Assert( session != null );
 #endif
-
 				scope.RegisterSession(sessionFactory, session);
 
 				return session;

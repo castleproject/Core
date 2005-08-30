@@ -19,6 +19,7 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 	using System.Reflection;
+	using System.ComponentModel;
 
 	using NHibernate.Cfg;
 
@@ -26,6 +27,8 @@ namespace Castle.ActiveRecord
 
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
+
+	public delegate void SessionFactoryHolderDelegate(ISessionFactoryHolder holder);
 
 	/// <summary>
 	/// Performs the framework initialization.
@@ -35,6 +38,19 @@ namespace Castle.ActiveRecord
 	/// </remarks>
 	public class ActiveRecordStarter
 	{
+		private static readonly EventHandlerList events = new EventHandlerList();
+		private static readonly object SessionFactoryHolderCreatedEvent = new object();
+
+		/// <summary>
+		/// So others frameworks can intercept the 
+		/// creation and act on the holder instance
+		/// </summary>
+		public static event SessionFactoryHolderDelegate SessionFactoryHolderCreated
+		{
+			add { events.AddHandler(SessionFactoryHolderCreatedEvent, value); }
+			remove { events.RemoveHandler(SessionFactoryHolderCreatedEvent, value); }
+		}
+
 		/// <summary>
 		/// Initialize tha mappings using the configuration and 
 		/// the list of types
@@ -46,6 +62,9 @@ namespace Castle.ActiveRecord
 
 			// First initialization
 			SessionFactoryHolder holder = new SessionFactoryHolder();
+
+			RaiseSessionFactoryHolderCreated(holder);
+
 			ActiveRecordBase.type2Model.Clear();
 			ActiveRecordBase._holder = holder;
 
@@ -271,6 +290,17 @@ namespace Castle.ActiveRecord
 			{
 				Configuration nconf = CreateConfiguration(config);
 				holder.Register( type, nconf );
+			}
+		}
+
+		private static void RaiseSessionFactoryHolderCreated(ISessionFactoryHolder holder)
+		{
+			SessionFactoryHolderDelegate evtDelegate = 
+				(SessionFactoryHolderDelegate) events[SessionFactoryHolderCreatedEvent];
+
+			if (evtDelegate != null)
+			{
+				evtDelegate(holder);
 			}
 		}
 	}
