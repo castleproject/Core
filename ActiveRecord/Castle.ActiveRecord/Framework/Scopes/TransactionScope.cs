@@ -181,9 +181,12 @@ namespace Castle.ActiveRecord
 				}
 			}
 
-			// No flush necessary, but we should close the session
+			if (parentSimpleScope == null)
+			{
+				// No flush necessary, but we should close the session
 
-			base.PerformDisposal(sessions, false, true);
+				base.PerformDisposal(sessions, false, true);
+			}
 		}
 
 		private ISessionScope FindPreviousScope(bool transactional)
