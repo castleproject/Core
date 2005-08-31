@@ -12,32 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestSiteNVelocity.Controllers
+namespace Castle.MonoRail.Framework.Views.NVelocity.Tests.Components
 {
 	using System;
-	using System.Collections;
-
-	using Castle.MonoRail.Framework;
 
 
-	public class UsingComponentController : Controller
+	public class BlockViewComponent2 : ViewComponent
 	{
-		public void Index()
+		public BlockViewComponent2()
 		{
 		}
 
-		public void Index2()
+		/// <summary>
+		/// Called by the framework so the component can 
+		/// render its content
+		/// </summary>
+		public override void Render()
 		{
-		}
-
-		public void Index3()
-		{
-			ArrayList items = new ArrayList();
-
-			items.Add("1");
-			items.Add("2");
-
-			PropertyBag.Add("items", items);
+			Context.RenderBody();
 		}
 	}
 }

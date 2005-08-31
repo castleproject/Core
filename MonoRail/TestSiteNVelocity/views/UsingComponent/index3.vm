@@ -1,0 +1,5 @@
+#foreach($it in $items)
+#blockcomponent(BlockComponent1 with "role=x")
+inner content $it
+#end
+#end

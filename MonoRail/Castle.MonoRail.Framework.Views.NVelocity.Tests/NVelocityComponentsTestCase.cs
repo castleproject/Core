@@ -56,5 +56,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			Execute(url, expected);
 		}
+
+		[Test]
+		public void BlockComponentWithinForeach()
+		{
+			string url = "/usingcomponent/index3.rails";
+			string expected = "inner content 1\r\ninner content 2\r\n";
+
+			Execute(url, expected);
+		}
 	}
 }

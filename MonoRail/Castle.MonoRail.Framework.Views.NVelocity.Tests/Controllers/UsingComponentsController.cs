@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests.Controllers
 {
 	using System;
+	using System.Collections;
 
 
 	public class UsingComponentsController : Controller
@@ -47,5 +48,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests.Controllers
 		{
 		}
 
+		public void Index8()
+		{
+			ArrayList items = new ArrayList();
+
+			items.Add("1");
+			items.Add("2");
+
+			PropertyBag.Add("items", items);
+		}
+
+		public void Index9()
+		{
+		}
 	}
 }

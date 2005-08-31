@@ -348,6 +348,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\UsingComponent\index3.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\validated\default.vm"
                     BuildAction = "None"
                 />

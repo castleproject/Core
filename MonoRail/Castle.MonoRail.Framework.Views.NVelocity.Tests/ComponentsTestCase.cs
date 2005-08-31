@@ -16,11 +16,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
 	using System.IO;
-	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Tests;
-	using NUnit.Framework;
 
 	using Castle.MonoRail.Engine;
+	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Tests;
+	
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class ComponentsTestCase
@@ -97,6 +98,31 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			_engine.Process( context );
 
 			Assert.AreEqual( "  item 0\r\n  item 1\r\n  item 2\r\n", context.Output );
+		}
+
+		[Test]
+		public void BlockWithinForEach()
+		{
+			RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index8.rails");
+
+			_engine.Process( context );
+
+			Assert.AreEqual( "inner content 1\r\ninner content 2\r\n", context.Output );
+		}
+
+		[Test]
+		public void SeveralComponentsInvocation()
+		{
+			for(int i=0; i < 10; i++)
+			{
+				RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index9.rails");
+
+				_engine.Process( context );
+
+				// System.Diagnostics.Debug.WriteLine( context.Output );
+
+				Assert.AreEqual( "static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n", context.Output );
+			}
 		}
 	}
 }

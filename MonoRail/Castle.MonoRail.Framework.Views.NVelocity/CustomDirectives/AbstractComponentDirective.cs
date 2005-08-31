@@ -74,6 +74,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			INode bodyNode = null;
 
+			IDictionary componentParams = CreateParametersAndFigureOutBlockNode(context, node);
+
 			if (bodyNodeIndex < node.jjtGetNumChildren())
 			{
 				bodyNode = node.jjtGetChild(bodyNodeIndex);
@@ -81,7 +83,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 			NVelocityViewContextAdapter contextAdapter = 
 				new NVelocityViewContextAdapter( 
-					componentName, context, writer, bodyNode, CreateParameters(context, node) );
+					componentName, context, writer, bodyNode, componentParams );
 
 			IRailsEngineContext railsContext = (IRailsEngineContext) context.Get("context");
 
@@ -97,7 +99,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			return true;
 		}
 
-		private IDictionary CreateParameters(InternalContextAdapter context, INode node)
+		private IDictionary CreateParametersAndFigureOutBlockNode(InternalContextAdapter context, INode node)
 		{
 			int childrenCount = node.jjtGetNumChildren();
 
