@@ -28,8 +28,6 @@ namespace Castle.MicroKernel.Handlers
 		{
 		}
 
-		#region IHandler Members
-
 		public override object Resolve()
 		{
 			if (CurrentState == HandlerState.WaitingDependency)
@@ -48,7 +46,5 @@ namespace Castle.MicroKernel.Handlers
 		{
 			lifestyleManager.Release( instance );
 		}
-
-		#endregion
 	}
 }

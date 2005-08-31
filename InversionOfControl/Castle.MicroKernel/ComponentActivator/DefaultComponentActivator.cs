@@ -164,7 +164,6 @@ namespace Castle.MicroKernel.ComponentActivator
 
 			if (winnerCandidate == null)
 			{
-				// What?
 				throw new ComponentActivatorException("Could not find eligible constructor.");
 			}
 
@@ -178,8 +177,7 @@ namespace Castle.MicroKernel.ComponentActivator
 			return Kernel.Resolver.CanResolve(Model, dep);
 		}
 
-		protected virtual object[] CreateConstructorArguments( 
-			ConstructorCandidate constructor )
+		protected virtual object[] CreateConstructorArguments( ConstructorCandidate constructor )
 		{
 			if (constructor == null) return new object[0];
 

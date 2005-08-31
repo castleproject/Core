@@ -35,10 +35,6 @@ namespace Castle.MicroKernel.ComponentActivator
 		/// <summary>
 		/// Constructs an AbstractComponentActivator
 		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="kernel"></param>
-		/// <param name="onCreation"></param>
-		/// <param name="onDestruction"></param>
 		public AbstractComponentActivator(ComponentModel model, IKernel kernel, 
 			ComponentInstanceDelegate onCreation, 
 			ComponentInstanceDelegate onDestruction)
