@@ -85,10 +85,10 @@ namespace Castle.MonoRail.Framework.Filters
 				
 				if ( localeId != null )
 				{
-					CultureInfo culture						= CultureInfo.CreateSpecificCulture( localeId );
+					CultureInfo culture = CultureInfo.CreateSpecificCulture( localeId );
 
-					Thread.CurrentThread.CurrentCulture		= culture;
-					Thread.CurrentThread.CurrentUICulture	= culture;
+					Thread.CurrentThread.CurrentCulture = culture;
+					Thread.CurrentThread.CurrentUICulture = culture;
 				}
 			}
 			catch
