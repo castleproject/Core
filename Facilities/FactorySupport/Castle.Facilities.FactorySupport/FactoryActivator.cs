@@ -15,8 +15,9 @@
 namespace Castle.Facilities.FactorySupport
 {
 	using System;
+	using System.Collections;
 	using System.Reflection;
-
+	using Castle.MicroKernel.SubSystems.Conversion;
 	using Castle.Model;
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
@@ -59,13 +60,15 @@ namespace Castle.Facilities.FactorySupport
 
 			if (staticCreateMethod != null)
 			{
-				return Create(null, factoryId, staticCreateMethod, factoryCreate);
+				return Create(factoryHandler.ComponentModel, null, 
+					factoryId, staticCreateMethod, factoryCreate);
 			}
 			else if (instanceCreateMethod != null)
 			{
 				object factoryInstance = Kernel[ factoryId ];
 
-				return Create(factoryInstance, factoryId, instanceCreateMethod, factoryCreate);
+				return Create(factoryHandler.ComponentModel, 
+					factoryInstance, factoryId, instanceCreateMethod, factoryCreate);
 			}
 			else
 			{
@@ -78,19 +81,55 @@ namespace Castle.Facilities.FactorySupport
 			}
 		}
 
-		private object Create(object factoryInstance, 
-			string factoryId, MethodInfo instanceCreateMethod, string factoryCreate)
+		private object Create(ComponentModel model, object factoryInstance, string factoryId, 
+			MethodInfo instanceCreateMethod, string factoryCreate)
 		{
+			ITypeConverter converter = (ITypeConverter) Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+
 			try
-			{					
-				return instanceCreateMethod.Invoke( factoryInstance, new object[0] );
+			{
+				ParameterInfo[] parameters = instanceCreateMethod.GetParameters();
+
+				ArrayList methodArgs = new ArrayList();
+
+				foreach(ParameterInfo parameter in parameters)
+				{
+					Type paramType = parameter.ParameterType;
+
+					DependencyModel depModel = null;
+
+					if ( converter.CanHandleType(paramType) )
+					{
+						depModel = new DependencyModel( 
+							DependencyType.Parameter, parameter.Name, paramType, false );
+					}
+					else
+					{
+						depModel = new DependencyModel(
+							DependencyType.Service, parameter.Name, paramType, false );
+					}
+
+					if (!Kernel.Resolver.CanResolve(model, depModel))
+					{
+						String message = String.Format(
+							"Factory Method {0}.{1} requires an argument '{2}' that could not be resolved", 
+								instanceCreateMethod.DeclaringType.FullName, instanceCreateMethod.Name, parameter.Name);
+						throw new FacilityException(message);
+					}
+
+					object arg = Kernel.Resolver.Resolve(model, depModel );
+
+					methodArgs.Add(arg);
+				}
+
+				return instanceCreateMethod.Invoke( factoryInstance, methodArgs.ToArray() );
 			}
 			catch(Exception ex)
 			{
 				String message = String.Format("You have specified a factory " +
 					"('{2}' - method to be called: {3}) " + 
 					"for the component '{0}' {1} that failed during invoke.", 
-				                               Model.Name, Model.Implementation.FullName, factoryId, factoryCreate);
+						Model.Name, Model.Implementation.FullName, factoryId, factoryCreate);
 
 				throw new FacilityException(message, ex);
 			}

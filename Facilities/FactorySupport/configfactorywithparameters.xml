@@ -13,12 +13,24 @@
 	<components>
 
 		<component id="mycompfactory" 
-			type="Castle.Facilities.FactorySupport.Tests.Components.MyCompFactory, Castle.Facilities.FactorySupport.Tests"/>
+			type="Castle.Facilities.FactorySupport.Tests.Components.MyCompFactory2, Castle.Facilities.FactorySupport.Tests">
+
+			<parameters>
+				<storeName>MyStore</storeName>
+				<props>
+					<dictionary>
+						<entry key="key1">item1</entry>
+						<entry key="key2">item2</entry>
+					</dictionary>
+				</props>
+			</parameters>
+			
+		</component>
 
 		<component id="mycomp" 
 			type="Castle.Facilities.FactorySupport.Tests.Components.MyComp, Castle.Facilities.FactorySupport.Tests"
 			factoryId="mycompfactory" factoryCreate="Create">
-			
+						
 		</component>
 
 	</components>

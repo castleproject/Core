@@ -34,5 +34,32 @@ namespace Castle.Facilities.FactorySupport.Tests
 			
 			Assert.IsNotNull(instance);
 		}
+
+		[Test]
+		public void FactoryTest2()
+		{
+			IWindsorContainer container = new WindsorContainer("../configfactorywithparameters.xml");
+
+			MyComp instance = (MyComp) container[ typeof(MyComp) ];
+			
+			Assert.IsNotNull(instance);
+			Assert.IsNotNull(instance.StoreName);
+			Assert.IsNotNull(instance.Props);
+
+			Assert.AreEqual("MyStore", instance.StoreName);
+			Assert.AreEqual("item1", instance.Props["key1"]);
+			Assert.AreEqual("item2", instance.Props["key2"]);
+		}
+
+		[Test]
+		public void FactoryTest3()
+		{
+			IWindsorContainer container = new WindsorContainer("../configfactorywithparameters2.xml");
+
+			MyComp instance = (MyComp) container[ typeof(MyComp) ];
+			
+			Assert.IsNotNull(instance);
+			Assert.IsNotNull(instance.Service);
+		}
 	}
 }

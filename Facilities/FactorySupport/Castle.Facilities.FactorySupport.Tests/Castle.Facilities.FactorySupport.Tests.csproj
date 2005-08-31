@@ -130,12 +130,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\DefaultMyService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\IMyService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Components\MyComp.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Components\MyCompFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\MyCompFactory2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\MyCompFactory3.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

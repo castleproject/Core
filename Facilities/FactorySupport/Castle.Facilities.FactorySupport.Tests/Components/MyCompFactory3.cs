@@ -15,43 +15,17 @@
 namespace Castle.Facilities.FactorySupport.Tests.Components
 {
 	using System;
-	using System.Collections;
 
 
-	public class MyComp
+	public class MyCompFactory3
 	{
-		private IMyService serv;
-		private string storeName;
-		private IDictionary props;
-
-		internal MyComp()
+		public MyCompFactory3()
 		{
 		}
 
-		internal MyComp(IMyService serv)
+		public MyComp Create(IMyService serv)
 		{
-			this.serv = serv;
-		}
-
-		internal MyComp(String storeName, IDictionary props)
-		{
-			this.storeName = storeName;
-			this.props = props;
-		}
-
-		public IMyService Service
-		{
-			get { return serv; }
-		}
-
-		public string StoreName
-		{
-			get { return storeName; }
-		}
-
-		public IDictionary Props
-		{
-			get { return props; }
+			return new MyComp(serv);
 		}
 	}
 }

@@ -12,13 +12,19 @@
 
 	<components>
 
+		<component id="myserv" 
+		    service="Castle.Facilities.FactorySupport.Tests.Components.IMyService, Castle.Facilities.FactorySupport.Tests"
+			type="Castle.Facilities.FactorySupport.Tests.Components.DefaultMyService, Castle.Facilities.FactorySupport.Tests"/>
+			
 		<component id="mycompfactory" 
-			type="Castle.Facilities.FactorySupport.Tests.Components.MyCompFactory, Castle.Facilities.FactorySupport.Tests"/>
+			type="Castle.Facilities.FactorySupport.Tests.Components.MyCompFactory3, Castle.Facilities.FactorySupport.Tests">
+			
+		</component>
 
 		<component id="mycomp" 
 			type="Castle.Facilities.FactorySupport.Tests.Components.MyComp, Castle.Facilities.FactorySupport.Tests"
 			factoryId="mycompfactory" factoryCreate="Create">
-			
+						
 		</component>
 
 	</components>

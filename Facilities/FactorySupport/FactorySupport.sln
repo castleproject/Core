@@ -25,6 +25,8 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 		configaccessor.xml = configaccessor.xml
 		configfactory.xml = configfactory.xml
+		configfactorywithparameters.xml = configfactorywithparameters.xml
+		configfactorywithparameters2.xml = configfactorywithparameters2.xml
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
