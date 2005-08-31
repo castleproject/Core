@@ -424,6 +424,19 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		}
 
 		/// <summary>
+		/// Naive implementation, but valid for long namespaces
+		/// Works by using only the last piece of the namespace
+		/// </summary>
+		protected String NormalizeNamespaceName(String nsName)
+		{
+			if (nsName == null || nsName == String.Empty) return String.Empty;
+
+			String[] parts = nsName.Split('.');
+
+			return parts[ parts.Length - 1 ];
+		}
+
+		/// <summary>
 		/// Generate property implementation
 		/// </summary>
 		/// <param name="property"></param>

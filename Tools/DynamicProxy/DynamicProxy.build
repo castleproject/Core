@@ -76,9 +76,6 @@
 		<nunit2 if="${not isMono}">
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${core.test.assembly.name}">
-				<categories>
-					<include name="DotNetOnly" if="${not isMono}" />
-				</categories>
 			</test>
 		</nunit2>
 		
