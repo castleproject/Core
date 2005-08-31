@@ -301,7 +301,13 @@ namespace NVelocity.Util.Introspection
 
 			public String MethodName
 			{
-				get { return ae.Method.Name; }
+				get
+				{
+					if (ae.Method != null)
+						return ae.Method.Name;
+					else
+						return "undefined";
+				}
 
 			}
 

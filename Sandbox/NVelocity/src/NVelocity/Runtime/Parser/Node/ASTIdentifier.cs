@@ -155,17 +155,17 @@ namespace NVelocity.Runtime.Parser.Node
 				{
 					try
 					{
-						return ec.methodException(o.GetType(), vg.MethodName, (Exception) ite.InnerException);
+						return ec.methodException(o.GetType(), vg.MethodName, ite.InnerException);
 					}
 					catch (Exception e)
 					{
-						throw new MethodInvocationException(
-							"Invocation of method '" + vg.MethodName + "'"
-								+ " in  " + o.GetType()
-								+ " threw exception "
-								+ ite.InnerException.GetType() + " : "
-								+ ite.InnerException.Message,
-							ite.InnerException, vg.MethodName);
+						String message = String.Format(
+							"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw exception {5} {6}", 
+							vg.MethodName, o != null ? o.GetType().FullName : "", 
+							uberInfo.TemplateName, uberInfo.Line, uberInfo.Column,
+							ite.InnerException.GetType(), ite.InnerException.Message);
+
+						throw new MethodInvocationException(message, ite.InnerException, vg.MethodName);
 					}
 				}
 				else
@@ -173,13 +173,13 @@ namespace NVelocity.Runtime.Parser.Node
 					/*
 		    * no event cartridge to override. Just throw
 		    */
-					throw  new MethodInvocationException(
-						"Invocation of method '" + vg.MethodName + "'"
-							+ " in  " + o.GetType()
-							+ " threw exception "
-							+ ite.InnerException.GetType() + " : "
-							+ ite.InnerException.Message,
-						ite.InnerException, vg.MethodName);
+					String message = String.Format(
+						"Invocation of method '{0}' in {1}, template {2} Line {3} Column {4} threw exception {5} {6}", 
+						vg.MethodName, o != null ? o.GetType().FullName : "", 
+						uberInfo.TemplateName, uberInfo.Line, uberInfo.Column,
+						ite.InnerException.GetType(), ite.InnerException.Message);
+
+					throw new MethodInvocationException(message, ite.InnerException, vg.MethodName);
 				}
 			}
 			catch (ArgumentException iae)
