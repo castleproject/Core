@@ -42,7 +42,7 @@ class BrailBasicFunctionality(BasicFunctionalityTestCase):
 		url = "/apppath/index.rails"
 		expected = new
 		# Wait half a sec so Brail could pick up that a change in the file occured.
-		System.Threading.Thread.Sleep(500)
+		System.Threading.Thread.Sleep(100)
 		try:
 			Execute(url, expected)
 		ensure:
@@ -70,7 +70,7 @@ def SayHello(name as string):
 		expected = "Hello, Ayende! Modified!"
 		# Have to wait for the common scripts recompilation otherwise you get random test failure since the request
 		# sometimes gets there faster you can recompile and it gets the old version.
-		System.Threading.Thread.Sleep(500)
+		System.Threading.Thread.Sleep(100)
 		try:
 			Execute(url, expected)
 		ensure:	

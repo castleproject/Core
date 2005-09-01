@@ -64,17 +64,23 @@ namespace Castle.MonoRail.Engine.Tests
 		protected void AssertContents(String expected, HttpWebResponse response, bool startsWith)
 		{
 			String contents = GetContents(response);
-
-			if (startsWith)
+			try
 			{
-				if (expected.Length > contents.Length)
-					Assert.Fail("Expected String with length " + expected.Length + " but was " + contents.Length);
-
-				Assert.AreEqual(expected, contents.Substring(0, expected.Length));
+				if (startsWith)
+				{
+					if (expected.Length > contents.Length)
+						Assert.Fail("Expected String with length " + expected.Length + " but was " + contents.Length);
+	
+					Assert.AreEqual(expected, contents.Substring(0, expected.Length));
+				}
+				else
+				{
+					Assert.AreEqual(expected, contents);
+				}
 			}
-			else
+			catch
 			{
-				Assert.AreEqual(expected, contents);
+				System.Diagnostics.Trace.WriteLine(contents);
 			}
 		}
 
@@ -109,7 +115,15 @@ namespace Castle.MonoRail.Engine.Tests
 			HttpWebRequest myReq = (HttpWebRequest)
 				WebRequest.Create("http://localhost:8083" + url);
 
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			try
+			{
+				HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			}
+			catch( Exception e )
+			{
+				System.Diagnostics.Trace.WriteLine(e.ToString());
+				throw;
+			}
 
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 			Assert.AreEqual(expectedUrl, response.ResponseUri.PathAndQuery);
