@@ -1,0 +1,69 @@
+<Project name="Brail.Tests" standardNamespace="Brail.Tests" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="Boo">
+  <Contents>
+    <File name=".\Default.build" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Controllers" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\HomeController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Resources" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Resources\Language.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Resources\Language.he.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\ViewEngineTest.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Fakes\FakeControllerFactory.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Fakes\FakeEngineContext.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\index.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Fakes" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Fakes\FakeResponse.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Fakes\FakeRequest.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Fakes\FakeServiceUtility.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Views\home\display.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\bag.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\LayoutController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layout" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layout\index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layout\save.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layout\update.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layouts" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layouts\general.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layouts\printable.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\App.config" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Views\home\resource.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailBasicFunctionality.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\TestSite\Controllers\SubArea\HomeController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailAjaxTestCase.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\BrailExceptionTestCase.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\BrailFilterTestCase.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\BrailHelperTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailLayoutTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailRescureTestCase.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\ResourceTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailRoutingTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailSmartControllerTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DirectRenderTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailSubViewTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputMethodTestCase.Boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="..\..\Vendor\nunit.framework.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\Vendor\Castle.MonoRail.Framework.dll" localcopy="True" />
+    <Reference type="Project" refto="Brail.BooViewEngine" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\Vendor\Castle.MonoRail.Engine.dll" localcopy="True" />
+    <Reference type="Gac" refto="System.Web, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\CastleProject\MonoRail\bin\Castle.MonoRail.Engine.Tests.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CompilerOptions runtime="MsNet" compileTarget="Library" includeDebugInformation="True" commandLineParameters="" pauseConsoleOutput="False" duckTypingByDefault="False" />
+    <Output directory=".\bin\Debug" assembly="Brail.Tests" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CompilerOptions runtime="MsNet" compileTarget="Library" includeDebugInformation="True" commandLineParameters="" pauseConsoleOutput="False" duckTypingByDefault="False" />
+      <Output directory=".\bin\Debug" assembly="Brail.Tests" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CompilerOptions runtime="MsNet" compileTarget="Library" includeDebugInformation="False" commandLineParameters="" pauseConsoleOutput="False" duckTypingByDefault="False" />
+      <Output directory=".\bin\Release" assembly="Brail.Tests" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

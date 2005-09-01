@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project name="Brail.BooViewEngine" default="compile">
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/../bin" />
+	<property name="library.dir" value="${base.dir}/../lib" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="test.src.dir" value="${src.dir}/../Castle.MonoRail.Views.Brail.Tests" />
+	<property name="name" value="Castle.MonoRail.Views.Brail" />
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${name}.Tests.dll" />
+
+	<property name="version" value="1.0.0.0" />
+
+	<loadtasks assembly="${library.dir}\Boo.NAnt.Tasks.dll"/>
+
+	<target name="compile">		
+		<booc target="library" 
+		      output="${bin.dir}\${assembly.name}" 
+				debug="${debug}">
+			<sources basedir="${src.dir}">
+				<include name="**.boo" />
+			</sources>
+			<references basedir="${bin.dir}">
+				<include name="System.Xml.dll"/>
+				<include name="System.Web.dll"/>
+				<include name="${library.dir}\anrControls.Markdown.NET.dll"/>
+				<include name="${bin.dir}\Castle.MonoRail.Framework.dll"/>
+			</references>
+		</booc>
+	</target>
+
+	<target name="tests.compile">
+		<booc target="library" 
+		      output="${bin.dir}\${test.assembly.name}" 
+		      debug="${debug}">
+			<sources basedir="${test.src.dir}">
+				<include name="**/*.boo" />
+				<exclude name="Views/**.boo" />
+			</sources>
+			<references basedir="${bin.dir}">
+				<include name="${bin.dir}\${assembly.name}" />
+				<include name="${bin.dir}\nunit.framework.dll" />
+				<include name="${bin.dir}\Castle.MonoRail.Engine.Dll"/>
+				<include name="${bin.dir}\Castle.MonoRail.Engine.Tests.Dll"/>
+				<include name="${bin.dir}\Castle.MonoRail.Framework.Dll"/>
+				<include name="System.Web.dll"/>
+			</references>
+			<resources basedir="${test.src.dir}\Resources">
+				<include name="**.resources"/>
+			</resources>
+		</booc>
+	</target>
+	
+	<target name="test" depends="tests.run" />
+
+	<target name="tests.run" depends="tests.compile">
+		<nunit2>
+			<formatter type="Plain" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+		</nunit2>
+	</target>
+
+</project>

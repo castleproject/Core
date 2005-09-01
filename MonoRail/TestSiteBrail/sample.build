@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="rails-testsite" default="build">
+
+	<property name="base.dir" value="." />
+	<property name="bin.dir" value="${base.dir}/bin" />
+	<property name="doc.dir" value="${base.dir}/../docs" />
+	<property name="library.dir" value="${base.dir}/../lib" />
+	<property name="src.dir" value="${base.dir}" />
+
+	<property name="name" value="TestSiteBrail" />
+	<property name="assembly.name" value="${name}.dll" />
+
+	<property name="version" value="1.0.0.0" />
+
+	<loadtasks assembly="${library.dir}\Boo.NAnt.Tasks.dll"/>
+
+	<target name="clean">
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}"/>
+	</target>
+
+	<target name="init" depends="clean">
+		<copy todir="${bin.dir}">
+			<fileset basedir="../bin">
+				<include name="Castle.MonoRail.Engine.dll" />
+				<include name="Castle.MonoRail.Framework.dll" />
+				<include name="Castle.MonoRail.Views.Brail.dll" />
+				<include name="Boo.Lang.dll" />
+				<include name="Boo.Lang.Compiler.dll" />
+				<include name="Boo.Lang.Parser.dll" />
+				<include name="anrControls.Markdown.NET.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build" depends="init,compile" />
+	
+	<target name="compile" depends="init">		
+		<booc target="library" 
+		      output="${bin.dir}\${assembly.name}">
+			<sources basedir="${src.dir}">
+				<include name="**/*.boo" />
+				<exclude name="Views/**.boo" />
+			</sources>
+			<references basedir="${bin.dir}">
+				<include name="Castle.MonoRail.Framework.Dll"/>
+			</references>
+			<resources basedir="${src.dir}">
+				<include name="**.resources"/>
+			</resources>
+		</booc>
+	</target>
+</project>

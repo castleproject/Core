@@ -1,0 +1,38 @@
+<Project name="Brail" standardNamespace="Brail" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="Boo">
+  <Contents>
+    <File name=".\BooViewEngine.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Default.build" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\ResourceToDuck.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BooViewEngineOptions.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\CustomTypeSystem.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailConfigurationSection.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailBase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\TransformToBrailStep.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputError.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputMacro.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ReplaceUknownWithParameters.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailPreProcessor.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputMethodAttributes.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ReturnValueVisitor.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="..\..\Vendor\Castle.MonoRail.Framework.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\Vendor\log4net.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\vendor\Log4Net.Useful.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CompilerOptions runtime="MsNet" compileTarget="Library" includeDebugInformation="True" commandLineParameters="" pauseConsoleOutput="False" duckTypingByDefault="False" />
+    <Output directory=".\bin\Debug" assembly="BooViewEngine" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CompilerOptions runtime="MsNet" compileTarget="Library" includeDebugInformation="True" commandLineParameters="" pauseConsoleOutput="False" duckTypingByDefault="False" />
+      <Output directory=".\bin\Debug" assembly="BooViewEngine" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CompilerOptions runtime="MsNet" compileTarget="Library" includeDebugInformation="False" commandLineParameters="" pauseConsoleOutput="False" duckTypingByDefault="False" />
+      <Output directory=".\bin\Release" assembly="BooViewEngine" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

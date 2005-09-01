@@ -1,0 +1,91 @@
+<Project name="Brail.TestSite" standardNamespace="Brail.TestSite" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="Boo">
+  <Contents>
+    <File name=".\Default.build" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Controllers" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\AppPathController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\SubArea" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\apppath" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\cookies" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\filter" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\flash" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\helper" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layouts" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layoutable" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\rescues" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubArea" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubArea\home" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\heyhello.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubArea\home\index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\bag.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\HomeController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\bag2.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\apppath\index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\CookiesController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\cookies\Index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\AjaxController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\ExceptionController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\SubArea\HomeController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\filter\index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\FilterController.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Controllers\HelperController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\helper\DictHelperUsage.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\helper\InheritedHelpers.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Helpers\DateFormatHelper.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Helpers" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\LayoutController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layoutable\index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layoutable\ChangeLayout.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layouts\master.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\layouts\master2.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\RescueController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\rescues\General.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\rescues\UpdateErrorMsg.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\rescues\UpdateError.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\rescues\SaveError.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\ResourcedController.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Views\resourced\getresources.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\ResourceFile.resources" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Controllers\BlogController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\NewsController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\web.config" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Controllers\SmartController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\DirectRenderController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\CommonScripts" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\CommonScripts\Hello.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\HelloFromCommon.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubView" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubView\index.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubView\SubView.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubView\SubViewWithPath.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\SubViewController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\home\PreProcessor.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubView\CallSubViewWithParameters.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\SubView\SubViewWithParameters.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\OutputMethods" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\OutputMethods\HtmlOutputAttribute.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\OutputMethodController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\OutputMethods\RawOutputAttribute.boo" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\Views\OutputMethods\MarkDownOutputAttribute.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="..\..\Vendor\Castle.MonoRail.Framework.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CompilerOptions runtime="MsNet" compileTarget="Exe" includeDebugInformation="True" commandLineParameters="" pauseConsoleOutput="True" duckTypingByDefault="False" />
+    <Output directory=".\bin\Debug" assembly="TestSite" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CompilerOptions runtime="MsNet" compileTarget="Exe" includeDebugInformation="True" commandLineParameters="" pauseConsoleOutput="True" duckTypingByDefault="False" />
+      <Output directory=".\bin\Debug" assembly="TestSite" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CompilerOptions runtime="MsNet" compileTarget="Exe" includeDebugInformation="False" commandLineParameters="" pauseConsoleOutput="True" duckTypingByDefault="False" />
+      <Output directory=".\bin\Release" assembly="TestSite" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

@@ -1,0 +1,1 @@
+Current apppath is ${siteRoot}

@@ -23,7 +23,7 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, composite, arscaffold, samples, tests, generator" />
+	<target name="build" depends="clean, init, framework, engine, integration, brail, nvelocity, composite, arscaffold, samples, tests, generator" />
 
 	<target name="clean">
 		<delete>
@@ -103,6 +103,10 @@
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="compile" />
 	</target>
 
+	<target name="brail" depends="init">
+		<nant buildfile="Castle.MonoRail.Views.brail/default.build" inheritall="true" target="compile" />
+	</target>
+
 	<target name="nvelocity" depends="init">
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="compile" />
 	</target>
@@ -119,13 +123,15 @@
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
+		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestScaffolding/sample.build" inheritall="true" target="compile" />
 	</target>
 	
 	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.Engine/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="test" />
 	</target>
@@ -210,6 +216,8 @@
 				<include name="Castle.MonoRail.Engine.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Framework/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Tests/**/*.*" />
+				<include name="Castle.MonoRail.Views.Brail/**/*.*" />
+				<include name="Castle.MonoRail.Views.Brail.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView/**/*.*" />
@@ -218,6 +226,7 @@
 				<include name="Castle.MonoRail.Generator/**/*.*" />
 				<include name="TestSite/**/*.*" />
 				<include name="TestSiteNVelocity/**/*.*" />
+				<include name="TestSiteBrail/**/*.*" />
 				<include name="TestSiteWindsor/**/*.*" />
 				<include name="TestScaffolding/**/*.*" />
 				<include name="${library.dir}/*.dll" />

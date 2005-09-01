@@ -1,0 +1,1 @@
+My View contents for Cookies\Index

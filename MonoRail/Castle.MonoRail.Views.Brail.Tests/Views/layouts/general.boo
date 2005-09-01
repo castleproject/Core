@@ -1,0 +1,5 @@
+My layout
+
+${ChildOutput}
+
+Footer
