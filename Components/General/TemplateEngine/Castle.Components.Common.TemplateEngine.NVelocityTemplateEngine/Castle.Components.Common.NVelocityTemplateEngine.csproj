@@ -80,14 +80,9 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.Components.Common.TemplateEngine"
-                    Project = "{9698FE03-CD65-4FBC-B734-7326674A4894}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NVelocity"
-                    AssemblyName = "NVelocity"
-                    HintPath = "..\lib\NVelocity.dll"
+                    Project = "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
