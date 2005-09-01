@@ -58,6 +58,11 @@ namespace NVelocity.Runtime.Resource.Loader
 
 			String template = StringUtils.normalizePath(templateName);
 
+			if (template.StartsWith("\\"))
+			{
+				template = template.Substring(1);
+			}
+
 			if (template == null || template.Length == 0)
 			{
 				String msg = "File resource error : argument " + template + " contains .. and may be trying to access " + "content outside of template root.  Rejected.";
