@@ -114,10 +114,10 @@ namespace Castle.MonoRail.Engine.Tests
 		{
 			HttpWebRequest myReq = (HttpWebRequest)
 				WebRequest.Create("http://localhost:8083" + url);
-
+			HttpWebResponse response;
 			try
 			{
-				HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+				response = (HttpWebResponse) myReq.GetResponse();
 			}
 			catch( Exception e )
 			{
