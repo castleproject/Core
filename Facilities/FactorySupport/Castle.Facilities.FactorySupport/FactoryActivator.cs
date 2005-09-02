@@ -17,13 +17,18 @@ namespace Castle.Facilities.FactorySupport
 	using System;
 	using System.Collections;
 	using System.Reflection;
-	using Castle.MicroKernel.SubSystems.Conversion;
+
 	using Castle.Model;
+	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 	using Castle.MicroKernel.Facilities;
+	using Castle.MicroKernel.SubSystems.Conversion;
 
 
+	/// <summary>
+	/// 
+	/// </summary>
 	public class FactoryActivator : DefaultComponentActivator
 	{
 		public FactoryActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
@@ -60,15 +65,13 @@ namespace Castle.Facilities.FactorySupport
 
 			if (staticCreateMethod != null)
 			{
-				return Create(factoryHandler.ComponentModel, null, 
-					factoryId, staticCreateMethod, factoryCreate);
+				return Create(null, factoryId, staticCreateMethod, factoryCreate);
 			}
 			else if (instanceCreateMethod != null)
 			{
 				object factoryInstance = Kernel[ factoryId ];
 
-				return Create(factoryHandler.ComponentModel, 
-					factoryInstance, factoryId, instanceCreateMethod, factoryCreate);
+				return Create(factoryInstance, factoryId, instanceCreateMethod, factoryCreate);
 			}
 			else
 			{
@@ -81,7 +84,7 @@ namespace Castle.Facilities.FactorySupport
 			}
 		}
 
-		private object Create(ComponentModel model, object factoryInstance, string factoryId, 
+		private object Create(object factoryInstance, string factoryId, 
 			MethodInfo instanceCreateMethod, string factoryCreate)
 		{
 			ITypeConverter converter = (ITypeConverter) Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
@@ -109,7 +112,7 @@ namespace Castle.Facilities.FactorySupport
 							DependencyType.Service, parameter.Name, paramType, false );
 					}
 
-					if (!Kernel.Resolver.CanResolve(model, depModel))
+					if (!Kernel.Resolver.CanResolve(Model, depModel))
 					{
 						String message = String.Format(
 							"Factory Method {0}.{1} requires an argument '{2}' that could not be resolved", 
@@ -117,7 +120,7 @@ namespace Castle.Facilities.FactorySupport
 						throw new FacilityException(message);
 					}
 
-					object arg = Kernel.Resolver.Resolve(model, depModel );
+					object arg = Kernel.Resolver.Resolve(Model, depModel );
 
 					methodArgs.Add(arg);
 				}

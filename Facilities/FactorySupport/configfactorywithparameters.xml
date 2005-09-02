@@ -14,6 +14,11 @@
 
 		<component id="mycompfactory" 
 			type="Castle.Facilities.FactorySupport.Tests.Components.MyCompFactory2, Castle.Facilities.FactorySupport.Tests">
+		</component>
+
+		<component id="mycomp" 
+			type="Castle.Facilities.FactorySupport.Tests.Components.MyComp, Castle.Facilities.FactorySupport.Tests"
+			factoryId="mycompfactory" factoryCreate="Create">
 
 			<parameters>
 				<storeName>MyStore</storeName>
@@ -24,12 +29,6 @@
 					</dictionary>
 				</props>
 			</parameters>
-			
-		</component>
-
-		<component id="mycomp" 
-			type="Castle.Facilities.FactorySupport.Tests.Components.MyComp, Castle.Facilities.FactorySupport.Tests"
-			factoryId="mycompfactory" factoryCreate="Create">
 						
 		</component>
 
