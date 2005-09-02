@@ -16,7 +16,7 @@ namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 import System
 import Castle.MonoRail.Framework
 
-[Filter(ExecuteEnum.Before, typeof(FilterBadHeader) )]
+[Filter(ExecuteEnum.Before, typeof(Castle.MonoRail.Views.Brail.TestSite.Controllers.FilterBadHeader) )]
 class FilterController(Controller):
 	
 	def Index():
