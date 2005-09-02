@@ -73,5 +73,10 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		protected virtual void PerformDisposal(ICollection sessions)
 		{
 		}
+
+		internal ICollection GetSessions()
+		{
+			return _key2Session.Values;
+		}
 	}
 }

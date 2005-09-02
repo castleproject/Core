@@ -47,7 +47,7 @@ namespace Castle.ActiveRecord
 		private readonly TransactionMode mode;
 		private IDictionary _transactions = new HybridDictionary();
 		private TransactionScope parentTransactionScope;
-		private ISessionScope parentSimpleScope;
+		private AbstractScope parentSimpleScope;
 		private bool _rollbackOnly;
 
 		public TransactionScope(TransactionMode mode) : base(SessionScopeType.Transactional)
@@ -65,7 +65,12 @@ namespace Castle.ActiveRecord
 				}
 				else
 				{
-					parentSimpleScope = previousScope;
+					parentSimpleScope = (AbstractScope) previousScope;
+
+					foreach(ISession session in parentSimpleScope.GetSessions())
+					{
+						EnsureHasTransaction(session);
+					}
 				}
 			}
 		}
@@ -144,6 +149,7 @@ namespace Castle.ActiveRecord
 			if (!_transactions.Contains(session))
 			{
 				session.FlushMode = FlushMode.Commit;
+
 				ITransaction transaction = session.BeginTransaction();
 
 				_transactions.Add(session, transaction);
@@ -186,6 +192,18 @@ namespace Castle.ActiveRecord
 				// No flush necessary, but we should close the session
 
 				base.PerformDisposal(sessions, false, true);
+			}
+			else
+			{
+				if (_rollbackOnly)
+				{
+					// Cancel all pending changes (not sure whether this is a good idea, it should be scoped
+
+					foreach( ISession session in parentSimpleScope.GetSessions() )
+					{
+						session.Clear();
+					}
+				}
 			}
 		}
 
