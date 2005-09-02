@@ -309,6 +309,13 @@ namespace Castle.MonoRail.Framework
 		private static object ConvertToArray( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context )
 		{
 			Type elemType	= desiredType.GetElementType();
+
+			// Fix for mod_mono issue where array values are passed as a comma seperated string
+			if(values.Length == 1 && (values[0].IndexOf(',') > -1))
+			{
+				values = values[0].Split(',');
+			}
+
 			Array newArray	= Array.CreateInstance(elemType, values.Length);
 	
 			for( int i=0; i < values.Length; i++)

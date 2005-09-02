@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			_engine.Process( context );
 
-			Assert.AreEqual( "static 1\r\nHello from SimpleInlineViewComponent static 2", context.Output );
+			AssertOutput( "static 1\r\nHello from SimpleInlineViewComponent static 2", context.Output );
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			_engine.Process( context );
 
-			Assert.AreEqual( "static 1\r\nThis is a view used by a component static 2", context.Output );
+			AssertOutput( "static 1\r\nThis is a view used by a component static 2", context.Output );
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			_engine.Process( context );
 
-			Assert.AreEqual( "static 1\r\ndefault component view picked up automatically static 2", context.Output );
+			AssertOutput( "static 1\r\ndefault component view picked up automatically static 2", context.Output );
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			_engine.Process( context );
 
-			Assert.AreEqual( "Done", context.Output );
+			AssertOutput( "Done", context.Output );
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			_engine.Process( context );
 
-			Assert.AreEqual( "  item 0\r\n  item 1\r\n  item 2\r\n", context.Output );
+			AssertOutput( "  item 0\r\n  item 1\r\n  item 2\r\n", context.Output );
 		}
 
 		[Test]
@@ -107,7 +107,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			_engine.Process( context );
 
-			Assert.AreEqual( "inner content 1\r\ninner content 2\r\n", context.Output );
+			AssertOutput( "inner content 1\r\ninner content 2\r\n", context.Output );
 		}
 
 		[Test]
@@ -121,8 +121,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 				// System.Diagnostics.Debug.WriteLine( context.Output );
 
-				Assert.AreEqual( "static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n", context.Output );
+				AssertOutput( "static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n", context.Output );
 			}
+		}
+
+		void AssertOutput(string expected, object output)
+		{
+			Assert.AreEqual(NormalizeWhitespace(expected), NormalizeWhitespace(output.ToString()));
+		}
+
+		string NormalizeWhitespace(string s)
+		{
+			return s.Replace("\r\n", "\n");
 		}
 	}
 }
