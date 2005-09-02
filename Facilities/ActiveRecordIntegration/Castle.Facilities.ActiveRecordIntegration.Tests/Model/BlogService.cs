@@ -50,5 +50,23 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests.Model
 
 			throw new Exception("Doh!");
 		}
+
+		[Transaction(TransactionMode.Requires)]
+		public virtual void ModifyAndThrowException(Blog blog, String newName)
+		{
+			blog.Name = newName;
+			
+			blog.Save();
+
+			throw new Exception("Doh!");
+		}
+
+		[Transaction(TransactionMode.Requires)]
+		public virtual void ModifyAndThrowException2(Blog blog, String newName)
+		{
+			blog.Name = newName;
+			
+			throw new Exception("Doh!");
+		}
 	}
 }
