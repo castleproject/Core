@@ -43,6 +43,7 @@ public class BooViewEngine (ViewEngineBase):
 	static def InitializeConfig():
 		InitializeConfig("brail")
 		InitializeConfig("Brail") if options is null
+		options = BooViewEngineOptions() if options is null
 	
 	static def InitializeConfig(name as string):
 		options = System.Configuration.ConfigurationSettings.GetConfig(name)
@@ -51,7 +52,7 @@ public class BooViewEngine (ViewEngineBase):
 	# Create directory to save the compiled assemblies if required.
 	# pre-compile the common scripts
 	override def Init():
-		options = BooViewEngineOptions() if options is null
+		InitializeConfig() if options is null
 		baseDir = Path.GetDirectoryName(typeof(BooViewEngine).Assembly.Location)
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)
 		self.commonScriptPath = Path.Combine(ViewRootDir, options.CommonScriptsDirectory)
@@ -213,11 +214,9 @@ public class BooViewEngine (ViewEngineBase):
 		compiler = SetupCompiler(files)
 		filename = Path.Combine(self.baseSavePath,name)
 		compiler.Parameters.OutputAssembly = filename
-		
-		for assembly as System.Reflection.Assembly in options.AssembliesToReference:
-			compiler.Parameters.References.Add(assembly)
-		
-		compiler.Parameters.References.Add(common) if common is not null		
+		# this is here and not in SetupCompiler since CompileCommon is also
+		# using SetupCompiler, and we don't want reference to the old common from the new one
+		compiler.Parameters.References.Add(common) if common is not null
 		# pre procsssor needs to run before the parser
 		compiler.Parameters.Pipeline.Insert(0, BrailPreProcessor())
 		# inserting the add class step after the parser
@@ -277,6 +276,8 @@ public class BooViewEngine (ViewEngineBase):
 			compiler.Parameters.Pipeline = CompileToMemory()
 		for file in files:
 			compiler.Parameters.Input.Add(file)
+		for assembly as System.Reflection.Assembly in options.AssembliesToReference:
+			compiler.Parameters.References.Add(assembly)
 		compiler.Parameters.OutputType = CompilerOutputType.Library
 		return compiler
 		
