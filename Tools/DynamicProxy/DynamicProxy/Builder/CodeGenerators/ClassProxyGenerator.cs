@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Runtime.Serialization;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Threading;
 
 	using Castle.DynamicProxy.Builder.CodeBuilder;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
@@ -202,32 +203,47 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				interfaces = AddISerializable( interfaces );
 			}
 
+			ReaderWriterLock rwlock = ModuleScope.RWLock;
+
+			rwlock.AcquireReaderLock(-1);
+
 			Type cacheType = GetFromCache(baseClass, interfaces);
 			
 			if (cacheType != null)
 			{
+				rwlock.ReleaseReaderLock();
+
 				return cacheType;
 			}
 
-			CreateTypeBuilder( GenerateTypeName(baseClass, interfaces), baseClass, interfaces );
-			GenerateFields();
+			rwlock.UpgradeToWriterLock(-1);
 
-			if (baseClass.IsSerializable)
+			try
 			{
-				ImplementGetObjectData( interfaces );
+				CreateTypeBuilder( GenerateTypeName(baseClass, interfaces), baseClass, interfaces );
+				GenerateFields();
+
+				if (baseClass.IsSerializable)
+				{
+					ImplementGetObjectData( interfaces );
+				}
+
+				ImplementCacheInvocationCache();
+				GenerateTypeImplementation( baseClass, true );
+				GenerateInterfaceImplementation(interfaces);
+				GenerateConstructors(baseClass);
+
+				if (_delegateToBaseGetObjectData)
+				{
+					GenerateSerializationConstructor();
+				}
+
+				return CreateType();
 			}
-
-			ImplementCacheInvocationCache();
-			GenerateTypeImplementation( baseClass, true );
-			GenerateInterfaceImplementation(interfaces);
-			GenerateConstructors(baseClass);
-
-			if (_delegateToBaseGetObjectData)
+			finally
 			{
-				GenerateSerializationConstructor();
+				rwlock.ReleaseWriterLock();
 			}
-
-			return CreateType();
 		}
 
 		public virtual Type GenerateCustomCode(Type baseClass, Type[] interfaces)

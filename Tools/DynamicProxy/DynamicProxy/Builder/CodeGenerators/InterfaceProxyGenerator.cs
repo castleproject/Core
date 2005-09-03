@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Text;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+	using System.Threading;
 
 	using Castle.DynamicProxy.Builder.CodeBuilder;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
@@ -182,22 +183,38 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			interfaces = AddISerializable(interfaces);
 
+			ReaderWriterLock rwlock = ModuleScope.RWLock;
+
+			rwlock.AcquireReaderLock(-1);
+
 			Type cacheType = GetFromCache(targetType, interfaces);
 			
 			if (cacheType != null)
 			{
+				rwlock.ReleaseReaderLock();
+
 				return cacheType;
 			}
 
-			_targetType = targetType;
+			rwlock.UpgradeToWriterLock(-1);
 
-			CreateTypeBuilder( GenerateTypeName(targetType, interfaces), typeof(Object), interfaces );
-			GenerateFields();
-			ImplementGetObjectData( interfaces );
-			ImplementCacheInvocationCache();
-			GenerateInterfaceImplementation( interfaces );
-			GenerateConstructor();
-			return CreateType();
+			try
+			{
+				_targetType = targetType;
+
+				CreateTypeBuilder( GenerateTypeName(targetType, interfaces), typeof(Object), interfaces );
+				GenerateFields();
+				ImplementGetObjectData( interfaces );
+				ImplementCacheInvocationCache();
+				GenerateInterfaceImplementation( interfaces );
+				GenerateConstructor();
+
+				return CreateType();
+			}
+			finally
+			{
+				rwlock.ReleaseWriterLock();
+			}
 		}
 	}
 }

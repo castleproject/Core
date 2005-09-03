@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Collections;
+	using System.Threading;
 
 	/// <summary>
 	/// Summary description for ModuleScope.
@@ -42,7 +43,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		/// </summary>
 		private object _lockobj = new object();
 
-		private int innerTypeCounter;
+		private ReaderWriterLock readerWriterLock = new ReaderWriterLock();
 
 		private AssemblyBuilder _assemblyBuilder;
 
@@ -74,9 +75,9 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			return _moduleBuilder;
 		}
 
-		public int InnerTypeCounter
+		public ReaderWriterLock RWLock
 		{
-			get { return innerTypeCounter++; }
+			get { return readerWriterLock; }
 		}
 
 		public bool SaveAssembly()
