@@ -589,6 +589,8 @@ namespace Castle.MonoRail.Framework
 
 				if (dynAction == null)
 				{
+					method = FindOutDefaultMethod();
+
 					if (method == null)
 					{
 						throw new ControllerException(String.Format("No action for '{0}' found", action));
@@ -664,6 +666,24 @@ namespace Castle.MonoRail.Framework
 
 				ReleaseResources();
 			}
+		}
+
+		/// <summary>
+		/// The following lines were added to handle _default processing
+		/// if present look for and load _default action method
+		/// <seealso cref="DefaultActionAttribute"/>
+		/// </summary>
+		private MethodInfo FindOutDefaultMethod()
+		{
+			object[] attributes = this.GetType().GetCustomAttributes( typeof(DefaultActionAttribute), true );
+	
+			if (attributes.Length != 0)
+			{
+				DefaultActionAttribute attr = (DefaultActionAttribute)attributes[0];
+				return SelectMethod(attr.DefaultAction, _actions, _context.Request);
+			}
+
+			return null;
 		}
 
 		protected virtual void CreateAndInitializeHelpers()

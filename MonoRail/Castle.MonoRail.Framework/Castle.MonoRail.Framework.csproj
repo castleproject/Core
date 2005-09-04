@@ -208,6 +208,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\DefaultActionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\FilterAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
