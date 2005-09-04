@@ -126,7 +126,7 @@ namespace Castle.MonoRail.Framework
 						}
 						else
 						{
-							throw e;
+							throw;
 						}
 					}
 

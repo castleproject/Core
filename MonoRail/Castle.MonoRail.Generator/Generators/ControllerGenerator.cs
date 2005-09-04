@@ -177,7 +177,7 @@ namespace Castle.MonoRail.Generator.Generators
 			catch(Exception ex)
 			{
 				output.WriteLine(ex.Message);
-				throw ex;
+				throw;
 			}
 		}
 

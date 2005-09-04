@@ -644,7 +644,7 @@ namespace Castle.MonoRail.Framework
 				if (!PerformRescue(method, GetType(), ex))
 				{
 					//If the rescue fails, let the exception bubble
-					throw ex;
+					throw;
 				}
 			}
 			finally
