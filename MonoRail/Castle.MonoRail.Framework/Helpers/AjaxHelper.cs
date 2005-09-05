@@ -44,10 +44,10 @@ namespace Castle.MonoRail.Framework.Helpers
 		Complete
 	}
 
-
 	/// <summary>
 	/// MonoRail Helper that delivers AJAX capabilities.
 	/// </summary>
+	[Obsolete("This helper is going to be replaced by AjaxHelper2")]
 	public class AjaxHelper : AbstractHelper
 	{
 		public AjaxHelper()
@@ -203,7 +203,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String ButtonToRemote(String name, String url, String idOfElementToBeUpdated, String with)
 		{
-			return ButtonToFunction(name, BuildRemoteFunction(url, idOfElementToBeUpdated, with));   
+			return ButtonToFunction(name, BuildRemoteFunction(with, idOfElementToBeUpdated, url));   
 		}
 
 		public String ButtonToRemote(String name, String url, String idOfElementToBeUpdated, bool form)
