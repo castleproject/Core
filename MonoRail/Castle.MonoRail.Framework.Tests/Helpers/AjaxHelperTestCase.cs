@@ -124,7 +124,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
         public void ButtonToRemote4StringArgs() 
         {
-            String expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'with', {asynchronous:true, parameters:url}); return false;\" value=\"name\" />";
+            String expected = "<input type=\"button\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true, parameters:with}); return false;\" value=\"name\" />";
             String actual = this._hlp.ButtonToRemote("name", "url", "update", "with");
             Assert.AreEqual(expected, actual);
         }
