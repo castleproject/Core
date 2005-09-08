@@ -18,7 +18,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, prevalence, autotransaction, arintegration, nhibernate, aspectsharp, typedfactory, batchregistration, startable, factorysupport" />
+	<target name="build" depends="init, prevalence, autotransaction, arintegration, nhibernate, aspectsharp, eventwiring, typedfactory, batchregistration, startable, factorysupport" />
 	
 	<target name="init">
 
@@ -56,6 +56,10 @@
 		<nant buildfile="FactorySupport/default.build" inheritall="true" target="build" />
 	</target>
 
+	<target name="eventwiring">
+		<nant buildfile="EventWiring/default.build" inheritall="true" target="build" />
+	</target>
+	
 	<target name="startable">
 		<nant buildfile="Startable/default.build" inheritall="true" target="build" />
 	</target>
