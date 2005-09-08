@@ -181,7 +181,7 @@ namespace Castle.MonoRail.Framework
 					{
 						DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
 	
-						args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix );
+						args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel );
 					}
 					else
 					{
@@ -205,7 +205,7 @@ namespace Castle.MonoRail.Framework
 			return args;
 		}
 
-		protected object BindObject(ParamStore from, Type paramType, String prefix)
+		protected object BindObject(ParamStore from, Type paramType, String prefix, int nestedLevel)
 		{
 			NameValueCollection webParams = null;
 
@@ -226,7 +226,7 @@ namespace Castle.MonoRail.Framework
 
 			ArrayList errorList = new ArrayList();
 			
-			object instance = binder.BindObject( paramType, prefix, webParams, Context.Request.Files, errorList );
+			object instance = binder.BindObject( paramType, prefix, webParams, Context.Request.Files, errorList, nestedLevel );
 						
 			boundInstances[instance] = errorList;
 
@@ -242,11 +242,9 @@ namespace Castle.MonoRail.Framework
 				case ParamStore.Form: 
 					webParams = formParams; 
 					break;
-
 				case ParamStore.QueryString:
 					webParams = queryParams;
 					break;
-
 				default:
 					webParams = allParams;
 					break;

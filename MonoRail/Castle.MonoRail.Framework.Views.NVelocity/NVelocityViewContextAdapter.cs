@@ -39,6 +39,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			this.writer = writer;
 			this.bodyNode = bodyNode;
 			this.componentParams = componentParams;
+
+			// TODO: Implement IEnumerable on NVelocity context
+//			foreach(String key in context.Keys)
+//			{
+//				contextVars[key] = context.Get(key);
+//			}
 		}
 
 		public String ComponentName

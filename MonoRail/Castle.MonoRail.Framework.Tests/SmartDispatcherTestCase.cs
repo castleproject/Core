@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
-    using System.Collections.Specialized;
 	using System.Reflection;
 
 	using NUnit.Framework;
@@ -134,6 +133,34 @@ namespace Castle.MonoRail.Framework.Tests
 			ctx.Params.Add( DataBindController.FormPrefix + ".value", DataBindController.Value.ToString() );
 			ctx.Params.Add( DataBindController.FormPrefix + ".internal.text", DataBindController.Text );
 			ctx.Params.Add( DataBindController.FormPrefix + ".internal.date", DataBindController.Date.ToString() );
+
+			_engine.Process( ctx );
+
+			AssertResponse();
+		}
+
+		[Test]
+		public void DataBindObjectWithCycledGraph()
+		{
+			IRailsEngineContext ctx = GetDataBindContext( "WithCycledGraph" );
+
+			ctx.Params.Add( "age", "25" );
+			ctx.Params.Add( "name", "hammett" );
+			ctx.Params.Add( "login.Username", "ham" );
+
+			_engine.Process( ctx );
+
+			AssertResponse();
+		}
+
+		[Test]
+		public void DataBindObjectWithCycledGraph2()
+		{
+			IRailsEngineContext ctx = GetDataBindContext( "WithCycledGraph2" );
+
+			ctx.Params.Add( "userrr.age", "25" );
+			ctx.Params.Add( "userrr.name", "hammett" );
+			ctx.Params.Add( "userrr.login.Username", "ham" );
 
 			_engine.Process( ctx );
 

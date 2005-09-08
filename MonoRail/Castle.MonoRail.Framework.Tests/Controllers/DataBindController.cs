@@ -32,6 +32,28 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 			Validate( instance );
 		}
 
+		public void WithCycledGraph( [DataBind] User user )
+		{
+			Assert.IsNotNull(user);
+			Assert.IsNotNull(user.Login);
+			Assert.AreEqual( 25, user.Age );
+			Assert.AreEqual( "hammett", user.Name );
+			Assert.AreEqual( "ham", user.Login.Username );
+
+			RenderText("ok");
+		}
+
+		public void WithCycledGraph2( [DataBind(Prefix="userrr")] User user )
+		{
+			Assert.IsNotNull(user);
+			Assert.IsNotNull(user.Login);
+			Assert.AreEqual( 25, user.Age );
+			Assert.AreEqual( "hammett", user.Name );
+			Assert.AreEqual( "ham", user.Login.Username );
+
+			RenderText("ok");
+		}
+
 		public void MapWithPrefix( [DataBind(Prefix=FormPrefix)] BindObject instance )
 		{
 			Validate( instance );
@@ -122,6 +144,49 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 				get { return _Date; }
 				set { _Date = value; }
 			}
+		}
+	}
+
+	public class User
+	{
+		private String name;
+		private int age;
+		private Login login = new Login();
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public int Age
+		{
+			get { return age; }
+			set { age = value; }
+		}
+
+		public Login Login
+		{
+			get { return login; }
+			set { login = value; }
+		}
+	}
+
+	public class Login
+	{
+		private String username;
+		private User user;
+
+		public string Username
+		{
+			get { return username; }
+			set { username = value; }
+		}
+
+		public User User
+		{
+			get { return user; }
+			set { user = value; }
 		}
 	}
 }

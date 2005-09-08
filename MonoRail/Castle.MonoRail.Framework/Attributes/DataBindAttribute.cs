@@ -29,8 +29,9 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
 	public class DataBindAttribute : Attribute
 	{
-		private String _Prefix		= string.Empty;
-		private ParamStore _From	= ParamStore.Params;
+		private String prefix = string.Empty;
+		private ParamStore from	= ParamStore.Params;
+		private int nestedLevel = 3;
 
 		public DataBindAttribute()
 		{
@@ -41,8 +42,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public ParamStore From
 		{
-			get { return _From; }
-			set { _From = value; }
+			get { return from; }
+			set { from = value; }
 		}
 
 		/// <summary>
@@ -50,8 +51,14 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public String Prefix
 		{
-			get { return _Prefix; }
-			set { _Prefix = value; }
+			get { return prefix; }
+			set { prefix = value; }
+		}
+
+		public int NestedLevel
+		{
+			get { return nestedLevel; }
+			set { nestedLevel = value; }
 		}
 	}
 }

@@ -28,133 +28,170 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class DataBinder
 	{
-		private IRailsEngineContext context;
+		private static readonly int DefaultNestedLevel = 3;
 
 		private String root = null;
-		private String parent = String.Empty;
+		private IRailsEngineContext context;
 		
-		public DataBinder( IRailsEngineContext context )
+		public DataBinder(IRailsEngineContext context)
 		{
 			this.context = context;
 		}
 
-		public object BindObject( Type instanceType )
+		public object BindObject(Type instanceType)
 		{
-			return BindObject( instanceType, String.Empty, context.Params, context.Request.Files, null );
+			return BindObject(instanceType, String.Empty, context.Params, context.Request.Files, null, DefaultNestedLevel);
 		}
 
-		public object BindObject( Type instanceType, String paramPrefix, IList errorList )
+		public object BindObject(Type instanceType, String paramPrefix, IList errorList, int nestedLevel)
 		{
-			return BindObject( instanceType, paramPrefix, context.Params, context.Request.Files, errorList );
+			return BindObject(instanceType, paramPrefix, context.Params, context.Request.Files, errorList, nestedLevel);
 		}
 
-		public object BindObject( Type instanceType, String paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
+		public object BindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList, int nestedLevel)
 		{
-			if ( root == null ) root = instanceType.Name;
-			if ( instanceType.IsAbstract || instanceType.IsInterface ) return null;
+			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
+			if (root == null) root = instanceType.Name;
 
-			object instance = Activator.CreateInstance( instanceType );
+			object instance = Activator.CreateInstance(instanceType);
 
-			return BindObjectInstance(instance, paramPrefix, paramList, files, errorList);			
+			return BindObjectInstance(instance, paramPrefix, paramList, files, errorList, nestedLevel);
 		}
 
-		public object BindObjectInstance( object instance, String paramPrefix)
+		public object BindObjectInstance(object instance, String paramPrefix)
 		{
-			return BindObjectInstance(instance,  paramPrefix, context.Params, context.Request.Files, null );
+			paramPrefix = NormalizeParamPrefix(paramPrefix);
+
+			return InternalRecursiveBindObjectInstance(instance,  paramPrefix, context.Params, context.Request.Files, null, 0, DefaultNestedLevel);
 		}
 
-		public object BindObjectInstance( object instance, String paramPrefix, NameValueCollection paramList, IDictionary files, IList errorList )
+		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList)
 		{
-			paramPrefix = (paramPrefix != null && paramPrefix != String.Empty) ?  paramPrefix.ToLower( CultureInfo.InvariantCulture ) + "." : String.Empty;
+			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
-			PropertyInfo[] props = instance.GetType().GetProperties( BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic );
+			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, errorList,  0, DefaultNestedLevel);
+		}
 
-			foreach ( PropertyInfo prop in props )
+		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList, int nestedLevel)
+		{
+			paramPrefix = NormalizeParamPrefix(paramPrefix);
+
+			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, errorList,  0, nestedLevel);
+		}
+
+		private object InternalBindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel)
+		{
+			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
+			if (root == null) root = instanceType.Name;
+
+			object instance = Activator.CreateInstance(instanceType);
+
+			return InternalRecursiveBindObjectInstance(instance, paramPrefix, 
+				paramList, files, errorList, curNestedLevel, maxNestedLevel);
+		}
+
+		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, 
+			NameValueCollection paramList, IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel)
+		{
+			if (curNestedLevel > maxNestedLevel)
 			{
-				if ( prop.CanWrite )
-				{
-					Type propType = prop.PropertyType;
-					
-					String oldParent = parent;
-					
-					try
-					{
-						if (!propType.IsPrimitive && !propType.IsArray && 
-							propType != typeof(String) && propType != typeof(Guid) && 
-							propType != typeof(DateTime) && propType != typeof(HttpPostedFile) &&
-							!typeof(ICollection).IsAssignableFrom( propType ) )
-						{
-							parent += prop.Name + ".";		
-						
-							// if the property is an object, we look if it is already instanciated
-							object value = prop.GetValue(instance, null);
-							
-							if (value == null) // if it's not there, we create it
-							{
-								value = BindObject( prop.PropertyType, paramPrefix + prop.Name, paramList, files, errorList );
-								
-								prop.SetValue( instance, value, null );
-							}
-							else // if the object already instanciated, then we use it 
-							{
-								BindObjectInstance( value, paramPrefix + prop.Name, paramList, files, errorList );
-							}
-						}
-						else
-						{
-							String paramName = paramPrefix + prop.Name;
-
-							bool conversionSucceeded;
-
-							string[] values = paramList.GetValues( paramName );
-
-							object value = Convert( prop.PropertyType, values, paramName, files, context, out conversionSucceeded );
-							
-							// we don't want to set the value if the form param was missing
-							// to avoid loosing existing values in the object instance
-							if (conversionSucceeded && value != null)
-							{
-								prop.SetValue( instance, value, null );
-							}
-						}						
-					}
-					catch ( Exception e )
-					{
-						if ( errorList != null )
-						{
-							errorList.Add( new DataBindError( root, parent + prop.Name, e ) );
-						}
-						else
-						{
-							throw;
-						}
-					}
-
-					parent = oldParent;
-				}
+				return instance;
 			}
 
-			if ( parent == String.Empty ) root = null;
+			BindingFlags flags = BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
+			PropertyInfo[] props = instance.GetType().GetProperties(flags);
+
+			foreach (PropertyInfo prop in props)
+			{
+				if (!prop.CanWrite)
+				{
+					continue;
+				}
+
+				Type propType = prop.PropertyType;
+				
+				bool simpleProperty = (!propType.IsPrimitive && 
+					!propType.IsArray && propType != typeof(String) && 
+					propType != typeof(Guid) && propType != typeof(DateTime) && 
+					propType != typeof(HttpPostedFile) && !typeof(ICollection).IsAssignableFrom(propType));
+				
+				try
+				{
+					if (simpleProperty)
+					{
+						// if the property is an object, we look if it is already instanciated
+						object value = prop.GetValue(instance, null);
+						
+						String propName = BuildParamName(paramPrefix, prop.Name);
+
+						if (value == null) // if it's not there, we create it
+						{
+							value = InternalBindObject(prop.PropertyType, propName, paramList, files, 
+								errorList, curNestedLevel + 1, maxNestedLevel);
+							
+							prop.SetValue(instance, value, null);
+						}
+						else // if the object already instanciated, then we use it 
+						{
+							InternalRecursiveBindObjectInstance(value, propName, paramList, files, 
+								errorList, curNestedLevel + 1, maxNestedLevel);
+						}
+					}
+					else
+					{
+						String paramName = BuildParamName(paramPrefix, prop.Name); 
+
+						bool conversionSucceeded;
+
+						String[] values = paramList.GetValues(paramName);
+						
+						object value = Convert(prop.PropertyType, values, paramName, files, context, out conversionSucceeded);
+						
+						// we don't want to set the value if the form param was missing
+						// to avoid loosing existing values in the object instance
+						if (conversionSucceeded && value != null)
+						{
+							prop.SetValue(instance, value, null);
+						}
+					}						
+				}
+				catch (Exception ex)
+				{
+					if (errorList != null)
+					{
+						errorList.Add(new DataBindError(root, BuildParamName(paramPrefix, prop.Name), ex));
+					}
+					else
+					{
+						throw;
+					}
+				}
+			}
 
 			return instance;
 		}
 
-		public static object Convert( Type desiredType, String value, String paramName, IDictionary files, IRailsEngineContext context )
+		public static object Convert(Type desiredType, String value, String paramName, IDictionary files, IRailsEngineContext context)
 		{
-			return Convert(desiredType, new string[] { value }, paramName, files, context );
+			return Convert(desiredType, new String[] { value }, paramName, files, context);
 		}
 
-		public static object Convert( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context )
+		public static object Convert(Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context)
 		{
 			bool conversionSucceeded; 
-			return Convert(desiredType, values, paramName, files, context, out conversionSucceeded );
+			return Convert(desiredType, values, paramName, files, context, out conversionSucceeded);
 		}
 		
-		private static object Convert( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context, out bool conversionSucceeded )
+		private static object Convert(Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context, out bool conversionSucceeded)
 		{
 			String value = null;
 
-			if ( values != null && values.Length > 0 ) 
+			if (values != null && values.Length > 0) 
 			{
 				value = values[0];
 				conversionSucceeded = true;
@@ -172,7 +209,7 @@ namespace Castle.MonoRail.Framework
 			{
 				if (value != null)
 				{
-					return new Guid( value.ToString() );
+					return new Guid(value.ToString());
 				}
 				else
 				{
@@ -182,52 +219,52 @@ namespace Castle.MonoRail.Framework
 			else if (desiredType == typeof(UInt16))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToUInt16( value );
+				return System.Convert.ToUInt16(value);
 			}
 			else if (desiredType == typeof(UInt32))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToUInt32( value );
+				return System.Convert.ToUInt32(value);
 			}
 			else if (desiredType == typeof(UInt64))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToUInt64( value );
+				return System.Convert.ToUInt64(value);
 			}
 			else if (desiredType == typeof(Int16))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToInt16( value );
+				return System.Convert.ToInt16(value);
 			}
 			else if (desiredType == typeof(Int32))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToInt32( value );
+				return System.Convert.ToInt32(value);
 			}
 			else if (desiredType == typeof(Int64))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToInt64( value );
+				return System.Convert.ToInt64(value);
 			}
 			else if (desiredType == typeof(Byte))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToByte( value );
+				return System.Convert.ToByte(value);
 			}
 			else if (desiredType == typeof(SByte))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToSByte( value );
+				return System.Convert.ToSByte(value);
 			}
 			else if (desiredType == typeof(Single))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToSingle( value );
+				return System.Convert.ToSingle(value);
 			}
 			else if (desiredType == typeof(Double))
 			{
 				if (value == String.Empty) value = null;
-				return System.Convert.ToDouble( value );
+				return System.Convert.ToDouble(value);
 			}
 			else if (desiredType == typeof(DateTime))
 			{
@@ -245,10 +282,10 @@ namespace Castle.MonoRail.Framework
 							// consider the convertion successful
 							conversionSucceeded = true; 
 
-							return new DateTime( 
+							return new DateTime(
 								System.Convert.ToInt32(year), 
 								System.Convert.ToInt32(month), 
-								System.Convert.ToInt32(day) );
+								System.Convert.ToInt32(day));
 						}
 						catch(Exception inner)
 						{
@@ -271,7 +308,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (desiredType == typeof(Boolean))
 			{
-				if (value == null || String.Compare( "false", value, true ) == 0)
+				if (value == null || String.Compare("false", value, true) == 0)
 				{
 					return false;
 				}
@@ -287,13 +324,13 @@ namespace Castle.MonoRail.Framework
 			{
 				if (value == String.Empty) return null;
 				
-				return Enum.Parse( desiredType, value, true );
+				return Enum.Parse(desiredType, value, true);
 			}
 			else if (desiredType.IsArray)
 			{
-				return values != null ? ConvertToArray( desiredType, values, paramName, files, context ) : null;
+				return values != null ? ConvertToArray(desiredType, values, paramName, files, context) : null;
 			}
-			else if ( context != null )
+			else if (context != null)
 			{
 				conversionSucceeded = false;
 
@@ -306,11 +343,11 @@ namespace Castle.MonoRail.Framework
 			return null;
 		}
 
-		private static object ConvertToArray( Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context )
+		private static object ConvertToArray(Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context)
 		{
 			Type elemType	= desiredType.GetElementType();
 
-			// Fix for mod_mono issue where array values are passed as a comma seperated string
+			// Fix for mod_mono issue where array values are passed as a comma seperated String
 			if(values.Length == 1 && (values[0].IndexOf(',') > -1))
 			{
 				values = values[0].Split(',');
@@ -318,12 +355,30 @@ namespace Castle.MonoRail.Framework
 
 			Array newArray	= Array.CreateInstance(elemType, values.Length);
 	
-			for( int i=0; i < values.Length; i++)
+			for(int i=0; i < values.Length; i++)
 			{
-				newArray.SetValue( Convert(elemType, new String[] { values[i] }, paramName, files, context), i );
+				newArray.SetValue(Convert(elemType, new String[] { values[i] }, paramName, files, context), i);
 			}
 	
 			return newArray;
+		}
+
+		private static String NormalizeParamPrefix(String paramPrefix)
+		{
+			return (paramPrefix != null && paramPrefix != String.Empty) ? 
+				paramPrefix.ToLower(CultureInfo.InvariantCulture) : String.Empty;
+		}
+
+		private static String BuildParamName(String prefix, String name)
+		{
+			if (prefix != String.Empty)
+			{
+				return String.Format("{0}.{1}", prefix, name);
+			}
+			else
+			{
+				return name;
+			}
 		}
 	}
 }
