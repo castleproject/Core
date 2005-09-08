@@ -8,30 +8,30 @@
 	<components>
 		<component id="SimpleListener">
 			<subscribes>
-				<subscribe-to publisher="SimplePublisher" event="PublishEvent1" handler="OnPublish"/>
+				<subscribe-to publisher="SimplePublisher" event="Event" handler="OnPublish"/>
 			</subscribes>
 		</component>
 		
 		<component id="MultiListener">
 			<subscribes>
-					<subscriber 
+					<subscribe-to 
 						publisher="MultiPublisher" 
 						handler="OnPublish" 
-						event="PublishEvent1"  />
-					<subscriber 
+						event="Event1"  />
+					<subscribe-to 
 						publisher="MultiPublisher" 
 						handler="OnPublish2" 
-						event="PublishEvent2"  />
-					<subscriber 
+						event="Event2"  />
+					<subscribe-to 
 						publisher="PublisherListener" 
 						handler="OnPublish"
-						event="Publish" />
+						event="Event1" />
 				</subscribes>
 		</component>
 		
 		<component id="PublisherListener">
 			<subscribes>
-				<subscriber handler="OnPublish" publisher="SimplePublisher" event="Publish" />
+				<subscribe-to handler="OnPublish" publisher="SimplePublisher" event="Event" />
 			</subscribes>
 		</component>
 	</components>

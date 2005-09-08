@@ -102,7 +102,7 @@ namespace Castle.Facilities.EventWiring
 
 			if (eventInfo == null)
 			{
-				throw new EventWiringException(string.Format("Event Not Found. Event Name: {0}. Publisher: {1}", eventName, publisherType.FullName));
+				throw new EventWiringException(String.Format("Event Not Found. Event Name: {0}. Publisher: {1}", eventName, publisherType.FullName));
 			}
 
 			return eventInfo;

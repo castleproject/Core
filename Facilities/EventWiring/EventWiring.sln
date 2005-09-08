@@ -23,7 +23,7 @@ Global
 		{89FC2739-BEAB-4926-9899-5B2CA43A39BB}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
-		bin\Castle.Facilities.EventWiring.Tests.dll.config = bin\Castle.Facilities.EventWiring.Tests.dll.config
+		config.xml = config.xml
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

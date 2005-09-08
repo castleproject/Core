@@ -120,10 +120,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Castle.Facilities.EventWiring.Tests.dll.config"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "EventWiringTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
