@@ -27,7 +27,7 @@ namespace Castle.Facilities.EventWiring
 
 	public class EventWiringFacility : AbstractFacility
 	{
-		private IDictionary _listeners;
+		private IDictionary _subscribers;
 
 		public EventWiringFacility()
 		{
@@ -35,7 +35,7 @@ namespace Castle.Facilities.EventWiring
 
 		protected override void Init()
 		{
-			_listeners = new HybridDictionary(true);
+			_subscribers = new HybridDictionary(true);
 
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
 			Kernel.ComponentCreated += new ComponentInstanceDelegate(OnComponentCreated);
@@ -51,13 +51,13 @@ namespace Castle.Facilities.EventWiring
 		{
 			if (model.Configuration != null)
 			{
-				IConfiguration listenersNode = model.Configuration.Children["listeners"];
+				IConfiguration subscribersNode = model.Configuration.Children["subscribes"];
 
-				if (listenersNode != null)
+				if (subscribersNode != null)
 				{
 					//TODO: Validate the config.
 
-					_listeners.Add(model.Name, listenersNode);
+					_subscribers.Add(model.Name, subscribersNode);
 				}
 			}
 		}
@@ -74,17 +74,17 @@ namespace Castle.Facilities.EventWiring
 
 		private void WireEventsIfNeeded(ComponentModel model, object instance)
 		{
-			if (_listeners.Contains(model.Name))
+			if (_subscribers.Contains(model.Name))
 			{
-				IConfiguration listenersNode = (IConfiguration) _listeners[model.Name];
+				IConfiguration subscribersNode = (IConfiguration) _subscribers[model.Name];
 
-				foreach (IConfiguration listenerNode in listenersNode.Children)
+				foreach (IConfiguration subscriberNode in subscribersNode.Children)
 				{
-					object publisher = GetPublisherInstance(listenerNode);
+					object publisher = GetPublisherInstance(subscriberNode);
 
-					EventInfo eventInfo = GetEventInfo(publisher, listenerNode);
+					EventInfo eventInfo = GetEventInfo(publisher, subscriberNode);
 
-					string handlerMethodName = listenerNode.Attributes["handler"];
+					string handlerMethodName = subscriberNode.Attributes["handler"];
 					Delegate handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, instance, handlerMethodName);
 
 					eventInfo.AddEventHandler(publisher, handler);
@@ -92,9 +92,9 @@ namespace Castle.Facilities.EventWiring
 			}
 		}
 
-		private EventInfo GetEventInfo(object publisher, IConfiguration listenerNode)
+		private EventInfo GetEventInfo(object publisher, IConfiguration subscriberNode)
 		{
-			string eventName = listenerNode.Attributes["listening"];
+			string eventName = subscriberNode.Attributes["event"];
 
 			Type publisherType = publisher.GetType();
 
@@ -108,9 +108,9 @@ namespace Castle.Facilities.EventWiring
 			return eventInfo;
 		}
 
-		private object GetPublisherInstance(IConfiguration listenerNode)
+		private object GetPublisherInstance(IConfiguration subscriberNode)
 		{
-			string publisherId = listenerNode.Attributes["publisherId"];
+			string publisherId = subscriberNode.Attributes["publisher"];
 
 			//TODO: Check cyclic dependency
 
