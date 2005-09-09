@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<facilities>
-		<facility id="nhibernate">
-		</facility>
-	</facilities>
 	
 	<components>
 		<component id="SimpleListener">
@@ -32,6 +28,12 @@
 		<component id="PublisherListener">
 			<subscribes>
 				<subscribe-to handler="OnPublish" publisher="SimplePublisher" event="Event" />
+			</subscribes>
+		</component>
+		
+		<component id="BadConfig">
+			<subscribes>
+				<subscribe-to handler="OnPublish" publisher="SimplePublisher" event="EventIahhh" />
 			</subscribes>
 		</component>
 	</components>

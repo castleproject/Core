@@ -14,11 +14,10 @@
 
 namespace Castle.Facilities.EventWiring.Tests
 {
-	using Castle.Facilities.EventWiring.Tests.Model;
-	using Castle.Windsor;
-	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Configuration.Sources;
 	using NUnit.Framework;
+	
+	using Castle.Windsor;
+	using Castle.Facilities.EventWiring.Tests.Model;
 
 	[TestFixture]
 	public class EventWiringTestCase
@@ -60,7 +59,6 @@ namespace Castle.Facilities.EventWiring.Tests
 		}
 
 		[Test, ExpectedException(typeof(EventWiringException))]
-		[Ignore("Not working: missing configuration?")]
 		public void EventNotFound()
 		{
 			object badConfigured = _container["BadConfig"];
