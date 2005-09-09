@@ -28,14 +28,29 @@ namespace Castle.Services.Transaction
 	/// </summary>
 	public interface ITransactionManager
 	{
+		/// <summary>
+		/// Raised when a top level transaction was created
+		/// </summary>
 		event TransactionCreationInfoDelegate TransactionCreated;
 
+		/// <summary>
+		/// Raised when a child transaction was created
+		/// </summary>
 		event TransactionCreationInfoDelegate ChildTransactionCreated;
 
+		/// <summary>
+		/// Raised when the transaction was committed successfully
+		/// </summary>
 		event TransactionDelegate TransactionCommitted;
 
+		/// <summary>
+		/// Raised when the transaction was rolledback successfully
+		/// </summary>
 		event TransactionDelegate TransactionRolledback;
 
+		/// <summary>
+		/// Raised when the transaction was disposed
+		/// </summary>
 		event TransactionDelegate TransactionDisposed;
 
 		/// <summary>

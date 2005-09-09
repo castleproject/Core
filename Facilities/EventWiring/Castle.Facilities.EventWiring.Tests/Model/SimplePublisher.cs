@@ -21,6 +21,8 @@ namespace Castle.Facilities.EventWiring.Tests.Model
 	{
 		public event PublishEventHandler Event;
 
+		public static event PublishEventHandler StaticEvent;
+
 		public SimplePublisher()
 		{
 		}
@@ -30,6 +32,14 @@ namespace Castle.Facilities.EventWiring.Tests.Model
 			if (Event != null)
 			{
 				Event(this, new EventArgs()); 
+			}
+		}
+
+		public void StaticTrigger()
+		{
+			if (StaticEvent != null)
+			{
+				StaticEvent(this, new EventArgs()); 
 			}
 		}
 	}

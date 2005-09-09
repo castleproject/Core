@@ -36,6 +36,7 @@ namespace Castle.Facilities.EventWiring.Tests
 			_container.AddFacility("eventwiring", new EventWiringFacility());
 
 			_container.AddComponent("SimpleListener", typeof(SimpleListener));
+			_container.AddComponent("SimpleListener2", typeof(SimpleListener));
 			_container.AddComponent("SimplePublisher", typeof(SimplePublisher));
 			_container.AddComponent("MultiPublisher", typeof(MultiPublisher));
 			_container.AddComponent("MultiListener", typeof(MultiListener));
@@ -45,6 +46,21 @@ namespace Castle.Facilities.EventWiring.Tests
 
 		[Test]
 		public void TriggerSimple()
+		{
+			SimplePublisher publisher = (SimplePublisher)_container["SimplePublisher"];
+			SimpleListener listener = (SimpleListener)_container["SimpleListener2"];
+
+			Assert.IsFalse(listener.Listened);
+			Assert.IsNull(listener.Sender);
+
+			publisher.StaticTrigger();
+
+			Assert.IsTrue(listener.Listened);
+			Assert.AreSame(publisher, listener.Sender);
+		}
+
+		[Test]
+		public void TriggerStaticEvent()
 		{
 			SimplePublisher publisher = (SimplePublisher)_container["SimplePublisher"];
 			SimpleListener listener = (SimpleListener)_container["SimpleListener"];

@@ -7,6 +7,12 @@
 				<subscribe-to publisher="SimplePublisher" event="Event" handler="OnPublish"/>
 			</subscribes>
 		</component>
+
+		<component id="SimpleListener2">
+			<subscribes>
+				<subscribe-to publisher="SimplePublisher" event="StaticEvent" handler="OnPublish"/>
+			</subscribes>
+		</component>
 		
 		<component id="MultiListener">
 			<subscribes>

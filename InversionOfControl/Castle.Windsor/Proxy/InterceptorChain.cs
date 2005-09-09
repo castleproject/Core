@@ -83,7 +83,6 @@ namespace Castle.Windsor.Proxy
 				throw new Exception("Expected 'invocation' to be an instance of DefaultMethodInvocation");
 			}
 #endif
-			
 			// This is not a beatiful cast, I know, 
 			// But if the previous assert was ok, its safe to cast it
 
