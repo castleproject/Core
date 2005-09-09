@@ -188,8 +188,8 @@ namespace Castle.MonoRail.Generator.Generators
 		private void CreateSolution(string name, IDictionary options, TextWriter writer)
 		{
 			Hashtable ctx = new Hashtable();
-			ctx.Add("projid", Guid.NewGuid().ToString());
-			ctx.Add("projtestid", Guid.NewGuid().ToString());
+			ctx.Add("projid", Guid.NewGuid().ToString().ToUpper());
+			ctx.Add("projtestid", Guid.NewGuid().ToString().ToUpper());
 			ctx.Add("basename", name);
 			ctx.Add("basenameproj", name + ".csproj");
 			ctx.Add("basenameprojtests", name + ".Tests.csproj");
