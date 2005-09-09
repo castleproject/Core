@@ -134,43 +134,43 @@
                 />
                 <File
                     RelPath = "templates\abstractcassini.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\container.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\csproj.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\csprojtest.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\global.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\httpapp.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\newview.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\newviewaspx.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\solution.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "templates\webconfig.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

@@ -29,16 +29,11 @@ namespace Castle.MonoRail.Generator.Generators
 	public abstract class AbstractGenerator
 	{
 		protected ITemplateEngine engine;
-
+		private string resourcePrefix="Castle.MonoRail.Generator.templates.";
 		public AbstractGenerator()
 		{
-			// TODO: Move templates to bin directory
-
-			String templatePath = Path.Combine( 
-				AppDomain.CurrentDomain.BaseDirectory, 
-				@"../Castle.MonoRail.Generator/templates" );
-
-			engine = new NVelocityTemplateEngine(templatePath);
+			engine = new NVelocityTemplateEngine();
+			(engine as NVelocityTemplateEngine).AssemblyName=System.Reflection.Assembly.GetExecutingAssembly().FullName;
 			(engine as ISupportInitialize).BeginInit();
 		}
 
@@ -46,7 +41,7 @@ namespace Castle.MonoRail.Generator.Generators
 		{
 			using (StreamWriter swriter = new StreamWriter(filename, false, Encoding.Default))
 			{
-				engine.Process(ctx, templateName, swriter);
+				engine.Process(ctx, resourcePrefix + templateName, swriter);
 			}
 		}
 	}
