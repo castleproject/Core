@@ -1,0 +1,45 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.RemoteIntegration", "Castle.Facilities.RemoteIntegration\Castle.Facilities.RemoteIntegration.csproj", "{0090A16A-ED32-42E4-90B1-6AC6D9E4C5FC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MicroKernel", "..\..\InversionOfControl\Castle.MicroKernel\Castle.MicroKernel.csproj", "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Model", "..\..\InversionOfControl\Castle.Model\Castle.Model.csproj", "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Windsor", "..\..\InversionOfControl\Castle.Windsor\Castle.Windsor.csproj", "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0090A16A-ED32-42E4-90B1-6AC6D9E4C5FC}.Debug.ActiveCfg = Debug|.NET
+		{0090A16A-ED32-42E4-90B1-6AC6D9E4C5FC}.Debug.Build.0 = Debug|.NET
+		{0090A16A-ED32-42E4-90B1-6AC6D9E4C5FC}.Release.ActiveCfg = Release|.NET
+		{0090A16A-ED32-42E4-90B1-6AC6D9E4C5FC}.Release.Build.0 = Release|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.ActiveCfg = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Debug.Build.0 = Debug|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.ActiveCfg = Release|.NET
+		{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}.Release.Build.0 = Release|.NET
+		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Debug.ActiveCfg = Debug|.NET
+		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Debug.Build.0 = Debug|.NET
+		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Release.ActiveCfg = Release|.NET
+		{6F052973-C8E0-41EB-BAAF-B052509B5597}.Release.Build.0 = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.ActiveCfg = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Debug.Build.0 = Debug|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.ActiveCfg = Release|.NET
+		{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
