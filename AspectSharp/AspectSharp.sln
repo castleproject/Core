@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AopAlliance", "AopAlliance\
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspectSharp.LoggingExample", "AspectSharp.LoggingExample\AspectSharp.LoggingExample.csproj", "{3099B452-9D33-4411-A200-C8F25D6AE26E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -53,6 +57,10 @@ Global
 		{74C3CE90-25AF-4998-9123-61D19041AF68}.Debug.Build.0 = Debug|.NET
 		{74C3CE90-25AF-4998-9123-61D19041AF68}.Release.ActiveCfg = Release|.NET
 		{74C3CE90-25AF-4998-9123-61D19041AF68}.Release.Build.0 = Release|.NET
+		{3099B452-9D33-4411-A200-C8F25D6AE26E}.Debug.ActiveCfg = Debug|.NET
+		{3099B452-9D33-4411-A200-C8F25D6AE26E}.Debug.Build.0 = Debug|.NET
+		{3099B452-9D33-4411-A200-C8F25D6AE26E}.Release.ActiveCfg = Release|.NET
+		{3099B452-9D33-4411-A200-C8F25D6AE26E}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		aspectsharp.build = aspectsharp.build
