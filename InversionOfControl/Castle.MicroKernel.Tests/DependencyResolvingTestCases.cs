@@ -21,9 +21,7 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 
 	using Castle.Model;
 	using Castle.Model.Configuration;
-	using Castle.MicroKernel.Handlers;
 	using Castle.MicroKernel.Tests.ClassComponents;
-	using Castle.MicroKernel.Resolvers;
 
 
 	/// <summary>
@@ -42,14 +40,13 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 		[SetUp] public void SetUp()
 		{
 			kernel = new DefaultKernel();
-			kernel.DependencyResolving += new DependancyDelegate(AssertEvent);
+			kernel.DependencyResolving += new DependencyDelegate(AssertEvent);
 		}
 
 		[TearDown] public void TearDown()
 		{
 			kernel.Dispose();
 		}
-
 
 		#endregion
 
@@ -158,7 +155,7 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 		[SetUp] public void SetUp()
 		{
 			kernel = new DefaultKernel();
-			kernel.DependencyResolving += new DependancyDelegate(ThrowException);
+			kernel.DependencyResolving += new DependencyDelegate(ThrowException);
 		}
 
 		[TearDown] public void TearDown()

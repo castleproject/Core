@@ -26,6 +26,13 @@ namespace Castle.MicroKernel
 	public interface IDependencyResolver
 	{
 		/// <summary>
+		/// This method is called with a delegate for firing the
+		/// IKernelEvents.DependencyResolving event.
+		/// </summary>
+		/// <param name="resolving">The delegate used to fire the event</param>
+		void Initialize(DependencyDelegate resolving);
+
+		/// <summary>
 		/// Should return an instance of a service or property values as
 		/// specified by the dependency model instance. 
 		/// It is also the responsability of <see cref="IDependencyResolver"/>
@@ -44,12 +51,5 @@ namespace Castle.MicroKernel
 		/// <param name="dependency"></param>
 		/// <returns></returns>
 		bool CanResolve(ComponentModel model, DependencyModel dependency);
-
-		/// <summary>
-		/// This method is called with a delegate for firing the
-		/// IKernelEvents.DependencyResolving event.
-		/// </summary>
-		/// <param name="resolving">The delegate used to fire the event</param>
-		void Initialize(DependancyDelegate resolving);
 	}
 }

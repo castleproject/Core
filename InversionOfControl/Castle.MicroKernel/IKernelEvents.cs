@@ -61,7 +61,7 @@ namespace Castle.MicroKernel
 	/// Represents a delegate which holds dependency
 	/// resolving information.
 	/// </summary>
-	public delegate void DependancyDelegate(ComponentModel client, DependencyModel model, Object dependency);
+	public delegate void DependencyDelegate(ComponentModel client, DependencyModel model, Object dependency);
 
 	/// <summary>
 	/// Summary description for IKernelEvents.
@@ -112,6 +112,6 @@ namespace Castle.MicroKernel
 		/// it allows the dependency to be changed,
 		/// but the client ComponentModel must not be altered.
 		/// </summary>
-		event DependancyDelegate DependencyResolving;
+		event DependencyDelegate DependencyResolving;
 	}
 }

@@ -122,7 +122,7 @@ namespace Castle.MicroKernel
 		}
 
 
-		public event DependancyDelegate DependencyResolving
+		public event DependencyDelegate DependencyResolving
 		{
 			add { events.AddHandler(DependencyResolvingEvent, value); }
 			remove { events.RemoveHandler(DependencyResolvingEvent, value); }
@@ -179,9 +179,10 @@ namespace Castle.MicroKernel
 		}
 		protected virtual void RaiseDependencyResolving(ComponentModel client, DependencyModel model, Object dependency)
 		{
-			DependancyDelegate eventDelegate = (DependancyDelegate) events[DependencyResolvingEvent];
+			DependencyDelegate eventDelegate = (DependencyDelegate) events[DependencyResolvingEvent];
 			if (eventDelegate != null) eventDelegate(client, model, dependency);
 		}
+
 		#region IDeserializationCallback Members
 
 		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
