@@ -112,19 +112,19 @@ namespace Castle.MonoRail.Engine.Tests
 
 		protected void Execute(String url, String expected, String expectedUrl, bool startsWith, string contentType)
 		{
-			HttpWebRequest myReq = (HttpWebRequest)
-				WebRequest.Create("http://localhost:8083" + url);
-
 			HttpWebResponse response;
 
-			try
+			// try
 			{
+				HttpWebRequest myReq = (HttpWebRequest)
+					WebRequest.Create("http://localhost:8083" + url);
+
 				response = (HttpWebResponse) myReq.GetResponse();
 			}
-			catch( Exception e )
+			// catch( Exception ex )
 			{
-				System.Diagnostics.Trace.WriteLine(e.ToString());
-				throw;
+				// System.Diagnostics.Trace.WriteLine(e.ToString());
+				// throw ex;
 			}
 
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);

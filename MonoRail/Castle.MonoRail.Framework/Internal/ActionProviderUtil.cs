@@ -12,21 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
-	/// <summary>
-	/// An action that is not exactly a method
-	/// on the controller.
-	/// </summary>
-	public interface IDynamicAction
+
+	public abstract class ActionProviderUtil
 	{
-		/// <summary>
-		/// Implementors should perform the action 
-		/// upon this invocation
-		/// </summary>
-		/// <param name="controller"></param>
-		void Execute( Controller controller );
+		public static void RegisterActions(Controller controller)
+		{
+			Type controllerType = controller.GetType();
+
+			object[] attrs = controllerType.GetCustomAttributes( typeof(DynamicActionProviderAttribute), true );
+
+			foreach(DynamicActionProviderAttribute providerAtt in attrs)
+			{
+				Type providerType = providerAtt.ProviderType;
+				
+				IDynamicActionProvider provider = (IDynamicActionProvider) Activator.CreateInstance(providerType);
+
+				provider.IncludeActions( controller );
+			}
+		}
 	}
 }

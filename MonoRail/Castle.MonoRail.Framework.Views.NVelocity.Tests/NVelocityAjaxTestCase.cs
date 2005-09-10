@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 
 	[TestFixture]
-	public class NVelocityAjaxTestCase : AbstractCassiniTestCase
+	public class NVelocityAjaxTestCase : AbstractNVelocityTestCase
 	{
 		[Test]
 		public void JsFunctions()
@@ -86,11 +86,5 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			Execute(url, expected);
 		}
-
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
-		}
-
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	using Castle.MonoRail.Engine.Tests;
 
 	[TestFixture]
-	public class SmartControllerTestCase : AbstractCassiniTestCase
+	public class SmartControllerTestCase : AbstractNVelocityTestCase
 	{
 		[Test]
 		public void StringMethod()
@@ -102,11 +102,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			string expected = "incoming hammett " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
 
 			Execute(url, expected);
-		}
-
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
 		}
 	}
 }

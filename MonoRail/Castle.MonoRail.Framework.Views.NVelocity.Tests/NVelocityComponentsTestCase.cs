@@ -23,13 +23,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 
 	[TestFixture]
-	public class NVelocityComponentsTestCase : AbstractCassiniTestCase
+	public class NVelocityComponentsTestCase : AbstractNVelocityTestCase
 	{
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
-		}
-
 		[Test]
 		public void BlockComponent1()
 		{

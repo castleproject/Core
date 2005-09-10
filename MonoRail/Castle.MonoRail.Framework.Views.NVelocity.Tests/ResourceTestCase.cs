@@ -21,17 +21,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class ResourceTestCase : AbstractCassiniTestCase
+	public class ResourceTestCase : AbstractNVelocityTestCase
 	{
-		public ResourceTestCase()
-		{
-		}
-
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
-		}
-
 		[Test]
 		public void GetResources()
 		{

@@ -157,6 +157,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\DynController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\Exception.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -231,6 +236,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ActionProviders\DynamicActionProvider1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\SubArea\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -257,6 +267,10 @@
                 />
                 <File
                     RelPath = "views\cookies\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\dyn\index.vm"
                     BuildAction = "None"
                 />
                 <File

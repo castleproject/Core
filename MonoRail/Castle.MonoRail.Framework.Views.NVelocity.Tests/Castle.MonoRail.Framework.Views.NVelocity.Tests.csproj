@@ -125,12 +125,22 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AbstractNVelocityTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ComponentsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DynamicActionProviderTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

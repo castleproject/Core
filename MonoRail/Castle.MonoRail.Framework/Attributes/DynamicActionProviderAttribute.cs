@@ -17,16 +17,27 @@ namespace Castle.MonoRail.Framework
 	using System;
 
 	/// <summary>
-	/// An action that is not exactly a method
-	/// on the controller.
+	/// Associates a provider that can add dynamic actions 
+	/// to a controller
 	/// </summary>
-	public interface IDynamicAction
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
+	public class DynamicActionProviderAttribute : Attribute
 	{
-		/// <summary>
-		/// Implementors should perform the action 
-		/// upon this invocation
-		/// </summary>
-		/// <param name="controller"></param>
-		void Execute( Controller controller );
+		private readonly Type providerType;
+
+		public DynamicActionProviderAttribute( Type providerType )
+		{
+			if (!typeof(IDynamicActionProvider).IsAssignableFrom(providerType))
+			{
+				throw new ArgumentException("The specified provider does not implement IDynamicActionProvider");
+			}
+
+			this.providerType = providerType;
+		}
+
+		public Type ProviderType
+		{
+			get { return providerType; }
+		}
 	}
 }

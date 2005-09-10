@@ -535,6 +535,11 @@ namespace Castle.MonoRail.Framework
 				_scaffoldSupport.Process(this);
 			}
 
+			if (GetType().IsDefined(typeof(DynamicActionProviderAttribute), true))
+			{
+				ActionProviderUtil.RegisterActions(this);
+			}
+
 			Initialize();
 
 			InternalSend(actionName);

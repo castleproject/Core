@@ -22,13 +22,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	using Castle.MonoRail.Engine.Tests;
 
 	[TestFixture]
-	public class RoutingTestCase : AbstractCassiniTestCase
-	{
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
-		}
-		
+	public class RoutingTestCase : AbstractNVelocityTestCase
+	{		
 		[Test]
 		public void BlogRoutingRule()
 		{

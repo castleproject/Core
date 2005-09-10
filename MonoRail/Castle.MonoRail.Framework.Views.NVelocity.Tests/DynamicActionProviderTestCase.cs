@@ -12,21 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
 
-	/// <summary>
-	/// An action that is not exactly a method
-	/// on the controller.
-	/// </summary>
-	public interface IDynamicAction
+	using NUnit.Framework;
+
+
+	[TestFixture]
+	public class DynamicActionProviderTestCase : AbstractNVelocityTestCase
 	{
-		/// <summary>
-		/// Implementors should perform the action 
-		/// upon this invocation
-		/// </summary>
-		/// <param name="controller"></param>
-		void Execute( Controller controller );
+		[Test]
+		public void DynamicActionUsingView()
+		{
+			string url = "/dyn/save.rails";
+			string expected = "Hello from save dynamic action";
+
+			Execute(url, expected);
+		}
+
+		[Test]
+		public void DynamicActionUsingRenderText()
+		{
+			string url = "/dyn/index.rails";
+			string expected = "xx";//"Rendered from the view: hello!";
+
+			Execute(url, expected);
+		}
 	}
 }

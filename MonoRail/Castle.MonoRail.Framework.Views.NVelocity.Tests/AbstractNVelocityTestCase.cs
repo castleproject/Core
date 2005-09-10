@@ -12,21 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
+	using System.IO;
 
-	/// <summary>
-	/// An action that is not exactly a method
-	/// on the controller.
-	/// </summary>
-	public interface IDynamicAction
+	using Castle.MonoRail.Engine.Tests;
+
+
+	public abstract class AbstractNVelocityTestCase : AbstractCassiniTestCase
 	{
-		/// <summary>
-		/// Implementors should perform the action 
-		/// upon this invocation
-		/// </summary>
-		/// <param name="controller"></param>
-		void Execute( Controller controller );
+		protected sealed override String ObtainPhysicalDir()
+		{
+			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
+		}
 	}
 }

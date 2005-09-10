@@ -133,6 +133,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IDynamicActionProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -209,6 +214,11 @@
                 />
                 <File
                     RelPath = "Attributes\DefaultActionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\DynamicActionProviderAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -330,6 +340,11 @@
                 />
                 <File
                     RelPath = "Internal\AbstractControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\ActionProviderUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -60,8 +60,8 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
 	public class FilterAttribute : Attribute
 	{
-		private Type _filterType;
-		private ExecuteEnum _when;
+		private readonly Type _filterType;
+		private readonly ExecuteEnum _when;
 
 		/// <summary>
 		/// Constructs a FilterAttribute associating 

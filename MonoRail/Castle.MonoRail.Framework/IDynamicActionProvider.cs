@@ -17,16 +17,15 @@ namespace Castle.MonoRail.Framework
 	using System;
 
 	/// <summary>
-	/// An action that is not exactly a method
-	/// on the controller.
+	/// 
 	/// </summary>
-	public interface IDynamicAction
+	public interface IDynamicActionProvider
 	{
 		/// <summary>
-		/// Implementors should perform the action 
-		/// upon this invocation
+		/// Implementors should register their dynamics 
+		/// actions into the controller
 		/// </summary>
 		/// <param name="controller"></param>
-		void Execute( Controller controller );
+		void IncludeActions(Controller controller);
 	}
 }

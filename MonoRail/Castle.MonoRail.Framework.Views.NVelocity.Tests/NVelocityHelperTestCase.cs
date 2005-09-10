@@ -24,7 +24,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 	[TestFixture]
 	[Ignore("Formats are different")]
-	public class NVelocityHelperTestCase : AbstractCassiniTestCase
+	public class NVelocityHelperTestCase : AbstractNVelocityTestCase
 	{
 		[Test]
 		public void InheritedHelpers()
@@ -42,11 +42,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			string expected = "Date formatted ";
 
 			Execute(url, expected);
-		}
-
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
 		}
 	}
 }

@@ -20,9 +20,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 	using Castle.MonoRail.Framework.Internal.Graph;
 
-	/// <summary>
-	/// Summary description for ControllerTreeTestCase.
-	/// </summary>
+
 	[TestFixture]
 	public class ControllerTreeTestCase
 	{

@@ -12,21 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace TestSiteNVelocity.Controllers
 {
-	using System;
+	using Castle.MonoRail.Framework;
 
-	/// <summary>
-	/// An action that is not exactly a method
-	/// on the controller.
-	/// </summary>
-	public interface IDynamicAction
+	using TestSiteNVelocity.Controllers.ActionProviders;
+
+
+	[DynamicActionProvider( typeof(DynamicActionProvider1) )]
+	[DynamicActionProvider( typeof(DynamicActionProvider2) )]
+	public class DynController : Controller
 	{
-		/// <summary>
-		/// Implementors should perform the action 
-		/// upon this invocation
-		/// </summary>
-		/// <param name="controller"></param>
-		void Execute( Controller controller );
+		
 	}
 }
