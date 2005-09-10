@@ -11,18 +11,17 @@
 #end
     </configSections>
 
-    <monoRail>
-		<viewEngine 
-			viewPathRoot="$viewpath" 
-			customEngine="$viewenginetypename" />
 #if($useWindsorIntegration)
-		<customControllerFactory type="Castle.MonoRail.WindsorExtension.WindsorControllerFactory, Castle.MonoRail.WindsorExtension" />
-		<customFilterFactory type="Castle.MonoRail.WindsorExtension.WindsorFilterFactory, Castle.MonoRail.WindsorExtension" />
+    <monoRail useWindsorIntegration="true">
 #else
+    <monoRail>
 		<controllers>
 			<assembly>${name}</assembly>
 		</controllers>
 #end
+		<viewEngine 
+			viewPathRoot="$viewpath" 
+			customEngine="$viewenginetypename" />
 		<!-- These are a few routing rules samples 
 		  (dont forget to enable the http module below)
 		<routing>
@@ -65,13 +64,20 @@
 		</facilities>
 
 		<components>
-		  <!-- Components declarations goes here -->
+		  
+		  <!-- Components declarations/configuration goes here -->
+		  
 		</components>
+		
 	</castle>
 #end
 
     <system.web>
         <httpHandlers>
+            <!-- 
+              The .rails extension is just a suggestion, you can use 
+              whatever extension you want and for shared hosting, you can use .ashx
+             -->
             <add verb="*" path="*.rails" 
                type="Castle.MonoRail.Engine.MonoRailHttpHandlerFactory, Castle.MonoRail.Engine" />
         </httpHandlers>

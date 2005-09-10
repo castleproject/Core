@@ -35,7 +35,7 @@
 				<warning number="1572" />
 			</nowarn>
 
-			<resources prefix="Castle.MonoRail.Generator.templates" dynamicprefix="true">
+			<resources prefix="Castle.MonoRail.Generator.templates" dynamicprefix="false">
 				<include name="**/*.vm" />
 			</resources>
 			
