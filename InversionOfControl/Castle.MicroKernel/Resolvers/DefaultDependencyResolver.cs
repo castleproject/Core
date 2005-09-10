@@ -32,6 +32,7 @@ namespace Castle.MicroKernel.Resolvers
 	{
 		private readonly IKernel kernel;
 		private readonly ITypeConverter converter;
+		private DependancyDelegate RaiseDependencyResolving;
 
 		public DefaultDependencyResolver(IKernel kernel)
 		{
@@ -40,6 +41,12 @@ namespace Castle.MicroKernel.Resolvers
 			this.converter = (ITypeConverter) 
 				kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 		}
+
+		public void Initialize(DependancyDelegate resolving)
+		{
+			this.RaiseDependencyResolving = resolving;
+		}
+
 
 		/// <summary>
 		/// Try to resolve the dependency by checking the parameters in 
@@ -75,6 +82,14 @@ namespace Castle.MicroKernel.Resolvers
 					model.Name, implementation, dependency.DependencyKey, dependency.TargetType.FullName);
 
 				throw new DependencyResolverException(message);	
+			}
+
+			try
+			{
+				RaiseDependencyResolving(model, dependency, value);
+			}
+			catch
+			{
 			}
 
 			return value;

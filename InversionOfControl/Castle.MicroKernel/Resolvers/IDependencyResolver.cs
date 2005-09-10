@@ -44,5 +44,12 @@ namespace Castle.MicroKernel
 		/// <param name="dependency"></param>
 		/// <returns></returns>
 		bool CanResolve(ComponentModel model, DependencyModel dependency);
+
+		/// <summary>
+		/// This method is called with a delegate for firing the
+		/// IKernelEvents.DependencyResolving event.
+		/// </summary>
+		/// <param name="resolving">The delegate used to fire the event</param>
+		void Initialize(DependancyDelegate resolving);
 	}
 }

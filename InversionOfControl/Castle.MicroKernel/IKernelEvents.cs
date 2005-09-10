@@ -58,6 +58,12 @@ namespace Castle.MicroKernel
 	public delegate void HandlerDelegate( IHandler handler, ref bool stateChanged );
 
 	/// <summary>
+	/// Represents a delegate which holds dependency
+	/// resolving information.
+	/// </summary>
+	public delegate void DependancyDelegate(ComponentModel client, DependencyModel model, Object dependency);
+
+	/// <summary>
 	/// Summary description for IKernelEvents.
 	/// </summary>
 	public interface IKernelEvents
@@ -100,5 +106,12 @@ namespace Castle.MicroKernel
 		/// (it might be in a valid or waiting dependency state)
 		/// </summary>
 		event HandlerDelegate HandlerRegistered;
+
+		/// <summary>
+		/// Event fired when a dependency is being resolved,
+		/// it allows the dependency to be changed,
+		/// but the client ComponentModel must not be altered.
+		/// </summary>
+		event DependancyDelegate DependencyResolving;
 	}
 }

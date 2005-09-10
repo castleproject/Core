@@ -33,6 +33,7 @@ namespace Castle.MicroKernel
 		private static readonly object ComponentDestroyedEvent = new object();
 		private static readonly object AddedAsChildKernelEvent = new object();
 		private static readonly object ComponentModelCreatedEvent = new object();
+		private static readonly object DependencyResolvingEvent = new object();
 
 		[NonSerialized]
 		private EventHandlerList events;
@@ -120,6 +121,14 @@ namespace Castle.MicroKernel
 			remove { events.RemoveHandler(ComponentModelCreatedEvent, value); }
 		}
 
+
+		public event DependancyDelegate DependencyResolving
+		{
+			add { events.AddHandler(DependencyResolvingEvent, value); }
+			remove { events.RemoveHandler(DependencyResolvingEvent, value); }
+		}
+
+
 		protected virtual void RaiseComponentRegistered(String key, IHandler handler)
 		{
 			ComponentDataDelegate eventDelegate = (ComponentDataDelegate) events[ComponentRegisteredEvent];
@@ -168,7 +177,11 @@ namespace Castle.MicroKernel
 				if (eventDelegate != null) eventDelegate(handler, ref stateChanged);
 			}
 		}
-
+		protected virtual void RaiseDependencyResolving(ComponentModel client, DependencyModel model, Object dependency)
+		{
+			DependancyDelegate eventDelegate = (DependancyDelegate) events[DependencyResolvingEvent];
+			if (eventDelegate != null) eventDelegate(client, model, dependency);
+		}
 		#region IDeserializationCallback Members
 
 		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)

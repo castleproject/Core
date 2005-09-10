@@ -107,6 +107,7 @@ namespace Castle.MicroKernel
 		public DefaultKernel(IDependencyResolver resolver, IProxyFactory proxyFactory) : this(proxyFactory)
 		{
 			this.resolver = resolver;
+			this.resolver.Initialize(new DependancyDelegate(RaiseDependencyResolving));
 		}
 
 		/// <summary>
@@ -134,6 +135,7 @@ namespace Castle.MicroKernel
 			this.handlerFactory = new DefaultHandlerFactory(this);
 			this.modelBuilder = new DefaultComponentModelBuilder(this);
 			this.resolver = new DefaultDependencyResolver(this);
+			this.resolver.Initialize(new DependancyDelegate(RaiseDependencyResolving));
 		}
 
 		public DefaultKernel(SerializationInfo info, StreamingContext context) : base(info, context)
