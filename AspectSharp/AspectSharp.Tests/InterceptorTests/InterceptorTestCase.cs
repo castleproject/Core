@@ -15,12 +15,8 @@
 namespace AspectSharp.Tests.InterceptorTests
 {
 	using System;
-	using System.Reflection;
-	using System.Collections;
 
 	using NUnit.Framework;
-
-	using AopAlliance.Intercept;
 
 	using AspectSharp.Builder;
 	using AspectSharp.Tests.Classes;
@@ -45,7 +41,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method|property(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -68,7 +64,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -91,7 +87,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut property(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -114,7 +110,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut propertyread(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -137,7 +133,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut propertyread(String)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -160,7 +156,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut propertyread(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -183,7 +179,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method|propertyread(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -206,7 +202,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(* DoSomething)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -228,7 +224,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(* DoSomething(int))" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -250,7 +246,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(* DoSomething(int, *))" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -272,7 +268,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(* DoSomething(int, int))" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -294,7 +290,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(void DoSomething(*))" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -316,7 +312,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(int DoSomething(*))" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -338,7 +334,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(* DoS.*(*))" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -360,7 +356,7 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut property(* Na.*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -383,10 +379,10 @@ namespace AspectSharp.Tests.InterceptorTests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut property(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   pointcut method(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -418,51 +414,6 @@ namespace AspectSharp.Tests.InterceptorTests
 			Assert.AreEqual( "John Johnson", instance.Name );
 			instance.Started = true;
 			Assert.IsTrue( instance.Started );
-		}
-
-	}
-
-	public class LogInvocationInterceptor : IMethodInterceptor
-	{
-		private static readonly ArrayList _list = new ArrayList();
-
-		public LogInvocationInterceptor()
-		{
-		}
-
-		public static void Clear()
-		{
-			_list.Clear();
-		}
-
-		public static String[] Messages
-		{
-			get { return (String[]) _list.ToArray( typeof(String) ); }
-		}
-
-		public object Invoke(IMethodInvocation invocation)
-		{
-			MethodBase method = invocation.Method;
-			
-			if (method.IsSpecialName)
-			{
-				_list.Add("property " + method.Name);
-			}
-			else
-			{
-				Type[] args = Type.GetTypeArray(invocation.Arguments);
-
-				String argMessage = "(";
-				foreach(Type arg in args)
-				{
-					argMessage += " " + arg.Name;
-				}
-				argMessage += ")";
-				
-				_list.Add("method " + method.Name + argMessage);
-			}
-
-			return invocation.Proceed();
 		}
 	}
 }

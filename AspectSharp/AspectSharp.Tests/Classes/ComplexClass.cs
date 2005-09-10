@@ -26,6 +26,21 @@ namespace AspectSharp.Tests.Classes
 		private String _name;
 		private bool _started;
 
+		public ComplexClass()
+		{
+		}
+
+		public ComplexClass(string name)
+		{
+			_name = name;
+		}
+
+		public ComplexClass(string name, bool started)
+		{
+			_name = name;
+			_started = started;
+		}
+
 		public virtual void DoNothing()
 		{
 		}

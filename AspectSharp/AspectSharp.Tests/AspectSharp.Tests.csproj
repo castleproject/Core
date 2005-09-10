@@ -121,6 +121,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AspectEngineTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AspectSharp.Tests.dll.config"
                     BuildAction = "None"
                 />
@@ -180,6 +185,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Classes\IPartiallyComplex.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Classes\IPerson.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -196,6 +206,11 @@
                 />
                 <File
                     RelPath = "Classes\Loggeable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Classes\LogInvocationInterceptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

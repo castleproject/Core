@@ -61,14 +61,14 @@ namespace AspectSharp.Core.Proxy
 
 		#region IProxyFactory Members
 
-		public object CreateClassProxy(Type classType, AspectDefinition aspect)
+		public object CreateClassProxy(Type classType, AspectDefinition aspect, params object[] constructorArgs)
 		{
 			AssertUtil.ArgumentNotNull(classType, "classType");
 			AssertUtil.ArgumentNotNull(aspect, "aspect");
 
 			IInvocationDispatcher dispatcher = _dispatcherFactory.Create(aspect, _engine);
 
-			return CreateAndInstantiateClassProxy(classType, aspect, dispatcher);
+			return CreateAndInstantiateClassProxy(classType, aspect, dispatcher, constructorArgs);
 		}
 
 		public object CreateInterfaceProxy(Type inter, object target, AspectDefinition aspect)
@@ -84,18 +84,18 @@ namespace AspectSharp.Core.Proxy
 
 		#endregion
 
-		protected virtual object CreateAndInstantiateClassProxy(Type baseClass, AspectDefinition aspect, IInvocationDispatcher dispatcher)
+		protected virtual object CreateAndInstantiateClassProxy(Type baseClass, AspectDefinition aspect, IInvocationDispatcher dispatcher, params object[] constructorArgs)
 		{
 			object proxy = null;
 
 			object[] mixins = InstantiateMixins(aspect.Mixins);
-			proxy = ObtainClassProxyInstance(aspect, baseClass, mixins, dispatcher);
+			proxy = ObtainClassProxyInstance(aspect, baseClass, mixins, dispatcher, constructorArgs);
 			InitializeMixins(proxy, mixins);
 
 			return proxy;
 		}
 
-		protected virtual object CreateAndInstantiateInterfaceProxy(Type inter, object target, AspectDefinition aspect, IInvocationDispatcher dispatcher)
+		protected virtual object CreateAndInstantiateInterfaceProxy(Type inter, object target, AspectDefinition aspect, IInvocationDispatcher dispatcher, params object[] constructorArgs)
 		{
 			object proxy = null;
 
@@ -106,16 +106,16 @@ namespace AspectSharp.Core.Proxy
 			return proxy;
 		}
 
-		private object ObtainClassProxyInstance(AspectDefinition aspect, Type baseClass, object[] mixins, IInvocationDispatcher dispatcher)
+		private object ObtainClassProxyInstance(AspectDefinition aspect, Type baseClass, object[] mixins, IInvocationDispatcher dispatcher, params object[] constructorArgs)
 		{
 			Type proxyType = GetProxyTypeFromCache(aspect, baseClass);
 
 			if (proxyType != null)
 			{
-				return CreateClassProxyInstance(proxyType, mixins, dispatcher);
+				return CreateClassProxyInstance(proxyType, mixins, dispatcher, constructorArgs);
 			}
 
-			object proxy = _generator.CreateClassProxy(baseClass, mixins, dispatcher);
+			object proxy = _generator.CreateClassProxy(baseClass, mixins, dispatcher, constructorArgs);
 			RegisterProxyTypeInCache(aspect, baseClass, proxy.GetType());
 			return proxy;
 		}
@@ -136,20 +136,33 @@ namespace AspectSharp.Core.Proxy
 
 		#region Proxy instantiation related methods
 
-		private object CreateClassProxyInstance(Type proxyType, object[] mixins, IInvocationDispatcher dispatcher)
+		private object CreateClassProxyInstance(Type proxyType, object[] mixins, IInvocationDispatcher dispatcher, params object[] constructorArgs)
 		{
 			object proxy;
 
 			if (mixins.Length != 0)
 			{
-				proxy = Activator.CreateInstance(proxyType, new object[] {dispatcher, mixins});
+				proxy = Activator.CreateInstance(proxyType, Merge(new object[] {dispatcher, mixins}, constructorArgs));
 			}
 			else
 			{
-				proxy = Activator.CreateInstance(proxyType, new object[] {dispatcher});
+				proxy = Activator.CreateInstance(proxyType, Merge(new object[] {dispatcher}, constructorArgs));
 			}
 
 			return proxy;
+		}
+
+		private object[] Merge(object[] args1, object[] args2)
+		{
+			ArrayList args = new ArrayList();
+
+			if (args1 != null)
+			args.AddRange(args1);
+
+			if (args2 != null)
+			args.AddRange(args2);
+
+			return args.ToArray();
 		}
 
 		private object CreateInterfaceProxyInstance(Type proxyType, object target, object[] mixins, IInvocationDispatcher dispatcher)

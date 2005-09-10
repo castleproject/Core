@@ -96,7 +96,7 @@ namespace AspectSharp
 		/// </summary>
 		/// <param name="classType">Concrete class with a available constructor (public or protected) to be wrapped</param>
 		/// <returns>A proxy</returns>
-		public virtual object WrapClass(Type classType)
+		public virtual object WrapClass(Type classType, params object[] constructorArgs)
 		{
 			AssertUtil.ArgumentNotNull(classType, "classType");
 			AssertUtil.ArgumentNotInterface(classType, "classType");
@@ -105,12 +105,12 @@ namespace AspectSharp
 
 			if (aspects.Length == 0)
 			{
-				return Activator.CreateInstance(classType);
+				return Activator.CreateInstance(classType, constructorArgs);
 			}
 
 			AspectDefinition aspectdef = Union(aspects);
 
-			return ProxyFactory.CreateClassProxy(classType, aspectdef);
+			return ProxyFactory.CreateClassProxy(classType, aspectdef, constructorArgs);
 		}
 
 		/// <summary>

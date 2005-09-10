@@ -35,7 +35,7 @@ namespace AspectSharp.Tests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method|property(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
@@ -53,15 +53,15 @@ namespace AspectSharp.Tests
 				" aspect MyAspect for ComplexClass " + 
 				"   " + 
 				"   pointcut method(* Do.*(*))" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				"   pointcut propertyread(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				"   pointcut propertywrite(*)" + 
-				"     advice(AspectSharp.Tests.InterceptorTests.LogInvocationInterceptor)" + 
+				"     advice(AspectSharp.Tests.Classes.LogInvocationInterceptor)" + 
 				"   end" + 
 				"   " + 
 				" end ";
