@@ -48,6 +48,12 @@ namespace Castle.DynamicProxy.Builder
 			return generator.GenerateCode(theClass);
 		}
 
+		public Type CreateClassProxy(Type theClass, Type[] interfaces)
+		{
+			ClassProxyGenerator generator = new ClassProxyGenerator(_scope);
+			return generator.GenerateCode(theClass, interfaces);
+		}
+
 		public virtual Type CreateCustomInterfaceProxy(Type[] interfaces, Type type, GeneratorContext context)
 		{
 			InterfaceProxyGenerator generator = new InterfaceProxyGenerator(_scope, context);

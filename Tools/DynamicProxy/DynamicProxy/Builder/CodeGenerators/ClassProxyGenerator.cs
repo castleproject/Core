@@ -193,7 +193,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		public virtual Type GenerateCode(Type baseClass)
 		{
 			return GenerateCode(baseClass, new Type[0]);
-		}	
+		}
 		
 		public virtual Type GenerateCode(Type baseClass, Type[] interfaces)
 		{

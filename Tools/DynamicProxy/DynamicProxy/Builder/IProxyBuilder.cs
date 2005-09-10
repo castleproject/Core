@@ -27,6 +27,8 @@ namespace Castle.DynamicProxy.Builder
 
 		Type CreateClassProxy( Type theClass );
 
+		Type CreateClassProxy( Type theClass, Type[] interfaces );
+
 		Type CreateCustomClassProxy( Type theClass, GeneratorContext context );
 	}
 }

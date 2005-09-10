@@ -72,6 +72,17 @@ namespace Castle.DynamicProxy
 			return CreateClassProxyInstance( newType, interceptor, argumentsForConstructor );
 		}
 
+		public virtual object CreateClassProxy(Type baseClass, Type[] interfaces,
+			IInterceptor interceptor, params object[] argumentsForConstructor)
+		{
+			AssertUtil.IsClass(baseClass, "baseClass");
+			AssertUtil.NotNull(interceptor, "interceptor");
+			AssertUtil.NotNull(interfaces, "interfaces");
+
+			Type newType = ProxyBuilder.CreateClassProxy(baseClass, interfaces);
+
+			return CreateClassProxyInstance( newType, interceptor, argumentsForConstructor );
+		}
 		
 
 		public virtual object CreateCustomClassProxy(Type baseClass, 

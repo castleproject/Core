@@ -54,6 +54,22 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
+		public void ProxyForClassWithInterfaces()
+		{
+			object proxy = _generator.CreateClassProxy( typeof(ServiceClass), new Type[] { typeof(IDisposable) }, 
+				new ResultModifiedInvocationHandler( ) );
+			
+			Assert.IsNotNull( proxy );
+			Assert.IsTrue( typeof(ServiceClass).IsAssignableFrom( proxy.GetType() ) );
+			Assert.IsTrue( typeof(IDisposable).IsAssignableFrom( proxy.GetType() ) );
+
+			ServiceClass inter = (ServiceClass) proxy;
+
+			Assert.AreEqual( 44, inter.Sum( 20, 25 ) );
+			Assert.AreEqual( true, inter.Valid );
+		}
+
+		[Test]
 		public void ProxyForClassWithSuperClass()
 		{
 			object proxy = _generator.CreateClassProxy( 
