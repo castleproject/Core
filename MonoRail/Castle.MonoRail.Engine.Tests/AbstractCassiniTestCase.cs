@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Engine.Tests
 					Assert.AreEqual(expected, contents);
 				}
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				System.Diagnostics.Trace.WriteLine(contents);
 

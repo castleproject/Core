@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="rails-framework" default="build">
 
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
-
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/../bin" />
 	<property name="library.dir" value="${base.dir}/../lib" />

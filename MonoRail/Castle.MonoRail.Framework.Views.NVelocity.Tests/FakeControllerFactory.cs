@@ -16,8 +16,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
 
-	using Castle.MonoRail.Engine;
-
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views.NVelocity.Tests.Controllers;
 
@@ -27,7 +25,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 		}
 
-		public Controller GetController(UrlInfo info)
+		public Controller CreateController(UrlInfo info)
 		{
 			if ("home".Equals(info.Controller))
 			{

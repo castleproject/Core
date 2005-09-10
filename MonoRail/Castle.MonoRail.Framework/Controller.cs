@@ -119,6 +119,8 @@ namespace Castle.MonoRail.Framework
 
 		internal bool _directRenderInvoked;
 
+		private ControllerMetaDescriptor metaDescriptor;
+
 		#endregion
 
 		#region Constructors
@@ -136,6 +138,20 @@ namespace Castle.MonoRail.Framework
 		#endregion
 
 		#region Usefull Properties
+
+		/// <summary>
+		/// This is intended to be used by MonoRail infrastructure.
+		/// </summary>
+		public ControllerMetaDescriptor MetaDescriptor
+		{
+			get { return metaDescriptor; }
+			set { metaDescriptor = value; }
+		}
+
+		public ICollection Actions
+		{
+			get { return _actions.Values; }
+		}
 
 		public ResourceDictionary Resources
 		{
@@ -680,12 +696,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		private MethodInfo FindOutDefaultMethod()
 		{
-			object[] attributes = this.GetType().GetCustomAttributes( typeof(DefaultActionAttribute), true );
-	
-			if (attributes.Length != 0)
+			if (metaDescriptor.DefaultAction != null)
 			{
-				DefaultActionAttribute attr = (DefaultActionAttribute)attributes[0];
-				return SelectMethod(attr.DefaultAction, _actions, _context.Request);
+				return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, _actions, _context.Request);
 			}
 
 			return null;
@@ -695,9 +708,7 @@ namespace Castle.MonoRail.Framework
 		{
 			_helpers = new HybridDictionary();
 
-			Attribute[] helpers = Attribute.GetCustomAttributes(this.GetType(), typeof(HelperAttribute));
-
-			foreach (HelperAttribute helper in helpers)
+			foreach (HelperAttribute helper in metaDescriptor.Helpers)
 			{
 				object helperInstance = Activator.CreateInstance(helper.HelperType);
 
@@ -762,18 +773,16 @@ namespace Castle.MonoRail.Framework
 
 			Assembly typeAssembly = this.GetType().Assembly;
 
-			Attribute[] resources = Attribute.GetCustomAttributes(this.GetType(), typeof(AbstractResourceAttribute));
-
-			foreach (AbstractResourceAttribute resource in resources)
+			foreach (AbstractResourceAttribute resource in metaDescriptor.Resources)
 			{
 				_resources.Add(resource.Name, _resourceFactory.Create(resource, typeAssembly));
 			}
 
 			if (method == null) return;
 
-			resources = Attribute.GetCustomAttributes(method, typeof(AbstractResourceAttribute));
+			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
 
-			foreach (AbstractResourceAttribute resource in resources)
+			foreach (AbstractResourceAttribute resource in actionMeta.Resources)
 			{
 				_resources[resource.Name] = _resourceFactory.Create(resource, typeAssembly);
 			}
@@ -799,15 +808,15 @@ namespace Castle.MonoRail.Framework
 				return true;
 			}
 
-			if (!method.IsDefined(typeof(SkipFilterAttribute), true))
+			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
+
+			if (actionMeta.SkipFilters.Count == 0)
 			{
 				// Nothing against filters declared for this action
 				return false;
 			}
 
-			object[] skipInfo = method.GetCustomAttributes(typeof(SkipFilterAttribute), true);
-
-			foreach (SkipFilterAttribute skipfilter in skipInfo)
+			foreach (SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
 			{
 				// If the user declared a [SkipFilterAttribute] then skip all filters
 				if (skipfilter.BlanketSkip) return true;
@@ -820,10 +829,11 @@ namespace Castle.MonoRail.Framework
 
 		protected internal FilterDescriptor[] CollectFilterDescriptor()
 		{
-			object[] attrs = GetType().GetCustomAttributes(typeof(FilterAttribute), true);
-			FilterDescriptor[] desc = new FilterDescriptor[attrs.Length];
+			IList attrs = metaDescriptor.Filters;
 
-			for (int i = 0; i < attrs.Length; i++)
+			FilterDescriptor[] desc = new FilterDescriptor[attrs.Count];
+
+			for (int i = 0; i < attrs.Count; i++)
 			{
 				desc[i] = new FilterDescriptor(attrs[i] as FilterAttribute);
 			}
@@ -881,12 +891,9 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual String ObtainDefaultLayoutName()
 		{
-			object[] attrs = GetType().GetCustomAttributes(typeof(LayoutAttribute), true);
-
-			if (attrs.Length == 1)
+			if (metaDescriptor.Layout != null)
 			{
-				LayoutAttribute layoutDef = (LayoutAttribute) attrs[0];
-				return layoutDef.LayoutName;
+				return metaDescriptor.Layout.LayoutName;
 			}
 
 			return null;
@@ -915,22 +922,22 @@ namespace Castle.MonoRail.Framework
 				_context.LastException = ex;
 			}
 
-			if (method != null && method.IsDefined(typeof(SkipRescueAttribute), true))
+			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
+
+			if (method != null && actionMeta.SkipRescue != null)
 			{
 				return false;
 			}
 
 			RescueAttribute att = null;
 
-			if (method != null && method.IsDefined(typeof(RescueAttribute), true))
+			if (method != null && actionMeta.Rescue != null)
 			{
-				att = method.GetCustomAttributes(
-					typeof(RescueAttribute), true)[0] as RescueAttribute;
+				att = actionMeta.Rescue;
 			}
-			else if (controllerType.IsDefined(typeof(RescueAttribute), true))
+			else if (metaDescriptor.Rescue != null)
 			{
-				att = controllerType.GetCustomAttributes(
-					typeof(RescueAttribute), true)[0] as RescueAttribute;
+				att = metaDescriptor.Rescue;
 			}
 
 			if (att != null)

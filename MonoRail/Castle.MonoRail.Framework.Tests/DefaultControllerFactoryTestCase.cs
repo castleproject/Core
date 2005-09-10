@@ -36,35 +36,35 @@ namespace Castle.MonoRail.Framework.Tests
 			DefaultControllerFactory factory = new DefaultControllerFactory();
 			factory.Inspect( Assembly.GetExecutingAssembly() );
 			
-			Controller controller = factory.GetController( new UrlInfo("", "", "home", "", extension) );
+			Controller controller = factory.CreateController( new UrlInfo("", "", "home", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.MonoRail.Framework.Tests.Controllers.HomeController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "clients", "home", "", extension) );
+			controller = factory.CreateController( new UrlInfo("", "clients", "home", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.MonoRail.Framework.Tests.Controllers.Clients.HomeController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "clients", "hire-us", "", extension) );
+			controller = factory.CreateController( new UrlInfo("", "clients", "hire-us", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.MonoRail.Framework.Tests.Controllers.Clients.OtherController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "ourproducts", "shoppingcart", "", extension) );
+			controller = factory.CreateController( new UrlInfo("", "ourproducts", "shoppingcart", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 
 				"Castle.MonoRail.Framework.Tests.Controllers.Products.CartController", 
 				controller.GetType().FullName );
 
-			controller = factory.GetController( new UrlInfo("", "ourproducts", "lista", "", extension) );
+			controller = factory.CreateController( new UrlInfo("", "ourproducts", "lista", "", extension) );
 
 			Assert.IsNotNull( controller );
 			Assert.AreEqual( 

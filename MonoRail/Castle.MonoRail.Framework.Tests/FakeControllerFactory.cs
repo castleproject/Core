@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 		}
 
-		public Controller GetController(UrlInfo info)
+		public Controller CreateController(UrlInfo info)
 		{
 			switch(info.Controller)
 			{

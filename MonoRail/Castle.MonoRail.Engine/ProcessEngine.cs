@@ -30,12 +30,13 @@ namespace Castle.MonoRail.Engine
 	/// </remarks>
 	public class ProcessEngine
 	{
-		private IControllerFactory _controllerFactory;
-		private IViewEngine _viewEngine;
-		private IFilterFactory _filterFactory;
-		private IResourceFactory _resourceFactory;
-		private IScaffoldingSupport _scaffoldingSupport;
-		private IViewComponentFactory _viewCompFactory;
+		private IControllerFactory controllerFactory;
+		private IViewEngine viewEngine;
+		private IFilterFactory filterFactory;
+		private IResourceFactory resourceFactory;
+		private IScaffoldingSupport scaffoldingSupport;
+		private IViewComponentFactory viewCompFactory;
+		private ControllerDescriptorBuilder controllerDescriptorBuilder = new ControllerDescriptorBuilder();
 
 		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine) : 
 			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
@@ -53,42 +54,42 @@ namespace Castle.MonoRail.Engine
 			IViewEngine viewEngine, IFilterFactory filterFactory, 
 			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, IViewComponentFactory viewCompFactory)
 		{
-			_controllerFactory = controllerFactory;
-			_viewEngine = viewEngine;
-			_filterFactory = filterFactory;
-			_resourceFactory = resourceFactory;
-			_scaffoldingSupport = scaffoldingSupport;
-			_viewCompFactory = viewCompFactory;
+			this.controllerFactory = controllerFactory;
+			this.viewEngine = viewEngine;
+			this.filterFactory = filterFactory;
+			this.resourceFactory = resourceFactory;
+			this.scaffoldingSupport = scaffoldingSupport;
+			this.viewCompFactory = viewCompFactory;
 		}
 
 		public IControllerFactory ControllerFactory
 		{
-			get { return _controllerFactory; }
+			get { return controllerFactory; }
 		}
 
 		public IViewEngine ViewEngine
 		{
-			get { return _viewEngine; }
+			get { return viewEngine; }
 		}
 
 		public IFilterFactory FilterFactory
 		{
-			get { return _filterFactory; }
+			get { return filterFactory; }
 		}
 
 		public IResourceFactory ResourceFactory
 		{
-			get { return _resourceFactory; }
+			get { return resourceFactory; }
 		}
 
 		public IScaffoldingSupport ScaffoldingSupport
 		{
-			get { return _scaffoldingSupport; }
+			get { return scaffoldingSupport; }
 		}
 
 		public IViewComponentFactory ViewComponentFactory
 		{
-			get { return _viewCompFactory; }
+			get { return viewCompFactory; }
 		}
 
 		/// <summary>
@@ -102,7 +103,7 @@ namespace Castle.MonoRail.Engine
 		{
 			UrlInfo info = ExtractUrlInfo(context);
 
-			Controller controller = _controllerFactory.GetController( info );
+			Controller controller = controllerFactory.CreateController( info );
 
 			if (controller == null)
 			{
@@ -110,15 +111,17 @@ namespace Castle.MonoRail.Engine
 				throw new RailsException(message);
 			}
 
+			controller.MetaDescriptor = controllerDescriptorBuilder.BuildDescriptor(controller);
+
 			try
 			{
 				controller.Process( 
-					context, _filterFactory, _resourceFactory, 
-					info.Area, info.Controller, info.Action, _viewEngine, _scaffoldingSupport, _viewCompFactory );
+					context, filterFactory, resourceFactory, 
+					info.Area, info.Controller, info.Action, viewEngine, scaffoldingSupport, viewCompFactory );
 			}
 			finally
 			{
-				_controllerFactory.Release(controller);
+				controllerFactory.Release(controller);
 			}
 		}
 

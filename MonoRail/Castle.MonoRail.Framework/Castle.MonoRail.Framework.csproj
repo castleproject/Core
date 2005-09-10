@@ -359,6 +359,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\ControllerMetaDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\DefaultControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

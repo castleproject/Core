@@ -21,11 +21,7 @@ namespace Castle.MonoRail.Framework.Internal
 	{
 		public static void RegisterActions(Controller controller)
 		{
-			Type controllerType = controller.GetType();
-
-			object[] attrs = controllerType.GetCustomAttributes( typeof(DynamicActionProviderAttribute), true );
-
-			foreach(DynamicActionProviderAttribute providerAtt in attrs)
+			foreach(DynamicActionProviderAttribute providerAtt in controller.MetaDescriptor.ActionProviders)
 			{
 				Type providerType = providerAtt.ProviderType;
 				

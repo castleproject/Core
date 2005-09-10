@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Internal
 			Tree.AddController("MonoRail", "Files", typeof(FilesController));
 		}
 
-		public virtual Controller GetController(UrlInfo urlInfo)
+		public virtual Controller CreateController(UrlInfo urlInfo)
 		{
 			String area = urlInfo.Area == null ? String.Empty : urlInfo.Area;
 			String name = urlInfo.Controller;

@@ -120,6 +120,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DescriptorBuilderMultiThreadedTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "FakeControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -130,22 +135,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "FilterAttributeTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "FilterTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "FlowTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "HelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
