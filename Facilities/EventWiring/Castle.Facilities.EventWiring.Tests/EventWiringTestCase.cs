@@ -118,7 +118,8 @@ namespace Castle.Facilities.EventWiring.Tests
 
 			Assert.IsTrue(publisherThatListens.Listened);
 			Assert.AreSame(anotherPublisher, publisherThatListens.Sender);
-
 		}
+
+
 	}
 }
