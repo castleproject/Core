@@ -40,6 +40,9 @@ namespace AspectSharp.LoggingExample
 			Console.WriteLine(" ");
 
 			InterfaceInvocation();
+
+			Console.WriteLine("\r\nPress any key to exit." );
+			Console.ReadLine();
 		}
 
 		/// <summary>

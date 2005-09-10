@@ -42,6 +42,9 @@ namespace AspectSharpExample
 
 			// Altering the Hashtable
 			HashtableTest();
+
+			Console.WriteLine("\r\nPress any key to exit." );
+			Console.ReadLine();
 		}
 
 		private static void SimpleExecution()
