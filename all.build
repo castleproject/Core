@@ -99,6 +99,7 @@
 				<include name="Facilities/Prevalence/lib"/>
 				<include name="Facilities/Db4o/lib"/>
 				<include name="Facilities/IBatisNet/lib"/>
+				<include name="Facilities/NHibernate/lib"/>
 			</referencepaths>
 			<documenters>
 				<documenter name="MSDN">
