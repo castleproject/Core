@@ -28,20 +28,25 @@ namespace Castle.MonoRail.Generator.Generators
 	/// </summary>
 	public abstract class AbstractGenerator
 	{
-		protected ITemplateEngine engine;
-		private string resourcePrefix="Castle.MonoRail.Generator.templates.";
+		private static readonly String ResourcePrefix = "Castle.MonoRail.Generator.templates.";
+
+		protected NVelocityTemplateEngine engine;
+				
 		public AbstractGenerator()
 		{
 			engine = new NVelocityTemplateEngine();
-			(engine as NVelocityTemplateEngine).AssemblyName=System.Reflection.Assembly.GetExecutingAssembly().FullName;
-			(engine as ISupportInitialize).BeginInit();
+
+			engine.AssemblyName = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+			
+			engine.BeginInit();
+			engine.EndInit();
 		}
 
-		protected void WriteTemplateFile(String filename, Hashtable ctx, string templateName)
+		protected void WriteTemplateFile(String filename, Hashtable ctx, String templateName)
 		{
 			using (StreamWriter swriter = new StreamWriter(filename, false, Encoding.Default))
 			{
-				engine.Process(ctx, resourcePrefix + templateName, swriter);
+				engine.Process(ctx, ResourcePrefix + templateName, swriter);
 			}
 		}
 	}

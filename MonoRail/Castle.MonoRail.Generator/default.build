@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="cor-generator" default="build">
+<project name="monorail-generator" default="build">
 
 	<property name="base.dir" value="." />
 	<property name="bin.dir" value="${base.dir}/../bin" />
@@ -34,6 +34,10 @@
 				<warning number="1591" />
 				<warning number="1572" />
 			</nowarn>
+
+			<resources prefix="Castle.MonoRail.Generator.templates" dynamicprefix="true">
+				<include name="**/*.vm" />
+			</resources>
 			
 			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
@@ -42,8 +46,6 @@
 			<references>
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
-				<include name="${library.dir}/Commons.dll" />
-				<include name="${library.dir}/log4net.dll" />
 				<include name="${library.dir}/NVelocity.dll" />
 			</references>
 		</csc>

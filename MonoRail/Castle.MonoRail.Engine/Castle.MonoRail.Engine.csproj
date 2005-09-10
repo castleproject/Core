@@ -99,6 +99,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "default.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "MonoRailHttpHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

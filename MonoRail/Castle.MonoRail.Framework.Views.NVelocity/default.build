@@ -44,8 +44,6 @@
 			<references>
 				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
-				<include name="${library.dir}/Commons.dll" />
-				<include name="${library.dir}/log4net.dll" />
 				<include name="${library.dir}/NVelocity.dll" />
 			</references>
 		</csc>
@@ -68,8 +66,6 @@
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Engine.Tests.dll" />
 				<include name="${bin.dir}/Cassini.dll" />
-				<include name="${bin.dir}/Commons.dll" />
-				<include name="${bin.dir}/log4net.dll" />
 				<include name="${bin.dir}/NVelocity.dll" />
 			</references>
 		</csc>
