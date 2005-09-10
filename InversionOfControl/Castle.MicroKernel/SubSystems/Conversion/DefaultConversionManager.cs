@@ -23,7 +23,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	/// Composition of all available conversion managers
 	/// </summary>
 	[Serializable]
-	public class DefaultConversionManager : IConversionManager, ITypeConverterContext
+	public class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 	{
 		private IList converters;
 
@@ -42,18 +42,6 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			Add( new DictionaryConverter() );
 			Add( new ArrayConverter() ); 
 		}
-
-		#region ISubSystem Members
-
-		public void Init(IKernel kernel)
-		{
-		}
-
-		public void Terminate()
-		{
-		}
-
-		#endregion
 
 		#region IConversionManager Members
 

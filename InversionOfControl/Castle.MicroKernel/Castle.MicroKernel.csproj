@@ -378,6 +378,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\AbstractSubSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubSystems\ISubSystem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

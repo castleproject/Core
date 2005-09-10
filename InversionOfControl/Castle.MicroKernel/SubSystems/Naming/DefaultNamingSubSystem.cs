@@ -16,7 +16,6 @@ namespace Castle.MicroKernel.SubSystems.Naming
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 
 	/// <summary>
 	/// Default <see cref="INamingSubSystem"/> implementation.
@@ -24,12 +23,13 @@ namespace Castle.MicroKernel.SubSystems.Naming
 	/// support a query string.
 	/// </summary>
 	[Serializable]
-	public class DefaultNamingSubSystem : INamingSubSystem
+	public class DefaultNamingSubSystem : AbstractSubSystem, INamingSubSystem
 	{
 		/// <summary>
 		/// Map(String, IHandler) to map component keys
 		/// to <see cref="IHandler"/>
 		/// </summary>
+		[NonSerialized]
 		protected IDictionary key2Handler;
 
 		/// <summary>
@@ -38,24 +38,11 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		/// </summary>
 		protected IDictionary service2Handler;
 
-
 		public DefaultNamingSubSystem()
 		{
 			key2Handler = Hashtable.Synchronized(new Hashtable());
 			service2Handler = Hashtable.Synchronized(new Hashtable());
 		}
-
-		#region ISubSystem Members
-
-		public virtual void Init(IKernel kernel)
-		{
-		}
-
-		public virtual void Terminate()
-		{
-		}
-
-		#endregion
 
 		#region INamingSubSystem Members
 
@@ -177,6 +164,16 @@ namespace Castle.MicroKernel.SubSystems.Naming
 		public virtual IHandler this[String key]
 		{
 			set { key2Handler[key] = value; }
+		}
+
+		public IDictionary GetKey2Handler()
+		{
+			return key2Handler;
+		}
+		
+		public IDictionary GetService2Handler()
+		{
+			return service2Handler;
 		}
 
 		#endregion

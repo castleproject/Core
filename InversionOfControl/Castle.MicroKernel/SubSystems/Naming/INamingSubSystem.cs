@@ -15,6 +15,7 @@
 namespace Castle.MicroKernel
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Contract for SubSystem that wishes to keep and coordinate
@@ -118,5 +119,15 @@ namespace Castle.MicroKernel
 		/// the specified key
 		/// </summary>
 		IHandler this[String key] { set; }
+
+		/// <summary>
+		/// List of handler by key
+		/// </summary>
+		IDictionary GetKey2Handler();
+
+		/// <summary>
+		/// List of handler by service
+		/// </summary>
+		IDictionary GetService2Handler();
 	}
 }

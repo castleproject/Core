@@ -25,7 +25,7 @@ namespace Castle.MicroKernel.Handlers
 	/// Implements the basis of <see cref="IHandler"/>
 	/// </summary>
 	[Serializable]
-	public abstract class AbstractHandler : IHandler, IDisposable
+	public abstract class AbstractHandler : MarshalByRefObject, IHandler, IDisposable
 	{
 		private IKernel kernel;
 		private ComponentModel model;

@@ -101,7 +101,7 @@ namespace Castle.Windsor.Configuration.Interpreters.CastleLanguage
 tryAgain:
 			for (;;)
 			{
-				IToken _token = null;
+//				IToken _token = null;
 				int _ttype = Token.INVALID_TYPE;
 				setCommitToPath(false);
 				resetText();

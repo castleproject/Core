@@ -27,7 +27,7 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 	/// that might obtain the configuration node from anywhere.
 	/// </summary>
 	[Serializable]
-	public class DefaultConfigurationStore : IConfigurationStore
+	public class DefaultConfigurationStore : AbstractSubSystem, IConfigurationStore
 	{
 		private IDictionary facilities;
 		private IDictionary components;
@@ -76,18 +76,6 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 			components.Values.CopyTo(array, 0);
 
 			return array;
-		}
-
-		#endregion
-
-		#region ISubSystem Members
-
-		public void Init(IKernel kernel)
-		{
-		}
-
-		public void Terminate()
-		{
 		}
 
 		#endregion

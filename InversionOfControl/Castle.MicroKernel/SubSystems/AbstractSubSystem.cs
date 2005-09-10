@@ -14,22 +14,21 @@
 
 namespace Castle.MicroKernel
 {
-	/// <summary>
-	/// A subsystem is used by the MicroKernel to deal 
-	/// with a specific concern.  
-	/// </summary>
-	public interface ISubSystem
-	{
-		/// <summary>
-		/// Initializes the subsystem
-		/// </summary>
-		/// <param name="kernel"></param>
-		void Init(IKernel kernel);
+	using System;
 
-		/// <summary>
-		/// Should perform the termination
-		/// of the subsystem instance.
-		/// </summary>
-		void Terminate();
+	public abstract class AbstractSubSystem : MarshalByRefObject, ISubSystem
+	{
+		public override object InitializeLifetimeService()
+		{
+			return null;
+		}
+
+		public virtual void Init(IKernel kernel)
+		{
+		}
+
+		public virtual void Terminate()
+		{
+		}
 	}
 }
