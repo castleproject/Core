@@ -64,6 +64,7 @@ namespace Castle.MonoRail.Engine.Tests
 		protected void AssertContents(String expected, HttpWebResponse response, bool startsWith)
 		{
 			String contents = GetContents(response);
+
 			try
 			{
 				if (startsWith)
@@ -78,9 +79,11 @@ namespace Castle.MonoRail.Engine.Tests
 					Assert.AreEqual(expected, contents);
 				}
 			}
-			catch
+			catch(Exception ex)
 			{
 				System.Diagnostics.Trace.WriteLine(contents);
+
+				throw;
 			}
 		}
 
@@ -114,17 +117,17 @@ namespace Castle.MonoRail.Engine.Tests
 		{
 			HttpWebResponse response;
 
-			// try
+			try
 			{
 				HttpWebRequest myReq = (HttpWebRequest)
 					WebRequest.Create("http://localhost:8083" + url);
 
 				response = (HttpWebResponse) myReq.GetResponse();
 			}
-			// catch( Exception ex )
+			catch( Exception ex )
 			{
-				// System.Diagnostics.Trace.WriteLine(e.ToString());
-				// throw ex;
+				System.Diagnostics.Trace.WriteLine( ex.ToString() );
+				throw ex;
 			}
 
 			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);

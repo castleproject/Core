@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		public void DynamicActionUsingRenderText()
 		{
 			string url = "/dyn/index.rails";
-			string expected = "xx";//"Rendered from the view: hello!";
+			string expected = "Rendered from the view: hello!";
 
 			Execute(url, expected);
 		}
