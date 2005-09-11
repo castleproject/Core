@@ -19,12 +19,19 @@ namespace Castle.ActiveRecord.Framework
 	using NHibernate;
 	using NHibernate.Cfg;
 
+	public delegate void RootTypeHandler(object sender, Type rootType);
+
 	/// <summary>
 	/// Keeps an association of SessionFactories to a object model 
 	/// tree;
 	/// </summary>
 	public interface ISessionFactoryHolder
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		event RootTypeHandler OnRootTypeRegistered;
+
 		/// <summary>
 		/// Associates a Configuration object to a root type
 		/// </summary>

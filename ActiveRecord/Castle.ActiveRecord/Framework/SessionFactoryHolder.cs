@@ -35,14 +35,21 @@ namespace Castle.ActiveRecord.Framework
 		private Hashtable type2Conf = Hashtable.Synchronized(new Hashtable());
 		private Hashtable type2SessFactory = Hashtable.Synchronized(new Hashtable());
 		private ReaderWriterLock readerWriterLock = new ReaderWriterLock();
-
+		
 		public SessionFactoryHolder()
 		{
 		}
 
+		public event RootTypeHandler OnRootTypeRegistered;
+
 		public void Register(Type rootType, Configuration cfg)
 		{
 			type2Conf.Add(rootType, cfg);
+
+			if (OnRootTypeRegistered != null)
+			{
+				OnRootTypeRegistered(this, rootType);
+			}
 		}
 
 		public Configuration GetConfiguration(Type type)
