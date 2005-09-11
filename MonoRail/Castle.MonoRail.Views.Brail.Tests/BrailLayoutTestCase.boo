@@ -25,3 +25,8 @@ class BrailLayoutTestCase(LayoutTestCase):
 	override def ObtainPhysicalDir():
 		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
 	
+	def DefaultLayout():
+		url = "/defaultlayout/index.rails"
+		expected = "start\r\ncontent\r\nend"
+		Execute(url, expected)
+	

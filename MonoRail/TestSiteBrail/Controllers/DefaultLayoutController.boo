@@ -11,24 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Castle.MonoRail.Views.Brail.Tests.Fakes
+namespace Castle.MonoRail.Views.Brail.TestSite.Controllers
 
 import System
-import Castle.MonoRail.Views.Brail.Tests.Controllers
 import Castle.MonoRail.Framework
-import Castle.MonoRail.Framework.Internal
 
-class FakeControllerFactory(IControllerFactory):
+class DefaultLayoutController(Controller):
 	
-	def CreateController(url as UrlInfo) as Controller:
-		if url.Controller == "home":
-			return HomeController()
-		elif url.Controller == "layout":
-			return LayoutController()
-		elif url.Controller == "usingcomponents":
-			return UsingComponentsController()
-		raise RailsException("Uknown controller ${url.Controller}")
-	
-	def Release(controller as Controller):
+	def Index():
 		pass
-		

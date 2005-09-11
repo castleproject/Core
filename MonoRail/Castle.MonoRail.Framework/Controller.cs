@@ -895,7 +895,12 @@ namespace Castle.MonoRail.Framework
 			{
 				return metaDescriptor.Layout.LayoutName;
 			}
-
+			else
+			{
+				String defaultLayout = String.Format("layouts/{0}",Name);
+				if ( HasTemplate(defaultLayout))
+					return Name;
+			}
 			return null;
 		}
 
