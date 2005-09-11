@@ -42,7 +42,9 @@ namespace Castle.MonoRail.Engine
 
 		public void ProcessRequest(HttpContext context)
 		{
-			Process(new RailsEngineContextAdapter(context, _url));
+			RailsEngineContextAdapter railsEngineContextAdapter = new RailsEngineContextAdapter(context, _url);
+			context.Items["RailsContext"] = railsEngineContextAdapter;
+			Process(railsEngineContextAdapter);
 		}
 
 		public bool IsReusable
