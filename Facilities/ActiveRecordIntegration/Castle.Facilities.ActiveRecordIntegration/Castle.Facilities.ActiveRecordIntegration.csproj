@@ -121,8 +121,8 @@
                 />
                 <Reference
                     Name = "Castle.ActiveRecord"
-                    Project = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    AssemblyName = "Castle.ActiveRecord"
+                    HintPath = "..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
                 />
             </References>
         </Build>
@@ -140,6 +140,16 @@
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SafeSessionProxy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SessionFactoryDelegate.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

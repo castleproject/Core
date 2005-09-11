@@ -20,6 +20,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using System.Configuration;
 
 	using Castle.ActiveRecord;
+	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Config;
 
 	using Castle.MicroKernel.Facilities;
@@ -115,10 +116,19 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		private void OnSessionFactoryHolderCreated(Castle.ActiveRecord.Framework.ISessionFactoryHolder holder)
 		{
+			holder.OnRootTypeRegistered += new RootTypeHandler(OnRootTypeRegistered);
+
 			Kernel.AddComponentInstance( 
 				"activerecord.sessionfactoryholder", 
-				typeof(Castle.ActiveRecord.Framework.ISessionFactoryHolder), 
-				holder );
+				typeof(ISessionFactoryHolder), holder );
+		}
+
+		private void OnRootTypeRegistered(object sender, Type rootType)
+		{
+			Kernel.AddComponentInstance( 
+				"activerecord.sessionfactory", 
+				typeof(NHibernate.ISessionFactory), 
+				new SessionFactoryDelegate( (ISessionFactoryHolder) sender, rootType) );
 		}
 	}
 

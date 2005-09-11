@@ -41,6 +41,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 			container.AddComponent( "blog.service", typeof(BlogService) );
 			container.AddComponent( "post.service", typeof(PostService) );
 			container.AddComponent( "first.service", typeof(FirstService) );
+			container.AddComponent( "wiring.service", typeof(WiringSession) );
 
 			Recreate();
 		}

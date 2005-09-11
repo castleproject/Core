@@ -16,6 +16,8 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 {
 	using NUnit.Framework;
 
+	using Castle.Facilities.ActiveRecordIntegration.Tests.Model;
+
 
 	[TestFixture]
 	public class IntegrationTestCase : AbstractActiveRecordTest
@@ -46,6 +48,16 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 
 			Assert.AreEqual( blog.Name, retrieved.Name );
 			Assert.AreEqual( blog.Author, retrieved.Author );
+		}
+
+		[Test]
+		public void ComponentAutoWiring()
+		{
+			WiringSession wsession = (WiringSession) container["wiring.service"];
+
+			wsession.UsingISessionFactory();
+
+			wsession.UsingISessionFactoryHolder();
 		}
 	}
 }
