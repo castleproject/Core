@@ -29,6 +29,13 @@
 				<include name="Boo.Lang.Compiler.dll" />
 				<include name="Boo.Lang.Parser.dll" />
 				<include name="anrControls.Markdown.NET.dll" />
+				<include name="Castle.MonoRail.Engine.pdb" />
+				<include name="Castle.MonoRail.Framework.pdb" />
+				<include name="Castle.MonoRail.Views.Brail.pdb" />
+				<include name="Boo.Lang.pdb" />
+				<include name="Boo.Lang.Compiler.pdb" />
+				<include name="Boo.Lang.Parser.pdb" />
+				<include name="anrControls.Markdown.NET.pdb" />
 			</fileset>
 		</copy>
 	</target>

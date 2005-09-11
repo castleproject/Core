@@ -39,6 +39,7 @@ public class BooViewEngine (ViewEngineBase):
 	static options as BooViewEngineOptions
 	baseSavePath as string
 	commonScriptPath as string
+	fullPathToViewDir as string
 	
 	static def InitializeConfig():
 		InitializeConfig("brail")
@@ -56,7 +57,7 @@ public class BooViewEngine (ViewEngineBase):
 		baseDir = Path.GetDirectoryName(typeof(BooViewEngine).Assembly.Location)
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)
 		self.commonScriptPath = Path.Combine(ViewRootDir, options.CommonScriptsDirectory)
-		
+		self.fullPathToViewDir = Path.GetFullPath(ViewRootDir)
 		if options.SaveToDisk and not Directory.Exists(baseSavePath):
 			Directory.CreateDirectory(baseSavePath)
 		
@@ -235,7 +236,7 @@ public class BooViewEngine (ViewEngineBase):
 	# should never include it since I'm converting this to a relative path
 	def NormalizeName(filename as string, batch as bool):
 		#Get relative filename,
-		name = Path.GetFullPath(filename)[ViewRootDir.Length+1:]
+		name = Path.GetFullPath(filename)[fullPathToViewDir.Length+1:]
 		name = Path.GetDirectoryName(name) if batch
 		for ch as char in (Path.AltDirectorySeparatorChar,
 			Path.DirectorySeparatorChar):
@@ -250,9 +251,8 @@ public class BooViewEngine (ViewEngineBase):
 		if not Directory.Exists(commonScriptPath):
 			return false
 		
-		commonDir = Path.Combine(ViewRootDir, options.CommonScriptsDirectory)
 		# the demi.boo is stripped, but GetInput require it.
-		demiFile = Path.Combine(commonDir,"demi.boo")
+		demiFile = Path.Combine(commonScriptPath,"demi.boo")
 		inputs = GetInput(demiFile,true)
 		compiler = SetupCompiler(inputs)
 		outputFile = Path.Combine(self.baseSavePath, "CommonScripts.dll")

@@ -34,6 +34,9 @@ abstract class BrailBase:
 	
 	properties as Hashtable
 	
+	# list of dictionaries where additional properties can be stored.
+	extendedPropertiesList = []
+	
 	context as IRailsEngineContext
 	
 	controller as Controller
@@ -86,8 +89,15 @@ abstract class BrailBase:
 	# any uknon identifier will be translate into a call for GetParameter('identifier name').
 	# This mean that when an uknonwn identifier is in the script, it will only be found on runtime.
 	def GetParameter(name as string) as object:
-		raise RailsException("Parameter '${name}' was not found!") if not properties.Contains(name)
-		return properties[name]
+		if properties.Contains(name):
+			return properties[name]
+		for dic as IDictionary in self.extendedPropertiesList:
+			if dic.Contains(name):
+				return dic[name]
+		raise RailsException("Parameter '${name}' was not found!")
+		
+	def AddProperties(properties as IDictionary):
+		self.extendedPropertiesList.Add(properties)
 	
 	# Allows to check that a parameter was defined
 	def IsDefined(name as string) as bool:

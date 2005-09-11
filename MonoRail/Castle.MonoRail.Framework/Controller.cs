@@ -980,7 +980,9 @@ namespace Castle.MonoRail.Framework
 				(view as IControllerAware).SetController(this);
 			}
 
-			if (_context.UnderlyingContext != null)
+			if (_context.UnderlyingContext != null && 
+				// not guarantee to be true in tests.
+				_context.UnderlyingContext is HttpContext)
 			{
 				((HttpContext) _context.UnderlyingContext).Items[ControllerContextKey] = this;
 			}

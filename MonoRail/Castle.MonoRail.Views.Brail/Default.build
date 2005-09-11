@@ -34,7 +34,7 @@
 	<target name="tests.compile">
 		<booc target="library" 
 		      output="${bin.dir}\${test.assembly.name}" 
-		      debug="${debug}">
+		      debug="${debug}" >
 			<sources basedir="${test.src.dir}">
 				<include name="**/*.boo" />
 				<exclude name="Views/**.boo" />
@@ -58,7 +58,7 @@
 	<target name="tests.run" depends="tests.compile">
 		<nunit2>
 			<formatter type="Plain" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" appconfig="${test.src.dir}\app.config"/>
 		</nunit2>
 	</target>
 

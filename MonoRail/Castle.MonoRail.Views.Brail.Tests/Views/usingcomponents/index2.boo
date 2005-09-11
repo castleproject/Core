@@ -1,0 +1,4 @@
+static 1
+<%
+component SimpleInlineViewComponent2
+%> static 2

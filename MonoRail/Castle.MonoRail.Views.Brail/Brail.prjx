@@ -14,6 +14,8 @@
     <File name=".\BrailPreProcessor.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\OutputMethodAttributes.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\ReturnValueVisitor.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ComponentMacro.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BrailViewComponentContext.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
   </Contents>
   <References>
     <Reference type="Assembly" refto="..\..\Vendor\Castle.MonoRail.Framework.dll" localcopy="True" />

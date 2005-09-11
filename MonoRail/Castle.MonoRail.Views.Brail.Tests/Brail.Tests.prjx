@@ -42,6 +42,26 @@
     <File name=".\DirectRenderTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\BrailSubViewTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
     <File name=".\OutputMethodTestCase.Boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ComponentsTestCase.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Components" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Controllers\UsingComponentsController.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\components" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents\index1.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\components\SimpleInlineViewComponent2\mycompview1.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents\index2.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\components\SimpleInlineViewComponent2" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Components\SimpleInlineViewComponent3.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents\index3.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\components\SimpleInlineViewComponent3" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\components\SimpleInlineViewComponent3\default.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents\index4.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Components\InlineComponentWithParam1.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Components\BlockViewComponent1.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents\index5.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Components\BlockViewComponent2.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents\index8.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Views\usingcomponents\index9.boo" subtype="Code" buildaction="Compile" dependson="" data="" />
   </Contents>
   <References>
     <Reference type="Assembly" refto="..\..\Vendor\nunit.framework.dll" localcopy="True" />

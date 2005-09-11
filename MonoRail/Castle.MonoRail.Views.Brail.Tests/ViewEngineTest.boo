@@ -20,6 +20,7 @@ import Castle.MonoRail.Framework
 import Castle.MonoRail.Engine
 import Castle.MonoRail.Views.Brail
 import Castle.MonoRail.Views.Brail.Tests.Fakes
+import Castle.MonoRail.Framework.Tests
 
 [TestFixture]
 class ViewEngineTest:
@@ -39,34 +40,39 @@ class ViewEngineTest:
 	
 	[Test]
 	def SimpleRequest():
-		context = FakeEngineContext("/home/index.rails")
+		context = RailsEngineContextImpl("/home/index.rails")
 		engine.Process(context)
+		System.Diagnostics.Trace.WriteLine(context.Output)
 		Assert.AreEqual( "Brail is wonderful", context.Output)
 		
 	[Test]
 	def SimpleRequestWithDifferentView():
-		context = FakeEngineContext("/home/other.rails")
+		context = RailsEngineContextImpl("/home/other.rails")
 		engine.Process(context)
+		System.Diagnostics.Trace.WriteLine(context.Output)
 		Assert.AreEqual("Brail is wonderful!", context.Output)
 	
 	[Test]
 	def PropertyBag():
-		context = FakeEngineContext("/home/bag.rails")
+		context = RailsEngineContextImpl("/home/bag.rails")
 		engine.Process(context)
+		System.Diagnostics.Trace.WriteLine(context.Output)
 		Assert.AreEqual("Ayende is the name\r\n a\r\n b\r\n c\r\n", context.Output)
 		
 	[Test]
 	def Layout():
-		context = FakeEngineContext("/layout/index.rails")
+		context = RailsEngineContextImpl("/layout/index.rails")
 		engine.Process(context)
+		System.Diagnostics.Trace.WriteLine(context.Output)
 		Assert.AreEqual("My layout\r\n\r\nindex contents\r\n\r\nFooter", context.Output )
-		context = FakeEngineContext("/layout/save.rails");
+		context = RailsEngineContextImpl("/layout/save.rails");
 		engine.Process( context );
+		System.Diagnostics.Trace.WriteLine(context.Output)
 		Assert.AreEqual( "My printable layout\r\n\r\nsave contents\r\n\r\nFooter", context.Output )
 		
 	[Test]
 	def Resource():
-		context = FakeEngineContext("/home/resource.rails")
+		context = RailsEngineContextImpl("/home/resource.rails")
 		engine.Process(context)
 		Assert.AreEqual("current language - english", context.Output)
 		
