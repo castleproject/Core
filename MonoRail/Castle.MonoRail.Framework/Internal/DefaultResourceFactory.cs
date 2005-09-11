@@ -15,14 +15,17 @@
 namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
-	using System.Reflection;
 	using System.Resources;
+	using System.Reflection;
+	using System.Globalization;
 
 	/// <summary>
 	/// Standard implementation of <see cref="IResourceFactory" />
 	/// </summary>
 	public class DefaultResourceFactory : IResourceFactory
 	{
+		// TODO: Cache assembly resolution
+
 		public IResource Create( IResourceDefinition definition, Assembly appAssembly )
 		{
 			if ( definition is ResourceAttribute )
@@ -35,16 +38,39 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public IResource Create( ResourceAttribute attribute, Assembly appAssembly )
 		{
-			Assembly resAssembly	= attribute.Assembly;
-			ResourceManager rm		= new ResourceManager( attribute.ResourceName, 
-															resAssembly == null ? appAssembly : resAssembly, 
-															attribute.ResourceType );
+			Assembly resAssembly = ResolveAssembly(attribute.AssemblyName, appAssembly);
+			CultureInfo culture = ResolveCulture(attribute.CultureName);
+
+			ResourceManager rm = new ResourceManager( 
+				attribute.ResourceName, resAssembly, attribute.ResourceType );
             
-			return new ResourceFacade( rm.GetResourceSet( attribute.Culture, true, true ) );
+			return new ResourceFacade( rm.GetResourceSet( culture, true, true ) );
 		}
 
 		public void Release( IResource resource )
 		{
+			resource.Dispose();
+		}
+
+		private CultureInfo ResolveCulture(string name)
+		{
+			if ("neutral".Equals(name))
+			{
+				return CultureInfo.InvariantCulture;
+			}
+			else if ( name != null )
+			{
+				return CultureInfo.CreateSpecificCulture( name );
+			}
+					 
+			return CultureInfo.CurrentCulture;
+		}
+
+		private Assembly ResolveAssembly(String name, Assembly assembly)
+		{
+			if (name == null) return assembly;
+
+			return Assembly.Load( name );
 		}
 	}
 }

@@ -48,6 +48,7 @@ namespace Castle.MonoRail.Engine.Tests
 		{
 			string expected = " \r\n\t\t\t/*************************************";
 			string url = "/MonoRail/Files/ValidateCore.rails";
+
 			Execute(url, expected, url, true, "text/javascript");
 
 			expected = " \r\n\t\t\t\tfunction fValConfig()\r\n\t\t\t\t{";

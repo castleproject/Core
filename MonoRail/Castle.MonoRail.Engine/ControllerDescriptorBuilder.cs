@@ -85,9 +85,9 @@ namespace Castle.MonoRail.Engine
 
 		private static void CollectActionAttributes(MethodInfo method, ControllerMetaDescriptor descriptor)
 		{
-			object[] attributes = method.GetCustomAttributes(typeof(AbstractResourceAttribute), true);
+			object[] attributes = method.GetCustomAttributes(typeof(ResourceAttribute), true);
 
-			foreach(AbstractResourceAttribute resource in attributes)
+			foreach(ResourceAttribute resource in attributes)
 			{
 				descriptor.GetAction(method).Resources.Add(resource);
 			}
@@ -148,11 +148,11 @@ namespace Castle.MonoRail.Engine
 				}
 			}
 	
-			attributes = controllerType.GetCustomAttributes( typeof(AbstractResourceAttribute), true );
+			attributes = controllerType.GetCustomAttributes( typeof(ResourceAttribute), true );
 	
 			if (attributes.Length != 0)
 			{
-				foreach(AbstractResourceAttribute resource in attributes)
+				foreach(ResourceAttribute resource in attributes)
 				{
 					descriptor.Resources.Add(resource);
 				}

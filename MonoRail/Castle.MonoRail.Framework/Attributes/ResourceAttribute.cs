@@ -24,12 +24,11 @@ namespace Castle.MonoRail.Framework
 	/// specified name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true, Inherited=true), Serializable]
-	public class ResourceAttribute : AbstractResourceAttribute
+	public class ResourceAttribute : Attribute, IResourceDefinition
 	{
+		private string _Name;
 		private string _ResourceName, _CultureName, _AssemblyName;
 		
-		private Assembly _Assembly;
-		private CultureInfo _Culture;
 		private Type _ResourceType;
 		
 		/// <summary>
@@ -38,8 +37,9 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="name">Name the resource will be available as in the PropertyBag</param>
 		/// <param name="resourceName">Fully qualified name of the resource in the sattelite assembly</param>
-		public ResourceAttribute( string name, string resourceName ) : base( name )
+		public ResourceAttribute( string name, string resourceName )
 		{
+			_Name = name;
 			_ResourceName	= resourceName;
 
 			if ( resourceName.IndexOf( ',' ) > 0 )
@@ -50,7 +50,11 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		#region Properties
+		public string Name
+		{
+			get { return _Name; }
+			set { _Name = value; }
+		}
 
 		public string ResourceName
 		{
@@ -60,42 +64,14 @@ namespace Castle.MonoRail.Framework
 
 		public string CultureName
 		{
-			get { return Culture.DisplayName; }
+			get { return _CultureName; }
 			set { _CultureName = value; }
-		}
-
-		public CultureInfo Culture
-		{
-			get
-			{
-				if ( _Culture != null )
-					return _Culture;
-				else if ( _CultureName != null )
-					return CultureInfo.CreateSpecificCulture( _CultureName );
-				
-				return CultureInfo.CurrentCulture;
-			}
-			set { _Culture = value; }
 		}
 
 		public string AssemblyName
 		{
-			get { return Assembly.FullName; }
+			get { return _AssemblyName; }
 			set { _AssemblyName = value; }
-		}
-
-		public Assembly Assembly
-		{
-			get 
-			{
-				if ( _Assembly != null ) 
-					return _Assembly;
-				else if ( _AssemblyName != null ) 
-					return Assembly.Load( _AssemblyName );
-
-				return null;
-			}
-			set { _Assembly = value; }
 		}
 
 		public Type ResourceType
@@ -103,7 +79,5 @@ namespace Castle.MonoRail.Framework
 			get { return _ResourceType; }
 			set { _ResourceType = value; }
 		}
-
-		#endregion
 	}
 }

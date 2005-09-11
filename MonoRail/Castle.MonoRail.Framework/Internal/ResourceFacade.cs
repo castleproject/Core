@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public class ResourceFacade : IResource
 	{
-		private ResourceSet resourceSet;
+		private readonly ResourceSet resourceSet;
 
 		public ResourceFacade(ResourceSet resourceSet)
 		{
@@ -42,6 +42,11 @@ namespace Castle.MonoRail.Framework.Internal
 		public object GetObject(string key)
 		{
 			return key != null ? resourceSet.GetObject(key, true) : null;
+		}
+
+		public void Dispose()
+		{
+			resourceSet.Dispose();
 		}
 	}
 }

@@ -679,12 +679,17 @@ namespace Castle.MonoRail.Framework
 				DisposeFilter();
 			}
 
-			// If we haven't failed anywhere yet...
-			if (!hasError)
+			try
 			{
-				// Render the actual view then cleanup
-				ProcessView();
-
+				// If we haven't failed anywhere yet...
+				if (!hasError)
+				{
+					// Render the actual view then cleanup
+					ProcessView();
+				}
+			}
+			finally
+			{				
 				ReleaseResources();
 			}
 		}
@@ -773,7 +778,7 @@ namespace Castle.MonoRail.Framework
 
 			Assembly typeAssembly = this.GetType().Assembly;
 
-			foreach (AbstractResourceAttribute resource in metaDescriptor.Resources)
+			foreach (ResourceAttribute resource in metaDescriptor.Resources)
 			{
 				_resources.Add(resource.Name, _resourceFactory.Create(resource, typeAssembly));
 			}
@@ -782,7 +787,7 @@ namespace Castle.MonoRail.Framework
 
 			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
 
-			foreach (AbstractResourceAttribute resource in actionMeta.Resources)
+			foreach (ResourceAttribute resource in actionMeta.Resources)
 			{
 				_resources[resource.Name] = _resourceFactory.Create(resource, typeAssembly);
 			}
@@ -898,8 +903,11 @@ namespace Castle.MonoRail.Framework
 			else
 			{
 				String defaultLayout = String.Format("layouts/{0}",Name);
-				if ( HasTemplate(defaultLayout))
+				
+				if ( HasTemplate(defaultLayout) )
+				{
 					return Name;
+				}
 			}
 			return null;
 		}

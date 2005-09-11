@@ -20,8 +20,8 @@
 	<include buildfile="../common.inc" />		
 
 	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
+	<property name="debug" value="true" />
+	<property name="optimize" value="false" />
 
 	<!-- <target name="build" depends="clean, init, framework, engine, integration, brail, nvelocity, composite, arscaffold, samples, tests, generator" /> -->
 	<!-- Brail disabled as it's breaking the build -->

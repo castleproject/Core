@@ -198,11 +198,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes\AbstractResourceAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Attributes\ControllerDetailsAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
