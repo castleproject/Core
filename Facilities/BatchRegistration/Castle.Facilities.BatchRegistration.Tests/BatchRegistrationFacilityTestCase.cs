@@ -1,6 +1,3 @@
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Configuration.Sources;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +21,10 @@ namespace Castle.Facilities.BatchRegistration.Tests
 	using NUnit.Framework;
 
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.SubSystems.Configuration;
+
+	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Configuration.Sources;
 
 	using Castle.Facilities.BatchRegistration.Tests.Components;
 

@@ -49,7 +49,6 @@ namespace Castle.Facilities.BatchRegistration
 
 		private void AddComponents(IConfiguration config)
 		{
-
 			String assemblyName = config.Attributes["name"];
 
 			if (assemblyName == null || assemblyName.Length == 0)

@@ -19,10 +19,11 @@ namespace Castle.Facilities.EventWiring
 	using System.Collections.Specialized;
 	using System.Reflection;
 
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.Facilities;
 	using Castle.Model;
 	using Castle.Model.Configuration;
+
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
 
 
 	public class EventWiringFacility : AbstractFacility
@@ -84,7 +85,7 @@ namespace Castle.Facilities.EventWiring
 
 					EventInfo eventInfo = GetEventInfo(publisher, subscriberNode);
 
-					string handlerMethodName = subscriberNode.Attributes["handler"];
+					String handlerMethodName = subscriberNode.Attributes["handler"];
 					Delegate handler = Delegate.CreateDelegate(eventInfo.EventHandlerType, instance, handlerMethodName);
 
 					eventInfo.AddEventHandler(publisher, handler);
@@ -94,7 +95,7 @@ namespace Castle.Facilities.EventWiring
 
 		private EventInfo GetEventInfo(object publisher, IConfiguration subscriberNode)
 		{
-			string eventName = subscriberNode.Attributes["event"];
+			String eventName = subscriberNode.Attributes["event"];
 
 			Type publisherType = publisher.GetType();
 
@@ -110,7 +111,7 @@ namespace Castle.Facilities.EventWiring
 
 		private object GetPublisherInstance(IConfiguration subscriberNode)
 		{
-			string publisherId = subscriberNode.Attributes["publisher"];
+			String publisherId = subscriberNode.Attributes["publisher"];
 
 			//TODO: Check cyclic dependency
 

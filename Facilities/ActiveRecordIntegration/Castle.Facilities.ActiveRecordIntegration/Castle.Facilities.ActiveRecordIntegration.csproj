@@ -119,6 +119,11 @@
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
                 />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    Project = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
