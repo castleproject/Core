@@ -30,6 +30,8 @@ namespace Castle.MonoRail.Engine
 	/// </remarks>
 	public class ProcessEngine
 	{
+		internal static readonly String RailsContextKey = "rails.context";
+		
 		private IControllerFactory controllerFactory;
 		private IViewEngine viewEngine;
 		private IFilterFactory filterFactory;
@@ -101,6 +103,12 @@ namespace Castle.MonoRail.Engine
 		/// <param name="context"></param>
 		public virtual void Process( IRailsEngineContext context )
 		{
+			//Push the IRailsEngineContext into the HttpContext so that we can access it from outside of MonoRail
+			if (HttpContext.Current != null && !HttpContext.Current.Items.Contains(RailsContextKey))
+			{
+				HttpContext.Current.Items.Add(RailsContextKey, context);
+			}
+			
 			UrlInfo info = ExtractUrlInfo(context);
 
 			Controller controller = controllerFactory.CreateController( info );
@@ -122,6 +130,29 @@ namespace Castle.MonoRail.Engine
 			finally
 			{
 				controllerFactory.Release(controller);
+			}
+		}
+		
+		/// <summary>
+		/// Returns the MonoRail context assosciated with the current
+		/// request if one is available, otherwise <c>null</c>.
+		/// </summary>
+		public static IRailsEngineContext CurrentContext
+		{
+			get
+			{
+				HttpContext context = HttpContext.Current;
+				
+				//Are we in a web request?
+				if (context == null)
+					return null;
+				
+				//Is a MonoRail context in the store?
+				if (! context.Items.Contains(RailsContextKey))
+					return null;
+				
+				//Return it!
+				return context.Items[RailsContextKey] as IRailsEngineContext;
 			}
 		}
 
