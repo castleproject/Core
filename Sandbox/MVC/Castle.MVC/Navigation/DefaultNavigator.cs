@@ -25,20 +25,15 @@
 *************************************************/
 #endregion 
 
-using System;
-using System.Configuration;
-
 using Castle.Model;
-using Castle.MVC;
-using Castle.MVC.Configuration;
-using Castle.MVC.Views;
-using Castle.MVC.States;
 using Castle.MVC.StatePersister;
+using Castle.MVC.States;
+using Castle.MVC.Views;
 
 namespace Castle.MVC.Navigation
 {
 	/// <summary>
-	/// Description résumée de WebNavigator.
+	/// WebNavigator.
 	/// </summary>
 	[Transient]
 	public class DefaultNavigator : INavigator
@@ -86,5 +81,6 @@ namespace Castle.MVC.Navigation
 		}
 
 		#endregion
+
 	}
 }

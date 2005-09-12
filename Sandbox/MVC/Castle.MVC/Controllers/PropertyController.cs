@@ -18,63 +18,49 @@
  ********************************************************************************/
 #endregion
 
-#region Autors
-
-/************************************************
-* Gilles Bayon
-*************************************************/
-#endregion 
+#region Using
 
 using System;
 using System.Reflection;
-using System.Windows.Forms;
-using Castle.MVC.Configuration;
-using Castle.MVC.Controllers;
-using Castle.MVC.StatePersister;
-using Castle.MVC.States;
-using Castle.Windsor;
+#endregion 
 
-namespace Castle.MVC.Views
+
+
+namespace Castle.MVC.Controllers
 {
 	/// <summary>
-	/// Base class for user interaction in windows application. You can inherit from
-	/// this class when developing your windows forms.
+	/// PropertyController.
 	/// </summary>
-	public class WinFormView : Form, IView 
+	public class PropertyController
 	{
-		private IState _state = null;
+		private PropertyInfo _propertyInfo = null;
+		private Type _controllerType = null;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public PropertyInfo PropertyInfo
+		{
+			get {return _propertyInfo;}	
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public Type ControllerType
+		{
+			get {return _controllerType;}	
+		}
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public WinFormView()
+		/// <param name="info"></param>
+		/// <param name="controllerType"></param>
+		public PropertyController(PropertyInfo info, Type controllerType)
 		{
-			 this.Load += new EventHandler(WinFormViewOnLoad);
+			_propertyInfo = info;
+			_controllerType= controllerType;
 		}
-
-		private void WinFormViewOnLoad( object source, EventArgs e )
-		{
-			//To Do
-		}
-
-		#region IView members
-
-		/// <summary>
-		/// Gets the current view name.
-		/// </summary>
-		public string View
-		{
-			get { return _state.CurrentView; }
-		}
-
-		/// <summary>
-		/// Gets access to the user process state.
-		/// </summary>
-		public IState State
-		{
-			get { return _state; }
-		}
-
-		#endregion
 	}
 }

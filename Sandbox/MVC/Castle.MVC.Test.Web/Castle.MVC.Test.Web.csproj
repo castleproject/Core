@@ -105,11 +105,6 @@
                     HintPath = "..\Lib\Castle.Windsor.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilities.TypedFactory"
-                    AssemblyName = "Castle.Facilities.TypedFactory"
-                    HintPath = "..\Lib\Castle.Facilities.TypedFactory.dll"
-                />
-                <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
                     HintPath = "..\Lib\Castle.MicroKernel.dll"
@@ -151,7 +146,7 @@
                 <File
                     RelPath = "Views\index.aspx.cs"
                     DependentUpon = "index.aspx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -167,7 +162,7 @@
                 <File
                     RelPath = "Views\MyUserControl.ascx.cs"
                     DependentUpon = "MyUserControl.ascx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File
@@ -183,7 +178,7 @@
                 <File
                     RelPath = "Views\page2.aspx.cs"
                     DependentUpon = "page2.aspx"
-                    SubType = "Code"
+                    SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
                 />
                 <File

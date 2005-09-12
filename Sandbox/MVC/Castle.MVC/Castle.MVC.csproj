@@ -99,6 +99,16 @@
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\Lib\Castle.MicroKernel.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.TypedFactory"
+                    AssemblyName = "Castle.Facilities.TypedFactory"
+                    HintPath = "..\Lib\Castle.Facilities.TypedFactory.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -129,6 +139,11 @@
                 <File
                     RelPath = "licence.txt"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "MVCFacility.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "readme.txt"
@@ -169,7 +184,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ControllerTree.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\IController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\PropertyController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\PropertyControllerCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

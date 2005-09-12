@@ -25,9 +25,11 @@
 *************************************************/
 #endregion 
 
-using System;
+#region Using
 
 using Castle.MVC.States;
+
+#endregion 
 
 namespace Castle.MVC.Navigation
 {

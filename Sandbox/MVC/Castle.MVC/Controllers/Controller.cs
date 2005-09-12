@@ -25,15 +25,14 @@
 *************************************************/
 #endregion 
 
-using System;
-using System.Collections;
-using System.Collections.Specialized;
+#region Using
 
 using Castle.Model;
-
-using Castle.MVC.States;
-using Castle.MVC.Navigation;
 using Castle.MVC.Configuration;
+using Castle.MVC.Navigation;
+using Castle.MVC.States;
+
+#endregion 
 
 namespace Castle.MVC.Controllers
 {
@@ -115,5 +114,6 @@ namespace Castle.MVC.Controllers
 			_navigator.Navigate();
 		}
 		#endregion 
+
 	}
 }

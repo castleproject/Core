@@ -54,15 +54,6 @@ namespace Castle.MVC.Views
 
 		private IState _state = null;
 
-		/// <summary>
-		/// Binding token
-		/// </summary>
-		private BindingFlags BINDING_FLAGS_SET
-			= BindingFlags.Public 
-			| BindingFlags.SetProperty
-			| BindingFlags.Instance 
-			| BindingFlags.SetField
-			;
 		#endregion 
 
 		#region Constructor
@@ -109,15 +100,16 @@ namespace Castle.MVC.Views
 			_state.CurrentView = ConfigUtil.Settings.GetView(this.Request.Path);
 			_state.Save();
 
-			// Set the properties controllers
-			PropertyInfo[] properties = this.GetType().GetProperties(BINDING_FLAGS_SET);
-			for (int i = 0; i < properties.Length; i++) 
+			ControllerTree tree = (ControllerTree) container["mvc.controllerTree"];
+			PropertyControllerCollection propertiesController = tree.GetControllers( this.GetType().BaseType );
+
+			if (propertiesController!=null)
 			{
-				if (properties[i].PropertyType.IsSubclassOf(typeof(Controller)))
+				for(int i=0; i<propertiesController.Count; i++)
 				{
-					IController controller = container[properties[i].PropertyType ] as IController;
-					properties[i].SetValue(this, controller, null);
-				}
+					IController controller = container[propertiesController[i].ControllerType ] as IController;
+					propertiesController[i].PropertyInfo.SetValue(this, controller, null);
+				}				
 			}
 		}
 

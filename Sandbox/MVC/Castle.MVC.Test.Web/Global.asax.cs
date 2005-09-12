@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
+using System.Reflection;
 using System.Web;
-using System.Web.SessionState;
-
-using Castle.Facilities.TypedFactory;
 using Castle.MVC.Navigation;
-using Castle.MVC.Test.Presentation;
 using Castle.MVC.StatePersister;
 using Castle.MVC.States;
+using Castle.MVC.Test.Presentation;
 using Castle.MVC.Views;
 using Castle.Windsor;
 
@@ -17,12 +14,12 @@ namespace Castle.MVC.Test.Web
 	/// <summary>
 	/// Description résumée de Global.
 	/// </summary>
-	public class Global : System.Web.HttpApplication, IContainerAccessor
+	public class Global : HttpApplication, IContainerAccessor
 	{
 		/// <summary>
 		/// Variable nécessaire au concepteur.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+		private IContainer components = null;
 
 		private static WindsorContainer _container;
 
@@ -42,27 +39,9 @@ namespace Castle.MVC.Test.Web
 		
 		protected void Application_Start(Object sender, EventArgs e)
 		{
-			_container = new WindsorContainer();
-			TypedFactoryFacility facility = new TypedFactoryFacility();
-
-			_container.AddFacility("typedfactory", facility );
-			facility.AddTypedFactoryEntry( 
-				new FactoryEntry("stateFactory", typeof(IStateFactory), "Create", "Release") );
-
-			AddControllers();
+			_container = new MyContainer( Assembly.GetExecutingAssembly() );
 		}
  
-		private void AddControllers()
-		{
-			_container.AddComponent( "state", typeof(IState),typeof(MyApplicationState));
-			_container.AddComponent( "statePersister", typeof(IStatePersister), typeof(SessionPersister));
-			_container.AddComponent( "viewManager", typeof(IViewManager), typeof(XmlWebViewManager));
-			_container.AddComponent( "navigator", typeof(INavigator), typeof(DefaultNavigator));
-			_container.AddComponent( "HomeController", typeof(HomeController) );
-			_container.AddComponent( "AccountController", typeof(AccountController) );
-
-		}
-
 		protected void Session_Start(Object sender, EventArgs e)
 		{
 
@@ -105,7 +84,7 @@ namespace Castle.MVC.Test.Web
 		/// </summary>
 		private void InitializeComponent()
 		{    
-			this.components = new System.ComponentModel.Container();
+			this.components = new Container();
 		}
 		#endregion
 	}

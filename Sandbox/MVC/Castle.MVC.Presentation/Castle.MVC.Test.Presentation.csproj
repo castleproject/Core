@@ -84,6 +84,16 @@
                     Project = "{8C3E14B8-8154-4FC4-9BF3-EF63F74B69D3}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\Lib\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\Lib\Castle.MicroKernel.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -105,6 +115,11 @@
                 />
                 <File
                     RelPath = "MyApplicationState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MyContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

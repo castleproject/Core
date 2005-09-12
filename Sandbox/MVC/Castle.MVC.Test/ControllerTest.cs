@@ -1,3 +1,4 @@
+using System.Reflection;
 using Castle.Facilities.TypedFactory;
 using Castle.MVC.Navigation;
 using Castle.MVC.StatePersister;
@@ -33,23 +34,15 @@ namespace Castle.MVC.Test
 
 			_container = new WindsorContainer();
 
-			TypedFactoryFacility facility = new TypedFactoryFacility();
-
-			_container.AddFacility("typedfactory", facility );
-			facility.AddTypedFactoryEntry( 
-				new FactoryEntry("stateFactory", typeof(IStateFactory), "Create", "Release") );
-
+			_container.AddFacility("MVCFacility", new MVCFacility() );
+			_container.AddComponent( "state", typeof(IState),typeof(MyApplicationState));
+			_container.AddComponent( "viewManager", typeof(IViewManager), typeof(MockViewManager));
 
 			AddControllers();
 		}
  
 		private void AddControllers()
 		{
-			_container.AddComponent( "state", typeof(IState), typeof(MyApplicationState));
-			_container.AddComponent( "statePersister", typeof(IStatePersister), typeof(MemoryStatePersister));
-			_container.AddComponent( "viewManager", typeof(IViewManager), typeof(MockViewManager));
-			_container.AddComponent( "navigator", typeof(INavigator), typeof(DefaultNavigator));
-
 			_container.AddComponent( "HomeController", typeof(HomeController) );
 			_container.AddComponent( "AccountController", typeof(AccountController) );
 
