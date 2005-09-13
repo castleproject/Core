@@ -12,7 +12,7 @@
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
-	<property name="version" value="beta-1" />
+	<property name="version" value="alpha-1" />
 
 	<include buildfile="../../common.inc" />
 
