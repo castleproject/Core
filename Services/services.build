@@ -10,7 +10,7 @@
 	<property name="debug" value="false" />
 	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 
-	<target name="build" depends="init, transaction" />
+	<target name="build" depends="init, transaction, security" />
 	
 	<target name="init">
 		<delete dir="${bin.dir}" failonerror="false" />
@@ -24,8 +24,13 @@
 		<nant buildfile="TransactionMangement/transaction.build" target="build" />
 	</target>
 	
+	<target name="security">
+		<nant buildfile="Security/security.build" target="build" />
+	</target>
+	
 	<target name="dist">
 		<nant buildfile="TransactionMangement/transaction.build" target="dist" />
+		<nant buildfile="Security/security.build" target="dist" />
 	</target>
 	
 </project>
