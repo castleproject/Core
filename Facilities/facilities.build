@@ -18,7 +18,7 @@
         <!-- Removed the build for prevalence til they apply the patch -->
         <!-- supplied -->
 
-	<target name="build" depends="init, prevalence, autotransaction, arintegration, nhibernate, aspectsharp, eventwiring, typedfactory, batchregistration, startable, factorysupport" />
+	<target name="build" depends="init, prevalence, autotransaction, arintegration, nhibernate, aspectsharp, eventwiring, typedfactory, batchregistration, startable, factorysupport, securitymanagement" />
 	
 	<target name="init">
 
@@ -70,6 +70,10 @@
 	
 	<target name="db4o">
 		<nant buildfile="Db4o/default.build" inheritall="true" target="build" />
+	</target>
+	
+	<target name="securitymanagement">
+		<nant buildfile="Security/default.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="dist">
