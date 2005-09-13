@@ -795,6 +795,8 @@ namespace Castle.MonoRail.Framework
 
 		protected virtual void ReleaseResources()
 		{
+			if (_resources == null) return;
+
 			foreach (IResource resource in _resources.Values)
 			{
 				_resourceFactory.Release(resource);
