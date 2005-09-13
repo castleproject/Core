@@ -39,7 +39,7 @@ namespace Castle.Services.Security
     public abstract class PermissionAttribute : System.Attribute
     {
         public PermissionAttribute(String role) : this(new String[] {role}){}
-        public PermissionAttribute(params string[] roles)
+        public PermissionAttribute(params String[] roles)
         {
             this._roles = roles;
         }
