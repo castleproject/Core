@@ -51,33 +51,33 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class CollectionIDAttribute : Attribute
 	{
-		private CollectionIDType _generator = CollectionIDType.Assigned;
-		private String _column;
-		private String _type;
+		private CollectionIDType generator = CollectionIDType.Assigned;
+		private String column;
+		private String type;
 
 		public CollectionIDAttribute(CollectionIDType generator, String column, String ColumnType)
 		{
-			_generator = generator;
-			_column = column;
-			_type = ColumnType;
+			this.generator = generator;
+			this.column = column;
+			this.type = ColumnType;
 		}
 
 		public CollectionIDType Generator
 		{
-			get { return _generator; }
-			set { _generator = value; }
+			get { return generator; }
+			set { generator = value; }
 		}
 
 		public String Column
 		{
-			get { return _column; }
-			set { _column = value; }
+			get { return column; }
+			set { column = value; }
 		}
 
 		public String ColumnType
 		{
-			get { return _type; }
-			set { _type = value; }
+			get { return type; }
+			set { type = value; }
 		}
 	}
 }

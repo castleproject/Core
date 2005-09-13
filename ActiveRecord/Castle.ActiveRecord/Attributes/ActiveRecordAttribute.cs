@@ -28,50 +28,73 @@ namespace Castle.ActiveRecord
 	/// }
 	/// </code>
 	/// </example>
+	/// <remarks>
+	/// If no table is specified, the class name 
+	/// is used as table name
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
 	public class ActiveRecordAttribute : BaseAttribute
 	{ 
-		private String _table;
-		private String _schema;
-		private String _discriminatorType;
-		private String _discriminatorValue;
-		private String _discriminatorColumn;
+		private String table;
+		private String schema;
+		private String discriminatorType;
+		private String discriminatorValue;
+		private String discriminatorColumn;
 		private String where;
-		private Type _proxy;
+		private Type proxy;
 		private bool lazy;
 
+		/// <summary>
+		/// Uses the class name as table name
+		/// </summary>
 		public ActiveRecordAttribute()
 		{
 			
 		}
 
+		/// <summary>
+		/// Associates the specified table with the target type
+		/// </summary>
+		/// <param name="table"></param>
 		public ActiveRecordAttribute(String table)
 		{
-			_table = table;
+			this.table = table;
 		}
 
+		/// <summary>
+		/// Associates the specified table and schema with the target type
+		/// </summary>
 		public ActiveRecordAttribute(String table, String schema)
 		{
-			_table = table;
-			_schema = schema;
+			this.table = table;
+			this.schema = schema;
 		}
 
+		/// <summary>
+		/// Gets or sets the table name associated with the type
+		/// </summary>
 		public String Table
 		{
-			get { return _table; }
-			set { _table = value; }
+			get { return table; }
+			set { table = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the schema name associated with the type
+		/// </summary>
 		public String Schema
 		{
-			get { return _schema; }
-			set { _schema = value; }
+			get { return schema; }
+			set { schema = value; }
 		}
 
+		/// <summary>
+		/// Associates a proxy type with the target type
+		/// </summary>
 		public Type Proxy
 		{
-			get { return _proxy; }
-			set { _proxy = value; }
+			get { return proxy; }
+			set { proxy = value; }
 		}
 
 		/// <summary>
@@ -80,8 +103,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public String DiscriminatorColumn
 		{
-			get { return _discriminatorColumn; }
-			set { _discriminatorColumn = value; }
+			get { return discriminatorColumn; }
+			set { discriminatorColumn = value; }
 		}
 
 		/// <summary>
@@ -90,8 +113,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public String DiscriminatorType
 		{
-			get { return _discriminatorType; }
-			set { _discriminatorType = value; }
+			get { return discriminatorType; }
+			set { discriminatorType = value; }
 		}
 
 		/// <summary>
@@ -100,8 +123,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public String DiscriminatorValue
 		{
-			get { return _discriminatorValue; }
-			set { _discriminatorValue = value; }
+			get { return discriminatorValue; }
+			set { discriminatorValue = value; }
 		}
 
 		/// <summary>
@@ -113,6 +136,9 @@ namespace Castle.ActiveRecord
 			set { where = value; }
 		}
 
+		/// <summary>
+		/// Enable lazy loading for the type
+		/// </summary>
 		public bool Lazy
 		{
 			get { return lazy; }

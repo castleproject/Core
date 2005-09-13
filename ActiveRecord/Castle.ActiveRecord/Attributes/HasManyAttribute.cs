@@ -44,24 +44,24 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public class HasManyAttribute : RelationAttribute
 	{
-		protected String _keyColumn;
+		protected String keyColumn;
 
 		public HasManyAttribute(Type mapType)
 		{
-			_mapType = mapType;
+			base.mapType = mapType;
 		}
 
 		public HasManyAttribute(Type mapType, String keyColumn, String table)
 		{
-			_mapType = mapType;
-			_keyColumn = keyColumn;
-			_table = table;
+			this.keyColumn = keyColumn;
+			base.mapType = mapType;
+			base.table = table;
 		}
 
 		public String ColumnKey
 		{
-			get { return _keyColumn; }
-			set { _keyColumn = value; }
+			get { return keyColumn; }
+			set { keyColumn = value; }
 		}
 	}
 }

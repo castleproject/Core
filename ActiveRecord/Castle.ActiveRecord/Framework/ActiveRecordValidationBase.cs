@@ -21,8 +21,30 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Internal;
 
 	/// <summary>
-	/// 
+	/// Extends <see cref="ActiveRecordBase"/> adding automatic validation support.
+	/// <seealso cref="ActiveRecordValidationBase.IsValid"/>
 	/// </summary>
+	/// <example>
+	/// <code>
+	/// public class Customer : ActiveRecordBase
+	/// {
+	///		...
+	///		
+	///		[Property, ValidateNotEmpty]
+	///		public int Name
+	///		{
+	///			get { return _name; }
+	///			set { _name = value; }
+	///		}
+	///		
+	///		[Property, ValidateNotEmpty, ValidateEmail]
+	///		public int Email
+	///		{
+	///			get { return _email; }
+	///			set { _email = value; }
+	///		}
+	///	</code>
+	/// </example>
 	public abstract class ActiveRecordValidationBase : ActiveRecordBase
 	{
 		/// <summary>
@@ -95,6 +117,7 @@ namespace Castle.ActiveRecord
 					else
 					{
 						items = new ArrayList();
+
 						__failedProperties[validator.Property] = items;
 					}
 

@@ -54,71 +54,101 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class BelongsToAttribute : Attribute
 	{
-		private Type _type;
-		private String _column;
-		private bool _update = true;
-		private bool _insert = true;
-		private bool _notnull;
-		private bool _unique;
-		private OuterJoinEnum _outerJoin = OuterJoinEnum.Auto;
-		private CascadeEnum _cascade = CascadeEnum.None;
+		private Type type;
+		private String column;
+		private bool update = true;
+		private bool insert = true;
+		private bool notnull;
+		private bool unique;
+		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
+		private CascadeEnum cascade = CascadeEnum.None;
 
+		/// <summary>
+		/// Indicates a column to be used on the association
+		/// </summary>
 		public BelongsToAttribute(String column)
 		{
-			_column = column;
+			this.column = column;
 		}
 
+		/// <summary>
+		/// Indicates the target type to be used by the association
+		/// </summary>
 		public BelongsToAttribute(Type type)
 		{
-			_type = type;
+			this.type = type;
 		}
 
+		/// <summary>
+		/// Gets or sets the target type
+		/// </summary>
 		public Type Type
 		{
-			get { return _type; }
-			set { _type = value; }
+			get { return type; }
+			set { type = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the column used by association (usually a foreign key
+		/// </summary>
 		public String Column
 		{
-			get { return _column; }
-			set { _column = value; }
+			get { return column; }
+			set { column = value; }
 		}
 
+		/// <summary>
+		/// Gets of sets the cascade behavior
+		/// </summary>
 		public CascadeEnum Cascade
 		{
-			get { return _cascade; }
-			set { _cascade = value; }
+			get { return cascade; }
+			set { cascade = value; }
 		}
 
+		/// <summary>
+		/// Gets of sets the outer join behavior
+		/// </summary>
 		public OuterJoinEnum OuterJoin
 		{
-			get { return _outerJoin; }
-			set { _outerJoin = value; }
+			get { return outerJoin; }
+			set { outerJoin = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the update behavior. 
+		/// </summary>
 		public bool Update
 		{
-			get { return _update; }
-			set { _update = value; }
+			get { return update; }
+			set { update = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the update behavior. 
+		/// </summary>
 		public bool Insert
 		{
-			get { return _insert; }
-			set { _insert = value; }
+			get { return insert; }
+			set { insert = value; }
 		}
 
+		/// <summary>
+		/// Indicates whether this association allows nulls.
+		/// </summary>
 		public bool NotNull
 		{
-			get { return _notnull; }
-			set { _notnull = value; }
+			get { return notnull; }
+			set { notnull = value; }
 		}
 
+		/// <summary>
+		/// Indicates whehter this association is unique
+		/// </summary>
 		public bool Unique
 		{
-			get { return _unique; }
-			set { _unique = value; }
+			get { return unique; }
+			set { unique = value; }
 		}
 	}
 }

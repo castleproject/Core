@@ -28,7 +28,8 @@ namespace Castle.ActiveRecord.Framework
 	public interface ISessionFactoryHolder
 	{
 		/// <summary>
-		/// 
+		/// Raised when a new root type is registered. 
+		/// A new root type creates a new <c>ISessionFactory</c>
 		/// </summary>
 		event RootTypeHandler OnRootTypeRegistered;
 

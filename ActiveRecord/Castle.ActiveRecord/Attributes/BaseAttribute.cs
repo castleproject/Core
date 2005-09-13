@@ -24,6 +24,10 @@ namespace Castle.ActiveRecord
 		NonStrictReadWrite
 	}
 
+	/// <summary>
+	/// Implement common properties shared by some
+	/// attributes
+	/// </summary>
 	[Serializable]
 	public abstract class BaseAttribute : Attribute
 	{

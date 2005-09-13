@@ -30,8 +30,8 @@ namespace Castle.ActiveRecord
 	///		[Property]
 	///		public int Name
 	///		{
-	///			get { return _id; }
-	///			set { _id = value; }
+	///			get { return _name; }
+	///			set { _name = value; }
 	///		}
 	///	</code>
 	/// To map a column name, use 
@@ -39,8 +39,8 @@ namespace Castle.ActiveRecord
 	///		[Property("blog_name")]
 	///		public int Name
 	///		{
-	///			get { return _id; }
-	///			set { _id = value; }
+	///			get { return _name; }
+	///			set { _name = value; }
 	///		}
 	///	</code>
 	/// </example>

@@ -39,29 +39,29 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class HasAndBelongsToManyAttribute : RelationAttribute
 	{
-		private String _columnRef;	
-		private String _columnKey;
+		private String columnRef;	
+		private String columnKey;
 
 		public HasAndBelongsToManyAttribute( Type mapType )
 		{
-			_mapType = mapType;
+			this.mapType = mapType;
 		}
 
 		public HasAndBelongsToManyAttribute( Type mapType, RelationType type ) : this(mapType)
 		{
-			_relType = type;
+			base.relType = type;
 		}
 
 		public String ColumnRef
 		{
-			get { return _columnRef; }
-			set { _columnRef = value; }
+			get { return columnRef; }
+			set { columnRef = value; }
 		}
 
 		public String ColumnKey
 		{
-			get { return _columnKey; }
-			set { _columnKey = value; }
+			get { return columnKey; }
+			set { columnKey = value; }
 		}
 	}
 }

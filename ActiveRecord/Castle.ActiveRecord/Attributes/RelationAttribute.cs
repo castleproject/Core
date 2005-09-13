@@ -29,71 +29,71 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public abstract class RelationAttribute : BaseAttribute
 	{
-		protected Type _mapType;
-		protected String _table;
-		protected String _schema;
-		protected String _orderBy;
-		protected String _where;
-		protected String _sort;
-		protected String _index;
-		protected String _indexType;
-		protected bool _lazy;
-		protected bool _inverse;
-		protected ManyRelationCascadeEnum _cascade = ManyRelationCascadeEnum.None;
-		protected RelationType _relType = RelationType.Guess;
+		protected Type mapType;
+		protected String table;
+		protected String schema;
+		protected String orderBy;
+		protected String where;
+		protected String sort;
+		protected String index;
+		protected String indexType;
+		protected bool lazy;
+		protected bool inverse;
+		protected ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
+		protected RelationType relType = RelationType.Guess;
 
 		public RelationType RelationType
 		{
-			get { return _relType; }
-			set { _relType = value; }
+			get { return relType; }
+			set { relType = value; }
 		}
 
 		public Type MapType
 		{
-			get { return _mapType; }
-			set { _mapType = value; }
+			get { return mapType; }
+			set { mapType = value; }
 		}
 
 		public String Table
 		{
-			get { return _table; }
-			set { _table = value; }
+			get { return table; }
+			set { table = value; }
 		}
 
 		public String Schema
 		{
-			get { return _schema; }
-			set { _schema = value; }
+			get { return schema; }
+			set { schema = value; }
 		}
 
 		public bool Lazy
 		{
-			get { return _lazy; }
-			set { _lazy = value; }
+			get { return lazy; }
+			set { lazy = value; }
 		}
 
 		public bool Inverse
 		{
-			get { return _inverse; }
-			set { _inverse = value; }
+			get { return inverse; }
+			set { inverse = value; }
 		}
 	
 		public ManyRelationCascadeEnum Cascade
 		{
-			get { return _cascade; }
-			set { _cascade = value; }
+			get { return cascade; }
+			set { cascade = value; }
 		}
 
 		public String OrderBy
 		{
-			get { return _orderBy; }
-			set { _orderBy = value; }
+			get { return orderBy; }
+			set { orderBy = value; }
 		}
 
 		public String Where
 		{
-			get { return _where; }
-			set { _where = value; }
+			get { return where; }
+			set { where = value; }
 		}
 
 		/// <summary>
@@ -101,8 +101,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public String Sort
 		{
-			get { return _sort; }
-			set { _sort = value; }
+			get { return sort; }
+			set { sort = value; }
 		}
 
 		/// <summary>
@@ -110,8 +110,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public string Index
 		{
-			get { return _index; }
-			set { _index = value; }
+			get { return index; }
+			set { index = value; }
 		}
 
 		/// <summary>
@@ -119,8 +119,8 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public string IndexType
 		{
-			get { return _indexType; }
-			set { _indexType = value; }
+			get { return indexType; }
+			set { indexType = value; }
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework
 	using NHibernate.Type;
 
 	/// <summary>
-	/// Translates the <seealso cref="IInterceptor"/>
+	/// Translates the <c>IInterceptor</c>
 	/// messages to instance possible hooks
 	/// </summary>
 	public class HookDispatcher : IInterceptor
