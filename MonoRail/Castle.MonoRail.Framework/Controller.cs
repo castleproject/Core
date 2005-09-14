@@ -527,17 +527,14 @@ namespace Castle.MonoRail.Framework
 			_scaffoldSupport = scaffoldSupport;
 			_viewComponentFactory = viewComponentFactory;
 
-			if (GetType().IsDefined(typeof(FilterAttribute), true))
+			if (metaDescriptor.Filters.Count != 0)
 			{
 				_filters = CollectFilterDescriptor();
 			}
 
-			if (GetType().IsDefined(typeof(LayoutAttribute), true))
-			{
-				LayoutName = ObtainDefaultLayoutName();
-			}
+			LayoutName = ObtainDefaultLayoutName();
 
-			if (GetType().IsDefined(typeof(ScaffoldingAttribute), false))
+			if (metaDescriptor.Scaffolding != null)
 			{
 				if (_scaffoldSupport == null)
 				{
@@ -551,10 +548,7 @@ namespace Castle.MonoRail.Framework
 				_scaffoldSupport.Process(this);
 			}
 
-			if (GetType().IsDefined(typeof(DynamicActionProviderAttribute), true))
-			{
-				ActionProviderUtil.RegisterActions(this);
-			}
+			ActionProviderUtil.RegisterActions(this);
 
 			Initialize();
 
