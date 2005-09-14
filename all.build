@@ -149,14 +149,23 @@
 					<include name="InversionOfControl"/>
 					<include name="MonoRail"/>
 					
+					<!-- AspectSharp -->
+					<include name="AspectSharp/AopAlliance"/>
+					<include name="AspectSharp/AspectSharp"/>
+					<include name="AspectSharp/AspectSharp.Lang"/>
+					
 					<!-- Components -->
 					<include name="Components/General/EmailSender"/>
 					<include name="Components/General/TemplateEngine"/>
 					
 					<!-- Facilities -->
 					<include name="Facilities/ActiveRecordIntegration"/>
-					<include name="Facilities/AspectSharp"/>
 					<include name="Facilities/AutomaticTransactionManagement"/>
+					<include name="Facilities/AspectSharp"/>
+					<include name="Facilities/EnterpriseLibrary"/>
+					<include name="Facilities/EventWiring"/>
+					<include name="Facilities/FactorySupport"/>
+					<include name="Facilities/TypedFactory"/>
 					<include name="Facilities/BatchRegistration"/>
 					<include name="Facilities/Db4o"/>
 					<include name="Facilities/IBatisNet"/>
@@ -168,6 +177,11 @@
 					
 					<!-- Services -->
 					<include name="Services/TransactionMangement"/>
+					<include name="Services/Logging"/>
+					
+					<!-- Tools -->
+					<include name="Tools/DynamicProxy"/>
+					<include name="Tools/ManagedExtensions"/>
 				</items>
 			</in>
 			<do>

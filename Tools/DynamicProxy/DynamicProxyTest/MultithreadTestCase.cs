@@ -22,9 +22,7 @@ namespace Castle.DynamicProxy.Test
 	using Castle.DynamicProxy.Test.Classes;
 	using Castle.DynamicProxy.Test.Interceptors;
 
-	/// <summary>
-	/// Summary description for MultithreadTestCase.
-	/// </summary>
+
 	[TestFixture]
 	public class MultithreadTestCase
 	{

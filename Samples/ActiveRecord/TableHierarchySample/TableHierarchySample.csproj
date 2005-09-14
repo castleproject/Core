@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -88,11 +88,6 @@
                     Name = "Castle.ActiveRecord"
                     AssemblyName = "Castle.ActiveRecord"
                     HintPath = "..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\..\ActiveRecord\bin\Castle.DynamicProxy.dll"
                 />
                 <Reference
                     Name = "Castle.Model"

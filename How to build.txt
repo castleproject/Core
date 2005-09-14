@@ -3,12 +3,12 @@ For an updated version check: http://www.castleproject.org/index.php/How+To+Buil
 Everything should compile fine using NAnt 0.85 RC3. Anyway, the following are some useful tips if things go wrong for some reason.
 
 
-- Where to start the build?
+--- Where to start the build?
 
 Use the all.build in the root directory. It compiles everything in the right order, copies dependencies and so on. 
 
 
-- MonoRail tests are failing
+--- MonoRail tests are failing
 
 Not good. If you have more than one CLR runtime installed, try specifying the 1.1 runtime:
 
@@ -18,18 +18,21 @@ If the problem persists, just disable the MonoRail tests:
   
   > nant -D:monorail.test=false
 
-
-- NHibernate Facility
+--- NHibernate Facility
 
 This test is bound to fail. You must adjust the connection string and create a small structure on your data. To avoid all this aggravation, simply disable it:
 
 > nant -D:nhibernate.test=false
 
-- ActiveRecord
+--- ActiveRecord
 
-This test is bound to fail. You must adjust the connection string and create a small structure on your data. To avoid all this aggravation, simply disable it:
+This test is bound to fail. You must adjust the connection string. To avoid all this aggravation, simply disable it:
 
 > nant -D:activerecord.test=false
+
+--- Compiling a Debug version
+
+  > nant -D:debug=true -D:optimize=false
 
 
 - More questions? 

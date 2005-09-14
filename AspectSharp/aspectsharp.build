@@ -118,7 +118,8 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${aopalliance.assembly.name}">
+			output="${bin.dir}/${aopalliance.assembly.name}"
+			doc="${bin.dir}/${aopalliance.name}.xml">
 			
 			<sources basedir="${aopalliance.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
@@ -132,7 +133,8 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${lang.assembly.name}">
+			output="${bin.dir}/${lang.assembly.name}"
+			doc="${bin.dir}/${lang.name}.xml">
 			
 			<sources basedir="${lang.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
@@ -175,11 +177,12 @@
 
 	<target name="core.compile" depends="init">
 		<csc
-		    	define="${strong}" 
+		    define="${strong}" 
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${core.assembly.name}">
+			output="${bin.dir}/${core.assembly.name}"
+			doc="${bin.dir}/${core.name}.xml">
 			
 			<sources basedir="${core.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />

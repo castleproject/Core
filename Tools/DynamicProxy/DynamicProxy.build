@@ -32,13 +32,13 @@
 	<target name="build" depends="init,core.tests.run" />
 	
 	<target name="core.compile" depends="init">
-		<!-- doc="${bin.dir}/${core.name}.xml" -->
 		<csc 
 			define="${strong}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${core.assembly.name}">
+			output="${bin.dir}/${core.assembly.name}"
+			doc="${bin.dir}/${core.name}.xml">
 			
 			<nowarn>
 				<warning number="1591" />
