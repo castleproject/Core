@@ -454,13 +454,13 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 		{
 			if (Context.ShouldSkip(method)) return;
 
-			ParameterInfo[] parameterInfo = method.GetParameters();
+			ParameterInfo[] parametersInfo = method.GetParameters();
 
-			Type[] parameters = new Type[parameterInfo.Length];
+			Type[] parameters = new Type[parametersInfo.Length];
 
-			for (int i = 0; i < parameterInfo.Length; i++)
+			for (int i = 0; i < parametersInfo.Length; i++)
 			{
-				parameters[i] = parameterInfo[i].ParameterType;
+				parameters[i] = parametersInfo[i].ParameterType;
 			}
 
 			MethodAttributes atts = ObtainMethodAttributes(method);
@@ -499,7 +499,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 							for(int i=0; i < property.IndexParameters.Length; i++)
 							{
-								if (property.IndexParameters[i].ParameterType != parameterInfo[i].ParameterType)
+								if (property.IndexParameters[i].ParameterType != parametersInfo[i].ParameterType)
 								{
 									signatureMatches = false;
 									break;
@@ -522,6 +522,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 					}
 				}
 			}
+
+			easyMethod.DefineParameters(parametersInfo);
 
 			WriteInterceptorInvocationMethod(method, easyMethod);
 

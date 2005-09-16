@@ -105,5 +105,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 				CodeBuilder.AddStatement( new ReturnStatement() );
 			}
 		}
+
+		public void DefineParameters(ParameterInfo[] info)
+		{
+			foreach (ParameterInfo parameterInfo in info)
+			{
+				_builder.DefineParameter(parameterInfo.Position+1,parameterInfo.Attributes, parameterInfo.Name);
+			}
+		}
 	}
 }
