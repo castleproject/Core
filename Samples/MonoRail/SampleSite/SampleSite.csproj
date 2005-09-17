@@ -70,11 +70,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
@@ -103,16 +98,6 @@
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     AssemblyName = "Castle.MonoRail.Framework.Views.NVelocity"
                     HintPath = "..\..\..\MonoRail\bin\Castle.MonoRail.Framework.Views.NVelocity.dll"
-                />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\..\..\MonoRail\bin\Commons.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\..\MonoRail\bin\log4net.dll"
                 />
                 <Reference
                     Name = "System.Web"
