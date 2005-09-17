@@ -52,6 +52,16 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests.Model
 		}
 
 		[Transaction(TransactionMode.Requires)]
+		public virtual Blog CreateAndThrowException3(String name, String author)
+		{
+			Create(name, author);
+
+			Blog.FindAll(); // will it flush?
+
+			throw new Exception("Doh!");
+		}
+
+		[Transaction(TransactionMode.Requires)]
 		public virtual void ModifyAndThrowException(Blog blog, String newName)
 		{
 			blog.Name = newName;

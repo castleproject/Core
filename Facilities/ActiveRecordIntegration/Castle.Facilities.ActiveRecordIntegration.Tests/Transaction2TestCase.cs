@@ -141,6 +141,30 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 		}
 
 		[Test]
+		public void OneLevelTransactionRollback3()
+		{
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			BlogService service = (BlogService) container[ typeof(BlogService) ];
+
+			using(new SessionScope())
+			{
+				Blog.FindAll(); // side effects only
+
+				try
+				{
+					service.CreateAndThrowException3( "name", "author" );
+				}
+				catch(Exception)
+				{
+				}
+			}
+
+			Assert.AreEqual( 0, Blog.FindAll().Length );
+		}
+
+		[Test]
 		public void TwoLevelTransaction()
 		{
 			Post.DeleteAll();

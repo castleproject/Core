@@ -15,9 +15,10 @@
 namespace Castle.Facilities.ActiveRecordIntegration.Tests
 {
 	using System;
-	
+
 	using NUnit.Framework;
 
+	using Castle.ActiveRecord;
 	using Castle.Facilities.ActiveRecordIntegration.Tests.Model;
 
 
@@ -35,6 +36,52 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 			service.Create( "name", "author" );
 
 			Assert.AreEqual( 1, Blog.FindAll().Length );
+		}
+
+		[Test]
+		public void DicardingChanges()
+		{
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			SessionScope scope = new SessionScope();
+			
+			Blog.FindAll(); // side effects only
+
+			BlogService service = (BlogService) container[ typeof(BlogService) ];
+			Blog blog = service.Create( "name", "author" );
+			
+			Assert.AreEqual( 1, Blog.FindAll().Length );
+
+			blog.Name = "joe developer";
+
+			scope.Dispose(true);
+
+			Assert.AreEqual( "name", Blog.FindAll()[0].Name );
+		}
+
+		[Test]
+		public void DicardingChanges2()
+		{
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			SessionScope scope = new SessionScope();
+			
+			Blog.FindAll(); // side effects only
+
+			BlogService service = (BlogService) container[ typeof(BlogService) ];
+			Blog blog = service.Create( "name", "author" );
+			
+			Assert.AreEqual( 1, Blog.FindAll().Length );
+
+			blog.Name = "joe developer";
+
+			Assert.AreEqual( 1, Blog.FindAll().Length );
+
+			scope.Dispose(true);
+
+			Assert.AreEqual( "name", Blog.FindAll()[0].Name );
 		}
 
 		[Test]
