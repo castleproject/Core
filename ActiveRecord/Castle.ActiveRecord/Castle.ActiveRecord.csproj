@@ -109,6 +109,16 @@
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
                 />
+                <Reference
+                    Name = "Nullables"
+                    AssemblyName = "Nullables"
+                    HintPath = "..\lib\Nullables.dll"
+                />
+                <Reference
+                    Name = "Nullables.NHibernate"
+                    AssemblyName = "Nullables.NHibernate"
+                    HintPath = "..\lib\Nullables.NHibernate.dll"
+                />
             </References>
         </Build>
         <Files>

@@ -202,7 +202,7 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
-		public void LotsOsNestedTransactionWithDifferentConfigurations()
+		public void LotsOfNestedTransactionWithDifferentConfigurations()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
 			Recreate();

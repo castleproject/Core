@@ -91,11 +91,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\lib\Castle.DynamicProxy.dll"
-                />
-                <Reference
                     Name = "HashCodeProvider"
                     AssemblyName = "HashCodeProvider"
                     HintPath = "..\lib\HashCodeProvider.dll"
@@ -114,6 +109,21 @@
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
+                />
+                <Reference
+                    Name = "Nullables"
+                    AssemblyName = "Nullables"
+                    HintPath = "..\lib\Nullables.dll"
+                />
+                <Reference
+                    Name = "Nullables.NHibernate"
+                    AssemblyName = "Nullables.NHibernate"
+                    HintPath = "..\lib\Nullables.NHibernate.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
                 />
             </References>
         </Build>
@@ -140,6 +150,11 @@
                 />
                 <File
                     RelPath = "JoinedSubClassTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NullablesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -205,6 +220,11 @@
                 />
                 <File
                     RelPath = "Model\LineItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\NullableModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
