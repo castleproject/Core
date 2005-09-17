@@ -14,7 +14,7 @@
 	<property name="assembly.name" value="${name}.dll" />
 	<property name="test.assembly.name" value="${name}.Tests.dll" />
 
-	<property name="version" value="beta-2" />
+	<property name="version" value="beta-3" />
 
 	<target name="clean">
 		<delete failonerror="false">

@@ -17,10 +17,13 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
 
-#if STRONG
+//#if STRONG
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile("../../CastleKey.snk")]
-// [assembly: AssemblyKeyFile(@"E:\dev\projects\castle\CastleKey.snk")]
-[assembly: AssemblyKeyName("")]
-#endif
 
+// [csc] error CS1577: Assembly generation failed -- 
+// Referenced assembly 'Microsoft.Practices.EnterpriseLibrary.Configuration' does not have a strong name
+
+// [assembly: AssemblyKeyFile("../../CastleKey.snk")]
+
+[assembly: AssemblyKeyName("")]
+//#endif

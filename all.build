@@ -50,6 +50,7 @@
 
 	<target name="dist">
 		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="dist" inheritall="true" />
+		<nant buildfile="AspectSharp/aspectsharp.build" target="distribution" inheritall="true" />
 		<nant buildfile="InversionOfControl/container.build" target="dist" inheritall="true" />
 		<nant buildfile="Components/components.build" target="dist" inheritall="true" />
 		<nant buildfile="ActiveRecord/activerecord.build" target="dist" inheritall="true" />
@@ -215,4 +216,34 @@
 			</fileset>
 		</delete>
 	</target>
+
+	<target name="ziptrunk">
+		<zip zipfile="Castle-all.zip">
+			<fileset basedir="${base.dir}">
+				<include name="all.build" />
+				<include name="common.inc" />
+				<include name="CastleKey.snk" />
+				<include name="How to build.txt" />
+				
+				<include name="ActiveRecord/**.*" />
+				<include name="AspectSharp/**.*" />
+				<include name="Components/**.*" />
+				<include name="Deps/**.*" />
+				<include name="Facilities/**.*" />
+				<include name="InversionOfControl/**.*" />
+				<include name="MonoRail/**.*" />
+				<include name="Services/**.*" />
+				<include name="Tools/**.*" />
+				
+				<exclude name="**\*.user" />
+				<exclude name="**\*.pdb" />
+				<exclude name="**\*.zip" />
+				<exclude name="**\*.chm" />
+				<exclude name="**\*.resharperoptions" />
+				<exclude name="**\*.suo" />
+				<exclude name="**\obj\Debug\*.*" />
+			</fileset>
+		</zip>
+	</target>
+
 </project>

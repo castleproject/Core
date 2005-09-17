@@ -5,7 +5,7 @@
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="name" value="MonoRail" />
-	<property name="version" value="beta-2" />
+	<property name="version" value="beta-4" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="samples.dir" value="${base.dir}/../Samples/MonoRail" />
 	<property name="gacutil.framework.file" value="${framework::get-framework-directory( framework::get-target-framework() )}\gacutil.exe"/>
@@ -206,6 +206,13 @@
 				<exclude name="**/bin/Debug/*.*" />
 				<exclude name="**/*.user" />
 				<exclude name="**/*.log" />
+				<exclude name="**/*.user" />
+				<exclude name="**/*.resharperoptions" />
+				<exclude name="**/*.obj" />
+				<exclude name="**/*.pch" />
+				<exclude name="**/*.pdb" />
+				<exclude name="**/*.idb" />
+				<exclude name="**/*.log*" />
 			</fileset>
 		</zip>
 		
