@@ -28,7 +28,6 @@ namespace Castle.Facilities.NHibernateExtension
 	{
 		private static LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
 
-
 		/// <summary>
 		/// Returns the current NHibernate's Session
 		/// </summary>
