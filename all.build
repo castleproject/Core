@@ -150,9 +150,7 @@
 					<include name="MonoRail"/>
 					
 					<!-- AspectSharp -->
-					<include name="AspectSharp/AopAlliance"/>
-					<include name="AspectSharp/AspectSharp"/>
-					<include name="AspectSharp/AspectSharp.Lang"/>
+					<include name="AspectSharp"/>
 					
 					<!-- Components -->
 					<include name="Components/General/EmailSender"/>
