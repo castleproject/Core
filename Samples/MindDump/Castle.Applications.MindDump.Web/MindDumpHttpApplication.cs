@@ -14,14 +14,55 @@
 
 namespace Castle.Applications.MindDump.Web
 {
+	using System;
 	using System.Web;
 
 	using Castle.Windsor;
+	using Castle.Facilities.NHibernateExtension;
+
+	using NHibernate;
 
 
 	public class MindDumpHttpApplication : HttpApplication, IContainerAccessor
 	{
+		private static readonly String DefaultSessionFactory = "nhibernate.sessfactory.default";
+
 		private static WindsorContainer container;
+
+		public MindDumpHttpApplication()
+		{
+			this.BeginRequest += new EventHandler(OnBeginRequest);
+			this.EndRequest += new EventHandler(OnEndRequest);
+		}
+
+		public void OnBeginRequest(object sender, EventArgs e)
+		{
+			ISessionFactory sessFac = (ISessionFactory) container[ typeof(ISessionFactory) ];
+
+			ISession session = sessFac.OpenSession();
+
+			SessionManager.Push(session, DefaultSessionFactory);
+
+			HttpContext.Current.Items.Add( "nh.session", session );
+		}
+
+		public void OnEndRequest(object sender, EventArgs e)
+		{
+			ISession session = (ISession) HttpContext.Current.Items["nh.session"];
+
+			if (session == null) return;
+
+			try
+			{
+				SessionManager.Pop(DefaultSessionFactory);
+
+				session.Dispose();
+			}
+			catch(Exception ex)
+			{
+				HttpContext.Current.Trace.Warn( "Error", "EndRequest: " + ex.Message, ex );
+			}
+		}
 
 		public void Application_OnStart() 
 		{

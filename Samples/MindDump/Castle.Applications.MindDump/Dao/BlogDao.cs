@@ -51,6 +51,7 @@ namespace Castle.Applications.MindDump.Dao
 		/// Usually will be invoked only by the
 		/// test cases
 		/// </summary>
+		[SessionFlush(FlushOption.Force)]
 		public virtual void DeleteAll()
 		{
 			SessionManager.CurrentSession.Delete("from Blog");
@@ -64,7 +65,7 @@ namespace Castle.Applications.MindDump.Dao
 		public virtual Blog Find(String blogName)
 		{
 			IList list = SessionManager.CurrentSession.Find(
-				"from Blog as a where a.Name=:name", blogName, NHibernate.String);
+				"from Blog as a where a.Name=:name", blogName, NHibernateUtil.String);
 
 			if (list.Count == 1)
 			{

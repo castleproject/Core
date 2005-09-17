@@ -47,6 +47,7 @@ namespace Castle.Applications.MindDump.Dao
 		/// Usually will be invoked only be the
 		/// test cases
 		/// </summary>
+		[SessionFlush(FlushOption.Force)]
 		public virtual void DeleteAll()
 		{
 			SessionManager.CurrentSession.Delete("from Post");
@@ -60,7 +61,7 @@ namespace Castle.Applications.MindDump.Dao
 		public virtual IList Find(Blog blog)
 		{
 			IList list = SessionManager.CurrentSession.Find(
-				"from Post as a where a.Blog.Id=:name", blog.Id, NHibernate.Int64);
+				"from Post as a where a.Blog.Id=:name", blog.Id, NHibernateUtil.Int64);
 
 			return list;
 		}
@@ -68,7 +69,7 @@ namespace Castle.Applications.MindDump.Dao
 		public virtual Post Find(long id)
 		{
 			IList list = SessionManager.CurrentSession.Find(
-				"from Post as a where a.id=:name order by id desc", id, NHibernate.Int64);
+				"from Post as a where a.id=:name order by id desc", id, NHibernateUtil.Int64);
 
 			if (list.Count == 1)
 			{

@@ -125,11 +125,6 @@
                     HintPath = "..\..\..\Facilities\NHibernate\bin\HashCodeProvider.dll"
                 />
                 <Reference
-                    Name = "ICSharpCode.SharpZipLib"
-                    AssemblyName = "ICSharpCode.SharpZipLib"
-                    HintPath = "..\..\..\Facilities\NHibernate\bin\ICSharpCode.SharpZipLib.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\Facilities\NHibernate\bin\Iesi.Collections.dll"
@@ -165,14 +160,14 @@
                     HintPath = "..\..\..\MonoRail\bin\Castle.MonoRail.WindsorExtension.dll"
                 />
                 <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\lib\Commons.dll"
-                />
-                <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\lib\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.NHibernateExtension"
+                    AssemblyName = "Castle.Facilities.NHibernateExtension"
+                    HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
                 />
             </References>
         </Build>
@@ -182,6 +177,10 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "default.htm"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "global.asax"

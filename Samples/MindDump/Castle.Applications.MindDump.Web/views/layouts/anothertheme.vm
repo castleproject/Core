@@ -2,26 +2,14 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta http-equiv="Content-Language" content="en">
-    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <meta http-equiv="Content-Language" content="en">
     <title>${blog.name}</title>
-    <script type="text/javascript" language="JavaScript">
-    <!--
-    if (!((navigator.appVersion.indexOf('MSIE')!=-1) || (parseInt(navigator.appVersion)!=4)))
-    {
-        document.write("<STYLE TYPE=\"text/css\">");
-        document.write("BODY { margin-top: -8px; margin-left: -8px; }");
-        document.write("<\/style>");
-    };
-    // -->
-    </script>
 
     <link rel="stylesheet" type="text/css" href="/css/base.css" />
     <link rel="stylesheet" type="text/css" href="/css/theme.css" />
     <style type="text/css">
-                  </style>
-    <script type="text/javascript" src="/theme/scripts/roller.js">
-    </script>
+    </style>
+    <script type="text/javascript" src="/theme/scripts/roller.js"></script>
 </head>
 
 <body>
@@ -54,8 +42,6 @@
 <br />
 
 <p>
-   <a name="detailed_analysis_of_dynamicproxy" id="detailed_analysis_of_dynamicproxy"></a>
-
    <h3>${lastpost.title}</h3>
    
    <div>

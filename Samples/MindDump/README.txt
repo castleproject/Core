@@ -17,12 +17,9 @@ And access on the browser by using
 
 http://localhost:8082/default.htm
 
-
 If you use IIS, create a virtual directory pointing to 
 
 PestControl\Castle.Applications.PestControl.Web
-
-
 
 
 IIS Considerations
@@ -33,13 +30,12 @@ This application uses prevalence to keep its data, so the storage directory must
 Also remember to associate the extension 'rails' with the ASP.Net ISAPI on IIS configuration.
 
 
-
 Problems?
 =========
 
 Please direct any question to our mailing list:
 
-http://www.castleproject.org/home/lists
+http://www.castleproject.org/
 
 
 

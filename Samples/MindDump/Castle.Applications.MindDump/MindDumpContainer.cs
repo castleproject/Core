@@ -38,7 +38,7 @@ namespace Castle.Applications.MindDump
 		{
 		}
 
-		public MindDumpContainer(Castle.Windsor.Configuration.IConfigurationInterpreter store) : base(store)
+		public MindDumpContainer(XmlInterpreter interpreter) : base(interpreter)
 		{
 			Init();
 		}

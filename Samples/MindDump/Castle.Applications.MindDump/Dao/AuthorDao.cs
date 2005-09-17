@@ -51,6 +51,7 @@ namespace Castle.Applications.MindDump.Dao
 		/// Usually will be invoked only by the
 		/// test cases
 		/// </summary>
+		[SessionFlush(FlushOption.Force)]
 		public virtual void DeleteAll()
 		{
 			SessionManager.CurrentSession.Delete("from Author");
@@ -64,7 +65,7 @@ namespace Castle.Applications.MindDump.Dao
 		public virtual Author Find(String login)
 		{
 			IList list = SessionManager.CurrentSession.Find(
-				"from Author as a where a.Login=:name", login, NHibernate.String);
+				"from Author as a where a.Login=:name", login, NHibernateUtil.String);
 
 			if (list.Count == 1)
 			{

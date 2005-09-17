@@ -18,11 +18,8 @@ namespace Castle.Applications.MindDump.Tests
 
 	using NUnit.Framework;
 
-	using Castle.Windsor.Configuration.Xml;
-
 	using Castle.Applications.MindDump.Dao;
-
-	using MySql.Data.MySqlClient;
+	using Castle.Windsor.Configuration.Interpreters;
 
 
 	public abstract class BaseMindDumpTestCase
@@ -33,7 +30,7 @@ namespace Castle.Applications.MindDump.Tests
 		public void InitContainer()
 		{
 			_container = new MindDumpContainer( 
-				new XmlConfigurationStore("../app_test_config.xml") );
+				new XmlInterpreter("../app_test_config.xml") );
 
 			ResetDatabase();
 		}
