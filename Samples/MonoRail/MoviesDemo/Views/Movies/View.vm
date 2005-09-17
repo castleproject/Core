@@ -1,0 +1,7 @@
+<h3>$text.movieDetails: $movie.Title</h3>
+
+<strong>$text.description:</strong> $movie.Description<br />
+<strong>$text.dateAddedLong:</strong> $movie.Added.ToString( "D" )<br />
+<strong>$text.scoreLong:</strong> $movie.Score /10
+<br /><br />
+<a href="$siteRoot/Movies/List.rails">$text.backToList</a>

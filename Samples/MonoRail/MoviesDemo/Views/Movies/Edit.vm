@@ -1,0 +1,17 @@
+<h3>#if ( $movie.Id > 0 ) Edit a movie #else Add a movie #end</h3>
+
+<form method="post" action="$siteRoot/Movies/Save.rails">
+<input type="hidden" name="movie.id" value="$movie.Id" />
+<table>
+    <tr><td><strong>$text.title</strong></td><td><input type="text" name="movie.title" value="$!movie.Title" /></td></tr>
+    <tr><td><strong>$text.description</strong></td><td><textarea name="movie.description" cols="50" rows="5">$!movie.Description</textarea></td></tr>
+    <tr><td><strong>$text.dateAddedLong</strong></td><td><input name="movie.added" type="text" size="7" value="$movie.Added.ToString( "d" )" /></td></tr>
+    <tr><td><strong>$text.scoreLong</strong></td><td><input name="movie.score" size="2" type="text" value="$movie.Score" /></td></tr>
+    <tr>
+        <td colspan="2" align="center">
+            <br /><input type="submit" value="Save" />
+        </td>
+    </tr>
+</table>
+</form>
+<a href="$siteRoot/Movies/List.rails">Cancel</a>
