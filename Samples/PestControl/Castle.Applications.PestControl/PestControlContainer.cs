@@ -14,10 +14,8 @@
 
 namespace Castle.Applications.PestControl
 {
-	using System;
-
-	using Castle.MicroKernel;
 	using Castle.Windsor;
+	using Castle.Windsor.Configuration;
 
 	using Castle.Facilities.Prevalence;
 
@@ -29,10 +27,8 @@ namespace Castle.Applications.PestControl
 	/// </summary>
 	public class PestControlContainer : WindsorContainer
 	{
-		public PestControlContainer( IConfigurationStore configStore ) : base()
+		public PestControlContainer( IConfigurationInterpreter interpreter ) : base(interpreter)
 		{
-			Kernel.ConfigurationStore = configStore;
-
 			AddFacility("prevalence", new PrevalenceFacility() );
 
 			// BS Manager

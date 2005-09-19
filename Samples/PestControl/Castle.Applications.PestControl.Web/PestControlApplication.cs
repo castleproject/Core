@@ -20,7 +20,8 @@ namespace Castle.Applications.PestControl.Web
 	using System.Web;
 
 	using Castle.Windsor;
-	using Castle.Windsor.Configuration.AppDomain;
+	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Configuration.Sources;
 
 	using Castle.MonoRail.WindsorExtension;
 
@@ -36,7 +37,8 @@ namespace Castle.Applications.PestControl.Web
 
 		public void Application_OnStart() 
 		{
-			container = new PestControlContainer( new AppDomainConfigurationStore() );
+			container = new PestControlContainer( new XmlInterpreter(new AppDomainConfigSource()) );
+
 			container.AddFacility( "rails", new RailsFacility() );
 
 			AddFiltersAndControllers(container);
@@ -56,11 +58,9 @@ namespace Castle.Applications.PestControl.Web
 			container.Dispose();
 		}
 
-		public void FormsAuthentication_OnAuthenticate(Object sender, 
-			FormsAuthenticationEventArgs e)
+		public void FormsAuthentication_OnAuthenticate(Object sender, FormsAuthenticationEventArgs e)
 		{
-			HttpCookie cookie = 
-				e.Context.Request.Cookies[ FormsAuthentication.FormsCookieName ];
+			HttpCookie cookie = e.Context.Request.Cookies[ FormsAuthentication.FormsCookieName ];
 
 			if (cookie == null) return;
 

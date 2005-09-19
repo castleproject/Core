@@ -21,7 +21,9 @@ namespace Castle.Applications.PestControl.Tests
 	using NUnit.Framework;
 
 	using Castle.Windsor;
-	using Castle.Windsor.Configuration.AppDomain;
+	using Castle.Windsor.Configuration.Interpreters;
+	using Castle.Windsor.Configuration.Sources;
+
 	using Castle.Applications.PestControl.Model;
 
 	/// <summary>
@@ -40,7 +42,8 @@ namespace Castle.Applications.PestControl.Tests
 		[SetUp]
 		public void Init()
 		{
-			_container = new PestControlContainer(new AppDomainConfigurationStore());
+			_container = new PestControlContainer(new XmlInterpreter(new AppDomainConfigSource()));
+
 			_model = (PestControlModel) _container["pestcontrolModel"];
 			_engine = (PrevalenceEngine) _container["prevalenceengine"];
 		}
