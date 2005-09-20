@@ -134,7 +134,12 @@ namespace Castle.Windsor
 		public IWindsorContainer Parent
 		{
 			get { return _parent; }
-			set { _parent = value; }
+			set
+			{
+				_parent = value;
+
+				if (value != null) Kernel.Parent = value.Kernel;
+			}
 		}
 
 		/// <summary>
