@@ -116,7 +116,7 @@
 					<property name="SplitTOCs" value="False" />
 					
 					<property name="Title" value="Castle API documentation" />	
-					<property name="DefaulTOC" value="Castle" />
+					<property name="DefaulTOC" value="Castle.MicroKernel" />
 					
 					<property name="ShowVisualBasic" value="True" />
 					<property name="ShowMissingSummaries" value="${ShowMissing}" />
@@ -190,6 +190,7 @@
 					<in>
 						<items>
 							<include name="${foldername}/bin/Castle.*.dll"/>
+							<include name="${foldername}/bin/AspectSharp*.dll"/>
 							<exclude name="Castle.*.Tests.dll"/>
 						</items>
 					</in>
