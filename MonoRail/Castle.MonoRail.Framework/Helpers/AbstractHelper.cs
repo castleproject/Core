@@ -25,18 +25,42 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public abstract class AbstractHelper : IControllerAware
 	{
+		#region Controller
+		/// <summary>
+		/// Store's <see cref="Controller"/> for the current view.
+		/// </summary>
 		private Controller _controller;
 
+		/// <summary>
+		/// Sets the controller.
+		/// </summary>
+		/// <param name="controller">Current view's <see cref="Controller"/>.</param>
 		public void SetController(Controller controller)
 		{
 			_controller = controller;
 		}
 
+		/// <summary>
+		/// Gets the controller.
+		/// </summary>
+		/// <value>The <see cref="Controller"/> used with the current view.</value>
 		public Controller Controller
 		{
 			get { return _controller; }
 		}
+		#endregion 
 
+		/// <summary>
+		/// Merges <paramref name="userOptions"/> with <paramref name="defaultOptions"/> placing results in
+		/// <paramref name="userOptions"/>.
+		/// </summary>
+		/// <param name="userOptions">The user options.</param>
+		/// <param name="defaultOptions">The default options.</param>
+		/// <remarks>
+		/// All <see cref="IDictionary.Values"/> and <see cref="IDictionary.Keys"/> in <paramref name="defaultOptions"/>
+		/// are copied to <paramref name="userOptions"/>. Entries with the same <see cref="DictionaryEntry.Key"/> in
+		/// <paramref name="defaultOptions"/> and <paramref name="userOptions"/> are skipped.
+		/// </remarks>
 		protected void MergeOptions(IDictionary userOptions, IDictionary defaultOptions)
 		{
 			foreach(DictionaryEntry entry in defaultOptions)
@@ -48,6 +72,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
+		#region HTML generation methods
+		/// <summary>
+		/// Generates HTML element attributes string from <paramref name="attributes"/>.
+		/// <code>key1="value1" key2</code>
+		/// </summary>
+		/// <param name="attributes">The attributes for the element.</param>
+		/// <returns><see cref="String"/> to use inside HTML element's tag.</returns>
+		/// <remarks>
+		/// <see cref="String.Empty"/> is returned if <paramref name="attributes"/> is <c>null</c> or empty.
+		/// <para>
+		/// If for some <see cref="DictionaryEntry.Key"/> <see cref="DictionaryEntry.Value"/> is <c>null</c> or
+		/// <see cref="String.Empty"/> only attribute name is appended to the string.
+		/// </para>
+		/// </remarks>
 		protected String GetAttributes(IDictionary attributes)
 		{
 			if (attributes == null) return String.Empty;
@@ -69,9 +107,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			return contents;
 		}
 
+		/// <summary>
+		/// Generates script block.
+		/// <code>
+		/// &lt;script&gt;
+		/// scriptContents
+		/// &lt;/script&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="scriptContents">The script contents.</param>
+		/// <returns><paramref name="scriptContents"/> placed inside <b>script</b> tags.</returns>
 		protected String ScriptBlock( String scriptContents )
 		{
 			return String.Format( "\r\n<script>\r\n{0}</script>\r\n", scriptContents );
 		}
+		#endregion 
 	}
 }
