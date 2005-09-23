@@ -154,6 +154,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MultipleDatabasesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NullablesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -214,6 +219,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\Hand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\IntlName.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -270,6 +280,11 @@
                 />
                 <File
                     RelPath = "Model\Snippet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Test2ARBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
