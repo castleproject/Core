@@ -128,6 +128,11 @@ namespace Castle.MonoRail.Framework.Helpers
 			return LinkToFunction(name, BuildRemoteFunction(url, options));
 		}
 
+		public String LinkToRemote(String name, String url, IDictionary options, IDictionary htmloptions)
+		{
+			return LinkToFunction(name, BuildRemoteFunction(url, options), htmloptions);
+		}
+
 		/// <summary>
 		/// Returns a form tag that will submit using XMLHttpRequest 
 		/// in the background instead of the regular 

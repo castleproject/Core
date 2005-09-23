@@ -58,6 +58,8 @@
 				<include name="Iesi.Collections.dll" />
 				<include name="log4net.dll" />
 				<include name="NHibernate.dll" />
+				<include name="Nullables.dll" />
+				<include name="Nullables.NHibernate.dll" />
 			</fileset>
 		</copy>
 
