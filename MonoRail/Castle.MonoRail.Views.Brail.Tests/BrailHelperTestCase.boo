@@ -24,6 +24,7 @@ class BrailHelperTestCase(AbstractCassiniTestCase):
 	
 	[Test]
 	def InheritedHelpers():
+		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
 		url = "/helper/inheritedhelpers.rails"
 		expected = "Date formatted " + DateTime(1979, 7, 16).ToShortDateString()
 		Execute(url, expected)

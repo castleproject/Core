@@ -17,10 +17,10 @@ import System
 import Castle.MonoRail.Framework
 import Castle.MonoRail.Views.Brail.TestSite.Helpers
 
-[Helper(DateFormatHelper)]
 class HelperController(Controller):
 	
 	def InheritedHelpers():
+		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
 		PropertyBag.Add( "date",  DateTime(1979, 7, 16) )
 	
 	def MyDeclaredHelpers():

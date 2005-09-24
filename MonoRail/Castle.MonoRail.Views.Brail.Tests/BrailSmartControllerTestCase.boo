@@ -68,6 +68,7 @@ class BrailSmartControllerTestCase(AbstractCassiniTestCase):
 
 	[Test]
 	def FillingBehavior1():
+		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
 		url = "/smart/FillingBehavior.rails?name=someone&date1day=11&date1month=10&date1year=2005"
 		date1 = DateTime(2005,10,11)
 		expected = "incoming someone ${date1.ToShortDateString()} " + DateTime.Now.AddDays(1).ToShortDateString()
@@ -76,6 +77,7 @@ class BrailSmartControllerTestCase(AbstractCassiniTestCase):
 
 	[Test]
 	def FillingBehavior2():
+		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
 		url = "/smart/FillingBehavior.rails"
 		expected = "incoming hammett " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString()
 		Execute(url, expected)

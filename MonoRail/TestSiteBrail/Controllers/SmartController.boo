@@ -32,6 +32,7 @@ class SmartController(SmartDispatcherController):
 		RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()))
 	
 	def FillingBehavior([Castle.MonoRail.Framework.DataBind] clazz as ClassWithInitializers):
+		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
 		RenderText(String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString()))
 	
 
