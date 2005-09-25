@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 	using System.Text;
+	using System.Web;
 
 	/// <summary>
 	/// Optional base class for helpers. 
@@ -71,6 +72,11 @@ namespace Castle.MonoRail.Framework.Helpers
 					userOptions[entry.Key] = entry.Value;
 				}
 			}
+		}
+
+		protected static HttpContext CurrentContext
+		{
+			get { return HttpContext.Current; }
 		}
 
 		#region HTML generation methods

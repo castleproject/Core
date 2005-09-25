@@ -53,7 +53,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			pageHelper.SetController(controller);
 
 			controller.PropertyBag.Add( "items", PaginationHelper.CreateCachedPagination(
-				Model.Type.FullName, 10, controller, new DataObtentionDelegate(PerformFindAll)) );
+				Model.Type.FullName, 10, new DataObtentionDelegate(PerformFindAll)) );
 			controller.PropertyBag["model"] = Model;
 			controller.PropertyBag["keyprop"] = keyProperty;
 			controller.PropertyBag["properties"] = ObtainListableProperties(Model);

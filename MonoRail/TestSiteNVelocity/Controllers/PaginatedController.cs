@@ -32,7 +32,7 @@ namespace TestSiteNVelocity.Controllers
 				list.Add( i.ToString() );
 			}
 
-			PropertyBag.Add( "list1", PaginationHelper.CreatePagination(list, 10, this) );
+			PropertyBag.Add( "list1", PaginationHelper.CreatePagination(list, 10) );
 		}
 	}
 }

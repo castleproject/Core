@@ -16,17 +16,25 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
-	using System.Web;
-	using System.Web.Caching;
 
+	/// <summary>
+	/// Used as callback handler to obtain the items 
+	/// to be displayed. 
+	/// </summary>
 	public delegate IList DataObtentionDelegate();
 
+	/// <summary>
+	/// This helper allows you to easily paginate through a data source 
+	/// (anything that implements <see cref="IList"/>)
+	/// </summary>
 	public class PaginationHelper : AbstractHelper
 	{
-		public PaginationHelper()
-		{
-		}
-
+		/// <summary>
+		/// Creates a link to navigate to a specific page
+		/// </summary>
+		/// <param name="page"></param>
+		/// <param name="text"></param>
+		/// <returns></returns>
 		public String CreatePageLink(int page, String text)
 		{
 			return CreatePageLink(page, text, null, null);
@@ -39,7 +47,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String CreatePageLink(int page, String text, IDictionary htmlAttributes, IDictionary queryStringParams)
 		{
-			String filePath = HttpContext.Current.Request.FilePath;
+			String filePath = CurrentContext.Request.FilePath;
 
 			if (queryStringParams == null)
 			{
@@ -52,9 +60,16 @@ namespace Castle.MonoRail.Framework.Helpers
 				filePath, BuildQueryString(queryStringParams), GetAttributes(htmlAttributes), text);
 		}
 
-		public static Page CreatePagination(IList list, int pageSize, Controller controller)
+		/// <summary>
+		/// Creates a <see cref="Page"/> which is a sliced view of
+		/// the data source
+		/// </summary>
+		/// <param name="datasource">Data source to be used as target of the pagination</param>
+		/// <param name="pageSize">Page size</param>
+		/// <returns>A <see cref="Page"/> instance</returns>
+		public static Page CreatePagination(IList datasource, int pageSize)
 		{
-			String currentPage = controller.Request.Params["page"];
+			String currentPage = CurrentContext.Request.Params["page"];
 
 			int curPage = 1;
 
@@ -63,33 +78,47 @@ namespace Castle.MonoRail.Framework.Helpers
 				curPage = Int32.Parse(currentPage);
 			}
 
-			return new Page(list, curPage, pageSize);
+			return new Page(datasource, curPage, pageSize);
 		}
 
-		public static Page CreateCachedPagination(String cacheKey, int pageSize, 
-			Controller controller, DataObtentionDelegate dataObtentionCallback)
+		/// <summary>
+		/// Creates a <see cref="Page"/> which is a sliced view of
+		/// the data source. This method first looks for the datasource 
+		/// in the <see cref="System.Web.Caching.Cache"/> and if not found, 
+		/// it invokes the <c>dataObtentionCallback</c> and caches the result
+		/// using the specifed <c>cacheKey</c>
+		/// </summary>
+		/// <param name="cacheKey">Cache key used to query/store the datasource</param>
+		/// <param name="pageSize">Page size</param>
+		/// <param name="dataObtentionCallback">Callback to be used to populate the cache</param>
+		/// <returns>A <see cref="Page"/> instance</returns>
+		public static Page CreateCachedPagination(String cacheKey, int pageSize, DataObtentionDelegate dataObtentionCallback)
 		{
-			IList items = (IList) controller.Context.Cache[cacheKey];
+			IList datasource = (IList) CurrentContext.Cache[cacheKey];
 
-			if (items == null)
+			if (datasource == null)
 			{
-				items = dataObtentionCallback();
+				datasource = dataObtentionCallback();
 
-				controller.Context.Cache.Insert(cacheKey, items, null, DateTime.MaxValue, TimeSpan.FromSeconds(10));
+				CurrentContext.Cache.Insert(
+					cacheKey, datasource, null, 
+					DateTime.MaxValue, TimeSpan.FromSeconds(10));
 			}
 
-			return CreatePagination(items, pageSize, controller);
+			return CreatePagination(datasource, pageSize);
 		}
 	}
 
-	[Serializable]
+	/// <summary>
+	/// Represents the sliced data and offers
+	/// a few read only properties to create a pagination bar.
+	/// </summary>
 	public class Page : IEnumerable
 	{
 		private int firstItem, lastItem, totalItems;
 		private int previousIndex, nextIndex, lastIndex;
 		private bool hasPrev, hasNext, hasFirst, hasLast;
 
-		[NonSerialized]
 		private readonly IList slice = new ArrayList();
 
 		public Page(IList list, int curPage, int pageSize)
@@ -131,6 +160,8 @@ namespace Castle.MonoRail.Framework.Helpers
 				lastIndex++;
 			}
 		}
+
+		#region Properties
 
 		public int LastIndex
 		{
@@ -181,6 +212,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			get { return totalItems; }
 		}
+
+		#endregion
 
 		#region IEnumerable Members
 

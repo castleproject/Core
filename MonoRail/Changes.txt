@@ -1,12 +1,30 @@
 Change history
 
+RC1 
+===
+
+Core:
+
+- Hierarchy of areas support (kudos to Fabio Batista)
+- PaginationHelper introduced
+
+Scaffolding support:
+
+- huge refactoring
+- It's now using templates
+
+Bug fixes:
+
+- Incorrect url were accepted (fixed by Fabio Batista)
+
+
 Beta 4
-------
+======
 
 - Added useWindsorIntegration attribute to monoRail configuration section
 
 Beta 3
-------
+======
 
 - Databind
 - Initial Scaffolding support
@@ -16,7 +34,7 @@ Beta 3
 
 
 Beta 2
------- 
+====== 
 
 - Few bug corrections
 - Applied patch from Dru Sellers: NVelocityViewEngine adds a $siteRoot exposing the Request.ApplicationPath
