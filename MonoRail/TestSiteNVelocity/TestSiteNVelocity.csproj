@@ -197,6 +197,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\PaginatedController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\PerfController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -327,6 +332,10 @@
                 />
                 <File
                     RelPath = "views\layouts\master2.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\paginated\list1.vm"
                     BuildAction = "None"
                 />
                 <File

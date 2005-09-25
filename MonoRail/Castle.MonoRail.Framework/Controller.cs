@@ -727,18 +727,19 @@ namespace Castle.MonoRail.Framework
 						new AjaxHelper(), new AjaxHelper2(),
 						new EffectsFatHelper(), new Effects2Helper(),
 						new DateFormatHelper(), new HtmlHelper(),
-						new ValidationHelper(), new DictHelper()
+						new ValidationHelper(), new DictHelper(),
+						new PaginationHelper()
 					};
 
 			foreach (AbstractHelper helper in builtInHelpers)
 			{
 				helper.SetController(this);
 
-				string helperName = helper.GetType().Name;
+				String helperName = helper.GetType().Name;
 
 				if (!_helpers.Contains(helperName))
 				{
-					_helpers.Add(helperName, helper);
+					_helpers[helperName] = helper;
 				}
 			}
 		}
@@ -930,6 +931,9 @@ namespace Castle.MonoRail.Framework
 			{
 				_context.LastException = ex;
 			}
+
+			// Dynamic action 
+			if (method == null) return false;
 
 			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
 

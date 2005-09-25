@@ -104,6 +104,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ControllerNotFoundException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DataBinder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -325,6 +330,11 @@
                 />
                 <File
                     RelPath = "Helpers\HtmlHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\PaginationHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

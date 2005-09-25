@@ -65,8 +65,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 			if (type == null)
 			{
-				throw new RailsException(
-					string.Format("Controller not found. Area: '{0}'. Controller Name: '{1}'.", area, name ) );
+				throw new ControllerNotFoundException(area, name);
 			}
 
 			return (Controller) Activator.CreateInstance( type );

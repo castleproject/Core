@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsNotNull( info );
 			Assert.AreEqual( "home", info.Controller );
 			Assert.AreEqual( "index", info.Action );
-			Assert.AreEqual( "clients", info.Area );
+			Assert.AreEqual( "mysite/clients", info.Area );
 		}
 
 		[Test]

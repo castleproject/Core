@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 	using System.IO;
+	using System.Text;
 
 	/// <summary>
 	/// Extracts the information from a Url Path into
@@ -65,9 +66,19 @@ namespace Castle.MonoRail.Framework.Internal
 
 			String area = String.Empty;
 			
-			if (parts.Length - 3 >= 0 )
+			if (parts.Length - 3 == 0)
 			{
 				area = parts[ parts.Length - 3 ];
+			}
+			else if (parts.Length - 3 > 0) 
+			{
+				StringBuilder areaSB = new StringBuilder();
+				for (int i=0; i <= parts.Length - 3; i++)
+					if (parts[i] != null && parts[i].Length > 0)
+						areaSB.Append(parts[i]).Append('/');
+				if (areaSB.Length > 0) 
+					areaSB.Length -= 1;
+				area = areaSB.ToString();
 			}
 
 			string extension = GetExtension(url);

@@ -12,29 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal.Test
+namespace TestSiteNVelocity.Controllers
 {
 	using System;
+	using System.Collections;
 
-	public class ServerUtilityImpl : IServerUtility
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Helpers;
+
+
+	public class PaginatedController : Controller
 	{
-		public ServerUtilityImpl()
+		public void List1()
 		{
-		}
+			IList list = new ArrayList();
 
-		public string HtmlEncode(string content)
-		{
-			return content.Replace("<", "&lt;").Replace(">", "&gt;");
-		}
+			for(int i=1; i < 36; i++)
+			{
+				list.Add( i.ToString() );
+			}
 
-		public String UrlEncode(String content)
-		{
-			return content;
-		}
-
-		public String UrlPathEncode(String content)
-		{
-			return content;
+			PropertyBag.Add( "list1", PaginationHelper.CreatePagination(list, 10, this) );
 		}
 	}
 }

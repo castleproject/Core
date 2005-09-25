@@ -50,7 +50,7 @@ namespace Castle.MonoRail.WindsorExtension
 
 			if (key == null || key.Length == 0)
 			{
-				throw new RailsException("Controller not found. Controller Name: " + urlInfo.Controller);
+				throw new ControllerNotFoundException(urlInfo);
 			}
 
 			if (container.Kernel.HasComponent(key))

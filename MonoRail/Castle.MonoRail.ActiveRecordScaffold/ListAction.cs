@@ -15,13 +15,16 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
+	using System.IO;
 	using System.Text;
 	using System.Reflection;
 	using System.Collections;
-
+	using Castle.MonoRail.ActiveRecordScaffold.Helpers;
 	using Castle.MonoRail.Framework;
 
 	using Castle.ActiveRecord.Framework.Internal;
+
+	using Castle.Components.Common.TemplateEngine;
 
 
 	/// <summary>
@@ -32,15 +35,27 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class ListAction : AbstractScaffoldAction
 	{
-		public ListAction(Type modelType) : base(modelType)
+		private readonly ITemplateEngine templateEngine;
+
+		public ListAction(Type modelType, ITemplateEngine templateEngine) : base(modelType)
 		{
+			this.templateEngine = templateEngine;
 		}
 
 		protected override void PerformActionProcess(Controller controller)
 		{
 			object[] items = CommonOperationUtils.FindAll( Model.Type );
 
+			ObtainPKProperty();
+
+			PresentationHelper presentationHelper = new PresentationHelper();
+			presentationHelper.SetController(controller);
+
 			controller.PropertyBag["items"] = items;
+			controller.PropertyBag["model"] = Model;
+			controller.PropertyBag["keyprop"] = keyProperty;
+			controller.PropertyBag["properties"] = ObtainListableProperties(Model);
+			controller.PropertyBag["presentation"] = presentationHelper;
 
 			controller.RenderView(controller.Name, "list" + Model.Type.Name);
 		}
@@ -50,11 +65,30 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			return String.Format(@"{0}\list{1}", controller.Name, Model.Type.Name);
 		}
 
+		/// <summary>
+		/// Called when the template was not found
+		/// </summary>
+		/// <param name="controller"></param>
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			object[] items = (object[]) controller.PropertyBag["items"];
+			StringWriter writer = new StringWriter();
 
-			GenerateHtmlList(Model.Type.Name, Model, items, controller);
+			IDictionary context = new Hashtable();
+
+			foreach(DictionaryEntry entry in controller.PropertyBag)
+			{
+				context.Add(entry.Key, entry.Value);
+			}
+
+#if DEBUG
+			templateEngine.Process( context, "list.vm", writer );
+#else
+			templateEngine.Process( context, "Castle.MonoRail.ActiveRecordScaffold/Templates/list.vm", writer );
+#endif
+
+			controller.DirectRender( writer.GetStringBuilder().ToString() );
+
+			// GenerateHtmlList(Model.Type.Name, Model, items, controller);
 		}
 
 		private void GenerateHtmlList(String name, ActiveRecordModel model, object[] items, Controller controller)
@@ -91,7 +125,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 					else
 						sb.Append( "\r\n\t\t<td align=\"center\">" );
 
-					object value = prop.GetGetMethod().Invoke( item, null );
+					object value = prop.GetValue(item, new object[0]);
 
 					if (value != null)
 					{

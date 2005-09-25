@@ -99,6 +99,16 @@
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
+                    AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
+                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.TemplateEngine"
+                    AssemblyName = "Castle.Components.Common.TemplateEngine"
+                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -161,6 +171,15 @@
                     RelPath = "UpdateAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\PresentationHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Templates\list.vm"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

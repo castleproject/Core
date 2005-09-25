@@ -15,17 +15,43 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-
+	
 	using Castle.MonoRail.Framework;
+
+	using Castle.Components.Common.TemplateEngine;
+	using Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine;
 
 
 	public class ScaffoldingSupport : IScaffoldingSupport
 	{
+		public ScaffoldingSupport()
+		{
+		}
+
 		public void Process(Controller controller)
 		{
-			object[] attrs = controller.GetType().GetCustomAttributes( typeof(ScaffoldingAttribute), false );
+			ITemplateEngine templateEngine = null;
 
-			ScaffoldingAttribute scaffoldAtt = attrs[0] as ScaffoldingAttribute;
+			lock(this)
+			{
+				if (templateEngine == null)
+				{
+					NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
+#if DEBUG
+					nvelTemplateEng.TemplateDir = @"E:\dev\projects\castle\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
+					nvelTemplateEng.BeginInit();
+					nvelTemplateEng.EndInit();
+#else
+					nvelTemplateEng.AssemblyName = "Castle.MonoRail.ActiveRecordScaffold";
+					nvelTemplateEng.BeginInit();
+					nvelTemplateEng.EndInit();
+#endif
+
+					templateEngine = nvelTemplateEng;
+				}
+			}
+
+			ScaffoldingAttribute scaffoldAtt = controller.MetaDescriptor.Scaffolding;
 
 			String name = scaffoldAtt.Model.Name;
 
@@ -35,7 +61,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			controller.CustomActions[ String.Format("update{0}", name) ] = new UpdateAction( scaffoldAtt.Model ); 
 			controller.CustomActions[ String.Format("remove{0}", name) ] = new RemoveAction( scaffoldAtt.Model ); 
 			controller.CustomActions[ String.Format("confirm{0}", name) ] = new ConfirmRemoveAction( scaffoldAtt.Model ); 
-			controller.CustomActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model ); 
+			controller.CustomActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model, templateEngine ); 
 		}
 	}
 }

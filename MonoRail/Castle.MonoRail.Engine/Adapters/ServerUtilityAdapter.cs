@@ -28,9 +28,19 @@ namespace Castle.MonoRail.Engine.Adapters
 			_server = server;
 		}
 
-		public string HtmlEncode(string content)
+		public String HtmlEncode(String content)
 		{
 			return _server.HtmlEncode(content);
+		}
+
+		public String UrlEncode(String content)
+		{
+			return _server.UrlEncode(content);
+		}
+
+		public String UrlPathEncode(String content)
+		{
+			return _server.UrlPathEncode(content);
 		}
 	}
 }

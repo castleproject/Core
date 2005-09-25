@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Text;
 
 	/// <summary>
 	/// Optional base class for helpers. 
@@ -29,7 +30,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Store's <see cref="Controller"/> for the current view.
 		/// </summary>
-		private Controller _controller;
+		private Controller controller;
 
 		/// <summary>
 		/// Sets the controller.
@@ -37,7 +38,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="controller">Current view's <see cref="Controller"/>.</param>
 		public void SetController(Controller controller)
 		{
-			_controller = controller;
+			this.controller = controller;
 		}
 
 		/// <summary>
@@ -46,7 +47,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <value>The <see cref="Controller"/> used with the current view.</value>
 		public Controller Controller
 		{
-			get { return _controller; }
+			get { return controller; }
 		}
 		#endregion 
 
@@ -73,6 +74,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		#region HTML generation methods
+
 		/// <summary>
 		/// Generates HTML element attributes string from <paramref name="attributes"/>.
 		/// <code>key1="value1" key2</code>
@@ -108,6 +110,71 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="paramMap"></param>
+		/// <returns></returns>
+		protected String BuildQueryString(IDictionary paramMap)
+		{
+			if (paramMap == null) return String.Empty;
+
+			StringBuilder sb = new StringBuilder();
+
+			foreach(DictionaryEntry entry in paramMap)
+			{
+				if (entry.Value == null) continue;
+
+				sb.AppendFormat( "{0}={1}&", 
+					UrlEncode(entry.Key.ToString()), UrlEncode(entry.Value.ToString()) );
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="leftParams"></param>
+		/// <param name="rightParams"></param>
+		/// <returns></returns>
+		protected String ConcatQueryString(String leftParams, String rightParams)
+		{
+			// x=y    w=10
+			// x=y&w=10
+
+			if (leftParams == null || leftParams.Length == 0)
+			{
+				return rightParams;
+			}
+			if (rightParams == null || rightParams.Length == 0)
+			{
+				return leftParams;
+			}
+
+			if (leftParams.EndsWith("&"))
+			{
+				leftParams = leftParams.Substring( 0, leftParams.Length - 1 );
+			}
+
+			return String.Format("{0}&{1}", leftParams, rightParams);
+		}
+
+		protected String HtmlEncode(String content)
+		{
+			return controller.Context.Server.HtmlEncode(content);
+		}
+
+		protected String UrlEncode(String content)
+		{
+			return controller.Context.Server.UrlEncode(content);
+		}
+
+		protected String UrlPathEncode(String content)
+		{
+			return controller.Context.Server.UrlPathEncode(content);
+		}
+
+		/// <summary>
 		/// Generates script block.
 		/// <code>
 		/// &lt;script&gt;
@@ -121,6 +188,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return String.Format( "\r\n<script>\r\n{0}</script>\r\n", scriptContents );
 		}
+
 		#endregion 
 	}
 }
