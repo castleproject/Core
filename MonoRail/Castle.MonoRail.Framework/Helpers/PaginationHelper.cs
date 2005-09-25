@@ -17,7 +17,9 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System;
 	using System.Collections;
 	using System.Web;
+	using System.Web.Caching;
 
+	public delegate IList DataObtentionDelegate();
 
 	public class PaginationHelper : AbstractHelper
 	{
@@ -61,7 +63,22 @@ namespace Castle.MonoRail.Framework.Helpers
 				curPage = Int32.Parse(currentPage);
 			}
 
-			return new Page( list, curPage, pageSize );
+			return new Page(list, curPage, pageSize);
+		}
+
+		public static Page CreateCachedPagination(String cacheKey, int pageSize, 
+			Controller controller, DataObtentionDelegate dataObtentionCallback)
+		{
+			IList items = (IList) controller.Context.Cache[cacheKey];
+
+			if (items == null)
+			{
+				items = dataObtentionCallback();
+
+				controller.Context.Cache.Insert(cacheKey, items, null, DateTime.MaxValue, TimeSpan.FromSeconds(10));
+			}
+
+			return CreatePagination(items, pageSize, controller);
 		}
 	}
 

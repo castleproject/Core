@@ -25,6 +25,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using Castle.ActiveRecord.Framework.Internal;
 
 	using Castle.Components.Common.TemplateEngine;
+	using Castle.MonoRail.Framework.Helpers;
 
 
 	/// <summary>
@@ -44,20 +45,27 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			object[] items = CommonOperationUtils.FindAll( Model.Type );
-
 			ObtainPKProperty();
 
 			PresentationHelper presentationHelper = new PresentationHelper();
 			presentationHelper.SetController(controller);
+			PaginationHelper pageHelper = new PaginationHelper();
+			pageHelper.SetController(controller);
 
-			controller.PropertyBag["items"] = items;
+			controller.PropertyBag.Add( "items", PaginationHelper.CreateCachedPagination(
+				Model.Type.FullName, 10, controller, new DataObtentionDelegate(PerformFindAll)) );
 			controller.PropertyBag["model"] = Model;
 			controller.PropertyBag["keyprop"] = keyProperty;
 			controller.PropertyBag["properties"] = ObtainListableProperties(Model);
 			controller.PropertyBag["presentation"] = presentationHelper;
+			controller.PropertyBag["pagination"] = pageHelper;
 
 			controller.RenderView(controller.Name, "list" + Model.Type.Name);
+		}
+
+		private IList PerformFindAll()
+		{
+			return CommonOperationUtils.FindAll( Model.Type );
 		}
 
 		protected override string ComputeTemplateName(Controller controller)

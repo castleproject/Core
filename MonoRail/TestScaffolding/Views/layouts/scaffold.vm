@@ -7,17 +7,17 @@
 		font-family: Verdana, Arial;
 		font-size: small;
 		background-color: white;
+		margin: 15px;
 	}
 	th
 	{
 		background-color: #DDDDDD;
 		font-size: small;
+		border-right: solid 1px gray;
 	}
 	td
 	{
 		font-size: small;
-		border-left:  #A0A0A0 0.5px solid;
-		border-right: #C0C0C0 0.5px solid;
 	}
 	.errorList
 	{
@@ -28,13 +28,29 @@
 	}
 	.scaffoldrow
 	{
-		background-color: #C0C0C0;
+		background-color: #EFEFEF;
 	}
 	.scaffoldaltrow
 	{
 		background-color: White;
 	}
-
+	.scaffoldrow td
+	{
+		border-right: solid 1px gray;
+	}
+	.scaffoldaltrow td
+	{
+		border-right: solid 1px gray;
+	}
+	.pagination
+	{
+		border: solid 1px gray;
+		padding: 2px;
+	}
+	.pagination table tr td
+	{
+		font-size: 10;
+	}
   </style>
 </head>
 

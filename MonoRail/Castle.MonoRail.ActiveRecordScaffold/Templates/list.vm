@@ -37,4 +37,21 @@ $presentation.LinkToConfirm( $model, "remove", $rowid, $DictHelper.CreateDict() 
   </tr>
 #end
 </table>
+<div class="pagination">
+<table width="100%" border="0">
+  <tr>
+  <td>Showing $items.FirstItem - $items.LastItem of $items.TotalItems</td>
+  <td align="right">
+#if($items.HasFirst) $pagination.CreatePageLink( 1, "first" ) #end
+#if(!$items.HasFirst) first #end
+#if($items.HasPrevious) | $pagination.CreatePageLink( $items.PreviousIndex, "prev" ) #end
+#if(!$items.HasPrevious) | prev #end
+#if($items.HasNext) | $pagination.CreatePageLink( $items.NextIndex, "next" ) #end
+#if(!$items.HasNext) | next #end
+#if($items.HasLast) | $pagination.CreatePageLink( $items.LastIndex, "last" ) #end
+#if(!$items.HasLast) | last #end
+  </td>
+  </tr>
+</table>
+</div>
 </div>
