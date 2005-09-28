@@ -119,58 +119,58 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (model.PropertyAtt.Column == null)
 			{
-				model.PropertyAtt.Column = model.PropertyName;
+				model.PropertyAtt.Column = model.Property.Name;
 			}
 
-			if (typeof(INullableType).IsAssignableFrom(model.PropertyType))
+			if (typeof(INullableType).IsAssignableFrom(model.Property.PropertyType))
 			{
 				model.PropertyAtt.NotNull = false;
 
-				if (model.PropertyType == typeof(NullableBoolean))
+				if (model.Property.PropertyType == typeof(NullableBoolean))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableBooleanType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableByte))
+				else if (model.Property.PropertyType == typeof(NullableByte))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableByteType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableChar))
+				else if (model.Property.PropertyType == typeof(NullableChar))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableCharType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableDateTime))
+				else if (model.Property.PropertyType == typeof(NullableDateTime))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableDateTimeType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableDecimal))
+				else if (model.Property.PropertyType == typeof(NullableDecimal))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableDecimalType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableDouble))
+				else if (model.Property.PropertyType == typeof(NullableDouble))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableDoubleType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableGuid))
+				else if (model.Property.PropertyType == typeof(NullableGuid))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableGuidType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableInt16))
+				else if (model.Property.PropertyType == typeof(NullableInt16))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableInt16Type, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableInt32))
+				else if (model.Property.PropertyType == typeof(NullableInt32))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableInt32Type, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableInt64))
+				else if (model.Property.PropertyType == typeof(NullableInt64))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableInt64Type, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableSByte))
+				else if (model.Property.PropertyType == typeof(NullableSByte))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableSByteType, Nullables.NHibernate";
 				}
-				else if (model.PropertyType == typeof(NullableSingle))
+				else if (model.Property.PropertyType == typeof(NullableSingle))
 				{
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
 				}

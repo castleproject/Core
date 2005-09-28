@@ -131,7 +131,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 					if (prop.PropertyType == typeof(String))
 						sb.Append( "\r\n\t\t<td>" );
 					else
-					else
 						sb.Append( "\r\n\t\t<td align=\"center\">" );
 
 					object value = prop.GetValue(item, new object[0]);
@@ -207,7 +206,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			foreach(PropertyModel propModel in model.Properties)
 			{
 				// TODO: Add ISet
-				if (propModel.PropertyType == typeof(IList)) continue;
+				if (propModel.Property.PropertyType == typeof(IList)) continue;
 
 				properties.Add(propModel.Property);
 			}

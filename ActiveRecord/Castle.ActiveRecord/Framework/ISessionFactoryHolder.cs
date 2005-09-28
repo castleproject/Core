@@ -66,11 +66,5 @@ namespace Castle.ActiveRecord.Framework
 		/// </summary>
 		/// <param name="session"></param>
 		void ReleaseSession(ISession session);
-		
-		/// <summary>
-		/// Flush the session if needed.
-		/// </summary>
-		void FlushSession(ISession session);
-		
 	}
 }

@@ -23,45 +23,18 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly PropertyInfo prop;
 		private readonly PropertyAttribute att;
 
-		protected PropertyModel() {}
-
 		public PropertyModel(PropertyInfo prop, PropertyAttribute att)
 		{
 			this.prop = prop;
 			this.att = att;
 		}
 
-		public virtual string PropertyName
+		public PropertyInfo Property
 		{
-			get { return prop.Name; }
+			get { return prop; }
 		}
 
-		public virtual bool CanRead
-		{
-			get { return prop.CanRead; }
-		}
-		
-		public virtual bool CanWrite
-		{
-			get { return prop.CanWrite; }
-		}
-
-		public virtual bool IsIndexed
-		{
-			get { return prop.GetIndexParameters().Length != 0; }
-		}
-
-		public virtual object GetValue(object instance)
-		{
-			return prop.GetGetMethod().Invoke( instance, null );
-		} 
-
-		public virtual Type PropertyType
-		{
-			get { return prop.PropertyType; }
-		}
-
-		public virtual PropertyAttribute PropertyAtt
+		public PropertyAttribute PropertyAtt
 		{
 			get { return att; }
 		}

@@ -80,45 +80,40 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\lib\HashCodeProvider.dll"
-                />
-                <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\lib\Iesi.Collections.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
-                />
-                <Reference
-                    Name = "NHibernate"
-                    AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
-                />
-                <Reference
                     Name = "Castle.ActiveRecord"
                     Project = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.ActiveRecord.Tests"
-                    Project = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\castle\ActiveRecord\lib\NHibernate.dll"
+                />
+                <Reference
+                    Name = "HashCodeProvider"
+                    AssemblyName = "HashCodeProvider"
+                    HintPath = "..\..\castle\ActiveRecord\lib\HashCodeProvider.dll"
+                />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\castle\ActiveRecord\lib\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\castle\ActiveRecord\lib\log4net.dll"
+                />
+                <Reference
+                    Name = "Castle.DynamicProxy"
+                    AssemblyName = "Castle.DynamicProxy"
+                    HintPath = "..\..\castle\ActiveRecord\lib\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
+                    AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
             </References>
         </Build>
@@ -181,11 +176,6 @@
                 />
                 <File
                     RelPath = "Model\Person.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Model\PropertyAccessHelperTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

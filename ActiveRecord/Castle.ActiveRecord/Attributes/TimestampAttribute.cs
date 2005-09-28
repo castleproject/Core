@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord
 
 
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class TimestampAttribute : WithAccessAttribute
+	public class TimestampAttribute : Attribute
 	{
 		private String column;
 

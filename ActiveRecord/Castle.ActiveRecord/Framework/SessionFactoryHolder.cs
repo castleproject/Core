@@ -141,18 +141,6 @@ namespace Castle.ActiveRecord.Framework
 				session.Close();
 			}
 		}
-		
-		public void FlushSession(ISession session)
-		{
-			if (ThreadScopeInfo.HasInitializedScope)
-			{
-				FlushScopedSession(session);
-			}
-			else
-			{
-				session.Flush();
-			}
-		}
 
 		private ISession CreateScopeSession(Type type)
 		{
@@ -181,11 +169,6 @@ namespace Castle.ActiveRecord.Framework
 		}
 
 		private void ReleaseScopedSession(ISession session)
-		{
-			
-		}
-		
-		private void FlushScopedSession(ISession session)
 		{
 			
 		}

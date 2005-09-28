@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord
 
 
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class VersionAttribute : WithAccessAttribute
+	public class VersionAttribute : Attribute
 	{
 		private String column, type;
 

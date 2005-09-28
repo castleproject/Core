@@ -49,7 +49,7 @@ namespace Castle.ActiveRecord
 	///		}
 	/// </code></example>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class PrimaryKeyAttribute : WithAccessAttribute
+	public class PrimaryKeyAttribute : Attribute
 	{
 		private PrimaryKeyType _generator = PrimaryKeyType.Native;
 		private String _column;
