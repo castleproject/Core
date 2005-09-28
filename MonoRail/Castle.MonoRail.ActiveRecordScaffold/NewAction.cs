@@ -379,20 +379,20 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			foreach( PropertyModel prop in model.Properties )
 			{
 				// Skip non standard properties
-				if (!prop.Property.CanWrite || !prop.Property.CanRead) continue;
+				if (!prop.CanWrite || !prop.CanRead) continue;
 
 				// Skip indexers
-				if (prop.Property.GetIndexParameters().Length != 0) continue;
+				if (prop.IsIndexed) continue;
 
 				sb.Append( "<p>\r\n" );
 
-				Type propType = prop.Property.PropertyType;
-				String propName = prop.Property.Name;
+				Type propType = prop.PropertyType;
+				String propName = prop.PropertyName;
 				object value = null;
 				
 				if (instance != null)
 				{
-					value = prop.Property.GetGetMethod().Invoke( instance, null );
+					value = prop.GetValue( instance );
 				}
 
 				sb.AppendFormat( helper.LabelFor( propName, propName + ':' ) );

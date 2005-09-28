@@ -36,6 +36,26 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return prop.Name; }
 		}
 
+		public virtual bool CanRead
+		{
+			get { return prop.CanRead; }
+		}
+		
+		public virtual bool CanWrite
+		{
+			get { return prop.CanWrite; }
+		}
+
+		public virtual bool IsIndexed
+		{
+			get { return prop.GetIndexParameters().Length != 0; }
+		}
+
+		public virtual object GetValue(object instance)
+		{
+			return prop.GetGetMethod().Invoke( instance, null );
+		} 
+
 		public virtual Type PropertyType
 		{
 			get { return prop.PropertyType; }

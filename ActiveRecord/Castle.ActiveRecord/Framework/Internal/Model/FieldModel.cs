@@ -48,5 +48,26 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			get { return att; }
 		}
+		
+		public override bool CanRead
+		{
+			get { return true; }
+		}
+		
+		public override bool CanWrite
+		{
+			get { return true; }
+		}
+		
+		public override bool IsIndexed
+		{
+			get { return false; }
+		}
+		
+		public override object GetValue(object instance)
+		{
+			return field.GetValue( instance );
+		}
+		
 	}
 }
