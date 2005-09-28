@@ -154,6 +154,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\FieldAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\HasAndBelongsToManyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -365,6 +370,11 @@
                 />
                 <File
                     RelPath = "Framework\Internal\Model\CollectionIDModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\FieldModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

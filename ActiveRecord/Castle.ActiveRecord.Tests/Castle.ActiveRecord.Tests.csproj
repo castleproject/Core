@@ -80,17 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
-                    Name = "Castle.ActiveRecord"
-                    Project = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "HashCodeProvider"
                     AssemblyName = "HashCodeProvider"
                     HintPath = "..\lib\HashCodeProvider.dll"
@@ -109,6 +98,7 @@
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\lib\NHibernate.dll"
+                    Private = "False"
                 />
                 <Reference
                     Name = "Nullables"
@@ -124,6 +114,16 @@
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
                     HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\..\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    Project = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

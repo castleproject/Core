@@ -30,9 +30,9 @@ namespace Castle.ActiveRecord
 		NosetterLowercaseUnderscore
 	}
 	
-	internal class PropertyAccessHelper
+	public class PropertyAccessHelper
 	{
-		internal static string ToString(PropertyAccess access)
+		public static string ToString(PropertyAccess access)
 		{
 			switch (access)
 			{

@@ -150,7 +150,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				MakeAtt("name", model.Property.Name),
 				MakeAtt("access", PropertyAccessHelper.ToString(model.PrimaryKeyAtt.Access)),
 				MakeAtt("column", model.PrimaryKeyAtt.Column),
-				MakeTypeAtt(model.Property, model.PrimaryKeyAtt.ColumnType),
+				MakeTypeAtt(model.Property.PropertyType, model.PrimaryKeyAtt.ColumnType),
 				WriteIfNotZero("length", model.PrimaryKeyAtt.Length), 
 				WriteIfNonNull("unsaved-value", unsavedVal));
 
@@ -191,10 +191,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public override void VisitProperty(PropertyModel model)
 		{
 			AppendF("<property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} />",
-				MakeAtt("name", model.Property.Name),
+				MakeAtt("name", model.PropertyName),
 				MakeAtt("access", PropertyAccessHelper.ToString(model.PropertyAtt.Access)),
 				MakeAtt("column", model.PropertyAtt.Column),
-				MakeTypeAtt(model.Property, model.PropertyAtt.ColumnType),
+				MakeTypeAtt(model.PropertyType, model.PropertyAtt.ColumnType),
 				WriteIfNotZero("length", model.PropertyAtt.Length), 
 				WriteIfNonNull("unsaved-value", model.PropertyAtt.UnsavedValue),
 				WriteIfTrue("not-null", model.PropertyAtt.NotNull), 
@@ -210,7 +210,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				MakeAtt("name", model.Property.Name),
 				MakeAtt("access", PropertyAccessHelper.ToString(model.VersionAtt.Access)),
 				MakeAtt("column", model.VersionAtt.Column),
-				MakeTypeAtt(model.Property, model.VersionAtt.Type));
+				MakeTypeAtt(model.Property.PropertyType, model.VersionAtt.Type));
 		}
 
 		public override void VisitTimestamp(TimestampModel model)
@@ -479,9 +479,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return outerJoin;
 		}
 
-		private String MakeTypeAtt(PropertyInfo prop, String typeName)
+		private String MakeTypeAtt(Type propType, String typeName)
 		{
-			if (prop.PropertyType.IsEnum) return String.Empty;
+			if (propType.IsEnum) return String.Empty;
 
 			if (typeName != null)
 			{
@@ -489,13 +489,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				if (prop.PropertyType.IsPrimitive)
+				if (propType.IsPrimitive)
 				{
-					return MakeAtt("type", prop.PropertyType.Name);
+					return MakeAtt("type", propType.Name);
 				}
 				else
 				{
-					return MakeAtt("type", prop.PropertyType.FullName);
+					return MakeAtt("type", propType.FullName);
 				}
 			}
 		}

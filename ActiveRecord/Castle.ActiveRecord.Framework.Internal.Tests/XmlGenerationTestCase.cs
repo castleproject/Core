@@ -57,6 +57,36 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
 		[Test]
+		public void SimpleClassWithMappedFieldAndNonDefaultAccess()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create( typeof(ClassWithMappedField) );
+			Assert.IsNotNull( model );
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode( model );
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+
+			String xml = xmlVisitor.Xml;
+
+			String expected = 
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithMappedField, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithMappedField\"    >\r\n" +
+				"    <id name=\"Id\" access=\"nosetter.camelcase-underscore\" column=\"Id\" type=\"Int32\"  unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <property name=\"name1\" access=\"field\" column=\"MyCustomName\" type=\"System.String\"        />\r\n" + 
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
 		public void DiscriminatorUse()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();

@@ -23,18 +23,25 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly PropertyInfo prop;
 		private readonly PropertyAttribute att;
 
+		protected PropertyModel() {}
+
 		public PropertyModel(PropertyInfo prop, PropertyAttribute att)
 		{
 			this.prop = prop;
 			this.att = att;
 		}
 
-		public PropertyInfo Property
+		public virtual string PropertyName
 		{
-			get { return prop; }
+			get { return prop.Name; }
 		}
 
-		public PropertyAttribute PropertyAtt
+		public virtual Type PropertyType
+		{
+			get { return prop.PropertyType; }
+		}
+
+		public virtual PropertyAttribute PropertyAtt
 		{
 			get { return att; }
 		}
