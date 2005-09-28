@@ -14,6 +14,7 @@
 
 namespace Castle.Facilities.NHibernateIntegration
 {
+	using System;
 	using Castle.Services.Transaction;
 
 	using Castle.Facilities.NHibernateExtension;
@@ -27,11 +28,13 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// </summary>
 	public class SessionKeeper : ISynchronization
 	{
-		private ISession _session;
+		private readonly ISession session;
+		private readonly String key;
 
-		public SessionKeeper(ISession session)
+		public SessionKeeper(ISession session, String key)
 		{
-			_session = session;
+			this.session = session;
+			this.key = key;
 		}
 
 		public void BeforeCompletion()
@@ -40,7 +43,8 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public void AfterCompletion()
 		{
-			_session.Close();
+			session.Close();
+			SessionManager.Pop(key);
 		}
 	}
 }

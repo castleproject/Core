@@ -75,14 +75,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			if (EnlistSessionIfHasTransactionActive(key, session))
 			{
-				try
-				{
-					return invocation.Proceed(args);
-				}
-				finally
-				{
-					SessionManager.Pop(key);
-				}
+				return invocation.Proceed(args);
 			}
 
 			try
@@ -132,7 +125,7 @@ namespace Castle.Facilities.NHibernateIntegration
 				{
 					transaction.Context[key] = true;
 					transaction.Enlist(new ResourceSessionAdapter(session.BeginTransaction()));
-					transaction.RegisterSynchronization( new SessionKeeper(session) );
+					transaction.RegisterSynchronization( new SessionKeeper(session, key) );
 					enlisted = true;
 				}
 			}
