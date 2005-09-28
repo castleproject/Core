@@ -29,7 +29,7 @@ namespace Castle.ActiveRecord
 	/// attributes
 	/// </summary>
 	[Serializable]
-	public abstract class BaseAttribute : Attribute
+	public abstract class BaseAttribute : WithAccessAttribute
 	{
 		private CacheEnum cache = CacheEnum.Undefined;
 

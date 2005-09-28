@@ -52,7 +52,7 @@ namespace Castle.ActiveRecord
 	/// Please note that the 'blogid' foreign key lies on the 'Post' table.
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class BelongsToAttribute : Attribute
+	public class BelongsToAttribute : WithAccessAttribute
 	{
 		private Type type;
 		private String column;

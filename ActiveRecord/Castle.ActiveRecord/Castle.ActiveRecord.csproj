@@ -194,6 +194,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\PropertyAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\PropertyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -210,6 +215,11 @@
                 />
                 <File
                     RelPath = "Attributes\VersionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\WithAccessAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

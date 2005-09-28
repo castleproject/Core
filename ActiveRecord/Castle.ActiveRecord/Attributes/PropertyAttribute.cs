@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord
 	///	</code>
 	/// </example>
 	[AttributeUsage(AttributeTargets.Property), Serializable]
-	public class PropertyAttribute : Attribute
+	public class PropertyAttribute : WithAccessAttribute
 	{
 		private String _column;
 		private String _formula;
@@ -56,7 +56,7 @@ namespace Castle.ActiveRecord
 		private bool _unique;
 		private bool _update = true;
 		private bool _insert = true;
-
+		
 		public PropertyAttribute() 
 		{
 		}

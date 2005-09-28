@@ -335,7 +335,7 @@ namespace Castle.ActiveRecord
 			{
 				session.Delete( String.Format("from {0}", type.Name) );
 
-				session.Flush();
+				_holder.FlushSession(session);
 			}
 			catch(Exception ex)
 			{
@@ -363,7 +363,7 @@ namespace Castle.ActiveRecord
 			{
 				session.SaveOrUpdate(instance);
 
-				session.Flush();
+				_holder.FlushSession(session);
 			}
 			catch(Exception ex)
 			{
@@ -391,7 +391,7 @@ namespace Castle.ActiveRecord
 			{
 				session.Save(instance);
 
-				session.Flush();
+				_holder.FlushSession(session);
 			}
 			catch(Exception ex)
 			{
@@ -420,7 +420,7 @@ namespace Castle.ActiveRecord
 			{
 				session.Update(instance);
 
-				session.Flush();
+				_holder.FlushSession(session);
 			}
 			catch(Exception ex)
 			{
@@ -448,7 +448,7 @@ namespace Castle.ActiveRecord
 			{
 				session.Delete(instance);
 
-				session.Flush();
+				_holder.FlushSession(session);
 			}
 			catch(Exception ex)
 			{

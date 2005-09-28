@@ -16,31 +16,15 @@ namespace Castle.ActiveRecord
 {
 	using System;
 
-
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class VersionAttribute : WithAccessAttribute
+	public class WithAccessAttribute : Attribute
 	{
-		private String column, type;
-
-		public VersionAttribute()
+		private PropertyAccess _access;
+		
+		public PropertyAccess Access
 		{
-		}
-
-		public VersionAttribute(String column)
-		{
-			this.column = column;
-		}
-
-		public String Column
-		{
-			get { return column; }
-			set { column = value; }
-		}
-
-		public String Type
-		{
-			get { return type; }
-			set { type = value; }
+			get { return _access; }
+			set { _access = value; }
 		}
 	}
 }
