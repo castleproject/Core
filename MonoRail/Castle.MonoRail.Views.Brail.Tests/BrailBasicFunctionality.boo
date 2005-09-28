@@ -55,6 +55,8 @@ class BrailBasicFunctionality(BasicFunctionalityTestCase):
 		url = "/home/hellofromcommon.rails"
 		expected = "Hello, Ayende"
 		Execute(url, expected)
+/*
+	Removed this because it can cause problems with timing and collisions of compiling app domains.
 	
 	[Test]
 	def CommonScriptsChangeOnTheFly():
@@ -76,7 +78,7 @@ def SayHello(name as string):
 		ensure:	
 			using write = File.CreateText(common ):
 				write.Write(old)
-	
+*/	
 	[Test]
 	def PreProcessor():
 		url = "/home/preprocessor.rails"
