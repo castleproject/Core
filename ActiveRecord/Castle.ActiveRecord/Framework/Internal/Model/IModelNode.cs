@@ -19,6 +19,5 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	public interface IModelNode : IVisitable
 	{
-//		String ToXml();
 	}
 }

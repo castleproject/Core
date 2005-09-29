@@ -1,43 +1,61 @@
 
-- beta 2
+beta 3
+======
 
-  Added support for map relations. Necessary to specify Index and IndexType on the HasMany (or HasAndBelongsToMany)
+- Support for fields in addition to properties
+- Small improvement on ActiveRecordModelBuilder (less intensive on IsDefined/GetCustomAttribute)
 
-  IsUnique validator fix
+beta 2
+======
 
-- Version 0.0.1.5
+- Transaction support: lots of minor fixes
 
+- Added support for map relations. 
+  Necessary to specify Index and IndexType on the HasMany (or HasAndBelongsToMany)
+
+- IsUnique validator fix
+  
+
+Version 0.0.1.5
+===============
+  
   Inner workings fully rewritten, better test cases coverage
 
   Added SlicedFindAll
 
 
-- Version 0.0.1.4
+Version 0.0.1.4
+===============
 
   Implemented support for Joined Subclasses
 
   Implemented initial support for validations
 
 
-- Version 0.0.1.3
+Version 0.0.1.3
+===============
 
   Applied patch from John Morales (support for idbags)
 
 
-- Version 0.0.1.2
+Version 0.0.1.2
+===============
 
   Applied patch from John Morales (support for sets)
 
   Applied suggestion and fixes from "jianxiao jiang" <jiangjianxiao@gmail.com> (NHibernateDelegate)
 
 
-- Version 0.0.1.1
+Version 0.0.1.1
+===============
   
   Applied patch from Luiz César Kuriki <luizck@gmail.com> in order to support NHibernate's Component feature
   
   Applied modification suggested by Andrew Hallock and Craig Neuwirt in order to support HasOne relations.
 
 
-- Version 0.0.1.0 Released (not changes to track yet)
+Version 0.0.1.0 
+===============
 
+  Released (not changes to track yet)
 
