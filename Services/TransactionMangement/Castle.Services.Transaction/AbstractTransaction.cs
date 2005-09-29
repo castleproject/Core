@@ -88,7 +88,7 @@ namespace Castle.Services.Transaction
 			AssertState(TransactionStatus.Active);
 			_state = TransactionStatus.RolledBack;
 
-			PerformBeforeSynchronizations(false);
+			PerformSynchronizations(false);
 
 			Exception error = null;
 
@@ -105,7 +105,7 @@ namespace Castle.Services.Transaction
 				}
 			}
 
-			PerformBeforeSynchronizations(true);
+			PerformSynchronizations(true);
 
 			if (error != null)
 			{
@@ -118,7 +118,7 @@ namespace Castle.Services.Transaction
 			AssertState(TransactionStatus.Active);
 			_state = TransactionStatus.Committed;
 
-			PerformBeforeSynchronizations(false);
+			PerformSynchronizations(false);
 
 			Exception error = null;
 
@@ -135,7 +135,7 @@ namespace Castle.Services.Transaction
 				}
 			}
 
-			PerformBeforeSynchronizations(true);
+			PerformSynchronizations(true);
 
 			if (error != null)
 			{
@@ -184,7 +184,7 @@ namespace Castle.Services.Transaction
 			}
 		}
 
-		private void PerformBeforeSynchronizations(bool runAfterCompletion)
+		private void PerformSynchronizations(bool runAfterCompletion)
 		{
 			foreach(ISynchronization sync in _synchronizations)
 			{

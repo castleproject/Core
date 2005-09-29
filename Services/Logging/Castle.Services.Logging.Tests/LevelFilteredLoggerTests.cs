@@ -16,11 +16,12 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 {
 	using System;
 	using System.ComponentModel;
-
+	
 	using NUnit.Framework;
+
 	using Castle.Services.Logging;
-	
-	
+
+
 	/// <summary>
 	/// Contains all tests relating to the properties.
 	/// </summary>
@@ -35,7 +36,6 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			logger = new LevelFilteredLoggerInstance(null);
 		}
 
-
 		[Test]
 		public void LevelDebug()
 		{
@@ -46,8 +46,8 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return true when the level is Debug");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return true when the level is Debug");
 			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return true when the level is Debug");
-			
 		}
+
 		[Test]
 		public void LevelInfo()
 		{
@@ -58,8 +58,8 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return true when the level is Info");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return true when the level is Info");
 			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return true when the level is Info");
-			
 		}
+
 		[Test]
 		public void LevelWarn()
 		{
@@ -70,8 +70,9 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			Assert.IsTrue(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return true when the level is Warn");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return true when the level is Warn");
 			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return true when the level is Warn");
-			
+
 		}
+
 		[Test]
 		public void LevelError()
 		{
@@ -82,8 +83,8 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			Assert.IsFalse(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return false when the level is Error");
 			Assert.IsTrue(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return true when the level is Error");
 			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return true when the level is Error");
-			
 		}
+
 		[Test]
 		public void LevelFatal()
 		{
@@ -94,8 +95,8 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			Assert.IsFalse(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return false when the level is Fatal");
 			Assert.IsFalse(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return false when the level is Fatal");
 			Assert.IsTrue(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return true when the level is Fatal");
-			
 		}
+
 		[Test]
 		public void LevelOff()
 		{
@@ -106,9 +107,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			Assert.IsFalse(logger.IsWarnEnabled, "LevelFilteredLogger.IsWarnEnabled does not return false when the level is Off");
 			Assert.IsFalse(logger.IsErrorEnabled, "LevelFilteredLogger.IsErrorEnabled does not return false when the level is Off");
 			Assert.IsFalse(logger.IsFatalErrorEnabled, "LevelFilteredLogger.IsFatalErrorEnabled does not return false when the level is Off");
-			
 		}
-
 
 		[Test]
 		public void DefaultLevel()
@@ -127,13 +126,13 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 				Assert.AreEqual(level, logger.Level, "LevelFilteredLogger.Level did not change");
 			}
 		}
+
 		[Test]
 		[ExpectedException(typeof(InvalidEnumArgumentException))]
 		public void SettingLevelToInvalid()
 		{
-			logger.Level = (LoggerLevel)(-1);
+			logger.Level = (LoggerLevel) (-1);
 		}
-
 
 		[Test]
 		public void DefaultName()
@@ -144,19 +143,19 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 		[Test]
 		public void Name()
 		{
-			((LevelFilteredLoggerInstance)logger).ChangeName("Main");
+			((LevelFilteredLoggerInstance) logger).ChangeName("Main");
 			Assert.AreEqual("Main", logger.Name, "LevelFilteredLogger.Name did not change");
 
-			((LevelFilteredLoggerInstance)logger).ChangeName( "GUI");
+			((LevelFilteredLoggerInstance) logger).ChangeName("GUI");
 			Assert.AreEqual("GUI", logger.Name, "LevelFilteredLogger.Name did not change");
 		}
+
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SettingNameToNull()
 		{
-			((LevelFilteredLoggerInstance)logger).ChangeName(null);
+			((LevelFilteredLoggerInstance) logger).ChangeName(null);
 		}
-
 	}
 
 	/// <summary>
@@ -177,7 +176,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 		public void SetUp()
 		{
 			logger = new LevelFilteredLoggerInstance(this);
-			
+
 			// setting the default level to debug to simplify
 			// the tests.
 
@@ -186,14 +185,13 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			// setting the level to an undefined value so
 			// we dont have to wonder if it changed from Off
 			// to Off (for instance).
-			level = (LoggerLevel)(-1);
+			level = (LoggerLevel) (-1);
 			name = null;
 			message = null;
 			exception = null;
 			calls = 0;
 		}
 
-				
 		#region Debug tests
 
 		[Test]
@@ -202,7 +200,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Debug message";
 			LoggerLevel level = LoggerLevel.Debug;
 			Exception exception = null;
-			
+
 			logger.Debug(message);
 
 			ValidateCall(level, message, exception);
@@ -214,7 +212,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Debug message 2";
 			LoggerLevel level = LoggerLevel.Debug;
 			Exception exception = new Exception();
-			
+
 			logger.Debug(message, exception);
 
 			ValidateCall(level, message, exception);
@@ -226,12 +224,11 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Debug message 3";
 			LoggerLevel level = LoggerLevel.Debug;
 			Exception exception = null;
-			
+
 			logger.Debug("{0} {1} {2}", "Debug", "message", 3);
 
 			ValidateCall(level, message, exception);
 		}
-
 
 		[Test]
 		public void DebugLevelDebug()
@@ -282,6 +279,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void DebugLevelOff()
 		{
@@ -347,6 +345,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void DebugLevelOffWithException()
 		{
@@ -408,6 +407,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void DebugLevelOffWithArgs()
 		{
@@ -418,9 +418,8 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			ValidateNoCalls();
 		}
 
-
 		#endregion
-		
+
 		#region Info tests
 
 		[Test]
@@ -429,7 +428,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Info message";
 			LoggerLevel level = LoggerLevel.Info;
 			Exception exception = null;
-			
+
 			logger.Info(message);
 
 			ValidateCall(level, message, exception);
@@ -441,7 +440,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Info message 2";
 			LoggerLevel level = LoggerLevel.Info;
 			Exception exception = new Exception();
-			
+
 			logger.Info(message, exception);
 
 			ValidateCall(level, message, exception);
@@ -453,7 +452,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Info message 3";
 			LoggerLevel level = LoggerLevel.Info;
 			Exception exception = null;
-			
+
 			logger.Info("{0} {1} {2}", "Info", "message", 3);
 
 			ValidateCall(level, message, exception);
@@ -509,6 +508,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void InfoLevelOff()
 		{
@@ -574,6 +574,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void InfoLevelOffWithException()
 		{
@@ -635,6 +636,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void InfoLevelOffWithArgs()
 		{
@@ -644,7 +646,6 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
-
 
 		#endregion
 
@@ -656,7 +657,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Warn message";
 			LoggerLevel level = LoggerLevel.Warn;
 			Exception exception = null;
-			
+
 			logger.Warn(message);
 
 			ValidateCall(level, message, exception);
@@ -668,7 +669,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Warn message 2";
 			LoggerLevel level = LoggerLevel.Warn;
 			Exception exception = new Exception();
-			
+
 			logger.Warn(message, exception);
 
 			ValidateCall(level, message, exception);
@@ -680,7 +681,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Warn message 3";
 			LoggerLevel level = LoggerLevel.Warn;
 			Exception exception = null;
-			
+
 			logger.Warn("{0} {1} {2}", "Warn", "message", 3);
 
 			ValidateCall(level, message, exception);
@@ -736,6 +737,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void WarnLevelOff()
 		{
@@ -801,6 +803,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void WarnLevelOffWithException()
 		{
@@ -862,6 +865,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void WarnLevelOffWithArgs()
 		{
@@ -871,7 +875,6 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
-
 
 		#endregion
 
@@ -883,7 +886,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Error message";
 			LoggerLevel level = LoggerLevel.Error;
 			Exception exception = null;
-			
+
 			logger.Error(message);
 
 			ValidateCall(level, message, exception);
@@ -895,7 +898,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Error message 2";
 			LoggerLevel level = LoggerLevel.Error;
 			Exception exception = new Exception();
-			
+
 			logger.Error(message, exception);
 
 			ValidateCall(level, message, exception);
@@ -907,7 +910,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "Error message 3";
 			LoggerLevel level = LoggerLevel.Error;
 			Exception exception = null;
-			
+
 			logger.Error("{0} {1} {2}", "Error", "message", 3);
 
 			ValidateCall(level, message, exception);
@@ -963,6 +966,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void ErrorLevelOff()
 		{
@@ -1028,6 +1032,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void ErrorLevelOffWithException()
 		{
@@ -1038,7 +1043,6 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
-
 
 		[Test]
 		public void ErrorLevelDebugWithArgs()
@@ -1089,6 +1093,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
+
 		[Test]
 		public void ErrorLevelOffWithArgs()
 		{
@@ -1098,7 +1103,6 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
-
 
 		#endregion
 
@@ -1110,7 +1114,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "FatalError message";
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = null;
-			
+
 			logger.FatalError(message);
 
 			ValidateCall(level, message, exception);
@@ -1122,7 +1126,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "FatalError message 2";
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = new Exception();
-			
+
 			logger.FatalError(message, exception);
 
 			ValidateCall(level, message, exception);
@@ -1134,7 +1138,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 			string message = "FatalError message 3";
 			LoggerLevel level = LoggerLevel.Fatal;
 			Exception exception = null;
-			
+
 			logger.FatalError("{0} {1} {2}", "FatalError", "message", 3);
 
 			ValidateCall(level, message, exception);
@@ -1190,6 +1194,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
+
 		[Test]
 		public void FatalErrorLevelOff()
 		{
@@ -1255,6 +1260,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateCall(LoggerLevel.Fatal, "Test", exception);
 		}
+
 		[Test]
 		public void FatalErrorLevelOffWithException()
 		{
@@ -1316,6 +1322,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateCall(LoggerLevel.Fatal, "Test", null);
 		}
+
 		[Test]
 		public void FatalErrorLevelOffWithArgs()
 		{
@@ -1325,7 +1332,6 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 			ValidateNoCalls();
 		}
-
 
 		#endregion
 
@@ -1339,7 +1345,7 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 		}
 
 		private void ValidateNoCalls()
-		{			
+		{
 			Assert.AreEqual(0, calls, "LevelFilteredLogger.Log was called with logging " + logger.Level);
 		}
 
@@ -1352,6 +1358,8 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 
 	internal class LevelFilteredLoggerInstance : LevelFilteredLogger
 	{
+		private readonly LoggingTests Fixture;
+
 		public LevelFilteredLoggerInstance(LoggingTests fixture)
 		{
 			Fixture = fixture;
@@ -1377,9 +1385,5 @@ namespace Castle.Services.Logging.Tests.LevelFilteredLoggerTests
 		{
 			return null;
 		}
-
-
-		private readonly LoggingTests Fixture;
 	}
-
 }

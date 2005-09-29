@@ -15,12 +15,12 @@
 namespace Castle.Services.Logging
 {
 	using System;
-	using System.Diagnostics; 
+	using System.Diagnostics;
 
 	/// <summary>
 	/// The Logger using standart Diagnostics namespace.
 	/// </summary>
-	public class DiagnosticsLogger : ILogger
+	public class DiagnosticsLogger : ILogger, IDisposable
 	{
 		private EventLog _logger;
 
@@ -28,9 +28,8 @@ namespace Castle.Services.Logging
 		/// Creates a logger based on <see cref="System.Diagnostics.EventLog"/>.
 		/// </summary>
 		/// <param name="logName"><see cref="EventLog.Log"/></param>
-		public DiagnosticsLogger(string logName)
+		public DiagnosticsLogger(string logName) : this(logName, "default")
 		{
-			_logger = new EventLog(logName);
 		}
 
 		/// <summary>
@@ -41,12 +40,13 @@ namespace Castle.Services.Logging
 		public DiagnosticsLogger(string logName, string source)
 		{
 			// Create the source, if it does not already exist.
-			if(!EventLog.SourceExists(source))
+			if (!EventLog.SourceExists(source))
 			{
 				EventLog.CreateEventSource(source, logName);
 			}
 
-			_logger = new EventLog(logName); 
+			_logger = new EventLog(logName);
+			_logger.Source = source;
 		}
 
 		/// <summary>
@@ -58,19 +58,52 @@ namespace Castle.Services.Logging
 		public DiagnosticsLogger(string logName, string machineName, string source)
 		{
 			// Create the source, if it does not already exist.
-			if(!EventLog.SourceExists(source, machineName))
+			if (!EventLog.SourceExists(source, machineName))
 			{
 				EventLog.CreateEventSource(source, logName, machineName);
 			}
-  			
+
 			_logger = new EventLog(logName, machineName, source);
+		}
+
+		~DiagnosticsLogger()
+		{
+			Close(false);
+		}
+
+		#region IDisposable Members
+
+		public void Dispose()
+		{
+			Close(true);
+		}
+
+		#endregion
+
+		public void Close()
+		{
+			Close(true);
+		}
+
+		protected void Close(bool supressFinalize)
+		{
+			if (supressFinalize)
+			{
+				GC.SuppressFinalize(this);
+			}
+
+			if (_logger != null)
+			{
+				_logger.Close();
+				_logger = null;
+			}
 		}
 
 		/// <summary>
 		/// Logs a debug message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		public void Debug(string message )
+		public void Debug(string message)
 		{
 			Debug(message, null as Exception);
 		}
@@ -83,7 +116,7 @@ namespace Castle.Services.Logging
 		public void Debug(string message, Exception exception)
 		{
 			System.Diagnostics.Debug.WriteLine(string.Format("message: {0}", message));
-			
+
 			if (exception != null)
 			{
 				System.Diagnostics.Debug.WriteLine(string.Format("exception: {0}", exception));
@@ -95,7 +128,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		public void Debug( string format, params Object[] args )
+		public void Debug(string format, params Object[] args)
 		{
 			Debug(String.Format(format, args), null as Exception);
 		}
@@ -106,17 +139,14 @@ namespace Castle.Services.Logging
 		/// <value>The Value is always True</value> 
 		public bool IsDebugEnabled
 		{
-			get
-			{
-				return true;
-			}
+			get { return true; }
 		}
 
 		/// <summary>
 		/// Logs an info message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		public void Info(string message )
+		public void Info(string message)
 		{
 			Info(message, null as Exception);
 		}
@@ -128,7 +158,7 @@ namespace Castle.Services.Logging
 		/// <param name="exception">The Exception</param>
 		public void Info(string message, Exception exception)
 		{
-			Log(message, exception, EventLogEntryType.Information);  
+			Log(message, exception, EventLogEntryType.Information);
 		}
 
 		/// <summary>
@@ -136,7 +166,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		public void Info( string format, params Object[] args )
+		public void Info(string format, params Object[] args)
 		{
 			Info(String.Format(format, args));
 		}
@@ -147,17 +177,14 @@ namespace Castle.Services.Logging
 		/// <value>The Value is always True</value> 
 		public bool IsInfoEnabled
 		{
-			get
-			{
-				return true;
-			}
+			get { return true; }
 		}
 
 		/// <summary>
 		/// Logs a warn message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		public void Warn(string message )
+		public void Warn(string message)
 		{
 			Warn(message, null as Exception);
 		}
@@ -169,7 +196,7 @@ namespace Castle.Services.Logging
 		/// <param name="exception">The Exception</param>
 		public void Warn(string message, Exception exception)
 		{
-			Log(message, exception, EventLogEntryType.Warning); 
+			Log(message, exception, EventLogEntryType.Warning);
 		}
 
 		/// <summary>
@@ -177,7 +204,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		public void Warn( string format, params Object[] args )
+		public void Warn(string format, params Object[] args)
 		{
 			Warn(String.Format(format, args));
 		}
@@ -188,17 +215,14 @@ namespace Castle.Services.Logging
 		/// <value>The Value is always True</value> 
 		public bool IsWarnEnabled
 		{
-			get
-			{
-				return true;
-			}
+			get { return true; }
 		}
 
 		/// <summary>
 		/// Logs an error message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		public void Error(string message )
+		public void Error(string message)
 		{
 			Error(message, null as Exception);
 		}
@@ -218,7 +242,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		public void Error( string format, params Object[] args )
+		public void Error(string format, params Object[] args)
 		{
 			Error(String.Format(format, args));
 		}
@@ -229,17 +253,14 @@ namespace Castle.Services.Logging
 		/// <value>The Value is always True</value> 
 		public bool IsErrorEnabled
 		{
-			get
-			{
-				return true;
-			}
+			get { return true; }
 		}
 
 		/// <summary>
 		/// Logs a fatal error message.
 		/// </summary>
 		/// <param name="message">The Message</param>
-		public void FatalError(string message )
+		public void FatalError(string message)
 		{
 			FatalError(message, null as Exception);
 		}
@@ -259,7 +280,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Message format</param>
 		/// <param name="args">Array of objects to write using format</param>
-		public void FatalError( string format, params Object[] args )
+		public void FatalError(string format, params Object[] args)
 		{
 			FatalError(String.Format(format, args));
 		}
@@ -270,10 +291,7 @@ namespace Castle.Services.Logging
 		/// <value>The Value is always True</value> 
 		public bool IsFatalErrorEnabled
 		{
-			get 
-			{
-				return true; 
-			}
+			get { return true; }
 		}
 
 		/// <summary>
@@ -282,9 +300,9 @@ namespace Castle.Services.Logging
 		/// <param name="name">Ignored, cause a source can only be registered to one log at a time.</param>
 		/// <returns>The New ILogger instance.</returns> 
 		/// <exception cref="System.ArgumentException">If the name has an empty element name.</exception>
-		public ILogger CreateChildLogger(string name )
+		public ILogger CreateChildLogger(string name)
 		{
-			return new DiagnosticsLogger(_logger.Log, _logger.MachineName, _logger.Source);  
+			return new DiagnosticsLogger(_logger.Log, _logger.MachineName, _logger.Source);
 		}
 
 		private void Log(string message, Exception exception, EventLogEntryType type)
@@ -299,7 +317,7 @@ namespace Castle.Services.Logging
 			{
 				result = string.Format("message: {0}; exception: {1}", message, exception);
 			}
-			
+
 			_logger.WriteEntry(result, type);
 		}
 	}
