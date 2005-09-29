@@ -22,6 +22,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		void VisitModel(ActiveRecordModel model);
 		void VisitPrimaryKey(PrimaryKeyModel model);
 		void VisitProperty(PropertyModel model);
+		void VisitField(FieldModel model);
 		void VisitVersion(VersionModel model);
 		void VisitTimestamp(TimestampModel model);
 		void VisitKey(KeyModel model);

@@ -42,6 +42,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNode( model.Timestamp );
 			VisitNodes( model.JoinedClasses );
 			VisitNodes( model.Classes );
+			VisitNodes( model.Fields );
 			VisitNodes( model.Properties );
 			VisitNodes( model.Components );
 			VisitNodes( model.OneToOnes );
@@ -57,6 +58,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		public virtual void VisitProperty(PropertyModel model)
+		{
+		}
+
+		public virtual void VisitField(FieldModel model)
 		{
 		}
 

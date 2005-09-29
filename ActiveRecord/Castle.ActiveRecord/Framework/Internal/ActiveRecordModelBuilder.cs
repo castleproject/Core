@@ -21,6 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	public class ActiveRecordModelBuilder
 	{
 		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.Instance;
+		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance;
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
@@ -57,6 +58,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			ProcessJoinedBaseAttribute(type, model);
 
 			ProcessProperties(type, model);
+
+			ProcessFields(type, model);
 		}
 
 		private void ProcessJoinedBaseAttribute(Type type, ActiveRecordModel model)
@@ -89,6 +92,23 @@ namespace Castle.ActiveRecord.Framework.Internal
 				model.ActiveRecordAtt.Table = model.Type.Name;
 			}
 		}
+
+		private void ProcessFields(Type type, ActiveRecordModel model)
+		{
+			FieldInfo[] fields = type.GetFields( FieldDefaultBindingFlags );
+
+			foreach( FieldInfo field in fields )
+			{
+
+				if (field.IsDefined( typeof(FieldAttribute), false ))
+				{
+					FieldAttribute fieldAtt = field.GetCustomAttributes( typeof(FieldAttribute), false )[0] as FieldAttribute;
+
+					model.Fields.Add( new FieldModel( field, fieldAtt ) );
+				}
+			}
+		}
+
 
 		private void ProcessProperties(Type type, ActiveRecordModel model)
 		{

@@ -99,7 +99,7 @@ namespace Castle.ActiveRecord
 	/// generator type <c>PrimaryKeyType.Foreign</c>
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
-	public class OneToOneAttribute : Attribute
+	public class OneToOneAttribute : WithAccessAttribute
 	{
 		private bool _constrained;
 		private OuterJoinEnum _outerJoin = OuterJoinEnum.Auto;

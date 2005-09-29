@@ -31,6 +31,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private ActiveRecordModel parent;
 		private IList ids = new ArrayList();
 		private IList properties = new ArrayList();
+		private IList fields = new ArrayList();
 		private IList classes = new ArrayList();
 		private IList joinedclasses = new ArrayList();
 		private IList components = new ArrayList();
@@ -127,6 +128,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public IList Properties
 		{
 			get { return properties; }
+		}
+
+		public IList Fields
+		{
+			get { return fields; }
 		}
 
 		public IList Classes

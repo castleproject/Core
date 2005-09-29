@@ -177,6 +177,69 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
+		public override void VisitField(FieldModel model)
+		{
+			if (model.FieldAtt.Column == null)
+			{
+				model.FieldAtt.Column = model.Field.Name;
+			}
+
+			if (typeof(INullableType).IsAssignableFrom(model.Field.FieldType))
+			{
+				model.FieldAtt.NotNull = false;
+
+				if (model.Field.FieldType== typeof(NullableBoolean))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableBooleanType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableByte))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableByteType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableChar))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableCharType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableDateTime))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableDateTimeType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableDecimal))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableDecimalType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableDouble))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableDoubleType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableGuid))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableGuidType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableInt16))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableInt16Type, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableInt32))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableInt32Type, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableInt64))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableInt64Type, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableSByte))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableSByteType, Nullables.NHibernate";
+				}
+				else if (model.Field.FieldType == typeof(NullableSingle))
+				{
+					model.FieldAtt.ColumnType = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
+				}
+			}
+		}
+
+
 		public override void VisitKey(KeyModel model)
 		{
 			if (model.JoinedKeyAtt.Column == null)
