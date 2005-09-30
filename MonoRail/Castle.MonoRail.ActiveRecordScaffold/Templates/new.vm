@@ -1,0 +1,65 @@
+$ValidationHelper.InstallScripts()
+
+<h4>New ${armodel.Type.Name}</h4>
+
+#set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
+
+$HtmlHelper.Form( "create.rails", "scaffoldingform", "POST", $validatorForm )
+
+<table border="0" align="center" width="90%" cellpadding="10" cellspacing="5">
+
+  <tr>
+    <td>
+  $HtmlHelper.FieldSet("${armodel.Type.Name} fields:")
+  
+#foreach($model in $HtmlHelper.GetModelHierarchy($armodel))
+
+#if($model.IsNestedType)
+  $HtmlHelper.FieldSet("${model.Type.Name}:")
+#end
+
+#foreach($field in $model.Fields)
+#if($HtmlHelper.CanHandle($field))
+<p>
+$HtmlHelper.CreateControl($model, $field, $instance)
+</p>
+#end
+#end
+
+#foreach($prop in $model.Properties)
+#if($HtmlHelper.CanHandle($prop))
+<p>
+$HtmlHelper.CreateControl($model, $prop, $instance)
+</p>
+#end
+#end
+
+#foreach($prop in $model.NotMappedProperties)
+#if($HtmlHelper.CanHandle($prop))
+<p>
+$HtmlHelper.CreateControl($model, $prop, $instance)
+</p>
+#end
+#end
+
+#if($model.IsNestedType)
+  $HtmlHelper.EndFieldSet()
+#end
+
+#end
+  
+  $HtmlHelper.EndFieldSet()
+    </td>
+  </tr>
+  
+  <tr>
+    <td align="center">$HtmlHelper.SubmitButton("Create")</td>
+  </tr>
+
+</table>
+
+$HtmlHelper.EndForm()
+
+<p align="center">
+Back | List
+</p>

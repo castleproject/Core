@@ -37,9 +37,9 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return "center";
 		}
 
-		public String LinkToCreate(ActiveRecordModel model, String text, IDictionary attributes)
+		public String LinkToNew(ActiveRecordModel model, String text, IDictionary attributes)
 		{
-			return String.Format( "<a href=\"create{0}.{1}\" {3}>{2}</a>", model.Type.Name, 
+			return String.Format( "<a href=\"new{0}.{1}\" {3}>{2}</a>", model.Type.Name, 
 				Controller.Context.UrlInfo.Extension, text, GetAttributes(attributes) );
 		}
 

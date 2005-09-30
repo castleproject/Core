@@ -16,7 +16,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 	using System.Text;
-
+	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 
 	using Castle.ActiveRecord.Framework;
@@ -31,7 +31,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	{
 		protected object idVal;
 
-		public EditAction(Type modelType) : base(modelType)
+		public EditAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
 		}
 

@@ -16,7 +16,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 	using System.Text;
-
+	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 
 	using Castle.ActiveRecord;
@@ -32,7 +32,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	{
 		private bool removalSuccessful;
 
-		public RemoveAction(Type modelType) : base(modelType)
+		public RemoveAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
 		}
 

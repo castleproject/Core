@@ -173,6 +173,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\FormHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\PresentationHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -180,6 +185,10 @@
                 <File
                     RelPath = "Templates\list.vm"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Templates\new.vm"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

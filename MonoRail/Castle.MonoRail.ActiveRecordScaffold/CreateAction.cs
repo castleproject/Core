@@ -17,7 +17,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 
 	using Castle.ActiveRecord;
-	
+	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -28,7 +28,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class CreateAction : NewAction
 	{
-		public CreateAction(Type modelType) : base(modelType)
+		public CreateAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
 		}
 

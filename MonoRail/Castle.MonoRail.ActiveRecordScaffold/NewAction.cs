@@ -15,13 +15,15 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
+	using System.IO;
 	using System.Text;
 	using System.Reflection;
 	using System.Collections;
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
-
+	using Castle.Components.Common.TemplateEngine;
+	using Castle.MonoRail.ActiveRecordScaffold.Helpers;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
@@ -40,8 +42,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		protected DataBinder binder;
 		protected ArrayList errors = new ArrayList();
 
-
-		public NewAction( Type modelType ) : base(modelType)
+		public NewAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
 		}
 
@@ -52,17 +53,44 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			controller.PropertyBag["armodel"] = Model;
-		}
-
-		protected override void RenderStandardHtml(Controller controller)
-		{
 			if (instance == null)
 			{
 				instance = Activator.CreateInstance( Model.Type );
 			}
 
-			GenerateHtmlForm(Model.Type.Name, Model, instance, controller, "New");
+			controller.PropertyBag["armodel"] = Model;
+			controller.PropertyBag["instance"] = instance;
+		}
+
+		protected override void RenderStandardHtml(Controller controller)
+		{
+			StringWriter writer = new StringWriter();
+
+			FormHelper htmlHelper = new FormHelper();
+			htmlHelper.SetController(controller);
+
+			ValidationHelper validationHelper = new ValidationHelper();
+			validationHelper.SetController(controller);
+
+			controller.PropertyBag["HtmlHelper"] = htmlHelper;
+			controller.PropertyBag["ValidationHelper"] = validationHelper;
+
+			IDictionary context = new Hashtable();
+
+			foreach(DictionaryEntry entry in controller.PropertyBag)
+			{
+				context.Add(entry.Key, entry.Value);
+			}
+
+#if DEBUG
+			templateEngine.Process( context, "new.vm", writer );
+#else
+			templateEngine.Process( context, "Castle.MonoRail.ActiveRecordScaffold/Templates/new.vm", writer );
+#endif
+
+			controller.DirectRender( writer.GetStringBuilder().ToString() );
+
+//			GenerateHtmlForm(Model.Type.Name, Model, instance, controller, "New");
 		}
 
 		/// <summary>

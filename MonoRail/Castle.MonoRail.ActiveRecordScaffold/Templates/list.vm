@@ -1,6 +1,6 @@
 
 <p>
-$presentation.LinkToCreate( $model, "Create a new $model.Type.Name", $DictHelper.CreateDict() )
+$presentation.LinkToNew( $model, "Create a new $model.Type.Name", $DictHelper.CreateDict() )
 </p>
 
 #set($cols = $properties.Count + 2)

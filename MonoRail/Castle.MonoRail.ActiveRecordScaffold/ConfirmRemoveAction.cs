@@ -18,7 +18,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System.Text;
 
 	using Castle.ActiveRecord.Framework;
-
+	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 
 
@@ -31,7 +31,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class ConfirmRemoveAction : EditAction
 	{
-		public ConfirmRemoveAction(Type modelType) : base(modelType)
+		public ConfirmRemoveAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
 		}
 

@@ -17,7 +17,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 	using System.Reflection;
 	using System.Collections;
-
+	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
@@ -31,15 +31,17 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected readonly Type modelType;
 		protected readonly HtmlHelper helper = new HtmlHelper();
+		protected readonly ITemplateEngine templateEngine;
 		
 		protected PropertyInfo keyProperty;
 		protected IDictionary prop2Validation = new Hashtable();
 
 		private ActiveRecordModel model;
 
-		public AbstractScaffoldAction( Type modelType )
+		public AbstractScaffoldAction( Type modelType, ITemplateEngine templateEngine )
 		{
 			this.modelType = modelType;
+			this.templateEngine = templateEngine;
 		}
 
 		public void Execute(Controller controller)
