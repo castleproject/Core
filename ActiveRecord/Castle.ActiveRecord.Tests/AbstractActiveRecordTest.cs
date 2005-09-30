@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord.Tests
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Framework;
-	using Castle.ActiveRecord.Framework.Config;
+
 
 	public abstract class AbstractActiveRecordTest
 	{

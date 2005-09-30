@@ -127,9 +127,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					model.Validators.Add( valAtt.Validator );
 				}
 
-				object[] attributes = prop.GetCustomAttributes(false);
-
-				foreach(object attribute in attributes)
+				foreach(object attribute in prop.GetCustomAttributes(false))
 				{
 					if (attribute is PrimaryKeyAttribute)
 					{
@@ -239,11 +237,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						model.Hilos.Add(new HiloModel( prop, propAtt ));
 					}
+				}
 
-					if (!isArProperty)
-					{
-						model.NotMappedProperties.Add(prop);
-					}
+				if (!isArProperty)
+				{
+					model.NotMappedProperties.Add(prop);
 				}
 			}
 		}
