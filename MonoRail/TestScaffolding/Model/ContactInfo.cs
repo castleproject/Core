@@ -15,22 +15,42 @@
 namespace TestScaffolding.Model
 {
 	using System;
-
 	using Castle.ActiveRecord;
 
-//	public enum CallBy
-//	{
-//		Mr,
-//		Ms,
-//		Lord,
-//		Duke
-//	}
 
-	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="customer")]
-	public class Customer : Person
+	public class ContactInfo
 	{
-		public Customer()
+		private String telephone1;
+		private String telephone2;
+		private int countrycode;
+		private int regioncode;
+
+		[Property]
+		public string Telephone1
 		{
+			get { return telephone1; }
+			set { telephone1 = value; }
+		}
+
+		[Property]
+		public string Telephone2
+		{
+			get { return telephone2; }
+			set { telephone2 = value; }
+		}
+
+		[Property]
+		public int Countrycode
+		{
+			get { return countrycode; }
+			set { countrycode = value; }
+		}
+
+		[Property]
+		public int Regioncode
+		{
+			get { return regioncode; }
+			set { regioncode = value; }
 		}
 	}
 }

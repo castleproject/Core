@@ -51,6 +51,10 @@
 	{
 		font-size: 10;
 	}
+	input, select, textarea
+	{
+		border: 1px solid gray;
+	}
 	input.errHilite, select.errHilite, textarea.errHilite 
 	{
 		border: 1px solid #DDC;
@@ -58,7 +62,7 @@
 	}
 	label.errHilite 
 	{
-		color: #C00;
+		color: red;
 	}
 	ul#errors 
 	{
@@ -84,6 +88,13 @@
 		font-style: italic;
 		margin: .5em 0;
 		padding: 0;
+	}
+	div#scaffoldmain
+	{
+		border-left: solid 1px black;
+		padding-left: 10px;
+		margin-left: 5px;
+		margin-top: 5px;
 	}
 
   </style>

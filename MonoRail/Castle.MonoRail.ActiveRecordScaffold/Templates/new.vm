@@ -1,18 +1,14 @@
 $ValidationHelper.InstallScripts()
 
-<h4>New ${armodel.Type.Name}</h4>
+<h2>New ${armodel.Type.Name}</h2>
 
 #set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
 
 $HtmlHelper.Form( "create.rails", "scaffoldingform", "POST", $validatorForm )
 
-<table border="0" align="center" width="90%" cellpadding="10" cellspacing="5">
+<div id="scaffoldmain">
 
-  <tr>
-    <td>
-  $HtmlHelper.FieldSet("${armodel.Type.Name} fields:")
-  
-#foreach($model in $HtmlHelper.GetModelHierarchy($armodel))
+#foreach($model in $HtmlHelper.GetModelHierarchy($armodel, $instance))
 
 #if($model.IsNestedType)
   $HtmlHelper.FieldSet("${model.Type.Name}:")
@@ -20,25 +16,37 @@ $HtmlHelper.Form( "create.rails", "scaffoldingform", "POST", $validatorForm )
 
 #foreach($field in $model.Fields)
 #if($HtmlHelper.CanHandle($field))
-<p>
-$HtmlHelper.CreateControl($model, $field, $instance)
-</p>
+<p>$HtmlHelper.CreateControl($model, $field, $instance)</p>
 #end
 #end
 
 #foreach($prop in $model.Properties)
 #if($HtmlHelper.CanHandle($prop))
-<p>
-$HtmlHelper.CreateControl($model, $prop, $instance)
-</p>
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
 #end
 #end
 
 #foreach($prop in $model.NotMappedProperties)
 #if($HtmlHelper.CanHandle($prop))
-<p>
-$HtmlHelper.CreateControl($model, $prop, $instance)
-</p>
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.BelongsTo)
+#if($HtmlHelper.CanHandle($prop))
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.HasMany)
+#if($HtmlHelper.CanHandle($prop))
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.HasAndBelongsToMany)
+#if($HtmlHelper.CanHandle($prop))
+<p valign="top">$HtmlHelper.CreateControl($model, $prop, $instance)</p>
 #end
 #end
 
@@ -47,19 +55,13 @@ $HtmlHelper.CreateControl($model, $prop, $instance)
 #end
 
 #end
-  
-  $HtmlHelper.EndFieldSet()
-    </td>
-  </tr>
-  
-  <tr>
-    <td align="center">$HtmlHelper.SubmitButton("Create")</td>
-  </tr>
 
-</table>
+$HtmlHelper.SubmitButton("Create")
 
-$HtmlHelper.EndForm()
+</div>
 
-<p align="center">
+<p>
 Back | List
 </p>
+
+$HtmlHelper.EndForm()

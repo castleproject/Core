@@ -142,7 +142,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		private void ProcessViewData(int startIndex, int endIndex, IList list, int pageSize, int curPage)
 		{
-			firstItem = startIndex + 1;
+			firstItem = list.Count != 0 ? startIndex + 1 : 0;
 			lastItem = endIndex;
 			totalItems = list.Count;
 	

@@ -124,11 +124,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CommonOperationUtils.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ConfirmRemoveAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -189,6 +184,16 @@
                 <File
                     RelPath = "Templates\new.vm"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "Utils\CommonOperationUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Utils\CreationUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

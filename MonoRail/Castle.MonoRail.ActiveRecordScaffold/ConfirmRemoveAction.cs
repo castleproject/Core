@@ -42,7 +42,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			ReadPkFromParams(controller);
+//			ReadPkFromParams(controller);
 
 			try
 			{

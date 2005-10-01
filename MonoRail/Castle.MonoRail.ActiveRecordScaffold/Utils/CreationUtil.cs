@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestScaffolding.Model
+namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 
-	using Castle.ActiveRecord;
 
-//	public enum CallBy
-//	{
-//		Mr,
-//		Ms,
-//		Lord,
-//		Duke
-//	}
-
-	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="customer")]
-	public class Customer : Person
+	public abstract class CreationUtil
 	{
-		public Customer()
+		private CreationUtil() { }
+
+		public static object Create( Type type )
 		{
+			try
+			{
+				return Activator.CreateInstance( type );
+			}
+			catch(Exception ex)
+			{
+				return null;
+			}
 		}
 	}
 }

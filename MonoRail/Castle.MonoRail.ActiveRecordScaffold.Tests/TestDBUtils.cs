@@ -29,13 +29,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 		{
 			ActiveRecordStarter.Initialize( 
 				ConfigurationSettings.GetConfig( "activerecord" ) as IConfigurationSource, 
-				typeof(Blog), typeof(Person), typeof(Customer) );
+				typeof(Blog), typeof(Person), typeof(Customer), typeof(Account),
+				typeof(AccountPermission), typeof(ProductLicense) );
 
 			ActiveRecordStarter.CreateSchema();
 
 			using(new SessionScope())
 			{
-				for(int i=1; i <= 5; i++)
+				for(int i=1; i <= 15; i++)
 				{
 					Blog blog = new Blog();
 					blog.Name = "Name " + i.ToString();
@@ -43,7 +44,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 					blog.Save();
 				}
 
-				for(int i=1; i <= 5; i++)
+				for(int i=1; i <= 15; i++)
 				{
 					Person person = new Person();
 					person.Name = "Name " + i.ToString();

@@ -46,7 +46,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			CreateInstanceFromFormData(controller);
+//			CreateInstanceFromFormData(controller);
 
 			try
 			{

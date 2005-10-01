@@ -18,19 +18,33 @@ namespace TestScaffolding.Model
 
 	using Castle.ActiveRecord;
 
-//	public enum CallBy
-//	{
-//		Mr,
-//		Ms,
-//		Lord,
-//		Duke
-//	}
-
-	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="customer")]
-	public class Customer : Person
+	[ActiveRecord]
+	public class AccountPermission : ActiveRecordBase
 	{
-		public Customer()
+		private int id;
+		private String name;
+
+		public AccountPermission()
 		{
+		}
+
+		[PrimaryKey]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		[Property]
+		public String Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public override string ToString()
+		{
+			return String.Format(name);
 		}
 	}
 }

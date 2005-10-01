@@ -17,21 +17,21 @@ namespace TestScaffolding.Model
 	using System;
 
 	using Castle.ActiveRecord;
+	using Iesi.Collections;
 
-
-	[ActiveRecord("Persons", DiscriminatorColumn="type", DiscriminatorValue="person")]
-	public class Person : ActiveRecordValidationBase
+	[ActiveRecord]
+	public class Account : ActiveRecordValidationBase
 	{
 		private int id;
 		private String name;
 		private String email;
-		private int age;
-		private DateTime dob;
-		private ContactInfo info;
+		private String password;
+		private String confirmationpassword;
+		private ProductLicense productLicense;
+		private ISet permissions;
 
-		public Person()
+		public Account()
 		{
-			dob = DateTime.Now;
 		}
 
 		[PrimaryKey]
@@ -41,39 +41,47 @@ namespace TestScaffolding.Model
 			set { id = value; }
 		}
 
-		[Nested]
-		public ContactInfo Contact
-		{
-			get { return info; }
-			set { info = value; }
-		}
-
 		[Property, ValidateNotEmpty]
-		public String Name
+		public string Name
 		{
 			get { return name; }
 			set { name = value; }
 		}
 
 		[Property, ValidateNotEmpty, ValidateEmail]
-		public String Email
+		public string Email
 		{
 			get { return email; }
 			set { email = value; }
 		}
 
-		[Property]
-		public int Age
+		[Property, ValidateNotEmpty, ValidateConfirmation("ConfirmationPassword")]
+		public string Password
 		{
-			get { return age; }
-			set { age = value; }
+			get { return password; }
+			set { password = value; }
 		}
 
-		[Property]
-		public DateTime Dob
+		[ValidateNotEmpty]
+		public string ConfirmationPassword
 		{
-			get { return dob; }
-			set { dob = value; }
+			get { return confirmationpassword; }
+			set { confirmationpassword = value; }
+		}
+
+		[BelongsTo("license_id")]
+		public ProductLicense ProductLicense
+		{
+			get { return productLicense; }
+			set { productLicense = value; }
+		}
+
+		[HasAndBelongsToMany( typeof(AccountPermission), Table="AccountAccountPermission", 
+			 ColumnRef="permission_id", ColumnKey="account_id", Inverse=true)]
+		public ISet Permissions
+		{
+			get { return permissions; }
+			set { permissions = value; }
 		}
 	}
 }

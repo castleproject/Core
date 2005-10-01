@@ -29,6 +29,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class HtmlHelper : AbstractHelper
 	{
+		StringBuilder sb = new StringBuilder(512);
+
 		#region Fieldset
 
 		/// <summary>
@@ -105,7 +107,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String Form(String action)
 		{
-			StringWriter sbWriter = new StringWriter();
+			sb.Length = 0;
+			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			writer.WriteBeginTag("form");
@@ -169,7 +172,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String Form(String action, String id, String method, String onSubmit)
 		{
-			StringWriter sbWriter = new StringWriter();
+			sb.Length = 0;
+			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			writer.WriteBeginTag("form");
@@ -378,7 +382,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LabelFor(String forId, String label, IDictionary attributes)
 		{
-			StringWriter sbWriter = new StringWriter();
+			sb.Length = 0;
+			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			writer.WriteBeginTag("label");
@@ -530,7 +535,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			for (int i = 1930; i < 2030; i++)
 				years[index++] = i.ToString();
 
-			StringBuilder sb = new StringBuilder();
+			sb.Length = 0;
 
 			sb.Append(Select(name + "day", attributes));
 			sb.Append(CreateOptionsFromPrimitiveArray(days, value.Day.ToString()));
@@ -793,7 +798,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String SubmitButton(String value, IDictionary attributes)
 		{
-			StringWriter sbWriter = new StringWriter();
+			sb.Length = 0;
+			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			writer.WriteBeginTag("input");
@@ -881,7 +887,48 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		#endregion
 		
-		#region Create options from array
+		#region Create options
+
+		/// <summary>
+		/// TODO: Document this!
+		/// </summary>
+		/// <param name="label"></param>
+		/// <returns></returns>
+		public String OptionGroup(String label)
+		{
+			return String.Format("<optgroup label=\"{0}\">", label);
+		}
+
+		public String EndOptionGroup()
+		{
+			return String.Format("</optgroup>");
+		}
+
+		/// <summary>
+		/// TODO: Document this!
+		/// </summary>
+		public String CreateOption(String text, object value)
+		{
+			return CreateOption(text, value, null);
+		}
+
+		/// <summary>
+		/// TODO: Document this!
+		/// </summary>
+		/// <remarks>
+		/// Valid html attributes include: selected and disabled
+		/// </remarks>
+		public String CreateOption(String text, object value, IDictionary htmlAttributes)
+		{
+			if (value != null)
+			{
+				return String.Format("<OPTION {0} value=\"{1}\">{2}</OPTION>", GetAttributes(htmlAttributes), value, text);
+			}
+			else
+			{
+				return String.Format("<OPTION {0}>{1}</OPTION>", GetAttributes(htmlAttributes), text);
+			}
+		}
 
 		/// <summary>
 		/// Creates <b>option</b> elements from <see cref="Array"/>. Marks the
@@ -922,7 +969,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			if (elems.GetLength(0) == 0) return String.Empty;
 
-			StringBuilder sb = new StringBuilder();
+			sb.Length = 0;
 
 			foreach (object elem in elems)
 			{
@@ -1305,7 +1352,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				textMethodInfo = GetMethod(guidanceElem, textProperty);
 			}
 
-			StringBuilder sb = new StringBuilder();
+			sb.Length = 0;
 
 			foreach (object elem in elems)
 			{
@@ -1417,7 +1464,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildUnorderedList( ICollection )
 		/// </code>
 		/// </example>
-		public static String BuildUnorderedList(ICollection elements)
+		public String BuildUnorderedList(ICollection elements)
 		{
 			return BuildUnorderedList(elements, null, null);
 		}
@@ -1457,7 +1504,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildUnorderedList( ICollection, "styleClassArg", "itemClassArg" )
 		/// </code>
 		/// </example>
-		public static String BuildUnorderedList(ICollection elements, String styleClass, String itemClass)
+		public String BuildUnorderedList(ICollection elements, String styleClass, String itemClass)
 		{
 			return BuildList("ul", elements, styleClass, itemClass);
 		}
@@ -1495,7 +1542,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildOrderedList( ICollection )
 		/// </code>
 		/// </example>
-		public static String BuildOrderedList(ICollection elements)
+		public String BuildOrderedList(ICollection elements)
 		{
 			return BuildOrderedList(elements, null, null);
 		}
@@ -1535,7 +1582,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// $HtmlHelper.BuildOrderedList( ICollection, "styleClassArg", "itemClassArg" )
 		/// </code>
 		/// </example>
-		public static String BuildOrderedList(ICollection elements, String styleClass, String itemClass)
+		public String BuildOrderedList(ICollection elements, String styleClass, String itemClass)
 		{
 			return BuildList("ol", elements, styleClass, itemClass);
 		}
@@ -1583,9 +1630,10 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// BuildList("ol", elements, styleClass, itemClass);
 		/// </code>
 		/// </example>
-		private static String BuildList(String tag, ICollection elements, String styleClass, String itemClass)
+		private String BuildList(String tag, ICollection elements, String styleClass, String itemClass)
 		{
-			StringWriter sbWriter = new StringWriter();
+			sb.Length = 0;
+			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
 			writer.WriteBeginTag(tag);

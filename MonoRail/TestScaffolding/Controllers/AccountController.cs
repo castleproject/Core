@@ -12,24 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace TestScaffolding.Model
+namespace TestScaffolding.Controllers
 {
 	using System;
 
-	using Castle.ActiveRecord;
+	using Castle.MonoRail.Framework;
+	
+	using TestScaffolding.Model;
 
-//	public enum CallBy
-//	{
-//		Mr,
-//		Ms,
-//		Lord,
-//		Duke
-//	}
-
-	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="customer")]
-	public class Customer : Person
+	[Scaffolding( typeof(Account) )]
+	public class AccountController : Controller
 	{
-		public Customer()
+		public AccountController()
 		{
 		}
 	}

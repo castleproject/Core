@@ -18,20 +18,20 @@ namespace TestScaffolding.Model
 
 	using Castle.ActiveRecord;
 
+	using Iesi.Collections;
 
-	[ActiveRecord("Persons", DiscriminatorColumn="type", DiscriminatorValue="person")]
-	public class Person : ActiveRecordValidationBase
+	[ActiveRecord]
+	public class ProductLicense : ActiveRecordBase
 	{
 		private int id;
-		private String name;
-		private String email;
-		private int age;
-		private DateTime dob;
-		private ContactInfo info;
+		private DateTime created;
+		private DateTime expires;
+		private ISet accounts = new ListSet();
 
-		public Person()
+		public ProductLicense()
 		{
-			dob = DateTime.Now;
+			created = DateTime.Now;
+			expires = DateTime.Now.AddDays(1);
 		}
 
 		[PrimaryKey]
@@ -41,39 +41,31 @@ namespace TestScaffolding.Model
 			set { id = value; }
 		}
 
-		[Nested]
-		public ContactInfo Contact
+		[Property(Update=false, Insert=true)]
+		public DateTime Created
 		{
-			get { return info; }
-			set { info = value; }
-		}
-
-		[Property, ValidateNotEmpty]
-		public String Name
-		{
-			get { return name; }
-			set { name = value; }
-		}
-
-		[Property, ValidateNotEmpty, ValidateEmail]
-		public String Email
-		{
-			get { return email; }
-			set { email = value; }
+			get { return created; }
+			set { created = value; }
 		}
 
 		[Property]
-		public int Age
+		public DateTime Expires
 		{
-			get { return age; }
-			set { age = value; }
+			get { return expires; }
+			set { expires = value; }
 		}
 
-		[Property]
-		public DateTime Dob
+		[HasMany( typeof(Account), Inverse=true )]
+		public ISet Accounts
 		{
-			get { return dob; }
-			set { dob = value; }
+			get { return accounts; }
+			set { accounts = value; }
+		}
+
+		public override string ToString()
+		{
+			return String.Format("License Created at {0} Expires at {1}", 
+				created.ToShortDateString(), expires.ToShortDateString());
 		}
 	}
 }

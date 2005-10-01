@@ -42,7 +42,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			ReadPkFromParams(controller);
+//			ReadPkFromParams(controller);
 
 			try
 			{
@@ -59,32 +59,32 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			base.GenerateHtmlForm( Model.Type.Name, Model, instance, controller, "Edit" );
+//			base.GenerateHtmlForm( Model.Type.Name, Model, instance, controller, "Edit" );
 		}
 
-		protected override void AddHiddenFields(StringBuilder sb)
-		{
-			sb.Append( helper.InputHidden( keyProperty.Name, idVal.ToString() ) );
-		}
-
-		protected override void CreateForm(StringBuilder sb, String name, Controller controller)
-		{
-			sb.Append( helper.Form( String.Format("update{0}.{1}", 
-				name, controller.Context.UrlInfo.Extension) ) );
-		}
-
-		protected void ReadPkFromParams(Controller controller)
-		{
-			ObtainPKProperty();
-	
-			String id = controller.Context.Params["id"];
-	
-			if (id == null)
-			{
-				throw new ScaffoldException("Can't edit without the proper id");
-			}
-	
-			idVal = DataBinder.Convert( keyProperty.PropertyType, id, "id", null, controller.Context );
-		}
+//		protected override void AddHiddenFields(StringBuilder sb)
+//		{
+//			sb.Append( helper.InputHidden( keyProperty.Name, idVal.ToString() ) );
+//		}
+//
+//		protected override void CreateForm(StringBuilder sb, String name, Controller controller)
+//		{
+//			sb.Append( helper.Form( String.Format("update{0}.{1}", 
+//				name, controller.Context.UrlInfo.Extension) ) );
+//		}
+//
+//		protected void ReadPkFromParams(Controller controller)
+//		{
+//			ObtainPKProperty();
+//	
+//			String id = controller.Context.Params["id"];
+//	
+//			if (id == null)
+//			{
+//				throw new ScaffoldException("Can't edit without the proper id");
+//			}
+//	
+//			idVal = DataBinder.Convert( keyProperty.PropertyType, id, "id", null, controller.Context );
+//		}
 	}
 }

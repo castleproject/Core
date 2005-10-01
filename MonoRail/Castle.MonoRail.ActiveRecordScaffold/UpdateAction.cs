@@ -49,13 +49,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			ReadPkFromParams(controller);
+//			ReadPkFromParams(controller);
 
 			try
 			{
 				instance = SupportingUtils.FindByPK( Model.Type, idVal );
 
-				CreateInstanceFromFormData(instance, controller);
+//				CreateInstanceFromFormData(instance, controller);
 			}
 			catch(Exception ex)
 			{

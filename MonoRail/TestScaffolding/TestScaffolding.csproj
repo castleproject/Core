@@ -167,6 +167,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Controllers\AccountController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\BlogsController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -186,7 +191,22 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Model\Account.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\AccountPermission.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Blog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\ContactInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -197,6 +217,11 @@
                 />
                 <File
                     RelPath = "Model\Person.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\ProductLicense.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
