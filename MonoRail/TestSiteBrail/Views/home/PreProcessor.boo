@@ -9,6 +9,7 @@ import Boo.Lang
 <%
 for i in Builtins.range(3):
     output "<li>${i}</li>"
+end
 %>
 </ul>
 </body>

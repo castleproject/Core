@@ -4,4 +4,5 @@ Customer is ${CustomerName}
 <%
 for element in List:
 	output element
+end
 %>

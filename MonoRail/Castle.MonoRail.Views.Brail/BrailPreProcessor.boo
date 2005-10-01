@@ -22,14 +22,14 @@ class BrailPreProcessor(AbstractCompilerStep):
         new = []
         for input in self.Parameters.Input:
             using reader=input.Open():
-                code = booify(reader.ReadToEnd())
+                code = Booify(reader.ReadToEnd())
                 #print join("${i+1}:${line}" for i as int, line in enumerate(System.IO.StringReader(code)), "\n")
                 new.Add(StringInput(input.Name, code))
         self.Parameters.Input.Clear()
         for input in new:
             self.Parameters.Input.Add(input)                
         
-    def booify(code as string):
+    static def Booify(code as string):
         buffer = System.IO.StringWriter()
         output = def(code as string):
             return if len(code) == 0

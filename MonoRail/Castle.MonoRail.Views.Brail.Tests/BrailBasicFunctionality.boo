@@ -63,7 +63,8 @@ class BrailBasicFunctionality(BasicFunctionalityTestCase):
 			old = read.ReadToEnd()
 		new = """
 def SayHello(name as string):
-	return "Hello, \${name}! Modified!" """
+	return "Hello, \${name}! Modified!" 
+end"""
 		using write = File.CreateText(common ):
 			write.Write(new)
 		url = "/home/hellofromcommon.rails"

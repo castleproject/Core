@@ -21,6 +21,7 @@
     <Reference type="Assembly" refto="..\..\Vendor\Castle.MonoRail.Framework.dll" localcopy="True" />
     <Reference type="Assembly" refto="..\..\Vendor\log4net.dll" localcopy="True" />
     <Reference type="Assembly" refto="..\..\vendor\Log4Net.Useful.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\lib\WSABoo.Parser.dll" localcopy="True" />
   </References>
   <DeploymentInformation target="" script="" strategy="File" />
   <Configuration runwithwarnings="True" name="Debug">

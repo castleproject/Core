@@ -59,6 +59,7 @@
 				<include name="${bin2.dir}/log4net.dll" />
 				<include name="${bin2.dir}/NVelocity.dll" />
 				<include name="${bin2.dir}/NHibernate.dll" />
+				<include name="${bin2.dir}/Iesi.Collections.dll" />
 			</references>
 		</csc>
 		<copy todir="../bin">

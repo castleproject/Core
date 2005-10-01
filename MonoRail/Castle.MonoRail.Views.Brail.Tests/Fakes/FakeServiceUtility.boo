@@ -20,3 +20,8 @@ class FakeServiceUtility(IServerUtility):
 	def HtmlEncode(content as string) as string:
 		return content.Replace("<", "&lt;").Replace(">", "&gt;")
 
+	def UrlPathEncode(url as string):
+		return HtmlEncode(url)
+		
+	def UrlEncode(url as string):
+		return HtmlEncode(url)

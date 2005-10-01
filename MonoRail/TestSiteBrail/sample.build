@@ -26,6 +26,7 @@
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Views.Brail.dll" />
 				<include name="Boo.Lang.dll" />
+				<include name="WSABoo.Parser.dll" />
 				<include name="Boo.Lang.Compiler.dll" />
 				<include name="Boo.Lang.Parser.dll" />
 				<include name="anrControls.Markdown.NET.dll" />

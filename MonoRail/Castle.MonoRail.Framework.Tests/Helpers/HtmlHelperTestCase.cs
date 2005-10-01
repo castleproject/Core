@@ -50,18 +50,19 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void BuildUnorderedList1()
 		{
 			String[] args = new String[] { "arg1", "arg2" };
-
+			HtmlHelper helper = new HtmlHelper();
 			Assert.AreEqual( "<ul>\r\n<li>arg1</li>\r\n<li>arg2</li>\r\n</ul>\r\n", 
-				HtmlHelper.BuildUnorderedList(args) );
+				helper.BuildUnorderedList(args) );
 		}
 
 		[Test]
 		public void BuildUnorderedList2()
 		{
 			String[] args = new String[] { "arg1" };
-
+			HtmlHelper helper = new HtmlHelper();
+		
 			Assert.AreEqual( "<ul class=\"style1\">\r\n<li class=\"style2\">arg1</li>\r\n</ul>\r\n", 
-				HtmlHelper.BuildUnorderedList(args, "style1", "style2") );
+				helper.BuildUnorderedList(args, "style1", "style2") );
 		}
 
 		

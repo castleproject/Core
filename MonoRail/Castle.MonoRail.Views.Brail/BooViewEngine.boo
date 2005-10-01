@@ -178,7 +178,11 @@ public class BooViewEngine (ViewEngineBase):
 		result = DoCompile(inputs,name)
 		if result.Errors.Count:
 			if not batch:
-				raise RailsException("Error during compile:\r\n${result.Errors.ToString()}")
+				#This can be very useful to figure out things, but it's also pretty bad
+				#security wise.
+				#code = BrailPreProcessor.Booify(System.IO.File.OpenText(filename).ReadToEnd())
+				#code = System.Web.HttpUtility.HtmlEncode(code)
+				raise RailsException("Error during compile:\r\n${result.Errors.ToString()}\r\nCode:\r\n")
 			#error compiling a batch, let's try a single file
 			return CompileScript(filename,false)
 		
@@ -274,6 +278,9 @@ public class BooViewEngine (ViewEngineBase):
 			compiler.Parameters.Pipeline = CompileToFile()
 		else:
 			compiler.Parameters.Pipeline = CompileToMemory()
+		# replace the normal parser with white space agnostic one.
+		compiler.Parameters.Pipeline.RemoveAt(0)
+		compiler.Parameters.Pipeline.Insert(0, WSABoo.Parser.WSABooParsingStep() )
 		for file in files:
 			compiler.Parameters.Input.Add(file)
 		for assembly as System.Reflection.Assembly in options.AssembliesToReference:

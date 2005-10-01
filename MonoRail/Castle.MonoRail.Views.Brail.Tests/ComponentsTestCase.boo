@@ -81,7 +81,7 @@ class ComponentsTestCase:
 	def BlockWithinForEach():
 		context as RailsEngineContextImpl = RailsEngineContextImpl('/usingcomponents/index8.rails')
 		engine.Process(context)
-		Assert.AreEqual('inner content 1\r\ninner content 2\r\n', context.Output)
+		Assert.AreEqual('\r\ninner content 1\r\n\r\ninner content 2\r\n', context.Output)
 	
 	[Test]
 	def SeveralComponentsInvocation():

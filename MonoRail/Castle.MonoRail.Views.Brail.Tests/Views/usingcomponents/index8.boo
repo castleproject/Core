@@ -1,4 +1,6 @@
-<%
-for it in items:
-	component BlockViewComponent2, {"role":"x"}:
-		%>inner content ${it}
+<% for it in items: %>
+<% 
+component BlockViewComponent2, {"role":"x"}:
+	output "inner content ${it}\r\n"
+end 
+end %>

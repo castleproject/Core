@@ -26,6 +26,7 @@
 				<include name="System.Xml.dll"/>
 				<include name="System.Web.dll"/>
 				<include name="${library.dir}\anrControls.Markdown.NET.dll"/>
+				<include name="${library.dir}\WSABoo.Parser.dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.Framework.dll"/>
 			</references>
 		</booc>
