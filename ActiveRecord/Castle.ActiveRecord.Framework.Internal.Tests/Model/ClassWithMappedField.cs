@@ -16,5 +16,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			get { return id; }
 			set { id = value; }
 		}
+
+		[Property(CustomAccess="CustomAccess")]
+		public int Value
+		{
+			get { return id;}
+			set { id = value;}
+		}
 	}
 }

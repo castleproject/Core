@@ -20,11 +20,28 @@ namespace Castle.ActiveRecord
 	public class WithAccessAttribute : Attribute
 	{
 		private PropertyAccess _access;
-		
+		private string _customAccess;
+
 		public PropertyAccess Access
 		{
 			get { return _access; }
 			set { _access = value; }
+		}
+
+		public string CustomAccess
+		{
+			get { return _customAccess;}
+			set { _customAccess=value;}
+		}
+
+		public string AccessString
+		{
+			get
+			{
+				if (CustomAccess!=null)
+					return CustomAccess;
+				return PropertyAccessHelper.ToString(Access);
+			}
 		}
 	}
 }

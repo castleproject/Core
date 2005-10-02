@@ -80,6 +80,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
 				"    <property name=\"name1\" access=\"field\" column=\"MyCustomName\" type=\"System.String\"        />\r\n" + 
+				"    <property name=\"Value\" access=\"CustomAccess\" column=\"Value\" type=\"Int32\"        />\r\n"+
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
 

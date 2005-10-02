@@ -152,7 +152,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			AppendF("<id {0} {1} {2} {3} {4} {5}>",
 				MakeAtt("name", model.Property.Name), 
-				MakeAtt("access", PropertyAccessHelper.ToString(model.PrimaryKeyAtt.Access)),
+				MakeAtt("access", model.PrimaryKeyAtt.AccessString),
 				MakeAtt("column", model.PrimaryKeyAtt.Column),
 				MakeTypeAtt(model.Property.PropertyType, model.PrimaryKeyAtt.ColumnType),
 				WriteIfNotZero("length", model.PrimaryKeyAtt.Length), 
@@ -196,7 +196,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			AppendF("<property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} />",
 				MakeAtt("name", model.Property.Name), 
-				MakeAtt("access", PropertyAccessHelper.ToString(model.PropertyAtt.Access)),
+				MakeAtt("access", model.PropertyAtt.AccessString),
 				MakeAtt("column", model.PropertyAtt.Column),
 				MakeTypeAtt(model.Property.PropertyType, model.PropertyAtt.ColumnType),
 				WriteIfNotZero("length", model.PropertyAtt.Length), 
@@ -212,7 +212,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			AppendF("<property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} />",
 				MakeAtt("name", model.Field.Name),
-				MakeAtt("access", PropertyAccessHelper.ToString(model.FieldAtt.Access)),
+				MakeAtt("access", model.FieldAtt.AccessString),
 				MakeAtt("column", model.FieldAtt.Column),
 				MakeTypeAtt(model.Field.FieldType, model.FieldAtt.ColumnType),
 				WriteIfNotZero("length", model.FieldAtt.Length), 
@@ -228,7 +228,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			AppendF("<version {0} {1} {2} {3} />", 
 				MakeAtt("name", model.Property.Name),
-				MakeAtt("access", PropertyAccessHelper.ToString(model.VersionAtt.Access)),
+				MakeAtt("access", model.VersionAtt.AccessString),
 				MakeAtt("column", model.VersionAtt.Column),
 				MakeTypeAtt(model.Property.PropertyType, model.VersionAtt.Type));
 		}
@@ -237,7 +237,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			AppendF("<timestamp {0} {1} {2} />", 
 				MakeAtt("name", model.Property.Name),
-				MakeAtt("access", PropertyAccessHelper.ToString(model.TimestampAtt.Access)),
+				MakeAtt("access", model.TimestampAtt.AccessString),
 				MakeAtt("column", model.TimestampAtt.Column));
 		}
 
@@ -252,7 +252,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			AppendF("<one-to-one {0} {1} {2} />", 
 				MakeAtt("name", model.Property.Name),
-				MakeAtt("access", PropertyAccessHelper.ToString(model.OneToOneAtt.Access)),
+				MakeAtt("access", model.OneToOneAtt.AccessString),
 				MakeAtt("class", MakeTypeName(model.Property.PropertyType)), 
 				WriteIfNonNull("cascade", cascade), 
 				WriteIfNonNull("outer-join", TranslateOuterJoin(model.OneToOneAtt.OuterJoin)),
@@ -266,7 +266,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			AppendF("<many-to-one {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}/>", 
 				MakeAtt("name", model.Property.Name),
-				MakeAtt("access", PropertyAccessHelper.ToString(model.BelongsToAtt.Access)),
+				MakeAtt("access", model.BelongsToAtt.AccessString),
 				MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type) ), 
 				MakeAtt("column", model.BelongsToAtt.Column),
 				WriteIfFalse("insert", model.BelongsToAtt.Insert), 
@@ -282,7 +282,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			HasManyAttribute att = model.HasManyAtt;
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name, 
-				model.HasManyAtt.Access,att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
+				model.HasManyAtt.AccessString,att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
 				att.Where, att.Sort, att.ColumnKey, null, null, att.Index, att.IndexType, 
 				att.Cache);
 		}
@@ -292,7 +292,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			HasAndBelongsToManyAttribute att = model.HasManyAtt;
 
 			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name, 
-				att.Access, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
+				att.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy, 
 				att.Where, att.Sort, att.ColumnKey, att.ColumnRef, model.CollectionID, 
 				att.Index, att.IndexType, att.Cache);
 		}
@@ -333,7 +333,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		private void WriteCollection(ManyRelationCascadeEnum cascadeEnum, Type targetType,
-			RelationType type, String name, PropertyAccess access,
+			RelationType type, String name, string accessString,
 			String table, String schema, bool lazy, bool inverse, String orderBy, 
 			String where, String sort, String columnKey, String columnRef, CollectionIDModel collectionId,
 			String index, String indexType, CacheEnum cache)
@@ -348,7 +348,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				AppendF("<bag {0} {1} {2} {3} {4} {5} {6} {7} {8} >", 
 					MakeAtt("name", name),
-					MakeAtt("access", PropertyAccessHelper.ToString(access)),
+					MakeAtt("access", accessString),
 					WriteIfNonNull("table", table ), 
 					WriteIfNonNull("schema", schema ),
 					WriteIfTrue("lazy", lazy), 
@@ -363,7 +363,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				AppendF("<set {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}>", 
 					MakeAtt("name", name),
-					MakeAtt("access", PropertyAccessHelper.ToString(access)),
+					MakeAtt("access", accessString),
 					WriteIfNonNull("table", table ), 
 					WriteIfNonNull("schema", schema ),
 					WriteIfTrue("lazy", lazy), 
@@ -379,7 +379,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				AppendF("<idbag {0} {1} {2} {3} {4} {5} {6} {7}>", 
 					MakeAtt("name", name),
-					MakeAtt("access", PropertyAccessHelper.ToString(access)),
+					MakeAtt("access", accessString),
 					WriteIfNonNull("table", table ), 
 					WriteIfNonNull("schema", schema ),
 					WriteIfTrue("lazy", lazy), 
@@ -395,7 +395,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				AppendF("<map {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}>", 
 					MakeAtt("name", name),
-					MakeAtt("access", PropertyAccessHelper.ToString(access)),
+					MakeAtt("access", accessString),
 					WriteIfNonNull("table", table ), 
 					WriteIfNonNull("schema", schema ),
 					WriteIfTrue("lazy", lazy), 
