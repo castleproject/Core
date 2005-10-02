@@ -3,13 +3,13 @@ using System;
 namespace Castle.Facilities.Cache.Tests
 {
 	/// <summary>
-	/// Description résumée de ServiceA.
+	/// Description résumée de ServiceC.
 	/// </summary>
 	[Cache("FifoCacheManager")]
-	public class ServiceA : IServiceA
+	public class ServiceC : IServiceC
 	{
 
-		#region Membres de IServiceA
+		#region Membres de IServiceC
 
 		[Cache]
 		public decimal MyMethod(int a , decimal c)

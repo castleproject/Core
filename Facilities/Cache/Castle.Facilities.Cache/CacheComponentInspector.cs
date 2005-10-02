@@ -14,6 +14,7 @@
 
 using System;
 using System.Reflection;
+using Castle.Facilities.Cache.Manager;
 using Castle.MicroKernel;
 using Castle.MicroKernel.ModelBuilder;
 using Castle.MicroKernel.SubSystems.Conversion;
@@ -25,11 +26,23 @@ namespace Castle.Facilities.Cache
 	/// <summary>
 	/// Description résumée de CacheComponentInspector.
 	/// </summary>
+	/// <example>
+	///		<component id="ServiceA"
+	///			 cache="true"
+	///		     service="TestConfig.IServiceA, TestConfig" 
+	///		     type="TestConfig.ServiceA, TestConfig">
+	///		  <cache ref="CacheManager">
+	///		    <method>MyMethod</method>
+	///		  </cache>
+	//		</component>
+	/// </example>
 	public class CacheComponentInspector : IContributeComponentModelConstruction
 	{
-		CacheConfigHolder _cacheConfigHolder = null;
+		private CacheConfigHolder _cacheConfigHolder = null;
+		private Castle.MicroKernel.IKernel _kernel =null;
+		private Castle.Model.ComponentModel _model =null;
 
-		#region Membres de IContributeComponentModelConstruction
+		#region IContributeComponentModelConstruction Members
 
 		public void ProcessModel(Castle.MicroKernel.IKernel kernel, Castle.Model.ComponentModel model)
 		{
@@ -41,12 +54,48 @@ namespace Castle.Facilities.Cache
 				model.Interceptors.Add( new InterceptorReference(typeof(CacheInterceptor)) );
 
 				_cacheConfigHolder = kernel[ typeof(CacheConfigHolder) ] as CacheConfigHolder;
-				CacheConfig config = CreateCacheConfig(model);
-				_cacheConfigHolder.Register(model.Implementation, config);
+				_model = model;
+				_kernel = kernel;
+				kernel.ComponentRegistered += new ComponentDataDelegate(OnComponentRegistered);
 			}		
 		}
 
-		
+		private void OnComponentRegistered(String key, IHandler handler)
+		{
+			object obj =_kernel[key];
+
+
+			if ( typeof(ICacheManager).IsInstanceOfType( obj ) )
+			{
+				CacheConfig config = CreateCacheConfig(_kernel, _model);
+				_cacheConfigHolder.Register(_model.Implementation, config);
+			}
+			else
+			{
+				if (IsCacheModelOn(_kernel, _model))
+				{
+					// Check .NET attribut Cache or config attribute ref 
+					string cacheManagerId = GetCacheManagerId( _model );
+					// Check if cacheManager is regsitered
+					try
+					{
+						ICacheManager cacheManager = _kernel[cacheManagerId] as ICacheManager;
+						// si oui faire CreateCacheConfig	
+						if (cacheManager!=null)
+						{
+							CacheConfig config = CreateCacheConfig(_kernel, _model);
+							_cacheConfigHolder.Register(_model.Implementation, config);
+						}						
+					}
+					catch
+					{
+						// The ICacheManager has not yet been registered
+						// it will be "injected" on ComponentRegistered event
+					}
+				}				
+			}
+		}
+
 		private bool IsCacheModelOn(Castle.MicroKernel.IKernel kernel, ComponentModel model)
 		{
 			IConversionManager converter = kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey ) as IConversionManager;
@@ -71,38 +120,68 @@ namespace Castle.Facilities.Cache
 		}
 
 
-		private CacheConfig CreateCacheConfig(ComponentModel model)
+		private string GetCacheManagerId(ComponentModel model)
 		{
-			CacheConfig config = new CacheConfig();
-			GatherTransactionConfiguration(config, model);
+			string cacheManagerId = string.Empty;
+
+			if (model.Configuration != null)
+			{
+				IConfiguration cacheNode = model.Configuration.Children["cache"];
+
+				if (cacheNode != null)
+				{
+					cacheManagerId = cacheNode.Attributes["ref"];
+				}
+			}
+			else
+			{
+				if ( model.Implementation.IsDefined( typeof(CacheAttribute), true ) )
+				{
+					CacheAttribute[] attributs = 
+						model.Implementation.GetCustomAttributes(typeof(CacheAttribute), true) as CacheAttribute[];
+					cacheManagerId = attributs[0].CacheManagerId;
+				}
+			}
+
+			return cacheManagerId;
+		}
+
+		
+		private CacheConfig CreateCacheConfig(Castle.MicroKernel.IKernel kernel,ComponentModel model)
+		{
+			CacheConfig config = BuildCacheConfig(kernel, model);
+
+			GatherCacheConfiguration(config, model);
 			GatherCacheAttributes(config, model.Implementation);
 			return config;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="config"></param>
-		/// <param name="model"></param>
-		/// <example>
-		///		<component id="ServiceA"
-		///			 cache="true"
-		///		     service="TestConfig.IServiceA, TestConfig" 
-		///		     type="TestConfig.ServiceA, TestConfig">
-		///		  <cache>
-		///		    <method>MyMethod</method>
-		///		  </cache>
-		//		</component>
-		/// </example>
-		private void GatherTransactionConfiguration(CacheConfig config, ComponentModel model)
+		
+		private CacheConfig BuildCacheConfig(Castle.MicroKernel.IKernel kernel,ComponentModel model)
+		{
+			ICacheManager cacheManager = null;
+			string cacheManagerId = GetCacheManagerId(model);
+
+			if (cacheManagerId == string.Empty )
+			{
+				throw new ArgumentException("You need to specify a CacheManager via attribute or ref attribute in config file.");
+			}
+
+			cacheManager = (ICacheManager)kernel[cacheManagerId];
+			CacheConfig cacheConfig = new CacheConfig(cacheManager);
+			return cacheConfig; 
+		}
+
+
+		private void GatherCacheConfiguration(CacheConfig config, ComponentModel model)
 		{
 			if (model.Configuration == null) return;
 			
-			IConfiguration transactionNode = model.Configuration.Children["cache"];
+			IConfiguration cacheNode = model.Configuration.Children["cache"];
 
-			if (transactionNode == null) return;
+			if (cacheNode == null) return;
 
-			foreach(IConfiguration methodNode in transactionNode.Children)
+			foreach(IConfiguration methodNode in cacheNode.Children)
 			{
 				config.AddMethodName( methodNode.Value );
 			}
@@ -121,6 +200,8 @@ namespace Castle.Facilities.Cache
 				}
 			}
 		}
+
+
 		#endregion
 	}
 }

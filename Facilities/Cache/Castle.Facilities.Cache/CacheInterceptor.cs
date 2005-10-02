@@ -24,13 +24,10 @@ namespace Castle.Facilities.Cache
 	/// </summary>
 	public class CacheInterceptor : IMethodInterceptor
 	{
-		ICacheManager _cacheManager = null;
-
 		private CacheConfigHolder _cacheConfigHolder = null;
 
-		public CacheInterceptor(CacheConfigHolder transactionConfHolder, ICacheManager cacheManager)
+		public CacheInterceptor(CacheConfigHolder transactionConfHolder)
 		{
-			_cacheManager= cacheManager;
 			_cacheConfigHolder = transactionConfHolder;
 		}
 
@@ -39,21 +36,20 @@ namespace Castle.Facilities.Cache
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
 			CacheConfig config = _cacheConfigHolder.GetConfig( invocation.Method.DeclaringType );
+			ICacheManager cacheManager = config.CacheManager;
 
 			if (config != null && config.IsMethodCache( invocation.Method ))
 			{
 				String cacheKey = GetCacheKey( invocation, args );
-				object result = _cacheManager[ cacheKey ];
+				object result = cacheManager[ cacheKey ];
 
 				if (result == null)
 				{
 					//call target/sub-interceptor
-//					Console.WriteLine("calling intercepted method") ;
 					result = invocation.Proceed(args);
 
 					//cache method result
-//					Console.WriteLine("caching result");
-					_cacheManager[ cacheKey ] = result;
+					cacheManager[ cacheKey ] = result;
 				}
 				
 				return result;

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading;
 using NUnit.Framework;
 using Castle.Windsor;
 
@@ -19,6 +20,7 @@ namespace Castle.Facilities.Cache.Tests
 		{
 			_container = new WindsorContainer("Castle.Facilities.Cache.Tests.config");
 			_container.AddComponent("ServiceA",typeof(IServiceA), typeof(ServiceA));
+			_container.AddComponent("ServiceC",typeof(IServiceC), typeof(ServiceC));
 		}
 
 		[TestFixtureTearDown]
@@ -56,6 +58,28 @@ namespace Castle.Facilities.Cache.Tests
 
 			serviceB.MyMethod("cache", "serviceB", "MyMethod");
 			Assert.AreEqual(consoleContents, _outWriter.GetStringBuilder().ToString() );
+		}
+
+		[Test]
+		public void TestFicoCache()
+		{
+			IServiceA serviceA = _container[typeof(IServiceA)] as IServiceA;
+			IServiceC serviceC = _container[typeof(IServiceC)] as IServiceC;
+
+			serviceA.MyMethod(2, 5.5M);
+			string consoleContents = _outWriter.GetStringBuilder().ToString();
+
+			serviceC.MyMethod(2, 5.5M);
+
+			ReplaceOut();
+			
+			// Wait a moment
+			DateTime startTime = DateTime.Now;
+			while(startTime.Millisecond==DateTime.Now.Millisecond)
+			{}
+
+			serviceA.MyMethod(2, 5.5M);
+			Assert.IsFalse( consoleContents == _outWriter.GetStringBuilder().ToString() );
 		}
 	}
 }

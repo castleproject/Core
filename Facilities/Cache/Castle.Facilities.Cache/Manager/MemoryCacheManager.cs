@@ -68,15 +68,6 @@ namespace Castle.Facilities.Cache.Manager
 			}				
 		}
 
-		/// <summary>
-		/// Configures the CacheController
-		/// </summary>
-		/// <param name="properties"></param>
-		public void Configure(IDictionary properties)
-		{
-			
-		}
-
 		#endregion
 	}
 }

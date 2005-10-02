@@ -22,6 +22,21 @@ namespace Castle.Facilities.Cache
 	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false)]
 	public class CacheAttribute : System.Attribute
 	{
+		string _cacheManagerId = string.Empty;
 
+		public string CacheManagerId
+		{
+			get { return _cacheManagerId; }
+		}
+
+		public CacheAttribute()
+		{
+			_cacheManagerId = "MemoryCacheManager";
+		}
+
+		public CacheAttribute(string cacheManagerId)
+		{
+			_cacheManagerId = cacheManagerId;
+		}
 	}
 }

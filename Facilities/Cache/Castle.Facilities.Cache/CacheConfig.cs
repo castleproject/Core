@@ -15,6 +15,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using Castle.Facilities.Cache.Manager;
 
 namespace Castle.Facilities.Cache
 {
@@ -25,6 +26,17 @@ namespace Castle.Facilities.Cache
 	{
 		private IList _methods = new ArrayList();
 		private IList _methodName = new ArrayList();
+		private ICacheManager _cacheManager = null;
+
+		public ICacheManager CacheManager
+		{
+			get { return _cacheManager; }
+		}
+
+		public CacheConfig(ICacheManager cacheManager)
+		{
+			_cacheManager = cacheManager;
+		}
 
 		public void AddMethodName(string value)
 		{
