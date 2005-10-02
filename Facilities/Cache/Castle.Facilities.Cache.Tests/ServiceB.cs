@@ -7,19 +7,15 @@ namespace Castle.Facilities.Cache.Tests
 	/// </summary>
 	public class ServiceB : IServiceB
 	{
-		public ServiceB()
-		{
-			//
-			// TODO : ajoutez ici la logique du constructeur
-			//
-		}
 
 		#region Membres de IServiceB
 
 		public string MyMethod(string a, string b, string c)
 		{
-			// TODO : ajoutez l'implémentation de ServiceB.MyMethod
-			return a+b+c;
+			string ret = a+b+c;
+
+			Console.Write( ret.ToString() + Environment.TickCount.ToString() );
+			return ret;
 		}
 
 		#endregion

@@ -8,19 +8,16 @@ namespace Castle.Facilities.Cache.Tests
 	[Cache]
 	public class ServiceA : IServiceA
 	{
-		public ServiceA()
-		{
-			//
-			// TODO : ajoutez ici la logique du constructeur
-			//
-		}
 
 		#region Membres de IServiceA
 
 		[Cache]
 		public decimal MyMethod(int a , decimal c)
 		{
-			return (a+c);
+			decimal ret = a+c;
+
+			Console.Write(ret.ToString() + Environment.TickCount.ToString());
+			return (ret);
 		}
 
 		#endregion
