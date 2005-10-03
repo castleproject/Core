@@ -19,6 +19,7 @@ namespace Castle.Facilities.NHibernateExtension
 	using System.Collections;
 	using System.Threading;
 	using System.Runtime.CompilerServices;
+
 	using NHibernate;
 
 	/// <summary>

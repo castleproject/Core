@@ -1,4 +1,8 @@
 
+Version ???
+
+- Test cases simplified by the introduction of facilityconfig.xml
+
 Alpha Version 1.0.0
 - First release
 

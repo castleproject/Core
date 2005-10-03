@@ -16,6 +16,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 {
 	using System;
 	using System.Collections;
+
 	using Castle.Facilities.AutomaticTransactionManagement;
 	using Castle.Windsor;
 
@@ -29,7 +30,6 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		public void DeletionNeedsFlush()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
-			container.AddFacility("nhibernate", new NHibernateFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 
 			container.AddComponent("blogdao", typeof(BlogDao));
@@ -54,7 +54,6 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		public void FlushAndTransaction()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
-			container.AddFacility("nhibernate", new NHibernateFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 
 			container.AddComponent("blogdao", typeof(BlogDaoTransactional));

@@ -14,14 +14,11 @@
 
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
-	using System;
 	using System.Collections;
 	
 	using NUnit.Framework;
 	
 	using Castle.Windsor;
-	using Castle.Model.Configuration;
-	using Castle.MicroKernel.SubSystems.Configuration;
 
 	using NHibernate;
 
@@ -35,7 +32,6 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		public void Usage()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
-			container.AddFacility("nhibernate", new NHibernateFacility());
 
 			ISessionFactory factory = (ISessionFactory) container["sessionFactory1"];
 			ISession session = factory.OpenSession();

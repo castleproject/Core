@@ -27,6 +27,12 @@
 	</target>
 	
 	<target name="init" depends="clean">
+		<copy todir="${library.dir}">
+			<fileset basedir="../../ActiveRecord/lib">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	
 		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />

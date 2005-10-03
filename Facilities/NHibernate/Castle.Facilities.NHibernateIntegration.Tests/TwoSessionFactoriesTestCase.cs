@@ -22,21 +22,14 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 	using Castle.Facilities.AutomaticTransactionManagement;
 	using Castle.Windsor;
 	
-	using Castle.Model.Configuration;
 
 	[TestFixture]
 	public class TwoSessionFactoriesTestCase : AbstractNHibernateTestCase
 	{
-		protected override void CustomizeConfig(MutableConfiguration confignode)
-		{
-			AddOtherDatabase(confignode);
-		}
-
 		[Test]
 		public void BusinessLayerWithTransactions()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
-			container.AddFacility("nhibernate", new NHibernateFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 			
 			container.AddComponent("blogdao", typeof(BlogDao));
@@ -62,23 +55,18 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		public void BusinessLayerWithTransactionsAndThread()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
-			container.AddFacility("nhibernate", new NHibernateFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 			
 			container.AddComponent("blogdao", typeof(BlogDao));
 			container.AddComponent("orderdao", typeof(OrderDao));
 			container.AddComponent("business", typeof(MyBusinessClass));
 			container.AddComponent("business2", typeof(MyOtherBusinessClass));
-
-
-
 		}
 
 		[Test]
 		public void Rollback()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
-			container.AddFacility("nhibernate", new NHibernateFacility());
 			container.AddFacility("transaction", new TransactionFacility());
 
 			container.AddComponent("blogdao", typeof(BlogDao));

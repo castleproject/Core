@@ -19,7 +19,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 	public class BlogItem
 	{
-		private string id;
+		private int id;
 		private string text;
 		private string title;
 		private Blog blog;
@@ -37,7 +37,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 			set { dateTime = value; }
 		}
 
-		public string Id
+		public int Id
 		{
 			get { return id; }
 			set { id = value; }

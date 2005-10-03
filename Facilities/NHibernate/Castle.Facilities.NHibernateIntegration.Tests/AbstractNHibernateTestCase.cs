@@ -14,155 +14,50 @@
 
 namespace Castle.Facilities.NHibernateIntegration.Tests
 {
-	using System;
-	using System.Threading;
-
+	using NHibernate.Cfg;
+	using NHibernate.Tool.hbm2ddl;
+	
 	using NUnit.Framework;
 
-	using MySql.Data.MySqlClient;
-
-	using Castle.Model.Configuration;
-
 	using Castle.Windsor;
-	
-	using Castle.MicroKernel.SubSystems.Configuration;
 
 
 	public abstract class AbstractNHibernateTestCase
 	{
-		protected const string Driver = "NHibernate.Driver.MySqlDataDriver";
-		protected const string Dialect = "NHibernate.Dialect.MySQLDialect";
-		protected const string ConnectionProvider = "NHibernate.Connection.DriverConnectionProvider";
-		protected const string ConnectionString = "Database=Test;Data Source=localhost;User Id=theuser;Password=opauser";
-		protected const string ConnectionString2 = "Database=Test2;Data Source=localhost;User Id=theuser;Password=opauser";
+		protected IWindsorContainer container;
 
 		[SetUp]
-		public virtual void InitDb()
+		public void Init()
 		{
+			IWindsorContainer container = CreateConfiguredContainer();
+
 			// Reset tables
 
-			ResetDb1();
-			ResetDb2();
+			Configuration cfg1 = (Configuration) container[ "sessionFactory1.cfg" ];
+			SchemaExport export1 = new SchemaExport(cfg1);
+
+			Configuration cfg2 = (Configuration) container[ "sessionFactory2.cfg" ];
+			SchemaExport export2 = new SchemaExport(cfg2);
+
+			export1.Create(false, true);
+			export2.Create(false, true);
 		}
 
-		private void ResetDb1()
+		[TearDown]
+		public void Dispose()
 		{
-			MySqlConnection conn = new MySqlConnection(ConnectionString);
-			conn.Open();
+			container.Dispose();
 
-			try
-			{
-				// This is a bad practice named 
-				// `programming by coincidence`, but we need to 
-				// ask the mysql developers why changes are so slow
-				// to be reflected
-				Thread.CurrentThread.Join(1000);
-
-				MySqlCommand command = conn.CreateCommand();
-				command.CommandText = "DELETE FROM BLOGS";
-				command.ExecuteNonQuery();
-				command.CommandText = "DELETE FROM BLOG_ITEMS";
-				command.ExecuteNonQuery();
-			}
-			finally
-			{
-				conn.Close();
-			}
-		}
-
-		private void ResetDb2()
-		{
-			MySqlConnection conn = new MySqlConnection(ConnectionString2);
-			conn.Open();
-
-			try
-			{
-				Thread.CurrentThread.Join(1000);
-
-				MySqlCommand command = conn.CreateCommand();
-				command.CommandText = "DELETE FROM ORDERS";
-				command.ExecuteNonQuery();
-			}
-			finally
-			{
-				conn.Close();
-			}
+			container = null;
 		}
 
 		protected virtual IWindsorContainer CreateConfiguredContainer()
 		{
-			IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
+			if (container != null) return container;
 
-			MutableConfiguration confignode = new MutableConfiguration("facility");
-
-			IConfiguration factory =
-				confignode.Children.Add(new MutableConfiguration("factory"));
-			factory.Attributes["id"] = "sessionFactory1";
-
-			IConfiguration settings =
-				factory.Children.Add(new MutableConfiguration("settings"));
-
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				ConnectionProvider)).Attributes["key"] = "hibernate.connection.provider";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				Driver)).Attributes["key"] = "hibernate.connection.driver_class";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				ConnectionString)).Attributes["key"] = "hibernate.connection.connection_string";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				Dialect)).Attributes["key"] = "hibernate.dialect";
-
-			IConfiguration resources =
-				factory.Children.Add(new MutableConfiguration("resources"));
-
-			IConfiguration resource;
-			resource = resources.Children.Add(new MutableConfiguration("resource"));
-			resource.Attributes["name"] = "Blog.hbm.xml";
-			resource = resources.Children.Add(new MutableConfiguration("resource"));
-			resource.Attributes["name"] = "BlogItem.hbm.xml";
-
-			CustomizeConfig(confignode);
-
-			container.Kernel.ConfigurationStore.AddFacilityConfiguration("nhibernate", confignode);
+			container = new WindsorContainer( "../facilityconfig.xml" );
 
 			return container;
-		}
-
-		protected virtual void CustomizeConfig(MutableConfiguration confignode)
-		{
-		}
-
-		protected void AddOtherDatabase(MutableConfiguration confignode)
-		{
-			IConfiguration factory =
-				confignode.Children.Add(new MutableConfiguration("factory"));
-			factory.Attributes["id"] = "sessionFactory2";
-
-			IConfiguration settings =
-				factory.Children.Add(new MutableConfiguration("settings"));
-
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				ConnectionProvider)).Attributes["key"] = "hibernate.connection.provider";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				Driver)).Attributes["key"] = "hibernate.connection.driver_class";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				ConnectionString2)).Attributes["key"] = "hibernate.connection.connection_string";
-			settings.Children.Add(
-				new MutableConfiguration("item",
-				Dialect)).Attributes["key"] = "hibernate.dialect";
-
-			IConfiguration resources =
-				factory.Children.Add(new MutableConfiguration("resources"));
-
-			IConfiguration resource;
-			resource = resources.Children.Add(new MutableConfiguration("resource"));
-			resource.Attributes["name"] = "Order.hbm.xml";
 		}
 	}
 }

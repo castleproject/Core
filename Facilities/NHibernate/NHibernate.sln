@@ -11,10 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernat
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.AutomaticTransactionManagement", "..\AutomaticTransactionManagement\Castle.Facilities.AutomaticTransactionManagement\Castle.Facilities.AutomaticTransactionManagement.csproj", "{9962F772-E75C-4998-A45B-3CD99C2E2903}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -33,10 +29,6 @@ Global
 		{B687632A-D2C9-4E48-B878-D9066FB43434}.Debug.Build.0 = Debug|.NET
 		{B687632A-D2C9-4E48-B878-D9066FB43434}.Release.ActiveCfg = Release|.NET
 		{B687632A-D2C9-4E48-B878-D9066FB43434}.Release.Build.0 = Release|.NET
-		{9962F772-E75C-4998-A45B-3CD99C2E2903}.Debug.ActiveCfg = Debug|.NET
-		{9962F772-E75C-4998-A45B-3CD99C2E2903}.Debug.Build.0 = Debug|.NET
-		{9962F772-E75C-4998-A45B-3CD99C2E2903}.Release.ActiveCfg = Release|.NET
-		{9962F772-E75C-4998-A45B-3CD99C2E2903}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		bin\Blog.hbm.xml = bin\Blog.hbm.xml
@@ -44,6 +36,7 @@ Global
 		bin\Castle.Facilities.NHibernateIntegration.Tests.dll.config = bin\Castle.Facilities.NHibernateIntegration.Tests.dll.config
 		Changes.txt = Changes.txt
 		default.build = default.build
+		facilityconfig.xml = facilityconfig.xml
 		License.txt = License.txt
 		bin\Order.hbm.xml = bin\Order.hbm.xml
 		Readme.txt = Readme.txt

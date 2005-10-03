@@ -136,11 +136,6 @@
                     HintPath = "..\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
                 />
                 <Reference
-                    Name = "MySql.Data"
-                    AssemblyName = "MySql.Data"
-                    HintPath = "..\lib\MySql.Data.dll"
-                />
-                <Reference
                     Name = "Castle.Services.Transaction"
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
