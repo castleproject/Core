@@ -337,7 +337,7 @@ namespace Castle.MonoRail.Framework
 				String message = String.Format("Ignoring argument {0} with value {1} " + 
 					" as we don't know how to convert from this value to its type", paramName, value);
 
-				context.Trace(message);
+				context.Trace.Warn(message);
 			}
 
 			return null;

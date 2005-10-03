@@ -17,12 +17,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 	using System.Reflection;
 	using System.Collections;
-	using Castle.Components.Common.TemplateEngine;
+
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
+
+	using Castle.Components.Common.TemplateEngine;
 
 
 	public abstract class AbstractScaffoldAction : IDynamicAction

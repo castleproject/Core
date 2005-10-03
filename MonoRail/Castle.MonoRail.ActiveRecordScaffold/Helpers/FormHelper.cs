@@ -101,12 +101,20 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 		public bool CanHandle(HasManyModel model)
 		{
-			return CheckModelAndKeyAreAccessible(model.HasManyAtt.MapType);
+			if (!model.HasManyAtt.Inverse)
+			{
+				return CheckModelAndKeyAreAccessible(model.HasManyAtt.MapType);
+			}
+			return false;
 		}
 
 		public bool CanHandle(HasAndBelongsToManyModel model)
 		{
-			return CheckModelAndKeyAreAccessible(model.HasManyAtt.MapType);
+			if (!model.HasManyAtt.Inverse)
+			{
+				return CheckModelAndKeyAreAccessible(model.HasManyAtt.MapType);
+			}
+			return false;
 		}
 
 		private bool CheckModelAndKeyAreAccessible(Type type)

@@ -34,6 +34,7 @@ namespace Castle.MonoRail.Engine.Adapters
 		private HttpContext _context;
 		private RequestAdapter _request;
 		private ResponseAdapter _response;
+		private TraceAdapter _trace;
 		private Exception _lastException;
 		private SessionAdapter _session;
 		private ServerUtilityAdapter _server;
@@ -43,6 +44,7 @@ namespace Castle.MonoRail.Engine.Adapters
 			_url = url;
 			_context = context;
 			_request = new RequestAdapter(context.Request);
+			_trace = new TraceAdapter(context.Trace);
 			_response = new ResponseAdapter(context.Response, _url, ApplicationPath);
 			_server = new ServerUtilityAdapter(context.Server);
 		}
@@ -112,6 +114,11 @@ namespace Castle.MonoRail.Engine.Adapters
 			get { return _response; }
 		}
 
+		public ITrace Trace
+		{
+			get { return _trace; }
+		}
+
 		public IServerUtility Server
 		{
 			get { return _server; }
@@ -136,15 +143,6 @@ namespace Castle.MonoRail.Engine.Adapters
 		{
 			get { return _context.User; }
 			set { _context.User = value; }
-		}
-
-		/// <summary>
-		/// Writes the message to the underlying tracing scheme
-		/// </summary>
-		/// <param name="message"></param>
-		public void Trace(String message)
-		{
-			_context.Trace.Warn(message);
 		}
 
 		public UrlInfo UrlInfo

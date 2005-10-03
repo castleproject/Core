@@ -33,6 +33,7 @@ namespace Castle.MonoRail.Framework.Tests
 		private String _requestType;
 		private MockRequest _request = new MockRequest();
 		private MockResponse _response = new MockResponse();
+		private ITrace _trace = new MockTrace();
 		private ServerUtilityImpl _server = new ServerUtilityImpl();
 		private Exception _lastException;
 		private Hashtable _session = new Hashtable();
@@ -104,6 +105,11 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			get { return _response; }
 		}
+		
+		public ITrace Trace
+		{
+			get { return _trace; }
+		}
 
 		public Cache Cache
 		{
@@ -134,16 +140,6 @@ namespace Castle.MonoRail.Framework.Tests
 		public UrlInfo UrlInfo
 		{
 			get { throw new NotImplementedException(); }
-		}
-
-		/// <summary>
-		/// Writes the message to the underlying tracing scheme
-		/// </summary>
-		/// <param name="message"></param>
-		public void Trace(String message)
-		{
-			Console.WriteLine(message);
-			System.Diagnostics.Trace.WriteLine(message);
 		}
 
 		public IServerUtility Server

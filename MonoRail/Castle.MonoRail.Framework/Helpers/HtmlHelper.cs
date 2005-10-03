@@ -29,8 +29,6 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </remarks>
 	public class HtmlHelper : AbstractHelper
 	{
-		StringBuilder sb = new StringBuilder(512);
-
 		#region Fieldset
 
 		/// <summary>
@@ -107,7 +105,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String Form(String action)
 		{
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder();
+
 			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
@@ -172,7 +171,8 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String Form(String action, String id, String method, String onSubmit)
 		{
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder();
+
 			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
@@ -382,7 +382,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String LabelFor(String forId, String label, IDictionary attributes)
 		{
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
@@ -535,7 +535,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			for (int i = 1930; i < 2030; i++)
 				years[index++] = i.ToString();
 
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder(1024);
 
 			sb.Append(Select(name + "day", attributes));
 			sb.Append(CreateOptionsFromPrimitiveArray(days, value.Day.ToString()));
@@ -798,7 +798,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		public String SubmitButton(String value, IDictionary attributes)
 		{
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 
@@ -969,7 +969,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			if (elems.GetLength(0) == 0) return String.Empty;
 
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder();
 
 			foreach (object elem in elems)
 			{
@@ -1352,7 +1352,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				textMethodInfo = GetMethod(guidanceElem, textProperty);
 			}
 
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder();
 
 			foreach (object elem in elems)
 			{
@@ -1632,7 +1632,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </example>
 		private String BuildList(String tag, ICollection elements, String styleClass, String itemClass)
 		{
-			sb.Length = 0;
+			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
 

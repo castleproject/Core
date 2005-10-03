@@ -158,6 +158,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Adapters\TraceAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\MonoRailConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

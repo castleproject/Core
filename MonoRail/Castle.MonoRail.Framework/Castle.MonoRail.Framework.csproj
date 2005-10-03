@@ -178,6 +178,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ITrace.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IViewComponentContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -470,6 +475,11 @@
                 />
                 <File
                     RelPath = "Internal\Test\MockResponse.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Test\MockTrace.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

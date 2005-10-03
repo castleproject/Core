@@ -5,6 +5,7 @@ RC1
 
 Core:
 
+- ITrace and Trace property added to IRailsEngineContext (kudos to Chad Humphries)
 - Hierarchy of areas support (kudos to Fabio Batista)
 - PaginationHelper introduced
 

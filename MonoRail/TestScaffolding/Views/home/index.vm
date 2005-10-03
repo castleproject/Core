@@ -1,0 +1,17 @@
+<p>
+  <ul>
+    
+    <li><a href="$siteRoot/blogs/listblog.rails">Blogs</a></li>
+
+    <li><a href="$siteRoot/account/listAccount.rails">Accounts</a></li>
+
+    <li><a href="$siteRoot/accountpermission/listaccountpermission.rails">Account Permissions</a></li>
+
+    <li><a href="$siteRoot/productlicense/listProductLicense.rails">Product Licenses</a></li>
+
+    <li><a href="$siteRoot/customer/listcustomer.rails">Customer</a></li>
+
+    <li><a href="$siteRoot/person/listperson.rails">Person</a></li>
+
+  </ul>
+</p>

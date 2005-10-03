@@ -69,6 +69,11 @@ namespace Castle.MonoRail.Framework
 		IResponse Response { get; }
 
 		/// <summary>
+		/// Gets the trace object.
+		/// </summary>
+		ITrace Trace { get; }
+
+		/// <summary>
 		/// Access the Cache associated with this 
 		/// web execution context.
 		/// </summary>
@@ -106,12 +111,6 @@ namespace Castle.MonoRail.Framework
 		/// Returns the <see cref="UrlInfo"/> of the the current request.
 		/// </summary>
 		UrlInfo UrlInfo { get; }
-
-		/// <summary>
-		/// Writes the message to the underlying tracing scheme.
-		/// </summary>
-		/// <param name="message"></param>
-		void Trace(String message);
 
 		/// <summary>
 		/// Returns an <see cref="IServerUtility"/>.

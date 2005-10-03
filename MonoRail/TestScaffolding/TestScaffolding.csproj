@@ -172,6 +172,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\AccountPermissionController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\BlogsController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -182,7 +187,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\PersonController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ProductLicenseController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -228,6 +243,10 @@
                 <File
                     RelPath = "Views\blogs\newBlog.vm.old"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\home\index.vm"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Views\layouts\scaffold.vm"
