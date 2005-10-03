@@ -66,5 +66,12 @@ namespace Castle.ActiveRecord.Framework
 		/// </summary>
 		/// <param name="session"></param>
 		void ReleaseSession(ISession session);
+
+		Type GetRootType(Type type);
+
+		/// <summary>
+		/// Gets or sets the implementation of <see cref="IThreadScopeInfo"/>
+		/// </summary>
+		IThreadScopeInfo ThreadScopeInfo { get; set; }
 	}
 }

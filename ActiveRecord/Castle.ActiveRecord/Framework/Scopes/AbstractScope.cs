@@ -31,7 +31,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		public AbstractScope( SessionScopeType type )
 		{
 			this.type = type;
-			ThreadScopeInfo.RegisterScope(this);
+			ThreadScopeAccessor.Instance.RegisterScope(this);
 		}
 
 		public SessionScopeType ScopeType
@@ -58,7 +58,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public void Dispose()
 		{
-			ThreadScopeInfo.UnRegisterScope(this);
+			ThreadScopeAccessor.Instance.UnRegisterScope(this);
 
 			PerformDisposal(_key2Session.Values);			
 

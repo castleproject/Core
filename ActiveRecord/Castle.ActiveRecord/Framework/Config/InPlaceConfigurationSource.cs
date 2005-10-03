@@ -26,6 +26,7 @@ namespace Castle.ActiveRecord.Framework.Config
 	public class InPlaceConfigurationSource : IConfigurationSource
 	{
 		private readonly IDictionary _type2Config = new Hashtable();
+		private Type threadScopeInfoImplementation;
 
 		public InPlaceConfigurationSource()
 		{
@@ -42,6 +43,12 @@ namespace Castle.ActiveRecord.Framework.Config
 		}
 
 		#region IConfigurationSource Members
+
+		public Type ThreadScopeInfoImplementation
+		{
+			get { return threadScopeInfoImplementation; }
+			set { threadScopeInfoImplementation = value; }
+		}
 
 		public IConfiguration GetConfiguration(Type type)
 		{

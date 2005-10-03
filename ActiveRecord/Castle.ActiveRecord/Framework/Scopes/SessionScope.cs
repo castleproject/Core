@@ -38,7 +38,7 @@ namespace Castle.ActiveRecord
 
 		public void Dispose(bool discardChanges)
 		{
-			ThreadScopeInfo.UnRegisterScope(this);
+			ThreadScopeAccessor.Instance.UnRegisterScope(this);
 
 			PerformDisposal(_key2Session.Values, !discardChanges, true);
 

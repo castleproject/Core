@@ -209,7 +209,7 @@ namespace Castle.ActiveRecord
 
 		private ISessionScope FindPreviousScope(bool transactional)
 		{
-			object[] items = ThreadScopeInfo.CurrentStack.ToArray();
+			object[] items = ThreadScopeAccessor.Instance.CurrentStack.ToArray();
 
 			ISessionScope first = null;
 

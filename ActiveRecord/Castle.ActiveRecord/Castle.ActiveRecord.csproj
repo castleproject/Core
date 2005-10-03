@@ -119,6 +119,11 @@
                     AssemblyName = "Nullables.NHibernate"
                     HintPath = "..\lib\Nullables.NHibernate.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -294,6 +299,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\IThreadScopeInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\NotFoundException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -459,6 +469,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Scopes\AbstractThreadScopeInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Scopes\ISessionScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -474,12 +489,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Scopes\ThreadScopeAccessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Scopes\ThreadScopeInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Framework\Scopes\TransactionScope.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Scopes\WebThreadScopeInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

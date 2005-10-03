@@ -26,6 +26,7 @@ namespace Castle.ActiveRecord
 	using Castle.Model.Configuration;
 
 	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Scopes;
 	using Castle.ActiveRecord.Framework.Internal;
 
 	public delegate void SessionFactoryHolderDelegate(ISessionFactoryHolder holder);
@@ -61,7 +62,9 @@ namespace Castle.ActiveRecord
 			if (types == null) throw new ArgumentNullException("types");
 
 			// First initialization
-			SessionFactoryHolder holder = new SessionFactoryHolder();
+			ISessionFactoryHolder holder = new SessionFactoryHolder();
+
+			holder.ThreadScopeInfo = CreateThreadScopeInfoImplementation(source);
 
 			RaiseSessionFactoryHolderCreated(holder);
 
@@ -282,7 +285,7 @@ namespace Castle.ActiveRecord
 			return cfg;
 		}
 
-		private static void SetUpConfiguration(IConfigurationSource source, Type type, SessionFactoryHolder holder)
+		private static void SetUpConfiguration(IConfigurationSource source, Type type, ISessionFactoryHolder holder)
 		{
 			IConfiguration config = source.GetConfiguration(type);
 	
@@ -302,6 +305,26 @@ namespace Castle.ActiveRecord
 			{
 				evtDelegate(holder);
 			}
+		}
+
+		private static IThreadScopeInfo CreateThreadScopeInfoImplementation(IConfigurationSource source)
+		{
+			Type threadScopeType = typeof(ThreadScopeInfo);
+
+			if (source.ThreadScopeInfoImplementation != null)
+			{
+				threadScopeType = source.ThreadScopeInfoImplementation;
+
+				if (!typeof(IThreadScopeInfo).IsAssignableFrom(threadScopeType))
+				{
+					String message = String.Format("The specified type {0} does " + 
+						"not implement the interface IThreadScopeInfo", threadScopeType.FullName);
+
+					throw new ActiveRecordException( message );
+				}
+			}
+
+			return (IThreadScopeInfo) Activator.CreateInstance(threadScopeType);
 		}
 	}
 }

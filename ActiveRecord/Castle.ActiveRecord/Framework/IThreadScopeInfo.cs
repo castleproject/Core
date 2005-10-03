@@ -15,22 +15,19 @@
 namespace Castle.ActiveRecord.Framework
 {
 	using System;
+	using System.Collections;
 
-	using Castle.Model.Configuration;
 
-	/// <summary>
-	/// Abstracts the source of configuration for the framework.
-	/// </summary>
-	public interface IConfigurationSource
+	public interface IThreadScopeInfo
 	{
-		Type ThreadScopeInfoImplementation { get; }
+		Stack CurrentStack { get; }
 
-		/// <summary>
-		/// Implementors should return an <see cref="IConfiguration"/> 
-		/// instance
-		/// </summary>
-		/// <param name="type"></param>
-		/// <returns></returns>
-		IConfiguration GetConfiguration(Type type);
+		ISessionScope GetRegisteredScope();
+
+		void RegisterScope(ISessionScope scope);
+
+		void UnRegisterScope(ISessionScope scope);
+
+		bool HasInitializedScope { get; }
 	}
 }

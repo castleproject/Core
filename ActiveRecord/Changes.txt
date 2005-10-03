@@ -3,7 +3,22 @@ beta 3
 ======
 
 - Support for fields in addition to properties
+
 - Small improvement on ActiveRecordModelBuilder (less intensive on IsDefined/GetCustomAttribute)
+
+- IThreadScopeInfo introduced. Two implementations: ThreadScopeInfo and WebThreadScopeInfo. 
+  ThreadScopeInfo is the default implementation. You can use WebThreadScopeInfo by simply using 
+  isWeb="true" on the configuration node:
+  
+  <config isWeb="true">
+    ..
+  
+  Or you can provide your own implementation specifying the full type name
+
+  <config threadinfotype="my.threadinfotype, my.assembly">
+    ..
+
+  
 
 beta 2
 ======

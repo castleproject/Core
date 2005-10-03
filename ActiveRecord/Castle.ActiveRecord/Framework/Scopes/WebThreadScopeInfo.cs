@@ -16,26 +16,37 @@ namespace Castle.ActiveRecord.Framework.Scopes
 {
 	using System;
 	using System.Collections;
-	using System.Threading;
 	using System.Runtime.CompilerServices;
+	using System.Web;
 
 
-	public sealed class ThreadScopeInfo : AbstractThreadScopeInfo
+	public class WebThreadScopeInfo : AbstractThreadScopeInfo
 	{
-		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
+		public WebThreadScopeInfo()
+		{
+		}
 
 		public override Stack CurrentStack
 		{
 			[MethodImpl(MethodImplOptions.Synchronized)]
 			get
 			{
-				Stack stack = Thread.GetData(_slot) as Stack;
+				HttpContext current = HttpContext.Current;
+
+				if (current == null)
+				{
+					String message = "WebThreadScopeInfo: Could not access HttpContext.Current";
+					
+					throw new ScopeMachineryException(message);
+				}
+
+				Stack stack = (Stack) current.Items["activerecord.currentstack"];
 
 				if (stack == null)
 				{
 					stack = new Stack();
 
-					Thread.SetData(_slot, stack);
+					current.Items["activerecord.currentstack"] = stack;
 				}
 
 				return stack;

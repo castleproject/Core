@@ -35,6 +35,7 @@ namespace Castle.ActiveRecord.Framework
 		private Hashtable type2Conf = Hashtable.Synchronized(new Hashtable());
 		private Hashtable type2SessFactory = Hashtable.Synchronized(new Hashtable());
 		private ReaderWriterLock readerWriterLock = new ReaderWriterLock();
+		private IThreadScopeInfo threadScopeInfo;
 		
 		public SessionFactoryHolder()
 		{
@@ -108,7 +109,7 @@ namespace Castle.ActiveRecord.Framework
 		[MethodImpl(MethodImplOptions.Synchronized)]
 		public ISession CreateSession(Type type)
 		{
-			if (ThreadScopeInfo.HasInitializedScope)
+			if (threadScopeInfo.HasInitializedScope)
 			{
 				return CreateScopeSession(type);
 			}
@@ -122,6 +123,18 @@ namespace Castle.ActiveRecord.Framework
 			return session;
 		}
 
+		public Type GetRootType(Type type)
+		{
+			while(type != typeof(object))
+			{
+				if (type2Conf.ContainsKey(type)) return type;
+
+				type = type.BaseType;
+			}
+
+			return null;
+		}
+
 		private static ISession OpenSession(ISessionFactory sessionFactory)
 		{
 			lock(sessionFactory)
@@ -132,7 +145,7 @@ namespace Castle.ActiveRecord.Framework
 
 		public void ReleaseSession(ISession session)
 		{
-			if (ThreadScopeInfo.HasInitializedScope)
+			if (threadScopeInfo.HasInitializedScope)
 			{
 				ReleaseScopedSession(session);
 			}
@@ -142,9 +155,19 @@ namespace Castle.ActiveRecord.Framework
 			}
 		}
 
+		public IThreadScopeInfo ThreadScopeInfo
+		{
+			get { return threadScopeInfo; }
+			set
+			{
+				ThreadScopeAccessor.Instance.ScopeInfo = value;
+				threadScopeInfo = value;
+			}
+		}
+
 		private ISession CreateScopeSession(Type type)
 		{
-			ISessionScope scope = ThreadScopeInfo.GetRegisteredScope();
+			ISessionScope scope = threadScopeInfo.GetRegisteredScope();
 			ISessionFactory sessionFactory = GetSessionFactory(type);
 
 #if DEBUG
@@ -171,21 +194,6 @@ namespace Castle.ActiveRecord.Framework
 		private void ReleaseScopedSession(ISession session)
 		{
 			
-		}
-
-		protected internal Type GetRootType(Type type)
-		{
-			while(type != typeof(object))
-			{
-				if (type2Conf.ContainsKey(type))
-				{
-					return type;
-				}
-
-				type = type.BaseType;
-			}
-
-			return null;
 		}
 	}
 }

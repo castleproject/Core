@@ -55,8 +55,37 @@ namespace Castle.ActiveRecord.Framework.Config
 
 		protected void PopulateSource(XmlNode section)
 		{
-			const string Config_Node_Name = "config";
+			Type threadInfoType = null;
+
+			XmlAttribute isWebAtt = section.Attributes["isWeb"];
+			XmlAttribute threadInfoAtt = section.Attributes["threadinfotype"];
+
+			if (isWebAtt != null && "true".Equals(isWebAtt.Value))
+			{
+				threadInfoType = typeof(Castle.ActiveRecord.Framework.Scopes.WebThreadScopeInfo);
+			}
+
+			if (threadInfoAtt != null && threadInfoAtt.Value != String.Empty)
+			{
+				String typeName = threadInfoAtt.Value;
 				
+				threadInfoType = Type.GetType(typeName, false, false);
+
+				if (threadInfoType == null)
+				{
+					String message = String.Format("The type name {0} could not be found", typeName);
+
+					throw new ActiveRecordException(message);
+				}
+			}
+
+			PopulateConfigNodes(section);
+		}
+
+		private void PopulateConfigNodes(XmlNode section)
+		{
+			const string Config_Node_Name = "config";
+
 			foreach(XmlNode node in section.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
