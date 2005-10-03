@@ -76,7 +76,7 @@ public class BooViewEngine (ViewEngineBase):
 		commonScriptWatcher = FileSystemWatcher(commonScriptPath,
 			IncludeSubdirectories: false, Filter:"*.boo")
 		commonScriptWatcher.Changed += def (source, e as FileSystemEventArgs):
-			CompileCommonScripts.BeginInvoke(
+			CompileCommonScripts.BeginInvoke( null,
 				{ ar as IAsyncResult | CompileCommonScripts.EndInvoke(ar) } )
 		
 		commonScriptWatcher.EnableRaisingEvents = true
