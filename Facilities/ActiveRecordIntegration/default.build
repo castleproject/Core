@@ -34,6 +34,8 @@
 		<copy file="${ar.bin.dir}/NHibernate.dll" todir="${bin.dir}" />
 		<copy file="${ar.bin.dir}/HashCodeProvider.dll" todir="${bin.dir}" />
 		<copy file="${ar.bin.dir}/Iesi.Collections.dll" todir="${bin.dir}" />
+		<copy file="${ar.bin.dir}/Nullables.dll" todir="${bin.dir}" />
+		<copy file="${ar.bin.dir}/Nullables.NHibernate.dll" todir="${bin.dir}" />
 		<copy file="${ar.bin.dir}/log4net.dll" todir="${bin.dir}" />
 		<copy file="${services.bin.dir}/Castle.Services.Transaction.dll" todir="${bin.dir}" />
 		<copy file="../AutomaticTransactionManagement/bin/Castle.Facilities.AutomaticTransactionManagement.dll" todir="${bin.dir}" />

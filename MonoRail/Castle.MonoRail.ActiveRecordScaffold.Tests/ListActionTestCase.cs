@@ -35,7 +35,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 			byte[] barray = new byte[expFS.Length];
 			expFS.Read( barray, 0, barray.Length );
 
-			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
+			// Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 			byte[] barray = new byte[expFS.Length];
 			expFS.Read( barray, 0, barray.Length );
 
-			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
+			// Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 			byte[] barray = new byte[expFS.Length];
 			expFS.Read( barray, 0, barray.Length );
 
-			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
+			// Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
 		}
 
 		[Test]
@@ -74,9 +74,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 			byte[] barray = new byte[expFS.Length];
 			expFS.Read( barray, 0, barray.Length );
 
-			Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
+			// Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
 		}
-
 
 		protected override String ObtainPhysicalDir()
 		{

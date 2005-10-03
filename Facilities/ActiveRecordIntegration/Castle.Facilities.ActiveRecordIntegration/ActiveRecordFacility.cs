@@ -77,10 +77,10 @@ namespace Castle.Facilities.ActiveRecordIntegration
 					(Assembly[]) assemblies.ToArray( typeof(Assembly) ), 
 					new ConfigurationSourceAdapter(FacilityConfig) );
 			}
-			catch(Exception ex)
-			{
-				throw new FacilityException("Error trying to start the ActiveRecord Framework", ex);
-			}
+//			catch(Exception ex)
+//			{
+//				throw new FacilityException("Error trying to start the ActiveRecord Framework", ex);
+//			}
 			finally
 			{
 				ActiveRecord.ActiveRecordStarter.SessionFactoryHolderCreated -= new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);

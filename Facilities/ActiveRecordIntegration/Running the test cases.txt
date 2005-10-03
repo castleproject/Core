@@ -7,28 +7,4 @@ like.
 
    See file "configuration.xml"
 
-2. Create the database schema
-
-   --- cut here ---
-
-/****** Object:  Table [dbo].[Blogs]    Script Date: 19/3/2005 23:53:47 ******/
-CREATE TABLE [dbo].[Blogs] (
-	[id] [int] IDENTITY (1, 1) NOT NULL ,
-	[name] [varchar] (50) NULL ,
-	[author] [varchar] (50) NULL 
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[Posts]    Script Date: 19/3/2005 23:53:49 ******/
-CREATE TABLE [dbo].[Posts] (
-	[id] [int] IDENTITY (1, 1) NOT NULL ,
-	[title] [varchar] (50) NULL ,
-	[contents] [text] NULL ,
-	[category] [varchar] (50) NULL ,
-	[blogid] [int] NULL ,
-	[created] [datetime] NULL ,
-	[published] [bit] NULL 
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-   --- cut here ---
+2. That's it.
