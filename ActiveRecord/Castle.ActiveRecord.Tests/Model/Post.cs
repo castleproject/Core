@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Tests
 	using System;
 	using System.Collections;
 
-	[ActiveRecord("Posts")]
+	[ActiveRecord("PostTable")]
 	public class Post : ActiveRecordBase
 	{
 		private int _id;

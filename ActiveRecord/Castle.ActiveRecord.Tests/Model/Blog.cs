@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Tests
 	using Castle.ActiveRecord.Framework;
 
 
-	[ActiveRecord("Blogs")]
+	[ActiveRecord("BlogTable")]
 	public class Blog : ActiveRecordBase
 	{
 		private int _id;

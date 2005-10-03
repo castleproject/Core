@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Tests
 	using System.Collections;
 
 
-	[ActiveRecord("Posts")]
+	[ActiveRecord("PostTable")]
 	public class PostLazy : ActiveRecordBase
 	{
 		private int _id;
