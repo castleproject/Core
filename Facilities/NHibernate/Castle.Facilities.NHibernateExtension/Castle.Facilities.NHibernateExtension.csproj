@@ -99,7 +99,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DataException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "FlushOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IGenericDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "INHibernateGenericDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NHibernateGenericDao.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -115,6 +135,16 @@
                 />
                 <File
                     RelPath = "UsesAutomaticSessionCreationAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\FieldInfoCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\ReflectionUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
