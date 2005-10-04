@@ -133,7 +133,7 @@ namespace Castle.MonoRail.Engine.Configuration
 
 		public Type ScaffoldingType
 		{
-			get { return _scaffoldingTypeName != null ? GetType(_scaffoldingTypeName) : null; }
+			get { return _scaffoldingTypeName != null ? GetType(_scaffoldingTypeName, true) : null; }
 		}
 
 		internal static MonoRailConfiguration GetConfig()
@@ -152,9 +152,14 @@ namespace Castle.MonoRail.Engine.Configuration
 
 		internal static Type GetType(String typeName)
 		{
+			return GetType(typeName, false);
+		}
+
+		internal static Type GetType(String typeName, bool ignoreError)
+		{
 			Type loadedType = Type.GetType(typeName, false, false);
 
-			if (loadedType == null)
+			if (loadedType == null && !ignoreError)
 			{
 				throw new ConfigurationException( String.Format("The type {0} could not be found", typeName) );
 			}

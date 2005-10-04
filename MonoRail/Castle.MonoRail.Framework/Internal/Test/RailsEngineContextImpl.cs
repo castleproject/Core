@@ -138,7 +138,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 		public string ApplicationPath
 		{
-			get { return AppDomain.CurrentDomain.BaseDirectory; }
+			get { return String.Empty; }
 		}
 
 		public UrlInfo UrlInfo
