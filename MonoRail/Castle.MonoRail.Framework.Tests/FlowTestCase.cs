@@ -15,54 +15,57 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
+	using System.Reflection;
 
 	using NUnit.Framework;
 
 	using Castle.MonoRail.Engine;
+	// using Castle.MonoRail.TestSupport;
 
 	/// <summary>
 	/// Summary description for FlowTestCase.
 	/// </summary>
 	[TestFixture]
-	public class FlowTestCase
+	public class FlowTestCase// : AbstractMRTestCase
 	{
-		FakeViewEngine _viewEngine;
-		ProcessEngine _engine;
+		private FakeViewEngine viewEngine;
 
-		[SetUp]
-		public void Init()
-		{
-			IControllerFactory factory = new FakeControllerFactory();
+//		public FlowTestCase()
+//		{
+//			Config.CustomEngineTypeName = "Castle.MonoRail.Framework.Tests.FakeViewEngine, Castle.MonoRail.Framework.Tests";
+//
+//			Config.ControllerAssemblies.Add( "Castle.MonoRail.Framework.Tests" );
+//		}
+//
+//		protected override void CustomizeProcessEngine(ProcessEngine processEngine)
+//		{
+//			viewEngine = (FakeViewEngine) processEngine.ViewEngine;
+//		}
 
-			_viewEngine = new FakeViewEngine();
-			_engine = new ProcessEngine(factory, _viewEngine);
-		}
+//		[Test]
+//		public void SimpleRequest()
+//		{
+//			viewEngine.AddView("home", "index", "hello world!");
+//
+//			DoGet("/home/index.rails");
+//
+//			AssertSuccess();
+//
+//			AssertReplyEqualsTo( "hello world!" );
+//		}
 
-		[Test]
-		public void SimpleRequest()
-		{
-			_viewEngine.AddView("home", "index", "hello world!");
-
-			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/home/index.rails");
-
-			_engine.Process( context );
-
-			Assert.AreEqual( "hello world!", context.Output );
-		}
-
-		[Test]
-		public void SimpleRequestWithDifferentView()
-		{
-			_viewEngine.AddView("home", "index", "hello from index");
-			_viewEngine.AddView("home", "display", "hello from display");
-
-			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/home/other.rails");
-
-			_engine.Process( context );
-
-			Assert.AreEqual( "hello from display", context.Output );
-		}
+//		[Test]
+//		public void SimpleRequestWithDifferentView()
+//		{
+//			_viewEngine.AddView("home", "index", "hello from index");
+//			_viewEngine.AddView("home", "display", "hello from display");
+//
+//			RailsEngineContextImpl context = new 
+//				RailsEngineContextImpl("/home/other.rails");
+//
+//			_engine.Process( context );
+//
+//			Assert.AreEqual( "hello from display", context.Output );
+//		}
 	}
 }

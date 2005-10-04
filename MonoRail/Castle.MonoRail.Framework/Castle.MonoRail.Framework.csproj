@@ -469,11 +469,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\Test\MockRequest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Internal\Test\MockResponse.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -490,6 +485,11 @@
                 />
                 <File
                     RelPath = "Internal\Test\ServerUtilityImpl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Test\TestRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

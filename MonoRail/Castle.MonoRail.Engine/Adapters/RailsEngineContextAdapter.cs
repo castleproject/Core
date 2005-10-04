@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Engine.Adapters
 	using System.Web;
 	using System.Web.Caching;
 	using System.Security.Principal;
-
+	using System.Web.SessionState;
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Engine.Adapters
 		private ResponseAdapter _response;
 		private TraceAdapter _trace;
 		private Exception _lastException;
-		private SessionAdapter _session;
+		private IDictionary _session;
 		private ServerUtilityAdapter _server;
 
 		public RailsEngineContextAdapter(HttpContext context, String url)
@@ -82,7 +82,7 @@ namespace Castle.MonoRail.Engine.Adapters
 			}
 		}
 
-		public object UnderlyingContext
+		public HttpContext UnderlyingContext
 		{
 			get { return _context; }
 		}
@@ -98,8 +98,18 @@ namespace Castle.MonoRail.Engine.Adapters
 			{
 				if (_session == null)
 				{
-					_session = new SessionAdapter(_context.Session);
+					object session = _context.Items["AspSession"];
+
+					if (session is HttpSessionState)
+					{
+						_session = new SessionAdapter( session as HttpSessionState );
+					}
+					else
+					{
+						_session = (IDictionary) session;
+					}
 				}
+
 				return _session;
 			}
 		}
@@ -159,9 +169,9 @@ namespace Castle.MonoRail.Engine.Adapters
 			{
 				String path = null;
 
-				if (HttpContext.Current != null)
+				if (UnderlyingContext != null)
 				{
-					path = HttpContext.Current.Request.ApplicationPath;
+					path = UnderlyingContext.Request.ApplicationPath;
 			
 					if("/".Equals(path))
 					{

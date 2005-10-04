@@ -103,10 +103,12 @@ namespace Castle.MonoRail.Engine
 		/// <param name="context"></param>
 		public virtual void Process( IRailsEngineContext context )
 		{
-			//Push the IRailsEngineContext into the HttpContext so that we can access it from outside of MonoRail
-			if (HttpContext.Current != null && !HttpContext.Current.Items.Contains(RailsContextKey))
+			HttpContext httpContext = context.UnderlyingContext;
+
+			// Push the IRailsEngineContext into the HttpContext so that we can access it from outside of MonoRail
+			if (httpContext != null && !httpContext.Items.Contains(RailsContextKey))
 			{
-				HttpContext.Current.Items.Add(RailsContextKey, context);
+				httpContext.Items.Add(RailsContextKey, context);
 			}
 			
 			UrlInfo info = ExtractUrlInfo(context);
@@ -116,6 +118,7 @@ namespace Castle.MonoRail.Engine
 			if (controller == null)
 			{
 				String message = String.Format("No controller for {0}\\{1}", info.Area, info.Controller);
+				
 				throw new RailsException(message);
 			}
 
@@ -125,7 +128,7 @@ namespace Castle.MonoRail.Engine
 			{
 				controller.Process( 
 					context, filterFactory, resourceFactory, 
-					info.Area, info.Controller, info.Action, viewEngine, scaffoldingSupport, viewCompFactory );
+					info.Area, info.Controller, info.Action, viewEngine, scaffoldingSupport );
 			}
 			finally
 			{
@@ -143,15 +146,9 @@ namespace Castle.MonoRail.Engine
 			{
 				HttpContext context = HttpContext.Current;
 				
-				//Are we in a web request?
-				if (context == null)
-					return null;
-				
-				//Is a MonoRail context in the store?
-				if (! context.Items.Contains(RailsContextKey))
-					return null;
-				
-				//Return it!
+				// Are we in a web request?
+				if (context == null) return null;
+								
 				return context.Items[RailsContextKey] as IRailsEngineContext;
 			}
 		}
@@ -163,13 +160,7 @@ namespace Castle.MonoRail.Engine
 		/// <returns></returns>
 		protected virtual UrlInfo ExtractUrlInfo(IRailsEngineContext context)
 		{
-			String vdir = null;
-
-			// Null means 'testing' mode
-			if (HttpContext.Current != null)
-			{
-				vdir = HttpContext.Current.Request.ApplicationPath;
-			}
+			String vdir = context.ApplicationPath;
 
 			return UrlTokenizer.ExtractInfo(context.Url, vdir);
 		}

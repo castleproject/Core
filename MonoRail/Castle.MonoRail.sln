@@ -63,6 +63,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecor
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.TestSupport", "Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport.csproj", "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -133,6 +137,10 @@ Global
 		{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}.Debug.Build.0 = Debug|.NET
 		{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}.Release.ActiveCfg = Release|.NET
 		{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}.Release.Build.0 = Release|.NET
+		{E572DC59-2A96-482F-BE39-E938AB47EA9D}.Debug.ActiveCfg = Debug|.NET
+		{E572DC59-2A96-482F-BE39-E938AB47EA9D}.Debug.Build.0 = Debug|.NET
+		{E572DC59-2A96-482F-BE39-E938AB47EA9D}.Release.ActiveCfg = Release|.NET
+		{E572DC59-2A96-482F-BE39-E938AB47EA9D}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt

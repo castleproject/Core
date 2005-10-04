@@ -18,14 +18,14 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	public class MockRequest : IRequest
+	public class TestRequest : IRequest
 	{
 		internal NameValueCollection _params = new NameValueCollection();
 		internal NameValueCollection _query = new NameValueCollection();
 		internal NameValueCollection _form = new NameValueCollection();
 		internal NameValueCollection _headers = new NameValueCollection();
 
-		public MockRequest()
+		public TestRequest()
 		{
 		}
 

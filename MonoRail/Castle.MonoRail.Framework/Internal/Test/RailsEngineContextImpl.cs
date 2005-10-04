@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
+	using System.Web;
 	using System.Web.Caching;
 	using System.Collections;
 	using System.Collections.Specialized;
@@ -28,14 +29,14 @@ namespace Castle.MonoRail.Framework.Tests
 	/// </summary>
 	public class RailsEngineContextImpl : IRailsEngineContext
 	{
-		private object _context = new object();
 		private String _url;
 		private String _requestType;
-		private MockRequest _request = new MockRequest();
+		private Exception _lastException;
+		private HttpContext _context;
+		private TestRequest _request = new TestRequest();
 		private MockResponse _response = new MockResponse();
 		private ITrace _trace = new MockTrace();
 		private ServerUtilityImpl _server = new ServerUtilityImpl();
-		private Exception _lastException;
 		private Hashtable _session = new Hashtable();
 		private Hashtable _flashItems = new Hashtable();
 		private IPrincipal _user;
@@ -48,6 +49,9 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			_url = url;
 			_requestType = requestType;
+
+			// TODO: Review this
+			_context = null;
 		}
 
 		public void AddRequestParam(String name, String value)
@@ -81,7 +85,7 @@ namespace Castle.MonoRail.Framework.Tests
 			get { return null; }
 		}
 
-		public object UnderlyingContext
+		public HttpContext UnderlyingContext
 		{
 			get { return _context; }
 		}

@@ -19,7 +19,6 @@ namespace Castle.MonoRail.Engine
 	using System.Web.SessionState;
 
 	using Castle.MonoRail.Engine.Adapters;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 

@@ -15,10 +15,11 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
+	using System.Web;
 	using System.Web.Caching;
 	using System.Security.Principal;
+	using System.Collections;
+	using System.Collections.Specialized;
 
 	using Castle.MonoRail.Framework.Internal;
 
@@ -46,7 +47,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets the underlying context of the API being used.
 		/// </summary>
-		object UnderlyingContext { get; }
+		HttpContext UnderlyingContext { get; }
 
 		/// <summary>
 		/// Access the params (Query, Post, headers and Cookies)

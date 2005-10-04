@@ -27,7 +27,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				return Activator.CreateInstance( type );
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				return null;
 			}

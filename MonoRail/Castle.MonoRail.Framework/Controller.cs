@@ -115,8 +115,6 @@ namespace Castle.MonoRail.Framework
 
 		private IScaffoldingSupport _scaffoldSupport;
 
-		private IViewComponentFactory _viewComponentFactory;
-
 		internal bool _directRenderInvoked;
 
 		private ControllerMetaDescriptor metaDescriptor;
@@ -488,6 +486,9 @@ namespace Castle.MonoRail.Framework
 
 			foreach (MethodInfo m in methods)
 			{
+				// Get/set methods that belongs to a property
+				if (m.IsSpecialName) continue;
+
 				_actions[m.Name] = m;
 			}
 
@@ -515,8 +516,7 @@ namespace Castle.MonoRail.Framework
 		/// the controller process. 
 		/// </summary>
 		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
-		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine,
-		                    IScaffoldingSupport scaffoldSupport, IViewComponentFactory viewComponentFactory)
+		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine, IScaffoldingSupport scaffoldSupport)
 		{
 			_areaName = areaName;
 			_controllerName = controllerName;
@@ -525,7 +525,6 @@ namespace Castle.MonoRail.Framework
 			_filterFactory = filterFactory;
 			_resourceFactory = resourceFactory;
 			_scaffoldSupport = scaffoldSupport;
-			_viewComponentFactory = viewComponentFactory;
 
 			if (metaDescriptor.Filters.Count != 0)
 			{
@@ -585,11 +584,11 @@ namespace Castle.MonoRail.Framework
 			RenderView(action);
 
 			// If we have an HttpContext available, store the original view name
-			if (HttpContext.Current != null)
+			if (HttpContext != null)
 			{
-				if (!HttpContext.Current.Items.Contains(OriginalViewKey))
+				if (!HttpContext.Items.Contains(OriginalViewKey))
 				{
-					HttpContext.Current.Items[OriginalViewKey] = _selectedViewName;
+					HttpContext.Items[OriginalViewKey] = _selectedViewName;
 				}
 			}
 

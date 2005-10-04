@@ -45,6 +45,7 @@ namespace Castle.MonoRail.Engine.Configuration
 		public IList ControllerAssemblies
 		{
 			get { return _controllers; }
+
 		}
 
 		public IList ComponentsAssemblies
@@ -107,71 +108,65 @@ namespace Castle.MonoRail.Engine.Configuration
 
 		public Type CustomViewEngineType
 		{
-			get
-			{
-				return _customEngineTypeName != null ?
-					Type.GetType(_customEngineTypeName, false, false) : null;
-			}
+			get { return _customEngineTypeName != null ? GetType(_customEngineTypeName) : null; }
 		}
 
 		public Type CustomViewComponentFactoryType
 		{
-			get
-			{
-				return _customViewComponentFactory != null ?
-					Type.GetType(_customViewComponentFactory, false, false) : null;
-			}
+			get { return _customViewComponentFactory != null ? GetType(_customViewComponentFactory) : null; }
 		}
 
 		public Type CustomFilterFactoryType
 		{
-			get
-			{
-				return _customFilterFactory != null ?
-					Type.GetType(_customFilterFactory, false, false) : null;
-			}
+			get { return _customFilterFactory != null ? GetType(_customFilterFactory) : null; }
 		}
 
 		public Type CustomResourceFactoryType
 		{
-			get
-			{
-				return _customResourceFactory != null ?
-					Type.GetType(_customResourceFactory, false, false) : null;
-			}
+			get { return _customResourceFactory != null ? GetType(_customResourceFactory) : null; }
 		}
 
 		public Type CustomControllerFactoryType
 		{
-			get
-			{
-				return _customControllerFactory != null ?
-					Type.GetType(_customControllerFactory, false, false) : null;
-			}
+			get { return _customControllerFactory != null ? GetType(_customControllerFactory) : null; }
 		}
 
 		public Type ScaffoldingType
 		{
-			get
-			{
-				return _scaffoldingTypeName != null ? Type.GetType(_scaffoldingTypeName, false, false) : null;
-			}
+			get { return _scaffoldingTypeName != null ? GetType(_scaffoldingTypeName) : null; }
 		}
 
 		internal static MonoRailConfiguration GetConfig()
 		{
-			MonoRailConfiguration config = (MonoRailConfiguration) ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
+			MonoRailConfiguration config = (MonoRailConfiguration)
+				ConfigurationSettings.GetConfig(MonoRailConfiguration.SectionName);
 
 			if (config == null)
 			{
-				throw new ApplicationException("Unfortunately, you have to provide " + 
+				throw new ApplicationException("Unfortunately, you have to provide " +
 					"a small configuration to use MonoRail. Check the samples or the documentation.");
 			}
 
 			return config;
 		}
+
+		internal static Type GetType(String typeName)
+		{
+			Type loadedType = Type.GetType(typeName, false, false);
+
+			if (loadedType == null)
+			{
+				throw new ConfigurationException( String.Format("The type {0} could not be found", typeName) );
+			}
+
+			return loadedType;
+		}
 	}
 
+
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class RoutingRule
 	{
 		private String _pattern, _replace;
@@ -182,7 +177,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			_pattern = pattern;
 			_replace = replace;
 
-			_rule = new Regex(pattern, RegexOptions.Compiled|RegexOptions.IgnoreCase|RegexOptions.Singleline);
+			_rule = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 		}
 
 		public string Pattern
