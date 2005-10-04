@@ -71,10 +71,6 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 						model.LifestyleType = type;
 
-						if (model.LifestyleType == LifestyleType.Pooled)
-						{
-							ExtractPoolConfig(model);
-						}
 					}
 					catch(Exception ex)
 					{
@@ -84,6 +80,16 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 						
 						throw new ConfigurationException(message, ex);
 					}
+
+					if (model.LifestyleType == LifestyleType.Pooled)
+					{
+						ExtractPoolConfig(model);
+					}
+					else if(model.LifestyleType == LifestyleType.Custom)
+					{
+						ExtractCustomConfig(model);
+					}
+
 
 					return true;
 				}
@@ -104,6 +110,30 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 			if (maxSize != null)
 			{
 				model.ExtendedProperties[ExtendedPropertiesConstants.Pool_MaxPoolSize] = Convert.ToInt32(maxSize);
+			}
+		}
+
+		private void ExtractCustomConfig(ComponentModel model)
+		{
+			String customLifestyleType = model.Configuration.Attributes["customLifestyleType"];
+
+			if(customLifestyleType != null)
+			{
+				try
+				{
+					model.CustomLifestyle = Type.GetType(customLifestyleType, true, false);
+				}
+				catch(Exception ex)
+				{
+					String message = String.Format(
+						"The Type {0} specified  in the customLifestyleType attribute could not be loaded.", customLifestyleType);
+
+					throw new ConfigurationException(message, ex);
+				}
+			}
+			else
+			{
+				throw new ConfigurationException(@"The attribute 'customLifestyleType' must be specified in conjunction with the 'lifestyle' attribute set to ""custom"".");
 			}
 		}
 

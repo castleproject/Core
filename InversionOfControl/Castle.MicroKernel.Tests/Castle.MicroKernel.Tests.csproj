@@ -200,6 +200,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ClassComponents\CustomLifestyleManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ClassComponents\DefaultCustomer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

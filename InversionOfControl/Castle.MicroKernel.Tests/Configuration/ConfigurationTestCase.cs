@@ -141,5 +141,27 @@ namespace Castle.MicroKernel.Tests.Configuration
 			Assert.AreEqual( "uol", instance.Hosts[1] );
 			Assert.AreEqual( "folha", instance.Hosts[2] );
 		}
+
+		[Test]
+		public void CustomLifestyleManager()
+		{
+			string key = "key";
+
+			MutableConfiguration confignode = new MutableConfiguration(key);
+			confignode.Attributes.Add("lifestyle", "custom");
+
+			confignode.Attributes.Add( "customLifestyleType", "Castle.MicroKernel.Tests.ClassComponents.CustomLifestyleManager, Castle.MicroKernel.Tests" );
+
+			kernel.ConfigurationStore.AddComponentConfiguration(key, confignode);
+			kernel.AddComponent(key, typeof(ICommon), typeof(CommonImpl1));
+
+			ICommon instance = (ICommon) kernel[key];
+			IHandler handler = kernel.GetHandler(key);
+
+			Assert.IsNotNull( instance );
+			Assert.AreEqual(Model.LifestyleType.Custom,  handler.ComponentModel.LifestyleType);
+			Assert.AreEqual(typeof(CustomLifestyleManager), handler.ComponentModel.CustomLifestyle);
+		}
+
 	}
 }

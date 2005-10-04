@@ -1,4 +1,15 @@
-Beta 3  - 
+RC 2
+----
+
+- Support for custom lifestyle through configuration (kudos to Bawer Dagdeviren):
+
+  <component id="my.component"
+                   type="MyLib.MyComponent, MyLib"
+                   lifestyle="custom"
+                   customLifestyleType="MyLib.MyCustomLifestyle, MyLib" />
+
+
+Beta 3
 ------
 
 - Bug in dependency resolution (when chained) fixed
