@@ -48,7 +48,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		}
 
 		[Test]
-		// [Ignore("Just for a while")]
+		[Ignore("Just for a while")]
 		public void CommonUsageMultithread()
 		{
 			IWindsorContainer container = CreateConfiguredContainer();
