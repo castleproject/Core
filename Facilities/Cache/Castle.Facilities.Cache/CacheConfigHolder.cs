@@ -18,7 +18,7 @@ using System.Collections;
 namespace Castle.Facilities.Cache
 {
 	/// <summary>
-	/// Description résumée de CaheConfigHolder.
+	/// Summary description for CacheConfigHolder.
 	/// </summary>
 	public class CacheConfigHolder
 	{

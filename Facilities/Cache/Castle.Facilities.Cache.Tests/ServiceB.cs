@@ -8,14 +8,19 @@ namespace Castle.Facilities.Cache.Tests
 	public class ServiceB : IServiceB
 	{
 
-		#region Membres de IServiceB
+		#region IServiceB members
 
-		public string MyMethod(string a, string b, string c)
+		public string MyMethodA(string a, string b, string c)
 		{
 			string ret = a+b+c;
 
 			Console.Write( ret.ToString() + Environment.TickCount.ToString() );
 			return ret;
+		}
+
+		public void MyMethodB()
+		{
+			Console.Write( Environment.TickCount.ToString() );
 		}
 
 		#endregion

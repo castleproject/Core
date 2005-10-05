@@ -12,19 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections;
-using System.Collections.Specialized;
-using Castle.Facilities.Cache.Manager;
-using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
-using Castle.MicroKernel.SubSystems.Conversion;
-using Castle.Model.Configuration;
 
 namespace Castle.Facilities.Cache
 {
 	/// <summary>
-	/// Description résumée de CacheFacility.
+	/// Summary description for CacheFacility.
 	/// </summary>
 	public class CacheFacility : AbstractFacility
 	{

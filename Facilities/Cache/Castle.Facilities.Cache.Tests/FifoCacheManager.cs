@@ -15,6 +15,11 @@ namespace Castle.Facilities.Cache.Tests
 		private IList _keyList = null;
 		#endregion
 
+		public IList KeyList
+		{
+			get { return _keyList; }
+		}
+
 		#region Constructor (s) / Destructor
 		/// <summary>
 		/// 

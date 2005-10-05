@@ -7,6 +7,8 @@ namespace Castle.Facilities.Cache.Tests
 	/// </summary>
 	public interface IServiceB
 	{
-		string MyMethod(string a , string b, string c);
+		string MyMethodA(string a , string b, string c);
+
+		void MyMethodB();
 	}
 }

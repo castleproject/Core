@@ -20,10 +20,12 @@ using Castle.Model.Interceptor;
 namespace Castle.Facilities.Cache
 {
 	/// <summary>
-	/// Description résumée de CacheInterceptor.
+	/// Summary description for CacheInterceptor.
 	/// </summary>
 	public class CacheInterceptor : IMethodInterceptor
 	{
+		public readonly object NULL_OBJECT = new Object(); 
+
 		private CacheConfigHolder _cacheConfigHolder = null;
 
 		public CacheInterceptor(CacheConfigHolder transactionConfHolder)
@@ -31,12 +33,12 @@ namespace Castle.Facilities.Cache
 			_cacheConfigHolder = transactionConfHolder;
 		}
 
-		#region Membres de IMethodInterceptor
+		#region IMethodInterceptor Members
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
 			CacheConfig config = _cacheConfigHolder.GetConfig( invocation.Method.DeclaringType );
-			ICacheManager cacheManager = config.CacheManager;
+			ICacheManager cacheManager = config.GetCacheManager( invocation.Method );
 
 			if (config != null && config.IsMethodCache( invocation.Method ))
 			{
@@ -49,9 +51,21 @@ namespace Castle.Facilities.Cache
 					result = invocation.Proceed(args);
 
 					//cache method result
-					cacheManager[ cacheKey ] = result;
+					if (result == null)
+					{
+						cacheManager[ cacheKey ] = NULL_OBJECT;
+					}
+					else
+					{
+						cacheManager[ cacheKey ] = result;	
+					}
 				}
-				
+				else if (result == NULL_OBJECT) 
+				{ 
+					// convert the marker object back into a null value 
+					result = null; 
+				} 
+
 				return result;
 			}
 			else
@@ -78,5 +92,6 @@ namespace Castle.Facilities.Cache
 		}
 
 		#endregion
+
 	}
 }

@@ -12,42 +12,79 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Reflection;
 using Castle.Facilities.Cache.Manager;
+using Castle.MicroKernel;
+using Castle.MicroKernel.Facilities;
 
 namespace Castle.Facilities.Cache
 {
 	/// <summary>
-	/// Description résumée de CacheConfig.
+	/// Summary description for CacheConfig.
 	/// </summary>
 	public class CacheConfig
 	{
-		private IList _methods = new ArrayList();
-		private IList _methodName = new ArrayList();
-		private ICacheManager _cacheManager = null;
+		private IDictionary _cacheManagerByMethod = new HybridDictionary();
+		private IDictionary _cacheManagerByMethodName = new HybridDictionary();
+		private IKernel _kernel = null;
 
-		public ICacheManager CacheManager
+		private string _globalCacheManagerId = null;
+
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="kernel"></param>
+		/// <param name="globalCacheManagerId"></param>
+		/// <remarks>The globalCacheManagerId us only used when configure by attribute</remarks>
+		public CacheConfig(IKernel kernel, string globalCacheManagerId)
 		{
-			get { return _cacheManager; }
+			_globalCacheManagerId = globalCacheManagerId;
+			_kernel = kernel;
 		}
 
-		public CacheConfig(ICacheManager cacheManager)
+		public ICacheManager GetCacheManager(MethodInfo method)
 		{
-			_cacheManager = cacheManager;
+			string cacheManagerId = string.Empty;
+
+			if (_cacheManagerByMethod.Contains(method))
+			{
+				cacheManagerId = _cacheManagerByMethod[method] as string;
+			}
+			else if (_cacheManagerByMethodName.Contains(method.Name))
+			{
+				cacheManagerId = _cacheManagerByMethodName[method.Name] as string;
+			}
+
+			return (ICacheManager)_kernel[cacheManagerId];
 		}
 
-		public void AddMethodName(string value)
+		public void AddMethod(MethodInfo method, string cacheManagerId)
 		{
-			_methodName.Add(value);
+			if ( cacheManagerId == string.Empty )
+			{
+				if (_globalCacheManagerId != string.Empty )
+				{
+					_cacheManagerByMethod.Add(method, _globalCacheManagerId);
+				}
+				else
+				{
+					throw new FacilityException("You must specify a cache manager id on the cache class attribute or on the method attribute."); 
+				}
+			}
+			else
+			{
+				_cacheManagerByMethod.Add(method, cacheManagerId);	
+			}
 		}
 
-		public void AddMethod(MethodInfo method)
+		public void AddMethodName(string methodName, string cacheManagerId)
 		{
-			_methods.Add(method);
+			_cacheManagerByMethodName.Add(methodName, cacheManagerId);
 		}
-	
+
 		/// <summary>
 		/// A 
 		/// </summary>
@@ -55,15 +92,8 @@ namespace Castle.Facilities.Cache
 		/// <returns></returns>
 		public bool IsMethodCache(MethodInfo method)
 		{
-			if (_methods.Contains(method)) return true;
-
-			foreach(String methodName in _methodName)
-			{
-				if (method.Name.Equals(methodName))
-				{
-					return true;
-				}
-			}
+			if (_cacheManagerByMethod.Contains(method)) return true;
+			if (_cacheManagerByMethodName.Contains(method.Name)) return true;
 
 			return false;
 		}
