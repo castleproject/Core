@@ -21,47 +21,47 @@ namespace Castle.MonoRail.Framework.Tests
 	[TestFixture]
 	public class ViewEngineBaseTestCase
 	{
-		FakeViewEngine _viewEngine;
-		ProcessEngine _engine;
+//		FakeViewEngine _viewEngine;
+//		ProcessEngine _engine;
 
-		[SetUp]
-		public void Init()
-		{
-			IControllerFactory factory = new FakeControllerFactory();
-
-			_viewEngine = new FakeViewEngine();
-			_engine = new ProcessEngine(factory, _viewEngine);
-		}
-
-		[Test]
-		public void AdjustContentType()
-		{
-			RailsEngineContextImpl context;
-			_viewEngine.AddView("home", "index", "test content");
-
-			context = new RailsEngineContextImpl("/home/index.rails");
-			_viewEngine.XhtmlRendering = true;
-			context.Request.Headers["Accept"] = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-			_engine.Process(context);
-			Assert.AreEqual("application/xhtml+xml", context.Response.ContentType);
-
-			context = new RailsEngineContextImpl("/home/index.rails");
-			_viewEngine.XhtmlRendering = false;
-			context.Request.Headers["Accept"] = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-			_engine.Process(context);
-			Assert.AreEqual("text/html", context.Response.ContentType);
-
-			context = new RailsEngineContextImpl("/home/index.rails");
-			_viewEngine.XhtmlRendering = true;
-			context.Request.Headers["Accept"] = "text/html,text/plain,image/png,*/*;q=0.5";
-			_engine.Process(context);
-			Assert.AreEqual("text/html", context.Response.ContentType);
-
-			context = new RailsEngineContextImpl("/home/index.rails");
-			_viewEngine.XhtmlRendering = false;
-			context.Request.Headers["Accept"] = "text/html,text/plain,image/png,*/*;q=0.5";
-			_engine.Process(context);
-			Assert.AreEqual("text/html", context.Response.ContentType);
-		}
+//		[SetUp]
+//		public void Init()
+//		{
+//			IControllerFactory factory = new FakeControllerFactory();
+//
+//			_viewEngine = new FakeViewEngine();
+//			_engine = new ProcessEngine(factory, _viewEngine);
+//		}
+//
+//		[Test]
+//		public void AdjustContentType()
+//		{
+//			RailsEngineContextImpl context;
+//			_viewEngine.AddView("home", "index", "test content");
+//
+//			context = new RailsEngineContextImpl("/home/index.rails");
+//			_viewEngine.XhtmlRendering = true;
+//			context.Request.Headers["Accept"] = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+//			_engine.Process(context);
+//			Assert.AreEqual("application/xhtml+xml", context.Response.ContentType);
+//
+//			context = new RailsEngineContextImpl("/home/index.rails");
+//			_viewEngine.XhtmlRendering = false;
+//			context.Request.Headers["Accept"] = "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+//			_engine.Process(context);
+//			Assert.AreEqual("text/html", context.Response.ContentType);
+//
+//			context = new RailsEngineContextImpl("/home/index.rails");
+//			_viewEngine.XhtmlRendering = true;
+//			context.Request.Headers["Accept"] = "text/html,text/plain,image/png,*/*;q=0.5";
+//			_engine.Process(context);
+//			Assert.AreEqual("text/html", context.Response.ContentType);
+//
+//			context = new RailsEngineContextImpl("/home/index.rails");
+//			_viewEngine.XhtmlRendering = false;
+//			context.Request.Headers["Accept"] = "text/html,text/plain,image/png,*/*;q=0.5";
+//			_engine.Process(context);
+//			Assert.AreEqual("text/html", context.Response.ContentType);
+//		}
 	}
 }

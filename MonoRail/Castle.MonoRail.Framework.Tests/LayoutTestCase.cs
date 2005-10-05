@@ -23,38 +23,38 @@ namespace Castle.MonoRail.Framework.Tests
 	[TestFixture]
 	public class LayoutTestCase 
 	{
-		FakeViewEngine _viewEngine;
-		ProcessEngine _engine;
-
-		[SetUp]
-		public void Init()
-		{
-			IControllerFactory factory = new FakeControllerFactory();
-
-			_viewEngine = new FakeViewEngineWithLayoutSupport();
-			_engine = new ProcessEngine(factory, _viewEngine);
-		}
-
-		[Test]
-		public void LayoutUsage()
-		{
-			_viewEngine.AddView("layout", "index", "index view contents");
-			_viewEngine.AddView("layout", "save", "save view contents");
-			_viewEngine.AddView("layout", "update", "update view contents");
-			_viewEngine.AddView("layouts", "general", "My layout! follows the contents {0}");
-
-			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/layout/index.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "My layout! follows the contents index view contents", context.Output );
-
-			context = new RailsEngineContextImpl("/layout/save.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "My layout! follows the contents save view contents", context.Output );
-
-			context = new RailsEngineContextImpl("/layout/update.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "My layout! follows the contents update view contents", context.Output );
-		}
+//		FakeViewEngine _viewEngine;
+//		ProcessEngine _engine;
+//
+//		[SetUp]
+//		public void Init()
+//		{
+//			IControllerFactory factory = new FakeControllerFactory();
+//
+//			_viewEngine = new FakeViewEngineWithLayoutSupport();
+//			_engine = new ProcessEngine(factory, _viewEngine);
+//		}
+//
+//		[Test]
+//		public void LayoutUsage()
+//		{
+//			_viewEngine.AddView("layout", "index", "index view contents");
+//			_viewEngine.AddView("layout", "save", "save view contents");
+//			_viewEngine.AddView("layout", "update", "update view contents");
+//			_viewEngine.AddView("layouts", "general", "My layout! follows the contents {0}");
+//
+//			RailsEngineContextImpl context = new 
+//				RailsEngineContextImpl("/layout/index.rails");
+//			_engine.Process( context );
+//			Assert.AreEqual( "My layout! follows the contents index view contents", context.Output );
+//
+//			context = new RailsEngineContextImpl("/layout/save.rails");
+//			_engine.Process( context );
+//			Assert.AreEqual( "My layout! follows the contents save view contents", context.Output );
+//
+//			context = new RailsEngineContextImpl("/layout/update.rails");
+//			_engine.Process( context );
+//			Assert.AreEqual( "My layout! follows the contents update view contents", context.Output );
+//		}
 	}
 }

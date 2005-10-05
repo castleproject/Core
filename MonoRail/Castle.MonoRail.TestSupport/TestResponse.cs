@@ -12,26 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Tests.Controllers
+namespace Castle.MonoRail.TestSupport
 {
 	using System;
+	using System.Collections.Specialized;
 
-	using NUnit.Framework;
 
-	[Filter( ExecuteEnum.Before, typeof(MyFilter) )]
-	public class Filtered2Controller : Controller
+	[Serializable]
+	public class TestResponse// : MarshalByRefObject
 	{
-		[SkipFilter]
-		public void Index()
+		private NameValueCollection headers = new NameValueCollection();
+		private int statusCode;
+		private String statusDescription;
+
+		public TestResponse()
 		{
 		}
 
-		public void Save()
+		public int StatusCode
 		{
+			get { return statusCode; }
+			set { statusCode = value; }
 		}
 
-		public void Update()
+		public string StatusDescription
 		{
+			get { return statusDescription; }
+			set { statusDescription = value; }
+		}
+
+		public NameValueCollection Headers
+		{
+			get { return headers; }
+		}
+
+		protected internal void Complete()
+		{
+			
 		}
 	}
 }

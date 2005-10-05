@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)\App.config $(TargetPath).config"
                 RootNamespace = "Castle.MonoRail.Framework.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -110,6 +110,10 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -126,16 +130,6 @@
                 />
                 <File
                     RelPath = "DescriptorBuilderMultiThreadedTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FakeControllerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FakeViewEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -186,16 +180,6 @@
                 />
                 <File
                     RelPath = "Controllers\ExceptionController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\Filtered2Controller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\FilteredController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Tests.Controllers
+namespace TestSite.Controllers
 {
 	using System;
 
-	using NUnit.Framework;
+	using Castle.MonoRail.Framework;
 
 	[Filter( ExecuteEnum.Before|ExecuteEnum.After, typeof(MyFilter) )]
 	public class FilteredController : Controller
@@ -32,6 +32,7 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 
 		public void Save()
 		{
+			RenderText("content");
 		}
 
 		public void Update()
@@ -48,9 +49,6 @@ namespace Castle.MonoRail.Framework.Tests.Controllers
 	{
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
-			Assert.IsNotNull(context);
-			Assert.IsNotNull(controller);
-
 			if (exec == ExecuteEnum.Before)
 			{
 				context.Response.Write("(before)");

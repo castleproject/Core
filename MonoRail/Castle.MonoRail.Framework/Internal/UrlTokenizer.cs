@@ -26,12 +26,12 @@ namespace Castle.MonoRail.Framework.Internal
 	{
 		public static UrlInfo ExtractInfo( String url, String virtualDirectory )
 		{
-			if ( url == null || url.Length == 0 || url[0] != '/' )
+			if ( url == null || url.Length == 0 )
 			{
 				throw new UrlTokenizerException("Invalid url");
 			}
 
-			url = url.ToLower().Substring(1);
+			if (url[0] == '/') url = url.ToLower().Substring(1);
 
 			// Strip the virtualDirectory from the Url
 			if (virtualDirectory != null && virtualDirectory != "")

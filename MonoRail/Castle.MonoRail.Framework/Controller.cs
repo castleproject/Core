@@ -509,6 +509,10 @@ namespace Castle.MonoRail.Framework
 			actions.Remove("Send");
 			actions.Remove("PreSendView");
 			actions.Remove("PostSendView");
+			actions.Remove("Equals");
+			actions.Remove("CancelLayout");
+			actions.Remove("HasTemplate");
+			actions.Remove("GetType");
 		}
 
 		/// <summary>

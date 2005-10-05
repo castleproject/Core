@@ -167,7 +167,7 @@ namespace Castle.MonoRail.Engine.Adapters
 		{
 			get
 			{
-				String path = null;
+				String path = String.Empty;
 
 				if (UnderlyingContext != null)
 				{

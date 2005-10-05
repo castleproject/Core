@@ -15,49 +15,18 @@
 namespace TestSite.Controllers
 {
 	using System;
-
 	using Castle.MonoRail.Framework;
 
-	public class HomeController : Controller
+	[Filter( ExecuteEnum.Before, typeof(MyFilter) )]
+	public class Filtered2Controller : Controller
 	{
-		public HomeController()
-		{
-		}
-
+		[SkipFilter]
 		public void Index()
 		{
 		}
 
-		public void Other()
+		public void Update()
 		{
-			RenderView("display");
-		}
-
-		public void Welcome()
-		{
-			RenderView("heyhello");
-		}
-
-		public void RedirectAction()
-		{
-			Redirect("home", "index");
-		}
-
-		public void RedirectForOtherArea()
-		{
-			Redirect("subarea", "home", "index");
-		}
-
-		public void Bag()
-		{
-			PropertyBag.Add( "CustomerName", "hammett" );
-			PropertyBag.Add( "List", new String[] { "1", "2", "3" } );
-		}
-
-		public void Bag2()
-		{
-			PropertyBag.Add( "CustomerName", "hammett" );
-			PropertyBag.Add( "List", new String[] { "1", "2", "3" } );
 		}
 	}
 }

@@ -14,10 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Tests
 {
-	using System;
-
-	using Castle.MonoRail.Engine;
-
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Tests.Controllers;
 

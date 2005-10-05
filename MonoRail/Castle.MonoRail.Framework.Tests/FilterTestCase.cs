@@ -14,84 +14,71 @@
 
 namespace Castle.MonoRail.Framework.Tests
 {
-	using System;
-
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Engine;
+	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-	public class FilterTestCase
+	public class FilterTestCase : AbstractMRTestCase
 	{
-		FakeViewEngine _viewEngine;
-		ProcessEngine _engine;
-
-		[SetUp]
-		public void Init()
+		[Test]
+		public void SkipFilter()
 		{
-			IControllerFactory factory = new FakeControllerFactory();
+			DoGet("filtered/index.rails");
 
-			_viewEngine = new FakeViewEngine();
-			_engine = new ProcessEngine(factory, _viewEngine);
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "Filtered Action Index" );
 		}
 
 		[Test]
-		public void FilteringAndSkippingFiltering()
+		public void FilteredActionWithRenderText()
 		{
-			_viewEngine.AddView("filtered", "index", "index view contents");
-			_viewEngine.AddView("filtered", "save", "save view contents");
-			_viewEngine.AddView("filtered", "update", "update view contents");
+			DoGet("filtered/save.rails");
 
-			// Non filtered action
-			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/filtered/index.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "index view contents", context.Output );
+			AssertSuccess();
 
-			// Filtered action
-			context = new RailsEngineContextImpl("/filtered/save.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "(before)(after)save view contents", context.Output );
+			AssertReplyEqualsTo( "(before)content(after)" );
+		}
 
-			// Filtered action
-			context = new RailsEngineContextImpl("/filtered/update.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "(before)(after)update view contents", context.Output );
+		[Test]
+		public void FilteredActionWithView()
+		{
+			DoGet("filtered/update.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "(before)(after)update view contents" );
 		}
 
         [Test]
         public void SelectiveSkipFilter()
 		{
-            _viewEngine.AddView("filtered", "selectiveSkip", "selectiveSkip view contents");
+			DoGet("filtered/selectiveSkip.rails");
 
-            // Non filtered action
-            RailsEngineContextImpl context = new RailsEngineContextImpl("/filtered/selectiveSkip.rails");
-            _engine.Process( context );
-            Assert.AreEqual( "selectiveSkip view contents", context.Output );
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "selectiveSkip view contents" );
         }
 
 		[Test]
-		public void BeforeFilters()
+		public void BeforeFilter_SkipFilter()
 		{
-			_viewEngine.AddView("filtered2", "index", "index view contents");
-			_viewEngine.AddView("filtered2", "save", "save view contents");
-			_viewEngine.AddView("filtered2", "update", "update view contents");
+			DoGet("filtered2/index.rails");
 
-			// Non filtered action
-			RailsEngineContextImpl context = new 
-				RailsEngineContextImpl("/filtered2/index.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "index view contents", context.Output );
+			AssertSuccess();
 
-			// Filtered action
-			context = new RailsEngineContextImpl("/filtered2/save.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "(before)save view contents", context.Output );
+			AssertReplyEqualsTo( "index view contents" );
+		}
 
-			// Filtered action
-			context = new RailsEngineContextImpl("/filtered2/update.rails");
-			_engine.Process( context );
-			Assert.AreEqual( "(before)update view contents", context.Output );
+		[Test]
+		public void BeforeFilter_Filtered()
+		{
+			DoGet("filtered2/update.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "update view contents" );
 		}
 	}
 }

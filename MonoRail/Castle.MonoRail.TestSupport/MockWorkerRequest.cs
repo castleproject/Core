@@ -23,7 +23,7 @@ namespace Castle.MonoRail.TestSupport
 	using System.Web;
 	using System.Web.Hosting;
 
-
+	[Serializable]
 	public class MockWorkerRequest : SimpleWorkerRequest
 	{
 		private String protocol = "HTTP/1.0";

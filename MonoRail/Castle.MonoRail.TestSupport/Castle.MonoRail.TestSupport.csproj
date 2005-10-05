@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\gacutil.exe /u $(TargetPath)&#xd;&#xa;C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\gacutil.exe /i $(TargetPath)"
                 RootNamespace = "Castle.MonoRail.TestSupport"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -115,7 +115,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MockWorkerRequest.cs"
+                    RelPath = "MonoRailTestWorkerRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TestRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TestResponse.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebAppHost.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -136,6 +136,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\Filtered2Controller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\FilteredController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\HelperController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -183,6 +193,26 @@
                     RelPath = "views\filter\index.aspx"
                     BuildAction = "Content"
                 />
+                <File
+                    RelPath = "views\filtered\index.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\filtered\selectiveSkip.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\filtered\update.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\filtered2\index.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\filtered2\update.aspx"
+                    BuildAction = "Content"
+                />
                 <Folder RelPath = "views\general\" />
                 <File
                     RelPath = "views\helper\helpme.aspx"
@@ -206,6 +236,10 @@
                 />
                 <File
                     RelPath = "views\home\bag2.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\home\display.aspx"
                     BuildAction = "Content"
                 />
                 <File

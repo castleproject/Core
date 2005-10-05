@@ -14,58 +14,32 @@
 
 namespace Castle.MonoRail.Framework.Tests
 {
-	using System;
-	using System.Reflection;
-
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Engine;
-	// using Castle.MonoRail.TestSupport;
+	using Castle.MonoRail.TestSupport;
 
-	/// <summary>
-	/// Summary description for FlowTestCase.
-	/// </summary>
+
 	[TestFixture]
-	public class FlowTestCase// : AbstractMRTestCase
+	public class FlowTestCase : AbstractMRTestCase
 	{
-		private FakeViewEngine viewEngine;
+		[Test]
+		public void SimpleRequest()
+		{
+			DoGet("home/index.rails");
 
-//		public FlowTestCase()
-//		{
-//			Config.CustomEngineTypeName = "Castle.MonoRail.Framework.Tests.FakeViewEngine, Castle.MonoRail.Framework.Tests";
-//
-//			Config.ControllerAssemblies.Add( "Castle.MonoRail.Framework.Tests" );
-//		}
-//
-//		protected override void CustomizeProcessEngine(ProcessEngine processEngine)
-//		{
-//			viewEngine = (FakeViewEngine) processEngine.ViewEngine;
-//		}
+			AssertSuccess();
 
-//		[Test]
-//		public void SimpleRequest()
-//		{
-//			viewEngine.AddView("home", "index", "hello world!");
-//
-//			DoGet("/home/index.rails");
-//
-//			AssertSuccess();
-//
-//			AssertReplyEqualsTo( "hello world!" );
-//		}
+			AssertReplyEqualsTo( @"My View contents for Home\Index" );
+		}
 
-//		[Test]
-//		public void SimpleRequestWithDifferentView()
-//		{
-//			_viewEngine.AddView("home", "index", "hello from index");
-//			_viewEngine.AddView("home", "display", "hello from display");
-//
-//			RailsEngineContextImpl context = new 
-//				RailsEngineContextImpl("/home/other.rails");
-//
-//			_engine.Process( context );
-//
-//			Assert.AreEqual( "hello from display", context.Output );
-//		}
+		[Test]
+		public void SimpleRequestWithDifferentView()
+		{
+			DoGet("home/other.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "Hello from display view.aspx" );
+		}
 	}
 }

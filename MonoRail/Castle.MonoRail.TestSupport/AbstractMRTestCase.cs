@@ -16,176 +16,121 @@ namespace Castle.MonoRail.TestSupport
 {
 	using System;
 	using System.IO;
-	using System.Reflection;
 	using System.Text;
-	using System.Web;
-	using System.Collections;
-
+	using System.Web.Hosting;
+	using System.Configuration;
+	
 	using NUnit.Framework;
-
-	using Castle.MonoRail.Engine;
-	using Castle.MonoRail.Engine.Adapters;
-	using Castle.MonoRail.Engine.Configuration;
 
 
 	public abstract class AbstractMRTestCase
 	{
-		private MonoRailConfiguration customConfig;
-		private ProcessEngineFactory processEngineFactory;
-		private ProcessEngine processEngine;
-		private MockWorkerRequest request;
-		private HttpResponse response;
-		private StringBuilder outputContents = new StringBuilder();
+		private static readonly String PhysicalWebDirConfigKey = "web.physical.dir";
+		private static readonly String VirtualWebDirConfigKey = "web.virtual.dir";
+
+		private WebAppHost host;
+		private TestRequest request;
+		private TestResponse response;
+		private StringBuilder outputBuffer = new StringBuilder();
 
 		[TestFixtureSetUp]
 		public virtual void FixtureInitialize()
 		{
-			if (customConfig != null)
-			{
-				processEngineFactory = new ProcessEngineFactory( customConfig );
-			}
-			else
-			{
-				processEngineFactory = new ProcessEngineFactory();
-			}
+			String virDir = GetVirtualDir();
+			String physicalDir = GetPhysicalDir();
+
+			host = (WebAppHost) ApplicationHost.CreateApplicationHost( 
+				typeof(WebAppHost), virDir, physicalDir );
+
+			host.Configure(virDir, physicalDir);
 		}
 
 		[SetUp]
 		public virtual void Initialize()
 		{
-			outputContents.Length = 0;
-
-			processEngine = processEngineFactory.Create();
-
-			CustomizeProcessEngine(processEngine);
-
-			StringWriter writer = new StringWriter(outputContents);
-
-			request = new MockWorkerRequest(writer);
-			request.VirtualPath = "/";
-			
-			response = null;
+			request = new TestRequest();
 		}
 
 		[TearDown]
 		public virtual void Terminate()
 		{
-			processEngine = null;
-			request = null;
-			response = null;
+			outputBuffer.Length = 0;
 		}
 
 		[TestFixtureTearDown]
 		public virtual void FixtureTerminate()
 		{
-			processEngineFactory = null;
+			if (host != null) host.Dispose();
 		}
 
-		protected virtual void CustomizeProcessEngine(ProcessEngine processEngine)
+		public void DoGet(String path, params String[] queryStringParams)
 		{
-			
+			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
+
+			Request.Url = path;
+
+			StringWriter writer = new StringWriter(outputBuffer);
+
+			response = host.Process( Request, writer );
+
+			// Console.WriteLine( "Contents " + writer.GetStringBuilder().ToString() );
 		}
 
-		protected void DoGet(String path, params String[] queryStringParams)
-		{
-			// url-decode path
-
-			if (path.IndexOf('%') >= 0) 
-			{
-				path = HttpUtility.UrlDecode(path);
-			}
-
-			// path info
-
-			String filePath = String.Empty;
-			String pathInfo = String.Empty;
-
-			int lastDot = path.LastIndexOf('.');
-			int lastSlh = path.LastIndexOf('/');
-
-			if (lastDot >= 0 && lastSlh >= 0 && lastDot < lastSlh) 
-			{
-				int ipi = path.IndexOf('/', lastDot);
-				filePath = path.Substring(0, ipi);
-				pathInfo = path.Substring(ipi);
-			}
-			else 
-			{
-				filePath = path;
-				pathInfo = String.Empty;
-			}
-
-			request.FilePath = filePath;
-			request.PathInfo = pathInfo;
-
-			outputContents.Length = 0;
-
-			HttpContext context = new HttpContext( request );
-			
-			// context.Items["AspSession"] = new Hashtable();
-
-			// TODO: Extract query string from url
-
-			request.Prepare();
-
-			HttpRuntime.ProcessRequest( request );
-
-			response = context.Response;
-
-			processEngine.Process( new RailsEngineContextAdapter(context, path) );
-		}
-
-		protected void DoPost(String url, params String[] postParams)
-		{
-			outputContents.Length = 0;
-
-			HttpContext context = new HttpContext( request );
-
-			request.PostParams = postParams;
-			
-			context.Items["AspSession"] = new Hashtable();
-
-			// TODO: Extract query string from url
-
-			request.Prepare();
-
-			processEngine.Process( new RailsEngineContextAdapter(context, url) );
-
-			response = context.Response;
-			response.Flush();
-		}
-
-//		protected void DoPostFile(String url, String fileName)
-//		{
-//			
-//		}
-
-		protected void AssertSuccess()
-		{
-			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
-			Assert.AreEqual(200, response.StatusCode, "Status code different than 200");
-		}
-
-		protected void AssertReplyEqualsTo(String expectedContents)
-		{
-			
-		}
-
-		public MockWorkerRequest Request
+		public TestRequest Request
 		{
 			get { return request; }
 		}
 
-		public MonoRailConfiguration Config
+		public TestResponse Response
 		{
-			get
+			get { return response; }
+		}
+
+		protected void AssertSuccess()
+		{
+			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
+			Assert.IsTrue(response.StatusCode < 400, "Status code different than > 400");
+		}
+
+		protected void AssertReplyEqualsTo(String expectedContents)
+		{
+			Assert.AreEqual( expectedContents, outputBuffer.ToString() );
+		}
+
+		protected virtual string GetPhysicalDir()
+		{
+			String dir = ConfigurationSettings.AppSettings[PhysicalWebDirConfigKey];
+
+			if (dir == null)
 			{
-				if (customConfig == null)
-				{
-					customConfig = new MonoRailConfiguration();
-				}
-				return customConfig;
+				String message = String.Format("Could not find a configuration key " + 
+					"defining the web application physical directory. You must create " + 
+					"a key ('{0}') on your configuration file or override the method " + 
+					"AbstractMRTestCase.GetPhysicalDir", PhysicalWebDirConfigKey);
+
+				throw new ConfigurationException(message);
 			}
+
+			if (!Path.IsPathRooted(dir))
+			{
+				DirectoryInfo dinfo = new DirectoryInfo( Path.Combine( AppDomain.CurrentDomain.SetupInformation.ApplicationBase, dir ) );
+
+				dir = dinfo.FullName;
+			}
+
+			return dir;
+		}
+
+		protected virtual string GetVirtualDir()
+		{
+			String dir = ConfigurationSettings.AppSettings[VirtualWebDirConfigKey];
+
+			if (dir == null)
+			{
+				dir = "/";
+			}
+
+			return dir;
 		}
 	}
 }

@@ -28,8 +28,6 @@ namespace TestSite.Controllers
 
 	public class FilterBadHeader : IFilter
 	{
-		#region IFilter Members
-
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
 			if (context.Request.Headers["mybadheader"] != null)
@@ -41,7 +39,5 @@ namespace TestSite.Controllers
 
 			return true;
 		}
-
-		#endregion
 	}
 }
