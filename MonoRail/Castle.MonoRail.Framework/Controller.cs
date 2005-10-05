@@ -659,7 +659,7 @@ namespace Castle.MonoRail.Framework
 				hasError = true;
 
 				// Try and perform the rescue
-				if (!PerformRescue(method, GetType(), ex))
+				if (!PerformRescue(method, ex))
 				{
 					//If the rescue fails, let the exception bubble
 					throw;
@@ -924,7 +924,7 @@ namespace Castle.MonoRail.Framework
 
 		#region Rescue
 
-		protected virtual bool PerformRescue(MethodInfo method, Type controllerType, Exception ex)
+		protected virtual bool PerformRescue(MethodInfo method, Exception ex)
 		{
 			if (ex is TargetInvocationException)
 			{

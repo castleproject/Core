@@ -144,17 +144,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "LayoutTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "RailsUrlTokenizerTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RescueTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

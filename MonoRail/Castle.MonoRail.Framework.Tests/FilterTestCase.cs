@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "update view contents" );
+			AssertReplyEqualsTo( "(before)update view contents" );
 		}
 	}
 }

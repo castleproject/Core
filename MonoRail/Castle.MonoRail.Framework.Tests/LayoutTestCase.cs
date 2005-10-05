@@ -23,18 +23,6 @@ namespace Castle.MonoRail.Framework.Tests
 	[TestFixture]
 	public class LayoutTestCase 
 	{
-//		FakeViewEngine _viewEngine;
-//		ProcessEngine _engine;
-//
-//		[SetUp]
-//		public void Init()
-//		{
-//			IControllerFactory factory = new FakeControllerFactory();
-//
-//			_viewEngine = new FakeViewEngineWithLayoutSupport();
-//			_engine = new ProcessEngine(factory, _viewEngine);
-//		}
-//
 //		[Test]
 //		public void LayoutUsage()
 //		{
