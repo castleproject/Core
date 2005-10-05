@@ -17,7 +17,6 @@ namespace Castle.Facilities.NHibernateIntegration
 	using System;
 	using System.IO;
 	using System.Reflection;
-	using System.Configuration;
 
 	using Castle.Model;
 	using Castle.Model.Configuration;
@@ -46,7 +45,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (FacilityConfig == null)
 			{
-				throw new ConfigurationException(
+				throw new System.Configuration.ConfigurationException(
 					"The NHibernateFacility requires an external configuration");
 			}
 
@@ -54,7 +53,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			if (factoriesConfig == null)
 			{
-				throw new ConfigurationException(
+				throw new System.Configuration.ConfigurationException(
 					"You need to configure at least one factory to use the NHibernateFacility");
 			}
 
@@ -68,7 +67,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			{
 				if (!"factory".Equals(factoryConfig.Name))
 				{
-					throw new ConfigurationException("Unexpected node " + factoryConfig.Name);
+					throw new System.Configuration.ConfigurationException("Unexpected node " + factoryConfig.Name);
 				}
 
 				ConfigureFactories(factoryConfig);
@@ -81,7 +80,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			if (id == null || String.Empty.Equals(id))
 			{
-				throw new ConfigurationException("You must provide a valid 'id' attribute for the 'factory' node");
+				throw new System.Configuration.ConfigurationException("You must provide a valid 'id' attribute for the 'factory' node");
 			}
 
 			Configuration cfg = new Configuration();
@@ -157,7 +156,7 @@ namespace Castle.Facilities.NHibernateIntegration
 			catch(Exception ex)
 			{
 				String message = String.Format("The assembly {0} could not be loaded.", assembly);
-				throw new ConfigurationException( message, ex );
+				throw new System.Configuration.ConfigurationException( message, ex );
 			}
 		}
 	}
