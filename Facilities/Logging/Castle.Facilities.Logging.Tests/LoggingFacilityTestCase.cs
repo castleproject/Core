@@ -88,9 +88,12 @@ namespace Castle.Facilities.Logging.Tests
 
             MutableConfiguration confignode = new MutableConfiguration("facility");
 
-            confignode.Children.Add(new MutableConfiguration("framework", "log4net"));
-            confignode.Children.Add(new MutableConfiguration("config", "log4net.config"));
-            confignode.Children.Add(new MutableConfiguration("interception", "false"));            
+            IConfiguration main = confignode.Children.Add(new MutableConfiguration("default"));
+            
+
+            main.Children.Add(new MutableConfiguration("framework", "log4net"));
+            main.Children.Add(new MutableConfiguration("config", "log4net.config"));
+            main.Children.Add(new MutableConfiguration("enableInterception", "false"));            
 
             container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);
 
@@ -103,9 +106,11 @@ namespace Castle.Facilities.Logging.Tests
 
             MutableConfiguration confignode = new MutableConfiguration("facility");
 
-            confignode.Children.Add(new MutableConfiguration("framework", "nlog"));
-            confignode.Children.Add(new MutableConfiguration("config", "nlog.config"));
-            confignode.Children.Add(new MutableConfiguration("interception", "false"));            
+            IConfiguration main = confignode.Children.Add(new MutableConfiguration("default"));
+
+            main.Children.Add(new MutableConfiguration("framework", "nlog"));
+            main.Children.Add(new MutableConfiguration("config", "nlog.config"));
+            main.Children.Add(new MutableConfiguration("enableInterception", "false"));            
 
             container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);
 
