@@ -46,10 +46,10 @@ namespace Castle.Facilities.Cache
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
 			CacheConfig config = _cacheConfigHolder.GetConfig( invocation.Method.DeclaringType );
-			ICacheManager cacheManager = config.GetCacheManager( invocation.Method );
 
 			if (config != null && config.IsMethodCache( invocation.Method ))
 			{
+				ICacheManager cacheManager = config.GetCacheManager( invocation.Method );
 				String cacheKey = cacheManager.CacheKeyGenerator.GenerateKey( invocation, args );
 				object result = cacheManager[ cacheKey ];
 

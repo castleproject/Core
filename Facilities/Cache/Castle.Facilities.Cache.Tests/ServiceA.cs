@@ -8,8 +8,12 @@ namespace Castle.Facilities.Cache.Tests
 	[Cache("FifoCacheManager")]
 	public class ServiceA : IServiceA
 	{
+		#region IServiceA Members
 
-		#region Membres de IServiceA
+		public string MyMethodNotcached(string a)
+		{
+			return "Hello "+a;
+		}
 
 		[Cache]
 		public decimal MyMethod(int a , decimal c)
@@ -21,5 +25,6 @@ namespace Castle.Facilities.Cache.Tests
 		}
 
 		#endregion
+
 	}
 }

@@ -46,6 +46,8 @@ namespace Castle.Facilities.Cache.Tests
 			serviceA.MyMethod(2, 5.5M);
 			string consoleContents = _outWriter.GetStringBuilder().ToString();
 
+			serviceA.MyMethodNotcached("Gilles");
+
 			serviceA.MyMethod(2, 5.5M);
 			Assert.AreEqual(consoleContents, _outWriter.GetStringBuilder().ToString() );
 		}

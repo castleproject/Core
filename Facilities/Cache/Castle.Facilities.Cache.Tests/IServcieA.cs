@@ -8,5 +8,7 @@ namespace Castle.Facilities.Cache.Tests
 	public interface IServiceA
 	{
 		decimal MyMethod(int a , decimal c);
+
+		string MyMethodNotcached(string a);
 	}
 }
