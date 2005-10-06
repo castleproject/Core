@@ -15,13 +15,9 @@
 namespace Castle.Facilities.Logging
 {
 	using System;
-	using System.IO;
-
-	using Castle.Model;
+	using System.Configuration;
 	using Castle.Model.Configuration;
-
 	using Castle.Services.Logging;
-	
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
@@ -72,45 +68,54 @@ namespace Castle.Facilities.Logging
 			// this.Kernel.Resolver.DependencyResolving += new Castle.MicroKernel.DependancyDelegate(InjectClassLogger);
 		}
 
-		private void ConfigureFactory()
-		{
-			if (FacilityConfig != null)
-			{
-				IConfiguration defaultNode = FacilityConfig.Children["default"];
+        private void ConfigureFactory()
+        {
+            if(FacilityConfig == null)
+            {
+                throw new ConfigurationException("The logging facility requires an external configuration");
+            }
 
-				String enableInterceptionAtt = defaultNode.Attributes["enableInterception"];
-				String typeAtt = defaultNode.Attributes["type"];				
-				String customAtt = defaultNode.Attributes["custom"];
+            IConfiguration defaultNode = FacilityConfig.Children["default"];
+                
 
-				if (enableInterceptionAtt != null)
-				{
-					allowInterception = (bool) converter.PerformConversion( 
-						enableInterceptionAtt, typeof(bool) );
-				}
+            String enableInterceptionAtt = defaultNode.Attributes["enableInterception"];
+            String typeAtt = defaultNode.Attributes["type"];				
+            String customAtt = defaultNode.Attributes["custom"];
 
-				if (typeAtt != null)
-				{
-					defaultLogImpl = (LoggerImplementation) Enum.Parse(
-						typeof(LoggerImplementation), typeAtt, true);
-				}
+            if (enableInterceptionAtt != null)
+            {
+                allowInterception = (bool) converter.PerformConversion( 
+                    enableInterceptionAtt, typeof(bool) );
+            }
 
-				Type customLoggerFactoryType = null;
+            if (typeAtt != null)
+            {
+                defaultLogImpl = (LoggerImplementation) Enum.Parse(
+                    typeof(LoggerImplementation), typeAtt, true);
+            }
 
-				if (customAtt != null)
-				{
-					customLoggerFactoryType = (Type) converter.PerformConversion( 
-						customAtt, typeof(Type) );
-				}
+            Type customLoggerFactoryType = null;
 
-				customFactory = (ILoggerFactory) Activator.CreateInstance( 
-					customLoggerFactoryType );
-			}
+            if (customAtt != null)
+            {
+                customLoggerFactoryType = (Type) converter.PerformConversion( customAtt, typeof(Type) );
+            }
 
-			if (allowInterception)
-			{
-				Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
-			}
-		}
+            
+            customFactory = (ILoggerFactory) Activator.CreateInstance(customLoggerFactoryType);
+            
+            if(customFactory == null)
+            {
+                throw new ConfigurationException("{0} does not implement ILoggerFactory");
+            }
+
+			
+
+            if (allowInterception)
+            {
+                Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
+            }
+        }
 
 		private void Kernel_ComponentRegistered(String key, IHandler handler)
 		{
