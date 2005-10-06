@@ -130,6 +130,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ConsoleTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "log4net.config"
                     BuildAction = "None"
                 />
