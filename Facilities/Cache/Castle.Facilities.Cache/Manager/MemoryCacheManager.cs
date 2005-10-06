@@ -24,6 +24,7 @@ namespace Castle.Facilities.Cache.Manager
 	{
 		#region Fields 
 		private IDictionary _cache = null;
+		private ICacheKeyGenerator _cacheKeyGenerator = null;
 		#endregion
 
 		public MemoryCacheManager()
@@ -32,6 +33,15 @@ namespace Castle.Facilities.Cache.Manager
 		}
 
 		#region ICacheManager Members
+
+		/// <summary>
+		/// A generator of keys for a cache entry.
+		/// </summary>
+		public ICacheKeyGenerator CacheKeyGenerator
+		{
+			get { return _cacheKeyGenerator; }
+			set { _cacheKeyGenerator = value; }
+		}
 
 		/// <summary>
 		/// Adds an item with the specified key and value into cached data.
@@ -69,5 +79,7 @@ namespace Castle.Facilities.Cache.Manager
 		}
 
 		#endregion
+
+
 	}
 }

@@ -140,6 +140,20 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ToDo.txt"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Manager\DefaultCacheKeyGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Manager\ICacheKeyGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Manager\ICacheManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

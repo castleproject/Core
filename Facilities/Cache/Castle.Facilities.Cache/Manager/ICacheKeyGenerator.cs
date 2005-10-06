@@ -12,42 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.Model.Interceptor;
+
 namespace Castle.Facilities.Cache.Manager
 {
 	/// <summary>
-	/// Description résumée de ICacheManager.
+	///  Generates the key to retrieve/save objects from/to the cache.
 	/// </summary>
-	public interface ICacheManager
+	public interface ICacheKeyGenerator
 	{
-		#region Properties
-
 		/// <summary>
-		/// Generates the key to retrieve/save objects from/to the cache.
+		/// Generates the key for a cache entry.
 		/// </summary>
-		ICacheKeyGenerator CacheKeyGenerator
-		{
-			get;
-			set;
-		}
+		/// <param name="invocation">the description of an invocation to the intercepted method.</param>
+		/// <param name="arguments">the arguments of the invocation</param>
+		/// <returns>the key for a cache entry.</returns>
+		 string GenerateKey(IMethodInvocation invocation, object[] arguments);
 
-		/// <summary>
-		/// Adds an item with the specified key and value into cached data.
-		/// Gets a cached object with the specified key.
-		/// </summary>
-		/// <value>The cached object or <c>null</c></value>
-		object this [object key] 
-		{
-			get;
-			set;
-		}
-		#endregion
-
-		#region Methods
-		/// <summary>
-		/// Clears all elements from the cache.
-		/// </summary>
-		void Flush ();
-
-		#endregion
 	}
 }

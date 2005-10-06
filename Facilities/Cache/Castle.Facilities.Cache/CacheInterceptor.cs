@@ -13,14 +13,13 @@
 // limitations under the License.
 
 using System;
-using System.Text;
 using Castle.Facilities.Cache.Manager;
 using Castle.Model.Interceptor;
 
 namespace Castle.Facilities.Cache
 {
 	/// <summary>
-	/// Summary description for CacheInterceptor.
+	/// Caches the return value of the intercepted method.
 	/// </summary>
 	public class CacheInterceptor : IMethodInterceptor
 	{
@@ -35,6 +34,15 @@ namespace Castle.Facilities.Cache
 
 		#region IMethodInterceptor Members
 
+		/// <summary>
+		/// Returns from the cache provider the value saved with the key generated
+		/// using the specified <code>IMethodInvocation</code>. If the object is not
+		/// found in the cache, the intercepted method is executed and its returned
+		/// value is saved in the cached and returned by this method.
+		/// </summary>
+		/// <param name="invocation">the description of the intercepted method.</param>
+		/// <param name="args">the arguments of the intercepted method.</param>
+		/// <returns>the object stored in the cache.</returns>
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
 			CacheConfig config = _cacheConfigHolder.GetConfig( invocation.Method.DeclaringType );
@@ -42,7 +50,7 @@ namespace Castle.Facilities.Cache
 
 			if (config != null && config.IsMethodCache( invocation.Method ))
 			{
-				String cacheKey = GetCacheKey( invocation, args );
+				String cacheKey = cacheManager.CacheKeyGenerator.GenerateKey( invocation, args );
 				object result = cacheManager[ cacheKey ];
 
 				if (result == null)
@@ -72,23 +80,6 @@ namespace Castle.Facilities.Cache
 			{
 				return invocation.Proceed(args);
 			}
-		}
-
-		private string GetCacheKey(IMethodInvocation invocation, object[] arguments)
-		{
-			StringBuilder cacheKey = new StringBuilder();
-			cacheKey.Append(invocation.InvocationTarget.ToString());
-			cacheKey.Append(".");
-			cacheKey.Append(invocation.Method.Name);
-
-			if ((arguments != null) && (arguments.Length != 0)) 
-			{
-				for (int i=0; i<arguments.Length; i++) 
-				{
-					cacheKey.Append(".").Append(arguments[i]);
-				}
-			}
-			return cacheKey.ToString();
 		}
 
 		#endregion

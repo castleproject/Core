@@ -13,6 +13,7 @@ namespace Castle.Facilities.Cache.Tests
 		private int _cacheSize = 0;
 		private IDictionary _cache = null;
 		private IList _keyList = null;
+		private ICacheKeyGenerator _cacheKeyGenerator = null;
 		#endregion
 
 		public IList KeyList
@@ -32,7 +33,16 @@ namespace Castle.Facilities.Cache.Tests
 		}
 		#endregion
 
-		#region ICacheManger Members
+		#region ICacheManager Members
+
+		/// <summary>
+		/// A generator of keys for a cache entry.
+		/// </summary>
+		public ICacheKeyGenerator CacheKeyGenerator
+		{
+			get { return _cacheKeyGenerator; }
+			set { _cacheKeyGenerator = value; }
+		}
 
 		/// <summary>
 		/// Clears all elements from the cache.
