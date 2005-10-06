@@ -7,13 +7,10 @@
 			
 			<default 
 					enableInterception="true" 
-					type="Null | Console | Diagnostics | Web | Log4net" 
+					type="NLog | Log4net" 
 					custom="typename, assemblyname" />
 		
             <!-- <config>logging.config</config>  Why? -->
-            
-            <!-- <interception>true|false</interception> -->
-            
 		</facility>
 	</facilities>
 
