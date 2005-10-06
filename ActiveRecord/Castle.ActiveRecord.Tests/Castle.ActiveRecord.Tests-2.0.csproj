@@ -1,0 +1,266 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.ActiveRecord.Tests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.ActiveRecord.Tests</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\bin\temp\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;dotNet2</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.DynamicProxy">
+      <Name>Castle.DynamicProxy</Name>
+      <HintPath>..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="HashCodeProvider">
+      <Name>HashCodeProvider</Name>
+      <HintPath>..\lib\HashCodeProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <Name>Iesi.Collections</Name>
+      <HintPath>..\lib\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <Name>NHibernate</Name>
+      <HintPath>..\lib\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Nullables">
+      <Name>Nullables</Name>
+      <HintPath>..\lib\Nullables.dll</HintPath>
+    </Reference>
+    <Reference Include="Nullables.NHibernate">
+      <Name>Nullables.NHibernate</Name>
+      <HintPath>..\lib\Nullables.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.3.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\TestDriven.NET 1.1\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Castle.ActiveRecord\Castle.ActiveRecord-2.0.csproj">
+      <Name>Castle.ActiveRecord</Name>
+      <Project>{652F95D4-86E2-40B6-919D-CFC6E449386B}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractActiveRecordTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ActiveRecordTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JoinedSubClassTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Blog.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\BlogLazy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Client.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Company.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Employee.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Entity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Firm.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Hand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\IntlName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\LazyModel\ProductLazy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\LineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\NullableModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Order.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Person.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Post.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\PostLazy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Product.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\SimpleModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\SimpleModel2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\SimpleModel3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Snippet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\StrictModel\Estrato.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\StrictModel\QuestionContainer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\StrictModel\ReferenceEstrato.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\StrictModel\Repository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\StrictModel\Survey.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\StrictModel\SurveyEstrato.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Test2ARBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MultipleDatabasesTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NullablesTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ActiveRecordGenericsTestCase.cs" />
+    <Compile Include="SessionScopeTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StrictModelTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TableHierarchyTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransactionScopeTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\Model\Blog.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\Model\Customer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\Model\Person.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\Model\User.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validation\ValidationTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validators\ValidatorTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Castle.ActiveRecord.Tests.dll.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)\$(TargetFileName).config $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
+</Project>

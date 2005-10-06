@@ -1,0 +1,40 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord-2.0", "Castle.ActiveRecord\Castle.ActiveRecord-2.0.csproj", "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Tests-2.0", "Castle.ActiveRecord.Tests\Castle.ActiveRecord.Tests-2.0.csproj", "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.ActiveRecord.Framework.Internal.Tests-2.0", "Castle.ActiveRecord.Framework.Internal.Tests\Castle.ActiveRecord.Framework.Internal.Tests-2.0.csproj", "{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{489743F5-3634-4656-A851-AC8727F736FD}"
+	ProjectSection(SolutionItems) = preProject
+		activerecord.build = activerecord.build
+		Changes.txt = Changes.txt
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+		Running the test cases.txt = Running the test cases.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{652F95D4-86E2-40B6-919D-CFC6E449386B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F7C7B1-9620-4F42-8F62-7C8D68EA825A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

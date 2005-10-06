@@ -154,7 +154,7 @@ namespace Castle.ActiveRecord
 			}
 		}
 
-		protected static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
+		internal protected static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
 		{
 			EnsureInitialized(targetType);
 
@@ -208,7 +208,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
+		internal protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
 		{
 			EnsureInitialized(targetType);
 
@@ -249,7 +249,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
+		internal protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
 		{
 			return SlicedFindAll(targetType, firstResult, maxresults, null, criterias);
 		}
@@ -262,7 +262,7 @@ namespace Castle.ActiveRecord
 		/// <param name="orders"></param>
 		/// <param name="criterias"></param>
 		/// <returns></returns>
-		protected static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
+		internal protected static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
 		{
 			EnsureInitialized(targetType);
 
@@ -304,7 +304,7 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType"></param>
 		/// <param name="criterias"></param>
 		/// <returns></returns>
-		protected static Array FindAll(Type targetType, params ICriterion[] criterias)
+		internal protected static Array FindAll(Type targetType, params ICriterion[] criterias)
 		{
 			return FindAll(targetType, null, criterias);
 		}
@@ -325,7 +325,7 @@ namespace Castle.ActiveRecord
 			return array;
 		}
 
-		protected static void DeleteAll(Type type)
+		internal protected static void DeleteAll(Type type)
 		{
 			EnsureInitialized(type);
 
