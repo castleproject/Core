@@ -26,6 +26,10 @@
 
 	<target name="init" depends="clean">
 		<mkdir dir="bin" />
+		<property name="define" value="TRACE;${strong}"/>
+		<property name="define" value="${define};DEBUG" if="${debug}"/>
+		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
+
 		<!-- <copy file="${antlr.runtime.dll}" todir="build" /> -->
 	</target>
 
@@ -33,7 +37,7 @@
 	
 	<target name="core.compile" depends="init">
 		<csc 
-			define="${strong}"
+			define="${define}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
@@ -55,6 +59,7 @@
 		<csc 
 			target="library" 
 			debug="${debug}" 
+			define="${define}"
 			output="${bin.dir}/${core.test.assembly.name}">
 			
 			<sources basedir="${core.test.src.dir}" defaultexcludes="true">
