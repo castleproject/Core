@@ -37,5 +37,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(VersionedTimestampedClass) );
 		}
+
+		[Test]
+		[ExpectedException( typeof(ActiveRecordException), "A type must declare a primary key. Check type Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithoutPrimaryKey" )]
+		public void ClassWithoutPrimaryKey()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(ClassWithoutPrimaryKey) );
+		
+		}
 	}
 }

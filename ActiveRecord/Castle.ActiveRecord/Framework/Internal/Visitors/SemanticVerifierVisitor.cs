@@ -81,7 +81,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 				}
 			}
 
+			ThrowIfDoesntHavePrimaryKey(model);
+
 			base.VisitModel(model);
+		}
+
+		private static void ThrowIfDoesntHavePrimaryKey(ActiveRecordModel model)
+		{
+			//Need to make the check this way because of inheritance, where the current class doesn't have
+			//a primary key but the base class does
+			ActiveRecordModel tmpModel = model;
+			while(tmpModel!=null && tmpModel.Ids.Count==0)
+				tmpModel = model.Parent;
+			if(tmpModel==null || tmpModel.Ids.Count==0)
+			{
+				throw new ActiveRecordException( String.Format(
+					"A type must declare a primary key. " + 
+						"Check type {0}", model.Type.FullName) );
+			}
 		}
 
 		public override void VisitPrimaryKey(PrimaryKeyModel model)

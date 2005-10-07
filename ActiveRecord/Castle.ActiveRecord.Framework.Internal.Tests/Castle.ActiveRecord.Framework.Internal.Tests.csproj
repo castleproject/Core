@@ -175,6 +175,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\ClassWithoutPrimaryKey.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\Company.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
