@@ -156,6 +156,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "robotwireconfig.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "RobotWireTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sample_config.xml"
                     BuildAction = "Content"
                 />
@@ -231,6 +240,11 @@
                 />
                 <File
                     RelPath = "Components\Reviewer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Robot.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

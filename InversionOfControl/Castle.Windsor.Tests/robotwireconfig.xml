@@ -1,0 +1,23 @@
+<configuration>
+
+	<components>
+
+		<component id="left" 
+			service="Castle.Windsor.Tests.Components.IArm, Castle.Windsor.Tests" 
+			type="Castle.Windsor.Tests.Components.PlasmaGunArm, Castle.Windsor.Tests" />
+
+		<component id="right" 
+			service="Castle.Windsor.Tests.Components.IArm, Castle.Windsor.Tests" 
+			type="Castle.Windsor.Tests.Components.HumanArm, Castle.Windsor.Tests" />
+
+		<component id="robot" 
+			type="Castle.Windsor.Tests.Components.Robot, Castle.Windsor.Tests">
+			<parameters>
+				<left>${left}</left>
+				<right>${right}</right>
+			</parameters>
+		</component>
+
+	</components>
+
+</configuration>
