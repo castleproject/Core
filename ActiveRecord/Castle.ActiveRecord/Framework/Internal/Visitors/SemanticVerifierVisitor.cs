@@ -88,6 +88,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private static void ThrowIfDoesntHavePrimaryKey(ActiveRecordModel model)
 		{
+			if (model.IsNestedType)//nested types do not have primary keys
+				return;
 			//Need to make the check this way because of inheritance, where the current class doesn't have
 			//a primary key but the base class does
 			ActiveRecordModel tmpModel = model;

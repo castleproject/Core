@@ -24,6 +24,15 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 		private String email;
 		private String password;
 		private String confirmationPassword;
+		private int id;
+
+		[PrimaryKey(PrimaryKeyType.Native)]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
 
 		[ValidateNotEmpty]
 		public string Login

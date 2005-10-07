@@ -143,6 +143,7 @@
     <Compile Include="Model\ClassWithMappedField.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\ClassWithoutPrimaryKey.cs" />
     <Compile Include="Model\Company.cs">
       <SubType>Code</SubType>
     </Compile>
