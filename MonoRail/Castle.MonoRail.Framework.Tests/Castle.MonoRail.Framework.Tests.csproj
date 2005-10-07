@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)\App.config $(TargetPath).config"
+                PostBuildEvent = ""
                 RootNamespace = "Castle.MonoRail.Framework.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -100,19 +100,10 @@
                     Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
-                <Reference
-                    Name = "Castle.MonoRail.TestSupport"
-                    Project = "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "App.config"
-                    BuildAction = "None"
-                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
@@ -134,47 +125,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "FilterTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FlowTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "RailsUrlTokenizerTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ResourceTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SmartDispatcherTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ViewEngineBaseTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\DataBindController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\ExceptionController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\HelperController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -184,34 +135,196 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\LayoutController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Controllers\.svn\dir-prop-base"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\MyAbstractController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Controllers\.svn\dir-props"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\ResourceController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Controllers\.svn\dir-wcprops"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\SecureController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Controllers\.svn\empty-file"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\SmartController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Controllers\.svn\entries"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\TheController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Controllers\.svn\format"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\README.txt"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\DataBindController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\ExceptionController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\HelperController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\HomeController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\LayoutController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\MyAbstractController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\ResourceController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\SecureController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\SmartController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\prop-base\TheController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\DataBindController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\ExceptionController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\HelperController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\HomeController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\LayoutController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\MyAbstractController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\ResourceController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\SecureController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\SmartController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\props\TheController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\DataBindController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\ExceptionController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\HelperController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\HomeController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\LayoutController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\MyAbstractController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\ResourceController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\SecureController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\SmartController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\text-base\TheController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Controllers\.svn\tmp\prop-base\" />
+                <Folder RelPath = "Controllers\.svn\tmp\props\" />
+                <Folder RelPath = "Controllers\.svn\tmp\text-base\" />
+                <Folder RelPath = "Controllers\.svn\tmp\wcprops\" />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\DataBindController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\ExceptionController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\HelperController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\HomeController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\LayoutController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\MyAbstractController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\ResourceController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\SecureController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\SmartController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\.svn\wcprops\TheController.cs.svn-work"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Controllers\Clients\HomeController.cs"
@@ -224,6 +337,70 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\Clients\.svn\dir-prop-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\dir-props"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\dir-wcprops"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\empty-file"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\entries"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\format"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\README.txt"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\prop-base\HomeController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\prop-base\OtherController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\props\HomeController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\props\OtherController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\text-base\HomeController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\text-base\OtherController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Controllers\Clients\.svn\tmp\prop-base\" />
+                <Folder RelPath = "Controllers\Clients\.svn\tmp\props\" />
+                <Folder RelPath = "Controllers\Clients\.svn\tmp\text-base\" />
+                <Folder RelPath = "Controllers\Clients\.svn\tmp\wcprops\" />
+                <File
+                    RelPath = "Controllers\Clients\.svn\wcprops\HomeController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Clients\.svn\wcprops\OtherController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Controllers\Products\CartController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -234,7 +411,76 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\Products\.svn\dir-prop-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\dir-props"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\dir-wcprops"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\empty-file"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\entries"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\format"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\README.txt"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\prop-base\CartController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\prop-base\ListController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\props\CartController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\props\ListController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\text-base\CartController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\text-base\ListController.cs.svn-base"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Controllers\Products\.svn\tmp\prop-base\" />
+                <Folder RelPath = "Controllers\Products\.svn\tmp\props\" />
+                <Folder RelPath = "Controllers\Products\.svn\tmp\text-base\" />
+                <Folder RelPath = "Controllers\Products\.svn\tmp\wcprops\" />
+                <File
+                    RelPath = "Controllers\Products\.svn\wcprops\CartController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Controllers\Products\.svn\wcprops\ListController.cs.svn-work"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Helpers\AjaxHelperTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Helpers\DictHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -244,21 +490,14 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helpers\ValidationHelperTestCase.cs"
+                    RelPath = "Helpers\PaginationHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Resources\Language.de.resx"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Resources\Language.nl.resx"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Resources\Language.resx"
-                    BuildAction = "EmbeddedResource"
+                    RelPath = "Helpers\ValidationHelperTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>
