@@ -468,31 +468,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Internal\Test\MockResponse.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Test\MockTrace.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Test\RailsEngineContextImpl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Test\ServerUtilityImpl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\Test\TestRequest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Internal\Test\" />
                 <File
                     RelPath = "Views\Aspx\ActionTo.cs"
                     SubType = "Code"

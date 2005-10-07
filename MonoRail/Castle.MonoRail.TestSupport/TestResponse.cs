@@ -15,7 +15,10 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Runtime.InteropServices;
+	using System.Web;
 
 
 	[Serializable]
@@ -24,6 +27,9 @@ namespace Castle.MonoRail.TestSupport
 		private NameValueCollection headers = new NameValueCollection();
 		private int statusCode;
 		private String statusDescription;
+		private IDictionary propertyBag;
+		private IDictionary flash;
+		private IDictionary session;
 
 		public TestResponse()
 		{
@@ -46,9 +52,33 @@ namespace Castle.MonoRail.TestSupport
 			get { return headers; }
 		}
 
+		public IDictionary PropertyBag
+		{
+			get { return propertyBag; }
+		}
+
+		public IDictionary Flash
+		{
+			get { return flash; }
+		}
+
+		public IDictionary Session
+		{
+			get { return session; }
+		}
+
 		protected internal void Complete()
 		{
-			
+			HttpContext context = HttpContext.Current;
+
+			System.Diagnostics.Debug.WriteLine("Complete: " + GetCurrentThreadId() );
+
+//			flash = (IDictionary) context.Items["mr.flash"];
+//			session = (IDictionary) context.Items["mr.session"];
+//			propertyBag = (IDictionary) context.Items["mr.propertybag"];
 		}
+
+		[DllImport("Kernel32.dll")]
+		public static extern long GetCurrentThreadId();
 	}
 }

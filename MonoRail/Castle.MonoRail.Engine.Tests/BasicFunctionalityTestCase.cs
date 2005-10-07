@@ -16,172 +16,206 @@ namespace Castle.MonoRail.Engine.Tests
 {
 	using System;
 	using System.Net;
-
+	
 	using NUnit.Framework;
 
-	/// <summary>
-	/// Summary description for BasicFunctionalityTestCase.
-	/// </summary>
+	using Castle.MonoRail.TestSupport;
+
+
 	[TestFixture]
-	public class BasicFunctionalityTestCase : AbstractCassiniTestCase
+	public class BasicFunctionalityTestCase : AbstractMRTestCase
 	{
 		[Test]
 		public void SimpleControllerAction()
 		{
-			string url = "/home/index.rails";
-			string expected = "My View contents for Home\\Index";
+			DoGet("home/index.rails");
 
-			Execute(url, expected, true);
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "My View contents for Home\\Index" );
 		}
 
 		[Test]
 		public void RenderView()
 		{
-			string url = "/home/welcome.rails";
-			string expected = "Contents for heyhello View";
-			
-			Execute(url, expected);
+			DoGet("home/welcome.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "Contents for heyhello View" );
 		}
 
 		[Test]
 		public void Redirect()
 		{
-			string url = "/home/redirectAction.rails";
-			string expectedUrl = "/home/index.rails";
-			string expected = @"My View contents for Home\Index";
+			DoGet("home/redirectAction.rails");
 
-			Execute(url, expected, expectedUrl);
+			AssertSuccess();
+
+			AssertRedirectedTo( "/home/index.rails" );
 		}
+
+		[System.Runtime.InteropServices.DllImport("Kernel32.dll")]
+		public static extern long GetCurrentThreadId();
 
 		[Test]
 		public void RedirectForArea()
 		{
-			string url = "/subarea/home/index.rails";
-			string expected = @"My View contents for SubArea\Home\Index";
+			System.Diagnostics.Debug.WriteLine("TestCase: " + GetCurrentThreadId() );
 
-			Execute(url, expected);
+			DoGet("home/redirectforotherarea.rails");
+
+			AssertSuccess();
+
+			AssertRedirectedTo( "/subarea/home/index.rails" );
 		}
 
 		[Test]
 		public void PropertyBagNoFieldSetting()
 		{
-			string url = "/home/bag.rails";
-			string expected = "\r\nCustomer is hammett\r\n<br>\r\n123";
+			DoGet("home/bag.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertPropertyBagContains( "CustomerName" );
+			AssertPropertyBagEntryEquals( "CustomerName", "hammett" );
+			AssertReplyEqualsTo( "\r\nCustomer is hammett\r\n<br>\r\n123" );
 		}
 
 		[Test]
 		public void PropertyBagUsingFieldSetting()
 		{
-			string url = "/home/bag2.rails";
-			string expected = "\r\nCustomer is hammett\r\n<br>\r\n123";
+			DoGet("home/bag2.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			// AssertPropertyBagContains( "CustomerName" );
+			// AssertPropertyBagEquals( "CustomerName", "hammett" );
+			AssertReplyEqualsTo( "\r\nCustomer is hammett\r\n<br>\r\n123" );
 		}
 
-		[Test]
-		public void CreateCookie()
-		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/cookies/addcookie.rails");
-			myReq.AllowAutoRedirect = false;
-			myReq.CookieContainer = new CookieContainer();
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/cookies/addcookie.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents(@"My View contents for Cookies\Index", response);
-			CookieCollection cookies = 
-				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
-			
-			/// The server may use two headers for SetCookie
-			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
-			foreach(Cookie cookie in cookies)
-			{
-				Assert.AreEqual("cookiename", cookie.Name);
-				Assert.AreEqual("value", cookie.Value);
-			}
-		}
-
-		[Test]
-		public void CreateCookieRedirect()
-		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/cookies/AddCookieRedirect.rails");
-			myReq.AllowAutoRedirect = false;
-			myReq.CookieContainer = new CookieContainer();
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.Found, response.StatusCode);
-
-			CookieCollection cookies = 
-				myReq.CookieContainer.GetCookies(new Uri("http://localhost:8083/"));
-			
-			/// The server may use two headers for SetCookie
-			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
-			foreach(Cookie cookie in cookies)
-			{
-				Assert.AreEqual("cookiename", cookie.Name);
-				Assert.AreEqual("value", cookie.Value);
-			}
-		}
-
-		[Test]
-		public void CreateCookieExpirationRedirect()
-		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/cookies/AddCookieExpirationRedirect.rails");
-			myReq.AllowAutoRedirect = false;
-			myReq.CookieContainer = new CookieContainer();
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.Found, response.StatusCode);
-
-			CookieCollection cookies = 
-				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
-			
-			/// The server may use two headers for SetCookie
-			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
-			foreach(Cookie cookie in cookies)
-			{
-				Assert.AreEqual( "cookiename2", cookie.Name );
-				Assert.AreEqual( "value", cookie.Value );
-				DateTime twoWeeks = DateTime.Now.Add(new TimeSpan(14, 0, 0, 0));
-				Assert.AreEqual( twoWeeks.Day, cookie.Expires.Day );
-				Assert.AreEqual( twoWeeks.Month, cookie.Expires.Month );
-				Assert.AreEqual( twoWeeks.Year, cookie.Expires.Year );
-			}
-		}
-
-		[Test]
-		public void CreateCookieExpiration()
-		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/cookies/AddCookieExpiration.rails");
-			myReq.AllowAutoRedirect = false;
-			myReq.CookieContainer = new CookieContainer();
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/cookies/AddCookieExpiration.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents(@"My View contents for Cookies\Index", response);
-			CookieCollection cookies = 
-				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
-			
-			/// The server may use two headers for SetCookie
-			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
-			foreach(Cookie cookie in cookies)
-			{
-				Assert.AreEqual( "cookiename2", cookie.Name );
-				Assert.AreEqual( "value", cookie.Value );
-				DateTime twoWeeks = DateTime.Now.Add(new TimeSpan(14, 0, 0, 0));
-				Assert.AreEqual( twoWeeks.Day, cookie.Expires.Day );
-				Assert.AreEqual( twoWeeks.Month, cookie.Expires.Month );
-				Assert.AreEqual( twoWeeks.Year, cookie.Expires.Year );
-			}
-		}
+//		[Test]
+//		public void CreateCookie()
+//		{
+//			HttpWebRequest myReq = (HttpWebRequest) 
+//				WebRequest.Create("http://localhost:8083/cookies/addcookie.rails");
+//			myReq.AllowAutoRedirect = false;
+//			myReq.CookieContainer = new CookieContainer();
+//			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+//
+//			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+//			Assert.AreEqual("/cookies/addcookie.rails", response.ResponseUri.PathAndQuery);
+//			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+//			AssertContents(@"My View contents for Cookies\Index", response);
+//			CookieCollection cookies = 
+//				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+//			
+//			/// The server may use two headers for SetCookie
+//			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+//			foreach(Cookie cookie in cookies)
+//			{
+//				Assert.AreEqual("cookiename", cookie.Name);
+//				Assert.AreEqual("value", cookie.Value);
+//			}
+//			DoGet("filtered/index.rails");
+//
+//			AssertSuccess();
+//
+//			AssertReplyEqualsTo( "Filtered Action Index" );
+//		}
+//
+//		[Test]
+//		public void CreateCookieRedirect()
+//		{
+//			HttpWebRequest myReq = (HttpWebRequest) 
+//				WebRequest.Create("http://localhost:8083/cookies/AddCookieRedirect.rails");
+//			myReq.AllowAutoRedirect = false;
+//			myReq.CookieContainer = new CookieContainer();
+//			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+//
+//			Assert.AreEqual(HttpStatusCode.Found, response.StatusCode);
+//
+//			CookieCollection cookies = 
+//				myReq.CookieContainer.GetCookies(new Uri("http://localhost:8083/"));
+//			
+//			/// The server may use two headers for SetCookie
+//			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+//			foreach(Cookie cookie in cookies)
+//			{
+//				Assert.AreEqual("cookiename", cookie.Name);
+//				Assert.AreEqual("value", cookie.Value);
+//			}
+//			DoGet("filtered/index.rails");
+//
+//			AssertSuccess();
+//
+//			AssertReplyEqualsTo( "Filtered Action Index" );
+//		}
+//
+//		[Test]
+//		public void CreateCookieExpirationRedirect()
+//		{
+////			HttpWebRequest myReq = (HttpWebRequest) 
+////				WebRequest.Create("http://localhost:8083/cookies/AddCookieExpirationRedirect.rails");
+////			myReq.AllowAutoRedirect = false;
+////			myReq.CookieContainer = new CookieContainer();
+////			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+////
+////			Assert.AreEqual(HttpStatusCode.Found, response.StatusCode);
+////
+////			CookieCollection cookies = 
+////				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+////			
+////			/// The server may use two headers for SetCookie
+////			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+////			foreach(Cookie cookie in cookies)
+////			{
+////				Assert.AreEqual( "cookiename2", cookie.Name );
+////				Assert.AreEqual( "value", cookie.Value );
+////				DateTime twoWeeks = DateTime.Now.Add(new TimeSpan(14, 0, 0, 0));
+////				Assert.AreEqual( twoWeeks.Day, cookie.Expires.Day );
+////				Assert.AreEqual( twoWeeks.Month, cookie.Expires.Month );
+////				Assert.AreEqual( twoWeeks.Year, cookie.Expires.Year );
+////			}
+//			DoGet("filtered/index.rails");
+//
+//			AssertSuccess();
+//
+//			AssertReplyEqualsTo( "Filtered Action Index" );
+//		}
+//
+//		[Test]
+//		public void CreateCookieExpiration()
+//		{
+////			HttpWebRequest myReq = (HttpWebRequest) 
+////				WebRequest.Create("http://localhost:8083/cookies/AddCookieExpiration.rails");
+////			myReq.AllowAutoRedirect = false;
+////			myReq.CookieContainer = new CookieContainer();
+////			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+////
+////			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+////			Assert.AreEqual("/cookies/AddCookieExpiration.rails", response.ResponseUri.PathAndQuery);
+////			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
+////			AssertContents(@"My View contents for Cookies\Index", response);
+////			CookieCollection cookies = 
+////				myReq.CookieContainer.GetCookies( new Uri("http://localhost:8083/") );
+////			
+////			/// The server may use two headers for SetCookie
+////			Assert.IsTrue( cookies.Count == 1 || cookies.Count == 2 );
+////			foreach(Cookie cookie in cookies)
+////			{
+////				Assert.AreEqual( "cookiename2", cookie.Name );
+////				Assert.AreEqual( "value", cookie.Value );
+////				DateTime twoWeeks = DateTime.Now.Add(new TimeSpan(14, 0, 0, 0));
+////				Assert.AreEqual( twoWeeks.Day, cookie.Expires.Day );
+////				Assert.AreEqual( twoWeeks.Month, cookie.Expires.Month );
+////				Assert.AreEqual( twoWeeks.Year, cookie.Expires.Year );
+////			}
+//			DoGet("filtered/index.rails");
+//
+//			AssertSuccess();
+//
+//			AssertReplyEqualsTo( "Filtered Action Index" );
+//		}
 	}
 }

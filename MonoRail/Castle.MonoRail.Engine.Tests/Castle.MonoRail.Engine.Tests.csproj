@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)\App.config $(TargetPath).config"
                 RootNamespace = "Castle.MonoRail.Engine.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -86,24 +86,19 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "Cassini"
-                    AssemblyName = "Cassini"
-                    HintPath = "..\lib\Cassini.dll"
-                />
-                <Reference
                     Name = "System"
                     AssemblyName = "System"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.TestSupport"
+                    Project = "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "AbstractCassiniTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
                 <File
                     RelPath = "App.config"
                     BuildAction = "None"
@@ -115,31 +110,6 @@
                 />
                 <File
                     RelPath = "BasicFunctionalityTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ExceptionsTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FilesTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FilterTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LayoutTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RescueTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

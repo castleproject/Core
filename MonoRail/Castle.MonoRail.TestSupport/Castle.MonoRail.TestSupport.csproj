@@ -115,6 +115,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "default.build"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "MonoRailTestWorkerRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

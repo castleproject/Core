@@ -33,6 +33,8 @@ namespace Castle.MonoRail.TestSupport
 		private TestResponse response;
 		private StringBuilder outputBuffer = new StringBuilder();
 
+		#region Test Lifecycle 
+
 		[TestFixtureSetUp]
 		public virtual void FixtureInitialize()
 		{
@@ -63,6 +65,10 @@ namespace Castle.MonoRail.TestSupport
 			if (host != null) host.Dispose();
 		}
 
+		#endregion
+
+		#region Actions
+
 		public void DoGet(String path, params String[] queryStringParams)
 		{
 			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
@@ -76,6 +82,10 @@ namespace Castle.MonoRail.TestSupport
 			// Console.WriteLine( "Contents " + writer.GetStringBuilder().ToString() );
 		}
 
+		#endregion
+
+		#region Properties
+
 		public TestRequest Request
 		{
 			get { return request; }
@@ -85,6 +95,10 @@ namespace Castle.MonoRail.TestSupport
 		{
 			get { return response; }
 		}
+
+		#endregion
+
+		#region Available Asserts
 
 		protected void AssertSuccess()
 		{
@@ -96,6 +110,63 @@ namespace Castle.MonoRail.TestSupport
 		{
 			Assert.AreEqual( expectedContents, outputBuffer.ToString() );
 		}
+
+		protected void AssertReplyStartsWith(String contents)
+		{
+			Assert.IsTrue( outputBuffer.ToString().StartsWith(contents), 
+				"Reply string did not start with '{0}'", contents );
+		}
+
+		protected void AssertReplyEndsWith(String contents)
+		{
+			Assert.IsTrue( outputBuffer.ToString().EndsWith(contents), 
+				"Reply string did not end with '{0}'", contents );
+		}
+
+		protected void AssertReplyContains(String contents)
+		{
+			Assert.IsTrue( outputBuffer.ToString().IndexOf(contents) != -1, 
+				"AssertReplyContains did not find the content '{0}'", contents );
+		}
+
+		protected void AssertReplyDoNotContain(String contents)
+		{
+			Assert.IsTrue( outputBuffer.ToString().IndexOf(contents) == -1, 
+				"AssertReplyDoNotContain found the content '{0}'", contents );
+		}
+
+		protected void AssertRedirectedTo(String url)
+		{
+			Assert.AreEqual(302, Response.StatusCode, "Redirect status not used");
+			AssertHasHeader("Location");
+			Assert.AreEqual(url, Response.Headers["Location"]);
+		}
+
+		protected void AssertContentType(String expectedContentType)
+		{
+			AssertHasHeader("Content-Type");
+			Assert.AreEqual(expectedContentType, Response.Headers["Content-Type"]);
+		}
+
+		protected void AssertHasHeader(String headerName)
+		{
+			Assert.IsTrue( Response.Headers[headerName] != null, 
+				"Header '{0}' was not found", headerName );
+		}
+
+		protected void AssertPropertyBagContains(String entryKey)
+		{
+			
+		}
+
+		protected void AssertPropertyBagEntryEquals(String entryKey, object expectedValue)
+		{
+			
+		}
+
+		#endregion
+
+		#region Overridables
 
 		protected virtual string GetPhysicalDir()
 		{
@@ -132,5 +203,7 @@ namespace Castle.MonoRail.TestSupport
 
 			return dir;
 		}
+
+		#endregion
 	}
 }

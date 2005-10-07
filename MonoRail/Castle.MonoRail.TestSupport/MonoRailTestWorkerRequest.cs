@@ -18,6 +18,7 @@ namespace Castle.MonoRail.TestSupport
 	using System.Globalization;
 	using System.IO;
 	using System.Text;
+	using System.Web;
 	using System.Web.Hosting;
 	using System.Collections;
 
@@ -253,8 +254,14 @@ namespace Castle.MonoRail.TestSupport
 			return value == null ? String.Empty : value;
 		}
 
+		[System.Runtime.InteropServices.DllImport("Kernel32.dll")]
+		public static extern long GetCurrentThreadId();
+
 		public override void EndOfRequest()
 		{
+			HttpContext context = HttpContext.Current;
+
+			System.Diagnostics.Debug.WriteLine("EndOfRequest: " + GetCurrentThreadId() );
 		}
 
 		public override string GetFilePath()
@@ -324,9 +331,9 @@ namespace Castle.MonoRail.TestSupport
 
 		public override void SendKnownResponseHeader(int index, string value)
 		{
-			String key = GetKnownRequestHeaderName(index);
+			String key = GetKnownResponseHeaderName(index);
 			
-			response.Headers[key] = value;
+			SendUnknownResponseHeader(key, value);
 		}
 
 		public override void SendResponseFromFile(IntPtr handle, long offset, long length)
@@ -353,6 +360,41 @@ namespace Castle.MonoRail.TestSupport
 		public override void SendUnknownResponseHeader(string name, string value)
 		{
 			response.Headers[name] = value;
+		}
+
+		public override bool IsSecure()
+		{
+			return false;
+		}
+
+		public override string GetProtocol()
+		{
+			return requestData.Protocol;
+		}
+
+		public override void SendResponseFromMemory(IntPtr data, int length)
+		{
+			base.SendResponseFromMemory(data, length);
+		}
+
+		public override void SendCalculatedContentLength(int contentLength)
+		{
+			response.Headers["Content-Length"] = contentLength.ToString();
+		}
+
+		public override bool HeadersSent()
+		{
+			return false;
+		}
+
+		public override bool IsClientConnected()
+		{
+			return true;
+		}
+
+		public override void CloseConnection()
+		{
+			
 		}
 	}
 }

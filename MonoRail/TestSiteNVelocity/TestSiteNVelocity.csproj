@@ -100,11 +100,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
-                    Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\lib\NVelocity.dll"

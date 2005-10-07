@@ -23,7 +23,7 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="clean, init, framework, engine, integration, brail, nvelocity, composite, arscaffold, samples, tests, generator" /> 
+	<target name="build" depends="clean, init, framework, engine, integration, brail, nvelocity, composite, arscaffold, testsupport, samples, tests, generator" /> 
 	
 	<target name="clean">
 		<delete>
@@ -31,8 +31,11 @@
 				<include name="${bin.dir}/*.dll" />
 				<include name="${bin.dir}/*.pdb" />
 				<include name="${bin.dir}/*.xml" />
+				<include name="${bin.dir}/*.exe" />
+				<include name="${bin.dir}/*.config" />
 			</fileset>
 		</delete>
+		<delete dir="${bin.dir}" failonerror="false" includeemptydirs="true" />
 	</target>
 	
 	<target name="init">
@@ -75,21 +78,7 @@
 		</if>
 		<if test="${not property::exists( 'gacutil.file' )}">
 			<echo>Could not find "gacutil" to install Cassini server to GAC.</echo>
-			<echo>To run the tests you have to install it manually: gacutil /i Cassini.dll</echo>
-		</if>
-		
-		<description>Install Cassini if "gacutil" was found.</description>
-		<if test="${property::exists( 'gacutil.file' )}">
-			<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}">
-			<!-- <exec program="gacutil" failonerror="false" verbose="true" workingdir="${bin.dir}"> -->
-				<arg value="/u" />
-				<arg value="Cassini" />
-			</exec>
-			<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}">
-			<!-- <exec program="gacutil" failonerror="false" verbose="true" workingdir="${bin.dir}"> -->
-				<arg value="/i" />
-				<arg value="Cassini.dll" />
-			</exec>
+			<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport.dll</echo>
 		</if>
 	</target>
 	
@@ -121,6 +110,22 @@
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="compile" />
 	</target>
 
+	<target name="testsupport" depends="init">
+		<nant buildfile="Castle.MonoRail.TestSupport/default.build" inheritall="true" target="build" />
+
+		<description>Install Castle.MonoRail.TestSupport.dll if "gacutil" was found.</description>
+		<if test="${property::exists( 'gacutil.file' )}">
+			<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
+				<arg value="/u" />
+				<arg value="Castle.MonoRail.TestSupport" />
+			</exec>
+			<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
+				<arg value="/i" />
+				<arg value="Castle.MonoRail.TestSupport.dll" />
+			</exec>
+		</if>
+	</target>
+
 	<target name="samples" depends="init">
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
@@ -140,6 +145,10 @@
 
 	<target name="generator" depends="init">
 		<nant buildfile="Castle.MonoRail.Generator/default.build" inheritall="true" target="compile" />
+	</target>
+
+	<target name="testsupport" depends="init">
+		<nant buildfile="Castle.MonoRail.TestSupport/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="docs">

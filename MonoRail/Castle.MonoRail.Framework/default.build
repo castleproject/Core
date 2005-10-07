@@ -69,7 +69,6 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
-				<include name="${bin.dir}/Cassini.dll" />
 			</references>
 		</csc>
 	</target>

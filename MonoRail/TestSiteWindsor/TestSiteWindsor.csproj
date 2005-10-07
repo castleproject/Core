@@ -119,11 +119,6 @@
                     AssemblyName = "System.Drawing"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
-                <Reference
-                    Name = "Castle.MonoRail.WindsorExtension"
-                    Project = "{6C51A1E3-7F20-4696-BFD6-829134678341}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>

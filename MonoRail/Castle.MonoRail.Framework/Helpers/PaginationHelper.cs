@@ -78,7 +78,22 @@ namespace Castle.MonoRail.Framework.Helpers
 				curPage = Int32.Parse(currentPage);
 			}
 
-			return new Page(datasource, curPage, pageSize);
+			return CreatePagination(datasource, pageSize, curPage);
+		}
+
+		/// <summary>
+		/// Creates a <see cref="Page"/> which is a sliced view of
+		/// the data source
+		/// </summary>
+		/// <param name="datasource">Data source to be used as target of the pagination</param>
+		/// <param name="pageSize">Page size</param>
+		/// <param name="currentPage">current page index (1 based)</param>
+		/// <returns>A <see cref="Page"/> instance</returns>
+		public static Page CreatePagination(IList datasource, int pageSize, int currentPage)
+		{
+			if (currentPage <= 0) currentPage = 1;
+
+			return new Page(datasource, currentPage, pageSize);
 		}
 
 		/// <summary>
