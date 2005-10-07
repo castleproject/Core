@@ -438,16 +438,7 @@ namespace Castle.MonoRail.Framework
 		{
 			CancelView();
 
-			String querystring = String.Empty;
-
-			HttpServerUtility serverUtility = HttpContext.Server;
-
-			foreach (String key in parameters.Keys)
-			{
-				querystring += String.Format("{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
-				                             serverUtility.HtmlEncode(key),
-				                             serverUtility.HtmlEncode(parameters[key]));
-			}
+			String querystring = ToQueryString(parameters);
 
 			String url = UrlInfo.CreateAbsoluteRailsUrl(
 				Context.ApplicationPath, controller, action, Context.UrlInfo.Extension);
@@ -466,21 +457,28 @@ namespace Castle.MonoRail.Framework
 		{
             CancelView();
 
-            String querystring = String.Empty;
-
-            HttpServerUtility serverUtility = HttpContext.Server;
-
-            foreach (String key in parameters.Keys)
-            {
-                querystring += String.Format("{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
-                    serverUtility.HtmlEncode(key),
-                    serverUtility.HtmlEncode(parameters[key]));
-            }
+			String querystring = ToQueryString(parameters);
 
             String url = UrlInfo.CreateAbsoluteRailsUrl(
                 Context.ApplicationPath, area, controller, action, Context.UrlInfo.Extension);
 
             _context.Response.Redirect(String.Format("{0}?{1}", url, querystring));
+		}
+
+		protected String ToQueryString(NameValueCollection parameters)
+		{
+			String querystring = String.Empty;
+
+			HttpServerUtility serverUtility = HttpContext.Server;
+	
+			foreach (String key in parameters.Keys)
+			{
+				querystring += String.Format("{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
+					serverUtility.HtmlEncode(key),
+					serverUtility.HtmlEncode(parameters[key]));
+			}
+
+			return querystring;
 		}
 
 		#endregion
