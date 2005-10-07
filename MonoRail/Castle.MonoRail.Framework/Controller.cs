@@ -464,11 +464,23 @@ namespace Castle.MonoRail.Framework
 		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(String area, String controller, String action, NameValueCollection parameters)
 		{
-			CancelView();
+            CancelView();
 
-			_context.Params.Add(parameters);
+            String querystring = String.Empty;
 
-			_context.Response.Redirect(area, controller, action);
+            HttpServerUtility serverUtility = HttpContext.Server;
+
+            foreach (String key in parameters.Keys)
+            {
+                querystring += String.Format("{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
+                    serverUtility.HtmlEncode(key),
+                    serverUtility.HtmlEncode(parameters[key]));
+            }
+
+            String url = UrlInfo.CreateAbsoluteRailsUrl(
+                Context.ApplicationPath, area, controller, action, Context.UrlInfo.Extension);
+
+            _context.Response.Redirect(String.Format("{0}?{1}", url, querystring));
 		}
 
 		#endregion
