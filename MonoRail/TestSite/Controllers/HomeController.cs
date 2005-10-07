@@ -28,6 +28,13 @@ namespace TestSite.Controllers
 		{
 		}
 
+		public void Flash1()
+		{
+			Flash.Add("errormessage", "Some error");
+
+			RenderText("RenderText output");
+		}
+
 		public void Other()
 		{
 			RenderView("display");

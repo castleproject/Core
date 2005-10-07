@@ -18,7 +18,6 @@ namespace Castle.MonoRail.TestSupport
 	using System.Globalization;
 	using System.IO;
 	using System.Text;
-	using System.Web;
 	using System.Web.Hosting;
 	using System.Collections;
 
@@ -67,10 +66,9 @@ namespace Castle.MonoRail.TestSupport
 
 			IList unknownHeaders = new ArrayList();
 
-			foreach (DictionaryEntry entry in requestData.Headers)
+			foreach(String name in requestData.Headers)
 			{
-				String name = entry.Key.ToString();
-				String value = entry.Value.ToString();
+				String value = requestData.Headers[name];
 
 				int index = GetKnownRequestHeaderIndex(name);
 
@@ -254,14 +252,8 @@ namespace Castle.MonoRail.TestSupport
 			return value == null ? String.Empty : value;
 		}
 
-		[System.Runtime.InteropServices.DllImport("Kernel32.dll")]
-		public static extern long GetCurrentThreadId();
-
 		public override void EndOfRequest()
 		{
-			HttpContext context = HttpContext.Current;
-
-			System.Diagnostics.Debug.WriteLine("EndOfRequest: " + GetCurrentThreadId() );
 		}
 
 		public override string GetFilePath()
@@ -359,7 +351,28 @@ namespace Castle.MonoRail.TestSupport
 
 		public override void SendUnknownResponseHeader(string name, string value)
 		{
-			response.Headers[name] = value;
+			object existingValue = response.Headers[name];
+
+			if (existingValue == null)
+			{
+				response.Headers[name] = value;
+			}
+			else
+			{
+				if (existingValue is IList)
+				{
+					(existingValue as IList).Add(value);
+				}
+				else
+				{
+					IList list = new ArrayList();
+					
+					list.Add(existingValue);
+					list.Add(value);
+
+					response.Headers[name] = list;
+				}
+			}
 		}
 
 		public override bool IsSecure()

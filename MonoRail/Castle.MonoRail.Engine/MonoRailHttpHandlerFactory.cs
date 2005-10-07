@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Engine
 	/// and uses the configuration to obtain the correct factories 
 	/// instances.
 	/// </summary>
-	public class MonoRailHttpHandlerFactory : ProcessEngineFactory, IHttpHandlerFactory, IRequiresSessionState
+	public class MonoRailHttpHandlerFactory : ProcessEngineFactory, IHttpHandlerFactory//, IRequiresSessionState
 	{
 		public MonoRailHttpHandlerFactory()
 		{
@@ -32,6 +32,16 @@ namespace Castle.MonoRail.Engine
 		public virtual IHttpHandler GetHandler(HttpContext context, 
 			String requestType, String url, String pathTranslated)
 		{
+
+#if ALLOWTEST
+			String isTest = context.Request.Headers["IsTestWorkerRequest"];
+			
+			if ("true".Equals(isTest))
+			{
+				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(context);
+			}
+#endif
+
 			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, 
 				_filterFactory, _resourceFactory, _scaffoldingSupport, _viewCompFactory);
 		}

@@ -525,9 +525,6 @@ namespace Castle.MonoRail.Framework
 			actions.Remove("GetType");
 		}
 
-		[System.Runtime.InteropServices.DllImport("Kernel32.dll")]
-		public static extern long GetCurrentThreadId();
-
 		/// <summary>
 		/// Method invoked by the engine to start 
 		/// the controller process. 
@@ -543,11 +540,11 @@ namespace Castle.MonoRail.Framework
 			_resourceFactory = resourceFactory;
 			_scaffoldSupport = scaffoldSupport;
 
+#if ALLOWTEST
 			HttpContext.Items["mr.flash"] = Flash;
 			HttpContext.Items["mr.session"] = Session;
 			HttpContext.Items["mr.propertybag"] = PropertyBag;
-
-			System.Diagnostics.Debug.WriteLine("Process: " + GetCurrentThreadId() );
+#endif
 
 			if (metaDescriptor.Filters.Count != 0)
 			{

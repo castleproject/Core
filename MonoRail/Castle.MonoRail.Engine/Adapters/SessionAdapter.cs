@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Engine.Adapters
 	/// <summary>
 	/// Summary description for SessionAdapter.
 	/// </summary>
-	public class SessionAdapter : IDictionary
+	public class SessionAdapter : MarshalByRefObject, IDictionary
 	{
 		private HttpSessionState _session;
 

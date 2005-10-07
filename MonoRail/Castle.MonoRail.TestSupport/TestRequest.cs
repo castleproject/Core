@@ -36,6 +36,7 @@ namespace Castle.MonoRail.TestSupport
 
 		public TestRequest()
 		{
+			headers.Add("IsTestWorkerRequest", "true");
 		}
 
 		public string Protocol

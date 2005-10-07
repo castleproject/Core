@@ -16,6 +16,7 @@ namespace Castle.MonoRail.TestSupport
 {
 	using System;
 	using System.IO;
+	using System.Net;
 	using System.Text;
 	using System.Web.Hosting;
 	using System.Configuration;
@@ -156,12 +157,87 @@ namespace Castle.MonoRail.TestSupport
 
 		protected void AssertPropertyBagContains(String entryKey)
 		{
-			
+			Assert.IsNotNull(response.PropertyBag, "PropertyBag could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsTrue(response.PropertyBag.Contains(entryKey), "Entry {0} was not on PropertyBag", entryKey);
 		}
 
 		protected void AssertPropertyBagEntryEquals(String entryKey, object expectedValue)
 		{
-			
+			AssertPropertyBagContains(entryKey);
+			Assert.AreEqual(expectedValue, response.PropertyBag[entryKey], "PropertyBag entry differs from the expected");
+		}
+
+		protected void AssertFlashContains(String entryKey)
+		{
+			Assert.IsNotNull(response.Flash, "Flash could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsTrue(response.Flash.Contains(entryKey), "Entry {0} was not on Flash", entryKey);
+		}
+
+		protected void AssertFlashEntryEquals(String entryKey, object expectedValue)
+		{
+			AssertFlashContains(entryKey);
+			Assert.AreEqual(expectedValue, response.Flash[entryKey], "Flash entry differs from the expected");
+		}
+
+		protected void AssertSessionContains(String entryKey)
+		{
+			Assert.IsNotNull(response.Session, "Session could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsTrue(response.Session.Contains(entryKey), "Entry {0} was not on Session", entryKey);
+		}
+
+		protected void AssertSessionEntryEquals(String entryKey, object expectedValue)
+		{
+			AssertSessionContains(entryKey);
+			Assert.AreEqual(expectedValue, response.Session[entryKey], "Session entry differs from the expected");
+		}
+
+		protected void AssertHasCookie(String cookieName)
+		{
+			CookieCollection cookies = Response.Cookies.GetCookies( new Uri("http://localhost") );
+
+			foreach(Cookie cookie in cookies)
+			{
+				if (cookie.Name.Equals(cookieName)) return;
+			}
+
+			Assert.Fail( "Cookie '{0}' was not found", cookieName );
+		}
+
+		protected void AssertCookieValueEqualsTo(String cookieName, String expectedValue)
+		{
+			AssertHasCookie(cookieName);
+
+			CookieCollection cookies = Response.Cookies.GetCookies( new Uri("http://localhost") );
+
+			foreach(Cookie cookie in cookies)
+			{
+				if (cookie.Name.Equals(cookieName))
+				{
+					Assert.AreEqual(expectedValue, cookie.Value);
+					break;
+				}
+			}
+		}
+
+		protected void AssertCookieExpirationEqualsTo(String cookieName, DateTime expectedExpiration)
+		{
+			AssertHasCookie(cookieName);
+
+			CookieCollection cookies = Response.Cookies.GetCookies( new Uri("http://localhost") );
+
+			foreach(Cookie cookie in cookies)
+			{
+				if (cookie.Name.Equals(cookieName))
+				{
+					Assert.AreEqual(expectedExpiration.Day, cookie.Expires.Day);
+					Assert.AreEqual(expectedExpiration.Month, cookie.Expires.Month);
+					Assert.AreEqual(expectedExpiration.Year, cookie.Expires.Year);
+					Assert.AreEqual(expectedExpiration.Hour, cookie.Expires.Hour);
+					Assert.AreEqual(expectedExpiration.Minute, cookie.Expires.Minute);
+					Assert.AreEqual(expectedExpiration.Second, cookie.Expires.Second);
+					break;
+				}
+			}
 		}
 
 		#endregion

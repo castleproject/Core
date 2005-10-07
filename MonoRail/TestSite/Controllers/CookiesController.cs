@@ -29,6 +29,7 @@ namespace TestSite.Controllers
 		public void AddCookie()
 		{
 			Context.Response.CreateCookie("cookiename", "value");
+			Context.Response.CreateCookie("cookiename2", "value2");
 			RenderView("Index");
 		}
 

@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Engine
 	/// <remarks>
 	/// This is were all fun begins.
 	/// </remarks>
-	public class ProcessEngine
+	public class ProcessEngine : MarshalByRefObject
 	{
 		internal static readonly String RailsContextKey = "rails.context";
 		

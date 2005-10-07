@@ -15,21 +15,24 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
+	using System.Net;
+	using System.Web;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using System.Runtime.InteropServices;
-	using System.Web;
+
+	using Castle.MonoRail.Framework.Internal.Test;
 
 
 	[Serializable]
-	public class TestResponse// : MarshalByRefObject
+	public class TestResponse : MarshalByRefObject
 	{
-		private NameValueCollection headers = new NameValueCollection();
 		private int statusCode;
 		private String statusDescription;
 		private IDictionary propertyBag;
 		private IDictionary flash;
 		private IDictionary session;
+		private IDictionary headers = new Hashtable();
+		private CookieContainer cookies = new CookieContainer();
 
 		public TestResponse()
 		{
@@ -47,9 +50,14 @@ namespace Castle.MonoRail.TestSupport
 			set { statusDescription = value; }
 		}
 
-		public NameValueCollection Headers
+		public IDictionary Headers
 		{
 			get { return headers; }
+		}
+
+		public CookieContainer Cookies
+		{
+			get { return cookies; }
 		}
 
 		public IDictionary PropertyBag
@@ -69,16 +77,40 @@ namespace Castle.MonoRail.TestSupport
 
 		protected internal void Complete()
 		{
-			HttpContext context = HttpContext.Current;
+			foreach(DictionaryEntry entry in headers)
+			{
+				String name = entry.Key.ToString();
 
-			System.Diagnostics.Debug.WriteLine("Complete: " + GetCurrentThreadId() );
+				if ("Set-Cookie".Equals(name))
+				{
+					if (entry.Value is IList)
+					{
+						foreach(String value in (IList) entry.Value)
+						{
+							cookies.SetCookies(new Uri("http://localhost"), value);
+						}
+					}
+					else
+					{
+						try
+						{
+							cookies.SetCookies(new Uri("http://localhost"), entry.Value.ToString());
+						}
+						catch(Exception ex)
+						{
+							Console.WriteLine(ex.ToString());
+						}
+					}
 
-//			flash = (IDictionary) context.Items["mr.flash"];
-//			session = (IDictionary) context.Items["mr.session"];
-//			propertyBag = (IDictionary) context.Items["mr.propertybag"];
+					break;
+				}
+			}
+
+			HttpContext context = TestContextHolder.Context;
+
+			flash = (IDictionary) context.Items["mr.flash"];
+			session = (IDictionary) context.Items["mr.session"];
+			propertyBag = (IDictionary) context.Items["mr.propertybag"];
 		}
-
-		[DllImport("Kernel32.dll")]
-		public static extern long GetCurrentThreadId();
 	}
 }

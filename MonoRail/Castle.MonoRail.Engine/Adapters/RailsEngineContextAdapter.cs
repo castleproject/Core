@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Engine.Adapters
 	/// Adapter to expose a valid <see cref="IRailsEngineContext"/>
 	/// implementation on top of <c>HttpContext</c>.
 	/// </summary>
-	public class RailsEngineContextAdapter : IRailsEngineContext
+	public class RailsEngineContextAdapter : MarshalByRefObject, IRailsEngineContext
 	{
 		private String _url;
 		private HttpContext _context;
