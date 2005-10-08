@@ -1,4 +1,0 @@
-$name is the name
-#foreach ($element in $list)
-  $element
-#end
