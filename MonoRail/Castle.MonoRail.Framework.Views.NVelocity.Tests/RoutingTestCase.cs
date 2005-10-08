@@ -15,31 +15,43 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-	using System.IO;
 
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Engine.Tests;
+	using Castle.MonoRail.TestSupport;
+
 
 	[TestFixture]
-	public class RoutingTestCase : AbstractNVelocityTestCase
+	public class RoutingTestCase : AbstractMRTestCase
 	{		
 		[Test]
 		public void BlogRoutingRule()
 		{
-			string url = "/blog/posts/2005/07/";
-			string expected = "Blog: year=2005 month=7";
+			DoGet("blog/posts/2005/07/");
+			
+			String expected = "Blog: year=2005 month=7";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
+		}
+
+		[Test]
+		public void BlogRoutingRuleWithQueryString()
+		{
+			DoGet("blog/posts/2005/07/", "high=hammett");
+			
+			String expected = "Blog: year=2005 month=7";
+
+			AssertReplyEqualsTo(expected);
 		}
 
 		[Test]
 		public void NewsRoutingRule()
 		{
-			string url = "/news/2004/11/";
-			string expected = "News: year=2004 month=11";
+			DoGet("news/2004/11/");
+			
+			String expected = "News: year=2004 month=11";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 	}
 }

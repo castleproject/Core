@@ -15,21 +15,22 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-	using System.IO;
-	
-	using Castle.MonoRail.Engine.Tests;
+
 	using NUnit.Framework;
 
+	using Castle.MonoRail.TestSupport;
+
 	[TestFixture]
-	public class ResourceTestCase : AbstractNVelocityTestCase
+	public class ResourceTestCase : AbstractMRTestCase
 	{
 		[Test]
 		public void GetResources()
 		{
-			string expected = "testValue";
-			string url = "/resourced/getresources.rails";
+			DoGet("resourced/getresources.rails");
 
-			Execute(url, expected);
+			String expected = "testValue";
+
+			AssertReplyEqualsTo(expected);
 		}
 	}
 }

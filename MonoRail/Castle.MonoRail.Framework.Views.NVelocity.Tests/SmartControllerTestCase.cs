@@ -15,93 +15,94 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-	using System.IO;
 
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Engine.Tests;
+	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
-	public class SmartControllerTestCase : AbstractNVelocityTestCase
+	public class SmartControllerTestCase : AbstractMRTestCase
 	{
 		[Test]
 		public void StringMethod()
 		{
-			string url = "/smart/stringmethod.rails?name=hammett";
-			string expected = "incoming hammett";
+			DoGet("smart/stringmethod.rails", "name=hammett");
+			String expected = "incoming hammett";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 
-			url = "/smart/stringmethod.rails?NAME=hammett";
+			DoGet("smart/stringmethod.rails", "NAME=hammett");
 			expected = "incoming hammett";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 
 		[Test]
 		public void Complex()
 		{
-			string url = "/smart/complex.rails?strarg=hammett&intarg=1&strarray=a";
-			string expected = "incoming hammett 1 a";
+			DoGet("smart/complex.rails", "strarg=hammett", "intarg=1", "strarray=a");
+			String expected = "incoming hammett 1 a";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 
-			url = "/smart/complex.rails?strarg=&intarg=&strarray=a,b,c";
+			DoGet("smart/complex.rails", "strarg=", "intarg=", "strarray=a,b,c");
 			expected = "incoming  0 a,b,c";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 
 		[Test]
 		public void SimpleBind()
 		{
-			string url = "/smart/SimpleBind.rails?name=hammett&itemcount=11&price=20";
-			string expected = "incoming hammett 11 20";
+			DoGet("smart/SimpleBind.rails", "name=hammett", "itemcount=11", "price=20");
+			String expected = "incoming hammett 11 20";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 
-			url = "/smart/SimpleBind.rails?name=hammett";
+			DoGet("smart/SimpleBind.rails", "name=hammett");
 			expected = "incoming hammett 0 0";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 
 		[Test]
 		public void ComplexBind()
 		{
-			string url = "/smart/ComplexBind.rails?name=hammett&itemcount=11&price=20&id=1&contact.email=x&contact.phone=y";
-			string expected = "incoming hammett 11 20 1 x y";
+			DoGet("smart/ComplexBind.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y");
+			String expected = "incoming hammett 11 20 1 x y";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 
 		[Test]
 		public void ComplexBindWithPrefix()
 		{
-			string url = "/smart/ComplexBindWithPrefix.rails?name=hammett&itemcount=11&price=20&person.id=1&person.contact.email=x&person.contact.phone=y";
-			string expected = "incoming hammett 11 20 1 x y";
+			DoGet("smart/ComplexBindWithPrefix.rails", "name=hammett", "itemcount=11", "price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y");
+			String expected = "incoming hammett 11 20 1 x y";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 
 		[Test]
-		[Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
+		//[Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
 		public void FillingBehavior1()
 		{
-			string url = "/smart/FillingBehavior.rails?name=someone&date1day=11&date1month=10&date1year=2005";
-			string expected = "incoming someone 11/10/2005 " + DateTime.Now.AddDays(1).ToShortDateString();
+			DoGet("smart/FillingBehavior.rails", "name=someone", "date1day=11", "date1month=10", "date1year=2005");
+			String expected = "incoming someone 11/10/2005 " + 
+				DateTime.Now.AddDays(1).ToShortDateString();
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 
 		[Test]
-		[Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
+		// [Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
 		public void FillingBehavior2()
 		{
-			string url = "/smart/FillingBehavior.rails";
-			string expected = "incoming hammett " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
+			DoGet("smart/FillingBehavior.rails");
+			String expected = "incoming hammett " + 
+				DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 	}
 }

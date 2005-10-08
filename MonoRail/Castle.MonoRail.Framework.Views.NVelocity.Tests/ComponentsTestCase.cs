@@ -15,99 +15,72 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-	using System.IO;
 
-	using Castle.MonoRail.Engine;
-	using Castle.MonoRail.Framework.Internal;
-	using Castle.MonoRail.Framework.Tests;
-	
 	using NUnit.Framework;
 
+	using Castle.MonoRail.TestSupport;
+
 	[TestFixture]
-	public class ComponentsTestCase
+	public class ComponentsTestCase : AbstractMRTestCase
 	{
-		NVelocityViewEngine _viewEngine;
-		ProcessEngine _engine;
-
-		[TestFixtureSetUp]
-		public void Init()
-		{
-			IControllerFactory factory = new FakeControllerFactory();
-
-			_viewEngine = new NVelocityViewEngine();
-			_viewEngine.ViewRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, 
-				"../Castle.MonoRail.Framework.Views.NVelocity.Tests/views");
-
-			DefaultViewComponentFactory viewFactory = new DefaultViewComponentFactory();
-			viewFactory.Inspect( "Castle.MonoRail.Framework.Views.NVelocity.Tests" );
-			
-			_engine = new ProcessEngine(factory, _viewEngine, viewFactory);
-
-			viewFactory.ViewEngine = _viewEngine;
-
-			_viewEngine.ViewComponentFactory = viewFactory;
-
-			_viewEngine.Init();
-		}
-
 		[Test]
 		public void InlineComponentUsingRenderText()
 		{
-			RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index1.rails");
+			DoGet("usingcomponent/index1.rails");
 
-			_engine.Process( context );
+			AssertSuccess();
 
-			AssertOutput( "static 1\r\nHello from SimpleInlineViewComponent static 2", context.Output );
+			AssertOutput( "static 1\r\nHello from SimpleInlineViewComponent static 2", Output );
 		}
 
 		[Test]
 		public void InlineComponentUsingRender()
 		{
-			RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index2.rails");
+			DoGet("usingcomponent/index6.rails");
 
-			_engine.Process( context );
+			AssertSuccess();
 
-			AssertOutput( "static 1\r\nThis is a view used by a component static 2", context.Output );
+			AssertOutput( "static 1\r\nThis is a view used by a component static 2", Output );
 		}
 
 		[Test]
 		public void InlineComponentNotOverridingRender()
 		{
-			RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index3.rails");
+			DoGet("usingcomponent/index3.rails");
 
-			_engine.Process( context );
+			AssertSuccess();
 
-			AssertOutput( "static 1\r\ndefault component view picked up automatically static 2", context.Output );
+			AssertOutput( "static 1\r\ndefault component view picked up automatically static 2", Output );
 		}
 
 		[Test]
 		public void InlineComponentWithParam1()
 		{
-			RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index4.rails");
+			DoGet("usingcomponent/index4.rails");
 
-			_engine.Process( context );
+			AssertSuccess();
 
-			AssertOutput( "Done", context.Output );
+			AssertOutput( "Done 1", Output );
 		}
 
 		[Test]
 		public void BlockComp1()
 		{
-			RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index5.rails");
+			DoGet("usingcomponent/index5.rails");
 
-			_engine.Process( context );
+			AssertSuccess();
 
-			AssertOutput( "  item 0\r\n  item 1\r\n  item 2\r\n", context.Output );
+			AssertOutput( "  item 0\r\n  item 1\r\n  item 2\r\n", Output );
 		}
 
 		[Test]
 		public void BlockWithinForEach()
 		{
-			RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index8.rails");
+			DoGet("usingcomponent/index8.rails");
 
-			_engine.Process( context );
+			AssertSuccess();
 
-			AssertOutput( "inner content 1\r\ninner content 2\r\n", context.Output );
+			AssertOutput( "inner content 1\r\ninner content 2\r\n", Output );
 		}
 
 		[Test]
@@ -115,22 +88,20 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			for(int i=0; i < 10; i++)
 			{
-				RailsEngineContextImpl context = new RailsEngineContextImpl("/usingcomponents/index9.rails");
+				DoGet("usingcomponent/index9.rails");
 
-				_engine.Process( context );
+				AssertSuccess();
 
-				// System.Diagnostics.Debug.WriteLine( context.Output );
-
-				AssertOutput( "static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n", context.Output );
+				AssertOutput( "static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n", Output );
 			}
 		}
 
-		void AssertOutput(string expected, object output)
+		void AssertOutput(String expected, object output)
 		{
 			Assert.AreEqual(NormalizeWhitespace(expected), NormalizeWhitespace(output.ToString()));
 		}
 
-		string NormalizeWhitespace(string s)
+		String NormalizeWhitespace(String s)
 		{
 			return s.Replace("\r\n", "\n");
 		}

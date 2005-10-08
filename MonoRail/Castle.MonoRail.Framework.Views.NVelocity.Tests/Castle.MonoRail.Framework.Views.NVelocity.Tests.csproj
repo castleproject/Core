@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)\App.config $(TargetPath).config"
                 RootNamespace = "Castle.MonoRail.Framework.Views.NVelocity.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -120,14 +120,18 @@
                     AssemblyName = "NVelocity"
                     HintPath = "..\lib\NVelocity.dll"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.TestSupport"
+                    Project = "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "AbstractNVelocityTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "App.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
@@ -145,37 +149,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "FakeControllerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "NVelocityAjaxTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "NVelocityBasicFunctionalityTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NVelocityComponentsTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NVelocityExceptionsTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NVelocityFilterTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NVelocityHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -203,128 +182,6 @@
                     RelPath = "SmartControllerTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ViewEngineTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Components\BlockViewComponent1.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Components\BlockViewComponent2.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Components\InlineComponentWithParam1.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Components\SimpleInlineViewComponent.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Components\SimpleInlineViewComponent2.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Components\SimpleInlineViewComponent3.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\HomeController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\LayoutController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\UsingComponentsController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "views\components\SimpleInlineViewComponent2\mycompview1.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\components\SimpleInlineViewComponent3\default.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\home\bag.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\home\display.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\home\index.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\home\resource.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\layout\index.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\layout\save.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\layout\update.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\layouts\general.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\layouts\printable.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\usingcomponents\index1.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\usingcomponents\index2.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\usingcomponents\index3.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\usingcomponents\index4.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\usingcomponents\index5.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\usingcomponents\index8.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\usingcomponents\index9.vm"
-                    BuildAction = "None"
                 />
             </Include>
         </Files>

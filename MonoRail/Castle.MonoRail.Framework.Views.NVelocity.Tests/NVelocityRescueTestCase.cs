@@ -24,9 +24,5 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	[TestFixture]
 	public class NVelocityRescueTestCase : RescueTestCase
 	{
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
-		}
 	}
 }

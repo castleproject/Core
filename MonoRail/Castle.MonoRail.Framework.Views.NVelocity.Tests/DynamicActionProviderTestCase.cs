@@ -18,26 +18,30 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 	using NUnit.Framework;
 
+	using Castle.MonoRail.TestSupport;
+
 
 	[TestFixture]
-	public class DynamicActionProviderTestCase : AbstractNVelocityTestCase
+	public class DynamicActionProviderTestCase : AbstractMRTestCase
 	{
 		[Test]
 		public void DynamicActionUsingView()
 		{
-			string url = "/dyn/save.rails";
-			string expected = "Hello from save dynamic action";
+			DoGet("dyn/save.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo("Hello from save dynamic action");
 		}
 
 		[Test]
 		public void DynamicActionUsingRenderText()
 		{
-			string url = "/dyn/index.rails";
-			string expected = "Rendered from the view: hello!";
+			DoGet("dyn/index.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo("Rendered from the view: hello!");
 		}
 	}
 }

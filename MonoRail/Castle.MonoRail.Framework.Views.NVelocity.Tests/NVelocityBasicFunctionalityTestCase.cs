@@ -15,8 +15,6 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-	using System.IO;
-	using System.Net;
 
 	using NUnit.Framework;
 
@@ -25,18 +23,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	[TestFixture]
 	public class NVelocityBasicFunctionalityTestCase : BasicFunctionalityTestCase
 	{
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteNVelocity" );
-		}
-
 		[Test]
 		public void AppPath()
 		{
-			string url = "/apppath/index.rails";
-			string expected = "Current apppath is ";
+			DoGet("apppath/index.rails");
+			
+			String expected = "Current apppath is ";
 
-			Execute(url, expected);
+			AssertReplyEqualsTo(expected);
 		}
 	}
 }
