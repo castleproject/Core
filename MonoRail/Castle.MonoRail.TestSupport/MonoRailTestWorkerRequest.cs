@@ -298,7 +298,8 @@ namespace Castle.MonoRail.TestSupport
 
 		public override string GetRawUrl()
 		{
-			return GetPathInternal();
+			return String.Format("{0}{1}{2}", 
+				GetPathInternal(), queryString != null ? "?" : "", queryString);
 		}
 
 		public override string GetRemoteAddress()

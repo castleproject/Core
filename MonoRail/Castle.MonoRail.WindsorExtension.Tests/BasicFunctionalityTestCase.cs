@@ -14,44 +14,13 @@
 
 namespace Castle.MonoRail.WindsorExtension.Tests
 {
-	using System;
-	using System.IO;
-	using System.Net;
-
 	using NUnit.Framework;
 
 	using Castle.MonoRail.Engine.Tests;
 
+	
 	[TestFixture]
-	public class BasicFunctionalityTestCase : AbstractCassiniTestCase
+	public class WindsorExtensionBasicFunctionalityTestCase : BasicFunctionalityTestCase
 	{
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestSiteWindsor" );
-		}
-
-		[Test]
-		public void SimpleControllerAction()
-		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/home/index.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("My View contents for Home\\Index", response);
-		}
-
-		[Test]
-		public void Filter()
-		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/registration/index.rails");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
-
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("Login page", response);
-		}
 	}
 }

@@ -316,15 +316,15 @@ namespace Castle.MonoRail.Generator.Generators
 			String controllerName = StripControllerFrom(name);
 
 			CodeNamespace thisNs = new CodeNamespace(ns + ".Tests");
+
 			thisNs.Imports.Add(new CodeNamespaceImport("System"));
-			thisNs.Imports.Add(new CodeNamespaceImport("System.Net"));
 			thisNs.Imports.Add(new CodeNamespaceImport("NUnit.Framework"));
-//			thisNs.Comments.Add(new CodeCommentStatement("Ignore the above comment or better, delete it"));
+			thisNs.Imports.Add(new CodeNamespaceImport("Castle.MonoRail.TestSupport"));
 	
 			CodeTypeDeclaration controllerType = new CodeTypeDeclaration(name + "TestCase");
 			thisNs.Types.Add(controllerType);
 
-			controllerType.BaseTypes.Add("AbstractCassiniTestCase");
+			controllerType.BaseTypes.Add("AbstractMRTestCase");
 			controllerType.CustomAttributes.Add( new CodeAttributeDeclaration("TestFixture") );
 	
 			foreach(String action in actions)
@@ -334,45 +334,32 @@ namespace Castle.MonoRail.Generator.Generators
 				actionTestMethod.Attributes = MemberAttributes.Public;
 				actionTestMethod.CustomAttributes.Add( new CodeAttributeDeclaration("Test") );
 
-				String url = String.Format("\"http://localhost:8083/{0}/{1}.rails\"", controllerName, action);
+				String url = null;
+
+				if (area == null || area.Length == 0)
+				{
+					url = String.Format("\"{0}/{1}.rails\"", controllerName, action);
+				}
+				else
+				{
+					url = String.Format("\"{0}/{1}/{2}.rails\"", area, controllerName, action);
+				}
+				
 				String expected = string.Format("\"action {0}\"", action);
 
-				CodeVariableDeclarationStatement myReqDecl = new CodeVariableDeclarationStatement("HttpWebRequest", "myReq");
-				myReqDecl.InitExpression = 
-					new CodeCastExpression("HttpWebRequest", 
-						new CodeMethodInvokeExpression(
-							new CodeSnippetExpression("WebRequest"), "Create", 
-								new CodeSnippetExpression(url)));
+				CodeMethodInvokeExpression doGetInvoke = new CodeMethodInvokeExpression();
+				doGetInvoke.Method = new CodeMethodReferenceExpression(null, "DoGet");
+				doGetInvoke.Parameters.Add( new CodeSnippetExpression(url) );
+				actionTestMethod.Statements.Add( new CodeExpressionStatement(doGetInvoke) );
 
-				CodeVariableDeclarationStatement myResDecl = new CodeVariableDeclarationStatement("HttpWebResponse", "reply");
-				myResDecl.InitExpression = 
-					new CodeCastExpression("HttpWebResponse", 
-					new CodeMethodInvokeExpression(
-					new CodeSnippetExpression("myReq"), "GetResponse"));
+				CodeMethodInvokeExpression assertSuccess = new CodeMethodInvokeExpression();
+				doGetInvoke.Method = new CodeMethodReferenceExpression(null, "AssertSuccess");
+				actionTestMethod.Statements.Add( new CodeExpressionStatement(assertSuccess) );
 
-				actionTestMethod.Statements.Add( myReqDecl );
-				actionTestMethod.Statements.Add( myResDecl );
-
-				CodeMethodInvokeExpression assertStatusCode = 
-					new CodeMethodInvokeExpression(
-						new CodeSnippetExpression("Assert"), "AreEqual", new CodeSnippetExpression("HttpStatusCode.OK"), new CodeSnippetExpression("reply.StatusCode"));
-
-				actionTestMethod.Statements.Add(new CodeExpressionStatement(assertStatusCode) );
-
-				CodeMethodInvokeExpression assertContType = 
-					new CodeMethodInvokeExpression(
-					new CodeSnippetExpression("Assert"), "IsTrue", new CodeSnippetExpression("reply.ContentType.StartsWith(\"text/html\")"));
-
-				actionTestMethod.Statements.Add(new CodeExpressionStatement(assertContType) );
-
-				CodeMethodInvokeExpression assertContains = 
-					new CodeMethodInvokeExpression(
-					new CodeBaseReferenceExpression(), "AssertContains", 
-						new CodeSnippetExpression(expected), 
-						new CodeSnippetExpression("reply"));
-
-				actionTestMethod.Statements.Add(new CodeExpressionStatement(assertContains) );
-
+				CodeMethodInvokeExpression assertReply = new CodeMethodInvokeExpression();
+				assertReply.Method = new CodeMethodReferenceExpression(null, "AssertReplyEqualsTo");
+				assertReply.Parameters.Add( new CodeSnippetExpression(expected) );
+				actionTestMethod.Statements.Add( new CodeExpressionStatement(assertReply) );
 
 				controllerType.Members.Add(actionTestMethod);
 			}

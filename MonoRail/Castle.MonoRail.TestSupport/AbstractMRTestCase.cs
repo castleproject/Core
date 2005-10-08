@@ -45,6 +45,14 @@ namespace Castle.MonoRail.TestSupport
 			String virDir = GetVirtualDir();
 			String physicalDir = GetPhysicalDir();
 
+			if (!Path.IsPathRooted(physicalDir))
+			{
+				DirectoryInfo dinfo = new DirectoryInfo( Path.Combine( 
+					AppDomain.CurrentDomain.SetupInformation.ApplicationBase, physicalDir ) );
+
+				physicalDir = dinfo.FullName;
+			}
+
 			host = (WebAppHost) ApplicationHost.CreateApplicationHost( 
 				typeof(WebAppHost), virDir, physicalDir );
 
@@ -105,6 +113,11 @@ namespace Castle.MonoRail.TestSupport
 			get { return response; }
 		}
 
+		public String Output
+		{
+			get { return outputBuffer.ToString(); }
+		}
+
 		#endregion
 
 		#region Available Asserts
@@ -115,7 +128,8 @@ namespace Castle.MonoRail.TestSupport
 		protected void AssertSuccess()
 		{
 			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
-			Assert.IsTrue(response.StatusCode < 400, "Status code different than > 400");
+			Assert.IsTrue(response.StatusCode < 400, "Expeciting status code < 400 when it was in fact {0} - {1}", 
+				response.StatusCode, response.StatusDescription);
 		}
 
 		/// <summary>
@@ -125,7 +139,7 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="expectedContents"></param>
 		protected void AssertReplyEqualsTo(String expectedContents)
 		{
-			Assert.AreEqual( expectedContents, outputBuffer.ToString() );
+			Assert.AreEqual( expectedContents, Output, "Reply differs. Expecting {0} but was {1}", expectedContents, Output );
 		}
 
 		/// <summary>
@@ -134,7 +148,7 @@ namespace Castle.MonoRail.TestSupport
 		/// </summary>
 		protected void AssertReplyStartsWith(String contents)
 		{
-			String buffer = outputBuffer.ToString();
+			String buffer = Output;
 
 			Assert.IsTrue( buffer.StartsWith(contents), 
 				"Reply string did not start with '{0}'. It was '{1}'", contents,
@@ -147,7 +161,7 @@ namespace Castle.MonoRail.TestSupport
 		/// </summary>
 		protected void AssertReplyEndsWith(String contents)
 		{
-			String buffer = outputBuffer.ToString();
+			String buffer = Output;
 
 			Assert.IsTrue( buffer.EndsWith(contents), 
 				"Reply string did not end with '{0}'. It was '{1}'", contents,
@@ -160,7 +174,7 @@ namespace Castle.MonoRail.TestSupport
 		/// </summary>
 		protected void AssertReplyContains(String contents)
 		{
-			Assert.IsTrue( outputBuffer.ToString().IndexOf(contents) != -1, 
+			Assert.IsTrue( Output.IndexOf(contents) != -1, 
 				"AssertReplyContains did not find the content '{0}'", contents );
 		}
 
@@ -168,9 +182,9 @@ namespace Castle.MonoRail.TestSupport
 		/// Asserts that reply does not contain
 		/// <c>expectedContents</c>
 		/// </summary>
-		protected void AssertReplyDoNotContain(String contents)
+		protected void AssertReplyDoesNotContain(String contents)
 		{
-			Assert.IsTrue( outputBuffer.ToString().IndexOf(contents) == -1, 
+			Assert.IsTrue( Output.IndexOf(contents) == -1, 
 				"AssertReplyDoNotContain found the content '{0}'", contents );
 		}
 
@@ -283,12 +297,12 @@ namespace Castle.MonoRail.TestSupport
 			{
 				if (cookie.Name.Equals(cookieName))
 				{
-					Assert.AreEqual(expectedExpiration.Day, cookie.Expires.Day);
-					Assert.AreEqual(expectedExpiration.Month, cookie.Expires.Month);
-					Assert.AreEqual(expectedExpiration.Year, cookie.Expires.Year);
-					Assert.AreEqual(expectedExpiration.Hour, cookie.Expires.Hour);
-					Assert.AreEqual(expectedExpiration.Minute, cookie.Expires.Minute);
-					Assert.AreEqual(expectedExpiration.Second, cookie.Expires.Second);
+					Assert.AreEqual(expectedExpiration.Day, cookie.Expires.Day, "Expiration day differs. Expecting {0} but was {1}", expectedExpiration.Day, cookie.Expires.Day);
+					Assert.AreEqual(expectedExpiration.Month, cookie.Expires.Month, "Expiration month differs. Expecting {0} but was {1}", expectedExpiration.Month, cookie.Expires.Month);
+					Assert.AreEqual(expectedExpiration.Year, cookie.Expires.Year, "Expiration year differs. Expecting {0} but was {1}", expectedExpiration.Year, cookie.Expires.Year);
+					Assert.AreEqual(expectedExpiration.Hour, cookie.Expires.Hour, "Expiration hour differs. Expecting {0} but was {1}", expectedExpiration.Hour, cookie.Expires.Hour);
+					Assert.AreEqual(expectedExpiration.Minute, cookie.Expires.Minute, "Expiration minute differs. Expecting {0} but was {1}", expectedExpiration.Minute, cookie.Expires.Minute);
+					// Assert.AreEqual(expectedExpiration.Second, cookie.Expires.Second, "Expiration second differs. Expecting {0} but was {1}", expectedExpiration.Second, cookie.Expires.Second);
 					break;
 				}
 			}
@@ -310,13 +324,6 @@ namespace Castle.MonoRail.TestSupport
 					"AbstractMRTestCase.GetPhysicalDir", PhysicalWebDirConfigKey);
 
 				throw new ConfigurationException(message);
-			}
-
-			if (!Path.IsPathRooted(dir))
-			{
-				DirectoryInfo dinfo = new DirectoryInfo( Path.Combine( AppDomain.CurrentDomain.SetupInformation.ApplicationBase, dir ) );
-
-				dir = dinfo.FullName;
 			}
 
 			return dir;

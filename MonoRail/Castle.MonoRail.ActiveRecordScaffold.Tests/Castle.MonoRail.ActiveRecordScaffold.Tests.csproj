@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)\$(TargetFileName).config $(TargetDir)"
+                PostBuildEvent = "copy $(ProjectDir)\App.config $(TargetPath).config"
                 RootNamespace = "Castle.MonoRail.ActiveRecordScaffold.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -115,6 +115,10 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -122,10 +126,6 @@
                 <File
                     RelPath = "bloglist.txt"
                     BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Castle.MonoRail.ActiveRecordScaffold.Tests.dll.config"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "ListActionTestCase.cs"

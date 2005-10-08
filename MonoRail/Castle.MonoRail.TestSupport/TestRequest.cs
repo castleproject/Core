@@ -20,7 +20,7 @@ namespace Castle.MonoRail.TestSupport
 
 	public class TestRequest : MarshalByRefObject
 	{
-		private String protocol = "HTTP/1.0";
+		private String protocol = "http";
 		private String verb = "GET";
 		private String url;
 		private String virtualPath;

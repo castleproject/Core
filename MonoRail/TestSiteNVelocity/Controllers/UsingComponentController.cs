@@ -26,6 +26,10 @@ namespace TestSiteNVelocity.Controllers
 		{
 		}
 
+		public void Index1()
+		{
+		}
+
 		public void Index2()
 		{
 		}
@@ -38,6 +42,36 @@ namespace TestSiteNVelocity.Controllers
 			items.Add("2");
 
 			PropertyBag.Add("items", items);
+		}
+
+		public void Index4()
+		{
+		}
+	
+		public void Index5()
+		{
+		}
+	
+		public void Index6()
+		{
+		}
+
+		public void Index7()
+		{
+		}
+
+		public void Index8()
+		{
+			ArrayList items = new ArrayList();
+
+			items.Add("1");
+			items.Add("2");
+
+			PropertyBag.Add("items", items);
+		}
+
+		public void Index9()
+		{
 		}
 	}
 }

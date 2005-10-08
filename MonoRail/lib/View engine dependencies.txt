@@ -8,4 +8,5 @@ BRail View engine requires
 * Boo.Lang.Compiler.dll
 * Boo.Lang.dll
 * Boo.Lang.Parser.dll
+* WSABoo.Parser.dll
 

@@ -23,7 +23,8 @@
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
-	<target name="build" depends="clean, init, framework, engine, integration, brail, nvelocity, composite, arscaffold, testsupport, samples, tests, generator" /> 
+	<!-- brail removed just for a moment -->
+	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, composite, arscaffold, testsupport, samples, tests, generator" /> 
 	
 	<target name="clean">
 		<delete>
@@ -78,7 +79,7 @@
 		</if>
 		<if test="${not property::exists( 'gacutil.file' )}">
 			<echo>Could not find "gacutil" to install Cassini server to GAC.</echo>
-			<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport.dll</echo>
+			<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport</echo>
 		</if>
 	</target>
 	
@@ -145,10 +146,6 @@
 
 	<target name="generator" depends="init">
 		<nant buildfile="Castle.MonoRail.Generator/default.build" inheritall="true" target="compile" />
-	</target>
-
-	<target name="testsupport" depends="init">
-		<nant buildfile="Castle.MonoRail.TestSupport/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="docs">

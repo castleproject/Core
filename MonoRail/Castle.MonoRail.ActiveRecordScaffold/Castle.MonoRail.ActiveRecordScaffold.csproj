@@ -102,12 +102,17 @@
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
-                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                    HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine"
-                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.dll"
+                    HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.dll"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\lib\NVelocity.dll"
                 />
             </References>
         </Build>

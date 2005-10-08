@@ -26,6 +26,19 @@ namespace TestSiteNVelocity.Controllers
 
 		public void Index()
 		{
+			
+		}
+
+		public void Flash1()
+		{
+			Flash.Add("errormessage", "Some error");
+
+			RenderText("RenderText output");
+		}
+
+		public void Other()
+		{
+			RenderView("display");
 		}
 
 		public void Welcome()

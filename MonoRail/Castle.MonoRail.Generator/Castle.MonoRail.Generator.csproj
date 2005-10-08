@@ -137,10 +137,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "templates\abstractcassini.vm"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "templates\container.vm"
                     BuildAction = "EmbeddedResource"
                 />

@@ -17,10 +17,8 @@ namespace Castle.MonoRail.Generator.Generators
 	using System;
 	using System.IO;
 	using System.Text;
-	using System.ComponentModel;
 	using System.Collections;
 
-	using Castle.Components.Common.TemplateEngine;
 	using Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine;
 
 	/// <summary>

@@ -15,8 +15,8 @@
 namespace Castle.MonoRail.Engine
 {
 	using System;
-	using System.Collections;
 	using System.Web;
+	using System.Collections;
 
 	using Castle.MonoRail.Engine.Configuration;
 
@@ -32,10 +32,8 @@ namespace Castle.MonoRail.Engine
 
 		public void Init(HttpApplication context)
 		{
-			//Subcribe to BeginRequest
 			context.BeginRequest += new EventHandler(OnBeginRequest);
 
-			//Load the rules
 			routingRules = MonoRailConfiguration.GetConfig().RoutingRules;
 		}
 
@@ -50,30 +48,32 @@ namespace Castle.MonoRail.Engine
 			HttpContext context = HttpContext.Current;
 			HttpRequest request = context.Request;
 
-			string virtualPath = request.FilePath;
-			string newPath;
+			String virtualPath = request.FilePath;
+			String newPath;
 
-			//Store the original path in case this needs to be used later
-			context.Items.Add(OriginalPathKey, virtualPath);
+			SaveOriginalPath(context, virtualPath);
 
 			if(FindMatchAndReplace(virtualPath, out newPath))
 			{
-				//Handle things differently depending on wheter we need to keep a query string or not
+				// Handle things differently depending on wheter we need 
+				// to keep a query string or not
+
 				int queryStringIndex = newPath.IndexOf('?');
+				
 				if (queryStringIndex == -1)
 				{
 					context.RewritePath(newPath);
 				}
 				else
 				{
-					string path = newPath.Substring(0, queryStringIndex);
-					string queryString = newPath.Substring(queryStringIndex + 1);
+					String path = newPath.Substring(0, queryStringIndex);
+					String queryString = newPath.Substring(queryStringIndex + 1);
 					context.RewritePath(path, request.PathInfo, queryString);
 				}
 			}
 		}
 
-		private bool FindMatchAndReplace(string currentPath, out string newPath)
+		private bool FindMatchAndReplace(String currentPath, out String newPath)
 		{
 			newPath = String.Empty;
 
@@ -108,18 +108,28 @@ namespace Castle.MonoRail.Engine
 		}
 		
 		/// <summary>
-		/// Returns the original path (before rewriting occured), or <c>null</c> if rewriting didn't occur on this request.
+		/// Returns the original path 
+		/// (before rewriting occured), or <c>null</c> 
+		/// if rewriting didn't occur on this request.
 		/// </summary>
-		public static string OriginalPath
+		public static String OriginalPath
 		{
 			get
 			{
 				HttpContext context = HttpContext.Current;
+
 				if (context.Items.Contains(OriginalPathKey))
-					return context.Items[OriginalPathKey] as string;
-				else
-					return null;
+				{
+					return context.Items[OriginalPathKey] as String;
+				}
+
+				return null;
 			}
+		}
+
+		private static void SaveOriginalPath(HttpContext context, String virtualPath)
+		{
+			context.Items.Add(OriginalPathKey, virtualPath);
 		}
 	}
 }

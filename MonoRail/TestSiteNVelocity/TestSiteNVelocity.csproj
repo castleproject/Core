@@ -104,6 +104,11 @@
                     AssemblyName = "NVelocity"
                     HintPath = "..\lib\NVelocity.dll"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.NVelocity"
+                    Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -123,6 +128,36 @@
                 />
                 <File
                     RelPath = "Components\BlockComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\BlockViewComponent1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\BlockViewComponent2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\InlineComponentWithParam1.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\SimpleInlineViewComponent3.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -266,6 +301,14 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\components\SimpleInlineViewComponent2\mycompview1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\components\SimpleInlineViewComponent3\default.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\cookies\index.vm"
                     BuildAction = "None"
                 />
@@ -304,6 +347,10 @@
                 <File
                     RelPath = "views\home\bag2.vm"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\home\display.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "views\home\heyhello.vm"
@@ -362,11 +409,35 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\UsingComponent\index1.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\UsingComponent\index2.vm"
                     BuildAction = "None"
                 />
                 <File
                     RelPath = "views\UsingComponent\index3.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index4.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index5.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index6.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index8.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index9.vm"
                     BuildAction = "None"
                 />
                 <File

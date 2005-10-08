@@ -188,6 +188,7 @@ namespace Castle.MonoRail.Generator.Generators
 		private void CreateSolution(string name, IDictionary options, TextWriter writer)
 		{
 			Hashtable ctx = new Hashtable();
+
 			ctx.Add("projid", Guid.NewGuid().ToString().ToUpper());
 			ctx.Add("projtestid", Guid.NewGuid().ToString().ToUpper());
 			ctx.Add("basename", name);
@@ -202,9 +203,6 @@ namespace Castle.MonoRail.Generator.Generators
 			WriteTemplateFile(Path.Combine(rootDir.FullName, name + ".sln"), ctx, "solution.vm");
 			WriteTemplateFile(Path.Combine(projectDir.FullName, name + ".csproj"), ctx, "csproj.vm");
 			WriteTemplateFile(Path.Combine(projectTestDir.FullName, name + ".Tests.csproj"),  ctx, "csprojtest.vm");
-			WriteTemplateFile(Path.Combine(projectTestDir.FullName, "AbstractCassiniTestCase.cs"),  ctx, "abstractcassini.vm");
-
-			
 
 			if (useWindsorIntegration)
 			{
@@ -220,7 +218,7 @@ namespace Castle.MonoRail.Generator.Generators
 
 			CopyFileToLib(sourcedir, "Castle.MonoRail.Engine.dll");
 			CopyFileToLib(sourcedir, "Castle.MonoRail.Framework.dll");
-			CopyFileToLib(sourcedir, "Cassini.dll");
+			CopyFileToLib(sourcedir, "Castle.MonoRail.TestSupport.dll");
 			
 			if (isNVelocity)
 			{

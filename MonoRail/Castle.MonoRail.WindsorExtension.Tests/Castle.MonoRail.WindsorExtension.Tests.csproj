@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)\App.config $(TargetPath).config"
                 RootNamespace = "Castle.MonoRail.WindsorExtension.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -100,10 +100,19 @@
                     Project = "{12A3B0DA-079D-4337-AF70-798596FDB9FE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.TestSupport"
+                    Project = "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "App.config"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
@@ -111,11 +120,6 @@
                 />
                 <File
                     RelPath = "BasicFunctionalityTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FilesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

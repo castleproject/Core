@@ -38,10 +38,8 @@ namespace TestSiteWindsor
 
 		private void AddControllers(WindsorContainer container)
 		{
-			container.AddComponent( "auth.filter", typeof(AuthenticationFilter) );
 			container.AddComponent( "home", typeof(HomeController) );
-			container.AddComponent( "registration", typeof(MyController) );
-			container.AddComponent( "account", typeof(AccountController) );
+			container.AddComponent( "cookies", typeof(CookiesController) );
 		}
 
 		public void Application_OnEnd() 

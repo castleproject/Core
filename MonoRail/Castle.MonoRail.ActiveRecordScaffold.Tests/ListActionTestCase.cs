@@ -23,7 +23,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 
 
 	[TestFixture]
-	public class BlogTestCase : AbstractCassiniTestCase
+	public class BlogTestCase : AbstractMRTestCase
 	{
 		[Test]
 		public void ListBlog()
@@ -75,11 +75,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 			expFS.Read( barray, 0, barray.Length );
 
 			// Execute(url, System.Text.ASCIIEncoding.Default.GetString(barray) );
-		}
-
-		protected override String ObtainPhysicalDir()
-		{
-			return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, @"..\TestScaffolding" );
 		}
 	}
 }

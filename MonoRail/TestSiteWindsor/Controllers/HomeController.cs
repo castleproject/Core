@@ -25,8 +25,43 @@ namespace TestSiteWindsor.Controllers
 		{
 		}
 
-		public void List()
+		public void Flash1()
 		{
+			Flash.Add("errormessage", "Some error");
+
+			RenderText("RenderText output");
+		}
+
+		public void Other()
+		{
+			RenderView("display");
+		}
+
+		public void Welcome()
+		{
+			RenderView("heyhello");
+		}
+
+		public void RedirectAction()
+		{
+			Redirect("home", "index");
+		}
+
+		public void RedirectForOtherArea()
+		{
+			Redirect("subarea", "home", "index");
+		}
+
+		public void Bag()
+		{
+			PropertyBag.Add( "CustomerName", "hammett" );
+			PropertyBag.Add( "List", new String[] { "1", "2", "3" } );
+		}
+
+		public void Bag2()
+		{
+			PropertyBag.Add( "CustomerName", "hammett" );
+			PropertyBag.Add( "List", new String[] { "1", "2", "3" } );
 		}
 	}
 }
