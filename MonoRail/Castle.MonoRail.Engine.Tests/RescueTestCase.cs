@@ -19,44 +19,50 @@ namespace Castle.MonoRail.Engine.Tests
 
 	using NUnit.Framework;
 
+	using Castle.MonoRail.TestSupport;
+
 
 	[TestFixture]
-	public class RescueTestCase : AbstractCassiniTestCase
+	public class RescueTestCase : AbstractMRTestCase
 	{
 		[Test]
 		public void GeneralRescue()
 		{
-			string url = "/rescuable/index.rails";
-			string expected = "An error happened";
+			DoGet("rescuable/index.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "An error happened" );
 		}
 
 		[Test]
 		public void RescueForMethod()
 		{
-			string url = "/rescuable/save.rails";
-			string expected = "An error happened during save";
+			DoGet("rescuable/save.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "An error happened during save" );
 		}
 
 		[Test]
 		public void RescueForMethodWithLayout()
 		{
-			string url = "/rescuable/update.rails";
-			string expected = "\r\nWelcome!\r\n<p>An error happened during update</p>\r\nFooter";
+			DoGet("rescuable/update.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "\r\nWelcome!\r\n<p>An error happened during update</p>\r\nFooter" );
 		}
 
 		[Test]
 		public void RescueMessage()
 		{
-			string url = "/rescuable/updateMsg.rails";
-			string expected = "custom msg";
+			DoGet("rescuable/updateMsg.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "custom msg" );
 		}
 	}
 }

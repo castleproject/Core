@@ -18,32 +18,93 @@ namespace Castle.MonoRail.Engine.Tests
 	using System.Net;
 
 	using NUnit.Framework;
+	
+	using Castle.MonoRail.TestSupport;
+
 
 	[TestFixture]
-	public class FilterTestCase : AbstractCassiniTestCase
+	public class FilterTestCase : AbstractMRTestCase
 	{
+		[Test]
+		public void SkipFilter()
+		{
+			DoGet("filtered/index.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "Filtered Action Index" );
+		}
+
+		[Test]
+		public void FilteredActionWithRenderText()
+		{
+			DoGet("filtered/save.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "(before)content(after)" );
+		}
+
+		[Test]
+		public void FilteredActionWithView()
+		{
+			DoGet("filtered/update.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "(before)(after)update view contents" );
+		}
+
+		[Test]
+		public void SelectiveSkipFilter()
+		{
+			DoGet("filtered/selectiveSkip.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "selectiveSkip view contents" );
+		}
+
+		[Test]
+		public void BeforeFilter_SkipFilter()
+		{
+			DoGet("filtered2/index.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "index view contents" );
+		}
+
+		[Test]
+		public void BeforeFilter_Filtered()
+		{
+			DoGet("filtered2/update.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "(before)update view contents" );
+		}
+
 		[Test]
 		public void InvalidCondition()
 		{
-			HttpWebRequest myReq = (HttpWebRequest) 
-				WebRequest.Create("http://localhost:8083/filter/index.rails");
+			Request.Headers.Add("mybadheader", "somevalue");
 
-			myReq.Headers.Add("mybadheader", "somevalue");
-			HttpWebResponse response = (HttpWebResponse) myReq.GetResponse();
+			DoGet("filter/index.rails");
 
-			Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-			Assert.AreEqual("/filter/index.rails", response.ResponseUri.PathAndQuery);
-			Assert.IsTrue(response.ContentType.StartsWith("text/html"));
-			AssertContents("Denied!", response);
+			AssertSuccess();
+
+			AssertReplyEqualsTo("Denied!");
 		}
 
 		[Test]
 		public void ValidCondition()
 		{
-			string url = "/filter/index.rails";
-			string expected = "View contents!";
+			DoGet("filter/index.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo("View contents!");
 		}
 	}
 }

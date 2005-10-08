@@ -15,53 +15,84 @@
 namespace Castle.MonoRail.Engine.Tests
 {
 	using System;
-
+	using System.Net;
+	
 	using NUnit.Framework;
 
-	[TestFixture]
-	public class FilesTestCase : AbstractCassiniTestCase
-	{
-		public FilesTestCase()
-		{
-		}
+	using Castle.MonoRail.TestSupport;
 
+
+	/// <summary>
+	/// Ensures MonoRail is serving the static files
+	/// </summary>
+	[TestFixture]
+	public class FilesTestCase : AbstractMRTestCase
+	{
 		[Test]
 		public void Ajax()
 		{
-			string expected = "\r\n\r\n/*  Prototype JavaScript framework";
-			string url = "/MonoRail/Files/AjaxScripts.rails";
+			DoGet("MonoRail/Files/AjaxScripts.rails");
+			
+			AssertSuccess();
 
-			Execute(url, expected, url, true, "text/javascript");
+			String expected = "\r\n\r\n/*  Prototype JavaScript framework";
+
+			AssertContentTypeStartsWith("text/javascript");
+			AssertReplyStartsWith(expected);
 		}
 
 		[Test]
-		public void Fade()
+		public void EffectsFat()
 		{
-			string expected = "\r\n// @name      The Fade Anything Technique";
-			string url = "/MonoRail/Files/EffectsFatScripts.rails";
+			DoGet("MonoRail/Files/EffectsFatScripts.rails");
 
-			Execute(url, expected, url, true, "text/javascript");
+			AssertSuccess();
+
+			String expected = "\r\n// @name      The Fade Anything Technique";
+
+			AssertContentTypeStartsWith("text/javascript");
+			AssertReplyStartsWith(expected);
+		}
+
+		[Test]
+		public void Effects()
+		{
+			DoGet("MonoRail/Files/Effects2.rails");
+
+			AssertSuccess();
+
+			String expected = "\r\n\r\n// Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)";
+
+			AssertContentTypeStartsWith("text/javascript");
+			AssertReplyStartsWith(expected);
 		}
 
 		[Test]
 		public void Validation()
 		{
-			string expected = " \r\n\t\t\t/*************************************";
-			string url = "/MonoRail/Files/ValidateCore.rails";
-
-			Execute(url, expected, url, true, "text/javascript");
+			String expected = " \r\n\t\t\t/*************************************";
+			DoGet("MonoRail/Files/ValidateCore.rails");
+			AssertSuccess();
+			AssertContentTypeStartsWith("text/javascript");
+			AssertReplyStartsWith(expected);
 
 			expected = " \r\n\t\t\t\tfunction fValConfig()\r\n\t\t\t\t{";
-			url = "/MonoRail/Files/ValidateConfig.rails";
-			Execute(url, expected, url, true, "text/javascript");
+			DoGet("MonoRail/Files/ValidateConfig.rails");
+			AssertSuccess();
+			AssertContentTypeStartsWith("text/javascript");
+			AssertReplyStartsWith(expected);
 
 			expected = " \r\n\t\t\t/*< blank basic ******************";
-			url = "/MonoRail/Files/ValidateValidators.rails";
-			Execute(url, expected, url, true, "text/javascript");
+			DoGet("MonoRail/Files/ValidateValidators.rails");
+			AssertSuccess();
+			AssertContentTypeStartsWith("text/javascript");
+			AssertReplyStartsWith(expected);
 
 			expected = " \r\n\t\t\t/*--	fValidate US-English language file.";
-			url = "/MonoRail/Files/ValidateLang.rails";
-			Execute(url, expected, url, true, "text/javascript");
+			DoGet("MonoRail/Files/ValidateLang.rails");
+			AssertSuccess();
+			AssertContentTypeStartsWith("text/javascript");
+			AssertReplyStartsWith(expected);
 		}
 	}
 }

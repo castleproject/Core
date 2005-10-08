@@ -19,35 +19,30 @@ namespace Castle.MonoRail.Engine.Tests
 
 	using NUnit.Framework;
 
+	using Castle.MonoRail.TestSupport;
+
 
 	[TestFixture]
-	public class LayoutTestCase : AbstractCassiniTestCase
+	public class LayoutTestCase : AbstractMRTestCase
 	{
 		[Test]
 		public void ContentWithLayout()
 		{
-			string url = "/layoutable/index.rails";
-			string expected = "\r\nWelcome!\r\n<p>Inner Content</p>\r\nFooter";
+			DoGet("layoutable/index.rails");
 
-			Execute(url, expected);
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "\r\nWelcome!\r\n<p>Inner Content</p>\r\nFooter" );
 		}
 
 		[Test]
 		public void LayoutChanged()
 		{
-			string url = "/layoutable/ChangeLayout.rails";
-			string expected = "\r\nDifferent master page\r\n<p>Another Inner Content</p>\r\nFooter";
+			DoGet("layoutable/ChangeLayout.rails");
 
-			Execute(url, expected);
-		}
+			AssertSuccess();
 
-		[Test]
-		public void Redirect()
-		{
-			string url = "/home/index.rails";
-			string expected = "My View contents for Home\\Index";
-
-			Execute(url, expected);
+			AssertReplyEqualsTo( "\r\nDifferent master page\r\n<p>Another Inner Content</p>\r\nFooter" );
 		}
 	}
 }

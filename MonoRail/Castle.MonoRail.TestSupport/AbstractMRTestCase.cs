@@ -74,6 +74,8 @@ namespace Castle.MonoRail.TestSupport
 		{
 			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
 
+			outputBuffer.Length = 0;
+
 			Request.Url = path;
 
 			StringWriter writer = new StringWriter(outputBuffer);
@@ -114,14 +116,20 @@ namespace Castle.MonoRail.TestSupport
 
 		protected void AssertReplyStartsWith(String contents)
 		{
-			Assert.IsTrue( outputBuffer.ToString().StartsWith(contents), 
-				"Reply string did not start with '{0}'", contents );
+			String buffer = outputBuffer.ToString();
+
+			Assert.IsTrue( buffer.StartsWith(contents), 
+				"Reply string did not start with '{0}'. It was '{1}'", contents,
+					buffer.Substring(0, Math.Min(contents.Length, buffer.Length) ) );
 		}
 
 		protected void AssertReplyEndsWith(String contents)
 		{
-			Assert.IsTrue( outputBuffer.ToString().EndsWith(contents), 
-				"Reply string did not end with '{0}'", contents );
+			String buffer = outputBuffer.ToString();
+
+			Assert.IsTrue( buffer.EndsWith(contents), 
+				"Reply string did not end with '{0}'. It was '{1}'", contents,
+					buffer.Substring(0, Math.Min(contents.Length, buffer.Length) ) );
 		}
 
 		protected void AssertReplyContains(String contents)
@@ -143,10 +151,22 @@ namespace Castle.MonoRail.TestSupport
 			Assert.AreEqual(url, Response.Headers["Location"]);
 		}
 
-		protected void AssertContentType(String expectedContentType)
+		protected void AssertContentTypeEqualsTo(String expectedContentType)
 		{
 			AssertHasHeader("Content-Type");
 			Assert.AreEqual(expectedContentType, Response.Headers["Content-Type"]);
+		}
+
+		protected void AssertContentTypeStartsWith(String expectedContentType)
+		{
+			AssertHasHeader("Content-Type");
+			Assert.IsTrue( Response.Headers["Content-Type"].ToString().StartsWith(expectedContentType) );
+		}
+
+		protected void AssertContentTypeEndsWith(String expectedContentType)
+		{
+			AssertHasHeader("Content-Type");
+			Assert.IsTrue( Response.Headers["Content-Type"].ToString().EndsWith(expectedContentType) );
 		}
 
 		protected void AssertHasHeader(String headerName)
@@ -185,7 +205,7 @@ namespace Castle.MonoRail.TestSupport
 			Assert.IsTrue(response.Session.Contains(entryKey), "Entry {0} was not on Session", entryKey);
 		}
 
-		protected void AssertSessionEntryEquals(String entryKey, object expectedValue)
+		protected void AssertSessionEntryEqualsTo(String entryKey, object expectedValue)
 		{
 			AssertSessionContains(entryKey);
 			Assert.AreEqual(expectedValue, response.Session[entryKey], "Session entry differs from the expected");

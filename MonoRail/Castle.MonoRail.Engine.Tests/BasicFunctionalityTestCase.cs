@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Engine.Tests
 {
 	using System;
-	using System.Net;
 	
 	using NUnit.Framework;
 

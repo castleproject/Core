@@ -171,6 +171,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ResourceController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\UploadFileController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -184,6 +189,18 @@
                     RelPath = "Helper\DateFormatHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Resources\Language.de.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Language.nl.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Language.resx"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "views\cookies\index.aspx"
