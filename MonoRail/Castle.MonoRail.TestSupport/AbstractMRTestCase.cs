@@ -23,7 +23,10 @@ namespace Castle.MonoRail.TestSupport
 	
 	using NUnit.Framework;
 
-
+	/// <summary>
+	/// Base class for tests cases using the ASP.Net Runtime 
+	/// to run the web project
+	/// </summary>
 	public abstract class AbstractMRTestCase
 	{
 		private static readonly String PhysicalWebDirConfigKey = "web.physical.dir";
@@ -70,6 +73,11 @@ namespace Castle.MonoRail.TestSupport
 
 		#region Actions
 
+		/// <summary>
+		/// Performs a GET operation on 
+		/// </summary>
+		/// <param name="path">The resource being request, for example <c>home/index.rails</c></param>
+		/// <param name="queryStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
 		public void DoGet(String path, params String[] queryStringParams)
 		{
 			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
@@ -81,8 +89,6 @@ namespace Castle.MonoRail.TestSupport
 			StringWriter writer = new StringWriter(outputBuffer);
 
 			response = host.Process( Request, writer );
-
-			// Console.WriteLine( "Contents " + writer.GetStringBuilder().ToString() );
 		}
 
 		#endregion
@@ -103,17 +109,29 @@ namespace Castle.MonoRail.TestSupport
 
 		#region Available Asserts
 
+		/// <summary>
+		/// Asserts the return status code is less than 400
+		/// </summary>
 		protected void AssertSuccess()
 		{
 			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
 			Assert.IsTrue(response.StatusCode < 400, "Status code different than > 400");
 		}
 
+		/// <summary>
+		/// Asserts that reply has exactly the samme 
+		/// content of <c>expectedContents</c>
+		/// </summary>
+		/// <param name="expectedContents"></param>
 		protected void AssertReplyEqualsTo(String expectedContents)
 		{
 			Assert.AreEqual( expectedContents, outputBuffer.ToString() );
 		}
 
+		/// <summary>
+		/// Asserts that reply starts with 
+		/// <c>expectedContents</c>
+		/// </summary>
 		protected void AssertReplyStartsWith(String contents)
 		{
 			String buffer = outputBuffer.ToString();
@@ -123,6 +141,10 @@ namespace Castle.MonoRail.TestSupport
 					buffer.Substring(0, Math.Min(contents.Length, buffer.Length) ) );
 		}
 
+		/// <summary>
+		/// Asserts that reply ends with 
+		/// <c>expectedContents</c>
+		/// </summary>
 		protected void AssertReplyEndsWith(String contents)
 		{
 			String buffer = outputBuffer.ToString();
@@ -132,18 +154,30 @@ namespace Castle.MonoRail.TestSupport
 					buffer.Substring(0, Math.Min(contents.Length, buffer.Length) ) );
 		}
 
+		/// <summary>
+		/// Asserts that reply contains the specified
+		/// <c>expectedContents</c>
+		/// </summary>
 		protected void AssertReplyContains(String contents)
 		{
 			Assert.IsTrue( outputBuffer.ToString().IndexOf(contents) != -1, 
 				"AssertReplyContains did not find the content '{0}'", contents );
 		}
 
+		/// <summary>
+		/// Asserts that reply does not contain
+		/// <c>expectedContents</c>
+		/// </summary>
 		protected void AssertReplyDoNotContain(String contents)
 		{
 			Assert.IsTrue( outputBuffer.ToString().IndexOf(contents) == -1, 
 				"AssertReplyDoNotContain found the content '{0}'", contents );
 		}
 
+		/// <summary>
+		/// Asserts that the response was a redirect to the specified
+		/// <c>url</c>
+		/// </summary>
 		protected void AssertRedirectedTo(String url)
 		{
 			Assert.AreEqual(302, Response.StatusCode, "Redirect status not used");
