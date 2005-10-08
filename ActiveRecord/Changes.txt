@@ -4,6 +4,8 @@ beta 3
 
 - Support for fields in addition to properties
 
+- Added [Any], [Any.MetaValue] and [HasManyToAny] attributes.
+
 - Small improvement on ActiveRecordModelBuilder (less intensive on IsDefined/GetCustomAttribute)
 
 - IThreadScopeInfo introduced. Two implementations: ThreadScopeInfo and WebThreadScopeInfo. 
