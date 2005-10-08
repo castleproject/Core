@@ -26,7 +26,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="${strong}"
+			define="${strong} ${enabletest}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
@@ -56,10 +56,6 @@
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${test.assembly.name}">
-
-			<resources basedir="${test.src.dir}" prefix="Castle.MonoRail.Framework.Tests" dynamicprefix="true">
-				<include name="**/*.resx" />
-			</resources>
 			
 			<sources basedir="${test.src.dir}">
 				<include name="**/*.cs" />

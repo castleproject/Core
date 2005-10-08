@@ -38,6 +38,10 @@
 				<include name="**/*.cs" />
 			</sources>
 
+			<resources basedir="${src.dir}" prefix="${name}" dynamicprefix="true">
+				<include name="**/*.resx" />
+			</resources>
+
 			<references>
 				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />

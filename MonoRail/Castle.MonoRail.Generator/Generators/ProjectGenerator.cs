@@ -165,6 +165,7 @@ namespace Castle.MonoRail.Generator.Generators
 			ctx.Add("name", options["name"]);
 			ctx.Add("viewpath", viewsDir.FullName);
 			ctx.Add("useWindsorIntegration", useWindsorIntegration);
+			ctx.Add("webapppath", projectDir.FullName);
 
 			if (isNVelocity)
 			{
@@ -178,6 +179,10 @@ namespace Castle.MonoRail.Generator.Generators
 			}
 
 			WriteTemplateFile(Path.Combine(projectDir.FullName, "web.config"), ctx, templateName);
+
+			templateName = "testconfig.vm";
+
+			WriteTemplateFile(Path.Combine(projectTestDir.FullName, "App.config"), ctx, templateName);
 		}
 
 		private void CreateNAntBuildFile(IDictionary options, TextWriter writer)

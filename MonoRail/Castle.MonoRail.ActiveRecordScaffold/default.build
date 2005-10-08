@@ -23,7 +23,7 @@
 	</target>
 
 	<target name="init" depends="clean">
-		<copy file="${test.src.dir}/Castle.MonoRail.ActiveRecordScaffold.Tests.dll.config" todir="${bin.dir}" />
+		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>
 
 	<target name="build" depends="init,compile" />
@@ -70,7 +70,7 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
-				<include name="${bin.dir}/Cassini.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Engine.Tests.dll" />
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />

@@ -345,7 +345,7 @@ namespace Castle.MonoRail.Generator.Generators
 					url = String.Format("\"{0}/{1}/{2}.rails\"", area, controllerName, action);
 				}
 				
-				String expected = string.Format("\"action {0}\"", action);
+				String expected = string.Format("\"View for {0} action {1}\"", name, action);
 
 				CodeMethodInvokeExpression doGetInvoke = new CodeMethodInvokeExpression();
 				doGetInvoke.Method = new CodeMethodReferenceExpression(null, "DoGet");
@@ -353,11 +353,11 @@ namespace Castle.MonoRail.Generator.Generators
 				actionTestMethod.Statements.Add( new CodeExpressionStatement(doGetInvoke) );
 
 				CodeMethodInvokeExpression assertSuccess = new CodeMethodInvokeExpression();
-				doGetInvoke.Method = new CodeMethodReferenceExpression(null, "AssertSuccess");
+				assertSuccess.Method = new CodeMethodReferenceExpression(null, "AssertSuccess");
 				actionTestMethod.Statements.Add( new CodeExpressionStatement(assertSuccess) );
 
 				CodeMethodInvokeExpression assertReply = new CodeMethodInvokeExpression();
-				assertReply.Method = new CodeMethodReferenceExpression(null, "AssertReplyEqualsTo");
+				assertReply.Method = new CodeMethodReferenceExpression(null, "AssertReplyContains");
 				assertReply.Parameters.Add( new CodeSnippetExpression(expected) );
 				actionTestMethod.Statements.Add( new CodeExpressionStatement(assertReply) );
 

@@ -169,6 +169,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "templates\testconfig.vm"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "templates\webconfig.vm"
                     BuildAction = "EmbeddedResource"
                 />

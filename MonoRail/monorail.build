@@ -20,6 +20,7 @@
 	<include buildfile="../common.inc" />		
 
 	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
+	<property name="enabletest" value="ALLOWTEST" unless="${property::exists('enabletest')}" />
 	<property name="debug" value="false" />
 	<property name="optimize" value="true" />
 
@@ -78,7 +79,7 @@
 			<property name="gacutil.file" value="${gacutil.sdk.file}"/>
 		</if>
 		<if test="${not property::exists( 'gacutil.file' )}">
-			<echo>Could not find "gacutil" to install Cassini server to GAC.</echo>
+			<echo>Could not find "gacutil" to install Castle.MonoRail.TestSupport server to GAC.</echo>
 			<echo>To run the tests you have to install it manually: gacutil /i Castle.MonoRail.TestSupport</echo>
 		</if>
 	</target>
@@ -131,14 +132,14 @@
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
-		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" />
+		<!-- <nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" /> -->
 		<nant buildfile="TestScaffolding/sample.build" inheritall="true" target="compile" />
 	</target>
 	
 	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.Engine/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" /> 
+		<!-- <nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />  -->
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="test" />
@@ -156,6 +157,7 @@
 				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="Castle.MonoRail.WindsorExtension.dll" />
+				<include name="Castle.MonoRail.TestSupport.dll" />
 			</assemblies>
 			<documenters>
 				<documenter name="MSDN">
@@ -239,6 +241,7 @@
 				<include name="Castle.MonoRail.WindsorExtension/**/*.*" />
 				<include name="Castle.MonoRail.WindsorExtension.Tests.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Generator/**/*.*" />
+				<include name="Castle.MonoRail.TestSupport/**/*.*" />
 				<include name="TestSite/**/*.*" />
 				<include name="TestSiteNVelocity/**/*.*" />
 				<include name="TestSiteBrail/**/*.*" />

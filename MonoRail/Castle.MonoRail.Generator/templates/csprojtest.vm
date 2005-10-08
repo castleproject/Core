@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)\App.config $(TargetPath).config"
                 RootNamespace = "${basename}.Tests"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -67,17 +67,17 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "${frameworkpath}\System.dll"
+                    HintPath = "${frameworkpath}System.dll"
                 />
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
-                    HintPath = "${frameworkpath}\System.Data.dll"
+                    HintPath = "${frameworkpath}System.Data.dll"
                 />
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.XML"
-                    HintPath = "${frameworkpath}\System.XML.dll"
+                    HintPath = "${frameworkpath}System.XML.dll"
                 />
                 <Reference
                     Name = "nunit.framework"
@@ -90,9 +90,9 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Cassini"
-                    AssemblyName = "Cassini"
-                    HintPath = "..\lib\Cassini.dll"
+                    Name = "Castle.MonoRail.TestSupport"
+                    AssemblyName = "Castle.MonoRail.TestSupport"
+                    HintPath = "..\lib\Castle.MonoRail.TestSupport.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework"
@@ -104,9 +104,8 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "AbstractCassiniTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "App.config"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

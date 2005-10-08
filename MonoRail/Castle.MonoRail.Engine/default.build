@@ -21,14 +21,14 @@
 	</target>
 
 	<target name="init" depends="clean">
-
+		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>
 
 	<target name="build" depends="init,tests.run" />
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="${strong}"
+			define="${strong} ${enabletest}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"

@@ -17,9 +17,12 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
 
-//#if STRONG
+#if STRONG
 [assembly: AssemblyDelaySign(false)]
-[assembly: AssemblyKeyFile(@"E:\dev\castle\CastleKey.snk")]
-//[assembly: AssemblyKeyFile("../../CastleKey.snk")]
+[assembly: AssemblyKeyFile("../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
-//#endif
+#else
+// This assembly must be signed, so if STRONG is not defined
+// we assume this compilation is being held by Visual Studio
+[assembly: AssemblyKeyFile("../../../../CastleKey.snk")]
+#endif
