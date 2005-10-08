@@ -43,6 +43,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNodes( model.JoinedClasses );
 			VisitNodes( model.Classes );
 			VisitNodes( model.Fields );
+			VisitNodes( model.Anys );
+			VisitNodes(model.HasManyToAny);
 			VisitNodes( model.Properties );
 			VisitNodes( model.Components );
 			VisitNodes( model.OneToOnes );
@@ -57,11 +59,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 		}
 
+
+		public virtual void VisitHasManyToAny(HasManyToAnyModel model)
+		{
+		}
+
 		public virtual void VisitProperty(PropertyModel model)
 		{
 		}
 
 		public virtual void VisitField(FieldModel model)
+		{
+		}
+
+		public virtual void VisitAny(AnyModel model)
 		{
 		}
 
@@ -105,6 +116,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public virtual void VisitCollectionID(CollectionIDModel model)
 		{
 			VisitNode(model.Hilo);
+		}
+
+		public virtual void VisitHasManyToAnyConfig(HasManyToAnyModel.Config hasManyToAnyConfigModel)
+		{
 		}
 	}
 }

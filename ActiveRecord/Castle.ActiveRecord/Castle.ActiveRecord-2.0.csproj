@@ -129,6 +129,7 @@
     <Compile Include="Attributes\ActiveRecordSkip.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\AnyAttribute.cs" />
     <Compile Include="Attributes\BaseAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +148,7 @@
     <Compile Include="Attributes\HasManyAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\HasManyToAnyAttribute.cs" />
     <Compile Include="Attributes\HiLoAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -246,6 +248,7 @@
     <Compile Include="Framework\Internal\Model\ActiveRecordModel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\Internal\Model\AnyModel.cs" />
     <Compile Include="Framework\Internal\Model\BelongsToModel.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -261,6 +264,7 @@
     <Compile Include="Framework\Internal\Model\HasManyModel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\Internal\Model\HasManyToAnyModel.cs" />
     <Compile Include="Framework\Internal\Model\HiloModel.cs">
       <SubType>Code</SubType>
     </Compile>

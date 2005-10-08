@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
 	using System.Reflection;
-
+	using System.Collections;
 
 	public class ActiveRecordModelBuilder
 	{
@@ -115,7 +115,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 			foreach( PropertyInfo prop in props )
 			{
 				bool isArProperty = false;
-
+				AnyModel anyModel = null;
+				ArrayList anyMetaValues = new ArrayList();
 				// Validation
 
 				object[] valAtts = prop.GetCustomAttributes( typeof(AbstractValidationAttribute), true ); 
@@ -135,6 +136,19 @@ namespace Castle.ActiveRecord.Framework.Internal
 						isArProperty = true;
 
 						model.Ids.Add( new PrimaryKeyModel( prop, propAtt ) );
+					}
+					else if (attribute is AnyAttribute)
+					{
+						AnyAttribute anyAtt = attribute as AnyAttribute;
+						isArProperty = true;
+						anyModel = new AnyModel(prop, anyAtt);
+						model.Anys.Add( anyModel );
+					}
+					else if (attribute is Any.MetaValueAttribute)
+					{
+						Any.MetaValueAttribute meta = attribute as Any.MetaValueAttribute;
+						isArProperty = true;
+						anyMetaValues.Add(meta);
 					}
 					else if (attribute is PropertyAttribute)
 					{
@@ -195,7 +209,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						model.Timestamp = new TimestampModel( prop, propAtt );
 					}
-					// Relations
+						// Relations
 					else if (attribute is OneToOneAttribute)
 					{
 						OneToOneAttribute propAtt = attribute as OneToOneAttribute;
@@ -209,6 +223,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 						isArProperty = true;
 
 						model.BelongsTo.Add(new BelongsToModel( prop, propAtt ));
+					}
+					//The ordering is important here, HasManyToAny must comes before HasMany!
+					else if (attribute is HasManyToAnyAttribute)
+					{
+						HasManyToAnyAttribute propAtt = attribute as HasManyToAnyAttribute;
+						isArProperty = true;
+
+						model.HasManyToAny.Add(new HasManyToAnyModel(prop, propAtt));
 					}
 					else if (attribute is HasManyAttribute)
 					{
@@ -237,6 +259,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						model.Hilos.Add(new HiloModel( prop, propAtt ));
 					}
+				}
+				if(anyMetaValues.Count>0)
+				{
+					if (anyModel==null)
+						throw new ActiveRecordException("You can't specify a Any.MetaValue without specifying the Any attribute. " + 
+							"Check type " + prop.DeclaringType.FullName);
+					anyModel.MetaValues = anyMetaValues;
 				}
 
 				if (!isArProperty)

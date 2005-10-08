@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\AnyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\BaseAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -370,6 +375,11 @@
                 />
                 <File
                     RelPath = "Framework\Internal\Model\ActiveRecordModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\AnyModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

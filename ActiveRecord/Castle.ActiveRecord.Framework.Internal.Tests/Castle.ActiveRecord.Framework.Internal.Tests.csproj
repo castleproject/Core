@@ -170,6 +170,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\ClassWithAnyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\ClassWithMappedField.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

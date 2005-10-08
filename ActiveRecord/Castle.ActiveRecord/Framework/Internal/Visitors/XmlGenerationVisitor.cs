@@ -63,6 +63,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes( model.Properties );
 				VisitNodes( model.BelongsTo  );
 				VisitNodes( model.HasMany );
+				VisitNodes( model.HasManyToAny );
 				VisitNodes( model.HasAndBelongsToMany );
 				VisitNodes( model.Components );
 				VisitNodes( model.OneToOnes );
@@ -82,6 +83,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes( model.Properties );
 				VisitNodes( model.BelongsTo  );
 				VisitNodes( model.HasMany );
+				VisitNodes(model.HasManyToAny);
 				VisitNodes( model.HasAndBelongsToMany );
 				VisitNodes( model.Components );
 				VisitNodes( model.OneToOnes );
@@ -97,6 +99,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNodes( model.Properties );
 				VisitNodes( model.BelongsTo  );
 				VisitNodes( model.HasMany );
+				VisitNodes(model.HasManyToAny);
 				VisitNodes( model.HasAndBelongsToMany );
 				VisitNodes( model.Components );
 				VisitNodes( model.OneToOnes );
@@ -121,8 +124,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 				VisitNode( model.Timestamp );
 				VisitNodes( model.Fields );
 				VisitNodes( model.Properties );
+				VisitNodes( model.Anys );
 				VisitNodes( model.BelongsTo  );
 				VisitNodes( model.HasMany );
+				VisitNodes(model.HasManyToAny);
 				VisitNodes( model.HasAndBelongsToMany );
 				VisitNodes( model.Components );
 				VisitNodes( model.OneToOnes );
@@ -206,6 +211,64 @@ namespace Castle.ActiveRecord.Framework.Internal
 				WriteIfFalse("insert", model.PropertyAtt.Insert), 
 				WriteIfFalse("update", model.PropertyAtt.Update),
 				WriteIfNonNull("formula", model.PropertyAtt.Formula));
+		}
+
+		public override void VisitAny(AnyModel model)
+		{
+			String cascade = TranslateCascadeEnum(model.AnyAtt.Cascade);
+
+			AppendF("<any {0} {1} {2} {3} {4} {5} {6} {7} >",
+				MakeAtt("name", model.Property.Name), 
+				MakeAtt("access", model.AnyAtt.AccessString),
+				MakeCustomTypeAtt("id-type", model.AnyAtt.IdType),
+				MakeCustomTypeAtt("meta-type", model.AnyAtt.MetaType),
+				WriteIfFalse("insert", model.AnyAtt.Insert), 
+				WriteIfFalse("update", model.AnyAtt.Update),
+				WriteIfNonNull("index", model.AnyAtt.Index),
+				WriteIfNonNull("cascade", cascade) );
+			Ident();
+			foreach(Any.MetaValueAttribute meta in model.MetaValues)
+			{
+				AppendF("<meta-value {0} {1} />",
+					MakeAtt("value", meta.Value), 
+					MakeCustomTypeAtt("class", meta.Class)
+				);
+			}
+			//The ordering is important, apperantly
+			AppendF("<column {0} />",
+				MakeAtt("name", model.AnyAtt.TypeColumn)
+				);
+			AppendF("<column {0} />",
+				MakeAtt("name", model.AnyAtt.IdColumn)
+				);
+			Dedent();
+			Append("</any>"); 
+			
+		}
+
+		public override void VisitHasManyToAny(HasManyToAnyModel model)
+		{
+			HasManyToAnyAttribute att = model.HasManyToAnyAtt;
+
+			WriteCollection(att.Cascade, att.MapType, att.RelationType, model.Property.Name,
+				model.HasManyToAnyAtt.AccessString, att.Table, att.Schema, att.Lazy, att.Inverse, att.OrderBy,
+				att.Where, att.Sort, att.ColumnKey, null, model.Configuration, att.Index, att.IndexType,
+				att.Cache);
+		}
+
+		public override void VisitHasManyToAnyConfig(HasManyToAnyModel.Config model)
+		{
+			HasManyToAnyAttribute att = model.Parent.HasManyToAnyAtt;
+			AppendF("<many-to-any {0} >",
+				MakeCustomTypeAtt("id-type", att.IdType),
+				MakeCustomTypeAttIfNotNull("meta-type", att.MetaType));
+			Ident();
+			AppendF("<column {0} />",
+				MakeAtt("name", att.TypeColumn));
+			AppendF("<column {0} />",
+				MakeAtt("name", att.IdColumn));
+			Dedent();
+			AppendF("</many-to-any>");
 		}
 
 		public override void VisitField(FieldModel model)
@@ -335,7 +398,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private void WriteCollection(ManyRelationCascadeEnum cascadeEnum, Type targetType,
 			RelationType type, String name, string accessString,
 			String table, String schema, bool lazy, bool inverse, String orderBy, 
-			String where, String sort, String columnKey, String columnRef, CollectionIDModel collectionId,
+			String where, String sort, String columnKey, String columnRef, IModelNode extraModel,
 			String index, String indexType, CacheEnum cache)
 		{
 			String cascade = TranslateCascadeEnum(cascadeEnum);
@@ -387,7 +450,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					WriteIfNonNull("order-by", orderBy),
 					WriteIfNonNull("where", where));
 
-				VisitNode( collectionId );
+				VisitNode( extraModel );
 			}
 			else if (type == RelationType.Map)
 			{
@@ -418,7 +481,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			if (columnRef == null)
 			{
-				WriteOneToMany(targetType);
+				if (extraModel == null)
+				{
+					WriteOneToMany(targetType);
+				}
+				else
+				{
+					VisitNode(extraModel);
+				}
 			}
 			else
 			{
@@ -515,6 +585,33 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					return MakeAtt("type", type.FullName);
 				}
+			}
+		}
+
+		private String MakeCustomTypeAttIfNotNull(String attName, Type type)
+		{
+			if (type == null)
+				return String.Empty;
+			return MakeCustomTypeAtt(attName, type);
+		}
+
+		private String MakeCustomTypeAtt(String attName, Type type)
+		{
+			if (type.IsEnum) return String.Empty;
+
+			if (type.IsPrimitive)
+			{
+				return MakeAtt(attName, type.Name);
+			}
+			else
+			{
+				if (typeof(object).Assembly == type.Assembly)
+				{
+					return MakeAtt(attName, type.FullName);
+				}
+				string [] parts = type.AssemblyQualifiedName.Split(',');
+				string name = string.Join(",", parts, 0, 2);
+				return MakeAtt(attName, name);
 			}
 		}
 

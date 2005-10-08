@@ -140,6 +140,7 @@
     <Compile Include="Model\ClassJoinedSubClassParent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\ClassWithAnyAttribute.cs" />
     <Compile Include="Model\ClassWithMappedField.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +180,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy $(ProjectDir)\$(TargetFileName).config $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)$(TargetFileName).config" "$(TargetDir)" /y/c</PostBuildEvent>
   </PropertyGroup>
 </Project>

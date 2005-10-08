@@ -57,6 +57,76 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
 		[Test]
+		public void AnyAttribute()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create( typeof(ClassWithAnyAttribute) );
+			Assert.IsNotNull( model );
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode( model );
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+
+			String xml = xmlVisitor.Xml;
+
+			String expected = 
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithAnyAttribute, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithAnyAttribute\"    >\r\n" +
+				"    <id name=\"Id\" access=\"nosetter.camelcase-underscore\" column=\"Id\" type=\"Int32\"  unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <any name=\"PaymentMethod\" access=\"property\" id-type=\"Int64\" meta-type=\"System.String\"    cascade=\"save-update\" >\r\n"+
+				"      <meta-value value=\"CREDIT_CARD\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CreditCard, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
+				"      <meta-value value=\"BANK_ACCOUNT\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.BankAccount, Castle.ActiveRecord.Framework.Internal.Tests\" />\r\n" +
+				"      <column name=\"BILLING_DETAILS_TYPE\" />\r\n"+
+				"      <column name=\"BILLING_DETAILS_ID\" />\r\n"+
+                "    </any>\r\n"+
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
+		public void HasManyToAnyAttribute()
+		{
+			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();
+			ActiveRecordModel model = builder.Create(typeof(ClasssWithHasManyToAny));
+			Assert.IsNotNull(model);
+
+			SemanticVerifierVisitor semanticVisitor = new SemanticVerifierVisitor(builder.Models);
+			semanticVisitor.VisitNode(model);
+
+			XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
+			xmlVisitor.CreateXml(model);
+
+			String xml = xmlVisitor.Xml;
+			String expected =
+				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
+				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
+				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClasssWithHasManyToAny, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClasssWithHasManyToAny\"    >\r\n" +
+				"    <id name=\"Id\" access=\"nosetter.camelcase-underscore\" column=\"Id\" type=\"Int32\"  unsaved-value=\"0\">\r\n" +
+				"      <generator class=\"native\">\r\n" +
+				"      </generator>\r\n" +
+				"    </id>\r\n" +
+				"    <set name=\"PaymentMethod\" access=\"property\" table=\"payments_table\"       >\r\n" +
+				"      <key column=\"pay_id\" />\r\n" +
+				"      <many-to-any id-type=\"Int32\" >\r\n" +
+				"        <column name=\"payment_type\" />\r\n" +
+				"        <column name=\"payment_method_id\" />\r\n" +
+				"      </many-to-any>\r\n" +
+				"    </set>\r\n" +
+				"  </class>\r\n" +
+				"</hibernate-mapping>\r\n";
+
+			Assert.AreEqual(expected, xml);
+		}
+
+		[Test]
 		public void SimpleClassWithMappedFieldAndNonDefaultAccess()
 		{
 			ActiveRecordModelBuilder builder = new ActiveRecordModelBuilder();

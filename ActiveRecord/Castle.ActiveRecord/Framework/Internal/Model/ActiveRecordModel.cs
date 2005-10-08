@@ -29,6 +29,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private bool isNestedType;
 		private ActiveRecordAttribute arAtt;
 		private ActiveRecordModel parent;
+		private IList hasManyToAny = new ArrayList();
+		private IList anys = new ArrayList();
 		private IList ids = new ArrayList();
 		private IList properties = new ArrayList();
 		private IList fields = new ArrayList();
@@ -133,6 +135,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public IList Fields
 		{
 			get { return fields; }
+		}
+
+		public IList HasManyToAny
+		{
+			get { return hasManyToAny; }
+		}
+
+		public IList Anys
+		{
+			get { return anys; }
 		}
 
 		public IList Classes

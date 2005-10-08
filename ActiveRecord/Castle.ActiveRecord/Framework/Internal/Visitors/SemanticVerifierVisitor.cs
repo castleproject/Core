@@ -258,7 +258,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-
 		public override void VisitKey(KeyModel model)
 		{
 			if (model.JoinedKeyAtt.Column == null)

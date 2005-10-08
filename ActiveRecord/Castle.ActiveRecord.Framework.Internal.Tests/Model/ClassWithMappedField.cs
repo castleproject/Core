@@ -5,7 +5,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	[ActiveRecord]
 	public class ClassWithMappedField
 	{
-		private int id;
+		private int _id;
 
 		[Field("MyCustomName")]
 		private String name1;
@@ -13,15 +13,14 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		[PrimaryKey(Access=PropertyAccess.NosetterCamelcaseUnderscore)]
 		public int Id
 		{
-			get { return id; }
-			set { id = value; }
+			get { return _id; }
 		}
 
 		[Property(CustomAccess="CustomAccess")]
 		public int Value
 		{
-			get { return id;}
-			set { id = value;}
+			get { return _id;}
+			set { _id = value;}
 		}
 	}
 }

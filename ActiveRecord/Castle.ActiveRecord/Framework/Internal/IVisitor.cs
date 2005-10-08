@@ -21,6 +21,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 	{
 		void VisitModel(ActiveRecordModel model);
 		void VisitPrimaryKey(PrimaryKeyModel model);
+		void VisitHasManyToAny(HasManyToAnyModel model);
+		void VisitAny(AnyModel model);
 		void VisitProperty(PropertyModel model);
 		void VisitField(FieldModel model);
 		void VisitVersion(VersionModel model);
@@ -33,5 +35,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 		void VisitHilo(HiloModel model);
 		void VisitNested(NestedModel model);
 		void VisitCollectionID(CollectionIDModel model);
+		void VisitHasManyToAnyConfig(HasManyToAnyModel.Config hasManyToAnyConfigModel);
 	}
 }

@@ -261,6 +261,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy $(ProjectDir)\$(TargetFileName).config $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)$(TargetFileName).config" "$(TargetDir)" /y/c</PostBuildEvent>
   </PropertyGroup>
 </Project>
