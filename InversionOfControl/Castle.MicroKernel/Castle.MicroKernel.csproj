@@ -443,6 +443,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\Conversion\Converters\EnumConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubSystems\Conversion\Converters\ListConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

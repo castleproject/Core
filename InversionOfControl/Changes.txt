@@ -8,6 +8,8 @@ RC 2
                    lifestyle="custom"
                    customLifestyleType="MyLib.MyCustomLifestyle, MyLib" />
 
+- Type converter for enums
+
 
 Beta 3
 ------

@@ -38,6 +38,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		{
 			Add( new PrimitiveConverter() );
 			Add( new TypeNameConverter() );
+			Add( new EnumConverter() );
 			Add( new ListConverter() );
 			Add( new DictionaryConverter() );
 			Add( new ArrayConverter() ); 
