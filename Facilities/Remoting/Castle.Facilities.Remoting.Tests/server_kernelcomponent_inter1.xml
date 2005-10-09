@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<configuration>
+
+  <facilities>
+  
+    <facility 
+		id="remote.facility" 
+		type="Castle.Facilities.Remoting.RemotingFacility, Castle.Facilities.Remoting"
+		isServer="true"
+		registryUri="kernel.rem"
+		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfig.config" />
+  
+  </facilities>
+  
+  <components>
+  
+    <component 
+		id="myinterceptor"
+		type="Castle.Facilities.Remoting.TestComponents.ChangeResultInterceptor, Castle.Facilities.Remoting.TestComponents"
+		/>
+  
+    <component 
+		id="calc.service" 
+		service="Castle.Facilities.Remoting.TestComponents.ICalcService, Castle.Facilities.Remoting.TestComponents"
+		type="Castle.Facilities.Remoting.TestComponents.InterceptableCalcService, Castle.Facilities.Remoting.TestComponents"
+		remoteserver="component" />
+  
+  </components>
+
+</configuration>

@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Remoting", "Castle.Facilities.Remoting\Castle.Facilities.Remoting.csproj", "{26AEAA4B-F14A-4153-B440-C4E3407F612C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Remoting.TestComponents", "Castle.Facilities.Remoting.TestComponents\Castle.Facilities.Remoting.TestComponents.csproj", "{07B01B42-54DC-4A99-B856-0EA5515684AC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.Remoting.Tests", "Castle.Facilities.Remoting.Tests\Castle.Facilities.Remoting.Tests.csproj", "{19F55512-3F9D-4032-B195-223E51F47635}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{26AEAA4B-F14A-4153-B440-C4E3407F612C}.Debug.ActiveCfg = Debug|.NET
+		{26AEAA4B-F14A-4153-B440-C4E3407F612C}.Debug.Build.0 = Debug|.NET
+		{26AEAA4B-F14A-4153-B440-C4E3407F612C}.Release.ActiveCfg = Release|.NET
+		{26AEAA4B-F14A-4153-B440-C4E3407F612C}.Release.Build.0 = Release|.NET
+		{07B01B42-54DC-4A99-B856-0EA5515684AC}.Debug.ActiveCfg = Debug|.NET
+		{07B01B42-54DC-4A99-B856-0EA5515684AC}.Debug.Build.0 = Debug|.NET
+		{07B01B42-54DC-4A99-B856-0EA5515684AC}.Release.ActiveCfg = Release|.NET
+		{07B01B42-54DC-4A99-B856-0EA5515684AC}.Release.Build.0 = Release|.NET
+		{19F55512-3F9D-4032-B195-223E51F47635}.Debug.ActiveCfg = Debug|.NET
+		{19F55512-3F9D-4032-B195-223E51F47635}.Debug.Build.0 = Debug|.NET
+		{19F55512-3F9D-4032-B195-223E51F47635}.Release.ActiveCfg = Release|.NET
+		{19F55512-3F9D-4032-B195-223E51F47635}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
