@@ -94,7 +94,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			//a primary key but the base class does
 			ActiveRecordModel tmpModel = model;
 			while(tmpModel!=null && tmpModel.Ids.Count==0)
-				tmpModel = model.Parent;
+				tmpModel = tmpModel.Parent;
 			if(tmpModel==null || tmpModel.Ids.Count==0)
 			{
 				throw new ActiveRecordException( String.Format(

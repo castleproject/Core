@@ -36,7 +36,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			currentModel = model;
 
-			if (model.IsDiscriminatorBase || model.IsJoinedSubClassBase)
+			if (model.IsDiscriminatorBase || model.IsJoinedSubClassBase ||
+				model.IsDiscriminatorSubClass || model.IsJoinedSubClass)
 			{
 				foreach(ActiveRecordModel child in arCollection)
 				{

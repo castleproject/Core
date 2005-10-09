@@ -26,6 +26,9 @@
 	<property name="version" value="0.0.1.3" />
 
 	<target name="init">
+		<property name="define" value="TRACE;${strong}"/>
+		<property name="define" value="${define};DEBUG" if="${debug}"/>
+		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
 		<delete dir="${bin.dir}" failonerror="false" />
 		<mkdir dir="${bin.dir}" />
 
@@ -55,7 +58,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-		    define="${strong}" 
+		    define="${define}" 
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
@@ -86,6 +89,7 @@
 
 	<target name="tests.compile" depends="compile">
 		<csc 
+			define="${define}" 
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${test.assembly.name1}">

@@ -19,6 +19,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Framework.Internal.Tests.Model;
+	using System.Reflection;
 
 
 	[TestFixture]
@@ -43,7 +44,6 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		public void ClassWithoutPrimaryKey()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(ClassWithoutPrimaryKey) );
-		
 		}
 	}
 }

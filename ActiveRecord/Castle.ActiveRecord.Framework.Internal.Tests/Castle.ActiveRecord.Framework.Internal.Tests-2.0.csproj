@@ -125,6 +125,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GraphConnectorTestCase.cs" />
     <Compile Include="Model\BelongsToClassA.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -148,6 +149,7 @@
     <Compile Include="Model\Company.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\DiscriminatorGrandchild.cs" />
     <Compile Include="Model\HasManyClassA.cs">
       <SubType>Code</SubType>
     </Compile>
