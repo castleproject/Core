@@ -120,6 +120,11 @@
                     Project = "{AB057784-A68E-460F-A4BD-63181296FD07}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\Lib\Castle.Model.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -135,12 +140,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IServcieA.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServiceA.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebFormTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "bin\Debug\Castle.MVC.Test.dll.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "bin\Debug\test.config"
                     BuildAction = "None"
                 />
             </Include>

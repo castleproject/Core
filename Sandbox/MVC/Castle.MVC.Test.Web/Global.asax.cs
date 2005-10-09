@@ -39,7 +39,7 @@ namespace Castle.MVC.Test.Web
 		
 		protected void Application_Start(Object sender, EventArgs e)
 		{
-			_container = new MyContainer( Assembly.GetExecutingAssembly() );
+			_container = new MyContainer();
 		}
  
 		protected void Session_Start(Object sender, EventArgs e)

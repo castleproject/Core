@@ -123,7 +123,7 @@ namespace Castle.MVC.Views
 			// Another try
 			if (!findControl && this.Request.Form["__EVENTTARGET"]!=null)
 			{
-				control = this.FindControl(this.Request.Form["__EVENTTARGET"]);
+				control = this.FindControl(this.Request.Form["__EVENTTARGET"].Replace(this.UniqueID+ ":", ""));
 			}
 
 			// The Control.ViewState property is associated with each server control 

@@ -19,14 +19,15 @@
 #endregion
 
 using System;
+using System.Configuration;
 using System.Reflection;
 using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Facilities;
 using Castle.Model;
+using Castle.Model.Configuration;
 using Castle.MVC.Controllers;
-using Castle.MVC.Navigation;
-using Castle.MVC.StatePersister;
+using Castle.MVC.LifestyleManager;
 using Castle.MVC.States;
 using Castle.MVC.Views;
 
@@ -55,22 +56,8 @@ namespace Castle.MVC
 		/// </summary>
 		public MVCFacility()
 		{
-			SetUp( Assembly.GetCallingAssembly() );	
 		}
 
-		/// <summary>
-		/// Cosntructor
-		/// </summary>
-		/// <param name="assembly">The assembly where are the views.</param>
-		public MVCFacility(Assembly assembly)
-		{
-			SetUp( assembly );	
-		}
-
-		private void SetUp(Assembly assembly)
-		{
-			_assembly = assembly;
-		}
 
 		#region IFacility Members
 
@@ -79,23 +66,28 @@ namespace Castle.MVC
 		/// </summary>
 		protected override void Init()
 		{
+			if (FacilityConfig == null)
+			{
+				throw new ConfigurationException(
+					"The MVCFacility requires an 'assembyView' child tag.");
+			}
+
+			IConfiguration factoriesConfig = FacilityConfig.Children["assembyView"];
+			if (factoriesConfig!=null && 
+				factoriesConfig.Value!= null && factoriesConfig.Value!= string.Empty )
+			{
+				_assembly =  Assembly.Load(factoriesConfig.Value) ;	
+			}
+
+			// Added TypedFactory to have a IState factory
 			TypedFactoryFacility facility = new TypedFactoryFacility();
 
 			Kernel.AddFacility("typedfactory", facility );
 			facility.AddTypedFactoryEntry( new FactoryEntry("stateFactory", typeof(IStateFactory), "Create", "Release") );
 			
+			// Added a ControlerTree component to track controller by view
 			Kernel.AddComponent( "mvc.controllerTree", typeof(ControllerTree) );
 			Kernel.ComponentModelCreated += new ComponentModelDelegate(OnComponentModelCreated);
-
-			if (System.Web.HttpContext.Current == null)
-			{
-				Kernel.AddComponent( "statePersister", typeof(IStatePersister), typeof(MemoryStatePersister));
-			}
-			else
-			{
-				Kernel.AddComponent( "statePersister", typeof(IStatePersister), typeof(SessionPersister));
-			}
-			Kernel.AddComponent( "navigator", typeof(INavigator), typeof(DefaultNavigator));
 
 			Initialize();
 		}
@@ -106,25 +98,27 @@ namespace Castle.MVC
 		{
 			ControllerTree tree = (ControllerTree) Kernel["mvc.controllerTree"];
 
-			Type[] types = _assembly.GetExportedTypes();
-			
-			foreach( Type type in types )
+			if (_assembly != null)
 			{
-				// Web page / UserControl
-				if ( type.IsSubclassOf(typeof(WebFormView)) || type.IsSubclassOf(typeof(WebUserControlView))  )
+				Type[] types = _assembly.GetExportedTypes();
+				
+				foreach( Type type in types )
 				{
-					// Retrieve the properties controllers
-					PropertyInfo[] properties = type.GetProperties(BINDING_FLAGS_SET);
-					for (int i = 0; i < properties.Length; i++) 
+					// Web page / UserControl
+					if ( type.IsSubclassOf(typeof(WebFormView)) || type.IsSubclassOf(typeof(WebUserControlView))  )
 					{
-						if (properties[i].PropertyType.IsSubclassOf(typeof(Controller)))
+						// Retrieve the properties controllers
+						PropertyInfo[] properties = type.GetProperties(BINDING_FLAGS_SET);
+						for (int i = 0; i < properties.Length; i++) 
 						{
-							tree.AddController(type, properties[i], properties[i].PropertyType);
-						}
-					}	
+							if (properties[i].PropertyType.IsSubclassOf(typeof(Controller)))
+							{
+								tree.AddController(type, properties[i], properties[i].PropertyType);
+							}
+						}	
+					}				
 				}				
 			}
-
 		}
 
 		private void OnComponentModelCreated(ComponentModel model)
@@ -134,8 +128,9 @@ namespace Castle.MVC
 				return;
 			}
 
-			// Ensure its transient
-			model.LifestyleType = LifestyleType.Transient;
+			// Ensure its CustomLifestyle
+			model.LifestyleType = LifestyleType.Custom;
+			model.CustomLifestyle = typeof(PerRequestLifestyleManager);
 		}
 
 	}

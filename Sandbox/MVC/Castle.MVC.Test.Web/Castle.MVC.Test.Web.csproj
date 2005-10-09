@@ -135,6 +135,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "mvc.config"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "Content"
                 />

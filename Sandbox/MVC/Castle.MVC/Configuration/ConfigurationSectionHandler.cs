@@ -38,11 +38,10 @@ namespace Castle.MVC.Configuration
 	/// </summary>
 	/// <remarks>
 	/// Usage
-	/// MVCConfigSettings ctx = ConfigurationSettings.GetConfig("castle/mvc") as MVCConfigSettings; 
+	/// MVCConfigSettings ctx = ConfigurationSettings.GetConfig("mvc") as MVCConfigSettings; 
 	/// </remarks>
 	public class ConfigurationSectionHandler : IConfigurationSectionHandler
 	{
-
 
 		#region Fields
 
@@ -58,7 +57,6 @@ namespace Castle.MVC.Configuration
 		/// </summary>
 		public ConfigurationSectionHandler(){}
 		#endregion 
-
 
 		/// <summary>
 		/// Factory method that creates a configuration handler for a specific section of 

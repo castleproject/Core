@@ -24,8 +24,6 @@ using System;
 using System.Reflection;
 #endregion 
 
-
-
 namespace Castle.MVC.Controllers
 {
 	/// <summary>

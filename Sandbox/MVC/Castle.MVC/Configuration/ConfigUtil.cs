@@ -45,7 +45,7 @@ namespace Castle.MVC.Configuration
 		{
 			get
 			{
-				return ConfigurationSettings.GetConfig("castle/mvc") as MVCConfigSettings;
+				return ConfigurationSettings.GetConfig("mvc") as MVCConfigSettings;
 			}
 		}
 	}

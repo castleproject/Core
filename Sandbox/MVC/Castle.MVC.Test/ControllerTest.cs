@@ -1,11 +1,14 @@
-using System.Reflection;
-using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.MVC.Navigation;
 using Castle.MVC.StatePersister;
 using Castle.MVC.States;
 using Castle.MVC.Test.Presentation;
 using Castle.MVC.Views;
 using Castle.Windsor;
+using Castle.Model.Configuration;
+
+using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Configuration.Sources;
 using NUnit.Framework;
 
 namespace Castle.MVC.Test
@@ -32,24 +35,38 @@ namespace Castle.MVC.Test
 			 _homeController = null;
 			 _state = null;
 
-			_container = new WindsorContainer();
+			// Config by file
+			_container = new WindsorContainer( new XmlInterpreter( new AppDomainConfigSource("castle")),
+				new XmlInterpreter( "test.config" )
+				);
 
-			_container.AddFacility("MVCFacility", new MVCFacility() );
-			_container.AddComponent( "state", typeof(IState),typeof(MyApplicationState));
-			_container.AddComponent( "viewManager", typeof(IViewManager), typeof(MockViewManager));
+			//-- Config by Code
+//			_container = new WindsorContainer(new DefaultConfigurationStore());
+//
+//			MutableConfiguration confignode = new MutableConfiguration("facility");
+//
+//			IConfiguration assembyView = confignode.Children.Add(new MutableConfiguration("assembyView"));
+//
+//			_container.Kernel.ConfigurationStore.AddFacilityConfiguration("MVCFacility", confignode);
+//			_container.AddFacility("MVCFacility", new MVCFacility());
+//
+//			_container.AddComponent( "state", typeof(IState),typeof(MyApplicationState));
+//			_container.AddComponent( "navigator", typeof(INavigator), typeof(DefaultNavigator));
+//			_container.AddComponent( "viewManager", typeof(IViewManager), typeof(MockViewManager));
+//			_container.AddComponent( "statePersister", typeof(IStatePersister), typeof(MemoryStatePersister));
+//
+//			// controllers
+//			_container.AddComponent( "HomeController", typeof(HomeController) );
+//			_container.AddComponent( "AccountController", typeof(AccountController) );
+//
+//			// components
+//			_container.AddComponent( "ServiceA", typeof(IServiceA), typeof(ServiceA));
 
-			AddControllers();
-		}
- 
-		private void AddControllers()
-		{
-			_container.AddComponent( "HomeController", typeof(HomeController) );
-			_container.AddComponent( "AccountController", typeof(AccountController) );
 
-			_homeController = _container.Resolve("HomeController") as HomeController;
+			_homeController = _container["HomeController"] as HomeController;
 			_state = _homeController.State as MyApplicationState;
 		}
-
+ 
 
 		/// <summary>
 		/// TearDown
@@ -70,8 +87,14 @@ namespace Castle.MVC.Test
 		[Test] 
 		public void TestContainer() 
 		{
-			object controller = _container.Resolve("HomeController");
+			object controller = _container["HomeController"];
 			Assert.IsTrue(controller.GetType()==typeof(HomeController));
+			controller = _container["AccountController"];
+			Assert.IsTrue(controller.GetType()==typeof(AccountController));
+
+			IServiceA serviceA = _container[typeof(IServiceA)] as IServiceA;
+			serviceA.MyMethodNotcached("Gilles");
+
 		}
 
 		/// <summary>
@@ -101,6 +124,7 @@ namespace Castle.MVC.Test
 
 			Assert.IsTrue(_state.SomeSessionString=="toto");
 		}
+
 		#endregion
 	}
 }

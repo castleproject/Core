@@ -204,6 +204,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LifestyleManager\PerRequestLifestyleManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Navigation\DefaultNavigator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

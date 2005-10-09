@@ -40,7 +40,6 @@ namespace Castle.MVC.Controllers
 	/// Abstract base class to control the navigation between views.
 	/// You must inherit from this class when developing yours controllers.
 	/// </summary>
-	[Transient]
 	public abstract class Controller : IController
 	{
 

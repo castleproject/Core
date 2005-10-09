@@ -123,6 +123,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "bin\Debug\" />
             </Include>
         </Files>
     </CSHARP>
