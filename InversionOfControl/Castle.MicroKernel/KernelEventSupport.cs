@@ -51,6 +51,11 @@ namespace Castle.MicroKernel
 				 info.GetValue("HandlerRegisteredEvent", typeof(Delegate));
 		}
 
+		public override object InitializeLifetimeService()
+		{
+			return null;
+		}
+
 		/// <summary>
 		/// Pending
 		/// </summary>

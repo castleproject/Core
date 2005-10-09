@@ -21,7 +21,7 @@ namespace Castle.Services.Transaction
 	/// <summary>
 	/// TODO: Ensure this class is thread-safe
 	/// </summary>
-	public class DefaultTransactionManager : ITransactionManager
+	public class DefaultTransactionManager : MarshalByRefObject, ITransactionManager
 	{
 		private static readonly object TransactionCreatedEvent = new object();
 		private static readonly object ChildTransactionCreatedEvent = new object();
@@ -35,6 +35,11 @@ namespace Castle.Services.Transaction
 
 		public DefaultTransactionManager()
 		{
+		}
+
+		public override object InitializeLifetimeService()
+		{
+			return null;
 		}
 
 		#region ITransactionManager Members

@@ -19,11 +19,11 @@ namespace Castle.ManagementExtensions.Remote
 	/// <summary>
 	/// Summary description for MServerProxy.
 	/// </summary>
-	public class MServerProxy : MarshalByRefObject, MServer
+	public class MServerProxyDecorator : MarshalByRefObject, MServer
 	{
 		protected MServer server;
 
-		public MServerProxy(MServer server)
+		public MServerProxyDecorator(MServer server)
 		{
 			if (server == null)
 			{

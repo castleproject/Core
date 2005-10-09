@@ -25,7 +25,7 @@ namespace Castle.Services.Transaction
 	/// <summary>
 	/// Helper abstract class for <see cref="ITransaction"/> implementors. 
 	/// </summary>
-	public abstract class AbstractTransaction : ITransaction, IDisposable
+	public abstract class AbstractTransaction : MarshalByRefObject, ITransaction, IDisposable
 	{
 		private HybridDictionary _context;
 		private IList _synchronizations;
@@ -37,6 +37,11 @@ namespace Castle.Services.Transaction
 			_resources = new ArrayList();
 			_synchronizations = new ArrayList();
 			_context = new HybridDictionary(true);
+		}
+
+		public override object InitializeLifetimeService()
+		{
+			return null;
 		}
 
 		#region ITransaction

@@ -25,13 +25,18 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	/// <summary>
 	/// Summary description for TransactionInterceptor.
 	/// </summary>
-	public class TransactionInterceptor : IMethodInterceptor
+	public class TransactionInterceptor : MarshalByRefObject, IMethodInterceptor
 	{
 		private IKernel _kernel;
 
 		public TransactionInterceptor(IKernel kernel)
 		{
             _kernel = kernel;
+		}
+
+		public override object InitializeLifetimeService()
+		{
+			return null;
 		}
 
 		public object Intercept(IMethodInvocation invocation, params object[] args)
