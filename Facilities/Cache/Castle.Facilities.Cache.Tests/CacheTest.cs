@@ -34,7 +34,7 @@ namespace Castle.Facilities.Cache.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			_container = new WindsorContainer("Castle.Facilities.Cache.Tests.config");
+			_container = new WindsorContainer("../Castle.Facilities.Cache.Tests.config");
 			_container.AddComponent("ServiceA",typeof(IServiceA), typeof(ServiceA));
 			_container.AddComponent("ServiceC",typeof(IServiceC), typeof(ServiceC));
 			_container.AddComponent("ServiceD",typeof(IServiceD), typeof(ServiceD));

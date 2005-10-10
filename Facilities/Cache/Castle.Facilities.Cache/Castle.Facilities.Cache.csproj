@@ -80,25 +80,19 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "F:\Program Files\NUnit 2.2\bin\nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\dn\nunit.framework"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\Lib\Castle.MicroKernel.dll"
-                />
-                <Reference
                     Name = "Castle.Model"
                     AssemblyName = "Castle.Model"
-                    HintPath = "..\Lib\Castle.Model.dll"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
-                    HintPath = "..\Lib\Castle.Windsor.dll"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
             </References>
         </Build>
