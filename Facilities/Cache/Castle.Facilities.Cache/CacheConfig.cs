@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
-using System.Collections.Specialized;
-using System.Reflection;
-using Castle.Facilities.Cache.Manager;
-using Castle.MicroKernel;
-using Castle.MicroKernel.Facilities;
-
 namespace Castle.Facilities.Cache
 {
+	using System.Reflection;
+	using System.Collections;
+	using System.Collections.Specialized;
+
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
+
+	using Castle.Facilities.Cache.Manager;
+	
 	/// <summary>
 	/// Summary description for CacheConfig.
 	/// </summary>

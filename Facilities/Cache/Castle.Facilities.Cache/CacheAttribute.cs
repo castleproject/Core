@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-
 namespace Castle.Facilities.Cache
 {
+	using System;
+
 	/// <summary>
 	/// Indicates the cache support for a method.
 	/// </summary>

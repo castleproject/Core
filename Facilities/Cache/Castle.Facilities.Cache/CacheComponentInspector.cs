@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Reflection;
-using Castle.MicroKernel;
-using Castle.MicroKernel.ModelBuilder;
-using Castle.MicroKernel.SubSystems.Conversion;
-using Castle.Model;
-using Castle.Model.Configuration;
-
 namespace Castle.Facilities.Cache
 {
+	using System;
+	using System.Reflection;
+
+	using Castle.Model;
+	using Castle.Model.Configuration;
+
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.ModelBuilder;
+	using Castle.MicroKernel.SubSystems.Conversion;
+
 	/// <summary>
 	/// Summary description for CacheComponentInspector.
 	/// </summary>

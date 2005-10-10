@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text;
-using Castle.Model.Interceptor;
-
 namespace Castle.Facilities.Cache.Manager
 {
+	using System.Text;
+
+	using Castle.Model.Interceptor;
+
 	/// <summary>
 	/// Generates the key to retrieve/save objects from/to the cache.
 	/// </summary>
 	public class DefaultCacheKeyGenerator : ICacheKeyGenerator
 	{
-		#region ICacheKeyGenerator Members
-
 		/// <summary>
 		/// Generates the key for a cache entry.
 		/// </summary>
@@ -46,7 +45,5 @@ namespace Castle.Facilities.Cache.Manager
 			}
 			return cacheKey.ToString();
 		}
-
-		#endregion
 	}
 }

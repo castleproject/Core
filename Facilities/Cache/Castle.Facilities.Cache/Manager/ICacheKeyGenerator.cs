@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.Model.Interceptor;
-
 namespace Castle.Facilities.Cache.Manager
 {
+	using Castle.Model.Interceptor;
+
 	/// <summary>
 	///  Generates the key to retrieve/save objects from/to the cache.
 	/// </summary>
@@ -28,6 +28,5 @@ namespace Castle.Facilities.Cache.Manager
 		/// <param name="arguments">the arguments of the invocation</param>
 		/// <returns>the key for a cache entry.</returns>
 		 string GenerateKey(IMethodInvocation invocation, object[] arguments);
-
 	}
 }

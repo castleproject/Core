@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.MicroKernel.Facilities;
-
 namespace Castle.Facilities.Cache
 {
+	using Castle.MicroKernel.Facilities;
+
 	/// <summary>
 	/// Summary description for CacheFacility.
 	/// </summary>

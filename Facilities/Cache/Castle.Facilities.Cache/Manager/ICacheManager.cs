@@ -19,35 +19,21 @@ namespace Castle.Facilities.Cache.Manager
 	/// </summary>
 	public interface ICacheManager
 	{
-		#region Properties
-
 		/// <summary>
 		/// Generates the key to retrieve/save objects from/to the cache.
 		/// </summary>
-		ICacheKeyGenerator CacheKeyGenerator
-		{
-			get;
-			set;
-		}
+		ICacheKeyGenerator CacheKeyGenerator { get; set; }
 
 		/// <summary>
 		/// Adds an item with the specified key and value into cached data.
 		/// Gets a cached object with the specified key.
 		/// </summary>
 		/// <value>The cached object or <c>null</c></value>
-		object this [object key] 
-		{
-			get;
-			set;
-		}
-		#endregion
+		object this[object key] { get; set; }
 
-		#region Methods
 		/// <summary>
 		/// Clears all elements from the cache.
 		/// </summary>
-		void Flush ();
-
-		#endregion
+		void Flush();
 	}
 }

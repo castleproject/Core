@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections;
-using System.Collections.Specialized;
-
 namespace Castle.Facilities.Cache.Manager
 {
+	using System.Collections;
+	using System.Collections.Specialized;
+
 	/// <summary>
 	/// Description résumée de MemoryCache.
 	/// </summary>
 	public class MemoryCacheManager : ICacheManager
 	{
 		#region Fields 
+
 		private IDictionary _cache = null;
 		private ICacheKeyGenerator _cacheKeyGenerator = null;
+
 		#endregion
 
 		public MemoryCacheManager()
 		{
 			_cache = new HybridDictionary();
 		}
-
-		#region ICacheManager Members
 
 		/// <summary>
 		/// A generator of keys for a cache entry.
@@ -52,34 +52,29 @@ namespace Castle.Facilities.Cache.Manager
 		{
 			get
 			{
-				lock (this) 
+				lock (this)
 				{
 					return _cache[key];
 				}
 			}
 			set
 			{
-				lock (this) 
+				lock (this)
 				{
-					_cache[key] = value;	
-				}			
+					_cache[key] = value;
+				}
 			}
 		}
-
 
 		/// <summary>
 		/// Clears all elements from the cache.
 		/// </summary>
 		public void Flush()
 		{
-			lock(this) 
+			lock (this)
 			{
 				_cache.Clear();
-			}				
+			}
 		}
-
-		#endregion
-
-
 	}
 }

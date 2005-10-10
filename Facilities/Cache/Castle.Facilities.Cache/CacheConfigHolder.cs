@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections;
-
 namespace Castle.Facilities.Cache
 {
+	using System;
+	using System.Collections;
+
 	/// <summary>
 	/// Summary description for CacheConfigHolder.
 	/// </summary>

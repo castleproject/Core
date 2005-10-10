@@ -12,18 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using Castle.Facilities.Cache.Manager;
-using Castle.Model.Interceptor;
-
 namespace Castle.Facilities.Cache
 {
+	using System;
+
+	using Castle.Facilities.Cache.Manager;
+	using Castle.Model.Interceptor;
+
 	/// <summary>
 	/// Caches the return value of the intercepted method.
 	/// </summary>
 	public class CacheInterceptor : IMethodInterceptor
 	{
-		public readonly object NULL_OBJECT = new Object(); 
+		public static readonly object NULL_OBJECT = new Object(); 
 
 		private CacheConfigHolder _cacheConfigHolder = null;
 
@@ -31,8 +32,6 @@ namespace Castle.Facilities.Cache
 		{
 			_cacheConfigHolder = transactionConfHolder;
 		}
-
-		#region IMethodInterceptor Members
 
 		/// <summary>
 		/// Returns from the cache provider the value saved with the key generated
@@ -81,8 +80,5 @@ namespace Castle.Facilities.Cache
 				return invocation.Proceed(args);
 			}
 		}
-
-		#endregion
-
 	}
 }
