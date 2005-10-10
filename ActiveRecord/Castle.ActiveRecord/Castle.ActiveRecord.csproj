@@ -179,6 +179,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\HasManyToAnyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\HiLoAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -266,6 +271,10 @@
                 <File
                     RelPath = "Attributes\Validations\ValidateRegExpAttribute.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\ActiveRecord.cs"
                     BuildAction = "Compile"
                 />
                 <File
