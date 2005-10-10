@@ -1,14 +1,31 @@
-#if dotNet2
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using Castle.ActiveRecord.Tests.Model;
-using NHibernate.Expression;
-using System.Reflection;
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
+#if dotNet2
 namespace Castle.ActiveRecord.Tests
 {
+	using System;
+	using System.Text;
+	using System.Reflection;
+	using System.Collections.Generic;
+
+	using NUnit.Framework;
+
+	using Castle.ActiveRecord.Tests.Model;
+
+	using NHibernate.Expression;
+
 	[TestFixture]
 	public class ActiveRecordGenericsTestCase : AbstractActiveRecordTest
 	{
@@ -27,8 +44,8 @@ namespace Castle.ActiveRecord.Tests
 			ActiveRecord<Post>.DeleteAll();
 			ActiveRecord<Blog>.DeleteAll();
 			ActiveRecord<Company>.DeleteAll();
-			ActiveRecord <Award>.DeleteAll();
-			ActiveRecord <Employee>.DeleteAll();
+			ActiveRecord<Award>.DeleteAll();
+			ActiveRecord<Employee>.DeleteAll();
 		}
 
 		[Test]
@@ -56,7 +73,6 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(blog.Author, retrieved.Author);
 		}
 
-
 		[Test]
 		public void SlicedOperation()
 		{
@@ -76,7 +92,6 @@ namespace Castle.ActiveRecord.Tests
 
 			Post[] posts = ActiveRecord<Post>.FindAll(Expression.Eq("Blog", blog), 1, 2);
 			Assert.AreEqual(2, posts.Length);
-
 		}
 
 		[Test]

@@ -135,6 +135,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ActiveRecordGenericsTestCase.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ActiveRecordTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

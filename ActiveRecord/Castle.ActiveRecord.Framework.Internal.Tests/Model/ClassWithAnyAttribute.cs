@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 			TypeColumn="BILLING_DETAILS_TYPE",
 			IdColumn="BILLING_DETAILS_ID",
 			Cascade=CascadeEnum.SaveUpdate)]
-		[Any.MetaValue("CREDIT_CARD", typeof (CreditCard))]
+		// [Any.MetaValue("CREDIT_CARD", typeof (CreditCard))]
 		[Any.MetaValue("BANK_ACCOUNT", typeof (BankAccount))]
 		public IPayment PaymentMethod
 		{
