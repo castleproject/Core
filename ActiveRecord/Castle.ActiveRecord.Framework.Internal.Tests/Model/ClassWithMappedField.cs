@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 		private int _id;
 
 		[Field("MyCustomName")]
-		private String name1;
+		private String name1 = "";
 
 		[PrimaryKey(Access=PropertyAccess.NosetterCamelcaseUnderscore)]
 		public int Id

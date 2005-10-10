@@ -418,6 +418,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Internal\Model\HasManyToAnyModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Internal\Model\HiloModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

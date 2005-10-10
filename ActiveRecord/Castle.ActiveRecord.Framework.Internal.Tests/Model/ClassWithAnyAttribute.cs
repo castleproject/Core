@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	[ActiveRecord]
 	public class ClassWithAnyAttribute : ActiveRecordBase
 	{
-		private int _id;
+		private int _id = 0;
 
 		[PrimaryKey(Access=PropertyAccess.NosetterCamelcaseUnderscore)]
 		public int Id
@@ -59,7 +59,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
 	[ActiveRecord]
 	public class ClasssWithHasManyToAny : ActiveRecordBase
 	{
-		private int _id;
+		private int _id = 0;
 
 		[PrimaryKey(Access = PropertyAccess.NosetterCamelcaseUnderscore)]
 		public int Id
