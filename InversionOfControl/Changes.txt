@@ -10,6 +10,26 @@ RC 2
 
 - Type converter for enums
 
+- Support to associate configuration nodes to methods. Usage:
+
+<component>
+  <methods>
+    <save />
+    <save signature="System.String, mscorlib" />
+    <save signature="System.String, mscorlib;System.Int32, mscorlib" />
+  </methods>
+</component>
+
+Which is equivalent to
+
+<component>
+  <methods>
+    <method name="save" />
+    <method name="save" signature="System.String, mscorlib" />
+    <method name="save" signature="System.String, mscorlib;System.Int32, mscorlib" />
+  </methods>
+</component> 
+
 
 Beta 3
 ------

@@ -203,6 +203,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\MethodMetaModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\MethodMetaModelCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\ParameterModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

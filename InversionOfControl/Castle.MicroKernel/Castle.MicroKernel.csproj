@@ -328,6 +328,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ModelBuilder\Inspectors\MethodMetaInspector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ModelBuilder\Inspectors\PropertiesDependenciesModelInspector.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

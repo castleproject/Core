@@ -16,6 +16,7 @@ namespace Castle.Model
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Runtime.Serialization;
 
 	using Castle.Model.Configuration;
@@ -58,7 +59,7 @@ namespace Castle.Model
 	/// meta information collected about a component.
 	/// </summary>
 	[Serializable]
-	public sealed class ComponentModel : GraphNode, IDeserializationCallback
+	public sealed class ComponentModel : GraphNode
 	{
 		#region Fields
 
@@ -92,6 +93,8 @@ namespace Castle.Model
 		
 		/// <summary>All potential properties that can be setted by the kernel</summary>
 		private PropertySetCollection properties;
+
+		private MethodMetaModelCollection methodMetaModels;
 		
 		/// <summary>Steps of lifecycle</summary>
 		private LifecycleStepCollection lifecycleSteps;
@@ -116,14 +119,6 @@ namespace Castle.Model
 			this.service = service;
 			this.implementation = implementation;
 			this.lifestyleType = LifestyleType.Undefined;
-
-			this.extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
-			this.properties = new PropertySetCollection();
-			this.parameters = new ParameterModelCollection();
-			this.constructors = new ConstructorCandidateCollection();
-			this.interceptors = new InterceptorReferenceCollection();
-			this.lifecycleSteps = new LifecycleStepCollection();
-			this.dependencies = new DependencyModelCollection();
 		}
 
 		/// <summary>
@@ -149,18 +144,51 @@ namespace Castle.Model
 
 		public IDictionary ExtendedProperties
 		{
-			get { return extended; }
+			get
+			{
+				lock(this)
+				{
+					if (extended == null) extended = new HybridDictionary();
+				}
+				return extended;
+			}
 			set { extended = value; }
 		}
 
 		public ConstructorCandidateCollection Constructors
 		{
-			get { return constructors; }
+			get
+			{
+				lock(this)
+				{
+					if (constructors == null) constructors = new ConstructorCandidateCollection();
+				}
+				return constructors;
+			}
 		}
 
 		public PropertySetCollection Properties
 		{
-			get { return properties; }
+			get
+			{
+				lock(this)
+				{
+					if (properties == null) properties = new PropertySetCollection();
+				}
+				return properties;
+			}
+		}
+
+		public MethodMetaModelCollection MethodMetaModels
+		{
+			get
+			{
+				lock(this)
+				{
+					if (methodMetaModels == null) methodMetaModels = new MethodMetaModelCollection();
+				}
+				return methodMetaModels;
+			}
 		}
 
 		public IConfiguration Configuration
@@ -171,7 +199,14 @@ namespace Castle.Model
 
 		public LifecycleStepCollection LifecycleSteps
 		{
-			get { return lifecycleSteps; }
+			get
+			{
+				lock(this)
+				{
+					if (lifecycleSteps == null) lifecycleSteps = new LifecycleStepCollection();
+				}
+				return lifecycleSteps;
+			}
 		}
 
 		public LifestyleType LifestyleType
@@ -194,12 +229,26 @@ namespace Castle.Model
 
 		public InterceptorReferenceCollection Interceptors
 		{
-			get { return interceptors; }
+			get
+			{
+				lock(this)
+				{
+					if (interceptors == null) interceptors = new InterceptorReferenceCollection();
+				}
+				return interceptors;
+			}
 		}
 
 		public ParameterModelCollection Parameters
 		{
-			get { return parameters; }
+			get
+			{
+				lock(this)
+				{
+					if (parameters == null) parameters = new ParameterModelCollection();
+				}
+				return parameters;
+			}
 		}
 
 		/// <summary>
@@ -209,16 +258,14 @@ namespace Castle.Model
 		/// </summary>
 		public DependencyModelCollection Dependencies
 		{
-			get { return dependencies; }
+			get
+			{
+				lock(this)
+				{
+					if (dependencies == null) dependencies = new DependencyModelCollection();
+				}
+				return dependencies;
+			}
 		}
-
-		#region IDeserializationCallback
-
-		public void OnDeserialization(object sender)
-		{
-			extended = new Hashtable( CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default );
-		}
-
-		#endregion
 	}
 }

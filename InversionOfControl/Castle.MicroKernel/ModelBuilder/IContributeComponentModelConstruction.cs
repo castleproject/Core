@@ -14,8 +14,6 @@
 
 namespace Castle.MicroKernel.ModelBuilder
 {
-	using System;
-
 	using Castle.Model;
 
 	/// <summary>
