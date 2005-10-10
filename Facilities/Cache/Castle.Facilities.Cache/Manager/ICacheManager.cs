@@ -34,6 +34,6 @@ namespace Castle.Facilities.Cache.Manager
 		/// <summary>
 		/// Clears all elements from the cache.
 		/// </summary>
-		void Flush();
+		void Clear();
 	}
 }

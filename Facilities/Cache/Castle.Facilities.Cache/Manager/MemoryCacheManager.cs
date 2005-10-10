@@ -69,7 +69,7 @@ namespace Castle.Facilities.Cache.Manager
 		/// <summary>
 		/// Clears all elements from the cache.
 		/// </summary>
-		public void Flush()
+		public void Clear()
 		{
 			lock (this)
 			{

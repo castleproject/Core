@@ -61,7 +61,7 @@ namespace Castle.Facilities.Cache.Tests
 		/// <summary>
 		/// Clears all elements from the cache.
 		/// </summary>
-		public void Flush()
+		public void Clear()
 		{
 			lock(this) 
 			{
