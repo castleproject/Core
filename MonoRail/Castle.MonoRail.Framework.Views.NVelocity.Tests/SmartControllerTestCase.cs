@@ -88,7 +88,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		public void FillingBehavior1()
 		{
 			DoGet("smart/FillingBehavior.rails", "name=someone", "date1day=11", "date1month=10", "date1year=2005");
-			String expected = "incoming someone 11/10/2005 " + 
+			String expected = "incoming someone " + new DateTime( 2005, 10, 11 ).ToShortDateString() + " " + 
 				DateTime.Now.AddDays(1).ToShortDateString();
 
 			AssertReplyEqualsTo(expected);
