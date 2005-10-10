@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Engine.Configuration
 
 			if (useWindsorAtt != null && "true".Equals(useWindsorAtt.Value))
 			{
-				ConfigureWinsorIntegration(config);
+				ConfigureWindsorIntegration(config);
 			}
 
 			foreach( XmlNode node in section.ChildNodes)
@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Engine.Configuration
 			return config;
 		}
 
-		private void ConfigureWinsorIntegration(MonoRailConfiguration config)
+		private void ConfigureWindsorIntegration(MonoRailConfiguration config)
 		{
 			config.CustomControllerFactory = "Castle.MonoRail.WindsorExtension.WindsorControllerFactory, Castle.MonoRail.WindsorExtension";
 			config.CustomFilterFactory = "Castle.MonoRail.WindsorExtension.WindsorFilterFactory, Castle.MonoRail.WindsorExtension";
