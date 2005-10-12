@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,21 +23,20 @@
 
 namespace Castle.Facilities.IBatisNetIntegration
 {
+	using System;
 	using System.Configuration;
-
-	using log4net;
 
 	using Castle.Model;
 	using Castle.Model.Configuration;
 	using Castle.MicroKernel.Facilities;
 	using Castle.Services.Transaction;
 
+	using IBatisNet.Common.Logging;
 	using IBatisNet.DataMapper;
-
 
 	public class IBatisNetFacility : AbstractFacility
 	{
-		public static readonly string FILE_CONFIGURATION = "_IBATIS_FILE_CONFIGURATION_";
+		public static readonly String FILE_CONFIGURATION = "_IBATIS_FILE_CONFIGURATION_";
 
 		private static readonly ILog _logger = LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod().DeclaringType );
 
@@ -51,27 +50,18 @@ namespace Castle.Facilities.IBatisNetIntegration
 		{
 			if (FacilityConfig == null)
 			{
-				throw new ConfigurationException(
-					"The IBatisNetFacility requires an external configuration");
+				throw new ConfigurationException( "The IBatisNetFacility requires an external configuration" );
 			}
 
 			IConfiguration factoriesConfig = FacilityConfig.Children["sqlMap"];
-
 			if (factoriesConfig == null)
 			{
-				throw new ConfigurationException(
-					"You need to configure at least one sqlMap for IBatisNetFacility");
+				throw new ConfigurationException( "You need to configure at least one sqlMap for IBatisNetFacility" );
 			}
 
 			Kernel.ComponentModelBuilder.AddContributor( new AutomaticSessionInspector() );
-
-			Kernel.AddComponent( 
-				"IBatis.session.interceptor", 
-				typeof(AutomaticSessionInterceptor) );
-
-			Kernel.AddComponent( 
-				"IBatis.transaction.manager", 
-				typeof(ITransactionManager), typeof(DataMapperTransactionManager) );
+			Kernel.AddComponent( "IBatis.session.interceptor", typeof(AutomaticSessionInterceptor) );
+			Kernel.AddComponent( "IBatis.transaction.manager", typeof(ITransactionManager), typeof(DataMapperTransactionManager) );
 
 			ConfigureFactories(factoriesConfig);
 		}
@@ -81,11 +71,10 @@ namespace Castle.Facilities.IBatisNetIntegration
 		private void ConfigureFactories(IConfiguration config)
 		{
 			// A name for this sqlMap
-			// sqlServerMap
-			string id = config.Attributes["id"]; 
+			String id = config.Attributes["id"]; 
 
-			string fileName = config.Attributes["config"];
-			if (fileName == string.Empty)
+			String fileName = config.Attributes["config"];
+			if (fileName == String.Empty)
 			{
 				fileName = "sqlMap.config"; // default name
 			}

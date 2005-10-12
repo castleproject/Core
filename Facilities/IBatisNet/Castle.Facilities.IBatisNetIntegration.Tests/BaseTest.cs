@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,6 @@
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
-	using System;
-
 	using Castle.Windsor;
 
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
@@ -32,9 +30,6 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 	using NUnit.Framework;
 
-	/// <summary>
-	/// Summary description for BaseTest.
-	/// </summary>
 	public class BaseTest
 	{
 		protected IWindsorContainer container = null;

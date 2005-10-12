@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 	using System;
 
 	/// <summary>
-	/// Declares that a method 
-	/// don't want to used Automatic session creation.
+	/// Declares that a method does not want to use automatic session creation.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false)]
 	public sealed class NoSessionAttribute : Attribute

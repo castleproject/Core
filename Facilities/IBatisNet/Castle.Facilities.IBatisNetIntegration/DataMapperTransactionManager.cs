@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,20 +21,13 @@
 /// --
 #endregion
 
-#region Using
-using System;
-using System.Collections;
-
-using Castle.Model;
-using Castle.Services.Transaction;
-#endregion
-
-
 namespace Castle.Facilities.IBatisNetIntegration
 {
+	using Castle.Model;
+	using Castle.Services.Transaction;
+
 	/// <summary>
-	/// Dispatch the transaction management to the
-	/// Session transaction implementation.
+	/// Dispatch the transaction management to the Session transaction implementation.
 	/// </summary>
 	[PerThread]
 	public class DataMapperTransactionManager : DefaultTransactionManager

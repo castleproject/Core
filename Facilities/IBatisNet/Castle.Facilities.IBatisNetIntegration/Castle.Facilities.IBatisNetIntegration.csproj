@@ -95,11 +95,6 @@
                     HintPath = "..\bin\Castle.Services.Transaction.dll"
                 />
                 <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
-                />
-                <Reference
                     Name = "IBatisNet.Common"
                     AssemblyName = "IBatisNet.Common"
                     HintPath = "..\lib\IBatisNet.Common.dll"

@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,18 +21,10 @@
 /// --
 #endregion
 
-#region Using
-using System;
-using System.Data;
-
-using IBatisNet.Common;
-#endregion
-
 namespace Castle.Facilities.IBatisNetIntegration
 {
-	/// <summary>
-	/// Summary description for ResourceSqlMapAdapter.
-	/// </summary>
+	using IBatisNet.Common;
+
 	public class ResourceSqlMapAdapter: Castle.Services.Transaction.IResource
 	{
 		private IDalSession _session;
@@ -44,7 +36,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		public void Start()
 		{
-			// Nothing do to
+			
 		}
 
 		public void Commit()

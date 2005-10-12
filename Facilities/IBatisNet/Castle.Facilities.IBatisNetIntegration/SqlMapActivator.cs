@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,36 +21,29 @@
 /// --
 #endregion
 
-#region Using
-using System;
-
-using Castle.Model;
-
-using Castle.MicroKernel;
-using Castle.MicroKernel.ComponentActivator;
-
-using IBatisNet.DataMapper;
-#endregion
-
 namespace Castle.Facilities.IBatisNetIntegration
 {
-	/// <summary>
-	/// Summary description for SqlMapFactoryActivator.
-	/// </summary>
+	using System;
+
+	using Castle.Model;
+
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.ComponentActivator;
+
+	using IBatisNet.DataMapper.Configuration;
+
 	public class SqlMapActivator : AbstractComponentActivator
 	{
-		public SqlMapActivator(ComponentModel model, 
-			IKernel kernel, ComponentInstanceDelegate onCreation, 
-			ComponentInstanceDelegate onDestruction) : 
-			base(model, kernel, onCreation, onDestruction)
+		public SqlMapActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, 
+			ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
 		{
 		}
 
 		protected override object InternalCreate()
 		{
-			string fileName = (string) Model.ExtendedProperties[ IBatisNetFacility.FILE_CONFIGURATION ];
-
-			return SqlMapper.Configure(fileName);
+			String fileName = (String) Model.ExtendedProperties[ IBatisNetFacility.FILE_CONFIGURATION ];
+			IBatisNet.DataMapper.Configuration.DomSqlMapBuilder domSqlMapBuilder = new DomSqlMapBuilder();
+			return domSqlMapBuilder.Configure(fileName);
 		}
 
 		protected override void InternalDestroy(object instance)

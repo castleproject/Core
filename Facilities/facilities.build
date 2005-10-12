@@ -21,7 +21,7 @@
 	<target name="build" depends="init, buildlist1, buildlist2, buildlist3" />
 	
 	<target name="buildlist1" depends="autotransaction,arintegration,aspectsharp,batchregistration,cache,db4o" />
-	<target name="buildlist2" depends="eventwiring,factorysupport,nhibernate" />
+	<target name="buildlist2" depends="eventwiring,factorysupport,nhibernate, ibatis" />
 	<target name="buildlist3" depends="prevalence,startable,securitymanagement,typedfactory" />
 	
 	<!-- entlib, ibatis, logging are out -->

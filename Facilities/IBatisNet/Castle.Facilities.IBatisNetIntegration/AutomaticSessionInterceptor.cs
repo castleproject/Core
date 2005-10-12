@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,26 +21,19 @@
 /// --
 #endregion
 
-#region Using
-using System;
-using System.Reflection;
-
-using log4net;
-
-using Castle.Model.Interceptor;
-using Castle.MicroKernel;
-using Castle.Services.Transaction;
-using Transaction = Castle.Services.Transaction.ITransaction;
-
-using IBatisNet.DataMapper;
-#endregion
-
 namespace Castle.Facilities.IBatisNetIntegration
 {
+	using System;
+	using System.Reflection;
 
-	/// <summary>
-	/// Summary description for AutomaticSessionInterceptor.
-	/// </summary>
+	using Castle.Model.Interceptor;
+	using Castle.MicroKernel;
+	using Castle.Services.Transaction;
+	using Transaction = Castle.Services.Transaction.ITransaction;
+
+	using IBatisNet.Common.Logging;
+	using IBatisNet.DataMapper;
+
 	public class AutomaticSessionInterceptor : IMethodInterceptor
 	{
 		private IKernel _kernel = null;
@@ -95,7 +88,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 			}
 		}
 
-		private bool EnlistSessionIfHasTransactionActive(string key, SqlMapper sqlMap)
+		private bool EnlistSessionIfHasTransactionActive(String key, SqlMapper sqlMap)
 		{
 			if (!_kernel.HasComponent(typeof(ITransactionManager))) return false;
 
@@ -123,7 +116,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 			return enlisted;
 		}
 
-		protected string ObtainSqlMapKeyFor(MethodInfo info)
+		protected String ObtainSqlMapKeyFor(MethodInfo info)
 		{
 			String sqlMapID = String.Empty;
 

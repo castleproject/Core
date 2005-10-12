@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,23 +23,14 @@
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
-	using System;
-	using System.Collections;
-	
 	using NUnit.Framework;
 	
+	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
 	using Castle.Windsor;
-	using Castle.Model.Configuration;
-	using Castle.MicroKernel.SubSystems.Configuration;
 
 	using IBatisNet.Common;
 	using IBatisNet.DataMapper;
 
-	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
-
-	/// <summary>
-	/// Summary description for IBatisFacilityTestCase.
-	/// </summary>
 	[TestFixture]
 	public class IBatisNetFacilityTestCase : AbstractIBatisNetTestCase
 	{

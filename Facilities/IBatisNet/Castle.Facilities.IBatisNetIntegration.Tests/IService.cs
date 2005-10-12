@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,15 +21,10 @@
 /// --
 #endregion
 
-using System;
-
-using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
-
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
-	/// <summary>
-	/// Description résumée de IService.
-	/// </summary>
+	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
+
 	public interface IService
 	{
 		Account GetAccount(int id);

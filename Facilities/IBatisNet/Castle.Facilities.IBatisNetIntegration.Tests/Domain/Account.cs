@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,16 +24,14 @@
 
 namespace Castle.Facilities.IBatisNetIntegration.Tests.Domain
 {
+	using System;
 
-	/// <summary>
-	/// Summary description for Account.
-	/// </summary>
 	public class Account
 	{
 		private int _id;
-		private string _firstName;
-		private string _lastName;
-		private string _emailAddress;
+		private String _firstName;
+		private String _lastName;
+		private String _emailAddress;
 
 		public int Id
 		{
@@ -41,19 +39,19 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests.Domain
 			set { _id = value; }
 		}
 
-		public string FirstName
+		public String FirstName
 		{
 			get { return _firstName; }
 			set { _firstName = value; }
 		}
 
-		public string LastName
+		public String LastName
 		{
 			get { return _lastName; }
 			set { _lastName = value; }
 		}
 
-		public string EmailAddress
+		public String EmailAddress
 		{
 			get { return _emailAddress; }
 			set { _emailAddress = value; }

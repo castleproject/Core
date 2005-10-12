@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,24 +26,23 @@ namespace Castle.Facilities.IBatisNetIntegration
 	using System;
 
 	/// <summary>
-	/// Declares that a component
-	/// wants to use an IBatis's Data Mapper session.
+	/// Declares that a component wants to use an IBatis's Data Mapper session.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
 	public class UsesAutomaticSessionCreationAttribute : Attribute
 	{
-		private string _sqlMapId;
+		private String _sqlMapId;
 
 		public UsesAutomaticSessionCreationAttribute()
 		{
 		}
 
-		public UsesAutomaticSessionCreationAttribute(string sqlMapId)
+		public UsesAutomaticSessionCreationAttribute(String sqlMapId)
 		{
 			_sqlMapId = sqlMapId;
 		}
 
-		public string SqlMapId
+		public String SqlMapId
 		{
 			get { return _sqlMapId; }
 		}

@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,22 +24,16 @@
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
 	using System;
-	using System.Threading;
 
 	using NUnit.Framework;
 
 	using Castle.Model.Configuration;
-
 	using Castle.Windsor;
-	
 	using Castle.MicroKernel.SubSystems.Configuration;
 
-	/// <summary>
-	/// Summary description for AbstractNHibernateTestCase.
-	/// </summary>
 	public abstract class AbstractIBatisNetTestCase : BaseTest 
 	{
-		public const string DATA_MAPPER = "sqlServerSqlMap";
+		public const String DATA_MAPPER = "sqlServerSqlMap";
 
 		[SetUp]
 		public virtual void InitDb()

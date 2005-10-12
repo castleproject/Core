@@ -1,4 +1,4 @@
-#region Licence
+#region License
 /// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 ///  
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,13 +28,9 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 	using NUnit.Framework;
 
 	using Castle.Facilities.AutomaticTransactionManagement;
-
 	using Castle.Facilities.IBatisNetIntegration.Tests.Dao;
 	using Castle.Facilities.IBatisNetIntegration.Tests.Domain;
 
-	/// <summary>
-	/// Summary description for ServiceTestCase.
-	/// </summary>
 	[TestFixture]
 	public class ServiceTestCase : AbstractIBatisNetTestCase
 	{
