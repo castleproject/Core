@@ -24,6 +24,7 @@
 namespace Castle.Facilities.IBatisNetIntegration.Tests
 {
 	using System;
+	using System.IO;
 
 	using NUnit.Framework;
 
@@ -34,10 +35,15 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 	public abstract class AbstractIBatisNetTestCase : BaseTest 
 	{
 		public const String DATA_MAPPER = "sqlServerSqlMap";
-
+		public static readonly String ACCESS_SOURCE_FILE = ".." + Path.DirectorySeparatorChar + "Castle.mdb";
+		public static readonly String ACCESS_DESTINATION_FILE = ".." + Path.DirectorySeparatorChar + "Castle_temp.mdb";
 		[SetUp]
 		public virtual void InitDb()
 		{
+			if(File.Exists(ACCESS_SOURCE_FILE))
+			{
+				File.Copy(ACCESS_SOURCE_FILE,ACCESS_DESTINATION_FILE,true);
+			}
 		}
 
 		protected virtual IWindsorContainer CreateConfiguredContainer()
@@ -53,6 +59,15 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			container.Kernel.ConfigurationStore.AddFacilityConfiguration("IBatisNet", confignode);
 
 			return container;
+		}
+
+		[TearDown]
+		public virtual void ShutdownDb()
+		{
+			if(File.Exists(ACCESS_DESTINATION_FILE))
+			{
+				File.Delete(ACCESS_DESTINATION_FILE);
+			}
 		}
 	}
 }

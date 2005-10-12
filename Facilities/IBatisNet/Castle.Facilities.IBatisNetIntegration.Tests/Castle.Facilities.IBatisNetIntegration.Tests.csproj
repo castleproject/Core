@@ -111,19 +111,9 @@
                     HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
                 />
                 <Reference
-                    Name = "Castle.Facilities.AutomaticTransactionManagement"
-                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
-                    HintPath = "..\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
-                />
-                <Reference
                     Name = "Castle.Facilities.IBatisNetIntegration"
                     Project = "{5CE5406D-92AB-45ED-A4C9-921745E38BE1}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
                 />
                 <Reference
                     Name = "IBatisNet.Common"
@@ -134,6 +124,11 @@
                     Name = "IBatisNet.DataMapper"
                     AssemblyName = "IBatisNet.DataMapper"
                     HintPath = "..\lib\IBatisNet.DataMapper.dll"
+                />
+                <Reference
+                    Name = "Castle.Facilities.AutomaticTransactionManagement"
+                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
+                    HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
                 />
             </References>
         </Build>
