@@ -1,0 +1,171 @@
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+namespace Castle.Facilities.NHibernateIntegration.Internal
+{
+	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
+
+	using NHibernate;
+
+	using Castle.MicroKernel;
+	using Castle.MicroKernel.Facilities;
+
+	using Castle.Services.Transaction;
+	using ITransaction = Castle.Services.Transaction.ITransaction;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public class DefaultSessionManager : MarshalByRefObject, ISessionManager
+	{
+		private readonly IKernel kernel;
+		private readonly ISessionStore sessionStore;
+		private readonly IDictionary alias2SessionFactory = new HybridDictionary(true);
+
+		public DefaultSessionManager(ISessionStore sessionStore, IKernel kernel)
+		{
+			this.sessionStore = sessionStore;
+			this.kernel = kernel;
+		}
+
+		public void RegisterSessionFactory(String alias, ISessionFactory sessionFactory)
+		{
+			if (alias == null) throw new ArgumentNullException("alias");
+			if (sessionFactory == null) throw new ArgumentNullException("sessionFactory");
+
+			if (alias2SessionFactory.Contains(alias))
+			{
+				throw new FacilityException("Duplicated alias: " + alias);
+			}
+
+			alias2SessionFactory.Add(alias, sessionFactory);
+		}
+
+		public ISession OpenSession()
+		{
+			return OpenSession(Constants.DefaultAlias);
+		}
+
+		public ISession OpenSession(String alias)
+		{
+			if (alias == null) throw new ArgumentNullException("alias");
+
+			ITransaction transaction = ObtainCurrentTransaction();
+
+			bool weAreSessionOwner = false;
+
+			SessionDelegate wrapped = null;
+			
+			ISession session = sessionStore.FindCompatibleSession(alias);
+
+			if (session == null)
+			{
+				session = CreateSession(alias); weAreSessionOwner = true;
+
+				wrapped = WrapSession(transaction != null, session);
+
+				object cookie = sessionStore.Store(alias, wrapped);
+
+				wrapped.SessionStoreCookie = cookie;
+
+				EnlistIfNecessary(weAreSessionOwner, transaction, session);
+			}
+			else
+			{
+				if (EnlistIfNecessary(weAreSessionOwner, transaction, session))
+				{
+					wrapped = WrapSession(true, session);
+				}
+			}
+			
+			return wrapped != null ? wrapped : session;
+		}
+
+		protected bool EnlistIfNecessary(bool weAreSessionOwner, ITransaction transaction, ISession session)
+		{
+			if (transaction == null) return false;
+
+			IList list = (IList) transaction.Context["nh.session.enlisted"];
+
+			bool shouldEnlist = false;
+
+			if (list == null)
+			{
+				list = new ArrayList();
+
+				list.Add(session);
+
+				transaction.Context["nh.session.enlisted"] = list;
+
+				shouldEnlist = true;
+			}
+			else
+			{
+				shouldEnlist = true;
+
+				foreach(ISession sess in list)
+				{
+					if (Object.ReferenceEquals(sess, session))
+					{
+						shouldEnlist = false;
+						break;
+					}
+				}
+			}
+
+			if (shouldEnlist)
+			{
+				// TODO: propagate IsolationLevel, expose as transaction property
+
+				transaction.Enlist( new ResourceAdapter(session.BeginTransaction()) );
+
+				if (weAreSessionOwner)
+				{
+					transaction.RegisterSynchronization( new SessionDisposeSynchronization(session) );
+				}
+			}
+
+			return true;
+		}
+
+		private ITransaction ObtainCurrentTransaction()
+		{
+			ITransactionManager transactionManager = kernel[ typeof(ITransactionManager) ] as ITransactionManager;
+
+			return transactionManager.CurrentTransaction;
+		}
+
+		private SessionDelegate WrapSession(bool hasTransaction, ISession session)
+		{
+			return new SessionDelegate( !hasTransaction, session, sessionStore );
+		}
+
+		private ISession CreateSession(string alias)
+		{
+			ISessionFactory sessionFactory = alias2SessionFactory[alias] as ISessionFactory;
+
+			if (sessionFactory == null)
+			{
+				throw new FacilityException("No ISessionFactory implementation " + 
+					"associated with the given alias: " + alias);
+			}
+
+			// TODO: Check whether there's an interceptor available on the kernel and use it if so
+
+			return sessionFactory.OpenSession();
+		}
+	}
+}

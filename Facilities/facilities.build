@@ -75,7 +75,7 @@
 	</target>
 
 	<target name="nhibernate">
-		<nant buildfile="NHibernate/default.build" inheritall="true" target="build" />
+		<nant buildfile="NHibernateIntegration/default.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="prevalence">

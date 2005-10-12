@@ -1,0 +1,9 @@
+
+-- Please note that you can disable the test cases, check the 'How to build.txt' in --
+--                             the root directory                                   --
+
+1 - You can change the connection string at facilityconfig.xml
+
+2 - Create two databases (test and test2 on a MS SQLServer will do)
+
+
