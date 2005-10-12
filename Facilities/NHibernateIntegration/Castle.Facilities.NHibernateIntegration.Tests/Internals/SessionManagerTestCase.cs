@@ -42,7 +42,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 			Assert.IsNotNull(session1);
 			Assert.IsNotNull(session2);
 
-			Assert.AreNotSame(session1, session2);
+			Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
 		}
 
 		[Test]

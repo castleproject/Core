@@ -47,7 +47,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.SessionCreation
 			using(ISession sess = sessManager.OpenSession())
 			{
 				Assert.IsNotNull(sess);
-				Assert.AreNotSame(sess, prevSession);
+				// Assert.AreNotSame(sess, prevSession);
+				Assert.IsFalse( Object.ReferenceEquals(sess, prevSession) );
 			}
 		}
 	}
