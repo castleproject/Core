@@ -24,7 +24,7 @@
 	<target name="buildlist2" depends="eventwiring,factorysupport,nhibernate, ibatis" />
 	<target name="buildlist3" depends="prevalence,startable,securitymanagement,typedfactory" />
 	
-	<!-- entlib, ibatis, logging are out -->
+	<!-- entlib, logging are out -->
 	
 	<target name="init">
 
