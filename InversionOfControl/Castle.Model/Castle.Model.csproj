@@ -308,6 +308,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Resource\StaticContentResource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Resource\UncResource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
