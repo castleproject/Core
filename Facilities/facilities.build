@@ -22,7 +22,7 @@
 	
 	<target name="buildlist1" depends="autotransaction,arintegration,aspectsharp,batchregistration,cache,db4o" />
 	<target name="buildlist2" depends="eventwiring,factorysupport,nhibernate, ibatis" />
-	<target name="buildlist3" depends="prevalence,startable,securitymanagement,typedfactory" />
+	<target name="buildlist3" depends="prevalence,remoting,startable,securitymanagement,typedfactory" />
 	
 	<!-- entlib, logging are out -->
 	
@@ -82,6 +82,10 @@
 		<nant buildfile="Prevalence/default.build" inheritall="true" target="build" />
 	</target>
 	
+	<target name="remoting">
+		<nant buildfile="Remoting/default.build" inheritall="true" target="build" />
+	</target>	
+	
 	<target name="startable">
 		<nant buildfile="Startable/default.build" inheritall="true" target="build" />
 	</target>
@@ -107,6 +111,7 @@
 		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" /> 
 		<nant buildfile="NHibernate/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Prevalence/default.build" inheritall="true" target="dist" />
+		<nant buildfile="Remoting/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Startable/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Security/default.build" inheritall="true" target="dist" />
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="dist" />

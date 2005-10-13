@@ -16,9 +16,10 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 {
 	using System;
 	using System.Reflection;
-	using Castle.MicroKernel;
-	using Castle.Model;
+
 	using Castle.Model.Interceptor;
+
+	using Castle.MicroKernel;
 
 	using Castle.Services.Transaction;
 

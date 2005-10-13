@@ -40,8 +40,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 				model.Dependencies.Add( 
 					new DependencyModel( DependencyType.Service, null, typeof(TransactionInterceptor), false ) );
 
-				model.Interceptors.Insert( 0,  
-					new InterceptorReference( typeof(TransactionInterceptor) ) );
+				model.Interceptors.AddFirst( new InterceptorReference( typeof(TransactionInterceptor) ) );
 			}
 		}
 
