@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration", "Castle.Facilities.NHibernateIntegration\Castle.Facilities.NHibernateIntegration.csproj", "{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.NHibernateIntegration.Tests", "Castle.Facilities.NHibernateIntegration.Tests\Castle.Facilities.NHibernateIntegration.Tests.csproj", "{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Debug.ActiveCfg = Debug|.NET
+		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Debug.Build.0 = Debug|.NET
+		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Release.ActiveCfg = Release|.NET
+		{75D19CFC-A0A0-49C6-B1D1-3DC897A2A805}.Release.Build.0 = Release|.NET
+		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Debug.ActiveCfg = Debug|.NET
+		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Debug.Build.0 = Debug|.NET
+		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Release.ActiveCfg = Release|.NET
+		{F7FB5FFB-BACC-4E71-A8F5-BD7636D2E456}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		default.build = default.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+		Running the tests.txt = Running the tests.txt
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
