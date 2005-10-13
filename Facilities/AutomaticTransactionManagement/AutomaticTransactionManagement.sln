@@ -22,6 +22,12 @@ Global
 		{8A7E5413-3F2C-4C09-92A7-F5A3AC9F2F93}.Release.ActiveCfg = Release|.NET
 		{8A7E5413-3F2C-4C09-92A7-F5A3AC9F2F93}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		default.build = default.build
+		License.txt = License.txt
+		Readme.txt = Readme.txt
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution

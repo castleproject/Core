@@ -15,18 +15,17 @@
 namespace Castle.Facilities.BatchRegistration.Tests
 {
 	using System;
-	using System.IO;
 	using System.Configuration;
 
-	using NUnit.Framework;
+	using Castle.Model.Resource;
 
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.SubSystems.Configuration;
 
 	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Configuration.Sources;
 
 	using Castle.Facilities.BatchRegistration.Tests.Components;
+
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class BatchRegistrationFacilityTestCase
@@ -57,8 +56,8 @@ namespace Castle.Facilities.BatchRegistration.Tests
 				"	</facilities>" + 
 				"</configuration>";
 
-			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentSource(xml) );
-			interpreter.Process(_kernel.ConfigurationStore);
+			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentResource(xml) );
+			interpreter.ProcessResource( interpreter.Source, _kernel.ConfigurationStore);
 
 			_kernel.AddFacility( "batchregistration", new BatchRegistrationFacility() );
 
@@ -82,8 +81,8 @@ namespace Castle.Facilities.BatchRegistration.Tests
 				"	</facilities>" + 
 				"</configuration>";
 
-			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentSource(xml) );
-			interpreter.Process(_kernel.ConfigurationStore);
+			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentResource(xml) );
+			interpreter.ProcessResource( interpreter.Source, _kernel.ConfigurationStore);
 
 			_kernel.AddFacility( "batchregistration", new BatchRegistrationFacility() );
 
@@ -107,8 +106,8 @@ namespace Castle.Facilities.BatchRegistration.Tests
 				"	</facilities>" + 
 				"</configuration>";
 
-			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentSource(xml) );
-			interpreter.Process(_kernel.ConfigurationStore);
+			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentResource(xml) );
+			interpreter.ProcessResource( interpreter.Source, _kernel.ConfigurationStore);
 
 			_kernel.AddFacility( "batchregistration", new BatchRegistrationFacility() );
 
@@ -133,8 +132,8 @@ namespace Castle.Facilities.BatchRegistration.Tests
 				"	</facilities>" + 
 				"</configuration>";
 
-			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentSource(xml) );
-			interpreter.Process(_kernel.ConfigurationStore);
+			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentResource(xml) );
+			interpreter.ProcessResource( interpreter.Source, _kernel.ConfigurationStore);
 
 			_kernel.AddFacility( "batchregistration", new BatchRegistrationFacility() );
 		}
@@ -152,8 +151,8 @@ namespace Castle.Facilities.BatchRegistration.Tests
 				"	</facilities>" + 
 				"</configuration>";
 
-			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentSource(xml) );
-			interpreter.Process(_kernel.ConfigurationStore);
+			XmlInterpreter interpreter = new XmlInterpreter( new StaticContentResource(xml) );
+			interpreter.ProcessResource( interpreter.Source, _kernel.ConfigurationStore);
 
 			_kernel.AddFacility( "batchregistration", new BatchRegistrationFacility() );
 
