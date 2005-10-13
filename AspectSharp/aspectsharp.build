@@ -121,6 +121,11 @@
 			output="${bin.dir}/${aopalliance.assembly.name}"
 			doc="${bin.dir}/${aopalliance.name}.xml">
 			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+
 			<sources basedir="${aopalliance.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
@@ -135,6 +140,11 @@
 			optimize="${optimize}"
 			output="${bin.dir}/${lang.assembly.name}"
 			doc="${bin.dir}/${lang.name}.xml">
+
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
 			
 			<sources basedir="${lang.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
@@ -152,6 +162,11 @@
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${lang.test.assembly.name}">
+
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
 			
 			<sources basedir="${lang.test.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
@@ -183,6 +198,11 @@
 			optimize="${optimize}"
 			output="${bin.dir}/${core.assembly.name}"
 			doc="${bin.dir}/${core.name}.xml">
+
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
 			
 			<sources basedir="${core.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
@@ -202,6 +222,11 @@
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${core.test.assembly.name}">
+
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
 			
 			<sources basedir="${core.test.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
