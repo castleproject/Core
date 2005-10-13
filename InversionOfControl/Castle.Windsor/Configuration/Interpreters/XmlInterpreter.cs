@@ -18,12 +18,13 @@ namespace Castle.Windsor.Configuration.Interpreters
 	using System.Xml;
 	using System.Configuration;
 
+	using Castle.Model.Resource;
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
 
 	/// <summary>
-	/// Reads the configuration from a XmlFile. Example structure:
+	/// Reads the configuration from a XmlFile. Sample structure:
 	/// <code>
 	/// &lt;configuration&gt;
 	///   &lt;facilities&gt;
@@ -42,35 +43,35 @@ namespace Castle.Windsor.Configuration.Interpreters
 	/// </summary>
 	public class XmlInterpreter : AbstractInterpreter
 	{
+		#region Constructors
+
 		public XmlInterpreter()
 		{
 		}
 
-		public XmlInterpreter(string filename) : base(filename)
+		public XmlInterpreter(String filename) : base(filename)
 		{
 		}
 
-		public XmlInterpreter(IConfigurationSource source) : base(source)
+		public XmlInterpreter(Castle.Model.Resource.IResource source) : base(source)
 		{
 		}
 
-		#region IConfigurationInterpreter Members
+		#endregion
 
-		public override void Process(IConfigurationStore store)
+		public override void ProcessResource(IResource source, IConfigurationStore store)
 		{
-			if (store == null) throw new ArgumentNullException("store");
-
-			using (Source)
+			using (source)
 			{
 				XmlDocument doc = new XmlDocument();
 			
-				doc.Load(Source.Contents);
+				doc.Load( source.GetStreamReader() );
 			
 				Deserialize(doc.DocumentElement, store);
 			}
 		}
 
-		#endregion
+		#region Deserialization methods
 
 		protected void Deserialize(XmlNode section, IConfigurationStore store)
 		{
@@ -81,7 +82,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 					continue;
 				}
 
-				if (FacilitiesNodeName.Equals(node.Name))
+				if (IncludeNodeName.Equals(node.Name))
+				{
+					ProcessInclude(node, store);
+				}
+				else if (FacilitiesNodeName.Equals(node.Name))
 				{
 					DeserializeFacilities( node.ChildNodes, store );
 				}
@@ -217,6 +222,20 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 
 			return att.Value;
+		}
+
+		#endregion
+
+		private void ProcessInclude(XmlNode includeNode, IConfigurationStore store)
+		{
+			XmlAttribute resourceUriAtt = includeNode.Attributes["uri"];
+
+			if (resourceUriAtt == null)
+			{
+				// TODO: Throw proper Exception
+			}
+
+			ProcessInclude( resourceUriAtt.Value, store );
 		}
 	}
 }

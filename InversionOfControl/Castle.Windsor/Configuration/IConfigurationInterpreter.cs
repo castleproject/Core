@@ -16,6 +16,8 @@ namespace Castle.Windsor.Configuration
 {
 	using Castle.MicroKernel;
 
+	using Castle.Model.Resource;
+
 	/// <summary>
 	/// Interpreter of a specific language to describe 
 	/// configuration nodes in a hierachical manner.
@@ -23,11 +25,18 @@ namespace Castle.Windsor.Configuration
 	public interface IConfigurationInterpreter
 	{
 		/// <summary>
-		/// Implementors should make sure that the 
-		/// Interpreter instance already has a reference 
-		/// to a configuration source.
+		/// Exposes the reference to <see cref="IResource"/>
+		/// which the interpreter is likely to hold
 		/// </summary>
+		IResource Source { get; }
+
+		/// <summary>
+		/// Should obtain the contents from the resource,
+		/// interpret it and populate the <see cref="IConfigurationStore"/>
+		/// accordingly.
+		/// </summary>
+		/// <param name="resource"></param>
 		/// <param name="store"></param>
-		void Process(IConfigurationStore store);
+		void ProcessResource(IResource resource, IConfigurationStore store);
 	}
 }

@@ -278,6 +278,39 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration2\config_with_include.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_include_relative.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\include1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\include2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\IncludesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration2\resource_config_with_include.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\RelativeTest\rel_include1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\RelativeTest\rel_include2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Installer\InstallerTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

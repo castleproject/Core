@@ -15,53 +15,104 @@
 namespace Castle.Windsor.Configuration.Interpreters
 {
 	using System;
+	using System.Collections;
 	using System.Configuration;
+
+	using Castle.Model.Resource;
+	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
 
-	using Castle.Model.Configuration;
-
-	using Castle.Windsor.Configuration.Sources;
 	using Castle.Windsor.Configuration.Interpreters.CastleLanguage;
 
 	/// <summary>
-	/// 
+	/// Provides common methods for those who wants 
+	/// to implement <see cref="IConfigurationInterpreter"/>
 	/// </summary>
 	public abstract class AbstractInterpreter : IConfigurationInterpreter
 	{
+		#region Fields
 		protected static readonly String FacilitiesNodeName = "facilities";
 		protected static readonly String FacilityNodeName = "facility";
 		protected static readonly String ComponentsNodeName = "components";
 		protected static readonly String ComponentNodeName = "component";
+		protected static readonly String IncludeNodeName = "include";
 
-		private IConfigurationSource _source;
-		private ImportDirectiveCollection _imports = new ImportDirectiveCollection();
+		private ImportDirectiveCollection imports = new ImportDirectiveCollection();
+		private IResource source;
+		private Stack resourceStack = new Stack();
+		#endregion
 
-		public AbstractInterpreter(IConfigurationSource source)
+		#region Constructors
+
+		public AbstractInterpreter(IResource source)
 		{
-			if (source == null) throw new ArgumentNullException("source", "IConfigurationSource is null");
+			if (source == null) throw new ArgumentNullException("source", "IResource is null");
 
-			_source = source;
+			this.source = source;
+
+			PushResource(source);
 		} 
 
-		public AbstractInterpreter(String filename) : this(new ExternalFileSource(filename))
+		public AbstractInterpreter(String filename) : this(new FileResource(filename))
 		{
 		} 
 
-		public AbstractInterpreter() : this(new AppDomainConfigSource())
+		public AbstractInterpreter() : this(new ConfigResource())
 		{
 		}
 
-		public IConfigurationSource Source
+		#endregion
+
+		/// <summary>
+		/// Should obtain the contents from the resource,
+		/// interpret it and populate the <see cref="IConfigurationStore"/>
+		/// accordingly.
+		/// </summary>
+		/// <param name="resource"></param>
+		/// <param name="store"></param>
+		public abstract void ProcessResource(IResource resource, IConfigurationStore store);
+
+		#region Support for Resource stack
+
+		protected void PushResource(IResource resource)
 		{
-			get { return _source; }
+			resourceStack.Push(resource);
 		}
 
-		public ImportDirectiveCollection Imports
+		protected void PopResource()
 		{
-			get { return _imports; }
-			set { _imports = value; }
+			resourceStack.Pop();
 		}
+
+		protected IResource CurrentResource
+		{
+			get
+			{
+				if (resourceStack.Count == 0) return null;
+
+				return resourceStack.Peek() as IResource;
+			}
+		}
+
+		#endregion
+
+		#region Properties
+
+		public IResource Source
+		{
+			get { return this.source; }
+		}
+
+		protected ImportDirectiveCollection Imports
+		{
+			get { return this.imports; }
+			set { this.imports = value; }
+		}
+
+		#endregion
+
+		#region Helpers to populate IConfigurationStore
 
 		protected void AddFacilityConfig(IConfiguration facility, IConfigurationStore store)
 		{
@@ -99,10 +150,22 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="store"></param>
-		public abstract void Process(IConfigurationStore store);
+		#endregion
+		
+		protected void ProcessInclude(String uri, IConfigurationStore store)
+		{
+			IResource resource = store.GetResource( uri, CurrentResource );
+
+			if (resource == null)
+			{
+				// TODO: Proper Exception
+			}
+
+			PushResource(resource);
+			
+			ProcessResource(resource, store);
+			
+			PopResource();
+		}		
 	}
 }

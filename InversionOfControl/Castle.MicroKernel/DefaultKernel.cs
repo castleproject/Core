@@ -122,14 +122,7 @@ namespace Castle.MicroKernel
 			this.facilities = new ArrayList();
 			this.subsystems = new Hashtable();
 
-			AddSubSystem( SubSystemConstants.ConfigurationStoreKey, 
-				new DefaultConfigurationStore() );
-			
-			AddSubSystem( SubSystemConstants.ConversionManagerKey, 
-				new SubSystems.Conversion.DefaultConversionManager() );
-
-			AddSubSystem( SubSystemConstants.NamingKey, 
-				new SubSystems.Naming.DefaultNamingSubSystem() );
+			RegisterSubSystems();
 
 			this.releaserPolicy = new LifecycledComponentsReleasePolicy();
 			this.handlerFactory = new DefaultHandlerFactory(this);
@@ -145,6 +138,25 @@ namespace Castle.MicroKernel
 			object[] kernelmembers = (object[]) info.GetValue( "members", typeof(object[]) );
 			
 			FormatterServices.PopulateObjectMembers( this, members, kernelmembers );
+		}
+
+		#endregion
+
+		#region Overridables
+
+		protected virtual void RegisterSubSystems()
+		{
+			AddSubSystem( SubSystemConstants.ConfigurationStoreKey, 
+				new DefaultConfigurationStore() );
+	
+			AddSubSystem( SubSystemConstants.ConversionManagerKey, 
+				new SubSystems.Conversion.DefaultConversionManager() );
+	
+			AddSubSystem( SubSystemConstants.NamingKey, 
+				new SubSystems.Naming.DefaultNamingSubSystem() );
+
+			AddSubSystem( SubSystemConstants.ResourceKey, 
+				new SubSystems.Resource.DefaultResourceSubSystem() );
 		}
 
 		#endregion

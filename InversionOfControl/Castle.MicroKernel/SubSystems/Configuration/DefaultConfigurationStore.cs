@@ -19,6 +19,9 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 	using System.Collections.Specialized;
 
 	using Castle.Model.Configuration;
+	using Castle.Model.Resource;
+
+	using Castle.MicroKernel.SubSystems.Resource;
 
 	/// <summary>
 	/// This implementation of <see cref="IConfigurationStore"/>
@@ -37,8 +40,6 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 			facilities = new HybridDictionary();
 			components = new HybridDictionary();
 		}
-
-		#region IConfigurationStore Members
 
 		public void AddFacilityConfiguration(String key, IConfiguration config)
 		{
@@ -78,6 +79,12 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 			return array;
 		}
 
-		#endregion
+		public IResource GetResource(String resourceUri, IResource resource)
+		{
+			IResourceSubSystem subSystem = (IResourceSubSystem)
+				Kernel.GetSubSystem( SubSystemConstants.ResourceKey );
+
+			return subSystem.CreateResource(resourceUri, resource.FileBasePath);
+		}
 	}
 }

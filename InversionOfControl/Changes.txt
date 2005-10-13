@@ -1,5 +1,5 @@
 RC 2
-----
+====
 
 - Support for custom lifestyle through configuration (kudos to Bawer Dagdeviren):
 
@@ -12,34 +12,82 @@ RC 2
 
 - Support to associate configuration nodes to methods. Usage:
 
-<component>
-  <methods>
-    <save />
-    <save signature="System.String, mscorlib" />
-    <save signature="System.String, mscorlib;System.Int32, mscorlib" />
-  </methods>
-</component>
+	<component>
+		<methods>
+			<save />
+			<save signature="System.String, mscorlib" />
+			<save signature="System.String, mscorlib;System.Int32, mscorlib" />
+		</methods>
+	</component>
 
-Which is equivalent to
+  Which is equivalent to
 
-<component>
-  <methods>
-    <method name="save" />
-    <method name="save" signature="System.String, mscorlib" />
-    <method name="save" signature="System.String, mscorlib;System.Int32, mscorlib" />
-  </methods>
-</component> 
+	<component>
+		<methods>
+			<method name="save" />
+			<method name="save" signature="System.String, mscorlib" />
+			<method name="save" signature="System.String, mscorlib;System.Int32, mscorlib" />
+		</methods>
+	</component> 
+
+- IResource introduced (FileResource, AssemblyResource, ConfigResource and UncResource)
+  which are accessible through Uris:
+
+  - FileResource:  
+    file://pathtofile 
+    (For example: file://c:\mydir\file.txt)
+
+  - AssemblyResource:  
+    assembly://AssemblyName/ExtendingNamespace/filename 
+    (For example: assembly://Castle.Windsor.Tests/Configuration2/include1.xml)
+
+  - ConfigResource:  
+    config://sectioname 
+    (For example: config://castle will fetch the 
+    <configuration><castle> entry in the configuration)
+
+  - UncResource (not completed!):  
+    \\server\file 
+    (For example: \\mysharedplace\myconfig.xml)
+
+- IResourceFactory and IResourceSubSystem introduced
+
+- Ability to use <include> in configuration files. Usage
+
+  Main file:
+
+	<configuration>
+
+		<include uri="file://include1.xml"/>
+
+	</configuration>
+
+  include1.xml:
+
+	<configuration>
+
+		<components>
+
+			<component id="testidcomponent1">
+			</component>
+
+			<component id="testidcomponent2">
+			</component>
+
+		</components>
+
+	</configuration>
 
 
 Beta 3
-------
+======
 
 - Bug in dependency resolution (when chained) fixed
 - Better message description on exceptions related to unresolved dependencies.
 - Fixed bug in AddComponentWithProperties
 
 Beta 2  - 10/apr/2005
------- 
+======
 
 - Bug fixes
 
@@ -49,7 +97,7 @@ Beta 2  - 10/apr/2005
 
 
 Beta 1  - 21/jan/2005
-------
+======
 
 - Changed: from #{} to ${} - way of referencing to another component
   on the configuration.

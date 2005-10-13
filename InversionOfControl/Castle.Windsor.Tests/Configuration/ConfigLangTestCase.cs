@@ -33,7 +33,7 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 			ConfigLanguageInterpreter interpreter = new ConfigLanguageInterpreter("ConfigContents.lang");
-			interpreter.Process(store);
+			interpreter.ProcessResource(interpreter.Source, store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
 			Assert.AreEqual(2, store.GetComponents().Length);

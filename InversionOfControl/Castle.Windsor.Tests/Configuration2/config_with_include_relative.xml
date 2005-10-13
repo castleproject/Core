@@ -1,0 +1,6 @@
+<configuration>
+
+    <include uri="file://./RelativeTest/rel_include1.xml"/>
+    <include uri="file://./RelativeTest/rel_include2.xml"/>
+
+</configuration>

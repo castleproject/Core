@@ -569,31 +569,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\Sources\AbstractConfigurationSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\Sources\AppDomainConfigSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\Sources\ExternalFileSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\Sources\ManifestResourceSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\Sources\StaticContentSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Installer\DefaultComponentInstaller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

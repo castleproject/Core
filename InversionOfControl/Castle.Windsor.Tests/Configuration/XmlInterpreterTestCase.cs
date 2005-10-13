@@ -18,13 +18,13 @@ namespace Castle.Windsor.Tests.Configuration
 
 	using NUnit.Framework;
 
+	using Castle.Model.Resource;
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.SubSystems.Configuration;
 
 	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Configuration.Sources;
 
 
 	/// <summary>
@@ -38,7 +38,7 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 			XmlInterpreter interpreter = new XmlInterpreter("sample_config.xml");
-			interpreter.Process(store);
+			interpreter.ProcessResource(interpreter.Source, store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
 			Assert.AreEqual(2, store.GetComponents().Length);
@@ -68,7 +68,7 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 			XmlInterpreter interpreter = new XmlInterpreter("sample_config.xml");
-			interpreter.Process(store);
+			interpreter.ProcessResource(interpreter.Source, store);
 
 			WindsorContainer container = new WindsorContainer(store);			
 
@@ -80,8 +80,8 @@ namespace Castle.Windsor.Tests.Configuration
 		{
 			DefaultConfigurationStore store = new DefaultConfigurationStore();
 			XmlInterpreter interpreter = new XmlInterpreter(
-				new ManifestResourceSource(GetType(), "sample_config.xml"));
-			interpreter.Process(store);
+				new AssemblyResource("assembly://Castle.Windsor.Tests/Configuration/sample_config.xml"));
+			interpreter.ProcessResource(interpreter.Source, store);
 
 			Assert.AreEqual(2, store.GetFacilities().Length);
 			Assert.AreEqual(2, store.GetComponents().Length);
@@ -107,13 +107,10 @@ namespace Castle.Windsor.Tests.Configuration
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void MissingManifestResourceConifguration()
+		[ExpectedException(typeof(ResourceException))]
+		public void MissingManifestResourceConfiguration()
 		{
-			DefaultConfigurationStore store = new DefaultConfigurationStore();
-			XmlInterpreter interpreter = new XmlInterpreter(
-				new ManifestResourceSource(GetType(), "missing_config.xml"));
-			interpreter.Process(store);
+			new XmlInterpreter(new AssemblyResource("assembly://Castle.Windsor.Tests/missing_config.xml"));
 		}
 	}
 

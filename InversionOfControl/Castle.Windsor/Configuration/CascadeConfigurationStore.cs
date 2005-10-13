@@ -30,10 +30,10 @@ namespace Castle.Windsor.Configuration
 			if (child == null) throw new ArgumentNullException("child");
 
 			/// The parent configuration add the main entries.
-			parent.Process( this );
+			parent.ProcessResource( parent.Source, this );
 
 			// The child may overwrite the config entries.
-			child.Process( this );
+			child.ProcessResource( child.Source, this );
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 	using Castle.Model.Configuration;
 
 	using Castle.MicroKernel;
-	
+	using Castle.Model.Resource;
 	using Castle.Windsor.Configuration.Interpreters.CastleLanguage;
 
 	/// <summary>
@@ -36,19 +36,15 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 		}
 
-		public ConfigLanguageInterpreter(IConfigurationSource source) : base(source)
+		public ConfigLanguageInterpreter(Castle.Model.Resource.IResource source) : base(source)
 		{
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="store"></param>
-		public override void Process(IConfigurationStore store)
+		public override void ProcessResource(IResource resource, IConfigurationStore store)
 		{
 			using (Source)
 			{
-				WindsorConfLanguageLexer lexer = new WindsorConfLanguageLexer(Source.Contents);
+				WindsorConfLanguageLexer lexer = new WindsorConfLanguageLexer( Source.GetStreamReader() );
 
 				WindsorParser parser = new WindsorParser(new IndentTokenStream(lexer));
 

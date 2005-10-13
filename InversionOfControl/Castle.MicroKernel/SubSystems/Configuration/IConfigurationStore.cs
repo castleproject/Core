@@ -17,6 +17,7 @@ namespace Castle.MicroKernel
 	using System;
 
 	using Castle.Model.Configuration;
+	using Castle.Model.Resource;
 
 	/// <summary>
 	/// The contract used by the kernel to obtain
@@ -68,5 +69,13 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <returns></returns>
 		IConfiguration[] GetComponents();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="resourceUri"></param>
+		/// <param name="resource"></param>
+		/// <returns></returns>
+		IResource GetResource(String resourceUri, IResource resource);
 	}
 }

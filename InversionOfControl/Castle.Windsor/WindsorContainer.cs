@@ -67,17 +67,18 @@ namespace Castle.Windsor
 		{
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
-			interpreter.Process(Kernel.ConfigurationStore);
+			interpreter.ProcessResource(interpreter.Source, Kernel.ConfigurationStore);
 
 			RunInstaller();
 		}
 
-		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this(new DefaultKernel(), new Installer.DefaultComponentInstaller())
+		[Obsolete()]
+		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this()
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
 			if (child == null) throw new ArgumentNullException("child");
 
-			Kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+			// Kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
 
 			RunInstaller();
 		}

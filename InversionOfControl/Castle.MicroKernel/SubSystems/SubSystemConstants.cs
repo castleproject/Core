@@ -36,5 +36,10 @@ namespace Castle.MicroKernel
 		/// Key used for the naming subsystem
 		/// </summary>
 		public static readonly String NamingKey             = "naming.sub.key";
+
+		/// <summary>
+		/// Key used for the resource subsystem
+		/// </summary>
+		public static readonly String ResourceKey           = "resource.sub.key";
 	}
 }

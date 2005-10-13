@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<configuration>
+
+	<components>
+
+		<component id="testidcomponent1">
+		<item>value1</item>
+		</component>
+
+		<component id="testidcomponent2">
+		<item>value2</item>
+		</component>
+
+	</components>
+
+</configuration>

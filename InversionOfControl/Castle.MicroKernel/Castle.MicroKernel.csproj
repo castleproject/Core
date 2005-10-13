@@ -493,6 +493,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\Resource\DefaultResourceSubSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Resource\IResourceSubSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\ReferenceComparer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

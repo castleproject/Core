@@ -63,6 +63,11 @@
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 			</references>
+			
+			<resources basedir="${test.src.dir}" prefix="Castle.Model.Tests" dynamicprefix="true">
+				<include name="**/*.xml" />
+				<include name="**/*.txt" />
+			</resources>
 		</csc>
 	</target>
 	
