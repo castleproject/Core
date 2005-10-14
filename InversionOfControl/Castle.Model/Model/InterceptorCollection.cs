@@ -17,25 +17,59 @@ namespace Castle.Model
 	using System;
 	using System.Collections;
 
+	using Castle.Model.Internal;
+
 	/// <summary>
 	/// Collection of <see cref="InterceptorReference"/>
 	/// </summary>
 	[Serializable]
-	public class InterceptorReferenceCollection : ReadOnlyCollectionBase
+	public class InterceptorReferenceCollection : ICollection
 	{
+		private LinkedList list = new LinkedList();
+
 		public void Add(InterceptorReference interceptor)
 		{
-			InnerList.Add( interceptor );
+			list.Add( interceptor );
+		}
+
+		public void AddFirst(InterceptorReference interceptor)
+		{
+			list.AddFirst(interceptor);
 		}
 
 		public void Insert(int index, InterceptorReference interceptor)
 		{
-			InnerList.Insert( index, interceptor );
+			list.Insert( index, interceptor );
 		}
 
 		public bool HasInterceptors
 		{
 			get { return Count != 0; }
+		}
+
+		public void CopyTo(Array array, int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int Count
+		{
+			get { return list.Count; }
+		}
+
+		public object SyncRoot
+		{
+			get { return list; }
+		}
+
+		public bool IsSynchronized
+		{
+			get { return false; }
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return list.GetEnumerator();
 		}
 	}
 }
