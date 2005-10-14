@@ -22,24 +22,39 @@ namespace Castle.MonoRail.Framework
 		Form,
 		Params
 	}
-
 	/// <summary>
-	/// 
+	/// The DataBind Attribute is used to indicate that an Action methods parameter 
+	/// is to be intercepted and handled by the <see cref="DataBinder"/>.
 	/// </summary>
+	/// <remarks>
+	/// Allowed usage is one per method parameter, and is not inherited.
+	/// </remarks>
 	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
 	public class DataBindAttribute : Attribute
 	{
 		private String prefix = string.Empty;
 		private ParamStore from	= ParamStore.Params;
 		private int nestedLevel = 3;
+		private String exclude = String.Empty;
 
 		public DataBindAttribute()
 		{
 		}
 
 		/// <summary>
-		/// 
+		/// Gets or sets the property names to exclude.
 		/// </summary>
+		/// <value>A comma seperated list of property names to exclude from databinding.</value>
+		public String Exclude
+		{
+			get { return exclude; }
+			set { exclude = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets <see cref="ParamStore"/> used to locate the values used for databinding.
+		/// </summary>
+		/// <value>The ParamStore type.  Typically either QueryString, Form, or Params.</value>
 		public ParamStore From
 		{
 			get { return from; }
@@ -47,14 +62,19 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// 
+		/// Gets or sets the databinding prefix.
 		/// </summary>
+		/// <value>The databinding prefix.</value>
 		public String Prefix
 		{
 			get { return prefix; }
 			set { prefix = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the nested level.
+		/// </summary>
+		/// <value>The nested level.</value>
 		public int NestedLevel
 		{
 			get { return nestedLevel; }

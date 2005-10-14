@@ -68,10 +68,30 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void ComplexBind()
 		{
-			DoGet("smart/ComplexBind.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y");
+			DoGet( "smart/ComplexBind.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y" );
 			String expected = "incoming hammett 11 20 1 x y";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualsTo( expected );
+		}
+
+		[Test]
+		public void ComplexBindExcludePrice()
+		{
+			DoGet( "smart/ComplexBindExcludePrice.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y" );
+			// This still includes zero in place of price due to the ToString() method of the domain object and price being of type float
+			String expected = "incoming hammett 11 0 1 x y";
+
+			AssertReplyEqualsTo( expected );
+		}
+
+		[Test]
+		public void ComplexBindExcludeName()
+		{
+			DoGet( "smart/ComplexBindExcludeName.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y" );
+			// This includes an extra space because of the ToString() method of the domain object and the custom String.Format it contains.
+			String expected = "incoming  11 20 1 x y";
+
+			AssertReplyEqualsTo( expected );
 		}
 
 		[Test]

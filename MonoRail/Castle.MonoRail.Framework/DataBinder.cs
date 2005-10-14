@@ -15,20 +15,25 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Web;
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Globalization;
 	using System.Reflection;
-	using System.Web;
-
 
 	/// <summary>
 	/// A DataBinder can be used to map properties from 
 	/// a NameValueCollection to one or more instance types.
 	/// </summary>
+	/// <remarks>
+	/// This code is messy. We need more test cases so we can 
+	/// refactor it mercyless
+	/// </remarks>
 	public class DataBinder
 	{
 		private static readonly int DefaultNestedLevel = 3;
+		private static readonly BindingFlags PropertiesBindingFlags = BindingFlags.Static | 
+			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 		private String root = null;
 		private IRailsEngineContext context;
@@ -40,30 +45,31 @@ namespace Castle.MonoRail.Framework
 
 		public object BindObject(Type instanceType)
 		{
-			return BindObject(instanceType, String.Empty, context.Params, context.Request.Files, null, DefaultNestedLevel);
+			return BindObject(instanceType, String.Empty, context.Params, context.Request.Files, null, DefaultNestedLevel, String.Empty);
 		}
 
-		public object BindObject(Type instanceType, String paramPrefix, IList errorList, int nestedLevel)
+		public object BindObject(Type instanceType, String paramPrefix, IList errorList, int nestedLevel, String excludedProperties)
 		{
-			return BindObject(instanceType, paramPrefix, context.Params, context.Request.Files, errorList, nestedLevel);
+			return BindObject(instanceType, paramPrefix, context.Params, context.Request.Files, errorList, nestedLevel, excludedProperties);
 		}
 
 		public object BindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int nestedLevel)
+			IDictionary files, IList errorList, int nestedLevel, String excludedProperties)
 		{
 			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
 			if (root == null) root = instanceType.Name;
 
 			object instance = Activator.CreateInstance(instanceType);
 
-			return BindObjectInstance(instance, paramPrefix, paramList, files, errorList, nestedLevel);
+			return BindObjectInstance(instance, paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties);
 		}
 
 		public object BindObjectInstance(object instance, String paramPrefix)
 		{
 			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
-			return InternalRecursiveBindObjectInstance(instance,  paramPrefix, context.Params, context.Request.Files, null, 0, DefaultNestedLevel);
+			return InternalRecursiveBindObjectInstance(instance,  paramPrefix, context.Params, context.Request.Files, 
+				null, 0, DefaultNestedLevel, string.Empty);
 		}
 
 		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
@@ -71,44 +77,44 @@ namespace Castle.MonoRail.Framework
 		{
 			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
-			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, errorList,  0, DefaultNestedLevel);
+			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList,  0, DefaultNestedLevel, string.Empty );
 		}
 
 		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int nestedLevel)
+			IDictionary files, IList errorList, int nestedLevel, String excludedProperties)
 		{
 			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
-			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, errorList,  0, nestedLevel);
+			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList,  0, nestedLevel, excludedProperties );
 		}
 
 		private object InternalBindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel)
+			IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel, string excludedProperties)
 		{
 			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
 			if (root == null) root = instanceType.Name;
 
 			object instance = Activator.CreateInstance(instanceType);
 
-			return InternalRecursiveBindObjectInstance(instance, paramPrefix, 
-				paramList, files, errorList, curNestedLevel, maxNestedLevel);
+			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, 
+				errorList, curNestedLevel, maxNestedLevel, excludedProperties);
 		}
 
-		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, 
-			NameValueCollection paramList, IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel)
+		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel, string excludedProperties)
 		{
 			if (curNestedLevel > maxNestedLevel)
 			{
 				return instance;
 			}
+			
+			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
-			BindingFlags flags = BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-
-			PropertyInfo[] props = instance.GetType().GetProperties(flags);
+			String[] excludeList = CreateExcludeList(excludedProperties);
 
 			foreach (PropertyInfo prop in props)
 			{
-				if (!prop.CanWrite)
+				if (!prop.CanWrite || Array.IndexOf(excludeList, prop.Name) != -1)
 				{
 					continue;
 				}
@@ -132,14 +138,14 @@ namespace Castle.MonoRail.Framework
 						if (value == null) // if it's not there, we create it
 						{
 							value = InternalBindObject(prop.PropertyType, propName, paramList, files, 
-								errorList, curNestedLevel + 1, maxNestedLevel);
+								errorList, curNestedLevel + 1, maxNestedLevel, excludedProperties);
 							
 							prop.SetValue(instance, value, null);
 						}
 						else // if the object already instanciated, then we use it 
 						{
 							InternalRecursiveBindObjectInstance(value, propName, paramList, files, 
-								errorList, curNestedLevel + 1, maxNestedLevel);
+								errorList, curNestedLevel + 1, maxNestedLevel, excludedProperties);
 						}
 					}
 					else
@@ -174,6 +180,31 @@ namespace Castle.MonoRail.Framework
 			}
 
 			return instance;
+		}
+
+		private String[] CreateExcludeList(String excludedProperties)
+		{
+			String[] excludeList = excludedProperties.Split(',');
+	
+			if (excludedProperties != null)
+			{
+				excludeList = excludedProperties.Split(',');
+				NormalizeExcludeList(excludeList);
+			}
+			else
+			{
+				excludeList = new String[] { String.Empty };
+			}
+
+			return excludeList;
+		}
+
+		private void NormalizeExcludeList(String[] excludeList)
+		{
+			for(int i=0; i < excludeList.Length; i++)
+			{
+				excludeList[i] = excludeList[i].Trim();
+			}
 		}
 
 		public static object Convert(Type desiredType, String value, String paramName, IDictionary files, IRailsEngineContext context)

@@ -40,6 +40,15 @@ namespace TestSiteNVelocity.Controllers
 		{
 			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
 		}
+		public void ComplexBindExcludePrice( [DataBind(Exclude="Price")] Order order, [DataBind] Person person )
+		{
+			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
+		}
+
+		public void ComplexBindExcludeName( [DataBind(Exclude="Name")] Order order, [DataBind] Person person )
+		{
+			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
+		}
 
 		public void ComplexBindWithPrefix( [DataBind] Order order, [DataBind(Prefix="person")] Person person )
 		{
