@@ -52,11 +52,11 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		public static void IsClass(Type type, String argumentName)
+		public static void IsClass(Type type, String argumentName, bool checkAbstract)
 		{
 			NotNull(type, argumentName);
 
-			if (!type.IsClass || type.IsAbstract)
+			if (!type.IsClass || type.IsAbstract && checkAbstract)
 			{
 				bool hasAbstractMembers = false;
 				

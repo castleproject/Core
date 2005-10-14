@@ -62,10 +62,16 @@ namespace Castle.DynamicProxy
 			set { _builder = value; }
 		}
 
-		public virtual object CreateClassProxy(Type baseClass, IInterceptor interceptor, 
+		public virtual object CreateClassProxy(Type baseClass, IInterceptor interceptor,
 			params object[] argumentsForConstructor)
 		{
-			AssertUtil.IsClass(baseClass, "baseClass");
+			return CreateClassProxy	(baseClass, interceptor, true, argumentsForConstructor);
+		}
+
+		public virtual object CreateClassProxy(Type baseClass, IInterceptor interceptor,bool checkAbstract, 
+			params object[] argumentsForConstructor)
+		{
+			AssertUtil.IsClass(baseClass, "baseClass", checkAbstract);
 			AssertUtil.NotNull(interceptor, "interceptor");
 
 			Type newType = ProxyBuilder.CreateClassProxy(baseClass);
@@ -75,7 +81,13 @@ namespace Castle.DynamicProxy
 		public virtual object CreateClassProxy(Type baseClass, Type[] interfaces,
 			IInterceptor interceptor, params object[] argumentsForConstructor)
 		{
-			AssertUtil.IsClass(baseClass, "baseClass");
+			return CreateClassProxy(baseClass, interfaces, interceptor, true, argumentsForConstructor);
+		}
+
+		public virtual object CreateClassProxy(Type baseClass, Type[] interfaces,
+			IInterceptor interceptor, bool checkAbstract, params object[] argumentsForConstructor)
+		{
+			AssertUtil.IsClass(baseClass, "baseClass", checkAbstract);
 			AssertUtil.NotNull(interceptor, "interceptor");
 			AssertUtil.NotNull(interfaces, "interfaces");
 
@@ -84,12 +96,18 @@ namespace Castle.DynamicProxy
 			return CreateClassProxyInstance( newType, interceptor, argumentsForConstructor );
 		}
 		
-
 		public virtual object CreateCustomClassProxy(Type baseClass, 
-			IInterceptor interceptor, GeneratorContext context, 
+			IInterceptor interceptor, GeneratorContext context,
 			params object[] argumentsForConstructor)
 		{
-			AssertUtil.IsClass(baseClass, "baseClass");
+			return 	CreateCustomClassProxy(baseClass, interceptor, context, true, argumentsForConstructor);
+		}
+
+		public virtual object CreateCustomClassProxy(Type baseClass, 
+			IInterceptor interceptor, GeneratorContext context, bool checkAbstract,
+			params object[] argumentsForConstructor)
+		{
+			AssertUtil.IsClass(baseClass, "baseClass", checkAbstract);
 			AssertUtil.NotNull(interceptor, "interceptor");
 			AssertUtil.NotNull(context, "context");
 

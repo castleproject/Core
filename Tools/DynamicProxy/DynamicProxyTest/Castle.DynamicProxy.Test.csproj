@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProxyingAbstractClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SerializableClassTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -50,6 +50,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			set { innerSession.FlushMode = value; }
 		}
 
+		public ISessionFactory SessionFactory
+		{
+			get { return innerSession.SessionFactory; }
+		}
+
 		public IDbConnection Connection
 		{
 			get { return innerSession.Connection; }
@@ -102,6 +107,16 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			{
 				throw new InvalidOperationException("Session was closed");
 			}
+		}
+
+		public void CancelQuery()
+		{
+			innerSession.CancelQuery();
+		}
+
+		public bool IsDirty()
+		{
+			return innerSession.IsDirty();
 		}
 
 		public object GetIdentifier(object obj)
@@ -257,6 +272,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		public void Refresh(object obj)
 		{
 			innerSession.Refresh(obj);
+		}
+
+		public void Refresh(object obj, LockMode lockMode)
+		{
+			innerSession.Refresh(obj,lockMode);
 		}
 
 		public LockMode GetCurrentLockMode(object obj)

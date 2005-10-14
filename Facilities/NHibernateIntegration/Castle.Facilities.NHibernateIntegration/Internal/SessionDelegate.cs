@@ -57,6 +57,11 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			get { return inner.FlushMode; }
 			set { inner.FlushMode = value; }
 		}
+		
+		public ISessionFactory SessionFactory
+		{
+			get { return inner.SessionFactory; }
+		}
 
 		public IDbConnection Connection
 		{
@@ -77,6 +82,17 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			get { return inner.Transaction; }
 		}
+		
+		public void CancelQuery()
+		{
+			inner.CancelQuery();
+		}
+		
+		public bool IsDirty()
+		{
+			return inner.IsDirty();
+		}
+		
 
 		public void Flush()
 		{
@@ -251,6 +267,11 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		public void Refresh(object obj)
 		{
 			inner.Refresh(obj);
+		}
+		
+		public void Refresh(object obj, LockMode lockMode)
+		{
+			inner.Refresh(obj, lockMode);
 		}
 
 		public LockMode GetCurrentLockMode(object obj)
