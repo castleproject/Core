@@ -15,7 +15,8 @@
 namespace Castle.MicroKernel.Resolvers
 {
 	using System;
-
+	using System.Collections;
+	
 	using Castle.Model;
 
 	using Castle.MicroKernel.Util;
@@ -31,7 +32,8 @@ namespace Castle.MicroKernel.Resolvers
 	{
 		private readonly IKernel kernel;
 		private readonly ITypeConverter converter;
-		private DependencyDelegate RaiseDependencyResolving;
+		private DependencyDelegate dependencyResolvingDelegate;
+		private IList subResolvers = new ArrayList();
 
 		public DefaultDependencyResolver(IKernel kernel)
 		{
@@ -41,9 +43,23 @@ namespace Castle.MicroKernel.Resolvers
 				kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 		}
 
-		public void Initialize(DependencyDelegate resolving)
+		public void Initialize(DependencyDelegate dependencyDelegate)
 		{
-			this.RaiseDependencyResolving = resolving;
+			dependencyResolvingDelegate = dependencyDelegate;
+		}
+
+		public void AddSubResolver(ISubDependencyResolver subResolver)
+		{
+			if (subResolver == null) throw new ArgumentNullException("subResolver");
+
+			subResolvers.Add(subResolver);
+		}
+
+		public void RemoveSubResolver(ISubDependencyResolver subResolver)
+		{
+			if (subResolver == null) throw new ArgumentNullException("subResolver");
+
+			subResolvers.Remove(subResolver);
 		}
 
 		/// <summary>
@@ -57,13 +73,28 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			object value = null;
 
-			if(dependency.DependencyType == DependencyType.Service)
+			bool resolved = false;
+
+			foreach(IDependencyResolver subResolver in subResolvers)
 			{
-				value = ResolveServiceDependency( model, dependency );
+				if (subResolver.CanResolve(model, dependency))
+				{
+					value = subResolver.Resolve(model, dependency);
+					resolved = true;
+					break; 
+				}
 			}
-			else
+
+			if (!resolved)
 			{
-				value = ResolveParameterDependency( model, dependency );
+				if(dependency.DependencyType == DependencyType.Service)
+				{
+					value = ResolveServiceDependency( model, dependency );
+				}
+				else
+				{
+					value = ResolveParameterDependency( model, dependency );
+				}
 			}
 
 			if (value == null && !dependency.IsOptional)
@@ -82,13 +113,7 @@ namespace Castle.MicroKernel.Resolvers
 				throw new DependencyResolverException(message);	
 			}
 
-			try
-			{
-				RaiseDependencyResolving(model, dependency, value);
-			}
-			catch
-			{
-			}
+			RaiseDependencyResolving(model, dependency, value);
 
 			return value;
 		}
@@ -101,6 +126,14 @@ namespace Castle.MicroKernel.Resolvers
 		/// <returns></returns>
 		public bool CanResolve(ComponentModel model, DependencyModel dependency)
 		{
+			foreach(IDependencyResolver subResolver in subResolvers)
+			{
+				if (subResolver.CanResolve(model, dependency))
+				{
+					return true;
+				}
+			}
+
 			if(dependency.DependencyType == DependencyType.Service)
 			{
 				return CanResolveServiceDependency( model, dependency );
@@ -214,6 +247,11 @@ namespace Castle.MicroKernel.Resolvers
 			}
 
 			return ReferenceExpressionUtil.ExtractComponentKey(keyValue);
+		}
+
+		private void RaiseDependencyResolving(ComponentModel model, DependencyModel dependency, object value)
+		{
+			dependencyResolvingDelegate(model, dependency, value);
 		}
 	}
 }

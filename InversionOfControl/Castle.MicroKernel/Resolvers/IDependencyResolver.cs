@@ -23,7 +23,7 @@ namespace Castle.MicroKernel
 	/// valid references to properties and/or services 
 	/// requested in the dependency model.
 	/// </summary>
-	public interface IDependencyResolver
+	public interface IDependencyResolver : ISubDependencyResolver
 	{
 		/// <summary>
 		/// This method is called with a delegate for firing the
@@ -32,24 +32,8 @@ namespace Castle.MicroKernel
 		/// <param name="resolving">The delegate used to fire the event</param>
 		void Initialize(DependencyDelegate resolving);
 
-		/// <summary>
-		/// Should return an instance of a service or property values as
-		/// specified by the dependency model instance. 
-		/// It is also the responsability of <see cref="IDependencyResolver"/>
-		/// to throw an exception in the case a non-optional dependency 
-		/// could not be resolved.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="dependency"></param>
-		/// <returns></returns>
-		object Resolve(ComponentModel model, DependencyModel dependency);
+		void AddSubResolver(ISubDependencyResolver subResolver);
 
-		/// <summary>
-		/// Returns true if the resolver is able to satisfy this dependency.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="dependency"></param>
-		/// <returns></returns>
-		bool CanResolve(ComponentModel model, DependencyModel dependency);
+		void RemoveSubResolver(ISubDependencyResolver subResolver);
 	}
 }

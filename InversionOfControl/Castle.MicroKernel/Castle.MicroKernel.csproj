@@ -383,6 +383,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Resolvers\ISubDependencyResolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubSystems\AbstractSubSystem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

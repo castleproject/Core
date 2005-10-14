@@ -28,7 +28,8 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 	/// This test case ensures that the resolving event
 	/// is fired properly.
 	/// </summary>
-	[TestFixture] public class EventTests
+	[TestFixture] 
+	public class EventTests
 	{
 		private IKernel kernel;
 
@@ -50,7 +51,8 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 
 		#endregion
 
-		[Test] public void ResolvingPrimitivesThroughProperties()
+		[Test] 
+		public void ResolvingPrimitivesThroughProperties()
 		{
 			MutableConfiguration config = new MutableConfiguration("component");
 			
@@ -77,7 +79,8 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 			Assert.IsNotNull(customer);
 		}
 
-		[Test] public void ResolvingConcreteClassThroughProperties()
+		[Test] 
+		public void ResolvingConcreteClassThroughProperties()
 		{
 			kernel.AddComponent( "spamservice", typeof(DefaultSpamService) );
 			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
@@ -101,7 +104,8 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 			Assert.IsNotNull(spamservice);
 		}
 
-		[Test] public void ResolvingConcreteClassThroughConstructor()
+		[Test] 
+		public void ResolvingConcreteClassThroughConstructor()
 		{
 			kernel.AddComponent( "spamservice", typeof(DefaultSpamServiceWithConstructor) );
 			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
@@ -122,7 +126,6 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 			Assert.IsNotNull(spamservice);
 		}
 
-
 		private void AssertEvent(Castle.Model.ComponentModel client, Castle.Model.DependencyModel model, object dependency)
 		{
 			bool ok = false;
@@ -138,97 +141,5 @@ namespace Castle.MicroKernel.Tests.DependencyResolving
 			Assert.IsTrue(ok);
 			Assert.IsNotNull(dependency);			
 		}
-
 	}
-
-	/// <summary>
-	/// This test case ensures that the resolving event
-	/// is not sensitive to thrown exceptions. 
-	/// </summary>
-	[TestFixture] public class EventTestsWithExceptions
-	{
-
-		private IKernel kernel;
-
-		#region Setup / Teardown
-
-		[SetUp] public void SetUp()
-		{
-			kernel = new DefaultKernel();
-			kernel.DependencyResolving += new DependencyDelegate(ThrowException);
-		}
-
-		[TearDown] public void TearDown()
-		{
-			kernel.Dispose();
-		}
-
-
-		#endregion
-
-		[Test] public void ResolvingPrimitivesThroughProperties()
-		{
-			MutableConfiguration config = new MutableConfiguration("component");
-			
-			MutableConfiguration parameters = (MutableConfiguration ) 
-				config.Children.Add( new MutableConfiguration("parameters") );
-
-			parameters.Children.Add( new MutableConfiguration("name", "hammett") );
-			parameters.Children.Add( new MutableConfiguration("address", "something") );
-			parameters.Children.Add( new MutableConfiguration("age", "25") );
-
-			kernel.ConfigurationStore.AddComponentConfiguration("customer", config);
-
-			kernel.AddComponent( "customer", typeof(ICustomer), typeof(CustomerImpl) );
-
-			ICustomer customer = (ICustomer) kernel["customer"];
-			Assert.IsNotNull(customer);
-		}
-
-		[Test] public void ResolvingConcreteClassThroughProperties()
-		{
-			kernel.AddComponent( "spamservice", typeof(DefaultSpamService) );
-			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
-			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
-
-			DefaultMailSenderService mailservice = (DefaultMailSenderService) kernel["mailsender"];
-			DefaultTemplateEngine templateengine = (DefaultTemplateEngine) kernel["templateengine"];
-
-			Assert.IsNotNull(mailservice);
-			Assert.IsNotNull(templateengine);
-
-			DefaultSpamService spamservice = (DefaultSpamService) kernel["spamservice"];
-			Assert.IsNotNull(spamservice);
-		}
-
-		[Test] public void ResolvingConcreteClassThroughConstructor()
-		{
-			kernel.AddComponent( "spamservice", typeof(DefaultSpamServiceWithConstructor) );
-			kernel.AddComponent( "mailsender", typeof(DefaultMailSenderService) );
-			kernel.AddComponent( "templateengine", typeof(DefaultTemplateEngine) );
-
-			DefaultMailSenderService mailservice = (DefaultMailSenderService) kernel["mailsender"];
-			DefaultTemplateEngine templateengine = (DefaultTemplateEngine) kernel["templateengine"];
-
-			Assert.IsNotNull(mailservice);
-			Assert.IsNotNull(templateengine);
-
-			DefaultSpamServiceWithConstructor spamservice = 
-				(DefaultSpamServiceWithConstructor) kernel["spamservice"];
-		
-			Assert.IsNotNull(spamservice);
-		}
-
-
-		private void ThrowException(Castle.Model.ComponentModel client, Castle.Model.DependencyModel model, object dependency)
-		{
-			throw new TestException();
-		}
-
-
-		private class TestException : Exception 
-		{
-		}
-	}
-
 }

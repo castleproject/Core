@@ -16,6 +16,7 @@ namespace Castle.Windsor.Proxy
 {
 	using System;
 	using System.Reflection;
+	using System.Runtime.Remoting.Messaging;
 	using System.Threading;
 
 	using Castle.DynamicProxy;
@@ -34,7 +35,7 @@ namespace Castle.Windsor.Proxy
 	/// </remarks>
 	public class DefaultMethodInvocation : AbstractInvocation, IMethodInvocation
 	{
-		private static readonly LocalDataStoreSlot slot = Thread.AllocateDataSlot();
+		// private static readonly LocalDataStoreSlot slot = Thread.AllocateDataSlot();
 
 		private IMethodInterceptor[] interceptorChain;
 
@@ -78,8 +79,16 @@ namespace Castle.Windsor.Proxy
 
 		private int CurrentIndex
 		{
-			get { return (int) Thread.GetData(slot); }
-			set { Thread.SetData(slot, value); }
+			get 
+			{ 
+				object index = CallContext.GetData("interceptor_index");
+				if (index == null) return 0;
+				return (int) index;
+			}
+			set
+			{
+				CallContext.SetData("interceptor_index", value);
+			}
 		}
 
 		internal void Reset()
