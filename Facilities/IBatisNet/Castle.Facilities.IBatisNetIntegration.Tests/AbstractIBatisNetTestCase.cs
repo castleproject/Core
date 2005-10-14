@@ -66,6 +66,8 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 		{
 			if(File.Exists(ACCESS_DESTINATION_FILE))
 			{
+				// This is necessary so that the locks on the file have time to release prior to deletion.
+				System.Threading.Thread.Sleep(1200);
 				File.Delete(ACCESS_DESTINATION_FILE);
 			}
 		}

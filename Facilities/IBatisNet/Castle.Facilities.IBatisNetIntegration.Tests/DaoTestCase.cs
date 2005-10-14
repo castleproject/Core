@@ -95,11 +95,12 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 
 		public void ExecuteMethodUntilSignal()
 		{
+			System.Random _random = new Random();
 			_startEvent.WaitOne(int.MaxValue, false);
 
 			while (!_stopEvent.WaitOne(1, false))
 			{
-				int id = Convert.ToInt32(DateTime.Now.Ticks);
+				int id = _random.Next();
 				Account account = new Account();
 				account.Id = id;
 				account.EmailAddress = "ibatis@somewhere.com";
