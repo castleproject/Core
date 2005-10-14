@@ -6,17 +6,27 @@ RC1
 Core:
 
 - ITrace and Trace property added to IRailsEngineContext (kudos to Chad Humphries)
+
 - Hierarchy of areas support (kudos to Fabio Batista)
+
 - PaginationHelper introduced
+
+- Added IServerUtility.JavaScriptEscape (kudos to Chad Humphries)
+
+- Added DataBindAttribute.Exclude - A comma separated list of property names 
+  to exclude from databinding (kudos to Chad Humphries)
+
 
 Scaffolding support:
 
 - huge refactoring
 - It's now using templates
 
+
 Test support:
 
 - Introduced Castle.MonoRail.TestSupport
+
 
 Bug fixes:
 

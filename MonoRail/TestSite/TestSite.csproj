@@ -176,6 +176,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ServerUtilityController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\UploadFileController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

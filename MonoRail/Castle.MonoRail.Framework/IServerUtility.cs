@@ -18,10 +18,32 @@ namespace Castle.MonoRail.Framework
 
 	public interface IServerUtility
 	{
+		/// <summary>
+		/// HTML encodes a string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text string to HTML encode.</param>
+		/// <returns>The HTML encoded text.</returns>
 		String HtmlEncode(String content);
 
+		/// <summary>
+		/// URL encodes a string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
 		String UrlEncode(String content);
-		
+
+		/// <summary>
+		/// URL encodes the path portion of a URL string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
 		String UrlPathEncode(String content);
+
+		/// <summary>
+		/// Escapes JavaScript with Url encoding and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
+		/// <returns>The URL encoded and JavaScript escaped text.</returns>
+		String JavaScriptEscape(String content);
 	}
 }

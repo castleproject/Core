@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			get { return HttpContext.Current; }
 		}
 
-		#region HTML generation methods
+		#region helper methods
 
 		/// <summary>
 		/// Generates HTML element attributes string from <paramref name="attributes"/>.
@@ -165,19 +165,44 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("{0}&{1}", leftParams, rightParams);
 		}
 
-		protected String HtmlEncode(String content)
+		/// <summary>
+		/// HTML encodes a string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text string to HTML encode.</param>
+		/// <returns>The HTML encoded text.</returns>
+		public String HtmlEncode(String content)
 		{
 			return controller.Context.Server.HtmlEncode(content);
 		}
 
-		protected String UrlEncode(String content)
+		/// <summary>
+		/// URL encodes a string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
+		public String UrlEncode(String content)
 		{
 			return controller.Context.Server.UrlEncode(content);
 		}
 
-		protected String UrlPathEncode(String content)
+		/// <summary>
+		/// URL encodes the path portion of a URL string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
+		public String UrlPathEncode(String content)
 		{
 			return controller.Context.Server.UrlPathEncode(content);
+		}
+
+		/// <summary>
+		/// Escapes JavaScript with Url encoding and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
+		/// <returns>The URL encoded and JavaScript escaped text.</returns>
+		public String JavaScriptEscape(String content)
+		{
+			return controller.Context.Server.JavaScriptEscape(content);
 		}
 
 		/// <summary>

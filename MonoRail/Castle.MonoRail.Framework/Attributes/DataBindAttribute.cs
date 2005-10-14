@@ -34,8 +34,8 @@ namespace Castle.MonoRail.Framework
 	{
 		private String prefix = string.Empty;
 		private ParamStore from	= ParamStore.Params;
-		private int nestedLevel = 3;
 		private String exclude = String.Empty;
+		private int nestedLevel = 3;
 
 		public DataBindAttribute()
 		{
@@ -44,7 +44,8 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets or sets the property names to exclude.
 		/// </summary>
-		/// <value>A comma seperated list of property names to exclude from databinding.</value>
+		/// <value>A comma separated list 
+		/// of property names to exclude from databinding.</value>
 		public String Exclude
 		{
 			get { return exclude; }

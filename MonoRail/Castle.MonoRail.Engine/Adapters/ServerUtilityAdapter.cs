@@ -1,4 +1,3 @@
-using System.Web;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,31 +15,57 @@ using System.Web;
 namespace Castle.MonoRail.Engine.Adapters
 {
 	using System;
+	using System.Web;
 
 	using Castle.MonoRail.Framework;
 	
 	public class ServerUtilityAdapter : IServerUtility
 	{
-		private readonly HttpServerUtility _server;
+		private readonly HttpServerUtility server;
 
 		public ServerUtilityAdapter(HttpServerUtility server)
 		{
-			_server = server;
+			this.server = server;
 		}
 
+		/// <summary>
+		/// HTML encodes a string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text string to HTML encode.</param>
+		/// <returns>The HTML encoded text.</returns>
 		public String HtmlEncode(String content)
 		{
-			return _server.HtmlEncode(content);
+			return server.HtmlEncode(content);
 		}
 
+		/// <summary>
+		/// Escapes JavaScript with Url encoding and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
+		/// <returns>The URL encoded and JavaScript escaped text.</returns>
+		public String JavaScriptEscape(String content)
+		{
+			return server.UrlEncode(content).Replace("'", @"\'"); 
+		}
+
+		/// <summary>
+		/// URL encodes a string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
 		public String UrlEncode(String content)
 		{
-			return _server.UrlEncode(content);
+			return server.UrlEncode(content);
 		}
-
+		
+		/// <summary>
+		/// URL encodes the path portion of a URL string and returns the encoded string.  
+		/// </summary>
+		/// <param name="content">The text to URL encode.</param>
+		/// <returns>The URL encoded text.</returns>
 		public String UrlPathEncode(String content)
 		{
-			return _server.UrlPathEncode(content);
+			return server.UrlPathEncode(content);
 		}
 	}
 }
