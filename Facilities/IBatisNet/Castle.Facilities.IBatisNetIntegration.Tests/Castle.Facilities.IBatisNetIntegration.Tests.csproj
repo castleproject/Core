@@ -130,6 +130,11 @@
                     AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
                     HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
                 />
+                <Reference
+                    Name = "IBatisNet.Common.Logging.Log4Net"
+                    AssemblyName = "IBatisNet.Common.Logging.Log4Net"
+                    HintPath = "..\lib\IBatisNet.Common.Logging.Log4Net.dll"
+                />
             </References>
         </Build>
         <Files>
