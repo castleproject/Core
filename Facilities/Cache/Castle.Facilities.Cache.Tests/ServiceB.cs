@@ -21,7 +21,6 @@ namespace Castle.Facilities.Cache.Tests
 	/// </summary>
 	public class ServiceB : IServiceB
 	{
-
 		#region IServiceB members
 
 		public string MyMethodA(string a, string b, string c)

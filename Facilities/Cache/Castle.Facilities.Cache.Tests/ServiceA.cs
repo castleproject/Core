@@ -19,7 +19,7 @@ namespace Castle.Facilities.Cache.Tests
 	/// <summary>
 	/// Description résumée de ServiceA.
 	/// </summary>
-	[Cache("FifoCacheManager")]
+	[Cache("Another.Cache")]
 	public class ServiceA : IServiceA
 	{
 		#region IServiceA Members

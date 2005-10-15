@@ -19,10 +19,9 @@ namespace Castle.Facilities.Cache.Tests
 	/// <summary>
 	/// Description résumée de ServiceC.
 	/// </summary>
-	[Cache("FifoCacheManager")]
+	[Cache("Another.Cache")]
 	public class ServiceC : IServiceC
 	{
-
 		#region Membres de IServiceC
 
 		[Cache]

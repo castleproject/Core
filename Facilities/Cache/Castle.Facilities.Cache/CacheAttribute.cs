@@ -30,9 +30,7 @@ namespace Castle.Facilities.Cache
 		}
 
 		public CacheAttribute()
-		{
-			_cacheManagerId = "MemoryCacheManager";
-		}
+		{}
 
 		public CacheAttribute(string cacheManagerId)
 		{

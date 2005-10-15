@@ -74,7 +74,7 @@ namespace Castle.Facilities.Cache.Tests
 			IServiceD serviceD = _container[typeof(IServiceD)] as IServiceD;
 
 			// MethodeA
-			FifoCacheManager fifoCacheManager = _container["FifoCacheManager"] as FifoCacheManager;
+			FifoCacheManager fifoCacheManager = _container["Another.Cache"] as FifoCacheManager;
 			Assert.IsTrue(fifoCacheManager.KeyList.Count==0);
 
 			serviceD.MyMethodA(2, 5);
@@ -106,7 +106,7 @@ namespace Castle.Facilities.Cache.Tests
 			IServiceB serviceB= _container[typeof(IServiceB)] as IServiceB;
 
 			// MethodeA
-			FifoCacheManager fifoCacheManager = _container["FifoCacheManager"] as FifoCacheManager;
+			FifoCacheManager fifoCacheManager = _container["Another.Cache"] as FifoCacheManager;
 			Assert.IsTrue(fifoCacheManager.KeyList.Count==0);
 
 			serviceB.MyMethodA("cache", "serviceB", "MyMethodA");

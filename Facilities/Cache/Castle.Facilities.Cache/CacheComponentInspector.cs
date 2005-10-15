@@ -1,3 +1,4 @@
+using System.Configuration;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -135,7 +136,7 @@ namespace Castle.Facilities.Cache
 		{
 			if (model.Configuration == null) return;
 			
-			// Récuperer tt les fils cache
+			// Get all children of cahce node
 			IConfiguration cacheNode = model.Configuration.Children["cache"];
 
 			if (cacheNode == null) return;
@@ -146,7 +147,20 @@ namespace Castle.Facilities.Cache
 				{
 					foreach(IConfiguration methodNode in configuration.Children)
 					{
-						config.AddMethodName( methodNode.Value, configuration.Attributes["ref"] );
+						string methodName = string.Empty;
+
+						if (methodNode.Value==null)
+						{
+							methodName = methodNode.Attributes["name"];
+						}
+						else
+						{
+							methodName = methodNode.Value;
+						}
+						
+						AssertNameIsNotEmptyIsNotNull(methodName, model);
+
+						config.AddMethodName( methodName, configuration.Attributes["ref"] );
 					}
 				}
 			}
@@ -169,6 +183,16 @@ namespace Castle.Facilities.Cache
 			}
 		}
 
+		private void AssertNameIsNotEmptyIsNotNull(string name, ComponentModel model)
+		{
+			if (name == string.Empty || name==null)
+			{
+				string message = String.Format("The configuration nodes 'method' within 'cache' node " + 
+					"for the component '{0}' does not have a name. You can either provide the method name " + 
+					" as the 'method' node or provide an attribute 'name'", model.Name);
+				throw new ConfigurationException(message);
+			}
+		}
 
 		#endregion
 	}

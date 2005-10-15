@@ -24,7 +24,7 @@ namespace Castle.Facilities.Cache.Tests
 	{
 		#region IServiceD Members
 
-		[Cache("FifoCacheManager")]
+		[Cache("Another.Cache")]
 		public int MyMethodA(int a, int c)
 		{
 			int ret = a+c;
@@ -33,7 +33,7 @@ namespace Castle.Facilities.Cache.Tests
 			return (ret);
 		}
 
-		[Cache("MemoryCacheManager")]
+		[Cache("A.Cache")]
 		public string MyMethodB(string s)
 		{
 			string ret = "Hello "+s;
