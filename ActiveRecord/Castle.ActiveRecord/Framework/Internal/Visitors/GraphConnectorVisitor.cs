@@ -49,13 +49,21 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						if (child.Key != null)
 						{
-							// Joined subclass
-							model.JoinedClasses.Add(child);
+							//Needed for deep hierarchies
+							if (model.JoinedClasses.Contains(child) == false)
+							{
+								// Joined subclass
+								model.JoinedClasses.Add(child);
+							}
 						}
 						else
 						{
-							// Discriminator subclass
-							model.Classes.Add(child);
+							//Needed for deep hierarchies
+							if (model.Classes.Contains(child) == false)
+							{
+								// Discriminator subclass
+								model.Classes.Add(child);
+							}
 						}
 					}
 				}

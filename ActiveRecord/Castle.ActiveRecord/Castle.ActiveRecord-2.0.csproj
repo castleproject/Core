@@ -26,6 +26,14 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\bin\</OutputPath>
@@ -93,18 +101,6 @@
     <Reference Include="log4net">
       <Name>log4net</Name>
       <HintPath>..\lib\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate">
-      <Name>NHibernate</Name>
-      <HintPath>..\lib\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="Nullables">
-      <Name>Nullables</Name>
-      <HintPath>..\lib\Nullables.dll</HintPath>
-    </Reference>
-    <Reference Include="Nullables.NHibernate">
-      <Name>Nullables.NHibernate</Name>
-      <HintPath>..\lib\Nullables.NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -374,6 +370,20 @@
     <Compile Include="Framework\Validators\RegularExpressionValidator.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Z:\nhibernate-0.99.3.0\src\NHibernate\NHibernate-1.1.csproj">
+      <Project>{EE3B9473-7C64-44FF-B342-91B558D413A8}</Project>
+      <Name>NHibernate-1.1</Name>
+    </ProjectReference>
+    <ProjectReference Include="Z:\NHibernateContrib-0.99.3.0\src\Nullables.NHibernate\Nullables.NHibernate-1.1.csproj">
+      <Project>{35F82297-CAB4-4D57-AAB9-CBDB1F6B8841}</Project>
+      <Name>Nullables.NHibernate-1.1</Name>
+    </ProjectReference>
+    <ProjectReference Include="Z:\NHibernateContrib-0.99.3.0\src\Nullables\Nullables-1.1.csproj">
+      <Project>{9DEFA2EA-4A52-445A-8DA4-6531BD5D76B5}</Project>
+      <Name>Nullables-1.1</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
