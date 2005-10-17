@@ -17,7 +17,6 @@ namespace Castle.Model
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using System.Runtime.Serialization;
 
 	using Castle.Model.Configuration;
 
