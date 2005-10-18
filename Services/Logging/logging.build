@@ -41,6 +41,9 @@
 	
 	<target name="copy">
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
+		<copy file="${bin.dir}/Castle.Services.Logging.log4netIntegration.dll" todir="../bin" />
+		<copy file="${bin.dir}/Castle.Services.Logging.NLogIntegration.dll" todir="../bin" />
+		<copy file="${bin.dir}/Castle.Services.Logging.Web.dll" todir="../bin" />
 	</target>
 	
 	<target name="compile" depends="init">
