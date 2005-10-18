@@ -14,30 +14,28 @@
 
 namespace Castle.Facilities.Logging.Tests.Classes
 {
-    using Castle.Services.Logging;
+	using Castle.Services.Logging;
 
-    /// <summary>
+	/// <summary>
 	/// Summary description for LoggingComponent.
 	/// </summary>
 	public class LoggingComponent
 	{
-		public LoggingComponent( ILogger logger )
+		private ILogger _logger;
+
+		public LoggingComponent(ILogger logger)
 		{
 			_logger = logger;
 		}
 
-        [Log]
-        public virtual void HelloWorld()
-        {
-            Logger.Info("Hello world");
-        }
+		public void DoSomething()
+		{
+			Logger.Info("Hello world");
+		}
 
-        ILogger Logger
-        {
-            get
-            {
-                return _logger;
-            }
-        } ILogger _logger;
+		public ILogger Logger
+		{
+			get { return _logger; }
+		}		
 	}
 }

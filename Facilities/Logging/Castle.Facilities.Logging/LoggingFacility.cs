@@ -16,16 +16,15 @@ namespace Castle.Facilities.Logging
 {
 	using System;
 	using System.Configuration;
-	using Castle.Facilities.Logging.log4netIntegration;
-	using Castle.Facilities.Logging.NLogIntegration;
-	using Castle.Model.Configuration;
+
 	using Castle.Services.Logging;
+
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.SubSystems.Conversion;
 	
 	/// <summary>
-	/// 
+	/// The supported <see cref="ILogger"/> implementations
 	/// </summary>
 	public enum LoggerImplementation
 	{
@@ -33,126 +32,125 @@ namespace Castle.Facilities.Logging
 		Console,
 		Diagnostics,
 		Web,
-		Log4net,
 		NLog,
+		Log4net,
 		Custom
 	}
 
 	/// <summary>
 	/// A facility for logging support.
+	/// 
+	/// TODO: Document its inner working and configuration scheme
 	/// </summary>
 	public class LoggingFacility : AbstractFacility
 	{
-		private IConversionManager converter;
+		private static readonly String Log4NetLoggerFactoryTypeName = "Castle.Services.Logging.log4netIntegration.Log4netFactory, Castle.Services.Logging.log4netIntegration";
+		private static readonly String NLogLoggerFactoryTypeName = "Castle.Services.Logging.NLogIntegration.NLogFactory, Castle.Services.Logging.NLogIntegration";
+
+		private ITypeConverter converter;
 		private ILoggerFactory factory;
-		private LoggerImplementation defaultLogImpl;
-		private bool allowInterception = false;
 
 		public LoggingFacility()
 		{
-            defaultLogImpl = LoggerImplementation.Console;
 		}
 
 		protected override void Init()
 		{
-			converter = Kernel.GetSubSystem( 
-				SubSystemConstants.ConversionManagerKey ) as IConversionManager;
+			SetUpTypeConverter();
 
-			ConfigureFactory();
-			EnableKernelLoggerInjection();
-            EnableInterception();
+			ReadConfigurationAndCreateLoggerFactory();
+
+			RegisterDefaultILogger();
+
+			RegisterSubResolver();
 		}
 
-		private void EnableKernelLoggerInjection()
+		private void RegisterDefaultILogger()
 		{
-			Kernel.AddComponent("fac.logging.logger", typeof(ILogger), typeof(NullLogger));
-			// This is going to be deffered
-			// this.Kernel.Resolver.DependencyResolving += new Castle.MicroKernel.DependancyDelegate(InjectClassLogger);
+			Kernel.AddComponentInstance( "ilogger.default", typeof(ILogger), factory.Create("Default") );
 		}
 
-        private void ConfigureFactory()
+		private void RegisterSubResolver()
+		{
+			Kernel.Resolver.AddSubResolver( new LoggerResolver(factory) );
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void ReadConfigurationAndCreateLoggerFactory()
         {
-            if(FacilityConfig == null)
-            {
-                throw new ConfigurationException("The logging facility requires an external configuration");
-            }
+			LoggerImplementation logApi = LoggerImplementation.Console;
 
-            IConfiguration defaultNode = FacilityConfig.Children["default"];
-                
-
-            String enableInterceptionAtt = defaultNode.Attributes["enableInterception"];
-            String typeAtt = defaultNode.Attributes["type"];				
-            String customAtt = defaultNode.Attributes["custom"];
-
-            if (enableInterceptionAtt != null)
-            {
-                allowInterception = (bool) converter.PerformConversion( 
-                    enableInterceptionAtt, typeof(bool) );
-            }
+            String typeAtt = FacilityConfig.Attributes["loggingApi"];				
+            String customAtt = FacilityConfig.Attributes["customLoggerFactory"];
 
             if (typeAtt != null)
             {
-                defaultLogImpl = (LoggerImplementation) Enum.Parse(
-                    typeof(LoggerImplementation), typeAtt, true);
+                logApi = (LoggerImplementation) 
+					converter.PerformConversion( typeAtt, typeof(LoggerImplementation) );
             }
 
-            if(defaultLogImpl == LoggerImplementation.Custom)
-            {
-                Type customLoggerFactoryType = null;
-
-                if (customAtt != null)
-                {
-                    customLoggerFactoryType = (Type) converter.PerformConversion( customAtt, typeof(Type) );
-                }
-
-            
-                factory = (ILoggerFactory) Activator.CreateInstance(customLoggerFactoryType);
-            
-                if(factory == null)
-                {
-                    throw new ConfigurationException("{0} does not implement ILoggerFactory");
-                }
-            }
-            else
-            {
-                switch(defaultLogImpl)
-                {
-                    case LoggerImplementation.Console:
-                        this.Kernel.AddComponent("logging.factory", typeof(ILoggerFactory), typeof(ConsoleFactory));
-                        break;
-                    case LoggerImplementation.Log4net:
-                        this.Kernel.AddComponent("logging.factory", typeof(ILoggerFactory), typeof(log4netFactory));
-                        break;
-                    case LoggerImplementation.NLog:
-                        this.Kernel.AddComponent("logging.factory", typeof(ILoggerFactory), typeof(NLogFactory));
-                        break;
-                }
-                factory = this.Kernel[typeof(ILoggerFactory)] as ILoggerFactory;
-            }
+			CreateProperLoggerFactory(logApi, customAtt);
         }
 
+		private void CreateProperLoggerFactory(LoggerImplementation logApi, String customType)
+		{
+			Type loggerFactoryType = null;
 
-        private void EnableInterception()
-        {
-            if(this.allowInterception)
-            {
-                Kernel.AddComponent("logging.interceptor", typeof(LoggingInterceptor));
-                Kernel.ComponentModelBuilder.AddContributor( new LoggingComponentInspector() );
-            }
-        }
+			if(logApi == LoggerImplementation.Console)
+			{
+				loggerFactoryType = typeof(ConsoleFactory);
+			}
+			else if(logApi == LoggerImplementation.Log4net)
+			{
+				loggerFactoryType = (Type) 
+					converter.PerformConversion(Log4NetLoggerFactoryTypeName, typeof(Type));
+			}
+			else if(logApi == LoggerImplementation.NLog)
+			{
+				loggerFactoryType = (Type) 
+					converter.PerformConversion(NLogLoggerFactoryTypeName, typeof(Type));
+			}
+			else if(logApi == LoggerImplementation.Diagnostics)
+			{
+				
+			}
+			else if(logApi == LoggerImplementation.Null)
+			{
+				
+			}
+			else if(logApi == LoggerImplementation.Web)
+			{
+				
+			}
+			else if(logApi == LoggerImplementation.Custom)
+			{
+				if (customType == null)
+				{
+					throw new ConfigurationException("If you specify loggingApi='custom' " + 
+						"then you must use the attribute customLoggerFactory to inform the " + 
+						"type name of the custom logger factory");
+				}
 
-//		private void InjectClassLogger(ComponentModel client, DependencyModel model, ref object dependency)
-//		{
-//			if (model.TargetType == typeof(ILogger))
-//			{
-//				string clientLoggingKey = String.Format("{0}.{1}", client.Implementation.ToString(), model.DependencyKey);
-//				if (!Kernel.HasComponent(clientLoggingKey))
-//				{
-//					ILogger logger = factory.Create(client.Implementation);
-//					Kernel.AddComponentInstance(clientLoggingKey, logger);
-//				}
-//				dependency = (ILogger) Kernel[clientLoggingKey];
-//			}
-//		}
+				loggerFactoryType = (Type) 
+					converter.PerformConversion( customType, typeof(Type) );
+
+				if (!typeof(ILoggerFactory).IsAssignableFrom(loggerFactoryType))
+				{
+					throw new FacilityException("The specified type '" + customType + 
+						"' does not implement ILoggerFactory");
+				}
+			}
+
+			factory = (ILoggerFactory) Activator.CreateInstance(loggerFactoryType);
+		}
+
+		private void SetUpTypeConverter()
+		{
+			converter = Kernel.GetSubSystem( 
+				SubSystemConstants.ConversionManagerKey ) as IConversionManager;
+		}
 	}
+
 }

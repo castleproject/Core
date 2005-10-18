@@ -16,8 +16,10 @@ namespace Castle.Facilities.Logging.Tests
 {
     using System;
     using System.IO;
+
     using Castle.Windsor;
-    using NUnit.Framework;
+    
+	using NUnit.Framework;
 
     /// <summary>
     /// Summary description for NLogFacilityTestts.
@@ -32,7 +34,7 @@ namespace Castle.Facilities.Logging.Tests
         [SetUp]
         public void Setup()
         {
-            container = base.CreateConfiguredContainer("console", "", "true");
+            container = base.CreateConfiguredContainer(LoggerImplementation.NLog);
             
 
             outWriter.GetStringBuilder().Length = 0;
@@ -51,15 +53,13 @@ namespace Castle.Facilities.Logging.Tests
         [Test]
         public void SimpleTest() 
         {
-            String expectedLogOutput = String.Format("[Debug] '{0}' Method Name: HelloWorld\r\n", typeof(LoggingInterceptor).ToString());
-            String actualLogOutput = "";
-
             container.AddComponent("component", typeof(Classes.LoggingComponent));
             Classes.LoggingComponent test = container["component"] as Classes.LoggingComponent;
 
-            test.HelloWorld();
+            test.DoSomething();
 
-            actualLogOutput = outWriter.GetStringBuilder().ToString();
+			String expectedLogOutput = String.Format("[Info] '{0}' Hello world\r\n", typeof(Classes.LoggingComponent).FullName);
+			String actualLogOutput = outWriter.GetStringBuilder().ToString();
             Assert.AreEqual(expectedLogOutput, actualLogOutput);
         }
     }

@@ -3,14 +3,11 @@
 <configuration>
 
 	<facilities>
-		<facility id="logging">
+		
+		<facility id="logging" 
+			loggingApi="NLog | Log4net | Custom" 
+			customLoggerFactory="typename, assemblyname" />
 			
-			<default 
-					enableInterception="true" 
-					type="NLog | Log4net | Custom" 
-					custom="typename, assemblyname" <!-- Only required if type="Custom": Must implement ILoggerFactory -->
-					/>
-		</facility>
 	</facilities>
 
 </configuration>

@@ -85,11 +85,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Services.Logging"
-                    Project = "{1AFAEC30-152C-43E2-B37C-E713419D20B8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
@@ -131,11 +126,6 @@
                 />
                 <File
                     RelPath = "ConsoleFacitlyTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ConsoleTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

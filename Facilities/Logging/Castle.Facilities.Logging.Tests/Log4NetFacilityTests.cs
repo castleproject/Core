@@ -32,8 +32,7 @@ namespace Castle.Facilities.Logging.Tests
         [SetUp]
         public void Setup()
         {
-            container = base.CreateConfiguredContainer("log4net", "", "true");
-            
+            container = base.CreateConfiguredContainer(LoggerImplementation.Log4net);            
 
             outWriter.GetStringBuilder().Length = 0;
             errorWriter.GetStringBuilder().Length = 0;
@@ -51,15 +50,13 @@ namespace Castle.Facilities.Logging.Tests
         [Test]
         public void SimpleTest() 
         {
-            String expectedLogOutput = String.Format("DEBUG {0} - Method Name: HelloWorld\r\n", typeof(LoggingInterceptor).ToString());
-            String actualLogOutput = "";
-
             container.AddComponent("component", typeof(Classes.LoggingComponent));
             Classes.LoggingComponent test = container["component"] as Classes.LoggingComponent;
 
-            test.HelloWorld();
+            test.DoSomething();
 
-            actualLogOutput = outWriter.GetStringBuilder().ToString();
+			String expectedLogOutput = String.Format("[Info] '{0}' Hello world\r\n", typeof(Classes.LoggingComponent).FullName);
+			String actualLogOutput = outWriter.GetStringBuilder().ToString();
             Assert.AreEqual(expectedLogOutput, actualLogOutput);
         }
 	}

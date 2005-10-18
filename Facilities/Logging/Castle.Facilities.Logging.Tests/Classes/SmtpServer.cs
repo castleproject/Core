@@ -16,23 +16,32 @@ namespace Castle.Facilities.Logging.Tests.Classes
 {
 	using System;
 
+	using Castle.Services.Logging;
+
+
 	public class SmtpServer : ISmtpServer
 	{
-		#region ISmtpServer Members
+		private ILogger logger;
+
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
 
 		public void Start()
 		{
+			Logger.Debug("Started");
 		}
 
 		public void Stop()
 		{
+			Logger.Debug("Stopped");
 		}
 
 		public void InternalSend(String from, String to, String contents)
 		{
-			
+			Logger.Info("InternalSend {0} {1} {2}", from, to, contents);
 		}
-
-		#endregion
 	}
 }

@@ -14,22 +14,25 @@
 
 namespace Castle.Facilities.Logging.Tests
 {
-    using Castle.MicroKernel.SubSystems.Configuration;
-    using Castle.Model.Configuration;
-    using Castle.Windsor;
+	using System;
+	
+	using Castle.Windsor;
+	
+	using Castle.Model.Configuration;
+	
+	using Castle.MicroKernel.SubSystems.Configuration;
 
     /// <summary>
 	/// Summary description for BaseTest.
 	/// </summary>
 	public abstract class BaseTest
 	{
-		public BaseTest()
+		protected virtual IWindsorContainer CreateConfiguredContainer(LoggerImplementation loggerApi)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
+			return CreateConfiguredContainer(loggerApi, String.Empty);
 		}
-        protected virtual IWindsorContainer CreateConfiguredContainer(string type, string custom, string interception)
+
+        protected virtual IWindsorContainer CreateConfiguredContainer(LoggerImplementation loggerApi, String custom)
         {
             IWindsorContainer container = new WindsorContainer(new DefaultConfigurationStore());
 
@@ -37,9 +40,8 @@ namespace Castle.Facilities.Logging.Tests
 
             IConfiguration main = confignode.Children.Add(new MutableConfiguration("default"));
 
-            main.Attributes.Add("type", type);
+            main.Attributes.Add("type", loggerApi.ToString());
             main.Attributes.Add("custom", custom);
-            main.Attributes.Add("enableInterception", interception);
 
             container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);
 
