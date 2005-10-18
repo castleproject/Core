@@ -159,24 +159,28 @@
 					
 					<!-- Facilities -->
 					<include name="Facilities/ActiveRecordIntegration"/>
-					<include name="Facilities/AutomaticTransactionManagement"/>
 					<include name="Facilities/AspectSharp"/>
+					<include name="Facilities/AutomaticTransactionManagement"/>
+					<include name="Facilities/BatchRegistration"/>
+					<include name="Facilities/Cache"/>
+					<include name="Facilities/Db4o"/>
 					<include name="Facilities/EnterpriseLibrary"/>
 					<include name="Facilities/EventWiring"/>
 					<include name="Facilities/FactorySupport"/>
-					<include name="Facilities/TypedFactory"/>
-					<include name="Facilities/BatchRegistration"/>
-					<include name="Facilities/Db4o"/>
 					<include name="Facilities/IBatisNet"/>
 					<include name="Facilities/Logging"/>
 					<include name="Facilities/ManagementExtensions"/>
 					<include name="Facilities/NHibernateIntegration"/>
 					<include name="Facilities/Prevalence"/>
+					<include name="Facilities/Remoting"/>
+					<include name="Facilities/Security"/>
 					<include name="Facilities/Startable"/>
+					<include name="Facilities/TypedFactory"/>
 					
 					<!-- Services -->
-					<include name="Services/TransactionMangement"/>
 					<include name="Services/Logging"/>
+					<include name="Services/Security"/>
+					<include name="Services/TransactionMangement"/>
 					
 					<!-- Tools -->
 					<include name="Tools/DynamicProxy"/>
