@@ -16,8 +16,10 @@ namespace Castle.Facilities.Logging.Tests
 {
     using System;
     using System.IO;
+
     using Castle.Windsor;
-    using NUnit.Framework;
+    
+	using NUnit.Framework;
 
     /// <summary>
 	/// Summary description for Log4NetFacilityTests.

@@ -46,6 +46,7 @@ namespace Castle.Facilities.Logging
 	{
 		private static readonly String Log4NetLoggerFactoryTypeName = "Castle.Services.Logging.log4netIntegration.Log4netFactory, Castle.Services.Logging.log4netIntegration";
 		private static readonly String NLogLoggerFactoryTypeName = "Castle.Services.Logging.NLogIntegration.NLogFactory, Castle.Services.Logging.NLogIntegration";
+		private static readonly String WebLoggerFactoryTypeName = "Castle.Services.Logging.Web.WebLoggerFactory, Castle.Services.Logging.Web";
 
 		private ITypeConverter converter;
 		private ILoggerFactory factory;
@@ -122,7 +123,8 @@ namespace Castle.Facilities.Logging
 			}
 			else if(logApi == LoggerImplementation.Web)
 			{
-				
+				loggerFactoryType = (Type) 
+					converter.PerformConversion(WebLoggerFactoryTypeName, typeof(Type));
 			}
 			else if(logApi == LoggerImplementation.Custom)
 			{

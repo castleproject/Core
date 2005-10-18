@@ -30,7 +30,7 @@
 		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
 		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
 		<copy todir="${bin.dir}">
-			<fileset basedir="${library.dir}">
+			<fileset basedir="${services.bin.dir}/../Logging/lib">
 				<include name="*.dll" />
 			</fileset>
 		</copy>

@@ -38,10 +38,8 @@ namespace Castle.Facilities.Logging.Tests
 
             MutableConfiguration confignode = new MutableConfiguration("facility");
 
-            IConfiguration main = confignode.Children.Add(new MutableConfiguration("default"));
-
-            main.Attributes.Add("type", loggerApi.ToString());
-            main.Attributes.Add("custom", custom);
+            confignode.Attributes.Add("loggingApi", loggerApi.ToString());
+            confignode.Attributes.Add("customLoggerFactory", custom);
 
             container.Kernel.ConfigurationStore.AddFacilityConfiguration("logging", confignode);
 

@@ -110,6 +110,11 @@
                     HintPath = "C:\devtools\nunit22\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
+                <Reference
+                    Name = "Castle.Services.Logging"
+                    AssemblyName = "Castle.Services.Logging"
+                    HintPath = "..\..\..\Services\bin\Castle.Services.Logging.dll"
+                />
             </References>
         </Build>
         <Files>
