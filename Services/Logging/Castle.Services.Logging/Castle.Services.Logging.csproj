@@ -94,11 +94,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ConsoleFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -27,7 +27,9 @@ namespace Castle.Services.Logging
 	/// This logger is not thread safe.
 	/// </remarks>
 	public class StreamLogger : LevelFilteredLogger, IDisposable
-	{
+	{		        
+		private StreamWriter writer;
+
 		/// <summary>
 		/// Creates a new <c>StreamLogger</c> with default encoding 
 		/// and buffer size. Initial Level is set to Debug.
@@ -85,6 +87,11 @@ namespace Castle.Services.Logging
 		{
 		}
 
+		~StreamLogger()
+		{
+			Dispose();
+		}
+
 		/// <summary>
 		/// Creates a new <c>StreamLogger</c> with 
 		/// Debug as default Level.
@@ -97,16 +104,8 @@ namespace Castle.Services.Logging
 			writer.AutoFlush = true;
 		}
 
-
 		protected override void Log(LoggerLevel level, String name, String message, Exception exception)
 		{
-//			Console.Out.WriteLine(string.Format("[{0}] '{1}' {2}", level.ToString(), name, message));
-//				
-//			if(exception != null)
-//			{
-//				Console.Out.WriteLine("[{0}] '{1}' {2}: {3} {4}", level.ToString(), name, exception.GetType().FullName, exception.Message, exception.StackTrace);
-//			}
-
 			writer.WriteLine("[{0}] '{1}' {2}", level.ToString(), name, message);
 
 			if (exception != null)
@@ -136,12 +135,14 @@ namespace Castle.Services.Logging
 			return null;
 		}
 
-
 		public void Dispose()
 		{
-			writer.Close();
+			if (writer != null)
+			{
+				writer.Close();
+			}
+			
+			writer = null;
 		}
-        
-		private StreamWriter writer;
 	}
 }

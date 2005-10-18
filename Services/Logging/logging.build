@@ -6,6 +6,9 @@
 	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="src.dir" value="${base.dir}/Castle.Services.Logging" />
+	<property name="src.log4net.dir" value="${base.dir}/Castle.Services.Logging.log4netIntegration" />
+	<property name="src.nlog.dir" value="${base.dir}/Castle.Services.Logging.NLogIntegration" />
+	<property name="src.web.dir" value="${base.dir}/Castle.Services.Logging.Web" />
 
 	<property name="test.src.dir" value="${base.dir}/Castle.Services.Logging.Tests" />
 	<property name="name" value="Castle.Services.Logging" />
@@ -22,6 +25,11 @@
 				<include name="*.dll" />
 			</fileset>
 		</delete>
+		<copy todir="${bin.dir}">
+			<fileset basedir="${library.dir}">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="../bin" />
 	</target>
@@ -34,7 +42,6 @@
 	<target name="copy">
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
 	</target>
-
 	
 	<target name="compile" depends="init">
 		<csc 
@@ -51,6 +58,72 @@
 			</nowarn>
 			
 			<sources basedir="${src.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/*.dll" />
+			</references>
+		</csc>
+		
+		<csc 
+			define="${strong}"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/Castle.Services.Logging.log4netIntegration.dll"
+			doc="${bin.dir}/Castle.Services.Logging.log4netIntegration.xml">
+			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+			
+			<sources basedir="${src.log4net.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/*.dll" />
+			</references>
+		</csc>
+		
+		<csc 
+			define="${strong}"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/Castle.Services.Logging.NLogIntegration.dll"
+			doc="${bin.dir}/Castle.Services.Logging.NLogIntegration.xml">
+			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+			
+			<sources basedir="${src.nlog.dir}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${bin.dir}/*.dll" />
+			</references>
+		</csc>
+		
+		<csc 
+			define="${strong}"
+			target="library" 
+			debug="${debug}"
+			optimize="${optimize}"
+			output="${bin.dir}/Castle.Services.Logging.Web.dll"
+			doc="${bin.dir}/Castle.Services.Logging.Web.xml">
+			
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
+			
+			<sources basedir="${src.web.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
 
