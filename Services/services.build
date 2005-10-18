@@ -10,7 +10,7 @@
 	<property name="debug" value="false" />
 	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 
-	<target name="build" depends="init, transaction, security" />
+	<target name="build" depends="init, transaction, security, logging" />
 	
 	<target name="init">
 		<delete dir="${bin.dir}" failonerror="false" />
@@ -26,6 +26,10 @@
 	
 	<target name="security">
 		<nant buildfile="Security/security.build" target="build" />
+	</target>
+	
+	<target name="logging">
+		<nant buildfile="Logging/logging.build" target="build" />
 	</target>
 	
 	<target name="dist">

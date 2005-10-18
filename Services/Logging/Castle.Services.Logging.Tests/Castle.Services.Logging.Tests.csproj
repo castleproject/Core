@@ -115,6 +115,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MixedLoggerTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "StreamLoggerTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
