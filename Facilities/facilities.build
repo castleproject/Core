@@ -109,7 +109,7 @@
 		<nant buildfile="EventWiring/default.build" inheritall="true" target="dist" />
 		<nant buildfile="FactorySupport/default.build" inheritall="true" target="dist" />
 		<nant buildfile="IBatisNet/default.build" inheritall="true" target="dist" /> 
-		<nant buildfile="NHibernate/default.build" inheritall="true" target="dist" />
+		<nant buildfile="NHibernateIntegration/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Prevalence/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Remoting/default.build" inheritall="true" target="dist" />
 		<nant buildfile="Startable/default.build" inheritall="true" target="dist" />

@@ -100,7 +100,7 @@
 				<include name="Facilities/Prevalence/lib"/>
 				<include name="Facilities/Db4o/lib"/>
 				<include name="Facilities/IBatisNet/lib"/>
-				<include name="Facilities/NHibernate/lib"/>
+				<include name="Facilities/NHibernateIntegration/lib"/>
 			</referencepaths>
 			<documenters>
 				<documenter name="MSDN">
@@ -170,7 +170,7 @@
 					<include name="Facilities/IBatisNet"/>
 					<include name="Facilities/Logging"/>
 					<include name="Facilities/ManagementExtensions"/>
-					<include name="Facilities/NHibernate"/>
+					<include name="Facilities/NHibernateIntegration"/>
 					<include name="Facilities/Prevalence"/>
 					<include name="Facilities/Startable"/>
 					
