@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}"
+        ProjectGuid = "{D680B5DB-B943-4BB5-891A-1695DEF86A3A}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Services.Logging.Tests"
+                AssemblyName = "Castle.Services.Logging.NLogIntegration"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Services.Logging.Tests"
+                RootNamespace = "Castle.Services.Logging.NLogIntegration"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -80,10 +80,14 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\publicassemblies"
+                    Name = "NLog"
+                    AssemblyName = "NLog"
+                    HintPath = "..\lib\NLog.dll"
+                />
+                <Reference
+                    Name = "NLog.DotNet"
+                    AssemblyName = "NLog.DotNet"
+                    HintPath = "..\lib\NLog.DotNet.dll"
                 />
                 <Reference
                     Name = "Castle.Services.Logging"
@@ -100,22 +104,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConsoleLoggerTestCase.cs"
+                    RelPath = "NLogFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DiagnosticsLoggerTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LevelFilteredLoggerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StreamLoggerTests.cs"
+                    RelPath = "NLogLogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

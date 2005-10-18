@@ -3,13 +3,13 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}"
+        ProjectGuid = "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Services.Logging.Tests"
+                AssemblyName = "Castle.Services.Logging.log4netIntegration"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Services.Logging.Tests"
+                RootNamespace = "Castle.Services.Logging.log4netIntegration"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -80,10 +80,9 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "nunit.framework.dll"
-                    AssemblyFolderKey = "hklm\publicassemblies"
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\lib\log4net.dll"
                 />
                 <Reference
                     Name = "Castle.Services.Logging"
@@ -100,22 +99,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConsoleLoggerTestCase.cs"
+                    RelPath = "Log4netFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DiagnosticsLoggerTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LevelFilteredLoggerTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StreamLoggerTests.cs"
+                    RelPath = "Log4netLogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
