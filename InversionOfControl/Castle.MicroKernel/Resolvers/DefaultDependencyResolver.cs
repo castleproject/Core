@@ -75,7 +75,7 @@ namespace Castle.MicroKernel.Resolvers
 
 			bool resolved = false;
 
-			foreach(IDependencyResolver subResolver in subResolvers)
+			foreach(ISubDependencyResolver subResolver in subResolvers)
 			{
 				if (subResolver.CanResolve(model, dependency))
 				{
@@ -126,7 +126,7 @@ namespace Castle.MicroKernel.Resolvers
 		/// <returns></returns>
 		public bool CanResolve(ComponentModel model, DependencyModel dependency)
 		{
-			foreach(IDependencyResolver subResolver in subResolvers)
+			foreach(ISubDependencyResolver subResolver in subResolvers)
 			{
 				if (subResolver.CanResolve(model, dependency))
 				{
