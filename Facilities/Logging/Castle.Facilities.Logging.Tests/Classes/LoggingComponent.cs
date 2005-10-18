@@ -26,7 +26,8 @@ namespace Castle.Facilities.Logging.Tests.Classes
 			_logger = logger;
 		}
 
-        public void HelloWorld()
+        [Log]
+        public virtual void HelloWorld()
         {
             Logger.Info("Hello world");
         }

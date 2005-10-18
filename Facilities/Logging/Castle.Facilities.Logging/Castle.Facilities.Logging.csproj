@@ -114,6 +114,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "LoggingComponentInspector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LoggingConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LoggingFacility.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

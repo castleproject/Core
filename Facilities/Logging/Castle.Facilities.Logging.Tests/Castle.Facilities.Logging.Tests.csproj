@@ -125,7 +125,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConsoleLoggerTestCase.cs"
+                    RelPath = "BaseTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConsoleFacitlyTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -139,13 +144,18 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "LoggingFacilityTestCase.cs"
+                    RelPath = "Log4NetFacilityTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "NLog.config"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "NLogFacilityTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Classes\ISmtpServer.cs"

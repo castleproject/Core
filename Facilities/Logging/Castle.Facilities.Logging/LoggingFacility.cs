@@ -16,6 +16,8 @@ namespace Castle.Facilities.Logging
 {
 	using System;
 	using System.Configuration;
+	using Castle.Facilities.Logging.log4netIntegration;
+	using Castle.Facilities.Logging.NLogIntegration;
 	using Castle.Model.Configuration;
 	using Castle.Services.Logging;
 	using Castle.MicroKernel;
@@ -42,12 +44,13 @@ namespace Castle.Facilities.Logging
 	public class LoggingFacility : AbstractFacility
 	{
 		private IConversionManager converter;
-		private ILoggerFactory customFactory;
-		private LoggerImplementation defaultLogImpl = LoggerImplementation.Console;
+		private ILoggerFactory factory;
+		private LoggerImplementation defaultLogImpl;
 		private bool allowInterception = false;
 
 		public LoggingFacility()
 		{
+            defaultLogImpl = LoggerImplementation.Console;
 		}
 
 		protected override void Init()
@@ -57,8 +60,7 @@ namespace Castle.Facilities.Logging
 
 			ConfigureFactory();
 			EnableKernelLoggerInjection();
-
-			Kernel.ComponentRegistered += new ComponentDataDelegate(Kernel_ComponentRegistered);
+            EnableInterception();
 		}
 
 		private void EnableKernelLoggerInjection()
@@ -94,57 +96,50 @@ namespace Castle.Facilities.Logging
                     typeof(LoggerImplementation), typeAtt, true);
             }
 
-            Type customLoggerFactoryType = null;
-
-            if (customAtt != null)
+            if(defaultLogImpl == LoggerImplementation.Custom)
             {
-                customLoggerFactoryType = (Type) converter.PerformConversion( customAtt, typeof(Type) );
-            }
+                Type customLoggerFactoryType = null;
+
+                if (customAtt != null)
+                {
+                    customLoggerFactoryType = (Type) converter.PerformConversion( customAtt, typeof(Type) );
+                }
 
             
-            customFactory = (ILoggerFactory) Activator.CreateInstance(customLoggerFactoryType);
+                factory = (ILoggerFactory) Activator.CreateInstance(customLoggerFactoryType);
             
-            if(customFactory == null)
-            {
-                throw new ConfigurationException("{0} does not implement ILoggerFactory");
+                if(factory == null)
+                {
+                    throw new ConfigurationException("{0} does not implement ILoggerFactory");
+                }
             }
-
-			
-
-            if (allowInterception)
+            else
             {
-                Kernel.AddComponent("logging.intercepter", typeof(LoggingInterceptor));
+                switch(defaultLogImpl)
+                {
+                    case LoggerImplementation.Console:
+                        this.Kernel.AddComponent("logging.factory", typeof(ILoggerFactory), typeof(ConsoleFactory));
+                        break;
+                    case LoggerImplementation.Log4net:
+                        this.Kernel.AddComponent("logging.factory", typeof(ILoggerFactory), typeof(log4netFactory));
+                        break;
+                    case LoggerImplementation.NLog:
+                        this.Kernel.AddComponent("logging.factory", typeof(ILoggerFactory), typeof(NLogFactory));
+                        break;
+                }
+                factory = this.Kernel[typeof(ILoggerFactory)] as ILoggerFactory;
             }
         }
 
-		private void Kernel_ComponentRegistered(String key, IHandler handler)
-		{
-			LoggerImplementation logImpl = defaultLogImpl;
-			Type customLoggerType = null;
-			bool enableAutomaticLogging = allowInterception;
 
-			String desiredLoggerAtt = handler.ComponentModel.Configuration.Attributes[ "logger" ];
-			String customLoggerAtt = handler.ComponentModel.Configuration.Attributes[ "customlogger" ];
-			String enableAutomaticLoggingAtt = handler.ComponentModel.Configuration.Attributes[ "automaticlogging" ];
-
-			if (desiredLoggerAtt != null)
-			{
-				logImpl = (LoggerImplementation) Enum.Parse(
-					typeof(LoggerImplementation), desiredLoggerAtt, true);
-			}
-
-			if (customLoggerAtt != null)
-			{
-				customLoggerType = (Type) converter.PerformConversion(
-					customLoggerAtt, typeof(Type));
-			}
-
-			if (enableAutomaticLoggingAtt != null)
-			{
-				enableAutomaticLogging = (bool) converter.PerformConversion(
-					enableAutomaticLoggingAtt, typeof(bool));
-			}
-		}
+        private void EnableInterception()
+        {
+            if(this.allowInterception)
+            {
+                Kernel.AddComponent("logging.interceptor", typeof(LoggingInterceptor));
+                Kernel.ComponentModelBuilder.AddContributor( new LoggingComponentInspector() );
+            }
+        }
 
 //		private void InjectClassLogger(ComponentModel client, DependencyModel model, ref object dependency)
 //		{
