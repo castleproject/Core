@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "bin\Debug\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
-                    OutputPath = "bin\Release\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -104,7 +104,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CustomPermission.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CustomPermissionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DenyPolicy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GenericExtendedPrincipal.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -114,7 +129,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IPermission.cs"
+                    RelPath = "ICustomPermission.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IExtendedPrincipal.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

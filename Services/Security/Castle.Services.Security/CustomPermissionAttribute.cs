@@ -14,25 +14,23 @@
 
 namespace Castle.Services.Security
 {
-	/// <summary>
-	/// Summary description for GenericPolicy.
-	/// </summary>
-	public class GenericPolicy : IPolicy
+	using System;
+	using System.Security;
+	using System.Security.Permissions;
+
+	[Serializable, AttributeUsage(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
+	public sealed class CustomPermissionAttribute : SecurityAttribute // CodeAccessSecurityAttribute
 	{
-		public GenericPolicy()
+		private readonly string permissionName;
+
+		public CustomPermissionAttribute(SecurityAction action, String permissionName) : base(action)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
-        }
-        #region IPolicy Members
+			this.permissionName = permissionName;
+		}
 
-        public bool Evaluate()
-        {
-            // TODO:  Add GenericPolicy.Evaluate implementation
-            return false;
-        }
-
-        #endregion
-    }
+		public override IPermission CreatePermission()
+		{
+			return new CustomPermission(permissionName);
+		}
+	}
 }

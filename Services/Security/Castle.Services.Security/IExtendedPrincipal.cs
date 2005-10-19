@@ -14,25 +14,11 @@
 
 namespace Castle.Services.Security
 {
-	/// <summary>
-	/// Summary description for GenericPolicy.
-	/// </summary>
-	public class GenericPolicy : IPolicy
+	using System;
+	using System.Security.Principal;
+
+	public interface IExtendedPrincipal : IPrincipal
 	{
-		public GenericPolicy()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-        }
-        #region IPolicy Members
-
-        public bool Evaluate()
-        {
-            // TODO:  Add GenericPolicy.Evaluate implementation
-            return false;
-        }
-
-        #endregion
-    }
+		bool HasPermission(String permissionName);
+	}
 }

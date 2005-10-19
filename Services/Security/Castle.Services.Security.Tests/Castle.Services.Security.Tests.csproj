@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "bin\Debug\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
-                    OutputPath = "bin\Release\"
+                    OutputPath = "..\bin\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -85,6 +85,11 @@
                     HintPath = "C:\Program Files\NUnit 2.2\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
+                <Reference
+                    Name = "Castle.Services.Security"
+                    Project = "{2C1055D7-FD24-4393-9C18-B90FF92EEF6C}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -95,7 +100,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "RoleAuthorizeTestCase.cs"
+                    RelPath = "CustomPermissionAttributeTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\MySecurityClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

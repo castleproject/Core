@@ -17,6 +17,10 @@
 	<include buildfile="../../common.inc" />
 
 	<target name="clean">
+		<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
+			<arg value="/u" />
+			<arg value="${name}" />
+		</exec>
 		<delete>
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll" />
@@ -29,12 +33,23 @@
 	<target name="init" depends="clean">
 	</target>
 
-	<target name="build" depends="init,tests.run,copy" />
+	<target name="build" depends="init,tests.run,install,copy" />
 	
 	<target name="copy">
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
 	</target>
-
+	
+	<target name="install" depends="compile">
+		<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
+			<arg value="/i" />
+			<arg value="${assembly.name}" />
+		</exec>
+		<exec program="${caspol.file}" failonerror="true" verbose="true" workingdir="${base.dir}">
+			<arg value="-machine" />
+			<arg value="-addpset" />
+			<arg value="castlepermissionset.xml" />
+		</exec>
+	</target>
 	
 	<target name="compile" depends="init">
 		<csc 
