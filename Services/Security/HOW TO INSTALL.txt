@@ -10,4 +10,8 @@ Then add the permission set to the machine policy
 
 > caspol -machine -addpset castlepermissionset.xml
 
+To remove the permission set use
+
+> caspol -machine -rempset CastlePermissionSet
+
 

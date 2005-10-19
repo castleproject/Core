@@ -17,6 +17,12 @@
 	<include buildfile="../../common.inc" />
 
 	<target name="clean">
+		<exec program="${caspol.file}" failonerror="false" verbose="true" workingdir="${base.dir}">
+			<arg value="-quiet" />
+			<arg value="-machine" />
+			<arg value="-rempset" />
+			<arg value="CastlePermissionSet" />
+		</exec>
 		<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
 			<arg value="/u" />
 			<arg value="${name}" />
@@ -33,7 +39,7 @@
 	<target name="init" depends="clean">
 	</target>
 
-	<target name="build" depends="init,tests.run,install,copy" />
+	<target name="build" depends="init,install,tests.run,copy" />
 	
 	<target name="copy">
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
@@ -45,6 +51,7 @@
 			<arg value="${assembly.name}" />
 		</exec>
 		<exec program="${caspol.file}" failonerror="true" verbose="true" workingdir="${base.dir}">
+			<arg value="-quiet" />
 			<arg value="-machine" />
 			<arg value="-addpset" />
 			<arg value="castlepermissionset.xml" />
