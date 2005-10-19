@@ -27,11 +27,12 @@ namespace Castle.MonoRail.Framework
 	{
 		private IDictionary boundInstances = new ListDictionary();
 
-		private DataBinder binder;
-
 		private NameValueCollection queryParams;
 		private NameValueCollection formParams;
 		private NameValueCollection allParams;
+
+		protected DataBinder binder;
+
 
 		public SmartDispatcherController()
 		{
