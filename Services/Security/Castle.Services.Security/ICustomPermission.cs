@@ -15,9 +15,9 @@
 namespace Castle.Services.Security
 {
 	/// <summary>
-	/// Summary description for IPermission.
+	/// Summary description for ICustomPermission.
 	/// </summary>
-	public interface IPermission
+	public interface ICustomPermission
 	{
 		
 	}
