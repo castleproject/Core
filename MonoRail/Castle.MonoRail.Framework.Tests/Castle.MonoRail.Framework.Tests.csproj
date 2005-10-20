@@ -115,6 +115,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DataBinderTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DefaultControllerFactoryTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -16,6 +16,60 @@ Core:
 - Added DataBindAttribute.Exclude - A comma separated list of property names 
   to exclude from databinding (kudos to Chad Humphries)
 
+- Support for smart arrays (aside from primitives) (kudos do Ahmed)
+
+  Quoting the explanation:
+  
+Suppose you have this class:
+
+ 
+class Person
+{
+  public string Name {get;set;}
+
+  public int Age {get;set;}
+}
+
+With the following view 
+
+  <input name="Person[0].Name"   value="John">
+  <input name="Person[0].Age"    value="30">
+  <input name="Person[1].Name"   value="Mary">
+  <input name="Person[1].Age"    value="25">
+
+Now you can specify the DataBinderAttribute to an array element in your controller:
+
+public void SavePeople( [DataBinder(Prefix=”People”)] Person[] people )
+{
+  // you should be able to access the people as an Person array
+
+  Assert.IsTrue( people[0].Name == “John” );
+  Assert.IsTrue( people[1].Name == “Mary” );
+}
+
+There are a couple extra things, first you can specify an “ignore” attribute to any element in which that case the data binder will completely ignore the element
+
+  <input name="Person[0].Name"   value="John">
+  <input name="Person[0].Age"    value="30">
+  <input name="Person[0]@ignore" value="yes">
+  <input name="Person[1].Name"   value="Mary">
+  <input name="Person[1].Age"    value="25">
+
+In the previous html code, the people array in the controller will only have one element (Mary).
+
+Notice that I reserved the @ sign as a special character to add metadata to any element, right now the only attributes supported are “ignore” and “count”.
+
+The count attribute serves as a performance optimization when your elements are keyed using sequential integers, for example:
+
+  <input name="Person@count"   value="5">
+  <input name="Person[0].Name" value="John">
+  <input name="Person[1].Name" value="James">
+  <input name="Person[2].Name" value="Jeff">
+  <input name="Person[3].Name" value="Geoff">
+  <input name="Person[4].Name" value="Jeffrey">
+
+   
+
 
 Scaffolding support:
 

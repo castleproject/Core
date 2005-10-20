@@ -16,10 +16,11 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Web;
+	using System.Reflection;
+	using System.Globalization;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using System.Globalization;
-	using System.Reflection;
+	using System.Text.RegularExpressions;
 
 	/// <summary>
 	/// A DataBinder can be used to map properties from 
@@ -31,21 +32,31 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public class DataBinder
 	{
-		private static readonly int DefaultNestedLevel = 3;
-		private static readonly BindingFlags PropertiesBindingFlags = BindingFlags.Static | 
-			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+		protected internal static readonly String MetadataIdentifier = "@";
+		protected internal static readonly String IgnoreAttribute = MetadataIdentifier + "ignore";
+		protected internal static readonly String CountAttribute = MetadataIdentifier + "count";
+		protected internal static readonly String Yes = "yes";
+		protected internal static readonly int DefaultNestedLevelsLeft = 3;
+		protected internal static readonly BindingFlags PropertiesBindingFlags = 
+			BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
 		private String root = null;
 		private IRailsEngineContext context;
+		
+		#region Constructors
 		
 		public DataBinder(IRailsEngineContext context)
 		{
 			this.context = context;
 		}
 
+		#endregion
+
+		#region BindObject family
+
 		public object BindObject(Type instanceType)
 		{
-			return BindObject(instanceType, String.Empty, context.Params, context.Request.Files, null, DefaultNestedLevel, String.Empty);
+			return BindObject(instanceType, String.Empty, context.Params, context.Request.Files, null, DefaultNestedLevelsLeft, String.Empty);
 		}
 
 		public object BindObject(Type instanceType, String paramPrefix, IList errorList, int nestedLevel, String excludedProperties)
@@ -59,9 +70,94 @@ namespace Castle.MonoRail.Framework
 			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
 			if (root == null) root = instanceType.Name;
 
-			object instance = Activator.CreateInstance(instanceType);
+			if( IgnoreElement( paramList, paramPrefix ) ) return null;
 
-			return BindObjectInstance(instance, paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties);
+			if(instanceType.IsArray)
+			{
+				return BindObjectArrayInstance(instanceType, paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties);
+			}
+			else
+			{
+				return BindObjectInstance(CreateInstance(instanceType), paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties);
+			}			
+		}
+
+		#endregion
+		
+		#region CreateInstance 
+		 
+		protected virtual object CreateInstance(Type t)
+		{
+			return Activator.CreateInstance(t);
+		}
+		
+		protected virtual object CreateArrayElementInstance(Type instanceType, NameValueCollection paramsList, string paramPrefix)
+		{
+			return Activator.CreateInstance( instanceType.GetElementType() );
+		}
+		
+		#endregion
+		
+		#region BindObjectInstance
+		
+		public object[] BindObjectArrayInstance(Type instanceType, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList, int nestedLevelsLeft, String excludedProperties)
+		{
+			if( IgnoreElement( paramList, paramPrefix ) ) return null;
+			
+			ArrayList bindArray = new ArrayList();
+	
+			// check if a count attribute is present, if so we assume the
+			// params are in order i.e.
+			// param[0], param[1], ... param[count-1]
+			// otherwise we have to find all uniques id for that identifier
+			// which is probably slower but is more flexible
+			string countBeforeCast = paramList[paramPrefix + CountAttribute ];			
+			if( countBeforeCast != null )
+			{
+				Int32 count = System.Convert.ToInt32( countBeforeCast );					
+				
+				// if count > paramList.Count that means that there is a problem
+				// in the count variable
+				if( count > paramList.Count ) count = paramList.Count;
+					
+				for(int i=0; i < count; i++)
+				{
+					String arrayParamPrefix = paramPrefix + "[" + i + "]";
+
+					AddArrayInstance(bindArray, instanceType, arrayParamPrefix, 
+						paramList, files, errorList, nestedLevelsLeft, excludedProperties );											
+				}				
+			}
+			else
+			{
+				String[] uniquePrefixes = Grep( paramList.AllKeys, "^" + Regex.Escape( paramPrefix ) + @"\[(.*?)]", 1 );
+
+				foreach( string prefix in uniquePrefixes )
+				{
+					string arrayParamPrefix = paramPrefix + "[" + prefix + "]";					
+					AddArrayInstance(bindArray, instanceType, arrayParamPrefix, 
+						paramList, files, errorList, nestedLevelsLeft, excludedProperties );
+				}				
+			}
+						
+			return (object[]) bindArray.ToArray( instanceType.GetElementType() );		
+		}
+
+		private void AddArrayInstance( ArrayList bindArray, Type instanceType, string arrayParamPrefix, NameValueCollection paramList, IDictionary files, IList errorList, int nestedLevelsLeft, string excludedProperties )
+		{
+			if( !IgnoreElement( paramList, arrayParamPrefix ) )
+			{
+				object instance = CreateArrayElementInstance( instanceType, paramList, arrayParamPrefix );
+				BindObjectInstance( instance, 
+					arrayParamPrefix, 
+					paramList, 
+					files, 
+					errorList, 
+					nestedLevelsLeft, 
+					excludedProperties );	
+				bindArray.Add( instance );
+			}
 		}
 
 		public object BindObjectInstance(object instance, String paramPrefix)
@@ -69,7 +165,7 @@ namespace Castle.MonoRail.Framework
 			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
 			return InternalRecursiveBindObjectInstance(instance,  paramPrefix, context.Params, context.Request.Files, 
-				null, 0, DefaultNestedLevel, string.Empty);
+				null, DefaultNestedLevelsLeft, string.Empty);
 		}
 
 		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
@@ -77,7 +173,7 @@ namespace Castle.MonoRail.Framework
 		{
 			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
-			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList,  0, DefaultNestedLevel, string.Empty );
+			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList, DefaultNestedLevelsLeft, string.Empty );
 		}
 
 		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
@@ -85,29 +181,35 @@ namespace Castle.MonoRail.Framework
 		{
 			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
-			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList,  0, nestedLevel, excludedProperties );
+			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties );
 		}
 
+		#endregion
+		
+		#region InternalBindObject
+		
 		private object InternalBindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel, string excludedProperties)
+			IDictionary files, IList errorList, int nestedLevelsLeft, string excludedProperties)
 		{
 			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
 			if (root == null) root = instanceType.Name;
 
-			object instance = Activator.CreateInstance(instanceType);
+			object instance = CreateInstance(instanceType);
 
 			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, 
-				errorList, curNestedLevel, maxNestedLevel, excludedProperties);
+				errorList, nestedLevelsLeft, excludedProperties);
 		}
-
+		
 		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int curNestedLevel, int maxNestedLevel, string excludedProperties)
+			IDictionary files, IList errorList, int nestedLevelsLeft, string excludedProperties)
 		{
-			if (curNestedLevel > maxNestedLevel)
+			if (--nestedLevelsLeft < 0)
 			{
 				return instance;
 			}
 			
+			if( IgnoreElement( paramList, paramPrefix ) ) return null;
+
 			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
 			String[] excludeList = CreateExcludeList(excludedProperties);
@@ -120,32 +222,34 @@ namespace Castle.MonoRail.Framework
 				}
 
 				Type propType = prop.PropertyType;
-				
-				bool simpleProperty = (!propType.IsPrimitive && 
-					!propType.IsArray && propType != typeof(String) && 
-					propType != typeof(Guid) && propType != typeof(DateTime) && 
-					propType != typeof(HttpPostedFile) && !typeof(ICollection).IsAssignableFrom(propType));
-				
+								
 				try
 				{
-					if (simpleProperty)
+					if ( !IsSimpleProperty(propType) )
 					{
 						// if the property is an object, we look if it is already instanciated
 						object value = prop.GetValue(instance, null);
 						
 						String propName = BuildParamName(paramPrefix, prop.Name);
 
-						if (value == null) // if it's not there, we create it
+						if( propType.IsArray )
+						{
+							value = BindObjectArrayInstance(
+										propType, propName, paramList, files, 										
+										errorList, nestedLevelsLeft, excludedProperties);
+							prop.SetValue(instance, value, null);
+						}
+						else if (value == null) // if it's not there, we create it
 						{
 							value = InternalBindObject(prop.PropertyType, propName, paramList, files, 
-								errorList, curNestedLevel + 1, maxNestedLevel, excludedProperties);
+								errorList, nestedLevelsLeft, excludedProperties);
 							
 							prop.SetValue(instance, value, null);
 						}
 						else // if the object already instanciated, then we use it 
 						{
 							InternalRecursiveBindObjectInstance(value, propName, paramList, files, 
-								errorList, curNestedLevel + 1, maxNestedLevel, excludedProperties);
+								errorList, nestedLevelsLeft, excludedProperties);
 						}
 					}
 					else
@@ -182,6 +286,28 @@ namespace Castle.MonoRail.Framework
 			return instance;
 		}
 
+		#endregion
+		
+		#region Helpers
+
+		private bool IsSimpleProperty(Type propType)
+		{
+			// When dealing with arrays or lists we want to check
+			// the type of the array element type
+			if( propType.IsArray || typeof(IList).IsAssignableFrom(propType) )
+				propType = propType.GetElementType();
+				
+			return propType.IsPrimitive ||
+				   propType == typeof(String) ||
+				   propType == typeof(Guid) && 
+				   propType == typeof(DateTime);
+		}
+		
+		private bool IgnoreElement( NameValueCollection paramList, string paramPrefix )
+		{		
+			return Yes.Equals( paramList.Get(paramPrefix + IgnoreAttribute) ); 
+		}
+
 		private String[] CreateExcludeList(String excludedProperties)
 		{
 			String[] excludeList = excludedProperties.Split(',');
@@ -206,7 +332,60 @@ namespace Castle.MonoRail.Framework
 				excludeList[i] = excludeList[i].Trim();
 			}
 		}
+				
+		private static String NormalizeParamPrefix(String paramPrefix)
+		{
+			return (paramPrefix != null && paramPrefix != String.Empty) ? 
+				paramPrefix.ToLower(CultureInfo.InvariantCulture) : String.Empty;
+		}
 
+		private static String BuildParamName(String prefix, String name)
+		{
+			if (prefix != String.Empty)
+			{
+				return String.Format("{0}.{1}", prefix, name);
+			}
+			else
+			{
+				return name;
+			}
+		}
+		/// <summary>
+		/// Similar to the grep in perl but with the option
+		/// of specifying if you want to capture the value to be returned
+		/// i.e. 
+		/// <code>
+		/// list = param[0], param[1], param[2]
+		/// Grep( list, "^param", 0 ) => [ "param[0]", "param[1]", "param[2]" ]
+		/// Grep( list, "^param\[(.*?)]", 1 ) => [ "0", "1", "2" ]
+		/// </code>
+		/// Note that it only returns distinct values
+		/// </summary>
+		public static string[] Grep( string[] values, string pattern, int captureNumber )
+		{
+			NameValueCollection results = new NameValueCollection();
+			Regex re = new Regex( pattern, RegexOptions.IgnoreCase );
+			
+			foreach(string value in values)
+			{
+				Match match = re.Match(value);
+
+				if( match.Success )
+				{
+					if( match.Groups.Count >= captureNumber )
+					{
+						results[ match.Groups[captureNumber].Value ] = String.Empty;
+					}
+				}
+			}
+
+			return results.AllKeys;
+		}
+				
+		#endregion
+		
+		#region Convert
+		
 		public static object Convert(Type desiredType, String value, String paramName, IDictionary files, IRailsEngineContext context)
 		{
 			return Convert(desiredType, new String[] { value }, paramName, files, context);
@@ -393,23 +572,7 @@ namespace Castle.MonoRail.Framework
 	
 			return newArray;
 		}
-
-		private static String NormalizeParamPrefix(String paramPrefix)
-		{
-			return (paramPrefix != null && paramPrefix != String.Empty) ? 
-				paramPrefix.ToLower(CultureInfo.InvariantCulture) : String.Empty;
-		}
-
-		private static String BuildParamName(String prefix, String name)
-		{
-			if (prefix != String.Empty)
-			{
-				return String.Format("{0}.{1}", prefix, name);
-			}
-			else
-			{
-				return name;
-			}
-		}
+		
+		#endregion		
 	}
 }
