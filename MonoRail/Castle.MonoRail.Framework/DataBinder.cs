@@ -70,30 +70,34 @@ namespace Castle.MonoRail.Framework
 			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
 			if (root == null) root = instanceType.Name;
 
-			if( IgnoreElement( paramList, paramPrefix ) ) return null;
+			if(ShouldIgnoreElement( paramList, paramPrefix )) return null;
 
 			if(instanceType.IsArray)
 			{
-				return BindObjectArrayInstance(instanceType, paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties);
+				return BindObjectArrayInstance(instanceType, paramPrefix, paramList, 
+					files, errorList, nestedLevel, excludedProperties);
 			}
 			else
 			{
-				return BindObjectInstance(CreateInstance(instanceType), paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties);
+				object instance = CreateInstance(instanceType, paramPrefix, paramList);
+				
+				return BindObjectInstance(instance, paramPrefix, paramList, files, 
+					errorList, nestedLevel, excludedProperties);
 			}			
 		}
-
-		#endregion
 		
+		#endregion
+			
 		#region CreateInstance 
 		 
-		protected virtual object CreateInstance(Type t)
+		protected virtual object CreateInstance( Type instanceType, string paramPrefix, NameValueCollection paramsList )
 		{
-			return Activator.CreateInstance(t);
+			return Activator.CreateInstance(instanceType);
 		}
 		
-		protected virtual object CreateArrayElementInstance(Type instanceType, NameValueCollection paramsList, string paramPrefix)
+		protected virtual object CreateArrayElementInstance( Type instanceType, string paramPrefix, NameValueCollection paramsList )
 		{
-			return Activator.CreateInstance( instanceType.GetElementType() );
+			return CreateInstance( instanceType.GetElementType(), paramPrefix, paramsList );
 		}
 		
 		#endregion
@@ -103,7 +107,7 @@ namespace Castle.MonoRail.Framework
 		public object[] BindObjectArrayInstance(Type instanceType, String paramPrefix, NameValueCollection paramList, 
 			IDictionary files, IList errorList, int nestedLevelsLeft, String excludedProperties)
 		{
-			if( IgnoreElement( paramList, paramPrefix ) ) return null;
+			if(ShouldIgnoreElement( paramList, paramPrefix )) return null;
 			
 			ArrayList bindArray = new ArrayList();
 	
@@ -112,7 +116,8 @@ namespace Castle.MonoRail.Framework
 			// param[0], param[1], ... param[count-1]
 			// otherwise we have to find all uniques id for that identifier
 			// which is probably slower but is more flexible
-			string countBeforeCast = paramList[paramPrefix + CountAttribute ];			
+			string countBeforeCast = paramList[paramPrefix + CountAttribute ];	
+		
 			if( countBeforeCast != null )
 			{
 				Int32 count = System.Convert.ToInt32( countBeforeCast );					
@@ -135,7 +140,8 @@ namespace Castle.MonoRail.Framework
 
 				foreach( string prefix in uniquePrefixes )
 				{
-					string arrayParamPrefix = paramPrefix + "[" + prefix + "]";					
+					String arrayParamPrefix = paramPrefix + "[" + prefix + "]";
+				
 					AddArrayInstance(bindArray, instanceType, arrayParamPrefix, 
 						paramList, files, errorList, nestedLevelsLeft, excludedProperties );
 				}				
@@ -144,18 +150,25 @@ namespace Castle.MonoRail.Framework
 			return (object[]) bindArray.ToArray( instanceType.GetElementType() );		
 		}
 
+		#endregion
+				
+		#region BindObjectInstance
+
 		private void AddArrayInstance( ArrayList bindArray, Type instanceType, string arrayParamPrefix, NameValueCollection paramList, IDictionary files, IList errorList, int nestedLevelsLeft, string excludedProperties )
 		{
-			if( !IgnoreElement( paramList, arrayParamPrefix ) )
+			if( !ShouldIgnoreElement( paramList, arrayParamPrefix ) )
 			{
-				object instance = CreateArrayElementInstance( instanceType, paramList, arrayParamPrefix );
+				object instance = CreateArrayElementInstance(
+					instanceType, arrayParamPrefix, paramList);
+				
 				BindObjectInstance( instance, 
 					arrayParamPrefix, 
 					paramList, 
 					files, 
 					errorList, 
 					nestedLevelsLeft, 
-					excludedProperties );	
+					excludedProperties );
+
 				bindArray.Add( instance );
 			}
 		}
@@ -194,7 +207,7 @@ namespace Castle.MonoRail.Framework
 			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
 			if (root == null) root = instanceType.Name;
 
-			object instance = CreateInstance(instanceType);
+			object instance = CreateInstance(instanceType, paramPrefix, paramList);
 
 			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, 
 				errorList, nestedLevelsLeft, excludedProperties);
@@ -299,11 +312,11 @@ namespace Castle.MonoRail.Framework
 				
 			return propType.IsPrimitive ||
 				   propType == typeof(String) ||
-				   propType == typeof(Guid) && 
+				   propType == typeof(Guid) || 
 				   propType == typeof(DateTime);
 		}
 		
-		private bool IgnoreElement( NameValueCollection paramList, string paramPrefix )
+		private bool ShouldIgnoreElement( NameValueCollection paramList, string paramPrefix )
 		{		
 			return Yes.Equals( paramList.Get(paramPrefix + IgnoreAttribute) ); 
 		}
@@ -557,7 +570,8 @@ namespace Castle.MonoRail.Framework
 		{
 			Type elemType	= desiredType.GetElementType();
 
-			// Fix for mod_mono issue where array values are passed as a comma seperated String
+			// Fix for mod_mono issue where array values are passed 
+			// as a comma seperated String
 			if(values.Length == 1 && (values[0].IndexOf(',') > -1))
 			{
 				values = values[0].Split(',');
