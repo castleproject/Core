@@ -23,7 +23,7 @@
 			<arg value="-rempset" />
 			<arg value="CastlePermissionSet" />
 		</exec>
-		<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
+		<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}">
 			<arg value="/u" />
 			<arg value="${name}" />
 		</exec>
