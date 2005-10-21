@@ -106,7 +106,7 @@ namespace Castle.MonoRail.Framework
 
 			if (candidates == null)
 			{
-				throw new ControllerException( String.Format("No action for '{0}' found", action) );
+				return null;
 			}
 
 			return SelectBestCandidate( 
