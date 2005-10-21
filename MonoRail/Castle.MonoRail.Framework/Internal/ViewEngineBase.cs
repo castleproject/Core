@@ -75,6 +75,15 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 
+		///<summary>
+		/// Processes the view - using the templateName to obtain the correct template
+		/// and returns the result as a string. No layout is applied!
+		/// </summary>
+		public virtual String ProcessTemplate(IRailsEngineContext context, Controller controller, String templateName)
+		{
+			throw new NotImplementedException();
+		}
+
 		#region Render Helpers 
 
 		/// <summary>

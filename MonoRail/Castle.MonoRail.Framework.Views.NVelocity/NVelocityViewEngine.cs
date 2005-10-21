@@ -153,6 +153,32 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 		}
 
+		///<summary>
+		/// Processes the view - using the templateName to obtain the correct template
+		/// and returns the result as a string. No layout is applied!
+		/// </summary>
+		public override String ProcessTemplate(IRailsEngineContext context, Controller controller, String viewName)
+		{
+			IContext ctx = CreateContext(context, controller);
+			
+			AdjustContentType(context);
+
+			StringWriter writer = new StringWriter();
+
+			try
+			{
+				Template template = velocity.GetTemplate(ResolveTemplateName(viewName));
+
+				template.Merge(ctx, writer);
+			}
+			catch (Exception ex)
+			{
+				throw new RailsException("Could not obtain view", ex);
+			}
+
+			return writer.ToString();
+		}
+
 		#endregion
 
 		public static IViewComponentFactory StaticViewComponentFactory

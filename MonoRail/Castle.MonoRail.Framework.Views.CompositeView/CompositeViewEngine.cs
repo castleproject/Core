@@ -77,6 +77,26 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 			_nvelocityViewEngine.ProcessContents(context, controller, contents);
 		}
 
+		///<summary>
+		/// Processes the view - using the templateName to obtain the correct template
+		/// and returns the result as a string. No layout is applied!
+		/// </summary>
+		public override String ProcessTemplate(IRailsEngineContext context, Controller controller, String viewName)
+		{
+			String output = String.Empty;
+
+			if (_nvelocityViewEngine.HasTemplate(viewName))
+			{
+				output = _nvelocityViewEngine.ProcessTemplate(context, controller, viewName);
+			}
+			else
+			{
+				throw new RailsException("Could not obtain NVelocity view: " + viewName);
+			}
+
+			return output;
+		}
+
 		#endregion
 
 		protected virtual bool ProcessVm(IRailsEngineContext context, Controller controller, string viewName)

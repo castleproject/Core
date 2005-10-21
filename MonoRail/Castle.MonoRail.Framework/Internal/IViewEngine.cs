@@ -60,5 +60,11 @@ namespace Castle.MonoRail.Framework
 		/// Wraps the specified content in the layout using the context to output the result.
 		/// </summary>
 		void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
+
+		///<summary>
+		/// Processes the view - using the templateName to obtain the correct template
+		/// and returns the result as a string. No layout is applied!
+		/// </summary>
+		String ProcessTemplate(IRailsEngineContext context, Controller controller, String templateName);
 	}
 }
