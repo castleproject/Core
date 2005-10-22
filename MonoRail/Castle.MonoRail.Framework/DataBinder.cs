@@ -221,7 +221,7 @@ namespace Castle.MonoRail.Framework
 				return instance;
 			}
 			
-			if( IgnoreElement( paramList, paramPrefix ) ) return null;
+			if( ShouldIgnoreElement( paramList, paramPrefix ) ) return null;
 
 			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
