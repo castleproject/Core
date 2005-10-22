@@ -15,7 +15,7 @@
 namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
-	
+	using System.IO;
 	using Castle.Services.Logging;
 
 	using NLog;
@@ -28,7 +28,8 @@ namespace Castle.Services.Logging.NLogIntegration
 	{
 		public NLogFactory()
 		{
-			LogManager.Configuration = new XmlLoggingConfiguration("nlog.config");
+		    FileInfo file = this.GetConfigFile("nlog.config");
+			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
 		}
 
 		public override ILogger Create(String name)

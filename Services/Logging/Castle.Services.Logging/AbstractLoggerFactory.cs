@@ -15,9 +15,11 @@
 namespace Castle.Services.Logging
 {
 	using System;
+	using System.IO;
+	using System.Web;
 
 
-	public abstract class AbstractLoggerFactory : ILoggerFactory
+    public abstract class AbstractLoggerFactory : ILoggerFactory
 	{
 		public AbstractLoggerFactory()
 		{
@@ -40,5 +42,32 @@ namespace Castle.Services.Logging
 		public abstract ILogger Create(String name);
 
 		public abstract ILogger Create(String name, LoggerLevel level);
+
+        /// <summary>
+        /// Gets the configuration file.
+        /// </summary>
+        /// <param name="filename">i.e. log4net.config</param>
+        /// <returns></returns>
+        protected FileInfo GetConfigFile(string filename)
+        {
+            FileInfo result;
+            if(IsWeb)
+            {
+                result = new FileInfo(HttpContext.Current.Request.PhysicalApplicationPath + filename);
+            }
+            else
+            {
+                result = new FileInfo(filename);
+            }
+            return result;
+        }
+
+        private bool IsWeb
+        {
+            get
+            {
+                return HttpContext.Current != null;
+            }
+        }
 	}
 }

@@ -29,7 +29,7 @@ namespace Castle.Services.Logging.log4netIntegration
 	{
 		public Log4netFactory()
 		{
-            FileInfo file = new FileInfo("log4net.config");
+            FileInfo file = this.GetConfigFile("log4net.config");
 			XmlConfigurator.ConfigureAndWatch(file);
 		}
 

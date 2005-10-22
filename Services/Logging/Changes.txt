@@ -3,3 +3,5 @@ Alpha Version 1.0.0
 - First release
 
 Future modifications - after the first release - shall be tracked in this file
+
+10.22.2005 - Added support for Web versus Windows config file locations
