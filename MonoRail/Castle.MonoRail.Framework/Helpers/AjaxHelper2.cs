@@ -444,7 +444,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#region Supporting methods
 
-		private String BuildRemoteFunction(String url, IDictionary options)
+		public String BuildRemoteFunction(String url, IDictionary options)
 		{
 			if (options == null)
 			{
@@ -456,7 +456,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return RemoteFunction(options);
 		}
 
-		protected String RemoteFunction(IDictionary options)
+		public String RemoteFunction(IDictionary options)
 		{
 			IDictionary jsOptions = new HybridDictionary();
 

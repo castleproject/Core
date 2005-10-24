@@ -23,7 +23,12 @@ namespace Castle.MonoRail.Framework
 		public RailsException(string message) : base(message)
 		{
 		}
-
+				
+		public RailsException(string message, params object[] args) 
+			: this( String.Format(message, args) )
+		{			
+		}
+			
 		public RailsException(string message, Exception innerException) : base(message, innerException)
 		{
 		}

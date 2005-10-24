@@ -24,6 +24,7 @@
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="Castle.MonoRail.ActiveRecordScaffold.dll" />
+				<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
 				<include name="Commons.dll" />
 				<include name="log4net.dll" />
 				<include name="NVelocity.dll" />
@@ -33,6 +34,7 @@
 				<include name="Iesi.Collections.dll" />
 				<include name="log4net.dll" />
 				<include name="NHibernate.dll" />
+				<include name="Nullables.dll" />
 			</fileset>
 		</copy>
 	</target>
@@ -54,12 +56,15 @@
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.ActiveRecordScaffold.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.ActiveRecordSupport.dll" />
 				<include name="${bin2.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin2.dir}/Commons.dll" />
 				<include name="${bin2.dir}/log4net.dll" />
 				<include name="${bin2.dir}/NVelocity.dll" />
 				<include name="${bin2.dir}/NHibernate.dll" />
 				<include name="${bin2.dir}/Iesi.Collections.dll" />
+				<include name="${bin2.dir}/Castle.Components.Common.TemplateEngine.dll" />
+				<include name="${bin2.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 			</references>
 		</csc>
 		<copy todir="../bin">

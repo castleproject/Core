@@ -15,9 +15,9 @@
 namespace Castle.MonoRail.Framework.Tests
 {
 	using System;
-	using System.Text;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.Text;
 
 	using NUnit.Framework;
 	
@@ -29,15 +29,35 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void SimpleDataBind()
 		{
-			string name = "John";
+			String name = "John";
 			int age = 32;
 			NameValueCollection args = new NameValueCollection();
 
 			args.Add("Person.Name", name);
 			args.Add("Person.Age", age.ToString());
 			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(
-				typeof (Person),"Person", args, null, null, 3, "");
+			object instance = binder.BindObject(typeof (Person), "Person",
+				args, null, null, 3, "");
+
+			Assert.IsNotNull(instance);
+			Person person = instance as Person;
+			Assert.IsNotNull(person);
+			Assert.AreEqual(person.Age, age);
+			Assert.AreEqual(person.Name, name);
+		}
+
+		[Test]
+		public void SimpleDataBindNoPrefix()
+		{
+			string name = "John";
+			int age = 32;
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("Name", name);
+			args.Add("Age", age.ToString());
+			DataBinder binder = new DataBinder(null);
+			object instance = binder.BindObject(typeof(Person), "", args,
+				null, null, 3, "");
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
@@ -55,8 +75,8 @@ namespace Castle.MonoRail.Framework.Tests
 			args.Add("Game.Scores", scores);
 			args.Add("Game.Opponents", opponents);
 			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(
-				typeof (Game),"Game",args,null,null,3,"");
+			object instance = binder.BindObject(typeof(Game), "Game", args,
+				null, null, 3, "");
 
 			Assert.IsNotNull(instance);
 			Game game = instance as Game;
@@ -80,8 +100,33 @@ namespace Castle.MonoRail.Framework.Tests
 
 			NameValueCollection args = ParseNameValueString(data);
 			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(
-				typeof (Person[]),"Person",args,null,null,3,"");
+			object instance = binder.BindObject(typeof(Person[]), "Person",
+				args, null, null, 3, "");
+
+			Assert.IsNotNull(instance);
+			Person[] sc = instance as Person[];
+			Assert.IsNotNull(sc);
+			Assert.IsTrue(sc.Length == 2);
+			Assert.AreEqual(sc[0].Age, 32);
+			Assert.AreEqual(sc[0].Name, "John");
+			Assert.AreEqual(sc[1].Age, 16);
+			Assert.AreEqual(sc[1].Name, "Mary");
+		}
+
+		[Test]
+		public void SimpleArrayDataBindNoPrefix()
+		{
+			string data = @" 
+				[0].Name = John
+				[0].Age  = 32
+				[1].Name = Mary
+				[1].Age  = 16
+			";
+
+			NameValueCollection args = ParseNameValueString(data);
+			DataBinder binder = new DataBinder(null);
+			object instance = binder.BindObject(typeof (Person[]), "",
+				args, null, null, 3, "");
 
 			Assert.IsNotNull(instance);
 			Person[] sc = instance as Person[];
@@ -104,22 +149,22 @@ namespace Castle.MonoRail.Framework.Tests
 			{
 				args = BuildComplexParamList(useCountAttribute);
 				args.Add("Team@ignore", "yes");
-				instance = binder.BindObject(
-					typeof (Team[]),"Team",args,null,null,3,"");
+				instance = binder.BindObject(typeof (Team[]), "Team",
+					args, null, null, 3, "");
 				Assert.IsNull(instance);
 
 				args.Remove("Team@ignore");
 				args.Add("Team[0]@ignore", "yes");
-				instance = binder.BindObject(
-					typeof (Team[]),"Team",args,null,null,3,"");
+				instance = binder.BindObject(typeof(Team[]), 
+					"Team", args, null, null, 3, "");
 				team = instance as Team[];
 				Assert.IsNotNull(team);
 				Assert.IsTrue(team.Length == 1);
 
 				args.Remove("Team[0]@ignore");
 				args.Add("Team[0].Members@ignore", "yes");
-				instance = binder.BindObject(
-					typeof (Team[]),"Team",args,null,null,3,"");
+				instance = binder.BindObject(typeof (Team[]), "Team",
+					args, null, null, 3, "");
 				team = instance as Team[];
 				Assert.IsNotNull(team);
 				Assert.IsNull(team[0].Members);
@@ -135,8 +180,8 @@ namespace Castle.MonoRail.Framework.Tests
 				NameValueCollection args = BuildComplexParamList(useCountAttribute);
 
 				DataBinder binder = new DataBinder(null);
-				object instance = binder.BindObject(
-					typeof (Team[]),"Team",args,null,null,3,"");
+				object instance = binder.BindObject(typeof (Team[]),"Team",
+					args,null,null,3,"");
 
 				Assert.IsNotNull(instance);
 				team = instance as Team[];
@@ -156,12 +201,10 @@ namespace Castle.MonoRail.Framework.Tests
 			}
 		}
 
-		/// <summary>
-		/// Test when count is too big
-		/// </summary>
 		[Test]
 		public void NonNumericIdAttribute()
 		{
+			// Test when count is too big
 			string data = @"
 				Person[john].Name = John
 				Person[james].Name = James
@@ -173,8 +216,8 @@ namespace Castle.MonoRail.Framework.Tests
 			NameValueCollection args = ParseNameValueString(data);
 
 			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(
-				typeof (Person[]),"Person",args,null,null,3,"");
+			object instance = binder.BindObject(typeof (Person[]),
+				"Person", args, null, null, 3, "");
 
 			Assert.IsNotNull(instance);
 			Person[] people = instance as Person[];
@@ -182,12 +225,10 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsTrue(people.Length == 3);
 		}
 
-		/// <summary>
-		/// Test when count is too big
-		/// </summary>
 		[Test]
 		public void CountAttribute()
 		{
+			// Test when count is too big
 			string data = @"
 				Person@count = 1000
 				Person[0].Name = John
@@ -199,8 +240,8 @@ namespace Castle.MonoRail.Framework.Tests
 			NameValueCollection args = ParseNameValueString(data);
 
 			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(
-				typeof (Person[]),"Person",args,null,null,3,"");
+			object instance = binder.BindObject(typeof (Person[]), "Person",
+				args, null, null, 3, "");
 
 			Assert.IsNotNull(instance);
 			Person[] people = instance as Person[];
@@ -209,8 +250,8 @@ namespace Castle.MonoRail.Framework.Tests
 
 			args["Person@count"] = "2";
 			binder = new DataBinder(null);
-			instance = binder.BindObject(
-				typeof (Person[]),"Person",args,null,null,3,"");
+			instance = binder.BindObject(typeof (Person[]), "Person",
+				args, null, null, 3, "");
 
 			Assert.IsNotNull(instance);
 			people = instance as Person[];
@@ -260,21 +301,18 @@ namespace Castle.MonoRail.Framework.Tests
 		/// 		Person[0].Age  = 32
 		/// 		Person[1].Name = Mary
 		/// 		Person[1].Age  = 16
-		/// 	"
-		/// 	
-		/// and returns a NameValueCollection with these elements
-		/// "Person@count"   => "2"
+		/// 	";
+		/// and return a NameValueCollection with these elements
+		/// 												"Person@count"   => "2"
 		/// "Person[0].Name" => "Gi   Joe"
 		/// "Person[0].Age"  => "32"
 		/// "Person[1].Name" => "Mary"
 		/// "Person[1].Age"  => "16" 		
+		/// Notice that any that leading and trailing spaces are discarded
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
-		/// <remarks>
-		/// Notice that any that leading and trailing spaces are discarded
-		/// </remarks>
-		private NameValueCollection ParseNameValueString(string data)
+		public static NameValueCollection ParseNameValueString(string data)
 		{
 			NameValueCollection args = new NameValueCollection();
 			data = data.Trim();
@@ -299,12 +337,10 @@ namespace Castle.MonoRail.Framework.Tests
 			if (args.Count == 0) return "";
 
 			StringBuilder sb = new StringBuilder();
-
 			for (int i = 0; i < args.Count; i++)
 			{
 				sb.Append(args[i]).Append(separator);
 			}
-
 			return sb.ToString(0, sb.Length - 1);
 		}
 
@@ -316,14 +352,13 @@ namespace Castle.MonoRail.Framework.Tests
 	class Game
 	{
 		private int[] _scores;
+		private string[] _opponents;
 
 		public int[] Scores
 		{
 			get { return _scores; }
 			set { _scores = value; }
 		}
-
-		private string[] _opponents;
 
 		public String[] Opponents
 		{
@@ -335,6 +370,8 @@ namespace Castle.MonoRail.Framework.Tests
 	class Team
 	{
 		private Game[] _games;
+		private string _name;
+		private Person[] _members;
 
 		public Game[] Games
 		{
@@ -342,15 +379,11 @@ namespace Castle.MonoRail.Framework.Tests
 			set { _games = value; }
 		}
 
-		private string _name;
-
 		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
 		}
-
-		private Person[] _members;
 
 		public Person[] Members
 		{
@@ -362,14 +395,13 @@ namespace Castle.MonoRail.Framework.Tests
 	class Person
 	{
 		private string _name;
+		private Int32 _age;
 
 		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
 		}
-
-		private Int32 _age;
 
 		public Int32 Age
 		{

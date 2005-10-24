@@ -124,6 +124,21 @@
                     AssemblyName = "Castle.ActiveRecord"
                     HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.ActiveRecordSupport"
+                    Project = "{2409063E-BE05-4596-A677-758096D1C759}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
+                    AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
+                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.TemplateEngine"
+                    AssemblyName = "Castle.Components.Common.TemplateEngine"
+                    HintPath = "..\bin\Castle.Components.Common.TemplateEngine.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -163,6 +178,11 @@
                 />
                 <File
                     RelPath = "Controllers\AccountPermissionController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ARDataBinderTestController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -231,6 +251,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\SimplePerson.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Views\blogs\newBlog.vm.old"
                     BuildAction = "None"
                 />
@@ -240,6 +265,10 @@
                 />
                 <File
                     RelPath = "Views\layouts\scaffold.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\rescues\DataBinderValidateBadData.vm"
                     BuildAction = "None"
                 />
             </Include>

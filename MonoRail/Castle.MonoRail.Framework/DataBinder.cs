@@ -70,9 +70,9 @@ namespace Castle.MonoRail.Framework
 			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
 			if (root == null) root = instanceType.Name;
 
-			if(ShouldIgnoreElement( paramList, paramPrefix )) return null;
+			if (ShouldIgnoreElement( paramList, paramPrefix )) return null;
 
-			if(instanceType.IsArray)
+			if (instanceType.IsArray)
 			{
 				return BindObjectArrayInstance(instanceType, paramPrefix, paramList, 
 					files, errorList, nestedLevel, excludedProperties);
@@ -381,6 +381,13 @@ namespace Castle.MonoRail.Framework
 			
 			foreach(string value in values)
 			{
+				// Note: I have this check here cause when using testsupport
+				// the paramList attribute passed to the databinder had a mixture
+				// of servervariables and post/query string params, and one of them
+				// was a null value, which cause an exception, I need to verify if 
+				// this is also true when running through IIS
+				if( value == null ) continue;
+				
 				Match match = re.Match(value);
 
 				if( match.Success )

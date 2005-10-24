@@ -188,7 +188,7 @@
                 />
                 <File
                     RelPath = "Templates\new.vm"
-                    BuildAction = "None"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Utils\CommonOperationUtils.cs"

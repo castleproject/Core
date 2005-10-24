@@ -23,7 +23,7 @@
 	<property name="optimize" value="true" />
 
 	<!-- brail removed just for a moment -->
-	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, composite, arscaffold, testsupport, samples, tests, generator" /> 
+	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, composite, arscaffold, testsupport, arsupport, samples, tests, generator" /> 
 	
 	<target name="clean">
 		<delete>
@@ -68,7 +68,6 @@
 
 		<delete dir="${doc.dir}" failonerror="false" />
 		<mkdir dir="${doc.dir}" />
-		
 	</target>
 	
 	<target name="framework" depends="init">
@@ -97,6 +96,10 @@
 
 	<target name="arscaffold" depends="init">
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="compile" />
+	</target>
+
+	<target name="arsupport" depends="init">
+		<nant buildfile="Castle.MonoRail.ActiveRecordSupport/default.build" inheritall="true" target="build" />
 	</target>
 
 	<target name="testsupport" depends="init">
@@ -130,6 +133,7 @@
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.ActiveRecordSupport/default.build" inheritall="true" target="test" />
 	</target>
 
 	<target name="generator" depends="init">

@@ -23,7 +23,9 @@
 	</target>
 
 	<target name="init" depends="clean">
-		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
+		<copy 
+			file="${test.src.dir}/App.config"
+			tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>
 
 	<target name="build" depends="init,compile" />
@@ -41,6 +43,10 @@
 				<warning number="1591" />
 				<warning number="1572" />
 			</nowarn>
+
+			<resources prefix="${name}" dynamicprefix="true">
+				<include name="**/*.vm" />
+			</resources>
 			
 			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />

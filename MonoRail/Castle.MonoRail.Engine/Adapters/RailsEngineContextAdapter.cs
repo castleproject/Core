@@ -21,6 +21,7 @@ namespace Castle.MonoRail.Engine.Adapters
 	using System.Web.Caching;
 	using System.Security.Principal;
 	using System.Web.SessionState;
+
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 

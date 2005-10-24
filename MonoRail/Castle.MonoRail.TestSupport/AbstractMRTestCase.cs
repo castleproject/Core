@@ -99,6 +99,24 @@ namespace Castle.MonoRail.TestSupport
 			response = host.Process( Request, writer );
 		}
 
+		/// <summary>
+		/// Performs a Post operation on 
+		/// </summary>
+		/// <param name="path">The resource being request, for example <c>home/index.rails</c></param>
+		/// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
+		public void DoPost(String path, params String[] postStringParams)
+		{
+			if (postStringParams.Length != 0) Request.PostParams = postStringParams;
+
+			outputBuffer.Length = 0;
+
+			Request.Url = path;
+
+			StringWriter writer = new StringWriter(outputBuffer);
+
+			response = host.Process( Request, writer );
+		}
+		
 		#endregion
 
 		#region Properties
@@ -175,7 +193,7 @@ namespace Castle.MonoRail.TestSupport
 		protected void AssertReplyContains(String contents)
 		{
 			Assert.IsTrue( Output.IndexOf(contents) != -1, 
-				"AssertReplyContains did not find the content '{0}'", contents );
+				"AssertReplyContains did not find the content '{0}'. Raw content {1}", contents, Output );
 		}
 
 		/// <summary>

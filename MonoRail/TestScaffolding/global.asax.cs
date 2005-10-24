@@ -38,7 +38,8 @@ namespace TestScaffolding
 
 			ActiveRecordStarter.Initialize( source, 
 			  typeof(Blog), typeof(Person), typeof(Customer), typeof(Account), 
-			  typeof(AccountPermission), typeof(ProductLicense) );
+			  typeof(AccountPermission), typeof(ProductLicense),
+			  typeof(SimplePerson) );
 		}
  
 		protected void Session_Start(Object sender, EventArgs e)
