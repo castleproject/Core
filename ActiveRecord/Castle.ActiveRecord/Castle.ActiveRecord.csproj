@@ -275,6 +275,7 @@
                 />
                 <File
                     RelPath = "Framework\ActiveRecord.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

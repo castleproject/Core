@@ -6,7 +6,7 @@
 	<property name="library.dir" value="${base.dir}/lib" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 	<property name="castle.model.dir" value="../../InversionOfControl/bin" />
-	<property name="netron.dir" value= "../../Deps/netron" />
+	<property name="netron.dir" value= "../../SharedLib/netron" />
 	
 	<property name="generator.name" value="Castle.ActiveRecord.Generator" />
 	<property name="cpnts.name" value="Castle.ActiveRecord.Generator.Components" />
