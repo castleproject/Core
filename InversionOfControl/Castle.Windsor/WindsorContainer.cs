@@ -15,7 +15,7 @@
 namespace Castle.Windsor
 {
 	using System;
-
+	using System.Collections;
 	using Castle.MicroKernel;
 
 	using Castle.Windsor.Configuration;
@@ -173,6 +173,16 @@ namespace Castle.Windsor
 		{
 			Kernel.AddComponent(key, serviceType, classType);
 		}
+
+        public void AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
+        {
+            Kernel.AddComponentWithProperties(key, classType, extendedProperties);
+        }
+
+        public void AddComponentWithProperties(string key, Type serviceType, Type classType, IDictionary extendedProperties)
+        {
+            Kernel.AddComponentWithProperties(key, serviceType, classType, extendedProperties);
+        }
 
 		/// <summary>
 		/// Returns a component instance by the key

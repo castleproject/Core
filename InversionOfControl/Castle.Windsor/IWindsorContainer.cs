@@ -15,7 +15,7 @@
 namespace Castle.Windsor
 {
 	using System;
-
+	using System.Collections;
 	using Castle.MicroKernel;
 
 	/// <summary>
@@ -45,6 +45,26 @@ namespace Castle.Windsor
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
 		void AddComponent( String key, Type serviceType, Type classType );
+
+        /// <summary>
+        /// Adds a concrete class as a component and specify the extended properties.
+        /// Used by facilities, mostly.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="classType"></param>
+        /// <param name="extendedProperties"></param>
+        void AddComponentWithProperties( String key, Type classType, IDictionary extendedProperties );
+
+        /// <summary>
+        /// Adds a concrete class and an interface 
+        /// as a component and specify the extended properties.
+        /// Used by facilities, mostly.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="serviceType"></param>
+        /// <param name="classType"></param>
+        /// <param name="extendedProperties"></param>
+        void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary extendedProperties );
 
 		/// <summary>
 		/// Returns a component instance by the key
