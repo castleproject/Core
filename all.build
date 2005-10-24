@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="all" default="build">
 
-	<property name="base.dir" value="." />
-	<property name="version" value="beta-1" />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="sharedlibrary.dir" value="${base.dir}/SharedLibs" />
+	
 	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
 	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
+	
+	<property name="nunit.formatter" value="Plain" />
 
 	<target name="build" depends="init, tools, container, components, activerecord, monorail, services, aspectsharp, facilities, samples" />
 	
