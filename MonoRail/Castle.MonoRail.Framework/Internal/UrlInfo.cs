@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Internal
 	/// <summary>
 	/// Represents the splitted information on a Url.
 	/// </summary>
+	[Serializable]
 	public class UrlInfo
 	{
 		private readonly String _urlRaw;

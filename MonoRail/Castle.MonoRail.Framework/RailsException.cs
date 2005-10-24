@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Framework
 		{
 		}
 
-		public RailsException(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected RailsException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}
