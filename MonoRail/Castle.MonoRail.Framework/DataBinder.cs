@@ -310,7 +310,7 @@ namespace Castle.MonoRail.Framework
 			if( propType.IsArray || typeof(IList).IsAssignableFrom(propType) )
 				propType = propType.GetElementType();
 				
-			return propType.IsPrimitive ||
+			return propType.IsPrimitive || propType.IsEnum ||
 				   propType == typeof(String) ||
 				   propType == typeof(Guid) || 
 				   propType == typeof(DateTime);
@@ -428,66 +428,39 @@ namespace Castle.MonoRail.Framework
 			{
 				return value;
 			}
+			else if (desiredType.IsArray)
+			{
+				return values != null ? ConvertToArray(desiredType, values, paramName, files, context) : null;
+			}
+			else if (desiredType.IsEnum)
+			{
+				if (value == String.Empty || value == null) return null;
+				
+				if (!Regex.IsMatch(value.ToString(), @"\D", RegexOptions.Compiled)) 
+				{
+					object enumValue = System.Convert.ChangeType(value, Enum.GetUnderlyingType(desiredType));
+					// optional: test if the specified value is valid within the enum
+					//if (Enum.IsDefined(desiredType, enumValue))
+					//	throw or set enumValue = null
+					return enumValue;
+				}
+				
+				return Enum.Parse(desiredType, value, true);
+			}
+			else if (desiredType.IsPrimitive)
+			{
+				if (desiredType == typeof(Boolean))
+					return (value != null && String.Compare("false", value, true) != 0);
+				
+				if (value == String.Empty || value == null) 
+					return null;
+				
+				return System.Convert.ChangeType(value, desiredType);
+			}
 			else if (desiredType == typeof(Guid))
 			{
-				if (value != null)
-				{
-					return new Guid(value.ToString());
-				}
-				else
-				{
-					return Guid.Empty; 
-				}
-			}
-			else if (desiredType == typeof(UInt16))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToUInt16(value);
-			}
-			else if (desiredType == typeof(UInt32))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToUInt32(value);
-			}
-			else if (desiredType == typeof(UInt64))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToUInt64(value);
-			}
-			else if (desiredType == typeof(Int16))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToInt16(value);
-			}
-			else if (desiredType == typeof(Int32))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToInt32(value);
-			}
-			else if (desiredType == typeof(Int64))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToInt64(value);
-			}
-			else if (desiredType == typeof(Byte))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToByte(value);
-			}
-			else if (desiredType == typeof(SByte))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToSByte(value);
-			}
-			else if (desiredType == typeof(Single))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToSingle(value);
-			}
-			else if (desiredType == typeof(Double))
-			{
-				if (value == String.Empty) value = null;
-				return System.Convert.ToDouble(value);
+				if (value == null) return Guid.Empty;
+				return new Guid(value.ToString());
 			}
 			else if (desiredType == typeof(DateTime))
 			{
@@ -529,38 +502,23 @@ namespace Castle.MonoRail.Framework
 					return DateTime.Parse(value);
 				}
 			}
-			else if (desiredType == typeof(Boolean))
-			{
-				if (value == null || String.Compare("false", value, true) == 0)
-				{
-					return false;
-				}
-
-				return value != null;
-			}
 			else if (desiredType == typeof(HttpPostedFile))
 			{
 				conversionSucceeded = true; // if we get some files we don't care about the values being null
 				return files[paramName];
 			}
-			else if (desiredType.IsEnum)
-			{
-				if (value == String.Empty) return null;
-				
-				return Enum.Parse(desiredType, value, true);
-			}
-			else if (desiredType.IsArray)
-			{
-				return values != null ? ConvertToArray(desiredType, values, paramName, files, context) : null;
-			}
-			else if (context != null)
+			else 
 			{
 				conversionSucceeded = false;
 
-				String message = String.Format("Ignoring argument {0} with value {1} " + 
-					" as we don't know how to convert from this value to its type", paramName, value);
-
-				context.Trace.Warn(message);
+				if (context != null)
+				{
+					String message = String.Format("Ignoring argument '{0}' with value '{1}' " + 
+						"as we don't know how to convert from this value to its type. " +
+						"desired type = {2}", paramName, value, desiredType);
+	
+					context.Trace.Warn(message);
+				}
 			}
 
 			return null;
