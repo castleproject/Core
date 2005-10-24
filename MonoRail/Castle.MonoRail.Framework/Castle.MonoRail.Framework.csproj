@@ -444,6 +444,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\TemplateKeys.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\UrlInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

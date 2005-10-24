@@ -27,6 +27,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 	public class NVelocityViewEngine : ViewEngineBase
 	{
+		private const String TEMPLATE_EXTENSION = ".vm";
+
 		private static IViewComponentFactory staticViewComponentFactory;
 
 		protected VelocityEngine velocity = new VelocityEngine();
@@ -198,7 +200,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// </summary>
 		protected virtual string ResolveTemplateName(string templateName)
 		{
-			return templateName + ".vm";
+			return templateName + TEMPLATE_EXTENSION;
 		}
 		
 		/// <summary>
@@ -211,11 +213,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		
 		private void ProcessLayout(String contents, Controller controller, IContext ctx, IRailsEngineContext context)
 		{
-			String layout = ResolveTemplateName("layouts", controller.LayoutName);
+			String layout = ResolveTemplateName(TemplateKeys.LayoutPath, controller.LayoutName);
 
 			try
 			{
-				ctx.Put("childContent", contents);
+				ctx.Put(TemplateKeys.ChildContent, contents);
 
 				Template template = velocity.GetTemplate(layout);
 
@@ -239,10 +241,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			Hashtable innerContext = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 
-			innerContext.Add("context", context);
-			innerContext.Add("request", context.Request);
-			innerContext.Add("response", context.Response);
-			innerContext.Add("session", context.Session);
+			innerContext.Add(TemplateKeys.Context,	context);
+			innerContext.Add(TemplateKeys.Request,	context.Request);
+			innerContext.Add(TemplateKeys.Response, context.Response);
+			innerContext.Add(TemplateKeys.Session,  context.Session);
 
 			if (controller.Resources != null)
 			{
