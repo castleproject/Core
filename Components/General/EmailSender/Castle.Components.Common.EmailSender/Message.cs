@@ -46,6 +46,7 @@ namespace Castle.Components.Common.EmailSender
 		private Format format = Format.Text;
 		private Encoding encoding = Encoding.ASCII;
 		private IDictionary headers = new HybridDictionary();
+        private IDictionary fields = new HybridDictionary();
 		private MessagePriority priority = MessagePriority.Normal;
 		private MessageAttachmentCollection attachments = new MessageAttachmentCollection();
 
@@ -112,9 +113,21 @@ namespace Castle.Components.Common.EmailSender
 			get { return headers; }
 		}
 
+        public IDictionary Fields
+        {
+            get { return fields; }
+        }
+
 		public MessageAttachmentCollection Attachments
 		{
 			get { return attachments; }
 		}
+
+        public void AddAuthentication(string username, string password)
+        {
+            this.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1");
+            this.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", username);
+            this.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", password);
+        }
 	}
 }

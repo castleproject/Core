@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.Em
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.Tests", "Castle.Components.Common.EmailSender.Tests\Castle.Components.Common.EmailSender.Tests.csproj", "{3962C62D-CE40-47D0-AE53-26A4C4AEFA06}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -29,6 +33,10 @@ Global
 		{1DA92714-7B61-48AB-B0E7-C06A1C6EE04C}.Debug.Build.0 = Debug|.NET
 		{1DA92714-7B61-48AB-B0E7-C06A1C6EE04C}.Release.ActiveCfg = Release|.NET
 		{1DA92714-7B61-48AB-B0E7-C06A1C6EE04C}.Release.Build.0 = Release|.NET
+		{3962C62D-CE40-47D0-AE53-26A4C4AEFA06}.Debug.ActiveCfg = Debug|.NET
+		{3962C62D-CE40-47D0-AE53-26A4C4AEFA06}.Debug.Build.0 = Debug|.NET
+		{3962C62D-CE40-47D0-AE53-26A4C4AEFA06}.Release.ActiveCfg = Release|.NET
+		{3962C62D-CE40-47D0-AE53-26A4C4AEFA06}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt

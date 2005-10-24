@@ -88,6 +88,11 @@ namespace Castle.Components.Common.EmailSender.SmtpEmailSender
 				mailMessage.Headers.Add(entry.Key, entry.Value);
 			}
 
+            foreach(DictionaryEntry entry in message.Fields)
+            {
+                mailMessage.Fields.Add(entry.Key, entry.Value);
+            }
+
 			foreach(MessageAttachment attachment in message.Attachments)
 			{
 				MailEncoding enc = (MailEncoding) Enum.Parse( typeof(MailEncoding), attachment.Encoding.ToString() );

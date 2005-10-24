@@ -3,3 +3,7 @@ Alpha Version 1.0.0
 - First release
 
 Future modifications - after the first release - shall be tracked in this file
+
+10.22.2005 - Added Authentication Features
+- Added a Fields property that maps to the MailMessage Fields property
+- Added public void AddAuthentication(string username, string password)
