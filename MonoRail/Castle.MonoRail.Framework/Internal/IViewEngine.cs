@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-
+	using System.IO;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
@@ -56,15 +56,15 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		void Process(IRailsEngineContext context, Controller controller, String templateName);
 
+		///<summary>
+		/// Processes the view - using the templateName to obtain the correct template
+		/// and writes the results to the System.TextWriter. No layout is applied!
+		/// </summary>
+		void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
+
 		/// <summary>
 		/// Wraps the specified content in the layout using the context to output the result.
 		/// </summary>
 		void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
-
-		///<summary>
-		/// Processes the view - using the templateName to obtain the correct template
-		/// and returns the result as a string. No layout is applied!
-		/// </summary>
-		String ProcessTemplate(IRailsEngineContext context, Controller controller, String templateName);
 	}
 }

@@ -136,6 +136,28 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 		}
 
+		///<summary>
+		/// Processes the view - using the templateName to obtain the correct template
+		/// and writes the results to the System.TextWriter. No layout is applied!
+		/// </summary>
+		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller, String viewName)
+		{
+			IContext ctx = CreateContext(context, controller);
+			
+			AdjustContentType(context);
+
+			try
+			{
+				Template template = velocity.GetTemplate(ResolveTemplateName(viewName));
+
+				template.Merge(ctx, output);
+			}
+			catch (Exception ex)
+			{
+				throw new RailsException("Could not obtain view", ex);
+			}
+		}
+
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			IContext ctx = CreateContext(context, controller);
@@ -151,32 +173,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				context.Response.Output.Write(contents);
 			}
-		}
-
-		///<summary>
-		/// Processes the view - using the templateName to obtain the correct template
-		/// and returns the result as a string. No layout is applied!
-		/// </summary>
-		public override String ProcessTemplate(IRailsEngineContext context, Controller controller, String viewName)
-		{
-			IContext ctx = CreateContext(context, controller);
-			
-			AdjustContentType(context);
-
-			StringWriter writer = new StringWriter();
-
-			try
-			{
-				Template template = velocity.GetTemplate(ResolveTemplateName(viewName));
-
-				template.Merge(ctx, writer);
-			}
-			catch (Exception ex)
-			{
-				throw new RailsException("Could not obtain view", ex);
-			}
-
-			return writer.ToString();
 		}
 
 		#endregion

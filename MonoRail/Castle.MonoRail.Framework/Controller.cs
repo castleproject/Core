@@ -313,6 +313,23 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Specifies the view to be processed and results are written to System.IO.TextWriter. 
+		/// </summary>
+		/// <param name="output"></param>
+		/// <param name="name">The name of the view to process.</param>
+		public void RenderView(TextWriter output, String name)
+		{
+			String basePath = _controllerName;
+
+			if (_areaName != null)
+			{
+				basePath = Path.Combine(_areaName, _controllerName);
+			}
+
+			_viewEngine.Process(output, Context, this, Path.Combine(basePath, name));			
+		}
+
+		/// <summary>
 		/// Specifies the shared view to be processed after the action has finished its
 		/// processing. (A partial view shared 
 		/// by others views and usually in the root folder
@@ -334,6 +351,18 @@ namespace Castle.MonoRail.Framework
 			if (skipLayout) CancelLayout();
 			
 			RenderSharedView(name);
+		}
+
+		/// <summary>
+		/// Specifies the shared view to be processed and results are written to System.IO.TextWriter.
+		/// (A partial view shared by others views and usually in the root folder
+		/// of the view directory).
+		/// </summary>
+		/// <param name="output"></param>
+		/// <param name="name">The name of the view to process.</param>
+		public void RenderSharedView(TextWriter output, String name)
+		{
+			_viewEngine.Process(output, Context, this, name);
 		}
 
 		/// <summary>

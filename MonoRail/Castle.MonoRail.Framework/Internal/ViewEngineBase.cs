@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.IO;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
@@ -77,9 +78,9 @@ namespace Castle.MonoRail.Framework
 
 		///<summary>
 		/// Processes the view - using the templateName to obtain the correct template
-		/// and returns the result as a string. No layout is applied!
+		/// and writes the results to the System.IO.TextWriter.
 		/// </summary>
-		public virtual String ProcessTemplate(IRailsEngineContext context, Controller controller, String templateName)
+		public virtual void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName)
 		{
 			throw new NotImplementedException();
 		}

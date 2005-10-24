@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework.Views.CompositeView
 {
 	using System;
-	
+	using System.IO;
 	using Castle.MonoRail.Framework.Views.Aspx;
 	using Castle.MonoRail.Framework.Views.NVelocity;
 
@@ -72,29 +72,18 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 			}
 		}
 
+		///<summary>
+		/// Processes the view - using the templateName to obtain the correct template
+		/// and writes the results to the System.TextWriter No layout is applied!
+		/// </summary>
+		public override void Process(TextWriter output, IRailsEngineContext context, Controller controller, String viewName)
+		{
+			_nvelocityViewEngine.Process(output, context, controller, viewName);
+		}
+
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			_nvelocityViewEngine.ProcessContents(context, controller, contents);
-		}
-
-		///<summary>
-		/// Processes the view - using the templateName to obtain the correct template
-		/// and returns the result as a string. No layout is applied!
-		/// </summary>
-		public override String ProcessTemplate(IRailsEngineContext context, Controller controller, String viewName)
-		{
-			String output = String.Empty;
-
-			if (_nvelocityViewEngine.HasTemplate(viewName))
-			{
-				output = _nvelocityViewEngine.ProcessTemplate(context, controller, viewName);
-			}
-			else
-			{
-				throw new RailsException("Could not obtain NVelocity view: " + viewName);
-			}
-
-			return output;
 		}
 
 		#endregion
