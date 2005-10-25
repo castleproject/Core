@@ -136,10 +136,16 @@
                 />
                 <File
                     RelPath = "ActiveRecordGenericsTestCase.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ActiveRecordTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ActiveRecordWithoutBaseTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -184,6 +190,11 @@
                 />
                 <File
                     RelPath = "TransactionScopeTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\BadPostClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -294,6 +305,11 @@
                 />
                 <File
                     RelPath = "Model\LazyModel\ProductLazy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\RulesModel\Rules.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

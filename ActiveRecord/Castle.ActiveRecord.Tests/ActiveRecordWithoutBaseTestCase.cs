@@ -16,7 +16,9 @@ namespace Castle.ActiveRecord.Tests
 {
     using System;
     using System.Text;
-    using NUnit.Framework;
+    
+	using NUnit.Framework;
+
     using Castle.ActiveRecord.Tests.Model.RulesModel;
     using Castle.ActiveRecord.Framework.Internal;
 

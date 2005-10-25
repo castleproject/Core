@@ -135,6 +135,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Castle.ActiveRecord.Framework.Internal.Tests.dll.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "GraphConnectorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SemanticCheckTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -175,6 +184,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\ClassWithBadMapping.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\ClassWithMappedField.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -186,6 +200,11 @@
                 />
                 <File
                     RelPath = "Model\Company.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\DiscriminatorGrandchild.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
