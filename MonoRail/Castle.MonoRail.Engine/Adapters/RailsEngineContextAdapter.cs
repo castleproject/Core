@@ -99,7 +99,18 @@ namespace Castle.MonoRail.Engine.Adapters
 			{
 				if (_session == null)
 				{
-					object session = _context.Items["AspSession"];
+					object session;
+					
+					// Windows and Testing
+					if(_context.Items["AspSession"] != null)
+					{
+						session = _context.Items["AspSession"];
+					}
+					// Mono
+					else
+					{
+						session = _context.Session;
+					}
 
 					if (session is HttpSessionState)
 					{
