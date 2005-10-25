@@ -20,8 +20,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	public class ActiveRecordModelBuilder
 	{
-		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.Instance;
-		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance;
+		public static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.Instance;
+		public static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance;
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			PopulateModel(model, type);
 
-			ActiveRecordBase._Register( type, model );
+			DomainModel.Register( type, model );
 
 			return model;
 		}
@@ -95,6 +95,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private void ProcessFields(Type type, ActiveRecordModel model)
 		{
+            //Check persistent fields of the base class as well
+            if (ShouldCheckBase(type))
+                ProcessFields(type.BaseType, model);
+
 			FieldInfo[] fields = type.GetFields( FieldDefaultBindingFlags );
 
 			foreach( FieldInfo field in fields )
@@ -110,6 +114,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private void ProcessProperties(Type type, ActiveRecordModel model)
 		{
+            //Check persistent properties of the base class as well
+            if (ShouldCheckBase(type))
+                ProcessProperties(type.BaseType, model);
+
 			PropertyInfo[] props = type.GetProperties( DefaultBindingFlags );
 
 			foreach( PropertyInfo prop in props )
@@ -274,6 +282,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 				}
 			}
 		}
+
+        private static bool ShouldCheckBase(Type type)
+        {
+            return type.BaseType != typeof(object) && 
+                type.BaseType != typeof(ActiveRecordBase) && 
+                type.BaseType != typeof(ActiveRecordValidationBase) &&
+                !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
+        }
 
 		private void ProcessActiveRecordAttribute(Type type, ActiveRecordModel model)
 		{

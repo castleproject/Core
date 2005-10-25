@@ -37,8 +37,8 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		public void Start()
 		{
-			ActiveRecord.TransactionMode mode = (transactionMode == TransactionMode.Requires)
-				? ActiveRecord.TransactionMode.Inherits : ActiveRecord.TransactionMode.New;
+			Castle.ActiveRecord.TransactionMode mode = (transactionMode == TransactionMode.Requires)
+				? Castle.ActiveRecord.TransactionMode.Inherits : Castle.ActiveRecord.TransactionMode.New;
 
 			scope = new TransactionScope( mode );
 		}

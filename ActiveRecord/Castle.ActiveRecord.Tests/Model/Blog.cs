@@ -23,7 +23,7 @@ namespace Castle.ActiveRecord.Tests
 
 
 	[ActiveRecord("BlogTable")]
-	public class Blog : ActiveRecordBase
+	public class Blog
 	{
 		private int _id;
 		private String _name;
@@ -84,30 +84,22 @@ namespace Castle.ActiveRecord.Tests
 
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll( typeof(Blog) );
+			DomainModel.DeleteAll( typeof(Blog));
 		}
 
 		public static Blog[] FindAll()
 		{
-			return (Blog[]) ActiveRecordBase.FindAll( typeof(Blog) );
+            return (Blog[])DomainModel.FindAll(typeof(Blog));
 		}
 
 		public static Blog Find(int id)
 		{
-			return (Blog) ActiveRecordBase.FindByPrimaryKey( typeof(Blog), id );
-		}
-
-		/// <summary>
-		/// We make it visible only to for test cases' assertions 
-		/// </summary>
-		public static ISessionFactoryHolder Holder
-		{
-			get { return _holder; }
+			return (Blog) DomainModel.FindByPrimaryKey(typeof(Blog), id );
 		}
 
 		public void CustomAction()
 		{
-			Execute(new NHibernateDelegate(MyCustomMethod));
+			DomainModel.Execute(typeof(Blog), new NHibernateDelegate(MyCustomMethod), this);
 		}
 
 		private object MyCustomMethod(ISession session, object blogInstance)
@@ -117,5 +109,30 @@ namespace Castle.ActiveRecord.Tests
 			
 			return null;
 		}
-	}
+
+        internal void Save()
+        {
+            DomainModel.Save(this);
+        }
+
+        internal void Create()
+        {
+            DomainModel.Create(this);
+        }
+
+        internal void Update()
+        {
+            DomainModel.Update(this);
+        }
+
+        internal void Delete()
+        {
+            DomainModel.Delete(this);
+        }
+
+        internal static ISessionFactoryHolder Holder
+        {
+            get { return DomainModel.GetSessionFactoryHolder(); }
+        }
+    }
 }

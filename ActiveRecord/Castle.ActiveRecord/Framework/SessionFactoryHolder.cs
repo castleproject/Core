@@ -132,7 +132,7 @@ namespace Castle.ActiveRecord.Framework
 				type = type.BaseType;
 			}
 
-			return null;
+			return typeof(ActiveRecordBase);
 		}
 
 		private static ISession OpenSession(ISessionFactory sessionFactory)

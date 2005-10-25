@@ -43,7 +43,7 @@ namespace Castle.ActiveRecord.Tests
 	
 			blog.Author = "Henry";
 			blog.Name = "Senseless";
-			blog.Save();
+            blog.Save();
 		}
 
 		[Test]

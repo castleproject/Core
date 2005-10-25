@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Framework
 	{
 		public static IList FindAll( Type type )
 		{
-			ISession session = ActiveRecordBase._holder.CreateSession( type );
+			ISession session = DomainModel._holder.CreateSession( type );
 
 			try
 			{
@@ -36,40 +36,21 @@ namespace Castle.ActiveRecord.Framework
 			}
 			finally
 			{
-				ActiveRecordBase._holder.ReleaseSession(session);
+				DomainModel._holder.ReleaseSession(session);
 			}
 		}
 
 		public static object FindByPK( Type type, object id )
 		{
-			return FindByPK(type, id, true);
-		}
-
-		public static object FindByPK( Type type, object id, bool throwOnNotFound )
-		{
-			ISession session = ActiveRecordBase._holder.CreateSession( type );
+			ISession session = DomainModel._holder.CreateSession( type );
 
 			try
 			{
 				return session.Load( type, id );
 			}
-			catch(ObjectNotFoundException ex)
-			{
-				if (throwOnNotFound)
-				{
-					String message = String.Format("Could not find {0} with id {1}", type.Name, id);
-					throw new NotFoundException(message, ex);
-				}
-
-				return null;
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform Load (Find by PK) for " + type.Name, ex);
-			}
 			finally
 			{
-				ActiveRecordBase._holder.ReleaseSession(session);
+				DomainModel._holder.ReleaseSession(session);
 			}
 		}
 	}

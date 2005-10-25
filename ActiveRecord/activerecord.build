@@ -54,8 +54,7 @@
 
 	</target>
 
-	<target name="build" depends="init,tests.run" />
-	<!-- generator is temporarily out -->
+	<target name="build" depends="init,tests.run, generator" />
 	
 	<target name="compile" depends="init">
 		<csc 

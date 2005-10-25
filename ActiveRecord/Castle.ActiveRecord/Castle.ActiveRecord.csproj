@@ -274,11 +274,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Framework\ActiveRecord.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Framework\ActiveRecordBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -300,6 +295,16 @@
                 />
                 <File
                     RelPath = "Framework\DictionaryAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DomainModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\DomainModel.Generic.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

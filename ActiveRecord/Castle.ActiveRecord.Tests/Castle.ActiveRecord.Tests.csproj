@@ -136,7 +136,6 @@
                 />
                 <File
                     RelPath = "ActiveRecordGenericsTestCase.cs"
-                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

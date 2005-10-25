@@ -13,39 +13,45 @@
 // limitations under the License.
 
 #if dotNet2
+
 namespace Castle.ActiveRecord
 {
 	using System;
-	using System.Text;
-	using System.Collections.Generic;
-
+	using System.Collections;
+	using Castle.ActiveRecord.Framework;
+	using NHibernate;
 	using NHibernate.Expression;
 
-	public static class ActiveRecord<T> where T : ActiveRecordBase
+
+	/// <summary>
+	/// Generic static class to ease the access to Active Record features on .Net 2
+	/// </summary>
+	public static class DomainModel<T> where T : class
 	{
+		
 		public static T Find(object id)
 		{
-			return (T)ActiveRecordBase.FindByPrimaryKey(typeof(T), id, true);
+			return (T)DomainModel.FindByPrimaryKey(typeof(T), id, true);
 		}
 
 		public static T TryFind(object id)
 		{
-			return (T)ActiveRecordBase.FindByPrimaryKey(typeof(T), id, false);
+			return (T)DomainModel.FindByPrimaryKey(typeof(T), id, false);
 		}
 		
 		public static void DeleteAll()
 		{
-			ActiveRecordBase.DeleteAll(typeof(T));
+			DomainModel.DeleteAll(typeof(T));
 		}
 
 		public static T[] FindAll()
 		{
-			return (T[])ActiveRecordBase.FindAll(typeof(T));
+			return (T[])DomainModel.FindAll(typeof(T));
 		}
 
 		public static T[] FindAll(params ICriterion[] criterias)
 		{
-			return (T[])ActiveRecordBase.FindAll(typeof(T), criterias);
+			return (T[])DomainModel.FindAll(typeof(T), criterias);
 		}
 
 		public static T[] FindAll(ICriterion criteria, int firstResult, int maxresults)
@@ -55,18 +61,43 @@ namespace Castle.ActiveRecord
 
 		public static T[] FindAll(ICriterion[] criterias,int firstResult, int maxresults)
 		{
-			return (T[])ActiveRecordBase.SlicedFindAll(typeof(T), firstResult, maxresults, criterias);
+            return (T[])DomainModel.SlicedFindAll(typeof(T), firstResult, maxresults, criterias);
 		}
 
 		public static T[] FindAll(ICriterion[] criterias, Order[] orders)
 		{
-			return (T[])ActiveRecordBase.FindAll(typeof(T), orders, criterias);
+			return (T[])DomainModel.FindAll(typeof(T), orders, criterias);
 		}
 
 		public static T[] FindAll( ICriterion[] criterias, Order[] orders,int firstResult, int maxresults)
 		{
-			return (T[]) ActiveRecordBase.SlicedFindAll(typeof(T),firstResult, maxresults,orders,criterias);
+			return (T[]) DomainModel.SlicedFindAll(typeof(T),firstResult, maxresults,orders,criterias);
 		}
-	}
+
+        public static void Save(T instance)
+        {
+            DomainModel.Save(instance);
+        }
+
+        public static void Create(T instance)
+        {
+            DomainModel.Create(instance);
+        }
+
+        public static void Update(T instance)
+        {
+            DomainModel.Update(instance);
+        }
+
+        public static void Delete(T instance)
+        {
+            DomainModel.Delete(instance);
+        }
+
+        public static void Execute(T instnace, NHibernateDelegate call)
+        {
+            DomainModel.Execute(typeof(T), call, instnace);
+        }
+    }
 }
-#endif
+#endif 

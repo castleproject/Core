@@ -16,11 +16,9 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
-
+	using Castle.ActiveRecord.Framework;
 	using NHibernate;
 	using NHibernate.Expression;
-
-	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
 	/// Allow custom executions using the NHibernate's ISession.
@@ -34,55 +32,12 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public abstract class ActiveRecordBase
 	{
-		protected internal static ISessionFactoryHolder _holder;
-		protected internal static IDictionary type2Model = Hashtable.Synchronized( new Hashtable() );
-
 		/// <summary>
 		/// Constructs an ActiveRecordBase subclass.
 		/// </summary>
 		public ActiveRecordBase()
 		{
 		}
-
-		#region Internal core methods
-
-		private static void EnsureInitialized( Type type )
-		{
-			if (_holder == null)
-			{
-				String message = String.Format("An ActiveRecord class ({0}) was used but the framework seems not " + 
-					"properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?", type.FullName);
-				throw new ActiveRecordException( message );
-			}
-			if (!type2Model.Contains(type))
-			{
-				String message = String.Format("You have accessed an ActiveRecord class that wasn't properly initialized. " + 
-					"The only explanation is that the call to ActiveRecordStarter.Initialize() didn't include {0} class", type.FullName);
-				throw new ActiveRecordException( message );
-			}
-		}
-
-		/// <summary>
-		/// Internally used
-		/// </summary>
-		/// <param name="arType"></param>
-		/// <param name="model"></param>
-		public static void _Register(Type arType, Framework.Internal.ActiveRecordModel model)
-		{
-			type2Model[ arType ] = model;
-		}
-
-		/// <summary>
-		/// Internally used
-		/// </summary>
-		/// <param name="arType"></param>
-		/// <returns></returns>
-		public static Framework.Internal.ActiveRecordModel _GetModel( Type arType )
-		{
-			return (Framework.Internal.ActiveRecordModel) type2Model[ arType ];
-		}
-
-		#endregion
 
 		#region Overridable Hooks
 
@@ -133,55 +88,12 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		protected static object Execute(Type targetType, NHibernateDelegate call, object instance)
 		{
-			EnsureInitialized(targetType);
-
-			if (targetType == null) throw new ArgumentNullException("targetType", "Target type must be informed");
-			if (call == null) throw new ArgumentNullException("call", "Delegate must be passed");
-
-			ISession session = _holder.CreateSession( targetType );
-
-			try
-			{
-				return call(session, instance);
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Error performing Execute for " + targetType.Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			return DomainModel.Execute(targetType,call,instance);
 		}
 
 		internal protected static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
 		{
-			EnsureInitialized(targetType);
-
-			ISession session = _holder.CreateSession( targetType );
-
-			try
-			{
-				return session.Load( targetType, id );
-			}
-			catch(ObjectNotFoundException ex)
-			{
-				if (throwOnNotFound)
-				{
-					String message = String.Format("Could not find {0} with id {1}", targetType.Name, id);
-					throw new NotFoundException(message, ex);
-				}
-
-				return null;
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform Load (Find by id) for " + targetType.Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}		
+			return DomainModel.FindByPrimaryKey(targetType,id, throwOnNotFound);	
 		}
 
 		/// <summary>
@@ -210,40 +122,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		internal protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
 		{
-			EnsureInitialized(targetType);
-
-			ISession session = _holder.CreateSession( targetType );
-
-			try
-			{
-				ICriteria criteria = session.CreateCriteria(targetType);
-
-				foreach( ICriterion cond in criterias )
-				{
-					criteria.Add( cond );
-				}
-
-				if (orders != null)
-				{
-					foreach( Order order in orders )
-					{
-						criteria.AddOrder( order );
-					}
-				}
-
-				criteria.SetFirstResult(firstResult);
-				criteria.SetMaxResults(maxresults);
-
-				return CreateReturnArray(criteria, targetType);
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform SlicedFindAll for " + targetType.Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			return DomainModel.SlicedFindAll(targetType,firstResult,maxresults,orders,criterias);
 		}
 
 		/// <summary>
@@ -264,37 +143,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		internal protected static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
 		{
-			EnsureInitialized(targetType);
-
-			ISession session = _holder.CreateSession( targetType );
-
-			try
-			{
-				ICriteria criteria = session.CreateCriteria(targetType);
-
-				foreach( ICriterion cond in criterias )
-				{
-					criteria.Add( cond );
-				}
-
-				if (orders != null)
-				{
-					foreach( Order order in orders )
-					{
-						criteria.AddOrder( order );
-					}
-				}
-
-				return CreateReturnArray(criteria, targetType);
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			return DomainModel.FindAll(targetType,orders,criterias);
 		}
 
 		/// <summary>
@@ -309,42 +158,9 @@ namespace Castle.ActiveRecord
 			return FindAll(targetType, null, criterias);
 		}
 
-		private static Array CreateReturnArray(ICriteria criteria, Type targetType)
-		{
-			IList result = criteria.List();
-	
-			Array array = Array.CreateInstance(targetType, result.Count);
-	
-			int index = 0;
-	
-			foreach(object item in result)
-			{
-				array.SetValue(item, index++);
-			}
-	
-			return array;
-		}
-
 		internal protected static void DeleteAll(Type type)
 		{
-			EnsureInitialized(type);
-
-			ISession session = _holder.CreateSession( type );
-
-			try
-			{
-				session.Delete( String.Format("from {0}", type.Name) );
-
-				session.Flush();
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			DomainModel.DeleteAll(type);
 		}
 
 		/// <summary>
@@ -353,26 +169,7 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Save(object instance)
 		{
-			if (instance == null) throw new ArgumentNullException("instance");
-
-			EnsureInitialized(instance.GetType());
-
-			ISession session = _holder.CreateSession( instance.GetType() );
-
-			try
-			{
-				session.SaveOrUpdate(instance);
-
-				session.Flush();
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			DomainModel.Save(instance);
 		}
 
 		/// <summary>
@@ -381,26 +178,7 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Create(object instance)
 		{
-			if (instance == null) throw new ArgumentNullException("instance");
-
-			EnsureInitialized(instance.GetType());
-
-			ISession session = _holder.CreateSession( instance.GetType() );
-
-			try
-			{
-				session.Save(instance);
-
-				session.Flush();
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			DomainModel.Create(instance);
 		}
 
 		/// <summary>
@@ -410,26 +188,7 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Update(object instance)
 		{
-			if (instance == null) throw new ArgumentNullException("instance");
-
-			EnsureInitialized(instance.GetType());
-
-			ISession session = _holder.CreateSession( instance.GetType() );
-
-			try
-			{
-				session.Update(instance);
-
-				session.Flush();
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			DomainModel.Update(instance);
 		}
 
 		/// <summary>
@@ -438,26 +197,7 @@ namespace Castle.ActiveRecord
 		/// <param name="instance"></param>
 		protected static void Delete(object instance)
 		{
-			if (instance == null) throw new ArgumentNullException("instance");
-
-			EnsureInitialized(instance.GetType());
-
-			ISession session = _holder.CreateSession( instance.GetType() );
-
-			try
-			{
-				session.Delete(instance);
-
-				session.Flush();
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
-			}
-			finally
-			{
-				_holder.ReleaseSession(session);
-			}
+			DomainModel.Delete(instance);
 		}
 
 		#endregion
@@ -472,7 +212,7 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		protected internal object Execute(NHibernateDelegate call)
 		{
-			return Execute( this.GetType(), call, this );
+			return DomainModel.Execute( this.GetType(), call, this );
 		}
 
 		/// <summary>
@@ -482,7 +222,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Save()
 		{
-			Save(this);
+			DomainModel.Save(this);
 		}
 
 		/// <summary>
@@ -490,7 +230,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Create()
 		{
-			Create(this);
+			DomainModel.Create(this);
 		}
 
 		/// <summary>
@@ -499,7 +239,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Update()
 		{
-			Update(this);
+			DomainModel.Update(this);
 		}
 
 		/// <summary>
@@ -507,7 +247,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public virtual void Delete()
 		{
-			Delete(this);
+			DomainModel.Delete(this);
 		}
 
 		#endregion

@@ -69,11 +69,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		private void InitializeFramework(ArrayList assemblies)
 		{
-			ActiveRecord.ActiveRecordStarter.SessionFactoryHolderCreated += new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
+			ActiveRecordStarter.SessionFactoryHolderCreated += new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
 
 			try
 			{
-				ActiveRecord.ActiveRecordStarter.Initialize( 
+				ActiveRecordStarter.Initialize( 
 					(Assembly[]) assemblies.ToArray( typeof(Assembly) ), 
 					new ConfigurationSourceAdapter(FacilityConfig) );
 			}
@@ -83,7 +83,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 //			}
 			finally
 			{
-				ActiveRecord.ActiveRecordStarter.SessionFactoryHolderCreated -= new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
+				ActiveRecordStarter.SessionFactoryHolderCreated -= new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
 			}
 		}
 

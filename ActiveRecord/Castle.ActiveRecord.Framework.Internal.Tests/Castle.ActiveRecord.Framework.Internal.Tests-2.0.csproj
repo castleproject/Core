@@ -126,6 +126,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GraphConnectorTestCase.cs" />
+    <Compile Include="Model\ClassWithBadMapping.cs" />
     <Compile Include="Model\BelongsToClassA.cs">
       <SubType>Code</SubType>
     </Compile>

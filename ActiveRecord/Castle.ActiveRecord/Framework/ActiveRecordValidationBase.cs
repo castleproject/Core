@@ -73,7 +73,7 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType"></param>
 		private void CollectValidators( Type targetType )
 		{
-			ActiveRecordModel model = _GetModel( targetType );
+			ActiveRecordModel model = DomainModel.GetModel( targetType );
 
 			if (model == null)
 			{

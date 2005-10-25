@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				foreach(ActiveRecordModel child in arCollection)
 				{
-					if (child.Type.BaseType == model.Type)
+                    if (IsChildClass(model, child))
 					{
 						child.IsDiscriminatorSubClass = child.Key == null;
 						child.IsJoinedSubClass = child.Key != null;
@@ -75,6 +75,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 			model.CollectionIDs.Clear();
 			model.Hilos.Clear();
 		}
+
+        private static bool IsChildClass(ActiveRecordModel model, ActiveRecordModel child)
+        {
+            //Direct decendant
+            if (child.Type.BaseType == model.Type)
+                return true;
+            //Not related to each other
+            if (!model.Type.IsAssignableFrom(child.Type))
+                return false;
+            //The model is the ancsetor of the child, but is it the direct AR ancsetor?
+            Type arAncestor = child.Type.BaseType;
+            while (arAncestor != typeof(object) &&
+                DomainModel.GetModel(arAncestor) == null)
+            {
+                arAncestor = arAncestor.BaseType;
+            }
+            return arAncestor == model.Type;
+        }
 
 		public override void VisitCollectionID(CollectionIDModel model)
 		{

@@ -86,7 +86,7 @@ namespace Castle.ActiveRecord.Tests
 		/// </summary>
 		public static ISessionFactoryHolder Holder
 		{
-			get { return _holder; }
+			get { return DomainModel.GetSessionFactoryHolder(); }
 		}
 
 		public void CustomAction()

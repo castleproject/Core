@@ -45,5 +45,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(ClassWithoutPrimaryKey) );
 		}
+
+        [Test]
+        [ExpectedException(typeof(ActiveRecordException), "You can't use [Property] on ClassWithBadMapping.ClassA because Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA is an active record class, did you mean to use BelongTo?")]
+        public void ClassThatMapAnotherActiveRecordClassAsAPropertyInsteadOfBelongsTo()
+        {
+            ActiveRecordStarter.Initialize(GetConfigSource(), typeof(ClassWithBadMapping), typeof(ClassA));
+        }
 	}
 }

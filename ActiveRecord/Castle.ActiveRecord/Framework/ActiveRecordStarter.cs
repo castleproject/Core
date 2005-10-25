@@ -68,8 +68,8 @@ namespace Castle.ActiveRecord
 
 			RaiseSessionFactoryHolderCreated(holder);
 
-			ActiveRecordBase.type2Model.Clear();
-			ActiveRecordBase._holder = holder;
+			DomainModel.type2Model.Clear();
+			DomainModel._holder = holder;
 
 			// Base configuration
 			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
@@ -82,7 +82,7 @@ namespace Castle.ActiveRecord
 			{
 				if ( models.Contains(type) || 
 					type == typeof(ActiveRecordBase) || type == typeof(ActiveRecordValidationBase) || 
-					!typeof(ActiveRecordBase).IsAssignableFrom( type ) )
+					!IsActiveRecordType(type) )
 				{
 					continue;
 				}
@@ -130,7 +130,7 @@ namespace Castle.ActiveRecord
 
 			foreach( Type type in types )
 			{
-				if ( !typeof(ActiveRecordBase).IsAssignableFrom( type ) )
+				if ( !IsActiveRecordType(type) )
 				{
 					continue;
 				}
@@ -155,7 +155,7 @@ namespace Castle.ActiveRecord
 
 				foreach( Type type in types )
 				{
-					if ( !typeof(ActiveRecordBase).IsAssignableFrom( type ) )
+					if ( !IsActiveRecordType(type) )
 					{
 						continue;
 					}
@@ -165,6 +165,15 @@ namespace Castle.ActiveRecord
 			}
 
 			Initialize( source, (Type[]) list.ToArray( typeof(Type) ) );
+		}
+
+        /// <summary>
+        /// Return true if the type has a [ActiveRecord] attribute or one of
+        /// its properties or fields has been marked.
+        /// </summary>
+		private static bool IsActiveRecordType(Type type)
+		{
+            return type.IsDefined(typeof(ActiveRecordAttribute), false);
 		}
 
 		/// <summary>
@@ -260,14 +269,14 @@ namespace Castle.ActiveRecord
 		{
 			CheckInitialized();
 
-			Configuration cfg = ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) );
+			Configuration cfg = DomainModel._holder.GetConfiguration( typeof(ActiveRecordBase) );
 
 			return new SchemaExport( cfg );
 		}
 
 		private static void CheckInitialized()
 		{
-			if (ActiveRecordBase._holder == null)
+			if (DomainModel._holder == null)
 			{
 				throw new ActiveRecordException("Framework must be Initialize(d) first.");
 			}

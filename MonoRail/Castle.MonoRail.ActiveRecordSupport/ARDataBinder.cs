@@ -54,7 +54,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					throw new RailsException("ARDataBinder autoload only supports classes that inherit from ActiveRecordBase");
 				}
 					
-				ActiveRecordModel model = ActiveRecordBase._GetModel(instanceType);				
+				ActiveRecordModel model = DomainModel.GetModel(instanceType);				
 				// NOTE: as of right now we only support one PK
 				if( model.Ids.Count == 1 )
 				{

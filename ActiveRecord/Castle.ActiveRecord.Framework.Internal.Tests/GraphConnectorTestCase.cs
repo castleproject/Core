@@ -16,8 +16,8 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				typeof(ClassDiscriminatorParent));
 
 			Assert.AreEqual(
-				ActiveRecordBase._GetModel(typeof(ClassDiscriminatorA)),
-				ActiveRecordBase._GetModel(typeof(DiscriminatorGrandchild)).Parent
+				DomainModel.GetModel(typeof(ClassDiscriminatorA)),
+				DomainModel.GetModel(typeof(DiscriminatorGrandchild)).Parent
 			);
 		}
 	}

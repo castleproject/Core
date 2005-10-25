@@ -81,7 +81,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected ActiveRecordModel GetARModel()
 		{
-			ActiveRecordModel model = ActiveRecordBase._GetModel( modelType );
+			ActiveRecordModel model = DomainModel.GetModel( modelType );
 	
 			if (model == null)
 			{
