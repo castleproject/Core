@@ -35,6 +35,7 @@ namespace Castle.MonoRail.Framework
 		private String prefix = string.Empty;
 		private ParamStore from	= ParamStore.Params;
 		private String exclude = String.Empty;
+		private String allow = String.Empty;
 		private int nestedLevel = 3;
 
 		public DataBindAttribute()
@@ -52,6 +53,17 @@ namespace Castle.MonoRail.Framework
 			set { exclude = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the property names to allow.
+		/// </summary>
+		/// <value>A comma separated list 
+		/// of property names to allow from databinding.</value>
+		public String Allow
+		{
+			get { return allow; }
+			set { allow = value; }
+		}
+		
 		/// <summary>
 		/// Gets or sets <see cref="ParamStore"/> used to locate the values used for databinding.
 		/// </summary>

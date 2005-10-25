@@ -22,6 +22,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.ActiveRecord.Framework.Internal;	
 
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Extends DataBinder class with some ActiveRecord specific functionallity
@@ -33,7 +34,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	{
 		protected internal static readonly String AutoLoadAttribute = DataBinder.MetadataIdentifier + "autoload";
 		
-		public ARDataBinder( IRailsEngineContext context ) : base( context )
+		public ARDataBinder() : base()
 		{			
 		}
 
@@ -66,7 +67,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					
 					if( propValue != null )
 					{
-						object id = DataBinder.Convert(pkModel.Property.PropertyType, propValue, propName, null, null );
+						object id = ConvertUtils.Convert(pkModel.Property.PropertyType, propValue, propName, null, null );
 						instance = SupportingUtils.FindByPK(instanceType, id);
 					}
 					else

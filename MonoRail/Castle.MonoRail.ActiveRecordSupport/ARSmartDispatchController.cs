@@ -31,7 +31,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		
 		protected override void Initialize()
 		{
-			binder = new ARDataBinder( Context );
+			binder = new ARDataBinder();
 		}	
 		
 		/// <summary>

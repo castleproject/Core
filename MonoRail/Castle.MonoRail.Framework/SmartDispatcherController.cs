@@ -19,6 +19,8 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.Collections.Specialized;
 
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Specialization of <see cref="Controller"/> that tries
 	/// to match the request params to method arguments.
@@ -45,7 +47,7 @@ namespace Castle.MonoRail.Framework
 
 		protected override void Initialize()
 		{
-			binder = new DataBinder( Context );
+			binder = new DataBinder();
 		}
 
 		protected internal override void CollectActions()
@@ -182,11 +184,11 @@ namespace Castle.MonoRail.Framework
 					{
 						DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
 	
-						args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel, dba.Exclude );
+						args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel, dba.Exclude, dba.Allow );
 					}
 					else
 					{
-						args[i] = DataBinder.Convert( param.ParameterType, allParams.GetValues( paramName ), param.Name, files, Context );
+						args[i] = ConvertUtils.Convert( param.ParameterType, allParams.GetValues( paramName ), param.Name, files, allParams );
 					}
 				}
 			}
@@ -206,7 +208,7 @@ namespace Castle.MonoRail.Framework
 			return args;
 		}
 
-		protected object BindObject(ParamStore from, Type paramType, String prefix, int nestedLevel, String excludedProperties)
+		protected object BindObject(ParamStore from, Type paramType, String prefix, int nestedLevel, String excludedProperties, String allowedProperties)
 		{
 			NameValueCollection webParams = null;
 
@@ -227,7 +229,7 @@ namespace Castle.MonoRail.Framework
 
 			ArrayList errorList = new ArrayList();
 			
-			object instance = binder.BindObject( paramType, prefix, webParams, Context.Request.Files, errorList, nestedLevel, excludedProperties );
+			object instance = binder.BindObject( paramType, prefix, webParams, Context.Request.Files, errorList, nestedLevel, excludedProperties, allowedProperties );
 						
 			boundInstances[instance] = errorList;
 

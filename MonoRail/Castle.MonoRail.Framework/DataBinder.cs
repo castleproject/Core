@@ -15,12 +15,13 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Web;
 	using System.Reflection;
 	using System.Globalization;
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Text.RegularExpressions;
+
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// A DataBinder can be used to map properties from 
@@ -40,75 +41,86 @@ namespace Castle.MonoRail.Framework
 		protected internal static readonly BindingFlags PropertiesBindingFlags = 
 			BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-		private String root = null;
-		private IRailsEngineContext context;
+		#region DataBindContext
 		
-		#region Constructors
-		
-		public DataBinder(IRailsEngineContext context)
+		/// <summary>
+		/// This class is used just to minimize the number of params being passed between
+		/// calls, also to make it easier to make modifications in the future,
+		/// notice that the recursive nature of the algorithm prevent us from adding all
+		/// params here unless we implement some kind of stack. 
+		/// </summary>
+		private class DataBindContext
 		{
-			this.context = context;
+			internal NameValueCollection ParamList; 
+			internal IDictionary Files; 
+			internal IList Errors;
+			internal string [] ExcludedProperties;
+			internal string [] AllowedProperties;
+			internal string Root;
+			
+			public DataBindContext(String root, NameValueCollection paramList, IDictionary files, 
+				IList errorList, String[] excludedProperties, String[] allowedProperties)
+			{
+				Root = root;
+				ParamList = paramList;
+				Files = files;
+				Errors = errorList;
+				ExcludedProperties = excludedProperties;
+				AllowedProperties = allowedProperties;
+			}
 		}
-
+		
 		#endregion
-
+		
 		#region BindObject family
 
-		public object BindObject(Type instanceType)
+		public object BindObject(Type instanceType, String paramPrefix, NameValueCollection paramList)
 		{
-			return BindObject(instanceType, String.Empty, context.Params, context.Request.Files, null, DefaultNestedLevelsLeft, String.Empty);
-		}
-
-		public object BindObject(Type instanceType, String paramPrefix, IList errorList, int nestedLevel, String excludedProperties)
-		{
-			return BindObject(instanceType, paramPrefix, context.Params, context.Request.Files, errorList, nestedLevel, excludedProperties);
+			return BindObject(instanceType, paramPrefix, paramList, null, null, DefaultNestedLevelsLeft, null);
 		}
 
 		public object BindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
 			IDictionary files, IList errorList, int nestedLevel, String excludedProperties)
 		{
-			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
-			if (root == null) root = instanceType.Name;
+			return BindObject(instanceType, paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties, String.Empty );
+		}
+		
+		public object BindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList, int nestedLevel, String excludedProperties, String allowProperties)
+		{
+			String root = GetRoot(instanceType, paramPrefix);
+			paramPrefix = NormalizeParamPrefix(paramPrefix);
 
-			if (ShouldIgnoreElement( paramList, paramPrefix )) return null;
+			String[] excludedPropertyList = CreateNormalizedList(excludedProperties);
+			String[] allowPropertyList = CreateNormalizedList(allowProperties);
 
-			if (instanceType.IsArray)
-			{
-				return BindObjectArrayInstance(instanceType, paramPrefix, paramList, 
-					files, errorList, nestedLevel, excludedProperties);
-			}
-			else
-			{
-				object instance = CreateInstance(instanceType, paramPrefix, paramList);
-				
-				return BindObjectInstance(instance, paramPrefix, paramList, files, 
-					errorList, nestedLevel, excludedProperties);
-			}			
+			DataBindContext ctx = new DataBindContext(root, paramList, files, errorList, excludedPropertyList, allowPropertyList );
+			
+			return InternalBindObject(instanceType, paramPrefix, nestedLevel, ctx);
+		}
+
+		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
+			IDictionary files, IList errorList)
+		{
+			paramPrefix = NormalizeParamPrefix(paramPrefix);
+			String root = GetRoot(instance.GetType(), paramPrefix);
+			
+			DataBindContext ctx = new DataBindContext(root, paramList, files, errorList, null, null );
+
+			return InternalRecursiveBindObjectInstance( instance, paramPrefix, DefaultNestedLevelsLeft, ctx );
 		}
 		
 		#endregion
 			
-		#region CreateInstance 
-		 
 		protected virtual object CreateInstance( Type instanceType, string paramPrefix, NameValueCollection paramsList )
 		{
 			return Activator.CreateInstance(instanceType);
 		}
 		
-		protected virtual object CreateArrayElementInstance( Type instanceType, string paramPrefix, NameValueCollection paramsList )
+		#region Array Support
+		
+		private object[] InternalBindObjectArray(Type instanceType, String paramPrefix, int nestedLevelsLeft, DataBindContext ctx)
 		{
-			return CreateInstance( instanceType.GetElementType(), paramPrefix, paramsList );
-		}
-		
-		#endregion
-		
-		#region BindObjectInstance
-		
-		public object[] BindObjectArrayInstance(Type instanceType, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int nestedLevelsLeft, String excludedProperties)
-		{
-			if(ShouldIgnoreElement( paramList, paramPrefix )) return null;
-			
 			ArrayList bindArray = new ArrayList();
 	
 			// check if a count attribute is present, if so we assume the
@@ -116,7 +128,7 @@ namespace Castle.MonoRail.Framework
 			// param[0], param[1], ... param[count-1]
 			// otherwise we have to find all uniques id for that identifier
 			// which is probably slower but is more flexible
-			string countBeforeCast = paramList[paramPrefix + CountAttribute ];	
+			string countBeforeCast = ctx.ParamList[paramPrefix + CountAttribute ];	
 		
 			if( countBeforeCast != null )
 			{
@@ -124,156 +136,105 @@ namespace Castle.MonoRail.Framework
 				
 				// if count > paramList.Count that means that there is a problem
 				// in the count variable
-				if( count > paramList.Count ) count = paramList.Count;
+				if( count > ctx.ParamList.Count ) count = ctx.ParamList.Count;
 					
-				for(int i=0; i < count; i++)
+				for(int prefix=0; prefix < count; prefix++)
 				{
-					String arrayParamPrefix = paramPrefix + "[" + i + "]";
-
-					AddArrayInstance(bindArray, instanceType, arrayParamPrefix, 
-						paramList, files, errorList, nestedLevelsLeft, excludedProperties );											
+					AddArrayElement(bindArray, instanceType, prefix, paramPrefix, nestedLevelsLeft, ctx);											
 				}				
 			}
 			else
 			{
-				String[] uniquePrefixes = Grep( paramList.AllKeys, "^" + Regex.Escape( paramPrefix ) + @"\[(.*?)]", 1 );
+				String[] uniquePrefixes = Grep( ctx.ParamList.AllKeys, "^" + Regex.Escape( paramPrefix ) + @"\[(.*?)]", 1 );
 
 				foreach( string prefix in uniquePrefixes )
-				{
-					String arrayParamPrefix = paramPrefix + "[" + prefix + "]";
-				
-					AddArrayInstance(bindArray, instanceType, arrayParamPrefix, 
-						paramList, files, errorList, nestedLevelsLeft, excludedProperties );
+				{				
+					AddArrayElement(bindArray, instanceType, prefix, paramPrefix, nestedLevelsLeft, ctx );
 				}				
 			}
 						
 			return (object[]) bindArray.ToArray( instanceType.GetElementType() );		
 		}
 
-		#endregion
-				
-		#region BindObjectInstance
-
-		private void AddArrayInstance( ArrayList bindArray, Type instanceType, string arrayParamPrefix, NameValueCollection paramList, IDictionary files, IList errorList, int nestedLevelsLeft, string excludedProperties )
+		// Only here so we can support 2 types of loop in the BindObjectArrayInstance
+		// without duplicating too much code
+		private void AddArrayElement( ArrayList bindArray, Type instanceType, object arrayPrefix, string paramPrefix, int nestedLevelsLeft, DataBindContext ctx )
 		{
-			if( !ShouldIgnoreElement( paramList, arrayParamPrefix ) )
+			String arrayParamPrefix = paramPrefix + "[" + arrayPrefix + "]";
+			
+			if( !ShouldIgnoreElement( ctx.ParamList, arrayParamPrefix ) )
 			{
-				object instance = CreateArrayElementInstance(
-					instanceType, arrayParamPrefix, paramList);
+				object instance = CreateInstance(
+					instanceType.GetElementType(), arrayParamPrefix, ctx.ParamList);
 				
-				BindObjectInstance( instance, 
-					arrayParamPrefix, 
-					paramList, 
-					files, 
-					errorList, 
-					nestedLevelsLeft, 
-					excludedProperties );
+				InternalRecursiveBindObjectInstance( instance, arrayParamPrefix, nestedLevelsLeft, ctx );
 
 				bindArray.Add( instance );
 			}
 		}
 
-		public object BindObjectInstance(object instance, String paramPrefix)
-		{
-			paramPrefix = NormalizeParamPrefix(paramPrefix);
-
-			return InternalRecursiveBindObjectInstance(instance,  paramPrefix, context.Params, context.Request.Files, 
-				null, DefaultNestedLevelsLeft, string.Empty);
-		}
-
-		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList)
-		{
-			paramPrefix = NormalizeParamPrefix(paramPrefix);
-
-			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList, DefaultNestedLevelsLeft, string.Empty );
-		}
-
-		public object BindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int nestedLevel, String excludedProperties)
-		{
-			paramPrefix = NormalizeParamPrefix(paramPrefix);
-
-			return InternalRecursiveBindObjectInstance( instance, paramPrefix, paramList, files, errorList, nestedLevel, excludedProperties );
-		}
-
 		#endregion
 		
 		#region InternalBindObject
-		
-		private object InternalBindObject(Type instanceType, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int nestedLevelsLeft, string excludedProperties)
-		{
-			if (instanceType.IsAbstract || instanceType.IsInterface) return null;
-			if (root == null) root = instanceType.Name;
 
-			object instance = CreateInstance(instanceType, paramPrefix, paramList);
-
-			return InternalRecursiveBindObjectInstance(instance, paramPrefix, paramList, files, 
-				errorList, nestedLevelsLeft, excludedProperties);
-		}
-		
-		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, NameValueCollection paramList, 
-			IDictionary files, IList errorList, int nestedLevelsLeft, string excludedProperties)
-		{
-			if (--nestedLevelsLeft < 0)
+		private object InternalBindObject(Type instanceType, String paramPrefix, int nestedLevelsLeft, DataBindContext ctx)
+		{		
+			if (ShouldIgnoreType(instanceType) ||
+			    ShouldIgnoreElement( ctx.ParamList, paramPrefix )) return null;
+					
+			if (instanceType.IsArray)
 			{
-				return instance;
+				return InternalBindObjectArray(instanceType, paramPrefix, nestedLevelsLeft, ctx);
 			}
+			else
+			{
+				object instance = CreateInstance(instanceType, paramPrefix, ctx.ParamList);				
+				return InternalRecursiveBindObjectInstance(instance, paramPrefix, nestedLevelsLeft, ctx);
+			}			
+		}
 			
-			if( ShouldIgnoreElement( paramList, paramPrefix ) ) return null;
+		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, int nestedLevelsLeft, DataBindContext ctx)
+		{
+			if (--nestedLevelsLeft < 0) return instance;			
+			if (ShouldIgnoreElement (ctx.ParamList, paramPrefix)) return instance;
 
 			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
-			String[] excludeList = CreateExcludeList(excludedProperties);
-
 			foreach (PropertyInfo prop in props)
 			{
-				if (!prop.CanWrite || Array.IndexOf(excludeList, prop.Name) != -1)
-				{
-					continue;
-				}
-
-				Type propType = prop.PropertyType;
-								
+				if( ShouldIgnoreProperty(prop, ctx) ) continue;
+				
+				Type propType = prop.PropertyType;								
+				String paramName = BuildParamName(paramPrefix, prop.Name);
 				try
 				{
 					if ( !IsSimpleProperty(propType) )
 					{
-						// if the property is an object, we look if it is already instanciated
-						object value = prop.GetValue(instance, null);
+						if( nestedLevelsLeft > 0 )
+						{
+							// if the property is an object, we look if it is already instanciated
+							object value = prop.GetValue(instance, null);
 						
-						String propName = BuildParamName(paramPrefix, prop.Name);
-
-						if( propType.IsArray )
-						{
-							value = BindObjectArrayInstance(
-										propType, propName, paramList, files, 										
-										errorList, nestedLevelsLeft, excludedProperties);
-							prop.SetValue(instance, value, null);
-						}
-						else if (value == null) // if it's not there, we create it
-						{
-							value = InternalBindObject(prop.PropertyType, propName, paramList, files, 
-								errorList, nestedLevelsLeft, excludedProperties);
-							
-							prop.SetValue(instance, value, null);
-						}
-						else // if the object already instanciated, then we use it 
-						{
-							InternalRecursiveBindObjectInstance(value, propName, paramList, files, 
-								errorList, nestedLevelsLeft, excludedProperties);
+							// if it's not there, we create it
+							// Or if is an array
+							if ( value == null || propType.IsArray ) 
+							{
+								value = InternalBindObject(propType, paramName, nestedLevelsLeft, ctx);							
+								prop.SetValue(instance, value, null);
+							}
+							else // if the object already instanciated, then we use it 
+							{
+								InternalRecursiveBindObjectInstance(value, paramName, nestedLevelsLeft, ctx);
+							}							
 						}
 					}
 					else
 					{
-						String paramName = BuildParamName(paramPrefix, prop.Name); 
-
 						bool conversionSucceeded;
 
-						String[] values = paramList.GetValues(paramName);
+						String[] values = ctx.ParamList.GetValues(paramName);
 						
-						object value = Convert(prop.PropertyType, values, paramName, files, context, out conversionSucceeded);
+						object value = ConvertUtils.Convert(prop.PropertyType, values, paramName, ctx.Files, ctx.ParamList, out conversionSucceeded);
 						
 						// we don't want to set the value if the form param was missing
 						// to avoid loosing existing values in the object instance
@@ -285,9 +246,10 @@ namespace Castle.MonoRail.Framework
 				}
 				catch (Exception ex)
 				{
-					if (errorList != null)
+					if (ctx.Errors != null)
 					{
-						errorList.Add(new DataBindError(root, BuildParamName(paramPrefix, prop.Name), ex));
+						ctx.Errors.Add(new DataBindError( ctx.Root, 
+							(paramPrefix == "") ? paramName : prop.Name, ex ));
 					}
 					else
 					{
@@ -303,6 +265,26 @@ namespace Castle.MonoRail.Framework
 		
 		#region Helpers
 
+		private bool ShouldIgnoreElement( NameValueCollection paramList, string paramPrefix )
+		{		
+			return Yes.Equals( paramList.Get(paramPrefix + IgnoreAttribute) ); 
+		}
+
+		private bool ShouldIgnoreProperty( PropertyInfo prop, DataBindContext ctx )
+		{
+			return !prop.CanWrite || 
+				   ( ctx.AllowedProperties != null && 
+				     Array.IndexOf( ctx.AllowedProperties, prop.Name) == -1 ) ||
+				   ( ctx.ExcludedProperties != null &&  
+				     Array.IndexOf( ctx.ExcludedProperties, prop.Name) != -1 ) ;
+		}
+
+		private bool ShouldIgnoreType(Type instanceType)
+		{
+			return instanceType.IsAbstract ||
+			       instanceType.IsInterface;
+		}
+		
 		private bool IsSimpleProperty(Type propType)
 		{
 			// When dealing with arrays or lists we want to check
@@ -313,36 +295,34 @@ namespace Castle.MonoRail.Framework
 			return propType.IsPrimitive || propType.IsEnum ||
 				   propType == typeof(String) ||
 				   propType == typeof(Guid) || 
-				   propType == typeof(DateTime);
-		}
-		
-		private bool ShouldIgnoreElement( NameValueCollection paramList, string paramPrefix )
-		{		
-			return Yes.Equals( paramList.Get(paramPrefix + IgnoreAttribute) ); 
+				   propType == typeof(DateTime) ||
+				   propType == typeof(Decimal);
 		}
 
-		private String[] CreateExcludeList(String excludedProperties)
+		private string GetRoot( Type type, string prefix )
 		{
-			String[] excludeList = excludedProperties.Split(',');
-	
-			if (excludedProperties != null)
+			return (prefix == null) ? type.Name : prefix;
+		}
+		
+		private String[] CreateNormalizedList(String csv)
+		{
+			if( csv == null || csv.Trim() == String.Empty )
 			{
-				excludeList = excludedProperties.Split(',');
-				NormalizeExcludeList(excludeList);
+				return null;
 			}
 			else
 			{
-				excludeList = new String[] { String.Empty };
+				String[] list = csv.Split(',');
+				NormalizeList(list);
+				return list;
 			}
-
-			return excludeList;
 		}
 
-		private void NormalizeExcludeList(String[] excludeList)
+		private void NormalizeList(String[] list)
 		{
-			for(int i=0; i < excludeList.Length; i++)
+			for(int i=0; i < list.Length; i++)
 			{
-				excludeList[i] = excludeList[i].Trim();
+				list[i] = list[i].Trim();
 			}
 		}
 				
@@ -403,155 +383,5 @@ namespace Castle.MonoRail.Framework
 		}
 				
 		#endregion
-		
-		#region Convert
-		
-		public static object Convert(Type desiredType, String value, String paramName, IDictionary files, IRailsEngineContext context)
-		{
-			return Convert(desiredType, new String[] { value }, paramName, files, context);
-		}
-
-		public static object Convert(Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context)
-		{
-			bool conversionSucceeded; 
-			return Convert(desiredType, values, paramName, files, context, out conversionSucceeded);
-		}
-		
-		private static object Convert(Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context, out bool conversionSucceeded)
-		{
-			String value = null;
-
-			if (values != null && values.Length > 0) 
-			{
-				value = values[0];
-				conversionSucceeded = true;
-			}
-			else
-			{
-				conversionSucceeded = false;
-			}
-
-			if (desiredType == typeof(String))
-			{
-				return value;
-			}
-			else if (desiredType.IsArray)
-			{
-				return values != null ? ConvertToArray(desiredType, values, paramName, files, context) : null;
-			}
-			else if (desiredType.IsEnum)
-			{
-				if (value == String.Empty || value == null) return null;
-				
-				if (!Regex.IsMatch(value.ToString(), @"\D", RegexOptions.Compiled)) 
-				{
-					object enumValue = System.Convert.ChangeType(value, Enum.GetUnderlyingType(desiredType));
-					// optional: test if the specified value is valid within the enum
-					//if (Enum.IsDefined(desiredType, enumValue))
-					//	throw or set enumValue = null
-					return enumValue;
-				}
-				
-				return Enum.Parse(desiredType, value, true);
-			}
-			else if (desiredType.IsPrimitive)
-			{
-				if (desiredType == typeof(Boolean))
-					return (value != null && String.Compare("false", value, true) != 0);
-				
-				if (value == String.Empty || value == null) 
-					return null;
-				
-				return System.Convert.ChangeType(value, desiredType);
-			}
-			else if (desiredType == typeof(Guid))
-			{
-				if (value == null) return Guid.Empty;
-				return new Guid(value.ToString());
-			}
-			else if (desiredType == typeof(DateTime))
-			{
-				if (value == null)
-				{
-					String day = context.Params[paramName + "day"];
-					String month = context.Params[paramName + "month"];
-					String year = context.Params[paramName + "year"];
-
-					if (day != null && month != null && year != null)
-					{
-						try
-						{
-							// we have found a composite date so we 
-							// consider the convertion successful
-							conversionSucceeded = true; 
-
-							return new DateTime(
-								System.Convert.ToInt32(year), 
-								System.Convert.ToInt32(month), 
-								System.Convert.ToInt32(day));
-						}
-						catch(Exception inner)
-						{
-							String message = String.Format("Invalid date (day {0} month {1} year {2}) for {3} ", 
-								day, month, year, paramName);
-
-							throw new ArgumentException(message, inner);
-						}
-					}
-				}
-
-				if (value == null || value == String.Empty)
-				{
-					return null;
-				}
-				else
-				{
-					return DateTime.Parse(value);
-				}
-			}
-			else if (desiredType == typeof(HttpPostedFile))
-			{
-				conversionSucceeded = true; // if we get some files we don't care about the values being null
-				return files[paramName];
-			}
-			else 
-			{
-				conversionSucceeded = false;
-
-				if (context != null)
-				{
-					String message = String.Format("Ignoring argument '{0}' with value '{1}' " + 
-						"as we don't know how to convert from this value to its type. " +
-						"desired type = {2}", paramName, value, desiredType);
-	
-					context.Trace.Warn(message);
-				}
-			}
-
-			return null;
-		}
-
-		private static object ConvertToArray(Type desiredType, String[] values, String paramName, IDictionary files, IRailsEngineContext context)
-		{
-			Type elemType	= desiredType.GetElementType();
-
-			// Fix for mod_mono issue where array values are passed 
-			// as a comma seperated String
-			if(values.Length == 1 && (values[0].IndexOf(',') > -1))
-			{
-				values = values[0].Split(',');
-			}
-
-			Array newArray	= Array.CreateInstance(elemType, values.Length);
-	
-			for(int i=0; i < values.Length; i++)
-			{
-				newArray.SetValue(Convert(elemType, new String[] { values[i] }, paramName, files, context), i);
-			}
-	
-			return newArray;
-		}
-		
-		#endregion		
-	}
+	}		
 }

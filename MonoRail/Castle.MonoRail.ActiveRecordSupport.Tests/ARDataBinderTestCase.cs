@@ -31,9 +31,9 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 	using TestScaffolding.Model;
 
 	[TestFixture]
-	public class ARDataBinderTestCase// : AbstractMRTestCase
+	public class ARDataBinderTestCase
 	{
-		private ARDataBinder binder = new ARDataBinder(null);
+		private ARDataBinder binder = new ARDataBinder();
 		private NameValueCollection args;
 		private object instance;
 		private SimplePerson person;
@@ -56,8 +56,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			args = DataBinderTestCase.ParseNameValueString(data);
 			
-			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", 
-				args, null, null, 3, "");
+			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", args);
 			
 			Assert.IsNotNull(instance);	
 			person = instance as SimplePerson;
@@ -79,8 +78,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			args = DataBinderTestCase.ParseNameValueString(@data);
 			
-			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", 
-				args, null, null, 3, "");
+			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", args);
 			
 			Assert.IsNotNull(instance);	
 			person = instance as SimplePerson;
@@ -100,8 +98,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			try
 			{
-				instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", 
-					args, null, null, 3, "");	
+				instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", args);	
 
 				Assert.Fail("Autoload should had thrown an exception, cause pk was missing");
 			}
@@ -124,14 +121,8 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			try
 			{
-				instance = binder.BindObject(
-					typeof(SimplePerson), 
-					"SimplePerson", 
-					args, 
-					null, 
-					null, 
-					3, 
-					"");	
+				instance = binder.BindObject( typeof(SimplePerson), "SimplePerson", args);	
+				
 				Assert.Fail("Autoload should had thrown an exception, cause pk value was invalid");
 			}
 			catch(Castle.ActiveRecord.NotFoundException)
@@ -148,14 +139,8 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			try
 			{
-				instance = binder.BindObject(
-					typeof(DisconnectedPerson),
-					"DisconnectedPerson", 
-					args, 
-					null, 
-					null, 
-					3, 
-					"");	
+				instance = binder.BindObject( typeof(DisconnectedPerson), "DisconnectedPerson", args );	
+
 				Assert.Fail("Autoload should had thrown an exception, DisconnectedPerson is not an active record class");
 			}
 			catch(RailsException)
@@ -187,14 +172,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			args = DataBinderTestCase.ParseNameValueString(@data);
 			
-			instance = binder.BindObject(
-				typeof(SimplePerson[]),
-				"SimplePerson", 
-				args, 
-				null, 
-				null, 
-				3, 
-				"");	
+			instance = binder.BindObject( typeof(SimplePerson[]), "SimplePerson", args );	
 
 			Assert.IsNotNull(instance);
 			people = instance as SimplePerson[];

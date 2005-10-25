@@ -374,6 +374,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\ConvertUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\DefaultControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

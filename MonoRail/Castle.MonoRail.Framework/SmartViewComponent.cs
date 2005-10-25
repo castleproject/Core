@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework
 				allParams[ entry.Key.ToString() ] = entry.ToString();
 			}
 
-			DataBinder binder = new DataBinder(RailsContext);
+			DataBinder binder = new DataBinder();
 
 			binder.BindObjectInstance( this, String.Empty, allParams, Request.Files, null );
 		}

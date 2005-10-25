@@ -31,19 +31,21 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			String name = "John";
 			int age = 32;
+			decimal assets = (decimal)100000;
 			NameValueCollection args = new NameValueCollection();
 
 			args.Add("Person.Name", name);
 			args.Add("Person.Age", age.ToString());
-			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(typeof (Person), "Person",
-				args, null, null, 3, "");
+			args.Add("Person.Assets", assets.ToString() );
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person), "Person", args);
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
 			Assert.IsNotNull(person);
 			Assert.AreEqual(person.Age, age);
 			Assert.AreEqual(person.Name, name);
+			Assert.AreEqual(person.Assets, assets);
 		}
 
 		[Test]
@@ -55,9 +57,8 @@ namespace Castle.MonoRail.Framework.Tests
 
 			args.Add("Name", name);
 			args.Add("Age", age.ToString());
-			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(typeof(Person), "", args,
-				null, null, 3, "");
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "", args);
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
@@ -74,9 +75,8 @@ namespace Castle.MonoRail.Framework.Tests
 			NameValueCollection args = new NameValueCollection();
 			args.Add("Game.Scores", scores);
 			args.Add("Game.Opponents", opponents);
-			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(typeof(Game), "Game", args,
-				null, null, 3, "");
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Game), "Game", args);
 
 			Assert.IsNotNull(instance);
 			Game game = instance as Game;
@@ -99,9 +99,8 @@ namespace Castle.MonoRail.Framework.Tests
 			";
 
 			NameValueCollection args = ParseNameValueString(data);
-			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(typeof(Person[]), "Person",
-				args, null, null, 3, "");
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person[]), "Person", args);
 
 			Assert.IsNotNull(instance);
 			Person[] sc = instance as Person[];
@@ -124,9 +123,8 @@ namespace Castle.MonoRail.Framework.Tests
 			";
 
 			NameValueCollection args = ParseNameValueString(data);
-			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(typeof (Person[]), "",
-				args, null, null, 3, "");
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person[]), "", args);
 
 			Assert.IsNotNull(instance);
 			Person[] sc = instance as Person[];
@@ -142,35 +140,54 @@ namespace Castle.MonoRail.Framework.Tests
 		public void IgnoreAttributeDataBind()
 		{
 			Team[] team = null;
-			DataBinder binder = new DataBinder(null);
+			DataBinder binder = new DataBinder();
 			object instance;
 			NameValueCollection args;
 			foreach (bool useCountAttribute in new bool[] {true, false})
 			{
 				args = BuildComplexParamList(useCountAttribute);
 				args.Add("Team@ignore", "yes");
-				instance = binder.BindObject(typeof (Team[]), "Team",
-					args, null, null, 3, "");
+				instance = binder.BindObject(typeof (Team[]), "Team", args);
 				Assert.IsNull(instance);
 
 				args.Remove("Team@ignore");
 				args.Add("Team[0]@ignore", "yes");
-				instance = binder.BindObject(typeof(Team[]), 
-					"Team", args, null, null, 3, "");
+				instance = binder.BindObject(typeof(Team[]), "Team", args);
 				team = instance as Team[];
 				Assert.IsNotNull(team);
 				Assert.IsTrue(team.Length == 1);
 
 				args.Remove("Team[0]@ignore");
 				args.Add("Team[0].Members@ignore", "yes");
-				instance = binder.BindObject(typeof (Team[]), "Team",
-					args, null, null, 3, "");
+				instance = binder.BindObject(typeof (Team[]), "Team", args);
 				team = instance as Team[];
 				Assert.IsNotNull(team);
 				Assert.IsNull(team[0].Members);
 			}
 		}
 
+		[Test]
+		public void NestedLevelArrayDataBind()
+		{
+			Team[] team = null;
+			foreach (bool useCountAttribute in new bool[] {true, false})
+			{
+				NameValueCollection args = BuildComplexParamList(useCountAttribute);
+
+				DataBinder binder = new DataBinder();
+				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,1,null);
+
+				Assert.IsNotNull(instance);
+				team = instance as Team[];
+				Assert.IsNotNull(team);
+				Assert.IsTrue(team[0].Name == "A-Team");
+				Assert.IsTrue(team[1].Name == "B-Team");
+				Assert.IsNull(team[0].Games);
+				Assert.IsNull(team[0].Members);
+				Assert.IsNull(team[1].Members);
+			}
+		}
+		
 		[Test]
 		public void NestedArrayDataBind()
 		{
@@ -179,14 +196,12 @@ namespace Castle.MonoRail.Framework.Tests
 			{
 				NameValueCollection args = BuildComplexParamList(useCountAttribute);
 
-				DataBinder binder = new DataBinder(null);
-				object instance = binder.BindObject(typeof (Team[]),"Team",
-					args,null,null,3,"");
+				DataBinder binder = new DataBinder();
+				object instance = binder.BindObject(typeof (Team[]),"Team",args);
 
 				Assert.IsNotNull(instance);
 				team = instance as Team[];
 				Assert.IsNotNull(team);
-				Assert.IsTrue(team.Length == 2);
 				Assert.IsTrue(team[0].Games[0].Scores.Length == 2);
 				Assert.IsTrue(team[0].Games[0].Opponents.Length == 2);
 				Assert.IsTrue(team[0].Games[1].Scores.Length == 3);
@@ -198,9 +213,93 @@ namespace Castle.MonoRail.Framework.Tests
 				Assert.IsTrue(team[0].Members[1].Age == 15);
 				Assert.IsTrue(team[1].Members[0].Name == "Mr. B-White");
 				Assert.IsTrue(team[1].Members[0].Age == 20);
+				Assert.IsTrue(team[1].Name == "B-Team");
 			}
 		}
 
+		[Test]
+		public void NestedArrayDataBindWithExcludeList()
+		{
+			Team[] team = null;
+			foreach (bool useCountAttribute in new bool[] {true, false})
+			{
+				NameValueCollection args = BuildComplexParamList(useCountAttribute);
+
+				DataBinder binder = new DataBinder();
+				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,3,"Games,Name");
+
+				Assert.IsNotNull(instance);
+				team = instance as Team[];
+				Assert.IsNotNull(team);
+				Assert.IsTrue(team.Length == 2);
+				Assert.IsNull(team[0].Games);
+				Assert.IsNull(team[0].Name);
+				Assert.IsTrue(team[0].Members[0].Age == 25);
+				Assert.IsNull(team[0].Members[1].Name);
+				Assert.IsTrue(team[0].Members[1].Age == 15);
+				Assert.IsNull(team[1].Members[0].Name);
+				Assert.IsTrue(team[1].Members[0].Age == 20);
+				Assert.IsNull(team[1].Name);
+			}
+		}
+		
+		[Test]
+		public void NestedArrayDataBindWithAllowList()
+		{
+			Team[] team = null;
+			foreach (bool useCountAttribute in new bool[] {true, false})
+			{
+				NameValueCollection args = BuildComplexParamList(useCountAttribute);
+
+				DataBinder binder = new DataBinder();
+				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,3,null,"Name,Games,Members");
+
+				Assert.IsNotNull(instance);
+				team = instance as Team[];
+				Assert.IsNotNull(team);
+				Assert.IsNull(team[0].Games[0].Scores);
+				Assert.IsNull(team[0].Games[0].Opponents);
+				Assert.IsNull(team[0].Games[1].Scores);
+				Assert.IsNull(team[0].Games[1].Opponents);
+				Assert.IsTrue(team[0].Name == "A-Team");
+				Assert.IsTrue(team[0].Members[0].Name == "Mr. White");
+				Assert.IsTrue(team[0].Members[0].Age == 0);
+				Assert.IsTrue(team[0].Members[1].Name == "Mr. Black");
+				Assert.IsTrue(team[0].Members[1].Age == 0);
+				Assert.IsTrue(team[1].Members[0].Name == "Mr. B-White");
+				Assert.IsTrue(team[1].Members[0].Age == 0);
+				Assert.IsTrue(team[1].Name == "B-Team");
+			}
+		}
+		
+		[Test]
+		public void NestedArrayDataBindWithAllowAndExcludeList()
+		{
+			Team[] team = null;
+			foreach (bool useCountAttribute in new bool[] {true, false})
+			{
+				NameValueCollection args = BuildComplexParamList(useCountAttribute);
+
+				DataBinder binder = new DataBinder();
+				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,3,"Games","Name,Games,Members");
+
+				
+				Assert.IsNotNull(instance);
+				team = instance as Team[];
+				Assert.IsNotNull(team);
+				// Game pass allowlist but should fail on the exclude
+				Assert.IsNull(team[0].Games);
+				Assert.IsTrue(team[0].Name == "A-Team");
+				Assert.IsTrue(team[0].Members[0].Name == "Mr. White");
+				Assert.IsTrue(team[0].Members[0].Age == 0);
+				Assert.IsTrue(team[0].Members[1].Name == "Mr. Black");
+				Assert.IsTrue(team[0].Members[1].Age == 0);
+				Assert.IsTrue(team[1].Members[0].Name == "Mr. B-White");
+				Assert.IsTrue(team[1].Members[0].Age == 0);
+				Assert.IsTrue(team[1].Name == "B-Team");
+			}
+		}
+		
 		[Test]
 		public void NonNumericIdAttribute()
 		{
@@ -215,9 +314,8 @@ namespace Castle.MonoRail.Framework.Tests
 
 			NameValueCollection args = ParseNameValueString(data);
 
-			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(typeof (Person[]),
-				"Person", args, null, null, 3, "");
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person[]), "Person", args);
 
 			Assert.IsNotNull(instance);
 			Person[] people = instance as Person[];
@@ -225,6 +323,95 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsTrue(people.Length == 3);
 		}
 
+		[Test]
+		public void SimpleDataBindWithErrors()
+		{
+			// Test when count is too big
+			string data = @"
+				Person.Name = John
+				Person.Age = Thirty Two?
+			";
+
+			NameValueCollection args = ParseNameValueString(data);
+			ArrayList errorList = new ArrayList();
+			
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person), "Person", args, null, errorList, 3, null);
+
+			Assert.IsNotNull(instance);
+			Person person = instance as Person;
+			Assert.IsNotNull(person);
+			Assert.IsTrue(person.Name == "John");
+			Assert.IsTrue(person.Age == 0);
+			Assert.IsTrue(errorList.Count == 1);
+		}
+
+		[Test]
+		public void SimpleDataBindWithErrorsNoPrefix()
+		{
+			// Test when count is too big
+			string data = @"
+				Name = John
+				Age = Thirty Two?
+			";
+
+			NameValueCollection args = ParseNameValueString(data);
+			ArrayList errorList = new ArrayList();
+			
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person), null, args, null, errorList, 3, null);
+
+			Assert.IsNotNull(instance);
+			Person person = instance as Person;
+			Assert.IsNotNull(person);
+			Assert.IsTrue(person.Name == "John");
+			Assert.IsTrue(person.Age == 0);
+			Assert.IsTrue(errorList.Count == 1);
+			Assert.IsTrue( (errorList[0] as DataBindError).Key.IndexOf("Person") == 0 );
+		}
+		
+		[Test]
+		public void ComplexDataBindWithErrors()
+		{
+			// Test when count is too big
+			string data = @"
+				[0].Games[0].Scores	   = x,x
+				[0].Games[0].Opponents = Santos,Cruzeiro
+				[0].Games[1].Scores    = x,x,x
+				[0].Games[1].Opponents = Santos,Cruzeiro,Guarani
+				[0].Name = A-Team
+				[0].Members[0].Name = Mr. White
+				[0].Members[0].Age  = xx
+				[0].Members[1].Name = Mr. Black
+				[0].Members[1].Age  = xx
+				[1].Members[0].Name = Mr. B-White
+				[1].Members[0].Age  = xx				
+				[1].Name = B-Team
+			";
+
+			NameValueCollection args = ParseNameValueString(data);
+			ArrayList errorList = new ArrayList();
+			
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Team[]), null, args, null, errorList, 3, null);
+			Assert.IsNotNull(instance);
+			Team[] team = instance as Team[];
+			
+			Assert.IsNotNull(team);
+			Assert.IsNull(team[0].Games[0].Scores );
+			Assert.IsNull(team[0].Games[1].Scores );
+			Assert.IsTrue(team[0].Name == "A-Team");
+			Assert.IsTrue(team[1].Name == "B-Team");
+			Assert.IsTrue(team[0].Members[0].Name == "Mr. White");
+			Assert.IsTrue(team[0].Members[0].Age == 0);
+			Assert.IsTrue(team[0].Members[1].Name == "Mr. Black");
+			Assert.IsTrue(team[0].Members[1].Age == 0);
+			Assert.IsTrue(team[1].Members[0].Name == "Mr. B-White");
+			Assert.IsTrue(team[1].Members[0].Age == 0);
+			Assert.IsTrue(errorList.Count == 5);
+			Assert.IsTrue( (errorList[0] as DataBindError).Key.IndexOf("Team") == 0 );			
+		}
+				
 		[Test]
 		public void CountAttribute()
 		{
@@ -239,9 +426,8 @@ namespace Castle.MonoRail.Framework.Tests
 
 			NameValueCollection args = ParseNameValueString(data);
 
-			DataBinder binder = new DataBinder(null);
-			object instance = binder.BindObject(typeof (Person[]), "Person",
-				args, null, null, 3, "");
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person[]), "Person", args );
 
 			Assert.IsNotNull(instance);
 			Person[] people = instance as Person[];
@@ -249,9 +435,8 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsTrue(people.Length == 5);
 
 			args["Person@count"] = "2";
-			binder = new DataBinder(null);
-			instance = binder.BindObject(typeof (Person[]), "Person",
-				args, null, null, 3, "");
+			binder = new DataBinder();
+			instance = binder.BindObject(typeof (Person[]), "Person", args );
 
 			Assert.IsNotNull(instance);
 			people = instance as Person[];
@@ -288,6 +473,7 @@ namespace Castle.MonoRail.Framework.Tests
 				Team[0].Members[1].Age  = 15
 				Team[1].Members[0].Name = Mr. B-White
 				Team[1].Members[0].Age  = 20				
+				Team[1].Name = B-Team
 			";
 
 			return ParseNameValueString(data);
@@ -396,7 +582,8 @@ namespace Castle.MonoRail.Framework.Tests
 	{
 		private string _name;
 		private Int32 _age;
-
+		private Decimal _assets;
+		
 		public String Name
 		{
 			get { return _name; }
@@ -407,6 +594,12 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			get { return _age; }
 			set { _age = value; }
+		}
+
+		public Decimal Assets
+		{
+			get { return _assets; }
+			set { _assets = value; }
 		}
 	}
 
