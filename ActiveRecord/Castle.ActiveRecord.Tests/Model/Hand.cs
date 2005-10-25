@@ -14,7 +14,6 @@
 
 namespace Castle.ActiveRecord.Tests.Model
 {
-	
 	[ActiveRecord("Hands")]
 	public class Hand : Test2ARBase
 	{
@@ -28,32 +27,20 @@ namespace Castle.ActiveRecord.Tests.Model
 		[PrimaryKey(PrimaryKeyType.Identity)]
 		public int Id
 		{
-			get
-			{
-				return _id;
-			}
-			set
-			{
-				_id = value;
-			}
+			get { return _id; }
+			set { _id = value}
 		}
 
 		[Property]
 		public string Side
 		{
-			get
-			{
-				return _side;
-			}
-			set
-			{
-				_side = value;
-			}
+			get { return _side; }
+			set { _side = value; }
 		}
 
 		public static Hand[] FindAll()
 		{
-			return (Hand[]) ActiveRecordBase.FindAll( typeof(Hand) );
+			return (Hand[]) ActiveRecordBase.FindAll(typeof (Hand));
 		}
 	}
 }

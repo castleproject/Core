@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Tests
 	using System.Collections;
 
 	using NHibernate;
-
+	
 	using Castle.ActiveRecord.Framework;
 
 
@@ -54,28 +54,28 @@ namespace Castle.ActiveRecord.Tests
 			set { _author = value; }
 		}
 
-		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid")]
+		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid")]
 		public IList Posts
 		{
 			get { return _posts; }
 			set { _posts = value; }
 		}
 
-		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 1")]
+		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid", Where="published = 1")]
 		public IList PublishedPosts
 		{
 			get { return _publishedposts; }
 			set { _publishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", Where="published = 0")]
+		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid", Where="published = 0")]
 		public IList UnPublishedPosts
 		{
 			get { return _unpublishedposts; }
 			set { _unpublishedposts = value; }
 		}
 
-		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid", OrderBy="created desc")]
+		[HasMany(typeof (Post), Table="Posts", ColumnKey="blogid", OrderBy="created desc")]
 		public IList RecentPosts
 		{
 			get { return _recentposts; }
@@ -84,55 +84,55 @@ namespace Castle.ActiveRecord.Tests
 
 		public static void DeleteAll()
 		{
-			DomainModel.DeleteAll( typeof(Blog));
+			DomainModel.DeleteAll(typeof (Blog));
 		}
 
 		public static Blog[] FindAll()
 		{
-            return (Blog[])DomainModel.FindAll(typeof(Blog));
+			return (Blog[]) DomainModel.FindAll(typeof (Blog));
 		}
 
 		public static Blog Find(int id)
 		{
-			return (Blog) DomainModel.FindByPrimaryKey(typeof(Blog), id );
+			return (Blog) DomainModel.FindByPrimaryKey(typeof (Blog), id);
 		}
 
 		public void CustomAction()
 		{
-			DomainModel.Execute(typeof(Blog), new NHibernateDelegate(MyCustomMethod), this);
+			DomainModel.Execute(typeof (Blog), new NHibernateDelegate(MyCustomMethod), this);
 		}
 
 		private object MyCustomMethod(ISession session, object blogInstance)
 		{
 			session.Delete(blogInstance);
 			session.Flush();
-			
+
 			return null;
 		}
 
-        internal void Save()
-        {
-            DomainModel.Save(this);
-        }
+		internal void Save()
+		{
+			DomainModel.Save(this);
+		}
 
-        internal void Create()
-        {
-            DomainModel.Create(this);
-        }
+		internal void Create()
+		{
+			DomainModel.Create(this);
+		}
 
-        internal void Update()
-        {
-            DomainModel.Update(this);
-        }
+		internal void Update()
+		{
+			DomainModel.Update(this);
+		}
 
-        internal void Delete()
-        {
-            DomainModel.Delete(this);
-        }
+		internal void Delete()
+		{
+			DomainModel.Delete(this);
+		}
 
-        internal static ISessionFactoryHolder Holder
-        {
-            get { return DomainModel.GetSessionFactoryHolder(); }
-        }
-    }
+		internal static ISessionFactoryHolder Holder
+		{
+			get { return DomainModel.GetSessionFactoryHolder(); }
+		}
+	}
 }

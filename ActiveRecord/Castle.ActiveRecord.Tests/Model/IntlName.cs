@@ -21,7 +21,7 @@ namespace Castle.ActiveRecord.Tests.Model
 	public class IntlName : ActiveRecordBase
 	{
 		private int id;
-		private IDictionary snippet = new Hashtable(); 
+		private IDictionary snippet = new Hashtable();
 
 		public IntlName()
 		{
@@ -34,7 +34,7 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { id = value; }
 		}
 
-		[HasMany( typeof(Snippet), ColumnKey="refid", Index="langcode", IndexType="string" )]
+		[HasMany(typeof (Snippet), ColumnKey="refid", Index="langcode", IndexType="string")]
 		public IDictionary Snippet
 		{
 			get { return snippet; }

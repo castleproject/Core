@@ -17,7 +17,6 @@ namespace Castle.ActiveRecord.Tests
 	using System;
 	using System.Collections;
 
-
 	[ActiveRecord("PostTable")]
 	public class PostLazy : ActiveRecordBase
 	{

@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
-	using Castle.ActiveRecord.Framework;
+
 	using NHibernate;
 	using NHibernate.Expression;
 

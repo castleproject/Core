@@ -40,7 +40,6 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { this.product_name = value; }
 		}
 
-
 		[Property()]
 		public string SerialNumber
 		{
@@ -54,7 +53,6 @@ namespace Castle.ActiveRecord.Tests.Model
 			get { return this.price; }
 			set { this.price = value; }
 		}
-
 
 		[HasAndBelongsToMany(typeof (Order), RelationType.Set,
 			Table="line_item",
@@ -99,7 +97,6 @@ namespace Castle.ActiveRecord.Tests.Model
 			set { this.product_name = value; }
 		}
 
-
 		[Property()]
 		public string SerialNumber
 		{
@@ -113,7 +110,6 @@ namespace Castle.ActiveRecord.Tests.Model
 			get { return this.price; }
 			set { this.price = value; }
 		}
-
 
 		[HasAndBelongsToMany(typeof (OrderWithIDBag), RelationType.IdBag,
 			Table="line_item_non_ident",

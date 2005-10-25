@@ -17,7 +17,6 @@ namespace Castle.ActiveRecord.Tests.Model
 	using System;
 	using System.Collections;
 
-
 	[ActiveRecord("People")]
 	public class Person : ActiveRecordBase
 	{

@@ -58,9 +58,6 @@ namespace Castle.ActiveRecord.Tests.Model.RulesModel
     {
         string name;
 
-        /// <summary>
-        /// 
-        /// </summary>
         [Property]
         public string Name
         {

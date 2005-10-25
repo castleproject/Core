@@ -16,10 +16,11 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
+	
 	using Castle.ActiveRecord.Framework;
+
 	using NHibernate;
 	using NHibernate.Expression;
-
 
 	/// <summary>
 	/// Static class that holds all the functionality for Active Record. Allows the use
@@ -27,7 +28,6 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public class DomainModel
 	{
-
 		protected internal static ISessionFactoryHolder _holder;
 		protected internal static IDictionary type2Model = Hashtable.Synchronized( new Hashtable() );
 
@@ -83,10 +83,10 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		public static object Execute(Type targetType, NHibernateDelegate call, object instance)
 		{
-			EnsureInitialized(targetType);
-
 			if (targetType == null) throw new ArgumentNullException("targetType", "Target type must be informed");
 			if (call == null) throw new ArgumentNullException("call", "Delegate must be passed");
+
+			EnsureInitialized(targetType);
 
 			ISession session = _holder.CreateSession( targetType );
 
@@ -420,6 +420,5 @@ namespace Castle.ActiveRecord
             return _holder;
         }
 	}
-
 }
 

@@ -14,37 +14,37 @@
 
 namespace Castle.ActiveRecord.Tests.Model
 {
-  using System;
+	using System;
 
 
-  [ActiveRecord("Line_Item")]
-  public class LineItem : ActiveRecordBase
-  {
-	private int id;
-	private int quantity;
-
-	[PrimaryKey(PrimaryKeyType.Native, "line_number")]
-	public int ID
+	[ActiveRecord("Line_Item")]
+	public class LineItem : ActiveRecordBase
 	{
-	  get { return this.id; }
-	  set { this.id = value; }
-	}
+		private int id;
+		private int quantity;
 
-	[Property()]
-	public int Quantity
-	{
-	  get { return this.quantity; }
-	  set { this.quantity = value; }
-	}
+		[PrimaryKey(PrimaryKeyType.Native, "line_number")]
+		public int ID
+		{
+			get { return this.id; }
+			set { this.id = value; }
+		}
 
-	public static LineItem Find(int id)
-	{
-	  return ((LineItem) (ActiveRecordBase.FindByPrimaryKey(typeof (LineItem), id)));
-	}
+		[Property()]
+		public int Quantity
+		{
+			get { return this.quantity; }
+			set { this.quantity = value; }
+		}
 
-	public static void DeleteAll()
-	{
-	  ActiveRecordBase.DeleteAll( typeof(LineItem) );
+		public static LineItem Find(int id)
+		{
+			return ((LineItem) (ActiveRecordBase.FindByPrimaryKey(typeof (LineItem), id)));
+		}
+
+		public static void DeleteAll()
+		{
+			ActiveRecordBase.DeleteAll(typeof (LineItem));
+		}
 	}
-  }
 }
