@@ -116,7 +116,6 @@ namespace Castle.MonoRail.Framework
 
 			context.Session[wizardName + "currentstepindex"] = 0;
 			context.Session[wizardName + "currentstep"] = firstStep;
-			context.Session[wizardName + "juststarted"] = true;
 
 			context.Response.Redirect(controller.Name, firstStep);
 		}

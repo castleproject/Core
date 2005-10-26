@@ -128,5 +128,10 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return LinkToAttributed( linkText, Controller.Name, stepName, attributes );
 		}
+
+		public String EnableDoProcess()
+		{
+			return InputHidden("wizard.doprocess", "true");
+		}
 	}
 }

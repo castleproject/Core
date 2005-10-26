@@ -771,10 +771,28 @@ namespace Castle.MonoRail.Framework.Helpers
 		#region InputPassword
 
 		/// <summary>
-		/// Creates an input element of text type
+		/// Creates an input element of password type
+		/// </summary>
+		public String InputPassword(String name)
+		{
+			return InputPassword(name, null);
+		}
+
+		/// <summary>
+		/// Creates an input element of password type
+		/// </summary>
+		public String InputPassword(String name, String value)
+		{
+			return InputPassword(name, value, null);
+		}
+
+		/// <summary>
+		/// Creates an input element of password type
 		/// </summary>
 		public String InputPassword(String name, String value, IDictionary attributes)
 		{
+			if (value == null) value = String.Empty;
+
 			return String.Format("<input type=\"password\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2}/>",
 				name, value, GetAttributes(attributes));
 		}

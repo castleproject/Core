@@ -96,26 +96,20 @@ namespace Castle.MonoRail.Framework.Internal
 
 				if (actionName == stepName)
 				{
-					RegisterCurrentStepInfo(controller, i, stepName, false);
+					RegisterCurrentStepInfo(controller, i, stepName);
 
 					break;
 				}
 			}
 		}
 
-		public static void RegisterCurrentStepInfo(Controller controller, 
-			int stepIndex, string stepName, bool started)
+		public static void RegisterCurrentStepInfo(Controller controller, int stepIndex, string stepName)
 		{
 			IRailsEngineContext context = controller.Context;
 			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
 
 			context.Session[wizardName + "currentstepindex"] = stepIndex;
 			context.Session[wizardName + "currentstep"] = stepName;
-
-			if (started)
-			{
-				context.Session[wizardName + "juststarted"] = true;
-			}
 		}
 	}
 }

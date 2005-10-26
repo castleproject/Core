@@ -289,7 +289,7 @@ namespace Castle.MonoRail.Framework
 		/// action. Implementors should perform session clean up (if 
 		/// they actually use the session) to avoid stale data on forms.
 		/// </summary>
-		public void Reset()
+		public virtual void Reset()
 		{
 			
 		}
@@ -342,33 +342,29 @@ namespace Castle.MonoRail.Framework
 
 			String currentStep = (String) context.Session[wizardName + "currentstep"];
 
-			if (!context.Session.Contains(wizardName + "juststarted"))
+			String doProcessFlag = context.Params["wizard.doprocess"];
+
+			// This is a repost/postback
+			// and the programmer wants to perform Process invocation
+			if (currentStep == ActionName && doProcessFlag == "true") 
 			{
-				if (currentStep == ActionName) // This is a repost/postback
+				if (Process())
 				{
-					if (Process())
+					// Successful - it means that we can move forward
+					
+					int currentIndex = (int) context.Session[wizardName + "currentstepindex"];
+					
+					if ((currentIndex + 1) < stepList.Count)
 					{
-						// Successful - it means that we can move forward
-						
-						int currentIndex = (int) context.Session[wizardName + "currentstepindex"];
-						
-						if ((currentIndex + 1) < stepList.Count)
-						{
-							int nextStepIndex = currentIndex + 1;
+						int nextStepIndex = currentIndex + 1;
 
-							String nextStep = (String) stepList[nextStepIndex];
+						String nextStep = (String) stepList[nextStepIndex];
 
-							WizardUtils.RegisterCurrentStepInfo(controller, 
-								nextStepIndex, nextStep, true);
+						WizardUtils.RegisterCurrentStepInfo(controller, nextStepIndex, nextStep);
 
-							context.Response.Redirect(controller.Name, nextStep);
-						}
+						context.Response.Redirect(controller.Name, nextStep);
 					}
 				}
-			}
-			else
-			{
-				context.Session.Remove(wizardName + "juststarted");
 			}
 
 			WizardUtils.RegisterCurrentStepInfo(controller, ActionName);
