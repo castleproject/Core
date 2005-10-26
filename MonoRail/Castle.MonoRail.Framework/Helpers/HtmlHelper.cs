@@ -214,7 +214,54 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		#endregion
 		
-		#region LinkTo
+		#region Link and LinkTo
+
+		///<overloads>This method has two overloads.</overloads>
+		/// <summary>
+		/// Creates an anchor (link) to the <paramref name="target"/> 
+		/// <code>
+		/// &lt;a href=&quot;/sometarget.html&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="target">link's target.</param>
+		/// <param name="linkText">Text of the link.</param>
+		/// <returns>HTML string with anchor to the specified <paramref name="target"/>.</returns>
+		/// <remarks>Calling <c>Link( "something.html", "to something" )</c> results in:
+		/// <code>&lt;a href=&quot;something.html&quot;&gt;something&lt;/a&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <b>Link</b>:
+		/// <code>
+		/// $HtmlHelper.Link( "mypage.html", "This is a link to my page" )
+		/// </code>
+		/// </example>
+		public String Link(String target, String linkText)
+		{
+			return LinkTo(target, linkText);
+		}
+
+		/// <summary>
+		/// Creates an anchor (link) to the <paramref name="target"/> 
+		/// <code>
+		/// &lt;a href=&quot;/sometarget.html&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="target">link's target.</param>
+		/// <param name="linkText">Text of the link.</param>
+		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
+		/// <returns>HTML string with anchor to the specified <paramref name="target"/>.</returns>
+		/// <remarks>Calling <c>Link( "something.html", "to something", $DictHelper.CreateDict("class=mylinkclass") )</c> results in:
+		/// <code>&lt;a href=&quot;something.html&quot; class=&quot;mylinkclass&quot;&gt;something&lt;/a&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <b>Link</b>:
+		/// <code>
+		/// $HtmlHelper.Link( "mypage.html", "This is a link to my page", $DictHelper.CreateDict("class=mylinkclass") )
+		/// </code>
+		/// </example>
+		public String Link(String target, String linkText, IDictionary attributes)
+		{
+			return String.Format("<a href=\"{0}\" {1}>{2}</a>", 
+				target, GetAttributes(attributes), linkText);
+		}
 
 		///<overloads>This method has three overloads.</overloads>
 		/// <summary>
@@ -297,6 +344,34 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={4}\">{5}</a>", 
 				url, controller, action, extension, id, name);
+		}
+
+		/// <summary>
+		/// Creates an anchor (link) to the <paramref name="action"/> on the specified <paramref name="controller"/>
+		/// <code>
+		/// &lt;a href=&quot;/website/controllerArg/actionArg.rails&quot;&gt;nameArg&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="name">Name for the link.</param>
+		/// <param name="controller">Controller to link to.</param>
+		/// <param name="action">Action to link to.</param>
+		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
+		/// <returns>HTML string with anchor to the specified <paramref name="controller"/></returns>
+		/// <remarks>Calling <c>LinkToAttributed( "nameArg", "controllerArg", "actionArg", IDictionary )</c> results in:
+		/// <code>&lt;a href=&quot;/website/controllerArg/actionArg.rails&quot;&gt;nameArg&lt;/a&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <b>LinkToAttributed</b>:
+		/// <code>
+		/// $HtmlHelper.LinkToAttributed( "linkName", "someController", "requiredAction", $DictHelper.CreateDict("class=something") )
+		/// </code>
+		/// </example>
+		public String LinkToAttributed(String name, String controller, String action, IDictionary attributes)
+		{
+			String url = Controller.Context.ApplicationPath;
+			String extension = Controller.Context.UrlInfo.Extension;
+
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}\" {5}>{4}</a>", 
+				url, controller, action, extension, name, GetAttributes(attributes));
 		}
 		
 		#endregion

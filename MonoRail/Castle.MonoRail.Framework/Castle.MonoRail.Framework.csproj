@@ -188,6 +188,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IWizardController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RailsException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -204,6 +209,16 @@
                 />
                 <File
                     RelPath = "ViewComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WizardActionProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WizardStepPage.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -349,6 +364,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\WizardHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\AbstractControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -470,6 +490,11 @@
                 />
                 <File
                     RelPath = "Internal\ViewEngineBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\WizardUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

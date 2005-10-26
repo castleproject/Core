@@ -135,7 +135,7 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		#region Usefull Properties
+		#region Useful Properties
 
 		/// <summary>
 		/// This is intended to be used by MonoRail infrastructure.
@@ -238,7 +238,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected HttpContext HttpContext
 		{
-			get { return _context.UnderlyingContext as HttpContext; }
+			get { return _context.UnderlyingContext; }
 		}
 
 		/// <summary>
@@ -267,7 +267,7 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		#region Usefull operations
+		#region Useful operations
 
 		/// <summary>
 		/// Specifies the view to be processed after the action has finished its processing. 
@@ -317,7 +317,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="output"></param>
 		/// <param name="name">The name of the view to process.</param>
-		public void RenderView(TextWriter output, String name)
+		public void InPlaceRenderView(TextWriter output, String name)
 		{
 			String basePath = _controllerName;
 
@@ -360,7 +360,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="output"></param>
 		/// <param name="name">The name of the view to process.</param>
-		public void RenderSharedView(TextWriter output, String name)
+		public void InPlaceRenderSharedView(TextWriter output, String name)
 		{
 			_viewEngine.Process(output, Context, this, name);
 		}

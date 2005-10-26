@@ -15,10 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Framework.T
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.Generator", "Castle.MonoRail.Generator\Castle.MonoRail.Generator.csproj", "{30F513CB-9520-4E43-A845-3185D76F38B9}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSite", "TestSite\TestSite.csproj", "{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -97,10 +93,6 @@ Global
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Debug.Build.0 = Debug|.NET
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Release.ActiveCfg = Release|.NET
 		{844F5EC4-9224-42A9-986D-CE645AC970F2}.Release.Build.0 = Release|.NET
-		{30F513CB-9520-4E43-A845-3185D76F38B9}.Debug.ActiveCfg = Debug|.NET
-		{30F513CB-9520-4E43-A845-3185D76F38B9}.Debug.Build.0 = Debug|.NET
-		{30F513CB-9520-4E43-A845-3185D76F38B9}.Release.ActiveCfg = Release|.NET
-		{30F513CB-9520-4E43-A845-3185D76F38B9}.Release.Build.0 = Release|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug.ActiveCfg = Debug|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Debug.Build.0 = Debug|.NET
 		{7439F3D3-5F1B-4D03-ADE1-8EB85F711A53}.Release.ActiveCfg = Release|.NET

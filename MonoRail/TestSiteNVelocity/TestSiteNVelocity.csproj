@@ -222,6 +222,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\MyFirstWizard.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\NewsController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -374,6 +379,18 @@
                 />
                 <File
                     RelPath = "views\layouts\master2.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\layouts\wizardlayout.vm"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "views\myfirstwizard\page1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\myfirstwizard\page2.vm"
                     BuildAction = "None"
                 />
                 <File
