@@ -68,7 +68,6 @@
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.Tests.dll" />
-				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
 				<include name="${bin.dir}/TestScaffolding.dll" />
 			</references>

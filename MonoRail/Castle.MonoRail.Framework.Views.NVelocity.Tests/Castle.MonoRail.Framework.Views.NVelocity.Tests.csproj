@@ -91,18 +91,8 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Engine"
-                    Project = "{057D2BF7-45FF-41B6-8D2D-0B164FA3B9FD}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.MonoRail.Engine.Tests"
-                    Project = "{12A3B0DA-079D-4337-AF70-798596FDB9FE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference

@@ -16,7 +16,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 {
 	using NUnit.Framework;
 
-	using Castle.MonoRail.Engine.Tests;
+	using Castle.MonoRail.Framework.Tests;
 
 	
 	[TestFixture]

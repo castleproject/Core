@@ -17,7 +17,6 @@ namespace Castle.MonoRail.Framework.Tests
 	using System;
 	using System.Threading;
 
-	using Castle.MonoRail.Engine;
 	using Castle.MonoRail.Framework.Internal;
 	using NUnit.Framework;
 

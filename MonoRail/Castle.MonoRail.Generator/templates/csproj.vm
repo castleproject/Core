@@ -85,11 +85,6 @@
                     HintPath = "${frameworkpath}\System.Web.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Engine"
-                    AssemblyName = "Castle.MonoRail.Engine"
-                    HintPath = "..\lib\Castle.MonoRail.Engine.dll"
-                />
-                <Reference
                     Name = "Castle.MonoRail.Framework"
                     AssemblyName = "Castle.MonoRail.Framework"
                     HintPath = "..\lib\Castle.MonoRail.Framework.dll"

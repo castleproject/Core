@@ -221,7 +221,6 @@ namespace Castle.MonoRail.Generator.Generators
 		{
 			String sourcedir = AppDomain.CurrentDomain.BaseDirectory;
 
-			CopyFileToLib(sourcedir, "Castle.MonoRail.Engine.dll");
 			CopyFileToLib(sourcedir, "Castle.MonoRail.Framework.dll");
 			CopyFileToLib(sourcedir, "Castle.MonoRail.TestSupport.dll");
 			

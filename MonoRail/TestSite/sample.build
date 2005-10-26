@@ -20,7 +20,6 @@
 	<target name="init" depends="clean">
 		<copy todir="${bin.dir}">
 			<fileset basedir="../bin">
-				<include name="Castle.MonoRail.Engine.dll" />
 				<include name="Castle.MonoRail.Framework.dll" />
 			</fileset>
 		</copy>
@@ -43,7 +42,6 @@
 			</resources>
 
 			<references>
-				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 			</references>
 		</csc>

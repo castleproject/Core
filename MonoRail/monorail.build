@@ -23,7 +23,7 @@
 	<property name="optimize" value="true" />
 
 	<!-- brail removed just for a moment -->
-	<target name="build" depends="clean, init, framework, engine, integration, nvelocity, composite, arscaffold, testsupport, arsupport, samples, tests, generator" /> 
+	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arscaffold, testsupport, arsupport, samples, tests, generator" /> 
 	
 	<target name="clean">
 		<delete>
@@ -72,10 +72,6 @@
 	
 	<target name="framework" depends="init">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="compile" />
-	</target>
-
-	<target name="engine" depends="init">
-		<nant buildfile="Castle.MonoRail.Engine/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="integration" depends="init">
@@ -128,7 +124,6 @@
 	
 	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.MonoRail.Engine/default.build" inheritall="true" target="test" />
 		<!-- <nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />  -->
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
@@ -143,7 +138,6 @@
 	<target name="docs">
 		<ndoc failonerror="true">
 			<assemblies basedir="${bin.dir}">
-				<include name="Castle.MonoRail.Engine.dll" />
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
@@ -220,8 +214,6 @@
 				<include name="*.sln" />
 				<include name="Castle.MonoRail.ActiveRecordScaffold/**/*.*" />
 				<include name="Castle.MonoRail.ActiveRecordScaffold.Tests/**/*.*" />
-				<include name="Castle.MonoRail.Engine/**/*.*" />
-				<include name="Castle.MonoRail.Engine.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Framework/**/*.*" />
 				<include name="Castle.MonoRail.Framework.Tests/**/*.*" />
 				<include name="Castle.MonoRail.Views.Brail/**/*.*" />

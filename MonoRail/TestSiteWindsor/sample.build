@@ -20,7 +20,6 @@
 	<target name="init" depends="clean">
 		<copy todir="${bin2.dir}">
 			<fileset basedir="../bin">
-				<include name="Castle.MonoRail.Engine.dll" />
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.WindsorExtension.dll" />
 				<include name="Castle.DynamicProxy.dll" />
@@ -45,7 +44,6 @@
 
 			<references>
 				<include name="System.Web.dll" />
-				<include name="${bin2.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.WindsorExtension.dll" />
 				<include name="${bin2.dir}/Castle.DynamicProxy.dll" />

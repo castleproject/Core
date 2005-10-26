@@ -42,7 +42,6 @@
 			</sources>
 
 			<references>
-				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="${library.dir}/Commons.dll" />

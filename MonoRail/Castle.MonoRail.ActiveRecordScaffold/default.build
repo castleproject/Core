@@ -75,9 +75,8 @@
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
-				<include name="${bin.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
-				<include name="${bin.dir}/Castle.MonoRail.Engine.Tests.dll" />
+				<include name="${bin.dir}/Castle.MonoRail.Framework.Tests.dll" />
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
 				<include name="${bin.dir}/TestScaffolding.dll" />

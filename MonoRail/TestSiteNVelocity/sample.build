@@ -20,7 +20,6 @@
 	<target name="init" depends="clean">
 		<copy todir="${bin2.dir}">
 			<fileset basedir="../bin">
-				<include name="Castle.MonoRail.Engine.dll" />
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="Commons.dll" />
@@ -47,7 +46,6 @@
 			</resources>
 
 			<references>
-				<include name="${bin2.dir}/Castle.MonoRail.Engine.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="${bin2.dir}/Commons.dll" />
