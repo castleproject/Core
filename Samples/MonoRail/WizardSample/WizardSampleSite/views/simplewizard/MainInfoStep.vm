@@ -1,18 +1,59 @@
 
+#if($errors)
+<p>Something is not good. Please correct the following problems first:
+<ul>
+#foreach($error in $errors)
+  <li>$error</li>
+#end
+</ul>
+</p>
+#end
+
 <p>
 
 <form action="maininfostep.rails">
 
-<table width="80%" border="1">
+<table width="80%" border="0" cellpadding="2" cellspacing="3">
   
   <tr>
-    <td>Name: </td>
-    <td>$HtmlHelper.InputText("name", $name)</td>
+    <td>Full name: </td>
+    <td>$HtmlHelper.InputText("name", $account.name)</td>
+  </tr>
+
+  <tr>
+    <td>User name: </td>
+    <td>$HtmlHelper.InputText("username", $account.username)</td>
+  </tr>
+
+  <tr>
+    <td>E-mail: </td>
+    <td>$HtmlHelper.InputText("email", $account.email)</td>
+  </tr>
+  
+  <tr>
+    <td>Password: </td>
+    <td>$HtmlHelper.InputPassword("pwd")</td>
+  </tr>
+
+  <tr>
+    <td>Confirm: </td>
+    <td>$HtmlHelper.InputPassword("pwdconfirmation")</td>
   </tr>
   
 </table>
 
+
+  $WizardHelper.EnableDoProcess()
+
+<p>
+#if ($WizardHelper.HasPreviousStep())
+    $WizardHelper.LinkToPrevious("Back")
+#end
+  &nbsp;
+  &nbsp;
+  
   $HtmlHelper.SubmitButton("Next")
+</p>
 
 </form>
 

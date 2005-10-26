@@ -1,1 +1,46 @@
-SubscribeStep
+<p>
+Please inform your interests so we can select very special offers and
+send you spam:
+</p>
+
+<form action="subscribestep.rails">
+
+<h4>Sports</h4>
+
+<ul>
+  <li><input type="checkbox" id="sports1" name="interests" value="Soccer" />
+    $HtmlHelper.LabelFor("sports1", "Soccer")
+  </li>
+  
+  <li><input type="checkbox" id="sports2" name="interests" value="Soft ball" />
+    $HtmlHelper.LabelFor("sports2", "Soft ball")
+  </li>
+  
+  <li><input type="checkbox" id="sports3" name="interests" value="Tennis" />
+    $HtmlHelper.LabelFor("sports3", "Tennis")
+  </li>
+</ul>
+
+<h4>Science</h4>
+
+<ul>
+  <li><input type="checkbox" id="science1" name="interests" value="Math" />
+    $HtmlHelper.LabelFor("science1", "Math")
+  </li>
+  
+  <li><input type="checkbox" id="science2" name="interests" value="Computing" />
+    $HtmlHelper.LabelFor("science2", "Computing")
+  </li>
+
+  <li><input type="checkbox" id="science3" name="interests" value="Physics" />
+    $HtmlHelper.LabelFor("science3", "Physics")
+  </li>
+</ul>
+
+  $WizardHelper.EnableDoProcess()
+
+#if ($WizardHelper.HasPreviousStep())
+    $WizardHelper.LinkToPrevious("Back")
+#end
+
+  $HtmlHelper.SubmitButton("Next")

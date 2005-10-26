@@ -5,8 +5,8 @@
 <head>
 <title>Simple Wizard</title>
 </head>
-<body>
 
+<body>
 
 <div>
 $childContent
@@ -14,11 +14,14 @@ $childContent
 
 <hr>
 
+<!-- Just for debugging purposes 
 <pre>
 Current index $session.get_Item("wizard.simplewizardcurrentstepindex") <br>
 current step  $session.get_Item("wizard.simplewizardcurrentstep") <br>
 just started  $session.get_Item("wizard.simplewizardjuststarted") <br>
 </pre>
+-->
 
 </body>
+
 </html>

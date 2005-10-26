@@ -113,6 +113,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\Account.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "views\home\index.vm"
                     BuildAction = "None"
                 />

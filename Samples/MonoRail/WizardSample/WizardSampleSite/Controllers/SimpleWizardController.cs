@@ -15,8 +15,12 @@
 namespace WizardSampleSite.Controllers
 {
 	using System;
+	using System.Collections;
 
 	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
+	using WizardSampleSite.Model;
+
 
 	[DynamicActionProvider( typeof(WizardActionProvider) )]
 	public class SimpleWizardController : Controller, IWizardController
@@ -32,6 +36,10 @@ namespace WizardSampleSite.Controllers
 		}
 	}
 
+	// Please note that we put the steps on the same file
+	// for brevity's sake
+
+
 	/// <summary>
 	/// Presents a small introduction
 	/// </summary>
@@ -41,9 +49,61 @@ namespace WizardSampleSite.Controllers
 
 	class MainInfoStep : WizardStepPage
 	{
+		// protected override void Reset()
+		// {
+		//   Session.Remove("account");
+		// }
+
 		protected override bool Process()
 		{
+			Account account = GetAccountFromSession(Session);
+
+			account.Name = Params["name"];
+			account.Username = Params["username"];
+			account.Email = Params["email"];
+			account.Pwd = Params["pwd"];
+			account.PwdConfirmation = Params["pwdconfirmation"];
+
+			// Some naive validation
+
+			IList errors = ValidateAccount(account);
+
+			if (errors.Count != 0)
+			{
+				// Not good
+
+				Flash["errors"] = errors;
+
+				// User can go to the next step yet
+
+				return false;
+			}
+
 			return true;
+		}
+
+		private IList ValidateAccount(Account account)
+		{
+			IList errors = new ArrayList();
+	
+			if (account.Name == null || account.Name.Length == 0)
+			{
+				errors.Add("Full name field must be filled");
+			}
+			if (account.Username == null || account.Username.Length == 0)
+			{
+				errors.Add("User name field must be filled");
+			}
+			if (account.Email == null || account.Email.Length == 0)
+			{
+				errors.Add("E-mail field must be filled");
+			}
+			if (account.Pwd != account.PwdConfirmation)
+			{
+				errors.Add("Password don't match with confirmation");
+			}
+
+			return errors;
 		}
 
 		/// <summary>
@@ -54,19 +114,61 @@ namespace WizardSampleSite.Controllers
 		/// </summary>
 		protected override void Show()
 		{
+			PropertyBag.Add("account", GetAccountFromSession(Session));
+
 			base.Show();
+		}
+
+		internal static Account GetAccountFromSession(IDictionary session)
+		{
+			Account account = session["stored.account"] as Account;
+
+			if (account == null)
+			{
+				account = new Account();
+
+				session["stored.account"] = account;
+			}
+
+			return account;
 		}
 	}
 
 	class SubscribeStep : WizardStepPage
 	{
+		protected override bool Process()
+		{
+			Account account = MainInfoStep.GetAccountFromSession(Session);
+
+			String[] interests = (String[]) ConvertUtils.Convert( 
+				typeof(String[]), Params["interests"], "interests", null, Params );
+
+			account.Interests = interests;
+
+			return base.Process();
+		}
 	}
 
 	class ConfirmationStep : WizardStepPage
 	{
+		protected override void Show()
+		{
+			PropertyBag.Add("account", MainInfoStep.GetAccountFromSession(Session));
+
+			base.Show();
+		}
 	}
 
 	class ResultStep : WizardStepPage
 	{
+		protected override void Show()
+		{
+			Account account = MainInfoStep.GetAccountFromSession(Session);
+		
+			// AccountService.Create(account);
+			// Session.Remove("account");
+
+			base.Show();
+		}
 	}
 }
