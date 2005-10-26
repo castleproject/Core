@@ -4,7 +4,8 @@ namespace ${basename}
 
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Configuration.Sources;
+
+	using Castle.Model.Resource;
 
 	using Castle.MicroKernel;
 
@@ -14,7 +15,7 @@ namespace ${basename}
 	public class MyContainer : WindsorContainer
 	{
 		// Using AppDomain as configuration source
-		public MyContainer() : base( new XmlInterpreter(new AppDomainConfigSource()) )
+		public MyContainer() : base( new XmlInterpreter(new ConfigResource()) )
 		{
 			Init();
 		}
