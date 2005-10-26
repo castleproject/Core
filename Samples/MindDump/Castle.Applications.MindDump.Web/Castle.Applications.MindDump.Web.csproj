@@ -140,11 +140,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Engine"
-                    AssemblyName = "Castle.MonoRail.Engine"
-                    HintPath = "..\..\..\MonoRail\bin\Castle.MonoRail.Engine.dll"
-                />
-                <Reference
                     Name = "Castle.MonoRail.Framework"
                     AssemblyName = "Castle.MonoRail.Framework"
                     HintPath = "..\..\..\MonoRail\bin\Castle.MonoRail.Framework.dll"
