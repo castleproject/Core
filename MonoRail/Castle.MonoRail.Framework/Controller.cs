@@ -710,17 +710,7 @@ namespace Castle.MonoRail.Framework
 					throw;
 				}
 			}
-			finally
-			{
-				// Run the filters if required
-				if (!skipFilters)
-				{
-					ProcessFilters(ExecuteEnum.After, filtersToSkip);
-				}
-
-				DisposeFilter();
-			}
-
+			
 			try
 			{
 				// If we haven't failed anywhere yet...
@@ -731,7 +721,15 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 			finally
-			{				
+			{			
+				// Run the filters if required
+				if (!skipFilters)
+				{
+					ProcessFilters(ExecuteEnum.After, filtersToSkip);
+				}
+
+				DisposeFilter();
+
 				ReleaseResources();
 			}
 		}
