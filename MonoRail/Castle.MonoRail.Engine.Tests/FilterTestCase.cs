@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Engine.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "(before)(after)update view contents" );
+			AssertReplyEqualsTo( "(before)update view contents(after)" );
 		}
 
 		[Test]
