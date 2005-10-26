@@ -1,0 +1,19 @@
+
+<p>
+
+<form action="maininfostep.rails">
+
+<table width="80%" border="1">
+  
+  <tr>
+    <td>Name: </td>
+    <td>$HtmlHelper.InputText("name", $name)</td>
+  </tr>
+  
+</table>
+
+  $HtmlHelper.SubmitButton("Next")
+
+</form>
+
+</p>
