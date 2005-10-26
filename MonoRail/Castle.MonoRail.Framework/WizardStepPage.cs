@@ -37,13 +37,33 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public abstract class WizardStepPage : IDynamicAction
 	{
+		#region Fields
+
 		private Controller _controller;
+
+		protected DataBinder binder;
+
+		#endregion
+
+		#region Constructors
+
+		public WizardStepPage()
+		{
+			binder = new DataBinder();
+		}
+
+		#endregion
 
 		#region Useful Properties
 
 		protected Controller WizardController
 		{
 			get { return _controller; }
+		}
+
+		public DataBinder Binder
+		{
+			get { return binder; }
 		}
 
 		/// <summary>

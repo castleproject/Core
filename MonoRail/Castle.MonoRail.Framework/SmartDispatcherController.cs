@@ -35,7 +35,6 @@ namespace Castle.MonoRail.Framework
 
 		protected DataBinder binder;
 
-
 		public SmartDispatcherController()
 		{
 		}

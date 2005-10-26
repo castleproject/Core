@@ -217,11 +217,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\MyFirstWizard.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Controllers\NewsController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -257,6 +252,11 @@
                 />
                 <File
                     RelPath = "Controllers\SmartController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\TestWizardController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -377,18 +377,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "views\layouts\wizardlayout.vm"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\myfirstwizard\page1.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\myfirstwizard\page2.vm"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "views\paginated\list1.vm"
                     BuildAction = "None"
                 />
@@ -414,6 +402,10 @@
                 />
                 <File
                     RelPath = "views\SubArea\home\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\testwizard\page1.vm"
                     BuildAction = "None"
                 />
                 <File

@@ -259,6 +259,12 @@ namespace Castle.MonoRail.TestSupport
 			Assert.IsTrue(response.Flash.Contains(entryKey), "Entry {0} was not on Flash", entryKey);
 		}
 
+		protected void AssertFlashDoesNotContain(String entryKey)
+		{
+			Assert.IsNotNull(response.Flash, "Flash could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsFalse(response.Flash.Contains(entryKey), "Entry {0} was on Flash", entryKey);
+		}
+
 		protected void AssertFlashEntryEquals(String entryKey, object expectedValue)
 		{
 			AssertFlashContains(entryKey);
@@ -269,6 +275,12 @@ namespace Castle.MonoRail.TestSupport
 		{
 			Assert.IsNotNull(response.Session, "Session could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
 			Assert.IsTrue(response.Session.Contains(entryKey), "Entry {0} was not on Session", entryKey);
+		}
+
+		protected void AssertSessionDoesNotContain(String entryKey)
+		{
+			Assert.IsNotNull(response.Session, "Session could not be used. Are you using a testing enable version of MonoRail Engine and Framework?"); 
+			Assert.IsFalse(response.Session.Contains(entryKey), "Entry {0} was on Session", entryKey);
 		}
 
 		protected void AssertSessionEntryEqualsTo(String entryKey, object expectedValue)

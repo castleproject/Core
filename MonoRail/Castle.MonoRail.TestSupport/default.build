@@ -31,6 +31,11 @@
 			optimize="${optimize}"
 			output="${bin.dir}/${assembly.name}"
 			doc="${bin.dir}/${name}.xml">
+
+			<nowarn>
+				<warning number="1591" />
+				<warning number="1572" />
+			</nowarn>
 						
 			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
