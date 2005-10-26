@@ -24,13 +24,17 @@ namespace Castle.MonoRail.Framework
 	public enum ExecuteEnum
 	{
 		/// <summary>
-		/// The filter is being invoked before the action
+		/// The filter is invoked before the action.
 		/// </summary>
 		Before = 0x01,
 		/// <summary>
-		/// The filter is being invoked after the action
+		/// The filter is invoked after the action.
 		/// </summary>
-		After = 0x02
+		After = 0x02,
+		/// <summary>
+		/// The filter is invoked before and after the action.
+		/// </summary>
+		Around = Before | After
 	}
 
 	/// <summary>
