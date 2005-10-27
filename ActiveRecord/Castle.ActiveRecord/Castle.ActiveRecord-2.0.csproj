@@ -217,6 +217,8 @@
     <Compile Include="Framework\ActiveRecordException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\ActiveRecordMediator.cs" />
+    <Compile Include="Framework\ActiveRecordMediator.Generic.cs" />
     <Compile Include="Framework\ActiveRecordStarter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -238,8 +240,6 @@
     <Compile Include="Framework\DictionaryAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Framework\DomainModel.cs" />
-    <Compile Include="Framework\DomainModel.Generic.cs" />
     <Compile Include="Framework\HookDispatcher.cs">
       <SubType>Code</SubType>
     </Compile>
