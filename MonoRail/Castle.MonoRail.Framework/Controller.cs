@@ -852,8 +852,8 @@ namespace Castle.MonoRail.Framework
 		{
 			if (method == null)
 			{
-				// Dynamic Action, run the filters
-				return false;
+				// Dynamic Action, run the filters if we have any
+				return (_filters == null);
 			}
 
 			if (_filters == null)
@@ -919,8 +919,12 @@ namespace Castle.MonoRail.Framework
 			{
 				desc.FilterInstance = _filterFactory.Create(desc.FilterType);
 
-				if (typeof(IFilterAttributeAware).IsInstanceOfType(desc.FilterInstance))
-					(desc.FilterInstance as IFilterAttributeAware).FilterAttribute = desc.Attribute;
+				IFilterAttributeAware filterAttAware = desc.FilterInstance as IFilterAttributeAware;
+
+				if (filterAttAware != null)
+				{
+					filterAttAware.FilterAttribute = desc.Attribute;
+				}
 			}
 
 			return desc.FilterInstance.Perform(when, _context, this);
