@@ -15,8 +15,10 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using Castle.MonoRail.Framework.Configuration;
+	using System.Collections;
+
 	using Castle.MonoRail.Framework.Internal;
+	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Views.Aspx;
 
 
@@ -29,6 +31,7 @@ namespace Castle.MonoRail.Framework
 		protected IControllerFactory _controllerFactory;
 		protected IScaffoldingSupport _scaffoldingSupport;
 		protected IViewComponentFactory _viewCompFactory;
+		protected IMonoRailExtension[] extensions;
 
 		public ProcessEngineFactory() : this(null)
 		{
@@ -45,6 +48,7 @@ namespace Castle.MonoRail.Framework
 				_config = config;
 			}
 
+			InitializeExtensions();
 			InitializeControllerFactory();
 			InitializeViewComponentFactory();
 			InitializeFilterFactory();
@@ -58,7 +62,8 @@ namespace Castle.MonoRail.Framework
 		public ProcessEngine Create()
 		{
 			return new ProcessEngine(_controllerFactory, _viewEngine, 
-				_filterFactory, _resourceFactory, _scaffoldingSupport, _viewCompFactory);
+				_filterFactory, _resourceFactory, _scaffoldingSupport, 
+				_viewCompFactory, extensions);
 		}
 
 		public MonoRailConfiguration Config
@@ -81,7 +86,8 @@ namespace Castle.MonoRail.Framework
 		{
 			if (_config.CustomViewEngineType != null)
 			{
-				_viewEngine = (IViewEngine) Activator.CreateInstance(_config.CustomViewEngineType);
+				_viewEngine = (IViewEngine) 
+					Activator.CreateInstance(_config.CustomViewEngineType);
 			}
 			else
 			{
@@ -112,7 +118,8 @@ namespace Castle.MonoRail.Framework
 		{
 			if (_config.CustomViewComponentFactoryType != null)
 			{
-				_viewCompFactory = (IViewComponentFactory) Activator.CreateInstance(_config.CustomViewComponentFactoryType);
+				_viewCompFactory = (IViewComponentFactory) 
+					Activator.CreateInstance(_config.CustomViewComponentFactoryType);
 			}
 			else
 			{
@@ -131,7 +138,8 @@ namespace Castle.MonoRail.Framework
 		{
 			if (_config.CustomResourceFactoryType != null)
 			{
-				_resourceFactory = (IResourceFactory) Activator.CreateInstance(_config.CustomResourceFactoryType);
+				_resourceFactory = (IResourceFactory) 
+					Activator.CreateInstance(_config.CustomResourceFactoryType);
 			}
 			else
 			{
@@ -143,7 +151,8 @@ namespace Castle.MonoRail.Framework
 		{
 			if (_config.ScaffoldingType != null)
 			{
-				_scaffoldingSupport = (IScaffoldingSupport) Activator.CreateInstance(_config.ScaffoldingType);
+				_scaffoldingSupport = (IScaffoldingSupport) 
+					Activator.CreateInstance(_config.ScaffoldingType);
 			}
 		}
 
@@ -165,6 +174,24 @@ namespace Castle.MonoRail.Framework
 
 				_controllerFactory = factory;
 			}
+		}
+
+		protected virtual void InitializeExtensions()
+		{
+			ArrayList extensionList = new ArrayList();
+
+			foreach(Type extensionType in Config.Extensions)
+			{
+				IMonoRailExtension extension = 
+					Activator.CreateInstance( extensionType ) as IMonoRailExtension;
+
+				extension.Init(Config);
+
+				extensionList.Add(extension);
+			}
+
+			extensions = (IMonoRailExtension[]) 
+				extensionList.ToArray( typeof(IMonoRailExtension) );
 		}
 		
 		private void ConnectViewComponentFactoryToViewEngine()

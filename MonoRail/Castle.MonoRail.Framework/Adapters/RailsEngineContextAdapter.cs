@@ -15,12 +15,12 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Web;
 	using System.Web.Caching;
-	using System.Security.Principal;
 	using System.Web.SessionState;
+	using System.Security.Principal;
+	using System.Collections;
+	using System.Collections.Specialized;
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
@@ -101,14 +101,14 @@ namespace Castle.MonoRail.Framework.Adapters
 				{
 					object session;
 					
-					// Windows and Testing
 					if(_context.Items["AspSession"] != null)
 					{
+						// Windows and Testing
 						session = _context.Items["AspSession"];
 					}
-					// Mono
 					else
 					{
+						// Mono
 						session = _context.Session;
 					}
 
@@ -124,6 +124,7 @@ namespace Castle.MonoRail.Framework.Adapters
 
 				return _session;
 			}
+			set { _session = value; }
 		}
 
 		public IRequest Request

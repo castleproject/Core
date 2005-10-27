@@ -29,6 +29,8 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public class ProcessEngine : MarshalByRefObject
 	{
+		#region Fields
+
 		internal static readonly String RailsContextKey = "rails.context";
 		
 		private IControllerFactory controllerFactory;
@@ -37,23 +39,29 @@ namespace Castle.MonoRail.Framework
 		private IResourceFactory resourceFactory;
 		private IScaffoldingSupport scaffoldingSupport;
 		private IViewComponentFactory viewCompFactory;
-		private ControllerDescriptorBuilder controllerDescriptorBuilder = new ControllerDescriptorBuilder();
+		private readonly ControllerDescriptorBuilder controllerDescriptorBuilder = new ControllerDescriptorBuilder();
+		private readonly IMonoRailExtension[] extensions;
+
+		#endregion
+
+		#region Constructors
 
 		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine) : 
 			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
-			     new DefaultResourceFactory(), null, new DefaultViewComponentFactory())
+			     new DefaultResourceFactory(), null, new DefaultViewComponentFactory(), new IMonoRailExtension[0])
 		{
 		}
 
 		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine, IViewComponentFactory viewCompFactory) : 
 			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
-				new DefaultResourceFactory(), null, viewCompFactory)
+				new DefaultResourceFactory(), null, viewCompFactory, new IMonoRailExtension[0])
 		{
 		}
 
 		public ProcessEngine(IControllerFactory controllerFactory, 
 			IViewEngine viewEngine, IFilterFactory filterFactory, 
-			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, IViewComponentFactory viewCompFactory)
+			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, 
+			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions)
 		{
 			this.controllerFactory = controllerFactory;
 			this.viewEngine = viewEngine;
@@ -61,7 +69,12 @@ namespace Castle.MonoRail.Framework
 			this.resourceFactory = resourceFactory;
 			this.scaffoldingSupport = scaffoldingSupport;
 			this.viewCompFactory = viewCompFactory;
+			this.extensions = extensions;
 		}
+
+		#endregion
+
+		#region Properties
 
 		public IControllerFactory ControllerFactory
 		{
@@ -94,6 +107,25 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Returns the MonoRail context assosciated with the current
+		/// request if one is available, otherwise <c>null</c>.
+		/// </summary>
+		public static IRailsEngineContext CurrentContext
+		{
+			get
+			{
+				HttpContext context = HttpContext.Current;
+				
+				// Are we in a web request?
+				if (context == null) return null;
+								
+				return context.Items[RailsContextKey] as IRailsEngineContext;
+			}
+		}
+
+		#endregion
+
+		/// <summary>
 		/// Performs the base work of MonoRail. Extracts 
 		/// the information from the URL, obtain the controller 
 		/// that matches this information and dispatch the execution 
@@ -104,7 +136,8 @@ namespace Castle.MonoRail.Framework
 		{
 			HttpContext httpContext = context.UnderlyingContext;
 
-			// Push the IRailsEngineContext into the HttpContext so that we can access it from outside of MonoRail
+			// Push the IRailsEngineContext into the HttpContext so 
+			// that we can access it from outside of MonoRail
 			if (httpContext != null && !httpContext.Items.Contains(RailsContextKey))
 			{
 				httpContext.Items.Add(RailsContextKey, context);
@@ -134,23 +167,6 @@ namespace Castle.MonoRail.Framework
 				controllerFactory.Release(controller);
 			}
 		}
-		
-		/// <summary>
-		/// Returns the MonoRail context assosciated with the current
-		/// request if one is available, otherwise <c>null</c>.
-		/// </summary>
-		public static IRailsEngineContext CurrentContext
-		{
-			get
-			{
-				HttpContext context = HttpContext.Current;
-				
-				// Are we in a web request?
-				if (context == null) return null;
-								
-				return context.Items[RailsContextKey] as IRailsEngineContext;
-			}
-		}
 
 		/// <summary>
 		/// Can be overriden so new semantics can be supported.
@@ -162,6 +178,26 @@ namespace Castle.MonoRail.Framework
 			String vdir = context.ApplicationPath;
 
 			return UrlTokenizer.ExtractInfo(context.Url, vdir);
+		}
+
+		protected void RaiseEngineContextCreated(IRailsEngineContext context)
+		{
+			if (extensions.Length == 0) return;
+
+			foreach(IMonoRailExtension extension in extensions)
+			{
+				extension.OnRailsContextCreated(context);
+			}
+		}
+
+		protected void RaiseEngineContextDiscarded(IRailsEngineContext context)
+		{
+			if (extensions.Length == 0) return;
+
+			foreach(IMonoRailExtension extension in extensions)
+			{
+				extension.OnRailsContextDiscarded(context);
+			}
 		}
 	}
 }

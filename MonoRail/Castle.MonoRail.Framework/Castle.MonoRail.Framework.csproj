@@ -148,6 +148,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IMonoRailExtension.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IPropertyError.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -372,6 +377,16 @@
                 <File
                     RelPath = "Controllers\Validation.resx"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Extensions\Session\CustomSessionExtension.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\Session\ICustomSessionFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Filters\AntiGoogleWebAcceleratorFilter.cs"

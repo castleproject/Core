@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Configuration;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,16 +14,22 @@ using System.Configuration;
 
 namespace Castle.MonoRail.Framework.Configuration
 {
+	using System;
+	using System.Xml;
+	using System.Collections;
+	using System.Configuration;
+
 	public class MonoRailConfiguration
 	{
 		private static readonly string DefaultScaffoldType = "Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold";
 
 		public static readonly string SectionName = "monoRail";
 
+		private bool _viewsXhtmlRendering;
 		private IList _controllers = new ArrayList();
 		private IList _components = new ArrayList();
 		private IList _routingRules = new ArrayList();
-		private bool _viewsXhtmlRendering;
+		private IList _extensions = new ArrayList();
 		private String _viewsPhysicalPath;
 		private String _customControllerFactory;
 		private String _customViewComponentFactory;
@@ -34,6 +37,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private String _customResourceFactory;
 		private String _customEngineTypeName;
 		private String _scaffoldingTypeName = DefaultScaffoldType;
+		private XmlNode section;
 
 		public MonoRailConfiguration()
 		{
@@ -42,7 +46,6 @@ namespace Castle.MonoRail.Framework.Configuration
 		public IList ControllerAssemblies
 		{
 			get { return _controllers; }
-
 		}
 
 		public IList ComponentsAssemblies
@@ -53,6 +56,12 @@ namespace Castle.MonoRail.Framework.Configuration
 		public IList RoutingRules
 		{
 			get { return _routingRules; }
+		}
+
+		public IList Extensions
+		{
+			get { return _extensions; }
+			set { _extensions = value; }
 		}
 
 		public String ViewsPhysicalPath
@@ -133,6 +142,12 @@ namespace Castle.MonoRail.Framework.Configuration
 			get { return _scaffoldingTypeName != null ? GetType(_scaffoldingTypeName, true) : null; }
 		}
 
+		public XmlNode ConfigSection
+		{
+			get { return section;  }
+			set { section = value; }
+		}
+
 		internal static MonoRailConfiguration GetConfig()
 		{
 			MonoRailConfiguration config = (MonoRailConfiguration)
@@ -147,12 +162,12 @@ namespace Castle.MonoRail.Framework.Configuration
 			return config;
 		}
 
-		internal static Type GetType(String typeName)
+		public static Type GetType(String typeName)
 		{
 			return GetType(typeName, false);
 		}
 
-		internal static Type GetType(String typeName, bool ignoreError)
+		public static Type GetType(String typeName, bool ignoreError)
 		{
 			Type loadedType = Type.GetType(typeName, false, false);
 

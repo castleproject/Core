@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 	using System.Web.SessionState;
 
-	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -32,16 +31,29 @@ namespace Castle.MonoRail.Framework
 		private String _url;
 
 		public MonoRailHttpHandler( String url, IViewEngine viewEngine, 
-			IControllerFactory controllerFactory, IFilterFactory filterFactory, IResourceFactory resourceFactory, 
-			IScaffoldingSupport scaffoldingSupport, IViewComponentFactory viewCompFactory)
-			: base(controllerFactory, viewEngine, filterFactory, resourceFactory, scaffoldingSupport, viewCompFactory)
+			IControllerFactory controllerFactory, IFilterFactory filterFactory, 
+			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, 
+			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions)
+			: base(controllerFactory, viewEngine, filterFactory, resourceFactory, 
+			       scaffoldingSupport, viewCompFactory, extensions)
 		{
 			_url = url;
 		}
 
 		public void ProcessRequest(HttpContext context)
 		{
-			Process(new RailsEngineContextAdapter(context, _url));
+			RailsEngineContextAdapter mrContext = new RailsEngineContextAdapter(context, _url);
+
+			RaiseEngineContextCreated(mrContext);
+
+			try
+			{
+				Process(mrContext);
+			}
+			finally
+			{
+				RaiseEngineContextDiscarded(mrContext);
+			}
 		}
 
 		public bool IsReusable

@@ -31,18 +31,17 @@ namespace Castle.MonoRail.Framework
 		public virtual IHttpHandler GetHandler(HttpContext context, 
 			String requestType, String url, String pathTranslated)
 		{
-
 #if ALLOWTEST
 			String isTest = context.Request.Headers["IsTestWorkerRequest"];
 			
-			if ("true".Equals(isTest))
+			if ("true" == isTest)
 			{
 				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(context);
 			}
 #endif
-
-			return new MonoRailHttpHandler(url, _viewEngine, _controllerFactory, 
-				_filterFactory, _resourceFactory, _scaffoldingSupport, _viewCompFactory);
+			return new MonoRailHttpHandler(url, _viewEngine, 
+				_controllerFactory, _filterFactory, _resourceFactory, 
+				_scaffoldingSupport, _viewCompFactory, extensions);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
