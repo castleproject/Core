@@ -68,8 +68,8 @@ namespace Castle.ActiveRecord
 
 			RaiseSessionFactoryHolderCreated(holder);
 
-			DomainModel.type2Model.Clear();
-			DomainModel._holder = holder;
+			ActiveRecordBase.type2Model.Clear();
+			ActiveRecordBase._holder = holder;
 
 			// Base configuration
 			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
@@ -269,14 +269,14 @@ namespace Castle.ActiveRecord
 		{
 			CheckInitialized();
 
-			Configuration cfg = DomainModel._holder.GetConfiguration( typeof(ActiveRecordBase) );
+			Configuration cfg = ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) );
 
 			return new SchemaExport( cfg );
 		}
 
 		private static void CheckInitialized()
 		{
-			if (DomainModel._holder == null)
+			if (ActiveRecordBase._holder == null)
 			{
 				throw new ActiveRecordException("Framework must be Initialize(d) first.");
 			}

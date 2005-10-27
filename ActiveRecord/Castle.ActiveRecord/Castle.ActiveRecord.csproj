@@ -284,6 +284,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\ActiveRecordMediator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\ActiveRecordMediator.Generic.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\ActiveRecordStarter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -295,16 +305,6 @@
                 />
                 <File
                     RelPath = "Framework\DictionaryAdapter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Framework\DomainModel.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Framework\DomainModel.Generic.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

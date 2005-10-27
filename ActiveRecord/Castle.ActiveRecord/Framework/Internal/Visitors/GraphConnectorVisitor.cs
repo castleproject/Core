@@ -78,19 +78,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 
         private static bool IsChildClass(ActiveRecordModel model, ActiveRecordModel child)
         {
-            //Direct decendant
-            if (child.Type.BaseType == model.Type)
-                return true;
-            //Not related to each other
-            if (!model.Type.IsAssignableFrom(child.Type))
-                return false;
-            //The model is the ancsetor of the child, but is it the direct AR ancsetor?
+            // Direct decendant
+            if (child.Type.BaseType == model.Type) return true;
+
+            // Not related to each other
+            if (!model.Type.IsAssignableFrom(child.Type)) return false;
+            
+			// The model is the ancestor of the child, but is it the direct AR ancsetor?
             Type arAncestor = child.Type.BaseType;
-            while (arAncestor != typeof(object) &&
-                DomainModel.GetModel(arAncestor) == null)
+
+            while (arAncestor != typeof(object) && ActiveRecordBase.GetModel(arAncestor) == null)
             {
                 arAncestor = arAncestor.BaseType;
             }
+
             return arAncestor == model.Type;
         }
 

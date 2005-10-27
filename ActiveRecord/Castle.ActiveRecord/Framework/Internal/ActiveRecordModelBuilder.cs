@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			PopulateModel(model, type);
 
-			DomainModel.Register( type, model );
+			ActiveRecordBase.Register( type, model );
 
 			return model;
 		}

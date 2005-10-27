@@ -194,7 +194,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
 				}
 			}
-            if (DomainModel.GetModel(model.Property.PropertyType) != null)
+            if (ActiveRecordBase.GetModel(model.Property.PropertyType) != null)
             {
                 throw new ActiveRecordException( String.Format(
                     "You can't use [Property] on {0}.{1} because {2} is an active record class, did you mean to use BelongTo?",

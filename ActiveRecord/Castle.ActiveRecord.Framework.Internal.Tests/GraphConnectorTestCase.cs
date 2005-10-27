@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using NUnit.Framework;
-using Castle.ActiveRecord.Framework.Internal.Tests.Model;
-
 namespace Castle.ActiveRecord.Framework.Internal.Tests
 {
+	using System;
+	using NUnit.Framework;
+	using Castle.ActiveRecord.Framework.Internal.Tests.Model;
+
 	[TestFixture]
 	public class GraphConnectorTestCase : AbstractActiveRecordTest
 	{
@@ -30,8 +30,8 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				typeof(ClassDiscriminatorParent));
 
 			Assert.AreEqual(
-				DomainModel.GetModel(typeof(ClassDiscriminatorA)),
-				DomainModel.GetModel(typeof(DiscriminatorGrandchild)).Parent
+				ActiveRecordBase.GetModel(typeof(ClassDiscriminatorA)),
+				ActiveRecordBase.GetModel(typeof(DiscriminatorGrandchild)).Parent
 			);
 		}
 	}

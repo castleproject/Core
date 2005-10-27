@@ -37,7 +37,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 		public override bool Perform(object instance, object fieldValue)
 		{
 			ActiveRecordValidationBase arInstance = (ActiveRecordValidationBase) instance;
-			ActiveRecordModel model = DomainModel.GetModel( arInstance.GetType() );
+			ActiveRecordModel model = ActiveRecordBase.GetModel( arInstance.GetType() );
 
 			while (model != null)
 			{

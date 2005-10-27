@@ -84,22 +84,22 @@ namespace Castle.ActiveRecord.Tests
 
 		public static void DeleteAll()
 		{
-			DomainModel.DeleteAll(typeof (Blog));
+			ActiveRecordMediator.DeleteAll(typeof (Blog));
 		}
 
 		public static Blog[] FindAll()
 		{
-			return (Blog[]) DomainModel.FindAll(typeof (Blog));
+			return (Blog[]) ActiveRecordMediator.FindAll(typeof (Blog));
 		}
 
 		public static Blog Find(int id)
 		{
-			return (Blog) DomainModel.FindByPrimaryKey(typeof (Blog), id);
+			return (Blog) ActiveRecordMediator.FindByPrimaryKey(typeof (Blog), id);
 		}
 
 		public void CustomAction()
 		{
-			DomainModel.Execute(typeof (Blog), new NHibernateDelegate(MyCustomMethod), this);
+			ActiveRecordMediator.Execute(typeof (Blog), new NHibernateDelegate(MyCustomMethod), this);
 		}
 
 		private object MyCustomMethod(ISession session, object blogInstance)
@@ -112,27 +112,27 @@ namespace Castle.ActiveRecord.Tests
 
 		internal void Save()
 		{
-			DomainModel.Save(this);
+			ActiveRecordMediator.Save(this);
 		}
 
 		internal void Create()
 		{
-			DomainModel.Create(this);
+			ActiveRecordMediator.Create(this);
 		}
 
 		internal void Update()
 		{
-			DomainModel.Update(this);
+			ActiveRecordMediator.Update(this);
 		}
 
 		internal void Delete()
 		{
-			DomainModel.Delete(this);
+			ActiveRecordMediator.Delete(this);
 		}
 
 		internal static ISessionFactoryHolder Holder
 		{
-			get { return DomainModel.GetSessionFactoryHolder(); }
+			get { return ActiveRecordMediator.GetSessionFactoryHolder(); }
 		}
 	}
 }

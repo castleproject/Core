@@ -15,7 +15,6 @@
 namespace Castle.ActiveRecord.Tests
 {
     using System;
-    using System.Text;
     
 	using NUnit.Framework;
 
@@ -37,7 +36,7 @@ namespace Castle.ActiveRecord.Tests
         [Test]
         public void SimpleOperations()
         {
-            RuleBase[] rules = (RuleBase[])DomainModel.FindAll(typeof(PersistedRule));
+            RuleBase[] rules = (RuleBase[]) ActiveRecordMediator.FindAll(typeof(PersistedRule));
 
             Assert.IsNotNull(rules);
             Assert.AreEqual(0, rules.Length);
@@ -47,16 +46,16 @@ namespace Castle.ActiveRecord.Tests
             rule.Days = 4;
             rule.Name = "blah";
 
-            DomainModel.Save(rule);
+            ActiveRecordMediator.Save(rule);
 
             Assert.IsFalse(0 == rule.Id);
 
-            rules = (PersistedRule[])DomainModel.FindAll(typeof(PersistedRule));
+            rules = (PersistedRule[]) ActiveRecordMediator.FindAll(typeof(PersistedRule));
 
             Assert.IsNotNull(rules);
             Assert.AreEqual(1, rules.Length);
 
-            WorkDaysRules retrieved = (WorkDaysRules)DomainModel.FindByPrimaryKey(typeof(WorkDaysRules), rule.Id);
+            WorkDaysRules retrieved = (WorkDaysRules) ActiveRecordMediator.FindByPrimaryKey(typeof(WorkDaysRules), rule.Id);
             Assert.IsNotNull(retrieved);
 
             Assert.AreEqual(rule.Name, retrieved.Name);
@@ -68,7 +67,7 @@ namespace Castle.ActiveRecord.Tests
         public void DiscriminatorUse()
         {
             XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
-            xmlVisitor.CreateXml(DomainModel.GetModel(typeof(PersistedRule)));
+            xmlVisitor.CreateXml(ActiveRecordBase.GetModel(typeof(PersistedRule)));
             String xml = xmlVisitor.Xml;
 
             String expected =

@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Framework
 	{
 		public static IList FindAll( Type type )
 		{
-			ISession session = DomainModel._holder.CreateSession( type );
+			ISession session = ActiveRecordBase._holder.CreateSession( type );
 
 			try
 			{
@@ -36,7 +36,7 @@ namespace Castle.ActiveRecord.Framework
 			}
 			finally
 			{
-				DomainModel._holder.ReleaseSession(session);
+				ActiveRecordBase._holder.ReleaseSession(session);
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace Castle.ActiveRecord.Framework
 
 		public static object FindByPK( Type type, object id, bool throwOnNotFound )
 		{
-			ISession session = DomainModel._holder.CreateSession( type );
+			ISession session = ActiveRecordBase._holder.CreateSession( type );
 
 			try
 			{
@@ -69,7 +69,7 @@ namespace Castle.ActiveRecord.Framework
 			}
 			finally
 			{
-				DomainModel._holder.ReleaseSession(session);
+				ActiveRecordBase._holder.ReleaseSession(session);
 			}
 		}
 	}

@@ -47,7 +47,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			{
 				list.Add(hierarchy);
 
-				hierarchy = DomainModel.GetModel( hierarchy.Type.BaseType );
+				hierarchy = ActiveRecordBase.GetModel( hierarchy.Type.BaseType );
 			}
 
 			hierarchy = model;
@@ -71,7 +71,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 					list.Add( nested.Model );
 				}
 
-				hierarchy = DomainModel.GetModel( hierarchy.Type.BaseType );
+				hierarchy = ActiveRecordBase.GetModel( hierarchy.Type.BaseType );
 			}
 
 			return list;
@@ -119,7 +119,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 		private bool CheckModelAndKeyAreAccessible(Type type)
 		{
-			ActiveRecordModel otherModel = DomainModel.GetModel(type);
+			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(type);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
@@ -322,7 +322,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			PropertyInfo prop = belongsToModel.Property;
 
-			ActiveRecordModel otherModel = DomainModel.GetModel(belongsToModel.BelongsToAtt.Type);
+			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(belongsToModel.BelongsToAtt.Type);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
@@ -369,7 +369,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			PropertyInfo prop = hasManyModel.Property;
 
-			ActiveRecordModel otherModel = DomainModel.GetModel(hasManyModel.HasManyAtt.MapType);
+			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(hasManyModel.HasManyAtt.MapType);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
@@ -406,7 +406,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			PropertyInfo prop = hasAndBelongsModel.Property;
 
-			ActiveRecordModel otherModel = DomainModel.GetModel(hasAndBelongsModel.HasManyAtt.MapType);
+			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(hasAndBelongsModel.HasManyAtt.MapType);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
