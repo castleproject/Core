@@ -32,6 +32,7 @@ namespace Castle.ActiveRecord
 	/// all the functionality to simplify the code on the 
 	/// subclasses.
 	/// </summary>
+	[Serializable]
 	public abstract class ActiveRecordBase
 	{
 		protected internal static ISessionFactoryHolder _holder;

@@ -30,7 +30,7 @@ namespace Castle.ActiveRecord.Framework
 	/// <remarks>
 	/// This class is thread safe
 	/// </remarks>
-	public class SessionFactoryHolder : ISessionFactoryHolder
+	public class SessionFactoryHolder : MarshalByRefObject, ISessionFactoryHolder
 	{
 		private Hashtable type2Conf = Hashtable.Synchronized(new Hashtable());
 		private Hashtable type2SessFactory = Hashtable.Synchronized(new Hashtable());

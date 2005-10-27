@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System;
 	using System.Collections;
 
-
+	[Serializable]
 	public class ActiveRecordModel : IModelNode
 	{
 		private readonly Type type;

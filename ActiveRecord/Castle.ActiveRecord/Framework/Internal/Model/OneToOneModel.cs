@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 
 
+	[Serializable]
 	public class OneToOneModel : IModelNode
 	{
 		private readonly PropertyInfo propInfo;

@@ -14,10 +14,13 @@
 
 namespace Castle.ActiveRecord.Framework.Internal
 {
+	using System;
 	using System.Reflection;
 
 	using Castle.ActiveRecord;
 
+
+	[Serializable]
 	public class HasManyToAnyModel : IModelNode
 	{
 		private readonly PropertyInfo prop;
