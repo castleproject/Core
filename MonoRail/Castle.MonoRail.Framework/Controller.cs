@@ -15,12 +15,12 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 	using System.IO;
 	using System.Web;
 	using System.Reflection;
 	using System.Threading;
+	using System.Collections;
+	using System.Collections.Specialized;
 
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
@@ -850,6 +850,12 @@ namespace Castle.MonoRail.Framework
 
 		protected internal bool ShouldSkip(MethodInfo method, IDictionary filtersToSkip)
 		{
+			if (method == null)
+			{
+				// Dynamic Action, run the filters
+				return false;
+			}
+
 			if (_filters == null)
 			{
 				// No filters, so skip 
