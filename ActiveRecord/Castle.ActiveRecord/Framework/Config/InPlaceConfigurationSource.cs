@@ -42,6 +42,30 @@ namespace Castle.ActiveRecord.Framework.Config
 			_type2Config[type] = config;
 		}
 
+		protected void SetUpThreadInfoType(bool isWeb, String customType)
+		{
+			Type threadInfoType = null;
+
+			if (isWeb)
+			{
+				threadInfoType = typeof(Castle.ActiveRecord.Framework.Scopes.WebThreadScopeInfo);
+			}
+
+			if (customType != null && customType != String.Empty)
+			{
+				String typeName = customType;
+				
+				threadInfoType = Type.GetType(typeName, false, false);
+
+				if (threadInfoType == null)
+				{
+					String message = String.Format("The type name {0} could not be found", typeName);
+
+					throw new ActiveRecordException(message);
+				}
+			}
+		}
+
 		#region IConfigurationSource Members
 
 		public Type ThreadScopeInfoImplementation

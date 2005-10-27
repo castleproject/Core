@@ -55,29 +55,11 @@ namespace Castle.ActiveRecord.Framework.Config
 
 		protected void PopulateSource(XmlNode section)
 		{
-			Type threadInfoType = null;
-
 			XmlAttribute isWebAtt = section.Attributes["isWeb"];
 			XmlAttribute threadInfoAtt = section.Attributes["threadinfotype"];
 
-			if (isWebAtt != null && "true".Equals(isWebAtt.Value))
-			{
-				threadInfoType = typeof(Castle.ActiveRecord.Framework.Scopes.WebThreadScopeInfo);
-			}
-
-			if (threadInfoAtt != null && threadInfoAtt.Value != String.Empty)
-			{
-				String typeName = threadInfoAtt.Value;
-				
-				threadInfoType = Type.GetType(typeName, false, false);
-
-				if (threadInfoType == null)
-				{
-					String message = String.Format("The type name {0} could not be found", typeName);
-
-					throw new ActiveRecordException(message);
-				}
-			}
+			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value, 
+				threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
 
 			PopulateConfigNodes(section);
 		}
@@ -92,7 +74,8 @@ namespace Castle.ActiveRecord.Framework.Config
 
 				if (!Config_Node_Name.Equals(node.Name))
 				{
-					String message = String.Format("Unexpected node. Expect '{0}' found '{1}'", Config_Node_Name, node.Name);
+					String message = String.Format("Unexpected node. Expect '{0}' found '{1}'", 
+						Config_Node_Name, node.Name);
 					
 					throw new ConfigurationException(message);
 				}

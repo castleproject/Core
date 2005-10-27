@@ -77,10 +77,6 @@ namespace Castle.Facilities.ActiveRecordIntegration
 					(Assembly[]) assemblies.ToArray( typeof(Assembly) ), 
 					new ConfigurationSourceAdapter(FacilityConfig) );
 			}
-//			catch(Exception ex)
-//			{
-//				throw new FacilityException("Error trying to start the ActiveRecord Framework", ex);
-//			}
 			finally
 			{
 				ActiveRecordStarter.SessionFactoryHolderCreated -= new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
@@ -136,6 +132,11 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	{
 		public ConfigurationSourceAdapter(IConfiguration facilityConfig)
 		{
+			String isWeb = facilityConfig.Attributes["isWeb"];
+			String threadinfotype = facilityConfig.Attributes["threadinfotype"];
+
+			SetUpThreadInfoType("true" == isWeb, threadinfotype);
+
 			foreach(IConfiguration config in facilityConfig.Children)
 			{
 				if (!"config".Equals(config.Name)) continue;
