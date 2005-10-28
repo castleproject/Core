@@ -414,7 +414,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helpers\AjaxHelper2.cs"
+                    RelPath = "Helpers\AjaxHelperOld.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

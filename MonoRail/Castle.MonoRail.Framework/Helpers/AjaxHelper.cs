@@ -26,9 +26,9 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// This version provides less overloads but makes intensive use of 
 	/// <see cref="IDictionary"/> to pass on options and attributes.
 	/// </remarks>
-	public class AjaxHelper2 : AbstractHelper
+	public class AjaxHelper : AbstractHelper
 	{
-		public AjaxHelper2()
+		public AjaxHelper()
 		{
 		}
 
