@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 	using System.Data;
@@ -24,7 +24,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	/// <summary>
 	/// Proxies an ISession so the user cannot close a session which
 	/// is controlled by a transaction, or, when this is not the case, 
-	/// remove the session from the storage.
+	/// make sure to remove the session from the storage.
 	/// <seealso cref="ISessionStore"/>
 	/// <seealso cref="ISessionManager"/>
 	/// </summary>
@@ -42,6 +42,11 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			this.inner = inner;
 			this.sessionStore = sessionStore;
 			this.canClose = canClose;
+		}
+
+		public ISession InnerSession
+		{
+			get { return inner; }
 		}
 
 		public object SessionStoreCookie
@@ -344,23 +349,46 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 		{
 			if (disposed) return null;
 
-			IDbConnection conn = null;
-
 			if (canClose)
 			{
-				sessionStore.Remove(cookie, this);
-
-				if (closing)
-				{
-					conn = inner.Close();
-				}
-
-				inner.Dispose();
+				return InternalClose(closing);
 			}
 
-			disposed = true;
+			return null;
+		}
 
+		internal IDbConnection InternalClose(bool closing)
+		{
+			IDbConnection conn = null;
+	
+			sessionStore.Remove(this);
+
+			if (closing)
+			{
+				conn = inner.Close();
+			}
+
+			inner.Dispose();
+	
+			disposed = true;
+	
 			return conn;
+		}
+
+		public static bool AreEqual(ISession left, ISession right)
+		{
+			SessionDelegate sdLeft = left as SessionDelegate;
+			SessionDelegate sdRight = right as SessionDelegate;
+
+			if (sdLeft != null && sdRight != null)
+			{
+				return Object.ReferenceEquals( sdLeft.inner, sdRight.inner );
+			}
+			else
+			{
+				throw new NotSupportedException("AreEqual: left is " + 
+					left.GetType().Name + " and right is " + right.GetType().Name);
+			}
 		}
 	}
 }

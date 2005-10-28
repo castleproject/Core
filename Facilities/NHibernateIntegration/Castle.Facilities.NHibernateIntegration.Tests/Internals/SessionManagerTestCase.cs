@@ -43,6 +43,12 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 			Assert.IsNotNull(session2);
 
 			Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
+
+			session2.Dispose();
+			session1.Dispose();
+
+			Assert.IsTrue( (container[typeof(ISessionStore)] 
+				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
 		[Test]
@@ -71,6 +77,13 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			Assert.AreSame(session1, session2);
 			Assert.AreSame(session1, session3);
+
+			session3.Dispose();
+			session2.Dispose();
+			session1.Dispose();
+
+			Assert.IsTrue( (container[typeof(ISessionStore)] 
+				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
 		/// <summary>
@@ -101,6 +114,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			Assert.IsTrue(session.Transaction.WasCommitted);
 			Assert.IsTrue(session.IsConnected); 
+
+			session.Dispose();
+
+			Assert.IsTrue( (container[typeof(ISessionStore)] 
+				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
 		/// <summary>
@@ -138,6 +156,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			Assert.IsTrue(session1.Transaction.WasCommitted);
 			Assert.IsTrue(session1.IsConnected); 
+
+			session1.Dispose();
+
+			Assert.IsTrue( (container[typeof(ISessionStore)] 
+				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
 		/// <summary>
@@ -171,7 +194,13 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 			Assert.IsTrue(session1.Transaction.WasCommitted);
 			Assert.IsTrue(session1.IsConnected); 
 			Assert.IsTrue(session2.Transaction.WasCommitted);
-			Assert.IsTrue(session2.IsConnected); 
+			Assert.IsTrue(session2.IsConnected);
+ 
+			session2.Dispose();
+			session1.Dispose();
+
+			Assert.IsTrue( (container[typeof(ISessionStore)] 
+				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
 		[Test]
@@ -204,6 +233,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			Assert.IsTrue(session1.Transaction.WasCommitted);
 			Assert.IsTrue(session1.IsConnected); 
+
+			session1.Dispose();
+
+			Assert.IsTrue( (container[typeof(ISessionStore)] 
+				as ISessionStore).IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 	}
 }

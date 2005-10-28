@@ -67,34 +67,33 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			bool weAreSessionOwner = false;
 
-			SessionDelegate wrapped = null;
-			
-			ISession session = sessionStore.FindCompatibleSession(alias);
+			SessionDelegate wrapped = sessionStore.FindCompatibleSession(alias);
 
-			if (session == null)
+			ISession session = null;
+
+			if (wrapped == null)
 			{
 				session = CreateSession(alias); weAreSessionOwner = true;
 
 				wrapped = WrapSession(transaction != null, session);
 
-				object cookie = sessionStore.Store(alias, wrapped);
+				sessionStore.Store(alias, wrapped);
 
-				wrapped.SessionStoreCookie = cookie;
-
-				EnlistIfNecessary(weAreSessionOwner, transaction, session);
+				EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
 			}
 			else
 			{
-				if (EnlistIfNecessary(weAreSessionOwner, transaction, session))
+				if (EnlistIfNecessary(weAreSessionOwner, transaction, wrapped))
 				{
-					wrapped = WrapSession(true, session);
+					wrapped = WrapSession(true, wrapped.InnerSession);
 				}
 			}
 			
-			return wrapped != null ? wrapped : session;
+			return wrapped;
 		}
 
-		protected bool EnlistIfNecessary(bool weAreSessionOwner, ITransaction transaction, ISession session)
+		protected bool EnlistIfNecessary(bool weAreSessionOwner, 
+			ITransaction transaction, SessionDelegate session)
 		{
 			if (transaction == null) return false;
 
@@ -118,7 +117,7 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 				foreach(ISession sess in list)
 				{
-					if (Object.ReferenceEquals(sess, session))
+					if (SessionDelegate.AreEqual(session, sess))
 					{
 						shouldEnlist = false;
 						break;
@@ -134,7 +133,8 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 				if (weAreSessionOwner)
 				{
-					transaction.RegisterSynchronization( new SessionDisposeSynchronization(session) );
+					transaction.RegisterSynchronization( 
+						new SessionDisposeSynchronization(session) );
 				}
 			}
 

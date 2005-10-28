@@ -16,8 +16,6 @@ namespace Castle.Facilities.NHibernateIntegration
 {
 	using System;
 
-	using NHibernate;
-
 	/// <summary>
 	/// Provides the contract for implementors who want to 
 	/// store valid session so they can be reused in a invocation
@@ -31,24 +29,27 @@ namespace Castle.Facilities.NHibernateIntegration
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <returns></returns>
-		ISession FindCompatibleSession(String alias);
+		SessionDelegate FindCompatibleSession(String alias);
 
 		/// <summary>
 		/// Should store the specified session instance 
-		/// and return a cookie which will be used to remove
-		/// the session from the store.
 		/// </summary>
 		/// <param name="alias"></param>
 		/// <param name="session"></param>
-		/// <returns>Returns a cookie</returns>
-		object Store(String alias, ISession session);
+		void Store(String alias, SessionDelegate session);
 
 		/// <summary>
 		/// Should remove the session from the store 
 		/// only.
 		/// </summary>
-		/// <param name="cookie"></param>
 		/// <param name="session"></param>
-		void Remove(object cookie, ISession session);
+		void Remove(SessionDelegate session);
+
+		/// <summary>
+		/// Returns <c>true</c> if the current activity
+		/// (which is an execution activity context) has no
+		/// sessions available
+		/// </summary>
+		bool IsCurrentActivityEmptyFor(String alias);
 	}
 }

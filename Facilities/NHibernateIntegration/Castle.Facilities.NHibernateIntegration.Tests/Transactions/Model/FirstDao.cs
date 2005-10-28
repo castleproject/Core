@@ -12,32 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.NHibernateIntegration.Internal
+namespace Castle.Facilities.NHibernateIntegration.Tests.Transactions
 {
-	using NHibernate;
+	using System;
 
 	using Castle.Services.Transaction;
+	
+	using NHibernate;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public class SessionDisposeSynchronization : ISynchronization
+
+	[Transactional]
+	public class FirstDao
 	{
-		private readonly SessionDelegate session;
+		private readonly ISessionManager sessManager;
 
-		public SessionDisposeSynchronization(SessionDelegate session)
+		public FirstDao(ISessionManager sessManager)
 		{
-			this.session = session;
+			this.sessManager = sessManager;
 		}
 
-		public void BeforeCompletion()
+		[Transaction]
+		public virtual Blog Create()
 		{
-			
+			return Create("xbox blog");
 		}
 
-		public void AfterCompletion()
+		[Transaction]
+		public virtual Blog Create(String name)
 		{
-			session.InternalClose(false);
+			using(ISession session = sessManager.OpenSession())
+			{
+				NUnit.Framework.Assert.IsNotNull(session.Transaction);
+
+				Blog blog = new Blog();
+				blog.Name = name;
+				session.Save(blog);
+				return blog;
+			}
 		}
 	}
 }

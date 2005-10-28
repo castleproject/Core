@@ -23,31 +23,37 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 	{
 		protected abstract Stack GetStackFor(String alias);
 
-		public ISession FindCompatibleSession(String alias)
+		public SessionDelegate FindCompatibleSession(String alias)
 		{
 			Stack stack = GetStackFor(alias);
 
 			if (stack.Count == 0) return null;
 
-			return stack.Peek() as ISession;
+			return stack.Peek() as SessionDelegate;
 		}
 
-		public object Store(String alias, ISession session)
+		public void Store(String alias, SessionDelegate session)
 		{
 			Stack stack = GetStackFor(alias);
 
 			stack.Push(session);
 
-			return stack;
+			session.SessionStoreCookie = stack;
 		}
 
-		public void Remove(object cookie, ISession session)
+		public void Remove(SessionDelegate session)
 		{
-			Stack stack = (Stack) cookie;
+			Stack stack = (Stack) session.SessionStoreCookie;
+
+			if (stack == null)
+			{
+				throw new InvalidProgramException("AbstractSessionStore.Remove called " + 
+					"with no cookie - no pun intended");
+			}
 
 			if (stack.Count == 0)
 			{
-				throw new InvalidProgramException("ThreadLocalSessionStore.Remove called " + 
+				throw new InvalidProgramException("AbstractSessionStore.Remove called " + 
 					"for an empty stack");
 			}
 
@@ -55,11 +61,18 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 
 			if (session != current)
 			{
-				throw new InvalidProgramException("ThreadLocalSessionStore.Remove tried to " + 
+				throw new InvalidProgramException("AbstractSessionStore.Remove tried to " + 
 					"remove a session which is not on the top or not in the stack at all");
 			}
 
 			stack.Pop();
+		}
+
+		public bool IsCurrentActivityEmptyFor(String alias)
+		{
+			Stack stack = GetStackFor(alias);
+
+			return stack.Count == 0;
 		}
 	}
 }

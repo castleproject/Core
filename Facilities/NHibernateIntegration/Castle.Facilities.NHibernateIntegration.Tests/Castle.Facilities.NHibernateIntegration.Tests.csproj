@@ -130,6 +130,11 @@
                     HintPath = "C:\devtools\NUnit 2.2.2\bin\nunit.framework.dll"
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
+                <Reference
+                    Name = "Castle.Facilities.AutomaticTransactionManagement"
+                    AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
+                    HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -217,6 +222,26 @@
                 />
                 <File
                     RelPath = "SessionCreation\MySecondDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Transactions\TransactionsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Transactions\Model\FirstDao.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Transactions\Model\RootService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Transactions\Model\SecondDao.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -49,9 +49,11 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			session = factory.OpenSession();
 
-			object cookie = store.Store( Constants.DefaultAlias, session );
+			SessionDelegate sessDelegate = new SessionDelegate(true, session, store);
+
+			store.Store( Constants.DefaultAlias, sessDelegate );
 			
-			Assert.IsNotNull(cookie);
+			Assert.IsNotNull(sessDelegate.SessionStoreCookie);
 
 			ISession session2 = store.FindCompatibleSession( "something in the way she moves" );
 
@@ -60,15 +62,17 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 			session2 = store.FindCompatibleSession( Constants.DefaultAlias );
 
 			Assert.IsNotNull(session2);
-			Assert.AreSame(session, session2);
+			Assert.AreSame(sessDelegate, session2);
 
 			session.Dispose();
 
-			store.Remove(cookie, session);
+			store.Remove(sessDelegate);
 
 			session = store.FindCompatibleSession( Constants.DefaultAlias );
 
 			Assert.IsNull(session);
+
+			Assert.IsTrue( store.IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
 		[Test]
@@ -79,19 +83,23 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 
 			ISession session = factory.OpenSession();
 
-			store.Store( Constants.DefaultAlias, session );
+			SessionDelegate sessDelegate = new SessionDelegate(true, session, store);
+
+			store.Store( Constants.DefaultAlias, sessDelegate );
 
 			ISession session2 = store.FindCompatibleSession( Constants.DefaultAlias );
 
 			Assert.IsNotNull(session2);
-			Assert.AreSame(session, session2);
+			Assert.AreSame(sessDelegate, session2);
 
 			Thread newThread = new Thread(new ThreadStart(FindCompatibleSessionOnOtherThread));
 			newThread.Start();
 
 			arEvent.WaitOne();
 
-			session.Dispose();
+			sessDelegate.Dispose();
+
+			Assert.IsTrue( store.IsCurrentActivityEmptyFor( Constants.DefaultAlias ) );
 		}
 
 		private void FindCompatibleSessionOnOtherThread()
