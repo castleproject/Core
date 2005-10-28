@@ -16,12 +16,12 @@ namespace Castle.MonoRail.Views.Brail.Tests.Components
 
 import System
 import Castle.MonoRail.Framework
-import NUnit.Framework
 
 class InlineComponentWithParam1(ViewComponent):
 	override def Initialize():
-		Assert.IsNotNull(ComponentParams['arg1'])
-		Assert.AreEqual('1', ComponentParams['arg1'])
+		if '1' != ComponentParams['arg1']:
+			raise InvalidOperationException('Expected to get ComponentParams[\'arg1\'] with value of 1')
+		
 	
 	override def Render():
 		RenderText('Done')

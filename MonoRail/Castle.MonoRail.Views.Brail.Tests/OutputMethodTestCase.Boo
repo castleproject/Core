@@ -26,7 +26,7 @@ class OutputMethodTestCase(AbstractMRTestCase):
 	def HtmlAttribute():
 		expected = """
 Some text that will be &lt;html&gt; encoded"""
-		DoGet( "/OutputMethods/HtmlOutputAttribute.rails")
+		DoGet("OutputMethods/HtmlOutputAttribute.rails")
 		AssertReplyEqualsTo(expected)
 	
 	[Test]
@@ -40,5 +40,5 @@ Some text that will be &lt;html&gt; encoded"""
 	def MarkDownAttribute():
 		expected = '\r\n<p><a href="http://www.ayende.com/">Ayende Rahien</a>, <strong>Rahien</strong>.</p>\n'
 
-		DoGet( "/OutputMethods/MarkDownOutputAttribute.rails")
+		DoGet("OutputMethods/MarkDownOutputAttribute.rails")
 		AssertReplyEqualsTo(expected)

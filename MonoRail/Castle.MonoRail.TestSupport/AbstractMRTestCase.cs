@@ -96,6 +96,8 @@ namespace Castle.MonoRail.TestSupport
 		/// <param name="queryStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
 		public void DoGet(String path, params String[] queryStringParams)
 		{
+			AssertPathIsValid(path);
+
 			if (queryStringParams.Length != 0) Request.QueryStringParams = queryStringParams;
 
 			outputBuffer.Length = 0;
@@ -125,6 +127,19 @@ namespace Castle.MonoRail.TestSupport
 			response = host.Process( Request, writer );
 		}
 		
+
+		private void AssertPathIsValid(string path)
+		{
+			if(path == null)
+				throw new ArgumentNullException("path", "Can't test a null path");
+			if(path.Length==0)
+				throw new ArgumentException("Can't test an empty path","path");
+			if(path[0] == '/')
+				throw new ArgumentException("Path mustn't start with a '/'!");
+			if(path.IndexOf('?')!=-1)
+				throw new ArgumentException("Path cannot contain query parameters! Pass them seperatedly","path");
+		}
+
 		#endregion
 
 		#region Properties

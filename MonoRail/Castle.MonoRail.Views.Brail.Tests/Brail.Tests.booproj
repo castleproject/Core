@@ -37,7 +37,6 @@
     <Compile Include="BrailBasicFunctionality.boo" />
     <Compile Include="BrailHelperTestCase.boo" />
     <Compile Include="BrailLayoutTestCase.boo" />
-    <Compile Include="BrailRescureTestCase.boo" />
     <Compile Include="BrailRoutingTestCase.boo" />
     <Compile Include="BrailSmartControllerTestCase.boo" />
     <Compile Include="BrailSubViewTestCase.boo" />
@@ -45,19 +44,10 @@
     <Compile Include="DirectRenderTestCase.boo" />
     <Compile Include="OutputMethodTestCase.Boo" />
     <Compile Include="ResourceTestCase.boo" />
-    <Compile Include="Components\SimpleInlineViewComponent.boo" />
-    <Compile Include="Components\SimpleInlineViewComponent2.boo" />
-    <Compile Include="Components\SimpleInlineViewComponent3.boo" />
-    <Compile Include="Components\BlockViewComponent1.boo" />
-    <Compile Include="Components\BlockViewComponent2.boo" />
-    <Compile Include="Components\InlineComponentWithParam1.boo" />
     <Compile Include="Controllers\LayoutController.boo" />
-    <Compile Include="Controllers\UsingComponentsController.boo" />
     <Compile Include="Controllers\HomeController.boo" />
     <EmbeddedResource Include="Resources\Language.he.resources" />
     <EmbeddedResource Include="Resources\Language.resources" />
-    <Compile Include="Views\components\SimpleInlineViewComponent2\mycompview1.boo" />
-    <Compile Include="Views\components\SimpleInlineViewComponent3\default.boo" />
     <Compile Include="Views\home\resource.boo" />
     <Compile Include="Views\home\bag.boo" />
     <Compile Include="Views\home\display.boo" />
@@ -67,13 +57,6 @@
     <Compile Include="Views\layout\update.boo" />
     <Compile Include="Views\layouts\general.boo" />
     <Compile Include="Views\layouts\printable.boo" />
-    <Compile Include="Views\usingcomponents\index3.boo" />
-    <Compile Include="Views\usingcomponents\index4.boo" />
-    <Compile Include="Views\usingcomponents\index5.boo" />
-    <Compile Include="Views\usingcomponents\index8.boo" />
-    <Compile Include="Views\usingcomponents\index9.boo" />
-    <Compile Include="Views\usingcomponents\index1.boo" />
-    <Compile Include="Views\usingcomponents\index2.boo" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

@@ -31,28 +31,28 @@ class BrailAjaxTestCase(AbstractMRTestCase):
 	[Test]
 	def LinkToFunction():
 		DoGet("ajax/LinkToFunction.rails")
-		expected = "<a href=\"#\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>"
+		expected = "<a href=\"#\"  onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def LinkToRemote():
-		DoGet( "/ajax/LinkToRemote.rails")
-		expected = "<a href=\"#\" onclick=\"new Ajax.Request('/controller/action.rails', {asynchronous:true}); return false;\" ><img src='myimg.gid'></a>"
+		DoGet("ajax/LinkToRemote.rails")
+		expected = "<a href=\"#\"  onclick=\"new Ajax.Request('/controller/action.rails', {asynchronous:true, evalScripts:true}); return false;\" ><img src='myimg.gid'></a>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def BuildFormRemoteTag():
-		DoGet( "/ajax/BuildFormRemoteTag.rails")
-		expected = "<form  onsubmit=\"new Ajax.Request('url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\">"
+		DoGet("ajax/BuildFormRemoteTag.rails")
+		expected = "<form  onsubmit=\"new Ajax.Request('url', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\">"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def ObserveField():
 		DoGet("ajax/ObserveField.rails")
-		expected = "<script type=\"text/javascript\">new Form.Element.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, parameters:newcontent}) })</script>"
+		expected = "<script type=\"text/javascript\">new Form.Element.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, evalScripts:true, parameters:newcontent}) })</script>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 	
@@ -60,6 +60,6 @@ class BrailAjaxTestCase(AbstractMRTestCase):
 	[Test]
 	def ObserveForm():
 		DoGet("ajax/ObserveForm.rails")
-		expected = "<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, parameters:newcontent}) })</script>"
+		expected = "<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, evalScripts:true, parameters:newcontent}) })</script>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)

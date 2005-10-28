@@ -37,7 +37,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 		# Wait half a sec so Brail could pick up that a change in the file occured.
 		System.Threading.Thread.Sleep(100)
 		try:
-			DoGet( "/apppath/index.rails")
+			DoGet("apppath/index.rails")
 			AssertReplyEqualsTo(newContent)
 		ensure:
 			using write = File.CreateText(script):
@@ -46,7 +46,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 	
 	[Test]
 	def CommonScripts():
-		DoGet( "/home/hellofromcommon.rails")
+		DoGet("home/hellofromcommon.rails")
 		expected = "Hello, Ayende"
 		AssertReplyEqualsTo(expected)
 	
@@ -64,7 +64,7 @@ end"""
 		expected = "Hello, Ayende! Modified!"
 		# Have to wait for the common scripts recompilation otherwise you get random test failure since the request
 		# sometimes gets there faster you can recompile and it gets the old version.
-		System.Threading.Thread.Sleep(100)
+		System.Threading.Thread.Sleep(500)
 		try:
 			DoGet("home/hellofromcommon.rails")
 			AssertReplyEqualsTo(expected)
