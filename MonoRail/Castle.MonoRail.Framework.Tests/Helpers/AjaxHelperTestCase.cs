@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	[TestFixture]
 	public class AjaxHelperTestCase
 	{
-		Castle.MonoRail.Framework.Helpers.AjaxHelperOld _hlp;
+		private AjaxHelperOld _hlp;
 
 		[SetUp]
 		public void Setup()

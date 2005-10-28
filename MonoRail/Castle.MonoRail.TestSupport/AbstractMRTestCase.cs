@@ -53,6 +53,14 @@ namespace Castle.MonoRail.TestSupport
 				physicalDir = dinfo.FullName;
 			}
 
+			if (!Directory.Exists( Path.Combine(physicalDir, "bin") ) || 
+				!File.Exists( Path.Combine(physicalDir, "web.config") ) )
+			{
+				String message = String.Format("The path specified for the " + 
+					"web project doesnt look as a web project dir (bin directory or web.config missing): {0}", physicalDir);
+				throw new ConfigurationException(message);
+			}
+
 			host = (WebAppHost) ApplicationHost.CreateApplicationHost( 
 				typeof(WebAppHost), virDir, physicalDir );
 
