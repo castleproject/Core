@@ -19,13 +19,19 @@ namespace Castle.Services.Security
 	using System.Security.Permissions;
 
 	[Serializable, AttributeUsage(AttributeTargets.Class|AttributeTargets.Method|AttributeTargets.Property, AllowMultiple=false, Inherited=false)]
-	public sealed class CustomPermissionAttribute : SecurityAttribute // CodeAccessSecurityAttribute
+	public sealed class CustomPermissionAttribute : SecurityAttribute
 	{
-		private readonly string permissionName;
+		private String permissionName;
 
-		public CustomPermissionAttribute(SecurityAction action, String permissionName) : base(action)
+		public CustomPermissionAttribute(SecurityAction action) : base(action)
 		{
 			this.permissionName = permissionName;
+		}
+
+		public String Permission
+		{
+			get { return permissionName; }
+			set { permissionName = value; }
 		}
 
 		public override IPermission CreatePermission()

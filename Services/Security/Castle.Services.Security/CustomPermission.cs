@@ -32,7 +32,6 @@ namespace Castle.Services.Security
 
 		public CustomPermission(PermissionState state)
 		{
-			
 		}
 
 		#region IPermission implementation
