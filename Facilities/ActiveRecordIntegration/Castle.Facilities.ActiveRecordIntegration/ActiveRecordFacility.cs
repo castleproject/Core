@@ -36,6 +36,8 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	/// </summary>
 	public class ActiveRecordFacility : AbstractFacility
 	{
+		private int sessionFactoryCount, sessionFactoryHolderCount;
+
 		public ActiveRecordFacility()
 		{
 		}
@@ -114,17 +116,40 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			holder.OnRootTypeRegistered += new RootTypeHandler(OnRootTypeRegistered);
 
-			Kernel.AddComponentInstance( 
-				"activerecord.sessionfactoryholder", 
-				typeof(ISessionFactoryHolder), holder );
+			if (!Kernel.HasComponent("activerecord.sessionfactoryholder"))
+			{
+				Kernel.AddComponentInstance( 
+					"activerecord.sessionfactoryholder", 
+					typeof(ISessionFactoryHolder), holder );
+			}
+			else
+			{
+				sessionFactoryHolderCount++;
+
+				Kernel.AddComponentInstance( 
+					"activerecord.sessionfactoryholder." + sessionFactoryCount.ToString(), 
+					typeof(ISessionFactoryHolder), holder );
+			}
 		}
 
 		private void OnRootTypeRegistered(object sender, Type rootType)
 		{
-			Kernel.AddComponentInstance( 
-				"activerecord.sessionfactory", 
-				typeof(NHibernate.ISessionFactory), 
-				new SessionFactoryDelegate( (ISessionFactoryHolder) sender, rootType) );
+			if (!Kernel.HasComponent("activerecord.sessionfactory"))
+			{
+				Kernel.AddComponentInstance( 
+					"activerecord.sessionfactory", 
+					typeof(NHibernate.ISessionFactory), 
+					new SessionFactoryDelegate( (ISessionFactoryHolder) sender, rootType) );
+			}
+			else
+			{
+				sessionFactoryCount++;
+
+				Kernel.AddComponentInstance( 
+					"activerecord.sessionfactory." + sessionFactoryCount.ToString(), 
+					typeof(NHibernate.ISessionFactory), 
+					new SessionFactoryDelegate( (ISessionFactoryHolder) sender, rootType) );
+			}
 		}
 	}
 
