@@ -15,6 +15,8 @@
 	<property name="src.dir" value="${base.dir}" />
 	<property name="test.src.dir" value="${src.dir}/../${test.name}" />
 
+	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
+
 	<property name="version" value="1.0.0.0" />
 
 	<target name="clean">
@@ -76,7 +78,7 @@
 	
 	<target name="test" depends="tests.run" />
 	
-	<target name="tests.run" depends="tests.compile">
+	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">
 		<nunit2>
 			<formatter type="Plain" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
