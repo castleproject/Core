@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.ActiveRecordSupport
 {
+	using System;
 	using System.Reflection;
 	
 	using Castle.ActiveRecord;
@@ -46,40 +47,74 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			for( int i=0; i < args.Length; i++)
 			{
 				ParameterInfo param	= parameters[i];
-
+				
 				object[] bindAttributes	= param.GetCustomAttributes( typeof(ARDataBindAttribute), false );
 				
 				if ( bindAttributes.Length > 0 )
 				{
 					ARDataBindAttribute dba = bindAttributes[0] as ARDataBindAttribute;							
-					if( dba.Validate )
+					if( dba.AutoPersist )
 					{
-						ActiveRecordValidationBase[] records = null;
-						if( args[i].GetType().IsArray )
-						{
-							records = args[i] as ActiveRecordValidationBase[];
-						}
-						else if( typeof(ActiveRecordValidationBase).IsAssignableFrom( args[i].GetType() ) )
-						{
-							records = new ActiveRecordValidationBase[] { (ActiveRecordValidationBase) args[i] };
-						}
-
-						if( records != null )
-						{
-							foreach(ActiveRecordValidationBase record in records)
-							{								
-								if( !record.IsValid() )
-								{
-									throw new RailsException( "ARSmartDispatchController: Error validating {0} {1}\n{2}",
-												param.ParameterType.FullName, param.Name, string.Join( "\n", record.ValidationErrorMessages) );
-								}
-							}
-						}
+						PersistInstances (args[i]);
+					}
+					else if( dba.Validate )
+					{
+						ValidateInstances (args[i], param);
 					}
 				}
 			}
 			
 			return args;
-		}			
+		}
+
+		private void PersistInstances( object instances )
+		{
+			Type instanceType = instances.GetType();		
+			ActiveRecordBase[] records = null;
+			
+			if( instanceType.IsArray )
+			{
+				records = instances as ActiveRecordBase[];
+			}
+			else if( typeof(ActiveRecordBase).IsAssignableFrom( instanceType ) )
+			{
+				records = new ActiveRecordBase[] { (ActiveRecordBase) instances };
+			}
+
+			if( records != null )
+			{
+				foreach(ActiveRecordBase record in records)
+				{								
+					record.Save();
+				}
+			}
+		}
+
+		private void ValidateInstances( object instances, ParameterInfo param )
+		{
+			Type instanceType = instances.GetType();		
+			ActiveRecordValidationBase[] records = null;
+			
+			if( instanceType.IsArray )
+			{
+				records = instances as ActiveRecordValidationBase[];
+			}
+			else if( typeof(ActiveRecordValidationBase).IsAssignableFrom( instanceType ) )
+			{
+				records = new ActiveRecordValidationBase[] { (ActiveRecordValidationBase) instances };
+			}
+
+			if( records != null )
+			{
+				foreach(ActiveRecordValidationBase record in records)
+				{								
+					if( !record.IsValid() )
+					{
+						throw new RailsException( "ARSmartDispatchController: Error validating {0} {1}\n{2}",
+							param.ParameterType.FullName, param.Name, string.Join( "\n", record.ValidationErrorMessages) );
+					}
+				}
+			}			
+		}
 	}
 }

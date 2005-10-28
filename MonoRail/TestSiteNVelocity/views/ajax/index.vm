@@ -1,6 +1,6 @@
 <html>
 <head>
-$AjaxHelper.GetJavascriptFunctions()
+$AjaxHelperAlias.GetJavascriptFunctions()
 </head>
 
 <body>
@@ -16,7 +16,7 @@ Observer field example:
 
 </form>
 
-$AjaxHelper.ObserveField("zip", 2, "inferaddress.rails", "address", "'aa new content'")
+$AjaxHelperAlias.ObserveField("zip", 2, "inferaddress.rails", "address", "'aa new content'")
 
 <hr>
 
@@ -35,7 +35,7 @@ Observer form example:
 </form>
 </p>
 
-$AjaxHelper.ObserveForm("myform", 2, "accountformvalidate.rails", "message", null)
+$AjaxHelperAlias.ObserveForm("myform", 2, "accountformvalidate.rails", "message", null)
 
 <hr>
 

@@ -59,7 +59,19 @@ namespace TestScaffolding
 			}
 			RenderText(buffer.ToString());
 		}
-		
+
+		[Rescue("DataBinderValidateBadData")]
+		public void AutoPersistPeople([ARDataBindAttribute(Prefix="SimplePerson",AutoPersist=true)] SimplePerson[] people)
+		{			
+			StringBuilder buffer = new StringBuilder("Length=");
+			buffer.Append(people.Length).Append("\n");
+			foreach(SimplePerson person in people)
+			{
+				buffer.Append(person).Append("\n");
+			}
+			RenderText(buffer.ToString());
+		}
+				
 		[Rescue("DataBinderValidateBadData")]
 		public void SavePeopleWithValidate([ARDataBindAttribute(Prefix="SimplePerson", Validate=true)] SimplePerson[] people)
 		{	

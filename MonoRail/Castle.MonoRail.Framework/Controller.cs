@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
+	using System.Text;
 	using System.Web;
 	using System.Reflection;
 	using System.Threading;
@@ -496,18 +497,20 @@ namespace Castle.MonoRail.Framework
 
 		protected String ToQueryString(NameValueCollection parameters)
 		{
-			String querystring = String.Empty;
-
+			StringBuilder buffer = new StringBuilder();
 			HttpServerUtility serverUtility = HttpContext.Server;
 	
 			foreach (String key in parameters.Keys)
 			{
-				querystring += String.Format("{0}{1}={2}", (querystring.Length == 0 ? String.Empty : "&"),
-					serverUtility.HtmlEncode(key),
-					serverUtility.HtmlEncode(parameters[key]));
+				buffer.Append( serverUtility.HtmlEncode(key) )
+					  .Append('=')
+					  .Append( serverUtility.HtmlEncode(parameters[key]) )
+					  .Append('&');
 			}
 
-			return querystring;
+			return buffer.Length == 0 ? 
+						String.Empty : 
+						buffer.Remove(buffer.Length -1, 1).ToString(); // removing extra &
 		}
 
 		#endregion
@@ -764,7 +767,7 @@ namespace Castle.MonoRail.Framework
 					aware.SetController(this);
 				}
 
-				_helpers.Add(helper.HelperType.Name, helperInstance);
+				_helpers.Add(helper.Name, helperInstance);
 			}
 
 			AbstractHelper[] builtInHelpers =

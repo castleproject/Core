@@ -20,11 +20,12 @@ namespace TestSiteNVelocity.Controllers
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 
+	[Helper(typeof(AjaxHelper),"ajaxHelperAlias")]
 	public class AjaxController : SmartDispatcherController
 	{
 		private AjaxHelper Helper
 		{
-			get { return (AjaxHelper) Helpers["AjaxHelper"]; }
+			get { return (AjaxHelper) Helpers["ajaxHelperAlias"]; }
 		}
 
 		public AjaxController()

@@ -234,6 +234,63 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			DoGet("ARDataBinderTest/SavePeopleWithValidate.rails", args);
 			AssertReplyContains("Error Validating Attribute");
-		}				
+		}	
+				
+		[Test]
+		public void ArrayAutoPersist()
+		{
+			string[] args;
+			
+			args = new string[] {
+									"SimplePerson[0]@autoload=yes",
+									"SimplePerson[0].Id=1",
+									"SimplePerson[0].Name=John",
+									
+									"SimplePerson[1]@autoload=yes",
+									"SimplePerson[1].Id=2",
+									"SimplePerson[1].Age=20",
+									
+									"SimplePerson[2]@autoload=yes",
+									"SimplePerson[2].Id=3",
+									"SimplePerson[2].Name=Bill",
+									
+									"SimplePerson[3]@autoload=no",
+									"SimplePerson[3].Name=Tico",									
+									"SimplePerson[3].Age=21"
+								};
+			
+			DoGet("ARDataBinderTest/AutoPersistPeople.rails", args);
+			AssertReplyContains("[1:John:1]");
+			AssertReplyContains("[2:Name 2:20]");
+			AssertReplyContains("[3:Bill:3]");
+			AssertReplyContains("[16:Tico:21]");
+		}
+		
+		[Test]
+		public void ArrayAutoPersistWithBadData()
+		{
+			string[] args;
+			
+			args = new string[] {
+									"SimplePerson[0]@autoload=yes",
+									"SimplePerson[0].Id=1",
+									"SimplePerson[0].Name=John",
+									
+									"SimplePerson[1]@autoload=yes",
+									"SimplePerson[1].Id=2",
+									"SimplePerson[1].Age=20",
+									
+									"SimplePerson[2]@autoload=yes",
+									"SimplePerson[2].Id=3",
+									"SimplePerson[2].Name=Bill",
+									
+									"SimplePerson[3]@autoload=no",
+									"SimplePerson[3].Name=Tico!!",									
+									"SimplePerson[3].Age=21"
+								};
+			
+			DoGet("ARDataBinderTest/AutoPersistPeople.rails", args);
+			AssertReplyContains("Error Validating Attribute");
+		}			
 	}
 }

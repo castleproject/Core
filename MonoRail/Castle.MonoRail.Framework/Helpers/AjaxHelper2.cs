@@ -409,15 +409,19 @@ namespace Castle.MonoRail.Framework.Helpers
 				}
 				else
 				{
-					String content = "";
+					StringBuilder content = new StringBuilder("new Array(");
+					
 					foreach(String tok in tokens)
 					{
-						if (content.Length != 0) content += ",";
-
-						content += String.Format( "'{0}'", tok );
+						content.Append('\'').Append(tok).Append("\',");
 					}
-
-					options["tokens"] = String.Format( "new Array( {0} )", content );
+					
+					if(tokens.Length > 0)
+						content.Remove( content.Length - 1, 1); // removing extra comma
+					
+					content.Append(')');
+					
+					options["tokens"] = content.ToString();
 				}
 			}
 

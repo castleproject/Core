@@ -15,9 +15,9 @@
 namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
-	using System.Collections;
-	using System.Text;
 	using System.Web;
+	using System.Text;
+	using System.Collections;
 
 	/// <summary>
 	/// Optional base class for helpers. 
@@ -27,7 +27,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public abstract class AbstractHelper : IControllerAware
 	{
-		#region Controller
+		#region Controller Reference
+
 		/// <summary>
 		/// Store's <see cref="Controller"/> for the current view.
 		/// </summary>
@@ -50,6 +51,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			get { return controller; }
 		}
+
 		#endregion 
 
 		/// <summary>
@@ -96,23 +98,24 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </remarks>
 		protected String GetAttributes(IDictionary attributes)
 		{
-			if (attributes == null) return String.Empty;
+			if (attributes == null || attributes.Count == 0) return String.Empty;
 
-			String contents = String.Empty;
+			StringBuilder contents = new StringBuilder();
 
 			foreach (DictionaryEntry entry in attributes)
 			{
 				if (entry.Value == null || entry.Value.ToString() == String.Empty)
 				{
-					contents += String.Format("{0} ", entry.Key);
+					contents.Append(entry.Key);
 				}
 				else
 				{
-					contents += String.Format("{0}=\"{1}\" ", entry.Key, entry.Value);
+					contents.AppendFormat("{0}=\"{1}\"", entry.Key, entry.Value);
 				}
+				contents.Append(' ');
 			}
 
-			return contents;
+			return contents.ToString();
 		}
 
 		/// <summary>
