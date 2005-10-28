@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework
 	/// and uses the configuration to obtain the correct factories 
 	/// instances.
 	/// </summary>
-	public class MonoRailHttpHandlerFactory : ProcessEngineFactory, IHttpHandlerFactory//, IRequiresSessionState
+	public class MonoRailHttpHandlerFactory : ProcessEngineFactory, IHttpHandlerFactory
 	{
 		public MonoRailHttpHandlerFactory()
 		{

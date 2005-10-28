@@ -135,13 +135,6 @@ namespace Castle.MonoRail.Framework
 		public virtual void Process( IRailsEngineContext context )
 		{
 			HttpContext httpContext = context.UnderlyingContext;
-
-			// Push the IRailsEngineContext into the HttpContext so 
-			// that we can access it from outside of MonoRail
-			if (httpContext != null && !httpContext.Items.Contains(RailsContextKey))
-			{
-				httpContext.Items.Add(RailsContextKey, context);
-			}
 			
 			UrlInfo info = ExtractUrlInfo(context);
 
@@ -182,6 +175,8 @@ namespace Castle.MonoRail.Framework
 
 		protected void RaiseEngineContextCreated(IRailsEngineContext context)
 		{
+			context.UnderlyingContext.Items[RailsContextKey] = context;
+
 			if (extensions.Length == 0) return;
 
 			foreach(IMonoRailExtension extension in extensions)
