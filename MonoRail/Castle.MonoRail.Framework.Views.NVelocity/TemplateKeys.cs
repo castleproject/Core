@@ -11,25 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Castle.MonoRail.Views.Brail.Tests
 
-import System
-import System.IO
-import NUnit.Framework
-import Castle.MonoRail.Framework
+namespace Castle.MonoRail.Framework.Views.NVelocity
+{
+	using System;
 
-import Castle.MonoRail.TestSupport
-
-[TestFixture]
-class BrailRoutingTestCase(AbstractMRTestCase):
-	[Test]
-	def BlogRoutingRule():
-		DoGet("blog/posts/2005/07/")
-		expected = "Blog: year=2005 month=7";
-		AssertReplyEqualsTo(expected);
-	
-	[Test]
-	def NewsRoutingRule():
-		DoGet("news/2004/11/")
-		expected = "News: year=2004 month=11";
-		AssertReplyEqualsTo(expected);
+	public class TemplateKeys
+	{
+		public static readonly String LayoutPath	= "layouts";
+		public static readonly String ChildContent	= "childContent";
+		public static readonly String Context		= "context";
+		public static readonly String Request		= "request";
+		public static readonly String Response		= "response";
+		public static readonly String Session		= "session";
+		public static readonly String SiteRoot		= "siteroot";
+	}
+}

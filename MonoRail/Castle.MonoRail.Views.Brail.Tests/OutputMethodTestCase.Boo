@@ -33,7 +33,7 @@ Some text that will be &lt;html&gt; encoded"""
 	def RawAttribute():
 		expected = """
 1<2 && 3>4"""
-		DoGet("/OutputMethods/RawOutputAttribute.rails")
+		DoGet("OutputMethods/RawOutputAttribute.rails")
 		AssertReplyEqualsTo(expected)
 	
 	[Test]

@@ -23,7 +23,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 
 	[Test]
 	def AppPath():
-		DoGet("/apppath/index.rails")
+		DoGet("apppath/index.rails")
 		AssertReplyEqualsTo("Current apppath is ")
 	
 	[Test]
@@ -66,7 +66,7 @@ end"""
 		# sometimes gets there faster you can recompile and it gets the old version.
 		System.Threading.Thread.Sleep(100)
 		try:
-			DoGet("/home/hellofromcommon.rails")
+			DoGet("home/hellofromcommon.rails")
 			AssertReplyEqualsTo(expected)
 		ensure:	
 			using write = File.CreateText(common ):
@@ -74,7 +74,7 @@ end"""
 	
 	[Test]
 	def PreProcessor():
-		DoGet("/home/preprocessor.rails")
+		DoGet("home/preprocessor.rails")
 		expected = """
 <html>
 <body>

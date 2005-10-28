@@ -26,12 +26,12 @@ class BrailHelperTestCase(AbstractMRTestCase):
 	[Test]
 	def InheritedHelpers():
 		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
-		DoGet("/helper/inheritedhelpers.rails")
+		DoGet("helper/inheritedhelpers.rails")
 		expected = "Date formatted " + DateTime(1979, 7, 16).ToShortDateString()
 		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def DictHelperUsage():
-		DoGet("/helper/DictHelperUsage.rails")
+		DoGet("helper/DictHelperUsage.rails")
 		expected = """<input type="text" name="name" id="name" value="value" size="30" maxlength="20" style="something" eol="true" />"""
 		AssertReplyEqualsTo(expected)

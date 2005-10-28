@@ -23,6 +23,6 @@ import Castle.MonoRail.Framework.Tests
 class BrailLayoutTestCase(LayoutTestCase):
 
 	def DefaultLayout():
-		DoGet("/defaultlayout/index.rails")
+		DoGet("defaultlayout/index.rails")
 		expected = "start\r\ncontent\r\nend"
 		AssertReplyEqualsTo(expected)

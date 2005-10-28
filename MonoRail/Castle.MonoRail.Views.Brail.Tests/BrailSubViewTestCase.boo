@@ -24,24 +24,24 @@ class BrailSubViewTestCase(AbstractMRTestCase):
 		
 	[Test]
 	def CanCallSubViews():
-		DoGet("/subview/index.rails")
+		DoGet("subview/index.rails")
 		expected = "View With SubView Content\r\nFrom SubView"
 		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def CanCallSubViewWithPath():
-		DoGet("/subview/SubViewWithPath.rails")
+		DoGet("subview/SubViewWithPath.rails")
 		expected = "View With SubView Content\r\nContents for heyhello View"
 		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def SubViewWithLayout():
-		DoGet("/subview/SubViewWithLayout.rails")
+		DoGet("subview/SubViewWithLayout.rails")
 		expected = "\r\nWelcome!\r\n<p>View With SubView Content\r\nFrom SubView</p>\r\nFooter"
 		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def SubViewWithParameters():
-		DoGet("/subview/SubViewWithParameters.rails")
+		DoGet("subview/SubViewWithParameters.rails")
 		expected = "View SubView Content With Parameters\r\nMonth: 0\r\nAllow Select: False"
 		AssertReplyEqualsTo(expected)

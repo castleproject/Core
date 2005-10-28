@@ -23,14 +23,14 @@ class BrailAjaxTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def JsFunctions():
-		DoGet("/ajax/JsFunctions.rails")
+		DoGet("ajax/JsFunctions.rails")
 		expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails\"></script>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def LinkToFunction():
-		DoGet("/ajax/LinkToFunction.rails")
+		DoGet("ajax/LinkToFunction.rails")
 		expected = "<a href=\"#\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
@@ -51,7 +51,7 @@ class BrailAjaxTestCase(AbstractMRTestCase):
 		
 	[Test]
 	def ObserveField():
-		DoGet("/ajax/ObserveField.rails")
+		DoGet("ajax/ObserveField.rails")
 		expected = "<script type=\"text/javascript\">new Form.Element.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, parameters:newcontent}) })</script>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
@@ -59,7 +59,7 @@ class BrailAjaxTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def ObserveForm():
-		DoGet("/ajax/ObserveForm.rails")
+		DoGet("ajax/ObserveForm.rails")
 		expected = "<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, parameters:newcontent}) })</script>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)

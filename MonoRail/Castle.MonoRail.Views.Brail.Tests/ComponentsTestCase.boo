@@ -27,7 +27,7 @@ class ComponentsTestCase(AbstractMRTestCase):
 	[Test]
 	def SimpleInlineViewComponent():
 		expected = "static 1\r\nHello from SimpleInlineViewComponent\r\nstatic 2"
-		DoGet("/usingcomponents/index1.rails")
+		DoGet("usingcomponents/index1.rails")
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 		

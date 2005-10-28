@@ -15,11 +15,11 @@
 namespace Castle.MonoRail.TestSupport
 {
 	using System;
-	using System.Globalization;
 	using System.IO;
 	using System.Text;
 	using System.Web.Hosting;
 	using System.Collections;
+	using System.Globalization;
 
 
 	public class MonoRailTestWorkerRequest : SimpleWorkerRequest
@@ -135,11 +135,8 @@ namespace Castle.MonoRail.TestSupport
 
 		private string GetPathInternal()
 		{
-			String add = "";
-			if(!virtualAppPath.Equals("/"))
-				add = virtualAppPath;
-			return filePath[0].Equals('/') ? (add + filePath)
-				: (add + "/" + filePath);
+			return virtualAppPath.Equals("/") ? 
+				("/" + filePath) : (virtualAppPath + "/" + filePath);
 		}
 
 		public override string GetAppPath()

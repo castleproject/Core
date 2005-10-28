@@ -123,6 +123,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TemplateKeys.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CustomDirectives\AbstractComponentDirective.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

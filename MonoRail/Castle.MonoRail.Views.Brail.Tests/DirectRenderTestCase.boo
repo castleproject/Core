@@ -25,12 +25,12 @@ class DirectRenderTestCase(AbstractMRTestCase):
 
 	[Test]
 	def DirectRendering():
-		DoGet("/directrender/direct.rails")
+		DoGet("directrender/direct.rails")
 		expected = "Ayende"
 		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def DirectRenderingWithLayout():
-		DoGet("/directrender/directwithlayout.rails")
+		DoGet("directrender/directwithlayout.rails")
 		expected = "Ayende"
 		AssertReplyEqualsTo(expected)
