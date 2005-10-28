@@ -25,6 +25,11 @@ namespace Castle.MonoRail.Framework
 	/// Specialization of <see cref="Controller"/> that tries
 	/// to match the request params to method arguments.
 	/// </summary>
+	/// <remarks>
+	/// You don't even need to always use databinding within
+	/// arguments. <see cref="BindObject"/> and <see cref="BindObjectInstance"/>
+	/// provides the same functionality to be used in place.
+	/// </remarks>
 	public abstract class SmartDispatcherController : Controller
 	{
 		private IDictionary boundInstances = new ListDictionary();
@@ -143,18 +148,24 @@ namespace Castle.MonoRail.Framework
 		protected int CalculatePoints(MethodInfo candidate, NameValueCollection webParams)
 		{
 			int points = 0;
+			int paramsMatched = 0;
 
 			ParameterInfo[] parameters = candidate.GetParameters();
-
-			if (parameters.Length == webParams.Count)
-			{
-				points = 10;
-			}
 
 			foreach(ParameterInfo param in parameters)
 			{
 				object value = webParams.Get( param.Name );
-				if (value != null ) points += 10;
+
+				if (value != null )
+				{
+					points += 10;		
+					paramsMatched++;
+				}
+			}
+
+			if (paramsMatched == parameters.Length)
+			{
+				points += 10;
 			}
 
 			return points;
