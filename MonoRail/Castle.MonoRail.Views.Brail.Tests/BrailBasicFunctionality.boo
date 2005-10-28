@@ -16,35 +16,29 @@ namespace Castle.MonoRail.Views.Brail.Tests
 import System
 import System.IO
 import NUnit.Framework
-import Castle.MonoRail.Engine.Tests
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class BrailBasicFunctionality(BasicFunctionalityTestCase):
+class BrailBasicFunctionality(AbstractMRTestCase):
 
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
 	[Test]
 	def AppPath():
-		url = "/apppath/index.rails"
-		expected = "Current apppath is "
-		
-		Execute(url, expected)
+		DoGet("/apppath/index.rails")
+		AssertReplyEqualsTo("Current apppath is ")
 	
 	[Test]
 	def AppPathChangeOnTheFly():
-		script = Path.Combine(ObtainPhysicalDir(),"""Views\AppPath\Index.boo""")
+		script = Path.Combine(GetPhysicalDir(),"""Views\AppPath\Index.boo""")
+		newContent = "new content"
 		using read = File.OpenText(script):
 			old = read.ReadToEnd()
-		new = """new content"""
 		using write = File.CreateText(script):
-			write.Write(new)
-		url = "/apppath/index.rails"
-		expected = new
+			write.Write(newContent)
 		# Wait half a sec so Brail could pick up that a change in the file occured.
 		System.Threading.Thread.Sleep(100)
 		try:
-			Execute(url, expected)
+			DoGet( "/apppath/index.rails")
+			AssertReplyEqualsTo(newContent)
 		ensure:
 			using write = File.CreateText(script):
 				write.Write(old)
@@ -52,13 +46,13 @@ class BrailBasicFunctionality(BasicFunctionalityTestCase):
 	
 	[Test]
 	def CommonScripts():
-		url = "/home/hellofromcommon.rails"
+		DoGet( "/home/hellofromcommon.rails")
 		expected = "Hello, Ayende"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def CommonScriptsChangeOnTheFly():
-		common = Path.Combine(ObtainPhysicalDir(),"""Views\CommonScripts\Hello.boo""")
+		common = Path.Combine(GetPhysicalDir(),"""Views\CommonScripts\Hello.boo""")
 		using read = File.OpenText(common ):
 			old = read.ReadToEnd()
 		new = """
@@ -67,20 +61,20 @@ def SayHello(name as string):
 end"""
 		using write = File.CreateText(common ):
 			write.Write(new)
-		url = "/home/hellofromcommon.rails"
 		expected = "Hello, Ayende! Modified!"
 		# Have to wait for the common scripts recompilation otherwise you get random test failure since the request
 		# sometimes gets there faster you can recompile and it gets the old version.
 		System.Threading.Thread.Sleep(100)
 		try:
-			Execute(url, expected)
+			DoGet("/home/hellofromcommon.rails")
+			AssertReplyEqualsTo(expected)
 		ensure:	
 			using write = File.CreateText(common ):
 				write.Write(old)
 	
 	[Test]
 	def PreProcessor():
-		url = "/home/preprocessor.rails"
+		DoGet("/home/preprocessor.rails")
 		expected = """
 <html>
 <body>
@@ -92,4 +86,4 @@ end"""
 </body>
 </html>
 """
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)

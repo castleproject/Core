@@ -15,18 +15,16 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 import System
 import System.IO
-import Castle.MonoRail.Engine.Tests
+
 import NUnit.Framework
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class ResourceTestCase(AbstractCassiniTestCase):
+class ResourceTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def GetResources():
 		expected = "testValue"
-		url = "/resourced/getresources.rails"
-		Execute(url, expected);
-	
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
+		DoGet("/resourced/getresources.rails")
+		AssertReplyEqualsTo(expected)
+

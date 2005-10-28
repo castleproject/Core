@@ -16,33 +16,32 @@ namespace Castle.MonoRail.Views.Brail.Tests
 import System
 import System.IO
 import NUnit.Framework
-import Castle.MonoRail.Engine.Tests
+
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class BrailSubViewTestCase(AbstractCassiniTestCase):
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
+class BrailSubViewTestCase(AbstractMRTestCase):
+		
 	[Test]
 	def CanCallSubViews():
-		url = "/subview/index.rails"
+		DoGet("/subview/index.rails")
 		expected = "View With SubView Content\r\nFrom SubView"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def CanCallSubViewWithPath():
-		url = "/subview/SubViewWithPath.rails"
+		DoGet("/subview/SubViewWithPath.rails")
 		expected = "View With SubView Content\r\nContents for heyhello View"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def SubViewWithLayout():
-		url = "/subview/SubViewWithLayout.rails"
+		DoGet("/subview/SubViewWithLayout.rails")
 		expected = "\r\nWelcome!\r\n<p>View With SubView Content\r\nFrom SubView</p>\r\nFooter"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def SubViewWithParameters():
-		url = "/subview/SubViewWithParameters.rails"
+		DoGet("/subview/SubViewWithParameters.rails")
 		expected = "View SubView Content With Parameters\r\nMonth: 0\r\nAllow Select: False"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)

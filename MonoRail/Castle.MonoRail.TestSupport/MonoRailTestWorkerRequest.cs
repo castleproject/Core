@@ -135,8 +135,11 @@ namespace Castle.MonoRail.TestSupport
 
 		private string GetPathInternal()
 		{
-			return virtualAppPath.Equals("/") ? 
-				("/" + filePath) : (virtualAppPath + "/" + filePath);
+			String add = "";
+			if(!virtualAppPath.Equals("/"))
+				add = virtualAppPath;
+			return filePath[0].Equals('/') ? (add + filePath)
+				: (add + "/" + filePath);
 		}
 
 		public override string GetAppPath()

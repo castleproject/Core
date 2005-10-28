@@ -18,76 +18,59 @@ import System.IO
 import NUnit.Framework
 import Castle.MonoRail.Framework
 import Castle.MonoRail.Framework.Internal
-import Castle.MonoRail.Engine
 import Castle.MonoRail.Views.Brail
-import Castle.MonoRail.Views.Brail.Tests.Fakes
-import Castle.MonoRail.Framework.Tests
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class ComponentsTestCase:
+class ComponentsTestCase(AbstractMRTestCase):
 
-	viewEngine as BooViewEngine
-	engine as ProcessEngine
-	
-	[SetUp]
-	def Setup():
-		viewEngine = BooViewEngine()
-		componentFactory = DefaultViewComponentFactory()
-		componentFactory.Inspect( Reflection.Assembly.GetExecutingAssembly() )
-		viewEngine.ViewComponentFactory = componentFactory
-		componentFactory.ViewEngine = viewEngine
-		viewEngine.ViewRootDir = Path.Combine(
-			AppDomain.CurrentDomain.BaseDirectory,
-			"../Castle.MonoRail.Views.Brail.Tests/Views")
-		viewEngine.Init()
-		factory = FakeControllerFactory()
-		engine = ProcessEngine(factory,viewEngine)
-	
 	[Test]
 	def SimpleInlineViewComponent():
 		expected = "static 1\r\nHello from SimpleInlineViewComponent\r\nstatic 2"
-		context = RailsEngineContextImpl("/usingcomponents/index1.rails")
-		engine.Process(context)
-		Assert.AreEqual( expected, context.Output)
+		DoGet("/usingcomponents/index1.rails")
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
+		
 	
 	[Test]
 	def InlineComponentUsingRender():
 		expected = 'static 1\r\nThis is a view used by a component static 2'
-		context as RailsEngineContextImpl = RailsEngineContextImpl('/usingcomponents/index2.rails')
-		engine.Process(context)
-		Assert.AreEqual(expected, context.Output)
+		DoGet('/usingcomponents/index2.rails')
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
+		
 	
 	[Test()]
 	def InlineComponentNotOverridingRender():
 		expected = 'static 1\r\ndefault component view picked up automatically static 2'
-		context as RailsEngineContextImpl = RailsEngineContextImpl('/usingcomponents/index3.rails')
-		engine.Process(context)
-		Assert.AreEqual(expected, context.Output)
+		DoGet('/usingcomponents/index3.rails')
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def InlineComponentWithParam1():
-		context as RailsEngineContextImpl = RailsEngineContextImpl('/usingcomponents/index4.rails')
-		engine.Process(context)
-		Assert.AreEqual('Done', context.Output)
+		DoGet('/usingcomponents/index4.rails')
+		AssertSuccess()
+		AssertReplyEqualsTo('Done')
+
 
 	[Test]
 	def BlockComp1():
-		context as RailsEngineContextImpl = RailsEngineContextImpl('/usingcomponents/index5.rails')
-		engine.Process(context)
-		System.Diagnostics.Trace.WriteLine(context.Output)
-		Assert.AreEqual('  item 0\r\n  item 1\r\n  item 2\r\n', context.Output)
+		DoGet('/usingcomponents/index5.rails')
+		AssertSuccess()
+		AssertReplyEqualsTo('  item 0\r\n  item 1\r\n  item 2\r\n')
 	
 	[Test]
 	def BlockWithinForEach():
-		context as RailsEngineContextImpl = RailsEngineContextImpl('/usingcomponents/index8.rails')
-		engine.Process(context)
-		Assert.AreEqual('\r\ninner content 1\r\n\r\ninner content 2\r\n', context.Output)
+		DoGet('/usingcomponents/index8.rails')
+		AssertSuccess()
+		AssertReplyEqualsTo('\r\ninner content 1\r\n\r\ninner content 2\r\n')
 	
 	[Test]
 	def SeveralComponentsInvocation():
 		for i in range(10):
 			expected = 'static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n'
-			context as RailsEngineContextImpl = RailsEngineContextImpl('/usingcomponents/index9.rails')
-			engine.Process(context)
-			Assert.AreEqual(expected, context.Output)
+			DoGet('/usingcomponents/index9.rails')
+			AssertSuccess()
+			AssertReplyEqualsTo(expected)
 			

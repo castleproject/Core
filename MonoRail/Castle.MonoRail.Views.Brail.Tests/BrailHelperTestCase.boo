@@ -17,25 +17,21 @@ namespace Castle.MonoRail.Views.Brail.Tests
 import System
 import System.IO
 import NUnit.Framework
-import Castle.MonoRail.Engine.Tests
+
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class BrailHelperTestCase(AbstractCassiniTestCase):
+class BrailHelperTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def InheritedHelpers():
 		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
-		url = "/helper/inheritedhelpers.rails"
+		DoGet("/helper/inheritedhelpers.rails")
 		expected = "Date formatted " + DateTime(1979, 7, 16).ToShortDateString()
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def DictHelperUsage():
-		url = "/helper/DictHelperUsage.rails"
+		DoGet("/helper/DictHelperUsage.rails")
 		expected = """<input type="text" name="name" id="name" value="value" size="30" maxlength="20" style="something" eol="true" />"""
-		Execute(url, expected)
-	
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
-
+		AssertReplyEqualsTo(expected)

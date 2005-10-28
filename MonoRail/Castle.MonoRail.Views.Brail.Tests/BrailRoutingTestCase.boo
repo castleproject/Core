@@ -17,25 +17,19 @@ import System
 import System.IO
 import NUnit.Framework
 import Castle.MonoRail.Framework
-import Castle.MonoRail.Engine.Tests
+
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class BrailRoutingTestCase(AbstractCassiniTestCase):
-	
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
+class BrailRoutingTestCase(AbstractMRTestCase):
 	[Test]
 	def BlogRoutingRule():
-		url = "/blog/posts/2005/07/";
+		DoGet("/blog/posts/2005/07/")
 		expected = "Blog: year=2005 month=7";
-		Execute(url, expected);
+		AssertReplyEqualsTo(expected);
 	
 	[Test]
 	def NewsRoutingRule():
-		url = "/news/2004/11/";
+		DoGet("/news/2004/11/")
 		expected = "News: year=2004 month=11";
-		Execute(url, expected);
-			
-	
-
+		AssertReplyEqualsTo(expected);

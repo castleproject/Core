@@ -16,50 +16,50 @@ namespace Castle.MonoRail.Views.Brail.Tests
 import System
 import System.IO
 import NUnit.Framework
-import Castle.MonoRail.Engine.Tests
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class BrailAjaxTestCase(AbstractCassiniTestCase):
+class BrailAjaxTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def JsFunctions():
-		url = "/ajax/JsFunctions.rails"
+		DoGet("/ajax/JsFunctions.rails")
 		expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails\"></script>"
-		Execute(url, expected)
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def LinkToFunction():
-		url = "/ajax/LinkToFunction.rails"
+		DoGet("/ajax/LinkToFunction.rails")
 		expected = "<a href=\"#\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>"
-		Execute(url, expected)
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def LinkToRemote():
-		url = "/ajax/LinkToRemote.rails";
+		DoGet( "/ajax/LinkToRemote.rails")
 		expected = "<a href=\"#\" onclick=\"new Ajax.Request('/controller/action.rails', {asynchronous:true}); return false;\" ><img src='myimg.gid'></a>"
-		Execute(url, expected)
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def BuildFormRemoteTag():
-		url = "/ajax/BuildFormRemoteTag.rails"
+		DoGet( "/ajax/BuildFormRemoteTag.rails")
 		expected = "<form  onsubmit=\"new Ajax.Request('url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\">"
-		Execute(url, expected);
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def ObserveField():
-		url = "/ajax/ObserveField.rails"
+		DoGet("/ajax/ObserveField.rails")
 		expected = "<script type=\"text/javascript\">new Form.Element.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, parameters:newcontent}) })</script>"
-		Execute(url, expected)
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)
 	
 	
 	[Test]
 	def ObserveForm():
-		url = "/ajax/ObserveForm.rails"
+		DoGet("/ajax/ObserveForm.rails")
 		expected = "<script type=\"text/javascript\">new Form.Observer('myfieldid', 2, function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', {asynchronous:true, parameters:newcontent}) })</script>"
-		Execute(url, expected);
-	
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
-	
-		
+		AssertSuccess()
+		AssertReplyEqualsTo(expected)

@@ -17,22 +17,20 @@ import System
 import System.IO
 import NUnit.Framework
 import Castle.MonoRail.Framework
-import Castle.MonoRail.Engine.Tests
+
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class DirectRenderTestCase(AbstractCassiniTestCase):
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
+class DirectRenderTestCase(AbstractMRTestCase):
+
 	[Test]
 	def DirectRendering():
-		url = "/directrender/direct.rails"
+		DoGet("/directrender/direct.rails")
 		expected = "Ayende"
-		Execute(url,expected)
+		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def DirectRenderingWithLayout():
-		url = "/directrender/directwithlayout.rails"
+		DoGet("/directrender/directwithlayout.rails")
 		expected = "Ayende"
-		Execute(url,expected)
-		
+		AssertReplyEqualsTo(expected)

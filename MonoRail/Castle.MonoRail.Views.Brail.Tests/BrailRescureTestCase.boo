@@ -16,12 +16,10 @@ namespace Castle.MonoRail.Views.Brail.Tests
 import System
 import System.IO
 import NUnit.Framework
-import Castle.MonoRail.Engine.Tests
+import Castle.MonoRail.Framework.Tests
 
 
 [TestFixture]
 class BrailRescueTestCase(RescueTestCase):
 
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
+	pass

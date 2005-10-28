@@ -34,7 +34,7 @@ class AjaxController(SmartDispatcherController):
 		RenderText(Helper.LinkToRemote("<img src='myimg.gid'>","/controller/action.rails",Hashtable()) )
 	
 	def BuildFormRemoteTag():
-		RenderText(Helper.BuildFormRemoteTag("url",null,null))
+		RenderText(Helper.BuildFormRemoteTag({"url":"url"}))
 		
 	def ObserveField():
 		RenderText(Helper.ObserveField("myfieldid",2,"/url","elementToBeUpdated", "newcontent"))

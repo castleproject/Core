@@ -17,70 +17,63 @@ import System
 import System.IO
 import NUnit.Framework
 import Castle.MonoRail.Framework
-import Castle.MonoRail.Engine.Tests
+
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class BrailSmartControllerTestCase(AbstractCassiniTestCase):
+class BrailSmartControllerTestCase(AbstractMRTestCase):
 	
 	[Test]
 	def StringMethod():
-		url = "/smart/stringmethod.rails?name=hammett"
+		DoGet("/smart/stringmethod.rails?NAME=hammett")
 		expected = "incoming hammett"
-		Execute(url, expected)
-
-		url = "/smart/stringmethod.rails?NAME=hammett"
-		expected = "incoming hammett"
-		Execute(url, expected)
-	
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def Complex():
-		url = "/smart/complex.rails?strarg=hammett&intarg=1&strarray=a"
+		DoGet("/smart/complex.rails?strarg=hammett&intarg=1&strarray=a")
 		expected = "incoming hammett 1 a"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 
-		url = "/smart/complex.rails?strarg=&intarg=&strarray=a,b,c"
+		DoGet("/smart/complex.rails?strarg=&intarg=&strarray=a,b,c")
 		expected = "incoming  0 a,b,c"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def SimpleBind():
-		url = "/smart/SimpleBind.rails?name=hammett&itemcount=11&price=20"
+		DoGet("/smart/SimpleBind.rails?name=hammett&itemcount=11&price=20")
 		expected = "incoming hammett 11 20"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 
-		url = "/smart/SimpleBind.rails?name=hammett"
+		DoGet("/smart/SimpleBind.rails?name=hammett")
 		expected = "incoming hammett 0 0"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def ComplexBind():
-		url = "/smart/ComplexBind.rails?name=hammett&itemcount=11&price=20&id=1&contact.email=x&contact.phone=y"
+		DoGet("/smart/ComplexBind.rails?name=hammett&itemcount=11&price=20&id=1&contact.email=x&contact.phone=y")
 		expected = "incoming hammett 11 20 1 x y"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 
 	[Test]
 	def ComplexBindWithPrefix():
-		url = "/smart/ComplexBindWithPrefix.rails?name=hammett&itemcount=11&price=20&person.id=1&person.contact.email=x&person.contact.phone=y"
+		DoGet("/smart/ComplexBindWithPrefix.rails?name=hammett&itemcount=11&price=20&person.id=1&person.contact.email=x&person.contact.phone=y")
 		expected = "incoming hammett 11 20 1 x y"
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 
 	[Test]
 	def FillingBehavior1():
 		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
-		url = "/smart/FillingBehavior.rails?name=someone&date1day=11&date1month=10&date1year=2005"
+		DoGet("/smart/FillingBehavior.rails?name=someone&date1day=11&date1month=10&date1year=2005")
 		date1 = DateTime(2005,10,11)
 		expected = "incoming someone ${date1.ToShortDateString()} " + DateTime.Now.AddDays(1).ToShortDateString()
-		Execute(url, expected)
+		AssertReplyEqualsTo(expected)
 	
 
 	[Test]
 	def FillingBehavior2():
 		System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-us")
-		url = "/smart/FillingBehavior.rails"
+		DoGet("/smart/FillingBehavior.rails")
 		expected = "incoming hammett " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString()
-		Execute(url, expected)
-	
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
+		AssertReplyEqualsTo(expected)

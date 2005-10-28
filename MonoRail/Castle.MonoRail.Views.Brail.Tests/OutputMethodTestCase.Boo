@@ -15,33 +15,30 @@ namespace Castle.MonoRail.Views.Brail.Tests
 
 import System
 import System.IO
-import Castle.MonoRail.Engine.Tests
+
 import NUnit.Framework
+import Castle.MonoRail.TestSupport
 
 [TestFixture]
-class OutputMethodTestCase(AbstractCassiniTestCase):
-	
+class OutputMethodTestCase(AbstractMRTestCase):
+
 	[Test]
 	def HtmlAttribute():
 		expected = """
 Some text that will be &lt;html&gt; encoded"""
-		url = "/OutputMethods/HtmlOutputAttribute.rails"
-		Execute(url, expected);
+		DoGet( "/OutputMethods/HtmlOutputAttribute.rails")
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def RawAttribute():
 		expected = """
 1<2 && 3>4"""
-		url = "/OutputMethods/RawOutputAttribute.rails"
-		Execute(url, expected);
+		DoGet("/OutputMethods/RawOutputAttribute.rails")
+		AssertReplyEqualsTo(expected)
 	
 	[Test]
 	def MarkDownAttribute():
 		expected = '\r\n<p><a href="http://www.ayende.com/">Ayende Rahien</a>, <strong>Rahien</strong>.</p>\n'
 
-		url = "/OutputMethods/MarkDownOutputAttribute.rails"
-		Execute(url, expected);
-		
-	override def ObtainPhysicalDir():
-		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"""..\TestSiteBrail""")
-	
+		DoGet( "/OutputMethods/MarkDownOutputAttribute.rails")
+		AssertReplyEqualsTo(expected)
