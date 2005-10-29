@@ -27,7 +27,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 	public class NVelocityViewEngine : ViewEngineBase
 	{
-		private const String TEMPLATE_EXTENSION = ".vm";
+		private const String TemplateExtension = ".vm";
+    private const String TemplatePathPattern = "{0}{1}{2}";
 
 		private static IViewComponentFactory staticViewComponentFactory;
 
@@ -107,9 +108,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				writer = context.Response.Output;	//No layout so render direct to the output
 			}
 
+			String view = ResolveTemplateName(viewName);
 			try
 			{
-				template = velocity.GetTemplate(ResolveTemplateName(viewName));
+				template = velocity.GetTemplate(view);
 
 				template.Merge(ctx, writer);
 			}
@@ -128,7 +130,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 				else
 				{
-					throw new RailsException("Could not obtain view", ex);
+					throw new RailsException("Could not obtain view: " + view, ex);
 				}
 			}
 
@@ -148,15 +150,17 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			
 			AdjustContentType(context);
 
+			String view = ResolveTemplateName(viewName);
+
 			try
 			{
-				Template template = velocity.GetTemplate(ResolveTemplateName(viewName));
+				Template template = velocity.GetTemplate(view);
 
 				template.Merge(ctx, output);
 			}
 			catch (Exception ex)
 			{
-				throw new RailsException("Could not obtain view", ex);
+				throw new RailsException("Could not obtain view: " + view, ex);
 			}
 		}
 
@@ -200,7 +204,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// </summary>
 		protected virtual string ResolveTemplateName(string templateName)
 		{
-			return templateName + TEMPLATE_EXTENSION;
+			return templateName + TemplateExtension;
 		}
 		
 		/// <summary>
@@ -208,7 +212,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// </summary>
 		protected virtual string ResolveTemplateName(string area, string templateName)
 		{
-			return String.Format("{0}{1}{2}", area, Path.AltDirectorySeparatorChar, ResolveTemplateName(templateName));
+			return String.Format(TemplatePathPattern, area, Path.DirectorySeparatorChar, ResolveTemplateName(templateName));
 		}
 		
 		private void ProcessLayout(String contents, Controller controller, IContext ctx, IRailsEngineContext context)
@@ -232,7 +236,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 				else
 				{
-					throw new RailsException("Could not obtain layout", ex);
+					throw new RailsException("Could not obtain layout: " + layout, ex);
 				}
 			}
 		}
@@ -279,7 +283,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				innerContext[entry.Key] = entry.Value;
 			}
 
-			innerContext["siteRoot"] = context.ApplicationPath;
+			innerContext[TemplateKeys.SiteRoot] = context.ApplicationPath;
 
 			return new VelocityContext(innerContext);
 		}
