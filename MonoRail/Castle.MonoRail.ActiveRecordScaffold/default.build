@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="scaffolding-support" default="build">
 
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
-
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
-	<property name="library.dir" value="${base.dir}/../lib" />
-	<property name="doc.dir" value="${base.dir}/../docs" />
-	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.MonoRail.ActiveRecordScaffold.Tests" />
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.MonoRail.ActiveRecordScaffold" />
+	<property name="test.name" value="${name}.Tests" />
+	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/" />
+	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
+
 	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
 
-	<property name="version" value="1.0.0.0" />
 
 	<target name="clean">
-
+		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>
 
 	<target name="init" depends="clean">
-		<copy 
-			file="${test.src.dir}/App.config"
-			tofile="${bin.dir}/${test.assembly.name}.config" />
+
 	</target>
 
 	<target name="build" depends="init,compile" />
@@ -90,7 +88,7 @@
 	
 	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">
 		<nunit2>
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

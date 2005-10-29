@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="view-nvelocity" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
-	<property name="library.dir" value="${base.dir}/../lib" />
-	<property name="doc.dir" value="${base.dir}/../docs" />
-	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.MonoRail.Framework.Views.NVelocity.Tests" />
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.MonoRail.Framework.Views.NVelocity" />
+	<property name="test.name" value="${name}.Tests" />
+	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
-
-	<property name="version" value="1.0.0.0" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/" />
+	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
 
 	<target name="clean">
 	</target>
@@ -43,7 +44,7 @@
 
 			<references>
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
-				<include name="${library.dir}/NVelocity.dll" />
+				<include name="${bin.dir}/NVelocity.dll" />
 			</references>
 		</csc>
 	</target>
@@ -73,7 +74,7 @@
 
 	<target name="tests.run" depends="tests.compile">
 		<nunit2>
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

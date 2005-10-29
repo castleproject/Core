@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <project name="Common Build Properties">
 
+	<!-- Common properties that allow overrides -->
+
+	<property name="strong"		value="STRONG"		unless="${property::exists('strong')}" />
+	<property name="debug"		value="false"		unless="${property::exists('debug')}" />
+	<property name="optimize"	value="true"		unless="${property::exists('optimize')}" />
+	<property name="doc.dir"	value="${base.dir}/docs" />
+	<property name="nunit.formatter" value="Plain"	unless="${property::exists('nunit.formatter')}" />
+	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
+	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
+
 	<!-- find out where gacutil is -->
 
 	<property name="gacutil.framework.file" value="${framework::get-framework-directory( framework::get-target-framework() )}\gacutil.exe"/>
@@ -38,7 +48,7 @@
 		value="${path::combine(lib.family.dir, version::to-string(framework::get-version(framework::get-target-framework())))}"
 		dynamic="true" />
 
-    <!-- Uncomment this block for nant backward compat 
+    <!-- Uncomment this block for nant backward compatibility
 	<property name="lib.framework.dir"
 		value="${path::combine(lib.family.dir, framework::get-version(framework::get-target-framework()))}"
 		dynamic="true" />
@@ -50,7 +60,5 @@
 	<property name="nant.tasks.nunit2"
 			value="False"
 			unless="${property::exists('nant.tasks.nunit2')}" />
-
-	<echo message="NUnit on ${lib.framework.dir} ${nunit.framework.dll} " />
 
 </project>

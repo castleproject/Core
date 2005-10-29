@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="assemblyresolver-facility" default="build">
+<project name="castle-assemblyresolver-component" default="build">
     
-    <!-- This build file inherits common properties from the ../components.build -->
-
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Components.Winforms.AssemblyResolver" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Components.Winforms.AssemblyResolver.Tests" />
+	<include buildfile="../../../common.inc" />
+	
 	<property name="name" value="Castle.Components.Winforms.AssemblyResolver" />
+	<property name="test.name" value="${name}.Tests" />
+	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
 
 	<property name="version" value="beta-2" />
 
 	<target name="clean">
-		<delete failonerror="false">
-			<fileset basedir="${bin.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</delete>
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}" />
 	</target>
 	
 	<target name="init" depends="clean">
-		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
+		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-container" inheritall="true" />
 	</target>
 
 	<target name="build" depends="init,tests.run" />
 
 	<target name="compile" depends="init" if="${isWindows}">
-		<!-- doc="${bin.dir}/${name}.xml" -->
 		<csc 
 			define="${strong}"
 			target="library" 
@@ -78,7 +74,7 @@
 	
 	<target name="tests.run" depends="tests.compile" if="${isWindows}">
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

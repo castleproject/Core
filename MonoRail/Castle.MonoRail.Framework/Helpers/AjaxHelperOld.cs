@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// <summary>
 	/// MonoRail Helper that delivers AJAX capabilities.
 	/// </summary>
-	[Obsolete("This helper is going to be replaced by AjaxHelper")]
+	[Obsolete("This helper was replaced by the new version of AjaxHelper")]
 	public class AjaxHelperOld : AbstractHelper
 	{
 		public AjaxHelperOld()

@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="Winforms-components" default="build">
-
-	<property name="base.dir" value="." />
-	<property name="name" value="WinformComponents" />
-	<property name="version" value="beta-2" />
-	<property name="container.bin.dir" value="${base.dir}/../../../InversionOfControl/bin" />
-	<property name="services.bin.dir" value="${base.dir}/../../../Services/bin" />
-
-	<include buildfile="../../common.inc" />	
-
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
+<project name="castle-winforms-components" default="build">
 
 	<target name="build" depends="init, assembly-resolver" />
 	

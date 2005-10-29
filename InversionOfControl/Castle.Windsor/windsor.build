@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="windsor" default="build">
+<project name="castle-windsor" default="build">
+    <!-- This build file inherits properties from container.build and is not meant to be used directly -->
 
-	<property name="base.dir" value="." />
+    <!-- This build file inherits properties from container.build and is not meant to be used directly -->
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
-	<property name="library.dir" value="${base.dir}/../lib" />
-	<property name="doc.dir" value="${base.dir}/../docs" />
-	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.Windsor.Tests" />
 	<property name="name" value="Castle.Windsor" />
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.name" value="${name}.Tests" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
 	<property name="test.assembly.appconfig" value="${test.assembly.name}.config" />
 
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
-	<property name="version" value="1.0.0.0" />
-
-	<include buildfile="../../common.inc" />
+	<property name="src.dir" value="${base.dir}" />
+	<property name="test.src.dir" value="${src.dir}/../${test.name}" />
 
 	<target name="clean">
 
 	</target>
 
 	<target name="init" depends="clean">
+		<copy file="${test.src.dir}/${test.assembly.appconfig}" todir="${bin.dir}" />
 		<copy file="${test.src.dir}/sample_config.xml" todir="${bin.dir}" />
-		<copy file="${test.src.dir}/Castle.Windsor.Tests.dll.config" todir="${bin.dir}" />
 		<copy file="${test.src.dir}/ConfigContents.lang" todir="${bin.dir}" />
 		<copy file="${test.src.dir}/ConfigContents2.lang" todir="${bin.dir}" />
 		<copy file="${test.src.dir}/installerconfig.xml" todir="${bin.dir}" />
@@ -47,6 +43,9 @@
 			<nowarn>
 				<warning number="1591" />
 				<warning number="1572" />
+				<warning number="1573" />
+				<warning number="0162" />
+				<warning number="0612" />
 			</nowarn>
 
 			<sources basedir="${src.dir}" defaultexcludes="true">
@@ -79,7 +78,7 @@
 				<include name="${bin.dir}/Castle.DynamicProxy.dll" />
 			</references>
 
-			<resources basedir="${test.src.dir}" prefix="Castle.Windsor.Tests" dynamicprefix="true">
+			<resources basedir="${test.src.dir}" prefix="${test.name}" dynamicprefix="true">
 				<include name="**/*.xml" />
 			</resources>
 		</csc>
@@ -87,7 +86,7 @@
 	
 	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test 
 				assemblyname="${bin.dir}/${test.assembly.name}" 
 				appconfig="${bin.dir}/${test.assembly.appconfig}"/>

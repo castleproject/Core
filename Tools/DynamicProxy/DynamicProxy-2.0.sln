@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy.Test", "DynamicProxyTest\Castle.DynamicProxy.Test-2.0.csproj", "{EF89321E-FB2A-41B6-85B3-794D50A55CF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy.Test", "Castle.DynamicProxy.Tests\Castle.DynamicProxy.Test-2.0.csproj", "{EF89321E-FB2A-41B6-85B3-794D50A55CF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy", "DynamicProxy\Castle.DynamicProxy-2.0.csproj", "{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.DynamicProxy", "Castle.DynamicProxy\Castle.DynamicProxy-2.0.csproj", "{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D1771940-134E-45C1-9CEC-4023864D7901}"
 	ProjectSection(SolutionItems) = preProject

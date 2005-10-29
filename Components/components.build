@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="components" default="build">
+<project name="castle-components" default="build">
 
-	<property name="base.dir" value="." />
-	<property name="name" value="ComponentFoundry" />
-	<property name="version" value="beta-2" />
-	<property name="container.bin.dir" value="${base.dir}/../../InversionOfControl/bin" />
-	<property name="services.bin.dir" value="${base.dir}/../../Services/bin" />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 
-	<include buildfile="../common.inc" />
-
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
-
-	<target name="build" depends="init, common, winforms" />
+	<target name="build" depends="init, general, winforms" />
 	
 	<target name="init">
+	
 	</target>
 
-	<target name="common">
+	<target name="general">
 		<nant buildfile="General/commoncomponents.build" inheritall="true" target="build" />
 	</target>
 	
@@ -34,7 +26,6 @@
 				<include name="**/*.zip" />				
 			</fileset>
 		</zip>
-
 	</target>
 
 </project>

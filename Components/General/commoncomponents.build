@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="common-components" default="build">
-
-	<property name="base.dir" value="." />
-	<property name="name" value="commoncomponents" />
-	<property name="version" value="beta-2" />
-	<property name="container.bin.dir" value="${base.dir}/../../../InversionOfControl/bin" />
-	<property name="services.bin.dir" value="${base.dir}/../../../Services/bin" />
-
-	<include buildfile="../../common.inc" />	
-
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
+<project name="castle-common-components" default="build">
 
 	<target name="build" depends="init, templateengine, emailsender" />
 	
 	<target name="init">
+	
 	</target>
 	
 	<target name="templateengine">
@@ -27,6 +16,7 @@
 	</target>
 
 	<target name="dist">
+		<nant buildfile="EmailSender/default.build" inheritall="true" target="dist" />
 		<nant buildfile="TemplateEngine/default.build" inheritall="true" target="dist" />
 	</target>
 

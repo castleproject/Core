@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="rails-testsitenvelocity" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin2.dir" value="${base.dir}/bin" />
 	<property name="doc.dir" value="${base.dir}/../docs" />
 	<property name="src.dir" value="${base.dir}" />

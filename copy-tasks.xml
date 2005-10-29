@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project name="all" default="build">
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="sharedlibrary.dir" value="${base.dir}/SharedLibs" />
+
+	<!-- castle's assemblies location -->
+	<property name="castle.ar" value="${base.dir}/ActiveRecord/bin/Castle.ActiveRecord.dll" />
+	<property name="castle.model" value="${base.dir}/InversionOfControl/bin/Castle.Model.dll" />
+	<property name="castle.kernel" value="${base.dir}/InversionOfControl/bin/Castle.MicroKernel.dll" />
+	<property name="castle.windsor" value="${base.dir}/InversionOfControl/bin/Castle.Windsor.dll" />
+	<property name="castle.dynamicproxy" value="${base.dir}/Tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
+
+	<!-- tasks to copy castle's assemblies -->
+
+	<target name="copy-castle.model">
+		<copy file="${castle.model}" todir="${bin.dir}" />
+	</target>
+	
+	<target name="copy-dynamicproxy">
+		<copy file="${castle.dynamicproxy}" todir="${bin.dir}" />
+	</target>
+	
+	<target name="copy-container" depends="copy-castle.model, copy-dynamicproxy">
+		<copy file="${castle.kernel}" todir="${bin.dir}" />
+		<copy file="${castle.windsor}" todir="${bin.dir}" />
+	</target>
+	
+	<target name="copy-templateengine-comp" depends="copy-nvelocity">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${base.dir}/Components/General/TemplateEngine/bin">
+				<include name="Castle.Components.Common.TemplateEngine.dll" />
+				<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-activerecord" depends="copy-nhibernate">
+		<copy file="${castle.ar}" todir="${bin.dir}" />
+	</target>
+
+	<!-- tasks to copy shared libs -->
+
+	<target name="copy-nhibernate" depends="copy-log4net, copy-dynamicproxy">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nhibernate">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copy-log4net">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/log4net">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-nlog">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nlog">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-netron">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/netron">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-nvelocity">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nvelocity">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-boo">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/boo">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+</project>

@@ -95,7 +95,7 @@
 	<target name="tests.run" depends="tests.compile">
 	<!-- For some reason the AppDomain created by the tests are not reaching nunit.framework 
 		<nunit2>
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	--> 

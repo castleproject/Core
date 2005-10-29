@@ -2,18 +2,10 @@
 <project name="all" default="build">
 
 	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
-	<property name="sharedlibrary.dir" value="${base.dir}/SharedLibs" />
 	
-	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
-	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
-	
-	<property name="nunit.formatter" value="Plain" />
-
-	<target name="build" depends="init, tools, container, components, activerecord, monorail, services, aspectsharp, facilities, samples" />
+	<target name="build" depends="init, tools, container, components, services, activerecord, monorail, aspectsharp, facilities, samples" />
 	
 	<target name="init">
-		<echo message="${os}" />
-		<echo message="Running on Windows? ${isWindows}" />
 	</target>
 
 	<target name="activerecord">
@@ -49,6 +41,7 @@
 	</target>
 
 	<target name="samples">
+	
 	</target>
 
 	<target name="dist">
@@ -253,5 +246,5 @@
 			</fileset>
 		</zip>
 	</target>
-
+	
 </project>

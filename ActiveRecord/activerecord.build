@@ -1,60 +1,52 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="activerecord" default="build">
+<project name="castle-activerecord" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="castle.model" value="${base.dir}/../InversionOfControl/bin/Castle.Model.dll" />
-	<property name="dynamicproxy" value="${base.dir}/../Tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
-	<property name="name" value="Castle.ActiveRecord" />
-	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
-	<property name="samples.dir" value="${base.dir}/../Samples/ActiveRecord" />
 
+	<include buildfile="../common.inc" />
+
+	<property name="name" value="Castle.ActiveRecord" />
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="src.dir" value="${base.dir}\${name}" />
-	<property name="test.src.dir1" value="${src.dir}/../${name}.Framework.Internal.Tests" />
-	<property name="test.src.dir2" value="${src.dir}/../${name}.Tests" />
+	
+	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
+
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir1" value="${base.dir}/${name}.Framework.Internal.Tests" />
+	<property name="test.src.dir2" value="${base.dir}/${name}.Tests" />
+	
 	<property name="test.assembly.name1" value="${name}.Framework.Internal.Tests.dll" />
-	<property name="test.assembly.appconfig1" value="${test.assembly.name1}.config" />
 	<property name="test.assembly.name2" value="${name}.Tests.dll" />
+	<property name="test.assembly.appconfig1" value="${test.assembly.name1}.config" />
 	<property name="test.assembly.appconfig2" value="${test.assembly.name2}.config" />
 
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
+	<property name="samples.dir" value="${base.dir}/../Samples/ActiveRecord" />
+
 	<property name="version" value="0.0.1.3" />
 
 	<target name="init">
 		<property name="define" value="TRACE;${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
 		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
+		
 		<delete dir="${bin.dir}" failonerror="false" />
 		<mkdir dir="${bin.dir}" />
 
 		<delete dir="${doc.dir}" failonerror="false" />
 		<mkdir dir="${doc.dir}" />
 
-		<copy file="${test.src.dir1}/${test.assembly.appconfig1}" todir="${bin.dir}" />
-		<copy file="${test.src.dir2}/${test.assembly.appconfig2}" todir="${bin.dir}" />
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-castle.model" inheritall="true" />
 
-		<copy file="${castle.model}" todir="${bin.dir}" />
-	    <copy file="${dynamicproxy}" todir="${bin.dir}" />
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-dynamicproxy" inheritall="true" />
 
-		<copy todir="${bin.dir}">
-                  <fileset basedir="${library.dir}">
-                    <include name="*.dll" />
-                  </fileset>
-		</copy>
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-nhibernate" inheritall="true" />
 	</target>
 	
-	<include buildfile="../common.inc" />
-
 	<target name="clean">
 
 	</target>
 
-	<target name="build" depends="init,tests.run, generator" />
+	<target name="build" depends="init, tests.run, generator" />
 	
 	<target name="compile" depends="init">
 		<csc 
@@ -135,21 +127,21 @@
 	</target>
 	
 	<target name="generator">
-		<nant buildfile="Generator/generator.build" target="build" inheritall="false" />
+		<nant buildfile="${base.dir}/Generator/generator.build" target="build" inheritall="false" />
 	</target>
 	
 	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">
-		<nunit2 >
-			<formatter type="Plain" />
+		<nunit2>
+			<formatter type="${nunit.formatter}" />
 			<test 
 				assemblyname="${bin.dir}/${test.assembly.name1}" 
-				appconfig="${bin.dir}/${test.assembly.appconfig1}"/>
+				appconfig="${test.src.dir1}/${test.assembly.appconfig1}"/>
 		</nunit2>
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test 
 				assemblyname="${bin.dir}/${test.assembly.name2}" 
-				appconfig="${bin.dir}/${test.assembly.appconfig2}"/>
+				appconfig="${test.src.dir2}/${test.assembly.appconfig2}"/>
 		</nunit2>
 	</target>
 	
@@ -218,7 +210,6 @@
 				<exclude name="**\*.user" />
 			</fileset>
 		</zip>
-		
 		
 		<zip zipfile="${name}.${version}.zip">
 			<fileset basedir="${base.dir}">

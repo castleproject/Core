@@ -1,35 +1,44 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="service-logging" default="build">
-    
-	<property name="base.dir" value="." />
+<project name="castle-service-logging" default="build">
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Services.Logging" />
-	<property name="src.log4net.dir" value="${base.dir}/Castle.Services.Logging.log4netIntegration" />
-	<property name="src.nlog.dir" value="${base.dir}/Castle.Services.Logging.NLogIntegration" />
-	<property name="src.web.dir" value="${base.dir}/Castle.Services.Logging.Web" />
-
-	<property name="test.src.dir" value="${base.dir}/Castle.Services.Logging.Tests" />
-	<property name="name" value="Castle.Services.Logging" />
-	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
-
-	<property name="version" value="beta-1" />
 
 	<include buildfile="../../common.inc" />
+	
+	<property name="name"		  value="Castle.Services.Logging" />
+	<property name="name.log4net" value="${name}.Log4netIntegration" />
+	<property name="name.nlog"    value="${name}.NLogIntegration" />
+	<property name="name.web"     value="${name}.Web" />
+	
+	<property name="test.name" value="${name}.Tests" />
+	
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="assembly.name.web" value="${name.web}.dll" />
+	<property name="assembly.name.nlog" value="${name.nlog}.dll" />
+	<property name="assembly.name.log4net" value="${name.log4net}.dll" />
+	
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="src.web.dir" value="${base.dir}/${name.web}" />
+	<property name="src.nlog.dir" value="${base.dir}/${name.nlog}" />
+	<property name="src.log4net.dir" value="${base.dir}/${name.log4net}" />
 
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
+
+	<property name="version" value="beta-1" />
+    
 	<target name="clean">
 		<delete>
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll" />
 			</fileset>
 		</delete>
-		<copy todir="${bin.dir}">
-			<fileset basedir="${library.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
+		
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-log4net" inheritall="true" />
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-nlog" inheritall="true" />
+		
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="../bin" />
 	</target>
@@ -41,9 +50,9 @@
 	
 	<target name="copy">
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
-		<copy file="${bin.dir}/Castle.Services.Logging.log4netIntegration.dll" todir="../bin" />
-		<copy file="${bin.dir}/Castle.Services.Logging.NLogIntegration.dll" todir="../bin" />
-		<copy file="${bin.dir}/Castle.Services.Logging.Web.dll" todir="../bin" />
+		<copy file="${bin.dir}/${assembly.name.web}" todir="../bin" />
+		<copy file="${bin.dir}/${assembly.name.nlog}" todir="../bin" />
+		<copy file="${bin.dir}/${assembly.name.log4net}" todir="../bin" />
 	</target>
 	
 	<target name="compile" depends="init">
@@ -74,8 +83,8 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/Castle.Services.Logging.log4netIntegration.dll"
-			doc="${bin.dir}/Castle.Services.Logging.log4netIntegration.xml">
+			output="${bin.dir}/${assembly.name.log4net}"
+			doc="${bin.dir}/${name.log4net}.xml">
 			
 			<nowarn>
 				<warning number="1591" />
@@ -96,8 +105,8 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/Castle.Services.Logging.NLogIntegration.dll"
-			doc="${bin.dir}/Castle.Services.Logging.NLogIntegration.xml">
+			output="${bin.dir}/${assembly.name.nlog}"
+			doc="${bin.dir}/${name.nlog}.xml">
 			
 			<nowarn>
 				<warning number="1591" />
@@ -118,8 +127,8 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/Castle.Services.Logging.Web.dll"
-			doc="${bin.dir}/Castle.Services.Logging.Web.xml">
+			output="${bin.dir}/${assembly.name.web}"
+			doc="${bin.dir}/${name.web}.xml">
 			
 			<nowarn>
 				<warning number="1591" />
@@ -156,7 +165,7 @@
 	
 	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

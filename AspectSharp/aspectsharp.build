@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-
 <project name="aspectsharp" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
+
+	<include buildfile="../common.inc" />
+
 	<property name="library.dir" value="${base.dir}/lib" />
+
 	<property name="doc.dir" value="${base.dir}/doc" />
 	<property name="src.dir" value="${base.dir}" />
 	<property name="pack.dir" value="${base.dir}/pack" />
@@ -24,9 +27,7 @@
 	<property name="aopalliance.name" value="AopAlliance" />
 	<property name="aopalliance.assembly.name" value="${aopalliance.name}.dll" />
 	
-	<property name="strong" value="false" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
+	<property name="strong" value="false"  />
 	<property name="version" value="2.1.1.0" />
 
 	<property name="skip.antlr" value="false" />
@@ -183,7 +184,7 @@
 	
 	<target name="lang.tests.run" depends="lang.tests.compile">
 		<nunit2>
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test 
 				assemblyname="${bin.dir}/${lang.test.assembly.name}" 
 				appconfig="${bin.dir}/${lang.test.assembly.name}.config" />
@@ -245,7 +246,7 @@
 	
 	<target name="core.tests.run" depends="core.tests.compile, tests.copyfiles">
 		<nunit2>
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test 
 				assemblyname="${bin.dir}/${core.test.assembly.name}" 
 				appconfig="${bin.dir}/${core.test.assembly.name}.config" />

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="service-security" default="build">
-    
-	<property name="base.dir" value="." />
+<project name="castle-service-security" default="build">
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Services.Security" />
-
-	<property name="test.src.dir" value="${base.dir}/Castle.Services.Security.Tests" />
-	<property name="name" value="Castle.Services.Security" />
-	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
-
-	<property name="version" value="alpha-1" />
 
 	<include buildfile="../../common.inc" />
+	
+	<property name="name" value="Castle.Services.Security" />
+	<property name="test.name" value="${name}.Tests" />
+	
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
+
+	<property name="version" value="beta-1" />
 
 	<target name="clean">
 		<exec program="${caspol.file}" failonerror="false" verbose="true" workingdir="${base.dir}">
@@ -101,7 +102,7 @@
 	
 	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

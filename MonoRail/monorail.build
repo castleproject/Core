@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="rails" default="build">
+<project name="castle-monorail" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="name" value="MonoRail" />
-	<property name="version" value="beta-4" />
 	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="samples.dir" value="${base.dir}/../Samples/MonoRail" />
 
-	<property name="ar.bin.dir" value="${base.dir}/../ActiveRecord/bin" />
-	<property name="container.bin.dir" value="${base.dir}/../InversionOfControl/bin" />
-	<property name="template.component.bin.dir" value="${base.dir}/../Components/General/TemplateEngine/bin" />
+	<property name="samples.dir" value="${base.dir}/../Samples/MonoRail" />
 
 	<property name="monorail.test" value="true" unless="${property::exists('monorail.test')}" />
 
-	<include buildfile="../common.inc" />		
-
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 	<property name="enabletest" value="ALLOWTEST" unless="${property::exists('enabletest')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
+
+	<property name="name" value="MonoRail" />
+	
+	<property name="version" value="beta-5" />
 
 	<!-- brail removed just for a moment -->
-	<target name="build" depends="clean, init, framework, integration, nvelocity, brail, composite, arscaffold, testsupport, arsupport, samples, tests, generator" /> 
+	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arscaffold, testsupport, arsupport, samples, tests, generator" /> 
 	
 	<target name="clean">
 		<delete>
@@ -38,36 +32,23 @@
 		<delete dir="${bin.dir}" failonerror="false" includeemptydirs="true" />
 	</target>
 	
-	<target name="init">
-		<copy todir="${bin.dir}">
-			<fileset basedir="${container.bin.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
-		<copy todir="${bin.dir}">
-			<fileset basedir="${template.component.bin.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
-		<copy todir="${bin.dir}">
-			<fileset basedir="${library.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
-		<copy todir="${bin.dir}">
-			<fileset basedir="${ar.bin.dir}">
-				<include name="Castle.ActiveRecord.dll" />
-				<include name="HashCodeProvider.dll" />
-				<include name="Iesi.Collections.dll" />
-				<include name="log4net.dll" />
-				<include name="NHibernate.dll" />
-				<include name="Nullables.dll" />
-				<include name="Nullables.NHibernate.dll" />
-			</fileset>
-		</copy>
+	<target name="init" depends="clean">
 
-		<delete dir="${doc.dir}" failonerror="false" />
-		<mkdir dir="${doc.dir}" />
+		<!-- Scaffolding and ARIntegration dependencies -->
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-activerecord" inheritall="true" />
+
+		<!-- Windsor integration dependencies -->
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-container" inheritall="true" />
+
+		<!-- NVelocity view engine dependencies -->
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-nvelocity" inheritall="true" />
+
+		<!-- Monorail Generator dependencies -->
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-templateengine-comp" inheritall="true" />
+
+		<!-- Brail dependencies -->
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-boo" inheritall="true" />
+
 	</target>
 	
 	<target name="framework" depends="init">
@@ -124,7 +105,7 @@
 	
 	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />
+		<!-- <nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" /> -->
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="test" />

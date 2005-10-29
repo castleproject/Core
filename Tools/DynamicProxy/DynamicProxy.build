@@ -1,92 +1,85 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="dynamicproxy" default="build">
+<project name="castle-dynamicproxy" default="build">
 
-	<property name="base.dir" value="." />
-	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/doc" />
-	<property name="src.dir" value="${base.dir}" />
-
-	<property name="core.src.dir" value="${src.dir}/DynamicProxy" />
-	<property name="core.test.src.dir" value="${src.dir}/DynamicProxyTest" />
-	<property name="core.name" value="Castle.DynamicProxy" />
-	<property name="core.assembly.name" value="${core.name}.dll" />
-	<property name="core.test.assembly.name" value="${core.name}.Test.dll" />
-
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
-	<property name="version" value="1.1.5.0" />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="bin.dir"  value="${base.dir}/bin" />
 
 	<include buildfile="../../common.inc" />
 
+	<property name="name" value="Castle.DynamicProxy" />
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.name" value="${name}.Tests" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
+
+	<property name="version" value="1.1.5.5" />
+
 	<target name="clean">
 		<delete dir="bin" failonerror="false" />
+		<mkdir dir="bin" />
 	</target>
 
 	<target name="init" depends="clean">
-		<mkdir dir="bin" />
 		<property name="define" value="TRACE;${strong}"/>
 		<property name="define" value="${define};DEBUG" if="${debug}"/>
 		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
-
-		<!-- <copy file="${antlr.runtime.dll}" todir="build" /> -->
 	</target>
 
-	<target name="build" depends="init,core.tests.run" />
+	<target name="build" depends="init, tests.run" />
 	
-	<target name="core.compile" depends="init">
+	<target name="compile" depends="init">
 		<csc 
 			define="${define}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${core.assembly.name}"
-			doc="${bin.dir}/${core.name}.xml">
+			output="${bin.dir}/${assembly.name}"
+			doc="${bin.dir}/${name}.xml">
 			
 			<nowarn>
 				<warning number="1591" />
 				<warning number="1572" />
 			</nowarn>
 			
-			<sources basedir="${core.src.dir}" defaultexcludes="true">
+			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
 		</csc>
 	</target>
 
-	<target name="core.tests.compile" depends="core.compile" >
+	<target name="tests.compile" depends="compile" >
 		<csc 
 			target="library" 
 			debug="${debug}" 
 			define="${define}"
-			output="${bin.dir}/${core.test.assembly.name}">
+			output="${bin.dir}/${test.assembly.name}">
 			
-			<sources basedir="${core.test.src.dir}" defaultexcludes="true">
+			<sources basedir="${test.src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
 
 			<references>
 				<include name="${nunit.framework.dll}" />
-				<include name="${bin.dir}/${core.assembly.name}" />
+				<include name="${bin.dir}/${assembly.name}" />
 				<include name="System.Data.dll" />
 			</references>
 		</csc>
 	</target>
 	
-	<target name="core.tests.run" depends="core.tests.compile">
+	<target name="tests.run" depends="tests.compile">
 		<property name="isMono" value="${string::contains(framework::get-target-framework(),'mono')}" />
-		<echo message="target is Mono? ${isMono}" />
 		
 		<nunit2 if="${not isMono}">
-			<formatter type="Plain" />
-			<test assemblyname="${bin.dir}/${core.test.assembly.name}">
+			<formatter type="${nunit.formatter}" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}">
 			</test>
 		</nunit2>
 		
 		<nunit2 if="${isMono}">
-			<formatter type="Plain" />
-			<test assemblyname="${bin.dir}/${core.test.assembly.name}">
+			<formatter type="${nunit.formatter}" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}">
 				<categories>
 					<exclude name="DotNetOnly" if="${isMono}" />
 				</categories>
@@ -97,7 +90,7 @@
 	<target name="dist">
 		<zip zipfile="DynamicProxy.bin.${version}.zip">
 			<fileset basedir="${base.dir}">
-				<include name="${bin.dir}/Castle.DynamicProxy.dll" />				
+				<include name="${bin.dir}/${assembly.name}" />				
 				<include name="License.txt" />				
 				<include name="Readme.txt" />				
 				<include name="Changes.txt" />				
@@ -111,8 +104,8 @@
 				<include name="Changes.txt" />				
 				<include name="*.build" />
 				<include name="*.sln" />
-				<include name="${core.src.dir}/**/*.*" />
-				<include name="${core.test.src.dir}/**/*.*" />
+				<include name="${src.dir}/**/*.*" />
+				<include name="${test.src.dir}/**/*.*" />
 				
 				<exclude name="**/Debug/*" />
 				<exclude name="**/obj/*" />

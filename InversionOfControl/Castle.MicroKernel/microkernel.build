@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="microkernel" default="build">
+<project name="castle-microkernel" default="build">
+    <!-- This build file inherits properties from container.build and is not meant to be used directly -->
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
-	<property name="library.dir" value="${base.dir}/../lib" />
-	<property name="doc.dir" value="${base.dir}/../docs" />
-	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.MicroKernel.Tests" />
 	<property name="name" value="Castle.MicroKernel" />
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.name" value="${name}.Tests" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
 
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
-	<property name="version" value="1.0.0.0" />
-
-	<include buildfile="../../common.inc" />	
+	<property name="src.dir" value="${base.dir}" />
+	<property name="test.src.dir" value="${src.dir}/../${test.name}" />
 
 	<target name="clean">
 
@@ -41,6 +35,7 @@
 			<nowarn>
 				<warning number="1591" />
 				<warning number="1572" />
+				<warning number="1573" />
 			</nowarn>
 			
 			<sources basedir="${src.dir}" defaultexcludes="true">
@@ -73,7 +68,7 @@
 	
 	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

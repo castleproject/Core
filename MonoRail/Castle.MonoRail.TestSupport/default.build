@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="testsupport" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
-	<property name="library.dir" value="${base.dir}/../lib" />
-	<property name="doc.dir" value="${base.dir}/../docs" />
-	<property name="src.dir" value="${base.dir}" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.MonoRail.TestSupport" />
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.MonoRail.TestSupport" />
+	
 	<property name="assembly.name" value="${name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/" />
 
-	<property name="version" value="1.0.0.0" />
 
 	<target name="clean">
 

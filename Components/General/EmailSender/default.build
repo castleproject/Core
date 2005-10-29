@@ -1,44 +1,43 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="templateengine-facility" default="build">
+<project name="castle-emailsender-component" default="build">
     
-    <!-- This build file inherits common properties from the ../components.build -->
-
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Components.Common.EmailSender" />
-	<property name="src.smtp.dir" value="${base.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender" />
-	<property name="src.mock.dir" value="${base.dir}/Castle.Components.Common.EmailSender.MockSender" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.Tests" />
-	<property name="test2.src.dir" value="${base.dir}/Castle.Components.Common.EmailSender.Tests" />
+	<include buildfile="../../../common.inc" />
 	
 	<property name="name" value="Castle.Components.Common.EmailSender" />
+	<property name="name.smtp" value="${name}.SmtpEmailSender" />
+	<property name="name.mock" value="${name}.MockSender" />
+	
 	<property name="assembly.name" value="${name}.dll" />
+	<property name="assembly.name.smtp" value="${name.smtp}.dll" />
+	<property name="assembly.name.mock" value="${name.mock}.dll" />
 	
-	<property name="name.smtp" value="Castle.Components.Common.EmailSender.SmtpEmailSender" />
-	<property name="assembly.smtp.name" value="${name.smtp}.dll" />
-	
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.name1" value="${name}.Tests" />
+	<property name="test.name2" value="${name.smtp}.Tests" />
+	<property name="test.assembly.name1" value="${test.name1}.dll" />
+	<property name="test.assembly.name2" value="${test.name2}.dll" />
 
-	<property name="version" value="beta-1" />
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="src.smtp.dir" value="${base.dir}/${name.smtp}" />
+	<property name="src.mock.dir" value="${base.dir}/${name.mock}" />
+	
+	<property name="test.src.dir1" value="${base.dir}/${test.name1}" />
+	<property name="test.src.dir2" value="${base.dir}/${test.name2}" />
+
+	<property name="version" value="beta-2" />
 
 	<target name="clean">
-		<delete failonerror="false">
-			<fileset basedir="${bin.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</delete>
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}" />
 	</target>
 	
 	<target name="init" depends="clean">
-		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
+		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-container" inheritall="true" />
 	</target>
 
-	<target name="build" depends="init,tests.run,tests2.run" />
+	<target name="build" depends="init,tests.run" />
 
 	<target name="compile" depends="init">
 		<csc 
@@ -57,11 +56,6 @@
 			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
-
-			<references>
-				<include name="System.Drawing.dll" />
-				<include name="System.Windows.Forms.dll" />
-			</references>
 		</csc>
 
 		<csc 
@@ -69,7 +63,7 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${assembly.smtp.name}"
+			output="${bin.dir}/${assembly.name.smtp}"
 			doc="${bin.dir}/${name.smtp}.xml">
 			
 			<nowarn>
@@ -86,13 +80,14 @@
 				<include name="System.Web.dll" />
 			</references>
 		</csc>
+		
 		<csc 
 			define="${strong}"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/Castle.Components.Common.EmailSender.MockSender.dll"
-			doc="${bin.dir}/Castle.Components.Common.EmailSender.MockSender.xml">
+			output="${bin.dir}/${assembly.name.mock}"
+			doc="${bin.dir}/${name.mock}.xml">
 			
 			<nowarn>
 				<warning number="1591" />
@@ -110,68 +105,53 @@
 	</target>
 
 	<target name="tests.compile" depends="compile">
-	    <!--
 		<csc 
 			target="library" 
 			debug="${debug}" 
-			output="${bin.dir}/${test.assembly.name}">
+			output="${bin.dir}/${test.assembly.name1}">
 			
-			<sources basedir="${test.src.dir}" defaultexcludes="true">
+			<sources basedir="${test.src.dir1}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
 
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/*.dll" />
-				<include name="System.Drawing.dll" />
-				<include name="System.Windows.Forms.dll" />
+			</references>
+		</csc>
+		<!-- We need to create tests for the smtp implementation
+		<csc 
+			target="library" 
+			debug="${debug}" 
+			output="${bin.dir}/${test.assembly.name2}">
+			
+			<sources basedir="${test.src.dir2}" defaultexcludes="true">
+				<include name="**/*.cs" />
+			</sources>
+
+			<references>
+				<include name="${nunit.framework.dll}" />
+				<include name="${bin.dir}/*.dll" />
 			</references>
 		</csc>
 		-->
 	</target>
 	
 	<target name="tests.run" depends="tests.compile">
-	    <!--
 		<nunit2 >
-			<formatter type="Plain" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}" />
+			<formatter type="${nunit.formatter}" />
+			<test assemblyname="${bin.dir}/${test.assembly.name1}" />
+			<!-- We need to create tests for the smtp implementation
+			<test assemblyname="${bin.dir}/${test.assembly.name2}" />
+			-->
 		</nunit2>
-		-->
 	</target>
-	
-	<target name="tests2.compile" depends="compile">
-	    
-		<csc 
-			target="library" 
-			debug="${debug}" 
-			output="${bin.dir}/Castle.Components.Common.EmailSender.Tests.dll">
-			
-			<sources basedir="${test2.src.dir}" defaultexcludes="true">
-				<include name="**/*.cs" />
-			</sources>
-
-			<references>
-				<include name="${nunit.framework.dll}" />
-				<include name="${bin.dir}/*.dll" />
-			</references>
-		</csc>
 		
-	</target>
-	
-	<target name="tests2.run" depends="tests2.compile">
-	    
-		<nunit2 >
-			<formatter type="Plain" />
-			<test assemblyname="${bin.dir}/Castle.Components.Common.EmailSender.Tests.dll" />
-		</nunit2>
-		
-	</target>
-	
 	<target name="docs">
 		<ndoc failonerror="true">
 			<assemblies basedir="${bin.dir}">
 				<include name="${assembly.name}" />
-				<include name="${assembly.smtp.name}" />
+				<include name="${assembly.name.smtp}" />
 			</assemblies>
 			<documenters>
 				<documenter name="MSDN">

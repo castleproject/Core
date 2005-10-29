@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <project name="Brail.BooViewEngine" default="compile">
-	<property name="base.dir" value="." />
+
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
-	<property name="library.dir" value="${base.dir}/../lib" />
-	<property name="doc.dir" value="${base.dir}/../docs" />
-	<property name="src.dir" value="${base.dir}" />
-	<property name="sample.dir" value="${base.dir}../TestSiteBrail" />
 
-	<property name="test.src.dir" value="${src.dir}/../Castle.MonoRail.Views.Brail.Tests" />
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.MonoRail.Views.Brail" />
+	<property name="test.name" value="${name}.Tests" />
+	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/" />
+	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
 
-	<property name="version" value="1.0.0.0" />
-
-	<loadtasks assembly="${library.dir}\Boo.NAnt.Tasks.dll"/>
+	<loadtasks assembly="${bin.dir}/Boo.NAnt.Tasks.dll"/>
 
 	<target name="compile">		
 		<booc target="library" 
@@ -63,7 +64,7 @@
 	<target name="tests.run" depends="tests.compile, sample.compile">
 		<copy file="${bin.dir}\Castle.MonoRail.TestSupport.dll" todir="${sample.dir}/bin"/>
 		<nunit2>
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" appconfig="${test.src.dir}\app.config"/>
 		</nunit2>
 	</target>

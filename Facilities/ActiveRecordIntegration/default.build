@@ -91,7 +91,7 @@
 	
 	<target name="tests.run" depends="tests.compile" if="${nhibernate.test}">
 		<nunit2 failonerror="false">
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

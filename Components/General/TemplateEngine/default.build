@@ -1,41 +1,35 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="templateengine-facility" default="build">
-    
-    <!-- This build file inherits common properties from the ../components.build -->
+<project name="castle-templateengine-component" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Components.Common.TemplateEngine" />
-	<property name="src.nvelocity.dir" value="${base.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests" />
+	<include buildfile="../../../common.inc" />
 	
 	<property name="name" value="Castle.Components.Common.TemplateEngine" />
+	<property name="name.nvelocity" value="${name}.NVelocityTemplateEngine" />
+	
 	<property name="assembly.name" value="${name}.dll" />
+	<property name="assembly.name.nvelocity" value="${name.nvelocity}.dll" />
 	
-	<property name="name.nvelocity" value="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine" />
-	<property name="assembly.nvelocity.name" value="${name.nvelocity}.dll" />
+	<property name="test.name" value="${name.nvelocity}.Tests" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="src.nvelocity.dir" value="${base.dir}/${name.nvelocity}" />
 	
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
 
 	<property name="version" value="beta-2" />
 
-
 	<target name="clean">
-		<delete failonerror="false">
-			<fileset basedir="${bin.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</delete>
+		<delete dir="${bin.dir}" failonerror="false" />
+		<mkdir dir="${bin.dir}" />
 	</target>
 	
 	<target name="init" depends="clean">
-		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
-		<copy file="${library.dir}/NVelocity.dll" todir="${bin.dir}" />
+		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-container" inheritall="true" />
+		<nant buildfile="${base.dir}/../../../copy-tasks.xml" target="copy-nvelocity" inheritall="true" />
 	</target>
 
 	<target name="build" depends="init,tests.run" />
@@ -59,8 +53,6 @@
 			</sources>
 
 			<references>
-				<include name="System.Drawing.dll" />
-				<include name="System.Windows.Forms.dll" />
 			</references>
 		</csc>
 
@@ -69,7 +61,7 @@
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
-			output="${bin.dir}/${assembly.nvelocity.name}"
+			output="${bin.dir}/${assembly.name.nvelocity}"
 			doc="${bin.dir}/${name.nvelocity}.xml">
 			
 			<nowarn>
@@ -97,22 +89,20 @@
 				<include name="**/*.cs" />
 			</sources>
 
-			<resources basedir="${test.src.dir}" prefix="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.Tests" dynamicprefix="true">
+			<resources basedir="${test.src.dir}" prefix="${test.name}" dynamicprefix="true">
 				<include name="**/*.vm" />
 			</resources>
 			
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/*.dll" />
-				<include name="System.Drawing.dll" />
-				<include name="System.Windows.Forms.dll" />
 			</references>
 		</csc>
 	</target>
 	
 	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>

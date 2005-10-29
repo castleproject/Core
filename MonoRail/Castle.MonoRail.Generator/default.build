@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="monorail-generator" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
-	<property name="library.dir" value="${base.dir}/../lib" />
-	<property name="doc.dir" value="${base.dir}/../docs" />
-	<property name="src.dir" value="${base.dir}" />
 
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.MonoRail.Generator" />
 	<property name="assembly.name" value="Generator.exe" />
-	
-	<property name="version" value="1.0.0.0" />
+	<property name="src.dir" value="${base.dir}/" />
 
 	<target name="clean">
 	</target>
@@ -46,7 +44,7 @@
 			<references>
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
-				<include name="${library.dir}/NVelocity.dll" />
+				<include name="${bin.dir}/NVelocity.dll" />
 			</references>
 		</csc>
 	</target>

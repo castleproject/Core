@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="service-transaction" default="build">
-    
-	<property name="base.dir" value="." />
-	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Services.Transaction" />
+<project name="castle-service-transaction" default="build">
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Services.Transaction.Tests" />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="bin.dir" value="${base.dir}/bin" />
+
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.Services.Transaction" />
+	<property name="test.name" value="${name}.Tests" />
+	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
 
 	<property name="version" value="beta-2" />
 
-	<include buildfile="../../common.inc" />
-
 	<target name="clean">
-		<delete>
-			<fileset basedir="${bin.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</delete>
+		<delete dir="${bin.dir}" failonerror="false" />
 		<mkdir dir="${bin.dir}" />
 		<mkdir dir="../bin" />
 	</target>
@@ -34,7 +31,6 @@
 	<target name="copy">
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
 	</target>
-
 	
 	<target name="compile" depends="init">
 		<csc 
@@ -79,7 +75,7 @@
 	
 	<target name="tests.run" depends="tests.compile">
 		<nunit2 >
-			<formatter type="Plain" />
+			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>
