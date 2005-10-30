@@ -17,13 +17,15 @@ namespace Castle.Windsor.Tests.Configuration2
 	using System;
 	using System.IO;
 
-	using Castle.MicroKernel;
-	using Castle.Model.Configuration;
-	using Castle.Model.Resource;
-	using Castle.Windsor.Configuration.Interpreters;
-	
 	using NUnit.Framework;
 
+	using Castle.Model.Resource;
+	using Castle.Model.Configuration;
+
+	using Castle.MicroKernel;
+	
+	using Castle.Windsor.Configuration.Interpreters;
+	
 
 	[TestFixture]
 	public class IncludesTestCase
@@ -48,6 +50,17 @@ namespace Castle.Windsor.Tests.Configuration2
 		{
 			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
 				"config_with_include_relative.xml");
+
+			container = new WindsorContainer(file);
+
+			AssertConfiguration();
+		}
+
+		[Test, Ignore(".net 2.0 problems")]
+		public void FileResourceAndRelativeIncludes2()
+		{
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
+				"config_with_include_relative2.xml");
 
 			container = new WindsorContainer(file);
 

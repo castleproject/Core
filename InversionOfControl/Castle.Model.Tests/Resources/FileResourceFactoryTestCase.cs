@@ -28,6 +28,12 @@ namespace Castle.Model.Tests.Resources
 		private FileResourceFactory resFactory = new FileResourceFactory();
 		private String basePath = "../Castle.Model.Tests/Resources";
 
+		[TestFixtureSetUp]
+		public void Init()
+		{
+			basePath = Path.Combine(Directory.GetCurrentDirectory(), basePath); 
+		}
+
 		[Test]
 		public void Accept()
 		{
@@ -42,7 +48,10 @@ namespace Castle.Model.Tests.Resources
 
 			FileInfo fileInfo = new FileInfo(file);
 
-			IResource resource = resFactory.Create( new Uri("file://" + fileInfo.FullName), null );
+			Uri uri = new Uri(fileInfo.FullName);
+
+			// IResource resource = resFactory.Create( new Uri("file://" + fileInfo.FullName), null );
+			IResource resource = resFactory.Create( uri, null );
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
@@ -52,7 +61,8 @@ namespace Castle.Model.Tests.Resources
 		[Test]
 		public void CreateWithRelativePath()
 		{
-			IResource resource = resFactory.Create( new Uri("file://" + basePath + "/file1.txt") );
+			// IResource resource = resFactory.Create( new Uri("file://" + basePath + "/file1.txt") );
+			IResource resource = resFactory.Create( new Uri(basePath + "/file1.txt") );
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
@@ -62,7 +72,12 @@ namespace Castle.Model.Tests.Resources
 		[Test]
 		public void CreateWithRelativePathAndContext()
 		{
-			IResource resource = resFactory.Create( new Uri("file://file1.txt"), basePath );
+			Uri uri = new Uri("file://file1.txt");
+			Console.WriteLine(uri.ToString());
+			Console.WriteLine(uri.IsFile);
+
+			// IResource resource = resFactory.Create( new Uri("file://file1.txt"), basePath );
+			IResource resource = resFactory.Create( uri, basePath );
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
@@ -73,7 +88,8 @@ namespace Castle.Model.Tests.Resources
 		[ExpectedException(typeof(ResourceException))]
 		public void NonExistingResource()
 		{
-			resFactory.Create( new Uri("file://" + basePath + "/Something/file1.txt") );
+			// resFactory.Create( new Uri("file://" + basePath + "/Something/file1.txt") );
+			resFactory.Create( new Uri(basePath + "/Something/file1.txt") );
 		}
 	}
 }

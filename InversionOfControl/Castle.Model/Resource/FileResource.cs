@@ -76,6 +76,10 @@ namespace Castle.Model.Resource
 			{
 				filePath = filePath.Substring(1);
 			}
+			if (filePath[ filePath.Length - 1 ] == '/')
+			{
+				filePath = filePath.Substring(0, filePath.Length - 1);
+			}
 
 			return CreateStreamFromPath(filePath, basePath);
 		}

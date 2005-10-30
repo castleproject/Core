@@ -286,6 +286,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Configuration2\config_with_include_relative2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Configuration2\include1.xml"
                     BuildAction = "EmbeddedResource"
                 />
