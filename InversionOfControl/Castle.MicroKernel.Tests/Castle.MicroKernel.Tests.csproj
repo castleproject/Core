@@ -255,6 +255,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Facilities\Startable\StartableFacilityTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\Startable\Componets\StartableComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifecycle\LifecycleTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
