@@ -86,11 +86,6 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Castle.Facilities.TypedFactory"
-                    Project = "{03D19FDE-6EAD-4FC1-B244-987E8C4983E6}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Windsor"
                     AssemblyName = "Castle.Windsor"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"

@@ -1,8 +1,4 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.TypedFactory", "Castle.Facilities.TypedFactory\Castle.Facilities.TypedFactory.csproj", "{03D19FDE-6EAD-4FC1-B244-987E8C4983E6}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Facilities.TypedFactory.Tests", "Castle.Facilities.TypedFactory.Tests\Castle.Facilities.TypedFactory.Tests.csproj", "{8A080CE4-4C56-4FCB-9940-451F261BFEE9}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -13,10 +9,6 @@ Global
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{03D19FDE-6EAD-4FC1-B244-987E8C4983E6}.Debug.ActiveCfg = Debug|.NET
-		{03D19FDE-6EAD-4FC1-B244-987E8C4983E6}.Debug.Build.0 = Debug|.NET
-		{03D19FDE-6EAD-4FC1-B244-987E8C4983E6}.Release.ActiveCfg = Release|.NET
-		{03D19FDE-6EAD-4FC1-B244-987E8C4983E6}.Release.Build.0 = Release|.NET
 		{8A080CE4-4C56-4FCB-9940-451F261BFEE9}.Debug.ActiveCfg = Debug|.NET
 		{8A080CE4-4C56-4FCB-9940-451F261BFEE9}.Debug.Build.0 = Debug|.NET
 		{8A080CE4-4C56-4FCB-9940-451F261BFEE9}.Release.ActiveCfg = Release|.NET
