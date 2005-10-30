@@ -41,7 +41,7 @@ namespace Castle.Facilities.SecurityManagement
                 model.Dependencies.Add( 
                     new DependencyModel( DependencyType.Service, null, typeof(SecurityInterceptor), false ) );
 
-                model.Interceptors.Insert( 0,  
+                model.Interceptors.Add(
                     new InterceptorReference( typeof(SecurityInterceptor) ) );
             }
         }

@@ -99,7 +99,9 @@
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
-		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" />
+		<!-- 
+		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" /> 
+		-->
 		<nant buildfile="TestScaffolding/sample.build" inheritall="true" target="compile" />
 	</target>
 	

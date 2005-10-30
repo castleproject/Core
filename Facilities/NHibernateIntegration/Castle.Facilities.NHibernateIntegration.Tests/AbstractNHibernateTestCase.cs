@@ -55,6 +55,15 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		[TearDown]
 		public void Dispose()
 		{
+			Configuration cfg1 = (Configuration) container[ "sessionFactory1.cfg" ];
+			SchemaExport export1 = new SchemaExport(cfg1);
+
+			Configuration cfg2 = (Configuration) container[ "sessionFactory2.cfg" ];
+			SchemaExport export2 = new SchemaExport(cfg2);
+
+			export2.Drop(false, true);
+			export1.Drop(false, true);
+
 			container.Dispose();
 
 			container = null;

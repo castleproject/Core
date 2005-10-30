@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="arintegration-facility" default="build">
+<project name="castle-arintegration-facility" default="build">
     
-    <!-- This build file inherits common properties from the ../facilities.build -->
-
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Facilities.ActiveRecordIntegration" />
-	<property name="nhibernate.test" value="true" unless="${property::exists('nhibernate.test')}" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.ActiveRecordIntegration.Tests" />
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.Facilities.ActiveRecordIntegration" />
+	<property name="test.name" value="${name}.Tests" />
+	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
 
 	<property name="version" value="beta-2" />
+
+	<property name="activerecord.test" value="true" unless="${property::exists('nhibernate.test')}" />
 
 	<target name="clean">
 		<delete failonerror="false">
@@ -26,24 +28,15 @@
 	</target>
 	
 	<target name="init" depends="clean">
-		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
-		<copy file="${ar.bin.dir}/Castle.ActiveRecord.dll" todir="${bin.dir}" />
-		<copy file="${ar.bin.dir}/NHibernate.dll" todir="${bin.dir}" />
-		<copy file="${ar.bin.dir}/HashCodeProvider.dll" todir="${bin.dir}" />
-		<copy file="${ar.bin.dir}/Iesi.Collections.dll" todir="${bin.dir}" />
-		<copy file="${ar.bin.dir}/Nullables.dll" todir="${bin.dir}" />
-		<copy file="${ar.bin.dir}/Nullables.NHibernate.dll" todir="${bin.dir}" />
-		<copy file="${ar.bin.dir}/log4net.dll" todir="${bin.dir}" />
-		<copy file="${services.bin.dir}/Castle.Services.Transaction.dll" todir="${bin.dir}" />
-		<copy file="../AutomaticTransactionManagement/bin/Castle.Facilities.AutomaticTransactionManagement.dll" todir="${bin.dir}" />
-		<copy todir="${bin.dir}">
-			<fileset basedir="${library.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-container" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-activerecord" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-transaction-service" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-atm-facility" inheritall="true" />
+
 	</target>
 
 	<target name="build" depends="init,tests.run" />
@@ -89,8 +82,8 @@
 		</csc>
 	</target>
 	
-	<target name="tests.run" depends="tests.compile" if="${nhibernate.test}">
-		<nunit2 failonerror="false">
+	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">
+		<nunit2>
 			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>

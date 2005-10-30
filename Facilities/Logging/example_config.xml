@@ -5,7 +5,7 @@
 	<facilities>
 		
 		<facility id="logging" 
-			loggingApi="NLog | Log4net | Custom" 
+			loggingApi="NLog | Log4net | Web | Custom" 
 			customLoggerFactory="typename, assemblyname" />
 			
 	</facilities>

@@ -10,6 +10,8 @@
 	<property name="castle.kernel" value="${base.dir}/InversionOfControl/bin/Castle.MicroKernel.dll" />
 	<property name="castle.windsor" value="${base.dir}/InversionOfControl/bin/Castle.Windsor.dll" />
 	<property name="castle.dynamicproxy" value="${base.dir}/Tools/DynamicProxy/bin/Castle.DynamicProxy.dll" />
+	<property name="castle.transaction-service" value="${base.dir}/Services/bin/Castle.Services.Transaction.dll" />
+	<property name="castle.security-service" value="${base.dir}/Services/bin/Castle.Services.Security.dll" />
 
 	<!-- tasks to copy castle's assemblies -->
 
@@ -37,6 +39,44 @@
 
 	<target name="copy-activerecord" depends="copy-nhibernate">
 		<copy file="${castle.ar}" todir="${bin.dir}" />
+	</target>
+	
+	<target name="copy-transaction-service">
+		<copy file="${castle.transaction-service}" todir="${bin.dir}" />
+	</target>
+
+	<target name="copy-security-service">
+		<copy file="${castle.security-service}" todir="${bin.dir}" />
+	</target>
+
+	<target name="copy-atm-facility">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${base.dir}/Facilities/AutomaticTransactionManagement/bin">
+				<include name="Castle.Facilities.AutomaticTransactionManagement.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-aspectsharp" depends="copy-dynamicproxy">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${base.dir}/AspectSharp/bin">
+				<include name="antlr.runtime.dll" />
+				<include name="AopAlliance.dll" />
+				<include name="AspectSharp.dll" />
+				<include name="AspectSharp.Lang.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-logging-service">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${base.dir}/Services/bin">
+				<include name="Castle.Services.Logging.dll" />
+				<include name="Castle.Services.Logging.Log4netIntegration.dll" />
+				<include name="Castle.Services.Logging.NLogIntegration.dll" />
+				<include name="Castle.Services.Logging.Web.dll" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- tasks to copy shared libs -->
@@ -84,6 +124,30 @@
 	<target name="copy-boo">
 		<copy todir="${bin.dir}">
 			<fileset basedir="${sharedlibrary.dir}/boo">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copy-db4o">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/db4o">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copy-ibatis" depends="copy-log4net">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/ibatis">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copy-prevalence">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${sharedlibrary.dir}/prevalence">
 				<include name="*.dll" />
 			</fileset>
 		</copy>

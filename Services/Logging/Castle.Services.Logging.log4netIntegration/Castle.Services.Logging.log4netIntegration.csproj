@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Castle.Services.Logging.log4netIntegration"
+                AssemblyName = "Castle.Services.Logging.Log4netIntegration"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Castle.Services.Logging.log4netIntegration"
+                RootNamespace = "Castle.Services.Logging.Log4netIntegration"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >

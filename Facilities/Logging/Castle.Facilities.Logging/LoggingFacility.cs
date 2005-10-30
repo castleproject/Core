@@ -44,7 +44,7 @@ namespace Castle.Facilities.Logging
 	/// </summary>
 	public class LoggingFacility : AbstractFacility
 	{
-		private static readonly String Log4NetLoggerFactoryTypeName = "Castle.Services.Logging.log4netIntegration.Log4netFactory, Castle.Services.Logging.log4netIntegration";
+		private static readonly String Log4NetLoggerFactoryTypeName = "Castle.Services.Logging.Log4netIntegration.Log4netFactory, Castle.Services.Logging.log4netIntegration";
 		private static readonly String NLogLoggerFactoryTypeName = "Castle.Services.Logging.NLogIntegration.NLogFactory, Castle.Services.Logging.NLogIntegration";
 		private static readonly String WebLoggerFactoryTypeName = "Castle.Services.Logging.Web.WebLoggerFactory, Castle.Services.Logging.Web";
 

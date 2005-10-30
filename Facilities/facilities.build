@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
-<project name="facilities" default="build">
+<project name="castle-facilities" default="build">
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+
 	<property name="name" value="Facilities" />
-	<property name="version" value="beta-2" />
-	<property name="container.bin.dir" value="${base.dir}/../../InversionOfControl/bin" />
-	<property name="services.bin.dir" value="${base.dir}/../../Services/bin" />
-	<property name="ar.bin.dir" value="${base.dir}/../../ActiveRecord/bin" />
-	<property name="aspectsharp.bin.dir" value="${base.dir}/../../AspectSharp/bin" />
-
-	<include buildfile="../common.inc" />	
-
-	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
-	<property name="debug" value="false" />
-	<property name="optimize" value="true" />
-
-        <!-- Removed the build for prevalence til they apply the patch -->
-        <!-- supplied -->
 
 	<target name="build" depends="init, buildlist1, buildlist2, buildlist3" />
 	
@@ -24,7 +11,7 @@
 	<target name="buildlist2" depends="eventwiring,factorysupport,nhibernate,ibatis,logging" />
 	<target name="buildlist3" depends="prevalence,remoting,startable,securitymanagement,typedfactory" />
 	
-	<!-- entlib is/are out -->
+	<!-- entlib,x is/are out -->
 	
 	<target name="init">
 
@@ -59,11 +46,15 @@
 	</target>
 
 	<target name="eventwiring">
+	    <!--
 		<nant buildfile="EventWiring/default.build" inheritall="true" target="build" />
+		-->
 	</target>
 
 	<target name="factorysupport">
+	    <!--
 		<nant buildfile="FactorySupport/default.build" inheritall="true" target="build" />
+		-->
 	</target>
 
 	<target name="ibatis">
@@ -83,11 +74,15 @@
 	</target>
 	
 	<target name="remoting">
+	    <!--
 		<nant buildfile="Remoting/default.build" inheritall="true" target="build" />
+		-->
 	</target>	
 	
 	<target name="startable">
+	    <!--
 		<nant buildfile="Startable/default.build" inheritall="true" target="build" />
+		-->
 	</target>
 	
 	<target name="securitymanagement">
@@ -95,7 +90,9 @@
 	</target>
 
 	<target name="typedfactory">
+	    <!--
 		<nant buildfile="TypedFactory/default.build" inheritall="true" target="build" />
+		-->
 	</target>
 
 	<target name="dist">
@@ -122,7 +119,6 @@
 				<include name="**/*.zip" />				
 			</fileset>
 		</zip>
-
 	</target>
 
 </project>

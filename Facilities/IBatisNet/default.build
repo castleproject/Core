@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="nhibernate-facility" default="build">
-    
-    <!-- This build file inherits common properties from the ../facilities.build -->
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Facilities.IBatisNetIntegration" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.IBatisNetIntegration.Tests" />
-	<property name="name" value="Castle.Facilities.IBatisNetIntegration" />
-	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
+	<include buildfile="../../common.inc" />
 	
-	<property name="ibatis.test" value="true" unless="${property::exists('ibatis.test')}" />
+	<property name="name" value="Castle.Facilities.IBatisNetIntegration" />
+	<property name="test.name" value="${name}.Tests" />
+	
+	<property name="assembly.name" value="${name}.dll" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
 
 	<property name="version" value="beta-2" />
+    
+	<property name="ibatis.test" value="true" unless="${property::exists('ibatis.test')}" />
 
 	<target name="clean">
 		<delete failonerror="false">
@@ -27,24 +28,20 @@
 	</target>
 
 	<target name="init" depends="clean">
-		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
-		<copy file="${services.bin.dir}/Castle.Services.Transaction.dll" todir="${bin.dir}" />
-		<copy file="../AutomaticTransactionManagement/bin/Castle.Facilities.AutomaticTransactionManagement.dll" todir="${bin.dir}" />
-		<copy todir="${bin.dir}">
-			<fileset basedir="${library.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-container" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-transaction-service" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-atm-facility" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-ibatis" inheritall="true" />
 	</target>
 
 	<target name="build" depends="init,tests.run" />
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="STRONG2"
+			define="STRONG"
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"

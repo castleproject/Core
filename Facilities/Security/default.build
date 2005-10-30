@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding='iso-8859-1' ?>
 <project name="security-facility" default="build">
-    
-    <!-- This build file inherits common properties from the ../facilities.build -->
 
-	<property name="base.dir" value="." />
+	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/bin" />
-	<property name="library.dir" value="${base.dir}/lib" />
-	<property name="doc.dir" value="${base.dir}/docs" />
-	<property name="src.dir" value="${base.dir}/Castle.Facilities.SecurityManagement" />
-	<property name="securitymanagement.test" value="true" unless="${property::exists('securitymanagement.test')}" />
 
-	<property name="test.src.dir" value="${base.dir}/Castle.Facilities.SecurityManagement.Tests" />
+	<include buildfile="../../common.inc" />
+	
 	<property name="name" value="Castle.Facilities.SecurityManagement" />
+	<property name="test.name" value="${name}.Tests" />
+	
 	<property name="assembly.name" value="${name}.dll" />
-	<property name="test.assembly.name" value="${name}.Tests.dll" />
-
-	<property name="version" value="alpha-1" />
+	<property name="test.assembly.name" value="${test.name}.dll" />
+	
+	<property name="src.dir" value="${base.dir}/${name}" />
+	<property name="test.src.dir" value="${base.dir}/${test.name}" />
+	
+	<property name="version" value="alpha" />
 
 	<target name="clean">
 		<delete failonerror="false">
@@ -26,16 +26,11 @@
 	</target>
 	
 	<target name="init" depends="clean">
-		<copy file="${container.bin.dir}/Castle.MicroKernel.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Model.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.Windsor.dll" todir="${bin.dir}" />
-		<copy file="${container.bin.dir}/Castle.DynamicProxy.dll" todir="${bin.dir}" />
-		<copy file="${services.bin.dir}/Castle.Services.Security.dll" todir="${bin.dir}" />
-		<copy todir="${bin.dir}">
-			<fileset basedir="${library.dir}">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-container" inheritall="true" />
+
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-security-service" inheritall="true" />
+
 	</target>
 
 	<target name="build" depends="init,tests.run" />
@@ -81,8 +76,8 @@
 		</csc>
 	</target>
 	
-	<target name="tests.run" depends="tests.compile" if="${securitymanagement.test}">
-		<nunit2 failonerror="false">
+	<target name="tests.run" depends="tests.compile">
+		<nunit2>
 			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
