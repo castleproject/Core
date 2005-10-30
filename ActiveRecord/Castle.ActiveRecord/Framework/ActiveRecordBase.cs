@@ -95,7 +95,7 @@ namespace Castle.ActiveRecord
 		/// <param name="call">The delegate instance</param>
 		/// <param name="instance">The ActiveRecord instance</param>
 		/// <returns>Whatever is returned by the delegate invocation</returns>
-		protected static object Execute(Type targetType, NHibernateDelegate call, object instance)
+		protected internal static object Execute(Type targetType, NHibernateDelegate call, object instance)
 		{
 			if (targetType == null) throw new ArgumentNullException("targetType", "Target type must be informed");
 			if (call == null) throw new ArgumentNullException("call", "Delegate must be passed");
@@ -128,7 +128,7 @@ namespace Castle.ActiveRecord
 		/// <returns></returns>
 		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
 		/// <c>true</c> and the row is not found</exception>
-		protected static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
+		protected internal static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
 		{
 			EnsureInitialized(targetType);
 
@@ -164,7 +164,7 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType">The AR subclass type</param>
 		/// <param name="id">ID value</param>
 		/// <returns></returns>
-		protected static object FindByPrimaryKey(Type targetType, object id)
+		protected internal static object FindByPrimaryKey(Type targetType, object id)
 		{
 			return FindByPrimaryKey(targetType, id, true);
 		}
@@ -174,7 +174,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="targetType"></param>
 		/// <returns></returns>
-		protected static Array FindAll(Type targetType)
+		protected internal static Array FindAll(Type targetType)
 		{
 			return FindAll(targetType, (Order[]) null);
 		}
@@ -182,7 +182,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
+		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
 		{
 			EnsureInitialized(targetType);
 
@@ -223,7 +223,7 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
-		protected static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
+		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
 		{
 			return SlicedFindAll(targetType, firstResult, maxresults, null, criterias);
 		}
@@ -236,7 +236,7 @@ namespace Castle.ActiveRecord
 		/// <param name="orders"></param>
 		/// <param name="criterias"></param>
 		/// <returns></returns>
-		protected static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
+		protected internal static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
 		{
 			EnsureInitialized(targetType);
 
@@ -278,7 +278,7 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType"></param>
 		/// <param name="criterias"></param>
 		/// <returns></returns>
-		protected static Array FindAll(Type targetType, params ICriterion[] criterias)
+		protected internal static Array FindAll(Type targetType, params ICriterion[] criterias)
 		{
 			return FindAll(targetType, null, criterias);
 		}
@@ -299,7 +299,7 @@ namespace Castle.ActiveRecord
 			return array;
 		}
 
-		protected static void DeleteAll(Type type)
+		protected internal static void DeleteAll(Type type)
 		{
 			EnsureInitialized(type);
 
@@ -325,7 +325,7 @@ namespace Castle.ActiveRecord
 		/// Saves the instance to the database
 		/// </summary>
 		/// <param name="instance"></param>
-		protected static void Save(object instance)
+		protected internal static void Save(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
@@ -353,7 +353,7 @@ namespace Castle.ActiveRecord
 		/// Creates (Saves) a new instance to the database.
 		/// </summary>
 		/// <param name="instance"></param>
-		protected static void Create(object instance)
+		protected internal static void Create(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
@@ -382,7 +382,7 @@ namespace Castle.ActiveRecord
 		/// state to the database.
 		/// </summary>
 		/// <param name="instance"></param>
-		protected static void Update(object instance)
+		protected internal static void Update(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
@@ -410,7 +410,7 @@ namespace Castle.ActiveRecord
 		/// Deletes the instance from the database.
 		/// </summary>
 		/// <param name="instance"></param>
-		protected static void Delete(object instance)
+		protected internal static void Delete(object instance)
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
