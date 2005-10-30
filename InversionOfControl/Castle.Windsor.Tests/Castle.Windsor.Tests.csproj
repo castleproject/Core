@@ -311,6 +311,45 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Facilities\EventWiring\config.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\EventWiringTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\Handlers.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\MultiListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\MultiPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\PublisherListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\SimpleListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\EventWiring\Model\SimplePublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Installer\InstallerTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	
+	<components>
+		<component id="SimpleListener">
+			<subscribes>
+				<subscribe-to publisher="SimplePublisher" event="Event" handler="OnPublish"/>
+			</subscribes>
+		</component>
+
+		<component id="SimpleListener2">
+			<subscribes>
+				<subscribe-to publisher="SimplePublisher" event="StaticEvent" handler="OnPublish"/>
+			</subscribes>
+		</component>
+		
+		<component id="MultiListener">
+			<subscribes>
+					<subscribe-to 
+						publisher="MultiPublisher" 
+						handler="OnPublish" 
+						event="Event1"  />
+					<subscribe-to 
+						publisher="MultiPublisher" 
+						handler="OnPublish2" 
+						event="Event2"  />
+					<subscribe-to 
+						publisher="PublisherListener" 
+						handler="OnPublish"
+						event="Event1" />
+				</subscribes>
+		</component>
+		
+		<component id="PublisherListener">
+			<subscribes>
+				<subscribe-to handler="OnPublish" publisher="SimplePublisher" event="Event" />
+			</subscribes>
+		</component>
+		
+		<component id="BadConfig">
+			<subscribes>
+				<subscribe-to handler="OnPublish" publisher="SimplePublisher" event="EventIahhh" />
+			</subscribes>
+		</component>
+	</components>
+	
+</configuration>
