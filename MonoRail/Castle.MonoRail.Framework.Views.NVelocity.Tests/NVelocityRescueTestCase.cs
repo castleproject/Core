@@ -24,5 +24,61 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	[TestFixture]
 	public class NVelocityRescueTestCase : RescueTestCase
 	{
+		[Test]
+		public void RescueWithSkipRescue()
+		{
+			DoGet("rescuable/MethodWithSkipRescue.rails");
+			AssertStatusCode(500);
+		}
+		
+		[Test]
+		public void RescueWithAppExceptionType()
+		{
+			DoGet("rescuable/RescueWithExceptionsByType.rails", "exceptionType=appException");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "appException" );
+		}		
+		
+		[Test]
+		public void RescueWithArgExceptionType()
+		{
+			DoGet("rescuable/RescueWithExceptionsByType.rails", "exceptionType=argException");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "argException" );
+		}		
+		
+		[Test]
+		public void RescueWithControllerDefaultExceptionType()
+		{
+			DoGet("rescuable/RescueWithExceptionsByType.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "An error happened" );
+		}		
+
+		[Test]
+		public void RescueWithMethodDefaultArgExceptionType()
+		{
+			DoGet("rescuable/RescueWithExceptionsByTypeWithDefaultException.rails", "exceptionType=argException");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "argException" );
+		}
+		
+		[Test]
+		public void RescueWithMethodDefaultExceptionType()
+		{
+			DoGet("rescuable/RescueWithExceptionsByTypeWithDefaultException.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "methodDefaultException" );
+		}		
 	}
 }

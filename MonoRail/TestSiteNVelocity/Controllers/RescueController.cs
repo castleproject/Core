@@ -20,9 +20,15 @@ namespace TestSiteNVelocity.Controllers
 
 	[Rescue("general")]
 	[ControllerDetails("rescuable")]
-	public class RescueController : Controller
+	public class RescueController : SmartDispatcherController
 	{
 		public void Index()
+		{
+			throw new ApplicationException();
+		}
+
+		[SkipRescue]
+		public void MethodWithSkipRescue()
 		{
 			throw new ApplicationException();
 		}
@@ -46,5 +52,32 @@ namespace TestSiteNVelocity.Controllers
 		{
 			throw new ApplicationException("custom msg");
 		}
+		
+		[Rescue("appException",typeof(ApplicationException))]
+		[Rescue("argException",typeof(ArgumentException))]
+		public void RescueWithExceptionsByType(String exceptionType)
+		{
+			if( exceptionType == "appException" )
+				throw new ApplicationException("appException");
+			
+			if( exceptionType == "argException" )
+				throw new ArgumentException("argException");
+				
+			throw new Exception();
+		}
+
+		[Rescue("methodDefaultException")]
+		[Rescue("appException",typeof(ApplicationException))]
+		[Rescue("argException",typeof(ArgumentException))]
+		public void RescueWithExceptionsByTypeWithDefaultException(string exceptionType)
+		{
+			if( exceptionType == "appException" )
+				throw new ApplicationException("appException");
+			
+			if( exceptionType == "argException" )
+				throw new ArgumentException("argException");
+				
+			throw new Exception();
+		}		
 	}
 }

@@ -163,6 +163,13 @@ namespace Castle.MonoRail.TestSupport
 
 		#region Available Asserts
 
+		protected void AssertStatusCode(int expectedCode)
+		{
+			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
+			Assert.IsTrue(response.StatusCode == expectedCode, "Expecting status code {0} when it was in fact {1} {2}", 
+				response.StatusCode, response.StatusDescription);
+		}
+		
 		/// <summary>
 		/// Asserts the return status code is less than 400
 		/// </summary>

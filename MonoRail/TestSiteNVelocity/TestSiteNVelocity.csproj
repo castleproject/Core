@@ -381,7 +381,19 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\rescues\appException.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\argException.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\rescues\general.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\rescues\methodDefaultException.vm"
                     BuildAction = "None"
                 />
                 <File

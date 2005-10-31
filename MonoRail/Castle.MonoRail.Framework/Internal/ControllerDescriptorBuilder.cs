@@ -99,7 +99,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 			if (attributes.Length != 0)
 			{
-				descriptor.GetAction(method).Rescue = (RescueAttribute) attributes[0];
+				descriptor.GetAction(method).Rescues = attributes;
 			}
 
 			attributes = method.GetCustomAttributes(typeof(SkipRescueAttribute), true);
@@ -175,7 +175,7 @@ namespace Castle.MonoRail.Framework.Internal
 	
 			if (attributes.Length != 0)
 			{
-				descriptor.Rescue = (RescueAttribute) attributes[0];
+				descriptor.Rescues = attributes;
 			}
 	
 			attributes = controllerType.GetCustomAttributes( typeof(ScaffoldingAttribute), false );

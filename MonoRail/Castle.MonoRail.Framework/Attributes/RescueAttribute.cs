@@ -21,29 +21,45 @@ namespace Castle.MonoRail.Framework
 	/// or an action (method). The rescue is invoked in
 	/// response to some exception during the action processing.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=false), Serializable]
+	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=true), Serializable]
 	public class RescueAttribute : Attribute
 	{
-		private String _viewName;
+		private String viewName;
+		private Type exceptionType;
 		
 		/// <summary>
 		/// Constructs a RescueAttribute with the template name.
 		/// </summary>
 		/// <param name="viewName"></param>
-		public RescueAttribute(String viewName)
+		public RescueAttribute(String viewName) : this( viewName, typeof(Exception) )
+		{			
+		}
+
+		public RescueAttribute(String viewName, Type exceptionType)
 		{
 			if (viewName == null || viewName.Length == 0)
 			{
 				throw new ArgumentNullException("viewName");
 			}
-
-			_viewName = viewName;
+			
+			if (exceptionType != null && !typeof(Exception).IsAssignableFrom(exceptionType) )
+			{
+				throw new ArgumentException("exceptionType must be an type assignable from Exception");
+			}
+			
+			this.viewName = viewName;
+			this.exceptionType = exceptionType;
 		}
 
 		public String ViewName
 		{
-			get { return _viewName; }
+			get { return viewName; }
 		}
+		
+		public Type ExceptionType
+		{
+			get { return exceptionType; }
+		}		
 	}
 
 	/// <summary>

@@ -981,54 +981,63 @@ namespace Castle.MonoRail.Framework
 		#region Rescue
 
 		protected virtual bool PerformRescue(MethodInfo method, Exception ex)
-		{
-			if (ex is TargetInvocationException)
-			{
-				_context.LastException = ex.InnerException;
-			}
-			else
-			{
-				_context.LastException = ex;
-			}
-
+		{		
+			_context.LastException = (ex is TargetInvocationException) ? ex.InnerException : ex;
+			
 			// Dynamic action 
 			if (method == null) return false;
 
+			Type exceptionType = _context.LastException.GetType();
+
 			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
-
-			if (method != null && actionMeta.SkipRescue != null)
+			
+			if (actionMeta.SkipRescue != null) return false;
+			
+			RescueAttribute att = GetRescueAttributeFor(actionMeta.Rescues, exceptionType);
+			
+			if (att == null)
 			{
-				return false;
+				att = GetRescueAttributeFor(metaDescriptor.Rescues, exceptionType);
+
+				if (att == null) return false;
 			}
-
-			RescueAttribute att = null;
-
-			if (method != null && actionMeta.Rescue != null)
+				
+			try
 			{
-				att = actionMeta.Rescue;
+				_selectedViewName = String.Format("rescues\\{0}", att.ViewName);
+				ProcessView();
+				return true;
 			}
-			else if (metaDescriptor.Rescue != null)
+			catch (Exception e)
 			{
-				att = metaDescriptor.Rescue;
-			}
-
-			if (att != null)
-			{
-				try
-				{
-					_selectedViewName = String.Format("rescues\\{0}", att.ViewName);
-					ProcessView();
-					return true;
-				}
-				catch (Exception e)
-				{
-					// In this situation, the rescue view could not be found
-					// So we're back to the default error exibition
-					Console.WriteLine(e);
-				}
+				// In this situation, the rescue view could not be found
+				// So we're back to the default error exibition
+				Console.WriteLine(e);
 			}
 
 			return false;
+		}
+
+		protected virtual RescueAttribute GetRescueAttributeFor(IList rescues, Type exceptionType)
+		{
+			if (rescues == null || rescues.Count == 0) return null;
+			
+			RescueAttribute bestCandidate = null;
+			
+			foreach(RescueAttribute rescue in rescues)
+			{
+				if (rescue.ExceptionType == exceptionType)
+				{
+					return rescue;
+				}
+				else if (rescue.ExceptionType != null && 
+					rescue.ExceptionType.IsAssignableFrom(exceptionType))
+				{
+					bestCandidate = rescue;
+				}
+			}
+			
+			return bestCandidate;
 		}
 
 		#endregion

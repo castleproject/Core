@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Framework.Internal
 	public abstract class BaseMetaDescriptor
 	{
 		private LayoutAttribute layout;
-		private RescueAttribute rescue;
+		private IList rescues;
 		private IList resources = new ArrayList();
 
 		public LayoutAttribute Layout
@@ -30,10 +30,10 @@ namespace Castle.MonoRail.Framework.Internal
 			set { layout = value; }
 		}
 
-		public RescueAttribute Rescue
+		public IList Rescues
 		{
-			get { return rescue; }
-			set { rescue = value; }
+			get { return rescues; }
+			set { rescues = value; }
 		}
 
 		public IList Resources
