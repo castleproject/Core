@@ -16,7 +16,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 {
 	using System;
 	using System.Xml;
+	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Configuration;
+	using System.Text;
+	using System.Text.RegularExpressions;
 
 	using Castle.Model.Resource;
 	using Castle.Model.Configuration;
@@ -43,6 +47,14 @@ namespace Castle.Windsor.Configuration.Interpreters
 	/// </summary>
 	public class XmlInterpreter : AbstractInterpreter
 	{
+		/// <summary>
+		/// Properties names can contain a-zA-Z0-9_. 
+		/// i.e. #{my_node_name} || #{ my.node.name }
+		/// spaces are trimmed
+		/// </summary>
+		private static Regex PropertyValidationRegExp = new Regex( @"(\#\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
+		private IDictionary properties = new HybridDictionary();
+
 		#region Constructors
 
 		public XmlInterpreter()
@@ -86,14 +98,37 @@ namespace Castle.Windsor.Configuration.Interpreters
 				{
 					ProcessInclude(node, store);
 				}
+				else if (PropertiesNodeName.Equals(node.Name))
+				{
+					DeserializeProperties(node.ChildNodes);
+				}
 				else if (FacilitiesNodeName.Equals(node.Name))
 				{
-					DeserializeFacilities( node.ChildNodes, store );
+					DeserializeFacilities(node.ChildNodes, store);
 				}
 				else if (ComponentsNodeName.Equals(node.Name))
 				{
-					DeserializeComponents( node.ChildNodes, store );
+					DeserializeComponents(node.ChildNodes, store);
 				}
+			}
+		}
+
+		private void DeserializeProperties( XmlNodeList nodes)
+		{
+			foreach(XmlNode node in nodes)
+			{
+				if (node.NodeType != XmlNodeType.Element)
+				{
+					continue;
+				}
+				
+				// Note that new properties values override old ones!
+				// properties values can reference another properties
+
+				String value = EvalProperty( 
+					GetPreserveSpaceValue(node) ? node.InnerText : node.InnerText.Trim() );
+
+				properties[node.Name] = value;
 			}
 		}
 
@@ -165,7 +200,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 				{
 					if (child.NodeType == XmlNodeType.Text || child.NodeType == XmlNodeType.CDATA)
 					{
-						config = new MutableConfiguration(node.Name, child.Value.Trim());
+						config = new MutableConfiguration(node.Name, EvalProperty(child.Value.Trim()) );
 						break;
 					}
 				}
@@ -178,7 +213,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 			foreach(XmlAttribute attribute in node.Attributes)
 			{
-				config.Attributes.Add(attribute.Name, attribute.Value);
+				config.Attributes.Add(attribute.Name, EvalProperty( attribute.Value ) );
 			}
 
 			if (node.HasChildNodes)
@@ -195,6 +230,32 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 
 			return config;
+		}
+
+		private string EvalProperty(string value)
+		{
+			MatchCollection matches = PropertyValidationRegExp.Matches( value );
+
+			if(matches.Count > 0)
+			{
+				StringBuilder buffer = new StringBuilder(value);
+				
+				foreach(Match match in matches)
+				{
+					string propRef = match.Groups[1].Value; 
+					string propKey = match.Groups[2].Value;
+					string propValue = properties[propKey] as string;
+
+					// if a property is not found we replace its value with an empty string
+					if( propValue == null ) propValue = String.Empty;
+					
+					buffer.Replace( propRef, propValue );
+				}
+
+				value = buffer.ToString();
+			}
+
+			return value;
 		}
 
 		private String GetRequiredAttributeValue(XmlNode node, String attName)
@@ -224,8 +285,18 @@ namespace Castle.Windsor.Configuration.Interpreters
 			return att.Value;
 		}
 
-		#endregion
+		private bool GetPreserveSpaceValue(XmlNode node)
+		{
+			XmlAttribute att = node.Attributes["preserve_spaces"];
 
+			if (att == null)
+			{
+				return false;
+			}
+
+			return att.Value.ToLower() == "true";
+		}
+		
 		private void ProcessInclude(XmlNode includeNode, IConfigurationStore store)
 		{
 			XmlAttribute resourceUriAtt = includeNode.Attributes["uri"];
@@ -237,5 +308,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 			ProcessInclude( resourceUriAtt.Value, store );
 		}
+
+		#endregion
 	}
 }

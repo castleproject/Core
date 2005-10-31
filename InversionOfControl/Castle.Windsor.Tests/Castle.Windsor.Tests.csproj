@@ -307,6 +307,23 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Configuration2\Properties\config_with_properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_properties_and_includes.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\PropertiesTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration2\RelativeTest\rel_include1.xml"
                     BuildAction = "EmbeddedResource"
                 />

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<configuration>
+
+    <include uri="file://properties.xml"/>
+
+	<facilities>
+	
+		<facility id="testidengine" >
+			<item>#{prop1}</item>
+		</facility>
+
+		<facility id="testidengine2" >
+			<item value="#{prop2}"/>
+		</facility>
+	
+	</facilities>
+
+	<components>
+	
+		<component id="testidcomponent1">
+			<item>#{prop1}</item>
+		</component>
+		
+		<component id="testidcomponent2">
+			<item value="#{prop2}"/>
+		</component>
+		
+	</components>
+	
+</configuration>
