@@ -246,5 +246,13 @@
 			</fileset>
 		</zip>
 	</target>
-	
+
+	<target name="update-from-svn">
+		<!--
+		<exec program="C:\devtools\svn-win32-1.2.3\bin\svn.exe">
+			<arg value=""/>
+		</exec>
+		-->
+	</target>
+
 </project>
