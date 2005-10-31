@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 
 <configuration>
 
@@ -6,7 +6,7 @@
 	
 		<facility 
 			id="factorysupport" 
-			type="Castle.Facilities.FactorySupport.FactorySupportFacility, Castle.Facilities.FactorySupport" />
+			type="Castle.Facilities.FactorySupport.FactorySupportFacility, Castle.MicroKernel" />
 	
 	</facilities>
 

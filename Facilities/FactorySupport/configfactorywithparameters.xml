@@ -6,7 +6,7 @@
 	
 		<facility 
 			id="factorysupport" 
-			type="Castle.Facilities.FactorySupport.FactorySupportFacility, Castle.Facilities.FactorySupport" />
+			type="Castle.Facilities.FactorySupport.FactorySupportFacility, Castle.MicroKernel" />
 	
 	</facilities>
 
