@@ -124,6 +124,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Resources\UncResourceFactoryTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Resources\MoreRes\file2.txt"
                     BuildAction = "EmbeddedResource"
                 />

@@ -72,13 +72,13 @@ namespace Castle.Windsor
 			RunInstaller();
 		}
 
-		[Obsolete()]
+		[Obsolete("Use includes instead of cascade configurations")]
 		public WindsorContainer(IConfigurationInterpreter parent, IConfigurationInterpreter child) : this()
 		{
 			if (parent == null) throw new ArgumentNullException("parent");
 			if (child == null) throw new ArgumentNullException("child");
 
-			// Kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+			Kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
 
 			RunInstaller();
 		}

@@ -1,6 +1,6 @@
 <configuration>
 
-    <include uri="file://include1.xml"/>
+    <include uri="include1.xml"/> <!-- this is also valid -->
     <include uri="file://include2.xml"/>
 
 </configuration>

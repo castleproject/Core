@@ -260,7 +260,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Facilities\Startable\Componets\StartableComponent.cs"
+                    RelPath = "Facilities\Startable\Components\StartableComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -81,6 +81,11 @@ namespace Castle.MicroKernel.SubSystems.Configuration
 
 		public IResource GetResource(String resourceUri, IResource resource)
 		{
+			if (resourceUri.IndexOf(Uri.SchemeDelimiter) == -1)
+			{
+				return resource.CreateRelative(resourceUri);
+			}
+
 			IResourceSubSystem subSystem = (IResourceSubSystem)
 				Kernel.GetSubSystem( SubSystemConstants.ResourceKey );
 

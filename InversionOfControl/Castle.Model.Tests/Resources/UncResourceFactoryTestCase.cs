@@ -15,7 +15,6 @@
 namespace Castle.Model.Tests.Resources
 {
 	using System;
-	using System.IO;
 
 	using NUnit.Framework;
 
@@ -23,56 +22,37 @@ namespace Castle.Model.Tests.Resources
 
 
 	[TestFixture]
-	public class FileResourceFactoryTestCase
+	public class UncResourceFactoryTestCase
 	{
-		private FileResourceFactory resFactory = new FileResourceFactory();
-		private String basePath = "../Castle.Model.Tests/Resources";
-
-		[TestFixtureSetUp]
-		public void Init()
-		{
-			basePath = Path.Combine(Directory.GetCurrentDirectory(), basePath); 
-		}
+		private UncResourceFactory resFactory = new UncResourceFactory();
 
 		[Test]
 		public void Accept()
 		{
-			Assert.IsTrue( resFactory.Accept( new Uri("file://something") ) );
+			Assert.IsTrue( resFactory.Accept( new Uri(@"\\server\something") ) );
 			Assert.IsFalse( resFactory.Accept( new Uri("http://www.castleproject.org") ) );
 		}
 
-		[Test]
+		[Test, Ignore("Requires network share")]
 		public void CreateWithAbsolutePath()
 		{
-			String file = Path.Combine(basePath, "file1.txt");
-
-			FileInfo fileInfo = new FileInfo(file);
-
-			Uri uri = new Uri(fileInfo.FullName);
+			Uri uri = new Uri(@"\\hammet\C$\file1.txt");
 
 			IResource resource = resFactory.Create( uri, null );
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
-			Assert.AreEqual("Something", line);
+			Assert.AreEqual("The long and winding road", line);
 		}
 
-		[Test]
-		public void CreateWithRelativePath()
+		[Test, Ignore("Requires network share")]
+		public void CreateRelative()
 		{
-			IResource resource = resFactory.Create( new Uri(basePath + "/file1.txt") );
+			Uri uri = new Uri(@"\\hammet\C$\file1.txt");
 
-			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
-			Assert.AreEqual("Something", line);
-		}
+			IResource resource = resFactory.Create( uri, null );
 
-		[Test]
-		public void CreateWithRelativePathAndContext()
-		{
-			Uri uri = new Uri("file://file1.txt");
-
-			IResource resource = resFactory.Create( uri, basePath );
+			resource = resource.CreateRelative("file2.txt");
 
 			Assert.IsNotNull(resource);
 			String line = resource.GetStreamReader().ReadLine();
@@ -83,7 +63,7 @@ namespace Castle.Model.Tests.Resources
 		[ExpectedException(typeof(ResourceException))]
 		public void NonExistingResource()
 		{
-			resFactory.Create( new Uri(basePath + "/Something/file1.txt") );
+			resFactory.Create( new Uri(@"\\hammettz\C$\file1.txt") );
 		}
 	}
 }

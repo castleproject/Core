@@ -86,14 +86,10 @@ namespace Castle.Model.Resource
 
 		private Stream CreateStreamFromPath(String filePath, String basePath)
 		{
-			if (filePath == null) throw new ArgumentNullException("filePath");
-			if (basePath == null) throw new ArgumentNullException("basePath");
-
-			if (filePath.StartsWith(Uri.UriSchemeFile + Uri.SchemeDelimiter) )
-			{
-				return CreateStreamFromUri( 
-					new Uri(Uri.UriSchemeFile + Uri.SchemeDelimiter + filePath), basePath );
-			}
+			if (filePath == null) 
+				throw new ArgumentNullException("filePath");
+			if (basePath == null) 
+				throw new ArgumentNullException("basePath");
 
 			if (!Path.IsPathRooted(filePath) || !File.Exists(filePath))
 			{

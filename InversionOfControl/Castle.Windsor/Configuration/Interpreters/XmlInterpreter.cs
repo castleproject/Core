@@ -125,8 +125,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 				// Note that new properties values override old ones!
 				// properties values can reference another properties
 
-				String value = EvalProperty( 
-					GetPreserveSpaceValue(node) ? node.InnerText : node.InnerText.Trim() );
+				String value = EvalProperty( node.InnerText.Trim() );
 
 				properties[node.Name] = value;
 			}
@@ -285,18 +284,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 			return att.Value;
 		}
 
-		private bool GetPreserveSpaceValue(XmlNode node)
-		{
-			XmlAttribute att = node.Attributes["preserve_spaces"];
-
-			if (att == null)
-			{
-				return false;
-			}
-
-			return att.Value.ToLower() == "true";
-		}
-		
 		private void ProcessInclude(XmlNode includeNode, IConfigurationStore store)
 		{
 			XmlAttribute resourceUriAtt = includeNode.Attributes["uri"];

@@ -30,12 +30,12 @@ namespace Castle.Model.Resource
 
 		public IResource Create(Uri uri)
 		{
-			throw new NotImplementedException();
+			return new UncResource(uri);
 		}
 
 		public IResource Create(Uri uri, String basePath)
 		{
-			throw new NotImplementedException();
+			return new UncResource(uri, basePath);
 		}
 	}
 }
