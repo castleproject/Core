@@ -41,6 +41,17 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 		}
 
 		[Test]
+		public void PropertiesWithinProperties()
+		{
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
+				"properties_using_properties.xml");
+
+			container = new WindsorContainer(file);
+
+			AssertConfiguration();
+		}
+
+		[Test]
 		public void PropertiesAndIncludes()
 		{
 			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 

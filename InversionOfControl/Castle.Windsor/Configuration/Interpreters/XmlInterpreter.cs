@@ -52,7 +52,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		/// i.e. #{my_node_name} || #{ my.node.name }
 		/// spaces are trimmed
 		/// </summary>
-		private static Regex PropertyValidationRegExp = new Regex( @"(\#\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
+		private static readonly Regex PropertyValidationRegExp = new Regex( @"(\#\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
 		private IDictionary properties = new HybridDictionary();
 
 		#region Constructors

@@ -319,6 +319,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Configuration2\Properties\properties_using_properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Configuration2\Properties\PropertiesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
