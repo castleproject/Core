@@ -12,37 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Startable.Tests
+namespace Castle.Facilities.Startable.Tests.Components
 {
 	using System;
 
-	using NUnit.Framework;
+	using Castle.Model;
 
-	using Castle.MicroKernel;
-
-	using Castle.Facilities.Startable.Tests.Components;
-
-
-	[TestFixture]
-	public class StartableFacilityTestCase
+	[Transient]
+	public class StartableComponent : IStartable
 	{
-		[Test]
-		public void SimpleCase()
+		private bool _Started = false;
+		private bool _Stopped = false;
+
+		public void Start()
 		{
-			IKernel kernel = new DefaultKernel();
+			_Started = true;
+		}
 
-			kernel.AddFacility( "startable", new StartableFacility() );
+		public void Stop()
+		{
+			_Stopped = true;
+		}
 
-			kernel.AddComponent( "a", typeof(StartableComponent) );
+		public bool Started
+		{
+			get { return _Started; }
+		}
 
-			StartableComponent component = kernel["a"] as StartableComponent;
-
-			Assert.IsNotNull(component);
-			Assert.IsTrue( component.Started );
-			Assert.IsFalse( component.Stopped );
-
-			kernel.ReleaseComponent(component);
-			Assert.IsTrue( component.Stopped );
+		public bool Stopped
+		{
+			get { return _Stopped; }
 		}
 	}
 }
