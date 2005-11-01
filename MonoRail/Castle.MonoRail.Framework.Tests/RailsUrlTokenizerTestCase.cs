@@ -97,5 +97,16 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual( "index", info.Action );
 			Assert.AreEqual( String.Empty, info.Area );
 		}
+
+	    [Test, ExpectedException(typeof(UrlTokenizerException), "Invalid url")]
+	    public void BadUrl()
+	    {
+            UrlInfo info = UrlTokenizer.ExtractInfo( "/index.rails", null );
+            Assert.IsNotNull( info );
+            Assert.AreEqual( "home", info.Controller );
+            Assert.AreEqual( "index", info.Action );
+            Assert.AreEqual( String.Empty, info.Area );
+            Assert.AreEqual( "rails", info.Extension );
+	    }
 	}
 }

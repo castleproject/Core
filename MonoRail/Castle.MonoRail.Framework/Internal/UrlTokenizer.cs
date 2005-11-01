@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 			String[] parts = url.Split('/');
 
-			if ( url.Length < 2 )
+			if ( parts.Length < 2 )
 			{
 				throw new UrlTokenizerException("Invalid url");
 			}
