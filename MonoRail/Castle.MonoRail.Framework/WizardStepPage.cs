@@ -354,6 +354,8 @@ namespace Castle.MonoRail.Framework
 		{
 			IRailsEngineContext context = controller.Context;
 
+			IWizardController wizController = (IWizardController) controller;
+
 			_controller = controller;
 
 			IList stepList = (IList) context.UnderlyingContext.Items["wizard.step.list"];
@@ -364,12 +366,19 @@ namespace Castle.MonoRail.Framework
 
 			String doProcessFlag = context.Params["wizard.doprocess"];
 
+			if (!wizController.OnBeforeStep(wizardName, currentStep, this))
+			{
+				return;
+			}
+
 			// This is a repost/postback
 			// and the programmer wants to perform Process invocation
 			if (currentStep == ActionName && doProcessFlag == "true") 
 			{
 				if (Process())
 				{
+					wizController.OnAfterStep(wizardName, currentStep, this);
+
 					// Successful - it means that we can move forward
 					
 					int currentIndex = (int) context.Session[wizardName + "currentstepindex"];
@@ -390,6 +399,8 @@ namespace Castle.MonoRail.Framework
 			WizardUtils.RegisterCurrentStepInfo(controller, ActionName);
 
 			Show();
+
+			wizController.OnAfterStep(wizardName, currentStep, this);
 		}
 
 		#endregion

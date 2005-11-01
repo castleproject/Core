@@ -28,6 +28,16 @@ namespace TestSiteNVelocity.Controllers
 			
 		}
 
+		public bool OnBeforeStep(String wizardName, String stepName, WizardStepPage step)
+		{
+			return true;
+		}
+
+		public void OnAfterStep(String wizardName, String stepName, WizardStepPage step)
+		{
+			
+		}
+
 		public WizardStepPage[] GetSteps(IRailsEngineContext context)
 		{
 			return new WizardStepPage[] { new Page1(), new Page2() };
