@@ -16,8 +16,8 @@
 	<property name="src.dir" value="${base.dir}/" />
 	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
 
-	<loadtasks assembly="${bin.dir}/Boo.NAnt.Tasks.dll"/>
-
+	<loadtasks assembly="${bin.dir}/Boo.NAnt.Tasks.dll" verbose="true" />
+	
 	<target name="compile">		
 		<booc target="library" 
 		      output="${bin.dir}\${assembly.name}" 

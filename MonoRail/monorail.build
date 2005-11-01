@@ -6,6 +6,8 @@
 	<property name="bin.dir" value="${base.dir}/bin" />
 	<property name="doc.dir" value="${base.dir}/docs" />
 
+	<include buildfile="../common.inc" />
+
 	<property name="samples.dir" value="${base.dir}/../Samples/MonoRail" />
 
 	<property name="monorail.test" value="true" unless="${property::exists('monorail.test')}" />
@@ -59,7 +61,9 @@
 	</target>
 
 	<target name="brail" depends="init">
+	<!--
 		<nant buildfile="Castle.MonoRail.Views.brail/default.build" inheritall="true" target="compile" />
+	-->
 	</target>
 
 	<target name="nvelocity" depends="init">
@@ -81,9 +85,8 @@
 	<target name="testsupport" depends="init">
 		<nant buildfile="Castle.MonoRail.TestSupport/default.build" inheritall="true" target="build" />
 
-		<description>Install Castle.MonoRail.TestSupport.dll if "gacutil" was found.</description>
 		<if test="${property::exists( 'gacutil.file' )}">
-			<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
+			<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}">
 				<arg value="/u" />
 				<arg value="Castle.MonoRail.TestSupport" />
 			</exec>
@@ -98,13 +101,17 @@
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
+	<!--
 		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" /> 
+	-->
 		<nant buildfile="TestScaffolding/sample.build" inheritall="true" target="compile" />
 	</target>
 	
 	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
+	<!--
 		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />
+	-->
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="test" />
