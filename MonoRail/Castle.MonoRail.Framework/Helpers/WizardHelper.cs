@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return WizardUtils.HasPreviousStep(Controller);
 		}
 
-		/// <overloads>This method has two overloads.</overloads>
+		/// <overloads>This method has three overloads.</overloads>
 		/// <summary>
 		/// Creates an anchor tag (link) to the next step.
 		/// <code>
@@ -89,7 +89,27 @@ namespace Castle.MonoRail.Framework.Helpers
 			return LinkToAttributed( linkText, Controller.Name, stepName, attributes );
 		}
 
-		/// <overloads>This method has two overloads.</overloads>
+		/// <summary>
+		/// Creates an anchor tag (link) with an id attribute to the next step.
+		/// <code>
+		/// &lt;a href=&quot;/page2.rails?Id=id&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <remarks>
+		/// This helper assumes there is a next step. It's advised 
+		/// that you use <see cref="HasNextStep"/> before calling this
+		/// </remarks>
+		/// <param name="linkText">The label for the link</param>
+		/// <param name="id">Object to use for the action ID argument.</param>
+		/// <returns></returns>
+		public String LinkToNext(String linkText, object id)
+		{
+			String stepName = WizardUtils.GetNextStepName(Controller);
+
+			return LinkTo( linkText, Controller.Name, stepName, id );
+		}
+		
+		/// <overloads>This method has three overloads.</overloads>
 		/// <summary>
 		/// Creates an anchor tag (link) to the previous step.
 		/// <code>
@@ -127,6 +147,26 @@ namespace Castle.MonoRail.Framework.Helpers
 			String stepName = WizardUtils.GetPreviousStepName(Controller);
 
 			return LinkToAttributed( linkText, Controller.Name, stepName, attributes );
+		}
+
+		/// <summary>
+		/// Creates an anchor tag (link) with an id attribute to the previous step.
+		/// <code>
+		/// &lt;a href=&quot;/page2.rails?Id=id&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <remarks>
+		/// This helper assumes there is a previous step. It's advised 
+		/// that you use <see cref="HasPreviousStep"/> before calling this
+		/// </remarks>
+		/// <param name="linkText">The label for the link</param>
+		/// <param name="id">Object to use for the action ID argument.</param>
+		/// <returns></returns>
+		public String LinkToPrevious(String linkText, object id)
+		{
+			String stepName = WizardUtils.GetPreviousStepName(Controller);
+
+			return LinkTo( linkText, Controller.Name, stepName, id );
 		}
 
 		public String EnableDoProcess()
