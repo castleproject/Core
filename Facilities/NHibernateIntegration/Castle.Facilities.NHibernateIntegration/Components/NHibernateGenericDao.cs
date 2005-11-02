@@ -30,7 +30,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	/// <remarks>
 	/// Contributed by Steve Degosserie <steve.degosserie@vn.netika.com>
 	/// </remarks>
-	public abstract class NHibernateGenericDao : INHibernateGenericDao
+	public class NHibernateGenericDao : INHibernateGenericDao
 	{
 		private readonly ISessionManager sessionManager;
 
