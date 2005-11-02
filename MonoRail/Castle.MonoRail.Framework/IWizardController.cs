@@ -18,10 +18,12 @@ namespace Castle.MonoRail.Framework
 
 	public interface IWizardController
 	{
-		WizardStepPage[] GetSteps(IRailsEngineContext context);
+		void OnWizardStart();
 
 		bool OnBeforeStep(String wizardName, String stepName, WizardStepPage step);
 		
 		void OnAfterStep(String wizardName, String stepName, WizardStepPage step);
+
+		WizardStepPage[] GetSteps(IRailsEngineContext context);
 	}
 }

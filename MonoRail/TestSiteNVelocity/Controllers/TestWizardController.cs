@@ -28,6 +28,10 @@ namespace TestSiteNVelocity.Controllers
 			
 		}
 
+		public void OnWizardStart()
+		{
+		}
+
 		public bool OnBeforeStep(String wizardName, String stepName, WizardStepPage step)
 		{
 			return true;

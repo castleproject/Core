@@ -106,6 +106,8 @@ namespace Castle.MonoRail.Framework
 		{
 			ResetSteps(controller);
 
+			IWizardController wizardController = controller as IWizardController;
+
 			IRailsEngineContext context = controller.Context;
 
 			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
@@ -116,6 +118,8 @@ namespace Castle.MonoRail.Framework
 
 			context.Session[wizardName + "currentstepindex"] = 0;
 			context.Session[wizardName + "currentstep"] = firstStep;
+
+			wizardController.OnWizardStart();
 
 			context.Response.Redirect(controller.Name, firstStep);
 		}
