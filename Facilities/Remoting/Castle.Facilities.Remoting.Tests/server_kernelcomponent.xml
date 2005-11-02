@@ -5,7 +5,7 @@
   
     <facility 
 		id="remote.facility" 
-		type="Castle.Facilities.Remoting.RemotingFacility, Castle.Facilities.Remoting"
+		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
 		isServer="true"
 		registryUri="kernel.rem"
 		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfig.config" />

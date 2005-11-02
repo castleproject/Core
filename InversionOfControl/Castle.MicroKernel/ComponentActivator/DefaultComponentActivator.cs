@@ -65,12 +65,13 @@ namespace Castle.MicroKernel.ComponentActivator
 		{
 			ConstructorCandidate candidate = SelectEligibleConstructor();
 	
-			object[] arguments = CreateConstructorArguments( candidate );
+			Type[] signature;
+			object[] arguments = CreateConstructorArguments( candidate, out signature );
 	
-			return CreateInstance(arguments);
+			return CreateInstance(arguments, signature);
 		}
 
-		protected virtual object CreateInstance(object[] arguments)
+		protected virtual object CreateInstance(object[] arguments, Type[] signature)
 		{
 			object instance;
 
@@ -89,7 +90,24 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					instance = Activator.CreateInstance(Model.Implementation, arguments);
+					// Caching ConstructorInfo as suggested here:
+					// http://aspnetresources.com/blog/dynamic_insstantiation_perf.aspx
+
+					ConstructorInfo cinfo = (ConstructorInfo) 
+						Model.ExtendedProperties["cached.constructorinfo"];
+
+					if (cinfo == null)
+					{
+						cinfo = Model.Implementation.GetConstructor(
+							BindingFlags.Public|BindingFlags.Instance, null, signature, null);
+					}
+
+					instance = System.Runtime.Serialization.FormatterServices.
+						GetUninitializedObject(Model.Implementation);
+
+					cinfo.Invoke(instance, arguments);
+
+					Model.ExtendedProperties["cached.constructorinfo"] = cinfo;
 				}
 				catch(Exception ex)
 				{
@@ -177,18 +195,22 @@ namespace Castle.MicroKernel.ComponentActivator
 			return Kernel.Resolver.CanResolve(Model, dep);
 		}
 
-		protected virtual object[] CreateConstructorArguments( ConstructorCandidate constructor )
+		protected virtual object[] CreateConstructorArguments( ConstructorCandidate constructor, out Type[] signature )
 		{
+			signature = null;
+
 			if (constructor == null) return new object[0];
 
 			object[] arguments = new object[constructor.Constructor.GetParameters().Length];
+			signature = new Type[arguments.Length];
 
 			int index = 0;
 
 			foreach(DependencyModel dependency in constructor.Dependencies)
 			{
 				object value = Kernel.Resolver.Resolve(Model, dependency);
-				arguments[index++] = value;
+				arguments[index] = value;
+				signature[index++] = dependency.TargetType;
 			}
 
 			return arguments;

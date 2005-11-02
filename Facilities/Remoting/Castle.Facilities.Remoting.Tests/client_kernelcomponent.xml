@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?> 
 <configuration>
 
   <facilities>
   
     <facility 
 		id="remote.facility" 
-		type="Castle.Facilities.Remoting.RemotingFacility, Castle.Facilities.Remoting"
+		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
 		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfigClient.config"
 		isClient="true"
 		remoteKernelUri="tcp://localhost:2133/kernel.rem"

@@ -12,26 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Facilities.Remoting
+namespace Castle.Facilities.Remoting.TestComponents
 {
 	using System;
 
-	using Castle.Model;
-
-	using Castle.MicroKernel;
-	using Castle.MicroKernel.ComponentActivator;
-
-	public class RemoteActivator : DefaultComponentActivator
+	public class ConsumerComp
 	{
-		public RemoteActivator(ComponentModel model, IKernel kernel, ComponentInstanceDelegate onCreation, ComponentInstanceDelegate onDestruction) : base(model, kernel, onCreation, onDestruction)
+		private readonly ICalcService calcservice;
+
+		public ConsumerComp(ICalcService calcservice)
 		{
+			this.calcservice = calcservice;
 		}
 
-		protected override object Instantiate()
+		public ICalcService Calcservice
 		{
-			String url = (String) Model.ExtendedProperties["remoting.uri"];
-
-			return Activator.GetObject(Model.Service, url);
+			get { return calcservice; }
 		}
 	}
 }

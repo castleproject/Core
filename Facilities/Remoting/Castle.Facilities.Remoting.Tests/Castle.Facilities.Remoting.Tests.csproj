@@ -85,34 +85,29 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Castle.Facilities.Remoting"
-                    Project = "{26AEAA4B-F14A-4153-B440-C4E3407F612C}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
-                />
-                <Reference
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.DynamicProxy.dll"
                 />
                 <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
-                />
-                <Reference
-                    Name = "Castle.Model"
-                    AssemblyName = "Castle.Model"
-                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "C:\devtools\nant\bin\lib\net\1.1\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    Project = "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.Windsor"
+                    Project = "{60EFCB9B-E3FF-46A5-A2D2-D9F0EF75D5FE}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

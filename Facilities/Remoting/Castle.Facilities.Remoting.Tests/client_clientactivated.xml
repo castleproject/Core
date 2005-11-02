@@ -5,7 +5,7 @@
   
     <facility 
 		id="remote.facility" 
-		type="Castle.Facilities.Remoting.RemotingFacility, Castle.Facilities.Remoting"
+		type="Castle.Facilities.Remoting.RemotingFacility, Castle.MicroKernel"
 		remotingConfigurationFile="../Castle.Facilities.Remoting.Tests/RemotingTcpConfigClient.config"
 		baseUri="tcp://localhost:2133">
     

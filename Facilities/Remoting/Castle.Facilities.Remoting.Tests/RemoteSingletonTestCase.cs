@@ -67,5 +67,25 @@ namespace Castle.Facilities.Remoting.Tests
 
 			Assert.AreEqual(10, service.Sum(7,3));
 		}
+
+		[Test]
+		public void WiringRemoteComponent()
+		{
+			clientDomain.DoCallBack(new CrossAppDomainDelegate(WiringRemoteComponentCallback));
+		}
+
+		public void WiringRemoteComponentCallback()
+		{
+			IWindsorContainer clientContainer = CreateRemoteContainer(clientDomain, 
+				"../Castle.Facilities.Remoting.Tests/client_simple_scenario.xml");
+
+			clientContainer.AddComponent("comp", typeof(ConsumerComp));
+
+			ConsumerComp service = (ConsumerComp) clientContainer[ typeof(ConsumerComp) ];
+
+			Assert.IsNotNull( service.Calcservice );
+			Assert.IsTrue( RemotingServices.IsTransparentProxy(service.Calcservice) );
+			Assert.IsTrue( RemotingServices.IsObjectOutOfAppDomain(service.Calcservice) );
+		}
 	}
 }
