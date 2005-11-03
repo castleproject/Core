@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework
 		private string _Key			= "locale";
 		private RequestStore _Store = RequestStore.Cookie;
 		
-		public LocalizationFilterAttribute() : base( ExecuteEnum.Before, typeof(LocalizationFilter) )
+		public LocalizationFilterAttribute() : base( ExecuteEnum.BeforeAction, typeof(LocalizationFilter) )
 		{
 		}
 

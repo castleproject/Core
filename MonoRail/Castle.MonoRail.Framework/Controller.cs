@@ -675,7 +675,7 @@ namespace Castle.MonoRail.Framework
 				if (!skipFilters)
 				{
 					// ...run them. If they fail...
-					if (!ProcessFilters(ExecuteEnum.Before, filtersToSkip))
+					if (!ProcessFilters(ExecuteEnum.BeforeAction, filtersToSkip))
 					{
 						// Record that they failed.
 						hasError = true;
@@ -696,6 +696,16 @@ namespace Castle.MonoRail.Framework
 					{
 						dynAction.Execute(this);
 					}
+
+					if (!skipFilters)
+					{
+						// ...run the AfterAction filters. If they fail...
+						if (!ProcessFilters(ExecuteEnum.AfterAction, filtersToSkip))
+						{
+							// Record that they failed.
+							hasError = true;
+						}
+					}
 				}
 			}
 			catch (ThreadAbortException)
@@ -709,8 +719,17 @@ namespace Castle.MonoRail.Framework
 				// Try and perform the rescue
 				if (!PerformRescue(method, ex))
 				{
-					//If the rescue fails, let the exception bubble
-					throw;
+					try
+					{
+						// dont't forget to clean up before bubbling...
+						DisposeFilter();
+						ReleaseResources();
+					}
+					finally 
+					{
+						//If the rescue fails, let the exception bubble
+						throw;
+					}
 				}
 			}
 			
@@ -728,7 +747,7 @@ namespace Castle.MonoRail.Framework
 				// Run the filters if required
 				if (!skipFilters)
 				{
-					ProcessFilters(ExecuteEnum.After, filtersToSkip);
+					ProcessFilters(ExecuteEnum.AfterRendering, filtersToSkip);
 				}
 
 				DisposeFilter();

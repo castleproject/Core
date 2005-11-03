@@ -53,7 +53,7 @@ namespace TestSite.Controllers
 			{
 				context.Response.Write("(before)");
 			}
-			else
+			else if (exec == ExecuteEnum.After)
 			{
 				context.Response.Write("(after)");
 			}
