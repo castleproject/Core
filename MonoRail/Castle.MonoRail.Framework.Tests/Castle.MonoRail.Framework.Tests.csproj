@@ -209,6 +209,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\DateFormatHelperTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\DictHelperTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
