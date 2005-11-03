@@ -19,7 +19,7 @@ namespace Castle.MicroKernel.Util
 	/// <summary>
 	/// Summary description for ReferenceExpressionUtil.
 	/// </summary>
-	internal abstract class ReferenceExpressionUtil
+	public abstract class ReferenceExpressionUtil
 	{
 		/// <summary>
 		/// 

@@ -419,6 +419,7 @@ namespace Castle.MicroKernel
 		public IComponentModelBuilder ComponentModelBuilder
 		{
 			get { return modelBuilder; }
+			set { modelBuilder = value; }
 		}
 
 		public IProxyFactory ProxyFactory
