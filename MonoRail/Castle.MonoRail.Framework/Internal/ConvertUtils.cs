@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework.Internal
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.ComponentModel;
 	using System.Text.RegularExpressions;
 	using System.Web;
 
@@ -141,7 +142,12 @@ namespace Castle.MonoRail.Framework.Internal
 			}
 			else 
 			{
-				String message = String.Format("Cannot conver argument '{0}' with value '{1}' " + 
+				// support for types that specify a TypeConverter, i.e.: NullableTypes
+				TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
+				if (conv != null && value != null && conv.CanConvertFrom(value.GetType()))
+					return conv.ConvertFrom(value);
+				
+				String message = String.Format("Cannot convert argument '{0}' with value '{1}' " + 
 					"as we don't know how to convert from this value to its type. " +
 					"desired type = {2}", paramName, value, desiredType);
 	
