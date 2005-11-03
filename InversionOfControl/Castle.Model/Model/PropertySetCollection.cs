@@ -27,5 +27,10 @@ namespace Castle.Model
 		{
 			InnerList.Add(property);
 		}
+
+		public void Clear()
+		{
+			InnerList.Clear();
+		}
 	}
 }

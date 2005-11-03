@@ -38,9 +38,8 @@ namespace Castle.Facilities.Remoting
 		private readonly RemotingRegistry remoteRegistry;
 		private readonly RemotingRegistry localRegistry;
 		private readonly ITypeConverter converter;
-		private readonly bool isServer;
-		private readonly bool isClient;
 		private readonly String baseUri;
+		private readonly bool isServer, isClient;
 
 		public RemotingInspector(ITypeConverter converter, bool isServer, bool isClient, 
 			String baseUri, RemotingRegistry remoteRegistry, RemotingRegistry localRegistry)
@@ -119,6 +118,8 @@ namespace Castle.Facilities.Remoting
 		private void ConfigureClientComponent(RemotingStrategy client, Type type, ComponentModel model)
 		{
 			if (client == RemotingStrategy.None) return;
+
+			ResetDependencies(model);
 
 			String uri = ConstructClientURI(client, model.Name, model);
 
@@ -213,6 +214,17 @@ namespace Castle.Facilities.Remoting
 			}
 
 			return uriText;
+		}
+
+		/// <summary>
+		/// Client components are not created by the container
+		/// so there's no point collecting constructor dependencies
+		/// </summary>
+		/// <param name="model"></param>
+		private void ResetDependencies(ComponentModel model)
+		{
+			model.Dependencies.Clear();
+			model.Constructors.Clear();
 		}
 
 		private void CheckHasBaseURI()

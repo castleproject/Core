@@ -90,24 +90,13 @@ namespace Castle.MicroKernel.ComponentActivator
 			{
 				try
 				{
-					// Caching ConstructorInfo as suggested here:
-					// http://aspnetresources.com/blog/dynamic_insstantiation_perf.aspx
-
-					ConstructorInfo cinfo = (ConstructorInfo) 
-						Model.ExtendedProperties["cached.constructorinfo"];
-
-					if (cinfo == null)
-					{
-						cinfo = Model.Implementation.GetConstructor(
+					ConstructorInfo cinfo = Model.Implementation.GetConstructor(
 							BindingFlags.Public|BindingFlags.Instance, null, signature, null);
-					}
 
 					instance = System.Runtime.Serialization.FormatterServices.
 						GetUninitializedObject(Model.Implementation);
 
 					cinfo.Invoke(instance, arguments);
-
-					Model.ExtendedProperties["cached.constructorinfo"] = cinfo;
 				}
 				catch(Exception ex)
 				{

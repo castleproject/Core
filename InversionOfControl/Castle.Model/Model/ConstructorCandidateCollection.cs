@@ -54,5 +54,10 @@ namespace Castle.Model
 			get { return bestCandidate; }
 			set { bestCandidate = value; }
 		}
+
+		public void Clear()
+		{
+			InnerList.Clear();
+		}
 	}
 }
