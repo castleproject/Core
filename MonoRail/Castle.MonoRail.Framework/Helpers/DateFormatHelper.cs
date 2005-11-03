@@ -22,6 +22,44 @@ namespace Castle.MonoRail.Framework.Helpers
 	public class DateFormatHelper : AbstractHelper
 	{
 		/// <summary>
+		/// Alternative representation of a difference
+		/// between the specified date and now. If within 24hr
+		/// it returns <c>Today</c>. If within 48hr it returns
+		/// <c>Yesterday</c>. If within 40 days it returns
+		/// <c>x days ago</c> and otherwise it returns
+		/// <c>x months ago</c>
+		/// <para>
+		/// TODO: Think about i18n
+		/// </para>
+		/// </summary>
+		/// <param name="date">The date in the past (should be equal or less than now)</param>
+		/// <returns></returns>
+		public String AlternativeFriendlyFormatFromNow(DateTime date)
+		{
+			TimeSpan now = new TimeSpan(DateTime.Now.Ticks);
+			TimeSpan cur = new TimeSpan(date.Ticks);
+
+			TimeSpan diff = now.Subtract(cur);
+
+			if (diff.TotalHours <= 24)
+			{
+				return "Today";
+			}
+			else if (diff.TotalHours <= 48)
+			{
+				return "Yesterday";
+			}
+			else if (diff.TotalDays <= 40)
+			{
+				return String.Format("{0} days ago", diff.Days);
+			}
+			else 
+			{
+				return String.Format("{0} months ago", (diff.Days / 30));
+			}
+		}
+
+		/// <summary>
 		/// Returns the difference from the 
 		/// specified <c>date</c> the the current date
 		/// in a friendly string like "1 day ago"
@@ -29,16 +67,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// TODO: Think about i18n
 		/// </para>
 		/// </summary>
-		/// <param name="date"></param>
+		/// <param name="date">The date in the past (should be equal or less than now)</param>
 		/// <returns></returns>
 		public String FriendlyFormatFromNow(DateTime date)
 		{
 			TimeSpan now = new TimeSpan(DateTime.Now.Ticks);
 			TimeSpan cur = new TimeSpan(date.Ticks);
 
-			TimeSpan diff = cur.Subtract(now);
+			TimeSpan diff = now.Subtract(cur);
 
-			if (diff.TotalMilliseconds == 0)
+			if (diff.TotalSeconds == 0)
 			{
 				return "Just now";
 			}
@@ -50,24 +88,24 @@ namespace Castle.MonoRail.Framework.Helpers
 					if (diff.Minutes == 0)
 					{
 						return String.Format("{0} second{1} ago", 
-							diff.Seconds, diff.Seconds > 1 ? "s" : "");
+							diff.Seconds, diff.Seconds > 1 ? "s" : String.Empty);
 					}
 					else
 					{
 						return String.Format("{0} minute{1} ago", 
-							diff.Minutes, diff.Minutes > 1 ? "s" : "");
+							diff.Minutes, diff.Minutes > 1 ? "s" : String.Empty);
 					}
 				}
 				else
 				{
 					return String.Format("{0} hour{1} ago", 
-						diff.Hours, diff.Hours > 1 ? "s" : "");
+						diff.Hours, diff.Hours > 1 ? "s" : String.Empty);
 				}
 			}
 			else
 			{
 				return String.Format("{0} day{1} ago", 
-					diff.Days, diff.Days > 1 ? "s" : "");
+					diff.Days, diff.Days > 1 ? "s" : String.Empty);
 			}
 		}
 

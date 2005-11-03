@@ -24,7 +24,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	[TestFixture]
 	public class DateFormatHelperTestCase
 	{
-		DateFormatHelper helper = new DateFormatHelper();
+		private DateFormatHelper helper = new DateFormatHelper();
 
 		[Test]
 		public void FriendlyFormatWithNoDiff()
@@ -35,31 +35,73 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void FriendlyFormatWithDiffOfOneSecond()
 		{
-			Assert.AreEqual("1 second ago", helper.FriendlyFormatFromNow( DateTime.Now.AddSeconds(1) ));
+			Assert.AreEqual("1 second ago", 
+				helper.FriendlyFormatFromNow( DateTime.Now.AddSeconds(-1) ));
 		}
 
 		[Test]
 		public void FriendlyFormatWithDiffOfTenSeconds()
 		{
-			Assert.AreEqual("10 seconds ago", helper.FriendlyFormatFromNow( DateTime.Now.AddSeconds(10) ));
+			Assert.AreEqual("10 seconds ago", 
+				helper.FriendlyFormatFromNow( DateTime.Now.AddSeconds(-10) ));
 		}
 
 		[Test]
 		public void FriendlyFormatWithDiffOfTenMinutes()
 		{
-			Assert.AreEqual("10 minutes ago", helper.FriendlyFormatFromNow( DateTime.Now.AddMinutes(10) ));
+			Assert.AreEqual("10 minutes ago", 
+				helper.FriendlyFormatFromNow( DateTime.Now.AddMinutes(-10) ));
 		}
 
 		[Test]
 		public void FriendlyFormatWithDiffOf120Minutes()
 		{
-			Assert.AreEqual("2 hours ago", helper.FriendlyFormatFromNow( DateTime.Now.AddMinutes(120) ));
+			Assert.AreEqual("2 hours ago", 
+				helper.FriendlyFormatFromNow( DateTime.Now.AddMinutes(-120) ));
+		}
+
+		[Test]
+		public void FriendlyFormatWithDiffOf17Hours()
+		{
+			Assert.AreEqual("17 hours ago", 
+				helper.FriendlyFormatFromNow( DateTime.Now.AddMinutes(- (17 * 60 + 30) ) ));
 		}
 
 		[Test]
 		public void FriendlyFormatWithDiffOf2Days()
 		{
-			Assert.AreEqual("2 days ago", helper.FriendlyFormatFromNow( DateTime.Now.AddDays(2) ));
+			Assert.AreEqual("2 days ago", 
+				helper.FriendlyFormatFromNow( DateTime.Now.AddDays(-2) ));
+		}
+
+		[Test]
+		public void AlternativeFriendlyFormatFromNow()
+		{
+			Assert.AreEqual("Today", helper.AlternativeFriendlyFormatFromNow( DateTime.Now ));
+		}
+
+		[Test]
+		public void AlternativeFriendlyFormatFromNowWith4Hours()
+		{
+			Assert.AreEqual("Today", helper.AlternativeFriendlyFormatFromNow( DateTime.Now.AddHours(-4) ));
+		}
+
+		[Test]
+		public void AlternativeFriendlyFormatFromNowWith44Hours()
+		{
+			Assert.AreEqual("Yesterday", helper.AlternativeFriendlyFormatFromNow( DateTime.Now.AddHours(-44) ));
+		}
+
+		[Test]
+		public void AlternativeFriendlyFormatFromNowWith3Days()
+		{
+			Assert.AreEqual("3 days ago", helper.AlternativeFriendlyFormatFromNow( DateTime.Now.AddDays(-3) ));
+		}
+
+		[Test]
+		public void AlternativeFriendlyFormatFromNowWith120Days()
+		{
+			Assert.AreEqual("4 months ago", helper.AlternativeFriendlyFormatFromNow( DateTime.Now.AddDays(-120) ));
 		}
 	}
 }
