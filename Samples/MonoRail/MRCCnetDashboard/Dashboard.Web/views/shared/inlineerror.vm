@@ -1,0 +1,6 @@
+#if ($error)
+<div id="error">
+  <p>$error</p>
+<script>new Effect.Shake($('error'));</script>
+</div>
+#end
