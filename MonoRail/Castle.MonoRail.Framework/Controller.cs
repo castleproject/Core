@@ -23,6 +23,10 @@ namespace Castle.MonoRail.Framework
 	using System.Collections;
 	using System.Collections.Specialized;
 
+	using System.Web.Mail;
+	using System.Configuration;
+	using System.Text.RegularExpressions;
+
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -1093,6 +1097,139 @@ namespace Castle.MonoRail.Framework
 		/// <param name="view"></param>
 		public virtual void PostSendView(object view)
 		{
+		}
+
+		#endregion
+
+    #region Email Constants and Instance Fields
+
+    const String TemplatePath       = "mail";
+    const String ToAddressPattern   = @"[ \t]*(?<header>(to|cc|bcc)):[ \t]*(?<value>([\w-\.]+@([\w\.]){1,}\w+[ \t]*;?[ \t]*)+)[ \t]*(\r*\n*)?";
+    const String FromAddressPattern = @"[ \t]*from:[ \t]*(?<value>(\w+[ \t]*)*<*[ \t]*[\w-\.]+@([\w\.]){1,}[\w][ \t]*>*)[ \t]*(\r*\n*)?";
+    const String HeaderPattern      = @"[ \t]*(?<header>(subject|X-\w+)):[ \t]*(?<value>(\w+[ \t]*)+)(\r*\n*)?";
+    const String HeaderKey          = "header";
+    const String ValueKey           = "value";
+    const String To                 = "to";
+    const String Cc                 = "cc";
+    const String Bcc                = "bcc";
+    const String Subject            = "subject";
+    const String HtmlTag            = "<html>";
+    const String SmtpUsername       = "SMTP_USERNAME";
+    const String SmtpPassword       = "SMTP_PASSWORD";
+    const String SmtpUsernameSchema = "http://schemas.microsoft.com/cdo/configuration/sendusername";
+    const String SmtpPasswordSchema = "http://schemas.microsoft.com/cdo/configuration/sendpassword";
+    const String SmtpAuthSchema     = "http://schemas.microsoft.com/cdo/configuration/smtpauthenticate";
+    const String SmtpAuthEnabled    = "1";
+    const String SmtpServer         = "SMTP_SERVER";
+    const String DefaultSmtpServer  = "localhost";
+
+    Regex readdress = new Regex(ToAddressPattern,   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    Regex refrom    = new Regex(FromAddressPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    Regex reheader  = new Regex(HeaderPattern,      RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    #endregion
+
+		#region Email operations
+
+		/// <summary>
+		/// Creates an instance of System.Web.Mail.MailMessage using the specified template for the body
+		/// </summary>
+		/// <param name="templateName">Name of the template to load. Will look in Views/mail for that template file.</param>
+		/// <returns>An instance of System.Web.Mail.MailMessage</returns>
+		public MailMessage RenderMailMessage(String templateName)
+		{
+			// create a message object
+			MailMessage message = new MailMessage();
+
+			// use the template engine to generate the body of the message
+			StringWriter writer = new StringWriter();
+			this.InPlaceRenderSharedView(writer, Path.Combine(TemplatePath, templateName));
+			string body = writer.ToString();
+			
+			// process delivery addresses from template.
+			MatchCollection matches1 = readdress.Matches(body);
+			for(int i=0; i< matches1.Count; i++)
+			{
+				string header	 = matches1[i].Groups[HeaderKey].ToString().ToLower();
+				string address = matches1[i].Groups[ValueKey].ToString();
+
+				switch(header)
+				{
+					case To :
+						message.To = address;
+						break;
+					case Cc :
+						message.Cc = address;
+						break;
+					case Bcc :
+						message.Bcc = address;
+						break;
+				}
+			}
+			body = readdress.Replace(body, String.Empty);
+
+			// process from address from template
+			Match match = refrom.Match(body);
+			if(match.Success)
+			{
+				message.From = match.Groups[ValueKey].ToString();
+				body = refrom.Replace(body, String.Empty);
+			}
+
+			// process subject and X headers from template
+			MatchCollection matches2 = reheader.Matches(body);
+			for(int i=0; i< matches2.Count; i++)
+			{
+				string header	= matches2[i].Groups[HeaderKey].ToString();
+				string strval	= matches2[i].Groups[ValueKey].ToString();
+
+				if(header.ToLower() == Subject)
+				{
+					message.Subject = strval;
+				}
+				else
+				{
+					message.Headers.Add(header, strval);
+				}
+			}
+			body = reheader.Replace(body, String.Empty);
+
+			message.Body = body;
+
+			// a little magic to see if the body is html
+			if(message.Body.ToLower().IndexOf(HtmlTag) > -1)
+				message.BodyFormat = MailFormat.Html;
+			
+			return message;
+		}
+
+		/// <summary>
+		/// Attempts to deliver the System.Web.Mail.MailMessage using localhost smtp server or the server specified by the key SMTP_SERVER in the web.config.
+		/// </summary>
+		/// <param name="message">The instance of System.Web.Mail.MailMessage that will be sent</param>
+		public void DeliverEmail(MailMessage message)
+		{
+			try
+			{
+				if( ConfigurationSettings.AppSettings[SmtpUsername] != null && ConfigurationSettings.AppSettings[SmtpUsername] != String.Empty &&
+					ConfigurationSettings.AppSettings[SmtpPassword] != null && ConfigurationSettings.AppSettings[SmtpPassword] != String.Empty)
+				{
+					message.Fields.Add(SmtpAuthSchema, SmtpAuthEnabled);
+					message.Fields.Add(SmtpUsernameSchema, ConfigurationSettings.AppSettings[SmtpUsername]);
+					message.Fields.Add(SmtpPasswordSchema, ConfigurationSettings.AppSettings[SmtpPassword]);
+				}
+
+				if(ConfigurationSettings.AppSettings[SmtpServer] != null && ConfigurationSettings.AppSettings[SmtpServer] != String.Empty)
+					SmtpMail.SmtpServer = ConfigurationSettings.AppSettings[SmtpServer];
+				else
+					SmtpMail.SmtpServer = DefaultSmtpServer;
+			
+				SmtpMail.Send(message);
+			}
+			catch(Exception ex)
+			{
+				throw new RailsException("Error sending message!", ex);
+			}
 		}
 
 		#endregion
