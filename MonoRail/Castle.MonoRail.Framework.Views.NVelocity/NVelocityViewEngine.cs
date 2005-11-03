@@ -16,19 +16,20 @@ using NVelocity;
 using NVelocity.App;
 using NVelocity.Context;
 using NVelocity.Runtime;
+using Commons.Collections;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity
 {
 	using System;
 	using System.IO;
 	using System.Collections;
+	
 	using Castle.MonoRail.Framework.Internal;
-	using Commons.Collections;
-
+	
 	public class NVelocityViewEngine : ViewEngineBase
 	{
 		private const String TemplateExtension = ".vm";
-    private const String TemplatePathPattern = "{0}{1}{2}";
+		private const String TemplatePathPattern = "{0}{1}{2}";
 
 		private static IViewComponentFactory staticViewComponentFactory;
 

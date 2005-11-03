@@ -27,12 +27,6 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private DateFormatHelper helper = new DateFormatHelper();
 
 		[Test]
-		public void FriendlyFormatWithNoDiff()
-		{
-			Assert.AreEqual("Just now", helper.FriendlyFormatFromNow( DateTime.Now ));
-		}
-		
-		[Test]
 		public void FriendlyFormatWithDiffOfOneSecond()
 		{
 			Assert.AreEqual("1 second ago", 

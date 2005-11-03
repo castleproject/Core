@@ -981,7 +981,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				String defaultLayout = String.Format("layouts/{0}",Name);
+				String defaultLayout = String.Format("layouts/{0}", Name);
 				
 				if ( HasTemplate(defaultLayout) )
 				{
