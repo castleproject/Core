@@ -1101,7 +1101,7 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-    #region Email Constants and Instance Fields
+		#region Email Constants and Instance Fields
 
     const String TemplatePath       = "mail";
     const String ToAddressPattern   = @"[ \t]*(?<header>(to|cc|bcc)):[ \t]*(?<value>([\w-\.]+@([\w\.]){1,}\w+[ \t]*;?[ \t]*)+)[ \t]*(\r*\n*)?";
