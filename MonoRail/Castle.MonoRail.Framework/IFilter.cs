@@ -46,11 +46,11 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// The filter is invoked after the action.
 		/// </summary>
-		AfterAction = 0x11,
+		AfterAction = 0x02,
 		/// <summary>
 		/// The filter is invoked after the rendering.
 		/// </summary>
-		AfterRendering = 0x12,
+		AfterRendering = 0x04,
 		/// <summary>
 		/// The filter is invoked around all steps.
 		/// </summary>
