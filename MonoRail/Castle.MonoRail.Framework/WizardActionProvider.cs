@@ -73,6 +73,8 @@ namespace Castle.MonoRail.Framework
 				controller.CustomActions[actionName] = step;
 
 				stepList.Add(actionName);
+
+				step.Initialize(controller);
 			}
 
 			context.UnderlyingContext.Items["wizard.step.list"] = stepList;

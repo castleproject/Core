@@ -119,9 +119,18 @@ namespace Castle.MonoRail.TestSupport
 			if (postStringParams.Length != 0) Request.PostParams = postStringParams;
 
 			outputBuffer.Length = 0;
+			
+			int pos = path.IndexOf('?');
+			if( pos > -1 )
+			{
+				string qs = path.Substring( pos + 1 );
+				path = path.Substring(0, pos );
+				Request.QueryStringParams = qs.Split('&');
+			}
 
 			Request.Url = path;
-
+			Request.Verb = "POST";
+			
 			StringWriter writer = new StringWriter(outputBuffer);
 
 			response = host.Process( Request, writer );

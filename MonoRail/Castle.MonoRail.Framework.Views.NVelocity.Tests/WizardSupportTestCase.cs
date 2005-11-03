@@ -68,5 +68,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertFlashContains("ProcessInvoked");
 		}
+		
+//		[Test]
+//		public void ProcessWithQueryStringParams()
+//		{
+//			DoPost("testwizard/Page1.rails", "wizard.doprocess=true", "name=1");
+//			AssertSuccess();
+//			AssertFlashContains("ProcessInvoked");
+//			AssertRedirectedTo("/testwizard/Page2.rails?Id=1");
+//		}		
 	}
 }

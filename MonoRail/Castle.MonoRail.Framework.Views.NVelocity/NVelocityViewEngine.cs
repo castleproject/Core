@@ -258,9 +258,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				}
 			}
 
-			foreach(object helper in controller.Helpers.Values)
+			foreach(object key in controller.Helpers.Keys)
 			{
-				innerContext.Add(helper.GetType().Name, helper);
+				innerContext.Add( key, controller.Helpers[ key ] );
 			}
 
 			foreach(String key in context.Params.AllKeys)

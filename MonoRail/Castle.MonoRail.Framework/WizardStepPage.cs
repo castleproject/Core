@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework
 
 		#region Useful Properties
 
-		protected Controller WizardController
+		public Controller WizardController
 		{
 			get { return _controller; }
 		}
@@ -304,6 +304,11 @@ namespace Castle.MonoRail.Framework
 
 		#region Core Lifecycle methods
 
+		public virtual void Initialize(Controller controller)
+		{
+			_controller = controller;
+		}
+
 		/// <summary>
 		/// Invoked when the wizard is being access from the start 
 		/// action. Implementors should perform session clean up (if 
@@ -339,7 +344,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected virtual void Show()
 		{
-			_controller.RenderView( GetType().Name );
+			_controller.RenderView( ActionName );
 		}
 
 		#endregion
@@ -355,8 +360,6 @@ namespace Castle.MonoRail.Framework
 			IRailsEngineContext context = controller.Context;
 
 			IWizardController wizController = (IWizardController) controller;
-
-			_controller = controller;
 
 			IList stepList = (IList) context.UnderlyingContext.Items["wizard.step.list"];
 
@@ -390,8 +393,19 @@ namespace Castle.MonoRail.Framework
 						String nextStep = (String) stepList[nextStepIndex];
 
 						WizardUtils.RegisterCurrentStepInfo(controller, nextStepIndex, nextStep);
-
-						context.Response.Redirect(controller.Name, nextStep);
+						
+						// We need to preserve any attribute from the QueryString
+						// for example in case the url has an Id
+						if( context.Request.QueryString.HasKeys() )
+						{							
+							string url = UrlInfo.CreateAbsoluteRailsUrl( context.ApplicationPath, controller.Name, nextStep, context.UrlInfo.Extension ) +
+										 '?' + context.Server.BuildWebParams( context.Request.QueryString );							
+							context.Response.Redirect(url);
+						}
+						else
+						{
+							context.Response.Redirect(controller.Name, nextStep);
+						}
 					}
 				}
 			}

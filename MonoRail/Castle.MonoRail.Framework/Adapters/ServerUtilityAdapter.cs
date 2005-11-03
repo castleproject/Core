@@ -15,6 +15,9 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
+	using System.Text;
 	using System.Web;
 
 	using Castle.MonoRail.Framework;
@@ -46,6 +49,29 @@ namespace Castle.MonoRail.Framework.Adapters
 		public String JavaScriptEscape(String content)
 		{
 			return server.UrlEncode(content).Replace("'", @"\'"); 
+		}
+
+		/// <summary>
+		/// Returns an encoded string that can be used as part of the url query string or the post body param
+		/// </summary>
+		/// <param name="args">NameValueCollection with the params to be constructed</param>
+		/// <returns>URL safe params name1=value1[&name2=value2&...]</returns>
+		public String BuildWebParams( NameValueCollection args )
+		{
+			if (args == null) return String.Empty;
+
+			StringBuilder sb = new StringBuilder();
+
+			foreach(string key in args.Keys)
+			{
+				if (key == null) continue;
+
+				sb.AppendFormat( "{0}={1}&", 
+					UrlEncode(key), UrlEncode(args[key]) );
+			}
+
+			sb.Length -= 1; // removing extra &
+			return sb.ToString();
 		}
 
 		/// <summary>

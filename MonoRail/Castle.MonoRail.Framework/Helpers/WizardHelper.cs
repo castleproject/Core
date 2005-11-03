@@ -49,6 +49,36 @@ namespace Castle.MonoRail.Framework.Helpers
 			return WizardUtils.HasPreviousStep(Controller);
 		}
 
+		/// <overloads>This method has two overloads.</overloads>
+		/// <summary>
+		/// Creates an anchor tag (link) to the specified step.
+		/// <code>
+		/// &lt;a href=&quot;/page2.rails&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="linkText">The label for the step</param>
+		/// <param name="step">The WizardStepPage to link to</param>
+		/// <returns></returns>
+		public String LinkToStep(string linkText, WizardStepPage step)
+		{
+			return LinkTo( linkText, step.WizardController.Name, step.ActionName);
+		}
+
+		/// <summary>
+		/// Creates an anchor tag (link) to the specified step.
+		/// <code>
+		/// &lt;a href=&quot;/page2.rails&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="linkText">The label for the step</param>
+		/// <param name="step">The WizardStepPage to link to</param>
+		/// <param name="id">Object to use for the action ID argument.</param>
+		/// <returns></returns>
+		public String LinkToStep(string linkText, WizardStepPage step, object id)
+		{
+			return LinkTo( linkText, step.WizardController.Name, step.ActionName, id);
+		}
+				
 		/// <overloads>This method has three overloads.</overloads>
 		/// <summary>
 		/// Creates an anchor tag (link) to the next step.

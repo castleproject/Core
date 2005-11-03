@@ -21,6 +21,8 @@ namespace TestSiteNVelocity.Controllers
 	using Castle.MonoRail.Framework.Helpers;
 
 	[Helper(typeof(AjaxHelperOld),"ajaxHelperAlias")]
+	// do not remove this is to make sure, you can add the same helper twice with different names
+	[Helper(typeof(AjaxHelperOld))] 
 	public class AjaxController : SmartDispatcherController
 	{
 		private AjaxHelperOld Helper
