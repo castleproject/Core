@@ -37,6 +37,11 @@ namespace Castle.Model
 			list.AddFirst(interceptor);
 		}
 
+		public void AddLast(InterceptorReference interceptor)
+		{
+			list.AddLast(interceptor);
+		}
+
 		public void Insert(int index, InterceptorReference interceptor)
 		{
 			list.Insert( index, interceptor );

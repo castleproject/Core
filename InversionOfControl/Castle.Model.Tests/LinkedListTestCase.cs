@@ -215,7 +215,7 @@ namespace Castle.Model.Tests
 		}
 
 		[Test]
-		public void Insert1()
+		public void Insert0()
 		{
 			LinkedList list = new LinkedList();
 			
@@ -231,23 +231,7 @@ namespace Castle.Model.Tests
 		}
 
 		[Test]
-		public void Insert2()
-		{
-			LinkedList list = new LinkedList();
-			
-			list.Add( "1" );
-			list.Add( "2" );
-			list.Add( "3" );
-			list.Insert(2, "x");
-
-			Assert.AreEqual( 4, list.Count );
-			
-			String[] array = (String[]) list.ToArray( typeof(String) );
-			Assert.AreEqual( "1,2,3,x", String.Join(",", array) );
-		}
-
-		[Test]
-		public void Insert3()
+		public void Insert1()
 		{
 			LinkedList list = new LinkedList();
 			
@@ -263,7 +247,24 @@ namespace Castle.Model.Tests
 		}
 
 		[Test]
-		public void Insert4()
+		public void Insert2()
+		{
+			LinkedList list = new LinkedList();
+			
+			list.Add( "1" );
+			list.Add( "2" );
+			list.Add( "3" );
+			list.Insert(2, "x");
+
+			Assert.AreEqual( 4, list.Count );
+			
+			String[] array = (String[]) list.ToArray( typeof(String) );
+			Assert.AreEqual( "1,2,x,3", String.Join(",", array) );
+		}
+
+
+		[Test]
+		public void Insert2bis()
 		{
 			LinkedList list = new LinkedList();
 			
@@ -280,6 +281,7 @@ namespace Castle.Model.Tests
 			String[] array = (String[]) list.ToArray( typeof(String) );
 			Assert.AreEqual( "0,1,x,2,3,4,5", String.Join(",", array) );
 		}
+
 
 		[Test]
 		public void Replace1()

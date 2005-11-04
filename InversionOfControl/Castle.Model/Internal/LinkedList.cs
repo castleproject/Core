@@ -50,6 +50,22 @@ namespace Castle.Model.Internal
 			internalcount++;
 		}
 
+		public virtual int AddLast(object value)
+		{
+			if (internalhead == null)
+			{
+				internalhead = new LinkNode(value);
+			}
+			else 
+			{
+				LinkNode p, q;
+				for(p = internalhead; (q = p.Next) != null; p = q);
+				p.Next = new LinkNode(value, null, p);
+			}
+
+			return internalcount++;
+		} 
+
 		public virtual int Add(object value)
 		{
 			if (internalhead == null)
@@ -128,34 +144,56 @@ namespace Castle.Model.Internal
 
 		public virtual void Insert(int index, object value)
 		{
-			if (index > internalcount - 1)
-			{
-				throw new ArgumentOutOfRangeException("index");
-			}
-
 			if (index == 0)
 			{
 				AddFirst(value);
 			}
-			else if (index == internalcount -1)
+			else if (index == internalcount)
 			{
-				Add(value);
+				AddLast(value);
 			}
 			else
 			{
-				LinkNode node = internalhead.Next; int indexCur = 0;
+				LinkNode insert = GetNode(index);
+				LinkNode node = new LinkNode(value, insert, insert.Previous);
+				insert.Previous.Next = node;
+				insert.Previous = node;
+				internalcount++;
+			}
+		}
 
-				while(node != null)
-				{
-					if (++indexCur == index)
-					{
-						node.Previous.Next = new LinkNode(value, node, node.Previous);
-						internalcount++;
-						break;
-					}
+		/// <summary>
+		/// Returns the node at the specified index.
+		/// </summary>
+		/// <param name="index">The lookup index.</param>
+		/// <returns>The node at the specified index.</returns>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// If the specified <paramref name="index"/> is greater than the
+		/// number of objects within the list.
+		/// </exception>
+		private LinkNode GetNode(int index)
+		{
+			ValidateIndex(index);
+			LinkNode node = internalhead;
+			for (int i = 0; i < index; i++)
+			{
+				node = node.Next;
+			}
+			return node;
+		}
 
-					node = node.Next;
-				}
+		/// <summary>
+		/// Validates the specified index.
+		/// </summary>
+		/// <param name="index">The lookup index.</param>
+		/// <exception cref="System.ArgumentOutOfRangeException">
+		/// If the index is invalid.
+		/// </exception>
+		private void ValidateIndex(int index)
+		{
+			if (index < 0 || index >= internalcount)
+			{
+				throw new ArgumentOutOfRangeException("index");
 			}
 		}
 
