@@ -129,6 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MethodsWithAttributesOnParameters.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MixinTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
