@@ -732,7 +732,7 @@ namespace Castle.MonoRail.Framework
 					finally 
 					{
 						//If the rescue fails, let the exception bubble
-						throw;
+						throw ex;
 					}
 				}
 			}
