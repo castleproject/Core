@@ -133,7 +133,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				if (entry.Value == null) continue;
 
-				sb.AppendFormat( "{0}={1}&", 
+				sb.AppendFormat( "{0}={1}&amp;", 
 					UrlEncode(entry.Key.ToString()), UrlEncode(entry.Value.ToString()) );
 			}
 
