@@ -97,7 +97,7 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\lib\NVelocity.dll"
+                    HintPath = "..\..\SharedLibs\NVelocity\NVelocity.dll"
                 />
                 <Reference
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"

@@ -87,27 +87,27 @@
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
+                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
                 />
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\lib\NVelocity.dll"
+                    HintPath = "..\..\SharedLibs\NVelocity\NVelocity.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\..\ActiveRecord\bin\NHibernate.dll"
+                    HintPath = "..\..\SharedLibs\NHibernate\NHibernate.dll"
                 />
                 <Reference
                     Name = "HashCodeProvider"
                     AssemblyName = "HashCodeProvider"
-                    HintPath = "..\..\ActiveRecord\bin\HashCodeProvider.dll"
+                    HintPath = "..\..\SharedLibs\NHibernate\HashCodeProvider.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\ActiveRecord\bin\Iesi.Collections.dll"
+                    HintPath = "..\..\SharedLibs\NHibernate\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "System.Web"

@@ -92,7 +92,7 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\lib\NVelocity.dll"
+                    HintPath = "..\..\SharedLibs\NVelocity\NVelocity.dll"
                 />
             </References>
         </Build>
