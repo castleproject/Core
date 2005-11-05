@@ -3,6 +3,7 @@
 
 	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="bin.dir" value="${base.dir}/../bin" />
+	<property name="shared.lib.dir" value="${base.dir}/../../SharedLibs/Boo" />
 	<property name="sample.dir" value="${base.dir}/../TestSiteBrail" />
 
 	<include buildfile="../../common.inc" />
@@ -16,7 +17,7 @@
 	<property name="src.dir" value="${base.dir}/" />
 	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
 
-	<loadtasks assembly="${bin.dir}/Boo.NAnt.Tasks.dll" verbose="true" />
+	<loadtasks assembly="${shared.lib.dir}/Boo.NAnt.Tasks.dll" verbose="true" />
 	
 	<target name="compile">		
 		<booc target="library" 
