@@ -14,12 +14,10 @@
 
 namespace TestSiteNVelocity.Controllers
 {
-	using System;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Filters;
 
-	[Filter(ExecuteEnum.Before, typeof(RequestValidatorFilter))]
+	[Filter(ExecuteEnum.BeforeAction, typeof(RequestValidatorFilter))]
 	public class FlashController : SmartDispatcherController
 	{
 		public FlashController()

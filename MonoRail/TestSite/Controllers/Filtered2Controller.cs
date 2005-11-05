@@ -14,10 +14,9 @@
 
 namespace TestSite.Controllers
 {
-	using System;
 	using Castle.MonoRail.Framework;
 
-	[Filter( ExecuteEnum.Before, typeof(MyFilter) )]
+	[Filter( ExecuteEnum.BeforeAction, typeof(MyFilter) )]
 	public class Filtered2Controller : Controller
 	{
 		[SkipFilter]

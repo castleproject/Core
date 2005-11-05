@@ -47,12 +47,12 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public bool ExecuteFilterBefore
 		{
-			get { return (When & ExecuteEnum.Before) != 0; }
+			get { return (When & ExecuteEnum.BeforeAction) != 0; }
 		}
 
 		public bool ExecuteFilterAfter
 		{
-			get { return (When & ExecuteEnum.After) != 0; }
+			get { return (When & ExecuteEnum.AfterAction) != 0; }
 		}
 
 		public IFilter FilterInstance

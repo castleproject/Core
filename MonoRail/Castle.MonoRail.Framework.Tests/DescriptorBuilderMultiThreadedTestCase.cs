@@ -89,7 +89,7 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 	}
 
-	[Filter( ExecuteEnum.After, typeof(MyFilter) )]
+	[Filter( ExecuteEnum.AfterAction, typeof(MyFilter) )]
 	[Rescue("Controller1rescue")]
 	[Layout("Controller1layout")]
 	internal class Controller1 : Controller
@@ -100,7 +100,7 @@ namespace Castle.MonoRail.Framework.Tests
 		}
 	}
 
-	[Filter( ExecuteEnum.After, typeof(MyFilter) )]
+	[Filter( ExecuteEnum.AfterAction, typeof(MyFilter) )]
 	[Rescue("Controller1rescue")]
 	[Layout("Controller1layout")]
 	internal class Controller2 : SmartDispatcherController

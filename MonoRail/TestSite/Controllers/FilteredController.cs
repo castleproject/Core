@@ -14,11 +14,9 @@
 
 namespace TestSite.Controllers
 {
-	using System;
-
 	using Castle.MonoRail.Framework;
 
-	[Filter( ExecuteEnum.Before|ExecuteEnum.After, typeof(MyFilter) )]
+	[Filter( ExecuteEnum.Always, typeof(MyFilter) )]
 	public class FilteredController : Controller
 	{
 		public FilteredController()
@@ -49,11 +47,11 @@ namespace TestSite.Controllers
 	{
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
 		{
-			if (exec == ExecuteEnum.Before)
+			if (exec == ExecuteEnum.BeforeAction)
 			{
 				context.Response.Write("(before)");
 			}
-			else if (exec == ExecuteEnum.After)
+			else if (exec == ExecuteEnum.AfterRendering)
 			{
 				context.Response.Write("(after)");
 			}

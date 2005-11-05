@@ -14,11 +14,9 @@
 
 namespace TestSite.Controllers
 {
-	using System;
-
 	using Castle.MonoRail.Framework;
 
-	[Filter(ExecuteEnum.Before, typeof(FilterBadHeader))]	
+	[Filter(ExecuteEnum.BeforeAction, typeof(FilterBadHeader))]	
 	public class FilterController : Controller
 	{
 		public void Index()
