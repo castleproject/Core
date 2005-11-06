@@ -7,13 +7,13 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Castle.Windsor")]
+[assembly: AssemblyDescription("Windsor is an inversion of control container that aggregates " + 
+	"the MicroKernel offering a friendly fool-proof interface and options to external configurations")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyProduct("Castle Ioc Package")]
+[assembly: AssemblyCompany("Castle Project")]
+[assembly: AssemblyCopyright("Copyright (c) Original author or authors")]
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.0.0.2")]
 

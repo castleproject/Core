@@ -7,13 +7,12 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Castle.Model")]
+[assembly: AssemblyDescription("Model is a shared assembly used mostly by MicroKernel/Windsor and ActiveRecord")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyProduct("Castle Ioc Package")]
+[assembly: AssemblyCompany("Castle Project")]
+[assembly: AssemblyCopyright("Copyright (c) Original author or authors")]
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.0.0.2")]
 
