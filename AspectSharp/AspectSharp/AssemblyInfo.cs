@@ -16,12 +16,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 
 
-[assembly : AssemblyTitle("AspectSharp API")]
+[assembly : AssemblyTitle("Castle.AspectSharp API")]
 [assembly : AssemblyDescription("Core components of AspectSharp")]
 [assembly : AssemblyConfiguration("")]
-[assembly : AssemblyCompany("Aspect#")]
-[assembly : AssemblyProduct("Aspect#")]
-[assembly : AssemblyTrademark("Aspect#")]
+[assembly: AssemblyCompany("Castle Project")]
+[assembly: AssemblyProduct("Castle AspectSharp")]
+[assembly: AssemblyCopyright("Copyright (c) Original author or authors")]
 [assembly : AssemblyCulture("")]
 [assembly : AssemblyVersion("2.1.1.0")]
 

@@ -16,12 +16,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 
 
-[assembly: AssemblyTitle("AspectSharp.Lang")]
-[assembly: AssemblyDescription("Built-in Language")]
+[assembly: AssemblyTitle("Castle.AspectSharp.Lang")]
+[assembly: AssemblyDescription("Built-in Language to configure aspects using Aspect#")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Aspect#")]
-[assembly: AssemblyProduct("Aspect#")]
-[assembly: AssemblyTrademark("Aspect#")]
+[assembly: AssemblyProduct("Castle AspectSharp")]
+[assembly: AssemblyCompany("Castle Project")]
+[assembly: AssemblyCopyright("Copyright (c) Original author or authors")]
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("2.1.1.0")]
 
