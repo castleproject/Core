@@ -68,7 +68,7 @@ namespace Castle.ActiveRecord
 
 			RaiseSessionFactoryHolderCreated(holder);
 
-			ActiveRecordBase.type2Model.Clear();
+			ActiveRecordModel.type2Model.Clear();
 			ActiveRecordBase._holder = holder;
 
 			// Base configuration

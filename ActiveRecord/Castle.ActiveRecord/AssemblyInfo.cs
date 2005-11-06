@@ -6,10 +6,10 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("ActiveRecord")]
+[assembly: AssemblyTitle("Castle.ActiveRecord")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Castle")]
+[assembly: AssemblyCompany("Castle Project")]
 [assembly: AssemblyProduct("Castle ActiveRecord")]
 [assembly: AssemblyCopyright("Copyright (c) Original author or authors")]
 [assembly: AssemblyTrademark("")]

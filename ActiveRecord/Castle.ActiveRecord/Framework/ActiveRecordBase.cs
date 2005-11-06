@@ -36,7 +36,6 @@ namespace Castle.ActiveRecord
 	public abstract class ActiveRecordBase
 	{
 		protected internal static ISessionFactoryHolder _holder;
-		protected internal static IDictionary type2Model = Hashtable.Synchronized( new Hashtable() );
 
 		/// <summary>
 		/// Constructs an ActiveRecordBase subclass.
@@ -55,7 +54,7 @@ namespace Castle.ActiveRecord
 					"properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?", type.FullName);
 				throw new ActiveRecordException( message );
 			}
-			if (!type2Model.Contains(type))
+			if (GetModel(type) == null)
 			{
 				String message = String.Format("You have accessed an ActiveRecord class that wasn't properly initialized. " + 
 					"The only explanation is that the call to ActiveRecordStarter.Initialize() didn't include {0} class", type.FullName);
@@ -70,7 +69,7 @@ namespace Castle.ActiveRecord
 		/// <param name="model"></param>
 		internal static void Register(Type arType, Framework.Internal.ActiveRecordModel model)
 		{
-			type2Model[ arType ] = model;
+			Framework.Internal.ActiveRecordModel.Register(arType, model);
 		}
 
 		/// <summary>
@@ -78,9 +77,9 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="arType"></param>
 		/// <returns></returns>
-		public static Framework.Internal.ActiveRecordModel GetModel( Type arType )
+		internal static Framework.Internal.ActiveRecordModel GetModel( Type arType )
 		{
-			return (Framework.Internal.ActiveRecordModel) type2Model[ arType ];
+			return Framework.Internal.ActiveRecordModel.GetModel(arType);
 		}
 
 		#endregion

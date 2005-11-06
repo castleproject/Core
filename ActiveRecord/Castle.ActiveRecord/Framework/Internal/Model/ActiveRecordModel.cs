@@ -20,6 +20,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 	[Serializable]
 	public class ActiveRecordModel : IModelNode
 	{
+		protected internal static IDictionary type2Model = Hashtable.Synchronized( new Hashtable() );
+
 		private readonly Type type;
 
 		private bool isJoinedSubClassBase;
@@ -200,6 +202,26 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public IList Validators
 		{
 			get { return validators; }
+		}
+
+		/// <summary>
+		/// Internally used
+		/// </summary>
+		/// <param name="arType"></param>
+		/// <param name="model"></param>
+		internal static void Register(Type arType, Framework.Internal.ActiveRecordModel model)
+		{
+			type2Model[ arType ] = model;
+		}
+
+		/// <summary>
+		/// Internally used
+		/// </summary>
+		/// <param name="arType"></param>
+		/// <returns></returns>
+		public static Framework.Internal.ActiveRecordModel GetModel( Type arType )
+		{
+			return (Framework.Internal.ActiveRecordModel) type2Model[ arType ];
 		}
 
 		#region IVisitable Members

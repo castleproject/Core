@@ -67,7 +67,7 @@ namespace Castle.ActiveRecord.Tests
         public void DiscriminatorUse()
         {
             XmlGenerationVisitor xmlVisitor = new XmlGenerationVisitor();
-            xmlVisitor.CreateXml(ActiveRecordBase.GetModel(typeof(PersistedRule)));
+            xmlVisitor.CreateXml(ActiveRecordModel.GetModel(typeof(PersistedRule)));
             String xml = xmlVisitor.Xml;
 
             String expected =
