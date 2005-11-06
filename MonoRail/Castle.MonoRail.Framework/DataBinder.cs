@@ -33,6 +33,8 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public class DataBinder
 	{
+		#region Constants
+
 		protected internal static readonly String MetadataIdentifier = "@";
 		protected internal static readonly String IgnoreAttribute = MetadataIdentifier + "ignore";
 		protected internal static readonly String CountAttribute = MetadataIdentifier + "count";
@@ -41,35 +43,6 @@ namespace Castle.MonoRail.Framework
 		protected internal static readonly BindingFlags PropertiesBindingFlags = 
 			BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-		#region DataBindContext
-		
-		/// <summary>
-		/// This class is used just to minimize the number of params being passed between
-		/// calls, also to make it easier to make modifications in the future,
-		/// notice that the recursive nature of the algorithm prevent us from adding all
-		/// params here unless we implement some kind of stack. 
-		/// </summary>
-		private class DataBindContext
-		{
-			internal NameValueCollection ParamList; 
-			internal IDictionary Files; 
-			internal IList Errors;
-			internal string [] ExcludedProperties;
-			internal string [] AllowedProperties;
-			internal string Root;
-			
-			public DataBindContext(String root, NameValueCollection paramList, IDictionary files, 
-				IList errorList, String[] excludedProperties, String[] allowedProperties)
-			{
-				Root = root;
-				ParamList = paramList;
-				Files = files;
-				Errors = errorList;
-				ExcludedProperties = excludedProperties;
-				AllowedProperties = allowedProperties;
-			}
-		}
-		
 		#endregion
 		
 		#region BindObject family
@@ -111,11 +84,15 @@ namespace Castle.MonoRail.Framework
 		}
 		
 		#endregion
+
+		#region CreateInstance
 			
 		protected virtual object CreateInstance( Type instanceType, string paramPrefix, NameValueCollection paramsList )
 		{
 			return Activator.CreateInstance(instanceType);
 		}
+
+		#endregion
 		
 		#region Array Support
 		
@@ -193,10 +170,13 @@ namespace Castle.MonoRail.Framework
 			}			
 		}
 			
-		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, int nestedLevelsLeft, DataBindContext ctx)
+		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, 
+			int nestedLevelsLeft, DataBindContext ctx)
 		{
 			if (--nestedLevelsLeft < 0) return instance;			
 			if (ShouldIgnoreElement (ctx.ParamList, paramPrefix)) return instance;
+
+			BeforeBinding(instance, paramPrefix, ctx);
 
 			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
@@ -206,6 +186,7 @@ namespace Castle.MonoRail.Framework
 				
 				Type propType = prop.PropertyType;								
 				String paramName = BuildParamName(paramPrefix, prop.Name);
+
 				try
 				{
 					if ( !IsSimpleProperty(propType) )
@@ -258,10 +239,22 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
+			AfterBinding(instance, paramPrefix, ctx);
+
 			return instance;
 		}
 
 		#endregion
+
+		protected virtual void BeforeBinding(object instance, String paramPrefix, DataBindContext context)
+		{
+			
+		}
+
+		protected virtual void AfterBinding(object instance, String paramPrefix, DataBindContext context)
+		{
+			
+		}
 		
 		#region Helpers
 
@@ -382,6 +375,37 @@ namespace Castle.MonoRail.Framework
 			return results.AllKeys;
 		}
 				
+		#endregion
+
+		#region DataBindContext
+		
+		/// <summary>
+		/// This class is used just to minimize the number of params being passed between
+		/// calls, also to make it easier to make modifications in the future,
+		/// notice that the recursive nature of the algorithm prevent us from adding all
+		/// params here unless we implement some kind of stack. 
+		/// </summary>
+		public class DataBindContext
+		{
+			public NameValueCollection ParamList; 
+			public IDictionary Files; 
+			public IList Errors;
+			public String [] ExcludedProperties;
+			public String [] AllowedProperties;
+			public String Root;
+			
+			public DataBindContext(String root, NameValueCollection paramList, IDictionary files, 
+				IList errorList, String[] excludedProperties, String[] allowedProperties)
+			{
+				Root = root;
+				ParamList = paramList;
+				Files = files;
+				Errors = errorList;
+				ExcludedProperties = excludedProperties;
+				AllowedProperties = allowedProperties;
+			}
+		}
+		
 		#endregion
 	}		
 }

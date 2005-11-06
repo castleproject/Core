@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Internal
 	public class ControllerMetaDescriptor : BaseMetaDescriptor
 	{
 		private DefaultActionAttribute defaultAction;
-		private ScaffoldingAttribute scaffolding;
+		private IList scaffoldings = new ArrayList();
 		private IList helpers = new ArrayList();
 		private IList filters = new ArrayList();
 		private IList actionProviders = new ArrayList();
@@ -91,12 +91,6 @@ namespace Castle.MonoRail.Framework.Internal
 			return desc;
 		}
 
-		public ScaffoldingAttribute Scaffolding
-		{
-			get { return scaffolding; }
-			set { scaffolding = value; }
-		}
-
 		public DefaultActionAttribute DefaultAction
 		{
 			get { return defaultAction; }
@@ -111,6 +105,11 @@ namespace Castle.MonoRail.Framework.Internal
 		public IList Filters
 		{
 			get { return filters; }
+		}
+
+		public IList Scaffoldings
+		{
+			get { return scaffoldings; }
 		}
 
 		public IList ActionProviders

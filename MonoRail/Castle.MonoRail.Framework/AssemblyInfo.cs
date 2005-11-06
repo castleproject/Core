@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("")]
+[assembly: AssemblyTitle("Castle.MonoRail.Framework")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -16,12 +16,14 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.0.0.0")]
 
+// [assembly: AssemblyKeyFile(@"E:\dev\castle\CastleKey.snk")]
+
 #if STRONG
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
 #else
 // This assembly must be signed, so if STRONG is not defined
-// we assume this compilation is being held by Visual Studio
+// we assume this compilation is being perfomed by Visual Studio
 [assembly: AssemblyKeyFile("../../../../CastleKey.snk")]
 #endif

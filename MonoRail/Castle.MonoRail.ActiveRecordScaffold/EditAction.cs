@@ -15,22 +15,21 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Text;
+
 	using Castle.Components.Common.TemplateEngine;
+
 	using Castle.MonoRail.Framework;
-
+	
 	using Castle.ActiveRecord.Framework;
-
+	
 	/// <summary>
 	/// Renders an edit form
 	/// </summary>
 	/// <remarks>
 	/// Searchs for a template named <c>edit{name}</c>
 	/// </remarks>
-	public class EditAction : NewAction
+	public class EditAction : AbstractScaffoldAction
 	{
-		protected object idVal;
-
 		public EditAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
 		}
@@ -42,14 +41,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-//			ReadPkFromParams(controller);
+			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
 
 			try
 			{
-				instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
 				
 				controller.PropertyBag["armodel"] = Model;
-				controller.PropertyBag["item"] = instance;
+				controller.PropertyBag["instance"] = instance;
+				controller.PropertyBag["id"] = idVal;
 			}
 			catch(Exception ex)
 			{
@@ -59,32 +59,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-//			base.GenerateHtmlForm( Model.Type.Name, Model, instance, controller, "Edit" );
+			SetUpHelpers(controller);
+			RenderFromTemplate("edit.vm", controller);
 		}
-
-//		protected override void AddHiddenFields(StringBuilder sb)
-//		{
-//			sb.Append( helper.InputHidden( keyProperty.Name, idVal.ToString() ) );
-//		}
-//
-//		protected override void CreateForm(StringBuilder sb, String name, Controller controller)
-//		{
-//			sb.Append( helper.Form( String.Format("update{0}.{1}", 
-//				name, controller.Context.UrlInfo.Extension) ) );
-//		}
-//
-//		protected void ReadPkFromParams(Controller controller)
-//		{
-//			ObtainPKProperty();
-//	
-//			String id = controller.Context.Params["id"];
-//	
-//			if (id == null)
-//			{
-//				throw new ScaffoldException("Can't edit without the proper id");
-//			}
-//	
-//			idVal = DataBinder.Convert( keyProperty.PropertyType, id, "id", null, controller.Context );
-//		}
 	}
 }

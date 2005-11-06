@@ -17,9 +17,10 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
 
+// [assembly: AssemblyKeyFile(@"E:\dev\castle\CastleKey.snk")]
+
 #if STRONG
 [assembly: AssemblyDelaySign(false)]
-// [assembly: AssemblyKeyFile(@"E:\dev\projects\castle\CastleKey.snk")]
 [assembly: AssemblyKeyFile("../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
 #endif

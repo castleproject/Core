@@ -1,6 +1,6 @@
 
 <p>
-$presentation.LinkToNew( $model, "Create a new $model.Type.Name", $DictHelper.CreateDict() )
+$PresentationHelper.LinkToNew( $model, "Create a new $model.Type.Name", $DictHelper.CreateDict() )
 </p>
 
 #set($cols = $properties.Count + 2)
@@ -22,17 +22,17 @@ $presentation.LinkToNew( $model, "Create a new $model.Type.Name", $DictHelper.Cr
 
 #foreach($row in $items)
 #set ($rowid = $keyprop.GetValue($row, null) )
-  $presentation.StartAlternateTR($velocityCount, "scaffoldrow", "scaffoldaltrow")
+  $PresentationHelper.StartAlternateTR($velocityCount, "scaffoldrow", "scaffoldaltrow")
   
-  <td width="1%" nowrap align="$presentation.BestAlignFor( $keyprop.PropertyType )">$rowid</td>
+  <td width="1%" nowrap align="$PresentationHelper.BestAlignFor( $keyprop.PropertyType )">$rowid</td>
   
   #foreach($prop in $properties)
-  <td align="$presentation.BestAlignFor( $prop.PropertyType )">$!prop.GetValue($row, null)</td>
+  <td align="$PresentationHelper.BestAlignFor( $prop.PropertyType )">$!prop.GetValue($row, null)</td>
   #end
   
   <td align="center" nowrap width="1%">
-$presentation.LinkToEdit( $model, "edit", $rowid, $DictHelper.CreateDict() )
-$presentation.LinkToConfirm( $model, "remove", $rowid, $DictHelper.CreateDict() )
+$PresentationHelper.LinkToEdit( $model, "edit", $rowid, $DictHelper.CreateDict() )
+$PresentationHelper.LinkToConfirm( $model, "remove", $rowid, $DictHelper.CreateDict() )
   </td>
   </tr>
 #end

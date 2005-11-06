@@ -15,29 +15,38 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
+	using System.IO;
 	using System.Reflection;
 	using System.Collections;
 
-	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Helpers;
-
-	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 
 	using Castle.Components.Common.TemplateEngine;
 
+	using Castle.MonoRail.ActiveRecordScaffold.Helpers;
+	using Castle.MonoRail.ActiveRecordSupport;
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Helpers;
 
+	/// <summary>
+	/// Base abstract class for actions that relate to 
+	/// Scaffolding support. Provide the basic flow process
+	/// </summary>
 	public abstract class AbstractScaffoldAction : IDynamicAction
 	{
-		protected static readonly object[] Empty = new object[0];
-
+		/// <summary>Holds the AR type</summary>
 		protected readonly Type modelType;
-		protected readonly HtmlHelper helper = new HtmlHelper();
+		
+		/// <summary>Reference to the template engine instance</summary>
 		protected readonly ITemplateEngine templateEngine;
 		
-		protected PropertyInfo keyProperty;
+		/// <summary>A map of PropertyInfo to validation failures</summary>
 		protected IDictionary prop2Validation = new Hashtable();
+		
+		/// <summary>A list of errors that happened during this process</summary>
+		protected ArrayList errors = new ArrayList();
 
+		/// <summary>The model for the AR type we're dealing with</summary>
 		private ActiveRecordModel model;
 
 		public AbstractScaffoldAction( Type modelType, ITemplateEngine templateEngine )
@@ -46,11 +55,20 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			this.templateEngine = templateEngine;
 		}
 
+		/// <summary>
+		/// Executes the basic flow which is
+		/// <list type="number">
+		/// <item><description>Resolve the <see cref="ActiveRecordModel"/></description></item>
+		/// <item><description>Resolve the layout (if not is associated with the controller, defaults to "scaffold")</description></item>
+		/// <item><description>Invokes <see cref="PerformActionProcess"/> which should perform the correct process for this action</description></item>
+		/// <item><description>Resolves the template name that the developer might provide by using <see cref="ComputeTemplateName"/></description></item>
+		/// <item><description>If the template exists, renders it. Otherwise invokes <see cref="RenderStandardHtml"/></description></item>
+		/// </list>
+		/// </summary>
+		/// <param name="controller"></param>
 		public void Execute(Controller controller)
 		{
 			model = GetARModel();
-
-			helper.SetController(controller);
 
 			SetDefaultLayout(controller);
 
@@ -68,20 +86,40 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 		}
 
+		/// <summary>
+		/// Implementors should return the template name 
+		/// for the current action.
+		/// </summary>
+		/// <param name="controller"></param>
+		/// <returns></returns>
 		protected abstract string ComputeTemplateName(Controller controller);
 
+		/// <summary>
+		/// Implementors should perform the action for the 
+		/// scaffolding, like new or create.
+		/// </summary>
+		/// <param name="controller"></param>
 		protected abstract void PerformActionProcess(Controller controller);
 
+		/// <summary>
+		/// Only invoked if the programmer havent provided
+		/// a custom template for the current action. Implementors
+		/// should create a basic html to present.
+		/// </summary>
+		/// <param name="controller"></param>
 		protected abstract void RenderStandardHtml(Controller controller);
 
+		/// <summary>
+		/// Gets the current <see cref="ActiveRecordModel"/>
+		/// </summary>
 		protected ActiveRecordModel Model
 		{
 			get { return model; }
 		}
 
-		protected ActiveRecordModel GetARModel()
+		private ActiveRecordModel GetARModel()
 		{
-			ActiveRecordModel model = ActiveRecordBase.GetModel( modelType );
+			ActiveRecordModel model = ActiveRecordModel.GetModel( modelType );
 	
 			if (model == null)
 			{
@@ -92,6 +130,12 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			return model;
 		}
 
+		/// <summary>
+		/// Checks whether the controller has 
+		/// a layout set up, if it doesn't sets <c>scaffold</c>
+		/// as the layout (which must exists on the view tree)
+		/// </summary>
+		/// <param name="controller"></param>
 		protected void SetDefaultLayout(Controller controller)
 		{
 			if (controller.LayoutName == null)
@@ -100,30 +144,57 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 		}
 
-		protected void ObtainPKProperty()
+		/// <summary>
+		/// Gets the property that represents the Primary key 
+		/// for the current <see cref="ActiveRecordModel"/>
+		/// </summary>
+		/// <returns></returns>
+		protected PropertyInfo ObtainPKProperty()
 		{
-			PrimaryKeyModel keyModel = ObtainPKProperty(model);
+			PrimaryKeyModel keyModel = ARCommonUtils.ObtainPKProperty(model);
 			
-			if (keyModel != null) keyProperty = keyModel.Property;
-		}
-
-		protected static PrimaryKeyModel ObtainPKProperty(ActiveRecordModel model)
-		{
-			if (model == null) return null;
-
-			ActiveRecordModel curModel = model;
-
-			while (curModel != null)
+			if (keyModel != null)
 			{
-				foreach(PrimaryKeyModel keyModel in curModel.Ids)
-				{
-					return keyModel;
-				}
-
-				curModel = curModel.Parent;
+				return keyModel.Property;
 			}
 
 			return null;
+		}
+
+		protected void RenderFromTemplate(String templateName, Controller controller)
+		{
+			StringWriter writer = new StringWriter();
+
+			IDictionary context = new Hashtable();
+
+			foreach(DictionaryEntry entry in controller.PropertyBag)
+			{
+				context.Add(entry.Key, entry.Value);
+			}
+
+#if DEBUG
+			templateEngine.Process( context, templateName, writer );
+#else
+			templateEngine.Process( context, "Castle.MonoRail.ActiveRecordScaffold/Templates/" + templateName, writer );
+#endif
+
+			controller.DirectRender( writer.GetStringBuilder().ToString() );		
+		}
+
+		protected static void SetUpHelpers(Controller controller)
+		{
+			FormHelper htmlHelper = new FormHelper();
+			htmlHelper.SetController(controller);
+	
+			ValidationHelper validationHelper = new ValidationHelper();
+			validationHelper.SetController(controller);
+	
+			PresentationHelper presentationHelper = new PresentationHelper();
+			presentationHelper.SetController(controller);
+	
+			controller.PropertyBag["HtmlHelper"] = htmlHelper;
+			controller.PropertyBag["ValidationHelper"] = validationHelper;
+			controller.PropertyBag["PresentationHelper"] = presentationHelper;
 		}
 	}
 }

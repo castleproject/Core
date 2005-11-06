@@ -19,7 +19,7 @@ using System.Runtime.CompilerServices;
 
 #if STRONG
 [assembly: AssemblyDelaySign(false)]
-// [assembly: AssemblyKeyFile(@"E:\dev\projects\castle\CastleKey.snk")]
+//[assembly: AssemblyKeyFile(@"E:\dev\castle\CastleKey.snk")]
 [assembly: AssemblyKeyFile("../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
 #endif

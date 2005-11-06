@@ -18,7 +18,7 @@
 	
 	<property name="version" value="beta-5" />
 
-	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arscaffold, brail, testsupport, arsupport, samples, tests, generator" /> 
+	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arsupport, arscaffold, brail, testsupport, samples, tests, generator" /> 
 	
 	<target name="clean">
 		<delete>

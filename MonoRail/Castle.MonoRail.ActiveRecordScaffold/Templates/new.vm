@@ -4,7 +4,7 @@ $ValidationHelper.InstallScripts()
 
 #set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
 
-$HtmlHelper.Form( "create.rails", "scaffoldingform", "POST", $validatorForm )
+$HtmlHelper.Form( "create${armodel.Type.Name}.rails", "scaffoldingform", "POST", $validatorForm )
 
 <div id="scaffoldmain">
 
@@ -61,7 +61,7 @@ $HtmlHelper.SubmitButton("Create")
 </div>
 
 <p>
-Back | List
+$PresentationHelper.LinkToBack("Back", null) | $PresentationHelper.LinkToList($armodel, "List", null)
 </p>
 
 $HtmlHelper.EndForm()

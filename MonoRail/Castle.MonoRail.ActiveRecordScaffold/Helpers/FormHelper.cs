@@ -47,7 +47,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			{
 				list.Add(hierarchy);
 
-				hierarchy = ActiveRecordBase.GetModel( hierarchy.Type.BaseType );
+				hierarchy = ActiveRecordModel.GetModel( hierarchy.Type.BaseType );
 			}
 
 			hierarchy = model;
@@ -71,7 +71,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 					list.Add( nested.Model );
 				}
 
-				hierarchy = ActiveRecordBase.GetModel( hierarchy.Type.BaseType );
+				hierarchy = ActiveRecordModel.GetModel( hierarchy.Type.BaseType );
 			}
 
 			return list;
@@ -119,7 +119,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 		private bool CheckModelAndKeyAreAccessible(Type type)
 		{
-			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(type);
+			ActiveRecordModel otherModel = ActiveRecordModel.GetModel(type);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
@@ -322,7 +322,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			PropertyInfo prop = belongsToModel.Property;
 
-			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(belongsToModel.BelongsToAtt.Type);
+			ActiveRecordModel otherModel = ActiveRecordModel.GetModel(belongsToModel.BelongsToAtt.Type);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
@@ -369,7 +369,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			PropertyInfo prop = hasManyModel.Property;
 
-			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(hasManyModel.HasManyAtt.MapType);
+			ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasManyModel.HasManyAtt.MapType);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
@@ -406,7 +406,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			PropertyInfo prop = hasAndBelongsModel.Property;
 
-			ActiveRecordModel otherModel = ActiveRecordBase.GetModel(hasAndBelongsModel.HasManyAtt.MapType);
+			ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasAndBelongsModel.HasManyAtt.MapType);
 
 			PrimaryKeyModel keyModel = ObtainPKProperty(otherModel);
 
@@ -477,11 +477,26 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			}
 			else if (propType == typeof(bool))
 			{
-				// TODO: checkbox
+				// stringBuilder.AppendFormat( InputCheckbox(propName, "true", (bool) value) );
+				stringBuilder.Append( Select(propName) );
+				stringBuilder.Append( CreateOptionsFromPrimitiveArray(new bool[] { true, false }, value.ToString() ) );
+				stringBuilder.Append( EndSelect() );
 			}
 			else if (propType == typeof(Enum))
 			{
-				// TODO: select
+				// TODO: Support flags as well
+
+				String[] names = System.Enum.GetNames(propType);
+
+				IList options = new ArrayList();
+
+				foreach(String name in names)
+				{
+					options.Add( String.Format("{0} {1}\r\n", 
+						InputRadio(propName, name), LabelFor(name, name) ) );
+				}
+				
+				stringBuilder.AppendFormat( BuildUnorderedList(options) );
 			}
 		}
 

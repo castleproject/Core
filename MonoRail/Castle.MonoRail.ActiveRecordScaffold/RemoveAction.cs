@@ -15,12 +15,14 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Text;
-	using Castle.Components.Common.TemplateEngine;
-	using Castle.MonoRail.Framework;
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
+
+	using Castle.MonoRail.Framework;
+
+	using Castle.Components.Common.TemplateEngine;
+	
 
 	/// <summary>
 	/// Removes the ActiveRecord instance
@@ -28,10 +30,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// <remarks>
 	/// Searchs for a template named <c>{name}removed</c>
 	/// </remarks>
-	public class RemoveAction : EditAction
+	public class RemoveAction : AbstractScaffoldAction
 	{
-		private bool removalSuccessful;
-
 		public RemoveAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
 		}
@@ -43,55 +43,29 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-//			ReadPkFromParams(controller);
+			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
+
+			controller.PropertyBag["armodel"] = Model;
+			controller.PropertyBag["id"] = idVal;
 
 			try
 			{
-				instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
+
+				controller.PropertyBag["instance"] = instance;
+
+				(instance as ActiveRecordBase).Delete();
 			}
 			catch(Exception ex)
 			{
-				throw new ScaffoldException("Could not obtain instance by using this id", ex);
+				controller.PropertyBag["exception"] = ex;
 			}
-
-			try
-			{
-				(instance as ActiveRecordBase).Delete();
-
-				removalSuccessful = true;
-			}
-			catch(Exception)
-			{
-				removalSuccessful = false;
-			}
-
-			controller.PropertyBag["armodel"] = Model;
-			controller.PropertyBag["item"] = instance;
-			controller.PropertyBag["removalSuccessful"] = removalSuccessful;
 		}
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append("<p>");
-
-			if (removalSuccessful)
-			{
-				sb.AppendFormat("{0} was removed successfully.", Model.Type.Name);
-			}
-			else
-			{
-				sb.Append("<font color=\"red\">");
-				sb.AppendFormat("{0} could not be removed...", Model.Type.Name);
-				sb.Append("</font>");
-			}
-
-			sb.Append("</p>");
-
-			sb.Append( helper.LinkTo( "Back to list", "list" + Model.Type.Name ) );
-
-			controller.DirectRender(sb.ToString());
+			SetUpHelpers(controller);
+			RenderFromTemplate("remove.vm", controller);
 		}
 	}
 }

@@ -1,0 +1,16 @@
+
+#if($exception)
+  <h2>${armodel.Type.Name} could not be removed</h2>
+
+  <pre>
+  $exception.Message
+  </pre>
+
+#else
+  <h2>${armodel.Type.Name} removed</h2>
+
+#end
+
+<p>
+ $PresentationHelper.LinkToList($armodel, "List", null)
+</p>

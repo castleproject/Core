@@ -182,7 +182,10 @@ namespace Castle.MonoRail.Framework.Internal
 	
 			if (attributes.Length != 0)
 			{
-				descriptor.Scaffolding = (ScaffoldingAttribute) attributes[0];
+				foreach(ScaffoldingAttribute scaffolding in attributes)
+				{
+					descriptor.Scaffoldings.Add(scaffolding);
+				}
 			}
 	
 			attributes = controllerType.GetCustomAttributes( typeof(DynamicActionProviderAttribute), true );

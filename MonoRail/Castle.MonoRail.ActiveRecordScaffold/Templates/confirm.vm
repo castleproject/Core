@@ -1,0 +1,11 @@
+
+<h2>Remove ${armodel.Type.Name}</h2>
+
+<p>
+Do you reall want to remove this $armodel.Type.Name ?
+</p>
+
+<p>
+$PresentationHelper.LinkToRemove($armodel, "Yes", $id, null) | $PresentationHelper.LinkToBack("Cancel", null)
+</p>
+

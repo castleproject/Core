@@ -95,11 +95,6 @@
                     HintPath = "..\..\ActiveRecord\lib\Iesi.Collections.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Framework"
-                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     HintPath = "..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
@@ -113,6 +108,16 @@
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\lib\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.ActiveRecordSupport"
+                    Project = "{2409063E-BE05-4596-A677-758096D1C759}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -183,11 +188,23 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Templates\confirm.vm"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Templates\edit.vm"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Templates\list.vm"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Templates\new.vm"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Templates\remove.vm"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

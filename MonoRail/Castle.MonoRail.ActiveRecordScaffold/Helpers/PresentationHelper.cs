@@ -37,6 +37,18 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return "center";
 		}
 
+		public String LinkToBack(String text, IDictionary attributes)
+		{
+			return String.Format( "<a href=\"javascript:history.go(-1);\" {1}>{0}</a>", 
+				text, GetAttributes(attributes) );
+		}
+
+		public String LinkToList(ActiveRecordModel model, String text, IDictionary attributes)
+		{
+			return String.Format( "<a href=\"list{0}.{1}\" {3}>{2}</a>", model.Type.Name, 
+				Controller.Context.UrlInfo.Extension, text, GetAttributes(attributes) );
+		}
+
 		public String LinkToNew(ActiveRecordModel model, String text, IDictionary attributes)
 		{
 			return String.Format( "<a href=\"new{0}.{1}\" {3}>{2}</a>", model.Type.Name, 
@@ -52,6 +64,12 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 		public String LinkToConfirm(ActiveRecordModel model, String text, object key, IDictionary attributes)
 		{
 			return String.Format( "<a href=\"confirm{0}.{1}?id={4}\" {3}>{2}</a>", model.Type.Name, 
+				Controller.Context.UrlInfo.Extension, text, GetAttributes(attributes), key );
+		}
+
+		public String LinkToRemove(ActiveRecordModel model, String text, object key, IDictionary attributes)
+		{
+			return String.Format( "<a href=\"remove{0}.{1}?id={4}\" {3}>{2}</a>", model.Type.Name, 
 				Controller.Context.UrlInfo.Extension, text, GetAttributes(attributes), key );
 		}
 	}

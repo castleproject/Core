@@ -21,24 +21,75 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using Castle.Components.Common.TemplateEngine;
 	using Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine;
 
-
+	/// <summary>
+	/// Uses the dynamic action infrastructure to 
+	/// add new actions to an existing controller.
+	/// </summary>
+	/// <remarks>
+	/// Provided that a controller uses <see cref="ScaffoldingAttribute"/>
+	/// like the following code:
+	/// <code>
+	/// [Scaffolding( typeof(Account) )]
+	/// public class AdminController : Controller
+	/// {
+	/// }
+	/// </code>
+	/// Then the following dynamic actions will be added:
+	/// <list type="bullet">
+	/// <item><term>newAccount</term>
+	/// <description>Presents a form to the user fill in order to create the item on the database</description>
+	/// </item>
+	/// <item><term>createAccount</term>
+	/// <description>Take the information submited by the newAccount and creates the item</description>
+	/// </item>
+	/// <item><term>editAccount</term>
+	/// <description>Presents a form to the user fill in order to update the item on the database</description>
+	/// </item>
+	/// <item><term>updateAccount</term>
+	/// <description>Take the information submited by the editAccount and changes the item</description>
+	/// </item>
+	/// <item><term>listAccount</term>
+	/// <description>Presents a paginated list of items saved</description>
+	/// </item>
+	/// <item><term>confirmAccount</term>
+	/// <description>Ask the user if he/she confirms the removal of the item</description>
+	/// </item>
+	/// <item><term>removeAccount</term>
+	/// <description>Attempt to remove the item and presents the results</description>
+	/// </item>
+	/// </list>
+	/// </remarks>
 	public class ScaffoldingSupport : IScaffoldingSupport
 	{
-		public ScaffoldingSupport()
-		{
-		}
-
 		public void Process(Controller controller)
 		{
 			ITemplateEngine templateEngine = null;
 
+			InitializeTemplateEngine(ref templateEngine);
+
+			foreach(ScaffoldingAttribute scaffoldAtt in controller.MetaDescriptor.Scaffoldings)
+			{
+				String name = scaffoldAtt.Model.Name;
+
+				controller.CustomActions[ String.Format("new{0}", name) ] = new NewAction( scaffoldAtt.Model, templateEngine ); 
+				controller.CustomActions[ String.Format("create{0}", name) ] = new CreateAction( scaffoldAtt.Model, templateEngine ); 
+				controller.CustomActions[ String.Format("edit{0}", name) ] = new EditAction( scaffoldAtt.Model, templateEngine ); 
+				controller.CustomActions[ String.Format("update{0}", name) ] = new UpdateAction( scaffoldAtt.Model, templateEngine ); 
+				controller.CustomActions[ String.Format("remove{0}", name) ] = new RemoveAction( scaffoldAtt.Model, templateEngine ); 
+				controller.CustomActions[ String.Format("confirm{0}", name) ] = new ConfirmRemoveAction( scaffoldAtt.Model, templateEngine ); 
+				controller.CustomActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model, templateEngine ); 
+			}
+		}
+
+		private void InitializeTemplateEngine(ref ITemplateEngine templateEngine)
+		{
 			lock(this)
 			{
 				if (templateEngine == null)
 				{
 					NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
 #if DEBUG
-					nvelTemplateEng.TemplateDir = @"E:\dev\projects\castle\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
+					nvelTemplateEng.TemplateDir = @"E:\dev\castle\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
 					nvelTemplateEng.BeginInit();
 					nvelTemplateEng.EndInit();
 #else
@@ -50,18 +101,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 					templateEngine = nvelTemplateEng;
 				}
 			}
-
-			ScaffoldingAttribute scaffoldAtt = controller.MetaDescriptor.Scaffolding;
-
-			String name = scaffoldAtt.Model.Name;
-
-			controller.CustomActions[ String.Format("new{0}", name) ] = new NewAction( scaffoldAtt.Model, templateEngine ); 
-			controller.CustomActions[ String.Format("create{0}", name) ] = new CreateAction( scaffoldAtt.Model, templateEngine ); 
-			controller.CustomActions[ String.Format("edit{0}", name) ] = new EditAction( scaffoldAtt.Model, templateEngine ); 
-			controller.CustomActions[ String.Format("update{0}", name) ] = new UpdateAction( scaffoldAtt.Model, templateEngine ); 
-			controller.CustomActions[ String.Format("remove{0}", name) ] = new RemoveAction( scaffoldAtt.Model, templateEngine ); 
-			controller.CustomActions[ String.Format("confirm{0}", name) ] = new ConfirmRemoveAction( scaffoldAtt.Model, templateEngine ); 
-			controller.CustomActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model, templateEngine ); 
 		}
 	}
 }

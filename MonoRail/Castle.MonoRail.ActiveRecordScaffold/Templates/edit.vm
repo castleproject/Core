@@ -1,0 +1,69 @@
+$ValidationHelper.InstallScripts()
+
+<h2>Edit ${armodel.Type.Name}</h2>
+
+#set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
+
+$HtmlHelper.Form( "update${armodel.Type.Name}.rails", "scaffoldingform", "POST", $validatorForm )
+
+$HtmlHelper.InputHidden("id", ${id})
+
+<div id="scaffoldmain">
+
+#foreach($model in $HtmlHelper.GetModelHierarchy($armodel, $instance))
+
+#if($model.IsNestedType)
+  $HtmlHelper.FieldSet("${model.Type.Name}:")
+#end
+
+#foreach($field in $model.Fields)
+#if($HtmlHelper.CanHandle($field))
+<p>$HtmlHelper.CreateControl($model, $field, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.Properties)
+#if($HtmlHelper.CanHandle($prop))
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.NotMappedProperties)
+#if($HtmlHelper.CanHandle($prop))
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.BelongsTo)
+#if($HtmlHelper.CanHandle($prop))
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.HasMany)
+#if($HtmlHelper.CanHandle($prop))
+<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#foreach($prop in $model.HasAndBelongsToMany)
+#if($HtmlHelper.CanHandle($prop))
+<p valign="top">$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+#end
+#end
+
+#if($model.IsNestedType)
+  $HtmlHelper.EndFieldSet()
+#end
+
+#end
+
+$HtmlHelper.SubmitButton("Save")
+
+</div>
+
+<p>
+$PresentationHelper.LinkToBack("Back", null) | $PresentationHelper.LinkToList($armodel, "List", null)
+</p>
+
+$HtmlHelper.EndForm()

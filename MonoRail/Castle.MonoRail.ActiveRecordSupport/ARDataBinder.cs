@@ -15,14 +15,18 @@
 namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Specialized;
-	
+	using System.Reflection;
+
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;	
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
+
+	using Iesi.Collections;
 
 	/// <summary>
 	/// Extends DataBinder class with some ActiveRecord specific functionallity
@@ -32,14 +36,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// </summary>
 	public class ARDataBinder : DataBinder
 	{
+		protected internal static readonly object[] EmptyArg = new object[0];
 		protected internal static readonly String AutoLoadAttribute = DataBinder.MetadataIdentifier + "autoload";
-		
+
 		public ARDataBinder() : base()
 		{			
 		}
 
-		protected override object CreateInstance( Type instanceType, string paramPrefix, 
-			NameValueCollection paramsList )
+		protected override object CreateInstance( Type instanceType, 
+			String paramPrefix, NameValueCollection paramsList )
 		{
 			object instance = null;
 			
@@ -55,7 +60,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					throw new RailsException("ARDataBinder autoload only supports classes that inherit from ActiveRecordBase");
 				}
 					
-				ActiveRecordModel model = ActiveRecordBase.GetModel(instanceType);				
+				ActiveRecordModel model = ActiveRecordModel.GetModel(instanceType);				
+				
 				// NOTE: as of right now we only support one PK
 				if( model.Ids.Count == 1 )
 				{
@@ -82,6 +88,116 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			return instance;
+		}
+
+		protected override void AfterBinding(object instance, String paramPrefix, DataBindContext context)
+		{
+			// Defensive programming
+			if (instance == null) return;
+
+			ActiveRecordModel model = ActiveRecordModel.GetModel( instance.GetType() );
+
+			if (model == null) return;
+
+			SaveManyMappings(instance, model, context);
+		}
+
+		protected void SaveManyMappings(object instance, ActiveRecordModel model, DataBindContext context)
+		{
+			foreach(HasManyModel hasManyModel in model.HasMany)
+			{
+				if (hasManyModel.HasManyAtt.Inverse) continue;
+				if (hasManyModel.HasManyAtt.RelationType != RelationType.Bag && 
+					hasManyModel.HasManyAtt.RelationType != RelationType.Set) continue;
+
+				ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasManyModel.HasManyAtt.MapType);
+
+				PrimaryKeyModel keyModel = ARCommonUtils.ObtainPKProperty(otherModel);
+
+				if (otherModel == null || keyModel == null)
+				{
+					continue; // Impossible to save
+				}
+
+				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, context);
+			}
+
+			foreach(HasAndBelongsToManyModel hasManyModel in model.HasAndBelongsToMany)
+			{
+				if (hasManyModel.HasManyAtt.Inverse) continue;
+				if (hasManyModel.HasManyAtt.RelationType != RelationType.Bag && 
+					hasManyModel.HasManyAtt.RelationType != RelationType.Set) continue;
+
+				ActiveRecordModel otherModel = ActiveRecordModel.GetModel(hasManyModel.HasManyAtt.MapType);
+
+				PrimaryKeyModel keyModel = ARCommonUtils.ObtainPKProperty(otherModel);
+
+				if (otherModel == null || keyModel == null)
+				{
+					continue; // Impossible to save
+				}
+
+				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, context);
+			}
+		}
+
+		private void CreateMappedInstances(object instance, PropertyInfo prop, 
+			PrimaryKeyModel keyModel, ActiveRecordModel otherModel, DataBindContext context)
+		{
+			object container = InitializeRelationPropertyIfNull(instance, prop);
+	
+			// TODO: Support any kind of key
+	
+			String paramName = String.Format( "{0}.{1}", prop.Name, keyModel.Property.Name );
+	
+			String[] values = context.ParamList.GetValues( paramName );
+	
+			int[] ids = (int[]) ConvertUtils.Convert( typeof(int[]), values, paramName, null, context.ParamList );
+	
+			if (ids != null)
+			{
+				foreach(int id in ids)
+				{
+					object item = Activator.CreateInstance( otherModel.Type );
+
+					keyModel.Property.SetValue( item, id, EmptyArg );
+
+					AddToContainer(container, item);
+				}
+			}
+		}
+
+		private static object InitializeRelationPropertyIfNull(object instance, PropertyInfo property)
+		{
+			object container = property.GetValue( instance, EmptyArg );
+
+			if (container == null)
+			{
+				if (property.PropertyType == typeof(IList))
+				{
+					container = new ArrayList();
+				}
+				else if (property.PropertyType == typeof(ISet))
+				{
+					container = new HashedSet();
+				}
+
+				property.SetValue( instance, container, EmptyArg );
+			}
+
+			return container;
+		}
+
+		private void AddToContainer(object container, object item)
+		{
+			if (container is IList)
+			{
+				(container as IList).Add( item );
+			}
+			else if (container is ISet)
+			{
+				(container as ISet).Add( item );
+			}
 		}
 	}
 }

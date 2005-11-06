@@ -18,7 +18,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System.Reflection;
 	using System.Collections;
 
+	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
+
+	using Castle.MonoRail.Framework;
+	using Castle.MonoRail.Framework.Internal;
 
 
 	public abstract class CommonOperationUtils
@@ -49,6 +53,44 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 
 			return items;
+		}
+
+		internal static void SaveInstance(object instance, 
+			Controller controller, ArrayList errors, IDictionary prop2Validation)
+		{
+			if (instance is ActiveRecordValidationBase)
+			{
+				ActiveRecordValidationBase instanceBase = instance as ActiveRecordValidationBase;
+
+				if (!instanceBase.IsValid())
+				{
+					errors.AddRange(instanceBase.ValidationErrorMessages);
+					prop2Validation = instanceBase.PropertiesValidationErrorMessage;
+				}
+				else
+				{
+					instanceBase.Save();
+				}
+			}
+			else
+			{
+				ActiveRecordBase instanceBase = instance as ActiveRecordBase;
+
+				instanceBase.Save();
+			}
+		}
+
+		internal static object ReadPkFromParams(Controller controller, PropertyInfo keyProperty)
+		{
+			String id = controller.Context.Params["id"];
+	
+			if (id == null)
+			{
+				throw new ScaffoldException("Can't edit without the proper id");
+			}
+	
+			return ConvertUtils.Convert(keyProperty.PropertyType, 
+				id, "id", null, controller.Params );
 		}
 	}
 }

@@ -1,7 +1,18 @@
 body
 {
 	font-family: Verdana, Arial;
+	font-size: small;
 	background-color: white;
+	margin: 15px;
+}
+th
+{
+	background-color: #DDDDDD;
+	font-size: small;
+	border-right: solid 1px gray;
+}
+td
+{
 	font-size: small;
 }
 .errorList
@@ -11,12 +22,34 @@ body
 {
 	color: #993333;
 }
-.item
+.scaffoldrow
 {
-	border-right: black 1px solid;
-	border-top: medium none;
-	border-left: medium none;
-	border-bottom: medium none;
+	background-color: #EFEFEF;
+}
+.scaffoldaltrow
+{
+	background-color: White;
+}
+.scaffoldrow td
+{
+	border-right: solid 1px gray;
+}
+.scaffoldaltrow td
+{
+	border-right: solid 1px gray;
+}
+.pagination
+{
+	border: solid 1px gray;
+	padding: 2px;
+}
+.pagination table tr td
+{
+	font-size: 10;
+}
+input, select, textarea
+{
+	border: 1px solid gray;
 }
 input.errHilite, select.errHilite, textarea.errHilite 
 {
@@ -25,7 +58,7 @@ input.errHilite, select.errHilite, textarea.errHilite
 }
 label.errHilite 
 {
-	color: #C00;
+	color: red;
 }
 ul#errors 
 {
@@ -51,4 +84,11 @@ ul#errors li.heading
 	font-style: italic;
 	margin: .5em 0;
 	padding: 0;
+}
+div#scaffoldmain
+{
+	border-left: solid 1px black;
+	padding-left: 10px;
+	margin-left: 5px;
+	margin-top: 5px;
 }

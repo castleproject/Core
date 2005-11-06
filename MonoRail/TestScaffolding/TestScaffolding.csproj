@@ -134,6 +134,11 @@
                     AssemblyName = "Castle.Components.Common.TemplateEngine"
                     HintPath = "..\bin\Castle.Components.Common.TemplateEngine.dll"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.ActiveRecordScaffold"
+                    AssemblyName = "Castle.MonoRail.ActiveRecordScaffold"
+                    HintPath = "..\bin\scaffold\Castle.MonoRail.ActiveRecordScaffold.dll"
+                />
             </References>
         </Build>
         <Files>

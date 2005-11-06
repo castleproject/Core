@@ -15,11 +15,13 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Collections;
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
+
 	using Castle.Components.Common.TemplateEngine;
+	
+	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
 
 
@@ -29,7 +31,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// <remarks>
 	/// Searchs for a template named <c>create{name}</c>
 	/// </remarks>
-	public class UpdateAction : EditAction
+	public class UpdateAction : AbstractScaffoldAction
 	{
 		public UpdateAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
@@ -37,84 +39,46 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override string ComputeTemplateName(Controller controller)
 		{
-			if (controller.Context.Flash["errors"] != null)
-			{
-				return base.ComputeTemplateName(controller);
-			}
-			else
-			{
-				return String.Format(@"{0}\create{1}", controller.Name, Model.Type.Name);
-			}
+			return String.Format(@"{0}\update{1}", controller.Name, Model.Type.Name);
 		}
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-//			ReadPkFromParams(controller);
+			ARDataBinder binder = new ARDataBinder();
+
+			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
+
+			SessionScope scope = new SessionScope();
 
 			try
 			{
-				instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
 
-//				CreateInstanceFromFormData(instance, controller);
+				binder.BindObjectInstance(instance, String.Empty, controller.Params, null, null);
+
+				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation);
+
+				scope.Dispose();
+
+				controller.Context.Response.Redirect(controller.Name, "list" + Model.Type.Name);
 			}
 			catch(Exception ex)
 			{
 				errors.Add( "Could not save " + Model.Type.Name + ". " + ex.Message );
-				return;
-			}
 
-			try
-			{
-				SaveInstance(instance, controller);
-			}
-			catch(Exception ex)
-			{
-				errors.Add( "Could not save " + Model.Type.Name + ". " + ex.Message );
+				scope.Dispose(true);
 			}
 
 			if (errors.Count != 0)
 			{
 				controller.Context.Flash["errors"] = errors;
+				controller.Context.Response.Redirect(controller.Name, "edit" + Model.Type.Name);
 			}
-
-			controller.PropertyBag["armodel"] = Model;
-			controller.PropertyBag["instance"] = instance;
 		}
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			if (controller.Context.Flash["errors"] != null)
-			{
-				base.RenderStandardHtml(controller);
-			}
-			else
-			{
-				controller.Redirect( controller.Name, "list" + Model.Type.Name );
-			}
-		}
-
-		protected void SaveInstance(object instance, Controller controller)
-		{
-			if (instance is ActiveRecordValidationBase)
-			{
-				ActiveRecordValidationBase instanceBase = instance as ActiveRecordValidationBase;
-
-				if (!instanceBase.IsValid())
-				{
-					errors.AddRange(instanceBase.ValidationErrorMessages);
-					prop2Validation = instanceBase.PropertiesValidationErrorMessage;
-				}
-				else
-				{
-					instanceBase.Update();
-				}
-			}
-			else
-			{
-				ActiveRecordBase instanceBase = instance as ActiveRecordBase;
-
-				instanceBase.Update();
-			}
+			
 		}
 	}
 }

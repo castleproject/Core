@@ -15,10 +15,11 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Text;
 
 	using Castle.ActiveRecord.Framework;
+	
 	using Castle.Components.Common.TemplateEngine;
+
 	using Castle.MonoRail.Framework;
 
 
@@ -29,7 +30,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// <remarks>
 	/// Searchs for a template named <c>confirm{name}remove</c>
 	/// </remarks>
-	public class ConfirmRemoveAction : EditAction
+	public class ConfirmRemoveAction : AbstractScaffoldAction
 	{
 		public ConfirmRemoveAction(Type modelType, ITemplateEngine templateEngine) : base(modelType, templateEngine)
 		{
@@ -42,14 +43,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-//			ReadPkFromParams(controller);
+			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
 
 			try
 			{
-				instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
 				
 				controller.PropertyBag["armodel"] = Model;
-				controller.PropertyBag["item"] = instance;
+				controller.PropertyBag["instance"] = instance;
+				controller.PropertyBag["id"] = idVal;
 			}
 			catch(Exception ex)
 			{
@@ -59,21 +61,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			StringBuilder sb = new StringBuilder();
-
-			sb.Append("<p>");
-
-			sb.AppendFormat("Confirm removal of {0} ?", instance.ToString());
-
-			sb.Append("</p>");
-
-			sb.Append("<p>");
-			sb.Append( helper.LinkTo( "Yes", controller.Name, "remove" + Model.Type.Name, idVal ) );
-			sb.Append("  |  ");
-			sb.Append( helper.LinkTo( "No", "list" + Model.Type.Name ) );
-			sb.Append("</p>");
-
-			controller.DirectRender(sb.ToString());
+			SetUpHelpers(controller);
+			RenderFromTemplate("confirm.vm", controller);
 		}
 	}
 }

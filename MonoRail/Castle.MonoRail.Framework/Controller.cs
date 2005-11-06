@@ -589,7 +589,7 @@ namespace Castle.MonoRail.Framework
 
 			LayoutName = ObtainDefaultLayoutName();
 
-			if (metaDescriptor.Scaffolding != null)
+			if (metaDescriptor.Scaffoldings.Count != 0)
 			{
 				if (_scaffoldSupport == null)
 				{
@@ -732,7 +732,7 @@ namespace Castle.MonoRail.Framework
 					finally 
 					{
 						//If the rescue fails, let the exception bubble
-						throw ex;
+						throw;
 					}
 				}
 			}

@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.IO;
 	using System.Reflection;
 	using System.Collections;
 
@@ -25,7 +24,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
-	using Castle.MonoRail.ActiveRecordScaffold.Helpers;
+
+	using Iesi.Collections;
 
 
 	/// <summary>
@@ -42,12 +42,10 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			ObtainPKProperty();
-
 			controller.PropertyBag.Add( "items", PaginationHelper.CreateCachedPagination(
 				Model.Type.FullName, 10, new DataObtentionDelegate(PerformFindAll)) );
 			controller.PropertyBag["model"] = Model;
-			controller.PropertyBag["keyprop"] = keyProperty;
+			controller.PropertyBag["keyprop"] = ObtainPKProperty();
 			controller.PropertyBag["properties"] = ObtainListableProperties(Model);
 
 			controller.RenderView(controller.Name, "list" + Model.Type.Name);
@@ -70,25 +68,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		protected override void RenderStandardHtml(Controller controller)
 		{
 			SetUpHelpers(controller);
-
-			StringWriter writer = new StringWriter();
-
-			IDictionary context = new Hashtable();
-
-			foreach(DictionaryEntry entry in controller.PropertyBag)
-			{
-				context.Add(entry.Key, entry.Value);
-			}
-
-#if DEBUG
-			templateEngine.Process( context, "list.vm", writer );
-#else
-			templateEngine.Process( context, "Castle.MonoRail.ActiveRecordScaffold/Templates/list.vm", writer );
-#endif
-
-			controller.DirectRender( writer.GetStringBuilder().ToString() );
-
-			// GenerateHtmlList(Model.Type.Name, Model, items, controller);
+			RenderFromTemplate("list.vm", controller);
 		}
 
 		private IList ObtainListableProperties(ActiveRecordModel model)
@@ -104,16 +84,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	
 			foreach(PropertyModel propModel in model.Properties)
 			{
-				// TODO: Add ISet
-				if (propModel.Property.PropertyType == typeof(IList)) continue;
+				if (IsNotSupported(propModel.Property.PropertyType)) continue;
 
 				properties.Add(propModel.Property);
 			}
 	
 			foreach(PropertyInfo prop in model.NotMappedProperties)
 			{
-				// TODO: Add ISet
-				if (prop.PropertyType == typeof(IList)) continue;
+				if (IsNotSupported(prop.PropertyType)) continue;
 
 				properties.Add(prop);
 			}
@@ -121,16 +99,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			return properties;
 		}
 
-		private static void SetUpHelpers(Controller controller)
+		private bool IsNotSupported(Type type)
 		{
-			PresentationHelper presentationHelper = new PresentationHelper();
-			presentationHelper.SetController(controller);
-	
-			PaginationHelper pageHelper = new PaginationHelper();
-			pageHelper.SetController(controller);
-	
-			controller.PropertyBag["presentation"] = presentationHelper;
-			controller.PropertyBag["pagination"] = pageHelper;
+			return type == typeof(IList) || 
+				type == typeof(ISet) || 
+				type == typeof(IDictionary);
 		}
 	}
 }

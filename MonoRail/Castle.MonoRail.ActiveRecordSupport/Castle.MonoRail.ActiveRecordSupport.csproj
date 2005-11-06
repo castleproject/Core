@@ -89,10 +89,20 @@
                     AssemblyName = "Castle.ActiveRecord"
                     HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
                 />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "ARCommonUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "ARDataBindAttribute.cs"
                     SubType = "Code"
