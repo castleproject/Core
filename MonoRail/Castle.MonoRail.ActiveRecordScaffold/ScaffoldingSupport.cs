@@ -15,7 +15,8 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	
+	using System.Runtime.CompilerServices;
+
 	using Castle.MonoRail.Framework;
 
 	using Castle.Components.Common.TemplateEngine;
@@ -61,11 +62,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// </remarks>
 	public class ScaffoldingSupport : IScaffoldingSupport
 	{
+		private static ITemplateEngine templateEngine = null;
+
 		public void Process(Controller controller)
 		{
-			ITemplateEngine templateEngine = null;
-
-			InitializeTemplateEngine(ref templateEngine);
+			InitializeTemplateEngine();
 
 			foreach(ScaffoldingAttribute scaffoldAtt in controller.MetaDescriptor.Scaffoldings)
 			{
@@ -81,25 +82,23 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 		}
 
-		private void InitializeTemplateEngine(ref ITemplateEngine templateEngine)
+		[MethodImpl(MethodImplOptions.Synchronized)]
+		private static void InitializeTemplateEngine()
 		{
-			lock(this)
+			if (templateEngine == null)
 			{
-				if (templateEngine == null)
-				{
-					NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
+				NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
 #if DEBUG
-					nvelTemplateEng.TemplateDir = @"E:\dev\castle\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
-					nvelTemplateEng.BeginInit();
-					nvelTemplateEng.EndInit();
+				nvelTemplateEng.TemplateDir = @"E:\dev\castle\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
+				nvelTemplateEng.BeginInit();
+				nvelTemplateEng.EndInit();
 #else
-					nvelTemplateEng.AssemblyName = "Castle.MonoRail.ActiveRecordScaffold";
-					nvelTemplateEng.BeginInit();
-					nvelTemplateEng.EndInit();
+				nvelTemplateEng.AssemblyName = "Castle.MonoRail.ActiveRecordScaffold";
+				nvelTemplateEng.BeginInit();
+				nvelTemplateEng.EndInit();
 #endif
 
-					templateEngine = nvelTemplateEng;
-				}
+				templateEngine = nvelTemplateEng;
 			}
 		}
 	}

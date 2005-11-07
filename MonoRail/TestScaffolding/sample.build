@@ -24,7 +24,8 @@
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
 				<include name="Castle.MonoRail.ActiveRecordScaffold.dll" />
 				<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
-				<include name="Commons.dll" />
+				<include name="Castle.Components.Common.TemplateEngine.dll" />
+				<include name="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 				<include name="log4net.dll" />
 				<include name="NVelocity.dll" />
 				<include name="Castle.ActiveRecord.dll" />
@@ -56,7 +57,6 @@
 				<include name="${bin2.dir}/Castle.MonoRail.ActiveRecordScaffold.dll" />
 				<include name="${bin2.dir}/Castle.MonoRail.ActiveRecordSupport.dll" />
 				<include name="${bin2.dir}/Castle.ActiveRecord.dll" />
-				<include name="${bin2.dir}/Commons.dll" />
 				<include name="${bin2.dir}/log4net.dll" />
 				<include name="${bin2.dir}/NVelocity.dll" />
 				<include name="${bin2.dir}/NHibernate.dll" />
