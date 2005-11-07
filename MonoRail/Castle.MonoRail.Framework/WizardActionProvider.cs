@@ -64,13 +64,13 @@ namespace Castle.MonoRail.Framework
 
 			IList stepList = new ArrayList();
 
-			controller.CustomActions["start"] = this;
+			controller.DynamicActions["start"] = this;
 
 			foreach(WizardStepPage step in steps)
 			{
 				String actionName = step.ActionName;
 
-				controller.CustomActions[actionName] = step;
+				controller.DynamicActions[actionName] = step;
 
 				stepList.Add(actionName);
 

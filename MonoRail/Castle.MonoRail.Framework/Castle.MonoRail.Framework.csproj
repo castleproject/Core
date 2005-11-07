@@ -123,6 +123,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "DelegateDynamicAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ErrorList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -19,6 +19,7 @@ namespace Castle.MonoRail.Framework.Internal
 	using System.Reflection;
 	using System.Threading;
 
+
 	public class ControllerDescriptorBuilder
 	{
 		private ReaderWriterLock locker = new ReaderWriterLock();
@@ -30,7 +31,8 @@ namespace Castle.MonoRail.Framework.Internal
 
 			locker.AcquireReaderLock(-1);
 
-			ControllerMetaDescriptor desc = (ControllerMetaDescriptor) descriptorRepository[controllerType];
+			ControllerMetaDescriptor desc = (ControllerMetaDescriptor) 
+				descriptorRepository[controllerType];
 
 			if (desc != null)
 			{
@@ -79,7 +81,7 @@ namespace Castle.MonoRail.Framework.Internal
 			return descriptor;
 		}
 
-		private static void CollectActionAttributes(MethodInfo method, ControllerMetaDescriptor descriptor)
+		private void CollectActionAttributes(MethodInfo method, ControllerMetaDescriptor descriptor)
 		{
 			object[] attributes = method.GetCustomAttributes(typeof(ResourceAttribute), true);
 
@@ -109,14 +111,6 @@ namespace Castle.MonoRail.Framework.Internal
 				descriptor.GetAction(method).SkipRescue = (SkipRescueAttribute) attributes[0];
 			}
 
-			// TODO: CustomRescue
-//			attributes = method.GetCustomAttributes(typeof(RescueAttribute), true);
-//
-//			foreach(RescueAttribute rescue in attributes)
-//			{
-//				descriptor.GetAction(method).Rescue = rescue;
-//			}
-
 			attributes = method.GetCustomAttributes( typeof(LayoutAttribute), true );
 	
 			if (attributes.Length != 0)
@@ -125,7 +119,7 @@ namespace Castle.MonoRail.Framework.Internal
 			}
 		}
 
-		private static void CollectClassLevelAttributes(Type controllerType, ControllerMetaDescriptor descriptor)
+		private void CollectClassLevelAttributes(Type controllerType, ControllerMetaDescriptor descriptor)
 		{
 			object[] attributes = controllerType.GetCustomAttributes( typeof(DefaultActionAttribute), true );
 	

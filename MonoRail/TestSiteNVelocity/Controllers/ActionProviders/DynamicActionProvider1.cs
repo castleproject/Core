@@ -28,7 +28,7 @@ namespace TestSiteNVelocity.Controllers.ActionProviders
 		/// <param name="controller"></param>
 		public void IncludeActions(Controller controller)
 		{
-			controller.CustomActions["index"] = new IndexDynamicAction();
+			controller.DynamicActions["index"] = new IndexDynamicAction();
 		}
 	}
 
@@ -41,7 +41,7 @@ namespace TestSiteNVelocity.Controllers.ActionProviders
 		/// <param name="controller"></param>
 		public void IncludeActions(Controller controller)
 		{
-			controller.CustomActions["save"] = new SaveDynamicAction();
+			controller.DynamicActions["save"] = new SaveDynamicAction();
 		}
 	}
 

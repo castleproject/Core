@@ -72,13 +72,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				String name = scaffoldAtt.Model.Name;
 
-				controller.CustomActions[ String.Format("new{0}", name) ] = new NewAction( scaffoldAtt.Model, templateEngine ); 
-				controller.CustomActions[ String.Format("create{0}", name) ] = new CreateAction( scaffoldAtt.Model, templateEngine ); 
-				controller.CustomActions[ String.Format("edit{0}", name) ] = new EditAction( scaffoldAtt.Model, templateEngine ); 
-				controller.CustomActions[ String.Format("update{0}", name) ] = new UpdateAction( scaffoldAtt.Model, templateEngine ); 
-				controller.CustomActions[ String.Format("remove{0}", name) ] = new RemoveAction( scaffoldAtt.Model, templateEngine ); 
-				controller.CustomActions[ String.Format("confirm{0}", name) ] = new ConfirmRemoveAction( scaffoldAtt.Model, templateEngine ); 
-				controller.CustomActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model, templateEngine ); 
+				controller.DynamicActions[ String.Format("new{0}", name) ] = new NewAction( scaffoldAtt.Model, templateEngine ); 
+				controller.DynamicActions[ String.Format("create{0}", name) ] = new CreateAction( scaffoldAtt.Model, templateEngine ); 
+				controller.DynamicActions[ String.Format("edit{0}", name) ] = new EditAction( scaffoldAtt.Model, templateEngine ); 
+				controller.DynamicActions[ String.Format("update{0}", name) ] = new UpdateAction( scaffoldAtt.Model, templateEngine ); 
+				controller.DynamicActions[ String.Format("remove{0}", name) ] = new RemoveAction( scaffoldAtt.Model, templateEngine ); 
+				controller.DynamicActions[ String.Format("confirm{0}", name) ] = new ConfirmRemoveAction( scaffoldAtt.Model, templateEngine ); 
+				controller.DynamicActions[ String.Format("list{0}", name) ] = new ListAction( scaffoldAtt.Model, templateEngine ); 
 			}
 		}
 

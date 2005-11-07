@@ -116,7 +116,7 @@ namespace Castle.MonoRail.Framework
 
 		internal IDictionary _actions = new HybridDictionary(true);
 
-		internal IDictionary _customActions = new HybridDictionary(true);
+		internal IDictionary _dynamicActions = new HybridDictionary(true);
 
 		private IScaffoldingSupport _scaffoldSupport;
 
@@ -268,6 +268,17 @@ namespace Castle.MonoRail.Framework
 		public NameValueCollection Params
 		{
 			get { return Request.Params; }
+		}
+
+		public IDictionary DynamicActions
+		{
+			get { return _dynamicActions; }
+		}
+
+		[Obsolete("Use the DynamicActions property instead")]
+		public IDictionary CustomActions
+		{
+			get { return _dynamicActions; }
 		}
 
 		#endregion
@@ -521,11 +532,6 @@ namespace Castle.MonoRail.Framework
 
 		#region Core members
 
-		public IDictionary CustomActions
-		{
-			get { return _customActions; }
-		}
-
 		protected internal virtual void CollectActions()
 		{
 			MethodInfo[] methods = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance);
@@ -655,7 +661,7 @@ namespace Castle.MonoRail.Framework
 			IDynamicAction dynAction = null;
 			if (method == null)
 			{
-				dynAction = CustomActions[action] as IDynamicAction;
+				dynAction = DynamicActions[action] as IDynamicAction;
 
 				if (dynAction == null)
 				{
