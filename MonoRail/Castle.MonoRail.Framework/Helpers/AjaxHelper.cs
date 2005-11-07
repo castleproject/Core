@@ -270,6 +270,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		public String ObserveField(String fieldId, int frequency, String url, IDictionary options)
 		{
 			options["url"] = url;
+			options["frequency"] = frequency;
 			return BuildObserver("Form.Element.Observer", fieldId, options);
 		}
 

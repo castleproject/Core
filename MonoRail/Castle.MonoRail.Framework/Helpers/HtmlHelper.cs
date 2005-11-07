@@ -656,12 +656,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		#endregion
 
-		public String InputCheckbox(String name, String value)
+		public String InputCheckbox(String name, Object value)
 		{
 			return InputCheckbox(name, value, null);
 		}
 
-		public String InputCheckbox(String name, String value, bool isChecked)
+		public String InputCheckbox(String name, Object value, bool isChecked)
 		{
 			IDictionary attributes = null;
 
@@ -674,20 +674,20 @@ namespace Castle.MonoRail.Framework.Helpers
 			return InputCheckbox(name, value, attributes);
 		}
 
-		public String InputCheckbox(String name, String value, IDictionary attributes)
+		public String InputCheckbox(String name, Object value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"checkbox\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2} />",
 				name, value, GetAttributes(attributes));
 		}
 
-		public String InputRadio(String name, String value)
+		public String InputRadio(String name, Object value)
 		{
 			return InputRadio(name, value, null);
 		}
 
-		public String InputRadio(String name, String value, IDictionary attributes)
+		public String InputRadio(String name, Object value, IDictionary attributes)
 		{
-			return String.Format("<input type=\"radio\" name=\"{0}\" id=\"{1}\" value=\"{1}\" {2} />",
+			return String.Format("<input type=\"radio\" name=\"{0}\" value=\"{1}\" {2} />",
 				name, value, GetAttributes(attributes));
 		}
 

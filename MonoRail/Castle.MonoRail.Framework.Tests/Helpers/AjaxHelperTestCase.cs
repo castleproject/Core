@@ -25,13 +25,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	[TestFixture]
 	public class AjaxHelperTestCase
 	{
-		private AjaxHelperOld _hlp;
-
-		[SetUp]
-		public void Setup()
-		{
-			this._hlp = new AjaxHelperOld();
-		}
+		private AjaxHelperOld _hlp = new AjaxHelperOld();
 
 		[Test]
 		public void LinkToFunction2args()
