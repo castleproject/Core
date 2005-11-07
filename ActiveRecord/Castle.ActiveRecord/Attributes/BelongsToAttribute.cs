@@ -19,8 +19,8 @@ namespace Castle.ActiveRecord
 	public enum OuterJoinEnum
 	{
 		Auto,
-		Yes,
-		No
+		True,
+		False
 	}
 
 	public enum CascadeEnum
