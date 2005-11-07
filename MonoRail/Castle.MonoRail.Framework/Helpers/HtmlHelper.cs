@@ -682,7 +682,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String InputRadio(String name, String value)
 		{
-			return InputCheckbox(name, value, null);
+			return InputRadio(name, value, null);
 		}
 
 		public String InputRadio(String name, String value, IDictionary attributes)
