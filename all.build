@@ -93,10 +93,16 @@
 				<include name="Tools/DynamicProxy/bin"/>
 				
 				<!-- Components -->
-				<include name="Facilities/Prevalence/lib"/>
-				<include name="Facilities/Db4o/lib"/>
-				<include name="Facilities/IBatisNet/lib"/>
-				<include name="Facilities/NHibernateIntegration/lib"/>
+				<include name="SharedLibs/Prevalence"/>
+				<include name="SharedLibs/Db4o"/>
+				<include name="SharedLibs/IBatis"/>
+				<include name="SharedLibs/NHibernate"/>
+				<include name="SharedLibs/boo"/>
+				<include name="SharedLibs/cassini"/>
+				<include name="SharedLibs/log4net"/>
+				<include name="SharedLibs/nettron"/>
+				<include name="SharedLibs/Nlog"/>
+				<include name="SharedLibs/Nvelocity"/>
 			</referencepaths>
 			<documenters>
 				<documenter name="MSDN">
