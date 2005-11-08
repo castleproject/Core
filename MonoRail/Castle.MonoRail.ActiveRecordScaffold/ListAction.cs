@@ -43,7 +43,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		protected override void PerformActionProcess(Controller controller)
 		{
 			controller.PropertyBag.Add( "items", PaginationHelper.CreateCachedPagination(
-				Model.Type.FullName, 10, new DataObtentionDelegate(PerformFindAll)) );
+				Model.Type.FullName, 1, new DataObtentionDelegate(PerformFindAll)) );
 			controller.PropertyBag["model"] = Model;
 			controller.PropertyBag["keyprop"] = ObtainPKProperty();
 			controller.PropertyBag["properties"] = ObtainListableProperties(Model);

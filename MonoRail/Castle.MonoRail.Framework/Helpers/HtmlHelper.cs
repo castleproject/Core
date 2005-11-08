@@ -1288,10 +1288,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			return CreateOptions(elems, textProperty, valueProperty, selectedValue);
 		}
 		
-		#endregion
-		
-		#region Create options
-
 		///<overloads>This method has two overloads.</overloads>
 		/// <summary>
 		/// Creates options elements from an <see cref="ICollection"/>.
