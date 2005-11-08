@@ -26,6 +26,79 @@ namespace Castle.MonoRail.Framework.Tests
 	[TestFixture]
 	public class DataBinderTestCase
 	{
+	
+		[Test]
+		public void DateTimeBind()
+		{
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("DOBday", 1.ToString());
+			args.Add("DOBmonth", 12.ToString());
+			args.Add("DOByear", 2005.ToString() );
+			
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person), "", args);
+
+			Assert.IsNotNull(instance);
+			Person p = (Person) instance ;
+			Assert.IsNotNull(instance);
+			Assert.AreEqual( p.DOB, new DateTime(2005,12,1) );
+		}
+
+		[Test]
+		public void DayTooBigDateTimeBind()
+		{
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("DOBday", 31.ToString());
+			args.Add("DOBmonth", 2.ToString());
+			args.Add("DOByear", 2005.ToString() );
+			
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof (Person), "", args);
+
+			Assert.IsNotNull(instance);
+			Person p = (Person) instance ;
+			Assert.IsNotNull(instance);
+			Assert.AreEqual( p.DOB, new DateTime(2005,2,28) );
+		}
+
+		[Test]
+		public void InvalidDateTimeBind()
+		{
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("DOBday", 32.ToString());
+			args.Add("DOBmonth", 2.ToString());
+			args.Add("DOByear", 2005.ToString() );
+			
+			try
+			{
+				DataBinder binder = new DataBinder();
+				object instance = binder.BindObject(typeof (Person), "", args);
+				Assert.Fail("InvalidDateTimeBind must throw an ArgumentException");
+			}
+			catch(ArgumentException){}
+		}
+
+		[Test]
+		public void InvalidDateTime2Bind()
+		{
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("DOBday", (-2).ToString());
+			args.Add("DOBmonth", 2.ToString());
+			args.Add("DOByear", 2005.ToString() );
+			
+			try
+			{
+				DataBinder binder = new DataBinder();
+				object instance = binder.BindObject(typeof (Person), "", args);
+				Assert.Fail("InvalidDateTime2Bind must throw an ArgumentException");
+			}
+			catch(ArgumentException){}
+		}
+								
 		[Test]
 		public void SimpleDataBind()
 		{
@@ -583,6 +656,7 @@ namespace Castle.MonoRail.Framework.Tests
 		private string _name;
 		private Int32 _age;
 		private Decimal _assets;
+		private DateTime _dob;
 		
 		public String Name
 		{
@@ -601,6 +675,12 @@ namespace Castle.MonoRail.Framework.Tests
 			get { return _assets; }
 			set { _assets = value; }
 		}
+		
+		public DateTime DOB
+		{
+			get { return _dob; }
+			set { _dob = value; }
+		}		
 	}
 
 	#endregion

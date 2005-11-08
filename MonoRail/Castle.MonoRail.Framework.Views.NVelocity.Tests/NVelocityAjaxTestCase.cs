@@ -35,6 +35,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
+		public void BehaviourFunctions()
+		{
+			DoGet("ajax/BehaviourFunctions.rails");
+			
+			String expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/BehaviourScripts.rails\"></script>";
+
+			AssertReplyEqualsTo(expected);
+		}
+		
+		[Test]
 		public void LinkToFunction()
 		{
 			DoGet("ajax/LinkToFunction.rails");

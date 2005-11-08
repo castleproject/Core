@@ -99,22 +99,29 @@ namespace Castle.MonoRail.Framework.Internal
 			{
 				if (value == null)
 				{
-					String day = paramList[paramName + "day"];
+					String day   = paramList[paramName + "day"];
 					String month = paramList[paramName + "month"];
-					String year = paramList[paramName + "year"];
+					String year  = paramList[paramName + "year"];
 
 					if (day != null && month != null && year != null)
 					{
 						try
-						{
-							// we have found a composite date so we 
-							// consider the convertion successful
+						{						
+							int numYear = System.Convert.ToInt32(year);
+							int numMonth = System.Convert.ToInt32(month);
+							int numDay = System.Convert.ToInt32(day);
+							
+							int daysInMonth = DateTime.DaysInMonth( numYear, numMonth);
+							
+							if( numDay > 31 ) throw new ArgumentException( String.Format( "{0}day {1} is too big", paramName, numDay) );
+							
+							if( numDay > daysInMonth ) numDay = daysInMonth;
+
+							DateTime dt = new DateTime( numYear, numMonth, numDay );
+
 							conversionSucceeded = true; 
 
-							return new DateTime(
-								System.Convert.ToInt32(year), 
-								System.Convert.ToInt32(month), 
-								System.Convert.ToInt32(day));
+							return dt;
 						}
 						catch(Exception inner)
 						{

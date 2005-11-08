@@ -44,6 +44,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		/// <summary>
+		/// Renders a script tag refering the Behaviour library code.
+		/// </summary>
+		/// <returns></returns>
+		public String GetBehaviourFunctions()
+		{
+			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
+				Controller.Context.ApplicationPath + "/MonoRail/Files/BehaviourScripts", 
+				Controller.Context.UrlInfo.Extension);
+		}
+		
+		/// <summary>
 		/// Returns a link that'll trigger a javascript +function+ using the 
 		/// onclick handler and return false after the fact.
 		/// <code>

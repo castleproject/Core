@@ -367,6 +367,10 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Controllers\Behaviour.resx"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controllers\Effects2.resx"
                     BuildAction = "EmbeddedResource"
                 />

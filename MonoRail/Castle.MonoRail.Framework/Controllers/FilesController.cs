@@ -21,6 +21,7 @@ namespace Castle.MonoRail.Framework.Controllers
 	/// parts of MonoRail.
 	/// </summary>
 	[ControllerDetails(Area="MonoRail")]
+	[Resource("Behaviour","Castle.MonoRail.Framework.Controllers.Behaviour", CultureName="neutral")]
 	[Resource("Ajax","Castle.MonoRail.Framework.Controllers.Ajax", CultureName="neutral")]
 	[Resource("Effects2", "Castle.MonoRail.Framework.Controllers.Effects2", CultureName="neutral")]
 	[Resource("EffectsFat", "Castle.MonoRail.Framework.Controllers.EffectsFat", CultureName="neutral")]
@@ -50,6 +51,15 @@ namespace Castle.MonoRail.Framework.Controllers
 			RenderFile("Ajax", "jsfunctions");
 		}
 
+		/// <summary>
+		/// Script used by <see cref="AjaxHelper"/>.
+		/// </summary>
+		public void BehaviourScripts()
+		{
+			Response.ContentType = "text/javascript";
+			RenderFile("Behaviour", "jsfunctions");
+		}
+		
 		/// <summary>
 		/// Script used by <see cref="EffectsFatHelper"/>.
 		/// </summary>

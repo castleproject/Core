@@ -398,9 +398,10 @@ namespace Castle.MonoRail.Framework
 						// for example in case the url has an Id
 						if( context.Request.QueryString.HasKeys() )
 						{							
-							string url = UrlInfo.CreateAbsoluteRailsUrl( context.ApplicationPath, controller.Name, nextStep, context.UrlInfo.Extension ) +
-										 '?' + context.Server.BuildWebParams( context.Request.QueryString );							
-							context.Response.Redirect(url);
+							string url = UrlInfo.CreateAbsoluteRailsUrl( context.ApplicationPath, controller.Name, nextStep, context.UrlInfo.Extension )
+									   + context.Request.Uri.Query;
+													
+							context.Response.Redirect( url );
 						}
 						else
 						{

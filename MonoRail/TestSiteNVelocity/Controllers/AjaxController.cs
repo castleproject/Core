@@ -23,46 +23,57 @@ namespace TestSiteNVelocity.Controllers
 	[Helper(typeof(AjaxHelperOld),"ajaxHelperAlias")]
 	// do not remove this is to make sure, you can add the same helper twice with different names
 	[Helper(typeof(AjaxHelperOld))] 
+	[Helper(typeof(AjaxHelper))] 
 	public class AjaxController : SmartDispatcherController
 	{
-		private AjaxHelperOld Helper
+		private AjaxHelperOld HelperOld
 		{
 			get { return (AjaxHelperOld) Helpers["ajaxHelperAlias"]; }
 		}
 
+		private AjaxHelper Helper
+		{
+			get { return (AjaxHelper) Helpers["AjaxHelper"]; }
+		}
+		
 		public AjaxController()
 		{
 		}
 
 		public void JsFunctions()
 		{
-			RenderText(Helper.GetJavascriptFunctions());
+			RenderText(HelperOld.GetJavascriptFunctions());
 		}
 
+		public void BehaviourFunctions()
+		{
+			RenderText(Helper.GetBehaviourFunctions());
+		}
+		
 		public void LinkToFunction()
 		{
-			RenderText(Helper.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')"));
+			RenderText(HelperOld.LinkToFunction("<img src='myimg.gid'>", "alert('Ok')"));
 		}
 
 		public void LinkToRemote()
 		{
 			Hashtable options = new Hashtable();
-			RenderText(Helper.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options));
+			RenderText(HelperOld.LinkToRemote("<img src='myimg.gid'>", "/controller/action.rails", options));
 		}
 
 		public void BuildFormRemoteTag()
 		{
-			RenderText(Helper.BuildFormRemoteTag("url", null, null));
+			RenderText(HelperOld.BuildFormRemoteTag("url", null, null));
 		}
 
 		public void ObserveField()
 		{
-			RenderText(Helper.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
+			RenderText(HelperOld.ObserveField("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
 		}
 
 		public void ObserveForm()
 		{
-			RenderText(Helper.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
+			RenderText(HelperOld.ObserveForm("myfieldid", 2, "/url", "elementToBeUpdated", "newcontent"));
 		}
 
 		public void Index()
