@@ -656,6 +656,22 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		#endregion
 
+		public String InputButton(String value)
+		{
+			return InputButton(value, value);
+		}
+
+		public String InputButton(String name, String value)
+		{
+			return InputButton(name, value, null);
+		}
+
+		public String InputButton(String name, String value, IDictionary attributes)
+		{
+			return String.Format("<input type=\"button\" name=\"{0}\" value=\"{1}\" {2} />",
+				name, value, GetAttributes(attributes));
+		}
+
 		public String InputCheckbox(String name, Object value)
 		{
 			return InputCheckbox(name, value, null);
