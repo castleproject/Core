@@ -188,12 +188,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model\InterceptorCollection.cs"
+                    RelPath = "Model\InterceptorReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Model\InterceptorReference.cs"
+                    RelPath = "Model\InterceptorReferenceCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
