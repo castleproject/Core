@@ -37,6 +37,7 @@ namespace Castle.Facilities.IBatisNetIntegration
 	public class IBatisNetFacility : AbstractFacility
 	{
 		public static readonly String FILE_CONFIGURATION = "_IBATIS_FILE_CONFIGURATION_";
+		public static readonly String FILE_CONFIGURATION_EMBEDDED = "_IBATIS_FILE_CONFIGURATION_EMBEDDED";
 
 		private static readonly ILog _logger = LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod().DeclaringType );
 
@@ -68,19 +69,34 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		#endregion
 
-		private void ConfigureFactories(IConfiguration config)
+		private void ConfigureFactories( IConfiguration config )
 		{
 			// A name for this sqlMap
 			String id = config.Attributes["id"]; 
 
 			String fileName = config.Attributes["config"];
-			if (fileName == String.Empty)
+			if ( fileName == String.Empty )
 			{
 				fileName = "sqlMap.config"; // default name
 			}
+			
+			bool isEmbedded = false;
+			String embedded = config.Attributes["embedded"];
+			if ( embedded != null )
+			{
+				try
+				{
+					isEmbedded = Convert.ToBoolean( embedded );
+				}
+				catch
+				{
+					isEmbedded = false;
+				}
+			}
 
 			ComponentModel model = new ComponentModel(id, typeof(SqlMapper), null);
-			model.ExtendedProperties.Add(FILE_CONFIGURATION, fileName );
+			model.ExtendedProperties.Add( FILE_CONFIGURATION, fileName );
+			model.ExtendedProperties.Add( FILE_CONFIGURATION_EMBEDDED, isEmbedded );
 			model.LifestyleType = LifestyleType.Singleton;
 			model.CustomComponentActivator = typeof( SqlMapActivator );
 

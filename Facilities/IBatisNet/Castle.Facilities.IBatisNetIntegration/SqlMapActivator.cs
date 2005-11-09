@@ -24,12 +24,14 @@
 namespace Castle.Facilities.IBatisNetIntegration
 {
 	using System;
+	using System.Xml;
 
 	using Castle.Model;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 
+	using IBatisNet.Common.Utilities;
 	using IBatisNet.DataMapper.Configuration;
 
 	public class SqlMapActivator : AbstractComponentActivator
@@ -42,8 +44,18 @@ namespace Castle.Facilities.IBatisNetIntegration
 		protected override object InternalCreate()
 		{
 			String fileName = (String) Model.ExtendedProperties[ IBatisNetFacility.FILE_CONFIGURATION ];
+			bool isEmbedded = (bool) Model.ExtendedProperties[ IBatisNetFacility.FILE_CONFIGURATION_EMBEDDED ];
+
 			IBatisNet.DataMapper.Configuration.DomSqlMapBuilder domSqlMapBuilder = new DomSqlMapBuilder();
-			return domSqlMapBuilder.Configure(fileName);
+			if( isEmbedded )
+			{
+				XmlDocument sqlMapConfig = Resources.GetEmbeddedResourceAsXmlDocument( fileName );
+				return domSqlMapBuilder.Configure(sqlMapConfig);     
+			}
+			else
+			{
+				return domSqlMapBuilder.Configure(fileName);
+			}
 		}
 
 		protected override void InternalDestroy(object instance)
