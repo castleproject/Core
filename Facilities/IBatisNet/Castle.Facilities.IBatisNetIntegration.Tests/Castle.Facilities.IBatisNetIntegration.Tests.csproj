@@ -116,24 +116,29 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "IBatisNet.Common"
-                    AssemblyName = "IBatisNet.Common"
-                    HintPath = "..\lib\IBatisNet.Common.dll"
-                />
-                <Reference
-                    Name = "IBatisNet.DataMapper"
-                    AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\lib\IBatisNet.DataMapper.dll"
-                />
-                <Reference
                     Name = "Castle.Facilities.AutomaticTransactionManagement"
                     AssemblyName = "Castle.Facilities.AutomaticTransactionManagement"
                     HintPath = "..\..\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll"
                 />
                 <Reference
+                    Name = "IBatisNet.DataMapper"
+                    AssemblyName = "IBatisNet.DataMapper"
+                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.DataMapper.dll"
+                />
+                <Reference
+                    Name = "IBatisNet.Common"
+                    AssemblyName = "IBatisNet.Common"
+                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.Common.dll"
+                />
+                <Reference
                     Name = "IBatisNet.Common.Logging.Log4Net"
                     AssemblyName = "IBatisNet.Common.Logging.Log4Net"
-                    HintPath = "..\lib\IBatisNet.Common.Logging.Log4Net.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.Common.Logging.Log4Net.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\..\SharedLibs\log4net\log4net.dll"
                 />
             </References>
         </Build>
@@ -178,6 +183,10 @@
                     RelPath = "ServiceTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SqlMap.config"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Dao\AccountDao.cs"

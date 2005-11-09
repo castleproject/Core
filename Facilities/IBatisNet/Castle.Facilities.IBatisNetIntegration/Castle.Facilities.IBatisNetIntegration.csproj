@@ -97,12 +97,12 @@
                 <Reference
                     Name = "IBatisNet.Common"
                     AssemblyName = "IBatisNet.Common"
-                    HintPath = "..\lib\IBatisNet.Common.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.Common.dll"
                 />
                 <Reference
                     Name = "IBatisNet.DataMapper"
                     AssemblyName = "IBatisNet.DataMapper"
-                    HintPath = "..\lib\IBatisNet.DataMapper.dll"
+                    HintPath = "..\..\..\SharedLibs\ibatis\IBatisNet.DataMapper.dll"
                 />
             </References>
         </Build>
