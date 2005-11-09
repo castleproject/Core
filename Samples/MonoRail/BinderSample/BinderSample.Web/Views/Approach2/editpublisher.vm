@@ -1,0 +1,44 @@
+
+<h3>Using ARDataBinder</h3>
+
+$HtmlHelper.Form("update.rails")
+
+<h4>Publisher</h4>
+
+$HtmlHelper.InputHidden("publisher.id", $publisher.Id)
+
+Name: $HtmlHelper.InputText("publisher.name", $publisher.Name)
+
+$HtmlHelper.InputHidden("Book@autoload", "yes")
+
+<h4>Books</h4>
+
+<table>
+  <tr>
+    <td>&nbsp;</td>
+    <td>Name</td>
+    <td>Author</td>
+  </tr>
+#set($counter = 0)
+#foreach($book in $publisher.Books)
+  <tr>
+    <td>
+    $book.Id
+    </td>
+    <td>
+  $HtmlHelper.InputHidden("book[${counter}].Id", $book.Id)
+  $HtmlHelper.InputText("book[${counter}].Name", $book.name)
+    </td>
+    <td>
+  $HtmlHelper.InputText("book[${counter}].Author", $book.author)
+    </td>
+  </tr>
+#set($counter = $counter + 1)
+#end
+</table>
+
+<br/>
+
+$HtmlHelper.SubmitButton("Save")
+
+$HtmlHelper.EndForm()

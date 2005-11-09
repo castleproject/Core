@@ -1,0 +1,12 @@
+<html>
+	<head>
+	  <link rel="STYLESHEET" type="text/css" href="${siteRoot}/Content/style.css">
+	</head>
+
+<body>
+
+  $childContent
+
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+<p>
+  <ul>
+    
+    <li><a href="$siteRoot/scaffolding/listbook.rails">Books</a></li>
+
+    <li><a href="$siteRoot/scaffolding/listpublisher.rails">Publishers</a></li>
+
+  </ul>
+</p>

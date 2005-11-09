@@ -1,0 +1,40 @@
+
+<h3>Using only DataBind attribute</h3>
+
+$HtmlHelper.Form("update.rails")
+
+<h4>Publisher</h4>
+
+$HtmlHelper.InputHidden("publisher.id", $publisher.Id)
+
+Name: $HtmlHelper.InputText("publisher.name", $publisher.Name)
+
+<h4>Books</h4>
+
+<table>
+  <tr>
+    <td>&nbsp;</td>
+    <td>Name</td>
+    <td>Author</td>
+  </tr>
+#foreach($book in $publisher.Books)
+  <tr>
+    <td>
+    $book.Id
+    </td>
+    <td>
+  $HtmlHelper.InputHidden("bookids", $book.Id)
+  $HtmlHelper.InputText("booknames", $book.name)
+    </td>
+    <td>
+  $HtmlHelper.InputText("bookauthors", $book.author)
+    </td>
+  </tr>
+#end
+</table>
+
+<br/>
+
+$HtmlHelper.SubmitButton("Save")
+
+$HtmlHelper.EndForm()

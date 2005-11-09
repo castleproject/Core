@@ -1,0 +1,12 @@
+
+<h3>Using ARDataBinder</h3>
+
+<h4>Publishers</h4>
+
+<ul>
+#foreach($pub in $publishers)
+  <li><a href="editpublisher.rails?publisherId=$pub.id">$pub</a></li>
+#end
+</ul>
+
+$HtmlHelper.EndForm()
