@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
+	using System.IO;
 	using System.Web;
 
 	using Castle.MonoRail.Framework;
@@ -87,6 +88,30 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _response.OutputStream; }
 		}
 
+		public void BinaryWrite(byte[] buffer)
+		{
+			_response.BinaryWrite(buffer);
+		}
+
+		public void BinaryWrite(Stream stream)
+		{
+			byte[] buffer = new byte[stream.Length];
+
+			stream.Read(buffer, 0, buffer.Length);
+
+			BinaryWrite(buffer);
+		}
+
+		public void Clear()
+		{
+			_response.Clear();
+		}
+
+		public void ClearContent()
+		{
+			_response.ClearContent();
+		}
+
 		public void Write(String s)
 		{
 			_response.Write(s);
@@ -144,7 +169,7 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public void CreateCookie(String name, String value)
 		{
-			_response.Cookies.Add( new HttpCookie(name, value) );
+			CreateCookie( new HttpCookie(name, value) );
 		}
 
 		public void CreateCookie(String name, String value, DateTime expiration)
@@ -154,7 +179,12 @@ namespace Castle.MonoRail.Framework.Adapters
 			cookie.Expires = expiration;
 			cookie.Path = "/";
 
-			_response.Cookies.Add( cookie );
+			CreateCookie(cookie);
+		}
+
+		public void CreateCookie(HttpCookie cookie)
+		{
+			_response.Cookies.Add(cookie);
 		}
 	}
 }

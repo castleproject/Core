@@ -1,7 +1,7 @@
 Change history
 
-RC1 
-===
+Beta 4
+======
 
 Core:
 
@@ -15,6 +15,8 @@ Core:
 
 - Added DataBindAttribute.Exclude - A comma separated list of property names 
   to exclude from databinding (kudos to Chad Humphries)
+
+- Added IResponse.BinaryWrite and CreateCookie( HttpCookie )
 
 - Support for smart arrays (aside from primitives) (kudos do Ahmed)
 

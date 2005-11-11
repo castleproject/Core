@@ -45,6 +45,14 @@ namespace Castle.MonoRail.Framework
 		
 		System.IO.Stream OutputStream { get; }
 
+		void BinaryWrite(byte[] buffer);
+
+		void BinaryWrite(System.IO.Stream stream);
+
+		void Clear();
+
+		void ClearContent();
+
 		void Write(String s);
 
 		void Write(object obj);
@@ -66,5 +74,7 @@ namespace Castle.MonoRail.Framework
 		void CreateCookie(String name, String value);
 		
 		void CreateCookie(String name, String value, DateTime expiration);
+
+		void CreateCookie(HttpCookie cookie);
 	}
 }
