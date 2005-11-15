@@ -94,6 +94,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Constants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -588,11 +593,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\ViewEngineBase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Internal\WizardUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -604,6 +604,11 @@
                 />
                 <File
                     RelPath = "Internal\Test\TestContextHolder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\ViewEngineBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -417,6 +417,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\testwizard\InnerAction2.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\testwizard\page1.vm"
                     BuildAction = "None"
                 />

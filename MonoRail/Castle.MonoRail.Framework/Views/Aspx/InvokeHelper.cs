@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		protected Controller Controller
 		{
-			get { return (Controller) Context.Items[Controller.ControllerContextKey]; }
+			get { return (Controller) Context.Items[Constants.ControllerContextKey]; }
 		}
 
 		public override void DataBind()

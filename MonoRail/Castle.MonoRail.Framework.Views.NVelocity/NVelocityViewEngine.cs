@@ -110,13 +110,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 
 			String view = ResolveTemplateName(viewName);
+
 			try
 			{
 				template = velocity.GetTemplate(view);
 
+				PreSendView(controller, template);
+
 				template.Merge(ctx, writer);
+
+				PostSendView(controller, template);
 			}
-			catch (Exception ex)
+			catch (Exception/* ex*/)
 			{
 				if (hasLayout)
 				{
@@ -124,24 +129,28 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					writer = context.Response.Output;
 				}
 
-				if (context.Request.IsLocal)
-				{
-					SendErrorDetails(ex, writer);
-					return;
-				}
-				else
-				{
-					throw new RailsException("Could not obtain view: " + view, ex);
-				}
+				// hammett: Gonna experiment with default ASP.Net error handling for a while
+				throw;
+
+//				if (context.Request.IsLocal)
+//				{
+//					SendErrorDetails(ex, writer);
+//					return;
+//				}
+//				else
+//				{
+//					throw new RailsException("Could not obtain view: " + view, ex);
+//				}
 			}
 
 			if (hasLayout)
 			{
-				ProcessLayout((writer as StringWriter).GetStringBuilder().ToString(), controller, ctx, context);
+				String contents = (writer as StringWriter).GetStringBuilder().ToString();
+				ProcessLayout(contents, controller, ctx, context);
 			}
 		}
 
-		///<summary>
+		/// <summary>
 		/// Processes the view - using the templateName to obtain the correct template
 		/// and writes the results to the System.TextWriter. No layout is applied!
 		/// </summary>

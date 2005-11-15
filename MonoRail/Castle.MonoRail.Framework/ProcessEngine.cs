@@ -15,6 +15,10 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Specialized;
+	using System.ComponentModel;
+	using System.ComponentModel.Design;
 	using System.Web;
 
 	using Castle.MonoRail.Framework.Internal;
@@ -27,7 +31,7 @@ namespace Castle.MonoRail.Framework
 	/// <remarks>
 	/// This is were all fun begins.
 	/// </remarks>
-	public class ProcessEngine : MarshalByRefObject
+	public class ProcessEngine : MarshalByRefObject, IServiceContainer
 	{
 		#region Fields
 
@@ -41,6 +45,7 @@ namespace Castle.MonoRail.Framework
 		private IViewComponentFactory viewCompFactory;
 		private readonly ControllerDescriptorBuilder controllerDescriptorBuilder = new ControllerDescriptorBuilder();
 		private readonly IMonoRailExtension[] extensions;
+		private IDictionary _type2Service = new HybridDictionary();
 
 		#endregion
 
@@ -70,41 +75,49 @@ namespace Castle.MonoRail.Framework
 			this.scaffoldingSupport = scaffoldingSupport;
 			this.viewCompFactory = viewCompFactory;
 			this.extensions = extensions;
+
+			AddService(typeof(IControllerFactory), controllerFactory);
+			AddService(typeof(IViewEngine), viewEngine);
+			AddService(typeof(IFilterFactory), filterFactory);
+			AddService(typeof(IResourceFactory), resourceFactory);
+			AddService(typeof(IScaffoldingSupport), scaffoldingSupport);
+			AddService(typeof(IViewComponentFactory), viewCompFactory);
+			AddService(typeof(ControllerDescriptorBuilder), controllerDescriptorBuilder);
 		}
 
 		#endregion
 
 		#region Properties
 
-		public IControllerFactory ControllerFactory
-		{
-			get { return controllerFactory; }
-		}
-
-		public IViewEngine ViewEngine
-		{
-			get { return viewEngine; }
-		}
-
-		public IFilterFactory FilterFactory
-		{
-			get { return filterFactory; }
-		}
-
-		public IResourceFactory ResourceFactory
-		{
-			get { return resourceFactory; }
-		}
-
-		public IScaffoldingSupport ScaffoldingSupport
-		{
-			get { return scaffoldingSupport; }
-		}
-
-		public IViewComponentFactory ViewComponentFactory
-		{
-			get { return viewCompFactory; }
-		}
+//		public IControllerFactory ControllerFactory
+//		{
+//			get { return controllerFactory; }
+//		}
+//
+//		public IViewEngine ViewEngine
+//		{
+//			get { return viewEngine; }
+//		}
+//
+//		public IFilterFactory FilterFactory
+//		{
+//			get { return filterFactory; }
+//		}
+//
+//		public IResourceFactory ResourceFactory
+//		{
+//			get { return resourceFactory; }
+//		}
+//
+//		public IScaffoldingSupport ScaffoldingSupport
+//		{
+//			get { return scaffoldingSupport; }
+//		}
+//
+//		public IViewComponentFactory ViewComponentFactory
+//		{
+//			get { return viewCompFactory; }
+//		}
 
 		/// <summary>
 		/// Returns the MonoRail context assosciated with the current
@@ -125,6 +138,45 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
+		#region IServiceContainer
+
+		public void AddService(Type serviceType, object serviceInstance)
+		{
+			_type2Service[serviceType] = serviceInstance;
+		}
+
+		public void AddService(Type serviceType, object serviceInstance, bool promote)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddService(Type serviceType, ServiceCreatorCallback callback)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddService(Type serviceType, ServiceCreatorCallback callback, bool promote)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void RemoveService(Type serviceType)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void RemoveService(Type serviceType, bool promote)
+		{
+			throw new NotImplementedException();
+		}
+
+		public object GetService(Type serviceType)
+		{
+			return _type2Service[serviceType];
+		}
+
+		#endregion
+
 		/// <summary>
 		/// Performs the base work of MonoRail. Extracts 
 		/// the information from the URL, obtain the controller 
@@ -134,8 +186,6 @@ namespace Castle.MonoRail.Framework
 		/// <param name="context"></param>
 		public virtual void Process( IRailsEngineContext context )
 		{
-			HttpContext httpContext = context.UnderlyingContext;
-			
 			UrlInfo info = ExtractUrlInfo(context);
 
 			Controller controller = controllerFactory.CreateController( info );
@@ -147,13 +197,10 @@ namespace Castle.MonoRail.Framework
 				throw new RailsException(message);
 			}
 
-			controller.MetaDescriptor = controllerDescriptorBuilder.BuildDescriptor(controller);
-
 			try
 			{
-				controller.Process( 
-					context, filterFactory, resourceFactory, 
-					info.Area, info.Controller, info.Action, viewEngine, scaffoldingSupport );
+				controller.Process( context, this, 
+					info.Area, info.Controller, info.Action );
 			}
 			finally
 			{

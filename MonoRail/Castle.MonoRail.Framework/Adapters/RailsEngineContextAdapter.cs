@@ -39,6 +39,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		private Exception _lastException;
 		private IDictionary _session;
 		private ServerUtilityAdapter _server;
+		private IDictionary _flash;
 
 		public RailsEngineContextAdapter(HttpContext context, String url)
 		{
@@ -154,7 +155,14 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public IDictionary Flash
 		{
-			get { return _context.Items; }
+			get
+			{
+				if (_flash == null)
+				{
+					_flash = new HybridDictionary();
+				}
+				return _flash;
+			}
 		}
 
 		public void Transfer(String path, bool preserveForm)
@@ -170,10 +178,7 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public UrlInfo UrlInfo
 		{
-			get
-			{
-				return UrlTokenizer.ExtractInfo(_url, ApplicationPath);
-			}
+			get { return UrlTokenizer.ExtractInfo(_url, ApplicationPath); }
 		}
 
 		public String ApplicationPath

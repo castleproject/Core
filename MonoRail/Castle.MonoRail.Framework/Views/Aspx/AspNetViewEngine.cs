@@ -113,7 +113,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		private bool IsTheSameView(HttpContext httpContext, string viewName)
 		{
-			string original = ((string) httpContext.Items[Controller.OriginalViewKey]);
+			string original = ((string) httpContext.Items[Constants.OriginalViewKey]);
 			string actual = viewName;
 
 			return String.Compare(original, actual, true) == 0;
@@ -121,11 +121,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		private void ProcessPage(Controller controller, IHttpHandler page, HttpContext httpContext)
 		{
-			controller.PreSendView(page);
+			PreSendView(controller, page);
 	
 			page.ProcessRequest(httpContext);
 	
-			controller.PostSendView(page);
+			PostSendView(controller, page);
 		}
 
 		private void ProcessLayoutIfNeeded(Controller controller, HttpContext httpContext, IHttpHandler childPage, Page masterHandler)

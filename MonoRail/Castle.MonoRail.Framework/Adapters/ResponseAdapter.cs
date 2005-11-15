@@ -25,7 +25,8 @@ namespace Castle.MonoRail.Framework.Adapters
 	{
 		private readonly string _appPath;
 		private readonly string _extension;
-		private HttpResponse _response;
+		private readonly HttpResponse _response;
+		private bool redirected;
 
 		public ResponseAdapter(HttpResponse response, string url, string appPath)
 		{
@@ -139,22 +140,30 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public void Redirect(String url)
 		{
+			redirected = true;
+			
 			_response.Redirect(url, false);
 		}
 
 		public void Redirect(String url, bool endProcess)
 		{
+			redirected = true;
+			
 			_response.Redirect(url, endProcess);
 		}
 
 		public void Redirect(String controller, String action)
 		{
+			redirected = true;
+			
 			_response.Redirect( 
 				UrlInfo.CreateAbsoluteRailsUrl(_appPath, controller, action, _extension), false );
 		}
 
 		public void Redirect(String area, String controller, String action)
 		{
+			redirected = true;
+
 			if (area == null || area.Length == 0)
 			{
 				_response.Redirect(
@@ -165,6 +174,11 @@ namespace Castle.MonoRail.Framework.Adapters
 				_response.Redirect( 
 					UrlInfo.CreateAbsoluteRailsUrl(_appPath, area, controller, action, _extension), false );
 			}
+		}
+
+		public bool WasRedirected
+		{
+			get { return redirected; }
 		}
 
 		public void CreateCookie(String name, String value)

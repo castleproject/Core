@@ -19,13 +19,13 @@ namespace TestSiteNVelocity.Controllers
 	using Castle.MonoRail.Framework;
 
 
-	[DynamicActionProvider( typeof(WizardActionProvider) )]
+	[DynamicActionProvider( typeof(WizardActionProvider) ), Serializable]
 	public class TestWizardController : Controller, IWizardController
 	{
 		// wizard unrelated action
 		public void Index()
 		{
-			
+			RenderText("Hello!");
 		}
 
 		public void OnWizardStart()
@@ -51,24 +51,21 @@ namespace TestSiteNVelocity.Controllers
 
 	public class Page1 : WizardStepPage
 	{
-		protected override bool Process()
+		public void InnerAction()
 		{
-			Flash["ProcessInvoked"] = true;
+			Flash["InnerActionInvoked"] = true;
 
-			String name = Params["name"];
+			RenderText("InnerAction contents");
+		}
 
-			if (name == null || name.Length == 0)
-			{
-				return false;
-			}
-
-			return true;
+		public void InnerAction2()
+		{
 		}
 	}
 
 	public class Page2 : WizardStepPage
 	{
-		protected override void Show()
+		protected override void RenderWizardView()
 		{
 			RenderText("A content rendered using RenderText");
 		}

@@ -71,6 +71,8 @@ namespace Castle.MonoRail.Framework
 
 		void Redirect(String url, bool endProcess);
 
+		bool WasRedirected { get; }
+
 		void CreateCookie(String name, String value);
 		
 		void CreateCookie(String name, String value, DateTime expiration);

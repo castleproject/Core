@@ -18,12 +18,11 @@ namespace Castle.MonoRail.Framework
 	using System.IO;
 	using System.Text;
 	using System.Web;
+	using System.Web.Mail;
 	using System.Reflection;
 	using System.Threading;
 	using System.Collections;
 	using System.Collections.Specialized;
-
-	using System.Web.Mail;
 	using System.Configuration;
 	using System.Text.RegularExpressions;
 
@@ -36,27 +35,17 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class Controller
 	{
-		#region Static and Instance Fields
-
-		/// <summary>
-		/// TODO: Document why this is necessary
-		/// </summary>
-		public static readonly String ControllerContextKey = "rails.controller";
-
-		/// <summary>
-		/// TODO: Document why this is necessary
-		/// </summary>
-		internal static readonly String OriginalViewKey = "rails.original_view";
+		#region Fields
 
 		/// <summary>
 		/// The reference to the <see cref="IViewEngine"/> instance
 		/// </summary>
-		private IViewEngine _viewEngine;
+		internal IViewEngine _viewEngine;
 
 		/// <summary>
 		/// Holds the request/context information
 		/// </summary>
-		private IRailsEngineContext _context;
+		internal IRailsEngineContext _context;
 
 		/// <summary>
 		/// Holds information to pass to the view
@@ -71,12 +60,12 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Reference to the <see cref="IFilterFactory"/> instance
 		/// </summary>
-		private IFilterFactory _filterFactory;
+		internal IFilterFactory _filterFactory;
 
 		/// <summary>
 		/// Reference to the <see cref="IResourceFactory"/> instance
 		/// </summary>
-		private IResourceFactory _resourceFactory;
+		internal IResourceFactory _resourceFactory;
 
 		/// <summary>
 		/// The area name which was used to access this controller
@@ -118,11 +107,13 @@ namespace Castle.MonoRail.Framework
 
 		internal IDictionary _dynamicActions = new HybridDictionary(true);
 
-		private IScaffoldingSupport _scaffoldSupport;
+		internal IScaffoldingSupport _scaffoldSupport;
 
 		internal bool _directRenderInvoked;
 
 		private ControllerMetaDescriptor metaDescriptor;
+
+		private IServiceProvider serviceProvider;
 
 		#endregion
 
@@ -148,7 +139,6 @@ namespace Castle.MonoRail.Framework
 		public ControllerMetaDescriptor MetaDescriptor
 		{
 			get { return metaDescriptor; }
-			set { metaDescriptor = value; }
 		}
 
 		public ICollection Actions
@@ -532,6 +522,11 @@ namespace Castle.MonoRail.Framework
 
 		#region Core members
 
+		protected internal IServiceProvider ServiceProvider
+		{
+			get { return serviceProvider; }
+		}
+
 		protected internal virtual void CollectActions()
 		{
 			MethodInfo[] methods = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance);
@@ -567,20 +562,33 @@ namespace Castle.MonoRail.Framework
 			actions.Remove("GetType");
 		}
 
+		internal void InitializeFieldsFromServiceProvider(IServiceProvider serviceProvider)
+		{
+			this.serviceProvider = serviceProvider;
+			
+			_viewEngine = (IViewEngine) serviceProvider.GetService( typeof(IViewEngine) );
+			_filterFactory = (IFilterFactory) serviceProvider.GetService( typeof(IFilterFactory) );
+			_resourceFactory = (IResourceFactory) serviceProvider.GetService( typeof(IResourceFactory) );
+			_scaffoldSupport = (IScaffoldingSupport) serviceProvider.GetService( typeof(IScaffoldingSupport) );
+
+			ControllerDescriptorBuilder controllerDescriptorBuilder = (ControllerDescriptorBuilder)
+				serviceProvider.GetService( typeof(ControllerDescriptorBuilder) );
+
+			metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(this);
+		}
+
 		/// <summary>
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		public void Process(IRailsEngineContext context, IFilterFactory filterFactory, IResourceFactory resourceFactory,
-		                    String areaName, String controllerName, String actionName, IViewEngine viewEngine, IScaffoldingSupport scaffoldSupport)
+		internal void Process(IRailsEngineContext context, IServiceProvider serviceProvider, 
+			String areaName, String controllerName, String actionName)
 		{
+			InitializeFieldsFromServiceProvider(serviceProvider);
+
 			_areaName = areaName;
 			_controllerName = controllerName;
-			_viewEngine = viewEngine;
 			_context = context;
-			_filterFactory = filterFactory;
-			_resourceFactory = resourceFactory;
-			_scaffoldSupport = scaffoldSupport;
 
 #if ALLOWTEST
 			HttpContext.Items["mr.flash"] = Flash;
@@ -617,10 +625,16 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Used to process the method associated
-		/// with the action name specified.
+		/// Performs the specified action, which means:
+		/// <br/>
+		/// 1. Define the default view name<br/>
+		/// 2. Run the before filters<br/>
+		/// 3. Select the method related to the action name and invoke it<br/>
+		/// 4. On error, execute the rescues if available<br/>
+		/// 5. Run the after filters<br/>
+		/// 6. Invoke the view engine<br/>
 		/// </summary>
-		/// <param name="action"></param>
+		/// <param name="action">Action name</param>
 		public void Send(String action)
 		{
 			InternalSend(action);
@@ -639,6 +653,10 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">Action name</param>
 		protected virtual void InternalSend(String action)
 		{
+			// If a redirect was sent there's no point in
+			// wasting processor cycles
+			if (Response.WasRedirected) return;
+
 			// Record the action
 			_evaluatedAction = action;
 
@@ -648,9 +666,9 @@ namespace Castle.MonoRail.Framework
 			// If we have an HttpContext available, store the original view name
 			if (HttpContext != null)
 			{
-				if (!HttpContext.Items.Contains(OriginalViewKey))
+				if (!HttpContext.Items.Contains(Constants.OriginalViewKey))
 				{
-					HttpContext.Items[OriginalViewKey] = _selectedViewName;
+					HttpContext.Items[Constants.OriginalViewKey] = _selectedViewName;
 				}
 			}
 
@@ -745,8 +763,8 @@ namespace Castle.MonoRail.Framework
 			
 			try
 			{
-				// If we haven't failed anywhere yet...
-				if (!hasError)
+				// If we haven't failed anywhere and no redirect was issued
+				if (!hasError && !Response.WasRedirected)
 				{
 					// Render the actual view then cleanup
 					ProcessView();
@@ -1092,7 +1110,7 @@ namespace Castle.MonoRail.Framework
 
 			if (_context.UnderlyingContext != null)
 			{
-				_context.UnderlyingContext.Items[ControllerContextKey] = this;
+				_context.UnderlyingContext.Items[Constants.ControllerContextKey] = this;
 			}
 		}
 
@@ -1106,34 +1124,6 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#endregion
-
-		#region Email Constants and Instance Fields
-
-    const String TemplatePath       = "mail";
-    const String ToAddressPattern   = @"[ \t]*(?<header>(to|cc|bcc)):[ \t]*(?<value>([\w-\.]+@([\w\.]){1,}\w+[ \t]*;?[ \t]*)+)[ \t]*(\r*\n*)?";
-    const String FromAddressPattern = @"[ \t]*from:[ \t]*(?<value>(\w+[ \t]*)*<*[ \t]*[\w-\.]+@([\w\.]){1,}[\w][ \t]*>*)[ \t]*(\r*\n*)?";
-    const String HeaderPattern      = @"[ \t]*(?<header>(subject|X-\w+)):[ \t]*(?<value>(\w+[ \t]*)+)(\r*\n*)?";
-    const String HeaderKey          = "header";
-    const String ValueKey           = "value";
-    const String To                 = "to";
-    const String Cc                 = "cc";
-    const String Bcc                = "bcc";
-    const String Subject            = "subject";
-    const String HtmlTag            = "<html>";
-    const String SmtpUsername       = "SMTP_USERNAME";
-    const String SmtpPassword       = "SMTP_PASSWORD";
-    const String SmtpUsernameSchema = "http://schemas.microsoft.com/cdo/configuration/sendusername";
-    const String SmtpPasswordSchema = "http://schemas.microsoft.com/cdo/configuration/sendpassword";
-    const String SmtpAuthSchema     = "http://schemas.microsoft.com/cdo/configuration/smtpauthenticate";
-    const String SmtpAuthEnabled    = "1";
-    const String SmtpServer         = "SMTP_SERVER";
-    const String DefaultSmtpServer  = "localhost";
-
-    Regex readdress = new Regex(ToAddressPattern,   RegexOptions.IgnoreCase | RegexOptions.Compiled);
-    Regex refrom    = new Regex(FromAddressPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-    Regex reheader  = new Regex(HeaderPattern,      RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-    #endregion
 
 		#region Email operations
 
@@ -1149,47 +1139,47 @@ namespace Castle.MonoRail.Framework
 
 			// use the template engine to generate the body of the message
 			StringWriter writer = new StringWriter();
-			this.InPlaceRenderSharedView(writer, Path.Combine(TemplatePath, templateName));
+			this.InPlaceRenderSharedView(writer, Path.Combine(Constants.TemplatePath, templateName));
 			string body = writer.ToString();
 			
 			// process delivery addresses from template.
-			MatchCollection matches1 = readdress.Matches(body);
+			MatchCollection matches1 = Constants.readdress.Matches(body);
 			for(int i=0; i< matches1.Count; i++)
 			{
-				string header	 = matches1[i].Groups[HeaderKey].ToString().ToLower();
-				string address = matches1[i].Groups[ValueKey].ToString();
+				string header	 = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
+				string address = matches1[i].Groups[Constants.ValueKey].ToString();
 
 				switch(header)
 				{
-					case To :
+					case Constants.To :
 						message.To = address;
 						break;
-					case Cc :
+					case Constants.Cc :
 						message.Cc = address;
 						break;
-					case Bcc :
+					case Constants.Bcc :
 						message.Bcc = address;
 						break;
 				}
 			}
-			body = readdress.Replace(body, String.Empty);
+			body = Constants.readdress.Replace(body, String.Empty);
 
 			// process from address from template
-			Match match = refrom.Match(body);
+			Match match = Constants.refrom.Match(body);
 			if(match.Success)
 			{
-				message.From = match.Groups[ValueKey].ToString();
-				body = refrom.Replace(body, String.Empty);
+				message.From = match.Groups[Constants.ValueKey].ToString();
+				body = Constants.refrom.Replace(body, String.Empty);
 			}
 
 			// process subject and X headers from template
-			MatchCollection matches2 = reheader.Matches(body);
+			MatchCollection matches2 = Constants.reheader.Matches(body);
 			for(int i=0; i< matches2.Count; i++)
 			{
-				string header	= matches2[i].Groups[HeaderKey].ToString();
-				string strval	= matches2[i].Groups[ValueKey].ToString();
+				string header	= matches2[i].Groups[Constants.HeaderKey].ToString();
+				string strval	= matches2[i].Groups[Constants.ValueKey].ToString();
 
-				if(header.ToLower() == Subject)
+				if(header.ToLower() == Constants.Subject)
 				{
 					message.Subject = strval;
 				}
@@ -1198,12 +1188,12 @@ namespace Castle.MonoRail.Framework
 					message.Headers.Add(header, strval);
 				}
 			}
-			body = reheader.Replace(body, String.Empty);
+			body = Constants.reheader.Replace(body, String.Empty);
 
 			message.Body = body;
 
 			// a little magic to see if the body is html
-			if(message.Body.ToLower().IndexOf(HtmlTag) > -1)
+			if(message.Body.ToLower().IndexOf(Constants.HtmlTag) > -1)
 				message.BodyFormat = MailFormat.Html;
 			
 			return message;
@@ -1213,22 +1203,25 @@ namespace Castle.MonoRail.Framework
 		/// Attempts to deliver the System.Web.Mail.MailMessage using localhost smtp server or the server specified by the key SMTP_SERVER in the web.config.
 		/// </summary>
 		/// <param name="message">The instance of System.Web.Mail.MailMessage that will be sent</param>
+		/// <remarks>
+		/// TODO : Review this to ue MR configuration
+		/// </remarks>
 		public void DeliverEmail(MailMessage message)
 		{
 			try
 			{
-				if( ConfigurationSettings.AppSettings[SmtpUsername] != null && ConfigurationSettings.AppSettings[SmtpUsername] != String.Empty &&
-					ConfigurationSettings.AppSettings[SmtpPassword] != null && ConfigurationSettings.AppSettings[SmtpPassword] != String.Empty)
+				if( ConfigurationSettings.AppSettings[Constants.SmtpUsername] != null && ConfigurationSettings.AppSettings[Constants.SmtpUsername] != String.Empty &&
+					ConfigurationSettings.AppSettings[Constants.SmtpPassword] != null && ConfigurationSettings.AppSettings[Constants.SmtpPassword] != String.Empty)
 				{
-					message.Fields.Add(SmtpAuthSchema, SmtpAuthEnabled);
-					message.Fields.Add(SmtpUsernameSchema, ConfigurationSettings.AppSettings[SmtpUsername]);
-					message.Fields.Add(SmtpPasswordSchema, ConfigurationSettings.AppSettings[SmtpPassword]);
+					message.Fields.Add(Constants.SmtpAuthSchema, Constants.SmtpAuthEnabled);
+					message.Fields.Add(Constants.SmtpUsernameSchema, ConfigurationSettings.AppSettings[Constants.SmtpUsername]);
+					message.Fields.Add(Constants.SmtpPasswordSchema, ConfigurationSettings.AppSettings[Constants.SmtpPassword]);
 				}
 
-				if(ConfigurationSettings.AppSettings[SmtpServer] != null && ConfigurationSettings.AppSettings[SmtpServer] != String.Empty)
-					SmtpMail.SmtpServer = ConfigurationSettings.AppSettings[SmtpServer];
+				if(ConfigurationSettings.AppSettings[Constants.SmtpServer] != null && ConfigurationSettings.AppSettings[Constants.SmtpServer] != String.Empty)
+					SmtpMail.SmtpServer = ConfigurationSettings.AppSettings[Constants.SmtpServer];
 				else
-					SmtpMail.SmtpServer = DefaultSmtpServer;
+					SmtpMail.SmtpServer = Constants.DefaultSmtpServer;
 			
 				SmtpMail.Send(message);
 			}

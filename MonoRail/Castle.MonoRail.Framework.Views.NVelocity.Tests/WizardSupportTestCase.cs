@@ -31,6 +31,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
+		public void UnrelatedWizardActionInvocation()
+		{
+			DoGet("testwizard/index.rails");
+			AssertReplyEqualsTo("Hello!");
+		}
+
+		[Test]
 		public void Page1HasCorrectIndex()
 		{
 			DoGet("testwizard/Page1.rails");
@@ -52,30 +59,29 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
-		public void ProcessOnlyInvokedUnderRightConditions()
+		public void InnerActionsWithNoView()
 		{
 			DoGet("testwizard/Page1.rails");
+			AssertFlashDoesNotContain("InnerActionInvoked");
 			AssertSuccess();
-			AssertFlashDoesNotContain("ProcessInvoked");
 
 			// Yes, we invoke it twice
 
 			DoGet("testwizard/Page1.rails");
 			AssertSuccess();
-			AssertFlashDoesNotContain("ProcessInvoked");
+			AssertFlashDoesNotContain("InnerActionInvoked");
 
-			DoGet("testwizard/Page1.rails", "wizard.doprocess=true");
+			DoGet("testwizard/Page1-InnerAction.rails");
 			AssertSuccess();
-			AssertFlashContains("ProcessInvoked");
+			AssertFlashContains("InnerActionInvoked");
 		}
 		
-//		[Test]
-//		public void ProcessWithQueryStringParams()
-//		{
-//			DoPost("testwizard/Page1.rails", "wizard.doprocess=true", "name=1");
-//			AssertSuccess();
-//			AssertFlashContains("ProcessInvoked");
-//			AssertRedirectedTo("/testwizard/Page2.rails?Id=1");
-//		}		
+		[Test]
+		public void InnerActionsWithView()
+		{
+			DoGet("testwizard/Page1-InnerAction2.rails");
+			AssertSuccess();
+			AssertReplyEqualsTo("View for Inner action 2");
+		}	
 	}
 }

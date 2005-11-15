@@ -1,9 +1,10 @@
 Change history
+--------------
 
-Beta 4
+Beta 5
 ======
 
-Core:
+** Core ** 
 
 - ITrace and Trace property added to IRailsEngineContext (kudos to Chad Humphries)
 
@@ -73,20 +74,33 @@ The count attribute serves as a performance optimization when your elements are 
    
 
 
-Scaffolding support:
+** Scaffolding support **
 
 - huge refactoring
 - It's now using templates
 
 
-Test support:
+** Test support **
 
 - Introduced Castle.MonoRail.TestSupport
 
 
-Bug fixes:
+** Bug fixes **
 
-- Incorrect url were accepted (fixed by Fabio Batista)
+MR-68	PreSendView is not being invoked by NVelocityViewEngine
+        http://support.castleproject.org/jira/browse/MR-68
+MR-66	DataBinder and ConvertUtils should support TypeConverters
+        http://support.castleproject.org/jira/browse/MR-66
+MR-64	DataBinder.Convert should support decimal
+        http://support.castleproject.org/jira/browse/MR-64
+MR-58	AbstractHelper generates invalid XHTML
+        http://support.castleproject.org/jira/browse/MR-58
+MR-57	Wrong urls are crashing UrlTokenizer
+        http://support.castleproject.org/jira/browse/MR-57
+MR-49	Remove public properties from the list of available actions (Controller.cs)
+        http://support.castleproject.org/jira/browse/MR-49
+MR-30	MR should not accept incorrect urls
+        http://support.castleproject.org/jira/browse/MR-30
 
 
 Beta 4
