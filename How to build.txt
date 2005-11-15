@@ -9,6 +9,17 @@ Where to start the build?
 Use the all.build in the root directory. It compiles everything in the right order, copies dependencies and so on. 
 
 
+Building for .Net 2.0
+=====================
+
+Some of the Castle components has additional features that require the .Net 2.0 framework. 
+If you want to use Castle on a project that runs the .Net 2.0 framework, you should make sure that you're
+building for .Net 2.0
+Usually it will happen automatically if the .Net 2.0 is installed on your computer, but you can make sure by specifying
+the 2.0 version like so:
+  
+  > nant -t:net-2.0
+
 Database tests
 ==============
 
