@@ -64,12 +64,25 @@ namespace Castle.Facilities.IBatisNetIntegration
 			Kernel.AddComponent( "IBatis.session.interceptor", typeof(AutomaticSessionInterceptor) );
 			Kernel.AddComponent( "IBatis.transaction.manager", typeof(ITransactionManager), typeof(DataMapperTransactionManager) );
 
-			ConfigureFactories(factoriesConfig);
+			int factories = 0;
+			foreach( IConfiguration factoriesConfig in FacilityConfig.Children)
+			{
+				if( factoriesConfig.Name == "sqlMap")
+				{
+					ConfigureFactory( factoriesConfig);
+					factories ++;
+				}
+			}
+			
+			if ( factories == 0)
+			{
+				throw new ConfigurationException( "You need to configure at least one sqlMap for IBatisNetFacility" );
+			}
 		}
 
 		#endregion
 
-		private void ConfigureFactories( IConfiguration config )
+		private void ConfigureFactory( IConfiguration config )
 		{
 			// A name for this sqlMap
 			String id = config.Attributes["id"]; 
