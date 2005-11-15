@@ -91,8 +91,6 @@ namespace Castle.MonoRail.Framework
 				step.Initialize(controller);
 			}
 
-//			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
-
 			context.UnderlyingContext.Items["wizard.step.list"] = stepList;
 
 			if (currentStepInstance != null && !HasRequiredSessionData(controller))
@@ -136,13 +134,9 @@ namespace Castle.MonoRail.Framework
 
 			IWizardController wizController = (IWizardController) controller;
 
-			// IList stepList = (IList) context.UnderlyingContext.Items["wizard.step.list"];
-
 			String wizardName = WizardUtils.ConstructWizardNamespace(controller);
 
 			String currentStep = (String) context.Session[wizardName + "currentstep"];
-
-//			String doProcessFlag = context.Params["wizard.doprocess"];
 
 			if (!wizController.OnBeforeStep(wizardName, currentStep, currentStepInstance))
 			{
@@ -194,22 +188,6 @@ namespace Castle.MonoRail.Framework
 			{
 				context.Response.Redirect(controller.Name, firstStep);
 			}
-
-//			IList stepList = (IList) context.UnderlyingContext.Items["wizard.step.list"];
-//
-//			bool doRedirect = String.Compare((String) stepList[0], controller.Context.UrlInfo.Action, true) != 0;
-//
-//			String firstStep = (String) stepList[0];
-//
-//			context.Session[wizardName + "currentstepindex"] = 0;
-//			context.Session[wizardName + "currentstep"] = firstStep;
-//
-//			wizardController.OnWizardStart();
-//
-//			if (doRedirect)
-//			{
-//				context.Response.Redirect(controller.Name, firstStep);
-//			}
 		}
 
 		protected void ResetSteps(Controller controller)

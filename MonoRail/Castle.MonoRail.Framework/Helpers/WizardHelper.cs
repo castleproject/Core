@@ -198,10 +198,5 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return LinkTo( linkText, Controller.Name, stepName, id );
 		}
-
-		public String EnableDoProcess()
-		{
-			return InputHidden("wizard.doprocess", "true");
-		}
 	}
 }
