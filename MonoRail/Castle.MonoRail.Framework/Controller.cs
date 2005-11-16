@@ -765,7 +765,7 @@ namespace Castle.MonoRail.Framework
 						DisposeFilter();
 						ReleaseResources();
 					}
-					finally 
+					catch 
 					{
 						//If the rescue fails, let the exception bubble
 						throw;
