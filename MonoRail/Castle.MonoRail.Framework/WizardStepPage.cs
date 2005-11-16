@@ -16,7 +16,8 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Collections;
-
+	using System.Collections.Specialized;
+	using System.Reflection;
 	using Castle.MonoRail.Framework.Internal;
 
 
@@ -65,7 +66,10 @@ namespace Castle.MonoRail.Framework
 
 			_context = wizardController.Context;
 
+			UrlInfo urlInfo = _context.UrlInfo;
+
 			InitializeFieldsFromServiceProvider(wizardController.ServiceProvider);
+			InitializeControllerState(urlInfo.Area, urlInfo.Controller, urlInfo.Action);
 		}
 
 		/// <summary>
@@ -92,7 +96,19 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected internal virtual void RenderWizardView()
 		{
-			_wizardcontroller.RenderView( ActionName );
+			RenderView( ActionName );
+		}
+
+		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
+		{
+			if (action == "RenderWizardView")
+			{
+				return typeof(WizardStepPage).GetMethod("RenderWizardView", BindingFlags.Instance|BindingFlags.NonPublic);
+			}
+			else
+			{
+				return base.SelectMethod(action, actions, request);
+			}
 		}
 
 		#endregion

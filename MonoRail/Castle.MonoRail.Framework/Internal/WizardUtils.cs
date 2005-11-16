@@ -21,6 +21,11 @@ namespace Castle.MonoRail.Framework.Internal
 	{
 		public static String ConstructWizardNamespace(Controller controller)
 		{
+			if (controller is WizardStepPage)
+			{
+				return ConstructWizardNamespace( (controller as WizardStepPage).WizardController );
+			}
+
 			return String.Format("wizard.{0}", controller.Name);
 		}
 

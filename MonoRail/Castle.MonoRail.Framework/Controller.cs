@@ -577,6 +577,18 @@ namespace Castle.MonoRail.Framework
 			metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(this);
 		}
 
+		internal void InitializeControllerState(String areaName, String controllerName, String actionName)
+		{
+			SetEvaluatedAction(actionName);
+			_areaName = areaName;
+			_controllerName = controllerName;
+		}
+
+		internal void SetEvaluatedAction(String actionName)
+		{
+			_evaluatedAction = actionName;
+		}
+
 		/// <summary>
 		/// Method invoked by the engine to start 
 		/// the controller process. 
@@ -586,8 +598,8 @@ namespace Castle.MonoRail.Framework
 		{
 			InitializeFieldsFromServiceProvider(serviceProvider);
 
-			_areaName = areaName;
-			_controllerName = controllerName;
+			InitializeControllerState(areaName, controllerName, actionName);
+
 			_context = context;
 
 #if ALLOWTEST
@@ -658,7 +670,7 @@ namespace Castle.MonoRail.Framework
 			if (Response.WasRedirected) return;
 
 			// Record the action
-			_evaluatedAction = action;
+			SetEvaluatedAction(action);
 
 			// Record the default view for this area/controller/action
 			RenderView(action);

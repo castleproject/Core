@@ -82,6 +82,22 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("testwizard/Page1-InnerAction2.rails");
 			AssertSuccess();
 			AssertReplyEqualsTo("View for Inner action 2");
-		}	
+		}
+	
+		[Test]
+		public void WizardPageWithView()
+		{
+			DoGet("testwizard/Page3.rails");
+			AssertSuccess();
+			AssertReplyEqualsTo("Wizard page 3");
+		}
+
+		[Test]
+		public void WizardHelper_HasNextAndPreviousSteps()
+		{
+			DoGet("testwizard/Page4.rails");
+			AssertSuccess();
+			AssertReplyEqualsTo("hasprevious True\r\nhasnext False");
+		}
 	}
 }

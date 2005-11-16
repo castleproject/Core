@@ -38,6 +38,10 @@ namespace Castle.MonoRail.Framework
 	{
 		private WizardStepPage[] steps;
 		private WizardStepPage currentStepInstance;
+		private String rawAction;
+		private String innerAction;
+		private String requestedAction;
+		private UrlInfo urlInfo;
 
 		public WizardActionProvider()
 		{
@@ -63,16 +67,15 @@ namespace Castle.MonoRail.Framework
 					controller.Name);
 			}
 
-			SetUpWizardHelper(controller);
-
 			IList stepList = new ArrayList();
 
 			controller.DynamicActions["start"] = this;
 
-			String action = controller.Context.UrlInfo.Action;
+			urlInfo = controller.Context.UrlInfo;
 
-			String innerAction;
-			String requestedAction = ObtainRequestedAction(action, out innerAction);
+			rawAction = urlInfo.Action;
+
+			requestedAction = ObtainRequestedAction(rawAction, out innerAction);
 
 			foreach(WizardStepPage step in steps)
 			{
@@ -81,6 +84,13 @@ namespace Castle.MonoRail.Framework
 				if (String.Compare(requestedAction, actionName, true) == 0)
 				{
 					currentStepInstance = step;
+
+					if (innerAction != null)
+					{
+						// If there's an inner action, we invoke it as a step too
+						controller.DynamicActions[rawAction] = 
+							new DelegateDynamicAction(new ActionDelegate(OnStepActionRequested));
+					}
 				}
 
 				controller.DynamicActions[actionName] = 
@@ -97,19 +107,9 @@ namespace Castle.MonoRail.Framework
 			{
 				StartWizard(controller, false);
 			}
-
-			if (currentStepInstance != null && innerAction != null)
-			{
-				// Kinda hack to void to action on the wizard controller
-				controller.DynamicActions[action] = 
-					new DelegateDynamicAction(new ActionDelegate(EmptyAction));
-
-				UrlInfo info = context.UrlInfo;
-
-				currentStepInstance.Process(controller.Context, 
-					controller.ServiceProvider, 
-					info.Area, info.Controller, innerAction);
-			}
+			
+			SetUpWizardHelper(controller);
+			SetUpWizardHelper(currentStepInstance);
 		}
 
 		/// <summary>
@@ -123,7 +123,8 @@ namespace Castle.MonoRail.Framework
 
 		/// <summary>
 		/// Invoked when a step is accessed on the url, 
-		/// i.e. http://host/mywizard/firststep.rails
+		/// i.e. http://host/mywizard/firststep.rails and 
+		/// when an inner action is invoked like http://host/mywizard/firststep-save.rails
 		/// </summary>
 		/// <param name="controller"></param>
 		private void OnStepActionRequested(Controller controller)
@@ -145,7 +146,18 @@ namespace Castle.MonoRail.Framework
 
 			WizardUtils.RegisterCurrentStepInfo(controller, currentStepInstance.ActionName);
 
-			currentStepInstance.RenderWizardView();
+			if (innerAction == null || innerAction == String.Empty)
+			{
+				currentStepInstance.Process(
+					controller.Context, controller.ServiceProvider, 
+					urlInfo.Area, urlInfo.Controller, "RenderWizardView");
+			}
+			else
+			{
+				currentStepInstance.Process(
+					controller.Context, controller.ServiceProvider, 
+					urlInfo.Area, urlInfo.Controller, innerAction);
+			}
 
 			wizController.OnAfterStep(wizardName, currentStep, currentStepInstance);
 		}
@@ -220,6 +232,8 @@ namespace Castle.MonoRail.Framework
 
 		private void SetUpWizardHelper(Controller controller)
 		{
+			if (controller == null) return;
+
 			WizardHelper helper = new WizardHelper();
 
 			helper.SetController(controller);

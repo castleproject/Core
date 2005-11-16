@@ -44,10 +44,9 @@ namespace TestSiteNVelocity.Controllers
 
 		public WizardStepPage[] GetSteps(IRailsEngineContext context)
 		{
-			return new WizardStepPage[] { new Page1(), new Page2() };
+			return new WizardStepPage[] { new Page1(), new Page2(), new Page3(), new Page4() };
 		}
 	}
-
 
 	public class Page1 : WizardStepPage
 	{
@@ -69,5 +68,18 @@ namespace TestSiteNVelocity.Controllers
 		{
 			RenderText("A content rendered using RenderText");
 		}
+	}
+
+	public class Page3 : WizardStepPage
+	{
+		protected override void RenderWizardView()
+		{
+			RenderView("page3");
+		}
+	}
+
+	public class Page4 : WizardStepPage
+	{
+		
 	}
 }

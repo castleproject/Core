@@ -40,6 +40,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		private IDictionary _session;
 		private ServerUtilityAdapter _server;
 		private IDictionary _flash;
+		private UrlInfo urlInfo;
 
 		public RailsEngineContextAdapter(HttpContext context, String url)
 		{
@@ -178,7 +179,14 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public UrlInfo UrlInfo
 		{
-			get { return UrlTokenizer.ExtractInfo(_url, ApplicationPath); }
+			get
+			{
+				if (urlInfo == null)
+				{
+					urlInfo = UrlTokenizer.ExtractInfo(_url, ApplicationPath);
+				}
+				return urlInfo;
+			}
 		}
 
 		public String ApplicationPath
