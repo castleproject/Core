@@ -76,6 +76,15 @@ namespace Castle.Model.Internal
 			}
 			else
 			{
+			    // Added this code because internaltail seems to be null in come cases
+			    if (internaltail==null)
+			    {
+				    internaltail = internalhead;
+				    
+				    while(internaltail.Next != null)
+				        internaltail = internaltail.Next;
+			    }
+			    
 				internaltail.Next = new LinkNode(value, null, internaltail);
 				
 				internaltail = internaltail.Next;
