@@ -19,31 +19,6 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections;
 	using System.Collections.Specialized;
 
-	public enum CallbackEnum
-	{
-		Uninitialized,
-		/// <summary>
-		/// Called when the remote document is being 
-		/// loaded with data by the browser.
-		/// </summary>
-		Loading, 
-		/// <summary>
-		/// Called when the browser has finished loading
-		/// the remote document.
-		/// </summary>
-		Loaded, 
-		/// <summary>
-		/// Called when the user can interact with the 
-		/// remote document, even though it has not 
-		/// finished loading.
-		/// </summary>
-		Interactive, 
-		/// <summary>
-		/// Called when the XMLHttpRequest has completed.
-		/// </summary>
-		Complete
-	}
-
 	/// <summary>
 	/// MonoRail Helper that delivers AJAX capabilities.
 	/// </summary>
@@ -75,7 +50,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToFunction(String name, String functionCodeOrName, String styleClass)
 		{
-			return String.Format("<a href=\"#\" class=\"{2}\" onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, name, styleClass );
+			return String.Format("<a href=\"javascript:void(0);\" class=\"{2}\" onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, name, styleClass );
 		}
 
 		/// <summary>
@@ -87,7 +62,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToFunction(String name, String functionCodeOrName)
 		{
-			return String.Format("<a href=\"#\" onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, name );
+			return String.Format("<a href=\"javascript:void(0);\" onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, name );
 		}
 
 		/// <summary>
@@ -507,7 +482,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			
 			if (options.Contains("position"))
 			{
-				// "Insertion.#{options[:position].to_s.camelize}" if options[:position]
 				options["insertion"] = String.Format("Insertion.{0}", options["position"]);
 			}
 
@@ -519,8 +493,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			{
 				jsOptions["parameters"] = options["with"];
 			}
-
-			// '{' + js_options.map {|k, v| "#{k}:#{v}"}.join(', ') + '}'
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append("{");

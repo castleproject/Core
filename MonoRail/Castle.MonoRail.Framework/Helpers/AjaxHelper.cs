@@ -19,6 +19,31 @@ namespace Castle.MonoRail.Framework.Helpers
 	using System.Collections;
 	using System.Collections.Specialized;
 
+	public enum CallbackEnum
+	{
+		Uninitialized,
+		/// <summary>
+		/// Called when the remote document is being 
+		/// loaded with data by the browser.
+		/// </summary>
+		Loading, 
+		/// <summary>
+		/// Called when the browser has finished loading
+		/// the remote document.
+		/// </summary>
+		Loaded, 
+		/// <summary>
+		/// Called when the user can interact with the 
+		/// remote document, even though it has not 
+		/// finished loading.
+		/// </summary>
+		Interactive, 
+		/// <summary>
+		/// Called when the XMLHttpRequest has completed.
+		/// </summary>
+		Complete
+	}
+
 	/// <summary>
 	/// MonoRail Helper that delivers AJAX capabilities.
 	/// </summary>
@@ -58,7 +83,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Returns a link that'll trigger a javascript +function+ using the 
 		/// onclick handler and return false after the fact.
 		/// <code>
-		/// &lt;a href="#" onclick="functionCodeOrName; return false"&gt;innerContent&lt;/a&gt;
+		/// &lt;a href="javascript:void(0);" onclick="functionCodeOrName; return false"&gt;innerContent&lt;/a&gt;
 		/// </code>
 		/// </summary>
 		/// <param name="innerContent">Link content</param>
@@ -69,7 +94,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			String htmlAtt = GetAttributes(attributes);
 
-			return String.Format("<a href=\"#\" {2} onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, innerContent, htmlAtt );
+			return String.Format("<a href=\"javascript:void(0);\" {2} onclick=\"{0}; return false;\" >{1}</a>", functionCodeOrName, innerContent, htmlAtt );
 		}
 
 		/// <summary>

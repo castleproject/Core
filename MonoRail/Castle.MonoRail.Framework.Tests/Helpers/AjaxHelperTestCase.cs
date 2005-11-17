@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void LinkToFunction2args()
 		{
-			String expected = "<a href=\"#\" onclick=\"function; return false;\" >name</a>";
+			String expected = "<a href=\"javascript:void(0);\" onclick=\"function; return false;\" >name</a>";
 			String actual = this._hlp.LinkToFunction("name", "function");
 			Assert.AreEqual(expected, actual);
 		}
@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void LinkToFunction3args()
 		{
-			String expected = "<a href=\"#\" class=\"styleClass\" onclick=\"function; return false;\" >name</a>";
+			String expected = "<a href=\"javascript:void(0);\" class=\"styleClass\" onclick=\"function; return false;\" >name</a>";
 			String actual = this._hlp.LinkToFunction("name", "function", "styleClass");
 			Assert.AreEqual(expected, actual);
 		}
@@ -62,7 +62,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void LinkToRemote3StringArgs()
 		{
-			String expected = "<a href=\"#\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true}); return false;\" >name</a>";
+			String expected = "<a href=\"javascript:void(0);\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true}); return false;\" >name</a>";
 			String actual = this._hlp.LinkToRemote("name", "url", "update");
 			Assert.AreEqual(expected, actual);
 		}
@@ -72,7 +72,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			Hashtable dict = new Hashtable();
 			dict.Add("key", "value");
-			String expected = "<a href=\"#\" onclick=\"new Ajax.Request('url', {asynchronous:true}); return false;\" >name</a>";
+			String expected = "<a href=\"javascript:void(0);\" onclick=\"new Ajax.Request('url', {asynchronous:true}); return false;\" >name</a>";
 			String actual = this._hlp.LinkToRemote("name", "url", dict);
 			Assert.AreEqual(expected, actual);
 		}
@@ -80,7 +80,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[Test]
 		public void LinkToRemote4StringArgs()
 		{
-			String expected = "<a href=\"#\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true, parameters:with}); return false;\" >name</a>";
+			String expected = "<a href=\"javascript:void(0);\" onclick=\"new Ajax.Updater('update', 'url', {asynchronous:true, parameters:with}); return false;\" >name</a>";
 			String actual = this._hlp.LinkToRemote("name", "url", "update", "with");
 			Assert.AreEqual(expected, actual);
 		}
@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			Hashtable dict = new Hashtable();
 			dict.Add("key", "value");
-			String expected = "<a href=\"#\" onclick=\"new Ajax.Updater('with', 'url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" >name</a>";
+			String expected = "<a href=\"javascript:void(0);\" onclick=\"new Ajax.Updater('with', 'url', {asynchronous:true, parameters:Form.serialize(this)}); return false;\" >name</a>";
 			String actual = this._hlp.LinkToRemote("name", "url", "with", true);
 			Assert.AreEqual(expected, actual);
 		}

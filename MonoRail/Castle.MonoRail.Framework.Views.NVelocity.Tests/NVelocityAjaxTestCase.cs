@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("ajax/LinkToFunction.rails");
 
-			String expected = "<a href=\"#\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>";
+			String expected = "<a href=\"javascript:void(0);\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>";
 
 			AssertReplyEqualsTo(expected);
 		}
@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("ajax/LinkToRemote.rails");
 
-			String expected = "<a href=\"#\" onclick=\"new " + 
+			String expected = "<a href=\"javascript:void(0);\" onclick=\"new " + 
 				"Ajax.Request('/controller/action.rails', {asynchronous:true}); " + 
 				"return false;\" ><img src='myimg.gid'></a>";
 
