@@ -114,6 +114,38 @@ namespace Castle.MonoRail.Framework
 		#endregion
 
 		/// <summary>
+		/// Navigates within the wizard steps.
+		/// </summary>
+		/// <remarks>
+		/// By default this will invoke <see cref="RedirectToNextStep"/>
+		/// however you can send a field form <c>navigate.to</c> to customize this.
+		/// The possible values for <c>navigate.to</c> are:
+		/// <list type="bullet">
+		/// <item><term>previous</term>
+		/// <description>Invokes <see cref="RedirectToPreviousStep"/></description></item>
+		/// <item><term>first</term>
+		/// <description>Invokes <see cref="RedirectToFirstStep"/></description></item>
+		/// </list>
+		/// </remarks>
+		protected void DoNavigate()
+		{
+			String navigateTo = Params["navigate.to"];
+
+			if (navigateTo == "previous")
+			{
+				RedirectToPreviousStep();
+			}
+			else if (navigateTo == "first")
+			{
+				RedirectToFirstStep();
+			}
+			else
+			{
+				RedirectToNextStep();
+			}
+		}
+
+		/// <summary>
 		/// Sends a redirect to the next wizard step (if it exists)
 		/// </summary>
 		/// <exception cref="RailsException">if no further step exists</exception>
@@ -188,9 +220,8 @@ namespace Castle.MonoRail.Framework
 			// for example in case the url has an Id
 			if( Context.Request.QueryString.HasKeys() )
 			{							
-				string url = UrlInfo.CreateAbsoluteRailsUrl( Context.ApplicationPath, 
-				                                             _wizardcontroller.Name, prevStep, Context.UrlInfo.Extension )
-					+ Context.Request.Uri.Query;
+				String url = UrlInfo.CreateAbsoluteRailsUrl( Context.ApplicationPath, 
+					_wizardcontroller.Name, prevStep, Context.UrlInfo.Extension ) + Context.Request.Uri.Query;
 					
 				Context.Response.Redirect( url );
 			}
