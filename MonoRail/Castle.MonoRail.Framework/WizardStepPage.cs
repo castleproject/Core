@@ -16,8 +16,8 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Reflection;
+	
 	using Castle.MonoRail.Framework.Internal;
 
 
@@ -113,6 +113,10 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
+		/// <summary>
+		/// Sends a redirect to the next wizard step (if it exists)
+		/// </summary>
+		/// <exception cref="RailsException">if no further step exists</exception>
 		protected void RedirectToNextStep()
 		{
 			String wizardName = WizardUtils.ConstructWizardNamespace(_wizardcontroller);
@@ -129,20 +133,70 @@ namespace Castle.MonoRail.Framework
 
 				WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, nextStepIndex, nextStep);
 				
-				// We need to preserve any attribute from the QueryString
-				// for example in case the url has an Id
-				if( Context.Request.QueryString.HasKeys() )
-				{							
-					string url = UrlInfo.CreateAbsoluteRailsUrl( Context.ApplicationPath, 
-						_wizardcontroller.Name, nextStep, Context.UrlInfo.Extension )
-								+ Context.Request.Uri.Query;
+				RedirectToStep(nextStepIndex, nextStep);
+			}
+			else
+			{
+				throw new RailsException("No next step available");
+			}
+		}
+
+		/// <summary>
+		/// Sends a redirect to the previous wizard step
+		/// </summary>
+		/// <exception cref="RailsException">
+		/// if no previous step exists (ie. already in the first one)</exception>
+		protected void RedirectToPreviousStep()
+		{
+			String wizardName = WizardUtils.ConstructWizardNamespace(_wizardcontroller);
+
+			int currentIndex = (int) Context.Session[wizardName + "currentstepindex"];
+			
+			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
+
+			if ((currentIndex - 1) >= 0)
+			{
+				int prevStepIndex = currentIndex - 1;
+
+				String prevStep = (String) stepList[prevStepIndex];
+
+				RedirectToStep(prevStepIndex, prevStep);
+			}
+			else
+			{
+				throw new RailsException("No previous step available");
+			}
+		}
+
+		/// <summary>
+		/// Sends a redirect to the first wizard step
+		/// </summary>
+		protected void RedirectToFirstStep()
+		{
+			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
+
+			String firstStep = (String) stepList[0];
+
+			RedirectToStep(0, firstStep);
+		}
+
+		private void RedirectToStep(int prevStepIndex, string prevStep)
+		{
+			WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, prevStepIndex, prevStep);
+	
+			// We need to preserve any attribute from the QueryString
+			// for example in case the url has an Id
+			if( Context.Request.QueryString.HasKeys() )
+			{							
+				string url = UrlInfo.CreateAbsoluteRailsUrl( Context.ApplicationPath, 
+				                                             _wizardcontroller.Name, prevStep, Context.UrlInfo.Extension )
+					+ Context.Request.Uri.Query;
 					
-					Context.Response.Redirect( url );
-				}
-				else
-				{
-					Context.Response.Redirect(_wizardcontroller.Name, nextStep);
-				}
+				Context.Response.Redirect( url );
+			}
+			else
+			{
+				Context.Response.Redirect(_wizardcontroller.Name, prevStep);
 			}
 		}
 	}
