@@ -176,7 +176,7 @@ namespace Castle.MonoRail.TestSupport
 		{
 			Assert.IsNotNull(response, "No requests performed with DoGet or DoPost (?)");
 			Assert.IsTrue(response.StatusCode == expectedCode, "Expecting status code {0} when it was in fact {1} {2}", 
-				response.StatusCode, response.StatusDescription);
+				expectedCode, response.StatusCode, response.StatusDescription);
 		}
 		
 		/// <summary>

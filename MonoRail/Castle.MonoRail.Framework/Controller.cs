@@ -708,6 +708,7 @@ namespace Castle.MonoRail.Framework
 
 			bool skipFilters = ShouldSkip(method, filtersToSkip);
 			bool hasError = false;
+			Exception exceptionToThrow = null;
 
 			try
 			{
@@ -759,17 +760,7 @@ namespace Castle.MonoRail.Framework
 				// Try and perform the rescue
 				if (!PerformRescue(method, ex))
 				{
-					try
-					{
-						// dont't forget to clean up before bubbling...
-						DisposeFilter();
-						ReleaseResources();
-					}
-					catch 
-					{
-						//If the rescue fails, let the exception bubble
-						throw;
-					}
+					exceptionToThrow = ex;
 				}
 			}
 			
@@ -780,6 +771,11 @@ namespace Castle.MonoRail.Framework
 				{
 					// Render the actual view then cleanup
 					ProcessView();
+				}
+
+				if (exceptionToThrow != null)
+				{
+					throw exceptionToThrow;
 				}
 			}
 			finally
