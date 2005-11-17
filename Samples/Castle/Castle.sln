@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Web", "PetStore.Web\PetStore.Web.csproj", "{5537DCB6-D3F1-4704-96BA-83FAEC9981D7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Model", "PetStore.Model\PetStore.Model.csproj", "{932E2BF7-5E0B-42AA-A364-0138A150872E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetStore.Service", "PetStore.Service\PetStore.Service.csproj", "{5AA760BE-5153-498F-A9D9-CDB628A7E110}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{5537DCB6-D3F1-4704-96BA-83FAEC9981D7}.Debug.ActiveCfg = Debug|.NET
+		{5537DCB6-D3F1-4704-96BA-83FAEC9981D7}.Debug.Build.0 = Debug|.NET
+		{5537DCB6-D3F1-4704-96BA-83FAEC9981D7}.Release.ActiveCfg = Release|.NET
+		{5537DCB6-D3F1-4704-96BA-83FAEC9981D7}.Release.Build.0 = Release|.NET
+		{932E2BF7-5E0B-42AA-A364-0138A150872E}.Debug.ActiveCfg = Debug|.NET
+		{932E2BF7-5E0B-42AA-A364-0138A150872E}.Debug.Build.0 = Debug|.NET
+		{932E2BF7-5E0B-42AA-A364-0138A150872E}.Release.ActiveCfg = Release|.NET
+		{932E2BF7-5E0B-42AA-A364-0138A150872E}.Release.Build.0 = Release|.NET
+		{5AA760BE-5153-498F-A9D9-CDB628A7E110}.Debug.ActiveCfg = Debug|.NET
+		{5AA760BE-5153-498F-A9D9-CDB628A7E110}.Debug.Build.0 = Debug|.NET
+		{5AA760BE-5153-498F-A9D9-CDB628A7E110}.Release.ActiveCfg = Release|.NET
+		{5AA760BE-5153-498F-A9D9-CDB628A7E110}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

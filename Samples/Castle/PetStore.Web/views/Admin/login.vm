@@ -1,0 +1,21 @@
+<div id="error">
+#parse("shared/inlineerror.vm")
+</div>
+
+#set ($validatorForm = "return validateForm( this, false, false, false, false, 5 ) " )
+
+$HtmlHelper.Form("authenticate.rails", "loginForm", "POST", $validatorForm)
+
+<p>
+  $HtmlHelper.LabelFor( "user", "User name:" ) 
+  $HtmlHelper.InputText("user", $user, 20, 20, $DictHelper.CreateDict( "validators=blank" ))
+</p>
+
+<p>
+  $HtmlHelper.LabelFor( "password", "Password:" ) 
+  $HtmlHelper.InputPassword("password", "", $DictHelper.CreateDict( "validators=blank" ))
+</p>
+
+<p>$HtmlHelper.SubmitButton("Login")</p>
+
+$HtmlHelper.EndForm()

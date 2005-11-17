@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <link rel="STYLESHEET" type="text/css" href="${siteRoot}/Content/css/site.css">
+  $AjaxHelper.GetJavascriptFunctions()
+  $Effects2Helper.GetJavascriptFunctions()
+  $ValidationHelper.InstallScripts()
+</head>
+
+<body>
+
+$childContent
+
+</body>
+
+</html>
