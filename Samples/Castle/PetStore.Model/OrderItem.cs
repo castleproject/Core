@@ -16,7 +16,56 @@ namespace PetStore.Model
 {
 	using System;
 
-	public class OrderItem
+	using Castle.ActiveRecord;
+
+
+	[ActiveRecord]
+	public class OrderItem : ActiveRecordBase
 	{
+		private int id;
+		private Order order;
+		private Product product;
+		private decimal unitPrice;
+		private int quantity;
+
+		[PrimaryKey]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		[BelongsTo(typeof(Order))]
+		public Order Order
+		{
+			get { return order; }
+			set { order = value; }
+		}
+
+		[BelongsTo(typeof(Product))]
+		public Product Product
+		{
+			get { return product; }
+			set { product = value; }
+		}
+
+		[Property]
+		public decimal UnitPrice
+		{
+			get { return unitPrice; }
+			set { unitPrice = value; }
+		}
+
+		[Property]
+		public int Quantity
+		{
+			get { return quantity; }
+			set { quantity = value; }
+		}
+
+		public decimal Total
+		{
+			get { return quantity * unitPrice; }
+		}
 	}
 }

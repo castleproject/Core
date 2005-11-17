@@ -18,13 +18,19 @@ namespace PetStore.Model
 
 	using Castle.ActiveRecord;
 
-	[ActiveRecord]
-	public class Account : ActiveRecordBase
+	[ActiveRecord("ProductComment")]
+	public class Comment : ActiveRecordBase
 	{
 		private int id;
-		private String name;
-		private String email;
-		private String password;
+		private String text;
+		private DateTime postedAt;
+		private Customer author;
+		private Product product;
+
+		public Comment()
+		{
+			postedAt = DateTime.Now;
+		}
 
 		[PrimaryKey]
 		public int Id
@@ -33,25 +39,32 @@ namespace PetStore.Model
 			set { id = value; }
 		}
 
-		[Property]
-		public string Name
+		[Property(ColumnType="StringClob")]
+		public string Text
 		{
-			get { return name; }
-			set { name = value; }
+			get { return text; }
+			set { text = value; }
+		}
+
+		[BelongsTo("author_id")]
+		public Customer Author
+		{
+			get { return author; }
+			set { author = value; }
+		}
+
+		[BelongsTo("product_id")]
+		public Product Product
+		{
+			get { return product; }
+			set { product = value; }
 		}
 
 		[Property]
-		public string Email
+		public DateTime PostedAt
 		{
-			get { return email; }
-			set { email = value; }
-		}
-
-		[Property]
-		public string Password
-		{
-			get { return password; }
-			set { password = value; }
+			get { return postedAt; }
+			set { postedAt = value; }
 		}
 	}
 }

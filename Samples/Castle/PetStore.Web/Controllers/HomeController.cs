@@ -12,25 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Web.Controllers.Admin
+namespace PetStore.Web.Controllers
 {
 	using System;
 
 	using Castle.MonoRail.Framework;
 
 
-	public sealed class AuthenticationFilter : IFilter
+	public class HomeController : SmartDispatcherController
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
+		public void Index()
 		{
-//			if (context.Session["user"] == null)
-//			{
-//				context.Response.Redirect("admin", "login");
-//
-//				return false;
-//			}
-
-			return true;
+			
 		}
 	}
 }

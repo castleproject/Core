@@ -76,7 +76,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
@@ -255,6 +255,21 @@
                 />
                 <Folder RelPath = "Content\images\" />
                 <File
+                    RelPath = "Controllers\CartController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\HomeController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\ProductController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\Admin\AbstractSecureController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -266,6 +281,16 @@
                 />
                 <File
                     RelPath = "Controllers\Admin\AuthenticationFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Admin\CategoriesController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\State\CartState.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -18,56 +18,41 @@ namespace PetStore.Model
 
 	using Castle.ActiveRecord;
 
-	using Iesi.Collections;
 
-
-	[ActiveRecord]
-	public class Order : ActiveRecordBase
+	[ActiveRecord(DiscriminatorValue="customer")]
+	public class Customer : User
 	{
-		private int id;
-		private decimal total;
-		private DateTime creation;
-		private Customer customer;
-		private ISet items = new HashedSet();
+		private String address;
+		private String city;
+		private String country;
+		private String zipcode;
 
-		public Order()
+		[Property]
+		public string Address
 		{
-			creation = DateTime.Now;
-		}
-
-		[PrimaryKey]
-		public int Id
-		{
-			get { return id; }
-			set { id = value; }
+			get { return address; }
+			set { address = value; }
 		}
 
 		[Property]
-		public DateTime Creation
+		public string City
 		{
-			get { return creation; }
-			set { creation = value; }
+			get { return city; }
+			set { city = value; }
 		}
 
 		[Property]
-		public decimal Total
+		public string Country
 		{
-			get { return total; }
-			set { total = value; }
+			get { return country; }
+			set { country = value; }
 		}
 
-		[BelongsTo("customer_id")]
-		public Customer Customer
+		[Property]
+		public string Zipcode
 		{
-			get { return customer; }
-			set { customer = value; }
-		}
-
-		[HasMany( typeof(OrderItem) )]
-		public ISet Items
-		{
-			get { return items; }
-			set { items = value; }
+			get { return zipcode; }
+			set { zipcode = value; }
 		}
 	}
 }

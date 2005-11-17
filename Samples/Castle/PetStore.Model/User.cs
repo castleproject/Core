@@ -17,18 +17,16 @@ namespace PetStore.Model
 	using System;
 
 	using Castle.ActiveRecord;
-	
-	using Iesi.Collections;
 
 
-	[ActiveRecord]
-	public class Category : ActiveRecordBase
+	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="user")]
+	public class User : ActiveRecordBase
 	{
 		private int id;
-		private String name;
-		private Category parent;
-		private ISet subcategories = new HashedSet();
-		private ISet products = new HashedSet();
+		private string name;
+		private string email;
+		private string password;
+		private string userType;
 
 		[PrimaryKey]
 		public int Id
@@ -44,25 +42,29 @@ namespace PetStore.Model
 			set { name = value; }
 		}
 
-		[BelongsTo("parent_category_id")]
-		public Category Parent
+		[Property]
+		public string Email
 		{
-			get { return parent; }
-			set { parent = value; }
+			get { return email; }
+			set { email = value; }
 		}
 
-		[HasMany( typeof(Category), Inverse=true, Lazy=true )]
-		public ISet Subcategories
+		[Property]
+		public string Password
 		{
-			get { return subcategories; }
-			set { subcategories = value; }
+			get { return password; }
+			set { password = value; }
 		}
 
-		[HasMany( typeof(Product), Inverse=true, Lazy=true )]
-		public ISet Products
+		/// <summary>
+		/// Exposing the discriminator column
+		/// has its restrictions
+		/// </summary>
+		[Property("type", Insert=false, Update=false)]
+		public string UserType
 		{
-			get { return products; }
-			set { products = value; }
+			get { return userType; }
+			set { userType = value; }
 		}
 	}
 }

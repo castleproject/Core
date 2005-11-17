@@ -16,7 +16,58 @@ namespace PetStore.Model
 {
 	using System;
 
-	public class Product
+	using Castle.ActiveRecord;
+
+	[ActiveRecord]
+	public class Product : ActiveRecordBase
 	{
+		private int id;
+		private String name;
+		private String description;
+		private String pictureFile;
+		private decimal price;
+		private Category category;
+
+		[PrimaryKey]
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		[Property]
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		[Property]
+		public string Description
+		{
+			get { return description; }
+			set { description = value; }
+		}
+
+		[Property]
+		public string PictureFile
+		{
+			get { return pictureFile; }
+			set { pictureFile = value; }
+		}
+
+		[Property]
+		public decimal Price
+		{
+			get { return price; }
+			set { price = value; }
+		}
+
+		[BelongsTo("category_id")]
+		public Category Category
+		{
+			get { return category; }
+			set { category = value; }
+		}
 	}
 }

@@ -12,25 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Web.Controllers.Admin
+namespace PetStore.Model
 {
 	using System;
+	
+	using Castle.ActiveRecord;
 
-	using Castle.MonoRail.Framework;
-
-
-	public sealed class AuthenticationFilter : IFilter
+	[ActiveRecord(DiscriminatorValue="admin")]
+	public class Administrator : User
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
-		{
-//			if (context.Session["user"] == null)
-//			{
-//				context.Response.Redirect("admin", "login");
-//
-//				return false;
-//			}
+		private DateTime lastAccess;
 
-			return true;
+		[Property]
+		public DateTime LastAccess
+		{
+			get { return lastAccess; }
+			set { lastAccess = value; }
+		}
+
+		public override void Update()
+		{
+			lastAccess = DateTime.Now;
+
+			base.Update();
 		}
 	}
 }

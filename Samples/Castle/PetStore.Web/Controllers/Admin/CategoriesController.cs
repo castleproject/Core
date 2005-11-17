@@ -17,20 +17,14 @@ namespace PetStore.Web.Controllers.Admin
 	using System;
 
 	using Castle.MonoRail.Framework;
+	
+	using PetStore.Model;
 
-
-	public sealed class AuthenticationFilter : IFilter
+	/// <summary>
+	/// 
+	/// </summary>
+	[Scaffolding( typeof(Category) )]
+	public class CategoriesController : AbstractSecureController
 	{
-		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)
-		{
-//			if (context.Session["user"] == null)
-//			{
-//				context.Response.Redirect("admin", "login");
-//
-//				return false;
-//			}
-
-			return true;
-		}
 	}
 }
