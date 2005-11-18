@@ -57,20 +57,25 @@ namespace PetStore.Web.Controllers.Admin
 		[SkipFilter]
 		public void Authenticate(String username, String password)
 		{
-			try
+			//try
 			{
 				User user = authenticationService.Authenticate(username, password);
 
 				// VERY NAIVE, but for simplicity's sake...
 				Response.CreateCookie("usertoken", user.Id.ToString());
 
-				Redirect("home", "index");
+				Redirect("admin", "index");
 			}
-			catch(Exception ex)
-			{
-				Flash["error"] = ex.Message;
-				RenderView("Login");
-			}
+//			catch(Exception ex)
+//			{
+//				Flash["error"] = ex.Message;
+//				RenderView("Login");
+//			}
+		}
+
+		public void Index()
+		{
+			
 		}
 	}
 }

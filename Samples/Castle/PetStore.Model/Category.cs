@@ -64,5 +64,10 @@ namespace PetStore.Model
 			get { return products; }
 			set { products = value; }
 		}
+
+		public override string ToString()
+		{
+			return "" + name;
+		}
 	}
 }

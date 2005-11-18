@@ -18,10 +18,11 @@ namespace PetStore.Model
 	using System.Security.Principal;
 
 	using Castle.ActiveRecord;
+
 	using NHibernate.Expression;
 
 
-	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="user")]
+	[ActiveRecord("`User`", DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="user")]
 	public class User : ActiveRecordBase, IPrincipal
 	{
 		private int id;

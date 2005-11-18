@@ -1,0 +1,6 @@
+<h1>Maintenance</h1>
+
+<ul>
+  <li>$HtmlHelper.LinkTo("Category", "CategoryManagement", "ListCategory")</li>
+  <li>$HtmlHelper.LinkTo("Product", "ProductManagement", "ListProduct")</li>
+</ul>

@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Model
+namespace PetStore.Service
 {
 	using System;
-	
-	using Castle.ActiveRecord;
 
-	[ActiveRecord(DiscriminatorValue="admin")]
-	public class Administrator : User
+	using PetStore.Model;
+
+	public class DefaultRecommendationService : IRecommendationService
 	{
-		// We can use some specific administrator fields/columns
+		public Product[] GetProducts()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

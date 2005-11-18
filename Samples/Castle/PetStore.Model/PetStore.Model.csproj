@@ -119,22 +119,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Comment.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Customer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Order.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "OrderItem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

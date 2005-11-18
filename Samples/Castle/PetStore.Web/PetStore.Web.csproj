@@ -242,6 +242,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "properties.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "None"
                 />
@@ -250,10 +254,24 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Content\css\scaffold.css"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Content\css\site.css"
                     BuildAction = "Content"
                 />
                 <Folder RelPath = "Content\images\" />
+                <File
+                    RelPath = "Controllers\AbstractSecureController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\AuthenticationFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "Controllers\BaseSiteController.cs"
                     SubType = "Code"
@@ -275,17 +293,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\Admin\AbstractSecureController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Controllers\Admin\AdminController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Controllers\Admin\AuthenticationFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -303,6 +311,10 @@
                     RelPath = "Controllers\State\CartState.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "views\Admin\index.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "views\Admin\login.vm"
