@@ -94,6 +94,11 @@
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\ActiveRecord\bin\Iesi.Collections.dll"
                 />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\..\ActiveRecord\bin\NHibernate.dll"
+                />
             </References>
         </Build>
         <Files>

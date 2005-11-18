@@ -12,27 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Web.Controllers
+namespace PetStore.Service.DataAccess.AR
 {
 	using System;
 
-	using Castle.MonoRail.Framework;
-	
-	using PetStore.Service;
+	using PetStore.Model;
 
 
-	public class HomeController : BaseSiteController
+	public class ARUserDataAccess : IUserDataAccess
 	{
-		private readonly IRecommendationService recommendationService;
-
-		public HomeController(IRecommendationService recommendationService)
+		public User Find(int id)
 		{
-			this.recommendationService = recommendationService;
+			return User.Find(id);
 		}
 
-		public void Index()
+		public User FindByLogin(String login)
 		{
-			PropertyBag.Add( "products", recommendationService.GetProducts() );
+			return User.FindByLogin(login);
 		}
 	}
 }

@@ -31,8 +31,9 @@ namespace PetStore.Web
 
 		public GlobalApplication()
 		{
-			this.BeginRequest += new EventHandler(OnBeginRequest);
-			this.EndRequest += new EventHandler(OnEndRequest);
+			BeginRequest += new EventHandler(OnBeginRequest);
+			EndRequest += new EventHandler(OnEndRequest);
+			AuthenticateRequest += new EventHandler(OnAuthenticateRequest);
 		}
 
 		public void Application_OnStart()
@@ -45,9 +46,16 @@ namespace PetStore.Web
 			container.Dispose();
 		}
 
-		public void Application_AuthenticateRequest(object sender, EventArgs e)
+		public void OnAuthenticateRequest(object sender, EventArgs e)
 		{
+			HttpContext context = HttpContext.Current;
 
+			HttpCookie cookie = context.Request.Cookies.Get("usertoken");
+
+			if (cookie != null)
+			{
+				context.User = PetStore.Model.User.Find(Convert.ToInt32(cookie.Value));
+			}
 		}
 
 		public IWindsorContainer Container

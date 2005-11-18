@@ -12,27 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Web.Controllers
+namespace PetStore.Service
 {
 	using System;
+	using System.Runtime.Serialization;
 
-	using Castle.MonoRail.Framework;
-	
-	using PetStore.Service;
-
-
-	public class HomeController : BaseSiteController
+	[Serializable]
+	public class ServiceLayerException : Exception
 	{
-		private readonly IRecommendationService recommendationService;
-
-		public HomeController(IRecommendationService recommendationService)
+		public ServiceLayerException(string message) : base(message)
 		{
-			this.recommendationService = recommendationService;
 		}
 
-		public void Index()
+		public ServiceLayerException(string message, Exception innerException) : base(message, innerException)
 		{
-			PropertyBag.Add( "products", recommendationService.GetProducts() );
+		}
+
+		public ServiceLayerException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
 		}
 	}
 }

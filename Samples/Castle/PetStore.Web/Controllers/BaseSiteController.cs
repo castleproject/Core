@@ -17,22 +17,10 @@ namespace PetStore.Web.Controllers
 	using System;
 
 	using Castle.MonoRail.Framework;
-	
-	using PetStore.Service;
 
-
-	public class HomeController : BaseSiteController
+	[Layout("default")]
+	public class BaseSiteController : SmartDispatcherController
 	{
-		private readonly IRecommendationService recommendationService;
 
-		public HomeController(IRecommendationService recommendationService)
-		{
-			this.recommendationService = recommendationService;
-		}
-
-		public void Index()
-		{
-			PropertyBag.Add( "products", recommendationService.GetProducts() );
-		}
 	}
 }

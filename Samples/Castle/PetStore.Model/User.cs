@@ -15,14 +15,17 @@
 namespace PetStore.Model
 {
 	using System;
+	using System.Security.Principal;
 
 	using Castle.ActiveRecord;
+	using NHibernate.Expression;
 
 
 	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorType="String", DiscriminatorValue="user")]
-	public class User : ActiveRecordBase
+	public class User : ActiveRecordBase, IPrincipal
 	{
 		private int id;
+		private string login;
 		private string name;
 		private string email;
 		private string password;
@@ -33,6 +36,13 @@ namespace PetStore.Model
 		{
 			get { return id; }
 			set { id = value; }
+		}
+
+		[Property]
+		public string Login
+		{
+			get { return login; }
+			set { login = value; }
 		}
 
 		[Property]
@@ -65,6 +75,35 @@ namespace PetStore.Model
 		{
 			get { return userType; }
 			set { userType = value; }
+		}
+
+		public bool IsInRole(string role)
+		{
+			// We do not implement this functionality
+			return false;
+		}
+
+		public IIdentity Identity
+		{
+			get { return new GenericIdentity(name, "castle.authentication"); }
+		}
+
+		public static User Find(int id)
+		{
+			return (User) FindByPrimaryKey( typeof(User), id );
+		}
+
+		public static User FindByLogin(String login)
+		{
+			User[] users = (User[]) 
+				FindAll( typeof(User), Expression.Eq("Login", login) );
+
+			if (users.Length == 1)
+			{
+				return users[0];
+			}
+
+			return null;
 		}
 	}
 }

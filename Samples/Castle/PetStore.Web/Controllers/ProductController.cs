@@ -19,7 +19,7 @@ namespace PetStore.Web.Controllers
 	using Castle.MonoRail.Framework;
 
 
-	public class ProductController : SmartDispatcherController
+	public class ProductController : BaseSiteController
 	{
 		public void List()
 		{

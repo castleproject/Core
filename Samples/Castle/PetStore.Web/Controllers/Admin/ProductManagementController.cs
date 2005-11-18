@@ -12,27 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Web.Controllers
+namespace PetStore.Web.Controllers.Admin
 {
 	using System;
 
 	using Castle.MonoRail.Framework;
 	
-	using PetStore.Service;
+	using PetStore.Model;
 
-
-	public class HomeController : BaseSiteController
+	public class ProductManagementController : AbstractSecureController
 	{
-		private readonly IRecommendationService recommendationService;
-
-		public HomeController(IRecommendationService recommendationService)
-		{
-			this.recommendationService = recommendationService;
-		}
-
-		public void Index()
-		{
-			PropertyBag.Add( "products", recommendationService.GetProducts() );
-		}
 	}
 }

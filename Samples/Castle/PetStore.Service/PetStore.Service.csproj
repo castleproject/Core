@@ -76,8 +76,28 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "PetStore.Model"
+                    Project = "{932E2BF7-5E0B-42AA-A364-0138A150872E}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\..\ActiveRecord\bin\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "Castle.ActiveRecord"
+                    AssemblyName = "Castle.ActiveRecord"
+                    HintPath = "..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
+                />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\..\ActiveRecord\bin\Castle.Model.dll"
                 />
             </References>
         </Build>
@@ -88,7 +108,36 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "DataAccess\AR\" />
+                <File
+                    RelPath = "DefaultAuthenticationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IAuthenticationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IRecommendationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServiceLayerException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataAccess\IUserDataAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataAccess\AR\ARUserDataAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <Folder RelPath = "DataAccess\NH\" />
                 <Folder RelPath = "DataAccess\Standard\" />
             </Include>

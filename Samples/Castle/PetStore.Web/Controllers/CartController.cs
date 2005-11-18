@@ -19,7 +19,7 @@ namespace PetStore.Web.Controllers
 	using Castle.MonoRail.Framework;
 
 
-	public class CartController : SmartDispatcherController
+	public class CartController : BaseSiteController
 	{
 		public void AddToCart(int quantity, int productid)
 		{

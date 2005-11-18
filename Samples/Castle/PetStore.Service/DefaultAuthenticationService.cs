@@ -12,19 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Web.Controllers.Admin
+namespace PetStore.Service
 {
 	using System;
 
-	using Castle.MonoRail.Framework;
-	
 	using PetStore.Model;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	[Scaffolding( typeof(Category) )]
-	public class CategoriesController : AbstractSecureController
+	public class DefaultAuthenticationService : IAuthenticationService
 	{
+		private readonly IUserDataAccess userDataAccess;
+
+		public DefaultAuthenticationService(IUserDataAccess userDataAccess)
+		{
+			this.userDataAccess = userDataAccess;
+		}
+
+		public User Authenticate(String login, String password)
+		{
+			User user = userDataAccess.FindByLogin(login);
+
+			if (user == null)
+			{
+				throw new ServiceLayerException("User not found for login " + login);
+			}
+
+			if (user.Password != password)
+			{
+				throw new ServiceLayerException("Incorrect password");
+			}
+
+			return user;
+		}
 	}
 }

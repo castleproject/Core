@@ -255,6 +255,11 @@
                 />
                 <Folder RelPath = "Content\images\" />
                 <File
+                    RelPath = "Controllers\BaseSiteController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\CartController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -285,7 +290,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Controllers\Admin\CategoriesController.cs"
+                    RelPath = "Controllers\Admin\CategoryManagementController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\Admin\ProductManagementController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

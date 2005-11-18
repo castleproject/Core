@@ -17,6 +17,8 @@ namespace PetStore.Web.Controllers.Admin
 	using System;
 
 	using Castle.MonoRail.Framework;
+	using PetStore.Model;
+	using PetStore.Service;
 
 	/// <summary>
 	/// Note that this controller extends the secure controller
@@ -24,6 +26,13 @@ namespace PetStore.Web.Controllers.Admin
 	[Layout("admin")] // see views/layouts/admin.vm
 	public class AdminController : AbstractSecureController
 	{
+		private readonly IAuthenticationService authenticationService;
+
+		public AdminController(IAuthenticationService authenticationService)
+		{
+			this.authenticationService = authenticationService;
+		}
+
 		/// <summary>
 		/// Presents the login page.
 		/// </summary>
@@ -43,14 +52,25 @@ namespace PetStore.Web.Controllers.Admin
 		/// is invoked. See the form action on the view
 		/// views/admin/login.vm
 		/// </summary>
-		/// <param name="user"></param>
+		/// <param name="username"></param>
 		/// <param name="password"></param>
 		[SkipFilter]
-		public void Authenticate(String user, String password)
+		public void Authenticate(String username, String password)
 		{
-			Flash["error"] = "User cannot be found";
+			try
+			{
+				User user = authenticationService.Authenticate(username, password);
 
-			RenderView("Login");
+				// VERY NAIVE, but for simplicity's sake...
+				Response.CreateCookie("usertoken", user.Id.ToString());
+
+				Redirect("home", "index");
+			}
+			catch(Exception ex)
+			{
+				Flash["error"] = ex.Message;
+				RenderView("Login");
+			}
 		}
 	}
 }
