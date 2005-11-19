@@ -109,6 +109,11 @@ namespace Castle.MonoRail.Framework
 		string ApplicationPath { get; }
 
 		/// <summary>
+		/// Returns the physical application path.
+		/// </summary>
+		string ApplicationPhysicalPath { get; }
+
+		/// <summary>
 		/// Returns the <see cref="UrlInfo"/> of the the current request.
 		/// </summary>
 		UrlInfo UrlInfo { get; }

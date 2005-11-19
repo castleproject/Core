@@ -93,5 +93,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			return server.UrlPathEncode(content);
 		}
+
+		/// <summary>
+		/// Returns the physical path for the 
+		/// specified virtual path.
+		/// </summary>
+		/// <param name="virtualPath"></param>
+		/// <returns></returns>
+		public String MapPath(String virtualPath)
+		{
+			return server.MapPath(virtualPath);
+		}
 	}
 }

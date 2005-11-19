@@ -20,6 +20,14 @@ namespace Castle.MonoRail.Framework
 	public interface IServerUtility
 	{
 		/// <summary>
+		/// Returns the physical path for the 
+		/// specified virtual path.
+		/// </summary>
+		/// <param name="virtualPath"></param>
+		/// <returns></returns>
+		String MapPath(String virtualPath);
+
+		/// <summary>
 		/// HTML encodes a string and returns the encoded string.  
 		/// </summary>
 		/// <param name="content">The text string to HTML encode.</param>
@@ -50,7 +58,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Build an encoded QueryString
 		/// </summary>
-		/// <param name="queryString">A NameValueCollection with the values for the QueryParams</param>
+		/// <param name="queryParams">A NameValueCollection with the values for the QueryParams</param>
 		/// <returns>The QueryString encoded.</returns>
 		String BuildWebParams(NameValueCollection queryParams);
 	}

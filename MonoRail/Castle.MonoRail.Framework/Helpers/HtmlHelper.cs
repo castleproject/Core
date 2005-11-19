@@ -187,6 +187,21 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return sbWriter.ToString();
 		}
+
+		/// <summary>
+		/// Creates a <b>form</b> tag the specified <paramref name="action"/>.
+		/// <code>
+		/// &lt;form action=&quot;actionArg&quot;&gt;
+		/// </code>
+		/// <seealso cref="HtmlHelper.EndForm"/>
+		/// </summary>
+		/// <param name="action">Target action for the form.</param>
+		/// <param name="attributes">Html Attributes for the form tag</param>
+		/// <returns>HTML string with form opening tag.</returns>
+		public String Form(String action, IDictionary attributes)
+		{
+			return String.Format("<form action=\"{0}\" {1}>", action, GetAttributes(attributes));
+		}
 		
 		/// <summary>
 		/// Creates a closing <b>form</b> tag.
@@ -705,6 +720,17 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return String.Format("<input type=\"radio\" name=\"{0}\" value=\"{1}\" {2} />",
 				name, value, GetAttributes(attributes));
+		}
+
+		public String InputFile(String name)
+		{
+			return InputFile(name, null);
+		}
+
+		public String InputFile(String name, IDictionary attributes)
+		{
+			return String.Format("<input type=\"file\" name=\"{0}\" {1} />",
+				name, GetAttributes(attributes));
 		}
 
 		#region InputText

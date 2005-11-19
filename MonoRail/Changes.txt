@@ -12,12 +12,23 @@ Beta 5
 
 - PaginationHelper introduced
 
-- Added IServerUtility.JavaScriptEscape (kudos to Chad Humphries)
+- Added IServerUtility.JavaScriptEscape() (kudos to Chad Humphries)
 
 - Added DataBindAttribute.Exclude - A comma separated list of property names 
   to exclude from databinding (kudos to Chad Humphries)
 
-- Added IResponse.BinaryWrite and CreateCookie( HttpCookie )
+- Added IResponse.BinaryWrite() and CreateCookie( HttpCookie ) overload
+
+- Added IServerUtility.MapPath()
+
+- Added IRailsContext.ApplicationPhysicalPath
+
+- Added to HtmlHelper:
+  - InputCheckbox
+  - InputRadio
+  - InputFile
+  - InputButton
+  - Form(action, attribtes) overload
 
 - Support for smart arrays (aside from primitives) (kudos do Ahmed)
 
