@@ -1,3 +1,4 @@
+using System.IO;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +28,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	public class ModuleScope
 	{
 		public static readonly String FILE_NAME = "GeneratedAssembly.dll";
-
+        public static readonly String ASSEMBLY_NAME = "DynamicAssemblyProxyGen";
 		/// <summary>
 		/// Avoid leaks caused by non disposal of generated types.
 		/// </summary>
@@ -54,7 +55,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				if (_moduleBuilder == null)
 				{
 					AssemblyName assemblyName = new AssemblyName();
-					assemblyName.Name = "DynamicAssemblyProxyGen";
+                    assemblyName.Name = ASSEMBLY_NAME;
 
 #if ( DEBUG )
 					_assemblyBuilder =

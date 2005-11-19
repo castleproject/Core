@@ -25,3 +25,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.0.3.0")]
 
+#if dotNet2
+[assembly: InternalsVisibleTo("DynamicAssemblyProxyGen")]
+#endif
+

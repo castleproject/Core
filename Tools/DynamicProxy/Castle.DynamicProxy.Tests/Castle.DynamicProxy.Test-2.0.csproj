@@ -87,7 +87,7 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\DynamicProxy\Castle.DynamicProxy-2.0.csproj">
+    <ProjectReference Include="..\Castle.DynamicProxy\Castle.DynamicProxy-2.0.csproj">
       <Name>Castle.DynamicProxy</Name>
       <Project>{70EE6AF2-1F6D-4CC5-A1B2-C3182F035F67}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>

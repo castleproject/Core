@@ -103,7 +103,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			if (newMethod == null)
 			{
-				System.Diagnostics.Trace.Write("Target class does not offer the method " + method.Name);
+				//System.Diagnostics.Trace.Write("Target class does not offer the method " + method.Name);
 				newMethod = method;
 			}
 

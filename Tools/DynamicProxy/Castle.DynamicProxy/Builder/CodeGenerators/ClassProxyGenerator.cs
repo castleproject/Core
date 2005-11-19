@@ -267,10 +267,14 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 			foreach(ConstructorInfo constructor in constructors)
 			{
-				if (constructor.IsPrivate || constructor.IsAssembly)
+				if (constructor.IsPrivate)
 				{
 					continue;
 				}
+                if (constructor.IsAssembly && !IsInternalToDynamicProxy(baseClass.Assembly))
+                {
+                    continue;
+                }
 				GenerateConstructor(constructor);
 			}
 		}
