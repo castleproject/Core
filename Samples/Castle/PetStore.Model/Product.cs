@@ -17,6 +17,7 @@ namespace PetStore.Model
 	using System;
 
 	using Castle.ActiveRecord;
+	using NHibernate.Expression;
 
 	[ActiveRecord]
 	public class Product : ActiveRecordBase
@@ -68,6 +69,12 @@ namespace PetStore.Model
 		{
 			get { return category; }
 			set { category = value; }
+		}
+
+		public static Product[] FindAll()
+		{
+			return (Product[]) FindAll( 
+				typeof(Product), new Order[] { Order.Asc("Name") } );
 		}
 	}
 }

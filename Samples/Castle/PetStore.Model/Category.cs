@@ -19,6 +19,7 @@ namespace PetStore.Model
 	using Castle.ActiveRecord;
 	
 	using Iesi.Collections;
+	using NHibernate.Expression;
 
 
 	[ActiveRecord]
@@ -51,13 +52,24 @@ namespace PetStore.Model
 			set { parent = value; }
 		}
 
+		/// <summary>
+		/// Lazy means: load the collections content only when used.
+		/// and inverse means that the other end controls 
+		/// the relation
+		/// </summary>
 		[HasMany( typeof(Category), Inverse=true, Lazy=true )]
-		public ISet Subcategories
+		public ISet SubCategories
 		{
 			get { return subcategories; }
 			set { subcategories = value; }
 		}
 
+		/// <summary>
+		/// The Inverse is usually a source of confusion, but it
+		/// more or like make this relation informative, or readonly.
+		/// <see cref="Product"/> is the entity that dictates
+		/// the relation.
+		/// </summary>
 		[HasMany( typeof(Product), Inverse=true, Lazy=true )]
 		public ISet Products
 		{
@@ -65,9 +77,21 @@ namespace PetStore.Model
 			set { products = value; }
 		}
 
+		/// <summary>
+		/// We have overrided the implementation of 
+		/// ToString only because this class in being 
+		/// used on the ActiveRecord Scaffolding
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return "" + name;
+		}
+
+		public static Category[] FindAll()
+		{
+			return (Category[]) FindAll( 
+				typeof(Category), new Order[] { Order.Asc("Name") } );
 		}
 	}
 }

@@ -2,5 +2,5 @@
 
 <ul>
   <li>$HtmlHelper.LinkTo("Category", "CategoryManagement", "ListCategory")</li>
-  <li>$HtmlHelper.LinkTo("Product", "ProductManagement", "ListProduct")</li>
+  <li>$HtmlHelper.LinkTo("Product", "ProductManagement", "List")</li>
 </ul>

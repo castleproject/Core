@@ -11,6 +11,15 @@
 
 $childContent
 
+
+<br/>
+
+<hr noshade/>
+
+<div style="text-align: center;">
+  $HtmlHelper.LinkTo("Back to maintenance", "admin", "index")
+</div>
+
 </body>
 
 </html>

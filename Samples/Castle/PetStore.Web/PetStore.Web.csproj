@@ -254,14 +254,11 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Content\css\scaffold.css"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "Content\css\site.css"
                     BuildAction = "Content"
                 />
                 <Folder RelPath = "Content\images\" />
+                <Folder RelPath = "Content\productpics\" />
                 <File
                     RelPath = "Controllers\AbstractSecureController.cs"
                     SubType = "Code"
@@ -329,7 +326,11 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "views\Layouts\scaffold.vm"
+                    RelPath = "views\ProductManagement\List.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\ProductManagement\New.vm"
                     BuildAction = "None"
                 />
                 <File

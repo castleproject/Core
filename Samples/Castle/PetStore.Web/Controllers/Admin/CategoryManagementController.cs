@@ -21,9 +21,10 @@ namespace PetStore.Web.Controllers.Admin
 	using PetStore.Model;
 
 	/// <summary>
-	/// 
+	/// This is an example of CRUD using Scaffolding support
+	/// which still very simple, but improving day after day :-)
 	/// </summary>
-	[Scaffolding( typeof(Category) )]
+	[Layout("admin"), Scaffolding( typeof(Category) )]
 	public class CategoryManagementController : AbstractSecureController
 	{
 	}
