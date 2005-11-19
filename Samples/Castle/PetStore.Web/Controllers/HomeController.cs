@@ -16,23 +16,25 @@ namespace PetStore.Web.Controllers
 {
 	using System;
 
-	using Castle.MonoRail.Framework;
-	
+	using PetStore.Model;
 	using PetStore.Service;
 
 
 	public class HomeController : BaseSiteController
 	{
 		private readonly IRecommendationService recommendationService;
+		private readonly CategoryService categoryService;
 
-		public HomeController(IRecommendationService recommendationService)
+		public HomeController(IRecommendationService recommendationService, CategoryService categoryService)
 		{
 			this.recommendationService = recommendationService;
+			this.categoryService = categoryService;
 		}
 
 		public void Index()
 		{
-			PropertyBag.Add( "products", recommendationService.GetProducts() );
+			PropertyBag.Add("categories", categoryService.ObtainCategories());
+			PropertyBag.Add( "featuredproducts", recommendationService.GetProducts(Context.CurrentUser as Customer) );
 		}
 	}
 }

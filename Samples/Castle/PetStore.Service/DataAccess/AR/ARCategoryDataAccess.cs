@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace PetStore.Service
+namespace PetStore.Service.DataAccess.AR
 {
 	using System;
 
 	using PetStore.Model;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public interface IRecommendationService
+	public class ARCategoryDataAccess : ICategoryDataAccess
 	{
-		Product[] GetProducts(Customer customer);
+		public Category[] FindAll()
+		{
+			return Category.FindAll();
+		}
 	}
 }

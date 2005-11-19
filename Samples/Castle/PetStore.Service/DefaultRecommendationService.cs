@@ -18,11 +18,45 @@ namespace PetStore.Service
 
 	using PetStore.Model;
 
+	/// <summary>
+	/// A clever recommendation service should use some 
+	/// branch of AI to suggest meaningfull products 
+	/// (think adaptive resonance theory / http://jroller.com/page/hammett?entry=finally_something_interesting_on_my)
+	/// based on the history of the customer (if available).
+	/// But we just pick up some random products
+	/// </summary>
 	public class DefaultRecommendationService : IRecommendationService
 	{
-		public Product[] GetProducts()
+		private readonly Random random;
+		private readonly IProductDataAccess productDataAccess;
+
+		public DefaultRecommendationService(IProductDataAccess productDataAccess)
 		{
-			throw new NotImplementedException();
+			this.productDataAccess = productDataAccess;
+			this.random = new Random((int) DateTime.Now.Ticks);
+		}
+
+		public Product[] GetProducts(Customer customer)
+		{
+			int[] ids = productDataAccess.GetProductIds();
+
+			if (ids.Length == 0) return new Product[0];
+
+			// We select two
+			
+			int firstIndex = random.Next(0, ids.Length - 1);
+			int secondIndex = random.Next(0, ids.Length - 1);
+
+			if (firstIndex != secondIndex)
+			{
+				return new Product[] { 
+										 Product.Find(ids[firstIndex]), 
+										 Product.Find(ids[secondIndex]) };
+			}
+			else
+			{
+				return new Product[] { Product.Find(ids[firstIndex]) };
+			}
 		}
 	}
 }

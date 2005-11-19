@@ -16,13 +16,8 @@ namespace PetStore.Service
 {
 	using System;
 
-	using PetStore.Model;
-
-	/// <summary>
-	/// 
-	/// </summary>
-	public interface IRecommendationService
+	public interface IProductDataAccess
 	{
-		Product[] GetProducts(Customer customer);
+		int[] GetProductIds();
 	}
 }

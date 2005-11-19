@@ -1,9 +1,175 @@
 /* Main site style sheet */
 
-body
+body 
 {
-	background-color: White;
-	font-family: Verdana, Tahoma;
-	font-size: 90%;
-	color: #0A0A0A;
+	margin: 0 0 0 0;
+ 	/* border: solid 1px black;  */
+	color: #333;
+	line-height: 140%;
+	background: white url("../images/background.gif") repeat-x;
+	font-size: 0.9em;
+}
+
+body, td, th, h3, h2, h1, h4 input, textarea
+{ 
+	font-family: verdana, tahoma, sans-serif;
+}
+
+#container {
+	width: 100%;
+	margin: 0 auto;
+}
+
+#page {
+    border: solid 1px gray;
+	margin: 15px 20px 20px 20px;
+}
+
+#content {
+    /* border: dashed 1px navy;*/
+	margin-left: 250px;
+	padding: 0 0 0 0;
+/*	background: url("bk-ground.gif") repeat-x top left;*/
+}
+
+#header {
+	clear: both;
+	position: relative;
+	margin: 0 0 0 0;
+	height: 38px;
+}
+
+#header h1 {
+	position: absolute;
+	top: 0; 
+	left: 0;
+	margin: 0;
+}
+#header h1 a,#header h1 a:hover {
+	display: block;
+ 	/* border: solid 1px black;  */
+	width: 276px; 
+	height: 67px;
+	background: url("../images/title.gif") no-repeat;
+	font-size: 1px;
+	text-indent: -7000em;
+	text-decoration: none;
+}
+
+#links {
+	position: relative;
+	height: 27px;
+}
+#links #toplinks {
+	position: absolute;
+	bottom: 0; 
+	left: 0;
+	top: 0;
+	margin: 0 0 0 0; 
+	padding: 0 0 0 0;
+	list-style-type: none;
+}
+#links #toplinks li {
+	/* border: dashed 1px red; */
+	text-align: center;
+	/* padding-right: 13px; */
+	width: 95px; 
+	float: right;
+	background-image: url("../images/top-button.gif");
+	background-position: top right;
+	background-repeat: no-repeat;
+	height: 27px;
+}
+#links #toplinks li a {
+	line-height: 2.5em;
+	/* padding-right: 13px; */
+	display: block;
+	font-family: tahoma, verdana, sans-serif;
+	text-decoration: none;
+	font-size: 85%;
+	color: #606060;
+	height: 27px;
+	background-image: url("../images/top-button-left.gif");
+	background-position: top left;
+	background-repeat: no-repeat;
+}
+
+div#categories {
+	position: absolute;
+	top: 80px;
+	left: 20px;
+	background: #FFF;
+	width: 235px;
+	line-height: 120%;
+	background: white url("../images/sidebar.gif") no-repeat bottom left;
+	margin: 0 0 8px 0;
+	/* border: solid 1px gray; */
+	border: solid 1px gray;
+}
+div#categories div {
+	background: url("../images/sidebar-top.gif") no-repeat top left;
+	padding: 10px;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+}
+div#categories h3 {
+	font-weight: bold;
+	font-size: 0.9em;
+	margin: 1em 0 0.3em;	
+	color: #036;
+}
+div#categories ul 
+{
+	padding: 5px 5px 5px 18px;
+	/* border: solid 1px gray; */
+}
+div#categories li {
+	color: #525252;
+	list-style-type: square;
+}
+div#categories a {
+	color: #525252;
+	text-decoration: none;
+}
+
+#content h3 
+{
+	margin: 0 0 10px 0;
+	padding: 0 0 5px 0;
+	font-size: medium;
+	border-bottom: solid 0.5px black;
+}
+
+.productbox 
+{
+	border-bottom: solid 1px gray;
+	
+	height: 220px;
+}
+
+.productbox div#thumbnail
+{
+	padding: 5px;
+	display: inline;
+	float: left;
+	width: 250px;
+}
+
+.productbox div#thumbnail img
+{
+	border: solid 1px gray;
+	width: 220px;
+	height: 190px;
+}
+
+.productbox div#productdesc
+{
+	padding: 10px;
+	display: inline;
+}
+
+.productbox span
+{
+	font-weight: bold;
+	color: Red;
 }

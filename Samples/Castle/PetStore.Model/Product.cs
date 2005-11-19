@@ -71,6 +71,11 @@ namespace PetStore.Model
 			set { category = value; }
 		}
 
+		public static Product Find(int id)
+		{
+			return (Product) FindByPrimaryKey( typeof(Product), id );
+		}
+
 		public static Product[] FindAll()
 		{
 			return (Product[]) FindAll( 

@@ -318,6 +318,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\Home\Index.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\Layouts\admin.vm"
                     BuildAction = "None"
                 />
@@ -335,6 +339,10 @@
                 />
                 <File
                     RelPath = "views\shared\inlineerror.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\shared\ProductBox.vm"
                     BuildAction = "None"
                 />
             </Include>

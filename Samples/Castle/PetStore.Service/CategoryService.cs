@@ -19,10 +19,24 @@ namespace PetStore.Service
 	using PetStore.Model;
 
 	/// <summary>
-	/// 
+	/// As you can see this service does not imeplement
+	/// any service interface. This is OK for components
+	/// you dont think you would need to offer more than one
+	/// implementation. 
+	/// Principles: YAGNI and KISS :-)
 	/// </summary>
-	public interface IRecommendationService
+	public class CategoryService
 	{
-		Product[] GetProducts(Customer customer);
+		private readonly ICategoryDataAccess categoryDataAccess;
+
+		public CategoryService(ICategoryDataAccess categoryDataAccess)
+		{
+			this.categoryDataAccess = categoryDataAccess;
+		}
+
+		public Category[] ObtainCategories()
+		{
+			return categoryDataAccess.FindAll();
+		}
 	}
 }

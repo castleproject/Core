@@ -1,0 +1,20 @@
+<div class="productbox">
+  <div id="thumbnail">
+    <img src="/content/productpics/a63d794d560d48d4ac2076d586f653c8.jpg">
+  </div>
+  <div id="productdesc">
+    <h4>$product.name</h4>
+    
+    <p>$product.Description</p>
+    
+    <div id="price">
+    Price: <span>$product.Price.ToString("C")</span>
+    </div>
+    
+    <p>
+    $HtmlHelper.InputText("", "1", 1, 1)
+    $HtmlHelper.SubmitButton("Add to cart")
+    </p>
+    
+  </div>
+</div>

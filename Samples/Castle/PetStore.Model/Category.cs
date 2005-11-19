@@ -19,6 +19,7 @@ namespace PetStore.Model
 	using Castle.ActiveRecord;
 	
 	using Iesi.Collections;
+	
 	using NHibernate.Expression;
 
 
@@ -50,6 +51,11 @@ namespace PetStore.Model
 		{
 			get { return parent; }
 			set { parent = value; }
+		}
+
+		public bool IsRoot
+		{
+			get { return Parent == null; }
 		}
 
 		/// <summary>

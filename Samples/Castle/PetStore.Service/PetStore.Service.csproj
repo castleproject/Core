@@ -99,12 +99,22 @@
                     AssemblyName = "Castle.Model"
                     HintPath = "..\..\..\ActiveRecord\bin\Castle.Model.dll"
                 />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\..\ActiveRecord\bin\NHibernate.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CategoryService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -134,7 +144,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DataAccess\ICategoryDataAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataAccess\IProductDataAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DataAccess\IUserDataAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataAccess\AR\ARCategoryDataAccess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataAccess\AR\ARProductDataAccess.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
