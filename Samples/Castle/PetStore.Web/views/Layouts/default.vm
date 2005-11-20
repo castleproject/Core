@@ -28,12 +28,13 @@
 		<div>
 		<h3>Check our sections</h3>
 		<ul>
+		  <li><a href="${siteRoot}/Product/List.rails">All products</a></li>
 #foreach($cat in $categories)
  #if($cat.IsRoot)
-		  <li id="n-mainpage"><a href="/en/docs/Main_Page">$cat.Name ($cat.Products.Count)</a></li>
+		  <li><a href="${siteRoot}/Product/ListByCategory.rails?category=${cat.Id}">$cat.Name ($cat.Products.Count)</a></li>
 		<ul>
   #foreach($sub in $cat.SubCategories)
-		  <li id="n-mainpage"><a href="/en/docs/Main_Page">$sub.Name ($sub.Products.Count)</a></li>
+		  <li><a href="${siteRoot}/Product/ListByCategory.rails?category=${sub.Id}">$sub.Name ($sub.Products.Count)</a></li>
   #end
 		</ul>
  #end

@@ -17,23 +17,43 @@ namespace PetStore.Web.Controllers
 	using System;
 
 	using Castle.MonoRail.Framework;
+	
+	using PetStore.Service;
 
 
 	public class ProductController : BaseSiteController
 	{
+		private readonly CategoryService categoryService;
+		private readonly IProductService productService;
+
+		public ProductController(CategoryService categoryService, IProductService productService)
+		{
+			this.categoryService = categoryService;
+			this.productService = productService;
+		}
+
 		public void List()
 		{
-			// Use paginate helper or ajax to paginate?
+			AddCategoriesToPropertyBag();
+
+			PropertyBag.Add("products", productService.FindAll());
 		}
 
 		public void ListByCategory(int categoryId)
 		{
-			// Use paginate helper or ajax to paginate?
+			AddCategoriesToPropertyBag();
+
+			PropertyBag.Add("products", productService.FindByCategory(categoryId));
 		}
 
 		public void Details(int productid)
 		{
 			
+		}
+
+		private void AddCategoriesToPropertyBag()
+		{
+			PropertyBag.Add("categories", categoryService.ObtainCategories());
 		}
 	}
 }

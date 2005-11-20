@@ -63,7 +63,7 @@ namespace PetStore.Model
 		/// and inverse means that the other end controls 
 		/// the relation
 		/// </summary>
-		[HasMany( typeof(Category), Inverse=true, Lazy=true )]
+		[HasMany( typeof(Category), Inverse=true, Lazy=true, OrderBy="Name ASC" )]
 		public ISet SubCategories
 		{
 			get { return subcategories; }

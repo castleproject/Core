@@ -1,0 +1,7 @@
+<h3>
+
+</h3>
+
+#foreach($product in $products)
+#parse("shared/ProductBox.vm")
+#end

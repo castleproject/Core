@@ -34,7 +34,7 @@ namespace PetStore.Web.Controllers
 		public void Index()
 		{
 			PropertyBag.Add("categories", categoryService.ObtainCategories());
-			PropertyBag.Add( "featuredproducts", recommendationService.GetProducts(Context.CurrentUser as Customer) );
+			PropertyBag.Add("featuredproducts", recommendationService.GetProducts(Context.CurrentUser as Customer));
 		}
 	}
 }

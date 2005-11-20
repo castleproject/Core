@@ -81,5 +81,11 @@ namespace PetStore.Model
 			return (Product[]) FindAll( 
 				typeof(Product), new Order[] { Order.Asc("Name") } );
 		}
+
+		public static Product[] FindByCategory(int category)
+		{
+			return (Product[]) FindAll( 
+				typeof(Product), new Order[] { Order.Asc("Name") }, Expression.Eq("Category.Id", category) );
+		}
 	}
 }

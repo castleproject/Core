@@ -330,6 +330,14 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\Product\List.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\Product\ListByCategory.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\ProductManagement\List.vm"
                     BuildAction = "None"
                 />

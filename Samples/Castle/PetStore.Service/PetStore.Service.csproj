@@ -124,12 +124,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DefaultProductService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DefaultRecommendationService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IAuthenticationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IProductService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -19,13 +19,15 @@ namespace PetStore.Service.DataAccess.AR
 
 	using NHibernate;
 
+	using PetStore.Model;
+
 	/// <summary>
 	/// ActiveRecord implementation of a data access class 
 	/// for the Product entity.
 	/// </summary>
 	public class ARProductDataAccess : IProductDataAccess
 	{
-		public ISessionFactory sessionFactory;
+		private ISessionFactory sessionFactory;
 
 		/// <summary>
 		/// As you probably know the ISessionFactory is a
@@ -62,6 +64,16 @@ namespace PetStore.Service.DataAccess.AR
 
 				return intArray;
 			}
+		}
+
+		public Product[] FindAll()
+		{
+			return Product.FindAll();
+		}
+
+		public Product[] FindByCategory(int category)
+		{
+			return Product.FindByCategory(category);
 		}
 	}
 }

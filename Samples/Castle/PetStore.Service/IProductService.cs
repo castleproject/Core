@@ -18,13 +18,10 @@ namespace PetStore.Service
 
 	using PetStore.Model;
 
-
-	public interface IProductDataAccess
+	public interface IProductService
 	{
-		int[] GetProductIds();
-
 		Product[] FindAll();
 
-		Product[] FindByCategory(int id);
+		Product[] FindByCategory(int categoryId);
 	}
 }
