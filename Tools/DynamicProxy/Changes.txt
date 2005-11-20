@@ -1,14 +1,15 @@
 
-Version 1.0.0
-- First release
+Version 1.4.6
 
-Version 1.0.2
-- Support for constructor arguments
-- Lock implemented on the obtention of the invocation objects (also multithread test case added)
-- Applied patch from Mark Traudt to make SimpleAST support the creation of events
+ * Fixed a problem with overloaded indexed properties
+ * Added ability to handle internal classes using .Net 2 InternalsVisibleTo
+ * Removed trace warning when method is not found on object.
 
-Version 1.0.3
-- Applied patch from Sergey Koshcheyev related to proxy desserialization problems
+Version 1.0.6
+- Applied patch from Corneliu I. Tusnea
+
+Version 1.0.5
+- Fix sbyte enums
 
 Version 1.0.4
 - Added the property MethodInvocationTarget to the IInvocation interface.
@@ -16,11 +17,17 @@ Version 1.0.4
   is important when proxying interfaces and still you want to obtain attributes
   from the method on the concrete class.
 
-Version 1.0.5
-- Fix sbyte enums
+Version 1.0.3
+- Applied patch from Sergey Koshcheyev related to proxy desserialization problems
 
-Version 1.0.6
-- Applied patch from Corneliu I. Tusnea
+Version 1.0.2
+- Support for constructor arguments
+- Lock implemented on the obtention of the invocation objects (also multithread test case added)
+- Applied patch from Mark Traudt to make SimpleAST support the creation of events
+
+Version 1.0.0
+- First release
+
 
 
 
