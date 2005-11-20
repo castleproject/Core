@@ -30,6 +30,44 @@ Beta 5
   - InputButton
   - Form(action, attribtes) overload
 
+- Support for nullable types in SmartDispatcherController, useful for
+  detecting missing ValueType parameters. Works with Nullables library, still
+  not working on .NET 2.0 Nullables (kudos to Fabio Batista)
+
+  Example of use:
+
+    // .NET 1.1
+    public void CreateTicket(string name, NullableDateTime date, NullableInt32 priority)
+    {
+      if (name == null || name.Length == 0) throw new MissingFieldException();
+      if (!date.HasValue) throw new MissingFieldException();
+      if (!priority.HasValue) throw new MissingFieldException();
+    }
+
+    // .NET 2.0 (NOT WORKING YET)
+    public void CreateTicket(string name, DateTime? date, int? priority)
+    {
+      if (name == null || name.Length == 0) throw new MissingFieldException();
+      if (!date.HasValue) throw new MissingFieldException();
+      if (!priority.HasValue) throw new MissingFieldException();
+    }
+
+- Broaded support for Enums. They can be specified by number or by text (kudos to Fabio Batista)
+
+  public enum MyEnum {
+    First = 1,
+    Second = 2
+  }
+  
+  <input type="hidden" name="myEnumValue" value="1" />
+  <input type="hidden" name="myOtherEnumValue" value="seCoNd" />
+  
+  public void TestEnumValues(MyEnum myEnumValue, MyEnum myOtherEnumValue)
+  {
+    if (myEnumValue == MyEnum.First) // ok
+    if (myOtherEnumValue == MyEnum.Second) // ok
+  }
+
 - Support for smart arrays (aside from primitives) (kudos do Ahmed)
 
   Quoting the explanation:
