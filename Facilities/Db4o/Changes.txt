@@ -1,3 +1,5 @@
+11.20.2005
+- update for db4o version 5.0
 
 Alpha Version 1.0.0
 - First release
