@@ -66,7 +66,7 @@ namespace Castle.Facilities.Db4oIntegration
 		{
 			ObjectContainer objContainer = (ObjectContainer) Kernel[typeof(ObjectContainer)];
 
-			objContainer.close();
+			objContainer.Close();
 
 			base.Dispose();
 		}

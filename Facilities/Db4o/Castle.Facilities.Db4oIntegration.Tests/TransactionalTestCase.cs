@@ -93,7 +93,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 
 		private void DoRollback()
 		{
-			_objContainer.rollback();
+			_objContainer.Rollback();
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 			Start(threads);
 			Join(threads);
 
-			Assert.AreEqual(InvocationsNumber * ThreadsNumber, _box.GetAll().size());
+			Assert.AreEqual(InvocationsNumber * ThreadsNumber, _box.GetAll().Size());
 		}
 
 		private void Join(Thread[] threads)

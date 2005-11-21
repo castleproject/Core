@@ -14,8 +14,6 @@
 
 namespace Castle.Facilities.Db4oIntegration.Tests.Components
 {
-	using System;
-
 	using com.db4o;
 	using com.db4o.query;
 	
@@ -30,34 +28,34 @@ namespace Castle.Facilities.Db4oIntegration.Tests.Components
 
 		public virtual void Create(Beer beer)
 		{
-			_objContainer.set(beer);
+			_objContainer.Set(beer);
 		}
 
 		public virtual void Remove(Beer beer)
 		{
-			_objContainer.delete(beer);
+			_objContainer.Delete(beer);
 		}
 
 		public virtual Beer Load(object id)
 		{
-			Query query = _objContainer.query();
+			Query query = _objContainer.Query();
 
-			query.constrain(typeof(Beer));
-			query.descend("_id").constrain(id);
+			query.Constrain(typeof(Beer));
+			query.Descend("_id").Constrain(id);
 
-			if (query.execute().size() == 0)
+			if (query.Execute().Size() == 0)
 			{
 				return null;
 			}
 			else
 			{
-				return (Beer) query.execute().next();
+				return (Beer) query.Execute().Next();
 			}
 		}
 
 		public virtual ObjectSet FindAll()
 		{
-			return _objContainer.get(typeof(Beer));
+			return _objContainer.Get(typeof(Beer));
 		}
 	}
 }

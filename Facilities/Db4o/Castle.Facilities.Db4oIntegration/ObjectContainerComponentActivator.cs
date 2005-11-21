@@ -52,7 +52,7 @@ namespace Castle.Facilities.Db4oIntegration
 		{
 			string databaseFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, (string) Model.ExtendedProperties[Db4oFacility.DatabaseFileKey]);
 
-			ObjectContainer container =  Db4o.openFile(databaseFile);
+			ObjectContainer container =  Db4o.OpenFile(databaseFile);
 
 			//TODO: Remove it when db4o's team fix it.
 			if (container == null)
@@ -70,26 +70,26 @@ namespace Castle.Facilities.Db4oIntegration
 			string user = (string) Model.ExtendedProperties[Db4oFacility.UserKey];
 			string password = (string) Model.ExtendedProperties[Db4oFacility.PasswordKey];
 	
-			return Db4o.openClient(hostName, remotePort, user, password);
+			return Db4o.OpenClient(hostName, remotePort, user, password);
 		}
 
 		protected virtual void SetupDb4o()
 		{
-			Db4o.configure().exceptionsOnNotStorable((bool) Model.ExtendedProperties[Db4oFacility.ExceptionsOnNotStorableKey]); 
+			Db4o.Configure().ExceptionsOnNotStorable((bool) Model.ExtendedProperties[Db4oFacility.ExceptionsOnNotStorableKey]); 
 
 			if(Model.ExtendedProperties[Db4oFacility.CallConstructorsKey] != null)
 			{
-				Db4o.configure().callConstructors((bool) Model.ExtendedProperties[Db4oFacility.CallConstructorsKey]);
+				Db4o.Configure().CallConstructors((bool) Model.ExtendedProperties[Db4oFacility.CallConstructorsKey]);
 			}
 
 			if (Model.ExtendedProperties.Contains(Db4oFacility.ActivationDepth))
 			{
-				Db4o.configure().activationDepth((int) Model.ExtendedProperties[Db4oFacility.ActivationDepth]);
+				Db4o.Configure().ActivationDepth((int) Model.ExtendedProperties[Db4oFacility.ActivationDepth]);
 			}
 	
 			if (Model.ExtendedProperties.Contains(Db4oFacility.UpdateDepth))
 			{
-				Db4o.configure().updateDepth((int) Model.ExtendedProperties[Db4oFacility.UpdateDepth]);
+				Db4o.Configure().UpdateDepth((int) Model.ExtendedProperties[Db4oFacility.UpdateDepth]);
 			}
 
 			SetupTranslators();
@@ -98,7 +98,7 @@ namespace Castle.Facilities.Db4oIntegration
 		protected virtual void SetupTranslators()
 		{
 			//TODO: Remove it when db4o's team fix it.
-			Db4o.configure().objectClass(typeof(CompareInfo)).translate(new TSerializable());
+			Db4o.Configure().ObjectClass(typeof(CompareInfo)).Translate(new TSerializable());
 		}
 	}
 }

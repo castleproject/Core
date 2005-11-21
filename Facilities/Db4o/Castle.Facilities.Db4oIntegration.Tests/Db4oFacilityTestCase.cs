@@ -41,28 +41,28 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 
 			try
 			{
-				db4oContainer.set(new Beer(id));
+				db4oContainer.Set(new Beer(id));
 			}
 			catch
 			{
-				db4oContainer.rollback();
+				db4oContainer.Rollback();
 			}
 			finally
 			{
-				db4oContainer.commit();
+				db4oContainer.Commit();
 			}
 
-			ObjectSet results = db4oContainer.get(typeof(Beer));
+			ObjectSet results = db4oContainer.Get(typeof(Beer));
 
-			Assert.AreEqual(1, results.size());
-			Beer loaded = (Beer)results.next();
+			Assert.AreEqual(1, results.Size());
+			Beer loaded = (Beer)results.Next();
 			Assert.AreEqual(id, loaded.Id);
 
-			db4oContainer.delete(loaded);
-			db4oContainer.commit();
+			db4oContainer.Delete(loaded);
+			db4oContainer.Commit();
 
-			results = db4oContainer.get(typeof(Beer));
-			Assert.AreEqual(0, results.size());
+			results = db4oContainer.Get(typeof(Beer));
+			Assert.AreEqual(0, results.Size());
 		}
 	}
 }

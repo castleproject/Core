@@ -95,11 +95,6 @@
                     HintPath = "..\lib\NHibernate.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\lib\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Castle.MicroKernel"
                     AssemblyName = "Castle.MicroKernel"
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"

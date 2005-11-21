@@ -64,7 +64,7 @@ namespace Castle.Facilities.Db4oIntegration.Tests
 			Start(threads);
 			Join(threads);
 
-			Assert.AreEqual(InvocationsNumber * ThreadsNumber, _dao.FindAll().size());
+			Assert.AreEqual(InvocationsNumber * ThreadsNumber, _dao.FindAll().Size());
 		}
 
 		private void Join(Thread[] threads)

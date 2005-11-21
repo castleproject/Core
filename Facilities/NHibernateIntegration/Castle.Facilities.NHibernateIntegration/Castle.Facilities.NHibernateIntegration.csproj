@@ -90,11 +90,6 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\lib\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\lib\Iesi.Collections.dll"
