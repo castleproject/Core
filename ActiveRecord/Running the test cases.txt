@@ -15,7 +15,7 @@ like.
   Test cases will generate all the necessary schema. 
   
 
-  ** The following schema is just provided for history **
+  ** The following schema is only provided for history purposes **
 
 
    --- cut here ---
