@@ -150,13 +150,13 @@ namespace Castle.MonoRail.Framework.Internal
 			else 
 			{
 				// support for types that specify a TypeConverter, i.e.: NullableTypes
+				Type sourceType = (value != null ? value.GetType() : typeof(String));
 				TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
-				if (conv != null && value != null && conv.CanConvertFrom(value.GetType()))
+				if (conv != null && conv.CanConvertFrom(sourceType))
 					return conv.ConvertFrom(value);
 				
-				String message = String.Format("Cannot convert argument '{0}' with value '{1}' " + 
-					"as we don't know how to convert from this value to its type. " +
-					"desired type = {2}", paramName, value, desiredType);
+				String message = String.Format("Cannot convert argument '{0}', with value '{1}', "+
+					"from {2} to {3}", paramName, value, sourceType, desiredType);
 	
 				throw new ArgumentException(message);
 			}
