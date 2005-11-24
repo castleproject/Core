@@ -15,7 +15,11 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.ComponentModel;
 	using System.Collections;
+
+	using Castle.Components.Common.EmailSender;
+	using Castle.Components.Common.EmailSender.SmtpEmailSender;
 
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Configuration;
@@ -32,6 +36,7 @@ namespace Castle.MonoRail.Framework
 		protected IScaffoldingSupport _scaffoldingSupport;
 		protected IViewComponentFactory _viewCompFactory;
 		protected IMonoRailExtension[] extensions;
+		protected IEmailSender emailSender;
 
 		public ProcessEngineFactory() : this(null)
 		{
@@ -55,6 +60,7 @@ namespace Castle.MonoRail.Framework
 			InitializeResourceFactory();
 			InitializeViewEngine();
 			InitializeScaffoldingSupport();
+			InitializeEmailSender();
 
 			ConnectViewComponentFactoryToViewEngine();
 		}
@@ -63,7 +69,7 @@ namespace Castle.MonoRail.Framework
 		{
 			return new ProcessEngine(_controllerFactory, _viewEngine, 
 				_filterFactory, _resourceFactory, _scaffoldingSupport, 
-				_viewCompFactory, extensions);
+				_viewCompFactory, extensions, emailSender);
 		}
 
 		public MonoRailConfiguration Config
@@ -185,13 +191,28 @@ namespace Castle.MonoRail.Framework
 				IMonoRailExtension extension = 
 					Activator.CreateInstance( extensionType ) as IMonoRailExtension;
 
-				extension.Init(Config);
+				extension.Init(_config);
 
 				extensionList.Add(extension);
 			}
 
 			extensions = (IMonoRailExtension[]) 
 				extensionList.ToArray( typeof(IMonoRailExtension) );
+		}
+
+		protected void InitializeEmailSender()
+		{
+			// TODO: allow user to customize this
+
+			emailSender = new SmtpSender( _config.SmtpConfig.Host );
+
+			ISupportInitialize initializer = emailSender as ISupportInitialize;
+
+			if (initializer != null)
+			{
+				initializer.BeginInit();
+				initializer.EndInit();
+			}
 		}
 		
 		private void ConnectViewComponentFactoryToViewEngine()

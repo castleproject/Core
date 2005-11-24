@@ -18,14 +18,14 @@ namespace Castle.MonoRail.Framework
 	using System.IO;
 	using System.Text;
 	using System.Web;
-	using System.Web.Mail;
 	using System.Reflection;
 	using System.Threading;
 	using System.Collections;
 	using System.Collections.Specialized;
-	using System.Configuration;
 	using System.Text.RegularExpressions;
 
+	using Castle.Components.Common.EmailSender;
+	
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -762,6 +762,8 @@ namespace Castle.MonoRail.Framework
 				{
 					exceptionToThrow = ex;
 				}
+
+				RaiseOnActionExceptionOnExtension();
 			}
 			
 			try
@@ -1136,18 +1138,22 @@ namespace Castle.MonoRail.Framework
 		#region Email operations
 
 		/// <summary>
-		/// Creates an instance of System.Web.Mail.MailMessage using the specified template for the body
+		/// Creates an instance of <see cref="Message"/>
+		/// using the specified template for the body
 		/// </summary>
-		/// <param name="templateName">Name of the template to load. Will look in Views/mail for that template file.</param>
-		/// <returns>An instance of System.Web.Mail.MailMessage</returns>
-		public MailMessage RenderMailMessage(String templateName)
+		/// <param name="templateName">
+		/// Name of the template to load. 
+		/// Will look in Views/mail for that template file.
+		/// </param>
+		/// <returns>An instance of <see cref="Message"/></returns>
+		public Message RenderMailMessage(String templateName)
 		{
 			// create a message object
-			MailMessage message = new MailMessage();
+			Message message = new Message();
 
 			// use the template engine to generate the body of the message
 			StringWriter writer = new StringWriter();
-			this.InPlaceRenderSharedView(writer, Path.Combine(Constants.TemplatePath, templateName));
+			InPlaceRenderSharedView(writer, Path.Combine(Constants.TemplatePath, templateName));
 			string body = writer.ToString();
 			
 			// process delivery addresses from template.
@@ -1202,7 +1208,9 @@ namespace Castle.MonoRail.Framework
 
 			// a little magic to see if the body is html
 			if(message.Body.ToLower().IndexOf(Constants.HtmlTag) > -1)
-				message.BodyFormat = MailFormat.Html;
+			{
+				message.Format = Format.Html;
+			}
 			
 			return message;
 		}
@@ -1211,32 +1219,42 @@ namespace Castle.MonoRail.Framework
 		/// Attempts to deliver the System.Web.Mail.MailMessage using localhost smtp server or the server specified by the key SMTP_SERVER in the web.config.
 		/// </summary>
 		/// <param name="message">The instance of System.Web.Mail.MailMessage that will be sent</param>
-		/// <remarks>
-		/// TODO : Review this to ue MR configuration
-		/// </remarks>
-		public void DeliverEmail(MailMessage message)
+		public void DeliverEmail(Message message)
 		{
 			try
 			{
-				if( ConfigurationSettings.AppSettings[Constants.SmtpUsername] != null && ConfigurationSettings.AppSettings[Constants.SmtpUsername] != String.Empty &&
-					ConfigurationSettings.AppSettings[Constants.SmtpPassword] != null && ConfigurationSettings.AppSettings[Constants.SmtpPassword] != String.Empty)
-				{
-					message.Fields.Add(Constants.SmtpAuthSchema, Constants.SmtpAuthEnabled);
-					message.Fields.Add(Constants.SmtpUsernameSchema, ConfigurationSettings.AppSettings[Constants.SmtpUsername]);
-					message.Fields.Add(Constants.SmtpPasswordSchema, ConfigurationSettings.AppSettings[Constants.SmtpPassword]);
-				}
+				IEmailSender sender = (IEmailSender) ServiceProvider.GetService( typeof(IEmailSender) );
 
-				if(ConfigurationSettings.AppSettings[Constants.SmtpServer] != null && ConfigurationSettings.AppSettings[Constants.SmtpServer] != String.Empty)
-					SmtpMail.SmtpServer = ConfigurationSettings.AppSettings[Constants.SmtpServer];
-				else
-					SmtpMail.SmtpServer = Constants.DefaultSmtpServer;
-			
-				SmtpMail.Send(message);
+				sender.Send(message);
 			}
 			catch(Exception ex)
 			{
-				throw new RailsException("Error sending message!", ex);
+				throw new RailsException("Error sending e-mail", ex);
 			}
+		}
+
+		/// <summary>
+		/// Renders and delivers the e-mail message.
+		/// <seealso cref="RenderMailMessage"/>
+		/// <seealso cref="DeliverEmail"/>
+		/// </summary>
+		/// <param name="templateName"></param>
+		public void RenderEmailAndSend(String templateName)
+		{
+			Message message = RenderMailMessage(templateName);
+			DeliverEmail(message);
+		}
+
+		#endregion
+
+		#region Extension 
+
+		protected void RaiseOnActionExceptionOnExtension()
+		{
+			IMonoRailExtension composite = (IMonoRailExtension) 
+				ServiceProvider.GetService( typeof(IMonoRailExtension) );
+
+			composite.OnActionException(Context, ServiceProvider);
 		}
 
 		#endregion

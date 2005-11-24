@@ -25,6 +25,8 @@
 				<include name="Castle.MonoRail.Engine.dll" />
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Views.Brail.dll" />
+				<include name="Castle.Components.Common.EmailSender.dll" />
+				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 				<include name="Boo.Lang.dll" />
 				<include name="WSABoo.Parser.dll" />
 				<include name="Boo.Lang.Compiler.dll" />
@@ -52,6 +54,8 @@
 			</sources>
 			<references basedir="${bin.dir}">
 				<include name="Castle.MonoRail.Framework.Dll"/>
+				<include name="Castle.Components.Common.EmailSender.dll" />
+				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</references>
 			<resources basedir="${src.dir}">
 				<include name="**.resources"/>

@@ -16,9 +16,9 @@ namespace Castle.MonoRail.Framework.Configuration
 {
 	using System;
 	using System.Collections;
+	using System.Configuration;
 	using System.IO;
 	using System.Xml;
-	using System.Configuration;
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
@@ -60,6 +60,23 @@ namespace Castle.MonoRail.Framework.Configuration
 				ConfigureWindsorIntegration(config);
 			}
 
+			XmlAttribute smtpHostAtt = section.Attributes["smtpHost"];
+			XmlAttribute smtpUserAtt = section.Attributes["smtpUsername"];
+			XmlAttribute smtpPwdAtt  = section.Attributes["smtpPassword"];
+
+			if (smtpHostAtt != null && smtpHostAtt.Value != String.Empty)
+			{
+				config.SmtpConfig.Host = smtpHostAtt.Value;
+			}
+			if (smtpUserAtt != null && smtpUserAtt.Value != String.Empty)
+			{
+				config.SmtpConfig.Username = smtpUserAtt.Value;
+			}
+			if (smtpPwdAtt != null && smtpPwdAtt.Value != String.Empty)
+			{
+				config.SmtpConfig.Password = smtpPwdAtt.Value;
+			}
+
 			foreach( XmlNode node in section.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element)
@@ -98,10 +115,6 @@ namespace Castle.MonoRail.Framework.Configuration
 				else if ( String.Compare(Extensions_Node_Name, node.Name, true) == 0 )
 				{
 					ProcessExtensionsNode(node, config);
-				}
-				else
-				{
-					throw new ConfigurationException("Unknown node: " + node.Name);
 				}
 			}
 

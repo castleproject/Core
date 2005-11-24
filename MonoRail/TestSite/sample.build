@@ -21,6 +21,8 @@
 		<copy todir="${bin.dir}">
 			<fileset basedir="../bin">
 				<include name="Castle.MonoRail.Framework.dll" />
+				<include name="Castle.Components.Common.EmailSender.dll" />
+				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</fileset>
 		</copy>
 	</target>
@@ -43,6 +45,8 @@
 
 			<references>
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
+				<include name="${bin.dir}/Castle.Components.Common.EmailSender.dll" />
+				<include name="${bin.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</references>
 		</csc>
 	</target>

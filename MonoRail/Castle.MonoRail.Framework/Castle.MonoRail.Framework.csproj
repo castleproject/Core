@@ -84,6 +84,16 @@
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -154,11 +164,6 @@
                 />
                 <File
                     RelPath = "IFilter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IMonoRailExtension.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -368,6 +373,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\SmtpConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\Ajax.resx"
                     BuildAction = "EmbeddedResource"
                 />
@@ -391,6 +401,46 @@
                 <File
                     RelPath = "Controllers\Validation.resx"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Extensions\AbstractMonoRailExtension.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\ExtensionComposite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\IMonoRailExtension.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\ExceptionChaining\AbstractExceptionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\ExceptionChaining\EmailHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\ExceptionChaining\ExceptionChainingExtension.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\ExceptionChaining\IConfigurableHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Extensions\ExceptionChaining\IExceptionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Extensions\Session\CustomSessionExtension.cs"

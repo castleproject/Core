@@ -12,29 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
 	using System;
 
-	using Castle.MonoRail.Framework.Configuration;
-
-	/// <summary>
-	/// Contract for extensions that want to hook 
-	/// on MonoRail's events
-	/// </summary>
-	/// <remarks>
-	/// Extensions implementations must be thread safe
-	/// </remarks>
-	public interface IMonoRailExtension
+	public abstract class AbstractExceptionHandler : IExceptionHandler
 	{
-		/// <summary>
-		/// Implementors have a chance to 
-		/// </summary>
-		/// <param name="configuration"></param>
-		void Init(MonoRailConfiguration configuration);
+		private IExceptionHandler nextHandler;
 
-		void OnRailsContextCreated(IRailsEngineContext context);
+		public virtual void Initialize()
+		{
+		}
 
-		void OnRailsContextDiscarded(IRailsEngineContext context);
+		public abstract void Process(IRailsEngineContext context, IServiceProvider serviceProvider);
+
+		public IExceptionHandler Next
+		{
+			get { return nextHandler; }
+			set { nextHandler = value; }
+		}
+
+		protected void InvokeNext(IRailsEngineContext context, IServiceProvider serviceProvider)
+		{
+			if (nextHandler != null)
+			{
+				nextHandler.Process(context, serviceProvider);
+			}
+		}
 	}
 }

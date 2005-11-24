@@ -14,14 +14,28 @@
 
 namespace Castle.MonoRail.Framework.Extensions.Session
 {
-	using System;
 	using System.Collections;
 
-
+	/// <summary>
+	/// Contract used by <see cref="CustomSessionExtension"/>
+	/// to obtain the session implementation provided by the programmer
+	/// </summary>
 	public interface ICustomSessionFactory
 	{
+		/// <summary>
+		/// Should identify the session using the context (usually a cookie is used
+		/// for that)
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
 		IDictionary ObtainSession(IRailsEngineContext context);
 
+		/// <summary>
+		/// Should persist the session state associated with the context (again, a cookie 
+		/// is the standard approach to identify the session)
+		/// </summary>
+		/// <param name="session"></param>
+		/// <param name="context"></param>
 		void PersistSession(IDictionary session, IRailsEngineContext context);
 	}
 }

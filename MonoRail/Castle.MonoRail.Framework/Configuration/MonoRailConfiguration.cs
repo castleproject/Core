@@ -37,6 +37,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private String _customResourceFactory;
 		private String _customEngineTypeName;
 		private String _scaffoldingTypeName = DefaultScaffoldType;
+		private SmtpConfig smtp = new SmtpConfig();
 		private XmlNode section;
 
 		public MonoRailConfiguration()
@@ -140,6 +141,12 @@ namespace Castle.MonoRail.Framework.Configuration
 		public Type ScaffoldingType
 		{
 			get { return _scaffoldingTypeName != null ? GetType(_scaffoldingTypeName, true) : null; }
+		}
+
+		public SmtpConfig SmtpConfig
+		{
+			get { return smtp; }
+			set { smtp = value; }
 		}
 
 		public XmlNode ConfigSection

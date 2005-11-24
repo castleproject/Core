@@ -18,6 +18,8 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 	using System.Web.SessionState;
 
+	using Castle.Components.Common.EmailSender;
+	
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -33,9 +35,9 @@ namespace Castle.MonoRail.Framework
 		public MonoRailHttpHandler( String url, IViewEngine viewEngine, 
 			IControllerFactory controllerFactory, IFilterFactory filterFactory, 
 			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, 
-			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions)
+			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions, IEmailSender sender)
 			: base(controllerFactory, viewEngine, filterFactory, resourceFactory, 
-			       scaffoldingSupport, viewCompFactory, extensions)
+			       scaffoldingSupport, viewCompFactory, extensions, sender)
 		{
 			_url = url;
 		}

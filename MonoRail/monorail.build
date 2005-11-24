@@ -44,6 +44,9 @@
 		<!-- NVelocity view engine dependencies -->
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-nvelocity" inheritall="true" />
 
+		<!-- Monorail Framework dependencies -->
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-email-comp" inheritall="true" />
+
 		<!-- Monorail Generator dependencies -->
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-templateengine-comp" inheritall="true" />
 

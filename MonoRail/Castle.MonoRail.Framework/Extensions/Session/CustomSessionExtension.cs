@@ -24,17 +24,39 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 
 
 	/// <summary>
-	/// 
+	/// This extension allow one to provide a custom 
+	/// implementation of the session available on <see cref="IRailsEngineContext"/>
 	/// </summary>
-	public class CustomSessionExtension : IMonoRailExtension
+	/// <remarks>
+	/// To successfully install this extension you must add the attribute <c>customsession</c>
+	/// to the <c>monoRail</c> configuration node and register the extension on the extensions node.
+	/// <code>
+	///   &lt;monoRail customsession="Type name that implements ICustomSessionFactory"&gt;
+	///   	&lt;extensions&gt;
+	///   	  &lt;extension type="Castle.MonoRail.Framework.Extensions.Session.CustomSessionExtension, Castle.MonoRail.Framework" /&gt;
+	///   	&lt;/extensions&gt;
+	///   &lt;/monoRail&gt;
+	/// </code>
+	/// </remarks>
+	public class CustomSessionExtension : AbstractMonoRailExtension
 	{
+		/// <summary>
+		/// Reference to an instance of <see cref="ICustomSessionFactory"/>
+		/// obtained from the configuration
+		/// </summary>
 		private ICustomSessionFactory customSession;
 
-		public CustomSessionExtension()
-		{
-		}
-
-		public void Init(MonoRailConfiguration configuration)
+		/// <summary>
+		/// Reads the attribute <c>customsession</c> 
+		/// from <see cref="MonoRailConfiguration"/> and
+		/// instantiate it based on the type name provided.
+		/// </summary>
+		/// <exception cref="ConfigurationException">
+		/// If the typename was not provided or the type 
+		/// could not be instantiated/found
+		/// </exception>
+		/// <param name="configuration"></param>
+		public override void Init(MonoRailConfiguration configuration)
 		{
 			XmlAttribute customSessionAtt = 
 				configuration.ConfigSection.Attributes["customsession"];
@@ -56,8 +78,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 
 			try
 			{
-				customSession = (ICustomSessionFactory) 
-					Activator.CreateInstance(customSessType);
+				customSession = (ICustomSessionFactory) Activator.CreateInstance(customSessType);
 			}
 			catch(InvalidCastException)
 			{
@@ -66,14 +87,23 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 			}
 		}
 
-		public void OnRailsContextCreated(IRailsEngineContext context)
+		/// <summary>
+		/// Overrides the ISession instance on <see cref="RailsEngineContextAdapter"/>.
+		/// </summary>
+		/// <remarks>Note that the session available through IHttpContext is left untouched</remarks>
+		/// <param name="context"></param>
+		public override void OnRailsContextCreated(IRailsEngineContext context, IServiceProvider serviceProvider)
 		{
 			IDictionary session = customSession.ObtainSession(context);
 
 			(context as RailsEngineContextAdapter).Session = session;
 		}
 
-		public void OnRailsContextDiscarded(IRailsEngineContext context)
+		/// <summary>
+		/// Retrives the ISession instance from <see cref="RailsEngineContextAdapter"/>.
+		/// and invokes <see cref="ICustomSessionFactory.PersistSession"/>
+		/// </summary>
+		public override void OnRailsContextDiscarded(IRailsEngineContext context, IServiceProvider serviceProvider)
 		{
 			customSession.PersistSession(context.Session, context);
 		}

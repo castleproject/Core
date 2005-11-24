@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework
 #endif
 			return new MonoRailHttpHandler(url, _viewEngine, 
 				_controllerFactory, _filterFactory, _resourceFactory, 
-				_scaffoldingSupport, _viewCompFactory, extensions);
+				_scaffoldingSupport, _viewCompFactory, extensions, emailSender);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)
