@@ -54,7 +54,7 @@ namespace Castle.ActiveRecord
 					"properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?", type.FullName);
 				throw new ActiveRecordException( message );
 			}
-			if (GetModel(type) == null)
+			if (type != typeof(ActiveRecordBase) && GetModel(type) == null)
 			{
 				String message = String.Format("You have accessed an ActiveRecord class that wasn't properly initialized. " + 
 					"The only explanation is that the call to ActiveRecordStarter.Initialize() didn't include {0} class", type.FullName);

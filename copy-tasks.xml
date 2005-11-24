@@ -37,6 +37,15 @@
 		</copy>
 	</target>
 
+	<target name="copy-email-comp">
+		<copy todir="${bin.dir}">
+			<fileset basedir="${base.dir}/Components/General/EmailSender/bin">
+				<include name="Castle.Components.Common.EmailSender.dll" />
+				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+			</fileset>
+		</copy>
+	</target>
+
 	<target name="copy-activerecord" depends="copy-nhibernate">
 		<copy file="${castle.ar}" todir="${bin.dir}" />
 	</target>
