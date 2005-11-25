@@ -21,19 +21,19 @@ namespace Castle.MonoRail.Framework.Configuration
 		private String host = "localhost";
 		private String username, password;
 
-		public string Host
+		public String Host
 		{
 			get { return host; }
 			set { host = value; }
 		}
 
-		public string Username
+		public String Username
 		{
 			get { return username; }
 			set { username = value; }
 		}
 
-		public string Password
+		public String Password
 		{
 			get { return password; }
 			set { password = value; }

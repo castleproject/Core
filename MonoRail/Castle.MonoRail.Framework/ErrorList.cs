@@ -42,12 +42,12 @@ namespace Castle.MonoRail.Framework
 			get { return list.Count; }
 		}
 
-		public bool Contains( string property )
+		public bool Contains( String property )
 		{
 			return map.Contains( property );
 		}
 
-		public IPropertyError this[ string property ]
+		public IPropertyError this[ String property ]
 		{
 			get { return map[ property ] as IPropertyError; }
 		}

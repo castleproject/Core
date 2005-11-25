@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="linkText">The label for the step</param>
 		/// <param name="step">The WizardStepPage to link to</param>
 		/// <returns></returns>
-		public String LinkToStep(string linkText, WizardStepPage step)
+		public String LinkToStep(String linkText, WizardStepPage step)
 		{
 			return LinkTo( linkText, step.WizardController.Name, step.ActionName);
 		}
@@ -74,7 +74,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="step">The WizardStepPage to link to</param>
 		/// <param name="id">Object to use for the action ID argument.</param>
 		/// <returns></returns>
-		public String LinkToStep(string linkText, WizardStepPage step, object id)
+		public String LinkToStep(String linkText, WizardStepPage step, object id)
 		{
 			return LinkTo( linkText, step.WizardController.Name, step.ActionName, id);
 		}

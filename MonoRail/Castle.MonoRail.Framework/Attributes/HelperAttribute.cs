@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework
 	public class HelperAttribute : Attribute
 	{
 		private readonly Type _helperType;
-		private readonly string _name;
+		private readonly String _name;
 
 		public HelperAttribute(Type helperType) : this( helperType, null)
 		{			

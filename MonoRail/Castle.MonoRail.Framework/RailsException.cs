@@ -20,20 +20,20 @@ namespace Castle.MonoRail.Framework
 	[Serializable]
 	public class RailsException : ApplicationException
 	{
-		public RailsException(string message) : base(message)
+		public RailsException( String message ) : base( message )
 		{
 		}
 				
-		public RailsException(string message, params object[] args) 
+		public RailsException( String message, params object[] args ) 
 			: this( String.Format(message, args) )
 		{			
 		}
 			
-		public RailsException(string message, Exception innerException) : base(message, innerException)
+		public RailsException( String message, Exception innerException ) : base( message, innerException )
 		{
 		}
 
-		protected RailsException(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected RailsException( SerializationInfo info, StreamingContext context ) : base( info, context )
 		{
 		}
 	}

@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework.Internal
 		private readonly String _action;
 		private readonly String _extension;
 
-		public UrlInfo(String urlRaw, String area, String controller, String action, String extension)
+		public UrlInfo( String urlRaw, String area, String controller, String action, String extension )
 		{
 			_controller = controller;
 			_area = area;
@@ -57,7 +57,7 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return _urlRaw; }
 		}
 
-		public string Extension
+		public String Extension
 		{
 			get { return _extension; }
 		}
@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Internal
 //		/// <param name="controller"></param>
 //		/// <param name="action"></param>
 //		/// <param name="extension"></param>
-//		public static string GetRailsUrl(String controller, String action, String extension)
+//		public static String GetRailsUrl(String controller, String action, String extension)
 //		{
 //			if (action == null || action.Length == 0) throw new ArgumentNullException("action");
 //			if (controller == null || controller.Length == 0) throw new ArgumentNullException("controller");
@@ -84,7 +84,7 @@ namespace Castle.MonoRail.Framework.Internal
 //		/// <param name="controller"></param>
 //		/// <param name="action"></param>
 //		/// <param name="extension"></param>
-//		public static string GetRailsUrl(String area, String controller, String action, String extension)
+//		public static String GetRailsUrl(String area, String controller, String action, String extension)
 //		{
 //			if (area == null || area.Length == 0) throw new ArgumentNullException("area");
 //			if (action == null || action.Length == 0) throw new ArgumentNullException("action");
@@ -97,19 +97,19 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <summary>
 		/// Creates an absolute MonoRail url.
 		/// </summary>
-		public static string CreateAbsoluteRailsUrl(String appPath, 
-			String controller, String action, String extension)
+		public static String CreateAbsoluteRailsUrl( String appPath, String controller, 
+			String action, String extension )
 		{
-			return String.Format("{0}/{1}/{2}.{3}", appPath, controller, action, extension);
+			return String.Format( "{0}/{1}/{2}.{3}", appPath, controller, action, extension );
 		}
 
 		/// <summary>
 		/// Creates an absolute MonoRail url.
 		/// </summary>
-		public static string CreateAbsoluteRailsUrl(String appPath, String area, 
-			String controller, String action, String extension)
+		public static String CreateAbsoluteRailsUrl(String appPath, String area, String controller, 
+			String action, String extension )
 		{
-			return String.Format("{0}/{1}/{2}/{3}.{4}", appPath, area, controller, action, extension);
+			return String.Format( "{0}/{1}/{2}/{3}.{4}", appPath, area, controller, action, extension );
 		}
 	}
 }

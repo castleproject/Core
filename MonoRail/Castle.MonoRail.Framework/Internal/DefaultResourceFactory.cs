@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Framework.Internal
 			resource.Dispose();
 		}
 
-		private CultureInfo ResolveCulture(string name)
+		private CultureInfo ResolveCulture(String name)
 		{
 			if ("neutral".Equals(name))
 			{

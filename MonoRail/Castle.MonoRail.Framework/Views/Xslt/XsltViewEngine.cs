@@ -104,7 +104,7 @@ namespace Castle.MonoRail.Framework.Views.Xslt
 			throw new NotImplementedException();
 		}
 
-		private XslTransform LoadXslt(IRailsEngineContext context, string templateName)
+		private XslTransform LoadXslt(IRailsEngineContext context, String templateName)
 		{
 			XslTransform transform = new XslTransform();
 			using (Stream templateStream = LoadTemplateFile(context, templateName))
@@ -139,17 +139,17 @@ namespace Castle.MonoRail.Framework.Views.Xslt
 			}
 		}
 
-		protected virtual string ResolveTemplateName(string templateName)
+		protected virtual String ResolveTemplateName(String templateName)
 		{
 			return templateName + ".xslt";
 		}
 
-		protected virtual string ResolveTemplatePath(IRailsEngineContext context, string templateName)
+		protected virtual String ResolveTemplatePath(IRailsEngineContext context, String templateName)
 		{
 			return Path.Combine(context.ApplicationPath, Path.Combine(ViewRootDir, ResolveTemplateName(templateName)));
 		}
 
-		protected virtual Stream LoadTemplateFile(IRailsEngineContext context, string templateName)
+		protected virtual Stream LoadTemplateFile(IRailsEngineContext context, String templateName)
 		{
 			return File.OpenRead(ResolveTemplatePath(context, templateName));
 		}
@@ -188,13 +188,13 @@ namespace Castle.MonoRail.Framework.Views.Xslt
 				}
 			}
 			
-			foreach (string key in context.Flash.Keys)
+			foreach (String key in context.Flash.Keys)
 			{
 				if (context.Flash[key] != null)
 					args.AddParam(key, "", context.Flash[key]);
 			}
 
-			foreach (string key in controller.PropertyBag.Keys)
+			foreach (String key in controller.PropertyBag.Keys)
 			{
 				if (controller.PropertyBag[key] != null)
 					args.AddParam(key, "", controller.PropertyBag[key]);

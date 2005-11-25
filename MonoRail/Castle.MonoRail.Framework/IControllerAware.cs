@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System;
-
 	/// <summary>
 	/// Implemented by the view or helpers, if they desire
 	/// to have access to the controller instance.

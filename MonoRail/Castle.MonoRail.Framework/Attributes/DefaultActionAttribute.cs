@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Framework
 			defaultAction = action;
 		}
 
-		public string DefaultAction
+		public String DefaultAction
 		{
 			get { return defaultAction; }
 		}

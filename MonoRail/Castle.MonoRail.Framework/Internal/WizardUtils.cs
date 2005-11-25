@@ -108,7 +108,7 @@ namespace Castle.MonoRail.Framework.Internal
 			}
 		}
 
-		public static void RegisterCurrentStepInfo(Controller controller, int stepIndex, string stepName)
+		public static void RegisterCurrentStepInfo(Controller controller, int stepIndex, String stepName)
 		{
 			IRailsEngineContext context = controller.Context;
 			String wizardName = WizardUtils.ConstructWizardNamespace(controller);

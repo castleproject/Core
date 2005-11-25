@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	/// </summary>
 	public class MasterPageBase : Page
 	{
-		private const string ViewStateKey = "__MASTERVIEWSTATE";
+		private const String ViewStateKey = "__MASTERVIEWSTATE";
 
 		protected override object LoadPageStateFromPersistenceMedium()
 		{

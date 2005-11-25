@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			// TODO: Delegate to OnActionException
 		}
 
-		private void InstallExceptionHandler(XmlNode node, string typeName)
+		private void InstallExceptionHandler(XmlNode node, String typeName)
 		{
 			IExceptionHandler handler = null;
 

@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework
 	public class LocalizationFilterAttribute : FilterAttribute
 	{
 		private bool _FailOnError = false, _UseBrowser = true;
-		private string _Key			= "locale";
+		private String _Key			= "locale";
 		private RequestStore _Store = RequestStore.Cookie;
 		
 		public LocalizationFilterAttribute() : base( ExecuteEnum.BeforeAction, typeof(LocalizationFilter) )
@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="store">Location where the localization parameter is stored.</param>
 		/// <param name="key">Name of the parameter in the store.</param>
-		public LocalizationFilterAttribute( RequestStore store, string key ) : this()
+		public LocalizationFilterAttribute( RequestStore store, String key ) : this()
 		{
 			_Key	= key;
 			_Store	= store;
@@ -45,7 +45,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Key under which the locale value is stored.
 		/// </summary>
-		public string Key
+		public String Key
 		{
 			get { return _Key; }
 			set { _Key = value; }

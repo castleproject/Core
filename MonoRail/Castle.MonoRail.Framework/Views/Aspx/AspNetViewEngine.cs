@@ -100,7 +100,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		#endregion
 
-		private IHttpHandler GetCompiledPageInstace(string viewName, HttpContext httpContext)
+		private IHttpHandler GetCompiledPageInstace( String viewName, HttpContext httpContext )
 		{
 			viewName += ".aspx";
 
@@ -111,10 +111,10 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
 
-		private bool IsTheSameView(HttpContext httpContext, string viewName)
+		private bool IsTheSameView(HttpContext httpContext, String viewName)
 		{
-			string original = ((string) httpContext.Items[Constants.OriginalViewKey]);
-			string actual = viewName;
+			String original = ((String) httpContext.Items[Constants.OriginalViewKey]);
+			String actual = viewName;
 
 			return String.Compare(original, actual, true) == 0;
 		}

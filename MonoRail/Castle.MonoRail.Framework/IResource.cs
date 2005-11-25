@@ -14,6 +14,8 @@
 
 namespace Castle.MonoRail.Framework
 {
+	using System;
+
 	/// <summary>
 	/// Dictates the contract for resources that are publishable
 	/// through the PropertyBag context.
@@ -23,17 +25,17 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Returns the object linked to the specific key.
 		/// </summary>
-		object this[ string key ] { get; }
+		object this[ String key ] { get; }
 
 		/// <summary>
 		/// Returns the object linked to the specific key as a string.
 		/// </summary>
-		string GetString( string key );
+		String GetString( String key );
 
 		/// <summary>
 		/// Returns the object linked to the specific key.
 		/// </summary>
-		object GetObject( string key );
+		object GetObject( String key );
 	}
 
     /// <summary>

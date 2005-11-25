@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
 	public class DataBindAttribute : Attribute
 	{
-		private String prefix = string.Empty;
+		private String prefix = String.Empty;
 		private ParamStore from	= ParamStore.Params;
 		private String exclude = String.Empty;
 		private String allow = String.Empty;

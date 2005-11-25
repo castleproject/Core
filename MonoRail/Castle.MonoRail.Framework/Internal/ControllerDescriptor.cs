@@ -37,12 +37,12 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return _controllerType; }
 		}
 
-		public string Name
+		public String Name
 		{
 			get { return _name; }
 		}
 
-		public string Area
+		public String Area
 		{
 			get { return _area; }
 		}

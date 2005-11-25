@@ -14,6 +14,8 @@
 
 namespace Castle.MonoRail.Framework.Controllers
 {
+	using System;
+
 	using Castle.MonoRail.Framework.Helpers;
 
 	/// <summary>
@@ -32,12 +34,12 @@ namespace Castle.MonoRail.Framework.Controllers
 		{
 		}
 
-		private string GetResourceValue(string resName, string resKey)
+		private String GetResourceValue(String resName, String resKey)
 		{
-			return (string)(Resources[resName])[resKey];
+			return (String)(Resources[resName])[resKey];
 		}
 
-		private void RenderFile(string resourceName, string resourceKey)
+		private void RenderFile(String resourceName, String resourceKey)
 		{
 			RenderText( GetResourceValue(resourceName, resourceKey) );
 		}

@@ -23,8 +23,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	/// </summary>
 	public class InvokeHelper : Control
 	{
-		private string _name;
-		private string _method;
+		private String _name;
+		private String _method;
 		private object[] _args;
 		private object _arg;
 
@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// The Helper's Name.
 		/// </summary>
 		/// <value>A <see cref="String"/> representing the Helper's Name.</value>
-		public string Name
+		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
@@ -46,7 +46,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// The name of the method which will be invoked.
 		/// </summary>
 		/// <value>A <see cref="String"/> rerprsenting the method's name</value>
-		public string Method
+		public String Method
 		{
 			get { return _method; }
 			set { _method = value; }
@@ -134,7 +134,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			if (method == null)
 			{
-				throw new RailsException(string.Format("Helper's method not found. Method: {0}.{1}", Name, Method));
+				throw new RailsException( String.Format("Helper's method not found. Method: {0}.{1}", Name, Method) );
 			}
 
 			return method;

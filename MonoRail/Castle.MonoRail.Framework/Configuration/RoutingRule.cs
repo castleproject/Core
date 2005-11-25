@@ -34,12 +34,12 @@ namespace Castle.MonoRail.Framework.Configuration
 			_rule = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 		}
 
-		public string Pattern
+		public String Pattern
 		{
 			get { return _pattern; }
 		}
 
-		public string Replace
+		public String Replace
 		{
 			get { return _replace; }
 		}

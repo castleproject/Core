@@ -19,7 +19,6 @@ namespace Castle.MonoRail.Framework.Internal
 	using System.Collections.Specialized;
 	using System.Reflection;
 
-
 	public class DefaultViewComponentFactory : IViewComponentFactory
 	{
 		private IViewEngine viewEngine;

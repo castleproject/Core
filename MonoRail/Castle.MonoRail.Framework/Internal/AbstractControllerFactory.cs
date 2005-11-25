@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return _tree; }
 		}
 
-		protected virtual Controller CreateControllerInstance(string area, string name)
+		protected virtual Controller CreateControllerInstance(String area, String name)
 		{
 			Type type = (Type) Tree.GetController(area, name);
 

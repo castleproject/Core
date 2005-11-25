@@ -86,7 +86,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _request.Params; }
 		}
 
-		public string[] UserLanguages
+		public String[] UserLanguages
 		{
 			get { return _request.UserLanguages; }
 		}

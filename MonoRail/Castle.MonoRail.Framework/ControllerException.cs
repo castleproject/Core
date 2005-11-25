@@ -18,17 +18,16 @@ namespace Castle.MonoRail.Framework
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Represents and Exception during the controller 
-	/// processing.
+	/// Represents and Exception during the controller processing.
 	/// </summary>
 	[Serializable]
 	public class ControllerException : RailsException
 	{
-		public ControllerException(string message) : base(message)
+		public ControllerException( String message ) : base( message )
 		{
 		}
 
-		public ControllerException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public ControllerException( SerializationInfo info, StreamingContext context ) : base( info, context )
 		{
 		}
 	}

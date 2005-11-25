@@ -21,9 +21,9 @@ namespace Castle.MonoRail.Framework.Configuration
 
 	public class MonoRailConfiguration
 	{
-		private static readonly string DefaultScaffoldType = "Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold";
+		private static readonly String DefaultScaffoldType = "Castle.MonoRail.ActiveRecordScaffold.ScaffoldingSupport, Castle.MonoRail.ActiveRecordScaffold";
 
-		public static readonly string SectionName = "monoRail";
+		public static readonly String SectionName = "monoRail";
 
 		private bool _viewsXhtmlRendering;
 		private IList _controllers = new ArrayList();

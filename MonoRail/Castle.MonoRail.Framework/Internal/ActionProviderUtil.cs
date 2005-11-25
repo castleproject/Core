@@ -16,16 +16,15 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
-
 	public abstract class ActionProviderUtil
 	{
-		public static void RegisterActions(Controller controller)
+		public static void RegisterActions( Controller controller )
 		{
-			foreach(DynamicActionProviderAttribute providerAtt in controller.MetaDescriptor.ActionProviders)
+			foreach( DynamicActionProviderAttribute providerAtt in controller.MetaDescriptor.ActionProviders )
 			{
 				Type providerType = providerAtt.ProviderType;
 				
-				IDynamicActionProvider provider = (IDynamicActionProvider) Activator.CreateInstance(providerType);
+				IDynamicActionProvider provider = (IDynamicActionProvider) Activator.CreateInstance( providerType );
 
 				provider.IncludeActions( controller );
 			}

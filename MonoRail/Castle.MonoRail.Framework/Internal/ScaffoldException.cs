@@ -20,11 +20,11 @@ namespace Castle.MonoRail.Framework
 	[Serializable]
 	public class ScaffoldException : RailsException
 	{
-		public ScaffoldException(string message) : base(message)
+		public ScaffoldException(String message) : base(message)
 		{
 		}
 
-		public ScaffoldException(string message, Exception innerException) : base(message, innerException)
+		public ScaffoldException(String message, Exception innerException) : base(message, innerException)
 		{
 		}
 

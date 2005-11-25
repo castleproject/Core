@@ -18,17 +18,16 @@ namespace Castle.MonoRail.Framework.Internal
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Represents a problem during the Url information
-	/// extraction.
+	/// Represents a problem during the Url information extraction.
 	/// </summary>
 	[Serializable]
 	public class UrlTokenizerException : RailsException
 	{
-		public UrlTokenizerException(string message) : base(message)
+		public UrlTokenizerException( String message ) : base( message )
 		{
 		}
 
-		public UrlTokenizerException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public UrlTokenizerException( SerializationInfo info, StreamingContext context ) : base( info, context )
 		{
 		}
 	}

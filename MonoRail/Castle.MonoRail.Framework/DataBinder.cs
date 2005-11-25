@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework
 
 		#region CreateInstance
 			
-		protected virtual object CreateInstance( Type instanceType, string paramPrefix, NameValueCollection paramsList )
+		protected virtual object CreateInstance( Type instanceType, String paramPrefix, NameValueCollection paramsList )
 		{
 			return Activator.CreateInstance(instanceType);
 		}
@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework
 			// param[0], param[1], ... param[count-1]
 			// otherwise we have to find all uniques id for that identifier
 			// which is probably slower but is more flexible
-			string countBeforeCast = ctx.ParamList[paramPrefix + CountAttribute ];	
+			 String countBeforeCast = ctx.ParamList[paramPrefix + CountAttribute ];	
 		
 			if( countBeforeCast != null )
 			{
@@ -124,7 +124,7 @@ namespace Castle.MonoRail.Framework
 			{
 				String[] uniquePrefixes = Grep( ctx.ParamList.AllKeys, "^" + Regex.Escape( paramPrefix ) + @"\[(.*?)]", 1 );
 
-				foreach( string prefix in uniquePrefixes )
+				foreach( String prefix in uniquePrefixes )
 				{				
 					AddArrayElement(bindArray, instanceType, prefix, paramPrefix, nestedLevelsLeft, ctx );
 				}				
@@ -135,7 +135,7 @@ namespace Castle.MonoRail.Framework
 
 		// Only here so we can support 2 types of loop in the BindObjectArrayInstance
 		// without duplicating too much code
-		private void AddArrayElement( ArrayList bindArray, Type instanceType, object arrayPrefix, string paramPrefix, int nestedLevelsLeft, DataBindContext ctx )
+		private void AddArrayElement( ArrayList bindArray, Type instanceType, object arrayPrefix, String paramPrefix, int nestedLevelsLeft, DataBindContext ctx )
 		{
 			String arrayParamPrefix = paramPrefix + "[" + arrayPrefix + "]";
 			
@@ -258,7 +258,7 @@ namespace Castle.MonoRail.Framework
 		
 		#region Helpers
 
-		private bool ShouldIgnoreElement( NameValueCollection paramList, string paramPrefix )
+		private bool ShouldIgnoreElement( NameValueCollection paramList,  String paramPrefix )
 		{		
 			return Yes.Equals( paramList.Get(paramPrefix + IgnoreAttribute) ); 
 		}
@@ -292,7 +292,7 @@ namespace Castle.MonoRail.Framework
 				   propType == typeof(Decimal);
 		}
 
-		private string GetRoot( Type type, string prefix )
+		private String GetRoot( Type type, String prefix )
 		{
 			return (prefix == null) ? type.Name : prefix;
 		}
@@ -347,12 +347,12 @@ namespace Castle.MonoRail.Framework
 		/// </code>
 		/// Note that it only returns distinct values
 		/// </summary>
-		public static string[] Grep( string[] values, string pattern, int captureNumber )
+		public static String[] Grep( String[] values, String pattern, int captureNumber )
 		{
 			NameValueCollection results = new NameValueCollection();
 			Regex re = new Regex( pattern, RegexOptions.IgnoreCase );
 			
-			foreach(string value in values)
+			foreach( String value in values )
 			{
 				// Note: I have this check here cause when using testsupport
 				// the paramList attribute passed to the databinder had a mixture

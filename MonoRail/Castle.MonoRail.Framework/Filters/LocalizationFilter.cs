@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Filters
 {
+	using System;
 	using System.Configuration;
 	using System.Globalization;
 	using System.Threading;
@@ -76,7 +77,7 @@ namespace Castle.MonoRail.Framework.Filters
 		{
 			try
 			{
-				string localeId	= GetLocaleId( context );
+				String localeId	= GetLocaleId( context );
 
 				if ( localeId == null && setup.UseBrowser )
 				{
@@ -103,7 +104,7 @@ namespace Castle.MonoRail.Framework.Filters
 
 		#region Get locale id from the store
 
-		private string GetUserLanguage( IRequest request )
+		private String GetUserLanguage( IRequest request )
 		{
 			if ( request.UserLanguages != null && request.UserLanguages.Length > 0 )
 			{
@@ -113,12 +114,12 @@ namespace Castle.MonoRail.Framework.Filters
 			return null;	
 		}
 
-		private string GetLocaleId( IRailsEngineContext context )
+		private String GetLocaleId( IRailsEngineContext context )
 		{
 			switch ( setup.Store )
 			{
 				case RequestStore.Session:
-					return context.Session[ setup.Key ] as string;
+					return context.Session[ setup.Key ] as String;
 				case RequestStore.Cookie:
 					return context.Request.ReadCookie( setup.Key );
 				case RequestStore.QueryString:

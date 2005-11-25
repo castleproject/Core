@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System;
-
 	/// <summary>
 	/// Depicts the contract the engine has 
 	/// to perform the creation and disposal of

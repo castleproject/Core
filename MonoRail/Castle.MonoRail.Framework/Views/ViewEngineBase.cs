@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public abstract class ViewEngineBase : IViewEngine
 	{
-		private string _viewRootDir;
+		private String _viewRootDir;
 		private bool _xhtmlRendering;
 		private IViewComponentFactory viewComponentFactory;
 
@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework
 			if (XhtmlRendering)
 			{
 				//Find out what they'll accept
-				string httpAccept = context.Request.Headers["Accept"];
+				 String httpAccept = context.Request.Headers["Accept"];
 
 				//TODO: Evaluate the q-values of the Accept header
 

@@ -15,7 +15,6 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Text;
 	using System.Web;
@@ -62,7 +61,7 @@ namespace Castle.MonoRail.Framework.Adapters
 
 			StringBuilder sb = new StringBuilder();
 
-			foreach(string key in args.Keys)
+			foreach(String key in args.Keys)
 			{
 				if (key == null) continue;
 

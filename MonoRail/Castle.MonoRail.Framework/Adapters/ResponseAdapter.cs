@@ -23,12 +23,12 @@ namespace Castle.MonoRail.Framework.Adapters
 
 	public class ResponseAdapter : IResponse
 	{
-		private readonly string _appPath;
-		private readonly string _extension;
+		private readonly String _appPath;
+		private readonly String _extension;
 		private readonly HttpResponse _response;
 		private bool redirected;
 
-		public ResponseAdapter(HttpResponse response, string url, string appPath)
+		public ResponseAdapter(HttpResponse response, String url, String appPath)
 		{
 			_response = response;
 			_extension = UrlTokenizer.GetExtension(url);
@@ -133,7 +133,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			_response.Write(buffer, index, count);
 		}
 
-		public void WriteFile(string fileName)
+		public void WriteFile(String fileName)
 		{
 			_response.WriteFile(fileName);
 		}

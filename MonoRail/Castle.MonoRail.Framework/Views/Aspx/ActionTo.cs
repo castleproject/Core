@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Views.Aspx
 {
+	using System;
 	using System.Web.UI;
 
 	using Castle.MonoRail.Framework.Internal;
@@ -23,27 +24,27 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	/// </summary>
 	public class ActionTo : Control
 	{
-		private const string scriptTag = @"<script language='javascript'>{0}</script>";
+		private const String scriptTag = @"<script language='javascript'>{0}</script>";
 
-		private string _controller;
-		private string _action;
-		private string _area;
-		private string _formID;
-		private string _extension;
+		private String _controller;
+		private String _action;
+		private String _area;
+		private String _formID;
+		private String _extension;
 
-		public string Area
+		public String Area
 		{
 			get { return _area; }
 			set { _area = value; }
 		}
 
-		public string Controller
+		public String Controller
 		{
 			get { return _controller; }
 			set { _controller = value; }
 		}
 
-		public string Action
+		public String Action
 		{
 			get { return _action; }
 			set { _action = value; }
@@ -53,7 +54,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		/// The Form that will be redirected.
 		/// </summary>
 		/// <value>A string represeting the FormID.</value>
-		public string FormID
+		public String FormID
 		{
 			get { return _formID; }
 			set { _formID = value; }
@@ -87,14 +88,14 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			DataBind();
 
-			string redirectFunction = GetRedirectFunction();
+			String redirectFunction = GetRedirectFunction();
 
-			Page.RegisterStartupScript("rails.actionTo", string.Format(scriptTag, redirectFunction));
+			Page.RegisterStartupScript("rails.actionTo", String.Format(scriptTag, redirectFunction));
 		}
 
-		private string GetRedirectFunction()
+		private  String GetRedirectFunction()
 		{
-			string url;
+			String url;
 
 			if (Area == null || Area.Length == 0)
 			{
@@ -107,11 +108,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			if (FormID == null || FormID.Length == 0)
 			{
-				return string.Format("document.forms[0].action = '{0}';", url);
+				return String.Format("document.forms[0].action = '{0}';", url);
 			}
 			else
 			{
-				return string.Format("document.getElementById('{0}').action = '{1}';", FormID, url);
+				return String.Format("document.getElementById('{0}').action = '{1}';", FormID, url);
 			}
 		}
 	}

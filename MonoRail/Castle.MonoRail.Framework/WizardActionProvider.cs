@@ -214,7 +214,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
-		private string ObtainRequestedAction(String action, out String innerAction)
+		private String ObtainRequestedAction(String action, out String innerAction)
 		{
 			innerAction = null;
 

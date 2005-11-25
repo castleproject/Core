@@ -69,9 +69,9 @@ namespace Castle.MonoRail.Framework
 		}
 		#endregion
 
-		private static string BuildExceptionMessage(string area, string controller)
+		private static String BuildExceptionMessage( String area, String controller )
 		{
-			StringBuilder sb = new StringBuilder("Controller not found.");
+			StringBuilder sb = new StringBuilder( "Controller not found." );
 
 			sb.AppendFormat(" Area: '{0}'", area);
 			sb.AppendFormat(" Controller Name: '{0}'", controller);

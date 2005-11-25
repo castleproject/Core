@@ -42,6 +42,6 @@ namespace Castle.MonoRail.Framework
 
 		NameValueCollection Form { get; }
 
-		string[] UserLanguages { get; }
+		String[] UserLanguages { get; }
 	}
 }

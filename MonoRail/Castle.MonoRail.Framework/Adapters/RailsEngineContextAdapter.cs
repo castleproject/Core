@@ -216,7 +216,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// <summary>
 		/// Returns the physical application path.
 		/// </summary>
-		public string ApplicationPhysicalPath
+		public String ApplicationPhysicalPath
 		{
 			get { return _context.Server.MapPath("/"); }
 		}

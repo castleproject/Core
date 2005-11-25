@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System;
-
 	public delegate void ActionDelegate(Controller controller);
 
 	/// <summary>

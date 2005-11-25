@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String GetJavascriptFunctions()
 		{
-			return string.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
+			return String.Format("<script type=\"text/javascript\" src=\"{0}.{1}\"></script>", 
 				Controller.Context.ApplicationPath + "/MonoRail/Files/AjaxScripts", 
 				Controller.Context.UrlInfo.Extension);
 		}
@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String ButtonToFunction(String name, String functionCodeOrName, String styleClass) 
 		{
-			return string.Format("<input type=\"button\" class=\"{2}\" onclick=\"{0}; return false;\" value=\"{1}\" />",
+			return String.Format("<input type=\"button\" class=\"{2}\" onclick=\"{0}; return false;\" value=\"{1}\" />",
 				functionCodeOrName, name, styleClass);
 		}
 
@@ -260,7 +260,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<form {1} onsubmit=\"{0}; return false;\" enctype=\"multipart/form-data\">", remoteFunc, formId);
 		}
 
-		public IDictionary GetOptions(string url, string idOfElementToBeUpdated, string with, string loading, string loaded, string complete, string interactive)
+		public IDictionary GetOptions(String url, String idOfElementToBeUpdated, String with, String loading, String loaded, String complete, String interactive)
 		{
 			IDictionary options = new HybridDictionary();
 	
@@ -457,9 +457,9 @@ namespace Castle.MonoRail.Framework.Helpers
 			return contents.ToString();
 		}
 
-		private string GetUrlOption(IDictionary options)
+		private String GetUrlOption(IDictionary options)
 		{
-			string url = (string) options["url"];
+			String url = (String) options["url"];
 
 			if (url.StartsWith("<") && url.EndsWith(">"))
 			{

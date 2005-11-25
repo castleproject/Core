@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System;
-
 	/// <summary>
 	/// An action that is not exactly a method
 	/// on the controller.

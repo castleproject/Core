@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Internal.Test
 {
-	using System;
 	using System.Web;
 
 	/// <summary>

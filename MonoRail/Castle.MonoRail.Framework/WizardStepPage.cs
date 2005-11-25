@@ -212,7 +212,7 @@ namespace Castle.MonoRail.Framework
 			RedirectToStep(0, firstStep);
 		}
 
-		private void RedirectToStep(int prevStepIndex, string prevStep)
+		private void RedirectToStep(int prevStepIndex, String prevStep)
 		{
 			WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, prevStepIndex, prevStep);
 	

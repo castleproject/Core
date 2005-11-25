@@ -25,12 +25,12 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// fValidate(http://www.peterbailey.net/fValidate/).</remarks>
 	public class ValidationHelper : AbstractHelper
 	{
-		private const string AutoIncludeTag = "<script type=\"text/javascript\" src=\"{0}/{1}.{2}\"></script>\r\n";
-		private const string UserIncludeTag = "<script type=\"text/javascript\" src=\"{0}\"></script>\r\n";
+		private const String AutoIncludeTag = "<script type=\"text/javascript\" src=\"{0}/{1}.{2}\"></script>\r\n";
+		private const String UserIncludeTag = "<script type=\"text/javascript\" src=\"{0}\"></script>\r\n";
 
-		private string _virtualDir;
+		private String _virtualDir;
 		private IDictionary _submitOptions;
-		private string _extension;
+		private String _extension;
 
 		/// <summary>
 		/// Constructor.
@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Gets or Sets the Virtual Directory the scripts are in.
 		/// </summary>
 		/// <remarks>The default is <see cref="Controller.Context.ApplicationPath"/>.</remarks>
-		public virtual string VirtualDir
+		public virtual String VirtualDir
 		{
 			get
 			{
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			set { _virtualDir = value; }
 		}
 
-		protected string Extension
+		protected String Extension
 		{
 			get
 			{
@@ -87,9 +87,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// Automatic Script installer.
 		/// </summary>
 		/// <returns></returns>
-		public string InstallScripts()
+		public String InstallScripts()
 		{
-			string baseDir = VirtualDir + @"/MonoRail/Files";
+			String baseDir = VirtualDir + @"/MonoRail/Files";
 
 			return BuildScriptInclude(baseDir, "ValidateConfig", Extension) +
 				BuildScriptInclude(baseDir, "ValidateCore", Extension) +
@@ -97,9 +97,9 @@ namespace Castle.MonoRail.Framework.Helpers
 				BuildScriptInclude(baseDir, "ValidateLang", Extension);
 		}
 
-		protected virtual string BuildScriptInclude(string baseDir, string js, string extension)
+		protected virtual String BuildScriptInclude(String baseDir, String js, String extension)
 		{
-			return string.Format(AutoIncludeTag, baseDir, js, extension);
+			return String.Format(AutoIncludeTag, baseDir, js, extension);
 		}
 
 		/// <summary>
@@ -107,14 +107,14 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="scriptFilePath">A <see cref="string"/> represeting the path and file name</param>
 		/// <returns></returns>
-		public string InstallWithCustomMsg(string scriptFilePath)
+		public String InstallWithCustomMsg(String scriptFilePath)
 		{
-			string baseDir = VirtualDir + @"/MonoRail/Files";
+			String baseDir = VirtualDir + @"/MonoRail/Files";
 
 			return BuildScriptInclude(baseDir, "ValidateConfig", Extension) +
 				BuildScriptInclude(baseDir, "ValidateCore", Extension) +
 				BuildScriptInclude(baseDir, "ValidateValidators", Extension) +
-				string.Format(UserIncludeTag, scriptFilePath);
+				String.Format(UserIncludeTag, scriptFilePath);
 		}
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="baseDir">The virtual path of the dir where the fValidate are.</param>
 		/// <remarks>You'll need to have the files physically</remarks>
 		/// <returns></returns>
-		public string InstallScripts(string baseDir)
+		public String InstallScripts(String baseDir)
 		{
 			return InstallScripts(baseDir, "enUS");
 		}
@@ -135,7 +135,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="lang">The language of the messages.</param>
 		/// <remarks>You'll need to have the files physically</remarks>
 		/// <returns></returns>
-		public string InstallScripts(string baseDir, string lang)
+		public String InstallScripts(String baseDir, String lang)
 		{
 			return BuildScriptInclude(baseDir, "fValidate.config.js") +
 				BuildScriptInclude(baseDir, "fValidate.core.js") +
@@ -143,16 +143,16 @@ namespace Castle.MonoRail.Framework.Helpers
 				BuildScriptInclude(baseDir, "fValidate.lang-" + lang + ".js");
 		}
 
-		private string BuildScriptInclude(string baseDir, string js)
+		private String BuildScriptInclude(String baseDir, String js)
 		{
-			return string.Format(UserIncludeTag, Path.Combine(baseDir, js).Replace('\\', '/'));
+			return String.Format(UserIncludeTag, Path.Combine(baseDir, js).Replace('\\', '/'));
 		}
 
 		/// <summary>
 		/// Returns the form validation function.
 		/// </summary>
 		/// <returns></returns>
-		public string GetValidationTriggerFunction()
+		public String GetValidationTriggerFunction()
 		{
 			return GetValidationTriggerFunction("this");
 		}
@@ -162,9 +162,9 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="formElement">Javascript expression that return the desired form.</param>
 		/// <returns></returns>
-		public string GetValidationTriggerFunction(string formElement)
+		public String GetValidationTriggerFunction(String formElement)
 		{
-			return string.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );",
+			return String.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );",
 			                     formElement,
 			                     _submitOptions["confirm"].ToString().ToLower(),
 			                     _submitOptions["disable"].ToString().ToLower(),
@@ -183,7 +183,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <param name="formElement">Javascript expression that return the desired form.</param>
 		/// <param name="options">Custom options</param>
 		/// <returns></returns>
-		public string GetValidationTriggerFunction(String formElement, IDictionary options)
+		public String GetValidationTriggerFunction(String formElement, IDictionary options)
 		{
 			if (options == null)
 			{
@@ -194,7 +194,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				MergeOptions(options, _submitOptions);
 			}
 
-			return string.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );",
+			return String.Format("return validateForm( {0}, {1}, {2}, {3}, {4}, {5} );",
 				formElement,
 				options["confirm"].ToString().ToLower(),
 				options["disable"].ToString().ToLower(),

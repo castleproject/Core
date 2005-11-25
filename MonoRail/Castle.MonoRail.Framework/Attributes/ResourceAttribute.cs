@@ -15,8 +15,6 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Globalization;
-	using System.Reflection;
 
 	/// <summary>
 	/// Declares that for the specified class or method, the given resource
@@ -26,8 +24,8 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true, Inherited=true), Serializable]
 	public class ResourceAttribute : Attribute, IResourceDefinition
 	{
-		private string _Name;
-		private string _ResourceName, _CultureName, _AssemblyName;
+		private String _Name;
+		private String _ResourceName, _CultureName, _AssemblyName;
 		
 		private Type _ResourceType;
 		
@@ -37,38 +35,38 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		/// <param name="name">Name the resource will be available as in the PropertyBag</param>
 		/// <param name="resourceName">Fully qualified name of the resource in the sattelite assembly</param>
-		public ResourceAttribute( string name, string resourceName )
+		public ResourceAttribute( String name, String resourceName )
 		{
 			_Name = name;
 			_ResourceName	= resourceName;
 
 			if ( resourceName.IndexOf( ',' ) > 0 )
 			{
-				string[] pair	= resourceName.Split( ',' );
+				String[] pair	= resourceName.Split( ',' );
 				_ResourceName	= pair[0].Trim();
 				_AssemblyName	= pair[1].Trim();
 			}
 		}
 
-		public string Name
+		public String Name
 		{
 			get { return _Name; }
 			set { _Name = value; }
 		}
 
-		public string ResourceName
+		public String ResourceName
 		{
 			get { return _ResourceName; }
 			set { _ResourceName = value; }
 		}
 
-		public string CultureName
+		public String CultureName
 		{
 			get { return _CultureName; }
 			set { _CultureName = value; }
 		}
 
-		public string AssemblyName
+		public String AssemblyName
 		{
 			get { return _AssemblyName; }
 			set { _AssemblyName = value; }

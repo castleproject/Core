@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Filters
 {
-	using System;
 	using System.Web;
 	
 	public class RequestValidatorFilter : IFilter

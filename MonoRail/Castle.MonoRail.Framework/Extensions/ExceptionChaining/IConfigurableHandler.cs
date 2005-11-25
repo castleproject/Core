@@ -14,7 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
-	using System;
 	using System.Xml;
 
 	/// <summary>

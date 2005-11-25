@@ -14,6 +14,7 @@
 
 namespace Castle.MonoRail.Framework.Internal
 {
+	using System;
 	using System.Resources;
 
 	/// <summary>
@@ -29,17 +30,17 @@ namespace Castle.MonoRail.Framework.Internal
 			this.resourceSet = resourceSet;
 		}
 
-		public object this[string key]
+		public object this[String key]
 		{
 			get { return GetObject( key ); }
 		}
 
-		public string GetString(string key)
+		public String GetString(String key)
 		{
 			return key != null ? resourceSet.GetString(key, true) : null;
 		}
 
-		public object GetObject(string key)
+		public object GetObject(String key)
 		{
 			return key != null ? resourceSet.GetObject(key, true) : null;
 		}

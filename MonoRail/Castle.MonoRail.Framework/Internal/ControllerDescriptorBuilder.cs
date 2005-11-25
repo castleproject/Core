@@ -19,12 +19,16 @@ namespace Castle.MonoRail.Framework.Internal
 	using System.Reflection;
 	using System.Threading;
 
-
 	public class ControllerDescriptorBuilder
 	{
 		private ReaderWriterLock locker = new ReaderWriterLock();
 		private Hashtable descriptorRepository = new Hashtable();
 
+		/// <summary>
+		/// Builds the <see cref="ControllerMetaDescriptor"/>.
+		/// </summary>
+		/// <param name="controller">Controller.</param>
+		/// <returns></returns>
 		public ControllerMetaDescriptor BuildDescriptor(Controller controller)
 		{
 			Type controllerType = controller.GetType();

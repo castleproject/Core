@@ -1154,14 +1154,14 @@ namespace Castle.MonoRail.Framework
 			// use the template engine to generate the body of the message
 			StringWriter writer = new StringWriter();
 			InPlaceRenderSharedView(writer, Path.Combine(Constants.TemplatePath, templateName));
-			string body = writer.ToString();
+			String body = writer.ToString();
 			
 			// process delivery addresses from template.
 			MatchCollection matches1 = Constants.readdress.Matches(body);
 			for(int i=0; i< matches1.Count; i++)
 			{
-				string header	 = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
-				string address = matches1[i].Groups[Constants.ValueKey].ToString();
+				String header	 = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
+				String address = matches1[i].Groups[Constants.ValueKey].ToString();
 
 				switch(header)
 				{
@@ -1190,8 +1190,8 @@ namespace Castle.MonoRail.Framework
 			MatchCollection matches2 = Constants.reheader.Matches(body);
 			for(int i=0; i< matches2.Count; i++)
 			{
-				string header	= matches2[i].Groups[Constants.HeaderKey].ToString();
-				string strval	= matches2[i].Groups[Constants.ValueKey].ToString();
+				String header	= matches2[i].Groups[Constants.HeaderKey].ToString();
+				String strval	= matches2[i].Groups[Constants.ValueKey].ToString();
 
 				if(header.ToLower() == Constants.Subject)
 				{
