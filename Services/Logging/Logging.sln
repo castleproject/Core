@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.Tes
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.Web", "Castle.Services.Logging.Web\Castle.Services.Logging.Web.csproj", "{0D24700D-4CB9-4600-83BC-9C4FB5B184A8}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Services.Logging.log4netIntegration", "Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj", "{FA79D6B4-30B1-444A-A627-ED283BF6406B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -33,10 +29,6 @@ Global
 		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Debug.Build.0 = Debug|.NET
 		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Release.ActiveCfg = Release|.NET
 		{455A1B2F-DEBD-47FD-8891-5C0C70046B3B}.Release.Build.0 = Release|.NET
-		{0D24700D-4CB9-4600-83BC-9C4FB5B184A8}.Debug.ActiveCfg = Debug|.NET
-		{0D24700D-4CB9-4600-83BC-9C4FB5B184A8}.Debug.Build.0 = Debug|.NET
-		{0D24700D-4CB9-4600-83BC-9C4FB5B184A8}.Release.ActiveCfg = Release|.NET
-		{0D24700D-4CB9-4600-83BC-9C4FB5B184A8}.Release.Build.0 = Release|.NET
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Debug.ActiveCfg = Debug|.NET
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Debug.Build.0 = Debug|.NET
 		{FA79D6B4-30B1-444A-A627-ED283BF6406B}.Release.ActiveCfg = Release|.NET

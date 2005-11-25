@@ -1,3 +1,13 @@
+Change history
+--------------
+
+Beta 1
+======
+
+** Castle.Services.Logging **
+
+- Merged Castle.Services.Logging.Web into Castle.Services.Logging.
+
 
 Alpha Version 1.0.0
 - First release

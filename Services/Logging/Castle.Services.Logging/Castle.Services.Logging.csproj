@@ -124,6 +124,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebLoggerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Loggers\ConsoleLogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -145,6 +150,11 @@
                 />
                 <File
                     RelPath = "Loggers\StreamLogger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Loggers\WebLogger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
