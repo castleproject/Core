@@ -100,11 +100,6 @@
                     HintPath = "..\..\SharedLibs\NHibernate\NHibernate.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\..\SharedLibs\NHibernate\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\SharedLibs\NHibernate\Iesi.Collections.dll"
