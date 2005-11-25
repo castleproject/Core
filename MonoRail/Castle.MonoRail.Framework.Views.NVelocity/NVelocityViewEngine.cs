@@ -207,6 +207,25 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
 			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
+			
+			// add support for global macros. they must be defined in "Views/macros".
+			ArrayList macros = new ArrayList();
+			DirectoryInfo macrosPath = new DirectoryInfo(Path.Combine(ViewRootDir, "macros"));
+			if (macrosPath.Exists)
+				foreach (FileInfo file in macrosPath.GetFiles("*" + TemplateExtension))
+					macros.Add("macros/" + file.Name);
+			
+			if (macros.Count > 0)
+			{
+				object m = props.GetProperty(RuntimeConstants_Fields.VM_LIBRARY);
+				if (m is ICollection)
+					macros.AddRange((ICollection) m);
+				else if (m is string)
+					macros.Add(m);
+
+				props.AddProperty(RuntimeConstants_Fields.VM_LIBRARY, macros);
+				props.AddProperty(RuntimeConstants_Fields.VM_LIBRARY_AUTORELOAD, true);
+			}
 		}
 	
 		/// <summary>

@@ -127,6 +127,12 @@ The count attribute serves as a performance optimization when your elements are 
    
 
 
+** NVelocity View Engine **
+
+- Added support for global macros. Every *.vm file which is placed in the Views/macros directory
+  will be scanned for macros (by Fabio Batista, rev. 1374)
+
+
 ** Scaffolding support **
 
 - huge refactoring
