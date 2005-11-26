@@ -187,18 +187,11 @@ namespace Castle.MonoRail.Framework
 					ParameterInfo param	= parameters[i];
 					paramName = param.Name;
 
-					object[] bindAttributes	= param.GetCustomAttributes( typeof(DataBindAttribute), false );
+					// if complex binding is successful, there's no need for further processing
+					if (BindComplexParameter(param, request, args, i))
+						continue;
 					
-					if ( bindAttributes.Length > 0 )
-					{
-						DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
-	
-						args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel, dba.Exclude, dba.Allow );
-					}
-					else
-					{
-						args[i] = ConvertUtils.Convert( param.ParameterType, allParams.GetValues( paramName ), param.Name, files, allParams );
-					}
+					args[i] = ConvertUtils.Convert( param.ParameterType, allParams.GetValues( paramName ), param.Name, files, allParams );
 				}
 			}
 			catch(FormatException ex)
@@ -215,6 +208,31 @@ namespace Castle.MonoRail.Framework
 			}
 
 			return args;
+		}
+		
+		/// <summary>
+		/// Complex parameter bindings can be done overriding this method.
+		/// It should return <c>true</c> if the binding was completed. If it returns
+		/// <c>false</c>, MonoRail will try to convert the parameter in the usual way.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if binding completes and the default behaviour can be skipped,
+		/// <c>false</c> otherwise.
+		/// </returns>
+		protected virtual bool BindComplexParameter(ParameterInfo param, IRequest request, object[] args, int i)
+		{
+			object[] bindAttributes	= param.GetCustomAttributes( typeof(DataBindAttribute), false );
+			
+			if ( bindAttributes.Length > 0 )
+			{
+				DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
+
+				args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel, dba.Exclude, dba.Allow );
+				
+				return true;
+			}
+
+			return false;
 		}
 
 		protected object BindObject(ParamStore from, Type paramType, String prefix, int nestedLevel, String excludedProperties, String allowedProperties)

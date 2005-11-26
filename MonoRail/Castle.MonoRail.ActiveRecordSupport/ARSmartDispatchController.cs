@@ -18,7 +18,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using System.Reflection;
 	
 	using Castle.ActiveRecord;
-
+	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord.Framework.Internal;	
+	
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -65,6 +67,52 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 			
 			return args;
+		}
+		
+		protected override bool BindComplexParameter( ParameterInfo param, IRequest request, object[] args, int i )
+		{
+			// [ARFetch] support
+			object[] fetchAttributes = param.GetCustomAttributes( typeof(ARFetchAttribute), false );
+			if ( fetchAttributes.Length > 0 )
+			{
+				ARFetchAttribute attr = (ARFetchAttribute) fetchAttributes[0];
+				args[i] = FetchActiveRecord(args[i], param, attr, request);
+				return true;
+			}
+			
+			return base.BindComplexParameter(param, request, args, i);
+		}
+		
+		private object FetchActiveRecord( object pk, ParameterInfo param, ARFetchAttribute attr, IRequest request )
+		{
+			Type t = param.ParameterType;
+			ActiveRecordModel model = ActiveRecordModel.GetModel(t);
+			if (model == null)
+				throw new RailsException(String.Format("'{0}' is not an ActiveRecord class. It could not be bound to an [ARFetch] attribute.", t));
+
+			if (model.Ids.Count != 1)
+				throw new RailsException("ARFetch only supports single-attribute primary keys");
+
+			PrimaryKeyModel pkModel = (PrimaryKeyModel) model.Ids[0];
+
+			if (attr.RequestParameterName != null && attr.RequestParameterName != param.Name)
+				pk = request.Params[attr.RequestParameterName];
+			
+			object obj = null;
+
+			if (pk != null && String.Empty != pk)
+			{
+				Type pkType = pkModel.Property.PropertyType;
+				if (pk.GetType() != pkType)
+					pk = Convert.ChangeType(pk, pkType);
+			
+				obj = SupportingUtils.FindByPK(param.ParameterType, pk, attr.ThrowIfNotFound);
+			}
+			
+			if (obj == null && attr.AutoCreateNew)
+				obj = Activator.CreateInstance(t);
+			
+			return obj;
 		}
 
 		private void PersistInstances( object instances )

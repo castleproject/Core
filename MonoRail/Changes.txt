@@ -72,6 +72,57 @@ Beta 5
     if (myOtherEnumValue == MyEnum.Second) // ok
   }
 
+- Support for Active Record fetching in Castle.MonoRail.ActiveRecordSupport
+  (by Fabio Batista, rev. 1380).
+	
+	Mainly for those unconfortable with direct binding of form values
+	to ActiveRecord objects. This attribute only fetches the ActiveRecord based
+	on its Primary Key, nothing more.
+	
+	Usage:
+	
+		public class MyCrudExample : ARSmartDispatchController
+		{
+			// simple usage.
+			public void Save( [ARFetch] Example example, string name, ...)
+			{
+				example.Name = name;
+				// ...
+				
+				example.Save();
+			}
+
+			// using a different request parameter, instead of the action's parameter name
+			public void Save( [ARFetch("primaryKey")] Example example, string name, ...)
+			{
+				example.Name = name;
+				// ...
+				
+				example.Save();
+			}
+
+			// ignoring invalid primary keys
+			public void Save( [ARFetch(ThrowIfNotFound=false)] Example example, string name, ...)
+			{
+				example.Name = name;
+				// ...
+				
+				example.Save();
+			}
+
+			// not creating new records automatically, when the parameter is empty or null
+			public void Save( [ARFetch(AutoCreateNew=false)] Example example, string name, ...)
+			{
+				if (example == null)
+					example = new Example(someRequiredConstructorParameter);
+				
+				example.Name = name;
+				// ...
+				
+				example.Save();
+			}
+		}
+
 - Support for smart arrays (aside from primitives) (kudos do Ahmed)
 
   Quoting the explanation:
