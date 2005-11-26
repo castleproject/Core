@@ -208,8 +208,8 @@ namespace Castle.MonoRail.TestSupport
 			String buffer = Output;
 
 			Assert.IsTrue( buffer.StartsWith(contents), 
-				"Reply string did not start with '{0}'. It was '{1}'", contents,
-					buffer.Substring(0, Math.Min(contents.Length, buffer.Length) ) );
+				String.Format("Reply string did not start with '{0}'. It was '{1}'", Prepare(contents),
+                    Prepare(buffer.Substring(0, Math.Min(contents.Length, buffer.Length)))));
 		}
 
 		/// <summary>
@@ -411,5 +411,12 @@ namespace Castle.MonoRail.TestSupport
 		}
 
 		#endregion
+
+        private String Prepare(String content)
+        {
+            if (content == null || content.Length == 0) return String.Empty;
+
+            return content.Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
+        }
 	}
 }

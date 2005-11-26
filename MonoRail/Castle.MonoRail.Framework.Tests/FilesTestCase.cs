@@ -35,7 +35,7 @@ namespace Castle.MonoRail.Framework.Tests
 			
 			AssertSuccess();
 
-			String expected = "\r\n\r\n/*  Prototype JavaScript framework";
+			String expected = "/*  Prototype JavaScript framework";
 
 			AssertContentTypeStartsWith("text/javascript");
 			AssertReplyStartsWith(expected);
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			String expected = "\r\n// @name      The Fade Anything Technique";
+            String expected = "\r\n// @name      The Fade Anything Technique";
 
 			AssertContentTypeStartsWith("text/javascript");
 			AssertReplyStartsWith(expected);
@@ -61,7 +61,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			String expected = "\r\n\r\n// Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)";
+            String expected = "\r\n\r\n// Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)";
 
 			AssertContentTypeStartsWith("text/javascript");
 			AssertReplyStartsWith(expected);
@@ -79,7 +79,7 @@ namespace Castle.MonoRail.Framework.Tests
 			expected = " \r\n\t\t\t\tfunction fValConfig()\r\n\t\t\t\t{";
 			DoGet("MonoRail/Files/ValidateConfig.rails");
 			AssertSuccess();
-			AssertContentTypeStartsWith("text/javascript");
+            AssertContentTypeStartsWith("text/javascript");
 			AssertReplyStartsWith(expected);
 
 			expected = " \r\n\t\t\t/*< blank basic ******************";

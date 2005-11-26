@@ -41,7 +41,15 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Called when the XMLHttpRequest has completed.
 		/// </summary>
-		Complete
+		Complete,
+		/// <summary>
+		/// Called when the request was successfully (Status code &lt; 500)
+		/// </summary>
+		Success,
+		/// <summary>
+		/// Called when the request was not successfully (Status code &gt;= 500)
+		/// </summary>
+		Failure
 	}
 
 	/// <summary>

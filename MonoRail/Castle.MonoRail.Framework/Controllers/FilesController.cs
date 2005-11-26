@@ -41,7 +41,8 @@ namespace Castle.MonoRail.Framework.Controllers
 
 		private void RenderFile(String resourceName, String resourceKey)
 		{
-			RenderText( GetResourceValue(resourceName, resourceKey) );
+            String fileContent = GetResourceValue(resourceName, resourceKey);
+            RenderText(fileContent);
 		}
 
 		/// <summary>
