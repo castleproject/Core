@@ -103,26 +103,20 @@ namespace Castle.MonoRail.Framework
 
 		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
 		{
-			NameValueCollection webParams = request.Params;
-
 			object methods = actions[action];
 
-			ArrayList candidates = methods as ArrayList;
-
-			if (candidates == null && methods != null)
-			{
-				candidates = new ArrayList();
-				candidates.Add(methods);
-			}
-
+			// should check for single-option as soon as possible (performance improvement)
+			if (methods is MethodInfo)
+				return (MethodInfo) methods;
+			
+			ArrayList candidates = (ArrayList) methods;
+			
 			if (candidates == null)
-			{
 				return null;
-			}
 
 			return SelectBestCandidate( 
 				(MethodInfo[]) candidates.ToArray( typeof(MethodInfo) ), 
-				webParams );
+				request.Params );
 		}
 
 		protected virtual MethodInfo SelectBestCandidate(MethodInfo[] candidates, NameValueCollection webParams)
