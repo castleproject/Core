@@ -50,5 +50,18 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			
 			Assert.AreEqual(expected, actual);
 		}
+
+		[Test]
+		public void OnSuccessFailureCallbacks()
+		{
+			String expected = "<form  onsubmit=\"new Ajax.Request('something.rails', " 
+				+ "{onSuccess:function(request) { javascriptcode } , onFailure:function("
+				+ "request) { javascriptcode } , asynchronous:true, evalScripts:true, "
+				+ "parameters:Form.serialize(this)}); return false;\" enctype=\"multipart/form-data\">";
+
+			String actual = helper.BuildFormRemoteTag( new DictHelper().CreateDict("url=something.rails", "onfailure=javascriptcode", "onsuccess=javascriptcode") );
+			
+			Assert.AreEqual(expected, actual);
+		}
 	}
 }

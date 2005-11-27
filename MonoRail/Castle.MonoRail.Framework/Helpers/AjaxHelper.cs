@@ -45,11 +45,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <summary>
 		/// Called when the request was successfully (Status code &lt; 500)
 		/// </summary>
-		Success,
+		OnSuccess,
 		/// <summary>
 		/// Called when the request was not successfully (Status code &gt;= 500)
 		/// </summary>
-		Failure
+		OnFailure
 	}
 
 	/// <summary>
@@ -671,7 +671,18 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			if (callback == CallbackEnum.Uninitialized) return String.Empty;
 
-			name = "on" + callback.ToString();
+			if (callback != CallbackEnum.OnFailure && callback != CallbackEnum.OnSuccess)
+			{
+				name = "on" + callback.ToString();
+			}
+			else if (callback == CallbackEnum.OnFailure)
+			{
+				name = "onFailure";
+			}
+			else if (callback == CallbackEnum.OnSuccess)
+			{
+				name = "onSuccess";
+			}
 
 			return String.Format("function(request) {{ {0} }} ", code);
 		}

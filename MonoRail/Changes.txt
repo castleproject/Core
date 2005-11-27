@@ -175,7 +175,16 @@ The count attribute serves as a performance optimization when your elements are 
   <input name="Person[3].Name" value="Geoff">
   <input name="Person[4].Name" value="Jeffrey">
 
+** Ajax Helper **
    
+- AjaxHelper2 renamed to AjaxHelper. The old one was renamed to AjaxHelperOld
+
+- Two more callbacks supported: onSuccess and onFailure. For example
+
+  $AjaxHelper.BuildFormRemoteTag( $DictHelper.CreateDict("url=something.rails", "OnSuccess=myjavascriptfunction();", "OnFailure=otherfunction(request)" ) );
+  
+  Do not confuse it with 'success' and 'failure' keys, though. Those means the id of elements
+  to be updated in the event of success and failure.
 
 
 ** NVelocity View Engine **
