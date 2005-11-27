@@ -20,6 +20,11 @@ namespace PetStore.Service.DataAccess.AR
 
 	public class ARCategoryDataAccess : ICategoryDataAccess
 	{
+		public Category Find(int category)
+		{
+			return Category.Find(category);
+		}
+
 		public Category[] FindAll()
 		{
 			return Category.FindAll();

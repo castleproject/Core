@@ -99,5 +99,10 @@ namespace PetStore.Model
 			return (Category[]) FindAll( 
 				typeof(Category), new Order[] { Order.Asc("Name") } );
 		}
+
+		public static Category Find(int id)
+		{
+			return (Category) FindByPrimaryKey(typeof(Category), id);
+		}
 	}
 }

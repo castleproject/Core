@@ -38,5 +38,10 @@ namespace PetStore.Service
 		{
 			return categoryDataAccess.FindAll();
 		}
+
+		public Category Find(int category)
+		{
+			return categoryDataAccess.Find(category);
+		}
 	}
 }

@@ -250,6 +250,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "Components\ImageLocationComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Content\css\admin.css"
                     BuildAction = "Content"
                 />

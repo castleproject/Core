@@ -21,7 +21,7 @@ body, td, th, h3, h2, h1, h4 input, textarea
 }
 
 #page {
-    border: solid 1px gray;
+    /* bborder: solid 1px gray; */
 	margin: 15px 20px 20px 20px;
 }
 
@@ -104,7 +104,6 @@ div#categories {
 	background: white url("../images/sidebar.gif") no-repeat bottom left;
 	margin: 0 0 8px 0;
 	/* border: solid 1px gray; */
-	border: solid 1px gray;
 }
 div#categories div {
 	background: url("../images/sidebar-top.gif") no-repeat top left;
@@ -121,6 +120,7 @@ div#categories h3 {
 div#categories ul 
 {
 	padding: 5px 5px 5px 18px;
+	margin: 0 0 0 0;
 	/* border: solid 1px gray; */
 }
 div#categories li {
@@ -139,37 +139,84 @@ div#categories a {
 	font-size: medium;
 	border-bottom: solid 0.5px black;
 }
-
-.productbox 
-{
-	border-bottom: solid 1px gray;
-	
-	height: 220px;
-}
-
-.productbox div#thumbnail
-{
-	padding: 5px;
-	display: inline;
-	float: left;
-	width: 250px;
-}
-
-.productbox div#thumbnail img
+div.item 
 {
 	border: solid 1px gray;
-	width: 220px;
-	height: 190px;
+	position: relative;
+	height: 200px;
+	width: 320px;
+	float: left;
+	color: gray;
+	padding: 5px;
+	margin: 4px;
+	overflow: auto;
 }
-
-.productbox div#productdesc
+div.item div.itemImg
 {
-	padding: 10px;
-	display: inline;
+	float: left;
+	position: relative;
+	margin: 2px;
 }
-
-.productbox span
+div.item div.title
 {
+	border: solid 1px white;
+	margin-left: 10px;
+	font: 12px verdana;
 	font-weight: bold;
-	color: Red;
+	text-align: center;
+}
+div.item div.description
+{
+	margin-top: 40px;
+	color: gray;
+	font: 11px verdana;
+	text-align: justify;
+	height: 52px;
+	overflow: auto;
+}
+div.item div.price
+{
+	text-align: center;
+	font: 11px verdana;
+}
+div.item div.price span
+{
+	color: red;
+	font-weight: bold;
+}
+div.item form
+{
+	text-align: center;
+	border: solid 1px white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+div.item form input
+{
+	font: 10px verdana;
+}
+div.item div.bottombuttons
+{
+	position: absolute;
+	height: 244px;
+	width: 97%;
+	margin: 0;
+	padding: 0;
+	bottom: 0;
+	overflow: hidden;
+	height: 20px;
+}
+div.bottombuttons span
+{
+	position: relative;
+	font: 10px verdana;
+	font-weight: bold;
+}
+div.bottombuttons span.details
+{
+	float: left;
+}
+div.bottombuttons span.comments
+{
+	float: right;
 }

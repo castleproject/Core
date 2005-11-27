@@ -1,5 +1,5 @@
 <h3>
-
+$category.Name
 </h3>
 
 #foreach($product in $products)

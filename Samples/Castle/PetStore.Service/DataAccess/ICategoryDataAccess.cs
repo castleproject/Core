@@ -21,5 +21,7 @@ namespace PetStore.Service
 	public interface ICategoryDataAccess
 	{
 		Category[] FindAll();
+		
+		Category Find(int category);
 	}
 }

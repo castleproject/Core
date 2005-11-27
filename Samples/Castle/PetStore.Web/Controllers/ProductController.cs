@@ -14,10 +14,6 @@
 
 namespace PetStore.Web.Controllers
 {
-	using System;
-
-	using Castle.MonoRail.Framework;
-	
 	using PetStore.Service;
 
 
@@ -39,11 +35,12 @@ namespace PetStore.Web.Controllers
 			PropertyBag.Add("products", productService.FindAll());
 		}
 
-		public void ListByCategory(int categoryId)
+		public void ListByCategory(int category)
 		{
 			AddCategoriesToPropertyBag();
 
-			PropertyBag.Add("products", productService.FindByCategory(categoryId));
+			PropertyBag.Add("category", categoryService.Find(category));
+			PropertyBag.Add("products", productService.FindByCategory(category));
 		}
 
 		public void Details(int productid)

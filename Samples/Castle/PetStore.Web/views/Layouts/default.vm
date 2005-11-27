@@ -40,12 +40,11 @@
  #end
 #end
 		</ul>
-
 		<br>
 		</div>
 	</div>
 #end
-	
+		
 	<div id="content"> 
 
       $childContent
