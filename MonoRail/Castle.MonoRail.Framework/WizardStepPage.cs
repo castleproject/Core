@@ -125,6 +125,8 @@ namespace Castle.MonoRail.Framework
 		/// <description>Invokes <see cref="RedirectToPreviousStep"/></description></item>
 		/// <item><term>first</term>
 		/// <description>Invokes <see cref="RedirectToFirstStep"/></description></item>
+		/// <item><term>step name</term>
+		/// <description>A custom step name to navigate</description></item>
 		/// </list>
 		/// </remarks>
 		protected void DoNavigate()
@@ -139,9 +141,13 @@ namespace Castle.MonoRail.Framework
 			{
 				RedirectToFirstStep();
 			}
-			else
+			else if (navigateTo == null || navigateTo == String.Empty || navigateTo == "next")
 			{
 				RedirectToNextStep();
+			}
+			else
+			{
+				InternalRedirectToStep(navigateTo);
 			}
 		}
 
@@ -165,7 +171,7 @@ namespace Castle.MonoRail.Framework
 
 				WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, nextStepIndex, nextStep);
 				
-				RedirectToStep(nextStepIndex, nextStep);
+				InternalRedirectToStep(nextStepIndex, nextStep);
 			}
 			else
 			{
@@ -192,7 +198,7 @@ namespace Castle.MonoRail.Framework
 
 				String prevStep = (String) stepList[prevStepIndex];
 
-				RedirectToStep(prevStepIndex, prevStep);
+				InternalRedirectToStep(prevStepIndex, prevStep);
 			}
 			else
 			{
@@ -209,25 +215,46 @@ namespace Castle.MonoRail.Framework
 
 			String firstStep = (String) stepList[0];
 
-			RedirectToStep(0, firstStep);
+			InternalRedirectToStep(0, firstStep);
 		}
 
-		private void RedirectToStep(int prevStepIndex, String prevStep)
+		/// <summary>
+		/// Sends a redirect to a custom step (that must exists)
+		/// </summary>
+		protected bool InternalRedirectToStep(String stepName)
 		{
-			WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, prevStepIndex, prevStep);
+			IList stepList = (IList) Context.UnderlyingContext.Items["wizard.step.list"];
+
+			for(int index = 0; index < stepList.Count; index++)
+			{
+				String curStep = (String) stepList[index];
+
+				if (curStep == stepName)
+				{
+					InternalRedirectToStep(index, stepName);
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private void InternalRedirectToStep(int stepIndex, String step)
+		{
+			WizardUtils.RegisterCurrentStepInfo(_wizardcontroller, stepIndex, step);
 	
 			// We need to preserve any attribute from the QueryString
 			// for example in case the url has an Id
 			if( Context.Request.QueryString.HasKeys() )
 			{							
 				String url = UrlInfo.CreateAbsoluteRailsUrl( Context.ApplicationPath, 
-					_wizardcontroller.Name, prevStep, Context.UrlInfo.Extension ) + Context.Request.Uri.Query;
+					_wizardcontroller.Name, step, Context.UrlInfo.Extension ) + Context.Request.Uri.Query;
 					
 				Context.Response.Redirect( url );
 			}
 			else
 			{
-				Context.Response.Redirect(_wizardcontroller.Name, prevStep);
+				Context.Response.Redirect(_wizardcontroller.Name, step);
 			}
 		}
 	}

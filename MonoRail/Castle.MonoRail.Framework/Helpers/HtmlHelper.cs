@@ -388,6 +388,34 @@ namespace Castle.MonoRail.Framework.Helpers
 			return String.Format("<a href=\"{0}/{1}/{2}.{3}\" {5}>{4}</a>", 
 				url, controller, action, extension, name, GetAttributes(attributes));
 		}
+
+		/// <summary>
+		/// Creates an anchor (link) to the <paramref name="action"/> on the specified <paramref name="controller"/>
+		/// <code>
+		/// &lt;a href=&quot;/website/controllerArg/actionArg.rails&quot;&gt;nameArg&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="name">Name for the link.</param>
+		/// <param name="controller">Controller to link to.</param>
+		/// <param name="action">Action to link to.</param>
+		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
+		/// <returns>HTML string with anchor to the specified <paramref name="controller"/></returns>
+		/// <remarks>Calling <c>LinkToAttributed( "nameArg", "controllerArg", "actionArg", IDictionary )</c> results in:
+		/// <code>&lt;a href=&quot;/website/controllerArg/actionArg.rails&quot;&gt;nameArg&lt;/a&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <b>LinkToAttributed</b>:
+		/// <code>
+		/// $HtmlHelper.LinkToAttributed( "linkName", "someController", "requiredAction", $DictHelper.CreateDict("class=something") )
+		/// </code>
+		/// </example>
+		public String LinkToAttributed(String name, String controller, String action, object id, IDictionary attributes)
+		{
+			String url = Controller.Context.ApplicationPath;
+			String extension = Controller.Context.UrlInfo.Extension;
+
+			return String.Format("<a href=\"{0}/{1}/{2}.{3}?id={6}\" {5}>{4}</a>", 
+				url, controller, action, extension, name, GetAttributes(attributes), id);
+		}
 		
 		#endregion
 		

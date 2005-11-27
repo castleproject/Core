@@ -49,7 +49,25 @@ namespace Castle.MonoRail.Framework.Helpers
 			return WizardUtils.HasPreviousStep(Controller);
 		}
 
-		/// <overloads>This method has two overloads.</overloads>
+		/// <summary>
+		/// Returns the name of the previous step
+		/// </summary>
+		public String PreviousStepName
+		{
+			get { return WizardUtils.GetPreviousStepName(Controller); }
+		}
+
+		/// <summary>
+		/// Returns the name of the next step
+		/// </summary>
+		public String NextStepName
+		{
+			get { return WizardUtils.GetNextStepName(Controller); }
+		}
+
+		#region LinkToStep
+
+		/// <overloads>This method has three overloads.</overloads>
 		/// <summary>
 		/// Creates an anchor tag (link) to the specified step.
 		/// <code>
@@ -78,8 +96,28 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			return LinkTo( linkText, step.WizardController.Name, step.ActionName, id);
 		}
+
+		/// <summary>
+		/// Creates an anchor tag (link) to the specified step.
+		/// <code>
+		/// &lt;a href=&quot;/page2.rails&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <param name="linkText">The label for the step</param>
+		/// <param name="step">The WizardStepPage to link to</param>
+		/// <param name="id">Object to use for the action ID argument.</param>
+		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
+		/// <returns></returns>
+		public String LinkToStep(String linkText, WizardStepPage step, object id, IDictionary attributes)
+		{
+			return LinkToAttributed( linkText, step.WizardController.Name, step.ActionName, id, attributes);
+		}
+
+		#endregion
+
+		#region LinkToNext and LinkToPrevious
 				
-		/// <overloads>This method has three overloads.</overloads>
+		/// <overloads>This method has four overloads.</overloads>
 		/// <summary>
 		/// Creates an anchor tag (link) to the next step.
 		/// <code>
@@ -94,9 +132,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToNext(String linkText)
 		{
-			String stepName = WizardUtils.GetNextStepName(Controller);
-
-			return LinkTo( linkText, Controller.Name, stepName );
+			return LinkTo( linkText, Controller.Name, NextStepName );
 		}
 
 		/// <summary>
@@ -114,9 +150,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToNext(String linkText, IDictionary attributes)
 		{
-			String stepName = WizardUtils.GetNextStepName(Controller);
-
-			return LinkToAttributed( linkText, Controller.Name, stepName, attributes );
+			return LinkToAttributed( linkText, Controller.Name, NextStepName, attributes );
 		}
 
 		/// <summary>
@@ -134,12 +168,29 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToNext(String linkText, object id)
 		{
-			String stepName = WizardUtils.GetNextStepName(Controller);
+			return LinkTo( linkText, Controller.Name, NextStepName, id );
+		}
 
-			return LinkTo( linkText, Controller.Name, stepName, id );
+		/// <summary>
+		/// Creates an anchor tag (link) with an id attribute to the next step.
+		/// <code>
+		/// &lt;a href=&quot;/page2.rails?Id=id&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <remarks>
+		/// This helper assumes there is a previous step. It's advised 
+		/// that you use <see cref="HasNextStep"/> before calling this
+		/// </remarks>
+		/// <param name="linkText">The label for the link</param>
+		/// <param name="id">Object to use for the action ID argument.</param>
+		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
+		/// <returns></returns>
+		public String LinkToNext(String linkText, object id, IDictionary attributes)
+		{
+			return LinkToAttributed( linkText, Controller.Name, NextStepName, id, attributes );
 		}
 		
-		/// <overloads>This method has three overloads.</overloads>
+		/// <overloads>This method has four overloads.</overloads>
 		/// <summary>
 		/// Creates an anchor tag (link) to the previous step.
 		/// <code>
@@ -154,9 +205,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText)
 		{
-			String stepName = WizardUtils.GetPreviousStepName(Controller);
-
-			return LinkTo( linkText, Controller.Name, stepName );
+			return LinkTo( linkText, Controller.Name, NextStepName );
 		}
 
 		/// <summary>
@@ -174,9 +223,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText, IDictionary attributes)
 		{
-			String stepName = WizardUtils.GetPreviousStepName(Controller);
-
-			return LinkToAttributed( linkText, Controller.Name, stepName, attributes );
+			return LinkToAttributed( linkText, Controller.Name, PreviousStepName, attributes );
 		}
 
 		/// <summary>
@@ -194,9 +241,28 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText, object id)
 		{
-			String stepName = WizardUtils.GetPreviousStepName(Controller);
-
-			return LinkTo( linkText, Controller.Name, stepName, id );
+			return LinkTo( linkText, Controller.Name, PreviousStepName, id );
 		}
+
+		/// <summary>
+		/// Creates an anchor tag (link) with an id attribute to the previous step.
+		/// <code>
+		/// &lt;a href=&quot;/page2.rails?Id=id&quot;&gt;linkText&lt;/a&gt;
+		/// </code>
+		/// </summary>
+		/// <remarks>
+		/// This helper assumes there is a previous step. It's advised 
+		/// that you use <see cref="HasPreviousStep"/> before calling this
+		/// </remarks>
+		/// <param name="linkText">The label for the link</param>
+		/// <param name="id">Object to use for the action ID argument.</param>
+		/// <param name="attributes">Additional attributes for the <b>a</b> tag.</param>
+		/// <returns></returns>
+		public String LinkToPrevious(String linkText, object id, IDictionary attributes)
+		{
+			return LinkToAttributed( linkText, Controller.Name, PreviousStepName, id, attributes );
+		}
+
+		#endregion
 	}
 }
