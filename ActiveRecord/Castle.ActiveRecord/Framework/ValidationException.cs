@@ -20,16 +20,42 @@ namespace Castle.ActiveRecord
 	[Serializable]
 	public class ValidationException : Exception
 	{
-		public ValidationException(string message) : base(message)
+		private String[] _validationErrorMessages;
+		/// <summary>
+		/// Returns a list of current validation errors messages, if available.
+		/// </summary>
+		public String[] ValidationErrorMessages
+		{
+			get
+			{
+				if (_validationErrorMessages == null)
+				{
+					_validationErrorMessages = new String[0];
+				}
+				return _validationErrorMessages;
+			}
+		}
+		
+		public ValidationException( String message ) : base( message )
 		{
 		}
 
-		public ValidationException(string message, Exception innerException) : base(message, innerException)
+		public ValidationException( String message, Exception innerException ) : base( message, innerException )
 		{
 		}
 
-		public ValidationException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public ValidationException( SerializationInfo info, StreamingContext context ) : base( info, context )
 		{
+		}
+		
+		public ValidationException( String message, String[] errorMessages ) : base( message )
+		{
+			_validationErrorMessages = errorMessages;
+		}
+
+		public ValidationException( String message, Exception innerException, String[] errorMessages )  : base( message, innerException )
+		{
+			_validationErrorMessages = errorMessages;
 		}
 	}
 }

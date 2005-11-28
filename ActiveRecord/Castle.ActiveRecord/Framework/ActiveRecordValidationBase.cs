@@ -204,15 +204,15 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Throws an execption explaining why the save or update
-		/// cannot be executed while fields aren't ok to pass.
+		/// Throws an exception explaining why the save or update
+		/// cannot be executed when fields are not ok to pass.
 		/// </summary>
 		/// <remarks>
-		/// You can override this method to declare a better behavior
+		/// You can override this method to declare a better behavior.
 		/// </remarks>
 		protected virtual void OnNotValid()
 		{
-			throw new ValidationException("Can't save or update as there is one (or more) field that has not passed the validation test");
+			throw new ValidationException( "Can't save or update as there is one (or more) field that has not passed the validation test", ValidationErrorMessages );
 		}
 	}
 }
