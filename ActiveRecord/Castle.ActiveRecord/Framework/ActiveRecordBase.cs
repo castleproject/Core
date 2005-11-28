@@ -288,14 +288,30 @@ namespace Castle.ActiveRecord
 	
 			Array array = Array.CreateInstance(targetType, result.Count);
 	
-			int index = 0;
-	
-			foreach(object item in result)
-			{
-				array.SetValue(item, index++);
-			}
+			result.CopyTo(array, 0);
 	
 			return array;
+		}
+
+		protected internal static object ExecuteQuery(IActiveRecordQuery q)
+		{
+			Type targetType = q.TargetType;
+			EnsureInitialized(targetType);
+
+			ISession session = _holder.CreateSession( targetType );
+
+			try
+			{
+				return q.Execute(session);
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
 		}
 
 		protected internal static void DeleteAll(Type type)

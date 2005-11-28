@@ -125,6 +125,11 @@ namespace Castle.ActiveRecord
 			ActiveRecordBase.DeleteAll(type);
 		}
 
+		public static object ExecuteQuery(IActiveRecordQuery q)
+		{
+			return ActiveRecordBase.ExecuteQuery(q);
+		}
+
 		/// <summary>
 		/// Saves the instance to the database
 		/// </summary>
