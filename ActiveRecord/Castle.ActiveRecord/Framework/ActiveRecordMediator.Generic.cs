@@ -102,6 +102,13 @@ namespace Castle.ActiveRecord
         {
             ActiveRecordBase.Execute(typeof(T), call, instnace);
         }
+        
+        public static T ExecuteQuery(IActiveRecordQuery q)
+		{
+			return (T)ActiveRecordBase.ExecuteQuery(q);
+		}
+
+
     }
 }
 #endif 
