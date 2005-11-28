@@ -29,7 +29,7 @@ class BrailPreProcessor(AbstractCompilerStep):
         for input in new:
             self.Parameters.Input.Add(input)                
         
-    static def Booify(code as string):
+    def Booify(code as string):
         buffer = System.IO.StringWriter()
         output = def(code as string):
             return if len(code) == 0

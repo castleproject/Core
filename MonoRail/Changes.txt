@@ -192,6 +192,9 @@ The count attribute serves as a performance optimization when your elements are 
 - Added support for global macros. Every *.vm file which is placed in the Views/macros directory
   will be scanned for macros (by Fabio Batista, rev. 1374)
 
+** Brail View Engine **
+
+- Upgraded to use Boo 0.75, should solve the problem that Brail had with breaking tests.
 
 ** Scaffolding support **
 

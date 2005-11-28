@@ -18,6 +18,7 @@ import System
 import System.IO
 import System.Collections
 import Castle.MonoRail.Framework
+import Boo.Lang.Parser
 import Boo.Lang.Compiler
 import Boo.Lang.Compiler.IO
 import Boo.Lang.Compiler.Steps
@@ -280,7 +281,7 @@ public class BooViewEngine (ViewEngineBase):
 			compiler.Parameters.Pipeline = CompileToMemory()
 		# replace the normal parser with white space agnostic one.
 		compiler.Parameters.Pipeline.RemoveAt(0)
-		compiler.Parameters.Pipeline.Insert(0, WSABoo.Parser.WSABooParsingStep() )
+		compiler.Parameters.Pipeline.Insert(0, WSABooParsingStep() )
 		for file in files:
 			compiler.Parameters.Input.Add(file)
 		for assembly as System.Reflection.Assembly in options.AssembliesToReference:

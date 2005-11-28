@@ -31,14 +31,14 @@ class BrailAjaxTestCase(AbstractMRTestCase):
 	[Test]
 	def LinkToFunction():
 		DoGet("ajax/LinkToFunction.rails")
-		expected = "<a href=\"#\"  onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>"
+		expected = "<a href=\"javascript:void(0);\"  onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 		
 	[Test]
 	def LinkToRemote():
 		DoGet("ajax/LinkToRemote.rails")
-		expected = "<a href=\"#\"  onclick=\"new Ajax.Request('/controller/action.rails', {asynchronous:true, evalScripts:true}); return false;\" ><img src='myimg.gid'></a>"
+		expected = "<a href=\"javascript:void(0);\"  onclick=\"new Ajax.Request('/controller/action.rails', {asynchronous:true, evalScripts:true}); return false;\" ><img src='myimg.gid'></a>"
 		AssertSuccess()
 		AssertReplyEqualsTo(expected)
 		
