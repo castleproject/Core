@@ -78,21 +78,21 @@
       <Name>Castle.DynamicProxy</Name>
       <HintPath>..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="HashCodeProvider">
-      <Name>HashCodeProvider</Name>
-      <HintPath>..\lib\HashCodeProvider.dll</HintPath>
+    <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections">
-      <Name>Iesi.Collections</Name>
-      <HintPath>..\lib\Iesi.Collections.dll</HintPath>
+    <Reference Include="NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <Name>log4net</Name>
-      <HintPath>..\lib\log4net.dll</HintPath>
+    <Reference Include="Nullables, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\Nullables.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <Name>NHibernate</Name>
-      <HintPath>..\lib\NHibernate.dll</HintPath>
+    <Reference Include="Nullables.NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.3.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <SpecificVersion>False</SpecificVersion>
@@ -154,6 +154,8 @@
     <Compile Include="Model\HasManyClassA.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\LazyClass.cs" />
+    <Compile Include="Model\LazyClassWithoutVirtualPropertyOnBelongsTo.cs" />
     <Compile Include="Model\Person.cs">
       <SubType>Code</SubType>
     </Compile>

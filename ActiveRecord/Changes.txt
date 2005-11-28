@@ -1,6 +1,9 @@
 
 beta 3
 ======
+- Added: Support for Lazy loading class using BelongsTo. Will throw if there is a non virtual property that
+  also BelongsTo().
+
 - Closed: (AR-24) ValidationException must contain the validation error messages
 
 - Support for fields in addition to properties

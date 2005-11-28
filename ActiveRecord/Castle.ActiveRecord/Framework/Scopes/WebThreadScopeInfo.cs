@@ -22,6 +22,8 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 	public class WebThreadScopeInfo : AbstractThreadScopeInfo
 	{
+        const string ActiveRecordCurrentStack = "activerecord.currentstack";
+	    
 		public WebThreadScopeInfo()
 		{
 		}
@@ -40,13 +42,13 @@ namespace Castle.ActiveRecord.Framework.Scopes
 					throw new ScopeMachineryException(message);
 				}
 
-				Stack stack = (Stack) current.Items["activerecord.currentstack"];
+			    Stack stack = (Stack) current.Items[ActiveRecordCurrentStack];
 
 				if (stack == null)
 				{
 					stack = new Stack();
 
-					current.Items["activerecord.currentstack"] = stack;
+					current.Items[ActiveRecordCurrentStack] = stack;
 				}
 
 				return stack;

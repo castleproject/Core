@@ -47,6 +47,13 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 		}
 
         [Test]
+        [ExpectedException(typeof(ActiveRecordException), "Property Clazz must be virtual because class LazyClassWithoutVirtualPropertyOnBelongsTo support lazy loading [ActiveRecord(Lazy=true)]")]
+        public void LazyClassWithoutVirtualPropertyOnBelongsTo()
+        {
+            ActiveRecordStarter.Initialize(GetConfigSource(), typeof(LazyClassWithoutVirtualPropertyOnBelongsTo));
+        }
+
+        [Test]
         [ExpectedException(typeof(ActiveRecordException), "You can't use [Property] on ClassWithBadMapping.ClassA because Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassA is an active record class, did you mean to use BelongTo?")]
         public void ClassThatMapAnotherActiveRecordClassAsAPropertyInsteadOfBelongsTo()
         {

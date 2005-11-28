@@ -43,7 +43,7 @@ namespace Castle.ActiveRecord
 		private String where;
 		private Type proxy;
 		private bool lazy;
-
+        
 		/// <summary>
 		/// Uses the class name as table name
 		/// </summary>

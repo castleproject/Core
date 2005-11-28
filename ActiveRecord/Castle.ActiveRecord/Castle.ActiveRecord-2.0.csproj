@@ -90,29 +90,25 @@
       <Name>Castle.Model</Name>
       <HintPath>..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
     </Reference>
-    <Reference Include="HashCodeProvider">
-      <Name>HashCodeProvider</Name>
-      <HintPath>..\lib\HashCodeProvider.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections">
-      <Name>Iesi.Collections</Name>
-      <HintPath>..\lib\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <Name>log4net</Name>
       <HintPath>..\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+    <Reference Include="NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\NHibernate.dll</HintPath>
+      <HintPath>..\..\SharedLibs\nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Nullables, Version=1.0.0.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+    <Reference Include="Nullables, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Nullables.dll</HintPath>
+      <HintPath>..\..\SharedLibs\nhibernate\Nullables.dll</HintPath>
     </Reference>
-    <Reference Include="Nullables.NHibernate, Version=1.0.0.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+    <Reference Include="Nullables.NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Nullables.NHibernate.dll</HintPath>
+      <HintPath>..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

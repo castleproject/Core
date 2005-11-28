@@ -107,7 +107,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				AppendF( "<class {0} {1} {2} {3} {4} {5}>",
+				AppendF( "<class {0} {1} {2} {3} {4} {5} {6}>",
 					MakeAtt("name", MakeTypeName(model.Type)), 
 					MakeAtt("table", model.ActiveRecordAtt.Table),
 					WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
