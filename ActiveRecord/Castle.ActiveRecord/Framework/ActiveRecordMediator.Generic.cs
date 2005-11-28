@@ -103,9 +103,12 @@ namespace Castle.ActiveRecord
             ActiveRecordBase.Execute(typeof(T), call, instnace);
         }
         
-        public static T ExecuteQuery(IActiveRecordQuery q)
+        //This may return more than one result, and more than one type,
+        //so this is here just to complement the non-generic version, instead of
+        //enhancing it, like the rest of the methods here.
+        public static object ExecuteQuery(IActiveRecordQuery q)
 		{
-			return (T)ActiveRecordBase.ExecuteQuery(q);
+			return ActiveRecordBase.ExecuteQuery(q);
 		}
 
 
