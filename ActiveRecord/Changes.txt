@@ -1,6 +1,7 @@
 
 beta 3
 ======
+- Closed: (AR-24) ValidationException must contain the validation error messages
 
 - Support for fields in addition to properties
 
