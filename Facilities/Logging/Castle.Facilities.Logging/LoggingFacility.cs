@@ -71,6 +71,11 @@ namespace Castle.Facilities.Logging
 			Kernel.AddComponentInstance( "ilogger.default", typeof(ILogger), factory.Create("Default") );
 		}
 
+		private void RegisterLoggerFactory()
+		{
+			Kernel.AddComponentInstance( "iloggerfactory", typeof(ILoggerFactory), factory );
+		}
+
 		private void RegisterSubResolver()
 		{
 			Kernel.Resolver.AddSubResolver( new LoggerResolver(factory) );
@@ -93,6 +98,8 @@ namespace Castle.Facilities.Logging
             }
 
 			CreateProperLoggerFactory(logApi, customAtt);
+
+			RegisterLoggerFactory();
         }
 
 		private void CreateProperLoggerFactory(LoggerImplementation logApi, String customType)
