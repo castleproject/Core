@@ -33,6 +33,7 @@ namespace Castle.Facilities.NHibernateIntegration
 	public class NHibernateGenericDao : INHibernateGenericDao
 	{
 		private readonly ISessionManager sessionManager;
+		private string sessionFactoryAlias = null;
 
 		public NHibernateGenericDao(ISessionManager sessionManager)
 		{
@@ -44,6 +45,13 @@ namespace Castle.Facilities.NHibernateIntegration
 			get { return sessionManager; }
 		}
 
+		public string SessionFactoryAlias
+		{
+			get { return sessionFactoryAlias; }
+			set { sessionFactoryAlias = value; }
+		}
+
+
 		#region IGenericDAO Members
 
 		public virtual Array FindAll(Type type)
@@ -53,7 +61,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual Array FindAll(Type type, int firstRow, int maxRows)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -78,7 +86,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual object FindById(Type type, object id)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -97,7 +105,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual object Create(object instance)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -112,7 +120,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual void Delete(object instance)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -127,7 +135,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual void Update(object instance)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -142,7 +150,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual void DeleteAll(Type type)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -157,7 +165,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual void Save(object instance)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -191,7 +199,7 @@ namespace Castle.Facilities.NHibernateIntegration
 
 		public virtual Array FindAll(Type type, ICriterion[] criterias, Order[] sortItems, int firstRow, int maxRows)
 		{
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -235,7 +243,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (queryString == null || queryString.Length == 0) throw new ArgumentNullException("queryString");
 
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -268,7 +276,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (namedQuery == null || namedQuery.Length == 0) throw new ArgumentNullException("queryString");
 
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				try
 				{
@@ -296,7 +304,7 @@ namespace Castle.Facilities.NHibernateIntegration
 		{
 			if (instance == null) throw new ArgumentNullException("instance");
 
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				foreach (object val in ReflectionUtil.GetPropertiesDictionary(instance).Values)
 				{
@@ -323,7 +331,7 @@ namespace Castle.Facilities.NHibernateIntegration
 					+ propertyName + " doest not exist for type "
 					+ instance.GetType().ToString() + ".");
 
-			using (ISession session = SessionManager.OpenSession())
+			using (ISession session = GetSession())
 			{
 				object val = properties[propertyName];
 
@@ -338,6 +346,16 @@ namespace Castle.Facilities.NHibernateIntegration
 			}
 		}
 
+		#endregion
+
+		#region Private methods
+		private ISession GetSession()
+		{
+			if (sessionFactoryAlias == null || sessionFactoryAlias.Length == 0)
+				return sessionManager.OpenSession();
+			else
+				return sessionManager.OpenSession(sessionFactoryAlias);
+		}
 		#endregion
 	}
 }
