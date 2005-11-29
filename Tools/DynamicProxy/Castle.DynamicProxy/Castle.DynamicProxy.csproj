@@ -224,6 +224,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\AddressOfReferenceExpression.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\ArgumentReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -285,6 +290,11 @@
                 />
                 <File
                     RelPath = "Builder\CodeBuilder\SimpleAST\IEmitter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Builder\CodeBuilder\SimpleAST\IndirectReference.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

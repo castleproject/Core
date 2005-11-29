@@ -22,7 +22,13 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	/// </summary>
 	abstract class OpCodeUtil
 	{
-		public static void ConvertValueToLdcOpCode(ILGenerator gen, object value)
+		/// <summary>
+		/// Emits a load opcode of the appropriate kind for a constant string or
+		/// primitive value.
+		/// </summary>
+		/// <param name="gen"></param>
+		/// <param name="value"></param>
+		public static void EmitLoadOpCodeForConstantValue(ILGenerator gen, object value)
 		{
 			if (value is String)
 			{
@@ -45,41 +51,41 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 		}
 
 		/// <summary>
-		/// Converts a Value type to a correspondent OpCode
-		/// of value type allocation
+		/// Emits a load opcode of the appropriate kind for the constant default value of a
+		/// type, such as 0 for value types and null for reference types.
+		/// </summary>
+		public static void EmitLoadOpCodeForDefaultValueOfType(ILGenerator gen, Type type)
+		{
+			if (type.IsPrimitive)
+			{
+				gen.Emit(LdcOpCodesDictionary.Instance[type], 0);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldnull);
+			}
+		}
+
+		/// <summary>
+		/// Emits a load indirect opcode of the appropriate type for a value or object reference.
+		/// Pops a pointer off the evaluation stack, dereferences it and loads
+		/// a value of the specified type.
 		/// </summary>
 		/// <param name="gen"></param>
-		public static void ConvertTypeToOpCode(ILGenerator gen, Type type)
+		/// <param name="type"></param>
+		public static void EmitLoadIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
 			if (type.IsEnum)
 			{
-				Enum baseType = (Enum) Activator.CreateInstance(type);
-				TypeCode code = baseType.GetTypeCode();
-
-				switch (code)
-				{
-					case TypeCode.SByte:
-						type = typeof (SByte);
-						break;
-					case TypeCode.Byte:
-						type = typeof (Byte);
-						break;
-					case TypeCode.Int16:
-						type = typeof (Int16);
-						break;
-					case TypeCode.Int32:
-						type = typeof (Int32);
-						break;
-					case TypeCode.Int64:
-						type = typeof (Int64);
-						break;
-				}
-
-				ConvertTypeToOpCode(gen, type);
+				EmitLoadIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
 				return;
 			}
 
-			if (type.IsPrimitive)
+			if (type.IsByRef)
+			{
+				throw new NotSupportedException("Cannot load ByRef values");
+			}
+			else if (type.IsPrimitive)
 			{
 				OpCode opCode = LdindOpCodesDictionary.Instance[type];
 
@@ -90,9 +96,75 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 
 				gen.Emit(opCode);
 			}
-			else
+			else if (type.IsValueType)
 			{
 				gen.Emit(OpCodes.Ldobj, type);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldind_Ref);
+			}
+		}
+
+		/// <summary>
+		/// Emits a store indirectopcode of the appropriate type for a value or object reference.
+		/// Pops a value of the specified type and a pointer off the evaluation stack, and
+		/// stores the value.
+		/// </summary>
+		/// <param name="gen"></param>
+		/// <param name="type"></param>
+		public static void EmitStoreIndirectOpCodeForType(ILGenerator gen, Type type)
+		{
+			if (type.IsEnum)
+			{
+				EmitStoreIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
+				return;
+			}
+
+			if (type.IsByRef)
+			{
+				throw new NotSupportedException("Cannot store ByRef values");
+			}
+			else if (type.IsPrimitive)
+			{
+				OpCode opCode = StindOpCodesDictionary.Instance[type];
+
+				if (Object.ReferenceEquals(opCode, StindOpCodesDictionary.EmptyOpCode))
+				{
+					throw new ArgumentException("Type " + type + " could not be converted to a OpCode");
+				}
+
+				gen.Emit(opCode);
+			}
+			else if (type.IsValueType)
+			{
+				gen.Emit(OpCodes.Stobj, type);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Stind_Ref);
+			}
+		}
+
+		private static Type GetUnderlyingTypeOfEnum(Type enumType)
+		{
+			Enum baseType = (Enum)Activator.CreateInstance(enumType);
+			TypeCode code = baseType.GetTypeCode();
+
+			switch (code)
+			{
+				case TypeCode.SByte:
+					return typeof(SByte);
+				case TypeCode.Byte:
+					return typeof(Byte);
+				case TypeCode.Int16:
+					return typeof(Int16);
+				case TypeCode.Int32:
+					return typeof(Int32);
+				case TypeCode.Int64:
+					return typeof(Int64);
+				default:
+					throw new NotSupportedException();
 			}
 		}
 	}

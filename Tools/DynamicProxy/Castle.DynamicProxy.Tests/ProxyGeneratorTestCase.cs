@@ -312,7 +312,7 @@ namespace Castle.DynamicProxy.Test
 
 		[Test]
 		[Category("DotNetOnly")]
-		public void ProxyForRefAndOutClass()
+		public void ProxyForRefAndOutClassWithPrimitiveTypeParams()
 		{
 			LogInvokeInterceptor interceptor = new LogInvokeInterceptor();
 
@@ -322,15 +322,176 @@ namespace Castle.DynamicProxy.Test
 
 			Assert.IsNotNull(proxy);
 
-			int arg1 = 0;
-			proxy.RefPongOne(ref arg1);
-			Assert.AreEqual(1, arg1);
+			int int1 = -3;
+			proxy.RefInt(ref int1);
+			Assert.AreEqual(-2, int1);
+
+			int int2;
+			proxy.OutInt(out int2);
+			Assert.AreEqual(2, int2);
+
+			Assert.AreEqual("RefInt OutInt ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Category("DotNetOnly")]
+		public void ProxyForRefAndOutClassWithReferenceTypeParams()
+		{
+			LogInvokeInterceptor interceptor = new LogInvokeInterceptor();
+
+			RefAndOutClass proxy = (RefAndOutClass)
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), interceptor);
+
+			Assert.IsNotNull(proxy);
+
+			string string1 = "foobar";
+			proxy.RefString(ref string1);
+			Assert.AreEqual("foobar_string", string1);
+
+			string string2;
+			proxy.OutString(out string2);
+			Assert.AreEqual("string", string2);
+
+			Assert.AreEqual("RefString OutString ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Category("DotNetOnly")]
+		public void ProxyForRefAndOutClassWithStructTypeParams()
+		{
+			LogInvokeInterceptor interceptor = new LogInvokeInterceptor();
+
+			RefAndOutClass proxy = (RefAndOutClass)
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), interceptor);
+
+			Assert.IsNotNull(proxy);
+
+			DateTime dt1 = new DateTime(1999, 1, 1);
+			proxy.RefDateTime(ref dt1);
+			Assert.AreEqual(new DateTime(2000, 1, 1), dt1);
+
+			DateTime dt2;
+			proxy.OutDateTime(out dt2);
+			Assert.AreEqual(new DateTime(2005, 1, 1), dt2);
+
+			Assert.AreEqual("RefDateTime OutDateTime ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Category("DotNetOnly")]
+		public void ProxyForRefAndOutClassWithEnumTypeParams()
+		{
+			LogInvokeInterceptor interceptor = new LogInvokeInterceptor();
+
+			RefAndOutClass proxy = (RefAndOutClass)
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), interceptor);
+
+			Assert.IsNotNull(proxy);
+
+			SByteEnum value1 = SByteEnum.One;
+			proxy.RefSByteEnum(ref value1);
+			Assert.AreEqual(SByteEnum.Two, value1);
+
+			SByteEnum value2;
+			proxy.OutSByteEnum(out value2);
+			Assert.AreEqual(SByteEnum.Two, value2);
+
+			Assert.AreEqual("RefSByteEnum OutSByteEnum ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Category("DotNetOnly")]
+		public void ProxyForRefAndOutClassWithPrimitiveTypeParamsWhereInterceptorModifiesTheValues()
+		{
+			RefAndOutInterceptor interceptor = new RefAndOutInterceptor();
+
+			RefAndOutClass proxy = (RefAndOutClass)
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), interceptor);
+
+			Assert.IsNotNull(proxy);
+
+			int arg1 = -3;
+			proxy.RefInt(ref arg1);
+			Assert.AreEqual(98, arg1);
 
 			int arg2;
-			proxy.OutPingTwo(out arg2);
-			Assert.AreEqual(2, arg2);
+			proxy.OutInt(out arg2);
+			Assert.AreEqual(102, arg2);
 
-			Assert.AreEqual("RefPongOne OutPingTwo ", interceptor.LogContents);
+			Assert.AreEqual("RefInt OutInt ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Category("DotNetOnly")]
+		public void ProxyForRefAndOutClassWithReferenceTypeParamsWhereInterceptorModifiesTheValues()
+		{
+			RefAndOutInterceptor interceptor = new RefAndOutInterceptor();
+
+			RefAndOutClass proxy = (RefAndOutClass)
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), interceptor);
+
+			Assert.IsNotNull(proxy);
+
+			string string1 = "foobar";
+			proxy.RefString(ref string1);
+			Assert.AreEqual("foobar_string_xxx", string1);
+
+			string string2;
+			proxy.OutString(out string2);
+			Assert.AreEqual("string_xxx", string2);
+
+			Assert.AreEqual("RefString OutString ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Category("DotNetOnly")]
+		public void ProxyForRefAndOutClassWithStructTypeParamsWhereInterceptorModifiesTheValues()
+		{
+			RefAndOutInterceptor interceptor = new RefAndOutInterceptor();
+
+			RefAndOutClass proxy = (RefAndOutClass)
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), interceptor);
+
+			Assert.IsNotNull(proxy);
+
+			DateTime dt1 = new DateTime(1999, 1, 1);
+			proxy.RefDateTime(ref dt1);
+			Assert.AreEqual(new DateTime(2000, 2, 1), dt1);
+
+			DateTime dt2;
+			proxy.OutDateTime(out dt2);
+			Assert.AreEqual(new DateTime(2005, 2, 1), dt2);
+
+			Assert.AreEqual("RefDateTime OutDateTime ", interceptor.LogContents);
+		}
+
+		[Test]
+		[Category("DotNetOnly")]
+		public void ProxyForRefAndOutClassWithEnumTypeParamsWhereInterceptorModifiesTheValues()
+		{
+			RefAndOutInterceptor interceptor = new RefAndOutInterceptor();
+
+			RefAndOutClass proxy = (RefAndOutClass)
+				_generator.CreateClassProxy(
+				typeof(RefAndOutClass), interceptor);
+
+			Assert.IsNotNull(proxy);
+
+			SByteEnum value1 = SByteEnum.One;
+			proxy.RefSByteEnum(ref value1);
+			Assert.AreEqual(SByteEnum.One, value1);
+
+			SByteEnum value2;
+			proxy.OutSByteEnum(out value2);
+			Assert.AreEqual(SByteEnum.One, value2);
+
+			Assert.AreEqual("RefSByteEnum OutSByteEnum ", interceptor.LogContents);
 		}
 
 		[Test]

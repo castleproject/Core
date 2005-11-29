@@ -4,6 +4,7 @@ Version 1.4.6
  * Fixed a problem with overloaded indexed properties
  * Added ability to handle internal classes using .Net 2 InternalsVisibleTo
  * Removed trace warning when method is not found on object.
+ * Applied patch from Jeff Brown <Jeff@ingenio.com> to support ref and out params.
 
 Version 1.0.6
 - Applied patch from Corneliu I. Tusnea

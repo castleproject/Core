@@ -194,6 +194,7 @@
     <Compile Include="ExplicitImplementationOfISerializable.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interceptors\RefAndOutInterceptor.cs" />
     <Compile Include="Interceptors\HashtableInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
 	using System.Reflection.Emit;
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
 	/// <summary>
 	/// Summary description for ReferencesToObjectArrayExpression.
@@ -44,7 +45,12 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 				TypeReference reference = _args[i];
 
-				_args[i].LoadReference( gen );
+				ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
+
+				if (reference.Type.IsByRef)
+				{
+					throw new NotSupportedException();
+				}
 
 				if (reference.Type.IsValueType)
 				{

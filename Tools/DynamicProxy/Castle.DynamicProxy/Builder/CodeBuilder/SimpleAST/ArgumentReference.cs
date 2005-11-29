@@ -67,5 +67,10 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 			// We'd like to keep arguments read-only
 			throw new NotImplementedException();
 		}
+
+		public override void LoadAddressOfReference(ILGenerator gen)
+		{
+			throw new NotSupportedException();
+		}
 	}
 }

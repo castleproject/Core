@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Summary description for LdOpCodesDictionary.
+	/// Provides appropriate Ldc.X opcode for the type of primitive value to be loaded.
 	/// </summary>
 	public sealed class LdcOpCodesDictionary : DictionaryBase
 	{
@@ -65,7 +65,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 	}
 
 	/// <summary>
-	/// Summary description for LdOpCodesDictionary.
+	/// Provides appropriate Ldind.X opcode for the type of primitive value to be loaded indirectly.
 	/// </summary>
 	public sealed class LdindOpCodesDictionary : DictionaryBase
 	{
@@ -109,4 +109,51 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.Utils
 			get { return _emptyOpCode; }
 		}
 	}
+
+	/// <summary>
+	/// Provides appropriate Stind.X opcode for the type of primitive value to be stored indirectly.
+	/// </summary>
+	public sealed class StindOpCodesDictionary : DictionaryBase
+	{
+		private static readonly StindOpCodesDictionary _dict = new StindOpCodesDictionary();
+
+		private static readonly OpCode _emptyOpCode = new OpCode();
+
+		private StindOpCodesDictionary() : base()
+		{
+			Dictionary[typeof(bool)] = OpCodes.Stind_I1;
+			Dictionary[typeof(SByte)] = OpCodes.Stind_I1;
+			Dictionary[typeof(Int16)] = OpCodes.Stind_I2;
+			Dictionary[typeof(Int32)] = OpCodes.Stind_I4;
+			Dictionary[typeof(Int64)] = OpCodes.Stind_I8;
+			Dictionary[typeof(float)] = OpCodes.Stind_R4;
+			Dictionary[typeof(double)] = OpCodes.Stind_R8;
+			Dictionary[typeof(byte)] = OpCodes.Stind_I1;
+			Dictionary[typeof(UInt16)] = OpCodes.Stind_I2;
+			Dictionary[typeof(UInt32)] = OpCodes.Stind_I4;
+		}
+
+		public OpCode this[Type type]
+		{		
+			get
+			{
+				if (Dictionary.Contains(type))
+				{
+					return (OpCode)Dictionary[type];
+				}
+				return EmptyOpCode;
+			}
+		}
+
+		public static StindOpCodesDictionary Instance
+		{
+			get { return _dict; }
+		}
+
+		public static OpCode EmptyOpCode
+		{
+			get { return _emptyOpCode; }
+		}
+	}
+
 }

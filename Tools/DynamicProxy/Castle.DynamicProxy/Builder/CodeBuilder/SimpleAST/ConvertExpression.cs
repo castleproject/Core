@@ -49,27 +49,51 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 				return;
 			}
 
-			if (_target.IsValueType && !_fromType.IsValueType)
+			if (_fromType.IsByRef)
 			{
-				gen.Emit(OpCodes.Unbox, _target);
-				OpCodeUtil.ConvertTypeToOpCode(gen, _target);
-				return;
+				throw new NotSupportedException("Cannot convert from ByRef types");
 			}
-			else if (!_target.IsValueType && _fromType.IsValueType)
+
+			if (_target.IsByRef)
 			{
-				gen.Emit(OpCodes.Box, _fromType);
+				throw new NotSupportedException("Cannot convert to ByRef types");
 			}
-			
-			if (_target != typeof(Object))
+
+			if (_target.IsValueType)
 			{
-				if (_target.IsByRef)
+				if (_fromType.IsValueType)
 				{
-					//ignore ref
+					throw new NotImplementedException("Cannot convert between distinct value types at the moment");
 				}
 				else
 				{
-					gen.Emit(OpCodes.Castclass, _target);
+					// Unbox conversion
+					// Assumes fromType is a boxed value
+					gen.Emit(OpCodes.Unbox, _target);
+					OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, _target);
 				}
+			}
+			else
+			{
+				if (_fromType.IsValueType)
+				{
+					// Box conversion
+					gen.Emit(OpCodes.Box, _fromType);
+					EmitCastIfNeeded(typeof(object), _target, gen);
+				}
+				else
+				{
+					// Possible down-cast
+					EmitCastIfNeeded(_fromType, _target, gen);
+				}
+			}
+		}
+
+		private void EmitCastIfNeeded(Type from, Type target, ILGenerator gen)
+		{
+			if (target.IsSubclassOf(from))
+			{
+				gen.Emit(OpCodes.Castclass, target);
 			}
 		}
 	}

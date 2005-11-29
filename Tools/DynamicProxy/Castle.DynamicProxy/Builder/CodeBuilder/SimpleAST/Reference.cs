@@ -45,9 +45,16 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 			return new ReferenceExpression(this);
 		}
 
+		public virtual Expression ToAddressOfExpression()
+		{
+			return new AddressOfReferenceExpression(this);
+		}
+
 		public virtual void Generate(ILGenerator gen)
 		{
 		}
+
+		public abstract void LoadAddressOfReference(ILGenerator gen);
 
 		public abstract void LoadReference(ILGenerator gen);
 

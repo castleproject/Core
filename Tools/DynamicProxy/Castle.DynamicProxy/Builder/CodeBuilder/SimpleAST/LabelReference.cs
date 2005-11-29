@@ -53,5 +53,10 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		{
 			throw new NotImplementedException();
 		}
+
+		public override void LoadAddressOfReference(ILGenerator gen)
+		{
+			throw new NotSupportedException();
+		}
 	}
 }

@@ -656,6 +656,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         protected virtual void WriteInterceptorInvocationMethod(MethodInfo method, EasyMethod builder)
         {
             ArgumentReference[] arguments = builder.Arguments;
+            TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(builder.Arguments);
 
             LocalReference local_inv = builder.CodeBuilder.DeclareLocal(Context.Invocation);
 
@@ -670,13 +671,32 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
                         GetPseudoInvocationTarget(method))));
 
             LocalReference ret_local = builder.CodeBuilder.DeclareLocal(typeof(object));
+            LocalReference args_local = builder.CodeBuilder.DeclareLocal(typeof(object[]));
 
+            // Store arguments into an object array.
+            builder.CodeBuilder.AddStatement(
+                new AssignStatement(args_local,
+                    new ReferencesToObjectArrayExpression(dereferencedArguments)));
+
+            // Invoke the interceptor.
             builder.CodeBuilder.AddStatement(
                 new AssignStatement(ret_local,
                     new VirtualMethodInvocationExpression(InterceptorField,
                         Context.Interceptor.GetMethod("Intercept"),
                         local_inv.ToExpression(),
-                        new ReferencesToObjectArrayExpression(arguments))));
+                        args_local.ToExpression())));
+
+            // Load possibly modified ByRef arguments from the array.
+            for (int i = 0; i < arguments.Length; i++)
+            {
+                if (arguments[i].Type.IsByRef)
+                {
+                    builder.CodeBuilder.AddStatement(
+                        new AssignStatement(dereferencedArguments[i], 
+                            new ConvertExpression(dereferencedArguments[i].Type,
+                                new LoadRefArrayElementExpression(i, args_local))));
+                }
+            }
 
             if (builder.ReturnType == typeof(void))
             {

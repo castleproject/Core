@@ -43,5 +43,10 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		{
 			gen.Emit( OpCodes.Stloc, _localbuilder );
 		}
+
+		public override void LoadAddressOfReference(ILGenerator gen)
+		{
+			gen.Emit(OpCodes.Ldloca, _localbuilder);
+		}
 	}
 }

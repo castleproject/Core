@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Interceptors\RefAndOutInterceptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Interceptors\ResultModifiedInvocationHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -38,9 +38,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void Emit(IEasyMember member, ILGenerator il)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference( _targetArray.OwnerReference, il );
-			
-			_targetArray.LoadReference( il );
+			ArgumentsUtil.EmitLoadOwnerAndReference( _targetArray, il );
 			
 			il.Emit(OpCodes.Ldc_I4, _targetPosition);
 

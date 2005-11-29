@@ -71,30 +71,64 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			
 			// LocalReference localRef = method.CodeBuilder.DeclareLocal( typeof(object) );
 
-			Expression[] arguments = new Expression[_args.Length];
+			TypeReference[] dereferencedArguments = IndirectReference.WrapIfByRef(_args);
+			LocalReference[] localCopies = new LocalReference[_args.Length];
+			Expression[] invocationArguments = new Expression[_args.Length];
 
+			// Load arguments from the object array. 
 			for (int i = 0; i < _args.Length; i++)
 			{
-				ArgumentReference argument = _args[i];
-				arguments[i] = new ConvertExpression( argument.Type, 
-					new LoadRefArrayElementExpression(i, arg) );
+				if (_args[i].Type.IsByRef)
+				{
+					localCopies[i] = _callmethod.CodeBuilder.DeclareLocal(dereferencedArguments[i].Type);
+
+					_callmethod.CodeBuilder.AddStatement(new AssignStatement(localCopies[i],
+						new ConvertExpression(dereferencedArguments[i].Type,
+							new LoadRefArrayElementExpression(i, arg))));
+
+					invocationArguments[i] = localCopies[i].ToAddressOfExpression();
+				}
+				else
+				{
+					invocationArguments[i] = new ConvertExpression(dereferencedArguments[i].Type,
+						new LoadRefArrayElementExpression(i, arg));
+				}
 			}
 
+			// Invoke the method.
 			MethodInvocationExpression methodInv = new MethodInvocationExpression( 
 				_invokeMethod,
-				arguments );
+				invocationArguments );
 
+			Expression result = null;
 			if (_returnType.Type == typeof(void))
 			{
-				_callmethod.CodeBuilder.AddStatement( new ExpressionStatement(methodInv) );
-				_callmethod.CodeBuilder.AddStatement( new ReturnStatement( NullExpression.Instance ) );
+				_callmethod.CodeBuilder.AddStatement(new ExpressionStatement(methodInv));
+				result = NullExpression.Instance;
 			}
 			else
 			{
-				ConvertExpression conversion = new ConvertExpression( 
-					typeof(object), _returnType.Type, methodInv );
-				_callmethod.CodeBuilder.AddStatement( new ReturnStatement( conversion ) );
+				LocalReference resultLocal = _callmethod.CodeBuilder.DeclareLocal(typeof(object));
+
+				_callmethod.CodeBuilder.AddStatement(new AssignStatement(resultLocal,
+					new ConvertExpression(typeof(object), _returnType.Type, methodInv)));
+
+				result = resultLocal.ToExpression();
 			}
+
+			// Save ByRef arguments into the object array.
+			for (int i = 0; i < _args.Length; i++)
+			{
+				if (_args[i].Type.IsByRef)
+				{
+					_callmethod.CodeBuilder.AddStatement(new AssignArrayStatement(arg, i,
+						new ConvertExpression(typeof(object), dereferencedArguments[i].Type,
+							localCopies[i].ToExpression())));
+				}
+			}
+
+			// Return.
+			_callmethod.CodeBuilder.AddStatement( new ReturnStatement( result ) );
 		}
 
 		private void GenerateTargetProperty()

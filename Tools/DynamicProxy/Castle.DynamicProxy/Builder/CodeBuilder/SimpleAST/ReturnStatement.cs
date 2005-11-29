@@ -46,11 +46,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		{
 			if (_reference != null)
 			{
-				if (_reference.OwnerReference != null)
-				{
-					_reference.OwnerReference.LoadReference( gen );
-				}
-				_reference.LoadReference( gen );
+				ArgumentsUtil.EmitLoadOwnerAndReference(_reference, gen);
 			}
 			else if (_expression != null)
 			{
@@ -60,8 +56,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 			{
 				if (member.ReturnType != typeof(void))
 				{
-					// Only value types supported
-					gen.Emit( LdcOpCodesDictionary.Instance[member.ReturnType], 0 );
+					OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, member.ReturnType);
 				}
 			}
 			gen.Emit(OpCodes.Ret);

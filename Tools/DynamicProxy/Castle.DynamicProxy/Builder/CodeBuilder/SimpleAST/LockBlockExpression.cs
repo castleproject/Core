@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 	using System.Reflection.Emit;
 	using System.Collections;
 	using System.Threading;
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
 	/// <summary>
 	/// Summary description for LockBlockExpression.
@@ -41,7 +42,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			_syncLockSource.LoadReference(gen);
+			ArgumentsUtil.EmitLoadOwnerAndReference(_syncLockSource, gen);
+
 			gen.Emit(OpCodes.Call, typeof(Monitor).GetMethod("Enter"));
 
 			Label tryBlock = gen.BeginExceptionBlock();
@@ -53,7 +55,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 
 			gen.BeginFinallyBlock();
-			_syncLockSource.LoadReference(gen);
+			ArgumentsUtil.EmitLoadOwnerAndReference(_syncLockSource, gen);
 			gen.Emit(OpCodes.Call, typeof(Monitor).GetMethod("Exit"));
 			gen.EndExceptionBlock();
 

@@ -43,12 +43,17 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void LoadReference(ILGenerator gen)
 		{
-			OpCodeUtil.ConvertValueToLdcOpCode(gen, _value);
+			OpCodeUtil.EmitLoadOpCodeForConstantValue(gen, _value);
 		}
 
 		public override void StoreReference(ILGenerator gen)
 		{
 			throw new NotImplementedException("FixedReference.StoreReference");
+		}
+
+		public override void LoadAddressOfReference(ILGenerator gen)
+		{
+			throw new NotSupportedException();
 		}
 	}
 }

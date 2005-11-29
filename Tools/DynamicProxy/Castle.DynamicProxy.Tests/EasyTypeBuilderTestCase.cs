@@ -26,6 +26,8 @@ namespace Castle.DynamicProxy.Test
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 
 	using NUnit.Framework;
+	using Castle.DynamicProxy.Test.Classes;
+	using System.Threading;
 
 	[TestFixture]
 	public class EasyTypeBuilderTestCase
@@ -40,23 +42,24 @@ namespace Castle.DynamicProxy.Test
 
 		public void RunPEVerify()
 		{
-//			if (false && module.SaveAssembly())
-			//if (module.SaveAssembly())
-//			{
-//				Process process = new Process();
-//				process.StartInfo.UseShellExecute = false;
-//				process.StartInfo.RedirectStandardOutput = true;
-//				process.StartInfo.Arguments = ModuleScope.FILE_NAME;
-//				// Hack. Should it find in the path? 
-//				// I thought it would.
-//				process.StartInfo.FileName = @"C:\Arquivos de programas\Microsoft Visual Studio .NET 2003\SDK\v1.1\Bin\PEVerify.exe";
-//				process.Start();
-//				process.WaitForExit( Int32.MaxValue );
-//				if (process.ExitCode != 0)
-//				{
-//					Assert.Fail( process.StandardOutput.ReadToEnd() );
-//				}
-//			}
+#if false
+			if (module.SaveAssembly())
+			{
+				Process process = new Process();
+				process.StartInfo.UseShellExecute = false;
+				process.StartInfo.RedirectStandardOutput = true;
+				process.StartInfo.Arguments = ModuleScope.FILE_NAME;
+				// Hack. Should it find in the path? 
+				// I thought it would.
+				process.StartInfo.FileName = @"C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\PEVerify.exe";
+				process.Start();
+				process.WaitForExit( Int32.MaxValue );
+				if (process.ExitCode != 0)
+				{
+					Assert.Fail( process.StandardOutput.ReadToEnd() );
+				}
+			}
+#endif
 		}
 
 		[Test]
@@ -496,14 +499,12 @@ namespace Castle.DynamicProxy.Test
 		}
 
 		[Test]
-		public void EmptyMethodWithRefArg()
+		public void EmptyMethodWithPrimitiveTypeRefArg()
 		{
 			EasyType typebuilder = new EasyType( module, "mytype" );
 
-			object refArgInst = 0;
-			Type refType = GetRefType(ref refArgInst);
-
-			Assert.IsTrue(refType.IsByRef);
+			int refArgInst = 42;
+			Type refType = GetPrimitiveRefType(ref refArgInst);
 
 			ArgumentReference refArg = new ArgumentReference( refType );
 			ReturnReferenceExpression ret = new ReturnReferenceExpression(typeof(int));
@@ -518,16 +519,131 @@ namespace Castle.DynamicProxy.Test
 			MethodInfo method = instance.GetType().GetMethod("DoSomething");
 			method.Invoke( instance, new object[]{refArgInst} );
 
+			Assert.AreEqual(42, refArgInst, "Argument made round-trip successfully");
+
 			RunPEVerify();
 		}
 
-		public Type GetRefType(ref object refArg)
+		[Test]
+		public void EmptyMethodWithReferenceTypeRefArg()
 		{
-			ParameterInfo[] parameters = this.GetType().GetMethod("GetRefType").GetParameters();
+			EasyType typebuilder = new EasyType(module, "mytype");
 
+			string refArgInst = "foobar";
+			Type refType = GetReferenceRefType(ref refArgInst);
+
+			ArgumentReference refArg = new ArgumentReference(refType);
+			ReturnReferenceExpression ret = new ReturnReferenceExpression(typeof(int));
+
+			EasyMethod emptyMethod = typebuilder.CreateMethod("DoSomething", ret, refArg);
+
+			Type newType = typebuilder.BuildType();
+			Assert.IsNotNull(newType);
+			object instance = Activator.CreateInstance(newType);
+			Assert.IsNotNull(instance);
+
+			MethodInfo method = instance.GetType().GetMethod("DoSomething");
+			method.Invoke(instance, new object[] { refArgInst });
+
+			Assert.AreEqual("foobar", refArgInst, "Argument made round-trip successfully");
+
+			RunPEVerify();
+		}
+
+		[Test]
+		public void EmptyMethodWithStructTypeRefArg()
+		{
+			EasyType typebuilder = new EasyType(module, "mytype");
+
+			DateTime refArgInst = new DateTime(2005, 1, 1);
+			Type refType = GetStructRefType(ref refArgInst);
+
+			Assert.IsTrue(refType.IsByRef);
+
+			ArgumentReference refArg = new ArgumentReference(refType);
+			ReturnReferenceExpression ret = new ReturnReferenceExpression(typeof(int));
+
+			EasyMethod emptyMethod = typebuilder.CreateMethod("DoSomething", ret, refArg);
+
+			Type newType = typebuilder.BuildType();
+			Assert.IsNotNull(newType);
+			object instance = Activator.CreateInstance(newType);
+			Assert.IsNotNull(instance);
+
+			MethodInfo method = instance.GetType().GetMethod("DoSomething");
+			method.Invoke(instance, new object[] { refArgInst });
+
+			Assert.AreEqual(new DateTime(2005, 1, 1), refArgInst, "Argument made round-trip successfully");
+
+			RunPEVerify();
+		}
+
+		[Test]
+		public void EmptyMethodWithEnumTypeRefArg()
+		{
+			EasyType typebuilder = new EasyType(module, "mytype");
+
+			SByteEnum refArgInst = SByteEnum.Two;
+			Type refType = GetEnumRefType(ref refArgInst);
+
+			Assert.IsTrue(refType.IsByRef);
+
+			ArgumentReference refArg = new ArgumentReference(refType);
+			ReturnReferenceExpression ret = new ReturnReferenceExpression(typeof(int));
+
+			EasyMethod emptyMethod = typebuilder.CreateMethod("DoSomething", ret, refArg);
+
+			Type newType = typebuilder.BuildType();
+			Assert.IsNotNull(newType);
+			object instance = Activator.CreateInstance(newType);
+			Assert.IsNotNull(instance);
+
+			MethodInfo method = instance.GetType().GetMethod("DoSomething");
+			method.Invoke(instance, new object[] { refArgInst });
+
+			Assert.AreEqual(SByteEnum.Two, refArgInst, "Argument made round-trip successfully");
+
+			RunPEVerify();
+		}
+
+		public Type GetPrimitiveRefType(ref int refArg)
+		{
+			// Need this because .Net 1.1 does not have the Type.MakeByRefType method.
+			ParameterInfo[] parameters = this.GetType().GetMethod("GetPrimitiveRefType").GetParameters();
 			Assert.AreEqual(1, parameters.Length);
+			Type refType = parameters[0].ParameterType;
+			Assert.IsTrue(refType.IsByRef);
+			return refType;
+		}
 
-			return parameters[0].ParameterType;
+		public Type GetReferenceRefType(ref string refArg)
+		{
+			// Need this because .Net 1.1 does not have the Type.MakeByRefType method.
+			ParameterInfo[] parameters = this.GetType().GetMethod("GetReferenceRefType").GetParameters();
+			Assert.AreEqual(1, parameters.Length);
+			Type refType = parameters[0].ParameterType;
+			Assert.IsTrue(refType.IsByRef);
+			return refType;
+		}
+
+		public Type GetStructRefType(ref DateTime refArg)
+		{
+			// Need this because .Net 1.1 does not have the Type.MakeByRefType method.
+			ParameterInfo[] parameters = this.GetType().GetMethod("GetStructRefType").GetParameters();
+			Assert.AreEqual(1, parameters.Length);
+			Type refType = parameters[0].ParameterType;
+			Assert.IsTrue(refType.IsByRef);
+			return refType;
+		}
+
+		public Type GetEnumRefType(ref SByteEnum refArg)
+		{
+			// Need this because .Net 1.1 does not have the Type.MakeByRefType method.
+			ParameterInfo[] parameters = this.GetType().GetMethod("GetEnumRefType").GetParameters();
+			Assert.AreEqual(1, parameters.Length);
+			Type refType = parameters[0].ParameterType;
+			Assert.IsTrue(refType.IsByRef);
+			return refType;
 		}
 	}
 }

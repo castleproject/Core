@@ -38,5 +38,10 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 		{
 			gen.Emit(OpCodes.Ldarg_0);
 		}
+
+		public override void LoadAddressOfReference(ILGenerator gen)
+		{
+			throw new NotSupportedException();
+		}
 	}
 }

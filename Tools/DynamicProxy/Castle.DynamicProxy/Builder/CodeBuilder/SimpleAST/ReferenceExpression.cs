@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 {
 	using System;
 	using System.Reflection.Emit;
+	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
 
 	/// <summary>
 	/// Summary description for ReferenceExpression.
@@ -32,11 +33,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST
 
 		public override void Emit(IEasyMember member, ILGenerator gen)
 		{
-			if (_reference.OwnerReference != null)
-			{
-				_reference.OwnerReference.StoreReference(gen);
-			}
-			_reference.LoadReference(gen);
+			ArgumentsUtil.EmitLoadOwnerAndReference(_reference, gen);
 		}
 	}
 }
