@@ -153,7 +153,7 @@ namespace Castle.MonoRail.Framework
 
 			foreach(ParameterInfo param in parameters)
 			{
-				object value = webParams.Get( param.Name );
+				object value = webParams.Get( GetRequestParameterName(param) );
 
 				if (value != null )
 				{
@@ -168,6 +168,11 @@ namespace Castle.MonoRail.Framework
 			}
 
 			return points;
+		}
+		
+		protected virtual String GetRequestParameterName(ParameterInfo param)
+		{
+			return param.Name;
 		}
 
 		protected virtual object[] BuildMethodArguments( ParameterInfo[] parameters, IRequest request )

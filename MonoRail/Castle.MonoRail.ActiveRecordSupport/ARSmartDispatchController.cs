@@ -117,7 +117,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			object obj = null;
 			
-			if (pk != null && String.Empty != pk)
+			if (pk != null && !String.Empty.Equals(pk))
 			{
 				PrimaryKeyModel pkModel = (PrimaryKeyModel) model.Ids[0];
 
@@ -182,6 +182,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					}
 				}
 			}			
+		}
+		
+		protected override String GetRequestParameterName(ParameterInfo param)
+		{
+			object[] fetchAttributes = param.GetCustomAttributes( typeof(ARFetchAttribute), false );
+			if (fetchAttributes.Length == 0)
+				return base.GetRequestParameterName(param);
+			
+			ARFetchAttribute attr = (ARFetchAttribute) fetchAttributes[0];
+			return attr.RequestParameterName != null 
+				? attr.RequestParameterName 
+				: base.GetRequestParameterName(param);
 		}
 	}
 }
