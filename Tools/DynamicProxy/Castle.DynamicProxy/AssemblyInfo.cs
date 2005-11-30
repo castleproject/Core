@@ -16,11 +16,11 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("DynamicProxy")]
+[assembly: AssemblyTitle("Castle.DynamicProxy")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Castle Project - http://www.castleproject.org/")]
-[assembly: AssemblyProduct("DynamicProxy")]
+[assembly: AssemblyProduct("Castle.DynamicProxy")]
 [assembly: AssemblyCopyright("Copyright (c) 2004,2005 Castle Project - http://www.castleproject.org/")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
