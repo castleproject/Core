@@ -102,7 +102,7 @@ Beta 5
 			}
 
 			// ignoring invalid primary keys
-			public void Save( [ARFetch(ThrowIfNotFound=false)] Example example, string name, ...)
+			public void Save( [ARFetch(Require=false)] Example example, string name, ...)
 			{
 				example.Name = name;
 				// ...
@@ -111,7 +111,7 @@ Beta 5
 			}
 
 			// not creating new records automatically, when the parameter is empty or null
-			public void Save( [ARFetch(AutoCreateNew=false)] Example example, string name, ...)
+			public void Save( [ARFetch(Create=false)] Example example, string name, ...)
 			{
 				if (example == null)
 					example = new Example(someRequiredConstructorParameter);
@@ -120,6 +120,13 @@ Beta 5
 				// ...
 				
 				example.Save();
+			}
+
+			// fetching a list of Active Records
+			public void Delete( [ARFetch("selected")] Example[] examples )
+			{
+				foreach (Example example in examples)
+					example.Delete();
 			}
 		}
 

@@ -86,6 +86,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		private object FetchActiveRecord( ParameterInfo param, ARFetchAttribute attr, IRequest request )
 		{
 			Type t = param.ParameterType;
+			bool isArray = t.IsArray;
+			if (isArray)
+				t = t.GetElementType();
+			
 			ActiveRecordModel model = ActiveRecordModel.GetModel(t);
 
 			if (model == null)
@@ -94,9 +98,25 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			if (model.Ids.Count != 1)
 				throw new RailsException("ARFetch only supports single-attribute primary keys");
 
-			object pk = request.Params[attr.RequestParameterName != null ? attr.RequestParameterName : param.Name];
-			object obj = null;
+			String webParamName = attr.RequestParameterName != null ? attr.RequestParameterName : param.Name;
+			
+			if (!isArray)
+				return LoadActiveRecord(t, request.Params[webParamName], attr, model);
+			
+			object[] pks = request.Params.GetValues(webParamName);
+			
+			Array objs = Array.CreateInstance(t, pks.Length);
+			
+			for (int i=0; i < objs.Length; i++)
+				objs.SetValue(LoadActiveRecord(t, pks[i], attr, model), i);
 
+			return objs;
+		}
+		
+		private object LoadActiveRecord(Type t, object pk, ARFetchAttribute attr, ActiveRecordModel model)
+		{
+			object obj = null;
+			
 			if (pk != null && String.Empty != pk)
 			{
 				PrimaryKeyModel pkModel = (PrimaryKeyModel) model.Ids[0];
@@ -105,10 +125,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				if (pk.GetType() != pkType)
 					pk = Convert.ChangeType(pk, pkType);
 			
-				obj = SupportingUtils.FindByPK(param.ParameterType, pk, attr.ThrowIfNotFound);
+				obj = SupportingUtils.FindByPK(t, pk, attr.Require);
 			}
 			
-			if (obj == null && attr.AutoCreateNew)
+			if (obj == null && attr.Create)
 				obj = Activator.CreateInstance(t);
 			
 			return obj;

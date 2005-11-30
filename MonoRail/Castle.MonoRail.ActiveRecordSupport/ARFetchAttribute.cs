@@ -26,13 +26,13 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public class ARFetchAttribute : Attribute
 	{
 		private String _requestParameterName;
-		private bool _autoCreateNew, _throwIfNotFound;
+		private bool _create, _require;
 		
-		public ARFetchAttribute(String requestParameterName, bool autoCreateNew, bool throwIfNotFound) : base()
+		public ARFetchAttribute(String requestParameterName, bool create, bool require) : base()
 		{
 			this._requestParameterName = requestParameterName;
-			this._autoCreateNew = autoCreateNew;
-			this._throwIfNotFound = throwIfNotFound;
+			this._create = create;
+			this._require = require;
 		}
 		
 		public ARFetchAttribute() : this(null, true, true)
@@ -43,7 +43,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 		}
 		
-		public ARFetchAttribute(bool autoCreateNew, bool throwIfNotFound) : this(null, autoCreateNew, throwIfNotFound)
+		public ARFetchAttribute(bool create, bool require) : this(null, create, require)
 		{
 		}
 		
@@ -53,16 +53,16 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { _requestParameterName = value; }
 		}
 
-		public bool AutoCreateNew
+		public bool Create
 		{
-			get { return _autoCreateNew; }
-			set { _autoCreateNew = value; }
+			get { return _create; }
+			set { _create = value; }
 		}
 		
-		public bool ThrowIfNotFound
+		public bool Require
 		{
-			get { return _throwIfNotFound; }
-			set { _throwIfNotFound = value; }
+			get { return _require; }
+			set { _require = value; }
 		}
 	}
 }
