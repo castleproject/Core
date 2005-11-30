@@ -274,10 +274,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			Hashtable innerContext = new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
 
-			innerContext.Add(TemplateKeys.Context,	context);
-			innerContext.Add(TemplateKeys.Request,	context.Request);
-			innerContext.Add(TemplateKeys.Response, context.Response);
-			innerContext.Add(TemplateKeys.Session,  context.Session);
+			innerContext.Add(TemplateKeys.Controller, controller);
+			innerContext.Add(TemplateKeys.Context,    context);
+			innerContext.Add(TemplateKeys.Request,    context.Request);
+			innerContext.Add(TemplateKeys.Response,   context.Response);
+			innerContext.Add(TemplateKeys.Session,    context.Session);
 
 			if (controller.Resources != null)
 			{
