@@ -44,9 +44,18 @@ namespace Castle.ActiveRecord
 		{
 		}
 
+		#region Serialization Support
 		public ValidationException( SerializationInfo info, StreamingContext context ) : base( info, context )
 		{
+			_validationErrorMessages = (String[]) info.GetValue("validationErrorMessages", typeof(String[]));
 		}
+		
+		public override void GetObjectData( SerializationInfo info, StreamingContext context )
+		{
+			info.AddValue("validationErrorMessages", _validationErrorMessages);
+			base.GetObjectData(info, context);
+		}
+		#endregion
 		
 		public ValidationException( String message, String[] errorMessages ) : base( message )
 		{
