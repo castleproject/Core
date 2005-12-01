@@ -205,7 +205,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public String LinkToPrevious(String linkText)
 		{
-			return LinkTo( linkText, Controller.Name, NextStepName );
+			return LinkTo( linkText, Controller.Name, PreviousStepName );
 		}
 
 		/// <summary>
