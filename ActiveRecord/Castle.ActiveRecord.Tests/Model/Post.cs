@@ -105,6 +105,11 @@ namespace Castle.ActiveRecord.Tests
 			return (Post[]) ActiveRecordBase.FindAll( typeof(Post) );
 		}
 
+		public static Post Find(int id)
+		{
+			return (Post) ActiveRecordBase.FindByPrimaryKey( typeof(Post), id );
+		}
+
 		public void SaveWithException()
 		{
 			Save();

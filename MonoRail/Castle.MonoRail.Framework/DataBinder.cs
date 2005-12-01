@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework
 			// param[0], param[1], ... param[count-1]
 			// otherwise we have to find all uniques id for that identifier
 			// which is probably slower but is more flexible
-			 String countBeforeCast = ctx.ParamList[paramPrefix + CountAttribute ];	
+			String countBeforeCast = ctx.ParamList[paramPrefix + CountAttribute];	
 		
 			if( countBeforeCast != null )
 			{

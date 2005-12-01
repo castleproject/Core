@@ -83,7 +83,6 @@
 				<include name="Castle.Services.Logging.dll" />
 				<include name="Castle.Services.Logging.Log4netIntegration.dll" />
 				<include name="Castle.Services.Logging.NLogIntegration.dll" />
-				<include name="Castle.Services.Logging.Web.dll" />
 			</fileset>
 		</copy>
 	</target>

@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
+
+<?define VsVersion = "dummy"?>
+
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
 
 	<Product 
@@ -13,6 +16,22 @@
 			Description="All Castle Binaries, documentation, samples and source code" 
 			Comments="All Castle Binaries, documentation, samples and source code" 
 			InstallerVersion="200" Compressed="yes" />
+
+		<Condition Message="An administrator must approve or install [ProductName].">Privileged</Condition>
+
+		<Property Id="VS2003_SCHEMAS_DIR">
+			<?undef VsVersion?>
+			<?define VsVersion = "7.1"?>
+			<RegistrySearch Id="SearchForCommonDirPath2003" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\$(var.VsVersion)\Setup\VC#" Name="ProductDir" Type="raw">
+			</RegistrySearch>
+		</Property>
+
+		<Property Id="VS2005_SCHEMAS_DIR">
+			<?undef VsVersion?>
+			<?define VsVersion = "8.0"?>
+			<RegistrySearch Id="SearchForCommonDirPath2005" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\$(var.VsVersion)\Setup\VC#" Name="ProductDir" Type="raw">
+			</RegistrySearch>
+		</Property>
 
 		<Media Id="1" Cabinet="Content.cab" EmbedCab="yes" CompressionLevel="high" />
 
@@ -169,6 +188,7 @@
 				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Castle">
 					<Registry Action="write" Name="vs7templatelocation" Type="string" Value="[TemplatesVs7Dir]" />
 				</Registry>
+				<Condition>VS2003_SCHEMAS_DIR</Condition>
 			</Component>
 		</DirectoryRef>
 		
@@ -178,36 +198,52 @@
 				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Castle">
 					<Registry Action="write" Name="vs8templatelocation" Type="string" Value="[TemplatesVs8Dir]" />
 				</Registry>
+				<Condition>VS2005_SCHEMAS_DIR</Condition>
 			</Component>
 		</DirectoryRef>
 
 		<!-- Features -->
-		<Feature Id="Complete" Title="Feature Title" Level="1" Description="AA" ConfigurableDirectory="INSTALLLOCATION">
-			<Feature Id='MainProgram' Title='Program' Description='The main executable.' Level='1'>
+		<Feature Id="Complete" Title="Castle" 
+			Display="expand" Level="1" Description="Castle Project" 
+			ConfigurableDirectory="INSTALLLOCATION">
+			
+			<Feature Id='MainProgram' Title='Binaries' Description='Castle assemblies and dependencies' Level='1'>
 				<ComponentRef Id="BasicComponent" />
 				<ComponentRef Id="ProductComponent" />
 				<ComponentRef Id="CassiniComponent" />
 			</Feature>
 
-			<Feature Id='Documentation' Title='Description' Description='The instruction manual.' Level='1000'>
+			<Feature Id='Documentation' Title='Documentation' Description='Castle documentation' Level='1'>
 				<ComponentRef Id='DocsComp' />
 			</Feature>
 
-			<Feature Id='SourceCode' Title='Source Code' Description='The instruction manual.' Level='1000'>
+			<Feature Id='SourceCode' Title='Source Code' Description='A zip file with the source code' Level='1'>
 				<ComponentRef Id='SourceComp' />
 			</Feature>
 
-			<Feature Id='Samples' Title='Samples' Description='The instruction manual.' Level='1000'>
+			<Feature Id='Samples' Title='Samples' Description='Zip files with sample applications' Level='1'>
 				<ComponentRef Id='samplescomp' />
 			</Feature>
 			
-			<Feature Id='VSWizards' Title='Visual Studio Wizards' Description='The instruction manual.' Level='1000'>
+			<Feature Id='VSWizards' Title='Visual Studio Wizards' Description='Wizards for VS.Net that helps in creating new projects' Level='1'>
 				<ComponentRef Id='vs7comp' />
 				<ComponentRef Id='vs8comp' />
 			</Feature>
 		</Feature>
 		
 		<UIRef Id="WixUI" />
+
+		<Binary Id="Up" src="Binary\Up.ico" />
+		<Binary Id="New" src="Binary\New.ico" />
+		<Binary Id="custicon" src="Binary\Custom.ico" />
+		<Binary Id="repairic" src="Binary\Repair.ico" />
+		<Binary Id="exclamic" src="Binary\Exclam.ico" />
+		<Binary Id="removico" src="Binary\Remove.ico" />
+		<Binary Id="completi" src="Binary\Complete.ico" />
+		<Binary Id="insticon" src="Binary\Typical.ico" />
+		<Binary Id="info" src="Binary\Info.ico" />
+		<Binary Id="bannrbmp" src="Binary\Banner.bmp" />
+		<Binary Id="dlgbmp" src="Binary\Dialog.bmp" />
 		
 	</Product>
 </Wix>

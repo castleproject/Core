@@ -36,7 +36,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "..\bin\temp\"
+                    OutputPath = "..\bin\temp2\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -89,11 +89,6 @@
                     Name = "Castle.ActiveRecord"
                     Project = "{652F95D4-86E2-40B6-919D-CFC6E449386B}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\lib\HashCodeProvider.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"

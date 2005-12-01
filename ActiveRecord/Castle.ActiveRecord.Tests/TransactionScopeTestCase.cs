@@ -454,5 +454,47 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( 10, posts.Length );
 		}
 
+		[Test]
+		public void MixingSessionScopeAndTransactionScopes4()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog b = new Blog();
+			Post post = null;
+
+			{
+				b.Name = "a";
+				b.Author = "x";
+				b.Save();
+
+				post = new Post(b, "t", "c", "General");
+				post.Save();
+			}
+
+			using(new SessionScope())
+			{
+				using(new TransactionScope())
+				{
+					b = Blog.Find(b.Id);
+					b.Name = "changed";
+					b.Save();
+				}
+
+				{
+					Post post2 = Post.Find(post.Id);
+					b = Blog.Find(b.Id);
+				}
+			}
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.AreEqual( 1, blogs.Length );
+
+			Post[] posts = Post.FindAll();
+			Assert.AreEqual( 1, posts.Length );
+		}
 	}
 }

@@ -86,11 +86,6 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\lib\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\lib\Iesi.Collections.dll"
@@ -210,6 +205,16 @@
                 />
                 <File
                     RelPath = "Model\HasManyClassA.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\LazyClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\LazyClassWithoutVirtualPropertyOnBelongsTo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

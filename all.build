@@ -45,6 +45,7 @@
 	</target>
 
 	<target name="dist">
+	<!--
 		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="dist" inheritall="true" />
 		<nant buildfile="AspectSharp/aspectsharp.build" target="distribution" inheritall="true" />
 		<nant buildfile="InversionOfControl/container.build" target="dist" inheritall="true" />
@@ -53,6 +54,7 @@
 		<nant buildfile="MonoRail/monorail.build" target="dist" inheritall="true" />
 		<nant buildfile="Services/services.build" target="dist" inheritall="true" />
 		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
+	-->
 	</target>
 	
 	<description>Documentation generation.</description><property name="base.dir" value="." />
