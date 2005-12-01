@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.Reflection;
 
 	public abstract class BaseMetaDescriptor
@@ -72,23 +73,70 @@ namespace Castle.MonoRail.Framework.Internal
 		private IList helpers = new ArrayList();
 		private IList filters = new ArrayList();
 		private IList actionProviders = new ArrayList();
-		private Hashtable actions = new Hashtable();
+		private Hashtable actionMetaDescriptors = new Hashtable();
+		private IDictionary _actions = new HybridDictionary(true);
+		private Type _controllerType;
 
-		public ControllerMetaDescriptor()
+		public ControllerMetaDescriptor( Type controllerType )
 		{
+			_controllerType = controllerType;
+			collectActions(  _controllerType );
 		}
 
-		public ActionMetaDescriptor GetAction(MethodInfo actionMethod)
+		public ActionMetaDescriptor GetAction( MethodInfo actionMethod )
 		{
-			ActionMetaDescriptor desc = (ActionMetaDescriptor) actions[actionMethod];
+			ActionMetaDescriptor desc = (ActionMetaDescriptor) actionMetaDescriptors[actionMethod];
 
 			if (desc == null)
 			{
 				desc = new ActionMetaDescriptor();
-				actions[actionMethod] = desc;
+				actionMetaDescriptors[actionMethod] = desc;
 			}
 
 			return desc;
+		}
+
+		private void collectActions( Type controllerType )
+		{
+			MethodInfo[] methods = controllerType.GetMethods( BindingFlags.Public | BindingFlags.Instance );
+
+			Type objectType = typeof( Object );
+			Type baseControllerType = typeof( Controller );
+
+			foreach (MethodInfo m in methods)
+			{
+				if ( m.DeclaringType == objectType || m.DeclaringType == baseControllerType ) continue;
+				_actions[m.Name] = m;
+			}
+
+
+
+			// HACK: workaround for DYNPROXY-14
+			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
+//			for (int i=0; i < methods.Length; i++)
+//				methods[i] = methods[i].GetBaseDefinition();
+//			
+//			foreach(MethodInfo m in methods)
+//			{
+//				if (_actions.Contains(m.Name))
+//				{
+//					ArrayList list = _actions[m.Name] as ArrayList;
+//
+//					if (list == null)
+//					{
+//						list = new ArrayList();
+//						list.Add(_actions[m.Name]);
+//
+//						_actions[m.Name] = list;
+//					}
+//
+//					list.Add(m);
+//				}
+//				else
+//				{
+//					_actions[m.Name] = m;
+//				}
+//			}
 		}
 
 		public DefaultActionAttribute DefaultAction
@@ -100,6 +148,11 @@ namespace Castle.MonoRail.Framework.Internal
 		public IList Helpers
 		{
 			get { return helpers; }
+		}
+
+		public IDictionary Actions
+		{
+			get { return _actions; }
 		}
 
 		public IList Filters
