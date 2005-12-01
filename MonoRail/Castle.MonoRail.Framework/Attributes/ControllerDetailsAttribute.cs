@@ -37,7 +37,8 @@ namespace Castle.MonoRail.Framework
 		/// Constructs a ControllerDetailsAttribute
 		/// with a name for the controller.
 		/// </summary>
-		public ControllerDetailsAttribute(String name)
+		/// <param name="name">The specified Controller Name</param>
+		public ControllerDetailsAttribute( String name )
 		{
 			_name = name;
 		}

@@ -19,16 +19,16 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
 	public class ScaffoldingAttribute : Attribute
 	{
-		private readonly Type model;
+		private readonly Type _model;
 
 		public ScaffoldingAttribute( Type model )
 		{
-			this.model = model;
+			_model = model;
 		}
 
 		public Type Model
 		{
-			get { return model; }
+			get { return _model; }
 		}
 	}
 }

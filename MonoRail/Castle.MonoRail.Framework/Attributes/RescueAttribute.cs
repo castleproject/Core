@@ -17,54 +17,53 @@ namespace Castle.MonoRail.Framework
 	using System;
 
 	/// <summary>
-	/// Associates a rescue template with a <see cref="Controller"/>
-	/// or an action (method). The rescue is invoked in
-	/// response to some exception during the action processing.
+	/// Associates a rescue template with a <see cref="Controller"/> or an action 
+	/// (method). The rescue is invoked in response to some exception during the 
+	/// action processing.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=true), Serializable]
 	public class RescueAttribute : Attribute
 	{
-		private String viewName;
-		private Type exceptionType;
+		private String _viewName;
+		private Type _exceptionType;
 		
 		/// <summary>
 		/// Constructs a RescueAttribute with the template name.
 		/// </summary>
 		/// <param name="viewName"></param>
-		public RescueAttribute(String viewName) : this( viewName, typeof(Exception) )
+		public RescueAttribute( String viewName ) : this( viewName, typeof(Exception) )
 		{			
 		}
 
-		public RescueAttribute(String viewName, Type exceptionType)
+		public RescueAttribute( String viewName, Type exceptionType )
 		{
-			if (viewName == null || viewName.Length == 0)
+			if ( viewName == null || viewName.Length == 0 )
 			{
-				throw new ArgumentNullException("viewName");
+				throw new ArgumentNullException( "viewName" );
 			}
 			
-			if (exceptionType != null && !typeof(Exception).IsAssignableFrom(exceptionType) )
+			if ( exceptionType != null && !typeof( Exception ).IsAssignableFrom( exceptionType ) )
 			{
-				throw new ArgumentException("exceptionType must be an type assignable from Exception");
+				throw new ArgumentException( "exceptionType must be a type assignable from Exception" );
 			}
 			
-			this.viewName = viewName;
-			this.exceptionType = exceptionType;
+			this._viewName = viewName;
+			this._exceptionType = exceptionType;
 		}
 
 		public String ViewName
 		{
-			get { return viewName; }
+			get { return _viewName; }
 		}
 		
 		public Type ExceptionType
 		{
-			get { return exceptionType; }
+			get { return _exceptionType; }
 		}		
 	}
 
 	/// <summary>
-	/// Declares that for the specific method (action)
-	/// no rescue should be performed.
+	/// Declares that for the specific method (action) no rescue should be performed.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true), Serializable]
 	public class SkipRescueAttribute : Attribute

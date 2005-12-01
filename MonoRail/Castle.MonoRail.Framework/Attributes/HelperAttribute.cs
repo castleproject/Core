@@ -25,11 +25,11 @@ namespace Castle.MonoRail.Framework
 		private readonly Type _helperType;
 		private readonly String _name;
 
-		public HelperAttribute(Type helperType) : this( helperType, null)
+		public HelperAttribute( Type helperType ) : this( helperType, null)
 		{			
 		}
 		
-		public HelperAttribute(Type helperType, String name)
+		public HelperAttribute( Type helperType, String name )
 		{
 			_helperType = helperType;
 			_name = ( name == null || name.Trim() == "" ) ? helperType.Name : name;

@@ -32,11 +32,11 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
 	public class DataBindAttribute : Attribute
 	{
-		private String prefix = String.Empty;
-		private ParamStore from	= ParamStore.Params;
-		private String exclude = String.Empty;
-		private String allow = String.Empty;
-		private int nestedLevel = 3;
+		private String _prefix = String.Empty;
+		private ParamStore _from	= ParamStore.Params;
+		private String _exclude = String.Empty;
+		private String _allow = String.Empty;
+		private int _nestedLevel = 3;
 
 		public DataBindAttribute()
 		{
@@ -49,8 +49,8 @@ namespace Castle.MonoRail.Framework
 		/// of property names to exclude from databinding.</value>
 		public String Exclude
 		{
-			get { return exclude; }
-			set { exclude = value; }
+			get { return _exclude; }
+			set { _exclude = value; }
 		}
 
 		/// <summary>
@@ -60,8 +60,8 @@ namespace Castle.MonoRail.Framework
 		/// of property names to allow from databinding.</value>
 		public String Allow
 		{
-			get { return allow; }
-			set { allow = value; }
+			get { return _allow; }
+			set { _allow = value; }
 		}
 		
 		/// <summary>
@@ -70,8 +70,8 @@ namespace Castle.MonoRail.Framework
 		/// <value>The ParamStore type.  Typically either QueryString, Form, or Params.</value>
 		public ParamStore From
 		{
-			get { return from; }
-			set { from = value; }
+			get { return _from; }
+			set { _from = value; }
 		}
 
 		/// <summary>
@@ -80,8 +80,8 @@ namespace Castle.MonoRail.Framework
 		/// <value>The databinding prefix.</value>
 		public String Prefix
 		{
-			get { return prefix; }
-			set { prefix = value; }
+			get { return _prefix; }
+			set { _prefix = value; }
 		}
 
 		/// <summary>
@@ -90,8 +90,8 @@ namespace Castle.MonoRail.Framework
 		/// <value>The nested level.</value>
 		public int NestedLevel
 		{
-			get { return nestedLevel; }
-			set { nestedLevel = value; }
+			get { return _nestedLevel; }
+			set { _nestedLevel = value; }
 		}
 	}
 }

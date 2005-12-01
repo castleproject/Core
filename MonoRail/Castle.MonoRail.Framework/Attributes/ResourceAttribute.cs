@@ -17,65 +17,62 @@ namespace Castle.MonoRail.Framework
 	using System;
 
 	/// <summary>
-	/// Declares that for the specified class or method, the given resource
-	/// file should be loaded and set available in the PropertyBag with the 
-	/// specified name.
+	/// Declares that for the specified class or method, the given resource file should be 
+	/// loaded and set available in the PropertyBag with the specified name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true, Inherited=true), Serializable]
 	public class ResourceAttribute : Attribute, IResourceDefinition
 	{
-		private String _Name;
-		private String _ResourceName, _CultureName, _AssemblyName;
-		
-		private Type _ResourceType;
+		private String _name, _resourceName, _cultureName, _assemblyName;
+		private Type _resourceType;
 		
 		/// <summary>
 		/// Constructs a resource attribute, with the specified name, based
-		/// on the resource in a sattelite assembly.
+		/// on the resource in a satellite assembly.
 		/// </summary>
 		/// <param name="name">Name the resource will be available as in the PropertyBag</param>
 		/// <param name="resourceName">Fully qualified name of the resource in the sattelite assembly</param>
 		public ResourceAttribute( String name, String resourceName )
 		{
-			_Name = name;
-			_ResourceName	= resourceName;
+			_name = name;
+			_resourceName	= resourceName;
 
 			if ( resourceName.IndexOf( ',' ) > 0 )
 			{
 				String[] pair	= resourceName.Split( ',' );
-				_ResourceName	= pair[0].Trim();
-				_AssemblyName	= pair[1].Trim();
+				_resourceName	= pair[0].Trim();
+				_assemblyName	= pair[1].Trim();
 			}
 		}
 
 		public String Name
 		{
-			get { return _Name; }
-			set { _Name = value; }
+			get { return _name; }
+			set { _name = value; }
 		}
 
 		public String ResourceName
 		{
-			get { return _ResourceName; }
-			set { _ResourceName = value; }
+			get { return _resourceName; }
+			set { _resourceName = value; }
 		}
 
 		public String CultureName
 		{
-			get { return _CultureName; }
-			set { _CultureName = value; }
+			get { return _cultureName; }
+			set { _cultureName = value; }
 		}
 
 		public String AssemblyName
 		{
-			get { return _AssemblyName; }
-			set { _AssemblyName = value; }
+			get { return _assemblyName; }
+			set { _assemblyName = value; }
 		}
 
 		public Type ResourceType
 		{
-			get { return _ResourceType; }
-			set { _ResourceType = value; }
+			get { return _resourceType; }
+			set { _resourceType = value; }
 		}
 	}
 }

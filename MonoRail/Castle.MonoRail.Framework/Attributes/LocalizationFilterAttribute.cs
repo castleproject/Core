@@ -21,9 +21,9 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=true), Serializable]
 	public class LocalizationFilterAttribute : FilterAttribute
 	{
-		private bool _FailOnError = false, _UseBrowser = true;
-		private String _Key			= "locale";
-		private RequestStore _Store = RequestStore.Cookie;
+		private bool _failOnError = false, _useBrowser = true;
+		private String _key			= "locale";
+		private RequestStore _requestStore = RequestStore.Cookie;
 		
 		public LocalizationFilterAttribute() : base( ExecuteEnum.BeforeAction, typeof(LocalizationFilter) )
 		{
@@ -36,8 +36,8 @@ namespace Castle.MonoRail.Framework
 		/// <param name="key">Name of the parameter in the store.</param>
 		public LocalizationFilterAttribute( RequestStore store, String key ) : this()
 		{
-			_Key	= key;
-			_Store	= store;
+			_key	= key;
+			_requestStore	= store;
 		}
 
         #region Properties
@@ -47,8 +47,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public String Key
 		{
-			get { return _Key; }
-			set { _Key = value; }
+			get { return _key; }
+			set { _key = value; }
 		}
 
 		/// <summary>
@@ -56,8 +56,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public RequestStore Store
 		{
-			get { return _Store; }
-			set { _Store = value; }
+			get { return _requestStore; }
+			set { _requestStore = value; }
 		}
 
 		/// <summary>
@@ -66,8 +66,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public bool FailOnError
 		{
-			get { return _FailOnError; }
-			set { _FailOnError = value; }
+			get { return _failOnError; }
+			set { _failOnError = value; }
 		}
 
 		/// <summary>
@@ -75,8 +75,8 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public bool UseBrowser
 		{
-			get { return _UseBrowser; }
-			set { _UseBrowser = value; }
+			get { return _useBrowser; }
+			set { _useBrowser = value; }
 		}
 
 		#endregion		
