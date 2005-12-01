@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework
 		internal static readonly String RailsContextKey = "rails.context";
 		
 		private readonly IControllerFactory controllerFactory;
-		private readonly ControllerDescriptorBuilder controllerDescriptorBuilder = new ControllerDescriptorBuilder();
+		private readonly ControllerDescriptorBuilder controllerDescriptorBuilder;
 		private readonly IDictionary _type2Service = new HybridDictionary();
 		private readonly ExtensionComposite extensionComposite;
 
@@ -47,23 +47,24 @@ namespace Castle.MonoRail.Framework
 
 		#region Constructors
 
-		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine) : 
-			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
+		public ProcessEngine(IControllerFactory controllerFactory, ControllerDescriptorBuilder controllerDescriptorBuilder, IViewEngine viewEngine) : 
+			this(controllerFactory, controllerDescriptorBuilder, viewEngine, new DefaultFilterFactory(), 
 			     new DefaultResourceFactory(), null, new DefaultViewComponentFactory(), new IMonoRailExtension[0], null)
 		{
 		}
 
-		public ProcessEngine(IControllerFactory controllerFactory, IViewEngine viewEngine, IViewComponentFactory viewCompFactory) : 
-			this(controllerFactory, viewEngine, new DefaultFilterFactory(), 
+		public ProcessEngine(IControllerFactory controllerFactory, ControllerDescriptorBuilder controllerDescriptorBuilder, IViewEngine viewEngine, IViewComponentFactory viewCompFactory) : 
+			this(controllerFactory, controllerDescriptorBuilder, viewEngine, new DefaultFilterFactory(), 
 				new DefaultResourceFactory(), null, viewCompFactory, new IMonoRailExtension[0], null)
 		{
 		}
 
-		public ProcessEngine(IControllerFactory controllerFactory, 
+		public ProcessEngine(IControllerFactory controllerFactory, ControllerDescriptorBuilder controllerDescriptorBuilder, 
 			IViewEngine viewEngine, IFilterFactory filterFactory, 
 			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, 
 			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions, IEmailSender emailSender)
 		{
+			this.controllerDescriptorBuilder = controllerDescriptorBuilder;
 			this.controllerFactory = controllerFactory;
 			this.extensionComposite = new ExtensionComposite(extensions);
 

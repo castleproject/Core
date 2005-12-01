@@ -33,10 +33,10 @@ namespace Castle.MonoRail.Framework
 		private String _url;
 
 		public MonoRailHttpHandler( String url, IViewEngine viewEngine, 
-			IControllerFactory controllerFactory, IFilterFactory filterFactory, 
+			IControllerFactory controllerFactory, ControllerDescriptorBuilder controllerDescriptorBuilder, IFilterFactory filterFactory, 
 			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, 
 			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions, IEmailSender sender)
-			: base(controllerFactory, viewEngine, filterFactory, resourceFactory, 
+			: base(controllerFactory, controllerDescriptorBuilder, viewEngine, filterFactory, resourceFactory, 
 			       scaffoldingSupport, viewCompFactory, extensions, sender)
 		{
 			_url = url;

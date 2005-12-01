@@ -37,9 +37,11 @@ namespace Castle.MonoRail.Framework
 		protected IViewComponentFactory _viewCompFactory;
 		protected IMonoRailExtension[] extensions;
 		protected IEmailSender emailSender;
+		protected ControllerDescriptorBuilder _controllerDescriptorBuilder;
 
 		public ProcessEngineFactory() : this(null)
 		{
+			
 		}
 
 		public ProcessEngineFactory(MonoRailConfiguration config)
@@ -52,7 +54,7 @@ namespace Castle.MonoRail.Framework
 			{
 				_config = config;
 			}
-
+			_controllerDescriptorBuilder = new ControllerDescriptorBuilder();
 			InitializeExtensions();
 			InitializeControllerFactory();
 			InitializeViewComponentFactory();
@@ -67,7 +69,7 @@ namespace Castle.MonoRail.Framework
 
 		public ProcessEngine Create()
 		{
-			return new ProcessEngine(_controllerFactory, _viewEngine, 
+			return new ProcessEngine(_controllerFactory, _controllerDescriptorBuilder, _viewEngine, 
 				_filterFactory, _resourceFactory, _scaffoldingSupport, 
 				_viewCompFactory, extensions, emailSender);
 		}
