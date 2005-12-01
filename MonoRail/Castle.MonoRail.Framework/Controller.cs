@@ -50,7 +50,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Holds information to pass to the view
 		/// </summary>
-		private IDictionary _bag;
+		private IDictionary _bag = new HybridDictionary();
 
 		/// <summary>
 		/// Holds the filters associated with the action
@@ -103,8 +103,6 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		private ResourceDictionary _resources = null;
 
-		internal IDictionary _actions = new HybridDictionary(true);
-
 		internal IDictionary _dynamicActions = new HybridDictionary(true);
 
 		internal IScaffoldingSupport _scaffoldSupport;
@@ -124,9 +122,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public Controller()
 		{
-			_bag = new HybridDictionary();
-
-			CollectActions();
+			
 		}
 
 		#endregion
@@ -143,7 +139,7 @@ namespace Castle.MonoRail.Framework
 
 		public ICollection Actions
 		{
-			get { return _actions.Values; }
+			get { return metaDescriptor.Actions.Values; }
 		}
 
 		public ResourceDictionary Resources
@@ -527,41 +523,6 @@ namespace Castle.MonoRail.Framework
 			get { return serviceProvider; }
 		}
 
-		protected internal virtual void CollectActions()
-		{
-			MethodInfo[] methods = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance);
-
-			foreach (MethodInfo m in methods)
-			{
-				// Get/set methods that belongs to a property
-				if (m.IsSpecialName) continue;
-
-				_actions[m.Name] = m;
-			}
-
-			ScreenCommonPublicMethods(_actions);
-		}
-
-		protected void ScreenCommonPublicMethods(IDictionary actions)
-		{
-			actions.Remove("ToString");
-			actions.Remove("GetHashCode");
-			actions.Remove("RenderView");
-			actions.Remove("RenderSharedView");
-			actions.Remove("CancelView");
-			actions.Remove("RenderText");
-			actions.Remove("DirectRender");
-			actions.Remove("Redirect");
-			actions.Remove("Process");
-			actions.Remove("Send");
-			actions.Remove("PreSendView");
-			actions.Remove("PostSendView");
-			actions.Remove("Equals");
-			actions.Remove("CancelLayout");
-			actions.Remove("HasTemplate");
-			actions.Remove("GetType");
-		}
-
 		internal void InitializeFieldsFromServiceProvider(IServiceProvider serviceProvider)
 		{
 			this.serviceProvider = serviceProvider;
@@ -599,9 +560,8 @@ namespace Castle.MonoRail.Framework
 			InitializeFieldsFromServiceProvider(serviceProvider);
 
 			InitializeControllerState(areaName, controllerName, actionName);
-
+			
 			_context = context;
-
 #if ALLOWTEST
 			HttpContext.Items["mr.flash"] = Flash;
 			HttpContext.Items["mr.session"] = Session;
@@ -685,7 +645,7 @@ namespace Castle.MonoRail.Framework
 			}
 
 			// Look for the target method
-			MethodInfo method = SelectMethod(action, _actions, _context.Request);
+			MethodInfo method = SelectMethod(action, MetaDescriptor.Actions, _context.Request);
 
 			// If we couldn't find a method for this action, look for a dynamic action
 			IDynamicAction dynAction = null;
@@ -803,7 +763,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (metaDescriptor.DefaultAction != null)
 			{
-				return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, _actions, _context.Request);
+				return SelectMethod(metaDescriptor.DefaultAction.DefaultAction, MetaDescriptor.Actions, _context.Request);
 			}
 
 			return null;
