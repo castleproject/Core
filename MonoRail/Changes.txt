@@ -5,6 +5,9 @@ Beta 5
 ======
 
 ** Core ** 
+- Moved action collection to ControllerMetaDescriptor class, using new method that does not require ScreenCommonPublicMethods.
+
+- Moved ControllerDescriptorBuilder creation to ProcessEngineFactory to ensure ControllerDescriptors are only created once
 
 - ITrace and Trace property added to IRailsEngineContext (kudos to Chad Humphries)
 
