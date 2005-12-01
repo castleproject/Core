@@ -15,8 +15,9 @@
 namespace Castle.ActiveRecord.Framework.Internal
 {
 	using System;
-	using System.Text;
 	using System.Reflection;
+	using System.Text;
+	using Castle.ActiveRecord;
 
 
 	/// <summary>
@@ -140,8 +141,64 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitPrimaryKey(PrimaryKeyModel model)
 		{
-			String unsavedVal = model.PrimaryKeyAtt.UnsavedValue;
+			if( model.Property.PropertyType.GetCustomAttributes( typeof( CompositeKeyAttribute ), false ).Length > 0 )
+			{
+				DoNaturalKey( model );
+			}
+			else
+			{
+				DoSurrogateKey( model );
+			}
+		}
 
+		private void DoNaturalKey( PrimaryKeyModel model )
+		{
+			CompositeKeyAttribute att = model.Property.PropertyType.GetCustomAttributes( typeof( CompositeKeyAttribute ), false )[0] as CompositeKeyAttribute;
+			string unsavedVal = att.UnsavedValue;
+			if( unsavedVal == null )
+			{
+				unsavedVal = "none";
+			}
+
+			AppendF( "<composite-id {0} {1} {2} {3}>",
+				MakeAtt( "name", model.Property.Name ),
+				MakeClassAtt( model.Property.PropertyType ),
+				WriteIfNonNull( "unsaved-value", unsavedVal ),
+				MakeAtt("access", att.AccessString ) );
+
+			Ident();
+
+			PropertyInfo[] keyProps = model.Property.PropertyType.GetProperties();
+			foreach( PropertyInfo keyProp in keyProps )
+			{
+				KeyPropertyAttribute keyPropAttr = keyProp.GetCustomAttributes( typeof( KeyPropertyAttribute ), false )[0] as KeyPropertyAttribute;
+				if( keyPropAttr.Column == null )
+				{
+					keyPropAttr.Column = keyProp.Name;
+				}
+				
+				AppendF( "<key-property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} />",
+					MakeAtt("name", keyProp.Name), 
+					MakeAtt("access", keyPropAttr.AccessString),
+					MakeAtt("column", keyPropAttr.Column),
+					MakeTypeAtt(keyProp.PropertyType, keyPropAttr.ColumnType),
+					WriteIfNotZero("length", keyPropAttr.Length), 
+					WriteIfNonNull("unsaved-value", keyPropAttr.UnsavedValue),
+					WriteIfTrue("not-null", keyPropAttr.NotNull), 
+					WriteIfTrue("unique", keyPropAttr.Unique), 
+					WriteIfFalse("insert", keyPropAttr.Insert), 
+					WriteIfFalse("update", keyPropAttr.Update),
+					WriteIfNonNull("formula", keyPropAttr.Formula));
+			}
+
+			Dedent();
+			AppendF( "</composite-id>" );
+		}
+
+		private void DoSurrogateKey( PrimaryKeyModel model )
+		{
+			String unsavedVal = model.PrimaryKeyAtt.UnsavedValue;
+	
 			if (unsavedVal == null)
 			{
 				if (model.Property.PropertyType.IsPrimitive && model.Property.PropertyType != typeof(String)) 
@@ -154,17 +211,17 @@ namespace Castle.ActiveRecord.Framework.Internal
 					unsavedVal = "";
 				}
 			}
-
+	
 			AppendF("<id {0} {1} {2} {3} {4} {5}>",
-				MakeAtt("name", model.Property.Name), 
-				MakeAtt("access", model.PrimaryKeyAtt.AccessString),
-				MakeAtt("column", model.PrimaryKeyAtt.Column),
-				MakeTypeAtt(model.Property.PropertyType, model.PrimaryKeyAtt.ColumnType),
-				WriteIfNotZero("length", model.PrimaryKeyAtt.Length), 
-				WriteIfNonNull("unsaved-value", unsavedVal));
-
+			        MakeAtt("name", model.Property.Name), 
+			        MakeAtt("access", model.PrimaryKeyAtt.AccessString),
+			        MakeAtt("column", model.PrimaryKeyAtt.Column),
+			        MakeTypeAtt(model.Property.PropertyType, model.PrimaryKeyAtt.ColumnType),
+			        WriteIfNotZero("length", model.PrimaryKeyAtt.Length), 
+			        WriteIfNonNull("unsaved-value", unsavedVal));
+	
 			Ident();
-
+	
 			if (model.PrimaryKeyAtt.Generator != PrimaryKeyType.None)
 			{
 				AppendF("<generator {0}>", MakeAtt("class", model.PrimaryKeyAtt.Generator.ToString().ToLower()));
@@ -192,7 +249,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				}
 				AppendF("</generator>");
 			}
-
+	
 			Dedent();
 			Append( "</id>" );
 		}
@@ -585,6 +642,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 				{
 					return MakeAtt("type", type.FullName);
 				}
+			}
+		}
+
+		private String MakeClassAtt( Type type )
+		{
+			if( type.IsEnum ) return String.Empty;
+
+			if( type.IsPrimitive )
+			{
+				return MakeAtt( "class", type.Name );
+			}
+			else
+			{
+				return MakeAtt( "class", type.FullName );
 			}
 		}
 

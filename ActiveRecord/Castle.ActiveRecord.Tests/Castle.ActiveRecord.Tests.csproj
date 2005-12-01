@@ -93,32 +93,27 @@
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\lib\Iesi.Collections.dll"
+                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
+                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
+                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
                 />
                 <Reference
                     Name = "Nullables"
                     AssemblyName = "Nullables"
-                    HintPath = "..\lib\Nullables.dll"
+                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.dll"
                 />
                 <Reference
                     Name = "Nullables.NHibernate"
                     AssemblyName = "Nullables.NHibernate"
-                    HintPath = "..\lib\Nullables.NHibernate.dll"
-                />
-                <Reference
-                    Name = "Castle.DynamicProxy"
-                    AssemblyName = "Castle.DynamicProxy"
-                    HintPath = "..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll"
+                    HintPath = "..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll"
                 />
             </References>
         </Build>

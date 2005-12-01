@@ -115,6 +115,21 @@
                     Project = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Iesi.Collections"
+                    AssemblyName = "Iesi.Collections"
+                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
+                />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -149,6 +164,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\BadCompositeKey.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\BelongsToClassA.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -179,7 +199,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\ClassWithBadCompositeKey.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\ClassWithBadMapping.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\ClassWithCompositeKey.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -195,6 +225,11 @@
                 />
                 <File
                     RelPath = "Model\Company.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\CompositeKeyForClassWithCompositeKey.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

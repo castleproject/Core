@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	using Iesi.Collections;
 	using Nullables;
+	using Castle.ActiveRecord;
 
 	/// <summary>
 	/// Traverse the tree checking the semantics of the relation and
@@ -105,30 +106,63 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitPrimaryKey(PrimaryKeyModel model)
 		{
-			if (model.PrimaryKeyAtt.Column == null)
+			// check for composite key first
+			if( model.Property.PropertyType.GetCustomAttributes( typeof( CompositeKeyAttribute ), false ).Length > 0 )
 			{
-				model.PrimaryKeyAtt.Column = model.Property.Name;
-			}
-
-			if (model.PrimaryKeyAtt.Generator == PrimaryKeyType.Foreign)
-			{
-				// Just a thought, let's see if we are a OneToOne
-
-				if (currentModel.OneToOnes.Count != 0)
+				MethodInfo eq = model.Property.PropertyType.GetMethod( "Equals", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly );
+				MethodInfo hc = model.Property.PropertyType.GetMethod( "GetHashCode", BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly );
+				
+				if( eq == null || hc == null )
 				{
-					// Yes, set the one to one as param 
+					throw new ActiveRecordException( string.Format( "To use type '{0}' as a composite id, you must implement Equals and GetHashCode.", model.Property.PropertyType.Name ) );
+				}
+				
+				if( model.Property.PropertyType.IsSerializable == false )
+				{
+					throw new ActiveRecordException( string.Format( "To use type '{0}' as a composite id it must be Serializable.", model.Property.PropertyType.Name ) );
+				}
 
-					OneToOneModel oneToOne = (OneToOneModel) currentModel.OneToOnes[0];
-
-					String param = "property=" + oneToOne.Property.Name;
-
-					if (model.PrimaryKeyAtt.Params == null)
+				int keyPropAttrCount = 0;
+				PropertyInfo[] compositeKeyProps = model.Property.PropertyType.GetProperties();
+				foreach( PropertyInfo keyProp in compositeKeyProps )
+				{
+					if( keyProp.GetCustomAttributes( typeof( KeyPropertyAttribute ), false ).Length > 0 )
 					{
-						model.PrimaryKeyAtt.Params = param;
+						keyPropAttrCount++;
 					}
-					else
+				}
+				if( keyPropAttrCount < 2 )
+				{
+					throw new ActiveRecordException( string.Format( "To use type '{0}' as a composite id it must have two or more properties marked with the [KeyProperty] attribute.", model.Property.PropertyType.Name ) );
+				}
+			}
+			else
+			{
+				if (model.PrimaryKeyAtt.Column == null)
+				{
+					model.PrimaryKeyAtt.Column = model.Property.Name;
+				}
+
+				if (model.PrimaryKeyAtt.Generator == PrimaryKeyType.Foreign)
+				{
+					// Just a thought, let's see if we are a OneToOne
+
+					if (currentModel.OneToOnes.Count != 0)
 					{
-						model.PrimaryKeyAtt.Params += "," + param;
+						// Yes, set the one to one as param 
+
+						OneToOneModel oneToOne = (OneToOneModel) currentModel.OneToOnes[0];
+
+						String param = "property=" + oneToOne.Property.Name;
+
+						if (model.PrimaryKeyAtt.Params == null)
+						{
+							model.PrimaryKeyAtt.Params = param;
+						}
+						else
+						{
+							model.PrimaryKeyAtt.Params += "," + param;
+						}
 					}
 				}
 			}

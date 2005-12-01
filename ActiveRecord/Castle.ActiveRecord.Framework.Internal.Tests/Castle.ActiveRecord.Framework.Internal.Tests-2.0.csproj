@@ -126,6 +126,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GraphConnectorTestCase.cs" />
+    <Compile Include="Model\BadCompositeKey.cs" />
+    <Compile Include="Model\ClassWithBadCompositeKey.cs" />
     <Compile Include="Model\ClassWithBadMapping.cs" />
     <Compile Include="Model\BelongsToClassA.cs">
       <SubType>Code</SubType>
@@ -143,6 +145,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\ClassWithAnyAttribute.cs" />
+    <Compile Include="Model\ClassWithCompositeKey.cs" />
     <Compile Include="Model\ClassWithMappedField.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +153,7 @@
     <Compile Include="Model\Company.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\CompositeKeyForClassWithCompositeKey.cs" />
     <Compile Include="Model\DiscriminatorGrandchild.cs" />
     <Compile Include="Model\HasManyClassA.cs">
       <SubType>Code</SubType>

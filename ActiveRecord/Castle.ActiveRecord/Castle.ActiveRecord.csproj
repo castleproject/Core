@@ -159,6 +159,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\CompositeKeyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\FieldAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -190,6 +195,11 @@
                 />
                 <File
                     RelPath = "Attributes\JoinedKeyAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\KeyPropertyAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

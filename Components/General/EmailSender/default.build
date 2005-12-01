@@ -194,7 +194,7 @@
 				<include name="*.build" />
 				<include name="*.sln" />
 				<include name="${src.dir}/**/*.*" />
-				<include name="${test.src.dir}/**/*.*" />
+				<include name="${test.src.dir1}/**/*.*" />
 				<include name="${library.dir}/**/*.*" />
 				
 				<exclude name="**/Debug/*" />

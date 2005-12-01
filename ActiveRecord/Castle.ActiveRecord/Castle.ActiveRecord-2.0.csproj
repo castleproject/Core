@@ -143,6 +143,7 @@
     <Compile Include="Attributes\CollectionIDAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\CompositeKeyAttribute.cs" />
     <Compile Include="Attributes\FieldAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -162,6 +163,7 @@
     <Compile Include="Attributes\JoinedKeyAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\KeyPropertyAttribute.cs" />
     <Compile Include="Attributes\NestedAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -319,6 +321,10 @@
     <Compile Include="Framework\NotFoundException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\Queries\ActiveRecordBaseQuery.cs" />
+    <Compile Include="Framework\Queries\IActiveRecordQuery.cs" />
+    <Compile Include="Framework\Queries\ScalarQuery.cs" />
+    <Compile Include="Framework\Queries\SimpleQuery.cs" />
     <Compile Include="Framework\Scopes\AbstractScope.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -14,12 +14,9 @@
 
 namespace Castle.ActiveRecord.Framework.Internal.Tests
 {
-	using System;
-
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Framework.Internal.Tests.Model;
-	using System.Reflection;
 
 
 	[TestFixture]
@@ -59,5 +56,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
         {
             ActiveRecordStarter.Initialize(GetConfigSource(), typeof(ClassWithBadMapping), typeof(ClassA));
         }
+
+		[Test]
+		[ExpectedException( typeof( ActiveRecordException))]
+		public void ClassWithBadCompositeKey()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof( ClassWithBadCompositeKey ) );
+		}
 	}
 }

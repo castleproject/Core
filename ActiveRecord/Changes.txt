@@ -1,6 +1,9 @@
 
 beta 3
 ======
+- Added: Support for composite keys - composite key class must be serializable and implement both Equals and GetHashCode.
+  Not complete support, missing the NHibernate key-many-to-one element in the composite key.
+  
 - Added: Support for Lazy loading class using BelongsTo. Will throw if there is a non virtual property that
   also BelongsTo().
 
