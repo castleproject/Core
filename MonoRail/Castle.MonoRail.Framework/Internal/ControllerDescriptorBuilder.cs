@@ -49,7 +49,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 			try
 			{
-				desc = BuildDescriptor(controller, controllerType);
+				desc = BuildDescriptor( controllerType );
 
 				descriptorRepository[controllerType] = desc;
 			}
@@ -61,13 +61,13 @@ namespace Castle.MonoRail.Framework.Internal
 			return desc;
 		}
 
-		private ControllerMetaDescriptor BuildDescriptor(Controller controller, Type controllerType)
+		private ControllerMetaDescriptor BuildDescriptor(  Type controllerType )
 		{
-			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor();
-
+			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor( controllerType );
+			
 			CollectClassLevelAttributes(controllerType, descriptor);
 
-			foreach(object action in controller.Actions)
+			foreach(object action in descriptor.Actions.Values)
 			{
 				if (action is IList)
 				{
