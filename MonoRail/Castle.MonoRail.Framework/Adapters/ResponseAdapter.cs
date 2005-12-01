@@ -26,12 +26,12 @@ namespace Castle.MonoRail.Framework.Adapters
 		private readonly String _appPath;
 		private readonly String _extension;
 		private readonly HttpResponse _response;
-		private bool redirected;
+		private bool _redirected;
 
-		public ResponseAdapter(HttpResponse response, String url, String appPath)
+		public ResponseAdapter( HttpResponse response, String url, String appPath )
 		{
 			_response = response;
-			_extension = UrlTokenizer.GetExtension(url);
+			_extension = UrlTokenizer.GetExtension( url );
 			_appPath = appPath;
 		}
 
@@ -74,9 +74,9 @@ namespace Castle.MonoRail.Framework.Adapters
 			set { _response.ContentType = value; }
 		}
 
-		public void AppendHeader(String name, String value)
+		public void AppendHeader( String name, String headerValue )
 		{
-			_response.AppendHeader(name, value);
+			_response.AppendHeader( name, headerValue );
 		}
 
 		public System.IO.TextWriter Output
@@ -89,18 +89,18 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _response.OutputStream; }
 		}
 
-		public void BinaryWrite(byte[] buffer)
+		public void BinaryWrite( byte[] buffer )
 		{
-			_response.BinaryWrite(buffer);
+			_response.BinaryWrite( buffer );
 		}
 
-		public void BinaryWrite(Stream stream)
+		public void BinaryWrite( Stream stream )
 		{
-			byte[] buffer = new byte[stream.Length];
+			byte[] buffer = new byte[ stream.Length ];
 
-			stream.Read(buffer, 0, buffer.Length);
+			stream.Read( buffer, 0, buffer.Length );
 
-			BinaryWrite(buffer);
+			BinaryWrite( buffer );
 		}
 
 		public void Clear()
@@ -113,92 +113,92 @@ namespace Castle.MonoRail.Framework.Adapters
 			_response.ClearContent();
 		}
 
-		public void Write(String s)
+		public void Write( String s )
 		{
 			_response.Write(s);
 		}
 
-		public void Write(object obj)
+		public void Write( object obj )
 		{
-			_response.Write(obj);
+			_response.Write( obj );
 		}
 
-		public void Write(char ch)
+		public void Write( char ch )
 		{
-			_response.Write(ch);
+			_response.Write( ch );
 		}
 
-		public void Write(char[] buffer, int index, int count)
+		public void Write( char[] buffer, int index, int count )
 		{
-			_response.Write(buffer, index, count);
+			_response.Write( buffer, index, count );
 		}
 
-		public void WriteFile(String fileName)
+		public void WriteFile( String fileName )
 		{
-			_response.WriteFile(fileName);
+			_response.WriteFile( fileName );
 		}
 
-		public void Redirect(String url)
+		public void Redirect( String url )
 		{
-			redirected = true;
+			_redirected = true;
 			
-			_response.Redirect(url, false);
+			_response.Redirect( url, false );
 		}
 
-		public void Redirect(String url, bool endProcess)
+		public void Redirect( String url, bool endProcess )
 		{
-			redirected = true;
+			_redirected = true;
 			
-			_response.Redirect(url, endProcess);
+			_response.Redirect( url, endProcess );
 		}
 
-		public void Redirect(String controller, String action)
+		public void Redirect( String controller, String action )
 		{
-			redirected = true;
+			_redirected = true;
 			
 			_response.Redirect( 
-				UrlInfo.CreateAbsoluteRailsUrl(_appPath, controller, action, _extension), false );
+				UrlInfo.CreateAbsoluteRailsUrl( _appPath, controller, action, _extension ), false );
 		}
 
-		public void Redirect(String area, String controller, String action)
+		public void Redirect( String area, String controller, String action )
 		{
-			redirected = true;
+			_redirected = true;
 
-			if (area == null || area.Length == 0)
+			if ( area == null || area.Length == 0 )
 			{
 				_response.Redirect(
-					UrlInfo.CreateAbsoluteRailsUrl(_appPath, controller, action, _extension), false);
+					UrlInfo.CreateAbsoluteRailsUrl( _appPath, controller, action, _extension ), false );
 			}
 			else
 			{
 				_response.Redirect( 
-					UrlInfo.CreateAbsoluteRailsUrl(_appPath, area, controller, action, _extension), false );
+					UrlInfo.CreateAbsoluteRailsUrl( _appPath, area, controller, action, _extension ), false );
 			}
 		}
 
 		public bool WasRedirected
 		{
-			get { return redirected; }
+			get { return _redirected; }
 		}
 
-		public void CreateCookie(String name, String value)
+		public void CreateCookie( String name, String cookieValue )
 		{
-			CreateCookie( new HttpCookie(name, value) );
+			CreateCookie( new HttpCookie( name, cookieValue ) );
 		}
 
-		public void CreateCookie(String name, String value, DateTime expiration)
+		public void CreateCookie( String name, String cookieValue, DateTime expiration )
 		{
-			HttpCookie cookie = new HttpCookie(name, value);
+			HttpCookie cookie = new HttpCookie( name, cookieValue );
 			
 			cookie.Expires = expiration;
 			cookie.Path = "/";
 
-			CreateCookie(cookie);
+			CreateCookie( cookie );
 		}
 
-		public void CreateCookie(HttpCookie cookie)
+		public void CreateCookie( HttpCookie cookie )
 		{
-			_response.Cookies.Add(cookie);
+			_response.Cookies.Add( cookie );
 		}
 	}
 }

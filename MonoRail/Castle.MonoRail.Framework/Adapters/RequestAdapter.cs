@@ -22,14 +22,14 @@ namespace Castle.MonoRail.Framework.Adapters
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
-	/// Summary description for RequestAdapter.
+	/// This class adapts the <c>HttpRequest</c> to a MonoRail <c>IRequest</c>.
 	/// </summary>
 	public class RequestAdapter : IRequest
 	{
 		private HttpRequest _request;
 		private FileDictionaryAdapter _files;
 
-		public RequestAdapter(HttpRequest request)
+		public RequestAdapter( HttpRequest request )
 		{
 			_request = request;
 		}
@@ -59,21 +59,21 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _request.Form; }
 		}
 
-		public byte[] BinaryRead(int count)
+		public byte[] BinaryRead( int count )
 		{
-			return _request.BinaryRead(count);
+			return _request.BinaryRead( count );
 		}
 
-		public String this[String key]
+		public String this[ String key ]
 		{
-			get { return _request[key]; }
+			get { return _request[ key ]; }
 		}
 
 		public IDictionary Files
 		{
 			get
 			{
-				if (_files == null)
+				if ( _files == null )
 				{
 					_files = new FileDictionaryAdapter(_request.Files);
 				}
@@ -91,10 +91,10 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _request.UserLanguages; }
 		}
 
-		public String ReadCookie(String name)
+		public String ReadCookie( String name )
 		{
-			HttpCookie cookie = _request.Cookies[name];
-			if (cookie == null)
+			HttpCookie cookie = _request.Cookies[ name ];
+			if ( cookie == null )
 			{
 				return null;
 			}

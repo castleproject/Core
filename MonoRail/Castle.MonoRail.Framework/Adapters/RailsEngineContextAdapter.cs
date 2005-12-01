@@ -26,8 +26,7 @@ namespace Castle.MonoRail.Framework.Adapters
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// Adapter to expose a valid <see cref="IRailsEngineContext"/>
-	/// implementation on top of <c>HttpContext</c>.
+	/// Adapter to expose a valid <see cref="IRailsEngineContext"/> implementation on top of <c>HttpContext</c>.
 	/// </summary>
 	public class RailsEngineContextAdapter : MarshalByRefObject, IRailsEngineContext
 	{
@@ -40,9 +39,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		private IDictionary _session;
 		private ServerUtilityAdapter _server;
 		private IDictionary _flash;
-		private UrlInfo urlInfo;
+		private UrlInfo _urlInfo;
 
-		public RailsEngineContextAdapter(HttpContext context, String url)
+		public RailsEngineContextAdapter( HttpContext context, String url )
 		{
 			_url = url;
 			_context = context;
@@ -74,7 +73,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				Uri referrer = _context.Request.UrlReferrer;
 
-				if (referrer != null)
+				if ( referrer != null )
 				{
 					return referrer.ToString();
 				}
@@ -99,11 +98,11 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get
 			{
-				if (_session == null)
+				if ( _session == null )
 				{
 					object session;
 					
-					if(_context.Items["AspSession"] != null)
+					if( _context.Items["AspSession"] != null )
 					{
 						// Windows and Testing
 						session = _context.Items["AspSession"];
@@ -114,7 +113,7 @@ namespace Castle.MonoRail.Framework.Adapters
 						session = _context.Session;
 					}
 
-					if (session is HttpSessionState)
+					if ( session is HttpSessionState )
 					{
 						_session = new SessionAdapter( session as HttpSessionState );
 					}
@@ -158,7 +157,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get
 			{
-				if (_flash == null)
+				if ( _flash == null )
 				{
 					_flash = new HybridDictionary();
 				}
@@ -166,7 +165,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			}
 		}
 
-		public void Transfer(String path, bool preserveForm)
+		public void Transfer( String path, bool preserveForm )
 		{
 			_context.Server.Transfer(path, preserveForm);
 		}
@@ -181,11 +180,11 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			get
 			{
-				if (urlInfo == null)
+				if ( _urlInfo == null )
 				{
-					urlInfo = UrlTokenizer.ExtractInfo(_url, ApplicationPath);
+					_urlInfo = UrlTokenizer.ExtractInfo( _url, ApplicationPath );
 				}
-				return urlInfo;
+				return _urlInfo;
 			}
 		}
 
@@ -195,11 +194,11 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				String path = String.Empty;
 
-				if (UnderlyingContext != null)
+				if ( UnderlyingContext != null )
 				{
 					path = UnderlyingContext.Request.ApplicationPath;
 			
-					if("/".Equals(path))
+					if( "/".Equals(path) )
 					{
 						path = String.Empty;
 					}
@@ -218,7 +217,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		public String ApplicationPhysicalPath
 		{
-			get { return _context.Server.MapPath("/"); }
+			get { return _context.Server.MapPath( "/" ); }
 		}
 	}
 }

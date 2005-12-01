@@ -22,17 +22,17 @@ namespace Castle.MonoRail.Framework.Adapters
 	{
 		private HttpFileCollection _fileCollection;
 
-		public FileDictionaryAdapter(HttpFileCollection fileCollection)
+		public FileDictionaryAdapter( HttpFileCollection fileCollection )
 		{
 			_fileCollection = fileCollection;
 		}
 
-		public bool Contains(object key)
+		public bool Contains( object key )
 		{
 			return _fileCollection[ (String)key ] != null;
 		}
 
-		public void Add(object key, object value)
+		public void Add( object key, object value )
 		{
 			throw new NotImplementedException();
 		}
@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			throw new NotImplementedException();
 		}
 
-		public void Remove(object key)
+		public void Remove( object key )
 		{
 			throw new NotImplementedException();
 		}
@@ -72,13 +72,13 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return true; }
 		}
 
-		public object this[object key]
+		public object this[ object key ]
 		{
 			get { return _fileCollection[ (String)key ]; }
 			set { throw new NotImplementedException(); }
 		}
 
-		public void CopyTo(Array array, int index)
+		public void CopyTo( Array array, int index )
 		{
 			throw new NotImplementedException();
 		}

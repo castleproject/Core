@@ -23,11 +23,11 @@ namespace Castle.MonoRail.Framework.Adapters
 	
 	public class ServerUtilityAdapter : IServerUtility
 	{
-		private readonly HttpServerUtility server;
+		private readonly HttpServerUtility _server;
 
-		public ServerUtilityAdapter(HttpServerUtility server)
+		public ServerUtilityAdapter( HttpServerUtility server )
 		{
-			this.server = server;
+			_server = server;
 		}
 
 		/// <summary>
@@ -35,9 +35,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="content">The text string to HTML encode.</param>
 		/// <returns>The HTML encoded text.</returns>
-		public String HtmlEncode(String content)
+		public String HtmlEncode( String content )
 		{
-			return server.HtmlEncode(content);
+			return _server.HtmlEncode( content );
 		}
 
 		/// <summary>
@@ -45,9 +45,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="content">The text to URL encode and escape JavaScript within.</param>
 		/// <returns>The URL encoded and JavaScript escaped text.</returns>
-		public String JavaScriptEscape(String content)
+		public String JavaScriptEscape( String content )
 		{
-			return server.UrlEncode(content).Replace("'", @"\'"); 
+			return _server.UrlEncode( content ).Replace( "'", @"\'" ); 
 		}
 
 		/// <summary>
@@ -61,12 +61,10 @@ namespace Castle.MonoRail.Framework.Adapters
 
 			StringBuilder sb = new StringBuilder();
 
-			foreach(String key in args.Keys)
+			foreach( String key in args.Keys )
 			{
-				if (key == null) continue;
-
-				sb.AppendFormat( "{0}={1}&", 
-					UrlEncode(key), UrlEncode(args[key]) );
+				if ( key == null ) continue;
+				sb.AppendFormat( "{0}={1}&", UrlEncode(key), UrlEncode(args[key]) );
 			}
 
 			sb.Length -= 1; // removing extra &
@@ -78,9 +76,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
 		/// <returns>The URL encoded text.</returns>
-		public String UrlEncode(String content)
+		public String UrlEncode( String content )
 		{
-			return server.UrlEncode(content);
+			return _server.UrlEncode( content );
 		}
 		
 		/// <summary>
@@ -88,9 +86,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="content">The text to URL encode.</param>
 		/// <returns>The URL encoded text.</returns>
-		public String UrlPathEncode(String content)
+		public String UrlPathEncode( String content )
 		{
-			return server.UrlPathEncode(content);
+			return _server.UrlPathEncode( content );
 		}
 
 		/// <summary>
@@ -99,9 +97,9 @@ namespace Castle.MonoRail.Framework.Adapters
 		/// </summary>
 		/// <param name="virtualPath"></param>
 		/// <returns></returns>
-		public String MapPath(String virtualPath)
+		public String MapPath( String virtualPath )
 		{
-			return server.MapPath(virtualPath);
+			return _server.MapPath( virtualPath );
 		}
 	}
 }

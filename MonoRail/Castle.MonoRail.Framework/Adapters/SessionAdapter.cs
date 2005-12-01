@@ -18,14 +18,11 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Collections;
 	using System.Web.SessionState;
 	
-	/// <summary>
-	/// Summary description for SessionAdapter.
-	/// </summary>
 	public class SessionAdapter : MarshalByRefObject, IDictionary
 	{
 		private HttpSessionState _session;
 
-		public SessionAdapter(HttpSessionState session)
+		public SessionAdapter( HttpSessionState session )
 		{
 			_session = session;
 		}
@@ -65,14 +62,14 @@ namespace Castle.MonoRail.Framework.Adapters
 			return _session.GetEnumerator();
 		}
 
-		public bool Contains(object key)
+		public bool Contains( object key )
 		{
-			return _session[(String) key] != null;
+			return _session[ (String)key ] != null;
 		}
 
-		public void Add(object key, object value)
+		public void Add( object key, object value )
 		{
-			_session.Add((String) key, value);
+			_session.Add( (String)key, value );
 		}
 
 		public void Clear()
@@ -80,9 +77,9 @@ namespace Castle.MonoRail.Framework.Adapters
 			_session.Clear();
 		}
 
-		public void Remove(object key)
+		public void Remove( object key )
 		{
-			_session.Remove((String) key);
+			_session.Remove( (String)key );
 		}
 
 		public ICollection Values
@@ -100,12 +97,12 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return false; }
 		}
 
-		public object this[object key]
+		public object this[ object key ]
 		{
-			get { return _session[(String) key]; }
+			get { return _session[ (String)key ]; }
 			set
 			{
-				_session[(String) key] = value;
+				_session[ (String)key ] = value;
 			}
 		}
 	}

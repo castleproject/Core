@@ -18,45 +18,44 @@ namespace Castle.MonoRail.Framework.Adapters
 	using System.Web;
 
 	using Castle.MonoRail.Framework;
-
 	
 	public class TraceAdapter : ITrace
 	{
-		private TraceContext trace;
+		private TraceContext _trace;
 
-		public TraceAdapter(TraceContext traceContext)
+		public TraceAdapter( TraceContext traceContext )
 		{
-			trace = traceContext;
+			_trace = traceContext;
 		}
 
-		public void Warn(String message)
+		public void Warn( String message )
 		{
-			trace.Warn(message);
+			_trace.Warn( message );
 		}
 
-		public void Warn(String category, String message)
+		public void Warn( String category, String message )
 		{
-			trace.Warn(category, message);
+			_trace.Warn( category, message );
 		}
 
-		public void Warn(String category, String message, Exception errorInfo)
+		public void Warn( String category, String message, Exception errorInfo )
 		{
-			trace.Warn(category, message, errorInfo);
+			_trace.Warn( category, message, errorInfo );
 		}
 
-		public void Write(String message)
+		public void Write( String message )
 		{
-			trace.Write(message);
+			_trace.Write( message );
 		}
 
-		public void Write(String category, String message)
+		public void Write( String category, String message )
 		{
-			trace.Write(category, message);
+			_trace.Write( category, message );
 		}
 
-		public void Write(String category, String message, Exception errorInfo)
+		public void Write( String category, String message, Exception errorInfo )
 		{
-			trace.Write(category, message, errorInfo);
+			_trace.Write( category, message, errorInfo );
 		}
 	}
 }
