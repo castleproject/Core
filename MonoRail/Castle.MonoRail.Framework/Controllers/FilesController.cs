@@ -34,15 +34,15 @@ namespace Castle.MonoRail.Framework.Controllers
 		{
 		}
 
-		private String GetResourceValue(String resName, String resKey)
+		private String GetResourceValue( String resName, String resKey )
 		{
 			return (String)(Resources[resName])[resKey];
 		}
 
-		private void RenderFile(String resourceName, String resourceKey)
+		private void RenderFile( String resourceName, String resourceKey )
 		{
-            String fileContent = GetResourceValue(resourceName, resourceKey);
-            RenderText(fileContent);
+            String fileContent = GetResourceValue( resourceName, resourceKey );
+            RenderText( fileContent );
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void AjaxScripts()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("Ajax", "jsfunctions");
+			RenderFile( "Ajax", "jsfunctions" );
 		}
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void BehaviourScripts()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("Behaviour", "jsfunctions");
+			RenderFile( "Behaviour", "jsfunctions" );
 		}
 		
 		/// <summary>
@@ -69,7 +69,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void EffectsFatScripts()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("EffectsFat", "fatfunctions");
+			RenderFile( "EffectsFat", "fatfunctions" );
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void Effects2()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("Effects2", "functions");
+			RenderFile( "Effects2", "functions" );
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateConfig()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("Validation", "fValidateConfig");
+			RenderFile( "Validation", "fValidateConfig" );
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateCore()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("Validation", "fValidateCore");
+			RenderFile( "Validation", "fValidateCore" );
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateValidators()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("Validation", "fValidateValidators");
+			RenderFile( "Validation", "fValidateValidators" );
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		public void ValidateLang()
 		{
 			Response.ContentType = "text/javascript";
-			RenderFile("Validation", "fValidateLang");
+			RenderFile( "Validation", "fValidateLang" );
 		}
 	}
 }
