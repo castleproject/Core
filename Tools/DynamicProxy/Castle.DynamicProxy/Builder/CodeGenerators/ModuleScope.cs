@@ -1,4 +1,3 @@
-using System.IO;
 // Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +56,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 					AssemblyName assemblyName = new AssemblyName();
                     assemblyName.Name = ASSEMBLY_NAME;
 
-#if ( DEBUG )
+#if ( PHYSICALASSEMBLY )
 					_assemblyBuilder =
 						AppDomain.CurrentDomain.DefineDynamicAssembly(
 							assemblyName,
@@ -83,7 +82,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		public bool SaveAssembly()
 		{
-#if ( DEBUG )
+#if ( PHYSICALASSEMBLY )
 			_assemblyBuilder.Save(FILE_NAME);
 			return true;
 #else
