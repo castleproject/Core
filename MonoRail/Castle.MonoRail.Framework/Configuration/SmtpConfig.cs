@@ -18,25 +18,25 @@ namespace Castle.MonoRail.Framework.Configuration
 
 	public class SmtpConfig
 	{
-		private String host = "localhost";
-		private String username, password;
+		private String _host = "localhost";
+		private String _username, _password;
 
 		public String Host
 		{
-			get { return host; }
-			set { host = value; }
+			get { return _host; }
+			set { _host = value; }
 		}
 
 		public String Username
 		{
-			get { return username; }
-			set { username = value; }
+			get { return _username; }
+			set { _username = value; }
 		}
 
 		public String Password
 		{
-			get { return password; }
-			set { password = value; }
+			get { return _password; }
+			set { _password = value; }
 		}
 	}
 }

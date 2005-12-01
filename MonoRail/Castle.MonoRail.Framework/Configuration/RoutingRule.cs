@@ -26,12 +26,12 @@ namespace Castle.MonoRail.Framework.Configuration
 		private String _pattern, _replace;
 		private Regex _rule;
 
-		public RoutingRule(String pattern, String replace)
+		public RoutingRule( String pattern, String replace )
 		{
 			_pattern = pattern;
 			_replace = replace;
 
-			_rule = new Regex(pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+			_rule = new Regex( pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline );
 		}
 
 		public String Pattern

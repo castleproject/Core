@@ -37,8 +37,8 @@ namespace Castle.MonoRail.Framework.Configuration
 		private String _customResourceFactory;
 		private String _customEngineTypeName;
 		private String _scaffoldingTypeName = DefaultScaffoldType;
-		private SmtpConfig smtp = new SmtpConfig();
-		private XmlNode section;
+		private SmtpConfig _smtp = new SmtpConfig();
+		private XmlNode _section;
 
 		public MonoRailConfiguration()
 		{
@@ -145,14 +145,14 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		public SmtpConfig SmtpConfig
 		{
-			get { return smtp; }
-			set { smtp = value; }
+			get { return _smtp; }
+			set { _smtp = value; }
 		}
 
 		public XmlNode ConfigSection
 		{
-			get { return section;  }
-			set { section = value; }
+			get { return _section;  }
+			set { _section = value; }
 		}
 
 		internal static MonoRailConfiguration GetConfig()
@@ -162,27 +162,26 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			if (config == null)
 			{
-				throw new ApplicationException("Unfortunately, you have to provide " +
-					"a small configuration to use MonoRail. Check the samples or the documentation.");
+				throw new ApplicationException( "Unfortunately, you have to provide " +
+					"a small configuration to use MonoRail. Check the samples or the documentation." );
 			}
 
 			return config;
 		}
 
-		public static Type GetType(String typeName)
+		public static Type GetType( String typeName )
 		{
-			return GetType(typeName, false);
+			return GetType( typeName, false );
 		}
 
-		public static Type GetType(String typeName, bool ignoreError)
+		public static Type GetType( String typeName, bool ignoreError )
 		{
 			Type loadedType = Type.GetType(typeName, false, false);
 
-			if (loadedType == null && !ignoreError)
+			if ( loadedType == null && !ignoreError )
 			{
 				throw new ConfigurationException( String.Format("The type {0} could not be found", typeName) );
 			}
-
 			return loadedType;
 		}
 	}
