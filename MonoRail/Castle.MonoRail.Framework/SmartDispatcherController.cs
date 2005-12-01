@@ -54,40 +54,6 @@ namespace Castle.MonoRail.Framework
 			binder = new DataBinder();
 		}
 
-		protected internal override void CollectActions()
-		{
-			MethodInfo[] methods = GetType().GetMethods( BindingFlags.Public|BindingFlags.Instance );
-			
-			// HACK: workaround for DYNPROXY-14
-			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
-			for (int i=0; i < methods.Length; i++)
-				methods[i] = methods[i].GetBaseDefinition();
-			
-			foreach(MethodInfo m in methods)
-			{
-				if (_actions.Contains(m.Name))
-				{
-					ArrayList list = _actions[m.Name] as ArrayList;
-
-					if (list == null)
-					{
-						list = new ArrayList();
-						list.Add(_actions[m.Name]);
-
-						_actions[m.Name] = list;
-					}
-
-					list.Add(m);
-				}
-				else
-				{
-					_actions[m.Name] = m;
-				}
-			}
-
-			base.ScreenCommonPublicMethods(_actions);
-		}
-
 		protected override void InternalSend(String action)
 		{
 			base.InternalSend( action );
