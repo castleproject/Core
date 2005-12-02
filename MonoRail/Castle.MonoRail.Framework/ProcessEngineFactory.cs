@@ -54,7 +54,9 @@ namespace Castle.MonoRail.Framework
 			{
 				_config = config;
 			}
+			
 			_controllerDescriptorBuilder = new ControllerDescriptorBuilder();
+			
 			InitializeExtensions();
 			InitializeControllerFactory();
 			InitializeViewComponentFactory();

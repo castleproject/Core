@@ -80,7 +80,8 @@ namespace Castle.MonoRail.Framework.Internal
 		public ControllerMetaDescriptor( Type controllerType )
 		{
 			_controllerType = controllerType;
-			collectActions(  _controllerType );
+			
+			CollectActions(_controllerType);
 		}
 
 		public ActionMetaDescriptor GetAction( MethodInfo actionMethod )
@@ -96,7 +97,7 @@ namespace Castle.MonoRail.Framework.Internal
 			return desc;
 		}
 
-		private void collectActions( Type controllerType )
+		private void CollectActions( Type controllerType )
 		{
 			MethodInfo[] methods = controllerType.GetMethods( BindingFlags.Public | BindingFlags.Instance );
 

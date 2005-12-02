@@ -39,7 +39,6 @@ namespace Castle.MonoRail.Framework
 		internal static readonly String RailsContextKey = "rails.context";
 		
 		private readonly IControllerFactory controllerFactory;
-		private readonly ControllerDescriptorBuilder controllerDescriptorBuilder;
 		private readonly IDictionary _type2Service = new HybridDictionary();
 		private readonly ExtensionComposite extensionComposite;
 
@@ -64,7 +63,6 @@ namespace Castle.MonoRail.Framework
 			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, 
 			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions, IEmailSender emailSender)
 		{
-			this.controllerDescriptorBuilder = controllerDescriptorBuilder;
 			this.controllerFactory = controllerFactory;
 			this.extensionComposite = new ExtensionComposite(extensions);
 
@@ -166,8 +164,7 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				controller.Process( context, this, 
-					info.Area, info.Controller, info.Action );
+				controller.Process( context, this, info.Area, info.Controller, info.Action );
 			}
 			finally
 			{
