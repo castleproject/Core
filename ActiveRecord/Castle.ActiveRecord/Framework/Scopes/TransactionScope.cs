@@ -119,6 +119,10 @@ namespace Castle.ActiveRecord
 			{
 				parentTransactionScope.RegisterSession(key, session);
 			}
+			else if (parentSimpleScope != null)
+			{
+				parentSimpleScope.RegisterSession(key, session);
+			}
 
 			base.RegisterSession(key, session);
 		}

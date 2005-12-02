@@ -477,13 +477,19 @@ namespace Castle.ActiveRecord.Tests
 
 			using(new SessionScope())
 			{
-				using(new TransactionScope())
+				using(new TransactionScope(TransactionMode.Inherits))
 				{
 					b = Blog.Find(b.Id);
 					b.Name = "changed";
 					b.Save();
 				}
 
+				{
+					Post post2 = Post.Find(post.Id);
+					b = Blog.Find(b.Id);
+				}
+
+				using(new TransactionScope(TransactionMode.Inherits))
 				{
 					Post post2 = Post.Find(post.Id);
 					b = Blog.Find(b.Id);
