@@ -44,7 +44,7 @@
 	
 	</target>
 
-	<target name="dist">
+	<target name="dist" depends="zipsource, zipsamples">
 	<!--
 		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="dist" inheritall="true" />
 		<nant buildfile="AspectSharp/aspectsharp.build" target="distribution" inheritall="true" />
@@ -55,6 +55,134 @@
 		<nant buildfile="Services/services.build" target="dist" inheritall="true" />
 		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
 	-->
+	</target>
+
+	<target name="zipsamples">
+		<zip zipfile="${base.dir}/Samples/ActiveRecord-Samples.zip">
+			<fileset basedir="${base.dir}/Samples/ActiveRecord">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\*.*" />
+				<exclude name="**\*.user" />
+			</fileset>
+		</zip>
+		<zip zipfile="${base.dir}/Samples/Facilities-Samples.zip">
+			<fileset basedir="${base.dir}/Samples/Facilities">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\*.*" />
+				<exclude name="**\*.user" />
+			</fileset>
+		</zip>
+		<zip zipfile="${base.dir}/Samples/InversionOfControl-Samples.zip">
+			<fileset basedir="${base.dir}/Samples/InversionOfControl">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\*.*" />
+				<exclude name="**\*.user" />
+			</fileset>
+		</zip>
+		<zip zipfile="${base.dir}/Samples/MonoRail-Samples.zip">
+			<fileset basedir="${base.dir}/Samples/MonoRail">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\*.*" />
+				<exclude name="**\*.user" />
+			</fileset>
+		</zip>
+		<zip zipfile="${base.dir}/Samples/Castle-Samples.zip">
+			<fileset basedir="${base.dir}/Samples/Castle">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\*.*" />
+				<exclude name="**\*.user" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="zipsource">
+		<zip zipfile="Castle-src.zip">
+			<fileset basedir="${base.dir}">
+				<include name="**/*.build" />
+				<include name="**/*.sln" />
+				<include name="**/*.cs" />
+				<include name="**/*.ico" />
+				<include name="**/*.csproj" />
+				<include name="**/*.xml" />
+				<include name="**/*.config" />
+				<include name="**/*.lang" />
+				<include name="**/*.txt" />
+				<include name="**/*.inc" />
+				<include name="**/*.vm" />
+				<include name="*.snk" />
+				<include name="SharedLibs/**/*.dll" />
+				<include name="SharedLibs/**/*.rtf" />
+				<include name="ActiveRecord/Generator/lib/*.dll" />
+				
+				<exclude name="**\obj\Debug\*.*" />
+				<exclude name="**\bin\*.*" />
+				<exclude name="**\*.user" />
+				<exclude name="Rook" />
+				<exclude name="Samples" />
+				<exclude name="Sandbox" />
+				<exclude name="setup" />
+			</fileset>
+		</zip>
 	</target>
 	
 	<description>Documentation generation.</description><property name="base.dir" value="." />
@@ -67,7 +195,7 @@
 	<property name="ShowPrivate" value="false"/>
 	<property name="OutputTarget" value="HTMLHelp"/>
 
-	<description>Generates documentation with default propreties.</description>
+	<description>Generates documentation with default properties.</description>
 	<target name="releaseDocs" depends="cleanup">
 		<call target="copyFilesToDocument"/>
 		<call target="generateReleaseDocs"/>
@@ -102,8 +230,9 @@
 				<include name="SharedLibs/boo"/>
 				<include name="SharedLibs/cassini"/>
 				<include name="SharedLibs/log4net"/>
-				<include name="SharedLibs/nettron"/>
+				<include name="SharedLibs/netron"/>
 				<include name="SharedLibs/Nlog"/>
+				<include name="SharedLibs/log4net"/>
 				<include name="SharedLibs/Nvelocity"/>
 			</referencepaths>
 			<documenters>
