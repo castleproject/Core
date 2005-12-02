@@ -192,9 +192,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			PresentationHelper presentationHelper = new PresentationHelper();
 			presentationHelper.SetController(controller);
 	
+            PaginationHelper paginationHelper = new PaginationHelper();
+            paginationHelper.SetController(controller);
+
 			controller.PropertyBag["HtmlHelper"] = htmlHelper;
 			controller.PropertyBag["ValidationHelper"] = validationHelper;
 			controller.PropertyBag["PresentationHelper"] = presentationHelper;
+            controller.PropertyBag["PaginationHelper"] = paginationHelper;
 		}
 	}
 }

@@ -4,7 +4,7 @@ $ValidationHelper.InstallScripts()
 
 #set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
 
-$HtmlHelper.Form( "update${armodel.Type.Name}.rails", "scaffoldingform", "POST", $validatorForm )
+$PresentationHelper.Form( "update${armodel.Type.Name}", "scaffoldingform", "post", $validatorForm )
 
 $HtmlHelper.InputHidden("id", ${id})
 

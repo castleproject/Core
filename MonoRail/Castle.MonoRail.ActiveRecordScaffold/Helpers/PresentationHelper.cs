@@ -72,5 +72,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return String.Format( "<a href=\"remove{0}.{1}?id={4}\" {3}>{2}</a>", model.Type.Name, 
 				Controller.Context.UrlInfo.Extension, text, GetAttributes(attributes), key );
 		}
+
+        public String Form(String action, String id, String method, String onSubmit)
+        {
+            HtmlHelper hh = new HtmlHelper();
+
+            string fullAction = string.Format("{0}.{1}", action, Controller.Context.UrlInfo.Extension);
+
+            return hh.Form(fullAction, id, method, onSubmit);
+        }
 	}
 }

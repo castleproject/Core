@@ -4,7 +4,7 @@ $ValidationHelper.InstallScripts()
 
 #set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
 
-$HtmlHelper.Form( "create${armodel.Type.Name}.rails", "scaffoldingform", "POST", $validatorForm )
+$PresentationHelper.Form( "create${armodel.Type.Name}", "scaffoldingform", "post", $validatorForm )
 
 <div id="scaffoldmain">
 

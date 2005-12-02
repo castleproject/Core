@@ -7,11 +7,11 @@ $PresentationHelper.LinkToNew( $model, "Create a new $model.Type.Name", $DictHel
 <div style="border: 1px solid black;">
 <table class="scaffoldtable" cellpadding="5" cellspacing="0" border="0" width="100%">
   <tr>
-    <th>&nbsp</th>
+    <th>&nbsp;</th>
   #foreach($prop in $properties)
     <th>$prop.Name</th>
   #end
-    <th>&nbsp</th>
+    <th>&nbsp;</th>
   </tr>
 
 #if($items.Length = 0)
@@ -42,13 +42,13 @@ $PresentationHelper.LinkToConfirm( $model, "remove", $rowid, $DictHelper.CreateD
   <tr>
   <td>Showing $items.FirstItem - $items.LastItem of $items.TotalItems</td>
   <td align="right">
-#if($items.HasFirst) $pagination.CreatePageLink( 1, "first" ) #end
+#if($items.HasFirst) $PaginationHelper.CreatePageLink( 1, "first" ) #end
 #if(!$items.HasFirst) first #end
-#if($items.HasPrevious) | $pagination.CreatePageLink( $items.PreviousIndex, "prev" ) #end
+#if($items.HasPrevious) | $PaginationHelper.CreatePageLink( $items.PreviousIndex, "prev" ) #end
 #if(!$items.HasPrevious) | prev #end
-#if($items.HasNext) | $pagination.CreatePageLink( $items.NextIndex, "next" ) #end
+#if($items.HasNext) | $PaginationHelper.CreatePageLink( $items.NextIndex, "next" ) #end
 #if(!$items.HasNext) | next #end
-#if($items.HasLast) | $pagination.CreatePageLink( $items.LastIndex, "last" ) #end
+#if($items.HasLast) | $PaginationHelper.CreatePageLink( $items.LastIndex, "last" ) #end
 #if(!$items.HasLast) | last #end
   </td>
   </tr>
