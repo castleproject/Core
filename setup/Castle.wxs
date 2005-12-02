@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 
+<!-- TODO: register the add in as a COM component -->
+<!-- TODO: Documents -->
+<!-- TODO: Samples -->
+<!-- TODO: Source code -->
+
 <?define VsVersion = "dummy"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
@@ -23,6 +28,7 @@
 			<?undef VsVersion?>
 			<?define VsVersion = "7.1"?>
 			<RegistrySearch Id="SearchForCommonDirPath2003" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\$(var.VsVersion)\Setup\VC#" Name="ProductDir" Type="raw">
+				<DirectorySearch Id="SearchForProjectsPath2003" Path="CSharpProjects" Depth="1" />
 			</RegistrySearch>
 		</Property>
 
@@ -30,6 +36,7 @@
 			<?undef VsVersion?>
 			<?define VsVersion = "8.0"?>
 			<RegistrySearch Id="SearchForCommonDirPath2005" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\$(var.VsVersion)\Setup\VC#" Name="ProductDir" Type="raw">
+				<DirectorySearch Id="SearchForProjectsPath2005" Path="CSharpProjects" Depth="1" />
 			</RegistrySearch>
 		</Property>
 
@@ -94,8 +101,14 @@
 				<File Id="file25" Name="CAEE9E_1.DLL" LongName="Castle.Windsor.dll" src="..\MonoRail\bin\Castle.Windsor.dll" />
 				<File Id="file31" Name="NVELOC_1.DLL" LongName="NVelocity.dll" src="..\MonoRail\bin\NVelocity.dll" />
 				<!-- <File Id="file34" Name="WSABOO_1.DLL" LongName="WSABoo.Parser.dll" src="..\MonoRail\bin\WSABoo.Parser.dll" /> -->
+
 				<File Id="file22" Name="CAED29_1.DLL" 
 					LongName="Castle.MonoRail.TestSupport.dll" 
+					src="..\MonoRail\bin\Castle.MonoRail.TestSupport.dll" />
+
+				<File Id="file22A" Name="CAED29_2.DLL" 
+					LongName="Castle.MonoRail.TestSupport.dll" 
+					KeyPath="yes" Assembly=".net" AssemblyManifest="file22"
 					src="..\MonoRail\bin\Castle.MonoRail.TestSupport.dll" />
 
 				<!-- DynProxy -->
@@ -140,10 +153,10 @@
 				<File Id="file66" Name="BAMBOO_3.DLL" LongName="Bamboo.Prevalence.Util.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Bamboo.Prevalence.Util.dll" />
 				<File Id="file67" Name="BAMBOO_2.DLL" LongName="Bamboo.Prevalence.XPath.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Bamboo.Prevalence.XPath.dll" />
 				<File Id="file68" Name="log4net.dll" src="E:\dev\castleall\trunk\Facilities\Logging\bin\log4net.dll" />
-				<File Id="file69" Name="IESICO_1.DLL" LongName="Iesi.Collections.dll" src="E:\dev\castleall\trunk\Facilities\ActiveRecordIntegration\bin\Iesi.Collections.dll" />
-				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="E:\dev\castleall\trunk\Facilities\ActiveRecordIntegration\bin\NHibernate.dll" />
-				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="E:\dev\castleall\trunk\Facilities\ActiveRecordIntegration\bin\Nullables.dll" />
-				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="E:\dev\castleall\trunk\Facilities\ActiveRecordIntegration\bin\Nullables.NHibernate.dll" />
+				<File Id="file69" Name="IESICO_1.DLL" LongName="Iesi.Collections.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\Iesi.Collections.dll" />
+				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\NHibernate.dll" />
+				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\Nullables.dll" />
+				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\Nullables.NHibernate.dll" />
 
 				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
 					<Registry Action="write" Type="string" Value="[BinDir]" />
@@ -155,6 +168,8 @@
 		<DirectoryRef Id="CassiniDir">
 			<Component Id="CassiniComponent" DiskId="1" Guid="FB49D9FE-D154-431F-BD70-CF1E51F98B10">
 				<File Id="cfile0" Name="Cassini.dll" src="..\SharedLibs\cassini\Cassini.dll" />
+				<File Id="cfile0a" Name="Cassini.dll" src="..\SharedLibs\cassini\Cassini.dll"
+					Assembly=".net"  KeyPath="yes" AssemblyManifest="cfile0" />
 				<File Id="cfile1" Name="web.exe" LongName="CassiniWebServer.exe" src="..\SharedLibs\cassini\CassiniWebServer.exe" />
 				<File Id="cfile2" Name="EULA.rtf" src="..\SharedLibs\cassini\EULA.rtf" />
 
@@ -166,29 +181,50 @@
 		
 		<DirectoryRef Id="DocsDir">
 			<Component Id="DocsComp" DiskId="1" Guid="CDE4186F-DE83-4E7C-A78B-84649BF99AD9">
-				<CreateFolder />
+				<File Id="docs0" Name="Castle.chm" src="..\docs\Castle.chm" />
 			</Component>
 		</DirectoryRef>
 
 		<DirectoryRef Id="SourceCodeDir">
 			<Component Id="SourceComp" DiskId="1" Guid="54844DCA-C0EF-47F2-8151-34A6AE16B1AE">
-				<CreateFolder />
+				<File Id="src0" Name="Castle-src.zip" src="..\Castle-src.zip" />
 			</Component>
 		</DirectoryRef>
 
 		<DirectoryRef Id="SamplesDir">
 			<Component Id="samplescomp" DiskId="1" Guid="F6638FC5-BD66-49E8-8B84-13CD74227146">
-				<CreateFolder />
+				<File Id="sample0" Name="ActiveRecord-Samples.zip" src="..\Samples\ActiveRecord-Samples.zip" />
+				<File Id="sample1" Name="Castle-Samples.zip" src="..\Samples\Castle-Samples.zip" />
+				<File Id="sample2" Name="Facilities-Samples.zip" src="..\Samples\Facilities-Samples.zip" />
+				<File Id="sample3" Name="InversionOfControl-Samples.zip" src="..\Samples\InversionOfControl-Samples.zip" />
+				<File Id="sample4" Name="MonoRail-Samples.zip" src="..\Samples\MonoRail-Samples.zip" />
+			</Component>
+		</DirectoryRef>
+		
+		<DirectoryRef Id="WizardTemplatesDir">
+			<Component Id="vsaddin" DiskId="1" Guid="E4A2DCF9-32F1-4692-942D-E8081EB61FD2">
+				<File Id="addinfile" Name="casaddin.dll" 
+					LongName="Castle.VSNetIntegration.CastleWizards.dll" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\bin\Debug\Castle.VSNetIntegration.CastleWizards.dll" />
 			</Component>
 		</DirectoryRef>
 
 		<DirectoryRef Id="TemplatesVs7Dir">
 			<Component Id="vs7comp" DiskId="1" Guid="F28DAF5D-C18D-4F06-8928-CD17D955019F">
 				<CreateFolder />
+				
 				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Castle">
 					<Registry Action="write" Name="vs7templatelocation" Type="string" Value="[TemplatesVs7Dir]" />
 				</Registry>
+				
 				<Condition>VS2003_SCHEMAS_DIR</Condition>
+				
+				<File Id="vs7file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Sandbox\VSNetIntegration\Castle ActiveRecord Project.vsz">
+					<CopyFile Id="vs7file0cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+				</File>
+				
+				<File Id="vs7file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Sandbox\VSNetIntegration\Castle MonoRail Project.vsz">
+					<CopyFile Id="vs7file1cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+				</File>
 			</Component>
 		</DirectoryRef>
 		
@@ -201,7 +237,7 @@
 				<Condition>VS2005_SCHEMAS_DIR</Condition>
 			</Component>
 		</DirectoryRef>
-
+		
 		<!-- Features -->
 		<Feature Id="Complete" Title="Castle" 
 			Display="expand" Level="1" Description="Castle Project" 
@@ -226,6 +262,7 @@
 			</Feature>
 			
 			<Feature Id='VSWizards' Title='Visual Studio Wizards' Description='Wizards for VS.Net that helps in creating new projects' Level='1'>
+				<ComponentRef Id='vsaddin' />
 				<ComponentRef Id='vs7comp' />
 				<ComponentRef Id='vs8comp' />
 			</Feature>
