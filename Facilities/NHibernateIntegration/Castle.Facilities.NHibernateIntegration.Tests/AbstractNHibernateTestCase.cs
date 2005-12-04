@@ -71,7 +71,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 
 		protected virtual String GetContainerConfig()
 		{
-			return "../Castle.Facilities.NHibernateIntegration.Tests/facilityconfig.xml";
+			return "facilityconfig.xml";
 		}
 	}
 }

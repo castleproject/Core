@@ -33,7 +33,7 @@ namespace Castle.Facilities.ActiveRecordIntegration.Tests
 		[TestFixtureSetUp]
 		public void Init()
 		{
-			container = new WindsorContainer("../configuration.xml");
+			container = new WindsorContainer("configuration.xml");
 
 			container.AddFacility("transactionfacility", new TransactionFacility() );
 			container.AddFacility("arfacility", new ActiveRecordFacility() );

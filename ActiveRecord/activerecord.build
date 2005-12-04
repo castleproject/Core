@@ -40,6 +40,58 @@
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-dynamicproxy" inheritall="true" />
 
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-nhibernate" inheritall="true" />
+
+		<copy file="${test.src.dir1}/${test.assembly.appconfig1}" tofile="${bin.dir}/${test.assembly.appconfig1}" />
+		<copy file="${test.src.dir2}/${test.assembly.appconfig2}" tofile="${bin.dir}/${test.assembly.appconfig2}" />
+		
+		<property name="app.config" value="${bin.dir}/${test.assembly.appconfig1}" />
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.1}" 
+		/>
+		
+		<property name="app.config" value="${bin.dir}/${test.assembly.appconfig2}" />
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.1}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config[@type='Castle.ActiveRecord.Tests.Model.Test2ARBase, Castle.ActiveRecord.Tests']/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.2}" 
+		/>
 	</target>
 	
 	<target name="clean">
@@ -125,7 +177,7 @@
 			</references>
 		</csc>
 	</target>
-	
+
 	<target name="generator">
 		<nant buildfile="${base.dir}/Generator/generator.build" target="build" inheritall="false" />
 	</target>
@@ -134,14 +186,12 @@
 		<nunit2>
 			<formatter type="${nunit.formatter}" />
 			<test 
-				assemblyname="${bin.dir}/${test.assembly.name1}" 
-				appconfig="${test.src.dir1}/${test.assembly.appconfig1}"/>
+				assemblyname="${bin.dir}/${test.assembly.name1}" />
 		</nunit2>
 		<nunit2 >
 			<formatter type="${nunit.formatter}" />
 			<test 
-				assemblyname="${bin.dir}/${test.assembly.name2}" 
-				appconfig="${test.src.dir2}/${test.assembly.appconfig2}"/>
+				assemblyname="${bin.dir}/${test.assembly.name2}" />
 		</nunit2>
 	</target>
 	

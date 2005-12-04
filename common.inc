@@ -11,6 +11,12 @@
 	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
 	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
 
+	<!-- properties used to connect to database for testing -->
+	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />
+	<property name="ar.connection.driver_class" value="NHibernate.Driver.SqlClientDriver" overwrite="false" />
+	<property name="ar.connection.connection_string.1" value="Server=(local);initial catalog=test;Integrated Security=SSPI" overwrite="false" />
+	<property name="ar.connection.connection_string.2" value="Server=(local);initial catalog=test2;Integrated Security=SSPI" overwrite="false" />
+
 	<!-- find out where gacutil is -->
 
 	<property name="gacutil.framework.file" value="${framework::get-framework-directory( framework::get-target-framework() )}\gacutil.exe"/>

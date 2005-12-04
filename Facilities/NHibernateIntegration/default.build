@@ -36,6 +36,39 @@
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-transaction-service" inheritall="true" />
 
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-atm-facility" inheritall="true" />
+				
+		<property name="app.config" value="${bin.dir}/facilityconfig.xml" />
+		<copy file="${base.dir}/Castle.Facilities.NHibernateIntegration.Tests/facilityconfig.xml" tofile="${app.config}" />
+		<xmlpoke
+			file="${app.config}"
+			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.dialect']"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.dialect']"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.connection.driver_class']"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.connection.driver_class']"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory1']/settings/item[@key='hibernate.connection.connection_string']"
+			value="${ar.connection.connection_string.1}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/castle/facilities/facility[@id='nhibernatefacility']/factory[@id='sessionFactory2']/settings/item[@key='hibernate.connection.connection_string']"
+			value="${ar.connection.connection_string.2}" 
+		/>
 		
 	</target>
 

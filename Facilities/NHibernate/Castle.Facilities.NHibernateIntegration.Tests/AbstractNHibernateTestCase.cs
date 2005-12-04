@@ -55,7 +55,7 @@ namespace Castle.Facilities.NHibernateIntegration.Tests
 		{
 			if (container != null) return container;
 
-			container = new WindsorContainer( "../facilityconfig.xml" );
+			container = new WindsorContainer( "facilityconfig.xml" );
 
 			return container;
 		}

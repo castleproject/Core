@@ -36,6 +36,24 @@
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-transaction-service" inheritall="true" />
 
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-atm-facility" inheritall="true" />
+		
+		<property name="app.config" value="${bin.dir}/configuration.xml" />
+		<copy file="${base.dir}/configuration.xml" tofile="${app.config}" />
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/facilities/facility[@id='arfacility']/config/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/facilities/facility[@id='arfacility']/config/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/facilities/facility[@id='arfacility']/config/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.1}" 
+		/>
 
 	</target>
 
