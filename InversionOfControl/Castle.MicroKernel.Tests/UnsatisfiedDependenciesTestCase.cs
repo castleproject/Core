@@ -42,7 +42,7 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
-		[ExpectedException( typeof(HandlerException), "Can't create component as it has dependencies to be satisfied. \r\nWaiting for the following services: \r\n- Castle.MicroKernel.Tests.ClassComponents.ICommon \r\n" )]
+		[ExpectedException( typeof(HandlerException), "Can't create component 'key' as it has dependencies to be satisfied. \r\nWaiting for the following services: \r\n- Castle.MicroKernel.Tests.ClassComponents.ICommon \r\n" )]
 		public void UnsatisfiedService()
 		{
 			kernel.AddComponent("key", typeof(CommonServiceUser));
