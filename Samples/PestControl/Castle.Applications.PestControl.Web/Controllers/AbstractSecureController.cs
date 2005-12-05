@@ -21,7 +21,7 @@ namespace Castle.Applications.PestControl.Web.Controllers
 	using Castle.Applications.PestControl.Web.Controllers.Filters;
 
 	[Layout("default")]
-	[Filter(ExecuteEnum.Before, typeof(CheckAuthenticationFilter))]
+	[Filter(ExecuteEnum.BeforeAction, typeof(CheckAuthenticationFilter))]
 	public class AbstractSecureController : SmartDispatcherController
 	{
 		public AbstractSecureController()

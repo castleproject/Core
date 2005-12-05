@@ -27,7 +27,7 @@
 						   if (Context.User != null && Context.User.Identity.IsAuthenticated)
 					       {
 					    %>
-						<font size=-1>Logged as <%= Context.User.Identity.Name %></font>
+						<font size=-1>Logged in as <%= Context.User.Identity.Name %></font>
 					    <% }
 					       else if (!Context.User.Identity.IsAuthenticated) 
 						   {

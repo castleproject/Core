@@ -12,9 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Model.Resource;
+
 namespace Castle.Applications.PestControl.Tests
 {
 	using System;
+	using System.Configuration;
 
 	using Bamboo.Prevalence;
 
@@ -22,7 +26,6 @@ namespace Castle.Applications.PestControl.Tests
 
 	using Castle.Windsor;
 	using Castle.Windsor.Configuration.Interpreters;
-	using Castle.Windsor.Configuration.Sources;
 
 	using Castle.Applications.PestControl.Model;
 
@@ -42,7 +45,10 @@ namespace Castle.Applications.PestControl.Tests
 		[SetUp]
 		public void Init()
 		{
-			_container = new PestControlContainer(new XmlInterpreter(new AppDomainConfigSource()));
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			XmlInterpreter interpreter = new XmlInterpreter( new ConfigResource() );
+			interpreter.ProcessResource(interpreter.Source, store);
+			_container = new PestControlContainer(interpreter);
 
 			_model = (PestControlModel) _container["pestcontrolModel"];
 			_engine = (PrevalenceEngine) _container["prevalenceengine"];
