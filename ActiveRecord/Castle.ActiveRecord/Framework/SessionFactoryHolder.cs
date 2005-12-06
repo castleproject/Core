@@ -74,35 +74,41 @@ namespace Castle.ActiveRecord.Framework
 
 			readerWriterLock.AcquireReaderLock(-1);
 
-			ISessionFactory sessFactory = null;
-
-			if (type2SessFactory.Contains(normalizedtype))
-			{
-				sessFactory = type2SessFactory[normalizedtype] as ISessionFactory;
-			}
-
-			if (sessFactory != null)
-			{
-				readerWriterLock.ReleaseReaderLock();
-
-				return sessFactory;
-			}
-
-			readerWriterLock.UpgradeToWriterLock(-1);
-
 			try
 			{
-				Configuration cfg = GetConfiguration(normalizedtype);
+				
+				ISessionFactory sessFactory = null;
 
-				sessFactory = cfg.BuildSessionFactory();
+				if (type2SessFactory.Contains(normalizedtype))
+				{
+					sessFactory = type2SessFactory[normalizedtype] as ISessionFactory;
+				}
 
-				type2SessFactory[normalizedtype] = sessFactory;
+				if (sessFactory != null)
+				{
+					return sessFactory;
+				}
 
-				return sessFactory;
+				LockCookie lc = readerWriterLock.UpgradeToWriterLock(-1);
+
+				try
+				{
+					Configuration cfg = GetConfiguration(normalizedtype);
+
+					sessFactory = cfg.BuildSessionFactory();
+
+					type2SessFactory[normalizedtype] = sessFactory;
+
+					return sessFactory;
+				}
+				finally
+				{
+					readerWriterLock.DowngradeFromWriterLock(ref lc);
+				}
 			}
 			finally
 			{
-				readerWriterLock.ReleaseWriterLock();
+				readerWriterLock.ReleaseReaderLock();
 			}
 		}
 

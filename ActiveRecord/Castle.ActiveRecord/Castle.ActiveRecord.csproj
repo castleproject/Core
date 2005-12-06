@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\ARSchemaCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\DictionaryAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

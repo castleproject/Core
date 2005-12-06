@@ -167,15 +167,6 @@ namespace Castle.ActiveRecord
 			Initialize( source, (Type[]) list.ToArray( typeof(Type) ) );
 		}
 
-        /// <summary>
-        /// Return true if the type has a [ActiveRecord] attribute or one of
-        /// its properties or fields has been marked.
-        /// </summary>
-		private static bool IsActiveRecordType(Type type)
-		{
-            return type.IsDefined(typeof(ActiveRecordAttribute), false);
-		}
-
 		/// <summary>
 		/// Initializes the framework reading the configuration from
 		/// the <c>AppDomain</c> and checking all the types on the executing <c>Assembly</c>
@@ -210,6 +201,17 @@ namespace Castle.ActiveRecord
 			{
 				throw new ActiveRecordException( "Could not create the schema", ex );
 			}
+		}
+
+		/// <summary>
+		/// Executes the specified script to create/drop/change the database schema
+		/// </summary>
+		public static void ExecuteSchemaFromFile(String scriptFileName)
+		{
+			ARSchemaCreator arschema = new ARSchemaCreator( 
+				ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) ) );
+
+			arschema.Execute( scriptFileName );
 		}
 
 		/// <summary>
@@ -272,6 +274,14 @@ namespace Castle.ActiveRecord
 			Configuration cfg = ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) );
 
 			return new SchemaExport( cfg );
+		}
+
+		/// <summary>
+		/// Return true if the type has a [ActiveRecord] attribute
+		/// </summary>
+		private static bool IsActiveRecordType(Type type)
+		{
+			return type.IsDefined(typeof(ActiveRecordAttribute), false);
 		}
 
 		private static void CheckInitialized()

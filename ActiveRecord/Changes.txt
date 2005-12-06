@@ -1,6 +1,9 @@
 
 beta 3
 ======
+
+- Added: ActiveRecordStarter.ExecuteSchemaFromFile(filename) as an alternative to CreateSchema. 
+
 - Added: Support for composite keys - composite key class must be serializable and implement both Equals and GetHashCode.
   Not complete support, missing the NHibernate key-many-to-one element in the composite key.
   
