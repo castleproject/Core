@@ -1,6 +1,9 @@
 RC 2
 ====
 
+- Better error messages: now the components waiting for dependencies will recursively 
+  report what they are waiting for.
+
 - Support for custom lifestyle through configuration (kudos to Bawer Dagdeviren):
 
   <component id="my.component"

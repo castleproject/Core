@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE;STRONG"
+                    DefineConstants = "DEBUG;TRACE"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -279,6 +279,11 @@
                 />
                 <File
                     RelPath = "Handlers\HandlerException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Handlers\IExposeDependencyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

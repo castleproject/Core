@@ -42,13 +42,13 @@ namespace Castle.MicroKernel.Tests
 		}
 
 		[Test]
-		[ExpectedException( typeof(HandlerException), "Can't create component 'key' as it has dependencies to be satisfied. \r\nWaiting for the following services: \r\n- Castle.MicroKernel.Tests.ClassComponents.ICommon \r\n" )]
+		[ExpectedException( typeof(HandlerException) )]
 		public void UnsatisfiedService()
 		{
 			kernel.AddComponent("key", typeof(CommonServiceUser));
 			object instance = kernel["key"];
 		}
-		
+
 		[Test]
 		[ExpectedException( typeof(DependencyResolverException), "Could not resolve non-optional dependency for 'key' (Castle.MicroKernel.Tests.ClassComponents.CustomerImpl2). Parameter 'name' type 'System.String'" )]
 		public void UnsatisfiedConfigValues()

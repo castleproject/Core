@@ -25,7 +25,7 @@ namespace Castle.MicroKernel.Handlers
 	/// Implements the basis of <see cref="IHandler"/>
 	/// </summary>
 	[Serializable]
-	public abstract class AbstractHandler : MarshalByRefObject, IHandler, IDisposable
+	public abstract class AbstractHandler : MarshalByRefObject, IHandler, IExposeDependencyInfo, IDisposable
 	{
 		private IKernel kernel;
 		private ComponentModel model;
@@ -324,31 +324,67 @@ namespace Castle.MicroKernel.Handlers
 		}
 
 		/// <summary>
-		/// Returns human readable list of components 
+		/// Returns human readable list of dependencies 
 		/// this handler is waiting for.
 		/// </summary>
 		/// <returns></returns>
-		protected String ObtainDependencyDetails()
+		public String ObtainDependencyDetails()
 		{
+			if (this.CurrentState == HandlerState.Valid) return String.Empty;
+
 			StringBuilder sb = new StringBuilder();
+
+			sb.AppendFormat( "\r\n{0} is waiting for the following dependencies: \r\n", ComponentModel.Name );
 
 			if (DependenciesByService.Count != 0)
 			{
-				sb.Append( "\r\nWaiting for the following services: \r\n" );
+				sb.Append( "\r\nServices: \r\n" );
 
 				foreach(Type type in DependenciesByService)
 				{
-					sb.AppendFormat( "- {0} \r\n", type.FullName );
+					IHandler handler = Kernel.GetHandler( type );
+
+					if (handler == null)
+					{
+						sb.AppendFormat( "- {0} which was not registered. \r\n", type.FullName );
+					}
+					else
+					{
+						sb.AppendFormat( "- {0} which was registered but is also waiting for dependencies. \r\n", type.FullName );
+
+						IExposeDependencyInfo info = handler as IExposeDependencyInfo;
+						
+						if (info != null)
+						{
+							sb.Append( info.ObtainDependencyDetails() );
+						}
+					}
 				}
 			}
 
 			if (DependenciesByKey.Count != 0)
 			{
-				sb.Append( "\r\nAnd for the following keys {components with specific keys}\r\n" );
+				sb.Append( "\r\nKeys (components with specific keys)\r\n" );
 
 				foreach(String key in DependenciesByKey)
 				{
-					sb.AppendFormat( "- {0} \r\n", key );
+					IHandler handler = Kernel.GetHandler( key );
+
+					if (handler == null)
+					{
+						sb.AppendFormat( "- {0} which was not registered. \r\n", key );
+					}
+					else
+					{
+						sb.AppendFormat( "- {0} which was registered but is also waiting for dependencies. \r\n", key );
+
+						IExposeDependencyInfo info = handler as IExposeDependencyInfo;
+						
+						if (info != null)
+						{
+							sb.Append( info.ObtainDependencyDetails() );
+						}
+					}
 				}
 			}
 
