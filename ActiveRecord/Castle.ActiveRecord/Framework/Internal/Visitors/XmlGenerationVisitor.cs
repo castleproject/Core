@@ -655,7 +655,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				return MakeAtt( "class", type.FullName );
+				return MakeAtt("class", MakeTypeName(type));
 			}
 		}
 

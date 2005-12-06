@@ -438,7 +438,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
 				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithCompositeKey, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithCompositeKey\"     >\r\n" +
-				"    <composite-id name=\"Key\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CompositeKeyForClassWithCompositeKey\" unsaved-value=\"none\" access=\"property\">\r\n" +
+				"    <composite-id name=\"Key\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CompositeKeyForClassWithCompositeKey, Castle.ActiveRecord.Framework.Internal.Tests\" unsaved-value=\"none\" access=\"property\">\r\n" +
 				"      <key-property name=\"KeyA\" access=\"property\" column=\"KeyA\" type=\"System.String\"        />\r\n" +
 				"      <key-property name=\"KeyB\" access=\"property\" column=\"KeyB\" type=\"System.String\"        />\r\n" +
 				"    </composite-id>\r\n" +
