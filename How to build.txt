@@ -33,6 +33,22 @@ If not you must adjust the connection string and create a small structure on you
   > nant -D:nhibernate.test=false -D:activerecord.test=false
 
 
+The basic NHibernate settings can be set as NAnt arguments:
+
+- ar.dialect sets the NHibernate dialect
+
+    > -D:ar.dialect=NHibernate.Dialect.MsSql2000Dialect
+
+- ar.connection.driver_class sets the driver
+
+    > -D:ar.connection.driver_class=NHibernate.Driver.SqlClientDriver
+
+- ar.connection.connection_string{1,2} set the connection strings for the test and test2 databases
+
+    > -D:ar.connection.connection_string.1="Data Source=.\sqlexpress;Initial Catalog=test;Integrated Security=SSPI;"
+    > -D:ar.connection.connection_string.2="Data Source=.\sqlexpress;Initial Catalog=test2;Integrated Security=SSPI;"
+
+
 
 MonoRail tests are failing
 ==========================
