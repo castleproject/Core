@@ -115,6 +115,9 @@
 				<File Id="file37" Name="model.DLL"   LongName="Castle.Model.dll" src="..\InversionOfControl\bin\Castle.Model.dll" />
 				<File Id="file38" Name="windsor.DLL" LongName="Castle.Windsor.dll" src="..\InversionOfControl\bin\Castle.Windsor.dll" />
 
+				<!-- AR -->
+				<File Id="ar1" Name="AR.DLL"  LongName="Castle.ActiveRecord.dll" src="..\ActiveRecord\bin\Castle.ActiveRecord.dll" />
+
 				<!-- Services -->
 				<File Id="file39" Name="logging.DLL"  LongName="Castle.Services.Logging.dll" src="..\Services\bin\Castle.Services.Logging.dll" />
 				<File Id="file40" Name="logging1.DLL" LongName="Castle.Services.Logging.Log4netIntegration.dll" src="..\Services\bin\Castle.Services.Logging.Log4netIntegration.dll" />
@@ -123,36 +126,37 @@
 				<File Id="file43" Name="transact.DLL" LongName="Castle.Services.Transaction.dll" src="..\Services\bin\Castle.Services.Transaction.dll" />
 
 				<!-- Aspect# -->
-				<File Id="file44" Name="ANTLRR_1.DLL" LongName="antlr.runtime.dll" src="E:\dev\castleall\trunk\Facilities\AspectSharp\bin\antlr.runtime.dll" />
-				<File Id="file45" Name="AOPALL_1.DLL" LongName="AopAlliance.dll" src="E:\dev\castleall\trunk\Facilities\AspectSharp\bin\AopAlliance.dll" />
-				<File Id="file46" Name="ASPECT_1.DLL" LongName="AspectSharp.dll" src="E:\dev\castleall\trunk\Facilities\AspectSharp\bin\AspectSharp.dll" />
-				<File Id="file47" Name="ASPECT_2.DLL" LongName="AspectSharp.Lang.dll" src="E:\dev\castleall\trunk\Facilities\AspectSharp\bin\AspectSharp.Lang.dll" />
+				<File Id="file44" Name="ANTLRR_1.DLL" LongName="antlr.runtime.dll" src="..\Facilities\AspectSharp\bin\antlr.runtime.dll" />
+				<File Id="file45" Name="AOPALL_1.DLL" LongName="AopAlliance.dll" src="..\Facilities\AspectSharp\bin\AopAlliance.dll" />
+				<File Id="file46" Name="ASPECT_1.DLL" LongName="AspectSharp.dll" src="..\Facilities\AspectSharp\bin\AspectSharp.dll" />
+				<File Id="file47" Name="ASPECT_2.DLL" LongName="AspectSharp.Lang.dll" src="..\Facilities\AspectSharp\bin\AspectSharp.Lang.dll" />
 
 				<!-- Facilities -->
-				<File Id="file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll" src="E:\dev\castleall\trunk\Facilities\AspectSharp\bin\Castle.Facilities.AspectSharp.dll" />
-				<File Id="file51" Name="CAB93B_1.DLL" LongName="Castle.Facilities.AutomaticTransactionManagement.dll" src="E:\dev\castleall\trunk\Facilities\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll" />
-				<File Id="file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll" src="E:\dev\castleall\trunk\Facilities\BatchRegistration\bin\Castle.Facilities.BatchRegistration.dll" />
-				<File Id="file53" Name="CAB47C_1.DLL" LongName="Castle.Facilities.Cache.dll" src="E:\dev\castleall\trunk\Facilities\Cache\bin\Castle.Facilities.Cache.dll" />
-				<File Id="file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll" src="E:\dev\castleall\trunk\Facilities\Db4o\bin\Castle.Facilities.Db4oIntegration.dll" />
-				<File Id="file55" Name="CAD31C_1.DLL" LongName="Castle.Facilities.IBatisNetIntegration.dll" src="E:\dev\castleall\trunk\Facilities\IBatisNet\bin\Castle.Facilities.IBatisNetIntegration.dll" />
-				<File Id="file56" Name="CAC9D6_1.DLL" LongName="Castle.Facilities.Logging.dll" src="E:\dev\castleall\trunk\Facilities\Logging\bin\Castle.Facilities.Logging.dll" />
-				<File Id="file57" Name="CAC8A0_1.DLL" LongName="Castle.Facilities.NHibernateIntegration.dll" src="E:\dev\castleall\trunk\Facilities\NHibernateIntegration\bin\Castle.Facilities.NHibernateIntegration.dll" />
-				<File Id="file58" Name="CA27F5_1.DLL" LongName="Castle.Facilities.Prevalence.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Castle.Facilities.Prevalence.dll" />
+				<File Id="file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll" src="..\Facilities\AspectSharp\bin\Castle.Facilities.AspectSharp.dll" />
+				<File Id="file51" Name="CAB93B_1.DLL" LongName="Castle.Facilities.AutomaticTransactionManagement.dll" src="..\Facilities\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll" />
+				<File Id="file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll" src="..\Facilities\BatchRegistration\bin\Castle.Facilities.BatchRegistration.dll" />
+				<File Id="file53" Name="CAB47C_1.DLL" LongName="Castle.Facilities.Cache.dll" src="..\Facilities\Cache\bin\Castle.Facilities.Cache.dll" />
+				<File Id="file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll" src="..\Facilities\Db4o\bin\Castle.Facilities.Db4oIntegration.dll" />
+				<File Id="file55" Name="CAD31C_1.DLL" LongName="Castle.Facilities.IBatisNetIntegration.dll" src="..\Facilities\IBatisNet\bin\Castle.Facilities.IBatisNetIntegration.dll" />
+				<File Id="file56" Name="CAC9D6_1.DLL" LongName="Castle.Facilities.Logging.dll" src="..\Facilities\Logging\bin\Castle.Facilities.Logging.dll" />
+				<File Id="file57" Name="CAC8A0_1.DLL" LongName="Castle.Facilities.NHibernateIntegration.dll" src="..\Facilities\NHibernateIntegration\bin\Castle.Facilities.NHibernateIntegration.dll" />
+				<File Id="file58" Name="CA27F5_1.DLL" LongName="Castle.Facilities.Prevalence.dll" src="..\Facilities\Prevalence\bin\Castle.Facilities.Prevalence.dll" />
 
 				<!-- Distributable Dependencies -->
-				<File Id="file60" Name="log4net.dll" src="E:\dev\castleall\trunk\Facilities\Logging\bin\log4net.dll" />
-				<File Id="file61" Name="NLog.dll" src="E:\dev\castleall\trunk\Facilities\Logging\bin\NLog.dll" />
-				<File Id="file62" Name="NLOGDO_1.DLL" LongName="NLog.DotNet.dll" src="E:\dev\castleall\trunk\Facilities\Logging\bin\NLog.DotNet.dll" />
-				<File Id="file63" Name="BAMBOO_1.DLL" LongName="Bamboo.Prevalence.Collections.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Bamboo.Prevalence.Collections.dll" />
-				<File Id="file64" Name="BAMBOO_4.DLL" LongName="Bamboo.Prevalence.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Bamboo.Prevalence.dll" />
-				<File Id="file65" Name="BA9D73_1.DLL" LongName="Bamboo.Prevalence.Indexing.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Bamboo.Prevalence.Indexing.dll" />
-				<File Id="file66" Name="BAMBOO_3.DLL" LongName="Bamboo.Prevalence.Util.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Bamboo.Prevalence.Util.dll" />
-				<File Id="file67" Name="BAMBOO_2.DLL" LongName="Bamboo.Prevalence.XPath.dll" src="E:\dev\castleall\trunk\Facilities\Prevalence\bin\Bamboo.Prevalence.XPath.dll" />
-				<File Id="file68" Name="log4net.dll" src="E:\dev\castleall\trunk\Facilities\Logging\bin\log4net.dll" />
-				<File Id="file69" Name="IESICO_1.DLL" LongName="Iesi.Collections.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\Iesi.Collections.dll" />
-				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\NHibernate.dll" />
-				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\Nullables.dll" />
-				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="E:\dev\castleall\trunk\ActiveRecord\bin\Nullables.NHibernate.dll" />
+				<File Id="file60" Name="log4net.dll" src="..\Facilities\Logging\bin\log4net.dll" />
+				<File Id="file61" Name="NLog.dll" src="..\Facilities\Logging\bin\NLog.dll" />
+				<File Id="file62" Name="NLOGDO_1.DLL" LongName="NLog.DotNet.dll" src="..\Facilities\Logging\bin\NLog.DotNet.dll" />
+				<File Id="file63" Name="BAMBOO_1.DLL" LongName="Bamboo.Prevalence.Collections.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.Collections.dll" />
+				<File Id="file64" Name="BAMBOO_4.DLL" LongName="Bamboo.Prevalence.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.dll" />
+				<File Id="file65" Name="BA9D73_1.DLL" LongName="Bamboo.Prevalence.Indexing.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.Indexing.dll" />
+				<File Id="file66" Name="BAMBOO_3.DLL" LongName="Bamboo.Prevalence.Util.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.Util.dll" />
+				<File Id="file67" Name="BAMBOO_2.DLL" LongName="Bamboo.Prevalence.XPath.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.XPath.dll" />
+				<File Id="file68" Name="log4net.dll" src="..\Facilities\Logging\bin\log4net.dll" />
+				<File Id="file69" Name="IESICO_1.DLL" LongName="Iesi.Collections.dll" src="..\ActiveRecord\bin\Iesi.Collections.dll" />
+				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="..\ActiveRecord\bin\NHibernate.dll" />
+				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="..\ActiveRecord\bin\Nullables.dll" />
+				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="..\ActiveRecord\bin\Nullables.NHibernate.dll" />
+				<File Id="file74" Name="NUNIT.DLL" LongName="NUnit.Framework.dll" src="..\ActiveRecord\bin\Nullables.NHibernate.dll" />
 
 				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
 					<Registry Action="write" Type="string" Value="[BinDir]" />
