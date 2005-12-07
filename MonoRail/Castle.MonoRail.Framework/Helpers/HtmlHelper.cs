@@ -699,27 +699,82 @@ namespace Castle.MonoRail.Framework.Helpers
 		
 		#endregion
 
+		#region InputButton
+
+		/// <overloads>This method has three overloads.</overloads>
+		/// <summary>
+		/// Creates an input element of the button type.
+		/// <code>&lt;input type=&quot;button&quot; value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <returns>HTML string with button type <b>input</b> tag.</returns>
+		/// <remarks>Calling <c>InputButton( "valueArg" )</c> results in:
+		/// <code>&lt;input type=&quot;button&quot; name=&quot;valueArg&quot; value=&quot;valueArg&quot; /&gt;</code>
+		/// </remarks>
+		/// <example>This example shows how to use <b>InputButton</b>:
+		/// <code>
+		/// $HtmlHelper.InputButton( "valueArg" )
+		/// </code>
+		/// </example>
 		public String InputButton(String value)
 		{
 			return InputButton(value, value);
 		}
 
+		/// <summary>
+		/// Creates an input element of the button type.
+		/// <code>&lt;input type=&quot;button&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <returns>HTML string with button type <b>input</b> tag.</returns>
 		public String InputButton(String name, String value)
 		{
 			return InputButton(name, value, null);
 		}
 
+		/// <summary>
+		/// Creates an input element of the button type.
+		/// <code>&lt;input type=&quot;button&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
+		/// <returns>HTML string with button type <b>input</b> tag.</returns>
 		public String InputButton(String name, String value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"button\" name=\"{0}\" value=\"{1}\" {2} />",
 				name, value, GetAttributes(attributes));
 		}
 
+		#endregion
+
+		#region InputCheckbox
+
+		/// <overloads>This method has three overloads.</overloads>
+		/// <summary>
+		/// Creates an input element of the checkbox type.
+		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot id=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <returns>HTML string with checkbox type <b>input</b> tag.</returns>
+		/// <remarks>Calling <c>InputCheckbox( "name", "1" )</c> results in:
+		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;name&quot; id=&quot;name&quot; value=&quot;1&quot; /&gt;</code>
+		/// </remarks>
 		public String InputCheckbox(String name, Object value)
 		{
 			return InputCheckbox(name, value, null);
 		}
 
+		/// <summary>
+		/// Creates an input element of the checkbox type.
+		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot id=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <param name="isChecked">If true, adds the <c>checked</c> attributed to the tag</param>
+		/// <returns>HTML string with checkbox type <b>input</b> tag.</returns>
 		public String InputCheckbox(String name, Object value, bool isChecked)
 		{
 			IDictionary attributes = null;
@@ -733,37 +788,91 @@ namespace Castle.MonoRail.Framework.Helpers
 			return InputCheckbox(name, value, attributes);
 		}
 
+		/// <summary>
+		/// Creates an input element of the checkbox type.
+		/// <code>&lt;input type=&quot;checkbox&quot; name=&quot;nameArg&quot id=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> and <b>id</b> attributes.</param>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
+		/// <returns>HTML string with checkbox type <b>input</b> tag.</returns>
 		public String InputCheckbox(String name, Object value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"checkbox\" name=\"{0}\" id=\"{0}\" value=\"{1}\" {2} />",
 				name, value, GetAttributes(attributes));
 		}
 
+		#endregion
+
+		#region InputRadio
+
+		/// <overloads>This method has two overloads.</overloads>
+		/// <summary>
+		/// Creates an input element of the radio type.
+		/// <code>&lt;input type=&quot;radio&quot; name=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> attribute.</param>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <returns>HTML string with radio type <b>input</b> tag.</returns>
+		/// <remarks>Calling <c>InputRadio( "name", "1" )</c> results in:
+		/// <code>&lt;input type=&quot;radio&quot; name=&quot;name&quot; value=&quot;1&quot; /&gt;</code>
+		/// </remarks>
 		public String InputRadio(String name, Object value)
 		{
 			return InputRadio(name, value, null);
 		}
 
+		/// <summary>
+		/// Creates an input element of the radio type.
+		/// <code>&lt;input type=&quot;radio&quot; name=&quot;nameArg&quot value=&quot;valueArg&quot; /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> attribute.</param>
+		/// <param name="value"><see cref="String"/> for <b>value</b> attribute.</param>
+		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
+		/// <returns>HTML string with radio type <b>input</b> tag.</returns>
 		public String InputRadio(String name, Object value, IDictionary attributes)
 		{
 			return String.Format("<input type=\"radio\" name=\"{0}\" value=\"{1}\" {2} />",
 				name, value, GetAttributes(attributes));
 		}
 
+		#endregion
+
+		#region InputFile
+
+		/// <overloads>This method has two overloads.</overloads>
+		/// <summary>
+		/// Creates an input element of the file type.
+		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> attribute.</param>
+		/// <returns>HTML string with file type <b>input</b> tag.</returns>
+		/// <remarks>Calling <c>InputFile( "name" )</c> results in:
+		/// <code>&lt;input type=&quot;file&quot; name=&quot;name&quot; /&gt;</code>
+		/// </remarks>
 		public String InputFile(String name)
 		{
 			return InputFile(name, null);
 		}
 
+		/// <summary>
+		/// Creates an input element of the file type.
+		/// <code>&lt;input type=&quot;file&quot; name=&quot;nameArg&quot /&gt;</code>
+		/// </summary>
+		/// <param name="name">Value for <b>name</b> attribute.</param>
+		/// <param name="attributes">Additional attributes for the <b>input</b> tag.</param>
+		/// <returns>HTML string with file type <b>input</b> tag.</returns>
 		public String InputFile(String name, IDictionary attributes)
 		{
 			return String.Format("<input type=\"file\" name=\"{0}\" {1} />",
 				name, GetAttributes(attributes));
 		}
 
+		#endregion
+
 		#region InputText
 		
-		///<overloads>This method has four overloads.</overloads>
+		/// <overloads>This method has four overloads.</overloads>
 		/// <summary>
 		/// Creates an input element of the text type.
 		/// <code>&lt;input type=&quot;text&quot; name=&quot;nameArg&quot; id=&quot;nameArg&quot; value=&quot;valueArg&quot; /&gt;</code>
