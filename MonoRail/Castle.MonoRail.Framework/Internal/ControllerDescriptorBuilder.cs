@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Internal
 	public class ControllerDescriptorBuilder
 	{
 		private ReaderWriterLock locker = new ReaderWriterLock();
-		private Hashtable descriptorRepository = new Hashtable();
+		private Hashtable descriptorRepository = Hashtable.Synchronized(new Hashtable());
 
 		/// <summary>
 		/// Builds the <see cref="ControllerMetaDescriptor"/>.
@@ -33,35 +33,42 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			Type controllerType = controller.GetType();
 
+			ControllerMetaDescriptor desc = null;
+
 			locker.AcquireReaderLock(-1);
-
-			ControllerMetaDescriptor desc = (ControllerMetaDescriptor) 
-				descriptorRepository[controllerType];
-
-			if (desc != null)
-			{
-				locker.ReleaseReaderLock();
-				
-				return desc;
-			}
-
-			locker.UpgradeToWriterLock(-1);
 
 			try
 			{
-				desc = BuildDescriptor( controllerType );
+				desc = (ControllerMetaDescriptor) 
+					descriptorRepository[controllerType];
 
-				descriptorRepository[controllerType] = desc;
+				if (desc != null)
+				{
+					return desc;
+				}
+
+				LockCookie lc = locker.UpgradeToWriterLock(-1);
+
+				try
+				{
+					desc = BuildDescriptor( controllerType );
+
+					descriptorRepository[controllerType] = desc;
+				}
+				finally
+				{
+					locker.DowngradeFromWriterLock(ref lc);
+				}
 			}
 			finally
 			{
-				locker.ReleaseWriterLock();
+				locker.ReleaseReaderLock();
 			}
 
 			return desc;
 		}
 
-		private ControllerMetaDescriptor BuildDescriptor(  Type controllerType )
+		private ControllerMetaDescriptor BuildDescriptor( Type controllerType )
 		{
 			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor( controllerType );
 			

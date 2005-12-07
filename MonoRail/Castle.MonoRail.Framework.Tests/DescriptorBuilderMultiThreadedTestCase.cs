@@ -18,6 +18,7 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.Threading;
 
 	using Castle.MonoRail.Framework.Internal;
+
 	using NUnit.Framework;
 
 
@@ -38,7 +39,7 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void MultithreadTest()
 		{
-			const int threadCount = 10;
+			const int threadCount = 20;
 
 			Thread[] threads = new Thread[threadCount];
 			
@@ -50,9 +51,11 @@ namespace Castle.MonoRail.Framework.Tests
 
 			startEvent.Set();
 
-			Thread.CurrentThread.Join(1 * 2000);
+			Thread.CurrentThread.Join(4 * 2000);
 
-			stopEvent.Set();
+            stopEvent.Set();
+
+            Thread.CurrentThread.Join(1 * 1000);
 		}
 
 		public void ExecuteMethodUntilSignal()

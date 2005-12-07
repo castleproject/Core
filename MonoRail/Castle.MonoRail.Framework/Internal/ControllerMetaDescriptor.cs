@@ -101,16 +101,34 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			MethodInfo[] methods = controllerType.GetMethods( BindingFlags.Public | BindingFlags.Instance );
 
-			Type objectType = typeof( Object );
-			Type baseControllerType = typeof( Controller );
-
-			foreach (MethodInfo m in methods)
+			foreach (MethodInfo method in methods)
 			{
-				if ( m.DeclaringType == objectType || m.DeclaringType == baseControllerType ) continue;
-				_actions[m.Name] = m;
+                Type declaringType = method.DeclaringType;
+
+                if (declaringType == typeof(Object) || declaringType == typeof(Controller) || declaringType == typeof(SmartDispatcherController))
+                {
+                    continue;
+                }
+
+                if (_actions.Contains(method.Name))
+				{
+                    ArrayList list = _actions[method.Name] as ArrayList;
+
+                    if (list == null)
+					{
+						list = new ArrayList();
+                        list.Add(_actions[method.Name]);
+
+                        _actions[method.Name] = list;
+					}
+
+                    list.Add(method);
+				}
+				else
+				{
+                    _actions[method.Name] = method;
+				}
 			}
-
-
 
 			// HACK: workaround for DYNPROXY-14
 			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
