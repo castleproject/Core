@@ -1,10 +1,5 @@
 <?xml version="1.0"?>
 
-<!-- TODO: register the add in as a COM component -->
-<!-- TODO: Documents -->
-<!-- TODO: Samples -->
-<!-- TODO: Source code -->
-
 <?define VsVersion = "dummy"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
@@ -57,8 +52,8 @@
 					<Directory Id="SamplesDir" Name="Samples" />
 
 					<Directory Id="WizardTemplatesDir" Name="WizDir" LongName="Wizard Templates">
-						<Directory Id="TemplatesVs7Dir" Name="CSharp7" />
-						<Directory Id="TemplatesVs8Dir" Name="CSharp8" />
+						<Directory Id="TemplatesVs7Dir" Name="VS7" />
+						<Directory Id="TemplatesVs8Dir" Name="VS8" />
 					</Directory>
 					
 				</Directory>
@@ -77,6 +72,13 @@
 		</DirectoryRef>
 		
 		<DirectoryRef Id="BinDir">
+			<Component Id="ProductComponentGac" DiskId="1" Guid="49ABA8A2-D8C0-456A-8E80-6AEAD79DF1B7">
+				<File Id="file22A" Name="CAED29_2.DLL" 
+					LongName="Castle.MonoRail.TestSupport.dll" 
+					KeyPath="yes" Assembly=".net" AssemblyManifest="file22A"
+					src="..\MonoRail\bin\Castle.MonoRail.TestSupport.dll" />
+			</Component>
+
 			<Component Id="ProductComponent" DiskId="1" Guid="9809B08F-5717-44F2-A07F-B16C8ADADC39">
 				<File Id="file300" Name="readme.txt" LongName="Assemblies README.txt" src="Assemblies README.txt" />
 				
@@ -101,14 +103,8 @@
 				<File Id="file25" Name="CAEE9E_1.DLL" LongName="Castle.Windsor.dll" src="..\MonoRail\bin\Castle.Windsor.dll" />
 				<File Id="file31" Name="NVELOC_1.DLL" LongName="NVelocity.dll" src="..\MonoRail\bin\NVelocity.dll" />
 				<!-- <File Id="file34" Name="WSABOO_1.DLL" LongName="WSABoo.Parser.dll" src="..\MonoRail\bin\WSABoo.Parser.dll" /> -->
-
 				<File Id="file22" Name="CAED29_1.DLL" 
 					LongName="Castle.MonoRail.TestSupport.dll" 
-					src="..\MonoRail\bin\Castle.MonoRail.TestSupport.dll" />
-
-				<File Id="file22A" Name="CAED29_2.DLL" 
-					LongName="Castle.MonoRail.TestSupport.dll" 
-					KeyPath="yes" Assembly=".net" AssemblyManifest="file22"
 					src="..\MonoRail\bin\Castle.MonoRail.TestSupport.dll" />
 
 				<!-- DynProxy -->
@@ -166,10 +162,13 @@
 		</DirectoryRef>
 
 		<DirectoryRef Id="CassiniDir">
+			<Component Id="CassiniComponentGac" DiskId="1" Guid="5FC3B263-CCB6-4C48-87CC-7265CF849E22">
+				<!-- <File Id="cfile0b" Name="Cassini.dll" src="..\SharedLibs\cassini\Cassini.dll" /> -->
+				<File Id="cfile0a" Name="Cassini.dll" src="..\SharedLibs\cassini\Cassini.dll"
+					Assembly=".net"  KeyPath="yes" AssemblyManifest="cfile0a" />
+			</Component>
 			<Component Id="CassiniComponent" DiskId="1" Guid="FB49D9FE-D154-431F-BD70-CF1E51F98B10">
 				<File Id="cfile0" Name="Cassini.dll" src="..\SharedLibs\cassini\Cassini.dll" />
-				<File Id="cfile0a" Name="Cassini.dll" src="..\SharedLibs\cassini\Cassini.dll"
-					Assembly=".net"  KeyPath="yes" AssemblyManifest="cfile0" />
 				<File Id="cfile1" Name="web.exe" LongName="CassiniWebServer.exe" src="..\SharedLibs\cassini\CassiniWebServer.exe" />
 				<File Id="cfile2" Name="EULA.rtf" src="..\SharedLibs\cassini\EULA.rtf" />
 
@@ -187,17 +186,17 @@
 
 		<DirectoryRef Id="SourceCodeDir">
 			<Component Id="SourceComp" DiskId="1" Guid="54844DCA-C0EF-47F2-8151-34A6AE16B1AE">
-				<File Id="src0" Name="Castle-src.zip" src="..\Castle-src.zip" />
+				<File Id="src0" Name="Cas-src.zip" LongName="Castle-src.zip" src="..\Castle-src.zip" />
 			</Component>
 		</DirectoryRef>
 
 		<DirectoryRef Id="SamplesDir">
 			<Component Id="samplescomp" DiskId="1" Guid="F6638FC5-BD66-49E8-8B84-13CD74227146">
-				<File Id="sample0" Name="ActiveRecord-Samples.zip" src="..\Samples\ActiveRecord-Samples.zip" />
-				<File Id="sample1" Name="Castle-Samples.zip" src="..\Samples\Castle-Samples.zip" />
-				<File Id="sample2" Name="Facilities-Samples.zip" src="..\Samples\Facilities-Samples.zip" />
-				<File Id="sample3" Name="InversionOfControl-Samples.zip" src="..\Samples\InversionOfControl-Samples.zip" />
-				<File Id="sample4" Name="MonoRail-Samples.zip" src="..\Samples\MonoRail-Samples.zip" />
+				<File Id="sample0" Name="arsample.zip" LongName="ActiveRecord-Samples.zip" src="..\Samples\ActiveRecord-Samples.zip" />
+				<File Id="sample1" Name="casample.zip" LongName="Castle-Samples.zip" src="..\Samples\Castle-Samples.zip" />
+				<File Id="sample2" Name="fasample.zip" LongName="Facilities-Samples.zip" src="..\Samples\Facilities-Samples.zip" />
+				<File Id="sample3" Name="iosample.zip" LongName="InversionOfControl-Samples.zip" src="..\Samples\InversionOfControl-Samples.zip" />
+				<File Id="sample4" Name="mrsample.zip" LongName="MonoRail-Samples.zip" src="..\Samples\MonoRail-Samples.zip" />
 			</Component>
 		</DirectoryRef>
 		
@@ -205,6 +204,38 @@
 			<Component Id="vsaddin" DiskId="1" Guid="E4A2DCF9-32F1-4692-942D-E8081EB61FD2">
 				<File Id="addinfile" Name="casaddin.dll" 
 					LongName="Castle.VSNetIntegration.CastleWizards.dll" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\bin\Debug\Castle.VSNetIntegration.CastleWizards.dll" />
+
+				<Registry Id="registry0" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizard" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+				<Registry Id="registry1" Root="HKCR" Key="Castle.ActiveRecordModelProjectWizard\CLSID" Value="{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" Type="string" />
+				<Registry Id="registry2" Root="HKCR" Key="Castle.MonoRailProjectWizard" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+				<Registry Id="registry3" Root="HKCR" Key="Castle.MonoRailProjectWizard\CLSID" Value="{43C9796F-E6C8-460D-B722-204A7121A510}" Type="string" />
+				<Registry Id="registry4" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+				<Registry Id="registry5" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
+				<Registry Id="registry6" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Value="mscoree.dll" Type="string" />
+				<Registry Id="registry7" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="ThreadingModel" Value="Both" Type="string" />
+				<Registry Id="registry8" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+				<Registry Id="registry9" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
+				<Registry Id="registry10" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+				<Registry Id="registry11" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry12" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
+				<Registry Id="registry13" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
+				<Registry Id="registry14" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+				<Registry Id="registry15" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry16" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\ProgId" Value="Castle.MonoRailProjectWizard" Type="string" />
+				<Registry Id="registry17" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+				<Registry Id="registry18" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
+				<Registry Id="registry19" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Value="mscoree.dll" Type="string" />
+				<Registry Id="registry20" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="ThreadingModel" Value="Both" Type="string" />
+				<Registry Id="registry21" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+				<Registry Id="registry22" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
+				<Registry Id="registry23" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+				<Registry Id="registry24" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry25" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
+				<Registry Id="registry26" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
+				<Registry Id="registry27" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
+				<Registry Id="registry28" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry29" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\ProgId" Value="Castle.ActiveRecordModelProjectWizard" Type="string" />
+				<Registry Id="registry30" Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string" />
 			</Component>
 		</DirectoryRef>
 
@@ -225,7 +256,70 @@
 				<File Id="vs7file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Sandbox\VSNetIntegration\Castle MonoRail Project.vsz">
 					<CopyFile Id="vs7file1cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
 				</File>
+				
 			</Component>
+
+			<Directory Id="directory14" Name="MRPROJ_0" LongName="CSharp">
+				<Component Id="component6" DiskId="1">
+					<File Id="vs7tfile0" Name="ABSTRA_1.CS" LongName="AbstractModelTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\AbstractModelTestCase.cs" />
+					<File Id="vs7tfile1" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\App.config" />
+					<File Id="vs7tfile2" Name="ARPROJ_1.CSP" LongName="ARProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\ARProject.csproj" />
+					<File Id="vs7tfile3" Name="ARPROJ_2.CSP" LongName="ARProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\ARProjectTest.csproj" />
+					<File Id="vs7tfile4" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\AssemblyInfo.cs" />
+				</Component>
+				
+				<Directory Id="directory15" Name="MRPROJ_1" LongName="MRProject">
+					<Component Id="component7" DiskId="1">
+						<File Id="vs7tfile36" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\AssemblyInfo.cs" />
+						<File Id="vs7tfile37" Name="CONTAI_1.CS" LongName="ContainerGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\ContainerGlobalApplication.cs" />
+						<File Id="vs7tfile38" Name="CONTRO_1.CON" LongName="controllers.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\controllers.config" />
+						<File Id="vs7tfile39" Name="FACILI_1.CON" LongName="facilities.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\facilities.config" />
+						<File Id="vs7tfile40" Name="GLOBAL_1.ASA" LongName="global.asax" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\global.asax" />
+						<File Id="vs7tfile41" Name="INDEX_1.ASP" LongName="index.aspx" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.aspx" />
+						<File Id="vs7tfile42" Name="index.boo" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.boo" />
+						<File Id="vs7tfile43" Name="index.vm" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\index.vm" />
+						<File Id="vs7tfile44" Name="MRPROJ_1.CSP" LongName="MRProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\MRProject.csproj" />
+						<File Id="vs7tfile47" Name="MRPROJ_1.SLN" LongName="MRProject.sln" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\MRProject.sln" />
+						<File Id="vs7tfile49" Name="SIMPLE_1.CS" LongName="SimpleGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\SimpleGlobalApplication.cs" />
+						<File Id="vs7tfile50" Name="WEB_1.CON" LongName="Web.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\Web.config" />
+						<File Id="vs7tfile51" Name="WEBCON_1.CS" LongName="WebContainer.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\WebContainer.cs" />
+					</Component>
+					<Directory Id="directory18" Name="Content">
+						<Directory Id="directory19" Name="css">
+							<Component Id="component8" DiskId="1">
+								<CreateFolder/>
+							</Component>
+						</Directory>
+						<Directory Id="directory20" Name="images" >
+							<Component Id="component9" DiskId="1">
+								<CreateFolder/>
+							</Component>
+						</Directory>
+					</Directory>
+					<Directory Id="directory21" Name="CONTRO_1" LongName="Controllers">
+						<Component Id="component10" DiskId="1">
+							<File Id="vs7tfile68" Name="HOMECO_1.CS" LongName="HomeController.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProject\Controllers\HomeController.cs" />
+						</Component>
+					</Directory>
+					<Directory Id="directory26" Name="Views">
+						<Directory Id="directory27" Name="Home">
+							<Component Id="component11" DiskId="1">
+								<CreateFolder/>
+							</Component>
+						</Directory>
+					</Directory>
+				</Directory>
+				
+				<Directory Id="directory28" Name="MRPROJ_2" LongName="MRProjectTest">
+					<Component Id="component12" DiskId="1">
+						<File Id="vs7tfile72" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\App.config" />
+						<File Id="vs7tfile73" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\AssemblyInfo.cs" />
+						<File Id="vs7tfile74" Name="HOMECO_1.CS" LongName="HomeControllerTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\HomeControllerTestCase.cs" />
+						<File Id="vs7tfile75" Name="MRPROJ_1.CSP" LongName="MRProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp7\MRProjectTest\MRProjectTest.csproj" />
+					</Component>
+				</Directory>
+			</Directory>
+			
 		</DirectoryRef>
 		
 		<DirectoryRef Id="TemplatesVs8Dir">
@@ -235,6 +329,14 @@
 					<Registry Action="write" Name="vs8templatelocation" Type="string" Value="[TemplatesVs8Dir]" />
 				</Registry>
 				<Condition>VS2005_SCHEMAS_DIR</Condition>
+				
+				<File Id="vs8file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Sandbox\VSNetIntegration\Castle ActiveRecord Project.vsz">
+					<CopyFile Id="vs8file0cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+				</File>
+				
+				<File Id="vs8file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Sandbox\VSNetIntegration\Castle MonoRail Project.vsz">
+					<CopyFile Id="vs8file1cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+				</File>
 			</Component>
 		</DirectoryRef>
 		
@@ -246,7 +348,9 @@
 			<Feature Id='MainProgram' Title='Binaries' Description='Castle assemblies and dependencies' Level='1'>
 				<ComponentRef Id="BasicComponent" />
 				<ComponentRef Id="ProductComponent" />
+				<ComponentRef Id="ProductComponentGac" />
 				<ComponentRef Id="CassiniComponent" />
+				<ComponentRef Id="CassiniComponentGac" />
 			</Feature>
 
 			<Feature Id='Documentation' Title='Documentation' Description='Castle documentation' Level='1'>
@@ -264,6 +368,13 @@
 			<Feature Id='VSWizards' Title='Visual Studio Wizards' Description='Wizards for VS.Net that helps in creating new projects' Level='1'>
 				<ComponentRef Id='vsaddin' />
 				<ComponentRef Id='vs7comp' />
+				<ComponentRef Id='component6' />
+				<ComponentRef Id='component7' />
+				<ComponentRef Id='component8' />
+				<ComponentRef Id='component9' />
+				<ComponentRef Id='component10' />
+				<ComponentRef Id='component11' />
+				<ComponentRef Id='component12' />
 				<ComponentRef Id='vs8comp' />
 			</Feature>
 		</Feature>
