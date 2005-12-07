@@ -2,6 +2,9 @@
 beta 3
 ======
 
+- Added: ActiveRecordBase<T> - a generic form a ActiveRecordBase which relieves the need to re-write
+  all the base static methods to hide the type parameter and cast the result. Generics do it for you.
+
 - Added: ActiveRecordStarter.ExecuteSchemaFromFile(filename) as an alternative to CreateSchema. 
 
 - Added: Support for composite keys - composite key class must be serializable and implement both Equals and GetHashCode.

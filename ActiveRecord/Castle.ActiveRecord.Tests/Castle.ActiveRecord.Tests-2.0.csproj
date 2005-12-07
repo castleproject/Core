@@ -128,6 +128,7 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ActiveRecordBaseGenericsTestCase.cs" />
     <Compile Include="JoinedSubClassTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -153,6 +154,11 @@
     <Compile Include="Model\Firm.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\GenericModel\Blog.cs" />
+    <Compile Include="Model\GenericModel\Company.cs" />
+    <Compile Include="Model\GenericModel\Employee.cs" />
+    <Compile Include="Model\GenericModel\Person.cs" />
+    <Compile Include="Model\GenericModel\Post.cs" />
     <Compile Include="Model\Hand.cs">
       <SubType>Code</SubType>
     </Compile>

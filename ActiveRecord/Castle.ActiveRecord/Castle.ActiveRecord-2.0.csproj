@@ -386,6 +386,10 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Framework\ActiveRecordBase.Generic.cs" />
+    <Compile Include="Framework\ARSchemaCreator.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
