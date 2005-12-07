@@ -23,6 +23,7 @@
 		<delete failonerror="false">
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll" />
+				<include name="*.xml" />
 			</fileset>
 		</delete>
 	</target>
@@ -38,6 +39,8 @@
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-atm-facility" inheritall="true" />
 		
 		<property name="app.config" value="${bin.dir}/configuration.xml" />
+		
+		<copy file="${base.dir}\configuration.xml" tofile="${app.config}"/>	
 
 		<xmlpoke
 			file="${app.config}"
