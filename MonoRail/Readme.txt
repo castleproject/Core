@@ -11,16 +11,8 @@ to compile and test everything
 
 -- Scaffolding
 
-The scaffolding support tests requires a database. The schema is created automatically. 
-
-You need to change the connection string information on
-
-   MonoRail\TestScaffolding\web.config
-
-  and   
-
-   MonoRail\Castle.MonoRail.ActiveRecordScaffold.Tests\Castle.MonoRail.ActiveRecordScaffold.Tests.dll.config
-
+The scaffolding support tests requires a database. The schema is created automatically.
+See the "How to build.txt" file at the root of the repository for details.
 
 
 -- More
