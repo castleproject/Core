@@ -222,11 +222,11 @@
 				<Registry Id="registry8" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
 				<Registry Id="registry9" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry10" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry11" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry11" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="CodeBase" Value="[addinfile]" Type="string" />
 				<Registry Id="registry12" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
 				<Registry Id="registry13" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry14" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry15" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry15" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="[addinfile]" Type="string" />
 				<Registry Id="registry16" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\ProgId" Value="Castle.MonoRailProjectWizard" Type="string" />
 				<Registry Id="registry17" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry18" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
@@ -235,11 +235,11 @@
 				<Registry Id="registry21" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry22" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry23" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry24" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry24" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="CodeBase" Value="[addinfile]" Type="string" />
 				<Registry Id="registry25" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry26" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry27" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry28" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="file:///E:/dev/castleall/trunk/Sandbox/VSNetIntegration/Castle.VSNetIntegration.CastleWizards/bin/Debug/Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
+				<Registry Id="registry28" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="[addinfile]" Type="string" />
 				<Registry Id="registry29" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\ProgId" Value="Castle.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry30" Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string" />
 			</Component>
@@ -387,6 +387,7 @@
 		
 		<UIRef Id="WixUI" />
 
+<!--
 		<Binary Id="Up" src="Binary\Up.ico" />
 		<Binary Id="New" src="Binary\New.ico" />
 		<Binary Id="custicon" src="Binary\Custom.ico" />
@@ -398,6 +399,6 @@
 		<Binary Id="info" src="Binary\Info.ico" />
 		<Binary Id="bannrbmp" src="Binary\Banner.bmp" />
 		<Binary Id="dlgbmp" src="Binary\Dialog.bmp" />
-		
+-->		
 	</Product>
 </Wix>
