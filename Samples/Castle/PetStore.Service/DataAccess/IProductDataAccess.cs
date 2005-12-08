@@ -23,6 +23,8 @@ namespace PetStore.Service
 	{
 		int[] GetProductIds();
 
+		Product Find(int productId);
+
 		Product[] FindAll();
 
 		Product[] FindByCategory(int id);

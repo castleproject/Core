@@ -43,6 +43,11 @@ namespace PetStore.Service.DataAccess.AR
 			this.sessionFactory = sessionFactory;
 		}
 
+		public Product Find(int productId)
+		{
+			return Product.Find(productId);
+		}
+
 		/// <summary>
 		/// We need to return only the ids here, 
 		/// and there are a bunch of options. We 

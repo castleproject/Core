@@ -35,6 +35,11 @@ namespace PetStore.Service
 			this.productDataAccess = productDataAccess;
 		}
 
+		public Product Find(int productId)
+		{
+			return productDataAccess.Find(productId);
+		}
+
 		public Product[] FindAll()
 		{
 			return productDataAccess.FindAll();

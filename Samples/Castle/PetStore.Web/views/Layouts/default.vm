@@ -43,6 +43,13 @@
 		<br>
 		</div>
 	</div>
+#else
+	<div id="categories">
+		<div>
+		<h3><A href="javascript:history.go(-1);">Back</a></h3>
+		<br>
+		</div>
+	</div>
 #end
 		
 	<div id="content"> 

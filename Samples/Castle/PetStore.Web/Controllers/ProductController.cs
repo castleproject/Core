@@ -45,7 +45,7 @@ namespace PetStore.Web.Controllers
 
 		public void Details(int productid)
 		{
-			
+			PropertyBag.Add("product", productService.Find(productid));
 		}
 
 		private void AddCategoriesToPropertyBag()

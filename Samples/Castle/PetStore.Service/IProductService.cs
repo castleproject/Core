@@ -20,6 +20,8 @@ namespace PetStore.Service
 
 	public interface IProductService
 	{
+		Product Find(int productId);
+
 		Product[] FindAll();
 
 		Product[] FindByCategory(int categoryId);
