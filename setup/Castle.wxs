@@ -132,6 +132,7 @@
 				<File Id="file47" Name="ASPECT_2.DLL" LongName="AspectSharp.Lang.dll" src="..\Facilities\AspectSharp\bin\AspectSharp.Lang.dll" />
 
 				<!-- Facilities -->
+				<File Id="file59" Name="CABE8A_2.DLL" LongName="Castle.Facilities.ActiveRecordIntegration.dll" src="..\Facilities\ActiveRecordIntegration\bin\Castle.Facilities.ActiveRecordIntegration.dll" />
 				<File Id="file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll" src="..\Facilities\AspectSharp\bin\Castle.Facilities.AspectSharp.dll" />
 				<File Id="file51" Name="CAB93B_1.DLL" LongName="Castle.Facilities.AutomaticTransactionManagement.dll" src="..\Facilities\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll" />
 				<File Id="file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll" src="..\Facilities\BatchRegistration\bin\Castle.Facilities.BatchRegistration.dll" />
