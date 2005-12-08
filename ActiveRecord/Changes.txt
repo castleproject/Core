@@ -2,6 +2,9 @@
 beta 3
 ======
 
+- An implementation of ISessionFactoryHolder can be specified through the configuration, attribute sessionfactoryholdertype
+  on the config node.
+
 - Added: ActiveRecordBase<T> - a generic form a ActiveRecordBase which relieves the need to re-write
   all the base static methods to hide the type parameter and cast the result. Generics do it for you.
 

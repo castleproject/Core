@@ -14,7 +14,6 @@
 
 namespace Castle.ActiveRecord
 {
-	using System;
 	using System.Collections;
 
 	using NHibernate;

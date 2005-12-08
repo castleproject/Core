@@ -24,6 +24,8 @@ namespace Castle.ActiveRecord.Framework
 	public interface IConfigurationSource
 	{
 		Type ThreadScopeInfoImplementation { get; }
+		
+		Type SessionFactoryHolderImplementation { get; }
 
 		/// <summary>
 		/// Implementors should return an <see cref="IConfiguration"/> 

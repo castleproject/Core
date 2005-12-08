@@ -14,9 +14,7 @@
 
 namespace Castle.ActiveRecord.Framework
 {
-	using System;
 	using System.Collections;
-
 
 	public interface IThreadScopeInfo
 	{

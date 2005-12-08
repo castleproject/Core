@@ -14,7 +14,6 @@
 
 namespace Castle.ActiveRecord.Framework.Scopes
 {
-	using System;
 	using System.Collections;
 
 	using NHibernate;

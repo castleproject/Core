@@ -22,12 +22,19 @@ namespace Castle.ActiveRecord
 	{
 		Undefined,
 		Simple,
-		Transactional
+		Transactional,
+		Custom
 	}
 
 	/// <summary>
 	/// Contract for implementation of scopes.
 	/// </summary>
+	/// <remarks>
+	/// A scope can implement a logic that affects 
+	/// AR for the scope lifetime. Session cache and
+	/// transaction are the best examples, but you 
+	/// can create new scopes adding new semantics.
+	/// </remarks>
 	public interface ISessionScope : IDisposable
 	{
 		SessionScopeType ScopeType { get; }

@@ -27,6 +27,10 @@ namespace Castle.ActiveRecord.Framework.Config
 	/// </summary>
 	public class XmlConfigurationSource : InPlaceConfigurationSource
 	{
+		protected XmlConfigurationSource()
+		{
+		}
+
 		public XmlConfigurationSource(String xmlFileName)
 		{
 			XmlDocument doc = new XmlDocument();
@@ -48,11 +52,6 @@ namespace Castle.ActiveRecord.Framework.Config
 			PopulateSource(doc.DocumentElement);
 		}
 
-		protected XmlConfigurationSource()
-		{
-			
-		}
-
 		protected void PopulateSource(XmlNode section)
 		{
 			XmlAttribute isWebAtt = section.Attributes["isWeb"];
@@ -60,6 +59,12 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value, 
 				threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
+
+			XmlAttribute sessionfactoryholdertypeAtt = 
+				section.Attributes["sessionfactoryholdertype"];
+
+			SetUpSessionFactoryHolderType( sessionfactoryholdertypeAtt != null ? 
+				sessionfactoryholdertypeAtt.Value : String.Empty );
 
 			PopulateConfigNodes(section);
 		}

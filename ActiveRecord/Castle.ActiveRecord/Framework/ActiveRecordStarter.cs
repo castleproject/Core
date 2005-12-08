@@ -62,9 +62,11 @@ namespace Castle.ActiveRecord
 			if (types == null) throw new ArgumentNullException("types");
 
 			// First initialization
-			ISessionFactoryHolder holder = new SessionFactoryHolder();
+			ISessionFactoryHolder holder = 
+				CreateSessionFactoryHolderImplementation(source);
 
-			holder.ThreadScopeInfo = CreateThreadScopeInfoImplementation(source);
+			holder.ThreadScopeInfo = 
+				CreateThreadScopeInfoImplementation(source);
 
 			RaiseSessionFactoryHolderCreated(holder);
 
@@ -326,13 +328,33 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		private static ISessionFactoryHolder CreateSessionFactoryHolderImplementation(IConfigurationSource source)
+		{
+			if (source.SessionFactoryHolderImplementation != null)
+			{
+				Type sessionFactoryHolderType = source.SessionFactoryHolderImplementation;
+
+				if (!typeof(ISessionFactoryHolder).IsAssignableFrom(sessionFactoryHolderType))
+				{
+					String message = String.Format("The specified type {0} does " + 
+						"not implement the interface ISessionFactoryHolder", sessionFactoryHolderType.FullName);
+
+					throw new ActiveRecordException( message );
+				}
+
+				return (ISessionFactoryHolder) Activator.CreateInstance(sessionFactoryHolderType);
+			}
+			else
+			{
+				return new SessionFactoryHolder();
+			}
+		}
+
 		private static IThreadScopeInfo CreateThreadScopeInfoImplementation(IConfigurationSource source)
 		{
-			Type threadScopeType = typeof(ThreadScopeInfo);
-
 			if (source.ThreadScopeInfoImplementation != null)
 			{
-				threadScopeType = source.ThreadScopeInfoImplementation;
+				Type threadScopeType = source.ThreadScopeInfoImplementation;
 
 				if (!typeof(IThreadScopeInfo).IsAssignableFrom(threadScopeType))
 				{
@@ -341,9 +363,13 @@ namespace Castle.ActiveRecord
 
 					throw new ActiveRecordException( message );
 				}
-			}
 
-			return (IThreadScopeInfo) Activator.CreateInstance(threadScopeType);
+				return (IThreadScopeInfo) Activator.CreateInstance(threadScopeType);
+			}
+			else
+			{
+				return new ThreadScopeInfo();
+			}
 		}
 	}
 }

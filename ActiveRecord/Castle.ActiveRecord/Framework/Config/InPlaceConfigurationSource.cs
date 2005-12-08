@@ -27,6 +27,7 @@ namespace Castle.ActiveRecord.Framework.Config
 	{
 		private readonly IDictionary _type2Config = new Hashtable();
 		private Type threadScopeInfoImplementation;
+		private Type sessionFactoryHolderImplementation;
 
 		public InPlaceConfigurationSource()
 		{
@@ -66,12 +67,37 @@ namespace Castle.ActiveRecord.Framework.Config
 			}
 		}
 
+		protected void SetUpSessionFactoryHolderType(String customType)
+		{
+			Type sessionFactoryHolderType = typeof(SessionFactoryHolder);
+
+			if (customType != null && customType != String.Empty)
+			{
+				String typeName = customType;
+				
+				sessionFactoryHolderType = Type.GetType(typeName, false, false);
+
+				if (sessionFactoryHolderType == null)
+				{
+					String message = String.Format("The type name {0} could not be found", typeName);
+
+					throw new ActiveRecordException(message);
+				}
+			}
+		}
+
 		#region IConfigurationSource Members
 
 		public Type ThreadScopeInfoImplementation
 		{
 			get { return threadScopeInfoImplementation; }
 			set { threadScopeInfoImplementation = value; }
+		}
+
+		public Type SessionFactoryHolderImplementation
+		{
+			get { return sessionFactoryHolderImplementation; }
+			set { sessionFactoryHolderImplementation = value; }
 		}
 
 		public IConfiguration GetConfiguration(Type type)
