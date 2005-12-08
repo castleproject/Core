@@ -197,6 +197,7 @@ namespace Castle.MonoRail.Framework
 		public IDictionary PropertyBag
 		{
 			get { return _bag; }
+			set { _bag = value; }
 		}
 
 		/// <summary>

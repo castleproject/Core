@@ -139,6 +139,10 @@ namespace Castle.MonoRail.Framework
 
 			String currentStep = (String) context.Session[wizardName + "currentstep"];
 
+			// The step will inherit the controller property bag,
+			// this way filters can pass values to the step property without having to know it
+			currentStepInstance.PropertyBag = controller.PropertyBag;
+
 			if (!wizController.OnBeforeStep(wizardName, currentStep, currentStepInstance))
 			{
 				return;
