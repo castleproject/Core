@@ -114,11 +114,6 @@
                     AssemblyName = "Castle.Services.Transaction"
                     HintPath = "..\..\..\Services\TransactionMangement\bin\Castle.Services.Transaction.dll"
                 />
-                <Reference
-                    Name = "Castle.ActiveRecord"
-                    AssemblyName = "Castle.ActiveRecord"
-                    HintPath = "..\..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
-                />
             </References>
         </Build>
         <Files>
