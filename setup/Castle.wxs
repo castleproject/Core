@@ -152,11 +152,13 @@
 				<File Id="file66" Name="BAMBOO_3.DLL" LongName="Bamboo.Prevalence.Util.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.Util.dll" />
 				<File Id="file67" Name="BAMBOO_2.DLL" LongName="Bamboo.Prevalence.XPath.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.XPath.dll" />
 				<File Id="file68" Name="log4net.dll" src="..\Facilities\Logging\bin\log4net.dll" />
-				<File Id="file69" Name="IESICO_1.DLL" LongName="Iesi.Collections.dll" src="..\ActiveRecord\bin\Iesi.Collections.dll" />
-				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="..\ActiveRecord\bin\NHibernate.dll" />
-				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="..\ActiveRecord\bin\Nullables.dll" />
-				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="..\ActiveRecord\bin\Nullables.NHibernate.dll" />
-				<File Id="file74" Name="NUNIT.DLL" LongName="NUnit.Framework.dll" src="..\ActiveRecord\bin\Nullables.NHibernate.dll" />
+				<File Id="file69" Name="IESICO_1.DLL" LongName="Iesi.Collections.dll" src="..\SharedLibs\nhibernate\Iesi.Collections.dll" />
+				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="..\SharedLibs\nhibernate\NHibernate.dll" />
+				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="..\SharedLibs\nhibernate\Nullables.dll" />
+				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="..\SharedLibs\nhibernate\Nullables.NHibernate.dll" />
+				<File Id="file74" Name="NUNIT.DLL" LongName="NUnit.Framework.dll" src="..\SharedLibs\nhibernate\Nullables.NHibernate.dll" />
+				<File Id="file75" Name="nhlic.txt" LongName="NHibernate.license.txt" src="..\SharedLibs\nhibernate\NHibernate.license.txt" />
+				<File Id="file76" Name="iesilic.txt" LongName="Iesi.Collections.license.txt" src="..\SharedLibs\nhibernate\Iesi.Collections.license.txt" />
 
 				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
 					<Registry Action="write" Type="string" Value="[BinDir]" />
