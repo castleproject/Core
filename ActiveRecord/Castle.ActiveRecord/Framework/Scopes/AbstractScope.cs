@@ -14,6 +14,7 @@
 
 namespace Castle.ActiveRecord.Framework.Scopes
 {
+	using System;
 	using System.Collections;
 
 	using NHibernate;
@@ -53,6 +54,16 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		public virtual ISession GetSession(object key)
 		{
 			return _key2Session[key] as ISession;
+		}
+
+		public virtual bool WantsToCreateTheSession
+		{
+			get { return false; }
+		}
+
+		public virtual ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void Dispose()

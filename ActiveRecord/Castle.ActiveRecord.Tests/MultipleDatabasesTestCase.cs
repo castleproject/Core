@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord.Tests
 {
 	using Castle.ActiveRecord.Tests.Model;
+	
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -91,7 +92,8 @@ namespace Castle.ActiveRecord.Tests
 		[SetUp]
 		public void Setup()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog), typeof(Post), typeof(Hand) );
+			ActiveRecordStarter.Initialize( GetConfigSource(), 
+				typeof(Blog), typeof(Post), typeof(Hand), typeof(Test2ARBase) );
 			Recreate();
 		}
 	}

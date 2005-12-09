@@ -75,5 +75,9 @@ namespace Castle.ActiveRecord
 		/// <param name="key">an object instance</param>
 		/// <returns>the session instance or null if none was found</returns>
 		ISession GetSession(object key);
+
+		bool WantsToCreateTheSession { get; }
+
+		ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor);
 	}
 }

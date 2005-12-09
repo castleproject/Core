@@ -41,6 +41,12 @@ namespace Castle.ActiveRecord.Framework
 		void Register(Type rootType, Configuration cfg);
 
 		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <returns></returns>
+		Configuration[] GetAllConfigurations();
+
+		/// <summary>
 		/// Requests the Configuration associated to the type.
 		/// </summary>
 		/// <param name="type"></param>

@@ -83,8 +83,17 @@ namespace Castle.ActiveRecord
 			foreach( Type type in types )
 			{
 				if ( models.Contains(type) || 
-					type == typeof(ActiveRecordBase) || type == typeof(ActiveRecordValidationBase) || 
-					!IsActiveRecordType(type) )
+					type == typeof(ActiveRecordBase) || type == typeof(ActiveRecordValidationBase) )
+				{
+					continue;
+				}
+				else if (type.IsAbstract && typeof(ActiveRecordBase).IsAssignableFrom(type))
+				{
+					SetUpConfiguration(source, type, holder);
+
+					continue;
+				}
+				else if (!IsActiveRecordType(type))
 				{
 					continue;
 				}
@@ -102,8 +111,6 @@ namespace Castle.ActiveRecord
 
 			foreach(ActiveRecordModel model in models)
 			{
-				SetUpConfiguration(source, model.Type, holder);
-				
 				Configuration cfg = holder.GetConfiguration( holder.GetRootType(model.Type) );
 
 				if (!model.IsNestedType && !model.IsDiscriminatorSubClass && !model.IsJoinedSubClass)
@@ -193,15 +200,20 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void CreateSchema()
 		{
-			SchemaExport export = CreateSchemaExport();
+			CheckInitialized();
 
-			try
+			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
 			{
-				export.Create( false, true );
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException( "Could not create the schema", ex );
+				SchemaExport export = CreateSchemaExport(config);
+
+				try
+				{
+					export.Create( false, true );
+				}
+				catch(Exception ex)
+				{
+					throw new ActiveRecordException( "Could not create the schema", ex );
+				}
 			}
 		}
 
@@ -210,6 +222,12 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void ExecuteSchemaFromFile(String scriptFileName)
 		{
+			// TODO: There might be multiples databases, find out
+			// a way so the user can specify that the script is supposed
+			// to be executed against a specific connection/db
+
+			CheckInitialized();
+
 			ARSchemaCreator arschema = new ARSchemaCreator( 
 				ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) ) );
 
@@ -221,15 +239,20 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void DropSchema()
 		{
-			SchemaExport export = CreateSchemaExport();
+			CheckInitialized();
 
-			try
+			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
 			{
-				export.Drop( false, true );
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException( "Could not drop the schema", ex );
+				SchemaExport export = CreateSchemaExport(config);
+
+				try
+				{
+					export.Drop( false, true );
+				}
+				catch(Exception ex)
+				{
+					throw new ActiveRecordException( "Could not drop the schema", ex );
+				}
 			}
 		}
 
@@ -238,16 +261,23 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void GenerateDropScripts( String fileName )
 		{
-			SchemaExport export = CreateSchemaExport();
+			// TODO: The export append to the file or erase it?
 
-			try
+			CheckInitialized();
+
+			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
 			{
-				export.SetOutputFile( fileName );
-				export.Drop( false, false );
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException( "Could not drop the schema", ex );
+				SchemaExport export = CreateSchemaExport(config);
+
+				try
+				{
+					export.SetOutputFile( fileName );
+					export.Drop( false, false );
+				}
+				catch(Exception ex)
+				{
+					throw new ActiveRecordException( "Could not drop the schema", ex );
+				}
 			}
 		}
 
@@ -256,25 +286,28 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static void GenerateCreationScripts( String fileName )
 		{
-			SchemaExport export = CreateSchemaExport();
+			// TODO: The export append to the file or erase it?
 
-			try
+			CheckInitialized();
+
+			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
 			{
-				export.SetOutputFile( fileName );
-				export.Create( false, false );
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException( "Could not create the schema", ex );
+				SchemaExport export = CreateSchemaExport(config);
+
+				try
+				{
+					export.SetOutputFile( fileName );
+					export.Create( false, false );
+				}
+				catch(Exception ex)
+				{
+					throw new ActiveRecordException( "Could not create the schema", ex );
+				}
 			}
 		}
 
-		private static SchemaExport CreateSchemaExport()
+		private static SchemaExport CreateSchemaExport(Configuration cfg)
 		{
-			CheckInitialized();
-
-			Configuration cfg = ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) );
-
 			return new SchemaExport( cfg );
 		}
 

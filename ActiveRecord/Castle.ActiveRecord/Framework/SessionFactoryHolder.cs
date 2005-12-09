@@ -18,7 +18,7 @@ namespace Castle.ActiveRecord.Framework
 	using System.Threading;
 	using System.Collections;
 	using System.Runtime.CompilerServices;
-
+	using Iesi.Collections;
 	using NHibernate;
 	using NHibernate.Cfg;
 
@@ -56,6 +56,21 @@ namespace Castle.ActiveRecord.Framework
 		public Configuration GetConfiguration(Type type)
 		{
 			return type2Conf[type] as Configuration;
+		}
+
+		/// <summary>
+		/// Pendent
+		/// </summary>
+		/// <returns></returns>
+		public Configuration[] GetAllConfigurations()
+		{
+			HashedSet set = new HashedSet(type2Conf.Values);
+
+			Configuration[] confs = new Configuration[set.Count];
+
+			set.CopyTo(confs, 0);
+
+			return confs;
 		}
 
 		/// <summary>
@@ -149,6 +164,14 @@ namespace Castle.ActiveRecord.Framework
 			}
 		}
 
+		private static ISession OpenSessionWithScope(ISessionScope scope, ISessionFactory sessionFactory)
+		{
+			lock(sessionFactory)
+			{
+				return scope.OpenSession( sessionFactory, HookDispatcher.Instance );
+			}
+		}
+
 		public void ReleaseSession(ISession session)
 		{
 			if (threadScopeInfo.HasInitializedScope)
@@ -187,7 +210,16 @@ namespace Castle.ActiveRecord.Framework
 			}
 			else
 			{
-				ISession session = OpenSession(sessionFactory);
+				ISession session = null;
+
+				if (scope.WantsToCreateTheSession)
+				{
+					session = OpenSessionWithScope(scope, sessionFactory);
+				}
+				else
+				{
+					session = OpenSession(sessionFactory);
+				}
 #if DEBUG
 				System.Diagnostics.Debug.Assert( session != null );
 #endif

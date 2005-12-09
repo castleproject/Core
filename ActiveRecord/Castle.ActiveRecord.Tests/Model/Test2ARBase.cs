@@ -16,7 +16,7 @@ namespace Castle.ActiveRecord.Tests.Model
 {
 	using System;
 
-	public class Test2ARBase : ActiveRecordBase
+	public abstract class Test2ARBase : ActiveRecordBase
 	{
 		public Test2ARBase()
 		{
