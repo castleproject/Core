@@ -2,6 +2,9 @@
 beta 3
 ======
 
+- DifferentDatabaseScope: so you can open a session using a different dbconnection
+  and persist your object model. Very experimental version
+
 - Fixed: Support for multiple databases was completely broken.
 
 - An implementation of ISessionFactoryHolder can be specified through the configuration, attribute sessionfactoryholdertype

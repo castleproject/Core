@@ -18,7 +18,9 @@ namespace Castle.ActiveRecord.Framework
 	using System.Threading;
 	using System.Collections;
 	using System.Runtime.CompilerServices;
+	
 	using Iesi.Collections;
+	
 	using NHibernate;
 	using NHibernate.Cfg;
 
@@ -198,12 +200,10 @@ namespace Castle.ActiveRecord.Framework
 		{
 			ISessionScope scope = threadScopeInfo.GetRegisteredScope();
 			ISessionFactory sessionFactory = GetSessionFactory(type);
-
 #if DEBUG
 			System.Diagnostics.Debug.Assert( scope != null );
 			System.Diagnostics.Debug.Assert( sessionFactory != null );
 #endif
-
 			if (scope.IsKeyKnown(sessionFactory))
 			{
 				return scope.GetSession(sessionFactory);

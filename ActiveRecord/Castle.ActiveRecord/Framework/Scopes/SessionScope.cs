@@ -49,14 +49,5 @@ namespace Castle.ActiveRecord
 		{
 			PerformDisposal(sessions, true, true);
 		}
-
-		protected internal void PerformDisposal( ICollection sessions, bool flush, bool close )
-		{
-			foreach(ISession session in sessions)
-			{
-				if (flush) session.Flush();
-				if (close) session.Close();
-			}
-		}
 	}
 }

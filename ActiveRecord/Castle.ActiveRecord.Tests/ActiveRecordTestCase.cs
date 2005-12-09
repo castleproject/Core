@@ -44,7 +44,6 @@ namespace Castle.ActiveRecord.Tests
 			blog.Save();
 
 			blogs = Blog.FindAll();
-
 			Assert.IsNotNull( blogs );
 			Assert.AreEqual( 1, blogs.Length );
 

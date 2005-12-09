@@ -115,6 +115,11 @@
                     AssemblyName = "Nullables.NHibernate"
                     HintPath = "..\..\SharedLibs\nhibernate\Nullables.NHibernate.dll"
                 />
+                <Reference
+                    Name = "Castle.Model"
+                    AssemblyName = "Castle.Model"
+                    HintPath = "..\..\InversionOfControl\bin\Castle.Model.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -147,6 +152,11 @@
                 <File
                     RelPath = "Castle.ActiveRecord.Tests.dll.config"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "DifferentDatabaseScopeTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "JoinedSubClassTestCase.cs"
@@ -245,6 +255,16 @@
                 />
                 <File
                     RelPath = "Model\Order.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\OtherDbBlog.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\OtherDbPost.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

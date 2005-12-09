@@ -46,7 +46,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public virtual void RegisterSession(object key, ISession session)
 		{
-			_key2Session[key] = session;
+			_key2Session.Add(key, session);
 
 			Initialize(session);
 		}
@@ -71,9 +71,6 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			ThreadScopeAccessor.Instance.UnRegisterScope(this);
 
 			PerformDisposal(_key2Session.Values);			
-
-			_key2Session.Clear();
-			_key2Session = null;
 		}
 
 		protected virtual void Initialize(ISession session)
@@ -87,6 +84,15 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		internal ICollection GetSessions()
 		{
 			return _key2Session.Values;
+		}
+
+		protected internal void PerformDisposal( ICollection sessions, bool flush, bool close )
+		{
+			foreach(ISession session in sessions)
+			{
+				if (flush) session.Flush();
+				if (close) session.Close();
+			}
 		}
 	}
 }

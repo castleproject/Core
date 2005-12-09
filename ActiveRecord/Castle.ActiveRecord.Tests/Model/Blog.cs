@@ -97,6 +97,20 @@ namespace Castle.ActiveRecord.Tests
 			return (Blog) ActiveRecordMediator.FindByPrimaryKey(typeof (Blog), id);
 		}
 
+		public ISession CurrentSession
+		{
+			get
+			{
+				return (ISession) 
+					ActiveRecordMediator.Execute(typeof(Blog), new NHibernateDelegate(GrabSession), this);
+			}
+		}
+
+		private object GrabSession(ISession session, object instance)
+		{
+			return session;
+		}
+
 		public void CustomAction()
 		{
 			ActiveRecordMediator.Execute(typeof (Blog), new NHibernateDelegate(MyCustomMethod), this);

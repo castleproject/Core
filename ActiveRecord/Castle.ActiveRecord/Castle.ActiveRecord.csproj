@@ -534,12 +534,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Scopes\DifferentDatabaseScope.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Scopes\ISessionScope.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Framework\Scopes\ScopeMachineryException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Scopes\ScopeUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

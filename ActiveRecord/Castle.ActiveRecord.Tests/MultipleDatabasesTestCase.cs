@@ -21,8 +21,12 @@ namespace Castle.ActiveRecord.Tests
 	[TestFixture]
 	public class MultipleDatabasesTestCase : AbstractActiveRecordTest
 	{
-		public MultipleDatabasesTestCase()
+		[SetUp]
+		public void Setup()
 		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), 
+				typeof(Blog), typeof(Post), typeof(Hand), typeof(Test2ARBase) );
+			Recreate();
 		}
 
 		[Test]
@@ -87,14 +91,6 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.AreEqual(1, blogs.Length);
 			Assert.AreEqual(1, hands.Length);
-		}
-
-		[SetUp]
-		public void Setup()
-		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), 
-				typeof(Blog), typeof(Post), typeof(Hand), typeof(Test2ARBase) );
-			Recreate();
 		}
 	}
 }

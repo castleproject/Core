@@ -54,7 +54,7 @@ namespace Castle.ActiveRecord
 		{
 			this.mode = mode;
 
-			ISessionScope previousScope = FindPreviousScope( 
+			ISessionScope previousScope = ScopeUtil.FindPreviousScope(this,  
 				mode == TransactionMode.Inherits ? true : false );
 
 			if (previousScope != null)
@@ -65,6 +65,7 @@ namespace Castle.ActiveRecord
 				}
 				else
 				{
+					// This is not a safe cast. Reconsider it
 					parentSimpleScope = (AbstractScope) previousScope;
 
 					foreach(ISession session in parentSimpleScope.GetSessions())
@@ -148,7 +149,7 @@ namespace Castle.ActiveRecord
 			return session;
 		}
 
-		protected void EnsureHasTransaction(ISession session)
+		protected internal void EnsureHasTransaction(ISession session)
 		{
 			if (!_transactions.Contains(session))
 			{
@@ -201,7 +202,8 @@ namespace Castle.ActiveRecord
 			{
 				if (_rollbackOnly)
 				{
-					// Cancel all pending changes (not sure whether this is a good idea, it should be scoped
+					// Cancel all pending changes 
+					// (not sure whether this is a good idea, it should be scoped
 
 					foreach( ISession session in parentSimpleScope.GetSessions() )
 					{
@@ -209,31 +211,6 @@ namespace Castle.ActiveRecord
 					}
 				}
 			}
-		}
-
-		private ISessionScope FindPreviousScope(bool transactional)
-		{
-			object[] items = ThreadScopeAccessor.Instance.CurrentStack.ToArray();
-
-			ISessionScope first = null;
-
-			for (int i = 0; i < items.Length; i++)
-			{
-				ISessionScope scope = items[i] as ISessionScope;
-
-				if (scope == this) continue;
-
-				if (first == null) first = scope;
-
-				if (!transactional) break;
-
-				if (transactional && scope.ScopeType == SessionScopeType.Transactional)
-				{
-					return scope;
-				}
-			}
-
-			return first;
 		}
 	}
 }
