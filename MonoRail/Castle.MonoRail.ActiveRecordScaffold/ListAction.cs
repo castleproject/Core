@@ -102,9 +102,15 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		private bool IsNotSupported(Type type)
 		{
-			return type == typeof(IList) || 
+			bool isUnsupportedType = (type == typeof(IList) || 
 				type == typeof(ISet) || 
-				type == typeof(IDictionary);
+				type == typeof(IDictionary));
+#if dotNet2
+            if( !isUnsupportedType && type.IsGenericType ) {
+                isUnsupportedType = (typeof(System.Collections.Generic.ICollection<>).IsAssignableFrom(type.GetGenericTypeDefinition()) || typeof(System.Collections.Generic.IList<>).IsAssignableFrom(type.GetGenericTypeDefinition()) || typeof(System.Collections.Generic.IDictionary<,>).IsAssignableFrom(type.GetGenericTypeDefinition()));
+            }
+#endif
+            return isUnsupportedType;
 		}
 	}
 }

@@ -23,6 +23,9 @@
 	</target>
 
 	<target name="init" depends="clean">
+		<property name="define" value="TRACE;${strong}"/>
+		<property name="define" value="${define};DEBUG" if="${debug}"/>
+		<property name="define" value="${define};dotNet2" if="${framework::get-target-framework()=='net-2.0'}"/>
 		
 		<property name="app.config" value="${bin.dir}/${test.assembly.name}.config" />
 		<xmlpoke
@@ -47,7 +50,7 @@
 	
 	<target name="compile" depends="init">
 		<csc 
-			define="${strong}"
+		    define="${define}" 
 			target="library" 
 			debug="${debug}"
 			optimize="${optimize}"
