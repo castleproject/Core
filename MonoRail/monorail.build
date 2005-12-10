@@ -18,7 +18,7 @@
 	
 	<property name="version" value="beta-5" />
 
-	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arsupport, arscaffold, brail, testsupport, samples, tests, generator" /> 
+	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arsupport, arscaffold, brail, testsupport, samples, tests, generator, copytobuilddir" /> 
 	
 	<target name="clean">
 		<delete>
@@ -31,6 +31,19 @@
 			</fileset>
 		</delete>
 		<delete dir="${bin.dir}" failonerror="false" includeemptydirs="true" />
+	</target>
+
+	<target name="copytobuilddir">
+		<copy todir="${build.dir}">
+			<fileset basedir="${bin.dir}">
+				<include name="Castle.MonoRail.Framework.dll" />
+				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="Castle.MonoRail.TestSupport.dll" />
+				<include name="Castle.MonoRail.Views.Brail.dll" />
+				<include name="Castle.MonoRail.WindsorExtension.dll" />
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="init" depends="clean">

@@ -3,6 +3,11 @@
 
 	<!-- Common properties that allow overrides -->
 
+	<property name="rootbuild.dir" value="${directory::get-current-directory()}" />
+		
+	<property name="build.dir" value="${rootbuild.dir}/build/net-2.0" if="${framework::get-target-framework()=='net-2.0'}" />
+	<property name="build.dir" value="${rootbuild.dir}/build/net-1.1" if="${framework::get-target-framework()=='net-1.1'}" />
+
 	<property name="strong"		value="STRONG"		unless="${property::exists('strong')}" />
 	<property name="debug"		value="false"		unless="${property::exists('debug')}" />
 	<property name="optimize"	value="true"		unless="${property::exists('optimize')}" />

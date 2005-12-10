@@ -18,13 +18,13 @@
 	<property name="version" value="beta-1" />
 
 	<target name="clean">
-		<exec program="${caspol.file}" failonerror="false" verbose="true" workingdir="${base.dir}">
+		<exec program="${caspol.file}" failonerror="false" verbose="true" workingdir="${base.dir}" unless="${skipcaspol}">
 			<arg value="-quiet" />
 			<arg value="-machine" />
 			<arg value="-rempset" />
 			<arg value="CastlePermissionSet" />
 		</exec>
-		<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}">
+		<exec program="${gacutil.file}" failonerror="false" verbose="true" workingdir="${bin.dir}" unless="${skipcaspol}">
 			<arg value="/u" />
 			<arg value="${name}" />
 		</exec>
@@ -47,11 +47,11 @@
 	</target>
 	
 	<target name="install" depends="compile">
-		<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}">
+		<exec program="${gacutil.file}" failonerror="true" verbose="true" workingdir="${bin.dir}" unless="${skipcaspol}">
 			<arg value="/i" />
 			<arg value="${assembly.name}" />
 		</exec>
-		<exec program="${caspol.file}" failonerror="true" verbose="true" workingdir="${base.dir}">
+		<exec program="${caspol.file}" failonerror="true" verbose="true" workingdir="${base.dir}" unless="${skipcaspol}">
 			<arg value="-quiet" />
 			<arg value="-machine" />
 			<arg value="-addpset" />

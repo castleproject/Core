@@ -10,7 +10,7 @@
 	<property name="packagename" value="InversionOfControl" />
 	<property name="samples.dir" value="${base.dir}/../Samples/InversionOfControl" />
 
-	<target name="build" depends="init, model, microkernel, windsor" />
+	<target name="build" depends="init, model, microkernel, windsor, copytobuilddir" />
 	
 	<target name="init">
 		<delete dir="${bin.dir}" failonerror="false" />
@@ -20,6 +20,16 @@
 		<mkdir dir="${doc.dir}" />
 
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-dynamicproxy" inheritall="true" />
+	</target>
+	
+	<target name="copytobuilddir">
+		<copy todir="${build.dir}">
+			<fileset basedir="${bin.dir}">
+				<include name="Castle.MicroKernel.dll" />
+				<include name="Castle.Model.dll" />
+				<include name="Castle.Windsor.dll" />
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="model">

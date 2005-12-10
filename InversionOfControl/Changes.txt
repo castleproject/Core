@@ -11,7 +11,7 @@ RC 2
                    lifestyle="custom"
                    customLifestyleType="MyLib.MyCustomLifestyle, MyLib" />
 
-- Type converter for enums
+- Added Type converter for enums
 
 - Support to associate configuration nodes to methods. Usage:
 
@@ -49,11 +49,31 @@ RC 2
     (For example: config://castle will fetch the 
     <configuration><castle> entry in the configuration)
 
-  - UncResource (not completed!):  
+  - UncResource:  
     \\server\file 
     (For example: \\mysharedplace\myconfig.xml)
 
-- IResourceFactory and IResourceSubSystem introduced
+- IResource, IResourceFactory and IResourceSubSystem introduced
+
+- Ability to use <properties> in configuration files. Usage
+
+	<properties>	
+		<prop1>prop1 value</prop1>
+		<prop2>prop2 value</prop2>
+	</properties>
+
+	<facilities>
+	
+		<facility id="testidengine" >
+			<item>#{prop1}</item>
+		</facility>
+
+		<facility id="testidengine2" >
+			<item value="#{prop2}"/>
+		</facility>
+	
+	</facilities>
+
 
 - Ability to use <include> in configuration files. Usage
 

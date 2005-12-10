@@ -2,41 +2,49 @@
 <project name="all" default="build">
 
 	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
+	<property name="skipcaspol" value="true" />
+
+	<include buildfile="common.inc" />
 	
-	<target name="build" depends="init, tools, container, components, services, activerecord, monorail, aspectsharp, facilities, samples" />
+	<target name="build" depends="clean, init, tools, container, components, services, activerecord, monorail, aspectsharp, facilities, samples" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" failonerror="false" />
+	</target>
 	
 	<target name="init">
+		<mkdir dir="${build.dir}" />
 	</target>
 
-	<target name="activerecord">
+	<target name="activerecord" depends="init">
 		<nant buildfile="ActiveRecord/activerecord.build" target="build" inheritall="true" />
 	</target>
 	
-	<target name="tools">
+	<target name="tools" depends="init">
 		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="container">
+	<target name="container" depends="init">
 		<nant buildfile="InversionOfControl/container.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="services">
+	<target name="services" depends="init">
 		<nant buildfile="Services/services.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="facilities">
+	<target name="facilities" depends="init">
 		<nant buildfile="Facilities/facilities.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="components">
+	<target name="components" depends="init">
 		<nant buildfile="Components/components.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="monorail">
+	<target name="monorail" depends="init">
 		<nant buildfile="MonoRail/monorail.build" target="build" inheritall="true" />
 	</target>
 
-	<target name="aspectsharp">
+	<target name="aspectsharp" depends="init">
 		<nant buildfile="AspectSharp/aspectsharp.build" target="build" inheritall="true" />
 	</target>
 
