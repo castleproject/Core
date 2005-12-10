@@ -114,6 +114,7 @@ abstract class BrailBase:
 		properties.Add("request", context.Request)
 		properties.Add("response", context.Response)
 		properties.Add("session", context.Session)
+		properties.Add("controller", controller)
 		
 		if controller.Resources is not null:
 			for key in controller.Resources.Keys:
