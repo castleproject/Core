@@ -157,7 +157,6 @@
 				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="..\SharedLibs\nhibernate\NHibernate.dll" />
 				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="..\SharedLibs\nhibernate\Nullables.dll" />
 				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="..\SharedLibs\nhibernate\Nullables.NHibernate.dll" />
-				<File Id="file74" Name="NUNIT.DLL" LongName="NUnit.Framework.dll" src="..\SharedLibs\nhibernate\Nullables.NHibernate.dll" />
 				<File Id="file75" Name="nhlic.txt" LongName="NHibernate.license.txt" src="..\SharedLibs\nhibernate\NHibernate.license.txt" />
 				<File Id="file76" Name="iesilic.txt" LongName="Iesi.Collections.license.txt" src="..\SharedLibs\nhibernate\Iesi.Collections.license.txt" />
 
@@ -223,11 +222,11 @@
 				<Registry Id="registry8" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
 				<Registry Id="registry9" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry10" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry11" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="CodeBase" Value="[addinfile]" Type="string" />
+				<Registry Id="registry11" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32" Name="CodeBase" Value="[WizardTemplatesDir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
 				<Registry Id="registry12" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.MonoRailProjectWizard" Type="string" />
 				<Registry Id="registry13" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry14" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry15" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="[addinfile]" Type="string" />
+				<Registry Id="registry15" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="[WizardTemplatesDir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
 				<Registry Id="registry16" Root="HKCR" Key="CLSID\{43C9796F-E6C8-460D-B722-204A7121A510}\ProgId" Value="Castle.MonoRailProjectWizard" Type="string" />
 				<Registry Id="registry17" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry18" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\Implemented Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" />
@@ -236,11 +235,11 @@
 				<Registry Id="registry21" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry22" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry23" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry24" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="CodeBase" Value="[addinfile]" Type="string" />
+				<Registry Id="registry24" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32" Name="CodeBase" Value="[WizardTemplatesDir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
 				<Registry Id="registry25" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="Class" Value="Castle.VSNetIntegration.CastleWizards.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry26" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="Assembly" Value="Castle.VSNetIntegration.CastleWizards, Version=1.0.2160.26211, Culture=neutral, PublicKeyToken=null" Type="string" />
 				<Registry Id="registry27" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="RuntimeVersion" Value="v1.1.4322" Type="string" />
-				<Registry Id="registry28" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="[addinfile]" Type="string" />
+				<Registry Id="registry28" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\InprocServer32\1.0.2160.26211" Name="CodeBase" Value="[WizardTemplatesDir]Castle.VSNetIntegration.CastleWizards.dll" Type="string" />
 				<Registry Id="registry29" Root="HKCR" Key="CLSID\{50E5A1CA-8ABD-4AD2-8A60-176F5BFC9706}\ProgId" Value="Castle.ActiveRecordModelProjectWizard" Type="string" />
 				<Registry Id="registry30" Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string" />
 			</Component>
@@ -259,9 +258,15 @@
 				<File Id="vs7file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Sandbox\VSNetIntegration\Castle ActiveRecord Project.vsz">
 					<CopyFile Id="vs7file0cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
 				</File>
+				<File Id="vs7file0a" LongName="Castle ActiveRecord Project.ico" Name="Project1.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+					<CopyFile Id="vs7file0cpa" DestinationProperty="VS2003_SCHEMAS_DIR" />
+				</File>
 				
 				<File Id="vs7file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Sandbox\VSNetIntegration\Castle MonoRail Project.vsz">
 					<CopyFile Id="vs7file1cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+				</File>
+				<File Id="vs7file1a" LongName="Castle MonoRail Project.ico"     Name="Project2.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+					<CopyFile Id="vs7file1cpa" DestinationProperty="VS2003_SCHEMAS_DIR" />
 				</File>
 				
 			</Component>
@@ -293,12 +298,12 @@
 					</Component>
 					<Directory Id="directory18" Name="Content">
 						<Directory Id="directory19" Name="css">
-							<Component Id="component8" DiskId="1">
+							<Component Id="component8" DiskId="1" SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no" Win64="no" Location="either">
 								<CreateFolder/>
 							</Component>
 						</Directory>
 						<Directory Id="directory20" Name="images" >
-							<Component Id="component9" DiskId="1">
+							<Component Id="component9" DiskId="1" SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no" Win64="no" Location="either">
 								<CreateFolder/>
 							</Component>
 						</Directory>
@@ -310,7 +315,7 @@
 					</Directory>
 					<Directory Id="directory26" Name="Views">
 						<Directory Id="directory27" Name="Home">
-							<Component Id="component11" DiskId="1">
+							<Component Id="component11" DiskId="1" SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no" Win64="no" Location="either">
 								<CreateFolder/>
 							</Component>
 						</Directory>
