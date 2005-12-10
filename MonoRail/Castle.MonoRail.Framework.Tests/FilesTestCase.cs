@@ -37,7 +37,8 @@ namespace Castle.MonoRail.Framework.Tests
 
 			String expected = "/*  Prototype JavaScript framework";
 
-			AssertContentTypeStartsWith("text/javascript");
+			AssertContentTypeStartsWith("application/x-javascript");
+			AssertHasHeader("Cache-Control");
 			AssertReplyStartsWith(expected);
 		}
 
@@ -50,7 +51,8 @@ namespace Castle.MonoRail.Framework.Tests
 
             String expected = "\r\n// @name      The Fade Anything Technique";
 
-			AssertContentTypeStartsWith("text/javascript");
+			AssertContentTypeStartsWith("application/x-javascript");
+			AssertHasHeader("Cache-Control");
 			AssertReplyStartsWith(expected);
 		}
 
@@ -63,7 +65,8 @@ namespace Castle.MonoRail.Framework.Tests
 
             String expected = "\r\n\r\n// Copyright (c) 2005 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)";
 
-			AssertContentTypeStartsWith("text/javascript");
+			AssertContentTypeStartsWith("application/x-javascript");
+			AssertHasHeader("Cache-Control");
 			AssertReplyStartsWith(expected);
 		}
 
@@ -73,25 +76,29 @@ namespace Castle.MonoRail.Framework.Tests
 			String expected = " \r\n\t\t\t/*************************************";
 			DoGet("MonoRail/Files/ValidateCore.rails");
 			AssertSuccess();
-			AssertContentTypeStartsWith("text/javascript");
+			AssertContentTypeStartsWith("application/x-javascript");
+			AssertHasHeader("Cache-Control");
 			AssertReplyStartsWith(expected);
 
 			expected = " \r\n\t\t\t\tfunction fValConfig()\r\n\t\t\t\t{";
 			DoGet("MonoRail/Files/ValidateConfig.rails");
 			AssertSuccess();
-            AssertContentTypeStartsWith("text/javascript");
+            AssertContentTypeStartsWith("application/x-javascript");
+			AssertHasHeader("Cache-Control");
 			AssertReplyStartsWith(expected);
 
 			expected = " \r\n\t\t\t/*< blank basic ******************";
 			DoGet("MonoRail/Files/ValidateValidators.rails");
 			AssertSuccess();
-			AssertContentTypeStartsWith("text/javascript");
+			AssertContentTypeStartsWith("application/x-javascript");
+			AssertHasHeader("Cache-Control");
 			AssertReplyStartsWith(expected);
 
 			expected = " \r\n\t\t\t/*--	fValidate US-English language file.";
 			DoGet("MonoRail/Files/ValidateLang.rails");
 			AssertSuccess();
-			AssertContentTypeStartsWith("text/javascript");
+			AssertContentTypeStartsWith("application/x-javascript");
+			AssertHasHeader("Cache-Control");
 			AssertReplyStartsWith(expected);
 		}
 	}

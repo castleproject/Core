@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.Framework.Controllers
 {
 	using System;
-
+	using System.Web;
 	using Castle.MonoRail.Framework.Helpers;
 
 	/// <summary>
@@ -30,8 +30,23 @@ namespace Castle.MonoRail.Framework.Controllers
 	[Resource("Validation", "Castle.MonoRail.Framework.Controllers.Validation", CultureName="neutral")]
 	public sealed class FilesController : Controller
 	{
+		private string _jsContentType = "application/x-javascript";
+		private string _jsCacheControl = "max-age=86400"; // cache valid for 1 day
+
 		public FilesController()
 		{
+		}
+
+		public string JavascriptContentType
+		{
+			get { return _jsContentType; }
+			set { _jsContentType = value; }
+		}
+
+		public string JavascriptCacheControl
+		{
+			get { return _jsCacheControl; }
+			set { _jsCacheControl = value; }
 		}
 
 		private String GetResourceValue( String resName, String resKey )
@@ -39,19 +54,26 @@ namespace Castle.MonoRail.Framework.Controllers
 			return (String)(Resources[resName])[resKey];
 		}
 
+		private void RenderJavascriptFile( String resourceName, String resourceKey )
+		{
+			Response.ContentType = JavascriptContentType;
+			Response.AppendHeader("Cache-Control", JavascriptCacheControl);
+			//Response.CacheControlHeader = JavascriptCacheControl;
+			RenderFile( resourceName, resourceKey );
+		}
+
 		private void RenderFile( String resourceName, String resourceKey )
 		{
-            String fileContent = GetResourceValue( resourceName, resourceKey );
-            RenderText( fileContent );
+			String fileContent = GetResourceValue( resourceName, resourceKey );
+			RenderText( fileContent );
 		}
 
 		/// <summary>
 		/// Script used by <see cref="AjaxHelper"/>.
 		/// </summary>
 		public void AjaxScripts()
-		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "Ajax", "jsfunctions" );
+		{	
+			RenderJavascriptFile( "Ajax", "jsfunctions" );
 		}
 
 		/// <summary>
@@ -59,8 +81,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void BehaviourScripts()
 		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "Behaviour", "jsfunctions" );
+			RenderJavascriptFile( "Behaviour", "jsfunctions" );
 		}
 		
 		/// <summary>
@@ -68,8 +89,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void EffectsFatScripts()
 		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "EffectsFat", "fatfunctions" );
+			RenderJavascriptFile( "EffectsFat", "fatfunctions" );
 		}
 
 		/// <summary>
@@ -77,8 +97,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void Effects2()
 		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "Effects2", "functions" );
+			RenderJavascriptFile( "Effects2", "functions" );
 		}
 
 		/// <summary>
@@ -86,8 +105,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void ValidateConfig()
 		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "Validation", "fValidateConfig" );
+			RenderJavascriptFile( "Validation", "fValidateConfig" );
 		}
 
 		/// <summary>
@@ -95,8 +113,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void ValidateCore()
 		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "Validation", "fValidateCore" );
+			RenderJavascriptFile( "Validation", "fValidateCore" );
 		}
 
 		/// <summary>
@@ -104,8 +121,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void ValidateValidators()
 		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "Validation", "fValidateValidators" );
+			RenderJavascriptFile( "Validation", "fValidateValidators" );
 		}
 
 		/// <summary>
@@ -113,8 +129,7 @@ namespace Castle.MonoRail.Framework.Controllers
 		/// </summary>
 		public void ValidateLang()
 		{
-			Response.ContentType = "text/javascript";
-			RenderFile( "Validation", "fValidateLang" );
+			RenderJavascriptFile( "Validation", "fValidateLang" );
 		}
 	}
 }

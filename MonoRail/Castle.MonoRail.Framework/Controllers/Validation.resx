@@ -906,15 +906,15 @@
 
 			/*	Prototype push if missing
 			------------------------------------------- */
-			if ( typeof Array.push == 'undefined' )
-			Array.prototype.push = function()
+			if ( typeof Array.prototype.push == 'undefined' )
 			{
-				var arg, i = 0;
-				while( arg = arguments[i++] )
+				Array.prototype.push = function()
 				{
-					this[this.length] = arg;
+					for ( var i = 0; i < arguments.length; i++ )
+					{
+						this[this.length] = arguments[i];
+					}	
 				}
-				return this.length;
 			}
 
 			/*	Returns last item of the array
