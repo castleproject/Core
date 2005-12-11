@@ -42,6 +42,8 @@
 				<include name="Castle.MonoRail.TestSupport.dll" />
 				<include name="Castle.MonoRail.Views.Brail.dll" />
 				<include name="Castle.MonoRail.WindsorExtension.dll" />
+				<include name="Castle.MonoRail.ActiveRecordScaffold.dll" />
+				<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
 			</fileset>
 		</copy>
 	</target>

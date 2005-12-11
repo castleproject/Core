@@ -33,10 +33,21 @@
 				<include name="*.dll" />
 			</fileset>
 		</copy>
-		
 	</target>
 	
-	<target name="build" depends="init, cpnts, generator.compile" />
+	<target name="build" depends="init, cpnts, generator.compile, copytobuilddir" />
+	
+	<target name="copytobuilddir">
+		<copy todir="${build.dir}">
+			<fileset basedir="${bin.dir}">
+				<include name="${generator.assembly.name}" />
+				<include name="${cpnts.assembly.name}" />
+				<include name="ADODB.dll" />
+				<include name="MSDASC.dll" />
+				<include name="WeifenLuo.WinFormsUI.Docking.dll" />
+			</fileset>
+		</copy>
+	</target>
 	
 	<target name="cpnts" depends="cpnts.compile, cpnts.tests.compile, cpnts.tests.run" />
 	

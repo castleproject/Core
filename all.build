@@ -3,6 +3,7 @@
 
 	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="skipcaspol" value="true" />
+	<property name="sharedlibrary.dir" value="${base.dir}/SharedLibs" />
 
 	<include buildfile="common.inc" />
 	
@@ -14,6 +15,50 @@
 	
 	<target name="init">
 		<mkdir dir="${build.dir}" />
+		<call target="copydistdependencies" />
+	</target>
+	
+	<target name="copydistdependencies">
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/boo">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/cassini">
+				<include name="*.*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/ibatis">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/log4net">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nhibernate">
+				<include name="*.*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nlog">
+				<include name="*.*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/nvelocity">
+				<include name="*.*" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/prevalence">
+				<include name="*.*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="activerecord" depends="init">

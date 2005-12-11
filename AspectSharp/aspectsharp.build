@@ -72,7 +72,18 @@
 		</copy>
 	</target>
 
-	<target name="build" depends="init,lang.tests.run,core.tests.run" />
+	<target name="build" depends="init,lang.tests.run,core.tests.run,copytobuilddir" />
+
+	<target name="copytobuilddir">
+		<copy todir="${build.dir}">
+			<fileset basedir="${bin.dir}">
+				<include name="${core.assembly.name}" />
+				<include name="${lang.assembly.name}" />
+				<include name="${aopalliance.assembly.name}" />
+				<include name="antlr.runtime.dll" />
+			</fileset>
+		</copy>
+	</target>
 	
 	<target name="distribution" depends="build, documentation, packfiles" />
 

@@ -37,7 +37,15 @@
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-ibatis" inheritall="true" />
 	</target>
 
-	<target name="build" depends="init,tests.run" />
+	<target name="build" depends="init,tests.run,copytobuilddir" />
+	
+	<target name="copytobuilddir">
+		<copy todir="${build.dir}">
+			<fileset basedir="${bin.dir}">
+				<include name="${assembly.name}" />
+			</fileset>
+		</copy>
+	</target>
 	
 	<target name="compile" depends="init">
 		<csc 
