@@ -101,6 +101,11 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			MethodInfo[] methods = controllerType.GetMethods( BindingFlags.Public | BindingFlags.Instance );
 
+			// HACK: workaround for DYNPROXY-14
+			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
+			for (int i=0; i < methods.Length; i++)
+				methods[i] = methods[i].GetBaseDefinition();
+
 			foreach (MethodInfo method in methods)
 			{
                 Type declaringType = method.DeclaringType;
