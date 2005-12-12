@@ -17,15 +17,15 @@ namespace Castle.Services.Logging.Log4netIntegration
 	using System;
 
 	using log4net;
-
-	using Castle.Services.Logging;
+	using log4net.Core;
 
 	/// <summary>
 	/// Summary description for log4netLogger.
 	/// </summary>
-	public class Log4netLogger : ILogger
+	public class Log4netLogger : Castle.Services.Logging.ILogger
 	{
-		private ILog _log;
+		private log4net.Core.ILogger _logger;
+		private static Type declaringType = typeof(Log4netLogger);
 
 		public Log4netLogger()
 		{
@@ -33,129 +33,129 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 		internal Log4netLogger(ILog log)
 		{
-			_log = log;
+			_logger = log.Logger;
 		}
 
 		#region ILogger Members
 
-		public ILogger CreateChildLogger(String name)
+		public Castle.Services.Logging.ILogger CreateChildLogger(String name)
 		{
 			throw new NotImplementedException();
 		}
 
 		public void Info(String format, params object[] args)
 		{
-			if (_log.IsInfoEnabled)
-				_log.InfoFormat(format, args);
+			if (IsInfoEnabled)
+				_logger.Log(declaringType, Level.Info, String.Format(format, args), null);
 		}
 
-		void ILogger.Info(String message, Exception exception)
+		public void Info(String message, Exception exception)
 		{
-			if (_log.IsInfoEnabled)
-				_log.Info(message, exception);
+			if (IsInfoEnabled)
+				_logger.Log(declaringType, Level.Info, message, exception);
 		}
 
-		void ILogger.Info(String message)
+		public void Info(String message)
 		{
-			if (_log.IsInfoEnabled)
-				_log.Info(message);
+			if (IsInfoEnabled)
+				_logger.Log(declaringType, Level.Info, message, null);
 		}
 
 		public void Debug(String format, params object[] args)
 		{
-			if (_log.IsDebugEnabled)
-				_log.DebugFormat(format, args);
+			if (IsDebugEnabled)
+				_logger.Log(declaringType, Level.Debug, String.Format(format, args), null);
 		}
 
-		void ILogger.Debug(String message, Exception exception)
+		public void Debug(String message, Exception exception)
 		{
-			if (_log.IsDebugEnabled)
-				_log.Debug(message, exception);
+			if (IsDebugEnabled)
+				_logger.Log(declaringType, Level.Debug, message, exception);
 		}
 
-		void ILogger.Debug(String message)
+		public void Debug(String message)
 		{
-			if (_log.IsDebugEnabled)
-				_log.Debug(message);
+			if (IsDebugEnabled)
+				_logger.Log(declaringType, Level.Debug, message, null);
 		}
 
 		public void Warn(String format, params object[] args)
 		{
-			if (_log.IsWarnEnabled)
-				_log.WarnFormat(format, args);
+			if (IsWarnEnabled)
+				_logger.Log(declaringType, Level.Warn, String.Format(format, args), null);
 		}
 
 		public void Warn(String message, Exception exception)
 		{
-			if (_log.IsWarnEnabled)
-				_log.Warn(message, exception);
+			if (IsWarnEnabled)
+				_logger.Log(declaringType, Level.Warn, message, exception);
 		}
 
 		public void Warn(String message)
 		{
-			if (_log.IsWarnEnabled)
-				_log.Warn(message);
+			if (IsWarnEnabled)
+				_logger.Log(declaringType, Level.Warn, message, null);
 		}
 
 		public void FatalError(String format, params object[] args)
 		{
-			if (_log.IsFatalEnabled)
-				_log.FatalFormat(format, args);
+			if (IsFatalErrorEnabled)
+				_logger.Log(declaringType, Level.Fatal, String.Format(format, args), null);
 		}
 
 		public void FatalError(String message, Exception exception)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(message, exception);
+			if (IsFatalErrorEnabled)
+				_logger.Log(declaringType, Level.Fatal, message, exception);
 		}
 
 		public void FatalError(String message)
 		{
-			if (_log.IsFatalEnabled)
-				_log.Fatal(message);
+			if (IsFatalErrorEnabled)
+				_logger.Log(declaringType, Level.Fatal, message, null);
 		}
 
 		public void Error(String format, params object[] args)
 		{
-			if (_log.IsErrorEnabled)
-				_log.ErrorFormat(format, args);
+			if (IsErrorEnabled)
+				_logger.Log(declaringType, Level.Error, String.Format(format, args), null);
 		}
 
 		public void Error(String message, Exception exception)
 		{
-			if (_log.IsErrorEnabled)
-				_log.Error(message, exception);
+			if (IsErrorEnabled)
+				_logger.Log(declaringType, Level.Error, message, exception);
 		}
 
 		public void Error(String message)
 		{
-			if (_log.IsErrorEnabled)
-				_log.Error(message);
+			if (IsErrorEnabled)
+				_logger.Log(declaringType, Level.Error, message, null);
 		}
 
 		public bool IsErrorEnabled
 		{
-			get { return _log.IsErrorEnabled; }
+			get { return _logger.IsEnabledFor(Level.Error); }
 		}
 
 		public bool IsWarnEnabled
 		{
-			get { return _log.IsWarnEnabled; }
+			get { return _logger.IsEnabledFor(Level.Warn); }
 		}
 
 		public bool IsDebugEnabled
 		{
-			get { return _log.IsDebugEnabled; }
+			get { return _logger.IsEnabledFor(Level.Debug); }
 		}
 
 		public bool IsFatalErrorEnabled
 		{
-			get { return _log.IsFatalEnabled; }
+			get { return _logger.IsEnabledFor(Level.Fatal); }
 		}
 
 		public bool IsInfoEnabled
 		{
-			get { return _log.IsInfoEnabled; }
+			get { return _logger.IsEnabledFor(Level.Info); }
 		}
 
 		#endregion
