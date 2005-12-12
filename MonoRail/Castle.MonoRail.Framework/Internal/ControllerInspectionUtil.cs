@@ -24,10 +24,10 @@ namespace Castle.MonoRail.Framework.Internal
 	{
 		public static ControllerDescriptor Inspect(Type controllerType)
 		{
-			if (controllerType.IsDefined(typeof(ControllerDetailsAttribute), false))
+			if (controllerType.IsDefined(typeof(ControllerDetailsAttribute), true))
 			{
 				object[] attrs = controllerType.GetCustomAttributes( 
-					typeof(ControllerDetailsAttribute), false );
+					typeof(ControllerDetailsAttribute), true );
 
 				ControllerDetailsAttribute details = attrs[0] as ControllerDetailsAttribute;
 
