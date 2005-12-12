@@ -99,8 +99,7 @@
 	<target name="tests.run" depends="tests.compile" if="${activerecord.test}">
 		<nunit2>
 			<formatter type="${nunit.formatter}" />
-			<test assemblyname="${bin.dir}/${test.assembly.name}"
-				appconfig="${test.src.dir}/App.config" />
+			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
 	</target>
 	
