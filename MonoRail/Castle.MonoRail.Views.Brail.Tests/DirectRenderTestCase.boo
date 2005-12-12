@@ -32,5 +32,5 @@ class DirectRenderTestCase(AbstractMRTestCase):
 	[Test]
 	def DirectRenderingWithLayout():
 		DoGet("directrender/directwithlayout.rails")
-		expected = "Ayende"
+		expected = "\r\nWelcome!\r\n<p>Ayende</p>\r\nFooter"
 		AssertReplyEqualsTo(expected)
