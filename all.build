@@ -4,6 +4,7 @@
 	<property name="base.dir" value="${path::get-full-path( project::get-base-directory() )}" />
 	<property name="skipcaspol" value="true" />
 	<property name="sharedlibrary.dir" value="${base.dir}/SharedLibs" />
+	<property name="tempdir" value="tempdir" />
 
 	<include buildfile="common.inc" />
 	
@@ -97,7 +98,7 @@
 	
 	</target>
 
-	<target name="dist" depends="zipsource, zipsamples">
+	<target name="dist" depends="zipsource, zipsamples, zip11, zip20, zipdoc">
 	<!--
 		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="dist" inheritall="true" />
 		<nant buildfile="AspectSharp/aspectsharp.build" target="distribution" inheritall="true" />
@@ -108,6 +109,60 @@
 		<nant buildfile="Services/services.build" target="dist" inheritall="true" />
 		<nant buildfile="Facilities/facilities.build" target="dist" inheritall="true" />
 	-->
+	</target>
+	
+	<target name="createreleasenotes">
+		<mkdir dir="${tempdir}" />
+		
+		<copy file="ActiveRecord/Changes.txt" tofile="${tempdir}/ActiveRecord Release Notes.txt" />
+		<copy file="MonoRail/Changes.txt" tofile="${tempdir}/MonoRail Release Notes.txt" />
+		<copy file="InversionOfControl/Changes.txt" tofile="${tempdir}/InversionOfControl Release Notes.txt" />
+		<copy file="ActiveRecord/Changes.txt" tofile="${tempdir}/ActiveRecord Release Notes.txt" />
+		<copy file="Tools/DynamicProxy/Changes.txt" tofile="${tempdir}/DynamicProxy Release Notes.txt" />
+	</target>
+	
+	<target name="deletereleasenotes">
+		<delete dir="${tempdir}" />
+	</target>
+
+	<target name="zip11">
+		<call target="createreleasenotes" />
+		<zip zipfile="${base.dir}/Castle-net-1.1.zip">
+			<fileset basedir="${base.dir}/build">
+				<include name="net-1.1/*.*" />
+			</fileset>
+			<fileset basedir="${base.dir}/setup">
+				<include name="License.rtf" />
+			</fileset>
+			<fileset basedir="${tempdir}">
+				<include name="*.txt" />
+			</fileset>
+		</zip>
+		<call target="deletereleasenotes" />
+	</target>
+
+	<target name="zip20">
+		<call target="createreleasenotes" />
+		<zip zipfile="${base.dir}/Castle-net-2.0.zip">
+			<fileset basedir="${base.dir}/build">
+				<include name="net-2.0/*.*" />
+			</fileset>
+			<fileset basedir="${base.dir}/setup">
+				<include name="License.rtf" />
+			</fileset>
+			<fileset basedir="${tempdir}">
+				<include name="*.txt" />
+			</fileset>
+		</zip>
+		<call target="deletereleasenotes" />
+	</target>
+	
+	<target name="zipdoc">
+		<zip zipfile="${base.dir}/Castle-api-doc.zip">
+			<fileset basedir="${base.dir}/docs">
+				<include name="Castle.chm" />
+			</fileset>
+		</zip>
 	</target>
 
 	<target name="zipsamples">
