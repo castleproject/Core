@@ -79,7 +79,7 @@
 	</target>
 
 	<target name="brail" depends="init">
-		<nant buildfile="Castle.MonoRail.Views.brail/default.build" inheritall="true" target="compile" />
+		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="compile" />
 	</target>
 
 	<target name="nvelocity" depends="init">

@@ -13,6 +13,9 @@ Beta 5
 
 - Hierarchy of areas support (kudos to Fabio Batista)
 
+- Support for [Layout] attribute on Actions, so actions can override 
+  the Controller's specified layout (by Fabio Batista, rev 1459)
+
 - PaginationHelper introduced
 
 - Added IServerUtility.JavaScriptEscape() (kudos to Chad Humphries)
