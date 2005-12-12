@@ -665,6 +665,14 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
+			// Overrides the current layout, if the action specifies one
+			if (method != null)
+			{
+				ActionMetaDescriptor ac = MetaDescriptor.GetAction(method);
+				if (ac.Layout != null)
+					this.LayoutName = ac.Layout.LayoutName;
+			}
+
 			HybridDictionary filtersToSkip = new HybridDictionary();
 
 			bool skipFilters = ShouldSkip(method, filtersToSkip);

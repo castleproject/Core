@@ -21,7 +21,7 @@ namespace Castle.MonoRail.Framework
 	/// The layout can later be changed using the LayoutName
 	/// property of the <see cref="Controller"/>.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false), Serializable]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false), Serializable]
 	public class LayoutAttribute : Attribute
 	{
 		private String _layoutName;
