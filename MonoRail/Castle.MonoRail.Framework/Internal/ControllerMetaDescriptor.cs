@@ -101,66 +101,34 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			MethodInfo[] methods = controllerType.GetMethods( BindingFlags.Public | BindingFlags.Instance );
 
-			// HACK: workaround for DYNPROXY-14
-			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
-			for (int i=0; i < methods.Length; i++)
-				methods[i] = methods[i].GetBaseDefinition();
-
 			foreach (MethodInfo method in methods)
 			{
-                Type declaringType = method.DeclaringType;
+				Type declaringType = method.DeclaringType;
 
-                if (declaringType == typeof(Object) || declaringType == typeof(Controller) || declaringType == typeof(SmartDispatcherController))
-                {
-                    continue;
-                }
-
-                if (_actions.Contains(method.Name))
+				if (declaringType == typeof(Object) || declaringType == typeof(Controller) || declaringType == typeof(SmartDispatcherController))
 				{
-                    ArrayList list = _actions[method.Name] as ArrayList;
+					continue;
+				}
 
-                    if (list == null)
+				if (_actions.Contains(method.Name))
+				{
+					ArrayList list = _actions[method.Name] as ArrayList;
+
+					if (list == null)
 					{
 						list = new ArrayList();
-                        list.Add(_actions[method.Name]);
+						list.Add(_actions[method.Name]);
 
-                        _actions[method.Name] = list;
+						_actions[method.Name] = list;
 					}
 
-                    list.Add(method);
+					list.Add(method);
 				}
 				else
 				{
-                    _actions[method.Name] = method;
+					_actions[method.Name] = method;
 				}
 			}
-
-			// HACK: workaround for DYNPROXY-14
-			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
-//			for (int i=0; i < methods.Length; i++)
-//				methods[i] = methods[i].GetBaseDefinition();
-//			
-//			foreach(MethodInfo m in methods)
-//			{
-//				if (_actions.Contains(m.Name))
-//				{
-//					ArrayList list = _actions[m.Name] as ArrayList;
-//
-//					if (list == null)
-//					{
-//						list = new ArrayList();
-//						list.Add(_actions[m.Name]);
-//
-//						_actions[m.Name] = list;
-//					}
-//
-//					list.Add(m);
-//				}
-//				else
-//				{
-//					_actions[m.Name] = m;
-//				}
-//			}
 		}
 
 		public DefaultActionAttribute DefaultAction

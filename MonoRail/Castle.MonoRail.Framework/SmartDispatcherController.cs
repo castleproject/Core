@@ -61,9 +61,11 @@ namespace Castle.MonoRail.Framework
 
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
 		{
-			ParameterInfo[] parameters = method.GetParameters();
+			// HACK: GetBaseDefinition() is a workaround for DYNPROXY-14
+			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
+			ParameterInfo[] parameters = method.GetBaseDefinition().GetParameters();
 
-			object[] methodArgs = BuildMethodArguments( parameters, request);
+			object[] methodArgs = BuildMethodArguments(parameters, request);
             method.Invoke(this, methodArgs);
 		}
 
