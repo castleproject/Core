@@ -18,6 +18,8 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public DifferentDatabaseScope(IDbConnection connection) : base(SessionScopeType.Custom)
 		{
+			if (connection == null) throw new ArgumentNullException("connection");
+
 			this.connection = connection;
 
 			ISessionScope parentScope = ScopeUtil.FindPreviousScope(this, true); 
