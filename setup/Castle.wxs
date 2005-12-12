@@ -35,6 +35,11 @@
 			</RegistrySearch>
 		</Property>
 
+		<Property Id='FRAMEWORK20'>
+			<RegistrySearch Id='Framework20Registry' Type='raw'
+				Root='HKLM' Key='Software\Microsoft\.NETFramework\Policy\v2.0' Name='50727' />
+		</Property>
+	
 		<Media Id="1" Cabinet="Content.cab" EmbedCab="yes" CompressionLevel="high" />
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
@@ -58,6 +63,12 @@
 					
 				</Directory>
 			</Directory>
+			
+			<Directory Id="ProgramMenuFolder" SourceName="Programs">
+				<Directory Id="shortcutrootfolder" Name="SHORT~1.00" LongName="Castle Project">
+					<Directory Id="documentationfolder" Name="Doc~1" LongName="Docs" />
+				</Directory>
+			</Directory>			
 		</Directory>
 		
 		<!-- Components -->
@@ -76,95 +87,205 @@
 				<File Id="file22A" Name="CAED29_2.DLL" 
 					LongName="Castle.MonoRail.TestSupport.dll" 
 					KeyPath="yes" Assembly=".net" AssemblyManifest="file22A"
-					src="..\MonoRail\bin\Castle.MonoRail.TestSupport.dll" />
+					src="..\build\net-1.1\Castle.MonoRail.TestSupport.dll" />
 			</Component>
+			
+			<Directory Id="net11dir" Name="net-1.1">
+				<Component Id="ProductComponent11" DiskId="1" Guid="9809B08F-5717-44F2-A07F-B16C8ADADC39">
+					<File Id="file300" Name="readme.txt" LongName="Assemblies README.txt" src="Assemblies README.txt" />
+					
+					<!-- MonoRail -->
+					<File Id="file13" Name="CA29FF_1.DLL" LongName="Castle.MonoRail.ActiveRecordScaffold.dll" src="..\build\net-1.1\Castle.MonoRail.ActiveRecordScaffold.dll" />
+					<File Id="file15" Name="CAF2EC_1.DLL" LongName="Castle.MonoRail.ActiveRecordSupport.dll" src="..\build\net-1.1\Castle.MonoRail.ActiveRecordSupport.dll" />
+					<File Id="file17" Name="CA690F_1.DLL" LongName="Castle.MonoRail.Framework.dll" src="..\build\net-1.1\Castle.MonoRail.Framework.dll" />
+					<File Id="file19" Name="CAD114_1.DLL" LongName="Castle.MonoRail.Framework.Views.CompositeView.dll" src="..\build\net-1.1\Castle.MonoRail.Framework.Views.CompositeView.dll" />
+					<File Id="file20" Name="CA4D68_1.DLL" LongName="Castle.MonoRail.Framework.Views.NVelocity.dll" src="..\build\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll" />
+					<File Id="file23" Name="CA0B18_1.DLL" LongName="Castle.MonoRail.WindsorExtension.dll"	src="..\build\net-1.1\Castle.MonoRail.WindsorExtension.dll" />
+					<File Id="file22" Name="CAED29_1.DLL" LongName="Castle.MonoRail.TestSupport.dll" 		src="..\build\net-1.1\Castle.MonoRail.TestSupport.dll" />
 
-			<Component Id="ProductComponent" DiskId="1" Guid="9809B08F-5717-44F2-A07F-B16C8ADADC39">
-				<File Id="file300" Name="readme.txt" LongName="Assemblies README.txt" src="Assemblies README.txt" />
-				
-				<!-- MonoRail -->
-				<File Id="file0"  Name="ANRCON_1.DLL" LongName="anrControls.Markdown.NET.dll" src="..\MonoRail\bin\anrControls.Markdown.NET.dll" />
-				<File Id="file1"  Name="BOOLAN_1.DLL" LongName="Boo.Lang.Compiler.dll" src="..\MonoRail\bin\Boo.Lang.Compiler.dll" />
-				<File Id="file2"  Name="BOOLAN_3.DLL" LongName="Boo.Lang.dll" src="..\MonoRail\bin\Boo.Lang.dll" />
-				<File Id="file3"  Name="BOOLAN_2.DLL" LongName="Boo.Lang.Parser.dll" src="..\MonoRail\bin\Boo.Lang.Parser.dll" />
-				<File Id="file6"  Name="CA2BDA_1.DLL" LongName="Castle.Components.Common.EmailSender.dll" src="..\MonoRail\bin\Castle.Components.Common.EmailSender.dll" />
-				<File Id="file7"  Name="CAD0BC_1.DLL" LongName="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" src="..\MonoRail\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
-				<File Id="file8"  Name="CA83A6_1.DLL" LongName="Castle.Components.Common.TemplateEngine.dll" src="..\MonoRail\bin\Castle.Components.Common.TemplateEngine.dll" />
-				<File Id="file9"  Name="CA648E_1.DLL" LongName="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" src="..\MonoRail\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
-				<File Id="file10" Name="CASTLE_1.DLL" LongName="Castle.DynamicProxy.dll" src="..\MonoRail\bin\Castle.DynamicProxy.dll" />
-				<File Id="file11" Name="CASTLE_4.DLL" LongName="Castle.MicroKernel.dll" src="..\MonoRail\bin\Castle.MicroKernel.dll" />
-				<File Id="file12" Name="CASTLE_3.DLL" LongName="Castle.Model.dll" src="..\MonoRail\bin\Castle.Model.dll" />
-				<File Id="file13" Name="CA29FF_1.DLL" LongName="Castle.MonoRail.ActiveRecordScaffold.dll" src="..\MonoRail\bin\Castle.MonoRail.ActiveRecordScaffold.dll" />
-				<File Id="file15" Name="CAF2EC_1.DLL" LongName="Castle.MonoRail.ActiveRecordSupport.dll" src="..\MonoRail\bin\Castle.MonoRail.ActiveRecordSupport.dll" />
-				<File Id="file17" Name="CA690F_1.DLL" LongName="Castle.MonoRail.Framework.dll" src="..\MonoRail\bin\Castle.MonoRail.Framework.dll" />
-				<File Id="file19" Name="CAD114_1.DLL" LongName="Castle.MonoRail.Framework.Views.CompositeView.dll" src="..\MonoRail\bin\Castle.MonoRail.Framework.Views.CompositeView.dll" />
-				<File Id="file20" Name="CA4D68_1.DLL" LongName="Castle.MonoRail.Framework.Views.NVelocity.dll" src="..\MonoRail\bin\Castle.MonoRail.Framework.Views.NVelocity.dll" />
-				<File Id="file23" Name="CA0B18_1.DLL" LongName="Castle.MonoRail.WindsorExtension.dll" src="..\MonoRail\bin\Castle.MonoRail.WindsorExtension.dll" />
-				<File Id="file25" Name="CAEE9E_1.DLL" LongName="Castle.Windsor.dll" src="..\MonoRail\bin\Castle.Windsor.dll" />
-				<File Id="file31" Name="NVELOC_1.DLL" LongName="NVelocity.dll" src="..\MonoRail\bin\NVelocity.dll" />
-				<!-- <File Id="file34" Name="WSABOO_1.DLL" LongName="WSABoo.Parser.dll" src="..\MonoRail\bin\WSABoo.Parser.dll" /> -->
-				<File Id="file22" Name="CAED29_1.DLL" 
-					LongName="Castle.MonoRail.TestSupport.dll" 
-					src="..\MonoRail\bin\Castle.MonoRail.TestSupport.dll" />
+					<!-- DynProxy -->
+					<File Id="file35" Name="dynproxy.DLL" LongName="Castle.DynamicProxy.dll"				src="..\build\net-1.1\Castle.DynamicProxy.dll" />
 
-				<!-- DynProxy -->
-				<File Id="file35" Name="dynproxy.DLL" LongName="Castle.DynamicProxy.dll" src="..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll" />
+					<!-- IoC -->
+					<File Id="file36" Name="kernel.DLL"  LongName="Castle.MicroKernel.dll"					src="..\build\net-1.1\Castle.MicroKernel.dll" />
+					<File Id="file37" Name="model.DLL"   LongName="Castle.Model.dll"						src="..\build\net-1.1\Castle.Model.dll" />
+					<File Id="file38" Name="windsor.DLL" LongName="Castle.Windsor.dll"						src="..\build\net-1.1\Castle.Windsor.dll" />
 
-				<!-- IoC -->
-				<File Id="file36" Name="kernel.DLL"  LongName="Castle.MicroKernel.dll" src="..\InversionOfControl\bin\Castle.MicroKernel.dll" />
-				<File Id="file37" Name="model.DLL"   LongName="Castle.Model.dll" src="..\InversionOfControl\bin\Castle.Model.dll" />
-				<File Id="file38" Name="windsor.DLL" LongName="Castle.Windsor.dll" src="..\InversionOfControl\bin\Castle.Windsor.dll" />
+					<!-- Components -->
+					<File Id="file6"  Name="CA2BDA_1.DLL" LongName="Castle.Components.Common.EmailSender.dll" src="..\build\net-1.1\Castle.Components.Common.EmailSender.dll" />
+					<File Id="file7"  Name="CAD0BC_1.DLL" LongName="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" src="..\build\net-1.1\Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+					<File Id="file8"  Name="CA83A6_1.DLL" LongName="Castle.Components.Common.TemplateEngine.dll" src="..\build\net-1.1\Castle.Components.Common.TemplateEngine.dll" />
+					<File Id="file9"  Name="CA648E_1.DLL" LongName="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" src="..\build\net-1.1\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+					<File Id="file10"  Name="CA648E_1.DLL" LongName="Castle.Components.Winforms.AssemblyResolver.dll" src="..\build\net-1.1\Castle.Components.Winforms.AssemblyResolver.dll" />
 
-				<!-- AR -->
-				<File Id="ar1" Name="AR.DLL"  LongName="Castle.ActiveRecord.dll" src="..\ActiveRecord\bin\Castle.ActiveRecord.dll" />
+					<!-- AR -->
+					<File Id="ar1" Name="AR.DLL"		  LongName="Castle.ActiveRecord.dll"				src="..\build\net-1.1\Castle.ActiveRecord.dll" />
+					<File Id="ar2" Name="AR2.EXE"		  LongName="Castle.ActiveRecord.Generator.exe"		src="..\build\net-1.1\Castle.ActiveRecord.Generator.exe" />
+					<File Id="ar3" Name="AR3.DLL"		  LongName="Castle.ActiveRecord.Generator.Components.dll" src="..\build\net-1.1\Castle.ActiveRecord.Generator.Components.dll" />
+					<File Id="ar6" Name="AR6.DLL"		  LongName="WeifenLuo.WinFormsUI.Docking.dll"		src="..\build\net-1.1\WeifenLuo.WinFormsUI.Docking.dll" />
+					<File Id="ar4" Name="ADODB.DLL"		  LongName="ADODB.dll"								src="..\build\net-1.1\ADODB.dll" />
+					<File Id="ar5" Name="MSDASC.DLL"      LongName="MSDASC.dll"								src="..\build\net-1.1\MSDASC.dll" />
 
-				<!-- Services -->
-				<File Id="file39" Name="logging.DLL"  LongName="Castle.Services.Logging.dll" src="..\Services\bin\Castle.Services.Logging.dll" />
-				<File Id="file40" Name="logging1.DLL" LongName="Castle.Services.Logging.Log4netIntegration.dll" src="..\Services\bin\Castle.Services.Logging.Log4netIntegration.dll" />
-				<File Id="file41" Name="logging2.DLL" LongName="Castle.Services.Logging.NLogIntegration.dll" src="..\Services\bin\Castle.Services.Logging.NLogIntegration.dll" />
-				<File Id="file42" Name="security.DLL" LongName="Castle.Services.Security.dll" src="..\Services\bin\Castle.Services.Security.dll" />
-				<File Id="file43" Name="transact.DLL" LongName="Castle.Services.Transaction.dll" src="..\Services\bin\Castle.Services.Transaction.dll" />
+					<!-- Aspect# -->
+					<File Id="file44" Name="ANTLRR_1.DLL" LongName="antlr.runtime.dll"						src="..\build\net-1.1\antlr.runtime.dll" />
+					<File Id="file45" Name="AOPALL_1.DLL" LongName="AopAlliance.dll"						src="..\build\net-1.1\AopAlliance.dll" />
+					<File Id="file46" Name="ASPECT_1.DLL" LongName="AspectSharp.dll"						src="..\build\net-1.1\AspectSharp.dll" />
+					<File Id="file47" Name="ASPECT_2.DLL" LongName="AspectSharp.Lang.dll"					src="..\build\net-1.1\AspectSharp.Lang.dll" />
 
-				<!-- Aspect# -->
-				<File Id="file44" Name="ANTLRR_1.DLL" LongName="antlr.runtime.dll" src="..\Facilities\AspectSharp\bin\antlr.runtime.dll" />
-				<File Id="file45" Name="AOPALL_1.DLL" LongName="AopAlliance.dll" src="..\Facilities\AspectSharp\bin\AopAlliance.dll" />
-				<File Id="file46" Name="ASPECT_1.DLL" LongName="AspectSharp.dll" src="..\Facilities\AspectSharp\bin\AspectSharp.dll" />
-				<File Id="file47" Name="ASPECT_2.DLL" LongName="AspectSharp.Lang.dll" src="..\Facilities\AspectSharp\bin\AspectSharp.Lang.dll" />
+					<!-- Services -->
+					<File Id="file39" Name="logging.DLL"  LongName="Castle.Services.Logging.dll"					src="..\build\net-1.1\Castle.Services.Logging.dll" />
+					<File Id="file40" Name="logging1.DLL" LongName="Castle.Services.Logging.Log4netIntegration.dll" src="..\build\net-1.1\Castle.Services.Logging.Log4netIntegration.dll" />
+					<File Id="file41" Name="logging2.DLL" LongName="Castle.Services.Logging.NLogIntegration.dll"	src="..\build\net-1.1\Castle.Services.Logging.NLogIntegration.dll" />
+					<File Id="file42" Name="security.DLL" LongName="Castle.Services.Security.dll"					src="..\build\net-1.1\Castle.Services.Security.dll" />
+					<File Id="file43" Name="transact.DLL" LongName="Castle.Services.Transaction.dll"				src="..\build\net-1.1\Castle.Services.Transaction.dll" />
 
-				<!-- Facilities -->
-				<File Id="file59" Name="CABE8A_2.DLL" LongName="Castle.Facilities.ActiveRecordIntegration.dll" src="..\Facilities\ActiveRecordIntegration\bin\Castle.Facilities.ActiveRecordIntegration.dll" />
-				<File Id="file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll" src="..\Facilities\AspectSharp\bin\Castle.Facilities.AspectSharp.dll" />
-				<File Id="file51" Name="CAB93B_1.DLL" LongName="Castle.Facilities.AutomaticTransactionManagement.dll" src="..\Facilities\AutomaticTransactionManagement\bin\Castle.Facilities.AutomaticTransactionManagement.dll" />
-				<File Id="file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll" src="..\Facilities\BatchRegistration\bin\Castle.Facilities.BatchRegistration.dll" />
-				<File Id="file53" Name="CAB47C_1.DLL" LongName="Castle.Facilities.Cache.dll" src="..\Facilities\Cache\bin\Castle.Facilities.Cache.dll" />
-				<File Id="file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll" src="..\Facilities\Db4o\bin\Castle.Facilities.Db4oIntegration.dll" />
-				<File Id="file55" Name="CAD31C_1.DLL" LongName="Castle.Facilities.IBatisNetIntegration.dll" src="..\Facilities\IBatisNet\bin\Castle.Facilities.IBatisNetIntegration.dll" />
-				<File Id="file56" Name="CAC9D6_1.DLL" LongName="Castle.Facilities.Logging.dll" src="..\Facilities\Logging\bin\Castle.Facilities.Logging.dll" />
-				<File Id="file57" Name="CAC8A0_1.DLL" LongName="Castle.Facilities.NHibernateIntegration.dll" src="..\Facilities\NHibernateIntegration\bin\Castle.Facilities.NHibernateIntegration.dll" />
-				<File Id="file58" Name="CA27F5_1.DLL" LongName="Castle.Facilities.Prevalence.dll" src="..\Facilities\Prevalence\bin\Castle.Facilities.Prevalence.dll" />
+					<!-- Facilities -->
+					<File Id="file59" Name="CABE8A_2.DLL" LongName="Castle.Facilities.ActiveRecordIntegration.dll"	src="..\build\net-1.1\Castle.Facilities.ActiveRecordIntegration.dll" />
+					<File Id="file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll"				src="..\build\net-1.1\Castle.Facilities.AspectSharp.dll" />
+					<File Id="file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll"		src="..\build\net-1.1\Castle.Facilities.BatchRegistration.dll" />
+					<File Id="file53" Name="CAB47C_1.DLL" LongName="Castle.Facilities.Cache.dll"					src="..\build\net-1.1\Castle.Facilities.Cache.dll" />
+					<File Id="file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll"			src="..\build\net-1.1\Castle.Facilities.Db4oIntegration.dll" />
+					<File Id="file55" Name="CAD31C_1.DLL" LongName="Castle.Facilities.IBatisNetIntegration.dll"		src="..\build\net-1.1\Castle.Facilities.IBatisNetIntegration.dll" />
+					<File Id="file56" Name="CAC9D6_1.DLL" LongName="Castle.Facilities.Logging.dll"					src="..\build\net-1.1\Castle.Facilities.Logging.dll" />
+					<File Id="file57" Name="CAC8A0_1.DLL" LongName="Castle.Facilities.NHibernateIntegration.dll"	src="..\build\net-1.1\Castle.Facilities.NHibernateIntegration.dll" />
+					<File Id="file58" Name="CA27F5_1.DLL" LongName="Castle.Facilities.Prevalence.dll"				src="..\build\net-1.1\Castle.Facilities.Prevalence.dll" />
+					<File Id="file51" Name="CAB93B_1.DLL" LongName="Castle.Facilities.AutomaticTransactionManagement.dll" src="..\build\net-1.1\Castle.Facilities.AutomaticTransactionManagement.dll" />
 
-				<!-- Distributable Dependencies -->
-				<File Id="file60" Name="log4net.dll" src="..\Facilities\Logging\bin\log4net.dll" />
-				<File Id="file61" Name="NLog.dll" src="..\Facilities\Logging\bin\NLog.dll" />
-				<File Id="file62" Name="NLOGDO_1.DLL" LongName="NLog.DotNet.dll" src="..\Facilities\Logging\bin\NLog.DotNet.dll" />
-				<File Id="file63" Name="BAMBOO_1.DLL" LongName="Bamboo.Prevalence.Collections.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.Collections.dll" />
-				<File Id="file64" Name="BAMBOO_4.DLL" LongName="Bamboo.Prevalence.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.dll" />
-				<File Id="file65" Name="BA9D73_1.DLL" LongName="Bamboo.Prevalence.Indexing.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.Indexing.dll" />
-				<File Id="file66" Name="BAMBOO_3.DLL" LongName="Bamboo.Prevalence.Util.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.Util.dll" />
-				<File Id="file67" Name="BAMBOO_2.DLL" LongName="Bamboo.Prevalence.XPath.dll" src="..\Facilities\Prevalence\bin\Bamboo.Prevalence.XPath.dll" />
-				<File Id="file68" Name="log4net.dll" src="..\Facilities\Logging\bin\log4net.dll" />
-				<File Id="file69" Name="IESICO_1.DLL" LongName="Iesi.Collections.dll" src="..\SharedLibs\nhibernate\Iesi.Collections.dll" />
-				<File Id="file71" Name="NHIBER_1.DLL" LongName="NHibernate.dll" src="..\SharedLibs\nhibernate\NHibernate.dll" />
-				<File Id="file72" Name="NULLAB_1.DLL" LongName="Nullables.dll" src="..\SharedLibs\nhibernate\Nullables.dll" />
-				<File Id="file73" Name="NULLAB_2.DLL" LongName="Nullables.NHibernate.dll" src="..\SharedLibs\nhibernate\Nullables.NHibernate.dll" />
-				<File Id="file75" Name="nhlic.txt" LongName="NHibernate.license.txt" src="..\SharedLibs\nhibernate\NHibernate.license.txt" />
-				<File Id="file76" Name="iesilic.txt" LongName="Iesi.Collections.license.txt" src="..\SharedLibs\nhibernate\Iesi.Collections.license.txt" />
+					<!-- Distributable Dependencies -->
+					<File Id="file0"  Name="ANRCON_1.DLL"   LongName="anrControls.Markdown.NET.dll"			src="..\build\net-1.1\anrControls.Markdown.NET.dll" />
+					<File Id="file1"  Name="BOOLAN_1.DLL"   LongName="Boo.Lang.Compiler.dll"				src="..\build\net-1.1\Boo.Lang.Compiler.dll" />
+					<File Id="file2"  Name="BOOLAN_3.DLL"   LongName="Boo.Lang.dll"							src="..\build\net-1.1\Boo.Lang.dll" />
+					<File Id="file3"  Name="BOOLAN_2.DLL"   LongName="Boo.Lang.Parser.dll"					src="..\build\net-1.1\Boo.Lang.Parser.dll" />
+					<File Id="file60" Name="log4net.dll"													src="..\build\net-1.1\log4net.dll" />
+					<File Id="file80" Name="ibatis1.dll"	LongName="IBatisNet.Common.dll"					src="..\build\net-1.1\IBatisNet.Common.dll" />
+					<File Id="file81" Name="ibatis2.dll"	LongName="IBatisNet.Common.Logging.Log4Net.dll"	src="..\build\net-1.1\IBatisNet.Common.Logging.Log4Net.dll" />
+					<File Id="file82" Name="ibatis3.dll"	LongName="IBatisNet.DataMapper.dll"				src="..\build\net-1.1\IBatisNet.DataMapper.dll" />
 
-				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
-					<Registry Action="write" Type="string" Value="[BinDir]" />
-				</Registry>
+					<File Id="file83" Name="Velocity.dll"	LongName="NVelocity.dll"						src="..\build\net-1.1\NVelocity.dll" />
+					
+					<File Id="file61" Name="NLog.dll"														src="..\build\net-1.1\NLog.dll" />
+					<File Id="file85" Name="NLoglic.txt"	LongName="NLog.license.txt"						src="..\build\net-1.1\NLog.license.txt" />
+					<File Id="file62" Name="NLOGDO_1.DLL"	LongName="NLog.DotNet.dll"						src="..\build\net-1.1\NLog.DotNet.dll" />
+					<File Id="file63" Name="BAMBOO_1.DLL"	LongName="Bamboo.Prevalence.Collections.dll"	src="..\build\net-1.1\Bamboo.Prevalence.Collections.dll" />
+					<File Id="file64" Name="BAMBOO_4.DLL"	LongName="Bamboo.Prevalence.dll"				src="..\build\net-1.1\Bamboo.Prevalence.dll" />
+					<File Id="file65" Name="BA9D73_1.DLL"	LongName="Bamboo.Prevalence.Indexing.dll"		src="..\build\net-1.1\Bamboo.Prevalence.Indexing.dll" />
+					<File Id="file66" Name="BAMBOO_3.DLL"	LongName="Bamboo.Prevalence.Util.dll"			src="..\build\net-1.1\Bamboo.Prevalence.Util.dll" />
+					<File Id="file67" Name="BAMBOO_2.DLL"	LongName="Bamboo.Prevalence.XPath.dll"			src="..\build\net-1.1\Bamboo.Prevalence.XPath.dll" />
+					<File Id="file68" Name="log4net.dll"													src="..\build\net-1.1\log4net.dll" />
+					<File Id="file69" Name="IESICO_1.DLL"	LongName="Iesi.Collections.dll"					src="..\build\net-1.1\Iesi.Collections.dll" />
+					<File Id="file76" Name="iesilic.txt"	LongName="Iesi.Collections.license.txt"			src="..\build\net-1.1\Iesi.Collections.license.txt" />
+					<File Id="file71" Name="NHIBER_1.DLL"	LongName="NHibernate.dll"						src="..\build\net-1.1\NHibernate.dll" />
+					<File Id="file75" Name="nhlic.txt"		LongName="NHibernate.license.txt"				src="..\build\net-1.1\NHibernate.license.txt" />
+					<File Id="file72" Name="NULLAB_1.DLL"	LongName="Nullables.dll"						src="..\build\net-1.1\Nullables.dll" />
+					<File Id="file73" Name="NULLAB_2.DLL"	LongName="Nullables.NHibernate.dll"				src="..\build\net-1.1\Nullables.NHibernate.dll" />
 
-			</Component>
+					<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
+						<Registry Action="write" Type="string" Value="[net11dir]" />
+					</Registry>
+
+					<Shortcut Id="ShortcutWebSite" Directory="shortcutrootfolder" Name="A~1" LongName="Castle Project WebSite" Target="http://www.castleproject.org" Description="Source of up to date information" Hotkey="0" Show="normal" />
+					<Shortcut Id="ShortcutForum"   Directory="shortcutrootfolder" Name="A~2" LongName="Forum" Target="http://forum.castleproject.org" Description="Source of up to date information" Hotkey="0" Show="normal" />
+					<Shortcut Id="ShortcutIssue"   Directory="shortcutrootfolder" Name="A~3" LongName="Issue tracker" Target="http://support.castleproject.org/jira/" Description="Source of up to date information" Hotkey="0" Show="normal" />
+
+				</Component>
+			</Directory>
+
+			<Directory Id="net20dir" Name="net-2.0">
+				<Component Id="ProductComponent20" DiskId="1" Guid="394DE961-2B37-4BC9-A65E-C1F5A5F3B0F7">
+					<File Id="file3000" Name="readme.txt" LongName="Assemblies README.txt" src="Assemblies README.txt" />
+					
+					<!-- MonoRail -->
+					<File Id="n2file13" Name="CA29FF_1.DLL" LongName="Castle.MonoRail.ActiveRecordScaffold.dll" src="..\build\net-2.0\Castle.MonoRail.ActiveRecordScaffold.dll" />
+					<File Id="n2file15" Name="CAF2EC_1.DLL" LongName="Castle.MonoRail.ActiveRecordSupport.dll" src="..\build\net-2.0\Castle.MonoRail.ActiveRecordSupport.dll" />
+					<File Id="n2file17" Name="CA690F_1.DLL" LongName="Castle.MonoRail.Framework.dll" src="..\build\net-2.0\Castle.MonoRail.Framework.dll" />
+					<File Id="n2file19" Name="CAD114_1.DLL" LongName="Castle.MonoRail.Framework.Views.CompositeView.dll" src="..\build\net-2.0\Castle.MonoRail.Framework.Views.CompositeView.dll" />
+					<File Id="n2file20" Name="CA4D68_1.DLL" LongName="Castle.MonoRail.Framework.Views.NVelocity.dll" src="..\build\net-2.0\Castle.MonoRail.Framework.Views.NVelocity.dll" />
+					<File Id="n2file23" Name="CA0B18_1.DLL" LongName="Castle.MonoRail.WindsorExtension.dll"	src="..\build\net-2.0\Castle.MonoRail.WindsorExtension.dll" />
+					<File Id="n2file22" Name="CAED29_1.DLL" LongName="Castle.MonoRail.TestSupport.dll" 		src="..\build\net-2.0\Castle.MonoRail.TestSupport.dll" />
+
+					<!-- DynProxy -->
+					<File Id="n2file35" Name="dynproxy.DLL" LongName="Castle.DynamicProxy.dll"				src="..\build\net-2.0\Castle.DynamicProxy.dll" />
+
+					<!-- IoC -->
+					<File Id="n2file36" Name="kernel.DLL"  LongName="Castle.MicroKernel.dll"				src="..\build\net-2.0\Castle.MicroKernel.dll" />
+					<File Id="n2file37" Name="model.DLL"   LongName="Castle.Model.dll"						src="..\build\net-2.0\Castle.Model.dll" />
+					<File Id="n2file38" Name="windsor.DLL" LongName="Castle.Windsor.dll"					src="..\build\net-2.0\Castle.Windsor.dll" />
+
+					<!-- Components -->
+					<File Id="n2file6"  Name="CA2BDA_1.DLL" LongName="Castle.Components.Common.EmailSender.dll" src="..\build\net-2.0\Castle.Components.Common.EmailSender.dll" />
+					<File Id="n2file7"  Name="CAD0BC_1.DLL" LongName="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" src="..\build\net-2.0\Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
+					<File Id="n2file8"  Name="CA83A6_1.DLL" LongName="Castle.Components.Common.TemplateEngine.dll" src="..\build\net-2.0\Castle.Components.Common.TemplateEngine.dll" />
+					<File Id="n2file9"  Name="CA648E_1.DLL" LongName="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" src="..\build\net-2.0\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
+					<File Id="n2file10"  Name="CA648E_1.DLL" LongName="Castle.Components.Winforms.AssemblyResolver.dll" src="..\build\net-2.0\Castle.Components.Winforms.AssemblyResolver.dll" />
+
+					<!-- AR -->
+					<File Id="n2ar1" Name="AR.DLL"		  LongName="Castle.ActiveRecord.dll"				src="..\build\net-2.0\Castle.ActiveRecord.dll" />
+					<File Id="n2ar2" Name="AR2.EXE"		  LongName="Castle.ActiveRecord.Generator.exe"		src="..\build\net-2.0\Castle.ActiveRecord.Generator.exe" />
+					<File Id="n2ar3" Name="AR3.DLL"		  LongName="Castle.ActiveRecord.Generator.Components.dll" src="..\build\net-2.0\Castle.ActiveRecord.Generator.Components.dll" />
+
+					<!-- Aspect# -->
+					<File Id="n2file46" Name="ASPECT_1.DLL" LongName="AspectSharp.dll"						src="..\build\net-2.0\AspectSharp.dll" />
+					<File Id="n2file47" Name="ASPECT_2.DLL" LongName="AspectSharp.Lang.dll"					src="..\build\net-2.0\AspectSharp.Lang.dll" />
+
+					<!-- Services -->
+					<File Id="n2file39" Name="logging.DLL"  LongName="Castle.Services.Logging.dll"					src="..\build\net-2.0\Castle.Services.Logging.dll" />
+					<File Id="n2file40" Name="logging1.DLL" LongName="Castle.Services.Logging.Log4netIntegration.dll" src="..\build\net-2.0\Castle.Services.Logging.Log4netIntegration.dll" />
+					<File Id="n2file41" Name="logging2.DLL" LongName="Castle.Services.Logging.NLogIntegration.dll"	src="..\build\net-2.0\Castle.Services.Logging.NLogIntegration.dll" />
+					<File Id="n2file42" Name="security.DLL" LongName="Castle.Services.Security.dll"					src="..\build\net-2.0\Castle.Services.Security.dll" />
+					<File Id="n2file43" Name="transact.DLL" LongName="Castle.Services.Transaction.dll"				src="..\build\net-2.0\Castle.Services.Transaction.dll" />
+
+					<!-- Facilities -->
+					<File Id="n2file59" Name="CABE8A_2.DLL" LongName="Castle.Facilities.ActiveRecordIntegration.dll"	src="..\build\net-2.0\Castle.Facilities.ActiveRecordIntegration.dll" />
+					<File Id="n2file50" Name="CABE8A_1.DLL" LongName="Castle.Facilities.AspectSharp.dll"				src="..\build\net-2.0\Castle.Facilities.AspectSharp.dll" />
+					<File Id="n2file52" Name="CAA46E_1.DLL" LongName="Castle.Facilities.BatchRegistration.dll"			src="..\build\net-2.0\Castle.Facilities.BatchRegistration.dll" />
+					<File Id="n2file53" Name="CAB47C_1.DLL" LongName="Castle.Facilities.Cache.dll"						src="..\build\net-2.0\Castle.Facilities.Cache.dll" />
+					<File Id="n2file54" Name="CA670E_1.DLL" LongName="Castle.Facilities.Db4oIntegration.dll"			src="..\build\net-2.0\Castle.Facilities.Db4oIntegration.dll" />
+					<File Id="n2file55" Name="CAD31C_1.DLL" LongName="Castle.Facilities.IBatisNetIntegration.dll"		src="..\build\net-2.0\Castle.Facilities.IBatisNetIntegration.dll" />
+					<File Id="n2file56" Name="CAC9D6_1.DLL" LongName="Castle.Facilities.Logging.dll"					src="..\build\net-2.0\Castle.Facilities.Logging.dll" />
+					<File Id="n2file57" Name="CAC8A0_1.DLL" LongName="Castle.Facilities.NHibernateIntegration.dll"		src="..\build\net-2.0\Castle.Facilities.NHibernateIntegration.dll" />
+					<File Id="n2file58" Name="CA27F5_1.DLL" LongName="Castle.Facilities.Prevalence.dll"					src="..\build\net-2.0\Castle.Facilities.Prevalence.dll" />
+					<File Id="n2file51" Name="CAB93B_1.DLL" LongName="Castle.Facilities.AutomaticTransactionManagement.dll" src="..\build\net-2.0\Castle.Facilities.AutomaticTransactionManagement.dll" />
+
+					<!-- Distributable Dependencies -->
+					<CopyFile Id="n2file44" FileId="file44" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file45" FileId="file45" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file46" FileId="file46" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file47" FileId="file47" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2ar6"	FileId="ar6"	DestinationDirectory="net20dir" />
+					<CopyFile Id="n2ar4"    FileId="ar4"	DestinationDirectory="net20dir" />
+					<CopyFile Id="n2ar5"    FileId="ar5"	DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file0"  FileId="file0"	DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file1"  FileId="file1"	DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file2"  FileId="file2"	DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file3"  FileId="file3"	DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file60" FileId="file60" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file80" FileId="file80" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file81" FileId="file81" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file82" FileId="file82" DestinationDirectory="net20dir" />
+					<CopyFile Id="n2file83" FileId="file83" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file61" FileId="file61" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file85" FileId="file85" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file62" FileId="file62" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file63" FileId="file63" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file64" FileId="file64" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file65" FileId="file65" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file66" FileId="file66" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file67" FileId="file67" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file68" FileId="file68" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file69" FileId="file69" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file76" FileId="file76" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file71" FileId="file71" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file75" FileId="file75" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file72" FileId="file72" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file73" FileId="file73" DestinationDirectory="net20dir" />		
+
+					<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\Public Assemblies\Castle">
+						<Registry Action="write" Type="string" Value="[net20dir]" />
+					</Registry>
+
+				</Component>
+			</Directory>
+
 		</DirectoryRef>
 
 		<DirectoryRef Id="CassiniDir">
@@ -187,6 +308,8 @@
 		<DirectoryRef Id="DocsDir">
 			<Component Id="DocsComp" DiskId="1" Guid="CDE4186F-DE83-4E7C-A78B-84649BF99AD9">
 				<File Id="docs0" Name="Castle.chm" src="..\docs\Castle.chm" />
+
+				<Shortcut Id="ShortcutDoc" Directory="documentationfolder" Name="A~5" LongName="API Documentation" Target="[docs0]" Description="Documentation in MSDN format for the public API" Hotkey="0" Show="normal" />
 			</Component>
 		</DirectoryRef>
 
@@ -340,16 +463,86 @@
 				<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Castle">
 					<Registry Action="write" Name="vs8templatelocation" Type="string" Value="[TemplatesVs8Dir]" />
 				</Registry>
+				
 				<Condition>VS2005_SCHEMAS_DIR</Condition>
 				
 				<File Id="vs8file0" LongName="Castle ActiveRecord Project.vsz" Name="Project1.vsz" src="..\Sandbox\VSNetIntegration\Castle ActiveRecord Project.vsz">
-					<CopyFile Id="vs8file0cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+					<CopyFile Id="vs8file0cp" DestinationProperty="VS2005_SCHEMAS_DIR" />
 				</File>
 				
 				<File Id="vs8file1" LongName="Castle MonoRail Project.vsz"     Name="Project2.vsz" src="..\Sandbox\VSNetIntegration\Castle MonoRail Project.vsz">
-					<CopyFile Id="vs8file1cp" DestinationProperty="VS2003_SCHEMAS_DIR" />
+					<CopyFile Id="vs8file1cp" DestinationProperty="VS2005_SCHEMAS_DIR" />
+				</File>
+				
+				<File Id="vs8file0a" LongName="Castle ActiveRecord Project.ico" Name="Project1.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+					<CopyFile Id="vs8file0cpa" DestinationProperty="VS2005_SCHEMAS_DIR" />
+				</File>
+				<File Id="vs8file1a" LongName="Castle MonoRail Project.ico"     Name="Project2.ico" src="..\Sandbox\VSNetIntegration\CastlePiecesIcon.ico">
+					<CopyFile Id="vs8file1cpa" DestinationProperty="VS2005_SCHEMAS_DIR" />
 				</File>
 			</Component>
+			
+			<Directory Id="directoryvs814" Name="MRPROJ_0" LongName="CSharp">
+				<Component Id="componentvs86" DiskId="1">
+					<File Id="vs8tfile0" Name="ABSTRA_1.CS" LongName="AbstractModelTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\AbstractModelTestCase.cs" />
+					<File Id="vs8tfile1" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\App.config" />
+					<File Id="vs8tfile2" Name="ARPROJ_1.CSP" LongName="ARProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\ARProject.csproj" />
+					<File Id="vs8tfile3" Name="ARPROJ_2.CSP" LongName="ARProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\ARProjectTest.csproj" />
+					<File Id="vs8tfile4" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\AssemblyInfo.cs" />
+				</Component>
+				
+				<Directory Id="directoryvs815" Name="MRPROJ_1" LongName="MRProject">
+					<Component Id="componentvs87" DiskId="1">
+						<File Id="vs8tfile36" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\AssemblyInfo.cs" />
+						<File Id="vs8tfile37" Name="CONTAI_1.CS" LongName="ContainerGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\ContainerGlobalApplication.cs" />
+						<File Id="vs8tfile38" Name="CONTRO_1.CON" LongName="controllers.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\controllers.config" />
+						<File Id="vs8tfile39" Name="FACILI_1.CON" LongName="facilities.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\facilities.config" />
+						<File Id="vs8tfile40" Name="GLOBAL_1.ASA" LongName="global.asax" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\global.asax" />
+						<File Id="vs8tfile41" Name="INDEX_1.ASP" LongName="index.aspx" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.aspx" />
+						<File Id="vs8tfile42" Name="index.boo" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.boo" />
+						<File Id="vs8tfile43" Name="index.vm" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\index.vm" />
+						<File Id="vs8tfile44" Name="MRPROJ_1.CSP" LongName="MRProject.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\MRProject.csproj" />
+						<File Id="vs8tfile47" Name="MRPROJ_1.SLN" LongName="MRProject.sln" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\MRProject.sln" />
+						<File Id="vs8tfile49" Name="SIMPLE_1.CS" LongName="SimpleGlobalApplication.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\SimpleGlobalApplication.cs" />
+						<File Id="vs8tfile50" Name="WEB_1.CON" LongName="Web.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\Web.config" />
+						<File Id="vs8tfile51" Name="WEBCON_1.CS" LongName="WebContainer.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\WebContainer.cs" />
+					</Component>
+					<Directory Id="directoryvs818" Name="Content">
+						<Directory Id="directoryvs819" Name="css">
+							<Component Id="componentvs88" DiskId="1" SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no" Win64="no" Location="either">
+								<CreateFolder/>
+							</Component>
+						</Directory>
+						<Directory Id="directoryvs820" Name="images" >
+							<Component Id="componentvs89" DiskId="1" SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no" Win64="no" Location="either">
+								<CreateFolder/>
+							</Component>
+						</Directory>
+					</Directory>
+					<Directory Id="directoryvs821" Name="CONTRO_1" LongName="Controllers">
+						<Component Id="componentvs810" DiskId="1">
+							<File Id="vs8tfile68" Name="HOMECO_1.CS" LongName="HomeController.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProject\Controllers\HomeController.cs" />
+						</Component>
+					</Directory>
+					<Directory Id="directoryvs826" Name="Views">
+						<Directory Id="directoryvs827" Name="Home">
+							<Component Id="componentvs811" DiskId="1" SharedDllRefCount="no" KeyPath="no" NeverOverwrite="no" Permanent="no" Transitive="no" Win64="no" Location="either">
+								<CreateFolder/>
+							</Component>
+						</Directory>
+					</Directory>
+				</Directory>
+				
+				<Directory Id="directoryvs828" Name="MRPROJ_2" LongName="MRProjectTest">
+					<Component Id="componentvs812" DiskId="1">
+						<File Id="vs8tfile72" Name="APP_1.CON" LongName="App.config" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\App.config" />
+						<File Id="vs8tfile73" Name="ASSEMB_1.CS" LongName="AssemblyInfo.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\AssemblyInfo.cs" />
+						<File Id="vs8tfile74" Name="HOMECO_1.CS" LongName="HomeControllerTestCase.cs" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\HomeControllerTestCase.cs" />
+						<File Id="vs8tfile75" Name="MRPROJ_1.CSP" LongName="MRProjectTest.csproj" src="..\Sandbox\VSNetIntegration\Castle.VSNetIntegration.CastleWizards\CastleTemplates\CSharp8\MRProjectTest\MRProjectTest.csproj" />
+					</Component>
+				</Directory>
+			</Directory>
+						
 		</DirectoryRef>
 		
 		<!-- Features -->
@@ -359,7 +552,8 @@
 			
 			<Feature Id='MainProgram' Title='Binaries' Description='Castle assemblies and dependencies' Level='1'>
 				<ComponentRef Id="BasicComponent" />
-				<ComponentRef Id="ProductComponent" />
+				<ComponentRef Id="ProductComponent11" />
+				<ComponentRef Id="ProductComponent20" />
 				<ComponentRef Id="ProductComponentGac" />
 				<ComponentRef Id="CassiniComponent" />
 				<ComponentRef Id="CassiniComponentGac" />
@@ -388,6 +582,13 @@
 				<ComponentRef Id='component11' />
 				<ComponentRef Id='component12' />
 				<ComponentRef Id='vs8comp' />
+				<ComponentRef Id='componentvs86' />
+				<ComponentRef Id='componentvs87' />
+				<ComponentRef Id='componentvs88' />
+				<ComponentRef Id='componentvs89' />
+				<ComponentRef Id='componentvs810' />
+				<ComponentRef Id='componentvs811' />
+				<ComponentRef Id='componentvs812' />
 			</Feature>
 		</Feature>
 		
