@@ -21,14 +21,18 @@ namespace Castle.Facilities.Startable
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
+	using Castle.Model.Configuration;
 
 
-	public class StartableFacility : AbstractFacility
+    public class StartableFacility : AbstractFacility
 	{
 		private ArrayList _waitList = new ArrayList();
+        private IList _startableList = new ArrayList();
 		
 		protected override void Init()
 		{
+            this.LoadStartableList();
+
 			Kernel.ComponentModelCreated += 
 				new ComponentModelDelegate(OnComponentModelCreated);
 			Kernel.ComponentRegistered += 
@@ -37,7 +41,7 @@ namespace Castle.Facilities.Startable
 
 		private void OnComponentModelCreated(ComponentModel model)
 		{
-			bool startable = typeof(IStartable).IsAssignableFrom(model.Implementation);
+			bool startable = this.HandleIStartable(model) || this.SearchListByType(model);
 
 			model.ExtendedProperties["startable"] = startable;
 
@@ -98,5 +102,85 @@ namespace Castle.Facilities.Startable
 		{
 			object instance = Kernel[key];
 		}
+
+        #region Ways to determine if startable
+        private bool HandleIStartable(ComponentModel model)
+        {
+            bool startable = typeof(IStartable).IsAssignableFrom(model.Implementation);
+
+            return startable;
+        }
+        private bool SearchListByType(ComponentModel model)
+        {
+            bool result = false;
+            if(this._startableList.Count > 0)
+            {
+                foreach(StartableInfo s in this._startableList)
+                {
+                    if(s.Type.Equals(model.Implementation))
+                    {
+                        result = true;
+                        model.ExtendedProperties["startable.start"] = s.StartMethod;
+                        model.ExtendedProperties["startable.stop"] = s.StopMethod;
+                    }
+                }
+                
+            }
+            return result;
+        }
+        #endregion
+
+ 
+        #region Config Code
+        private void LoadStartableList()
+        {
+            IConfiguration config = this.FacilityConfig;
+            if(config != null)
+            {
+                foreach(IConfiguration c in this.FacilityConfig.Children)
+                {
+                    this._startableList.Add(new StartableInfo(c));
+                }
+            }
+        }
+        #endregion
+
+        private class StartableInfo
+        {
+            private Type _type;
+
+            public Type Type
+            {
+                get { return this._type; }
+            }
+
+            private String _startMethod;
+
+            public String StartMethod
+            {
+                get { return this._startMethod; }
+            }
+
+            private String _stopMethod;
+
+            public String StopMethod
+            {
+                get { return this._stopMethod; }
+            }
+
+            public StartableInfo(IConfiguration c)
+            {
+                this._startMethod = c.Attributes["startMethod"];
+                if(this._startMethod == null || this._startMethod.Length == 0)
+                    this._startMethod = "Start";
+                
+                this._stopMethod = c.Attributes["stopMethod"];
+                if(this._stopMethod == null || this._stopMethod.Length == 0)
+                    this._stopMethod = "Stop";
+
+                this._type = Type.GetType(c.Attributes["type"], true, true);
+            }
+        }
+
 	}
 }

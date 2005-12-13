@@ -260,6 +260,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Facilities\Startable\Components\NoInterfaceStartableComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Facilities\Startable\Components\OddStartStopMethodsComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Facilities\Startable\Components\StartableComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
