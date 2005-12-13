@@ -27,7 +27,7 @@ namespace Castle.Facilities.Startable.Tests
 	public class StartableFacilityTestCase
 	{
 		[Test]
-		public void SimpleCase()
+		public void TestInterfaceBasedStartable()
 		{
 			IKernel kernel = new DefaultKernel();
 
@@ -46,15 +46,19 @@ namespace Castle.Facilities.Startable.Tests
 		}
 
         [Test]
-        public void NoInterfaceCase()
+        public void TestComponentWithNoInterface()
         {
             IKernel kernel = new DefaultKernel();
-            this.GetConfig(kernel);
+
+            MutableConfiguration confignode = new MutableConfiguration("startables");
+            MutableConfiguration startableNode = new MutableConfiguration("startable");
+            startableNode.Attributes.Add("id", "do I need this");
+            startableNode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.NoInterfaceStartableComponent, Castle.MicroKernel.Tests");
+            confignode.Children.Add(startableNode);
+            kernel.ConfigurationStore.AddFacilityConfiguration("startable", confignode);
 
             kernel.AddFacility( "startable", new StartableFacility() );
-
             kernel.AddComponent( "b", typeof(NoInterfaceStartableComponent) );
-
             NoInterfaceStartableComponent component = kernel["b"] as NoInterfaceStartableComponent;
 
             Assert.IsNotNull(component);
@@ -66,15 +70,21 @@ namespace Castle.Facilities.Startable.Tests
         }
 
         [Test]
-        public void OddMethodsCase()
+        public void TestComponentWithNoInterfaceAndCustomerStartStop()
         {
             IKernel kernel = new DefaultKernel();
-            this.GetConfig2(kernel);
-            
+
+            MutableConfiguration confignode = new MutableConfiguration("startables");
+            MutableConfiguration startableNode = new MutableConfiguration("startable");
+            startableNode.Attributes.Add("id", "do I need this");
+            startableNode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.OddStartStopMethodsComponent, Castle.MicroKernel.Tests");
+            startableNode.Attributes.Add("startMethod", "Starter");
+            startableNode.Attributes.Add("stopMethod", "Stopper");
+            confignode.Children.Add(startableNode);
+            kernel.ConfigurationStore.AddFacilityConfiguration("startable", confignode);
+
             kernel.AddFacility( "startable", new StartableFacility() );
-
             kernel.AddComponent( "c", typeof(OddStartStopMethodsComponent) );
-
             OddStartStopMethodsComponent component = kernel["c"] as OddStartStopMethodsComponent;
 
             Assert.IsNotNull(component);
@@ -87,24 +97,18 @@ namespace Castle.Facilities.Startable.Tests
 
         [Test]
         [Ignore("Haven't gotten the configuration stuff right yet.")]
-        public void ComponentConfigCase()
+        public void TestComponentConfigMarkedStartable()
         {
             IKernel kernel = new DefaultKernel();
-
 
             MutableConfiguration confignode = new MutableConfiguration("key");
             confignode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.NoInterfaceStartableComponent, Castle.MicroKernel.Tests");
             confignode.Attributes.Add("id", "c");
             confignode.Attributes.Add("startable", "true");
-
-            
             kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
 
             kernel.AddComponent("key", typeof(NoInterfaceStartableComponent));
-
-            
             kernel.AddFacility( "startable", new StartableFacility() );
-
             NoInterfaceStartableComponent component = kernel["key"] as NoInterfaceStartableComponent;
 
             Assert.IsNotNull(component);
@@ -113,38 +117,6 @@ namespace Castle.Facilities.Startable.Tests
 
             kernel.ReleaseComponent(component);
             Assert.IsTrue( component.Stopped , "Hasn't been stopped");
-        }
-
-        private void GetConfig(IKernel kernel)
-        {
-            MutableConfiguration confignode = new MutableConfiguration("startables");
-
-            MutableConfiguration startableNode = new MutableConfiguration("startable");
-            
-            startableNode.Attributes.Add("id", "do I need this");
-            startableNode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.NoInterfaceStartableComponent, Castle.MicroKernel.Tests");
-
-            confignode.Children.Add(startableNode);
-
-
-            kernel.ConfigurationStore.AddFacilityConfiguration("startable", confignode);
-        }
-
-        private void GetConfig2(IKernel kernel)
-        {
-            MutableConfiguration confignode = new MutableConfiguration("startables");
-
-            MutableConfiguration startableNode = new MutableConfiguration("startable");
-            
-            startableNode.Attributes.Add("id", "do I need this");
-            startableNode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.OddStartStopMethodsComponent, Castle.MicroKernel.Tests");
-            startableNode.Attributes.Add("startMethod", "Starter");
-            startableNode.Attributes.Add("stopMethod", "Stopper");
-
-            confignode.Children.Add(startableNode);
-
-
-            kernel.ConfigurationStore.AddFacilityConfiguration("startable", confignode);
         }
 	}
 }
