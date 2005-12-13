@@ -425,6 +425,17 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Redirects to the specified action
+		/// </summary>
+		/// <param name="action">Target action</param>
+		public void RedirectToAction(String action)
+		{
+			CancelView();
+
+			_context.Response.Redirect(AreaName, Name, action);
+		}
+
+		/// <summary>
 		/// Redirects to the specified URL.
 		/// </summary>
 		/// <param name="url">Target URL</param>
