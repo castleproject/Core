@@ -41,7 +41,7 @@ namespace Castle.Facilities.Startable
 
 		private void OnComponentModelCreated(ComponentModel model)
 		{
-			bool startable = this.HandleIStartable(model) || this.SearchListByType(model);
+			bool startable = this.HandleIStartable(model) || this.ComponentConfig(model) || this.SearchListByType(model);
 
 			model.ExtendedProperties["startable"] = startable;
 
@@ -126,6 +126,19 @@ namespace Castle.Facilities.Startable
                 }
                 
             }
+            return result;
+        }
+        private bool ComponentConfig(ComponentModel model)
+        {
+            bool result = false;
+           
+            if(model.Configuration != null)
+            {
+                string startable = model.Configuration.Attributes["startable"];
+                if(startable != null)
+                    result = Convert.ToBoolean(startable);
+            }
+            
             return result;
         }
         #endregion

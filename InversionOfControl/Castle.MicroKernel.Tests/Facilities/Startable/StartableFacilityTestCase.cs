@@ -85,6 +85,36 @@ namespace Castle.Facilities.Startable.Tests
             Assert.IsTrue( component.Stopped );
         }
 
+        [Test]
+        [Ignore("Haven't gotten the configuration stuff right yet.")]
+        public void ComponentConfigCase()
+        {
+            IKernel kernel = new DefaultKernel();
+
+
+            MutableConfiguration confignode = new MutableConfiguration("key");
+            confignode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.NoInterfaceStartableComponent, Castle.MicroKernel.Tests");
+            confignode.Attributes.Add("id", "c");
+            confignode.Attributes.Add("startable", "true");
+
+            
+            kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
+
+            kernel.AddComponent("key", typeof(NoInterfaceStartableComponent));
+
+            
+            kernel.AddFacility( "startable", new StartableFacility() );
+
+            NoInterfaceStartableComponent component = kernel["key"] as NoInterfaceStartableComponent;
+
+            Assert.IsNotNull(component);
+            Assert.IsTrue( component.Started, "Hasn't been started" );
+            Assert.IsFalse( component.Stopped );
+
+            kernel.ReleaseComponent(component);
+            Assert.IsTrue( component.Stopped , "Hasn't been stopped");
+        }
+
         private void GetConfig(IKernel kernel)
         {
             MutableConfiguration confignode = new MutableConfiguration("startables");
