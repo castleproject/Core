@@ -94,6 +94,12 @@
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
                 />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                    Private = "True"
+                />
             </References>
         </Build>
         <Files>
@@ -114,6 +120,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ARFetchAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ARSmartDispatchController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -126,6 +137,31 @@
                 <File
                     RelPath = "default.build"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "Pagination\ARPaginableCriteria.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Pagination\ARPaginableQuery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Pagination\ARPaginableSimpleQuery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Pagination\ARPagination.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Pagination\IARPaginable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

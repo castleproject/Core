@@ -19,7 +19,11 @@ Beta 5
 - Support for [Layout] attribute on Actions, so actions can override 
   the Controller's specified layout (by Fabio Batista, rev 1459)
 
-- PaginationHelper introduced
+- PaginationHelper introduced: paginates objects that implements IList, and supports caching.
+
+- ARPager introduced: allows you to specify a custom NHibernate HQL Query or an NHibernate Criteria
+  (using Expression.Eq, à là ActiveRecord's FindAll()) and fetch the results with pagination.
+  (by Fabio Batista)
 
 - Added IServerUtility.JavaScriptEscape() (kudos to Chad Humphries)
 

@@ -66,6 +66,7 @@
 			<references>
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
 			</references>
 		</csc>

@@ -508,6 +508,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\IPager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\PaginationHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

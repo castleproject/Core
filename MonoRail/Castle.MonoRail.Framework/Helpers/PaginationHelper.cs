@@ -128,10 +128,10 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// Represents the sliced data and offers
 	/// a few read only properties to create a pagination bar.
 	/// </summary>
-	public class Page : IEnumerable
+	public class Page : IPager
 	{
 		private int firstItem, lastItem, totalItems;
-		private int previousIndex, nextIndex, lastIndex;
+		private int previousIndex, nextIndex, lastIndex, curIndex;
 		private bool hasPrev, hasNext, hasFirst, hasLast;
 
 		private readonly IList slice = new ArrayList();
@@ -166,6 +166,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			hasFirst = curPage != 1;
 			hasLast = list.Count > curPage * pageSize;
 	
+			curIndex = curPage;
 			previousIndex = curPage - 1;
 			nextIndex = curPage + 1;
 			lastIndex = list.Count / pageSize;
@@ -177,6 +178,16 @@ namespace Castle.MonoRail.Framework.Helpers
 		}
 
 		#region Properties
+
+		public int FirstIndex
+		{
+			get { return 1; }
+		}
+
+		public int CurrentIndex
+		{
+			get { return curIndex; }
+		}
 
 		public int LastIndex
 		{
