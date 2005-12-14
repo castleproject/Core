@@ -41,7 +41,9 @@
 		<copy todir="${build.dir}">
 			<fileset basedir="${bin.dir}">
 				<include name="${generator.assembly.name}" />
+				<include name="${generator.name}.xml" />
 				<include name="${cpnts.assembly.name}" />
+				<include name="${cpnts.name}.xml" />
 				<include name="ADODB.dll" />
 				<include name="MSDASC.dll" />
 				<include name="WeifenLuo.WinFormsUI.Docking.dll" />

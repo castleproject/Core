@@ -44,6 +44,8 @@
 			<fileset basedir="${bin.dir}">
 				<include name="${assembly.name}" />
 				<include name="${assembly.name.smtp}" />
+				<include name="${name}.xml" />
+				<include name="${name.smtp}.xml" />
 			</fileset>
 		</copy>
 	</target>

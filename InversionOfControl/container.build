@@ -28,6 +28,9 @@
 				<include name="Castle.MicroKernel.dll" />
 				<include name="Castle.Model.dll" />
 				<include name="Castle.Windsor.dll" />
+				<include name="Castle.MicroKernel.xml" />
+				<include name="Castle.Model.xml" />
+				<include name="Castle.Windsor.xml" />
 			</fileset>
 		</copy>
 	</target>

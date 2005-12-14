@@ -39,6 +39,8 @@
 			<fileset basedir="${bin.dir}">
 				<include name="${assembly.name}" />
 				<include name="${assembly.name.nvelocity}" />
+				<include name="${name}.xml" />
+				<include name="${name.nvelocity}.xml" />
 			</fileset>
 		</copy>
 	</target>

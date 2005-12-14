@@ -145,11 +145,6 @@
                     HintPath = "..\..\..\MonoRail\bin\Castle.Windsor.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\..\..\MonoRail\bin\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\MonoRail\bin\Iesi.Collections.dll"

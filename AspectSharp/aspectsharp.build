@@ -81,6 +81,8 @@
 				<include name="${lang.assembly.name}" />
 				<include name="${aopalliance.assembly.name}" />
 				<include name="antlr.runtime.dll" />
+				<include name="${core.name}.xml" />
+				<include name="${lang.name}.xml" />
 			</fileset>
 		</copy>
 	</target>

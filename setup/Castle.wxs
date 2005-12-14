@@ -178,6 +178,8 @@
 					<File Id="file75" Name="nhlic.txt"		LongName="NHibernate.license.txt"				src="..\build\net-1.1\NHibernate.license.txt" />
 					<File Id="file72" Name="NULLAB_1.DLL"	LongName="Nullables.dll"						src="..\build\net-1.1\Nullables.dll" />
 					<File Id="file73" Name="NULLAB_2.DLL"	LongName="Nullables.NHibernate.dll"				src="..\build\net-1.1\Nullables.NHibernate.dll" />
+					<File Id="file90" Name="NETRON1.DLL"	LongName="NetronGraphLib.dll"					src="..\build\net-1.1\NetronGraphLib.dll" />
+					<File Id="file91" Name="NETRON2.DLL"	LongName="NetronMaths.dll"						src="..\build\net-1.1\NetronMaths.dll" />
 
 					<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\AssemblyFolders\castle">
 						<Registry Action="write" Type="string" Value="[net11dir]" />
@@ -278,6 +280,8 @@
 					<CopyFile Id="n2file75" FileId="file75" DestinationDirectory="net20dir" />		
 					<CopyFile Id="n2file72" FileId="file72" DestinationDirectory="net20dir" />		
 					<CopyFile Id="n2file73" FileId="file73" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file90" FileId="file90" DestinationDirectory="net20dir" />		
+					<CopyFile Id="n2file91" FileId="file91" DestinationDirectory="net20dir" />		
 
 					<Registry Action="createKeyAndRemoveKeyOnUninstall" Root="HKLM" Key="SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\Public Assemblies\Castle">
 						<Registry Action="write" Type="string" Value="[net20dir]" />

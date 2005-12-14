@@ -16,6 +16,7 @@
 		<copy todir="${build.dir}">
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll" />
+				<include name="*.xml" />
 			</fileset>
 		</copy>
 	</target>

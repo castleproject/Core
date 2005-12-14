@@ -41,6 +41,11 @@
 			</fileset>
 		</copy>
 		<copy todir="${build.dir}">
+			<fileset basedir="${sharedlibrary.dir}/netron">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="${build.dir}">
 			<fileset basedir="${sharedlibrary.dir}/nhibernate">
 				<include name="*.*" />
 			</fileset>
@@ -387,45 +392,7 @@
 			<in>
 				<!-- Hardcode projects folders to speed up assemblies search -->
 				<items>
-					<include name="ActiveRecord"/>
-					<include name="InversionOfControl"/>
-					<include name="MonoRail"/>
-					
-					<!-- AspectSharp -->
-					<include name="AspectSharp"/>
-					
-					<!-- Components -->
-					<include name="Components/General/EmailSender"/>
-					<include name="Components/General/TemplateEngine"/>
-					
-					<!-- Facilities -->
-					<include name="Facilities/ActiveRecordIntegration"/>
-					<include name="Facilities/AspectSharp"/>
-					<include name="Facilities/AutomaticTransactionManagement"/>
-					<include name="Facilities/BatchRegistration"/>
-					<include name="Facilities/Cache"/>
-					<include name="Facilities/Db4o"/>
-					<include name="Facilities/EnterpriseLibrary"/>
-					<include name="Facilities/EventWiring"/>
-					<include name="Facilities/FactorySupport"/>
-					<include name="Facilities/IBatisNet"/>
-					<include name="Facilities/Logging"/>
-					<include name="Facilities/ManagementExtensions"/>
-					<include name="Facilities/NHibernateIntegration"/>
-					<include name="Facilities/Prevalence"/>
-					<include name="Facilities/Remoting"/>
-					<include name="Facilities/Security"/>
-					<include name="Facilities/Startable"/>
-					<include name="Facilities/TypedFactory"/>
-					
-					<!-- Services -->
-					<include name="Services/Logging"/>
-					<include name="Services/Security"/>
-					<include name="Services/TransactionMangement"/>
-					
-					<!-- Tools -->
-					<include name="Tools/DynamicProxy"/>
-					<include name="Tools/ManagedExtensions"/>
+					<include name="build/net-1.1"/>
 				</items>
 			</in>
 			<do>
@@ -434,8 +401,8 @@
 				<foreach item="File" property="file">
 					<in>
 						<items>
-							<include name="${foldername}/bin/Castle.*.dll"/>
-							<include name="${foldername}/bin/AspectSharp*.dll"/>
+							<include name="${foldername}/Castle.*.dll"/>
+							<include name="${foldername}/AspectSharp*.dll"/>
 							<exclude name="Castle.*.Tests.dll"/>
 						</items>
 					</in>

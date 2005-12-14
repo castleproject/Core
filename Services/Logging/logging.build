@@ -49,6 +49,9 @@
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
 		<copy file="${bin.dir}/${assembly.name.nlog}" todir="../bin" />
 		<copy file="${bin.dir}/${assembly.name.log4net}" todir="../bin" />
+		<copy file="${bin.dir}/${name}.xml" todir="../bin" />
+		<copy file="${bin.dir}/${name.nlog}.xml" todir="../bin" />
+		<copy file="${bin.dir}/${name.log4net}.xml" todir="../bin" />
 	</target>
 	
 	<target name="compile" depends="init">

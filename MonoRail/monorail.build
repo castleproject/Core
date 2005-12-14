@@ -44,6 +44,16 @@
 				<include name="Castle.MonoRail.WindsorExtension.dll" />
 				<include name="Castle.MonoRail.ActiveRecordScaffold.dll" />
 				<include name="Castle.MonoRail.ActiveRecordSupport.dll" />
+
+				<include name="Castle.MonoRail.Framework.xml" />
+				<include name="Castle.MonoRail.Framework.Views.CompositeView.xml" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.xml" />
+				<include name="Castle.MonoRail.TestSupport.xml" />
+				<include name="Castle.MonoRail.Views.Brail.xml" />
+				<include name="Castle.MonoRail.WindsorExtension.xml" />
+				<include name="Castle.MonoRail.ActiveRecordScaffold.xml" />
+				<include name="Castle.MonoRail.ActiveRecordSupport.xml" />
+
 			</fileset>
 		</copy>
 	</target>
