@@ -16,9 +16,6 @@ namespace Castle.Facilities.Startable.Tests.Components
 {
     using Castle.Model;
 
-    /// <summary>
-	/// Summary description for NoInterfaceStartableComponent.
-	/// </summary>
 	[Transient]
 	public class NoInterfaceStartableComponent
 	{

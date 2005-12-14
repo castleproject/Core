@@ -17,21 +17,21 @@ namespace Castle.Facilities.Startable
 	using System;
 	using System.Collections;
 
-	using Castle.Model;
-
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
-	using Castle.Model.Configuration;
+	using Castle.MicroKernel.SubSystems.Conversion;
+	
+	using Castle.Model;
 
 
     public class StartableFacility : AbstractFacility
 	{
-		private ArrayList _waitList = new ArrayList();
-        private IList _startableList = new ArrayList();
+		private ArrayList waitList = new ArrayList();
+        private ITypeConverter converter;
 		
 		protected override void Init()
 		{
-            this.LoadStartableList();
+			converter = (ITypeConverter) Kernel.GetSubSystem(SubSystemConstants.ConversionManagerKey);
 
 			Kernel.ComponentModelCreated += 
 				new ComponentModelDelegate(OnComponentModelCreated);
@@ -41,7 +41,8 @@ namespace Castle.Facilities.Startable
 
 		private void OnComponentModelCreated(ComponentModel model)
 		{
-			bool startable = this.HandleIStartable(model) || this.ComponentConfig(model) || this.SearchListByType(model);
+			bool startable = 
+				CheckIfComponentImplementsIStartable(model) || HasStartableAttributeSet(model);
 
 			model.ExtendedProperties["startable"] = startable;
 
@@ -54,7 +55,7 @@ namespace Castle.Facilities.Startable
 			}
 		}
 
-		private void OnComponentRegistered(String key, IHandler handler)
+    	private void OnComponentRegistered(String key, IHandler handler)
 		{
 			bool startable = (bool) handler.ComponentModel.ExtendedProperties["startable"];
 			
@@ -62,7 +63,7 @@ namespace Castle.Facilities.Startable
 			{
 				if (handler.CurrentState == HandlerState.WaitingDependency)
 				{
-					_waitList.Add( handler );
+					waitList.Add( handler );
 				}
 				else
 				{
@@ -80,8 +81,7 @@ namespace Castle.Facilities.Startable
 		/// </summary>
 		private void CheckWaitingList()
 		{
-			IHandler[] handlers = (IHandler[]) 
-				_waitList.ToArray( typeof(IHandler) );
+			IHandler[] handlers = (IHandler[]) waitList.ToArray( typeof(IHandler) );
 
 			foreach(IHandler handler in handlers)
 			{
@@ -89,7 +89,7 @@ namespace Castle.Facilities.Startable
 				{
 					Start( handler.ComponentModel.Name );
 
-					_waitList.Remove(handler);
+					waitList.Remove(handler);
 				}
 			}
 		}
@@ -103,97 +103,26 @@ namespace Castle.Facilities.Startable
 			object instance = Kernel[key];
 		}
 
-        #region Ways to determine if startable
-        private bool HandleIStartable(ComponentModel model)
+        private bool CheckIfComponentImplementsIStartable(ComponentModel model)
         {
-            bool startable = typeof(IStartable).IsAssignableFrom(model.Implementation);
-
-            return startable;
+            return typeof(IStartable).IsAssignableFrom(model.Implementation);
         }
-        private bool SearchListByType(ComponentModel model)
-        {
-            bool result = false;
-            if(this._startableList.Count > 0)
-            {
-                foreach(StartableInfo s in this._startableList)
-                {
-                    if(s.Type.Equals(model.Implementation))
-                    {
-                        result = true;
-                        model.ExtendedProperties["startable.start"] = s.StartMethod;
-                        model.ExtendedProperties["startable.stop"] = s.StopMethod;
-                    }
-                }
-                
-            }
-            return result;
-        }
-        private bool ComponentConfig(ComponentModel model)
+        
+		private bool HasStartableAttributeSet(ComponentModel model)
         {
             bool result = false;
            
-            if(model.Configuration != null)
+            if (model.Configuration != null)
             {
-                string startable = model.Configuration.Attributes["startable"];
-                if(startable != null)
-                    result = Convert.ToBoolean(startable);
+                String startable = model.Configuration.Attributes["startable"];
+                
+				if (startable != null)
+				{
+					result = (bool) converter.PerformConversion(startable, typeof(bool));
+				}
             }
             
             return result;
         }
-        #endregion
-
- 
-        #region Config Code
-        private void LoadStartableList()
-        {
-            IConfiguration config = this.FacilityConfig;
-            if(config != null)
-            {
-                foreach(IConfiguration c in this.FacilityConfig.Children)
-                {
-                    this._startableList.Add(new StartableInfo(c));
-                }
-            }
-        }
-        #endregion
-
-        private class StartableInfo
-        {
-            private Type _type;
-
-            public Type Type
-            {
-                get { return this._type; }
-            }
-
-            private String _startMethod;
-
-            public String StartMethod
-            {
-                get { return this._startMethod; }
-            }
-
-            private String _stopMethod;
-
-            public String StopMethod
-            {
-                get { return this._stopMethod; }
-            }
-
-            public StartableInfo(IConfiguration c)
-            {
-                this._startMethod = c.Attributes["startMethod"];
-                if(this._startMethod == null || this._startMethod.Length == 0)
-                    this._startMethod = "Start";
-                
-                this._stopMethod = c.Attributes["stopMethod"];
-                if(this._stopMethod == null || this._stopMethod.Length == 0)
-                    this._stopMethod = "Stop";
-
-                this._type = Type.GetType(c.Attributes["type"], true, true);
-            }
-        }
-
 	}
 }

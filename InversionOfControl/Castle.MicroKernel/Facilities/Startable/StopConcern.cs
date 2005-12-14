@@ -16,6 +16,7 @@ namespace Castle.Facilities.Startable
 {
 	using System;
 	using System.Reflection;
+
 	using Castle.Model;
 
 	using Castle.MicroKernel.LifecycleConcerns;
@@ -40,11 +41,15 @@ namespace Castle.Facilities.Startable
             {
                 (component as IStartable).Stop();
             }
-            else
+            else if (model.Configuration != null)
             {
-                string startmethod = model.ExtendedProperties["startable.stop"].ToString();
-                MethodInfo m = model.Implementation.GetMethod(startmethod);
-                m.Invoke(component, null);
+                String stopMethod = model.Configuration.Attributes["stopMethod"];
+
+				if (stopMethod != null)
+				{
+					MethodInfo method = model.Implementation.GetMethod(stopMethod);
+					method.Invoke(component, null);
+				}
             }
 		}
 	}

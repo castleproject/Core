@@ -50,12 +50,13 @@ namespace Castle.Facilities.Startable.Tests
         {
             IKernel kernel = new DefaultKernel();
 
-            MutableConfiguration confignode = new MutableConfiguration("startables");
-            MutableConfiguration startableNode = new MutableConfiguration("startable");
-            startableNode.Attributes.Add("id", "do I need this");
-            startableNode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.NoInterfaceStartableComponent, Castle.MicroKernel.Tests");
-            confignode.Children.Add(startableNode);
-            kernel.ConfigurationStore.AddFacilityConfiguration("startable", confignode);
+			MutableConfiguration compNode = new MutableConfiguration("component");
+			compNode.Attributes["id"] = "b";
+			compNode.Attributes["startable"] = "true";
+			compNode.Attributes["startMethod"] = "Start";
+			compNode.Attributes["stopMethod"] = "Stop";
+
+			kernel.ConfigurationStore.AddComponentConfiguration("b", compNode);
 
             kernel.AddFacility( "startable", new StartableFacility() );
             kernel.AddComponent( "b", typeof(NoInterfaceStartableComponent) );
@@ -67,56 +68,6 @@ namespace Castle.Facilities.Startable.Tests
 
             kernel.ReleaseComponent(component);
             Assert.IsTrue( component.Stopped );
-        }
-
-        [Test]
-        public void TestComponentWithNoInterfaceAndCustomerStartStop()
-        {
-            IKernel kernel = new DefaultKernel();
-
-            MutableConfiguration confignode = new MutableConfiguration("startables");
-            MutableConfiguration startableNode = new MutableConfiguration("startable");
-            startableNode.Attributes.Add("id", "do I need this");
-            startableNode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.OddStartStopMethodsComponent, Castle.MicroKernel.Tests");
-            startableNode.Attributes.Add("startMethod", "Starter");
-            startableNode.Attributes.Add("stopMethod", "Stopper");
-            confignode.Children.Add(startableNode);
-            kernel.ConfigurationStore.AddFacilityConfiguration("startable", confignode);
-
-            kernel.AddFacility( "startable", new StartableFacility() );
-            kernel.AddComponent( "c", typeof(OddStartStopMethodsComponent) );
-            OddStartStopMethodsComponent component = kernel["c"] as OddStartStopMethodsComponent;
-
-            Assert.IsNotNull(component);
-            Assert.IsTrue( component.Started );
-            Assert.IsFalse( component.Stopped );
-
-            kernel.ReleaseComponent(component);
-            Assert.IsTrue( component.Stopped );
-        }
-
-        [Test]
-        [Ignore("Haven't gotten the configuration stuff right yet.")]
-        public void TestComponentConfigMarkedStartable()
-        {
-            IKernel kernel = new DefaultKernel();
-
-            MutableConfiguration confignode = new MutableConfiguration("key");
-            confignode.Attributes.Add("type", "Castle.Facilities.Startable.Tests.Components.NoInterfaceStartableComponent, Castle.MicroKernel.Tests");
-            confignode.Attributes.Add("id", "c");
-            confignode.Attributes.Add("startable", "true");
-            kernel.ConfigurationStore.AddComponentConfiguration("key", confignode);
-
-            kernel.AddComponent("key", typeof(NoInterfaceStartableComponent));
-            kernel.AddFacility( "startable", new StartableFacility() );
-            NoInterfaceStartableComponent component = kernel["key"] as NoInterfaceStartableComponent;
-
-            Assert.IsNotNull(component);
-            Assert.IsTrue( component.Started, "Hasn't been started" );
-            Assert.IsFalse( component.Stopped );
-
-            kernel.ReleaseComponent(component);
-            Assert.IsTrue( component.Stopped , "Hasn't been stopped");
         }
 	}
 }
