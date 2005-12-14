@@ -1,6 +1,8 @@
 RC 2
 ====
 
+- Startable facility: support to specify the attribute startable=true on the configuration
+
 - Better error messages: now the components waiting for dependencies will recursively 
   report what they are waiting for.
 
