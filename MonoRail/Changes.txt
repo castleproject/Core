@@ -8,6 +8,10 @@ Beta 5
 
 - Added Controller.RedirectToAction(String actionName)
 
+- Added Controller.RedirectToAction overloads (by Fabio Batista)
+
+- Controller.Redirect(String) is now virtual, and it's called by all Redirect* methods (by Fabio Batista)
+
 - Moved action collection to ControllerMetaDescriptor class, using new method that does not require ScreenCommonPublicMethods.
 
 - Moved ControllerDescriptorBuilder creation to ProcessEngineFactory to ensure ControllerDescriptors are only created once
@@ -38,6 +42,7 @@ Beta 5
 
 - Added to HtmlHelper:
   - InputCheckbox
+  
   - InputRadio
   - InputFile
   - InputButton
