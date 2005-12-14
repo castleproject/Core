@@ -424,22 +424,65 @@ namespace Castle.MonoRail.Framework
 			return _viewEngine.HasTemplate(templateName);
 		}
 
-		/// <summary>
-		/// Redirects to the specified action
+		#region RedirectToAction
+		/// <summary> 
+		/// Redirects to another action in the same controller.
 		/// </summary>
-		/// <param name="action">Target action</param>
-		public void RedirectToAction(String action)
+		/// <param name="action">The action name</param>
+		protected void RedirectToAction(String action)
 		{
-			CancelView();
-
-			_context.Response.Redirect(AreaName, Name, action);
+			RedirectToAction(action, (NameValueCollection) null);
 		}
 
+		/// <summary> 
+		/// Redirects to another action in the same controller.
+		/// </summary>
+		protected void RedirectToAction(String action, IDictionary parameters)
+		{
+			NameValueCollection p = null;
+			
+			if (parameters != null && parameters.Count > 0) 
+			{
+				p = new NameValueCollection(parameters.Count);
+				foreach (Object key in parameters.Keys)
+					p.Add(Convert.ToString(key), Convert.ToString(parameters[key]));
+			}
+
+			RedirectToAction(action, p);
+		}
+
+		/// <summary> 
+		/// Redirects to another action in the same controller.
+		/// </summary>
+		protected void RedirectToAction(String action, NameValueCollection parameters)
+		{
+			if (parameters != null)
+				Redirect(this.AreaName, this.Name, action, parameters);
+			else
+				Redirect(this.AreaName, this.Name, action);
+		}
+		#endregion
+
+		protected String CreateAbsoluteRailsUrl(String area, String controller, String action)
+		{
+			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, area, controller, action, Context.UrlInfo.Extension);
+		}
+		
+		protected String CreateAbsoluteRailsUrl(String controller, String action)
+		{
+			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, controller, action, Context.UrlInfo.Extension);
+		}
+		
+		protected String CreateAbsoluteRailsUrlForAction(String action)
+		{
+			return UrlInfo.CreateAbsoluteRailsUrl(Context.ApplicationPath, this.AreaName, this.Name, action, Context.UrlInfo.Extension);
+		}
+		
 		/// <summary>
-		/// Redirects to the specified URL.
+		/// Redirects to the specified URL. All other Redirects call this one.
 		/// </summary>
 		/// <param name="url">Target URL</param>
-		public void Redirect(String url)
+		public virtual void Redirect(String url)
 		{
 			CancelView();
 
@@ -453,9 +496,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">Action name</param>
 		public void Redirect(String controller, String action)
 		{
-			CancelView();
-
-			_context.Response.Redirect(controller, action);
+			Redirect( CreateAbsoluteRailsUrl(controller, action) );
 		}
 
 		/// <summary>
@@ -466,9 +507,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="action">Action name</param>
 		public void Redirect(String area, String controller, String action)
 		{
-			CancelView();
-
-			_context.Response.Redirect(area, controller, action);
+			Redirect( CreateAbsoluteRailsUrl(area, controller, action) );
 		}
 
 		/// <summary>
@@ -479,14 +518,10 @@ namespace Castle.MonoRail.Framework
 		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(String controller, String action, NameValueCollection parameters)
 		{
-			CancelView();
-
 			String querystring = ToQueryString(parameters);
+			String url = CreateAbsoluteRailsUrl(controller, action);
 
-			String url = UrlInfo.CreateAbsoluteRailsUrl(
-				Context.ApplicationPath, controller, action, Context.UrlInfo.Extension);
-
-			_context.Response.Redirect(String.Format("{0}?{1}", url, querystring));
+			Redirect(String.Format("{0}?{1}", url, querystring));
 		}
 
 		/// <summary>
@@ -498,16 +533,12 @@ namespace Castle.MonoRail.Framework
 		/// <param name="parameters">Key/value pairings</param>
 		public void Redirect(String area, String controller, String action, NameValueCollection parameters)
 		{
-            CancelView();
-
 			String querystring = ToQueryString(parameters);
+			String url = CreateAbsoluteRailsUrl(area, controller, action);
 
-            String url = UrlInfo.CreateAbsoluteRailsUrl(
-                Context.ApplicationPath, area, controller, action, Context.UrlInfo.Extension);
-
-            _context.Response.Redirect(String.Format("{0}?{1}", url, querystring));
+			Redirect(String.Format("{0}?{1}", url, querystring));
 		}
-
+		
 		protected String ToQueryString(NameValueCollection parameters)
 		{
 			StringBuilder buffer = new StringBuilder();

@@ -109,6 +109,9 @@ namespace Castle.MonoRail.Framework.Internal
 		public static String CreateAbsoluteRailsUrl(String appPath, String area, String controller, 
 			String action, String extension )
 		{
+			if (area == null || area.Length == 0)
+				return CreateAbsoluteRailsUrl( appPath, controller, action, extension );
+			
 			return String.Format( "{0}/{1}/{2}/{3}.{4}", appPath, area, controller, action, extension );
 		}
 	}
