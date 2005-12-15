@@ -49,7 +49,8 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		public IEnumerable GetPageItems(int pageSize, int currentPage)
 		{
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
-			using (ISession session = holder.CreateSession(targetType)) 
+			ISession session = holder.CreateSession(targetType);
+			try
 			{
 				ICriteria c = session.CreateCriteria(targetType);
 			
@@ -66,6 +67,10 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 				// return GetResultsArray(targetType, c.List(), false);
 				return c.List();
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
 			}
 		}
 	}
