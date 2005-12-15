@@ -44,15 +44,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNodes( model.Classes );
 			VisitNodes( model.Fields );
 			VisitNodes( model.Anys );
-			VisitNodes(model.HasManyToAny);
+			VisitNodes( model.HasManyToAny );
 			VisitNodes( model.Properties );
-			VisitNodes( model.Components );
 			VisitNodes( model.OneToOnes );
 			VisitNodes( model.BelongsTo );
 			VisitNodes( model.HasMany );
 			VisitNodes( model.HasAndBelongsToMany );
 			VisitNodes( model.CollectionIDs );
 			VisitNodes( model.Hilos );
+			VisitNodes( model.Components );
 		}
 
 		public virtual void VisitPrimaryKey(PrimaryKeyModel model)
