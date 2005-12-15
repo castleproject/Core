@@ -58,7 +58,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 		public IEnumerator GetEnumerator()
 		{
-			IEnumerable en = source.GetPageItems(pageSize, currentPage);
+			IEnumerable en = source.Paginate(pageSize, currentPage);
 			if (en == null)
 				return null;
 

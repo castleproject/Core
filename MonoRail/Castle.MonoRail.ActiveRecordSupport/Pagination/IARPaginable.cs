@@ -19,6 +19,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 	public interface IARPaginable
 	{
-		IEnumerable GetPageItems(int pageSize, int currentPage);
+		IEnumerable ListAll();
+		IEnumerable Paginate(int pageSize, int currentPage);
 	}
 }

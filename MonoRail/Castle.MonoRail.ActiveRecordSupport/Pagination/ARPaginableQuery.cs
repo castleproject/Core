@@ -18,6 +18,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using System.Collections;
 
 	using Castle.ActiveRecord;
+	using Castle.ActiveRecord.Framework;
 
 	using NHibernate;
 
@@ -47,10 +48,16 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		/// <returns>The query results.</returns>
 		public sealed override object Execute(ISession session)
 		{
+			return InternalExecute(session, true);
+		}
+		
+		private IEnumerable InternalExecute(ISession session, bool skipPagination)
+		{
 			IQuery q = session.CreateQuery(BuildHQL());
 			SetQueryParameters(q);
-			PrepareQueryForPagination(q);
-			return ExecuteQuery(q);
+			if (!skipPagination)
+				PrepareQueryForPagination(q);
+			return (IEnumerable) ExecuteQuery(q);
 		}
 
 		/// <summary>
@@ -89,17 +96,32 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		/// Returns the page items.
 		/// Actually, the implementation just sets the protected fields
 		/// <see cref="pageSize"/> and <see cref="currentPage"/>,
-		/// and calls <see cref="ActiveRecordMediator"/> in order to execute
-		/// the custom query.
+		/// gets an <see cref="ISession" /> from <c>SessionFactoryHolder</c>
+		/// and calls <see cref="InternalExecute"/> in order to execute
+		/// the custom query and fetch only the page items.
 		/// </summary>
 		/// <param name="pageSize">The page size</param>
 		/// <param name="currentPage">The current page</param>
 		/// <returns>The page items</returns>
-		IEnumerable IARPaginable.GetPageItems(int pageSize, int currentPage)
+		public IEnumerable Paginate(int pageSize, int currentPage)
 		{
 			this.pageSize = pageSize;
 			this.currentPage = currentPage;
 
+			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
+			ISession session = holder.CreateSession(targetType);
+			try
+			{
+				return InternalExecute(session, false);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+		
+		public IEnumerable ListAll()
+		{
 			return (IEnumerable) ActiveRecordMediator.ExecuteQuery(this);
 		}
 	}

@@ -32,6 +32,8 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		Type targetType;
 		ICriterion[] criterions;
 		Order[] orders;
+		
+		int pageSize, currentPage;
 
 		public ARPaginableCriteria(Type targetType, Order[] orders, params ICriterion[] criterions)
 		{
@@ -46,7 +48,19 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		public ARPaginableCriteria(Type targetType, params Order[] orders)
 			: this(targetType, orders, null) { }
 
-		public IEnumerable GetPageItems(int pageSize, int currentPage)
+		public IEnumerable Paginate(int pageSize, int currentPage)
+		{
+			this.pageSize = pageSize;
+			this.currentPage = currentPage;
+			return InternalExecute(false);
+		}
+		
+		public IEnumerable ListAll()
+		{
+			return InternalExecute(true);
+		}
+		
+		private IEnumerable InternalExecute(bool skipPagination)
 		{
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
 			ISession session = holder.CreateSession(targetType);
@@ -62,8 +76,11 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 					foreach (Order order in orders)
 						c.AddOrder(order);
 
-				c.SetFirstResult(pageSize * (currentPage-1));
-				c.SetMaxResults(pageSize);
+				if (!skipPagination)
+				{
+					c.SetFirstResult(pageSize * (currentPage-1));
+					c.SetMaxResults(pageSize);
+				}
 
 				// return GetResultsArray(targetType, c.List(), false);
 				return c.List();
