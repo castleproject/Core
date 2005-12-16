@@ -16,8 +16,6 @@ namespace Castle.ActiveRecord
 {
 	using System.Collections;
 
-	using NHibernate;
-
 	using Castle.ActiveRecord.Framework.Scopes;
 
 	/// <summary>
@@ -39,10 +37,10 @@ namespace Castle.ActiveRecord
 		{
 			ThreadScopeAccessor.Instance.UnRegisterScope(this);
 
-			PerformDisposal(_key2Session.Values, !discardChanges, true);
+			PerformDisposal(key2Session.Values, !discardChanges, true);
 
-			_key2Session.Clear();
-			_key2Session = null;
+			key2Session.Clear();
+			key2Session = null;
 		}
 
 		protected override void PerformDisposal(ICollection sessions)

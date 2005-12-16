@@ -290,6 +290,91 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual( 2, blogs2.Length );
 		}
 
+		[Test, Category("mssql")]
+		public void SequenceOfTransactions()
+		{
+			SqlConnection conn = CreateSqlConnection();
+			ISession session1, session2;
+
+			using(new SessionScope())
+			{
+				using(TransactionScope scope = new TransactionScope())
+				{
+					Blog blog = new Blog();
+					blog.Name = "hammett's blog";
+					blog.Author = "hamilton verissimo";
+					blog.Save();
+					
+					session1 = blog.CurrentSession;
+					Assert.IsNotNull(session1);
+					Assert.IsNotNull(session1.Transaction);
+					Assert.IsFalse(session1.Transaction.WasCommitted);
+					Assert.IsFalse(session1.Transaction.WasRolledBack);
+
+					conn.Open();
+
+					using(new DifferentDatabaseScope(conn))
+					{
+						blog = new Blog();
+						blog.Name = "hammett's blog";
+						blog.Author = "hamilton verissimo";
+						blog.Save();
+
+						session2 = blog.CurrentSession;
+						Assert.IsNotNull(session2);
+
+						Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
+
+						Assert.IsNotNull(session2.Transaction);
+						Assert.IsFalse(session2.Transaction.WasCommitted);
+						Assert.IsFalse(session2.Transaction.WasRolledBack);
+					}
+
+					using(new DifferentDatabaseScope(conn))
+					{
+						blog = new Blog();
+						blog.Name = "hammett's blog";
+						blog.Author = "hamilton verissimo";
+						blog.Save();
+
+						session2 = blog.CurrentSession;
+						Assert.IsNotNull(session2);
+
+						Assert.IsFalse( Object.ReferenceEquals(session1, session2) );
+
+						Assert.IsNotNull(session2.Transaction);
+						Assert.IsFalse(session2.Transaction.WasCommitted);
+						Assert.IsFalse(session2.Transaction.WasRolledBack);
+					}
+				}
+
+				conn.Close();
+
+				using(TransactionScope scope = new TransactionScope())
+				{
+					Blog blog = new Blog();
+					blog.Name = "another blog";
+					blog.Author = "erico verissimo";
+					blog.Save();
+				}
+			}
+
+			Assert.IsFalse(session1.IsOpen);
+			Assert.IsFalse(session2.IsOpen);
+			Assert.IsTrue(session1.Transaction.WasCommitted);
+			Assert.IsFalse(session1.Transaction.WasRolledBack);
+			Assert.IsTrue(session2.Transaction.WasCommitted);
+			Assert.IsFalse(session2.Transaction.WasRolledBack);
+
+			Blog[] blogs = Blog.FindAll();
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 2, blogs.Length );
+
+			OtherDbBlog[] blogs2 = OtherDbBlog.FindAll();
+			Assert.IsNotNull( blogs2 );
+			Assert.AreEqual( 2, blogs2.Length );
+		}
+
 		private SqlConnection CreateSqlConnection()
 		{
 			IConfigurationSource config = GetConfigSource();

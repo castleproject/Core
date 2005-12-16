@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 	{
 		private readonly SessionScopeType type;
 
-		protected Hashtable _key2Session = new Hashtable();
+		protected Hashtable key2Session = new Hashtable();
 
 		public AbstractScope( SessionScopeType type )
 		{
@@ -41,19 +41,19 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		public virtual bool IsKeyKnown(object key)
 		{
-			return _key2Session.Contains(key);
+			return key2Session.Contains(key);
 		}
 
 		public virtual void RegisterSession(object key, ISession session)
 		{
-			_key2Session.Add(key, session);
+			key2Session.Add(key, session);
 
 			Initialize(session);
 		}
 
 		public virtual ISession GetSession(object key)
 		{
-			return _key2Session[key] as ISession;
+			return key2Session[key] as ISession;
 		}
 
 		public virtual bool WantsToCreateTheSession
@@ -70,7 +70,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		{
 			ThreadScopeAccessor.Instance.UnRegisterScope(this);
 
-			PerformDisposal(_key2Session.Values);			
+			PerformDisposal(key2Session.Values);			
 		}
 
 		protected virtual void Initialize(ISession session)
@@ -83,7 +83,7 @@ namespace Castle.ActiveRecord.Framework.Scopes
 
 		internal ICollection GetSessions()
 		{
-			return _key2Session.Values;
+			return key2Session.Values;
 		}
 
 		protected internal void PerformDisposal( ICollection sessions, bool flush, bool close )
@@ -92,6 +92,27 @@ namespace Castle.ActiveRecord.Framework.Scopes
 			{
 				if (flush) session.Flush();
 				if (close) session.Close();
+			}
+		}
+
+		protected internal virtual void DiscardSessions(ICollection sessions)
+		{
+			foreach(ISession session in sessions)
+			{
+				RemoveSession(session);
+			}
+		}
+
+		private void RemoveSession(ISession session)
+		{
+			foreach(DictionaryEntry entry in key2Session)
+			{
+				if (Object.ReferenceEquals(entry.Value, session))
+				{
+					session.Close();
+					key2Session.Remove(entry.Key);
+					break;
+				}
 			}
 		}
 	}

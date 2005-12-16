@@ -33,6 +33,8 @@ namespace Castle.ActiveRecord.Framework.Scopes
 				else if (parentScope.ScopeType == SessionScopeType.Transactional)
 				{
 					parentTransactionScope = (TransactionScope) parentScope;
+
+					parentTransactionScope.OnTransactionCompleted += new EventHandler(OnTransactionCompleted);
 				}
 				else
 				{
@@ -111,6 +113,12 @@ namespace Castle.ActiveRecord.Framework.Scopes
 		public override ISession OpenSession(ISessionFactory sessionFactory, IInterceptor interceptor)
 		{
 			return sessionFactory.OpenSession(connection, interceptor);
+		}
+
+		private void OnTransactionCompleted(object sender, EventArgs e)
+		{
+			TransactionScope scope = (sender as TransactionScope);
+			scope.DiscardSessions( base.GetSessions() );
 		}
 	}
 

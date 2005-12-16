@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
+	using System.ComponentModel;
 
 	using NHibernate;
 	
@@ -44,11 +45,14 @@ namespace Castle.ActiveRecord
 	/// </summary>
 	public class TransactionScope : SessionScope
 	{
+		private static readonly object CompletedEvent = new object();
+
 		private readonly TransactionMode mode;
 		private IDictionary _transactions = new HybridDictionary();
 		private TransactionScope parentTransactionScope;
 		private AbstractScope parentSimpleScope;
 		private bool _rollbackOnly;
+		private EventHandlerList events = new EventHandlerList();
 
 		public TransactionScope(TransactionMode mode) : base(SessionScopeType.Transactional)
 		{
@@ -79,6 +83,36 @@ namespace Castle.ActiveRecord
 		public TransactionScope() : this(TransactionMode.New)
 		{
 		}
+
+		#region OnTransactionCompleted event
+
+		public event EventHandler OnTransactionCompleted
+		{
+			add 
+			{ 
+				if (parentTransactionScope != null)
+				{
+					parentTransactionScope.OnTransactionCompleted += value;
+				}
+				else
+				{
+					events.AddHandler(CompletedEvent, value);
+				}
+			}
+			remove
+			{
+				if (parentTransactionScope != null)
+				{
+					parentTransactionScope.OnTransactionCompleted -= value;
+				}
+				else
+				{
+					events.RemoveHandler(CompletedEvent, value);
+				}
+			}
+		}
+
+		#endregion
 
 		public void VoteRollBack()
 		{
@@ -210,6 +244,26 @@ namespace Castle.ActiveRecord
 						session.Clear();
 					}
 				}
+			}
+
+			RaiseOnCompleted();
+		}
+
+		protected internal override void DiscardSessions(ICollection sessions)
+		{
+			if (parentSimpleScope != null)
+			{
+				parentSimpleScope.DiscardSessions(sessions);
+			}
+		}
+
+		private void RaiseOnCompleted()
+		{
+			EventHandler handler = (EventHandler) events[CompletedEvent];
+
+			if (handler != null)
+			{
+				handler(this, EventArgs.Empty);
 			}
 		}
 	}
