@@ -65,6 +65,7 @@ namespace Castle.ActiveRecord.Framework.Config
 					throw new ActiveRecordException(message);
 				}
 			}
+            ThreadScopeInfoImplementation = threadInfoType;
 		}
 
 		protected void SetUpSessionFactoryHolderType(String customType)

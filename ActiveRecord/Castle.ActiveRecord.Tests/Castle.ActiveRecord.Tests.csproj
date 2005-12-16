@@ -130,6 +130,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ActiveRecordBaseGenericsTestCase.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ActiveRecordGenericsTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -190,6 +194,11 @@
                 />
                 <File
                     RelPath = "TransactionScopeTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\ConfigurationSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -311,6 +320,26 @@
                 <File
                     RelPath = "Model\Test2ARBase.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\GenericModel\Blog.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\GenericModel\Company.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\GenericModel\Employee.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\GenericModel\Person.cs"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\GenericModel\Post.cs"
                     BuildAction = "Compile"
                 />
                 <File
