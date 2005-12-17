@@ -32,6 +32,10 @@ namespace BlogSample
 				new XmlConfigurationSource("../appconfig.xml"), 
 				typeof(Blog), typeof(Post) );
 
+			// If you want to let AR to create the schema
+
+			ActiveRecordStarter.CreateSchema();
+
 			// Common usage
 
 			Post.DeleteAll();
@@ -64,7 +68,9 @@ namespace BlogSample
 			Post.DeleteAll();
 			Blog.DeleteAll();
 
-			using(TransactionScope transaction = new TransactionScope())
+			TransactionScope transaction = new TransactionScope();
+
+			try
 			{
 				blog = new Blog("somename");
 				blog.Author = "hammett";
@@ -72,9 +78,17 @@ namespace BlogSample
 
 				post = new Post(blog, "title", "contents", "castle");
 				post.Save();
-
+			}
+			catch(Exception ex)
+			{
 				transaction.VoteRollBack();
 			}
+			finally
+			{
+				transaction.Dispose();
+			}
+
+			ActiveRecordStarter.DropSchema();
 		}
 	}
 }

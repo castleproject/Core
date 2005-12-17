@@ -33,9 +33,10 @@ namespace BlogSample
 
 		public Post()
 		{
+			_created = DateTime.Now;
 		}
 
-		public Post(Blog blog, String title, String contents, String category)
+		public Post(Blog blog, String title, String contents, String category) : this()
 		{
 			_blog = blog;
 			_title = title;

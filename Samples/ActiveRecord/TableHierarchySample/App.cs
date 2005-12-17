@@ -32,6 +32,10 @@ namespace TableHierarchySample
 				new XmlConfigurationSource("../appconfig.xml"), 
 				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
 
+			// If you want to let AR to create the schema
+
+			ActiveRecordStarter.CreateSchema();
+
 			// Common usage
 
 			Client.DeleteAll();
@@ -46,6 +50,10 @@ namespace TableHierarchySample
 
 			Client client = new Client("hammett", firm);
 			client.Save();
+
+			// Dropping the schema 
+
+			ActiveRecordStarter.DropSchema();
 		}
 	}
 }

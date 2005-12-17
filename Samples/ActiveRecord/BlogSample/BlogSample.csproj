@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\..\..\ActiveRecord\bin\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\ActiveRecord\bin\Iesi.Collections.dll"

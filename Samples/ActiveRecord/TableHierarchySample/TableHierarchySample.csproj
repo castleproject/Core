@@ -95,11 +95,6 @@
                     HintPath = "..\..\..\ActiveRecord\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\..\..\ActiveRecord\bin\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\ActiveRecord\bin\Iesi.Collections.dll"

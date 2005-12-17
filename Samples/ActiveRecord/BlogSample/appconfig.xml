@@ -13,6 +13,6 @@
 		value="NHibernate.Connection.DriverConnectionProvider" />
 	<add 
 		key="hibernate.connection.connection_string"	
-		value="UID=susa;Password=OverKkk;Initial Catalog=test;Data Source=." />
+		value="Data Source=.;Initial Catalog=test;Integrated Security=SSPI" />
   </config>
 </activerecord>
