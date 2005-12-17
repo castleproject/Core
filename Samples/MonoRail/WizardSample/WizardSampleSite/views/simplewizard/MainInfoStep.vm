@@ -11,7 +11,7 @@
 
 <p>
 
-<form action="maininfostep.rails">
+<form action="maininfostep-save.rails">
 
 <table width="80%" border="0" cellpadding="2" cellspacing="3">
   
@@ -43,7 +43,12 @@
 </table>
 
 
-  $WizardHelper.EnableDoProcess()
+  <!-- 
+  
+  you could have a field to guide where (step) the user should go 
+  The DoNavigate() looks for a field name 'navigate.to' on post/querystring entries
+  
+  -->
 
 <p>
 #if ($WizardHelper.HasPreviousStep())

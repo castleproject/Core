@@ -30,10 +30,25 @@ namespace WizardSampleSite.Controllers
 		{
 			return new WizardStepPage[]
 				{
-					new IntroductionStep(), new MainInfoStep(), 
-					new SubscribeStep(), new ConfirmationStep(), 
+					new IntroductionStep(), 
+					new MainInfoStep(), 
+					new SubscribeStep(), 
+					new ConfirmationStep(), 
 					new ResultStep()
 				};
+		}
+
+		public void OnWizardStart()
+		{
+		}
+
+		public bool OnBeforeStep(string wizardName, string stepName, WizardStepPage step)
+		{
+			return true;
+		}
+
+		public void OnAfterStep(string wizardName, string stepName, WizardStepPage step)
+		{
 		}
 	}
 
@@ -55,7 +70,7 @@ namespace WizardSampleSite.Controllers
 		//   Session.Remove("account");
 		// }
 
-		protected override bool Process()
+		public void Save()
 		{
 			Account account = GetAccountFromSession(Session);
 
@@ -75,12 +90,14 @@ namespace WizardSampleSite.Controllers
 
 				Flash["errors"] = errors;
 
-				// User can go to the next step yet
+				// User can't go to the next step yet
 
-				return false;
+				RedirectToAction( ActionName );
+				
+				return;
 			}
 
-			return true;
+			DoNavigate();
 		}
 
 		private IList ValidateAccount(Account account)
@@ -113,11 +130,11 @@ namespace WizardSampleSite.Controllers
 		/// view (the default behavior is to render 
 		/// the step name, i.e. MainInfoStep)
 		/// </summary>
-		protected override void Show()
+		protected override void RenderWizardView()
 		{
 			PropertyBag.Add("account", GetAccountFromSession(Session));
 
-			base.Show();
+			base.RenderWizardView ();
 		}
 
 		internal static Account GetAccountFromSession(IDictionary session)
@@ -137,7 +154,7 @@ namespace WizardSampleSite.Controllers
 
 	class SubscribeStep : WizardStepPage
 	{
-		protected override bool Process()
+		public void Save()
 		{
 			Account account = MainInfoStep.GetAccountFromSession(Session);
 
@@ -146,30 +163,30 @@ namespace WizardSampleSite.Controllers
 
 			account.Interests = interests;
 
-			return base.Process();
+			DoNavigate();
 		}
 	}
 
 	class ConfirmationStep : WizardStepPage
 	{
-		protected override void Show()
+		protected override void RenderWizardView()
 		{
 			PropertyBag.Add("account", MainInfoStep.GetAccountFromSession(Session));
 
-			base.Show();
+			base.RenderWizardView();
 		}
 	}
 
 	class ResultStep : WizardStepPage
 	{
-		protected override void Show()
+		protected override void RenderWizardView()
 		{
 			Account account = MainInfoStep.GetAccountFromSession(Session);
 		
 			// AccountService.Create(account);
 			// Session.Remove("account");
 
-			base.Show();
+			base.RenderWizardView();
 		}
 	}
 }

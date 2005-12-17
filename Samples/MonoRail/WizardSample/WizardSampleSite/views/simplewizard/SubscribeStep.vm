@@ -3,7 +3,7 @@ Please inform your interests so we can select very special offers and
 send you spam:
 </p>
 
-<form action="subscribestep.rails">
+<form action="subscribestep-save.rails">
 
 <h4>Sports</h4>
 
