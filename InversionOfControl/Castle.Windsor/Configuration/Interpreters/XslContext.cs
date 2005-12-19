@@ -59,7 +59,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			{
 				if (nodeList.Current.Name == "when")
 				{
-					string key = nodeList.Current.GetAttribute("defined", "");
+					String key = nodeList.Current.GetAttribute("defined", "");
 
 					if (Contains(key))
 					{
@@ -82,22 +82,55 @@ namespace Castle.Windsor.Configuration.Interpreters
 			return key.Trim().ToUpper();
 		}
 
-		/// <summary>
-		/// Workaround to return a 'NodeList' from a extension object
-		/// for more details see: http://www.tkachenko.com/blog/archives/000034.html
-		/// </summary>
 		private XPathNodeIterator GetNodeList(IList nodes)
 		{
-			Assembly assembly = typeof(XPathNodeIterator).Assembly;
+			return new XPathNodeIteratorAdapter(nodes);
+		}
 
-			Type iteratorType = assembly.GetType("System.Xml.XPath.XPathArrayIterator");
+		class XPathNodeIteratorAdapter : XPathNodeIterator
+		{
+			private readonly IList nodes;
+			private int currentIndex;
 
-			return (XPathNodeIterator) Activator.CreateInstance(
-				iteratorType,
-				BindingFlags.Instance | BindingFlags.Public |
-					BindingFlags.CreateInstance,
-				null, new object[] {new ArrayList(nodes)},
-				null);
+			public XPathNodeIteratorAdapter(IList nodes)
+			{
+				this.nodes = nodes;
+			}
+
+			protected XPathNodeIteratorAdapter(IList nodes, int index)
+			{
+				this.nodes = nodes;
+				this.currentIndex = index;
+			}
+
+			public override XPathNodeIterator Clone()
+			{
+				return new XPathNodeIteratorAdapter(nodes, currentIndex);
+			}
+
+			public override bool MoveNext()
+			{
+				if (currentIndex == nodes.Count) return false;
+
+				currentIndex++;
+
+				return true;
+			}
+
+			public override XPathNavigator Current
+			{
+				get { return (XPathNavigator) nodes[currentIndex - 1]; }
+			}
+
+			public override int CurrentPosition
+			{
+				get { return currentIndex; }
+			}
+
+			public override int Count
+			{
+				get { return nodes.Count; }
+			}
 		}
 	}
 }
