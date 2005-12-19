@@ -389,6 +389,7 @@
   <ItemGroup>
     <Compile Include="Framework\ActiveRecordBase.Generic.cs" />
     <Compile Include="Framework\ARSchemaCreator.cs" />
+    <Compile Include="Framework\Scopes\ScopeUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
