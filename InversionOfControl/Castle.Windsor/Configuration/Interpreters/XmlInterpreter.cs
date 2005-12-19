@@ -53,7 +53,9 @@ namespace Castle.Windsor.Configuration.Interpreters
 		/// spaces are trimmed
 		/// </summary>
 		private static readonly Regex PropertyValidationRegExp = new Regex( @"(\#\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
-		private IDictionary properties = new HybridDictionary();
+		private readonly IDictionary properties = new HybridDictionary();
+		private readonly XslContext context = new XslContext();
+		private readonly XslProcessor processor = new XslProcessor();
 
 		#region Constructors
 
@@ -78,6 +80,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 				XmlDocument doc = new XmlDocument();
 			
 				doc.Load( source.GetStreamReader() );
+
+				doc = processor.Process( doc, context );
 			
 				Deserialize(doc.DocumentElement, store);
 			}

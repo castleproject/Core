@@ -39,6 +39,10 @@
 			optimize="${optimize}"
 			output="${bin.dir}/${assembly.name}"
 			doc="${bin.dir}/${name}.xml">
+
+			<resources prefix="${name}" dynamicprefix="true">
+				<include name="**/*.xslt" />
+		    </resources>
 			
 			<nowarn>
 				<warning number="1591" />

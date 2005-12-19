@@ -31,15 +31,6 @@ namespace Castle.Windsor.Tests.Installer
 
 			Assert.IsTrue( container.Kernel.HasComponent( typeof(ICalcService) ) );
 			Assert.IsTrue( container.Kernel.HasComponent( "calcservice" ) );
-		}
-
-		[Test]
-		public void InstallCalcServiceConfigLanguage()
-		{
-			WindsorContainer container = new WindsorContainer( new ConfigLanguageInterpreter("installerconfig.lang") );
-
-			Assert.IsTrue( container.Kernel.HasComponent( typeof(ICalcService) ) );
-			Assert.IsTrue( container.Kernel.HasComponent( "calcservice" ) );
-		}
+		}		
 	}
 }

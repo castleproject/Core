@@ -1,0 +1,18 @@
+<configuration>
+	<components>
+		<choose>
+			<when defined="DEBUG">
+				<component id="debug"/>
+			</when>
+			<when defined="Qa">
+				<component id="qa"/>
+			</when>
+			<when defined="Prod">
+				<component id="prod"/>
+			</when>
+			<otherwise>
+				<component id="default"/>
+			</otherwise>
+		</choose>
+	</components>		
+</configuration>

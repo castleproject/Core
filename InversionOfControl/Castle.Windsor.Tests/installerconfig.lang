@@ -1,9 +1,0 @@
-container:
-
-  components: 
-
-    component: 
-      id: calcservice
-      service: "Castle.Windsor.Tests.Components.ICalcService, Castle.Windsor.Tests"
-      type: "Castle.Windsor.Tests.Components.CalculatorService, Castle.Windsor.Tests"
-      

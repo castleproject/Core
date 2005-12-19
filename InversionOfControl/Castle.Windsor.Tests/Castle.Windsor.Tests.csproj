@@ -120,21 +120,9 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "ConfigContents.lang"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "ConfigContents2.lang"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "DependencyProblem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "installerconfig.lang"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "installerconfig.xml"
@@ -254,16 +242,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CascadeConfigurationStoreTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\ConfigLangTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Configuration\sample_config.xml"
                     BuildAction = "EmbeddedResource"
                 />
@@ -273,9 +251,28 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\CastleLanguage\ParserTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Configuration2\config_with_choose_stmt.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_debug.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_default.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_prod.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_define_qa.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\config_with_if_stmt.xml"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Configuration2\config_with_include.xml"
@@ -305,6 +302,11 @@
                 <File
                     RelPath = "Configuration2\resource_config_with_include.xml"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Configuration2\XslProcessorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Configuration2\Properties\config_with_properties.xml"

@@ -1,0 +1,11 @@
+<configuration>
+	<define flag="debug"/>
+	<define flag="prod"/>
+	<define flag="qa"/>
+
+	<undef flag="debug"/>
+	<undef flag="prod"/>
+	<undef flag="qa"/>
+
+    <include uri="file://config_with_choose_stmt.xml"/>
+</configuration>

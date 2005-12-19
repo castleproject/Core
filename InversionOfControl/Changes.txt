@@ -1,6 +1,31 @@
 RC 2
 ====
 
+- Support for evaluation of expressions within the xml configuration (kudos to Ahmed)
+  The following "statements" are supported:
+  
+	<define flag="DEBUG" />
+	<undef flag="DEBUG"/>
+	
+	<if defined="DEBUG">
+		component/facility nodes
+	</if>
+	
+	<choose>
+		<when defined="DEBUG">
+			<component id="debug"/>
+		</when>
+		<when defined="Qa">
+			<component id="qa"/>
+		</when>
+		<when defined="Prod">
+			<component id="prod"/>
+		</when>
+		<otherwise>
+			<component id="default"/>
+		</otherwise>
+	</choose>
+
 - Startable facility: support to specify the attribute startable=true on the configuration
 
 - Better error messages: now the components waiting for dependencies will recursively 

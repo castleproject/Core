@@ -23,8 +23,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 	using Castle.MicroKernel;
 
-	using Castle.Windsor.Configuration.Interpreters.CastleLanguage;
-
 	/// <summary>
 	/// Provides common methods for those who wants 
 	/// to implement <see cref="IConfigurationInterpreter"/>
@@ -39,7 +37,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 		protected static readonly String IncludeNodeName = "include";
 		protected static readonly String PropertiesNodeName = "properties";		
 
-		private ImportDirectiveCollection imports = new ImportDirectiveCollection();
+		// private ImportDirectiveCollection imports = new ImportDirectiveCollection();
 		private IResource source;
 		private Stack resourceStack = new Stack();
 		#endregion
@@ -105,11 +103,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 			get { return this.source; }
 		}
 
-		protected ImportDirectiveCollection Imports
-		{
-			get { return this.imports; }
-			set { this.imports = value; }
-		}
+//		protected ImportDirectiveCollection Imports
+//		{
+//			get { return this.imports; }
+//			set { this.imports = value; }
+//		}
 
 		#endregion
 
