@@ -18,6 +18,7 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
+	using System.Data;
 	using System.Reflection;
 	using System.ComponentModel;
 
@@ -220,18 +221,28 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Executes the specified script to create/drop/change the database schema
 		/// </summary>
-		public static void ExecuteSchemaFromFile(String scriptFileName)
+		public static void CreateSchemaFromFile(String scriptFileName)
 		{
-			// TODO: There might be multiples databases, find out
-			// a way so the user can specify that the script is supposed
-			// to be executed against a specific connection/db
-
 			CheckInitialized();
 
 			ARSchemaCreator arschema = new ARSchemaCreator( 
 				ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) ) );
 
 			arschema.Execute( scriptFileName );
+		}
+
+		/// <summary>
+		/// Executes the specified script to create/drop/change the database schema
+		/// against the specified database connection
+		/// </summary>
+		public static void CreateSchemaFromFile(String scriptFileName, IDbConnection connection)
+		{
+			CheckInitialized();
+
+			if (connection == null) throw new ArgumentNullException("connection");
+
+			String[] parts = ARSchemaCreator.OpenFileAndStripContents(scriptFileName);
+			ARSchemaCreator.ExecuteScriptParts(connection, parts);
 		}
 
 		/// <summary>

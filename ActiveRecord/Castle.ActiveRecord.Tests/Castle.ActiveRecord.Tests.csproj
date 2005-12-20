@@ -131,6 +131,7 @@
                 />
                 <File
                     RelPath = "ActiveRecordBaseGenericsTestCase.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -324,22 +325,27 @@
                 />
                 <File
                     RelPath = "Model\GenericModel\Blog.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Model\GenericModel\Company.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Model\GenericModel\Employee.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Model\GenericModel\Person.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Model\GenericModel\Post.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

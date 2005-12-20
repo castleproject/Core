@@ -25,7 +25,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using NHibernate.Connection;
 	using NHibernate.Dialect;
 
-
 	/// <summary>
 	/// Used to execute a script file to create/update/drop 
 	/// a database schema. Inspired on NHibernate SchemaExport class.
@@ -35,13 +34,60 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private readonly IDictionary connectionProperties;
 		private readonly Dialect dialect;
 
-		public ARSchemaCreator( Configuration config )
+		public ARSchemaCreator(Configuration config)
 		{
 			this.connectionProperties = config.Properties;
-			this.dialect = Dialect.GetDialect( connectionProperties );
+			this.dialect = Dialect.GetDialect(connectionProperties);
 		}
 
-		public void Execute( String scriptFileName )
+		public void Execute(String scriptFileName)
+		{
+			String[] parts = OpenFileAndStripContents(scriptFileName);
+
+			ExecuteScript(parts);
+		}
+
+		private void ExecuteScript(String[] parts)
+		{
+			IConnectionProvider connectionProvider =
+				ConnectionProviderFactory.NewConnectionProvider(CreateConnectionProperties());
+
+			try
+			{
+				using(IDbConnection connection = connectionProvider.GetConnection())
+				{
+					ExecuteScriptParts(connection, parts);
+				}
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not execute schema script", ex);
+			}
+		}
+
+		public static void ExecuteScriptParts(IDbConnection connection, String[] parts)
+		{
+			using(IDbCommand statement = connection.CreateCommand())
+			{
+				foreach(String part in parts)
+				{
+					try
+					{
+						statement.CommandText = part;
+						statement.CommandType = CommandType.Text;
+						statement.ExecuteNonQuery();
+					}
+					catch(Exception ex)
+					{
+						// Ignored, but we output it
+
+						Debug.WriteLine(String.Format("SQL: {0} \r\nthrew {1}. Ignoring", part, ex.Message));
+					}
+				}
+			}
+		}
+
+		public static String[] OpenFileAndStripContents(String scriptFileName)
 		{
 			if (scriptFileName == null)
 			{
@@ -57,94 +103,60 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			using(StreamReader reader = new StreamReader(File.OpenRead(scriptFileName)))
 			{
-				String content = reader.ReadToEnd();
+				String contents = reader.ReadToEnd();
 
-				ExecuteScript(content);
-			}
-		}
+				String[] parts = contents.Split(';');
 
-		private void ExecuteScript(String sqlScript)
-		{
-			IConnectionProvider connectionProvider = 
-				ConnectionProviderFactory.NewConnectionProvider( CreateConnectionProperties() );
-
-			String[] parts = sqlScript.Split(';');
-			
-			if (parts.Length == 1)
-			{
-				parts = SplitString(sqlScript, "GO");
-			}
-
-			try
-			{
-				using(IDbConnection connection = connectionProvider.GetConnection())
+				if (parts.Length == 1)
 				{
-					using(IDbCommand statement = connection.CreateCommand())
-					{
-						foreach(String part in parts)
-						{
-							try
-							{
-								statement.CommandText = part;
-								statement.CommandType = CommandType.Text;
-								statement.ExecuteNonQuery();
-							}
-							catch(Exception ex)
-							{
-								// Ignored, but we output it
-
-								Debug.WriteLine(String.Format("SQL: {0} \r\nthrew {1}. Ignoring", part, ex.Message));
-							}
-						}
-					}
+					parts = SplitString(contents, "GO");
 				}
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not execute schema script", ex);
+
+				return parts;
 			}
 		}
 
-		private string[] SplitString(string sqlScript, string split)
+		private static String[] SplitString(String sqlScript, String split)
 		{
 			ArrayList parts = new ArrayList();
 
 			int searchFrom = -1;
 			int lastIndex = 0;
 
-			for(;;)
+			for(;; )
 			{
 				searchFrom = sqlScript.IndexOf(split, searchFrom + 1);
 
 				if (searchFrom != -1)
 				{
-					parts.Add( sqlScript.Substring(lastIndex, searchFrom - lastIndex) );
+					parts.Add(sqlScript.Substring(lastIndex, searchFrom - lastIndex));
 
 					lastIndex = searchFrom + split.Length;
 				}
-				else 
+				else
 				{
 					if (searchFrom == -1 && lastIndex != 0)
 					{
-						parts.Add( sqlScript.Substring(lastIndex) );
+						parts.Add(sqlScript.Substring(lastIndex));
 					}
+
 					break;
 				}
 			}
 
-			return (String[]) parts.ToArray( typeof(String) );
+			return (String[]) parts.ToArray(typeof(String));
 		}
 
 		private IDictionary CreateConnectionProperties()
 		{
 			IDictionary props = new HybridDictionary();
-	
+
 			foreach(DictionaryEntry entry in dialect.DefaultProperties)
 			{
 				props[entry.Key] = entry.Value;
 			}
-	
-			if(connectionProperties != null)
+
+			if (connectionProperties != null)
 			{
 				foreach(DictionaryEntry entry in connectionProperties)
 				{
@@ -155,11 +167,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			return props;
 		}
 
-		private string Normalize(string fileName)
+		private static string Normalize(string fileName)
 		{
 			if (!Path.IsPathRooted(fileName))
 			{
-				return Path.Combine( AppDomain.CurrentDomain.BaseDirectory, fileName );
+				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
 			}
 			else
 			{
