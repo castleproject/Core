@@ -21,6 +21,7 @@ namespace Castle.ActiveRecord.Tests.Config
 	
 	using Castle.ActiveRecord.Framework.Config;
 	using Castle.ActiveRecord.Framework.Scopes;
+    using Castle.ActiveRecord.Framework;
 
 	[TestFixture]
 	public class ConfigurationSource
@@ -41,7 +42,7 @@ namespace Castle.ActiveRecord.Tests.Config
 			//null == use default. == typeof(ThreadScopeInfo);
 			Type expectedType = null;
 
-			AssertConfig(xmlConfig, expectedType);
+			AssertConfig(xmlConfig, expectedType, null);
 		}
 
 		[Test]
@@ -58,17 +59,61 @@ namespace Castle.ActiveRecord.Tests.Config
 
 			Type expectedType = typeof (WebThreadScopeInfo);
 
-			AssertConfig(xmlConfig, expectedType);
+			AssertConfig(xmlConfig, expectedType, null);
 		}
 
-		private static void AssertConfig(string xmlConfig, Type expectedType)
+
+        [Test]
+        public void TestDefaultSessionFactoryHolder() {
+            String xmlConfig = @"<activerecord isWeb=""true"">
+                                  <config>
+                                    <add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
+                                    <add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
+                                    <add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
+                                    <add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
+                                  </config>
+                                </activerecord>";
+
+            Type sfh = typeof(SessionFactoryHolder);
+
+            AssertConfig(xmlConfig, null, sfh);
+        }
+
+
+        [Test]
+        public void TestCustomSessionFactoryholder() {
+            String xmlConfig = @"<activerecord isWeb=""true"" sessionfactoryholdertype=""Castle.ActiveRecord.Tests.Config.MySessionFactoryHolder, Castle.ActiveRecord.Tests"">
+                                  <config>
+                                    <add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
+                                    <add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
+                                    <add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
+                                    <add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
+                                  </config>
+                                </activerecord>";
+
+            Type sfh = typeof(MySessionFactoryHolder);
+
+            AssertConfig(xmlConfig, null, sfh);
+        }
+
+		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType)
 		{
 			StringReader sr = new StringReader(xmlConfig);
 
 			XmlConfigurationSource c = new XmlConfigurationSource(sr);
 
-			Assert.IsTrue(c.ThreadScopeInfoImplementation == expectedType, 
-				"Expected {0}, Got {1}", expectedType, c.ThreadScopeInfoImplementation);
+            if (null != webinfotype) {
+                Assert.IsTrue(c.ThreadScopeInfoImplementation == webinfotype,
+                    "Expected {0}, Got {1}", webinfotype, c.ThreadScopeInfoImplementation);
+            }
+
+            if (null != sessionFactoryHolderType) {
+                Assert.IsTrue(c.SessionFactoryHolderImplementation == sessionFactoryHolderType,
+                    "Expected {0}, Got {1}", sessionFactoryHolderType, c.SessionFactoryHolderImplementation);
+            }
 		}
+
 	}
+
+    public class MySessionFactoryHolder : SessionFactoryHolder { }
 }

@@ -85,6 +85,7 @@ namespace Castle.ActiveRecord.Framework.Config
 					throw new ActiveRecordException(message);
 				}
 			}
+            SessionFactoryHolderImplementation = sessionFactoryHolderType;
 		}
 
 		#region IConfigurationSource Members
