@@ -634,7 +634,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				if (type.IsPrimitive)
+				if (type.IsPrimitive || type == typeof( String ))
 				{
 					return MakeAtt("type", type.Name);
 				}

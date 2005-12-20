@@ -81,7 +81,7 @@ namespace Castle.ActiveRecord.Tests
                 "    <discriminator column=\"discriminator\"  />\r\n"+
                 "    <property name=\"Count\" access=\"property\" column=\"Count\" type=\"Int32\"        />\r\n"+
                 "    <subclass name=\"Castle.ActiveRecord.Tests.Model.RulesModel.WorkDaysRules, Castle.ActiveRecord.Tests\"  discriminator-value=\"2\">\r\n"+
-                "      <property name=\"Name\" access=\"property\" column=\"Name\" type=\"System.String\"        />\r\n"+
+                "      <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\"        />\r\n"+
                 "      <property name=\"Days\" access=\"property\" column=\"Days\" type=\"Int32\"        />\r\n"+
                 "    </subclass>\r\n"+
                 "  </class>\r\n"+

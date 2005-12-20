@@ -46,9 +46,9 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"System.String\"     insert=\"false\" update=\"false\"  />\r\n" + 
-				"    <property name=\"Name2\" access=\"property\" column=\"Name2\" type=\"System.String\"  unsaved-value=\"hammett\"      />\r\n" + 
-				"    <property name=\"Name3\" access=\"property\" column=\"Name3\" type=\"System.String\"   not-null=\"true\" unique=\"true\"    />\r\n" + 
+				"    <property name=\"Name1\" access=\"property\" column=\"Name1\" type=\"String\"     insert=\"false\" update=\"false\"  />\r\n" + 
+				"    <property name=\"Name2\" access=\"property\" column=\"Name2\" type=\"String\"  unsaved-value=\"hammett\"      />\r\n" + 
+				"    <property name=\"Name3\" access=\"property\" column=\"Name3\" type=\"String\"   not-null=\"true\" unique=\"true\"    />\r\n" + 
 				"    <property name=\"Text\" access=\"property\" column=\"Text\" type=\"StringClob\"        />\r\n" +
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
@@ -181,7 +181,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"name1\" access=\"field\" column=\"MyCustomName\" type=\"System.String\"        />\r\n" + 
+				"    <property name=\"name1\" access=\"field\" column=\"MyCustomName\" type=\"String\"        />\r\n" + 
 				"    <property name=\"Value\" access=\"CustomAccess\" column=\"Value\" type=\"Int32\"        />\r\n"+
 				"  </class>\r\n" +
 				"</hibernate-mapping>\r\n";
@@ -208,7 +208,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <discriminator column=\"type\" type=\"String\" />\r\n" + 
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"System.String\"        />\r\n" + 
+				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\"        />\r\n" + 
 				"    <subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassDiscriminatorA, Castle.ActiveRecord.Framework.Internal.Tests\"  discriminator-value=\"A\">\r\n" + 
 				"      <property name=\"Age\" access=\"property\" column=\"Age\" type=\"Int32\"        />\r\n" + 
 				"    </subclass>\r\n" + 
@@ -236,7 +236,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"System.String\"        />\r\n" +
+				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\"        />\r\n" +
 				"    <joined-subclass name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassJoinedSubClassA, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"disctablea\"   >\r\n" +
 				"      <key column=\"AId\" />\r\n" +
 				"      <property name=\"Age\" access=\"property\" column=\"Age\" type=\"Int32\"        />\r\n" +
@@ -264,8 +264,8 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" + 
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
-				"    <version name=\"Ver\" access=\"property\" column=\"Ver\" type=\"System.String\" />\r\n" + 
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"System.String\"        />\r\n" + 
+				"    <version name=\"Ver\" access=\"property\" column=\"Ver\" type=\"String\" />\r\n" + 
+				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\"        />\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
 
@@ -290,7 +290,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      </generator>\r\n" + 
 				"    </id>\r\n" + 
 				"    <timestamp name=\"Ts\" access=\"property\" column=\"Ts\" />\r\n" + 
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"System.String\"        />\r\n" + 
+				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\"        />\r\n" + 
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
 
@@ -413,7 +413,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"      <generator class=\"native\">\r\n" +
 				"      </generator>\r\n" +
 				"    </id>\r\n" +
-				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"System.String\"        />\r\n" +
+				"    <property name=\"Name\" access=\"property\" column=\"Name\" type=\"String\"        />\r\n" +
 				"    <many-to-one name=\"Parent\" access=\"property\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.Category, Castle.ActiveRecord.Framework.Internal.Tests\" column=\"parent_id\"      />\r\n" +
 				"    <bag name=\"SubCategories\" access=\"property\" table=\"Category\"       >\r\n" +
 				"      <key column=\"parent_id\" />\r\n" +
@@ -439,8 +439,8 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 				"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ClassWithCompositeKey, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ClassWithCompositeKey\"     >\r\n" +
 				"    <composite-id name=\"Key\" class=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.CompositeKeyForClassWithCompositeKey, Castle.ActiveRecord.Framework.Internal.Tests\" unsaved-value=\"none\" access=\"property\">\r\n" +
-				"      <key-property name=\"KeyA\" access=\"property\" column=\"KeyA\" type=\"System.String\"        />\r\n" +
-				"      <key-property name=\"KeyB\" access=\"property\" column=\"KeyB\" type=\"System.String\"        />\r\n" +
+				"      <key-property name=\"KeyA\" access=\"property\" column=\"KeyA\" type=\"String\"        />\r\n" +
+				"      <key-property name=\"KeyB\" access=\"property\" column=\"KeyB\" type=\"String\"        />\r\n" +
 				"    </composite-id>\r\n" +
 				"  </class>\r\n" + 
 				"</hibernate-mapping>\r\n";
