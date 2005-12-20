@@ -54,7 +54,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Initialize tha mappings using the configuration and 
+		/// Initialize the mappings using the configuration and 
 		/// the list of types
 		/// </summary>
 		public static void Initialize( IConfigurationSource source, params Type[] types )
@@ -129,7 +129,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Initialize tha mappings using the configuration and 
+		/// Initialize the mappings using the configuration and 
 		/// checking all the types on the specified <c>Assembly</c>
 		/// </summary>
 		public static void Initialize( Assembly assembly, IConfigurationSource source )
@@ -152,7 +152,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Initialize tha mappings using the configuration and 
+		/// Initialize the mappings using the configuration and 
 		/// checking all the types on the specified Assemblies
 		/// </summary>
 		public static void Initialize( Assembly[] assemblies, IConfigurationSource source )
