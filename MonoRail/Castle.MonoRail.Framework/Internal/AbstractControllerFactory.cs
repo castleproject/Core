@@ -33,10 +33,10 @@ namespace Castle.MonoRail.Framework.Internal
 		{
 			_tree = new ControllerTree();
 
-			AddBuitInControllers();
+			AddBuiltInControllers();
 		}
 
-		protected virtual void AddBuitInControllers()
+		protected virtual void AddBuiltInControllers()
 		{
 			Tree.AddController("MonoRail", "Files", typeof(FilesController));
 		}
