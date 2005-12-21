@@ -775,7 +775,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
                     bool found = false;
                     foreach (InternalsVisibleToAttribute internals in atts)
                     {
-                        if (internals.AssemblyName.Equals(ModuleScope.ASSEMBLY_NAME, StringComparison.Ordinal))
+                        if (internals.AssemblyName.Contains(ModuleScope.ASSEMBLY_NAME))
                         {
                             found = true;
                             break;

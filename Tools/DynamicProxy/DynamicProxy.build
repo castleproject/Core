@@ -55,6 +55,9 @@
 			<sources basedir="${src.dir}" defaultexcludes="true">
 				<include name="**/*.cs" />
 			</sources>
+			<resources  basedir="${src.dir}" prefix="Castle.DynamicProxy">
+				<include name="DynProxy.snk"/>
+			</resources>
 		</csc>
 	</target>
 

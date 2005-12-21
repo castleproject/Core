@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	using Castle.DynamicProxy.Builder.CodeGenerators;
 	using Castle.DynamicProxy.Builder.CodeBuilder.SimpleAST;
 	using Castle.DynamicProxy.Builder.CodeBuilder.Utils;
+using System.Collections;
 
 	/// <summary>
 	/// Summary description for EasyType.
@@ -27,6 +28,8 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 	[CLSCompliant(false)]
 	public class EasyType : AbstractEasyType
 	{
+        static IDictionary assemblySigning = new Hashtable();
+
 		protected EasyType() : base()
 		{
 		}
@@ -45,10 +48,23 @@ namespace Castle.DynamicProxy.Builder.CodeBuilder
 			{
 				flags |= TypeAttributes.Serializable;
 			}
-			
-			_typebuilder = modulescope.ObtainDynamicModule().DefineType( 
+            bool isAssemblySigned = IsAssemblySigned(baseType);
+            _typebuilder = modulescope.ObtainDynamicModule(isAssemblySigned).DefineType( 
 				name, flags, baseType, interfaces );
 		}
+
+        private bool IsAssemblySigned(Type baseType)
+        {
+            lock(assemblySigning)
+            {
+                if(assemblySigning.Contains(baseType.Assembly)==false)
+                {
+                    bool isSigned = baseType.Assembly.GetName().GetPublicKey().Length != 0;
+                    assemblySigning.Add(baseType.Assembly, isSigned );
+                }
+                return (bool)assemblySigning[baseType.Assembly];
+            }
+        }
 
 		public EasyType( ModuleScope modulescope, String name ) : this(modulescope, name, typeof(object), new Type[0])
 		{

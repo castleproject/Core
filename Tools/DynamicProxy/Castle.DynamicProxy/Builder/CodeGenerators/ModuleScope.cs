@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+
 namespace Castle.DynamicProxy.Builder.CodeGenerators
 {
 	using System;
@@ -28,10 +30,12 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 	{
 		public static readonly String FILE_NAME = "GeneratedAssembly.dll";
         public static readonly String ASSEMBLY_NAME = "DynamicAssemblyProxyGen";
+        
 		/// <summary>
 		/// Avoid leaks caused by non disposal of generated types.
 		/// </summary>
-		private ModuleBuilder _moduleBuilder = null;
+		private ModuleBuilder _moduleBuilderWithStrongName = null;
+        private ModuleBuilder _moduleBuilder = null;
 
 		/// <summary>
 		/// Keep track of generated types
@@ -47,35 +51,51 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
 		private AssemblyBuilder _assemblyBuilder;
 
-		public ModuleBuilder ObtainDynamicModule()
+	    public ModuleBuilder ObtainDynamicModule()
+	    {
+            return ObtainDynamicModule(false);
+	    }
+	    
+		public ModuleBuilder ObtainDynamicModule(bool signStrongName)
 		{
 			lock (_lockobj)
 			{
-				if (_moduleBuilder == null)
+                if (signStrongName && _moduleBuilderWithStrongName == null)
 				{
-					AssemblyName assemblyName = new AssemblyName();
-                    assemblyName.Name = ASSEMBLY_NAME;
+                    _moduleBuilderWithStrongName =  CreateModule(signStrongName);
+				}
+			    else if(!signStrongName && _moduleBuilder == null)
+			    {
+                    _moduleBuilder = CreateModule(signStrongName);
+			    }
+			}
+            return signStrongName ? _moduleBuilderWithStrongName : _moduleBuilder;
+		}
 
+	    private ModuleBuilder CreateModule(bool signStrongName)
+	    {
+	        AssemblyName assemblyName = new AssemblyName();
+	        assemblyName.Name = ASSEMBLY_NAME;
+	        if (signStrongName)
+	        {
+	            assemblyName.KeyPair = new StrongNameKeyPair(GetKeyPair());
+	        }
 #if ( PHYSICALASSEMBLY )
-					_assemblyBuilder =
+    _assemblyBuilder =
 						AppDomain.CurrentDomain.DefineDynamicAssembly(
 							assemblyName,
 							AssemblyBuilderAccess.RunAndSave);
 					_moduleBuilder = _assemblyBuilder.DefineDynamicModule(assemblyName.Name, FILE_NAME);
 #else
-					_assemblyBuilder =
-						AppDomain.CurrentDomain.DefineDynamicAssembly(
-							assemblyName,
-							AssemblyBuilderAccess.Run);
-					_moduleBuilder = _assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
+	        _assemblyBuilder =
+	            AppDomain.CurrentDomain.DefineDynamicAssembly(
+	                assemblyName,
+	                AssemblyBuilderAccess.Run);
+	        return _assemblyBuilder.DefineDynamicModule(assemblyName.Name, true);
 #endif
-				}
-			}
+	    }
 
-			return _moduleBuilder;
-		}
-
-		public ReaderWriterLock RWLock
+	    public ReaderWriterLock RWLock
 		{
 			get { return readerWriterLock; }
 		}
@@ -99,5 +119,17 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				SaveAssembly();
 			}
 		}
+
+        private static byte[] GetKeyPair()
+        {
+            byte[] keyPair;
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+            {
+                int length = (int)stream.Length;
+                keyPair = new byte[length];
+                stream.Read(keyPair, 0, length);
+            }
+            return keyPair;
+        }
 	}
 }
