@@ -164,6 +164,7 @@
 		</csc>
 
 		<csc 
+			define="${define}" 		
 			target="library" 
 			debug="${debug}" 
 			output="${bin.dir}/${test.assembly.name2}">

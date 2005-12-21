@@ -57,7 +57,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;dotNet2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -129,6 +129,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ActiveRecordBaseGenericsTestCase.cs" />
+    <Compile Include="Config\ConfigurationSource.cs" />
     <Compile Include="JoinedSubClassTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

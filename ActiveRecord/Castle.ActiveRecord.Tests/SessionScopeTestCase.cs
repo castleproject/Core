@@ -20,6 +20,8 @@ namespace Castle.ActiveRecord.Tests
 
 	using NHibernate;
 
+    using Castle.ActiveRecord.Tests.Model;
+
 	using Castle.ActiveRecord.Tests.Model.LazyModel;
 
 

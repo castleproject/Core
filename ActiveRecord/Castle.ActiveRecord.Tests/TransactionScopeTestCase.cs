@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord.Tests
 
 	using NHibernate;
 
+    using Castle.ActiveRecord.Tests.Model;
 
 	[TestFixture]
 	public class TransactionScopeTestCase : AbstractActiveRecordTest
