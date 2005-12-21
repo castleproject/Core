@@ -40,10 +40,6 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			_title = title;
 			_contents = contents;
 			_category = category;
-
-            //do this here because hooks arn't working yet. Otherwise test throws. 
-            //Column cannot be null and datetime.min is out of range for MSSQL DateTime Column. 
-            _created = DateTime.Now;
 		}
 
 		[PrimaryKey]
@@ -102,6 +98,10 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			throw new ApplicationException("Fake Exception");
 		}
 
+        protected override bool BeforeSave(IDictionary state) {
+            state["Created"] = DateTime.Now;
+            return true;
+        }
 	}
 }
 #endif

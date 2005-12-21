@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord
 	/// subclasses.
 	/// </summary>
 	[Serializable]
-	public abstract class ActiveRecordBase
+	public abstract class ActiveRecordBase : ActiveRecordHooksBase
 	{
 		protected internal static ISessionFactoryHolder _holder;
 
@@ -447,43 +447,6 @@ namespace Castle.ActiveRecord
 			{
 				_holder.ReleaseSession(session);
 			}
-		}
-
-		#endregion
-
-		#region Overridable Hooks
-
-		/// <summary>
-		/// Hook to change the object state
-		/// before saving it.
-		/// </summary>
-		/// <param name="state"></param>
-		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-		protected internal virtual bool BeforeSave(IDictionary state)
-		{
-			return false;
-		}
-
-		/// <summary>
-		/// Hook to transform the read data 
-		/// from the database before populating 
-		/// the object instance
-		/// </summary>
-		/// <param name="adapter"></param>
-		/// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-		protected internal virtual bool BeforeLoad(IDictionary adapter)
-		{
-			return false;
-		}
-
-		/// <summary>
-		/// Hook to perform additional tasks 
-		/// before removing the object instance representation
-		/// from the database.
-		/// </summary>
-		/// <param name="adapter"></param>
-		protected internal virtual void BeforeDelete(IDictionary adapter)
-		{
 		}
 
 		#endregion

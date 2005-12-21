@@ -54,9 +54,9 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns><c>true</c> if the user modified the <c>state</c> in any way</returns>
 		public bool OnLoad(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-			if (entity is ActiveRecordBase)
+            if (entity is ActiveRecordHooksBase)
 			{
-				return (entity as ActiveRecordBase).BeforeLoad( new DictionaryAdapter(propertyNames, state) );
+                return (entity as ActiveRecordHooksBase).BeforeLoad(new DictionaryAdapter(propertyNames, state));
 			}
 
 			return false;
@@ -99,12 +99,10 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns><c>true</c> if the user modified the <c>state</c> in any way</returns>
 		public bool OnSave(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-			if (entity is ActiveRecordBase)
-			{
-				return (entity as ActiveRecordBase).BeforeSave( new DictionaryAdapter(propertyNames, state) );
-			}
-
-			return false;
+            if (entity is ActiveRecordHooksBase) {
+                return (entity as ActiveRecordHooksBase).BeforeSave(new DictionaryAdapter(propertyNames, state));
+            }
+            return false;
 		}
 
 		/// <summary>
@@ -120,9 +118,9 @@ namespace Castle.ActiveRecord.Framework
 		/// </remarks>
 		public void OnDelete(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-			if (entity is ActiveRecordBase)
+            if (entity is ActiveRecordHooksBase)
 			{
-				(entity as ActiveRecordBase).BeforeDelete( new DictionaryAdapter(propertyNames, state) );
+                (entity as ActiveRecordHooksBase).BeforeDelete(new DictionaryAdapter(propertyNames, state));
 			}
 		}
 

@@ -2,6 +2,8 @@
 beta 3
 ======
 
+- Applied patch from Josh Robb. Added support for hooks on ActiveRecordBase<T>.
+
 - DifferentDatabaseScope: so you can open a session using a different dbconnection
   and persist your object model. Very experimental version
 

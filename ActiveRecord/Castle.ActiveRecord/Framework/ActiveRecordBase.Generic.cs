@@ -22,7 +22,7 @@ namespace Castle.ActiveRecord
 	using NHibernate;
 	using NHibernate.Expression;
 
-	public abstract class ActiveRecordBase<T> where T : class
+	public abstract class ActiveRecordBase<T> : ActiveRecordHooksBase where T : class
 	{
 		#region instance methods
 
