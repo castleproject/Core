@@ -57,12 +57,12 @@ namespace Castle.MonoRail.Framework
 	/// Decorates a controller associating a <see cref="IFilter"/>
 	/// implementation with it. More than one can be associated.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true), Serializable]
 	public class FilterAttribute : Attribute
 	{
 		private readonly Type _filterType;
 		private readonly ExecuteEnum _when;
-		private short _executionOrder = Int16.MaxValue;
+		private int _executionOrder = Int32.MaxValue;
 
 		/// <summary>
 		/// Constructs a FilterAttribute associating 
@@ -91,7 +91,7 @@ namespace Castle.MonoRail.Framework
 			get { return _when; }
 		}
 
-		public short ExecutionOrder
+		public int ExecutionOrder
 		{
 			get { return _executionOrder; }
 			set { _executionOrder = value; }

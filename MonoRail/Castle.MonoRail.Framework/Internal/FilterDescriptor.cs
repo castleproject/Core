@@ -45,20 +45,10 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return _attribute.When; }
 		}
 
-		public short ExecutionOrder
+		public int ExecutionOrder
 		{
 			get { return _attribute.ExecutionOrder; }
 		}
-
-//		public bool ExecuteFilterBefore
-//		{
-//			get { return (When & ExecuteEnum.BeforeAction) != 0; }
-//		}
-//
-//		public bool ExecuteFilterAfter
-//		{
-//			get { return (When & ExecuteEnum.AfterAction) != 0; }
-//		}
 
 		public IFilter FilterInstance
 		{
