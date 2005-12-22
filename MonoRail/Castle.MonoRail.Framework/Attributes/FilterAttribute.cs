@@ -62,6 +62,7 @@ namespace Castle.MonoRail.Framework
 	{
 		private readonly Type _filterType;
 		private readonly ExecuteEnum _when;
+		private short _executionOrder = Int16.MaxValue;
 
 		/// <summary>
 		/// Constructs a FilterAttribute associating 
@@ -88,6 +89,12 @@ namespace Castle.MonoRail.Framework
 		public ExecuteEnum When
 		{
 			get { return _when; }
+		}
+
+		public short ExecutionOrder
+		{
+			get { return _executionOrder; }
+			set { _executionOrder = value; }
 		}
 	}
 }

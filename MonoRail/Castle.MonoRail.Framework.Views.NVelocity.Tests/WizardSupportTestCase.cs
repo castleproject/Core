@@ -75,6 +75,22 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			AssertSuccess();
 			AssertFlashContains("InnerActionInvoked");
 		}
+
+		[Test]
+		public void NavigateToURI()
+		{
+			DoGet("testwizard/Page4-InnerAction.rails", "navigate.to=uri:testwizard/Page3.rails" );
+			AssertRedirectedTo("/testwizard/testwizard/Page3.rails");
+			AssertFlashContains("InnerActionInvoked");
+
+			DoGet("testwizard/Page4-InnerAction.rails", "navigate.to=uri:/testwizard/Page3.rails" );
+			AssertRedirectedTo("/testwizard/Page3.rails");
+			AssertFlashContains("InnerActionInvoked");
+
+			DoGet("testwizard/Page4-InnerAction.rails", "navigate.to=uri:http://google/" );
+			AssertRedirectedTo("http://google/");
+			AssertFlashContains("InnerActionInvoked");
+		}
 		
 		[Test]
 		public void InnerActionsWithView()

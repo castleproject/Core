@@ -80,6 +80,11 @@ namespace TestSiteNVelocity.Controllers
 
 	public class Page4 : WizardStepPage
 	{
-		
+		public void InnerAction()
+		{
+			Flash["InnerActionInvoked"] = true;
+
+			DoNavigate();
+		}		
 	}
 }

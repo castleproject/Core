@@ -131,11 +131,17 @@ namespace Castle.MonoRail.Framework
 		/// </remarks>
 		protected void DoNavigate()
 		{
+			string uriPrefix = "uri:";
+
 			String navigateTo = Params["navigate.to"];
 
 			if (navigateTo == "previous")
 			{
 				RedirectToPreviousStep();
+			}
+			else if (navigateTo.StartsWith(uriPrefix))
+			{
+				Redirect (navigateTo.Substring( uriPrefix.Length ));
 			}
 			else if (navigateTo == "first")
 			{
