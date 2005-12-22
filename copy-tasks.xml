@@ -139,7 +139,7 @@
 	
 	<target name="copy-db4o">
 		<copy todir="${bin.dir}">
-			<fileset basedir="${sharedlibrary.dir}/db4o">
+			<fileset basedir="${sharedlibrary.dir}/db4o/${framework::get-target-framework()}">
 				<include name="*.dll" />
 			</fileset>
 		</copy>

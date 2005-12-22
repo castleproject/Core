@@ -43,6 +43,7 @@
 		<copy todir="${build.dir}">
 			<fileset basedir="${bin.dir}">
 				<include name="${assembly.name}" />
+				<include name="db4o.dll" />
 				<include name="${name}.xml" />
 			</fileset>
 		</copy>
