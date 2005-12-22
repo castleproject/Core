@@ -224,7 +224,35 @@ namespace Castle.ActiveRecord.Framework.Internal
 	
 			if (model.PrimaryKeyAtt.Generator != PrimaryKeyType.None)
 			{
-				AppendF("<generator {0}>", MakeAtt("class", model.PrimaryKeyAtt.Generator.ToString().ToLower()));
+                String className = null;
+
+                switch (model.PrimaryKeyAtt.Generator)
+                {
+		            case PrimaryKeyType.Identity:
+		            case PrimaryKeyType.Sequence:
+		            case PrimaryKeyType.HiLo:
+		            case PrimaryKeyType.SeqHiLo:
+		            case PrimaryKeyType.Guid:
+		            case PrimaryKeyType.Native:
+		            case PrimaryKeyType.Assigned:
+		            case PrimaryKeyType.Foreign:
+                        className = model.PrimaryKeyAtt.Generator.ToString().ToLower();
+                        break;
+
+                    case PrimaryKeyType.GuidComb:
+                        className = "guid.comb";
+                        break;
+
+                    case PrimaryKeyType.UuidHex:
+                        className = "uuid.hex";
+                        break;
+
+                    case PrimaryKeyType.UuidString:
+                        className = "uuid.string";
+                        break;
+                }
+
+                AppendF("<generator {0}>", MakeAtt("class", className));
 				
 				if (model.PrimaryKeyAtt.SequenceName != null)
 				{
@@ -634,7 +662,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				if (type.IsPrimitive || type == typeof( String ))
 				{
 					return MakeAtt("type", type.Name);
 				}
@@ -655,7 +682,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				return MakeAtt("class", MakeTypeName(type));
 			}
 		}
 
