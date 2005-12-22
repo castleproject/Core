@@ -72,7 +72,7 @@ namespace Castle.MonoRail.Framework
 		/// <param name="filterType"></param>
 		public FilterAttribute(ExecuteEnum when, Type filterType)
 		{
-			if (!typeof (IFilter).IsAssignableFrom(filterType))
+			if (!typeof(IFilter).IsAssignableFrom(filterType))
 			{
 				throw new ArgumentException("The specified filter does not implement IFilter");
 			}

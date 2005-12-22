@@ -126,6 +126,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\FilterA.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\FilterB.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\FilterController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

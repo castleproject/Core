@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework.Internal
 		private FilterAttribute _attribute;
 		private IFilter _filterInstance;
 
-		public FilterDescriptor( FilterAttribute attribute )
+		public FilterDescriptor(FilterAttribute attribute)
 		{
 			_attribute = attribute;
 		}
@@ -45,15 +45,20 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return _attribute.When; }
 		}
 
-		public bool ExecuteFilterBefore
+		public short ExecutionOrder
 		{
-			get { return (When & ExecuteEnum.BeforeAction) != 0; }
+			get { return _attribute.ExecutionOrder; }
 		}
 
-		public bool ExecuteFilterAfter
-		{
-			get { return (When & ExecuteEnum.AfterAction) != 0; }
-		}
+//		public bool ExecuteFilterBefore
+//		{
+//			get { return (When & ExecuteEnum.BeforeAction) != 0; }
+//		}
+//
+//		public bool ExecuteFilterAfter
+//		{
+//			get { return (When & ExecuteEnum.AfterAction) != 0; }
+//		}
 
 		public IFilter FilterInstance
 		{

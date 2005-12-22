@@ -102,5 +102,15 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertReplyEqualsTo("View contents!");
 		}
+
+		[Test]
+		public void ExecutionOrder()
+		{
+			DoGet("FilterOrder/index.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo("ABIndexABAB");
+		}
 	}
 }

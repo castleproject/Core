@@ -24,6 +24,16 @@ namespace TestSite.Controllers
 		}
 	}
 
+	[Filter(ExecuteEnum.Always, typeof(FilterA), ExecutionOrder=0)]	
+	[Filter(ExecuteEnum.Always, typeof(FilterB))]	
+	public class FilterOrderController : Controller
+	{
+		public void Index()
+		{
+			RenderText("Index");
+		}
+	}
+
 	public class FilterBadHeader : IFilter
 	{
 		public bool Perform(ExecuteEnum exec, IRailsEngineContext context, Controller controller)

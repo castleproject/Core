@@ -613,7 +613,7 @@ namespace Castle.MonoRail.Framework
 
 			if (metaDescriptor.Filters.Count != 0)
 			{
-				_filters = CollectFilterDescriptor();
+				_filters = CollectFilterDescriptors();
 			}
 
 			LayoutName = ObtainDefaultLayoutName();
@@ -952,18 +952,28 @@ namespace Castle.MonoRail.Framework
 			return false;
 		}
 
-		protected internal FilterDescriptor[] CollectFilterDescriptor()
+		protected internal FilterDescriptor[] CollectFilterDescriptors()
 		{
 			IList attrs = metaDescriptor.Filters;
 
-			FilterDescriptor[] desc = new FilterDescriptor[attrs.Count];
+			FilterDescriptor[] descriptors = new FilterDescriptor[attrs.Count];
 
 			for (int i = 0; i < attrs.Count; i++)
 			{
-				desc[i] = new FilterDescriptor(attrs[i] as FilterAttribute);
+				descriptors[i] = new FilterDescriptor(attrs[i] as FilterAttribute);
 			}
 
-			return desc;
+			if (attrs.Count > 1)
+			{
+				SortFilterDescriptors(descriptors);
+			}
+
+			return descriptors;
+		}
+
+		private void SortFilterDescriptors(FilterDescriptor[] descriptors)
+		{
+			Array.Sort(descriptors, FilterDescriptorComparer.Instance);
 		}
 
 		private bool ProcessFilters(ExecuteEnum when, IDictionary filtersToSkip)
@@ -1011,6 +1021,25 @@ namespace Castle.MonoRail.Framework
 				{
 					_filterFactory.Release(desc.FilterInstance);
 				}
+			}
+		}
+
+		class FilterDescriptorComparer : IComparer
+		{
+			private static readonly FilterDescriptorComparer instance = new FilterDescriptorComparer();
+			
+			private FilterDescriptorComparer()
+			{
+			}
+
+			public static FilterDescriptorComparer Instance
+			{
+				get { return instance; }
+			}
+
+			public int Compare(object x, object y)
+			{
+				return ((FilterDescriptor)x).ExecutionOrder - ((FilterDescriptor)y).ExecutionOrder;
 			}
 		}
 

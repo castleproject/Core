@@ -6,6 +6,9 @@ Beta 5
 
 ** Core ** 
 
+- Added FilterAttribute.ExecutionOrder, the default value is Int16.MaxValue 
+  so the less the value higher will be the filter priority
+
 - Added Controller.RedirectToAction(String actionName)
 
 - Added Controller.RedirectToAction overloads (by Fabio Batista)
