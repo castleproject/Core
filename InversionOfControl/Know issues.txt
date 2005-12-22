@@ -1,0 +1,9 @@
+21/Dec/2005
+
+- If you happen to use the statements nodes in your configuration file you might have the following exception:
+
+  "fatal error CS2008: No inputs specified
+
+   Castle.Windsor.Configuration.Interpreters.XPathNodeIteratorAdapter is an unsupported type."
+
+  In this case install the .net Service Pack #1"

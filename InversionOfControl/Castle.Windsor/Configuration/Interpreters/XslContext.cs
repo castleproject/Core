@@ -86,51 +86,51 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			return new XPathNodeIteratorAdapter(nodes);
 		}
+	}
 
-		class XPathNodeIteratorAdapter : XPathNodeIterator
+	public class XPathNodeIteratorAdapter : XPathNodeIterator
+	{
+		private readonly IList nodes;
+		private int currentIndex;
+
+		public XPathNodeIteratorAdapter(IList nodes)
 		{
-			private readonly IList nodes;
-			private int currentIndex;
+			this.nodes = nodes;
+		}
 
-			public XPathNodeIteratorAdapter(IList nodes)
-			{
-				this.nodes = nodes;
-			}
+		protected XPathNodeIteratorAdapter(IList nodes, int index)
+		{
+			this.nodes = nodes;
+			this.currentIndex = index;
+		}
 
-			protected XPathNodeIteratorAdapter(IList nodes, int index)
-			{
-				this.nodes = nodes;
-				this.currentIndex = index;
-			}
+		public override XPathNodeIterator Clone()
+		{
+			return new XPathNodeIteratorAdapter(nodes, currentIndex);
+		}
 
-			public override XPathNodeIterator Clone()
-			{
-				return new XPathNodeIteratorAdapter(nodes, currentIndex);
-			}
+		public override bool MoveNext()
+		{
+			if (currentIndex == nodes.Count) return false;
 
-			public override bool MoveNext()
-			{
-				if (currentIndex == nodes.Count) return false;
+			currentIndex++;
 
-				currentIndex++;
+			return true;
+		}
 
-				return true;
-			}
+		public override XPathNavigator Current
+		{
+			get { return (XPathNavigator) nodes[currentIndex - 1]; }
+		}
 
-			public override XPathNavigator Current
-			{
-				get { return (XPathNavigator) nodes[currentIndex - 1]; }
-			}
+		public override int CurrentPosition
+		{
+			get { return currentIndex; }
+		}
 
-			public override int CurrentPosition
-			{
-				get { return currentIndex; }
-			}
-
-			public override int Count
-			{
-				get { return nodes.Count; }
-			}
+		public override int Count
+		{
+			get { return nodes.Count; }
 		}
 	}
 }

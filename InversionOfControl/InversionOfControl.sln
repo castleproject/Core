@@ -57,6 +57,7 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt
 		container.build = container.build
+		Know issues.txt = Know issues.txt
 		License.txt = License.txt
 		Readme.txt = Readme.txt
 	EndGlobalSection
