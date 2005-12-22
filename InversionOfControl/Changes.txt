@@ -1,6 +1,9 @@
 RC 2
 ====
 
+- AsyncInitializationContainer introduced. Special container flavor that installs the
+  facilities and components using a background thread.
+
 - Support for evaluation of expressions within the xml configuration (kudos to Ahmed)
   The following "statements" are supported:
   

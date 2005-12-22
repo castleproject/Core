@@ -53,7 +53,7 @@ namespace Castle.Windsor
 		/// <param name="store"></param>
 		public WindsorContainer(IConfigurationStore store) : this()
 		{
-			Kernel.ConfigurationStore = store;
+			_kernel.ConfigurationStore = store;
 
 			RunInstaller();
 		}
@@ -67,7 +67,7 @@ namespace Castle.Windsor
 		{
 			if (interpreter == null) throw new ArgumentNullException("interpreter");
 
-			interpreter.ProcessResource(interpreter.Source, Kernel.ConfigurationStore);
+			interpreter.ProcessResource(interpreter.Source, _kernel.ConfigurationStore);
 
 			RunInstaller();
 		}
@@ -78,7 +78,7 @@ namespace Castle.Windsor
 			if (parent == null) throw new ArgumentNullException("parent");
 			if (child == null) throw new ArgumentNullException("child");
 
-			Kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
+			_kernel.ConfigurationStore = new CascadeConfigurationStore(parent, child);
 
 			RunInstaller();
 		}
@@ -123,7 +123,7 @@ namespace Castle.Windsor
 		/// <summary>
 		/// Returns the inner instance of the MicroKernel
 		/// </summary>
-		public IKernel Kernel
+		public virtual IKernel Kernel
 		{
 			get { return _kernel; }
 		}
@@ -132,14 +132,14 @@ namespace Castle.Windsor
 		/// Gets or sets the parent container if this instance
 		/// is a sub container.
 		/// </summary>
-		public IWindsorContainer Parent
+		public virtual IWindsorContainer Parent
 		{
 			get { return _parent; }
 			set
 			{
 				_parent = value;
 
-				if (value != null) Kernel.Parent = value.Kernel;
+				if (value != null) _kernel.Parent = value.Kernel;
 			}
 		}
 
@@ -148,7 +148,7 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="facility"></param>
-		public void AddFacility(String key, IFacility facility)
+		public virtual void AddFacility(String key, IFacility facility)
 		{
 			_kernel.AddFacility(key, facility);
 		}
@@ -158,9 +158,9 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
-		public void AddComponent(String key, Type classType)
+		public virtual void AddComponent(String key, Type classType)
 		{
-			Kernel.AddComponent(key, classType);
+			_kernel.AddComponent(key, classType);
 		}
 
 		/// <summary>
@@ -169,19 +169,19 @@ namespace Castle.Windsor
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
-		public void AddComponent(String key, Type serviceType, Type classType)
+		public virtual void AddComponent(String key, Type serviceType, Type classType)
 		{
-			Kernel.AddComponent(key, serviceType, classType);
+			_kernel.AddComponent(key, serviceType, classType);
 		}
 
-        public void AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
+        public virtual void AddComponentWithProperties(string key, Type classType, IDictionary extendedProperties)
         {
-            Kernel.AddComponentWithProperties(key, classType, extendedProperties);
+            _kernel.AddComponentWithProperties(key, classType, extendedProperties);
         }
 
-        public void AddComponentWithProperties(string key, Type serviceType, Type classType, IDictionary extendedProperties)
+        public virtual void AddComponentWithProperties(string key, Type serviceType, Type classType, IDictionary extendedProperties)
         {
-            Kernel.AddComponentWithProperties(key, serviceType, classType, extendedProperties);
+            _kernel.AddComponentWithProperties(key, serviceType, classType, extendedProperties);
         }
 
 		/// <summary>
@@ -189,9 +189,9 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public object Resolve(String key)
+		public virtual object Resolve(String key)
 		{
-			return Kernel[key];
+			return _kernel[key];
 		}
 
 		/// <summary>
@@ -199,15 +199,15 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <param name="service"></param>
 		/// <returns></returns>
-		public object Resolve(Type service)
+		public virtual object Resolve(Type service)
 		{
-			return Kernel[service];
+			return _kernel[service];
 		}
 
 		/// <summary>
 		/// Shortcut to the method <see cref="Resolve"/>
 		/// </summary>
-		public object this [String key]
+		public virtual object this [String key]
 		{
 			get { return Resolve(key); }
 		}
@@ -215,7 +215,7 @@ namespace Castle.Windsor
 		/// <summary>
 		/// Shortcut to the method <see cref="Resolve"/>
 		/// </summary>
-		public object this [Type service]
+		public virtual object this [Type service]
 		{
 			get { return Resolve(service); }
 		}
@@ -224,9 +224,9 @@ namespace Castle.Windsor
 		/// Releases a component instance
 		/// </summary>
 		/// <param name="instance"></param>
-		public void Release(object instance)
+		public virtual void Release(object instance)
 		{
-			Kernel.ReleaseComponent(instance);
+			_kernel.ReleaseComponent(instance);
 		}
 
 		/// <summary>
@@ -234,10 +234,10 @@ namespace Castle.Windsor
 		/// by this container will be accessible from subcontainers.
 		/// </summary>
 		/// <param name="childContainer"></param>
-		public void AddChildContainer(IWindsorContainer childContainer)
+		public virtual void AddChildContainer(IWindsorContainer childContainer)
 		{
 			childContainer.Parent = this;
-			Kernel.AddChildKernel(childContainer.Kernel);
+			_kernel.AddChildKernel(childContainer.Kernel);
 		}
 
 		#endregion
@@ -247,7 +247,7 @@ namespace Castle.Windsor
 		/// <summary>
 		/// Executes Dispose on underlying <see cref="IKernel"/>
 		/// </summary>
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			_kernel.Dispose();
 		}
@@ -255,6 +255,11 @@ namespace Castle.Windsor
 		#endregion
 
 		#region Protected Operations Members
+
+		public IComponentsInstaller Installer
+		{
+			get { return _installer; }
+		}
 
 		protected virtual void RunInstaller()
 		{

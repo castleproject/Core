@@ -116,6 +116,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AsyncInitializationContainerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Castle.Windsor.Tests.dll.config"
                     BuildAction = "None"
                 />
@@ -336,6 +341,11 @@
                 <File
                     RelPath = "Configuration2\RelativeTest\rel_include2.xml"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Facilities\SlowlyInitFacility.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Facilities\EventWiring\config.xml"

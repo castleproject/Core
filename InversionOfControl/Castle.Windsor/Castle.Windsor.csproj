@@ -104,7 +104,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "AsyncInitializationContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IContainerAccessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InitializationException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
