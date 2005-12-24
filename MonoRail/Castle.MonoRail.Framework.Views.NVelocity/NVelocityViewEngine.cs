@@ -78,9 +78,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		public override bool HasTemplate(String templateName)
 		{
+			string templateFullName = ViewRootDir + "/" + ResolveTemplateName(templateName);
+			
+			if( !File.Exists(templateFullName) ) return false;
 			try
 			{
-				return velocity.GetTemplate(ResolveTemplateName(templateName)) != null;
+				return velocity.GetTemplate(templateFullName) != null;
 			}
 			catch(Exception)
 			{
@@ -300,6 +303,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				if (value == null) continue;
 				innerContext[key] = value;
 			}
+
+			// Adding flash as a collection and each individual item
+
+			innerContext[Flash.FlashKey] = context.Flash;
 
 			foreach(DictionaryEntry entry in context.Flash)
 			{

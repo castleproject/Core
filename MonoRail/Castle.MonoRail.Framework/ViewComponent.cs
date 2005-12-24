@@ -114,7 +114,7 @@ namespace Castle.MonoRail.Framework
 		/// Gets a dictionary of volative items.
 		/// Ideal for showing success and failures messages.
 		/// </summary>
-		protected IDictionary Flash
+		protected Flash Flash
 		{
 			get { return railsContext.Flash; }
 		}

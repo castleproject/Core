@@ -1,0 +1,4 @@
+#foreach($key in $flash.AllKeys) 
+	$!key
+#end 
+$!one $!two $!three

@@ -6,6 +6,8 @@ Beta 5
 
 ** Core ** 
 
+- Fixed Flash (it now persists the new entries between requests)  (by Ahmed)
+
 - Added FilterAttribute.ExecutionOrder, the default value is Int16.MaxValue 
   so the less the value higher will be the filter priority
 
@@ -247,6 +249,8 @@ MR-58	AbstractHelper generates invalid XHTML
         http://support.castleproject.org/jira/browse/MR-58
 MR-57	Wrong urls are crashing UrlTokenizer
         http://support.castleproject.org/jira/browse/MR-57
+MR-52	Support for real Flash feature
+        http://support.castleproject.org/jira/browse/MR-52
 MR-49	Remove public properties from the list of available actions (Controller.cs)
         http://support.castleproject.org/jira/browse/MR-49
 MR-30	MR should not accept incorrect urls

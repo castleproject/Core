@@ -55,12 +55,25 @@ namespace Castle.MonoRail.Framework
 			finally
 			{
 				RaiseEngineContextDiscarded(mrContext);
+
+				AddFlashToSessionIfUsed(mrContext);
 			}
 		}
 
 		public bool IsReusable
 		{
 			get { return true; }
+		}
+
+		private static void AddFlashToSessionIfUsed(RailsEngineContextAdapter mrContext)
+		{
+			// Remove items from flash before leaving the page
+			mrContext.Flash.Sweep();
+	
+			if (mrContext.Flash.Count != 0)
+			{
+				mrContext.Session[Flash.FlashKey] = mrContext.Flash;
+			}
 		}
 	}
 }

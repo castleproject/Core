@@ -83,7 +83,7 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Access a dictionary of volative items.
 		/// </summary>
-		IDictionary Flash { get; }
+		Flash Flash { get; }
 
 		/// <summary>
 		/// Transfer the execution to another resource.

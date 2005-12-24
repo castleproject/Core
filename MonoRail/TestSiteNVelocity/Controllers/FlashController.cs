@@ -30,8 +30,21 @@ namespace TestSiteNVelocity.Controllers
 		}
 
 		public void ValidateRequest()
+		{			
+		}
+
+		public void FlashContents()
+		{	
+			int i=0;		
+		}
+
+		public void AddFlashAndRedirect()
 		{
-			
+			Flash["one"] = 1;
+			Flash["two"] = 2;
+			Flash["three"] = 3;
+
+			RedirectToAction("FlashContents");
 		}
 	}
 }

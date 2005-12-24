@@ -588,6 +588,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\Flash.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\IControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

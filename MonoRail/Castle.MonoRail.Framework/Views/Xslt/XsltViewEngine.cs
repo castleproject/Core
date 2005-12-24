@@ -188,6 +188,10 @@ namespace Castle.MonoRail.Framework.Views.Xslt
 				}
 			}
 			
+			// Adding flash as a collection and also as separated items
+
+			args.AddParam(Flash.FlashKey, "", context.Flash);
+
 			foreach (String key in context.Flash.Keys)
 			{
 				if (context.Flash[key] != null)

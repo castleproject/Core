@@ -321,6 +321,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "views\flash\flashContents.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\flash\flashIt.vm"
                     BuildAction = "None"
                 />

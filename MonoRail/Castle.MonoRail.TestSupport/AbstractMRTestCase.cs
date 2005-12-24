@@ -18,6 +18,7 @@ namespace Castle.MonoRail.TestSupport
 	using System.IO;
 	using System.Net;
 	using System.Text;
+	using System.Text.RegularExpressions;
 	using System.Web.Hosting;
 	using System.Configuration;
 	
@@ -233,6 +234,50 @@ namespace Castle.MonoRail.TestSupport
 		{
 			Assert.IsTrue( Output.IndexOf(contents) != -1, 
 				"AssertReplyContains did not find the content '{0}'. Raw content {1}", contents, Output );
+		}
+
+		/// <summary>
+		/// Asserts that reply have only whitespace characters
+		/// </summary>
+		protected void AssertReplyIsBlank()
+		{
+			string contents = Output.Trim();
+
+			Assert.IsTrue( contents == String.Empty, 
+				"AssertReplyIsBlank found not whitespace characters '{0'}", contents);
+		}
+
+		/// <summary>
+		/// Asserts that reply contents match the specified pattern, ignoring any whitespaces
+		/// <c>pattern</c>
+		/// </summary>
+		protected void AssertReplyMatch(String pattern)
+		{
+			AssertReplyMatch(pattern, true, RegexOptions.None);
+		}
+
+		/// <summary>
+		/// Asserts that reply contents match the specified pattern
+		/// <c>pattern</c>
+		/// </summary>
+		protected void AssertReplyMatch(String pattern, bool normalizeSpaces)
+		{						
+			AssertReplyMatch(pattern, normalizeSpaces, RegexOptions.None);
+		}
+
+		/// <summary>
+		/// Asserts that reply contents match the specified pattern
+		/// <c>pattern</c>
+		/// </summary>
+		protected void AssertReplyMatch(String pattern, bool normalizeSpaces, RegexOptions options)
+		{
+			string contents = (normalizeSpaces) ? Output.Trim() : Output;
+
+			if(normalizeSpaces) pattern = pattern.Replace(" ", @"\s+");
+
+			Regex re = new Regex(pattern, options);
+			Assert.IsTrue( re.IsMatch(contents), 
+				"AssertReplyMatch did not match pattern '{0}'. Raw content {1}", pattern, contents );
 		}
 
 		/// <summary>

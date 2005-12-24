@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		private Exception _lastException;
 		private IDictionary _session;
 		private ServerUtilityAdapter _server;
-		private IDictionary _flash;
+		private Flash _flash;
 		private UrlInfo _urlInfo;
 
 		public RailsEngineContextAdapter( HttpContext context, String url )
@@ -153,14 +153,15 @@ namespace Castle.MonoRail.Framework.Adapters
 			get { return _context.Cache; }
 		}
 
-		public IDictionary Flash
+		public Flash Flash
 		{
 			get
 			{
-				if ( _flash == null )
+				if (_flash == null)
 				{
-					_flash = new HybridDictionary();
+					_flash = new Flash( (Flash) Session[Flash.FlashKey] );
 				}
+
 				return _flash;
 			}
 		}
