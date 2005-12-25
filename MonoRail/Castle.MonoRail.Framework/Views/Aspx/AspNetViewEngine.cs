@@ -29,8 +29,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	{
 		private static readonly String ProcessedBeforeKey = "processed_before";
 		
-		#region IViewEngine
-
 		public override void Init()
 		{
 		}
@@ -98,8 +96,6 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			ProcessPage(controller, masterHandler, httpContext);
 		}
 
-		#endregion
-
 		private IHttpHandler GetCompiledPageInstace( String viewName, HttpContext httpContext )
 		{
 			viewName += ".aspx";
@@ -132,8 +128,8 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		{
 			if (HasLayout(controller))
 			{
-				if (httpContext.Response.StatusCode == 200)
-				{
+//				if (httpContext.Response.StatusCode == 200)
+//				{
 					byte[] contents = RestoreFilter(httpContext.Response);
 
 					// Checks if its only returning from a inner process invocation
@@ -148,11 +144,11 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 					}
 
 					ProcessPage(controller, masterHandler, httpContext);
-				}
-				else
-				{
-					WriteBuffered(httpContext.Response);
-				}
+//				}
+//				else
+//				{
+//					WriteBuffered(httpContext.Response);
+//				}
 			}
 		}
 
@@ -163,7 +159,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 		private void WriteBuffered(HttpResponse response)
 		{
-			response.Flush();
+			// response.Flush();
 
 			// Restores the original stream
 			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
@@ -177,6 +173,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private byte[] RestoreFilter(HttpResponse response)
 		{
 			response.Flush();
+			response.Filter.Flush();
 
 			// Restores the original stream
 			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;

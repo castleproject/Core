@@ -24,23 +24,26 @@ namespace Castle.MonoRail.Framework
 		public static readonly String FlashKey = "flash";
 
 		[NonSerialized] 
-		private ArrayList keep;
+		private ArrayList keep = new ArrayList();
+
+		[NonSerialized] 
+		private bool hasItemsToKeep;
+
+		[NonSerialized] 
+		private bool hasSwept;
 
 		public Flash()
 		{
-			keep = new ArrayList();
 		}
 
-		public Flash(Flash copy) : this()
+		public Flash(Flash copy)
 		{
 			if (copy == null) return;
 
 			foreach(DictionaryEntry entry in copy)
 			{
-				Add(entry.Key, entry.Value);
+				base.Add(entry.Key, entry.Value);
 			}
-
-			keep.AddRange( copy.keep );
 		}
 
 		internal Flash(SerializationInfo info, StreamingContext context) : base(info, context)
@@ -53,6 +56,18 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public void Sweep()
 		{
+			if (hasSwept)
+			{
+				object[] keys = new object[Keys.Count];
+
+				Keys.CopyTo(keys, 0);
+
+				if (keys.Length != 0)
+				{
+					keep.AddRange(keys);
+				}
+			}
+
 			if (keep.Count == 0)
 			{
 				this.Clear();
@@ -69,14 +84,20 @@ namespace Castle.MonoRail.Framework
 					{
 						Remove(keys[i]);
 					}
+					else if (!hasItemsToKeep)
+					{
+						hasItemsToKeep = true;
+					}
 				}
 
 				keep.Clear();
 			}
+
+			hasSwept = true;
 		}
 
 		/// <summary>
-		/// Keeps either the entire flash contents available for the next action
+		/// Keeps the entire flash contents available for the next action
 		/// </summary>
 		public void Keep()
 		{
@@ -141,6 +162,11 @@ namespace Castle.MonoRail.Framework
 		{
 			get { return base[key]; }
 			set { InternalAdd(key, value); }
+		}
+
+		internal bool HasItemsToKeep
+		{
+			get { return hasItemsToKeep; }
 		}
 
 		/// <summary>

@@ -14,11 +14,6 @@
 
 namespace Castle.MonoRail.Framework.Tests
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
-	using System.Text;
-
 	using NUnit.Framework;
 	
 	using Castle.MonoRail.Framework;
@@ -26,7 +21,6 @@ namespace Castle.MonoRail.Framework.Tests
 	[TestFixture]
 	public class FlashTestCase
 	{
-	
 		[Test]
 		public void SimpleTest()
 		{
@@ -38,9 +32,9 @@ namespace Castle.MonoRail.Framework.Tests
 
 			Assert.IsTrue( flash.ContainsKey("test") );
 
-			flash.Sweep();
+			flash = new Flash(flash);
 
-			Assert.IsFalse( flash.ContainsKey("test") );
+			Assert.IsTrue( flash.ContainsKey("test") );
 		}
 
 		[Test]
@@ -72,6 +66,7 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsTrue( flash.ContainsKey("test1") );
 			Assert.IsFalse( flash.ContainsKey("test2") );
 
+			flash = new Flash(flash);
 			flash.Sweep();
 
 			Assert.IsTrue( flash.Count == 0 );
@@ -102,6 +97,7 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsTrue( flash.ContainsKey("test1") );
 			Assert.IsFalse( flash.ContainsKey("test2") );
 
+			flash = new Flash(flash);
 			flash.Sweep();
 
 			Assert.IsTrue( flash.Count == 0 );
@@ -111,6 +107,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			flash.Discard();
 
+			flash = new Flash(flash);
 			flash.Sweep();
 
 			Assert.IsFalse( flash.ContainsKey("test1") );

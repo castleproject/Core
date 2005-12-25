@@ -777,6 +777,8 @@ namespace Castle.MonoRail.Framework
 				RaiseOnActionExceptionOnExtension();
 			}
 			
+			AddFlashToSessionIfUsed();
+
 			try
 			{
 				// If we haven't failed anywhere and no redirect was issued
@@ -858,6 +860,21 @@ namespace Castle.MonoRail.Framework
 				{
 					_helpers[helperName] = helper;
 				}
+			}
+		}
+
+		private void AddFlashToSessionIfUsed()
+		{
+			// Remove items from flash before leaving the page
+			Flash.Sweep();
+	
+			if (Flash.HasItemsToKeep)
+			{
+				Session[Flash.FlashKey] = Flash;
+			}
+			else if (Session.Contains(Flash.FlashKey))
+			{
+				Session.Remove(Flash.FlashKey);
 			}
 		}
 
