@@ -36,7 +36,7 @@
   <span id="message"></span>
   
   </form>
-  $AjaxHelper.ObserveForm("mainform", 3, "Validate.rails", "message", null) 
+  $AjaxHelperOld.ObserveForm("mainform", 3, "Validate.rails", "message", null) 
 </p>
 
 </div>

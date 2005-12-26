@@ -28,12 +28,12 @@
 
 <p>
   Back link:
-  $AjaxHelper.LinkToFunction("Back", "window.history.back()")
+  $AjaxHelperOld.LinkToFunction("Back", "window.history.back()")
 </p>
 
 <p>
   With nested html:
-  $AjaxHelper.LinkToFunction("<b>Back</b>", "window.history.back()")
+  $AjaxHelperOld.LinkToFunction("<b>Back</b>", "window.history.back()")
 </p>
 
 </div>

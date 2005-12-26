@@ -1,8 +1,7 @@
-
-#if($errors)
+#if($Flash.get_Item("errors"))
 <p>Something is not good. Please correct the following problems first:
 <ul>
-#foreach($error in $errors)
+#foreach($error in $Flash.get_Item("errors"))
   <li>$error</li>
 #end
 </ul>
@@ -11,7 +10,7 @@
 
 <p>
 
-<form action="maininfostep-save.rails">
+<form action="maininfostep-save.rails" method="post">
 
 <table width="80%" border="0" cellpadding="2" cellspacing="3">
   

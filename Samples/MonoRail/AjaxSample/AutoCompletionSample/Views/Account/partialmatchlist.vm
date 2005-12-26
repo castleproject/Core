@@ -1,0 +1,5 @@
+<ul class="names">
+#foreach($item in $items)
+  <li class="name">$item</li>
+#end
+</ul>

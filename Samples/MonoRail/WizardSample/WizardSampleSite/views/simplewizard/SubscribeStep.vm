@@ -3,7 +3,7 @@ Please inform your interests so we can select very special offers and
 send you spam:
 </p>
 
-<form action="subscribestep-save.rails">
+<form action="subscribestep-save.rails" method="post">
 
 <h4>Sports</h4>
 
@@ -36,8 +36,6 @@ send you spam:
     $HtmlHelper.LabelFor("science3", "Physics")
   </li>
 </ul>
-
-  $WizardHelper.EnableDoProcess()
 
 #if ($WizardHelper.HasPreviousStep())
     $WizardHelper.LinkToPrevious("Back")

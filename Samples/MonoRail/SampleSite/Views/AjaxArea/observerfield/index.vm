@@ -32,7 +32,7 @@
   <br>Address:
   <div id="address">
   </div>
-  $AjaxHelper.ObserveField("zipcode", 2, "AddressFromZip.rails", "address", "'value='+value") 
+  $AjaxHelperOld.ObserveField("zipcode", 2, "AddressFromZip.rails", "address", "'value='+value") 
 </p>
 
 <hr>
@@ -55,7 +55,7 @@
 	</select>
   </span>
   
-  $AjaxHelper.ObserveField("country", 2, "GetStatesFromCountry.rails", "statesplaceholder", "'value='+value")
+  $AjaxHelperOld.ObserveField("country", 2, "GetStatesFromCountry.rails", "statesplaceholder", "'value='+value")
 </p>
 
 </div>

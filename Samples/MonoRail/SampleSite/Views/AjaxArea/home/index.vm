@@ -27,7 +27,7 @@
 
 <pre><code>
 &lt;head&gt;
-  $ AjaxHelper.GetJavascriptFunctions()
+  $ AjaxHelperOld.GetJavascriptFunctions()
 &lt;/head&gt;
 
 </code></pre>

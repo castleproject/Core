@@ -3,10 +3,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSite", "SampleSite\Sa
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoRail.AjaxSample", "AjaxSample\MonoRail.AjaxSample\MonoRail.AjaxSample.csproj", "{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinderSample.Web", "BinderSample\BinderSample.Web\BinderSample.Web.csproj", "{466784AE-DE64-4CD4-900C-683921659E73}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -15,11 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoviesDemo", "MoviesDemo\Mo
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashboard.Web", "MRCCnetDashboard\Dashboard.Web\Dashboard.Web.csproj", "{C999CEF8-E2E2-4918-B6F2-D49F0BD05A00}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizardSampleSite", "WizardSample\WizardSampleSite\WizardSampleSite.csproj", "{D2958D15-2739-4C03-B490-4F67559C0CC3}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizardSampleSite", "WizardSample\WizardSampleSite\WizardSampleSite.csproj", "{D2958D15-2739-4C03-B490-4F67559C0CC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCompletionSample", "AjaxSample\AutoCompletionSample\AutoCompletionSample.csproj", "{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -33,10 +29,6 @@ Global
 		{F1297EF2-C5C5-4393-B9AC-B43535E704C2}.Debug.Build.0 = Debug|.NET
 		{F1297EF2-C5C5-4393-B9AC-B43535E704C2}.Release.ActiveCfg = Release|.NET
 		{F1297EF2-C5C5-4393-B9AC-B43535E704C2}.Release.Build.0 = Release|.NET
-		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Debug.ActiveCfg = Debug|.NET
-		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Debug.Build.0 = Debug|.NET
-		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Release.ActiveCfg = Release|.NET
-		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Release.Build.0 = Release|.NET
 		{466784AE-DE64-4CD4-900C-683921659E73}.Debug.ActiveCfg = Debug|.NET
 		{466784AE-DE64-4CD4-900C-683921659E73}.Debug.Build.0 = Debug|.NET
 		{466784AE-DE64-4CD4-900C-683921659E73}.Release.ActiveCfg = Release|.NET
@@ -45,14 +37,14 @@ Global
 		{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}.Debug.Build.0 = Debug|.NET
 		{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}.Release.ActiveCfg = Release|.NET
 		{2F1243A9-7AE5-4DDF-827D-B2F4FBA19FB0}.Release.Build.0 = Release|.NET
-		{C999CEF8-E2E2-4918-B6F2-D49F0BD05A00}.Debug.ActiveCfg = Debug|.NET
-		{C999CEF8-E2E2-4918-B6F2-D49F0BD05A00}.Debug.Build.0 = Debug|.NET
-		{C999CEF8-E2E2-4918-B6F2-D49F0BD05A00}.Release.ActiveCfg = Release|.NET
-		{C999CEF8-E2E2-4918-B6F2-D49F0BD05A00}.Release.Build.0 = Release|.NET
 		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Debug.ActiveCfg = Debug|.NET
 		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Debug.Build.0 = Debug|.NET
 		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Release.ActiveCfg = Release|.NET
 		{D2958D15-2739-4C03-B490-4F67559C0CC3}.Release.Build.0 = Release|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Debug.ActiveCfg = Debug|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Debug.Build.0 = Debug|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Release.ActiveCfg = Release|.NET
+		{2E38D6C2-C914-4B75-BF7C-C25C5F1EC6A4}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

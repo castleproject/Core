@@ -38,7 +38,7 @@
   Add contact:
 
 <br>
-$AjaxHelper.BuildFormRemoteTag("AddContact.rails", "contacts", "Form.Serialize(this)")
+$AjaxHelperOld.BuildFormRemoteTag("AddContact.rails", "contacts", "Form.Serialize(this)")
 <br>
     Name: <input name="name"> <br>
     Email: <input name="email"> <br>
@@ -61,7 +61,7 @@ $AjaxHelper.BuildFormRemoteTag("AddContact.rails", "contacts", "Form.Serialize(t
   Add contact:
 
 <br>
-$AjaxHelper.BuildFormRemoteTag("AddContact2.rails", "contacts2", "Form.Serialize(this)", "Toggle.display('status');$('status').innerHTML='<b>Saving, please cross your fingers!</b>'", null, "$('status').innerHTML='Phew! Completed'", "Toggle.display('status')")
+$AjaxHelperOld.BuildFormRemoteTag("AddContact2.rails", "contacts2", "Form.Serialize(this)", "Toggle.display('status');$('status').innerHTML='<b>Saving, please cross your fingers!</b>'", null, "$('status').innerHTML='Phew! Completed'", "Toggle.display('status')")
 <br>
     Name: <input name="name"> <br>
     Email: <input name="email"> <br>

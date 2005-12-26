@@ -93,11 +93,11 @@ namespace WizardSampleSite.Controllers
 				// User can't go to the next step yet
 
 				RedirectToAction( ActionName );
-				
-				return;
 			}
-
-			DoNavigate();
+			else
+			{
+				DoNavigate();
+			}
 		}
 
 		private IList ValidateAccount(Account account)
