@@ -80,15 +80,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		{
 			string templateFullName = ViewRootDir + "/" + ResolveTemplateName(templateName);
 			
-			if( !File.Exists(templateFullName) ) return false;
-			try
-			{
-				return velocity.GetTemplate(templateFullName) != null;
-			}
-			catch(Exception)
-			{
-				return false;
-			}
+			return File.Exists(templateFullName);
+
+//			try
+//			{
+//				return velocity.GetTemplate(templateFullName) != null;
+//			}
+//			catch(Exception)
+//			{
+//				return false;
+//			}
 		}
 
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)

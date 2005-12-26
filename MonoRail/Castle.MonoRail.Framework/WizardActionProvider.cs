@@ -25,12 +25,12 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	/// <remarks>
 	/// We use the DynamicAction infrastructure to provide 
-	/// wizard support. By doing we dont get force 
-	/// the programmer to extend from a specific Controller 
+	/// wizard support. By doing we dont force 
+	/// the programmer to inherit from a specific Controller 
 	/// which can be quite undesirable in common business projects
 	/// situations. 
 	/// <para>
-	/// Nevetheless we do require that the programmer 
+	/// Nevertheless we do require that the programmer 
 	/// implements <see cref="IWizardController"/> on the wizard controller.
 	/// </para>
 	/// </remarks>

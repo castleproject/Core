@@ -141,7 +141,7 @@ namespace Castle.MonoRail.Framework
 			}
 			else if (navigateTo.StartsWith(uriPrefix))
 			{
-				Redirect (navigateTo.Substring( uriPrefix.Length ));
+				Redirect(navigateTo.Substring(uriPrefix.Length));
 			}
 			else if (navigateTo == "first")
 			{

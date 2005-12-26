@@ -169,6 +169,18 @@ namespace Castle.MonoRail.Framework
 			finally
 			{
 				controllerFactory.Release(controller);
+
+				// Remove items from flash before leaving the page
+				context.Flash.Sweep();
+	
+				if (context.Flash.HasItemsToKeep)
+				{
+					context.Session[Flash.FlashKey] = context.Flash;
+				}
+				else if (context.Session.Contains(Flash.FlashKey))
+				{
+					context.Session.Remove(Flash.FlashKey);
+				}
 			}
 		}
 
