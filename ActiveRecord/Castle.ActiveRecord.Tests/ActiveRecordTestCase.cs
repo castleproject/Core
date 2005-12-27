@@ -298,6 +298,53 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.IsNotNull( blogs );
 			Assert.AreEqual( 0, blogs.Length );
+		
+		}
+
+		[Test]
+		public void DeleteAll()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+
+			Blog blog1 = new Blog();
+			blog1.Name = "hammett's blog";
+			blog1.Author = "hamilton verissimo";
+			blog1.Save();
+
+			Blog blog2 = new Blog();
+			blog2.Name = "richard's blog";
+			blog2.Author = "g. richard bellamy";
+			blog2.Save();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 2, blogs.Length );
+
+			Blog.DeleteAll("Author = 'g. richard bellamy'");
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 1, blogs.Length );
+			Assert.AreEqual( "hamilton verissimo", blogs[0].Author);
+
+			blog1.Delete();
+
+			blogs = Blog.FindAll();
+
+			Assert.IsNotNull( blogs );
+			Assert.AreEqual( 0, blogs.Length );
+		
 		}
 
 		[Test]

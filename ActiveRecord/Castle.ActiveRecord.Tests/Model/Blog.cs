@@ -87,6 +87,11 @@ namespace Castle.ActiveRecord.Tests.Model
 			ActiveRecordMediator.DeleteAll(typeof (Blog));
 		}
 
+		public static void DeleteAll(string where)
+		{
+			ActiveRecordMediator.DeleteAll(typeof (Blog), where);
+		}
+
 		public static Blog[] FindAll()
 		{
 			return (Blog[]) ActiveRecordMediator.FindAll(typeof (Blog));

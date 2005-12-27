@@ -336,6 +336,28 @@ namespace Castle.ActiveRecord
 			}
 		}
 
+		protected internal static void DeleteAll(Type type, string where)
+		{
+			EnsureInitialized(type);
+
+			ISession session = _holder.CreateSession( type );
+
+			try
+			{
+				session.Delete( String.Format("from {0} where {1}", type.Name, where) );
+
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
+			}
+			finally
+			{
+				_holder.ReleaseSession(session);
+			}
+		}
+
 		/// <summary>
 		/// Saves the instance to the database
 		/// </summary>

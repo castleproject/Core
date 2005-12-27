@@ -125,6 +125,11 @@ namespace Castle.ActiveRecord
 			ActiveRecordBase.DeleteAll(type);
 		}
 
+		public static void DeleteAll(Type type, string where)
+		{
+			ActiveRecordBase.DeleteAll(type, where);
+		}
+
 		public static object ExecuteQuery(IActiveRecordQuery q)
 		{
 			return ActiveRecordBase.ExecuteQuery(q);

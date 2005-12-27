@@ -2,6 +2,8 @@
 beta 3
 ======
 
+- Added DeleteAll(type, where) (kudos to G. Richard Bellamy)
+
 - Applied patch from Josh Robb. Added support for hooks on ActiveRecordBase<T>.
 
 - DifferentDatabaseScope: so you can open a session using a different dbconnection
