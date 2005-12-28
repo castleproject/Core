@@ -318,11 +318,22 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType">The target type</param>
 		/// <param name="criterias">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		protected static object FindFirst(Type targetType, params ICriterion[] criterias)
+		protected internal static object FindFirst(Type targetType, params ICriterion[] criterias)
 		{
-			Array result = FindAll(targetType, criterias);
+			return FindFirst(targetType, null, criterias);
+		}
 
-			return (result.Length == 0) ? null : result.GetValue(0);
+		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="orders">The sort order - used to determine which record is the first one</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		protected internal static object FindFirst(Type targetType, Order[] orders, params ICriterion[] criterias)
+		{
+			Array r = SlicedFindAll(targetType, 0, 1, orders, criterias);
+			return (r != null && r.Length > 0 ? r.GetValue(0) : null);
 		}
 
 		/// <summary>
@@ -332,9 +343,9 @@ namespace Castle.ActiveRecord
 		/// <param name="targetType">The target type</param>
 		/// <param name="criterias">The criteria expression</param>
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-		protected static object FindOne(Type targetType, params ICriterion[] criterias)
+		protected internal static object FindOne(Type targetType, params ICriterion[] criterias)
 		{
-			Array result = FindAll(targetType, criterias);
+			Array result = SlicedFindAll(targetType, 0, 2, criterias);
 
 			if (result.Length > 1)
 			{
