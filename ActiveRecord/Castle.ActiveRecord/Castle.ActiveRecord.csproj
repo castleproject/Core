@@ -284,7 +284,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\ActiveRecordBase.Generic.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\ActiveRecordException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\ActiveRecordHooksBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

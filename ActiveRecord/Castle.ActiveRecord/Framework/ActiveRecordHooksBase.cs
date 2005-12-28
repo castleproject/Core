@@ -13,26 +13,17 @@
 // limitations under the License.
 
 namespace Castle.ActiveRecord
-{
-	using System;
-	using System.Collections;
-
-	using NHibernate;
-	using NHibernate.Expression;
-
-	using Castle.ActiveRecord.Framework;
-	
+{	
 	public abstract class ActiveRecordHooksBase
     {
-        #region Overridable Hooks -  copied from ActiveRecordBase
-
         /// <summary>
         /// Hook to change the object state
         /// before saving it.
         /// </summary>
         /// <param name="state"></param>
         /// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-        protected internal virtual bool BeforeSave(System.Collections.IDictionary state) {
+        protected internal virtual bool BeforeSave(System.Collections.IDictionary state)
+		{
             return false;
         }
 
@@ -43,7 +34,8 @@ namespace Castle.ActiveRecord
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns>Return <c>true</c> if you have changed the state. <c>false</c> otherwise</returns>
-        protected internal virtual bool BeforeLoad(System.Collections.IDictionary adapter) {
+        protected internal virtual bool BeforeLoad(System.Collections.IDictionary adapter) 
+		{
             return false;
         }
 
@@ -53,10 +45,8 @@ namespace Castle.ActiveRecord
         /// from the database.
         /// </summary>
         /// <param name="adapter"></param>
-        protected internal virtual void BeforeDelete(System.Collections.IDictionary adapter) {
+        protected internal virtual void BeforeDelete(System.Collections.IDictionary adapter) 
+		{
         }
-
-        #endregion
     }
-
 }

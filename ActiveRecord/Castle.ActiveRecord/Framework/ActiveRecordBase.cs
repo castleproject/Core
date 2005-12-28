@@ -282,15 +282,66 @@ namespace Castle.ActiveRecord
 			return FindAll(targetType, null, criterias);
 		}
 
-		private static Array CreateReturnArray(ICriteria criteria, Type targetType)
+		/// <summary>
+		/// Finds records based on a property value
+		/// </summary>
+		/// <remarks>
+		/// Contributed by someone on the forum
+		/// http://forum.castleproject.org/posts/list/300.page
+		/// </remarks>
+		/// <param name="targetType">The target type</param>
+		/// <param name="property">A property name (not a column name)</param>
+		/// <param name="value">The value to be equals to</param>
+		/// <returns></returns>
+		protected static Array FindAllByProperty(Type targetType, String property, object value)
 		{
-			IList result = criteria.List();
-	
-			Array array = Array.CreateInstance(targetType, result.Count);
-	
-			result.CopyTo(array, 0);
-	
-			return array;
+			return FindAll(targetType, Expression.Eq(property, value));
+		}
+
+		/// <summary>
+		/// Finds records based on a property value
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="orderByColumn">The column name to be ordered ASC</param>
+		/// <param name="property">A property name (not a column name)</param>
+		/// <param name="value">The value to be equals to</param>
+		/// <returns></returns>
+		protected static Array FindAllByProperty(Type targetType, String orderByColumn, String property, object value)
+		{
+			return FindAll(targetType, 
+				new Order[] { Order.Asc(orderByColumn) }, Expression.Eq(property, value));
+		}
+
+		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		protected static object FindFirst(Type targetType, params ICriterion[] criterias)
+		{
+			Array result = FindAll(targetType, criterias);
+
+			return (result.Length == 0) ? null : result.GetValue(0);
+		}
+
+		/// <summary>
+		/// Searches and returns the a row. If more than one is found, 
+		/// throws <see cref="ActiveRecordException"/>
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		protected static object FindOne(Type targetType, params ICriterion[] criterias)
+		{
+			Array result = FindAll(targetType, criterias);
+
+			if (result.Length > 1)
+			{
+				throw new ActiveRecordException(targetType.Name + ".FindOne returned " + result.Length + " rows. Expecting one or none");
+			}
+
+			return (result.Length == 0) ? null : result.GetValue(0);
 		}
 
 		protected internal static object ExecuteQuery(IActiveRecordQuery q)
@@ -469,6 +520,17 @@ namespace Castle.ActiveRecord
 			{
 				_holder.ReleaseSession(session);
 			}
+		}
+
+		private static Array CreateReturnArray(ICriteria criteria, Type targetType)
+		{
+			IList result = criteria.List();
+	
+			Array array = Array.CreateInstance(targetType, result.Count);
+	
+			result.CopyTo(array, 0);
+	
+			return array;
 		}
 
 		#endregion
