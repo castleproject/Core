@@ -419,6 +419,28 @@ namespace Castle.ActiveRecord
 				_holder.ReleaseSession(session);
 			}
 		}
+		
+		protected internal static int DeleteAll(Type targetType, IEnumerable pkValues)
+		{
+			if (pkValues == null)
+				return 0;
+
+			int c = 0;
+			foreach (int pk in pkValues)
+			{
+				Object obj = FindByPrimaryKey(targetType, pk, false);
+				if (obj != null) 
+				{
+					ActiveRecordBase arBase = obj as ActiveRecordBase;
+					if (arBase != null)
+						arBase.Delete(); // in order to allow override of the virtual "Delete()" method
+					else
+						ActiveRecordBase.Delete(obj);
+					c++;
+				}
+			}
+			return c;
+		}
 
 		/// <summary>
 		/// Saves the instance to the database
@@ -595,5 +617,16 @@ namespace Castle.ActiveRecord
 		}
 
 		#endregion
+		
+		public override String ToString()
+		{
+			Framework.Internal.ActiveRecordModel model = GetModel(GetType());
+			if (model.Ids.Count != 1)
+				return base.ToString();
+			
+			Framework.Internal.PrimaryKeyModel pkModel = (Framework.Internal.PrimaryKeyModel) model.Ids[0];
+			object pkVal = pkModel.Property.GetValue(this, null);
+			return base.ToString() + "#" + pkVal;
+		}
 	}
 }
