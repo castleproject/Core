@@ -21,7 +21,7 @@ namespace Castle.Services.Logging
 
     public abstract class AbstractLoggerFactory : ILoggerFactory
 	{
-		public AbstractLoggerFactory()
+    	public AbstractLoggerFactory()
 		{
 		}
 
@@ -50,24 +50,24 @@ namespace Castle.Services.Logging
         /// <returns></returns>
         protected FileInfo GetConfigFile(string filename)
         {
-            FileInfo result;
-            if(IsWeb)
-            {
-                result = new FileInfo(HttpContext.Current.Request.PhysicalApplicationPath + filename);
-            }
-            else
-            {
-                result = new FileInfo(filename);
-            }
+            FileInfo result = new FileInfo(filename);
+//            if(IsWeb)
+//            {
+//                result = new FileInfo(HttpContext.Current.Request.PhysicalApplicationPath + filename);
+//            }
+//            else
+//            {
+//                result = new FileInfo(filename);
+//            }
             return result;
         }
 
-        private bool IsWeb
-        {
-            get
-            {
-                return HttpContext.Current != null;
-            }
-        }
+//        private bool IsWeb
+//        {
+//            get
+//            {
+//                return HttpContext.Current != null;
+//            }
+//        }
 	}
 }

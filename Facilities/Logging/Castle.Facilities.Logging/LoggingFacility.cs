@@ -90,6 +90,7 @@ namespace Castle.Facilities.Logging
 
             String typeAtt = FacilityConfig.Attributes["loggingApi"];				
             String customAtt = FacilityConfig.Attributes["customLoggerFactory"];
+			String configFileAtt = FacilityConfig.Attributes["configFile"];
 
             if (typeAtt != null)
             {
@@ -97,12 +98,12 @@ namespace Castle.Facilities.Logging
 					converter.PerformConversion( typeAtt, typeof(LoggerImplementation) );
             }
 
-			CreateProperLoggerFactory(logApi, customAtt);
+			CreateProperLoggerFactory(logApi, customAtt, configFileAtt);
 
 			RegisterLoggerFactory();
         }
 
-		private void CreateProperLoggerFactory(LoggerImplementation logApi, String customType)
+		private void CreateProperLoggerFactory(LoggerImplementation logApi, String customType, String configFile)
 		{
 			Type loggerFactoryType = null;
 
@@ -152,7 +153,11 @@ namespace Castle.Facilities.Logging
 				}
 			}
 
-			factory = (ILoggerFactory) Activator.CreateInstance(loggerFactoryType);
+			object[] args = null;
+
+			if (configFile != null) args = new object[]{ configFile };
+
+			factory = (ILoggerFactory) Activator.CreateInstance(loggerFactoryType, args);
 		}
 
 		private void SetUpTypeConverter()

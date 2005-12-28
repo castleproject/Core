@@ -27,9 +27,13 @@ namespace Castle.Services.Logging.Log4netIntegration
 	/// </summary>
 	public class Log4netFactory : AbstractLoggerFactory
 	{
-		public Log4netFactory()
+		public Log4netFactory() : this ("log4net.config")
 		{
-            FileInfo file = this.GetConfigFile("log4net.config");
+		}
+
+		public Log4netFactory(string configFile)
+		{
+			FileInfo file = GetConfigFile(configFile);
 			XmlConfigurator.ConfigureAndWatch(file);
 		}
 

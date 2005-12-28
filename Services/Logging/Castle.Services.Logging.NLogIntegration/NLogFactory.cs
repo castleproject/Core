@@ -26,9 +26,13 @@ namespace Castle.Services.Logging.NLogIntegration
 	/// </summary>
 	public class NLogFactory : AbstractLoggerFactory
 	{
-		public NLogFactory()
+		public NLogFactory() : this ("nlog.config")
+		{			
+		}
+
+		public NLogFactory( string configFile )
 		{
-		    FileInfo file = this.GetConfigFile("nlog.config");
+		    FileInfo file = GetConfigFile( configFile );
 			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
 		}
 
