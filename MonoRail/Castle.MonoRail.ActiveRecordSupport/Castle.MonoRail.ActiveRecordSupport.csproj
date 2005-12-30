@@ -125,7 +125,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ARSmartDispatchController.cs"
+                    RelPath = "ARSmartDispatcherController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

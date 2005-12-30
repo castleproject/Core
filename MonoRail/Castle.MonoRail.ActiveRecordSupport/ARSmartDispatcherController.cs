@@ -27,13 +27,14 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 
 	/// <summary>
-	/// Extends the SmartDipatchController with ActiveRecord specific functionality
+	/// Extends the <see cref="SmartDispatcherController"/> 
+	/// with ActiveRecord specific functionality
 	/// </summary>
-	public class ARSmartDispatchController : SmartDispatcherController
+	public class ARSmartDispatcherController : SmartDispatcherController
 	{
 		private ARDataBinder arBinder;
 
-		public ARSmartDispatchController() : base()
+		public ARSmartDispatcherController() : base()
 		{
 		}
 
