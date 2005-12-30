@@ -22,47 +22,103 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// This attribute tells <see cref="ARSmartDispatchController" />
 	/// to fetches the ActiveRecord based on its Primary Key.
 	/// </summary>
+	/// <remarks>
+	/// The <see cref="ARFetchAttribute"/> only loads an instance
+	/// based on the primary key value obtained from <see cref="IRailsEngineContext.Params"/>
+	/// <para>For example:</para>
+	/// <code>
+	/// public class CustomerController : ARSmartDispatcherController
+	/// {
+	///     public void UpdateCustomerLocation([ARFetch("customer.id")] Customer customer, [ARFetch("location.id")] Location location)
+	///     {
+	///       customer.Location = location;
+	///       customer.Save();
+	///       
+	///       RedirectToAction("index");
+	///     }
+	/// }
+	/// </code>
+	/// The code above assumes that you have the fields 
+	/// <c>customer.id</c> and <c>location.id</c> on the form being
+	/// submitted. 
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Parameter), Serializable]
 	public class ARFetchAttribute : Attribute
 	{
-		private String _requestParameterName;
-		private bool _create, _require;
+		private String requestParameterName;
+		private bool create, require;
 		
+		/// <summary>
+		/// Constructs an <see cref="ARFetchAttribute"/> 
+		/// specifying the parameter name and the create and require behavior
+		/// </summary>
+		/// <param name="requestParameterName">The parameter name to be read from the request</param>
+		/// <param name="create"><c>true</c> if you want an instance even when the record is not found</param>
+		/// <param name="require"><c>true</c> if you want an exception if the record is not found</param>
 		public ARFetchAttribute(String requestParameterName, bool create, bool require) : base()
 		{
-			this._requestParameterName = requestParameterName;
-			this._create = create;
-			this._require = require;
+			this.requestParameterName = requestParameterName;
+			this.create = create;
+			this.require = require;
 		}
-		
-		public ARFetchAttribute() : this(null, true, true)
+
+		/// <summary>
+		/// Constructs an <see cref="ARFetchAttribute"/> using the
+		/// parameter name as the <see cref="ARFetchAttribute.RequestParameterName"/>
+		/// </summary>
+		public ARFetchAttribute() : this(null, false, false)
 		{
 		}
 		
-		public ARFetchAttribute(String requestParameterName) : this(requestParameterName, true, true)
+		/// <summary>
+		/// Constructs an <see cref="ARFetchAttribute"/> specifing the
+		/// parameter name
+		/// <seealso cref="ARFetchAttribute.RequestParameterName"/>
+		/// </summary>
+		public ARFetchAttribute(String requestParameterName) : this(requestParameterName, false, false)
 		{
 		}
 		
+		/// <summary>
+		/// Constructs an <see cref="ARFetchAttribute"/> using the
+		/// parameter name as the <see cref="ARFetchAttribute.RequestParameterName"/>
+		/// and the create and require behavior
+		/// </summary>
+		/// <param name="create"><c>true</c> if you want an instance even when the record is not found</param>
+		/// <param name="require"><c>true</c> if you want an exception if the record is not found</param>
 		public ARFetchAttribute(bool create, bool require) : this(null, create, require)
 		{
 		}
 		
+		/// <summary>
+		/// The parameter name to be read from the request. The parameter value will 
+		/// be used as the primary key value to load the target object instance.
+		/// </summary>
 		public String RequestParameterName
 		{
-			get { return _requestParameterName; }
-			set { _requestParameterName = value; }
+			get { return requestParameterName; }
+			set { requestParameterName = value; }
 		}
 
+		/// <summary>
+		/// When set to <c>true</c> an instance of
+		/// the target type will be created if the record 
+		/// is not found
+		/// </summary>
 		public bool Create
 		{
-			get { return _create; }
-			set { _create = value; }
+			get { return create; }
+			set { create = value; }
 		}
 		
+		/// <summary>
+		/// When set to <c>true</c> the record must be found
+		/// or an exception will be thrown
+		/// </summary>
 		public bool Require
 		{
-			get { return _require; }
-			set { _require = value; }
+			get { return require; }
+			set { require = value; }
 		}
 	}
 }

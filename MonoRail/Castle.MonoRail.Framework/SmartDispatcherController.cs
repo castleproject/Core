@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework
 	/// </remarks>
 	public abstract class SmartDispatcherController : Controller
 	{
-		private IDictionary boundInstances = new ListDictionary();
+		protected IDictionary boundInstances = new HybridDictionary();
 
 		private NameValueCollection queryParams;
 		private NameValueCollection formParams;
@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework
 
 		protected override void InternalSend(String action)
 		{
-			base.InternalSend( action );
+			base.InternalSend(action);
 		}
 
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
@@ -66,7 +66,8 @@ namespace Castle.MonoRail.Framework
 			ParameterInfo[] parameters = method.GetBaseDefinition().GetParameters();
 
 			object[] methodArgs = BuildMethodArguments(parameters, request);
-            method.Invoke(this, methodArgs);
+
+			method.Invoke(this, methodArgs);
 		}
 
 		protected override MethodInfo SelectMethod(String action, IDictionary actions, IRequest request)
@@ -74,17 +75,16 @@ namespace Castle.MonoRail.Framework
 			object methods = actions[action];
 
 			// should check for single-option as soon as possible (performance improvement)
-			if (methods is MethodInfo)
-				return (MethodInfo) methods;
-			
+			if (methods is MethodInfo) return (MethodInfo) methods;
+
 			ArrayList candidates = (ArrayList) methods;
-			
+
 			if (candidates == null)
 				return null;
 
-			return SelectBestCandidate( 
-				(MethodInfo[]) candidates.ToArray( typeof(MethodInfo) ), 
-				request.Params );
+			return SelectBestCandidate(
+				(MethodInfo[]) candidates.ToArray(typeof(MethodInfo)),
+				request.Params);
 		}
 
 		protected virtual MethodInfo SelectBestCandidate(MethodInfo[] candidates, NameValueCollection webParams)
@@ -100,8 +100,8 @@ namespace Castle.MonoRail.Framework
 
 			foreach(MethodInfo candidate in candidates)
 			{
-				int points = CalculatePoints( candidate, webParams );
-				
+				int points = CalculatePoints(candidate, webParams);
+
 				if (lastMaxPoints < points)
 				{
 					lastMaxPoints = points;
@@ -121,11 +121,11 @@ namespace Castle.MonoRail.Framework
 
 			foreach(ParameterInfo param in parameters)
 			{
-				object value = webParams.Get( GetRequestParameterName(param) );
+				object value = webParams.Get(GetRequestParameterName(param));
 
-				if (value != null )
+				if (value != null)
 				{
-					points += 10;		
+					points += 10;
 					paramsMatched++;
 				}
 			}
@@ -137,13 +137,13 @@ namespace Castle.MonoRail.Framework
 
 			return points;
 		}
-		
+
 		protected virtual String GetRequestParameterName(ParameterInfo param)
 		{
 			return param.Name;
 		}
 
-		protected virtual object[] BuildMethodArguments( ParameterInfo[] parameters, IRequest request )
+		protected virtual object[] BuildMethodArguments(ParameterInfo[] parameters, IRequest request)
 		{
 			object[] args = new object[parameters.Length];
 			String paramName = String.Empty;
@@ -155,34 +155,36 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				for(int i=0; i < args.Length; i++)
+				for(int argIndex = 0; argIndex < args.Length; argIndex++)
 				{
-					ParameterInfo param	= parameters[i];
+					ParameterInfo param = parameters[argIndex];
 					paramName = param.Name;
 
 					// if complex binding is successful, there's no need for further processing
-					if (BindComplexParameter(param, request, args, i))
+					if (BindComplexParameter(param, request, args, argIndex))
+					{
 						continue;
-					
-					args[i] = ConvertUtils.Convert( param.ParameterType, allParams.GetValues( paramName ), param.Name, files, allParams );
+					}
+
+					args[argIndex] = ConvertUtils.Convert(param.ParameterType, allParams.GetValues(paramName), param.Name, files, allParams);
 				}
 			}
 			catch(FormatException ex)
 			{
-				throw new RailsException( 
-					String.Format("Could not convert {0} to request type. " + 
-						"Argument value is '{1}'", paramName, allParams.Get( paramName ) ), ex );
+				throw new RailsException(
+					String.Format("Could not convert {0} to request type. " +
+						"Argument value is '{1}'", paramName, allParams.Get(paramName)), ex);
 			}
 			catch(Exception ex)
 			{
-				throw new RailsException( 
-					String.Format("Error building method arguments. " + 
-						"Last param analized was {0} with value '{1}'", paramName, value), ex );
+				throw new RailsException(
+					String.Format("Error building method arguments. " +
+						"Last param analized was {0} with value '{1}'", paramName, value), ex);
 			}
 
 			return args;
 		}
-		
+
 		/// <summary>
 		/// Complex parameter bindings can be done overriding this method.
 		/// It should return <c>true</c> if the binding was completed. If it returns
@@ -192,16 +194,16 @@ namespace Castle.MonoRail.Framework
 		/// <c>true</c> if binding completes and the default behaviour can be skipped,
 		/// <c>false</c> otherwise.
 		/// </returns>
-		protected virtual bool BindComplexParameter(ParameterInfo param, IRequest request, object[] args, int i)
+		protected virtual bool BindComplexParameter(ParameterInfo param, IRequest request, object[] args, int argIndex)
 		{
-			object[] bindAttributes	= param.GetCustomAttributes( typeof(DataBindAttribute), false );
-			
-			if ( bindAttributes.Length > 0 )
+			object[] bindAttributes = param.GetCustomAttributes(typeof(DataBindAttribute), false);
+
+			if (bindAttributes.Length != 0)
 			{
 				DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
 
-				args[i] = BindObject( dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel, dba.Exclude, dba.Allow );
-				
+				args[argIndex] = BindObject(dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel, dba.Exclude, dba.Allow);
+
 				return true;
 			}
 
@@ -210,27 +212,12 @@ namespace Castle.MonoRail.Framework
 
 		protected object BindObject(ParamStore from, Type paramType, String prefix, int nestedLevel, String excludedProperties, String allowedProperties)
 		{
-			NameValueCollection webParams = null;
-
-			switch ( from )
-			{
-				case ParamStore.Form: 
-					webParams = formParams; 
-					break;
-
-				case ParamStore.QueryString:
-					webParams = queryParams;
-					break;
-
-				default:
-					webParams = allParams;
-					break;
-			}
+			NameValueCollection webParams = ResolveParamsSource(from);
 
 			ArrayList errorList = new ArrayList();
-			
-			object instance = binder.BindObject( paramType, prefix, webParams, Context.Request.Files, errorList, nestedLevel, excludedProperties, allowedProperties );
-						
+
+			object instance = binder.BindObject(paramType, prefix, webParams, Context.Request.Files, errorList, nestedLevel, excludedProperties, allowedProperties);
+
 			boundInstances[instance] = errorList;
 
 			return instance;
@@ -238,42 +225,51 @@ namespace Castle.MonoRail.Framework
 
 		protected object BindObjectInstance(object instance, ParamStore from, String prefix)
 		{
-			NameValueCollection webParams = null;
-
-			switch ( from )
-			{
-				case ParamStore.Form: 
-					webParams = formParams; 
-					break;
-				case ParamStore.QueryString:
-					webParams = queryParams;
-					break;
-				default:
-					webParams = allParams;
-					break;
-			}
+			NameValueCollection webParams = ResolveParamsSource(from);
 
 			ArrayList errorList = new ArrayList();
-			
-			binder.BindObjectInstance( instance, prefix, webParams, Context.Request.Files, errorList );
-						
+
+			binder.BindObjectInstance(instance, prefix, webParams, Context.Request.Files, errorList);
+
 			boundInstances[instance] = errorList;
 
 			return instance;
 		}
 
-		protected ErrorList GetDataBindErrors( object instance )
+		protected ErrorList GetDataBindErrors(object instance)
 		{
-			ArrayList list = boundInstances[ instance ] as ArrayList;
+			ArrayList list = boundInstances[instance] as ArrayList;
 
-			return new ErrorList( list );
+			return new ErrorList(list);
 		}
 
-		protected void CreateParamCollections( IRequest request )
+		protected void CreateParamCollections(IRequest request)
 		{
-			formParams		= request.Form;
-			queryParams		= request.QueryString;
-			allParams		= request.Params;
+			formParams = request.Form;
+			queryParams = request.QueryString;
+			allParams = request.Params;
+		}
+
+		protected NameValueCollection ResolveParamsSource(ParamStore from)
+		{
+			NameValueCollection webParams = null;
+	
+			switch(from)
+			{
+				case ParamStore.Form:
+					webParams = formParams;
+					break;
+
+				case ParamStore.QueryString:
+					webParams = queryParams;
+					break;
+
+				default:
+					webParams = allParams;
+					break;
+			}
+
+			return webParams;
 		}
 	}
 }

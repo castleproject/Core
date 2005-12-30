@@ -1263,7 +1263,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Attempts to deliver the System.Web.Mail.MailMessage using localhost smtp server or the server specified by the key SMTP_SERVER in the web.config.
+		/// Attempts to deliver the Message using the server specified on the web.config.
 		/// </summary>
 		/// <param name="message">The instance of System.Web.Mail.MailMessage that will be sent</param>
 		public void DeliverEmail(Message message)

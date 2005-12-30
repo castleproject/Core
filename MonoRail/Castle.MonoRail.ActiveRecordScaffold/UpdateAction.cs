@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-
+	using System.Collections.Specialized;
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 
@@ -60,7 +60,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 				scope.Dispose();
 
-				controller.Context.Response.Redirect(controller.Name, "list" + Model.Type.Name);
+				controller.Redirect(controller.AreaName, controller.Name, "list" + Model.Type.Name);
 			}
 			catch(Exception ex)
 			{
@@ -72,7 +72,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			if (errors.Count != 0)
 			{
 				controller.Context.Flash["errors"] = errors;
-				controller.Context.Response.Redirect(controller.Name, "edit" + Model.Type.Name);
+
+				NameValueCollection parameters = new NameValueCollection();
+				parameters["id"] = idVal.ToString();
+
+				controller.Redirect(controller.AreaName, controller.Name, "edit" + Model.Type.Name, parameters);
 			}
 		}
 

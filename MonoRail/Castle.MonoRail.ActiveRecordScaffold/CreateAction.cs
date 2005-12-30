@@ -54,7 +54,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 				scope.Dispose();
 
-				controller.Context.Response.Redirect(controller.Name, "list" + Model.Type.Name);
+				controller.Redirect(controller.AreaName, controller.Name, "list" + Model.Type.Name);
 			}
 			catch(Exception ex)
 			{
@@ -66,7 +66,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			if (errors.Count != 0)
 			{
 				controller.Context.Flash["errors"] = errors;
-				controller.Context.Response.Redirect(controller.Name, "new" + Model.Type.Name);
+				controller.Redirect(controller.AreaName, controller.Name, "new" + Model.Type.Name);
 			}
 		}
 

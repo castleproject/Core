@@ -81,15 +81,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			string templateFullName = ViewRootDir + "/" + ResolveTemplateName(templateName);
 			
 			return File.Exists(templateFullName);
-
-//			try
-//			{
-//				return velocity.GetTemplate(templateFullName) != null;
-//			}
-//			catch(Exception)
-//			{
-//				return false;
-//			}
 		}
 
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
@@ -125,7 +116,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				PostSendView(controller, template);
 			}
-			catch (Exception/* ex*/)
+			catch (Exception)
 			{
 				if (hasLayout)
 				{
@@ -133,18 +124,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 					writer = context.Response.Output;
 				}
 
-				// hammett: Gonna experiment with default ASP.Net error handling for a while
 				throw;
-
-//				if (context.Request.IsLocal)
-//				{
-//					SendErrorDetails(ex, writer);
-//					return;
-//				}
-//				else
-//				{
-//					throw new RailsException("Could not obtain view: " + view, ex);
-//				}
 			}
 
 			if (hasLayout)

@@ -162,15 +162,14 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public void Redirect( String area, String controller, String action )
 		{
-			_redirected = true;
-
 			if ( area == null || area.Length == 0 )
 			{
-				_response.Redirect(
-					UrlInfo.CreateAbsoluteRailsUrl( _appPath, controller, action, _extension ), false );
+				Redirect( controller, action );
 			}
 			else
 			{
+    			_redirected = true;
+
 				_response.Redirect( 
 					UrlInfo.CreateAbsoluteRailsUrl( _appPath, area, controller, action, _extension ), false );
 			}

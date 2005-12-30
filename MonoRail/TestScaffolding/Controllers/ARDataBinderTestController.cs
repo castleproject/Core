@@ -33,7 +33,7 @@ namespace TestScaffolding
 			RenderText(person.ToString());
 		}
 				
-		public void SavePerson([ARDataBindAttribute(Prefix="SimplePerson")] SimplePerson person)
+		public void SavePerson([ARDataBindAttribute(Prefix="SimplePerson", AutoLoad=true)] SimplePerson person)
 		{			
 			RenderText(person.ToString());
 		}

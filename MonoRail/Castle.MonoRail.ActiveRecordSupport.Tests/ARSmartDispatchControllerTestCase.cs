@@ -35,7 +35,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			string[] args;
 			
 			args = new string[] {
-				"SimplePerson@autoload=yes",
+				//"SimplePerson@autoload=yes",
 				"SimplePerson.Id=1",
 				"SimplePerson.Name=John"
 			};

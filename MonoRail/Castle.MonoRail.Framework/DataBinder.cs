@@ -39,6 +39,7 @@ namespace Castle.MonoRail.Framework
 		protected internal static readonly String IgnoreAttribute = MetadataIdentifier + "ignore";
 		protected internal static readonly String CountAttribute = MetadataIdentifier + "count";
 		protected internal static readonly String Yes = "yes";
+		protected internal static readonly String No = "no";
 		protected internal static readonly int DefaultNestedLevelsLeft = 3;
 		protected internal static readonly BindingFlags PropertiesBindingFlags = 
 			BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
@@ -154,7 +155,7 @@ namespace Castle.MonoRail.Framework
 		
 		#region InternalBindObject
 
-		private object InternalBindObject(Type instanceType, String paramPrefix, int nestedLevelsLeft, DataBindContext ctx)
+		protected object InternalBindObject(Type instanceType, String paramPrefix, int nestedLevelsLeft, DataBindContext ctx)
 		{		
 			if (ShouldIgnoreType(instanceType) ||
 			    ShouldIgnoreElement( ctx.ParamList, paramPrefix )) return null;
@@ -170,7 +171,7 @@ namespace Castle.MonoRail.Framework
 			}			
 		}
 			
-		private object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, 
+		protected object InternalRecursiveBindObjectInstance(object instance, String paramPrefix, 
 			int nestedLevelsLeft, DataBindContext ctx)
 		{
 			if (--nestedLevelsLeft < 0) return instance;			
@@ -292,12 +293,12 @@ namespace Castle.MonoRail.Framework
 				   propType == typeof(Decimal);
 		}
 
-		private String GetRoot( Type type, String prefix )
+		protected String GetRoot( Type type, String prefix )
 		{
 			return (prefix == null) ? type.Name : prefix;
 		}
 		
-		private String[] CreateNormalizedList(String csv)
+		protected String[] CreateNormalizedList(String csv)
 		{
 			if( csv == null || csv.Trim() == String.Empty )
 			{
@@ -319,7 +320,7 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 				
-		private static String NormalizeParamPrefix(String paramPrefix)
+		protected static String NormalizeParamPrefix(String paramPrefix)
 		{
 			return (paramPrefix != null && paramPrefix != String.Empty) ? 
 				paramPrefix.ToLower(CultureInfo.InvariantCulture) : String.Empty;
@@ -336,6 +337,7 @@ namespace Castle.MonoRail.Framework
 				return name;
 			}
 		}
+
 		/// <summary>
 		/// Similar to the grep in perl but with the option
 		/// of specifying if you want to capture the value to be returned
@@ -375,37 +377,6 @@ namespace Castle.MonoRail.Framework
 			return results.AllKeys;
 		}
 				
-		#endregion
-
-		#region DataBindContext
-		
-		/// <summary>
-		/// This class is used just to minimize the number of params being passed between
-		/// calls, also to make it easier to make modifications in the future,
-		/// notice that the recursive nature of the algorithm prevent us from adding all
-		/// params here unless we implement some kind of stack. 
-		/// </summary>
-		public class DataBindContext
-		{
-			public NameValueCollection ParamList; 
-			public IDictionary Files; 
-			public IList Errors;
-			public String [] ExcludedProperties;
-			public String [] AllowedProperties;
-			public String Root;
-			
-			public DataBindContext(String root, NameValueCollection paramList, IDictionary files, 
-				IList errorList, String[] excludedProperties, String[] allowedProperties)
-			{
-				Root = root;
-				ParamList = paramList;
-				Files = files;
-				Errors = errorList;
-				ExcludedProperties = excludedProperties;
-				AllowedProperties = allowedProperties;
-			}
-		}
-		
-		#endregion
+		#endregion		
 	}		
 }

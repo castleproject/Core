@@ -24,21 +24,28 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	[AttributeUsage(AttributeTargets.Parameter), Serializable]
 	public class ARDataBindAttribute : DataBindAttribute
 	{
-		private bool _validate;
-		private bool _autoPersist;
+		private bool validate;
+		private bool autoPersist;
+		private bool autoLoad;
 		
 		public ARDataBindAttribute() : base ()
 		{
 		}
-		
+
+		public bool AutoLoad
+		{
+			get { return autoLoad; }
+			set { autoLoad = value; }
+		}
+
 		/// <summary>
 		/// When true performs automatic validation of any class
 		/// that inherit from <see cref="Castle.ActiveRecord.ActiveRecordValidationBase"/>
 		/// </summary>
 		public bool Validate
 		{
-			get { return _validate; }
-			set { _validate = value; }
+			get { return validate; }
+			set { validate = value; }
 		}	
 		
 		/// <summary>
@@ -47,8 +54,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// </summary>
 		public bool AutoPersist
 		{
-			get { return _autoPersist; }
-			set { _autoPersist = value; }
+			get { return autoPersist; }
+			set { autoPersist = value; }
 		}			
 	}
 }
