@@ -46,6 +46,23 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitModel(model);
 			Dedent();
 			EndMappingNode();
+
+#if OUTPUTXML
+			String file = model.Type.Name + ".maping.xml";
+
+			System.IO.File.Delete(file);
+
+			using(System.IO.FileStream fs = System.IO.File.OpenWrite(file))
+			{
+				String xml = Xml;
+
+				byte[] ba = System.Text.ASCIIEncoding.UTF8.GetBytes(xml);
+
+				fs.Write(ba, 0, ba.Length);
+
+				fs.Flush();
+			}			
+#endif
 		}
 
 		public override void VisitModel(ActiveRecordModel model)

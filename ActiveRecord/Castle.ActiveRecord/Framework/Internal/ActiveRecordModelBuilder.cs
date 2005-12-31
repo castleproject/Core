@@ -97,7 +97,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
             //Check persistent fields of the base class as well
             if (ShouldCheckBase(type))
-                ProcessFields(type.BaseType, model);
+            {
+				ProcessFields(type.BaseType, model);
+			}
 
 			FieldInfo[] fields = type.GetFields( FieldDefaultBindingFlags );
 
@@ -116,7 +118,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
             //Check persistent properties of the base class as well
             if (ShouldCheckBase(type))
+			{
                 ProcessProperties(type.BaseType, model);
+			}
 
 			PropertyInfo[] props = type.GetProperties( DefaultBindingFlags );
 
@@ -268,11 +272,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 						model.Hilos.Add(new HiloModel( prop, propAtt ));
 					}
 				}
-				if(anyMetaValues.Count>0)
+				
+				if (anyMetaValues.Count > 0)
 				{
 					if (anyModel==null)
+					{
 						throw new ActiveRecordException("You can't specify a Any.MetaValue without specifying the Any attribute. " + 
 							"Check type " + prop.DeclaringType.FullName);
+					}
 					anyModel.MetaValues = anyMetaValues;
 				}
 

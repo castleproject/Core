@@ -30,7 +30,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests.Model
             set { id = value; }
         }
 
-        [BelongsTo(typeof(ClassWithAnyAttribute))]
+        [BelongsTo]
         public virtual ClassWithAnyAttribute Clazz
         {
             get { return clazz; }

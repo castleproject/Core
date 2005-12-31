@@ -14,11 +14,15 @@
 
 namespace Castle.ActiveRecord.Framework.Internal
 {
+	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 
 
 	public abstract class AbstractDepthFirstVisitor : IVisitor
 	{
+		private IDictionary visited = new HybridDictionary(100); 
+
 		public void VisitNode(IVisitable visitable)
 		{
 			if (visitable == null) return;
@@ -36,6 +40,15 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public virtual void VisitModel(ActiveRecordModel model)
 		{
+			if (!visited.Contains(model))
+			{
+				visited.Add(model, String.Empty);
+			}
+			else
+			{
+				return;
+			}
+
 			VisitNodes( model.Ids );
 			VisitNode( model.Key );
 			VisitNode( model.Version );
@@ -44,12 +57,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNodes( model.Classes );
 			VisitNodes( model.Fields );
 			VisitNodes( model.Anys );
-			VisitNodes( model.HasManyToAny );
 			VisitNodes( model.Properties );
 			VisitNodes( model.OneToOnes );
 			VisitNodes( model.BelongsTo );
 			VisitNodes( model.HasMany );
 			VisitNodes( model.HasAndBelongsToMany );
+			VisitNodes( model.HasManyToAny );
 			VisitNodes( model.CollectionIDs );
 			VisitNodes( model.Hilos );
 			VisitNodes( model.Components );

@@ -87,7 +87,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			// The model is the ancestor of the child, but is it the direct AR ancsetor?
             Type arAncestor = child.Type.BaseType;
 
-            while (arAncestor != typeof(object) && ActiveRecordBase.GetModel(arAncestor) == null)
+            while (arAncestor != typeof(object) && ActiveRecordModel.GetModel(arAncestor) == null)
             {
                 arAncestor = arAncestor.BaseType;
             }

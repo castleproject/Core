@@ -63,6 +63,10 @@ namespace Castle.ActiveRecord
 		private OuterJoinEnum outerJoin = OuterJoinEnum.Auto;
 		private CascadeEnum cascade = CascadeEnum.None;
 
+		public BelongsToAttribute()
+		{
+		}
+
 		/// <summary>
 		/// Indicates a column to be used on the association
 		/// </summary>
@@ -74,10 +78,10 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Indicates the target type to be used by the association
 		/// </summary>
-		public BelongsToAttribute(Type type)
-		{
-			this.type = type;
-		}
+//		public BelongsToAttribute(Type type)
+//		{
+//			this.type = type;
+//		}
 
 		/// <summary>
 		/// Gets or sets the target type

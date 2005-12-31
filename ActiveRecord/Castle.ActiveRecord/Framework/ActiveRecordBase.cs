@@ -332,8 +332,8 @@ namespace Castle.ActiveRecord
 		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
 		protected internal static object FindFirst(Type targetType, Order[] orders, params ICriterion[] criterias)
 		{
-			Array r = SlicedFindAll(targetType, 0, 1, orders, criterias);
-			return (r != null && r.Length > 0 ? r.GetValue(0) : null);
+			Array result = SlicedFindAll(targetType, 0, 1, orders, criterias);
+			return (result != null && result.Length > 0 ? result.GetValue(0) : null);
 		}
 
 		/// <summary>
@@ -621,11 +621,16 @@ namespace Castle.ActiveRecord
 		public override String ToString()
 		{
 			Framework.Internal.ActiveRecordModel model = GetModel(GetType());
-			if (model.Ids.Count != 1)
+
+			if (model == null || model.Ids.Count != 1)
+			{
 				return base.ToString();
+			}
 			
 			Framework.Internal.PrimaryKeyModel pkModel = (Framework.Internal.PrimaryKeyModel) model.Ids[0];
+			
 			object pkVal = pkModel.Property.GetValue(this, null);
+			
 			return base.ToString() + "#" + pkVal;
 		}
 	}

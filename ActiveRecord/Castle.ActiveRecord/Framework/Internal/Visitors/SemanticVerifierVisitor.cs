@@ -228,7 +228,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
 				}
 			}
-            if (ActiveRecordBase.GetModel(model.Property.PropertyType) != null)
+            if (ActiveRecordModel.GetModel(model.Property.PropertyType) != null)
             {
                 throw new ActiveRecordException( String.Format(
                     "You can't use [Property] on {0}.{1} because {2} is an active record class, did you mean to use BelongTo?",
@@ -402,6 +402,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 					"it could not find a 'BelongsTo' mapped property in the target type {2}", 
 					model.Property.DeclaringType.Name, model.Property.Name, model.HasManyAtt.MapType) );
 			}
+
+			if (target != null) VisitModel(target);
 
 			if (table == null)
 			{
