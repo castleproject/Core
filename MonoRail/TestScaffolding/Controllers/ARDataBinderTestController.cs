@@ -22,7 +22,7 @@ namespace TestScaffolding
 	using TestScaffolding.Model;
 
 
-	public class ARDataBinderTestController : ARSmartDispatchController
+	public class ARDataBinderTestController : ARSmartDispatcherController
 	{
 		public ARDataBinderTestController() : base ()
 		{
