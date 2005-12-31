@@ -54,11 +54,6 @@ namespace Castle.MonoRail.Framework
 			binder = new DataBinder();
 		}
 
-		protected override void InternalSend(String action)
-		{
-			base.InternalSend(action);
-		}
-
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
 		{
 			// HACK: GetBaseDefinition() is a workaround for DYNPROXY-14

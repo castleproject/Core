@@ -19,7 +19,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
-	/// This attribute tells <see cref="ARSmartDispatchController" />
+	/// This attribute tells <see cref="ARSmartDispatcherController" />
 	/// to fetches the ActiveRecord based on its Primary Key.
 	/// </summary>
 	/// <remarks>
@@ -46,7 +46,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public class ARFetchAttribute : Attribute
 	{
 		private String requestParameterName;
-		private bool create, require;
+		private bool create, required;
 		
 		/// <summary>
 		/// Constructs an <see cref="ARFetchAttribute"/> 
@@ -54,12 +54,12 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// </summary>
 		/// <param name="requestParameterName">The parameter name to be read from the request</param>
 		/// <param name="create"><c>true</c> if you want an instance even when the record is not found</param>
-		/// <param name="require"><c>true</c> if you want an exception if the record is not found</param>
-		public ARFetchAttribute(String requestParameterName, bool create, bool require) : base()
+		/// <param name="required"><c>true</c> if you want an exception if the record is not found</param>
+		public ARFetchAttribute(String requestParameterName, bool create, bool required) : base()
 		{
 			this.requestParameterName = requestParameterName;
 			this.create = create;
-			this.require = require;
+			this.required = required;
 		}
 
 		/// <summary>
@@ -115,10 +115,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// When set to <c>true</c> the record must be found
 		/// or an exception will be thrown
 		/// </summary>
-		public bool Require
+		public bool Required
 		{
-			get { return require; }
-			set { require = value; }
+			get { return required; }
+			set { required = value; }
 		}
 	}
 }

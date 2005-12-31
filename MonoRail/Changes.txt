@@ -8,7 +8,7 @@ Beta 5
 
 - Fixed Flash (it now persists the new entries between requests)  (by Ahmed)
 
-- Added FilterAttribute.ExecutionOrder, the default value is Int16.MaxValue 
+- Added FilterAttribute.ExecutionOrder, the default value is Int32.MaxValue 
   so the less the value higher will be the filter priority
 
 - Added Controller.RedirectToAction(String actionName)

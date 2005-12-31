@@ -24,7 +24,6 @@ namespace Castle.MonoRail.Framework
 		/// Implementors should perform the action 
 		/// upon this invocation
 		/// </summary>
-		/// <param name="controller"></param>
-		void Execute( Controller controller );
+		void Execute(Controller controller);
 	}
 }

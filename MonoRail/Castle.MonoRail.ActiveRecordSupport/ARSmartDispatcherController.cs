@@ -176,7 +176,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			object obj = null;
 
-			if (pk != null && String.Empty != pk)
+			if (pk != null && !String.Empty.Equals(pk))
 			{
 				PrimaryKeyModel pkModel = (PrimaryKeyModel) model.Ids[0];
 
@@ -185,7 +185,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				if (pk.GetType() != pkType)
 					pk = Convert.ChangeType(pk, pkType);
 
-				obj = SupportingUtils.FindByPK(type, pk, attr.Require);
+				obj = SupportingUtils.FindByPK(type, pk, attr.Required);
 			}
 
 			if (obj == null && attr.Create)

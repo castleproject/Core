@@ -22,6 +22,7 @@ namespace Castle.MonoRail.Framework
 		Form,
 		Params
 	}
+
 	/// <summary>
 	/// The DataBind Attribute is used to indicate that an Action methods parameter 
 	/// is to be intercepted and handled by the <see cref="DataBinder"/>.
@@ -32,8 +33,8 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
 	public class DataBindAttribute : Attribute
 	{
+		private ParamStore _from = ParamStore.Params;
 		private String _prefix = String.Empty;
-		private ParamStore _from	= ParamStore.Params;
 		private String _exclude = String.Empty;
 		private String _allow = String.Empty;
 		private int _nestedLevel = 3;
@@ -65,9 +66,11 @@ namespace Castle.MonoRail.Framework
 		}
 		
 		/// <summary>
-		/// Gets or sets <see cref="ParamStore"/> used to locate the values used for databinding.
+		/// Gets or sets <see cref="ParamStore"/> used to 
+		/// indicate where to get the values to databinding.
 		/// </summary>
-		/// <value>The ParamStore type.  Typically either QueryString, Form, or Params.</value>
+		/// <value>The <see cref="ParamStore"/> type.  
+		/// Typically <see cref="ParamStore.Params"/>.</value>
 		public ParamStore From
 		{
 			get { return _from; }

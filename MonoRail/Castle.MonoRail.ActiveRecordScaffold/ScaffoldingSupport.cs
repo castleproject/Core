@@ -41,19 +41,19 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	/// <description>Presents a form to the user fill in order to create the item on the database</description>
 	/// </item>
 	/// <item><term>createAccount</term>
-	/// <description>Take the information submited by the newAccount and creates the item</description>
+	/// <description>Takes the information submited by the newAccount and creates the item</description>
 	/// </item>
 	/// <item><term>editAccount</term>
 	/// <description>Presents a form to the user fill in order to update the item on the database</description>
 	/// </item>
 	/// <item><term>updateAccount</term>
-	/// <description>Take the information submited by the editAccount and changes the item</description>
+	/// <description>Takes the information submited by the editAccount and changes the item</description>
 	/// </item>
 	/// <item><term>listAccount</term>
 	/// <description>Presents a paginated list of items saved</description>
 	/// </item>
 	/// <item><term>confirmAccount</term>
-	/// <description>Ask the user if he/she confirms the removal of the item</description>
+	/// <description>Asks the user if he/she confirms the removal of the item</description>
 	/// </item>
 	/// <item><term>removeAccount</term>
 	/// <description>Attempt to remove the item and presents the results</description>
@@ -89,7 +89,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				NVelocityTemplateEngine nvelTemplateEng = new NVelocityTemplateEngine();
 #if DEBUG
-				nvelTemplateEng.TemplateDir = @"E:\dev\castle\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
+				nvelTemplateEng.TemplateDir = @"E:\dev\castleall\trunk\MonoRail\Castle.MonoRail.ActiveRecordScaffold\Templates\";
 				nvelTemplateEng.BeginInit();
 				nvelTemplateEng.EndInit();
 #else

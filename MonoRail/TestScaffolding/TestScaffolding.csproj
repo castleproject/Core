@@ -80,11 +80,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.Framework"
-                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\..\SharedLibs\log4net\log4net.dll"
@@ -115,14 +110,10 @@
                     HintPath = "..\..\ActiveRecord\bin\Castle.ActiveRecord.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.ActiveRecordSupport"
-                    Project = "{2409063E-BE05-4596-A677-758096D1C759}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     AssemblyName = "Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine"
                     HintPath = "..\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll"
+                    Private = "True"
                 />
                 <Reference
                     Name = "Castle.Components.Common.TemplateEngine"
@@ -130,9 +121,29 @@
                     HintPath = "..\bin\Castle.Components.Common.TemplateEngine.dll"
                 />
                 <Reference
+                    Name = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender.SmtpEmailSender"
+                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll"
+                />
+                <Reference
+                    Name = "Castle.Components.Common.EmailSender"
+                    AssemblyName = "Castle.Components.Common.EmailSender"
+                    HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
+                />
+                <Reference
                     Name = "Castle.MonoRail.ActiveRecordScaffold"
-                    AssemblyName = "Castle.MonoRail.ActiveRecordScaffold"
-                    HintPath = "..\bin\scaffold\Castle.MonoRail.ActiveRecordScaffold.dll"
+                    Project = "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.ActiveRecordSupport"
+                    Project = "{2409063E-BE05-4596-A677-758096D1C759}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Castle.MonoRail.Framework"
+                    Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
