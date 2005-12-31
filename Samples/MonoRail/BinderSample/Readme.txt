@@ -38,13 +38,17 @@ Create some publishers and books using Scaffolding to start:
 
 Then you can visualize different approaches to edit a publisher and it's books
 
-  http://localhost:83/approach1/index.rails   which uses pure DataBind and some hand coded map
+    * http://localhost/approach1/index.rails
+      which uses pure arrays 
 
-and 
+and
 
-  http://localhost:83/approach2/index.rails   which uses ARDataBind (much less effort)
+    * http://localhost/approach2/index.rails
+      which uses DataBind and arrays (less effort) 
 
+and
 
-
+    * http://localhost/approach3/index.rails
+      which uses ARDataBind (much less effort) 
 
 Enjoy.

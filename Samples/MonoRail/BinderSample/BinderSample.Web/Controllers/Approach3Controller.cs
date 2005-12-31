@@ -14,13 +14,14 @@
 
 namespace BinderSample.Web.Controllers
 {
+	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
 
 	using BinderSample.Web.Model;
 
 
 	[Layout("scaffold")]
-	public class Approach2Controller : SmartDispatcherController
+	public class Approach3Controller : ARSmartDispatcherController
 	{
 		public void Index()
 		{
@@ -34,22 +35,9 @@ namespace BinderSample.Web.Controllers
 			RenderView("EditPublisher");
 		}
 
-		public void Update([DataBind(Prefix="publisher")] Publisher formpublisher,
-			[DataBind(Prefix="book")] Book[] formBooks)
+		public void Update([ARDataBind(AutoLoad=true, Prefix="publisher")] Publisher publisher,
+			[ARDataBind(AutoLoad=true, Prefix="book")] Book[] books)
 		{
-			Publisher publisher = Publisher.Find(formpublisher.Id);
-			publisher.Name = formpublisher.Name;
-
-			foreach(Book formBook in formBooks)
-			{
-				Book book = Book.Find(formBook.Id);
-
-				book.Name = formBook.Name;
-				book.Author = formBook.Author;
-
-				book.Save();
-			}
-
 			publisher.Save();
 
 			EditPublisher(publisher.Id);

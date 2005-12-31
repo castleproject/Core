@@ -1,5 +1,5 @@
 
-<h3>Using DataBinder with Arrays</h3>
+<h3>Using ARDataBinder</h3>
 
 $HtmlHelper.Form("update.rails")
 

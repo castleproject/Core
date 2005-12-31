@@ -1,6 +1,6 @@
 alter table Book  drop constraint FK7C80C0CCEB61E439
-drop table Publisher
-drop table Book
+if exists (select * from dbo.sysobjects where id = object_id(N'Publisher') and OBJECTPROPERTY(id, N'IsUserTable') = 1) drop table Publisher
+if exists (select * from dbo.sysobjects where id = object_id(N'Book') and OBJECTPROPERTY(id, N'IsUserTable') = 1) drop table Book
 create table Publisher (
   Id INT IDENTITY NOT NULL,
    Name NVARCHAR(255) null,

@@ -63,6 +63,11 @@ namespace BinderSample.Web.Model
 			set { publisher = value; }
 		}
 
+		public static Book Find(int id)
+		{
+			return (Book) FindByPrimaryKey(typeof(Book), id);
+		}
+
 		public override string ToString()
 		{
 			return "" + name;

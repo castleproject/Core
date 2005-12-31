@@ -135,11 +135,6 @@
                     HintPath = "..\..\..\..\MonoRail\bin\Castle.MonoRail.WindsorExtension.dll"
                 />
                 <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\..\..\..\MonoRail\bin\HashCodeProvider.dll"
-                />
-                <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\..\..\MonoRail\bin\Iesi.Collections.dll"
@@ -211,6 +206,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\Approach3Controller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\ScaffoldingController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -239,6 +239,14 @@
                 />
                 <File
                     RelPath = "Views\Approach2\index.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\Approach3\editpublisher.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Views\Approach3\index.vm"
                     BuildAction = "None"
                 />
                 <File
