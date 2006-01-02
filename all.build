@@ -290,10 +290,9 @@
 				<exclude name="**\obj\Debug\*.*" />
 				<exclude name="**\bin\*.*" />
 				<exclude name="**\*.user" />
-				<exclude name="Rook" />
-				<exclude name="Samples" />
-				<exclude name="Sandbox" />
-				<exclude name="setup" />
+				<exclude name="/Rook" />
+				<exclude name="/Sandbox" />
+				<exclude name="/setup" />
 			</fileset>
 		</zip>
 	</target>
@@ -337,7 +336,7 @@
 				
 				<!-- Components -->
 				<include name="SharedLibs/Prevalence"/>
-				<include name="SharedLibs/Db4o"/>
+				<include name="SharedLibs/Db4o/net-1.1"/>
 				<include name="SharedLibs/IBatis"/>
 				<include name="SharedLibs/NHibernate"/>
 				<include name="SharedLibs/boo"/>
@@ -379,7 +378,7 @@
 					<property name="DocumentPrivates" value="${ShowPrivate}" />
 					
 					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004,2005 - Castle Project (original author or authors)" />
+					<property name="CopyrightText" value="Copyright 2004,2006 - Castle Project (original author or authors)" />
 					<property name="CopyrightHref" value="http://www.castleproject.org" />
 				</documenter>
 			</documenters>

@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ namespace Castle.MonoRail.Generator
 		{
 			Console.WriteLine("MonoRail Generator - " + Assembly.GetExecutingAssembly().GetName().Version.ToString() );
 			Console.WriteLine("Released under Apache Software License 2.0");
-			Console.WriteLine("Copyright (c) 2004-2005 the original author/authors");
+			Console.WriteLine("Copyright (c) 2004-2006 the original author/authors");
 			Console.WriteLine("http://www.castleproject.org/");
 			Console.WriteLine("");
 			Console.WriteLine("");

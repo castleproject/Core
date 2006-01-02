@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -83,14 +83,20 @@ namespace Castle.Facilities.Startable
 		{
 			IHandler[] handlers = (IHandler[]) waitList.ToArray( typeof(IHandler) );
 
+			IList validList = new ArrayList();
+
 			foreach(IHandler handler in handlers)
 			{
 				if (handler.CurrentState == HandlerState.Valid)
 				{
-					Start( handler.ComponentModel.Name );
-
+					validList.Add(handler);
 					waitList.Remove(handler);
 				}
+			}
+
+			foreach(IHandler handler in validList)
+			{
+				Start( handler.ComponentModel.Name );
 			}
 		}
 

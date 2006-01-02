@@ -1,4 +1,4 @@
-// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ namespace CastleProjectHooks.Tests
 	{
 
 		private const String HEADER = 
-			"// Copyright 2004-2005 Castle Project - http://www.castleproject.org/\n" +
+			"// Copyright 2004-2006 Castle Project - http://www.castleproject.org/\n" +
 			"// \n" +
 			"// Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
 			"// you may not use this file except in compliance with the License.\n" +
