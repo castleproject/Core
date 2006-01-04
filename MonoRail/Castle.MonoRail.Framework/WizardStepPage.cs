@@ -139,6 +139,10 @@ namespace Castle.MonoRail.Framework
 			{
 				RedirectToPreviousStep();
 			}
+			else if (navigateTo == null || navigateTo == String.Empty || navigateTo == "next")
+			{
+				RedirectToNextStep();
+			}
 			else if (navigateTo.StartsWith(uriPrefix))
 			{
 				Redirect(navigateTo.Substring(uriPrefix.Length));
@@ -146,10 +150,6 @@ namespace Castle.MonoRail.Framework
 			else if (navigateTo == "first")
 			{
 				RedirectToFirstStep();
-			}
-			else if (navigateTo == null || navigateTo == String.Empty || navigateTo == "next")
-			{
-				RedirectToNextStep();
 			}
 			else
 			{
