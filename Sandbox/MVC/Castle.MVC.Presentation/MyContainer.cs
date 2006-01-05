@@ -5,8 +5,8 @@ using Castle.MVC.StatePersister;
 using Castle.MVC.States;
 using Castle.MVC.Views;
 using Castle.Windsor;
+using Castle.Windsor.Configuration;
 using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Configuration.Sources;
 
 namespace Castle.MVC.Test.Presentation
 {
@@ -15,7 +15,7 @@ namespace Castle.MVC.Test.Presentation
 	/// </summary>
 	public class MyContainer : WindsorContainer
 	{
-		public MyContainer() : base( new XmlInterpreter( new AppDomainConfigSource("castle") ),new XmlInterpreter( "mvc.config" ))
+		public MyContainer( IConfigurationInterpreter interpreter ) : base(interpreter)
 		{
 		}
 

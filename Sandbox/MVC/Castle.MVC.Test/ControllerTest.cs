@@ -1,14 +1,8 @@
 using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.MVC.Navigation;
-using Castle.MVC.StatePersister;
-using Castle.MVC.States;
+using Castle.Model.Resource;
 using Castle.MVC.Test.Presentation;
-using Castle.MVC.Views;
 using Castle.Windsor;
-using Castle.Model.Configuration;
-
 using Castle.Windsor.Configuration.Interpreters;
-using Castle.Windsor.Configuration.Sources;
 using NUnit.Framework;
 
 namespace Castle.MVC.Test
@@ -36,11 +30,17 @@ namespace Castle.MVC.Test
 			 _state = null;
 
 			// Config by file
-			_container = new WindsorContainer( new XmlInterpreter( new AppDomainConfigSource("castle")),
-				new XmlInterpreter( "test.config" )
-				);
+//			_container = new WindsorContainer( new XmlInterpreter( new AppDomainConfigSource("castle")),
+//				new XmlInterpreter( "test.config" )
+//				);
 
-			//-- Config by Code
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			XmlInterpreter interpreter = new XmlInterpreter(new ConfigResource());
+			interpreter.ProcessResource(interpreter.Source, store);
+
+			_container = new WindsorContainer( interpreter );
+
+			//-- Config by Code for test
 //			_container = new WindsorContainer(new DefaultConfigurationStore());
 //
 //			MutableConfiguration confignode = new MutableConfiguration("facility");

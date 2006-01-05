@@ -2,12 +2,15 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Web;
+using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Model.Resource;
 using Castle.MVC.Navigation;
 using Castle.MVC.StatePersister;
 using Castle.MVC.States;
 using Castle.MVC.Test.Presentation;
 using Castle.MVC.Views;
 using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
 
 namespace Castle.MVC.Test.Web 
 {
@@ -39,7 +42,11 @@ namespace Castle.MVC.Test.Web
 		
 		protected void Application_Start(Object sender, EventArgs e)
 		{
-			_container = new MyContainer();
+			DefaultConfigurationStore store = new DefaultConfigurationStore();
+			XmlInterpreter interpreter = new XmlInterpreter(new ConfigResource());
+			interpreter.ProcessResource(interpreter.Source, store);
+
+			_container = new MyContainer(interpreter);
 		}
  
 		protected void Session_Start(Object sender, EventArgs e)

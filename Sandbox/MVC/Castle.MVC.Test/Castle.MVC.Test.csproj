@@ -86,24 +86,9 @@
                     AssemblyFolderKey = "hklm\dn\nunit.framework"
                 />
                 <Reference
-                    Name = "Castle.Windsor"
-                    AssemblyName = "Castle.Windsor"
-                    HintPath = "..\Lib\Castle.Windsor.dll"
-                />
-                <Reference
                     Name = "Castle.MVC"
                     Project = "{8C3E14B8-8154-4FC4-9BF3-EF63F74B69D3}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.Facilities.TypedFactory"
-                    AssemblyName = "Castle.Facilities.TypedFactory"
-                    HintPath = "..\Lib\Castle.Facilities.TypedFactory.dll"
-                />
-                <Reference
-                    Name = "Castle.MicroKernel"
-                    AssemblyName = "Castle.MicroKernel"
-                    HintPath = "..\Lib\Castle.MicroKernel.dll"
                 />
                 <Reference
                     Name = "Castle.MVC.Test.Presentation"
@@ -121,9 +106,19 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
+                    Name = "Castle.Windsor"
+                    AssemblyName = "Castle.Windsor"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Windsor.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    AssemblyName = "Castle.MicroKernel"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.MicroKernel.dll"
+                />
+                <Reference
                     Name = "Castle.Model"
                     AssemblyName = "Castle.Model"
-                    HintPath = "..\Lib\Castle.Model.dll"
+                    HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
             </References>
         </Build>
