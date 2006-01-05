@@ -31,7 +31,7 @@ namespace Castle.ActiveRecord
 			this.targetType = type;
 		}
 
-		public Type TargetType
+		public Type Target
 		{
 			get { return targetType; }
 		}

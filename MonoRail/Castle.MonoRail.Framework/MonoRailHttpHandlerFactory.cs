@@ -39,9 +39,9 @@ namespace Castle.MonoRail.Framework
 				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(context);
 			}
 #endif
-			return new MonoRailHttpHandler(url, _viewEngine, 
-				_controllerFactory, _controllerDescriptorBuilder, _filterFactory, _resourceFactory, 
-				_scaffoldingSupport, _viewCompFactory, extensions, emailSender);
+			return new MonoRailHttpHandler(url, viewEngine, 
+				controllerFactory, controllerDescriptorBuilder, filterFactory, resourceFactory, 
+				scaffoldingSupport, viewCompFactory, extensions, emailSender);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)

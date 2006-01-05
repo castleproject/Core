@@ -38,10 +38,15 @@ namespace Castle.MonoRail.Framework
 		private NameValueCollection formParams;
 		private NameValueCollection allParams;
 
-		protected DataBinder binder;
+		private DataBinder binder;
 
-		public SmartDispatcherController()
+		public SmartDispatcherController() : this(new DataBinder())
 		{
+		}
+
+		protected SmartDispatcherController(DataBinder binder)
+		{
+			this.binder = binder;
 		}
 
 		public DataBinder Binder
@@ -51,7 +56,6 @@ namespace Castle.MonoRail.Framework
 
 		protected override void Initialize()
 		{
-			binder = new DataBinder();
 		}
 
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
@@ -161,7 +165,7 @@ namespace Castle.MonoRail.Framework
 						continue;
 					}
 
-					args[argIndex] = ConvertUtils.Convert(param.ParameterType, allParams.GetValues(paramName), param.Name, files, allParams);
+					args[argIndex] = ConvertUtils.Convert(param.ParameterType, paramName, allParams, files);
 				}
 			}
 			catch(FormatException ex)

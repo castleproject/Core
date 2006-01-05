@@ -20,7 +20,8 @@ namespace Castle.ActiveRecord
 	
 	public interface IActiveRecordQuery
 	{
-		Type TargetType { get; }
+		Type Target { get; }
+
 		object Execute(ISession session);
 	}
 }

@@ -1,6 +1,12 @@
 Change history
 --------------
 
+Release Candidate 1
+===================
+
+- MonoRail is now CLSCompliant (kudos to Roelof Blom <roelof.blom@gmail.com>)
+
+
 Beta 5
 ======
 

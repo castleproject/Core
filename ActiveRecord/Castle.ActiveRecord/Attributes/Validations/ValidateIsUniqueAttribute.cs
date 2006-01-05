@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Validators;
 
 
-	[Serializable]
+	[Serializable, CLSCompliant(false)]
 	public class ValidateIsUniqueAttribute : AbstractValidationAttribute
 	{
 		public ValidateIsUniqueAttribute() : base(new IsUniqueValidator())

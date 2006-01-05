@@ -177,7 +177,7 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public static ISessionFactoryHolder GetSessionFactoryHolder()
 		{
-			return ActiveRecordBase._holder;
+			return ActiveRecordBase.holder;
 		}
 	}
 }

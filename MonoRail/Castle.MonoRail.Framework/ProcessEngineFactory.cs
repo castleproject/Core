@@ -28,16 +28,16 @@ namespace Castle.MonoRail.Framework
 
 	public class ProcessEngineFactory
 	{
-		protected MonoRailConfiguration _config;
-		protected IViewEngine _viewEngine;
-		protected IFilterFactory _filterFactory;
-		protected IResourceFactory _resourceFactory;
-		protected IControllerFactory _controllerFactory;
-		protected IScaffoldingSupport _scaffoldingSupport;
-		protected IViewComponentFactory _viewCompFactory;
+		protected MonoRailConfiguration monoRailConfiguration;
+		protected IViewEngine viewEngine;
+		protected IFilterFactory filterFactory;
+		protected IResourceFactory resourceFactory;
+		protected IControllerFactory controllerFactory;
+		protected IScaffoldingSupport scaffoldingSupport;
+		protected IViewComponentFactory viewCompFactory;
 		protected IMonoRailExtension[] extensions;
 		protected IEmailSender emailSender;
-		protected ControllerDescriptorBuilder _controllerDescriptorBuilder;
+		protected ControllerDescriptorBuilder controllerDescriptorBuilder;
 
 		public ProcessEngineFactory() : this(null)
 		{
@@ -52,10 +52,10 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				_config = config;
+				this.monoRailConfiguration = config;
 			}
 			
-			_controllerDescriptorBuilder = new ControllerDescriptorBuilder();
+			controllerDescriptorBuilder = new ControllerDescriptorBuilder();
 			
 			InitializeExtensions();
 			InitializeControllerFactory();
@@ -71,118 +71,118 @@ namespace Castle.MonoRail.Framework
 
 		public ProcessEngine Create()
 		{
-			return new ProcessEngine(_controllerFactory, _controllerDescriptorBuilder, _viewEngine, 
-				_filterFactory, _resourceFactory, _scaffoldingSupport, 
-				_viewCompFactory, extensions, emailSender);
+			return new ProcessEngine(controllerFactory, controllerDescriptorBuilder, viewEngine, 
+				filterFactory, resourceFactory, scaffoldingSupport, 
+				viewCompFactory, extensions, emailSender);
 		}
 
 		public MonoRailConfiguration Config
 		{
-			get { return _config; }
-			set { _config = value; }
+			get { return monoRailConfiguration; }
+			set { monoRailConfiguration = value; }
 		}
 
 		protected virtual void ObtainConfiguration()
 		{
-			_config = MonoRailConfiguration.GetConfig();
+			monoRailConfiguration = MonoRailConfiguration.GetConfig();
 		}
 
 		protected virtual void CreateDefaultConfig()
 		{
-			_config = new MonoRailConfiguration();
+			monoRailConfiguration = new MonoRailConfiguration();
 		}
 
 		protected virtual void InitializeViewEngine()
 		{
-			if (_config.CustomViewEngineType != null)
+			if (monoRailConfiguration.CustomViewEngineType != null)
 			{
-				_viewEngine = (IViewEngine) 
-					Activator.CreateInstance(_config.CustomViewEngineType);
+				viewEngine = (IViewEngine) 
+					Activator.CreateInstance(monoRailConfiguration.CustomViewEngineType);
 			}
 			else
 			{
 				// If nothing was specified, we use the default view engine 
 				// based on webforms
-				_viewEngine = new AspNetViewEngine();
+				viewEngine = new AspNetViewEngine();
 			}
 
-			_viewEngine.ViewRootDir = _config.ViewsPhysicalPath;
-			_viewEngine.XhtmlRendering = _config.ViewsXhtmlRendering;
+			viewEngine.ViewRootDir = monoRailConfiguration.ViewsPhysicalPath;
+			viewEngine.XhtmlRendering = monoRailConfiguration.ViewsXhtmlRendering;
 
-			_viewEngine.Init();
+			viewEngine.Init();
 		}
 
 		protected virtual void InitializeFilterFactory()
 		{
-			if (_config.CustomFilterFactoryType != null)
+			if (monoRailConfiguration.CustomFilterFactoryType != null)
 			{
-				_filterFactory = (IFilterFactory) Activator.CreateInstance(_config.CustomFilterFactoryType);
+				filterFactory = (IFilterFactory) Activator.CreateInstance(monoRailConfiguration.CustomFilterFactoryType);
 			}
 			else
 			{
-				_filterFactory = new DefaultFilterFactory();
+				filterFactory = new DefaultFilterFactory();
 			}
 		}
 
 		protected virtual void InitializeViewComponentFactory()
 		{
-			if (_config.CustomViewComponentFactoryType != null)
+			if (monoRailConfiguration.CustomViewComponentFactoryType != null)
 			{
-				_viewCompFactory = (IViewComponentFactory) 
-					Activator.CreateInstance(_config.CustomViewComponentFactoryType);
+				viewCompFactory = (IViewComponentFactory) 
+					Activator.CreateInstance(monoRailConfiguration.CustomViewComponentFactoryType);
 			}
 			else
 			{
 				DefaultViewComponentFactory compFactory = new DefaultViewComponentFactory();
 
-				foreach(String assemblyName in _config.ComponentsAssemblies)
+				foreach(String assemblyName in monoRailConfiguration.ComponentsAssemblies)
 				{
 					compFactory.Inspect(assemblyName);
 				}
 
-				_viewCompFactory = compFactory;
+				viewCompFactory = compFactory;
 			}
 		}
 
 		protected virtual void InitializeResourceFactory()
 		{
-			if (_config.CustomResourceFactoryType != null)
+			if (monoRailConfiguration.CustomResourceFactoryType != null)
 			{
-				_resourceFactory = (IResourceFactory) 
-					Activator.CreateInstance(_config.CustomResourceFactoryType);
+				resourceFactory = (IResourceFactory) 
+					Activator.CreateInstance(monoRailConfiguration.CustomResourceFactoryType);
 			}
 			else
 			{
-				_resourceFactory = new DefaultResourceFactory();
+				resourceFactory = new DefaultResourceFactory();
 			}
 		}
 		
 		protected virtual void InitializeScaffoldingSupport()
 		{
-			if (_config.ScaffoldingType != null)
+			if (monoRailConfiguration.ScaffoldingType != null)
 			{
-				_scaffoldingSupport = (IScaffoldingSupport) 
-					Activator.CreateInstance(_config.ScaffoldingType);
+				scaffoldingSupport = (IScaffoldingSupport) 
+					Activator.CreateInstance(monoRailConfiguration.ScaffoldingType);
 			}
 		}
 
 		protected virtual void InitializeControllerFactory()
 		{
-			if (_config.CustomControllerFactoryType != null)
+			if (monoRailConfiguration.CustomControllerFactoryType != null)
 			{
-				_controllerFactory = (IControllerFactory) 
-					Activator.CreateInstance(_config.CustomControllerFactoryType);
+				controllerFactory = (IControllerFactory) 
+					Activator.CreateInstance(monoRailConfiguration.CustomControllerFactoryType);
 			}
 			else
 			{
 				DefaultControllerFactory factory = new DefaultControllerFactory();
 
-				foreach(String assemblyName in _config.ControllerAssemblies)
+				foreach(String assemblyName in monoRailConfiguration.ControllerAssemblies)
 				{
 					factory.Inspect(assemblyName);
 				}
 
-				_controllerFactory = factory;
+				controllerFactory = factory;
 			}
 		}
 
@@ -195,7 +195,7 @@ namespace Castle.MonoRail.Framework
 				IMonoRailExtension extension = 
 					Activator.CreateInstance( extensionType ) as IMonoRailExtension;
 
-				extension.Init(_config);
+				extension.Init(monoRailConfiguration);
 
 				extensionList.Add(extension);
 			}
@@ -208,7 +208,7 @@ namespace Castle.MonoRail.Framework
 		{
 			// TODO: allow user to customize this
 
-			emailSender = new SmtpSender( _config.SmtpConfig.Host );
+			emailSender = new SmtpSender( monoRailConfiguration.SmtpConfig.Host );
 
 			ISupportInitialize initializer = emailSender as ISupportInitialize;
 
@@ -221,8 +221,8 @@ namespace Castle.MonoRail.Framework
 		
 		private void ConnectViewComponentFactoryToViewEngine()
 		{
-			_viewCompFactory.ViewEngine = _viewEngine;
-			_viewEngine.ViewComponentFactory = _viewCompFactory;
+			viewCompFactory.ViewEngine = viewEngine;
+			viewEngine.ViewComponentFactory = viewCompFactory;
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework;
 
 
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple=true), Serializable]
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=true), Serializable, CLSCompliant(false)]
 	public abstract class AbstractValidationAttribute : Attribute
 	{
 		private IValidator _validator;

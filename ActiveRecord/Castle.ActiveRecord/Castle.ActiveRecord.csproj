@@ -285,6 +285,7 @@
                 />
                 <File
                     RelPath = "Framework\ActiveRecordBase.Generic.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

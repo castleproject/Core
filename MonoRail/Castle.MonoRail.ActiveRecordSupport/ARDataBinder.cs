@@ -93,7 +93,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 					if (propValue != null)
 					{
-						object id = ConvertUtils.Convert(pkModel.Property.PropertyType, propValue, propName, null, null);
+						object id = ConvertUtils.Convert(pkModel.Property.PropertyType, propValue);
 						instance = SupportingUtils.FindByPK(instanceType, id);
 					}
 					else
@@ -170,9 +170,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			String paramName = String.Format("{0}.{1}", prop.Name, keyModel.Property.Name);
 
-			String[] values = context.ParamList.GetValues(paramName);
-
-			int[] ids = (int[]) ConvertUtils.Convert(typeof(int[]), values, paramName, null, context.ParamList);
+			int[] ids = (int[]) ConvertUtils.Convert(typeof(int[]), paramName, context.ParamList, null);
 
 			if (ids != null)
 			{

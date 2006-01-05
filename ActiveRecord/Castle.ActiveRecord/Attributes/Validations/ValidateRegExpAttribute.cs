@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Validators;
 
 
-	[Serializable]
+	[Serializable, CLSCompliant(false)]
 	public class ValidateRegExpAttribute : AbstractValidationAttribute
 	{
 		public ValidateRegExpAttribute(String pattern) : base(new RegularExpressionValidator(pattern))

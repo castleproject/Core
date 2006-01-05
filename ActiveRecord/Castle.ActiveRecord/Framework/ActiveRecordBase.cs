@@ -35,7 +35,7 @@ namespace Castle.ActiveRecord
 	[Serializable]
 	public abstract class ActiveRecordBase : ActiveRecordHooksBase
 	{
-		protected internal static ISessionFactoryHolder _holder;
+		protected internal static ISessionFactoryHolder holder;
 
 		/// <summary>
 		/// Constructs an ActiveRecordBase subclass.
@@ -48,7 +48,7 @@ namespace Castle.ActiveRecord
 
 		private static void EnsureInitialized( Type type )
 		{
-			if (_holder == null)
+			if (holder == null)
 			{
 				String message = String.Format("An ActiveRecord class ({0}) was used but the framework seems not " + 
 					"properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?", type.FullName);
@@ -101,7 +101,7 @@ namespace Castle.ActiveRecord
 
 			EnsureInitialized(targetType);
 
-			ISession session = _holder.CreateSession( targetType );
+			ISession session = holder.CreateSession( targetType );
 
 			try
 			{
@@ -113,7 +113,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace Castle.ActiveRecord
 		{
 			EnsureInitialized(targetType);
 
-			ISession session = _holder.CreateSession( targetType );
+			ISession session = holder.CreateSession( targetType );
 
 			try
 			{
@@ -153,7 +153,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}		
 		}
 
@@ -185,7 +185,7 @@ namespace Castle.ActiveRecord
 		{
 			EnsureInitialized(targetType);
 
-			ISession session = _holder.CreateSession( targetType );
+			ISession session = holder.CreateSession( targetType );
 
 			try
 			{
@@ -215,7 +215,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -239,7 +239,7 @@ namespace Castle.ActiveRecord
 		{
 			EnsureInitialized(targetType);
 
-			ISession session = _holder.CreateSession( targetType );
+			ISession session = holder.CreateSession( targetType );
 
 			try
 			{
@@ -266,7 +266,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -355,16 +355,17 @@ namespace Castle.ActiveRecord
 			return (result.Length == 0) ? null : result.GetValue(0);
 		}
 
-		protected internal static object ExecuteQuery(IActiveRecordQuery q)
+		protected internal static object ExecuteQuery(IActiveRecordQuery query)
 		{
-			Type targetType = q.TargetType;
+			Type targetType = query.Target;
+
 			EnsureInitialized(targetType);
 
-			ISession session = _holder.CreateSession( targetType );
+			ISession session = holder.CreateSession( targetType );
 
 			try
 			{
-				return q.Execute(session);
+				return query.Execute(session);
 			}
 			catch (Exception ex)
 			{
@@ -372,7 +373,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -380,7 +381,7 @@ namespace Castle.ActiveRecord
 		{
 			EnsureInitialized(type);
 
-			ISession session = _holder.CreateSession( type );
+			ISession session = holder.CreateSession( type );
 
 			try
 			{
@@ -394,7 +395,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -402,7 +403,7 @@ namespace Castle.ActiveRecord
 		{
 			EnsureInitialized(type);
 
-			ISession session = _holder.CreateSession( type );
+			ISession session = holder.CreateSession( type );
 
 			try
 			{
@@ -416,16 +417,23 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 		
+		/// <summary>
+		/// Document this
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <param name="pkValues"></param>
+		/// <returns></returns>
 		protected internal static int DeleteAll(Type targetType, IEnumerable pkValues)
 		{
 			if (pkValues == null)
 				return 0;
 
-			int c = 0;
+			int counter = 0;
+			
 			foreach (int pk in pkValues)
 			{
 				Object obj = FindByPrimaryKey(targetType, pk, false);
@@ -436,10 +444,11 @@ namespace Castle.ActiveRecord
 						arBase.Delete(); // in order to allow override of the virtual "Delete()" method
 					else
 						ActiveRecordBase.Delete(obj);
-					c++;
+					counter++;
 				}
 			}
-			return c;
+
+			return counter;
 		}
 
 		/// <summary>
@@ -452,7 +461,7 @@ namespace Castle.ActiveRecord
 
 			EnsureInitialized(instance.GetType());
 
-			ISession session = _holder.CreateSession( instance.GetType() );
+			ISession session = holder.CreateSession( instance.GetType() );
 
 			try
 			{
@@ -466,7 +475,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -480,7 +489,7 @@ namespace Castle.ActiveRecord
 
 			EnsureInitialized(instance.GetType());
 
-			ISession session = _holder.CreateSession( instance.GetType() );
+			ISession session = holder.CreateSession( instance.GetType() );
 
 			try
 			{
@@ -494,7 +503,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -509,7 +518,7 @@ namespace Castle.ActiveRecord
 
 			EnsureInitialized(instance.GetType());
 
-			ISession session = _holder.CreateSession( instance.GetType() );
+			ISession session = holder.CreateSession( instance.GetType() );
 
 			try
 			{
@@ -523,7 +532,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 
@@ -537,7 +546,7 @@ namespace Castle.ActiveRecord
 
 			EnsureInitialized(instance.GetType());
 
-			ISession session = _holder.CreateSession( instance.GetType() );
+			ISession session = holder.CreateSession( instance.GetType() );
 
 			try
 			{
@@ -551,7 +560,7 @@ namespace Castle.ActiveRecord
 			}
 			finally
 			{
-				_holder.ReleaseSession(session);
+				holder.ReleaseSession(session);
 			}
 		}
 

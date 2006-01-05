@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -16,6 +17,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]		
 
 [assembly: AssemblyVersion("1.0.0.0")]
+
+[assembly: CLSCompliant(true)]
 
 // [assembly: AssemblyKeyFile(@"E:\dev\castle\CastleKey.snk")]
 

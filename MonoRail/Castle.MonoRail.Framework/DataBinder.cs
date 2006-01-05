@@ -214,9 +214,9 @@ namespace Castle.MonoRail.Framework
 					{
 						bool conversionSucceeded;
 
-						String[] values = ctx.ParamList.GetValues(paramName);
+						// String[] values = ctx.ParamList.GetValues(paramName);
 						
-						object value = ConvertUtils.Convert(prop.PropertyType, values, paramName, ctx.Files, ctx.ParamList, out conversionSucceeded);
+						object value = ConvertUtils.Convert(prop.PropertyType, paramName, ctx.ParamList, ctx.Files, out conversionSucceeded);
 						
 						// we don't want to set the value if the form param was missing
 						// to avoid loosing existing values in the object instance

@@ -34,14 +34,13 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	{
 		private ARDataBinder arBinder;
 
-		public ARSmartDispatcherController() : base()
+		public ARSmartDispatcherController() : base(new ARDataBinder())
 		{
 		}
 
 		protected override void Initialize()
 		{
-			arBinder = new ARDataBinder();
-			base.binder = arBinder;
+			arBinder = (ARDataBinder) Binder;
 		}
 
 		/// <summary>

@@ -27,16 +27,16 @@ namespace Castle.Services.Transaction
 	/// </summary>
 	public abstract class AbstractTransaction : MarshalByRefObject, ITransaction, IDisposable
 	{
-		private HybridDictionary _context;
-		private IList _synchronizations;
-		private TransactionStatus _state = TransactionStatus.NoTransaction;
-		protected IList _resources;
+		private HybridDictionary context;
+		private IList synchronizations;
+		private TransactionStatus state = TransactionStatus.NoTransaction;
+		internal IList resources;
 
 		public AbstractTransaction()
 		{
-			_resources = new ArrayList();
-			_synchronizations = new ArrayList();
-			_context = new HybridDictionary(true);
+			resources = new ArrayList();
+			synchronizations = new ArrayList();
+			context = new HybridDictionary(true);
 		}
 
 		public override object InitializeLifetimeService()
@@ -51,7 +51,7 @@ namespace Castle.Services.Transaction
 			if (resource == null) throw new ArgumentNullException("resource");
 
 			// We can't add the resource more than once
-			if (_resources.Contains(resource)) return;
+			if (resources.Contains(resource)) return;
 			
 			if (Status == TransactionStatus.Active)
 			{
@@ -61,20 +61,20 @@ namespace Castle.Services.Transaction
 				}
 				catch(Exception ex)
 				{
-					_state = TransactionStatus.Invalid;
+					state = TransactionStatus.Invalid;
 					throw ex;
 				}
 			}
 
-			_resources.Add(resource);
+			resources.Add(resource);
 		}
 
 		public virtual void Begin()
 		{
 			AssertState(TransactionStatus.NoTransaction);
-			_state = TransactionStatus.Active;
+			state = TransactionStatus.Active;
 
-			foreach(IResource resource in _resources)
+			foreach(IResource resource in resources)
 			{
 				try
 				{
@@ -82,7 +82,7 @@ namespace Castle.Services.Transaction
 				}
 				catch(Exception ex)
 				{
-					_state = TransactionStatus.Invalid;
+					state = TransactionStatus.Invalid;
 					throw ex;
 				}
 			}
@@ -91,13 +91,13 @@ namespace Castle.Services.Transaction
 		public virtual void Rollback()
 		{
 			AssertState(TransactionStatus.Active);
-			_state = TransactionStatus.RolledBack;
+			state = TransactionStatus.RolledBack;
 
 			PerformSynchronizations(false);
 
 			Exception error = null;
 
-			foreach(IResource resource in _resources)
+			foreach(IResource resource in resources)
 			{
 				try
 				{
@@ -105,7 +105,7 @@ namespace Castle.Services.Transaction
 				}
 				catch(Exception ex)
 				{
-					_state = TransactionStatus.Invalid;
+					state = TransactionStatus.Invalid;
 					error = ex;
 				}
 			}
@@ -121,13 +121,13 @@ namespace Castle.Services.Transaction
 		public virtual void Commit()
 		{
 			AssertState(TransactionStatus.Active);
-			_state = TransactionStatus.Committed;
+			state = TransactionStatus.Committed;
 
 			PerformSynchronizations(false);
 
 			Exception error = null;
 
-			foreach(IResource resource in _resources)
+			foreach(IResource resource in resources)
 			{
 				try
 				{
@@ -135,7 +135,7 @@ namespace Castle.Services.Transaction
 				}
 				catch(Exception ex)
 				{
-					_state = TransactionStatus.Invalid;
+					state = TransactionStatus.Invalid;
 					error = ex;
 				}
 			}
@@ -150,19 +150,19 @@ namespace Castle.Services.Transaction
 
 		public TransactionStatus Status
 		{
-			get { return _state; }
+			get { return state; }
 		}
 
 		public virtual void RegisterSynchronization(ISynchronization synchronization)
 		{
 			if (synchronization == null) throw new ArgumentNullException("synchronization");
 
-			_synchronizations.Add(synchronization);
+			synchronizations.Add(synchronization);
 		}
 
 		public virtual IDictionary Context
 		{
-			get { return _context; }
+			get { return context; }
 		}
 
 		public abstract bool IsChildTransaction { get; }
@@ -173,8 +173,8 @@ namespace Castle.Services.Transaction
 
 		public virtual void Dispose()
 		{
-			_resources.Clear();
-			_synchronizations.Clear();
+			resources.Clear();
+			synchronizations.Clear();
 		}
 
 		#endregion
@@ -183,7 +183,7 @@ namespace Castle.Services.Transaction
 
 		protected virtual void AssertState(TransactionStatus state)
 		{
-			if (_state != state)
+			if (this.state != state)
 			{
 				throw new TransactionException("Invalid transaction state to perform the requested action");
 			}
@@ -191,7 +191,7 @@ namespace Castle.Services.Transaction
 
 		private void PerformSynchronizations(bool runAfterCompletion)
 		{
-			foreach(ISynchronization sync in _synchronizations)
+			foreach(ISynchronization sync in synchronizations)
 			{
 				try
 				{
@@ -207,7 +207,7 @@ namespace Castle.Services.Transaction
 				catch(Exception)
 				{
 					// Exceptions should not be threw by syncs.
-					// It will be swalled
+					// They will be swalled
 				}
 			}
 		}

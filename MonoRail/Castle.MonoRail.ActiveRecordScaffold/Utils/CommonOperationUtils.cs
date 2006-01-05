@@ -89,8 +89,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 				throw new ScaffoldException("Can't edit without the proper id");
 			}
 	
-			return ConvertUtils.Convert(keyProperty.PropertyType, 
-				id, "id", null, controller.Params );
+			return ConvertUtils.Convert( keyProperty.PropertyType, "id", controller.Params, null );
 		}
 	}
 }

@@ -29,18 +29,18 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property), Serializable]
 	public abstract class RelationAttribute : BaseAttribute
 	{
-		protected Type mapType;
-		protected String table;
-		protected String schema;
-		protected String orderBy;
-		protected String where;
-		protected String sort;
-		protected String index;
-		protected String indexType;
-		protected bool lazy;
-		protected bool inverse;
-		protected ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
-		protected RelationType relType = RelationType.Guess;
+		internal Type mapType;
+		internal String table;
+		internal String schema;
+		internal String orderBy;
+		internal String where;
+		internal String sort;
+		internal String index;
+		internal String indexType;
+		internal bool lazy;
+		internal bool inverse;
+		internal ManyRelationCascadeEnum cascade = ManyRelationCascadeEnum.None;
+		internal RelationType relType = RelationType.Guess;
 
 		public RelationType RelationType
 		{

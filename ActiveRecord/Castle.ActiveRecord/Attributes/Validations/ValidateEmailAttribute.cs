@@ -19,7 +19,7 @@ namespace Castle.ActiveRecord
 	using Castle.ActiveRecord.Framework.Validators;
 
 
-	[Serializable]
+	[Serializable, CLSCompliant(false)]
 	public class ValidateEmailAttribute : AbstractValidationAttribute
 	{
 		public ValidateEmailAttribute() : base(new EmailValidator())

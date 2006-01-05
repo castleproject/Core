@@ -72,7 +72,7 @@ namespace Castle.ActiveRecord
 			RaiseSessionFactoryHolderCreated(holder);
 
 			ActiveRecordModel.type2Model.Clear();
-			ActiveRecordBase._holder = holder;
+			ActiveRecordBase.holder = holder;
 
 			// Base configuration
 			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);
@@ -203,7 +203,7 @@ namespace Castle.ActiveRecord
 		{
 			CheckInitialized();
 
-			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -226,7 +226,7 @@ namespace Castle.ActiveRecord
 			CheckInitialized();
 
 			ARSchemaCreator arschema = new ARSchemaCreator( 
-				ActiveRecordBase._holder.GetConfiguration( typeof(ActiveRecordBase) ) );
+				ActiveRecordBase.holder.GetConfiguration( typeof(ActiveRecordBase) ) );
 
 			arschema.Execute( scriptFileName );
 		}
@@ -252,7 +252,7 @@ namespace Castle.ActiveRecord
 		{
 			CheckInitialized();
 
-			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -276,7 +276,7 @@ namespace Castle.ActiveRecord
 
 			CheckInitialized();
 
-			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -301,7 +301,7 @@ namespace Castle.ActiveRecord
 
 			CheckInitialized();
 
-			foreach(Configuration config in ActiveRecordBase._holder.GetAllConfigurations())
+			foreach(Configuration config in ActiveRecordBase.holder.GetAllConfigurations())
 			{
 				SchemaExport export = CreateSchemaExport(config);
 
@@ -332,7 +332,7 @@ namespace Castle.ActiveRecord
 
 		private static void CheckInitialized()
 		{
-			if (ActiveRecordBase._holder == null)
+			if (ActiveRecordBase.holder == null)
 			{
 				throw new ActiveRecordException("Framework must be Initialize(d) first.");
 			}
