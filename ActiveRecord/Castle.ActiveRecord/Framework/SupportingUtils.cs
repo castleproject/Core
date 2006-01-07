@@ -18,6 +18,8 @@ namespace Castle.ActiveRecord.Framework
 	using System.Collections;
 
 	using NHibernate;
+	using Nullables;
+	using Iesi.Collections;
 
 	/// <summary>
 	/// Usefull for external frameworks
@@ -71,6 +73,57 @@ namespace Castle.ActiveRecord.Framework
 			{
 				ActiveRecordBase.holder.ReleaseSession(session);
 			}
+		}
+
+		/// <summary>
+		/// Converts the results stored in an <see cref="IList"/> to an
+		/// strongly-typed array.
+		/// </summary>
+		/// <param name="t">The type of the new array</param>
+		/// <param name="list">The source list</param>
+		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
+		/// <returns>The strongly-typed array</returns>
+		public static Array BuildArray(Type t, IList list, bool distinct)
+		{
+			return BuildArray(t, list, null, distinct);
+		}
+
+		/// <summary>
+		/// Converts the results stored in an <see cref="IList"/> to an
+		/// strongly-typed array.
+		/// </summary>
+		/// <param name="t">The type of the new array</param>
+		/// <param name="list">The source list</param>
+		/// <param name="entityIndex">
+		/// If the HQL clause selects more than one field, or a join is performed
+		/// without using <c>fetch join</c>, the contents of the result list will
+		/// be of type <c>object[]</c>. Specify which index in this array should be used to
+		/// compose the new result array.
+		/// </param>
+		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
+		/// <returns>The strongly-typed array</returns>
+		public static Array BuildArray(Type t, IList list, NullableInt32 entityIndex, bool distinct)
+		{
+			// we only need to perform an additional processing if an
+			// entityIndex was specified, or if distinct was chosen.
+			if (distinct || entityIndex.HasValue)
+			{
+				Set s = (distinct ? new ListSet() : null);
+
+				IList newList = new ArrayList(list.Count);
+				foreach (object o in list)
+				{
+					object el = (!entityIndex.HasValue ? o : ((object[]) o)[entityIndex.Value]);
+					if (s == null || s.Add(el))
+						newList.Add(el);
+				}
+
+				list = newList;
+			}
+
+			Array a = Array.CreateInstance(t, list.Count);
+			list.CopyTo(a, 0);
+			return a;
 		}
 	}
 }

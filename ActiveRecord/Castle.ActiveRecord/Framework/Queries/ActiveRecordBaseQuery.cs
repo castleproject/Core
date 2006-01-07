@@ -18,9 +18,9 @@ namespace Castle.ActiveRecord
 	using System.Collections;
 
 	using NHibernate;
-
-	using Iesi.Collections;
 	using Nullables;
+
+	using Castle.ActiveRecord.Framework;
 	
 	public abstract class ActiveRecordBaseQuery : IActiveRecordQuery
 	{
@@ -67,7 +67,7 @@ namespace Castle.ActiveRecord
 		/// <returns>The strongly-typed array</returns>
 		protected Array GetResultsArray(Type t, IList list, bool distinct)
 		{
-			return GetResultsArray(t, list, null, distinct);
+			return SupportingUtils.BuildArray(t, list, distinct);
 		}
 
 		/// <summary>
@@ -86,26 +86,7 @@ namespace Castle.ActiveRecord
 		/// <returns>The strongly-typed array</returns>
 		protected Array GetResultsArray(Type t, IList list, NullableInt32 entityIndex, bool distinct)
 		{
-			// we only need to perform an additional processing if an
-			// entityIndex was specified, or if distinct was chosen.
-			if (distinct || entityIndex.HasValue) 
-			{
-				Set s = (distinct ? new ListSet() : null);
-
-				IList newList = new ArrayList(list.Count);
-				foreach (object o in list) 
-				{
-					object el = (!entityIndex.HasValue ? o : ((object[]) o)[entityIndex.Value]);
-					if (s == null || s.Add(el))
-						newList.Add(el);
-				}
-
-				list = newList;
-			}
-
-			Array a = Array.CreateInstance(t, list.Count);
-			list.CopyTo(a, 0);
-			return a;
+			return SupportingUtils.BuildArray(t, list, entityIndex, distinct);
 		}
 	}
 }
