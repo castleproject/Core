@@ -35,7 +35,7 @@ namespace Castle.ActiveRecord.Queries
 			get { return hql; }
 		}
 
-		public override object Execute(ISession session)
+		protected override object InternalExecute(ISession session)
 		{
 			IQuery q = session.CreateQuery(hql);
 			
