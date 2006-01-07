@@ -388,7 +388,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\ActiveRecordBase.Generic.cs" />
+    <Compile Include="Framework\ActiveRecordHooksBase.cs" />
     <Compile Include="Framework\ARSchemaCreator.cs" />
+    <Compile Include="Framework\Queries\ScalarQuery.Generic.cs" />
+    <Compile Include="Framework\Queries\SimpleQuery.Generic.cs" />
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
