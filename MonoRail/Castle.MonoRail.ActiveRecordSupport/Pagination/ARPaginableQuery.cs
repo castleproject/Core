@@ -46,12 +46,12 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		/// </summary>
 		/// <param name="session">The NHibernate Session</param>
 		/// <returns>The query results.</returns>
-		public sealed override object Execute(ISession session)
+		protected sealed override object InternalExecute(ISession session)
 		{
-			return InternalExecute(session, true);
+			return InternalPaginate(session, true);
 		}
 		
-		private IEnumerable InternalExecute(ISession session, bool skipPagination)
+		private IEnumerable InternalPaginate(ISession session, bool skipPagination)
 		{
 			IQuery q = session.CreateQuery(BuildHQL());
 			SetQueryParameters(q);
@@ -112,7 +112,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			ISession session = holder.CreateSession(targetType);
 			try
 			{
-				return InternalExecute(session, false);
+				return InternalPaginate(session, false);
 			}
 			finally
 			{
