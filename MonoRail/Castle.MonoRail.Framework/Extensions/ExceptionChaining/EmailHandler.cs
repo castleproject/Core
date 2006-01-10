@@ -30,17 +30,17 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 		public void Configure(XmlNode exceptionHandlerNode)
 		{
-			XmlAttribute mailToAtt = exceptionHandlerNode.Attributes["mailto"];
+			XmlAttribute mailToAtt = exceptionHandlerNode.Attributes["mailTo"];
 
 			if (mailToAtt == null || mailToAtt.Value == String.Empty)
 			{
-				throw new ConfigurationException("'mailto' is a required attribute " + 
+				throw new ConfigurationException("'mailTo' is a required attribute " + 
 					"for EmailHandler (part of ExceptionChaining extension)");
 			}
 
 			mailTo = mailToAtt.Value;
 
-			XmlAttribute mailFromAtt = exceptionHandlerNode.Attributes["mailfrom"];
+			XmlAttribute mailFromAtt = exceptionHandlerNode.Attributes["mailFrom"];
 
 			if (mailFromAtt != null && mailFromAtt.Value != String.Empty)
 			{

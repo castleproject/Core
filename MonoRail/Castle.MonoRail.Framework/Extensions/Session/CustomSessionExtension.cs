@@ -28,10 +28,10 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 	/// implementation of the session available on <see cref="IRailsEngineContext"/>
 	/// </summary>
 	/// <remarks>
-	/// To successfully install this extension you must add the attribute <c>customsession</c>
+	/// To successfully install this extension you must add the attribute <c>customSession</c>
 	/// to the <c>monoRail</c> configuration node and register the extension on the extensions node.
 	/// <code>
-	///   &lt;monoRail customsession="Type name that implements ICustomSessionFactory"&gt;
+	///   &lt;monoRail customSession="Type name that implements ICustomSessionFactory"&gt;
 	///   	&lt;extensions&gt;
 	///   	  &lt;extension type="Castle.MonoRail.Framework.Extensions.Session.CustomSessionExtension, Castle.MonoRail.Framework" /&gt;
 	///   	&lt;/extensions&gt;
@@ -47,7 +47,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		private ICustomSessionFactory customSession;
 
 		/// <summary>
-		/// Reads the attribute <c>customsession</c> 
+		/// Reads the attribute <c>customSession</c> 
 		/// from <see cref="MonoRailConfiguration"/> and
 		/// instantiate it based on the type name provided.
 		/// </summary>
@@ -59,13 +59,13 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		public override void Init(MonoRailConfiguration configuration)
 		{
 			XmlAttribute customSessionAtt = 
-				configuration.ConfigSection.Attributes["customsession"];
+				configuration.ConfigSection.Attributes["customSession"];
 
 			if (customSessionAtt == null || customSessionAtt.Value.Length == 0)
 			{
 				throw new ConfigurationException("The CustomSessionExtension requires that " + 
 					"the type that implements ICustomSessionFactory be specified through the " + 
-					"'customsession' attribute on 'monoRail' configuration node");
+					"'customSession' attribute on 'monoRail' configuration node");
 			}
 
 			Type customSessType = MonoRailConfiguration.GetType(customSessionAtt.Value);

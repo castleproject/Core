@@ -41,6 +41,14 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
+		public WizardStepPage()
+		{			
+		}
+
+		public WizardStepPage( DataBinder binder ) : base( binder )
+		{			
+		}
+
 		#region Useful Properties
 
 		public Controller WizardController
