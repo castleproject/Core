@@ -1,3 +1,31 @@
+RC 3
+====
+
+- Support for nested nodes on the properties. (kudos to Ahmed)
+  Example:
+
+  <configuration>
+    <properties>
+       <MyComponentParams>
+         <user>Joe</user>
+         <pwd>Doe</pwd>
+       </MyComponentParams>
+     </properties>
+     <components id=”MyComponent”>
+       <parameters>#{ MyComponentParams }</parameters>
+     </components>
+  </configuration>
+  
+  Will result in 
+
+     <components id=”MyComponent”>
+       <parameters>
+         <user>Joe</user>
+         <pwd>Doe</pwd>
+       </parameters>
+     </components>
+
+
 RC 2
 ====
 

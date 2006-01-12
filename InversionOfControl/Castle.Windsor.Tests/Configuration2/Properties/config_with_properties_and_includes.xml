@@ -5,23 +5,28 @@
 
 	<facilities>
 	
-		<facility id="testidengine" >
+		<facility id="facility1" >
 			<item>#{prop1}</item>
 		</facility>
 
-		<facility id="testidengine2" >
+		<facility id="facility2" >
 			<item value="#{prop2}"/>
 		</facility>
-	
+
+		<facility id="facility3">
+			<param1 attr="#{prop1}">#{prop2}</param1>
+			<param2 attr="#{prop2}">#{prop1}</param2>
+			<param3 attr="param3 attr"><value attr="param3 value attr">param3 value</value></param3>
+		</facility>	
 	</facilities>
 
 	<components>
 	
-		<component id="testidcomponent1">
+		<component id="component1">
 			<item>#{prop1}</item>
 		</component>
 		
-		<component id="testidcomponent2">
+		<component id="component2">
 			<item value="#{prop2}"/>
 		</component>
 		

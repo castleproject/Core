@@ -66,26 +66,50 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 		{
 			IConfigurationStore store = container.Kernel.ConfigurationStore;
 
-			Assert.AreEqual(2, store.GetFacilities().Length);
-			Assert.AreEqual(2, store.GetComponents().Length);
+			Assert.AreEqual(3, store.GetFacilities().Length, "Diff num of facilities");
+			Assert.AreEqual(2, store.GetComponents().Length, "Diff num of components");
 
-			IConfiguration config = store.GetFacilityConfiguration("testidengine");
+			IConfiguration config = store.GetFacilityConfiguration("facility1");
 			IConfiguration childItem = config.Children["item"];
 			Assert.IsNotNull(childItem);
 			Assert.AreEqual("prop1 value", childItem.Value);
 
-			config = store.GetFacilityConfiguration("testidengine2");
+			config = store.GetFacilityConfiguration("facility2");
 			Assert.IsNotNull(config);
 			childItem = config.Children["item"];
 			Assert.IsNotNull(childItem);
 			Assert.AreEqual("prop2 value", childItem.Attributes["value"]);
+			Assert.IsNull(childItem.Value);
 
-			config = store.GetComponentConfiguration("testidcomponent1");
+			config = store.GetFacilityConfiguration("facility3");
+			Assert.IsNotNull(config);
+			Assert.AreEqual( 3, config.Children.Count, "facility3 should have 3 children" );
+
+			childItem = config.Children["param1"];
+			Assert.IsNotNull(childItem);
+			Assert.AreEqual("prop2 value", childItem.Value);
+			Assert.AreEqual("prop1 value", childItem.Attributes["attr"]);
+
+			childItem = config.Children["param2"];
+			Assert.IsNotNull(childItem);
+			Assert.AreEqual("prop1 value", childItem.Value);
+			Assert.AreEqual("prop2 value", childItem.Attributes["attr"]);
+
+			childItem = config.Children["param3"];
+			Assert.IsNotNull(childItem);
+			Assert.AreEqual("param3 attr", childItem.Attributes["attr"]);
+
+			childItem = childItem.Children["value"];
+			Assert.IsNotNull(childItem);
+			Assert.AreEqual("param3 value", childItem.Value);
+			Assert.AreEqual("param3 value attr", childItem.Attributes["attr"]);
+
+			config = store.GetComponentConfiguration("component1");
 			childItem = config.Children["item"];
 			Assert.IsNotNull(childItem);
 			Assert.AreEqual("prop1 value", childItem.Value);
 
-			config = store.GetComponentConfiguration("testidcomponent2");
+			config = store.GetComponentConfiguration("component2");
 			childItem = config.Children["item"];
 			Assert.IsNotNull(childItem);
 			Assert.AreEqual("prop2 value", childItem.Attributes["value"]);

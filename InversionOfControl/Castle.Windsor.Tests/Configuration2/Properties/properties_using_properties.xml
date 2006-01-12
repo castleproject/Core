@@ -5,28 +5,52 @@
 		<prop>value</prop>
 		<prop1>prop1 #{prop}</prop1>
 		<prop2>prop2 #{prop}</prop2>
+
+		<param3attr>param3 attr</param3attr>
+		<param3ValueAttr>param3 value attr</param3ValueAttr>
+		<param3value>param3 value</param3value>
+
+		<prop3>
+			<param3 attr="#{param3attr}"><value attr="#{param3ValueAttr}">#{param3value}</value></param3>
+		</prop3>
+
+		<facilityRef>
+			<facility id="facility1" >
+				<item>#{prop1}</item>
+			</facility>			
+		</facilityRef>
+
+		<parametersRef>
+			<param1 attr="#{prop1}">#{prop2}</param1>
+			<param2 attr="#{prop2}">#{prop1}</param2>
+			#{prop3}
+		</parametersRef>
+
+		<itemRef>
+			<item value="#{prop2}"/>
+		</itemRef>
 	</properties>
 
 	<facilities>
-	
-		<facility id="testidengine" >
-			<item>#{prop1}</item>
-		</facility>
+		#{facilityRef}
 
-		<facility id="testidengine2" >
+		<facility id="facility2" >
 			<item value="#{prop2}"/>
 		</facility>
-	
+
+		<facility id="facility3">
+			#{parametersRef}
+		</facility>	
 	</facilities>
 
 	<components>
 	
-		<component id="testidcomponent1">
+		<component id="component1">
 			<item>#{prop1}</item>
 		</component>
 		
-		<component id="testidcomponent2">
-			<item value="#{prop2}"/>
+		<component id="component2">
+			#{itemRef}
 		</component>
 		
 	</components>

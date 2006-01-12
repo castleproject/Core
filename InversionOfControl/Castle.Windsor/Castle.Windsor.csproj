@@ -183,11 +183,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\IConfigurationSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Configuration\AppDomain\CastleSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

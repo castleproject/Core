@@ -17,7 +17,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 	using System;
 	using System.Collections;
 	using System.Diagnostics;
-	using System.Reflection;
 	using System.Xml.XPath;
 
 	public class XslContext

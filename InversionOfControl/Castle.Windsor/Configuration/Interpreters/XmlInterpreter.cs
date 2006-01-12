@@ -24,7 +24,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 	using Castle.Model.Resource;
 	using Castle.Model.Configuration;
-
+	
 	using Castle.MicroKernel;
 
 	/// <summary>
@@ -52,11 +52,12 @@ namespace Castle.Windsor.Configuration.Interpreters
 		/// i.e. #{my_node_name} || #{ my.node.name }
 		/// spaces are trimmed
 		/// </summary>
-		private static readonly Regex PropertyValidationRegExp = new Regex( @"(\#\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
-		
+		private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
+
 		private readonly IDictionary properties = new HybridDictionary();
 		private readonly XslContext context = new XslContext();
 		private readonly XslProcessor processor = new XslProcessor();
+		private readonly StringBuilder buffer = new StringBuilder();
 
 		#region Constructors
 
@@ -76,14 +77,14 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		public override void ProcessResource(IResource source, IConfigurationStore store)
 		{
-			using (source)
+			using(source)
 			{
 				XmlDocument doc = new XmlDocument();
-			
-				doc.Load( source.GetStreamReader() );
 
-				doc = processor.Process( doc, context );
-			
+				doc.Load(source.GetStreamReader());
+
+				doc = processor.Process(doc, context);
+
 				Deserialize(doc.DocumentElement, store);
 			}
 		}
@@ -94,45 +95,49 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			foreach(XmlNode node in section)
 			{
-				if (node.NodeType != XmlNodeType.Element)
+				if (IsTextNode(node))
 				{
-					continue;
+					throw new ConfigurationException(String.Format("{0} cannot contain text nodes", node.Name));
 				}
-
-				if (IncludeNodeName.Equals(node.Name))
+				else if (node.NodeType == XmlNodeType.Element)
 				{
-					ProcessInclude(node, store);
-				}
-				else if (PropertiesNodeName.Equals(node.Name))
-				{
-					DeserializeProperties(node.ChildNodes);
-				}
-				else if (FacilitiesNodeName.Equals(node.Name))
-				{
-					DeserializeFacilities(node.ChildNodes, store);
-				}
-				else if (ComponentsNodeName.Equals(node.Name))
-				{
-					DeserializeComponents(node.ChildNodes, store);
+					DeserializeElement(node, store);
 				}
 			}
 		}
 
-		private void DeserializeProperties( XmlNodeList nodes)
+		private void DeserializeElement(XmlNode node, IConfigurationStore store)
+		{
+			if (IncludeNodeName.Equals(node.Name))
+			{
+				ProcessInclude(node, store);
+			}
+			else if (PropertiesNodeName.Equals(node.Name))
+			{
+				DeserializeProperties(node.ChildNodes);
+			}
+			else if (FacilitiesNodeName.Equals(node.Name))
+			{
+				DeserializeFacilities(node.ChildNodes, store);
+			}
+			else if (ComponentsNodeName.Equals(node.Name))
+			{
+				DeserializeComponents(node.ChildNodes, store);
+			}
+			else
+			{
+				throw new ConfigurationException(String.Format("DeserializeElement cannot process element {0}", node.Name));
+			}
+		}
+
+		private void DeserializeProperties(XmlNodeList nodes)
 		{
 			foreach(XmlNode node in nodes)
 			{
-				if (node.NodeType != XmlNodeType.Element)
+				if (node.NodeType == XmlNodeType.Element)
 				{
-					continue;
+					properties[node.Name] = GetDeserializedNode(node);
 				}
-				
-				// Note that new properties values override old ones!
-				// properties values can reference another properties
-
-				String value = EvalProperty( node.InnerText.Trim() );
-
-				properties[node.Name] = value;
 			}
 		}
 
@@ -140,27 +145,24 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			foreach(XmlNode node in nodes)
 			{
-				if (node.NodeType != XmlNodeType.Element)
+				if (node.NodeType == XmlNodeType.Element)
 				{
-					continue;
+					AssertNodeName(node, FacilityNodeName);
+
+					DeserializeFacility(node, store);
 				}
-				if (!FacilityNodeName.Equals(node.Name))
+				else if (IsTextNode(node))
 				{
-					String message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'", 
-						FacilitiesNodeName, FacilityNodeName, node.Name);
-
-					throw new ConfigurationException(message);
+					DeserializeString(node.Value, FacilityNodeName, store);
 				}
-
-				DeserializeFacility(node, store);
 			}
 		}
 
 		private void DeserializeFacility(XmlNode node, IConfigurationStore store)
 		{
 			String id = GetRequiredAttributeValue(node, "id");
-			
-			IConfiguration config = DeserializeNode(node);
+
+			IConfiguration config = GetDeserializedNode(node);
 
 			AddFacilityConfig(id, config, store);
 		}
@@ -169,107 +171,171 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 			foreach(XmlNode node in nodes)
 			{
-				if (node.NodeType != XmlNodeType.Element)
+				if (node.NodeType == XmlNodeType.Element)
 				{
-					continue;
+					AssertNodeName(node, ComponentNodeName);
+
+					DeserializeComponent(node, store);
 				}
-				if (!ComponentNodeName.Equals(node.Name))
+				else if (IsTextNode(node))
 				{
-					String message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'", 
-						ComponentsNodeName, ComponentNodeName, node.Name);
-
-					throw new ConfigurationException(message);
+					DeserializeString(node.Value, ComponentsNodeName, store);
 				}
-
-				DeserializeComponent(node, store);
 			}
 		}
 
 		private void DeserializeComponent(XmlNode node, IConfigurationStore store)
 		{
 			String id = GetRequiredAttributeValue(node, "id");
-			
-			IConfiguration config = DeserializeNode(node);
+
+			IConfiguration config = GetDeserializedNode(node);
 
 			AddComponentConfig(id, config, store);
 		}
 
-		private IConfiguration DeserializeNode(XmlNode node)
+		private IConfiguration GetDeserializedNode(XmlNode node)
 		{
 			MutableConfiguration config = null;
+			ConfigurationCollection configChilds = new ConfigurationCollection();
+
+			StringBuilder configValue = new StringBuilder();
 
 			if (node.HasChildNodes)
 			{
 				foreach(XmlNode child in node.ChildNodes)
 				{
-					if (child.NodeType == XmlNodeType.Text || child.NodeType == XmlNodeType.CDATA)
+					if (IsTextNode(child))
 					{
-						config = new MutableConfiguration(node.Name, EvalProperty(child.Value.Trim()) );
-						break;
+						IConfiguration tempConfig = GetDeserializedString(child.Value);
+						configValue.Append(tempConfig.Value);
+						configChilds.AddRange(tempConfig.Children);
+					}
+					else if (child.NodeType == XmlNodeType.Element)
+					{
+						configChilds.Add(GetDeserializedNode(child));
 					}
 				}
 			}
-			
-			if (config == null)
-			{
-				config = new MutableConfiguration(node.Name);				
-			}
+
+			config = new MutableConfiguration(node.Name, GetConfigValue(configValue.ToString()));
 
 			foreach(XmlAttribute attribute in node.Attributes)
 			{
-				config.Attributes.Add(attribute.Name, EvalProperty( attribute.Value ) );
-			}
+				IConfiguration tempConfig = GetDeserializedString(attribute.Value);
 
-			if (node.HasChildNodes)
-			{
-				foreach(XmlNode child in node.ChildNodes)
+				if (tempConfig.Children.Count > 0)
 				{
-					if (child.NodeType != XmlNodeType.Element)
-					{
-						continue;
-					}
-
-					config.Children.Add( DeserializeNode(child) );
+					throw new ConfigurationException("attribute value cannot reference properties with child elements");
 				}
+
+				config.Attributes.Add(attribute.Name, tempConfig.Value);
 			}
+
+			config.Children.AddRange(configChilds);
 
 			return config;
 		}
 
-		private string EvalProperty(string value)
+		private void DeserializeString(string value, string filterElement, IConfigurationStore store)
 		{
-			MatchCollection matches = PropertyValidationRegExp.Matches( value );
+			IConfiguration config = GetDeserializedString(value);
 
-			if(matches.Count > 0)
+			foreach(IConfiguration childConfig in config.Children)
 			{
-				StringBuilder buffer = new StringBuilder(value);
-				
-				foreach(Match match in matches)
+				if (childConfig.Name != filterElement)
 				{
-					string propRef = match.Groups[1].Value; 
-					string propKey = match.Groups[2].Value;
-					string propValue = properties[propKey] as string;
+					throw new ConfigurationException(String.Format("Expect element {0} found {1}", filterElement, childConfig.Name));
+				}
+				else
+				{
+					if (childConfig.Name == FacilityNodeName)
+					{
+						AssertRequiredAttribute(childConfig, "id", FacilityNodeName);
+						store.AddFacilityConfiguration(childConfig.Attributes["id"], childConfig);
+					}
+					else if (childConfig.Name == ComponentNodeName)
+					{
+						AssertRequiredAttribute(childConfig, "id", ComponentNodeName);
+						store.AddComponentConfiguration(childConfig.Attributes["id"], childConfig);
+					}
+					else
+					{
+						throw new ConfigurationException(String.Format("DeserializeString cannot handle element {0}", childConfig.Name));
+					}
+				}
+			}
+		}
 
-					// if a property is not found we replace its value with an empty string
-					if( propValue == null ) propValue = String.Empty;
-					
-					buffer.Replace( propRef, propValue );
+		private IConfiguration GetDeserializedString(string value)
+		{
+			buffer.Length = 0;
+
+			ConfigurationCollection children = new ConfigurationCollection();
+
+			int pos = 0;
+			Match match;
+
+			while((match = PropertyValidationRegExp.Match(value, pos)).Success)
+			{
+				if (pos < match.Index)
+				{
+					buffer.Append(value.Substring(pos, match.Index - pos));
 				}
 
-				value = buffer.ToString();
+				string propKey = match.Groups[2].Value;
+
+				MutableConfiguration prop = properties[propKey] as MutableConfiguration;
+
+				if (prop != null)
+				{
+					buffer.Append(prop.Value);
+					children.AddRange(prop.Children);
+				}
+
+				pos += match.Index + match.Length;
 			}
 
-			return value;
+			// appending anything left
+			if (pos < value.Length)
+			{
+				buffer.Append(value.Substring(pos, value.Length - pos));
+			}
+
+			IConfiguration result = new MutableConfiguration("", GetConfigValue(buffer.ToString()));
+
+			result.Children.AddRange(children);
+
+			return result;
+		}
+
+		#endregion		
+
+		private void ProcessInclude(XmlNode includeNode, IConfigurationStore store)
+		{
+			string uri = GetRequiredAttributeValue(includeNode, "uri");
+
+			ProcessInclude(uri, store);
+		}
+
+		/// <summary>
+		/// If a config value is an empty string we return null, this is to keep
+		/// backward compability with old code
+		/// </summary>
+		private string GetConfigValue(string value)
+		{
+			value = value.Trim();
+
+			return value == String.Empty ? null : value;
 		}
 
 		private String GetRequiredAttributeValue(XmlNode node, String attName)
 		{
-			String value = GetAttributeValue(node);
-						
-			if (value == null || value.Length == 0)
+			String value = GetAttributeValue(node, attName);
+
+			if (value.Length == 0)
 			{
-				String message = String.Format("Required attribute {0} was not found in node {1}", 
-					attName, node.Name);
+				String message = String.Format("{0} elements expects required non blank attribute {1}",
+				                               node.Name, attName);
 
 				throw new ConfigurationException(message);
 			}
@@ -277,30 +343,37 @@ namespace Castle.Windsor.Configuration.Interpreters
 			return value;
 		}
 
-		private String GetAttributeValue(XmlNode node)
+		private String GetAttributeValue(XmlNode node, String attName)
 		{
-			XmlAttribute att = node.Attributes["id"];
+			XmlAttribute att = node.Attributes[attName];
 
-			if (att == null)
-			{
-				return String.Empty;
-			}
-
-			return att.Value;
+			return (att == null) ? String.Empty : att.Value.Trim();
 		}
 
-		private void ProcessInclude(XmlNode includeNode, IConfigurationStore store)
+		private bool IsTextNode(XmlNode node)
 		{
-			XmlAttribute resourceUriAtt = includeNode.Attributes["uri"];
-
-			if (resourceUriAtt == null)
-			{
-				// TODO: Throw proper Exception
-			}
-
-			ProcessInclude( resourceUriAtt.Value, store );
+			return node.NodeType == XmlNodeType.Text || node.NodeType == XmlNodeType.CDATA;
 		}
 
-		#endregion
+		private void AssertRequiredAttribute(IConfiguration config, string attrName, string parentName)
+		{
+			String content = config.Attributes[attrName];
+
+			if (content == null || content.Trim() == String.Empty)
+			{
+				throw new ConfigurationException(String.Format("{0} expects {1} attribute", parentName, attrName));
+			}
+		}
+
+		private void AssertNodeName(XmlNode node, string expectedName)
+		{
+			if (!expectedName.Equals(node.Name))
+			{
+				String message = String.Format("Unexpected node under '{0}': Expected '{1}' but found '{2}'",
+				                               expectedName, expectedName, node.Name);
+
+				throw new ConfigurationException(message);
+			}
+		}
 	}
 }

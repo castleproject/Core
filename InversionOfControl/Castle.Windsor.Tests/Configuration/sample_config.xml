@@ -3,7 +3,7 @@
 	<facilities>
 
 		<facility id="testidengine">
-		<item>value</item>
+			<item>va<!--test-->lue</item>
 		</facility>
 
 		<facility id="testidengine2">
@@ -17,7 +17,7 @@
 	<components>
 
 		<component id="testidcomponent1">
-		<item>value1</item>
+			<item>va<?test?>lue1</item>
 		</component>
 
 		<component id="testidcomponent2">
