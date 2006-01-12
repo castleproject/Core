@@ -104,7 +104,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
-		//[Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
 		public void FillingBehavior1()
 		{
 			DoGet("smart/FillingBehavior.rails", "name=someone", "date1day=11", "date1month=10", "date1year=2005");
@@ -115,12 +114,56 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
-		// [Ignore("Crashes NUnit with '.', hexadecimal value 0x00, is an invalid character")]
 		public void FillingBehavior2()
 		{
 			DoGet("smart/FillingBehavior.rails");
 			String expected = "incoming hammett " + 
 				DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
+
+			AssertReplyEqualsTo(expected);
+		}
+
+		[Test]
+		public void NullableConversion1()
+		{
+			DoGet("smart/NullableConversion.rails");
+			String expected = "incoming False ";
+
+			AssertReplyEqualsTo(expected);
+		}
+
+		[Test]
+		public void NullableConversion2()
+		{
+			DoGet("smart/NullableConversion.rails", "amount=0");
+			String expected = "incoming True 0";
+
+			AssertReplyEqualsTo(expected);
+		}
+
+		[Test]
+		public void NullableConversion3()
+		{
+			DoGet("smart/NullableConversion.rails", "amount=11.2");
+			String expected = "incoming True 11.2";
+
+			AssertReplyEqualsTo(expected);
+		}
+
+		[Test]
+		public void NullableAndDataBind()
+		{
+			DoGet("smart/NullableConversion2.rails", "mov.name=hammett", "mov.amount=11");
+			String expected = "incoming hammett 11";
+
+			AssertReplyEqualsTo(expected);
+		}
+
+		[Test]
+		public void NullableAndDataBind2()
+		{
+			DoGet("smart/NullableConversion2.rails", "mov.name=hammett");
+			String expected = "incoming hammett ";
 
 			AssertReplyEqualsTo(expected);
 		}

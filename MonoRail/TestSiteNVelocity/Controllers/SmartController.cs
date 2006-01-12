@@ -17,47 +17,58 @@ namespace TestSiteNVelocity.Controllers
 	using System;
 
 	using Castle.MonoRail.Framework;
-
+	using Nullables;
 
 	public class SmartController : SmartDispatcherController
 	{
 		public void StringMethod(string name)
 		{
-			RenderText( "incoming " + name );
+			RenderText("incoming " + name);
 		}
 
 		public void Complex(string strarg, int intarg, String[] strarray)
 		{
-			RenderText( String.Format("incoming {0} {1} {2}", strarg, intarg, String.Join(",", strarray)) );
+			RenderText(String.Format("incoming {0} {1} {2}", strarg, intarg, String.Join(",", strarray)));
 		}
 
-		public void SimpleBind( [DataBind] Order order )
+		public void SimpleBind([DataBind] Order order)
 		{
-			RenderText( String.Format("incoming {0}", order.ToString() ) );
+			RenderText(String.Format("incoming {0}", order.ToString()));
 		}
 
-		public void ComplexBind( [DataBind] Order order, [DataBind] Person person )
+		public void ComplexBind([DataBind] Order order, [DataBind] Person person)
 		{
-			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
-		}
-		public void ComplexBindExcludePrice( [DataBind(Exclude="Price")] Order order, [DataBind] Person person )
-		{
-			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
+			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void ComplexBindExcludeName( [DataBind(Exclude="Name")] Order order, [DataBind] Person person )
+		public void ComplexBindExcludePrice([DataBind(Exclude="Price")] Order order, [DataBind] Person person)
 		{
-			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
+			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void ComplexBindWithPrefix( [DataBind] Order order, [DataBind(Prefix="person")] Person person )
+		public void ComplexBindExcludeName([DataBind(Exclude="Name")] Order order, [DataBind] Person person)
 		{
-			RenderText( String.Format("incoming {0} {1}", order.ToString(), person.ToString() ) );
+			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void FillingBehavior( [DataBind] ClassWithInitializers clazz )
+		public void ComplexBindWithPrefix([DataBind] Order order, [DataBind(Prefix="person")] Person person)
 		{
-			RenderText( String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString() ) );
+			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
+		}
+
+		public void FillingBehavior([DataBind] ClassWithInitializers clazz)
+		{
+			RenderText(String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString()));
+		}
+
+		public void NullableConversion(Nullables.NullableDouble amount)
+		{
+			RenderText(String.Format("incoming {0} {1}", amount.HasValue, amount.ToString()));
+		}
+
+		public void NullableConversion2([DataBind(Prefix="mov")] Movement movement)
+		{
+			RenderText(String.Format("incoming {0} {1}", movement.Name, movement.Amount.ToString()));
 		}
 	}
 
@@ -119,7 +130,7 @@ namespace TestSiteNVelocity.Controllers
 
 		public override string ToString()
 		{
-			return String.Format( "{0} {1} {2}", name, itemCount, price );
+			return String.Format("{0} {1} {2}", name, itemCount, price);
 		}
 	}
 
@@ -142,7 +153,7 @@ namespace TestSiteNVelocity.Controllers
 
 		public override string ToString()
 		{
-			return String.Format( "{0} {1}", id, contact );
+			return String.Format("{0} {1}", id, contact);
 		}
 	}
 
@@ -164,7 +175,24 @@ namespace TestSiteNVelocity.Controllers
 
 		public override string ToString()
 		{
-			return String.Format( "{0} {1}", email, phone );
+			return String.Format("{0} {1}", email, phone);
+		}
+	}
+
+	public class Movement
+	{
+		String name; Nullables.NullableDouble amount;
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public NullableDouble Amount
+		{
+			get { return amount; }
+			set { amount = value; }
 		}
 	}
 }

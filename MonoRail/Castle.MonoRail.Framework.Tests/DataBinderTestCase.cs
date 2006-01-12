@@ -19,14 +19,13 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.Collections.Specialized;
 	using System.Text;
 
-	using NUnit.Framework;
-	
 	using Castle.MonoRail.Framework;
 
+	using NUnit.Framework;
+	
 	[TestFixture]
 	public class DataBinderTestCase
 	{
-	
 		[Test]
 		public void DateTimeBind()
 		{
@@ -34,15 +33,15 @@ namespace Castle.MonoRail.Framework.Tests
 
 			args.Add("DOBday", 1.ToString());
 			args.Add("DOBmonth", 12.ToString());
-			args.Add("DOByear", 2005.ToString() );
-			
+			args.Add("DOByear", 2005.ToString());
+
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person), "", args);
+			object instance = binder.BindObject(typeof(Person), "", args);
 
 			Assert.IsNotNull(instance);
-			Person p = (Person) instance ;
+			Person p = (Person) instance;
 			Assert.IsNotNull(instance);
-			Assert.AreEqual( p.DOB, new DateTime(2005,12,1) );
+			Assert.AreEqual(p.DOB, new DateTime(2005, 12, 1));
 		}
 
 		[Test]
@@ -52,15 +51,15 @@ namespace Castle.MonoRail.Framework.Tests
 
 			args.Add("DOBday", 31.ToString());
 			args.Add("DOBmonth", 2.ToString());
-			args.Add("DOByear", 2005.ToString() );
-			
+			args.Add("DOByear", 2005.ToString());
+
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person), "", args);
+			object instance = binder.BindObject(typeof(Person), "", args);
 
 			Assert.IsNotNull(instance);
-			Person p = (Person) instance ;
+			Person p = (Person) instance;
 			Assert.IsNotNull(instance);
-			Assert.AreEqual( p.DOB, new DateTime(2005,2,28) );
+			Assert.AreEqual(p.DOB, new DateTime(2005, 2, 28));
 		}
 
 		[Test]
@@ -70,15 +69,17 @@ namespace Castle.MonoRail.Framework.Tests
 
 			args.Add("DOBday", 32.ToString());
 			args.Add("DOBmonth", 2.ToString());
-			args.Add("DOByear", 2005.ToString() );
-			
+			args.Add("DOByear", 2005.ToString());
+
 			try
 			{
 				DataBinder binder = new DataBinder();
-				object instance = binder.BindObject(typeof (Person), "", args);
+				object instance = binder.BindObject(typeof(Person), "", args);
 				Assert.Fail("InvalidDateTimeBind must throw an ArgumentException");
 			}
-			catch(ArgumentException){}
+			catch(ArgumentException)
+			{
+			}
 		}
 
 		[Test]
@@ -88,30 +89,32 @@ namespace Castle.MonoRail.Framework.Tests
 
 			args.Add("DOBday", (-2).ToString());
 			args.Add("DOBmonth", 2.ToString());
-			args.Add("DOByear", 2005.ToString() );
-			
+			args.Add("DOByear", 2005.ToString());
+
 			try
 			{
 				DataBinder binder = new DataBinder();
-				object instance = binder.BindObject(typeof (Person), "", args);
+				object instance = binder.BindObject(typeof(Person), "", args);
 				Assert.Fail("InvalidDateTime2Bind must throw an ArgumentException");
 			}
-			catch(ArgumentException){}
+			catch(ArgumentException)
+			{
+			}
 		}
-								
+
 		[Test]
 		public void SimpleDataBind()
 		{
 			String name = "John";
 			int age = 32;
-			decimal assets = (decimal)100000;
+			decimal assets = (decimal) 100000;
 			NameValueCollection args = new NameValueCollection();
 
 			args.Add("Person.Name", name);
 			args.Add("Person.Age", age.ToString());
-			args.Add("Person.Assets", assets.ToString() );
+			args.Add("Person.Assets", assets.ToString());
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person), "Person", args);
+			object instance = binder.BindObject(typeof(Person), "Person", args);
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
@@ -197,7 +200,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			NameValueCollection args = ParseNameValueString(data);
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person[]), "", args);
+			object instance = binder.BindObject(typeof(Person[]), "", args);
 
 			Assert.IsNotNull(instance);
 			Person[] sc = instance as Person[];
@@ -216,11 +219,11 @@ namespace Castle.MonoRail.Framework.Tests
 			DataBinder binder = new DataBinder();
 			object instance;
 			NameValueCollection args;
-			foreach (bool useCountAttribute in new bool[] {true, false})
+			foreach(bool useCountAttribute in new bool[] {true, false})
 			{
 				args = BuildComplexParamList(useCountAttribute);
 				args.Add("Team@ignore", "yes");
-				instance = binder.BindObject(typeof (Team[]), "Team", args);
+				instance = binder.BindObject(typeof(Team[]), "Team", args);
 				Assert.IsNull(instance);
 
 				args.Remove("Team@ignore");
@@ -232,7 +235,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 				args.Remove("Team[0]@ignore");
 				args.Add("Team[0].Members@ignore", "yes");
-				instance = binder.BindObject(typeof (Team[]), "Team", args);
+				instance = binder.BindObject(typeof(Team[]), "Team", args);
 				team = instance as Team[];
 				Assert.IsNotNull(team);
 				Assert.IsNull(team[0].Members);
@@ -243,12 +246,12 @@ namespace Castle.MonoRail.Framework.Tests
 		public void NestedLevelArrayDataBind()
 		{
 			Team[] team = null;
-			foreach (bool useCountAttribute in new bool[] {true, false})
+			foreach(bool useCountAttribute in new bool[] {true, false})
 			{
 				NameValueCollection args = BuildComplexParamList(useCountAttribute);
 
 				DataBinder binder = new DataBinder();
-				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,1,null);
+				object instance = binder.BindObject(typeof(Team[]), "Team", args, null, null, 1, null);
 
 				Assert.IsNotNull(instance);
 				team = instance as Team[];
@@ -260,17 +263,18 @@ namespace Castle.MonoRail.Framework.Tests
 				Assert.IsNull(team[1].Members);
 			}
 		}
-		
+
 		[Test]
 		public void NestedArrayDataBind()
 		{
 			Team[] team = null;
-			foreach (bool useCountAttribute in new bool[] {true, false})
+
+			foreach(bool useCountAttribute in new bool[] {true, false})
 			{
 				NameValueCollection args = BuildComplexParamList(useCountAttribute);
 
 				DataBinder binder = new DataBinder();
-				object instance = binder.BindObject(typeof (Team[]),"Team",args);
+				object instance = binder.BindObject(typeof(Team[]), "Team", args);
 
 				Assert.IsNotNull(instance);
 				team = instance as Team[];
@@ -294,12 +298,12 @@ namespace Castle.MonoRail.Framework.Tests
 		public void NestedArrayDataBindWithExcludeList()
 		{
 			Team[] team = null;
-			foreach (bool useCountAttribute in new bool[] {true, false})
+			foreach(bool useCountAttribute in new bool[] {true, false})
 			{
 				NameValueCollection args = BuildComplexParamList(useCountAttribute);
 
 				DataBinder binder = new DataBinder();
-				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,3,"Games,Name");
+				object instance = binder.BindObject(typeof(Team[]), "Team", args, null, null, 3, "Games,Name");
 
 				Assert.IsNotNull(instance);
 				team = instance as Team[];
@@ -315,17 +319,17 @@ namespace Castle.MonoRail.Framework.Tests
 				Assert.IsNull(team[1].Name);
 			}
 		}
-		
+
 		[Test]
 		public void NestedArrayDataBindWithAllowList()
 		{
 			Team[] team = null;
-			foreach (bool useCountAttribute in new bool[] {true, false})
+			foreach(bool useCountAttribute in new bool[] {true, false})
 			{
 				NameValueCollection args = BuildComplexParamList(useCountAttribute);
 
 				DataBinder binder = new DataBinder();
-				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,3,null,"Name,Games,Members");
+				object instance = binder.BindObject(typeof(Team[]), "Team", args, null, null, 3, null, "Name,Games,Members");
 
 				Assert.IsNotNull(instance);
 				team = instance as Team[];
@@ -344,19 +348,19 @@ namespace Castle.MonoRail.Framework.Tests
 				Assert.IsTrue(team[1].Name == "B-Team");
 			}
 		}
-		
+
 		[Test]
 		public void NestedArrayDataBindWithAllowAndExcludeList()
 		{
 			Team[] team = null;
-			foreach (bool useCountAttribute in new bool[] {true, false})
+			foreach(bool useCountAttribute in new bool[] {true, false})
 			{
 				NameValueCollection args = BuildComplexParamList(useCountAttribute);
 
 				DataBinder binder = new DataBinder();
-				object instance = binder.BindObject(typeof (Team[]),"Team",args,null,null,3,"Games","Name,Games,Members");
+				object instance = binder.BindObject(typeof(Team[]), "Team", args, null, null, 3, "Games", "Name,Games,Members");
 
-				
+
 				Assert.IsNotNull(instance);
 				team = instance as Team[];
 				Assert.IsNotNull(team);
@@ -372,7 +376,7 @@ namespace Castle.MonoRail.Framework.Tests
 				Assert.IsTrue(team[1].Name == "B-Team");
 			}
 		}
-		
+
 		[Test]
 		public void NonNumericIdAttribute()
 		{
@@ -388,7 +392,7 @@ namespace Castle.MonoRail.Framework.Tests
 			NameValueCollection args = ParseNameValueString(data);
 
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person[]), "Person", args);
+			object instance = binder.BindObject(typeof(Person[]), "Person", args);
 
 			Assert.IsNotNull(instance);
 			Person[] people = instance as Person[];
@@ -407,9 +411,9 @@ namespace Castle.MonoRail.Framework.Tests
 
 			NameValueCollection args = ParseNameValueString(data);
 			ArrayList errorList = new ArrayList();
-			
+
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person), "Person", args, null, errorList, 3, null);
+			object instance = binder.BindObject(typeof(Person), "Person", args, null, errorList, 3, null);
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
@@ -430,9 +434,9 @@ namespace Castle.MonoRail.Framework.Tests
 
 			NameValueCollection args = ParseNameValueString(data);
 			ArrayList errorList = new ArrayList();
-			
+
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person), null, args, null, errorList, 3, null);
+			object instance = binder.BindObject(typeof(Person), null, args, null, errorList, 3, null);
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
@@ -440,9 +444,9 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsTrue(person.Name == "John");
 			Assert.IsTrue(person.Age == 0);
 			Assert.IsTrue(errorList.Count == 1);
-			Assert.IsTrue( (errorList[0] as DataBindError).Key.IndexOf("Person") == 0 );
+			Assert.IsTrue((errorList[0] as DataBindError).Key.IndexOf("Person") == 0);
 		}
-		
+
 		[Test]
 		public void ComplexDataBindWithErrors()
 		{
@@ -464,15 +468,15 @@ namespace Castle.MonoRail.Framework.Tests
 
 			NameValueCollection args = ParseNameValueString(data);
 			ArrayList errorList = new ArrayList();
-			
+
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Team[]), null, args, null, errorList, 3, null);
+			object instance = binder.BindObject(typeof(Team[]), null, args, null, errorList, 3, null);
 			Assert.IsNotNull(instance);
 			Team[] team = instance as Team[];
-			
+
 			Assert.IsNotNull(team);
-			Assert.IsNull(team[0].Games[0].Scores );
-			Assert.IsNull(team[0].Games[1].Scores );
+			Assert.IsNull(team[0].Games[0].Scores);
+			Assert.IsNull(team[0].Games[1].Scores);
 			Assert.IsTrue(team[0].Name == "A-Team");
 			Assert.IsTrue(team[1].Name == "B-Team");
 			Assert.IsTrue(team[0].Members[0].Name == "Mr. White");
@@ -482,9 +486,9 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.IsTrue(team[1].Members[0].Name == "Mr. B-White");
 			Assert.IsTrue(team[1].Members[0].Age == 0);
 			Assert.IsTrue(errorList.Count == 5);
-			Assert.IsTrue( (errorList[0] as DataBindError).Key.IndexOf("Team") == 0 );			
+			Assert.IsTrue((errorList[0] as DataBindError).Key.IndexOf("Team") == 0);
 		}
-				
+
 		[Test]
 		public void CountAttribute()
 		{
@@ -500,7 +504,7 @@ namespace Castle.MonoRail.Framework.Tests
 			NameValueCollection args = ParseNameValueString(data);
 
 			DataBinder binder = new DataBinder();
-			object instance = binder.BindObject(typeof (Person[]), "Person", args );
+			object instance = binder.BindObject(typeof(Person[]), "Person", args);
 
 			Assert.IsNotNull(instance);
 			Person[] people = instance as Person[];
@@ -509,7 +513,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			args["Person@count"] = "2";
 			binder = new DataBinder();
-			instance = binder.BindObject(typeof (Person[]), "Person", args );
+			instance = binder.BindObject(typeof(Person[]), "Person", args);
 
 			Assert.IsNotNull(instance);
 			people = instance as Person[];
@@ -575,7 +579,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			NameValueCollection args = new NameValueCollection();
 			data = data.Trim();
-			foreach (string nameValue in data.Split('\n'))
+			foreach(string nameValue in data.Split('\n'))
 			{
 				if (nameValue.Trim() == "") continue;
 
@@ -596,7 +600,7 @@ namespace Castle.MonoRail.Framework.Tests
 			if (args.Count == 0) return "";
 
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < args.Count; i++)
+			for(int i = 0; i < args.Count; i++)
 			{
 				sb.Append(args[i]).Append(separator);
 			}
@@ -657,7 +661,7 @@ namespace Castle.MonoRail.Framework.Tests
 		private Int32 _age;
 		private Decimal _assets;
 		private DateTime _dob;
-		
+
 		public String Name
 		{
 			get { return _name; }
@@ -675,12 +679,12 @@ namespace Castle.MonoRail.Framework.Tests
 			get { return _assets; }
 			set { _assets = value; }
 		}
-		
+
 		public DateTime DOB
 		{
 			get { return _dob; }
 			set { _dob = value; }
-		}		
+		}
 	}
 
 	#endregion
