@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if NOT_COMPLETED
+
 using DirectiveConstants_Fields = NVelocity.Runtime.Directive.DirectiveConstants_Fields;
 
 using INode = NVelocity.Runtime.Parser.Node.INode;
@@ -31,7 +33,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 	using Castle.MonoRail.Framework.Internal;
 
-	#if NOT_COMPLETED
 	public class HtmlDirective : Directive
 	{
 		public HtmlDirective(IViewComponentFactory viewComponentFactory) : base(viewComponentFactory)
@@ -54,5 +55,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			throw new NotImplementedException();
 		}
 	}
-	#endif
 }
+
+#endif
