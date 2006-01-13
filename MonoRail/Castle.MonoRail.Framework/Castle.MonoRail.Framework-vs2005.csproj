@@ -1,0 +1,464 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EC393863-333E-49CE-94A6-654B9F323954}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Castle.MonoRail.Framework</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.MonoRail.Framework</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\bin\temp\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE;ALLOWTEST</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Components.Common.EmailSender">
+      <Name>Castle.Components.Common.EmailSender</Name>
+      <HintPath>..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Components.Common.EmailSender.SmtpEmailSender">
+      <Name>Castle.Components.Common.EmailSender.SmtpEmailSender</Name>
+      <HintPath>..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.SmtpEmailSender.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adapters\FileDictionaryAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\RailsEngineContextAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\RequestAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\ResponseAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\ServerUtilityAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\SessionAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Adapters\TraceAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\ControllerDetailsAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\DataBindAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\DefaultActionAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\DynamicActionProviderAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\FilterAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\HelperAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\Layout.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\LocalizationFilterAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\RescueAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\ResourceAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Attributes\ScaffoldingAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\MonoRailConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\MonoRailSectionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\RoutingRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\SmtpConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ControllerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ControllerNotFoundException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\FilesController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataBinder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataBindError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DelegateDynamicAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ErrorList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\AbstractMonoRailExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\ExceptionChaining\AbstractExceptionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\ExceptionChaining\EmailHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\ExceptionChaining\ExceptionChainingExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\ExceptionChaining\IConfigurableHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\ExceptionChaining\IExceptionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\ExtensionComposite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\IMonoRailExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Session\CustomSessionExtension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\Session\ICustomSessionFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\AntiGoogleWebAcceleratorFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\LocalizationFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Filters\RequestValidatorFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\AbstractHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\AjaxHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\AjaxHelperOld.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\DateFormatHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\DictHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\Effects2Helper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\EffectsFatHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\HtmlHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\IPager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\PaginationHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\ValidationHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Helpers\WizardHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IControllerAware.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDynamicAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDynamicActionProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\AbstractControllerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ActionProviderUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ControllerDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ControllerDescriptorBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ControllerInspectionUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ControllerMetaDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ConvertUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\DataBindContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\DefaultControllerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\DefaultFilterFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\DefaultResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\DefaultViewComponentFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\FilterDescriptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\Flash.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\Graph\ControllerTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\IControllerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\IFilterFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\IResourceFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\IScaffoldingSupport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\IViewComponentFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\IViewEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ResourceDictionary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ResourceFacade.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\ScaffoldException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\Test\TestContextHolder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\UrlInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\UrlTokenizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\UrlTokenizerException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Internal\WizardUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IPropertyError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRailsEngineContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IServerUtility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITrace.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IViewComponentContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IWizardController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MonoRailHttpHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MonoRailHttpHandlerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProcessEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProcessEngineFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RailsException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RoutingModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SmartDispatcherController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SmartViewComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Aspx\ActionTo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Aspx\AspNetViewEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Aspx\Contents.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Aspx\InvokeHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Aspx\MasterPageBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\ViewEngineBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Xslt\XsltViewEngine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WizardActionProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WizardStepPage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="default.build" />
+    <EmbeddedResource Include="Controllers\Ajax.resx" />
+    <EmbeddedResource Include="Controllers\Behaviour.resx" />
+    <EmbeddedResource Include="Controllers\Effects2.resx" />
+    <EmbeddedResource Include="Controllers\EffectsFat.resx" />
+    <EmbeddedResource Include="Controllers\Validation.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
