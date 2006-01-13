@@ -58,8 +58,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 	public class ASTTrue : SimpleNode
 	{
-		//UPGRADE_NOTE: Field value was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
-		private static Boolean value__Field = true;
+		private const bool val = true;
 
 		public ASTTrue(int id) : base(id)
 		{
@@ -69,21 +68,22 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		public override bool evaluate(InternalContextAdapter context)
+		public override bool Evaluate(InternalContextAdapter context)
 		{
 			return true;
 		}
 
 		public override Object Value(InternalContextAdapter context)
 		{
-			return value__Field;
+			return val;
 		}
 	}
 }

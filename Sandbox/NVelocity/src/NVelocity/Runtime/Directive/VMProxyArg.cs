@@ -270,11 +270,11 @@ namespace NVelocity.Runtime.Directive
 
 					try
 					{
-						((ASTReference) nodeTree).setValue(context, o);
+						((ASTReference) nodeTree).SetValue(context, o);
 					}
 					catch (MethodInvocationException mie)
 					{
-						rsvc.error("VMProxyArg.getObject() : method invocation error setting value : " + mie);
+						rsvc.Error("VMProxyArg.getObject() : method invocation error setting value : " + mie);
 					}
 				}
 				else
@@ -301,7 +301,7 @@ namespace NVelocity.Runtime.Directive
 				type = GENERALSTATIC;
 				staticObject = o;
 
-				rsvc.error("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : " + contextReference + " / " + callerReference);
+				rsvc.Error("VMProxyArg.setObject() : Programmer error : I am a constant!  No setting! : " + contextReference + " / " + callerReference);
 			}
 
 			return null;
@@ -349,7 +349,7 @@ namespace NVelocity.Runtime.Directive
 			*  I need to let the AST produce it for me.
 			*/
 
-						retObject = nodeTree.execute(null, context);
+						retObject = nodeTree.Execute(null, context);
 					}
 				}
 				else if (type == ParserTreeConstants.JJTOBJECTARRAY)
@@ -385,13 +385,13 @@ namespace NVelocity.Runtime.Directive
 					try
 					{
 						StringWriter writer = new StringWriter();
-						nodeTree.render(context, writer);
+						nodeTree.Render(context, writer);
 
 						retObject = writer;
 					}
 					catch (Exception e)
 					{
-						rsvc.error("VMProxyArg.getObject() : error rendering reference : " + e);
+						rsvc.Error("VMProxyArg.getObject() : error rendering reference : " + e);
 					}
 				}
 				else if (type == GENERALSTATIC)
@@ -400,7 +400,7 @@ namespace NVelocity.Runtime.Directive
 				}
 				else
 				{
-					rsvc.error("Unsupported VM arg type : VM arg = " + callerReference + " type = " + type + "( VMProxyArg.getObject() )");
+					rsvc.Error("Unsupported VM arg type : VM arg = " + callerReference + " type = " + type + "( VMProxyArg.getObject() )");
 				}
 
 				return retObject;
@@ -414,7 +414,7 @@ namespace NVelocity.Runtime.Directive
 		*  I can think of
 		*/
 
-				rsvc.error("VMProxyArg.getObject() : method invocation error getting value : " + mie);
+				rsvc.Error("VMProxyArg.getObject() : method invocation error getting value : " + mie);
 
 				return null;
 			}
@@ -456,7 +456,7 @@ namespace NVelocity.Runtime.Directive
 							//UPGRADE_ISSUE: The equivalent of constructor 'java.io.BufferedReader.BufferedReader' is incompatible with the expected type in C#. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1109"'
 							TextReader br = new StringReader(buff);
 
-							nodeTree = rsvc.parse(br, "VMProxyArg:" + callerReference, true);
+							nodeTree = rsvc.Parse(br, "VMProxyArg:" + callerReference, true);
 
 							/*
 			    *  now, our tree really is the first DirectiveArg(), and only one
@@ -470,18 +470,18 @@ namespace NVelocity.Runtime.Directive
 
 							if (nodeTree != null && nodeTree.Type != type)
 							{
-								rsvc.error("VMProxyArg.setup() : programmer error : type doesn't match node type.");
+								rsvc.Error("VMProxyArg.setup() : programmer error : type doesn't match node type.");
 							}
 
 							/*
 			    *  init.  We can do this as they are only references
 			    */
 
-							nodeTree.init(null, rsvc);
+							nodeTree.Init(null, rsvc);
 						}
 						catch (Exception e)
 						{
-							rsvc.error("VMProxyArg.setup() : exception " + callerReference + " : " + StringUtils.stackTrace(e));
+							rsvc.Error("VMProxyArg.setup() : exception " + callerReference + " : " + StringUtils.stackTrace(e));
 						}
 
 						break;
@@ -518,7 +518,7 @@ namespace NVelocity.Runtime.Directive
 			*  this is technically an error...
 			*/
 
-						rsvc.error("Unsupported arg type : " + callerReference + "  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())");
+						rsvc.Error("Unsupported arg type : " + callerReference + "  You most likely intended to call a VM with a string literal, so enclose with ' or \" characters. (VMProxyArg.setup())");
 						constant = true;
 						staticObject = new String(callerReference.ToCharArray());
 
@@ -528,7 +528,7 @@ namespace NVelocity.Runtime.Directive
 
 				default:
 					{
-						rsvc.error(" VMProxyArg.setup() : unsupported type : " + callerReference);
+						rsvc.Error(" VMProxyArg.setup() : unsupported type : " + callerReference);
 					}
 					break;
 

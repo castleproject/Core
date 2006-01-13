@@ -42,22 +42,22 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>
 		/// simple init - init our subtree and get what we can from
 		/// the AST
 		/// </summary>
-		public override Object init(InternalContextAdapter context, Object data)
+		public override Object Init(InternalContextAdapter context, Object data)
 		{
-			base.init(context, data);
+			base.Init(context, data);
 
 			/*
 	    *  this is about all we can do
 	    */
 
-			methodName = FirstToken.image;
+			methodName = FirstToken.Image;
 			paramCount = jjtGetNumChildren() - 1;
 			params_Renamed = new Object[paramCount];
 
@@ -86,30 +86,30 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			String methodNameUsed = methodName;
-			MethodInfo m = rsvc.Introspector.getMethod(data, methodNameUsed, params_Renamed);
+			MethodInfo m = rsvc.Introspector.GetMethod(data, methodNameUsed, params_Renamed);
 			PropertyInfo p = null;
 			if (m == null)
 			{
 				methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
-				m = rsvc.Introspector.getMethod(data, methodNameUsed, params_Renamed);
+				m = rsvc.Introspector.GetMethod(data, methodNameUsed, params_Renamed);
 				if (m == null)
 				{
 					methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
-					m = rsvc.Introspector.getMethod(data, methodNameUsed, params_Renamed);
+					m = rsvc.Introspector.GetMethod(data, methodNameUsed, params_Renamed);
 
 					// if there are no arguments, look for a property
 					if (m == null && paramCount == 0)
 					{
 						methodNameUsed = methodName;
-						p = rsvc.Introspector.getProperty(data, methodNameUsed);
+						p = rsvc.Introspector.GetProperty(data, methodNameUsed);
 						if (p == null)
 						{
 							methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
-							p = rsvc.Introspector.getProperty(data, methodNameUsed);
+							p = rsvc.Introspector.GetProperty(data, methodNameUsed);
 							if (p == null)
 							{
 								methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
-								p = rsvc.Introspector.getProperty(data, methodNameUsed);
+								p = rsvc.Introspector.GetProperty(data, methodNameUsed);
 							}
 						}
 					}
@@ -132,7 +132,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// actual return if the method returns something, or
 		/// an empty string "" if the method returns void
 		/// </summary>
-		public override Object execute(Object o, InternalContextAdapter context)
+		public override Object Execute(Object o, InternalContextAdapter context)
 		{
 			/*
 	    *  new strategy (strategery!) for introspection. Since we want 
@@ -162,7 +162,7 @@ namespace NVelocity.Runtime.Parser.Node
 				*  safe.
 				*/
 
-				if (icd != null && icd.contextData == c)
+				if (icd != null && icd.ContextData == c)
 				{
 					// We blindly assume that if there's an array, 
 					// we're dealing with a "params array[] args" and 
@@ -198,15 +198,15 @@ namespace NVelocity.Runtime.Parser.Node
 					/*
 					* and get the method from the cache
 					*/
-					if (icd.thingy is MethodInfo)
+					if (icd.Thingy is MethodInfo)
 					{
-						method = (MethodInfo) icd.thingy;
+						method = (MethodInfo) icd.Thingy;
 
 						methodArguments = BuildMethodArgs(method, paramArrayIndex);
 					}
-					if (icd.thingy is PropertyInfo)
+					if (icd.Thingy is PropertyInfo)
 					{
-						property = (PropertyInfo) icd.thingy;
+						property = (PropertyInfo) icd.Thingy;
 					}
 				}
 				else
@@ -230,8 +230,8 @@ namespace NVelocity.Runtime.Parser.Node
 					if (obj != null)
 					{
 						icd = new IntrospectionCacheData();
-						icd.contextData = c;
-						icd.thingy = obj;
+						icd.ContextData = c;
+						icd.Thingy = obj;
 						context.ICachePut(this, icd);
 					}
 				}
@@ -253,7 +253,7 @@ namespace NVelocity.Runtime.Parser.Node
 				*  can come from the doIntropection() also, from Introspector
 				*/
 
-				rsvc.error("ASTMethod.execute() : exception from introspection : " + e);
+				rsvc.Error("ASTMethod.execute() : exception from introspection : " + e);
 				throw;
 			}
 
@@ -294,25 +294,25 @@ namespace NVelocity.Runtime.Parser.Node
 			catch (TargetInvocationException ite)
 			{
 				/*
-		*  In the event that the invocation of the method
-		*  itself throws an exception, we want to catch that
-		*  wrap it, and throw.  We don't log here as we want to figure
-		*  out which reference threw the exception, so do that 
-		*  above
-		*/
+				*  In the event that the invocation of the method
+				*  itself throws an exception, we want to catch that
+				*  wrap it, and throw.  We don't log here as we want to figure
+				*  out which reference threw the exception, so do that 
+				*  above
+				*/
 
 				EventCartridge ec = context.EventCartridge;
 
 				/*
-		*  if we have an event cartridge, see if it wants to veto
-		*  also, let non-Exception Throwables go...
-		*/
+				*  if we have an event cartridge, see if it wants to veto
+				*  also, let non-Exception Throwables go...
+				*/
 
 				if (ec != null && ite.GetBaseException() is Exception)
 				{
 					try
 					{
-						return ec.methodException(o.GetType(), methodName, (Exception) ite.GetBaseException());
+						return ec.HandleMethodException(o.GetType(), methodName, ite.GetBaseException());
 					}
 					catch (Exception e)
 					{
@@ -322,15 +322,15 @@ namespace NVelocity.Runtime.Parser.Node
 				else
 				{
 					/*
-		    * no event cartridge to override. Just throw
-		    */
+					* no event cartridge to override. Just throw
+					*/
 
 					throw new MethodInvocationException("Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + ite.GetBaseException().GetType() + " : " + ite.GetBaseException().Message, ite.GetBaseException(), methodName);
 				}
 			}
 			catch (Exception e)
 			{
-				rsvc.error("ASTMethod.execute() : exception invoking method '" + methodName + "' in " + o.GetType() + " : " + e);
+				rsvc.Error("ASTMethod.execute() : exception invoking method '" + methodName + "' in " + o.GetType() + " : " + e);
 				throw e;
 			}
 		}

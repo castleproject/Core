@@ -86,13 +86,13 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>  init : we don't have to do much.  Init the tree (there
 		/// shouldn't be one) and then see if interpolation is turned on.
 		/// </summary>
-		public override Object init(InternalContextAdapter context, Object data)
+		public override Object Init(InternalContextAdapter context, Object data)
 		{
 			/*
 	    *  simple habit...  we prollie don't have an AST beneath us
 	    */
 
-			base.init(context, data);
+			base.Init(context, data);
 
 			/*
 	    *  the stringlit is set at template parse time, so we can 
@@ -105,13 +105,13 @@ namespace NVelocity.Runtime.Parser.Node
 	    *  can  interpolate.  Otherwise, don't bother.
 	    */
 
-			interpolate = rsvc.getBoolean(RuntimeConstants_Fields.INTERPOLATE_STRINGLITERALS, true) && FirstToken.image.StartsWith("\"") && ((FirstToken.image.IndexOf((Char) '$') != - 1) || (FirstToken.image.IndexOf((Char) '#') != - 1));
+			interpolate = rsvc.GetBoolean(RuntimeConstants.INTERPOLATE_STRINGLITERALS, true) && FirstToken.Image.StartsWith("\"") && ((FirstToken.Image.IndexOf((Char) '$') != - 1) || (FirstToken.Image.IndexOf((Char) '#') != - 1));
 
 			/*
 	    *  get the contents of the string, minus the '/" at each end
 	    */
 
-			image = FirstToken.image.Substring(1, (FirstToken.image.Length - 1) - (1));
+			image = FirstToken.Image.Substring(1, (FirstToken.Image.Length - 1) - (1));
 
 			/*
 	    * tack a space on the end (dreaded <MORE> kludge)
@@ -134,13 +134,13 @@ namespace NVelocity.Runtime.Parser.Node
 		*  Also, do *not* dump the VM namespace for this template
 		*/
 
-				nodeTree = rsvc.parse(br, (context != null) ? context.CurrentTemplateName : "StringLiteral", false);
+				nodeTree = rsvc.Parse(br, (context != null) ? context.CurrentTemplateName : "StringLiteral", false);
 
 				/*
 		*  init with context. It won't modify anything
 		*/
 
-				nodeTree.init(context, rsvc);
+				nodeTree.Init(context, rsvc);
 			}
 
 			return data;
@@ -150,7 +150,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>  renders the value of the string literal
@@ -169,7 +169,7 @@ namespace NVelocity.Runtime.Parser.Node
 		    */
 
 					TextWriter writer = new StringWriter();
-					nodeTree.render(context, writer);
+					nodeTree.Render(context, writer);
 
 					/*
 		    * and return the result as a String
@@ -189,7 +189,7 @@ namespace NVelocity.Runtime.Parser.Node
 		    *  eh.  If anything wrong, just punt 
 		    *  and output the literal 
 		    */
-					rsvc.error("Error in interpolating string literal : " + e);
+					rsvc.Error("Error in interpolating string literal : " + e);
 				}
 			}
 

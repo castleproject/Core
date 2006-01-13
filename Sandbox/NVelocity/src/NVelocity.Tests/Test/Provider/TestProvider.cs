@@ -15,7 +15,7 @@ namespace NVelocity.Test.Provider
 		public static String PUB_STAT_STRING = "Public Static String";
 
 		internal String title = "lunatic";
-		internal bool state;
+		//internal bool state;
 		internal Object ob = null;
 		internal int stateint = 0;
 

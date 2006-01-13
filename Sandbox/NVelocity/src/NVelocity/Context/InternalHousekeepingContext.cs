@@ -18,15 +18,23 @@ namespace NVelocity.Context
 	/// <version> $Id: InternalHousekeepingContext.cs,v 1.4 2003/10/27 13:54:08 corts Exp $</version>
 	public interface InternalHousekeepingContext
 	{
-		String CurrentTemplateName { get
-			; }
+		/// <summary>
+		/// get the current template name
+		/// </summary>
+		/// <returns>String current template name</returns>
+		String CurrentTemplateName { get; }
 
-		Object[] TemplateNameStack { get
-			; }
+		/// <summary>
+		/// Returns the template name stack in form of an array.
+		/// </summary>
+		/// <returns>Object[] with the template name stack contents.</returns>
+		Object[] TemplateNameStack { get; }
 
-		Resource CurrentResource { get
-			; set
-				; }
+		/// <summary>
+		/// temporary fix to enable #include() to figure out
+		/// current encoding.
+		/// </summary>
+		Resource CurrentResource { get; set; }
 
 		/// <summary>
 		/// set the current template name on top of stack
@@ -39,43 +47,20 @@ namespace NVelocity.Context
 		/// </summary>
 		void PopCurrentTemplateName();
 
-		/// <summary>  get the current template name
-		/// *
+		/// <summary>
+		/// Gets the <see cref="IntrospectionCacheData"/> object if exists 
+		/// for the key
 		/// </summary>
-		/// <returns>String current template name
-		///
-		/// </returns>
-		/// <summary>  Returns the template name stack in form of an array.
-		/// *
-		/// </summary>
-		/// <returns>Object[] with the template name stack contents.
-		///
-		/// </returns>
-		/// <seealso cref=" IntrospectionCacheData)
-		/// object if exists for the key
-		/// *
-		/// "/>
-		/// <param name="key"> key to find in cache
-		/// </param>
-		/// <returns>cache object
-		///
-		/// </returns>
+		/// <param name="key">key to find in cache</param>
+		/// <returns>cache object</returns>
 		IntrospectionCacheData ICacheGet(Object key);
 
-		/// <seealso cref=" IntrospectionCacheData)
-		/// element in the cache for specified key
-		/// *
-		/// "/>
-		/// <param name="key"> key
-		/// </param>
-		/// <param name="o"> IntrospectionCacheData object to place in cache
-		///
-		/// </param>
-		void ICachePut(Object key, IntrospectionCacheData o);
-
 		/// <summary>
-		/// temporary fix to enable #include() to figure out
-		/// current encoding.
+		/// Sets the <see cref="IntrospectionCacheData"/> object 
+		/// for the key
 		/// </summary>
+		/// <param name="key"> key </param>
+		/// <param name="o"> IntrospectionCacheData object to place in cache</param>
+		void ICachePut(Object key, IntrospectionCacheData o);
 	}
 }

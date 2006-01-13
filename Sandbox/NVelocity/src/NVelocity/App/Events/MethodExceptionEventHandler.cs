@@ -55,20 +55,37 @@ namespace NVelocity.App.Events
     * <http://www.apache.org/>.
     */
 
-	/// <summary>  Called when a method throws an exception.  This gives the
+	/// <summary>
+	/// Called when a method throws an exception.  This gives the
 	/// application a chance to deal with it and either
 	/// return something nice, or throw.
-	/// *
+	/// 
 	/// Please return what you want rendered into the output stream.
-	/// *
 	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: MethodExceptionEventHandler.cs,v 1.3 2003/10/27 13:54:07 corts Exp $
-	///
-	/// </version>
-	public interface MethodExceptionEventHandler : EventHandler
+	public delegate void MethodExceptionEventHandler(Object sender, MethodExceptionEventArgs e);
+
+	public class MethodExceptionEventArgs : EventArgs
 	{
-		Object methodException(Type claz, String method, Exception e);
+		Object valueToRender;
+		Exception exceptionThrown;
+		Type targetClass;
+		String targetMethod;
+
+		public MethodExceptionEventArgs(Type targetClass, String targetMethod, Exception exceptionThrown)
+		{
+			this.targetClass = targetClass;
+			this.targetMethod = targetMethod;
+			this.exceptionThrown = exceptionThrown;
+		}
+		
+		public Object ValueToRender
+		{
+			get { return valueToRender; }
+			set { valueToRender = value; }
+		}
+
+		public Exception ExceptionThrown { get { return exceptionThrown; } }
+		public Type TargetClass { get { return targetClass; } }
+		public String TargetMethod { get { return targetMethod; } }
 	}
 }

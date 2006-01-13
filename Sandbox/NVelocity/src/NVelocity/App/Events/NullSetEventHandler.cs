@@ -55,28 +55,36 @@ namespace NVelocity.App.Events
     * <http://www.apache.org/>.
     */
 
-	/// <summary>  Event handler : lets an app approve / veto
-	/// writing a log message when RHS of #set() is null.
-	/// *
+	/// <summary>
+	/// Lets an app approve / veto writing a log message when RHS of #set() is null.
 	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: NullSetEventHandler.cs,v 1.3 2003/10/27 13:54:07 corts Exp $
-	///
-	/// </version>
-	public interface NullSetEventHandler : EventHandler
+	public delegate void NullSetEventHandler(Object sender, NullSetEventArgs e);
+	
+	public class NullSetEventArgs : EventArgs
 	{
-		/// <summary>  Called when the RHS of a #set() is null, which will result
-		/// in a null LHS.
-		/// *
+		private Boolean shouldLog = true;
+		private String lhs, rhs;
+
+		public NullSetEventArgs(String lhs, String rhs)
+		{
+			this.lhs = lhs;
+			this.rhs = rhs;
+		}
+		
+		/// <summary>
+		/// reference literal of left-hand-side of set statement
 		/// </summary>
-		/// <param name="lhs"> reference literal of left-hand-side of set statement
-		/// </param>
-		/// <param name="rhs"> reference literal of right-hand-side of set statement
-		/// </param>
-		/// <returns>true if log message should be written, false otherwise
-		///
-		/// </returns>
-		bool shouldLogOnNullSet(String lhs, String rhs);
+		public String LHS { get { return lhs; } }
+
+		/// <summary>
+		/// reference literal of right-hand-side of set statement
+		/// </summary>
+		public String RHS { get { return rhs; } }
+
+		public Boolean ShouldLog 
+		{ 
+			get { return shouldLog; } 
+			set { shouldLog = value; } 
+		}
 	}
 }

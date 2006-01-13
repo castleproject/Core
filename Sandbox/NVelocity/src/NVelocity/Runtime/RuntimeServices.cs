@@ -51,30 +51,16 @@ namespace NVelocity.Runtime
 		*   <li>Velocimacro System</li>
 		* </ul>
 		*/
-		void init();
+		void Init();
 
-		/// <summary> Allows an external system to set a property in
+		/// <summary>
+		/// Allows an external system to set a property in
 		/// the Velocity Runtime.
-		/// *
 		/// </summary>
-		/// <param name="String">property key
-		/// </param>
-		/// <param name="String">property value
-		///
-		/// </param>
-		void setProperty(String key, Object value_);
+		/// <param name="key">property key</param>
+		/// <param name="value">property value</param>
+		void SetProperty(String key, Object value);
 
-		/// <summary> Allow an external system to set an ExtendedProperties
-		/// object to use. This is useful where the external
-		/// system also uses the ExtendedProperties class and
-		/// the velocity configuration is a subset of
-		/// parent application's configuration. This is
-		/// the case with Turbine.
-		/// *
-		/// </summary>
-		/// <param name="ExtendedProperties">configuration
-		///
-		/// </param>
 		/// <summary> Add a property to the configuration. If it already
 		/// exists then the value stated here will be added
 		/// to the configuration entry. For example, if
@@ -91,21 +77,15 @@ namespace NVelocity.Runtime
 		/// ["file", "classpath"]
 		/// *
 		/// </summary>
-		/// <param name="String">key
-		/// </param>
-		/// <param name="String">value
-		///
-		/// </param>
-		void addProperty(String key, Object value_);
+		/// <param name="key">key</param>
+		/// <param name="value">value</param>
+		void AddProperty(String key, Object value);
 
-		/// <summary> Clear the values pertaining to a particular
-		/// property.
-		/// *
+		/// <summary>
+		/// Clear the values pertaining to a particular property.
 		/// </summary>
-		/// <param name="String">key of property to clear
-		///
-		/// </param>
-		void clearProperty(String key);
+		/// <param name="key">key of property to clear</param>
+		void ClearProperty(String key);
 
 		/// <summary>  Allows an external caller to get a property.  The calling
 		/// routine is required to know the type, as this routine
@@ -115,29 +95,31 @@ namespace NVelocity.Runtime
 		/// <param name="key">property to return
 		///
 		/// </param>
-		Object getProperty(String key);
+		Object GetProperty(String key);
 
-		/// <summary> Initialize the Velocity Runtime with a Properties
-		/// object.
-		/// *
-		/// </summary>
-		/// <param name="">Properties
-		///
-		/// </param>
+		// <summary> Initialize the Velocity Runtime with a Properties
+		// object.
+		// *
+		// </summary>
+		// <param name="">Properties
+		//
+		// </param>
 		// TODO
 		//void  init(System.Configuration.AppSettingsReader p);
-		/// <summary> Initialize the Velocity Runtime with the name of
+		
+		
+		/// <summary>
+		/// Initialize the Velocity Runtime with the name of
 		/// ExtendedProperties object.
-		/// *
 		/// </summary>
-		/// <param name="">Properties
-		///
-		/// </param>
-		void init(String configurationFile);
+		/// <param name="configurationFile">Properties</param>
+		void Init(String configurationFile);
 
-		/// <summary> Parse the input and return the root of
+		/// <summary>
+		/// Parse the input and return the root of
 		/// AST node structure.
-		/// <br><br>
+		/// </summary>
+		/// <remarks>
 		/// In the event that it runs out of parsers in the
 		/// pool, it will create and let them be GC'd
 		/// dynamically, logging that it has to do that.  This
@@ -145,26 +127,18 @@ namespace NVelocity.Runtime
 		/// expected that the user will set the
 		/// PARSER_POOL_SIZE property appropriately for their
 		/// application.  We will revisit this.
-		/// *
-		/// </summary>
-		/// <param name="InputStream">inputstream retrieved by a resource loader
-		/// </param>
-		/// <param name="String">name of the template being parsed
-		///
-		/// </param>
-		SimpleNode parse(TextReader reader, String templateName);
+		/// </remarks>
+		/// <param name="reader">inputstream retrieved by a resource loader</param>
+		/// <param name="templateName">name of the template being parsed</param>
+		SimpleNode Parse(TextReader reader, String templateName);
 
-		/// <summary>  Parse the input and return the root of the AST node structure.
-		/// *
+		/// <summary>
+		/// Parse the input and return the root of the AST node structure.
 		/// </summary>
-		/// <param name="InputStream">inputstream retrieved by a resource loader
-		/// </param>
-		/// <param name="String">name of the template being parsed
-		/// </param>
-		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template
-		///
-		/// </param>
-		SimpleNode parse(TextReader reader, String templateName, bool dumpNamespace);
+		/// <param name="reader">inputstream retrieved by a resource loader</param>
+		/// <param name="templateName">name of the template being parsed</param>
+		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template</param>
+		SimpleNode Parse(TextReader reader, String templateName, bool dumpNamespace);
 
 		/// <summary> Returns a <code>Template</code> from the resource manager.
 		/// This method assumes that the character encoding of the
@@ -182,7 +156,7 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		Template getTemplate(String name);
+		Template GetTemplate(String name);
 
 		/// <summary> Returns a <code>Template</code> from the resource manager
 		/// *
@@ -199,7 +173,7 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		Template getTemplate(String name, String encoding);
+		Template GetTemplate(String name, String encoding);
 
 		/// <summary> Returns a static content resource from the
 		/// resource manager.  Uses the current value
@@ -213,7 +187,7 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		ContentResource getContent(String name);
+		ContentResource GetContent(String name);
 
 		/// <summary> Returns a static content resource from the
 		/// resource manager.
@@ -228,7 +202,7 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		ContentResource getContent(String name, String encoding);
+		ContentResource GetContent(String name, String encoding);
 
 		/// <summary>  Determines is a template exists, and returns name of the loader that
 		/// provides it.  This is a slightly less hokey way to support
@@ -241,120 +215,97 @@ namespace NVelocity.Runtime
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		String getLoaderNameForResource(String resourceName);
+		String GetLoaderNameForResource(String resourceName);
 
-		/// <summary> String property accessor method with default to hide the
+		/// <summary>
+		/// String property accessor method with default to hide the
 		/// configuration implementation.
-		///
 		/// </summary>
-		/// <param name="String">key property key
-		/// </param>
-		/// <param name="String">defaultValue  default value to return if key not
+		/// <param name="key">key property key</param>
+		/// <param name="defaultValue">default value to return if key not
 		/// found in resource manager.
 		/// </param>
-		/// <returns>String  value of key or default
-		///
-		/// </returns>
-		String getString(String key, String defaultValue);
+		/// <returns>value of key or default</returns>
+		String GetString(String key, String defaultValue);
 
-		/// <summary> Returns the appropriate VelocimacroProxy object if strVMname
+		/// <summary>
+		/// Returns the appropriate VelocimacroProxy object if vmName
 		/// is a valid current Velocimacro.
-		/// *
 		/// </summary>
-		/// <param name="String">vmName  Name of velocimacro requested
-		/// </param>
-		/// <returns>String VelocimacroProxy
-		///
-		/// </returns>
-		Directive.Directive getVelocimacro(String vmName, String templateName);
+		/// <param name="vmName">Name of velocimacro requested</param>
+		/// <param name="templateName">Template Name</param>
+		/// <returns>VelocimacroProxy</returns>
+		Directive.Directive GetVelocimacro(String vmName, String templateName);
 
-		/// <summary> Adds a new Velocimacro. Usually called by Macro only while parsing.
-		/// *
+		/// <summary>
+		/// Adds a new Velocimacro. Usually called by Macro only while parsing.
 		/// </summary>
-		/// <param name="String">name  Name of velocimacro
-		/// </param>
-		/// <param name="String">macro  String form of macro body
-		/// </param>
-		/// <param name="String">argArray  Array of strings, containing the
-		/// #macro() arguments.  the 0th is the name.
-		/// </param>
-		/// <returns>boolean  True if added, false if rejected for some
+		/// <param name="name">name  Name of velocimacro</param>
+		/// <param name="macro">macro  String form of macro body</param>
+		/// <param name="argArray">argArray  Array of strings, containing the
+		/// <c>#macro()</c> arguments.  the 0th is the name.</param>
+		/// <param name="sourceTemplate">Source Template</param>
+		/// <returns>
+		/// True if added, false if rejected for some
 		/// reason (either parameters or permission settings)
-		///
 		/// </returns>
-		bool addVelocimacro(String name, String macro, String[] argArray, String sourceTemplate);
+		bool AddVelocimacro(String name, String macro, String[] argArray, String sourceTemplate);
 
-		/// <summary>  Checks to see if a VM exists
-		/// *
+		/// <summary>
+		/// Checks to see if a VM exists
 		/// </summary>
-		/// <param name="name"> Name of velocimacro
-		/// </param>
-		/// <returns>boolean  True if VM by that name exists, false if not
-		///
-		/// </returns>
-		bool isVelocimacro(String vmName, String templateName);
+		/// <param name="vmName">Name of velocimacro</param>
+		/// <param name="templateName">Template Name</param>
+		/// <returns>True if VM by that name exists, false if not</returns>
+		bool IsVelocimacro(String vmName, String templateName);
 
 		/// <summary>  tells the vmFactory to dump the specified namespace.  This is to support
 		/// clearing the VM list when in inline-VM-local-scope mode
 		/// </summary>
-		bool dumpVMNamespace(String namespace_Renamed);
+		bool DumpVMNamespace(String namespace_Renamed);
 
-		/// <summary> String property accessor method to hide the configuration implementation
+		/// <summary>
+		/// String property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="key"> property key
-		/// </param>
-		/// <returns>  value of key or null
-		///
-		/// </returns>
-		String getString(String key);
+		/// <param name="key">property key</param>
+		/// <returns>value</returns>
+		String GetString(String key);
 
-		/// <summary> Int property accessor method to hide the configuration implementation.
-		/// *
+		/// <summary>
+		/// Int property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="String">key property key
-		/// </param>
-		/// <returns>int value
-		///
-		/// </returns>
-		int getInt(String key);
+		/// <param name="key">property key</param>
+		/// <returns>value</returns>
+		int GetInt(String key);
 
-		/// <summary> Int property accessor method to hide the configuration implementation.
-		/// *
+		/// <summary>
+		/// Int property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="key"> property key
-		/// </param>
-		/// <param name="int">default value
-		/// </param>
-		/// <returns>int  value
-		///
-		/// </returns>
-		int getInt(String key, int defaultValue);
+		/// <param name="key">property key</param>
+		/// <param name="defaultValue">default value</param>
+		/// <returns>value</returns>
+		int GetInt(String key, int defaultValue);
 
-		/// <summary> Boolean property accessor method to hide the configuration implementation.
-		///
+		/// <summary>
+		/// Boolean property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="String">key  property key
-		/// </param>
-		/// <param name="boolean">default default value if property not found
-		/// </param>
-		/// <returns>boolean  value of key or default value
-		///
-		/// </returns>
-		bool getBoolean(String key, bool def);
+		/// <param name="key">property key</param>
+		/// <param name="def">default value</param>
+		/// <returns>value</returns>
+		bool GetBoolean(String key, bool def);
 
-		/// <summary> Return the velocity runtime configuration object.
-		/// *
+		/// <summary>
+		/// Return the specified application attribute
 		/// </summary>
-		/// <returns>ExtendedProperties configuration object which houses
-		/// the velocity runtime properties.
-		///
-		/// </returns>
-		/*
-	*  Return this instance's Introspector
-	*/
-		/*
-	*  Return the specified applcation attribute
-	*/
-		Object getApplicationAttribute(Object key);
+		/// <param name="key"></param>
+		/// <returns></returns>
+		Object GetApplicationAttribute(Object key);
+
+		/// <summary>
+		/// Sets the specified application attribute.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="value"></param>
+		Object SetApplicationAttribute(Object key, Object value);
 	}
 }

@@ -36,25 +36,25 @@ namespace NVelocity.Test
 			// test simple objects (no nesting)
 			StringWriter sw = new StringWriter();
 			bool ok = Velocity.Evaluate(c, sw, "", "$firstName is my first name, my last name is $lastName");
-			Assertion.Assert("Evalutation returned failure", ok);
+			Assert.IsTrue(ok, "Evalutation returned failure");
 			String s = sw.ToString();
-			Assertion.Assert("test simple objects (no nesting)", s.Equals("Cort is my first name, my last name is Schaefer"));
+			Assert.AreEqual("Cort is my first name, my last name is Schaefer", s, "test simple objects (no nesting)");
 
 			// test nested object
 			sw = new StringWriter();
 			String template = "These are the individual properties:\naddr1=9339 Grand Teton Drive\naddr2=Office in the back";
 			ok = Velocity.Evaluate(c, sw, "", template);
-			Assertion.Assert("Evalutation returned failure", ok);
+			Assert.IsTrue(ok, "Evalutation returned failure");
 			s = sw.ToString();
-			Assertion.Assert("test nested object", !s.Equals(String.Empty));
+			Assert.IsFalse(String.Empty.Equals(s), "test nested object");
 
 			// test hashtable
-			//	    sw = new StringWriter();
-			//	    template = "Hashtable lookup: foo=$hashtable.foo";
-			//	    ok = Velocity.Evaluate(c, sw, "", template);
-			//	    Assert("Evalutation returned failure", ok);
-			//	    s = sw.ToString();
-			//	    Assert("Evaluation did not evaluate right", s.Equals("Hashtable lookup: foo=bar"));
+			sw = new StringWriter();
+			template = "Hashtable lookup: foo=$hashtable.foo";
+			ok = Velocity.Evaluate(c, sw, "", template);
+			Assert.IsTrue(ok, "Evalutation returned failure");
+			s = sw.ToString();
+			Assert.AreEqual("Hashtable lookup: foo=bar", s, "Evaluation did not evaluate right");
 
 			// test nested properties
 			//    	    sw = new StringWriter();
@@ -68,9 +68,9 @@ namespace NVelocity.Test
 			sw = new StringWriter();
 			template = "$!NOT_IN_CONTEXT";
 			ok = Velocity.Evaluate(c, sw, "", template);
-			Assertion.Assert("Evalutation returned failure", ok);
+			Assert.IsTrue(ok, "Evalutation returned failure");
 			s = sw.ToString();
-			Assertion.Assert("test key not found in context", s.Equals(String.Empty));
+			Assert.AreEqual(String.Empty, s, "test key not found in context");
 
 			// test nested properties where property not found
 			//	    sw = new StringWriter();

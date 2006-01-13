@@ -54,207 +54,96 @@ namespace NVelocity.App.Events
     * <http://www.apache.org/>.
     */
 	using System;
+	using System.Collections;
 	using NVelocity.Context;
+	using NVelocity.Exception;
 
-	/// <summary>  'Package' of event handlers...
-	/// *
+	/// <summary>
+	/// 'Package' of event handlers...
 	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <author> <a href="mailto:j_a_fernandez@yahoo.com">Jose Alberto Fernandez</a>
-	/// </author>
-	/// <version> $Id: EventCartridge.cs,v 1.4 2003/10/27 13:54:07 corts Exp $
-	///
-	/// </version>
-	public class EventCartridge : ReferenceInsertionEventHandler, NullSetEventHandler, MethodExceptionEventHandler
+	public class EventCartridge
 	{
-		private ReferenceInsertionEventHandler rieh = null;
-		private NullSetEventHandler nseh = null;
-		private MethodExceptionEventHandler meeh = null;
-
-		/// <summary>  Adds an event handler(s) to the Cartridge.  This method
-		/// will find all possible event handler interfaces supported
-		/// by the passed in object.
-		/// *
-		/// </summary>
-		/// <param name="ev">object impementing a valid EventHandler-derived interface
-		/// </param>
-		/// <returns>true if a supported interface, false otherwise or if null
-		///
-		/// </returns>
-		public bool addEventHandler(EventHandler ev)
-		{
-			if (ev == null)
-			{
-				return false;
-			}
-
-			bool found = false;
-
-			if (ev is ReferenceInsertionEventHandler)
-			{
-				rieh = (ReferenceInsertionEventHandler) ev;
-				found = true;
-			}
-
-			if (ev is NullSetEventHandler)
-			{
-				nseh = (NullSetEventHandler) ev;
-				found = true;
-			}
-
-			if (ev is MethodExceptionEventHandler)
-			{
-				meeh = (MethodExceptionEventHandler) ev;
-				found = true;
-			}
-
-			return found;
-		}
-
-		/// <summary>  Removes an event handler(s) from the Cartridge.  This method
-		/// will find all possible event handler interfaces supported
-		/// by the passed in object and remove them.
-		/// *
-		/// </summary>
-		/// <param name="ev">object impementing a valid EventHandler-derived interface
-		/// </param>
-		/// <returns>true if a supported interface, false otherwise or if null
-		///
-		/// </returns>
-		public bool removeEventHandler(EventHandler ev)
-		{
-			if (ev == null)
-			{
-				return false;
-			}
-
-			bool found = false;
-
-			if (ev == rieh)
-			{
-				rieh = null;
-				found = true;
-			}
-
-			if (ev == nseh)
-			{
-				nseh = null;
-				found = true;
-			}
-
-			if (ev == meeh)
-			{
-				meeh = null;
-				found = true;
-			}
-
-			return found;
-		}
-
-		/// <summary>  Implementation of ReferenceInsertionEventHandler method
-		/// <code>referenceInsert()</code>.
-		/// *
+		public event ReferenceInsertionEventHandler ReferenceInsertion;
+		public event NullSetEventHandler NullSet;
+		public event MethodExceptionEventHandler MethodExceptionEvent;
+		
+		/// <summary>
 		/// Called during Velocity merge before a reference value will
 		/// be inserted into the output stream.
-		/// *
 		/// </summary>
-		/// <param name="reference">reference from template about to be inserted
-		/// </param>
-		/// <param name="value"> value about to be inserted (after toString() )
-		/// </param>
-		/// <returns>Object on which toString() should be called for output.
-		///
+		/// <param name="referenceStack">the stack of objects used to reach this reference</param>
+		/// <param name="reference">reference from template about to be inserted</param>
+		/// <param name="value"> value about to be inserted (after toString() )</param>
+		/// <returns>
+		/// Object on which toString() should be called for output.
 		/// </returns>
-		public Object referenceInsert(String reference, Object value_)
+		internal Object ReferenceInsert(Stack referenceStack, String reference, Object value)
 		{
-			if (rieh == null)
+			if (this.ReferenceInsertion != null)
 			{
-				return value_;
+				ReferenceInsertionEventArgs args = new ReferenceInsertionEventArgs(referenceStack, reference, value);
+				this.ReferenceInsertion(this, args);
+				value = args.NewValue;
 			}
 
-			return rieh.referenceInsert(reference, value_);
+			return value;
 		}
 
-		/// <summary>  Implementation of NullSetEventHandler method
-		/// <code>shouldLogOnNullSet()</code>.
-		/// *
+		/// <summary>
 		/// Called during Velocity merge to determine if when
 		/// a #set() results in a null assignment, a warning
 		/// is logged.
-		/// *
 		/// </summary>
-		/// <param name="reference">reference from template about to be inserted
-		/// </param>
-		/// <returns>true if to be logged, false otherwise
-		///
-		/// </returns>
-		public bool shouldLogOnNullSet(String lhs, String rhs)
+		/// <returns>true if to be logged, false otherwise</returns>
+		internal bool ShouldLogOnNullSet(String lhs, String rhs)
 		{
-			if (nseh == null)
-			{
+			if (this.NullSet == null)
 				return true;
-			}
 
-			return nseh.shouldLogOnNullSet(lhs, rhs);
+			NullSetEventArgs e = new NullSetEventArgs(lhs, rhs);
+			this.NullSet(this, e);
+
+			return e.ShouldLog;
 		}
 
-		/// <summary>  Implementation of MethodExceptionEventHandler  method
-		/// <code>methodException()</code>.
-		/// *
+		/// <summary>
 		/// Called during Velocity merge if a reference is null
-		/// *
 		/// </summary>
-		/// <param name="claz"> Class that is causing the exception
-		/// </param>
-		/// <param name="method">method called that causes the exception
-		/// </param>
-		/// <param name="e">Exception thrown by the method
-		/// </param>
-		/// <returns>Object to return as method result
-		/// @throws exception to be wrapped and propogated to app
-		///
-		/// </returns>
-		public Object methodException(Type claz, String method, Exception e)
+		/// <param name="claz">Class that is causing the exception</param>
+		/// <param name="method">method called that causes the exception</param>
+		/// <param name="e">Exception thrown by the method</param>
+		/// <returns>Object to return as method result</returns>
+		/// <exception cref="Exception">exception to be wrapped and propogated to app</exception>
+		internal Object HandleMethodException(Type claz, String method, Exception e)
 		{
-			/*
-	    *  if we don't have a handler, just throw what we were handed
-	    */
-			if (meeh == null)
-			{
-				throw e;
-			}
+			// if we don't have a handler, just throw what we were handed
+			if (this.MethodExceptionEvent == null)
+				throw new VelocityException(e.Message, e);
 
-			/*
-	    *  otherwise, call it..
-	    */
-			return meeh.methodException(claz, method, e);
+			MethodExceptionEventArgs mea = new MethodExceptionEventArgs(claz, method, e);
+			this.MethodExceptionEvent(this, mea);
+
+			if (mea.ValueToRender != null)
+				return mea.ValueToRender;
+			else
+				throw new VelocityException(e.Message, e);
 		}
 
-		/// <summary>  Attached the EventCartridge to the context
-		/// *
-		/// Final because not something one should mess with lightly :)
-		/// *
+		/// <summary>
+		/// Attached the EventCartridge to the context
 		/// </summary>
-		/// <param name="context">context to attach to
-		/// </param>
-		/// <returns>true if successful, false otherwise
-		///
-		/// </returns>
-		public bool attachToContext(IContext context)
+		/// <param name="context">context to attach to</param>
+		/// <returns>true if successful, false otherwise</returns>
+		public bool AttachToContext(IContext context)
 		{
 			if (context is InternalEventContext)
 			{
 				InternalEventContext iec = (InternalEventContext) context;
-
 				iec.AttachEventCartridge(this);
-
 				return true;
 			}
 			else
-			{
 				return false;
-			}
 		}
 	}
 }

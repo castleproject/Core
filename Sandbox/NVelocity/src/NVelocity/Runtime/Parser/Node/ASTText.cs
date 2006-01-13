@@ -69,14 +69,15 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		public override Object init(InternalContextAdapter context, Object data)
+		public override Object Init(InternalContextAdapter context, Object data)
 		{
 			Token t = FirstToken;
 
@@ -87,9 +88,9 @@ namespace NVelocity.Runtime.Parser.Node
 			return data;
 		}
 
-		public override bool render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(InternalContextAdapter context, TextWriter writer)
 		{
-			writer.Write((Char[]) ctext);
+			writer.Write(ctext);
 			return true;
 		}
 	}

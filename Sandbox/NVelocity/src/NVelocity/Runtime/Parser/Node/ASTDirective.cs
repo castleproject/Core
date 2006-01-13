@@ -18,16 +18,17 @@ namespace NVelocity.Runtime.Parser.Node
 	/// <version> $Id: ASTDirective.cs,v 1.3 2003/10/27 13:54:10 corts Exp $</version>
 	public class ASTDirective : SimpleNode
 	{
+		/// <summary>
+		/// Gets or sets the directive name.
+		/// Used by the parser.  
+		/// This keeps us from having to
+		/// dig it out of the token stream and gives the parse 
+		/// the change to override.
+		/// </summary>
 		public String DirectiveName
 		{
 			get { return directiveName; }
-
-			set
-			{
-				directiveName = value;
-				return;
-			}
-
+			set { directiveName = value; }
 		}
 
 		private Directive directive;
@@ -43,41 +44,36 @@ namespace NVelocity.Runtime.Parser.Node
 		}
 
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		public override Object init(InternalContextAdapter context, Object data)
+		public override Object Init(InternalContextAdapter context, Object data)
 		{
-			base.init(context, data);
+			base.Init(context, data);
 
-			/*
-	    *  only do things that are not context dependant
-	    */
-
+			// only do things that are not context dependant
 			if (parser.isDirective(directiveName))
 			{
 				isDirective = true;
 
 				// create a new instance of the directive
 				directive = parser.getDirective(directiveName);
-				directive.init(rsvc, context, this);
-				directive.setLocation(Line, Column);
+				directive.Init(rsvc, context, this);
+				directive.SetLocation(Line, Column);
 			}
-			else if (rsvc.isVelocimacro(directiveName, context.CurrentTemplateName))
+			else if (rsvc.IsVelocimacro(directiveName, context.CurrentTemplateName))
 			{
-				/*
-		*  we seem to be a Velocimacro.
-		*/
-
+				// we seem to be a Velocimacro.
 				isDirective = true;
-				directive = rsvc.getVelocimacro(directiveName, context.CurrentTemplateName);
+				directive = rsvc.GetVelocimacro(directiveName, context.CurrentTemplateName);
 
-				directive.init(rsvc, context, this);
-				directive.setLocation(Line, Column);
+				directive.Init(rsvc, context, this);
+				directive.SetLocation(Line, Column);
 			}
 			else
 			{
@@ -87,15 +83,12 @@ namespace NVelocity.Runtime.Parser.Node
 			return data;
 		}
 
-		public override bool render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(InternalContextAdapter context, TextWriter writer)
 		{
-			/*
-	    *  normal processing
-	    */
-
+			// normal processing
 			if (isDirective)
 			{
-				directive.render(context, writer, this);
+				directive.Render(context, writer, this);
 			}
 			else
 			{
@@ -105,12 +98,5 @@ namespace NVelocity.Runtime.Parser.Node
 
 			return true;
 		}
-
-		/// <summary>   Sets the directive name.  Used by the parser.  This keeps us from having to
-		/// dig it out of the token stream and gives the parse the change to override.
-		/// </summary>
-
-		/// <summary>  Gets the name of this directive.
-		/// </summary>
 	}
 }

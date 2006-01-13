@@ -14,39 +14,30 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class BooleanPropertyExecutor : PropertyExecutor
 	{
-		public BooleanPropertyExecutor(RuntimeLogger r, Introspector i, Type clazz, String propertyName) : base(r, i, clazz, propertyName)
+		public BooleanPropertyExecutor(RuntimeLogger r, Introspector i, Type clazz, String propertyName) 
+			: base(r, i, clazz, propertyName)
 		{
 		}
 
-		protected internal override void discover(Type clazz, String propertyName)
+		protected internal override void Discover(Type clazz, String propertyName)
 		{
 			try
 			{
-				property = introspector.getProperty(clazz, propertyName);
-				if (property != null)
-				{
-					if (property.PropertyType.Equals(typeof(Boolean)))
-					{
-						return;
-					}
-				}
+				property = introspector.GetProperty(clazz, propertyName);
+				if (property != null && property.PropertyType.Equals(typeof(Boolean)))
+					return;
 
-				/*
-		*  now the convenience, flip the 1st character
-		*/
+				// now the convenience, flip the 1st character
 				propertyName = propertyName.Substring(0, 1).ToUpper() + propertyName.Substring(1);
-				property = introspector.getProperty(clazz, propertyName);
-				if (property != null)
-					if (property.PropertyType.Equals(typeof(Boolean)))
-					{
-						return;
-					}
+				property = introspector.GetProperty(clazz, propertyName);
+				if (property != null && property.PropertyType.Equals(typeof(Boolean)))
+					return;
 
 				property = null;
 			}
 			catch (Exception e)
 			{
-				rlog.error("PROGRAMMER ERROR : BooleanPropertyExector() : " + e);
+				rlog.Error("PROGRAMMER ERROR : BooleanPropertyExector() : " + e);
 			}
 		}
 	}

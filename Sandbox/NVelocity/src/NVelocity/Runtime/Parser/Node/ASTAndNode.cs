@@ -57,17 +57,13 @@ namespace NVelocity.Runtime.Parser.Node
 	using System;
 	using NVelocity.Context;
 
-	/// <summary> Please look at the Parser.jjt file which is
+	/// <summary>
+	/// Please look at the Parser.jjt file which is
 	/// what controls the generation of this class.
-	/// *
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ASTAndNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a> </author>
+	/// <version> $Id: ASTAndNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $ </version>
 	public class ASTAndNode : SimpleNode
 	{
 		public ASTAndNode(int id) : base(id)
@@ -78,11 +74,12 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>  Returns the value of the expression.
@@ -91,40 +88,31 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Value(InternalContextAdapter context)
 		{
-			return evaluate(context);
+			return Evaluate(context);
 		}
 
-		/// <summary> logical and :
+		/// <summary>
+		/// logical and :
 		/// null && right = false
 		/// left && null = false
 		/// null && null = false
 		/// </summary>
-		public override bool evaluate(InternalContextAdapter context)
+		public override bool Evaluate(InternalContextAdapter context)
 		{
 			INode left = jjtGetChild(0);
 			INode right = jjtGetChild(1);
 
-			/*
-	    *  if either is null, lets log and bail
-	    */
-
+			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.error((left == null ? "Left" : "Right") + " side of '&&' operation is null." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side of '&&' operation is null." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return false;
 			}
 
-			/*
-	    *  short circuit the test.  Don't eval the RHS if the LHS is false
-	    */
-
-			if (left.evaluate(context))
-			{
-				if (right.evaluate(context))
-				{
+			// short circuit the test.  Don't eval the RHS if the LHS is false
+			if (left.Evaluate(context))
+				if (right.Evaluate(context))
 					return true;
-				}
-			}
 
 			return false;
 		}

@@ -24,7 +24,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>
@@ -42,13 +42,12 @@ namespace NVelocity.Runtime.Parser.Node
 				SimpleNode valueNode = (SimpleNode) jjtGetChild(i + 1);
 
 				Object key = (keyNode == null ? null : keyNode.Value(context));
-				Object value_ = (valueNode == null ? null : valueNode.Value(context));
+				Object value = (valueNode == null ? null : valueNode.Value(context));
 
-				objectMap.Add(key, value_);
+				objectMap.Add(key, value);
 			}
 
 			return objectMap;
 		}
-
 	}
 }

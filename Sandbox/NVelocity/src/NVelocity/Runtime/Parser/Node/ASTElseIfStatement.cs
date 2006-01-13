@@ -80,30 +80,33 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		/// <summary> An ASTElseStatement is true if the expression
+		/// <summary>
+		/// An ASTElseStatement is true if the expression
 		/// it contains evaluates to true. Expressions know
 		/// how to evaluate themselves, so we do that
 		/// here and return the value back to ASTIfStatement
 		/// where this node was originally asked to evaluate
 		/// itself.
 		/// </summary>
-		public override bool evaluate(InternalContextAdapter context)
+		public override bool Evaluate(InternalContextAdapter context)
 		{
-			return jjtGetChild(0).evaluate(context);
+			return jjtGetChild(0).Evaluate(context);
 		}
 
-		/// <summary>  renders the block
+		/// <summary>
+		/// renders the block
 		/// </summary>
-		public override bool render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(InternalContextAdapter context, TextWriter writer)
 		{
-			return jjtGetChild(1).render(context, writer);
+			return jjtGetChild(1).Render(context, writer);
 		}
 	}
 }

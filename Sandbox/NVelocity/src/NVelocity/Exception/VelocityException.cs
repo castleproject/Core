@@ -32,7 +32,7 @@ namespace NVelocity.Exception
 		{
 		}
 
-		public VelocityException(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected VelocityException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

@@ -61,10 +61,11 @@ namespace NVelocity.Runtime.Directive
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Runtime.Resource;
 
-	/// <summary> Pluggable directive that handles the #include() statement in VTL.
+	/// <summary>
+	/// Pluggable directive that handles the #include() statement in VTL.
 	/// This #include() can take multiple arguments of either
 	/// StringLiteral or Reference.
-	/// *
+	/// 
 	/// Notes:
 	/// -----
 	/// 1) The included source material can only come from somewhere in
@@ -72,7 +73,7 @@ namespace NVelocity.Runtime.Directive
 	/// around this.  If you want to include content from elsewhere on
 	/// your disk, use a link from somwhere under Template Root to that
 	/// content.
-	/// *
+	/// 
 	/// 2) By default, there is no output to the render stream in the event of
 	/// a problem.  You can override this behavior with two property values :
 	/// include.output.errormsg.start
@@ -84,12 +85,12 @@ namespace NVelocity.Runtime.Directive
 	/// include.output.errormsg.start=<!-- #include error :
 	/// include.output.errormsg.end= -->
 	/// might be an excellent way to start...
-	/// *
+	/// 
 	/// 3) As noted above, #include() can take multiple arguments.
 	/// Ex : #include( "foo.vm" "bar.vm" $foo )
 	/// will simply include all three if valid to output w/o any
 	/// special separator.
-	/// *
+	/// 
 	/// </summary>
 	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
 	/// </author>
@@ -102,116 +103,97 @@ namespace NVelocity.Runtime.Directive
 	/// </version>
 	public class Include : Directive
 	{
+		/// <summary>
+		/// Return name of this directive.
+		/// </summary>
 		public override String Name
 		{
 			get { return "include"; }
 			set { throw new NotSupportedException(); }
 		}
 
-		public override int Type
+		/// <summary> Return type of this directive.</summary>
+		public override DirectiveType Type
 		{
-			get { return DirectiveConstants_Fields.LINE; }
-
+			get { return DirectiveType.LINE; }
 		}
 
 		private String outputMsgStart = "";
 		private String outputMsgEnd = "";
 
-		/// <summary> Return name of this directive.
-		/// </summary>
-		/// <summary> Return type of this directive.
-		/// </summary>
-		/// <summary>  simple init - init the tree and get the elementKey from
+		/// <summary>
+		/// simple init - init the tree and get the elementKey from
 		/// the AST
 		/// </summary>
-		public override void init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public override void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
 		{
-			base.init(rs, context, node);
+			base.Init(rs, context, node);
 
-			/*
-	    *  get the msg, and add the space so we don't have to
-	    *  do it each time
-	    */
-			outputMsgStart = rsvc.getString(RuntimeConstants_Fields.ERRORMSG_START);
+			// get the msg, and add the space so we don't have to
+	    // do it each time
+			outputMsgStart = rsvc.GetString(RuntimeConstants.ERRORMSG_START);
 			outputMsgStart = outputMsgStart + " ";
 
-			outputMsgEnd = rsvc.getString(RuntimeConstants_Fields.ERRORMSG_END);
+			outputMsgEnd = rsvc.GetString(RuntimeConstants.ERRORMSG_END);
 			outputMsgEnd = " " + outputMsgEnd;
 		}
 
-		/// <summary>  iterates through the argument list and renders every
+		/// <summary>
+		/// iterates through the argument list and renders every
 		/// argument that is appropriate.  Any non appropriate
 		/// arguments are logged, but render() continues.
 		/// </summary>
-		public override bool render(InternalContextAdapter context, TextWriter writer, INode node)
+		public override bool Render(InternalContextAdapter context, TextWriter writer, INode node)
 		{
-			/*
-	    *  get our arguments and check them
-	    */
-
+			// get our arguments and check them
 			int argCount = node.jjtGetNumChildren();
 
 			for (int i = 0; i < argCount; i++)
 			{
-				/*
-				*  we only handle StringLiterals and References right now
-				*/
-
+				// we only handle StringLiterals and References right now
 				INode n = node.jjtGetChild(i);
 
 				if (n.Type == ParserTreeConstants.JJTSTRINGLITERAL || n.Type == ParserTreeConstants.JJTREFERENCE)
 				{
-					if (!renderOutput(n, context, writer))
-						outputErrorToStream(writer, "error with arg " + i + " please see log.");
+					if (!RenderOutput(n, context, writer))
+						OutputErrorToStream(writer, "error with arg " + i + " please see log.");
 				}
 				else
 				{
 					//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
-					rsvc.error("#include() error : invalid argument type : " + n.ToString());
-					outputErrorToStream(writer, "error with arg " + i + " please see log.");
+					rsvc.Error("#include() error : invalid argument type : " + n.ToString());
+					OutputErrorToStream(writer, "error with arg " + i + " please see log.");
 				}
 			}
 
 			return true;
 		}
 
-		/// <summary>  does the actual rendering of the included file
-		/// *
+		/// <summary>
+		/// does the actual rendering of the included file
 		/// </summary>
-		/// <param name="node">AST argument of type StringLiteral or Reference
-		/// </param>
-		/// <param name="context">valid context so we can render References
-		/// </param>
-		/// <param name="writer">output Writer
-		/// </param>
-		/// <returns>boolean success or failure.  failures are logged
-		///
-		/// </returns>
-		private bool renderOutput(INode node, InternalContextAdapter context, TextWriter writer)
+		/// <param name="node">AST argument of type StringLiteral or Reference</param>
+		/// <param name="context">valid context so we can render References</param>
+		/// <param name="writer">output Writer</param>
+		/// <returns>boolean success or failure.  failures are logged</returns>
+		private bool RenderOutput(INode node, InternalContextAdapter context, TextWriter writer)
 		{
-			String arg = "";
-
 			if (node == null)
 			{
-				rsvc.error("#include() error :  null argument");
+				rsvc.Error("#include() error :  null argument");
 				return false;
 			}
 
-			/*
-	    *  does it have a value?  If you have a null reference, then no.
-	    */
-			Object value_ = node.Value(context);
-			if (value_ == null)
+			// does it have a value?  If you have a null reference, then no.
+			Object val = node.Value(context);
+			if (val == null)
 			{
-				rsvc.error("#include() error :  null argument");
+				rsvc.Error("#include() error :  null argument");
 				return false;
 			}
 
-			/*
-	    *  get the path
-	    */
-			//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
-			arg = value_.ToString();
+			// get the path
+			String arg = val.ToString();
 
 			Resource resource = null;
 
@@ -219,36 +201,26 @@ namespace NVelocity.Runtime.Directive
 
 			try
 			{
-				/*
-				*  get the resource, and assume that we use the encoding of the current template
-				*  the 'current resource' can be null if we are processing a stream....
-				*/
-
+				// get the resource, and assume that we use the encoding of the current template
+				// the 'current resource' can be null if we are processing a stream....
 				String encoding = null;
 
 				if (current != null)
-				{
 					encoding = current.Encoding;
-				}
 				else
-				{
-					encoding = (String) rsvc.getProperty(RuntimeConstants_Fields.INPUT_ENCODING);
-				}
+					encoding = (String) rsvc.GetProperty(RuntimeConstants.INPUT_ENCODING);
 
-				resource = rsvc.getContent(arg, encoding);
+				resource = rsvc.GetContent(arg, encoding);
 			}
-			catch (ResourceNotFoundException rnfe)
+			catch (ResourceNotFoundException)
 			{
-				/*
-				* the arg wasn't found.  Note it and throw
-				*/
-
-				rsvc.error("#include(): cannot find resource '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
-				throw rnfe;
+				// the arg wasn't found.  Note it and throw
+				rsvc.Error("#include(): cannot find resource '" + arg + "', called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ")");
+				throw;
 			}
 			catch (Exception e)
 			{
-				rsvc.error("#include(): arg = '" + arg + "',  called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ") : " + e);
+				rsvc.Error("#include(): arg = '" + arg + "',  called from template " + context.CurrentTemplateName + " at (" + Line + ", " + Column + ") : " + e);
 			}
 
 			if (resource == null)
@@ -258,11 +230,12 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		/// <summary>  Puts a message to the render output stream if ERRORMSG_START / END
+		/// <summary>
+		/// Puts a message to the render output stream if ERRORMSG_START / END
 		/// are valid property strings.  Mainly used for end-user template
 		/// debugging.
 		/// </summary>
-		private void outputErrorToStream(TextWriter writer, String msg)
+		private void OutputErrorToStream(TextWriter writer, String msg)
 		{
 			if (outputMsgStart != null && outputMsgEnd != null)
 			{

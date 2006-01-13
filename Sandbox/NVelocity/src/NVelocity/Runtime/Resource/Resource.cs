@@ -41,7 +41,7 @@ namespace NVelocity.Runtime.Resource
 		/// <summary>
 		/// Character encoding of this resource
 		/// </summary>
-		protected internal String encoding = RuntimeConstants_Fields.ENCODING_DEFAULT;
+		protected internal String encoding = RuntimeConstants.ENCODING_DEFAULT;
 
 		/// <summary>
 		/// The file modification time (in milliseconds) for the cached template.

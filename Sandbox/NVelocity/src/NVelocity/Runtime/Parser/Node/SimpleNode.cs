@@ -113,12 +113,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public int Line
 		{
-			get { return first.beginLine; }
+			get { return first.BeginLine; }
 		}
 
 		public int Column
 		{
-			get { return first.beginColumn; }
+			get { return first.BeginColumn; }
 		}
 
 		public void jjtOpen()
@@ -171,12 +171,12 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public virtual Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public Object childrenAccept(ParserVisitor visitor, Object data)
+		public Object ChildrenAccept(ParserVisitor visitor, Object data)
 		{
 			if (children != null)
 			{
@@ -225,21 +225,24 @@ namespace NVelocity.Runtime.Parser.Node
 
 		// All additional methods
 
-		public virtual String literal()
+		public virtual string Literal
 		{
-			Token t = first;
-			StringBuilder sb = new StringBuilder(t.image);
-
-			while (t != last)
+			get
 			{
-				t = t.next;
-				sb.Append(t.image);
-			}
+				Token t = first;
+				StringBuilder sb = new StringBuilder(t.Image);
 
-			return sb.ToString();
+				while (t != last)
+				{
+					t = t.Next;
+					sb.Append(t.Image);
+				}
+
+				return sb.ToString();
+			}
 		}
 
-		public virtual Object init(InternalContextAdapter context, Object data)
+		public virtual Object Init(InternalContextAdapter context, Object data)
 		{
 			/*
 	    * hold onto the RuntimeServices
@@ -253,18 +256,18 @@ namespace NVelocity.Runtime.Parser.Node
 			{
 				try
 				{
-					jjtGetChild(i).init(context, data);
+					jjtGetChild(i).Init(context, data);
 				}
 				catch (ReferenceException re)
 				{
-					rsvc.error(re);
+					rsvc.Error(re);
 				}
 			}
 
 			return data;
 		}
 
-		public virtual bool evaluate(InternalContextAdapter context)
+		public virtual bool Evaluate(InternalContextAdapter context)
 		{
 			return false;
 		}
@@ -274,27 +277,27 @@ namespace NVelocity.Runtime.Parser.Node
 			return null;
 		}
 
-		public virtual bool render(InternalContextAdapter context, TextWriter writer)
+		public virtual bool Render(InternalContextAdapter context, TextWriter writer)
 		{
 			int i, k = jjtGetNumChildren();
 
 			for (i = 0; i < k; i++)
-				jjtGetChild(i).render(context, writer);
+				jjtGetChild(i).Render(context, writer);
 
 			return true;
 		}
 
-		public virtual Object execute(Object o, InternalContextAdapter context)
+		public virtual Object Execute(Object o, InternalContextAdapter context)
 		{
 			return null;
 		}
 
-		public void setInvalid()
+		public void SetInvalid()
 		{
 			invalid = true;
 		}
 
-		public bool isInvalid()
+		public bool IsInvalid()
 		{
 			return invalid;
 		}

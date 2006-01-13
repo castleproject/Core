@@ -67,16 +67,17 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		public override bool evaluate(InternalContextAdapter context)
+		public override bool Evaluate(InternalContextAdapter context)
 		{
-			return jjtGetChild(0).evaluate(context);
+			return jjtGetChild(0).Evaluate(context);
 		}
 
 		public override Object Value(InternalContextAdapter context)

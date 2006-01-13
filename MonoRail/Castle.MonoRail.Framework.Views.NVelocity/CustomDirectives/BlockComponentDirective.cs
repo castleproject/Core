@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using DirectiveConstants_Fields = NVelocity.Runtime.Directive.DirectiveConstants_Fields;
+using NVelocity.Runtime.Directive;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
 	using System;
-
 	using Castle.MonoRail.Framework.Internal;
 
 
@@ -33,9 +32,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			set {  }
 		}
 
-		public override int Type
+		public override DirectiveType Type
 		{
-			get { return DirectiveConstants_Fields.BLOCK; }
+			get { return DirectiveType.BLOCK; }
 		}
 	}
 }

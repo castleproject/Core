@@ -1,10 +1,12 @@
-using ExtendedProperties = Commons.Collections.ExtendedProperties;
+using Commons.Collections;
 
 namespace NVelocity.Test
 {
 	using System;
 	using System.Reflection;
+
 	using NUnit.Framework;
+
 	using NVelocity.Runtime;
 	using NVelocity.Util.Introspection;
 
@@ -19,13 +21,13 @@ namespace NVelocity.Test
 		{
 			RuntimeServices rs = RuntimeSingleton.RuntimeServices;
 			Introspector i = new Introspector(rs);
-			MethodInfo mi = i.getMethod(typeof(VelocityTest), "Test_Evaluate", null);
-			Assertion.AssertNotNull("Expected to find VelocityTest.Test_Evaluate", mi);
-			Assertion.Assert("method not found", mi.ToString().Equals("Void Test_Evaluate()"));
+			MethodInfo mi = i.GetMethod(typeof(VelocityTest), "Test_Evaluate", null);
+			Assert.IsNotNull(mi, "Expected to find VelocityTest.Test_Evaluate");
+			Assert.IsTrue(mi.ToString().Equals("Void Test_Evaluate()"), "method not found");
 
-			mi = i.getMethod(typeof(ExtendedProperties), "GetString", new Object[] {"parm1", "parm2"});
-			Assertion.AssertNotNull("Expected to find ExtendedProperties.GetString(String, String)", mi);
-			Assertion.Assert("method not found", mi.ToString().Equals("System.String GetString(System.String, System.String)"));
+			mi = i.GetMethod(typeof(ExtendedProperties), "GetString", new Object[] {"parm1", "parm2"});
+			Assert.IsNotNull(mi, "Expected to find ExtendedProperties.GetString(String, String)");
+			Assert.IsTrue(mi.ToString().Equals("System.String GetString(System.String, System.String)"), "method not found");
 		}
 
 

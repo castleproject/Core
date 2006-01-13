@@ -189,8 +189,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <param name="props">The <see cref="ExtendedProperties"/> collection to populate.</param>
 		protected virtual void InitializeVelocityProperties(ExtendedProperties props)
 		{
-			props.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
-			props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
+			props.SetProperty(RuntimeConstants.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
+			props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
 			
 			// add support for global macros. they must be defined in "Views/macros".
 			ArrayList macros = new ArrayList();
@@ -201,14 +201,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			
 			if (macros.Count > 0)
 			{
-				object m = props.GetProperty(RuntimeConstants_Fields.VM_LIBRARY);
+				object m = props.GetProperty(RuntimeConstants.VM_LIBRARY);
 				if (m is ICollection)
 					macros.AddRange((ICollection) m);
 				else if (m is string)
 					macros.Add(m);
 
-				props.AddProperty(RuntimeConstants_Fields.VM_LIBRARY, macros);
-				props.AddProperty(RuntimeConstants_Fields.VM_LIBRARY_AUTORELOAD, true);
+				props.AddProperty(RuntimeConstants.VM_LIBRARY, macros);
+				props.AddProperty(RuntimeConstants.VM_LIBRARY_AUTORELOAD, true);
 			}
 		}
 	

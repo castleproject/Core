@@ -40,7 +40,7 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="date">A Date.</param>
 		/// <returns>A String.</returns>
-		public String formatShortDate(DateTime date)
+		public String FormatShortDate(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(3, -1, CultureInfo.CurrentCulture), date);
 		}
@@ -50,7 +50,7 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="date">A Date.</param>
 		/// <returns>A String.</returns>
-		public String formatLongDate(DateTime date)
+		public String FormatLongDate(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(1, -1, CultureInfo.CurrentCulture), date);
 		}
@@ -60,7 +60,7 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="date">A Date.</param>
 		/// <returns>A String.</returns>
-		public String formatShortDateTime(DateTime date)
+		public String FormatShortDateTime(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(3, 3, CultureInfo.CurrentCulture), date);
 		}
@@ -70,7 +70,7 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="date">A Date.</param>
 		/// <returns>A String.</returns>
-		public String formatLongDateTime(DateTime date)
+		public String FormatLongDateTime(DateTime date)
 		{
 			return SupportClass.FormatDateTime(SupportClass.GetDateTimeFormatInstance(1, 1, CultureInfo.CurrentCulture), date);
 		}
@@ -80,9 +80,9 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="array">An Object.</param>
 		/// <returns>A String.</returns>
-		public String formatArray(Object array)
+		public String FormatArray(Object array)
 		{
-			return formatArray(array, ", ", " and ");
+			return FormatArray(array, ", ", " and ");
 		}
 
 		/// <summary> 
@@ -92,9 +92,9 @@ namespace NVelocity.App.Tools
 		/// <param name="array">An Object.</param>
 		/// <param name="delim">A String.</param>
 		/// <returns>A String.</returns>
-		public String formatArray(Object array, String delim)
+		public String FormatArray(Object array, String delim)
 		{
-			return formatArray(array, delim, delim);
+			return FormatArray(array, delim, delim);
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace NVelocity.App.Tools
 		/// <param name="delim">A String.</param>
 		/// <param name="finalDelim">A String.</param>
 		/// <returns>A String.</returns>
-		public String formatArray(Object array, String delim, String finaldelim)
+		public String FormatArray(Object array, String delim, String finaldelim)
 		{
 			// TODO: if this is not right - it will blow up
 			Array a = (Array) array;
@@ -141,9 +141,9 @@ namespace NVelocity.App.Tools
 		/// </summary>
 		/// <param name="list">A list.</param>
 		/// <returns>A String.</returns>
-		public String formatVector(IList list)
+		public String FormatVector(IList list)
 		{
-			return formatVector(list, ", ", " and ");
+			return FormatVector(list, ", ", " and ");
 		}
 
 		/// <summary>
@@ -152,9 +152,9 @@ namespace NVelocity.App.Tools
 		/// <param name="list">A list.</param>
 		/// <param name="delim">A String.</param>
 		/// <returns>A String.</returns>
-		public String formatVector(IList list, String delim)
+		public String FormatVector(IList list, String delim)
 		{
-			return formatVector(list, delim, delim);
+			return FormatVector(list, delim, delim);
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace NVelocity.App.Tools
 		/// <param name="delim">A String.</param>
 		/// <param name="finalDelim">A String.</param>
 		/// <returns>A String.</returns>
-		public String formatVector(IList list, String delim, String finaldelim)
+		public String FormatVector(IList list, String delim, String finaldelim)
 		{
 			StringBuilder sb = new StringBuilder();
 			Int32 size = list.Count;
@@ -191,9 +191,9 @@ namespace NVelocity.App.Tools
 		/// <param name="maxlen">An int with the maximum length.</param>
 		/// <param name="string">A String.</param>
 		/// <returns>A String.</returns>
-		public String limitLen(int maxlen, String string_Renamed)
+		public String LimitLen(int maxlen, String value)
 		{
-			return limitLen(maxlen, string_Renamed, "...");
+			return LimitLen(maxlen, value, "...");
 		}
 
 		/// <summary>
@@ -204,12 +204,12 @@ namespace NVelocity.App.Tools
 		/// <param name="string">A String.</param>
 		/// <param name="suffix">A String.</param>
 		/// <returns>A String.</returns>
-		public String limitLen(int maxlen, String string_Renamed, String suffix)
+		public String LimitLen(int maxlen, String value, String suffix)
 		{
-			String ret = string_Renamed;
-			if (string_Renamed.Length > maxlen)
+			String ret = value;
+			if (value.Length > maxlen)
 			{
-				ret = string_Renamed.Substring(0, (maxlen - suffix.Length) - (0)) + suffix;
+				ret = value.Substring(0, (maxlen - suffix.Length) - (0)) + suffix;
 			}
 			return ret;
 		}
@@ -222,56 +222,36 @@ namespace NVelocity.App.Tools
 		/// object in a Velocity template.  For an example of usage see the
 		/// makeAlternator() method below.
 		/// </summary>
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'VelocityAlternator' to access its enclosing instance. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1019"'
 		public class VelocityAlternator
 		{
-			private void InitBlock(VelocityFormatter enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-
-			private VelocityFormatter enclosingInstance;
-
-			public VelocityFormatter Enclosing_Instance
-			{
-				get { return enclosingInstance; }
-
-			}
-
 			protected internal String[] alternates = null;
 			protected internal int current = 0;
 
-			/// <summary> Constructor takes an array of Strings.
-			/// *
+			/// <summary>
+			/// Constructor takes an array of Strings.
 			/// </summary>
 			/// <param name="alternates">A String[].
-			///
 			/// </param>
-			public VelocityAlternator(VelocityFormatter enclosingInstance, String[] alternates)
+			public VelocityAlternator(params String[] alternates)
 			{
-				InitBlock(enclosingInstance);
 				this.alternates = alternates;
 			}
 
-			/// <summary> Alternates to the next in the list.
-			/// *
+			/// <summary>
+			/// Alternates to the next in the list.
 			/// </summary>
-			/// <returns>The current alternate in the sequence.
-			///
-			/// </returns>
-			public String alternate()
+			/// <returns>The current alternate in the sequence.</returns>
+			public String Alternate()
 			{
 				current++;
 				current %= alternates.Length;
 				return "";
 			}
 
-			/// <summary> Returns the current alternate.
-			/// *
+			/// <summary>
+			/// Returns the current alternate.
 			/// </summary>
-			/// <returns>A String.
-			///
-			/// </returns>
+			/// <returns>A String.</returns>
 			public override String ToString()
 			{
 				return alternates[current];
@@ -282,134 +262,98 @@ namespace NVelocity.App.Tools
 		/// As VelocityAlternator, but calls <code>alternate()</code>
 		/// automatically on rendering in a template.
 		/// </summary>
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'VelocityAutoAlternator' to access its enclosing instance. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1019"'
 		public class VelocityAutoAlternator : VelocityAlternator
 		{
-			private void InitBlock(VelocityFormatter enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-
-			private VelocityFormatter enclosingInstance;
-
-			new public VelocityFormatter Enclosing_Instance
-			{
-				get { return enclosingInstance; }
-
-			}
-
-			/// <summary> Constructor takes an array of Strings.
-			/// *
+			/// <summary>
+			/// Constructor takes an array of Strings.
 			/// </summary>
 			/// <param name="alternates">A String[].
 			///
 			/// </param>
-			public VelocityAutoAlternator(VelocityFormatter enclosingInstance, String[] alternates) : base(enclosingInstance, alternates)
+			public VelocityAutoAlternator(params String[] alternates) 
+				: base(alternates)
 			{
-				InitBlock(enclosingInstance);
 			}
 
-			/// <summary> Returns the current alternate, and automatically alternates
+			/// <summary>
+			/// Returns the current alternate, and automatically alternates
 			/// to the next alternate in its sequence (trigged upon
 			/// rendering).
-			/// *
 			/// </summary>
-			/// <returns>The current alternate in the sequence.
-			///
-			/// </returns>
+			/// <returns>The current alternate in the sequence.</returns>
 			public override String ToString()
 			{
 				String s = alternates[current];
-				alternate();
+				Alternate();
 				return s;
 			}
 		}
 
-		/// <summary> Makes an alternator object that alternates between two values.
-		/// *
+		/// <summary>
+		/// Makes an alternator object that alternates between two values.
+		/// 
 		/// <p>Example usage in a Velocity template:
-		/// *
-		/// <code><pre>
+		/// 
+		/// <code>
 		/// &lt;table&gt;
 		/// $formatter.makeAlternator("rowcolor", "#c0c0c0", "#e0e0e0")
 		/// #foreach $item in $items
-		/// #begin
 		/// &lt;tr&gt;&lt;td bgcolor="$rowcolor"&gt;$item.Name&lt;/td&gt;&lt;/tr&gt;
 		/// $rowcolor.alternate()
 		/// #end
 		/// &lt;/table&gt;
-		/// </pre></code>
-		/// *
+		/// </code>
 		/// </summary>
-		/// <param name="name">The name for the alternator int the context.
-		/// </param>
-		/// <param name="alt1">The first alternate.
-		/// </param>
-		/// <param name="alt2">The second alternate.
-		/// </param>
-		/// <returns>The newly created instance.
-		///
-		/// </returns>
-		public String makeAlternator(String name, String alt1, String alt2)
+		/// <param name="name">The name for the alternator int the context.</param>
+		/// <param name="alt1">The first alternate.</param>
+		/// <param name="alt2">The second alternate.</param>
+		/// <returns>The newly created instance.</returns>
+		public String MakeAlternator(String name, String alt1, String alt2)
 		{
-			String[] alternates = new String[] {alt1, alt2};
-			context.Put(name, new VelocityAlternator(this, alternates));
+			context.Put(name, new VelocityAlternator(alt1, alt2));
 			return "";
 		}
 
-		/// <summary> Makes an alternator object that alternates between three
-		/// values.
-		/// *
+		/// <summary>
+		/// Makes an alternator object that alternates between three values.
 		/// </summary>
-		/// <seealso cref=" #makeAlternator(String name, String alt1, String alt2)
-		///
-		/// "/>
-		public String makeAlternator(String name, String alt1, String alt2, String alt3)
+		/// <seealso cref="#makeAlternator(String name, String alt1, String alt2)"/>
+		public String MakeAlternator(String name, String alt1, String alt2, String alt3)
 		{
-			String[] alternates = new String[] {alt1, alt2, alt3};
-			context.Put(name, new VelocityAlternator(this, alternates));
+			context.Put(name, new VelocityAlternator(alt1, alt2, alt3));
 			return "";
 		}
 
-		/// <summary> Makes an alternator object that alternates between four values.
-		/// *
+		/// <summary>
+		/// Makes an alternator object that alternates between four values.
 		/// </summary>
-		/// <seealso cref=" #makeAlternator(String name, String alt1, String alt2)
-		///
-		/// "/>
-		public String makeAlternator(String name, String alt1, String alt2, String alt3, String alt4)
+		/// <seealso cref="#makeAlternator(String name, String alt1, String alt2)"/>
+		public String MakeAlternator(String name, String alt1, String alt2, String alt3, String alt4)
 		{
-			String[] alternates = new String[] {alt1, alt2, alt3, alt4};
-			context.Put(name, new VelocityAlternator(this, alternates));
+			context.Put(name, new VelocityAlternator(alt1, alt2, alt3, alt4));
 			return "";
 		}
 
-		/// <summary> Makes an alternator object that alternates between two values
+		/// <summary>
+		/// Makes an alternator object that alternates between two values
 		/// automatically.
-		/// *
 		/// </summary>
-		/// <seealso cref=" #makeAlternator(String name, String alt1, String alt2)
-		///
-		/// "/>
-		public String makeAutoAlternator(String name, String alt1, String alt2)
+		/// <seealso cref="#makeAlternator(String name, String alt1, String alt2)"/>
+		public String MakeAutoAlternator(String name, String alt1, String alt2)
 		{
-			String[] alternates = new String[] {alt1, alt2};
-			context.Put(name, new VelocityAutoAlternator(this, alternates));
+			context.Put(name, new VelocityAutoAlternator(alt1, alt2));
 			return "";
 		}
 
-		/// <summary> Returns a default value if the object passed is null.
+		/// <summary>
+		/// Returns a default value if the object passed is null.
 		/// </summary>
-		public Object isNull(Object o, Object dflt)
+		public Object IsNull(Object o, Object dflt)
 		{
 			if (o == null)
-			{
 				return dflt;
-			}
 			else
-			{
 				return o;
-			}
 		}
 	}
 }

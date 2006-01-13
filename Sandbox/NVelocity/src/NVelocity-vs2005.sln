@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity-vs2005", "NVelocity\NVelocity-vs2005.csproj", "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVelocity.Test-vs2005", "NVelocity.Tests\NVelocity.Test-vs2005.csproj", "{E1B10210-6A42-4993-B383-0F6AAC255A24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{53ED5FFE-04BF-4FBF-AEA7-454502DAE200}"
+	ProjectSection(SolutionItems) = preProject
+		ToDo.txt = ToDo.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

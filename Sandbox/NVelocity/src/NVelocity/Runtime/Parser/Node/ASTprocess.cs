@@ -69,7 +69,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 	}
 }

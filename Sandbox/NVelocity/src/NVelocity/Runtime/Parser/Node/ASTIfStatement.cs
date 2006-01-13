@@ -28,55 +28,50 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		public override bool render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(InternalContextAdapter context, TextWriter writer)
 		{
-			/*
-	    * Check if the #if(expression) construct evaluates to true:
-	    * if so render and leave immediately because there
-	    * is nothing left to do!
-	    */
-			if (jjtGetChild(0).evaluate(context))
+			// Check if the #if(expression) construct evaluates to true:
+	    // if so render and leave immediately because there
+	    // is nothing left to do!
+			if (jjtGetChild(0).Evaluate(context))
 			{
-				jjtGetChild(1).render(context, writer);
+				jjtGetChild(1).Render(context, writer);
 				return true;
 			}
 
 			int totalNodes = jjtGetNumChildren();
 
-			/*
-	    * Now check the remaining nodes left in the
-	    * if construct. The nodes are either elseif
-	    *  nodes or else nodes. Each of these node
-	    * types knows how to evaluate themselves. If
-	    * a node evaluates to true then the node will
-	    * render itself and this method will return
-	    * as there is nothing left to do.
-	    */
+			// Now check the remaining nodes left in the
+	    // if construct. The nodes are either elseif
+	    // nodes or else nodes. Each of these node
+	    // types knows how to evaluate themselves. If
+	    // a node evaluates to true then the node will
+	    // render itself and this method will return
+	    // as there is nothing left to do.
 			for (int i = 2; i < totalNodes; i++)
 			{
-				if (jjtGetChild(i).evaluate(context))
+				if (jjtGetChild(i).Evaluate(context))
 				{
-					jjtGetChild(i).render(context, writer);
+					jjtGetChild(i).Render(context, writer);
 					return true;
 				}
 			}
 
-			/*
-	    * This is reached when an ASTIfStatement
-	    * consists of an if/elseif sequence where
-	    * none of the nodes evaluate to true.
-	    */
+			// This is reached when an ASTIfStatement
+	    // consists of an if/elseif sequence where
+	    // none of the nodes evaluate to true.
 			return true;
 		}
 
-		public void process(InternalContextAdapter context, ParserVisitor visitor)
+		public void Process(InternalContextAdapter context, ParserVisitor visitor)
 		{
 		}
 	}

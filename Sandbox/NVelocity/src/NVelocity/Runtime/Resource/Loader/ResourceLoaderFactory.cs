@@ -42,13 +42,13 @@ namespace NVelocity.Runtime.Resource.Loader
 				Object o = Activator.CreateInstance(loaderType);
 				loader = (ResourceLoader) o;
 
-				rs.info("Resource Loader Instantiated: " + loader.GetType().FullName);
+				rs.Info("Resource Loader Instantiated: " + loader.GetType().FullName);
 
 				return loader;
 			}
 			catch (Exception e)
 			{
-				rs.error("Problem instantiating the template loader.\n" + "Look at your properties file and make sure the\n" + "name of the template loader is correct. Here is the\n" + "error: " + StringUtils.stackTrace(e));
+				rs.Error("Problem instantiating the template loader.\n" + "Look at your properties file and make sure the\n" + "name of the template loader is correct. Here is the\n" + "error: " + StringUtils.stackTrace(e));
 				throw new Exception("Problem initializing template loader: " + loaderClassName + "\nError is: " + StringUtils.stackTrace(e));
 			}
 		}

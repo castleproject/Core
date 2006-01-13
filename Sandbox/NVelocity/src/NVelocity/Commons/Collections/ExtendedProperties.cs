@@ -5,7 +5,8 @@ namespace Commons.Collections
 	using System.IO;
 	using System.Text;
 
-	/// <summary> This class extends normal Java properties by adding the possibility
+	/// <summary>
+	/// This class extends normal Java properties by adding the possibility
 	/// to use the same key many times concatenating the value strings
 	/// instead of overwriting them.
 	///
@@ -99,66 +100,64 @@ namespace Commons.Collections
 		/// </summary>
 		private ExtendedProperties defaults;
 
-		/// <summary> The file connected to this repository (holding comments and
-		/// such).
-		/// *
-		/// @serial
+		/// <summary>
+		/// The file connected to this repository (holding comments and such).
 		/// </summary>
 		protected internal String file;
 
-		/// <summary> Base path of the configuration file used to create
+		/// <summary>
+		/// Base path of the configuration file used to create
 		/// this ExtendedProperties object.
 		/// </summary>
 		protected internal String basePath;
 
-		/// <summary> File separator.
+		/// <summary>
+		/// File separator.
 		/// </summary>
 		protected internal String fileSeparator = "" + Path.AltDirectorySeparatorChar;
 
-		/// <summary> Has this configuration been intialized.
+		/// <summary>
+		/// Has this configuration been intialized.
 		/// </summary>
 		protected internal bool isInitialized = false;
 
-		/// <summary> This is the name of the property that can point to other
+		/// <summary>
+		/// This is the name of the property that can point to other
 		/// properties file for including other properties files.
 		/// </summary>
 		protected internal static String include = "include";
 
-		/// <summary> These are the keys in the order they listed
+		/// <summary>
+		/// These are the keys in the order they listed
 		/// in the configuration file. This is useful when
 		/// you wish to perform operations with configuration
 		/// information in a particular order.
 		/// </summary>
 		protected internal ArrayList keysAsListed = new ArrayList();
 
-		/// <summary> Creates an empty extended properties object.
+		/// <summary>
+		/// Creates an empty extended properties object.
 		/// </summary>
 		public ExtendedProperties() : base()
 		{
 		}
 
-		/// <summary> Creates and loads the extended properties from the specified
+		/// <summary>
+		/// Creates and loads the extended properties from the specified
 		/// file.
-		/// *
 		/// </summary>
-		/// <param name="file">A String.
-		/// </param>
-		/// <exception cref="">IOException.
-		///
-		/// </exception>
+		/// <param name="file">A String.</param>
+		/// <exception cref="IOException" />
 		public ExtendedProperties(String file) : this(file, null)
 		{
 		}
 
-		/// <summary> Creates and loads the extended properties from the specified
+		/// <summary>
+		/// Creates and loads the extended properties from the specified
 		/// file.
-		/// *
 		/// </summary>
-		/// <param name="file">A String.
-		/// </param>
-		/// <exception cref="">IOException.
-		///
-		/// </exception>
+		/// <param name="file">A String.</param>
+		/// <exception cref="IOException" />
 		public ExtendedProperties(String file, String defaultFile)
 		{
 			this.file = file;
@@ -174,19 +173,18 @@ namespace Commons.Collections
 			}
 		}
 
-		/// <summary> Private initializer method that sets up the generic
+		/// <summary>
+		/// Private initializer method that sets up the generic
 		/// resources.
-		/// *
 		/// </summary>
-		/// <exception cref="">IOException, if there was an I/O problem.
-		///
-		/// </exception>
+		/// <exception cref="IOException">if there was an I/O problem.</exception>
 		private void Init(ExtendedProperties exp)
 		{
 			isInitialized = true;
 		}
 
-		/// <summary> Indicate to client code whether property
+		/// <summary>
+		/// Indicate to client code whether property
 		/// resources have been initialized or not.
 		/// </summary>
 		public bool IsInitialized()
@@ -200,41 +198,19 @@ namespace Commons.Collections
 			set { ExtendedProperties.include = value; }
 		}
 
-		public new IEnumerator Keys
+		public new IEnumerable Keys
 		{
-			get { return keysAsListed.GetEnumerator(); }
+			get { return keysAsListed; }
 		}
 
-		/// <summary> Gets the property value for including other properties files.
-		/// By default it is "include".
-		/// *
-		/// </summary>
-		/// <returns>A String.
-		///
-		/// </returns>
-		/// <summary> Sets the property value for including other properties files.
-		/// By default it is "include".
-		/// *
-		/// </summary>
-		/// <param name="inc">A String.
-		///
-		/// </param>
-		/// <summary> Load the properties from the given input stream.
-		/// *
-		/// </summary>
-		/// <param name="input">An InputStream.
-		/// </param>
-		/// <exception cref="">IOException.
-		///
-		/// </exception>
 		public void Load(Stream input)
 		{
 			Load(input, null);
 		}
 
-		/// <summary> Load the properties from the given input stream
+		/// <summary>
+		/// Load the properties from the given input stream
 		/// and using the specified encoding.
-		/// *
 		/// </summary>
 		/// <param name="input">An InputStream.
 		/// </param>
@@ -243,7 +219,6 @@ namespace Commons.Collections
 		/// <exception cref="">IOException.
 		///
 		/// </exception>
-		//UPGRADE_NOTE: Synchronized keyword was removed from method 'load'. Lock expression was added. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1027"'
 		public void Load(Stream input, String enc)
 		{
 			lock (this)
@@ -279,35 +254,35 @@ namespace Commons.Collections
 							String value_ = line.Substring(equalSign + 1).Trim();
 
 							/*
-			     * Configure produces lines like this ... just
-			     * ignore them.
-			     */
+							 * Configure produces lines like this ... just
+							 * ignore them.
+							 */
 							if (String.Empty.Equals(value_))
 								continue;
 
 							if (Include != null && key.ToUpper().Equals(Include.ToUpper()))
 							{
 								/*
-				 * Recursively load properties files.
-				 */
+								 * Recursively load properties files.
+								 */
 								FileInfo file = null;
 
 								if (value_.StartsWith(fileSeparator))
 								{
 									/*
-				     * We have an absolute path so we'll
-				     * use this.
-				     */
+									 * We have an absolute path so we'll
+									 * use this.
+									 */
 									file = new FileInfo(value_);
 								}
 								else
 								{
 									/*
-				     * We have a relative path, and we have
-				     * two possible forms here. If we have the
-				     * "./" form then just strip that off first
-				     * before continuing.
-				     */
+									 * We have a relative path, and we have
+									 * two possible forms here. If we have the
+									 * "./" form then just strip that off first
+									 * before continuing.
+									 */
 									if (value_.StartsWith("." + fileSeparator))
 									{
 										value_ = value_.Substring(2);
@@ -341,8 +316,8 @@ namespace Commons.Collections
 				catch (NullReferenceException e)
 				{
 					/*
-		     * Should happen only when EOF is reached.
-		     */
+					 * Should happen only when EOF is reached.
+					 */
 					return;
 				}
 				reader.Close();
@@ -367,10 +342,8 @@ namespace Commons.Collections
 
 			if (o == null)
 			{
-				/*
-		*  if there isn't a value there, get it from the
-		*  defaults if we have them
-		*/
+				// if there isn't a value there, get it from the
+				// defaults if we have them
 				if (defaults != null)
 				{
 					o = defaults[key];
@@ -579,52 +552,36 @@ namespace Commons.Collections
 			{
 				if (output != null)
 				{
-					//TODO - why did they do this?
-					//StreamWriter theWrtr = new StreamWriter(output);
-					TextWriter theWrtr = output;
+					TextWriter w = output;
 					if (Header != null)
+						w.WriteLine(Header);
+
+					foreach (String key in Keys)
 					{
-						theWrtr.WriteLine(Header);
-					}
-					IEnumerator theKeys = (IEnumerator) Keys;
-					//UPGRADE_TODO: method 'java.util.Enumeration.hasMoreElements' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationhasMoreElements"'
-					while (theKeys.MoveNext())
-					{
-						//UPGRADE_TODO: method 'java.util.Enumeration.nextElement' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationnextElement"'
-						String key = (String) theKeys.Current;
-						Object value_ = this[(Object) key];
-						if (value_ != null)
+						Object value = this[key];
+						if (value == null)
+							continue;
+
+						if (value is String)
+							WriteKeyOutput(w, key, (String) value);
+						else if (value is IEnumerable)
 						{
-							if (value_ is String)
-							{
-								StringBuilder currentOutput = new StringBuilder();
-								currentOutput.Append(key);
-								currentOutput.Append("=");
-								currentOutput.Append((String) value_);
-								theWrtr.WriteLine(currentOutput.ToString());
-							}
-							else if (value_ is ArrayList)
-							{
-								ArrayList values = (ArrayList) value_;
-								IEnumerator valuesEnum = values.GetEnumerator();
-								//UPGRADE_TODO: method 'java.util.Enumeration.hasMoreElements' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationhasMoreElements"'
-								while (valuesEnum.MoveNext())
-								{
-									//UPGRADE_TODO: method 'java.util.Enumeration.nextElement' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationnextElement"'
-									String currentElement = (String) valuesEnum.Current;
-									StringBuilder currentOutput = new StringBuilder();
-									currentOutput.Append(key);
-									currentOutput.Append("=");
-									currentOutput.Append(currentElement);
-									theWrtr.WriteLine(currentOutput.ToString());
-								}
-							}
+							foreach (String currentElement in (IEnumerable) value)
+								WriteKeyOutput(w, key, currentElement);
 						}
-						theWrtr.WriteLine();
-						theWrtr.Flush();
+						
+						w.WriteLine();
+						w.Flush();
 					}
 				}
 			}
+		}
+
+		private void WriteKeyOutput(TextWriter theWrtr, String key, String value)
+		{
+			StringBuilder currentOutput = new StringBuilder();
+			currentOutput.Append(key).Append("=").Append(value);
+			theWrtr.WriteLine(currentOutput.ToString());
 		}
 
 		/// <summary> Combines an existing Hashtable with this Hashtable.
@@ -637,16 +594,13 @@ namespace Commons.Collections
 		/// </param>
 		public void Combine(ExtendedProperties c)
 		{
-			IEnumerator i = c.Keys;
-			while (i.MoveNext())
+			foreach (String key in c.Keys)
 			{
-				String key = i.Current.ToString();
 				Object o = c[key];
 				// if the value is a String, escape it so that if there are delmiters that the value is not converted to a list
 				if (o is String)
-				{
-					o = (Object) ((String) o).Replace(",", @"\,");
-				}
+					o = ((String) o).Replace(",", @"\,");
+				
 				SetProperty(key, o);
 			}
 		}
@@ -695,21 +649,16 @@ namespace Commons.Collections
 		/// <returns>An Iterator of keys that match the prefix.
 		///
 		/// </returns>
-		public IEnumerator GetKeys(String prefix)
+		public IEnumerable GetKeys(String prefix)
 		{
-			IEnumerator keys = Keys;
 			ArrayList matchingKeys = new ArrayList();
 
-			while (keys.MoveNext())
+			foreach (Object key in Keys)
 			{
-				Object key = keys.Current;
-
 				if (key is String && ((String) key).StartsWith(prefix))
-				{
 					matchingKeys.Add(key);
-				}
 			}
-			return matchingKeys.GetEnumerator();
+			return matchingKeys;
 		}
 
 		/// <summary> Create an ExtendedProperties object that is a subset
@@ -723,55 +672,42 @@ namespace Commons.Collections
 		public ExtendedProperties Subset(String prefix)
 		{
 			ExtendedProperties c = new ExtendedProperties();
-			IEnumerator keys = Keys;
 			bool validSubset = false;
 
-			while (keys.MoveNext())
+			foreach (Object key in Keys)
 			{
-				Object key = keys.Current;
-
 				if (key is String && ((String) key).StartsWith(prefix))
 				{
 					if (!validSubset)
-					{
 						validSubset = true;
-					}
 
 					String newKey = null;
 
 					/*
-		    * Check to make sure that c.subset(prefix) doesn't
-		    * blow up when there is only a single property
-		    * with the key prefix. This is not a useful
-		    * subset but it is a valid subset.
-		    */
+					* Check to make sure that c.subset(prefix) doesn't
+					* blow up when there is only a single property
+					* with the key prefix. This is not a useful
+					* subset but it is a valid subset.
+					*/
 					if (((String) key).Length == prefix.Length)
-					{
 						newKey = prefix;
-					}
 					else
-					{
 						newKey = ((String) key).Substring(prefix.Length + 1);
-					}
 
 					/*
-		    *  use addPropertyDirect() - this will plug the data as 
-		    *  is into the Map, but will also do the right thing
-		    *  re key accounting
-		    */
+						*  use addPropertyDirect() - this will plug the data as 
+						*  is into the Map, but will also do the right thing
+						*  re key accounting
+						*/
 
 					c.AddPropertyDirect(newKey, this[key]);
 				}
 			}
 
 			if (validSubset)
-			{
 				return c;
-			}
 			else
-			{
 				return null;
-			}
 		}
 
 		/// <summary> Display the configuration for debugging
@@ -780,11 +716,8 @@ namespace Commons.Collections
 		public override String ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			IEnumerator i = Keys;
-			i.Reset();
-			while (i.MoveNext())
+			foreach (String key in Keys)
 			{
-				String key = (String) i.Current;
 				Object value = this[key];
 				sb.Append(key + " => " + ValueToString(value)).Append(Environment.NewLine);
 			}
@@ -1686,15 +1619,13 @@ namespace Commons.Collections
 		{
 			ExtendedProperties c = new ExtendedProperties();
 
-			for (IEnumerator e = p.Keys; e.MoveNext(); )
+			foreach (String key in p.Keys)
 			{
-				String key = (String) e.Current;
-				object value = p.GetProperty(key);
+				Object value = p.GetProperty(key);
+				
 				// if the value is a String, escape it so that if there are delmiters that the value is not converted to a list
 				if (value is String)
-				{
 					value = value.ToString().Replace(",", @"\,");
-				}
 				c.SetProperty(key, value);
 			}
 

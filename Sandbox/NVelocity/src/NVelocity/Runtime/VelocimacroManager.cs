@@ -116,20 +116,18 @@ namespace NVelocity.Runtime
 		//UPGRADE_NOTE: The initialization of  'namespaceHash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Hashtable namespaceHash;
 
-		/// <summary>map of names of library tempates/namespaces
-		/// </summary>
+		/// <summary>map of names of library tempates/namespaces</summary>
 		//UPGRADE_NOTE: The initialization of  'libraryMap' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Hashtable libraryMap;
 
 		/*
-	* big switch for namespaces.  If true, then properties control 
-	* usage. If false, no. 
-	*/
+		* big switch for namespaces.  If true, then properties control 
+		* usage. If false, no. 
+		*/
 		private bool namespacesOn = true;
 		private bool inlineLocalMode = false;
 
-		/// <summary> Adds the global namespace to the hash.
-		/// </summary>
+		/// <summary> Adds the global namespace to the hash.</summary>
 		internal VelocimacroManager(RuntimeServices rs)
 		{
 			InitBlock();
@@ -139,7 +137,7 @@ namespace NVelocity.Runtime
 	    *  add the global namespace to the namespace hash. We always have that.
 	    */
 
-			addNamespace(GLOBAL_NAMESPACE);
+			AddNamespace(GLOBAL_NAMESPACE);
 		}
 
 		/// <summary> Adds a VM definition to the cache.
@@ -147,9 +145,9 @@ namespace NVelocity.Runtime
 		/// <returns>Whether everything went okay.
 		///
 		/// </returns>
-		public bool addVM(String vmName, String macroBody, String[] argArray, String namespace_Renamed)
+		public bool AddVM(String vmName, String macroBody, String[] argArray, String ns)
 		{
-			MacroEntry me = new MacroEntry(this, this, vmName, macroBody, argArray, namespace_Renamed);
+			MacroEntry me = new MacroEntry(this, this, vmName, macroBody, argArray, ns);
 
 			me.FromLibrary = registerFromLib;
 
@@ -164,41 +162,41 @@ namespace NVelocity.Runtime
 
 			if (registerFromLib)
 			{
-				SupportClass.PutElement(libraryMap, namespace_Renamed, namespace_Renamed);
+				SupportClass.PutElement(libraryMap, ns, ns);
 			}
 			else
 			{
 				/*
-		*  now, we first want to check to see if this namespace (template)
-		*  is actually a library - if so, we need to use the global namespace
-		*  we don't have to do this when registering, as namespaces should
-		*  be shut off. If not, the default value is true, so we still go
-		*  global
-		*/
+				 *  now, we first want to check to see if this namespace (template)
+				 *  is actually a library - if so, we need to use the global namespace
+				 *  we don't have to do this when registering, as namespaces should
+				 *  be shut off. If not, the default value is true, so we still go
+				 *  global
+				 */
 
-				isLib = libraryMap.ContainsKey(namespace_Renamed);
+				isLib = libraryMap.ContainsKey(ns);
 			}
 
-			if (!isLib && usingNamespaces(namespace_Renamed))
+			if (!isLib && UsingNamespaces(ns))
 			{
 				/*
-		*  first, do we have a namespace hash already for this namespace?
-		*  if not, add it to the namespaces, and add the VM
-		*/
+				 *  first, do we have a namespace hash already for this namespace?
+				 *  if not, add it to the namespaces, and add the VM
+				 */
 
-				Hashtable local = getNamespace(namespace_Renamed, true);
-				SupportClass.PutElement(local, (String) vmName, me);
+				Hashtable local = GetNamespace(ns, true);
+				SupportClass.PutElement(local, vmName, me);
 
 				return true;
 			}
 			else
 			{
 				/*
-		*  otherwise, add to global template.  First, check if we
-		*  already have it to preserve some of the autoload information
-		*/
+				 *  otherwise, add to global template.  First, check if we
+				 *  already have it to preserve some of the autoload information
+				 */
 
-				MacroEntry exist = (MacroEntry) getNamespace(GLOBAL_NAMESPACE)[vmName];
+				MacroEntry exist = (MacroEntry) GetNamespace(GLOBAL_NAMESPACE)[vmName];
 
 				if (exist != null)
 				{
@@ -206,10 +204,10 @@ namespace NVelocity.Runtime
 				}
 
 				/*
-		*  now add it
-		*/
+				 *  now add it
+				 */
 
-				SupportClass.PutElement(getNamespace(GLOBAL_NAMESPACE), vmName, me);
+				SupportClass.PutElement(GetNamespace(GLOBAL_NAMESPACE), vmName, me);
 
 				return true;
 			}
@@ -221,13 +219,13 @@ namespace NVelocity.Runtime
 		public VelocimacroProxy get
 			(String vmName, String namespace_Renamed)
 		{
-			if (usingNamespaces(namespace_Renamed))
+			if (UsingNamespaces(namespace_Renamed))
 			{
-				Hashtable local = getNamespace(namespace_Renamed, false);
+				Hashtable local = GetNamespace(namespace_Renamed, false);
 
 				/*
-		*  if we have macros defined for this template
-		*/
+				 *  if we have macros defined for this template
+				 */
 
 				if (local != null)
 				{
@@ -235,7 +233,7 @@ namespace NVelocity.Runtime
 
 					if (me != null)
 					{
-						return me.createVelocimacro(namespace_Renamed);
+						return me.CreateVelocimacro(namespace_Renamed);
 					}
 				}
 			}
@@ -246,11 +244,11 @@ namespace NVelocity.Runtime
 	    */
 
 			//UPGRADE_NOTE: Variable me was renamed because block definition does not hide it. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1008"'
-			MacroEntry me2 = (MacroEntry) getNamespace(GLOBAL_NAMESPACE)[vmName];
+			MacroEntry me2 = (MacroEntry) GetNamespace(GLOBAL_NAMESPACE)[vmName];
 
 			if (me2 != null)
 			{
-				return me2.createVelocimacro(namespace_Renamed);
+				return me2.CreateVelocimacro(namespace_Renamed);
 			}
 
 			return null;
@@ -259,22 +257,21 @@ namespace NVelocity.Runtime
 		/// <summary> Removes the VMs and the namespace from the manager.
 		/// Used when a template is reloaded to avoid
 		/// accumulating drek
-		/// *
 		/// </summary>
-		/// <param name="namespace">namespace to dump
+		/// <param name="ns">namespace to dump
 		/// </param>
 		/// <returns>boolean representing success
 		///
 		/// </returns>
-		public bool dumpNamespace(String namespace_Renamed)
+		public bool DumpNamespace(String ns)
 		{
 			lock (this)
 			{
-				if (usingNamespaces(namespace_Renamed))
+				if (UsingNamespaces(ns))
 				{
 					Object temp_key;
 					Hashtable temp_hashtable;
-					temp_key = namespace_Renamed;
+					temp_key = ns;
 					temp_hashtable = namespaceHash;
 					Hashtable h = (Hashtable) temp_hashtable[temp_key];
 					temp_hashtable.Remove(temp_key);
@@ -291,89 +288,72 @@ namespace NVelocity.Runtime
 			}
 		}
 
-		/// <summary>  public switch to let external user of manager to control namespace
+		/// <summary>
+		/// public switch to let external user of manager to control namespace
 		/// usage indep of properties.  That way, for example, at startup the
 		/// library files are loaded into global namespace
-		/// </summary>
-		/// <summary>  returns the hash for the specified namespace.  Will not create a new one
+		/// 
+		/// returns the hash for the specified namespace.  Will not create a new one
 		/// if it doesn't exist
-		/// *
 		/// </summary>
-		/// <param name="namespace"> name of the namespace :)
-		/// </param>
-		/// <returns>namespace Hashtable of VMs or null if doesn't exist
-		///
-		/// </returns>
-		private Hashtable getNamespace(String namespace_Renamed)
+		/// <param name="ns"> name of the namespace :) </param>
+		/// <returns>namespace Hashtable of VMs or null if doesn't exist </returns>
+		private Hashtable GetNamespace(String ns)
 		{
-			return getNamespace(namespace_Renamed, false);
+			return GetNamespace(ns, false);
 		}
 
-		/// <summary>  returns the hash for the specified namespace, and if it doesn't exist
+		/// <summary>
+		/// returns the hash for the specified namespace, and if it doesn't exist
 		/// will create a new one and add it to the namespaces
-		/// *
 		/// </summary>
-		/// <param name="namespace"> name of the namespace :)
-		/// </param>
-		/// <param name="addIfNew"> flag to add a new namespace if it doesn't exist
-		/// </param>
-		/// <returns>namespace Hashtable of VMs or null if doesn't exist
-		///
-		/// </returns>
-		private Hashtable getNamespace(String namespace_Renamed, bool addIfNew)
+		/// <param name="ns"> name of the namespace :)</param>
+		/// <param name="addIfNew"> flag to add a new namespace if it doesn't exist</param>
+		/// <returns>namespace Hashtable of VMs or null if doesn't exist</returns>
+		private Hashtable GetNamespace(String ns, bool addIfNew)
 		{
-			Hashtable h = (Hashtable) namespaceHash[namespace_Renamed];
+			Hashtable h = (Hashtable) namespaceHash[ns];
 
 			if (h == null && addIfNew)
 			{
-				h = addNamespace(namespace_Renamed);
+				h = AddNamespace(ns);
 			}
 
 			return h;
 		}
 
-		/// <summary>   adds a namespace to the namespaces
-		/// *
-		/// </summary>
-		/// <param name="namespace">name of namespace to add
-		/// </param>
-		/// <returns>Hash added to namespaces, ready for use
-		///
-		/// </returns>
-		private Hashtable addNamespace(String namespace_Renamed)
+		/// <summary>adds a namespace to the namespaces</summary>
+		/// <param name="ns">name of namespace to add</param>
+		/// <returns>Hash added to namespaces, ready for use</returns>
+		private Hashtable AddNamespace(String ns)
 		{
 			Hashtable h = new Hashtable();
 			Object oh;
 
-			if ((oh = SupportClass.PutElement(namespaceHash, namespace_Renamed, h)) != null)
+			if ((oh = SupportClass.PutElement(namespaceHash, ns, h)) != null)
 			{
 				/*
-		* There was already an entry on the table, restore it!
-		* This condition should never occur, given the code
-		* and the fact that this method is private.
-		* But just in case, this way of testing for it is much
-		* more efficient than testing before hand using get().
-		*/
-				SupportClass.PutElement(namespaceHash, namespace_Renamed, oh);
+				 * There was already an entry on the table, restore it!
+				 * This condition should never occur, given the code
+				 * and the fact that this method is private.
+				 * But just in case, this way of testing for it is much
+				 * more efficient than testing before hand using get().
+				 */
+				SupportClass.PutElement(namespaceHash, ns, oh);
 				/*
-		* Should't we be returning the old entry (oh)?
-		* The previous code was just returning null in this case.
-		*/
+				 * Should't we be returning the old entry (oh)?
+				 * The previous code was just returning null in this case.
+				 */
 				return null;
 			}
 
 			return h;
 		}
 
-		/// <summary>  determines if currently using namespaces.
-		/// *
-		/// </summary>
-		/// <param name="namespace">currently ignored
-		/// </param>
-		/// <returns>true if using namespaces, false if not
-		///
-		/// </returns>
-		private bool usingNamespaces(String namespace_Renamed)
+		/// <summary>determines if currently using namespaces.</summary>
+		/// <param name="ns">currently ignored</param>
+		/// <returns>true if using namespaces, false if not</returns>
+		private bool UsingNamespaces(String ns)
 		{
 			/*
 	    *  if the big switch turns of namespaces, then ignore the rules
@@ -396,17 +376,17 @@ namespace NVelocity.Runtime
 			return false;
 		}
 
-		public String getLibraryName(String vmName, String namespace_Renamed)
+		public String GetLibraryName(String vmName, String ns)
 		{
-			if (usingNamespaces(namespace_Renamed))
+			if (UsingNamespaces(ns))
 			{
-				Hashtable local = getNamespace(namespace_Renamed, false);
+				Hashtable local = GetNamespace(ns, false);
 
 				/*
-		*  if we have this macro defined in this namespace, then
-		*  it is masking the global, library-based one, so 
-		*  just return null
-		*/
+				 *  if we have this macro defined in this namespace, then
+				 *  it is masking the global, library-based one, so 
+				 *  just return null
+				 */
 
 				if (local != null)
 				{
@@ -425,7 +405,7 @@ namespace NVelocity.Runtime
 	    */
 
 			//UPGRADE_NOTE: Variable me was renamed because block definition does not hide it. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1008"'
-			MacroEntry me2 = (MacroEntry) getNamespace(GLOBAL_NAMESPACE)[vmName];
+			MacroEntry me2 = (MacroEntry) GetNamespace(GLOBAL_NAMESPACE)[vmName];
 
 			if (me2 != null)
 			{
@@ -493,7 +473,7 @@ namespace NVelocity.Runtime
 			}
 
 
-			internal VelocimacroProxy createVelocimacro(String namespace_Renamed)
+			internal VelocimacroProxy CreateVelocimacro(String namespace_Renamed)
 			{
 				VelocimacroProxy vp = new VelocimacroProxy();
 				vp.Name = this.macroname;
@@ -507,8 +487,8 @@ namespace NVelocity.Runtime
 			internal void setup(InternalContextAdapter ica)
 			{
 				/*
-		*  if not parsed yet, parse!
-		*/
+				 *  if not parsed yet, parse!
+				 */
 
 				if (nodeTree == null)
 					parseTree(ica);
@@ -521,12 +501,12 @@ namespace NVelocity.Runtime
 					//UPGRADE_ISSUE: The equivalent of constructor 'java.io.BufferedReader.BufferedReader' is incompatible with the expected type in C#. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1109"'
 					TextReader br = new StringReader(macrobody);
 
-					nodeTree = Enclosing_Instance.rsvc.parse(br, "VM:" + macroname, true);
-					nodeTree.init(ica, null);
+					nodeTree = Enclosing_Instance.rsvc.Parse(br, "VM:" + macroname, true);
+					nodeTree.Init(ica, null);
 				}
 				catch (System.Exception e)
 				{
-					Enclosing_Instance.rsvc.error("VelocimacroManager.parseTree() : exception " + macroname + " : " + StringUtils.stackTrace(e));
+					Enclosing_Instance.rsvc.Error("VelocimacroManager.parseTree() : exception " + macroname + " : " + StringUtils.stackTrace(e));
 				}
 			}
 		}

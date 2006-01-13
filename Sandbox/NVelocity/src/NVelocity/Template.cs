@@ -57,32 +57,32 @@ namespace NVelocity
 		public override bool Process()
 		{
 			data = null;
-			Stream is_Renamed = null;
+			Stream s = null;
 			errorCondition = null;
 
 			// first, try to get the stream from the loader
 			try
 			{
-				is_Renamed = resourceLoader.getResourceStream(name);
+				s = resourceLoader.getResourceStream(name);
 			}
 			catch (ResourceNotFoundException rnfe)
 			{
 				//  remember and re-throw
 				errorCondition = rnfe;
-				throw rnfe;
+				throw;
 			}
 
 			// if that worked, lets protect in case a loader impl
 	        // forgets to throw a proper exception
 
-			if (is_Renamed != null)
+			if (s != null)
 			{
 				// now parse the template
 				try
 				{
-					StreamReader br = new StreamReader(is_Renamed, System.Text.Encoding.GetEncoding(encoding));
+					StreamReader br = new StreamReader(s, System.Text.Encoding.GetEncoding(encoding));
 
-					data = rsvc.parse(br, name);
+					data = rsvc.Parse(br, name);
 					InitDocument();
 					return true;
 				}
@@ -90,13 +90,13 @@ namespace NVelocity
 				{
 					String msg = "Template.process : Unsupported input encoding : " + encoding + " for template " + name;
 
-					errorCondition = new ParseErrorException(msg);
+					errorCondition = new ParseErrorException(msg, uce);
 					throw errorCondition;
 				}
 				catch (ParseException pex)
 				{
 					// remember the error and convert
-					errorCondition = new ParseErrorException(pex.Message);
+					errorCondition = new ParseErrorException(pex.Message, pex);
 					throw errorCondition;
 				}
 				catch (System.Exception e)
@@ -108,12 +108,12 @@ namespace NVelocity
 				finally
 				{
 					// Make sure to close the inputstream when we are done.
-					is_Renamed.Close();
+					s.Close();
 				}
 			}
 			else
 			{
-		        // is == null, therefore we have some kind of file issue
+				// is == null, therefore we have some kind of file issue
 				errorCondition = new ResourceNotFoundException("Unknown resource error for resource " + name);
 				throw errorCondition;
 			}
@@ -127,29 +127,21 @@ namespace NVelocity
 		/// </summary>
 		public void InitDocument()
 		{
-			/*
-	    *  send an empty InternalContextAdapter down into the AST to initialize it
-	    */
+			// send an empty InternalContextAdapter down into the AST to initialize it
 			InternalContextAdapterImpl ica = new InternalContextAdapterImpl(new VelocityContext());
 
 			try
 			{
-				/*
-		*  put the current template name on the stack
-		*/
+				// put the current template name on the stack
 				ica.PushCurrentTemplateName(name);
 
-				/*
-		*  init the AST
-		*/
-				((SimpleNode) data).init(ica, rsvc);
+				// init the AST
+				((SimpleNode) data).Init(ica, rsvc);
 			}
 			finally
 			{
-				/*
-		*  in case something blows up...
-		*  pull it off for completeness
-		*/
+				// in case something blows up...
+				// pull it off for completeness
 				ica.PopCurrentTemplateName();
 			}
 		}
@@ -173,10 +165,10 @@ namespace NVelocity
 		public void Merge(IContext context, TextWriter writer)
 		{
 			/*
-	    *  we shouldn't have to do this, as if there is an error condition, 
-	    *  the application code should never get a reference to the 
-	    *  Template
-	    */
+			*  we shouldn't have to do this, as if there is an error condition, 
+			*  the application code should never get a reference to the 
+			*  Template
+			*/
 
 			if (errorCondition != null)
 			{
@@ -186,9 +178,9 @@ namespace NVelocity
 			if (data != null)
 			{
 				/*
-		*  create an InternalContextAdapter to carry the user Context down
-		*  into the rendering engine.  Set the template name and render()
-		*/
+				*  create an InternalContextAdapter to carry the user Context down
+				*  into the rendering engine.  Set the template name and render()
+				*/
 				InternalContextAdapterImpl ica = new InternalContextAdapterImpl(context);
 
 				try
@@ -196,13 +188,13 @@ namespace NVelocity
 					ica.PushCurrentTemplateName(name);
 					ica.CurrentResource = this;
 
-					((SimpleNode) data).render(ica, writer);
+					((SimpleNode) data).Render(ica, writer);
 				}
 				finally
 				{
 					/*
-		    *  lets make sure that we always clean up the context 
-		    */
+					*  lets make sure that we always clean up the context 
+					*/
 					ica.PopCurrentTemplateName();
 					ica.CurrentResource = null;
 				}
@@ -210,11 +202,11 @@ namespace NVelocity
 			else
 			{
 				/*
-		* this shouldn't happen either, but just in case.
-		*/
+				* this shouldn't happen either, but just in case.
+				*/
 				String msg = "Template.merge() failure. The document is null, " + "most likely due to parsing error.";
 
-				rsvc.error(msg);
+				rsvc.Error(msg);
 				throw new System.Exception(msg);
 			}
 		}

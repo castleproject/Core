@@ -19,234 +19,229 @@ namespace NVelocity.Runtime.Visitor
 	/// </version>
 	public abstract class BaseVisitor : ParserVisitor
 	{
-		public StreamWriter Writer
-		{
-			set { this.writer = value; }
-
-		}
-
-		public InternalContextAdapter Context
-		{
-			set { this.context = value; }
-
-		}
-
-		/// <summary>Context used during traversal
+		/// <summary>
+		/// Context used during traversal
 		/// </summary>
 		protected internal InternalContextAdapter context;
 
-		/// <summary>Writer used as the output sink
+		/// <summary>
+		/// Writer used as the output sink
 		/// </summary>
 		protected internal StreamWriter writer;
 
-
-		public virtual Object visit(SimpleNode node, Object data)
+		public virtual Object Visit(SimpleNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTprocess node, Object data)
+		public virtual Object Visit(ASTprocess node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTExpression node, Object data)
+		public virtual Object Visit(ASTExpression node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTAssignment node, Object data)
+		public virtual Object Visit(ASTAssignment node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTOrNode node, Object data)
+		public virtual Object Visit(ASTOrNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTAndNode node, Object data)
+		public virtual Object Visit(ASTAndNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTEQNode node, Object data)
+		public virtual Object Visit(ASTEQNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTNENode node, Object data)
+		public virtual Object Visit(ASTNENode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTLTNode node, Object data)
+		public virtual Object Visit(ASTLTNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTGTNode node, Object data)
+		public virtual Object Visit(ASTGTNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTLENode node, Object data)
+		public virtual Object Visit(ASTLENode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTGENode node, Object data)
+		public virtual Object Visit(ASTGENode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTAddNode node, Object data)
+		public virtual Object Visit(ASTAddNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTSubtractNode node, Object data)
+		public virtual Object Visit(ASTSubtractNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTMulNode node, Object data)
+		public virtual Object Visit(ASTMulNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTDivNode node, Object data)
+		public virtual Object Visit(ASTDivNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTModNode node, Object data)
+		public virtual Object Visit(ASTModNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTNotNode node, Object data)
+		public virtual Object Visit(ASTNotNode node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTNumberLiteral node, Object data)
+		public virtual Object Visit(ASTNumberLiteral node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTStringLiteral node, Object data)
+		public virtual Object Visit(ASTStringLiteral node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTIdentifier node, Object data)
+		public virtual Object Visit(ASTIdentifier node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTMethod node, Object data)
+		public virtual Object Visit(ASTMethod node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTReference node, Object data)
+		public virtual Object Visit(ASTReference node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTTrue node, Object data)
+		public virtual Object Visit(ASTTrue node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTFalse node, Object data)
+		public virtual Object Visit(ASTFalse node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTBlock node, Object data)
+		public virtual Object Visit(ASTBlock node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTText node, Object data)
+		public virtual Object Visit(ASTText node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTIfStatement node, Object data)
+		public virtual Object Visit(ASTIfStatement node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTElseStatement node, Object data)
+		public virtual Object Visit(ASTElseStatement node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTElseIfStatement node, Object data)
+		public virtual Object Visit(ASTElseIfStatement node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTComment node, Object data)
+		public virtual Object Visit(ASTComment node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTObjectArray node, Object data)
+		public virtual Object Visit(ASTObjectArray node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTWord node, Object data)
+		public virtual Object Visit(ASTMap node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTSetDirective node, Object data)
+		public virtual Object Visit(ASTWord node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 
-		public virtual Object visit(ASTDirective node, Object data)
+		public virtual Object Visit(ASTSetDirective node, Object data)
 		{
-			data = node.childrenAccept(this, data);
+			data = node.ChildrenAccept(this, data);
+			return data;
+		}
+
+		public virtual Object Visit(ASTDirective node, Object data)
+		{
+			data = node.ChildrenAccept(this, data);
 			return data;
 		}
 	}

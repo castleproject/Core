@@ -77,10 +77,10 @@ namespace NVelocity.Runtime.Parser
 		{
 			get
 			{
-				if (token.next != null)
-					token = token.next;
+				if (token.Next != null)
+					token = token.Next;
 				else
-					token = token.next = token_source.NextToken;
+					token = token.Next = token_source.NextToken;
 				jj_ntk_Renamed_Field = - 1;
 				jj_gen++;
 				return token;
@@ -124,7 +124,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			catch (ParseException pe)
 			{
-				rsvc.error("Parser Exception: " + templateName + " : " + StringUtils.stackTrace(pe));
+				rsvc.Error("Parser Exception: " + templateName + " : " + StringUtils.stackTrace(pe));
 				throw new ParseException(pe.currentToken, pe.expectedTokenSequences, pe.tokenImage);
 			}
 			catch (TokenMgrError tme)
@@ -133,7 +133,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			catch (Exception e)
 			{
-				rsvc.error("Parser Error: " + templateName + " : " + StringUtils.stackTrace(e));
+				rsvc.Error("Parser Error: " + templateName + " : " + StringUtils.stackTrace(e));
 			}
 
 			currentTemplateName = "";
@@ -177,7 +177,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				bRecognizedDirective = true;
 			}
-			else if (rsvc.isVelocimacro(strDirective.Substring(1), currentTemplateName))
+			else if (rsvc.IsVelocimacro(strDirective.Substring(1), currentTemplateName))
 			{
 				bRecognizedDirective = true;
 			}
@@ -392,7 +392,7 @@ namespace NVelocity.Runtime.Parser
 				/*
 				*  churn and burn..
 				*/
-				t.image = escapedDirective(t.image);
+				t.Image = escapedDirective(t.Image);
 			}
 			finally
 			{
@@ -443,7 +443,7 @@ namespace NVelocity.Runtime.Parser
 				/*
 				* first, check to see if we have a control directive
 				*/
-				switch (t.next.kind)
+				switch (t.Next.Kind)
 				{
 					case ParserConstants.IF_DIRECTIVE:
 					case ParserConstants.ELSE_DIRECTIVE:
@@ -459,15 +459,15 @@ namespace NVelocity.Runtime.Parser
 				* if that failed, lets lookahead to see if we matched a PD or a VM
 				*/
 
-				if (isDirective(t.next.image.Substring(1)))
+				if (isDirective(t.Next.Image.Substring(1)))
 					control = true;
-				else if (rsvc.isVelocimacro(t.next.image.Substring(1), currentTemplateName))
+				else if (rsvc.IsVelocimacro(t.Next.Image.Substring(1), currentTemplateName))
 					control = true;
 
-				t.image = "";
+				t.Image = "";
 
 				for (int i = 0; i < count; i++)
-					t.image += (control ? "\\" : "\\\\");
+					t.Image += (control ? "\\" : "\\\\");
 			}
 			finally
 			{
@@ -677,7 +677,7 @@ namespace NVelocity.Runtime.Parser
 			jjtree.openNodeScope(jjtn000);
 			Token t = null;
 			Directive d;
-			int directiveType;
+			DirectiveType directiveType;
 			bool doItNow = false;
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
@@ -687,7 +687,7 @@ namespace NVelocity.Runtime.Parser
 		* EscapedDirective()
 		*/
 				t = jj_consume_token(ParserConstants.WORD);
-				String directiveName = t.image.Substring(1);
+				String directiveName = t.Image.Substring(1);
 
 				d = directives.Create(directiveName);
 
@@ -711,9 +711,7 @@ namespace NVelocity.Runtime.Parser
 
 				if (d == null)
 				{
-					/*
-		    *  if null, then not a real directive, but maybe a Velocimacro
-		    */
+					// if null, then not a real directive, but maybe a Velocimacro
 
 					//d  =  (Directive) rsvc.getVelocimacro( directiveName, currentTemplateName );
 
@@ -721,7 +719,7 @@ namespace NVelocity.Runtime.Parser
 					// since the parser can be created without RuntimeServices - this may actually be needed here and in the orgiginal source as well.
 					if (rsvc != null)
 					{
-						if (!rsvc.isVelocimacro(directiveName, currentTemplateName))
+						if (!rsvc.IsVelocimacro(directiveName, currentTemplateName))
 						{
 							token_source.stateStackPop();
 							token_source.inDirective = false;
@@ -731,9 +729,9 @@ namespace NVelocity.Runtime.Parser
 					}
 
 					/*
-		    *  Currently, all VMs are LINE directives
-		    */
-					directiveType = DirectiveConstants_Fields.LINE;
+					 *  Currently, all VMs are LINE directives
+					 */
+					directiveType = DirectiveType.LINE;
 				}
 				else
 				{
@@ -787,7 +785,7 @@ namespace NVelocity.Runtime.Parser
 				;
 
 				jj_consume_token(ParserConstants.RPAREN);
-				if (directiveType == DirectiveConstants_Fields.LINE)
+				if (directiveType == DirectiveType.LINE)
 				{
 					if (true)
 						return jjtn000;
@@ -4928,12 +4926,12 @@ namespace NVelocity.Runtime.Parser
 		private Token jj_consume_token(int kind)
 		{
 			Token oldToken = token;
-			if (token.next != null)
-				token = token.next;
+			if (token.Next != null)
+				token = token.Next;
 			else
-				token = token.next = token_source.NextToken;
+				token = token.Next = token_source.NextToken;
 			jj_ntk_Renamed_Field = - 1;
-			if (token.kind == kind)
+			if (token.Kind == kind)
 			{
 				jj_gen++;
 				if (++jj_gc > 100)
@@ -4962,18 +4960,18 @@ namespace NVelocity.Runtime.Parser
 			if (jj_scanpos == jj_lastpos)
 			{
 				jj_la--;
-				if (jj_scanpos.next == null)
+				if (jj_scanpos.Next == null)
 				{
-					jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.NextToken;
+					jj_lastpos = jj_scanpos = jj_scanpos.Next = token_source.NextToken;
 				}
 				else
 				{
-					jj_lastpos = jj_scanpos = jj_scanpos.next;
+					jj_lastpos = jj_scanpos = jj_scanpos.Next;
 				}
 			}
 			else
 			{
-				jj_scanpos = jj_scanpos.next;
+				jj_scanpos = jj_scanpos.Next;
 			}
 			if (jj_rescan)
 			{
@@ -4982,12 +4980,12 @@ namespace NVelocity.Runtime.Parser
 				while (tok != null && tok != jj_scanpos)
 				{
 					i++;
-					tok = tok.next;
+					tok = tok.Next;
 				}
 				if (tok != null)
 					jj_add_error_token(kind, i);
 			}
-			return (jj_scanpos.kind != kind);
+			return (jj_scanpos.Kind != kind);
 		}
 
 
@@ -4996,20 +4994,20 @@ namespace NVelocity.Runtime.Parser
 			Token t = lookingAhead ? jj_scanpos : token;
 			for (int i = 0; i < index; i++)
 			{
-				if (t.next != null)
-					t = t.next;
+				if (t.Next != null)
+					t = t.Next;
 				else
-					t = t.next = token_source.NextToken;
+					t = t.Next = token_source.NextToken;
 			}
 			return t;
 		}
 
 		private int jj_ntk()
 		{
-			if ((jj_nt = token.next) == null)
-				return (jj_ntk_Renamed_Field = (token.next = token_source.NextToken).kind);
+			if ((jj_nt = token.Next) == null)
+				return (jj_ntk_Renamed_Field = (token.Next = token_source.NextToken).Kind);
 			else
-				return (jj_ntk_Renamed_Field = jj_nt.kind);
+				return (jj_ntk_Renamed_Field = jj_nt.Kind);
 		}
 
 		//UPGRADE_NOTE: The initialization of  'jj_expentries' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'

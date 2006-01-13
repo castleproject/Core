@@ -130,7 +130,7 @@ namespace NVelocity.Runtime.Resource
 			}
 			catch (Exception e)
 			{
-				rsvc.error("Cannot process content resource : " + e.ToString());
+				rsvc.Error("Cannot process content resource : " + e.ToString());
 				return false;
 			}
 			finally

@@ -13,7 +13,7 @@ namespace NVelocity.Test
 	/// strings that are of use when testing templates.
 	/// </summary>
 	/// <author> <a href="mailto:jon@latchkey.com">Jon S. Stevens</a></author>
-	public struct TemplateTestBase_Fields
+	public struct TemplateTest
 	{
 		/// <summary>
 		/// VTL file extension.
@@ -36,23 +36,23 @@ namespace NVelocity.Test
 		/// <summary>
 		/// Properties file that lists which template tests to run.
 		/// </summary>
-		public static String TEST_CASE_PROPERTIES;
+		public static readonly String TEST_CASE_PROPERTIES;
 
 		/// <summary>
 		/// Results relative to the build directory.
 		/// </summary>
-		public static String RESULT_DIR;
+		public static readonly String RESULT_DIR;
 
 		/// <summary>
 		/// Results relative to the build directory.
 		/// </summary>
-		public static String COMPARE_DIR;
+		public static readonly String COMPARE_DIR;
 
-		static TemplateTestBase_Fields()
+		static TemplateTest()
 		{
-			TEST_CASE_PROPERTIES = TemplateTestBase_Fields.FILE_RESOURCE_LOADER_PATH + "/templates.properties";
-			RESULT_DIR = TemplateTestBase_Fields.FILE_RESOURCE_LOADER_PATH + "/results";
-			COMPARE_DIR = TemplateTestBase_Fields.FILE_RESOURCE_LOADER_PATH + "/compare";
+			TEST_CASE_PROPERTIES = TemplateTest.FILE_RESOURCE_LOADER_PATH + "/templates.properties";
+			RESULT_DIR = TemplateTest.FILE_RESOURCE_LOADER_PATH + "/results";
+			COMPARE_DIR = TemplateTest.FILE_RESOURCE_LOADER_PATH + "/compare";
 		}
 	}
 
@@ -70,14 +70,12 @@ namespace NVelocity.Test
 		/// <returns>
 		/// The full path to the file.
 		/// </returns>
-		protected internal static String getFileName(String dir, String base_Renamed, String ext)
+		protected internal static String GetFileName(String dir, String baseDir, String ext)
 		{
 			StringBuilder buf = new StringBuilder();
 			if (dir != null)
-			{
 				buf.Append(dir).Append('/');
-			}
-			buf.Append(base_Renamed).Append('.').Append(ext);
+			buf.Append(baseDir).Append('.').Append(ext);
 			return buf.ToString();
 		}
 
@@ -85,7 +83,7 @@ namespace NVelocity.Test
 		/// Assures that the results directory exists.  If the results directory
 		/// cannot be created, fails the test.
 		/// </summary>
-		protected internal static void assureResultsDirectoryExists(String resultsDirectory)
+		protected internal static void AssureResultsDirectoryExists(String resultsDirectory)
 		{
 			FileInfo dir = new FileInfo(resultsDirectory);
 			bool tmpBool;
@@ -95,7 +93,7 @@ namespace NVelocity.Test
 				tmpBool = Directory.Exists(dir.FullName);
 			if (!tmpBool)
 			{
-				RuntimeSingleton.info("Template results directory does not exist");
+				RuntimeSingleton.Info("Template results directory does not exist");
 				Boolean ok = true;
 				try
 				{
@@ -108,13 +106,13 @@ namespace NVelocity.Test
 
 				if (ok)
 				{
-					RuntimeSingleton.info("Created template results directory");
+					RuntimeSingleton.Info("Created template results directory");
 				}
 				else
 				{
 					String errMsg = "Unable to create template results directory";
-					RuntimeSingleton.warn(errMsg);
-					Assertion.Fail(errMsg);
+					RuntimeSingleton.Warn(errMsg);
+					Assert.Fail(errMsg);
 				}
 			}
 		}
@@ -130,10 +128,8 @@ namespace NVelocity.Test
 		/// <returns>
 		/// source with all line terminations changed to Unix style
 		/// </returns>
-		protected internal virtual String normalizeNewlines(String source)
+		protected internal virtual String NormalizeNewlines(String source)
 		{
-			//TODO:
-			//return perl.substitute("s/\r[\n]/\n/g", source);
 			return source.Replace(Environment.NewLine, "|").Replace("\n", "|");
 		}
 
@@ -148,15 +144,15 @@ namespace NVelocity.Test
 		/// <exception cref="">
 		/// Exception Test failure condition.
 		/// </exception>
-		protected internal virtual bool isMatch(String resultsDir, String compareDir, String baseFileName, String resultExt, String compareExt)
+		protected internal virtual bool IsMatch(String resultsDir, String compareDir, String baseFileName, String resultExt, String compareExt)
 		{
 			Boolean SHOW_RESULTS = true;
 
-			String result = StringUtils.fileContentsToString(getFileName(resultsDir, baseFileName, resultExt));
-			String compare = StringUtils.fileContentsToString(getFileName(compareDir, baseFileName, compareExt));
+			String result = StringUtils.fileContentsToString(GetFileName(resultsDir, baseFileName, resultExt));
+			String compare = StringUtils.fileContentsToString(GetFileName(compareDir, baseFileName, compareExt));
 
-			String s1 = normalizeNewlines(result);
-			String s2 = normalizeNewlines(compare);
+			String s1 = NormalizeNewlines(result);
+			String s2 = NormalizeNewlines(compare);
 
 			Boolean equals = s1.Equals(s2);
 			if (!equals && SHOW_RESULTS)
@@ -190,7 +186,7 @@ namespace NVelocity.Test
 		/// <returns>
 		/// The test case name.
 		/// </returns>
-		protected internal static String getTestCaseName(String s)
+		protected internal static String GetTestCaseName(String s)
 		{
 			StringBuilder name = new StringBuilder();
 			name.Append(Char.ToUpper(s[0]));

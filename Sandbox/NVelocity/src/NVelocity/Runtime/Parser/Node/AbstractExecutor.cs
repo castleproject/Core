@@ -11,20 +11,22 @@ namespace NVelocity.Runtime.Parser.Node
 	{
 		protected internal RuntimeLogger rlog = null;
 
-		/// <summary> Method to be executed.
+		/// <summary>
+		/// Method to be executed.
 		/// </summary>
 		protected internal MethodInfo method = null;
-
 		protected internal PropertyInfo property = null;
 
-		/// <summary> Execute method against context.
+		/// <summary>
+		/// Execute method against context.
 		/// </summary>
-		public abstract Object execute(Object o);
+		public abstract Object Execute(Object o);
 
-		/// <summary> Tell whether the executor is alive by looking
+		/// <summary>
+		/// Tell whether the executor is alive by looking
 		/// at the value of the method.
 		/// </summary>
-		public bool isAlive()
+		public bool IsAlive()
 		{
 			return (method != null || property != null);
 		}
@@ -34,5 +36,9 @@ namespace NVelocity.Runtime.Parser.Node
 			get { return method; }
 		}
 
+		public PropertyInfo Property
+		{
+			get { return property; }
+		}
 	}
 }

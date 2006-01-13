@@ -205,7 +205,7 @@ namespace NVelocity.Runtime
 		*  All we have to do is get the template. The template will be parsed;
 		*  VM's  are added during the parse phase
 		*/
-				Object libfiles = rsvc.getProperty(RuntimeConstants_Fields.VM_LIBRARY);
+				Object libfiles = rsvc.GetProperty(RuntimeConstants.VM_LIBRARY);
 
 				if (libfiles != null)
 				{
@@ -238,7 +238,7 @@ namespace NVelocity.Runtime
 
 							try
 							{
-								Template template = rsvc.getTemplate(lib);
+								Template template = rsvc.GetTemplate(lib);
 
 								/*
 				*  save the template.  This depends on the assumption
@@ -274,7 +274,7 @@ namespace NVelocity.Runtime
 		*/
 				AddMacroPermission = true;
 
-				if (!rsvc.getBoolean(RuntimeConstants_Fields.VM_PERM_ALLOW_INLINE, true))
+				if (!rsvc.GetBoolean(RuntimeConstants.VM_PERM_ALLOW_INLINE, true))
 				{
 					AddMacroPermission = false;
 
@@ -293,7 +293,7 @@ namespace NVelocity.Runtime
 		*/
 				ReplacementPermission = false;
 
-				if (rsvc.getBoolean(RuntimeConstants_Fields.VM_PERM_ALLOW_INLINE_REPLACE_GLOBAL, false))
+				if (rsvc.GetBoolean(RuntimeConstants.VM_PERM_ALLOW_INLINE_REPLACE_GLOBAL, false))
 				{
 					ReplacementPermission = true;
 
@@ -313,7 +313,7 @@ namespace NVelocity.Runtime
 				/*
 		*  template-local inline VM mode : default is off
 		*/
-				TemplateLocalInline = rsvc.getBoolean(RuntimeConstants_Fields.VM_PERM_INLINE_LOCAL, false);
+				TemplateLocalInline = rsvc.GetBoolean(RuntimeConstants.VM_PERM_INLINE_LOCAL, false);
 
 				if (TemplateLocalInline)
 				{
@@ -329,7 +329,7 @@ namespace NVelocity.Runtime
 				/*
 		*  general message switch.  default is on
 		*/
-				Blather = rsvc.getBoolean(RuntimeConstants_Fields.VM_MESSAGES_ON, true);
+				Blather = rsvc.GetBoolean(RuntimeConstants.VM_MESSAGES_ON, true);
 
 				if (Blather)
 				{
@@ -343,7 +343,7 @@ namespace NVelocity.Runtime
 				/*
 		*  autoload VM libraries
 		*/
-				Autoload = rsvc.getBoolean(RuntimeConstants_Fields.VM_LIBRARY_AUTORELOAD, false);
+				Autoload = rsvc.GetBoolean(RuntimeConstants.VM_LIBRARY_AUTORELOAD, false);
 
 				if (Autoload)
 				{
@@ -354,7 +354,7 @@ namespace NVelocity.Runtime
 					logVMMessageInfo("Velocimacro : autoload off  : VM system " + "will not automatically reload global library macros");
 				}
 
-				rsvc.info("Velocimacro : initialization complete.");
+				rsvc.Info("Velocimacro : initialization complete.");
 			}
 
 			return;
@@ -391,7 +391,7 @@ namespace NVelocity.Runtime
 	    */
 			lock (this)
 			{
-				vmManager.addVM(name, macroBody, argArray, sourceTemplate);
+				vmManager.AddVM(name, macroBody, argArray, sourceTemplate);
 			}
 
 			/*
@@ -493,7 +493,7 @@ namespace NVelocity.Runtime
 		private void logVMMessageInfo(String s)
 		{
 			if (blather)
-				rsvc.info(s);
+				rsvc.Info(s);
 		}
 
 		/// <summary>  localization of the logging logic
@@ -501,7 +501,7 @@ namespace NVelocity.Runtime
 		private void logVMMessageWarn(String s)
 		{
 			if (blather)
-				rsvc.warn(s);
+				rsvc.Warn(s);
 		}
 
 		/// <summary>  Tells the world if a given directive string is a Velocimacro
@@ -548,7 +548,7 @@ namespace NVelocity.Runtime
 		    *  in the event namespaces are set, as it could be masked by local
 		    */
 
-					String lib = vmManager.getLibraryName(vmName, sourceTemplate);
+					String lib = vmManager.GetLibraryName(vmName, sourceTemplate);
 
 					if (lib != null)
 					{
@@ -589,7 +589,7 @@ namespace NVelocity.Runtime
 
 									tw.modificationTime = ft;
 
-									template = rsvc.getTemplate(lib)
+									template = rsvc.GetTemplate(lib)
 										;
 
 									/*
@@ -627,7 +627,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public bool dumpVMNamespace(String namespace_Renamed)
 		{
-			return vmManager.dumpNamespace(namespace_Renamed);
+			return vmManager.DumpNamespace(namespace_Renamed);
 		}
 
 		/// <summary>  sets permission to have VMs local in scope to their declaring template

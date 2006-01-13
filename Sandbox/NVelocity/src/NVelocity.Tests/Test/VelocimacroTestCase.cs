@@ -24,7 +24,7 @@ namespace NVelocity.Test
 				/*
 		*  setup local scope for templates
 		*/
-				Velocity.SetProperty(RuntimeConstants_Fields.VM_PERM_INLINE_LOCAL, true);
+				Velocity.SetProperty(RuntimeConstants.VM_PERM_INLINE_LOCAL, true);
 				Velocity.Init();
 			}
 			catch (Exception e)
@@ -48,7 +48,7 @@ namespace NVelocity.Test
 
 			if (!result1.Equals(out_Renamed))
 			{
-				Assertion.Fail("output incorrect.");
+				Assert.Fail("output incorrect.");
 			}
 		}
 	}

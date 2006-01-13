@@ -38,7 +38,8 @@ namespace NVelocity.Util.Introspection
 	/// </version>
 	public class UberspectImpl : Uberspect, UberspectLoggable
 	{
-		/// <summary>  Sets the runtime logger - this must be called before anything
+		/// <summary>
+		/// Sets the runtime logger - this must be called before anything
 		/// else besides init() as to get the logger.  Makes the pull
 		/// model appealing...
 		/// </summary>
@@ -49,18 +50,20 @@ namespace NVelocity.Util.Introspection
 				rlog = value;
 				introspector = new Introspector(rlog);
 			}
-
 		}
 
-		/// <summary>  Our runtime logger.
+		/// <summary>
+		/// Our runtime logger.
 		/// </summary>
 		private RuntimeLogger rlog;
 
-		/// <summary>  the default Velocity introspector
+		/// <summary>
+		/// the default Velocity introspector
 		/// </summary>
 		private static Introspector introspector;
 
-		/// <summary>  init - does nothing - we need to have setRuntimeLogger
+		/// <summary>
+		/// init - does nothing - we need to have setRuntimeLogger
 		/// called before getting our introspector, as the default
 		/// vel introspector depends upon it.
 		/// </summary>
@@ -68,62 +71,21 @@ namespace NVelocity.Util.Introspection
 		{
 		}
 
-
-		/// <summary>  To support iterative objects used in a <code>#foreach()</code>
-		/// loop.
-		/// *
-		/// </summary>
-		/// <param name="obj">The iterative object.
-		/// </param>
-		/// <param name="i">Info about the object's location.
-		/// 
-		/// </param>
-		public Iterator getIterator(Object obj, Info i)
-		{
-			if (obj.GetType().IsArray)
-			{
-				return new ArrayIterator(obj);
-			}
-			else if (obj is ICollection)
-			{
-				return new EnumerationIterator(((ICollection) obj).GetEnumerator());
-			}
-			else if (obj is IDictionary)
-			{
-				return new EnumerationIterator(((IDictionary) obj).Values.GetEnumerator());
-			}
-			else if (obj is Iterator)
-			{
-				rlog.debug("The iterative object in the #foreach() loop at " + i + " is of type java.util.Iterator.  Because " + "it is not resettable, if used in more than once it " + "may lead to unexpected results.");
-
-				return ((Iterator) obj);
-			}
-			else if (obj is IEnumerator)
-			{
-				rlog.debug("The iterative object in the #foreach() loop at " + i + " is of type java.util.Enumeration.  Because " + "it is not resettable, if used in more than once it " + "may lead to unexpected results.");
-
-				return new EnumerationIterator((IEnumerator) obj);
-			}
-
-			/*  we have no clue what this is  */
-			rlog.warn("Could not determine type of iterator in " + "#foreach loop at " + i);
-
-			return null;
-		}
-
-		/// <summary>  Method
+		/// <summary>
+		/// Method
 		/// </summary>
 		public VelMethod getMethod(Object obj, String methodName, Object[] args, Info i)
 		{
 			if (obj == null)
 				return null;
 
-			MethodInfo m = introspector.getMethod(obj.GetType(), methodName, args);
+			MethodInfo m = introspector.GetMethod(obj.GetType(), methodName, args);
 
-			return (m != null) ? new VelMethodImpl(this, m) : null;
+			return (m != null) ? new VelMethodImpl(m) : null;
 		}
 
-		/// <summary> Property  getter
+		/// <summary>
+		/// Property  getter
 		/// </summary>
 		public VelPropertyGet getPropertyGet(Object obj, String identifier, Info i)
 		{
@@ -142,7 +104,7 @@ namespace NVelocity.Util.Introspection
 			*  if that didn't work, look for get("foo")
 			*/
 
-			if (!executor.isAlive())
+			if (!executor.IsAlive())
 			{
 				executor = new GetExecutor(rlog, introspector, claz, identifier);
 			}
@@ -151,12 +113,12 @@ namespace NVelocity.Util.Introspection
 			*  finally, look for boolean isFoo()
 			*/
 
-			if (!executor.isAlive())
+			if (!executor.IsAlive())
 			{
 				executor = new BooleanPropertyExecutor(rlog, introspector, claz, identifier);
 			}
 
-			return (executor != null) ? new VelGetterImpl(this, executor) : null;
+			return (executor != null) ? new VelGetterImpl(executor) : null;
 		}
 
 		/// <summary> Property setter
@@ -165,7 +127,6 @@ namespace NVelocity.Util.Introspection
 		{
 			Type claz = obj.GetType();
 
-			VelPropertySet vs = null;
 			VelMethod vm = null;
 			try
 			{
@@ -173,18 +134,18 @@ namespace NVelocity.Util.Introspection
 				*  first, we introspect for the set<identifier> setter method
 				*/
 
-				Object[] params_Renamed = new Object[] {arg};
+				Object[] parameters = new Object[] {arg};
 
 				try
 				{
-					vm = getMethod(obj, "set" + identifier, params_Renamed, i);
+					vm = getMethod(obj, "set" + identifier, parameters, i);
 
 					if (vm == null)
 					{
 						throw new MethodAccessException();
 					}
 				}
-				catch (MethodAccessException nsme2)
+				catch (MethodAccessException)
 				{
 					StringBuilder sb = new StringBuilder("set");
 					sb.Append(identifier);
@@ -198,213 +159,141 @@ namespace NVelocity.Util.Introspection
 						sb[3] = Char.ToLower(sb[3]);
 					}
 
-					vm = getMethod(obj, sb.ToString(), params_Renamed, i);
+					vm = getMethod(obj, sb.ToString(), parameters, i);
 
 					if (vm == null)
-					{
-						throw new MethodAccessException();
-					}
+						throw;
 				}
 			}
-			catch (MethodAccessException nsme)
+			catch (MethodAccessException)
 			{
-				/*
-				*  right now, we only support the Map interface
-				*/
-
+				// right now, we only support the IDictionary interface
 				if (typeof(IDictionary).IsAssignableFrom(claz))
 				{
-					Object[] params_Renamed = new Object[] {new Object(), new Object()};
+					Object[] parameters = new Object[] {new Object(), new Object()};
 
-					vm = getMethod(obj, "put", params_Renamed, i);
+					vm = getMethod(obj, "Add", parameters, i);
 
 					if (vm != null)
-						return new VelSetterImpl(this, vm, identifier);
+						return new VelSetterImpl(vm, identifier);
 				}
 			}
 
-			return (vm != null) ? new VelSetterImpl(this, vm) : null;
+			return (vm != null) ? new VelSetterImpl(vm) : null;
 		}
 
-		/// <summary>  Implementation of VelMethod
+		/// <summary>
+		/// Implementation of <see cref="VelMethod"/>.
 		/// </summary>
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'VelMethodImpl' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
 		public class VelMethodImpl : VelMethod
 		{
-			private void InitBlock(UberspectImpl enclosingInstance)
+			public VelMethodImpl(MethodInfo m)
 			{
-				this.enclosingInstance = enclosingInstance;
+				this.method = m;
 			}
-
-			private UberspectImpl enclosingInstance;
 
 			public bool Cacheable
 			{
 				get { return true; }
-
 			}
 
 			public String MethodName
 			{
 				get { return method.Name; }
-
 			}
 
 			public Type ReturnType
 			{
 				get { return method.ReturnType; }
-
-			}
-
-			public UberspectImpl Enclosing_Instance
-			{
-				get { return enclosingInstance; }
-
 			}
 
 			internal MethodInfo method = null;
 
-			public VelMethodImpl(UberspectImpl enclosingInstance, MethodInfo m)
+			public Object Invoke(Object o, Object[] parameters)
 			{
-				InitBlock(enclosingInstance);
-				method = m;
+				return method.Invoke(o, parameters);
 			}
-
-			private VelMethodImpl(UberspectImpl enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-			}
-
-			public Object invoke(Object o, Object[] params_Renamed)
-			{
-				return method.Invoke(o, (Object[]) params_Renamed);
-			}
-
-
 		}
 
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'VelGetterImpl' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
+		/// <summary>
+		/// Implementation of <see cref="VelPropertyGet"/>.
+		/// </summary>
 		public class VelGetterImpl : VelPropertyGet
 		{
-			private void InitBlock(UberspectImpl enclosingInstance)
+			public VelGetterImpl(AbstractExecutor exec)
 			{
-				this.enclosingInstance = enclosingInstance;
+				this.ae = exec;
 			}
-
-			private UberspectImpl enclosingInstance;
 
 			public bool Cacheable
 			{
 				get { return true; }
-
 			}
 
 			public String MethodName
 			{
 				get
 				{
+					if (ae.Property.Name != null)
+						return ae.Property.Name;
+
 					if (ae.Method != null)
 						return ae.Method.Name;
-					else
-						return "undefined";
+					
+					return "undefined";
 				}
-
-			}
-
-			public UberspectImpl Enclosing_Instance
-			{
-				get { return enclosingInstance; }
-
 			}
 
 			internal AbstractExecutor ae = null;
 
-			public VelGetterImpl(UberspectImpl enclosingInstance, AbstractExecutor exec)
+			public Object Invoke(Object o)
 			{
-				InitBlock(enclosingInstance);
-				ae = exec;
+				return ae.Execute(o);
 			}
-
-			private VelGetterImpl(UberspectImpl enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-			}
-
-			public Object invoke(Object o)
-			{
-				return ae.execute(o);
-			}
-
-
 		}
 
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'VelSetterImpl' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
 		public class VelSetterImpl : VelPropertySet
 		{
-			private void InitBlock(UberspectImpl enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-
-			private UberspectImpl enclosingInstance;
-
 			public bool Cacheable
 			{
 				get { return true; }
-
 			}
 
 			public String MethodName
 			{
 				get { return vm.MethodName; }
-
-			}
-
-			public UberspectImpl Enclosing_Instance
-			{
-				get { return enclosingInstance; }
-
 			}
 
 			internal VelMethod vm = null;
 			internal String putKey = null;
 
-			public VelSetterImpl(UberspectImpl enclosingInstance, VelMethod velmethod)
+			public VelSetterImpl(VelMethod velmethod)
 			{
-				InitBlock(enclosingInstance);
 				this.vm = velmethod;
 			}
 
-			public VelSetterImpl(UberspectImpl enclosingInstance, VelMethod velmethod, String key)
+			public VelSetterImpl(VelMethod velmethod, string key)
 			{
-				InitBlock(enclosingInstance);
 				this.vm = velmethod;
-				putKey = key;
+				this.putKey = key;
 			}
 
-			private VelSetterImpl(UberspectImpl enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-			}
-
-			public Object invoke(Object o, Object value_)
+			public Object invoke(Object o, Object value)
 			{
 				ArrayList al = new ArrayList();
 
 				if (putKey != null)
 				{
 					al.Add(putKey);
-					al.Add(value_);
+					al.Add(value);
 				}
 				else
 				{
-					al.Add(value_);
+					al.Add(value);
 				}
 
-				return vm.invoke(o, al.ToArray());
+				return vm.Invoke(o, al.ToArray());
 			}
-
-
 		}
 	}
 }

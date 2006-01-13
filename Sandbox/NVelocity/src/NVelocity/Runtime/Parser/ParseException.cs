@@ -46,20 +46,20 @@ namespace NVelocity.Runtime.Parser
 					expected += eol + "    ";
 				}
 				String retval = "Encountered \"";
-				Token tok = currentToken.next;
+				Token tok = currentToken.Next;
 				for (int i = 0; i < maxSize; i++)
 				{
 					if (i != 0)
 						retval += " ";
-					if (tok.kind == 0)
+					if (tok.Kind == 0)
 					{
 						retval += tokenImage[0];
 						break;
 					}
-					retval += add_escapes(tok.image);
-					tok = tok.next;
+					retval += add_escapes(tok.Image);
+					tok = tok.Next;
 				}
-				retval += "\" at line " + currentToken.next.beginLine + ", column " + currentToken.next.beginColumn;
+				retval += "\" at line " + currentToken.Next.BeginLine + ", column " + currentToken.Next.BeginColumn;
 				retval += "." + eol;
 				if (expectedTokenSequences.Length == 1)
 				{

@@ -85,7 +85,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				context.Put(entry.Key.ToString(), entry.Value);
 			}
 
-			bodyNode.render(context, writer);
+			bodyNode.Render(context, writer);
 		}
 	}
 }

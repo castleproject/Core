@@ -108,7 +108,7 @@ namespace NVelocity.Context
 		public VMContext(InternalContextAdapter inner, RuntimeServices rsvc)
 		{
 			InitBlock();
-			localcontextscope = rsvc.getBoolean(RuntimeConstants_Fields.VM_CONTEXT_LOCALSCOPE, false);
+			localcontextscope = rsvc.GetBoolean(RuntimeConstants.VM_CONTEXT_LOCALSCOPE, false);
 
 			wrappedContext = inner;
 			innerContext = inner.BaseContext;

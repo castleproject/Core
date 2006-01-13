@@ -57,16 +57,13 @@ namespace NVelocity.Runtime.Parser.Node
 	using System;
 	using NVelocity.Context;
 
-	/// <summary> Please look at the Parser.jjt file which is
-	/// what controls the generation of this class.
-	/// *
+	/// <summary>
+	/// Please look at the Parser.jjt file which is what controls 
+	/// the generation of this class.
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ASTOrNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	/// </version>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a> </author>
+	/// <version> $Id: ASTOrNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $ </version>
 	public class ASTOrNode : SimpleNode
 	{
 		public ASTOrNode(int id) : base(id)
@@ -81,7 +78,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>  Returns the value of the expression.
@@ -90,33 +87,28 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Value(InternalContextAdapter context)
 		{
-			return evaluate(context);
+			return Evaluate(context);
 		}
 
-		/// <summary>  the logical or :
+		/// <summary>
+		/// the logical or :
 		/// the rule :
 		/// left || null -> left
 		/// null || right -> right
 		/// null || null -> false
 		/// left || right ->  left || right
 		/// </summary>
-		public override bool evaluate(InternalContextAdapter context)
+		public override bool Evaluate(InternalContextAdapter context)
 		{
 			INode left = jjtGetChild(0);
 			INode right = jjtGetChild(1);
 
-			/*
-	    *  if the left is not null and true, then true
-	    */
-
-			if (left != null && left.evaluate(context))
+			// if the left is not null and true, then true
+			if (left != null && left.Evaluate(context))
 				return true;
 
-			/*
-	    *  same for right
-	    */
-
-			if (right != null && right.evaluate(context))
+			// same for right
+			if (right != null && right.Evaluate(context))
 				return true;
 
 			return false;

@@ -39,7 +39,7 @@ namespace NVelocity.Test
 			{
 				// this is expected to happen when the stream has been read
 			}
-			Assertion.Assert("read stream did not match source string", s1.Equals(s2));
+			Assert.IsTrue(s1.Equals(s2), "read stream did not match source string");
 		}
 
 		[Test]
@@ -56,11 +56,11 @@ namespace NVelocity.Test
 			if (root != null)
 			{
 				Token t = root.FirstToken;
-				nodes += t.kind.ToString();
+				nodes += t.Kind.ToString();
 				while (t != root.LastToken)
 				{
-					t = t.next;
-					nodes += "," + t.kind.ToString();
+					t = t.Next;
+					nodes += "," + t.Kind.ToString();
 				}
 			}
 
@@ -70,7 +70,7 @@ namespace NVelocity.Test
 				Console.Out.WriteLine(".Net parsed nodes did not match java nodes.");
 				Console.Out.WriteLine("java=" + javaNodes);
 				Console.Out.WriteLine(".net=" + nodes);
-				Assertion.Fail(".Net parsed nodes did not match java nodes.");
+				Assert.Fail(".Net parsed nodes did not match java nodes.");
 			}
 		}
 
@@ -78,15 +78,15 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_RuntimeServices()
 		{
-			RuntimeInstance ri = RuntimeSingleton.RuntimeInstance;
+			RuntimeServices ri = RuntimeSingleton.RuntimeServices;
 
 			try
 			{
-				ri.init();
+				ri.Init();
 			}
 			catch (Exception ex)
 			{
-				Assertion.Fail(ex.Message);
+				Assert.Fail(ex.Message);
 			}
 			ExtendedProperties ep = ri.Configuration;
 		}
@@ -104,7 +104,7 @@ namespace NVelocity.Test
 				VelocityEngine ve = new VelocityEngine();
 
 				ExtendedProperties ep = new ExtendedProperties();
-				ep.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, "../../test/templates");
+				ep.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, "../../test/templates");
 				
 				ve.Init(ep);
 
@@ -137,12 +137,12 @@ namespace NVelocity.Test
 				catch (ResourceNotFoundException rnfe)
 				{
 					Console.Out.WriteLine("Example : error : cannot find template " + templateFile + " : \n" + rnfe.Message);
-					Assertion.Fail();
+					Assert.Fail();
 				}
 				catch (ParseErrorException pee)
 				{
 					Console.Out.WriteLine("Example : Syntax error in template " + templateFile + " : \n" + pee);
-					Assertion.Fail();
+					Assert.Fail();
 				}
 
 				/*
@@ -165,7 +165,7 @@ namespace NVelocity.Test
 			}
 			catch (Exception ex)
 			{
-				Assertion.Fail(ex.Message);
+				Assert.Fail(ex.Message);
 			}
 		}
 

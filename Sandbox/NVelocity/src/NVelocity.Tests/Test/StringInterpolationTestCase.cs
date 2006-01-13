@@ -48,8 +48,8 @@ namespace NVelocity.Test
 					"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
 					"$DictHelper.CreateDict( \"failure=error\", \"success=emaillist\", \"with=return 'survey=${survey}&id=${id}'\" ) )");
 
-			Assertion.Assert("Evalutation returned failure", ok);
-			Assertion.AssertEquals("Remove /Participant/DeleteEmail.rails return 'survey=1&id=2'", sw.ToString());			
+			Assert.IsTrue(ok, "Evalutation returned failure");
+			Assert.AreEqual("Remove /Participant/DeleteEmail.rails return 'survey=1&id=2'", sw.ToString());			
 		}
 	}
 

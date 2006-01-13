@@ -47,7 +47,7 @@ namespace NVelocity.Runtime.Resource.Loader
 
 		public override void init(ExtendedProperties configuration)
 		{
-			rsvc.info("FileResourceLoader : initialization starting.");
+			rsvc.Info("FileResourceLoader : initialization starting.");
 
 			paths = configuration.GetVector("path");
 		}
@@ -142,7 +142,7 @@ namespace NVelocity.Runtime.Resource.Loader
 					filename = template;
 				}
 
-				rsvc.debug("FileResourceLoader attempting to load " + filename);
+				rsvc.Debug("FileResourceLoader attempting to load " + filename);
 
 				FileInfo file = new FileInfo(filename);
 
@@ -160,7 +160,7 @@ namespace NVelocity.Runtime.Resource.Loader
 			}
 			catch (Exception ex)
 			{
-				rsvc.debug("FileResourceLoader : " + ex.Message);
+				rsvc.Debug("FileResourceLoader : " + ex.Message);
 				return null;
 			}
 		}

@@ -34,9 +34,9 @@ namespace NVelocity.Runtime.Directive
 			set { macroName = value; }
 		}
 
-		public override int Type
+		public override DirectiveType Type
 		{
-			get { return DirectiveConstants_Fields.LINE; }
+			get { return DirectiveType.LINE; }
 
 		}
 
@@ -112,7 +112,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		/// <summary>   Renders the macro using the context
 		/// </summary>
-		public override bool render(InternalContextAdapter context, TextWriter writer, INode node)
+		public override bool Render(InternalContextAdapter context, TextWriter writer, INode node)
 		{
 			try
 			{
@@ -125,7 +125,7 @@ namespace NVelocity.Runtime.Directive
 				{
 					if (!init_Renamed_Field)
 					{
-						nodeTree.init(context, rsvc);
+						nodeTree.Init(context, rsvc);
 						init_Renamed_Field = true;
 					}
 
@@ -150,11 +150,11 @@ namespace NVelocity.Runtime.Directive
 		    *  now render the VM
 		    */
 
-					nodeTree.render(vmc, writer);
+					nodeTree.Render(vmc, writer);
 				}
 				else
 				{
-					rsvc.error("VM error : " + macroName + ". Null AST");
+					rsvc.Error("VM error : " + macroName + ". Null AST");
 				}
 			}
 			catch (Exception e)
@@ -168,7 +168,7 @@ namespace NVelocity.Runtime.Directive
 					throw (MethodInvocationException) e;
 				}
 
-				rsvc.error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + StringUtils.stackTrace(e));
+				rsvc.Error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + StringUtils.stackTrace(e));
 			}
 
 			return true;
@@ -178,9 +178,9 @@ namespace NVelocity.Runtime.Directive
 		/// macro body, renders the macro into an AST, and then inits the AST, so it is ready
 		/// for quick rendering.  Note that this is only AST dependant stuff. Not context.
 		/// </summary>
-		public override void init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public override void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
 		{
-			base.init(rs, context, node);
+			base.Init(rs, context, node);
 
 			/*
 	    *  how many args did we get?
@@ -194,7 +194,7 @@ namespace NVelocity.Runtime.Directive
 
 			if (NumArgs != i)
 			{
-				rsvc.error("VM #" + macroName + ": error : too " + ((NumArgs > i) ? "few" : "many") + " arguments to macro. Wanted " + NumArgs + " got " + i);
+				rsvc.Error("VM #" + macroName + ": error : too " + ((NumArgs > i) ? "few" : "many") + " arguments to macro. Wanted " + NumArgs + " got " + i);
 
 				return;
 			}
@@ -238,7 +238,7 @@ namespace NVelocity.Runtime.Directive
 		*  now parse the macro - and don't dump the namespace
 		*/
 
-				nodeTree = rsvc.parse(br, namespace_Renamed, false);
+				nodeTree = rsvc.Parse(br, namespace_Renamed, false);
 
 				/*
 		*  now, to make null references render as proper schmoo
@@ -274,7 +274,7 @@ namespace NVelocity.Runtime.Directive
 			}
 			catch (Exception e)
 			{
-				rsvc.error("VelocimacroManager.parseTree() : exception " + macroName + " : " + StringUtils.stackTrace(e));
+				rsvc.Error("VelocimacroManager.parseTree() : exception " + macroName + " : " + StringUtils.stackTrace(e));
 			}
 		}
 
@@ -320,7 +320,7 @@ namespace NVelocity.Runtime.Directive
 
 				if (false && node.jjtGetChild(i).Type == ParserTreeConstants.JJTSTRINGLITERAL)
 				{
-					args[i] += node.jjtGetChild(i).FirstToken.image.Substring(1, (node.jjtGetChild(i).FirstToken.image.Length - 1) - (1));
+					args[i] += node.jjtGetChild(i).FirstToken.Image.Substring(1, (node.jjtGetChild(i).FirstToken.Image.Length - 1) - (1));
 				}
 				else
 				{
@@ -332,14 +332,14 @@ namespace NVelocity.Runtime.Directive
 
 					while (t != tLast)
 					{
-						args[i] += t.image;
-						t = t.next;
+						args[i] += t.Image;
+						t = t.Next;
 					}
 
 					/*
 		    *  don't forget the last one... :)
 		    */
-					args[i] += t.image;
+					args[i] += t.Image;
 				}
 				i++;
 			}

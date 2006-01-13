@@ -22,62 +22,62 @@ namespace NVelocity.Test.Commons
 			AssertAddedFirst(map, "Four", 4);
 			AssertAddedFirst(map, "Five", 5);
 			AssertAddedFirst(map, "Six", 6);
-			Assertion.Assert(!map.Contains("One"));
+			Assert.IsTrue(!map.Contains("One"));
 			AssertAddedFirst(map, "Seven", 7);
-			Assertion.Assert(!map.Contains("Two"));
+			Assert.IsTrue(!map.Contains("Two"));
 			AssertAddedFirst(map, "Eight", 8);
-			Assertion.Assert(!map.Contains("Three"));
+			Assert.IsTrue(!map.Contains("Three"));
 			AssertAddedFirst(map, "Nine", 9);
-			Assertion.Assert(!map.Contains("Four"));
+			Assert.IsTrue(!map.Contains("Four"));
 			AssertAddedFirst(map, "Ten", 10);
-			Assertion.Assert(!map.Contains("Five"));
+			Assert.IsTrue(!map.Contains("Five"));
 
 			map.Remove("Eight");
-			Assertion.AssertEquals(4, map.Count);
+			Assert.AreEqual(4, map.Count);
 			map.Add("One", 1);
-			Assertion.AssertEquals(5, map.Count);
-			Assertion.Assert(map.Contains("One"));
-			Assertion.Assert(map.Contains("Six"));
-			Assertion.Assert(map.Contains("Seven"));
-			Assertion.Assert(map.Contains("Nine"));
-			Assertion.Assert(map.Contains("Ten"));
-			Assertion.AssertEquals("Six", ((ArrayList) map.Keys)[map.Count - 1]);
-			Assertion.AssertEquals("One", ((ArrayList) map.Keys)[0]);
+			Assert.AreEqual(5, map.Count);
+			Assert.IsTrue(map.Contains("One"));
+			Assert.IsTrue(map.Contains("Six"));
+			Assert.IsTrue(map.Contains("Seven"));
+			Assert.IsTrue(map.Contains("Nine"));
+			Assert.IsTrue(map.Contains("Ten"));
+			Assert.AreEqual("Six", ((ArrayList) map.Keys)[map.Count - 1]);
+			Assert.AreEqual("One", ((ArrayList) map.Keys)[0]);
 
 			AssertGetIsMostRecent(map, "Six", 6);
 			AssertGetIsMostRecent(map, "Nine", 9);
 			AssertGetIsMostRecent(map, "Seven", 7);
 			AssertGetIsMostRecent(map, "Ten", 10);
 			AssertGetIsMostRecent(map, "One", 1);
-			Assertion.AssertEquals("Six", ((ArrayList) map.Keys)[map.Count - 1]);
+			Assert.AreEqual("Six", ((ArrayList) map.Keys)[map.Count - 1]);
 
 			AssertSetIsMostRecent(map, "One", "Uno");
 			AssertSetIsMostRecent(map, "Two", "Dos");
-			Assertion.AssertEquals(5, map.Count);
+			Assert.AreEqual(5, map.Count);
 		}
 
 		private void AssertAddedFirst(LRUMap map, Object key, Object value)
 		{
 			map.Add(key, value);
-			Assertion.AssertEquals(key, ((ArrayList) map.Keys)[0]);
-			Assertion.AssertEquals(value, ((ArrayList) map.Values)[0]);
-			Assertion.Assert(map.Count <= map.MaxSize);
+			Assert.AreEqual(key, ((ArrayList) map.Keys)[0]);
+			Assert.AreEqual(value, ((ArrayList) map.Values)[0]);
+			Assert.IsTrue(map.Count <= map.MaxSize);
 		}
 
 		private void AssertSetIsMostRecent(LRUMap map, Object key, Object value)
 		{
 			map[key] = value;
-			Assertion.AssertEquals(key, ((ArrayList) map.Keys)[0]);
-			Assertion.AssertEquals(value, ((ArrayList) map.Values)[0]);
-			Assertion.Assert(map.Count <= map.MaxSize);
+			Assert.AreEqual(key, ((ArrayList) map.Keys)[0]);
+			Assert.AreEqual(value, ((ArrayList) map.Values)[0]);
+			Assert.IsTrue(map.Count <= map.MaxSize);
 		}
 
 		private void AssertGetIsMostRecent(LRUMap map, Object key, Object value)
 		{
 			Object o = map[key];
-			Assertion.AssertEquals(value, o);
-			Assertion.AssertEquals(key, ((ArrayList) map.Keys)[0]);
-			Assertion.AssertEquals(value, ((ArrayList) map.Values)[0]);
+			Assert.AreEqual(value, o);
+			Assert.AreEqual(key, ((ArrayList) map.Keys)[0]);
+			Assert.AreEqual(value, ((ArrayList) map.Values)[0]);
 		}
 
 	}

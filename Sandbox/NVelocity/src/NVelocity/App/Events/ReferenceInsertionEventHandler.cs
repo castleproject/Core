@@ -1,6 +1,7 @@
 namespace NVelocity.App.Events
 {
 	using System;
+	using System.Collections;
 	/*
     * The Apache Software License, Version 1.1
     *
@@ -55,32 +56,45 @@ namespace NVelocity.App.Events
     * <http://www.apache.org/>.
     */
 
-	/// <summary>  Reference 'Stream insertion' event handler.  Called with object
-	/// that will be inserted into stream via value.toString().
-	/// *
-	/// Please return an Object that will toString() nicely :)
-	/// *
-	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ReferenceInsertionEventHandler.cs,v 1.3 2003/10/27 13:54:07 corts Exp $
-	///
-	/// </version>
-	public interface ReferenceInsertionEventHandler : EventHandler
+	public class ReferenceInsertionEventArgs : EventArgs
 	{
-		/// <summary> A call-back which is executed during Velocity merge before a
-		/// reference value is inserted into the output stream.
-		/// *
-		/// </summary>
-		/// <param name="reference">Reference from template about to be inserted.
-		/// </param>
-		/// <param name="value">Value about to be inserted (after its
-		/// <code>toString()</code> method is called).
-		/// </param>
-		/// <returns>Object on which <code>toString()</code> should be
-		/// called for output.
-		///
-		/// </returns>
-		Object referenceInsert(String reference, Object value_);
+		Stack referenceStack;
+		Object originalValue, newValue;
+		String rootString;
+
+		public ReferenceInsertionEventArgs(Stack referenceStack, String rootString, Object value)
+		{
+			this.rootString = rootString;
+			this.referenceStack = referenceStack;
+			this.originalValue = this.newValue = value;
+		}
+		
+		public Stack GetCopyOfReferenceStack()
+		{
+			return (Stack) referenceStack.Clone();
+		}
+
+		public String RootString
+		{
+			get { return rootString; }
+		}
+
+		public Object OriginalValue
+		{
+			get { return originalValue; }
+		}
+
+		public Object NewValue
+		{
+			get { return newValue; }
+			set { newValue = value; }
+		}
 	}
+	
+	/// <summary>
+	/// Reference 'Stream insertion' event handler.  Called with object
+	/// that will be inserted into stream via value.toString().
+	/// Make sure you return an Object that will toString() without throwing an exception.
+	/// </summary>
+	public delegate void ReferenceInsertionEventHandler(Object sender, ReferenceInsertionEventArgs e);
 }

@@ -77,54 +77,56 @@ namespace NVelocity.Runtime.Parser.Node
 
 		int Column { get; }
 
-		/// <summary>  This method is called after the node has been made the current
-		/// node.  It indicates that child nodes can now be added to it.
+		/// <summary>
+		/// This method is called after the node has been made the current
+		/// node. It indicates that child nodes can now be added to it.
 		/// </summary>
 		void jjtOpen();
 
-		///
-		/// <summary>  This method is called after all the child nodes have been
-		/// added.
+		/// <summary>
+		/// This method is called after all the child nodes have been added.
 		/// </summary>
 		void jjtClose();
 
-		///
-		/// <summary>  This pair of methods are used to inform the node of its
-		/// parent.
+		/// <summary>
+		/// This pair of methods are used to inform the node of its parent.
 		/// </summary>
 		void jjtSetParent(INode n);
 
 		INode jjtGetParent();
 
-		///
-		/// <summary>  This method tells the node to add its argument to the node's
+		/// <summary>
+		/// This method tells the node to add its argument to the node's
 		/// list of children.
 		/// </summary>
 		void jjtAddChild(INode n, int i);
 
-		///
-		/// <summary>  This method returns a child node.  The children are numbered
+		/// <summary>
+		/// This method returns a child node.  The children are numbered
 		/// from zero, left to right.
 		/// </summary>
 		INode jjtGetChild(int i);
 
-		/// <summary>Return the number of children the node has.
+		/// <summary>
+		/// Return the number of children the node has.
 		/// </summary>
 		int jjtGetNumChildren();
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		Object jjtAccept(ParserVisitor visitor, Object data);
 
-		Object childrenAccept(ParserVisitor visitor, Object data);
-		// added
-		Object init(InternalContextAdapter context, Object data);
-		bool evaluate(InternalContextAdapter context);
+		Object ChildrenAccept(ParserVisitor visitor, Object data);
+
+		Object Init(InternalContextAdapter context, Object data);
+		bool Evaluate(InternalContextAdapter context);
 		Object Value(InternalContextAdapter context);
-		bool render(InternalContextAdapter context, TextWriter writer);
-		Object execute(Object o, InternalContextAdapter context);
-		String literal();
-		void setInvalid();
-		bool isInvalid();
+		bool Render(InternalContextAdapter context, TextWriter writer);
+		Object Execute(Object o, InternalContextAdapter context);
+		string Literal { get; }
+
+		void SetInvalid();
+		bool IsInvalid();
 	}
 }

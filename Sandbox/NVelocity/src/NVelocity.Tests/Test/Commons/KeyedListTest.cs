@@ -33,9 +33,9 @@ namespace NVelocity.Test.Commons
 			k.RemoveAt(0);
 			AssertCollectionsAreInSync(k);
 			k.Add("last", 11);
-			Assertion.AssertEquals(11, k[k.Count - 1]);
+			Assert.AreEqual(11, k[k.Count - 1]);
 			k.Remove("last");
-			Assertion.AssertEquals(10, k[k.Count - 1]);
+			Assert.AreEqual(10, k[k.Count - 1]);
 			k.Insert(0, "One", 1);
 			AssertCollectionsAreInSync(k);
 			k.Insert(6, "Seven", 7);
@@ -44,7 +44,7 @@ namespace NVelocity.Test.Commons
 			Int32 i = 1;
 			foreach (DictionaryEntry entry in k)
 			{
-				Assertion.AssertEquals(i, entry.Value);
+				Assert.AreEqual(i, entry.Value);
 				i++;
 			}
 		}
@@ -56,8 +56,8 @@ namespace NVelocity.Test.Commons
 			{
 				Object value = k[i];
 				Object key = ((ArrayList) k.Keys)[i];
-				Assertion.AssertEquals(entry.Key, key);
-				Assertion.AssertEquals(entry.Value, value);
+				Assert.AreEqual(entry.Key, key);
+				Assert.AreEqual(entry.Value, value);
 				i++;
 			}
 		}

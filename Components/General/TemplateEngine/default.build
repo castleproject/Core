@@ -23,7 +23,16 @@
 	<property name="version" value="beta-2" />
 
 	<target name="clean">
-		<delete dir="${bin.dir}" failonerror="false" />
+		<delete>
+			<fileset>
+				<include name="${bin.dir}/*.dll" />
+				<include name="${bin.dir}/*.pdb" />
+				<include name="${bin.dir}/*.xml" />
+				<include name="${bin.dir}/*.exe" />
+				<include name="${bin.dir}/*.config" />
+			</fileset>
+		</delete>
+		<delete dir="${bin.dir}" failonerror="false" includeemptydirs="true" />
 		<mkdir dir="${bin.dir}" />
 	</target>
 	

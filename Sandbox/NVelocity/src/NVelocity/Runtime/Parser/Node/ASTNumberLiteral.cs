@@ -73,21 +73,21 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>  Initialization method - doesn't do much but do the object
 		/// creation.  We only need to do it once.
 		/// </summary>
-		public override Object init(InternalContextAdapter context, Object data)
+		public override Object Init(InternalContextAdapter context, Object data)
 		{
 			/*
 	    *  init the tree correctly
 	    */
 
-			base.init(context, data);
+			base.Init(context, data);
 
-			value__Field = Int32.Parse(FirstToken.image);
+			value__Field = Int32.Parse(FirstToken.Image);
 
 			return data;
 		}

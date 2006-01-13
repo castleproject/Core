@@ -50,6 +50,6 @@ namespace NVelocity.Util.Introspection
 		/// <summary>  invocation method - called when the method invocationshould be
 		/// preformed and a value returned
 		/// </summary>
-		Object invoke(Object o, Object[] params_Renamed);
+		Object Invoke(Object o, Object[] params_Renamed);
 	}
 }

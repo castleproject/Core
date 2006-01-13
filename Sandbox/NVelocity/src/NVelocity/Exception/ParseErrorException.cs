@@ -37,7 +37,11 @@ namespace NVelocity.Exception
 		{
 		}
 
-		public ParseErrorException(SerializationInfo info, StreamingContext context) : base(info, context)
+		public ParseErrorException(String exceptionMessage, Exception innerException) : base(exceptionMessage, innerException)
+		{
+		}
+
+		protected ParseErrorException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 	}

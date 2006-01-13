@@ -27,12 +27,12 @@ namespace NVelocity.Runtime.Directive
 		{
 		}
 
-		public override void init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public override void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
 		{
-			base.init(rs, context, node);
+			base.Init(rs, context, node);
 		}
 
-		public override bool render(InternalContextAdapter context, TextWriter writer, INode node)
+		public override bool Render(InternalContextAdapter context, TextWriter writer, INode node)
 		{
 
 			return true;
@@ -44,9 +44,9 @@ namespace NVelocity.Runtime.Directive
 			set {  }
 		}
 
-		public override int Type
+		public override DirectiveType Type
 		{
-			get { return DirectiveConstants_Fields.LINE; }
+			get { return DirectiveType.LINE; }
 		}
 	}
 }

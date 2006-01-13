@@ -17,7 +17,7 @@ using Template = NVelocity.Template;
 using Resource = NVelocity.Runtime.Resource.Resource;
 using Directive = NVelocity.Runtime.Directive.Directive;
 using SimpleNode = NVelocity.Runtime.Parser.Node.SimpleNode;
-using RuntimeConstants_Fields = NVelocity.Runtime.RuntimeConstants_Fields;
+using RuntimeConstants = NVelocity.Runtime.RuntimeConstants;
 using RuntimeServices = NVelocity.Runtime.RuntimeServices;
 using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
 using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
@@ -47,9 +47,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			this.viewComponentFactory = viewComponentFactory;
 		}
 
-		public override void init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public override void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
 		{
-			base.init(rs, context, node);
+			base.Init(rs, context, node);
 
 			INode compNameNode = node.jjtGetChild(0);
 
@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				throw new RailsException(message);
 			}
 
-			componentName = compNameNode.FirstToken.image;
+			componentName = compNameNode.FirstToken.Image;
 
 			if (componentName == null)
 			{
@@ -70,7 +70,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			component = viewComponentFactory.Create( componentName );
 		}
 
-		public override bool render(InternalContextAdapter context, TextWriter writer, INode node)
+		public override bool Render(InternalContextAdapter context, TextWriter writer, INode node)
 		{
 			INode bodyNode = null;
 
@@ -122,7 +122,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 					{
 						INode withNode = node.jjtGetChild(1);
 
-						String withName = withNode.FirstToken.image;
+						String withName = withNode.FirstToken.Image;
 
 						if (!"with".Equals(withName))
 						{
@@ -191,7 +191,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			try
 			{
 				context.PushCurrentTemplateName(viewToRender);
-				((SimpleNode) template.Data).render(context, writer);
+				((SimpleNode) template.Data).Render(context, writer);
 			}
 			catch (Exception e)
 			{
@@ -214,7 +214,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			try
 			{
-				return rsvc.getTemplate(viewToRender, encoding);
+				return rsvc.GetTemplate(viewToRender, encoding);
 			}
 			catch (Exception)
 			{
@@ -234,7 +234,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			}
 			else
 			{
-				encoding = (String) rsvc.getProperty(RuntimeConstants_Fields.INPUT_ENCODING);
+				encoding = (String) rsvc.GetProperty(RuntimeConstants.INPUT_ENCODING);
 			}
 			return encoding;
 		}
@@ -243,7 +243,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 		{
 			Object[] templateStack = context.TemplateNameStack;
 	
-			if (templateStack.Length >= rsvc.getInt(RuntimeConstants_Fields.PARSE_DIRECTIVE_MAXDEPTH, 20))
+			if (templateStack.Length >= rsvc.GetInt(RuntimeConstants.PARSE_DIRECTIVE_MAXDEPTH, 20))
 			{
 				StringBuilder path = new StringBuilder();
 

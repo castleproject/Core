@@ -22,8 +22,8 @@ namespace NVelocity.Test
 		{
 			try
 			{
-				Velocity.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, TemplateTestBase_Fields.FILE_RESOURCE_LOADER_PATH);
-				Velocity.SetProperty(RuntimeConstants_Fields.INPUT_ENCODING, "UTF-8");
+				Velocity.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
+				Velocity.SetProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
 				Velocity.Init();
 			}
 			catch (Exception e)
@@ -41,7 +41,7 @@ namespace NVelocity.Test
 		{
 			VelocityContext context = new VelocityContext();
 
-			assureResultsDirectoryExists(TemplateTestBase_Fields.RESULT_DIR);
+			AssureResultsDirectoryExists(TemplateTest.RESULT_DIR);
 
 			/*
 	    *  get the template and the output
@@ -51,9 +51,9 @@ namespace NVelocity.Test
 	    *  Chinese and spanish
 	    */
 
-			Template template = Velocity.GetTemplate(getFileName(null, "encodingtest", TemplateTestBase_Fields.TMPL_FILE_EXT), "UTF-8");
+			Template template = Velocity.GetTemplate(GetFileName(null, "encodingtest", TemplateTest.TMPL_FILE_EXT), "UTF-8");
 
-			FileStream fos = new FileStream(getFileName(TemplateTestBase_Fields.RESULT_DIR, "encodingtest", TemplateTestBase_Fields.RESULT_FILE_EXT), FileMode.Create);
+			FileStream fos = new FileStream(GetFileName(TemplateTest.RESULT_DIR, "encodingtest", TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 
 			StreamWriter writer = new StreamWriter(fos);
 
@@ -61,18 +61,18 @@ namespace NVelocity.Test
 			writer.Flush();
 			writer.Close();
 
-			if (!isMatch(TemplateTestBase_Fields.RESULT_DIR, TemplateTestBase_Fields.COMPARE_DIR, "encodingtest", TemplateTestBase_Fields.RESULT_FILE_EXT, TemplateTestBase_Fields.CMP_FILE_EXT))
+			if (!IsMatch(TemplateTest.RESULT_DIR, TemplateTest.COMPARE_DIR, "encodingtest", TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
 			{
-				Assertion.Fail("Output 1 incorrect.");
+				Assert.Fail("Output 1 incorrect.");
 			}
 
 			/*
 	    *  a 'high-byte' chinese example from Michael Zhou
 	    */
 
-			template = Velocity.GetTemplate(getFileName(null, "encodingtest2", TemplateTestBase_Fields.TMPL_FILE_EXT), "UTF-8");
+			template = Velocity.GetTemplate(GetFileName(null, "encodingtest2", TemplateTest.TMPL_FILE_EXT), "UTF-8");
 
-			fos = new FileStream(getFileName(TemplateTestBase_Fields.RESULT_DIR, "encodingtest2", TemplateTestBase_Fields.RESULT_FILE_EXT), FileMode.Create);
+			fos = new FileStream(GetFileName(TemplateTest.RESULT_DIR, "encodingtest2", TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 
 			writer = new StreamWriter(fos);
 
@@ -80,18 +80,18 @@ namespace NVelocity.Test
 			writer.Flush();
 			writer.Close();
 
-			if (!isMatch(TemplateTestBase_Fields.RESULT_DIR, TemplateTestBase_Fields.COMPARE_DIR, "encodingtest2", TemplateTestBase_Fields.RESULT_FILE_EXT, TemplateTestBase_Fields.CMP_FILE_EXT))
+			if (!IsMatch(TemplateTest.RESULT_DIR, TemplateTest.COMPARE_DIR, "encodingtest2", TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
 			{
-				Assertion.Fail("Output 2 incorrect.");
+				Assert.Fail("Output 2 incorrect.");
 			}
 
 			/*
 	    *  a 'high-byte' chinese from Ilkka
 	    */
 
-			template = Velocity.GetTemplate(getFileName(null, "encodingtest3", TemplateTestBase_Fields.TMPL_FILE_EXT), "GB18030"); //GBK=936?
+			template = Velocity.GetTemplate(GetFileName(null, "encodingtest3", TemplateTest.TMPL_FILE_EXT), "GB18030"); //GBK=936?
 
-			fos = new FileStream(getFileName(TemplateTestBase_Fields.RESULT_DIR, "encodingtest3", TemplateTestBase_Fields.RESULT_FILE_EXT), FileMode.Create);
+			fos = new FileStream(GetFileName(TemplateTest.RESULT_DIR, "encodingtest3", TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 
 			writer = new StreamWriter(fos, Encoding.GetEncoding("GB18030"));
 
@@ -99,26 +99,26 @@ namespace NVelocity.Test
 			writer.Flush();
 			writer.Close();
 
-			if (!isMatch(TemplateTestBase_Fields.RESULT_DIR, TemplateTestBase_Fields.COMPARE_DIR, "encodingtest3", TemplateTestBase_Fields.RESULT_FILE_EXT, TemplateTestBase_Fields.CMP_FILE_EXT))
+			if (!IsMatch(TemplateTest.RESULT_DIR, TemplateTest.COMPARE_DIR, "encodingtest3", TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
 			{
-				Assertion.Fail("Output 3 incorrect.");
+				Assert.Fail("Output 3 incorrect.");
 			}
 
 			/*
 	    *  Russian example from Vitaly Repetenko
 	    */
 
-			template = Velocity.GetTemplate(getFileName(null, "encodingtest_KOI8-R", TemplateTestBase_Fields.TMPL_FILE_EXT), "KOI8-R");
-			fos = new FileStream(getFileName(TemplateTestBase_Fields.RESULT_DIR, "encodingtest_KOI8-R", TemplateTestBase_Fields.RESULT_FILE_EXT), FileMode.Create);
+			template = Velocity.GetTemplate(GetFileName(null, "encodingtest_KOI8-R", TemplateTest.TMPL_FILE_EXT), "KOI8-R");
+			fos = new FileStream(GetFileName(TemplateTest.RESULT_DIR, "encodingtest_KOI8-R", TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 			writer = new StreamWriter(fos, Encoding.GetEncoding("KOI8-R"));
 
 			template.Merge(context, writer);
 			writer.Flush();
 			writer.Close();
 
-			if (!isMatch(TemplateTestBase_Fields.RESULT_DIR, TemplateTestBase_Fields.COMPARE_DIR, "encodingtest_KOI8-R", TemplateTestBase_Fields.RESULT_FILE_EXT, TemplateTestBase_Fields.CMP_FILE_EXT))
+			if (!IsMatch(TemplateTest.RESULT_DIR, TemplateTest.COMPARE_DIR, "encodingtest_KOI8-R", TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
 			{
-				Assertion.Fail("Output 4 incorrect.");
+				Assert.Fail("Output 4 incorrect.");
 			}
 
 
@@ -126,17 +126,17 @@ namespace NVelocity.Test
 	    *  ISO-8859-1 example from Mike Bridge
 	    */
 
-			template = Velocity.GetTemplate(getFileName(null, "encodingtest_ISO-8859-1", TemplateTestBase_Fields.TMPL_FILE_EXT), "ISO-8859-1");
-			fos = new FileStream(getFileName(TemplateTestBase_Fields.RESULT_DIR, "encodingtest_ISO-8859-1", TemplateTestBase_Fields.RESULT_FILE_EXT), FileMode.Create);
+			template = Velocity.GetTemplate(GetFileName(null, "encodingtest_ISO-8859-1", TemplateTest.TMPL_FILE_EXT), "ISO-8859-1");
+			fos = new FileStream(GetFileName(TemplateTest.RESULT_DIR, "encodingtest_ISO-8859-1", TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 			writer = new StreamWriter(fos, Encoding.GetEncoding("ISO-8859-1"));
 
 			template.Merge(context, writer);
 			writer.Flush();
 			writer.Close();
 
-			if (!isMatch(TemplateTestBase_Fields.RESULT_DIR, TemplateTestBase_Fields.COMPARE_DIR, "encodingtest_ISO-8859-1", TemplateTestBase_Fields.RESULT_FILE_EXT, TemplateTestBase_Fields.CMP_FILE_EXT))
+			if (!IsMatch(TemplateTest.RESULT_DIR, TemplateTest.COMPARE_DIR, "encodingtest_ISO-8859-1", TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
 			{
-				Assertion.Fail("Output 5 incorrect.");
+				Assert.Fail("Output 5 incorrect.");
 			}
 		}
 	}

@@ -96,16 +96,16 @@ namespace Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine
 
 			if (assemblyName != null)
 			{
-				props.SetProperty(RuntimeConstants_Fields.RESOURCE_LOADER, "assembly");
+				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "assembly");
 				props.SetProperty("assembly.resource.loader.class", "NVelocity.Runtime.Resource.Loader.AssemblyResourceLoader;NVelocity");
 				props.SetProperty("assembly.resource.loader.cache", EnableCache.ToString().ToLower() );
 				props.SetProperty("assembly.resource.loader.assembly", assemblyName);
 			}
 			else
 			{
-				props.SetProperty(RuntimeConstants_Fields.RESOURCE_LOADER, "file");
-				props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, templateDir);
-				props.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_CACHE, EnableCache.ToString().ToLower() );
+				props.SetProperty(RuntimeConstants.RESOURCE_LOADER, "file");
+				props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, templateDir);
+				props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, EnableCache.ToString().ToLower() );
 			}
 
 			vengine.Init(props);

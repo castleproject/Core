@@ -56,7 +56,7 @@ namespace NVelocity.Runtime
 	/// </pre>
 	/// *
 	/// </summary>
-	public class RuntimeInstance : RuntimeConstants, RuntimeServices
+	public class RuntimeInstance : RuntimeServices
 	{
 		private DefaultTraceListener debugOutput = new DefaultTraceListener();
 
@@ -169,49 +169,49 @@ namespace NVelocity.Runtime
 		{
 			InitBlock();
 			/*
-	    *  create a VM factory, resource manager
-	    *  and introspector
-	    */
+			*  create a VM factory, resource manager
+			*  and introspector
+			*/
 
 			vmFactory = new VelocimacroFactory(this);
 
 			/*
-	    *  make a new introspector and initialize it
-	    */
+			*  make a new introspector and initialize it
+			*/
 
 			introspector = new Introspector(this);
 
 			/*
-	    * and a store for the application attributes
-	    */
+			* and a store for the application attributes
+			*/
 
 			applicationAttributes = new Hashtable();
 		}
 
 		/*
-	* This is the primary initialization method in the Velocity
-	* Runtime. The systems that are setup/initialized here are
-	* as follows:
-	*
-	* <ul>
-	*   <li>Logging System</li>
-	*   <li>ResourceManager</li>
-	*   <li>Parser Pool</li>
-	*   <li>Global Cache</li>
-	*   <li>Static Content Include System</li>
-	*   <li>Velocimacro System</li>
-	* </ul>
-	*/
+		* This is the primary initialization method in the Velocity
+		* Runtime. The systems that are setup/initialized here are
+		* as follows:
+		*
+		* <ul>
+		*   <li>Logging System</li>
+		*   <li>ResourceManager</li>
+		*   <li>Parser Pool</li>
+		*   <li>Global Cache</li>
+		*   <li>Static Content Include System</li>
+		*   <li>Velocimacro System</li>
+		* </ul>
+		*/
 
-		public void init()
+		public void Init()
 		{
 			lock (this)
 			{
 				if (initialized == false)
 				{
-					info("************************************************************** ");
-					info("Starting " + Assembly.GetExecutingAssembly().GetName());
-					info("RuntimeInstance initializing.");
+					Info("************************************************************** ");
+					Info("Starting " + Assembly.GetExecutingAssembly().GetName());
+					Info("RuntimeInstance initializing.");
 					initializeProperties();
 					initializeLogger();
 					initializeResourceManager();
@@ -220,12 +220,12 @@ namespace NVelocity.Runtime
 					initializeIntrospection();
 
 					/*
-		    *  initialize the VM Factory.  It will use the properties 
-		    * accessable from Runtime, so keep this here at the end.
-		    */
+					*  initialize the VM Factory.  It will use the properties 
+					* accessable from Runtime, so keep this here at the end.
+					*/
 					vmFactory.initVelocimacro();
 
-					info("NVelocity successfully started.");
+					Info("NVelocity successfully started.");
 
 					initialized = true;
 				}
@@ -237,7 +237,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		private void initializeIntrospection()
 		{
-			String rm = getString(RuntimeConstants_Fields.UBERSPECT_CLASSNAME);
+			String rm = GetString(RuntimeConstants.UBERSPECT_CLASSNAME);
 
 			if (rm != null && rm.Length > 0)
 			{
@@ -252,7 +252,7 @@ namespace NVelocity.Runtime
 				catch (System.Exception)
 				{
 					String err = "The specified class for Uberspect (" + rm + ") does not exist (or is not accessible to the current classlaoder.";
-					error(err);
+					Error(err);
 					throw new System.Exception(err);
 				}
 
@@ -260,7 +260,7 @@ namespace NVelocity.Runtime
 				{
 					String err = "The specified class for Uberspect (" + rm + ") does not implement org.apache.velocity.util.introspector.Uberspect." + " Velocity not initialized correctly.";
 
-					error(err);
+					Error(err);
 					throw new System.Exception(err);
 				}
 
@@ -276,12 +276,12 @@ namespace NVelocity.Runtime
 			else
 			{
 				/*
-		*  someone screwed up.  Lets not fool around...
-		*/
+				*  someone screwed up.  Lets not fool around...
+				*/
 
 				String err = "It appears that no class was specified as the" + " Uberspect.  Please ensure that all configuration" + " information is correct.";
 
-				error(err);
+				Error(err);
 				throw new System.Exception(err);
 			}
 		}
@@ -295,7 +295,7 @@ namespace NVelocity.Runtime
 			try
 			{
 				// TODO: this was modified in v1.4 to use the classloader
-				configuration.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants_Fields.DEFAULT_RUNTIME_PROPERTIES));
+				configuration.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants.DEFAULT_RUNTIME_PROPERTIES));
 			}
 			catch (System.Exception ex)
 			{
@@ -313,7 +313,7 @@ namespace NVelocity.Runtime
 		/// <param name="String">property value
 		///
 		/// </param>
-		public void setProperty(String key, Object value_)
+		public void SetProperty(String key, Object value_)
 		{
 			if (overridingProperties == null)
 			{
@@ -355,7 +355,7 @@ namespace NVelocity.Runtime
 		/// <param name="String">value
 		///
 		/// </param>
-		public void addProperty(String key, Object value_)
+		public void AddProperty(String key, Object value_)
 		{
 			if (overridingProperties == null)
 			{
@@ -372,7 +372,7 @@ namespace NVelocity.Runtime
 		/// <param name="String">key of property to clear
 		///
 		/// </param>
-		public void clearProperty(String key)
+		public void ClearProperty(String key)
 		{
 			if (overridingProperties != null)
 			{
@@ -388,7 +388,7 @@ namespace NVelocity.Runtime
 		/// <param name="key">property to return
 		///
 		/// </param>
-		public Object getProperty(String key)
+		public Object GetProperty(String key)
 		{
 			return configuration.GetProperty(key);
 		}
@@ -424,10 +424,10 @@ namespace NVelocity.Runtime
 		/// <param name="">Properties
 		///
 		/// </param>
-		public void init(ExtendedProperties p)
+		public void Init(ExtendedProperties p)
 		{
 			overridingProperties = ExtendedProperties.ConvertProperties(p);
-			init();
+			Init();
 		}
 
 		/// <summary> Initialize the Velocity Runtime with the name of
@@ -437,10 +437,10 @@ namespace NVelocity.Runtime
 		/// <param name="">Properties
 		///
 		/// </param>
-		public void init(String configurationFile)
+		public void Init(String configurationFile)
 		{
 			overridingProperties = new ExtendedProperties(configurationFile);
-			init();
+			Init();
 		}
 
 		private void initializeResourceManager()
@@ -449,7 +449,7 @@ namespace NVelocity.Runtime
 			 * Which resource manager?
 			 */
 
-			String rm = getString(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS);
+			String rm = GetString(RuntimeConstants.RESOURCE_MANAGER_CLASS);
 
 			if (rm != null && rm.Length > 0)
 			{
@@ -469,14 +469,14 @@ namespace NVelocity.Runtime
 				catch (System.Exception)
 				{
 					String err = "The specified class for Resourcemanager (" + rm + ") does not exist.";
-					error(err);
+					Error(err);
 					throw new System.Exception(err);
 				}
 
 				if (!(o is ResourceManager))
 				{
 					String err = "The specified class for ResourceManager (" + rm + ") does not implement ResourceManager." + " Velocity not initialized correctly.";
-					error(err);
+					Error(err);
 					throw new System.Exception(err);
 				}
 
@@ -491,7 +491,7 @@ namespace NVelocity.Runtime
 				 */
 
 				String err = "It appears that no class was specified as the" + " ResourceManager.  Please ensure that all configuration" + " information is correct.";
-				error(err);
+				Error(err);
 				throw new System.Exception(err);
 			}
 		}
@@ -556,7 +556,7 @@ namespace NVelocity.Runtime
 
 			try
 			{
-				directiveProperties.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants_Fields.DEFAULT_RUNTIME_DIRECTIVES));
+				directiveProperties.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(RuntimeConstants.DEFAULT_RUNTIME_DIRECTIVES));
 			}
 			catch (System.Exception ex)
 			{
@@ -617,16 +617,16 @@ namespace NVelocity.Runtime
 		/// </summary>
 		private void initializeParserPool()
 		{
-			int numParsers = getInt(RuntimeConstants_Fields.PARSER_POOL_SIZE, RuntimeConstants_Fields.NUMBER_OF_PARSERS);
+			int numParsers = GetInt(RuntimeConstants.PARSER_POOL_SIZE, RuntimeConstants.NUMBER_OF_PARSERS);
 
 			parserPool = new SimplePool(numParsers);
 
 			for (int i = 0; i < numParsers; i++)
 			{
-				parserPool.put(createNewParser());
+				parserPool.put(CreateNewParser());
 			}
 
-			info("Created: " + numParsers + " parsers.");
+			Info("Created: " + numParsers + " parsers.");
 		}
 
 		/// <summary> Returns a JavaCC generated Parser.
@@ -634,7 +634,7 @@ namespace NVelocity.Runtime
 		/// <returns>Parser javacc generated parser
 		///
 		/// </returns>
-		public Parser.Parser createNewParser()
+		public Parser.Parser CreateNewParser()
 		{
 			Parser.Parser parser = new Parser.Parser(this);
 			parser.Directives = directiveManager;
@@ -658,25 +658,25 @@ namespace NVelocity.Runtime
 		/// <param name="String">name of the template being parsed
 		///
 		/// </param>
-		public SimpleNode parse(TextReader reader, String templateName)
+		public SimpleNode Parse(TextReader reader, String templateName)
 		{
 			/*
-	    *  do it and dump the VM namespace for this template
-	    */
-			return parse(reader, templateName, true);
+			*  do it and dump the VM namespace for this template
+			*/
+			return Parse(reader, templateName, true);
 		}
 
 		/// <summary>  Parse the input and return the root of the AST node structure.
 		/// *
 		/// </summary>
-		/// <param name="InputStream">inputstream retrieved by a resource loader
+		/// <param name="reader">inputstream retrieved by a resource loader
 		/// </param>
-		/// <param name="String">name of the template being parsed
+		/// <param name="templateName">name of the template being parsed
 		/// </param>
 		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template
 		///
 		/// </param>
-		public SimpleNode parse(TextReader reader, String templateName, bool dumpNamespace)
+		public SimpleNode Parse(TextReader reader, String templateName, bool dumpNamespace)
 		{
 			SimpleNode ast = null;
 			Parser.Parser parser = (Parser.Parser) parserPool.get();
@@ -689,9 +689,9 @@ namespace NVelocity.Runtime
 				*  make one and log it.
 				*/
 
-				error("Runtime : ran out of parsers. Creating new.  " + " Please increment the parser.pool.size property." + " The current value is too small.");
+				Error("Runtime : ran out of parsers. Creating new.  " + " Please increment the parser.pool.size property." + " The current value is too small.");
 
-				parser = createNewParser();
+				parser = CreateNewParser();
 
 				if (parser != null)
 				{
@@ -700,22 +700,22 @@ namespace NVelocity.Runtime
 			}
 
 			/*
-	    *  now, if we have a parser
-	    */
+			*  now, if we have a parser
+			*/
 
 			if (parser != null)
 			{
 				try
 				{
 					/*
-		    *  dump namespace if we are told to.  Generally, you want to 
-		    *  do this - you don't in special circumstances, such as 
-		    *  when a VM is getting init()-ed & parsed
-		    */
+					*  dump namespace if we are told to.  Generally, you want to 
+					*  do this - you don't in special circumstances, such as 
+					*  when a VM is getting init()-ed & parsed
+					*/
 
 					if (dumpNamespace)
 					{
-						dumpVMNamespace(templateName);
+						DumpVMNamespace(templateName);
 					}
 
 					ast = parser.parse(reader, templateName);
@@ -733,7 +733,7 @@ namespace NVelocity.Runtime
 			}
 			else
 			{
-				error("Runtime : ran out of parsers and unable to create more.");
+				Error("Runtime : ran out of parsers and unable to create more.");
 			}
 			return ast;
 		}
@@ -754,9 +754,9 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		public Template getTemplate(String name)
+		public Template GetTemplate(String name)
 		{
-			return getTemplate(name, getString(RuntimeConstants_Fields.INPUT_ENCODING, RuntimeConstants_Fields.ENCODING_DEFAULT));
+			return GetTemplate(name, GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT));
 		}
 
 		/// <summary> Returns a <code>Template</code> from the resource manager
@@ -774,7 +774,7 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		public Template getTemplate(String name, String encoding)
+		public Template GetTemplate(String name, String encoding)
 		{
 			return (Template) resourceManager.getResource(name, ResourceManager_Fields.RESOURCE_TEMPLATE, encoding);
 		}
@@ -791,14 +791,14 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		public ContentResource getContent(String name)
+		public ContentResource GetContent(String name)
 		{
 			/*
 	    *  the encoding is irrelvant as we don't do any converstion
 	    *  the bytestream should be dumped to the output stream
 	    */
 
-			return getContent(name, getString(RuntimeConstants_Fields.INPUT_ENCODING, RuntimeConstants_Fields.ENCODING_DEFAULT));
+			return GetContent(name, GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT));
 		}
 
 		/// <summary> Returns a static content resource from the
@@ -814,7 +814,7 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		public ContentResource getContent(String name, String encoding)
+		public ContentResource GetContent(String name, String encoding)
 		{
 			return (ContentResource) resourceManager.getResource(name, ResourceManager_Fields.RESOURCE_CONTENT, encoding);
 		}
@@ -831,7 +831,7 @@ namespace NVelocity.Runtime
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		public String getLoaderNameForResource(String resourceName)
+		public String GetLoaderNameForResource(String resourceName)
 		{
 			return resourceManager.getLoaderNameForResource(resourceName);
 		}
@@ -845,7 +845,7 @@ namespace NVelocity.Runtime
 		{
 			if (configuration.IsInitialized())
 			{
-				return getBoolean(RuntimeConstants_Fields.RUNTIME_LOG_WARN_STACKTRACE, false);
+				return GetBoolean(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, false);
 			}
 			else
 			{
@@ -892,7 +892,7 @@ namespace NVelocity.Runtime
 		/// <param name="Object">message to log
 		///
 		/// </param>
-		public void warn(Object message)
+		public void Warn(Object message)
 		{
 			log(LogSystem_Fields.WARN_ID, message);
 		}
@@ -904,7 +904,7 @@ namespace NVelocity.Runtime
 		/// <param name="Object">message to log
 		///
 		/// </param>
-		public void info(Object message)
+		public void Info(Object message)
 		{
 			log(LogSystem_Fields.INFO_ID, message);
 		}
@@ -915,7 +915,7 @@ namespace NVelocity.Runtime
 		/// <param name="Object">message to log
 		///
 		/// </param>
-		public void error(Object message)
+		public void Error(Object message)
 		{
 			log(LogSystem_Fields.ERROR_ID, message);
 		}
@@ -926,7 +926,7 @@ namespace NVelocity.Runtime
 		/// <param name="Object">message to log
 		///
 		/// </param>
-		public void debug(Object message)
+		public void Debug(Object message)
 		{
 			log(LogSystem_Fields.DEBUG_ID, message);
 		}
@@ -943,7 +943,7 @@ namespace NVelocity.Runtime
 		/// <returns>String  value of key or default
 		///
 		/// </returns>
-		public String getString(String key, String defaultValue)
+		public String GetString(String key, String defaultValue)
 		{
 			return configuration.GetString(key, defaultValue);
 		}
@@ -957,7 +957,7 @@ namespace NVelocity.Runtime
 		/// <returns>String VelocimacroProxy
 		///
 		/// </returns>
-		public Directive.Directive getVelocimacro(String vmName, String templateName)
+		public Directive.Directive GetVelocimacro(String vmName, String templateName)
 		{
 			return vmFactory.getVelocimacro(vmName, templateName);
 		}
@@ -976,7 +976,7 @@ namespace NVelocity.Runtime
 		/// reason (either parameters or permission settings)
 		///
 		/// </returns>
-		public bool addVelocimacro(String name, String macro, String[] argArray, String sourceTemplate)
+		public bool AddVelocimacro(String name, String macro, String[] argArray, String sourceTemplate)
 		{
 			return vmFactory.addVelocimacro(name, macro, argArray, sourceTemplate);
 		}
@@ -989,7 +989,7 @@ namespace NVelocity.Runtime
 		/// <returns>boolean  True if VM by that name exists, false if not
 		///
 		/// </returns>
-		public bool isVelocimacro(String vmName, String templateName)
+		public bool IsVelocimacro(String vmName, String templateName)
 		{
 			return vmFactory.isVelocimacro(vmName, templateName);
 		}
@@ -997,7 +997,7 @@ namespace NVelocity.Runtime
 		/// <summary>  tells the vmFactory to dump the specified namespace.  This is to support
 		/// clearing the VM list when in inline-VM-local-scope mode
 		/// </summary>
-		public bool dumpVMNamespace(String namespace_Renamed)
+		public bool DumpVMNamespace(String namespace_Renamed)
 		{
 			return vmFactory.dumpVMNamespace(namespace_Renamed);
 		}
@@ -1021,73 +1021,64 @@ namespace NVelocity.Runtime
 		/// <returns>  value of key or null
 		///
 		/// </returns>
-		public String getString(String key)
+		public String GetString(String key)
 		{
 			return configuration.GetString(key);
 		}
 
-		/// <summary> Int property accessor method to hide the configuration implementation.
-		/// *
+		/// <summary>
+		///	Int property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="String">key property key
+		/// <param name="key">property key
 		/// </param>
-		/// <returns>int value
-		///
-		/// </returns>
-		public int getInt(String key)
+		/// <returns>value</returns>
+		public int GetInt(String key)
 		{
 			return configuration.GetInt(key);
 		}
 
-		/// <summary> Int property accessor method to hide the configuration implementation.
-		/// *
+		/// <summary>
+		/// Int property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="key"> property key
-		/// </param>
-		/// <param name="int">default value
-		/// </param>
-		/// <returns>int  value
-		///
-		/// </returns>
-		public int getInt(String key, int defaultValue)
+		/// <param name="key">property key</param>
+		/// <param name="defaultValue">default value</param>
+		/// <returns>value</returns>
+		public int GetInt(String key, int defaultValue)
 		{
 			return configuration.GetInt(key, defaultValue);
 		}
 
-		/// <summary> Boolean property accessor method to hide the configuration implementation.
-		///
+		/// <summary>
+		/// Boolean property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="String">key  property key
-		/// </param>
-		/// <param name="boolean">default default value if property not found
-		/// </param>
-		/// <returns>boolean  value of key or default value
-		///
-		/// </returns>
-		public bool getBoolean(String key, bool def)
+		/// <param name="key">property key</param>
+		/// <param name="def">default value if property not found</param>
+		/// <returns>boolean  value of key or default value</returns>
+		public bool GetBoolean(String key, bool def)
 		{
 			return configuration.GetBoolean(key, def);
 		}
 
-		/// <summary> Return the velocity runtime configuration object.
-		/// *
+		/// <summary>
+		/// Return the velocity runtime configuration object.
 		/// </summary>
-		/// <returns>ExtendedProperties configuration object which houses
+		/// <returns>
+		/// ExtendedProperties configuration object which houses
 		/// the velocity runtime properties.
-		///
 		/// </returns>
-		/// <summary>  Return the Introspector for this instance
-		/// </summary>
-		public Object getApplicationAttribute(Object key)
+		public Object GetApplicationAttribute(Object key)
 		{
 			return applicationAttributes[key];
 		}
 
-		public Object setApplicationAttribute(Object key, Object o)
+		public Object SetApplicationAttribute(Object key, Object o)
 		{
 			return applicationAttributes[key] = o;
 		}
 
+		/// <summary>
+		///	Return the Introspector for this instance
+		/// </summary>
 		public Uberspect Uberspect
 		{
 			get { return uberSpect; }

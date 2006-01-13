@@ -27,29 +27,24 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		public override bool evaluate(InternalContextAdapter context)
+		public override bool Evaluate(InternalContextAdapter context)
 		{
-			/*
-	    *  get the two args
-	    */
-
+			// get the two args
 			Object left = jjtGetChild(0).Value(context);
 			Object right = jjtGetChild(1).Value(context);
 
-			/*
-	    *  if either is null, lets log and bail
-	    */
-
+			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).literal() + ") of '>=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).Literal + ") of '>=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return false;
 			}
 
@@ -59,11 +54,10 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			catch ( ArgumentException ae )
 			{
-				rsvc.error( ae.Message );
+				rsvc.Error( ae.Message );
 
 				return false;
 			}
-
 		}
 	}
 }

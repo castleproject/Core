@@ -32,10 +32,6 @@ namespace NVelocity.Util.Introspection
 		/// </summary>
 		void init();
 
-		/// <summary>  To support iteratives - #foreach()
-		/// </summary>
-		Iterator getIterator(Object obj, Info info);
-
 		/// <summary>  Returns a general method, corresponding to $foo.bar( $woogie )
 		/// </summary>
 		VelMethod getMethod(Object obj, String method, Object[] args, Info info);

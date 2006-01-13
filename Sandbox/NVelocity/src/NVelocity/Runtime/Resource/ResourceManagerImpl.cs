@@ -91,7 +91,7 @@ namespace NVelocity.Runtime.Resource
 		{
 			rsvc = rs;
 
-			rsvc.info("Default ResourceManager initializing. (" + this.GetType() + ")");
+			rsvc.Info("Default ResourceManager initializing. (" + this.GetType() + ")");
 
 			ResourceLoader resourceLoader;
 
@@ -104,7 +104,7 @@ namespace NVelocity.Runtime.Resource
 
 				if (loaderClass == null)
 				{
-					rsvc.error("Unable to find '" + configuration.GetString(RESOURCE_LOADER_IDENTIFIER) + ".resource.loader.class' specification in configuation." + " This is a critical value.  Please adjust configuration.");
+					rsvc.Error("Unable to find '" + configuration.GetString(RESOURCE_LOADER_IDENTIFIER) + ".resource.loader.class' specification in configuation." + " This is a critical value.  Please adjust configuration.");
 					continue;
 				}
 
@@ -119,12 +119,12 @@ namespace NVelocity.Runtime.Resource
 			* now see if this is overridden by configuration
 			*/
 
-			logWhenFound = rsvc.getBoolean(RuntimeConstants_Fields.RESOURCE_MANAGER_LOGWHENFOUND, true);
+			logWhenFound = rsvc.GetBoolean(RuntimeConstants.RESOURCE_MANAGER_LOGWHENFOUND, true);
 
 			/*
 			*  now, is a global cache specified?
 			*/
-			String claz = rsvc.getString(RuntimeConstants_Fields.RESOURCE_MANAGER_CACHE_CLASS);
+			String claz = rsvc.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
 			Object o = null;
 
 			if (claz != null && claz.Length > 0)
@@ -137,14 +137,14 @@ namespace NVelocity.Runtime.Resource
 				catch (Exception cnfe)
 				{
 					String err = "The specified class for ResourceCache (" + claz + ") does not exist (or is not accessible to the current classlaoder).";
-					rsvc.error(err);
+					rsvc.Error(err);
 					o = null;
 				}
 
 				if (!(o is ResourceCache))
 				{
 					String err = "The specified class for ResourceCache (" + claz + ") does not implement NVelocity.Runtime.Resource.ResourceCache." + " Using default ResourceCache implementation.";
-					rsvc.error(err);
+					rsvc.Error(err);
 					o = null;
 				}
 			}
@@ -159,7 +159,7 @@ namespace NVelocity.Runtime.Resource
 
 			globalCache = (ResourceCache) o;
 			globalCache.initialize(rsvc);
-			rsvc.info("Default ResourceManager initialization complete.");
+			rsvc.Info("Default ResourceManager initialization complete.");
 		}
 
 		/// <summary> This will produce a List of Hashtables, each
@@ -175,7 +175,7 @@ namespace NVelocity.Runtime.Resource
 				return;
 			}
 
-			ArrayList resourceLoaderNames = rsvc.Configuration.GetVector(RuntimeConstants_Fields.RESOURCE_LOADER);
+			ArrayList resourceLoaderNames = rsvc.Configuration.GetVector(RuntimeConstants.RESOURCE_LOADER);
 
 			for (int i = 0; i < resourceLoaderNames.Count; i++)
 			{
@@ -187,7 +187,7 @@ namespace NVelocity.Runtime.Resource
 				 * The loader id is the prefix used for all properties
 				 * pertaining to a particular loader.
 				 */
-				String loaderID = resourceLoaderNames[i] + "." + RuntimeConstants_Fields.RESOURCE_LOADER;
+				String loaderID = resourceLoaderNames[i] + "." + RuntimeConstants.RESOURCE_LOADER;
 
 				ExtendedProperties loaderConfiguration = rsvc.Configuration.Subset(loaderID);
 
@@ -196,7 +196,7 @@ namespace NVelocity.Runtime.Resource
 				 */
 				if (loaderConfiguration == null)
 				{
-					rsvc.warn("ResourceManager : No configuration information for resource loader named '" + resourceLoaderNames[i] + "'. Skipping.");
+					rsvc.Warn("ResourceManager : No configuration information for resource loader named '" + resourceLoaderNames[i] + "'. Skipping.");
 					continue;
 				}
 
@@ -239,11 +239,11 @@ namespace NVelocity.Runtime.Resource
 		public Resource getResource(String resourceName, int resourceType, String encoding)
 		{
 			/*
-	    * Check to see if the resource was placed in the cache.
-	    * If it was placed in the cache then we will use
-	    * the cached version of the resource. If not we
-	    * will load it.
-	    */
+			* Check to see if the resource was placed in the cache.
+			* If it was placed in the cache then we will use
+			* the cached version of the resource. If not we
+			* will load it.
+			*/
 
 			Resource resource = globalCache.get(resourceName);
 
@@ -260,10 +260,10 @@ namespace NVelocity.Runtime.Resource
 				catch (ResourceNotFoundException rnfe)
 				{
 					/*
-		    *  something exceptional happened to that resource
-		    *  this could be on purpose, 
-		    *  so clear the cache and try again
-		    */
+					*  something exceptional happened to that resource
+					*  this could be on purpose, 
+					*  so clear the cache and try again
+					*/
 
 					globalCache.remove(resourceName);
 
@@ -271,15 +271,15 @@ namespace NVelocity.Runtime.Resource
 				}
 				catch (ParseErrorException pee)
 				{
-					rsvc.error("ResourceManager.getResource() exception: " + pee);
+					rsvc.Error("ResourceManager.getResource() exception: " + pee);
 
-					throw pee;
+					throw;
 				}
 				catch (Exception eee)
 				{
-					rsvc.error("ResourceManager.getResource() exception: " + eee);
+					rsvc.Error("ResourceManager.getResource() exception: " + eee);
 
-					throw eee;
+					throw;
 				}
 			}
 			else
@@ -299,21 +299,21 @@ namespace NVelocity.Runtime.Resource
 				}
 				catch (ResourceNotFoundException rnfe2)
 				{
-					rsvc.error("ResourceManager : unable to find resource '" + resourceName + "' in any resource loader.");
+					rsvc.Error("ResourceManager : unable to find resource '" + resourceName + "' in any resource loader.");
 
-					throw rnfe2;
+					throw;
 				}
 				catch (ParseErrorException pee)
 				{
-					rsvc.error("ResourceManager.getResource() parse exception: " + pee);
+					rsvc.Error("ResourceManager.getResource() parse exception: " + pee);
 
-					throw pee;
+					throw;
 				}
 				catch (Exception ee)
 				{
-					rsvc.error("ResourceManager.getResource() exception new: " + ee);
+					rsvc.Error("ResourceManager.getResource() exception new: " + ee);
 
-					throw ee;
+					throw;
 				}
 			}
 
@@ -381,7 +381,7 @@ namespace NVelocity.Runtime.Resource
 
 						if (logWhenFound)
 						{
-							rsvc.info("ResourceManager : found " + resourceName + " with loader " + resourceLoader.ClassName);
+							rsvc.Info("ResourceManager : found " + resourceName + " with loader " + resourceLoader.ClassName);
 						}
 
 						howOldItWas = resourceLoader.getLastModified(resource);
@@ -391,23 +391,23 @@ namespace NVelocity.Runtime.Resource
 				catch (ResourceNotFoundException)
 				{
 					/*
-		    *  that's ok - it's possible to fail in
-		    *  multi-loader environment
-		    */
+					*  that's ok - it's possible to fail in
+					*  multi-loader environment
+					*/
 				}
 			}
 
 			/*
-	    * Return null if we can't find a resource.
-	    */
+			* Return null if we can't find a resource.
+			*/
 			if (resource.Data == null)
 			{
 				throw new ResourceNotFoundException("Unable to find resource '" + resourceName + "'");
 			}
 
 			/*
-	    *  some final cleanup
-	    */
+			*  some final cleanup
+			*/
 
 			resource.LastModified = howOldItWas;
 
@@ -462,7 +462,7 @@ namespace NVelocity.Runtime.Resource
 
 					if (!resource.Encoding.Equals(encoding))
 					{
-						rsvc.error("Declared encoding for template '" + resource.Name + "' is different on reload.  Old = '" + resource.Encoding + "'  New = '" + encoding);
+						rsvc.Error("Declared encoding for template '" + resource.Name + "' is different on reload.  Old = '" + resource.Encoding + "'  New = '" + encoding);
 
 						resource.Encoding = encoding;
 					}
@@ -513,7 +513,7 @@ namespace NVelocity.Runtime.Resource
 		/// </deprecated>
 		public Resource getResource(String resourceName, int resourceType)
 		{
-			return getResource(resourceName, resourceType, RuntimeConstants_Fields.ENCODING_DEFAULT);
+			return getResource(resourceName, resourceType, RuntimeConstants.ENCODING_DEFAULT);
 		}
 
 		/// <summary>  Determines is a template exists, and returns name of the loader that

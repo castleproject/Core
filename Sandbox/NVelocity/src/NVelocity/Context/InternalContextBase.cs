@@ -47,54 +47,49 @@ namespace NVelocity.Context
 				else
 					return (String) templateNameStack.Peek();
 			}
-
 		}
 
 		public Object[] TemplateNameStack
 		{
 			get { return templateNameStack.ToArray(); }
-
 		}
 
 		public Resource CurrentResource
 		{
 			get { return currentResource; }
-
 			set { currentResource = value; }
-
 		}
 
 		public EventCartridge EventCartridge
 		{
 			get { return eventCartridge; }
-
 		}
 
-		/// <summary>  cache for node/context specific introspection information
+		/// <summary>
+		/// cache for node/context specific introspection information
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'introspectionCache' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Hashtable introspectionCache;
 
-		/// <summary>  Template name stack. The stack top contains the current template name.
+		/// <summary>
+		/// Template name stack. The stack top contains the current template name.
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'templateNameStack' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Stack templateNameStack;
 
-		/// <summary>  EventCartridge we are to carry.  Set by application
+		/// <summary>
+		/// EventCartridge we are to carry.  Set by application
 		/// </summary>
 		private EventCartridge eventCartridge = null;
 
-		/// <summary>  Current resource - used for carrying encoding and other
+		/// <summary>
+		/// Current resource - used for carrying encoding and other
 		/// information down into the rendering process
 		/// </summary>
 		private Resource currentResource = null;
 
-		/// <summary>  set the current template name on top of stack
-		/// *
+		/// <summary>
+		/// set the current template name on top of stack
 		/// </summary>
-		/// <param name="s">current template name
-		///
-		/// </param>
+		/// <param name="s">current template name</param>
 		public void PushCurrentTemplateName(String s)
 		{
 			Object temp_object;
@@ -104,54 +99,22 @@ namespace NVelocity.Context
 			return;
 		}
 
-		/// <summary>  remove the current template name from stack
-		/// </summary>
+		/// <summary>remove the current template name from stack</summary>
 		public void PopCurrentTemplateName()
 		{
 			templateNameStack.Pop();
 			return;
 		}
 
-		/// <summary>  get the current template name
-		/// *
-		/// </summary>
-		/// <returns>String current template name
-		///
-		/// </returns>
-		/// <summary>  get the current template name stack
-		/// *
-		/// </summary>
-		/// <returns>Object[] with the template name stack contents.
-		///
-		/// </returns>
-		/// <seealso cref=" IntrospectionCacheData)
-		/// object if exists for the key
-		/// *
-		/// "/>
-		/// <param name="key"> key to find in cache
-		/// </param>
-		/// <returns>cache object
-		///
-		/// </returns>
 		public IntrospectionCacheData ICacheGet(Object key)
 		{
 			return (IntrospectionCacheData) introspectionCache[key];
 		}
 
-		/// <seealso cref=" IntrospectionCacheData)
-		/// element in the cache for specified key
-		/// *
-		/// "/>
-		/// <param name="key"> key
-		/// </param>
-		/// <param name="o"> IntrospectionCacheData object to place in cache
-		///
-		/// </param>
 		public void ICachePut(Object key, IntrospectionCacheData o)
 		{
 			introspectionCache[key] = o;
 		}
-
 
 		public EventCartridge AttachEventCartridge(EventCartridge ec)
 		{

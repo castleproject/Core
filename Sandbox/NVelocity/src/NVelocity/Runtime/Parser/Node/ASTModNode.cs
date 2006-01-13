@@ -27,50 +27,39 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		public override Object Value(InternalContextAdapter context)
 		{
-			/*
-	    *  get the two args
-	    */
-
+			// get the two args
 			Object left = jjtGetChild(0).Value(context);
 			Object right = jjtGetChild(1).Value(context);
 
-			/*
-	    *  if either is null, lets log and bail
-	    */
-
+			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).literal() + ") of modulus operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).Literal + ") of modulus operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return null;
 			}
 
-			/*
-	    *  if not an Integer, not much we can do either
-	    */
-
+			// if not an Integer, not much we can do either
 			if (!(left is Int32) || !(right is Int32))
 			{
-				rsvc.error((!(left is Int32) ? "Left" : "Right") + " side of modulus operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of modulus operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 
 				return null;
 			}
 
-			/*
-	    *  check for divide by 0
-	    */
-
+			// check for divide by 0
 			if (((Int32) right) == 0)
 			{
-				rsvc.error("Right side of modulus operation is zero. Must be non-zero. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error("Right side of modulus operation is zero. Must be non-zero. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 
 				return null;
 			}

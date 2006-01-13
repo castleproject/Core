@@ -75,22 +75,22 @@ namespace NVelocity.Test
 
 		private void VerifyProperties(ExtendedProperties props, String prefix)
 		{
-			Assertion.Assert("expected to have 5 properties, had " + props.Count.ToString(), props.Count == 5);
+			Assert.IsTrue(props.Count == 5, "expected to have 5 properties, had " + props.Count.ToString());
 
-			Assertion.Assert("key was not correct: " + props.GetString(prefix + "key"), props.GetString(prefix + "key").Equals("value"));
+			Assert.IsTrue(props.GetString(prefix + "key").Equals("value"), "key was not correct: " + props.GetString(prefix + "key"));
 
 			// make sure the comma escaping is working correctly
-			Assertion.Assert("commas.excaped was not correct: " + props.GetString(prefix + "commas.excaped"), props.GetString(prefix + "commas.excaped").Equals("Hi, what'up?"));
+			Assert.IsTrue(props.GetString(prefix + "commas.excaped").Equals("Hi, what'up?"), "commas.excaped was not correct: " + props.GetString(prefix + "commas.excaped"));
 
 			// make sure that multiple tokens on a single line are parsed correctly
 			Object o = props.GetProperty(prefix + "tokens_on_a_line");
-			Assertion.Assert(prefix + "tokens_on_a_line was expected to be an ArrayList", (o is ArrayList));
-			Assertion.Assert(prefix + "tokens_on_a_line was expected to be an ArrayList with 2 elements", ((ArrayList) o).Count == 2);
+			Assert.IsTrue((o is ArrayList), prefix + "tokens_on_a_line was expected to be an ArrayList");
+			Assert.IsTrue(((ArrayList) o).Count == 2, prefix + "tokens_on_a_line was expected to be an ArrayList with 2 elements");
 
 			// make sure that tokens specified on multiple lines get put together correctly
 			o = props.GetProperty(prefix + "tokens_on_multiple_lines");
-			Assertion.Assert(prefix + "tokens_on_multiple_lines was expected to be an ArrayList", (o is ArrayList));
-			Assertion.Assert(prefix + "tokens_on_multiple_lines was expected to be an ArrayList with 2 elements", ((ArrayList) o).Count == 2);
+			Assert.IsTrue((o is ArrayList), prefix + "tokens_on_multiple_lines was expected to be an ArrayList");
+			Assert.IsTrue(((ArrayList) o).Count == 2, prefix + "tokens_on_multiple_lines was expected to be an ArrayList with 2 elements");
 		}
 	}
 }

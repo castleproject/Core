@@ -35,18 +35,18 @@ namespace NVelocity.Test
 
 			ExtendedProperties ep = new ExtendedProperties();
 			
-			ep.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, 
-				TemplateTestBase_Fields.FILE_RESOURCE_LOADER_PATH);
+			ep.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
+				TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
-			ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_ERROR_STACKTRACE, "true");
-			ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_WARN_STACKTRACE, "true");
-			ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_INFO_STACKTRACE, "true");
+			ep.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
+			ep.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
+			ep.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
 			ep.SetProperty("userdirective", "NVelocity.Runtime.Directive.Component;NVelocity,NVelocity.Runtime.Directive.BlockComponent;NVelocity");
 
 			ve.Init(ep);
 
 			testProperties = new ExtendedProperties();
-			testProperties.Load(new FileStream(TemplateTestBase_Fields.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
+			testProperties.Load(new FileStream(TemplateTest.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace NVelocity.Test
 			VelocityContext context = new VelocityContext();
 
 			Template template = ve.GetTemplate(
-				getFileName(null, "componentusage1", TemplateTestBase_Fields.TMPL_FILE_EXT));
+				GetFileName(null, "componentusage1", TemplateTest.TMPL_FILE_EXT));
 			
 			StringWriter writer = new StringWriter();
 

@@ -64,7 +64,7 @@ namespace NVelocity.App
 		{
 			try
 			{
-				addObject(s);
+				AddObject(s);
 			}
 			catch (Exception e)
 			{
@@ -83,7 +83,7 @@ namespace NVelocity.App
 		{
 			try
 			{
-				addObject(o);
+				AddObject(o);
 			}
 			catch (Exception e)
 			{
@@ -94,17 +94,17 @@ namespace NVelocity.App
 		/// <summary>
 		/// Add the Name of the class to methodize
 		/// </summary>
-		public void addObject(String s)
+		public void AddObject(String s)
 		{
 			Type type = Type.GetType(s);
-			inspect(type);
+			Inspect(type);
 		}
 
 		/// <summary> Add an Object to methodize
 		/// </summary>
-		public void addObject(Object o)
+		public void AddObject(Object o)
 		{
-			inspect(o.GetType());
+			Inspect(o.GetType());
 		}
 
 		/// <summary>
@@ -129,14 +129,12 @@ namespace NVelocity.App
 		/// <summary>  Method that retrieves all public static fields
 		/// in the class we are methodizing.
 		/// </summary>
-		private void inspect(Type clas)
+		private void Inspect(Type clas)
 		{
 			FieldInfo[] fields = clas.GetFields();
 			for (int i = 0; i < fields.Length; i++)
 			{
-				/*
-		*  only if public and static
-		*/
+				// only if public and static
 				if (fields[i].IsPublic && fields[i].IsStatic)
 				{
 					fieldHash[fields[i].Name] = fields[i];
@@ -144,7 +142,5 @@ namespace NVelocity.App
 				}
 			}
 		}
-
-
 	}
 }

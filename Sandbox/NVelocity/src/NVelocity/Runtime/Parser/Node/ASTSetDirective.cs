@@ -46,35 +46,35 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
 		/// <summary>  simple init.  We can get the RHS and LHS as the the tree structure is static
 		/// </summary>
-		public override Object init(InternalContextAdapter context, Object data)
+		public override Object Init(InternalContextAdapter context, Object data)
 		{
 			/*
 	    *  init the tree correctly
 	    */
 
-			base.init(context, data);
+			base.Init(context, data);
 
 			right = RightHandSide;
 			left = LeftHandSide;
 
-			blather = rsvc.getBoolean(RuntimeConstants_Fields.RUNTIME_LOG_REFERENCE_LOG_INVALID, true);
+			blather = rsvc.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true);
 
 			/*
 	    *  grab this now.  No need to redo each time
 	    */
-			leftReference = left.FirstToken.image.Substring(1);
+			leftReference = left.FirstToken.Image.Substring(1);
 
 			return data;
 		}
 
 		/// <summary>   puts the value of the RHS into the context under the key of the LHS
 		/// </summary>
-		public override bool render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(InternalContextAdapter context, TextWriter writer)
 		{
 			/*
 	    *  get the RHS node, and it's value
@@ -102,12 +102,12 @@ namespace NVelocity.Runtime.Parser.Node
 		    */
 					if (ec != null)
 					{
-						doit = ec.shouldLogOnNullSet(left.literal(), right.literal());
+						doit = ec.ShouldLogOnNullSet(left.Literal, right.Literal);
 					}
 
 					if (doit)
 					{
-						rsvc.error("RHS of #set statement is null. Context will not be modified. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+						rsvc.Error("RHS of #set statement is null. Context will not be modified. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 					}
 				}
 
@@ -126,7 +126,7 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 			else
 			{
-				left.setValue(context, value_);
+				left.SetValue(context, value_);
 			}
 
 			return true;

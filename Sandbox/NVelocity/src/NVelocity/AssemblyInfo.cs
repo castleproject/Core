@@ -1,6 +1,6 @@
 using System.Reflection;
 
-[assembly : AssemblyTitle("")]
+[assembly : AssemblyTitle("NVelocity")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyCompany("")]
 [assembly : AssemblyProduct("")]
@@ -8,9 +8,9 @@ using System.Reflection;
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 
-//#if STRONG
-[assembly: AssemblyDelaySign(false)]
-//[assembly: AssemblyKeyFile("../../CastleKey.snk")]
-[assembly: AssemblyKeyFile(@"E:\dev\projects\castle\CastleKey.snk")]
-[assembly: AssemblyKeyName("")]
-//#endif
+#if STRONG
+[assembly: AssemblyKeyFile("../../CastleKey.snk")]
+#elif VISUALSTUDIO7
+//[assembly: AssemblyKeyFile(@"../../../../../../CastleKey.snk")]
+[assembly: AssemblyKeyFile(@"../../svn/CastleKey.snk")]
+#endif

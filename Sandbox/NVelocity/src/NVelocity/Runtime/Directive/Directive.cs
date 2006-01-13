@@ -58,29 +58,44 @@ namespace NVelocity.Runtime.Directive
 	using NVelocity.Context;
 	using NVelocity.Runtime.Parser.Node;
 
-	/// <summary> Base class for all directives used in Velocity.
-	/// *
+	/// <summary>
+	/// Directive Types
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <version> $Id: Directive.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
-	public abstract class Directive : DirectiveConstants //,System.ICloneable
+	public enum DirectiveType
 	{
+		BLOCK = 1,
+		LINE = 2,
+	}
+
+	/// <summary> Base class for all directives used in Velocity.</summary>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
+	/// <version> $Id: Directive.cs,v 1.3 2003/10/27 13:54:10 corts Exp $ </version>
+	public abstract class Directive
+	{
+		/// <summary>
+		/// Return the name of this directive
+		/// </summary>
 		public abstract String Name { get; set; }
 
-		public abstract int Type { get; }
+		/// <summary>
+		/// Get the directive type BLOCK/LINE
+		/// </summary>
+		public abstract DirectiveType Type { get; }
 
+		/// <summary>
+		/// for log msg purposes
+		/// </summary>
 		public int Line
 		{
 			get { return line; }
 		}
 
+		/// <summary>
+		/// for log msg purposes
+		/// </summary>
 		public int Column
 		{
 			get { return column; }
-
 		}
 
 		private int line = 0;
@@ -88,25 +103,19 @@ namespace NVelocity.Runtime.Directive
 
 		protected internal RuntimeServices rsvc = null;
 
-		/// <summary>Return the name of this directive
+		/// <summary>
+		/// Allows the template location to be set
 		/// </summary>
-		/// <summary>Get the directive type BLOCK/LINE
-		/// </summary>
-		/// <summary>Allows the template location to be set
-		/// </summary>
-		public void setLocation(int line, int column)
+		public void SetLocation(int line, int column)
 		{
 			this.line = line;
 			this.column = column;
 		}
 
-		/// <summary>for log msg purposes
+		/// <summary>
+		/// How this directive is to be initialized.
 		/// </summary>
-		/// <summary>for log msg purposes
-		/// </summary>
-		/// <summary> How this directive is to be initialized.
-		/// </summary>
-		public virtual void init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public virtual void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
 		{
 			rsvc = rs;
 
@@ -116,8 +125,9 @@ namespace NVelocity.Runtime.Directive
 			//    node.jjtGetChild(i).init(context, rs);
 		}
 
-		/// <summary> How this directive is to be rendered
+		/// <summary>
+		/// How this directive is to be rendered
 		/// </summary>
-		public abstract bool render(InternalContextAdapter context, TextWriter writer, INode node);
+		public abstract bool Render(InternalContextAdapter context, TextWriter writer, INode node);
 	}
 }

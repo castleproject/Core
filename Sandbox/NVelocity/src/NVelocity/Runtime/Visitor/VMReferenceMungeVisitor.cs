@@ -34,26 +34,18 @@ namespace NVelocity.Runtime.Visitor
 		/// </summary>
 		/// <param name="node">ASTReference to work on</param>
 		/// <param name="data">Object to pass down from caller</param>
-		public override Object visit(ASTReference node, Object data)
+		public override Object Visit(ASTReference node, Object data)
 		{
-			/*
-	    *  see if there is an override value for this
-	    *  reference
-	    */
-			String override_Renamed = (String) argmap[node.literal().Substring(1)];
+			// see if there is an override value for this
+	    // reference
+			String overrideVal = (String) argmap[node.Literal.Substring(1)];
 
-			/*
-	    *  if so, set in the node
-	    */
-			if (override_Renamed != null)
-			{
-				node.Literal = override_Renamed;
-			}
+			// if so, set in the node
+			if (overrideVal != null)
+				node.SetLiteral(overrideVal);
 
-			/*
-	    *  feed the children...
-	    */
-			data = node.childrenAccept(this, data);
+			// feed the children...
+			data = node.ChildrenAccept(this, data);
 
 			return data;
 		}

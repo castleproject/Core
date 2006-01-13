@@ -17,17 +17,15 @@ namespace NVelocity.Runtime.Parser.Node
 	using System;
 	using NVelocity.Context;
 
-	/// <summary>  Handles the equivalence operator
-	/// *
+	/// <summary>
+	/// Handles the equivalence operator
+	/// 
 	/// <arg1>  == <arg2>
-	/// *
+	/// 
 	/// This operator requires that the LHS and RHS are both of the
 	/// same Class.
-	/// *
 	/// </summary>
-	/// <version> $Id: ASTEQNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
+	/// <version> $Id: ASTEQNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $ </version>
 	public class ASTEQNode : SimpleNode
 	{
 		public ASTEQNode(int id) : base(id)
@@ -42,35 +40,31 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		/// <summary>   Calculates the value of the logical expression
-		/// *
+		/// <summary>
+		/// Calculates the value of the logical expression
+		/// 
 		/// arg1 == arg2
-		/// *
+		/// 
 		/// All class types are supported.   Uses equals() to
 		/// determine equivalence.  This should work as we represent
 		/// with the types we already support, and anything else that
 		/// implements equals() to mean more than identical references.
-		/// *
-		/// *
 		/// </summary>
-		/// <param name="context"> internal context used to evaluate the LHS and RHS
-		/// </param>
-		/// <returns>true if equivalent, false if not equivalent,
+		/// <param name="context"> internal context used to evaluate the LHS and RHS </param>
+		/// <returns>
+		/// true if equivalent, false if not equivalent,
 		/// false if not compatible arguments, or false
 		/// if either LHS or RHS is null
-		///
 		/// </returns>
-		public override bool evaluate(InternalContextAdapter context)
+		public override bool Evaluate(InternalContextAdapter context)
 		{
 			Object left = jjtGetChild(0).Value(context);
 			Object right = jjtGetChild(1).Value(context);
 
-			/*
-			 * for equality, they are allowed to be null references 
-			 */
+			// for equality, they are allowed to be null references 
 			try
 			{
 				if ( ObjectComparer.CompareObjects( left, right ) == 0 )
@@ -85,7 +79,6 @@ namespace NVelocity.Runtime.Parser.Node
 			// reference equal => definitely equal objects ;)
 			// For operator overloaded types, this will not really be a reference comp, but that's ok.
 			return left == right;
-			
 		}
 	}
 }

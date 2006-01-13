@@ -81,19 +81,19 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			String specialText = "";
 
-			if (t.specialToken == null || t.specialToken.image.StartsWith("##"))
+			if (t.SpecialToken == null || t.SpecialToken.Image.StartsWith("##"))
 				return specialText;
 
-			Token tmp_t = t.specialToken;
+			Token tmp_t = t.SpecialToken;
 
-			while (tmp_t.specialToken != null)
+			while (tmp_t.SpecialToken != null)
 			{
-				tmp_t = tmp_t.specialToken;
+				tmp_t = tmp_t.SpecialToken;
 			}
 
 			while (tmp_t != null)
 			{
-				String st = tmp_t.image;
+				String st = tmp_t.Image;
 
 				StringBuilder sb = new StringBuilder();
 
@@ -157,7 +157,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 				specialText += sb.ToString();
 
-				tmp_t = tmp_t.next;
+				tmp_t = tmp_t.Next;
 			}
 
 			return specialText;
@@ -168,7 +168,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public static String tokenLiteral(Token t)
 		{
-			return specialText(t) + t.image;
+			return specialText(t) + t.Image;
 		}
 
 		/// <summary> Utility method to interpolate context variables

@@ -58,16 +58,16 @@ namespace NVelocity.Test
 				ve = new VelocityEngine();
 
 				ExtendedProperties ep = new ExtendedProperties();
-				ep.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, TemplateTestBase_Fields.FILE_RESOURCE_LOADER_PATH);
+				ep.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, TemplateTest.FILE_RESOURCE_LOADER_PATH);
 
-				ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_ERROR_STACKTRACE, "true");
-				ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_WARN_STACKTRACE, "true");
-				ep.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_INFO_STACKTRACE, "true");
+				ep.SetProperty(RuntimeConstants.RUNTIME_LOG_ERROR_STACKTRACE, "true");
+				ep.SetProperty(RuntimeConstants.RUNTIME_LOG_WARN_STACKTRACE, "true");
+				ep.SetProperty(RuntimeConstants.RUNTIME_LOG_INFO_STACKTRACE, "true");
 
 				ve.Init(ep);
 
 				testProperties = new ExtendedProperties();
-				testProperties.Load(new FileStream(TemplateTestBase_Fields.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
+				testProperties.Load(new FileStream(TemplateTest.TEST_CASE_PROPERTIES, FileMode.Open, FileAccess.Read));
 			}
 			catch (Exception e)
 			{
@@ -148,7 +148,7 @@ namespace NVelocity.Test
 			context.Put( "DictHelper", new DictHelper() );
 
 			Template template = ve.GetTemplate(
-				getFileName(null, "dicthelper", TemplateTestBase_Fields.TMPL_FILE_EXT));
+				GetFileName(null, "dicthelper", TemplateTest.TMPL_FILE_EXT));
 			
 			StringWriter writer = new StringWriter();
 
@@ -202,7 +202,7 @@ namespace NVelocity.Test
 
 			if (!allpass)
 			{
-				Assertion.Fail(failures.ToString() + " templates failed");
+				Assert.Fail(failures.ToString() + " templates failed");
 			}
 		}
 
@@ -227,12 +227,12 @@ namespace NVelocity.Test
 
 			try
 			{
-				Template template = ve.GetTemplate(getFileName(null, baseFileName, TemplateTestBase_Fields.TMPL_FILE_EXT));
+				Template template = ve.GetTemplate(GetFileName(null, baseFileName, TemplateTest.TMPL_FILE_EXT));
 
-				assureResultsDirectoryExists(TemplateTestBase_Fields.RESULT_DIR);
+				AssureResultsDirectoryExists(TemplateTest.RESULT_DIR);
 
 				/* get the file to write to */
-				FileStream fos = new FileStream(getFileName(TemplateTestBase_Fields.RESULT_DIR, baseFileName, TemplateTestBase_Fields.RESULT_FILE_EXT), FileMode.Create);
+				FileStream fos = new FileStream(GetFileName(TemplateTest.RESULT_DIR, baseFileName, TemplateTest.RESULT_FILE_EXT), FileMode.Create);
 
 				StreamWriter writer = new StreamWriter(fos);
 
@@ -243,8 +243,8 @@ namespace NVelocity.Test
 				writer.Flush();
 				writer.Close();
 
-				if (!isMatch(TemplateTestBase_Fields.RESULT_DIR, TemplateTestBase_Fields.COMPARE_DIR, baseFileName,
-				             TemplateTestBase_Fields.RESULT_FILE_EXT, TemplateTestBase_Fields.CMP_FILE_EXT))
+				if (!IsMatch(TemplateTest.RESULT_DIR, TemplateTest.COMPARE_DIR, baseFileName,
+				             TemplateTest.RESULT_FILE_EXT, TemplateTest.CMP_FILE_EXT))
 				{
 					//Fail("Processed template did not match expected output");
 					return false;
@@ -254,7 +254,7 @@ namespace NVelocity.Test
 			{
 				Console.Out.WriteLine("EXCEPTION : " + e);
 
-				Assertion.Fail(e.Message);
+				Assert.Fail(e.Message);
 			}
 
 			return true;

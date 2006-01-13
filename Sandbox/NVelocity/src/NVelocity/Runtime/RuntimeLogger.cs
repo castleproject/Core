@@ -12,25 +12,25 @@ namespace NVelocity.Runtime
 		/// <summary>
 		/// Log a warning message.
 		/// </summary>
-		/// <param name="Object">message to log</param>
-		void warn(Object message);
+		/// <param name="message">message to log</param>
+		void Warn(Object message);
 
 		/// <summary>
 		/// Log an info message.
 		/// </summary>
-		/// <param name="Object">message to log</param>
-		void info(Object message);
+		/// <param name="message">message to log</param>
+		void Info(Object message);
 
 		/// <summary>
 		/// Log an error message.
 		/// </summary>
-		/// <param name="Object">message to log</param>
-		void error(Object message);
+		/// <param name="message">message to log</param>
+		void Error(Object message);
 
 		/// <summary>
 		/// Log a debug message.
 		/// </summary>
-		/// <param name="Object">message to log</param>
-		void debug(Object message);
+		/// <param name="message">message to log</param>
+		void Debug(Object message);
 	}
 }

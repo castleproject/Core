@@ -44,19 +44,15 @@ namespace NVelocity.Util.Introspection
 			this.rlog = r;
 		}
 
-		/// <summary> Gets the method defined by <code>name</code> and
+		/// <summary>
+		/// Gets the method defined by <code>name</code> and
 		/// <code>params</code> for the Class <code>c</code>.
 		/// </summary>
-		/// <param name="c">Class in which the method search is taking place
-		/// </param>
-		/// <param name="name">Name of the method being searched for
-		/// </param>
-		/// <param name="params">An array of Objects (not Classes) that describe the
-		/// the parameters
-		/// </param>
-		/// <returns>The desired Method object.
-		/// </returns>
-		public override MethodInfo getMethod(Type c, String name, Object[] params_Renamed)
+		/// <param name="c">Class in which the method search is taking place</param>
+		/// <param name="name">Name of the method being searched for</param>
+		/// <param name="parameters">An array of Objects (not Classes) that describe the the parameters</param>
+		/// <returns>The desired Method object.</returns>
+		public override MethodInfo GetMethod(Type c, String name, Object[] parameters)
 		{
 			/*
 	    *  just delegate to the base class
@@ -64,63 +60,48 @@ namespace NVelocity.Util.Introspection
 
 			try
 			{
-				return base.getMethod(c, name, params_Renamed);
+				return base.GetMethod(c, name, parameters);
 			}
-			catch (AmbiguousException ae)
+			catch (AmbiguousException)
 			{
-				/*
-		*  whoops.  Ambiguous.  Make a nice log message and return null...
-		*/
-
+				// whoops.  Ambiguous.  Make a nice log message and return null...
 				String msg = "Introspection Error : Ambiguous method invocation " + name + "( ";
 
-				for (int i = 0; i < params_Renamed.Length; i++)
+				for (int i = 0; i < parameters.Length; i++)
 				{
 					if (i > 0)
 						msg = msg + ", ";
 
-					msg = msg + params_Renamed[i].GetType().FullName;
+					msg = msg + parameters[i].GetType().FullName;
 				}
 
 				msg = msg + ") for class " + c;
 
-				rlog.error(msg);
+				rlog.Error(msg);
 			}
 
 			return null;
 		}
 
-		/// <summary> Gets the method defined by <code>name</code> and
-		/// <code>params</code> for the Class <code>c</code>.
+		/// <summary>
+		/// Gets the method defined by <code>name</code>
+		/// for the Class <code>c</code>.
 		/// </summary>
-		/// <param name="c">Class in which the method search is taking place
-		/// </param>
-		/// <param name="name">Name of the method being searched for
-		/// </param>
-		/// <param name="params">An array of Objects (not Classes) that describe the
-		/// the parameters
-		/// </param>
-		/// <returns>The desired Method object.
-		/// </returns>
-		public override PropertyInfo getProperty(Type c, String name)
+		/// <param name="c">Class in which the method search is taking place</param>
+		/// <param name="name">Name of the method being searched for</param>
+		/// <returns>The desired <see cref="PropertyInfo"/> object.</returns>
+		public override PropertyInfo GetProperty(Type c, String name)
 		{
-			/*
-	    *  just delegate to the base class
-	    */
-
+			//  just delegate to the base class
 			try
 			{
-				return base.getProperty(c, name);
+				return base.GetProperty(c, name);
 			}
-			catch (AmbiguousException ae)
+			catch (AmbiguousException)
 			{
-				/*
-		*  whoops.  Ambiguous.  Make a nice log message and return null...
-		*/
-
-				String msg = "Introspection Error : Ambiguous property invocation " + name + " ";
-				msg = msg + " for class " + c;
-				rlog.error(msg);
+				// whoops.  Ambiguous.  Make a nice log message and return null...
+				String msg = "Introspection Error : Ambiguous property invocation " + name + " for class " + c;
+				rlog.Error(msg);
 			}
 			return null;
 		}
@@ -129,10 +110,10 @@ namespace NVelocity.Util.Introspection
 		/// <summary> Clears the classmap and classname
 		/// caches, and logs that we did so
 		/// </summary>
-		protected internal override void clearCache()
+		protected internal override void ClearCache()
 		{
-			base.clearCache();
-			rlog.info(CACHEDUMP_MSG);
+			base.ClearCache();
+			rlog.Info(CACHEDUMP_MSG);
 		}
 	}
 }

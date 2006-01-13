@@ -11,6 +11,10 @@ namespace NVelocity.Runtime.Parser.Node
 	/// the case.
 	/// </summary>
 	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
+	/// <remarks>
+	/// Add discovery for .NET default property, using
+	/// <see cref="Type.GetDefaultMembers"/>.
+	/// </remarks>
 	public class GetExecutor : AbstractExecutor
 	{
 		/// <summary>
@@ -28,13 +32,13 @@ namespace NVelocity.Runtime.Parser.Node
 
 			// NOTE: changed from get to get to get_Item - assumption is that get would be converted to an indexer in .Net
 			// to keep some resembalance to the Java version, look for "Get" and "get" methods as well (both cases for .Net style and java)
-			method = i.getMethod(c, "get_Item", args);
+			method = i.GetMethod(c, "get_Item", args);
 			if (method == null)
 			{
-				method = i.getMethod(c, "Get", args);
+				method = i.GetMethod(c, "Get", args);
 				if (method == null)
 				{
-					method = i.getMethod(c, "get", args);
+					method = i.GetMethod(c, "get", args);
 				}
 			}
 		}
@@ -42,30 +46,12 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Execute method against context.
 		/// </summary>
-		public override Object execute(Object o)
+		public override Object Execute(Object o)
 		{
 			if (method == null)
 				return null;
 
 			return method.Invoke(o, args);
 		}
-
-//	public override System.Object OLDexecute(System.Object o, InternalContextAdapter context) {
-//	    if (method == null)
-//		return null;
-//
-//	    try {
-//		return method.Invoke(o, (System.Object[]) args);
-//	    } catch (System.Reflection.TargetInvocationException ite) {
-//		/*
-//		*  the method we invoked threw an exception.
-//		*  package and pass it up
-//		*/
-//		throw new MethodInvocationException("Invocation of method 'get(\"" + args[0] + "\")'" + " in  " + o.GetType() + " threw exception " + ite.GetBaseException().GetType(), ite.GetBaseException(), "get");
-//	    } catch (System.ArgumentException iae) {
-//		return null;
-//	    }
-//	}
-
 	}
 }

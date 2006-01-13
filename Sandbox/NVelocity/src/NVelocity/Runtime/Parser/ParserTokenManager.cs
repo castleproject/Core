@@ -3731,14 +3731,14 @@ namespace NVelocity.Runtime.Parser
 
 		private Token jjFillToken()
 		{
-			Token t = Token.newToken(jjmatchedKind);
-			t.kind = jjmatchedKind;
+			Token t = Token.NewToken(jjmatchedKind);
+			t.Kind = jjmatchedKind;
 			String im = jjstrLiteralImages[jjmatchedKind];
-			t.image = (im == null) ? input_stream.GetImage() : im;
-			t.beginLine = input_stream.BeginLine;
-			t.beginColumn = input_stream.BeginColumn;
-			t.endLine = input_stream.EndLine;
-			t.endColumn = input_stream.EndColumn;
+			t.Image = (im == null) ? input_stream.GetImage() : im;
+			t.BeginLine = input_stream.BeginLine;
+			t.BeginColumn = input_stream.BeginColumn;
+			t.EndLine = input_stream.EndLine;
+			t.EndColumn = input_stream.EndColumn;
 			return t;
 		}
 
@@ -3768,7 +3768,7 @@ namespace NVelocity.Runtime.Parser
 					{
 						jjmatchedKind = 0;
 						matchedToken = jjFillToken();
-						matchedToken.specialToken = specialToken;
+						matchedToken.SpecialToken = specialToken;
 						return matchedToken;
 					}
 					image = null;
@@ -3859,7 +3859,7 @@ namespace NVelocity.Runtime.Parser
 							if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 63))) != 0L)
 							{
 								matchedToken = jjFillToken();
-								matchedToken.specialToken = specialToken;
+								matchedToken.SpecialToken = specialToken;
 								TokenLexicalActions(matchedToken);
 								if (jjnewLexState[jjmatchedKind] != -1)
 									curLexState = jjnewLexState[jjmatchedKind];
@@ -3874,8 +3874,8 @@ namespace NVelocity.Runtime.Parser
 										specialToken = matchedToken;
 									else
 									{
-										matchedToken.specialToken = specialToken;
-										specialToken = (specialToken.next = matchedToken);
+										matchedToken.SpecialToken = specialToken;
+										specialToken = (specialToken.Next = matchedToken);
 									}
 									SkipLexicalActions(matchedToken);
 								}
@@ -4254,7 +4254,7 @@ namespace NVelocity.Runtime.Parser
 						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
-					matchedToken.kind = EOF;
+					matchedToken.Kind = EOF;
 					fileDepth = 0;
 					break;
 				case 49:
@@ -4290,7 +4290,7 @@ namespace NVelocity.Runtime.Parser
 		    * looks like a ref.ident
 		    */
 
-					matchedToken.image = ".";
+					matchedToken.Image = ".";
 
 					if (debugPrint)
 						Console.Out.Write("DOT : switching to " + REFMODIFIER);

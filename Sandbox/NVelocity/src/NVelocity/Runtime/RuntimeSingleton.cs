@@ -55,148 +55,114 @@ namespace NVelocity.Runtime
 	/// <version> $Id: RuntimeSingleton.cs,v 1.5 2004/12/27 05:59:46 corts Exp $
 	///
 	/// </version>
-	public class RuntimeSingleton : RuntimeConstants
+	public class RuntimeSingleton
 	{
 		private static RuntimeInstance ri = new RuntimeInstance();
 
-		/*
-	* This is the primary initialization method in the Velocity
-	* Runtime. The systems that are setup/initialized here are
-	* as follows:
-	* 
-	* <ul>
-	*   <li>Logging System</li>
-	*   <li>ResourceManager</li>
-	*   <li>Parser Pool</li>
-	*   <li>Global Cache</li>
-	*   <li>Static Content Include System</li>
-	*   <li>Velocimacro System</li>
-	* </ul>
-	*/
-
-		public static void init()
+		/// <summary>
+		/// This is the primary initialization method in the Velocity
+		/// Runtime. The systems that are setup/initialized here are
+		/// as follows:
+		/// <list type="">
+		///		<item>Logging System</item>
+		///		<item>ResourceManager</item>
+		///		<item>Parser Pool</item>
+		///		<item>Global Cache</item>
+		///		<item>Static Content Include System</item>
+		///		<item>Velocimacro System</item>
+		/// </list>
+		/// </summary>
+		public static void Init()
 		{
 			lock (typeof(RuntimeSingleton))
 			{
-				ri.init();
+				ri.Init();
 			}
 		}
 
 
-		/// <summary> Allows an external system to set a property in
+		/// <summary>
+		/// Allows an external system to set a property in
 		/// the Velocity Runtime.
-		/// *
 		/// </summary>
-		/// <param name="String">property key
-		/// </param>
-		/// <param name="String">property value
-		///
-		/// </param>
-		public static void setProperty(String key, Object value_)
+		/// <param name="key">property key</param>
+		/// <param name="value">property value</param>
+		public static void SetProperty(String key, Object value)
 		{
-			ri.setProperty(key, value_);
+			ri.SetProperty(key, value);
 		}
 
-		/// <summary> Allow an external system to set an ExtendedProperties
-		/// object to use. This is useful where the external
-		/// system also uses the ExtendedProperties class and
-		/// the velocity configuration is a subset of
-		/// parent application's configuration. This is
-		/// the case with Turbine.
-		/// *
-		/// </summary>
-		/// <param name="ExtendedProperties">configuration
-		///
-		/// </param>
 		/// <summary> Add a property to the configuration. If it already
 		/// exists then the value stated here will be added
 		/// to the configuration entry. For example, if
-		/// *
-		/// resource.loader = file
-		/// *
+		/// 
+		/// <code>resource.loader = file</code>
+		/// 
 		/// is already present in the configuration and you
-		/// *
-		/// addProperty("resource.loader", "classpath")
-		/// *
-		/// Then you will end up with a Vector like the
+		/// 
+		/// <code>addProperty("resource.loader", "classpath")</code>
+		/// 
+		/// Then you will end up with an ArrayList like the
 		/// following:
-		/// *
+		/// 
 		/// ["file", "classpath"]
-		/// *
 		/// </summary>
-		/// <param name="String">key
-		/// </param>
-		/// <param name="String">value
-		///
-		/// </param>
-		public static void addProperty(String key, Object value_)
+		/// <param name="key">key</param>
+		/// <param name="value">value</param>
+		public static void AddProperty(String key, Object value)
 		{
-			ri.addProperty(key, value_);
+			ri.AddProperty(key, value);
 		}
 
-		/// <summary> Clear the values pertaining to a particular
-		/// property.
-		/// *
+		/// <summary>
+		/// Clear the values pertaining to a particular property.
 		/// </summary>
-		/// <param name="String">key of property to clear
-		///
-		/// </param>
-		public static void clearProperty(String key)
+		/// <param name="key">key of property to clear</param>
+		public static void ClearProperty(String key)
 		{
-			ri.clearProperty(key);
+			ri.ClearProperty(key);
 		}
 
-		/// <summary>  Allows an external caller to get a property.  The calling
+		/// <summary>
+		/// Allows an external caller to get a property.  The calling
 		/// routine is required to know the type, as this routine
 		/// will return an Object, as that is what properties can be.
-		/// *
 		/// </summary>
-		/// <param name="key">property to return
-		///
-		/// </param>
-		public static Object getProperty(String key)
+		/// <param name="key">property to return</param>
+		public static Object GetProperty(String key)
 		{
-			return ri.getProperty(key);
+			return ri.GetProperty(key);
 		}
 
-		/// <summary> Initialize the Velocity Runtime with a Properties
-		/// object.
-		/// *
+		/// <summary>
+		/// Initialize the Velocity Runtime with an ExtendedProperties object.
 		/// </summary>
-		/// <param name="">Properties
-		///
-		/// </param>
-		public static void init(ExtendedProperties p)
+		/// <param name="p">Properties</param>
+		public static void Init(ExtendedProperties p)
 		{
-			ri.init(p);
+			ri.Init(p);
 		}
 
-		/// <summary> Initialize the Velocity Runtime with the name of
-		/// ExtendedProperties object.
-		/// *
-		/// </summary>
-		/// <param name="">Properties
-		///
-		/// </param>
-		public static void init(String configurationFile)
+		/// <summary> Initialize the Velocity Runtime with a configuration file.</summary>
+		/// <param name="configurationFile">configuration file</param>
+		public static void Init(String configurationFile)
 		{
-			ri.init(configurationFile);
+			ri.Init(configurationFile);
 		}
 
-		/// <summary> Returns a JavaCC generated Parser.
-		/// *
+		/// <summary>
+		/// Returns a JavaCC generated Parser.
 		/// </summary>
-		/// <returns>Parser javacc generated parser
-		///
-		/// </returns>
-		private static Parser.Parser createNewParser()
+		/// <returns>Parser javacc generated parser</returns>
+		private static Parser.Parser CreateNewParser()
 		{
-			return ri.createNewParser();
+			return ri.CreateNewParser();
 		}
 
 		/// <summary> Parse the input and return the root of
 		/// AST node structure.
-		/// <br><br>
+		/// </summary>
+		/// <remarks>
 		/// In the event that it runs out of parsers in the
 		/// pool, it will create and let them be GC'd
 		/// dynamically, logging that it has to do that.  This
@@ -204,31 +170,23 @@ namespace NVelocity.Runtime
 		/// expected that the user will set the
 		/// PARSER_POOL_SIZE property appropriately for their
 		/// application.  We will revisit this.
-		/// *
-		/// </summary>
-		/// <param name="InputStream">inputstream retrieved by a resource loader
-		/// </param>
-		/// <param name="String">name of the template being parsed
-		///
-		/// </param>
-		public static SimpleNode parse(TextReader reader, String templateName)
+		/// </remarks>
+		/// <param name="reader">TextReader retrieved by a resource loader</param>
+		/// <param name="templateName">name of the template being parsed</param>
+		public static SimpleNode Parse(TextReader reader, String templateName)
 		{
-			return ri.parse(reader, templateName);
+			return ri.Parse(reader, templateName);
 		}
 
-		/// <summary>  Parse the input and return the root of the AST node structure.
-		/// *
+		/// <summary>
+		/// Parse the input and return the root of the AST node structure.
 		/// </summary>
-		/// <param name="InputStream">inputstream retrieved by a resource loader
-		/// </param>
-		/// <param name="String">name of the template being parsed
-		/// </param>
-		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template
-		///
-		/// </param>
-		public static SimpleNode parse(TextReader reader, String templateName, bool dumpNamespace)
+		/// <param name="reader">TextReader retrieved by a resource loader</param>
+		/// <param name="templateName">name of the template being parsed</param>
+		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template</param>
+		public static SimpleNode Parse(TextReader reader, String templateName, bool dumpNamespace)
 		{
-			return ri.parse(reader, templateName, dumpNamespace);
+			return ri.Parse(reader, templateName, dumpNamespace);
 		}
 
 
@@ -248,9 +206,9 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		public static Template getTemplate(String name)
+		public static Template GetTemplate(String name)
 		{
-			return ri.getTemplate(name);
+			return ri.GetTemplate(name);
 		}
 
 		/// <summary> Returns a <code>Template</code> from the resource manager
@@ -268,9 +226,9 @@ namespace NVelocity.Runtime
 		/// @throws Exception if an error occurs in template initialization
 		///
 		/// </returns>
-		public static Template getTemplate(String name, String encoding)
+		public static Template GetTemplate(String name, String encoding)
 		{
-			return ri.getTemplate(name, encoding);
+			return ri.GetTemplate(name, encoding);
 		}
 
 		/// <summary> Returns a static content resource from the
@@ -285,9 +243,9 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		public static ContentResource getContent(String name)
+		public static ContentResource GetContent(String name)
 		{
-			return ri.getContent(name);
+			return ri.GetContent(name);
 		}
 
 		/// <summary> Returns a static content resource from the
@@ -303,9 +261,9 @@ namespace NVelocity.Runtime
 		/// from any available source.
 		///
 		/// </returns>
-		public static ContentResource getContent(String name, String encoding)
+		public static ContentResource GetContent(String name, String encoding)
 		{
-			return ri.getContent(name, encoding);
+			return ri.GetContent(name, encoding);
 		}
 
 
@@ -320,55 +278,47 @@ namespace NVelocity.Runtime
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		public static String getLoaderNameForResource(String resourceName)
+		public static String GetLoaderNameForResource(String resourceName)
 		{
-			return ri.getLoaderNameForResource(resourceName);
+			return ri.GetLoaderNameForResource(resourceName);
 		}
 
 
-		/// <summary> Log a warning message.
-		/// *
+		/// <summary>
+		/// Log a warning message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
-		public static void warn(Object message)
+		/// <param name="message">message to log</param>
+		public static void Warn(Object message)
 		{
-			ri.warn(message);
+			ri.Warn(message);
 		}
 
 		///
-		/// <summary> Log an info message.
-		/// *
+		/// <summary>
+		/// Log an info message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
-		public static void info(Object message)
+		/// <param name="message">message to log</param>
+		public static void Info(Object message)
 		{
-			ri.info(message);
+			ri.Info(message);
 		}
 
-		/// <summary> Log an error message.
-		/// *
+		/// <summary>
+		/// Log an error message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
-		public static void error(Object message)
+		/// <param name="message">message to log</param>
+		public static void Error(Object message)
 		{
-			ri.error(message);
+			ri.Error(message);
 		}
 
-		/// <summary> Log a debug message.
-		/// *
+		/// <summary>
+		/// Log a debug message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
-		public static void debug(Object message)
+		/// <param name="message">message to log</param>
+		public static void Debug(Object message)
 		{
-			ri.debug(message);
+			ri.Debug(message);
 		}
 
 		/// <summary> String property accessor method with default to hide the
@@ -385,61 +335,56 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public static String getString(String key, String defaultValue)
 		{
-			return ri.getString(key, defaultValue);
+			return ri.GetString(key, defaultValue);
 		}
 
-		/// <summary> Returns the appropriate VelocimacroProxy object if strVMname
+		/// <summary>
+		/// Returns the appropriate VelocimacroProxy object if vmName
 		/// is a valid current Velocimacro.
-		/// *
 		/// </summary>
-		/// <param name="String">vmName  Name of velocimacro requested
-		/// </param>
-		/// <returns>String VelocimacroProxy
-		///
-		/// </returns>
-		public static Directive.Directive getVelocimacro(String vmName, String templateName)
+		/// <param name="vmName">Name of velocimacro requested</param>
+		/// <param name="templateName">Template Name</param>
+		/// <returns>VelocimacroProxy</returns>
+		public static Directive.Directive GetVelocimacro(String vmName, String templateName)
 		{
-			return ri.getVelocimacro(vmName, templateName);
+			return ri.GetVelocimacro(vmName, templateName);
 		}
 
-		/// <summary> Adds a new Velocimacro. Usually called by Macro only while parsing.
-		/// *
+		/// <summary>
+		/// Adds a new Velocimacro. Usually called by Macro only while parsing.
 		/// </summary>
-		/// <param name="String">name  Name of velocimacro
+		/// <param name="name">Name of velocimacro</param>
+		/// <param name="macro">String form of macro body</param>
+		/// <param name="argArray">Array of strings, containing the 
+		/// <code>#macro()</code> arguments. The 0th is the name.
 		/// </param>
-		/// <param name="String">macro  String form of macro body
-		/// </param>
-		/// <param name="String">argArray  Array of strings, containing the
-		/// #macro() arguments.  the 0th is the name.
-		/// </param>
-		/// <returns>boolean  True if added, false if rejected for some
+		/// <param name="sourceTemplate">Source template</param>
+		/// <returns>True if added, false if rejected for some
 		/// reason (either parameters or permission settings)
-		///
 		/// </returns>
-		public static bool addVelocimacro(String name, String macro, String[] argArray, String sourceTemplate)
+		public static bool AddVelocimacro(String name, String macro, String[] argArray, String sourceTemplate)
 		{
-			return ri.addVelocimacro(name, macro, argArray, sourceTemplate);
+			return ri.AddVelocimacro(name, macro, argArray, sourceTemplate);
 		}
 
-		/// <summary>  Checks to see if a VM exists
-		/// *
+		/// <summary>
+		/// Checks to see if a VM exists
 		/// </summary>
-		/// <param name="name"> Name of velocimacro
-		/// </param>
-		/// <returns>boolean  True if VM by that name exists, false if not
-		///
-		/// </returns>
-		public static bool isVelocimacro(String vmName, String templateName)
+		/// <param name="vmName">Name of velocimacro</param>
+		/// <returns>True if VM by that name exists, false if not</returns>
+		public static bool IsVelocimacro(String vmName, String templateName)
 		{
-			return ri.isVelocimacro(vmName, templateName);
+			return ri.IsVelocimacro(vmName, templateName);
 		}
 
-		/// <summary>  tells the vmFactory to dump the specified namespace.  This is to support
-		/// clearing the VM list when in inline-VM-local-scope mode
+		/// <summary>
+		/// Tells the vmFactory to dump the specified namespace.
+		/// This is to support clearing the VM list when in 
+		/// inline-VM-local-scope mode
 		/// </summary>
-		public static bool dumpVMNamespace(String namespace_Renamed)
+		public static bool DumpVMNamespace(String namespace_Renamed)
 		{
-			return ri.dumpVMNamespace(namespace_Renamed);
+			return ri.DumpVMNamespace(namespace_Renamed);
 		}
 
 		/* --------------------------------------------------------------------
@@ -454,92 +399,71 @@ namespace NVelocity.Runtime
 		* --------------------------------------------------------------------
 		*/
 
-		/// <summary> String property accessor method to hide the configuration implementation
+		/// <summary>
+		/// String property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="key"> property key
-		/// </param>
-		/// <returns>  value of key or null
-		///
-		/// </returns>
-		public static String getString(String key)
+		/// <param name="key">property key</param>
+		/// <returns>Value of key or <c>null</c></returns>
+		public static String GetString(String key)
 		{
-			return ri.getString(key);
+			return ri.GetString(key);
 		}
 
-		/// <summary> Int property accessor method to hide the configuration implementation.
-		/// *
+		/// <summary>
+		/// Int property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="String">key property key
-		/// </param>
-		/// <returns>int value
-		///
-		/// </returns>
-		public static int getInt(String key)
+		/// <param name="key">property key</param>
+		/// <returns>value</returns>
+		public static int GetInt(String key)
 		{
-			return ri.getInt(key);
+			return ri.GetInt(key);
 		}
 
-		/// <summary> Int property accessor method to hide the configuration implementation.
-		/// *
+		/// <summary>
+		/// Int property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="key"> property key
-		/// </param>
-		/// <param name="int">default value
-		/// </param>
-		/// <returns>int  value
-		///
-		/// </returns>
-		public static int getInt(String key, int defaultValue)
+		/// <param name="key">property key</param>
+		/// <param name="defaultValue">default value</param>
+		/// <returns>value</returns>
+		public static int GetInt(String key, int defaultValue)
 		{
-			return ri.getInt(key, defaultValue);
+			return ri.GetInt(key, defaultValue);
 		}
 
-		/// <summary> Boolean property accessor method to hide the configuration implementation.
-		///
+		/// <summary>
+		/// Boolean property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="String">key  property key
-		/// </param>
-		/// <param name="boolean">default default value if property not found
-		/// </param>
-		/// <returns>boolean  value of key or default value
-		///
-		/// </returns>
-		public static bool getBoolean(String key, bool def)
+		/// <param name="key">property key</param>
+		/// <param name="def">default value if property not found</param>
+		/// <returns>value of key or default value</returns>
+		public static bool GetBoolean(String key, bool def)
 		{
-			return ri.getBoolean(key, def);
+			return ri.GetBoolean(key, def);
 		}
-
-
-		/**
-	 * @return The RuntimeInstance used by this wrapper.
-	 */
 
 		public static RuntimeServices RuntimeServices
 		{
 			get { return ri; }
-
 		}
 
-		/// <summary> Return the velocity runtime configuration object.
-		/// *
+		/// <summary>
+		/// Return the velocity runtime configuration object.
 		/// </summary>
-		/// <returns>ExtendedProperties configuration object which houses
+		/// <returns>
+		/// ExtendedProperties configuration object which houses
 		/// the velocity runtime properties.
-		///
 		/// </returns>
 		public static ExtendedProperties Configuration
 		{
 			get { return ri.Configuration; }
-
 			set { ri.Configuration = value; }
-
 		}
 
-		/// <summary>  Return the Introspector for this RuntimeInstance
-		/// *
+		/// <summary>
+		/// Return the Introspector for this RuntimeInstance
 		/// </summary>
-		/// <returns>Introspector object for this runtime instance
-		///
+		/// <returns>
+		/// Introspector object for this runtime instance
 		/// </returns>
 		public static Introspector Introspector
 		{
@@ -547,37 +471,28 @@ namespace NVelocity.Runtime
 
 		}
 
-		/// <summary>  returns the RuntimeInstance object for this singleton
-		/// For internal use only :)
-		/// *
+		/// <summary>
+		/// Returns the RuntimeInstance object for this singleton.
+		/// For internal use only.
 		/// </summary>
-		/// <returns>RuntimeInstance the RuntimeInstance used by this Singleton
-		/// instance
-		///
+		/// <returns>
+		/// The <see cref="RuntimeInstance"/> used by this Singleton instance.
 		/// </returns>
-		/// 
-		[Obsolete("Use getRuntimeServices() instead")]
+		[Obsolete("Use the RuntimeServices property instead")]
 		public static RuntimeInstance RuntimeInstance
 		{
 			get { return ri; }
 		}
 
 
-		/**
-	 * @see org.apache.velocity.runtime.RuntimeServices#getApplicationAttribute(Object)
-	 */
-
-		public static Object getApplicationAttribute(Object key)
+		/// <summary>
+		/// <seealso cref="Runtime.RuntimeServices.GetApplicationAttribute"/>
+		/// </summary>
+		/// <param name="key">key</param>
+		/// <returns>value</returns>
+		public static Object GetApplicationAttribute(Object key)
 		{
-			return ri.getApplicationAttribute(key);
+			return ri.GetApplicationAttribute(key);
 		}
-
-		/**
-	 * @see org.apache.velocity.runtime.RuntimeServices#getUberspect()
-	 */
-//	public static Uberspect Uberspect {
-//	    get {return ri.getUberspect(); }
-//	}
-
 	}
 }

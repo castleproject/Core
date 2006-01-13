@@ -28,78 +28,54 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		/// <summary>  does the real work.  Creates an Vector of Integers with the
+		/// <summary>
+		/// does the real work.  Creates an Vector of Integers with the
 		/// right value range
-		/// *
 		/// </summary>
-		/// <param name="context"> app context used if Left or Right of .. is a ref
-		/// </param>
-		/// <returns>Object array of Integers
-		///
-		/// </returns>
+		/// <param name="context">app context used if Left or Right of .. is a ref</param>
+		/// <returns>Object array of Integers</returns>
 		public override Object Value(InternalContextAdapter context)
 		{
-			/*
-	    *  get the two range ends
-	    */
-
+			// get the two range ends
 			Object left = jjtGetChild(0).Value(context);
 			Object right = jjtGetChild(1).Value(context);
 
-			/*
-	    *  if either is null, lets log and bail
-	    */
-
+			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.error((left == null ? "Left" : "Right") + " side of range operator [n..m] has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side of range operator [n..m] has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return null;
 			}
 
-			/*
-	    *  if not an Integer, not much we can do either
-	    */
-
+			// if not an Integer, not much we can do either
 			if (!(left is Int32) || !(right is Int32))
 			{
-				rsvc.error((!(left is Int32) ? "Left" : "Right") + " side of range operator is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of range operator is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 
 				return null;
 			}
 
-
-			/*
-	    *  get the two integer values of the ends of the range
-	    */
-
+			// get the two integer values of the ends of the range
 			int l = ((Int32) left);
 			int r = ((Int32) right);
 
-			/*
-	    *  find out how many there are
-	    */
-
+			// find out how many there are
 			int num = Math.Abs(l - r);
 			num += 1;
 
-			/*
-	    *  see if your increment is Pos or Neg
-	    */
-
+			// see if your increment is Pos or Neg
 			int delta = (l >= r) ? - 1 : 1;
 
-			/*
-	    *  make the vector and fill it
-	    */
-
-			ArrayList foo = new ArrayList();
+			// make the vector and fill it
+			ArrayList foo = new ArrayList(num);
 			int val = l;
 
 			for (int i = 0; i < num; i++)

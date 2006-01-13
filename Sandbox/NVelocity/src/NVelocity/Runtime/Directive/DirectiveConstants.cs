@@ -54,26 +54,4 @@ namespace NVelocity.Runtime.Directive
     * <http://www.apache.org/>.
     */
 
-	/// <summary>  Base class for all directives used in Velocity.
-	/// *
-	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: DirectiveConstants.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
-	public struct DirectiveConstants_Fields
-	{
-		public const int BLOCK = 1;
-		public const int LINE = 2;
-	}
-
-	public interface DirectiveConstants
-	{
-		//UPGRADE_NOTE: Members of interface 'DirectiveConstants' were extracted into structure 'DirectiveConstants_Fields'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1045"'
-		/// <summary>Block directive indicator
-		/// </summary>
-		/// <summary>Line directive indicator
-		/// </summary>
-	}
 }

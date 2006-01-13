@@ -41,7 +41,7 @@ namespace NVelocity.Runtime.Log
 		{
 			// if a logSystem was set as a configuation value, use that.
 			// This is any class the user specifies.
-			Object o = rsvc.getProperty(RuntimeConstants_Fields.RUNTIME_LOG_LOGSYSTEM);
+			Object o = rsvc.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM);
 
 			if (o != null && o is LogSystem)
 			{
@@ -57,7 +57,7 @@ namespace NVelocity.Runtime.Log
 			// AvalonLogSystem and the SimpleLog4JLogSystem for convenience -
 			// so we use whichever we find.
 			IList classes = new ArrayList();
-			Object obj = rsvc.getProperty(RuntimeConstants_Fields.RUNTIME_LOG_LOGSYSTEM_CLASS);
+			Object obj = rsvc.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS);
 
 			// we might have a list, or not - so check
 			if (obj is IList)
@@ -76,7 +76,7 @@ namespace NVelocity.Runtime.Log
 			{
 				if (clazz != null && clazz.Length > 0)
 				{
-					rsvc.info("Trying to use logger class " + clazz);
+					rsvc.Info("Trying to use logger class " + clazz);
 
 					try
 					{
@@ -87,18 +87,18 @@ namespace NVelocity.Runtime.Log
 						{
 							((LogSystem) o).Init(rsvc);
 
-							rsvc.info("Using logger class " + clazz);
+							rsvc.Info("Using logger class " + clazz);
 
 							return (LogSystem) o;
 						}
 						else
 						{
-							rsvc.error("The specifid logger class " + clazz + " isn't a valid LogSystem");
+							rsvc.Error("The specifid logger class " + clazz + " isn't a valid LogSystem");
 						}
 					}
 					catch (ApplicationException ncdfe)
 					{
-						rsvc.debug("Couldn't find class " + clazz + " or necessary supporting classes in classpath. Exception : " + ncdfe);
+						rsvc.Debug("Couldn't find class " + clazz + " or necessary supporting classes in classpath. Exception : " + ncdfe);
 					}
 				}
 			}
@@ -126,7 +126,7 @@ namespace NVelocity.Runtime.Log
 				throw;
 			}
 
-			rsvc.info("Using log4net as logger of final resort.");
+			rsvc.Info("Using log4net as logger of final resort.");
 
 			return als;
 		}

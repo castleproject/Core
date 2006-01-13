@@ -35,9 +35,9 @@ namespace NVelocity.Runtime.Directive
 			set { throw new NotSupportedException(); }
 		}
 
-		public override int Type
+		public override DirectiveType Type
 		{
-			get { return DirectiveConstants_Fields.BLOCK; }
+			get { return DirectiveType.BLOCK; }
 		}
 
 		private static bool debugMode = false;
@@ -49,23 +49,19 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>   render() doesn't do anything in the final output rendering.
 		/// There is no output from a #macro() directive.
 		/// </summary>
-		public override bool render(InternalContextAdapter context, TextWriter writer, Node node)
+		public override bool Render(InternalContextAdapter context, TextWriter writer, Node node)
 		{
-			/*
-	    *  do nothing : We never render.  The VelocimacroProxy object does that
-	    */
+			// do nothing : We never render.  The VelocimacroProxy object does that
 			return true;
 		}
 
-		public override void init(RuntimeServices rs, InternalContextAdapter context, Node node)
+		public override void Init(RuntimeServices rs, InternalContextAdapter context, Node node)
 		{
-			base.init(rs, context, node);
+			base.Init(rs, context, node);
 
-			/*
-	    * again, don't do squat.  We want the AST of the macro 
-	    * block to hang off of this but we don't want to 
-	    * init it... it's useless...
-	    */
+			// again, don't do squat.  We want the AST of the macro 
+	    // block to hang off of this but we don't want to 
+	    // init it... it's useless...
 			return;
 		}
 
@@ -79,41 +75,29 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		public static void processAndRegister(RuntimeServices rs, Node node, String sourceTemplate)
 		{
-			/*
-	    *  There must be at least one arg to  #macro,
-	    *  the name of the VM.  Note that 0 following 
-	    *  args is ok for naming blocks of HTML
-	    */
+			// There must be at least one arg to  #macro,
+	    // the name of the VM.  Note that 0 following 
+	    // args is ok for naming blocks of HTML
 			int numArgs = node.jjtGetNumChildren();
 
-			/*
-	    *  this number is the # of args + 1.  The + 1
-	    *  is for the block tree
-	    */
+			// this number is the # of args + 1.  The + 1
+	    // is for the block tree
 			if (numArgs < 2)
 			{
-				/*
-		*  error - they didn't name the macro or
-		*  define a block
-		*/
-				rs.error("#macro error : Velocimacro must have name as 1st " + "argument to #macro()");
+				// error - they didn't name the macro or
+				// define a block
+				rs.Error("#macro error : Velocimacro must have name as 1st " + "argument to #macro()");
 
 				return;
 			}
 
-			/*
-	    *  get the arguments to the use of the VM
-	    */
+			// get the arguments to the use of the VM
 			String[] argArray = getArgArray(node);
 
-			/*
-	    *   now, try and eat the code block. Pass the root.
-	    */
+			// now, try and eat the code block. Pass the root.
 			IList macroArray = getASTAsStringArray(node.jjtGetChild(numArgs - 1));
 
-			/*
-	    *  make a big string out of our macro
-	    */
+			// make a big string out of our macro
 			StringBuilder temp = new StringBuilder();
 
 			for (int i = 0; i < macroArray.Count; i++)
@@ -121,11 +105,9 @@ namespace NVelocity.Runtime.Directive
 
 			String macroBody = temp.ToString();
 
-			/*
-	    * now, try to add it.  The Factory controls permissions, 
-	    * so just give it a whack...
-	    */
-			bool bRet = rs.addVelocimacro(argArray[0], macroBody, argArray, sourceTemplate);
+			// now, try to add it.  The Factory controls permissions, 
+	    // so just give it a whack...
+			rs.AddVelocimacro(argArray[0], macroBody, argArray, sourceTemplate);
 
 			return;
 		}
@@ -136,10 +118,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private static String[] getArgArray(Node node)
 		{
-			/*
-	    *  remember : this includes the block tree
-	    */
-
+			// remember : this includes the block tree
 			int numArgs = node.jjtGetNumChildren();
 
 			numArgs--; // avoid the block tree...
@@ -148,18 +127,13 @@ namespace NVelocity.Runtime.Directive
 
 			int i = 0;
 
-			/*
-	    *  eat the args
-	    */
-
+			//  eat the args
 			while (i < numArgs)
 			{
-				argArray[i] = node.jjtGetChild(i).FirstToken.image;
+				argArray[i] = node.jjtGetChild(i).FirstToken.Image;
 
-				/*
-		*  trim off the leading $ for the args after the macro name.
-		*  saves everyone else from having to do it
-		*/
+				// trim off the leading $ for the args after the macro name.
+				// saves everyone else from having to do it
 
 				if (i > 0)
 				{
@@ -188,19 +162,13 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private static IList getASTAsStringArray(Node rootNode)
 		{
-			/*
-	    *  this assumes that we are passed in the root 
-	    *  node of the code block
-	    */
-
+			// this assumes that we are passed in the root 
+	    // node of the code block
 			Token t = rootNode.FirstToken;
 			Token tLast = rootNode.LastToken;
 
-			/*
-	    *  now, run down the part of the tree bounded by
-	    *  our first and last tokens
-	    */
-
+			// now, run down the part of the tree bounded by
+	    // our first and last tokens
 			ArrayList list = new ArrayList();
 
 			t = rootNode.FirstToken;
@@ -208,18 +176,13 @@ namespace NVelocity.Runtime.Directive
 			while (t != tLast)
 			{
 				list.Add(NodeUtils.tokenLiteral(t));
-				t = t.next;
+				t = t.Next;
 			}
 
-			/*
-	    *  make sure we get the last one...
-	    */
-
+			// make sure we get the last one...
 			list.Add(NodeUtils.tokenLiteral(t));
 
 			return list;
 		}
-
-
 	}
 }

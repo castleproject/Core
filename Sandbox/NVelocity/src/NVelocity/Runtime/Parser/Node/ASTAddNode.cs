@@ -53,18 +53,16 @@ namespace NVelocity.Runtime.Parser.Node
     * information on the Apache Software Foundation, please see
     * <http://www.apache.org/>.
     */
-	/// <summary> Handles integer addition of nodes
-	/// *
+
+	/// <summary>
+	/// Handles integer addition of nodes
+	/// 
 	/// Please look at the Parser.jjt file which is
 	/// what controls the generation of this class.
-	/// *
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ASTAddNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	/// </version>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a> </author>
+	/// <version> $Id: ASTAddNode.cs,v 1.3 2003/10/27 13:54:10 corts Exp $ </version>
 	using System;
 	using NVelocity.Context;
 
@@ -78,45 +76,36 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
-		/// <summary>Accept the visitor. *
+		/// <summary>
+		/// Accept the visitor.
 		/// </summary>
 		public override Object jjtAccept(ParserVisitor visitor, Object data)
 		{
-			return visitor.visit(this, data);
+			return visitor.Visit(this, data);
 		}
 
-		/// <summary>  computes the sum of the two nodes.  Currently only integer operations are
-		/// supported.
+		/// <summary>
+		/// Computes the sum of the two nodes.
+		/// Currently only integer operations are supported.
 		/// </summary>
-		/// <returns>Integer object with value, or null
-		///
-		/// </returns>
+		/// <returns>Integer object with value, or null</returns>
 		public override Object Value(InternalContextAdapter context)
 		{
-			/*
-	    *  get the two addends
-	    */
-
+			// get the two addends
 			Object left = jjtGetChild(0).Value(context);
 			Object right = jjtGetChild(1).Value(context);
 
-			/*
-	    *  if either is null, lets log and bail
-	    */
-
+			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).literal() + ") of addition operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).Literal + ") of addition operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return null;
 			}
 
-			/*
-	    *  if not an Integer, not much we can do either
-	    */
-
+			// if not an Integer, not much we can do either
 			if (!(left is Int32) || !(right is Int32))
 			{
-				rsvc.error((!(left is Int32) ? "Left" : "Right") + " side of addition operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of addition operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 
 				return null;
 			}
