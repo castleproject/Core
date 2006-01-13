@@ -100,13 +100,13 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport.csproj">
-      <Name>Castle.MonoRail.TestSupport</Name>
+    <ProjectReference Include="..\Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport-vs2005.csproj">
+      <Name>Castle.MonoRail.TestSupport-vs2005</Name>
       <Project>{E572DC59-2A96-482F-BE39-E938AB47EA9D}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\TestScaffolding\TestScaffolding.csproj">
-      <Name>TestScaffolding</Name>
+    <ProjectReference Include="..\TestScaffolding\TestScaffolding-vs2005.csproj">
+      <Name>TestScaffolding-vs2005</Name>
       <Project>{C4107B52-109E-4629-A202-58E93917C80B}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>

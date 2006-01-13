@@ -109,8 +109,8 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Castle.MonoRail.WindsorExtension\Castle.MonoRail.WindsorExtension.csproj">
-      <Name>Castle.MonoRail.WindsorExtension</Name>
+    <ProjectReference Include="..\Castle.MonoRail.WindsorExtension\Castle.MonoRail.WindsorExtension-vs2005.csproj">
+      <Name>Castle.MonoRail.WindsorExtension-vs2005</Name>
       <Project>{6C51A1E3-7F20-4696-BFD6-829134678341}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>

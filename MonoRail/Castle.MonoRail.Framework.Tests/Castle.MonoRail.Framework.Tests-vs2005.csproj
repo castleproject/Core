@@ -91,13 +91,13 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework.csproj">
-      <Name>Castle.MonoRail.Framework</Name>
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
+      <Name>Castle.MonoRail.Framework-vs2005</Name>
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport.csproj">
-      <Name>Castle.MonoRail.TestSupport</Name>
+    <ProjectReference Include="..\Castle.MonoRail.TestSupport\Castle.MonoRail.TestSupport-vs2005.csproj">
+      <Name>Castle.MonoRail.TestSupport-vs2005</Name>
       <Project>{E572DC59-2A96-482F-BE39-E938AB47EA9D}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>

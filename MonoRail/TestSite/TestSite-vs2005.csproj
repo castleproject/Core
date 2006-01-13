@@ -89,8 +89,8 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework.csproj">
-      <Name>Castle.MonoRail.Framework</Name>
+    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
+      <Name>Castle.MonoRail.Framework-vs2005</Name>
       <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
@@ -221,7 +221,9 @@
     <EmbeddedResource Include="views\registration\postback.aspx.resx">
       <DependentUpon>postback.aspx.cs</DependentUpon>
     </EmbeddedResource>
-    <Folder Include="views\general" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="views\general\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
