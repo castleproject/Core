@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.Binder", "Castle.Components.Common.Binder\Castle.Components.Common.Binder.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.Binder.Tests", "Castle.Components.Common.Binder.Tests\Castle.Components.Common.Binder.Tests.csproj", "{57ED99CE-404E-4029-A98A-2159E2E70E22}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.ActiveCfg = Debug|.NET
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.Build.0 = Debug|.NET
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.ActiveCfg = Release|.NET
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.Build.0 = Release|.NET
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Debug.ActiveCfg = Debug|.NET
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Debug.Build.0 = Debug|.NET
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release.ActiveCfg = Release|.NET
+		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
