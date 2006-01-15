@@ -89,6 +89,7 @@ namespace Castle.Components.Binder.Tests
 		{
 			NameValueCollection args = new NameValueCollection();
 
+			args.Add("customer@ignore", "true");
 			args.Add("customer.name", "hammett");
 			args.Add("customer.age", "26");
 			args.Add("customer.all", "yada yada yada");
@@ -99,6 +100,7 @@ namespace Castle.Components.Binder.Tests
 			
 			Assert.IsNotNull(node);
 			Assert.IsFalse(node.IsIndexed);
+			Assert.IsTrue(node.ShouldIgnore);
 
 			Assert.AreEqual("hammett", node.GetEntryValue("name"));
 			Assert.AreEqual("26", node.GetEntryValue("age"));
