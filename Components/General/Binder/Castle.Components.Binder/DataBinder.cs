@@ -32,13 +32,17 @@ namespace Castle.Components.Binder
 		protected internal static readonly BindingFlags PropertiesBindingFlags =
 			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 		
-		protected String prefix;
-		protected IDictionary files;
-		protected IList errorList;
-		protected String excludedProperties;
-		protected String allowedProperties;
-		protected String[] excludedPropertyList;
-		protected String[] allowedPropertyList;
+		private String prefix;
+		private IList errorList;
+		private IDictionary files;
+		private String excludedProperties;
+		private String allowedProperties;
+		private String[] excludedPropertyList;
+		private String[] allowedPropertyList;
+
+		public DataBinder() : this(String.Empty, new Hashtable(), new ArrayList(), "", "")
+		{
+		}
 
 		public DataBinder(String prefix) : this(prefix, new Hashtable(), new ArrayList(), "", "")
 		{
@@ -52,6 +56,30 @@ namespace Castle.Components.Binder
 			this.errorList = errorList;
 			this.allowedProperties = allowedProperties;
 			this.excludedProperties = excludedProperties;
+		}
+
+		public string ExcludedProperties
+		{
+			get { return excludedProperties; }
+			set { excludedProperties = value; }
+		}
+
+		public string AllowedProperties
+		{
+			get { return allowedProperties; }
+			set { allowedProperties = value; }
+		}
+
+		public IDictionary Files
+		{
+			get { return files; }
+			set { files = value; }
+		}
+
+		public String Prefix
+		{
+			get { return prefix; }
+			set { prefix = value; }
 		}
 
 		public IList Errors
@@ -70,6 +98,14 @@ namespace Castle.Components.Binder
 		public void BindObjectInstance(object instance, IBindingDataSourceNode dataSource)
 		{
 			InternalRecursiveBindObjectInstance(instance, prefix, dataSource.ObtainNode(prefix));
+		}
+
+		protected virtual void AfterBinding(object instance, String prefix, IBindingDataSourceNode node)
+		{
+		}
+
+		protected virtual void BeforeBinding(object instance, String prefix, IBindingDataSourceNode node)
+		{
 		}
 
 		protected object InternalBindObject(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
@@ -158,14 +194,6 @@ namespace Castle.Components.Binder
 			}
 
 			AfterBinding(instance, paramPrefix, node);
-		}
-
-		protected virtual void AfterBinding(object instance, String prefix, IBindingDataSourceNode node)
-		{
-		}
-
-		protected virtual void BeforeBinding(object instance, String prefix, IBindingDataSourceNode node)
-		{
 		}
 
 		private object[] InternalBindObjectArray(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
