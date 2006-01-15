@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
@@ -23,17 +23,18 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class ErrorList : ICollection
 	{
-		private IList list;
-		private IDictionary map;
+		private readonly IList list;
+		private readonly IDictionary map;
 
-		public ErrorList( IList initialContents )
+		public ErrorList(IList initialContents)
 		{
-			this.list = ( initialContents != null ? initialContents : new ArrayList(0) );
-			map	= new HybridDictionary( list.Count, true );
+			this.list = (initialContents != null ? initialContents : new ArrayList(0));
 			
-			foreach ( IPropertyError error in list )
+			map = new HybridDictionary(list.Count, true);
+
+			foreach(DataBindError error in list)
 			{
-				map.Add( error.Property, error );
+				map.Add(error.Property, error);
 			}
 		}
 
@@ -42,14 +43,14 @@ namespace Castle.MonoRail.Framework
 			get { return list.Count; }
 		}
 
-		public bool Contains( String property )
+		public bool Contains(String property)
 		{
-			return map.Contains( property );
+			return map.Contains(property);
 		}
 
-		public IPropertyError this[ String property ]
+		public DataBindError this[String property]
 		{
-			get { return map[ property ] as IPropertyError; }
+			get { return map[property] as DataBindError; }
 		}
 
 		#region ICollection Members

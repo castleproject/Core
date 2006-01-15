@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Tests
+namespace Castle.Components.Binder.Tests
 {
 	using System;
 	using System.Collections;
@@ -20,8 +20,6 @@ namespace Castle.MonoRail.Framework.Tests
 	using System.Globalization;
 	using System.Threading;
 	using System.Web;
-
-	using Castle.MonoRail.Framework.Internal;
 	
 	using NUnit.Framework;
 
@@ -30,6 +28,8 @@ namespace Castle.MonoRail.Framework.Tests
 	{
 		private bool convSucceed;
 
+		private static TimeSpan init;
+
 		[TestFixtureSetUp]
 		public void Init()
 		{
@@ -37,16 +37,26 @@ namespace Castle.MonoRail.Framework.Tests
 
 			Thread.CurrentThread.CurrentCulture	= en;
 			Thread.CurrentThread.CurrentUICulture = en;
+
+			init = new TimeSpan(DateTime.Now.Ticks);
+		}
+
+		[TestFixtureTearDown]
+		public void Terminate()
+		{
+			TimeSpan diff = new TimeSpan(DateTime.Now.Ticks) - init;
+
+			Console.WriteLine(diff.Milliseconds);
 		}
 
 		private object Convert(Type desiredType, string input)
 		{
-			return ConvertUtils.Convert(desiredType, input, out convSucceed);
+			return ConvertUtils.Convert(desiredType, "myparam", input, out convSucceed);
 		}
 
 		private object Convert(Type desiredType, string paramName, string parseInput)
 		{
-			return ConvertUtils.Convert(desiredType, paramName, DataBinderTestCase.ParseNameValueString(parseInput), null, out convSucceed);
+			return ConvertUtils.Convert(desiredType, paramName, TestUtils.ParseNameValueString(parseInput), null, out convSucceed);
 		}
 
 		[Test]
@@ -84,24 +94,30 @@ namespace Castle.MonoRail.Framework.Tests
 		[Test]
 		public void EnumConvert()
 		{
-			Assert.AreEqual(System.UriPartial.Authority, Convert(typeof(System.UriPartial), "Authority"));
+			Assert.AreEqual(UriPartial.Scheme, Convert(typeof(UriPartial), UriPartial.Scheme.ToString("D")));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(System.UriPartial.Path, Convert(typeof(System.UriPartial), "uripartial", "uripartial=Path"));
+			Assert.AreEqual(UriPartial.Authority, Convert(typeof(UriPartial), UriPartial.Authority.ToString("D")));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(null, Convert(typeof(System.UriPartial), null));
+			Assert.AreEqual(UriPartial.Authority, Convert(typeof(UriPartial), "Authority"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(UriPartial.Path, Convert(typeof(UriPartial), "uripartial", "uripartial=Path"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(null, Convert(typeof(UriPartial), null));
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual(null, Convert(typeof(System.UriPartial), "   "));
+			Assert.AreEqual(null, Convert(typeof(UriPartial), "   "));
 			Assert.IsFalse(convSucceed);
 
 			try
 			{
-				Convert(typeof(System.UriPartial), "Invalid Value");
+				Convert(typeof(UriPartial), "Invalid Value");
 				Assert.Fail("EnumConvert should had throwed an exception");
 			}
-			catch(Exception)
+			catch(BindingException)
 			{
 				Assert.IsFalse(convSucceed);
 			}
@@ -116,10 +132,10 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual((decimal) 13.33, Convert(typeof(decimal), "value", "value=13.33"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(Decimal.Zero, Convert(typeof(decimal), null));
+			Assert.AreEqual(null, Convert(typeof(decimal), null));
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual(Decimal.Zero, Convert(typeof(decimal), "   "));
+			Assert.AreEqual(null, Convert(typeof(decimal), "   "));
 			Assert.IsFalse(convSucceed);
 
 			try
@@ -127,7 +143,7 @@ namespace Castle.MonoRail.Framework.Tests
 				Convert(typeof(decimal), "Invalid Value");
 				Assert.Fail("DecimalConvert should had throwed an exception");
 			}
-			catch(Exception)
+			catch(BindingException)
 			{
 				Assert.IsFalse(convSucceed);
 			}
@@ -142,10 +158,10 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual(new Guid("6CDEF425-6EEA-42AC-A318-0772B55FF259"), Convert(typeof(Guid), "value", "value=6CDEF425-6EEA-42AC-A318-0772B55FF259"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(Guid.Empty, Convert(typeof(Guid), null));
+			Assert.AreEqual(null, Convert(typeof(Guid), null));
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual(Guid.Empty, Convert(typeof(Guid), "   "));
+			Assert.AreEqual(null, Convert(typeof(Guid), "   "));
 			Assert.IsFalse(convSucceed);
 
 			try
@@ -153,7 +169,7 @@ namespace Castle.MonoRail.Framework.Tests
 				Convert(typeof(Guid), "Invalid Value");
 				Assert.Fail("GuidConvert should had throwed an exception");
 			}
-			catch(Exception)
+			catch(BindingException)
 			{
 				Assert.IsFalse(convSucceed);
 			}
@@ -168,53 +184,82 @@ namespace Castle.MonoRail.Framework.Tests
 			Assert.AreEqual(new DateTime(2005, 1, 31), Convert(typeof(DateTime), "value", "valueday=31 \n valuemonth=1 \n valueyear=2005"));
 			Assert.IsTrue(convSucceed);
 
-			DateTime d = (DateTime) Convert(typeof(DateTime), null);
+			Convert(typeof(DateTime), null);
 			Assert.IsFalse(convSucceed);
-			Assert.IsTrue(d > DateTime.MinValue);
 
-			DateTime d2 = (DateTime) Convert(typeof(DateTime), "      ");
+			Convert(typeof(DateTime), "      ");
 			Assert.IsFalse(convSucceed);
-			Assert.IsTrue(d2 >= d);
+		}
 
+		[Test]
+		public void InvalidDate1()
+		{
 			try
 			{
 				Convert(typeof(DateTime), "Invalid Value");
 				Assert.Fail("DateTimeConvert should had throwed an exception");
 			}
-			catch(Exception)
+			catch(BindingException)
 			{
 				Assert.IsFalse(convSucceed);
 			}
 		}
 
 		[Test]
-		public void PrimitiveConvert()
+		public void InvalidDate2()
 		{
-			Assert.AreEqual(false, Convert(typeof(bool), "FalSE"));
-			Assert.IsTrue(convSucceed);
+			try
+			{
+				Convert(typeof(DateTime), "2005-02-31");
+				Assert.Fail("DateTimeConvert should had throwed an exception");
+			}
+			catch(BindingException)
+			{
+				Assert.IsFalse(convSucceed);
+			}
+		}
 
-			Assert.AreEqual(false, Convert(typeof(bool), ""));
-			Assert.IsFalse(convSucceed);
-
-			Assert.AreEqual(false, Convert(typeof(bool), null));
-			Assert.IsFalse(convSucceed);
-
+		[Test]
+		public void Int32Convert()
+		{
 			Assert.AreEqual(12, Convert(typeof(int), "12"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(0, Convert(typeof(int), ""));
+			Assert.AreEqual(null, Convert(typeof(int), ""));
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual(0, Convert(typeof(int), null));
+			Assert.AreEqual(null, Convert(typeof(int), null));
 			Assert.IsFalse(convSucceed);
+		}
+
+		[Test]
+		public void PrimitiveConvert()
+		{
+			Assert.AreEqual(false, Convert(typeof(bool), ""));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(false, Convert(typeof(bool), "FalSE"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(true, Convert(typeof(bool), "1"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(true, Convert(typeof(bool), "true"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(true, Convert(typeof(bool), "on"));
+			Assert.IsTrue(convSucceed);
+
+			Assert.AreEqual(false, Convert(typeof(bool), null));
+			Assert.IsTrue(convSucceed);
 
 			Assert.AreEqual(12.01, Convert(typeof(float), "12.01"));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(0.0, Convert(typeof(float), ""));
+			Assert.AreEqual(null, Convert(typeof(float), ""));
 			Assert.IsFalse(convSucceed);
 
-			Assert.AreEqual(0.0, Convert(typeof(float), null));
+			Assert.AreEqual(null, Convert(typeof(float), null));
 			Assert.IsFalse(convSucceed);
 		}
 
@@ -224,10 +269,10 @@ namespace Castle.MonoRail.Framework.Tests
 			Hashtable hash = new Hashtable();
 			hash["value"] = "file content";
 
-			Assert.AreEqual("file content", ConvertUtils.Convert(typeof(HttpPostedFile), "value", null, hash, out convSucceed));
+			Assert.AreEqual("file content", ConvertUtils.Convert(typeof(HttpPostedFile), "value", new Hashtable(), hash, out convSucceed));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(null, ConvertUtils.Convert(typeof(HttpPostedFile), "invalidValue", null, hash, out convSucceed));
+			Assert.AreEqual(null, ConvertUtils.Convert(typeof(HttpPostedFile), "invalidValue", new Hashtable(), hash, out convSucceed));
 			Assert.IsFalse(convSucceed);
 		}
 
@@ -242,7 +287,7 @@ namespace Castle.MonoRail.Framework.Tests
 				Convert(typeof(CustomType), "invalid value");
 				Assert.Fail("TypeConverterConvert should had throwed an exception");
 			}
-			catch(Exception)
+			catch(BindingException)
 			{
 				Assert.IsFalse(convSucceed);
 			}
@@ -252,12 +297,11 @@ namespace Castle.MonoRail.Framework.Tests
 				Convert(typeof(CustomType2), "validvalue");
 				Assert.Fail("TypeConverterConvert should had throwed an exception");
 			}
-			catch(Exception)
+			catch(BindingException)
 			{
 				Assert.IsFalse(convSucceed);
 			}
 		}
-
 	}
 
 	[TypeConverter(typeof(TypeConverterHelper))]
@@ -283,7 +327,7 @@ namespace Castle.MonoRail.Framework.Tests
 			return sourceType == typeof(string);
 		}
 
-		public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 		{
 			if (value.ToString() == "validvalue")
 			{

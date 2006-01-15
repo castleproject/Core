@@ -12,59 +12,80 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Internal
+namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.ComponentModel;
-	using System.Text.RegularExpressions;
 	using System.Web;
 
+	/// <summary>
+	/// Handles only simple conversion of well-known types (primitives, DateTime)
+	/// as well as type that have a <see cref="TypeConverter"/> associated
+	/// </summary>
 	public sealed class ConvertUtils
 	{
 		private ConvertUtils()
 		{
 		}
 
-		public static object Convert(Type desiredType, String paramName, NameValueCollection paramList, IDictionary files)
-		{			
+		public static object Convert(Type desiredType, String paramName, 
+			NameValueCollection paramList, IDictionary files)
+		{
 			bool conversionSucceeded;
 
 			return Convert(desiredType, paramName, paramList, files, out conversionSucceeded);
 		}
 
-		public static object Convert(Type desiredType, String paramName, NameValueCollection paramList, IDictionary files, out bool conversionSucceeded)
-		{	
+		public static object Convert(Type desiredType, String paramName, 
+			IDictionary paramList, IDictionary files)
+		{
+			bool conversionSucceeded;
+
+			return Convert(desiredType, paramName, paramList, files, out conversionSucceeded);
+		}
+
+		public static object Convert(Type desiredType, String paramName, 
+			NameValueCollection paramList, IDictionary files, out bool conversionSucceeded)
+		{
 			object input = GetInput(desiredType, paramName, paramList, files);
 
-			return Convert(desiredType, input, out conversionSucceeded);
+			return Convert(desiredType, paramName, input, out conversionSucceeded);
+		}
+
+		public static object Convert(Type desiredType, String paramName, 
+			IDictionary paramList, IDictionary files, out bool conversionSucceeded)
+		{
+			object input = GetInput(desiredType, paramName, paramList, files);
+
+			return Convert(desiredType, paramName, input, out conversionSucceeded);
 		}
 
 		public static object Convert(Type desiredType, object value)
-		{			
+		{
 			bool conversionSucceeded;
 
-			return Convert(desiredType, value, out conversionSucceeded);
+			return Convert(desiredType, "unspecified param", value, out conversionSucceeded);
 		}
 
 		/// <summary>
 		/// Convert the input param into the desired type
 		/// </summary>
-		/// <param name="desiredType">Type of the desired.</param>
-		/// <param name="input">The input.</param>
-		/// <param name="conversionSucceeded">if set to <c>true</c> [conversion succeeded].</param>
-		/// <returns>
+		/// <param name="desiredType">Type of the desired</param>
+		/// <param name="input">The input</param>
+		/// <param name="conversionSucceeded">if <c>false</c> the return value must be ignored</param>
+		/// <remarks>
 		/// There are 3 possible cases when trying to convert:
-		/// 1) Input data for conversion missing (input is null or an empty string)
-		///		Returns default conversion value (based on desired type) and set conversionSucceeded = false
+		/// 1) Input data for conversion missing (input is null or an empty String)
+		///		Returns default conversion value (based on desired type) and set <c>conversionSucceeded = false</c>
 		/// 2) Has input data but cannot convert to particular type
-		///		Throw exception and set conversionSucceeded = false
+		///		Throw exception and set <c>conversionSucceeded = false</c>
 		/// 3) Has input data and can convert to particular type
-		/// 	 Return input converted to desired type and set conversionSucceeded = true
-		/// </returns>
-		public static object Convert(Type desiredType, object input, out bool conversionSucceeded)
-		{			
+		/// 	 Return input converted to desired type and set <c>conversionSucceeded = true</c>
+		/// </remarks>
+		public static object Convert(Type desiredType, String paramName, object input, out bool conversionSucceeded)
+		{
 			try
 			{
 				conversionSucceeded = (input != null);
@@ -73,161 +94,192 @@ namespace Castle.MonoRail.Framework.Internal
 				{
 					return conversionSucceeded ? input.ToString() : String.Empty;
 				}
+				else if (desiredType == typeof(int))
+				{
+					return ConvertInt32(input, ref conversionSucceeded);
+				}
 				else if (desiredType.IsArray)
 				{
-					return conversionSucceeded ? ConvertToArray(desiredType, input, out conversionSucceeded) : null;
+					return conversionSucceeded ? 
+						ConvertToArray(desiredType, paramName, input, ref conversionSucceeded) : null;
 				}
 				else if (desiredType.IsEnum)
 				{
-					string value = NormalizeString(input as string);
-
-					if (value == String.Empty)
-					{
-						conversionSucceeded = false;
-						return null;
-					}
-					else if (!Regex.IsMatch( value, @"\D", RegexOptions.Compiled)) 
-					{
-						object enumValue = System.Convert.ChangeType(value, Enum.GetUnderlyingType(desiredType));
-						// optional: test if the specified value is valid within the enum
-						//if (Enum.IsDefined(desiredType, enumValue))
-						//	throw or set enumValue = null
-						return enumValue;
-					}
-					else
-					{
-						return Enum.Parse(desiredType, value, true);	
-					}									
-				}
-				else if (desiredType.IsPrimitive)
-				{
-					string value = NormalizeString(input as string);
-
-					if (value == String.Empty)
-					{
-						conversionSucceeded = false;
-						return Activator.CreateInstance(desiredType);
-					}
-					else if (desiredType == typeof(Boolean))
-					{
-						return String.Compare( "false", value, true ) != 0;
-					}					
-					else
-					{
-						return System.Convert.ChangeType(value, desiredType);	
-					}							
+					return ConvertEnum(desiredType, input, ref conversionSucceeded);
 				}
 				else if (desiredType == typeof(Decimal))
 				{
-					string value = NormalizeString(input as string);
-					
-					if( value == String.Empty )
-					{
-						conversionSucceeded = false;
-						return Decimal.Zero;
-					}
-					else
-					{
-						return System.Convert.ToDecimal( value );	
-					}					
-				}			
+					return ConvertDecimal(input, ref conversionSucceeded);
+				}
 				else if (desiredType == typeof(Guid))
 				{
-					string value = NormalizeString(input as string);
-
-					if( value == String.Empty )
-					{
-						conversionSucceeded = false;
-						return Guid.Empty;
-					}
-					else
-					{
-						return new Guid(value);	
-					}		
+					return ConvertGuid(input, ref conversionSucceeded);
 				}
 				else if (desiredType == typeof(DateTime))
 				{
-					return ConvertDate(input, out conversionSucceeded);
+					return ConvertDate(paramName, input, ref conversionSucceeded);
 				}
 				else if (desiredType == typeof(HttpPostedFile))
 				{
 					return input;
 				}
-				else 
+				else if (desiredType.IsPrimitive)
 				{
-					// support for types that specify a TypeConverter, i.e.: NullableTypes
-					Type sourceType = (input != null ? input.GetType() : typeof(String));
-					TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
-
-					if (conv != null && conv.CanConvertFrom(sourceType))
-					{
-						return conv.ConvertFrom(input);
-					}
-					else
-					{
-						String message = String.Format("Cannot convert argument '{0}', with value '{1}', "+
-							"from {2} to {3}", "input", input, sourceType, desiredType);
-	
-						throw new ArgumentException(message);						
-					}
-				}				
+					return ConvertPrimitive(desiredType, input, ref conversionSucceeded);
+				}
+				else
+				{
+					return ConvertUsingTypeConverter(desiredType, paramName, input, ref conversionSucceeded);
+				}
 			}
-			catch(Exception)
+			catch(BindingException)
 			{
 				conversionSucceeded = false;
+
 				throw;
+			}
+			catch(Exception inner)
+			{
+				conversionSucceeded = false;
+				
+				ThrowInformativeException(desiredType, paramName, input, inner); return null;
 			}
 		}
 
-		private static object ConvertDate( object input, out bool conversionSucceeded)
+		private static object ConvertInt32(object input, ref bool conversionSucceeded)
+		{
+			if (conversionSucceeded && ((String) input) != String.Empty)
+			{
+				return System.Convert.ToInt32(input);
+			}
+
+			conversionSucceeded = false;
+
+			return null;
+		}
+
+		private static object ConvertGuid(object input, ref bool conversionSucceeded)
 		{
 			conversionSucceeded = true;
 
-			if( input != null && input.GetType().IsArray )
+			String value = NormalizeString(input as String);
+	
+			if (value == String.Empty)
 			{
-				Array inputArray = input as Array;
-
-				if( inputArray.Length != 3 || input.GetType().GetElementType() != typeof(string) )
-				{
-					String message = String.Format( "Convert DateTime expects string array with size 3, input was {0} with size {1}", 
-					                                input.GetType().GetElementType().FullName, inputArray.Length );
-
-					throw new ArgumentException( message );					
-				}
-
-				try
-				{												
-					int numYear = System.Convert.ToInt32(inputArray.GetValue(0));
-					int numMonth = System.Convert.ToInt32(inputArray.GetValue(1));
-					int numDay = System.Convert.ToInt32(inputArray.GetValue(2));
-							
-					int daysInMonth = DateTime.DaysInMonth( numYear, numMonth);
-							
-					if( numDay > 31 )
-					{
-						throw new ArgumentException( String.Format( "Convert DateTime day {1} is too big", numDay) );
-					}
-							
-					if( numDay > daysInMonth ) numDay = daysInMonth;
-
-					return new DateTime( numYear, numMonth, numDay );
-				}
-				catch(Exception inner)
-				{
-					String message = String.Format( "Convert DateTime invalid date (day {2} month {1} year {0})", 
-					                                (object[]) inputArray  );
-
-					throw new ArgumentException(message, inner);
-				}					
+				conversionSucceeded = false;
+				return null;
 			}
 			else
 			{
-				string value = NormalizeString(input as string);
-					
-				if(value == String.Empty)
+				return new Guid(value);
+			}
+		}
+
+		private static object ConvertDecimal(object input, ref bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+
+			String value = NormalizeString(input as String);
+	
+			if (value == String.Empty)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+			else
+			{
+				return System.Convert.ToDecimal(value);
+			}
+		}
+
+		private static object ConvertPrimitive(Type desiredType, object input, ref bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+
+			String value = NormalizeString(input as String);
+	
+			if (desiredType == typeof(Boolean))
+			{
+				if (value == String.Empty)
+				{
+					return false;
+				}
+				else
+				{
+					return !(String.Compare("false", value, true) == 0);
+				}
+			}
+			else if (value == String.Empty)
+			{
+				conversionSucceeded = false;
+						
+				return null;
+			}
+			else
+			{
+				return System.Convert.ChangeType(value, desiredType);
+			}
+		}
+
+		private static object ConvertEnum(Type desiredType, object input, ref bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+
+			String value = NormalizeString(input as String);
+	
+			if (value == String.Empty)
+			{
+				conversionSucceeded = false;
+				return null;
+			}
+			else
+			{
+				return Enum.Parse(desiredType, value, true);
+			}
+		}
+
+		private static object ConvertDate(string paramName, object input, ref bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+
+			if (input != null && input.GetType().IsArray)
+			{
+				Array inputArray = input as Array;
+
+				if (inputArray.Length != 3 || input.GetType().GetElementType() != typeof(String))
+				{
+					String message = String.Format("Convert DateTime expects String array with size 3, input was {0} with size {1}",
+					                               input.GetType().GetElementType().FullName, inputArray.Length);
+
+					throw new BindingException(message);
+				}
+
+				int numYear = System.Convert.ToInt32(inputArray.GetValue(0));
+				int numMonth = System.Convert.ToInt32(inputArray.GetValue(1));
+				int numDay = System.Convert.ToInt32(inputArray.GetValue(2));
+
+				try
+				{
+					return new DateTime(numYear, numMonth, numDay);
+				}
+				catch(Exception inner)
+				{
+					String message = String.Format(
+						"Convert DateTime: invalid date for " + 
+						"parameter {0} (day: {1} month: {2} year: {3})", paramName, numDay, numMonth, numYear);
+
+					throw new BindingException(message, inner);
+				}
+			}
+			else
+			{
+				String value = NormalizeString(input as String);
+
+				if (value == String.Empty)
 				{
 					conversionSucceeded = false;
-					return DateTime.Now;
+					
+					return null;
 				}
 				else
 				{
@@ -236,60 +288,88 @@ namespace Castle.MonoRail.Framework.Internal
 			}
 		}
 
-		private static object ConvertToArray(Type desiredType, object input, out bool conversionSucceeded)
+		private static object ConvertToArray(Type desiredType, string paramName, object input, ref bool conversionSucceeded)
 		{
 			Type elemType = desiredType.GetElementType();
 
 			// Fix for mod_mono issue where array values are passed 
 			// as a comma seperated String
-			if( !input.GetType().IsArray )
+			if (!input.GetType().IsArray)
 			{
-				if( input.GetType() == typeof(string) )
+				if (input.GetType() == typeof(String))
 				{
 					input = NormalizeString(input.ToString());
 
-					if( input.ToString() == String.Empty )
+					if (input.ToString() == String.Empty)
 					{
 						input = Array.CreateInstance(elemType, 0);
 					}
 					else
 					{
-						input = input.ToString().Split( ',' );		
-					}										
+						input = input.ToString().Split(',');
+					}
 				}
 				else
 				{
-					throw new RailsException("Cannot convert to array type {0} from type {1}", elemType.FullName, input.GetType().FullName );
-				}				
-			}			
+					throw new BindingException("Cannot convert to array type {0} from type {1}", elemType.FullName, input.GetType().FullName);
+				}
+			}
 
 			Array values = input as Array;
 			Array result = Array.CreateInstance(elemType, values.Length);
 			bool elementConversionSucceeded = conversionSucceeded = false;
 
-			for(int i=0; i < values.Length; i++)
+			for(int i = 0; i < values.Length; i++)
 			{
-				result.SetValue( Convert(elemType, values.GetValue(i), out elementConversionSucceeded), i);
-				// if at least one array element got converted we consider the conversion a success
-				if( elementConversionSucceeded ) conversionSucceeded = true;
+				result.SetValue(Convert(elemType, paramName, values.GetValue(i), out elementConversionSucceeded), i);
+				
+				// if at least one array element get converted 
+				// we consider the conversion a success
+				if (elementConversionSucceeded && !conversionSucceeded) conversionSucceeded = true;
 			}
-	
+
 			return result;
 		}
 
-		private static string NormalizeString( string input )
+		/// <summary>
+		/// Support for types that specify a TypeConverter, 
+		/// i.e.: NullableTypes
+		/// </summary>
+		private static object ConvertUsingTypeConverter(Type desiredType, string paramName, object input, ref bool conversionSucceeded)
+		{
+			conversionSucceeded = true;
+
+			Type sourceType = (input != null ? input.GetType() : typeof(String));
+			TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
+
+			if (conv != null && conv.CanConvertFrom(sourceType))
+			{
+				return conv.ConvertFrom(input);
+			}
+			else
+			{
+				conversionSucceeded = false;
+
+				String message = String.Format("Conversion error: " + 
+					"Could not convert parameter '{0}' with value '{1}' to {2}", paramName, input, desiredType);
+
+				throw new BindingException(message);
+			}
+		}
+
+		private static String NormalizeString(String input)
 		{
 			return (input == null) ? String.Empty : input.Trim();
 		}
 
-		public static bool HasConvertInput(Type desiredType, string paramName, NameValueCollection paramList, IDictionary fileList)
-		{
-			return GetInput(desiredType, paramName, paramList, fileList) != null;
-		}
+//		public static bool HasInput(Type desiredType, String paramName, NameValueCollection paramList, IDictionary fileList)
+//		{
+//			return GetInput(desiredType, paramName, paramList, fileList) != null;
+//		}
 
-		private static object GetInput( Type type, string paramName, NameValueCollection paramList, IDictionary fileList )
+		private static object GetInput(Type type, String paramName, NameValueCollection paramList, IDictionary fileList)
 		{
-			if( type == typeof(HttpPostedFile) )
+			if (type == typeof(HttpPostedFile))
 			{
 				return fileList[paramName];
 			}
@@ -297,17 +377,55 @@ namespace Castle.MonoRail.Framework.Internal
 			{
 				object input = paramList[paramName];
 
-				// When type == DateTime we should look for params of type paramNameyear,month,day
-				if( input == null && type == typeof(DateTime) &&
-					paramList[paramName + "day"]   != null &&
+				// When type == DateTime we should also look 
+				// up for paramNameyear, paramNamemonth, paramNameday
+				if (input == null && type == typeof(DateTime) &&
+					paramList[paramName + "day"] != null &&
 					paramList[paramName + "month"] != null &&
-					paramList[paramName + "year"]  != null )
+					paramList[paramName + "year"] != null)
 				{
-					return new string[]{ paramList[paramName + "year"], paramList[paramName + "month"], paramList[paramName + "day"] };
+					return new String[] {   paramList[paramName + "year"], 
+											paramList[paramName + "month"], 
+											paramList[paramName + "day"] };
 				}
-				
-				return input;				
+
+				return input;
 			}
-		}		
+		}
+
+		private static object GetInput(Type type, String paramName, IDictionary paramList, IDictionary fileList)
+		{
+			if (type == typeof(HttpPostedFile))
+			{
+				return fileList[paramName];
+			}
+			else
+			{
+				object input = paramList[paramName];
+
+				// When type == DateTime we should also look 
+				// up for paramNameyear, paramNamemonth, paramNameday
+				if (input == null && type == typeof(DateTime) &&
+					paramList[paramName + "day"] != null &&
+					paramList[paramName + "month"] != null &&
+					paramList[paramName + "year"] != null)
+				{
+					return new String[] {  
+										(String) paramList[paramName + "year"], 
+										(String) paramList[paramName + "month"], 
+										(String) paramList[paramName + "day"] };
+				}
+
+				return input;
+			}
+		}
+
+		private static void ThrowInformativeException(Type desiredType, string paramName, object input, Exception inner)
+		{
+			String message = String.Format("Conversion error: " + 
+				"Could not convert parameter '{0}' with value '{1}' to {2}", paramName, input, desiredType);
+	
+			throw new BindingException(message, inner);
+		}
 	}
 }

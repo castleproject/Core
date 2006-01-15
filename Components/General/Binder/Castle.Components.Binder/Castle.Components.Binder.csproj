@@ -79,22 +79,37 @@
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AbstractBindingDataSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConvertUtils.cs"
+                    RelPath = "BindingDataSourceException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DataBindContext.cs"
+                    RelPath = "BindingException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConvertUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -109,12 +124,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DataSourceNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ErrorList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IPropertyError.cs"
+                    RelPath = "IBindingDataSourceNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IndexComparer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NameValueCollectionAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

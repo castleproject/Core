@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework
+namespace Castle.Components.Binder
 {
 	using System;
 
@@ -20,24 +20,24 @@ namespace Castle.MonoRail.Framework
 	/// Represents an error that occurred when trying to 
 	/// databind a property of an instance.
 	/// </summary>
-	public class DataBindError : IPropertyError
+	public class DataBindError
 	{
-		private String _parent;
-		private String _property;
-		private Exception _exception;
+		private readonly String _parent;
+		private readonly String _property;
+		private readonly Exception _exception;
 
-		public DataBindError( String parent, String property ) : this( parent, property, null )
+		public DataBindError(String parent, String property) : this(parent, property, null)
 		{
 		}
 
-		public DataBindError( String parent, String property, Exception exception )
+		public DataBindError(String parent, String property, Exception exception)
 		{
 			_parent = parent;
 			_property = property;
 			_exception = exception;
 		}
 
-        public String Key
+		public String Key
 		{
 			get { return _parent + "." + Property; }
 		}
@@ -59,7 +59,7 @@ namespace Castle.MonoRail.Framework
 
 		public override String ToString()
 		{
-			if (Exception != null) 
+			if (Exception != null)
 			{
 				return Exception.Message;
 			}
