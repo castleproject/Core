@@ -94,6 +94,11 @@
                     AssemblyName = "Castle.Components.Common.EmailSender"
                     HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
                 />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -124,26 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "DataBinder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DataBindError.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "default.build"
                     BuildAction = "None"
                 />
                 <File
                     RelPath = "DelegateDynamicAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ErrorList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -168,7 +158,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IPropertyError.cs"
+                    RelPath = "IParameterBinder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -244,11 +234,6 @@
                 />
                 <File
                     RelPath = "SmartDispatcherController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SmartViewComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -503,6 +488,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Helpers\FormHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Helpers\HtmlHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -554,16 +544,6 @@
                 />
                 <File
                     RelPath = "Internal\ControllerMetaDescriptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\ConvertUtils.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\DataBindContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

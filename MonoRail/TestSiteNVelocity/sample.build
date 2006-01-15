@@ -22,6 +22,7 @@
 			<fileset basedir="../bin">
 				<include name="Castle.MonoRail.Framework.dll" />
 				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="Castle.Components.Binder.dll" />
 				<include name="Castle.Components.Common.EmailSender.dll" />
 				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 				<include name="Nullables.dll" />
@@ -55,6 +56,7 @@
 				<include name="${bin2.dir}/Commons.dll" />
 				<include name="${bin2.dir}/log4net.dll" />
 				<include name="${bin2.dir}/NVelocity.dll" />
+				<include name="${bin2.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</references>

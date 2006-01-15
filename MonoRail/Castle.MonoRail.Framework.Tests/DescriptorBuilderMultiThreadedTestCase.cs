@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			startEvent.Set();
 
-			Thread.CurrentThread.Join(4 * 2000);
+			Thread.CurrentThread.Join(1 * 2000);
 
             stopEvent.Set();
 
@@ -66,6 +66,8 @@ namespace Castle.MonoRail.Framework.Tests
 			{
 				ControllerMetaDescriptor desc1 = builder.BuildDescriptor( new Controller1() );
 				ControllerMetaDescriptor desc2 = builder.BuildDescriptor( new Controller2() );
+				desc1 = builder.BuildDescriptor( new Controller1() );
+				desc2 = builder.BuildDescriptor( new Controller2() );
 
 				Assert.AreEqual( 0, desc1.ActionProviders.Count );
 				Assert.AreEqual( 1, desc1.Filters.Count );

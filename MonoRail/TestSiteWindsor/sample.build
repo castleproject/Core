@@ -26,6 +26,7 @@
 				<include name="Castle.Model.dll" />
 				<include name="Castle.MicroKernel.dll" />
 				<include name="Castle.Windsor.dll" />
+				<include name="Castle.Components.Binder.dll" />
 				<include name="Castle.Components.Common.EmailSender.dll" />
 				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</fileset>
@@ -52,6 +53,7 @@
 				<include name="${bin2.dir}/Castle.Model.dll" />
 				<include name="${bin2.dir}/Castle.MicroKernel.dll" />
 				<include name="${bin2.dir}/Castle.Windsor.dll" />
+				<include name="${bin2.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</references>

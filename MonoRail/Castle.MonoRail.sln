@@ -43,23 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.WindsorExte
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordScaffold", "Castle.MonoRail.ActiveRecordScaffold\Castle.MonoRail.ActiveRecordScaffold.csproj", "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordScaffold.Tests", "Castle.MonoRail.ActiveRecordScaffold.Tests\Castle.MonoRail.ActiveRecordScaffold.Tests.csproj", "{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestScaffolding", "TestScaffolding\TestScaffolding.csproj", "{C4107B52-109E-4629-A202-58E93917C80B}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport", "Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport.csproj", "{2409063E-BE05-4596-A677-758096D1C759}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport.Tests", "Castle.MonoRail.ActiveRecordSupport.Tests\Castle.MonoRail.ActiveRecordSupport.Tests.csproj", "{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder", "..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder.csproj", "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -113,26 +97,10 @@ Global
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Debug.Build.0 = Debug|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.ActiveCfg = Release|.NET
 		{DDE1A9F0-4CD6-454E-A9DB-B56946F34ED5}.Release.Build.0 = Release|.NET
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug.ActiveCfg = Debug|.NET
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Debug.Build.0 = Debug|.NET
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release.ActiveCfg = Release|.NET
-		{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}.Release.Build.0 = Release|.NET
-		{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}.Debug.ActiveCfg = Debug|.NET
-		{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}.Debug.Build.0 = Debug|.NET
-		{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}.Release.ActiveCfg = Release|.NET
-		{F58E7FC3-AB85-4F5E-94D8-AA939B3372DB}.Release.Build.0 = Release|.NET
-		{C4107B52-109E-4629-A202-58E93917C80B}.Debug.ActiveCfg = Debug|.NET
-		{C4107B52-109E-4629-A202-58E93917C80B}.Debug.Build.0 = Debug|.NET
-		{C4107B52-109E-4629-A202-58E93917C80B}.Release.ActiveCfg = Release|.NET
-		{C4107B52-109E-4629-A202-58E93917C80B}.Release.Build.0 = Release|.NET
-		{2409063E-BE05-4596-A677-758096D1C759}.Debug.ActiveCfg = Debug|.NET
-		{2409063E-BE05-4596-A677-758096D1C759}.Debug.Build.0 = Debug|.NET
-		{2409063E-BE05-4596-A677-758096D1C759}.Release.ActiveCfg = Release|.NET
-		{2409063E-BE05-4596-A677-758096D1C759}.Release.Build.0 = Release|.NET
-		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Debug.ActiveCfg = Debug|.NET
-		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Debug.Build.0 = Debug|.NET
-		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Release.ActiveCfg = Release|.NET
-		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Release.Build.0 = Release|.NET
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.ActiveCfg = Debug|.NET
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.Build.0 = Debug|.NET
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.ActiveCfg = Release|.NET
+		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt

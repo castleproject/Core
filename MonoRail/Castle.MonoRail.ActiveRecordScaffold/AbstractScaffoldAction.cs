@@ -183,7 +183,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected static void SetUpHelpers(Controller controller)
 		{
-			FormHelper htmlHelper = new FormHelper();
+			ARFormHelper htmlHelper = new ARFormHelper();
 			htmlHelper.SetController(controller);
 	
 			ValidationHelper validationHelper = new ValidationHelper();

@@ -54,12 +54,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void SimpleBind()
 		{
-			DoGet("smart/SimpleBind.rails", "name=hammett", "itemcount=11", "price=20");
+			DoGet("smart/SimpleBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20");
 			String expected = "incoming hammett 11 20";
 
 			AssertReplyEqualsTo(expected);
 
-			DoGet("smart/SimpleBind.rails", "name=hammett");
+			DoGet("smart/SimpleBind.rails", "order.name=hammett");
 			expected = "incoming hammett 0 0";
 
 			AssertReplyEqualsTo(expected);
@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void ComplexBind()
 		{
-			DoGet( "smart/ComplexBind.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y" );
+			DoGet( "smart/ComplexBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y" );
 			String expected = "incoming hammett 11 20 1 x y";
 
 			AssertReplyEqualsTo( expected );
@@ -77,8 +77,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void ComplexBindExcludePrice()
 		{
-			DoGet( "smart/ComplexBindExcludePrice.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y" );
-			// This still includes zero in place of price due to the ToString() method of the domain object and price being of type float
+			DoGet( "smart/ComplexBindExcludePrice.rails", "order.name=hammett", "order.itemcount=11", "order.price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y" );
+			// This still includes zero in place of price due to 
+			// the ToString() method of the domain object and price being of type float
 			String expected = "incoming hammett 11 0 1 x y";
 
 			AssertReplyEqualsTo( expected );
@@ -87,8 +88,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void ComplexBindExcludeName()
 		{
-			DoGet( "smart/ComplexBindExcludeName.rails", "name=hammett", "itemcount=11", "price=20", "id=1", "contact.email=x&contact.phone=y" );
-			// This includes an extra space because of the ToString() method of the domain object and the custom String.Format it contains.
+			DoGet( "smart/ComplexBindExcludeName.rails", "order.name=hammett", "order.itemcount=11", "order.price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y" );
+			// This includes an extra space because of the ToString() 
+			// method of the domain object and the custom String.Format it contains.
 			String expected = "incoming  11 20 1 x y";
 
 			AssertReplyEqualsTo( expected );
@@ -97,7 +99,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void ComplexBindWithPrefix()
 		{
-			DoGet("smart/ComplexBindWithPrefix.rails", "name=hammett", "itemcount=11", "price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y");
+			DoGet("smart/ComplexBindWithPrefix.rails", "order.name=hammett", "order.itemcount=11", "order.price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y");
 			String expected = "incoming hammett 11 20 1 x y";
 
 			AssertReplyEqualsTo(expected);
@@ -106,7 +108,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void FillingBehavior1()
 		{
-			DoGet("smart/FillingBehavior.rails", "name=someone", "date1day=11", "date1month=10", "date1year=2005");
+			DoGet("smart/FillingBehavior.rails", "abc.name=someone", "abc.date1day=11", "abc.date1month=10", "abc.date1year=2005");
 			String expected = "incoming someone " + new DateTime( 2005, 10, 11 ).ToShortDateString() + " " + 
 				DateTime.Now.AddDays(1).ToShortDateString();
 

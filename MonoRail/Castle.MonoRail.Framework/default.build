@@ -48,6 +48,7 @@
 			</sources>
 
 			<references>
+				<include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.EmailSender.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</references>

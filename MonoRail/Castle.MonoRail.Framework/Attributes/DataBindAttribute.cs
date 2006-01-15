@@ -15,6 +15,9 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.Collections.Specialized;
+	using System.Reflection;
+	using Castle.Components.Binder;
 
 	public enum ParamStore
 	{
@@ -25,22 +28,22 @@ namespace Castle.MonoRail.Framework
 
 	/// <summary>
 	/// The DataBind Attribute is used to indicate that an Action methods parameter 
-	/// is to be intercepted and handled by the <see cref="DataBinder"/>.
+	/// is to be intercepted and handled by the <see cref="Castle.Components.Binder.DataBinder"/>.
 	/// </summary>
 	/// <remarks>
 	/// Allowed usage is one per method parameter, and is not inherited.
 	/// </remarks>
 	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
-	public class DataBindAttribute : Attribute
+	public class DataBindAttribute : Attribute, IParameterBinder
 	{
 		private ParamStore _from = ParamStore.Params;
-		private String _prefix = String.Empty;
 		private String _exclude = String.Empty;
 		private String _allow = String.Empty;
-		private int _nestedLevel = 3;
+		private String prefix;
 
-		public DataBindAttribute()
+		public DataBindAttribute(String prefix)
 		{
+			this.prefix = prefix;
 		}
 
 		/// <summary>
@@ -78,23 +81,26 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the databinding prefix.
+		/// Gets the databinding prefix.
 		/// </summary>
 		/// <value>The databinding prefix.</value>
 		public String Prefix
 		{
-			get { return _prefix; }
-			set { _prefix = value; }
+			get { return prefix; }
 		}
 
-		/// <summary>
-		/// Gets or sets the nested level.
-		/// </summary>
-		/// <value>The nested level.</value>
-		public int NestedLevel
+		object IParameterBinder.Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			get { return _nestedLevel; }
-			set { _nestedLevel = value; }
+			NameValueCollection coll = controller.ResolveParamsSource(From);
+
+			DataBinder binder = controller.Binder;
+
+			binder.Prefix = Prefix;
+			binder.AllowedProperties = Allow;
+			binder.ExcludedProperties = Exclude;
+			binder.Files = controller.Context.Request.Files;
+
+			return binder.BindObject(parameterInfo.ParameterType, new NameValueCollectionAdapter(coll));
 		}
 	}
 }

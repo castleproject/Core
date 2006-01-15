@@ -18,7 +18,8 @@
 	
 	<property name="version" value="beta-5" />
 
-	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, arsupport, arscaffold, brail, testsupport, samples, tests, generator, copytobuilddir" /> 
+	<target name="build" depends="clean, init, framework, integration, nvelocity, composite, testsupport, samples, tests, generator, copytobuilddir" /> 
+	<!-- <target name="build" dep"clean, init, framework, integration, nvelocity, composite, arsupport, arscaffold, brail, testsupport, samples, tests, generator, copytobuilddir" />  -->
 	
 	<target name="clean">
 		<delete>
@@ -71,6 +72,7 @@
 
 		<!-- Monorail Framework dependencies -->
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-email-comp" inheritall="true" />
+		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-binder-comp" inheritall="true" />
 
 		<!-- Monorail Generator dependencies -->
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-templateengine-comp" inheritall="true" />
@@ -127,17 +129,17 @@
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
-		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" /> 
-		<nant buildfile="TestScaffolding/sample.build" inheritall="true" target="compile" />
+<!--		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" /> 
+		<nant buildfile="TestScaffolding/sample.build" inheritall="true" target="compile" /> -->
 	</target>
 	
 	<target name="tests" depends="init" if="${monorail.test}">
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
+<!--		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="test" />
-		<nant buildfile="Castle.MonoRail.ActiveRecordSupport/default.build" inheritall="true" target="test" />
+		<nant buildfile="Castle.MonoRail.ActiveRecordSupport/default.build" inheritall="true" target="test" /> -->
 	</target>
 
 	<target name="generator" depends="init">

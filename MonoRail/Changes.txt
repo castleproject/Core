@@ -11,6 +11,8 @@ Release Candidate 1
   - mailfrom to mailFrom
   - customsession to customSession
 
+- SmartViewComponent removed
+
 
 Beta 5
 ======

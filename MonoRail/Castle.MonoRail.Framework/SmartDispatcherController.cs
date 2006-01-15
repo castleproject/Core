@@ -18,8 +18,8 @@ namespace Castle.MonoRail.Framework
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
-
-	using Castle.MonoRail.Framework.Internal;
+	
+	using Castle.Components.Binder;
 
 	/// <summary>
 	/// Specialization of <see cref="Controller"/> that tries
@@ -147,6 +147,7 @@ namespace Castle.MonoRail.Framework
 			object[] args = new object[parameters.Length];
 			String paramName = String.Empty;
 			String value = String.Empty;
+			Type paramType;
 
 			CreateParamCollections(request);
 
@@ -158,14 +159,41 @@ namespace Castle.MonoRail.Framework
 				{
 					ParameterInfo param = parameters[argIndex];
 					paramName = param.Name;
+					paramType = param.ParameterType;
 
-					// if complex binding is successful, there's no need for further processing
-					if (BindComplexParameter(param, request, args, argIndex))
+					if (paramType.IsPrimitive || paramType == typeof(DateTime) || paramType == typeof(String))
 					{
-						continue;
+						args[argIndex] = ConvertUtils.Convert(param.ParameterType, paramName, allParams, files);
+					}
+					else
+					{
+						bool handled = false;
+
+						object[] attributes = param.GetCustomAttributes(false);
+						
+						foreach(object attr in attributes)
+						{
+							IParameterBinder paramBinder = attr as IParameterBinder;
+
+							if (paramBinder != null)
+							{
+								args[argIndex] = paramBinder.Bind(this, param);
+
+								handled = true; break;
+							}
+						}
+
+						if (!handled)
+						{
+							args[argIndex] = ConvertUtils.Convert(param.ParameterType, paramName, allParams, files);
+						}
 					}
 
-					args[argIndex] = ConvertUtils.Convert(param.ParameterType, paramName, allParams, files);
+					// if complex binding is successful, there's no need for further processing
+//					if (BindComplexParameter(param, request, args, argIndex))
+//					{
+//						continue;
+//					}
 				}
 			}
 			catch(FormatException ex)
@@ -193,46 +221,55 @@ namespace Castle.MonoRail.Framework
 		/// <c>true</c> if binding completes and the default behaviour can be skipped,
 		/// <c>false</c> otherwise.
 		/// </returns>
-		protected virtual bool BindComplexParameter(ParameterInfo param, IRequest request, object[] args, int argIndex)
+//		protected virtual bool BindComplexParameter(ParameterInfo param, IRequest request, object[] args, int argIndex)
+//		{
+//			object[] bindAttributes = param.GetCustomAttributes(typeof(DataBindAttribute), false);
+//
+//			if (bindAttributes.Length != 0)
+//			{
+//				DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
+//
+//				args[argIndex] = BindObject(dba.From, param.ParameterType, dba.Prefix, dba.Exclude, dba.Allow);
+//
+//				return true;
+//			}
+//
+//			return false;
+//		}
+
+		protected object BindObject(ParamStore from, Type targetType, String prefix)
 		{
-			object[] bindAttributes = param.GetCustomAttributes(typeof(DataBindAttribute), false);
-
-			if (bindAttributes.Length != 0)
-			{
-				DataBindAttribute dba = bindAttributes[0] as DataBindAttribute;
-
-				args[argIndex] = BindObject(dba.From, param.ParameterType, dba.Prefix, dba.NestedLevel, dba.Exclude, dba.Allow);
-
-				return true;
-			}
-
-			return false;
+			return BindObject(from, targetType, prefix);
 		}
 
-		protected object BindObject(ParamStore from, Type paramType, String prefix, int nestedLevel, String excludedProperties, String allowedProperties)
+		protected object BindObject(ParamStore from, Type targetType, String prefix, String excludedProperties, String allowedProperties)
 		{
 			NameValueCollection webParams = ResolveParamsSource(from);
 
-			ArrayList errorList = new ArrayList();
+			binder.Prefix = prefix;
+			binder.Files = Context.Request.Files;
+			binder.ExcludedProperties = excludedProperties;
+			binder.AllowedProperties = allowedProperties;
 
-			object instance = binder.BindObject(paramType, prefix, webParams, Context.Request.Files, errorList, nestedLevel, excludedProperties, allowedProperties);
+			object instance = binder.BindObject(targetType, new NameValueCollectionAdapter(webParams));
 
-			boundInstances[instance] = errorList;
+			boundInstances[instance] = binder.Errors;
 
 			return instance;
 		}
 
-		protected object BindObjectInstance(object instance, ParamStore from, String prefix)
+		protected void BindObjectInstance(object instance, ParamStore from, String prefix)
 		{
 			NameValueCollection webParams = ResolveParamsSource(from);
 
-			ArrayList errorList = new ArrayList();
+			binder.Prefix = prefix;
+			binder.Files = Context.Request.Files;
+			binder.ExcludedProperties = null;
+			binder.AllowedProperties = null;
 
-			binder.BindObjectInstance(instance, prefix, webParams, Context.Request.Files, errorList);
+			binder.BindObjectInstance(instance, new NameValueCollectionAdapter(webParams));
 
-			boundInstances[instance] = errorList;
-
-			return instance;
+			boundInstances[instance] = binder.Errors;
 		}
 
 		protected ErrorList GetDataBindErrors(object instance)
@@ -249,7 +286,7 @@ namespace Castle.MonoRail.Framework
 			allParams = request.Params;
 		}
 
-		protected NameValueCollection ResolveParamsSource(ParamStore from)
+		protected internal NameValueCollection ResolveParamsSource(ParamStore from)
 		{
 			NameValueCollection webParams = null;
 	

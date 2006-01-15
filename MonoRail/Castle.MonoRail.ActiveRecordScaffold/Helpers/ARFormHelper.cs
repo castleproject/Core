@@ -29,7 +29,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 	using Iesi.Collections;
 
 
-	public class FormHelper : HtmlHelper
+	public class ARFormHelper : HtmlHelper
 	{
 		private static readonly object[] Empty = new object[0];
 

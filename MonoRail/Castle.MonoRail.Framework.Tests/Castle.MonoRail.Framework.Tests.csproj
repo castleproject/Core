@@ -124,16 +124,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConvertUtilsTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DataBinderTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "DefaultControllerFactoryTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -180,11 +170,6 @@
                 />
                 <File
                     RelPath = "ServerUtilityTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SmartDispatcherTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

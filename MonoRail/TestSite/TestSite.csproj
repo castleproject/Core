@@ -94,6 +94,11 @@
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

@@ -31,32 +31,32 @@ namespace TestSiteNVelocity.Controllers
 			RenderText(String.Format("incoming {0} {1} {2}", strarg, intarg, String.Join(",", strarray)));
 		}
 
-		public void SimpleBind([DataBind] Order order)
+		public void SimpleBind([DataBind("order")] Order order)
 		{
 			RenderText(String.Format("incoming {0}", order.ToString()));
 		}
 
-		public void ComplexBind([DataBind] Order order, [DataBind] Person person)
+		public void ComplexBind([DataBind("order")] Order order, [DataBind("person")] Person person)
 		{
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void ComplexBindExcludePrice([DataBind(Exclude="Price")] Order order, [DataBind] Person person)
+		public void ComplexBindExcludePrice([DataBind("order", Exclude="Price")] Order order, [DataBind("person")] Person person)
 		{
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void ComplexBindExcludeName([DataBind(Exclude="Name")] Order order, [DataBind] Person person)
+		public void ComplexBindExcludeName([DataBind("order", Exclude="Name")] Order order, [DataBind("person")] Person person)
 		{
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void ComplexBindWithPrefix([DataBind] Order order, [DataBind(Prefix="person")] Person person)
+		public void ComplexBindWithPrefix([DataBind("order")] Order order, [DataBind("person")] Person person)
 		{
 			RenderText(String.Format("incoming {0} {1}", order.ToString(), person.ToString()));
 		}
 
-		public void FillingBehavior([DataBind] ClassWithInitializers clazz)
+		public void FillingBehavior([DataBind("abc")] ClassWithInitializers clazz)
 		{
 			RenderText(String.Format("incoming {0} {1} {2}", clazz.Name, clazz.Date1.ToShortDateString(), clazz.Date2.ToShortDateString()));
 		}
@@ -66,7 +66,7 @@ namespace TestSiteNVelocity.Controllers
 			RenderText(String.Format("incoming {0} {1}", amount.HasValue, amount.ToString()));
 		}
 
-		public void NullableConversion2([DataBind(Prefix="mov")] Movement movement)
+		public void NullableConversion2([DataBind("mov")] Movement movement)
 		{
 			RenderText(String.Format("incoming {0} {1}", movement.Name, movement.Amount.ToString()));
 		}

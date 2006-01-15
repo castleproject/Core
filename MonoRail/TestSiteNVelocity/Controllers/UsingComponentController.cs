@@ -30,10 +30,6 @@ namespace TestSiteNVelocity.Controllers
 		{
 		}
 
-		public void Index2()
-		{
-		}
-
 		public void Index3()
 		{
 			ArrayList items = new ArrayList();

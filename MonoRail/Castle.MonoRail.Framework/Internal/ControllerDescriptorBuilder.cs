@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework.Internal
 	public class ControllerDescriptorBuilder
 	{
 		private ReaderWriterLock locker = new ReaderWriterLock();
-		private Hashtable descriptorRepository = Hashtable.Synchronized(new Hashtable());
+		private Hashtable descriptorRepository = new Hashtable();
 
 		/// <summary>
 		/// Builds the <see cref="ControllerMetaDescriptor"/>.

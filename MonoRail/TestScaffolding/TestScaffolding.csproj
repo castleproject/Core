@@ -131,16 +131,6 @@
                     HintPath = "..\..\Components\General\EmailSender\bin\Castle.Components.Common.EmailSender.dll"
                 />
                 <Reference
-                    Name = "Castle.MonoRail.ActiveRecordScaffold"
-                    Project = "{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Castle.MonoRail.ActiveRecordSupport"
-                    Project = "{2409063E-BE05-4596-A677-758096D1C759}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.MonoRail.Framework"
                     Project = "{EC393863-333E-49CE-94A6-654B9F323954}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"

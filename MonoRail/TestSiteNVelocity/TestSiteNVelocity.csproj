@@ -109,6 +109,11 @@
                     AssemblyName = "Nullables"
                     HintPath = "..\..\ActiveRecord\bin\Nullables.dll"
                 />
+                <Reference
+                    Name = "Castle.Components.Binder"
+                    Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -158,11 +163,6 @@
                 />
                 <File
                     RelPath = "Components\SimpleInlineViewComponent3.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Components\SmartComponent1.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -447,10 +447,6 @@
                 />
                 <File
                     RelPath = "views\UsingComponent\index1.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "views\UsingComponent\index2.vm"
                     BuildAction = "None"
                 />
                 <File

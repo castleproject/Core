@@ -178,7 +178,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helpers\FormHelper.cs"
+                    RelPath = "Helpers\ARFormHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

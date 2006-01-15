@@ -17,7 +17,7 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.Reflection;
-	
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework.Internal;
 
 
@@ -45,7 +45,7 @@ namespace Castle.MonoRail.Framework
 		{			
 		}
 
-		public WizardStepPage( DataBinder binder ) : base( binder )
+		public WizardStepPage(DataBinder binder) : base(binder)
 		{			
 		}
 
