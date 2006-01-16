@@ -38,7 +38,7 @@ namespace Castle.MonoRail.TestSupport
 		private TestResponse response;
 		private StringBuilder outputBuffer = new StringBuilder();
 
-		#region Test Lifecycle 
+		#region Test Lifecycle
 
 		[TestFixtureSetUp]
 		public virtual void FixtureInitialize()

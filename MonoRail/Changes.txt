@@ -13,6 +13,13 @@ Release Candidate 1
 
 - SmartViewComponent removed
 
+- DataBinder refactored out. Now implementation lies on Castle.Components.Binder
+  Big performance improvement
+
+- SmartDispatcher: now there's no hardcode reference to DataBind, ARDataBind or ARFetch attributes. 
+  They only must implement the interface IParameterBinding. This opens an interesting extension point
+  for users willing to create their own logic to binding form/querystring parameters to their data components
+
 
 Beta 5
 ======

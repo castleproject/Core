@@ -2,6 +2,14 @@ $ValidationHelper.InstallScripts()
 
 <h2>Edit ${armodel.Type.Name}</h2>
 
+#if($flash.errors)
+<ul id="errors">
+#foreach($error in $flash.errors)
+  <li>$error</li>
+#end
+</ul>
+#end
+
 #set ($validatorForm = "return validateForm( this, false, false, false, false, 5 )" )
 
 $PresentationHelper.Form( "update${armodel.Type.Name}", "scaffoldingform", "post", $validatorForm )
@@ -18,37 +26,37 @@ $HtmlHelper.InputHidden("id", ${id})
 
 #foreach($field in $model.Fields)
 #if($HtmlHelper.CanHandle($field))
-<p>$HtmlHelper.CreateControl($model, $field, $instance)</p>
+<p>$HtmlHelper.CreateControl($model, $prefix, $field, $instance)</p>
 #end
 #end
 
 #foreach($prop in $model.Properties)
 #if($HtmlHelper.CanHandle($prop))
-<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+<p>$HtmlHelper.CreateControl($model, $prefix, $prop, $instance)</p>
 #end
 #end
 
 #foreach($prop in $model.NotMappedProperties)
 #if($HtmlHelper.CanHandle($prop))
-<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+<p>$HtmlHelper.CreateControl($model, $prefix, $prop, $instance)</p>
 #end
 #end
 
 #foreach($prop in $model.BelongsTo)
 #if($HtmlHelper.CanHandle($prop))
-<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+<p>$HtmlHelper.CreateControl($model, $prefix, $prop, $instance)</p>
 #end
 #end
 
 #foreach($prop in $model.HasMany)
 #if($HtmlHelper.CanHandle($prop))
-<p>$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+<p>$HtmlHelper.CreateControl($model, $prefix, $prop, $instance)</p>
 #end
 #end
 
 #foreach($prop in $model.HasAndBelongsToMany)
 #if($HtmlHelper.CanHandle($prop))
-<p valign="top">$HtmlHelper.CreateControl($model, $prop, $instance)</p>
+<p valign="top">$HtmlHelper.CreateControl($model, $prefix, $prop, $instance)</p>
 #end
 #end
 

@@ -88,7 +88,7 @@
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
-				<include name="${bin.dir}/Castle.Components.Binder" />
+				<include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.Tests.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />

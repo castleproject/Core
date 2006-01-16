@@ -45,17 +45,17 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 		}
 
-		public bool Validate
-		{
-			get { return validate; }
-			set { validate = value; }
-		}
-
-		public bool PersistChanges
-		{
-			get { return persistchanges; }
-			set { persistchanges = value; }
-		}
+//		public bool Validate
+//		{
+//			get { return validate; }
+//			set { validate = value; }
+//		}
+//
+//		public bool PersistChanges
+//		{
+//			get { return persistchanges; }
+//			set { persistchanges = value; }
+//		}
 
 		public bool AutoLoad
 		{

@@ -167,6 +167,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			IDictionary context = new Hashtable();
 
+			context.Add("flash", controller.Context.Flash);
+
 			foreach(DictionaryEntry entry in controller.PropertyBag)
 			{
 				context.Add(entry.Key, entry.Value);

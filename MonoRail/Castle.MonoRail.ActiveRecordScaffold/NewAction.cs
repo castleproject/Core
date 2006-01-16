@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 	using Castle.Components.Common.TemplateEngine;
@@ -42,11 +42,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
+			DataBinder binder = new DataBinder();
+
 			if (instance == null)
 			{
-				instance = Activator.CreateInstance( Model.Type );
+				instance = binder.BindObject( Model.Type, Model.Type.Name, new NameValueCollectionAdapter(controller.Request.QueryString) );
 			}
 
+			controller.PropertyBag["prefix"] = Model.Type.Name;
 			controller.PropertyBag["armodel"] = Model;
 			controller.PropertyBag["instance"] = instance;
 		}

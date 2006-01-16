@@ -28,8 +28,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	[AttributeUsage(AttributeTargets.Parameter), Serializable]
 	public class ARDataBindAttribute : DataBindAttribute, IParameterBinder
 	{
-		private bool validate;
-		private bool autoPersist;
+//		private bool validate;
+//		private bool autoPersist;
 		private bool autoLoad;
 		
 		public ARDataBindAttribute(String prefix) : base (prefix)
@@ -46,21 +46,21 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		/// When true performs automatic validation of any class
 		/// that inherit from <see cref="Castle.ActiveRecord.ActiveRecordValidationBase"/>
 		/// </summary>
-		public bool Validate
-		{
-			get { return validate; }
-			set { validate = value; }
-		}	
+//		public bool Validate
+//		{
+//			get { return validate; }
+//			set { validate = value; }
+//		}	
 		
 		/// <summary>
 		/// When true automatically saves any record
 		/// that inherit from <see cref="Castle.ActiveRecord.ActiveRecordBase"/>
 		/// </summary>
-		public bool AutoPersist
-		{
-			get { return autoPersist; }
-			set { autoPersist = value; }
-		}
+//		public bool AutoPersist
+//		{
+//			get { return autoPersist; }
+//			set { autoPersist = value; }
+//		}
 
 		public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
@@ -71,10 +71,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			ConfigureBinder(binder, controller);
 
 			binder.AutoLoad = AutoLoad;
-			binder.PersistChanges = autoPersist;
-			binder.Validate = validate;
 
-			return binder.BindObject(parameterInfo.ParameterType, new NameValueCollectionAdapter(coll));
+			return binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, new NameValueCollectionAdapter(coll));
 		}
 	}
 }

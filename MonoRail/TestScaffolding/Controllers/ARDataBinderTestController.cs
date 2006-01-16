@@ -16,7 +16,6 @@ namespace TestScaffolding
 {
 	using System.Text;
 
-	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.ActiveRecordSupport;
 
 	using TestScaffolding.Model;
@@ -24,32 +23,12 @@ namespace TestScaffolding
 
 	public class ARDataBinderTestController : ARSmartDispatcherController
 	{
-		public ARDataBinderTestController() : base ()
-		{
-		}
-
-		public void SavePersonNoPrefix([ARDataBind] SimplePerson person)
-		{			
-			RenderText(person.ToString());
-		}
-				
-		public void SavePerson([ARDataBindAttribute(Prefix="SimplePerson", AutoLoad=true)] SimplePerson person)
+		public void SavePerson([ARDataBindAttribute("SimplePerson", AutoLoad=true)] SimplePerson person)
 		{			
 			RenderText(person.ToString());
 		}
 
-		[Rescue("DataBinderValidateBadData")]
-		public void SavePersonWithValidate([ARDataBindAttribute(Prefix="SimplePerson",Validate=true)] SimplePerson person)
-		{			
-			RenderText(person.ToString());
-		}
-
-		public void SavePeopleNoPrefix([ARDataBindAttribute] SimplePerson[] people)
-		{
-			SavePeople(people);
-		}
-						
-		public void SavePeople([ARDataBindAttribute(Prefix="SimplePerson")] SimplePerson[] people)
+		public void SavePeople([ARDataBindAttribute("SimplePerson")] SimplePerson[] people)
 		{			
 			StringBuilder buffer = new StringBuilder("Length=");
 			buffer.Append(people.Length).Append("\n");
@@ -59,32 +38,5 @@ namespace TestScaffolding
 			}
 			RenderText(buffer.ToString());
 		}
-
-		[Rescue("DataBinderValidateBadData")]
-		public void AutoPersistPeople([ARDataBindAttribute(Prefix="SimplePerson",AutoPersist=true)] SimplePerson[] people)
-		{			
-			StringBuilder buffer = new StringBuilder("Length=");
-			buffer.Append(people.Length).Append("\n");
-			foreach(SimplePerson person in people)
-			{
-				buffer.Append(person).Append("\n");
-			}
-			RenderText(buffer.ToString());
-		}
-				
-		[Rescue("DataBinderValidateBadData")]
-		public void SavePeopleWithValidate([ARDataBindAttribute(Prefix="SimplePerson", Validate=true)] SimplePerson[] people)
-		{	
-			StringBuilder buffer = new StringBuilder("Length=");
-			buffer.Append(people.Length).Append("\n");
-			foreach(SimplePerson person in people)
-			{
-				if( person.IsValid() )					
-					buffer.Append(person).Append("\n");
-				else
-					buffer.Append(person.Id).Append(" is not valid\n");
-			}
-			RenderText(buffer.ToString());
-		}		
 	}
 }

@@ -170,7 +170,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 		#region CreateControl methods
 
-		public String CreateControl(ActiveRecordModel model, FieldModel fieldModel, object instance)
+		public String CreateControl(ActiveRecordModel model, String prefix, FieldModel fieldModel, object instance)
 		{
 			stringBuilder.Length = 0;
 
@@ -188,16 +188,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				if (instance != null) value = fieldInfo.GetValue(instance);
 			}
 
-			String propName = null;
-
-			if (model.IsNestedType)
-			{
-				propName = String.Format("{0}.{1}", model.Type.Name, fieldInfo.Name);
-			}
-			else
-			{
-				propName = fieldInfo.Name;
-			}
+			String propName = propName = CreatePropName(model, prefix, fieldInfo.Name);
 
 			if (fieldInfo.FieldType == typeof(DateTime))
 			{
@@ -216,7 +207,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return stringBuilder.ToString();
 		}
 
-		public String CreateControl(ActiveRecordModel model, PropertyModel propertyModel, object instance)
+		public String CreateControl(ActiveRecordModel model, String prefix, PropertyModel propertyModel, object instance)
 		{
 			stringBuilder.Length = 0;
 
@@ -240,16 +231,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				if (instance != null) value = prop.GetValue(instance, null);
 			}
 
-			String propName = null;
-
-			if (model.IsNestedType)
-			{
-				propName = String.Format("{0}.{1}", model.Type.Name, prop.Name);
-			}
-			else
-			{
-				propName = prop.Name;
-			}
+			String propName = propName = CreatePropName(model, prefix, prop.Name);
 			
 			if (prop.PropertyType == typeof(DateTime))
 			{
@@ -268,7 +250,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return stringBuilder.ToString();
 		}
 
-		public String CreateControl(ActiveRecordModel model, PropertyInfo prop, object instance)
+		public String CreateControl(ActiveRecordModel model, String prefix, PropertyInfo prop, object instance)
 		{
 			stringBuilder.Length = 0;
 
@@ -290,16 +272,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 				if (instance != null) value = prop.GetValue(instance, null);
 			}
 
-			String propName = null;
-
-			if (model.IsNestedType)
-			{
-				propName = String.Format("{0}.{1}", model.Type.Name, prop.Name);
-			}
-			else
-			{
-				propName = prop.Name;
-			}
+			String propName = propName = CreatePropName(model, prefix, prop.Name);
 			
 			if (prop.PropertyType == typeof(DateTime))
 			{
@@ -316,7 +289,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return stringBuilder.ToString();
 		}
 
-		public String CreateControl(ActiveRecordModel model, BelongsToModel belongsToModel, object instance)
+		public String CreateControl(ActiveRecordModel model, String prefix, BelongsToModel belongsToModel, object instance)
 		{
 			stringBuilder.Length = 0;
 
@@ -333,7 +306,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 
 			object[] items = CommonOperationUtils.FindAll( otherModel.Type );
 
-			String propName = String.Format( "{0}.{1}", prop.Name, keyModel.Property.Name );
+			String propName = propName = CreatePropName(model, prefix, keyModel.Property.Name);
 			
 			object value = null;
 				
@@ -363,7 +336,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return stringBuilder.ToString();
 		}
 
-		public String CreateControl(ActiveRecordModel model, HasManyModel hasManyModel, object instance)
+		public String CreateControl(ActiveRecordModel model, String prefix, HasManyModel hasManyModel, object instance)
 		{
 			stringBuilder.Length = 0;
 
@@ -389,7 +362,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 	
 			object[] items = CommonOperationUtils.FindAll( otherModel.Type, hasManyModel.HasManyAtt.Where );
 
-			String propName = String.Format( "{0}.{1}", prop.Name, keyModel.Property.Name );
+			String propName = propName = CreatePropName(model, prefix, keyModel.Property.Name);
 			
 			stringBuilder.Append( LabelFor( propName, prop.Name + ": &nbsp;" ) );
 			stringBuilder.Append( "<br/>" );
@@ -400,7 +373,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			return stringBuilder.ToString();
 		}
 
-		public String CreateControl(ActiveRecordModel model, HasAndBelongsToManyModel hasAndBelongsModel, object instance)
+		public String CreateControl(ActiveRecordModel model, String prefix, HasAndBelongsToManyModel hasAndBelongsModel, object instance)
 		{
 			stringBuilder.Length = 0;
 
@@ -426,7 +399,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 	
 			object[] items = CommonOperationUtils.FindAll( otherModel.Type, hasAndBelongsModel.HasManyAtt.Where );
 
-			String propName = String.Format( "{0}.{1}", prop.Name, keyModel.Property.Name );
+			String propName = propName = CreatePropName(model, prefix, keyModel.Property.Name);
 			
 			stringBuilder.Append( LabelFor( propName, prop.Name + ": &nbsp;" ) );
 			stringBuilder.Append( "<br/>" );
@@ -596,6 +569,22 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Helpers
 			}
 
 			return array;
+		}
+
+		private static string CreatePropName(ActiveRecordModel model, String prefix, String name)
+		{
+			string propName;
+
+			if (model.IsNestedType)
+			{
+				propName = String.Format("{0}.{1}.{2}", prefix, model.Type.Name, name);
+			}
+			else
+			{
+				propName = String.Format("{0}.{1}", prefix, name);
+			}
+
+			return propName;
 		}
 	}
 }

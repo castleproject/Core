@@ -18,14 +18,6 @@ namespace TestScaffolding.Model
 
 	using Castle.ActiveRecord;
 
-//	public enum CallBy
-//	{
-//		Mr,
-//		Ms,
-//		Lord,
-//		Duke
-//	}
-
 	[ActiveRecord(DiscriminatorColumn="type", DiscriminatorValue="customer")]
 	public class Customer : Person
 	{

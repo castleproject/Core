@@ -16,12 +16,44 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Reflection;
 
 	public class FormHelper : AbstractHelper
 	{
+		private static readonly BindingFlags flags = BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+
+		public String TextFieldValue(Object target, String property, object value)
+		{
+			return TextFieldValue(target, property, value, null);
+		}
+
+		public String TextFieldValue(Object target, String property, object value, IDictionary attributes)
+		{
+			return CreateInputElement("text", String.Format("{0}_{1}", target.GetType().Name, property), 
+				String.Format("{0}.{1}", target.GetType().Name, property), 
+				value, attributes);
+		}
+
+		public String TextField(Object target, String property)
+		{
+			return TextField(target, property, null);
+		}
+
 		public String TextField(Object target, String property, IDictionary attributes)
 		{
-			return String.Format("");
+			PropertyInfo propertyInfo = target.GetType().GetProperty(property, flags);
+
+			return CreateInputElement("text", String.Format("{0}_{1}", target.GetType().Name, property), 
+				String.Format("{0}.{1}", target.GetType().Name, property), 
+				propertyInfo.GetValue(target, null), attributes);
+		}
+
+		protected String CreateInputElement(String type, String id, String name, Object value, IDictionary attributes)
+		{
+			value = value == null ? "" : value;
+
+			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
+				type, id, name, value, GetAttributes(attributes));
 		}
 	}
 }

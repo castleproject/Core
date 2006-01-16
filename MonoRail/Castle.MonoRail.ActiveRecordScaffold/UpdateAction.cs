@@ -16,14 +16,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 	using System.Collections.Specialized;
+
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
-
+	
+	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
 	
-	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
-
 
 	/// <summary>
 	/// Performs the update
@@ -44,7 +44,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void PerformActionProcess(Controller controller)
 		{
-			ARDataBinder binder = new ARDataBinder();
+			DataBinder binder = new DataBinder();
 
 			object idVal = CommonOperationUtils.ReadPkFromParams(controller, ObtainPKProperty());
 
@@ -54,7 +54,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
 
-				binder.BindObjectInstance(instance, String.Empty, controller.Params, null, null);
+				binder.BindObjectInstance(instance, Model.Type.Name, new NameValueCollectionAdapter(controller.Request.Form));
 
 				CommonOperationUtils.SaveInstance(instance, controller, errors, prop2Validation);
 
@@ -73,10 +73,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			{
 				controller.Context.Flash["errors"] = errors;
 
-				NameValueCollection parameters = new NameValueCollection();
-				parameters["id"] = idVal.ToString();
-
-				controller.Redirect(controller.AreaName, controller.Name, "edit" + Model.Type.Name, parameters);
+				controller.Redirect(controller.AreaName, controller.Name, "edit" + Model.Type.Name, controller.Request.Form);
 			}
 		}
 

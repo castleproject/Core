@@ -16,8 +16,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 
+	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
-
 	using Castle.MonoRail.Framework;
 	
 	using Castle.ActiveRecord.Framework;
@@ -46,7 +46,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			try
 			{
 				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
+
+				new DataBinder().BindObjectInstance(instance, Model.Type.Name, 
+					new NameValueCollectionAdapter(controller.Request.Params));
 				
+				controller.PropertyBag["prefix"] = Model.Type.Name;
 				controller.PropertyBag["armodel"] = Model;
 				controller.PropertyBag["instance"] = instance;
 				controller.PropertyBag["id"] = idVal;

@@ -21,10 +21,9 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 	[TestFixture]
 	public class ARSmartDispatchControllerTestCase : AbstractMRTestCase
 	{
-		[SetUp]
-		public override void Initialize()
+		public override void FixtureInitialize()
 		{
-			base.Initialize();
+			base.FixtureInitialize();
 
 			ARDataBinderTestCase.CreateAndPopulatePeopleTable();
 		}
@@ -35,7 +34,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			string[] args;
 			
 			args = new string[] {
-				//"SimplePerson@autoload=yes",
 				"SimplePerson.Id=1",
 				"SimplePerson.Name=John"
 			};
@@ -56,119 +54,27 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			AssertSuccess();
 			AssertReplyStartsWith("[1:John:0]");
 		}
-
-		[Test]
-		public void SimpleNoPrefixAutoLoad()
-		{
-			string[] args;
-
-			args = new string[] {
-									"@autoload=yes",
-									"Id=1",
-									"Name=John"
-								};
-			
-			DoGet("ARDataBinderTest/SavePersonNoPrefix.rails", args);
-			AssertSuccess();
-			AssertReplyStartsWith("[1:John:1]");
-
-			ARDataBinderTestCase.CreateAndPopulatePeopleTable();
-			
-			args = new string[] {
-									"@autoload=no",
-									"Id=1",
-									"Name=John"
-								};
-			
-			DoGet("ARDataBinderTest/SavePersonNoPrefix.rails", args);
-			AssertSuccess();
-			AssertReplyStartsWith("[1:John:0]");
-		}
-		
-		[Test]
-		public void SimpleAutoLoadWithValidate()
-		{
-			string[] args;
-			
-			args = new string[] {
-									"SimplePerson@autoload=yes",
-									"SimplePerson.Id=1",
-									"SimplePerson.Name=John"
-								};
-			
-			DoGet("ARDataBinderTest/SavePersonWithValidate.rails", args);
-			AssertSuccess();
-			AssertReplyStartsWith("[1:John:1]");
-		}				
-
-		[Test]
-		public void SimpleAutoLoadWithValidateBadData()
-		{
-			string[] args;
-			
-			args = new string[] {
-									"SimplePerson@autoload=no",
-									"SimplePerson.Id=1",
-									"SimplePerson.Name=John??"
-								};
-			
-			DoGet("ARDataBinderTest/SavePersonWithValidate.rails", args);
-			AssertReplyContains("Error Validating Attribute");
-		}				
-
-		[Test]
-		public void ArrayAutoLoadNoPrefix()
-		{
-			string[] args;
-			
-			args = new string[] {
-									"[0]@autoload=yes",
-									"[0].Id=1",
-									"[0].Name=John",
-									
-									"[1]@autoload=yes",
-									"[1].Id=2",
-									"[1].Age=20",
-									
-									"[2]@autoload=yes",
-									"[2].Id=3",
-
-									"[3]@autoload=no",
-									"[3].Id=16",
-									"[3].Name=Julio",
-									"[3].Age=16"
-								};
-			
-			DoGet("ARDataBinderTest/SavePeopleNoPrefix.rails", args);
-			AssertSuccess();
-			AssertReplyContains("[1:John:1]");
-			AssertReplyContains("[2:Name 2:20]");
-			AssertReplyContains("[3:Name 3:3]");
-			AssertReplyContains("[16:Julio:16]");			
-		}	
 				
 		[Test]
 		public void ArrayAutoLoad()
 		{
-			string[] args;
-			
-			args = new string[] {
-									"SimplePerson[0]@autoload=yes",
-									"SimplePerson[0].Id=1",
-									"SimplePerson[0].Name=John",
-									
-									"SimplePerson[1]@autoload=yes",
-									"SimplePerson[1].Id=2",
-									"SimplePerson[1].Age=20",
-									
-									"SimplePerson[2]@autoload=yes",
-									"SimplePerson[2].Id=3",
+			string[] args = new string[] {
+				"SimplePerson[0]@autoload=yes",
+				"SimplePerson[0].Id=1",
+				"SimplePerson[0].Name=John",
+				
+				"SimplePerson[1]@autoload=yes",
+				"SimplePerson[1].Id=2",
+				"SimplePerson[1].Age=20",
+				
+				"SimplePerson[2]@autoload=yes",
+				"SimplePerson[2].Id=3",
 
-									"SimplePerson[3]@autoload=no",
-									"SimplePerson[3].Id=16",
-									"SimplePerson[3].Name=Julio",
-									"SimplePerson[3].Age=16"
-								};
+				"SimplePerson[3]@autoload=no",
+				"SimplePerson[3].Id=16",
+				"SimplePerson[3].Name=Julio",
+				"SimplePerson[3].Age=16"
+			};
 			
 			DoGet("ARDataBinderTest/SavePeople.rails", args);
 			AssertSuccess();
@@ -177,120 +83,5 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			AssertReplyContains("[3:Name 3:3]");
 			AssertReplyContains("[16:Julio:16]");			
 		}	
-		
-		[Test]
-		public void ArrayAutoLoadWithValidate()
-		{
-			string[] args;
-			
-			args = new string[] {
-									"SimplePerson[0]@autoload=yes",
-									"SimplePerson[0].Id=1",
-									"SimplePerson[0].Name=John",
-									
-									"SimplePerson[1]@autoload=yes",
-									"SimplePerson[1].Id=2",
-									"SimplePerson[1].Age=20",
-									
-									"SimplePerson[2]@autoload=yes",
-									"SimplePerson[2].Id=3",
-
-									"SimplePerson[3]@autoload=no",
-									"SimplePerson[3].Id=16",
-									"SimplePerson[3].Name=Julio",
-									"SimplePerson[3].Age=16"
-								};
-			
-			DoGet("ARDataBinderTest/SavePeopleWithValidate.rails", args);
-			AssertSuccess();
-			AssertReplyContains("[1:John:1]");
-			AssertReplyContains("[2:Name 2:20]");
-			AssertReplyContains("[3:Name 3:3]");
-			AssertReplyContains("[16:Julio:16]");			
-		}				
-
-		[Test]
-		public void ArrayAutoLoadWithValidateBadData()
-		{
-			string[] args;
-			
-			args = new string[] {
-									"SimplePerson[0]@autoload=yes",
-									"SimplePerson[0].Id=1",
-									"SimplePerson[0].Name=John",
-									
-									"SimplePerson[1]@autoload=yes",
-									"SimplePerson[1].Id=2",
-									"SimplePerson[1].Age=20",
-									
-									"SimplePerson[2]@autoload=yes",
-									"SimplePerson[2].Id=3",
-
-									"SimplePerson[3]@autoload=no",
-									"SimplePerson[3].Id=16",
-									"SimplePerson[3].Name=Julio??",
-									"SimplePerson[3].Age=16"
-								};
-			
-			DoGet("ARDataBinderTest/SavePeopleWithValidate.rails", args);
-			AssertReplyContains("Error Validating Attribute");
-		}	
-				
-		[Test]
-		public void ArrayAutoPersist()
-		{
-			string[] args;
-			
-			args = new string[] {
-									"SimplePerson[0]@autoload=yes",
-									"SimplePerson[0].Id=1",
-									"SimplePerson[0].Name=John",
-									
-									"SimplePerson[1]@autoload=yes",
-									"SimplePerson[1].Id=2",
-									"SimplePerson[1].Age=20",
-									
-									"SimplePerson[2]@autoload=yes",
-									"SimplePerson[2].Id=3",
-									"SimplePerson[2].Name=Bill",
-									
-									"SimplePerson[3]@autoload=no",
-									"SimplePerson[3].Name=Tico",									
-									"SimplePerson[3].Age=21"
-								};
-			
-			DoGet("ARDataBinderTest/AutoPersistPeople.rails", args);
-			AssertReplyContains("[1:John:1]");
-			AssertReplyContains("[2:Name 2:20]");
-			AssertReplyContains("[3:Bill:3]");
-			AssertReplyContains("[16:Tico:21]");
-		}
-		
-		[Test]
-		public void ArrayAutoPersistWithBadData()
-		{
-			string[] args;
-			
-			args = new string[] {
-									"SimplePerson[0]@autoload=yes",
-									"SimplePerson[0].Id=1",
-									"SimplePerson[0].Name=John",
-									
-									"SimplePerson[1]@autoload=yes",
-									"SimplePerson[1].Id=2",
-									"SimplePerson[1].Age=20",
-									
-									"SimplePerson[2]@autoload=yes",
-									"SimplePerson[2].Id=3",
-									"SimplePerson[2].Name=Bill",
-									
-									"SimplePerson[3]@autoload=no",
-									"SimplePerson[3].Name=Tico!!",									
-									"SimplePerson[3].Age=21"
-								};
-			
-			DoGet("ARDataBinderTest/AutoPersistPeople.rails", args);
-			AssertReplyContains("Error Validating Attribute");
-		}			
 	}
 }

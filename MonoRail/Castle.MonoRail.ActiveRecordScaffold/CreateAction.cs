@@ -19,8 +19,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using Castle.ActiveRecord;
 	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
-
-	using Castle.MonoRail.ActiveRecordSupport;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -44,7 +42,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		{
 			DataBinder binder = new DataBinder();
 
-			object instance = binder.BindObject( Model.Type, "", controller.Params );
+			object instance = binder.BindObject(Model.Type, Model.Type.Name, new NameValueCollectionAdapter(controller.Request.Form));
 
 			SessionScope scope = new SessionScope();
 
@@ -66,13 +64,14 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			if (errors.Count != 0)
 			{
 				controller.Context.Flash["errors"] = errors;
-				controller.Redirect(controller.AreaName, controller.Name, "new" + Model.Type.Name);
+				
+				controller.Redirect(controller.AreaName, controller.Name, "new" + Model.Type.Name, 
+					controller.Request.Form);
 			}
 		}
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			
 		}
 	}
 }

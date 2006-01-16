@@ -62,19 +62,20 @@ label.errHilite
 }
 ul#errors 
 {
-	display: none;
 	margin-top: 1em;
+	margin-left: 0;
 	background-color: #FFE;
 	border: 1px solid #CC9;
 	padding: .3em;
 	color: #C00;
 	font-weight: bold;
+	margin: .5em 0;
 }	
 ul#errors li 
 {
-	margin-top: .5em;
-	margin-bottom: .5em;
-	padding: 0;
+	margin: 0 0 0 0;
+	padding: 5;
+	list-style-type: none;
 }
 ul#errors li.heading 
 {

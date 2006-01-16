@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <returns></returns>
 		public IDictionary CreateDict( params String[] args )
 		{
-			IDictionary dict = new HybridDictionary();
+			IDictionary dict = new HybridDictionary(true);
 
 			foreach(String arg in args)
 			{

@@ -97,14 +97,11 @@ namespace Castle.MonoRail.Framework
 
 			ConfigureBinder(binder, controller);
 
-			return binder.BindObject(parameterInfo.ParameterType, new NameValueCollectionAdapter(coll));
+			return binder.BindObject(parameterInfo.ParameterType, prefix, _exclude, _allow, new NameValueCollectionAdapter(coll));
 		}
 
 		protected void ConfigureBinder(DataBinder binder, SmartDispatcherController controller)
 		{
-			binder.Prefix = Prefix;
-			binder.AllowedProperties = Allow;
-			binder.ExcludedProperties = Exclude;
 			binder.Files = controller.Context.Request.Files;
 		}
 

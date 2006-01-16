@@ -20,12 +20,9 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 	
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
-
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Tests;
-	using Castle.MonoRail.ActiveRecordSupport.Tests.Model;
-	using Castle.MonoRail.TestSupport;
-	
+
 	using NUnit.Framework;
 	
 	using TestScaffolding.Model;
@@ -34,29 +31,27 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 	public class ARDataBinderTestCase
 	{
 		private ARDataBinder binder = new ARDataBinder();
-		private NameValueCollection args;
 		private object instance;
 		private SimplePerson person;
-		private SimplePerson[] people;
 			
-		[SetUp]
+		[TestFixtureSetUp]
 		public void Init()
 		{
 			CreateAndPopulatePeopleTable();
+			
+			binder.AutoLoad = true;
 		}
 			
 		[Test]
 		public void AutoloadOnSuccessScenario()
 		{			
-			String data = @"
-				SimplePerson@autoload = yes
-				SimplePerson.Id = 15
-				SimplePerson.Age = 200
-			";
-			
-			args = DataBinderTestCase.ParseNameValueString(data);
-			
-			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", args);
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("SimplePerson@autoload", "yes");
+			args.Add("SimplePerson.Id", "15");
+			args.Add("SimplePerson.Age", "200");
+
+			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", new NameValueCollectionAdapter(args));
 			
 			Assert.IsNotNull(instance);	
 			person = instance as SimplePerson;
@@ -70,15 +65,13 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		[Test]
 		public void AutoloadOffSuccessScenario()
 		{
-			String data = @"
-				SimplePerson@autoload = no
-				SimplePerson.Id = 15
-				SimplePerson.Age = 200
-			";
-			
-			args = DataBinderTestCase.ParseNameValueString(@data);
-			
-			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", args);
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("SimplePerson@autoload", "no");
+			args.Add("SimplePerson.Id", "15");
+			args.Add("SimplePerson.Age", "200");
+
+			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", new NameValueCollectionAdapter(args));
 			
 			Assert.IsNotNull(instance);	
 			person = instance as SimplePerson;
@@ -86,96 +79,49 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			Assert.IsTrue( person.Age == 200);	
 		}
 		
-		[Test]
+		[Test, ExpectedException(typeof(RailsException))]
 		public void AutoloadOnMissingPK()
 		{
-			String data = @"
-				SimplePerson@autoload = yes
-				SimplePerson.Age = 200
-			";
-			
-			args = DataBinderTestCase.ParseNameValueString(@data);
-			
-			try
-			{
-				instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", args);	
+			NameValueCollection args = new NameValueCollection();
 
-				Assert.Fail("Autoload should had thrown an exception, cause pk was missing");
-			}
-			catch(RailsException)
-			{
-				// Expected
-			}
+			args.Add("SimplePerson.Age", "200");
+
+			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", new NameValueCollectionAdapter(args));
 		}
 		
-		[Test]
+		[Test, ExpectedException(typeof(Castle.ActiveRecord.NotFoundException))]
 		public void LoadingWithANonExistentId()
 		{
-			String data = @"
-				SimplePerson@autoload = yes
-				SimplePerson.Id = 5000
-				SimplePerson.Age = 200
-			";
-			
-			args = DataBinderTestCase.ParseNameValueString(@data);
-			
-			try
-			{
-				instance = binder.BindObject( typeof(SimplePerson), "SimplePerson", args);	
-				
-				Assert.Fail("Autoload should had thrown an exception, cause pk value was invalid");
-			}
-			catch(Castle.ActiveRecord.NotFoundException)
-			{
-				// Expected
-			}
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("SimplePerson.Id", "5000");
+			args.Add("SimplePerson.Age", "200");
+
+			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", new NameValueCollectionAdapter(args));
 		}
 		
 		[Test]
-		public void AutoloadWithArray()
-		{
-			String data = @"DisconnectedPerson@autoload = yes";
-			args = DataBinderTestCase.ParseNameValueString(@data);
-			
-			try
-			{
-				instance = binder.BindObject( typeof(DisconnectedPerson), "DisconnectedPerson", args );	
-
-				Assert.Fail("Autoload should had thrown an exception, DisconnectedPerson is not an active record class");
-			}
-			catch(RailsException)
-			{
-				// Expected
-			}
-		}
-			
-		[Test]
-		public void AutoloadWithNonARClass()
+		public void AutoloadAndArray()
 		{			
-			String data = @"
-				SimplePerson[0]@autoload = no
-				SimplePerson[0].Id = 1
-				SimplePerson[0].Name = Custom Name
+			NameValueCollection args = new NameValueCollection();
 
-				SimplePerson[1]@autoload = yes
-				SimplePerson[1].Id = 2
-				SimplePerson[1].Age = 20
-				
-				SimplePerson[2]@autoload = no
-				SimplePerson[2].Id = 3
-				SimplePerson[2].Age = 200			
-				
-				SimplePerson[3]@autoload = yes
-				SimplePerson[3].Id = 15
-				SimplePerson[3].Name = Name Overwrite
-			";
-			
-			args = DataBinderTestCase.ParseNameValueString(@data);
-			
-			instance = binder.BindObject( typeof(SimplePerson[]), "SimplePerson", args );	
+			args.Add("SimplePerson[0]@autoload", "no");
+			args.Add("SimplePerson[0].Id", "1");
+			args.Add("SimplePerson[0].Name", "Custom Name");
+			args.Add("SimplePerson[1]@autoload", "yes");
+			args.Add("SimplePerson[1].Id", "2");
+			args.Add("SimplePerson[1].Age", "20");
+			args.Add("SimplePerson[2]@autoload", "no");
+			args.Add("SimplePerson[2].Id", "3");
+			args.Add("SimplePerson[2].Age", "200");
+			args.Add("SimplePerson[3]@autoload", "yes");
+			args.Add("SimplePerson[3].Id", "15");
+			args.Add("SimplePerson[3].Name", "Name overriden");
+
+			instance = binder.BindObject( typeof(SimplePerson[]), "SimplePerson", new NameValueCollectionAdapter(args) );	
 
 			Assert.IsNotNull(instance);
-			people = instance as SimplePerson[];
+			SimplePerson[] people = instance as SimplePerson[];
 			Assert.IsNotNull(people);
 			Assert.IsTrue( people.Length == 4 );
 			
@@ -192,10 +138,10 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			Assert.IsTrue(people[2].Age == 200);
 			
 			Assert.IsTrue(people[3].Id == 15);
-			Assert.IsTrue(people[3].Name == "Name Overwrite");
+			Assert.IsTrue(people[3].Name == "Name overriden");
 			Assert.IsTrue(people[3].Age == 15);															
 		}
-		
+
 		public static void CreateAndPopulatePeopleTable()
 		{
 			ActiveRecordStarter.Initialize( 
@@ -214,6 +160,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 					person.Save();
 				}
 			}
-		}		
+		}
 	}
 }
