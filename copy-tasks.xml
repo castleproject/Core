@@ -46,6 +46,10 @@
 		</copy>
 	</target>
 
+	<target name="copy-binder-comp">
+		<copy file="${base.dir}/Components/General/Binder/bin/Castle.Components.Binder.dll" todir="${bin.dir}" />
+	</target>
+
 	<target name="copy-activerecord" depends="copy-nhibernate">
 		<copy file="${castle.ar}" todir="${bin.dir}" />
 	</target>
