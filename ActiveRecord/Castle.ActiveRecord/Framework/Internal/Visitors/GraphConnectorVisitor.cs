@@ -76,7 +76,18 @@ namespace Castle.ActiveRecord.Framework.Internal
 			model.Hilos.Clear();
 		}
 
-        private static bool IsChildClass(ActiveRecordModel model, ActiveRecordModel child)
+		public override void VisitNested(NestedModel model)
+		{
+			Type type = model.Property.DeclaringType;
+
+			ActiveRecordModel parent = arCollection[type];
+
+			model.Model.Parent = parent;
+
+			base.VisitNested(model);
+		}
+
+		private static bool IsChildClass(ActiveRecordModel model, ActiveRecordModel child)
         {
             // Direct decendant
             if (child.Type.BaseType == model.Type) return true;
