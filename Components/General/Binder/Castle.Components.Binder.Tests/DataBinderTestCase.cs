@@ -56,8 +56,8 @@ namespace Castle.Components.Binder.Tests
 			args.Add("person.DOBmonth", 12.ToString());
 			args.Add("person.DOByear", 2005.ToString());
 
-			DataBinder binder = new DataBinder("person");
-			object instance = binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person p = (Person) instance;
@@ -72,12 +72,29 @@ namespace Castle.Components.Binder.Tests
 			args.Add("person@ignore", "true");
 			args.Add("person.name", "john");
 
-			DataBinder binder = new DataBinder("person");
-			object instance = binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person person = (Person) instance;
 			Assert.IsNull(person.Name);
+		}
+
+		[Test]
+		public void ExcludingProperty()
+		{
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("person.name", "john");
+			args.Add("person.age", "30");
+
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", "Name", null, new NameValueCollectionAdapter(args));
+
+			Assert.IsNotNull(instance);
+			Person person = (Person) instance;
+			Assert.IsNull(person.Name);
+			Assert.AreEqual(30, person.Age);
 		}
 
 		[Test]
@@ -89,12 +106,12 @@ namespace Castle.Components.Binder.Tests
 			args.Add("person.DOBmonth", 2.ToString());
 			args.Add("person.DOByear", 2005.ToString());
 
-			DataBinder binder = new DataBinder("person");
-			object instance = binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person person = (Person) instance;
-			Assert.AreEqual(1, binder.Errors.Count);
+			Assert.AreEqual(1, binder.ErrorList.Count);
 		}
 
 		[Test]
@@ -106,9 +123,9 @@ namespace Castle.Components.Binder.Tests
 			args.Add("person.DOBmonth", 2.ToString());
 			args.Add("person.DOByear", 2005.ToString());
 
-			DataBinder binder = new DataBinder("person");
-			binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
-			Assert.AreEqual(1, binder.Errors.Count);
+			DataBinder binder = new DataBinder();
+			binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
+			Assert.AreEqual(1, binder.ErrorList.Count);
 		}
 
 		[Test]
@@ -120,9 +137,9 @@ namespace Castle.Components.Binder.Tests
 			args.Add("person.DOBmonth", 2.ToString());
 			args.Add("person.DOByear", 2005.ToString());
 
-			DataBinder binder = new DataBinder("person");
-			binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
-			Assert.AreEqual(1, binder.Errors.Count);
+			DataBinder binder = new DataBinder();
+			binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
+			Assert.AreEqual(1, binder.ErrorList.Count);
 		}
 
 		[Test]
@@ -136,8 +153,8 @@ namespace Castle.Components.Binder.Tests
 			args.Add("Person.Name", name);
 			args.Add("Person.Age", age.ToString());
 			args.Add("Person.Assets", assets.ToString());
-			DataBinder binder = new DataBinder("Person");
-			object instance = binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
@@ -148,25 +165,6 @@ namespace Castle.Components.Binder.Tests
 		}
 
 		[Test]
-		public void SimpleDataBind2()
-		{
-			string name = "John";
-			int age = 32;
-			NameValueCollection args = new NameValueCollection();
-
-			args.Add("abc.Name", name);
-			args.Add("abc.Age", age.ToString());
-			DataBinder binder = new DataBinder("abc");
-			object instance = binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
-
-			Assert.IsNotNull(instance);
-			Person person = instance as Person;
-			Assert.IsNotNull(person);
-			Assert.AreEqual(person.Age, age);
-			Assert.AreEqual(person.Name, name);
-		}
-
-		[Test]
 		public void PrimitiveArrayDataBind()
 		{
 			string scores = "1,2,3,4,5";
@@ -174,8 +172,8 @@ namespace Castle.Components.Binder.Tests
 			NameValueCollection args = new NameValueCollection();
 			args.Add("Game.Scores", scores);
 			args.Add("Game.Opponents", opponents);
-			DataBinder binder = new DataBinder("Game");
-			object instance = binder.BindObject(typeof(Game), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Game), "Game", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Game game = instance as Game;
@@ -197,8 +195,8 @@ namespace Castle.Components.Binder.Tests
 			";
 
 			NameValueCollection args = TestUtils.ParseNameValueString(data);
-			DataBinder binder = new DataBinder("Person");
-			object instance = binder.BindObject(typeof(Person[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person[]), "Person", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person[] sc = instance as Person[];
@@ -223,8 +221,8 @@ namespace Castle.Components.Binder.Tests
 			";
 
 			NameValueCollection args = TestUtils.ParseNameValueString(data);
-			DataBinder binder = new DataBinder("Person");
-			object instance = binder.BindObject(typeof(Person[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person[]), "Person", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person[] sc = instance as Person[];
@@ -243,8 +241,8 @@ namespace Castle.Components.Binder.Tests
 			";
 
 			NameValueCollection args = TestUtils.ParseNameValueString(data);
-			DataBinder binder = new DataBinder("abc");
-			object instance = binder.BindObject(typeof(Person[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person[]), "abc", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person[] sc = instance as Person[];
@@ -261,25 +259,24 @@ namespace Castle.Components.Binder.Tests
 		{
 			Team[] team = null;
 			
-			DataBinder binder = new DataBinder("Team");
+			DataBinder binder = new DataBinder();
 			
 			object instance;
 			
 			NameValueCollection args = BuildComplexParamList();
 
 			args.Add("Team[0]@ignore", "yes");
-			instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			instance = binder.BindObject(typeof(Team[]), "Team", new NameValueCollectionAdapter(args));
 			team = instance as Team[];
 			Assert.IsNotNull(team);
 			Assert.IsTrue(team.Length == 1);
 
 			args.Remove("Team[0]@ignore");
 			args.Add("Team[0].Members@ignore", "yes");
-			instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			instance = binder.BindObject(typeof(Team[]), "Team", new NameValueCollectionAdapter(args));
 			team = instance as Team[];
 			Assert.IsNotNull(team);
-			Assert.IsNotNull(team[0].Members);
-			Assert.AreEqual(0, team[0].Members.Length);
+			Assert.IsNull(team[0].Members);
 		}
 
 		[Test]
@@ -288,8 +285,8 @@ namespace Castle.Components.Binder.Tests
 			Team[] team = null;
 			NameValueCollection args = BuildComplexParamList();
 
-			DataBinder binder = new DataBinder("Team");
-			object instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Team[]), "Team", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			team = instance as Team[];
@@ -308,8 +305,8 @@ namespace Castle.Components.Binder.Tests
 
 			NameValueCollection args = BuildComplexParamList();
 
-			DataBinder binder = new DataBinder("Team");
-			object instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Team[]), "Team", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			team = instance as Team[];
@@ -335,8 +332,8 @@ namespace Castle.Components.Binder.Tests
 
 			NameValueCollection args = BuildComplexParamList();
 
-			DataBinder binder = new DataBinder("Team", new Hashtable(), new ArrayList(), "", "Games,Name");
-			object instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Team[]), "Team", "Games,Name", "", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			team = instance as Team[];
@@ -358,8 +355,8 @@ namespace Castle.Components.Binder.Tests
 			Team[] team = null;
 			NameValueCollection args = BuildComplexParamList();
 
-			DataBinder binder = new DataBinder("Team", new Hashtable(), new ArrayList(), "Name,Games,Members", "");
-			object instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Team[]), "Team", null, "Name,Games,Members", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			team = instance as Team[];
@@ -385,9 +382,9 @@ namespace Castle.Components.Binder.Tests
 
 			NameValueCollection args = BuildComplexParamList();
 
-			DataBinder binder = new DataBinder("Team", new Hashtable(), new ArrayList(), "Name,Games,Members", "Games");
+			DataBinder binder = new DataBinder();
 			
-			object instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			object instance = binder.BindObject(typeof(Team[]), "Team", "Games", "Name,Games,Members", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			team = instance as Team[];
@@ -415,15 +412,15 @@ namespace Castle.Components.Binder.Tests
 
 			NameValueCollection args = TestUtils.ParseNameValueString(data);
 
-			DataBinder binder = new DataBinder("person");
-			object instance = binder.BindObject(typeof(Person), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Person), "person", new NameValueCollectionAdapter(args));
 
 			Assert.IsNotNull(instance);
 			Person person = instance as Person;
 			Assert.IsNotNull(person);
 			Assert.IsTrue(person.Name == "John");
 			Assert.IsTrue(person.Age == 0);
-			Assert.AreEqual(1, binder.Errors.Count);
+			Assert.AreEqual(1, binder.ErrorList.Count);
 		}
 
 		[Test]
@@ -447,8 +444,8 @@ namespace Castle.Components.Binder.Tests
 
 			NameValueCollection args = TestUtils.ParseNameValueString(data);
 
-			DataBinder binder = new DataBinder("abc");
-			object instance = binder.BindObject(typeof(Team[]), new NameValueCollectionAdapter(args));
+			DataBinder binder = new DataBinder();
+			object instance = binder.BindObject(typeof(Team[]), "abc", new NameValueCollectionAdapter(args));
 			Assert.IsNotNull(instance);
 			Team[] team = instance as Team[];
 
@@ -463,7 +460,7 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsTrue(team[0].Members[1].Age == 0);
 			Assert.IsTrue(team[1].Members[0].Name == "Mr. B-White");
 			Assert.IsTrue(team[1].Members[0].Age == 0);
-			Assert.AreEqual(5, binder.Errors.Count);
+			Assert.AreEqual(2, binder.ErrorList.Count);
 		}
 
 		#region Helpers

@@ -21,84 +21,144 @@ namespace Castle.Components.Binder
 
 	/// <summary>
 	/// A DataBinder can be used to map properties from 
-	/// a NameValueCollection to one or more instance types.
+	/// a <see cref="IBindingDataSourceNode"/> to one or more instance types.
 	/// </summary>
-	/// <remarks>
-	/// This code is messy. We need more test cases so we can 
-	/// refactor it mercyless
-	/// </remarks>
-	public class DataBinder
+	public class DataBinder : IDataBinder
 	{
+		#region Fields
+
 		protected internal static readonly BindingFlags PropertiesBindingFlags =
 			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 		
-		private String prefix;
-		private IList errorList;
+		/// <summary>Collect the databind errors</summary>
+		protected IList errors;
+		
+		/// <summary>Holds a reference to a hash of string to <c>HttpPostedFiles</c></summary>
 		private IDictionary files;
-		private String excludedProperties;
-		private String allowedProperties;
+
+		/// <summary>Holds a sorted array of properties names that should be ignored</summary>
 		private String[] excludedPropertyList;
+
+		/// <summary>Holds a sorted array of properties names that are on the white list</summary>
 		private String[] allowedPropertyList;
 
-		public DataBinder() : this(String.Empty, new Hashtable(), new ArrayList(), "", "")
+		#endregion
+
+		#region Constructors
+
+		/// <summary>
+		/// Constructs a <c>DataBinder</c>
+		/// </summary>
+		public DataBinder() : this(new Hashtable())
 		{
 		}
 
-		public DataBinder(String prefix) : this(prefix, new Hashtable(), new ArrayList(), "", "")
+		/// <summary>
+		/// Constructs a <c>DataBinder</c> 
+		/// with a hash of string to <c>HttpPostedFiles</c>
+		/// </summary>
+		public DataBinder(IDictionary files)
 		{
-		}
-
-		public DataBinder(String prefix, IDictionary files, IList errorList, 
-			String allowedProperties, String excludedProperties)
-		{
-			this.prefix = prefix;
 			this.files = files;
-			this.errorList = errorList;
-			this.allowedProperties = allowedProperties;
-			this.excludedProperties = excludedProperties;
 		}
 
-		public string ExcludedProperties
+		#endregion
+
+		#region IDataBinder
+
+		/// <summary>
+		/// Create an instance of the specified type and binds the properties that
+		/// are available on the datasource.
+		/// </summary>
+		/// <param name="targetType">The target type. Can be an array</param>
+		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+		/// <param name="dataSource">A hierarchycal representation of flat data</param>
+		/// <returns>an instance of the specified target type</returns>
+		public object BindObject(Type targetType, String prefix, IBindingDataSourceNode dataSource)
 		{
-			get { return excludedProperties; }
-			set { excludedProperties = value; }
+			return BindObject(targetType, prefix, null, null, dataSource);
 		}
 
-		public string AllowedProperties
+		/// <summary>
+		/// Create an instance of the specified type and binds the properties that
+		/// are available on the datasource respecting the white and black list
+		/// </summary>
+		/// <param name="targetType">The target type. Can be an array</param>
+		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+		/// <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
+		/// <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
+		/// <param name="dataSource">A hierarchycal representation of flat data</param>
+		/// <returns>an instance of the specified target type</returns>
+		public object BindObject(Type targetType, String prefix, String excludedProperties, String allowedProperties, IBindingDataSourceNode dataSource)
 		{
-			get { return allowedProperties; }
-			set { allowedProperties = value; }
-		}
+			if (targetType == null) throw new ArgumentNullException("targetType");
+			if (prefix == null) throw new ArgumentNullException("prefix");
+			if (dataSource == null) throw new ArgumentNullException("dataSource");
 
-		public IDictionary Files
-		{
-			get { return files; }
-			set { files = value; }
-		}
+			errors = new ArrayList();
 
-		public String Prefix
-		{
-			get { return prefix; }
-			set { prefix = value; }
-		}
-
-		public IList Errors
-		{
-			get { return errorList; }
-		}
-
-		public object BindObject(Type targetType, IBindingDataSourceNode dataSource)
-		{
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
 
 			return InternalBindObject(targetType, prefix, dataSource.ObtainNode(prefix));
 		}
 
-		public void BindObjectInstance(object instance, IBindingDataSourceNode dataSource)
+		/// <summary>
+		/// Binds the properties that are available on the datasource to the specified object instance.
+		/// </summary>
+		/// <param name="instance">The target instance.</param>
+		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+		/// <param name="dataSource">A hierarchycal representation of flat data</param>
+		/// <returns>an instance of the specified target type</returns>
+		public void BindObjectInstance(object instance, String prefix, IBindingDataSourceNode dataSource)
 		{
+			BindObjectInstance(instance, prefix, null, null, dataSource);
+		}
+
+		/// <summary>
+		/// Binds the properties that
+		/// are available on the datasource respecting the white and black list
+		/// </summary>
+		/// <param name="instance">The target type.</param>
+		/// <param name="prefix">The obligatory prefix that distinguishes it on the datasource</param>
+		/// <param name="excludedProperties">A list of comma separated values specifing the properties that should be ignored</param>
+		/// <param name="allowedProperties">A list of comma separated values specifing the properties that should not be ignored</param>
+		/// <param name="dataSource">A hierarchycal representation of flat data</param>
+		/// <returns>an instance of the specified target type</returns>
+		public void BindObjectInstance(object instance, String prefix, String excludedProperties, String allowedProperties, IBindingDataSourceNode dataSource)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
+			if (prefix == null) throw new ArgumentNullException("prefix");
+			if (dataSource == null) throw new ArgumentNullException("dataSource");
+
+			errors = new ArrayList();
+
+			excludedPropertyList = CreateNormalizedList(excludedProperties);
+			allowedPropertyList = CreateNormalizedList(allowedProperties);
+
 			InternalRecursiveBindObjectInstance(instance, prefix, dataSource.ObtainNode(prefix));
 		}
+
+		/// <summary>
+		/// Represents the databind errors
+		/// </summary>
+		public ErrorList ErrorList
+		{
+			get { return new ErrorList(errors); }
+		}
+
+		/// <summary>
+		/// Holds a reference to a hash of string to <c>HttpPostedFiles</c>
+		/// </summary>
+		public IDictionary Files
+		{
+			get { return files; }
+			set { files = value; }
+		}
+
+		#endregion
+
+		#region Overridables
 
 		protected virtual void AfterBinding(object instance, String prefix, IBindingDataSourceNode node)
 		{
@@ -108,28 +168,40 @@ namespace Castle.Components.Binder
 		{
 		}
 
+		#endregion
+
+		#region Internal implementation
+
 		protected object InternalBindObject(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
 		{
+			bool succeeded;
+			return InternalBindObject(instanceType, paramPrefix, node, out succeeded);
+		}
+
+		protected object InternalBindObject(Type instanceType, String paramPrefix, IBindingDataSourceNode node, out bool succeeded)
+		{
+			succeeded = false;
+
 			if (ShouldIgnoreType(instanceType)) return null;
 
 			if (instanceType.IsArray)
 			{
-				return InternalBindObjectArray(instanceType, paramPrefix, node);
+				return InternalBindObjectArray(instanceType, paramPrefix, node, out succeeded);
 			}
 			else
 			{
+				succeeded = true;
 				object instance = CreateInstance(instanceType, paramPrefix, node);
 				InternalRecursiveBindObjectInstance(instance, paramPrefix, node);
 				return instance;
 			}
 		}
 
-		protected void InternalRecursiveBindObjectInstance(
-			object instance, String paramPrefix, IBindingDataSourceNode node)
+		protected void InternalRecursiveBindObjectInstance(object instance, String prefix, IBindingDataSourceNode node)
 		{
 			if (node == null || node.ShouldIgnore) return;
 
-			BeforeBinding(instance, paramPrefix, node);
+			BeforeBinding(instance, prefix, node);
 
 			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
@@ -142,21 +214,34 @@ namespace Castle.Components.Binder
 
 				try
 				{
-					if (!IsSimpleProperty(propType))
-					{
-						// if the property is an object, we look if it is already instanciated
-						object value = prop.GetValue(instance, null);
+					bool conversionSucceeded;
 
+					if (IsSimpleProperty(propType))
+					{
+						object value = ConvertUtils.Convert(prop.PropertyType, paramName, node, files, out conversionSucceeded);
+
+						if (conversionSucceeded && value != null)
+						{
+							prop.SetValue(instance, value, null);
+						}
+					}
+					else
+					{
 						IBindingDataSourceNode nestedNode = node.ObtainNode(paramName);
 
 						if (nestedNode != null)
 						{
-							// if it's not there, we create it
-							// Or if is an array
+							// if the property is an object, we look if it is already instanciated
+							object value = prop.GetValue(instance, null);
+
 							if (value == null || propType.IsArray)
 							{
-								value = InternalBindObject(propType, paramName, nestedNode);
-								prop.SetValue(instance, value, null);
+								value = InternalBindObject(propType, paramName, nestedNode, out conversionSucceeded);
+								
+								if (conversionSucceeded)
+								{
+									prop.SetValue(instance, value, null);
+								}
 							}
 							else // if the object already instanciated, then we use it 
 							{
@@ -164,58 +249,40 @@ namespace Castle.Components.Binder
 							}
 						}
 					}
-					else
-					{
-						bool conversionSucceeded;
-
-						// String[] values = ctx.ParamList.GetValues(paramName);
-
-						object value = ConvertUtils.Convert(prop.PropertyType, paramName, node, files, out conversionSucceeded);
-
-						// we don't want to set the value if the form param was missing
-						// to avoid loosing existing values in the object instance
-						if (conversionSucceeded && value != null)
-						{
-							prop.SetValue(instance, value, null);
-						}
-					}
 				}
 				catch(Exception ex)
 				{
-					if (Errors != null)
-					{
-						Errors.Add(new DataBindError(prefix, (paramPrefix == "") ? paramName : prop.Name, ex));
-					}
-					else
-					{
-						throw;
-					}
+					errors.Add(new DataBindError(prefix, prop.Name, ex));
 				}
 			}
 
-			AfterBinding(instance, paramPrefix, node);
+			AfterBinding(instance, prefix, node);
 		}
 
-		private object[] InternalBindObjectArray(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
+		private object[] InternalBindObjectArray(Type instanceType, String paramPrefix, IBindingDataSourceNode node, out bool succeeded)
 		{
+			succeeded = false;
+
 			if (node == null || node.ShouldIgnore)
 			{
-				// No data, returns an empty array
-
-				return (object[]) Array.CreateInstance(instanceType.GetElementType(), 0);
+				return null;
 			}
-
-			ArrayList bindArray = new ArrayList();
 
 			if (node.IsIndexed)
 			{
+				ArrayList bindArray = new ArrayList();
+
+				succeeded = true;
+
 				foreach(IBindingDataSourceNode elementNode in node.IndexedNodes)
 				{
 					AddArrayElement(bindArray, instanceType, paramPrefix, elementNode);
 				}
+
+				return (object[]) bindArray.ToArray(instanceType.GetElementType());
 			}
 
-			return (object[]) bindArray.ToArray(instanceType.GetElementType());
+			return null;
 		}
 
 		private void AddArrayElement(ArrayList bindArray, Type instanceType, String prefix, IBindingDataSourceNode elementNode)
@@ -230,6 +297,8 @@ namespace Castle.Components.Binder
 			}
 		}
 
+		#endregion
+
 		#region CreateInstance
 
 		protected virtual object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode dataSource)
@@ -238,6 +307,8 @@ namespace Castle.Components.Binder
 		}
 
 		#endregion
+
+		#region Support methods
 
 		protected String[] CreateNormalizedList(String csv)
 		{
@@ -259,13 +330,26 @@ namespace Castle.Components.Binder
 			{
 				list[i] = list[i].Trim();
 			}
+			Array.Sort(list, CaseInsensitiveComparer.Default);
 		}
 
 		private bool ShouldIgnoreProperty(PropertyInfo prop)
 		{
-			return !prop.CanWrite ||
-				(allowedPropertyList != null && Array.IndexOf(allowedPropertyList, prop.Name) == -1) ||
-				(excludedPropertyList != null && Array.IndexOf(excludedPropertyList, prop.Name) != -1);
+			if (!prop.CanWrite) return true;
+
+			int index1 = 0; 
+			int index2 = -1;
+
+			if (allowedPropertyList != null)
+			{
+				index1 = Array.BinarySearch(allowedPropertyList, prop.Name, CaseInsensitiveComparer.Default);
+			}
+			if (excludedPropertyList != null)
+			{
+				index2 = Array.BinarySearch(excludedPropertyList, prop.Name, CaseInsensitiveComparer.Default);
+			}
+
+			return (index1 <= -1) || (index2 >= 0);
 		}
 
 		private bool ShouldIgnoreType(Type instanceType)
@@ -292,7 +376,10 @@ namespace Castle.Components.Binder
 			if (isSimple) return true;
 
 			TypeConverter converter = TypeDescriptor.GetConverter(propType);
+
 			return converter.CanConvertFrom( typeof(String) );
 		}
+
+		#endregion
 	}
 }

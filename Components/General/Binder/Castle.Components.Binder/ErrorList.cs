@@ -16,41 +16,37 @@ namespace Castle.Components.Binder
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 
 	/// <summary>
 	/// A useful representation of a set of IPropertyError instances.
 	/// </summary>
 	public class ErrorList : ICollection
 	{
-		private readonly IList list;
-		private readonly IDictionary map;
+		private readonly SortedList entries = new SortedList();
 
 		public ErrorList(IList initialContents)
 		{
-			this.list = (initialContents != null ? initialContents : new ArrayList(0));
+			IList list = (initialContents != null ? initialContents : new ArrayList(0));
 			
-			map = new HybridDictionary(list.Count, true);
-
 			foreach(DataBindError error in list)
 			{
-				map.Add(error.Property, error);
+				entries[error.Property] = error;
 			}
 		}
 
 		public int Count
 		{
-			get { return list.Count; }
+			get { return entries.Count; }
 		}
 
 		public bool Contains(String property)
 		{
-			return map.Contains(property);
+			return entries.Contains(property);
 		}
 
 		public DataBindError this[String property]
 		{
-			get { return map[property] as DataBindError; }
+			get { return entries[property] as DataBindError; }
 		}
 
 		#region ICollection Members
@@ -76,7 +72,7 @@ namespace Castle.Components.Binder
 
 		public IEnumerator GetEnumerator()
 		{
-			return list.GetEnumerator();
+			return entries.Values.GetEnumerator();
 		}
 
 		#endregion

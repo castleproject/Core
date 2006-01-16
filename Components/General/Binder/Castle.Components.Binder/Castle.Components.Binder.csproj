@@ -139,6 +139,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IDataBinder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IndexComparer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
