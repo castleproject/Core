@@ -20,9 +20,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
-
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
 
 
 	public abstract class CommonOperationUtils

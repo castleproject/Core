@@ -89,18 +89,28 @@ namespace Castle.MonoRail.Framework
 			get { return prefix; }
 		}
 
-		object IParameterBinder.Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			NameValueCollection coll = controller.ResolveParamsSource(From);
-
 			DataBinder binder = controller.Binder;
 
+			NameValueCollection coll = ResolveParams(controller);
+
+			ConfigureBinder(binder, controller);
+
+			return binder.BindObject(parameterInfo.ParameterType, new NameValueCollectionAdapter(coll));
+		}
+
+		protected void ConfigureBinder(DataBinder binder, SmartDispatcherController controller)
+		{
 			binder.Prefix = Prefix;
 			binder.AllowedProperties = Allow;
 			binder.ExcludedProperties = Exclude;
 			binder.Files = controller.Context.Request.Files;
+		}
 
-			return binder.BindObject(parameterInfo.ParameterType, new NameValueCollectionAdapter(coll));
+		protected NameValueCollection ResolveParams(SmartDispatcherController controller)
+		{
+			return controller.ResolveParamsSource(From);
 		}
 	}
 }

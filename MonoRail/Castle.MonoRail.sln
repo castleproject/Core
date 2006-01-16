@@ -47,6 +47,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Binder", 
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport", "Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport.csproj", "{2409063E-BE05-4596-A677-758096D1C759}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.MonoRail.ActiveRecordSupport.Tests", "Castle.MonoRail.ActiveRecordSupport.Tests\Castle.MonoRail.ActiveRecordSupport.Tests.csproj", "{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -101,6 +109,14 @@ Global
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Debug.Build.0 = Debug|.NET
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.ActiveCfg = Release|.NET
 		{98F19522-C9B8-400D-8A12-DABB3DA9411D}.Release.Build.0 = Release|.NET
+		{2409063E-BE05-4596-A677-758096D1C759}.Debug.ActiveCfg = Debug|.NET
+		{2409063E-BE05-4596-A677-758096D1C759}.Debug.Build.0 = Debug|.NET
+		{2409063E-BE05-4596-A677-758096D1C759}.Release.ActiveCfg = Release|.NET
+		{2409063E-BE05-4596-A677-758096D1C759}.Release.Build.0 = Release|.NET
+		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Debug.ActiveCfg = Debug|.NET
+		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Debug.Build.0 = Debug|.NET
+		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Release.ActiveCfg = Release|.NET
+		{2BFA8694-D90A-4ECE-BFD4-C7AB38116ED9}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Changes.txt = Changes.txt

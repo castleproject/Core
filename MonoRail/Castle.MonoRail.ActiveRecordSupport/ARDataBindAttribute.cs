@@ -15,20 +15,24 @@
 namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
+	using System.Collections.Specialized;
+	using System.Reflection;
 
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
-	/// Extends DataBindAttribute with ActiveRecord specific functionallity
+	/// Extends <see cref="DataBindAttribute"/> with 
+	/// ActiveRecord specific functionallity
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Parameter), Serializable]
-	public class ARDataBindAttribute : DataBindAttribute
+	public class ARDataBindAttribute : DataBindAttribute, IParameterBinder
 	{
 		private bool validate;
 		private bool autoPersist;
 		private bool autoLoad;
 		
-		public ARDataBindAttribute() : base ()
+		public ARDataBindAttribute(String prefix) : base (prefix)
 		{
 		}
 
@@ -56,6 +60,21 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			get { return autoPersist; }
 			set { autoPersist = value; }
-		}			
+		}
+
+		public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		{
+			ARDataBinder binder = new ARDataBinder();
+
+			NameValueCollection coll = ResolveParams(controller);
+
+			ConfigureBinder(binder, controller);
+
+			binder.AutoLoad = AutoLoad;
+			binder.PersistChanges = autoPersist;
+			binder.Validate = validate;
+
+			return binder.BindObject(parameterInfo.ParameterType, new NameValueCollectionAdapter(coll));
+		}
 	}
 }

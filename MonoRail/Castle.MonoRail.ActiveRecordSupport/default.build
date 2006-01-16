@@ -25,6 +25,7 @@
 		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 				
 		<property name="app.config" value="${bin.dir}/${test.assembly.name}.config" />
+		
 		<xmlpoke
 			file="${app.config}"
 			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
@@ -66,6 +67,7 @@
 			<references>
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
+				<include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
 			</references>
@@ -86,6 +88,7 @@
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
+				<include name="${bin.dir}/Castle.Components.Binder" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.Tests.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />

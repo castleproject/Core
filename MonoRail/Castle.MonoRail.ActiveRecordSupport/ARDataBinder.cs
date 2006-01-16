@@ -16,21 +16,20 @@ namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Reflection;
 
 	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
-	
+	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Internal;
 	
 	using Iesi.Collections;
 
 	/// <summary>
-	/// Extends DataBinder class with some ActiveRecord specific functionallity
-	/// for example by specifying an "autoload" attribute to your form params
+	/// Extends <see cref="DataBinder"/> class with some 
+	/// ActiveRecord specific functionality.
+	/// For example by specifying an "autoload" attribute to your form params
 	/// this class will automatically load the database record before binding
 	/// any properties values.
 	/// </summary>
@@ -39,78 +38,80 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public class ARDataBinder : DataBinder
 	{
 		protected internal static readonly object[] EmptyArg = new object[0];
-		protected internal static readonly String AutoLoadAttribute = DataBinder.MetadataIdentifier + "autoload";
 		
-		private bool autoLoad;
+		private bool autoLoad, validate, persistchanges;
 
 		public ARDataBinder() : base()
 		{
 		}
 
-		public object BindObject(Type instanceType, String paramPrefix, 
-			NameValueCollection paramList, IDictionary files, IList errorList, int nestedLevel, 
-			String excludedProperties, String allowProperties, bool autoLoad)
+		public bool Validate
 		{
-			this.autoLoad = true;
-
-			return BindObject(instanceType, paramPrefix, paramList, files, errorList, nestedLevel, 
-				excludedProperties, allowProperties);
+			get { return validate; }
+			set { validate = value; }
 		}
 
-		protected override object CreateInstance(Type instanceType, String paramPrefix, NameValueCollection paramsList)
+		public bool PersistChanges
+		{
+			get { return persistchanges; }
+			set { persistchanges = value; }
+		}
+
+		public bool AutoLoad
+		{
+			get { return autoLoad; }
+			set { autoLoad = value; }
+		}
+
+		protected override object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
 		{
 			object instance = null;
 
-			bool shouldLoad = autoLoad || paramsList[paramPrefix + AutoLoadAttribute] == Yes;
+			bool shouldLoad = autoLoad;
 
-			if (shouldLoad && paramsList[paramPrefix + AutoLoadAttribute] == No)
+			String autoloadOverride = node.GetMetaEntryValue("autoload");
+
+			if (autoloadOverride != null)
 			{
-				shouldLoad = false;
+				shouldLoad = (autoloadOverride == "yes" || autoloadOverride == "true");
 			}
 
 			if (shouldLoad)
 			{
 				if (instanceType.IsArray)
 				{
-					throw new RailsException("ARDataBinder autoload does not support arrays");
-				}
-
-				if (!typeof(ActiveRecordBase).IsAssignableFrom(instanceType))
-				{
-					throw new RailsException("ARDataBinder autoload only supports classes that inherit from ActiveRecordBase");
+					throw new RailsException("ARDataBinder AutoLoad does not support arrays");
 				}
 
 				ActiveRecordModel model = ActiveRecordModel.GetModel(instanceType);
 
-				// NOTE: as of right now we only support one PK
 				if (model.Ids.Count == 1)
 				{
 					PrimaryKeyModel pkModel = model.Ids[0] as PrimaryKeyModel;
 
-					string propName = pkModel.Property.Name;
-					string paramListPk = (paramPrefix == String.Empty) ? propName : paramPrefix + "." + propName;
-					string propValue = paramsList.Get(paramListPk);
+					String pkPropName = pkModel.Property.Name;
+					String propValue = node.GetEntryValue(pkPropName);
 
-					if (propValue != null)
+					if (propValue == null)
 					{
-						object id = ConvertUtils.Convert(pkModel.Property.PropertyType, propValue);
-						instance = SupportingUtils.FindByPK(instanceType, id);
+						throw new RailsException("ARDataBinder autoload failed as element {0} " + 
+							"doesn't have a primary key {1} value", paramPrefix, pkPropName);
 					}
-					else
-					{
-						throw new RailsException("ARDataBinder autoload failed as element {0} doesn't have a primary key {1} value", paramPrefix, propName);
-					}
+
+					object id = ConvertUtils.Convert(pkModel.Property.PropertyType, propValue);
+
+					instance = SupportingUtils.FindByPK(instanceType, id);
 				}
 			}
 			else
 			{
-				instance = base.CreateInstance(instanceType, paramPrefix, paramsList);
+				instance = base.CreateInstance(instanceType, paramPrefix, node);
 			}
 
 			return instance;
 		}
 
-		protected override void AfterBinding(object instance, String paramPrefix, DataBindContext context)
+		protected override void AfterBinding(object instance, String paramPrefix, IBindingDataSourceNode node)
 		{
 			// Defensive programming
 			if (instance == null) return;
@@ -119,10 +120,64 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (model == null) return;
 
-			SaveManyMappings(instance, model, context);
+			SaveManyMappings(instance, model, node);
+
+			if (validate) ValidateInstances(instance);
+
+			if (persistchanges) PersistInstances(instance);
 		}
 
-		protected void SaveManyMappings(object instance, ActiveRecordModel model, DataBindContext context)
+		private void PersistInstances(object instances)
+		{
+			Type instanceType = instances.GetType();
+			ActiveRecordBase[] records = null;
+
+			if (instanceType.IsArray)
+			{
+				records = instances as ActiveRecordBase[];
+			}
+			else if (typeof(ActiveRecordBase).IsAssignableFrom(instanceType))
+			{
+				records = new ActiveRecordBase[] {(ActiveRecordBase) instances};
+			}
+
+			if (records != null)
+			{
+				foreach(ActiveRecordBase record in records)
+				{
+					record.Save();
+				}
+			}
+		}
+
+		private void ValidateInstances(object instances)
+		{
+			Type instanceType = instances.GetType();
+			ActiveRecordValidationBase[] records = null;
+
+			if (instanceType.IsArray)
+			{
+				records = instances as ActiveRecordValidationBase[];
+			}
+			else if (typeof(ActiveRecordValidationBase).IsAssignableFrom(instanceType))
+			{
+				records = new ActiveRecordValidationBase[] {(ActiveRecordValidationBase) instances};
+			}
+
+			if (records != null)
+			{
+				foreach(ActiveRecordValidationBase record in records)
+				{
+					if (!record.IsValid())
+					{
+						throw new RailsException("Error validating {0} {1}",
+							record.GetType().Name, string.Join("\n", record.ValidationErrorMessages));
+					}
+				}
+			}
+		}
+
+		protected void SaveManyMappings(object instance, ActiveRecordModel model, IBindingDataSourceNode node)
 		{
 			foreach(HasManyModel hasManyModel in model.HasMany)
 			{
@@ -139,7 +194,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					continue; // Impossible to save
 				}
 
-				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, context);
+				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, node);
 			}
 
 			foreach(HasAndBelongsToManyModel hasManyModel in model.HasAndBelongsToMany)
@@ -157,20 +212,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					continue; // Impossible to save
 				}
 
-				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, context);
+				CreateMappedInstances(instance, hasManyModel.Property, keyModel, otherModel, node);
 			}
 		}
 
 		private void CreateMappedInstances(object instance, PropertyInfo prop,
-		                                   PrimaryKeyModel keyModel, ActiveRecordModel otherModel, DataBindContext context)
+			PrimaryKeyModel keyModel, ActiveRecordModel otherModel, IBindingDataSourceNode node)
 		{
 			object container = InitializeRelationPropertyIfNull(instance, prop);
 
-			// TODO: Support any kind of key
-
 			String paramName = String.Format("{0}.{1}", prop.Name, keyModel.Property.Name);
 
-			int[] ids = (int[]) ConvertUtils.Convert(typeof(int[]), paramName, context.ParamList, null);
+			int[] ids = (int[]) ConvertUtils.Convert(typeof(int[]), paramName, node, null);
 
 			if (ids != null)
 			{

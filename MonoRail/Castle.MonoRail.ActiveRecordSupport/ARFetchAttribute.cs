@@ -15,7 +15,7 @@
 namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
-
+	using System.Reflection;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -43,7 +43,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// submitted. 
 	/// </remarks>
 	[AttributeUsage(AttributeTargets.Parameter), Serializable]
-	public class ARFetchAttribute : Attribute
+	public class ARFetchAttribute : Attribute, IParameterBinder
 	{
 		private String requestParameterName;
 		private bool create, required;
@@ -119,6 +119,13 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			get { return required; }
 			set { required = value; }
+		}
+
+		object IParameterBinder.Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
+		{
+			ARFetcher fetcher = new ARFetcher();
+
+			return fetcher.FetchActiveRecord(parameterInfo, this, controller.Request);
 		}
 	}
 }
