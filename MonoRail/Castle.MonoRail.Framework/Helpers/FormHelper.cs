@@ -16,11 +16,20 @@ namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
+	using System.IO;
 	using System.Reflection;
+	using System.Text;
+	using System.Web.UI;
 
+	/// <summary>
+	/// Currently being evaluated
+	/// </summary>
 	public class FormHelper : AbstractHelper
 	{
 		private static readonly BindingFlags flags = BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+
+		#region TextFieldValue
 
 		public String TextFieldValue(Object target, String property, object value)
 		{
@@ -34,6 +43,10 @@ namespace Castle.MonoRail.Framework.Helpers
 				value, attributes);
 		}
 
+		#endregion
+
+		#region TextField
+
 		public String TextField(Object target, String property)
 		{
 			return TextField(target, property, null);
@@ -41,12 +54,75 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String TextField(Object target, String property, IDictionary attributes)
 		{
-			PropertyInfo propertyInfo = target.GetType().GetProperty(property, flags);
+			object value = ObtainValue(target, property);
 
 			return CreateInputElement("text", String.Format("{0}_{1}", target.GetType().Name, property), 
 				String.Format("{0}.{1}", target.GetType().Name, property), 
-				propertyInfo.GetValue(target, null), attributes);
+				value, attributes);
 		}
+
+		#endregion
+
+		#region LabelFor
+
+		public String LabelFor(Object target, String property, String label)
+		{
+			String id = String.Format("{0}_{1}", target.GetType().Name, property);
+
+			StringBuilder sb = new StringBuilder();
+			StringWriter sbWriter = new StringWriter(sb);
+			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
+
+			writer.WriteBeginTag("label");
+			writer.WriteAttribute("for", id);
+			writer.Write(HtmlTextWriter.TagRightChar);
+			writer.Write(label);
+			writer.WriteEndTag("label");
+
+			return sbWriter.ToString();
+		}
+
+		#endregion
+
+		#region HiddenField
+
+		public String HiddenField(Object target, String property)
+		{
+			object value = ObtainValue(target, property);
+
+			return CreateInputElement("hidden", String.Format("{0}_{1}", target.GetType().Name, property), 
+				String.Format("{0}.{1}", target.GetType().Name, property), 
+				value, null);
+		}
+
+		#endregion
+
+		#region CheckboxField
+
+		public String CheckboxField(Object target, String property)
+		{
+			return CheckboxField(target, property, null);
+		}
+
+		public String CheckboxField(Object target, String property, IDictionary attributes)
+		{
+			object value = ObtainValue(target, property);
+
+			bool isChecked = ((value != null && value is bool && ((bool)value) == true) || (!(value is bool) && (value != null)));
+
+			if (isChecked)
+			{
+				if (attributes == null) attributes = new HybridDictionary(true);
+
+				attributes["checked"] = String.Empty;
+			}
+
+			return CreateInputElement("checkbox", String.Format("{0}_{1}", target.GetType().Name, property), 
+				String.Format("{0}.{1}", target.GetType().Name, property), 
+				value is bool ? "true" : value, attributes);
+		}
+
+		#endregion
 
 		protected String CreateInputElement(String type, String id, String name, Object value, IDictionary attributes)
 		{
@@ -54,6 +130,12 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			return String.Format("<input type=\"{0}\" id=\"{1}\" name=\"{2}\" value=\"{3}\" {4}/>", 
 				type, id, name, value, GetAttributes(attributes));
+		}
+
+		private static object ObtainValue(object target, string property)
+		{
+			PropertyInfo propertyInfo = target.GetType().GetProperty(property, flags);
+			return propertyInfo.GetValue(target, null);
 		}
 	}
 }

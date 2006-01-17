@@ -20,6 +20,12 @@ Release Candidate 1
   They only must implement the interface IParameterBinding. This opens an interesting extension point
   for users willing to create their own logic to binding form/querystring parameters to their data components
 
+- Controller: Added RedirectToAction(String action, params String[] queryStringParameters)
+  example:  RedirectToAction("edit", "id=" + id, "error=couldn't update the row");
+
+- Added FlashBinderAttribute (being evaluated)
+
+- Added FormHelper (being evaluated)
 
 Beta 5
 ======

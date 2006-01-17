@@ -57,6 +57,42 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			Assert.AreEqual("<input type=\"text\" id=\"Product_price\" name=\"Product.price\" value=\"$12.30\" />", 
 				helper.TextFieldValue(product, "price", product.Price.ToString("C")));
 		}
+
+		[Test]
+		public void HiddenField()
+		{
+			Product product = new Product("memory card", 10, (decimal) 12.30);
+
+			Assert.AreEqual("<input type=\"hidden\" id=\"Product_name\" name=\"Product.name\" value=\"memory card\" />", 
+				helper.HiddenField(product, "name"));
+			Assert.AreEqual("<input type=\"hidden\" id=\"Product_quantity\" name=\"Product.quantity\" value=\"10\" />", 
+				helper.HiddenField(product, "quantity"));
+		}
+
+		[Test]
+		public void CheckboxField()
+		{
+			Product product = new Product("memory card", 10, (decimal) 12.30);
+
+			product.IsAvailable = false;
+
+			Assert.AreEqual("<input type=\"checkbox\" id=\"Product_isavailable\" name=\"Product.isavailable\" value=\"true\" />", 
+				helper.CheckboxField(product, "isavailable"));
+
+			product.IsAvailable = true;
+
+			Assert.AreEqual("<input type=\"checkbox\" id=\"Product_isavailable\" name=\"Product.isavailable\" value=\"true\" checked />", 
+				helper.CheckboxField(product, "isavailable"));
+		}
+
+		[Test]
+		public void LabelFor()
+		{
+			Product product = new Product("memory card", 10, (decimal) 12.30);
+
+			Assert.AreEqual("<label for=\"Product_name\">Name:</label>", 
+				helper.LabelFor(product, "name", "Name:"));
+		}
 	}
 
 	public class Product
@@ -64,6 +100,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		private String name;
 		private int quantity;
 		private Decimal price;
+		private bool isAvailable;
 
 		public Product(string name, int quantity, decimal price)
 		{
@@ -88,6 +125,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		{
 			get { return price; }
 			set { price = value; }
+		}
+
+		public bool IsAvailable
+		{
+			get { return isAvailable; }
+			set { isAvailable = value; }
 		}
 	}
 }

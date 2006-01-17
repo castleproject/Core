@@ -65,6 +65,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		protected override object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
 		{
+			if (node == null)
+			{
+				throw new RailsException("Nothing found for the given prefix. Are you sure the form fields are using the prefix " + paramPrefix + "?");
+			}
+
 			object instance = null;
 
 			bool shouldLoad = autoLoad;

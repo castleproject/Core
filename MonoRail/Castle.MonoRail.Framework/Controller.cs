@@ -425,6 +425,7 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#region RedirectToAction
+		
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
@@ -437,30 +438,46 @@ namespace Castle.MonoRail.Framework
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
-		protected void RedirectToAction(String action, IDictionary parameters)
+		protected void RedirectToAction(String action, params String[] queryStringParameters)
 		{
-			NameValueCollection p = null;
-			
-			if (parameters != null && parameters.Count > 0) 
-			{
-				p = new NameValueCollection(parameters.Count);
-				foreach (Object key in parameters.Keys)
-					p.Add(Convert.ToString(key), Convert.ToString(parameters[key]));
-			}
-
-			RedirectToAction(action, p);
+			RedirectToAction(action, new DictHelper().CreateDict(queryStringParameters));
 		}
 
 		/// <summary> 
 		/// Redirects to another action in the same controller.
 		/// </summary>
-		protected void RedirectToAction(String action, NameValueCollection parameters)
+		protected void RedirectToAction(String action, IDictionary queryStringParameters)
 		{
-			if (parameters != null)
-				Redirect(this.AreaName, this.Name, action, parameters);
-			else
-				Redirect(this.AreaName, this.Name, action);
+			NameValueCollection copy = null;
+			
+			if (queryStringParameters != null && queryStringParameters.Count > 0) 
+			{
+				copy = new NameValueCollection(queryStringParameters.Count);
+				
+				foreach (Object key in queryStringParameters.Keys)
+				{
+					copy.Add(Convert.ToString(key), Convert.ToString(queryStringParameters[key]));
+				}
+			}
+
+			RedirectToAction(action, copy);
 		}
+
+		/// <summary> 
+		/// Redirects to another action in the same controller.
+		/// </summary>
+		protected void RedirectToAction(String action, NameValueCollection queryStringParameters)
+		{
+			if (queryStringParameters != null)
+			{
+				Redirect(AreaName, Name, action, queryStringParameters);
+			}
+			else
+			{
+				Redirect(AreaName, Name, action);
+			}
+		}
+
 		#endregion
 
 		protected String CreateAbsoluteRailsUrl(String area, String controller, String action)
@@ -847,7 +864,7 @@ namespace Castle.MonoRail.Framework
 						new EffectsFatHelper(), new Effects2Helper(),
 						new DateFormatHelper(), new HtmlHelper(),
 						new ValidationHelper(), new DictHelper(),
-						new PaginationHelper()
+						new PaginationHelper(), new FormHelper()
 					};
 
 			foreach (AbstractHelper helper in builtInHelpers)
