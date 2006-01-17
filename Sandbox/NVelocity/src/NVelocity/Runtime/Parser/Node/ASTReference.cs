@@ -329,7 +329,8 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 			if (referenceType == ReferenceType.Runt)
 			{
-				writer.Write(rootString);
+				char[] c = rootString.ToCharArray();
+				writer.Write(c, 0, c.Length);
 				return true;
 			}
 
@@ -340,17 +341,16 @@ namespace NVelocity.Runtime.Parser.Node
 			// 2) if not, then \$foo  (its considered shmoo, not VTL)
 			if (escaped)
 			{
+				StringBuilder b = new StringBuilder();
+				b.Append(escPrefix);
 				if (value == null)
 				{
-					writer.Write(escPrefix);
-					writer.Write("\\");
-					writer.Write(nullString);
+					b.Append("\\");
 				}
-				else
-				{
-					writer.Write(escPrefix);
-					writer.Write(nullString);
-				}
+				b.Append(nullString);
+ 
+				char[] c = b.ToString().ToCharArray();
+				writer.Write(c, 0, c.Length);
 
 				return true;
 			}
@@ -367,10 +367,14 @@ namespace NVelocity.Runtime.Parser.Node
 			if (value == null)
 			{
 				// write prefix twice, because it's shmoo, so the \ don't escape each other...
-				writer.Write(escPrefix);
-				writer.Write(escPrefix);
-				writer.Write(morePrefix);
-				writer.Write(nullString);
+				StringBuilder b = new StringBuilder();
+				b.Append(escPrefix);
+				b.Append(escPrefix);
+				b.Append(morePrefix);
+				b.Append(nullString);
+ 
+				char[] c = b.ToString().ToCharArray();
+				writer.Write(c, 0, c.Length);
 
 				if (referenceType != ReferenceType.Quiet && rsvc.GetBoolean(RuntimeConstants.RUNTIME_LOG_REFERENCE_LOG_INVALID, true))
 				{
@@ -382,9 +386,13 @@ namespace NVelocity.Runtime.Parser.Node
 			else
 			{
 				// non-null processing
-				writer.Write(escPrefix);
-				writer.Write(morePrefix);
-				writer.Write(value.ToString());
+				StringBuilder b = new StringBuilder();
+				b.Append(escPrefix);
+				b.Append(morePrefix);
+				b.Append(value);
+ 
+				char[] c = b.ToString().ToCharArray();
+				writer.Write(c, 0, c.Length);
 
 				return true;
 			}

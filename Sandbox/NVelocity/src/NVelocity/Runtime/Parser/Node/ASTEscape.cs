@@ -96,7 +96,8 @@ namespace NVelocity.Runtime.Parser.Node
 
 		public override bool Render(InternalContextAdapter context, TextWriter writer)
 		{
-			writer.Write(text);
+			char[] c = text.ToCharArray();
+			writer.Write(c, 0, c.Length);
 			return true;
 		}
 	}
