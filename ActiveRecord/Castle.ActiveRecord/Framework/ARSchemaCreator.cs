@@ -81,7 +81,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					{
 						// Ignored, but we output it
 
-						Debug.WriteLine(String.Format("SQL: {0} \r\nthrew {1}. Ignoring", part, ex.Message));
+						Console.WriteLine(String.Format("SQL: {0} \r\nthrew {1}. Ignoring", part, ex.Message));
 					}
 				}
 			}

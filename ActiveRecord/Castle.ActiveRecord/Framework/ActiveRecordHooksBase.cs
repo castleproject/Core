@@ -13,7 +13,10 @@
 // limitations under the License.
 
 namespace Castle.ActiveRecord
-{	
+{
+	using System;
+
+	[Serializable]
 	public abstract class ActiveRecordHooksBase
     {
         /// <summary>
