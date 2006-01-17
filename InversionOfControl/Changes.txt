@@ -1,5 +1,7 @@
 RC 3
 ====
+- xmlinterpreter will throw an exception if a property is not defined but referenced
+using #{propertyName} syntax.(Patch from Ahmed)
 
 - Support for nested nodes on the properties. (kudos to Ahmed)
   Example:

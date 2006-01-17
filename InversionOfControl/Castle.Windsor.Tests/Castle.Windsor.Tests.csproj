@@ -314,11 +314,19 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration2\Properties\config_with_missing_properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Configuration2\Properties\config_with_properties.xml"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "Configuration2\Properties\config_with_properties_and_includes.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_silent_properties.xml"
                     BuildAction = "Content"
                 />
                 <File

@@ -15,6 +15,7 @@
 namespace Castle.Windsor.Tests.Configuration2.Properties
 {
 	using System;
+	using System.Configuration;
 	using System.IO;
 	
 	using Castle.MicroKernel;
@@ -38,6 +39,48 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 			container = new WindsorContainer(file);
 
 			AssertConfiguration();
+		}
+
+		[Test]
+		public void SilentProperties()
+		{
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
+				"config_with_silent_properties.xml");
+
+			container = new WindsorContainer(file);
+
+			IConfigurationStore store = container.Kernel.ConfigurationStore;
+
+			Assert.AreEqual(1, store.GetFacilities().Length, "Diff num of facilities");
+			Assert.AreEqual(1, store.GetComponents().Length, "Diff num of components");
+
+			IConfiguration config = store.GetFacilityConfiguration("facility1");
+			IConfiguration childItem = config.Children["param1"];
+			Assert.IsNotNull(childItem);
+			Assert.AreEqual("prop1 value", childItem.Value);
+			Assert.AreEqual(null, childItem.Attributes["attr"]);
+
+			config = store.GetComponentConfiguration("component1");
+			childItem = config.Children["param1"];
+			Assert.IsNotNull(childItem);
+			Assert.AreEqual(null, childItem.Value);
+			Assert.AreEqual("prop1 value", childItem.Attributes["attr"]);
+		}
+
+		[Test]
+		public void MissingProperties()
+		{
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
+				"config_with_missing_properties.xml");
+
+			try
+			{
+				container = new WindsorContainer(file);	
+				Assert.Fail("MissingProperties should had throw config exception");
+			}
+			catch(ConfigurationException c)
+			{				
+			}
 		}
 
 		[Test]

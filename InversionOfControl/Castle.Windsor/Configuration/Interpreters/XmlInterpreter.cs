@@ -49,10 +49,10 @@ namespace Castle.Windsor.Configuration.Interpreters
 	{
 		/// <summary>
 		/// Properties names can contain a-zA-Z0-9_. 
-		/// i.e. #{my_node_name} || #{ my.node.name }
+		/// i.e. #!{my_node_name} || #{ my.node.name }
 		/// spaces are trimmed
 		/// </summary>
-		private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
+		private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
 
 		private readonly IDictionary properties = new HybridDictionary();
 		private readonly XslContext context = new XslContext();
@@ -282,7 +282,8 @@ namespace Castle.Windsor.Configuration.Interpreters
 					buffer.Append(value.Substring(pos, match.Index - pos));
 				}
 
-				string propKey = match.Groups[2].Value;
+				string propRef = match.Groups[1].Value; // #!{ propKey }
+				string propKey = match.Groups[2].Value; // propKey
 
 				MutableConfiguration prop = properties[propKey] as MutableConfiguration;
 
@@ -290,6 +291,10 @@ namespace Castle.Windsor.Configuration.Interpreters
 				{
 					buffer.Append(prop.Value);
 					children.AddRange(prop.Children);
+				}
+				else if( IsRequiredProperty(propRef) )
+				{
+					throw new ConfigurationException( String.Format("Required configuration property {0} not found", propKey));
 				}
 
 				pos += match.Index + match.Length;
@@ -306,6 +311,11 @@ namespace Castle.Windsor.Configuration.Interpreters
 			result.Children.AddRange(children);
 
 			return result;
+		}
+
+		private bool IsRequiredProperty( string propRef )
+		{
+			return propRef.StartsWith( "#{" );
 		}
 
 		#endregion		
