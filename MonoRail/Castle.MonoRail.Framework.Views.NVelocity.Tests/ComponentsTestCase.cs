@@ -24,6 +24,36 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	public class ComponentsTestCase : AbstractMRTestCase
 	{
 		[Test]
+		public void CaptureForComponent()
+		{
+			DoGet("usingcomponent/capturefor.rails");
+
+			AssertSuccess();
+
+			AssertReplyContains(@"=navbar= some content =navbar=");
+		}
+
+		[Test]
+		public void CaptureForComponentAppend()
+		{
+			DoGet("usingcomponent/captureforappend.rails");
+
+			AssertSuccess();
+
+			AssertReplyContains(@"=2= some content =3=  =4=");
+		}
+
+		[Test]
+		public void CaptureForComponentAppendBefore()
+		{
+			DoGet("usingcomponent/captureforappendbefore.rails");
+
+			AssertSuccess();
+
+			AssertReplyContains(@"=2= some content	=4= 	=3=");
+		}
+
+		[Test]
 		public void InlineComponentUsingRenderText()
 		{
 			DoGet("usingcomponent/index1.rails");

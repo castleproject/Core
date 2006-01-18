@@ -1,0 +1,2 @@
+#blockcomponent(CaptureFor with "id=navbar") =navbar= #end
+${navbar}some content${navbar}

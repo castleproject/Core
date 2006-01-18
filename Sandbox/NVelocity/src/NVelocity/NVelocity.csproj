@@ -246,60 +246,8 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Dvsl\Dvsl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\DvslContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\DvslNode.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\DvslNodeContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\DvslNodeImpl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\TemplateHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\Transformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\TransformTool.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\Directive\MatchDirective.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\Directive\NameDirective.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dvsl\Resource\defaultroot.dvsl"
-                    BuildAction = "EmbeddedResource"
-                />
+                <Folder RelPath = "Dvsl\Directive\" />
+                <Folder RelPath = "Dvsl\Resource\" />
                 <File
                     RelPath = "Exception\MethodInvocationException.cs"
                     SubType = "Code"

@@ -2,16 +2,6 @@ namespace NVelocity.Util
 {
 	using System;
 
-	#region CVS information
-
-	/*
-    * $Header: /cvsroot/nvelocity/NVelocity/src/Util/SimplePool.cs,v 1.4 2003/11/05 03:57:29 corts Exp $
-    * $Revision: 1.4 $
-    * $Date: 2003/11/05 03:57:29 $
-    */
-
-	#endregion
-
 	/// <summary>
 	/// Simple object pool. Based on ThreadPool and few other classes
 	/// The pool will ignore overflow and return null if empty.
@@ -23,8 +13,8 @@ namespace NVelocity.Util
 	public sealed class SimplePool
 	{
 		/*
-	* Where the objects are held.
-	*/
+	     * Where the objects are held.
+	     */
 		private Object[] pool;
 
 		/// <summary>  max amount of objects to be managed

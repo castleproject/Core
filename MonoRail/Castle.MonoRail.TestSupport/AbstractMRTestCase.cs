@@ -260,22 +260,27 @@ namespace Castle.MonoRail.TestSupport
 		/// Asserts that reply contents match the specified pattern
 		/// <c>pattern</c>
 		/// </summary>
-		protected void AssertReplyMatch(String pattern, bool normalizeSpaces)
+		protected void AssertReplyMatch(String pattern, bool ignoreSpaces)
 		{						
-			AssertReplyMatch(pattern, normalizeSpaces, RegexOptions.None);
+			AssertReplyMatch(pattern, ignoreSpaces, RegexOptions.None);
 		}
 
 		/// <summary>
 		/// Asserts that reply contents match the specified pattern
 		/// <c>pattern</c>
 		/// </summary>
-		protected void AssertReplyMatch(String pattern, bool normalizeSpaces, RegexOptions options)
+		protected void AssertReplyMatch(String pattern, bool ignoreSpaces, RegexOptions options)
 		{
-			string contents = (normalizeSpaces) ? Output.Trim() : Output;
+			string contents = Output;
 
-			if(normalizeSpaces) pattern = pattern.Replace(" ", @"\s+");
+			if (ignoreSpaces)
+			{
+				contents = Regex.Replace(contents, @"\s+", "");
+				pattern  = Regex.Replace(pattern,  @"\s+", "");
+			}
 
 			Regex re = new Regex(pattern, options);
+
 			Assert.IsTrue( re.IsMatch(contents), 
 				"AssertReplyMatch did not match pattern '{0}'. Raw content {1}", pattern, contents );
 		}

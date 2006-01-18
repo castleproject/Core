@@ -28,7 +28,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		private readonly InternalContextAdapter context;
 		private readonly String componentName;
 		private readonly IDictionary componentParams;
-		private readonly IDictionary contextVars = new Hashtable();
 		private String viewToRender;
 
 		public NVelocityViewContextAdapter(String componentName, 
@@ -39,12 +38,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			this.writer = writer;
 			this.bodyNode = bodyNode;
 			this.componentParams = componentParams;
-
-			// TODO: Implement IEnumerable on NVelocity context
-//			foreach(String key in context.Keys)
-//			{
-//				contextVars[key] = context.Get(key);
-//			}
 		}
 
 		public String ComponentName
@@ -54,7 +47,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		public IDictionary ContextVars
 		{
-			get { return contextVars; }
+			get { return context as IDictionary; }
 		}
 
 		public IDictionary ComponentParameters
@@ -75,14 +68,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		public void RenderBody()
 		{
+			RenderBody(writer);
+		}
+
+		public void RenderBody(TextWriter writer)
+		{
 			if (bodyNode == null)
 			{
 				throw new RailsException("This component does not have a body content to be rendered");
-			}
-
-			foreach(DictionaryEntry entry in contextVars)
-			{
-				context.Put(entry.Key.ToString(), entry.Value);
 			}
 
 			bodyNode.Render(context, writer);

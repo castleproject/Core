@@ -1,6 +1,7 @@
 namespace NVelocity.Context
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>
 	/// Interface describing the application data context.  This set of
@@ -17,6 +18,12 @@ namespace NVelocity.Context
 	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
 	public interface IContext
 	{
+		/// <summary>
+		/// Returns the number of elements in this context
+		/// </summary>
+		/// <value>The count.</value>
+		int Count { get; }
+
 		/// <summary>
 		/// Adds a name/value pair to the context.
 		/// </summary>
@@ -41,8 +48,7 @@ namespace NVelocity.Context
 		/// <summary>
 		/// Get all the keys for the values in the context
 		/// </summary>
-		Object[] Keys { get
-			; }
+		Object[] Keys { get; }
 
 		/// <summary>
 		/// Removes the value associated with the specified key from the context.
@@ -50,7 +56,5 @@ namespace NVelocity.Context
 		/// <param name="key">The name of the value to remove.</param>
 		/// <returns>The value that the key was mapped to, or <code>null</code> if unmapped.</returns>
 		Object Remove(Object key);
-
-
 	}
 }

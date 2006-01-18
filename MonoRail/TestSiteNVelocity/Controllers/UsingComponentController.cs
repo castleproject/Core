@@ -22,6 +22,18 @@ namespace TestSiteNVelocity.Controllers
 
 	public class UsingComponentController : Controller
 	{
+		public void CaptureFor()
+		{			
+		}
+
+		public void CaptureForAppend()
+		{			
+		}
+
+		public void CaptureForAppendBefore()
+		{			
+		}
+
 		public void Index()
 		{
 		}

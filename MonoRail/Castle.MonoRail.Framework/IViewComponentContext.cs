@@ -24,6 +24,8 @@ namespace Castle.MonoRail.Framework
 
 		void RenderBody();
 
+		void RenderBody(TextWriter writer);
+
 		TextWriter Writer { get; }
 
 		IDictionary ContextVars { get; }

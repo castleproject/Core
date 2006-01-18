@@ -17,6 +17,7 @@ using NVelocity.Runtime.Directive;
 namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
 	using System;
+
 	using Castle.MonoRail.Framework.Internal;
 
 	public class ComponentDirective : AbstractComponentDirective

@@ -10,14 +10,11 @@ namespace NVelocity.Context
 		/// <summary>
 		/// returns the wrapped user context
 		/// </summary>
-		IContext InternalUserContext { get
-			; }
+		IContext InternalUserContext { get; }
 
 		/// <summary>
 		/// returns the base full context impl
 		/// </summary>
-		InternalContextAdapter BaseContext { get
-			; }
-
+		InternalContextAdapter BaseContext { get; }
 	}
 }

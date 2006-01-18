@@ -442,6 +442,18 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\UsingComponent\CaptureFor.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\CaptureForAppend.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\CaptureForAppendBefore.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\UsingComponent\index.vm"
                     BuildAction = "None"
                 />

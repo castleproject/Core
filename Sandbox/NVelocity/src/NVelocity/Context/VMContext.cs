@@ -2,6 +2,7 @@ namespace NVelocity.Context
 {
 	using System;
 	using System.Collections;
+
 	using NVelocity.App.Events;
 	using NVelocity.Runtime;
 	using NVelocity.Runtime.Directive;
@@ -35,24 +36,51 @@ namespace NVelocity.Context
 		public IContext InternalUserContext
 		{
 			get { return innerContext.InternalUserContext; }
-
 		}
 
 		public InternalContextAdapter BaseContext
 		{
 			get { return innerContext.BaseContext; }
-
 		}
 
 		public Object[] Keys
 		{
 			get
 			{
-				// TODO
 				//return vmproxyhash.keySet().toArray();
 				throw new NotImplementedException();
 			}
 
+		}
+
+		public int Count
+		{
+			get { throw new NotImplementedException(); }
+		}
+		ICollection IDictionary.Keys
+		{
+			get { throw new NotImplementedException(); } 			
+		}
+
+		public ICollection Values
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsFixedSize
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public object this[ object key ]
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 
 		public String CurrentTemplateName
@@ -273,6 +301,11 @@ namespace NVelocity.Context
 			return o;
 		}
 
+		void IDictionary.Remove(Object key)
+		{
+			this.Remove(key);
+		}
+
 		public void PushCurrentTemplateName(String s)
 		{
 			innerContext.PushCurrentTemplateName(s);
@@ -299,6 +332,44 @@ namespace NVelocity.Context
 			return innerContext.AttachEventCartridge(ec);
 		}
 
+		public void CopyTo(Array array, int index)
+		{
+			throw new NotImplementedException();
+		}
 
+		public object SyncRoot
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsSynchronized
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool Contains( object key )
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Add( object key, object value )
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Clear( )
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionaryEnumerator GetEnumerator( )
+		{
+			throw new NotImplementedException();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator( )
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

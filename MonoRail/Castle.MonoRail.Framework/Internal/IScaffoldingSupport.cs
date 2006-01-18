@@ -19,6 +19,6 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IScaffoldingSupport
 	{
-		void Process( Controller controller );
+		void Process(Controller controller);
 	}
 }

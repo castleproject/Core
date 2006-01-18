@@ -1,6 +1,7 @@
 namespace NVelocity.Context
 {
 	using System;
+	using System.Collections;
 	using NVelocity.App.Events;
 	using NVelocity.Runtime.Resource;
 	using NVelocity.Util.Introspection;
@@ -46,13 +47,11 @@ namespace NVelocity.Context
 		public String CurrentTemplateName
 		{
 			get { return icb.CurrentTemplateName; }
-
 		}
 
 		public Object[] TemplateNameStack
 		{
 			get { return icb.TemplateNameStack; }
-
 		}
 
 		public Resource CurrentResource
@@ -60,25 +59,58 @@ namespace NVelocity.Context
 			get { return icb.CurrentResource; }
 
 			set { icb.CurrentResource = value; }
-
 		}
 
 		public Object[] Keys
 		{
 			get { return context.Keys; }
+		}
 
+		ICollection IDictionary.Keys
+		{
+			get { return context.Keys; }
+		}
+
+		public ICollection Values
+		{
+			get
+			{
+				object[] keys = this.Keys;
+				object[] values = new object[keys.Length];
+
+				for(int i=0; i < values.Length; i++)
+				{
+					values[i] = Get(keys[i].ToString());
+				}
+				
+				return values;
+			}
+		}
+
+		public bool IsReadOnly
+		{
+			get { return false; }
+		}
+
+		public bool IsFixedSize
+		{
+			get { return false; }
+		}
+
+		public object this[ object key ]
+		{
+			get { return Get(key.ToString()); }
+			set { Put(key.ToString(), value); }
 		}
 
 		public IContext InternalUserContext
 		{
 			get { return context; }
-
 		}
 
 		public InternalContextAdapter BaseContext
 		{
 			get { return this; }
-
 		}
 
 		public EventCartridge EventCartridge
@@ -92,7 +124,6 @@ namespace NVelocity.Context
 
 				return null;
 			}
-
 		}
 
 		///
@@ -212,5 +243,113 @@ namespace NVelocity.Context
 			return null;
 		}
 
+		void IDictionary.Remove(Object key)
+		{
+			context.Remove(key);
+		}
+
+		public void CopyTo( Array array, int index )
+		{
+			foreach(object value in Values)
+			{
+				array.SetValue(value, index++);
+			}
+		}
+
+		public int Count
+		{
+			get { return context.Count; }
+		}
+
+		public object SyncRoot
+		{
+			get { return context; }
+		}
+
+		public bool IsSynchronized
+		{
+			get { return false; }
+		}
+
+		public bool Contains( object key )
+		{
+			return context.ContainsKey(key);
+		}
+
+		public void Add( object key, object value )
+		{
+			context.Put(key.ToString(), value);
+		}
+
+		public void Clear()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionaryEnumerator GetEnumerator( )
+		{
+			return CreateEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return CreateEnumerator();			
+		}
+
+		private InternalContextAdapterImplEnumerator CreateEnumerator()
+		{
+			return new InternalContextAdapterImplEnumerator(context);
+		}
+	}
+
+	public class InternalContextAdapterImplEnumerator : IDictionaryEnumerator
+	{
+		private int index = -1;
+		private IContext ctx;
+		private object[] keys;
+
+		public InternalContextAdapterImplEnumerator(IContext context)
+		{			
+			ctx = context;
+			keys = context.Keys;
+		}
+
+		#region IDictionaryEnumerator Members
+
+		public object Key
+		{
+			get { return keys[index]; }
+		}
+
+		public object Value
+		{
+			get { return ctx.Get(keys[index].ToString()); }
+		}
+
+		public DictionaryEntry Entry
+		{
+			get { return new DictionaryEntry ( Key, Value ); }
+		}
+
+		#endregion
+
+		#region IEnumerator Members
+
+		public void Reset()
+		{
+			index = -1;
+		}
+
+		public object Current
+		{
+			get { return Entry; }
+		}
+
+		public bool MoveNext()
+		{
+			return ++index < keys.Length;
+		}
+
+		#endregion
 	}
 }

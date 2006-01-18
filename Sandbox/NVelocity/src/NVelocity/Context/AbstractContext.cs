@@ -1,6 +1,7 @@
 namespace NVelocity.Context
 {
 	using System;
+	using System.Collections;
 
 	/// <summary>  This class is the abstract base class for all conventional
 	/// Velocity Context  implementations.  Simply extend this class
@@ -41,13 +42,11 @@ namespace NVelocity.Context
 		public Object[] Keys
 		{
 			get { return InternalGetKeys(); }
-
 		}
 
 		public IContext ChainedContext
 		{
 			get { return innerContext; }
-
 		}
 
 		/// <summary>  the chained Context if any
@@ -267,11 +266,6 @@ namespace NVelocity.Context
 			return InternalRemove(key);
 		}
 
-		/// <summary>  returns innerContext if one is chained
-		/// *
-		/// </summary>
-		/// <returns>Context if chained, <code>null</code> if not
-		///
-		/// </returns>
+		public abstract int Count { get ; }
 	}
 }

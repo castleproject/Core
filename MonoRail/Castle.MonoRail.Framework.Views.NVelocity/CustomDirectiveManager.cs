@@ -17,7 +17,6 @@ using DirectiveManager = NVelocity.Runtime.Directive.DirectiveManager;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity
 {
-	using System;
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives;
 

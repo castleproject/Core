@@ -11,6 +11,6 @@ using System.Reflection;
 #if STRONG
 [assembly: AssemblyKeyFile("../../CastleKey.snk")]
 #elif VISUALSTUDIO7
-//[assembly: AssemblyKeyFile(@"../../../../../../CastleKey.snk")]
-[assembly: AssemblyKeyFile(@"../../svn/CastleKey.snk")]
+[assembly: AssemblyKeyFile(@"../../../../../../CastleKey.snk")]
+//[assembly: AssemblyKeyFile(@"../../svn/CastleKey.snk")]
 #endif

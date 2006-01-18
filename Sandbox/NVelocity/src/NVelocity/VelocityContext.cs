@@ -104,10 +104,9 @@ namespace NVelocity
 		/// <returns>keys as []</returns>
 		public override Object[] InternalGetKeys()
 		{
-			throw new NotImplementedException();
-
-			//TODO
-			//return context.keySet().toArray();
+			Object[] keys = new object[context.Count];
+			context.Keys.CopyTo(keys,0);			
+			return keys;
 		}
 
 		/// <summary>
@@ -140,6 +139,11 @@ namespace NVelocity
 				// ignore
 			}
 			return clone;
+		}
+
+		public override int Count
+		{
+			get { return context.Count; }
 		}
 	}
 }

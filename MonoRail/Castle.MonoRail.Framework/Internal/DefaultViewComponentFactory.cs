@@ -15,18 +15,14 @@
 namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Reflection;
 
-	public class DefaultViewComponentFactory : IViewComponentFactory
+	public class DefaultViewComponentFactory : AbstractViewComponentFactory
 	{
 		private IViewEngine viewEngine;
-		private readonly IDictionary components;
 
-		public DefaultViewComponentFactory()
+		public DefaultViewComponentFactory() : base()
 		{
-			components = new HybridDictionary(true);
 		}
 
 		/// <summary>
@@ -35,7 +31,7 @@ namespace Castle.MonoRail.Framework.Internal
 		/// <param name="assemblyFileName"></param>
 		public void Inspect(String assemblyFileName)
 		{
-			Assembly assembly = Assembly.Load( assemblyFileName );
+			Assembly assembly = Assembly.Load(assemblyFileName);
 			Inspect(assembly);
 		}
 
@@ -53,34 +49,17 @@ namespace Castle.MonoRail.Framework.Internal
 					continue;
 				}
 
-				if ( typeof(ViewComponent).IsAssignableFrom(type) )
-				{					
-					components[ type.Name ] = type;
+				if (typeof(ViewComponent).IsAssignableFrom(type))
+				{
+					RegisterComponent(type.Name, type);
 				}
-			}		
+			}
 		}
 
-		public IViewEngine ViewEngine
+		public override IViewEngine ViewEngine
 		{
 			get { return viewEngine; }
 			set { viewEngine = value; }
-		}
-
-		public virtual ViewComponent Create(String name)
-		{
-			Type viewCompType = (Type) components[name];
-
-			if (viewCompType == null)
-			{
-				throw new RailsException("No ViewComponent found for name " + name);
-			}
-
-			return (ViewComponent) Activator.CreateInstance( viewCompType );
-		}
-
-		public virtual void Release(ViewComponent instance)
-		{
-			
 		}
 	}
 }

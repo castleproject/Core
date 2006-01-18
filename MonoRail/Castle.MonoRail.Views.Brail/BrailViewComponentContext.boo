@@ -47,6 +47,9 @@ class BrailViewComponentContext(IViewComponentContext):
 		self.componentParameters = params
 	
 	def RenderBody():
+		RenderBody(writer)
+		
+	def RenderBody(writer as TextWriter):
 		if body is null:
 			raise RailsException("This component does not have a body content to be rendered")
-		body()
+		body(writer)

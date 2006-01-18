@@ -32,7 +32,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// </summary>
 		/// <param name="args"></param>
 		/// <returns></returns>
-		public IDictionary CreateDict( params String[] args )
+		public IDictionary CreateDict(params String[] args)
+		{
+			return Create(args);
+		}
+
+		public static IDictionary Create(params String[] args)
 		{
 			IDictionary dict = new HybridDictionary(true);
 

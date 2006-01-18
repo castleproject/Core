@@ -528,6 +528,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\AbstractViewComponentFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\ActionProviderUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -654,6 +659,11 @@
                 />
                 <File
                     RelPath = "Internal\Test\TestContextHolder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewComponents\CaptureFor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -9,10 +9,8 @@ namespace NVelocity.Context
 	/// </summary>
 	public interface InternalEventContext
 	{
-		EventCartridge EventCartridge { get
-			; }
+		EventCartridge EventCartridge { get; }
 
 		EventCartridge AttachEventCartridge(EventCartridge ec);
-
 	}
 }
