@@ -112,6 +112,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				PreSendView(controller, template);
 
+				BeforeMerge(velocity, template, ctx);
 				template.Merge(ctx, writer);
 
 				PostSendView(controller, template);
@@ -150,6 +151,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			{
 				Template template = velocity.GetTemplate(view);
 
+				BeforeMerge(velocity, template, ctx);
 				template.Merge(ctx, output);
 			}
 			catch (Exception ex)
@@ -157,7 +159,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 				throw new RailsException("Could not obtain view: " + view, ex);
 			}
 		}
-
+		
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			IContext ctx = CreateContext(context, controller);
@@ -228,6 +230,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			return String.Format(TemplatePathPattern, area, Path.DirectorySeparatorChar, ResolveTemplateName(templateName));
 		}
 		
+		protected virtual void BeforeMerge(VelocityEngine velocity, Template template, IContext context)
+		{
+		}
+
 		private void ProcessLayout(String contents, Controller controller, IContext ctx, IRailsEngineContext context)
 		{
 			String layout = ResolveTemplateName(TemplateKeys.LayoutPath, controller.LayoutName);
@@ -238,6 +244,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				Template template = velocity.GetTemplate(layout);
 
+				BeforeMerge(velocity, template, ctx);
 				template.Merge(ctx, context.Response.Output);
 			}
 			catch (Exception ex)
