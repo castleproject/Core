@@ -210,49 +210,52 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (dataSource != null)
 			{
 				IEnumerator enumerator = dataSource.GetEnumerator(); 
-				enumerator.MoveNext(); 
-				object guidanceElem = enumerator.Current;
 
-				bool isMultiple = (selectedValue != null && selectedValue.GetType().IsArray);
-				
-				MethodInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
-				MethodInfo textMethodInfo = null;
-				
-				if (textProperty != null)
+				if (enumerator.MoveNext())
 				{
-					textMethodInfo = GetMethod(guidanceElem, textProperty);
-				}
+					object guidanceElem = enumerator.Current;
 
-				foreach(object elem in dataSource)
-				{
-					object value = null;
+					bool isMultiple = (selectedValue != null && selectedValue.GetType().IsArray);
+				
+					MethodInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
+					MethodInfo textMethodInfo = null;
+				
+					if (textProperty != null)
+					{
+						textMethodInfo = GetMethod(guidanceElem, textProperty);
+					}
 
-					if (valueMethodInfo != null) 
-						value = valueMethodInfo.Invoke(elem, null);
+					foreach(object elem in dataSource)
+					{
+						object value = null;
 
-					object text = textMethodInfo != null ? 
-						textMethodInfo.Invoke(elem, null) : elem.ToString();
+						if (valueMethodInfo != null) 
+							value = valueMethodInfo.Invoke(elem, null);
 
-					writer.WriteBeginTag("option");
+						object text = textMethodInfo != null ? 
+							textMethodInfo.Invoke(elem, null) : elem.ToString();
+
+						writer.WriteBeginTag("option");
 					
-					bool selected = false;
+						bool selected = false;
 
-					if (value != null)
-					{
-						selected = IsSelected(value, selectedValue, isMultiple);
+						if (value != null)
+						{
+							selected = IsSelected(value, selectedValue, isMultiple);
 
-						writer.WriteAttribute("value", value.ToString());
+							writer.WriteAttribute("value", value.ToString());
+						}
+						else
+						{
+							selected = IsSelected(text, selectedValue, isMultiple);
+						}
+
+						if (selected) writer.Write(" selected");
+						writer.Write(HtmlTextWriter.TagRightChar);
+						writer.Write(text);
+						writer.WriteEndTag("option");
+						writer.WriteLine();
 					}
-					else
-					{
-						selected = IsSelected(text, selectedValue, isMultiple);
-					}
-
-					if (selected) writer.Write(" selected");
-					writer.Write(HtmlTextWriter.TagRightChar);
-					writer.Write(text);
-					writer.WriteEndTag("option");
-					writer.WriteLine();
 				}
 			}
 
