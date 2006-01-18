@@ -50,12 +50,12 @@ namespace Castle.MonoRail.ActiveRecordSupport
 //			get { return validate; }
 //			set { validate = value; }
 //		}
-//
-//		public bool PersistChanges
-//		{
-//			get { return persistchanges; }
-//			set { persistchanges = value; }
-//		}
+
+		public bool PersistChanges
+		{
+			get { return persistchanges; }
+			set { persistchanges = value; }
+		}
 
 		public bool AutoLoad
 		{
@@ -90,23 +90,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 				ActiveRecordModel model = ActiveRecordModel.GetModel(instanceType);
 
-				if (model.Ids.Count == 1)
-				{
-					PrimaryKeyModel pkModel = model.Ids[0] as PrimaryKeyModel;
+				PrimaryKeyModel pkModel;
 
-					String pkPropName = pkModel.Property.Name;
-					String propValue = node.GetEntryValue(pkPropName);
+				object id = ObtainPKValue(model, node, paramPrefix, out pkModel);
 
-					if (propValue == null)
-					{
-						throw new RailsException("ARDataBinder autoload failed as element {0} " + 
-							"doesn't have a primary key {1} value", paramPrefix, pkPropName);
-					}
-
-					object id = ConvertUtils.Convert(pkModel.Property.PropertyType, propValue);
-
-					instance = SupportingUtils.FindByPK(instanceType, id);
-				}
+				instance = SupportingUtils.FindByPK(instanceType, id);
 			}
 			else
 			{
@@ -114,6 +102,45 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			return instance;
+		}
+
+		protected override bool ShouldRecreateInstance(object value, Type type, string prefix, IBindingDataSourceNode node)
+		{
+			ActiveRecordModel model = ActiveRecordModel.GetModel(type);
+
+			if (!AutoLoad || model == null)
+			{
+				return base.ShouldRecreateInstance(value, type, prefix, node);
+			}
+
+			PrimaryKeyModel pkModel;
+
+			object id = ObtainPKValue(model, node, prefix, out pkModel);
+
+			object currentId = pkModel.Property.GetValue(value, null);
+
+			return !Object.ReferenceEquals(id, currentId);
+		}
+
+		private static object ObtainPKValue(ActiveRecordModel model, IBindingDataSourceNode node, String prefix, out PrimaryKeyModel pkModel)
+		{
+			if (model.Ids.Count != 1)
+			{
+				throw new RailsException("ARDataBinder does not support more than one primary key");
+			}
+
+			pkModel = model.Ids[0] as PrimaryKeyModel;
+
+			String pkPropName = pkModel.Property.Name;
+			String propValue = node.GetEntryValue(pkPropName);
+	
+			if (propValue == null)
+			{
+				throw new RailsException("ARDataBinder autoload failed as element {0} " + 
+					"doesn't have a primary key {1} value", prefix, pkPropName);
+			}
+
+			return ConvertUtils.Convert(pkModel.Property.PropertyType, propValue);
 		}
 
 		protected override void AfterBinding(object instance, String paramPrefix, IBindingDataSourceNode node)
@@ -125,11 +152,16 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (model == null) return;
 
-			SaveManyMappings(instance, model, node);
+			if (validate)
+			{
+				ValidateInstances(instance);
+			}
 
-			if (validate) ValidateInstances(instance);
-
-			if (persistchanges) PersistInstances(instance);
+			if (persistchanges)
+			{
+				SaveManyMappings(instance, model, node);
+				PersistInstances(instance);
+			}
 		}
 
 		private void PersistInstances(object instances)

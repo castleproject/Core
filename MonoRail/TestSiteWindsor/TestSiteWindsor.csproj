@@ -124,6 +124,11 @@
                     Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.Framework.Views.CompositeView"
+                    Project = "{153BE1A6-69CD-4BBE-B90D-FF3D3B42D2E8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -155,42 +160,30 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Controllers\CookiesController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Controllers\HomeController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "views\cookies\index.aspx"
-                    BuildAction = "Content"
+                    RelPath = "Controllers\MyComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "views\home\bag.aspx"
-                    BuildAction = "Content"
+                    RelPath = "views\home\ComponentOnLayout.vm"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "views\home\bag2.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\home\display.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "views\home\heyhello.aspx"
-                    BuildAction = "Content"
+                    RelPath = "views\home\ComponentTest.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "views\home\index.aspx"
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "views\home\list.aspx"
-                    BuildAction = "Content"
+                    RelPath = "views\layouts\layout.vm"
+                    BuildAction = "None"
                 />
             </Include>
         </Files>

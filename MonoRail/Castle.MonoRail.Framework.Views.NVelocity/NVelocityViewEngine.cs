@@ -73,7 +73,11 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		public override IViewComponentFactory ViewComponentFactory
 		{
 			get { return base.ViewComponentFactory; }
-			set { base.ViewComponentFactory = value; staticViewComponentFactory = value; }
+			set 
+			{ 
+				base.ViewComponentFactory = value; 
+				staticViewComponentFactory = value; 
+			}
 		}
 
 		public override bool HasTemplate(String templateName)

@@ -41,7 +41,6 @@ namespace Castle.MonoRail.Framework
 
 		public ProcessEngineFactory() : this(null)
 		{
-			
 		}
 
 		public ProcessEngineFactory(MonoRailConfiguration config)

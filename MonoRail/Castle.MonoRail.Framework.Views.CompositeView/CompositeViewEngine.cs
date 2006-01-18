@@ -16,6 +16,7 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 {
 	using System;
 	using System.IO;
+	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views.Aspx;
 	using Castle.MonoRail.Framework.Views.NVelocity;
 
@@ -84,6 +85,20 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			_nvelocityViewEngine.ProcessContents(context, controller, contents);
+		}
+
+		/// <summary>
+		/// Gets/sets the factory for <see cref="ViewComponent"/>s
+		/// </summary>
+		public override IViewComponentFactory ViewComponentFactory
+		{
+			get { return base.ViewComponentFactory; }
+			set 
+			{ 
+				base.ViewComponentFactory = value; 
+				_aspxViewEngine.ViewComponentFactory = value; 
+				_nvelocityViewEngine.ViewComponentFactory = value; 
+			}
 		}
 
 		#endregion

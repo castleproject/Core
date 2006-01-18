@@ -39,7 +39,7 @@ namespace TestSiteWindsor
 		private void AddControllers(WindsorContainer container)
 		{
 			container.AddComponent( "home", typeof(HomeController) );
-			container.AddComponent( "cookies", typeof(CookiesController) );
+			container.AddComponent( "mycomp", typeof(MyComponent) );
 		}
 
 		public void Application_OnEnd() 

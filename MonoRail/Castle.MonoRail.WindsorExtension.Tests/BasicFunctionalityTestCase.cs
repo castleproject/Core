@@ -14,13 +14,41 @@
 
 namespace Castle.MonoRail.WindsorExtension.Tests
 {
+	using Castle.MonoRail.TestSupport;
+	
 	using NUnit.Framework;
-
-	using Castle.MonoRail.Framework.Tests;
-
 	
 	[TestFixture]
-	public class WindsorExtensionBasicFunctionalityTestCase : BasicFunctionalityTestCase
+	public class WindsorExtensionBasicFunctionalityTestCase : AbstractMRTestCase
 	{
+		[Test]
+		public void SimpleControllerAction()
+		{
+			DoGet("home/index.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "My View contents for Home\\Index" );
+		}
+
+		[Test]
+		public void UsingComponent()
+		{
+			DoGet("home/componenttest.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "my component" );
+		}
+
+		[Test]
+		public void UsingComponentFromLayout()
+		{
+			DoGet("home/ComponentOnLayout.rails");
+
+			AssertSuccess();
+
+			AssertReplyEqualsTo( "my component\r\n\r\nInner content" );
+		}
 	}
 }

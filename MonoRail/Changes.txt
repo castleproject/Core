@@ -16,6 +16,9 @@ Release Candidate 1
 - DataBinder refactored out. Now implementation lies on Castle.Components.Binder
   Big performance improvement
 
+- ARDataBinder now issues a FindByPK for nested objects if the keys differs (existing object with 
+  form fields)
+
 - SmartDispatcher: now there's no hardcode reference to DataBind, ARDataBind or ARFetch attributes. 
   They only must implement the interface IParameterBinding. This opens an interesting extension point
   for users willing to create their own logic to binding form/querystring parameters to their data components
@@ -26,6 +29,9 @@ Release Candidate 1
 - Added FlashBinderAttribute (being evaluated)
 
 - Added FormHelper (being evaluated)
+
+- Added CaptureFor component
+
 
 Beta 5
 ======

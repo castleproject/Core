@@ -26,6 +26,9 @@
 				<include name="Castle.Model.dll" />
 				<include name="Castle.MicroKernel.dll" />
 				<include name="Castle.Windsor.dll" />
+				<include name="Castle.MonoRail.Framework.Views.CompositeView.dll" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="NVelocity.dll" />
 				<include name="Castle.Components.Binder.dll" />
 				<include name="Castle.Components.Common.EmailSender.dll" />
 				<include name="Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
@@ -53,7 +56,10 @@
 				<include name="${bin2.dir}/Castle.Model.dll" />
 				<include name="${bin2.dir}/Castle.MicroKernel.dll" />
 				<include name="${bin2.dir}/Castle.Windsor.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.CompositeView.dll" />
 				<include name="${bin2.dir}/Castle.Components.Binder.dll" />
+				<include name="${bin2.dir}/Castle.MonoRail.Framework.Views.NVelocity.dll" />
+				<include name="${bin2.dir}/NVelocity.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.dll" />
 				<include name="${bin2.dir}/Castle.Components.Common.EmailSender.SmtpEmailSender.dll" />
 			</references>

@@ -100,11 +100,6 @@
                     Project = "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
-                <Reference
-                    Name = "Castle.MonoRail.Framework.Tests"
-                    Project = "{844F5EC4-9224-42A9-986D-CE645AC970F2}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
             </References>
         </Build>
         <Files>
