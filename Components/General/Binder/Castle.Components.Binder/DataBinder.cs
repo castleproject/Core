@@ -168,6 +168,11 @@ namespace Castle.Components.Binder
 		{
 		}
 
+		protected virtual bool ShouldRecreateInstance(object value, Type type, String prefix, IBindingDataSourceNode node)
+		{
+			return value == null || type.IsArray;
+		}
+
 		#endregion
 
 		#region Internal implementation
@@ -234,7 +239,7 @@ namespace Castle.Components.Binder
 							// if the property is an object, we look if it is already instanciated
 							object value = prop.GetValue(instance, null);
 
-							if (value == null || propType.IsArray)
+							if (ShouldRecreateInstance(value, propType, paramName, nestedNode))
 							{
 								value = InternalBindObject(propType, paramName, nestedNode, out conversionSucceeded);
 								
@@ -243,7 +248,7 @@ namespace Castle.Components.Binder
 									prop.SetValue(instance, value, null);
 								}
 							}
-							else // if the object already instanciated, then we use it 
+							else
 							{
 								InternalRecursiveBindObjectInstance(value, paramName, nestedNode);
 							}
