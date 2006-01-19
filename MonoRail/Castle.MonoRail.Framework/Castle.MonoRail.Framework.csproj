@@ -503,7 +503,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Helpers\IPager.cs"
+                    RelPath = "Helpers\IPaginatedPage.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

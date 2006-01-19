@@ -1,4 +1,4 @@
-// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,88 +17,146 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using System;
 	using System.Collections;
 	using System.Text.RegularExpressions;
-
+	
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
-
+	
 	using NHibernate.Expression;
 
-	public class ARPager : IPager
+	/// <summary>
+	/// Pendent
+	/// </summary>
+	public class ARPaginationHelper : AbstractHelper
 	{
-		int pageSize, currentPage, lastPage = -1;
-		IARPaginable source;
-
-		public ARPager(int pageSize, IARPaginable source)
-		{
-			this.source = source;
-			this.pageSize = pageSize;
-			this.currentPage = currentPage;
-
-			UpdateUIData();
-		}
-
-		protected virtual void UpdateUIData()
-		{
-			string page = ProcessEngine.CurrentContext.Request.Params["page"];
-			currentPage = 
-				page == null || Regex.IsMatch(page, "\\D")
-				? 1
-				: Convert.ToInt32(page);
-		}
-
-		#region Pagination Data
-		public int CurrentIndex { get { return currentPage; } }
-		public int FirstIndex { get { return 1; } }
-		public int LastIndex { get { return lastPage; } }
-		public int NextIndex { get { return currentPage + 1; } }
-		public int PreviousIndex { get { return currentPage - 1; } }
-		public bool HasPrevious { get { return currentPage > 1; } }
-		public bool HasNext { get { return lastPage == -1 || currentPage < lastPage; } }
-		#endregion
-
-		public IEnumerator GetEnumerator()
-		{
-			IEnumerable en = source.Paginate(pageSize, currentPage);
-			if (en == null)
-				return null;
-
-			return en.GetEnumerator();
-		}
-
-		#region Static Shortcut Methods
 		/// <summary>
 		/// Paginates using an <see cref="ARPaginableSimpleQuery"/>
 		/// </summary>
-		public static IPager Paginate(int pageSize, Type targetType, string hql, params object[] parameters)
+		public static IPaginatedPage CreatePagination(int pageSize, Type targetType, string hql, params object[] parameters)
 		{
-			IARPaginable q = new ARPaginableSimpleQuery(targetType, hql, parameters);
-			return Paginate(pageSize, q);
-		}
-		
-		/// <summary>
-		/// Paginates using an <see cref="ARPaginableCriteria"/>
-		/// </summary>
-		public static IPager Paginate(int pageSize, Type targetType, params Order[] orders)
-		{
-			return Paginate(pageSize, targetType, orders, null);
-		}
-		
-		/// <summary>
-		/// Paginates using an <see cref="ARPaginableCriteria"/>
-		/// </summary>
-		public static IPager Paginate(int pageSize, Type targetType, Order[] orders, params ICriterion[] criterions)
-		{
-			IARPaginable q = new ARPaginableCriteria(targetType, orders, criterions);
-			return Paginate(pageSize, q);
+			IARPaginableDataSource criteria = new ARPaginableSimpleQuery(targetType, hql, parameters);
+			return CreatePagination(pageSize, criteria);
 		}
 
 		/// <summary>
-		/// Paginates using the specified <see cref="IARPaginable"/>.
+		/// Paginates using an <see cref="ARPaginableCriteria"/>
 		/// </summary>
-		public static IPager Paginate(int pageSize, IARPaginable q)
+		public static IPaginatedPage CreatePagination(int pageSize, Type targetType, params Order[] orders)
 		{
-			return new ARPager(pageSize, q);
+			return CreatePagination(pageSize, targetType, orders, null);
 		}
-		#endregion
+
+		/// <summary>
+		/// Paginates using an <see cref="ARPaginableCriteria"/>
+		/// </summary>
+		public static IPaginatedPage CreatePagination(int pageSize, Type targetType, Order[] orders, params ICriterion[] criterions)
+		{
+			IARPaginableDataSource criteria = new ARPaginableCriteria(targetType, orders, criterions);
+			return CreatePagination(pageSize, criteria);
+		}
+
+		/// <summary>
+		/// Paginates using the specified <see cref="IARPaginableDataSource"/>.
+		/// </summary>
+		public static IPaginatedPage CreatePagination(int pageSize, IARPaginableDataSource criteria)
+		{
+			return new ARPager(pageSize, criteria, ObtainCurrentPage());
+		}
+
+		private static int ObtainCurrentPage()
+		{
+			String page = ProcessEngine.CurrentContext.Request.Params["page"];
+			return page == null || Regex.IsMatch(page, "\\D")
+				? 1 : Convert.ToInt32(page);
+		}
+	}
+
+	/// <summary>
+	/// Pendent
+	/// </summary>
+	public class ARPager : AbstractPage
+	{
+		// private int pageSize, currentPage, lastPage = -1;
+		// private IARPaginableDataSource source;
+		private IEnumerable enumerable;
+
+		public ARPager(int pageSize, IARPaginableDataSource source, int currentPage)
+		{
+			int count = source.ObtainCount();
+			int startIndex = (pageSize * currentPage) - pageSize;
+			int endIndex =  Math.Min(startIndex + pageSize, count);
+
+			enumerable = source.Paginate(pageSize, currentPage);
+
+			CalculatePaginationInfo(startIndex, endIndex, count, pageSize, currentPage);
+		}
+
+//		#region IPaginatedPage implementation
+//
+//		public int CurrentIndex
+//		{
+//			get { return currentPage; }
+//		}
+//
+//		public int FirstIndex
+//		{
+//			get { return 1; }
+//		}
+//
+//		public int LastIndex
+//		{
+//			get { return lastPage; }
+//		}
+//
+//		public int NextIndex
+//		{
+//			get { return currentPage + 1; }
+//		}
+//
+//		public int PreviousIndex
+//		{
+//			get { return currentPage - 1; }
+//		}
+//
+//		public int FirstItem
+//		{
+//			get { throw new NotImplementedException(); }
+//		}
+//
+//		public int LastItem
+//		{
+//			get { throw new NotImplementedException(); }
+//		}
+//
+//		public int TotalItems
+//		{
+//			get { throw new NotImplementedException(); }
+//		}
+//
+//		public bool HasFirst
+//		{
+//			get { throw new NotImplementedException(); }
+//		}
+//
+//		public bool HasLast
+//		{
+//			get { throw new NotImplementedException(); }
+//		}
+//
+//		public bool HasPrevious
+//		{
+//			get { return currentPage > 1; }
+//		}
+//
+//		public bool HasNext
+//		{
+//			get { return lastPage == -1 || currentPage < lastPage; }
+//		}
+//
+//		#endregion
+
+		public override IEnumerator GetEnumerator()
+		{
+			return enumerable.GetEnumerator();
+		}
 	}
 }

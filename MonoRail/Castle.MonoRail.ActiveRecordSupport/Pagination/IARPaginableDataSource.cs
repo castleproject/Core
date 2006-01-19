@@ -12,20 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Helpers
+namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 {
 	using System;
 	using System.Collections;
 
-	public interface IPager : IEnumerable
+	/// <summary>
+	/// Pendent
+	/// </summary>
+	public interface IARPaginableDataSource
 	{
-		int CurrentIndex { get; }
-		int LastIndex { get; }
-		int NextIndex { get; }
-		int PreviousIndex { get; }
-		int FirstIndex { get; }
+		/// <summary>
+		/// Implementors should execute a query
+		/// to return the record count
+		/// </summary>
+		int ObtainCount();
 
-		bool HasPrevious { get; }
-		bool HasNext { get; }
+		IEnumerable ListAll();
+
+		IEnumerable Paginate(int pageSize, int currentPage);
 	}
 }

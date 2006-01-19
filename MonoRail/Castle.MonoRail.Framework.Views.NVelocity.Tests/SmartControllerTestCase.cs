@@ -169,5 +169,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertReplyEqualsTo(expected);
 		}
+
+		[Test]
+		public void ArrayBinding1()
+		{
+			DoGet("smart/ArrayBinding.rails", "user.name=hammett", "user.roles=1", "user.roles=2", "user.permissions=10", "user.permissions=11");
+			String expected = "User hammett 2 2 1 2 10 11";
+
+			AssertReplyEqualsTo(expected);
+		}
 	}
 }

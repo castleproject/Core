@@ -128,12 +128,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// Represents the sliced data and offers
 	/// a few read only properties to create a pagination bar.
 	/// </summary>
-	public class Page : IPager
+	public class Page : AbstractPage
 	{
-		private int firstItem, lastItem, totalItems;
-		private int previousIndex, nextIndex, lastIndex, curIndex;
-		private bool hasPrev, hasNext, hasFirst, hasLast;
-
 		private readonly IList slice = new ArrayList();
 
 		public Page(IList list, int curPage, int pageSize)
@@ -144,7 +140,7 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			CreateSlicedCollection(startIndex, endIndex, list);
 
-			ProcessViewData(startIndex, endIndex, list, pageSize, curPage);
+			CalculatePaginationInfo(startIndex, endIndex, list.Count, pageSize, curPage);
 		}
 
 		private void CreateSlicedCollection(int startIndex, int endIndex, IList list)
@@ -155,29 +151,39 @@ namespace Castle.MonoRail.Framework.Helpers
 			}
 		}
 
-		private void ProcessViewData(int startIndex, int endIndex, IList list, int pageSize, int curPage)
+		public override IEnumerator GetEnumerator()
 		{
-			firstItem = list.Count != 0 ? startIndex + 1 : 0;
+			return slice.GetEnumerator();
+		}
+	}
+
+	public abstract class AbstractPage : IPaginatedPage
+	{
+		private int firstItem, lastItem, totalItems;
+		private int previousIndex, nextIndex, lastIndex, curIndex;
+		private bool hasPrev, hasNext, hasFirst, hasLast;
+
+		protected void CalculatePaginationInfo(int startIndex, int endIndex, int count, int pageSize, int curPage)
+		{
+			firstItem = count != 0 ? startIndex + 1 : 0;
 			lastItem = endIndex;
-			totalItems = list.Count;
+			totalItems = count;
 	
 			hasPrev = startIndex != 0;
-			hasNext = (startIndex + pageSize) < list.Count;
+			hasNext = (startIndex + pageSize) < count;
 			hasFirst = curPage != 1;
-			hasLast = list.Count > curPage * pageSize;
+			hasLast = count > curPage * pageSize;
 	
 			curIndex = curPage;
 			previousIndex = curPage - 1;
 			nextIndex = curPage + 1;
-			lastIndex = list.Count / pageSize;
+			lastIndex = count / pageSize;
 	
-			if (list.Count / (float) pageSize > lastIndex)
+			if (count / (float) pageSize > lastIndex)
 			{
 				lastIndex++;
 			}
 		}
-
-		#region Properties
 
 		public int FirstIndex
 		{
@@ -239,15 +245,6 @@ namespace Castle.MonoRail.Framework.Helpers
 			get { return totalItems; }
 		}
 
-		#endregion
-
-		#region IEnumerable Members
-
-		public IEnumerator GetEnumerator()
-		{
-			return slice.GetEnumerator();
-		}
-
-		#endregion
+		public abstract IEnumerator GetEnumerator();
 	}
 }

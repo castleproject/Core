@@ -149,12 +149,12 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Pagination\ARPaginableCriteria.cs"
+                    RelPath = "Pagination\AbstractPaginableQuery.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Pagination\ARPaginableQuery.cs"
+                    RelPath = "Pagination\ARPaginableCriteria.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -169,7 +169,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Pagination\IARPaginable.cs"
+                    RelPath = "Pagination\IARPaginableDataSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,14 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.ActiveRecordSupport.Pagination
+namespace Castle.MonoRail.Framework.Helpers
 {
 	using System;
 	using System.Collections;
 
-	public interface IARPaginable
+	public interface IPaginatedPage : IEnumerable
 	{
-		IEnumerable ListAll();
-		IEnumerable Paginate(int pageSize, int currentPage);
+		int CurrentIndex { get; }
+		
+		int LastIndex { get; }
+		
+		int NextIndex { get; }
+		
+		int PreviousIndex { get; }
+		
+		int FirstIndex { get; }
+
+		int FirstItem { get; }
+
+		int LastItem { get; }
+
+		int TotalItems { get; }
+
+		bool HasPrevious { get; }
+		
+		bool HasNext { get; }
+
+		bool HasFirst { get; }
+
+		bool HasLast { get; }
 	}
 }

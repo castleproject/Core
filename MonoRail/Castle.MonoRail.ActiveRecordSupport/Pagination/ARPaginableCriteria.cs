@@ -27,13 +27,13 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	/// A paginable criteria.
 	/// Mimics the <see cref="ActiveRecordMediator.FindAll"/> interface.
 	/// </summary>
-	public class ARPaginableCriteria : IARPaginable
+	public class ARPaginableCriteria : IARPaginableDataSource
 	{
-		Type targetType;
-		ICriterion[] criterions;
-		Order[] orders;
+		private Type targetType;
+		private ICriterion[] criterions;
+		private Order[] orders;
 		
-		int pageSize, currentPage;
+		private int pageSize, currentPage;
 
 		public ARPaginableCriteria(Type targetType, Order[] orders, params ICriterion[] criterions)
 		{
@@ -42,11 +42,50 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			this.criterions = criterions;
 		}
 
-		public ARPaginableCriteria(Type targetType, params ICriterion[] criterions)
-			: this(targetType, null, criterions) { }
+		public ARPaginableCriteria(Type targetType, params ICriterion[] criterions) : this(targetType, null, criterions) { }
 
-		public ARPaginableCriteria(Type targetType, params Order[] orders)
-			: this(targetType, orders, null) { }
+		public ARPaginableCriteria(Type targetType, params Order[] orders) : this(targetType, orders, null) { }
+
+		/// <summary>
+		/// Implementors should execute a query
+		/// to return the record count
+		/// </summary>
+		/// <remarks>
+		/// This needs a performance boost. Couldn't think of a better
+		/// way of get the count.
+		/// </remarks>
+		public int ObtainCount()
+		{
+			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
+			ISession session = holder.CreateSession(targetType);
+
+			try
+			{
+				ICriteria criteria = session.CreateCriteria(targetType);
+
+				if (criterions != null)
+				{
+					foreach (ICriterion queryCriteria in criterions)
+					{
+						criteria.Add(queryCriteria);
+					}
+				}
+			
+				if (orders != null)
+				{
+					foreach (Order order in orders)
+					{
+						criteria.AddOrder(order);
+					}
+				}
+
+				return criteria.List().Count;
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
 
 		public IEnumerable Paginate(int pageSize, int currentPage)
 		{
@@ -64,26 +103,34 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		{
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
 			ISession session = holder.CreateSession(targetType);
+
 			try
 			{
-				ICriteria c = session.CreateCriteria(targetType);
+				ICriteria criteria = session.CreateCriteria(targetType);
 			
 				if (criterions != null)
-					foreach (ICriterion cc in criterions)
-						c.Add(cc);
+				{
+					foreach (ICriterion queryCriteria in criterions)
+					{
+						criteria.Add(queryCriteria);
+					}
+				}
 			
 				if (orders != null)
+				{
 					foreach (Order order in orders)
-						c.AddOrder(order);
+					{
+						criteria.AddOrder(order);
+					}
+				}
 
 				if (!skipPagination)
 				{
-					c.SetFirstResult(pageSize * (currentPage-1));
-					c.SetMaxResults(pageSize);
+					criteria.SetFirstResult(pageSize * (currentPage-1));
+					criteria.SetMaxResults(pageSize);
 				}
 
-				// return GetResultsArray(targetType, c.List(), false);
-				return c.List();
+				return criteria.List();
 			}
 			finally
 			{

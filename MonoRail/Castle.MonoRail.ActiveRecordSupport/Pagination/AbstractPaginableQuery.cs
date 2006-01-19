@@ -30,13 +30,66 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	/// Optionally, the methods <see cref="SetQueryParameters"/>
 	/// and <see cref="ExecuteQuery"/> can also be overriden.
 	/// </remarks>
-	public abstract class ARPaginableQuery : ActiveRecordBaseQuery, IARPaginable
+	public abstract class AbstractPaginableQuery : ActiveRecordBaseQuery, IARPaginableDataSource
 	{
 		protected int pageSize, currentPage;
 
-		public ARPaginableQuery(Type targetType)
-			: base(targetType)
+		public AbstractPaginableQuery(Type targetType) : base(targetType)
 		{
+		}
+
+		/// <summary>
+		/// Executes a query to return the record count
+		/// </summary>
+		public virtual int ObtainCount()
+		{
+			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
+			ISession session = holder.CreateSession(targetType);
+
+			try
+			{
+				IQuery query = session.CreateQuery("select count(a) from " + targetType.Name + " a");
+
+				return (int) query.UniqueResult();
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
+		/// Returns the page items.
+		/// Actually, the implementation just sets the protected fields
+		/// <see cref="pageSize"/> and <see cref="currentPage"/>,
+		/// gets an <see cref="ISession" /> from <c>SessionFactoryHolder</c>
+		/// and calls <see cref="InternalExecute"/> in order to execute
+		/// the custom query and fetch only the page items.
+		/// </summary>
+		/// <param name="pageSize">The page size</param>
+		/// <param name="currentPage">The current page</param>
+		/// <returns>The page items</returns>
+		public virtual IEnumerable Paginate(int pageSize, int currentPage)
+		{
+			this.pageSize = pageSize;
+			this.currentPage = currentPage;
+
+			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
+			ISession session = holder.CreateSession(targetType);
+
+			try
+			{
+				return InternalPaginate(session, false);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+		
+		public virtual IEnumerable ListAll()
+		{
+			return (IEnumerable) ActiveRecordMediator.ExecuteQuery(this);
 		}
 
 		/// <summary>
@@ -53,20 +106,24 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		
 		private IEnumerable InternalPaginate(ISession session, bool skipPagination)
 		{
-			IQuery q = session.CreateQuery(BuildHQL());
-			SetQueryParameters(q);
+			IQuery query = session.CreateQuery(BuildHQL());
+			SetQueryParameters(query);
+
 			if (!skipPagination)
-				PrepareQueryForPagination(q);
-			return (IEnumerable) ExecuteQuery(q);
+			{
+				PrepareQueryForPagination(query);
+			}
+
+			return ExecuteQuery(query);
 		}
 
 		/// <summary>
 		/// For internal use only.
 		/// </summary>
-		private void PrepareQueryForPagination(IQuery q)
+		private void PrepareQueryForPagination(IQuery query)
 		{
-			q.SetFirstResult(pageSize * (currentPage-1));
-			q.SetMaxResults(pageSize);
+			query.SetFirstResult(pageSize * (currentPage-1));
+			query.SetMaxResults(pageSize);
 		}
 
 		/// <summary>
@@ -78,51 +135,18 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		/// <summary>
 		/// May be overriden, in order to set custom query parameters.
 		/// </summary>
-		/// <param name="q">The query</param>
-		protected virtual void SetQueryParameters(IQuery q) { }
+		/// <param name="query">The query</param>
+		protected virtual void SetQueryParameters(IQuery query) { }
 
 		/// <summary>
 		/// Override to provide a custom query execution.
 		/// The default behaviour is to just call <see cref="IQuery.List"/>.
 		/// </summary>
-		/// <param name="q"></param>
+		/// <param name="query"></param>
 		/// <returns>The query results.</returns>
-		protected virtual IEnumerable ExecuteQuery(IQuery q)
+		protected virtual IEnumerable ExecuteQuery(IQuery query)
 		{
-			return q.List();
-		}
-
-		/// <summary>
-		/// Returns the page items.
-		/// Actually, the implementation just sets the protected fields
-		/// <see cref="pageSize"/> and <see cref="currentPage"/>,
-		/// gets an <see cref="ISession" /> from <c>SessionFactoryHolder</c>
-		/// and calls <see cref="InternalExecute"/> in order to execute
-		/// the custom query and fetch only the page items.
-		/// </summary>
-		/// <param name="pageSize">The page size</param>
-		/// <param name="currentPage">The current page</param>
-		/// <returns>The page items</returns>
-		public IEnumerable Paginate(int pageSize, int currentPage)
-		{
-			this.pageSize = pageSize;
-			this.currentPage = currentPage;
-
-			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
-			ISession session = holder.CreateSession(targetType);
-			try
-			{
-				return InternalPaginate(session, false);
-			}
-			finally
-			{
-				holder.ReleaseSession(session);
-			}
-		}
-		
-		public IEnumerable ListAll()
-		{
-			return (IEnumerable) ActiveRecordMediator.ExecuteQuery(this);
+			return query.List();
 		}
 	}
 }

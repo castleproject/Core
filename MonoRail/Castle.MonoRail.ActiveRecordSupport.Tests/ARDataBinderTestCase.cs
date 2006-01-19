@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.ActiveRecordSupport.Tests
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Configuration;
 	
@@ -141,6 +142,22 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			Assert.IsTrue(people[3].Name == "Name overriden");
 			Assert.IsTrue(people[3].Age == 15);															
 		}
+
+//		[Test]
+//		public void PopulatingContainers()
+//		{
+//			NameValueCollection args = new NameValueCollection();
+//
+//			args.Add("user.roles.id", "1");
+//			args.Add("user.roles.id", "2");
+//
+//			instance = binder.BindObject(typeof(User), "user", new NameValueCollectionAdapter(args));
+//			
+//			Assert.IsNotNull(instance);	
+//			person = instance as SimplePerson;
+//			Assert.IsNull( person.Name );
+//			Assert.IsTrue( person.Age == 200);	
+//		}
 
 		public static void CreateAndPopulatePeopleTable()
 		{

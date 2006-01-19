@@ -70,6 +70,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				throw new RailsException("Nothing found for the given prefix. Are you sure the form fields are using the prefix " + paramPrefix + "?");
 			}
 
+			if (IsContainerType(instanceType))
+			{
+				
+			}
+
 			object instance = null;
 
 			bool shouldLoad = autoLoad;
@@ -120,6 +125,28 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			object currentId = pkModel.Property.GetValue(value, null);
 
 			return !Object.ReferenceEquals(id, currentId);
+		}
+
+		protected override bool ShouldIgnoreType(Type instanceType)
+		{
+			if (IsContainerType(instanceType))
+			{
+				return false;
+			}
+
+			return base.ShouldIgnoreType(instanceType);
+		}
+
+		protected override bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
+		{
+			Type type = instance.GetType();
+
+			if (IsContainerType(type))
+			{
+				
+			}
+
+			return false;
 		}
 
 		private static object ObtainPKValue(ActiveRecordModel model, IBindingDataSourceNode node, String prefix, out PrimaryKeyModel pkModel)
@@ -306,6 +333,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			{
 				(container as ISet).Add(item);
 			}
+		}
+
+		private bool IsContainerType(Type type)
+		{
+			return type == typeof(IList) || type == typeof(ISet);
 		}
 	}
 }

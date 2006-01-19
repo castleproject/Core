@@ -70,6 +70,20 @@ namespace TestSiteNVelocity.Controllers
 		{
 			RenderText(String.Format("incoming {0} {1}", movement.Name, movement.Amount.ToString()));
 		}
+
+		public void ArrayBinding([DataBind("user")] User2 user)
+		{
+			RenderText(user.ToString());
+			
+			foreach(int id in user.Roles)
+			{
+				RenderText(" " + id);
+			}
+			foreach(int id in user.Permissions)
+			{
+				RenderText(" " + id);
+			}
+		}
 	}
 
 	public class ClassWithInitializers
@@ -193,6 +207,34 @@ namespace TestSiteNVelocity.Controllers
 		{
 			get { return amount; }
 			set { amount = value; }
+		}
+	}
+
+	public class User2
+	{
+		String name; int[] roles; int[] permissions;
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public int[] Roles
+		{
+			get { return roles; }
+			set { roles = value; }
+		}
+
+		public int[] Permissions
+		{
+			get { return permissions; }
+			set { permissions = value; }
+		}
+
+		public override string ToString()
+		{
+			return String.Format("User {0} {1} {2}", name, roles.Length, permissions.Length);
 		}
 	}
 }

@@ -19,6 +19,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	using Castle.ActiveRecord.Queries;
 
 	using NHibernate;
+	using NHibernate.Expression;
 
 	/// <summary>
 	/// Performs a simple query and paginate the results.
@@ -28,13 +29,14 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	/// <see cref="SimpleQuery"/>, as we do not perform the
 	/// conversion of the query results to an array.
 	/// </remarks>
-	public class ARPaginableSimpleQuery : ARPaginableQuery
+	public class ARPaginableSimpleQuery : AbstractPaginableQuery
 	{
-		string hql;
-		object[] parameters;
+		private String hql;
+		private object[] parameters;
+		private ICriterion[] criterions;
+		private Order[] orders;
 
-		public ARPaginableSimpleQuery(Type targetType, string hql, params object[] parameters)
-			: base(targetType)
+		public ARPaginableSimpleQuery(Type targetType, String hql, params object[] parameters) : base(targetType)
 		{
 			this.hql = hql;
 			this.parameters = parameters;
@@ -45,11 +47,14 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			return hql;
 		}
 
-		protected override void SetQueryParameters(IQuery q)
+		protected override void SetQueryParameters(IQuery query)
 		{
 			int i = 0;
-			foreach (object p in parameters)
-				q.SetParameter(i++, p);
+			
+			foreach (object param in parameters)
+			{
+				query.SetParameter(i++, param);
+			}
 		}
 	}
 }
