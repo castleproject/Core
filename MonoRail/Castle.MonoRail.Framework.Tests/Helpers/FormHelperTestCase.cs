@@ -59,6 +59,15 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		}
 
 		[Test]
+		public void PasswordField()
+		{
+			Assert.AreEqual("<input type=\"password\" id=\"product_name\" name=\"product.name\" value=\"memory card\" />", 
+				helper.PasswordField("product.name"));
+			Assert.AreEqual("<input type=\"password\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />", 
+				helper.PasswordField("product.quantity"));
+		}
+
+		[Test]
 		public void TextFieldValue()
 		{
 			Assert.AreEqual("<input type=\"text\" id=\"product_price\" name=\"product.price\" value=\"$12.30\" />", 

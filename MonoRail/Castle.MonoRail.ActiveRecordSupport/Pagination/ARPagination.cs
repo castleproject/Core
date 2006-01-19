@@ -75,8 +75,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	/// </summary>
 	public class ARPager : AbstractPage
 	{
-		// private int pageSize, currentPage, lastPage = -1;
-		// private IARPaginableDataSource source;
 		private IEnumerable enumerable;
 
 		public ARPager(int pageSize, IARPaginableDataSource source, int currentPage)
@@ -89,70 +87,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 			CalculatePaginationInfo(startIndex, endIndex, count, pageSize, currentPage);
 		}
-
-//		#region IPaginatedPage implementation
-//
-//		public int CurrentIndex
-//		{
-//			get { return currentPage; }
-//		}
-//
-//		public int FirstIndex
-//		{
-//			get { return 1; }
-//		}
-//
-//		public int LastIndex
-//		{
-//			get { return lastPage; }
-//		}
-//
-//		public int NextIndex
-//		{
-//			get { return currentPage + 1; }
-//		}
-//
-//		public int PreviousIndex
-//		{
-//			get { return currentPage - 1; }
-//		}
-//
-//		public int FirstItem
-//		{
-//			get { throw new NotImplementedException(); }
-//		}
-//
-//		public int LastItem
-//		{
-//			get { throw new NotImplementedException(); }
-//		}
-//
-//		public int TotalItems
-//		{
-//			get { throw new NotImplementedException(); }
-//		}
-//
-//		public bool HasFirst
-//		{
-//			get { throw new NotImplementedException(); }
-//		}
-//
-//		public bool HasLast
-//		{
-//			get { throw new NotImplementedException(); }
-//		}
-//
-//		public bool HasPrevious
-//		{
-//			get { return currentPage > 1; }
-//		}
-//
-//		public bool HasNext
-//		{
-//			get { return lastPage == -1 || currentPage < lastPage; }
-//		}
-//
-//		#endregion
 
 		public override IEnumerator GetEnumerator()
 		{

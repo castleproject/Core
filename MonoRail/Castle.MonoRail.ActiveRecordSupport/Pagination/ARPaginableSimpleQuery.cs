@@ -33,8 +33,6 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 	{
 		private String hql;
 		private object[] parameters;
-		private ICriterion[] criterions;
-		private Order[] orders;
 
 		public ARPaginableSimpleQuery(Type targetType, String hql, params object[] parameters) : base(targetType)
 		{

@@ -71,6 +71,22 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region PasswordField
+
+		public String PasswordField(String target)
+		{
+			return PasswordField(target, null);
+		}
+
+		public String PasswordField(String target, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+
+			return CreateInputElement("password", target, value, attributes);
+		}
+
+		#endregion
+
 		#region TextFieldFormat
 
 		public String TextFieldFormat(String target, String formatString)
