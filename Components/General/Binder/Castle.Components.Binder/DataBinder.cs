@@ -173,6 +173,16 @@ namespace Castle.Components.Binder
 			return value == null || type.IsArray;
 		}
 
+		protected virtual bool ShouldIgnoreType(Type instanceType)
+		{
+			return instanceType.IsAbstract || instanceType.IsInterface;
+		}
+
+		protected virtual bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
+		{
+			return false;
+		}
+
 		#endregion
 
 		#region Internal implementation
@@ -207,6 +217,11 @@ namespace Castle.Components.Binder
 			if (node == null || node.ShouldIgnore) return;
 
 			BeforeBinding(instance, prefix, node);
+
+			if (PerformCustomBinding(instance, prefix, node))
+			{
+				return;
+			}
 
 			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
@@ -355,11 +370,6 @@ namespace Castle.Components.Binder
 			}
 
 			return (index1 <= -1) || (index2 >= 0);
-		}
-
-		private bool ShouldIgnoreType(Type instanceType)
-		{
-			return instanceType.IsAbstract || instanceType.IsInterface;
 		}
 
 		private bool IsSimpleProperty(Type propType)
