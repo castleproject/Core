@@ -29,7 +29,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 		{
 			ActiveRecordStarter.Initialize( 
 				ConfigurationSettings.GetConfig( "activerecord" ) as IConfigurationSource, 
-				typeof(Blog), typeof(Person), typeof(Customer), typeof(Account),
+				typeof(Blog), typeof(Category), typeof(Person), 
+				typeof(Customer), typeof(Account), 
 				typeof(AccountPermission), typeof(ProductLicense) );
 
 			ActiveRecordStarter.CreateSchema();
