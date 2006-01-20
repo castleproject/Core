@@ -614,10 +614,10 @@ namespace Castle.MonoRail.Framework
 		/// Method invoked by the engine to start 
 		/// the controller process. 
 		/// </summary>
-		internal void Process(IRailsEngineContext context, IServiceProvider serviceProvider, 
-			String areaName, String controllerName, String actionName)
+		internal void Process(IRailsEngineContext context, String areaName, 
+			String controllerName, String actionName)
 		{
-			InitializeFieldsFromServiceProvider(serviceProvider);
+			InitializeFieldsFromServiceProvider(context);
 
 			InitializeControllerState(areaName, controllerName, actionName);
 			
@@ -1315,10 +1315,10 @@ namespace Castle.MonoRail.Framework
 
 		protected void RaiseOnActionExceptionOnExtension()
 		{
-			IMonoRailExtension composite = (IMonoRailExtension) 
-				ServiceProvider.GetService( typeof(IMonoRailExtension) );
+			ExtensionManager manager = (ExtensionManager) 
+				ServiceProvider.GetService( typeof(ExtensionManager) );
 
-			composite.OnActionException(Context, ServiceProvider);
+			manager.RaiseActionError(Context);
 		}
 
 		#endregion

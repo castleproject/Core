@@ -18,49 +18,108 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 	using System.Web.SessionState;
 
-	using Castle.Components.Common.EmailSender;
-	
 	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// Extends the <see cref="ProcessEngine"/> and implements 
-	/// <see cref="IHttpHandler"/> to dispatch the web
+	/// Implements <see cref="IHttpHandler"/> to dispatch the web
 	/// requests. 
 	/// </summary>
-	public class MonoRailHttpHandler : ProcessEngine, IHttpHandler, IRequiresSessionState
+	public class MonoRailHttpHandler : MarshalByRefObject, IHttpHandler, IRequiresSessionState
 	{
-		private String _url;
+		public String url;
 
-		public MonoRailHttpHandler( String url, IViewEngine viewEngine, 
-			IControllerFactory controllerFactory, ControllerDescriptorBuilder controllerDescriptorBuilder, IFilterFactory filterFactory, 
-			IResourceFactory resourceFactory, IScaffoldingSupport scaffoldingSupport, 
-			IViewComponentFactory viewCompFactory, IMonoRailExtension[] extensions, IEmailSender sender)
-			: base(controllerFactory, controllerDescriptorBuilder, viewEngine, filterFactory, resourceFactory, 
-			       scaffoldingSupport, viewCompFactory, extensions, sender)
+		public MonoRailHttpHandler(String url)
 		{
-			_url = url;
+			this.url = url;
 		}
 
 		public void ProcessRequest(HttpContext context)
 		{
-			RailsEngineContextAdapter mrContext = new RailsEngineContextAdapter(context, _url);
-
-			RaiseEngineContextCreated(mrContext);
-
-			try
+			if (!EngineContextModule.Initialized)
 			{
-				Process(mrContext);
+				throw new RailsException("Looks like you forgot to register the module " + typeof(EngineContextModule).FullName);
 			}
-			finally
-			{
-				RaiseEngineContextDiscarded(mrContext);
-			}
+
+			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
+
+			// Not nice. Need to rewrite UrlInfo class to work with
+			// request.RawUrl
+			(mrContext as DefaultRailsEngineContext).Url = url;
+
+			Process(mrContext);
 		}
 
 		public bool IsReusable
 		{
-			get { return true; }
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Performs the base work of MonoRail. Extracts 
+		/// the information from the URL, obtain the controller 
+		/// that matches this information and dispatch the execution 
+		/// to it.
+		/// </summary>
+		/// <param name="context"></param>
+		public virtual void Process( IRailsEngineContext context )
+		{
+			UrlInfo info = ExtractUrlInfo(context);
+
+			IControllerFactory controllerFactory = (IControllerFactory) context.GetService(typeof(IControllerFactory));
+
+			Controller controller = controllerFactory.CreateController( info );
+
+			if (controller == null)
+			{
+				String message = String.Format("No controller for {0}\\{1}", info.Area, info.Controller);
+				
+				throw new RailsException(message);
+			}
+
+			try
+			{
+				controller.Process( context, info.Area, info.Controller, info.Action );
+			}
+			finally
+			{
+				controllerFactory.Release(controller);
+
+				// Remove items from flash before leaving the page
+				context.Flash.Sweep();
+	
+				if (context.Flash.HasItemsToKeep)
+				{
+					context.Session[Flash.FlashKey] = context.Flash;
+				}
+				else if (context.Session.Contains(Flash.FlashKey))
+				{
+					context.Session.Remove(Flash.FlashKey);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Can be overriden so new semantics can be supported.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <returns></returns>
+		protected virtual UrlInfo ExtractUrlInfo(IRailsEngineContext context)
+		{
+			return context.UrlInfo;
+		}
+
+		public static IRailsEngineContext CurrentContext
+		{
+			get
+			{
+				HttpContext context = HttpContext.Current;
+				
+				// Are we in a web request?
+				if (context == null) return null;
+								
+				return EngineContextModule.ObtainRailsEngineContext(context);
+			}
 		}
 	}
 }

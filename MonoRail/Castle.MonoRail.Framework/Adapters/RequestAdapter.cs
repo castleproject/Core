@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Adapters
 	/// </summary>
 	public class RequestAdapter : IRequest
 	{
-		private HttpRequest _request;
+		internal HttpRequest _request;
 		private FileDictionaryAdapter _files;
 
 		public RequestAdapter( HttpRequest request )
@@ -47,6 +47,16 @@ namespace Castle.MonoRail.Framework.Adapters
 		public Uri Uri
 		{
 			get { return _request.Url; }
+		}
+
+		public String RawUrl
+		{
+			get { return _request.RawUrl; }
+		}
+
+		public String FilePath
+		{
+			get { return _request.FilePath; }
 		}
 
 		public NameValueCollection QueryString

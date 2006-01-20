@@ -30,33 +30,11 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Implementors have a chance to read custom 
 		/// elements from <see cref="MonoRailConfiguration"/>
+		/// and subscribe to some event the <see cref="ExtensionManager"/>
+		/// exposes.
 		/// </summary>
 		/// <param name="configuration"></param>
-		void Init(MonoRailConfiguration configuration);
+		void Init(ExtensionManager manager, MonoRailConfiguration configuration);
 
-		/// <summary>
-		/// Invoked when an instance of the implementation 
-		/// of <see cref="IRailsEngineContext"/> is created
-		/// </summary>
-		/// <remarks>
-		/// The extension instance is shared and should not 
-		/// hold a reference to the context
-		/// </remarks>
-		/// <param name="context"></param>
-		void OnRailsContextCreated(IRailsEngineContext context, IServiceProvider serviceProvider);
-
-		/// <summary>
-		/// Invoked when an instance of the implementation 
-		/// of <see cref="IRailsEngineContext"/> is about
-		/// to be released.
-		/// </summary>
-		/// <remarks>
-		/// The extension instance is shared and should not 
-		/// hold a reference to the context
-		/// </remarks>
-		/// <param name="context"></param>
-		void OnRailsContextDiscarded(IRailsEngineContext context, IServiceProvider serviceProvider);
-
-		void OnActionException(IRailsEngineContext context, IServiceProvider serviceProvider);
 	}
 }

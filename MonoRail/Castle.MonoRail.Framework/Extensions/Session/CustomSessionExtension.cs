@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 	///   &lt;/monoRail&gt;
 	/// </code>
 	/// </remarks>
-	public class CustomSessionExtension : AbstractMonoRailExtension
+	public class CustomSessionExtension : IMonoRailExtension
 	{
 		/// <summary>
 		/// Reference to an instance of <see cref="ICustomSessionFactory"/>
@@ -56,8 +56,11 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// could not be instantiated/found
 		/// </exception>
 		/// <param name="configuration"></param>
-		public override void Init(MonoRailConfiguration configuration)
+		public void Init(ExtensionManager manager, MonoRailConfiguration configuration)
 		{
+			manager.AdquireSessionState += new ExtensionHandler(OnAdquireSessionState);
+			manager.ReleaseSessionState += new ExtensionHandler(OnReleaseSessionState);
+
 			XmlAttribute customSessionAtt = 
 				configuration.ConfigSection.Attributes["customSession"];
 
@@ -88,22 +91,22 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		}
 
 		/// <summary>
-		/// Overrides the ISession instance on <see cref="RailsEngineContextAdapter"/>.
+		/// Overrides the ISession instance on <see cref="IRailsEngineContext"/>.
 		/// </summary>
 		/// <remarks>Note that the session available through IHttpContext is left untouched</remarks>
 		/// <param name="context"></param>
-		public override void OnRailsContextCreated(IRailsEngineContext context, IServiceProvider serviceProvider)
+		private void OnAdquireSessionState(IRailsEngineContext context)
 		{
 			IDictionary session = customSession.ObtainSession(context);
 
-			(context as RailsEngineContextAdapter).Session = session;
+			(context as DefaultRailsEngineContext).Session = session;
 		}
 
 		/// <summary>
-		/// Retrives the ISession instance from <see cref="RailsEngineContextAdapter"/>.
+		/// Retrives the ISession instance from <see cref="IRailsEngineContext"/>.
 		/// and invokes <see cref="ICustomSessionFactory.PersistSession"/>
 		/// </summary>
-		public override void OnRailsContextDiscarded(IRailsEngineContext context, IServiceProvider serviceProvider)
+		private void OnReleaseSessionState(IRailsEngineContext context)
 		{
 			customSession.PersistSession(context.Session, context);
 		}

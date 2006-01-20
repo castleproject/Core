@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		{
 		}
 
-		public abstract void Process(IRailsEngineContext context, IServiceProvider serviceProvider);
+		public abstract void Process(IRailsEngineContext context);
 
 		public IExceptionHandler Next
 		{
@@ -38,11 +38,11 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			set { nextHandler = value; }
 		}
 
-		protected void InvokeNext(IRailsEngineContext context, IServiceProvider serviceProvider)
+		protected void InvokeNext(IRailsEngineContext context)
 		{
 			if (nextHandler != null)
 			{
-				nextHandler.Process(context, serviceProvider);
+				nextHandler.Process(context);
 			}
 		}
 

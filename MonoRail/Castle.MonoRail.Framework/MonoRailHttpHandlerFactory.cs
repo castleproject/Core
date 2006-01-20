@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework
 	/// and uses the configuration to obtain the correct factories 
 	/// instances.
 	/// </summary>
-	public class MonoRailHttpHandlerFactory : ProcessEngineFactory, IHttpHandlerFactory
+	public class MonoRailHttpHandlerFactory : IHttpHandlerFactory
 	{
 		public MonoRailHttpHandlerFactory()
 		{
@@ -39,9 +39,7 @@ namespace Castle.MonoRail.Framework
 				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(context);
 			}
 #endif
-			return new MonoRailHttpHandler(url, viewEngine, 
-				controllerFactory, controllerDescriptorBuilder, filterFactory, resourceFactory, 
-				scaffoldingSupport, viewCompFactory, extensions, emailSender);
+			return new MonoRailHttpHandler(url);
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)

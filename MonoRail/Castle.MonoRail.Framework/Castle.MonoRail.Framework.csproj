@@ -138,6 +138,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "EngineContextModule.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IControllerAware.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -218,11 +223,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ProcessEngineFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "RailsException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -253,12 +253,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Adapters\FileDictionaryAdapter.cs"
+                    RelPath = "Adapters\AbstractServiceContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Adapters\RailsEngineContextAdapter.cs"
+                    RelPath = "Adapters\DefaultRailsEngineContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Adapters\FileDictionaryAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -393,12 +398,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Extensions\AbstractMonoRailExtension.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Extensions\ExtensionComposite.cs"
+                    RelPath = "Extensions\ExtensionManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

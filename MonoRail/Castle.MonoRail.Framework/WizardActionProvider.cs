@@ -153,13 +153,13 @@ namespace Castle.MonoRail.Framework
 			if (innerAction == null || innerAction == String.Empty)
 			{
 				currentStepInstance.Process(
-					controller.Context, controller.ServiceProvider, 
+					controller.Context, 
 					urlInfo.Area, urlInfo.Controller, "RenderWizardView");
 			}
 			else
 			{
 				currentStepInstance.Process(
-					controller.Context, controller.ServiceProvider, 
+					controller.Context, 
 					urlInfo.Area, urlInfo.Controller, innerAction);
 			}
 

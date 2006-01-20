@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 		/// is available in <see cref="IRailsEngineContext.LastException"/>
 		/// </summary>
 		/// <param name="context"></param>
-		void Process(IRailsEngineContext context, IServiceProvider serviceProvider);
+		void Process(IRailsEngineContext context);
 
 		/// <summary>
 		/// The next exception in the sink 

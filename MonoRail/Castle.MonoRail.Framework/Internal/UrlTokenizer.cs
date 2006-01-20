@@ -75,11 +75,20 @@ namespace Castle.MonoRail.Framework.Internal
 			else if ( parts.Length - 3 > 0 ) 
 			{
 				StringBuilder areaSB = new StringBuilder();
+				
 				for ( int i=0; i <= parts.Length - 3; i++ )
+				{
 					if ( parts[i] != null && parts[i].Length > 0 )
+					{
 						areaSB.Append( parts[i] ).Append( '/' );
-				if ( areaSB.Length > 0 ) 
+					}
+				}
+				
+				if ( areaSB.Length > 0 )
+				{
 					areaSB.Length -= 1;
+				}
+				
 				area = areaSB.ToString();
 			}
 

@@ -6,6 +6,14 @@ Release Candidate 1
 
 - MonoRail is now CLSCompliant (kudos to Roelof Blom <roelof.blom@gmail.com>)
 
+- Breaking change: now MonoRail requires that you add the following module to web.config:
+
+	<system.web>
+		<httpModules>
+			<add name="monorail" type="Castle.MonoRail.Framework.EngineContextModule, Castle.MonoRail.Framework" />
+		</httpModules>
+	</system.web>
+
 - Configuration nodes and attributes changes:
   - mailto to mailTo
   - mailfrom to mailFrom

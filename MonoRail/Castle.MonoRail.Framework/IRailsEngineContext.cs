@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
+	using System.ComponentModel.Design;
 	using System.Web;
 	using System.Web.Caching;
 	using System.Security.Principal;
@@ -24,10 +25,10 @@ namespace Castle.MonoRail.Framework
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// Represents an abstraction between the Rails API
-	/// and the ASP.Net API. Usefull for unit tests.
+	/// Represents an abstraction between the MonoRail API
+	/// and the ASP.Net API. 
 	/// </summary>
-	public interface IRailsEngineContext
+	public interface IRailsEngineContext : IServiceContainer
 	{
 		/// <summary>
 		/// Gets the request type (GET, POST, etc)

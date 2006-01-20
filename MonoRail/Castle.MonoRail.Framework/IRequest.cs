@@ -30,6 +30,10 @@ namespace Castle.MonoRail.Framework
 
 		Uri Uri { get; }
 
+		String RawUrl { get; }
+
+		String FilePath { get; }
+
 		byte[] BinaryRead(int count);
 
 		String this [String key] { get; }

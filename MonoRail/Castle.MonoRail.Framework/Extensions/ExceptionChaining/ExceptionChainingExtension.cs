@@ -42,19 +42,16 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 	///   &lt;/monoRail&gt;
 	/// </code>
 	/// </remarks>
-	public class ExceptionChainingExtension : AbstractMonoRailExtension
+	public class ExceptionChainingExtension : IMonoRailExtension
 	{
 		private IExceptionHandler firstHandler;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="configuration"></param>
-		public override void Init(MonoRailConfiguration configuration)
+		public void Init(ExtensionManager manager, MonoRailConfiguration configuration)
 		{
-			XmlNodeList handlers = configuration.ConfigSection.SelectNodes("exception/exceptionHandler");
+			manager.ActionException += new ExtensionHandler(OnActionException);
+			manager.UnhandledException += new ExtensionHandler(OnUnhandledException);
 
-			HttpContext.Current.ApplicationInstance.Error += new EventHandler(ApplicationInstance_Error);
+			XmlNodeList handlers = configuration.ConfigSection.SelectNodes("exception/exceptionHandler");
 
 			foreach(XmlNode node in handlers)
 			{
@@ -69,20 +66,16 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="context"></param>
-		public override void OnActionException(IRailsEngineContext context, IServiceProvider serviceProvider)
+		private void OnActionException(IRailsEngineContext context)
 		{
-			firstHandler.Process(context, serviceProvider);
+			firstHandler.Process(context);
 
 			// Mark the request as processed (so if the 
 			// ApplicationInstance_Error is invoked again, we wouldn't re-invoke the chain)
 
 		}
 
-		private void ApplicationInstance_Error(object sender, EventArgs e)
+		private void OnUnhandledException(IRailsEngineContext context)
 		{
 			// TODO: Delegate to OnActionException
 		}

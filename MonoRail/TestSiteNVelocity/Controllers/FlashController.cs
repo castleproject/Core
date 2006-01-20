@@ -35,7 +35,6 @@ namespace TestSiteNVelocity.Controllers
 
 		public void FlashContents()
 		{	
-			int i=0;		
 		}
 
 		public void AddFlashAndRedirect()

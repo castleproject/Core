@@ -48,9 +48,9 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 			}
 		}
 
-		public override void Process(IRailsEngineContext context, IServiceProvider serviceProvider)
+		public override void Process(IRailsEngineContext context)
 		{
-			IEmailSender emailSender = (IEmailSender) serviceProvider.GetService( typeof(IEmailSender) );
+			IEmailSender emailSender = (IEmailSender) context.GetService( typeof(IEmailSender) );
 
 			String message = BuildStandardMessage(context);
 
@@ -64,7 +64,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 				// We ignore errors during send
 			}
 
-			InvokeNext(context, serviceProvider);
+			InvokeNext(context);
 		}
 	}
 }

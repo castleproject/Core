@@ -28,9 +28,8 @@ namespace Castle.MonoRail.Framework.Adapters
 	/// <summary>
 	/// Adapter to expose a valid <see cref="IRailsEngineContext"/> implementation on top of <c>HttpContext</c>.
 	/// </summary>
-	public class RailsEngineContextAdapter : MarshalByRefObject, IRailsEngineContext
+	public class DefaultRailsEngineContext : AbstractServiceContainer, IRailsEngineContext
 	{
-		private String _url;
 		private HttpContext _context;
 		private RequestAdapter _request;
 		private ResponseAdapter _response;
@@ -40,15 +39,15 @@ namespace Castle.MonoRail.Framework.Adapters
 		private ServerUtilityAdapter _server;
 		private Flash _flash;
 		private UrlInfo _urlInfo;
+		private String _url;
 
-		public RailsEngineContextAdapter( HttpContext context, String url )
+		public DefaultRailsEngineContext(HttpContext context)
 		{
-			_url = url;
 			_context = context;
 			_request = new RequestAdapter(context.Request);
 			_trace = new TraceAdapter(context.Trace);
-			_response = new ResponseAdapter(context.Response, _url, ApplicationPath);
 			_server = new ServerUtilityAdapter(context.Server);
+			_response = new ResponseAdapter(context.Response, this, ApplicationPath);
 		}
 
 		public Exception LastException
@@ -65,6 +64,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		public String Url
 		{
 			get { return _url; }
+			set { _url = value; }
 		}
 
 		public String UrlReferrer
@@ -183,7 +183,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
 				if ( _urlInfo == null )
 				{
-					_urlInfo = UrlTokenizer.ExtractInfo( _url, ApplicationPath );
+					_urlInfo = UrlTokenizer.ExtractInfo( _request.FilePath, ApplicationPath );
 				}
 				return _urlInfo;
 			}

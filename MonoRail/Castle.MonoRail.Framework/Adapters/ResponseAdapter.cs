@@ -24,15 +24,15 @@ namespace Castle.MonoRail.Framework.Adapters
 	public class ResponseAdapter : IResponse
 	{
 		private readonly String _appPath;
-		private readonly String _extension;
+		private readonly IRailsEngineContext _engine;
 		private readonly HttpResponse _response;
 		private bool _redirected;
 
-		public ResponseAdapter( HttpResponse response, String url, String appPath )
+		public ResponseAdapter( HttpResponse response, IRailsEngineContext engine, String appPath )
 		{
 			_response = response;
-			_extension = UrlTokenizer.GetExtension( url );
 			_appPath = appPath;
+			_engine = engine;
 		}
 
 		/// <summary>
@@ -156,8 +156,8 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			_redirected = true;
 			
-			_response.Redirect( 
-				UrlInfo.CreateAbsoluteRailsUrl( _appPath, controller, action, _extension ), false );
+			_response.Redirect( UrlInfo.CreateAbsoluteRailsUrl( 
+				_appPath, controller, action, _engine.UrlInfo.Extension ), false );
 		}
 
 		public void Redirect( String area, String controller, String action )
@@ -170,8 +170,8 @@ namespace Castle.MonoRail.Framework.Adapters
 			{
     			_redirected = true;
 
-				_response.Redirect( 
-					UrlInfo.CreateAbsoluteRailsUrl( _appPath, area, controller, action, _extension ), false );
+				_response.Redirect( UrlInfo.CreateAbsoluteRailsUrl( 
+					_appPath, area, controller, action, _engine.UrlInfo.Extension ), false );
 			}
 		}
 
