@@ -62,7 +62,13 @@ Release Candidate 1
   Then ARDataBinder will use the usual path, not ignoring the AutoLoad.
   
   This behavior is being evaluated.
-  
+
+- Removed AbstractExtension
+
+- Extension now uses events (See ExtensionManager)
+
+- Interface IMonoRailExtension changed (has only Init method now)
+
 
 Beta 5
 ======
