@@ -42,6 +42,8 @@ namespace Castle.Components.Binder
 		/// <summary>Holds a sorted array of properties names that are on the white list</summary>
 		private String[] allowedPropertyList;
 
+		private Stack instanceStack;
+
 		#endregion
 
 		#region Constructors
@@ -96,6 +98,7 @@ namespace Castle.Components.Binder
 			if (dataSource == null) throw new ArgumentNullException("dataSource");
 
 			errors = new ArrayList();
+			instanceStack = new Stack();
 
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
@@ -132,6 +135,7 @@ namespace Castle.Components.Binder
 			if (dataSource == null) throw new ArgumentNullException("dataSource");
 
 			errors = new ArrayList();
+			instanceStack = new Stack();
 
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
@@ -157,6 +161,16 @@ namespace Castle.Components.Binder
 		}
 
 		#endregion
+
+		protected object InstanceOnStack
+		{
+			get
+			{
+				if (instanceStack.Count == 0) return null;
+				
+				return instanceStack.Peek();
+			}
+		}
 
 		#region Overridables
 
@@ -223,6 +237,8 @@ namespace Castle.Components.Binder
 				return;
 			}
 
+			PushInstance(instance);
+
 			PropertyInfo[] props = instance.GetType().GetProperties(PropertiesBindingFlags);
 
 			foreach(PropertyInfo prop in props)
@@ -275,6 +291,8 @@ namespace Castle.Components.Binder
 					errors.Add(new DataBindError(prefix, prop.Name, ex));
 				}
 			}
+
+			PopInstance(instance);
 
 			AfterBinding(instance, prefix, node);
 		}
@@ -393,6 +411,21 @@ namespace Castle.Components.Binder
 			TypeConverter converter = TypeDescriptor.GetConverter(propType);
 
 			return converter.CanConvertFrom( typeof(String) );
+		}
+
+		private void PushInstance(object instance)
+		{
+			instanceStack.Push(instance);
+		}
+
+		private void PopInstance(object instance)
+		{
+			object actual = instanceStack.Pop();
+
+			if (actual != instance)
+			{
+				throw new BindingException("Unexpected item on the stack: found {0}, expecting {1}", actual, instance);
+			}
 		}
 
 		#endregion
