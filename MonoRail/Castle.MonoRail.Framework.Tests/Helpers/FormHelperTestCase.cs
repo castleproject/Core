@@ -45,6 +45,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			HomeController controller = new HomeController();
 
 			controller.PropertyBag.Add("product", product);
+			controller.PropertyBag.Add("sendemail", true);
+			controller.PropertyBag.Add("confirmation", "abc");
 
 			helper.SetController(controller);
 		}
@@ -65,6 +67,8 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				helper.PasswordField("product.name"));
 			Assert.AreEqual("<input type=\"password\" id=\"product_quantity\" name=\"product.quantity\" value=\"10\" />", 
 				helper.PasswordField("product.quantity"));
+			Assert.AreEqual("<input type=\"password\" id=\"confirmation\" name=\"confirmation\" value=\"abc\" />", 
+				helper.PasswordField("confirmation"));
 		}
 
 		[Test]
@@ -102,6 +106,9 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 
 			Assert.AreEqual("<input type=\"checkbox\" id=\"product_isavailable\" name=\"product.isavailable\" value=\"true\" checked />", 
 				helper.CheckboxField("product.isavailable"));
+
+			Assert.AreEqual("<input type=\"checkbox\" id=\"sendemail\" name=\"sendemail\" value=\"true\" checked />", 
+				helper.CheckboxField("sendemail"));
 		}
 
 		[Test]

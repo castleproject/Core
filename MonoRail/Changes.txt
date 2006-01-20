@@ -34,6 +34,28 @@ Release Candidate 1
 
 - Renamed ARPager splitted into ARPaginationHelper and ARPager
 
+- ARDataBinder is now able to deal with HasAndBelongsToMany relations. 
+  This works in two ways. Suppose you have a Product class with a relation HasAndBelongsToMany to Category.
+  
+  If you send the following fields from a form:
+    
+    product.categories.id=1 
+    product.categories.id=2
+    
+  ARDataBinder will ignore the AutoLoad property and always populate the Categories 
+  collection on the product class with the result of FindByPrimaryKey of the categories.
+  Any other field will be ignored, for example product.categories.name will not be bound
+  
+  However, if you send the values like
+  
+    product.categories[0].id=1 
+    product.categories[1].id=2
+    
+  Then ARDataBinder will use the usual path, not ignoring the AutoLoad.
+  
+  This behavior is being evaluated.
+  
+
 Beta 5
 ======
 

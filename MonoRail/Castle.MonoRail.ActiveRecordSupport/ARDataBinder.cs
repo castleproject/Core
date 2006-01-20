@@ -72,7 +72,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (IsContainerType(instanceType))
 			{
-				
+				return CreateContainer(instanceType);
 			}
 
 			object instance = null;
@@ -139,11 +139,69 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		protected override bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
 		{
-			Type type = instance.GetType();
+			object stackInstance = InstanceOnStack;
 
-			if (IsContainerType(type))
+			if (stackInstance == null)
 			{
-				
+				return false;
+			}
+
+			if (IsContainerInstance(instance))
+			{
+				Type type = stackInstance.GetType();
+
+				ActiveRecordModel model = ActiveRecordModel.GetModel(type);
+				ActiveRecordModel targetModel = null;
+
+				bool found = false;
+				Type targetType = null;
+
+				foreach(HasAndBelongsToManyModel hasManyModel in model.HasAndBelongsToMany)
+				{
+					if (hasManyModel.Property.Name == prefix)
+					{
+						targetType = hasManyModel.HasManyAtt.MapType;
+
+						targetModel = ActiveRecordModel.GetModel(targetType);
+
+						found = true; break;
+					}
+				}
+
+				if (found)
+				{
+					if (node.IsIndexed)
+					{
+						Array collArray = Array.CreateInstance(targetType, node.IndexedNodes.Length);
+
+						collArray = (Array) InternalBindObject(collArray.GetType(), prefix, node);
+
+						foreach(object item in collArray)
+						{
+							AddToContainer(instance, item);
+						}
+
+						return true;
+					}
+
+					PrimaryKeyModel pkModel = targetModel.Ids[0] as PrimaryKeyModel;
+
+					String ids = node.GetEntryValue(pkModel.Property.Name);
+
+					if (ids == null)
+					{
+						return true;
+					}
+
+					foreach(String id in ids.Split(','))
+					{
+						object convertedId = ConvertUtils.Convert(pkModel.Property.PropertyType, id);
+
+						AddToContainer(instance, SupportingUtils.FindByPK(targetType, convertedId));
+					}
+				}
+
+				return true;
 			}
 
 			return false;
@@ -338,6 +396,25 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		private bool IsContainerType(Type type)
 		{
 			return type == typeof(IList) || type == typeof(ISet);
+		}
+
+		private bool IsContainerInstance(object instance)
+		{
+			return (instance is IList || instance is ISet);
+		}
+
+		private object CreateContainer(Type type)
+		{
+			if (type == typeof(IList))
+			{
+				return new ArrayList();
+			}
+			else if (type == typeof(ISet))
+			{
+				return new HashedSet();
+			}
+
+			return null;
 		}
 	}
 }

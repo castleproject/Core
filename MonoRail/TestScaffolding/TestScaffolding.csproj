@@ -242,6 +242,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\BlogCategory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Category.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\ContactInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

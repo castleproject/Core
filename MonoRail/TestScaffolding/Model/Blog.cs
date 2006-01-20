@@ -15,8 +15,10 @@
 namespace TestScaffolding.Model
 {
 	using System;
+	using System.Collections;
 
 	using Castle.ActiveRecord;
+	using Iesi.Collections;
 
 	[ActiveRecord("Blogs")]
 	public class Blog : ActiveRecordValidationBase
@@ -24,7 +26,7 @@ namespace TestScaffolding.Model
 		private int _id;
 		private String _name;
 		private String _author;
-//		private IList _posts;
+		private ISet _categories;
 
 		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id
@@ -47,12 +49,13 @@ namespace TestScaffolding.Model
 			set { _author = value; }
 		}
 
-//		[HasMany(typeof(Post), Table="Posts", ColumnKey="blogid")]
-//		public IList Posts
-//		{
-//			get { return _posts; }
-//			set { _posts = value; }
-//		}
+		[HasAndBelongsToMany(typeof(Category), Table="BlogCategory", 
+			 ColumnRef="categoryid", ColumnKey="blogid")]
+		public ISet Categories
+		{
+			get { return _categories; }
+			set { _categories = value; }
+		}
 
 		public static void DeleteAll()
 		{

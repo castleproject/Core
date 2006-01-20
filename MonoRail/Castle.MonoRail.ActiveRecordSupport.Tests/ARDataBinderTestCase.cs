@@ -34,12 +34,20 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		private ARDataBinder binder = new ARDataBinder();
 		private object instance;
 		private SimplePerson person;
-			
+
+		private Category cat1;
+		private Category cat2;
+		private Category cat3;
+	
 		[TestFixtureSetUp]
 		public void Init()
 		{
-			CreateAndPopulatePeopleTable();
-			
+			CreateAndPopulateTables();
+		}
+
+		[SetUp]
+		public void TestInit()
+		{
 			binder.AutoLoad = true;
 		}
 			
@@ -143,27 +151,57 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			Assert.IsTrue(people[3].Age == 15);															
 		}
 
-//		[Test]
-//		public void PopulatingContainers()
-//		{
-//			NameValueCollection args = new NameValueCollection();
-//
-//			args.Add("user.roles.id", "1");
-//			args.Add("user.roles.id", "2");
-//
-//			instance = binder.BindObject(typeof(User), "user", new NameValueCollectionAdapter(args));
-//			
-//			Assert.IsNotNull(instance);	
-//			person = instance as SimplePerson;
-//			Assert.IsNull( person.Name );
-//			Assert.IsTrue( person.Age == 200);	
-//		}
+		[Test]
+		public void PopulatingContainers()
+		{
+			binder.AutoLoad = false;
 
-		public static void CreateAndPopulatePeopleTable()
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("blog.name", "my blog");
+			args.Add("blog.author", "hammett");
+			args.Add("blog.categories.id", cat1.Id.ToString());
+			args.Add("blog.categories.id", cat2.Id.ToString());
+
+			Blog instance = (Blog) binder.BindObject(
+				typeof(Blog), "blog", new NameValueCollectionAdapter(args));
+			
+			Assert.IsNotNull(instance);	
+			Assert.AreEqual( "my blog", instance.Name );
+			Assert.AreEqual( "hammett", instance.Author );
+			Assert.IsNotNull(instance.Categories);
+			Assert.AreEqual(2, instance.Categories.Count);
+		}
+
+		[Test]
+		public void PopulatingContainersWithArray()
+		{
+			binder.AutoLoad = false;
+
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("blog.name", "my blog");
+			args.Add("blog.author", "hammett");
+			args.Add("blog.categories[0].id", cat1.Id.ToString());
+			args.Add("blog.categories[1].id", cat2.Id.ToString());
+
+			Blog instance = (Blog) binder.BindObject(
+				typeof(Blog), "blog", new NameValueCollectionAdapter(args));
+			
+			Assert.IsNotNull(instance);	
+			Assert.AreEqual( "my blog", instance.Name );
+			Assert.AreEqual( "hammett", instance.Author );
+			Assert.IsNotNull(instance.Categories);
+			Assert.AreEqual(2, instance.Categories.Count);
+		}
+
+		public void CreateAndPopulateTables()
 		{
 			ActiveRecordStarter.Initialize( 
 				ConfigurationSettings.GetConfig( "activerecord" ) as IConfigurationSource, 
-				typeof(SimplePerson) );
+				typeof(SimplePerson), typeof(BlogCategory), typeof(Blog), typeof(Category) );
+
+			// try { ActiveRecordStarter.DropSchema(); } catch(Exception) {}
 
 			ActiveRecordStarter.CreateSchema();
 
@@ -176,6 +214,14 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 					person.Age = i;
 					person.Save();
 				}
+
+				cat1 = new Category("Technical");
+				cat2 = new Category("Political");
+				cat3 = new Category("General");
+
+				cat1.Save();
+				cat2.Save();
+				cat3.Save();
 			}
 		}
 	}

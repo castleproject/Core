@@ -25,7 +25,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		{
 			base.FixtureInitialize();
 
-			ARDataBinderTestCase.CreateAndPopulatePeopleTable();
+			new ARDataBinderTestCase().CreateAndPopulateTables();
 		}
 
 		[Test]
@@ -42,7 +42,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			AssertSuccess();
 			AssertReplyStartsWith("[1:John:1]");
 
-			ARDataBinderTestCase.CreateAndPopulatePeopleTable();
+			new ARDataBinderTestCase().CreateAndPopulateTables();
 			
 			args = new string[] {
 						"SimplePerson@autoload=no",

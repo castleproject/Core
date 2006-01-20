@@ -174,6 +174,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region Select
+
 		public String Select(String target, IEnumerable dataSource)
 		{
 			return Select(target, dataSource, null);
@@ -280,6 +282,8 @@ namespace Castle.MonoRail.Framework.Helpers
 			return sbWriter.ToString();
 		}
 
+		#endregion
+
 		protected String CreateInputElement(String type, String target, Object value, IDictionary attributes)
 		{
 			value = value == null ? "" : value;
@@ -306,6 +310,10 @@ namespace Castle.MonoRail.Framework.Helpers
 			if (rootInstance == null)
 			{
 				return null;
+			}
+			else if (pieces.Length == 1)
+			{
+				return rootInstance;
 			}
 
 			return QueryProperty(rootInstance, pieces[1]);
