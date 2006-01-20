@@ -27,13 +27,6 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public class MonoRailHttpHandler : MarshalByRefObject, IHttpHandler, IRequiresSessionState
 	{
-		public String url;
-
-		public MonoRailHttpHandler(String url)
-		{
-			this.url = url;
-		}
-
 		public void ProcessRequest(HttpContext context)
 		{
 			if (!EngineContextModule.Initialized)
@@ -42,10 +35,6 @@ namespace Castle.MonoRail.Framework
 			}
 
 			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
-
-			// Not nice. Need to rewrite UrlInfo class to work with
-			// request.RawUrl
-			(mrContext as DefaultRailsEngineContext).Url = url;
 
 			Process(mrContext);
 		}

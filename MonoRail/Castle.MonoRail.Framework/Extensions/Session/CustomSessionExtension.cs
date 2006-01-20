@@ -58,7 +58,7 @@ namespace Castle.MonoRail.Framework.Extensions.Session
 		/// <param name="configuration"></param>
 		public void Init(ExtensionManager manager, MonoRailConfiguration configuration)
 		{
-			manager.AdquireSessionState += new ExtensionHandler(OnAdquireSessionState);
+			manager.AcquireSessionState += new ExtensionHandler(OnAdquireSessionState);
 			manager.ReleaseSessionState += new ExtensionHandler(OnReleaseSessionState);
 
 			XmlAttribute customSessionAtt = 

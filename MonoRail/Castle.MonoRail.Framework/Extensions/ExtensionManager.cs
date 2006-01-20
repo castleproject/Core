@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework
 		private static readonly object ContextDisposedEvent = new object();
 		private static readonly object ActionExceptionEvent = new object();
 		private static readonly object UnhandledExceptionEvent = new object();
-		private static readonly object AdquireSessionStateEvent = new object();
+		private static readonly object AcquireSessionStateEvent = new object();
 		private static readonly object ReleaseSessionStateEvent = new object();
 		private static readonly object PreProcessEvent = new object();
 		private static readonly object PostProcessEvent = new object();
@@ -61,10 +61,10 @@ namespace Castle.MonoRail.Framework
 			remove { events.RemoveHandler(UnhandledExceptionEvent, value); }
 		}
 
-		public event ExtensionHandler AdquireSessionState
+		public event ExtensionHandler AcquireSessionState
 		{
-			add { events.AddHandler(AdquireSessionStateEvent, value); }
-			remove { events.RemoveHandler(AdquireSessionStateEvent, value); }
+			add { events.AddHandler(AcquireSessionStateEvent, value); }
+			remove { events.RemoveHandler(AcquireSessionStateEvent, value); }
 		}
 
 		public event ExtensionHandler ReleaseSessionState
@@ -117,7 +117,7 @@ namespace Castle.MonoRail.Framework
 
 		public void RaiseAcquireRequestState(IRailsEngineContext context)
 		{
-			ExtensionHandler eventDelegate = (ExtensionHandler) events[ActionExceptionEvent];
+			ExtensionHandler eventDelegate = (ExtensionHandler) events[AcquireSessionStateEvent];
 			if (eventDelegate != null) eventDelegate(context);
 		}
 

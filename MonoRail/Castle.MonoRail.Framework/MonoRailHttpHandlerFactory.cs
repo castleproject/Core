@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework
 				Castle.MonoRail.Framework.Internal.Test.TestContextHolder.SetContext(context);
 			}
 #endif
-			return new MonoRailHttpHandler(url);
+			return new MonoRailHttpHandler();
 		}
 
 		public virtual void ReleaseHandler(IHttpHandler handler)

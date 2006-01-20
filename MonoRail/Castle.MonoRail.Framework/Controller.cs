@@ -728,8 +728,11 @@ namespace Castle.MonoRail.Framework
 			if (method != null)
 			{
 				ActionMetaDescriptor ac = MetaDescriptor.GetAction(method);
+				
 				if (ac.Layout != null)
+				{
 					this.LayoutName = ac.Layout.LayoutName;
+				}
 			}
 
 			HybridDictionary filtersToSkip = new HybridDictionary();
