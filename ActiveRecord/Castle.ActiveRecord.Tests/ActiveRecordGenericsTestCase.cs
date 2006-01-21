@@ -23,6 +23,7 @@ namespace Castle.ActiveRecord.Tests
 	using NUnit.Framework;
 
 	using Castle.ActiveRecord.Tests.Model.GenericModel;
+    using Castle.ActiveRecord.Queries;
 
 	using NHibernate.Expression;
 
@@ -202,6 +203,50 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(post2.Id, (blog.RecentPosts[1] as Post).Id);
 			Assert.AreEqual(post1.Id, (blog.RecentPosts[2] as Post).Id);
 		}
+
+
+        [Test]
+        public void TestExpressionQuerySubProperty() {
+            Blog blog = new Blog();
+            blog.Name = "hammett's blog";
+            blog.Author = "hamilton verissimo";
+            blog.Save();
+
+            Blog blog2 = new Blog();
+            blog2.Name = "hammett's blog other blog";
+            blog2.Author = "hamilton verissimo 2";
+            blog2.Save();
+
+            Post post1 = new Post(blog, "title1", "contents", "category1");
+            Post post2 = new Post(blog, "title2", "contents", "category2");
+            Post post3 = new Post(blog, "title3", "contents", "category3");
+
+            Post post21 = new Post(blog2, "title21", "contents", "category21");
+            Post post22 = new Post(blog2, "title22", "contents", "category22");
+            Post post23 = new Post(blog2, "title23", "contents", "category23");
+
+            post1.Save();
+            post2.Save();
+            post3.Save();
+            
+            post21.Save();
+            post22.Save();
+            post23.Save();
+
+            //no idea how to make this style of query work. 
+            //Post[] posts = ActiveRecordMediator<Post>.FindAll(
+            //            Expression.Eq("Blog.Name", blog2.Name)
+            //        );
+            //Assert.IsTrue(posts.Length > 0);
+
+            SimpleQuery q  = new SimpleQuery(typeof(Post),"from Post p where p.Id = ? or p.Blog.Name = ?",1,"hammett's blog other blog");
+            
+            Post[] p = (Post[])ActiveRecordMediator<Post>.ExecuteQuery(q);
+
+            Assert.IsTrue(p.Length > 0);
+
+
+        }
 
 		[Test]
 		public void RelationsOneToOne()

@@ -17,7 +17,7 @@ namespace Castle.ActiveRecord.Tests
 	using System;
 
 	using NUnit.Framework;
-
+	
 	using Castle.ActiveRecord.Tests.Model;
 
 
@@ -27,7 +27,7 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void SimpleOperations()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -35,8 +35,8 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog[] blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
 
 			Blog blog = new Blog();
 			blog.Name = "hammett's blog";
@@ -44,20 +44,20 @@ namespace Castle.ActiveRecord.Tests
 			blog.Save();
 
 			blogs = Blog.FindAll();
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
 
 			Blog retrieved = blogs[0];
-			Assert.IsNotNull( retrieved );
+			Assert.IsNotNull(retrieved);
 
-			Assert.AreEqual( blog.Name, retrieved.Name );
-			Assert.AreEqual( blog.Author, retrieved.Author );
+			Assert.AreEqual(blog.Name, retrieved.Name);
+			Assert.AreEqual(blog.Author, retrieved.Author);
 		}
 
 		[Test]
 		public void SimpleOperations2()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -65,8 +65,8 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog[] blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
 
 			Blog blog = new Blog();
 			blog.Name = "hammett's blog";
@@ -74,11 +74,11 @@ namespace Castle.ActiveRecord.Tests
 			blog.Create();
 
 			blogs = Blog.FindAll();
-			Assert.AreEqual( blog.Name, blogs[0].Name );
-			Assert.AreEqual( blog.Author, blogs[0].Author );
+			Assert.AreEqual(blog.Name, blogs[0].Name);
+			Assert.AreEqual(blog.Author, blogs[0].Author);
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
 
 			blog.Name = "something else1";
 			blog.Author = "something else2";
@@ -86,17 +86,17 @@ namespace Castle.ActiveRecord.Tests
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
-			Assert.AreEqual( blog.Name, blogs[0].Name );
-			Assert.AreEqual( blog.Author, blogs[0].Author );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
+			Assert.AreEqual(blog.Name, blogs[0].Name);
+			Assert.AreEqual(blog.Author, blogs[0].Author);
 		}
 
 		[Test]
 		public void ComponentAttribute()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), 
-				typeof(Company), typeof(Client), typeof(Firm), typeof(Person) );
+			ActiveRecordStarter.Initialize(GetConfigSource(),
+			                               typeof(Company), typeof(Client), typeof(Firm), typeof(Person));
 			Recreate();
 
 			Company.DeleteAll();
@@ -107,21 +107,21 @@ namespace Castle.ActiveRecord.Tests
 			company.Save();
 
 			Company[] companies = Company.FindAll();
-			Assert.IsNotNull( companies );
-			Assert.AreEqual( 1, companies.Length );
+			Assert.IsNotNull(companies);
+			Assert.AreEqual(1, companies.Length);
 
 			Company corp = companies[0];
-			Assert.IsNotNull( corp.Address );
-			Assert.AreEqual( corp.Address.Address, company.Address.Address );
-			Assert.AreEqual( corp.Address.City, company.Address.City );
-			Assert.AreEqual( corp.Address.State, company.Address.State );
-			Assert.AreEqual( corp.Address.ZipCode, company.Address.ZipCode );
+			Assert.IsNotNull(corp.Address);
+			Assert.AreEqual(corp.Address.Address, company.Address.Address);
+			Assert.AreEqual(corp.Address.City, company.Address.City);
+			Assert.AreEqual(corp.Address.State, company.Address.State);
+			Assert.AreEqual(corp.Address.ZipCode, company.Address.ZipCode);
 		}
 
 		[Test]
 		public void RelationsOneToMany()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -141,19 +141,19 @@ namespace Castle.ActiveRecord.Tests
 			blog = Blog.Find(blog.Id);
 
 			Assert.IsNotNull(blog);
-			Assert.IsNotNull( blog.Posts, "posts collection is null" );
+			Assert.IsNotNull(blog.Posts, "posts collection is null");
 			Assert.AreEqual(2, blog.Posts.Count);
 
 			foreach(Post post in blog.Posts)
 			{
-				Assert.AreEqual( blog.Id, post.Blog.Id );
+				Assert.AreEqual(blog.Id, post.Blog.Id);
 			}
 		}
 
 		[Test]
 		public void RelationsOneToManyWithWhereAndOrder()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -182,15 +182,15 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(1, blog.PublishedPosts.Count);
 
 			Assert.AreEqual(3, blog.RecentPosts.Count);
-			Assert.AreEqual( post3.Id, (blog.RecentPosts[0] as Post).Id );
-			Assert.AreEqual( post2.Id, (blog.RecentPosts[1] as Post).Id );
-			Assert.AreEqual( post1.Id, (blog.RecentPosts[2] as Post).Id );
+			Assert.AreEqual(post3.Id, (blog.RecentPosts[0] as Post).Id);
+			Assert.AreEqual(post2.Id, (blog.RecentPosts[1] as Post).Id);
+			Assert.AreEqual(post1.Id, (blog.RecentPosts[2] as Post).Id);
 		}
 
 		[Test]
 		public void RelationsOneToOne()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Employee), typeof(Award) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Employee), typeof(Award));
 			Recreate();
 
 			Award.DeleteAll();
@@ -201,13 +201,13 @@ namespace Castle.ActiveRecord.Tests
 			emp.LastName = "doe";
 			emp.Save();
 
-			Assert.AreEqual(1, Employee.FindAll().Length );
+			Assert.AreEqual(1, Employee.FindAll().Length);
 
 			Award award = new Award(emp);
 			award.Description = "Invisible employee";
 			award.Save();
 
-			Assert.AreEqual(1, Award.FindAll().Length );
+			Assert.AreEqual(1, Award.FindAll().Length);
 
 			Employee emp2 = Employee.Find(emp.ID);
 			Assert.IsNotNull(emp2);
@@ -218,10 +218,10 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
-		[ExpectedException( typeof(NotFoundException) )]
+		[ExpectedException(typeof(NotFoundException))]
 		public void FindLoad()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -234,7 +234,7 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void SaveUpdate()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -242,8 +242,8 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog[] blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
 
 			Blog blog = new Blog();
 			blog.Name = "hammett's blog";
@@ -252,8 +252,8 @@ namespace Castle.ActiveRecord.Tests
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
 
 			blog.Name = "Something else";
 			blog.Author = "changed too";
@@ -261,17 +261,17 @@ namespace Castle.ActiveRecord.Tests
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
 
-			Assert.AreEqual( blog.Name, blogs[0].Name );
-			Assert.AreEqual( blog.Author, blogs[0].Author );
+			Assert.AreEqual(blog.Name, blogs[0].Name);
+			Assert.AreEqual(blog.Author, blogs[0].Author);
 		}
 
 		[Test]
 		public void Delete()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -279,8 +279,8 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog[] blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
 
 			Blog blog = new Blog();
 			blog.Name = "hammett's blog";
@@ -289,22 +289,22 @@ namespace Castle.ActiveRecord.Tests
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
 
 			blog.Delete();
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
-		
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
+
 		}
 
 		[Test]
 		public void DeleteAll()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -312,8 +312,8 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog[] blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
 
 			Blog blog1 = new Blog();
 			blog1.Name = "hammett's blog";
@@ -327,30 +327,30 @@ namespace Castle.ActiveRecord.Tests
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 2, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(2, blogs.Length);
 
 			Blog.DeleteAll("Author = 'g. richard bellamy'");
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
-			Assert.AreEqual( "hamilton verissimo", blogs[0].Author);
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
+			Assert.AreEqual("hamilton verissimo", blogs[0].Author);
 
 			blog1.Delete();
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
-		
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
+
 		}
 
 		[Test]
 		public void ExecuteAndCallback()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Post), typeof(Blog) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
 
 			Post.DeleteAll();
@@ -358,8 +358,8 @@ namespace Castle.ActiveRecord.Tests
 
 			Blog[] blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
 
 			Blog blog = new Blog();
 			blog.Name = "hammett's blog";
@@ -368,28 +368,50 @@ namespace Castle.ActiveRecord.Tests
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 1, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
 
 			blog.CustomAction();
 
 			blogs = Blog.FindAll();
 
-			Assert.IsNotNull( blogs );
-			Assert.AreEqual( 0, blogs.Length );
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
 		}
 
 		[Test]
 		[Ignore("Need to complete this test case!")]
 		public void RelationMap()
 		{
-			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(IntlName), typeof(Snippet) );
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(IntlName), typeof(Snippet));
 			Recreate();
 
 			IntlName n1 = new IntlName();
-			n1.AddSnippet( "pt-br", "bom dia" );
-			n1.AddSnippet( "en-us", "good morning" );
+			n1.AddSnippet("pt-br", "bom dia");
+			n1.AddSnippet("en-us", "good morning");
 			n1.Save();
+		}
+
+
+		[Test]
+		public void TestTimestampedClass()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(TimeStamped));
+			Recreate();
+
+			TimeStamped ts = new TimeStamped();
+			ts.name = "a timestamped record";
+
+			Assert.IsTrue(ts.LastSaved == DateTime.MinValue);
+			ts.Save();
+			Assert.IsFalse(ts.LastSaved == DateTime.MinValue);
+
+			DateTime origional_lastsaved = ts.LastSaved;
+
+			ts.name = "another name";
+			ts.Save();
+
+			Assert.IsFalse(ts.LastSaved == origional_lastsaved);
 		}
 	}
 }

@@ -224,6 +224,7 @@
     <Compile Include="Model\Test2ARBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\TimeStamped.cs" />
     <Compile Include="MultipleDatabasesTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

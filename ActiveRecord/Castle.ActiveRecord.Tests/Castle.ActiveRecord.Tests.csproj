@@ -329,6 +329,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\TimeStamped.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\GenericModel\Blog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
