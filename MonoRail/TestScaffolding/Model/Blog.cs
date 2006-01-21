@@ -20,7 +20,7 @@ namespace TestScaffolding.Model
 	using Castle.ActiveRecord;
 	using Iesi.Collections;
 
-	[ActiveRecord("Blogs")]
+	[ActiveRecord("NBlogs")]
 	public class Blog : ActiveRecordValidationBase
 	{
 		private int _id;

@@ -18,7 +18,7 @@ namespace TestScaffolding.Model
 
 	using Castle.ActiveRecord;
 
-	[ActiveRecord("Categories")]
+	[ActiveRecord("NCategories")]
 	public class Category : ActiveRecordBase
 	{
 		private int _id;
