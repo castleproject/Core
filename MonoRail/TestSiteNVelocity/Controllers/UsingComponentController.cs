@@ -34,6 +34,13 @@ namespace TestSiteNVelocity.Controllers
 		{			
 		}
 
+		public void InlineComponentUsingTemplatedRender()
+		{
+			PropertyBag.Add("var1", "v1");
+			PropertyBag.Add("var2", "v2");
+			PropertyBag.Add("fromPropertyBag", "items from property bag");
+		}
+
 		public void Index()
 		{
 		}

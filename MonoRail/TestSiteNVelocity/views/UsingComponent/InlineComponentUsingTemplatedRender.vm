@@ -1,0 +1,1 @@
+this is $var1 #component(TemplatedInlineViewComponent with "param1=parameters") and this is $var2 and $var1 again

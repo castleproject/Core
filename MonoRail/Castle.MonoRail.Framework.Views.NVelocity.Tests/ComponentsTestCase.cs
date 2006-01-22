@@ -74,6 +74,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		}
 
 		[Test]
+		public void InlineComponentUsingTemplatedRender()
+		{
+			DoGet("usingcomponent/inlinecomponentusingtemplatedrender.rails");
+
+			AssertSuccess();
+
+			AssertOutput("this is v1 [contains items from property bag] and this is v2 and v1 again", Output);
+		}
+
+		[Test]
 		public void InlineComponentNotOverridingRender()
 		{
 			DoGet("usingcomponent/index3.rails");

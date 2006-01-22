@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;dotNet2</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -133,6 +133,7 @@
     <Compile Include="Components\SimpleInlineViewComponent3.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components\TemplatedInlineViewComponent.cs" />
     <Compile Include="Controllers\ActionProviders\DynamicActionProvider1.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -207,6 +208,7 @@
     <None Include="views\apppath\index.vm" />
     <None Include="views\components\SimpleInlineViewComponent2\mycompview1.vm" />
     <None Include="views\components\SimpleInlineViewComponent3\default.vm" />
+    <None Include="views\components\TemplatedInlineViewComponent\templatedview.vm" />
     <None Include="views\cookies\index.vm" />
     <None Include="views\dyn\index.vm" />
     <None Include="views\flash\flashContents.vm" />
@@ -235,9 +237,12 @@
     <None Include="views\testwizard\page3.vm" />
     <None Include="views\testwizard\page4.vm" />
     <None Include="views\userlist.vm" />
+    <None Include="views\UsingComponent\CaptureFor.vm" />
+    <None Include="views\UsingComponent\CaptureForAppend.vm" />
+    <None Include="views\UsingComponent\CaptureForAppendBefore.vm" />
+    <None Include="views\UsingComponent\InlineComponentUsingTemplatedRender.vm" />
     <None Include="views\UsingComponent\index.vm" />
     <None Include="views\UsingComponent\index1.vm" />
-    <None Include="views\UsingComponent\index2.vm" />
     <None Include="views\UsingComponent\index3.vm" />
     <None Include="views\UsingComponent\index4.vm" />
     <None Include="views\UsingComponent\index5.vm" />
