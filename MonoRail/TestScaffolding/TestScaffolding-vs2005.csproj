@@ -155,6 +155,7 @@
     <Compile Include="Controllers\BlogsController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\ARFetchTestController.cs" />
     <Compile Include="Controllers\CustomerController.cs">
       <SubType>Code</SubType>
     </Compile>
