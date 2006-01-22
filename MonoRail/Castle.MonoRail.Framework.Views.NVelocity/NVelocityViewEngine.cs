@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	
 	public class NVelocityViewEngine : ViewEngineBase
 	{
-		private const String TemplateExtension = ".vm";
+		internal const String TemplateExtension = ".vm";
 		private const String TemplatePathPattern = "{0}{1}{2}";
 
 		private static IViewComponentFactory staticViewComponentFactory;

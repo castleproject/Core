@@ -166,7 +166,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			{
 				String viewToRender = contextAdapter.ViewToRender;
 
-				viewToRender = String.Format("{0}.vm", viewToRender);
+				viewToRender = viewToRender + NVelocityViewEngine.TemplateExtension;
 
 				CheckTemplateStack(context);
 
@@ -178,10 +178,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			}
 			finally
 			{
-				foreach(DictionaryEntry entry in contextAdapter.ContextVars)
-				{
-					context.Remove( entry.Key );
-				}
+				// WTF!!
+				// this might make sense when contextAdapter was a copy of the context,
+				// but not now.
+				//foreach(DictionaryEntry entry in contextAdapter.ContextVars)
+				//{
+				//	context.Remove( entry.Key );
+				//}
 			}
 		}
 
