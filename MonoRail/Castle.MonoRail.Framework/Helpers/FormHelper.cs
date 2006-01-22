@@ -169,7 +169,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				attributes["checked"] = String.Empty;
 			}
 
-			return CreateInputElement("checkbox", target, value is bool ? "true" : value, attributes);
+			return CreateInputElement("checkbox", target, "true", attributes);
 		}
 
 		#endregion
