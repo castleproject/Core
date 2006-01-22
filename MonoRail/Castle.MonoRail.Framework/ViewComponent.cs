@@ -153,7 +153,7 @@ namespace Castle.MonoRail.Framework
 
 		#endregion
 
-		#region Usefull operations
+		#region Useful operations
 
 		/// <summary>
 		/// Specifies the view to be processed after the component has finished its processing. 

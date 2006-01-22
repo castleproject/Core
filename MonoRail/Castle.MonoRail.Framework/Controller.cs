@@ -808,7 +808,7 @@ namespace Castle.MonoRail.Framework
 
 				if (exceptionToThrow != null)
 				{
-					throw exceptionToThrow;
+					throw new RailsException("Unhandled Exception while rendering view", exceptionToThrow);
 				}
 			}
 			finally
