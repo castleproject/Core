@@ -89,6 +89,11 @@ namespace Castle.MonoRail.Framework
 			get { return prefix; }
 		}
 
+		public string RequestParameterName
+		{
+			get { return null; }
+		}
+
 		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			DataBinder binder = controller.Binder;

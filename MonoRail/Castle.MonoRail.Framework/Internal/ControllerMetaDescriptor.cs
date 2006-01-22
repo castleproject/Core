@@ -99,6 +99,10 @@ namespace Castle.MonoRail.Framework.Internal
 
 		private void CollectActions( Type controllerType )
 		{
+			// HACK: GetRealControllerType is a workaround for DYNPROXY-14 bug
+			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
+			controllerType = GetRealControllerType(controllerType);
+
 			MethodInfo[] methods = controllerType.GetMethods( BindingFlags.Public | BindingFlags.Instance );
 
 			foreach (MethodInfo method in methods)
@@ -129,6 +133,25 @@ namespace Castle.MonoRail.Framework.Internal
 					_actions[method.Name] = method;
 				}
 			}
+		}
+
+		private Type GetRealControllerType(Type controllerType)
+		{
+			Type prev = controllerType;
+
+			// try to get the first type which is not a proxy
+			// TODO: skip it in case of mixins
+			while (controllerType.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen"))
+			{
+				controllerType = controllerType.BaseType;
+				if (controllerType == typeof(SmartDispatcherController) || controllerType == typeof(Controller))
+				{
+					// oops, it's a pure-proxy controller. just let it go.
+					controllerType = prev;
+					break;
+				}
+			}
+			return controllerType;
 		}
 
 		public DefaultActionAttribute DefaultAction

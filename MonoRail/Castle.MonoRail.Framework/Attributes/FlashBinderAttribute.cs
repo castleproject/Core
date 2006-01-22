@@ -34,5 +34,10 @@ namespace Castle.MonoRail.Framework
 
 			return controller.Context.Flash[key];
 		}
+
+		public string RequestParameterName
+		{
+			get { return null; }
+		}
 	}
 }

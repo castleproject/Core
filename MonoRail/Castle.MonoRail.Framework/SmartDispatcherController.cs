@@ -60,9 +60,7 @@ namespace Castle.MonoRail.Framework
 
 		protected override void InvokeMethod(MethodInfo method, IRequest request)
 		{
-			// HACK: GetBaseDefinition() is a workaround for DYNPROXY-14
-			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
-			ParameterInfo[] parameters = method.GetBaseDefinition().GetParameters();
+			ParameterInfo[] parameters = method.GetParameters();
 
 			object[] methodArgs = BuildMethodArguments(parameters, request);
 
@@ -118,9 +116,27 @@ namespace Castle.MonoRail.Framework
 
 			ParameterInfo[] parameters = candidate.GetParameters();
 
-			foreach(ParameterInfo param in parameters)
+			foreach (ParameterInfo param in parameters)
 			{
-				object value = webParams.Get(GetRequestParameterName(param));
+				object[] attributes = param.GetCustomAttributes(false);
+
+				String requestParameterName = null;
+
+				foreach (object attr in attributes)
+				{
+					IParameterBinder actionParam = attr as IParameterBinder;
+					if (actionParam == null)
+						continue;
+
+					requestParameterName = actionParam.RequestParameterName;
+					if (requestParameterName != null)
+						break;
+				}
+
+				if (requestParameterName == null)
+					requestParameterName = GetRequestParameterName(param);
+
+				object value = webParams.Get(requestParameterName);
 
 				if (value != null)
 				{
@@ -155,38 +171,31 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				for(int argIndex = 0; argIndex < args.Length; argIndex++)
+				for (int argIndex = 0; argIndex < args.Length; argIndex++)
 				{
 					ParameterInfo param = parameters[argIndex];
 					paramName = param.Name;
 					paramType = param.ParameterType;
 
-					if (paramType.IsPrimitive || paramType == typeof(DateTime) || paramType == typeof(String))
+					bool handled = false;
+
+					object[] attributes = param.GetCustomAttributes(false);
+
+					foreach (object attr in attributes)
+					{
+						IParameterBinder paramBinder = attr as IParameterBinder;
+
+						if (paramBinder != null)
+						{
+							args[argIndex] = paramBinder.Bind(this, param);
+
+							handled = true; break;
+						}
+					}
+
+					if (!handled)
 					{
 						args[argIndex] = ConvertUtils.Convert(param.ParameterType, paramName, allParams, files);
-					}
-					else
-					{
-						bool handled = false;
-
-						object[] attributes = param.GetCustomAttributes(false);
-						
-						foreach(object attr in attributes)
-						{
-							IParameterBinder paramBinder = attr as IParameterBinder;
-
-							if (paramBinder != null)
-							{
-								args[argIndex] = paramBinder.Bind(this, param);
-
-								handled = true; break;
-							}
-						}
-
-						if (!handled)
-						{
-							args[argIndex] = ConvertUtils.Convert(param.ParameterType, paramName, allParams, files);
-						}
 					}
 				}
 			}

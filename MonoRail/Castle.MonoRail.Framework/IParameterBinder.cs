@@ -14,10 +14,13 @@
 
 namespace Castle.MonoRail.Framework
 {
+	using System;
 	using System.Reflection;
 
 	public interface IParameterBinder
 	{
 		object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo);
+		
+		String RequestParameterName { get; }
 	}
 }
