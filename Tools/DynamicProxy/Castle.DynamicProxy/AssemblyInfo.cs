@@ -15,6 +15,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security;
 
 [assembly: AssemblyTitle("Castle.DynamicProxy")]
 [assembly: AssemblyDescription("")]
@@ -26,6 +27,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]		
 [assembly: AssemblyVersion("1.1.5.0")]
 [assembly: CLSCompliant(true)]
+[assembly: AllowPartiallyTrustedCallers()] 
 
 #if STRONG
 [assembly: AssemblyDelaySign(false)]
