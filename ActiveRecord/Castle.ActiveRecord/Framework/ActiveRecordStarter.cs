@@ -21,6 +21,13 @@ namespace Castle.ActiveRecord
 	using System.Data;
 	using System.Reflection;
 	using System.ComponentModel;
+				
+#if dotNet2
+    
+#else
+	using System.Configuration;
+#endif
+	
 
 	using NHibernate.Cfg;
 
