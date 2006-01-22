@@ -30,87 +30,152 @@ namespace Castle.ActiveRecord
 	/// ActiveRecord functionality without direct reference
 	/// to <see cref="ActiveRecordBase"/>
 	/// </summary>
-	public static class ActiveRecordMediator<T> where T : class
+    public static class ActiveRecordMediator<T> where T : class 
 	{
-		
-		public static T Find(object id)
-		{
-			return (T)ActiveRecordBase.FindByPrimaryKey(typeof(T), id, true);
-		}
 
-		public static T TryFind(object id)
-		{
-			return (T)ActiveRecordBase.FindByPrimaryKey(typeof(T), id, false);
-		}
-		
-		public static void DeleteAll()
-		{
-			ActiveRecordBase.DeleteAll(typeof(T));
-		}
+        /// <summary>
+        /// Invokes the specified delegate passing a valid 
+        /// NHibernate session. Used for custom NHibernate queries.
+        /// </summary>
+        /// <param name="call">The delegate instance</param>
+        /// <param name="instance">The ActiveRecord instance</param>
+        /// <returns>Whatever is returned by the delegate invocation</returns>
+        public static object Execute(NHibernateDelegate call, T instance)
+        {
+            return ActiveRecordBase.Execute(typeof(T), call, instance);
+        }
 
-		public static T[] FindAll()
-		{
-			return (T[])ActiveRecordBase.FindAll(typeof(T));
-		}
+        /// <summary>
+        /// Finds an object instance by a unique ID
+        /// </summary>
+        /// <param name="id">ID value</param>
+        /// <param name="throwOnNotFound"><c>true</c> if you want to catch an exception 
+        /// if the object is not found</param>
+        /// <returns></returns>
+        /// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
+        /// <c>true</c> and the row is not found</exception>
+        public static T FindByPrimaryKey(object id, bool throwOnNotFound)
+        {
+            return (T)ActiveRecordBase.FindByPrimaryKey(typeof(T), id, throwOnNotFound);
+        }
 
-		public static T[] FindAll(params ICriterion[] criterias)
-		{
-			return (T[])ActiveRecordBase.FindAll(typeof(T), criterias);
-		}
+        /// <summary>
+        /// Finds an object instance by a unique ID
+        /// </summary>
+        /// <param name="id">ID value</param>
+        /// <returns></returns>
+        public static T FindByPrimaryKey(object id)
+        {
+            return FindByPrimaryKey(id, true);
+        }
 
-		public static T[] FindAll(ICriterion criteria, int firstResult, int maxresults)
-		{
-			return FindAll(new ICriterion[] { criteria }, firstResult, maxresults);
-		}
+        /// <summary>
+        /// Returns all instances found for the specified type.
+        /// </summary>
+        /// <returns></returns>
+        public static T[] FindAll()
+        {
+            return FindAll((Order[])null);
+        }
 
-		public static T[] FindAll(ICriterion[] criterias,int firstResult, int maxresults)
-		{
-            return (T[])ActiveRecordBase.SlicedFindAll(typeof(T), firstResult, maxresults, criterias);
-		}
+        /// <summary>
+        /// Returns a portion of the query results (sliced)
+        /// </summary>
+        public static T[] SlicedFindAll(int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
+        {
+            return (T[])ActiveRecordBase.SlicedFindAll(typeof(T), firstResult, maxresults, orders, criterias);
+        }
 
-		public static T[] FindAll(ICriterion[] criterias, Order[] orders)
-		{
-			return (T[])ActiveRecordBase.FindAll(typeof(T), orders, criterias);
-		}
+        /// <summary>
+        /// Returns a portion of the query results (sliced)
+        /// </summary>
+        public static T[] SlicedFindAll(int firstResult, int maxresults, params ICriterion[] criterias)
+        {
+            return SlicedFindAll(firstResult, maxresults, null, criterias);
+        }
 
-		public static T[] FindAll( ICriterion[] criterias, Order[] orders,int firstResult, int maxresults)
-		{
-			return (T[]) ActiveRecordBase.SlicedFindAll(typeof(T),firstResult, maxresults,orders,criterias);
-		}
+        /// <summary>
+        /// Returns all instances found for the specified type 
+        /// using sort orders and criterias.
+        /// </summary>
+        /// <param name="orders"></param>
+        /// <param name="criterias"></param>
+        /// <returns></returns>
+        public static T[] FindAll(Order[] orders, params ICriterion[] criterias)
+        {
+            return (T[])ActiveRecordBase.FindAll(typeof(T), orders, criterias);
+        }
 
+        /// <summary>
+        /// Returns all instances found for the specified type 
+        /// using criterias.
+        /// </summary>
+        /// <param name="criterias"></param>
+        /// <returns></returns>
+        public static T[] FindAll(params ICriterion[] criterias)
+        {
+            return FindAll( null, criterias);
+        }
+
+        public static void DeleteAll()
+        {
+            ActiveRecordBase.DeleteAll(typeof(T));
+        }
+
+        public static void DeleteAll(string where)
+        {
+            ActiveRecordBase.DeleteAll(typeof(T), where);
+        }
+
+        public static object ExecuteQuery(IActiveRecordQuery q)
+        {
+            return ActiveRecordBase.ExecuteQuery(q);
+        }
+
+        /// <summary>
+        /// Saves the instance to the database
+        /// </summary>
+        /// <param name="instance"></param>
         public static void Save(T instance)
         {
             ActiveRecordBase.Save(instance);
         }
 
+        /// <summary>
+        /// Creates (Saves) a new instance to the database.
+        /// </summary>
+        /// <param name="instance"></param>
         public static void Create(T instance)
         {
             ActiveRecordBase.Create(instance);
         }
 
+        /// <summary>
+        /// Persists the modification on the instance
+        /// state to the database.
+        /// </summary>
+        /// <param name="instance"></param>
         public static void Update(T instance)
         {
             ActiveRecordBase.Update(instance);
         }
 
+        /// <summary>
+        /// Deletes the instance from the database.
+        /// </summary>
+        /// <param name="instance"></param>
         public static void Delete(T instance)
         {
             ActiveRecordBase.Delete(instance);
         }
 
-        public static void Execute(T instnace, NHibernateDelegate call)
+        /// <summary>
+        /// Testing hock only.
+        /// </summary>
+        public static ISessionFactoryHolder GetSessionFactoryHolder()
         {
-            ActiveRecordBase.Execute(typeof(T), call, instnace);
+            return ActiveRecordBase.holder;
         }
-        
-        //This may return more than one result, and more than one type,
-        //so this is here just to complement the non-generic version, instead of
-        //enhancing it, like the rest of the methods here.
-        public static object ExecuteQuery(IActiveRecordQuery q)
-		{
-			return ActiveRecordBase.ExecuteQuery(q);
-		}
-
 
     }
 }

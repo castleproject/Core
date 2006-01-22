@@ -91,7 +91,7 @@ namespace Castle.ActiveRecord.Tests
 			post3.Published = true;
 			post3.Save();
 
-			Post[] posts = ActiveRecordMediator<Post>.FindAll(Expression.Eq("Blog", blog), 1, 2);
+			Post[] posts = ActiveRecordMediator<Post>.SlicedFindAll(1, 2, Expression.Eq("Blog", blog));
 			Assert.AreEqual(2, posts.Length);
 		}
 
@@ -161,7 +161,7 @@ namespace Castle.ActiveRecord.Tests
 			post1.Save();
 			post2.Save();
 
-			blog = ActiveRecordMediator<Blog>.Find(blog.Id);
+			blog = ActiveRecordMediator<Blog>.FindByPrimaryKey(blog.Id);
 
 			Assert.IsNotNull(blog);
 			Assert.IsNotNull(blog.Posts, "posts collection is null");
@@ -192,7 +192,7 @@ namespace Castle.ActiveRecord.Tests
 			post3.Published = true;
 			post3.Save();
 
-			blog = ActiveRecordMediator<Blog>.Find(blog.Id);
+            blog = ActiveRecordMediator<Blog>.FindByPrimaryKey(blog.Id);
 
 			Assert.IsNotNull(blog);
 			Assert.AreEqual(2, blog.UnPublishedPosts.Count);
@@ -264,7 +264,7 @@ namespace Castle.ActiveRecord.Tests
 
             Assert.AreEqual(1, ActiveRecordMediator<Award>.FindAll().Length);
 
-            Employee emp2 = ActiveRecordMediator<Employee>.Find(emp.ID);
+            Employee emp2 = ActiveRecordMediator<Employee>.FindByPrimaryKey(emp.ID);
 			Assert.IsNotNull(emp2);
 			Assert.IsNotNull(emp2.Award);
 			Assert.AreEqual(emp.FirstName, emp2.FirstName);
@@ -276,7 +276,7 @@ namespace Castle.ActiveRecord.Tests
 		[ExpectedException(typeof(NotFoundException))]
 		public void FindLoad()
 		{
-			ActiveRecordMediator<Blog>.Find(1);
+            ActiveRecordMediator<Blog>.FindByPrimaryKey(1);
 		}
 
 		[Test]
