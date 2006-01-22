@@ -36,5 +36,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyKeyFile("../../../CastleKey.snk")]
 [assembly: AssemblyKeyName("")]
 #else
-[assembly: AssemblyKeyFile(@"E:\dev\castleall\trunk/CastleKey.snk")]
+[assembly: AssemblyKeyFile(@"../../../../../../CastleKey.snk")]
 #endif

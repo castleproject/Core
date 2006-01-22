@@ -96,10 +96,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\AbstractServiceContainer.cs" />
+    <Compile Include="Adapters\DefaultRailsEngineContext.cs" />
     <Compile Include="Adapters\FileDictionaryAdapter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Adapters\RailsEngineContextAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Adapters\RequestAdapter.cs">
@@ -135,6 +134,7 @@
     <Compile Include="Attributes\FilterAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\FlashBinderAttribute.cs" />
     <Compile Include="Attributes\HelperAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -180,21 +180,10 @@
     <Compile Include="Controllers\FilesController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataBinder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBindError.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DelegateDynamicAction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ErrorList.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extensions\AbstractMonoRailExtension.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="EngineContextModule.cs" />
     <Compile Include="Extensions\ExceptionChaining\AbstractExceptionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -210,9 +199,7 @@
     <Compile Include="Extensions\ExceptionChaining\IExceptionHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Extensions\ExtensionComposite.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Extensions\ExtensionManager.cs" />
     <Compile Include="Extensions\IMonoRailExtension.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -252,12 +239,11 @@
     <Compile Include="Helpers\EffectsFatHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\FormHelper.cs" />
     <Compile Include="Helpers\HtmlHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\IPager.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Helpers\IPaginatedPage.cs" />
     <Compile Include="Helpers\PaginationHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -282,6 +268,7 @@
     <Compile Include="Internal\AbstractControllerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\AbstractViewComponentFactory.cs" />
     <Compile Include="Internal\ActionProviderUtil.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -295,12 +282,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\ControllerMetaDescriptor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\ConvertUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Internal\DataBindContext.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Internal\DefaultControllerFactory.cs">
@@ -366,9 +347,7 @@
     <Compile Include="Internal\WizardUtils.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IPropertyError.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="IParameterBinder.cs" />
     <Compile Include="IRailsEngineContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -402,9 +381,6 @@
     <Compile Include="ProcessEngine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProcessEngineFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="RailsException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -414,12 +390,10 @@
     <Compile Include="SmartDispatcherController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SmartViewComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ViewComponent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewComponents\CaptureFor.cs" />
     <Compile Include="Views\Aspx\ActionTo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -453,6 +427,12 @@
     <EmbeddedResource Include="Controllers\Effects2.resx" />
     <EmbeddedResource Include="Controllers\EffectsFat.resx" />
     <EmbeddedResource Include="Controllers\Validation.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
+      <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
+      <Name>Castle.Components.Binder-vs2005</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

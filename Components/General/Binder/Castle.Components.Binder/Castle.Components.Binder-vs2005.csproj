@@ -3,14 +3,14 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8C6EA891-66AF-4F48-A2CB-98669D5E7AA9}</ProjectGuid>
+    <ProjectGuid>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Castle.MonoRail.ActiveRecordScaffold</AssemblyName>
+    <AssemblyName>Castle.Components.Binder</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -18,7 +18,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>Castle.MonoRail.ActiveRecordScaffold</RootNamespace>
+    <RootNamespace>Castle.Components.Binder</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -28,7 +28,7 @@
     </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\bin\scaffold\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -74,101 +74,59 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.ActiveRecord">
-      <Name>Castle.ActiveRecord</Name>
-      <HintPath>..\..\ActiveRecord\bin\Castle.ActiveRecord.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Components.Common.TemplateEngine">
-      <Name>Castle.Components.Common.TemplateEngine</Name>
-      <HintPath>..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine">
-      <Name>Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine</Name>
-      <HintPath>..\..\Components\General\TemplateEngine\bin\Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections">
-      <Name>Iesi.Collections</Name>
-      <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <Name>log4net</Name>
-      <HintPath>..\..\SharedLibs\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="NVelocity">
-      <Name>NVelocity</Name>
-      <HintPath>..\..\SharedLibs\nvelocity\NVelocity.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <ProjectReference Include="..\..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
-      <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
-      <Name>Castle.Components.Binder-vs2005</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport-vs2005.csproj">
-      <Name>Castle.MonoRail.ActiveRecordSupport-vs2005</Name>
-      <Project>{2409063E-BE05-4596-A677-758096D1C759}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\Castle.MonoRail.Framework\Castle.MonoRail.Framework-vs2005.csproj">
-      <Name>Castle.MonoRail.Framework-vs2005</Name>
-      <Project>{EC393863-333E-49CE-94A6-654B9F323954}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractScaffoldAction.cs">
+    <Compile Include="AbstractBindingDataSource.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConfirmRemoveAction.cs">
+    <Compile Include="BindingDataSourceException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CreateAction.cs">
+    <Compile Include="BindingException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EditAction.cs">
+    <Compile Include="ConvertUtils.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\ARFormHelper.cs" />
-    <Compile Include="Helpers\PresentationHelper.cs">
+    <Compile Include="DataBinder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ListAction.cs">
+    <Compile Include="DataBindError.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NewAction.cs">
+    <Compile Include="DataSourceNode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RemoveAction.cs">
+    <Compile Include="ErrorList.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ScaffoldingSupport.cs">
+    <Compile Include="IBindingDataSourceNode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UpdateAction.cs">
+    <Compile Include="IDataBinder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Utils\CommonOperationUtils.cs">
+    <Compile Include="IndexComparer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Utils\CreationUtil.cs">
+    <Compile Include="NameValueCollectionAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="default.build" />
-    <EmbeddedResource Include="Templates\confirm.vm" />
-    <EmbeddedResource Include="Templates\edit.vm" />
-    <EmbeddedResource Include="Templates\list.vm" />
-    <EmbeddedResource Include="Templates\new.vm" />
-    <EmbeddedResource Include="Templates\remove.vm" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

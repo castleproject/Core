@@ -78,6 +78,10 @@
       <Name>Castle.ActiveRecord</Name>
       <HintPath>..\..\ActiveRecord\bin\Castle.ActiveRecord.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
       <HintPath>C:\Program Files\NUnit 2.2\bin\nunit.framework.dll</HintPath>
@@ -92,6 +96,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\..\Components\General\Binder\Castle.Components.Binder\Castle.Components.Binder-vs2005.csproj">
+      <Project>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</Project>
+      <Name>Castle.Components.Binder-vs2005</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.MonoRail.ActiveRecordSupport\Castle.MonoRail.ActiveRecordSupport-vs2005.csproj">
       <Name>Castle.MonoRail.ActiveRecordSupport-vs2005</Name>
       <Project>{2409063E-BE05-4596-A677-758096D1C759}</Project>
@@ -127,9 +135,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Model\DisconnectedPerson.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

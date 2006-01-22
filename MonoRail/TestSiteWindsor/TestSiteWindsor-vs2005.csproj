@@ -119,12 +119,10 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controllers\CookiesController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controllers\HomeController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controllers\MyComponent.cs" />
     <Compile Include="MyHttpApplication.cs">
       <SubType>Code</SubType>
     </Compile>

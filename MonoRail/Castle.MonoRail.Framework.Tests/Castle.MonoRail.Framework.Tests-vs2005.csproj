@@ -128,12 +128,6 @@
     <Compile Include="ControllerTreeTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConvertUtilsTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DataBinderTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DefaultControllerFactoryTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -161,6 +155,7 @@
     <Compile Include="Helpers\DictHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\FormHelperTestCase.cs" />
     <Compile Include="Helpers\HtmlHelperTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -183,9 +178,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServerUtilityTestCase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SmartDispatcherTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

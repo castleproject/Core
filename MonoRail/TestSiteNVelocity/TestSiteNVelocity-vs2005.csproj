@@ -133,9 +133,6 @@
     <Compile Include="Components\SimpleInlineViewComponent3.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Components\SmartComponent1.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controllers\ActionProviders\DynamicActionProvider1.cs">
       <SubType>Code</SubType>
     </Compile>
