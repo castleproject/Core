@@ -81,9 +81,14 @@ namespace Castle.ActiveRecord.Framework.Config
 				{
 					String message = String.Format("Unexpected node. Expect '{0}' found '{1}'", 
 						Config_Node_Name, node.Name);
-					
-					throw new ConfigurationException(message);
-				}
+
+#if dotNet2
+                    throw new System.Configuration.ConfigurationErrorsException(message);
+#else
+                     throw new ConfigurationException(message);
+#endif
+
+                }
 
 				Type targetType = typeof(ActiveRecordBase);
 
@@ -95,8 +100,12 @@ namespace Castle.ActiveRecord.Framework.Config
 					{
 						String message = String.Format("Invalid attribute at node '{0}'. " + 
 							"The only supported attribute is 'type'", Config_Node_Name);
-					
-						throw new ConfigurationException(message);
+
+#if dotNet2
+                        throw new System.Configuration.ConfigurationErrorsException(message);
+#else
+                     throw new ConfigurationException(message);
+#endif
 					}
 
 					String typeName = typeNameAtt.Value;
@@ -106,8 +115,12 @@ namespace Castle.ActiveRecord.Framework.Config
 					if (targetType == null)
 					{
 						String message = String.Format("Could not obtain type from name '{0}'", typeName);
-					
-						throw new ConfigurationException(message);
+
+#if dotNet2
+                        throw new System.Configuration.ConfigurationErrorsException(message);
+#else
+                     throw new ConfigurationException(message);
+#endif
 					}
 				}
 
@@ -128,7 +141,11 @@ namespace Castle.ActiveRecord.Framework.Config
 				{
 					String message = String.Format("For each 'add' element you must specify 'key' and 'value' attributes");
 
-					throw new ConfigurationException(message);
+#if dotNet2
+                    throw new System.Configuration.ConfigurationErrorsException(message);
+#else
+                     throw new ConfigurationException(message);
+#endif
 				}
 
 				dict.Add( keyAtt.Value, valueAtt.Value );

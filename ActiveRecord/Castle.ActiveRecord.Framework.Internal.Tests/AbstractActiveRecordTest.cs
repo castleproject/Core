@@ -18,7 +18,12 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 	{
 		protected IConfigurationSource GetConfigSource()
 		{
-			return System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
-		}
+#if dotNet2
+            return System.Configuration.ConfigurationManager.GetSection("activerecord") as IConfigurationSource;
+#else
+            return System.Configuration.ConfigurationSettings.GetConfig("activerecord") as IConfigurationSource;
+#endif
+
+        }
 	}
 }
