@@ -75,8 +75,8 @@ namespace Castle.Facilities.NHibernateIntegration.Tests.Internals
 			Assert.IsNotNull(session2);
 			Assert.IsNotNull(session3);
 
-			Assert.AreSame(session1, session2);
-			Assert.AreSame(session1, session3);
+			Assert.IsTrue(SessionDelegate.AreEqual(session1, session2));
+			Assert.IsTrue(SessionDelegate.AreEqual(session1, session3));
 
 			session3.Dispose();
 			session2.Dispose();

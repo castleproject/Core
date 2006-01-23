@@ -83,10 +83,8 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 			}
 			else
 			{
-				if (EnlistIfNecessary(weAreSessionOwner, transaction, wrapped))
-				{
-					wrapped = WrapSession(true, wrapped.InnerSession);
-				}
+				EnlistIfNecessary(weAreSessionOwner, transaction, wrapped);
+				wrapped = WrapSession(true, wrapped.InnerSession);
 			}
 			
 			return wrapped;
