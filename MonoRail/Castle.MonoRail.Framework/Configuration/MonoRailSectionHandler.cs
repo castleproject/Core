@@ -19,7 +19,6 @@ namespace Castle.MonoRail.Framework.Configuration
 	using System.Configuration;
 	using System.IO;
 	using System.Xml;
-
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -47,7 +46,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 		#region IConfigurationSectionHandler implementation
 
-		public object Create(object parent, object configContext, XmlNode section)
+		public virtual object Create(object parent, object configContext, XmlNode section)
 		{
 			MonoRailConfiguration config = new MonoRailConfiguration();
 

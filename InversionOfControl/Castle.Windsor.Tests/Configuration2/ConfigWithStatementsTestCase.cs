@@ -24,7 +24,7 @@ namespace Castle.Windsor.Tests.Configuration2
 	using Castle.MicroKernel;		
 
 	[TestFixture]
-	public class XslProcessorTestCase
+	public class ConfigWithStatementsTestCase
 	{
 		String dir = "../Castle.Windsor.Tests/Configuration2/";
 

@@ -58,7 +58,7 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 			IConfiguration childItem = config.Children["param1"];
 			Assert.IsNotNull(childItem);
 			Assert.AreEqual("prop1 value", childItem.Value);
-			Assert.AreEqual(null, childItem.Attributes["attr"]);
+			Assert.AreEqual("", childItem.Attributes["attr"]);
 
 			config = store.GetComponentConfiguration("component1");
 			childItem = config.Children["param1"];

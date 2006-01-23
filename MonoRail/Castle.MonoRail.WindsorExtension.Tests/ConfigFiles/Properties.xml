@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<config>
+	<?define USE_PHOTO_DEMO?>
+
+	<properties>
+		<smptSettings>
+			<attributes>
+				<smtpHost>castleproject.org</smtpHost>
+				<smtpUsername>JoeDoe</smtpUsername>
+				<smtpPassword>secret</smtpPassword>
+			</attributes>
+		</smptSettings>
+
+		<viewEngineNode>
+			<viewEngine 
+				viewPathRoot="views" 
+				customEngine="Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine, Castle.MonoRail.Framework.Views.NVelocity" />
+		</viewEngineNode>
+	</properties>
+
+</config>

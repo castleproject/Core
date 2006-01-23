@@ -55,7 +55,8 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			
 			DoGet("ARFetchTest/SavePeople.rails", args);
 			AssertSuccess();
-			// TODO: Check why random results returned by the page
+
+// TODO: Check why random results returned by the page
 //			AssertReplyContains("[1:Name 1:1]");
 //			AssertReplyContains("[2:Name 2:2]");
 //			AssertReplyContains("[0::0]");

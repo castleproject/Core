@@ -1,0 +1,6 @@
+<root>
+	<!-- this include should not be processed since it dosent have an uri attribute -->
+	<include key="test">
+		<child attr="value"/>
+	</include>	
+</root>

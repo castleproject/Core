@@ -1,0 +1,6 @@
+<configuration>
+
+    <include uri="assembly://Castle.Windsor.Tests/XmlProcessor/TestFiles/assemblyInclude1.xml"/>
+    <include uri="assembly://Castle.Windsor.Tests/XmlProcessor/TestFiles/assemblyInclude2.xml"/>
+
+</configuration>

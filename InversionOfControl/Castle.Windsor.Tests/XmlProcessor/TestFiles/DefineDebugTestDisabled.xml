@@ -1,0 +1,6 @@
+<configuration>
+	<!-- some comment -->
+	<?process instruction?>
+	<define flag="debug"/>
+    <include uri="file://..\Castle.Windsor.Tests\XmlProcessor\TestFiles\ChooseStatementTest.xml"/>
+</configuration>

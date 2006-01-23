@@ -100,6 +100,11 @@
                     Project = "{E572DC59-2A96-482F-BE39-E938AB47EA9D}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Castle.MonoRail.WindsorExtension"
+                    Project = "{6C51A1E3-7F20-4696-BFD6-829134678341}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -117,6 +122,27 @@
                     RelPath = "BasicFunctionalityTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WindsorMonoRailSectionHandlerTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigFiles\ComplexTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ConfigFiles\Pi-ComplexTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ConfigFiles\Properties.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ConfigFiles\SimpleTest.xml"
+                    BuildAction = "Content"
                 />
             </Include>
         </Files>

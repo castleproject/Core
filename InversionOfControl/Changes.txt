@@ -1,7 +1,11 @@
 RC 3
 ====
+
 - xmlinterpreter will throw an exception if a property is not defined but referenced
 using #{propertyName} syntax.(Patch from Ahmed)
+
+- XmlProcessor refactored from XmlInterpreter (kudos to Ahmed)
+  Now PI are also supported (don't forget to document this on the wiki)
 
 - Support for nested nodes on the properties. (kudos to Ahmed)
   Example:

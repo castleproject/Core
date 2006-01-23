@@ -1,0 +1,13 @@
+<monoRail includeUri="file://..\Castle.MonoRail.WindsorExtension.Tests\ConfigFiles\properties.xml"
+		useWindsorIntegration="true" 
+		customSession="Castle.MonoRail.Framework.Extensions.Session.CustomSessionExtension, Castle.MonoRail.Framework.Extensions.Session"
+		isWeb="true">
+	#{smptSettings}
+    <controllers>
+		<assembly>MoviesDemo</assembly>
+		<?if USE_PHOTO_DEMO?>
+			<assembly>PhotosDemo</assembly>	
+		<?end?>       
+    </controllers>
+	#{viewEngineNode}
+</monoRail>

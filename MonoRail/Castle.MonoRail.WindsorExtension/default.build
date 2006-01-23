@@ -63,10 +63,12 @@
 			</sources>
 
 			<references>
+				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />
 				<include name="${bin.dir}/Castle.MonoRail.Framework.Tests.dll" />
 				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
+				<include name="${bin.dir}/Castle.Windsor.dll" />
 			</references>
 		</csc>
 	</target>

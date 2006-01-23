@@ -1,0 +1,4 @@
+<root>
+	<child attr="prop1 value">=prop2 value=</child>
+	<child>prop1 value prop2 value prop3 value</child>
+</root>

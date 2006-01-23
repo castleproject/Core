@@ -1,0 +1,27 @@
+<root>
+	<?define debug?>
+	<properties>
+		<!-- some comment -->
+		<simpleProp>
+			<attributes>
+				<!-- some comment -->
+				<attr1>attr1value</attr1>
+			</attributes>
+		</simpleProp>
+		<complexProp>
+			<attributes>
+				<attr2>attr2value</attr2>
+			</attributes>
+			<grandchild>
+				<attributes>
+					<attr3>attr3value</attr3>
+				</attributes>
+			</grandchild>
+			Some Text
+		</complexProp>
+	</properties>
+	<child attSimpleProp="#{simpleProp}" attCompleProp="#{complexProp}">
+		#{simpleProp}
+		#{complexProp}
+	</child>
+</root>

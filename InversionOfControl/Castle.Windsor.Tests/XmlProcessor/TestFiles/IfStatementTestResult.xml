@@ -1,0 +1,11 @@
+<configuration>
+	<components>
+		<component id="debug" att="prop1value">
+			<item> some value </item>
+			<item2><![CDATA[ some <&> value2 ]]></item2>
+		</component>
+		<component id="qa" att="prop1value"/>
+		<component id="notprod" att="prop1value"/>
+		<component id="default" att="prop1value"/>
+	</components>		
+</configuration>

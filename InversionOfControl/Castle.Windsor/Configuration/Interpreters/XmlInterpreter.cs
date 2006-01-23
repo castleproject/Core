@@ -16,16 +16,16 @@ namespace Castle.Windsor.Configuration.Interpreters
 {
 	using System;
 	using System.Xml;
-	using System.Collections;
-	using System.Collections.Specialized;
 	using System.Configuration;
 	using System.Text;
-	using System.Text.RegularExpressions;
 
 	using Castle.Model.Resource;
 	using Castle.Model.Configuration;
 	
 	using Castle.MicroKernel;
+	using Castle.MicroKernel.SubSystems.Resource;
+
+	using Castle.Windsor.Configuration.Interpreters.XmlProcessor;
 
 	/// <summary>
 	/// Reads the configuration from a XmlFile. Sample structure:
@@ -47,17 +47,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 	/// </summary>
 	public class XmlInterpreter : AbstractInterpreter
 	{
-		/// <summary>
-		/// Properties names can contain a-zA-Z0-9_. 
-		/// i.e. #!{my_node_name} || #{ my.node.name }
-		/// spaces are trimmed
-		/// </summary>
-		private static readonly Regex PropertyValidationRegExp = new Regex(@"(\#!?\{\s*((?:\w|\.)+)\s*\})", RegexOptions.Compiled);
-
-		private readonly IDictionary properties = new HybridDictionary();
-		private readonly XslContext context = new XslContext();
-		private readonly XslProcessor processor = new XslProcessor();
-		private readonly StringBuilder buffer = new StringBuilder();
+		private IKernel kernel;
 
 		#region Constructors
 
@@ -73,19 +63,29 @@ namespace Castle.Windsor.Configuration.Interpreters
 		{
 		}
 
+		public IKernel Kernel
+		{
+			get { return kernel ; }
+			set { kernel = value; }
+		}
 		#endregion
 
 		public override void ProcessResource(IResource source, IConfigurationStore store)
 		{
-			using(source)
+			XmlProcessor.XmlProcessor processor = ( kernel == null ) ? 
+				new XmlProcessor.XmlProcessor() :
+				new XmlProcessor.XmlProcessor(
+					kernel.GetSubSystem( SubSystemConstants.ResourceKey ) as IResourceSubSystem );
+
+			try
 			{
-				XmlDocument doc = new XmlDocument();
+				XmlNode element = processor.Process(source);
 
-				doc.Load(source.GetStreamReader());
-
-				doc = processor.Process(doc, context);
-
-				Deserialize(doc.DocumentElement, store);
+				Deserialize(element, store);				
+			}
+			catch(XmlProcessorException e)
+			{
+				throw new ConfigurationException("Unable to process xml resource ", e );
 			}
 		}
 
@@ -108,15 +108,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 		private void DeserializeElement(XmlNode node, IConfigurationStore store)
 		{
-			if (IncludeNodeName.Equals(node.Name))
-			{
-				ProcessInclude(node, store);
-			}
-			else if (PropertiesNodeName.Equals(node.Name))
-			{
-				DeserializeProperties(node.ChildNodes);
-			}
-			else if (FacilitiesNodeName.Equals(node.Name))
+			if (FacilitiesNodeName.Equals(node.Name))
 			{
 				DeserializeFacilities(node.ChildNodes, store);
 			}
@@ -130,17 +122,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 			}
 		}
 
-		private void DeserializeProperties(XmlNodeList nodes)
-		{
-			foreach(XmlNode node in nodes)
-			{
-				if (node.NodeType == XmlNodeType.Element)
-				{
-					properties[node.Name] = GetDeserializedNode(node);
-				}
-			}
-		}
-
 		private void DeserializeFacilities(XmlNodeList nodes, IConfigurationStore store)
 		{
 			foreach(XmlNode node in nodes)
@@ -150,10 +131,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 					AssertNodeName(node, FacilityNodeName);
 
 					DeserializeFacility(node, store);
-				}
-				else if (IsTextNode(node))
-				{
-					DeserializeString(node.Value, FacilityNodeName, store);
 				}
 			}
 		}
@@ -176,10 +153,6 @@ namespace Castle.Windsor.Configuration.Interpreters
 					AssertNodeName(node, ComponentNodeName);
 
 					DeserializeComponent(node, store);
-				}
-				else if (IsTextNode(node))
-				{
-					DeserializeString(node.Value, ComponentsNodeName, store);
 				}
 			}
 		}
@@ -206,9 +179,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 				{
 					if (IsTextNode(child))
 					{
-						IConfiguration tempConfig = GetDeserializedString(child.Value);
-						configValue.Append(tempConfig.Value);
-						configChilds.AddRange(tempConfig.Children);
+						configValue.Append(child.Value);
 					}
 					else if (child.NodeType == XmlNodeType.Element)
 					{
@@ -221,14 +192,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 
 			foreach(XmlAttribute attribute in node.Attributes)
 			{
-				IConfiguration tempConfig = GetDeserializedString(attribute.Value);
-
-				if (tempConfig.Children.Count > 0)
-				{
-					throw new ConfigurationException("attribute value cannot reference properties with child elements");
-				}
-
-				config.Attributes.Add(attribute.Name, tempConfig.Value);
+				config.Attributes.Add(attribute.Name, attribute.Value);
 			}
 
 			config.Children.AddRange(configChilds);
@@ -236,96 +200,7 @@ namespace Castle.Windsor.Configuration.Interpreters
 			return config;
 		}
 
-		private void DeserializeString(string value, string filterElement, IConfigurationStore store)
-		{
-			IConfiguration config = GetDeserializedString(value);
-
-			foreach(IConfiguration childConfig in config.Children)
-			{
-				if (childConfig.Name != filterElement)
-				{
-					throw new ConfigurationException(String.Format("Expect element {0} found {1}", filterElement, childConfig.Name));
-				}
-				else
-				{
-					if (childConfig.Name == FacilityNodeName)
-					{
-						AssertRequiredAttribute(childConfig, "id", FacilityNodeName);
-						store.AddFacilityConfiguration(childConfig.Attributes["id"], childConfig);
-					}
-					else if (childConfig.Name == ComponentNodeName)
-					{
-						AssertRequiredAttribute(childConfig, "id", ComponentNodeName);
-						store.AddComponentConfiguration(childConfig.Attributes["id"], childConfig);
-					}
-					else
-					{
-						throw new ConfigurationException(String.Format("DeserializeString cannot handle element {0}", childConfig.Name));
-					}
-				}
-			}
-		}
-
-		private IConfiguration GetDeserializedString(string value)
-		{
-			buffer.Length = 0;
-
-			ConfigurationCollection children = new ConfigurationCollection();
-
-			int pos = 0;
-			Match match;
-
-			while((match = PropertyValidationRegExp.Match(value, pos)).Success)
-			{
-				if (pos < match.Index)
-				{
-					buffer.Append(value.Substring(pos, match.Index - pos));
-				}
-
-				string propRef = match.Groups[1].Value; // #!{ propKey }
-				string propKey = match.Groups[2].Value; // propKey
-
-				MutableConfiguration prop = properties[propKey] as MutableConfiguration;
-
-				if (prop != null)
-				{
-					buffer.Append(prop.Value);
-					children.AddRange(prop.Children);
-				}
-				else if( IsRequiredProperty(propRef) )
-				{
-					throw new ConfigurationException( String.Format("Required configuration property {0} not found", propKey));
-				}
-
-				pos += match.Index + match.Length;
-			}
-
-			// appending anything left
-			if (pos < value.Length)
-			{
-				buffer.Append(value.Substring(pos, value.Length - pos));
-			}
-
-			IConfiguration result = new MutableConfiguration("", GetConfigValue(buffer.ToString()));
-
-			result.Children.AddRange(children);
-
-			return result;
-		}
-
-		private bool IsRequiredProperty( string propRef )
-		{
-			return propRef.StartsWith( "#{" );
-		}
-
 		#endregion		
-
-		private void ProcessInclude(XmlNode includeNode, IConfigurationStore store)
-		{
-			string uri = GetRequiredAttributeValue(includeNode, "uri");
-
-			ProcessInclude(uri, store);
-		}
 
 		/// <summary>
 		/// If a config value is an empty string we return null, this is to keep

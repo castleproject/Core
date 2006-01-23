@@ -1,0 +1,12 @@
+<configuration>
+	<facilities>
+		<facility id="facility1">
+			<param1 attr="">prop1 value</param1>
+		</facility>
+	</facilities>
+	<components>
+		<component id="component1">
+			<param1 attr="prop1 value"></param1>
+		</component>
+	</components>
+</configuration>

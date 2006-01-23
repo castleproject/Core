@@ -86,11 +86,6 @@
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "Castle.MicroKernel"
-                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Model"
                     Project = "{6F052973-C8E0-41EB-BAAF-B052509B5597}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -105,6 +100,11 @@
                     Name = "Castle.DynamicProxy"
                     AssemblyName = "Castle.DynamicProxy"
                     HintPath = "..\bin\Castle.DynamicProxy.dll"
+                />
+                <Reference
+                    Name = "Castle.MicroKernel"
+                    Project = "{8C6AADEB-D099-4D2A-8F5B-4EBC12AC9159}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -247,13 +247,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\sample_config.xml"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Configuration\XmlInterpreterTestCase.cs"
+                    RelPath = "Configuration\ConfigXmlInterpreterTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\sample_config.xml"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Configuration2\config_with_choose_stmt.xml"
@@ -292,6 +292,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Configuration2\ConfigWithStatementsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration2\include1.xml"
                     BuildAction = "EmbeddedResource"
                 />
@@ -307,11 +312,6 @@
                 <File
                     RelPath = "Configuration2\resource_config_with_include.xml"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Configuration2\XslProcessorTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Configuration2\Properties\config_with_missing_properties.xml"
@@ -411,6 +411,223 @@
                 />
                 <File
                     RelPath = "ModelBuilders\methodusage1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\XmlProcessorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyInclude1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyInclude2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyIncludeTestDisabled.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\AssemblyIncludeTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatement2Test.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatement2TestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ChooseStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ComplexPropertiesTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\ComplexPropertiesTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDebugTestDisabled.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDebugTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDefaultTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\DefineDefaultTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\IfStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\IfStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\include1.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\include2.xml"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidElseWithFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidElsifWithNoFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidIfWithNoFlag.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidPropertiesMissing.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\InvalidUnbalancedIfStatement.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiInclude2Test.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiInclude2TestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiIncludeTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\MultiIncludeTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatement2Test.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatement2TestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ChooseStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexChooseStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-ComplexDefineDefaultTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDebugTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDebugTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDefaultTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\Pi-DefineDefaultTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PI-IfStatementTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PI-IfStatementTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesMissingSilentTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesMissingSilentTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesWithAttributesTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\PropertiesWithAttributesTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimpleInclude.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimplePropertiesTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimplePropertiesTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimpleTest.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\SimpleTestResult.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\RelativeTest\Include1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XmlProcessor\TestFiles\RelativeTest\Include2.xml"
                     BuildAction = "Content"
                 />
             </Include>

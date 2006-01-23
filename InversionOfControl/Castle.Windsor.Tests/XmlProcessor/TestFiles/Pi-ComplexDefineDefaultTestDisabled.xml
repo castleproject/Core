@@ -1,0 +1,11 @@
+<configuration>
+	<?define debug?>
+	<?define prod?>
+	<?define qa?>
+
+	<?undef debug?>
+	<?undef prod?>
+	<?undef qa?>
+
+    <include uri="file://..\Castle.Windsor.Tests\XmlProcessor\TestFiles\Pi-ComplexChooseStatementTest.xml" preserve-wrapper="yes"/>
+</configuration>

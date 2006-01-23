@@ -71,6 +71,8 @@ Release Candidate 1
 
 - Refactored IParameterBinder in order to make it participate on calculations points.
 
+- Introduced WindsorMonoRailSectionHandler which has the support for statements similar to those supported
+  by windsor's XmlInterpreter
 
 Beta 5
 ======

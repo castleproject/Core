@@ -1,0 +1,11 @@
+<configuration>
+	<define flag="debug"/>
+	<define flag="prod"/>
+	<define flag="qa"/>
+
+	<undef flag="debug"/>
+	<undef flag="prod"/>
+	<undef flag="qa"/>
+
+    <include uri="file://..\Castle.Windsor.Tests\XmlProcessor\TestFiles\ChooseStatementTest.xml" preserve-wrapper="yes"/>
+</configuration>

@@ -143,6 +143,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WindsorMonoRailSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WindsorViewComponentFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

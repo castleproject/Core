@@ -1,0 +1,16 @@
+<configuration>
+	<components>
+		<properties>
+			<prop1>prop1value</prop1>
+		</properties>
+		<?if DEBUG?>
+			<component id="debug" att="#{prop1}"/>
+		<?elsif Qa?>
+			<component id="qa" att="#{prop1}"/>
+		<?elseif Prod?>
+			<component id="prod" att="#{prop1}"/>
+		<?else?>
+			<component id="default" att="#{prop1}"/>
+		<?end?>
+	</components>		
+</configuration>

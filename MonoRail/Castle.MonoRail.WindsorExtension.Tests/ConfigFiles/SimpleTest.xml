@@ -1,0 +1,14 @@
+<monoRail
+		smtpHost="castleproject.org"    
+		smtpUsername="JoeDoe"
+		smtpPassword="secret"
+		useWindsorIntegration="true" 
+		customSession="Castle.MonoRail.Framework.Extensions.Session.CustomSessionExtension, Castle.MonoRail.Framework.Extensions.Session"
+		isWeb="true">
+    <controllers>
+        <assembly>MoviesDemo</assembly>
+    </controllers>
+    <viewEngine 
+        viewPathRoot="views" 
+        customEngine="Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine, Castle.MonoRail.Framework.Views.NVelocity" />
+</monoRail>
