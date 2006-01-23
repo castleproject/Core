@@ -198,6 +198,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Controllers\ARFetchTestController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\BlogsController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

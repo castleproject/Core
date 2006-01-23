@@ -53,7 +53,16 @@
 				<include name="Castle.MonoRail.WindsorExtension.xml" />
 				<include name="Castle.MonoRail.ActiveRecordScaffold.xml" />
 				<include name="Castle.MonoRail.ActiveRecordSupport.xml" />
-
+				
+				<include name="Castle.MonoRail.Framework.pdb" />
+				<include name="Castle.MonoRail.Framework.Views.CompositeView.pdb" />
+				<include name="Castle.MonoRail.Framework.Views.NVelocity.pdb" />
+				<include name="Castle.MonoRail.TestSupport.pdb" />
+				<include name="Castle.MonoRail.Views.Brail.pdb" />
+				<include name="Castle.MonoRail.WindsorExtension.pdb" />
+				<include name="Castle.MonoRail.ActiveRecordScaffold.pdb" />
+				<include name="Castle.MonoRail.ActiveRecordSupport.pdb" />
+			
 			</fileset>
 		</copy>
 	</target>

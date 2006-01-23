@@ -34,6 +34,7 @@
 			<fileset basedir="${bin.dir}">
 				<include name="${assembly.name}" />
 				<include name="${name}.xml" />
+				<include name="${name}.pdb" if="${debug}" />
 			</fileset>
 		</copy>
 	</target>

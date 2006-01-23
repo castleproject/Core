@@ -15,8 +15,8 @@
 namespace Castle.MonoRail.Framework
 {
 	using System;
-	using System.Collections.Specialized;
 	using System.Reflection;
+
 	using Castle.Components.Binder;
 
 	public enum ParamStore
@@ -36,9 +36,9 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
 	public class DataBindAttribute : Attribute, IParameterBinder
 	{
-		private ParamStore _from = ParamStore.Params;
-		private String _exclude = String.Empty;
-		private String _allow = String.Empty;
+		private ParamStore from = ParamStore.Params;
+		private String exclude = String.Empty;
+		private String allow = String.Empty;
 		private String prefix;
 
 		public DataBindAttribute(String prefix)
@@ -53,8 +53,8 @@ namespace Castle.MonoRail.Framework
 		/// of property names to exclude from databinding.</value>
 		public String Exclude
 		{
-			get { return _exclude; }
-			set { _exclude = value; }
+			get { return exclude; }
+			set { exclude = value; }
 		}
 
 		/// <summary>
@@ -64,8 +64,8 @@ namespace Castle.MonoRail.Framework
 		/// of property names to allow from databinding.</value>
 		public String Allow
 		{
-			get { return _allow; }
-			set { _allow = value; }
+			get { return allow; }
+			set { allow = value; }
 		}
 		
 		/// <summary>
@@ -76,8 +76,8 @@ namespace Castle.MonoRail.Framework
 		/// Typically <see cref="ParamStore.Params"/>.</value>
 		public ParamStore From
 		{
-			get { return _from; }
-			set { _from = value; }
+			get { return from; }
+			set { from = value; }
 		}
 
 		/// <summary>
@@ -89,20 +89,22 @@ namespace Castle.MonoRail.Framework
 			get { return prefix; }
 		}
 
-		public string RequestParameterName
+		public int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			get { return null; }
+			IBindingDataSourceNode node = ResolveParams(controller);
+
+			node = node.ObtainNode(prefix);
+			
+			return node != null ? 10 : 0;
 		}
 
 		public virtual object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
 			DataBinder binder = controller.Binder;
 
-			NameValueCollection coll = ResolveParams(controller);
-
 			ConfigureBinder(binder, controller);
 
-			return binder.BindObject(parameterInfo.ParameterType, prefix, _exclude, _allow, new NameValueCollectionAdapter(coll));
+			return binder.BindObject(parameterInfo.ParameterType, prefix, exclude, allow, ResolveParams(controller));
 		}
 
 		protected void ConfigureBinder(DataBinder binder, SmartDispatcherController controller)
@@ -110,9 +112,17 @@ namespace Castle.MonoRail.Framework
 			binder.Files = controller.Context.Request.Files;
 		}
 
-		protected NameValueCollection ResolveParams(SmartDispatcherController controller)
+		protected IBindingDataSourceNode ResolveParams(SmartDispatcherController controller)
 		{
-			return controller.ResolveParamsSource(From);
+			switch(From)
+			{
+				case ParamStore.Form:
+					return controller.FormNode;
+				case ParamStore.QueryString:
+					return controller.QueryStringNode;
+				default:
+					return controller.ParamsNode;
+			}
 		}
 	}
 }

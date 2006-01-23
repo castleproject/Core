@@ -26,7 +26,7 @@ namespace Castle.ActiveRecord.Framework
 	/// </summary>
 	public class HookDispatcher : IInterceptor
 	{
-		private static readonly HookDispatcher _instance = new HookDispatcher();
+		private static readonly HookDispatcher instance = new HookDispatcher();
 
 		protected HookDispatcher()
 		{
@@ -34,10 +34,8 @@ namespace Castle.ActiveRecord.Framework
 
 		public static HookDispatcher Instance
 		{
-			get { return _instance; }
+			get { return instance; }
 		}
-
-		#region IInterceptor Members
 
 		/// <summary>
 		/// Called just before an object is initialized
@@ -54,9 +52,11 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns><c>true</c> if the user modified the <c>state</c> in any way</returns>
 		public bool OnLoad(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-            if (entity is ActiveRecordHooksBase)
+			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+			if (hookTarget != null)
 			{
-                return (entity as ActiveRecordHooksBase).BeforeLoad(new DictionaryAdapter(propertyNames, state));
+				return hookTarget.BeforeLoad(new DictionaryAdapter(propertyNames, state));
 			}
 
 			return false;
@@ -99,10 +99,14 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns><c>true</c> if the user modified the <c>state</c> in any way</returns>
 		public bool OnSave(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-            if (entity is ActiveRecordHooksBase) {
-                return (entity as ActiveRecordHooksBase).BeforeSave(new DictionaryAdapter(propertyNames, state));
-            }
-            return false;
+			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+			if (hookTarget != null)
+			{
+				return hookTarget.BeforeSave(new DictionaryAdapter(propertyNames, state));
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -118,9 +122,11 @@ namespace Castle.ActiveRecord.Framework
 		/// </remarks>
 		public void OnDelete(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-            if (entity is ActiveRecordHooksBase)
+			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+			if (hookTarget != null)
 			{
-                (entity as ActiveRecordHooksBase).BeforeDelete(new DictionaryAdapter(propertyNames, state));
+				hookTarget.BeforeDelete(new DictionaryAdapter(propertyNames, state));
 			}
 		}
 
@@ -130,7 +136,15 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="entities">The entities</param>
 		public void PreFlush(ICollection entities)
 		{
-			
+			foreach(object entity in entities)
+			{
+				ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+				if (hookTarget != null)
+				{
+					hookTarget.PreFlush();
+				}
+			}
 		}
 
 		/// <summary>
@@ -140,7 +154,15 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="entities">The entitites</param>
 		public void PostFlush(ICollection entities)
 		{
-			
+			foreach(object entity in entities)
+			{
+				ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+				if (hookTarget != null)
+				{
+					hookTarget.PostFlush();
+				}
+			}
 		}
 
 		/// <summary>
@@ -158,6 +180,13 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns></returns>
 		public object IsUnsaved(object entity)
 		{
+			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+			if (hookTarget != null)
+			{
+				return hookTarget.IsUnsaved();
+			}
+
 			return null;
 		}
 
@@ -180,6 +209,13 @@ namespace Castle.ActiveRecord.Framework
 		/// <returns>An array of dirty property indicies or <c>null</c> to choose default behavior</returns>
 		public int[] FindDirty(object entity, object id, object[] currentState, object[] previousState, string[] propertyNames, IType[] types)
 		{
+			ActiveRecordHooksBase hookTarget = entity as ActiveRecordHooksBase;
+
+			if (hookTarget != null)
+			{
+				return hookTarget.FindDirty(id, new DictionaryAdapter(propertyNames, previousState), new DictionaryAdapter(propertyNames, currentState), types);
+			}
+			
 			return null;
 		}
 
@@ -190,11 +226,9 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="type">A mapped type</param>
 		/// <param name="id">The identifier of the new instance</param>
 		/// <returns>An instance of the class, or <c>null</c> to choose default behaviour</returns>
-		public object Instantiate(System.Type type, object id)
+		public object Instantiate(Type type, object id)
 		{
 			return null;
 		}
-
-		#endregion
 	}
 }

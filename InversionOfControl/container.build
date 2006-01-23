@@ -31,6 +31,9 @@
 				<include name="Castle.MicroKernel.xml" />
 				<include name="Castle.Model.xml" />
 				<include name="Castle.Windsor.xml" />
+				<include name="Castle.MicroKernel.pdb"  if="${debug}" />
+				<include name="Castle.Model.pdb"  if="${debug}" />
+				<include name="Castle.Windsor.pdb"  if="${debug}" />
 			</fileset>
 		</copy>
 	</target>

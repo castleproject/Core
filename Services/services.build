@@ -17,6 +17,7 @@
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll" />
 				<include name="*.xml" />
+				<include name="*.pdb" if="${debug}" />
 			</fileset>
 		</copy>
 	</target>

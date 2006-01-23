@@ -46,6 +46,8 @@
 				<include name="${assembly.name.smtp}" />
 				<include name="${name}.xml" />
 				<include name="${name.smtp}.xml" />
+				<include name="${name}.pdb" if="${debug}" />
+				<include name="${name.smtp}.pdb" if="${debug}" />
 			</fileset>
 		</copy>
 	</target>

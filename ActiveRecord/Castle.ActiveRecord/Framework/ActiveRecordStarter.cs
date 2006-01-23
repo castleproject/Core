@@ -204,7 +204,7 @@ namespace Castle.ActiveRecord
 #if dotNet2
                 throw new System.Configuration.ConfigurationErrorsException(message);
 #else
-                     throw new ConfigurationException(message);
+                     throw new System.Configuration.ConfigurationException(message);
 #endif
 			}
 			

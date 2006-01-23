@@ -24,6 +24,8 @@
 		<delete failonerror="false">
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll" />
+				<include name="*.xml" />
+				<include name="*.pdb" />
 			</fileset>
 		</delete>
 	</target>

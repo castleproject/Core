@@ -14,13 +14,19 @@
 
 namespace Castle.MonoRail.Framework
 {
-	using System;
 	using System.Reflection;
 
+	/// <summary>
+	/// Implemented by attributes that wants to perform 
+	/// some conversion to populate a smart dispatcher 
+	/// action argument.
+	/// <seealso cref="FlashBinderAttribute"/>
+	/// <seealso cref="DataBindAttribute"/>
+	/// </summary>
 	public interface IParameterBinder
 	{
+		int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo);
+
 		object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo);
-		
-		String RequestParameterName { get; }
 	}
 }

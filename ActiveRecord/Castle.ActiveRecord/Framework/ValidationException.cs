@@ -17,8 +17,10 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Runtime.Serialization;
 
+	using Castle.ActiveRecord.Framework;
+
 	[Serializable]
-	public class ValidationException : Exception
+	public class ValidationException : ActiveRecordException
 	{
 		private String[] _validationErrorMessages;
 		/// <summary>

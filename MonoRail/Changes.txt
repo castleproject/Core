@@ -15,7 +15,7 @@ Release Candidate 1
 	</system.web>
 
 - Configuration nodes and attributes changes:
-  - mailto to mailTo
+  - mailto to mailTo 
   - mailfrom to mailFrom
   - customsession to customSession
 
@@ -68,6 +68,8 @@ Release Candidate 1
 - Extension now uses events (See ExtensionManager)
 
 - Interface IMonoRailExtension changed (has only Init method now)
+
+- Refactored IParameterBinder in order to make it participate on calculations points.
 
 
 Beta 5

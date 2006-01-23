@@ -15,10 +15,8 @@
 namespace Castle.MonoRail.ActiveRecordSupport
 {
 	using System;
-	using System.Collections.Specialized;
 	using System.Reflection;
 
-	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -66,13 +64,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			ARDataBinder binder = new ARDataBinder();
 
-			NameValueCollection coll = ResolveParams(controller);
-
 			ConfigureBinder(binder, controller);
 
 			binder.AutoLoad = AutoLoad;
 
-			return binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, new NameValueCollectionAdapter(coll));
+			return binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, ResolveParams(controller));
 		}
 	}
 }

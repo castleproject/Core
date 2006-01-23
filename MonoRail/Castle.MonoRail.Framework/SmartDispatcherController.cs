@@ -18,7 +18,7 @@ namespace Castle.MonoRail.Framework
 	using System.Reflection;
 	using System.Collections;
 	using System.Collections.Specialized;
-	
+
 	using Castle.Components.Binder;
 
 	/// <summary>
@@ -38,6 +38,10 @@ namespace Castle.MonoRail.Framework
 		private NameValueCollection formParams;
 		private NameValueCollection allParams;
 
+		private IBindingDataSourceNode queryStringNode;
+		private IBindingDataSourceNode formNode;
+		private IBindingDataSourceNode paramsNode;
+
 		private DataBinder binder;
 
 		public SmartDispatcherController() : this(new DataBinder())
@@ -52,6 +56,42 @@ namespace Castle.MonoRail.Framework
 		public DataBinder Binder
 		{
 			get { return binder; }
+		}
+
+		public IBindingDataSourceNode QueryStringNode
+		{
+			get
+			{
+				if (queryStringNode == null)
+				{
+					queryStringNode = new NameValueCollectionAdapter(Request.QueryString);
+				}
+				return queryStringNode;
+			}
+		}
+
+		public IBindingDataSourceNode FormNode
+		{
+			get
+			{
+				if (formNode == null)
+				{
+					formNode = new NameValueCollectionAdapter(Request.Form);
+				}
+				return formNode;
+			}
+		}
+
+		public IBindingDataSourceNode ParamsNode
+		{
+			get
+			{
+				if (paramsNode == null)
+				{
+					paramsNode = new NameValueCollectionAdapter(Request.Params);
+				}
+				return paramsNode;
+			}
 		}
 
 		protected override void Initialize()
@@ -76,8 +116,7 @@ namespace Castle.MonoRail.Framework
 
 			ArrayList candidates = (ArrayList) methods;
 
-			if (candidates == null)
-				return null;
+			if (candidates == null) return null;
 
 			return SelectBestCandidate(
 				(MethodInfo[]) candidates.ToArray(typeof(MethodInfo)),
@@ -116,22 +155,25 @@ namespace Castle.MonoRail.Framework
 
 			ParameterInfo[] parameters = candidate.GetParameters();
 
-			foreach (ParameterInfo param in parameters)
+			foreach(ParameterInfo param in parameters)
 			{
 				object[] attributes = param.GetCustomAttributes(false);
 
 				String requestParameterName = null;
 
-				foreach (object attr in attributes)
+				bool calculated = false;
+
+				foreach(object attr in attributes)
 				{
 					IParameterBinder actionParam = attr as IParameterBinder;
-					if (actionParam == null)
-						continue;
+					
+					if (actionParam == null) continue;
 
-					requestParameterName = actionParam.RequestParameterName;
-					if (requestParameterName != null)
-						break;
+					points += actionParam.CalculateParamPoints(this, param);
+					calculated = true;
 				}
+
+				if (calculated) continue;
 
 				if (requestParameterName == null)
 					requestParameterName = GetRequestParameterName(param);
@@ -171,7 +213,7 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
-				for (int argIndex = 0; argIndex < args.Length; argIndex++)
+				for(int argIndex = 0; argIndex < args.Length; argIndex++)
 				{
 					ParameterInfo param = parameters[argIndex];
 					paramName = param.Name;
@@ -181,7 +223,7 @@ namespace Castle.MonoRail.Framework
 
 					object[] attributes = param.GetCustomAttributes(false);
 
-					foreach (object attr in attributes)
+					foreach(object attr in attributes)
 					{
 						IParameterBinder paramBinder = attr as IParameterBinder;
 
@@ -189,7 +231,8 @@ namespace Castle.MonoRail.Framework
 						{
 							args[argIndex] = paramBinder.Bind(this, param);
 
-							handled = true; break;
+							handled = true;
+							break;
 						}
 					}
 
@@ -261,7 +304,7 @@ namespace Castle.MonoRail.Framework
 		protected internal NameValueCollection ResolveParamsSource(ParamStore from)
 		{
 			NameValueCollection webParams = null;
-	
+
 			switch(from)
 			{
 				case ParamStore.Form:

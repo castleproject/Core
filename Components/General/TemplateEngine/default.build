@@ -50,6 +50,8 @@
 				<include name="${assembly.name.nvelocity}" />
 				<include name="${name}.xml" />
 				<include name="${name.nvelocity}.xml" />
+				<include name="${name}.pdb" if="${debug}" />
+				<include name="${name.nvelocity}.pdb" if="${debug}" />
 			</fileset>
 		</copy>
 	</target>

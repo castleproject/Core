@@ -52,6 +52,9 @@
 		<copy file="${bin.dir}/${name}.xml" todir="../bin" />
 		<copy file="${bin.dir}/${name.nlog}.xml" todir="../bin" />
 		<copy file="${bin.dir}/${name.log4net}.xml" todir="../bin" />
+		<copy file="${bin.dir}/${name}.pdb" todir="../bin" if="${debug}" />
+		<copy file="${bin.dir}/${name.nlog}.pdb" todir="../bin" if="${debug}" />
+		<copy file="${bin.dir}/${name.log4net}.pdb" todir="../bin" if="${debug}" />
 	</target>
 	
 	<target name="compile" depends="init">

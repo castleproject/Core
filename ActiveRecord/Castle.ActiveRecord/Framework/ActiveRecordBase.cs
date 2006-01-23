@@ -107,6 +107,10 @@ namespace Castle.ActiveRecord
 			{
 				return call(session, instance);
 			}
+			catch(ActiveRecordException)
+			{
+				throw;
+			}
 			catch(Exception ex)
 			{
 				throw new ActiveRecordException("Error performing Execute for " + targetType.Name, ex);
@@ -146,6 +150,10 @@ namespace Castle.ActiveRecord
 				}
 
 				return null;
+			}
+			catch(ActiveRecordException)
+			{
+				throw;
 			}
 			catch(Exception ex)
 			{
@@ -209,6 +217,10 @@ namespace Castle.ActiveRecord
 
 				return CreateReturnArray(criteria, targetType);
 			}
+			catch(ActiveRecordException)
+			{
+				throw;
+			}
 			catch(Exception ex)
 			{
 				throw new ActiveRecordException("Could not perform SlicedFindAll for " + targetType.Name, ex);
@@ -259,6 +271,10 @@ namespace Castle.ActiveRecord
 				}
 
 				return CreateReturnArray(criteria, targetType);
+			}
+			catch(ActiveRecordException)
+			{
+				throw;
 			}
 			catch(Exception ex)
 			{
@@ -389,6 +405,10 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
+			catch(ActiveRecordException)
+			{
+				throw;
+			}
 			catch(Exception ex)
 			{
 				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
@@ -411,6 +431,10 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
+			catch(ActiveRecordException)
+			{
+				throw;
+			}
 			catch(Exception ex)
 			{
 				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
@@ -422,7 +446,7 @@ namespace Castle.ActiveRecord
 		}
 		
 		/// <summary>
-		/// Document this
+		/// TODO: Fabio, document this
 		/// </summary>
 		/// <param name="targetType"></param>
 		/// <param name="pkValues"></param>
@@ -430,20 +454,29 @@ namespace Castle.ActiveRecord
 		protected internal static int DeleteAll(Type targetType, IEnumerable pkValues)
 		{
 			if (pkValues == null)
+			{
 				return 0;
+			}
 
 			int counter = 0;
 			
 			foreach (int pk in pkValues)
 			{
 				Object obj = FindByPrimaryKey(targetType, pk, false);
+
 				if (obj != null) 
 				{
 					ActiveRecordBase arBase = obj as ActiveRecordBase;
+				
 					if (arBase != null)
+					{
 						arBase.Delete(); // in order to allow override of the virtual "Delete()" method
+					} 
 					else
+					{
 						ActiveRecordBase.Delete(obj);
+					}
+					
 					counter++;
 				}
 			}
@@ -468,6 +501,10 @@ namespace Castle.ActiveRecord
 				session.SaveOrUpdate(instance);
 
 				session.Flush();
+			}
+			catch(ActiveRecordException)
+			{
+				throw;
 			}
 			catch(Exception ex)
 			{
@@ -496,6 +533,10 @@ namespace Castle.ActiveRecord
 				session.Save(instance);
 
 				session.Flush();
+			}
+			catch(ActiveRecordException)
+			{
+				throw;
 			}
 			catch(Exception ex)
 			{
@@ -526,6 +567,10 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
+			catch(ActiveRecordException)
+			{
+				throw;
+			}
 			catch(Exception ex)
 			{
 				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
@@ -553,6 +598,10 @@ namespace Castle.ActiveRecord
 				session.Delete(instance);
 
 				session.Flush();
+			}
+			catch(ActiveRecordException)
+			{
+				throw;
 			}
 			catch(Exception ex)
 			{

@@ -21,6 +21,8 @@
 		<delete failonerror="false">
 			<fileset basedir="${bin.dir}">
 				<include name="*.dll" />
+				<include name="*.xml" />
+				<include name="*.pdb" />
 			</fileset>
 		</delete>
 	</target>
@@ -45,6 +47,7 @@
 				<include name="${assembly.name}" />
 				<include name="db4o.dll" />
 				<include name="${name}.xml" />
+				<include name="${name}.pdb" if="${debug}" />
 			</fileset>
 		</copy>
 	</target>

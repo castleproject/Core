@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework
 	{
 		private String flashKey;
 
-		public string FlashKey
+		public String FlashKey
 		{
 			get { return flashKey; }
 			set { flashKey = value; }
@@ -30,14 +30,21 @@ namespace Castle.MonoRail.Framework
 
 		public object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			String key = flashKey != null ? flashKey : parameterInfo.Name;
+			String key = ObtainKey(parameterInfo);
 
 			return controller.Context.Flash[key];
 		}
 
-		public string RequestParameterName
+		public int CalculateParamPoints(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
-			get { return null; }
+			String key = ObtainKey(parameterInfo);
+
+			return controller.Context.Flash[key] != null ? 10 : 0;
+		}
+
+		private String ObtainKey(ParameterInfo parameterInfo)
+		{
+			return flashKey != null ? flashKey : parameterInfo.Name;
 		}
 	}
 }

@@ -31,6 +31,7 @@
 	<target name="copy">
 		<copy file="${bin.dir}/${assembly.name}" todir="../bin" />
 		<copy file="${bin.dir}/${name}.xml" todir="../bin" />
+		<copy file="${bin.dir}/${name}.pdb" todir="../bin" if="${debug}" />
 	</target>
 	
 	<target name="compile" depends="init">

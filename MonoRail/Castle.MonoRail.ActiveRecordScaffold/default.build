@@ -17,7 +17,6 @@
 
 	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
 
-
 	<target name="clean">
 		<copy file="${test.src.dir}/App.config" tofile="${bin.dir}/${test.assembly.name}.config" />
 	</target>
@@ -75,6 +74,7 @@
 				<include name="${bin.dir}/Castle.MonoRail.ActiveRecordSupport.dll" />
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
@@ -100,6 +100,7 @@
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
 				<include name="${bin.dir}/TestScaffolding.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
 				<include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />

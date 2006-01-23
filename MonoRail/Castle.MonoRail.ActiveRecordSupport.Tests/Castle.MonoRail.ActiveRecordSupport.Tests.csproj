@@ -125,6 +125,11 @@
                     AssemblyName = "Iesi.Collections"
                     HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
                 />
+                <Reference
+                    Name = "NHibernate"
+                    AssemblyName = "NHibernate"
+                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -135,6 +140,11 @@
                 />
                 <File
                     RelPath = "ARDataBinderTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ARFetchTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

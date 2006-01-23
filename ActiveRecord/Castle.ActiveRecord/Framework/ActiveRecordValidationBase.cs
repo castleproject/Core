@@ -45,7 +45,7 @@ namespace Castle.ActiveRecord
 	///		}
 	///	</code>
 	/// </example>
-	public abstract class ActiveRecordValidationBase : ActiveRecordBase
+	public abstract class ActiveRecordValidationBase : ActiveRecordBase, NHibernate.IValidatable
 	{
 		/// <summary>
 		/// List of validators that should be executed for this class
@@ -155,49 +155,9 @@ namespace Castle.ActiveRecord
 			get { return __failedProperties; }
 		}
 
-		/// <summary>
-		/// Saves the instance information to the database.
-		/// May Create or Update the instance depending 
-		/// on whether it has a valid ID.
-		/// </summary>
-		public override void Save()
+		void NHibernate.IValidatable.Validate()
 		{
-			if (IsValid()) 
-			{
-				base.Save();
-			}
-			else
-			{
-				OnNotValid();
-			}
-		}
-
-		/// <summary>
-		/// Creates (Saves) a new instance to the database.
-		/// </summary>
-		public override void Create()
-		{
-			if (IsValid()) 
-			{
-				base.Create();
-			}
-			else
-			{
-				OnNotValid();
-			}
-		}
-
-		/// <summary>
-		/// Persists the modification on the instance
-		/// state to the database.
-		/// </summary>
-		public override void Update()
-		{
-			if (IsValid()) 
-			{
-				base.Update();
-			}
-			else
+			if (!IsValid())
 			{
 				OnNotValid();
 			}

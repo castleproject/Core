@@ -94,6 +94,7 @@
 				<include name="${bin.dir}/Castle.MonoRail.TestSupport.dll" />
 				<include name="${bin.dir}/TestScaffolding.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
+				<include name="${bin.dir}/NHibernate.dll" />
 			</references>
 		</csc>
 	</target>
