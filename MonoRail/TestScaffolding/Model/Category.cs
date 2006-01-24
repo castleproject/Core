@@ -46,5 +46,10 @@ namespace TestScaffolding.Model
 			get { return _name; }
 			set { _name = value; }
 		}
+
+		public static Category[] FindAll()
+		{
+			return (Category[]) FindAll(typeof(Category));
+		}
 	}
 }

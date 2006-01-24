@@ -29,8 +29,9 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 	{
 		private FormHelper helper;
 		private Product product;
+		private SimpleUser user;
 
-		[TestFixtureSetUp]
+		[SetUp]
 		public void Init()
 		{
 			CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
@@ -41,10 +42,12 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			helper = new FormHelper();
 
 			product = new Product("memory card", 10, (decimal) 12.30);
+			user = new SimpleUser();
 
 			HomeController controller = new HomeController();
 
 			controller.PropertyBag.Add("product", product);
+			controller.PropertyBag.Add("user", user);
 			controller.PropertyBag.Add("sendemail", true);
 			controller.PropertyBag.Add("confirmation", "abc");
 
@@ -168,7 +171,94 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 				"<option value=\"1\">cat1</option>\r\n<option value=\"2\" selected>cat2</option>\r\n</select>",
 				helper.Select("product.category.id", list, DictHelper.Create("value=id", "text=name") ));
 		}
+
+		[Test]
+		public void SelectWithNoSelection()
+		{
+			ArrayList list = new ArrayList();
+			list.Add(new Role(1, "role1"));
+			list.Add(new Role(2, "role2"));
+
+			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
+				"<option value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
+				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
+		}
+
+		[Test]
+		public void SelectWithSelection()
+		{
+			ArrayList list = new ArrayList();
+			list.Add(new Role(1, "role1"));
+			list.Add(new Role(2, "role2"));
+
+			user.Roles.Add(new Role(1, "role1"));
+			user.Roles.Add(new Role(2, "role2"));
+
+			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
+				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\" selected>role2</option>\r\n</select>",
+				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
+		}
+
+		[Test]
+		public void SelectWithSelection2()
+		{
+			ArrayList list = new ArrayList();
+			list.Add(new Role(1, "role1"));
+			list.Add(new Role(2, "role2"));
+
+			user.Roles.Add(new Role(1, "role1"));
+
+			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
+				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
+				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
+		}
+
+		[Test]
+		public void SelectWithArraySelection()
+		{
+			ArrayList list = new ArrayList();
+			list.Add(new Role(1, "role1"));
+			list.Add(new Role(2, "role2"));
+
+			user.Roles.Add(new Role(1, "role1"));
+			user.Roles.Add(new Role(2, "role2"));
+
+			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
+				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\" selected>role2</option>\r\n</select>",
+				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
+		}
+
+		[Test]
+		public void SelectWithArraySelection2()
+		{
+			ArrayList list = new ArrayList();
+			list.Add(new Role(1, "role1"));
+			list.Add(new Role(2, "role2"));
+
+			user.Roles.Add(new Role(1, "role1"));
+
+			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
+				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
+				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
+		}
+
+		[Test]
+		public void SelectWithArraySelectionNoId()
+		{
+			ArrayList list = new ArrayList();
+			list.Add(new Role(1, "role1"));
+			list.Add(new Role(2, "role2"));
+
+			user.Roles.Add(new Role(1, "role1"));
+			user.Roles.Add(new Role(2, "role2"));
+
+			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
+				"<option selected>role1</option>\r\n<option selected>role2</option>\r\n</select>",
+				helper.Select("user.RolesAsArray", list));
+		}
 	}
+
+	#region Classes skeletons
 
 	public class Product
 	{
@@ -243,4 +333,81 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			set { name = value; }
 		}
 	}
+
+	public class Role
+	{
+		private int id;
+		private String name;
+
+		public Role(int id, string name)
+		{
+			this.id = id;
+			this.name = name;
+		}
+
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		public String Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public override bool Equals(object obj)
+		{
+			Role other = obj as Role;
+			
+			if (other != null)
+			{
+				return other.Id == Id;
+			}
+
+			return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return id;
+		}
+
+		public override string ToString()
+		{
+			return name;
+		}
+	}
+
+	public class SimpleUser
+	{
+		private int id;
+		private String name;
+		private ArrayList roles = new ArrayList();
+
+		public int Id
+		{
+			get { return id; }
+			set { id = value; }
+		}
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		public Role[] RolesAsArray
+		{
+			get { return (Role[]) roles.ToArray(typeof(Role)); }
+		}
+
+		public IList Roles
+		{
+			get { return roles; }
+		}
+	}
+
+	#endregion
 }

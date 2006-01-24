@@ -38,8 +38,8 @@ namespace Castle.MonoRail.Framework.Helpers
 	/// </summary>
 	public class FormHelper : AbstractHelper
 	{
-		private static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
-		private static readonly BindingFlags FieldFlags = BindingFlags.GetField|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+		protected static readonly BindingFlags PropertyFlags = BindingFlags.GetProperty|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
+		protected static readonly BindingFlags FieldFlags = BindingFlags.GetField|BindingFlags.Public|BindingFlags.Instance|BindingFlags.IgnoreCase;
 
 		#region TextFieldValue
 
@@ -194,6 +194,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			String firstOption = null; 
 			String valueProperty = null; 
 			String textProperty = null;
+			String name = target;
 
 			if (attributes != null)
 			{
@@ -205,11 +206,17 @@ namespace Castle.MonoRail.Framework.Helpers
 				
 				textProperty = (String) attributes["text"];
 				attributes.Remove("text");
+
+				if (attributes.Contains("name"))
+				{
+					name = (String) attributes["name"];
+					attributes.Remove("name");
+				}
 			}
 
 			writer.WriteBeginTag("select");
 			writer.WriteAttribute("id", id);
-			writer.WriteAttribute("name", target);
+			writer.WriteAttribute("name", name);
 			writer.Write(" ");
 			writer.Write(GetAttributes(attributes));
 			writer.Write(HtmlTextWriter.TagRightChar);
@@ -233,10 +240,18 @@ namespace Castle.MonoRail.Framework.Helpers
 				{
 					object guidanceElem = enumerator.Current;
 
-					bool isMultiple = (selectedValue != null && selectedValue.GetType().IsArray);
+					Type selectedType = null;
+
+					if (selectedValue != null)
+					{
+						selectedType = selectedValue.GetType();
+					}
+
+					bool isMultiple = (selectedType != null && 
+						(selectedType.IsArray || typeof(ICollection).IsAssignableFrom(selectedType)));
 				
-					MethodInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
-					MethodInfo textMethodInfo = null;
+					PropertyInfo valueMethodInfo = GetMethod(guidanceElem, valueProperty);
+					PropertyInfo textMethodInfo = null;
 				
 					if (textProperty != null)
 					{
@@ -247,11 +262,13 @@ namespace Castle.MonoRail.Framework.Helpers
 					{
 						object value = null;
 
-						if (valueMethodInfo != null) 
-							value = valueMethodInfo.Invoke(elem, null);
+						if (valueMethodInfo != null)
+						{
+							value = valueMethodInfo.GetValue(elem, null);
+						}
 
 						object text = textMethodInfo != null ? 
-							textMethodInfo.Invoke(elem, null) : elem.ToString();
+							textMethodInfo.GetValue(elem, null) : elem.ToString();
 
 						writer.WriteBeginTag("option");
 					
@@ -259,13 +276,19 @@ namespace Castle.MonoRail.Framework.Helpers
 
 						if (value != null)
 						{
-							selected = IsSelected(value, selectedValue, isMultiple);
+							if (selectedType != null)
+							{
+								selected = IsSelected(value, selectedValue, selectedType, valueMethodInfo, isMultiple);
+							}
 
 							writer.WriteAttribute("value", value.ToString());
 						}
 						else
 						{
-							selected = IsSelected(text, selectedValue, isMultiple);
+							if (selectedType != null)
+							{
+								selected = IsSelected(elem, selectedValue, selectedType, textMethodInfo, isMultiple);
+							}
 						}
 
 						if (selected) writer.Write(" selected");
@@ -363,7 +386,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			return instance;
 		}
 
-		private object ObtainRootInstance(RequestContext context, String target)
+		protected object ObtainRootInstance(RequestContext context, String target)
 		{
 			object rootInstance = null;
 
@@ -401,16 +424,36 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// to the <paramref name="selectedValue"/>. Or if <paramref name="selectedValue"/> is an
 		/// array <paramref name="value"/> is selected if <see cref="Array.IndexOf"/> can find it
 		/// in <paramref name="selectedValue"/>.</remarks>
-		private bool IsSelected(object value, object selectedValue, bool isMultiple)
+		private bool IsSelected(object value, object selectedValue, Type selectedType, PropertyInfo property, bool isMultiple)
 		{
 			if (!isMultiple)
 			{
-				return value.Equals(selectedValue);
+				if (selectedType != selectedValue.GetType() && property != null)
+				{
+					value = property.GetValue(value, null);
+				}
+
+				return value != null ? value.Equals(selectedValue) : false;
 			}
-			else
+			else 
 			{
-				return Array.IndexOf( (Array) selectedValue, value ) != -1;
+				foreach(object item in (IEnumerable)selectedValue)
+				{
+					object newValue = item;
+
+					if (property != null)
+					{
+						newValue = property.GetValue(item, null);
+					}
+
+					if (newValue != null && newValue.Equals(value))
+					{
+						return true;
+					}
+				}
 			}
+
+			return false;
 		}
 		
 		/// <summary>
@@ -423,12 +466,12 @@ namespace Castle.MonoRail.Framework.Helpers
 		/// <remarks>This method is used to get the <see cref="MethodInfo"/> to retrieve
 		/// specified property from the specified type.</remarks>
 		/// <exception cref="ArgumentNullException">Thrown is <paramref name="elem"/> is <c>null</c>.</exception>
-		private MethodInfo GetMethod(object elem, String property)
+		private PropertyInfo GetMethod(object elem, String property)
 		{
 			if (elem == null) throw new ArgumentNullException("elem");
 			if (property == null) return null;
 
-			return elem.GetType().GetMethod("get_" + property, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+			return elem.GetType().GetProperty(property, PropertyFlags);
 		}
 	}
 }
