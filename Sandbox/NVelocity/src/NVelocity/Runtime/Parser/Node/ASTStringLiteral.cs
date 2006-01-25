@@ -54,7 +54,10 @@ namespace NVelocity.Runtime.Parser.Node
     * <http://www.apache.org/>.
     */
 	using System;
+	using System.Collections.Specialized;
 	using System.IO;
+	using System.Text.RegularExpressions;
+
 	using NVelocity.Context;
 
 	/// <summary> ASTStringLiteral support.  Will interpolate!
@@ -69,6 +72,18 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </version>
 	public class ASTStringLiteral : SimpleNode
 	{
+		// will match any string in this format
+		// "%{ key1 = 'value1' key2 = 'value2' }"
+		// quotes can be escaped using \'
+		// "%{ key1 = '\'value1\'' key2 = 'value2' }"
+		private const string dictPairPattern = @" (\w+) \s* = \s* '(.*?)(?<!\\)' "; 
+		private readonly Regex dictPairRegex = new Regex( dictPairPattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled );
+
+		// this pattern is used to make sure the dictionary is well formed
+		// we might provide some optimizations here  \s* (?:" + dictPairPattern + @")+ \s* 
+		private const string dictPattern = @"^%\{.*\}$";
+		private readonly Regex dictRegex = new Regex( dictPattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled );
+
 		/* cache the value of the interpolation switch */
 		private bool interpolate = true;
 		private SimpleNode nodeTree = null;
@@ -160,6 +175,8 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Value(InternalContextAdapter context)
 		{
+			string result = image;
+
 			if (interpolate)
 			{
 				try
@@ -181,7 +198,7 @@ namespace NVelocity.Runtime.Parser.Node
 		    *  remove the space from the end (dreaded <MORE> kludge)
 		    */
 
-					return ret.Substring(0, (ret.Length - 1) - (0));
+					result = ret.Substring(0, (ret.Length - 1) - (0));
 				}
 				catch (Exception e)
 				{
@@ -190,16 +207,50 @@ namespace NVelocity.Runtime.Parser.Node
 		    *  and output the literal 
 		    */
 					rsvc.Error("Error in interpolating string literal : " + e);
+					result = image;
 				}
 			}
 
-			/*
-	    *  ok, either not allowed to interpolate, there wasn't 
-	    *  a ref or directive, or we failed, so
-	    *  just output the literal
-	    */
+			if( IsDictionaryString(result) )
+			{
+				return InterpolateDictionaryString(result);
+			}
+			else
+			{
+				return result;
+			}
+		}
 
-			return image;
+		/// <summary>
+		/// Interpolates the dictionary string.
+		/// dictionary string is any string in the format
+		/// "%{ key='value' }"
+		/// </summary>
+		/// <param name="result">A hashtable result.</param>
+		/// <returns></returns>
+		private object InterpolateDictionaryString( string result )
+		{
+			MatchCollection matches = dictPairRegex.Matches( result );
+
+			HybridDictionary hash = new HybridDictionary(matches.Count, true);
+
+			foreach(Match match in matches)
+			{
+				string key   = match.Groups[1].Value;
+				string value = match.Groups[2].Value;
+
+				// remove any escaped singlequote with a singlequote
+				value = value.Replace( @"\'", "'" );
+
+				hash.Add( key, value);
+			}
+
+			return hash;
+		}
+
+		private bool IsDictionaryString( string str )
+		{
+			return dictRegex.IsMatch(str);
 		}
 	}
 }

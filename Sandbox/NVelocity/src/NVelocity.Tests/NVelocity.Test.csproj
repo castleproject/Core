@@ -179,16 +179,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Test\Dvsl\TransformTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Test\Dvsl\XPathTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Test\Dvsl\" />
                 <File
                     RelPath = "Test\Provider\BoolObj.cs"
                     SubType = "Code"

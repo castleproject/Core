@@ -134,12 +134,12 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public override Object Execute(Object o, InternalContextAdapter context)
 		{
-			/*
-	    *  new strategy (strategery!) for introspection. Since we want 
-	    *  to be thread- as well as context-safe, we *must* do it now,
-	    *  at execution time.  There can be no in-node caching,
-	    *  but if we are careful, we can do it in the context.
-	    */
+		   /*
+			*  new strategy (strategery!) for introspection. Since we want 
+			*  to be thread- as well as context-safe, we *must* do it now,
+			*  at execution time.  There can be no in-node caching,
+			*  but if we are careful, we can do it in the context.
+			*/
 
 			MethodInfo method = null;
 			PropertyInfo property = null;

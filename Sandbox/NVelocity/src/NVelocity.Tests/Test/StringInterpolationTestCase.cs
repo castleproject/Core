@@ -18,15 +18,14 @@ namespace NVelocity.Test
 	using System.IO;
 	using System.Collections;
 	using System.Collections.Specialized;
-
+	using System.Text;
 	using NUnit.Framework;
 	using NVelocity.App;
 
 	[TestFixture]
 	public class StringInterpolationTestCase
 	{
-		[Test]
-		public void InterpolationWithEquals()
+		public string Eval(string text)
 		{
 			VelocityContext c = new VelocityContext();
 			c.Put("survey", 1 );
@@ -44,12 +43,55 @@ namespace NVelocity.Test
 
 			ok = ve.Evaluate(c, sw, 
 				"ContextTest.CaseInsensitive", 
-				"$AjaxHelper2.LinkToRemote(\"Remove\", " + 
-					"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
-					"$DictHelper.CreateDict( \"failure=error\", \"success=emaillist\", \"with=return 'survey=${survey}&id=${id}'\" ) )");
+				text );
 
 			Assert.IsTrue(ok, "Evalutation returned failure");
-			Assert.AreEqual("Remove /Participant/DeleteEmail.rails return 'survey=1&id=2'", sw.ToString());			
+			return sw.ToString();						
+		}
+
+		[Test]
+		public void InterpolationWithDictInterpolation()
+		{
+			string result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
+				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
+				" \"%{ afailure='error' bsuccess='emaillist' cwith='return \\'survey=${survey}&id=${id}\\'' }\")");
+
+			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error> bsuccess=<emaillist> cwith=<return 'survey=1&id=2'>", result );			
+
+			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
+				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
+				" \"%{afailure='error' bsuccess='emaillist' cwith='return \\'survey=${survey}&id=${id}\\''}\")");
+
+			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error> bsuccess=<emaillist> cwith=<return 'survey=1&id=2'>", result );			
+
+			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
+				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
+				" \"%{afailure='error'}\")");
+
+			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error>", result );			
+
+			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
+				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
+				" \"%{ afailure = 'error' }\")");
+
+			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error>", result );			
+
+			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
+				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
+				@" ""%{afailure = '\'error\'' }"")");
+
+			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<'error'>", result );			
+		}
+
+		[Test]
+		public void InterpolationWithDictHelper()
+		{
+			string result = Eval(
+				"$AjaxHelper2.LinkToRemote(\"Remove\", " + 
+					"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
+					"$DictHelper.CreateDict( \"afailure=error\", \"bsuccess=emaillist\", \"cwith=return 'survey=${survey}&id=${id}'\"))");
+
+			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error> bsuccess=<emaillist> cwith=<return 'survey=1&id=2'>", result);			
 		}
 	}
 
@@ -83,14 +125,28 @@ namespace NVelocity.Test
 		{
 			if (options == null) throw new ArgumentNullException("options");
 
-			return name + " " + url + " " + options["with"];
+			StringBuilder sb = new StringBuilder(name + " " + url + " ");
+
+			
+			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[] ;
+
+			Array.Sort( keysSorted );
+
+			foreach(string key in keysSorted)
+			{
+				sb.Append(key).Append("=<").Append(options[key]).Append("> ");
+			}
+
+			sb.Length--;
+
+			return sb.ToString();
 		}
 
-		public String LinkToRemote2(String name, String url, IDictionary options)
+		public String LinkToRemote(String name, String url, string options)
 		{
 			if (options == null) throw new ArgumentNullException("options");
 
-			return name + " " + url + " " + options["success"] + options["failure"];
+			return name + " " + url + " " + options;
 		}
 	}
 }
