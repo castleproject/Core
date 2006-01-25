@@ -183,13 +183,18 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		public String Select(String target, IEnumerable dataSource, IDictionary attributes)
 		{
+		    object selectedValue = ObtainValue(target);
+		    
+		    return Select(target, selectedValue, dataSource, attributes);		    
+		}
+		
+		public String Select(String target, object selectedValue, IEnumerable dataSource, IDictionary attributes)
+		{
 			String id = target.Replace('.', '_');
 
 			StringBuilder sb = new StringBuilder();
 			StringWriter sbWriter = new StringWriter(sb);
 			HtmlTextWriter writer = new HtmlTextWriter(sbWriter);
-
-			object selectedValue = ObtainValue(target);
 
 			String firstOption = null; 
 			String valueProperty = null; 

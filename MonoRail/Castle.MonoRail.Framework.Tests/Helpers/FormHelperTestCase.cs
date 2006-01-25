@@ -34,7 +34,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		[SetUp]
 		public void Init()
 		{
-			CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
 			Thread.CurrentThread.CurrentCulture	= en;
 			Thread.CurrentThread.CurrentUICulture = en;
@@ -125,6 +125,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 		public void SimplisticSelect()
 		{
 			ArrayList list = new ArrayList();
+
 			list.Add("cat1");
 			list.Add("cat2");
 

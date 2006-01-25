@@ -73,6 +73,10 @@ Release Candidate 1
 
 - Introduced WindsorMonoRailSectionHandler which has the support for statements similar to those supported
   by windsor's XmlInterpreter
+  
+- Added ARDataBindAttribute.NullWhenPrimaryKey which forces the databinder to
+  ignore and do not load a record if the retrieved PK has the value assigned to this
+  property (kudos to Roelof Blom <roelof.blom@gmail.com>)
 
 Beta 5
 ======

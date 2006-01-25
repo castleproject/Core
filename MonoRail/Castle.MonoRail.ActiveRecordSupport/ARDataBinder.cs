@@ -39,17 +39,13 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	{
 		protected internal static readonly object[] EmptyArg = new object[0];
 		
-		private bool autoLoad, validate, persistchanges;
+		private bool autoLoad, persistchanges;
+        
+		private object nullWhenPrimaryKey;
 
 		public ARDataBinder() : base()
 		{
 		}
-
-//		public bool Validate
-//		{
-//			get { return validate; }
-//			set { validate = value; }
-//		}
 
 		public bool PersistChanges
 		{
@@ -62,6 +58,12 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			get { return autoLoad; }
 			set { autoLoad = value; }
 		}
+
+        public object NullWhenPrimaryKey
+        {
+            get { return nullWhenPrimaryKey; }
+            set { nullWhenPrimaryKey = value; }
+        }
 
 		protected override object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
 		{
@@ -99,7 +101,14 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 				object id = ObtainPKValue(model, node, paramPrefix, out pkModel);
 
-				instance = SupportingUtils.FindByPK(instanceType, id);
+                if (nullWhenPrimaryKey != null && id.Equals(NullWhenPrimaryKey))
+                {
+                    instance = null;
+                }
+                else
+                {
+                    instance = SupportingUtils.FindByPK(instanceType, id);
+                }
 			}
 			else
 			{
@@ -139,6 +148,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		protected override bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
 		{
+            if (nullWhenPrimaryKey != null && instance == null)
+            {
+                return true;
+            }
 			object stackInstance = InstanceOnStack;
 
 			if (stackInstance == null)
@@ -237,10 +250,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (model == null) return;
 
-			if (validate)
-			{
-				ValidateInstances(instance);
-			}
+//			if (validate)
+//			{
+//				ValidateInstances(instance);
+//			}
 
 			if (persistchanges)
 			{
@@ -272,32 +285,32 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 		}
 
-		private void ValidateInstances(object instances)
-		{
-			Type instanceType = instances.GetType();
-			ActiveRecordValidationBase[] records = null;
-
-			if (instanceType.IsArray)
-			{
-				records = instances as ActiveRecordValidationBase[];
-			}
-			else if (typeof(ActiveRecordValidationBase).IsAssignableFrom(instanceType))
-			{
-				records = new ActiveRecordValidationBase[] {(ActiveRecordValidationBase) instances};
-			}
-
-			if (records != null)
-			{
-				foreach(ActiveRecordValidationBase record in records)
-				{
-					if (!record.IsValid())
-					{
-						throw new RailsException("Error validating {0} {1}",
-							record.GetType().Name, string.Join("\n", record.ValidationErrorMessages));
-					}
-				}
-			}
-		}
+//		private void ValidateInstances(object instances)
+//		{
+//			Type instanceType = instances.GetType();
+//			ActiveRecordValidationBase[] records = null;
+//
+//			if (instanceType.IsArray)
+//			{
+//				records = instances as ActiveRecordValidationBase[];
+//			}
+//			else if (typeof(ActiveRecordValidationBase).IsAssignableFrom(instanceType))
+//			{
+//				records = new ActiveRecordValidationBase[] {(ActiveRecordValidationBase) instances};
+//			}
+//
+//			if (records != null)
+//			{
+//				foreach(ActiveRecordValidationBase record in records)
+//				{
+//					if (!record.IsValid())
+//					{
+//						throw new RailsException("Error validating {0} {1}",
+//							record.GetType().Name, string.Join("\n", record.ValidationErrorMessages));
+//					}
+//				}
+//			}
+//		}
 
 		protected void SaveManyMappings(object instance, ActiveRecordModel model, IBindingDataSourceNode node)
 		{
