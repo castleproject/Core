@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 
 	using Castle.ActiveRecord.Tests.Validation.Model;
 
-	[TestFixture, Ignore("Being refactored")]
+	[TestFixture]
 	public class ValidationTestCase : AbstractActiveRecordTest
 	{
 		[Test]
@@ -72,7 +72,50 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.AreEqual(0, user.ValidationErrorMessages.Length);
 		}
 
-		[Test]
+		[Test, ExpectedException(typeof(ValidationException))]
+		public void InvalidClassIsNotPersisted()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(User) );
+			Recreate();
+
+			int id;
+
+			using(new SessionScope())
+			{
+				User user = new User();
+
+				user.Name = "hammett";
+				user.Login = "hammett";
+				user.Email = "hammett@gmail.com";
+				user.ConfirmationPassword = "123";
+				user.Password = "123";
+
+				user.Save();
+
+				id = user.Id;
+			}
+
+			{
+				User user = (User) 
+					ActiveRecordMediator.FindByPrimaryKey(typeof(User), id, true);
+
+				Assert.AreEqual("hammett@gmail.com", user.Email);
+				Assert.AreEqual("123", user.Password);
+				Assert.AreEqual("123", user.ConfirmationPassword);
+			}
+
+			using(new SessionScope())
+			{
+				User user = (User) 
+					ActiveRecordMediator.FindByPrimaryKey(typeof(User), id, true);
+
+				user.Email = "wrong";
+				user.ConfirmationPassword = "123x";
+				user.Password = "123y";
+			}
+		}
+
+		[Test, Ignore("For some reason NH is throw ADOException")]
 		//[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
 		public void IsUnique()
 		{

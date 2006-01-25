@@ -107,7 +107,7 @@ namespace Castle.ActiveRecord
 			{
 				return call(session, instance);
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -151,7 +151,7 @@ namespace Castle.ActiveRecord
 
 				return null;
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -217,7 +217,7 @@ namespace Castle.ActiveRecord
 
 				return CreateReturnArray(criteria, targetType);
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -272,7 +272,7 @@ namespace Castle.ActiveRecord
 
 				return CreateReturnArray(criteria, targetType);
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -405,7 +405,7 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -431,7 +431,7 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -502,7 +502,7 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -534,7 +534,7 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -567,7 +567,7 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}
@@ -599,7 +599,7 @@ namespace Castle.ActiveRecord
 
 				session.Flush();
 			}
-			catch(ActiveRecordException)
+			catch(ValidationException)
 			{
 				throw;
 			}

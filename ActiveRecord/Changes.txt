@@ -3,7 +3,7 @@ beta 4
 
 - Add more hookable methods.
 
-- Refactored Validation support (still need more tests)
+- Refactored Validation support to use NHibernate.IValidatable
 
 - Brought ActiveRecordMediator.Generic inline with ActiveRecordMediator.  This is a breaking change (removal of a few methods/renaming of a few existing).
 
