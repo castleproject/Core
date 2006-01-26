@@ -86,7 +86,7 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 
 		public void CustomAction()
 		{
-			ActiveRecordMediator.Execute(typeof (Blog), new NHibernateDelegate(MyCustomMethod), this);
+			ActiveRecordMediator<Blog>.Execute(new NHibernateDelegate(MyCustomMethod), this);
 		}
 
 		private object MyCustomMethod(ISession session, object blogInstance)

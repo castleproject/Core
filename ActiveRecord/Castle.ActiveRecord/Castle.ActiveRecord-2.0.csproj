@@ -82,9 +82,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.DynamicProxy">
-      <Name>Castle.DynamicProxy</Name>
-      <HintPath>..\lib\Castle.DynamicProxy.dll</HintPath>
+    <Reference Include="Castle.DynamicProxy, Version=1.1.5.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\InversionOfControl\bin\Castle.DynamicProxy.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Model">
       <Name>Castle.Model</Name>
@@ -94,9 +94,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <Name>log4net</Name>
-      <HintPath>..\lib\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=1.0.1.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
