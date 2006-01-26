@@ -652,6 +652,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         /// method generates the IL code for property get/set method and
         /// ordinary methods.
         /// </summary>
+        /// <param name="method">The method to implement.</param>
         /// <param name="builder"><see cref="EasyMethod"/> being constructed.</param>
         protected virtual void WriteInterceptorInvocationMethod(MethodInfo method, EasyMethod builder)
         {

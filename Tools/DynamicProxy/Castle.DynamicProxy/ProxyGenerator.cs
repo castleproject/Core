@@ -122,6 +122,7 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name="theInterface">Interface to be implemented</param>
 		/// <param name="interceptor">instance of <see cref="IInterceptor"/></param>
+        /// <param name="target">The proxy target.</param>
 		/// <returns>Proxy instance</returns>
 		public virtual object CreateProxy(Type theInterface, IInterceptor interceptor, object target)
 		{
@@ -134,6 +135,7 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name="interfaces">Array of interfaces to be implemented</param>
 		/// <param name="interceptor">instance of <see cref="IInterceptor"/></param>
+        /// <param name="target">The proxy target.</param>
 		/// <returns>Proxy instance</returns>
 		public virtual object CreateProxy(Type[] interfaces, IInterceptor interceptor, object target)
 		{
@@ -151,6 +153,7 @@ namespace Castle.DynamicProxy
 		/// <param name="theInterface"></param>
 		/// <param name="interceptor"></param>
 		/// <param name="context"></param>
+        /// <param name="target">The proxy target.</param>
 		/// <returns></returns>
 		public virtual object CreateCustomProxy(Type theInterface, 
 			IInterceptor interceptor, object target, GeneratorContext context )
@@ -164,6 +167,7 @@ namespace Castle.DynamicProxy
 		/// <param name="interfaces"></param>
 		/// <param name="interceptor"></param>
 		/// <param name="context"></param>
+        /// <param name="target">The proxy target.</param>
 		/// <returns></returns>
 		public virtual object CreateCustomProxy(Type[] interfaces, 
 			IInterceptor interceptor, object target, GeneratorContext context )
