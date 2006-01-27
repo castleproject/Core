@@ -48,6 +48,7 @@ namespace Castle.MonoRail.Framework.Adapters
 			_trace = new TraceAdapter(context.Trace);
 			_server = new ServerUtilityAdapter(context.Server);
 			_response = new ResponseAdapter(context.Response, this, ApplicationPath);
+			_url = _context.Request.RawUrl;
 		}
 
 		public Exception LastException
