@@ -72,17 +72,21 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </version>
 	public class ASTStringLiteral : SimpleNode
 	{
-		// will match any string in this format
-		// "%{ key1 = 'value1' key2 = 'value2' }"
-		// quotes can be escaped using \'
-		// "%{ key1 = '\'value1\'' key2 = 'value2' }"
-		private const string dictPairPattern = @" (\w+) \s* = \s* '(.*?)(?<!\\)' "; 
-		private readonly Regex dictPairRegex = new Regex( dictPairPattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled );
+		// begin and end dictionary string markers
+		private const string dictStart = "%{";
+		private const string dictEnd = "}";
 
-		// this pattern is used to make sure the dictionary is well formed
-		// we might provide some optimizations here  \s* (?:" + dictPairPattern + @")+ \s* 
-		private const string dictPattern = @"^%\{.*\}$";
-		private readonly Regex dictRegex = new Regex( dictPattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled );
+		// Regex for key = 'value' pairs
+		private static readonly Regex dictPairRegex = new Regex( 
+			@" (\w+) \s* = \s* '(.*?)(?<!\\)' ", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled );
+
+		// Regex for string between pairs
+		private static readonly Regex dictBetweenPairRegex = new Regex( 
+			@"^\s*,\s*$", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled );
+
+		// Regex for string at the begining or end of a dictionary string
+		private static readonly Regex dictEdgePairRegex = new Regex( 
+			@"^\s*$", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled );
 
 		/* cache the value of the interpolation switch */
 		private bool interpolate = true;
@@ -224,33 +228,70 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Interpolates the dictionary string.
 		/// dictionary string is any string in the format
-		/// "%{ key='value' }"
+		/// "%{ key='value' [,key2='value2' }"		
 		/// </summary>
-		/// <param name="result">A hashtable result.</param>
+		/// <param name="str">
+		///	If valid input a HybridDictionary with zero or more items,
+		///	otherwise the input string
+		/// </param>
 		/// <returns></returns>
-		private object InterpolateDictionaryString( string result )
+		private object InterpolateDictionaryString( string str )
 		{
-			MatchCollection matches = dictPairRegex.Matches( result );
+			MatchCollection matches = dictPairRegex.Matches( str );
 
 			HybridDictionary hash = new HybridDictionary(matches.Count, true);
 
-			foreach(Match match in matches)
+			int pos = dictStart.Length;
+
+			Match match = null;
+
+			while( ( match = dictPairRegex.Match(str, pos) ) != Match.Empty )
 			{
+				// make sure there is no invalid string before this match
+				if( !AssertDictionaryString( str.Substring(pos, match.Index - pos ), hash.Count > 0 ) )
+				{
+					return str;
+				}
+
 				string key   = match.Groups[1].Value;
 				string value = match.Groups[2].Value;
 
 				// remove any escaped singlequote with a singlequote
 				value = value.Replace( @"\'", "'" );
 
-				hash.Add( key, value);
+				hash[key] = value;
+				pos = match.Index + match.Length;
 			}
 
+			int endPos = (str.Length - dictEnd.Length);
+
+			// make sure there is invalid string after the last match
+			if( pos < endPos && !AssertDictionaryString( str.Substring( pos, endPos - pos ), false ) )
+			{
+				return str;
+			}
+			
 			return hash;
+		}
+
+		private bool AssertDictionaryString(string str, bool isBetweenPairStr )
+		{
+			Regex re = isBetweenPairStr ? dictBetweenPairRegex : dictEdgePairRegex;
+
+			if( !re.IsMatch(str) )
+			{
+				rsvc.Error( String.Format( "Error in interpolating dictionary string, cannot contain str <{0}> {1} dictionary params",
+					str, isBetweenPairStr ? "between" :"before" ));	
+				
+				return false;
+			}			
+
+			return true;
 		}
 
 		private bool IsDictionaryString( string str )
 		{
-			return dictRegex.IsMatch(str);
+			return str.StartsWith(dictStart) && str.EndsWith(dictEnd);
 		}
 	}
 }

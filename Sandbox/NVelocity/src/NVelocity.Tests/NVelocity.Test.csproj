@@ -95,6 +95,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "Test\AjaxHelper2.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Test\AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -116,6 +121,11 @@
                 />
                 <File
                     RelPath = "Test\ContextTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\DictHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

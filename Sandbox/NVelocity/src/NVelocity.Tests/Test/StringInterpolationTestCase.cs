@@ -27,11 +27,17 @@ namespace NVelocity.Test
 	{
 		public string Eval(string text)
 		{
+			return Eval(text, true);
+		}
+
+		public string Eval(string text, bool wrapBetweenQuote)
+		{
 			VelocityContext c = new VelocityContext();
+			c.Put("style", "style='color:red'" );
 			c.Put("survey", 1 );
 			c.Put("id", 2 );
 			c.Put("siteRoot", String.Empty );
-			c.Put("AjaxHelper2", new AjaxHelper2());
+			c.Put("Helper", new Helper());
 			c.Put("DictHelper", new DictHelper());
 			
 			StringWriter sw = new StringWriter();
@@ -41,92 +47,88 @@ namespace NVelocity.Test
 
 			Boolean ok = false;
 
-			ok = ve.Evaluate(c, sw, 
-				"ContextTest.CaseInsensitive", 
-				text );
+			string templatePrefix = "$Helper.Dump(";
+			string templateSuffix = ")";
+			string templateContent = ( wrapBetweenQuote ) ? '"' + text + '"' : text;
+
+			string template = templatePrefix + templateContent + templateSuffix;
+
+			ok = ve.Evaluate(c, sw, "ContextTest.CaseInsensitive",  template);
 
 			Assert.IsTrue(ok, "Evalutation returned failure");
-			return sw.ToString();						
+
+			string result = sw.ToString();
+
+			return result.StartsWith(templatePrefix) ? text : result;
 		}
 
 		[Test]
-		public void InterpolationWithDictInterpolation()
+		public void SingleParamDictInterpolation()
+		{	
+			Assert.AreEqual( "key1=<value1>", Eval("%{key1='value1'}") );
+			Assert.AreEqual( "key1=<value1>", Eval("%{      key1     =  'value1' }") );
+			Assert.AreEqual( "key1=<value1>", Eval("%{      key1='value1' }") );
+		}
+
+		[Test]
+		public void MultiParamDictInterpolation()
+		{	
+			Assert.AreEqual( "key1=<value1> key2=<value2> key3=<value3>", 
+						Eval("%{ key1='value${survey}', key2='value$id', key3='value3' }") );
+
+			Assert.AreEqual( "key1=<value1> key2=<value2> style=<color:red>", 
+				Eval("%{ key1='value${survey}', key2='value$id', $style }") );
+
+		}
+
+		[Test]
+		public void MultiParamEscapedDictInterpolation()
+		{	
+			Assert.AreEqual( "key1=<value'1> key2=<value'2> key3=<'value'3>", 
+				Eval("%{ key1='value\\'1', key2='value\\'2', key3='\\'value\\'3' }") );
+		}
+
+		[Test]
+		public void ZeroParamDictInterpolation()
 		{
-			string result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
-				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
-				" \"%{ afailure='error' bsuccess='emaillist' cwith='return \\'survey=${survey}&id=${id}\\'' }\")");
+			Assert.AreEqual( "", Eval("%{       }") );
+			Assert.AreEqual( "", Eval("%{}") );
+		}
 
-			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error> bsuccess=<emaillist> cwith=<return 'survey=1&id=2'>", result );			
-
-			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
-				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
-				" \"%{afailure='error' bsuccess='emaillist' cwith='return \\'survey=${survey}&id=${id}\\''}\")");
-
-			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error> bsuccess=<emaillist> cwith=<return 'survey=1&id=2'>", result );			
-
-			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
-				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
-				" \"%{afailure='error'}\")");
-
-			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error>", result );			
-
-			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
-				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
-				" \"%{ afailure = 'error' }\")");
-
-			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error>", result );			
-
-			result = Eval("$AjaxHelper2.LinkToRemote(\"Remove\", " + 
-				"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
-				@" ""%{afailure = '\'error\'' }"")");
-
-			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<'error'>", result );			
+		[Test]
+		public void MalFormedDictInterpolation()
+		{
+			foreach(string str in new string[]{
+				"%{ key1 'value1' }",
+				"%{ err key1='value1' }",
+				"%{ key1='value1' err }",
+				"%{ key1='value1' err key2='value2' }",
+				"%{ key1='value1',, key2='value2' }",
+			    "%{ key1='value1' key2='value2' }",
+				"%{ key1='value1'key2='value2' }",
+				"%{ key1='value1' $style }",
+			})
+			{
+				Assert.AreEqual( str, Eval(str) );	
+			}
 		}
 
 		[Test]
 		public void InterpolationWithDictHelper()
 		{
-			string result = Eval(
-				"$AjaxHelper2.LinkToRemote(\"Remove\", " + 
-					"\"${siteRoot}/Participant/DeleteEmail.rails\", " + 
-					"$DictHelper.CreateDict( \"afailure=error\", \"bsuccess=emaillist\", \"cwith=return 'survey=${survey}&id=${id}'\"))");
+			string result = Eval("$DictHelper.CreateDict( \"key1=value1\", \"key2=value2\", \"key3=${survey},${id}\")", false);
 
-			Assert.AreEqual("Remove /Participant/DeleteEmail.rails afailure=<error> bsuccess=<emaillist> cwith=<return 'survey=1&id=2'>", result);			
+			Assert.AreEqual( "key1=<value1> key2=<value2> key3=<1,2>", result);			
 		}
 	}
 
-	public class DictHelper
+	public class Helper
 	{
-		public IDictionary CreateDict( params String[] args )
-		{
-			IDictionary dict = new HybridDictionary();
-
-			foreach(String arg in args)
-			{
-				String[] parts = arg.Split('=');
-
-				if (parts.Length == 1)
-				{
-					dict[arg] = "";
-				}
-				else
-				{
-					dict[ parts[0] ] = String.Join("=", parts, 1, parts.Length - 1);
-				}
-			}
-
-			return dict;
-		}
-	}
-
-	public class AjaxHelper2
-	{
-		public String LinkToRemote(String name, String url, IDictionary options)
+		public String Dump(IDictionary options)
 		{
 			if (options == null) throw new ArgumentNullException("options");
 
-			StringBuilder sb = new StringBuilder(name + " " + url + " ");
-
+			StringBuilder sb = new StringBuilder("");
 			
 			Array keysSorted = (new ArrayList(options.Keys)).ToArray(typeof(string)) as string[] ;
 
@@ -137,16 +139,9 @@ namespace NVelocity.Test
 				sb.Append(key).Append("=<").Append(options[key]).Append("> ");
 			}
 
-			sb.Length--;
+			if(sb.Length > 0) sb.Length--;
 
 			return sb.ToString();
-		}
-
-		public String LinkToRemote(String name, String url, string options)
-		{
-			if (options == null) throw new ArgumentNullException("options");
-
-			return name + " " + url + " " + options;
 		}
 	}
 }
