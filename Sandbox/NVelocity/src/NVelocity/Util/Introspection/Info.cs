@@ -1,23 +1,9 @@
 namespace NVelocity.Util.Introspection
 {
 	using System;
-	/*
-	* Copyright 2002-2004 The Apache Software Foundation.
-	*
-	* Licensed under the Apache License, Version 2.0 (the "License")
-	* you may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at
-	*
-	*     http://www.apache.org/licenses/LICENSE-2.0
-	*
-	* Unless required by applicable law or agreed to in writing, software
-	* distributed under the License is distributed on an "AS IS" BASIS,
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
-	*/
 
-	/// <summary>  Little class to carry in info such as template name, line and column
+	/// <summary>  
+	/// Little class to carry in info such as template name, line and column
 	/// for information error reporting from the uberspector implementations
 	/// *
 	/// </summary>
@@ -28,24 +14,6 @@ namespace NVelocity.Util.Introspection
 	/// </version>
 	public class Info
 	{
-		public String TemplateName
-		{
-			get { return templateName; }
-
-		}
-
-		public int Line
-		{
-			get { return line; }
-
-		}
-
-		public int Column
-		{
-			get { return column; }
-
-		}
-
 		private int line;
 		private int column;
 		private String templateName;
@@ -64,12 +32,20 @@ namespace NVelocity.Util.Introspection
 			this.column = column;
 		}
 
-		/// <summary> Force callers to set the location information.
-		/// </summary>
-		private Info()
+		public String TemplateName
 		{
+			get { return templateName; }
 		}
 
+		public int Line
+		{
+			get { return line; }
+		}
+
+		public int Column
+		{
+			get { return column; }
+		}
 
 		/// <summary> Formats a textual representation of this object as <code>SOURCE
 		/// [line X, column Y]</code>.

@@ -37,8 +37,7 @@ namespace NVelocity.Context
 	/// </version>
 	[Serializable]
 	public abstract class AbstractContext : InternalContextBase, IContext
-	{ //, System.Runtime.Serialization.ISerializable
-
+	{ 
 		public Object[] Keys
 		{
 			get { return InternalGetKeys(); }
@@ -149,9 +148,9 @@ namespace NVelocity.Context
 	    *  it's accessable, bringing to the top level.
 	    */
 
-			if (innerContext is InternalEventContext)
+			if (innerContext is IInternalEventContext)
 			{
-				AttachEventCartridge(((InternalEventContext) innerContext).EventCartridge);
+				AttachEventCartridge(((IInternalEventContext) innerContext).EventCartridge);
 			}
 		}
 

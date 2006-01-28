@@ -2,6 +2,7 @@ namespace NVelocity.Util.Introspection
 {
 	using System;
 	using System.Reflection;
+
 	using NVelocity.Runtime;
 
 	/// <summary> This basic function of this class is to return a Method
@@ -35,11 +36,11 @@ namespace NVelocity.Util.Introspection
 
 		/// <summary>  our engine runtime services
 		/// </summary>
-		private RuntimeLogger rlog = null;
+		private IRuntimeLogger rlog = null;
 
 		/// <summary>  Recieves our RuntimeServices object
 		/// </summary>
-		public Introspector(RuntimeLogger r)
+		public Introspector(IRuntimeLogger r)
 		{
 			this.rlog = r;
 		}

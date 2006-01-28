@@ -31,7 +31,7 @@ namespace NVelocity.Runtime.Parser
 	 *     gets messed up (do don't mess it up :)
 	 */
 
-		public bool stateStackPop()
+		public bool StateStackPop()
 		{
 			Hashtable h;
 
@@ -67,7 +67,7 @@ namespace NVelocity.Runtime.Parser
 	 *  @return bool : success of operation
 	 */
 
-		public bool stateStackPush()
+		public bool StateStackPush()
 		{
 			if (debugPrint)
 				Console.Out.WriteLine(" (" + stateStack.Count + ") pushing cur state : " +
@@ -93,7 +93,7 @@ namespace NVelocity.Runtime.Parser
 	 *  @return void
 	 */
 
-		public void clearStateVars()
+		public void ClearStateVars()
 		{
 			stateStack.Clear();
 
@@ -142,7 +142,7 @@ namespace NVelocity.Runtime.Parser
 
 					if (lparen == rparen + 1)
 					{
-						stateStackPop();
+						StateStackPop();
 					}
 					else
 					{
@@ -157,7 +157,7 @@ namespace NVelocity.Runtime.Parser
 		     * now, drop a state
 		     */
 
-					if (!stateStackPop())
+					if (!StateStackPop())
 						break;
 				}
 			}
@@ -165,7 +165,7 @@ namespace NVelocity.Runtime.Parser
 
 		public TextWriter debugStream = Console.Out;
 
-		public void setDebugStream(StreamWriter ds)
+		public void SetDebugStream(StreamWriter ds)
 		{
 			debugStream = ds;
 		}
@@ -236,7 +236,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -301,7 +301,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -356,7 +356,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_0(0, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -381,7 +381,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_0(1, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -408,7 +408,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_0(2, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -796,7 +796,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -829,7 +829,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -856,7 +856,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1012,7 +1012,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -1105,7 +1105,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1136,7 +1136,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1173,7 +1173,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_4(0, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1198,7 +1198,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_4(1, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1225,7 +1225,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_4(2, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1248,7 +1248,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_4(3, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1566,7 +1566,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -1601,7 +1601,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1629,7 +1629,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1910,7 +1910,7 @@ namespace NVelocity.Runtime.Parser
 
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -1946,7 +1946,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -1973,7 +1973,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2129,7 +2129,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -2162,7 +2162,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2187,7 +2187,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2360,7 +2360,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -2426,7 +2426,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2459,7 +2459,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2492,7 +2492,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_5(0, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2517,7 +2517,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_5(1, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2544,7 +2544,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_5(2, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2729,7 +2729,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -2797,7 +2797,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2840,7 +2840,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2877,7 +2877,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_1(0, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2902,7 +2902,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_1(1, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -2929,7 +2929,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_1(2, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -3237,7 +3237,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -3303,7 +3303,7 @@ namespace NVelocity.Runtime.Parser
 			jjmatchedPos = pos;
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -3338,7 +3338,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -3371,7 +3371,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_2(0, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -3396,7 +3396,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_2(1, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -3423,7 +3423,7 @@ namespace NVelocity.Runtime.Parser
 				return jjStartNfa_2(2, old0);
 			try
 			{
-				curChar = input_stream.readChar();
+				curChar = input_stream.ReadChar();
 			}
 			catch (IOException e)
 			{
@@ -3608,7 +3608,7 @@ namespace NVelocity.Runtime.Parser
 					return curPos;
 				try
 				{
-					curChar = input_stream.readChar();
+					curChar = input_stream.ReadChar();
 				}
 				catch (IOException e)
 				{
@@ -3681,7 +3681,7 @@ namespace NVelocity.Runtime.Parser
 			0x40fc00L,
 		};
 
-		private CharStream input_stream;
+		private ICharStream input_stream;
 		private uint[] jjrounds = new uint[42];
 		private uint[] jjstateSet = new uint[84];
 		private StringBuilder image;
@@ -3689,17 +3689,17 @@ namespace NVelocity.Runtime.Parser
 		private int lengthOfMatch;
 		protected char curChar;
 
-		public ParserTokenManager(CharStream stream)
+		public ParserTokenManager(ICharStream stream)
 		{
 			input_stream = stream;
 		}
 
-		public ParserTokenManager(CharStream stream, int lexState) : this(stream)
+		public ParserTokenManager(ICharStream stream, int lexState) : this(stream)
 		{
 			SwitchTo(lexState);
 		}
 
-		public void ReInit(CharStream stream)
+		public void ReInit(ICharStream stream)
 		{
 			jjmatchedPos = jjnewStateCnt = 0;
 			curLexState = defaultLexState;
@@ -3715,7 +3715,7 @@ namespace NVelocity.Runtime.Parser
 				jjrounds[i] = 0x80000000;
 		}
 
-		public void ReInit(CharStream stream, int lexState)
+		public void ReInit(ICharStream stream, int lexState)
 		{
 			ReInit(stream);
 			SwitchTo(lexState);
@@ -3855,7 +3855,7 @@ namespace NVelocity.Runtime.Parser
 						if (jjmatchedKind != 0x7fffffff)
 						{
 							if (jjmatchedPos + 1 < curPos)
-								input_stream.backup(curPos - jjmatchedPos - 1);
+								input_stream.Backup(curPos - jjmatchedPos - 1);
 							if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 63))) != 0L)
 							{
 								matchedToken = jjFillToken();
@@ -3892,7 +3892,7 @@ namespace NVelocity.Runtime.Parser
 							jjmatchedKind = 0x7fffffff;
 							try
 							{
-								curChar = input_stream.readChar();
+								curChar = input_stream.ReadChar();
 								continue;
 							}
 							catch (IOException e1)
@@ -3905,8 +3905,8 @@ namespace NVelocity.Runtime.Parser
 						bool EOFSeen = false;
 						try
 						{
-							input_stream.readChar();
-							input_stream.backup(1);
+							input_stream.ReadChar();
+							input_stream.Backup(1);
 						}
 						catch (IOException e1)
 						{
@@ -3922,7 +3922,7 @@ namespace NVelocity.Runtime.Parser
 						}
 						if (!EOFSeen)
 						{
-							input_stream.backup(1);
+							input_stream.Backup(1);
 							error_after = curPos <= 1 ? "" : input_stream.GetImage();
 						}
 						throw new TokenMgrError(EOFSeen, curLexState, error_line, error_column, error_after, curChar, TokenMgrError.LEXICAL_ERROR);
@@ -3946,14 +3946,14 @@ namespace NVelocity.Runtime.Parser
 		    * push every terminator character back into the stream  
 		    */
 
-					input_stream.backup(1);
+					input_stream.Backup(1);
 
 					inReference = false;
 
 					if (debugPrint)
 						Console.Out.Write("REF_TERM :");
 
-					stateStackPop();
+					StateStackPop();
 					break;
 				case 61:
 					if (image == null)
@@ -3963,9 +3963,9 @@ namespace NVelocity.Runtime.Parser
 					if (debugPrint)
 						Console.Out.Write("DIRECTIVE_TERM :");
 
-					input_stream.backup(1);
+					input_stream.Backup(1);
 					inDirective = false;
-					stateStackPop();
+					StateStackPop();
 					break;
 				default:
 					break;
@@ -3993,7 +3993,7 @@ namespace NVelocity.Runtime.Parser
 						if (curLexState == REFERENCE)
 						{
 							inReference = false;
-							stateStackPop();
+							StateStackPop();
 						}
 
 						inReference = true;
@@ -4001,7 +4001,7 @@ namespace NVelocity.Runtime.Parser
 						if (debugPrint)
 							Console.Out.Write("$  : going to " + REFERENCE);
 
-						stateStackPush();
+						StateStackPush();
 						SwitchTo(REFERENCE);
 					}
 					break;
@@ -4021,7 +4021,7 @@ namespace NVelocity.Runtime.Parser
 						if (curLexState == REFERENCE)
 						{
 							inReference = false;
-							stateStackPop();
+							StateStackPop();
 						}
 
 						inReference = true;
@@ -4029,7 +4029,7 @@ namespace NVelocity.Runtime.Parser
 						if (debugPrint)
 							Console.Out.Write("$!  : going to " + REFERENCE);
 
-						stateStackPush();
+						StateStackPush();
 						SwitchTo(REFERENCE);
 					}
 					break;
@@ -4044,11 +4044,11 @@ namespace NVelocity.Runtime.Parser
 						if (curLexState == REFERENCE)
 						{
 							inReference = false;
-							stateStackPop();
+							StateStackPop();
 						}
 
 						inComment = true;
-						stateStackPush();
+						StateStackPush();
 						SwitchTo(IN_SINGLE_LINE_COMMENT);
 					}
 					break;
@@ -4058,9 +4058,9 @@ namespace NVelocity.Runtime.Parser
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
-					input_stream.backup(1);
+					input_stream.Backup(1);
 					inComment = true;
-					stateStackPush();
+					StateStackPush();
 					SwitchTo(IN_FORMAL_COMMENT);
 					break;
 				case 14:
@@ -4070,7 +4070,7 @@ namespace NVelocity.Runtime.Parser
 						image.Append(input_stream.GetSuffix(jjimageLen));
 					jjimageLen = 0;
 					inComment = true;
-					stateStackPush();
+					StateStackPush();
 					SwitchTo(IN_MULTI_LINE_COMMENT);
 					break;
 				case 15:
@@ -4091,7 +4091,7 @@ namespace NVelocity.Runtime.Parser
 						if (curLexState == REFERENCE || curLexState == REFMODIFIER)
 						{
 							inReference = false;
-							stateStackPop();
+							StateStackPop();
 						}
 
 						inDirective = true;
@@ -4099,7 +4099,7 @@ namespace NVelocity.Runtime.Parser
 						if (debugPrint)
 							Console.Out.Write("# :  going to " + DIRECTIVE);
 
-						stateStackPush();
+						StateStackPush();
 						SwitchTo(PRE_DIRECTIVE);
 					}
 					break;
@@ -4160,7 +4160,7 @@ namespace NVelocity.Runtime.Parser
 						if (debugPrint)
 							Console.Out.Write("#set :  going to " + DIRECTIVE);
 
-						stateStackPush();
+						StateStackPush();
 						inSet = true;
 						SwitchTo(DIRECTIVE);
 					}
@@ -4171,7 +4171,7 @@ namespace NVelocity.Runtime.Parser
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
 					inComment = false;
-					stateStackPop();
+					StateStackPop();
 					break;
 				case 20:
 					if (image == null)
@@ -4179,7 +4179,7 @@ namespace NVelocity.Runtime.Parser
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
 					inComment = false;
-					stateStackPop();
+					StateStackPop();
 					break;
 				case 21:
 					if (image == null)
@@ -4187,7 +4187,7 @@ namespace NVelocity.Runtime.Parser
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
 					inComment = false;
-					stateStackPop();
+					StateStackPop();
 					break;
 				case 24:
 					if (image == null)
@@ -4201,7 +4201,7 @@ namespace NVelocity.Runtime.Parser
 		    */
 
 					if (curLexState == DIRECTIVE && !inSet && lparen == 0)
-						stateStackPop();
+						StateStackPop();
 					break;
 				case 27:
 					if (image == null)
@@ -4211,7 +4211,7 @@ namespace NVelocity.Runtime.Parser
 					if (debugPrint)
 						Console.Out.WriteLine(" NEWLINE :");
 
-					stateStackPop();
+					StateStackPop();
 
 					if (inSet)
 						inSet = false;
@@ -4225,7 +4225,7 @@ namespace NVelocity.Runtime.Parser
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
 					inDirective = false;
-					stateStackPop();
+					StateStackPop();
 					break;
 				case 44:
 					if (image == null)
@@ -4247,7 +4247,7 @@ namespace NVelocity.Runtime.Parser
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
 					inDirective = false;
-					stateStackPop();
+					StateStackPop();
 					break;
 				case 47:
 					if (image == null)
@@ -4270,7 +4270,7 @@ namespace NVelocity.Runtime.Parser
 
 					if (lparen == 0 && !inSet && curLexState != REFMOD2)
 					{
-						stateStackPop();
+						StateStackPop();
 					}
 					break;
 				case 57:
@@ -4283,7 +4283,7 @@ namespace NVelocity.Runtime.Parser
 		    * is complete
 		    */
 
-					input_stream.backup(1);
+					input_stream.Backup(1);
 
 					/*
 		    * and munge the <DOT> so we just get a . when we have normal text that 
@@ -4301,7 +4301,7 @@ namespace NVelocity.Runtime.Parser
 						image = new StringBuilder(new String(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1))));
 					else
 						image.Append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
-					stateStackPop();
+					StateStackPop();
 					break;
 				default:
 					break;

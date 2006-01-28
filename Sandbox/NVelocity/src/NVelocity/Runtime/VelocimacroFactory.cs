@@ -1,58 +1,5 @@
 namespace NVelocity.Runtime
 {
-	/*
-    * The Apache Software License, Version 1.1
-    *
-    * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
-    * reserved.
-    *
-    * Redistribution and use in source and binary forms, with or without
-    * modification, are permitted provided that the following conditions
-    * are met:
-    *
-    * 1. Redistributions of source code must retain the above copyright
-    *    notice, this list of conditions and the following disclaimer.
-    *
-    * 2. Redistributions in binary form must reproduce the above copyright
-    *    notice, this list of conditions and the following disclaimer in
-    *    the documentation and/or other materials provided with the
-    *    distribution.
-    *
-    * 3. The end-user documentation included with the redistribution, if
-    *    any, must include the following acknowlegement:
-    *       "This product includes software developed by the
-    *        Apache Software Foundation (http://www.apache.org/)."
-    *    Alternately, this acknowlegement may appear in the software itself,
-    *    if and wherever such third-party acknowlegements normally appear.
-    *
-    * 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-    *    Foundation" must not be used to endorse or promote products derived
-    *    from this software without prior written permission. For written
-    *    permission, please contact apache@apache.org.
-    *
-    * 5. Products derived from this software may not be called "Apache"
-    *    nor may "Apache" appear in their names without prior written
-    *    permission of the Apache Group.
-    *
-    * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-    * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-    * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-    * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-    * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-    * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-    * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-    * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-    * SUCH DAMAGE.
-    * ====================================================================
-    *
-    * This software consists of voluntary contributions made by many
-    * individuals on behalf of the Apache Software Foundation.  For more
-    * information on the Apache Software Foundation, please see
-    * <http://www.apache.org/>.
-    */
 	using System;
 	using System.Collections;
 	using NVelocity.Runtime.Directive;
@@ -69,58 +16,9 @@ namespace NVelocity.Runtime
 	/// </version>
 	public class VelocimacroFactory
 	{
-		private bool TemplateLocalInline
-		{
-			get { return templateLocal; }
-
-			set { templateLocal = value; }
-
-		}
-
-		private bool AddMacroPermission
-		{
-			set
-			{
-				bool b = addNewAllowed;
-
-				addNewAllowed = value;
-				// TODO: looks like original code must have returned the value that was replaced
-				//return b;
-			}
-
-		}
-
-		private bool ReplacementPermission
-		{
-			set
-			{
-				bool b = replaceAllowed;
-				replaceAllowed = value;
-				// TODO: looks like original code must have returned the value that was replaced
-				//return b;
-			}
-
-		}
-
-		private bool Blather
-		{
-			get { return blather; }
-
-			set { blather = value; }
-
-		}
-
-		private bool Autoload
-		{
-			get { return autoReloadLibrary; }
-
-			set { autoReloadLibrary = value; }
-
-		}
-
 		/// <summary>  runtime services for this instance
 		/// </summary>
-		private RuntimeServices rsvc = null;
+		private IRuntimeServices rsvc = null;
 
 		/// <summary>  VMManager : deal with namespace management
 		/// and actually keeps all the VM definitions
@@ -164,22 +62,66 @@ namespace NVelocity.Runtime
 		/// <summary>  CTOR : requires a runtime services from now
 		/// on
 		/// </summary>
-		public VelocimacroFactory(RuntimeServices rs)
+		public VelocimacroFactory(IRuntimeServices rs)
 		{
 			this.rsvc = rs;
 
 			/*
-	    *  we always access in a synchronized(), so we 
-	    *  can use an unsynchronized hashmap
-	    */
+		*  we always access in a synchronized(), so we 
+		*  can use an unsynchronized hashmap
+		*/
 			libModMap = new Hashtable();
 			vmManager = new VelocimacroManager(rsvc);
+		}
+
+		private bool TemplateLocalInline
+		{
+			get { return templateLocal; }
+			set { templateLocal = value; }
+		}
+
+		private bool AddMacroPermission
+		{
+			set
+			{
+				bool b = addNewAllowed;
+
+				addNewAllowed = value;
+				// TODO: looks like original code must have returned the value that was replaced
+				//return b;
+			}
+		}
+
+		private bool ReplacementPermission
+		{
+			set
+			{
+				bool b = replaceAllowed;
+				replaceAllowed = value;
+				// TODO: looks like original code must have returned the value that was replaced
+				//return b;
+			}
+
+		}
+
+		private bool Blather
+		{
+			get { return blather; }
+
+			set { blather = value; }
+		}
+
+		private bool Autoload
+		{
+			get { return autoReloadLibrary; }
+
+			set { autoReloadLibrary = value; }
 		}
 
 		/// <summary>  initialize the factory - setup all permissions
 		/// load all global libraries.
 		/// </summary>
-		public void initVelocimacro()
+		public void InitVelocimacro()
 		{
 			/*
 	    *  maybe I'm just paranoid...
@@ -192,7 +134,7 @@ namespace NVelocity.Runtime
 				ReplacementPermission = true;
 				Blather = true;
 
-				logVMMessageInfo("Velocimacro : initialization starting.");
+				LogVMMessageInfo("Velocimacro : initialization starting.");
 
 				/*
 		*  add all library macros to the global namespace
@@ -234,7 +176,7 @@ namespace NVelocity.Runtime
 			    */
 							vmManager.RegisterFromLib = true;
 
-							logVMMessageInfo("Velocimacro : adding VMs from " + "VM library template : " + lib);
+							LogVMMessageInfo("Velocimacro : adding VMs from " + "VM library template : " + lib);
 
 							try
 							{
@@ -252,10 +194,10 @@ namespace NVelocity.Runtime
 							}
 							catch (System.Exception e)
 							{
-								logVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
+								LogVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
 							}
 
-							logVMMessageInfo("Velocimacro :  VM library template " + "macro registration complete.");
+							LogVMMessageInfo("Velocimacro :  VM library template " + "macro registration complete.");
 
 							vmManager.RegisterFromLib = false;
 						}
@@ -278,11 +220,11 @@ namespace NVelocity.Runtime
 				{
 					AddMacroPermission = false;
 
-					logVMMessageInfo("Velocimacro : allowInline = false : VMs can not " + "be defined inline in templates");
+					LogVMMessageInfo("Velocimacro : allowInline = false : VMs can not " + "be defined inline in templates");
 				}
 				else
 				{
-					logVMMessageInfo("Velocimacro : allowInline = true : VMs can be " + "defined inline in templates");
+					LogVMMessageInfo("Velocimacro : allowInline = true : VMs can be " + "defined inline in templates");
 				}
 
 				/*
@@ -297,11 +239,11 @@ namespace NVelocity.Runtime
 				{
 					ReplacementPermission = true;
 
-					logVMMessageInfo("Velocimacro : allowInlineToOverride = true : VMs " + "defined inline may replace previous VM definitions");
+					LogVMMessageInfo("Velocimacro : allowInlineToOverride = true : VMs " + "defined inline may replace previous VM definitions");
 				}
 				else
 				{
-					logVMMessageInfo("Velocimacro : allowInlineToOverride = false : VMs " + "defined inline may NOT replace previous VM definitions");
+					LogVMMessageInfo("Velocimacro : allowInlineToOverride = false : VMs " + "defined inline may NOT replace previous VM definitions");
 				}
 
 				/*
@@ -317,11 +259,11 @@ namespace NVelocity.Runtime
 
 				if (TemplateLocalInline)
 				{
-					logVMMessageInfo("Velocimacro : allowInlineLocal = true : VMs " + "defined inline will be local to their defining template only.");
+					LogVMMessageInfo("Velocimacro : allowInlineLocal = true : VMs " + "defined inline will be local to their defining template only.");
 				}
 				else
 				{
-					logVMMessageInfo("Velocimacro : allowInlineLocal = false : VMs " + "defined inline will be  global in scope if allowed.");
+					LogVMMessageInfo("Velocimacro : allowInlineLocal = false : VMs " + "defined inline will be  global in scope if allowed.");
 				}
 
 				vmManager.TemplateLocalInlineVM = TemplateLocalInline;
@@ -333,11 +275,11 @@ namespace NVelocity.Runtime
 
 				if (Blather)
 				{
-					logVMMessageInfo("Velocimacro : messages on  : VM system " + "will output logging messages");
+					LogVMMessageInfo("Velocimacro : messages on  : VM system " + "will output logging messages");
 				}
 				else
 				{
-					logVMMessageInfo("Velocimacro : messages off : VM system will be quiet");
+					LogVMMessageInfo("Velocimacro : messages off : VM system will be quiet");
 				}
 
 				/*
@@ -347,11 +289,11 @@ namespace NVelocity.Runtime
 
 				if (Autoload)
 				{
-					logVMMessageInfo("Velocimacro : autoload on  : VM system " + "will automatically reload global library macros");
+					LogVMMessageInfo("Velocimacro : autoload on  : VM system " + "will automatically reload global library macros");
 				}
 				else
 				{
-					logVMMessageInfo("Velocimacro : autoload off  : VM system " + "will not automatically reload global library macros");
+					LogVMMessageInfo("Velocimacro : autoload off  : VM system " + "will not automatically reload global library macros");
 				}
 
 				rsvc.Info("Velocimacro : initialization complete.");
@@ -362,7 +304,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  adds a macro to the factory.
 		/// </summary>
-		public bool addVelocimacro(String name, String macroBody, String[] argArray, String sourceTemplate)
+		public bool AddVelocimacro(String name, String macroBody, String[] argArray, String sourceTemplate)
 		{
 			/*
 	    * maybe we should throw an exception, maybe just tell 
@@ -372,7 +314,7 @@ namespace NVelocity.Runtime
 	    */
 			if (name == null || macroBody == null || argArray == null || sourceTemplate == null)
 			{
-				logVMMessageWarn("Velocimacro : VM addition rejected : " + "programmer error : arg null");
+				LogVMMessageWarn("Velocimacro : VM addition rejected : " + "programmer error : arg null");
 
 				return false;
 			}
@@ -381,7 +323,7 @@ namespace NVelocity.Runtime
 	    *  see if the current ruleset allows this addition
 	    */
 
-			if (!canAddVelocimacro(name, sourceTemplate))
+			if (!CanAddVelocimacro(name, sourceTemplate))
 			{
 				return false;
 			}
@@ -411,7 +353,7 @@ namespace NVelocity.Runtime
 				s += " ) : source = ";
 				s += sourceTemplate;
 
-				logVMMessageInfo("Velocimacro : added new VM : " + s);
+				LogVMMessageInfo("Velocimacro : added new VM : " + s);
 			}
 
 			return true;
@@ -428,7 +370,7 @@ namespace NVelocity.Runtime
 		/// <returns>true if it is allowed to be added, false otherwise
 		///
 		/// </returns>
-		private bool canAddVelocimacro(String name, String sourceTemplate)
+		private bool CanAddVelocimacro(String name, String sourceTemplate)
 		{
 			/*
 	    *  short circuit and do it if autoloader is on, and the
@@ -460,7 +402,7 @@ namespace NVelocity.Runtime
 	    */
 			if (!addNewAllowed)
 			{
-				logVMMessageWarn("Velocimacro : VM addition rejected : " + name + " : inline VMs not allowed.");
+				LogVMMessageWarn("Velocimacro : VM addition rejected : " + name + " : inline VMs not allowed.");
 
 				return false;
 			}
@@ -478,9 +420,9 @@ namespace NVelocity.Runtime
 				*
 				*  so if we have it, and we aren't allowed to replace, bail
 				*/
-				if (isVelocimacro(name, sourceTemplate) && !replaceAllowed)
+				if (IsVelocimacro(name, sourceTemplate) && !replaceAllowed)
 				{
-					logVMMessageWarn("Velocimacro : VM addition rejected : " + name + " : inline not allowed to replace existing VM");
+					LogVMMessageWarn("Velocimacro : VM addition rejected : " + name + " : inline not allowed to replace existing VM");
 					return false;
 				}
 			}
@@ -490,7 +432,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  localization of the logging logic
 		/// </summary>
-		private void logVMMessageInfo(String s)
+		private void LogVMMessageInfo(String s)
 		{
 			if (blather)
 				rsvc.Info(s);
@@ -498,7 +440,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  localization of the logging logic
 		/// </summary>
-		private void logVMMessageWarn(String s)
+		private void LogVMMessageWarn(String s)
 		{
 			if (blather)
 				rsvc.Warn(s);
@@ -506,7 +448,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  Tells the world if a given directive string is a Velocimacro
 		/// </summary>
-		public bool isVelocimacro(String vm, String sourceTemplate)
+		public bool IsVelocimacro(String vm, String sourceTemplate)
 		{
 			lock (this)
 			{
@@ -524,7 +466,7 @@ namespace NVelocity.Runtime
 		/// behave correctly wrt getting the framework to
 		/// dig out the correct # of args
 		/// </summary>
-		public Directive.Directive getVelocimacro(String vmName, String sourceTemplate)
+		public Directive.Directive GetVelocimacro(String vmName, String sourceTemplate)
 		{
 			VelocimacroProxy vp = null;
 
@@ -577,7 +519,7 @@ namespace NVelocity.Runtime
 
 								if (ft > tt)
 								{
-									logVMMessageInfo("Velocimacro : autoload reload for VMs from " + "VM library template : " + lib);
+									LogVMMessageInfo("Velocimacro : autoload reload for VMs from " + "VM library template : " + lib);
 
 									/*
 				    *  when there are VMs in a library that invoke each other,
@@ -609,7 +551,7 @@ namespace NVelocity.Runtime
 						}
 						catch (System.Exception e)
 						{
-							logVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
+							LogVMMessageInfo("Velocimacro : error using  VM " + "library template " + lib + " : " + e);
 						}
 
 						/*
@@ -625,7 +567,7 @@ namespace NVelocity.Runtime
 
 		/// <summary>  tells the vmManager to dump the specified namespace
 		/// </summary>
-		public bool dumpVMNamespace(String namespace_Renamed)
+		public bool DumpVMNamespace(String namespace_Renamed)
 		{
 			return vmManager.DumpNamespace(namespace_Renamed);
 		}

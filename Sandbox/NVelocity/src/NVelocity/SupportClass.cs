@@ -13,7 +13,7 @@ namespace NVelocity
 		public static sbyte[] ToSByteArray(byte[] byteArray)
 		{
 			sbyte[] sbyteArray = new sbyte[byteArray.Length];
-			for (int index = 0; index < byteArray.Length; index++)
+			for(int index = 0; index < byteArray.Length; index++)
 				sbyteArray[index] = (sbyte) byteArray[index];
 			return sbyteArray;
 		}
@@ -23,7 +23,7 @@ namespace NVelocity
 		public static byte[] ToByteArray(sbyte[] sbyteArray)
 		{
 			byte[] byteArray = new byte[sbyteArray.Length];
-			for (int index = 0; index < sbyteArray.Length; index++)
+			for(int index = 0; index < sbyteArray.Length; index++)
 				byteArray[index] = (byte) sbyteArray[index];
 			return byteArray;
 		}
@@ -244,7 +244,7 @@ namespace NVelocity
 			private void RemoveEmptyStrings()
 			{
 				//VJ++ does not treat empty strings as tokens
-				for (int index = 0; index < this.elements.Count; index++)
+				for(int index = 0; index < this.elements.Count; index++)
 					if ((string) this.elements[index] == "")
 					{
 						this.elements.RemoveAt(index);
@@ -401,7 +401,7 @@ namespace NVelocity
 			private string GetCurrentFormatString()
 			{
 				string currentFormatString = "n"; //Default value
-				switch (this.numberFormatType)
+				switch(this.numberFormatType)
 				{
 					case (int) formatTypes.Currency:
 						currentFormatString = "c";
@@ -426,7 +426,7 @@ namespace NVelocity
 			{
 				string separatorItem = " "; //Default Separator
 
-				switch (numberFormatType)
+				switch(numberFormatType)
 				{
 					case (int) formatTypes.Currency:
 						separatorItem = this.numberFormat.CurrencyGroupSeparator;
@@ -531,7 +531,7 @@ namespace NVelocity
 		{
 			DateTimeFormatInfo format = culture.DateTimeFormat;
 
-			switch (timeStyle)
+			switch(timeStyle)
 			{
 				case -1:
 					DateTimeFormatManager.manager.SetTimeFormatPattern(format, "");
@@ -554,7 +554,7 @@ namespace NVelocity
 					break;
 			}
 
-			switch (dateStyle)
+			switch(dateStyle)
 			{
 				case -1:
 					DateTimeFormatManager.manager.SetDateFormatPattern(format, "");
@@ -598,7 +598,7 @@ namespace NVelocity
 			int countParams = firstConstructor.Length;
 
 			Type[] constructor = new Type[countParams];
-			for (int i = 0; i < countParams; i++)
+			for(int i = 0; i < countParams; i++)
 				constructor[i] = firstConstructor[i].ParameterType;
 
 			return classType.GetConstructor(constructor).Invoke(new Object[] {});

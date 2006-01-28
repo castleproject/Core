@@ -9,7 +9,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public abstract class AbstractExecutor
 	{
-		protected internal RuntimeLogger rlog = null;
+		protected internal IRuntimeLogger rlog = null;
 
 		/// <summary>
 		/// Method to be executed.
@@ -22,13 +22,9 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		public abstract Object Execute(Object o);
 
-		/// <summary>
-		/// Tell whether the executor is alive by looking
-		/// at the value of the method.
-		/// </summary>
-		public bool IsAlive()
+		public bool IsAlive
 		{
-			return (method != null || property != null);
+			get { return ( method != null || property != null ); }
 		}
 
 		public MethodInfo Method

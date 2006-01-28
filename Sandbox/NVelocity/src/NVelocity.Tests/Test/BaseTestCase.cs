@@ -148,8 +148,8 @@ namespace NVelocity.Test
 		{
 			Boolean SHOW_RESULTS = true;
 
-			String result = StringUtils.fileContentsToString(GetFileName(resultsDir, baseFileName, resultExt));
-			String compare = StringUtils.fileContentsToString(GetFileName(compareDir, baseFileName, compareExt));
+			String result = StringUtils.FileContentsToString(GetFileName(resultsDir, baseFileName, resultExt));
+			String compare = StringUtils.FileContentsToString(GetFileName(compareDir, baseFileName, compareExt));
 
 			String s1 = NormalizeNewlines(result);
 			String s2 = NormalizeNewlines(compare);

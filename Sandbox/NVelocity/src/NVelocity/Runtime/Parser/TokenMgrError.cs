@@ -41,7 +41,7 @@ namespace NVelocity.Runtime.Parser
 		/// <summary> Replaces unprintable characters by their espaced (or unicode escaped)
 		/// equivalents in the given string
 		/// </summary>
-		protected internal static String addEscapes(String str)
+		protected internal static String AddEscapes(String str)
 		{
 			StringBuilder retval = new StringBuilder();
 			char ch;
@@ -114,7 +114,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		private static String LexicalError(bool EOFSeen, int lexState, int errorLine, int errorColumn, String errorAfter, char curChar)
 		{
-			return ("Lexical error at line " + errorLine + ", column " + errorColumn + ".  Encountered: " + (EOFSeen ? "<EOF> " : ("\"" + addEscapes(curChar.ToString()) + "\"") + " (" + (int) curChar + "), ") + "after : \"" + addEscapes(errorAfter) + "\"");
+			return ("Lexical error at line " + errorLine + ", column " + errorColumn + ".  Encountered: " + (EOFSeen ? "<EOF> " : ("\"" + AddEscapes(curChar.ToString()) + "\"") + " (" + (int) curChar + "), ") + "after : \"" + AddEscapes(errorAfter) + "\"");
 		}
 
 		/// <summary> You can also modify the body of this method to customize your error messages.

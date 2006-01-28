@@ -48,13 +48,13 @@ namespace NVelocity.Runtime.Resource
 		/// Runtime services, generally initialized by the
 		/// <code>initialize()</code> method.
 		/// </summary>
-		protected internal RuntimeServices rsvc = null;
+		protected internal IRuntimeServices rsvc = null;
 
 		public ResourceCacheImpl()
 		{
 		}
 
-		public void initialize(RuntimeServices rs)
+		public void initialize(IRuntimeServices rs)
 		{
 			rsvc = rs;
 

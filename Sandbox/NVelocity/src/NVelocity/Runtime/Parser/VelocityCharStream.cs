@@ -15,7 +15,7 @@ namespace NVelocity.Runtime.Parser
 	/// <summary> An implementation of interface CharStream, where the stream is assumed to
 	/// contain only ASCII characters (without unicode processing).
 	/// </summary>
-	public sealed class VelocityCharStream : CharStream
+	public sealed class VelocityCharStream : ICharStream
 	{
 		public int Column
 		{
@@ -169,7 +169,7 @@ namespace NVelocity.Runtime.Parser
 			catch (IOException e)
 			{
 				--bufpos;
-				backup(0);
+				Backup(0);
 				if (tokenBegin == - 1)
 					tokenBegin = bufpos;
 				throw e;
@@ -179,7 +179,7 @@ namespace NVelocity.Runtime.Parser
 		public char BeginToken()
 		{
 			tokenBegin = - 1;
-			char c = readChar();
+			char c = ReadChar();
 			tokenBegin = bufpos;
 
 			return c;
@@ -229,7 +229,7 @@ namespace NVelocity.Runtime.Parser
 			bufcolumn[bufpos] = column;
 		}
 
-		public char readChar()
+		public char ReadChar()
 		{
 			if (inBuf > 0)
 			{
@@ -253,7 +253,7 @@ namespace NVelocity.Runtime.Parser
 			return (c);
 		}
 
-		public void backup(int amount)
+		public void Backup(int amount)
 		{
 			inBuf += amount;
 			if ((bufpos -= amount) < 0)
@@ -337,7 +337,7 @@ namespace NVelocity.Runtime.Parser
 
 		/// <summary> Method to adjust line and column numbers for the start of a token.<BR>
 		/// </summary>
-		public void adjustBeginLineColumn(int newLine, int newCol)
+		public void AdjustBeginLineColumn(int newLine, int newCol)
 		{
 			int start = tokenBegin;
 			int len;

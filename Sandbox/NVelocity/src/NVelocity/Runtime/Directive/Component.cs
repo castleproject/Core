@@ -25,12 +25,12 @@ namespace NVelocity.Runtime.Directive
 		{
 		}
 
-		public override void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
 		{
 			base.Init(rs, context, node);
 		}
 
-		public override bool Render(InternalContextAdapter context, TextWriter writer, INode node)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 
 			return true;

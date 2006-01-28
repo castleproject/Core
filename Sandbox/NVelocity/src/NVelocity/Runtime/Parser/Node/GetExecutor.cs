@@ -25,7 +25,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public GetExecutor(RuntimeLogger r, Introspector i, Type c, String key)
+		public GetExecutor(IRuntimeLogger r, Introspector i, Type c, String key)
 		{
 			rlog = r;
 			args[0] = key;

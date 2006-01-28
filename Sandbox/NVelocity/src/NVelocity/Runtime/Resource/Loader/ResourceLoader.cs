@@ -62,13 +62,13 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		protected internal String className = null;
 
-		protected internal RuntimeServices rsvc = null;
+		protected internal IRuntimeServices rsvc = null;
 
 		/// <summary> This initialization is used by all resource
 		/// loaders and must be called to set up common
 		/// properties shared by all resource loaders
 		/// </summary>
-		public void commonInit(RuntimeServices rs, ExtendedProperties configuration)
+		public void commonInit(IRuntimeServices rs, ExtendedProperties configuration)
 		{
 			this.rsvc = rs;
 

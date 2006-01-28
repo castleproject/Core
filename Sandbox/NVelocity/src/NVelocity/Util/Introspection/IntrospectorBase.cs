@@ -27,10 +27,6 @@ namespace NVelocity.Util.Introspection
 	/// This mapping is performed for all the methods in a class
 	/// and stored for
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
-	/// <author> <a href="mailto:bob@werken.com">Bob McWhirter</a> </author>
-	/// <author> <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a> </author>
-	/// <author> <a href="mailto:paulo.gaspar@krankikom.de">Paulo Gaspar</a> </author>
 	/// <version> $Id: IntrospectorBase.cs,v 1.3 2003/10/27 13:54:12 corts Exp $ </version>
 	public abstract class IntrospectorBase
 	{

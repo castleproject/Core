@@ -14,6 +14,5 @@ namespace Commons.Collections
 			hashTable[key] = newValue;
 			return element;
 		}
-
 	}
 }

@@ -28,11 +28,11 @@ namespace NVelocity.Test
 			String s2 = String.Empty;
 			try
 			{
-				Char c = vcs.readChar();
+				Char c = vcs.ReadChar();
 				while (true)
 				{
 					s2 += c;
-					c = vcs.readChar();
+					c = vcs.ReadChar();
 				}
 			}
 			catch (IOException)
@@ -48,7 +48,7 @@ namespace NVelocity.Test
 			VelocityCharStream vcs = GetTemplateStream();
 			Parser p = new Parser(vcs);
 
-			SimpleNode root = p.process();
+			SimpleNode root = p.Process();
 
 			String javaNodes = "19,18,9,5,23,56,23,42,23,24,6,18,56,18,9,5,23,56,23,42,23,25,6,18,44,23,5,56,6,18,46,18,43,0";
 			String nodes = String.Empty;
@@ -78,7 +78,7 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_RuntimeServices()
 		{
-			RuntimeServices ri = RuntimeSingleton.RuntimeServices;
+			IRuntimeServices ri = RuntimeSingleton.RuntimeServices;
 
 			try
 			{

@@ -40,7 +40,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -49,7 +49,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// simple init - init our subtree and get what we can from
 		/// the AST
 		/// </summary>
-		public override Object Init(InternalContextAdapter context, Object data)
+		public override Object Init(IInternalContextAdapter context, Object data)
 		{
 			base.Init(context, data);
 
@@ -58,7 +58,7 @@ namespace NVelocity.Runtime.Parser.Node
 	    */
 
 			methodName = FirstToken.Image;
-			paramCount = jjtGetNumChildren() - 1;
+			paramCount = ChildrenCount - 1;
 			params_Renamed = new Object[paramCount];
 
 			return data;
@@ -73,7 +73,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// convience (compatability with Java version).  If there are no arguments,
 		/// it will also try to find a property with the same name (also flipping first character).
 		/// </summary>
-		private Object doIntrospection(InternalContextAdapter context, Type data)
+		private Object doIntrospection(IInternalContextAdapter context, Type data)
 		{
 			/*
 	    *  Now the parameters have to be processed, there
@@ -82,7 +82,7 @@ namespace NVelocity.Runtime.Parser.Node
 	    */
 			for (int j = 0; j < paramCount; j++)
 			{
-				params_Renamed[j] = jjtGetChild(j + 1).Value(context);
+				params_Renamed[j] = GetChild(j + 1).Value(context);
 			}
 
 			String methodNameUsed = methodName;
@@ -132,7 +132,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// actual return if the method returns something, or
 		/// an empty string "" if the method returns void
 		/// </summary>
-		public override Object Execute(Object o, InternalContextAdapter context)
+		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
 		   /*
 			*  new strategy (strategery!) for introspection. Since we want 
@@ -190,7 +190,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 					for (int j = 0; j < paramCount; j++)
 					{
-						params_Renamed[j] = jjtGetChild(j + 1).Value(context);
+						params_Renamed[j] = GetChild(j + 1).Value(context);
 					}
 
 					preparedAlready = true;

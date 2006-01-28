@@ -43,7 +43,7 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		/// <summary> Initialize the ResourceManager.
 		/// </summary>
-		void initialize(RuntimeServices rs);
+		void Initialize(IRuntimeServices rs);
 
 		/// <summary> Gets the named resource.  Returned class type corresponds to specified type
 		/// (i.e. <code>Template</code> to <code>RESOURCE_TEMPLATE</code>).
@@ -64,7 +64,7 @@ namespace NVelocity.Runtime.Resource
 		/// @throws Exception if a problem in parse
 		///
 		/// </returns>
-		Resource getResource(String resourceName, int resourceType, String encoding);
+		Resource GetResource(String resourceName, int resourceType, String encoding);
 
 		/// <summary>  Determines is a template exists, and returns name of the loader that
 		/// provides it.  This is a slightly less hokey way to support
@@ -76,6 +76,6 @@ namespace NVelocity.Runtime.Resource
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		String getLoaderNameForResource(String resourceName);
+		String GetLoaderNameForResource(String resourceName);
 	}
 }

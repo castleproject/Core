@@ -38,7 +38,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -59,10 +59,10 @@ namespace NVelocity.Runtime.Parser.Node
 		/// false if not compatible arguments, or false
 		/// if either LHS or RHS is null
 		/// </returns>
-		public override bool Evaluate(InternalContextAdapter context)
+		public override bool Evaluate(IInternalContextAdapter context)
 		{
-			Object left = jjtGetChild(0).Value(context);
-			Object right = jjtGetChild(1).Value(context);
+			Object left = GetChild(0).Value(context);
+			Object right = GetChild(1).Value(context);
 
 			// for equality, they are allowed to be null references 
 			try

@@ -37,17 +37,17 @@ namespace NVelocity.Runtime.Log
 		/// <summary>  Creates a new logging system or returns an existing one
 		/// specified by the application.
 		/// </summary>
-		public static LogSystem createLogSystem(RuntimeServices rsvc)
+		public static ILogSystem CreateLogSystem(IRuntimeServices rsvc)
 		{
 			// if a logSystem was set as a configuation value, use that.
 			// This is any class the user specifies.
 			Object o = rsvc.GetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM);
 
-			if (o != null && o is LogSystem)
+			if (o != null && o is ILogSystem)
 			{
-				((LogSystem) o).Init(rsvc);
+				((ILogSystem) o).Init(rsvc);
 
-				return (LogSystem) o;
+				return (ILogSystem) o;
 			}
 
 			// otherwise, see if a class was specified.  You
@@ -83,13 +83,13 @@ namespace NVelocity.Runtime.Log
 						Type type = Type.GetType(clazz);
 						o = Activator.CreateInstance(type);
 
-						if (o is LogSystem)
+						if (o is ILogSystem)
 						{
-							((LogSystem) o).Init(rsvc);
+							((ILogSystem) o).Init(rsvc);
 
 							rsvc.Info("Using logger class " + clazz);
 
-							return (LogSystem) o;
+							return (ILogSystem) o;
 						}
 						else
 						{
@@ -110,7 +110,7 @@ namespace NVelocity.Runtime.Log
 			// dependencies for the default logger.
 			// Since we really don't know,
 			// then take a wack at the log4net as a last resort.
-			LogSystem als = null;
+			ILogSystem als = null;
 			try
 			{
 				als = new NullLogSystem();

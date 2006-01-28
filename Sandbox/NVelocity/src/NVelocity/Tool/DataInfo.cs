@@ -15,25 +15,12 @@ namespace NVelocity.Tool
 	/// </version>
 	public class DataInfo : IToolInfo
 	{
-		public String Key
-		{
-			get { return key; }
-
-		}
-
-		public String Classname
-		{
-			get { return data.GetType().FullName; }
-
-		}
-
-		public static String TYPE_STRING = "string";
-		public static String TYPE_NUMBER = "number";
-		public static String TYPE_BOOLEAN = "boolean";
+		public static readonly String TYPE_STRING = "string";
+		public static readonly String TYPE_NUMBER = "number";
+		public static readonly String TYPE_BOOLEAN = "boolean";
 
 		private String key;
 		private Object data;
-
 
 		/// <summary> Parses the value string into a recognized type. If
 		/// the type specified is not supported, the data will
@@ -73,6 +60,9 @@ namespace NVelocity.Tool
 			}
 		}
 
+		public String Key { get { return key; } }
+
+		public String Classname { get { return data.GetType().FullName; } }
 
 		/// <summary> Returns the data. Always returns the same
 		/// object since the data is a constant. Initialization

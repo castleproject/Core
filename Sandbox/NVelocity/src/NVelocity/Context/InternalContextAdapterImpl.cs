@@ -42,7 +42,7 @@ namespace NVelocity.Context
 	///
 	/// </version>
 	//TODO: class was sealed
-	public class InternalContextAdapterImpl : InternalContextAdapter
+	public class InternalContextAdapterImpl : IInternalContextAdapter
 	{
 		public String CurrentTemplateName
 		{
@@ -108,7 +108,7 @@ namespace NVelocity.Context
 			get { return context; }
 		}
 
-		public InternalContextAdapter BaseContext
+		public IInternalContextAdapter BaseContext
 		{
 			get { return this; }
 		}
@@ -139,7 +139,7 @@ namespace NVelocity.Context
 		/// people derive new contexts from AbstractContext
 		/// rather than piecing things together
 		/// </summary>
-		internal InternalHousekeepingContext icb = null;
+		internal IInternalHousekeepingContext icb = null;
 
 		/// <summary>  The InternalEventContext that we are wrapping.  If
 		/// the context passed to us doesn't support it, no
@@ -147,7 +147,7 @@ namespace NVelocity.Context
 		/// user context thing, nothing gained by making one
 		/// for them now
 		/// </summary>
-		internal InternalEventContext iec = null;
+		internal IInternalEventContext iec = null;
 
 		/// <summary>  CTOR takes a Context and wraps it, delegating all 'data' calls
 		/// to it.
@@ -159,18 +159,18 @@ namespace NVelocity.Context
 		{
 			context = c;
 
-			if (!(c is InternalHousekeepingContext))
+			if (!(c is IInternalHousekeepingContext))
 			{
 				icb = new InternalContextBase();
 			}
 			else
 			{
-				icb = (InternalHousekeepingContext) context;
+				icb = (IInternalHousekeepingContext) context;
 			}
 
-			if (c is InternalEventContext)
+			if (c is IInternalEventContext)
 			{
-				iec = (InternalEventContext) context;
+				iec = (IInternalEventContext) context;
 			}
 		}
 

@@ -11,7 +11,7 @@ namespace NVelocity.Runtime.Parser.Node
 		private String propertyUsed = null;
 		protected Introspector introspector = null;
 
-		public PropertyExecutor(RuntimeLogger r, Introspector i, Type clazz, String propertyName)
+		public PropertyExecutor(IRuntimeLogger r, Introspector i, Type clazz, String propertyName)
 		{
 			rlog = r;
 			introspector = i;

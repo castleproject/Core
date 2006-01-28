@@ -112,7 +112,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		/// <summary>   Renders the macro using the context
 		/// </summary>
-		public override bool Render(InternalContextAdapter context, TextWriter writer, INode node)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			try
 			{
@@ -168,7 +168,7 @@ namespace NVelocity.Runtime.Directive
 					throw (MethodInvocationException) e;
 				}
 
-				rsvc.Error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + StringUtils.stackTrace(e));
+				rsvc.Error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + StringUtils.StackTrace(e));
 			}
 
 			return true;
@@ -178,7 +178,7 @@ namespace NVelocity.Runtime.Directive
 		/// macro body, renders the macro into an AST, and then inits the AST, so it is ready
 		/// for quick rendering.  Note that this is only AST dependant stuff. Not context.
 		/// </summary>
-		public override void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
 		{
 			base.Init(rs, context, node);
 
@@ -186,7 +186,7 @@ namespace NVelocity.Runtime.Directive
 	    *  how many args did we get?
 	    */
 
-			int i = node.jjtGetNumChildren();
+			int i = node.ChildrenCount;
 
 			/*
 	    *  right number of args?
@@ -270,11 +270,11 @@ namespace NVelocity.Runtime.Directive
 		*  let 'er rip
 		*/
 				VMReferenceMungeVisitor v = new VMReferenceMungeVisitor(hm);
-				nodeTree.jjtAccept(v, null);
+				nodeTree.Accept(v, null);
 			}
 			catch (Exception e)
 			{
-				rsvc.Error("VelocimacroManager.parseTree() : exception " + macroName + " : " + StringUtils.stackTrace(e));
+				rsvc.Error("VelocimacroManager.parseTree() : exception " + macroName + " : " + StringUtils.StackTrace(e));
 			}
 		}
 
@@ -295,7 +295,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private String[] getArgArray(INode node)
 		{
-			int numArgs = node.jjtGetNumChildren();
+			int numArgs = node.ChildrenCount;
 
 			String[] args = new String[numArgs];
 			callingArgTypes = new int[numArgs];
@@ -315,20 +315,20 @@ namespace NVelocity.Runtime.Directive
 		*  into macro body.  So for each arg in the use-instance, treat the stringlierals specially...
 		*/
 
-				callingArgTypes[i] = node.jjtGetChild(i).Type;
+				callingArgTypes[i] = node.GetChild(i).Type;
 
 
-				if (false && node.jjtGetChild(i).Type == ParserTreeConstants.JJTSTRINGLITERAL)
+				if (false && node.GetChild(i).Type == ParserTreeConstants.STRING_LITERAL)
 				{
-					args[i] += node.jjtGetChild(i).FirstToken.Image.Substring(1, (node.jjtGetChild(i).FirstToken.Image.Length - 1) - (1));
+					args[i] += node.GetChild(i).FirstToken.Image.Substring(1, (node.GetChild(i).FirstToken.Image.Length - 1) - (1));
 				}
 				else
 				{
 					/*
 		    *  just wander down the token list, concatenating everything together
 		    */
-					t = node.jjtGetChild(i).FirstToken;
-					tLast = node.jjtGetChild(i).LastToken;
+					t = node.GetChild(i).FirstToken;
+					tLast = node.GetChild(i).LastToken;
 
 					while (t != tLast)
 					{

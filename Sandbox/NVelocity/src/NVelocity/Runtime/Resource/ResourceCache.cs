@@ -35,7 +35,7 @@ namespace NVelocity.Runtime.Resource
 		/// <param name="rs">RuntimeServices to use for logging, etc
 		///
 		/// </param>
-		void initialize(RuntimeServices rs);
+		void initialize(IRuntimeServices rs);
 
 		/// <summary>  retrieves a Resource from the
 		/// cache

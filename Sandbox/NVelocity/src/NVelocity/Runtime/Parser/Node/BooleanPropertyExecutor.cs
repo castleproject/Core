@@ -14,7 +14,7 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </summary>
 	public class BooleanPropertyExecutor : PropertyExecutor
 	{
-		public BooleanPropertyExecutor(RuntimeLogger r, Introspector i, Type clazz, String propertyName) 
+		public BooleanPropertyExecutor(IRuntimeLogger r, Introspector i, Type clazz, String propertyName) 
 			: base(r, i, clazz, propertyName)
 		{
 		}

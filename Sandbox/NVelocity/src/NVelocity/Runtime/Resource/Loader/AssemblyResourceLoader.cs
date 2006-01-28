@@ -56,7 +56,7 @@ namespace NVelocity.Runtime.Resource.Loader
 				throw new ResourceNotFoundException("Need to specify a file name or file path!");
 			}
 
-			String template = StringUtils.normalizePath(templateName);
+			String template = StringUtils.NormalizePath(templateName);
 
 			if (template.StartsWith("\\"))
 			{

@@ -17,12 +17,12 @@ namespace NVelocity.Runtime.Visitor
 	/// <version> $Id: BaseVisitor.cs,v 1.3 2003/10/27 13:54:11 corts Exp $
 	///
 	/// </version>
-	public abstract class BaseVisitor : ParserVisitor
+	public abstract class BaseVisitor : IParserVisitor
 	{
 		/// <summary>
 		/// Context used during traversal
 		/// </summary>
-		protected internal InternalContextAdapter context;
+		protected internal IInternalContextAdapter context;
 
 		/// <summary>
 		/// Writer used as the output sink

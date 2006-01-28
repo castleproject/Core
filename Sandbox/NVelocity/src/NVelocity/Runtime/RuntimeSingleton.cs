@@ -441,7 +441,7 @@ namespace NVelocity.Runtime
 			return ri.GetBoolean(key, def);
 		}
 
-		public static RuntimeServices RuntimeServices
+		public static IRuntimeServices RuntimeServices
 		{
 			get { return ri; }
 		}
@@ -486,7 +486,7 @@ namespace NVelocity.Runtime
 
 
 		/// <summary>
-		/// <seealso cref="Runtime.RuntimeServices.GetApplicationAttribute"/>
+		/// <seealso cref="IRuntimeServices.GetApplicationAttribute"/>
 		/// </summary>
 		/// <param name="key">key</param>
 		/// <returns>value</returns>

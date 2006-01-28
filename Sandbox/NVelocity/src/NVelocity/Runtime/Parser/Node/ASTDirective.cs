@@ -47,22 +47,22 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
-		public override Object Init(InternalContextAdapter context, Object data)
+		public override Object Init(IInternalContextAdapter context, Object data)
 		{
 			base.Init(context, data);
 
 			// only do things that are not context dependant
-			if (parser.isDirective(directiveName))
+			if (parser.IsDirective(directiveName))
 			{
 				isDirective = true;
 
 				// create a new instance of the directive
-				directive = parser.getDirective(directiveName);
+				directive = parser.GetDirective(directiveName);
 				directive.Init(rsvc, context, this);
 				directive.SetLocation(Line, Column);
 			}
@@ -83,7 +83,7 @@ namespace NVelocity.Runtime.Parser.Node
 			return data;
 		}
 
-		public override bool Render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
 			// normal processing
 			if (isDirective)

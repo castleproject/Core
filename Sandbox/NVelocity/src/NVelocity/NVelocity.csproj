@@ -212,7 +212,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Context\InternalContextAdapter.cs"
+                    RelPath = "Context\IInternalContextAdapter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Context\IInternalEventContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Context\IInternalHousekeepingContext.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Context\IInternalWrapperContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -227,27 +242,10 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Context\InternalEventContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Context\InternalHousekeepingContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Context\InternalWrapperContext.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Context\VMContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Dvsl\Directive\" />
-                <Folder RelPath = "Dvsl\Resource\" />
                 <File
                     RelPath = "Exception\MethodInvocationException.cs"
                     SubType = "Code"
@@ -269,22 +267,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Runtime\IRuntimeLogger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Runtime\IRuntimeServices.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\RuntimeConstants.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Runtime\RuntimeInstance.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Runtime\RuntimeLogger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Runtime\RuntimeServices.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -323,11 +321,6 @@
                 />
                 <File
                     RelPath = "Runtime\Directive\Directive.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Runtime\Directive\DirectiveConstants.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -392,12 +385,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Runtime\Log\LogManager.cs"
+                    RelPath = "Runtime\Log\ILogSystem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Runtime\Log\LogSystem.cs"
+                    RelPath = "Runtime\Log\LogManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -412,12 +405,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Runtime\Parser\CharStream.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Runtime\Parser\JJTParserState.cs"
+                    RelPath = "Runtime\Parser\ICharStream.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -433,6 +421,11 @@
                 />
                 <File
                     RelPath = "Runtime\Parser\ParserConstants.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Runtime\Parser\ParserState.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -687,17 +680,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Runtime\Parser\Node\IParserVisitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\Parser\Node\NodeUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Runtime\Parser\Node\ObjectComparer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Runtime\Parser\Node\ParserVisitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -837,6 +830,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Util\Introspection\IUberspect.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\Introspection\IVelMethod.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\Introspection\IVelPropertyGet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Util\Introspection\IVelPropertySet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Util\Introspection\MethodMap.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -847,32 +860,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Util\Introspection\Uberspect.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Util\Introspection\UberspectImpl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Util\Introspection\UberspectLoggable.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Util\Introspection\VelMethod.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Util\Introspection\VelPropertyGet.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Util\Introspection\VelPropertySet.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

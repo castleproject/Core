@@ -38,7 +38,5 @@ namespace NVelocity.Tool
 				return null;
 			}
 		}
-
-
 	}
 }

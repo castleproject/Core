@@ -31,23 +31,23 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
-		public override bool Render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
 			// Check if the #if(expression) construct evaluates to true:
 	    // if so render and leave immediately because there
 	    // is nothing left to do!
-			if (jjtGetChild(0).Evaluate(context))
+			if (GetChild(0).Evaluate(context))
 			{
-				jjtGetChild(1).Render(context, writer);
+				GetChild(1).Render(context, writer);
 				return true;
 			}
 
-			int totalNodes = jjtGetNumChildren();
+			int totalNodes = ChildrenCount;
 
 			// Now check the remaining nodes left in the
 	    // if construct. The nodes are either elseif
@@ -58,9 +58,9 @@ namespace NVelocity.Runtime.Parser.Node
 	    // as there is nothing left to do.
 			for (int i = 2; i < totalNodes; i++)
 			{
-				if (jjtGetChild(i).Evaluate(context))
+				if (GetChild(i).Evaluate(context))
 				{
-					jjtGetChild(i).Render(context, writer);
+					GetChild(i).Render(context, writer);
 					return true;
 				}
 			}
@@ -71,7 +71,7 @@ namespace NVelocity.Runtime.Parser.Node
 			return true;
 		}
 
-		public void Process(InternalContextAdapter context, ParserVisitor visitor)
+		public void Process(IInternalContextAdapter context, IParserVisitor visitor)
 		{
 		}
 	}

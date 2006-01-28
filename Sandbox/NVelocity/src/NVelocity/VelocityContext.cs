@@ -2,6 +2,7 @@ namespace NVelocity
 {
 	using System;
 	using System.Collections;
+
 	using NVelocity.Context;
 
 	/// <summary>
@@ -105,7 +106,7 @@ namespace NVelocity
 		public override Object[] InternalGetKeys()
 		{
 			Object[] keys = new object[context.Count];
-			context.Keys.CopyTo(keys,0);			
+			context.Keys.CopyTo(keys, 0);
 			return keys;
 		}
 
@@ -134,7 +135,7 @@ namespace NVelocity
 				clone = (VelocityContext) base.MemberwiseClone();
 				clone.context = new Hashtable(context);
 			}
-			catch (System.Exception)
+			catch(System.Exception)
 			{
 				// ignore
 			}

@@ -1,6 +1,7 @@
 namespace NVelocity.Util.Introspection
 {
-	/// <summary>  little class to hold 'distance' information
+	/// <summary> 
+	/// little class to hold 'distance' information
 	/// for calling params, as well as determine
 	/// specificity
 	/// </summary>

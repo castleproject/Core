@@ -1,58 +1,5 @@
 namespace NVelocity.Runtime.Directive
 {
-	/*
-    * The Apache Software License, Version 1.1
-    *
-    * Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
-    * reserved.
-    *
-    * Redistribution and use in source and binary forms, with or without
-    * modification, are permitted provided that the following conditions
-    * are met:
-    *
-    * 1. Redistributions of source code must retain the above copyright
-    *    notice, this list of conditions and the following disclaimer.
-    *
-    * 2. Redistributions in binary form must reproduce the above copyright
-    *    notice, this list of conditions and the following disclaimer in
-    *    the documentation and/or other materials provided with the
-    *    distribution.
-    *
-    * 3. The end-user documentation included with the redistribution, if
-    *    any, must include the following acknowlegement:
-    *       "This product includes software developed by the
-    *        Apache Software Foundation (http://www.apache.org/)."
-    *    Alternately, this acknowlegement may appear in the software itself,
-    *    if and wherever such third-party acknowlegements normally appear.
-    *
-    * 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-    *    Foundation" must not be used to endorse or promote products derived
-    *    from this software without prior written permission. For written
-    *    permission, please contact apache@apache.org.
-    *
-    * 5. Products derived from this software may not be called "Apache"
-    *    nor may "Apache" appear in their names without prior written
-    *    permission of the Apache Group.
-    *
-    * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-    * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-    * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-    * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-    * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-    * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-    * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-    * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-    * SUCH DAMAGE.
-    * ====================================================================
-    *
-    * This software consists of voluntary contributions made by many
-    * individuals on behalf of the Apache Software Foundation.  For more
-    * information on the Apache Software Foundation, please see
-    * <http://www.apache.org/>.
-    */
 	using System;
 	using System.IO;
 	using NVelocity.Context;
@@ -61,7 +8,8 @@ namespace NVelocity.Runtime.Directive
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util;
 
-	/// <summary>  The function of this class is to proxy for the calling parameter to the VM.
+	/// <summary>  
+	/// The function of this class is to proxy for the calling parameter to the VM.
 	/// *
 	/// This class is designed to be used in conjunction with the VMContext class
 	/// which knows how to get and set values via it, rather than a simple get()
@@ -109,36 +57,6 @@ namespace NVelocity.Runtime.Directive
 	/// </version>
 	public class VMProxyArg
 	{
-		public String CallerReference
-		{
-			get { return callerReference; }
-
-		}
-
-		public String ContextReference
-		{
-			get { return contextReference; }
-
-		}
-
-		public SimpleNode NodeTree
-		{
-			get { return nodeTree; }
-
-		}
-
-		public Object StaticObject
-		{
-			get { return staticObject; }
-
-		}
-
-		public int Type
-		{
-			get { return type; }
-
-		}
-
 		/// <summary>type of arg I will have
 		/// </summary>
 		private int type = 0;
@@ -153,7 +71,7 @@ namespace NVelocity.Runtime.Directive
 
 		/// <summary>not used in this impl : carries the appropriate user context
 		/// </summary>
-		private InternalContextAdapter usercontext = null;
+		private IInternalContextAdapter usercontext = null;
 
 		/// <summary>number of children in our tree if a reference
 		/// </summary>
@@ -179,7 +97,7 @@ namespace NVelocity.Runtime.Directive
 		/// </summary>
 		private const int GENERALSTATIC = - 1;
 
-		private RuntimeServices rsvc = null;
+		private IRuntimeServices rsvc = null;
 
 		/// <summary>  ctor for current impl
 		/// *
@@ -194,7 +112,7 @@ namespace NVelocity.Runtime.Directive
 		/// <param name="t"> type of arg : JJTREFERENCE, JJTTRUE, etc
 		///
 		/// </param>
-		public VMProxyArg(RuntimeServices rs, String contextRef, String callerRef, int t)
+		public VMProxyArg(IRuntimeServices rs, String contextRef, String callerRef, int t)
 		{
 			rsvc = rs;
 
@@ -203,32 +121,57 @@ namespace NVelocity.Runtime.Directive
 			type = t;
 
 			/*
-	    *  make our AST if necessary
-	    */
+		*  make our AST if necessary
+		*/
 			setup();
 
 			/*
-	    *  if we are multi-node tree, then save the size to 
-	    *  avoid fn call overhead 
-	    */
+		*  if we are multi-node tree, then save the size to 
+		*  avoid fn call overhead 
+		*/
 			if (nodeTree != null)
-				numTreeChildren = nodeTree.jjtGetNumChildren();
+				numTreeChildren = nodeTree.ChildrenCount;
 
 			/*
-	    *  if we are a reference, and 'scalar' (i.e. $foo )
-	    *  then get the de-dollared ref so we can
-	    *  hit our context directly, avoiding the AST
-	    */
-			if (type == ParserTreeConstants.JJTREFERENCE)
+		*  if we are a reference, and 'scalar' (i.e. $foo )
+		*  then get the de-dollared ref so we can
+		*  hit our context directly, avoiding the AST
+		*/
+			if (type == ParserTreeConstants.REFERENCE)
 			{
 				if (numTreeChildren == 0)
 				{
 					/*
-		    * do this properly and use the Reference node
-		    */
+			* do this properly and use the Reference node
+			*/
 					singleLevelRef = ((ASTReference) nodeTree).RootString;
 				}
 			}
+		}
+
+		public String CallerReference
+		{
+			get { return callerReference; }
+		}
+
+		public String ContextReference
+		{
+			get { return contextReference; }
+		}
+
+		public SimpleNode NodeTree
+		{
+			get { return nodeTree; }
+		}
+
+		public Object StaticObject
+		{
+			get { return staticObject; }
+		}
+
+		public int Type
+		{
+			get { return type; }
 		}
 
 		/// <summary>  tells if arg we are poxying for is
@@ -253,13 +196,13 @@ namespace NVelocity.Runtime.Directive
 		/// <returns>Object currently null
 		///
 		/// </returns>
-		public Object setObject(InternalContextAdapter context, Object o)
+		public Object setObject(IInternalContextAdapter context, Object o)
 		{
 			/*
 	    *  if we are a reference, we could be updating a property
 	    */
 
-			if (type == ParserTreeConstants.JJTREFERENCE)
+			if (type == ParserTreeConstants.REFERENCE)
 			{
 				if (numTreeChildren > 0)
 				{
@@ -319,7 +262,7 @@ namespace NVelocity.Runtime.Directive
 		/// *
 		///
 		/// </returns>
-		public Object getObject(InternalContextAdapter context)
+		public Object getObject(IInternalContextAdapter context)
 		{
 			try
 			{
@@ -329,7 +272,7 @@ namespace NVelocity.Runtime.Directive
 
 				Object retObject = null;
 
-				if (type == ParserTreeConstants.JJTREFERENCE)
+				if (type == ParserTreeConstants.REFERENCE)
 				{
 					/*
 		    *  two cases :  scalar reference ($foo) or multi-level ($foo.bar....)
@@ -352,31 +295,31 @@ namespace NVelocity.Runtime.Directive
 						retObject = nodeTree.Execute(null, context);
 					}
 				}
-				else if (type == ParserTreeConstants.JJTOBJECTARRAY)
+				else if (type == ParserTreeConstants.OBJECT_ARRAY)
 				{
 					retObject = nodeTree.Value(context);
 				}
-				else if (type == ParserTreeConstants.JJTINTEGERRANGE)
+				else if (type == ParserTreeConstants.INTEGER_RANGE)
 				{
 					retObject = nodeTree.Value(context);
 				}
-				else if (type == ParserTreeConstants.JJTTRUE)
+				else if (type == ParserTreeConstants.TRUE)
 				{
 					retObject = staticObject;
 				}
-				else if (type == ParserTreeConstants.JJTFALSE)
+				else if (type == ParserTreeConstants.FALSE)
 				{
 					retObject = staticObject;
 				}
-				else if (type == ParserTreeConstants.JJTSTRINGLITERAL)
+				else if (type == ParserTreeConstants.STRING_LITERAL)
 				{
 					retObject = nodeTree.Value(context);
 				}
-				else if (type == ParserTreeConstants.JJTNUMBERLITERAL)
+				else if (type == ParserTreeConstants.NUMBER_LITERAL)
 				{
 					retObject = staticObject;
 				}
-				else if (type == ParserTreeConstants.JJTTEXT)
+				else if (type == ParserTreeConstants.TEXT)
 				{
 					/*
 		    *  this really shouldn't happen.  text is just a thowaway arg for #foreach()
@@ -428,11 +371,11 @@ namespace NVelocity.Runtime.Directive
 		{
 			switch (type)
 			{
-				case ParserTreeConstants.JJTINTEGERRANGE:
-				case ParserTreeConstants.JJTREFERENCE:
-				case ParserTreeConstants.JJTOBJECTARRAY:
-				case ParserTreeConstants.JJTSTRINGLITERAL:
-				case ParserTreeConstants.JJTTEXT:
+				case ParserTreeConstants.INTEGER_RANGE:
+				case ParserTreeConstants.REFERENCE:
+				case ParserTreeConstants.OBJECT_ARRAY:
+				case ParserTreeConstants.STRING_LITERAL:
+				case ParserTreeConstants.TEXT:
 					{
 						/*
 			*  dynamic types, just render
@@ -462,7 +405,7 @@ namespace NVelocity.Runtime.Directive
 			    *  now, our tree really is the first DirectiveArg(), and only one
 			    */
 
-							nodeTree = (SimpleNode) nodeTree.jjtGetChild(0).jjtGetChild(0);
+							nodeTree = (SimpleNode) nodeTree.GetChild(0).GetChild(0);
 
 							/*
 			    * sanity check
@@ -481,14 +424,14 @@ namespace NVelocity.Runtime.Directive
 						}
 						catch (Exception e)
 						{
-							rsvc.Error("VMProxyArg.setup() : exception " + callerReference + " : " + StringUtils.stackTrace(e));
+							rsvc.Error("VMProxyArg.setup() : exception " + callerReference + " : " + StringUtils.StackTrace(e));
 						}
 
 						break;
 					}
 
 
-				case ParserTreeConstants.JJTTRUE:
+				case ParserTreeConstants.TRUE:
 					{
 						constant = true;
 						staticObject = true;
@@ -496,7 +439,7 @@ namespace NVelocity.Runtime.Directive
 					}
 
 
-				case ParserTreeConstants.JJTFALSE:
+				case ParserTreeConstants.FALSE:
 					{
 						constant = true;
 						staticObject = false;
@@ -504,7 +447,7 @@ namespace NVelocity.Runtime.Directive
 					}
 
 
-				case ParserTreeConstants.JJTNUMBERLITERAL:
+				case ParserTreeConstants.NUMBER_LITERAL:
 					{
 						constant = true;
 						staticObject = Int32.Parse(callerReference);
@@ -512,7 +455,7 @@ namespace NVelocity.Runtime.Directive
 					}
 
 
-				case ParserTreeConstants.JJTWORD:
+				case ParserTreeConstants.WORD:
 					{
 						/*
 			*  this is technically an error...
@@ -547,7 +490,7 @@ namespace NVelocity.Runtime.Directive
 		/// *
 		/// that impl also had the VMProxyArg carry it's context
 		/// </summary>
-		public VMProxyArg(VMProxyArg model, InternalContextAdapter c)
+		public VMProxyArg(VMProxyArg model, IInternalContextAdapter c)
 		{
 			usercontext = c;
 			contextReference = model.ContextReference;
@@ -557,9 +500,9 @@ namespace NVelocity.Runtime.Directive
 			type = model.Type;
 
 			if (nodeTree != null)
-				numTreeChildren = nodeTree.jjtGetNumChildren();
+				numTreeChildren = nodeTree.ChildrenCount;
 
-			if (type == ParserTreeConstants.JJTREFERENCE)
+			if (type == ParserTreeConstants.REFERENCE)
 			{
 				if (numTreeChildren == 0)
 				{

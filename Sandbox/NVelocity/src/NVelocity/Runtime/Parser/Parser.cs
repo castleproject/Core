@@ -21,7 +21,7 @@ namespace NVelocity.Runtime.Parser
 	{
 		/*@bgen(jjtree)*/
 		//UPGRADE_NOTE: The initialization of  'jjtree' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		internal JJTParserState jjtree;
+		internal ParserState jjtree;
 
 		/// <summary>  This Hashtable contains a list of all of the dynamic directives.
 		/// </summary>
@@ -34,7 +34,7 @@ namespace NVelocity.Runtime.Parser
 
 		internal VelocityCharStream velcharstream = null;
 
-		private RuntimeServices rsvc = null;
+		private IRuntimeServices rsvc = null;
 
 		///
 		/// <summary> This constructor was added to allow the re-use of parsers.
@@ -43,7 +43,7 @@ namespace NVelocity.Runtime.Parser
 		/// object, we satisfy the requirement of an InputStream
 		/// by using a newline character as an input stream.
 		/// </summary>
-		public Parser(RuntimeServices rs) : this(new VelocityCharStream(new StringReader("\n"), 1, 1))
+		public Parser(IRuntimeServices rs) : this(new VelocityCharStream(new StringReader("\n"), 1, 1))
 		{
 			InitBlock();
 
@@ -60,10 +60,10 @@ namespace NVelocity.Runtime.Parser
 
 		private void InitBlock()
 		{
-			jjtree = new JJTParserState();
+			jjtree = new ParserState();
 			directives = null;
 			jj_la1 = new int[53];
-			jj_2_rtns = new JJCalls[12];
+			jj_2_rtns = new Calls[12];
 			jj_expentries = new ArrayList();
 			jj_lasttokens = new int[100];
 		}
@@ -96,7 +96,7 @@ namespace NVelocity.Runtime.Parser
 		/// method and re-initializing the lexer with
 		/// the new stream that we want parsed.
 		/// </summary>
-		public SimpleNode parse(TextReader reader, String templateName)
+		public SimpleNode Parse(TextReader reader, String templateName)
 		{
 			SimpleNode sn = null;
 
@@ -104,7 +104,7 @@ namespace NVelocity.Runtime.Parser
 
 			try
 			{
-				token_source.clearStateVars();
+				token_source.ClearStateVars();
 
 				/*
 				*  reinitialize the VelocityCharStream
@@ -120,11 +120,11 @@ namespace NVelocity.Runtime.Parser
 				/*
 				*  do that voodoo...
 				*/
-				sn = process();
+				sn = Process();
 			}
 			catch (ParseException pe)
 			{
-				rsvc.Error("Parser Exception: " + templateName + " : " + StringUtils.stackTrace(pe));
+				rsvc.Error("Parser Exception: " + templateName + " : " + StringUtils.StackTrace(pe));
 				throw new ParseException(pe.currentToken, pe.expectedTokenSequences, pe.tokenImage);
 			}
 			catch (TokenMgrError tme)
@@ -133,7 +133,7 @@ namespace NVelocity.Runtime.Parser
 			}
 			catch (Exception e)
 			{
-				rsvc.Error("Parser Error: " + templateName + " : " + StringUtils.stackTrace(e));
+				rsvc.Error("Parser Error: " + templateName + " : " + StringUtils.StackTrace(e));
 			}
 
 			currentTemplateName = "";
@@ -145,7 +145,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		/// <summary>  This method gets a Directive from the directives Hashtable
 		/// </summary>
-		public Directive getDirective(String directive)
+		public Directive GetDirective(String directive)
 		{
 			return directives.Create(directive);
 		}
@@ -153,7 +153,7 @@ namespace NVelocity.Runtime.Parser
 		/// <summary>  This method finds out of the directive exists in the directives
 		/// Hashtable.
 		/// </summary>
-		public bool isDirective(String directive)
+		public bool IsDirective(String directive)
 		{
 			return (directives.Contains(directive));
 		}
@@ -161,7 +161,7 @@ namespace NVelocity.Runtime.Parser
 		/// <summary> Produces a processed output for an escaped control or
 		/// pluggable directive
 		/// </summary>
-		private String escapedDirective(String strImage)
+		private String EscapedDirective(String strImage)
 		{
 			int iLast = strImage.LastIndexOf("\\");
 
@@ -173,7 +173,7 @@ namespace NVelocity.Runtime.Parser
 	    *  is this a PD or a control directive?
 	    */
 
-			if (isDirective(strDirective.Substring(1)))
+			if (IsDirective(strDirective.Substring(1)))
 			{
 				bRecognizedDirective = true;
 			}
@@ -210,12 +210,12 @@ namespace NVelocity.Runtime.Parser
 		/// which implements the ParserVisitor interface
 		/// which is generated automatically by JavaCC
 		/// </summary>
-		public SimpleNode process()
+		public SimpleNode Process()
 		{
 			/*@bgen(jjtree) process */
-			ASTprocess jjtn000 = new ASTprocess(this, ParserTreeConstants.JJTPROCESS);
+			ASTprocess jjtn000 = new ASTprocess(this, ParserTreeConstants.PROCESS);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
@@ -257,8 +257,8 @@ namespace NVelocity.Runtime.Parser
 				label_1_brk:
 				;
 
-				jj_consume_token(0);
-				jjtree.closeNodeScope(jjtn000, true);
+				ConsumeToken(0);
+				jjtree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				if (true)
 					return jjtn000;
@@ -268,12 +268,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -294,7 +294,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 			throw new ApplicationException("Missing return statement in function");
@@ -361,7 +361,7 @@ namespace NVelocity.Runtime.Parser
 
 							default:
 								jj_la1[2] = jj_gen;
-								jj_consume_token(- 1);
+								ConsumeToken(- 1);
 								throw new ParseException();
 
 						}
@@ -380,25 +380,25 @@ namespace NVelocity.Runtime.Parser
 		public void EscapedDirective()
 		{
 			/*@bgen(jjtree) EscapedDirective */
-			ASTEscapedDirective jjtn000 = new ASTEscapedDirective(this, ParserTreeConstants.JJTESCAPEDDIRECTIVE);
+			ASTEscapedDirective jjtn000 = new ASTEscapedDirective(this, ParserTreeConstants.ESCAPED_DIRECTIVE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
 				Token t = null;
-				t = jj_consume_token(ParserConstants.ESCAPE_DIRECTIVE);
-				jjtree.closeNodeScope(jjtn000, true);
+				t = ConsumeToken(ParserConstants.ESCAPE_DIRECTIVE);
+				jjtree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				/*
 				*  churn and burn..
 				*/
-				t.Image = escapedDirective(t.Image);
+				t.Image = EscapedDirective(t.Image);
 			}
 			finally
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -412,9 +412,9 @@ namespace NVelocity.Runtime.Parser
 		public void Escape()
 		{
 			/*@bgen(jjtree) Escape */
-			ASTEscape jjtn000 = new ASTEscape(this, ParserTreeConstants.JJTESCAPE);
+			ASTEscape jjtn000 = new ASTEscape(this, ParserTreeConstants.ESCAPE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
 				Token t = null;
@@ -422,7 +422,7 @@ namespace NVelocity.Runtime.Parser
 				bool control = false;
 				while (true)
 				{
-					t = jj_consume_token(ParserConstants.DOUBLE_ESCAPE);
+					t = ConsumeToken(ParserConstants.DOUBLE_ESCAPE);
 					count++;
 					if (jj_2_2(2))
 					{
@@ -438,7 +438,7 @@ namespace NVelocity.Runtime.Parser
 				label_2_brk:
 				;
 
-				jjtree.closeNodeScope(jjtn000, true);
+				jjtree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				/*
 				* first, check to see if we have a control directive
@@ -459,7 +459,7 @@ namespace NVelocity.Runtime.Parser
 				* if that failed, lets lookahead to see if we matched a PD or a VM
 				*/
 
-				if (isDirective(t.Next.Image.Substring(1)))
+				if (IsDirective(t.Next.Image.Substring(1)))
 					control = true;
 				else if (rsvc.IsVelocimacro(t.Next.Image.Substring(1), currentTemplateName))
 					control = true;
@@ -473,7 +473,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -481,28 +481,28 @@ namespace NVelocity.Runtime.Parser
 		public void Comment()
 		{
 			/*@bgen(jjtree) Comment */
-			ASTComment jjtn000 = new ASTComment(this, ParserTreeConstants.JJTCOMMENT);
+			ASTComment jjtn000 = new ASTComment(this, ParserTreeConstants.COMMENT);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.SINGLE_LINE_COMMENT:
-						jj_consume_token(ParserConstants.SINGLE_LINE_COMMENT);
+						ConsumeToken(ParserConstants.SINGLE_LINE_COMMENT);
 						break;
 
 					case ParserConstants.MULTI_LINE_COMMENT:
-						jj_consume_token(ParserConstants.MULTI_LINE_COMMENT);
+						ConsumeToken(ParserConstants.MULTI_LINE_COMMENT);
 						break;
 
 					case ParserConstants.FORMAL_COMMENT:
-						jj_consume_token(ParserConstants.FORMAL_COMMENT);
+						ConsumeToken(ParserConstants.FORMAL_COMMENT);
 						break;
 
 					default:
 						jj_la1[3] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -511,7 +511,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -519,18 +519,18 @@ namespace NVelocity.Runtime.Parser
 		public void NumberLiteral()
 		{
 			/*@bgen(jjtree) NumberLiteral */
-			ASTNumberLiteral jjtn000 = new ASTNumberLiteral(this, ParserTreeConstants.JJTNUMBERLITERAL);
+			ASTNumberLiteral jjtn000 = new ASTNumberLiteral(this, ParserTreeConstants.NUMBER_LITERAL);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
-				jj_consume_token(ParserConstants.NUMBER_LITERAL);
+				ConsumeToken(ParserConstants.NUMBER_LITERAL);
 			}
 			finally
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -538,18 +538,18 @@ namespace NVelocity.Runtime.Parser
 		public void StringLiteral()
 		{
 			/*@bgen(jjtree) StringLiteral */
-			ASTStringLiteral jjtn000 = new ASTStringLiteral(this, ParserTreeConstants.JJTSTRINGLITERAL);
+			ASTStringLiteral jjtn000 = new ASTStringLiteral(this, ParserTreeConstants.STRING_LITERAL);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
-				jj_consume_token(ParserConstants.STRING_LITERAL);
+				ConsumeToken(ParserConstants.STRING_LITERAL);
 			}
 			finally
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -567,18 +567,18 @@ namespace NVelocity.Runtime.Parser
 		public void Identifier()
 		{
 			/*@bgen(jjtree) Identifier */
-			ASTIdentifier jjtn000 = new ASTIdentifier(this, ParserTreeConstants.JJTIDENTIFIER);
+			ASTIdentifier jjtn000 = new ASTIdentifier(this, ParserTreeConstants.IDENTIFIER);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
-				jj_consume_token(ParserConstants.IDENTIFIER);
+				ConsumeToken(ParserConstants.IDENTIFIER);
 			}
 			finally
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -586,18 +586,18 @@ namespace NVelocity.Runtime.Parser
 		public void Word()
 		{
 			/*@bgen(jjtree) Word */
-			ASTWord jjtn000 = new ASTWord(this, ParserTreeConstants.JJTWORD);
+			ASTWord jjtn000 = new ASTWord(this, ParserTreeConstants.WORD);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
-				jj_consume_token(ParserConstants.WORD);
+				ConsumeToken(ParserConstants.WORD);
 			}
 			finally
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -651,12 +651,12 @@ namespace NVelocity.Runtime.Parser
 								break;
 
 							case ParserConstants.WHITESPACE:
-								jj_consume_token(ParserConstants.WHITESPACE);
+								ConsumeToken(ParserConstants.WHITESPACE);
 								break;
 
 							default:
 								jj_la1[5] = jj_gen;
-								jj_consume_token(- 1);
+								ConsumeToken(- 1);
 								throw new ParseException();
 
 						}
@@ -672,9 +672,9 @@ namespace NVelocity.Runtime.Parser
 		public SimpleNode Directive()
 		{
 			/*@bgen(jjtree) Directive */
-			ASTDirective jjtn000 = new ASTDirective(this, ParserTreeConstants.JJTDIRECTIVE);
+			ASTDirective jjtn000 = new ASTDirective(this, ParserTreeConstants.DIRECTIVE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			Token t = null;
 			Directive d;
 			DirectiveType directiveType;
@@ -686,7 +686,7 @@ namespace NVelocity.Runtime.Parser
 		* note that if we were escaped, that is now handled by 
 		* EscapedDirective()
 		*/
-				t = jj_consume_token(ParserConstants.WORD);
+				t = ConsumeToken(ParserConstants.WORD);
 				String directiveName = t.Image.Substring(1);
 
 				d = directives.Create(directiveName);
@@ -721,7 +721,7 @@ namespace NVelocity.Runtime.Parser
 					{
 						if (!rsvc.IsVelocimacro(directiveName, currentTemplateName))
 						{
-							token_source.stateStackPop();
+							token_source.StateStackPop();
 							token_source.inDirective = false;
 							if (true)
 								return jjtn000;
@@ -746,7 +746,7 @@ namespace NVelocity.Runtime.Parser
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -755,7 +755,7 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.LPAREN);
+				ConsumeToken(ParserConstants.LPAREN);
 				while (true)
 				{
 					switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
@@ -784,15 +784,15 @@ namespace NVelocity.Runtime.Parser
 				label_3_brk:
 				;
 
-				jj_consume_token(ParserConstants.RPAREN);
+				ConsumeToken(ParserConstants.RPAREN);
 				if (directiveType == DirectiveType.LINE)
 				{
 					if (true)
 						return jjtn000;
 				}
-				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.JJTBLOCK);
+				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.openNodeScope(jjtn001);
+				jjtree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -839,12 +839,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.clearNodeScope(jjtn001);
+						jjtree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.popNode();
+						jjtree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -869,11 +869,11 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.closeNodeScope(jjtn001, true);
+						jjtree.CloseNodeScope(jjtn001, true);
 					}
 				}
-				jj_consume_token(ParserConstants.END);
-				jjtree.closeNodeScope(jjtn000, true);
+				ConsumeToken(ParserConstants.END);
+				jjtree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				/*
 		*  VM : if we are processing a #macro directive, we need to 
@@ -900,12 +900,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -930,7 +930,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 			throw new ApplicationException("Missing return statement in function");
@@ -939,13 +939,13 @@ namespace NVelocity.Runtime.Parser
 		public void ObjectArray()
 		{
 			/*@bgen(jjtree) ObjectArray */
-			ASTObjectArray jjtn000 = new ASTObjectArray(this, ParserTreeConstants.JJTOBJECTARRAY);
+			ASTObjectArray jjtn000 = new ASTObjectArray(this, ParserTreeConstants.OBJECT_ARRAY);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
-				jj_consume_token(ParserConstants.LBRACKET);
+				ConsumeToken(ParserConstants.LBRACKET);
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.LBRACKET:
@@ -971,7 +971,7 @@ namespace NVelocity.Runtime.Parser
 									goto label_5_brk;
 
 							}
-							jj_consume_token(ParserConstants.COMMA);
+							ConsumeToken(ParserConstants.COMMA);
 							Parameter();
 						}
 						//UPGRADE_NOTE: Label 'label_5_brk' was added. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1011"'
@@ -986,18 +986,18 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.RBRACKET);
+				ConsumeToken(ParserConstants.RBRACKET);
 			}
 			catch (Exception jjte000)
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1022,7 +1022,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1034,17 +1034,17 @@ namespace NVelocity.Runtime.Parser
 		public void IntegerRange()
 		{
 			/*@bgen(jjtree) IntegerRange */
-			ASTIntegerRange jjtn000 = new ASTIntegerRange(this, ParserTreeConstants.JJTINTEGERRANGE);
+			ASTIntegerRange jjtn000 = new ASTIntegerRange(this, ParserTreeConstants.INTEGER_RANGE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
-				jj_consume_token(ParserConstants.LBRACKET);
+				ConsumeToken(ParserConstants.LBRACKET);
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -1066,14 +1066,14 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[12] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -1082,11 +1082,11 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.DOUBLEDOT);
+				ConsumeToken(ParserConstants.DOUBLEDOT);
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -1108,14 +1108,14 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[15] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -1124,18 +1124,18 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.RBRACKET);
+				ConsumeToken(ParserConstants.RBRACKET);
 			}
 			catch (Exception jjte000)
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1160,7 +1160,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1174,7 +1174,7 @@ namespace NVelocity.Runtime.Parser
 			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 			{
 				case ParserConstants.WHITESPACE:
-					jj_consume_token(ParserConstants.WHITESPACE);
+					ConsumeToken(ParserConstants.WHITESPACE);
 					break;
 
 				default:
@@ -1222,7 +1222,7 @@ namespace NVelocity.Runtime.Parser
 
 							default:
 								jj_la1[19] = jj_gen;
-								jj_consume_token(- 1);
+								ConsumeToken(- 1);
 								throw new ParseException();
 
 						}
@@ -1233,7 +1233,7 @@ namespace NVelocity.Runtime.Parser
 			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 			{
 				case ParserConstants.WHITESPACE:
-					jj_consume_token(ParserConstants.WHITESPACE);
+					ConsumeToken(ParserConstants.WHITESPACE);
 					break;
 
 				default:
@@ -1251,14 +1251,14 @@ namespace NVelocity.Runtime.Parser
 		public void Method()
 		{
 			/*@bgen(jjtree) Method */
-			ASTMethod jjtn000 = new ASTMethod(this, ParserTreeConstants.JJTMETHOD);
+			ASTMethod jjtn000 = new ASTMethod(this, ParserTreeConstants.METHOD);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				Identifier();
-				jj_consume_token(ParserConstants.LPAREN);
+				ConsumeToken(ParserConstants.LPAREN);
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.LBRACKET:
@@ -1284,7 +1284,7 @@ namespace NVelocity.Runtime.Parser
 									goto label_6_brk;
 
 							}
-							jj_consume_token(ParserConstants.COMMA);
+							ConsumeToken(ParserConstants.COMMA);
 							Parameter();
 						}
 						//UPGRADE_NOTE: Label 'label_6_brk' was added. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1011"'
@@ -1299,18 +1299,18 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.REFMOD2_RPAREN);
+				ConsumeToken(ParserConstants.REFMOD2_RPAREN);
 			}
 			catch (Exception jjte000)
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1335,7 +1335,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1343,16 +1343,16 @@ namespace NVelocity.Runtime.Parser
 		public void Reference()
 		{
 			/*@bgen(jjtree) Reference */
-			ASTReference jjtn000 = new ASTReference(this, ParserTreeConstants.JJTREFERENCE);
+			ASTReference jjtn000 = new ASTReference(this, ParserTreeConstants.REFERENCE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.IDENTIFIER:
-						jj_consume_token(ParserConstants.IDENTIFIER);
+						ConsumeToken(ParserConstants.IDENTIFIER);
 						while (true)
 						{
 							if (jj_2_5(2))
@@ -1364,7 +1364,7 @@ namespace NVelocity.Runtime.Parser
 								//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
 								goto label_7_brk;
 							}
-							jj_consume_token(ParserConstants.DOT);
+							ConsumeToken(ParserConstants.DOT);
 							if (jj_2_6(3))
 							{
 								Method();
@@ -1379,7 +1379,7 @@ namespace NVelocity.Runtime.Parser
 
 									default:
 										jj_la1[23] = jj_gen;
-										jj_consume_token(- 1);
+										ConsumeToken(- 1);
 										throw new ParseException();
 
 								}
@@ -1392,8 +1392,8 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 					case ParserConstants.LCURLY:
-						jj_consume_token(ParserConstants.LCURLY);
-						jj_consume_token(ParserConstants.IDENTIFIER);
+						ConsumeToken(ParserConstants.LCURLY);
+						ConsumeToken(ParserConstants.IDENTIFIER);
 						while (true)
 						{
 							if (jj_2_7(2))
@@ -1405,7 +1405,7 @@ namespace NVelocity.Runtime.Parser
 								//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
 								goto label_8_brk;
 							}
-							jj_consume_token(ParserConstants.DOT);
+							ConsumeToken(ParserConstants.DOT);
 							if (jj_2_8(3))
 							{
 								Method();
@@ -1420,7 +1420,7 @@ namespace NVelocity.Runtime.Parser
 
 									default:
 										jj_la1[24] = jj_gen;
-										jj_consume_token(- 1);
+										ConsumeToken(- 1);
 										throw new ParseException();
 
 								}
@@ -1430,12 +1430,12 @@ namespace NVelocity.Runtime.Parser
 						label_8_brk:
 						;
 
-						jj_consume_token(ParserConstants.RCURLY);
+						ConsumeToken(ParserConstants.RCURLY);
 						break;
 
 					default:
 						jj_la1[25] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -1444,12 +1444,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1474,7 +1474,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1482,18 +1482,18 @@ namespace NVelocity.Runtime.Parser
 		public void True()
 		{
 			/*@bgen(jjtree) True */
-			ASTTrue jjtn000 = new ASTTrue(this, ParserTreeConstants.JJTTRUE);
+			ASTTrue jjtn000 = new ASTTrue(this, ParserTreeConstants.TRUE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
-				jj_consume_token(ParserConstants.TRUE);
+				ConsumeToken(ParserConstants.TRUE);
 			}
 			finally
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1501,18 +1501,18 @@ namespace NVelocity.Runtime.Parser
 		public void False()
 		{
 			/*@bgen(jjtree) False */
-			ASTFalse jjtn000 = new ASTFalse(this, ParserTreeConstants.JJTFALSE);
+			ASTFalse jjtn000 = new ASTFalse(this, ParserTreeConstants.FALSE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
-				jj_consume_token(ParserConstants.FALSE);
+				ConsumeToken(ParserConstants.FALSE);
 			}
 			finally
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1524,52 +1524,52 @@ namespace NVelocity.Runtime.Parser
 		public void Text()
 		{
 			/*@bgen(jjtree) Text */
-			ASTText jjtn000 = new ASTText(this, ParserTreeConstants.JJTTEXT);
+			ASTText jjtn000 = new ASTText(this, ParserTreeConstants.TEXT);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			try
 			{
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.TEXT:
-						jj_consume_token(ParserConstants.TEXT);
+						ConsumeToken(ParserConstants.TEXT);
 						break;
 
 					case ParserConstants.DOT:
-						jj_consume_token(ParserConstants.DOT);
+						ConsumeToken(ParserConstants.DOT);
 						break;
 
 					case ParserConstants.RPAREN:
-						jj_consume_token(ParserConstants.RPAREN);
+						ConsumeToken(ParserConstants.RPAREN);
 						break;
 
 					case ParserConstants.LPAREN:
-						jj_consume_token(ParserConstants.LPAREN);
+						ConsumeToken(ParserConstants.LPAREN);
 						break;
 
 					case ParserConstants.NUMBER_LITERAL:
-						jj_consume_token(ParserConstants.NUMBER_LITERAL);
+						ConsumeToken(ParserConstants.NUMBER_LITERAL);
 						break;
 
 					case ParserConstants.STRING_LITERAL:
-						jj_consume_token(ParserConstants.STRING_LITERAL);
+						ConsumeToken(ParserConstants.STRING_LITERAL);
 						break;
 
 					case ParserConstants.ESCAPE:
-						jj_consume_token(ParserConstants.ESCAPE);
+						ConsumeToken(ParserConstants.ESCAPE);
 						break;
 
 					case ParserConstants.LCURLY:
-						jj_consume_token(ParserConstants.LCURLY);
+						ConsumeToken(ParserConstants.LCURLY);
 						break;
 
 					case ParserConstants.RCURLY:
-						jj_consume_token(ParserConstants.RCURLY);
+						ConsumeToken(ParserConstants.RCURLY);
 						break;
 
 					default:
 						jj_la1[26] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -1578,7 +1578,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1592,17 +1592,17 @@ namespace NVelocity.Runtime.Parser
 		public void IfStatement()
 		{
 			/*@bgen(jjtree) IfStatement */
-			ASTIfStatement jjtn000 = new ASTIfStatement(this, ParserTreeConstants.JJTIFSTATEMENT);
+			ASTIfStatement jjtn000 = new ASTIfStatement(this, ParserTreeConstants.IF_STATEMENT);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
-				jj_consume_token(ParserConstants.IF_DIRECTIVE);
+				ConsumeToken(ParserConstants.IF_DIRECTIVE);
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -1611,12 +1611,12 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.LPAREN);
+				ConsumeToken(ParserConstants.LPAREN);
 				Expression();
-				jj_consume_token(ParserConstants.RPAREN);
-				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.JJTBLOCK);
+				ConsumeToken(ParserConstants.RPAREN);
+				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.openNodeScope(jjtn001);
+				jjtree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -1663,12 +1663,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.clearNodeScope(jjtn001);
+						jjtree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.popNode();
+						jjtree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -1693,7 +1693,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.closeNodeScope(jjtn001, true);
+						jjtree.CloseNodeScope(jjtn001, true);
 					}
 				}
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
@@ -1739,18 +1739,18 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.END);
+				ConsumeToken(ParserConstants.END);
 			}
 			catch (Exception jjte000)
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1775,7 +1775,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1783,16 +1783,16 @@ namespace NVelocity.Runtime.Parser
 		public void ElseStatement()
 		{
 			/*@bgen(jjtree) ElseStatement */
-			ASTElseStatement jjtn000 = new ASTElseStatement(this, ParserTreeConstants.JJTELSESTATEMENT);
+			ASTElseStatement jjtn000 = new ASTElseStatement(this, ParserTreeConstants.ELSE_STATEMENT);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
-				jj_consume_token(ParserConstants.ELSE_DIRECTIVE);
-				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.JJTBLOCK);
+				ConsumeToken(ParserConstants.ELSE_DIRECTIVE);
+				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.openNodeScope(jjtn001);
+				jjtree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -1839,12 +1839,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.clearNodeScope(jjtn001);
+						jjtree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.popNode();
+						jjtree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -1869,7 +1869,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.closeNodeScope(jjtn001, true);
+						jjtree.CloseNodeScope(jjtn001, true);
 					}
 				}
 			}
@@ -1877,12 +1877,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1907,7 +1907,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1915,17 +1915,17 @@ namespace NVelocity.Runtime.Parser
 		public void ElseIfStatement()
 		{
 			/*@bgen(jjtree) ElseIfStatement */
-			ASTElseIfStatement jjtn000 = new ASTElseIfStatement(this, ParserTreeConstants.JJTELSEIFSTATEMENT);
+			ASTElseIfStatement jjtn000 = new ASTElseIfStatement(this, ParserTreeConstants.ELSE_IF_STATEMENT);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
-				jj_consume_token(ParserConstants.ELSEIF_DIRECTIVE);
+				ConsumeToken(ParserConstants.ELSEIF_DIRECTIVE);
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -1934,12 +1934,12 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.LPAREN);
+				ConsumeToken(ParserConstants.LPAREN);
 				Expression();
-				jj_consume_token(ParserConstants.RPAREN);
-				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.JJTBLOCK);
+				ConsumeToken(ParserConstants.RPAREN);
+				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.openNodeScope(jjtn001);
+				jjtree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -1986,12 +1986,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.clearNodeScope(jjtn001);
+						jjtree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.popNode();
+						jjtree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -2016,7 +2016,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.closeNodeScope(jjtn001, true);
+						jjtree.CloseNodeScope(jjtn001, true);
 					}
 				}
 			}
@@ -2024,12 +2024,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2054,7 +2054,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -2066,24 +2066,24 @@ namespace NVelocity.Runtime.Parser
 		public void SetDirective()
 		{
 			/*@bgen(jjtree) SetDirective */
-			ASTSetDirective jjtn000 = new ASTSetDirective(this, ParserTreeConstants.JJTSETDIRECTIVE);
+			ASTSetDirective jjtn000 = new ASTSetDirective(this, ParserTreeConstants.SET_DIRECTIVE);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
-				jj_consume_token(ParserConstants.SET_DIRECTIVE);
+				ConsumeToken(ParserConstants.SET_DIRECTIVE);
 				if (jj_2_9(2))
 				{
-					jj_consume_token(ParserConstants.WHITESPACE);
+					ConsumeToken(ParserConstants.WHITESPACE);
 				}
 				else
 				{
 					;
 				}
-				jj_consume_token(ParserConstants.LPAREN);
+				ConsumeToken(ParserConstants.LPAREN);
 				Expression();
-				jj_consume_token(ParserConstants.RPAREN);
+				ConsumeToken(ParserConstants.RPAREN);
 				/*
 				* ensure that inSet is false.  Leads to some amusing bugs...
 				*/
@@ -2092,7 +2092,7 @@ namespace NVelocity.Runtime.Parser
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.NEWLINE:
-						jj_consume_token(ParserConstants.NEWLINE);
+						ConsumeToken(ParserConstants.NEWLINE);
 						break;
 
 					default:
@@ -2106,12 +2106,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2136,7 +2136,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -2149,7 +2149,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public void StopStatement()
 		{
-			jj_consume_token(ParserConstants.STOP_DIRECTIVE);
+			ConsumeToken(ParserConstants.STOP_DIRECTIVE);
 		}
 
 		/* -----------------------------------------------------------------------
@@ -2161,9 +2161,9 @@ namespace NVelocity.Runtime.Parser
 		public void Expression()
 		{
 			/*@bgen(jjtree) Expression */
-			ASTExpression jjtn000 = new ASTExpression(this, ParserTreeConstants.JJTEXPRESSION);
+			ASTExpression jjtn000 = new ASTExpression(this, ParserTreeConstants.EXPRESSION);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
@@ -2190,7 +2190,7 @@ namespace NVelocity.Runtime.Parser
 
 						default:
 							jj_la1[36] = jj_gen;
-							jj_consume_token(- 1);
+							ConsumeToken(- 1);
 							throw new ParseException();
 
 					}
@@ -2200,12 +2200,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2230,7 +2230,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, true);
+					jjtree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -2238,26 +2238,26 @@ namespace NVelocity.Runtime.Parser
 		public void Assignment()
 		{
 			/*@bgen(jjtree) #Assignment( 2) */
-			ASTAssignment jjtn000 = new ASTAssignment(this, ParserTreeConstants.JJTASSIGNMENT);
+			ASTAssignment jjtn000 = new ASTAssignment(this, ParserTreeConstants.ASSIGNMENT);
 			bool jjtc000 = true;
-			jjtree.openNodeScope(jjtn000);
+			jjtree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				PrimaryExpression();
-				jj_consume_token(ParserConstants.EQUALS);
+				ConsumeToken(ParserConstants.EQUALS);
 				Expression();
 			}
 			catch (Exception jjte000)
 			{
 				if (jjtc000)
 				{
-					jjtree.clearNodeScope(jjtn000);
+					jjtree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.popNode();
+					jjtree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2282,7 +2282,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.closeNodeScope(jjtn000, 2);
+					jjtree.CloseNodeScope(jjtn000, 2);
 				}
 			}
 		}
@@ -2304,10 +2304,10 @@ namespace NVelocity.Runtime.Parser
 						goto label_13_brk;
 
 				}
-				jj_consume_token(ParserConstants.LOGICAL_OR);
-				ASTOrNode jjtn001 = new ASTOrNode(this, ParserTreeConstants.JJTORNODE);
+				ConsumeToken(ParserConstants.LOGICAL_OR);
+				ASTOrNode jjtn001 = new ASTOrNode(this, ParserTreeConstants.OR_NODE);
 				bool jjtc001 = true;
-				jjtree.openNodeScope(jjtn001);
+				jjtree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -2317,12 +2317,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.clearNodeScope(jjtn001);
+						jjtree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.popNode();
+						jjtree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -2347,7 +2347,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.closeNodeScope(jjtn001, 2);
+						jjtree.CloseNodeScope(jjtn001, 2);
 					}
 				}
 			}
@@ -2374,10 +2374,10 @@ namespace NVelocity.Runtime.Parser
 						goto label_14_brk;
 
 				}
-				jj_consume_token(ParserConstants.LOGICAL_AND);
-				ASTAndNode jjtn001 = new ASTAndNode(this, ParserTreeConstants.JJTANDNODE);
+				ConsumeToken(ParserConstants.LOGICAL_AND);
+				ASTAndNode jjtn001 = new ASTAndNode(this, ParserTreeConstants.AND_NODE);
 				bool jjtc001 = true;
-				jjtree.openNodeScope(jjtn001);
+				jjtree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -2387,12 +2387,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.clearNodeScope(jjtn001);
+						jjtree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.popNode();
+						jjtree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -2417,7 +2417,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.closeNodeScope(jjtn001, 2);
+						jjtree.CloseNodeScope(jjtn001, 2);
 					}
 				}
 			}
@@ -2448,10 +2448,10 @@ namespace NVelocity.Runtime.Parser
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.LOGICAL_EQUALS:
-						jj_consume_token(ParserConstants.LOGICAL_EQUALS);
-						ASTEQNode jjtn001 = new ASTEQNode(this, ParserTreeConstants.JJTEQNODE);
+						ConsumeToken(ParserConstants.LOGICAL_EQUALS);
+						ASTEQNode jjtn001 = new ASTEQNode(this, ParserTreeConstants.EQ_NODE);
 						bool jjtc001 = true;
-						jjtree.openNodeScope(jjtn001);
+						jjtree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2461,12 +2461,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.clearNodeScope(jjtn001);
+								jjtree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2491,16 +2491,16 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.closeNodeScope(jjtn001, 2);
+								jjtree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
 
 					case ParserConstants.LOGICAL_NOT_EQUALS:
-						jj_consume_token(ParserConstants.LOGICAL_NOT_EQUALS);
-						ASTNENode jjtn002 = new ASTNENode(this, ParserTreeConstants.JJTNENODE);
+						ConsumeToken(ParserConstants.LOGICAL_NOT_EQUALS);
+						ASTNENode jjtn002 = new ASTNENode(this, ParserTreeConstants.NE_NODE);
 						bool jjtc002 = true;
-						jjtree.openNodeScope(jjtn002);
+						jjtree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2510,12 +2510,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.clearNodeScope(jjtn002);
+								jjtree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -2540,14 +2540,14 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.closeNodeScope(jjtn002, 2);
+								jjtree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
 
 					default:
 						jj_la1[40] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -2581,10 +2581,10 @@ namespace NVelocity.Runtime.Parser
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.LOGICAL_LT:
-						jj_consume_token(ParserConstants.LOGICAL_LT);
-						ASTLTNode jjtn001 = new ASTLTNode(this, ParserTreeConstants.JJTLTNODE);
+						ConsumeToken(ParserConstants.LOGICAL_LT);
+						ASTLTNode jjtn001 = new ASTLTNode(this, ParserTreeConstants.LT_NODE);
 						bool jjtc001 = true;
-						jjtree.openNodeScope(jjtn001);
+						jjtree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2594,12 +2594,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.clearNodeScope(jjtn001);
+								jjtree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2624,16 +2624,16 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.closeNodeScope(jjtn001, 2);
+								jjtree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
 
 					case ParserConstants.LOGICAL_GT:
-						jj_consume_token(ParserConstants.LOGICAL_GT);
-						ASTGTNode jjtn002 = new ASTGTNode(this, ParserTreeConstants.JJTGTNODE);
+						ConsumeToken(ParserConstants.LOGICAL_GT);
+						ASTGTNode jjtn002 = new ASTGTNode(this, ParserTreeConstants.GT_NODE);
 						bool jjtc002 = true;
-						jjtree.openNodeScope(jjtn002);
+						jjtree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2643,12 +2643,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.clearNodeScope(jjtn002);
+								jjtree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -2673,16 +2673,16 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.closeNodeScope(jjtn002, 2);
+								jjtree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
 
 					case ParserConstants.LOGICAL_LE:
-						jj_consume_token(ParserConstants.LOGICAL_LE);
-						ASTLENode jjtn003 = new ASTLENode(this, ParserTreeConstants.JJTLENODE);
+						ConsumeToken(ParserConstants.LOGICAL_LE);
+						ASTLENode jjtn003 = new ASTLENode(this, ParserTreeConstants.LE_NODE);
 						bool jjtc003 = true;
-						jjtree.openNodeScope(jjtn003);
+						jjtree.OpenNodeScope(jjtn003);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2692,12 +2692,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.clearNodeScope(jjtn003);
+								jjtree.ClearNodeScope(jjtn003);
 								jjtc003 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte003 is SystemException)
 							{
@@ -2722,16 +2722,16 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.closeNodeScope(jjtn003, 2);
+								jjtree.CloseNodeScope(jjtn003, 2);
 							}
 						}
 						break;
 
 					case ParserConstants.LOGICAL_GE:
-						jj_consume_token(ParserConstants.LOGICAL_GE);
-						ASTGENode jjtn004 = new ASTGENode(this, ParserTreeConstants.JJTGENODE);
+						ConsumeToken(ParserConstants.LOGICAL_GE);
+						ASTGENode jjtn004 = new ASTGENode(this, ParserTreeConstants.GE_NODE);
 						bool jjtc004 = true;
-						jjtree.openNodeScope(jjtn004);
+						jjtree.OpenNodeScope(jjtn004);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2741,12 +2741,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc004)
 							{
-								jjtree.clearNodeScope(jjtn004);
+								jjtree.ClearNodeScope(jjtn004);
 								jjtc004 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte004 is SystemException)
 							{
@@ -2771,14 +2771,14 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc004)
 							{
-								jjtree.closeNodeScope(jjtn004, 2);
+								jjtree.CloseNodeScope(jjtn004, 2);
 							}
 						}
 						break;
 
 					default:
 						jj_la1[42] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -2810,10 +2810,10 @@ namespace NVelocity.Runtime.Parser
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.PLUS:
-						jj_consume_token(ParserConstants.PLUS);
-						ASTAddNode jjtn001 = new ASTAddNode(this, ParserTreeConstants.JJTADDNODE);
+						ConsumeToken(ParserConstants.PLUS);
+						ASTAddNode jjtn001 = new ASTAddNode(this, ParserTreeConstants.ADD_NODE);
 						bool jjtc001 = true;
-						jjtree.openNodeScope(jjtn001);
+						jjtree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2823,12 +2823,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.clearNodeScope(jjtn001);
+								jjtree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2853,16 +2853,16 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.closeNodeScope(jjtn001, 2);
+								jjtree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
 
 					case ParserConstants.MINUS:
-						jj_consume_token(ParserConstants.MINUS);
-						ASTSubtractNode jjtn002 = new ASTSubtractNode(this, ParserTreeConstants.JJTSUBTRACTNODE);
+						ConsumeToken(ParserConstants.MINUS);
+						ASTSubtractNode jjtn002 = new ASTSubtractNode(this, ParserTreeConstants.SUBTRACT_NODE);
 						bool jjtc002 = true;
-						jjtree.openNodeScope(jjtn002);
+						jjtree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2872,12 +2872,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.clearNodeScope(jjtn002);
+								jjtree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -2902,14 +2902,14 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.closeNodeScope(jjtn002, 2);
+								jjtree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
 
 					default:
 						jj_la1[44] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -2942,10 +2942,10 @@ namespace NVelocity.Runtime.Parser
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.MULTIPLY:
-						jj_consume_token(ParserConstants.MULTIPLY);
-						ASTMulNode jjtn001 = new ASTMulNode(this, ParserTreeConstants.JJTMULNODE);
+						ConsumeToken(ParserConstants.MULTIPLY);
+						ASTMulNode jjtn001 = new ASTMulNode(this, ParserTreeConstants.MUL_NODE);
 						bool jjtc001 = true;
-						jjtree.openNodeScope(jjtn001);
+						jjtree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2955,12 +2955,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.clearNodeScope(jjtn001);
+								jjtree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2985,16 +2985,16 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.closeNodeScope(jjtn001, 2);
+								jjtree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
 
 					case ParserConstants.DIVIDE:
-						jj_consume_token(ParserConstants.DIVIDE);
-						ASTDivNode jjtn002 = new ASTDivNode(this, ParserTreeConstants.JJTDIVNODE);
+						ConsumeToken(ParserConstants.DIVIDE);
+						ASTDivNode jjtn002 = new ASTDivNode(this, ParserTreeConstants.DIV_NODE);
 						bool jjtc002 = true;
-						jjtree.openNodeScope(jjtn002);
+						jjtree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -3004,12 +3004,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.clearNodeScope(jjtn002);
+								jjtree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -3034,16 +3034,16 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.closeNodeScope(jjtn002, 2);
+								jjtree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
 
 					case ParserConstants.MODULUS:
-						jj_consume_token(ParserConstants.MODULUS);
-						ASTModNode jjtn003 = new ASTModNode(this, ParserTreeConstants.JJTMODNODE);
+						ConsumeToken(ParserConstants.MODULUS);
+						ASTModNode jjtn003 = new ASTModNode(this, ParserTreeConstants.MOD_NODE);
 						bool jjtc003 = true;
-						jjtree.openNodeScope(jjtn003);
+						jjtree.OpenNodeScope(jjtn003);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -3053,12 +3053,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.clearNodeScope(jjtn003);
+								jjtree.ClearNodeScope(jjtn003);
 								jjtc003 = false;
 							}
 							else
 							{
-								jjtree.popNode();
+								jjtree.PopNode();
 							}
 							if (jjte003 is SystemException)
 							{
@@ -3083,14 +3083,14 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.closeNodeScope(jjtn003, 2);
+								jjtree.CloseNodeScope(jjtn003, 2);
 							}
 						}
 						break;
 
 					default:
 						jj_la1[46] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -3108,7 +3108,7 @@ namespace NVelocity.Runtime.Parser
 				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 				{
 					case ParserConstants.WHITESPACE:
-						jj_consume_token(ParserConstants.WHITESPACE);
+						ConsumeToken(ParserConstants.WHITESPACE);
 						break;
 
 					default:
@@ -3117,10 +3117,10 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				jj_consume_token(ParserConstants.LOGICAL_NOT);
-				ASTNotNode jjtn001 = new ASTNotNode(this, ParserTreeConstants.JJTNOTNODE);
+				ConsumeToken(ParserConstants.LOGICAL_NOT);
+				ASTNotNode jjtn001 = new ASTNotNode(this, ParserTreeConstants.NOT_NODE);
 				bool jjtc001 = true;
-				jjtree.openNodeScope(jjtn001);
+				jjtree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -3130,12 +3130,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.clearNodeScope(jjtn001);
+						jjtree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.popNode();
+						jjtree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -3160,7 +3160,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.closeNodeScope(jjtn001, 1);
+						jjtree.CloseNodeScope(jjtn001, 1);
 					}
 				}
 			}
@@ -3182,7 +3182,7 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[48] = jj_gen;
-						jj_consume_token(- 1);
+						ConsumeToken(- 1);
 						throw new ParseException();
 
 				}
@@ -3194,7 +3194,7 @@ namespace NVelocity.Runtime.Parser
 			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 			{
 				case ParserConstants.WHITESPACE:
-					jj_consume_token(ParserConstants.WHITESPACE);
+					ConsumeToken(ParserConstants.WHITESPACE);
 					break;
 
 				default:
@@ -3241,14 +3241,14 @@ namespace NVelocity.Runtime.Parser
 								break;
 
 							case ParserConstants.LPAREN:
-								jj_consume_token(ParserConstants.LPAREN);
+								ConsumeToken(ParserConstants.LPAREN);
 								Expression();
-								jj_consume_token(ParserConstants.RPAREN);
+								ConsumeToken(ParserConstants.RPAREN);
 								break;
 
 							default:
 								jj_la1[51] = jj_gen;
-								jj_consume_token(- 1);
+								ConsumeToken(- 1);
 								throw new ParseException();
 
 						}
@@ -3259,7 +3259,7 @@ namespace NVelocity.Runtime.Parser
 			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
 			{
 				case ParserConstants.WHITESPACE:
-					jj_consume_token(ParserConstants.WHITESPACE);
+					ConsumeToken(ParserConstants.WHITESPACE);
 					break;
 
 				default:
@@ -3275,7 +3275,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_1();
-			jj_save(0, xla);
+			Save(0, xla);
 			return retval;
 		}
 
@@ -3284,7 +3284,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_2();
-			jj_save(1, xla);
+			Save(1, xla);
 			return retval;
 		}
 
@@ -3293,7 +3293,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_3();
-			jj_save(2, xla);
+			Save(2, xla);
 			return retval;
 		}
 
@@ -3302,7 +3302,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_4();
-			jj_save(3, xla);
+			Save(3, xla);
 			return retval;
 		}
 
@@ -3311,7 +3311,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_5();
-			jj_save(4, xla);
+			Save(4, xla);
 			return retval;
 		}
 
@@ -3320,7 +3320,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_6();
-			jj_save(5, xla);
+			Save(5, xla);
 			return retval;
 		}
 
@@ -3329,7 +3329,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_7();
-			jj_save(6, xla);
+			Save(6, xla);
 			return retval;
 		}
 
@@ -3338,7 +3338,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_8();
-			jj_save(7, xla);
+			Save(7, xla);
 			return retval;
 		}
 
@@ -3347,7 +3347,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_9();
-			jj_save(8, xla);
+			Save(8, xla);
 			return retval;
 		}
 
@@ -3356,7 +3356,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_10();
-			jj_save(9, xla);
+			Save(9, xla);
 			return retval;
 		}
 
@@ -3365,7 +3365,7 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_11();
-			jj_save(10, xla);
+			Save(10, xla);
 			return retval;
 		}
 
@@ -3374,13 +3374,13 @@ namespace NVelocity.Runtime.Parser
 			jj_la = xla;
 			jj_lastpos = jj_scanpos = token;
 			bool retval = !jj_3_12();
-			jj_save(11, xla);
+			Save(11, xla);
 			return retval;
 		}
 
 		private bool jj_3R_58()
 		{
-			if (jj_scan_token(ParserConstants.TRUE))
+			if (ScanToken(ParserConstants.TRUE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3389,7 +3389,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3_7()
 		{
-			if (jj_scan_token(ParserConstants.DOT))
+			if (ScanToken(ParserConstants.DOT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3431,7 +3431,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3_5()
 		{
-			if (jj_scan_token(ParserConstants.DOT))
+			if (ScanToken(ParserConstants.DOT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3452,11 +3452,11 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_39()
 		{
-			if (jj_scan_token(ParserConstants.LCURLY))
+			if (ScanToken(ParserConstants.LCURLY))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.IDENTIFIER))
+			if (ScanToken(ParserConstants.IDENTIFIER))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3472,7 +3472,7 @@ namespace NVelocity.Runtime.Parser
 				if (jj_la == 0 && jj_scanpos == jj_lastpos)
 					return false;
 			}
-			if (jj_scan_token(ParserConstants.RCURLY))
+			if (ScanToken(ParserConstants.RCURLY))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3481,7 +3481,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3_12()
 		{
-			if (jj_scan_token(ParserConstants.LBRACKET))
+			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3507,7 +3507,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.DOUBLEDOT))
+			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3516,7 +3516,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_24()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3525,7 +3525,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_38()
 		{
-			if (jj_scan_token(ParserConstants.IDENTIFIER))
+			if (ScanToken(ParserConstants.IDENTIFIER))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3546,7 +3546,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_52()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3555,7 +3555,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_51()
 		{
-			if (jj_scan_token(ParserConstants.LPAREN))
+			if (ScanToken(ParserConstants.LPAREN))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3563,7 +3563,7 @@ namespace NVelocity.Runtime.Parser
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.RPAREN))
+			if (ScanToken(ParserConstants.RPAREN))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3589,7 +3589,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_32()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3607,7 +3607,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_41()
 		{
-			if (jj_scan_token(ParserConstants.IDENTIFIER))
+			if (ScanToken(ParserConstants.IDENTIFIER))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3661,7 +3661,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3_4()
 		{
-			if (jj_scan_token(ParserConstants.LBRACKET))
+			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3687,7 +3687,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.DOUBLEDOT))
+			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3709,7 +3709,7 @@ namespace NVelocity.Runtime.Parser
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.LPAREN))
+			if (ScanToken(ParserConstants.LPAREN))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3719,7 +3719,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.REFMOD2_RPAREN))
+			if (ScanToken(ParserConstants.REFMOD2_RPAREN))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3728,7 +3728,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_43()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3800,7 +3800,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_73()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3818,7 +3818,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_106()
 		{
-			if (jj_scan_token(ParserConstants.MODULUS))
+			if (ScanToken(ParserConstants.MODULUS))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3840,7 +3840,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_105()
 		{
-			if (jj_scan_token(ParserConstants.DIVIDE))
+			if (ScanToken(ParserConstants.DIVIDE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3853,7 +3853,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_83()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3894,7 +3894,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.LOGICAL_NOT))
+			if (ScanToken(ParserConstants.LOGICAL_NOT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3916,7 +3916,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_104()
 		{
-			if (jj_scan_token(ParserConstants.MULTIPLY))
+			if (ScanToken(ParserConstants.MULTIPLY))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3961,7 +3961,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_55()
 		{
-			if (jj_scan_token(ParserConstants.STRING_LITERAL))
+			if (ScanToken(ParserConstants.STRING_LITERAL))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -3997,7 +3997,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_40()
 		{
-			if (jj_scan_token(ParserConstants.NUMBER_LITERAL))
+			if (ScanToken(ParserConstants.NUMBER_LITERAL))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4015,7 +4015,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_80()
 		{
-			if (jj_scan_token(ParserConstants.COMMA))
+			if (ScanToken(ParserConstants.COMMA))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4058,7 +4058,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_61()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4124,7 +4124,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_103()
 		{
-			if (jj_scan_token(ParserConstants.MINUS))
+			if (ScanToken(ParserConstants.MINUS))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4137,7 +4137,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_102()
 		{
-			if (jj_scan_token(ParserConstants.PLUS))
+			if (ScanToken(ParserConstants.PLUS))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4167,7 +4167,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_69()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4197,7 +4197,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_100()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_GE))
+			if (ScanToken(ParserConstants.LOGICAL_GE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4210,7 +4210,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_76()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4219,7 +4219,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_99()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_LE))
+			if (ScanToken(ParserConstants.LOGICAL_LE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4241,7 +4241,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_98()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_GT))
+			if (ScanToken(ParserConstants.LOGICAL_GT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4263,7 +4263,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_72()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4293,7 +4293,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_97()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_LT))
+			if (ScanToken(ParserConstants.LOGICAL_LT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4335,7 +4335,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_56()
 		{
-			if (jj_scan_token(ParserConstants.LBRACKET))
+			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4361,7 +4361,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.DOUBLEDOT))
+			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4386,7 +4386,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.RBRACKET))
+			if (ScanToken(ParserConstants.RBRACKET))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4416,7 +4416,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_94()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_NOT_EQUALS))
+			if (ScanToken(ParserConstants.LOGICAL_NOT_EQUALS))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4429,7 +4429,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_93()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_EQUALS))
+			if (ScanToken(ParserConstants.LOGICAL_EQUALS))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4459,7 +4459,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_57()
 		{
-			if (jj_scan_token(ParserConstants.LBRACKET))
+			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4469,7 +4469,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.RBRACKET))
+			if (ScanToken(ParserConstants.RBRACKET))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4499,7 +4499,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_87()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_AND))
+			if (ScanToken(ParserConstants.LOGICAL_AND))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4533,7 +4533,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_85()
 		{
-			if (jj_scan_token(ParserConstants.LOGICAL_OR))
+			if (ScanToken(ParserConstants.LOGICAL_OR))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4546,7 +4546,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3_2()
 		{
-			if (jj_scan_token(ParserConstants.DOUBLE_ESCAPE))
+			if (ScanToken(ParserConstants.DOUBLE_ESCAPE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4559,7 +4559,7 @@ namespace NVelocity.Runtime.Parser
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.EQUALS))
+			if (ScanToken(ParserConstants.EQUALS))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4593,7 +4593,7 @@ namespace NVelocity.Runtime.Parser
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.EQUALS))
+			if (ScanToken(ParserConstants.EQUALS))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4641,7 +4641,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_23()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4650,7 +4650,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3_9()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4677,7 +4677,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_37()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4695,7 +4695,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_27()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4731,7 +4731,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_20()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4767,7 +4767,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3_3()
 		{
-			if (jj_scan_token(ParserConstants.LBRACKET))
+			if (ScanToken(ParserConstants.LBRACKET))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4793,7 +4793,7 @@ namespace NVelocity.Runtime.Parser
 				jj_scanpos = xsp;
 			else if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
-			if (jj_scan_token(ParserConstants.DOUBLEDOT))
+			if (ScanToken(ParserConstants.DOUBLEDOT))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4802,7 +4802,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_88()
 		{
-			if (jj_scan_token(ParserConstants.COMMA))
+			if (ScanToken(ParserConstants.COMMA))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4833,7 +4833,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_59()
 		{
-			if (jj_scan_token(ParserConstants.FALSE))
+			if (ScanToken(ParserConstants.FALSE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4842,7 +4842,7 @@ namespace NVelocity.Runtime.Parser
 
 		private bool jj_3R_34()
 		{
-			if (jj_scan_token(ParserConstants.WHITESPACE))
+			if (ScanToken(ParserConstants.WHITESPACE))
 				return true;
 			if (jj_la == 0 && jj_scanpos == jj_lastpos)
 				return false;
@@ -4867,11 +4867,11 @@ namespace NVelocity.Runtime.Parser
 		private int[] jj_la1_1 = new int[] {0xf129000, 0x9000, 0xe120000, 0x0, 0x5120000, 0x0, 0x0, 0x5120000, 0xf129000, 0x0, 0x5020000, 0x0, 0x5020000, 0x0, 0x0, 0x5020000, 0x0, 0x0, 0x0, 0x5020000, 0x0, 0x0, 0x5020000, 0x1000000, 0x1000000, 0x5000000, 0xe020000, 0x0, 0xf129000, 0x2000, 0x2000, 0x4000, 0xf129000, 0x0, 0xf129000, 0x0, 0x5020200, 0x4, 0x2, 0x180, 0x180, 0x78, 0x78, 0x0, 0x0, 0x1, 0x1, 0x0, 0x5020000, 0x0, 0x5020000, 0x0, 0x0};
 		//UPGRADE_NOTE: Final was removed from the declaration of 'jj_2_rtns '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
 		//UPGRADE_NOTE: The initialization of  'jj_2_rtns' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private JJCalls[] jj_2_rtns;
+		private Calls[] jj_2_rtns;
 		private bool jj_rescan = false;
 		private int jj_gc = 0;
 
-		public Parser(CharStream stream)
+		public Parser(ICharStream stream)
 		{
 			InitBlock();
 			token_source = new ParserTokenManager(stream);
@@ -4881,20 +4881,20 @@ namespace NVelocity.Runtime.Parser
 			for (int i = 0; i < 53; i++)
 				jj_la1[i] = - 1;
 			for (int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new JJCalls();
+				jj_2_rtns[i] = new Calls();
 		}
 
-		public void ReInit(CharStream stream)
+		public void ReInit(ICharStream stream)
 		{
 			token_source.ReInit(stream);
 			token = new Token();
 			jj_ntk_Renamed_Field = - 1;
-			jjtree.reset();
+			jjtree.Reset();
 			jj_gen = 0;
 			for (int i = 0; i < 53; i++)
 				jj_la1[i] = - 1;
 			for (int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new JJCalls();
+				jj_2_rtns[i] = new Calls();
 		}
 
 		public Parser(ParserTokenManager tm)
@@ -4907,7 +4907,7 @@ namespace NVelocity.Runtime.Parser
 			for (int i = 0; i < 53; i++)
 				jj_la1[i] = - 1;
 			for (int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new JJCalls();
+				jj_2_rtns[i] = new Calls();
 		}
 
 		public void ReInit(ParserTokenManager tm)
@@ -4915,15 +4915,15 @@ namespace NVelocity.Runtime.Parser
 			token_source = tm;
 			token = new Token();
 			jj_ntk_Renamed_Field = - 1;
-			jjtree.reset();
+			jjtree.Reset();
 			jj_gen = 0;
 			for (int i = 0; i < 53; i++)
 				jj_la1[i] = - 1;
 			for (int i = 0; i < jj_2_rtns.Length; i++)
-				jj_2_rtns[i] = new JJCalls();
+				jj_2_rtns[i] = new Calls();
 		}
 
-		private Token jj_consume_token(int kind)
+		private Token ConsumeToken(int kind)
 		{
 			Token oldToken = token;
 			if (token.Next != null)
@@ -4939,12 +4939,12 @@ namespace NVelocity.Runtime.Parser
 					jj_gc = 0;
 					for (int i = 0; i < jj_2_rtns.Length; i++)
 					{
-						JJCalls c = jj_2_rtns[i];
+						Calls c = jj_2_rtns[i];
 						while (c != null)
 						{
-							if (c.gen < jj_gen)
-								c.first = null;
-							c = c.next;
+							if (c.Gen < jj_gen)
+								c.First = null;
+							c = c.Next;
 						}
 					}
 				}
@@ -4952,10 +4952,10 @@ namespace NVelocity.Runtime.Parser
 			}
 			token = oldToken;
 			jj_kind = kind;
-			throw generateParseException();
+			throw GenerateParseException();
 		}
 
-		private bool jj_scan_token(int kind)
+		private bool ScanToken(int kind)
 		{
 			if (jj_scanpos == jj_lastpos)
 			{
@@ -4983,13 +4983,13 @@ namespace NVelocity.Runtime.Parser
 					tok = tok.Next;
 				}
 				if (tok != null)
-					jj_add_error_token(kind, i);
+					AddErrorToken(kind, i);
 			}
 			return (jj_scanpos.Kind != kind);
 		}
 
 
-		public Token getToken(int index)
+		public Token GetToken(int index)
 		{
 			Token t = lookingAhead ? jj_scanpos : token;
 			for (int i = 0; i < index; i++)
@@ -5018,7 +5018,7 @@ namespace NVelocity.Runtime.Parser
 		private int[] jj_lasttokens;
 		private int jj_endpos;
 
-		private void jj_add_error_token(int kind, int pos)
+		private void AddErrorToken(int kind, int pos)
 		{
 			if (pos >= 100)
 				return;
@@ -5061,7 +5061,7 @@ namespace NVelocity.Runtime.Parser
 			}
 		}
 
-		public ParseException generateParseException()
+		public ParseException GenerateParseException()
 		{
 			ArrayList temp_arraylist;
 			temp_arraylist = jj_expentries;
@@ -5103,36 +5103,36 @@ namespace NVelocity.Runtime.Parser
 				}
 			}
 			jj_endpos = 0;
-			jj_rescan_token();
-			jj_add_error_token(0, 0);
+			RescanToken();
+			AddErrorToken(0, 0);
 			int[][] exptokseq = new int[jj_expentries.Count][];
 			for (int i = 0; i < jj_expentries.Count; i++)
 			{
 				exptokseq[i] = (int[]) jj_expentries[i];
 			}
-			return new ParseException(token, exptokseq, ParserConstants.tokenImage);
+			return new ParseException(token, exptokseq, ParserConstants.TokenImage);
 		}
 
-		public void enable_tracing()
+		public void EnableTracing()
 		{
 		}
 
-		public void disable_tracing()
+		public void DisableTracing()
 		{
 		}
 
-		private void jj_rescan_token()
+		private void RescanToken()
 		{
 			jj_rescan = true;
 			for (int i = 0; i < 12; i++)
 			{
-				JJCalls p = jj_2_rtns[i];
+				Calls p = jj_2_rtns[i];
 				do
 				{
-					if (p.gen > jj_gen)
+					if (p.Gen > jj_gen)
 					{
-						jj_la = p.arg;
-						jj_lastpos = jj_scanpos = p.first;
+						jj_la = p.Arg;
+						jj_lastpos = jj_scanpos = p.First;
 						switch (i)
 						{
 							case 0:
@@ -5185,35 +5185,35 @@ namespace NVelocity.Runtime.Parser
 
 						}
 					}
-					p = p.next;
+					p = p.Next;
 				} while (p != null);
 			}
 			jj_rescan = false;
 		}
 
-		private void jj_save(int index, int xla)
+		private void Save(int index, int xla)
 		{
-			JJCalls p = jj_2_rtns[index];
-			while (p.gen > jj_gen)
+			Calls p = jj_2_rtns[index];
+			while (p.Gen > jj_gen)
 			{
-				if (p.next == null)
+				if (p.Next == null)
 				{
-					p = p.next = new JJCalls();
+					p = p.Next = new Calls();
 					break;
 				}
-				p = p.next;
+				p = p.Next;
 			}
-			p.gen = jj_gen + xla - jj_la;
-			p.first = token;
-			p.arg = xla;
+			p.Gen = jj_gen + xla - jj_la;
+			p.First = token;
+			p.Arg = xla;
 		}
 
-		private sealed class JJCalls
+		private sealed class Calls
 		{
-			internal int gen;
-			internal Token first;
-			internal int arg;
-			internal JJCalls next;
+			internal int Gen;
+			internal Token First;
+			internal int Arg;
+			internal Calls Next;
 		}
 	}
 }

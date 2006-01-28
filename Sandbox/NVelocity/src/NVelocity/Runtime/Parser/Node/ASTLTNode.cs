@@ -30,21 +30,21 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
-		public override bool Evaluate(InternalContextAdapter context)
+		public override bool Evaluate(IInternalContextAdapter context)
 		{
 			// get the two args
-			Object left = jjtGetChild(0).Value(context);
-			Object right = jjtGetChild(1).Value(context);
+			Object left = GetChild(0).Value(context);
+			Object right = GetChild(1).Value(context);
 
 			// if either is null, lets log and bail
 			if (left == null || right == null)
 			{
-				rsvc.Error((left == null ? "Left" : "Right") + " side (" + jjtGetChild((left == null ? 0 : 1)).Literal + ") of '<' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+				rsvc.Error((left == null ? "Left" : "Right") + " side (" + GetChild((left == null ? 0 : 1)).Literal + ") of '<' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
 				return false;
 			}
 

@@ -78,7 +78,7 @@ namespace NVelocity.Runtime.Resource.Loader
 					throw new ResourceNotFoundException("Need to specify a file name or file path!");
 				}
 
-				template = StringUtils.normalizePath(templateName);
+				template = StringUtils.NormalizePath(templateName);
 
 				if (template == null || template.Length == 0)
 				{

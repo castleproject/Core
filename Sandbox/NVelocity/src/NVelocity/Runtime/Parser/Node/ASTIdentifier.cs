@@ -54,7 +54,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -63,7 +63,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// simple init - don't do anything that is context specific.
 		/// just get what we need from the AST, which is static.
 		/// </summary>
-		public override Object Init(InternalContextAdapter context, Object data)
+		public override Object Init(IInternalContextAdapter context, Object data)
 		{
 			base.Init(context, data);
 
@@ -77,9 +77,9 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// invokes the method on the object passed in
 		/// </summary>
-		public override Object Execute(Object o, InternalContextAdapter context)
+		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
-			VelPropertyGet vg = null;
+			IVelPropertyGet vg = null;
 
 			try
 			{
@@ -95,12 +95,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 				if (icd != null && icd.ContextData == c)
 				{
-					vg = (VelPropertyGet) icd.Thingy;
+					vg = (IVelPropertyGet) icd.Thingy;
 				}
 				else
 				{
 					// otherwise, do the introspection, and cache it
-					vg = rsvc.Uberspect.getPropertyGet(o, identifier, uberInfo);
+					vg = rsvc.Uberspect.GetPropertyGet(o, identifier, uberInfo);
 
 					if (vg != null && vg.Cacheable)
 					{

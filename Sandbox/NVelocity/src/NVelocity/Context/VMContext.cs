@@ -25,7 +25,7 @@ namespace NVelocity.Context
 	/// <version> $Id: VMContext.cs,v 1.4 2003/10/27 13:54:08 corts Exp $
 	///
 	/// </version>
-	public class VMContext : InternalContextAdapter
+	public class VMContext : IInternalContextAdapter
 	{
 		private void InitBlock()
 		{
@@ -38,7 +38,7 @@ namespace NVelocity.Context
 			get { return innerContext.InternalUserContext; }
 		}
 
-		public InternalContextAdapter BaseContext
+		public IInternalContextAdapter BaseContext
 		{
 			get { return innerContext.BaseContext; }
 		}
@@ -121,11 +121,11 @@ namespace NVelocity.Context
 
 		/// <summary>the base context store.  This is the 'global' context
 		/// </summary>
-		internal InternalContextAdapter innerContext = null;
+		internal IInternalContextAdapter innerContext = null;
 
 		/// <summary>context that we are wrapping
 		/// </summary>
-		internal InternalContextAdapter wrappedContext = null;
+		internal IInternalContextAdapter wrappedContext = null;
 
 		/// <summary>support for local context scope feature, where all references are local
 		/// </summary>
@@ -133,7 +133,7 @@ namespace NVelocity.Context
 
 		/// <summary>  CTOR, wraps an ICA
 		/// </summary>
-		public VMContext(InternalContextAdapter inner, RuntimeServices rsvc)
+		public VMContext(IInternalContextAdapter inner, IRuntimeServices rsvc)
 		{
 			InitBlock();
 			localcontextscope = rsvc.GetBoolean(RuntimeConstants.VM_CONTEXT_LOCALSCOPE, false);

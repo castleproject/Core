@@ -11,10 +11,10 @@ namespace NVelocity.Runtime.Log
 	/// know as this was a good idea...
 	/// </summary>
 	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
-	public class PrimordialLogSystem : LogSystem
+	public class PrimordialLogSystem : ILogSystem
 	{
 		private ArrayList pendingMessages = new ArrayList();
-		private RuntimeServices rsvc = null;
+		private IRuntimeServices rsvc = null;
 
 		private DefaultTraceListener debug = new DefaultTraceListener();
 
@@ -25,7 +25,7 @@ namespace NVelocity.Runtime.Log
 		{
 		}
 
-		public void Init(RuntimeServices rs)
+		public void Init(IRuntimeServices rs)
 		{
 			rsvc = rs;
 		}
@@ -52,7 +52,7 @@ namespace NVelocity.Runtime.Log
 		/// <summary>
 		/// dumps the log messages this logger is holding into a new logger
 		/// </summary>
-		public void DumpLogMessages(LogSystem newLogger)
+		public void DumpLogMessages(ILogSystem newLogger)
 		{
 			lock (this)
 			{

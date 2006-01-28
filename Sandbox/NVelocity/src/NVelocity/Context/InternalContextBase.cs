@@ -25,9 +25,8 @@ namespace NVelocity.Context
 	///
 	/// </version>
 	[Serializable]
-	public class InternalContextBase : InternalHousekeepingContext, InternalEventContext
-	{ //, System.Runtime.Serialization.ISerializable {
-
+	public class InternalContextBase : IInternalHousekeepingContext, IInternalEventContext
+	{ 
 		public InternalContextBase()
 		{
 			InitBlock();

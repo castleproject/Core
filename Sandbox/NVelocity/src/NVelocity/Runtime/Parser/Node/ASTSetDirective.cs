@@ -17,18 +17,6 @@ namespace NVelocity.Runtime.Parser.Node
 	/// </version>
 	public class ASTSetDirective : SimpleNode
 	{
-		private ASTReference LeftHandSide
-		{
-			get { return (ASTReference) jjtGetChild(0).jjtGetChild(0).jjtGetChild(0); }
-
-		}
-
-		private INode RightHandSide
-		{
-			get { return jjtGetChild(0).jjtGetChild(0).jjtGetChild(1).jjtGetChild(0); }
-
-		}
-
 		private String leftReference = "";
 		private INode right;
 		private ASTReference left;
@@ -42,16 +30,26 @@ namespace NVelocity.Runtime.Parser.Node
 		{
 		}
 
+		private ASTReference LeftHandSide
+		{
+			get { return (ASTReference) GetChild(0).GetChild(0).GetChild(0); }
+		}
+
+		private INode RightHandSide
+		{
+			get { return GetChild(0).GetChild(0).GetChild(1).GetChild(0); }
+		}
+
 		/// <summary>Accept the visitor. *
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
 		/// <summary>  simple init.  We can get the RHS and LHS as the the tree structure is static
 		/// </summary>
-		public override Object Init(InternalContextAdapter context, Object data)
+		public override Object Init(IInternalContextAdapter context, Object data)
 		{
 			/*
 	    *  init the tree correctly
@@ -74,7 +72,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>   puts the value of the RHS into the context under the key of the LHS
 		/// </summary>
-		public override bool Render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
 			/*
 	    *  get the RHS node, and it's value
@@ -120,7 +118,7 @@ namespace NVelocity.Runtime.Parser.Node
 	    *  Maybe we should always use setValue()
 	    */
 
-			if (left.jjtGetNumChildren() == 0)
+			if (left.ChildrenCount == 0)
 			{
 				context.Put(leftReference, value_);
 			}

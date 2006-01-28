@@ -70,7 +70,7 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		protected internal ResourceLoader resourceLoader;
 
-		protected internal RuntimeServices rsvc = null;
+		protected internal IRuntimeServices rsvc = null;
 
 
 		public bool IsSourceModified()
@@ -196,7 +196,7 @@ namespace NVelocity.Runtime.Resource
 			set { this.resourceLoader = value; }
 		}
 
-		public RuntimeServices RuntimeServices
+		public IRuntimeServices RuntimeServices
 		{
 			set { rsvc = value; }
 		}

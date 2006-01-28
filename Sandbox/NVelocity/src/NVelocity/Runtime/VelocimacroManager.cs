@@ -1,67 +1,16 @@
 namespace NVelocity.Runtime
 {
-	/*
-    * The Apache Software License, Version 1.1
-    *
-    * Copyright (c) 2000-2002 The Apache Software Foundation.  All rights
-    * reserved.
-    *
-    * Redistribution and use in source and binary forms, with or without
-    * modification, are permitted provided that the following conditions
-    * are met:
-    *
-    * 1. Redistributions of source code must retain the above copyright
-    *    notice, this list of conditions and the following disclaimer.
-    *
-    * 2. Redistributions in binary form must reproduce the above copyright
-    *    notice, this list of conditions and the following disclaimer in
-    *    the documentation and/or other materials provided with the
-    *    distribution.
-    *
-    * 3. The end-user documentation included with the redistribution, if
-    *    any, must include the following acknowlegement:
-    *       "This product includes software developed by the
-    *        Apache Software Foundation (http://www.apache.org/)."
-    *    Alternately, this acknowlegement may appear in the software itself,
-    *    if and wherever such third-party acknowlegements normally appear.
-    *
-    * 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-    *    Foundation" must not be used to endorse or promote products derived
-    *    from this software without prior written permission. For written
-    *    permission, please contact apache@apache.org.
-    *
-    * 5. Products derived from this software may not be called "Apache"
-    *    nor may "Apache" appear in their names without prior written
-    *    permission of the Apache Group.
-    *
-    * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-    * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-    * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-    * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-    * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-    * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-    * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-    * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-    * SUCH DAMAGE.
-    * ====================================================================
-    *
-    * This software consists of voluntary contributions made by many
-    * individuals on behalf of the Apache Software Foundation.  For more
-    * information on the Apache Software Foundation, please see
-    * <http://www.apache.org/>.
-    */
 	using System;
 	using System.Collections;
 	using System.IO;
+
 	using NVelocity.Context;
 	using NVelocity.Runtime.Directive;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util;
 
-	/// <summary> Manages VMs in namespaces.  Currently, two namespace modes are
+	/// <summary> 
+	/// Manages VMs in namespaces.  Currently, two namespace modes are
 	/// supported:
 	/// *
 	/// <ul>
@@ -77,11 +26,43 @@ namespace NVelocity.Runtime
 	/// </author>
 	/// <author> <a href="mailto:JFernandez@viquity.com">Jose Alberto Fernandez</a>
 	/// </author>
-	/// <version> $Id: VelocimacroManager.cs,v 1.3 2003/10/27 13:54:10 corts Exp $
-	///
-	/// </version>
 	public class VelocimacroManager
 	{
+		private IRuntimeServices rsvc = null;
+		private static String GLOBAL_NAMESPACE = "";
+
+		private bool registerFromLib = false;
+
+		/// <summary>Hash of namespace hashes.
+		/// </summary>
+		//UPGRADE_NOTE: The initialization of  'namespaceHash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		private Hashtable namespaceHash;
+
+		/// <summary>map of names of library tempates/namespaces</summary>
+		//UPGRADE_NOTE: The initialization of  'libraryMap' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
+		private Hashtable libraryMap;
+
+		/*
+		* big switch for namespaces.  If true, then properties control 
+		* usage. If false, no. 
+		*/
+		private bool namespacesOn = true;
+		private bool inlineLocalMode = false;
+
+		/// <summary> Adds the global namespace to the hash.</summary>
+		internal VelocimacroManager(IRuntimeServices rs)
+		{
+			InitBlock();
+			this.rsvc = rs;
+
+			/*
+		*  add the global namespace to the namespace hash. We always have that.
+		*/
+
+			AddNamespace(GLOBAL_NAMESPACE);
+		}
+
+
 		private void InitBlock()
 		{
 			namespaceHash = new Hashtable();
@@ -104,40 +85,6 @@ namespace NVelocity.Runtime
 		{
 			set { inlineLocalMode = value; }
 
-		}
-
-		private RuntimeServices rsvc = null;
-		private static String GLOBAL_NAMESPACE = "";
-
-		private bool registerFromLib = false;
-
-		/// <summary>Hash of namespace hashes.
-		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'namespaceHash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private Hashtable namespaceHash;
-
-		/// <summary>map of names of library tempates/namespaces</summary>
-		//UPGRADE_NOTE: The initialization of  'libraryMap' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		private Hashtable libraryMap;
-
-		/*
-		* big switch for namespaces.  If true, then properties control 
-		* usage. If false, no. 
-		*/
-		private bool namespacesOn = true;
-		private bool inlineLocalMode = false;
-
-		/// <summary> Adds the global namespace to the hash.</summary>
-		internal VelocimacroManager(RuntimeServices rs)
-		{
-			InitBlock();
-			this.rsvc = rs;
-
-			/*
-	    *  add the global namespace to the namespace hash. We always have that.
-	    */
-
-			AddNamespace(GLOBAL_NAMESPACE);
 		}
 
 		/// <summary> Adds a VM definition to the cache.
@@ -216,8 +163,7 @@ namespace NVelocity.Runtime
 		/// <summary> gets a new living VelocimacroProxy object by the
 		/// name / source template duple
 		/// </summary>
-		public VelocimacroProxy get
-			(String vmName, String namespace_Renamed)
+		public VelocimacroProxy get(String vmName, String namespace_Renamed)
 		{
 			if (UsingNamespaces(namespace_Renamed))
 			{
@@ -484,7 +430,7 @@ namespace NVelocity.Runtime
 				return vp;
 			}
 
-			internal void setup(InternalContextAdapter ica)
+			internal void setup(IInternalContextAdapter ica)
 			{
 				/*
 				 *  if not parsed yet, parse!
@@ -494,7 +440,7 @@ namespace NVelocity.Runtime
 					parseTree(ica);
 			}
 
-			internal void parseTree(InternalContextAdapter ica)
+			internal void parseTree(IInternalContextAdapter ica)
 			{
 				try
 				{
@@ -506,7 +452,7 @@ namespace NVelocity.Runtime
 				}
 				catch (System.Exception e)
 				{
-					Enclosing_Instance.rsvc.Error("VelocimacroManager.parseTree() : exception " + macroname + " : " + StringUtils.stackTrace(e));
+					Enclosing_Instance.rsvc.Error("VelocimacroManager.parseTree() : exception " + macroname + " : " + StringUtils.StackTrace(e));
 				}
 			}
 		}

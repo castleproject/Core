@@ -33,7 +33,6 @@ namespace NVelocity
 		/// to perform this.
 		/// </summary>
 		// private bool initialized = false;
-
 		private System.Exception errorCondition = null;
 
 		/// <summary>
@@ -65,7 +64,7 @@ namespace NVelocity
 			{
 				s = resourceLoader.getResourceStream(name);
 			}
-			catch (ResourceNotFoundException rnfe)
+			catch(ResourceNotFoundException rnfe)
 			{
 				//  remember and re-throw
 				errorCondition = rnfe;
@@ -73,7 +72,7 @@ namespace NVelocity
 			}
 
 			// if that worked, lets protect in case a loader impl
-	        // forgets to throw a proper exception
+			// forgets to throw a proper exception
 
 			if (s != null)
 			{
@@ -86,20 +85,20 @@ namespace NVelocity
 					InitDocument();
 					return true;
 				}
-				catch (IOException uce)
+				catch(IOException uce)
 				{
 					String msg = "Template.process : Unsupported input encoding : " + encoding + " for template " + name;
 
 					errorCondition = new ParseErrorException(msg, uce);
 					throw errorCondition;
 				}
-				catch (ParseException pex)
+				catch(ParseException pex)
 				{
 					// remember the error and convert
 					errorCondition = new ParseErrorException(pex.Message, pex);
 					throw errorCondition;
 				}
-				catch (System.Exception e)
+				catch(System.Exception e)
 				{
 					// who knows?  Something from initDocument()
 					errorCondition = e;

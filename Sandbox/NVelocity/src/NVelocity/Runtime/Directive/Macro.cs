@@ -49,13 +49,13 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>   render() doesn't do anything in the final output rendering.
 		/// There is no output from a #macro() directive.
 		/// </summary>
-		public override bool Render(InternalContextAdapter context, TextWriter writer, Node node)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, Node node)
 		{
 			// do nothing : We never render.  The VelocimacroProxy object does that
 			return true;
 		}
 
-		public override void Init(RuntimeServices rs, InternalContextAdapter context, Node node)
+		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, Node node)
 		{
 			base.Init(rs, context, node);
 
@@ -73,12 +73,12 @@ namespace NVelocity.Runtime.Directive
 		/// VelocimacroProxy objects, and if not currently used, adds it
 		/// to the macro Factory
 		/// </summary>
-		public static void processAndRegister(RuntimeServices rs, Node node, String sourceTemplate)
+		public static void processAndRegister(IRuntimeServices rs, Node node, String sourceTemplate)
 		{
 			// There must be at least one arg to  #macro,
 	    // the name of the VM.  Note that 0 following 
 	    // args is ok for naming blocks of HTML
-			int numArgs = node.jjtGetNumChildren();
+			int numArgs = node.ChildrenCount;
 
 			// this number is the # of args + 1.  The + 1
 	    // is for the block tree
@@ -95,7 +95,7 @@ namespace NVelocity.Runtime.Directive
 			String[] argArray = getArgArray(node);
 
 			// now, try and eat the code block. Pass the root.
-			IList macroArray = getASTAsStringArray(node.jjtGetChild(numArgs - 1));
+			IList macroArray = getASTAsStringArray(node.GetChild(numArgs - 1));
 
 			// make a big string out of our macro
 			StringBuilder temp = new StringBuilder();
@@ -119,7 +119,7 @@ namespace NVelocity.Runtime.Directive
 		private static String[] getArgArray(Node node)
 		{
 			// remember : this includes the block tree
-			int numArgs = node.jjtGetNumChildren();
+			int numArgs = node.ChildrenCount;
 
 			numArgs--; // avoid the block tree...
 
@@ -130,7 +130,7 @@ namespace NVelocity.Runtime.Directive
 			//  eat the args
 			while (i < numArgs)
 			{
-				argArray[i] = node.jjtGetChild(i).FirstToken.Image;
+				argArray[i] = node.GetChild(i).FirstToken.Image;
 
 				// trim off the leading $ for the args after the macro name.
 				// saves everyone else from having to do it

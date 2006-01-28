@@ -12,31 +12,18 @@ namespace NVelocity.Util.Introspection
 	/// </summary>
 	public class ClassMap
 	{
-		/// <summary>
-		/// Class passed into the constructor used to as
-		/// the basis for the Method map.
-		/// </summary>
-		internal Type CachedClass
-		{
-			get { return clazz; }
-		}
-
-		private sealed class CacheMiss
-		{
-		}
-
 		private readonly static CacheMiss CACHE_MISS = new CacheMiss();
 		private readonly static Object OBJECT = new Object();
 
-		private Type clazz;
+		private readonly Type clazz;
 
 		/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
 		/// name and actual arguments used to find it.
 		/// </summary>
-		private Hashtable methodCache = new Hashtable();
+		private readonly Hashtable methodCache = new Hashtable();
 
-		private Hashtable propertyCache = new Hashtable();
-		private MethodMap methodMap = new MethodMap();
+		private readonly Hashtable propertyCache = new Hashtable();
+		private readonly MethodMap methodMap = new MethodMap();
 
 		/// <summary> Standard constructor
 		/// </summary>
@@ -48,6 +35,19 @@ namespace NVelocity.Util.Introspection
 		}
 
 		public ClassMap()
+		{
+		}
+
+		/// <summary>
+		/// Class passed into the constructor used to as
+		/// the basis for the Method map.
+		/// </summary>
+		internal Type CachedClass
+		{
+			get { return clazz; }
+		}
+
+		private sealed class CacheMiss
 		{
 		}
 

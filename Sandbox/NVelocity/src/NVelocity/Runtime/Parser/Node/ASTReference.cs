@@ -5,11 +5,23 @@ namespace NVelocity.Runtime.Parser.Node
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+
 	using NVelocity.App.Events;
 	using NVelocity.Context;
 	using NVelocity.Exception;
 	using NVelocity.Runtime.Exception;
-	
+
+	/// <summary>
+	/// Reference types
+	/// </summary>
+	enum ReferenceType
+	{
+		Normal = 1,
+		Formal = 2,
+		Quiet = 3,
+		Runt = 4,
+	}
+
 	/// <summary>
 	/// This class is responsible for handling the references in
 	/// VTL ($foo).
@@ -24,15 +36,27 @@ namespace NVelocity.Runtime.Parser.Node
 	/// <version> $Id: ASTReference.cs,v 1.4 2003/10/27 13:54:10 corts Exp $ </version>
 	public class ASTReference : SimpleNode
 	{
-		/// <summary>
-		/// Reference types
-		/// </summary>
- 		private enum ReferenceType
+		private ReferenceType referenceType;
+		private String nullString;
+		private String rootString;
+		private bool escaped = false;
+		private bool computableReference = true;
+		private String escPrefix = "";
+		private String morePrefix = "";
+		private String identifier = "";
+
+		private String literal = null;
+
+		private Stack referenceStack;
+
+		private int numChildren = 0;
+
+		public ASTReference(int id) : base(id)
 		{
-			Normal = 1,
-			Formal = 2,
-			Quiet = 3,
-			Runt = 4,
+		}
+
+		public ASTReference(Parser p, int id) : base(p, id)
+		{
 		}
 
 		/// <summary>
@@ -191,9 +215,7 @@ namespace NVelocity.Runtime.Parser.Node
 					referenceType = ReferenceType.Runt;
 					return t.Image;
 				}
-
 			}
-
 		}
 
 		public void SetLiteral(String value)
@@ -213,36 +235,13 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 		}
 
-		private ReferenceType referenceType;
-		private String nullString;
-		private String rootString;
-		private bool escaped = false;
-		private bool computableReference = true;
-		private String escPrefix = "";
-		private String morePrefix = "";
-		private String identifier = "";
-
-		private String literal = null;
-
-		private Stack referenceStack;
-
-		private int numChildren = 0;
-
-		public ASTReference(int id) : base(id)
-		{
-		}
-
-		public ASTReference(Parser p, int id) : base(p, id)
-		{
-		}
-
 		/// <summary>Accept the visitor.</summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
 
-		public override Object Init(InternalContextAdapter context, Object data)
+		public override Object Init(IInternalContextAdapter context, Object data)
 		{
 			// init our children
 			base.Init(context, data);
@@ -252,11 +251,11 @@ namespace NVelocity.Runtime.Parser.Node
 	    // so it's thread- and context-safe
 			rootString = Root;
 
-			numChildren = jjtGetNumChildren();
+			numChildren = ChildrenCount;
 
 			// and if appropriate...
 			if (numChildren > 0)
-				identifier = jjtGetChild(numChildren - 1).FirstToken.Image;
+				identifier = GetChild(numChildren - 1).FirstToken.Image;
 
 			return data;
 		}
@@ -264,7 +263,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// gets an Object that 'is' the value of the reference
 		/// </summary>
-		public override Object Execute(Object o, InternalContextAdapter context)
+		public override Object Execute(Object o, IInternalContextAdapter context)
 		{
 			if (referenceType == ReferenceType.Runt)
 				return null;
@@ -298,7 +297,7 @@ namespace NVelocity.Runtime.Parser.Node
 					// HACK: inserir aqui uma extensão que vai permitir um "avaliador"
 					// adicionar na pilha cada resultado, para permitir uma avaliação
 					// de quais objetos foram chamados e processar adequadamente
-					result = jjtGetChild(i).Execute(result, context);
+					result = GetChild(i).Execute(result, context);
 
 					if (referenceStack != null)
 						referenceStack.Push(result);
@@ -325,7 +324,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		/// <param name="context"> context of data to use in getting value </param>
 		/// <param name="writer">  writer to render to </param>
-		public override bool Render(InternalContextAdapter context, TextWriter writer)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer)
 		{
 			if (referenceType == ReferenceType.Runt)
 			{
@@ -404,7 +403,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// boolean, and 'true' if value is not null
 		/// </summary>
 		/// <param name="context">context to compute value with</param>
-		public override bool Evaluate(InternalContextAdapter context)
+		public override bool Evaluate(IInternalContextAdapter context)
 		{
 			Object value = Execute(null, context);
 
@@ -416,7 +415,7 @@ namespace NVelocity.Runtime.Parser.Node
 				return true;
 		}
 
-		public override Object Value(InternalContextAdapter context)
+		public override Object Value(IInternalContextAdapter context)
 		{
 			return (computableReference ? Execute(null, context) : null);
 		}
@@ -429,7 +428,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <param name="context">context object containing this reference</param>
 		/// <param name="value">Object to set as value</param>
 		/// <returns>true if successful, false otherwise</returns>
-		public bool SetValue(InternalContextAdapter context, Object value)
+		public bool SetValue(IInternalContextAdapter context, Object value)
 		{
 			// The rootOfIntrospection is the object we will
 	    // retrieve from the Context. This is the base
@@ -445,7 +444,7 @@ namespace NVelocity.Runtime.Parser.Node
 			// How many child nodes do we have?
 			for (int i = 0; i < numChildren - 1; i++)
 			{
-				result = jjtGetChild(i).Execute(result, context);
+				result = GetChild(i).Execute(result, context);
 
 				if (result == null)
 				{

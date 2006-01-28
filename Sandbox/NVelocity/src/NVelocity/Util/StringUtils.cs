@@ -18,60 +18,6 @@ namespace NVelocity.Util
 	using System.Collections;
 	using System.IO;
 	using System.Text;
-	/*
-    * The Apache Software License, Version 1.1
-    *
-    * Copyright (c) 2001 The Apache Software Foundation.  All rights
-    * reserved.
-    *
-    * Redistribution and use in source and binary forms, with or without
-    * modification, are permitted provided that the following conditions
-    * are met:
-    *
-    * 1. Redistributions of source code must retain the above copyright
-    *    notice, this list of conditions and the following disclaimer.
-    *
-    * 2. Redistributions in binary form must reproduce the above copyright
-    *    notice, this list of conditions and the following disclaimer in
-    *    the documentation and/or other materials provided with the
-    *    distribution.
-    *
-    * 3. The end-user documentation included with the redistribution, if
-    *    any, must include the following acknowlegement:
-    *       "This product includes software developed by the
-    *        Apache Software Foundation (http://www.apache.org/)."
-    *    Alternately, this acknowlegement may appear in the software itself,
-    *    if and wherever such third-party acknowlegements normally appear.
-    *
-    * 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-    *    Foundation" must not be used to endorse or promote products derived
-    *    from this software without prior written permission. For written
-    *    permission, please contact apache@apache.org.
-    *
-    * 5. Products derived from this software may not be called "Apache"
-    *    nor may "Apache" appear in their names without prior written
-    *    permission of the Apache Group.
-    *
-    * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-    * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-    * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-    * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-    * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-    * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-    * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-    * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-    * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-    * SUCH DAMAGE.
-    * ====================================================================
-    *
-    * This software consists of voluntary contributions made by many
-    * individuals on behalf of the Apache Software Foundation.  For more
-    * information on the Apache Software Foundation, please see
-    * <http://www.apache.org/>.
-    */
-
 
 	/// <summary> This class provides some methods for dynamically
 	/// invoking methods in objects, and some string
@@ -91,14 +37,10 @@ namespace NVelocity.Util
 	{
 		/// <summary> Line separator for the OS we are operating on.
 		/// </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'EOL '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'EOL' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private readonly static String EOL = Environment.NewLine;
 
 		/// <summary> Length of the line separator.
 		/// </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'EOL_LENGTH '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'EOL_LENGTH' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		// private static int EOL_LENGTH = Environment.NewLine.Length;
 
 		/// <summary> Concatenates a list of objects as a String.
@@ -109,7 +51,7 @@ namespace NVelocity.Util
 		/// <returns>    A text representation of the concatenated objects.
 		///
 		/// </returns>
-		public String concat(IList list)
+		public String Concat(IList list)
 		{
 			StringBuilder sb = new StringBuilder();
 			int size = list.Count;
@@ -129,7 +71,7 @@ namespace NVelocity.Util
 		/// <returns>String directory path.
 		///
 		/// </returns>
-		public static String getPackageAsPath(String pckge)
+		public static String GetPackageAsPath(String pckge)
 		{
 			return pckge.Replace('.', Path.DirectorySeparatorChar.ToString()[0]) + Path.DirectorySeparatorChar.ToString();
 		}
@@ -154,7 +96,7 @@ namespace NVelocity.Util
 		/// with a StringTokenizer will achieve the same result.
 		///
 		/// </deprecated>
-		public static String removeUnderScores(String data)
+		public static String RemoveUnderScores(String data)
 		{
 			String temp = null;
 			StringBuilder out_Renamed = new StringBuilder();
@@ -165,7 +107,7 @@ namespace NVelocity.Util
 			while (st.HasMoreTokens())
 			{
 				String element = (String) st.NextToken();
-				out_Renamed.Append(firstLetterCaps(element));
+				out_Renamed.Append(FirstLetterCaps(element));
 			}
 
 			return out_Renamed.ToString();
@@ -190,9 +132,9 @@ namespace NVelocity.Util
 		/// <returns>String
 		///
 		/// </returns>
-		public static String removeAndHump(String data)
+		public static String RemoveAndHump(String data)
 		{
-			return removeAndHump(data, "_");
+			return RemoveAndHump(data, "_");
 		}
 
 		/// <summary> <p>
@@ -216,7 +158,7 @@ namespace NVelocity.Util
 		/// <returns>String
 		///
 		/// </returns>
-		public static String removeAndHump(String data, String replaceThis)
+		public static String RemoveAndHump(String data, String replaceThis)
 		{
 			String temp = null;
 			StringBuilder out_Renamed = new StringBuilder();
@@ -227,7 +169,7 @@ namespace NVelocity.Util
 			while (st.HasMoreTokens())
 			{
 				String element = (String) st.NextToken();
-				out_Renamed.Append(capitalizeFirstLetter(element));
+				out_Renamed.Append(CapitalizeFirstLetter(element));
 			} //while
 
 			return out_Renamed.ToString();
@@ -247,7 +189,7 @@ namespace NVelocity.Util
 		/// <returns>String
 		///
 		/// </returns>
-		public static String firstLetterCaps(String data)
+		public static String FirstLetterCaps(String data)
 		{
 			String firstLetter = data.Substring(0, (1) - (0)).ToUpper();
 			String restLetters = data.Substring(1).ToLower();
@@ -268,7 +210,7 @@ namespace NVelocity.Util
 		/// <returns>String
 		///
 		/// </returns>
-		public static String capitalizeFirstLetter(String data)
+		public static String CapitalizeFirstLetter(String data)
 		{
 			String firstLetter = data.Substring(0, (1) - (0)).ToUpper();
 			String restLetters = data.Substring(1);
@@ -285,7 +227,7 @@ namespace NVelocity.Util
 		/// <returns>a string array of the split fields
 		///
 		/// </returns>
-		public static String[] split(String line, String delim)
+		public static String[] Split(String line, String delim)
 		{
 			ArrayList list = new ArrayList();
 			SupportClass.Tokenizer t = new SupportClass.Tokenizer(line, delim);
@@ -309,9 +251,9 @@ namespace NVelocity.Util
 		/// <returns>String with processed answer.
 		///
 		/// </returns>
-		public static String chop(String s, int i)
+		public static String Chop(String s, int i)
 		{
-			return chop(s, i, EOL);
+			return Chop(s, i, EOL);
 		}
 
 		/// <summary> Chop i characters off the end of a string.
@@ -327,7 +269,7 @@ namespace NVelocity.Util
 		/// <returns>String with processed answer.
 		///
 		/// </returns>
-		public static String chop(String s, int i, String eol)
+		public static String Chop(String s, int i, String eol)
 		{
 			if (i == 0 || s == null || eol == null)
 			{
@@ -377,7 +319,7 @@ namespace NVelocity.Util
 		/// <returns>String target string with replacements.
 		///
 		/// </returns>
-		public static StringBuilder stringSubstitution(String argStr, Hashtable vars)
+		public static StringBuilder StringSubstitution(String argStr, Hashtable vars)
 		{
 			StringBuilder argBuf = new StringBuilder();
 
@@ -430,7 +372,7 @@ namespace NVelocity.Util
 		/// <returns>String contents of the file.
 		///
 		/// </returns>
-		public static String fileContentsToString(String file)
+		public static String FileContentsToString(String file)
 		{
 			String contents = "";
 
@@ -472,7 +414,7 @@ namespace NVelocity.Util
 		/// <returns>String
 		///
 		/// </returns>
-		public static String collapseNewlines(String argStr)
+		public static String CollapseNewlines(String argStr)
 		{
 			char last = argStr[0];
 			StringBuilder argBuf = new StringBuilder();
@@ -498,7 +440,7 @@ namespace NVelocity.Util
 		/// <returns>String
 		///
 		/// </returns>
-		public static String collapseSpaces(String argStr)
+		public static String CollapseSpaces(String argStr)
 		{
 			char last = argStr[0];
 			StringBuilder argBuf = new StringBuilder();
@@ -529,7 +471,7 @@ namespace NVelocity.Util
 		/// <returns>String string with replacements.
 		///
 		/// </returns>
-		public static String sub(String line, String oldString, String newString)
+		public static String Sub(String line, String oldString, String newString)
 		{
 			int i = 0;
 			if ((i = line.IndexOf(oldString, i)) >= 0)
@@ -562,7 +504,7 @@ namespace NVelocity.Util
 		///
 		/// </returns>
 		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
-		public static String stackTrace(Exception e)
+		public static String StackTrace(Exception e)
 		{
 			String foo = null;
 			try
@@ -599,7 +541,7 @@ namespace NVelocity.Util
 		/// <returns>String normalized path
 		///
 		/// </returns>
-		public static String normalizePath(String path)
+		public static String NormalizePath(String path)
 		{
 			// Normalize the slashes and add leading slash if necessary
 			string normalized = path;
@@ -664,7 +606,7 @@ namespace NVelocity.Util
 		/// <param name="String">falseString
 		///
 		/// </param>
-		public String select(bool state, String trueString, String falseString)
+		public String Select(bool state, String trueString, String falseString)
 		{
 			if (state)
 			{
@@ -685,7 +627,7 @@ namespace NVelocity.Util
 		/// <returns>    Whether all strings are empty.
 		///
 		/// </returns>
-		public bool allEmpty(IList list)
+		public bool AllEmpty(IList list)
 		{
 			int size = list.Count;
 

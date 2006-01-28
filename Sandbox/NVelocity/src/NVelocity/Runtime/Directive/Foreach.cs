@@ -73,7 +73,7 @@ namespace NVelocity.Runtime.Directive
 		/// simple init - init the tree and get the elementKey from
 		/// the AST
 		/// </summary>
-		public override void Init(RuntimeServices rs, InternalContextAdapter context, INode node)
+		public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
 		{
 			base.Init(rs, context, node);
 
@@ -82,7 +82,7 @@ namespace NVelocity.Runtime.Directive
 
 			// this is really the only thing we can do here as everything
 			// else is context sensitive
-			elementKey = node.jjtGetChild(0).FirstToken.Image.Substring(1);
+			elementKey = node.GetChild(0).FirstToken.Image.Substring(1);
 		}
 
 		/// <summary>
@@ -91,10 +91,10 @@ namespace NVelocity.Runtime.Directive
 		/// <param name="context"> current context </param>
 		/// <param name="node">  AST node </param>
 		/// <returns>Iterator to do the dataset </returns>
-		private IEnumerator GetIterator(InternalContextAdapter context, INode node)
+		private IEnumerator GetIterator(IInternalContextAdapter context, INode node)
 		{
 			// get our list object, and punt if it's null.
-			Object listObject = node.jjtGetChild(2).Value(context);
+			Object listObject = node.GetChild(2).Value(context);
 			if (listObject == null)
 				return null;
 
@@ -151,7 +151,7 @@ namespace NVelocity.Runtime.Directive
 					return ((IEnumerable) listObject).GetEnumerator();
 
 				case EnumType.Enumeration:
-					rsvc.Warn("Warning! The reference " + node.jjtGetChild(2).FirstToken.Image + " is an Enumeration in the #foreach() loop at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName + ". Because it's not resetable," + " if used in more than once, this may lead to" + " unexpected results.");
+					rsvc.Warn("Warning! The reference " + node.GetChild(2).FirstToken.Image + " is an Enumeration in the #foreach() loop at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName + ". Because it's not resetable," + " if used in more than once, this may lead to" + " unexpected results.");
 					return (IEnumerator) listObject;
 
 				case EnumType.Array:
@@ -162,7 +162,7 @@ namespace NVelocity.Runtime.Directive
 
 				default:
 					/*  we have no clue what this is  */
-					rsvc.Warn("Could not determine type of enumerator (" + listObject.GetType().Name + ") in " + "#foreach loop for " + node.jjtGetChild(2).FirstToken.Image + " at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName);
+					rsvc.Warn("Could not determine type of enumerator (" + listObject.GetType().Name + ") in " + "#foreach loop for " + node.GetChild(2).FirstToken.Image + " at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName);
 
 					return null;
 			}
@@ -171,7 +171,7 @@ namespace NVelocity.Runtime.Directive
 		/// <summary>
 		/// renders the #foreach() block
 		/// </summary>
-		public override bool Render(InternalContextAdapter context, TextWriter writer, INode node)
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			// do our introspection to see what our collection is
 			IEnumerator i = GetIterator(context, node);
@@ -190,7 +190,7 @@ namespace NVelocity.Runtime.Directive
 			{
 				context.Put(counterName, counter);
 				context.Put(elementKey, i.Current);
-				node.jjtGetChild(3).Render(context, writer);
+				node.GetChild(3).Render(context, writer);
 				counter++;
 			}
 

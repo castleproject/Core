@@ -28,7 +28,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		/// <summary>Accept the visitor.
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}

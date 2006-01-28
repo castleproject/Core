@@ -82,12 +82,12 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		private bool logWhenFound = true;
 
-		protected internal RuntimeServices rsvc = null;
+		protected internal IRuntimeServices rsvc = null;
 
 		/// <summary>
 		/// Initialize the ResourceManager.
 		/// </summary>
-		public void initialize(RuntimeServices rs)
+		public void Initialize(IRuntimeServices rs)
 		{
 			rsvc = rs;
 
@@ -95,7 +95,7 @@ namespace NVelocity.Runtime.Resource
 
 			ResourceLoader resourceLoader;
 
-			assembleResourceLoaderInitializers();
+			AssembleResourceLoaderInitializers();
 
 			for (int i = 0; i < sourceInitializerList.Count; i++)
 			{
@@ -168,7 +168,7 @@ namespace NVelocity.Runtime.Resource
 		/// will be passed in when initializing the
 		/// the template loader.
 		/// </summary>
-		private void assembleResourceLoaderInitializers()
+		private void AssembleResourceLoaderInitializers()
 		{
 			if (resourceLoaderInitializersActive)
 			{
@@ -236,7 +236,7 @@ namespace NVelocity.Runtime.Resource
 		/// @throws Exception if a problem in parse
 		///
 		/// </returns>
-		public Resource getResource(String resourceName, int resourceType, String encoding)
+		public Resource GetResource(String resourceName, int resourceType, String encoding)
 		{
 			/*
 			* Check to see if the resource was placed in the cache.
@@ -255,7 +255,7 @@ namespace NVelocity.Runtime.Resource
 
 				try
 				{
-					refreshResource(resource, encoding);
+					RefreshResource(resource, encoding);
 				}
 				catch (ResourceNotFoundException rnfe)
 				{
@@ -267,7 +267,7 @@ namespace NVelocity.Runtime.Resource
 
 					globalCache.remove(resourceName);
 
-					return getResource(resourceName, resourceType, encoding);
+					return GetResource(resourceName, resourceType, encoding);
 				}
 				catch (ParseErrorException pee)
 				{
@@ -290,7 +290,7 @@ namespace NVelocity.Runtime.Resource
 		    *  it's not in the cache, so load it.
 		    */
 
-					resource = loadResource(resourceName, resourceType, encoding);
+					resource = LoadResource(resourceName, resourceType, encoding);
 
 					if (resource.ResourceLoader.isCachingOn())
 					{
@@ -335,7 +335,7 @@ namespace NVelocity.Runtime.Resource
 		/// to syntax (or other) error.
 		/// @throws Exception if a problem in parse
 		/// </returns>
-		protected internal Resource loadResource(String resourceName, int resourceType, String encoding)
+		protected internal Resource LoadResource(String resourceName, int resourceType, String encoding)
 		{
 			Resource resource = ResourceFactory.getResource(resourceName, resourceType);
 
@@ -434,7 +434,7 @@ namespace NVelocity.Runtime.Resource
 		/// @throws Exception if a problem in parse
 		///
 		/// </param>
-		protected internal void refreshResource(Resource resource, String encoding)
+		protected internal void RefreshResource(Resource resource, String encoding)
 		{
 			/*
 	    * The resource knows whether it needs to be checked
@@ -511,9 +511,9 @@ namespace NVelocity.Runtime.Resource
 		/// String encoding )}
 		///
 		/// </deprecated>
-		public Resource getResource(String resourceName, int resourceType)
+		public Resource GetResource(String resourceName, int resourceType)
 		{
-			return getResource(resourceName, resourceType, RuntimeConstants.ENCODING_DEFAULT);
+			return GetResource(resourceName, resourceType, RuntimeConstants.ENCODING_DEFAULT);
 		}
 
 		/// <summary>  Determines is a template exists, and returns name of the loader that
@@ -527,7 +527,7 @@ namespace NVelocity.Runtime.Resource
 		/// <returns>class name of loader than can provide it
 		///
 		/// </returns>
-		public String getLoaderNameForResource(String resourceName)
+		public String GetLoaderNameForResource(String resourceName)
 		{
 			ResourceLoader resourceLoader = null;
 

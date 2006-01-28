@@ -29,7 +29,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// Gets the loader specified in the configuration file.
 		/// </summary>
 		/// <returns>TemplateLoader</returns>
-		public static ResourceLoader getLoader(RuntimeServices rs, String loaderClassName)
+		public static ResourceLoader getLoader(IRuntimeServices rs, String loaderClassName)
 		{
 			ResourceLoader loader = null;
 
@@ -48,8 +48,8 @@ namespace NVelocity.Runtime.Resource.Loader
 			}
 			catch (Exception e)
 			{
-				rs.Error("Problem instantiating the template loader.\n" + "Look at your properties file and make sure the\n" + "name of the template loader is correct. Here is the\n" + "error: " + StringUtils.stackTrace(e));
-				throw new Exception("Problem initializing template loader: " + loaderClassName + "\nError is: " + StringUtils.stackTrace(e));
+				rs.Error("Problem instantiating the template loader.\n" + "Look at your properties file and make sure the\n" + "name of the template loader is correct. Here is the\n" + "error: " + StringUtils.StackTrace(e));
+				throw new Exception("Problem initializing template loader: " + loaderClassName + "\nError is: " + StringUtils.StackTrace(e));
 			}
 		}
 

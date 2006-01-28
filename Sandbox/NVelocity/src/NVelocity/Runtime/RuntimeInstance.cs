@@ -56,7 +56,7 @@ namespace NVelocity.Runtime
 	/// </pre>
 	/// *
 	/// </summary>
-	public class RuntimeInstance : RuntimeServices
+	public class RuntimeInstance : IRuntimeServices
 	{
 		private DefaultTraceListener debugOutput = new DefaultTraceListener();
 
@@ -104,7 +104,7 @@ namespace NVelocity.Runtime
 		/// then, when the log system is initialized, we dump
 		/// all messages out of the primordial one into the real one.
 		/// </summary>
-		private LogSystem logSystem;
+		private ILogSystem logSystem;
 
 		///
 		/// <summary> The Runtime parser pool
@@ -161,7 +161,7 @@ namespace NVelocity.Runtime
 		*/
 		private Hashtable applicationAttributes = null;
 
-		private Uberspect uberSpect;
+		private IUberspect uberSpect;
 
 		private IDirectiveManager directiveManager;
 
@@ -223,7 +223,7 @@ namespace NVelocity.Runtime
 					*  initialize the VM Factory.  It will use the properties 
 					* accessable from Runtime, so keep this here at the end.
 					*/
-					vmFactory.initVelocimacro();
+					vmFactory.InitVelocimacro();
 
 					Info("NVelocity successfully started.");
 
@@ -256,7 +256,7 @@ namespace NVelocity.Runtime
 					throw new System.Exception(err);
 				}
 
-				if (!(o is Uberspect))
+				if (!(o is IUberspect))
 				{
 					String err = "The specified class for Uberspect (" + rm + ") does not implement org.apache.velocity.util.introspector.Uberspect." + " Velocity not initialized correctly.";
 
@@ -264,14 +264,14 @@ namespace NVelocity.Runtime
 					throw new System.Exception(err);
 				}
 
-				uberSpect = (Uberspect) o;
+				uberSpect = (IUberspect) o;
 
 				if (uberSpect is UberspectLoggable)
 				{
 					((UberspectLoggable) uberSpect).RuntimeLogger = this;
 				}
 
-				uberSpect.init();
+				uberSpect.Init();
 			}
 			else
 			{
@@ -482,7 +482,7 @@ namespace NVelocity.Runtime
 
 				resourceManager = (ResourceManager) o;
 
-				resourceManager.initialize(this);
+				resourceManager.Initialize(this);
 			}
 			else
 			{
@@ -718,7 +718,7 @@ namespace NVelocity.Runtime
 						DumpVMNamespace(templateName);
 					}
 
-					ast = parser.parse(reader, templateName);
+					ast = parser.Parse(reader, templateName);
 				}
 				finally
 				{
@@ -776,7 +776,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public Template GetTemplate(String name, String encoding)
 		{
-			return (Template) resourceManager.getResource(name, ResourceManager_Fields.RESOURCE_TEMPLATE, encoding);
+			return (Template) resourceManager.GetResource(name, ResourceManager_Fields.RESOURCE_TEMPLATE, encoding);
 		}
 
 		/// <summary> Returns a static content resource from the
@@ -816,7 +816,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public ContentResource GetContent(String name, String encoding)
 		{
-			return (ContentResource) resourceManager.getResource(name, ResourceManager_Fields.RESOURCE_CONTENT, encoding);
+			return (ContentResource) resourceManager.GetResource(name, ResourceManager_Fields.RESOURCE_CONTENT, encoding);
 		}
 
 
@@ -833,7 +833,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public String GetLoaderNameForResource(String resourceName)
 		{
-			return resourceManager.getLoaderNameForResource(resourceName);
+			return resourceManager.GetLoaderNameForResource(resourceName);
 		}
 
 		/// <summary> Added this to check and make sure that the configuration
@@ -859,7 +859,7 @@ namespace NVelocity.Runtime
 		/// <param name="String">message to log
 		///
 		/// </param>
-		private void log(int level, Object message)
+		private void Log(int level, Object message)
 		{
 			String out_Renamed;
 
@@ -871,7 +871,7 @@ namespace NVelocity.Runtime
 			if (showStackTrace() && (message is System.Exception || message is System.Exception))
 			{
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
-				out_Renamed = StringUtils.stackTrace((System.Exception) message);
+				out_Renamed = StringUtils.StackTrace((System.Exception) message);
 			}
 			else
 			{
@@ -894,7 +894,7 @@ namespace NVelocity.Runtime
 		/// </param>
 		public void Warn(Object message)
 		{
-			log(LogSystem_Fields.WARN_ID, message);
+			Log(LogSystem_Fields.WARN_ID, message);
 		}
 
 		///
@@ -906,7 +906,7 @@ namespace NVelocity.Runtime
 		/// </param>
 		public void Info(Object message)
 		{
-			log(LogSystem_Fields.INFO_ID, message);
+			Log(LogSystem_Fields.INFO_ID, message);
 		}
 
 		/// <summary> Log an error message.
@@ -917,7 +917,7 @@ namespace NVelocity.Runtime
 		/// </param>
 		public void Error(Object message)
 		{
-			log(LogSystem_Fields.ERROR_ID, message);
+			Log(LogSystem_Fields.ERROR_ID, message);
 		}
 
 		/// <summary> Log a debug message.
@@ -928,7 +928,7 @@ namespace NVelocity.Runtime
 		/// </param>
 		public void Debug(Object message)
 		{
-			log(LogSystem_Fields.DEBUG_ID, message);
+			Log(LogSystem_Fields.DEBUG_ID, message);
 		}
 
 		/// <summary> String property accessor method with default to hide the
@@ -959,7 +959,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public Directive.Directive GetVelocimacro(String vmName, String templateName)
 		{
-			return vmFactory.getVelocimacro(vmName, templateName);
+			return vmFactory.GetVelocimacro(vmName, templateName);
 		}
 
 		/// <summary> Adds a new Velocimacro. Usually called by Macro only while parsing.
@@ -978,7 +978,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public bool AddVelocimacro(String name, String macro, String[] argArray, String sourceTemplate)
 		{
-			return vmFactory.addVelocimacro(name, macro, argArray, sourceTemplate);
+			return vmFactory.AddVelocimacro(name, macro, argArray, sourceTemplate);
 		}
 
 		/// <summary>  Checks to see if a VM exists
@@ -991,7 +991,7 @@ namespace NVelocity.Runtime
 		/// </returns>
 		public bool IsVelocimacro(String vmName, String templateName)
 		{
-			return vmFactory.isVelocimacro(vmName, templateName);
+			return vmFactory.IsVelocimacro(vmName, templateName);
 		}
 
 		/// <summary>  tells the vmFactory to dump the specified namespace.  This is to support
@@ -999,7 +999,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		public bool DumpVMNamespace(String namespace_Renamed)
 		{
-			return vmFactory.dumpVMNamespace(namespace_Renamed);
+			return vmFactory.DumpVMNamespace(namespace_Renamed);
 		}
 
 		/* --------------------------------------------------------------------
@@ -1079,7 +1079,7 @@ namespace NVelocity.Runtime
 		/// <summary>
 		///	Return the Introspector for this instance
 		/// </summary>
-		public Uberspect Uberspect
+		public IUberspect Uberspect
 		{
 			get { return uberSpect; }
 		}

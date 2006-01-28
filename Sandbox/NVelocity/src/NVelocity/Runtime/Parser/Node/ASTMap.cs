@@ -22,7 +22,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor. 
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -30,16 +30,16 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Evaluate the node.
 		/// </summary>
-		public override Object Value(InternalContextAdapter context)
+		public override Object Value(IInternalContextAdapter context)
 		{
-			int size = jjtGetNumChildren();
+			int size = ChildrenCount;
 
 			IDictionary objectMap = new Hashtable();
 
 			for (int i = 0; i < size; i += 2)
 			{
-				SimpleNode keyNode = (SimpleNode) jjtGetChild(i);
-				SimpleNode valueNode = (SimpleNode) jjtGetChild(i + 1);
+				SimpleNode keyNode = (SimpleNode) GetChild(i);
+				SimpleNode valueNode = (SimpleNode) GetChild(i + 1);
 
 				Object key = (keyNode == null ? null : keyNode.Value(context));
 				Object value = (valueNode == null ? null : valueNode.Value(context));

@@ -31,7 +31,7 @@ namespace NVelocity.Runtime.Parser.Node
 		/// <summary>
 		/// Accept the visitor.
 		/// </summary>
-		public override Object jjtAccept(ParserVisitor visitor, Object data)
+		public override Object Accept(IParserVisitor visitor, Object data)
 		{
 			return visitor.Visit(this, data);
 		}
@@ -42,11 +42,11 @@ namespace NVelocity.Runtime.Parser.Node
 		/// </summary>
 		/// <param name="context">app context used if Left or Right of .. is a ref</param>
 		/// <returns>Object array of Integers</returns>
-		public override Object Value(InternalContextAdapter context)
+		public override Object Value(IInternalContextAdapter context)
 		{
 			// get the two range ends
-			Object left = jjtGetChild(0).Value(context);
-			Object right = jjtGetChild(1).Value(context);
+			Object left = GetChild(0).Value(context);
+			Object right = GetChild(1).Value(context);
 
 			// if either is null, lets log and bail
 			if (left == null || right == null)

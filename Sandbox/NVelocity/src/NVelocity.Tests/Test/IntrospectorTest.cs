@@ -19,7 +19,7 @@ namespace NVelocity.Test
 		[Test]
 		public void Test_Evaluate()
 		{
-			RuntimeServices rs = RuntimeSingleton.RuntimeServices;
+			IRuntimeServices rs = RuntimeSingleton.RuntimeServices;
 			Introspector i = new Introspector(rs);
 			MethodInfo mi = i.GetMethod(typeof(VelocityTest), "Test_Evaluate", null);
 			Assert.IsNotNull(mi, "Expected to find VelocityTest.Test_Evaluate");

@@ -1,32 +1,13 @@
-//using Iterator = java.util.Iterator;
-//using Collection = java.util.Collection;
-//using Map = java.util.Map;
-//using ArrayList = java.util.ArrayList;
-
 namespace NVelocity.Util.Introspection
 {
 	using System;
 	using System.Collections;
 	using System.Reflection;
 	using System.Text;
+
 	using NVelocity.Runtime;
 	using NVelocity.Runtime.Parser.Node;
-	/*
-	* Copyright 2002-2004 The Apache Software Foundation.
-	*
-	* Licensed under the Apache License, Version 2.0 (the "License")
-	* you may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at
-	*
-	*     http://www.apache.org/licenses/LICENSE-2.0
-	*
-	* Unless required by applicable law or agreed to in writing, software
-	* distributed under the License is distributed on an "AS IS" BASIS,
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
-	*/
-
+	
 	/// <summary>  Implementation of Uberspect to provide the default introspective
 	/// functionality of Velocity
 	/// *
@@ -36,14 +17,14 @@ namespace NVelocity.Util.Introspection
 	/// <version>  $Id: UberspectImpl.cs,v 1.1 2004/12/27 05:55:08 corts Exp $
 	/// 
 	/// </version>
-	public class UberspectImpl : Uberspect, UberspectLoggable
+	public class UberspectImpl : IUberspect, UberspectLoggable
 	{
 		/// <summary>
 		/// Sets the runtime logger - this must be called before anything
 		/// else besides init() as to get the logger.  Makes the pull
 		/// model appealing...
 		/// </summary>
-		public RuntimeLogger RuntimeLogger
+		public IRuntimeLogger RuntimeLogger
 		{
 			set
 			{
@@ -55,7 +36,7 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// Our runtime logger.
 		/// </summary>
-		private RuntimeLogger rlog;
+		private IRuntimeLogger rlog;
 
 		/// <summary>
 		/// the default Velocity introspector
@@ -67,14 +48,14 @@ namespace NVelocity.Util.Introspection
 		/// called before getting our introspector, as the default
 		/// vel introspector depends upon it.
 		/// </summary>
-		public void init()
+		public void Init()
 		{
 		}
 
 		/// <summary>
 		/// Method
 		/// </summary>
-		public VelMethod getMethod(Object obj, String methodName, Object[] args, Info i)
+		public IVelMethod GetMethod(Object obj, String methodName, Object[] args, Info i)
 		{
 			if (obj == null)
 				return null;
@@ -87,7 +68,7 @@ namespace NVelocity.Util.Introspection
 		/// <summary>
 		/// Property  getter
 		/// </summary>
-		public VelPropertyGet getPropertyGet(Object obj, String identifier, Info i)
+		public IVelPropertyGet GetPropertyGet(Object obj, String identifier, Info i)
 		{
 			AbstractExecutor executor;
 
@@ -104,7 +85,7 @@ namespace NVelocity.Util.Introspection
 			*  if that didn't work, look for get("foo")
 			*/
 
-			if (!executor.IsAlive())
+			if (!executor.IsAlive)
 			{
 				executor = new GetExecutor(rlog, introspector, claz, identifier);
 			}
@@ -113,7 +94,7 @@ namespace NVelocity.Util.Introspection
 			*  finally, look for boolean isFoo()
 			*/
 
-			if (!executor.IsAlive())
+			if (!executor.IsAlive)
 			{
 				executor = new BooleanPropertyExecutor(rlog, introspector, claz, identifier);
 			}
@@ -123,11 +104,11 @@ namespace NVelocity.Util.Introspection
 
 		/// <summary> Property setter
 		/// </summary>
-		public VelPropertySet getPropertySet(Object obj, String identifier, Object arg, Info i)
+		public IVelPropertySet GetPropertySet(Object obj, String identifier, Object arg, Info i)
 		{
 			Type claz = obj.GetType();
 
-			VelMethod vm = null;
+			IVelMethod vm = null;
 			try
 			{
 				/*
@@ -138,7 +119,7 @@ namespace NVelocity.Util.Introspection
 
 				try
 				{
-					vm = getMethod(obj, "set" + identifier, parameters, i);
+					vm = GetMethod(obj, "set" + identifier, parameters, i);
 
 					if (vm == null)
 					{
@@ -159,7 +140,7 @@ namespace NVelocity.Util.Introspection
 						sb[3] = Char.ToLower(sb[3]);
 					}
 
-					vm = getMethod(obj, sb.ToString(), parameters, i);
+					vm = GetMethod(obj, sb.ToString(), parameters, i);
 
 					if (vm == null)
 						throw;
@@ -172,7 +153,7 @@ namespace NVelocity.Util.Introspection
 				{
 					Object[] parameters = new Object[] {new Object(), new Object()};
 
-					vm = getMethod(obj, "Add", parameters, i);
+					vm = GetMethod(obj, "Add", parameters, i);
 
 					if (vm != null)
 						return new VelSetterImpl(vm, identifier);
@@ -183,9 +164,9 @@ namespace NVelocity.Util.Introspection
 		}
 
 		/// <summary>
-		/// Implementation of <see cref="VelMethod"/>.
+		/// Implementation of <see cref="IVelMethod"/>.
 		/// </summary>
-		public class VelMethodImpl : VelMethod
+		public class VelMethodImpl : IVelMethod
 		{
 			public VelMethodImpl(MethodInfo m)
 			{
@@ -216,9 +197,9 @@ namespace NVelocity.Util.Introspection
 		}
 
 		/// <summary>
-		/// Implementation of <see cref="VelPropertyGet"/>.
+		/// Implementation of <see cref="IVelPropertyGet"/>.
 		/// </summary>
-		public class VelGetterImpl : VelPropertyGet
+		public class VelGetterImpl : IVelPropertyGet
 		{
 			public VelGetterImpl(AbstractExecutor exec)
 			{
@@ -252,7 +233,7 @@ namespace NVelocity.Util.Introspection
 			}
 		}
 
-		public class VelSetterImpl : VelPropertySet
+		public class VelSetterImpl : IVelPropertySet
 		{
 			public bool Cacheable
 			{
@@ -264,21 +245,21 @@ namespace NVelocity.Util.Introspection
 				get { return vm.MethodName; }
 			}
 
-			internal VelMethod vm = null;
+			internal IVelMethod vm = null;
 			internal String putKey = null;
 
-			public VelSetterImpl(VelMethod velmethod)
+			public VelSetterImpl(IVelMethod velmethod)
 			{
 				this.vm = velmethod;
 			}
 
-			public VelSetterImpl(VelMethod velmethod, string key)
+			public VelSetterImpl(IVelMethod velmethod, string key)
 			{
 				this.vm = velmethod;
 				this.putKey = key;
 			}
 
-			public Object invoke(Object o, Object value)
+			public Object Invoke(Object o, Object value)
 			{
 				ArrayList al = new ArrayList();
 
