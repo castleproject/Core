@@ -22,6 +22,10 @@ namespace TestSiteNVelocity.Controllers
 
 	public class UsingComponentController : Controller
 	{
+		public void CaptureForDirective()
+		{			
+		}
+
 		public void CaptureFor()
 		{			
 		}

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 using INode = NVelocity.Runtime.Parser.Node.INode;
-using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
+using InternalContextAdapter = NVelocity.Context.IInternalContextAdapter;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity
 {

@@ -167,6 +167,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\TemplatedInlineViewComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Controllers\AjaxController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -314,6 +319,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\components\TemplatedInlineViewComponent\templatedview.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\cookies\index.vm"
                     BuildAction = "None"
                 />
@@ -454,6 +463,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "views\UsingComponent\CaptureForDirective.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "views\UsingComponent\index.vm"
                     BuildAction = "None"
                 />
@@ -483,6 +496,10 @@
                 />
                 <File
                     RelPath = "views\UsingComponent\index9.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\InlineComponentUsingTemplatedRender.vm"
                     BuildAction = "None"
                 />
                 <File

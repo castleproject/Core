@@ -286,7 +286,6 @@ namespace Castle.MonoRail.Framework.Helpers
 								selected = IsSelected(value, selectedValue, selectedType, valueMethodInfo, isMultiple);
 							}
 
-							writer.WriteAttribute("value", value.ToString());
 						}
 						else
 						{
@@ -297,6 +296,12 @@ namespace Castle.MonoRail.Framework.Helpers
 						}
 
 						if (selected) writer.Write(" selected");
+						
+						if (value != null)
+						{
+							writer.WriteAttribute("value", value.ToString());
+						}
+
 						writer.Write(HtmlTextWriter.TagRightChar);
 						writer.Write(text);
 						writer.WriteEndTag("option");

@@ -92,7 +92,7 @@
                 <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
-                    HintPath = "..\..\SharedLibs\NVelocity\NVelocity.dll"
+                    HintPath = "..\..\SharedLibs\nvelocity\NVelocity.dll"
                 />
             </References>
         </Build>
@@ -134,6 +134,11 @@
                 />
                 <File
                     RelPath = "CustomDirectives\BlockComponentDirective.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CustomDirectives\CaptureForDirective.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

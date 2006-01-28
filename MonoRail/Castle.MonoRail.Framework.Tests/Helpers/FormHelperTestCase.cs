@@ -169,7 +169,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			product.Category.Id = 2;
 
 			Assert.AreEqual("<select id=\"product_category_id\" name=\"product.category.id\" >\r\n" + 
-				"<option value=\"1\">cat1</option>\r\n<option value=\"2\" selected>cat2</option>\r\n</select>",
+				"<option value=\"1\">cat1</option>\r\n<option selected value=\"2\">cat2</option>\r\n</select>",
 				helper.Select("product.category.id", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -196,7 +196,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, "role2"));
 
 			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
-				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\" selected>role2</option>\r\n</select>",
+				"<option selected value=\"1\">role1</option>\r\n<option selected value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -210,7 +210,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(1, "role1"));
 
 			Assert.AreEqual("<select id=\"user_roles\" name=\"user.roles\" >\r\n" + 
-				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
+				"<option selected value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.roles", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -225,7 +225,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(2, "role2"));
 
 			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\" selected>role2</option>\r\n</select>",
+				"<option selected value=\"1\">role1</option>\r\n<option selected value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
 		}
 
@@ -239,7 +239,7 @@ namespace Castle.MonoRail.Framework.Tests.Helpers
 			user.Roles.Add(new Role(1, "role1"));
 
 			Assert.AreEqual("<select id=\"user_RolesAsArray\" name=\"user.RolesAsArray\" >\r\n" + 
-				"<option value=\"1\" selected>role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
+				"<option selected value=\"1\">role1</option>\r\n<option value=\"2\">role2</option>\r\n</select>",
 				helper.Select("user.RolesAsArray", list, DictHelper.Create("value=id", "text=name") ));
 		}
 

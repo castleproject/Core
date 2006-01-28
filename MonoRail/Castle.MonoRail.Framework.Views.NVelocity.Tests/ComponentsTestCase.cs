@@ -24,6 +24,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 	public class ComponentsTestCase : AbstractMRTestCase
 	{
 		[Test]
+		public void CaptureForDirective()
+		{
+			DoGet("usingcomponent/capturefordirective.rails");
+
+			AssertSuccess();
+
+			AssertReplyContains(@"=navbar= some content =navbar=");
+		}
+
+		[Test]
 		public void CaptureForComponent()
 		{
 			DoGet("usingcomponent/capturefor.rails");
@@ -80,7 +90,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput("this is v1 [contains items from property bag] and this is v2 and v1 again", Output);
+			AssertOutput("v1 v2 [contains items from property bag] v1 v2 [contains items from property bag]", Output);
 		}
 
 		[Test]

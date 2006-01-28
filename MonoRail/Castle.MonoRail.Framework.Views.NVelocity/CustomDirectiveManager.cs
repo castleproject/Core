@@ -17,32 +17,71 @@ using DirectiveManager = NVelocity.Runtime.Directive.DirectiveManager;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity
 {
+	using System;
+	using System.Collections;
+
 	using Castle.MonoRail.Framework.Internal;
 	using Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives;
 
 	public class CustomDirectiveManager : DirectiveManager
 	{
+		private static readonly String DirectiveSuffix = "directive";
+
+		Hashtable directives = new Hashtable();
+
 		public CustomDirectiveManager()
 		{
+			RegisterCustomDirectives();
+		}
+
+		protected virtual void RegisterCustomDirectives()
+		{
+			RegisterCustomDirective(typeof(BlockComponentDirective));
+			RegisterCustomDirective(typeof(ComponentDirective));
+			RegisterCustomDirective(typeof(CaptureForDirective));
+		}
+
+		private void RegisterCustomDirective(Type type)
+		{
+			if (!typeof(Directive).IsAssignableFrom(type))
+			{
+				throw new RailsException("{0} is not a subclass of directive", type.FullName);
+			}
+
+			String name = type.Name.ToLower();
+
+			if (name.EndsWith(DirectiveSuffix))
+			{
+				name = name.Substring(0, name.Length - DirectiveSuffix.Length);
+			}
+
+			directives.Add(name, type);
 		}
 
 		public override bool Contains(string name)
 		{
-			return (name.Equals("component") || name.Equals("blockcomponent")) ? true : base.Contains(name);
+			return directives.Contains(name) ? true : base.Contains(name);
 		}
 
 		public override Directive Create(string name)
 		{
-			if ("component".Equals(name))
-			{
-				return new ComponentDirective( GetViewComponentFactory() );
-			}
-			else if ("blockcomponent".Equals(name))
-			{
-				return new BlockComponentDirective( GetViewComponentFactory() );
-			}
+			Type customDirective = directives[name] as Type;
 
-			return base.Create(name);
+			if (customDirective != null)
+			{
+				object[] args = null;
+
+				if (typeof(AbstractComponentDirective).IsAssignableFrom(customDirective))
+				{
+					args = new object[] {GetViewComponentFactory()};
+				}
+
+				return Activator.CreateInstance(customDirective, args) as Directive;
+			}
+			else
+			{
+				return base.Create(name);
+			}
 		}
 
 		private IViewComponentFactory GetViewComponentFactory()
