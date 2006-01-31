@@ -16,7 +16,6 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 {
 	using System;
 	using System.Configuration;
-	using System.Web;
 	using System.Xml;
 
 	using Castle.MonoRail.Framework.Configuration;
@@ -68,7 +67,7 @@ namespace Castle.MonoRail.Framework.Extensions.ExceptionChaining
 
 		private void OnActionException(IRailsEngineContext context)
 		{
-			firstHandler.Process(context);
+			if (firstHandler != null) firstHandler.Process(context);
 
 			// Mark the request as processed (so if the 
 			// ApplicationInstance_Error is invoked again, we wouldn't re-invoke the chain)

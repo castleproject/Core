@@ -360,6 +360,8 @@ namespace Castle.MonoRail.Framework.Helpers
 
 			foreach(String property in properties)
 			{
+				if (instance == null) break;
+
 				Type instanceType = instance.GetType();
 
 				PropertyInfo propertyInfo = instanceType.GetProperty(property, PropertyFlags);
