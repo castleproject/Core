@@ -19,7 +19,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 	using System.Text;
 
 	/// <summary>
-	/// Render the its contents and stores it in the IViewEngineContext
+	/// Renders the inner content and stores it in the IViewEngineContext
 	/// <code>
 	/// #blockcomponent(CaptureFor with "id=someId" ["append=before"])
 	///		content to be captured
@@ -43,7 +43,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 
 			if( id == null || id.Trim().Length == 0 )
 			{
-				throw new RailsException("CaptureFor expects required id attribute use #blockcomponent(CaptureFor with \"id=someid\")...#end");
+				throw new RailsException("CaptureFor requires an id attribute use #blockcomponent(CaptureFor with \"id=someid\")...#end");
 			}
 
 			StringWriter buffer = new StringWriter();

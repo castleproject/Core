@@ -33,6 +33,7 @@ namespace Castle.MonoRail.Framework.Internal
 		protected virtual void AddBuiltInComponents()
 		{
 			RegisterComponent( "CaptureFor", typeof(CaptureFor) );
+			RegisterComponent( "SecurityComponent", typeof(SecurityComponent) );
 		}
 
 		protected void RegisterComponent(String name, Type type)

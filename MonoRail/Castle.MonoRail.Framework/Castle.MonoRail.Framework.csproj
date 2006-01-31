@@ -668,6 +668,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ViewComponents\SecurityComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Views\ViewEngineBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
