@@ -5,8 +5,7 @@
 
 	<property name="rootbuild.dir" value="${directory::get-current-directory()}" />
 		
-	<property name="build.dir" value="${rootbuild.dir}/build/net-2.0" if="${framework::get-target-framework()=='net-2.0'}" />
-	<property name="build.dir" value="${rootbuild.dir}/build/net-1.1" if="${framework::get-target-framework()=='net-1.1'}" />
+	<property name="build.dir" value="${rootbuild.dir}/build/${framework::get-target-framework()}" />
 
 	<property name="strong"		value="STRONG"		unless="${property::exists('strong')}" />
 	<property name="debug"		value="false"		unless="${property::exists('debug')}" />
@@ -15,6 +14,7 @@
 	<property name="nunit.formatter" value="Plain"	unless="${property::exists('nunit.formatter')}" />
 	<property name="os" value="${operating-system::to-string(environment::get-operating-system())}" />
 	<property name="isWindows" value="${string::starts-with(os, 'Microsoft Windows')}" />
+	<property name="isMono" value="${string::starts-with(framework::get-target-framework(),'mono')}" />
 
 	<!-- properties used to connect to database for testing -->
 	<property name="ar.dialect" value="NHibernate.Dialect.MsSql2000Dialect" overwrite="false" />
