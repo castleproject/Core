@@ -246,6 +246,9 @@ namespace Commons.Collections
 					while (true)
 					{
 						String line = reader.ReadProperty();
+
+						if(line==null) break;
+
 						int equalSign = line.IndexOf((Char) '=');
 
 						if (equalSign > 0)

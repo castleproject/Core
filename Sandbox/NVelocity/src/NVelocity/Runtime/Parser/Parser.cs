@@ -5,6 +5,7 @@ namespace NVelocity.Runtime.Parser
 	using System;
 	using System.Collections;
 	using System.IO;
+	using NVelocity.Exception;
 	using NVelocity.Runtime.Directive;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util;
@@ -21,7 +22,7 @@ namespace NVelocity.Runtime.Parser
 	{
 		/*@bgen(jjtree)*/
 		//UPGRADE_NOTE: The initialization of  'jjtree' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-		internal ParserState jjtree;
+		internal ParserState nodeTree;
 
 		/// <summary>  This Hashtable contains a list of all of the dynamic directives.
 		/// </summary>
@@ -60,7 +61,7 @@ namespace NVelocity.Runtime.Parser
 
 		private void InitBlock()
 		{
-			jjtree = new ParserState();
+			nodeTree = new ParserState();
 			directives = null;
 			jj_la1 = new int[53];
 			jj_2_rtns = new Calls[12];
@@ -125,7 +126,7 @@ namespace NVelocity.Runtime.Parser
 			catch (ParseException pe)
 			{
 				rsvc.Error("Parser Exception: " + templateName + " : " + StringUtils.StackTrace(pe));
-				throw new ParseException(pe.currentToken, pe.expectedTokenSequences, pe.tokenImage);
+				throw ( pe.currentToken == null ) ? pe : new ParseException(pe.currentToken, pe.expectedTokenSequences, pe.tokenImage);
 			}
 			catch (TokenMgrError tme)
 			{
@@ -215,13 +216,13 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) process */
 			ASTprocess jjtn000 = new ASTprocess(this, ParserTreeConstants.PROCESS);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				while (true)
 				{
-					switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+					switch (GetCurrentTokenKind())
 					{
 						case ParserConstants.LPAREN:
 						case ParserConstants.RPAREN:
@@ -258,7 +259,7 @@ namespace NVelocity.Runtime.Parser
 				;
 
 				ConsumeToken(0);
-				jjtree.CloseNodeScope(jjtn000, true);
+				nodeTree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				if (true)
 					return jjtn000;
@@ -268,12 +269,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -294,7 +295,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 			throw new ApplicationException("Missing return statement in function");
@@ -305,7 +306,8 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public void Statement()
 		{
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			int kind = GetCurrentTokenKind();
+			switch (kind)
 			{
 				case ParserConstants.IF_DIRECTIVE:
 					IfStatement();
@@ -323,7 +325,8 @@ namespace NVelocity.Runtime.Parser
 					}
 					else
 					{
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						int kind2 = GetCurrentTokenKind();
+						switch (kind2)
 						{
 							case ParserConstants.SINGLE_LINE_COMMENT:
 							case ParserConstants.FORMAL_COMMENT:
@@ -382,12 +385,12 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) EscapedDirective */
 			ASTEscapedDirective jjtn000 = new ASTEscapedDirective(this, ParserTreeConstants.ESCAPED_DIRECTIVE);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				Token t = null;
 				t = ConsumeToken(ParserConstants.ESCAPE_DIRECTIVE);
-				jjtree.CloseNodeScope(jjtn000, true);
+				nodeTree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				/*
 				*  churn and burn..
@@ -398,7 +401,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -414,7 +417,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Escape */
 			ASTEscape jjtn000 = new ASTEscape(this, ParserTreeConstants.ESCAPE);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				Token t = null;
@@ -438,7 +441,7 @@ namespace NVelocity.Runtime.Parser
 				label_2_brk:
 				;
 
-				jjtree.CloseNodeScope(jjtn000, true);
+				nodeTree.CloseNodeScope(jjtn000, true);
 				jjtc000 = false;
 				/*
 				* first, check to see if we have a control directive
@@ -473,7 +476,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -483,10 +486,10 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Comment */
 			ASTComment jjtn000 = new ASTComment(this, ParserTreeConstants.COMMENT);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.SINGLE_LINE_COMMENT:
 						ConsumeToken(ParserConstants.SINGLE_LINE_COMMENT);
@@ -511,7 +514,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -521,7 +524,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) NumberLiteral */
 			ASTNumberLiteral jjtn000 = new ASTNumberLiteral(this, ParserTreeConstants.NUMBER_LITERAL);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				ConsumeToken(ParserConstants.NUMBER_LITERAL);
@@ -530,7 +533,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -540,7 +543,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) StringLiteral */
 			ASTStringLiteral jjtn000 = new ASTStringLiteral(this, ParserTreeConstants.STRING_LITERAL);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				ConsumeToken(ParserConstants.STRING_LITERAL);
@@ -549,7 +552,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -569,7 +572,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Identifier */
 			ASTIdentifier jjtn000 = new ASTIdentifier(this, ParserTreeConstants.IDENTIFIER);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				ConsumeToken(ParserConstants.IDENTIFIER);
@@ -578,7 +581,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -588,7 +591,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Word */
 			ASTWord jjtn000 = new ASTWord(this, ParserTreeConstants.WORD);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				ConsumeToken(ParserConstants.WORD);
@@ -597,7 +600,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -609,7 +612,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public void DirectiveArg()
 		{
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			switch (GetCurrentTokenKind())
 			{
 				case ParserConstants.IDENTIFIER:
 				case ParserConstants.LCURLY:
@@ -636,7 +639,7 @@ namespace NVelocity.Runtime.Parser
 					}
 					else
 					{
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						switch (GetCurrentTokenKind())
 						{
 							case ParserConstants.LBRACKET:
 								ObjectArray();
@@ -672,11 +675,11 @@ namespace NVelocity.Runtime.Parser
 		public SimpleNode Directive()
 		{
 			/*@bgen(jjtree) Directive */
-			ASTDirective jjtn000 = new ASTDirective(this, ParserTreeConstants.DIRECTIVE);
-			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
-			Token t = null;
-			Directive d;
+			ASTDirective directiveNode = new ASTDirective(this, ParserTreeConstants.DIRECTIVE);
+			bool isNodeScopeOpen = true;
+			nodeTree.OpenNodeScope(directiveNode);
+			Token token = null;
+			Directive directive;
 			DirectiveType directiveType;
 			bool doItNow = false;
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
@@ -686,10 +689,10 @@ namespace NVelocity.Runtime.Parser
 		* note that if we were escaped, that is now handled by 
 		* EscapedDirective()
 		*/
-				t = ConsumeToken(ParserConstants.WORD);
-				String directiveName = t.Image.Substring(1);
+				token = ConsumeToken(ParserConstants.WORD);
+				String directiveName = token.Image.Substring(1);
 
-				d = directives.Create(directiveName);
+				directive = directives.Create(directiveName);
 
 				/*
 		*  Velocimacro support : if the directive is macro directive
@@ -707,9 +710,9 @@ namespace NVelocity.Runtime.Parser
 		* about parser tokens
 		*/
 
-				jjtn000.DirectiveName = directiveName;
+				directiveNode.DirectiveName = directiveName;
 
-				if (d == null)
+				if (directive == null)
 				{
 					// if null, then not a real directive, but maybe a Velocimacro
 
@@ -724,7 +727,7 @@ namespace NVelocity.Runtime.Parser
 							token_source.StateStackPop();
 							token_source.inDirective = false;
 							if (true)
-								return jjtn000;
+								return directiveNode;
 						}
 					}
 
@@ -735,7 +738,7 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					directiveType = d.Type;
+					directiveType = directive.Type;
 				}
 
 				/*
@@ -743,22 +746,29 @@ namespace NVelocity.Runtime.Parser
 				*/
 
 				token_source.SwitchTo(ParserConstants.DIRECTIVE);
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+
+				ConsumeWhiteSpaces();
+
+				if ( directive != null && !directive.AcceptParams)
 				{
-					case ParserConstants.WHITESPACE:
-						ConsumeToken(ParserConstants.WHITESPACE);
-						break;
+					int curToken = GetCurrentTokenKind();
 
-					default:
-						jj_la1[6] = jj_gen;
-						;
-						break;
-
+					if(curToken == ParserConstants.NEWLINE)
+					{
+						ConsumeToken(ParserConstants.NEWLINE);	
+					}
+					else
+					{
+						throw new ParseException("Foreach directives must be the only items on the line (comments or contents are not allowed)");
+					}
+											
+					return directiveNode;
 				}
+
 				ConsumeToken(ParserConstants.LPAREN);
 				while (true)
 				{
-					switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+					switch (GetCurrentTokenKind())
 					{
 						case ParserConstants.LBRACKET:
 						case ParserConstants.WHITESPACE:
@@ -788,18 +798,20 @@ namespace NVelocity.Runtime.Parser
 				if (directiveType == DirectiveType.LINE)
 				{
 					if (true)
-						return jjtn000;
+						return directiveNode;
 				}
+
 				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.OpenNodeScope(jjtn001);
+				nodeTree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
 					while (true)
 					{
 						Statement();
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						int kind = GetCurrentTokenKind();
+						switch (kind)
 						{
 							case ParserConstants.LPAREN:
 							case ParserConstants.RPAREN:
@@ -820,7 +832,6 @@ namespace NVelocity.Runtime.Parser
 							case ParserConstants.DOT:
 							case ParserConstants.LCURLY:
 							case ParserConstants.RCURLY:
-								;
 								break;
 
 							default:
@@ -839,12 +850,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.ClearNodeScope(jjtn001);
+						nodeTree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.PopNode();
+						nodeTree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -869,12 +880,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.CloseNodeScope(jjtn001, true);
+						nodeTree.CloseNodeScope(jjtn001, true);
 					}
 				}
 				ConsumeToken(ParserConstants.END);
-				jjtree.CloseNodeScope(jjtn000, true);
-				jjtc000 = false;
+				nodeTree.CloseNodeScope(directiveNode, true);
+				isNodeScopeOpen = false;
 				/*
 		*  VM : if we are processing a #macro directive, we need to 
 		*     process the block.  In truth, I can just register the name
@@ -885,7 +896,7 @@ namespace NVelocity.Runtime.Parser
 
 				if (doItNow)
 				{
-					Macro.processAndRegister(rsvc, jjtn000, currentTemplateName);
+					Macro.processAndRegister(rsvc, directiveNode, currentTemplateName);
 				}
 				{
 					/*
@@ -893,19 +904,19 @@ namespace NVelocity.Runtime.Parser
 		    */
 
 					if (true)
-						return jjtn000;
+						return directiveNode;
 				}
 			}
 			catch (Exception jjte000)
 			{
-				if (jjtc000)
+				if (isNodeScopeOpen)
 				{
-					jjtree.ClearNodeScope(jjtn000);
-					jjtc000 = false;
+					nodeTree.ClearNodeScope(directiveNode);
+					isNodeScopeOpen = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -928,12 +939,33 @@ namespace NVelocity.Runtime.Parser
 			}
 			finally
 			{
-				if (jjtc000)
+				if (isNodeScopeOpen)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(directiveNode, true);
 				}
 			}
 			throw new ApplicationException("Missing return statement in function");
+		}
+
+		private int GetCurrentTokenKind( )
+		{
+			return (jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field;
+		}
+
+		private void ConsumeWhiteSpaces( )
+		{
+			switch (GetCurrentTokenKind())
+			{
+				case ParserConstants.WHITESPACE:
+					ConsumeToken(ParserConstants.WHITESPACE);
+					break;
+
+				default:
+					jj_la1[6] = jj_gen;
+					;
+					break;
+
+			}
 		}
 
 		public void ObjectArray()
@@ -941,12 +973,12 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) ObjectArray */
 			ASTObjectArray jjtn000 = new ASTObjectArray(this, ParserTreeConstants.OBJECT_ARRAY);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				ConsumeToken(ParserConstants.LBRACKET);
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LBRACKET:
 					case ParserConstants.WHITESPACE:
@@ -959,7 +991,7 @@ namespace NVelocity.Runtime.Parser
 						Parameter();
 						while (true)
 						{
-							switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+							switch (GetCurrentTokenKind())
 							{
 								case ParserConstants.COMMA:
 									;
@@ -992,12 +1024,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1022,7 +1054,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1036,12 +1068,12 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) IntegerRange */
 			ASTIntegerRange jjtn000 = new ASTIntegerRange(this, ParserTreeConstants.INTEGER_RANGE);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				ConsumeToken(ParserConstants.LBRACKET);
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.WHITESPACE:
 						ConsumeToken(ParserConstants.WHITESPACE);
@@ -1053,7 +1085,7 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.IDENTIFIER:
 					case ParserConstants.LCURLY:
@@ -1070,7 +1102,7 @@ namespace NVelocity.Runtime.Parser
 						throw new ParseException();
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.WHITESPACE:
 						ConsumeToken(ParserConstants.WHITESPACE);
@@ -1083,7 +1115,7 @@ namespace NVelocity.Runtime.Parser
 
 				}
 				ConsumeToken(ParserConstants.DOUBLEDOT);
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.WHITESPACE:
 						ConsumeToken(ParserConstants.WHITESPACE);
@@ -1095,7 +1127,7 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.IDENTIFIER:
 					case ParserConstants.LCURLY:
@@ -1112,7 +1144,7 @@ namespace NVelocity.Runtime.Parser
 						throw new ParseException();
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.WHITESPACE:
 						ConsumeToken(ParserConstants.WHITESPACE);
@@ -1130,12 +1162,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1160,7 +1192,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1171,7 +1203,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public void Parameter()
 		{
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			switch (GetCurrentTokenKind())
 			{
 				case ParserConstants.WHITESPACE:
 					ConsumeToken(ParserConstants.WHITESPACE);
@@ -1183,7 +1215,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 
 			}
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			switch (GetCurrentTokenKind())
 			{
 				case ParserConstants.STRING_LITERAL:
 					StringLiteral();
@@ -1197,7 +1229,7 @@ namespace NVelocity.Runtime.Parser
 					}
 					else
 					{
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						switch (GetCurrentTokenKind())
 						{
 							case ParserConstants.LBRACKET:
 								ObjectArray();
@@ -1230,7 +1262,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 
 			}
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			switch (GetCurrentTokenKind())
 			{
 				case ParserConstants.WHITESPACE:
 					ConsumeToken(ParserConstants.WHITESPACE);
@@ -1253,13 +1285,13 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Method */
 			ASTMethod jjtn000 = new ASTMethod(this, ParserTreeConstants.METHOD);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				Identifier();
 				ConsumeToken(ParserConstants.LPAREN);
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LBRACKET:
 					case ParserConstants.WHITESPACE:
@@ -1272,7 +1304,7 @@ namespace NVelocity.Runtime.Parser
 						Parameter();
 						while (true)
 						{
-							switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+							switch (GetCurrentTokenKind())
 							{
 								case ParserConstants.COMMA:
 									;
@@ -1305,12 +1337,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1335,7 +1367,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1345,11 +1377,11 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Reference */
 			ASTReference jjtn000 = new ASTReference(this, ParserTreeConstants.REFERENCE);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.IDENTIFIER:
 						ConsumeToken(ParserConstants.IDENTIFIER);
@@ -1371,7 +1403,7 @@ namespace NVelocity.Runtime.Parser
 							}
 							else
 							{
-								switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+								switch (GetCurrentTokenKind())
 								{
 									case ParserConstants.IDENTIFIER:
 										Identifier();
@@ -1412,7 +1444,7 @@ namespace NVelocity.Runtime.Parser
 							}
 							else
 							{
-								switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+								switch (GetCurrentTokenKind())
 								{
 									case ParserConstants.IDENTIFIER:
 										Identifier();
@@ -1444,12 +1476,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1474,7 +1506,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1484,7 +1516,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) True */
 			ASTTrue jjtn000 = new ASTTrue(this, ParserTreeConstants.TRUE);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				ConsumeToken(ParserConstants.TRUE);
@@ -1493,7 +1525,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1503,7 +1535,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) False */
 			ASTFalse jjtn000 = new ASTFalse(this, ParserTreeConstants.FALSE);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
 				ConsumeToken(ParserConstants.FALSE);
@@ -1512,7 +1544,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1526,10 +1558,10 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Text */
 			ASTText jjtn000 = new ASTText(this, ParserTreeConstants.TEXT);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			try
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.TEXT:
 						ConsumeToken(ParserConstants.TEXT);
@@ -1578,7 +1610,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1594,12 +1626,12 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) IfStatement */
 			ASTIfStatement jjtn000 = new ASTIfStatement(this, ParserTreeConstants.IF_STATEMENT);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				ConsumeToken(ParserConstants.IF_DIRECTIVE);
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.WHITESPACE:
 						ConsumeToken(ParserConstants.WHITESPACE);
@@ -1616,14 +1648,14 @@ namespace NVelocity.Runtime.Parser
 				ConsumeToken(ParserConstants.RPAREN);
 				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.OpenNodeScope(jjtn001);
+				nodeTree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
 					while (true)
 					{
 						Statement();
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						switch (GetCurrentTokenKind())
 						{
 							case ParserConstants.LPAREN:
 							case ParserConstants.RPAREN:
@@ -1663,12 +1695,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.ClearNodeScope(jjtn001);
+						nodeTree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.PopNode();
+						nodeTree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -1693,16 +1725,17 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.CloseNodeScope(jjtn001, true);
+						nodeTree.CloseNodeScope(jjtn001, true);
 					}
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.ELSEIF_DIRECTIVE:
 						while (true)
 						{
 							ElseIfStatement();
-							switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+							switch (GetCurrentTokenKind())
 							{
 								case ParserConstants.ELSEIF_DIRECTIVE:
 									;
@@ -1727,7 +1760,8 @@ namespace NVelocity.Runtime.Parser
 						break;
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.ELSE_DIRECTIVE:
 						ElseStatement();
@@ -1745,12 +1779,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1775,7 +1809,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1785,21 +1819,21 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) ElseStatement */
 			ASTElseStatement jjtn000 = new ASTElseStatement(this, ParserTreeConstants.ELSE_STATEMENT);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				ConsumeToken(ParserConstants.ELSE_DIRECTIVE);
 				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.OpenNodeScope(jjtn001);
+				nodeTree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
 					while (true)
 					{
 						Statement();
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						switch (GetCurrentTokenKind())
 						{
 							case ParserConstants.LPAREN:
 							case ParserConstants.RPAREN:
@@ -1839,12 +1873,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.ClearNodeScope(jjtn001);
+						nodeTree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.PopNode();
+						nodeTree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -1869,7 +1903,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.CloseNodeScope(jjtn001, true);
+						nodeTree.CloseNodeScope(jjtn001, true);
 					}
 				}
 			}
@@ -1877,12 +1911,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -1907,7 +1941,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -1917,12 +1951,12 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) ElseIfStatement */
 			ASTElseIfStatement jjtn000 = new ASTElseIfStatement(this, ParserTreeConstants.ELSE_IF_STATEMENT);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				ConsumeToken(ParserConstants.ELSEIF_DIRECTIVE);
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.WHITESPACE:
 						ConsumeToken(ParserConstants.WHITESPACE);
@@ -1939,14 +1973,14 @@ namespace NVelocity.Runtime.Parser
 				ConsumeToken(ParserConstants.RPAREN);
 				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
-				jjtree.OpenNodeScope(jjtn001);
+				nodeTree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
 					while (true)
 					{
 						Statement();
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						switch (GetCurrentTokenKind())
 						{
 							case ParserConstants.LPAREN:
 							case ParserConstants.RPAREN:
@@ -1986,12 +2020,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.ClearNodeScope(jjtn001);
+						nodeTree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.PopNode();
+						nodeTree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -2016,7 +2050,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.CloseNodeScope(jjtn001, true);
+						nodeTree.CloseNodeScope(jjtn001, true);
 					}
 				}
 			}
@@ -2024,12 +2058,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2054,7 +2088,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -2068,7 +2102,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) SetDirective */
 			ASTSetDirective jjtn000 = new ASTSetDirective(this, ParserTreeConstants.SET_DIRECTIVE);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
@@ -2089,7 +2123,7 @@ namespace NVelocity.Runtime.Parser
 				*/
 
 				token_source.inSet = false;
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.NEWLINE:
 						ConsumeToken(ParserConstants.NEWLINE);
@@ -2106,12 +2140,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2136,7 +2170,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -2163,7 +2197,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) Expression */
 			ASTExpression jjtn000 = new ASTExpression(this, ParserTreeConstants.EXPRESSION);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
@@ -2173,7 +2207,7 @@ namespace NVelocity.Runtime.Parser
 				}
 				else
 				{
-					switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+					switch (GetCurrentTokenKind())
 					{
 						case ParserConstants.LBRACKET:
 						case ParserConstants.LPAREN:
@@ -2200,12 +2234,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2230,7 +2264,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, true);
+					nodeTree.CloseNodeScope(jjtn000, true);
 				}
 			}
 		}
@@ -2240,7 +2274,7 @@ namespace NVelocity.Runtime.Parser
 			/*@bgen(jjtree) #Assignment( 2) */
 			ASTAssignment jjtn000 = new ASTAssignment(this, ParserTreeConstants.ASSIGNMENT);
 			bool jjtc000 = true;
-			jjtree.OpenNodeScope(jjtn000);
+			nodeTree.OpenNodeScope(jjtn000);
 			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
@@ -2252,12 +2286,12 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.ClearNodeScope(jjtn000);
+					nodeTree.ClearNodeScope(jjtn000);
 					jjtc000 = false;
 				}
 				else
 				{
-					jjtree.PopNode();
+					nodeTree.PopNode();
 				}
 				if (jjte000 is SystemException)
 				{
@@ -2282,7 +2316,7 @@ namespace NVelocity.Runtime.Parser
 			{
 				if (jjtc000)
 				{
-					jjtree.CloseNodeScope(jjtn000, 2);
+					nodeTree.CloseNodeScope(jjtn000, 2);
 				}
 			}
 		}
@@ -2292,7 +2326,7 @@ namespace NVelocity.Runtime.Parser
 			ConditionalAndExpression();
 			while (true)
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LOGICAL_OR:
 						;
@@ -2307,7 +2341,7 @@ namespace NVelocity.Runtime.Parser
 				ConsumeToken(ParserConstants.LOGICAL_OR);
 				ASTOrNode jjtn001 = new ASTOrNode(this, ParserTreeConstants.OR_NODE);
 				bool jjtc001 = true;
-				jjtree.OpenNodeScope(jjtn001);
+				nodeTree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -2317,12 +2351,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.ClearNodeScope(jjtn001);
+						nodeTree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.PopNode();
+						nodeTree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -2347,7 +2381,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.CloseNodeScope(jjtn001, 2);
+						nodeTree.CloseNodeScope(jjtn001, 2);
 					}
 				}
 			}
@@ -2362,7 +2396,7 @@ namespace NVelocity.Runtime.Parser
 			EqualityExpression();
 			while (true)
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LOGICAL_AND:
 						;
@@ -2377,7 +2411,7 @@ namespace NVelocity.Runtime.Parser
 				ConsumeToken(ParserConstants.LOGICAL_AND);
 				ASTAndNode jjtn001 = new ASTAndNode(this, ParserTreeConstants.AND_NODE);
 				bool jjtc001 = true;
-				jjtree.OpenNodeScope(jjtn001);
+				nodeTree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -2387,12 +2421,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.ClearNodeScope(jjtn001);
+						nodeTree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.PopNode();
+						nodeTree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -2417,7 +2451,7 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.CloseNodeScope(jjtn001, 2);
+						nodeTree.CloseNodeScope(jjtn001, 2);
 					}
 				}
 			}
@@ -2432,7 +2466,7 @@ namespace NVelocity.Runtime.Parser
 			RelationalExpression();
 			while (true)
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LOGICAL_EQUALS:
 					case ParserConstants.LOGICAL_NOT_EQUALS:
@@ -2445,13 +2479,13 @@ namespace NVelocity.Runtime.Parser
 						goto label_15_brk;
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LOGICAL_EQUALS:
 						ConsumeToken(ParserConstants.LOGICAL_EQUALS);
 						ASTEQNode jjtn001 = new ASTEQNode(this, ParserTreeConstants.EQ_NODE);
 						bool jjtc001 = true;
-						jjtree.OpenNodeScope(jjtn001);
+						nodeTree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2461,12 +2495,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.ClearNodeScope(jjtn001);
+								nodeTree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2491,7 +2525,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.CloseNodeScope(jjtn001, 2);
+								nodeTree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
@@ -2500,7 +2534,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.LOGICAL_NOT_EQUALS);
 						ASTNENode jjtn002 = new ASTNENode(this, ParserTreeConstants.NE_NODE);
 						bool jjtc002 = true;
-						jjtree.OpenNodeScope(jjtn002);
+						nodeTree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2510,12 +2544,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.ClearNodeScope(jjtn002);
+								nodeTree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -2540,7 +2574,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.CloseNodeScope(jjtn002, 2);
+								nodeTree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
@@ -2563,7 +2597,7 @@ namespace NVelocity.Runtime.Parser
 			AdditiveExpression();
 			while (true)
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LOGICAL_LT:
 					case ParserConstants.LOGICAL_LE:
@@ -2578,13 +2612,13 @@ namespace NVelocity.Runtime.Parser
 						goto label_16_brk;
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LOGICAL_LT:
 						ConsumeToken(ParserConstants.LOGICAL_LT);
 						ASTLTNode jjtn001 = new ASTLTNode(this, ParserTreeConstants.LT_NODE);
 						bool jjtc001 = true;
-						jjtree.OpenNodeScope(jjtn001);
+						nodeTree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2594,12 +2628,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.ClearNodeScope(jjtn001);
+								nodeTree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2624,7 +2658,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.CloseNodeScope(jjtn001, 2);
+								nodeTree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
@@ -2633,7 +2667,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.LOGICAL_GT);
 						ASTGTNode jjtn002 = new ASTGTNode(this, ParserTreeConstants.GT_NODE);
 						bool jjtc002 = true;
-						jjtree.OpenNodeScope(jjtn002);
+						nodeTree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2643,12 +2677,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.ClearNodeScope(jjtn002);
+								nodeTree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -2673,7 +2707,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.CloseNodeScope(jjtn002, 2);
+								nodeTree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
@@ -2682,7 +2716,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.LOGICAL_LE);
 						ASTLENode jjtn003 = new ASTLENode(this, ParserTreeConstants.LE_NODE);
 						bool jjtc003 = true;
-						jjtree.OpenNodeScope(jjtn003);
+						nodeTree.OpenNodeScope(jjtn003);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2692,12 +2726,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.ClearNodeScope(jjtn003);
+								nodeTree.ClearNodeScope(jjtn003);
 								jjtc003 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte003 is SystemException)
 							{
@@ -2722,7 +2756,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.CloseNodeScope(jjtn003, 2);
+								nodeTree.CloseNodeScope(jjtn003, 2);
 							}
 						}
 						break;
@@ -2731,7 +2765,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.LOGICAL_GE);
 						ASTGENode jjtn004 = new ASTGENode(this, ParserTreeConstants.GE_NODE);
 						bool jjtc004 = true;
-						jjtree.OpenNodeScope(jjtn004);
+						nodeTree.OpenNodeScope(jjtn004);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2741,12 +2775,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc004)
 							{
-								jjtree.ClearNodeScope(jjtn004);
+								nodeTree.ClearNodeScope(jjtn004);
 								jjtc004 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte004 is SystemException)
 							{
@@ -2771,7 +2805,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc004)
 							{
-								jjtree.CloseNodeScope(jjtn004, 2);
+								nodeTree.CloseNodeScope(jjtn004, 2);
 							}
 						}
 						break;
@@ -2794,7 +2828,7 @@ namespace NVelocity.Runtime.Parser
 			MultiplicativeExpression();
 			while (true)
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.MINUS:
 					case ParserConstants.PLUS:
@@ -2807,13 +2841,13 @@ namespace NVelocity.Runtime.Parser
 						goto label_17_brk;
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.PLUS:
 						ConsumeToken(ParserConstants.PLUS);
 						ASTAddNode jjtn001 = new ASTAddNode(this, ParserTreeConstants.ADD_NODE);
 						bool jjtc001 = true;
-						jjtree.OpenNodeScope(jjtn001);
+						nodeTree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2823,12 +2857,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.ClearNodeScope(jjtn001);
+								nodeTree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2853,7 +2887,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.CloseNodeScope(jjtn001, 2);
+								nodeTree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
@@ -2862,7 +2896,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.MINUS);
 						ASTSubtractNode jjtn002 = new ASTSubtractNode(this, ParserTreeConstants.SUBTRACT_NODE);
 						bool jjtc002 = true;
-						jjtree.OpenNodeScope(jjtn002);
+						nodeTree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2872,12 +2906,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.ClearNodeScope(jjtn002);
+								nodeTree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -2902,7 +2936,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.CloseNodeScope(jjtn002, 2);
+								nodeTree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
@@ -2925,7 +2959,7 @@ namespace NVelocity.Runtime.Parser
 			UnaryExpression();
 			while (true)
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.MULTIPLY:
 					case ParserConstants.DIVIDE:
@@ -2939,13 +2973,13 @@ namespace NVelocity.Runtime.Parser
 						goto label_18_brk;
 
 				}
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.MULTIPLY:
 						ConsumeToken(ParserConstants.MULTIPLY);
 						ASTMulNode jjtn001 = new ASTMulNode(this, ParserTreeConstants.MUL_NODE);
 						bool jjtc001 = true;
-						jjtree.OpenNodeScope(jjtn001);
+						nodeTree.OpenNodeScope(jjtn001);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -2955,12 +2989,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.ClearNodeScope(jjtn001);
+								nodeTree.ClearNodeScope(jjtn001);
 								jjtc001 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte001 is SystemException)
 							{
@@ -2985,7 +3019,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc001)
 							{
-								jjtree.CloseNodeScope(jjtn001, 2);
+								nodeTree.CloseNodeScope(jjtn001, 2);
 							}
 						}
 						break;
@@ -2994,7 +3028,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.DIVIDE);
 						ASTDivNode jjtn002 = new ASTDivNode(this, ParserTreeConstants.DIV_NODE);
 						bool jjtc002 = true;
-						jjtree.OpenNodeScope(jjtn002);
+						nodeTree.OpenNodeScope(jjtn002);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -3004,12 +3038,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.ClearNodeScope(jjtn002);
+								nodeTree.ClearNodeScope(jjtn002);
 								jjtc002 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte002 is SystemException)
 							{
@@ -3034,7 +3068,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc002)
 							{
-								jjtree.CloseNodeScope(jjtn002, 2);
+								nodeTree.CloseNodeScope(jjtn002, 2);
 							}
 						}
 						break;
@@ -3043,7 +3077,7 @@ namespace NVelocity.Runtime.Parser
 						ConsumeToken(ParserConstants.MODULUS);
 						ASTModNode jjtn003 = new ASTModNode(this, ParserTreeConstants.MOD_NODE);
 						bool jjtc003 = true;
-						jjtree.OpenNodeScope(jjtn003);
+						nodeTree.OpenNodeScope(jjtn003);
 						//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 						try
 						{
@@ -3053,12 +3087,12 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.ClearNodeScope(jjtn003);
+								nodeTree.ClearNodeScope(jjtn003);
 								jjtc003 = false;
 							}
 							else
 							{
-								jjtree.PopNode();
+								nodeTree.PopNode();
 							}
 							if (jjte003 is SystemException)
 							{
@@ -3083,7 +3117,7 @@ namespace NVelocity.Runtime.Parser
 						{
 							if (jjtc003)
 							{
-								jjtree.CloseNodeScope(jjtn003, 2);
+								nodeTree.CloseNodeScope(jjtn003, 2);
 							}
 						}
 						break;
@@ -3105,7 +3139,7 @@ namespace NVelocity.Runtime.Parser
 		{
 			if (jj_2_11(2))
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.WHITESPACE:
 						ConsumeToken(ParserConstants.WHITESPACE);
@@ -3120,7 +3154,7 @@ namespace NVelocity.Runtime.Parser
 				ConsumeToken(ParserConstants.LOGICAL_NOT);
 				ASTNotNode jjtn001 = new ASTNotNode(this, ParserTreeConstants.NOT_NODE);
 				bool jjtc001 = true;
-				jjtree.OpenNodeScope(jjtn001);
+				nodeTree.OpenNodeScope(jjtn001);
 				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
@@ -3130,12 +3164,12 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.ClearNodeScope(jjtn001);
+						nodeTree.ClearNodeScope(jjtn001);
 						jjtc001 = false;
 					}
 					else
 					{
-						jjtree.PopNode();
+						nodeTree.PopNode();
 					}
 					if (jjte001 is SystemException)
 					{
@@ -3160,13 +3194,13 @@ namespace NVelocity.Runtime.Parser
 				{
 					if (jjtc001)
 					{
-						jjtree.CloseNodeScope(jjtn001, 1);
+						nodeTree.CloseNodeScope(jjtn001, 1);
 					}
 				}
 			}
 			else
 			{
-				switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+				switch (GetCurrentTokenKind())
 				{
 					case ParserConstants.LBRACKET:
 					case ParserConstants.LPAREN:
@@ -3191,7 +3225,7 @@ namespace NVelocity.Runtime.Parser
 
 		public void PrimaryExpression()
 		{
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			switch (GetCurrentTokenKind())
 			{
 				case ParserConstants.WHITESPACE:
 					ConsumeToken(ParserConstants.WHITESPACE);
@@ -3203,7 +3237,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 
 			}
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			switch (GetCurrentTokenKind())
 			{
 				case ParserConstants.STRING_LITERAL:
 					StringLiteral();
@@ -3226,7 +3260,7 @@ namespace NVelocity.Runtime.Parser
 					}
 					else
 					{
-						switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+						switch (GetCurrentTokenKind())
 						{
 							case ParserConstants.LBRACKET:
 								ObjectArray();
@@ -3256,7 +3290,7 @@ namespace NVelocity.Runtime.Parser
 					break;
 
 			}
-			switch ((jj_ntk_Renamed_Field == - 1) ? jj_ntk() : jj_ntk_Renamed_Field)
+			switch (GetCurrentTokenKind())
 			{
 				case ParserConstants.WHITESPACE:
 					ConsumeToken(ParserConstants.WHITESPACE);
@@ -4889,7 +4923,7 @@ namespace NVelocity.Runtime.Parser
 			token_source.ReInit(stream);
 			token = new Token();
 			jj_ntk_Renamed_Field = - 1;
-			jjtree.Reset();
+			nodeTree.Reset();
 			jj_gen = 0;
 			for (int i = 0; i < 53; i++)
 				jj_la1[i] = - 1;
@@ -4915,7 +4949,7 @@ namespace NVelocity.Runtime.Parser
 			token_source = tm;
 			token = new Token();
 			jj_ntk_Renamed_Field = - 1;
-			jjtree.Reset();
+			nodeTree.Reset();
 			jj_gen = 0;
 			for (int i = 0; i < 53; i++)
 				jj_la1[i] = - 1;

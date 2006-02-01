@@ -135,6 +135,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Test\ForeachTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Test\IntrospectorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

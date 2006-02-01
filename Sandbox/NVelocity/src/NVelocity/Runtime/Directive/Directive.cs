@@ -59,6 +59,11 @@ namespace NVelocity.Runtime.Directive
 			this.column = column;
 		}
 
+		public virtual bool AcceptParams
+		{
+			get { return true; }
+		}
+
 		/// <summary>
 		/// How this directive is to be initialized.
 		/// </summary>

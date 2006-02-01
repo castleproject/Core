@@ -13,6 +13,18 @@ namespace NVelocity.Runtime.Directive
 	/// </summary>
 	public class Foreach : Directive
 	{
+		private static readonly string[] sectionNames; 
+
+		static Foreach()
+		{
+			sectionNames = ForeachSectionEnum.GetNames(typeof(ForeachSectionEnum));
+			Array.Sort(sectionNames);
+			for(int i=0;i < sectionNames.Length; i++)
+			{
+				sectionNames[i] = sectionNames[i].ToLower();
+			}
+		}
+
 		private enum EnumType
 		{
 			Unknown = -1,
@@ -174,36 +186,92 @@ namespace NVelocity.Runtime.Directive
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			// do our introspection to see what our collection is
-			IEnumerator i = GetIterator(context, node);
+			IEnumerator enumerator = GetIterator(context, node);
+			INode bodyNode = node.GetChild(3);
 
-			if (i == null)
-				return false;
+			INode[][] sections = PrepareSections(bodyNode);
+			bool isFancyLoop = (sections != null);
+
+			if( enumerator == null && !isFancyLoop )
+			{
+				return true;
+			}
 
 			int counter = counterInitialValue;
 
 			// save the element key if there is one,
-	    // and the loop counter
+			// and the loop counter
 			Object o = context.Get(elementKey);
 			Object ctr = context.Get(counterName);
 
-			while (i.MoveNext())
+			if( enumerator != null && enumerator.MoveNext() )
+			{		
+				do
+				{
+					object current = enumerator.Current;
+
+					context.Put(counterName, counter);
+
+					context.Put(elementKey, current);
+
+					if( !isFancyLoop )
+					{
+						bodyNode.Render(context, writer);
+					}
+					else
+					{
+						if( counter == counterInitialValue )
+						{
+							ProcessSection( ForeachSectionEnum.BeforeAll, sections, context, writer );
+						}
+						else
+						{
+							ProcessSection( ForeachSectionEnum.Between, sections, context, writer );
+						}
+
+						ProcessSection( ForeachSectionEnum.Before, sections, context, writer );
+
+						// since 1st item is zero we invert odd/even
+						if( (counter - counterInitialValue) % 2 == 0)
+						{
+							ProcessSection( ForeachSectionEnum.Odd, sections, context, writer );
+						}
+						else
+						{
+							ProcessSection( ForeachSectionEnum.Even, sections, context, writer );
+						}						
+
+						ProcessSection( ForeachSectionEnum.Each, sections, context, writer );
+
+						ProcessSection( ForeachSectionEnum.After, sections, context, writer );
+					}
+
+					counter++;
+				}			
+				while( enumerator.MoveNext() );
+			}
+
+			if( isFancyLoop )
 			{
-				context.Put(counterName, counter);
-				context.Put(elementKey, i.Current);
-				node.GetChild(3).Render(context, writer);
-				counter++;
+				if( counter > counterInitialValue )
+				{
+					ProcessSection( ForeachSectionEnum.AfterAll, sections, context, writer );
+				}	
+				else
+				{
+					ProcessSection( ForeachSectionEnum.NoData, sections, context, writer );
+				}				
 			}
 
 			// restores the loop counter (if we were nested)
-	    // if we have one, else just removes
+			// if we have one, else just removes
 			if (ctr != null)
 				context.Put(counterName, ctr);
 			else
 				context.Remove(counterName);
 
-
 			// restores element key if exists
-	    // otherwise just removes
+			// otherwise just removes
 			if (o != null)
 				context.Put(elementKey, o);
 			else
@@ -211,5 +279,182 @@ namespace NVelocity.Runtime.Directive
 
 			return true;
 		}
+
+		private void ProcessSection( ForeachSectionEnum sectionEnumType, INode[][] sections, IInternalContextAdapter context, TextWriter writer )
+		{
+			int sectionIndex = (int) sectionEnumType;
+
+			if( sections[sectionIndex] == null ) return;
+
+			foreach(INode node in sections[sectionIndex])
+			{
+				node.Render(context, writer);
+			}
+		}
+
+		private INode[][] PrepareSections( INode node )
+		{
+			bool isFancyLoop = false;
+			int curSection = (int) ForeachSectionEnum.Each;
+			ArrayList[] sections = new ArrayList[sectionNames.Length];
+			int nodeCount = node.ChildrenCount;
+
+			for( int i = 0; i < nodeCount; i++ )
+			{
+				INode childNode = node.GetChild(i);
+				ASTDirective directive = childNode as ASTDirective;
+
+				if( directive != null && Array.BinarySearch(sectionNames, directive.DirectiveName) > -1 )
+				{
+					isFancyLoop = true;
+					curSection = (int) ForeachSectionEnum.Parse(typeof(ForeachSectionEnum), directive.DirectiveName, true );
+				}
+				else
+				{
+					if(sections[curSection] == null)
+					{
+						sections[curSection] = new ArrayList();
+					}
+					sections[curSection].Add(childNode);
+				}
+			}
+
+			if( !isFancyLoop )
+			{
+				return null;
+			}
+			else
+			{
+				INode[][] result = new INode[sections.Length][];
+			
+				for( int i=0; i < sections.Length; i++ )
+				{
+					if( sections[i] != null )
+						result[i] = sections[i].ToArray(typeof(INode)) as INode[];
+				}
+
+				return result;				
+			}
+		}
 	}
+
+	public enum ForeachSectionEnum
+	{
+		Each      = 0,
+		Between   = 1,
+		Odd		  = 2,
+		Even	  = 3,
+		NoData	  = 4,
+		BeforeAll = 5,
+		AfterAll  = 6,
+		Before    = 7,
+		After     = 8
+	}
+
+	public interface IForeachSection
+	{
+		ForeachSectionEnum Section { get; }		
+	}
+
+	public abstract class AbstractForeachSection : Directive, IForeachSection
+	{
+		public override String Name
+		{
+			get { return Section.ToString().ToLower(); }
+			set { throw new NotImplementedException(); }
+		}
+
+		public override bool AcceptParams
+		{
+			get { return false; }
+		}
+
+		public override DirectiveType Type
+		{
+			get { return DirectiveType.LINE; }
+		}
+
+		public override bool Render( IInternalContextAdapter context, TextWriter writer, INode node )
+		{
+			return true;
+		}
+
+		public abstract ForeachSectionEnum Section
+		{
+			get;
+		}		
+	}
+
+	public class ForeachEachSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.Each; }
+		}
+	}
+
+	public class ForeachBetweenSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.Between; }
+		}
+	}
+
+	public class ForeachOddSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.Odd; }
+		}
+	}
+
+	public class ForeachEvenSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.Even; }
+		}
+	}
+
+	public class ForeachNoDataSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.NoData; }
+		}
+	}
+
+	public class ForeachBeforeSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.Before; }
+		}
+	}
+
+	public class ForeachAfterSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.After; }
+		}
+	}
+
+	public class ForeachBeforeAllSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.BeforeAll; }
+		}
+	}
+
+	public class ForeachAfterAllSection : AbstractForeachSection
+	{	
+		public override ForeachSectionEnum Section
+		{
+			get { return ForeachSectionEnum.AfterAll; }
+		}
+	}
+
 }

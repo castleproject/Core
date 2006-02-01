@@ -32,7 +32,12 @@ namespace Commons.Collections
 			{
 				while (true)
 				{
-					String line = ReadLine().Trim();
+					String line = ReadLine();
+
+					if(line == null) return null;
+
+					line = line.Trim();
+
 					if ((line.Length != 0) && (line[0] != '#'))
 					{
 						if (line.EndsWith(@"\"))
