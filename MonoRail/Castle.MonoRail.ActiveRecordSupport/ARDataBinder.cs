@@ -183,6 +183,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 				if (found)
 				{
+					ClearContainer(instance);
+
 					if (node.IsIndexed)
 					{
 						Array collArray = Array.CreateInstance(targetType, node.IndexedNodes.Length);
@@ -428,6 +430,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			return null;
+		}
+
+		private void ClearContainer(object instance)
+		{
+			if (instance is IList)
+			{
+				(instance as IList).Clear();
+			}
+			else if (instance is ISet)
+			{
+				(instance as ISet).Clear();
+			}
 		}
 	}
 }
