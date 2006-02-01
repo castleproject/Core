@@ -50,24 +50,16 @@ namespace Castle.Services.Logging
         /// <returns></returns>
         protected FileInfo GetConfigFile(string filename)
         {
-            FileInfo result = new FileInfo(filename);
-//            if(IsWeb)
-//            {
-//                result = new FileInfo(HttpContext.Current.Request.PhysicalApplicationPath + filename);
-//            }
-//            else
-//            {
-//                result = new FileInfo(filename);
-//            }
+			FileInfo result;
+			if(Path.IsPathRooted(filename))
+			{
+				result = new FileInfo(filename);
+			}
+			else
+			{
+				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(filename)));
+			}
             return result;
         }
-
-//        private bool IsWeb
-//        {
-//            get
-//            {
-//                return HttpContext.Current != null;
-//            }
-//        }
 	}
 }

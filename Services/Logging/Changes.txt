@@ -1,6 +1,10 @@
 Change history
 --------------
 
+Beta 2
+======
+- Updated External Config File support to use IsPathRooted to decide how to load config file.
+
 Beta 1
 ======
 
