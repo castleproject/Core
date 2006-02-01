@@ -3,6 +3,7 @@ namespace NVelocity.Runtime.Directive
 	using System;
 	using System.Collections;
 	using System.IO;
+
 	using NVelocity.Context;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util.Introspection;
@@ -13,15 +14,17 @@ namespace NVelocity.Runtime.Directive
 	/// </summary>
 	public class Foreach : Directive
 	{
-		private static readonly string[] sectionNames; 
+		private static readonly string[] SectionNames;
 
 		static Foreach()
 		{
-			sectionNames = ForeachSectionEnum.GetNames(typeof(ForeachSectionEnum));
-			Array.Sort(sectionNames);
-			for(int i=0;i < sectionNames.Length; i++)
+			SectionNames = ForeachSectionEnum.GetNames(typeof(ForeachSectionEnum));
+			
+			Array.Sort(SectionNames);
+
+			for(int i = 0; i < SectionNames.Length; i++)
 			{
-				sectionNames[i] = sectionNames[i].ToLower();
+				SectionNames[i] = SectionNames[i].ToLower();
 			}
 		}
 
@@ -128,14 +131,14 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// If we still don't know what this is, 
-	    // figure out what type of object the list
-	    // element is, and get the iterator for it
+			// figure out what type of object the list
+			// element is, and get the iterator for it
 			if (type == EnumType.Unknown)
 			{
 				if (listObject.GetType().IsArray)
 					type = EnumType.Array;
 
-				// NOTE: IDictionary needs to come before ICollection as it support ICollection
+					// NOTE: IDictionary needs to come before ICollection as it support ICollection
 				else if (listObject is IDictionary)
 					type = EnumType.Dictionary;
 				else if (listObject is ICollection)
@@ -154,7 +157,7 @@ namespace NVelocity.Runtime.Directive
 			}
 
 			// now based on the type from either cache or examination...
-			switch (type)
+			switch(type)
 			{
 				case EnumType.Collection:
 					return ((ICollection) listObject).GetEnumerator();
@@ -192,7 +195,7 @@ namespace NVelocity.Runtime.Directive
 			INode[][] sections = PrepareSections(bodyNode);
 			bool isFancyLoop = (sections != null);
 
-			if( enumerator == null && !isFancyLoop )
+			if (enumerator == null && !isFancyLoop)
 			{
 				return true;
 			}
@@ -204,8 +207,8 @@ namespace NVelocity.Runtime.Directive
 			Object o = context.Get(elementKey);
 			Object ctr = context.Get(counterName);
 
-			if( enumerator != null && enumerator.MoveNext() )
-			{		
+			if (enumerator != null && enumerator.MoveNext())
+			{
 				do
 				{
 					object current = enumerator.Current;
@@ -214,53 +217,53 @@ namespace NVelocity.Runtime.Directive
 
 					context.Put(elementKey, current);
 
-					if( !isFancyLoop )
+					if (!isFancyLoop)
 					{
 						bodyNode.Render(context, writer);
 					}
 					else
 					{
-						if( counter == counterInitialValue )
+						if (counter == counterInitialValue)
 						{
-							ProcessSection( ForeachSectionEnum.BeforeAll, sections, context, writer );
+							ProcessSection(ForeachSectionEnum.BeforeAll, sections, context, writer);
 						}
 						else
 						{
-							ProcessSection( ForeachSectionEnum.Between, sections, context, writer );
+							ProcessSection(ForeachSectionEnum.Between, sections, context, writer);
 						}
 
-						ProcessSection( ForeachSectionEnum.Before, sections, context, writer );
+						ProcessSection(ForeachSectionEnum.Before, sections, context, writer);
 
 						// since 1st item is zero we invert odd/even
-						if( (counter - counterInitialValue) % 2 == 0)
+						if ((counter - counterInitialValue) % 2 == 0)
 						{
-							ProcessSection( ForeachSectionEnum.Odd, sections, context, writer );
+							ProcessSection(ForeachSectionEnum.Odd, sections, context, writer);
 						}
 						else
 						{
-							ProcessSection( ForeachSectionEnum.Even, sections, context, writer );
-						}						
+							ProcessSection(ForeachSectionEnum.Even, sections, context, writer);
+						}
 
-						ProcessSection( ForeachSectionEnum.Each, sections, context, writer );
+						ProcessSection(ForeachSectionEnum.Each, sections, context, writer);
 
-						ProcessSection( ForeachSectionEnum.After, sections, context, writer );
+						ProcessSection(ForeachSectionEnum.After, sections, context, writer);
 					}
 
 					counter++;
-				}			
-				while( enumerator.MoveNext() );
+
+				} while(enumerator.MoveNext());
 			}
 
-			if( isFancyLoop )
+			if (isFancyLoop)
 			{
-				if( counter > counterInitialValue )
+				if (counter > counterInitialValue)
 				{
-					ProcessSection( ForeachSectionEnum.AfterAll, sections, context, writer );
-				}	
+					ProcessSection(ForeachSectionEnum.AfterAll, sections, context, writer);
+				}
 				else
 				{
-					ProcessSection( ForeachSectionEnum.NoData, sections, context, writer );
-				}				
+					ProcessSection(ForeachSectionEnum.NoData, sections, context, writer);
+				}
 			}
 
 			// restores the loop counter (if we were nested)
@@ -280,11 +283,11 @@ namespace NVelocity.Runtime.Directive
 			return true;
 		}
 
-		private void ProcessSection( ForeachSectionEnum sectionEnumType, INode[][] sections, IInternalContextAdapter context, TextWriter writer )
+		private void ProcessSection(ForeachSectionEnum sectionEnumType, INode[][] sections, IInternalContextAdapter context, TextWriter writer)
 		{
 			int sectionIndex = (int) sectionEnumType;
 
-			if( sections[sectionIndex] == null ) return;
+			if (sections[sectionIndex] == null) return;
 
 			foreach(INode node in sections[sectionIndex])
 			{
@@ -292,26 +295,26 @@ namespace NVelocity.Runtime.Directive
 			}
 		}
 
-		private INode[][] PrepareSections( INode node )
+		private INode[][] PrepareSections(INode node)
 		{
 			bool isFancyLoop = false;
 			int curSection = (int) ForeachSectionEnum.Each;
-			ArrayList[] sections = new ArrayList[sectionNames.Length];
+			ArrayList[] sections = new ArrayList[SectionNames.Length];
 			int nodeCount = node.ChildrenCount;
 
-			for( int i = 0; i < nodeCount; i++ )
+			for(int i = 0; i < nodeCount; i++)
 			{
 				INode childNode = node.GetChild(i);
 				ASTDirective directive = childNode as ASTDirective;
 
-				if( directive != null && Array.BinarySearch(sectionNames, directive.DirectiveName) > -1 )
+				if (directive != null && Array.BinarySearch(SectionNames, directive.DirectiveName) > -1)
 				{
 					isFancyLoop = true;
-					curSection = (int) ForeachSectionEnum.Parse(typeof(ForeachSectionEnum), directive.DirectiveName, true );
+					curSection = (int) ForeachSectionEnum.Parse(typeof(ForeachSectionEnum), directive.DirectiveName, true);
 				}
 				else
 				{
-					if(sections[curSection] == null)
+					if (sections[curSection] == null)
 					{
 						sections[curSection] = new ArrayList();
 					}
@@ -319,41 +322,43 @@ namespace NVelocity.Runtime.Directive
 				}
 			}
 
-			if( !isFancyLoop )
+			if (!isFancyLoop)
 			{
 				return null;
 			}
 			else
 			{
 				INode[][] result = new INode[sections.Length][];
-			
-				for( int i=0; i < sections.Length; i++ )
+
+				for(int i = 0; i < sections.Length; i++)
 				{
-					if( sections[i] != null )
+					if (sections[i] != null)
+					{
 						result[i] = sections[i].ToArray(typeof(INode)) as INode[];
+					}
 				}
 
-				return result;				
+				return result;
 			}
 		}
 	}
 
 	public enum ForeachSectionEnum
 	{
-		Each      = 0,
-		Between   = 1,
-		Odd		  = 2,
-		Even	  = 3,
-		NoData	  = 4,
+		Each = 0,
+		Between = 1,
+		Odd = 2,
+		Even = 3,
+		NoData = 4,
 		BeforeAll = 5,
-		AfterAll  = 6,
-		Before    = 7,
-		After     = 8
+		AfterAll = 6,
+		Before = 7,
+		After = 8
 	}
 
 	public interface IForeachSection
 	{
-		ForeachSectionEnum Section { get; }		
+		ForeachSectionEnum Section { get; }
 	}
 
 	public abstract class AbstractForeachSection : Directive, IForeachSection
@@ -374,19 +379,16 @@ namespace NVelocity.Runtime.Directive
 			get { return DirectiveType.LINE; }
 		}
 
-		public override bool Render( IInternalContextAdapter context, TextWriter writer, INode node )
+		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
 		{
 			return true;
 		}
 
-		public abstract ForeachSectionEnum Section
-		{
-			get;
-		}		
+		public abstract ForeachSectionEnum Section { get; }
 	}
 
 	public class ForeachEachSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.Each; }
@@ -394,7 +396,7 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachBetweenSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.Between; }
@@ -402,7 +404,7 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachOddSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.Odd; }
@@ -410,7 +412,7 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachEvenSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.Even; }
@@ -418,7 +420,7 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachNoDataSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.NoData; }
@@ -426,7 +428,7 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachBeforeSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.Before; }
@@ -434,7 +436,7 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachAfterSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.After; }
@@ -442,7 +444,7 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachBeforeAllSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.BeforeAll; }
@@ -450,11 +452,10 @@ namespace NVelocity.Runtime.Directive
 	}
 
 	public class ForeachAfterAllSection : AbstractForeachSection
-	{	
+	{
 		public override ForeachSectionEnum Section
 		{
 			get { return ForeachSectionEnum.AfterAll; }
 		}
 	}
-
 }

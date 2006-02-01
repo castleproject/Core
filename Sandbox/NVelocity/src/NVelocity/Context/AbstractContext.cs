@@ -175,10 +175,10 @@ namespace NVelocity.Context
 			{
 				return null;
 			}
-			else if (value_ == null)
-			{
-				return null;
-			}
+//			else if (value_ == null)
+//			{
+//				return null;
+//			}
 
 			return InternalPut(key, value_);
 		}
