@@ -25,13 +25,14 @@ namespace Castle.Facilities.IBatisNetIntegration
 {
 	using System;
 	using System.Xml;
-
+	using Castle.MicroKernel.Facilities;
 	using Castle.Model;
 
 	using Castle.MicroKernel;
 	using Castle.MicroKernel.ComponentActivator;
 
 	using IBatisNet.Common.Utilities;
+	using IBatisNet.DataMapper;
 	using IBatisNet.DataMapper.Configuration;
 
 	public class SqlMapActivator : AbstractComponentActivator
@@ -43,18 +44,40 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		protected override object InternalCreate()
 		{
-			String fileName = (String) Model.ExtendedProperties[ IBatisNetFacility.FILE_CONFIGURATION ];
-			bool isEmbedded = (bool) Model.ExtendedProperties[ IBatisNetFacility.FILE_CONFIGURATION_EMBEDDED ];
+			String fileName = (String) Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_FILE ];
+			bool isEmbedded = (bool) Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_EMBEDDED ];
+			String connectionString = (String) Model.ExtendedProperties [ IBatisNetFacility.MAPPER_CONFIG_CONNECTION_STRING ];
 
 			IBatisNet.DataMapper.Configuration.DomSqlMapBuilder domSqlMapBuilder = new DomSqlMapBuilder();
+			SqlMapper sqlMapper;
+
 			if( isEmbedded )
 			{
 				XmlDocument sqlMapConfig = Resources.GetEmbeddedResourceAsXmlDocument( fileName );
-				return domSqlMapBuilder.Configure(sqlMapConfig);     
+				sqlMapper = domSqlMapBuilder.Configure(sqlMapConfig);     
 			}
 			else
 			{
-				return domSqlMapBuilder.Configure(fileName);
+				sqlMapper = domSqlMapBuilder.Configure(fileName);
+			}
+
+			if( connectionString !=null && connectionString.Length > 0)
+			{
+				sqlMapper.DataSource.ConnectionString = connectionString;
+			}
+
+			
+			if( sqlMapper != null )
+			{
+				return sqlMapper;	
+			}
+			else
+			{
+				throw new FacilityException(
+					string.Format("The IBatisNetIntegration Facility was unable to successfully configure SqlMapper ID [{0}] with File [{1}] that was set to Embedded [{2}].", 
+					Model.Name, Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_FILE ].ToString(),
+					Model.ExtendedProperties[ IBatisNetFacility.MAPPER_CONFIG_EMBEDDED ].ToString())
+					);
 			}
 		}
 

@@ -36,8 +36,9 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 	public class IBatisNetFacility : AbstractFacility
 	{
-		public static readonly String FILE_CONFIGURATION = "_IBATIS_FILE_CONFIGURATION_";
-		public static readonly String FILE_CONFIGURATION_EMBEDDED = "_IBATIS_FILE_CONFIGURATION_EMBEDDED";
+		public static readonly String MAPPER_CONFIG_FILE = "_IBATIS_MAPPER_CONFIG_FILE_";
+		public static readonly String MAPPER_CONFIG_EMBEDDED = "_IBATIS_MAPPER_CONFIG_EMBEDDED_";
+		public static readonly String MAPPER_CONFIG_CONNECTION_STRING = "_IBATIS_MAPPER_CONFIG_CONNECTIONSTRING_";
 
 		private static readonly ILog _logger = LogManager.GetLogger( System.Reflection.MethodBase.GetCurrentMethod().DeclaringType );
 
@@ -79,14 +80,30 @@ namespace Castle.Facilities.IBatisNetIntegration
 
 		private void ConfigureFactory( IConfiguration config )
 		{
-			// A name for this sqlMap
 			String id = config.Attributes["id"]; 
-
+			if(id==string.Empty)
+			{
+				throw new ConfigurationException( "The IBatisNetFacility requires each SqlMapper to have an ID." );
+			}
+			else
+			{
+				if(_logger.IsDebugEnabled)
+				{
+					_logger.Debug(string.Format("[{0}] was specified as the SqlMapper ID.", id));
+				}
+			}
+			
 			String fileName = config.Attributes["config"];
 			if ( fileName == String.Empty )
 			{
+				if(_logger.IsDebugEnabled)
+				{
+					_logger.Debug("No filename was specified, using [sqlMap.config].");
+				}
 				fileName = "sqlMap.config"; // default name
 			}
+
+			String connectionString = config.Attributes["connectionString"];
 			
 			bool isEmbedded = false;
 			String embedded = config.Attributes["embedded"];
@@ -95,16 +112,25 @@ namespace Castle.Facilities.IBatisNetIntegration
 				try
 				{
 					isEmbedded = Convert.ToBoolean( embedded );
+					if(_logger.IsDebugEnabled)
+					{
+						_logger.Debug("The SqlMap.config was set to embedded.");
+					}
 				}
-				catch
+				catch( System.Exception ex )
 				{
+					if(_logger.IsWarnEnabled)
+					{
+						_logger.Warn(string.Format("The SqlMap.config had a value set for embedded, [{0}], but it was not able to parsed as a Boolean.", embedded.ToString()), ex);
+					}
 					isEmbedded = false;
 				}
 			}
 
 			ComponentModel model = new ComponentModel(id, typeof(SqlMapper), null);
-			model.ExtendedProperties.Add( FILE_CONFIGURATION, fileName );
-			model.ExtendedProperties.Add( FILE_CONFIGURATION_EMBEDDED, isEmbedded );
+			model.ExtendedProperties.Add( MAPPER_CONFIG_FILE, fileName );
+			model.ExtendedProperties.Add( MAPPER_CONFIG_EMBEDDED, isEmbedded );
+			model.ExtendedProperties.Add( MAPPER_CONFIG_CONNECTION_STRING, connectionString );
 			model.LifestyleType = LifestyleType.Singleton;
 			model.CustomComponentActivator = typeof( SqlMapActivator );
 

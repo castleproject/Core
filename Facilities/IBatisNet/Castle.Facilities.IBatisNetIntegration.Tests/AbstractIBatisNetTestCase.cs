@@ -55,7 +55,7 @@ namespace Castle.Facilities.IBatisNetIntegration.Tests
 			IConfiguration sqlMap = confignode.Children.Add(new MutableConfiguration("sqlMap"));
 			sqlMap.Attributes["id"] = DATA_MAPPER;
 			sqlMap.Attributes["config"] = "sqlMap.config";
-
+			sqlMap.Attributes["connectionString"] = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=../castle_temp.mdb";
 			container.Kernel.ConfigurationStore.AddFacilityConfiguration("IBatisNet", confignode);
 
 			return container;
