@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.Em
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.DotNet2Sender", "Castle.Components.Common.EmailSender.DotNet2Sender\Castle.Components.Common.EmailSender.DotNet2Sender.csproj", "{4D344B22-75DF-4E26-8E96-1FCB7CD00935}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender2", "Castle.Components.Common.EmailSender2\Castle.Components.Common.EmailSender2.csproj", "{6729A622-CD96-40C7-B585-971377F1BD6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender.MockSender2", "Castle.Components.Common.EmailSender.MockSender2\Castle.Components.Common.EmailSender.MockSender2.csproj", "{E3BCC83C-2BAE-4E0F-8E48-A5D25B26EF3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Castle.Components.Common.EmailSender2.Tests", "Castle.Components.Common.EmailSender2.Tests\Castle.Components.Common.EmailSender2.Tests.csproj", "{929B1BB6-DD4A-4846-BF60-244908E1D899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +43,18 @@ Global
 		{4D344B22-75DF-4E26-8E96-1FCB7CD00935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D344B22-75DF-4E26-8E96-1FCB7CD00935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D344B22-75DF-4E26-8E96-1FCB7CD00935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6729A622-CD96-40C7-B585-971377F1BD6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6729A622-CD96-40C7-B585-971377F1BD6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6729A622-CD96-40C7-B585-971377F1BD6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6729A622-CD96-40C7-B585-971377F1BD6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3BCC83C-2BAE-4E0F-8E48-A5D25B26EF3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3BCC83C-2BAE-4E0F-8E48-A5D25B26EF3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3BCC83C-2BAE-4E0F-8E48-A5D25B26EF3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3BCC83C-2BAE-4E0F-8E48-A5D25B26EF3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{929B1BB6-DD4A-4846-BF60-244908E1D899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{929B1BB6-DD4A-4846-BF60-244908E1D899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{929B1BB6-DD4A-4846-BF60-244908E1D899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{929B1BB6-DD4A-4846-BF60-244908E1D899}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

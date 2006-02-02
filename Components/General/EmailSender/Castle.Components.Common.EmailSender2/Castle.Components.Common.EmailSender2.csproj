@@ -4,11 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4D344B22-75DF-4E26-8E96-1FCB7CD00935}</ProjectGuid>
+    <ProjectGuid>{6729A622-CD96-40C7-B585-971377F1BD6E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Castle.Components.Common.EmailSender.DotNet2Sender</RootNamespace>
-    <AssemblyName>Castle.Components.Common.EmailSender.DotNet2Sender</AssemblyName>
+    <RootNamespace>Castle.Components.Common.EmailSender2</RootNamespace>
+    <AssemblyName>Castle.Components.Common.EmailSender2</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,14 +33,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SmtpSender.cs" />
+    <Compile Include="IEmailSender.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageAttachment.cs" />
+    <Compile Include="MessageAttachmentCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Castle.Components.Common.EmailSender2\Castle.Components.Common.EmailSender2.csproj">
-      <Project>{6729A622-CD96-40C7-B585-971377F1BD6E}</Project>
-      <Name>Castle.Components.Common.EmailSender2</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

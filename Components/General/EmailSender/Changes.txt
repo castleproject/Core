@@ -1,3 +1,10 @@
+2/2/2006
+- Added .Net 2.0 Support for the original EmailSender
+- Added a new .Net 2.0 specific EmailSender interface.
+- - .Net 2.0 does not have a Fields Property
+- Added a MockSender for the EmailSender2 component
+- EmailSender2 has an optional parameter for the config file: Port which takes an integer.
+
 
 Alpha Version 1.0.0
 - First release

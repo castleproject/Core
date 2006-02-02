@@ -19,15 +19,17 @@ namespace Castle.Components.Common.EmailSender.DotNet2Sender
     using System.Net.Mail;
     using System.Net.Mime;
 
-    using Castle.Components.Common.EmailSender;
+    using Castle.Components.Common.EmailSender2;
 
     public class SmtpSender : IEmailSender
     {
         SmtpClient _client;
+
         public SmtpSender(String hostname)
         {
             this._client = new SmtpClient(hostname);
         }
+
         #region IEmailSender Members
 
         public void Send(string from, string to, string subject, string messageText)
@@ -76,34 +78,37 @@ namespace Castle.Components.Common.EmailSender.DotNet2Sender
                 mailMessage.Headers.Add(entry.Key.ToString(), entry.Value.ToString());
             }
 
-            foreach(DictionaryEntry entry in message.Fields)
-            {
-                //mailMessage.Fields.Add(entry.Key, entry.Value); // Not in 2.0
-            }
 
+            mailMessage.BodyEncoding = message.Encoding;
+            
             foreach(MessageAttachment attachment in message.Attachments)
             {
-                ContentType contentType;
-                switch(attachment.Encoding)
+                Attachment item;
+                if(attachment.Stream != null)
                 {
-                    case AttachmentEncoding.Base64:
-                        contentType = new ContentType(MediaTypeNames.Application.Octet);
-                        break;
-                    case AttachmentEncoding.UUEncode:
-                        contentType = new ContentType(MediaTypeNames.Application.Octet);
-                        break;
-                    default:
-                        contentType = new ContentType(MediaTypeNames.Application.Octet);
-                        break;
+                    item = new Attachment(attachment.Stream, attachment.MediaType);
                 }
-                ContentType contentType = contentType;
-
-                Attachment item = new Attachment(attachment.FileName, contentType);
+                else
+                {
+                    item = new Attachment(attachment.FileName, attachment.MediaType);
+                }
+                
 
                 mailMessage.Attachments.Add(item);
             }
 
             return mailMessage;
         }
+
+        /// <summary>
+        /// Port to use
+        /// </summary>
+        /// <remarks>Optional</remarks>
+        public int Port
+        {
+            get { return this._client.Port; }
+            set { this._client.Port = value; }
+        }
+
     }
 }
