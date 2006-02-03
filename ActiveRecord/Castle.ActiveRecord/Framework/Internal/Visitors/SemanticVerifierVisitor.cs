@@ -19,7 +19,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Reflection;
 
 	using Iesi.Collections;
+
 	using Nullables;
+	
 	using Castle.ActiveRecord;
 
 	/// <summary>

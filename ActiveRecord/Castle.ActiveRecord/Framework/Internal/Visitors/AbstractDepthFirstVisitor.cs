@@ -18,10 +18,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 	using System.Collections;
 	using System.Collections.Specialized;
 
-
 	public abstract class AbstractDepthFirstVisitor : IVisitor
 	{
-		private IDictionary visited = new HybridDictionary(100); 
+		private IDictionary visited = new HybridDictionary(100);
 
 		public void VisitNode(IVisitable visitable)
 		{
@@ -132,6 +131,10 @@ namespace Castle.ActiveRecord.Framework.Internal
 		}
 
 		public virtual void VisitHasManyToAnyConfig(HasManyToAnyModel.Config hasManyToAnyConfigModel)
+		{
+		}
+
+		public virtual void VisitImport(ImportModel model)
 		{
 		}
 	}

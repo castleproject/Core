@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 	[Serializable]
 	public class ActiveRecordModel : IModelNode
 	{
-		protected internal static IDictionary type2Model = Hashtable.Synchronized( new Hashtable() );
+		protected internal static IDictionary type2Model = Hashtable.Synchronized(new Hashtable());
 
 		private readonly Type type;
 
@@ -31,6 +31,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		private bool isNestedType;
 		private ActiveRecordAttribute arAtt;
 		private ActiveRecordModel parent;
+		private IList imports = new ArrayList();
 		private IList hasManyToAny = new ArrayList();
 		private IList anys = new ArrayList();
 		private IList ids = new ArrayList();
@@ -124,9 +125,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 			set { version = value; }
 		}
 
-		public IList Ids
+		public IList Imports
 		{
-			get { return ids; }
+			get { return imports; }
 		}
 
 		public IList Properties
@@ -189,6 +190,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 			get { return collectionIds; }
 		}
 
+		public IList Ids
+		{
+			get { return ids; }
+		}
+
 		public IList Hilos
 		{
 			get { return hilos; }
@@ -211,7 +217,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// <param name="model"></param>
 		internal static void Register(Type arType, Framework.Internal.ActiveRecordModel model)
 		{
-			type2Model[ arType ] = model;
+			type2Model[arType] = model;
 		}
 
 		/// <summary>
@@ -219,9 +225,9 @@ namespace Castle.ActiveRecord.Framework.Internal
 		/// </summary>
 		/// <param name="arType"></param>
 		/// <returns></returns>
-		public static Framework.Internal.ActiveRecordModel GetModel( Type arType )
+		public static Framework.Internal.ActiveRecordModel GetModel(Type arType)
 		{
-			return (Framework.Internal.ActiveRecordModel) type2Model[ arType ];
+			return (Framework.Internal.ActiveRecordModel) type2Model[arType];
 		}
 
 		#region IVisitable Members

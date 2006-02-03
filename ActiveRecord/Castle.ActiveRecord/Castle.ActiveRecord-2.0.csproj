@@ -388,9 +388,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ImportAttribute.cs" />
     <Compile Include="Framework\ActiveRecordBase.Generic.cs" />
     <Compile Include="Framework\ActiveRecordHooksBase.cs" />
     <Compile Include="Framework\ARSchemaCreator.cs" />
+    <Compile Include="Framework\Internal\Model\ImportModel.cs" />
     <Compile Include="Framework\Queries\ScalarQuery.Generic.cs" />
     <Compile Include="Framework\Queries\SimpleQuery.Generic.cs" />
     <Compile Include="Framework\Scopes\DifferentDatabaseScope.cs" />

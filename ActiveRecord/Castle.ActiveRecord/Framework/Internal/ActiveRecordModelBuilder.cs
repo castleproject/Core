@@ -20,8 +20,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	public class ActiveRecordModelBuilder
 	{
-		public static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.Instance;
-		public static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly|BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance;
+		private static readonly BindingFlags DefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance;
+		private static readonly BindingFlags FieldDefaultBindingFlags = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
 		private readonly ActiveRecordModelCollection coll = new ActiveRecordModelCollection();
 
@@ -33,7 +33,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (type == null) throw new ArgumentNullException("type");
 
-			if (type.IsDefined( typeof(ActiveRecordSkip), false )) return null;
+			if (type.IsDefined(typeof(ActiveRecordSkip), false)) return null;
 
 			ActiveRecordModel model = new ActiveRecordModel(type);
 
@@ -41,7 +41,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			PopulateModel(model, type);
 
-			ActiveRecordBase.Register( type, model );
+			ActiveRecordBase.Register(type, model);
 
 			return model;
 		}
@@ -55,6 +55,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			ProcessActiveRecordAttribute(type, model);
 
+			ProcessImports(type, model);
+
 			ProcessJoinedBaseAttribute(type, model);
 
 			ProcessProperties(type, model);
@@ -62,9 +64,20 @@ namespace Castle.ActiveRecord.Framework.Internal
 			ProcessFields(type, model);
 		}
 
+		private void ProcessImports(Type type, ActiveRecordModel model)
+		{
+			object[] attrs = type.GetCustomAttributes(typeof(ImportAttribute), false);
+
+			foreach(ImportAttribute att in attrs)
+			{
+				ImportModel im = new ImportModel(att);
+				model.Imports.Add(im);
+			}
+		}
+
 		private void ProcessJoinedBaseAttribute(Type type, ActiveRecordModel model)
 		{
-			model.IsJoinedSubClassBase = type.IsDefined( typeof(JoinedBaseAttribute), false );
+			model.IsJoinedSubClassBase = type.IsDefined(typeof(JoinedBaseAttribute), false);
 		}
 
 		private void PopulateActiveRecordAttribute(ActiveRecordAttribute attribute, ActiveRecordModel model)
@@ -77,14 +90,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 				if (attribute.DiscriminatorValue == null)
 				{
-					throw new ActiveRecordException( 
-						String.Format("You must specify a discriminator value for the type {0}", model.Type.FullName) );
+					throw new ActiveRecordException(
+						String.Format("You must specify a discriminator value for the type {0}", model.Type.FullName));
 				}
 			}
 			else if (attribute.DiscriminatorType != null)
 			{
-				throw new ActiveRecordException( 
-					String.Format("The usage of DiscriminatorType for {0} is meaningless", model.Type.FullName) );
+				throw new ActiveRecordException(
+					String.Format("The usage of DiscriminatorType for {0} is meaningless", model.Type.FullName));
 			}
 
 			if (model.ActiveRecordAtt.Table == null)
@@ -95,49 +108,49 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private void ProcessFields(Type type, ActiveRecordModel model)
 		{
-            //Check persistent fields of the base class as well
-            if (ShouldCheckBase(type))
-            {
+			//Check persistent fields of the base class as well
+			if (ShouldCheckBase(type))
+			{
 				ProcessFields(type.BaseType, model);
 			}
 
-			FieldInfo[] fields = type.GetFields( FieldDefaultBindingFlags );
+			FieldInfo[] fields = type.GetFields(FieldDefaultBindingFlags);
 
-			foreach( FieldInfo field in fields )
+			foreach(FieldInfo field in fields)
 			{
-				if (field.IsDefined( typeof(FieldAttribute), false ))
+				if (field.IsDefined(typeof(FieldAttribute), false))
 				{
-					FieldAttribute fieldAtt = field.GetCustomAttributes( typeof(FieldAttribute), false )[0] as FieldAttribute;
+					FieldAttribute fieldAtt = field.GetCustomAttributes(typeof(FieldAttribute), false)[0] as FieldAttribute;
 
-					model.Fields.Add( new FieldModel( field, fieldAtt ) );
+					model.Fields.Add(new FieldModel(field, fieldAtt));
 				}
 			}
 		}
 
 		private void ProcessProperties(Type type, ActiveRecordModel model)
 		{
-            //Check persistent properties of the base class as well
-            if (ShouldCheckBase(type))
+			//Check persistent properties of the base class as well
+			if (ShouldCheckBase(type))
 			{
-                ProcessProperties(type.BaseType, model);
+				ProcessProperties(type.BaseType, model);
 			}
 
-			PropertyInfo[] props = type.GetProperties( DefaultBindingFlags );
+			PropertyInfo[] props = type.GetProperties(DefaultBindingFlags);
 
-			foreach( PropertyInfo prop in props )
+			foreach(PropertyInfo prop in props)
 			{
 				bool isArProperty = false;
 				AnyModel anyModel = null;
 				ArrayList anyMetaValues = new ArrayList();
 				// Validation
 
-				object[] valAtts = prop.GetCustomAttributes( typeof(AbstractValidationAttribute), true ); 
+				object[] valAtts = prop.GetCustomAttributes(typeof(AbstractValidationAttribute), true);
 
 				foreach(AbstractValidationAttribute valAtt in valAtts)
 				{
-					valAtt.Validator.Initialize( prop );
+					valAtt.Validator.Initialize(prop);
 
-					model.Validators.Add( valAtt.Validator );
+					model.Validators.Add(valAtt.Validator);
 				}
 
 				foreach(object attribute in prop.GetCustomAttributes(false))
@@ -147,14 +160,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 						PrimaryKeyAttribute propAtt = attribute as PrimaryKeyAttribute;
 						isArProperty = true;
 
-						model.Ids.Add( new PrimaryKeyModel( prop, propAtt ) );
+						model.Ids.Add(new PrimaryKeyModel(prop, propAtt));
 					}
 					else if (attribute is AnyAttribute)
 					{
 						AnyAttribute anyAtt = attribute as AnyAttribute;
 						isArProperty = true;
 						anyModel = new AnyModel(prop, anyAtt);
-						model.Anys.Add( anyModel );
+						model.Anys.Add(anyModel);
 					}
 					else if (attribute is Any.MetaValueAttribute)
 					{
@@ -167,7 +180,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						PropertyAttribute propAtt = attribute as PropertyAttribute;
 						isArProperty = true;
 
-						model.Properties.Add( new PropertyModel( prop, propAtt ) );
+						model.Properties.Add(new PropertyModel(prop, propAtt));
 					}
 					else if (attribute is NestedAttribute)
 					{
@@ -180,7 +193,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						ProcessProperties(prop.PropertyType, nestedModel);
 
-						model.Components.Add( new NestedModel( prop, propAtt, nestedModel ) );
+						model.Components.Add(new NestedModel(prop, propAtt, nestedModel));
 					}
 					else if (attribute is JoinedKeyAttribute)
 					{
@@ -189,11 +202,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						if (model.Key != null)
 						{
-							throw new ActiveRecordException("You can't specify more than one JoinedKeyAttribute. " + 
+							throw new ActiveRecordException("You can't specify more than one JoinedKeyAttribute. " +
 								"Check type " + model.Type.FullName);
 						}
 
-						model.Key = new KeyModel( prop, propAtt );
+						model.Key = new KeyModel(prop, propAtt);
 					}
 					else if (attribute is VersionAttribute)
 					{
@@ -202,11 +215,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						if (model.Version != null)
 						{
-							throw new ActiveRecordException("You can't specify more than one VersionAttribute. " + 
+							throw new ActiveRecordException("You can't specify more than one VersionAttribute. " +
 								"Check type " + model.Type.FullName);
 						}
 
-						model.Version = new VersionModel( prop, propAtt );
+						model.Version = new VersionModel(prop, propAtt);
 					}
 					else if (attribute is TimestampAttribute)
 					{
@@ -215,11 +228,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 						if (model.Timestamp != null)
 						{
-							throw new ActiveRecordException("You can't specify more than one TimestampAttribute. " + 
+							throw new ActiveRecordException("You can't specify more than one TimestampAttribute. " +
 								"Check type " + model.Type.FullName);
 						}
 
-						model.Timestamp = new TimestampModel( prop, propAtt );
+						model.Timestamp = new TimestampModel(prop, propAtt);
 					}
 						// Relations
 					else if (attribute is OneToOneAttribute)
@@ -227,16 +240,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 						OneToOneAttribute propAtt = attribute as OneToOneAttribute;
 						isArProperty = true;
 
-						model.OneToOnes.Add(new OneToOneModel( prop, propAtt ));
+						model.OneToOnes.Add(new OneToOneModel(prop, propAtt));
 					}
 					else if (attribute is BelongsToAttribute)
 					{
 						BelongsToAttribute propAtt = attribute as BelongsToAttribute;
 						isArProperty = true;
 
-						model.BelongsTo.Add(new BelongsToModel( prop, propAtt ));
+						model.BelongsTo.Add(new BelongsToModel(prop, propAtt));
 					}
-					//The ordering is important here, HasManyToAny must comes before HasMany!
+						//The ordering is important here, HasManyToAny must comes before HasMany!
 					else if (attribute is HasManyToAnyAttribute)
 					{
 						HasManyToAnyAttribute propAtt = attribute as HasManyToAnyAttribute;
@@ -249,35 +262,35 @@ namespace Castle.ActiveRecord.Framework.Internal
 						HasManyAttribute propAtt = attribute as HasManyAttribute;
 						isArProperty = true;
 
-						model.HasMany.Add(new HasManyModel( prop, propAtt ));
+						model.HasMany.Add(new HasManyModel(prop, propAtt));
 					}
 					else if (attribute is HasAndBelongsToManyAttribute)
 					{
 						HasAndBelongsToManyAttribute propAtt = attribute as HasAndBelongsToManyAttribute;
 						isArProperty = true;
 
-						model.HasAndBelongsToMany.Add(new HasAndBelongsToManyModel( prop, propAtt ));
+						model.HasAndBelongsToMany.Add(new HasAndBelongsToManyModel(prop, propAtt));
 					}
 
 					if (attribute is CollectionIDAttribute)
 					{
 						CollectionIDAttribute propAtt = attribute as CollectionIDAttribute;
 
-						model.CollectionIDs.Add(new CollectionIDModel( prop, propAtt ));
+						model.CollectionIDs.Add(new CollectionIDModel(prop, propAtt));
 					}
 					if (attribute is HiloAttribute)
 					{
 						HiloAttribute propAtt = attribute as HiloAttribute;
 
-						model.Hilos.Add(new HiloModel( prop, propAtt ));
+						model.Hilos.Add(new HiloModel(prop, propAtt));
 					}
 				}
-				
+
 				if (anyMetaValues.Count > 0)
 				{
-					if (anyModel==null)
+					if (anyModel == null)
 					{
-						throw new ActiveRecordException("You can't specify a Any.MetaValue without specifying the Any attribute. " + 
+						throw new ActiveRecordException("You can't specify a Any.MetaValue without specifying the Any attribute. " +
 							"Check type " + prop.DeclaringType.FullName);
 					}
 					anyModel.MetaValues = anyMetaValues;
@@ -290,25 +303,25 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 		}
 
-        private static bool ShouldCheckBase(Type type)
-        {
-            return type.BaseType != typeof(object) && 
-                type.BaseType != typeof(ActiveRecordBase) && 
-                type.BaseType != typeof(ActiveRecordValidationBase) &&
-                !type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
-        }
+		private static bool ShouldCheckBase(Type type)
+		{
+			return type.BaseType != typeof(object) &&
+				type.BaseType != typeof(ActiveRecordBase) &&
+				type.BaseType != typeof(ActiveRecordValidationBase) &&
+				!type.BaseType.IsDefined(typeof(ActiveRecordAttribute), false);
+		}
 
 		private void ProcessActiveRecordAttribute(Type type, ActiveRecordModel model)
 		{
-			object[] attrs = type.GetCustomAttributes( typeof(ActiveRecordAttribute), false );
-	
+			object[] attrs = type.GetCustomAttributes(typeof(ActiveRecordAttribute), false);
+
 			if (attrs.Length == 0)
 			{
-				throw new ActiveRecordException( String.Format("Type {0} is not using the ActiveRecordAttribute, which is obligatory.", type.FullName) );
+				throw new ActiveRecordException(String.Format("Type {0} is not using the ActiveRecordAttribute, which is obligatory.", type.FullName));
 			}
-	
+
 			ActiveRecordAttribute arAttribute = attrs[0] as ActiveRecordAttribute;
-	
+
 			PopulateActiveRecordAttribute(arAttribute, model);
 		}
 	}

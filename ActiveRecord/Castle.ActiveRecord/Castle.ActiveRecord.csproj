@@ -189,6 +189,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\ImportAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\JoinedBaseAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -455,6 +460,11 @@
                 />
                 <File
                     RelPath = "Framework\Internal\Model\IModelNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Internal\Model\ImportModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

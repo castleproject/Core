@@ -19,6 +19,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 	public interface IVisitor
 	{
+        void VisitImport(ImportModel model);
 		void VisitModel(ActiveRecordModel model);
 		void VisitPrimaryKey(PrimaryKeyModel model);
 		void VisitHasManyToAny(HasManyToAnyModel model);

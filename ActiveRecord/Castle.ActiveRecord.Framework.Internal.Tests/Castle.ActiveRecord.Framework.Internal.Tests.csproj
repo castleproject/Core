@@ -88,17 +88,17 @@
                 <Reference
                     Name = "Iesi.Collections"
                     AssemblyName = "Iesi.Collections"
-                    HintPath = "..\lib\Iesi.Collections.dll"
+                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
                 />
                 <Reference
                     Name = "log4net"
                     AssemblyName = "log4net"
-                    HintPath = "..\lib\log4net.dll"
+                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
                 />
                 <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
-                    HintPath = "..\lib\NHibernate.dll"
+                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
                 />
                 <Reference
                     Name = "Castle.DynamicProxy"
@@ -114,21 +114,6 @@
                     Name = "Castle.ActiveRecord.Tests"
                     Project = "{DA3F2E47-AB8A-4CEC-9EDE-81DFC029E53F}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Iesi.Collections"
-                    AssemblyName = "Iesi.Collections"
-                    HintPath = "..\..\SharedLibs\nhibernate\Iesi.Collections.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\SharedLibs\log4net\log4net.dll"
-                />
-                <Reference
-                    Name = "NHibernate"
-                    AssemblyName = "NHibernate"
-                    HintPath = "..\..\SharedLibs\nhibernate\NHibernate.dll"
                 />
             </References>
         </Build>
@@ -150,6 +135,11 @@
                 />
                 <File
                     RelPath = "GraphConnectorTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ImportTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -240,6 +230,11 @@
                 />
                 <File
                     RelPath = "Model\HasManyClassA.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\ImportClass.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

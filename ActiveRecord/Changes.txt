@@ -7,6 +7,11 @@ beta 4
 
 - Brought ActiveRecordMediator.Generic inline with ActiveRecordMediator.  This is a breaking change (removal of a few methods/renaming of a few existing).
 
+- Add import support (kudos to Dan Burnea)
+  
+	[ActiveRecord, Import(typeof(ImportClassRow), "ImportClassRow")]
+    public class ImportClass : ActiveRecordBase
+
 beta 3
 ======
 
