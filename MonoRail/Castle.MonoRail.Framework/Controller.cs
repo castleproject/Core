@@ -213,7 +213,16 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected IDictionary Session
 		{
-			get { return _context.Session; }
+			get {
+                IDictionary result = null;
+
+                if(this._context != null)
+                {
+                    result = this._context.Session;
+                }
+
+                return result;
+            }
 		}
 
 		/// <summary>
