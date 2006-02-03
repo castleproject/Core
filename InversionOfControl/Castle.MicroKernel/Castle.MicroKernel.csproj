@@ -528,6 +528,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "SubSystems\Conversion\IKernelDependentConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "SubSystems\Conversion\ITypeConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -539,6 +544,11 @@
                 />
                 <File
                     RelPath = "SubSystems\Conversion\Converters\ArrayConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SubSystems\Conversion\Converters\ComponentConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

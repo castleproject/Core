@@ -31,6 +31,19 @@ using #{propertyName} syntax.(Patch from Ahmed)
        </parameters>
      </components>
 
+- Type converter for kernel components. This allows a usage like this:
+
+  <component id="mycomp">
+  
+    <parameters>
+      <servicelist>
+        <list type="IMyService, MyAssembly">
+          <item>${keytocomponent1}</item>
+          <item>${keytocomponent2}</item>
+        </list>
+      </servicelist>
+    </parameters>
+
 
 RC 2
 ====

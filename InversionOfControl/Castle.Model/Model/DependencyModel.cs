@@ -19,7 +19,8 @@ namespace Castle.Model
 	public enum DependencyType
 	{
 		Service,
-		Parameter
+		Parameter,
+		ServiceOverride
 	}
 
 	/// <summary>
@@ -47,11 +48,13 @@ namespace Castle.Model
 		public DependencyType DependencyType
 		{
 			get { return dependencyType; }
+			set { dependencyType = value; }
 		}
 
 		public String DependencyKey
 		{
 			get { return dependencyKey; }
+			set { dependencyKey = value; }
 		}
 
 		public Type TargetType

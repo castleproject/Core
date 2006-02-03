@@ -17,6 +17,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	using System;
 	using System.Collections;
 
+	using Castle.Model;
 	using Castle.Model.Configuration;
 
 	/// <summary>
@@ -26,10 +27,13 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	public class DefaultConversionManager : AbstractSubSystem, IConversionManager, ITypeConverterContext
 	{
 		private IList converters;
+		private IList standAloneConverters;
+		private Stack modelStack = new Stack();
 
 		public DefaultConversionManager()
 		{
 			converters = new ArrayList();
+			standAloneConverters = new ArrayList();
 
 			InitDefaultConverters();
 		}
@@ -42,6 +46,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			Add( new ListConverter() );
 			Add( new DictionaryConverter() );
 			Add( new ArrayConverter() ); 
+			Add( new ComponentConverter() ); 
 		}
 
 		#region IConversionManager Members
@@ -51,6 +56,21 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 			converter.Context = this;
 
 			converters.Add(converter);
+
+			if (!(converter is IKernelDependentConverter))
+			{
+				standAloneConverters.Add(converter);
+			}
+		}
+
+		public bool IsSupportedAndPrimitiveType(Type type)
+		{
+			foreach(ITypeConverter converter in standAloneConverters)
+			{
+				if (converter.CanHandleType(type)) return true;
+			}
+
+			return false;
 		}
 
 		#endregion
@@ -59,7 +79,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 		public ITypeConverterContext Context
 		{
-			get { throw new NotImplementedException(); }
+			get { return this; }
 			set { throw new NotImplementedException(); }
 		}
 
@@ -104,6 +124,27 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		#endregion
 
 		#region ITypeConverterContext Members
+
+		IKernel ITypeConverterContext.Kernel
+		{
+			get { return base.Kernel; }
+		}
+
+		public void PushModel(ComponentModel model)
+		{
+			modelStack.Push(model);
+		}
+
+		public void PopModel()
+		{
+			modelStack.Pop();
+		}
+
+		public ComponentModel CurrentModel
+		{
+			get { if (modelStack.Count == 0) return null; 
+				  else return (ComponentModel) modelStack.Peek(); }
+		}
 
 		public ITypeConverter Composition
 		{

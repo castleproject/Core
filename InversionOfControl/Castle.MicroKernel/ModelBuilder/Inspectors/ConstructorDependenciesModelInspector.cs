@@ -31,7 +31,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	public class ConstructorDependenciesModelInspector : IContributeComponentModelConstruction
 	{
 		[NonSerialized]
-		private ITypeConverter converter;
+		private IConversionManager converter;
 
 		public ConstructorDependenciesModelInspector()
 		{
@@ -41,7 +41,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		{
 			if (converter == null)
 			{
-				converter = (ITypeConverter) 
+				converter = (IConversionManager) 
 					kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 			}
 
@@ -72,7 +72,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 				Type paramType = parameter.ParameterType;
 
-				if ( converter.CanHandleType(paramType) )
+				if ( converter.IsSupportedAndPrimitiveType(paramType) )
 				{
 					dependencies[i] = new DependencyModel( 
 						DependencyType.Parameter, parameter.Name, paramType, false );

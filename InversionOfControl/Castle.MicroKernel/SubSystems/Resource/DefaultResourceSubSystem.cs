@@ -20,7 +20,7 @@ namespace Castle.MicroKernel.SubSystems.Resource
 	using Castle.Model.Resource;
 
 	/// <summary>
-	/// 
+	/// Pendent
 	/// </summary>
 	public class DefaultResourceSubSystem : AbstractSubSystem, IResourceSubSystem
 	{

@@ -31,7 +31,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 	public class PropertiesDependenciesModelInspector : IContributeComponentModelConstruction
 	{
 		[NonSerialized]
-		private ITypeConverter converter;
+		private IConversionManager converter;
 
 		public PropertiesDependenciesModelInspector()
 		{
@@ -46,7 +46,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		{
 			if (converter == null)
 			{
-				converter = (ITypeConverter) 
+				converter = (IConversionManager) 
 					kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 			}
 
@@ -74,7 +74,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 				// All these dependencies are simple guesses
 				// So we make them optional (the 'true' parameter below)
 
-				if ( converter.CanHandleType(propertyType) )
+				if ( converter.IsSupportedAndPrimitiveType(propertyType) )
 				{
 					dependency = new DependencyModel(DependencyType.Parameter, property.Name, propertyType, true);
 				}

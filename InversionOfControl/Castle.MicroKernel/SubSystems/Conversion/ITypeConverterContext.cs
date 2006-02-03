@@ -14,10 +14,18 @@
 
 namespace Castle.MicroKernel.SubSystems.Conversion
 {
-	using System;
+	using Castle.Model;
 
 	public interface ITypeConverterContext
 	{
+		IKernel Kernel { get; }
+
 		ITypeConverter Composition { get; }
+
+		void PushModel(ComponentModel model);
+
+		void PopModel();
+
+		ComponentModel CurrentModel { get; }
 	}
 }

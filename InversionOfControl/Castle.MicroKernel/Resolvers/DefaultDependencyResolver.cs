@@ -87,7 +87,8 @@ namespace Castle.MicroKernel.Resolvers
 
 			if (!resolved)
 			{
-				if(dependency.DependencyType == DependencyType.Service)
+				if(dependency.DependencyType == DependencyType.Service || 
+					dependency.DependencyType == DependencyType.ServiceOverride)
 				{
 					value = ResolveServiceDependency( model, dependency );
 				}
@@ -179,25 +180,35 @@ namespace Castle.MicroKernel.Resolvers
 		{
 			IHandler handler = null;
 
-			ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
-
-			if (parameter != null)
+			if (dependency.DependencyType == DependencyType.Service)
 			{
-				// User wants to override
+				ParameterModel parameter = ObtainParameterModelMatchingDependency(dependency, model);
 
-				String value = ExtractComponentKey( parameter.Value, parameter.Name );
+				if (parameter != null)
+				{
+					// User wants to override, we then change the type to ServiceOverride
 
-				handler = kernel.GetHandler( value );
+					dependency.DependencyKey = ExtractComponentKey( parameter.Value, parameter.Name );
+					dependency.DependencyType = DependencyType.ServiceOverride;
+				}
 			}
-			else if (dependency.TargetType == typeof(IKernel))
+
+			if (dependency.TargetType == typeof(IKernel))
 			{
 				return kernel;
 			}
 			else
 			{
-				// Default behaviour
+				if (dependency.DependencyType == DependencyType.ServiceOverride)
+				{
+					handler = kernel.GetHandler( dependency.DependencyKey );
+				}
+				else
+				{
+					// Default behaviour
 
-				handler = kernel.GetHandler( dependency.TargetType );
+					handler = kernel.GetHandler( dependency.TargetType );
+				}
 			}
 
 			if (handler == null) return null;
@@ -211,13 +222,22 @@ namespace Castle.MicroKernel.Resolvers
 
 			if (parameter != null)
 			{
-				if (parameter.Value != null)
+				converter.Context.PushModel(model);
+
+				try
 				{
-					return converter.PerformConversion( parameter.Value, dependency.TargetType );
+					if (parameter.Value != null)
+					{
+						return converter.PerformConversion(parameter.Value, dependency.TargetType);
+					}
+					else
+					{
+						return converter.PerformConversion(parameter.ConfigValue, dependency.TargetType);
+					}
 				}
-				else
+				finally
 				{
-					return converter.PerformConversion( parameter.ConfigValue, dependency.TargetType );
+					converter.Context.PopModel();
 				}
 			}
 

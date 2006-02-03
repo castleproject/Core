@@ -21,11 +21,6 @@ namespace Castle.MicroKernel.Util
 	/// </summary>
 	public abstract class ReferenceExpressionUtil
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
 		public static bool IsReference(String value)
 		{
 			if (value == null || value.Length <= 3 || 

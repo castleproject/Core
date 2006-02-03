@@ -24,9 +24,6 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 	/// </summary>
 	public interface ITypeConverter
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		ITypeConverterContext Context { get; set; }
 
 		/// <summary>

@@ -28,5 +28,7 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 		/// </summary>
 		/// <param name="converter"></param>
 		void Add( ITypeConverter converter );
+
+		bool IsSupportedAndPrimitiveType(Type type);
 	}
 }
