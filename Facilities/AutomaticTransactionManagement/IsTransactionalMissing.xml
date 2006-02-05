@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+
+<configuration>
+
+	<facilities>
+	
+		<facility 
+			id="atm" 
+			type="Castle.Facilities.AutomaticTransactionManagement.TransactionFacility, Castle.Facilities.AutomaticTransactionManagement" />
+	
+	</facilities>
+
+	<components>
+
+		<component 
+			id="mycomp" 
+			type="Castle.Facilities.AutomaticTransactionManagement.Tests.TransactionalComp1, Castle.Facilities.AutomaticTransactionManagement.Tests">
+		
+			<transaction>
+			
+				<method name="Save" />
+				<method name="Create" />
+				<method name="Delete" />
+			
+			</transaction>
+		
+		</component>
+		
+	</components>
+
+</configuration>

@@ -21,53 +21,106 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using Castle.Model;
 
 	using Castle.MicroKernel;
-	using Castle.MicroKernel.ModelBuilder;
+	using Castle.MicroKernel.ModelBuilder.Inspectors;
 	using Castle.MicroKernel.Facilities;
-
+	using Castle.Model.Configuration;
 	using Castle.Services.Transaction;
 
 	/// <summary>
 	/// Summary description for TransactionComponentInspector.
 	/// </summary>
-	public class TransactionComponentInspector : IContributeComponentModelConstruction
+	public class TransactionComponentInspector : MethodMetaInspector
 	{
-		public void ProcessModel(IKernel kernel, ComponentModel model)
+		private static readonly String TransactionNodeName = "transaction";
+		private TransactionMetaInfoStore metaStore;
+
+		public override void ProcessModel(IKernel kernel, ComponentModel model)
 		{
-			if (model.Implementation.IsDefined( typeof(TransactionalAttribute), true ))
+			if (metaStore == null)
 			{
-				EnsureRelevantMethodsAreVirtual( model.Service, model.Implementation );
+				metaStore = (TransactionMetaInfoStore) kernel[ typeof(TransactionMetaInfoStore) ];
+			}
+
+			if (IsMarkedWithTransactional(model.Configuration))
+			{
+				base.ProcessModel(kernel, model);
+			}
+			else
+			{
+				AssertThereNoTransactionOnConfig(model);
+
+				ConfigureBasedOnAttributes(model);
+			}
+
+			Validate(model, metaStore);
+		}
+
+		private void ConfigureBasedOnAttributes(ComponentModel model)
+		{
+			if (model.Implementation.IsDefined(typeof(TransactionalAttribute), true))
+			{
+				metaStore.CreateMetaFromType(model.Implementation);
 
 				model.Dependencies.Add( 
-					new DependencyModel( DependencyType.Service, null, typeof(TransactionInterceptor), false ) );
+					new DependencyModel(DependencyType.Service, null, typeof(TransactionInterceptor), false) );
 
-				model.Interceptors.AddFirst( new InterceptorReference( typeof(TransactionInterceptor) ) );
+				model.Interceptors.AddFirst( new InterceptorReference(typeof(TransactionInterceptor)) );
 			}
 		}
 
-		private void EnsureRelevantMethodsAreVirtual(Type service, Type implementation)
+		protected override String ObtainNodeName()
 		{
-			if (service.IsInterface) return;
+			return TransactionNodeName;
+		}
 
-			MethodInfo[] methods = implementation.GetMethods( 
-				BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly );
+		protected override void ProcessMeta(ComponentModel model, MethodInfo[] methods, MethodMetaModel metaModel)
+		{
+			metaStore.CreateMetaFromConfig(model.Implementation, methods, metaModel.ConfigNode);
+		}
+
+		private void Validate(ComponentModel model, TransactionMetaInfoStore store)
+		{
+			if (model.Service == null || model.Service.IsInterface) return;
+
+			TransactionMetaInfo meta = store.GetMetaFor(model.Implementation);
+
+			if (meta == null) return;
 
 			ArrayList problematicMethods = new ArrayList();
 
-			foreach( MethodInfo method in methods )
+			foreach(MethodInfo method in meta.Methods)
 			{
-				if (!method.IsVirtual && method.IsDefined( typeof(TransactionAttribute), true ))
+				if (!method.IsVirtual)
 				{
 					problematicMethods.Add( method.Name );
 				}
 			}
-			
+
 			if (problematicMethods.Count != 0)
 			{
 				String[] methodNames = (String[]) problematicMethods.ToArray( typeof(String) );
 
 				String message = String.Format( "The class {0} wants to use transaction interception, " + 
 					"however the methods must be marked as virtual in order to do so. Please correct " + 
-					"the following methods: {1}", implementation.FullName, String.Join(", ", methodNames) );
+					"the following methods: {1}", model.Implementation.FullName, String.Join(", ", methodNames) );
+
+				throw new FacilityException(message);
+			}		
+		}
+
+		private bool IsMarkedWithTransactional(IConfiguration configuration)
+		{
+			return (configuration != null && "true" == configuration.Attributes["isTransactional"]);
+		}
+
+		private void AssertThereNoTransactionOnConfig(ComponentModel model)
+		{
+			IConfiguration configuration = model.Configuration;
+
+			if (configuration != null && configuration.Children[TransactionNodeName] != null)
+			{
+				String message = String.Format( "The class {0} has configured transaction in a child node but has not " + 
+					"specified istransaction=\"true\" on the component node.", model.Implementation.FullName );
 
 				throw new FacilityException(message);
 			}

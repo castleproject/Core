@@ -17,6 +17,7 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using System;
 	using System.Reflection;
 
+	using Castle.Model;
 	using Castle.Model.Interceptor;
 
 	using Castle.MicroKernel;
@@ -24,37 +25,54 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 	using Castle.Services.Transaction;
 
 	/// <summary>
-	/// Summary description for TransactionInterceptor.
+	/// Intercepts call for transactional components, coordinating
+	/// the transaction creation, commit/rollback accordingly to the 
+	/// method execution. Rollback is invoked if an exception is threw.
 	/// </summary>
-	public class TransactionInterceptor : MarshalByRefObject, IMethodInterceptor
+	[Transient]
+	public class TransactionInterceptor : MarshalByRefObject, IMethodInterceptor, IOnBehalfAware
 	{
-		private IKernel _kernel;
+		private readonly IKernel kernel;
+		private readonly TransactionMetaInfoStore infoStore;
+		private TransactionMetaInfo metaInfo;
 
-		public TransactionInterceptor(IKernel kernel)
+		public TransactionInterceptor(IKernel kernel, TransactionMetaInfoStore infoStore)
 		{
-            _kernel = kernel;
+            this.kernel = kernel;
+			this.infoStore = infoStore;
 		}
+
+		#region MarshalByRefObject
 
 		public override object InitializeLifetimeService()
 		{
 			return null;
 		}
 
+		#endregion
+
+		#region IOnBehalfAware
+
+		public void SetInterceptedComponentModel(ComponentModel target)
+		{
+			metaInfo = infoStore.GetMetaFor(target.Implementation);
+		}
+
+		#endregion
+
 		public object Intercept(IMethodInvocation invocation, params object[] args)
 		{
 			MethodInfo methodInfo = invocation.MethodInvocationTarget;
 
-			if (!methodInfo.IsDefined( typeof(TransactionAttribute), true ))
+			if (metaInfo == null || !metaInfo.Contains(methodInfo))
 			{
 				return invocation.Proceed(args);
 			}
 			else
 			{
-				object[] attrs = methodInfo.GetCustomAttributes( typeof(TransactionAttribute), true );
+				TransactionAttribute transactionAtt = metaInfo.GetTransactionAttributeFor(methodInfo);
 
-				TransactionAttribute transactionAtt = (TransactionAttribute) attrs[0];
-
-				ITransactionManager manager = (ITransactionManager) _kernel[ typeof(ITransactionManager) ];
+				ITransactionManager manager = (ITransactionManager) kernel[ typeof(ITransactionManager) ];
 
 				ITransaction transaction = 
 					manager.CreateTransaction( 

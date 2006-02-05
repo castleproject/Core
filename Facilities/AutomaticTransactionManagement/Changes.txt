@@ -1,5 +1,32 @@
 
-Alpha Version 1.0.0
-- First release
+== Beta 5 ==
 
-Future modifications - after the first release - shall be tracked in this file
+- Refactored to support configuration and attributes. For example
+
+  [Transactional]
+  public class MyTransactionalComponent
+  {
+    [Transaction]
+    public virtual void Save()
+    {
+    }
+  }
+  
+  is equivalent to 
+  
+  <component 
+	id="someid" 
+	type="MyTransactionalComponent, MyAssembly"
+	isTransactional="true">
+  
+    <transaction>
+      <method name="Save" />
+    </transaction>
+  
+  </component>
+
+  You can also specify the transaction mode and isolation:
+  
+  <transaction>
+    <method name="Save" transactionMode="Requires" isolationLevel="Chaos" />
+  </transaction>

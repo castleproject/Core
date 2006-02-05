@@ -14,17 +14,14 @@
 
 namespace Castle.Facilities.AutomaticTransactionManagement
 {
-	using System;
-
-	using Castle.MicroKernel;
 	using Castle.MicroKernel.Facilities;
-
 
 	public class TransactionFacility : AbstractFacility
 	{
 		protected override void Init()
 		{
 			Kernel.AddComponent( "transaction.interceptor", typeof(TransactionInterceptor) );
+			Kernel.AddComponent( "transaction.MetaInfoStore", typeof(TransactionMetaInfoStore) );
 			Kernel.ComponentModelBuilder.AddContributor( new TransactionComponentInspector() );
 		}
 	}
