@@ -87,7 +87,8 @@ namespace Castle.Facilities.FactorySupport
 		private object Create(object factoryInstance, string factoryId, 
 			MethodInfo instanceCreateMethod, string factoryCreate)
 		{
-			ITypeConverter converter = (ITypeConverter) Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
+			IConversionManager converter = (IConversionManager) 
+				Kernel.GetSubSystem( SubSystemConstants.ConversionManagerKey );
 
 			try
 			{
@@ -101,7 +102,7 @@ namespace Castle.Facilities.FactorySupport
 
 					DependencyModel depModel = null;
 
-					if ( converter.CanHandleType(paramType) )
+					if ( converter.IsSupportedAndPrimitiveType(paramType) )
 					{
 						depModel = new DependencyModel( 
 							DependencyType.Parameter, parameter.Name, paramType, false );

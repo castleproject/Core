@@ -19,9 +19,9 @@ namespace Castle.Facilities.TypedFactory
 	public class FactoryEntry
 	{
 		private String _id;
-		private Type _factoryInterface;
 		private String _creationMethod;
 		private String _destructionMethod;
+		private Type _factoryInterface;
 
 		public FactoryEntry(String id, Type factoryInterface, String creationMethod, String destructionMethod)
 		{

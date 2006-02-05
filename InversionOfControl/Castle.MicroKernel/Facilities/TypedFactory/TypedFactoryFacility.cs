@@ -61,6 +61,7 @@ namespace Castle.Facilities.TypedFactory
 					String id = config.Attributes["id"];
 					String creation = config.Attributes["creation"];
 					String destruction = config.Attributes["destruction"];
+
 					Type factoryType = (Type)
 						converter.PerformConversion( config.Attributes["interface"], typeof(Type) );
 
