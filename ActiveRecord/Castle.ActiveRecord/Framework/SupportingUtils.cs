@@ -17,79 +17,51 @@ namespace Castle.ActiveRecord.Framework
 	using System;
 	using System.Collections;
 
-	using NHibernate;
 	using Nullables;
+
 	using Iesi.Collections;
 
 	/// <summary>
-	/// Usefull for external frameworks
+	/// Contains utility methods for dealing with ActiveRecord objects
+	/// and collections.
+	/// Useful for external frameworks.
 	/// </summary>
 	public abstract class SupportingUtils
 	{
-		public static IList FindAll( Type type )
+		[Obsolete("Use ActiveRecordMediator instead")]
+		public static IList FindAll(Type type)
 		{
-			ISession session = ActiveRecordBase.holder.CreateSession( type );
-
-			try
-			{
-				ICriteria criteria = session.CreateCriteria( type );
-
-				return criteria.List();
-			}
-			finally
-			{
-				ActiveRecordBase.holder.ReleaseSession(session);
-			}
+			return ActiveRecordMediator.FindAll(type);
 		}
 
-		public static object FindByPK( Type type, object id )
+		[Obsolete("Use ActiveRecordMediator instead")]
+		public static object FindByPK(Type type, object id)
 		{
-			return FindByPK(type, id, true);
+			return ActiveRecordMediator.FindByPrimaryKey(type, id);
 		}
 
-		public static object FindByPK( Type type, object id, bool throwOnNotFound )
+		[Obsolete("Use ActiveRecordMediator instead")]
+		public static object FindByPK(Type type, object id, bool throwOnNotFound)
 		{
-			ISession session = ActiveRecordBase.holder.CreateSession( type );
-
-			try
-			{
-				return session.Load( type, id );
-			}
-			catch(ObjectNotFoundException ex)
-			{
-				if (throwOnNotFound)
-				{
-					String message = String.Format("Could not find {0} with id {1}", type.Name, id);
-					throw new NotFoundException(message, ex);
-				}
-
-				return null;
-			}
-			catch(Exception ex)
-			{
-				throw new ActiveRecordException("Could not perform Load (Find by PK) for " + type.Name, ex);
-			}
-			finally
-			{
-				ActiveRecordBase.holder.ReleaseSession(session);
-			}
+			return ActiveRecordMediator.FindByPrimaryKey(type, id, throwOnNotFound);
 		}
 
+		#region BuildArray
 		/// <summary>
-		/// Converts the results stored in an <see cref="IList"/> to an
+		/// Converts the results stored in an <see cref="IEnumerable"/> to an
 		/// strongly-typed array.
 		/// </summary>
 		/// <param name="t">The type of the new array</param>
 		/// <param name="list">The source list</param>
 		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
 		/// <returns>The strongly-typed array</returns>
-		public static Array BuildArray(Type t, IList list, bool distinct)
+		public static Array BuildArray(Type t, IEnumerable list, bool distinct)
 		{
 			return BuildArray(t, list, null, distinct);
 		}
 
 		/// <summary>
-		/// Converts the results stored in an <see cref="IList"/> to an
+		/// Converts the results stored in an <see cref="IEnumerable"/> to an
 		/// strongly-typed array.
 		/// </summary>
 		/// <param name="t">The type of the new array</param>
@@ -102,7 +74,7 @@ namespace Castle.ActiveRecord.Framework
 		/// </param>
 		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
 		/// <returns>The strongly-typed array</returns>
-		public static Array BuildArray(Type t, IList list, NullableInt32 entityIndex, bool distinct)
+		public static Array BuildArray(Type t, IEnumerable list, NullableInt32 entityIndex, bool distinct)
 		{
 			// we only need to perform an additional processing if an
 			// entityIndex was specified, or if distinct was chosen.
@@ -110,7 +82,8 @@ namespace Castle.ActiveRecord.Framework
 			{
 				Set s = (distinct ? new ListSet() : null);
 
-				IList newList = new ArrayList(list.Count);
+				ICollection c = list as ICollection;
+				IList newList = c != null ? new ArrayList(c.Count) : new ArrayList();
 				foreach (object o in list)
 				{
 					object el = (!entityIndex.HasValue ? o : ((object[]) o)[entityIndex.Value]);
@@ -121,9 +94,126 @@ namespace Castle.ActiveRecord.Framework
 				list = newList;
 			}
 
-			Array a = Array.CreateInstance(t, list.Count);
-			list.CopyTo(a, 0);
+			ICollection col = list as ICollection;
+			if (col == null)
+			{
+				ArrayList al = new ArrayList();
+				foreach (object item in list)
+					al.Add(item);
+				col = al;
+			}
+
+			Array a = Array.CreateInstance(t, col.Count);
+			col.CopyTo(a, 0);
 			return a;
 		}
+		#endregion
+
+		#region BuildObjectArray
+		/// <summary>
+		/// Converts the results stored in an <see cref="IEnumerable"/> to an
+		/// strongly-typed array.
+		/// </summary>
+		/// <param name="t">
+		/// The class of the object which will be created for each row contained in
+		/// the supplied <paramref name="list" />.
+		/// </param>
+		/// <param name="list">The source list</param>
+		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
+		/// <returns>The strongly-typed array</returns>
+		/// <remarks>A good alternative is to use the new <see cref="ImportAttribute"/></remarks>
+		public static Array BuildObjectArray(Type t, IEnumerable list, bool distinct)
+		{
+			// we only need to perform an additional processing if 
+			// distinct was chosen.
+			Set s = (distinct ? new ListSet() : null);
+
+			ICollection c = list as ICollection;
+			IList newList = c != null ? new ArrayList(c.Count) : new ArrayList();
+			foreach (object o in list)
+			{
+				object[] p = (o is object[] ? (object[]) o : new object[] {o});
+				object el = Activator.CreateInstance(t, p);
+				if (s == null || s.Add(el))
+					newList.Add(el);
+			}
+
+			Array a = Array.CreateInstance(t, newList.Count);
+			newList.CopyTo(a, 0);
+			return a;
+		}
+		#endregion
+
+#if dotNet2
+
+		#region BuildObjectArray
+		/// <summary>
+		/// Converts the results stored in an <see cref="IEnumerable"/> to an
+		/// strongly-typed array.
+		/// </summary>
+		/// <param name="list">The source list</param>
+		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
+		/// <returns>The strongly-typed array</returns>
+		/// <typeparam name="T">
+		/// The class of the object which will be created for each row contained in
+		/// the supplied <paramref name="list" />.
+		/// </param>
+		/// <remarks>A good alternative is to use the new <see cref="ImportAttribute"/></remarks>
+		public static T[] BuildObjectArray<T>(IEnumerable list, bool distinct)
+		{
+			return (T[]) BuildObjectArray(typeof (T), list, distinct);
+		}
+		#endregion
+
+		#region BuildArray
+		public static T[] BuildArray<T>(IEnumerable list, bool distinct)
+		{
+			return (T[]) BuildArray(typeof (T), list, distinct);
+		}
+
+		public static T[] BuildArray<T>(IEnumerable list, int? entityIndex, bool distinct)
+		{
+			return (T[]) BuildArray(typeof (T), list, ConvertNullable(entityIndex), distinct);
+		}
+		#endregion
+
+		#region Nullable conversions
+		/// <summary>
+		/// Converts an <see cref="INullableType"/> from the <c>Nullables</c>
+		/// library into a .NET 2.0 <see cref="System.Nullable"/>.
+		/// </summary>
+		public static T? ConvertToDotNet2Nullable<T, U>(U value)
+			where T : struct
+			where U : struct, INullableType
+		{
+			T? r = null;
+			if (value.HasValue)
+				r = (T) value.Value;
+			return r;
+		}
+
+		/// <summary>
+		/// Converts a <see cref="NullableInt32"/> from the <c>Nullables</c>
+		/// library into a .NET 2.0 <see cref="System.Nullable"/>.
+		/// </summary>
+		public static int? ConvertNullable(NullableInt32 value)
+		{
+			return ConvertToDotNet2Nullable<int, NullableInt32>(value);
+		}
+
+		/// <summary>
+		/// Converts a .NET 2.0 <see cref="System.Nullable"/> into a
+		/// <see cref="NullableInt32"/> from the <c>Nullables</c> library.
+		/// </summary>
+		public static NullableInt32 ConvertNullable(int? value)
+		{
+			NullableInt32 r = null;
+			if (value.HasValue)
+				r = value.Value;
+			return r;
+		}
+		#endregion
+
+#endif
 	}
 }
