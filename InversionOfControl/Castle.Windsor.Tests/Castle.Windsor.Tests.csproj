@@ -400,20 +400,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ModelBuilders\Component1.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ModelBuilders\MethodMetaInspectorTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ModelBuilders\methodusage1.xml"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "XmlProcessor\XmlProcessorTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

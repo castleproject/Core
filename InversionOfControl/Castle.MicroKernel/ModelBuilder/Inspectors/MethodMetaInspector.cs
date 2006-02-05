@@ -26,11 +26,22 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 
 	/// <summary>
-	/// Check for a node 'methods' within the component 
-	/// configuration. For each child a <see cref="MethodMetaModel"/> is created
+	/// Base for inspectors that want configuration associated with methods.
+	/// For each child a <see cref="MethodMetaModel"/> is created
 	/// and added to ComponentModel's methods collection
 	/// </summary>
-	public class MethodMetaInspector : IContributeComponentModelConstruction
+	/// <remarks>
+	/// Implementors should override the <see cref="ObtainNodeName"/> return
+	/// the name of the node to be inspected. For example:
+	/// <code>
+	/// <pre>
+	///   <transactions>
+	///     <method name="Save" transaction="requires" />
+	///   </transactions>
+	/// </pre>
+	/// </code>
+	/// </remarks>
+	public abstract class MethodMetaInspector : IContributeComponentModelConstruction
 	{
 		private static readonly BindingFlags AllMethods = 
 			BindingFlags.Public|BindingFlags.NonPublic|
@@ -43,7 +54,7 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 		{
 			if (model.Configuration == null || model.Implementation == null) return;
 
-			IConfiguration methodsNode = model.Configuration.Children["methods"];
+			IConfiguration methodsNode = model.Configuration.Children[ObtainNodeName()];
 
 			if (methodsNode == null) return;
 
@@ -62,34 +73,69 @@ namespace Castle.MicroKernel.ModelBuilder.Inspectors
 
 				MethodMetaModel metaModel = new MethodMetaModel(methodNode);
 
-				model.MethodMetaModels.Add( metaModel );
-
-				String signature = methodNode.Attributes["signature"];
-
-				MethodInfo[] methods = GetMethods(model.Implementation, name, signature);
-
-				RegisterMethodsForFastAccess(methods, signature, metaModel, model);
-			}
-		}
-
-		private void RegisterMethodsForFastAccess(MethodInfo[] methods, 
-			String signature, MethodMetaModel metaModel, ComponentModel model)
-		{
-			foreach(MethodInfo method in methods)
-			{
-				if (signature != null && signature.Length != 0)
+				if (IsValidMeta(model, metaModel))
 				{
-					model.MethodMetaModels.MethodInfo2Model[method] = metaModel;
-				}
-				else
-				{
-					if (!model.MethodMetaModels.MethodInfo2Model.Contains(method))
+					if (ShouldUseMetaModel)
 					{
-						model.MethodMetaModels.MethodInfo2Model[method] = metaModel;
+						// model.MethodMetaModels.Add( metaModel );
+					}
+
+					String signature = methodNode.Attributes["signature"];
+
+					MethodInfo[] methods = GetMethods(model.Implementation, name, signature);
+
+					if (methods.Length == 0)
+					{
+						String message = String.Format( "The class {0} has tried to expose configuration for " + 
+							"a method named {1} which could not be found.", model.Implementation.FullName, name );
+
+						throw new ConfigurationException(message);
+					}
+
+					ProcessMeta(model, methods, metaModel);
+
+					if (ShouldUseMetaModel)
+					{
+						// RegisterMethodsForFastAccess(methods, signature, metaModel, model);
 					}
 				}
 			}
 		}
+
+		protected virtual void ProcessMeta(ComponentModel model, MethodInfo[] methods, MethodMetaModel metaModel)
+		{
+		}
+
+		protected virtual bool IsValidMeta(ComponentModel model, MethodMetaModel metaModel)
+		{
+			return true;
+		}
+
+		protected virtual bool ShouldUseMetaModel
+		{
+			get { return false; }
+		}
+
+		protected abstract String ObtainNodeName();
+
+//		private void RegisterMethodsForFastAccess(MethodInfo[] methods, 
+//			String signature, MethodMetaModel metaModel, ComponentModel model)
+//		{
+//			foreach(MethodInfo method in methods)
+//			{
+//				if (signature != null && signature.Length != 0)
+//				{
+//					model.MethodMetaModels.MethodInfo2Model[method] = metaModel;
+//				}
+//				else
+//				{
+//					if (!model.MethodMetaModels.MethodInfo2Model.Contains(method))
+//					{
+//						model.MethodMetaModels.MethodInfo2Model[method] = metaModel;
+//					}
+//				}
+//			}
+//		}
 
 		private void AssertNameIsNotNull(string name, ComponentModel model)
 		{

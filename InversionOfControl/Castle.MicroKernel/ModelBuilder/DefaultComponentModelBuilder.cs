@@ -45,7 +45,6 @@ namespace Castle.MicroKernel.ModelBuilder
 			AddContributor( new LifestyleModelInspector() );
 			AddContributor( new ConstructorDependenciesModelInspector() );
 			AddContributor( new PropertiesDependenciesModelInspector() );
-			AddContributor( new MethodMetaInspector() );
 			AddContributor( new LifecycleModelInspector() );
 			AddContributor( new ConfigurationParametersInspector() );
 			AddContributor( new InterceptorInspector() );

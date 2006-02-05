@@ -178,17 +178,18 @@ namespace Castle.Model
 			}
 		}
 
-		public MethodMetaModelCollection MethodMetaModels
-		{
-			get
-			{
-				lock(this)
-				{
-					if (methodMetaModels == null) methodMetaModels = new MethodMetaModelCollection();
-				}
-				return methodMetaModels;
-			}
-		}
+		// TODO: Consider not supporting this 
+//		public MethodMetaModelCollection MethodMetaModels
+//		{
+//			get
+//			{
+//				lock(this)
+//				{
+//					if (methodMetaModels == null) methodMetaModels = new MethodMetaModelCollection();
+//				}
+//				return methodMetaModels;
+//			}
+//		}
 
 		public IConfiguration Configuration
 		{

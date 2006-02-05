@@ -44,6 +44,9 @@ using #{propertyName} syntax.(Patch from Ahmed)
       </servicelist>
     </parameters>
 
+- Removed support for MethodMeta on ComponentModel. The design decision here 
+  is to make the facilities interested on it to extend MethodMetaInspector
+  reading from a specific node.
 
 RC 2
 ====
