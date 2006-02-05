@@ -102,7 +102,7 @@
 					<File Id="file20" Name="CA4D68_1.DLL" LongName="Castle.MonoRail.Framework.Views.NVelocity.dll" src="..\build\net-1.1\Castle.MonoRail.Framework.Views.NVelocity.dll" />
 					<File Id="file23" Name="CA0B18_1.DLL" LongName="Castle.MonoRail.WindsorExtension.dll"	src="..\build\net-1.1\Castle.MonoRail.WindsorExtension.dll" />
 					<File Id="file22" Name="CAED29_1.DLL" LongName="Castle.MonoRail.TestSupport.dll" 		src="..\build\net-1.1\Castle.MonoRail.TestSupport.dll" />
-					<File Id="file24" Name="CABRAIL.DLL"  LongName="Castle.MonoRail.TestSupport.dll" 		src="..\build\net-1.1\Castle.MonoRail.Views.Brail.dll" />
+					<File Id="file24" Name="CABRAIL.DLL"  LongName="Castle.MonoRail.Views.Brail.dll" 		src="..\build\net-1.1\Castle.MonoRail.Views.Brail.dll" />
 
 					<!-- DynProxy -->
 					<File Id="file35" Name="dynproxy.DLL" LongName="Castle.DynamicProxy.dll"				src="..\build\net-1.1\Castle.DynamicProxy.dll" />
@@ -205,7 +205,7 @@
 					<File Id="n2file20" Name="CA4D68_1.DLL" LongName="Castle.MonoRail.Framework.Views.NVelocity.dll" src="..\build\net-2.0\Castle.MonoRail.Framework.Views.NVelocity.dll" />
 					<File Id="n2file23" Name="CA0B18_1.DLL" LongName="Castle.MonoRail.WindsorExtension.dll"	src="..\build\net-2.0\Castle.MonoRail.WindsorExtension.dll" />
 					<File Id="n2file22" Name="CAED29_1.DLL" LongName="Castle.MonoRail.TestSupport.dll" 		src="..\build\net-2.0\Castle.MonoRail.TestSupport.dll" />
-					<File Id="n2file24" Name="CABRAIL.DLL"  LongName="Castle.MonoRail.TestSupport.dll" 		src="..\build\net-2.0\Castle.MonoRail.Views.Brail.dll" />
+					<File Id="n2file24" Name="CABRAIL.DLL"  LongName="Castle.MonoRail.Views.Brail.dll" 		src="..\build\net-2.0\Castle.MonoRail.Views.Brail.dll" />
 
 					<!-- DynProxy -->
 					<File Id="n2file35" Name="dynproxy.DLL" LongName="Castle.DynamicProxy.dll"				src="..\build\net-2.0\Castle.DynamicProxy.dll" />
