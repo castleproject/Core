@@ -41,12 +41,6 @@ namespace Castle.ActiveRecord
 			return InternalExecute(session);
 		}
 
-		[Obsolete("This method will be removed soon. Override InternalExecute instead.", true)]
-		public virtual object Execute(ISession session)
-		{
-			throw new NotImplementedException();
-		}
-
 		protected abstract object InternalExecute(ISession session);
 
 		/// <summary>

@@ -46,7 +46,7 @@ namespace Castle.ActiveRecord
 
 		#region Internal core methods
 
-		private static void EnsureInitialized( Type type )
+		internal static void EnsureInitialized( Type type )
 		{
 			if (holder == null)
 			{

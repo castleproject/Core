@@ -12,19 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+#if dotNet2
+
 namespace Castle.ActiveRecord
 {
-	using System;
-
 	using NHibernate;
-	
+
 	/// <summary>
 	/// Represents an ActiveRecord Query.
 	/// </summary>
-	public interface IActiveRecordQuery
+	/// <typeparam name="T">The resulting object type</typeparam>
+	public interface IActiveRecordQuery<T> : IActiveRecordQuery
 	{
-		Type Target { get; }
-
-		object Execute(ISession session);
+		new T Execute(ISession session);
 	}
 }
+
+#endif

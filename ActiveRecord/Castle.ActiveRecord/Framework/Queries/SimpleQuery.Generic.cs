@@ -18,12 +18,14 @@ namespace Castle.ActiveRecord.Queries
 {
 	using System;
 
+	using NHibernate;
+
 	/// <summary>
 	/// Represents a query that can result in an array of 
 	/// objects of the type <typeparamref name="T"/>.
 	/// </summary>
 	/// <typeparam name="T">The resulting object type</typeparam>
-	public class SimpleQuery<T> : SimpleQuery
+	public class SimpleQuery<T> : SimpleQuery, IActiveRecordQuery<T[]>
 	{
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
@@ -46,12 +48,17 @@ namespace Castle.ActiveRecord.Queries
 		public SimpleQuery(Type targetType, String hql, params Object[] parameters)
 			: base(targetType, typeof(T), hql, parameters) { }
 
+		T[] IActiveRecordQuery<T[]>.Execute(ISession session)
+		{
+			return (T[]) InternalExecute(session);
+		}
+
 		/// <summary>
 		/// Executes the query and gets the results.
 		/// </summary>
 		public T[] Execute()
 		{
-			return (T[]) ActiveRecordMediator.ExecuteQuery(this);
+			return ActiveRecordMediator<ActiveRecordBase>.ExecuteQuery2<T[]>(this);
 		}
 	}
 }

@@ -18,12 +18,14 @@ namespace Castle.ActiveRecord.Queries
 {
 	using System;
 
+	using NHibernate;
+
 	/// <summary>
 	/// Represents a query that can result in a value
 	/// of the type <typeparamref name="T"/>.
 	/// </summary>
 	/// <typeparam name="T">The resulting object type</typeparam>
-	public class ScalarQuery<T> : ScalarQuery
+	public class ScalarQuery<T> : ScalarQuery, IActiveRecordQuery<T>
 	{
 		/// <summary>
 		/// Creates a new <c>ScalarQuery</c> for the giving <paramref name="hql"/>,
@@ -33,8 +35,13 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="hql">The HQL</param>
 		/// <param name="parameters">The positional parameters</param>
 		public ScalarQuery(Type targetType, String hql, params Object[] parameters)
-			: base(typeof(T), hql, parameters) { }
+			: base(targetType, hql, parameters) { }
 
+		T IActiveRecordQuery<T>.Execute(ISession session)
+		{
+			return (T) InternalExecute(session);
+		}
+		
 		/// <summary>
 		/// Executes the query and gets the result.
 		/// </summary>

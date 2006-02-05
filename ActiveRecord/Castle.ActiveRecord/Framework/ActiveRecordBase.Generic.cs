@@ -17,7 +17,8 @@
 namespace Castle.ActiveRecord
 {
 	using System;
-	using System.Collections.Generic;
+
+	using Castle.ActiveRecord.Framework;
 
 	using NHibernate;
 	using NHibernate.Expression;
@@ -100,14 +101,33 @@ namespace Castle.ActiveRecord
 			return (T[])ActiveRecordBase.SlicedFindAll( typeof( T ), firstResult, maxresults, orders, criterias );
 		}
 
-		//This may return more than one result, and more than one type,
-		//so this is here just to complement the non-generic version, instead of
-		//enhancing it, like the rest of the methods here.
 		public static object ExecuteQuery( IActiveRecordQuery q )
 		{
 			return ActiveRecordBase.ExecuteQuery( q );
 		}
+		
+		public static R ExecuteQuery2<R>( IActiveRecordQuery<R> query )
+		{
+			Type targetType = query.Target;
 
+			ActiveRecordBase.EnsureInitialized(targetType);
+
+			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
+			ISession session = holder.CreateSession(targetType);
+
+			try
+			{
+				return query.Execute(session);
+			}
+			catch (Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
 		#endregion
 	}
 }
