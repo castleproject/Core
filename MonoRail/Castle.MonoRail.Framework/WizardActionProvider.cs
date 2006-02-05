@@ -214,6 +214,7 @@ namespace Castle.MonoRail.Framework
 
 			foreach(WizardStepPage step in steps)
 			{
+				step.InitializeFieldsFromServiceProvider(controller.Context);
 				step.Reset();
 			}
 		}

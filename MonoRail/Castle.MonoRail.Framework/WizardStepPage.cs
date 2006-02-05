@@ -76,7 +76,7 @@ namespace Castle.MonoRail.Framework
 
 			UrlInfo urlInfo = _context.UrlInfo;
 
-			InitializeFieldsFromServiceProvider(wizardController.ServiceProvider);
+			InitializeFieldsFromServiceProvider(wizardController.Context);
 			InitializeControllerState(urlInfo.Area, urlInfo.Controller, urlInfo.Action);
 		}
 

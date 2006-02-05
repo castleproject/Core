@@ -213,16 +213,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected IDictionary Session
 		{
-			get {
-                IDictionary result = null;
-
-                if(this._context != null)
-                {
-                    result = this._context.Session;
-                }
-
-                return result;
-            }
+			get { return _context.Session; }
 		}
 
 		/// <summary>
@@ -592,9 +583,9 @@ namespace Castle.MonoRail.Framework
 			get { return serviceProvider; }
 		}
 
-		internal void InitializeFieldsFromServiceProvider(IServiceProvider serviceProvider)
+		internal void InitializeFieldsFromServiceProvider(IRailsEngineContext context)
 		{
-			this.serviceProvider = serviceProvider;
+			serviceProvider = context;
 			
 			_viewEngine = (IViewEngine) serviceProvider.GetService( typeof(IViewEngine) );
 			_filterFactory = (IFilterFactory) serviceProvider.GetService( typeof(IFilterFactory) );
@@ -605,6 +596,8 @@ namespace Castle.MonoRail.Framework
 				serviceProvider.GetService( typeof(ControllerDescriptorBuilder) );
 
 			metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(this);
+
+			_context = context;
 		}
 
 		internal void InitializeControllerState(String areaName, String controllerName, String actionName)
@@ -630,7 +623,6 @@ namespace Castle.MonoRail.Framework
 
 			InitializeControllerState(areaName, controllerName, actionName);
 			
-			_context = context;
 #if ALLOWTEST
 			HttpContext.Items["mr.flash"] = Flash;
 			HttpContext.Items["mr.session"] = Session;
