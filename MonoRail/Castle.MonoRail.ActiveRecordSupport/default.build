@@ -69,7 +69,8 @@
 				<include name="${bin.dir}/Castle.MonoRail.Framework.dll" />
 				<include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
-				<include name="${bin.dir}/Iesi.Collections.dll" />
+        <include name="${bin.dir}/Nullables.dll" />
+        <include name="${bin.dir}/Iesi.Collections.dll" />
 			</references>
 		</csc>
 	</target>

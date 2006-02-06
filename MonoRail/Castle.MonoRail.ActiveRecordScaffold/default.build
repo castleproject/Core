@@ -75,7 +75,8 @@
 				<include name="${bin.dir}/Castle.ActiveRecord.dll" />
 				<include name="${bin.dir}/Iesi.Collections.dll" />
 				<include name="${bin.dir}/NHibernate.dll" />
-				<include name="${bin.dir}/Castle.Components.Binder.dll" />
+        <include name="${bin.dir}/Nullables.dll" />
+        <include name="${bin.dir}/Castle.Components.Binder.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.dll" />
 				<include name="${bin.dir}/Castle.Components.Common.TemplateEngine.NVelocityTemplateEngine.dll" />
 			</references>
