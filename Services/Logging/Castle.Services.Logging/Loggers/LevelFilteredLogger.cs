@@ -24,6 +24,9 @@ namespace Castle.Services.Logging
 	/// </summary>
 	public abstract class LevelFilteredLogger : ILogger
 	{
+		private LoggerLevel level = LoggerLevel.Off;
+		private String name = String.Empty;
+
 		/// <summary>
 		/// Creates a new <c>LevelFilteredLogger</c>.
 		/// </summary>
@@ -278,8 +281,5 @@ namespace Castle.Services.Logging
 
 
 		#endregion
-
-		private LoggerLevel level = LoggerLevel.Off;
-		private String name = String.Empty;
 	}
 }

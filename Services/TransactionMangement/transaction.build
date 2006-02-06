@@ -24,6 +24,7 @@
 	</target>
 
 	<target name="init" depends="clean">
+		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-logging-service" inheritall="true" />
 	</target>
 
 	<target name="build" depends="init,tests.run,copy" />
@@ -112,7 +113,7 @@
 					<property name="DocumentPrivates" value="False" />
 					<property name="DocumentEmptyNamespaces" value="False" />
 					<property name="IncludeAssemblyVersion" value="True" />
-					<property name="CopyrightText" value="Copyright 2004,2005 - Castle Project (original author or authors)" />
+					<property name="CopyrightText" value="Copyright 2004,2006 - Castle Project (original author or authors)" />
 					<property name="CopyrightHref" value="http://www.castleproject.org" />
 				</documenter>
 			</documenters>

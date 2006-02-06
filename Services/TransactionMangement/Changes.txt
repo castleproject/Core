@@ -1,5 +1,6 @@
 
-Alpha Version 1.0.0
-- First release
+Feb, 2006 
 
-Future modifications - after the first release - shall be tracked in this file
+- Added logging support
+
+- Added IsRollbackOnlySet

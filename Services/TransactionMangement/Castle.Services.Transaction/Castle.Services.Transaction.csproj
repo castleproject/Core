@@ -79,6 +79,11 @@
                     AssemblyName = "System.Xml"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "Castle.Services.Logging"
+                    AssemblyName = "Castle.Services.Logging"
+                    HintPath = "..\..\bin\Castle.Services.Logging.dll"
+                />
             </References>
         </Build>
         <Files>

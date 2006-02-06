@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Logger = Castle.Services.Logging.ILogger;
+
 namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
@@ -22,25 +24,28 @@ namespace Castle.Services.Logging.Log4netIntegration
 	/// <summary>
 	/// Summary description for log4netLogger.
 	/// </summary>
-	public class Log4netLogger : Castle.Services.Logging.ILogger
+	public class Log4netLogger : Logger
 	{
-		private log4net.Core.ILogger _logger;
 		private static Type declaringType = typeof(Log4netLogger);
+
+		private log4net.Core.ILogger _logger;
 
 		public Log4netLogger()
 		{
 		}
 
-		internal Log4netLogger(ILog log)
+		internal Log4netLogger(ILog log) : this(log.Logger)
 		{
-			_logger = log.Logger;
 		}
 
-		#region ILogger Members
-
-		public Castle.Services.Logging.ILogger CreateChildLogger(String name)
+		internal Log4netLogger(ILogger logger)
 		{
-			throw new NotImplementedException();
+			_logger = logger;
+		}
+
+		public Logger CreateChildLogger(String name)
+		{
+			return new Log4netLogger(_logger.Repository.GetLogger(name));
 		}
 
 		public void Info(String format, params object[] args)
@@ -157,7 +162,5 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			get { return _logger.IsEnabledFor(Level.Info); }
 		}
-
-		#endregion
 	}
 }

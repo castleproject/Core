@@ -18,6 +18,8 @@ namespace Castle.Services.Transaction
 	using System.Collections;
 	using System.ComponentModel;
 
+	using Castle.Services.Logging;
+
 	/// <summary>
 	/// TODO: Ensure this class is thread-safe
 	/// </summary>
@@ -29,50 +31,30 @@ namespace Castle.Services.Transaction
 		private static readonly object TransactionRolledbackEvent = new object();
 		private static readonly object TransactionDisposedEvent = new object();
 
-		private EventHandlerList _events = new EventHandlerList();
-
-		private Stack _transactions = new Stack(5);
+		private EventHandlerList events = new EventHandlerList();
+		private ILogger logger = new NullLogger();
+		private Stack transactions = new Stack(5);
 
 		public DefaultTransactionManager()
 		{
 		}
+
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
+
+		#region MarshalByRefObject
 
 		public override object InitializeLifetimeService()
 		{
 			return null;
 		}
 
+		#endregion
+
 		#region ITransactionManager Members
-
-		public event TransactionCreationInfoDelegate TransactionCreated
-		{
-			add { _events.AddHandler(TransactionCreatedEvent, value); }
-			remove { _events.RemoveHandler(TransactionCreatedEvent, value); }
-		}
-
-		public event TransactionCreationInfoDelegate ChildTransactionCreated
-		{
-			add { _events.AddHandler(ChildTransactionCreatedEvent, value); }
-			remove { _events.RemoveHandler(ChildTransactionCreatedEvent, value); }
-		}
-
-		public event TransactionDelegate TransactionCommitted
-		{
-			add { _events.AddHandler(TransactionCommittedEvent, value); }
-			remove { _events.RemoveHandler(TransactionCommittedEvent, value); }
-		}
-
-		public event TransactionDelegate TransactionRolledback
-		{
-			add { _events.AddHandler(TransactionRolledbackEvent, value); }
-			remove { _events.RemoveHandler(TransactionRolledbackEvent, value); }
-		}
-
-		public event TransactionDelegate TransactionDisposed
-		{
-			add { _events.AddHandler(TransactionDisposedEvent, value); }
-			remove { _events.RemoveHandler(TransactionDisposedEvent, value); }
-		}
 
 		public virtual ITransaction CreateTransaction(TransactionMode transactionMode, IsolationMode isolationMode)
 		{
@@ -99,6 +81,8 @@ namespace Castle.Services.Transaction
 					transaction = (CurrentTransaction as StandardTransaction).CreateChildTransaction();
 
 					RaiseChildTransactionCreated(transaction, transactionMode, isolationMode);
+
+					logger.Debug("Child Transaction {0} created", transaction.GetHashCode());
 				}
 			}
 
@@ -109,33 +93,56 @@ namespace Castle.Services.Transaction
 					new TransactionDelegate(RaiseTransactionRolledback) );
 
 				RaiseTransactionCreated(transaction, transactionMode, isolationMode);
+
+				logger.Debug("Transaction {0} created", transaction.GetHashCode());
 			}
 
-			_transactions.Push(transaction);
+			transaction.Logger = logger.CreateChildLogger( transaction.GetType().FullName );
+
+			transactions.Push(transaction);
 
 			return transaction;
 		}
 
-		private void CheckNotSupportedTransaction(TransactionMode transactionMode)
+		public event TransactionCreationInfoDelegate TransactionCreated
 		{
-			if (transactionMode == TransactionMode.NotSupported && 
-				CurrentTransaction != null && 
-				CurrentTransaction.Status == TransactionStatus.Active)
-			{
-				throw new TransactionException("There is a transaction active and the transaction mode " + 
-					"specified explicit says that no transaction is supported for this context");
-			}
+			add { events.AddHandler(TransactionCreatedEvent, value); }
+			remove { events.RemoveHandler(TransactionCreatedEvent, value); }
+		}
+
+		public event TransactionCreationInfoDelegate ChildTransactionCreated
+		{
+			add { events.AddHandler(ChildTransactionCreatedEvent, value); }
+			remove { events.RemoveHandler(ChildTransactionCreatedEvent, value); }
+		}
+
+		public event TransactionDelegate TransactionCommitted
+		{
+			add { events.AddHandler(TransactionCommittedEvent, value); }
+			remove { events.RemoveHandler(TransactionCommittedEvent, value); }
+		}
+
+		public event TransactionDelegate TransactionRolledback
+		{
+			add { events.AddHandler(TransactionRolledbackEvent, value); }
+			remove { events.RemoveHandler(TransactionRolledbackEvent, value); }
+		}
+
+		public event TransactionDelegate TransactionDisposed
+		{
+			add { events.AddHandler(TransactionDisposedEvent, value); }
+			remove { events.RemoveHandler(TransactionDisposedEvent, value); }
 		}
 
 		public virtual ITransaction CurrentTransaction
 		{
 			get
 			{
-				if (_transactions.Count == 0)
+				if (transactions.Count == 0)
 				{
 					return null;
 				}
-				return _transactions.Peek() as ITransaction;
+				return transactions.Peek() as ITransaction;
 			}
 		}
 
@@ -146,14 +153,14 @@ namespace Castle.Services.Transaction
 				throw new ArgumentNullException("transaction", "Tried to dispose a null transaction");
 			}
 
-			lock(_transactions)
+			lock(transactions)
 			{
 				if (CurrentTransaction != transaction)
 				{
 					throw new ArgumentException("transaction", "Tried to dispose a transaction that is not on the current active transaction");
 				}
 
-				_transactions.Pop();
+				transactions.Pop();
 			}
 
 			if (transaction is IDisposable)
@@ -162,13 +169,15 @@ namespace Castle.Services.Transaction
 			}
 
 			RaiseTransactionDisposed(transaction);
+
+			logger.Debug("Transaction {0} disposed successfully", transaction.GetHashCode());
 		}
 
 		#endregion
 
 		protected void RaiseTransactionCreated(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
 		{
-			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) _events[TransactionCreatedEvent];
+			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) events[TransactionCreatedEvent];
 			
 			if (eventDelegate != null)
 			{
@@ -178,7 +187,7 @@ namespace Castle.Services.Transaction
 
 		protected void RaiseChildTransactionCreated(ITransaction transaction, TransactionMode transactionMode, IsolationMode isolationMode)
 		{
-			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) _events[ChildTransactionCreatedEvent];
+			TransactionCreationInfoDelegate eventDelegate = (TransactionCreationInfoDelegate) events[ChildTransactionCreatedEvent];
 			
 			if (eventDelegate != null)
 			{
@@ -188,7 +197,7 @@ namespace Castle.Services.Transaction
 
 		protected void RaiseTransactionDisposed(ITransaction transaction)
 		{
-			TransactionDelegate eventDelegate = (TransactionDelegate) _events[TransactionDisposedEvent];
+			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionDisposedEvent];
 			
 			if (eventDelegate != null)
 			{
@@ -198,7 +207,7 @@ namespace Castle.Services.Transaction
 
 		protected void RaiseTransactionCommitted(ITransaction transaction)
 		{
-			TransactionDelegate eventDelegate = (TransactionDelegate) _events[TransactionCommittedEvent];
+			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionCommittedEvent];
 			
 			if (eventDelegate != null)
 			{
@@ -208,7 +217,7 @@ namespace Castle.Services.Transaction
 
 		protected void RaiseTransactionRolledback(ITransaction transaction)
 		{
-			TransactionDelegate eventDelegate = (TransactionDelegate) _events[TransactionRolledbackEvent];
+			TransactionDelegate eventDelegate = (TransactionDelegate) events[TransactionRolledbackEvent];
 			
 			if (eventDelegate != null)
 			{
@@ -219,6 +228,21 @@ namespace Castle.Services.Transaction
 		protected virtual TransactionMode ObtainDefaultTransactionMode(TransactionMode transactionMode)
 		{
 			return TransactionMode.Requires;
+		}
+
+		private void CheckNotSupportedTransaction(TransactionMode transactionMode)
+		{
+			if (transactionMode == TransactionMode.NotSupported && 
+				CurrentTransaction != null && 
+				CurrentTransaction.Status == TransactionStatus.Active)
+			{
+				String message = "There is a transaction active and the transaction mode " + 
+					"specified explicit says that no transaction is supported for this context";
+
+				logger.Error(message);
+
+				throw new TransactionException(message);
+			}
 		}
 	}
 }

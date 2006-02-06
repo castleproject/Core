@@ -93,7 +93,6 @@ namespace Castle.Services.Logging
 			}
 
 			return new ConsoleLogger(String.Format("{0}.{1}", this.Name, name), Level);
-
 		}
 	}
 }

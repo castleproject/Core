@@ -82,5 +82,7 @@ namespace Castle.Services.Transaction
 		IDictionary Context { get; }
 
 		bool IsChildTransaction { get; }
+
+		bool IsRollbackOnlySet { get; }
 	}
 }

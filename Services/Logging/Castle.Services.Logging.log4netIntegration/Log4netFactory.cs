@@ -31,7 +31,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 		}
 
-		public Log4netFactory(string configFile)
+		public Log4netFactory(String configFile)
 		{
 			FileInfo file = GetConfigFile(configFile);
 			XmlConfigurator.ConfigureAndWatch(file);

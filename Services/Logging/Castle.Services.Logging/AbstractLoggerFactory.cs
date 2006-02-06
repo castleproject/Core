@@ -16,7 +16,6 @@ namespace Castle.Services.Logging
 {
 	using System;
 	using System.IO;
-	using System.Web;
 
 
     public abstract class AbstractLoggerFactory : ILoggerFactory

@@ -22,6 +22,8 @@ namespace Castle.Services.Transaction
 	using System.Collections;
 	using System.Collections.Specialized;
 
+	using Castle.Services.Logging;
+
 	/// <summary>
 	/// Helper abstract class for <see cref="ITransaction"/> implementors. 
 	/// </summary>
@@ -30,6 +32,8 @@ namespace Castle.Services.Transaction
 		private HybridDictionary context;
 		private IList synchronizations;
 		private TransactionStatus state = TransactionStatus.NoTransaction;
+		private ILogger logger = new NullLogger();
+
 		internal IList resources;
 
 		public AbstractTransaction()
@@ -39,15 +43,27 @@ namespace Castle.Services.Transaction
 			context = new HybridDictionary(true);
 		}
 
+		public ILogger Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
+
+		#region MarshalByRefObject
+
 		public override object InitializeLifetimeService()
 		{
 			return null;
 		}
 
+		#endregion
+
 		#region ITransaction
 
 		public virtual void Enlist(IResource resource)
 		{
+			logger.Debug("Enlisting resource {0}", resource);
+
 			if (resource == null) throw new ArgumentNullException("resource");
 
 			// We can't add the resource more than once
@@ -62,15 +78,22 @@ namespace Castle.Services.Transaction
 				catch(Exception ex)
 				{
 					state = TransactionStatus.Invalid;
+
+					logger.Error("Enlisting resource failed", ex);
+
 					throw ex;
 				}
 			}
 
 			resources.Add(resource);
+
+			logger.Debug("Resource enlisted successfully {0}", resource);
 		}
 
 		public virtual void Begin()
 		{
+			logger.Debug("Transaction {0} Begin", GetHashCode());
+
 			AssertState(TransactionStatus.NoTransaction);
 			state = TransactionStatus.Active;
 
@@ -83,6 +106,9 @@ namespace Castle.Services.Transaction
 				catch(Exception ex)
 				{
 					state = TransactionStatus.Invalid;
+
+					logger.Error("Failed to start transaction on resource.", ex);
+
 					throw ex;
 				}
 			}
@@ -90,6 +116,8 @@ namespace Castle.Services.Transaction
 
 		public virtual void Rollback()
 		{
+			logger.Debug("Transaction {0} Rollback", GetHashCode());
+
 			AssertState(TransactionStatus.Active);
 			state = TransactionStatus.RolledBack;
 
@@ -106,6 +134,9 @@ namespace Castle.Services.Transaction
 				catch(Exception ex)
 				{
 					state = TransactionStatus.Invalid;
+
+					logger.Error("Failed to rollback transaction on resource.", ex);
+
 					error = ex;
 				}
 			}
@@ -120,6 +151,8 @@ namespace Castle.Services.Transaction
 
 		public virtual void Commit()
 		{
+			logger.Debug("Transaction {0} Commit", GetHashCode());
+
 			AssertState(TransactionStatus.Active);
 			state = TransactionStatus.Committed;
 
@@ -136,6 +169,9 @@ namespace Castle.Services.Transaction
 				catch(Exception ex)
 				{
 					state = TransactionStatus.Invalid;
+
+					logger.Error("Failed to commit transaction on resource.", ex);
+					
 					error = ex;
 				}
 			}
@@ -155,9 +191,13 @@ namespace Castle.Services.Transaction
 
 		public virtual void RegisterSynchronization(ISynchronization synchronization)
 		{
+			logger.Debug("Registering Synchronization {0}", synchronization);
+
 			if (synchronization == null) throw new ArgumentNullException("synchronization");
 
 			synchronizations.Add(synchronization);
+
+			logger.Debug("Synchronization registered successfully {0}", synchronization);
 		}
 
 		public virtual IDictionary Context
@@ -166,6 +206,8 @@ namespace Castle.Services.Transaction
 		}
 
 		public abstract bool IsChildTransaction { get; }
+
+		public abstract bool IsRollbackOnlySet { get; }
 
 		#endregion
 
@@ -204,8 +246,10 @@ namespace Castle.Services.Transaction
 						sync.BeforeCompletion();
 					}
 				}
-				catch(Exception)
+				catch(Exception ex)
 				{
+					logger.Error("Synchronization failed", ex);
+
 					// Exceptions should not be threw by syncs.
 					// They will be swalled
 				}

@@ -34,7 +34,7 @@ namespace Castle.Services.Logging
 		/// No-op.
 		/// </summary>
 		/// <param name="message">Ignored</param>
-		public void Debug(string message )
+		public void Debug(string message)
 		{
 		}
 
@@ -52,7 +52,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Debug( string format, params Object[] args )
+		public void Debug(string format, params Object[] args)
 		{
 		}
 
@@ -62,17 +62,14 @@ namespace Castle.Services.Logging
 		/// <value>false</value> 
 		public bool IsDebugEnabled
 		{
-			get
-			{
-				return false;
-			}
+			get { return false; }
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
 		/// <param name="message">Ignored</param>
-		public void Info( string message )
+		public void Info(string message)
 		{
 		}
 
@@ -81,7 +78,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="message">Ignored</param>
 		/// <param name="exception">Ignored</param>
-		public void Info( string message, Exception exception)
+		public void Info(string message, Exception exception)
 		{
 		}
 
@@ -90,7 +87,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Info( string format, params Object[] args )
+		public void Info(string format, params Object[] args)
 		{
 		}
 
@@ -100,17 +97,14 @@ namespace Castle.Services.Logging
 		/// <value>false</value> 
 		public bool IsInfoEnabled
 		{
-			get
-			{
-				return false;
-			}
+			get { return false; }
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
 		/// <param name="message">Ignored</param>
-		public void Warn(string message )
+		public void Warn(string message)
 		{
 		}
 
@@ -128,7 +122,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Warn( string format, params Object[] args )
+		public void Warn(string format, params Object[] args)
 		{
 		}
 
@@ -138,17 +132,14 @@ namespace Castle.Services.Logging
 		/// <value>false</value> 
 		public bool IsWarnEnabled
 		{
-			get
-			{
-				return false;
-			}
+			get { return false; }
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
 		/// <param name="message">Ignored</param>
-		public void Error(string message )
+		public void Error(string message)
 		{
 		}
 
@@ -166,7 +157,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void Error( string format, params Object[] args )
+		public void Error(string format, params Object[] args)
 		{
 		}
 
@@ -176,17 +167,14 @@ namespace Castle.Services.Logging
 		/// <value>false</value> 
 		public bool IsErrorEnabled
 		{
-			get
-			{
-				return false;
-			}
+			get { return false; }
 		}
 
 		/// <summary>
 		/// No-op.
 		/// </summary>
 		/// <param name="message">Ignored</param>
-		public void FatalError(string message )
+		public void FatalError(string message)
 		{
 		}
 
@@ -204,7 +192,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="format">Ignored</param>
 		/// <param name="args">Ignored</param>
-		public void FatalError( string format, params Object[] args )
+		public void FatalError(string format, params Object[] args)
 		{
 		}
 
@@ -214,10 +202,7 @@ namespace Castle.Services.Logging
 		/// <value>false</value> 
 		public bool IsFatalErrorEnabled
 		{
-			get 
-			{
-				return false; 
-			}
+			get { return false; }
 		}
 
 		/// <summary>
@@ -225,7 +210,7 @@ namespace Castle.Services.Logging
 		/// </summary>
 		/// <param name="name">Ignored</param>
 		/// <returns>This ILogger instance.</returns> 
-		public ILogger CreateChildLogger(string name )
+		public ILogger CreateChildLogger(string name)
 		{
 			return this;
 		}

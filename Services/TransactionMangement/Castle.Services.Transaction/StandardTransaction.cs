@@ -25,10 +25,8 @@ namespace Castle.Services.Transaction
 		private readonly TransactionDelegate onTransactionCommitted;
 		private readonly TransactionDelegate onTransactionRolledback;
 
-		private IList _childs = ArrayList.Synchronized( new ArrayList() );
-		
-		private bool _rollbackOnly;
-
+		private IList children = ArrayList.Synchronized( new ArrayList() );
+		private bool rollbackOnly;
 
 		public StandardTransaction(TransactionDelegate onTransactionCommitted, TransactionDelegate onTransactionRolledback)
 		{
@@ -44,7 +42,7 @@ namespace Castle.Services.Transaction
 		{
 			ChildTransaction child = new ChildTransaction(this);
 			
-			_childs.Add(child);
+			children.Add(child);
 
 			return child;
 		}
@@ -56,7 +54,7 @@ namespace Castle.Services.Transaction
 
 		public override void Commit()
 		{
-			if (_rollbackOnly)
+			if (rollbackOnly)
 			{
 				throw new TransactionException("Can't commit as one of the child transactions rolledback");
 			}
@@ -73,13 +71,18 @@ namespace Castle.Services.Transaction
 			if (onTransactionRolledback != null) onTransactionRolledback(this);
 		}
 
+		public override bool IsRollbackOnlySet
+		{
+			get { return rollbackOnly; }
+		}
+
 		/// <summary>
 		/// Invoked by child transactions, meaning that 
 		/// some sort of error has occured, so 
 		/// </summary>
 		public virtual void ChildTransactionRolledBack()
 		{
-			_rollbackOnly = true;
+			rollbackOnly = true;
 		}
 	}
 
@@ -131,6 +134,11 @@ namespace Castle.Services.Transaction
 		public override bool IsChildTransaction
 		{
 			get { return true; }
+		}
+
+		public override bool IsRollbackOnlySet
+		{
+			get { return _parent.IsRollbackOnlySet; }
 		}
 
 		public override void ChildTransactionRolledBack()
