@@ -87,11 +87,21 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 
 				transaction.Begin();
 
+				bool rolledback = false;
+
 				try
 				{
 					value = invocation.Proceed(args);
 
-					transaction.Commit();
+					if (transaction.IsRollbackOnlySet)
+					{
+						rolledback = true;
+						transaction.Rollback();
+					}
+					else
+					{
+						transaction.Commit();
+					}
 				}
 				catch(TransactionException)
 				{
@@ -102,7 +112,10 @@ namespace Castle.Facilities.AutomaticTransactionManagement
 				}
 				catch(Exception)
 				{
-					transaction.Rollback();
+					if (!rolledback)
+					{
+						transaction.Rollback();
+					}
 
 					throw;
 				}

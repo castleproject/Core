@@ -94,5 +94,10 @@ namespace Castle.Facilities.AutomaticTransactionManagement.Tests
 		{
 			get { return false; }
 		}
+
+		public override bool IsRollbackOnlySet
+		{
+			get { return false; }
+		}
 	}
 }
