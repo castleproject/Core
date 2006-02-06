@@ -54,7 +54,7 @@
 		<copy file="${castle.ar}" todir="${bin.dir}" />
 	</target>
 	
-	<target name="copy-transaction-service">
+	<target name="copy-transaction-service" depends="copy-logging-service">
 		<copy file="${castle.transaction-service}" todir="${bin.dir}" />
 	</target>
 
