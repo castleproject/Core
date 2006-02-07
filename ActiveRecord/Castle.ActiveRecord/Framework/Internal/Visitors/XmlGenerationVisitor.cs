@@ -48,7 +48,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			EndMappingNode();
 
 #if OUTPUTXML
-			String file = model.Type.Name + ".maping.xml";
+			String file = model.Type.Name + ".mapping.xml";
 
 			System.IO.File.Delete(file);
 
@@ -70,12 +70,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 			VisitNodes(model.Imports);
 			if (model.IsJoinedSubClass)
 			{
-				AppendF("<joined-subclass {0} {1} {2} {3} {4}>",
+				AppendF("<joined-subclass{0}{1}{2}{3}{4}{5}{6}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        MakeAtt("table", model.ActiveRecordAtt.Table),
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
-				        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue));
+                        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
+                        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+                        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
 				VisitNode(model.Key);
 				VisitNodes(model.Fields);
@@ -93,10 +95,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else if (model.IsDiscriminatorSubClass)
 			{
-				AppendF("<subclass {0} {1} {2}>",
+				AppendF("<subclass{0}{1}{2}{3}{4}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
-				        MakeAtt("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue));
+				        MakeAtt("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
+                        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+                        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
 				VisitNodes(model.Fields);
 				VisitNodes(model.Properties);
@@ -126,14 +130,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 			}
 			else
 			{
-				AppendF("<class {0} {1} {2} {3} {4} {5} {6}>",
+				AppendF("<class{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        MakeAtt("table", model.ActiveRecordAtt.Table),
 				        WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        WriteIfNonNull("where", model.ActiveRecordAtt.Where),
-				        WriteIfTrue("lazy", model.ActiveRecordAtt.Lazy));
+				        WriteIfTrue("lazy", model.ActiveRecordAtt.Lazy),
+                        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+                        WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
 				EnsureOnlyOneKey(model);
 				WriteCache(model.ActiveRecordAtt.Cache);
@@ -178,7 +184,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				unsavedVal = "none";
 			}
 
-			AppendF("<composite-id {0} {1} {2} {3}>",
+			AppendF("<composite-id{0}{1}{2}{3}>",
 			        MakeAtt("name", model.Property.Name),
 			        MakeClassAtt(model.Property.PropertyType),
 			        WriteIfNonNull("unsaved-value", unsavedVal),
@@ -195,7 +201,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 					keyPropAttr.Column = keyProp.Name;
 				}
 
-				AppendF("<key-property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} />",
+				AppendF("<key-property{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
 				        MakeAtt("name", keyProp.Name),
 				        MakeAtt("access", keyPropAttr.AccessString),
 				        MakeAtt("column", keyPropAttr.Column),
@@ -230,7 +236,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				}
 			}
 
-			AppendF("<id {0} {1} {2} {3} {4} {5}>",
+			AppendF("<id{0}{1}{2}{3}{4}{5}>",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.PrimaryKeyAtt.AccessString),
 			        MakeAtt("column", model.PrimaryKeyAtt.Column),
@@ -270,7 +276,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 						break;
 				}
 
-				AppendF("<generator {0}>", MakeAtt("class", className));
+				AppendF("<generator{0}>", MakeAtt("class", className));
 
 				if (model.PrimaryKeyAtt.SequenceName != null)
 				{
@@ -302,14 +308,14 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitImport(ImportModel model)
 		{
-			AppendF("<import {0} {1} />",
+			AppendF("<import{0}{1} />",
 			        MakeAtt("class", MakeTypeName(model.ImportAtt.Type)),
 			        MakeAtt("rename", model.ImportAtt.Rename));
 		}
 
 		public override void VisitProperty(PropertyModel model)
 		{
-			AppendF("<property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} />",
+			AppendF("<property{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.PropertyAtt.AccessString),
 			        MakeAtt("column", model.PropertyAtt.Column),
@@ -327,7 +333,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			String cascade = TranslateCascadeEnum(model.AnyAtt.Cascade);
 
-			AppendF("<any {0} {1} {2} {3} {4} {5} {6} {7} >",
+			AppendF("<any{0}{1}{2}{3}{4}{5}{6}{7}>",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.AnyAtt.AccessString),
 			        MakeCustomTypeAtt("id-type", model.AnyAtt.IdType),
@@ -339,16 +345,16 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Ident();
 			foreach(Any.MetaValueAttribute meta in model.MetaValues)
 			{
-				AppendF("<meta-value {0} {1} />",
+				AppendF("<meta-value{0}{1} />",
 				        MakeAtt("value", meta.Value),
 				        MakeCustomTypeAtt("class", meta.Class)
 					);
 			}
-			//The ordering is important, apperantly
-			AppendF("<column {0} />",
+			//The ordering is important, apparently
+			AppendF("<column{0} />",
 			        MakeAtt("name", model.AnyAtt.TypeColumn)
 				);
-			AppendF("<column {0} />",
+			AppendF("<column{0} />",
 			        MakeAtt("name", model.AnyAtt.IdColumn)
 				);
 			Dedent();
@@ -369,13 +375,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 		public override void VisitHasManyToAnyConfig(HasManyToAnyModel.Config model)
 		{
 			HasManyToAnyAttribute att = model.Parent.HasManyToAnyAtt;
-			AppendF("<many-to-any {0} >",
+			AppendF("<many-to-any{0}>",
 			        MakeCustomTypeAtt("id-type", att.IdType),
 			        MakeCustomTypeAttIfNotNull("meta-type", att.MetaType));
 			Ident();
-			AppendF("<column {0} />",
+			AppendF("<column{0} />",
 			        MakeAtt("name", att.TypeColumn));
-			AppendF("<column {0} />",
+			AppendF("<column{0} />",
 			        MakeAtt("name", att.IdColumn));
 			Dedent();
 			AppendF("</many-to-any>");
@@ -383,7 +389,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitField(FieldModel model)
 		{
-			AppendF("<property {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} />",
+			AppendF("<property{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10} />",
 			        MakeAtt("name", model.Field.Name),
 			        MakeAtt("access", model.FieldAtt.AccessString),
 			        MakeAtt("column", model.FieldAtt.Column),
@@ -399,7 +405,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitVersion(VersionModel model)
 		{
-			AppendF("<version {0} {1} {2} {3} />",
+			AppendF("<version{0}{1}{2}{3} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.VersionAtt.AccessString),
 			        MakeAtt("column", model.VersionAtt.Column),
@@ -408,7 +414,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitTimestamp(TimestampModel model)
 		{
-			AppendF("<timestamp {0} {1} {2} />",
+			AppendF("<timestamp{0}{1}{2} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.TimestampAtt.AccessString),
 			        MakeAtt("column", model.TimestampAtt.Column));
@@ -423,7 +429,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			String cascade = TranslateCascadeEnum(model.OneToOneAtt.Cascade);
 
-			AppendF("<one-to-one {0} {1} {2} {3} {4} {5}/>",
+			AppendF("<one-to-one{0}{1}{2}{3}{4}{5} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.OneToOneAtt.AccessString),
 			        MakeAtt("class", MakeTypeName(model.Property.PropertyType)),
@@ -437,7 +443,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			String cascade = TranslateCascadeEnum(model.BelongsToAtt.Cascade);
 			String outerJoin = TranslateOuterJoin(model.BelongsToAtt.OuterJoin);
 
-			AppendF("<many-to-one {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}/>",
+			AppendF("<many-to-one{0}{1}{2}{3}{4}{5}{6}{7}{8}{9} />",
 			        MakeAtt("name", model.Property.Name),
 			        MakeAtt("access", model.BelongsToAtt.AccessString),
 			        MakeAtt("class", MakeTypeName(model.BelongsToAtt.Type)),
@@ -472,7 +478,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitNested(NestedModel model)
 		{
-			AppendF("<component {0} {1} {2}>",
+			AppendF("<component{0}{1}{2}>",
 			        MakeAtt("name", model.Property.Name),
 			        WriteIfFalse("update", model.NestedAtt.Update),
 			        WriteIfFalse("insert", model.NestedAtt.Insert));
@@ -484,11 +490,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitCollectionID(CollectionIDModel model)
 		{
-			AppendF("<collection-id {0} {1}>",
+			AppendF("<collection-id{0}{1}>",
 			        MakeAtt("type", model.CollectionIDAtt.ColumnType),
 			        MakeAtt("column", model.CollectionIDAtt.Column));
 			Ident();
-			AppendF("<generator {0}>",
+			AppendF("<generator{0}>",
 			        MakeAtt("class", model.CollectionIDAtt.Generator.ToString().ToLower()));
 			Ident();
 			base.VisitCollectionID(model);
@@ -519,7 +525,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</bag>";
 
-				AppendF("<bag {0} {1} {2} {3} {4} {5} {6} {7} {8} >",
+				AppendF("<bag{0}{1}{2}{3}{4}{5}{6}{7}{8}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -534,7 +540,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</set>";
 
-				AppendF("<set {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}>",
+				AppendF("<set{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -550,7 +556,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</idbag>";
 
-				AppendF("<idbag {0} {1} {2} {3} {4} {5} {6} {7}>",
+				AppendF("<idbag{0}{1}{2}{3}{4}{5}{6}{7}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -566,7 +572,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 			{
 				closingTag = "</map>";
 
-				AppendF("<map {0} {1} {2} {3} {4} {5} {6} {7} {8} {9}>",
+				AppendF("<map{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}>",
 				        MakeAtt("name", name),
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
@@ -741,24 +747,24 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private void WriteOneToMany(Type type)
 		{
-			AppendF("<one-to-many {0} />", MakeAtt("class", MakeTypeName(type)));
+			AppendF("<one-to-many{0} />", MakeAtt("class", MakeTypeName(type)));
 		}
 
 		private void WriteManyToMany(Type type, String columnRef)
 		{
-			AppendF("<many-to-many {0} {1} />",
+			AppendF("<many-to-many{0}{1} />",
 			        MakeAtt("class", MakeTypeName(type)),
 			        MakeAtt("column", columnRef));
 		}
 
 		private void WriteKey(String column)
 		{
-			AppendF("<key {0} />", MakeAtt("column", column));
+			AppendF("<key{0} />", MakeAtt("column", column));
 		}
 
 		private void WriteIndex(String column, String type)
 		{
-			AppendF("<index {0} {1} />", MakeAtt("column", column), WriteIfNonNull("type", type));
+			AppendF("<index{0}{1} />", MakeAtt("column", column), WriteIfNonNull("type", type));
 		}
 
 		private void WriteCache(CacheEnum cacheEnum)
@@ -781,7 +787,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 		{
 			if (model.IsDiscriminatorBase)
 			{
-				AppendF("<discriminator {0} {1} />",
+				AppendF("<discriminator{0}{1} />",
 				        MakeAtt("column", model.ActiveRecordAtt.DiscriminatorColumn),
 				        WriteIfNonNull("type", model.ActiveRecordAtt.DiscriminatorType));
 			}
@@ -842,12 +848,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeAtt(String attName, String value)
 		{
-			return String.Format("{0}=\"{1}\"", attName, value);
+			return String.Format(" {0}=\"{1}\"", attName, value);
 		}
 
 		private String MakeAtt(String attName, bool value)
 		{
-			return String.Format("{0}=\"{1}\"", attName, value.ToString().ToLower());
+			return String.Format(" {0}=\"{1}\"", attName, value.ToString().ToLower());
 		}
 
 		private void Append(string xml)

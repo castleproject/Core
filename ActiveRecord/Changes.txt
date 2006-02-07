@@ -1,6 +1,19 @@
 beta 4
 ======
+- Added support for NHibernate dynamic-update, dynamic-insert to ActiveRecordAttribute
+
+- Simplified NHibernate markup generation for testing
+
+  Attributes are now written in one of two ways. Tags that have both an open and close 
+  will have no space at the end of the attributes on the opening tag, while tags that 
+  have no contents (<tag />) will be written with one space after the last attribute.
+  
+  Examples:
+  <openclose attrib="test" attrib2="test"></openclose>
+  <noclosetag attrib="test"/>
+
 - Added ActiveRecordValidationBase<> to support validation on Generic AR classes
+
 - Brought ActiveRecordBase.Generic inline with ActiveRecordBase.  This is a breaking change.  
   Some methods (FindAll, DeleteAll) have been renamed FindAllGeneric, DeleteAllGeneric.  In
   previous revisions users were forced to have an accessible DeleteAll/FindAll method on the 

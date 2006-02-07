@@ -43,6 +43,8 @@ namespace Castle.ActiveRecord
 		private String where;
 		private Type proxy;
 		private bool lazy;
+        private bool dynamicUpdate;
+        private bool dynamicInsert;
         
 		/// <summary>
 		/// Uses the class name as table name
@@ -144,5 +146,23 @@ namespace Castle.ActiveRecord
 			get { return lazy; }
 			set { lazy = value; }
 		}
+
+        /// <summary>
+        /// Specifies that UPDATE SQL should be generated at runtime and contain only those columns whose values have changed.
+        /// </summary>
+        public bool DynamicUpdate
+        {
+            get { return dynamicUpdate; }
+            set { dynamicUpdate = value; }
+        }
+
+        /// <summary>
+        /// Specifies that INSERT SQL should be generated at runtime and contain only the columns whose values are not null.
+        /// </summary>
+        public bool DynamicInsert
+        {
+            get { return dynamicInsert; }
+            set { dynamicInsert = value; }
+        }
 	}
 }

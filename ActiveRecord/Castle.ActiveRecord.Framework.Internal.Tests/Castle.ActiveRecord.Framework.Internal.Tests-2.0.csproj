@@ -156,6 +156,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\CompositeKeyForClassWithCompositeKey.cs" />
+    <Compile Include="Model\ClassADynamicInsertUpdate.cs" />
     <Compile Include="Model\DiscriminatorGrandchild.cs" />
     <Compile Include="Model\HasManyClassA.cs">
       <SubType>Code</SubType>
