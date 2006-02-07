@@ -70,11 +70,9 @@ namespace Castle.ActiveRecord
 			if (types == null) throw new ArgumentNullException("types");
 
 			// First initialization
-			ISessionFactoryHolder holder = 
-				CreateSessionFactoryHolderImplementation(source);
+			ISessionFactoryHolder holder = CreateSessionFactoryHolderImplementation(source);
 
-			holder.ThreadScopeInfo = 
-				CreateThreadScopeInfoImplementation(source);
+			holder.ThreadScopeInfo = CreateThreadScopeInfoImplementation(source);
 
 			RaiseSessionFactoryHolderCreated(holder);
 
@@ -349,7 +347,7 @@ namespace Castle.ActiveRecord
 		{
 			if (ActiveRecordBase.holder == null)
 			{
-				throw new ActiveRecordException("Framework must be Initialize(d) first.");
+				throw new ActiveRecordException("Framework must be Initialized first.");
 			}
 		}
 
