@@ -50,6 +50,16 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			get { return _companies; }
 			set { _companies = value; }
 		}
+
+        public static void DeleteAll()
+        {
+            DeleteAllGeneric();
+        }
+
+        public static Person[] FindAll()
+        {
+            return FindAllGeneric();
+        }
 	}
 }
 #endif

@@ -63,6 +63,16 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			get { return _people; }
 			set { _people = value; }
 		}
+
+        public static void DeleteAll()
+        {
+            DeleteAllGeneric();
+        }
+
+        public static Company[] FindAll()
+        {
+            return FindAllGeneric();
+        }
 	}
 
 	public class PostalAddress
@@ -112,6 +122,8 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			get { return _zipcode; }
 			set { _zipcode = value; }
 		}
+
+       
 	}
 } 
 #endif

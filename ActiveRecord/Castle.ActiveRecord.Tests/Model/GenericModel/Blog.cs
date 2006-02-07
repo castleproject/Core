@@ -21,6 +21,7 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 
 	using NHibernate;
 
+    using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework;
 
 
@@ -99,8 +100,23 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 
 		internal static ISessionFactoryHolder Holder
 		{
-			get { return ActiveRecordMediator.GetSessionFactoryHolder(); }
+            get { return ActiveRecordMediator<Blog>.GetSessionFactoryHolder(); }
 		}
+
+        public static void DeleteAll()
+        {
+            DeleteAllGeneric();
+        }
+
+        public static Blog[] FindAll()
+        {
+            return FindAllGeneric();
+        }
+
+        public static Blog Find(int id)
+        {
+            return FindByPrimaryKey(id);
+        }
 	}
 }
 #endif

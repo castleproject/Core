@@ -32,7 +32,7 @@ namespace Castle.ActiveRecord.Tests
 		[SetUp]
 		public void Setup()
 		{
-			ActiveRecordStarter.Initialize(GetConfigSource(),
+            ActiveRecordStarter.Initialize(GetConfigSource(),
 				typeof(Blog),
 				typeof(Post),
 				typeof(Company),
@@ -90,7 +90,7 @@ namespace Castle.ActiveRecord.Tests
 			post3.Published = true;
 			post3.Save();
 
-			Post[] posts = Post.FindAll(Expression.Eq("Blog", blog), 1, 2);
+            Post[] posts = Post.CustomSlicedFind(Expression.Eq("Blog", blog), 1, 2);
 			Assert.AreEqual(2, posts.Length);
 		}
 

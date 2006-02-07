@@ -19,6 +19,8 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 	using System;
 	using System.Collections;
 
+    using NHibernate.Expression;
+
 	[ActiveRecord("PostTable")]
 	public class Post : ActiveRecordBase<Post>
 	{
@@ -102,6 +104,27 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
             state["Created"] = DateTime.Now;
             return true;
         }
+
+        public static void DeleteAll()
+        {
+            DeleteAllGeneric();
+        }
+
+        public static Post[] FindAll()
+        {
+            return FindAllGeneric();
+        }
+
+        public static Post Find(int id)
+        {
+            return FindByPrimaryKey(id);
+        }
+
+        public static Post[] CustomSlicedFind(ICriterion criteria, int firstResult, int maxResults)
+        {
+            return SlicedFindAll(firstResult, maxResults, criteria);
+        }
+         
 	}
 }
 #endif
