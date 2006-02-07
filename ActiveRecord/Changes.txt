@@ -1,6 +1,8 @@
 beta 4
 ======
 
+- Updated DeleteAll(Type targetType, IEnumerable pkValues) to support non int primary keys
+
 - Add more hookable methods.
 
 - Refactored Validation support to use NHibernate.IValidatable

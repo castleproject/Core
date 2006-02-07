@@ -223,7 +223,7 @@ namespace Castle.ActiveRecord
 
             int counter = 0;
 
-            foreach (int pk in pkValues)
+            foreach (object pk in pkValues)
             {
                 Object obj = FindByPrimaryKey(targetType, pk, false);
 
