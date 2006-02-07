@@ -141,8 +141,8 @@ namespace Castle.ActiveRecord
 
         #region DeleteAllGeneric
         /// <summary>
-        /// Not the best way naming wise, but this will allow you to have your DeleteAll() method on the object.
-        /// Alternatively, we could prune this and rely on ActiveRecordMediator<>
+        /// Not the best way naming wise, but this will allow you to have your DeleteAll method on the object.
+        /// Alternatively, we could prune this and rely on ActiveRecordMediator
         /// </summary>
         protected internal static void DeleteAllGeneric()
         {
