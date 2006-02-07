@@ -245,6 +245,11 @@
     <Compile Include="TransactionScopeTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Validation\ValidationTestCase.Generic.cs" />
+    <Compile Include="Validation\GenericModel\Blog.cs" />
+    <Compile Include="Validation\GenericModel\Customer.cs" />
+    <Compile Include="Validation\GenericModel\Person.cs" />
+    <Compile Include="Validation\GenericModel\User.cs" />
     <Compile Include="Validation\Model\Blog.cs">
       <SubType>Code</SubType>
     </Compile>
