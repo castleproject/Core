@@ -1,5 +1,12 @@
 beta 4
 ======
+- Brought ActiveRecordBase.Generic inline with ActiveRecordBase.  This is a breaking change.  
+  Some methods (FindAll, DeleteAll) have been renamed FindAllGeneric, DeleteAllGeneric.  In
+  previous revisions users were forced to have an accessible DeleteAll/FindAll method on the 
+  object when inheriting from ActiveRecordBase<>.  New methods with the Generic suffix 
+  on their names allow the users to present the same methods in their generic and non generic 
+  classes, and by default ActiveRecordBase<> objects will have no accessible static methods 
+  just like their ActiveRecordBase counterparts.
 
 - Updated DeleteAll(Type targetType, IEnumerable pkValues) to support non int primary keys
 
@@ -7,12 +14,12 @@ beta 4
 
 - Refactored Validation support to use NHibernate.IValidatable
 
-- Brought ActiveRecordMediator.Generic inline with ActiveRecordMediator.  This is a breaking change (removal of a few methods/renaming of a few existing).
+- Brought ActiveRecordMediator.Generic inline with ActiveRecordMediator.  This is a breaking 
+  change (removal of a few methods/renaming of a few existing).
 
 - Add import support (kudos to Dan Burnea)
-  
-	[ActiveRecord, Import(typeof(ImportClassRow), "ImportClassRow")]
-    public class ImportClass : ActiveRecordBase
+  [ActiveRecord, Import(typeof(ImportClassRow), "ImportClassRow")]
+  public class ImportClass : ActiveRecordBase
 
 beta 3
 ======
