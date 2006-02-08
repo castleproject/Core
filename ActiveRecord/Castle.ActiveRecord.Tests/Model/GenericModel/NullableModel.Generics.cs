@@ -12,36 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #if dotNet2
-namespace Castle.ActiveRecord.Tests.Validation.GenericModel
+namespace Castle.ActiveRecord.Tests.Model.GenericModel
 {
 	using System;
 
-	[ActiveRecord("Blogs2")]
-	public class Blog2 : ActiveRecordValidationBase<Blog2>
-	{
-		private int _id;
-		private String _name;
-		private String _author;
+	using Nullables;
 
-		[PrimaryKey(PrimaryKeyType.Native)]
-		public int Id
+	[ActiveRecord]
+	public class GenericNullableModel : ActiveRecordBase<GenericNullableModel>
+	{
+		private int id;
+        private Int32? age;
+		private DateTime? completion;
+		private Boolean? accepted;
+
+        public GenericNullableModel()
 		{
-			get { return _id; }
-			set { _id = value; }
 		}
 
-		[Property, ValidateIsUnique]
-		public String Name
+		[PrimaryKey]
+		public int Id
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return id; }
+			set { id = value; }
 		}
 
 		[Property]
-		public String Author
+		public Int32? Age
 		{
-			get { return _author; }
-			set { _author = value; }
+			get { return age; }
+			set { age = value; }
+		}
+
+		[Property]
+        public DateTime? Completion
+		{
+			get { return completion; }
+			set { completion = value; }
+		}
+
+		[Property]
+        public Boolean? Accepted
+		{
+			get { return accepted; }
+			set { accepted = value; }
 		}
 
 	}

@@ -53,20 +53,7 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			set { this.award = value; }
 		}
 
-        public static void DeleteAll()
-        {
-            DeleteAllGeneric();
-        }
-
-        public static Employee Find(int id)
-        {
-            return FindByPrimaryKey(id);
-        }
-
-        public static Employee[] FindAll()
-        {
-            return FindAllGeneric();
-        }
+       
 	}
 
 	[ActiveRecord( "Award" )]
@@ -106,15 +93,6 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			set { this.description = value; }
 		}
 
-        public static void DeleteAll()
-        {
-            DeleteAllGeneric();
-        }
-
-        public static Award[] FindAll()
-        {
-            return FindAllGeneric();
-        }
 	}
 } 
 #endif

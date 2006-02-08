@@ -105,21 +105,6 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
             return true;
         }
 
-        public static void DeleteAll()
-        {
-            DeleteAllGeneric();
-        }
-
-        public static Post[] FindAll()
-        {
-            return FindAllGeneric();
-        }
-
-        public static Post Find(int id)
-        {
-            return FindByPrimaryKey(id);
-        }
-
         public static Post[] CustomSlicedFind(ICriterion criteria, int firstResult, int maxResults)
         {
             return SlicedFindAll(firstResult, maxResults, criteria);

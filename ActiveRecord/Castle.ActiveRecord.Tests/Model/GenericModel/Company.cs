@@ -64,15 +64,6 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 			set { _people = value; }
 		}
 
-        public static void DeleteAll()
-        {
-            DeleteAllGeneric();
-        }
-
-        public static Company[] FindAll()
-        {
-            return FindAllGeneric();
-        }
 	}
 
 	public class PostalAddress

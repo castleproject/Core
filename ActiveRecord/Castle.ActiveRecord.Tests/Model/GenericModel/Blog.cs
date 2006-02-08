@@ -102,21 +102,6 @@ namespace Castle.ActiveRecord.Tests.Model.GenericModel
 		{
             get { return ActiveRecordMediator<Blog>.GetSessionFactoryHolder(); }
 		}
-
-        public static void DeleteAll()
-        {
-            DeleteAllGeneric();
-        }
-
-        public static Blog[] FindAll()
-        {
-            return FindAllGeneric();
-        }
-
-        public static Blog Find(int id)
-        {
-            return FindByPrimaryKey(id);
-        }
-	}
+    }
 }
 #endif

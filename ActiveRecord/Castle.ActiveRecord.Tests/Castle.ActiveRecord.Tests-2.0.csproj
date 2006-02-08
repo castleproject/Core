@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="ActiveRecordBaseGenericsTestCase.cs" />
     <Compile Include="Config\ConfigurationSource.cs" />
+    <Compile Include="NullablesGenericsTestCase.cs" />
     <Compile Include="JoinedSubClassTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +148,7 @@
     <Compile Include="Model\Company.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\GenericModel\NullableModel.Generics.cs" />
     <Compile Include="Model\Employee.cs">
       <SubType>Code</SubType>
     </Compile>

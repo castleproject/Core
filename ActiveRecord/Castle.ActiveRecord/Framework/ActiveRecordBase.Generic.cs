@@ -17,8 +17,10 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+    using System.Collections.Generic;
 
 	using Castle.ActiveRecord.Framework;
+    using Castle.ActiveRecord.Queries;
 
 	using NHibernate;
 	using NHibernate.Expression;
@@ -61,366 +63,28 @@ namespace Castle.ActiveRecord
 
         #endregion
 
-        #region protected internal static
-        #region Create/Update/Save/Delete/DeleteAll
-        #region Create
-        /// <summary>
-        /// Creates (Saves) a new instance to the database.
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Create(T instance)
-        {
-            Type type = typeof(T);
+        #region public static
 
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
+        #region Find Related
 
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.Save(instance);
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Save for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-
-        #region Delete
-        /// <summary>
-        /// Deletes the instance from the database.
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Delete(T instance)
-        {
-            Type type = typeof(T);
-
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
-
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.Delete(instance);
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Delete for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-
-        #region DeleteAllGeneric
-        /// <summary>
-        /// Not the best way naming wise, but this will allow you to have your DeleteAll method on the object.
-        /// Alternatively, we could prune this and rely on ActiveRecordMediator
-        /// </summary>
-        protected internal static void DeleteAllGeneric()
-        {
-            Type type = typeof(T);
-
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.Delete(String.Format("from {0}", type.Name));
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-
-        protected internal static void DeleteAllGeneric(string where)
-        {
-            Type type = typeof(T);
-
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.Delete(String.Format("from {0} where {1}", type.Name, where));
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-
-        /// <summary>
-        /// TODO: Fabio, document this
-        /// </summary>
-        /// <param name="targetType"></param>
-        /// <param name="pkValues"></param>
-        /// <returns></returns>
-        protected internal static int DeleteAllGeneric(T targetType, System.Collections.IEnumerable pkValues)
-        {
-            if (pkValues == null)
-            {
-                return 0;
-            }
-
-            Type type = typeof(T);
-
-            int counter = 0;
-
-            foreach (object pk in pkValues)
-            {
-                T obj = FindByPrimaryKey(pk, false);
-
-                if (obj != null)
-                {
-                    ActiveRecordBase<T> arBase = obj as ActiveRecordBase<T>;
-                    if (arBase != null)
-                    {
-                        arBase.Delete(); // in order to allow override of the virtual "Delete()" method
-                    }
-                    else
-                    {
-                        ActiveRecordMediator<T>.Delete(obj);
-                    }
-
-                    counter++;
-                }
-            }
-
-            return counter;
-        }
-        #endregion
-
-        #region Update
-        /// <summary>
-        /// Persists the modification on the instance state to the database.
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Update(T instance)
-        {
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
-
-            Type type = typeof(T);
-
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.Update(instance);
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Save for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-
-        #region Save
-        /// <summary>
-        /// Saves the instance to the database
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Save(T instance)
-        {
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
-
-            Type type = typeof(T);
-
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.SaveOrUpdate(instance);
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Save for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-        #endregion        
-
-        #region Execute
-        /// <summary>
-        /// Invokes the specified delegate passing a valid 
-        /// NHibernate session. Used for custom NHibernate queries.
-        /// </summary>
-        /// <param name="call">The delegate instance</param>
-        /// <param name="instance">The ActiveRecord instance</param>
-        /// <returns>Whatever is returned by the delegate invocation</returns>
-        protected internal static object Execute( NHibernateDelegate call, T instance)
-        {
-            if (instance == default(T)) throw new ArgumentNullException("targetType", "Target type must be informed");
-            if (call == null) throw new ArgumentNullException("call", "Delegate must be passed");
-
-            Type type = typeof(T);
-
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                return call(session, instance);
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Error performing Execute for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-
-        #endregion
-
-        #region ExecuteQuery
-        protected internal static object ExecuteQuery(IActiveRecordQuery query)
-        {
-            Type targetType = query.Target;
-            EnsureInitialized();
-
-            ISession session = holder.CreateSession(targetType);
-
-            try
-            {
-                return query.Execute(session);
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-
-        protected internal static R ExecuteQuery2<R>(IActiveRecordQuery<R> query)
-        {
-            Type targetType = query.Target;
-
-            ActiveRecordBase.EnsureInitialized(targetType);
-
-            ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
-            ISession session = holder.CreateSession(targetType);
-
-            try
-            {
-                return query.Execute(session);
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-
-        #region FindAllGeneric
+        #region FindAll
         /// <summary>
         /// Returns all instances found for the specified type.
         /// </summary>
-        /// <param name="targetType"></param>
         /// <returns></returns>
-        protected internal static T[] FindAllGeneric()
+        public static T[] FindAll()
         {
-            return FindAllGeneric((Order[])null);
+            return FindAll((Order[])null);
         }
 
         /// <summary>
         /// Returns all instances found for the specified type 
         /// using sort orders and criterias.
         /// </summary>
-        /// <param name="targetType"></param>
         /// <param name="orders"></param>
         /// <param name="criterias"></param>
         /// <returns></returns>
-        protected internal static T[] FindAllGeneric(Order[] orders, params ICriterion[] criterias)
+        public static T[] FindAll(Order[] orders, params ICriterion[] criterias)
         {
             EnsureInitialized();
             Type type = typeof(T);
@@ -467,9 +131,9 @@ namespace Castle.ActiveRecord
         /// <param name="targetType"></param>
         /// <param name="criterias"></param>
         /// <returns></returns>
-        protected internal static T[] FindAllGeneric(params ICriterion[] criterias)
+        public static T[] FindAll(params ICriterion[] criterias)
         {
-            return FindAllGeneric(null, criterias);
+            return FindAll(null, criterias);
         }
         #endregion
 
@@ -484,23 +148,486 @@ namespace Castle.ActiveRecord
         /// <param name="property">A property name (not a column name)</param>
         /// <param name="value">The value to be equals to</param>
         /// <returns></returns>
-        protected static T[] FindAllByProperty(String property, object value)
+        public static T[] FindAllByProperty(String property, object value)
         {
-            return FindAllGeneric(Expression.Eq(property, value));
+            return FindAll(Expression.Eq(property, value));
         }
 
         /// <summary>
         /// Finds records based on a property value
         /// </summary>
-        /// <param name="orderByColumn">The column name to be ordered ASC</param>
         /// <param name="property">A property name (not a column name)</param>
         /// <param name="value">The value to be equals to</param>
+        /// <param name="orders">The sort order</param>
         /// <returns></returns>
-        protected static T[] FindAllByProperty(String orderByColumn, String property, object value)
+        public static T[] FindAllByProperty(String property, object value, Order[] orders)
         {
-            return FindAllGeneric(new Order[] { Order.Asc(orderByColumn) }, Expression.Eq(property, value));
+            return FindAll(orders, Expression.Eq(property, value));
         }
         #endregion
+
+        #region Find/TryFind
+        /// <summary>
+        /// Finds an object instance by a unique ID (typically primary key)
+        /// </summary>
+        /// <param name="id">ID value</param>
+        /// <exception cref="ObjectNotFoundException">if the row is not found</exception>
+        /// <returns>T</returns>
+        public static T Find(object id)
+        {
+            return FindByPrimaryKey(id, true);
+        }
+
+        /// <summary>
+        /// Finds an object instance by a unique ID (typically primary key). 
+        /// If the row is not found this method will not throw an exception.
+        /// </summary>
+        /// <param name="id">ID value</param>
+        /// <returns></returns>
+        public static T TryFind(object id)
+        {
+            return FindByPrimaryKey(id, false);
+        }
+        #endregion
+
+        #region FindFirst
+        /// <summary>
+        /// Searches and returns the first row.
+        /// </summary>
+        /// <param name="orders">The sort order - used to determine which record is the first one</param>
+        /// <param name="criterias">The criteria expression</param>
+        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+        public static T FindFirst(Order[] orders, params ICriterion[] criterias)
+        {
+            T[] result = SlicedFindAll(0, 1, orders, criterias);
+            return (result != default(T) && result.Length > 0 ? result[0] : default(T));
+        }
+
+        /// <summary>
+        /// Searches and returns the first row.
+        /// </summary>
+        /// <param name="criterias">The criteria expression</param>
+        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+        public static T FindFirst(params ICriterion[] criterias)
+        {
+            return FindFirst(null, criterias);
+        }
+        #endregion
+
+        #region FindOne
+        /// <summary>
+        /// Searches and returns the a row. If more than one is found, 
+        /// throws <see cref="ActiveRecordException"/>
+        /// </summary>
+        /// <param name="criterias">The criteria expression</param>
+        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+        public static T FindOne(params ICriterion[] criterias)
+        {
+            T[] result = SlicedFindAll(0, 2, criterias);
+
+            if (result.Length > 1)
+            {
+                throw new ActiveRecordException(typeof(T).Name + ".FindOne returned " + result.Length + " rows. Expecting one or none");
+            }
+
+            return (result.Length == 0) ? default(T) : result[0];
+        }
+        #endregion
+
+        #region SlicedFindAll
+        /// <summary>
+        /// Returns a portion of the query results (sliced)
+        /// </summary>
+        public static T[] SlicedFindAll(int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
+        {
+            EnsureInitialized();
+
+            Type type = typeof(T);
+
+            ISession session = holder.CreateSession(type);
+            try
+            {
+                ICriteria criteria = session.CreateCriteria(type);
+
+                foreach (ICriterion cond in criterias)
+                {
+                    criteria.Add(cond);
+                }
+
+                if (orders != null)
+                {
+                    foreach (Order order in orders)
+                    {
+                        criteria.AddOrder(order);
+                    }
+                }
+
+                criteria.SetFirstResult(firstResult);
+                criteria.SetMaxResults(maxresults);
+
+                return CreateReturnArray(criteria);
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform SlicedFindAll for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+
+        /// <summary>
+        /// Returns a portion of the query results (sliced)
+        /// </summary>
+        public static T[] SlicedFindAll(int firstResult, int maxresults, params ICriterion[] criterias)
+        {
+            return SlicedFindAll(firstResult, maxresults, null, criterias);
+        }
+        #endregion
+
+        #endregion
+
+        #region Create
+        /// <summary>
+        /// Creates (Saves) a new instance to the database.
+        /// </summary>
+        /// <param name="instance"></param>
+        public static void Create(T instance)
+        {
+            Type type = typeof(T);
+
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(type);
+
+            try
+            {
+                session.Save(instance);
+                session.Flush();
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform Save for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+        #endregion
+
+        #region Update
+        /// <summary>
+        /// Persists the modification on the instance state to the database.
+        /// </summary>
+        /// <param name="instance"></param>
+        public static void Update(T instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            Type type = typeof(T);
+
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(type);
+
+            try
+            {
+                session.Update(instance);
+                session.Flush();
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform Update for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+        #endregion
+
+        #region Save
+        /// <summary>
+        /// Saves the instance to the database
+        /// </summary>
+        /// <param name="instance"></param>
+        public static void Save(T instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            Type type = typeof(T);
+
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(type);
+
+            try
+            {
+                session.SaveOrUpdate(instance);
+                session.Flush();
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform Save for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+        #endregion
+
+        #region Delete
+        /// <summary>
+        /// Deletes the instance from the database.
+        /// </summary>
+        /// <param name="instance"></param>
+        public static void Delete(T instance)
+        {
+            Type type = typeof(T);
+
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(type);
+
+            try
+            {
+                session.Delete(instance);
+                session.Flush();
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform Delete for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+        #endregion
+
+        #region DeleteAll
+        public static void DeleteAll()
+        {
+            Type type = typeof(T);
+
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(type);
+
+            try
+            {
+                session.Delete(String.Format("from {0}", type.Name));
+                session.Flush();
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+
+        /// <summary>
+        /// Deletes all records of the specified type, using conditions in HQL.
+        /// </summary>
+        /// <param name="conditions ">HQL conditions</param>
+        public static void DeleteAll(string conditions)
+        {
+            Type type = typeof(T);
+
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(type);
+
+            try
+            {
+                session.Delete(String.Format("from {0} where {1}", type.Name, conditions));
+                session.Flush();
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+
+        /// <summary>
+        /// Removes all records with matching identifiers (typically primarykeys)
+        /// </summary>
+        /// <param name="pkValues"></param>
+        /// <returns>Number of records deleted</returns>
+        public static int DeleteAll<PkType>(IEnumerable<PkType> pkValues)
+        {
+            if (pkValues == null)
+            {
+                return 0;
+            }
+
+            Type type = typeof(T);
+
+            int counter = 0;
+            foreach (PkType pk in pkValues)
+            {
+                T obj = FindByPrimaryKey(pk, false);
+                if (obj != null)
+                {
+                    ActiveRecordBase<T> arBase = obj as ActiveRecordBase<T>;
+                    if (arBase != null)
+                    {
+                        arBase.Delete(); // in order to allow override of the virtual "Delete()" method
+                    }
+                    else
+                    {
+                        ActiveRecordMediator<T>.Delete(obj);
+                    }
+                    counter++;
+                }
+            }
+
+            return counter;
+        }
+        #endregion
+
+        #region ExecuteQuery
+        public static object ExecuteQuery(IActiveRecordQuery query)
+        {
+            Type targetType = query.Target;
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(targetType);
+
+            try
+            {
+                return query.Execute(session);
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+
+        public static R ExecuteQuery2<R>(IActiveRecordQuery<R> query)
+        {
+            Type targetType = query.Target;
+
+            ActiveRecordBase.EnsureInitialized(targetType);
+
+            ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
+            ISession session = holder.CreateSession(targetType);
+
+            try
+            {
+                return query.Execute(session);
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region protected internal static
+      
+        #region Execute
+        /// <summary>
+        /// Invokes the specified delegate passing a valid 
+        /// NHibernate session. Used for custom NHibernate queries.
+        /// </summary>
+        /// <param name="call">The delegate instance</param>
+        /// <param name="instance">The ActiveRecord instance</param>
+        /// <returns>Whatever is returned by the delegate invocation</returns>
+        protected internal static object Execute( NHibernateDelegate call, T instance)
+        {
+            if (instance == default(T)) throw new ArgumentNullException("targetType", "Target type must be informed");
+            if (call == null) throw new ArgumentNullException("call", "Delegate must be passed");
+
+            Type type = typeof(T);
+
+            EnsureInitialized();
+
+            ISession session = holder.CreateSession(type);
+
+            try
+            {
+                return call(session, instance);
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Error performing Execute for " + type.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+
+        #endregion               
 
         #region FindByPrimaryKey
         /// <summary>
@@ -556,108 +683,7 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion
-
-        #region FindFirst
-        /// <summary>
-        /// Searches and returns the first row.
-        /// </summary>
-        /// <param name="orders">The sort order - used to determine which record is the first one</param>
-        /// <param name="criterias">The criteria expression</param>
-        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-        protected internal static T FindFirst(Order[] orders, params ICriterion[] criterias)
-        {
-            T[] result = SlicedFindAll(0, 1, orders, criterias);
-            return (result != default(T) && result.Length > 0 ? result[0] : default(T));
-        }
-
-        /// <summary>
-        /// Searches and returns the first row.
-        /// </summary>
-        /// <param name="criterias">The criteria expression</param>
-        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-        protected internal static T FindFirst(params ICriterion[] criterias)
-        {
-            return FindFirst(null, criterias);
-        }
-        #endregion
-
-        #region FindOne
-        /// <summary>
-        /// Searches and returns the a row. If more than one is found, 
-        /// throws <see cref="ActiveRecordException"/>
-        /// </summary>
-        /// <param name="criterias">The criteria expression</param>
-        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-        protected internal static T FindOne(params ICriterion[] criterias)
-        {
-            T[] result = SlicedFindAll(0, 2, criterias);
-
-            if (result.Length > 1)
-            {
-                throw new ActiveRecordException(typeof(T).Name + ".FindOne returned " + result.Length + " rows. Expecting one or none");
-            }
-
-            return (result.Length == 0) ? default(T) : result[0];
-        }
-        #endregion
-
-        #region SlicedFindAll
-        /// <summary>
-        /// Returns a portion of the query results (sliced)
-        /// </summary>
-        protected internal static T[] SlicedFindAll(int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
-        {
-            EnsureInitialized();
-
-            Type type = typeof(T);
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                ICriteria criteria = session.CreateCriteria(type);
-
-                foreach (ICriterion cond in criterias)
-                {
-                    criteria.Add(cond);
-                }
-
-                if (orders != null)
-                {
-                    foreach (Order order in orders)
-                    {
-                        criteria.AddOrder(order);
-                    }
-                }
-
-                criteria.SetFirstResult(firstResult);
-                criteria.SetMaxResults(maxresults);
-
-                return CreateReturnArray(criteria);
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform SlicedFindAll for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-
-        /// <summary>
-        /// Returns a portion of the query results (sliced)
-        /// </summary>
-        protected internal static T[] SlicedFindAll(int firstResult, int maxresults, params ICriterion[] criterias)
-        {
-            return SlicedFindAll(firstResult, maxresults, null, criterias);
-        }
-        #endregion
+        #endregion        
 
         #endregion
 

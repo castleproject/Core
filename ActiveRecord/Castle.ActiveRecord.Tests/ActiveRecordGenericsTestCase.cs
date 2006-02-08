@@ -42,17 +42,17 @@ namespace Castle.ActiveRecord.Tests
 				typeof(Person));
 			Recreate();
 
-            ActiveRecordMediator<Post>.DeleteAll();
-            ActiveRecordMediator<Blog>.DeleteAll();
-            ActiveRecordMediator<Company>.DeleteAll();
-            ActiveRecordMediator<Award>.DeleteAll();
-            ActiveRecordMediator<Employee>.DeleteAll();
+            Post.DeleteAll();
+            Blog.DeleteAll();
+            Company.DeleteAll();
+            Award.DeleteAll();
+            Employee.DeleteAll();
 		}
 
 		[Test]
 		public void SimpleOperations()
 		{
-            Blog[] blogs = ActiveRecordMediator<Blog>.FindAll();
+            Blog[] blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(0, blogs.Length);
@@ -62,7 +62,7 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "hamilton verissimo";
 			blog.Save();
 
-            blogs = ActiveRecordMediator<Blog>.FindAll();
+            blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(1, blogs.Length);
@@ -91,14 +91,14 @@ namespace Castle.ActiveRecord.Tests
 			post3.Published = true;
 			post3.Save();
 
-			Post[] posts = ActiveRecordMediator<Post>.SlicedFindAll(1, 2, Expression.Eq("Blog", blog));
+			Post[] posts = Post.SlicedFindAll(1, 2, Expression.Eq("Blog", blog));
 			Assert.AreEqual(2, posts.Length);
 		}
 
 		[Test]
 		public void SimpleOperations2()
 		{
-			Blog[] blogs = ActiveRecordMediator<Blog>.FindAll();
+			Blog[] blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(0, blogs.Length);
@@ -108,7 +108,7 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "hamilton verissimo";
 			blog.Create();
 
-			blogs = ActiveRecordMediator<Blog>.FindAll();
+			blogs = Blog.FindAll();
 			Assert.AreEqual(blog.Name, blogs[0].Name);
 			Assert.AreEqual(blog.Author, blogs[0].Author);
 
@@ -119,7 +119,7 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "something else2";
 			blog.Update();
 
-			blogs = ActiveRecordMediator<Blog>.FindAll();
+			blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(1, blogs.Length);
@@ -127,6 +127,7 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(blog.Author, blogs[0].Author);
 		}
 
+      
 		[Test]
 		public void ComponentAttribute()
 		{
@@ -135,7 +136,7 @@ namespace Castle.ActiveRecord.Tests
 				"Embau St., 102", "Sao Paulo", "SP", "040390-060");
 			company.Save();
 
-			Company[] companies = ActiveRecordMediator<Company>.FindAll();
+			Company[] companies = Company.FindAll();
 			Assert.IsNotNull(companies);
 			Assert.AreEqual(1, companies.Length);
 
@@ -161,7 +162,7 @@ namespace Castle.ActiveRecord.Tests
 			post1.Save();
 			post2.Save();
 
-			blog = ActiveRecordMediator<Blog>.FindByPrimaryKey(blog.Id);
+			blog = Blog.Find(blog.Id);
 
 			Assert.IsNotNull(blog);
 			Assert.IsNotNull(blog.Posts, "posts collection is null");
@@ -192,7 +193,7 @@ namespace Castle.ActiveRecord.Tests
 			post3.Published = true;
 			post3.Save();
 
-            blog = ActiveRecordMediator<Blog>.FindByPrimaryKey(blog.Id);
+            blog = Blog.Find(blog.Id);
 
 			Assert.IsNotNull(blog);
 			Assert.AreEqual(2, blog.UnPublishedPosts.Count);
@@ -234,17 +235,16 @@ namespace Castle.ActiveRecord.Tests
             post23.Save();
 
             //no idea how to make this style of query work. 
-            //Post[] posts = ActiveRecordMediator<Post>.FindAll(
+            //Post[] posts = Post.FindAll(
             //            Expression.Eq("Blog.Name", blog2.Name)
             //        );
             //Assert.IsTrue(posts.Length > 0);
 
-            SimpleQuery q  = new SimpleQuery(typeof(Post),"from Post p where p.Id = ? or p.Blog.Name = ?",1,"hammett's blog other blog");
-            
-            Post[] p = (Post[])ActiveRecordMediator<Post>.ExecuteQuery(q);
+            SimpleQuery q = new SimpleQuery(typeof(Post), "from Post p where p.Id = ? or p.Blog.Name = ?", 1, "hammett's blog other blog");
+
+            Post[] p = (Post[])Post.ExecuteQuery(q);
 
             Assert.IsTrue(p.Length > 0);
-
 
         }
 
@@ -256,15 +256,15 @@ namespace Castle.ActiveRecord.Tests
 			emp.LastName = "doe";
 			emp.Save();
 
-			Assert.AreEqual(1, ActiveRecordMediator<Employee>.FindAll().Length);
+			Assert.AreEqual(1, Employee.FindAll().Length);
 
 			Award award = new Award(emp);
 			award.Description = "Invisible employee";
 			award.Save();
 
-            Assert.AreEqual(1, ActiveRecordMediator<Award>.FindAll().Length);
+            Assert.AreEqual(1, Award.FindAll().Length);
 
-            Employee emp2 = ActiveRecordMediator<Employee>.FindByPrimaryKey(emp.ID);
+            Employee emp2 = Employee.Find(emp.ID);
 			Assert.IsNotNull(emp2);
 			Assert.IsNotNull(emp2.Award);
 			Assert.AreEqual(emp.FirstName, emp2.FirstName);
@@ -276,13 +276,13 @@ namespace Castle.ActiveRecord.Tests
 		[ExpectedException(typeof(NotFoundException))]
 		public void FindLoad()
 		{
-            ActiveRecordMediator<Blog>.FindByPrimaryKey(1);
+            Blog.Find(1);
 		}
 
 		[Test]
 		public void SaveUpdate()
 		{
-			Blog[] blogs = ActiveRecordMediator<Blog>.FindAll();
+			Blog[] blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(0, blogs.Length);
@@ -292,7 +292,7 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "hamilton verissimo";
 			blog.Save();
 
-			blogs = ActiveRecordMediator<Blog>.FindAll();
+			blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(1, blogs.Length);
@@ -301,7 +301,7 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "changed too";
 			blog.Save();
 
-			blogs = ActiveRecordMediator<Blog>.FindAll();
+			blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(1, blogs.Length);
@@ -313,7 +313,7 @@ namespace Castle.ActiveRecord.Tests
 		[Test]
 		public void Delete()
 		{
-			Blog[] blogs = ActiveRecordMediator<Blog>.FindAll();
+			Blog[] blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(0, blogs.Length);
@@ -323,14 +323,14 @@ namespace Castle.ActiveRecord.Tests
 			blog.Author = "hamilton verissimo";
 			blog.Save();
 
-			blogs = ActiveRecordMediator<Blog>.FindAll();
+			blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(1, blogs.Length);
 
 			blog.Delete();
 
-			blogs = ActiveRecordMediator<Blog>.FindAll();
+			blogs = Blog.FindAll();
 
 			Assert.IsNotNull(blogs);
 			Assert.AreEqual(0, blogs.Length);

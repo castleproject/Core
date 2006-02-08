@@ -89,7 +89,6 @@ namespace Castle.ActiveRecord.Tests
 			post2.Save();
 			post3.Published = true;
 			post3.Save();
-
             Post[] posts = Post.CustomSlicedFind(Expression.Eq("Blog", blog), 1, 2);
 			Assert.AreEqual(2, posts.Length);
 		}
