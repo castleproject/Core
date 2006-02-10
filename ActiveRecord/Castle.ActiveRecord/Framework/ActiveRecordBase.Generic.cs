@@ -20,6 +20,7 @@ namespace Castle.ActiveRecord
     using System.Collections.Generic;
 
 	using Castle.ActiveRecord.Framework;
+    using Castle.ActiveRecord.Framework.Internal;
     using Castle.ActiveRecord.Queries;
 
 	using NHibernate;
@@ -585,6 +586,37 @@ namespace Castle.ActiveRecord
             }
         }
         #endregion
+
+        #region Exists
+        /// <summary>
+        /// Check if the <paramref name="id"/> exists in the datastore.
+        /// </summary>
+        /// <typeparam name="PkType">The <c>System.Type</c> of the PrimaryKey</typeparam>
+        /// <param name="id">The id to check on</param>
+        /// <returns>True if the ID exists; otherwise false.</returns>
+        public static bool Exists<PkType>(PkType id)
+        {
+            ActiveRecordModel model = ActiveRecordModel.GetModel(typeof(T));
+			if (model != null && model.Ids.Count == 1)
+			{
+                Type arType = typeof(T);
+                PrimaryKeyModel pkModel = (PrimaryKeyModel)model.Ids[0];
+                string pkName = pkModel.PrimaryKeyAtt.Column;
+                
+                if (pkName == null)
+                {
+                    pkName = pkModel.Property.Name;
+                }
+
+                SimpleQuery<PkType> query = new SimpleQuery<PkType>(arType, String.Format("select tbl.{0} from {1} tbl where tbl.{0} = ?", pkName, arType.Name), id);
+                foreach (PkType pk in query.Execute())
+                {
+                    return true;
+                }
+			}
+            return false;
+        }
+         #endregion
 
         #endregion
 

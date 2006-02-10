@@ -1,5 +1,8 @@
 beta 4
 ======
+- Added Exists<PkType>(PkType id) support to allow for checking of an object's existance 
+  in the datastore.
+
 - Brought ActiveRecordBase.Generic inline with ActiveRecordBase feature wise.  Public Static Methods are now present on all
   ActiveRecordBase.Generic objects for common tasks such as Find, FindAll, etc.
 

@@ -74,6 +74,32 @@ namespace Castle.ActiveRecord.Tests
 			Assert.AreEqual(blog.Author, retrieved.Author);
 		}
 
+        [Test]
+        public void ExistsTest()
+        {
+            Blog[] blogs = Blog.FindAll();
+
+            Assert.IsNotNull(blogs);
+            Assert.AreEqual(0, blogs.Length);
+
+            Blog blog = new Blog();
+            blog.Name = "hammett's blog";
+            blog.Author = "hamilton verissimo";
+            blog.Save();
+
+            Assert.IsTrue(blog.Id > 0);
+            Assert.IsTrue(Blog.Exists<int>(blog.Id));
+
+            blog = new Blog();
+            blog.Name = "chad's blog";
+            blog.Author = "chad humphries";
+            blog.Save();
+
+            Assert.IsTrue(Blog.Exists<int>(blog.Id));
+
+            Assert.IsFalse(Blog.Exists<int>(1000));
+        }
+
 		[Test]
 		public void SlicedOperation()
 		{
