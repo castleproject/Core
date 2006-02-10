@@ -479,8 +479,8 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
             EasyMethod easyMethod = null;
 
-            bool isSetMethod = method.Name.StartsWith("set_");
-            bool isGetMethod = method.Name.StartsWith("get_");
+            bool isSetMethod = method.IsSpecialName && method.Name.StartsWith("set_");
+            bool isGetMethod = method.IsSpecialName && method.Name.StartsWith("get_");
 
             if (!isSetMethod && !isGetMethod)
             {
