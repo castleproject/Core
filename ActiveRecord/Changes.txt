@@ -1,5 +1,16 @@
 beta 4
 ======
+- Added support for .Net 2.0 Connection Strings in the config file, using this method:
+<activerecord>
+	<add key="hibernate.connection.connection_string" value="ConnectionString = ${ConnectionStringKey}" />
+</activerecord>
+
+<connectionStrings>
+	<add name="ConnectionStringKey" connectionString="The Connection String"/>
+</connectionStrings>
+
+This allows to take advantage of the connection string encryption as well as manage them using the built in tools.
+
 - Added Exists<PkType>(PkType id) support to allow for checking of an object's existance 
   in the datastore.
 

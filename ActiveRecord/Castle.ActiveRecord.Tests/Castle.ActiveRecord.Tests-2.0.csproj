@@ -78,6 +78,10 @@
       <Name>Castle.DynamicProxy</Name>
       <HintPath>..\..\Tools\DynamicProxy\bin\Castle.DynamicProxy.dll</HintPath>
     </Reference>
+    <Reference Include="Castle.Model, Version=1.0.0.2, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\InversionOfControl\bin\Castle.Model.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.0.1, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
@@ -130,6 +134,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ActiveRecordBaseGenericsTestCase.cs" />
+    <Compile Include="Config\AspNet2.0ConfigurationIntegration.cs" />
     <Compile Include="Config\ConfigurationSource.cs" />
     <Compile Include="NullablesGenericsTestCase.cs" />
     <Compile Include="JoinedSubClassTestCase.cs">
