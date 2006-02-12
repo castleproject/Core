@@ -28,6 +28,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	using System.Text;
 	using System.Collections;
 
+	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -81,7 +82,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				new NVelocityViewContextAdapter(
 					componentName, context, writer, bodyNode, componentParams);
 
-			IRailsEngineContext railsContext = (IRailsEngineContext) context.Get("context");
+			IRailsEngineContext railsContext = MonoRailHttpHandler.CurrentContext;
 
 			component.Init(railsContext, contextAdapter);
 
