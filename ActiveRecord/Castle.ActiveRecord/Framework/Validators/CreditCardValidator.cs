@@ -180,10 +180,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 			Discover = 0x0020,
 			JCB = 0x0040,
 			Unknown = 0x0080,
-			All = Amex | DinersClub |
-							 Discover | Discover |
-							 enRoute | JCB |
-							 MasterCard | VISA
+			All = Amex | DinersClub | Discover | Discover | enRoute | JCB | MasterCard | VISA
 		}
 	}
 }
