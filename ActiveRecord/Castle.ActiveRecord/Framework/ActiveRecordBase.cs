@@ -87,6 +87,7 @@ namespace Castle.ActiveRecord
         #region protected internal static
 
         #region Create/Update/Save/Delete/DeleteAll
+
         #region Create
         /// <summary>
         /// Creates (Saves) a new instance to the database.
@@ -284,7 +285,8 @@ namespace Castle.ActiveRecord
         #endregion
 
         #region Save
-        /// <summary>
+        
+		/// <summary>
         /// Saves the instance to the database
         /// </summary>
         /// <param name="instance"></param>
@@ -315,7 +317,9 @@ namespace Castle.ActiveRecord
                 holder.ReleaseSession(session);
             }
         }
-        #endregion
+        
+		#endregion
+
         #endregion        
 
         #region Execute

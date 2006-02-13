@@ -1,6 +1,8 @@
 beta 4
 ======
+
 - Added support for .Net 2.0 Connection Strings in the config file, using this method:
+
 <activerecord>
 	<add key="hibernate.connection.connection_string" value="ConnectionString = ${ConnectionStringKey}" />
 </activerecord>
@@ -14,10 +16,10 @@ This allows to take advantage of the connection string encryption as well as man
 - Added Exists<PkType>(PkType id) support to allow for checking of an object's existance 
   in the datastore.
 
-- Brought ActiveRecordBase.Generic inline with ActiveRecordBase feature wise.  Public Static Methods are now present on all
-  ActiveRecordBase.Generic objects for common tasks such as Find, FindAll, etc.
+- Brought ActiveRecordBase.Generic inline with ActiveRecordBase feature wise.  
+  Public Static Methods are now present on all ActiveRecordBase.Generic objects for common tasks such as Find, FindAll, etc.
 
-  This is a breaking change.  
+  <This is a breaking change.>
   
 - Added support for NHibernate dynamic-update, dynamic-insert to ActiveRecordAttribute
 
@@ -28,7 +30,9 @@ This allows to take advantage of the connection string encryption as well as man
   have no contents (<tag />) will be written with one space after the last attribute.
   
   Examples:
+  
   <openclose attrib="test" attrib2="test"></openclose>
+  
   <noclosetag attrib="test"/>
 
 - Added ActiveRecordValidationBase<> to support validation on Generic AR classes
@@ -93,8 +97,6 @@ beta 3
 
   <config threadinfotype="my.threadinfotype, my.assembly">
     ..
-
-  
 
 beta 2
 ======

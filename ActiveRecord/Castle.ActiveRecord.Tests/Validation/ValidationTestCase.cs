@@ -115,7 +115,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 			}
 		}
 
-		[Test, Ignore("For some reason NH is throwing an ADOException")]
+		[Test/*, Ignore("For some reason NH is throwing an ADOException")*/]
 		//[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
 		public void IsUnique()
 		{
@@ -126,7 +126,7 @@ namespace Castle.ActiveRecord.Tests.Validation
 
 			Blog2 blog = new Blog2();
 			blog.Name = "hammett";
-			blog.Save();
+			blog.Create();
 
 			blog = new Blog2();
 			blog.Name = "hammett";
@@ -135,7 +135,32 @@ namespace Castle.ActiveRecord.Tests.Validation
 			Assert.IsTrue(messages.Length == 1);
 			Assert.AreEqual("Name is currently in use. Please pick up a new Name.", messages[0]);
 
-			blog.Save();
+			blog.Create();
+		}
+
+		[Test/*, Ignore("For some reason NH is throwing an ADOException")*/]
+			//[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
+		public void IsUnique2()
+		{
+			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog3) );
+			Recreate();
+
+			Blog3.DeleteAll();
+
+			Blog3 blog = new Blog3();
+			blog.Id = "xpto";
+			blog.Name = "abc";
+			blog.Create();
+
+			blog = new Blog3();
+			blog.Id = "xpto";
+			blog.Name = "abc";
+			
+			// String[] messages = blog.ValidationErrorMessages;
+			// Assert.IsTrue(messages.Length == 1);
+			// Assert.AreEqual("Name is currently in use. Please pick up a new Name.", messages[0]);
+
+			blog.Create();
 		}
 
 		[Test]

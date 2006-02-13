@@ -34,7 +34,7 @@ namespace Castle.ActiveRecord.Framework.Internal.Tests
 				"<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n" +
 					"<hibernate-mapping xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:nhibernate-mapping-2.0\">\r\n" +
 					"  <import class=\"Castle.ActiveRecord.Framework.Internal.Tests.ImportClassRow, Castle.ActiveRecord.Framework.Internal.Tests\" rename=\"ImportClassRow\" />\r\n" +
-					"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ImportClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ImportClass\">\r\n" +
+					"  <class name=\"Castle.ActiveRecord.Framework.Internal.Tests.Model.ImportClass, Castle.ActiveRecord.Framework.Internal.Tests\" table=\"ImportClass\" lazy=\"false\">\r\n" +
 					"    <id name=\"Id\" access=\"property\" column=\"Id\" type=\"Int32\" unsaved-value=\"0\">\r\n" +
 					"      <generator class=\"native\">\r\n" +
 					"      </generator>\r\n" +

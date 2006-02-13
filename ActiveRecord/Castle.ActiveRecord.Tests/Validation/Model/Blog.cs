@@ -59,4 +59,49 @@ namespace Castle.ActiveRecord.Tests.Validation.Model
 			return (Blog2) ActiveRecordBase.FindByPrimaryKey( typeof(Blog2), id );
 		}
 	}
+
+	[ActiveRecord("Blogs3")]
+	public class Blog3 : ActiveRecordValidationBase
+	{
+		private String _id;
+		private String _name;
+		private String _author;
+
+		[PrimaryKey(PrimaryKeyType.Assigned)]
+		[ValidateIsUnique("The ID you specified already exists.")]
+		public String Id
+		{
+			get { return _id; }
+			set { _id = value; }
+		}
+
+		[Property]
+		public String Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
+		[Property]
+		public String Author
+		{
+			get { return _author; }
+			set { _author = value; }
+		}
+
+		public static void DeleteAll()
+		{
+			ActiveRecordBase.DeleteAll( typeof(Blog3) );
+		}
+
+		public static Blog3[] FindAll()
+		{
+			return (Blog3[]) ActiveRecordBase.FindAll( typeof(Blog3) );
+		}
+
+		public static Blog3 Find(int id)
+		{
+			return (Blog3) ActiveRecordBase.FindByPrimaryKey( typeof(Blog3), id );
+		}
+	}
 }

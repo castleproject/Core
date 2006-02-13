@@ -129,7 +129,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private void ProcessProperties(Type type, ActiveRecordModel model)
 		{
-			//Check persistent properties of the base class as well
+			// Check persistent properties of the base class as well
 			if (ShouldCheckBase(type))
 			{
 				ProcessProperties(type.BaseType, model);
@@ -142,7 +142,6 @@ namespace Castle.ActiveRecord.Framework.Internal
 				bool isArProperty = false;
 				AnyModel anyModel = null;
 				ArrayList anyMetaValues = new ArrayList();
-				// Validation
 
 				object[] valAtts = prop.GetCustomAttributes(typeof(AbstractValidationAttribute), true);
 

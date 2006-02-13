@@ -76,7 +76,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
                         WriteIfNonNull("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
-                        WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
+						MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
+						WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
                         WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
 				VisitNode(model.Key);
@@ -99,6 +100,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("name", MakeTypeName(model.Type)),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        MakeAtt("discriminator-value", model.ActiveRecordAtt.DiscriminatorValue),
+				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
                         WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
                         WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
@@ -137,7 +139,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        WriteIfNonNull("schema", model.ActiveRecordAtt.Schema),
 				        WriteIfNonNull("proxy", MakeTypeName(model.ActiveRecordAtt.Proxy)),
 				        WriteIfNonNull("where", model.ActiveRecordAtt.Where),
-				        WriteIfTrue("lazy", model.ActiveRecordAtt.Lazy),
+				        MakeAtt("lazy", model.ActiveRecordAtt.Lazy),
                         WriteIfTrue("dynamic-update", model.ActiveRecordAtt.DynamicUpdate),
                         WriteIfTrue("dynamic-insert", model.ActiveRecordAtt.DynamicInsert));
 				Ident();
@@ -530,7 +532,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
 				        WriteIfNonNull("schema", schema),
-				        WriteIfTrue("lazy", lazy),
+				        MakeAtt("lazy", lazy),
 				        WriteIfTrue("inverse", inverse),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
@@ -545,7 +547,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
 				        WriteIfNonNull("schema", schema),
-				        WriteIfTrue("lazy", lazy),
+				        MakeAtt("lazy", lazy),
 				        WriteIfTrue("inverse", inverse),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
@@ -561,7 +563,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
 				        WriteIfNonNull("schema", schema),
-				        WriteIfTrue("lazy", lazy),
+				        MakeAtt("lazy", lazy),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
 				        WriteIfNonNull("where", where));
@@ -577,7 +579,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				        MakeAtt("access", accessString),
 				        WriteIfNonNull("table", table),
 				        WriteIfNonNull("schema", schema),
-				        WriteIfTrue("lazy", lazy),
+				        MakeAtt("lazy", lazy),
 				        WriteIfTrue("inverse", inverse),
 				        WriteIfNonNull("cascade", cascade),
 				        WriteIfNonNull("order-by", orderBy),
