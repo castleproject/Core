@@ -389,6 +389,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ImportAttribute.cs" />
+    <Compile Include="Attributes\Validations\ValidateCreditCardAttribute.cs" />
     <Compile Include="Attributes\Validations\ValidateLengthAttribute.cs" />
     <Compile Include="Framework\ActiveRecordBase.Generic.cs" />
     <Compile Include="Framework\ActiveRecordHooksBase.cs" />
@@ -400,6 +401,7 @@
     <Compile Include="Framework\Queries\SimpleQuery.Generic.cs" />
     <Compile Include="Framework\Scopes\DifferentDatabaseScope.cs" />
     <Compile Include="Framework\Scopes\ScopeUtil.cs" />
+    <Compile Include="Framework\Validators\CreditCardValidator.cs" />
     <Compile Include="Framework\Validators\LengthValidator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

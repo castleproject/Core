@@ -23,8 +23,6 @@ namespace Castle.ActiveRecord.Tests.Validators
 	[TestFixture]
 	public class ValidatorTestCase
 	{
-		public string passConfirmation;
-
 		[Test]
 		public void EmailValidatorTest()
 		{
@@ -47,6 +45,10 @@ namespace Castle.ActiveRecord.Tests.Validators
 			Assert.IsTrue( validator.Perform(this, "hammett@gmail.com") );
 			Assert.IsTrue( validator.Perform(this, "hammett@aol.com.br") );
 		}
+
+		#region Confirmation Validator Test
+
+		public string passConfirmation;
 
 		[Test]
 		public void ConfirmationValidatorTest()
@@ -78,6 +80,10 @@ namespace Castle.ActiveRecord.Tests.Validators
 		{
 			get { return passConfirmation; }
 		}
+		
+		#endregion
+
+		#region Length Validator Test
 
 		[Test]
 		public void LengthValidatorTest()
@@ -110,5 +116,32 @@ namespace Castle.ActiveRecord.Tests.Validators
 			LengthValidator validator = new LengthValidator(minLength, maxLength);
 			return validator.Perform(this, input);
 		}
+
+		#endregion
+
+		#region Credit Card Validator Test
+
+		[Test]
+		public void CreditCardValidatorTest()
+		{
+			Assert.IsTrue(CreditCardValidatorTest(null, CreditCardValidator.CardType.All, new string[] { }));
+			Assert.IsTrue(CreditCardValidatorTest("2323-2005 77663 554", CreditCardValidator.CardType.Unknown, new string[] { }));
+			Assert.IsFalse(CreditCardValidatorTest("3323-2005 77663 554", CreditCardValidator.CardType.Unknown, new string[] { }));
+			Assert.IsFalse(CreditCardValidatorTest("3323-2005 77663 554", CreditCardValidator.CardType.Unknown, new string[] { "3323-2005-7766-3554" }));
+			Assert.IsTrue(CreditCardValidatorTest("3323-2005 77663 554", CreditCardValidator.CardType.Unknown, new string[] { "3323200577663554" }));
+			Assert.IsTrue(CreditCardValidatorTest("4111-1111 1111 1111", CreditCardValidator.CardType.VISA, new string[] {}));
+			Assert.IsTrue(CreditCardValidatorTest("3400-0000 0000009", CreditCardValidator.CardType.Amex, new string[] {}));
+			Assert.IsTrue(CreditCardValidatorTest("3400-0000 0000 009", CreditCardValidator.CardType.Amex, new string[] {}));
+			Assert.IsTrue(CreditCardValidatorTest("6011-0000 00000004", CreditCardValidator.CardType.Discover, new string[] {}));
+			Assert.IsTrue(CreditCardValidatorTest("5500-0000 000 00004", CreditCardValidator.CardType.MasterCard, new string[] {}));
+		}
+
+		private bool CreditCardValidatorTest(string input, CreditCardValidator.CardType allowedTypes, string[] exceptions)
+		{
+			CreditCardValidator validator = new CreditCardValidator(allowedTypes, exceptions);
+			return validator.Perform(this, input);
+		}
+		
+		#endregion
 	}
 }
