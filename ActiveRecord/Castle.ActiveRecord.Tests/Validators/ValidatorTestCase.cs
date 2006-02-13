@@ -20,7 +20,6 @@ namespace Castle.ActiveRecord.Tests.Validators
 
 	using Castle.ActiveRecord.Framework.Validators;
 
-
 	[TestFixture]
 	public class ValidatorTestCase
 	{
@@ -78,6 +77,38 @@ namespace Castle.ActiveRecord.Tests.Validators
 		public string PassConfirmation
 		{
 			get { return passConfirmation; }
+		}
+
+		[Test]
+		public void LengthValidatorTest()
+		{
+			Assert.IsTrue(LengthValidatorTest("", 0));
+			Assert.IsTrue(LengthValidatorTest(null, 0));
+			Assert.IsTrue(LengthValidatorTest(null, 100));
+			Assert.IsTrue(LengthValidatorTest("abc", 3));
+			Assert.IsFalse(LengthValidatorTest("abcd", 3));
+
+			Assert.IsTrue(LengthValidatorTest("", 0, 5));
+			Assert.IsTrue(LengthValidatorTest(null, 0, 5));
+			Assert.IsTrue(LengthValidatorTest(null, 100, 110));
+			Assert.IsTrue(LengthValidatorTest("abc", 3, 3));
+			Assert.IsFalse(LengthValidatorTest("a", 2, 4));
+			Assert.IsTrue(LengthValidatorTest("ab", 2, 4));
+			Assert.IsTrue(LengthValidatorTest("abc", 2, 4));
+			Assert.IsTrue(LengthValidatorTest("abcd", 2, 4));
+			Assert.IsFalse(LengthValidatorTest("abcde", 2, 4));
+		}
+
+		private bool LengthValidatorTest(string input, int exactLength)
+		{
+			LengthValidator validator = new LengthValidator(exactLength);
+			return validator.Perform(this, input);
+		}
+
+		private bool LengthValidatorTest(string input, int minLength, int maxLength)
+		{
+			LengthValidator validator = new LengthValidator(minLength, maxLength);
+			return validator.Perform(this, input);
 		}
 	}
 }
