@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+	using System.Collections;
 
 	using NHibernate;
 	using NHibernate.Expression;
@@ -128,6 +129,11 @@ namespace Castle.ActiveRecord
 		public static void DeleteAll(Type type, string where)
 		{
 			ActiveRecordBase.DeleteAll(type, where);
+		}
+
+		public static IEnumerable EnumerateQuery(IActiveRecordQuery q)
+		{
+			return ActiveRecordBase.EnumerateQuery(q);
 		}
 
 		public static object ExecuteQuery(IActiveRecordQuery q)

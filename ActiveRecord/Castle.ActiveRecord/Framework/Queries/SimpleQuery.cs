@@ -15,27 +15,26 @@
 namespace Castle.ActiveRecord.Queries
 {
 	using System;
-	
+	using System.Collections;
+
+	using Castle.ActiveRecord.Framework;
+
 	using NHibernate;
 
 	/// <summary>
 	/// Simple query.
 	/// </summary>
-	public class SimpleQuery : ActiveRecordBaseQuery
+	public class SimpleQuery : HqlBasedQuery
 	{
-		string hql;
 		Type returnType;
-		object[] parameters;
 
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c>.
 		/// </summary>
 		public SimpleQuery(Type targetType, Type returnType, string hql, params object[] parameters)
-			: base(targetType)
+			: base(targetType, hql, parameters)
 		{
 			this.returnType = returnType;
-			this.hql = hql;
-			this.parameters = parameters;
 		}
 
 		/// <summary>
@@ -47,40 +46,14 @@ namespace Castle.ActiveRecord.Queries
 		}
 
 		/// <summary>
-		/// The query.
+		/// Executes the query and converts the results into a strongly-typed
+		/// array of <see cref="returnType"/>.
 		/// </summary>
-		public string Query
-		{
-			get { return hql; }
-		}
-		
-		/// <summary>
-		/// The parameters used.
-		/// </summary>
-		public Object[] Parameters
-		{
-			get { return parameters; }
-		}
-
-		/// <summary>
-		/// Creates the <see cref="IQuery" /> instance.
-		/// </summary>
-		protected virtual IQuery CreateQuery(ISession session)
-		{
-			IQuery q = session.CreateQuery(hql);
-
-			if (parameters != null)
-				for (int i=0; i < parameters.Length; i++)
-					q.SetParameter(i, parameters[i]);
-			
-			return q;
-		}
-		
+		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
 		protected override object InternalExecute(ISession session)
 		{
-			IQuery q = CreateQuery(session);
-
-			return GetResultsArray(returnType, q.List(), false);
+			IList results = (IList) base.InternalExecute(session);
+			return SupportingUtils.BuildArray(returnType, results, false);
 		}
 	}
 }

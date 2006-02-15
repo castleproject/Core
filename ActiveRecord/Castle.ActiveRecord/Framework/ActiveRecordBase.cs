@@ -361,6 +361,30 @@ namespace Castle.ActiveRecord
         #endregion
 
         #region ExecuteQuery
+        protected internal static IEnumerable EnumerateQuery(IActiveRecordQuery query)
+        {
+            Type targetType = query.Target;
+
+            EnsureInitialized(targetType);
+
+            ISession session = holder.CreateSession(targetType);
+
+            try
+            {
+                return query.Enumerate(session);
+            }
+            catch (Exception ex)
+            {
+                throw new ActiveRecordException("Could not perform EnumerateQuery for " + targetType.Name, ex);
+            }
+            finally
+            {
+                holder.ReleaseSession(session);
+            }
+        }
+        #endregion
+
+        #region ExecuteQuery
         protected internal static object ExecuteQuery(IActiveRecordQuery query)
         {
             Type targetType = query.Target;

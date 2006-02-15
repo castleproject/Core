@@ -22,6 +22,9 @@ namespace Castle.ActiveRecord
 
 	using Castle.ActiveRecord.Framework;
 	
+	/// <summary>
+	/// Base class for all ActiveRecord queries.
+	/// </summary>
 	public abstract class ActiveRecordBaseQuery : IActiveRecordQuery
 	{
 		protected Type targetType;
@@ -36,12 +39,40 @@ namespace Castle.ActiveRecord
 			get { return targetType; }
 		}
 
+		#region IActiveRecordQuery implementation
 		object IActiveRecordQuery.Execute(ISession session)
 		{
 			return InternalExecute(session);
 		}
 
-		protected abstract object InternalExecute(ISession session);
+		IEnumerable IActiveRecordQuery.Enumerate(ISession session)
+		{
+			return InternalEnumerate(session);
+		}
+		#endregion
+
+		/// <summary>
+		/// Simply creates the query and then call its <see cref="IQuery.List"/> method.
+		/// </summary>
+		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
+		protected virtual object InternalExecute(ISession session)
+		{
+			return CreateQuery(session).List();
+		}
+
+		/// <summary>
+		/// Simply creates the query and then call its <see cref="IQuery.Enumerable"/> method.
+		/// </summary>
+		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
+		protected virtual IEnumerable InternalEnumerate(ISession session)
+		{
+			return CreateQuery(session).Enumerable();
+		}
+
+		/// <summary>
+		/// Creates the <see cref="IQuery" /> instance.
+		/// </summary>
+		protected abstract IQuery CreateQuery(ISession session);
 
 		/// <summary>
 		/// Just a default clone implementation...
@@ -59,6 +90,7 @@ namespace Castle.ActiveRecord
 		/// <param name="list">The source list</param>
 		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
 		/// <returns>The strongly-typed array</returns>
+		[Obsolete("Use SupportingUtils.BuildArray directly")]
 		protected Array GetResultsArray(Type t, IList list, bool distinct)
 		{
 			return SupportingUtils.BuildArray(t, list, distinct);
@@ -78,6 +110,7 @@ namespace Castle.ActiveRecord
 		/// </param>
 		/// <param name="distinct">If true, only distinct results will be inserted in the array</param>
 		/// <returns>The strongly-typed array</returns>
+		[Obsolete("Use SupportingUtils.BuildArray directly")]
 		protected Array GetResultsArray(Type t, IList list, NullableInt32 entityIndex, bool distinct)
 		{
 			return SupportingUtils.BuildArray(t, list, entityIndex, distinct);

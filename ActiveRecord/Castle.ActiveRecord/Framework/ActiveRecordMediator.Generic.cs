@@ -126,9 +126,14 @@ namespace Castle.ActiveRecord
 			ActiveRecordBase.DeleteAll(typeof(T), where);
 		}
 
-		public static object ExecuteQuery(IActiveRecordQuery q)
+		public static IEnumerable EnumerateQuery(IActiveRecordQuery query)
 		{
-			return ActiveRecordBase.ExecuteQuery(q);
+			return ActiveRecordBase.EnumerateQuery(query);
+		}
+		
+		public static object ExecuteQuery(IActiveRecordQuery query)
+		{
+			return ActiveRecordBase.ExecuteQuery(query);
 		}
 
 		public static R ExecuteQuery2<R>(IActiveRecordQuery<R> query)

@@ -20,6 +20,9 @@ namespace Castle.ActiveRecord.Queries
 	using System.Collections;
 	using System.Collections.Generic;
 
+	using Castle.ActiveRecord;
+	using Castle.ActiveRecord.Framework;
+
 	using NHibernate;
 
 	/// <summary>
@@ -27,8 +30,9 @@ namespace Castle.ActiveRecord.Queries
 	/// objects of the type <typeparamref name="T"/>.
 	/// </summary>
 	/// <typeparam name="T">The resulting object type</typeparam>
-	public class SimpleQuery<T> : SimpleQuery, IActiveRecordQuery<T[]>
+	public class SimpleQuery<T> : HqlBasedQuery, IActiveRecordQuery<T[]>
 	{
+		#region Constructors
 		/// <summary>
 		/// Creates a new <c>SimpleQuery</c> for the giving <paramref name="hql"/>,
 		/// using the specified positional <paramref name="parameters"/>.
@@ -48,13 +52,17 @@ namespace Castle.ActiveRecord.Queries
 		/// <param name="hql">The HQL</param>
 		/// <param name="parameters">The positional parameters</param>
 		public SimpleQuery(Type targetType, String hql, params Object[] parameters)
-			: base(targetType, typeof(T), hql, parameters) { }
+			: base(targetType, hql, parameters) { }
+		#endregion
 
+		#region IActiveRecordQuery<T[]> implementation
 		T[] IActiveRecordQuery<T[]>.Execute(ISession session)
 		{
 			return (T[]) InternalExecute(session);
 		}
+		#endregion
 
+		#region Public "Execute" and "Enumerate" Methods
 		/// <summary>
 		/// Executes the query and gets the results.
 		/// </summary>
@@ -62,21 +70,49 @@ namespace Castle.ActiveRecord.Queries
 		{
 			return ActiveRecordMediator<ActiveRecordBase>.ExecuteQuery2<T[]>(this);
 		}
-		
+
 		/// <summary>
-		/// Enumerates the query results. Better suited for queries which might return large results.
+		/// Enumerates the query results. Better suited for queries 
+		/// which might return large results.
 		/// <seealso cref="IQuery.Enumerable" />
 		/// </summary>
+		/// <remarks>
+		/// It might not look obvious at first, but 
+		/// <see cref="ActiveRecordMediator"/> will call our 
+		/// <see cref="InternalEnumerate"/>, which will call our 
+		/// <see cref="GenericEnumerate"/>, which will convert
+		/// the <c>NHibernate</c>'s <see cref="IQuery.Enumerable"/> result
+		/// returned by <see cref="HqlBasedQuery.InternalEnumerate"/>
+		/// into a generic <see cref="System.Collections.Generic.IEnumerable"/>.
+		/// So, all we need to do is to cast it back to <c>IEnumerable&lt;T&gt;</c>.
+		/// </remarks>
 		public IEnumerable<T> Enumerate()
 		{
-			IEnumerator en = (IEnumerator)
-			ActiveRecordMediator.Execute(Target, delegate(ISession session, object dummy) {
-				IQuery q = CreateQuery(session);
-				return q.Enumerable();
-			}, null);
+			return (IEnumerable<T>) ActiveRecordMediator.EnumerateQuery(this);
+		}
+		#endregion
 
-			while (en.MoveNext())
-				yield return (T) en.Current;
+		protected override IEnumerable InternalEnumerate(ISession session)
+		{
+			return GenericEnumerate(session);
+		}
+
+		private IEnumerable<T> GenericEnumerate(ISession session)
+		{
+			IEnumerable en = base.InternalEnumerate(session);
+			foreach (T item in en)
+				yield return item;
+		}
+
+		/// <summary>
+		/// Executes the query and converts the results into a strongly-typed
+		/// array of <typeparamref name="T"/>.
+		/// </summary>
+		/// <param name="session">The <c>NHibernate</c>'s <see cref="ISession"/></param>
+		protected override object InternalExecute(ISession session)
+		{
+			IList results = (IList) base.InternalExecute(session);
+			return SupportingUtils.BuildArray<T>(results, false);
 		}
 	}
 }

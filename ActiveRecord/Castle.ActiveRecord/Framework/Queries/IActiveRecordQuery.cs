@@ -15,6 +15,7 @@
 namespace Castle.ActiveRecord
 {
 	using System;
+	using System.Collections;
 
 	using NHibernate;
 	
@@ -26,5 +27,6 @@ namespace Castle.ActiveRecord
 		Type Target { get; }
 
 		object Execute(ISession session);
+		IEnumerable Enumerate(ISession session);
 	}
 }

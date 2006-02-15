@@ -93,7 +93,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		}
 
 		/// <summary>
-		/// The implementation of the <see cref="Execute"/> method,
+		/// The implementation of the <see cref="InternalExecute"/> method,
 		/// as required by <see cref="ActiveRecordBaseQuery"/>.
 		/// Should not be overriden.
 		/// </summary>
@@ -103,11 +103,22 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		{
 			return InternalPaginate(session, true);
 		}
+
+		/// <summary>
+		/// The implementation of the <see cref="InternalEnumerate"/> method,
+		/// as required by <see cref="ActiveRecordBaseQuery"/>.
+		/// Should not be overriden.
+		/// </summary>
+		/// <param name="session">The NHibernate Session</param>
+		/// <returns>The query results.</returns>
+		protected sealed override IEnumerable InternalEnumerate(ISession session)
+		{
+			return InternalPaginate(session, true);
+		}
 		
 		private IEnumerable InternalPaginate(ISession session, bool skipPagination)
 		{
-			IQuery query = session.CreateQuery(BuildHQL());
-			SetQueryParameters(query);
+			IQuery query = CreateQuery(session);
 
 			if (!skipPagination)
 			{
@@ -115,6 +126,13 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 			}
 
 			return ExecuteQuery(query);
+		}
+
+		protected sealed override IQuery CreateQuery(ISession session)
+		{
+			IQuery query = session.CreateQuery(BuildHQL());
+			SetQueryParameters(query);
+			return query;
 		}
 
 		/// <summary>
@@ -142,7 +160,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		/// Override to provide a custom query execution.
 		/// The default behaviour is to just call <see cref="IQuery.List"/>.
 		/// </summary>
-		/// <param name="query"></param>
+		/// <param name="query">The query</param>
 		/// <returns>The query results.</returns>
 		protected virtual IEnumerable ExecuteQuery(IQuery query)
 		{

@@ -15,34 +15,36 @@
 namespace Castle.ActiveRecord.Queries
 {
 	using System;
-	
+	using System.Collections;
+
 	using NHibernate;
 
-	public class ScalarQuery : ActiveRecordBaseQuery
+	public class ScalarQuery : HqlBasedQuery
 	{
-		string hql;
-		object[] parameters;
-
 		public ScalarQuery(Type targetType, string hql, params object[] parameters)
-			: base(targetType)
+			: base(targetType, hql, parameters)
 		{
-			this.hql = hql;
-			this.parameters = parameters;
 		}
 
-		public string Query
-		{
-			get { return hql; }
-		}
-
+		/// <summary>
+		/// Executes the query and returns its scalar result.
+		/// </summary>
+		/// <param name="session">The NHibernate's <see cref="ISession"/></param>
+		/// <returns>The query's scalar result</returns>
 		protected override object InternalExecute(ISession session)
 		{
-			IQuery q = session.CreateQuery(hql);
-			
-			if (parameters != null)
-				for (int i=0; i < parameters.Length; i++)
-					q.SetParameter(i, parameters[i]);
-			return q.UniqueResult();
+			return CreateQuery(session).UniqueResult();
+		}
+
+		/// <summary>
+		/// Creates a single-position object array containing 
+		/// the query's scalar result.
+		/// </summary>
+		/// <param name="session">The NHibernate's <see cref="ISession"/></param>
+		/// <returns>An <c>object[1]</c> containing the query's scalar result.</returns>
+		protected override IEnumerable InternalEnumerate(ISession session)
+		{
+			return new object[] { InternalExecute(session) };
 		}
 	}
 }
