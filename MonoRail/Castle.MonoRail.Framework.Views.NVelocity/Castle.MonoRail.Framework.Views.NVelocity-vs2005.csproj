@@ -109,6 +109,7 @@
     <Compile Include="CustomDirectives\BlockComponentDirective.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomDirectives\CaptureForDirective.cs" />
     <Compile Include="CustomDirectives\ComponentDirective.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -82,6 +82,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <Name>nunit.framework</Name>
       <HintPath>C:\Program Files\NUnit 2.2\bin\nunit.framework.dll</HintPath>

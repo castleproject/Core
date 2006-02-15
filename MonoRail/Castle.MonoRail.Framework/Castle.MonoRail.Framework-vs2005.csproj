@@ -394,6 +394,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewComponents\CaptureFor.cs" />
+    <Compile Include="ViewComponents\SecurityComponent.cs" />
     <Compile Include="Views\Aspx\ActionTo.cs">
       <SubType>Code</SubType>
     </Compile>

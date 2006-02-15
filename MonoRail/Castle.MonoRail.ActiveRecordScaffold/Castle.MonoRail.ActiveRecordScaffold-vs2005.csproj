@@ -94,6 +94,10 @@
       <Name>log4net</Name>
       <HintPath>..\..\SharedLibs\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="NVelocity">
       <Name>NVelocity</Name>
       <HintPath>..\..\SharedLibs\nvelocity\NVelocity.dll</HintPath>
