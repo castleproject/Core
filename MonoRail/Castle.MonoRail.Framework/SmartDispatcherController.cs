@@ -187,9 +187,12 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 
+			// the bonus should be nice only for disambiguation.
+			// otherwise, unmatched-parameterless-actions will always have
+			// the same weight as matched-single-parameter-actions.
 			if (paramsMatched == parameters.Length)
 			{
-				points += 10;
+				points += 5;
 			}
 
 			return points;
