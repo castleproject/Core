@@ -1,5 +1,7 @@
 beta 4
 ======
+- Added SimpleQuery<T>.Enumerate(), for use with large queries - .NET 2.0 only.
+
 
 - Added ValidateCreditCard attribute.
 
