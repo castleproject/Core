@@ -63,6 +63,10 @@ namespace Castle.ActiveRecord.Queries
 			return ActiveRecordMediator<ActiveRecordBase>.ExecuteQuery2<T[]>(this);
 		}
 		
+		/// <summary>
+		/// Enumerates the query results. Better suited for queries which might return large results.
+		/// <seealso cref="IQuery.Enumerable" />
+		/// </summary>
 		public IEnumerable<T> Enumerate()
 		{
 			IEnumerator en = (IEnumerator)

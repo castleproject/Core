@@ -18,12 +18,18 @@ namespace Castle.ActiveRecord.Queries
 	
 	using NHibernate;
 
+	/// <summary>
+	/// Simple query.
+	/// </summary>
 	public class SimpleQuery : ActiveRecordBaseQuery
 	{
 		string hql;
 		Type returnType;
 		object[] parameters;
 
+		/// <summary>
+		/// Creates a new <c>SimpleQuery</c>.
+		/// </summary>
 		public SimpleQuery(Type targetType, Type returnType, string hql, params object[] parameters)
 			: base(targetType)
 		{
@@ -32,16 +38,33 @@ namespace Castle.ActiveRecord.Queries
 			this.parameters = parameters;
 		}
 
+		/// <summary>
+		/// Creates a new <c>SimpleQuery</c>.
+		/// </summary>
 		public SimpleQuery(Type returnType, string hql, params object[] parameters)
 			: this(returnType, returnType, hql, parameters)
 		{
 		}
 
+		/// <summary>
+		/// The query.
+		/// </summary>
 		public string Query
 		{
 			get { return hql; }
 		}
+		
+		/// <summary>
+		/// The parameters used.
+		/// </summary>
+		public Object[] Parameters
+		{
+			get { return parameters; }
+		}
 
+		/// <summary>
+		/// Creates the <see cref="IQuery" /> instance.
+		/// </summary>
 		protected virtual IQuery CreateQuery(ISession session)
 		{
 			IQuery q = session.CreateQuery(hql);
