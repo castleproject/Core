@@ -17,6 +17,8 @@
 namespace Castle.ActiveRecord.Queries
 {
 	using System;
+	using System.Collections;
+	using System.Collections.Generic;
 
 	using NHibernate;
 
@@ -59,6 +61,18 @@ namespace Castle.ActiveRecord.Queries
 		public T[] Execute()
 		{
 			return ActiveRecordMediator<ActiveRecordBase>.ExecuteQuery2<T[]>(this);
+		}
+		
+		public IEnumerable<T> Enumerate()
+		{
+			IEnumerator en = (IEnumerator)
+			ActiveRecordMediator.Execute(Target, delegate(ISession session, object dummy) {
+				IQuery q = CreateQuery(session);
+				return q.Enumerable();
+			}, null);
+
+			while (en.MoveNext())
+				yield return (T) en.Current;
 		}
 	}
 }

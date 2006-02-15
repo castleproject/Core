@@ -42,13 +42,20 @@ namespace Castle.ActiveRecord.Queries
 			get { return hql; }
 		}
 
-		protected override object InternalExecute(ISession session)
+		protected virtual IQuery CreateQuery(ISession session)
 		{
 			IQuery q = session.CreateQuery(hql);
 
 			if (parameters != null)
 				for (int i=0; i < parameters.Length; i++)
 					q.SetParameter(i, parameters[i]);
+			
+			return q;
+		}
+		
+		protected override object InternalExecute(ISession session)
+		{
+			IQuery q = CreateQuery(session);
 
 			return GetResultsArray(returnType, q.List(), false);
 		}
