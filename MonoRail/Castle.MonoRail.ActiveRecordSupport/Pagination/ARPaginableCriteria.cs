@@ -54,7 +54,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		/// This needs a performance boost. Couldn't think of a better
 		/// way of get the count.
 		/// </remarks>
-		public int ObtainCount()
+		public virtual int ObtainCount()
 		{
 			ISessionFactoryHolder holder = ActiveRecordMediator.GetSessionFactoryHolder();
 			ISession session = holder.CreateSession(targetType);
