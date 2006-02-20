@@ -191,7 +191,7 @@ public class BooViewEngine (ViewEngineBase):
 		
 		type as Type
 		for input in inputs:
-			type = result.GeneratedAssembly.GetType(Path.GetFileNameWithoutExtension(input.Name))
+			type = result.GeneratedAssembly.GetType("${Path.GetFileNameWithoutExtension(input.Name)}_BrailView")
 			compilations[input.Name] = type
 		
 		type = compilations[filename]
@@ -248,7 +248,7 @@ public class BooViewEngine (ViewEngineBase):
 		for ch as char in (Path.AltDirectorySeparatorChar,
 			Path.DirectorySeparatorChar):
 			name = name.Replace(ch.ToString(),"_")
-		return name + ".dll"
+		return name + "_BrailView.dll"
 	
 	# Compile all the common scripts to a common assemblies
 	# an error in the common scripts would raise an exception.

@@ -35,7 +35,7 @@ class TransformToBrailStep(AbstractCompilerStep):
 		
 			module.Imports.Add(Import(module.LexicalInfo,"Castle.MonoRail.Views.Brail"))
 			module.Imports.Add(Import(module.LexicalInfo,"Castle.MonoRail.Framework"))
-			macro = ClassDefinition(Name: "${module.FullName}")
+			macro = ClassDefinition(Name: "${module.FullName}_BrailView")
 			macro.BaseTypes.Add(SimpleTypeReference("Castle.MonoRail.Views.Brail.BrailBase"))
 			
 			AddConstructor(macro)
