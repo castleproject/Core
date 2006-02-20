@@ -4,6 +4,8 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed a bug with Brail not picking up changes that occured by VS.Net
+
 - Fixed bug with NVelocity components that caused an InvalidCastException to be thrown by the Render method if there was something other than an IRailsEngineContext occupying the "context" key.
 
 - MonoRail is now CLSCompliant (kudos to Roelof Blom <roelof.blom@gmail.com>)

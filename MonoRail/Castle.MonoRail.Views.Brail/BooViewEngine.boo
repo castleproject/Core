@@ -63,7 +63,8 @@ public class BooViewEngine (ViewEngineBase):
 			Directory.CreateDirectory(baseSavePath)
 		
 		viewsScriptWatcher = FileSystemWatcher(ViewRootDir,
-			IncludeSubdirectories: true, Filter: "*.boo")
+			IncludeSubdirectories: true, Filter: "*.boo",
+			NotifyFilter: NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName)
 		viewsScriptWatcher.Changed += def (source, e as FileSystemEventArgs):
 			file = Path.GetFullPath(e.FullPath)
 			# Will cause a recompilation
@@ -75,7 +76,8 @@ public class BooViewEngine (ViewEngineBase):
 			return
 			
 		commonScriptWatcher = FileSystemWatcher(commonScriptPath,
-			IncludeSubdirectories: false, Filter:"*.boo")
+			IncludeSubdirectories: false, Filter:"*.boo",
+			NotifyFilter: NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName)
 		commonScriptWatcher.Changed += def (source, e as FileSystemEventArgs):
 			CompileCommonScripts.BeginInvoke( null,
 				{ ar as IAsyncResult | CompileCommonScripts.EndInvoke(ar) } )
