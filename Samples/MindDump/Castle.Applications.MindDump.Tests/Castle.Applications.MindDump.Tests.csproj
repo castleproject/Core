@@ -116,19 +116,9 @@
                     HintPath = "..\..\..\Facilities\NHibernate\bin\log4net.dll"
                 />
                 <Reference
-                    Name = "MySql.Data"
-                    AssemblyName = "MySql.Data"
-                    HintPath = "..\..\..\Facilities\NHibernate\bin\MySql.Data.dll"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\Facilities\NHibernate\bin\NHibernate.dll"
-                />
-                <Reference
-                    Name = "Castle.Facilities.NHibernateExtension"
-                    AssemblyName = "Castle.Facilities.NHibernateExtension"
-                    HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
                 />
                 <Reference
                     Name = "Castle.Facilities.NHibernateIntegration"

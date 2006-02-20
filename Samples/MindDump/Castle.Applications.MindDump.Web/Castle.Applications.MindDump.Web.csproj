@@ -105,11 +105,6 @@
                     HintPath = "..\..\..\InversionOfControl\bin\Castle.Model.dll"
                 />
                 <Reference
-                    Name = "MySql.Data"
-                    AssemblyName = "MySql.Data"
-                    HintPath = "..\..\..\Facilities\NHibernate\bin\MySql.Data.dll"
-                />
-                <Reference
                     Name = "NHibernate"
                     AssemblyName = "NHibernate"
                     HintPath = "..\..\..\Facilities\NHibernate\bin\NHibernate.dll"
@@ -118,11 +113,6 @@
                     Name = "Castle.Facilities.NHibernateIntegration"
                     AssemblyName = "Castle.Facilities.NHibernateIntegration"
                     HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateIntegration.dll"
-                />
-                <Reference
-                    Name = "HashCodeProvider"
-                    AssemblyName = "HashCodeProvider"
-                    HintPath = "..\..\..\Facilities\NHibernate\bin\HashCodeProvider.dll"
                 />
                 <Reference
                     Name = "Iesi.Collections"
@@ -159,11 +149,6 @@
                     AssemblyName = "NVelocity"
                     HintPath = "..\lib\NVelocity.dll"
                 />
-                <Reference
-                    Name = "Castle.Facilities.NHibernateExtension"
-                    AssemblyName = "Castle.Facilities.NHibernateExtension"
-                    HintPath = "..\..\..\Facilities\NHibernate\bin\Castle.Facilities.NHibernateExtension.dll"
-                />
             </References>
         </Build>
         <Files>
@@ -180,6 +165,11 @@
                 <File
                     RelPath = "global.asax"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "global.xsx"
+                    DependentUpon = "global.asax"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "MindDumpHttpApplication.cs"

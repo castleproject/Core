@@ -18,7 +18,6 @@ namespace Castle.Applications.MindDump.Web
 	using System.Web;
 
 	using Castle.Windsor;
-	using Castle.Facilities.NHibernateExtension;
 
 	using NHibernate;
 
@@ -31,38 +30,38 @@ namespace Castle.Applications.MindDump.Web
 
 		public MindDumpHttpApplication()
 		{
-			this.BeginRequest += new EventHandler(OnBeginRequest);
-			this.EndRequest += new EventHandler(OnEndRequest);
+//			this.BeginRequest += new EventHandler(OnBeginRequest);
+//			this.EndRequest += new EventHandler(OnEndRequest);
 		}
 
-		public void OnBeginRequest(object sender, EventArgs e)
-		{
-			ISessionFactory sessFac = (ISessionFactory) container[ typeof(ISessionFactory) ];
-
-			ISession session = sessFac.OpenSession();
-
-			SessionManager.Push(session, DefaultSessionFactory);
-
-			HttpContext.Current.Items.Add( "nh.session", session );
-		}
-
-		public void OnEndRequest(object sender, EventArgs e)
-		{
-			ISession session = (ISession) HttpContext.Current.Items["nh.session"];
-
-			if (session == null) return;
-
-			try
-			{
-				SessionManager.Pop(DefaultSessionFactory);
-
-				session.Dispose();
-			}
-			catch(Exception ex)
-			{
-				HttpContext.Current.Trace.Warn( "Error", "EndRequest: " + ex.Message, ex );
-			}
-		}
+//		public void OnBeginRequest(object sender, EventArgs e)
+//		{
+//			ISessionFactory sessFac = (ISessionFactory) container[ typeof(ISessionFactory) ];
+//
+//			ISession session = sessFac.OpenSession();
+//
+//			SessionManager.Push(session, DefaultSessionFactory);
+//
+//			HttpContext.Current.Items.Add( "nh.session", session );
+//		}
+//
+//		public void OnEndRequest(object sender, EventArgs e)
+//		{
+//			ISession session = (ISession) HttpContext.Current.Items["nh.session"];
+//
+//			if (session == null) return;
+//
+//			try
+//			{
+//				SessionManager.Pop(DefaultSessionFactory);
+//
+//				session.Dispose();
+//			}
+//			catch(Exception ex)
+//			{
+//				HttpContext.Current.Trace.Warn( "Error", "EndRequest: " + ex.Message, ex );
+//			}
+//		}
 
 		public void Application_OnStart() 
 		{

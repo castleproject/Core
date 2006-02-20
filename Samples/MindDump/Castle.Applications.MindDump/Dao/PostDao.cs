@@ -14,83 +14,102 @@
 
 namespace Castle.Applications.MindDump.Dao
 {
-	using System;
 	using System.Collections;
+	
+	using Castle.Applications.MindDump.Model;
+	using Castle.Facilities.NHibernateIntegration;
 
 	using NHibernate;
 
-	using Castle.Applications.MindDump.Model;
-
-	using Castle.Facilities.NHibernateExtension;
-
-
-	[UsesAutomaticSessionCreation]
 	public class PostDao
 	{
-		public virtual Post Create(Post post)
+		private readonly ISessionManager sessionManager;
+
+		public PostDao(ISessionManager sessionManager)
 		{
-			ISession session = SessionManager.CurrentSession;
-
-			session.Save(post);
-
-			return post;
+			this.sessionManager = sessionManager;
 		}
 
-		public virtual void Update(Post post)
+		public Post Create(Post post)
 		{
-			ISession session = SessionManager.CurrentSession;
+			using(ISession session = sessionManager.OpenSession())
+			{
+				session.Save(post);
 
-			session.Update(post);
+				return post;
+			}
+		}
+
+		public void Update(Post post)
+		{
+			using(ISession session = sessionManager.OpenSession())
+			{
+				session.Update(post);
+			}
 		}
 
 		/// <summary>
 		/// Usually will be invoked only be the
 		/// test cases
 		/// </summary>
-		[SessionFlush(FlushOption.Force)]
-		public virtual void DeleteAll()
+		public void DeleteAll()
 		{
-			SessionManager.CurrentSession.Delete("from Post");
-		}
-
-		public virtual IList Find()
-		{
-			return SessionManager.CurrentSession.Find("from Post order by id desc");
-		}
-
-		public virtual IList Find(Blog blog)
-		{
-			IList list = SessionManager.CurrentSession.Find(
-				"from Post as a where a.Blog.Id=:name", blog.Id, NHibernateUtil.Int64);
-
-			return list;
-		}
-
-		public virtual Post Find(long id)
-		{
-			IList list = SessionManager.CurrentSession.Find(
-				"from Post as a where a.id=:name order by id desc", id, NHibernateUtil.Int64);
-
-			if (list.Count == 1)
+			using(ISession session = sessionManager.OpenSession())
 			{
-				return list[0] as Post;
-			}
-			else
-			{
-				return null;
+				session.Delete("from Post");
 			}
 		}
 
-		public virtual IList FindLatest(int howMany)
+		public IList Find()
 		{
-			IList list = SessionManager.CurrentSession.Find("from Post order by id desc");
-
-			if (list.Count > howMany)
+			using(ISession session = sessionManager.OpenSession())
 			{
-				list = ListUtil.Limit(howMany, list);
+				return session.Find("from Post order by id desc");
 			}
+		}
 
-			return list;
+		public IList Find(Blog blog)
+		{
+			using(ISession session = sessionManager.OpenSession())
+			{
+				IList list = session.Find(
+					"from Post as a where a.Blog.Id=:name", blog.Id, NHibernateUtil.Int64);
+
+				return list;
+			}
+		}
+
+		public Post Find(long id)
+		{
+			using(ISession session = sessionManager.OpenSession())
+			{
+				IList list = session.Find(
+					"from Post as a where a.id=:name order by id desc", id, NHibernateUtil.Int64);
+
+				if (list.Count == 1)
+				{
+					return list[0] as Post;
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
+
+		public IList FindLatest(int howMany)
+		{
+			using(ISession session = sessionManager.OpenSession())
+			{
+				IList list = session.Find("from Post order by id desc");
+
+				if (list.Count > howMany)
+				{
+					list = ListUtil.Limit(howMany, list);
+				}
+
+				return list;
+			}
 		}
 	}
 }

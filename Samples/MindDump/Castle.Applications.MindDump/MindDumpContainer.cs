@@ -14,27 +14,19 @@
 
 namespace Castle.Applications.MindDump
 {
-	using System;
-
 	using Castle.Windsor;
-    using Castle.Windsor.Configuration.Interpreters;
-
-	using Castle.MicroKernel;
-
+	using Castle.Windsor.Configuration.Interpreters;
 	using Castle.Facilities.AutomaticTransactionManagement;
 	using Castle.Facilities.NHibernateIntegration;
-
 	using Castle.Applications.MindDump.Dao;
 	using Castle.Applications.MindDump.Services;
 	using Castle.Applications.MindDump.Presentation.Controllers;
 	using Castle.Applications.MindDump.Presentation.Filters;
-
 	using Castle.MonoRail.WindsorExtension;
-
 
 	public class MindDumpContainer : WindsorContainer
 	{
-		public MindDumpContainer() : this( new XmlInterpreter("../app_config.xml") )
+		public MindDumpContainer() : this(new XmlInterpreter("../app_config.xml"))
 		{
 		}
 
@@ -52,43 +44,43 @@ namespace Castle.Applications.MindDump
 
 		private void RegisterFacilities()
 		{
-			AddFacility( "rails", new RailsFacility() );
-			AddFacility( "nhibernate", new NHibernateFacility() );
-			AddFacility( "transaction", new TransactionFacility() );
+			AddFacility("rails", new RailsFacility());
+			AddFacility("nhibernate", new NHibernateFacility());
+			AddFacility("transaction", new TransactionFacility());
 		}
 
 		protected void RegisterComponents()
 		{
-			AddComponent( "event.channel", typeof(IMindDumpEventPublisher), 
-				typeof(MindDumpEventChannel) );
+			AddComponent("event.channel", typeof(IMindDumpEventPublisher),
+			             typeof(MindDumpEventChannel));
 
-			AddComponent( "author.dao", typeof(AuthorDao) );
-			AddComponent( "blog.dao", typeof(BlogDao) );
-			AddComponent( "post.dao", typeof(PostDao) );
-			AddComponent( "authentication", typeof(AuthenticationService) );
-			AddComponent( "account", typeof(AccountService) );
-			AddComponent( "encryption", typeof(EncryptionService) );
-			AddComponent( "blogService", typeof(BlogService) );
+			AddComponent("author.dao", typeof(AuthorDao));
+			AddComponent("blog.dao", typeof(BlogDao));
+			AddComponent("post.dao", typeof(PostDao));
+			AddComponent("authentication", typeof(AuthenticationService));
+			AddComponent("account", typeof(AccountService));
+			AddComponent("encryption", typeof(EncryptionService));
+			AddComponent("blogService", typeof(BlogService));
 
-			AddComponent( "auth.filter", typeof(AuthenticationCheckFilter) );
-			AddComponent( "auth.attempt.filter", typeof(AuthenticationAttemptFilter) );
-			AddComponent( "print.filter", typeof(PrintableFilter) );
+			AddComponent("auth.filter", typeof(AuthenticationCheckFilter));
+			AddComponent("auth.attempt.filter", typeof(AuthenticationAttemptFilter));
+			AddComponent("print.filter", typeof(PrintableFilter));
 
-			AddComponent( "intro.controller", typeof(IntroController) );
-			AddComponent( "account.controller", typeof(AccountController) );
-			AddComponent( "blogs.controller", typeof(BlogController) );
-			AddComponent( "maintenance.controller", typeof(MaintenanceController) );
+			AddComponent("intro.controller", typeof(IntroController));
+			AddComponent("account.controller", typeof(AccountController));
+			AddComponent("blogs.controller", typeof(BlogController));
+			AddComponent("maintenance.controller", typeof(MaintenanceController));
 		}
 
 		protected void SubcribeForEvents()
 		{
-			AddComponent( "blog.creator.subscriber", typeof(BlogControllerCreatorSubscriber) );
-			
-			IMindDumpEventPublisher channel = 
-				(IMindDumpEventPublisher) this[ typeof(IMindDumpEventPublisher) ];
+			AddComponent("blog.creator.subscriber", typeof(BlogControllerCreatorSubscriber));
 
-			channel.AddSubcriber( 
-				(IMindDumpEventSubscriber) this[ typeof(BlogControllerCreatorSubscriber) ] );
+			IMindDumpEventPublisher channel =
+				(IMindDumpEventPublisher) this[typeof(IMindDumpEventPublisher)];
+
+			channel.AddSubcriber(
+				(IMindDumpEventSubscriber) this[typeof(BlogControllerCreatorSubscriber)]);
 		}
 	}
 }

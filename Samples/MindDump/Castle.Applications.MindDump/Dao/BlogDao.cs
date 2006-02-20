@@ -17,76 +17,94 @@ namespace Castle.Applications.MindDump.Dao
 	using System;
 	using System.Collections;
 
+	using Castle.Applications.MindDump.Model;
+	using Castle.Facilities.NHibernateIntegration;
+
 	using NHibernate;
 
-	using Castle.Applications.MindDump.Model;
-
-	using Castle.Facilities.NHibernateExtension;
-
-	[UsesAutomaticSessionCreation]
 	public class BlogDao
 	{
-		public virtual Blog Create(Blog blog)
+		private readonly ISessionManager sessionManager;
+
+		public BlogDao(ISessionManager sessionManager)
 		{
-			ISession session = SessionManager.CurrentSession;
+			this.sessionManager = sessionManager;
+		}
 
-			if (blog.Posts == null)
+		public Blog Create(Blog blog)
+		{
+			using(ISession session = sessionManager.OpenSession())
 			{
-				blog.Posts = new ArrayList();
-			}
+				if (blog.Posts == null)
+				{
+					blog.Posts = new ArrayList();
+				}
 
-			session.Save(blog);
+				session.Save(blog);
+			}
 
 			return blog;
 		}
 
-		public virtual void Update(Blog blog)
+		public void Update(Blog blog)
 		{
-			ISession session = SessionManager.CurrentSession;
-
-			session.Update(blog);
+			using(ISession session = sessionManager.OpenSession())
+			{
+				session.Update(blog);
+			}
 		}
 
 		/// <summary>
 		/// Usually will be invoked only by the
 		/// test cases
 		/// </summary>
-		[SessionFlush(FlushOption.Force)]
-		public virtual void DeleteAll()
+		public void DeleteAll()
 		{
-			SessionManager.CurrentSession.Delete("from Blog");
-		}
-
-		public virtual IList Find()
-		{
-			return SessionManager.CurrentSession.Find("from Blog");
-		}
-
-		public virtual Blog Find(String blogName)
-		{
-			IList list = SessionManager.CurrentSession.Find(
-				"from Blog as a where a.Name=:name", blogName, NHibernateUtil.String);
-
-			if (list.Count == 1)
+			using(ISession session = sessionManager.OpenSession())
 			{
-				return list[0] as Blog;
-			}
-			else
-			{
-				return null;
+				session.Delete("from Blog");
 			}
 		}
 
-		public virtual IList FindLatest(int howMany)
+		public IList Find()
 		{
-			IList list = SessionManager.CurrentSession.Find("from Blog order by id desc");
-
-			if (list.Count > howMany)
+			using(ISession session = sessionManager.OpenSession())
 			{
-				list = ListUtil.Limit(howMany, list);
+				return session.Find("from Blog");
 			}
+		}
 
-			return list;
+		public Blog Find(String blogName)
+		{
+			using(ISession session = sessionManager.OpenSession())
+			{
+				IList list = session.Find(
+					"from Blog as a where a.Name=:name", blogName, NHibernateUtil.String);
+
+				if (list.Count == 1)
+				{
+					return list[0] as Blog;
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
+
+		public IList FindLatest(int howMany)
+		{
+			using(ISession session = sessionManager.OpenSession())
+			{
+				IList list = session.Find("from Blog order by id desc");
+
+				if (list.Count > howMany)
+				{
+					list = ListUtil.Limit(howMany, list);
+				}
+
+				return list;
+			}
 		}
 	}
 }

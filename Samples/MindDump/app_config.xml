@@ -1,7 +1,7 @@
 <configuration>
 
 	<facilities>
-		<facility id="nhibernate">
+		<facility id="nhibernate" isWeb="true">
 			<factory id="nhibernate.factory">
 				<!-- MYSQL Config
 				<settings>

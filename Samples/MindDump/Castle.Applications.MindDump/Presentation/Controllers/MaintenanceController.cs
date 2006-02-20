@@ -25,8 +25,8 @@ namespace Castle.Applications.MindDump.Presentation.Controllers
 	[Layout("private")]
 	public class MaintenanceController : AbstractSecureController
 	{
-		private BlogService _blogService;
-		private AccountService _accountService;
+		private readonly BlogService _blogService;
+		private readonly AccountService _accountService;
 
 		public MaintenanceController(AccountService accountService, BlogService blogService)
 		{
