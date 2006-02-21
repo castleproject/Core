@@ -200,7 +200,7 @@ namespace Castle.Services.Logging
 			Log(LoggerLevel.Error, message, exception);
 		}
 
-//		/ <summary>
+		/// <summary>
 		/// Logs an error message.
 		/// </summary>
 		/// <param name="format">Message format</param>

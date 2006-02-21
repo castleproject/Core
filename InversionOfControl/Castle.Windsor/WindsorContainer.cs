@@ -87,9 +87,9 @@ namespace Castle.Windsor
 		{
 		}
 
-		public WindsorContainer(String parentXmlFile, String childXmlFile) : 
-			this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
+		public WindsorContainer(String parentXmlFile, String childXmlFile) : this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
 		{
+
 		}
 
 		/// <summary>

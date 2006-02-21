@@ -93,7 +93,7 @@ namespace Castle.Model
 		/// <summary>All potential properties that can be setted by the kernel</summary>
 		private PropertySetCollection properties;
 
-		private MethodMetaModelCollection methodMetaModels;
+		//private MethodMetaModelCollection methodMetaModels;
 		
 		/// <summary>Steps of lifecycle</summary>
 		private LifecycleStepCollection lifecycleSteps;

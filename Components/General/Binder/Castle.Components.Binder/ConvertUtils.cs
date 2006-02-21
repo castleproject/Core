@@ -75,6 +75,7 @@ namespace Castle.Components.Binder
 		/// <param name="desiredType">Type of the desired</param>
 		/// <param name="input">The input</param>
 		/// <param name="conversionSucceeded">if <c>false</c> the return value must be ignored</param>
+        /// <param name="paramName">Parameter name</param>
 		/// <remarks>
 		/// There are 3 possible cases when trying to convert:
 		/// 1) Input data for conversion missing (input is null or an empty String)
