@@ -115,8 +115,8 @@ namespace Castle.ActiveRecord.Tests.Validation
 			}
 		}
 
-		[Test, Ignore("For some reason NH is throwing an ADOException")]
-		//[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
+		[Test]
+		[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
 		public void IsUnique()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), typeof(Blog2) );

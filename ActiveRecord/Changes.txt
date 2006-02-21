@@ -1,7 +1,12 @@
 beta 4
 ======
-- Added SimpleQuery<T>.Enumerate(), for use with large queries - .NET 2.0 only.
+- You can now apply IsUnique to a property that also has PrimaryKey on it without problem.
 
+- Resolved IsUnique bug with ActiveRecordValidationBase<> (it was non functional)
+
+- Resolved test bugs with IsUnique for .net 1 and .net 2.
+
+- Added SimpleQuery<T>.Enumerate(), for use with large queries - .NET 2.0 only.
 
 - Added ValidateCreditCard attribute.
 

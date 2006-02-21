@@ -107,13 +107,17 @@ namespace Castle.ActiveRecord
 
                 session.Flush();
             }
-            catch (ValidationException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+                // NHibernate catches our ValidationException, and as such it is the innerexception here
+                if (ex.InnerException is ValidationException)
+                {
+                    throw ex.InnerException;
+                }
+                else
+                {
+                    throw new ActiveRecordException("Could not perform Create for " + instance.GetType().Name, ex);
+                }
             }
             finally
             {
@@ -141,13 +145,17 @@ namespace Castle.ActiveRecord
 
                 session.Flush();
             }
-            catch (ValidationException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
+                // NHibernate catches our ValidationException, and as such it is the innerexception here
+                if (ex.InnerException is ValidationException)
+                {
+                    throw ex.InnerException;
+                }
+                else
+                {
+                    throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
+                }
             }
             finally
             {
@@ -304,13 +312,17 @@ namespace Castle.ActiveRecord
 
                 session.Flush();
             }
-            catch (ValidationException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+                // NHibernate catches our ValidationException, and as such it is the innerexception here
+                if (ex.InnerException is ValidationException)
+                {
+                    throw ex.InnerException;
+                }
+                else
+                {
+                    throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+                }
             }
             finally
             {

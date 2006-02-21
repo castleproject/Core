@@ -26,7 +26,6 @@ namespace Castle.ActiveRecord.Tests
 	public class TableHierarchyTestCase : AbstractActiveRecordTest
 	{
 		[Test]
-		// [Ignore("NHibernate will fix the problem soon")]
 		public void CompanyFirmAndClient()
 		{
 			ActiveRecordStarter.Initialize( GetConfigSource(), 
