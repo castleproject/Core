@@ -71,6 +71,9 @@ end"""
 		ensure:	
 			using write = File.CreateText(common ):
 				write.Write(old)
+		#Have to wait again to make sure that the second recompilation happened, since otherwise a second test
+		# might get the modified version.
+		System.Threading.Thread.Sleep(500)
 	
 	[Test]
 	def PreProcessor():

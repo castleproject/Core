@@ -30,6 +30,7 @@
 				<include name="System.Xml.dll"/>
 				<include name="System.Web.dll"/>
 				<include name="${bin.dir}\anrControls.Markdown.NET.dll"/>
+				<include name="${bin.dir}\log4net.dll"/>
 				<include name="${bin.dir}\Boo.Lang.Parser.dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.Framework.dll"/>
 			</references>

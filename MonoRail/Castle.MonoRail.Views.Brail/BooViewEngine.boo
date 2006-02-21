@@ -46,6 +46,7 @@ public class BooViewEngine (ViewEngineBase):
 		InitializeConfig("brail")
 		InitializeConfig("Brail") if options is null
 		options = BooViewEngineOptions() if options is null
+		log4net.Config.DOMConfigurator.Configure()
 	
 	static def InitializeConfig(name as string):
 		options = System.Configuration.ConfigurationSettings.GetConfig(name)
@@ -96,36 +97,32 @@ public class BooViewEngine (ViewEngineBase):
 	# cause the yellow screen of death) if the user is local, then a detailed stack
 	# is shown
 	override def Process(context as IRailsEngineContext, controller as Controller, templateName as string):
-		try:
-			file = GetFileName(templateName)
-			view as BrailBase
-			# Output may be the layout's child output if a layout exists
-			# or the context.Response.Output if the layout is null
-			output as TextWriter, layout as BrailBase = GetOutput(context, controller)
-			# Will compile on first time, then save the assembly on the cache.
-			view = GetCompiledScriptInstance(file, output, context, controller)
-			controller.PreSendView(view)
-			view.Run()
-			layout.Run() if layout is not null
-			controller.PostSendView(view)
-		except e:
-			HandleError(context, controller, e, "Cannot load view ${templateName}")
+		file = GetFileName(templateName)
+		view as BrailBase
+		# Output may be the layout's child output if a layout exists
+		# or the context.Response.Output if the layout is null
+		output as TextWriter, layout as BrailBase = GetOutput(context, controller)
+		# Will compile on first time, then save the assembly on the cache.
+		view = GetCompiledScriptInstance(file, output, context, controller)
+		controller.PreSendView(view)
+		view.Run()
+		layout.Run() if layout is not null
+		controller.PostSendView(view)
 	
 	# Send the contents text directly to the user, only adding the layout if neccecary
 	override def ProcessContents(context as IRailsEngineContext, controller as Controller, contents as string):
-		try:
-			output as TextWriter, layout as BrailBase = GetOutput(context, controller)
-			output.Write(contents)
-			layout.Run() if layout is not null
-		except e:
-			HandleError(context, controller, e, "")
-	
+		output as TextWriter, layout as BrailBase = GetOutput(context, controller)
+		output.Write(contents)
+		layout.Run() if layout is not null
+		
+	/*
 	# Throw if the user is not local, otherwise send detailed error message
 	def HandleError(context as IRailsEngineContext, controller as Controller, e as Exception, msg as string):
 		if not context.Request.IsLocal:
 				raise RailsException(msg)
 		error = OutputError(self, context.Response.Output,context, controller, e)
 		error.Run()
+		*/
 	
 	# Check if a layout has been defined. If it was, then the layout would be created
 	# and will take over the output, otherwise, the context.Reposne.Output is used, 
@@ -185,7 +182,7 @@ public class BooViewEngine (ViewEngineBase):
 				#security wise.
 				#code = BrailPreProcessor.Booify(System.IO.File.OpenText(filename).ReadToEnd())
 				#code = System.Web.HttpUtility.HtmlEncode(code)
-				raise RailsException("Error during compile:\r\n${result.Errors.ToString()}\r\nCode:\r\n")
+				raise RailsException("Error during compile:\r\n${result.Errors.ToString(true)}\r\n")
 			#error compiling a batch, let's try a single file
 			return CompileScript(filename,false)
 		
@@ -193,7 +190,6 @@ public class BooViewEngine (ViewEngineBase):
 		for input in inputs:
 			type = result.GeneratedAssembly.GetType("${Path.GetFileNameWithoutExtension(input.Name)}_BrailView")
 			compilations[input.Name] = type
-		
 		type = compilations[filename]
 		return type
 	
