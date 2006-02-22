@@ -19,6 +19,8 @@
 	<property name="test.assembly.name2" value="${name}.Tests.dll" />
 	<property name="test.assembly.appconfig1" value="${test.assembly.name1}.config" />
 	<property name="test.assembly.appconfig2" value="${test.assembly.name2}.config" />
+	<property name="test.assembly.appconfig2.real" value="${test.assembly.name2}.config" />
+	<property name="test.assembly.appconfig2.real" value="${test.assembly.name2}.net-2.0.config" if="${framework::get-target-framework()=='net-2.0'}"/>
 
 	<property name="samples.dir" value="${base.dir}/../Samples/ActiveRecord" />
 
@@ -42,9 +44,10 @@
 		<nant buildfile="${base.dir}/../copy-tasks.xml" target="copy-nhibernate" inheritall="true" />
 
 		<copy file="${test.src.dir1}/${test.assembly.appconfig1}" tofile="${bin.dir}/${test.assembly.appconfig1}" />
-		<copy file="${test.src.dir2}/${test.assembly.appconfig2}" tofile="${bin.dir}/${test.assembly.appconfig2}" />
+		<copy file="${test.src.dir2}/${test.assembly.appconfig2.real}" tofile="${bin.dir}/${test.assembly.appconfig2}" />
 		
 		<property name="app.config" value="${bin.dir}/${test.assembly.appconfig1}" />
+		
 		<xmlpoke
 			file="${app.config}"
 			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
