@@ -41,7 +41,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		
 		private bool autoLoad, persistchanges;
         
-		private object nullWhenPrimaryKey;
+		private object nullWhenPrimaryKey, autoLoadUnlessKeyIs;
 
 		public ARDataBinder() : base()
 		{
@@ -64,7 +64,13 @@ namespace Castle.MonoRail.ActiveRecordSupport
             get { return nullWhenPrimaryKey; }
             set { nullWhenPrimaryKey = value; }
         }
-
+        
+		public object AutoLoadUnlessKeyIs
+        {
+            get { return autoLoadUnlessKeyIs; }
+            set { autoLoadUnlessKeyIs = value; }
+        }
+        
 		protected override object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
 		{
 			if (node == null)
@@ -100,8 +106,17 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				PrimaryKeyModel pkModel;
 
 				object id = ObtainPKValue(model, node, paramPrefix, out pkModel);
-
-                if (nullWhenPrimaryKey != null && id.Equals(NullWhenPrimaryKey))
+                if (id == null)
+                {
+                    throw new RailsException(string.Format(
+                        "Could not find primary key value '{0}' on '{1}'", pkModel.Property.Name,
+                        instanceType.FullName));
+                }
+				if(autoLoadUnlessKeyIs != null && id.Equals(autoLoadUnlessKeyIs))
+				{
+					instance = base.CreateInstance(instanceType, paramPrefix, node);
+				}
+				else if (nullWhenPrimaryKey != null && id.Equals(NullWhenPrimaryKey))
                 {
                     instance = null;
                 }

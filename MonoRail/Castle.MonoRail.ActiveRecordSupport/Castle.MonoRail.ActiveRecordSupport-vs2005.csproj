@@ -87,6 +87,10 @@
       <HintPath>..\..\SharedLibs\nhibernate\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nullables, Version=1.0.2.0, Culture=neutral, PublicKeyToken=154fdcb44c4484fc">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\nhibernate\Nullables.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>

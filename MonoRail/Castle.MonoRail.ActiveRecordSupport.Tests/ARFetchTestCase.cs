@@ -54,6 +54,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			};
 			
 			DoGet("ARFetchTest/SavePeople.rails", args);
+			AssertReplyStartsWith("Length=3\n[1:John:99]");
 			AssertSuccess();
 
 // TODO: Check why random results returned by the page

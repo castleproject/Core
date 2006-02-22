@@ -110,6 +110,39 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		}
 		
 		[Test]
+		public void NoLadingWhenIdMatchNoAutoLoadWhenPrimaryKeyIs()
+		{
+			NameValueCollection args = new NameValueCollection();
+
+			binder.AutoLoadUnlessKeyIs = 0;
+
+			args.Add("SimplePerson.Id", "0");
+			args.Add("SimplePerson.Age", "200");
+
+			instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", new NameValueCollectionAdapter(args));
+			
+			person = instance as SimplePerson;
+			
+			Assert.AreEqual(0, person.Id);
+			Assert.AreEqual(200, person.Age);
+		}
+
+        [Test]
+        [ExpectedException(typeof(RailsException), "Could not find primary key value 'Id' on 'TestScaffolding.Model.SimplePerson'")]
+        public void ErrorWhenAutoLoadIsTrueButNoIdSpecified()
+        {
+            NameValueCollection args = new NameValueCollection();
+
+            binder.AutoLoad = true;
+
+            args.Add("SimplePerson.Id", "");
+
+            instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", new NameValueCollectionAdapter(args));
+
+          
+        }
+		
+		[Test]
 		public void AutoloadAndArray()
 		{			
 			NameValueCollection args = new NameValueCollection();

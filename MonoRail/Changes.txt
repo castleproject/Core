@@ -4,6 +4,11 @@ Change history
 Release Candidate 1
 ===================
 
+- Added support for AutoLoadUnlessKeyIs in ARDataBinder - will load the object unless the key is a specific value
+ Usages: public void Save([ARDataBinder(AutoLoadUnlessKeyIs = 0)]User user) 
+
+- Added checks for null id when doing data binding.
+
 - Removed useless error handling from Brail, now you'll get the noraml ASP.Net Yellow Screen Of Death on errors. More consistent with the rest of the framework.
 
 - Added support for <?brail ?> tags for Brail, so it can be valid XML documnets
