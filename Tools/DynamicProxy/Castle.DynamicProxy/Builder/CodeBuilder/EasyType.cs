@@ -59,7 +59,8 @@ using System.Collections;
             {
                 if(assemblySigning.Contains(baseType.Assembly)==false)
                 {
-                    bool isSigned = baseType.Assembly.GetName().GetPublicKey().Length != 0;
+					byte[] key = baseType.Assembly.GetName().GetPublicKey();
+                    bool isSigned = key !=null  && key.Length != 0;
                     assemblySigning.Add(baseType.Assembly, isSigned );
                 }
                 return (bool)assemblySigning[baseType.Assembly];
