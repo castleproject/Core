@@ -4,6 +4,10 @@ Change history
 Release Candidate 1
 ===================
 
+- Added support for optional parameters in Brail, using the syntax ?foo will return null if the value was not set (instead of throwing.)
+
+- Fixed a bug where Brail would throw on Empty Views.
+
 - Added support for AutoLoadUnlessKeyIs in ARDataBinder - will load the object unless the key is a specific value
  Usages: public void Save([ARDataBinder(AutoLoadUnlessKeyIs = 0)]User user) 
 

@@ -51,3 +51,9 @@ class HomeController(Controller):
 	def ShowEmptyList():
 		PropertyBag.Add("dic",{})
 		RenderView("ShowList")
+		
+	def Nullable():
+		PropertyBag.Add("doesExists","foo")
+		
+	def Empty():
+		pass

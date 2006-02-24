@@ -50,6 +50,20 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 		expected = "Hello, Ayende"
 		AssertReplyEqualsTo(expected)
 	
+	
+	[Test]
+	def Nullables():
+		DoGet("home/nullables.rails")
+		expected = "Hello, Ayende"
+		AssertReplyEqualsTo(expected)
+
+	[Test]
+	def Empty():
+		DoGet("home/Empty.rails")
+		expected = ""
+		AssertReplyEqualsTo(expected)
+
+	
 	[Test]
 	def CommonScriptsChangeOnTheFly():
 		common = Path.Combine(GetPhysicalDir(),"""Views\CommonScripts\Hello.boo""")

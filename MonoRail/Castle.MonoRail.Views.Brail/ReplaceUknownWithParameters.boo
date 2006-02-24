@@ -24,6 +24,7 @@ import Boo.Lang.Compiler.TypeSystem
 class ReplaceUknownWithParameters(ProcessMethodBodiesWithDuckTyping):
 	
 	_getParam as IMethod
+	_tryGetParam as IMethod
 	
 	override def OnReferenceExpression(node as ReferenceExpression):
 		entity = self.NameResolutionService.Resolve(node.Name)
@@ -32,10 +33,23 @@ class ReplaceUknownWithParameters(ProcessMethodBodiesWithDuckTyping):
 		else:
 			mie = CodeBuilder.CreateMethodInvocation(
 					CodeBuilder.CreateSelfReference(self._currentMethod.DeclaringType),
-					_getParam)
-			mie.Arguments.Add(CodeBuilder.CreateStringLiteral(node.Name))
+					GetMethod(node.Name))
+			mie.Arguments.Add(GetNameLiteral(node.Name))
 			node.ParentNode.Replace(node, mie)
 			
 	override def InitializeMemberCache():
 		super()
 		_getParam  = TypeSystemServices.Map(typeof(BrailBase).GetMethod("GetParameter"))
+		_tryGetParam  = TypeSystemServices.Map(typeof(BrailBase).GetMethod("TryGetParameter"))
+
+	def GetMethod(name as string):
+		if name[0]==char('?'):
+			return _tryGetParam
+		else:
+			return _getParam
+			
+	def GetNameLiteral(name as string):
+		if name[0]==char('?'):
+			return CodeBuilder.CreateStringLiteral(name[1:])
+		else:
+			return CodeBuilder.CreateStringLiteral(name)

@@ -50,7 +50,7 @@ class BrailPreProcessor(AbstractCompilerStep):
 			buffer.Write(code[index+start.Length:lastIndex])
 			lastIndex += end.Length 
 				
-		Output(buffer, code[lastIndex:])
+		Output(buffer, code[lastIndex:]) if lastIndex < code.Length
 		return buffer.ToString()
 
 	def GetSeperators(code as string):

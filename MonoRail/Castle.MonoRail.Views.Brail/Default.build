@@ -39,6 +39,7 @@
 
 	<target name="tests.compile">
 		<booc target="library" 
+			
 		      output="${bin.dir}\${test.assembly.name}" 
 		      debug="${debug}" >
 			<sources basedir="${test.src.dir}">

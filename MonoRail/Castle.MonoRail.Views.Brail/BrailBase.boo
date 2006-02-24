@@ -86,15 +86,29 @@ abstract class BrailBase:
 		return Path.Combine(ScriptDirectory,subviewName)+".boo"
 	
 	# this is called by ReplaceUnknownWithParameters step to create a more dynamic experiance
-	# any uknon identifier will be translate into a call for GetParameter('identifier name').
+	# any uknown identifier will be translate into a call for GetParameter('identifier name').
 	# This mean that when an uknonwn identifier is in the script, it will only be found on runtime.
 	def GetParameter(name as string) as object:
+		val ,found as bool = GetParameterInternal(name)
+		if not found:
+			raise RailsException("Parameter '${name}' was not found!")
+		return val
+		
+	# this is called by ReplaceUnknownWithParameters step to create a more dynamic experiance
+	# any uknown identifier with the prefix of ? will be translated into a call for 
+	# TryGetParameter('identifier name without the ? prefix').
+	# This method will return null if the value it not found.
+	def TryGetParameter(name as string) as object:
+		val, = GetParameterInternal(name)
+		return val
+		
+	def GetParameterInternal(name as string):
 		if properties.Contains(name):
-			return properties[name]
+			return properties[name], true
 		for dic as IDictionary in self.extendedPropertiesList:
 			if dic.Contains(name):
-				return dic[name]
-		raise RailsException("Parameter '${name}' was not found!")
+				return dic[name], true
+		return null, false
 		
 	def AddProperties(properties as IDictionary):
 		self.extendedPropertiesList.Add(properties)
@@ -102,6 +116,11 @@ abstract class BrailBase:
 	# Allows to check that a parameter was defined
 	def IsDefined(name as string) as bool:
 		return properties.Contains(name)
+		
+	# allows explicit access to the Flash
+	Flash:
+		get:
+			return context.Flash	
 	
 	# Initialize all the properties that a script may need
 	# One thing to note here is that resources are wrapped in ResourceToDuck wrapper
