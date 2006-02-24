@@ -52,7 +52,7 @@ class HomeController(Controller):
 		PropertyBag.Add("dic",{})
 		RenderView("ShowList")
 		
-	def Nullable():
+	def Nullables():
 		PropertyBag.Add("doesExists","foo")
 		
 	def Empty():

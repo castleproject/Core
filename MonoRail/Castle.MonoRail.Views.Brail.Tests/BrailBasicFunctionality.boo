@@ -54,7 +54,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 	[Test]
 	def Nullables():
 		DoGet("home/nullables.rails")
-		expected = "Hello, Ayende"
+		expected = "\r\nfoo"
 		AssertReplyEqualsTo(expected)
 
 	[Test]

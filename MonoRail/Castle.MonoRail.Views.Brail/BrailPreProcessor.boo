@@ -27,6 +27,8 @@ class BrailPreProcessor(AbstractCompilerStep):
 	override def Run():
 		new = []
 		for input in self.Parameters.Input:
+			#if input.Name.Contains("empty"):
+			#	System.Diagnostics.Debugger.Break()
 			using reader=input.Open():
 				code = Booify(reader.ReadToEnd())
 				if logger.IsDebugEnabled:
@@ -37,6 +39,7 @@ class BrailPreProcessor(AbstractCompilerStep):
 			self.Parameters.Input.Add(input)		
 		
 	def Booify(code as string):
+		return "output string.Empty\r\n" if code.Length == 0
 		buffer = System.IO.StringWriter()
 		index, lastIndex = 0,0
 		start,end = GetSeperators(code)
@@ -50,7 +53,7 @@ class BrailPreProcessor(AbstractCompilerStep):
 			buffer.Write(code[index+start.Length:lastIndex])
 			lastIndex += end.Length 
 				
-		Output(buffer, code[lastIndex:]) if lastIndex < code.Length
+		Output(buffer, code[lastIndex:]) 
 		return buffer.ToString()
 
 	def GetSeperators(code as string):

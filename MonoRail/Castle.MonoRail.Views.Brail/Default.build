@@ -39,7 +39,6 @@
 
 	<target name="tests.compile">
 		<booc target="library" 
-			
 		      output="${bin.dir}\${test.assembly.name}" 
 		      debug="${debug}" >
 			<sources basedir="${test.src.dir}">
@@ -49,7 +48,7 @@
 			<references basedir="${bin.dir}">
 				<include name="${bin.dir}\${assembly.name}" />
 				<!-- get NUnit from the GAC -->
-				<include name="nunit.framework.dll" />
+				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}\Castle.MonoRail.TestSupport.dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.Framework.Dll"/>
 				<include name="${bin.dir}\Castle.MonoRail.Framework.Tests.Dll"/>
