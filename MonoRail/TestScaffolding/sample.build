@@ -8,7 +8,8 @@
 
 	<property name="name" value="TestScaffolding" />
 	<property name="assembly.name" value="${name}.dll" />
-
+	<property name="app.config" value="${src.dir}/web.config" />
+		
 	<property name="version" value="1.0.0.0" />
 	<property name="strong" value="STRONG" unless="${property::exists('strong')}" />
 
@@ -39,6 +40,23 @@
 				<include name="Nullables.dll" />
 			</fileset>
 		</copy>
+		
+		<copy file="${app.config}.template" tofile="${app.config}"/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.dialect']/@value"
+			value="${ar.dialect}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.driver_class']/@value"
+			value="${ar.connection.driver_class}" 
+		/>
+		<xmlpoke
+			file="${app.config}"
+			xpath="/configuration/activerecord/config/add[@key='hibernate.connection.connection_string']/@value"
+			value="${ar.connection.connection_string.1}" 
+		/>
 	</target>
 
 	<target name="build" depends="init,compile" />

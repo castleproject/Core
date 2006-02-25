@@ -55,6 +55,7 @@ public class BooViewEngine (ViewEngineBase):
 	# Create directory to save the compiled assemblies if required.
 	# pre-compile the common scripts
 	override def Init():
+		allFiltersButAccess = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.Size | NotifyFilters.Attributes
 		InitializeConfig() if options is null
 		baseDir = Path.GetDirectoryName(typeof(BooViewEngine).Assembly.Location)
 		self.baseSavePath = Path.Combine(baseDir,options.SaveDirectory)
@@ -65,7 +66,7 @@ public class BooViewEngine (ViewEngineBase):
 		
 		viewsScriptWatcher = FileSystemWatcher(ViewRootDir,
 			IncludeSubdirectories: true, Filter: "*.boo",
-			NotifyFilter: NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName)
+			NotifyFilter: allFiltersButAccess)
 		viewsScriptWatcher.Changed += def (source, e as FileSystemEventArgs):
 			file = Path.GetFullPath(e.FullPath)
 			# Will cause a recompilation
@@ -78,7 +79,7 @@ public class BooViewEngine (ViewEngineBase):
 			
 		commonScriptWatcher = FileSystemWatcher(commonScriptPath,
 			IncludeSubdirectories: false, Filter:"*.boo",
-			NotifyFilter: NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName)
+			NotifyFilter: allFiltersButAccess)
 		commonScriptWatcher.Changed += def (source, e as FileSystemEventArgs):
 			CompileCommonScripts.BeginInvoke( null,
 				{ ar as IAsyncResult | CompileCommonScripts.EndInvoke(ar) } )
