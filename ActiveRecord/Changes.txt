@@ -1,5 +1,7 @@
 beta 4
 ======
+- Fixed a stack over flow exception when using IsUnique inside a session scope.
+
 - You can now apply IsUnique to a property that also has PrimaryKey on it without problem.
 
 - Resolved IsUnique bug with ActiveRecordValidationBase<> (it was non functional)

@@ -18,7 +18,7 @@
 	<property name="test.src.dir" value="${base.dir}/../${test.name}" />
 
 	<loadtasks assembly="${shared.lib.dir}/Boo.NAnt.Tasks.dll" verbose="true" />
-	
+	<echo>${bin.dir}\anrControls.Markdown.NET.dll</echo>
 	<target name="compile">		
 		<booc target="library" 
 		      output="${bin.dir}\${assembly.name}" 

@@ -4,6 +4,12 @@ Change history
 Release Candidate 1
 ===================
 
+- Fixed a bug in ARFetch, where if the parameter was an array and the parameters didn't appear, a null reference would be thrown. Now it's returning an empty array.
+
+- Updated boo binaries, should fix the problems with the build on machines with only one framework installed.
+
+- Fixed a bug in Brail where a new line was required before a method call was recognized
+
 - Added support for optional parameters in Brail, using the syntax ?foo will return null if the value was not set (instead of throwing.)
 
 - Fixed a bug where Brail would throw on Empty Views.

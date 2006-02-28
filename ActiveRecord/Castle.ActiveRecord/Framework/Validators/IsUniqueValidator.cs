@@ -56,8 +56,10 @@ namespace Castle.ActiveRecord.Framework.Validators
 					" so we can't ensure the uniqueness of any field. Validatior failed");
 			}
 			_fieldValue = fieldValue;
-
-			return (bool) ActiveRecordMediator.Execute(instanceType, new NHibernateDelegate(CheckUniqueness), instance);
+            using (new SessionScope())
+            {
+                return (bool)ActiveRecordMediator.Execute(instanceType, new NHibernateDelegate(CheckUniqueness), instance);
+            }
 		}
 
 		private object CheckUniqueness(ISession session, object instance)

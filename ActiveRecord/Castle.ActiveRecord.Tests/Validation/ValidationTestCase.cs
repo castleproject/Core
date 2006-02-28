@@ -138,6 +138,26 @@ namespace Castle.ActiveRecord.Tests.Validation
 			blog.Create();
 		}
 
+        [Test]
+        public void IsUniqueWithSessionScope()
+        {
+            ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Blog2));
+            Recreate();
+
+            Blog2.DeleteAll();
+
+            Blog2 blog = new Blog2();
+            blog.Name = "hammett";
+            blog.Create();
+
+            using (new SessionScope())
+            {
+                Blog2 fromDb = Blog2.Find(blog.Id);
+                fromDb.Name = "foo";
+                fromDb.Save();
+            }
+        }
+
 		[Test]
 		[ExpectedException(typeof(ValidationException), "Can't save or update as there is one (or more) field that has not passed the validation test")]
 		public void IsUnique2()

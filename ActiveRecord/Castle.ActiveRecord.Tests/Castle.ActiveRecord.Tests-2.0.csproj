@@ -281,6 +281,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy "$(ProjectDir)$(TargetFileName).net-2.0.config" "$(TargetDir)$(TargetFileName).config" /y/c</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(ProjectDir)$(TargetFileName).net-2.0.config" "$(TargetDir)" /y/c
+move /y "$(TargetDir)$(TargetFileName).net-2.0.config" "$(TargetDir)$(TargetFileName).config"</PostBuildEvent>
   </PropertyGroup>
 </Project>

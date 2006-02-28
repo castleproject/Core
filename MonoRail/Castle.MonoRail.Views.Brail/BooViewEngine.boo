@@ -116,15 +116,6 @@ public class BooViewEngine (ViewEngineBase):
 		output.Write(contents)
 		layout.Run() if layout is not null
 		
-	/*
-	# Throw if the user is not local, otherwise send detailed error message
-	def HandleError(context as IRailsEngineContext, controller as Controller, e as Exception, msg as string):
-		if not context.Request.IsLocal:
-				raise RailsException(msg)
-		error = OutputError(self, context.Response.Output,context, controller, e)
-		error.Run()
-		*/
-	
 	# Check if a layout has been defined. If it was, then the layout would be created
 	# and will take over the output, otherwise, the context.Reposne.Output is used, 
 	# and layout is null

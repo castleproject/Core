@@ -72,6 +72,7 @@ class BrailPreProcessor(AbstractCompilerStep):
 		
 	def Output(buffer as System.IO.StringWriter, code as string):
 		return if len(code) == 0
+		buffer.WriteLine()
 		buffer.Write('output """')
 		buffer.Write(code)
 		buffer.WriteLine('"""')
