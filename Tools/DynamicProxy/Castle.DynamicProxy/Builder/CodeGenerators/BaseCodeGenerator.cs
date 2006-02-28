@@ -441,9 +441,11 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         {
             if (nsName == null || nsName == String.Empty) return String.Empty;
 
-            String[] parts = nsName.Split('.');
+            String[] parts = nsName.Split('.', '+');
+            String[] partsWithoutName = new String[parts.Length - 1];
+            Array.Copy(parts, partsWithoutName, parts.Length - 1);
 
-            return parts[parts.Length - 1];
+            return String.Join("_", partsWithoutName);
         }
 
         /// <summary>

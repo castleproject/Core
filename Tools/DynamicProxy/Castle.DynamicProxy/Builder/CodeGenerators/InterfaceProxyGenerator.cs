@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 				sb.Append(inter.Name);
 			}
 			// Naive implementation
-			return String.Format("ProxyInterface{2}{0}{1}", type.Name, sb.ToString(), NormalizeNamespaceName(type.Namespace));
+			return String.Format("ProxyInterface{2}{0}{1}", type.Name, sb.ToString(), NormalizeNamespaceName(type.FullName));
 		}
 
 		protected override void GenerateFields()

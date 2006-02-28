@@ -57,5 +57,18 @@ namespace Castle.DynamicProxy.Test
 				string.Format("Proxy {0} is not a subclass of {1}", proxyA.GetType(), typeof(Classes.SubNamespace.SimpleClass)));
 		}
 
+        [Test]
+        public void GenerateProxyClassSameNameButOneIsInnerClass()
+        {
+            object proxyA = _generator.CreateClassProxy(typeof(Classes.Foo), new StandardInterceptor());
+            object proxyB = _generator.CreateClassProxy(typeof(Classes.DuplicateNames.Foo), new StandardInterceptor());
+
+            Assert.IsTrue(proxyA is Classes.Foo,
+                string.Format("Proxy {0} is not a subclass of {1} ", proxyA.GetType(), typeof(Classes.Foo)));
+
+            Assert.IsTrue(proxyB is Classes.DuplicateNames.Foo,
+                string.Format("Proxy {0} is not a subclass of {1}", proxyA.GetType(), typeof(Classes.DuplicateNames.Foo)));
+        }
+
 	}
 }

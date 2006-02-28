@@ -34,7 +34,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;dotNet2 STRONG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;dotNet2 </DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -49,6 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\..\bin\</OutputPath>
@@ -130,6 +131,7 @@
     <Compile Include="Classes\DummyReader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\DuplicateNames.cs" />
     <Compile Include="Classes\IDataReaderProxy.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -55,6 +55,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			object[] pks = request.Params.GetValues(webParamName);
+			
+			if(pks==null)
+				pks = new object[0];
 
 			Array objs = Array.CreateInstance(type, pks.Length);
 
