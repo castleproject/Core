@@ -9,13 +9,13 @@ Release Candidate 1
 - Fixed a bug where Brail would throw on Empty Views.
 
 - Added support for AutoLoadUnlessKeyIs in ARDataBinder - will load the object unless the key is a specific value
- Usages: public void Save([ARDataBinder(AutoLoadUnlessKeyIs = 0)]User user) 
+ Usages: public void Save([ARDataBinder(AutoLoadUnlessKeyIs=0)] User user) 
 
 - Added checks for null id when doing data binding.
 
-- Removed useless error handling from Brail, now you'll get the noraml ASP.Net Yellow Screen Of Death on errors. More consistent with the rest of the framework.
+- Removed useless error handling from Brail, now you'll get the normal ASP.Net Yellow Screen Of Death on errors. More consistent with the rest of the framework.
 
-- Added support for <?brail ?> tags for Brail, so it can be valid XML documnets
+- Added support for <?brail ?> tags for Brail, so it can be valid XML documents
 
 - Added logging for Brail, so you can see the Boo code the preprocessor is generating.
 
@@ -45,12 +45,12 @@ Release Candidate 1
 - SmartViewComponent removed
 
 - DataBinder refactored out. Now implementation lies on Castle.Components.Binder
-  Big performance improvement
+  + Big performance improvement
 
 - ARDataBinder now issues a FindByPK for nested objects if the keys differs (existing object with 
   form fields)
 
-- SmartDispatcher: now there's no hardcode reference to DataBind, ARDataBind or ARFetch attributes. 
+- SmartDispatcherController: now there's no hardcode reference to DataBind, ARDataBind or ARFetch attributes. 
   They only must implement the interface IParameterBinding. This opens an interesting extension point
   for users willing to create their own logic to binding form/querystring parameters to their data components
 
@@ -147,7 +147,6 @@ Beta 5
 
 - Added to HtmlHelper:
   - InputCheckbox
-  
   - InputRadio
   - InputFile
   - InputButton
@@ -195,7 +194,7 @@ Beta 5
     if (myOtherEnumValue == MyEnum.Second) // ok
   }
 
-- Support for Active Record fetching in Castle.MonoRail.ActiveRecordSupport
+- Support for ActiveRecord fetching in Castle.MonoRail.ActiveRecordSupport
   (by Fabio Batista, rev. 1380).
 	
 	Mainly for those unconfortable with direct binding of form values
