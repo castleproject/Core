@@ -70,5 +70,24 @@ namespace Castle.DynamicProxy.Test
                 string.Format("Proxy {0} is not a subclass of {1}", proxyA.GetType(), typeof(Classes.DuplicateNames.Foo)));
         }
 
+#if dotNet2
+
+        [Test]
+        public void GenerateProxyOfGenericType()
+        {
+
+            object proxyA = _generator.CreateClassProxy(typeof(genericClass<int>), new StandardInterceptor());
+            object proxyB = _generator.CreateClassProxy(typeof(genericClass<int>), new StandardInterceptor());
+
+            Assert.AreEqual(proxyA.GetType(), proxyB.GetType(),"Wrong types for generic classes");
+            
+        }
+
+
+        public class genericClass<T>
+        {
+            public T Field;
+        }
+#endif
 	}
 }

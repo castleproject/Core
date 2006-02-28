@@ -1,3 +1,7 @@
+Version 1.4.8
+
+ * Added nested types detection, to avoid a case were types foo.Bar and Bar are treated the same
+
 Version 1.4.7
 
  * Added support for producing signed assmeblies when the proxied type is signed (solve some problems with proxies for strongly named internal classes on .Net 2.0).

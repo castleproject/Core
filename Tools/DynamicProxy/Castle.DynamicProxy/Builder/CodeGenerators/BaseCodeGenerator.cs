@@ -113,7 +113,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 
         protected void RegisterInCache(Type generatedType)
         {
-            ModuleScope[generatedType.Name] = generatedType;
+            ModuleScope[generatedType.FullName] = generatedType;
         }
 
         protected FieldReference ObtainCallableFieldBuilderDelegate(EasyCallable builder)
@@ -442,10 +442,16 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
             if (nsName == null || nsName == String.Empty) return String.Empty;
 
             String[] parts = nsName.Split('.', '+');
-            String[] partsWithoutName = new String[parts.Length - 1];
-            Array.Copy(parts, partsWithoutName, parts.Length - 1);
 
-            return String.Join("_", partsWithoutName);
+            return parts[parts.Length - 1];
+        }
+
+        /// <summary>
+        /// Gets the name of a type, taking into consideration nested types.
+        /// </summary>
+        protected String GetTypeName(Type type)
+        {
+            return type.DeclaringType != null ? type.DeclaringType + "_" + type.Name : type.Name;
         }
 
         /// <summary>
