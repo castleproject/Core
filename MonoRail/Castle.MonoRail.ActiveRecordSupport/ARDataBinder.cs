@@ -38,9 +38,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	public class ARDataBinder : DataBinder
 	{
 		protected internal static readonly object[] EmptyArg = new object[0];
-		
+
 		private bool autoLoad, persistchanges;
-        
+
 		private object nullWhenPrimaryKey, autoLoadUnlessKeyIs;
 
 		public ARDataBinder() : base()
@@ -59,18 +59,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { autoLoad = value; }
 		}
 
-        public object NullWhenPrimaryKey
-        {
-            get { return nullWhenPrimaryKey; }
-            set { nullWhenPrimaryKey = value; }
-        }
-        
+		public object NullWhenPrimaryKey
+		{
+			get { return nullWhenPrimaryKey; }
+			set { nullWhenPrimaryKey = value; }
+		}
+
 		public object AutoLoadUnlessKeyIs
-        {
-            get { return autoLoadUnlessKeyIs; }
-            set { autoLoadUnlessKeyIs = value; }
-        }
-        
+		{
+			get { return autoLoadUnlessKeyIs; }
+			set { autoLoadUnlessKeyIs = value; }
+		}
+
 		protected override object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
 		{
 			if (node == null)
@@ -106,24 +106,24 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				PrimaryKeyModel pkModel;
 
 				object id = ObtainPKValue(model, node, paramPrefix, out pkModel);
-                if (id == null)
-                {
-                    throw new RailsException(string.Format(
-                        "Could not find primary key value '{0}' on '{1}'", pkModel.Property.Name,
-                        instanceType.FullName));
-                }
-				if(autoLoadUnlessKeyIs != null && id.Equals(autoLoadUnlessKeyIs))
+				if (id == null)
+				{
+					throw new RailsException(string.Format(
+						"Could not find primary key value '{0}' on '{1}'", pkModel.Property.Name,
+						instanceType.FullName));
+				}
+				if (autoLoadUnlessKeyIs != null && id.Equals(autoLoadUnlessKeyIs))
 				{
 					instance = base.CreateInstance(instanceType, paramPrefix, node);
 				}
 				else if (nullWhenPrimaryKey != null && id.Equals(NullWhenPrimaryKey))
-                {
-                    instance = null;
-                }
-                else
-                {
-                    instance = SupportingUtils.FindByPK(instanceType, id);
-                }
+				{
+					instance = null;
+				}
+				else
+				{
+					instance = SupportingUtils.FindByPK(instanceType, id);
+				}
 			}
 			else
 			{
@@ -163,10 +163,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		protected override bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
 		{
-            if (nullWhenPrimaryKey != null && instance == null)
-            {
-                return true;
-            }
+			if (nullWhenPrimaryKey != null && instance == null)
+			{
+				return true;
+			}
 			object stackInstance = InstanceOnStack;
 
 			if (stackInstance == null)
@@ -192,7 +192,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 						targetModel = ActiveRecordModel.GetModel(targetType);
 
-						found = true; break;
+						found = true;
+						break;
 					}
 				}
 
@@ -248,10 +249,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			String pkPropName = pkModel.Property.Name;
 			String propValue = node.GetEntryValue(pkPropName);
-	
+
 			if (propValue == null)
 			{
-				throw new RailsException("ARDataBinder autoload failed as element {0} " + 
+				throw new RailsException("ARDataBinder autoload failed as element {0} " +
 					"doesn't have a primary key {1} value", prefix, pkPropName);
 			}
 
@@ -369,7 +370,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		}
 
 		private void CreateMappedInstances(object instance, PropertyInfo prop,
-			PrimaryKeyModel keyModel, ActiveRecordModel otherModel, IBindingDataSourceNode node)
+		                                   PrimaryKeyModel keyModel, ActiveRecordModel otherModel, IBindingDataSourceNode node)
 		{
 			object container = InitializeRelationPropertyIfNull(instance, prop);
 

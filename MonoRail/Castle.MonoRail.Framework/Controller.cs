@@ -1228,7 +1228,7 @@ namespace Castle.MonoRail.Framework
 			MatchCollection matches1 = Constants.readdress.Matches(body);
 			for(int i=0; i< matches1.Count; i++)
 			{
-				String header	 = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
+				String header  = matches1[i].Groups[Constants.HeaderKey].ToString().ToLower();
 				String address = matches1[i].Groups[Constants.ValueKey].ToString();
 
 				switch(header)

@@ -175,6 +175,11 @@ namespace Castle.MonoRail.Framework.Adapters
 			}
 		}
 
+		public bool IsClientConnected
+		{
+			get { return _response.IsClientConnected; }
+		}
+
 		public bool WasRedirected
 		{
 			get { return _redirected; }
