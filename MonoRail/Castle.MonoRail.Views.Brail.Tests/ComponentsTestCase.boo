@@ -51,6 +51,11 @@ class ComponentsTestCase(AbstractMRTestCase):
 
 
 	[Test]
+	def CanGetParamsFromTheComponentInTheView():
+		DoGet('usingcomponents/template.rails')
+		AssertReplyEqualsTo('123')
+
+	[Test]
 	def BlockComp1():
 		DoGet('usingcomponents/index5.rails')
 		AssertReplyEqualsTo('  item 0\r\n  item 1\r\n  item 2\r\n')

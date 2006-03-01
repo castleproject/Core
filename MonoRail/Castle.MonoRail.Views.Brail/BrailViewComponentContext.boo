@@ -27,7 +27,7 @@ class BrailViewComponentContext(IViewComponentContext):
 	writer as TextWriter
 	
 	[Getter(ContextVars)]
-	contextVars as IDictionary = Hashtable()
+	contextVars as IDictionary = Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default)
 	
 	[Getter(ComponentParameters)]
 	componentParameters as IDictionary

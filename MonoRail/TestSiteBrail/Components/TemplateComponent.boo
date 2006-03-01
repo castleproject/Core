@@ -11,34 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace Castle.MonoRail.Views.Brail.Tests.Controllers
+
+namespace Castle.MonoRail.Views.Brail.Tests.Components
 
 import System
 import Castle.MonoRail.Framework
 
-class UsingComponentsController(SmartDispatcherController):
 
-	def Index1():
-		pass
+class TemplateComponent(ViewComponent):
 	
-	def Index2():
-		pass
-	
-	def Index3():
-		pass
-
-	def Index4():
-		pass
-
-	def Index5():
-		pass
-	
-	def Index8():
-		items = [1,2]
-		PropertyBag.Add("items",items)
-	
-	def Index9():
-		pass
-		
-	def Template():
-		pass
+	override def Initialize():
+		Flash["List"] = [1,2,3]

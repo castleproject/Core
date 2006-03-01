@@ -25,12 +25,14 @@ class ComponentMacro(AbstractAstMacro):
 		if macro.Arguments.Count == 0:
 			raise RailsException("component must be called with a component name")
 		componentName = StringLiteralExpression(macro.Arguments[0].ToString())
-		dictionary as Expression
-		# get the hash table or an empty one.
+
+		# Make sure that hash table is an case insensitive one.
+		dictionary = MethodInvocationExpression( Target: AstUtil.CreateReferenceExpression("System.Collections.Hashtable") )
+			
 		if macro.Arguments.Count == 2:
-			dictionary = macro.Arguments[1]
-		else:
-			dictionary = MethodInvocationExpression( Target: AstUtil.CreateReferenceExpression("System.Collections.Hashtable") )
+			dictionary.Arguments.Add( macro.Arguments[1] )
+		dictionary.Arguments.Add( AstUtil.CreateReferenceExpression("System.Collections.CaseInsensitiveHashCodeProvider.Default") )
+		dictionary.Arguments.Add( AstUtil.CreateReferenceExpression("System.Collections.CaseInsensitiveComparer.Default") )
 		
 		block = Block()
 		
