@@ -34,46 +34,55 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitModel(ActiveRecordModel model)
 		{
-			currentModel = model;
+			ActiveRecordModel savedModel = currentModel;
 
-			if (model.IsDiscriminatorBase || model.IsJoinedSubClassBase ||
-				model.IsDiscriminatorSubClass || model.IsJoinedSubClass)
+			try
 			{
-				foreach(ActiveRecordModel child in arCollection)
-				{
-                    if (IsChildClass(model, child))
-					{
-						child.IsDiscriminatorSubClass = child.Key == null;
-						child.IsJoinedSubClass = child.Key != null;
-						child.Parent = model;
+				currentModel = model;
 
-						if (child.Key != null)
+				if (model.IsDiscriminatorBase || model.IsJoinedSubClassBase ||
+					model.IsDiscriminatorSubClass || model.IsJoinedSubClass)
+				{
+					foreach(ActiveRecordModel child in arCollection)
+					{
+						if (IsChildClass(model, child))
 						{
-							//Needed for deep hierarchies
-							if (model.JoinedClasses.Contains(child) == false)
+							child.IsDiscriminatorSubClass = child.Key == null;
+							child.IsJoinedSubClass = child.Key != null;
+							child.Parent = model;
+
+							if (child.Key != null)
 							{
-								// Joined subclass
-								model.JoinedClasses.Add(child);
+								// Needed for deep hierarchies
+								if (model.JoinedClasses.Contains(child) == false)
+								{
+									// Joined subclass
+									model.JoinedClasses.Add(child);
+								}
 							}
-						}
-						else
-						{
-							//Needed for deep hierarchies
-							if (model.Classes.Contains(child) == false)
+							else
 							{
-								// Discriminator subclass
-								model.Classes.Add(child);
+								// Needed for deep hierarchies
+								if (model.Classes.Contains(child) == false)
+								{
+									// Discriminator subclass
+									model.Classes.Add(child);
+								}
 							}
 						}
 					}
 				}
+
+				base.VisitModel(model);
+
+				// They should have been connected by now
+				model.CollectionIDs.Clear();
+				model.Hilos.Clear();
 			}
-
-			base.VisitModel(model);
-
-			// They should have been connected by now
-			model.CollectionIDs.Clear();
-			model.Hilos.Clear();
+			finally
+			{
+				currentModel = savedModel;
+			}
 		}
 
 		public override void VisitNested(NestedModel model)

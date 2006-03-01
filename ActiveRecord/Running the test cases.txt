@@ -1,6 +1,5 @@
 The test cases run against a MSSQL Server 2000 database by default, but due to 
-NHibernate's features, you can change the database to whatever you 
-like. 
+NHibernate's features, you can change the database to whatever you like. 
 
 
 1. Modify the Connection properties information:

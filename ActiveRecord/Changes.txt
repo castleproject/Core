@@ -1,6 +1,9 @@
 beta 4
 ======
-- Fixed a stack over flow exception when using IsUnique inside a session scope.
+
+- Applied patch from Dave Godfrey fixing nested classes with relations problems (http://forum.castleproject.org/posts/list/457.page)
+
+- Fixed a stack overflow exception when using IsUnique inside a session scope.
 
 - You can now apply IsUnique to a property that also has PrimaryKey on it without problem.
 

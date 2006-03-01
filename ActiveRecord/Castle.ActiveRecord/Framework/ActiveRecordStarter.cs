@@ -22,12 +22,9 @@ namespace Castle.ActiveRecord
 	using System.Reflection;
 	using System.ComponentModel;
 				
-#if dotNet2
-    
-#else
+#if !dotNet2
 	using System.Configuration;
 #endif
-	
 
 	using NHibernate.Cfg;
 

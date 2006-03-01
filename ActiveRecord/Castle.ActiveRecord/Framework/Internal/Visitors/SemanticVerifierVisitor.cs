@@ -41,52 +41,61 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitModel(ActiveRecordModel model)
 		{
-			currentModel = model;
+			ActiveRecordModel savedModel = currentModel;
 
-			if (model.IsDiscriminatorBase && model.IsJoinedSubClassBase)
+			try
 			{
-				throw new ActiveRecordException( String.Format(
-					"Unfortunatelly you can't have a discriminator class " + 
-					"and a joined subclass at the same time - check type {0}", model.Type.FullName) );
-			}
+				currentModel = model;
 
-			if (model.Version != null && model.Timestamp != null)
-			{
-				throw new ActiveRecordException( String.Format(
-					"You can't specify a version and a timestamp properties, only one of them " + 
-					"- check type {0}", model.Type.FullName) );
-			}
-
-			if (model.IsDiscriminatorSubClass || model.IsJoinedSubClass)
-			{
-				if (model.Version != null || model.Timestamp != null)
+				if (model.IsDiscriminatorBase && model.IsJoinedSubClassBase)
 				{
 					throw new ActiveRecordException( String.Format(
-						"A joined subclass or discriminator subclass can't specify a version or timestamp " + 
-						"- check type {0}", model.Type.FullName) );
+						"Unfortunatelly you can't have a discriminator class " + 
+						"and a joined subclass at the same time - check type {0}", model.Type.FullName) );
 				}
-			}
 
-			if (model.IsJoinedSubClass && model.Key == null)
-			{
-				throw new ActiveRecordException( String.Format(
-					"A joined subclass must specify a key property. Use the JoinedKeyAttribute to denote the shared key. " + 
-					"- check type {0}", model.Type.FullName) );
-			}
-
-			if (model.IsNestedType)
-			{
-				if (model.Version != null || model.Timestamp != null)
+				if (model.Version != null && model.Timestamp != null)
 				{
 					throw new ActiveRecordException( String.Format(
-						"A nested type is not allowed to have version or timestamped fields " + 
+						"You can't specify a version and a timestamp properties, only one of them " + 
 						"- check type {0}", model.Type.FullName) );
 				}
+
+				if (model.IsDiscriminatorSubClass || model.IsJoinedSubClass)
+				{
+					if (model.Version != null || model.Timestamp != null)
+					{
+						throw new ActiveRecordException( String.Format(
+							"A joined subclass or discriminator subclass can't specify a version or timestamp " + 
+							"- check type {0}", model.Type.FullName) );
+					}
+				}
+
+				if (model.IsJoinedSubClass && model.Key == null)
+				{
+					throw new ActiveRecordException( String.Format(
+						"A joined subclass must specify a key property. Use the JoinedKeyAttribute to denote the shared key. " + 
+						"- check type {0}", model.Type.FullName) );
+				}
+
+				if (model.IsNestedType)
+				{
+					if (model.Version != null || model.Timestamp != null)
+					{
+						throw new ActiveRecordException( String.Format(
+							"A nested type is not allowed to have version or timestamped fields " + 
+							"- check type {0}", model.Type.FullName) );
+					}
+				}
+
+				ThrowIfDoesntHavePrimaryKey(model);
+
+				base.VisitModel(model);
 			}
-
-			ThrowIfDoesntHavePrimaryKey(model);
-
-			base.VisitModel(model);
+			finally
+			{
+				currentModel = savedModel;
+			}
 		}
 
 		private static void ThrowIfDoesntHavePrimaryKey(ActiveRecordModel model)
