@@ -112,12 +112,12 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		public static int FetchCount()
 		{
-			return ActiveRecordBase.FetchCount(typeof(Post));
+			return ActiveRecordBase.CountAll(typeof(Post));
 		}
 
 		public static int FetchCount(string filter, params object[] args)
 		{
-			return ActiveRecordBase.FetchCount(typeof(Post), filter, args);
+			return ActiveRecordBase.CountAll(typeof(Post), filter, args);
 		}
 
 		public void SaveWithException()

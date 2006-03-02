@@ -447,16 +447,16 @@ namespace Castle.ActiveRecord
 		/// {
 		///   ...
 		///   
-		///   public static int FetchUsersCount()
+		///   public static int CountAllUsers()
 		///   {
-		///     return FetchCount(typeof(User));
+		///     return CountAll(typeof(User));
 		///   }
 		/// }
 		/// </code>
 		/// </example>
 		/// <param name="targetType">Type of the target.</param>
 		/// <returns>The count result</returns>
-		protected internal static int FetchCount(Type targetType)
+		protected internal static int CountAll(Type targetType)
 		{
 			CountQuery query = new CountQuery(targetType);
 
@@ -474,9 +474,9 @@ namespace Castle.ActiveRecord
 		/// {
 		///   ...
 		///   
-		///   public static int FetchUsersLockedCount()
+		///   public static int CountAllUsersLocked()
 		///   {
-		///     return FetchCount(typeof(User), "IsLocked = ?", true);
+		///     return CountAll(typeof(User), "IsLocked = ?", true);
 		///   }
 		/// }
 		/// </code>
@@ -485,7 +485,7 @@ namespace Castle.ActiveRecord
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
 		/// <returns>The count result</returns>
-		protected internal static int FetchCount(Type targetType, string filter, params object[] args)
+		protected internal static int CountAll(Type targetType, string filter, params object[] args)
 		{
 			CountQuery query = new CountQuery(targetType, filter, args);
 
@@ -503,7 +503,7 @@ namespace Castle.ActiveRecord
 		/// <returns><c>true</c> if there's at least one row</returns>
 		protected internal static bool Exists(Type targetType)
 		{
-			return FetchCount(targetType) != 0;
+			return CountAll(targetType) != 0;
 		}
 
 		/// <summary>
@@ -515,7 +515,7 @@ namespace Castle.ActiveRecord
 		/// <returns><c>true</c> if there's at least one row</returns>
 		protected internal static bool Exists(Type targetType, string filter, params object[] args)
 		{
-			return FetchCount(targetType, filter, args) != 0;
+			return CountAll(targetType, filter, args) != 0;
 		}
 
 		#endregion
@@ -863,25 +863,25 @@ namespace Castle.ActiveRecord
 			ActiveRecordBase.Delete(this);
 		}
 
-		/// <summary>
-		/// Returns the number of records of this type in the database
-		/// </summary>
-		/// <returns></returns>
-		public int FetchCount()
-		{
-			return FetchCount(this.GetType());
-		}
-
-		/// <summary>
-		/// Returns the number of records of this type in the database
-		/// </summary>
-		/// <param name="filter">A sql where string <code>Person=? and DOB > ?</code></param>
-		/// <param name="args">Positional parameters for the filter string</param>
-		/// <returns></returns>
-		public int FetchCount(string filter, params object[] args)
-		{
-			return FetchCount(this.GetType(), filter, args);
-		}
+//		/// <summary>
+//		/// Returns the number of records of this type in the database
+//		/// </summary>
+//		/// <returns></returns>
+//		public int CountAll()
+//		{
+//			return CountAll(this.GetType());
+//		}
+//
+//		/// <summary>
+//		/// Returns the number of records of this type in the database
+//		/// </summary>
+//		/// <param name="filter">A sql where string <code>Person=? and DOB > ?</code></param>
+//		/// <param name="args">Positional parameters for the filter string</param>
+//		/// <returns></returns>
+//		public int CountAll(string filter, params object[] args)
+//		{
+//			return CountAll(this.GetType(), filter, args);
+//		}
 
 		#endregion
 

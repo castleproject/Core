@@ -194,22 +194,22 @@ namespace Castle.ActiveRecord.Tests.Model
 
 		public static int FetchCount()
 		{
-			return ActiveRecordBase.FetchCount(typeof (Blog));
+			return ActiveRecordBase.CountAll(typeof(Blog));
 		}
 
 		public static int FetchCount(string filter, params object[] args)
 		{
-			return ActiveRecordBase.FetchCount(typeof (Blog), filter, args);
+			return ActiveRecordBase.CountAll(typeof(Blog), filter, args);
 		}
 
 		public static bool Exists()
 		{
-			return ActiveRecordBase.Exists(typeof (Blog));
+			return ActiveRecordBase.Exists(typeof(Blog));
 		}
 
 		public static bool Exists(string filter, params object[] args)
 		{
-			return ActiveRecordBase.Exists(typeof (Blog), filter, args);
+			return ActiveRecordBase.Exists(typeof(Blog), filter, args);
 		}
 
 		/// <summary>
