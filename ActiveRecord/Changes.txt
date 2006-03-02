@@ -1,6 +1,13 @@
 beta 4
 ======
 
+- Added lyfecycle methods that can be overriden:
+
+  . OnSave
+  . OnUpdate
+  . OnLoad(id)
+  . OnDelete
+
 - Applied patch from Ahmed Ghandour <aghandour@rydexinvestments.com> adding the methods
   FetchCount and Exists to ActiveRecordBase
 

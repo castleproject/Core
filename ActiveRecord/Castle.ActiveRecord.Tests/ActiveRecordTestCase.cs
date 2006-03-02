@@ -415,7 +415,7 @@ namespace Castle.ActiveRecord.Tests
 		}
 
 		[Test]
-		public void Count()
+		public void FetchCount()
 		{
 			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
 			Recreate();
@@ -458,6 +458,40 @@ namespace Castle.ActiveRecord.Tests
 
 			Assert.AreEqual(blog.Name, retrieved.Name);
 			Assert.AreEqual(blog.Author, retrieved.Author);
+		}
+
+		[Test]
+		public void LifecycleMethods()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Blog blog = new Blog();
+
+			Assert.IsTrue(blog.OnDeleteCalled == blog.OnLoadCalled == blog.OnSaveCalled == blog.OnUpdateCalled);
+
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			Assert.IsTrue(blog.OnSaveCalled);
+			Assert.IsFalse(blog.OnDeleteCalled);
+			Assert.IsFalse(blog.OnLoadCalled);
+			Assert.IsFalse(blog.OnUpdateCalled);
+
+			blog.Name = "hammett's blog x";
+			blog.Author = "hamilton verissimo x";
+			blog.Save();
+			Assert.IsTrue(blog.OnUpdateCalled);
+
+			blog = Blog.Find(blog.Id);
+			Assert.IsTrue(blog.OnLoadCalled);
+
+			blog.Delete();
+			Assert.IsTrue(blog.OnDeleteCalled);
 		}
 	}
 }

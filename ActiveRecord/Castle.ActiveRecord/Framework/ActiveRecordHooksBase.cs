@@ -17,6 +17,7 @@ namespace Castle.ActiveRecord
 	using System;
 	using System.Collections;
 	
+	using NHibernate;
 	using NHibernate.Type;
 
 	/// <summary>
@@ -24,7 +25,7 @@ namespace Castle.ActiveRecord
 	/// that are interested in NHibernate's hooks.
 	/// </summary>
 	[Serializable]
-	public abstract class ActiveRecordHooksBase
+	public abstract class ActiveRecordHooksBase : ILifecycle
     {
         /// <summary>
         /// Hook to change the object state
@@ -110,5 +111,67 @@ namespace Castle.ActiveRecord
 		{
 			return null;
 		}
-    }
+
+		#region ILifecycle
+
+		LifecycleVeto ILifecycle.OnSave(ISession session)
+		{
+			OnSave();
+
+			return LifecycleVeto.NoVeto;
+		}
+
+		LifecycleVeto ILifecycle.OnUpdate(ISession session)
+		{
+			OnUpdate();
+
+			return LifecycleVeto.NoVeto;
+		}
+
+		LifecycleVeto ILifecycle.OnDelete(ISession session)
+		{
+			OnDelete();
+
+			return LifecycleVeto.NoVeto;
+		}
+
+		void ILifecycle.OnLoad(ISession session, object id)
+		{
+			OnLoad(id);
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Lifecycle method invoked during Save of the entity
+		/// </summary>
+		protected virtual void OnSave()
+		{
+			
+		}
+
+		/// <summary>
+		/// Lifecycle method invoked during Update of the entity
+		/// </summary>
+		protected virtual void OnUpdate()
+		{
+			
+		}
+
+		/// <summary>
+		/// Lifecycle method invoked during Delete of the entity
+		/// </summary>
+		protected virtual void OnDelete()
+		{
+			
+		}
+
+		/// <summary>
+		/// Lifecycle method invoked during Load of the entity
+		/// </summary>
+		protected virtual void OnLoad(object id)
+		{
+			
+		}
+	}
 }

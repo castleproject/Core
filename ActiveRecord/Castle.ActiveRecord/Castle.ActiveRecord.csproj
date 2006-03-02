@@ -335,6 +335,7 @@
                 />
                 <File
                     RelPath = "Framework\ActiveRecordValidationBase.Generic.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

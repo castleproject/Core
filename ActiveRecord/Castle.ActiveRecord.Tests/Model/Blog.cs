@@ -33,6 +33,7 @@ namespace Castle.ActiveRecord.Tests.Model
 		private IList _publishedposts;
 		private IList _unpublishedposts;
 		private IList _recentposts;
+		private bool onSaveCalled, onUpdateCalled, onDeleteCalled, onLoadCalled;
 
 		[PrimaryKey(PrimaryKeyType.Native)]
 		public int Id
@@ -211,6 +212,57 @@ namespace Castle.ActiveRecord.Tests.Model
 			return ActiveRecordBase.Exists(typeof (Blog), filter, args);
 		}
 
+		/// <summary>
+		/// Lifecycle method invoked during Save of the entity
+		/// </summary>
+		protected override void OnSave()
+		{
+			onSaveCalled = true;
+		}
+
+		/// <summary>
+		/// Lifecycle method invoked during Update of the entity
+		/// </summary>
+		protected override void OnUpdate()
+		{
+			onUpdateCalled = true;
+		}
+
+		/// <summary>
+		/// Lifecycle method invoked during Delete of the entity
+		/// </summary>
+		protected override void OnDelete()
+		{
+			onDeleteCalled = true;
+		}
+
+		/// <summary>
+		/// Lifecycle method invoked during Load of the entity
+		/// </summary>
+		protected override void OnLoad(object id)
+		{
+			onLoadCalled = true;
+		}
+
+		public bool OnSaveCalled
+		{
+			get { return onSaveCalled; }
+		}
+
+		public bool OnUpdateCalled
+		{
+			get { return onUpdateCalled; }
+		}
+
+		public bool OnDeleteCalled
+		{
+			get { return onDeleteCalled; }
+		}
+
+		public bool OnLoadCalled
+		{
+			get { return onLoadCalled; }
+		}
 
 		public ISession CurrentSession
 		{

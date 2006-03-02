@@ -16,11 +16,12 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
+	
+	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Queries;
+
 	using NHibernate;
 	using NHibernate.Expression;
-
-	using Castle.ActiveRecord.Framework;
 
 	/// <summary>
 	/// Allow custom executions using the NHibernate's ISession.
@@ -46,19 +47,19 @@ namespace Castle.ActiveRecord
 
 		#region internal static
 
-		internal static void EnsureInitialized( Type type )
+		internal static void EnsureInitialized(Type type)
 		{
 			if (holder == null)
 			{
-				String message = String.Format("An ActiveRecord class ({0}) was used but the framework seems not " + 
+				String message = String.Format("An ActiveRecord class ({0}) was used but the framework seems not " +
 					"properly initialized. Did you forget about ActiveRecordStarter.Initialize() ?", type.FullName);
-				throw new ActiveRecordException( message );
+				throw new ActiveRecordException(message);
 			}
 			if (type != typeof(ActiveRecordBase) && GetModel(type) == null)
 			{
-				String message = String.Format("You have accessed an ActiveRecord class that wasn't properly initialized. " + 
+				String message = String.Format("You have accessed an ActiveRecord class that wasn't properly initialized. " +
 					"The only explanation is that the call to ActiveRecordStarter.Initialize() didn't include {0} class", type.FullName);
-				throw new ActiveRecordException( message );
+				throw new ActiveRecordException(message);
 			}
 		}
 
@@ -77,265 +78,274 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		/// <param name="arType"></param>
 		/// <returns></returns>
-		internal static Framework.Internal.ActiveRecordModel GetModel( Type arType )
+		internal static Framework.Internal.ActiveRecordModel GetModel(Type arType)
 		{
 			return Framework.Internal.ActiveRecordModel.GetModel(arType);
 		}
 
 		#endregion
 
-        #region protected internal static
+		#region protected internal static
 
-        #region Create/Update/Save/Delete/DeleteAll
+		#region Create/Update/Save/Delete/DeleteAll
 
-        #region Create
-        /// <summary>
-        /// Creates (Saves) a new instance to the database.
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Create(object instance)
-        {
-            if (instance == null) throw new ArgumentNullException("instance");
+		#region Create
 
-            EnsureInitialized(instance.GetType());
-
-            ISession session = holder.CreateSession(instance.GetType());
-
-            try
-            {
-                session.Save(instance);
-
-                session.Flush();
-            }
-            catch (Exception ex)
-            {
-                // NHibernate catches our ValidationException, and as such it is the innerexception here
-                if (ex.InnerException is ValidationException)
-                {
-                    throw ex.InnerException;
-                }
-                else
-                {
-                    throw new ActiveRecordException("Could not perform Create for " + instance.GetType().Name, ex);
-                }
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-
-        #region Delete
-        /// <summary>
-        /// Deletes the instance from the database.
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Delete(object instance)
-        {
-            if (instance == null) throw new ArgumentNullException("instance");
-
-            EnsureInitialized(instance.GetType());
-
-            ISession session = holder.CreateSession(instance.GetType());
-
-            try
-            {
-                session.Delete(instance);
-
-                session.Flush();
-            }
-            catch (Exception ex)
-            {
-                // NHibernate catches our ValidationException, and as such it is the innerexception here
-                if (ex.InnerException is ValidationException)
-                {
-                    throw ex.InnerException;
-                }
-                else
-                {
-                    throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
-                }
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-
-        #region DeleteAll
-        protected internal static void DeleteAll(Type type)
-        {
-            EnsureInitialized(type);
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.Delete(String.Format("from {0}", type.Name));
-
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-
-        protected internal static void DeleteAll(Type type, string where)
-        {
-            EnsureInitialized(type);
-
-            ISession session = holder.CreateSession(type);
-
-            try
-            {
-                session.Delete(String.Format("from {0} where {1}", type.Name, where));
-
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-
-        /// <summary>
-        /// TODO: Fabio, document this
-        /// </summary>
-        /// <param name="targetType"></param>
-        /// <param name="pkValues"></param>
-        /// <returns></returns>
-        protected internal static int DeleteAll(Type targetType, IEnumerable pkValues)
-        {
-            if (pkValues == null)
-            {
-                return 0;
-            }
-
-            int counter = 0;
-
-            foreach (object pk in pkValues)
-            {
-                Object obj = FindByPrimaryKey(targetType, pk, false);
-
-                if (obj != null)
-                {
-                    ActiveRecordBase arBase = obj as ActiveRecordBase;
-
-                    if (arBase != null)
-                    {
-                        arBase.Delete(); // in order to allow override of the virtual "Delete()" method
-                    }
-                    else
-                    {
-                        ActiveRecordBase.Delete(obj);
-                    }
-
-                    counter++;
-                }
-            }
-
-            return counter;
-        }
-        #endregion
-
-        #region Update
-        /// <summary>
-        /// Persists the modification on the instance
-        /// state to the database.
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Update(object instance)
-        {
-            if (instance == null) throw new ArgumentNullException("instance");
-
-            EnsureInitialized(instance.GetType());
-
-            ISession session = holder.CreateSession(instance.GetType());
-
-            try
-            {
-                session.Update(instance);
-
-                session.Flush();
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
-
-        #region Save
-        
 		/// <summary>
-        /// Saves the instance to the database
-        /// </summary>
-        /// <param name="instance"></param>
-        protected internal static void Save(object instance)
-        {
-            if (instance == null) throw new ArgumentNullException("instance");
+		/// Creates (Saves) a new instance to the database.
+		/// </summary>
+		/// <param name="instance"></param>
+		protected internal static void Create(object instance)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
 
-            EnsureInitialized(instance.GetType());
+			EnsureInitialized(instance.GetType());
 
-            ISession session = holder.CreateSession(instance.GetType());
+			ISession session = holder.CreateSession(instance.GetType());
 
-            try
-            {
-                session.SaveOrUpdate(instance);
+			try
+			{
+				session.Save(instance);
 
-                session.Flush();
-            }
-            catch (Exception ex)
-            {
-                // NHibernate catches our ValidationException, and as such it is the innerexception here
-                if (ex.InnerException is ValidationException)
-                {
-                    throw ex.InnerException;
-                }
-                else
-                {
-                    throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
-                }
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				// NHibernate catches our ValidationException, and as such it is the innerexception here
+				if (ex.InnerException is ValidationException)
+				{
+					throw ex.InnerException;
+				}
+				else
+				{
+					throw new ActiveRecordException("Could not perform Create for " + instance.GetType().Name, ex);
+				}
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
 		#endregion
 
-        #endregion        
+		#region Delete
 
-        #region Execute
-        /// <summary>
+		/// <summary>
+		/// Deletes the instance from the database.
+		/// </summary>
+		/// <param name="instance"></param>
+		protected internal static void Delete(object instance)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
+			ISession session = holder.CreateSession(instance.GetType());
+
+			try
+			{
+				session.Delete(instance);
+
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				// NHibernate catches our ValidationException, and as such it is the innerexception here
+				if (ex.InnerException is ValidationException)
+				{
+					throw ex.InnerException;
+				}
+				else
+				{
+					throw new ActiveRecordException("Could not perform Delete for " + instance.GetType().Name, ex);
+				}
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
+		#endregion
+
+		#region DeleteAll
+
+		protected internal static void DeleteAll(Type type)
+		{
+			EnsureInitialized(type);
+
+			ISession session = holder.CreateSession(type);
+
+			try
+			{
+				session.Delete(String.Format("from {0}", type.Name));
+
+				session.Flush();
+			}
+			catch(ValidationException)
+			{
+				throw;
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
+		protected internal static void DeleteAll(Type type, string where)
+		{
+			EnsureInitialized(type);
+
+			ISession session = holder.CreateSession(type);
+
+			try
+			{
+				session.Delete(String.Format("from {0} where {1}", type.Name, where));
+
+				session.Flush();
+			}
+			catch(ValidationException)
+			{
+				throw;
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform DeleteAll for " + type.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
+		/// <summary>
+		/// TODO: Fabio, document this
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <param name="pkValues"></param>
+		/// <returns></returns>
+		protected internal static int DeleteAll(Type targetType, IEnumerable pkValues)
+		{
+			if (pkValues == null)
+			{
+				return 0;
+			}
+
+			int counter = 0;
+
+			foreach(object pk in pkValues)
+			{
+				Object obj = FindByPrimaryKey(targetType, pk, false);
+
+				if (obj != null)
+				{
+					ActiveRecordBase arBase = obj as ActiveRecordBase;
+
+					if (arBase != null)
+					{
+						arBase.Delete(); // in order to allow override of the virtual "Delete()" method
+					}
+					else
+					{
+						ActiveRecordBase.Delete(obj);
+					}
+
+					counter++;
+				}
+			}
+
+			return counter;
+		}
+
+		#endregion
+
+		#region Update
+
+		/// <summary>
+		/// Persists the modification on the instance
+		/// state to the database.
+		/// </summary>
+		/// <param name="instance"></param>
+		protected internal static void Update(object instance)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
+			ISession session = holder.CreateSession(instance.GetType());
+
+			try
+			{
+				session.Update(instance);
+
+				session.Flush();
+			}
+			catch(ValidationException)
+			{
+				throw;
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
+		#endregion
+
+		#region Save
+
+		/// <summary>
+		/// Saves the instance to the database
+		/// </summary>
+		/// <param name="instance"></param>
+		protected internal static void Save(object instance)
+		{
+			if (instance == null) throw new ArgumentNullException("instance");
+
+			EnsureInitialized(instance.GetType());
+
+			ISession session = holder.CreateSession(instance.GetType());
+
+			try
+			{
+				session.SaveOrUpdate(instance);
+
+				session.Flush();
+			}
+			catch(Exception ex)
+			{
+				// NHibernate catches our ValidationException, and as such it is the innerexception here
+				if (ex.InnerException is ValidationException)
+				{
+					throw ex.InnerException;
+				}
+				else
+				{
+					throw new ActiveRecordException("Could not perform Save for " + instance.GetType().Name, ex);
+				}
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
+		#endregion
+
+		#endregion        
+
+		#region Execute
+
+		/// <summary>
 		/// Invokes the specified delegate passing a valid 
 		/// NHibernate session. Used for custom NHibernate queries.
 		/// </summary>
@@ -350,7 +360,7 @@ namespace Castle.ActiveRecord
 
 			EnsureInitialized(targetType);
 
-			ISession session = holder.CreateSession( targetType );
+			ISession session = holder.CreateSession(targetType);
 
 			try
 			{
@@ -368,59 +378,84 @@ namespace Castle.ActiveRecord
 			{
 				holder.ReleaseSession(session);
 			}
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region ExecuteQuery
-        protected internal static IEnumerable EnumerateQuery(IActiveRecordQuery query)
-        {
-            Type targetType = query.Target;
+		#region ExecuteQuery
 
-            EnsureInitialized(targetType);
+		protected internal static IEnumerable EnumerateQuery(IActiveRecordQuery query)
+		{
+			Type targetType = query.Target;
 
-            ISession session = holder.CreateSession(targetType);
+			EnsureInitialized(targetType);
 
-            try
-            {
-                return query.Enumerate(session);
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform EnumerateQuery for " + targetType.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
+			ISession session = holder.CreateSession(targetType);
 
-        #region ExecuteQuery
-        protected internal static object ExecuteQuery(IActiveRecordQuery query)
-        {
-            Type targetType = query.Target;
+			try
+			{
+				return query.Enumerate(session);
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform EnumerateQuery for " + targetType.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
 
-            EnsureInitialized(targetType);
+		#endregion
 
-            ISession session = holder.CreateSession(targetType);
+		#region ExecuteQuery
 
-            try
-            {
-                return query.Execute(session);
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
+		protected internal static object ExecuteQuery(IActiveRecordQuery query)
+		{
+			Type targetType = query.Target;
+
+			EnsureInitialized(targetType);
+
+			ISession session = holder.CreateSession(targetType);
+
+			try
+			{
+				return query.Execute(session);
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Execute for " + targetType.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
+
+		#endregion
 
 		#region Count
+
+		/// <summary>
+		/// Returns the number of records of the specified 
+		/// type in the database
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// [ActiveRecord]
+		/// public class User : ActiveRecordBase
+		/// {
+		///   ...
+		///   
+		///   public static int FetchUsersCount()
+		///   {
+		///     return FetchCount(typeof(User));
+		///   }
+		/// }
+		/// </code>
+		/// </example>
+		/// <param name="targetType">Type of the target.</param>
+		/// <returns>The count result</returns>
 		protected internal static int FetchCount(Type targetType)
 		{
 			CountQuery query = new CountQuery(targetType);
@@ -429,149 +464,172 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Returns the number of records of this type in the database
+		/// Returns the number of records of the specified 
+		/// type in the database
 		/// </summary>
+		/// <example>
+		/// <code>
+		/// [ActiveRecord]
+		/// public class User : ActiveRecordBase
+		/// {
+		///   ...
+		///   
+		///   public static int FetchUsersLockedCount()
+		///   {
+		///     return FetchCount(typeof(User), "IsLocked = ?", true);
+		///   }
+		/// }
+		/// </code>
+		/// </example>
 		/// <param name="targetType">Type of the target.</param>
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
-		/// <returns></returns>
+		/// <returns>The count result</returns>
 		protected internal static int FetchCount(Type targetType, string filter, params object[] args)
 		{
 			CountQuery query = new CountQuery(targetType, filter, args);
 
 			return (int) ExecuteQuery(query);
 		}
+
 		#endregion
 
-        #region Exists
+		#region Exists
+
 		/// <summary>
-		/// Check if there are any records in the db for the target type
+		/// Check if there is any records in the db for the target type
 		/// </summary>
 		/// <param name="targetType">Type of the target.</param>
-		/// <returns></returns>
+		/// <returns><c>true</c> if there's at least one row</returns>
 		protected internal static bool Exists(Type targetType)
 		{
-			return FetchCount(targetType) > 0;
+			return FetchCount(targetType) != 0;
 		}
 
 		/// <summary>
-		/// Existses the specified target type.
+		/// Check if there is any records in the db for the target type
 		/// </summary>
 		/// <param name="targetType">Type of the target.</param>
 		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
 		/// <param name="args">Positional parameters for the filter string</param>
-		/// <returns></returns>
+		/// <returns><c>true</c> if there's at least one row</returns>
 		protected internal static bool Exists(Type targetType, string filter, params object[] args)
 		{
-			return FetchCount(targetType, filter, args) > 0;
+			return FetchCount(targetType, filter, args) != 0;
 		}
+
 		#endregion
 
-        #region FindAll
-        /// <summary>
-        /// Returns all instances found for the specified type.
-        /// </summary>
-        /// <param name="targetType"></param>
-        /// <returns></returns>
-        protected internal static Array FindAll(Type targetType)
-        {
-            return FindAll(targetType, (Order[])null);
-        }
+		#region FindAll
 
-        /// <summary>
-        /// Returns all instances found for the specified type 
-        /// using sort orders and criterias.
-        /// </summary>
-        /// <param name="targetType"></param>
-        /// <param name="orders"></param>
-        /// <param name="criterias"></param>
-        /// <returns></returns>
-        protected internal static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
-        {
-            EnsureInitialized(targetType);
+		/// <summary>
+		/// Returns all instances found for the specified type.
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <returns></returns>
+		protected internal static Array FindAll(Type targetType)
+		{
+			return FindAll(targetType, (Order[]) null);
+		}
 
-            ISession session = holder.CreateSession(targetType);
+		/// <summary>
+		/// Returns all instances found for the specified type 
+		/// using sort orders and criterias.
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <param name="orders"></param>
+		/// <param name="criterias"></param>
+		/// <returns></returns>
+		protected internal static Array FindAll(Type targetType, Order[] orders, params ICriterion[] criterias)
+		{
+			EnsureInitialized(targetType);
 
-            try
-            {
-                ICriteria criteria = session.CreateCriteria(targetType);
+			ISession session = holder.CreateSession(targetType);
 
-                foreach (ICriterion cond in criterias)
-                {
-                    criteria.Add(cond);
-                }
+			try
+			{
+				ICriteria criteria = session.CreateCriteria(targetType);
 
-                if (orders != null)
-                {
-                    foreach (Order order in orders)
-                    {
-                        criteria.AddOrder(order);
-                    }
-                }
+				foreach(ICriterion cond in criterias)
+				{
+					criteria.Add(cond);
+				}
 
-                return CreateReturnArray(criteria, targetType);
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
+				if (orders != null)
+				{
+					foreach(Order order in orders)
+					{
+						criteria.AddOrder(order);
+					}
+				}
 
-        /// <summary>
-        /// Returns all instances found for the specified type 
-        /// using criterias.
-        /// </summary>
-        /// <param name="targetType"></param>
-        /// <param name="criterias"></param>
-        /// <returns></returns>
-        protected internal static Array FindAll(Type targetType, params ICriterion[] criterias)
-        {
-            return FindAll(targetType, null, criterias);
-        }
-        #endregion
+				return CreateReturnArray(criteria, targetType);
+			}
+			catch(ValidationException)
+			{
+				throw;
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform FindAll for " + targetType.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
 
-        #region FindAllByProperty
-        /// <summary>
-        /// Finds records based on a property value
-        /// </summary>
-        /// <remarks>
-        /// Contributed by someone on the forum
-        /// http://forum.castleproject.org/posts/list/300.page
-        /// </remarks>
-        /// <param name="targetType">The target type</param>
-        /// <param name="property">A property name (not a column name)</param>
-        /// <param name="value">The value to be equals to</param>
-        /// <returns></returns>
-        protected static Array FindAllByProperty(Type targetType, String property, object value)
-        {
-            return FindAll(targetType, Expression.Eq(property, value));
-        }
+		/// <summary>
+		/// Returns all instances found for the specified type 
+		/// using criterias.
+		/// </summary>
+		/// <param name="targetType"></param>
+		/// <param name="criterias"></param>
+		/// <returns></returns>
+		protected internal static Array FindAll(Type targetType, params ICriterion[] criterias)
+		{
+			return FindAll(targetType, null, criterias);
+		}
 
-        /// <summary>
-        /// Finds records based on a property value
-        /// </summary>
-        /// <param name="targetType">The target type</param>
-        /// <param name="orderByColumn">The column name to be ordered ASC</param>
-        /// <param name="property">A property name (not a column name)</param>
-        /// <param name="value">The value to be equals to</param>
-        /// <returns></returns>
-        protected static Array FindAllByProperty(Type targetType, String orderByColumn, String property, object value)
-        {
-            return FindAll(targetType,
-                new Order[] { Order.Asc(orderByColumn) }, Expression.Eq(property, value));
-        }
-        #endregion
+		#endregion
 
-        #region FindByPrimaryKey
-        /// <summary>
+		#region FindAllByProperty
+
+		/// <summary>
+		/// Finds records based on a property value
+		/// </summary>
+		/// <remarks>
+		/// Contributed by someone on the forum
+		/// http://forum.castleproject.org/posts/list/300.page
+		/// </remarks>
+		/// <param name="targetType">The target type</param>
+		/// <param name="property">A property name (not a column name)</param>
+		/// <param name="value">The value to be equals to</param>
+		/// <returns></returns>
+		protected static Array FindAllByProperty(Type targetType, String property, object value)
+		{
+			return FindAll(targetType, Expression.Eq(property, value));
+		}
+
+		/// <summary>
+		/// Finds records based on a property value
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="orderByColumn">The column name to be ordered ASC</param>
+		/// <param name="property">A property name (not a column name)</param>
+		/// <param name="value">The value to be equals to</param>
+		/// <returns></returns>
+		protected static Array FindAllByProperty(Type targetType, String orderByColumn, String property, object value)
+		{
+			return FindAll(targetType,
+			               new Order[] {Order.Asc(orderByColumn)}, Expression.Eq(property, value));
+		}
+
+		#endregion
+
+		#region FindByPrimaryKey
+
+		/// <summary>
 		/// Finds an object instance by a unique ID
 		/// </summary>
 		/// <param name="targetType">The AR subclass type</param>
@@ -582,122 +640,128 @@ namespace Castle.ActiveRecord
 			return FindByPrimaryKey(targetType, id, true);
 		}
 
-        /// <summary>
-        /// Finds an object instance by a unique ID
-        /// </summary>
-        /// <param name="targetType">The AR subclass type</param>
-        /// <param name="id">ID value</param>
-        /// <param name="throwOnNotFound"><c>true</c> if you want to catch an exception 
-        /// if the object is not found</param>
-        /// <returns></returns>
-        /// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
-        /// <c>true</c> and the row is not found</exception>
-        protected internal static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
-        {
-            EnsureInitialized(targetType);
+		/// <summary>
+		/// Finds an object instance by a unique ID
+		/// </summary>
+		/// <param name="targetType">The AR subclass type</param>
+		/// <param name="id">ID value</param>
+		/// <param name="throwOnNotFound"><c>true</c> if you want to catch an exception 
+		/// if the object is not found</param>
+		/// <returns></returns>
+		/// <exception cref="ObjectNotFoundException">if <c>throwOnNotFound</c> is set to 
+		/// <c>true</c> and the row is not found</exception>
+		protected internal static object FindByPrimaryKey(Type targetType, object id, bool throwOnNotFound)
+		{
+			EnsureInitialized(targetType);
 
-            ISession session = holder.CreateSession(targetType);
+			ISession session = holder.CreateSession(targetType);
 
-            try
-            {
-                return session.Load(targetType, id);
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                if (throwOnNotFound)
-                {
-                    String message = String.Format("Could not find {0} with id {1}", targetType.Name, id);
-                    throw new NotFoundException(message, ex);
-                }
+			try
+			{
+				return session.Load(targetType, id);
+			}
+			catch(ObjectNotFoundException ex)
+			{
+				if (throwOnNotFound)
+				{
+					String message = String.Format("Could not find {0} with id {1}", targetType.Name, id);
+					throw new NotFoundException(message, ex);
+				}
 
-                return null;
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ActiveRecordException("Could not perform Load (Find by id) for " + targetType.Name, ex);
-            }
-            finally
-            {
-                holder.ReleaseSession(session);
-            }
-        }
-        #endregion
+				return null;
+			}
+			catch(ValidationException)
+			{
+				throw;
+			}
+			catch(Exception ex)
+			{
+				throw new ActiveRecordException("Could not perform Load (Find by id) for " + targetType.Name, ex);
+			}
+			finally
+			{
+				holder.ReleaseSession(session);
+			}
+		}
 
-        #region FindFirst
-        /// <summary>
-        /// Searches and returns the first row.
-        /// </summary>
-        /// <param name="targetType">The target type</param>
-        /// <param name="orders">The sort order - used to determine which record is the first one</param>
-        /// <param name="criterias">The criteria expression</param>
-        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-        protected internal static object FindFirst(Type targetType, Order[] orders, params ICriterion[] criterias)
-        {
-            Array result = SlicedFindAll(targetType, 0, 1, orders, criterias);
-            return (result != null && result.Length > 0 ? result.GetValue(0) : null);
-        }
+		#endregion
 
-        /// <summary>
-        /// Searches and returns the first row.
-        /// </summary>
-        /// <param name="targetType">The target type</param>
-        /// <param name="criterias">The criteria expression</param>
-        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-        protected internal static object FindFirst(Type targetType, params ICriterion[] criterias)
-        {
-            return FindFirst(targetType, null, criterias);
-        }
-        #endregion
+		#region FindFirst
 
-        #region FindOne
-        /// <summary>
-        /// Searches and returns the a row. If more than one is found, 
-        /// throws <see cref="ActiveRecordException"/>
-        /// </summary>
-        /// <param name="targetType">The target type</param>
-        /// <param name="criterias">The criteria expression</param>
-        /// <returns>A <c>targetType</c> instance or <c>null</c></returns>
-        protected internal static object FindOne(Type targetType, params ICriterion[] criterias)
-        {
-            Array result = SlicedFindAll(targetType, 0, 2, criterias);
+		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="orders">The sort order - used to determine which record is the first one</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		protected internal static object FindFirst(Type targetType, Order[] orders, params ICriterion[] criterias)
+		{
+			Array result = SlicedFindAll(targetType, 0, 1, orders, criterias);
+			return (result != null && result.Length > 0 ? result.GetValue(0) : null);
+		}
 
-            if (result.Length > 1)
-            {
-                throw new ActiveRecordException(targetType.Name + ".FindOne returned " + result.Length + " rows. Expecting one or none");
-            }
+		/// <summary>
+		/// Searches and returns the first row.
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		protected internal static object FindFirst(Type targetType, params ICriterion[] criterias)
+		{
+			return FindFirst(targetType, null, criterias);
+		}
 
-            return (result.Length == 0) ? null : result.GetValue(0);
-        }
-        #endregion
+		#endregion
 
-        #region SlicedFindAll
-        /// <summary>
+		#region FindOne
+
+		/// <summary>
+		/// Searches and returns the a row. If more than one is found, 
+		/// throws <see cref="ActiveRecordException"/>
+		/// </summary>
+		/// <param name="targetType">The target type</param>
+		/// <param name="criterias">The criteria expression</param>
+		/// <returns>A <c>targetType</c> instance or <c>null</c></returns>
+		protected internal static object FindOne(Type targetType, params ICriterion[] criterias)
+		{
+			Array result = SlicedFindAll(targetType, 0, 2, criterias);
+
+			if (result.Length > 1)
+			{
+				throw new ActiveRecordException(targetType.Name + ".FindOne returned " + result.Length + " rows. Expecting one or none");
+			}
+
+			return (result.Length == 0) ? null : result.GetValue(0);
+		}
+
+		#endregion
+
+		#region SlicedFindAll
+
+		/// <summary>
 		/// Returns a portion of the query results (sliced)
 		/// </summary>
 		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, Order[] orders, params ICriterion[] criterias)
 		{
 			EnsureInitialized(targetType);
 
-			ISession session = holder.CreateSession( targetType );
+			ISession session = holder.CreateSession(targetType);
 
 			try
 			{
 				ICriteria criteria = session.CreateCriteria(targetType);
 
-				foreach( ICriterion cond in criterias )
+				foreach(ICriterion cond in criterias)
 				{
-					criteria.Add( cond );
+					criteria.Add(cond);
 				}
 
 				if (orders != null)
 				{
-					foreach( Order order in orders )
+					foreach(Order order in orders)
 					{
-						criteria.AddOrder( order );
+						criteria.AddOrder(order);
 					}
 				}
 
@@ -726,28 +790,30 @@ namespace Castle.ActiveRecord
 		protected internal static Array SlicedFindAll(Type targetType, int firstResult, int maxresults, params ICriterion[] criterias)
 		{
 			return SlicedFindAll(targetType, firstResult, maxresults, null, criterias);
-        }
-        #endregion
+		}
 
 		#endregion
 
-        #region private static
-        private static Array CreateReturnArray(ICriteria criteria, Type targetType)
-        {
-            IList result = criteria.List();
+		#endregion
 
-            Array array = Array.CreateInstance(targetType, result.Count);
+		#region private static
 
-            result.CopyTo(array, 0);
+		private static Array CreateReturnArray(ICriteria criteria, Type targetType)
+		{
+			IList result = criteria.List();
 
-            return array;
-        }
+			Array array = Array.CreateInstance(targetType, result.Count);
 
-        #endregion
+			result.CopyTo(array, 0);
 
+			return array;
+		}
 
-        #region protected internal
-        /// <summary>
+		#endregion
+
+		#region protected internal
+
+		/// <summary>
 		/// Invokes the specified delegate passing a valid 
 		/// NHibernate session. Used for custom NHibernate queries.
 		/// </summary>
@@ -755,12 +821,14 @@ namespace Castle.ActiveRecord
 		/// <returns>Whatever is returned by the delegate invocation</returns>
 		protected internal object Execute(NHibernateDelegate call)
 		{
-			return Execute( this.GetType(), call, this );
-        }
-        #endregion
+			return Execute(this.GetType(), call, this);
+		}
 
-        #region public virtual
-        /// <summary>
+		#endregion
+
+		#region public virtual
+
+		/// <summary>
 		/// Saves the instance information to the database.
 		/// May Create or Update the instance depending 
 		/// on whether it has a valid ID.
@@ -793,7 +861,7 @@ namespace Castle.ActiveRecord
 		public virtual void Delete()
 		{
 			ActiveRecordBase.Delete(this);
-        }
+		}
 
 		/// <summary>
 		/// Returns the number of records of this type in the database
@@ -814,10 +882,12 @@ namespace Castle.ActiveRecord
 		{
 			return FetchCount(this.GetType(), filter, args);
 		}
-        #endregion
 
-        #region public override
-        public override String ToString()
+		#endregion
+
+		#region public override
+
+		public override String ToString()
 		{
 			Framework.Internal.ActiveRecordModel model = GetModel(GetType());
 
@@ -825,13 +895,14 @@ namespace Castle.ActiveRecord
 			{
 				return base.ToString();
 			}
-			
+
 			Framework.Internal.PrimaryKeyModel pkModel = (Framework.Internal.PrimaryKeyModel) model.Ids[0];
-			
+
 			object pkVal = pkModel.Property.GetValue(this, null);
-			
+
 			return base.ToString() + "#" + pkVal;
-        }
-        #endregion
-    }
+		}
+
+		#endregion
+	}
 }
