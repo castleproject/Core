@@ -613,18 +613,9 @@ namespace Castle.ActiveRecord
 			{
                 Type arType = typeof(T);
                 PrimaryKeyModel pkModel = (PrimaryKeyModel)model.Ids[0];
-                string pkName = pkModel.PrimaryKeyAtt.Column;
-                
-                if (pkName == null)
-                {
-                    pkName = pkModel.Property.Name;
-                }
 
-                SimpleQuery<PkType> query = new SimpleQuery<PkType>(arType, String.Format("select tbl.{0} from {1} tbl where tbl.{0} = ?", pkName, arType.Name), id);
-                foreach (PkType pk in query.Execute())
-                {
-                    return true;
-                }
+                SimpleQuery<PkType> query = new SimpleQuery<PkType>(arType, String.Format("select tbl.{0} from {1} tbl where tbl.{0} = ?", pkModel.PrimaryKeyAtt.Column, arType.Name), id);
+                return query.Execute().Length > 0;
 			}
             return false;
         }
