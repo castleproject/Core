@@ -264,12 +264,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\Validations\ValidateCreditCardAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\Validations\ValidateEmailAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Attributes\Validations\ValidateIsUniqueAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\Validations\ValidateLengthAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -321,6 +331,10 @@
                 <File
                     RelPath = "Framework\ActiveRecordValidationBase.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\ActiveRecordValidationBase.Generic.cs"
                     BuildAction = "Compile"
                 />
                 <File
@@ -529,6 +543,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Queries\CountQuery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Queries\HqlBasedQuery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Queries\IActiveRecordQuery.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -609,6 +633,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Framework\Validators\CreditCardValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Framework\Validators\EmailValidator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -620,6 +649,11 @@
                 />
                 <File
                     RelPath = "Framework\Validators\IValidator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Framework\Validators\LengthValidator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,6 +1,9 @@
 beta 4
 ======
 
+- Applied patch from Ahmed Ghandour <aghandour@rydexinvestments.com> adding the methods
+  FetchCount and Exists to ActiveRecordBase
+
 - Applied patch from Dave Godfrey fixing nested classes with relations problems (http://forum.castleproject.org/posts/list/457.page)
 
 - Fixed a stack overflow exception when using IsUnique inside a session scope.
@@ -13,9 +16,9 @@ beta 4
 
 - Added SimpleQuery<T>.Enumerate(), for use with large queries - .NET 2.0 only.
 
-- Added ValidateCreditCard attribute.
+- Added ValidateCreditCard validation attribute.
 
-- Added ValidateLength attribute.
+- Added ValidateLength validation attribute.
 
 - Added support for .Net 2.0 Connection Strings in the config file, using this method:
 

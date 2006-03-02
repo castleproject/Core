@@ -413,5 +413,51 @@ namespace Castle.ActiveRecord.Tests
 
 			// Assert.IsFalse(ts.LastSaved == origional_lastsaved);
 		}
+
+		[Test]
+		public void Count()
+		{
+			ActiveRecordStarter.Initialize(GetConfigSource(), typeof(Post), typeof(Blog));
+			Recreate();
+
+			Post.DeleteAll();
+			Blog.DeleteAll();
+
+			Assert.AreEqual(0, Post.FetchCount());
+			Assert.AreEqual(0, Blog.FetchCount());
+
+			Blog[] blogs = Blog.FindAll();
+
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(0, blogs.Length);
+			Assert.IsFalse(Blog.Exists());
+
+			Blog blog = new Blog();
+			blog.Name = "hammett's blog";
+			blog.Author = "hamilton verissimo";
+			blog.Save();
+
+			Assert.AreEqual(1, Blog.FetchCount());
+			Assert.IsTrue(Blog.Exists());
+
+			blogs = Blog.FindAll();
+			Assert.IsNotNull(blogs);
+			Assert.AreEqual(1, blogs.Length);
+
+			Blog blog2 = new Blog();
+			blog2.Name = "joe's blog";
+			blog2.Author = "joe doe";
+			blog2.Save();
+
+			Assert.AreEqual(2, Blog.FetchCount());
+			Assert.AreEqual(1, Blog.FetchCount("name=?","hammett's blog"));
+			Assert.IsTrue(Blog.Exists("name=?","hammett's blog"));
+
+			Blog retrieved = blogs[0];
+			Assert.IsNotNull(retrieved);
+
+			Assert.AreEqual(blog.Name, retrieved.Name);
+			Assert.AreEqual(blog.Author, retrieved.Author);
+		}
 	}
 }

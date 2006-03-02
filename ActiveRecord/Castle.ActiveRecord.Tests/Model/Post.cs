@@ -110,6 +110,16 @@ namespace Castle.ActiveRecord.Tests.Model
 			return (Post) ActiveRecordBase.FindByPrimaryKey( typeof(Post), id );
 		}
 
+		public static int FetchCount()
+		{
+			return ActiveRecordBase.FetchCount(typeof(Post));
+		}
+
+		public static int FetchCount(string filter, params object[] args)
+		{
+			return ActiveRecordBase.FetchCount(typeof(Post), filter, args);
+		}
+
 		public void SaveWithException()
 		{
 			Save();

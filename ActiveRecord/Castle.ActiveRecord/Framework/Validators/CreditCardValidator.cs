@@ -19,7 +19,8 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System.Text.RegularExpressions;
 
 	/// <summary>
-	/// Ensures that a property's string representation is within the desired length limitations.
+	/// Ensures that a property's string 
+	/// representation is within the desired length limitations.
 	/// </summary>
 	[Serializable]
 	public class CreditCardValidator : AbstractValidator
@@ -27,8 +28,7 @@ namespace Castle.ActiveRecord.Framework.Validators
 		private CardType allowedTypes = CardType.All;
 		private string[] exceptions = new string[] {};
 
-		public CreditCardValidator()
-		{}
+		public CreditCardValidator() {}
 
 		/// <summary>
 		/// Initializes a new credit card validator.

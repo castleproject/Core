@@ -17,7 +17,8 @@ namespace Castle.ActiveRecord.Framework.Validators
 	using System;
 
 	/// <summary>
-	/// Ensures that a property's string representation is within the desired length limitations.
+	/// Ensures that a property's string representation 
+	/// is within the desired length limitations.
 	/// </summary>
 	[Serializable]
 	public class LengthValidator : AbstractValidator
@@ -33,7 +34,9 @@ namespace Castle.ActiveRecord.Framework.Validators
 		public LengthValidator(int exactLength)
 		{
 			if (minLength != int.MinValue && minLength < 0)
+			{
 				throw new ArgumentOutOfRangeException("The exactLength parameter must be set to a non-negative number.");
+			}
 
 			this.exactLength = exactLength;
 		}
@@ -46,16 +49,24 @@ namespace Castle.ActiveRecord.Framework.Validators
 		public LengthValidator(int minLength, int maxLength)
 		{
 			if (minLength == int.MinValue && maxLength == int.MaxValue)
+			{
 				throw new ArgumentException("Both minLength and maxLength were set in such as way that neither would be tested. At least one must be tested.");
+			}
 
 			if (minLength > maxLength)
+			{
 				throw new ArgumentException("The maxLength parameter must be greater than the minLength parameter.");
+			}
 
 			if (minLength != int.MinValue && minLength < 0)
+			{
 				throw new ArgumentOutOfRangeException("The minLength parameter must be set to either int.MinValue or a non-negative number.");
+			}
 
 			if (maxLength < 0)
+			{
 				throw new ArgumentOutOfRangeException("The maxLength parameter must be set to either int.MaxValue or a non-negative number.");
+			}
 
 			this.minLength = minLength;
 			this.maxLength = maxLength;

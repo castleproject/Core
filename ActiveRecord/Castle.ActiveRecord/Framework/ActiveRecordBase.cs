@@ -16,12 +16,12 @@ namespace Castle.ActiveRecord
 {
 	using System;
 	using System.Collections;
-
+	using Castle.ActiveRecord.Framework.Queries;
 	using NHibernate;
 	using NHibernate.Expression;
 
 	using Castle.ActiveRecord.Framework;
-	
+
 	/// <summary>
 	/// Allow custom executions using the NHibernate's ISession.
 	/// </summary>
@@ -420,6 +420,53 @@ namespace Castle.ActiveRecord
         }
         #endregion
 
+		#region Count
+		protected internal static int FetchCount(Type targetType)
+		{
+			CountQuery query = new CountQuery(targetType);
+
+			return (int) ExecuteQuery(query);
+		}
+
+		/// <summary>
+		/// Returns the number of records of this type in the database
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
+		/// <param name="args">Positional parameters for the filter string</param>
+		/// <returns></returns>
+		protected internal static int FetchCount(Type targetType, string filter, params object[] args)
+		{
+			CountQuery query = new CountQuery(targetType, filter, args);
+
+			return (int) ExecuteQuery(query);
+		}
+		#endregion
+
+        #region Exists
+		/// <summary>
+		/// Check if there are any records in the db for the target type
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <returns></returns>
+		protected internal static bool Exists(Type targetType)
+		{
+			return FetchCount(targetType) > 0;
+		}
+
+		/// <summary>
+		/// Existses the specified target type.
+		/// </summary>
+		/// <param name="targetType">Type of the target.</param>
+		/// <param name="filter">A sql where string i.e. Person=? and DOB &gt; ?</param>
+		/// <param name="args">Positional parameters for the filter string</param>
+		/// <returns></returns>
+		protected internal static bool Exists(Type targetType, string filter, params object[] args)
+		{
+			return FetchCount(targetType, filter, args) > 0;
+		}
+		#endregion
+
         #region FindAll
         /// <summary>
         /// Returns all instances found for the specified type.
@@ -698,6 +745,7 @@ namespace Castle.ActiveRecord
 
         #endregion
 
+
         #region protected internal
         /// <summary>
 		/// Invokes the specified delegate passing a valid 
@@ -746,6 +794,26 @@ namespace Castle.ActiveRecord
 		{
 			ActiveRecordBase.Delete(this);
         }
+
+		/// <summary>
+		/// Returns the number of records of this type in the database
+		/// </summary>
+		/// <returns></returns>
+		public int FetchCount()
+		{
+			return FetchCount(this.GetType());
+		}
+
+		/// <summary>
+		/// Returns the number of records of this type in the database
+		/// </summary>
+		/// <param name="filter">A sql where string <code>Person=? and DOB > ?</code></param>
+		/// <param name="args">Positional parameters for the filter string</param>
+		/// <returns></returns>
+		public int FetchCount(string filter, params object[] args)
+		{
+			return FetchCount(this.GetType(), filter, args);
+		}
         #endregion
 
         #region public override

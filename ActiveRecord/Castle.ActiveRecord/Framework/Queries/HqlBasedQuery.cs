@@ -26,8 +26,7 @@ namespace Castle.ActiveRecord.Queries
 		private String hql;
 		private Object[] positionalParameters;
 
-		public HqlBasedQuery(Type targetType, string hql, params object[] parameters)
-			: base(targetType)
+		public HqlBasedQuery(Type targetType, string hql, params object[] parameters) : base(targetType)
 		{
 			this.hql = hql;
 			this.positionalParameters = parameters;
@@ -54,8 +53,12 @@ namespace Castle.ActiveRecord.Queries
 			IQuery query = session.CreateQuery(hql);
 
 			if (positionalParameters != null)
+			{
 				for (int i = 0; i < positionalParameters.Length; i++)
+				{
 					query.SetParameter(i, positionalParameters[i]);
+				}
+			}
 
 			return query;
 		}

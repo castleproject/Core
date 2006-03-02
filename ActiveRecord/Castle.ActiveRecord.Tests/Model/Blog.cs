@@ -191,6 +191,27 @@ namespace Castle.ActiveRecord.Tests.Model
 			return (Blog) ActiveRecordMediator.FindByPrimaryKey(typeof (Blog), id);
 		}
 
+		public static int FetchCount()
+		{
+			return ActiveRecordBase.FetchCount(typeof (Blog));
+		}
+
+		public static int FetchCount(string filter, params object[] args)
+		{
+			return ActiveRecordBase.FetchCount(typeof (Blog), filter, args);
+		}
+
+		public static bool Exists()
+		{
+			return ActiveRecordBase.Exists(typeof (Blog));
+		}
+
+		public static bool Exists(string filter, params object[] args)
+		{
+			return ActiveRecordBase.Exists(typeof (Blog), filter, args);
+		}
+
+
 		public ISession CurrentSession
 		{
 			get
