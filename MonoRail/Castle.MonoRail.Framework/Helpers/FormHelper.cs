@@ -71,6 +71,27 @@ namespace Castle.MonoRail.Framework.Helpers
 
 		#endregion
 
+		#region TextArea
+
+		public String TextArea(String target)
+		{
+			return TextArea(target, null);
+		}
+
+		public String TextArea(String target, IDictionary attributes)
+		{
+			object value = ObtainValue(target);
+
+			value = value == null ? "" : HtmlEncode(value.ToString());
+
+			String id = target.Replace('.', '_');
+
+			return String.Format("<textarea id=\"{0}\" name=\"{1}\" {2}>{3}</textarea>", 
+				id, target, GetAttributes(attributes), value);
+		}
+
+		#endregion
+
 		#region PasswordField
 
 		public String PasswordField(String target)
