@@ -80,5 +80,7 @@ namespace Castle.MonoRail.Framework
 		void CreateCookie(String name, String value, DateTime expiration);
 
 		void CreateCookie(HttpCookie cookie);
+		
+		void RemoveCookie(string name);
 	}
 }

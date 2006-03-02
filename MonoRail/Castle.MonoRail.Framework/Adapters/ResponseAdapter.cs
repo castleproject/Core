@@ -204,5 +204,10 @@ namespace Castle.MonoRail.Framework.Adapters
 		{
 			_response.Cookies.Add( cookie );
 		}
+		
+		public void RemoveCookie( string name )
+		{
+			_response.Cookies.Remove( name );
+		}
 	}
 }

@@ -4,6 +4,8 @@ Change history
 Release Candidate 1
 ===================
 
+- Added RemoveCookie() method to IResponse
+
 - Fixed a bug in Brail's ViewComponents, where a parameter was search using case sensitive search.
 
 - Fixed a bug in ARFetch, where if the parameter was an array and the parameters didn't appear, a null reference would be thrown. Now it's returning an empty array.
