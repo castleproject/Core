@@ -165,7 +165,7 @@ namespace Castle.MonoRail.Framework.Helpers
 				leftParams = leftParams.Substring( 0, leftParams.Length - 1 );
 			}
 
-			return String.Format("{0}&{1}", leftParams, rightParams);
+			return String.Format("{0}&amp;{1}", leftParams, rightParams);
 		}
 
 		/// <summary>
