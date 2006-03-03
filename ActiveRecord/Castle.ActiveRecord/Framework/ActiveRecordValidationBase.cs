@@ -64,16 +64,21 @@ namespace Castle.ActiveRecord
 		/// </summary>
 		public ActiveRecordValidationBase()
 		{
-			CollectValidators( this.GetType() );
+			CollectValidators();
 		}
 
 		/// <summary>
 		/// Collect the validations applied to this class properties.
 		/// </summary>
 		/// <param name="targetType"></param>
-		private void CollectValidators( Type targetType )
+		private void CollectValidators()
 		{
+			Type targetType = this.GetType();
 			ActiveRecordModel model = GetModel( targetType );
+			
+			// workaround for proxy types
+			while (model == null && targetType != typeof(Object))
+				model = GetModel( targetType = targetType.BaseType );
 
 			if (model == null)
 			{
