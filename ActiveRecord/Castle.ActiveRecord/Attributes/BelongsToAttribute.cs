@@ -23,11 +23,18 @@ namespace Castle.ActiveRecord
 		False
 	}
 
+	/// <summary>
+	/// Defines the cascading behaviour of this association.
+	/// </summary>
 	public enum CascadeEnum
 	{
+		/// <summary> No cascading. This is the default. </summary>
 		None,
+		/// <summary> Cascade save, update and delete. </summary>
 		All,
+		/// <summary> Cascade save and update. </summary>
 		SaveUpdate,
+		/// <summary> Cascade delete. </summary>
 		Delete
 	}
 
@@ -38,15 +45,15 @@ namespace Castle.ActiveRecord
 	/// <code>
 	/// public class Post : ActiveRecordBase
 	/// {
-	///		...
-	///		
-	/// 	[BelongsTo("blogid")]
-	///		public Blog Blog
-	///		{
+	/// 		...
+	/// 
+	/// 		[BelongsTo("blogid")]
+	/// 		public Blog Blog
+	/// 		{
 	/// 		get { return _blog; }
 	/// 		set { _blog = value; }
-	///		}
-	///	</code>
+	/// 		}
+	/// 	</code>
 	/// </example>
 	/// <remarks>
 	/// Please note that the 'blogid' foreign key lies on the 'Post' table.
@@ -68,7 +75,8 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Indicates a column to be used on the association
+		/// Indicates the name of the column to be used on the association.
+		/// Usually the name of the foreign key field on the underlying database.
 		/// </summary>
 		public BelongsToAttribute(String column)
 		{
@@ -76,15 +84,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Indicates the target type to be used by the association
-		/// </summary>
-//		public BelongsToAttribute(Type type)
-//		{
-//			this.type = type;
-//		}
-
-		/// <summary>
-		/// Gets or sets the target type
+		/// Defines the target type of the association. It's usually inferred from the property type.
 		/// </summary>
 		public Type Type
 		{
@@ -93,7 +93,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Gets or sets the column used by association (usually a foreign key
+		/// Defines the column used by association (usually a foreign key)
 		/// </summary>
 		public String Column
 		{
@@ -102,7 +102,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Gets of sets the cascade behavior
+		/// Defines the cascading behavior of this association.
 		/// </summary>
 		public CascadeEnum Cascade
 		{
@@ -111,7 +111,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Gets of sets the outer join behavior
+		/// Defines the outer join behavior of this association.
 		/// </summary>
 		public OuterJoinEnum OuterJoin
 		{
@@ -120,7 +120,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Gets or sets the update behavior. 
+		/// Defines whether this association will be included in database UPDATEs or not.
 		/// </summary>
 		public bool Update
 		{
@@ -129,7 +129,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Gets or sets the update behavior. 
+		/// Defines whether this association will be included in database INSERTs or not.
 		/// </summary>
 		public bool Insert
 		{
@@ -138,7 +138,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Indicates whether this association allows nulls.
+		/// Indicates whether this association allows nulls or not.
 		/// </summary>
 		public bool NotNull
 		{
@@ -147,7 +147,7 @@ namespace Castle.ActiveRecord
 		}
 
 		/// <summary>
-		/// Indicates whehter this association is unique
+		/// Indicates whether this association is unique.
 		/// </summary>
 		public bool Unique
 		{

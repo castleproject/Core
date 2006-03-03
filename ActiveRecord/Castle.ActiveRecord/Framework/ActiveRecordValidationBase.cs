@@ -70,7 +70,6 @@ namespace Castle.ActiveRecord
 		/// <summary>
 		/// Collect the validations applied to this class properties.
 		/// </summary>
-		/// <param name="targetType"></param>
 		private void CollectValidators()
 		{
 			Type targetType = this.GetType();
