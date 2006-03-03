@@ -127,7 +127,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			String paramName = RequestParameterName != null ? RequestParameterName : parameterInfo.Name;
 
-			return controller.Request.Params[paramName] != null ? 10 : 0;
+			return controller.Request.Params.Get(paramName) != null ? 10 : 0;
 		}
 
 		object IParameterBinder.Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)

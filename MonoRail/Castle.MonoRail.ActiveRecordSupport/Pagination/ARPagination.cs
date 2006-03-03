@@ -81,7 +81,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 		{
 			int count = source.ObtainCount();
 			int startIndex = (pageSize * currentPage) - pageSize;
-			int endIndex =  Math.Min(startIndex + pageSize, count);
+			int endIndex = Math.Min(startIndex + pageSize, count);
 
 			enumerable = source.Paginate(pageSize, currentPage);
 
