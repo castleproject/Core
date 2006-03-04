@@ -4,6 +4,10 @@ Change history
 Release Candidate 1
 ===================
 
+- Added suport for InPlaceRenderView for Brail
+
+- Added <? ?> tags for Brail, to match the php style.
+
 - Added RemoveCookie() method to IResponse
 
 - Fixed a bug in Brail's ViewComponents, where a parameter was search using case sensitive search.

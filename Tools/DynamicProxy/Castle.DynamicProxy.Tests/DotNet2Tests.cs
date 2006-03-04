@@ -18,17 +18,26 @@ namespace Castle.DynamicProxy.Test
                 new StandardInterceptor());
 
             Assert.IsFalse(x.SomeMethod());
+
+            GenericClass<string> y = (GenericClass<string>)pg.CreateClassProxy(typeof(GenericClass<string>),
+                new StandardInterceptor());
+
+            Assert.IsFalse(y.SomeMethod());
         }
 
         [Test]
         public void ProxyGenericInterface()
         {
-            List<int> ints = new List<int>();
             ProxyGenerator pg = new ProxyGenerator();
             IList<int> x = (IList<int>)pg.CreateProxy(typeof(IList<int>),
-                new StandardInterceptor(), ints);
+                new StandardInterceptor(), new List<int>());
 
             Assert.AreEqual(0, x.Count);
+
+            IList<string> y = (IList<string>)pg.CreateProxy(typeof(IList<string>),
+                new StandardInterceptor(), new List<string>());
+
+            Assert.AreEqual(0, y.Count);
         }
 
         [Test]

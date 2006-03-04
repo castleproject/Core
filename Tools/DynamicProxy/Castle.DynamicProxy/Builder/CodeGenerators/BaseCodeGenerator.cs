@@ -451,7 +451,22 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
         /// </summary>
         protected String GetTypeName(Type type)
         {
-            return type.DeclaringType != null ? type.DeclaringType + "_" + type.Name : type.Name;
+            System.Text.StringBuilder nameBuilder = new System.Text.StringBuilder();
+            if (type.DeclaringType != null)
+                nameBuilder.Append(type.DeclaringType.Name).Append("_");
+#if dotNet2
+            if (type.IsGenericType)
+            {
+                Type[] args = type.GetGenericArguments();
+                foreach (Type arg in args)
+                {
+                    string argName = GetTypeName(arg);
+                    nameBuilder.Append(argName).Append("_");
+                }
+            }
+#endif
+            nameBuilder.Append(type.Name);
+            return nameBuilder.ToString();
         }
 
         /// <summary>

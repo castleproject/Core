@@ -98,13 +98,16 @@ public class BooViewEngine (ViewEngineBase):
 	# cause the yellow screen of death) if the user is local, then a detailed stack
 	# is shown
 	override def Process(context as IRailsEngineContext, controller as Controller, templateName as string):
+		Process(context.Response.Output, context, controller, templateName)
+	
+	override def Process(output as TextWriter, context as IRailsEngineContext, controller as Controller, templateName as string):
 		file = GetFileName(templateName)
 		view as BrailBase
 		# Output may be the layout's child output if a layout exists
 		# or the context.Response.Output if the layout is null
-		output as TextWriter, layout as BrailBase = GetOutput(context, controller)
+		viewOutput as TextWriter, layout as BrailBase = GetOutput(output, context, controller)
 		# Will compile on first time, then save the assembly on the cache.
-		view = GetCompiledScriptInstance(file, output, context, controller)
+		view = GetCompiledScriptInstance(file, viewOutput, context, controller)
 		controller.PreSendView(view)
 		view.Run()
 		layout.Run() if layout is not null
@@ -112,16 +115,15 @@ public class BooViewEngine (ViewEngineBase):
 	
 	# Send the contents text directly to the user, only adding the layout if neccecary
 	override def ProcessContents(context as IRailsEngineContext, controller as Controller, contents as string):
-		output as TextWriter, layout as BrailBase = GetOutput(context, controller)
+		output as TextWriter, layout as BrailBase = GetOutput(controller.Response.Output, context, controller)
 		output.Write(contents)
 		layout.Run() if layout is not null
 		
 	# Check if a layout has been defined. If it was, then the layout would be created
 	# and will take over the output, otherwise, the context.Reposne.Output is used, 
 	# and layout is null
-	def GetOutput(context as IRailsEngineContext, controller as Controller):
+	def GetOutput(output as TextWriter, context as IRailsEngineContext, controller as Controller):
 		layout as BrailBase
-		output as TextWriter = context.Response.Output
 		if controller.LayoutName is not null:
 			layoutTemplate = "layouts/${controller.LayoutName}"
 			layoutFilename = GetFileName(layoutTemplate)
@@ -158,6 +160,7 @@ public class BooViewEngine (ViewEngineBase):
 			batch = false
 			
 		type = CompileScript(file, batch)
+		raise RailsException("Could not find a view with path ${file}") if type is null
 		return type(self, output,context, controller)
 	
 	# Compile a script (or all scripts in a directory), save the compiled result

@@ -1,5 +1,6 @@
 Version 1.4.8
 
+ * Added generic type detection, to avoid a case where types with the same generic type but with deferent parameters were treated the same
  * Added nested types detection, to avoid a case were types foo.Bar and Bar are treated the same
 
 Version 1.4.7

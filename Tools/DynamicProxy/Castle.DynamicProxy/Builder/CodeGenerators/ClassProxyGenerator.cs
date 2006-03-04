@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Builder.CodeGenerators
 			foreach (Type inter in interfaces)
 			{
 				sb.Append('_');
-				sb.Append(inter.Name);
+                sb.Append(GetTypeName(inter));
 			}
 			// Naive implementation
 			return String.Format("CProxyType{0}{3}{1}{2}", GetTypeName(type), sb.ToString(), interfaces.Length, NormalizeNamespaceName(type.Namespace) );

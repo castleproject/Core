@@ -21,7 +21,7 @@ import Castle.MonoRail.Framework
 
 class BrailPreProcessor(AbstractCompilerStep):
 	
-	static Seperators = {"<?brail":"?>", "<%":"%>"}
+	static Seperators = {"<?brail":"?>", "<?":"?>", "<%":"%>"}
 	static logger = LogManager.GetLogger(BrailPreProcessor)
 	
 	override def Run():
@@ -61,7 +61,9 @@ class BrailPreProcessor(AbstractCompilerStep):
 		end as string	
 		for seperator in Seperators:
 			if code.IndexOf( seperator.Key as string,0)!= -1:
-				if start is not null:
+				if start is not null and start.Contains(seperator.Key):
+					continue #handle a shorthanded seperator.
+				if start is not null and not cast(string,seperator.Key).Contains(start): # handle long seperator
 					raise RailsException("Can't mix seperators in one file. Found both ${start} and ${seperator.Key}")
 				start = seperator.Key
 				end = seperator.Value
