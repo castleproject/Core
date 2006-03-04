@@ -61,9 +61,9 @@ class BrailPreProcessor(AbstractCompilerStep):
 		end as string	
 		for seperator in Seperators:
 			if code.IndexOf( seperator.Key as string,0)!= -1:
-				if start is not null and start.Contains(seperator.Key):
+				if start is not null and start.IndexOf(seperator.Key as string)!=-1:
 					continue #handle a shorthanded seperator.
-				if start is not null and not cast(string,seperator.Key).Contains(start): # handle long seperator
+				if start is not null and not cast(string,seperator.Key).IndexOf(start as string)!=-1: # handle long seperator
 					raise RailsException("Can't mix seperators in one file. Found both ${start} and ${seperator.Key}")
 				start = seperator.Key
 				end = seperator.Value
