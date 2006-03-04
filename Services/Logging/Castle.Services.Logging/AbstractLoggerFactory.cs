@@ -50,7 +50,8 @@ namespace Castle.Services.Logging
         protected FileInfo GetConfigFile(string filename)
         {
 			FileInfo result;
-			if(Path.IsPathRooted(filename))
+
+			if (Path.IsPathRooted(filename))
 			{
 				result = new FileInfo(filename);
 			}
@@ -58,7 +59,8 @@ namespace Castle.Services.Logging
 			{
 				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(filename)));
 			}
-            return result;
+            
+			return result;
         }
 	}
 }
