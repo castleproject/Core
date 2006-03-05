@@ -115,6 +115,13 @@ namespace Castle.MonoRail.Framework.Internal
 				descriptor.GetAction(method).Rescues = attributes;
 			}
 
+            attributes = method.GetCustomAttributes(typeof(RequiresVerbAttribute), true);
+
+            if (attributes.Length != 0)
+            {
+                descriptor.GetAction(method).RequiresVerb = (RequiresVerbAttribute)attributes[0];
+            }
+
 			attributes = method.GetCustomAttributes(typeof(SkipRescueAttribute), true);
 
 			if (attributes.Length != 0)

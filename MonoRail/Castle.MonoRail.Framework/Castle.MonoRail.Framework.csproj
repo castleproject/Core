@@ -338,6 +338,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\RequiresVerbAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\RescueAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

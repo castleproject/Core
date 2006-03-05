@@ -46,6 +46,8 @@ namespace Castle.MonoRail.Framework.Internal
 	public class ActionMetaDescriptor : BaseMetaDescriptor
 	{
 		private SkipRescueAttribute skipRescue;
+        private RequiresVerbAttribute requireVerb;
+
 		private IList skipFilters = new ArrayList();
 
 		public SkipRescueAttribute SkipRescue
@@ -53,6 +55,13 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return skipRescue; }
 			set { skipRescue = value; }
 		}
+
+        public RequiresVerbAttribute RequiresVerb
+        {
+            get { return requireVerb; }
+            set { requireVerb = value; }
+        }
+
 
 		public IList SkipFilters
 		{

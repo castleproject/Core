@@ -720,16 +720,25 @@ namespace Castle.MonoRail.Framework
 
 					if (method == null)
 					{
-						throw new ControllerException(String.Format("No action for '{0}' found", action));
+						throw new ControllerException(String.Format("Unable to locate action [{0}] on controller [{1}].", action, this.Name));
 					}
 				}
 			}
 
 			// Overrides the current layout, if the action specifies one
 			if (method != null)
-			{
-				ActionMetaDescriptor ac = MetaDescriptor.GetAction(method);
-				
+            {
+                ActionMetaDescriptor ac = MetaDescriptor.GetAction(method);
+                if (ac.RequiresVerb != null)
+                {
+                    string verbName = Enum.GetName(typeof(Verb), ac.RequiresVerb.Verb);
+                    string requestType = Context.RequestType.Trim();
+
+                    if (String.Compare(verbName, requestType, true) != 0)
+                    {
+                        throw new ControllerException(string.Format("Access to the action [{0}] on controller [{1}] is not allowed by the http verb [{2}].", action.ToLower(), this.Name.ToLower(), requestType));
+                    }
+                }
 				if (ac.Layout != null)
 				{
 					this.LayoutName = ac.Layout.LayoutName;

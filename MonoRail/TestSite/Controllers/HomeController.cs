@@ -28,6 +28,21 @@ namespace TestSite.Controllers
 		{
 		}
 
+        [RequiresVerb(Verb.Get)]
+        public void GetOnlyMethod()
+        {
+            CancelLayout();
+            RenderText("GetOnlyMethod");
+        }
+
+    
+        [RequiresVerb(Verb.Post)]
+        public void PostOnlyMethod()
+        {
+            CancelLayout();
+            RenderText("PostOnlyMethod");
+        }
+
 		public void Flash1()
 		{
 			Flash.Add("errormessage", "Some error");

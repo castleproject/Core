@@ -4,6 +4,8 @@ Change history
 Release Candidate 1
 ===================
 
+- Added support for RequiresVerb(Verb.Post, or Verb.Get) to restrict the type of access a controller action requires.
+
 - Added suport for InPlaceRenderView for Brail
 
 - Added <? ?> tags for Brail, to match the php style.
