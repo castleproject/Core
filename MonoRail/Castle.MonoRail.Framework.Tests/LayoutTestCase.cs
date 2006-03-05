@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "\r\nWelcome!\r\n<p>Inner Content</p>\r\nFooter" );
+			AssertReplyEqualTo( "\r\nWelcome!\r\n<p>Inner Content</p>\r\nFooter" );
 		}
 
 		[Test]
@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "\r\nDifferent master page\r\n<p>Another Inner Content</p>\r\nFooter" );
+			AssertReplyEqualTo( "\r\nDifferent master page\r\n<p>Another Inner Content</p>\r\nFooter" );
 		}
 	}
 }

@@ -29,7 +29,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			DoGet("ServerUtility/UrlEncode.rails", "content=this is a path");
 
-			AssertReplyEqualsTo("this+is+a+path");
+			AssertReplyEqualTo("this+is+a+path");
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			DoGet("ServerUtility/HtmlEncode.rails", "content=<html>content</html>");
 
-			AssertReplyEqualsTo("&lt;html&gt;content&lt;/html&gt;");
+			AssertReplyEqualTo("&lt;html&gt;content&lt;/html&gt;");
 		}
 	
 		[Test]
@@ -45,7 +45,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			DoGet("ServerUtility/UrlPathEncode.rails", @"content=My path folder\is this one");
 
-			AssertReplyEqualsTo(@"My%20path%20folder\is%20this%20one");
+			AssertReplyEqualTo(@"My%20path%20folder\is%20this%20one");
 		}
 	
 		[Test]
@@ -53,7 +53,7 @@ namespace Castle.MonoRail.Framework.Tests
 		{
 			DoGet("ServerUtility/JavaScriptEscape.rails", "content=some js \" content \"");
 
-			AssertReplyEqualsTo("some+js+%22+content+%22");
+			AssertReplyEqualTo("some+js+%22+content+%22");
 		}
 	}
 }

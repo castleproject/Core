@@ -24,7 +24,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 	[Test]
 	def AppPath():
 		DoGet("apppath/index.rails")
-		AssertReplyEqualsTo("Current apppath is ")
+		AssertReplyEqualTo("Current apppath is ")
 	
 	[Test]
 	def AppPathChangeOnTheFly():
@@ -38,7 +38,7 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 		System.Threading.Thread.Sleep(100)
 		try:
 			DoGet("apppath/index.rails")
-			AssertReplyEqualsTo(newContent)
+			AssertReplyEqualTo(newContent)
 		ensure:
 			using write = File.CreateText(script):
 				write.Write(old)
@@ -48,20 +48,20 @@ class BrailBasicFunctionality(AbstractMRTestCase):
 	def CommonScripts():
 		DoGet("home/hellofromcommon.rails")
 		expected = "Hello, Ayende"
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 	
 	
 	[Test]
 	def Nullables():
 		DoGet("home/nullables.rails")
 		expected = "\r\nfoo"
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 
 	[Test]
 	def Empty():
 		DoGet("home/Empty.rails")
 		expected = ""
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 
 	
 	[Test]
@@ -81,7 +81,7 @@ end"""
 		System.Threading.Thread.Sleep(500)
 		try:
 			DoGet("home/hellofromcommon.rails")
-			AssertReplyEqualsTo(expected)
+			AssertReplyEqualTo(expected)
 		ensure:	
 			using write = File.CreateText(common ):
 				write.Write(old)
@@ -103,4 +103,4 @@ end"""
 </body>
 </html>
 """
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)

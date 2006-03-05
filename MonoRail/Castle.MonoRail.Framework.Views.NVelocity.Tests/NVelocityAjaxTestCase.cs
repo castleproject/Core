@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			
 			String expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/AjaxScripts.rails\"></script>";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			
 			String expected = "<script type=\"text/javascript\" src=\"/MonoRail/Files/BehaviourScripts.rails\"></script>";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 		
 		[Test]
@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			String expected = "<a href=\"javascript:void(0);\" onclick=\"alert('Ok'); return false;\" ><img src='myimg.gid'></a>";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 				"Ajax.Request('/controller/action.rails', {asynchronous:true}); " + 
 				"return false;\" ><img src='myimg.gid'></a>";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -75,7 +75,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 				"{asynchronous:true, parameters:Form.serialize(this)}); " + 
 				"return false;\" enctype=\"multipart/form-data\">";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 				"function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', " + 
 				"{asynchronous:true, parameters:newcontent}) })</script>";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 				"function(element, value) { new Ajax.Updater('elementToBeUpdated', '/url', " + 
 				"{asynchronous:true, parameters:newcontent}) })</script>";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 	}
 }

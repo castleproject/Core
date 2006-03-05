@@ -26,5 +26,5 @@ class ResourceTestCase(AbstractMRTestCase):
 	def GetResources():
 		expected = "testValue"
 		DoGet("resourced/getresources.rails")
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 

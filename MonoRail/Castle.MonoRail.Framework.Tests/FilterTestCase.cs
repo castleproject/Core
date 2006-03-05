@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "Filtered Action Index" );
+			AssertReplyEqualTo( "Filtered Action Index" );
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "(before)content(after)" );
+			AssertReplyEqualTo( "(before)content(after)" );
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "(before)update view contents(after)" );
+			AssertReplyEqualTo( "(before)update view contents(after)" );
 		}
 
 		[Test]
@@ -58,7 +58,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "selectiveSkip view contents" );
+			AssertReplyEqualTo( "selectiveSkip view contents" );
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "index view contents" );
+			AssertReplyEqualTo( "index view contents" );
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "(before)update view contents" );
+			AssertReplyEqualTo( "(before)update view contents" );
 		}
 
 		[Test]
@@ -90,7 +90,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo("Denied!");
+			AssertReplyEqualTo("Denied!");
 		}
 
 		[Test]
@@ -100,7 +100,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo("View contents!");
+			AssertReplyEqualTo("View contents!");
 		}
 
 		[Test]
@@ -110,7 +110,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo("ABIndexABAB");
+			AssertReplyEqualTo("ABIndexABAB");
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			
 			String expected = "Current apppath is ";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 	}
 }

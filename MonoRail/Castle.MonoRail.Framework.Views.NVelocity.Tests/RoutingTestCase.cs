@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			
 			String expected = "Blog: year=2005 month=7";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			
 			String expected = "Blog: year=2005 month=7";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			
 			String expected = "News: year=2004 month=11";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 	}
 }

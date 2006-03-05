@@ -29,12 +29,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/stringmethod.rails", "name=hammett");
 			String expected = "incoming hammett";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 
 			DoGet("smart/stringmethod.rails", "NAME=hammett");
 			expected = "incoming hammett";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -43,12 +43,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/complex.rails", "strarg=hammett", "intarg=1", "strarray=a");
 			String expected = "incoming hammett 1 a";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 
 			DoGet("smart/complex.rails", "strarg=", "intarg=", "strarray=a,b,c");
 			expected = "incoming  0 a,b,c";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -57,12 +57,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/SimpleBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20");
 			String expected = "incoming hammett 11 20";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 
 			DoGet("smart/SimpleBind.rails", "order.name=hammett");
 			expected = "incoming hammett 0 0";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet( "smart/ComplexBind.rails", "order.name=hammett", "order.itemcount=11", "order.price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y" );
 			String expected = "incoming hammett 11 20 1 x y";
 
-			AssertReplyEqualsTo( expected );
+			AssertReplyEqualTo( expected );
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			// the ToString() method of the domain object and price being of type float
 			String expected = "incoming hammett 11 0 1 x y";
 
-			AssertReplyEqualsTo( expected );
+			AssertReplyEqualTo( expected );
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			// method of the domain object and the custom String.Format it contains.
 			String expected = "incoming  11 20 1 x y";
 
-			AssertReplyEqualsTo( expected );
+			AssertReplyEqualTo( expected );
 		}
 
 		[Test]
@@ -102,7 +102,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/ComplexBindWithPrefix.rails", "order.name=hammett", "order.itemcount=11", "order.price=20", "person.id=1", "person.contact.email=x", "person.contact.phone=y");
 			String expected = "incoming hammett 11 20 1 x y";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -112,7 +112,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			String expected = "incoming someone " + new DateTime( 2005, 10, 11 ).ToShortDateString() + " " + 
 				DateTime.Now.AddDays(1).ToShortDateString();
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -122,7 +122,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			String expected = "incoming hammett " + 
 				DateTime.Now.ToShortDateString() + " " + DateTime.Now.AddDays(1).ToShortDateString();
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -131,7 +131,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/NullableConversion.rails");
 			String expected = "incoming False ";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -140,7 +140,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/NullableConversion.rails", "amount=0");
 			String expected = "incoming True 0";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -149,7 +149,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/NullableConversion.rails", "amount=11.2");
 			String expected = "incoming True 11.2";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -158,7 +158,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/NullableConversion2.rails", "mov.name=hammett", "mov.amount=11");
 			String expected = "incoming hammett 11";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -167,7 +167,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/NullableConversion2.rails", "mov.name=hammett");
 			String expected = "incoming hammett ";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 
 		[Test]
@@ -176,7 +176,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			DoGet("smart/ArrayBinding.rails", "user.name=hammett", "user.roles=1", "user.roles=2", "user.permissions=10", "user.permissions=11");
 			String expected = "User hammett 2 2 1 2 10 11";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "My View contents for Home\\Index" );
+			AssertReplyEqualTo( "My View contents for Home\\Index" );
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "my component" );
+			AssertReplyEqualTo( "my component" );
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.WindsorExtension.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "my component\r\n\r\nInner content" );
+			AssertReplyEqualTo( "my component\r\n\r\nInner content" );
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "My View contents for Home\\Index" );
+			AssertReplyEqualTo( "My View contents for Home\\Index" );
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "Contents for heyhello View" );
+			AssertReplyEqualTo( "Contents for heyhello View" );
 		}
 
 		[Test]
@@ -83,7 +83,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertPropertyBagContains( "CustomerName" );
 			AssertPropertyBagEntryEquals( "CustomerName", "hammett" );
-			AssertReplyEqualsTo( "\r\nCustomer is hammett\r\n<br>\r\n123" );
+			AssertReplyEqualTo( "\r\nCustomer is hammett\r\n<br>\r\n123" );
 		}
 
 		[Test]
@@ -95,7 +95,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertPropertyBagContains( "CustomerName" );
 			AssertPropertyBagEntryEquals( "CustomerName", "hammett" );
-			AssertReplyEqualsTo( "\r\nCustomer is hammett\r\n<br>\r\n123" );
+			AssertReplyEqualTo( "\r\nCustomer is hammett\r\n<br>\r\n123" );
 		}
 
 		[Test]
@@ -105,7 +105,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( @"My View contents for Cookies\Index" );
+			AssertReplyEqualTo( @"My View contents for Cookies\Index" );
 			
 			/// One of the cookies will be the asp.net used by the flash property
 			///Assert.AreEqual( 3, Response.Cookies.Count );
@@ -150,7 +150,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 			
-			AssertReplyEqualsTo(@"My View contents for Cookies\Index");
+			AssertReplyEqualTo(@"My View contents for Cookies\Index");
 
 			DateTime twoWeeks = DateTime.Now.Add(new TimeSpan(14, 0, 0, 0));
 

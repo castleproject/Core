@@ -28,47 +28,47 @@ class ComponentsTestCase(AbstractMRTestCase):
 	def SimpleInlineViewComponent():
 		expected = "static 1\r\nHello from SimpleInlineViewComponent\r\nstatic 2"
 		DoGet("usingcomponents/index1.rails")
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 		
 	
 	[Test]
 	def InlineComponentUsingRender():
 		expected = 'static 1\r\nThis is a view used by a component static 2'
 		DoGet('usingcomponents/index2.rails')
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 		
 	
 	[Test()]
 	def InlineComponentNotOverridingRender():
 		expected = 'static 1\r\ndefault component view picked up automatically static 2'
 		DoGet('usingcomponents/index3.rails')
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 	
 	[Test]
 	def InlineComponentWithParam1():
 		DoGet('usingcomponents/index4.rails')
-		AssertReplyEqualsTo('Done')
+		AssertReplyEqualTo('Done')
 
 
 	[Test]
 	def CanGetParamsFromTheComponentInTheView():
 		DoGet('usingcomponents/template.rails')
-		AssertReplyEqualsTo('123')
+		AssertReplyEqualTo('123')
 
 	[Test]
 	def BlockComp1():
 		DoGet('usingcomponents/index5.rails')
-		AssertReplyEqualsTo('  item 0\r\n  item 1\r\n  item 2\r\n')
+		AssertReplyEqualTo('  item 0\r\n  item 1\r\n  item 2\r\n')
 	
 	[Test]
 	def BlockWithinForEach():
 		DoGet('usingcomponents/index8.rails')
-		AssertReplyEqualsTo('\r\ninner content 1\r\n\r\ninner content 2\r\n')
+		AssertReplyEqualTo('\r\ninner content 1\r\n\r\ninner content 2\r\n')
 	
 	[Test]
 	def SeveralComponentsInvocation():
 		for i in range(10):
 			expected = 'static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n'
 			DoGet('usingcomponents/index9.rails')
-			AssertReplyEqualsTo(expected)
+			AssertReplyEqualTo(expected)
 			

@@ -31,7 +31,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo("Hello from save dynamic action");
+			AssertReplyEqualTo("Hello from save dynamic action");
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo("Rendered from the view: hello!");
+			AssertReplyEqualTo("Rendered from the view: hello!");
 		}
 	}
 }

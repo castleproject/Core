@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		public void UnrelatedWizardActionInvocation()
 		{
 			DoGet("testwizard/index.rails");
-			AssertReplyEqualsTo("Hello!");
+			AssertReplyEqualTo("Hello!");
 		}
 
 		[Test]
@@ -95,7 +95,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("testwizard/Page1-InnerAction2.rails");
 			AssertSuccess();
-			AssertReplyEqualsTo("View for Inner action 2");
+			AssertReplyEqualTo("View for Inner action 2");
 		}
 	
 		[Test]
@@ -103,7 +103,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("testwizard/Page3.rails");
 			AssertSuccess();
-			AssertReplyEqualsTo("Wizard page 3");
+			AssertReplyEqualTo("Wizard page 3");
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		{
 			DoGet("testwizard/Page4.rails");
 			AssertSuccess();
-			AssertReplyEqualsTo("hasprevious True\r\nhasnext False");
+			AssertReplyEqualTo("hasprevious True\r\nhasnext False");
 		}
 	}
 }

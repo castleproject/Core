@@ -36,7 +36,7 @@ namespace Castle.MonoRail.Framework.Tests
 			
 			AssertSuccess();
 
-			AssertReplyEqualsTo("english");
+			AssertReplyEqualTo("english");
 		}
 
 		[Test]
@@ -46,7 +46,7 @@ namespace Castle.MonoRail.Framework.Tests
 			
 			AssertSuccess();
 
-			AssertReplyEqualsTo("deutsch");
+			AssertReplyEqualTo("deutsch");
 		}
 
 		[Test]
@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework.Tests
 			
 			AssertSuccess();
 
-			AssertReplyEqualsTo("nederlands");
+			AssertReplyEqualTo("nederlands");
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace Castle.MonoRail.Framework.Tests
 			
 			AssertSuccess();
 
-			AssertReplyEqualsTo("english");
+			AssertReplyEqualTo("english");
 		}
 	}
 }

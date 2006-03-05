@@ -26,10 +26,10 @@ class BrailRoutingTestCase(AbstractMRTestCase):
 	def BlogRoutingRule():
 		DoGet("blog/posts/2005/07/")
 		expected = "Blog: year=2005 month=7";
-		AssertReplyEqualsTo(expected);
+		AssertReplyEqualTo(expected);
 	
 	[Test]
 	def NewsRoutingRule():
 		DoGet("news/2004/11/")
 		expected = "News: year=2004 month=11";
-		AssertReplyEqualsTo(expected);
+		AssertReplyEqualTo(expected);

@@ -38,7 +38,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "appException" );
+			AssertReplyEqualTo( "appException" );
 		}		
 		
 		[Test]
@@ -48,7 +48,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "argException" );
+			AssertReplyEqualTo( "argException" );
 		}		
 		
 		[Test]
@@ -58,7 +58,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "An error happened" );
+			AssertReplyEqualTo( "An error happened" );
 		}		
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "argException" );
+			AssertReplyEqualTo( "argException" );
 		}
 		
 		[Test]
@@ -78,7 +78,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "methodDefaultException" );
+			AssertReplyEqualTo( "methodDefaultException" );
 		}		
 	}
 }

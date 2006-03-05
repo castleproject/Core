@@ -37,11 +37,11 @@ html string
 
 </ol>"""
 		DoGet("Xml/Complex.rails")
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 	
 	[Test]
 	def PureXml():
 		expected = "0,1,2,3,4,5,6,7,8,9,"
 		DoGet("Xml/Pure.rails")
-		AssertReplyEqualsTo(expected)
+		AssertReplyEqualTo(expected)
 	

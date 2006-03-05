@@ -30,7 +30,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			String expected = "testValue";
 
-			AssertReplyEqualsTo(expected);
+			AssertReplyEqualTo(expected);
 		}
 	}
 }

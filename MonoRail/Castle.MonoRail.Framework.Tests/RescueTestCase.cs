@@ -32,7 +32,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "An error happened" );
+			AssertReplyEqualTo( "An error happened" );
 		}
 
 		[Test]
@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "An error happened during save" );
+			AssertReplyEqualTo( "An error happened during save" );
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "\r\nWelcome!\r\n<p>An error happened during update</p>\r\nFooter" );
+			AssertReplyEqualTo( "\r\nWelcome!\r\n<p>An error happened during update</p>\r\nFooter" );
 		}
 
 		[Test]
@@ -62,7 +62,7 @@ namespace Castle.MonoRail.Framework.Tests
 
 			AssertSuccess();
 
-			AssertReplyEqualsTo( "custom msg" );
+			AssertReplyEqualTo( "custom msg" );
 		}
 	}
 }

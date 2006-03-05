@@ -136,6 +136,33 @@ namespace Castle.MonoRail.TestSupport
 
 			response = host.Process( Request, writer );
 		}
+
+        /// <summary>
+        /// Performs a Head operation on 
+        /// </summary>
+        /// <param name="path">The resource being request, for example <c>home/index.rails</c></param>
+        /// <param name="postStringParams">A list of key/value pair, for example <c>name=johndoe</c></param>
+        public void DoHead(String path, params String[] postStringParams)
+        {
+            if (postStringParams.Length != 0) Request.PostParams = postStringParams;
+
+            outputBuffer.Length = 0;
+
+            int pos = path.IndexOf('?');
+            if (pos > -1)
+            {
+                string qs = path.Substring(pos + 1);
+                path = path.Substring(0, pos);
+                Request.QueryStringParams = qs.Split('&');
+            }
+
+            Request.Url = path;
+            Request.Verb = "HEAD";
+
+            StringWriter writer = new StringWriter(outputBuffer);
+
+            response = host.Process(Request, writer);
+        }
 		
 
 		private void AssertPathIsValid(string path)
@@ -195,7 +222,7 @@ namespace Castle.MonoRail.TestSupport
 		/// content of <c>expectedContents</c>
 		/// </summary>
 		/// <param name="expectedContents"></param>
-		protected void AssertReplyEqualsTo(String expectedContents)
+		protected void AssertReplyEqualTo(String expectedContents)
 		{
 			Assert.AreEqual( expectedContents, Output, "Reply differs. Expecting {0} but was {1}", expectedContents, Output );
 		}
