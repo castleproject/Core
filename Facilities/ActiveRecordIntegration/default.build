@@ -17,7 +17,7 @@
 
 	<property name="version" value="beta-2" />
 
-	<property name="activerecord.test" value="true" unless="${property::exists('nhibernate.test')}" />
+	<property name="activerecord.test" value="true" unless="${property::exists('activerecord.test')}" />
 
 	<target name="clean">
 		<delete failonerror="false">
