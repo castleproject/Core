@@ -161,9 +161,9 @@ namespace Castle.Facilities.NHibernateIntegration.Internal
 					"associated with the given alias: " + alias);
 			}
 
-			if (kernel.HasComponent(typeof(IInterceptor)))
+			if (kernel.HasComponent("nhibernate.session.interceptor"))
 			{
-				IInterceptor interceptor = kernel[typeof(IInterceptor)] as IInterceptor;
+				IInterceptor interceptor = (IInterceptor) kernel["nhibernate.session.interceptor"];
 				
 				return sessionFactory.OpenSession(interceptor);
 			}

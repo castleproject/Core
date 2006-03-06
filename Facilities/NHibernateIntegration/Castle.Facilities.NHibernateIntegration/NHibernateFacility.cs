@@ -193,6 +193,13 @@ namespace Castle.Facilities.NHibernateIntegration
 
 			Kernel.AddComponentInstance( String.Format("{0}.cfg", id), cfg );
 
+			// If a Session Factory level interceptor was provided, we use it
+
+			if (Kernel.HasComponent("nhibernate.sessionfactory.interceptor"))
+			{
+				cfg.Interceptor = (IInterceptor) Kernel["nhibernate.sessionfactory.interceptor"];
+			}
+
 			// Registers the ISessionFactory as a component
 
 			ISessionFactory sessionFactory = cfg.BuildSessionFactory();

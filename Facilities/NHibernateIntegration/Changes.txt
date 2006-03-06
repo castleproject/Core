@@ -1,3 +1,10 @@
+Version beta 3
+
+- The DefaultSessionManager will always look up for a component "nhibernate.session.interceptor" to use as
+  a NH Interceptor
+  
+- The NH Facility will always look up for a component "nhibernate.sessionfactory.interceptor" and 
+  associate the instance with the Configuration.Interceptor before creating the session factories
 
 Version beta 2
 
