@@ -710,6 +710,7 @@ namespace Castle.MonoRail.Framework
 
 			// If we couldn't find a method for this action, look for a dynamic action
 			IDynamicAction dynAction = null;
+			
 			if (method == null)
 			{
 				dynAction = DynamicActions[action] as IDynamicAction;
@@ -724,25 +725,26 @@ namespace Castle.MonoRail.Framework
 					}
 				}
 			}
+			else
+			{
+				ActionMetaDescriptor actionDesc = MetaDescriptor.GetAction(method);
 
-			// Overrides the current layout, if the action specifies one
-			if (method != null)
-            {
-                ActionMetaDescriptor ac = MetaDescriptor.GetAction(method);
-                if (ac.RequiresVerb != null)
+				// Overrides the current layout, if the action specifies one
+				if (actionDesc.Layout != null)
+				{
+					this.LayoutName = actionDesc.Layout.LayoutName;
+				}
+                
+				if (actionDesc.AccessibleThrough != null)
                 {
-                    string verbName = Enum.GetName(typeof(Verb), ac.RequiresVerb.Verb);
-                    string requestType = Context.RequestType.Trim();
+                    string verbName = actionDesc.AccessibleThrough.Verb.ToString();
+                    string requestType = Context.RequestType;
 
                     if (String.Compare(verbName, requestType, true) != 0)
                     {
                         throw new ControllerException(string.Format("Access to the action [{0}] on controller [{1}] is not allowed by the http verb [{2}].", action.ToLower(), this.Name.ToLower(), requestType));
                     }
                 }
-				if (ac.Layout != null)
-				{
-					this.LayoutName = ac.Layout.LayoutName;
-				}
 			}
 
 			HybridDictionary filtersToSkip = new HybridDictionary();

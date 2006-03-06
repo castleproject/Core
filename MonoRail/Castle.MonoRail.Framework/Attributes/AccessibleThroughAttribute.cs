@@ -46,17 +46,18 @@ namespace Castle.MonoRail.Framework
     /// that is allowed to request it.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method), Serializable]
-	public class RequiresVerbAttribute : Attribute
+	public class AccessibleThroughAttribute : Attribute
 	{
-		private Verb _verb;
+		private readonly Verb verb;
 
         /// <summary>
-        /// Constructs a AllowVerbAttribute with the specified <paramref name="verb"/>.
+        /// Constructs a AccessibleThroughAttribute with 
+        /// the specified <paramref name="verb"/>.
         /// </summary>
         /// <param name="verb">The <see cref="Verb"/> to allow for this action.</param>
-        public RequiresVerbAttribute(Verb verb)
+        public AccessibleThroughAttribute(Verb verb)
 		{
-            _verb = verb;
+            this.verb = verb;
 		}
 
 		/// <summary>
@@ -64,8 +65,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public Verb Verb
 		{
-			get { return _verb; }
+			get { return verb; }
 		}
-
 	}
 }

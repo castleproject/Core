@@ -14,44 +14,39 @@
 
 namespace Castle.MonoRail.Framework.Tests
 {
-	using System;
-	using System.Net;
-
 	using NUnit.Framework;
 
 	using Castle.MonoRail.TestSupport;
 
-
 	[TestFixture]
-    public class RequiresVerbTestCase : AbstractMRTestCase
+    public class AccessibleThroughTestCase : AbstractMRTestCase
 	{
 		[Test]
-        public void AccessRequiresPostVerbByPost()
+        public void AccessibleThroughPostVerbByPost()
 		{
             DoPost("home/PostOnlyMethod.rails");
             AssertSuccess();
 		}
 
         [Test]
-        public void AccessRequiresPostVerbByGet()
+        public void AccessibleThroughPostVerbByGet()
         {
             DoGet("home/PostOnlyMethod.rails");
             AssertReplyContains("Access to the action [postonlymethod] on controller [home] is not allowed by the http verb [GET].");
         }
 
 		[Test]
-        public void AccessRequiresGetVerbByPost()
+        public void AccessibleThroughGetVerbByPost()
 		{
             DoPost("home/GetOnlyMethod.rails");
             AssertReplyContains("Access to the action [getonlymethod] on controller [home] is not allowed by the http verb [POST].");
 		}
 
         [Test]
-        public void AccessRequiresGetVerbByGet()
+        public void AccessibleThroughGetVerbByGet()
         {
             DoGet("home/GetOnlyMethod.rails");
             AssertSuccess();
         }
-
 	}
 }

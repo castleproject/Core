@@ -293,6 +293,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Attributes\AccessibleThroughAttribute.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Attributes\ControllerDetailsAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -334,11 +338,6 @@
                 />
                 <File
                     RelPath = "Attributes\LocalizationFilterAttribute.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Attributes\RequiresVerbAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

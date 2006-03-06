@@ -105,6 +105,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AccessibleThroughTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "App.config"
                     BuildAction = "None"
                 />
@@ -160,11 +165,6 @@
                 />
                 <File
                     RelPath = "RailsUrlTokenizerTestCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RequiresVerbTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

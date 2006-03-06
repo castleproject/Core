@@ -28,15 +28,14 @@ namespace TestSite.Controllers
 		{
 		}
 
-        [RequiresVerb(Verb.Get)]
+        [AccessibleThrough(Verb.Get)]
         public void GetOnlyMethod()
         {
             CancelLayout();
             RenderText("GetOnlyMethod");
         }
-
     
-        [RequiresVerb(Verb.Post)]
+        [AccessibleThrough(Verb.Post)]
         public void PostOnlyMethod()
         {
             CancelLayout();

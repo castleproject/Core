@@ -1,4 +1,4 @@
-// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 			try
 			{
-				desc = (ControllerMetaDescriptor) 
+				desc = (ControllerMetaDescriptor)
 					descriptorRepository[controllerType];
 
 				if (desc != null)
@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Internal
 
 				try
 				{
-					desc = BuildDescriptor( controllerType );
+					desc = BuildDescriptor(controllerType);
 
 					descriptorRepository[controllerType] = desc;
 				}
@@ -68,10 +68,10 @@ namespace Castle.MonoRail.Framework.Internal
 			return desc;
 		}
 
-		private ControllerMetaDescriptor BuildDescriptor( Type controllerType )
+		private ControllerMetaDescriptor BuildDescriptor(Type controllerType)
 		{
-			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor( controllerType );
-			
+			ControllerMetaDescriptor descriptor = new ControllerMetaDescriptor(controllerType);
+
 			CollectClassLevelAttributes(controllerType, descriptor);
 
 			foreach(object action in descriptor.Actions.Values)
@@ -82,7 +82,7 @@ namespace Castle.MonoRail.Framework.Internal
 					{
 						CollectActionAttributes(overloadedAction, descriptor);
 					}
-					
+
 					continue;
 				}
 
@@ -115,12 +115,12 @@ namespace Castle.MonoRail.Framework.Internal
 				descriptor.GetAction(method).Rescues = attributes;
 			}
 
-            attributes = method.GetCustomAttributes(typeof(RequiresVerbAttribute), true);
+			attributes = method.GetCustomAttributes(typeof(AccessibleThroughAttribute), true);
 
-            if (attributes.Length != 0)
-            {
-                descriptor.GetAction(method).RequiresVerb = (RequiresVerbAttribute)attributes[0];
-            }
+			if (attributes.Length != 0)
+			{
+				descriptor.GetAction(method).AccessibleThrough = (AccessibleThroughAttribute) attributes[0];
+			}
 
 			attributes = method.GetCustomAttributes(typeof(SkipRescueAttribute), true);
 
@@ -129,8 +129,8 @@ namespace Castle.MonoRail.Framework.Internal
 				descriptor.GetAction(method).SkipRescue = (SkipRescueAttribute) attributes[0];
 			}
 
-			attributes = method.GetCustomAttributes( typeof(LayoutAttribute), true );
-	
+			attributes = method.GetCustomAttributes(typeof(LayoutAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				descriptor.GetAction(method).Layout = (LayoutAttribute) attributes[0];
@@ -139,15 +139,15 @@ namespace Castle.MonoRail.Framework.Internal
 
 		private void CollectClassLevelAttributes(Type controllerType, ControllerMetaDescriptor descriptor)
 		{
-			object[] attributes = controllerType.GetCustomAttributes( typeof(DefaultActionAttribute), true );
-	
+			object[] attributes = controllerType.GetCustomAttributes(typeof(DefaultActionAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				descriptor.DefaultAction = (DefaultActionAttribute) attributes[0];
 			}
-	
-			attributes = controllerType.GetCustomAttributes( typeof(HelperAttribute), true );
-	
+
+			attributes = controllerType.GetCustomAttributes(typeof(HelperAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				foreach(HelperAttribute helper in attributes)
@@ -155,9 +155,9 @@ namespace Castle.MonoRail.Framework.Internal
 					descriptor.Helpers.Add(helper);
 				}
 			}
-	
-			attributes = controllerType.GetCustomAttributes( typeof(ResourceAttribute), true );
-	
+
+			attributes = controllerType.GetCustomAttributes(typeof(ResourceAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				foreach(ResourceAttribute resource in attributes)
@@ -165,9 +165,9 @@ namespace Castle.MonoRail.Framework.Internal
 					descriptor.Resources.Add(resource);
 				}
 			}
-	
-			attributes = controllerType.GetCustomAttributes( typeof(FilterAttribute), true );
-	
+
+			attributes = controllerType.GetCustomAttributes(typeof(FilterAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				foreach(FilterAttribute filter in attributes)
@@ -175,23 +175,23 @@ namespace Castle.MonoRail.Framework.Internal
 					descriptor.Filters.Add(filter);
 				}
 			}
-	
-			attributes = controllerType.GetCustomAttributes( typeof(LayoutAttribute), true );
-	
+
+			attributes = controllerType.GetCustomAttributes(typeof(LayoutAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				descriptor.Layout = (LayoutAttribute) attributes[0];
 			}
-	
-			attributes = controllerType.GetCustomAttributes( typeof(RescueAttribute), true );
-	
+
+			attributes = controllerType.GetCustomAttributes(typeof(RescueAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				descriptor.Rescues = attributes;
 			}
-	
-			attributes = controllerType.GetCustomAttributes( typeof(ScaffoldingAttribute), false );
-	
+
+			attributes = controllerType.GetCustomAttributes(typeof(ScaffoldingAttribute), false);
+
 			if (attributes.Length != 0)
 			{
 				foreach(ScaffoldingAttribute scaffolding in attributes)
@@ -199,9 +199,9 @@ namespace Castle.MonoRail.Framework.Internal
 					descriptor.Scaffoldings.Add(scaffolding);
 				}
 			}
-	
-			attributes = controllerType.GetCustomAttributes( typeof(DynamicActionProviderAttribute), true );
-	
+
+			attributes = controllerType.GetCustomAttributes(typeof(DynamicActionProviderAttribute), true);
+
 			if (attributes.Length != 0)
 			{
 				foreach(DynamicActionProviderAttribute actionProvider in attributes)
