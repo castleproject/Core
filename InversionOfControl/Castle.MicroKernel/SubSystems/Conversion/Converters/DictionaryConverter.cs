@@ -43,23 +43,25 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 
 			Hashtable dict = new Hashtable();
 
-			String keyType = configuration.Attributes["keyType"];
-			Type convertKeyTo = typeof(String);
+			String keyTypeName = configuration.Attributes["keyType"];
+			Type defaultKeyType = typeof(String);
 			
-			String valueType = configuration.Attributes["valueType"];
-			Type convertValueTo = typeof(String);
+			String valueTypeName = configuration.Attributes["valueType"];
+			Type defaultValueType = typeof(String);
 
-			if (keyType != null)
+			if (keyTypeName != null)
 			{
-				convertKeyTo = (Type) Context.Composition.PerformConversion( keyType, typeof(Type) );
+				defaultKeyType = (Type) Context.Composition.PerformConversion( keyTypeName, typeof(Type) );
 			}
-			if (valueType != null)
+			if (valueTypeName != null)
 			{
-				convertValueTo = (Type) Context.Composition.PerformConversion( valueType, typeof(Type) );
+				defaultValueType = (Type) Context.Composition.PerformConversion( valueTypeName, typeof(Type) );
 			}
 
 			foreach(IConfiguration itemConfig in configuration.Children)
 			{
+				// Preparing the key
+
 				String keyValue = itemConfig.Attributes["key"];
 
 				if (keyValue == null)
@@ -67,7 +69,23 @@ namespace Castle.MicroKernel.SubSystems.Conversion
 					throw new ConverterException("You must provide a key for the dictionary entry");
 				}
 
+				Type convertKeyTo = defaultKeyType;
+
+				if (itemConfig.Attributes["keyType"] != null)
+				{
+					convertKeyTo = (Type) Context.Composition.PerformConversion( itemConfig.Attributes["keyType"], typeof(Type) );
+				}
+
 				object key = Context.Composition.PerformConversion(keyValue, convertKeyTo);
+
+				// Preparing the value
+
+				Type convertValueTo = defaultValueType;
+
+				if (itemConfig.Attributes["valueType"] != null)
+				{
+					convertValueTo = (Type) Context.Composition.PerformConversion( itemConfig.Attributes["valueType"], typeof(Type) );
+				}
 				object value = Context.Composition.PerformConversion(itemConfig.Value, convertValueTo);
 
 				dict.Add( key, value );

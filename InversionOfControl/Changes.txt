@@ -1,6 +1,8 @@
 RC 3
 ====
 
+- Now with DictionaryConverter you can specify the keyType and valueType on each entry (kudos to Ahmed)
+
 - xmlinterpreter will throw an exception if a property is not defined but referenced
 using #{propertyName} syntax.(Patch from Ahmed)
 

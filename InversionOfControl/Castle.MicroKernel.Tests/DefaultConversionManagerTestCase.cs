@@ -89,6 +89,20 @@ namespace Castle.MicroKernel.Tests
 			config.Children.Add( new MutableConfiguration("item", "second") ).Attributes["key"] = "key2";
 			config.Children.Add( new MutableConfiguration("item", "third") ).Attributes["key"] = "key3";
 
+			MutableConfiguration intItem = new MutableConfiguration("item", "40");
+			intItem.Attributes["key"] = "4";
+			intItem.Attributes["keyType"] = "System.Int32, mscorlib";
+			intItem.Attributes["valueType"] = "System.Int32, mscorlib";
+
+			config.Children.Add(intItem);
+
+			MutableConfiguration dateItem = new MutableConfiguration("item", "2005/12/1");
+			dateItem.Attributes["key"] = "2000/1/1";
+			dateItem.Attributes["keyType"] = "System.DateTime, mscorlib";
+			dateItem.Attributes["valueType"] = "System.DateTime, mscorlib";
+
+			config.Children.Add(dateItem);
+
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(IDictionary)));
 			Assert.IsTrue(conversionMng.CanHandleType(typeof(Hashtable)));
 
@@ -100,6 +114,8 @@ namespace Castle.MicroKernel.Tests
 			Assert.AreEqual("first", dict["key1"]);
 			Assert.AreEqual("second", dict["key2"]);
 			Assert.AreEqual("third", dict["key3"]);
+			Assert.AreEqual(40, dict[4]);
+			Assert.AreEqual(new DateTime(2005,12,1), dict[new DateTime(2000,1,1)]);
 		}
 
 		[Test]
