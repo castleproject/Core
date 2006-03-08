@@ -119,10 +119,10 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Attributes\AccessibleThroughAttribute.cs" />
     <Compile Include="Attributes\ControllerDetailsAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Attributes\RequiresVerbAttribute.cs" />
     <Compile Include="Attributes\DataBindAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
