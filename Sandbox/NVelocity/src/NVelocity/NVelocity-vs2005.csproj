@@ -154,22 +154,14 @@
     <Compile Include="Context\IContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Context\InternalContextAdapter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Context\IInternalContextAdapter.cs" />
+    <Compile Include="Context\IInternalEventContext.cs" />
+    <Compile Include="Context\IInternalHousekeepingContext.cs" />
+    <Compile Include="Context\IInternalWrapperContext.cs" />
     <Compile Include="Context\InternalContextAdapterImpl.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Context\InternalContextBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Context\InternalEventContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Context\InternalHousekeepingContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Context\InternalWrapperContext.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Context\VMContext.cs">
@@ -194,9 +186,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime\Directive\Directive.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Runtime\Directive\DirectiveConstants.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime\Directive\DirectiveManager.cs">
@@ -235,10 +224,10 @@
     <Compile Include="Runtime\Exception\ReferenceException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Runtime\IRuntimeLogger.cs" />
+    <Compile Include="Runtime\IRuntimeServices.cs" />
+    <Compile Include="Runtime\Log\ILogSystem.cs" />
     <Compile Include="Runtime\Log\LogManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Runtime\Log\LogSystem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime\Log\NullLogSystem.cs">
@@ -247,12 +236,7 @@
     <Compile Include="Runtime\Log\PrimordialLogSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Runtime\Parser\CharStream.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Runtime\Parser\JJTParserState.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Runtime\Parser\ICharStream.cs" />
     <Compile Include="Runtime\Parser\Node\AbstractExecutor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -388,13 +372,11 @@
     <Compile Include="Runtime\Parser\Node\INode.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Runtime\Parser\Node\IParserVisitor.cs" />
     <Compile Include="Runtime\Parser\Node\NodeUtils.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime\Parser\Node\ObjectComparer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Runtime\Parser\Node\ParserVisitor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime\Parser\Node\PropertyExecutor.cs">
@@ -412,6 +394,7 @@
     <Compile Include="Runtime\Parser\ParserConstants.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Runtime\Parser\ParserState.cs" />
     <Compile Include="Runtime\Parser\ParserTokenManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -466,12 +449,6 @@
     <Compile Include="Runtime\RuntimeInstance.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Runtime\RuntimeLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Runtime\RuntimeServices.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Runtime\RuntimeSingleton.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -523,28 +500,20 @@
     <Compile Include="Util\Introspection\IntrospectorBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\Introspection\IUberspect.cs" />
+    <Compile Include="Util\Introspection\IVelMethod.cs" />
+    <Compile Include="Util\Introspection\IVelPropertyGet.cs" />
+    <Compile Include="Util\Introspection\IVelPropertySet.cs" />
     <Compile Include="Util\Introspection\MethodMap.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\Introspection\Twonk.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\Introspection\Uberspect.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Util\Introspection\UberspectImpl.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\Introspection\UberspectLoggable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Util\Introspection\VelMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Util\Introspection\VelPropertyGet.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Util\Introspection\VelPropertySet.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\SimplePool.cs">
