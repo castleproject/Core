@@ -64,7 +64,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Pagination
 
 		private static int ObtainCurrentPage()
 		{
-			String page = ProcessEngine.CurrentContext.Request.Params["page"];
+			String page = MonoRailHttpHandler.CurrentContext.Request.Params["page"];
 			return page == null || Regex.IsMatch(page, "\\D")
 				? 1 : Convert.ToInt32(page);
 		}

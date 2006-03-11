@@ -20,12 +20,35 @@ namespace TestScaffolding
 
 	using TestScaffolding.Model;
 
-
 	public class ARDataBinderTestController : ARSmartDispatcherController
 	{
-		public void SavePerson([ARDataBindAttribute("SimplePerson", AutoLoad=true)] SimplePerson person)
+		public void SavePerson([ARDataBindAttribute("SimplePerson", AutoLoad=AutoLoadBehavior.Always)] SimplePerson person)
 		{			
 			RenderText(person.ToString());
+		}
+
+		public void SavePersonNull([ARDataBindAttribute("SimplePerson", AutoLoad=AutoLoadBehavior.NullIfInvalidKey)] SimplePerson person)
+		{			
+			if (person == null)
+				RenderText("null");
+			else
+				RenderText(person.ToString());
+		}
+
+		public void SavePersonNew([ARDataBindAttribute("SimplePerson", AutoLoad=AutoLoadBehavior.NewInstanceIfInvalidKey)] SimplePerson person)
+		{			
+			if (person == null)
+				RenderText("null");
+			else
+				RenderText(person.ToString());
+		}
+
+		public void SavePersonNever([ARDataBindAttribute("SimplePerson", AutoLoad=AutoLoadBehavior.Never)] SimplePerson person)
+		{			
+			if (person == null)
+				RenderText("null");
+			else
+				RenderText(person.ToString());
 		}
 
 		public void SavePeople([ARDataBindAttribute("SimplePerson")] SimplePerson[] people)

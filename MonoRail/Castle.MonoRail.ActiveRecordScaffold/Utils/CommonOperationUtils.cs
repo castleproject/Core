@@ -19,32 +19,31 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System.Collections;
 
 	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework;
 	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
 
 
 	public abstract class CommonOperationUtils
 	{
-		internal static object[] FindAll( Type type )
+		internal static object[] FindAll(Type type)
 		{
-			return FindAll( type, null );
+			return FindAll(type, null);
 		}
 
-		internal static object[] FindAll( Type type, String customWhere )
+		internal static object[] FindAll(Type type, String customWhere)
 		{
-			MethodInfo findAll = type.GetMethod( "FindAll", 
-				BindingFlags.Static|BindingFlags.Public, null, new Type[0], null );
+			MethodInfo findAll = type.GetMethod("FindAll",
+			                                    BindingFlags.Static | BindingFlags.Public, null, new Type[0], null);
 
 			object[] items = null;
 
 			if (findAll != null)
 			{
-				items = (object[]) findAll.Invoke( null, null );
+				items = (object[]) findAll.Invoke(null, null);
 			}
 			else
 			{
-				IList list = SupportingUtils.FindAll( type );
+				IList list = ActiveRecordMediator.FindAll(type);
 
 				items = new object[list.Count];
 
@@ -54,8 +53,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			return items;
 		}
 
-		internal static void SaveInstance(object instance, 
-			Controller controller, ArrayList errors, IDictionary prop2Validation)
+		internal static void SaveInstance(object instance,
+		                                  Controller controller, ArrayList errors, IDictionary prop2Validation)
 		{
 			if (instance is ActiveRecordValidationBase)
 			{
@@ -82,13 +81,13 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 		internal static object ReadPkFromParams(Controller controller, PropertyInfo keyProperty)
 		{
 			String id = controller.Context.Params["id"];
-	
+
 			if (id == null)
 			{
 				throw new ScaffoldException("Can't edit without the proper id");
 			}
-	
-			return ConvertUtils.Convert( keyProperty.PropertyType, "id", controller.Params, null );
+
+			return ConvertUtils.Convert(keyProperty.PropertyType, "id", controller.Params, null);
 		}
 	}
 }

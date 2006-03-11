@@ -14,8 +14,6 @@
 
 namespace Castle.MonoRail.ActiveRecordSupport.Tests
 {
-	using System;
-	using System.Collections;
 	using System.Collections.Specialized;
 	using System.Configuration;
 	
@@ -48,7 +46,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		[SetUp]
 		public void TestInit()
 		{
-			binder.AutoLoad = true;
+			binder.AutoLoad = AutoLoadBehavior.Always;
 		}
 			
 		[Test]
@@ -110,11 +108,11 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		}
 		
 		[Test]
-		public void NoLadingWhenIdMatchNoAutoLoadWhenPrimaryKeyIs()
+		public void NoLoadingWhenIdMatchNoAutoLoadWhenPrimaryKeyIs()
 		{
 			NameValueCollection args = new NameValueCollection();
 
-			binder.AutoLoadUnlessKeyIs = 0;
+			binder.AutoLoad = AutoLoadBehavior.NewInstanceIfInvalidKey;
 
 			args.Add("SimplePerson.Id", "0");
 			args.Add("SimplePerson.Age", "200");
@@ -128,18 +126,16 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		}
 
         [Test]
-        [ExpectedException(typeof(RailsException), "Could not find primary key value 'Id' on 'TestScaffolding.Model.SimplePerson'")]
+        [ExpectedException(typeof(RailsException), "Could not find primary key 'Id' for 'TestScaffolding.Model.SimplePerson'")]
         public void ErrorWhenAutoLoadIsTrueButNoIdSpecified()
         {
             NameValueCollection args = new NameValueCollection();
 
-            binder.AutoLoad = true;
+            binder.AutoLoad = AutoLoadBehavior.Always;
 
             args.Add("SimplePerson.Id", "");
 
             instance = binder.BindObject(typeof(SimplePerson), "SimplePerson", new NameValueCollectionAdapter(args));
-
-          
         }
 		
 		[Test]
@@ -188,7 +184,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		[Ignore("Create schema does not create the correct tables")]
 		public void PopulatingContainers()
 		{
-			binder.AutoLoad = false;
+			binder.AutoLoad = AutoLoadBehavior.Never;
 
 			NameValueCollection args = new NameValueCollection();
 
@@ -211,7 +207,7 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 		[Ignore("Create schema does not create the correct tables")]
 		public void PopulatingContainersWithArray()
 		{
-			binder.AutoLoad = false;
+			binder.AutoLoad = AutoLoadBehavior.Never;
 
 			NameValueCollection args = new NameValueCollection();
 

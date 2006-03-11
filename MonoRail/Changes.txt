@@ -4,6 +4,21 @@ Change history
 Release Candidate 1
 ===================
 
+- Removed AutoLoadUnlessKeyIs and NullIfKeyIs from ARDataBinder. Added enum 
+  AutoLoadBehavior to replace them:
+
+  AutoLoadBehavior.Never (default): Means that no autoload should be perform on the target
+    type nor on nested types.
+      
+  AutoLoadBehavior.Always: Means that autoload should be used for the target type
+    and the nested types (if present). This demands that the primary key be present on the http request
+  
+  AutoLoadBehavior.NewInstanceIfInvalidKey: Means that we should autoload, but if the key is 
+    invalid, like null, 0 or an empty string, then just create a new instance of the target type.
+  
+  AutoLoadBehavior.NullIfInvalidKey: Means that we should autoload, but if the key is 
+    invalid, like null, 0 or an empty string, then just return null
+
 - Added support for AccessibleThrough(Verb.Post, or Verb.Get) to restrict the type of access a controller action requires.
 
 - Added suport for InPlaceRenderView for Brail

@@ -17,12 +17,8 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 	using System;
 
 	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework;
-
 	using Castle.MonoRail.Framework;
-
 	using Castle.Components.Common.TemplateEngine;
-	
 
 	/// <summary>
 	/// Removes the ActiveRecord instance
@@ -50,7 +46,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			try
 			{
-				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
 
 				controller.PropertyBag["instance"] = instance;
 

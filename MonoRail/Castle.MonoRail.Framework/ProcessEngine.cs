@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework
 	/// <remarks>
 	/// This is were all fun begins.
 	/// </remarks>
-	[Obsolete("This class is no longer used")]
+	[Obsolete("This class is no longer used, use MonoRailHttpHandler.CurrentContext")]
 	public class ProcessEngine
 	{
 		/// <summary>

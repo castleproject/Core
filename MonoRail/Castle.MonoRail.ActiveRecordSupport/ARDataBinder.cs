@@ -19,7 +19,6 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using System.Reflection;
 
 	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.Components.Binder;
 	using Castle.MonoRail.Framework;
@@ -29,19 +28,18 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	/// <summary>
 	/// Extends <see cref="DataBinder"/> class with some 
 	/// ActiveRecord specific functionality.
-	/// For example by specifying an "autoload" attribute to your form params
-	/// this class will automatically load the database record before binding
-	/// any properties values.
+	/// <seealso cref="AutoLoadBehavior"/>
+	/// <seealso cref="ARDataBindAttribute"/>
 	/// </summary>
 	/// <remarks>
+	/// Autoload can be turned on on the parameter, see <see cref="AutoLoadBehavior"/>.
 	/// </remarks>
 	public class ARDataBinder : DataBinder
 	{
 		protected internal static readonly object[] EmptyArg = new object[0];
 
-		private bool autoLoad, persistchanges;
-
-		private object nullWhenPrimaryKey, autoLoadUnlessKeyIs;
+		private AutoLoadBehavior autoLoad;
+		private bool persistchanges;
 
 		public ARDataBinder() : base()
 		{
@@ -53,22 +51,10 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			set { persistchanges = value; }
 		}
 
-		public bool AutoLoad
+		public AutoLoadBehavior AutoLoad
 		{
 			get { return autoLoad; }
 			set { autoLoad = value; }
-		}
-
-		public object NullWhenPrimaryKey
-		{
-			get { return nullWhenPrimaryKey; }
-			set { nullWhenPrimaryKey = value; }
-		}
-
-		public object AutoLoadUnlessKeyIs
-		{
-			get { return autoLoadUnlessKeyIs; }
-			set { autoLoadUnlessKeyIs = value; }
 		}
 
 		protected override object CreateInstance(Type instanceType, String paramPrefix, IBindingDataSourceNode node)
@@ -85,7 +71,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			object instance = null;
 
-			bool shouldLoad = autoLoad;
+			bool shouldLoad = autoLoad != AutoLoadBehavior.Never;
 
 			String autoloadOverride = node.GetMetaEntryValue("autoload");
 
@@ -106,23 +92,27 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				PrimaryKeyModel pkModel;
 
 				object id = ObtainPKValue(model, node, paramPrefix, out pkModel);
-				if (id == null)
+				
+				if (IsValidKey(id))
 				{
-					throw new RailsException(string.Format(
-						"Could not find primary key value '{0}' on '{1}'", pkModel.Property.Name,
-						instanceType.FullName));
-				}
-				if (autoLoadUnlessKeyIs != null && id.Equals(autoLoadUnlessKeyIs))
-				{
-					instance = base.CreateInstance(instanceType, paramPrefix, node);
-				}
-				else if (nullWhenPrimaryKey != null && id.Equals(NullWhenPrimaryKey))
-				{
-					instance = null;
+					instance = ActiveRecordMediator.FindByPrimaryKey(instanceType, id, true);
 				}
 				else
 				{
-					instance = SupportingUtils.FindByPK(instanceType, id);
+					if (autoLoad == AutoLoadBehavior.NewInstanceIfInvalidKey)
+					{
+						instance = base.CreateInstance(instanceType, paramPrefix, node);
+					}
+					else if (autoLoad == AutoLoadBehavior.NullIfInvalidKey)
+					{
+						instance = null;
+					}
+					else
+					{
+						throw new RailsException(string.Format(
+							"Could not find primary key '{0}' for '{1}'", 
+								pkModel.Property.Name, instanceType.FullName));
+					}
 				}
 			}
 			else
@@ -137,7 +127,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		{
 			ActiveRecordModel model = ActiveRecordModel.GetModel(type);
 
-			if (!AutoLoad || model == null)
+			if (AutoLoad == AutoLoadBehavior.Never || model == null)
 			{
 				return base.ShouldRecreateInstance(value, type, prefix, node);
 			}
@@ -163,7 +153,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 		protected override bool PerformCustomBinding(object instance, string prefix, IBindingDataSourceNode node)
 		{
-			if (nullWhenPrimaryKey != null && instance == null)
+			if (instance == null)
 			{
 				return true;
 			}
@@ -228,7 +218,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 					{
 						object convertedId = ConvertUtils.Convert(pkModel.Property.PropertyType, id);
 
-						AddToContainer(instance, SupportingUtils.FindByPK(targetType, convertedId));
+						AddToContainer(instance, ActiveRecordMediator.FindByPrimaryKey(targetType, convertedId, true));
 					}
 				}
 
@@ -238,7 +228,8 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			return false;
 		}
 
-		private static object ObtainPKValue(ActiveRecordModel model, IBindingDataSourceNode node, String prefix, out PrimaryKeyModel pkModel)
+		private static object ObtainPKValue(ActiveRecordModel model, IBindingDataSourceNode node, 
+			String prefix, out PrimaryKeyModel pkModel)
 		{
 			if (model.Ids.Count != 1)
 			{
@@ -370,7 +361,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		}
 
 		private void CreateMappedInstances(object instance, PropertyInfo prop,
-		                                   PrimaryKeyModel keyModel, ActiveRecordModel otherModel, IBindingDataSourceNode node)
+			PrimaryKeyModel keyModel, ActiveRecordModel otherModel, IBindingDataSourceNode node)
 		{
 			object container = InitializeRelationPropertyIfNull(instance, prop);
 
@@ -432,6 +423,23 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		private bool IsContainerInstance(object instance)
 		{
 			return (instance is IList || instance is ISet);
+		}
+
+		private bool IsValidKey(object id)
+		{
+			if (id != null)
+			{
+				if (id.GetType() == typeof(String))
+				{
+					return id.ToString() != String.Empty;
+				}
+				else
+				{
+					return Convert.ToInt64(id) != 0;
+				}
+			}
+			
+			return false;
 		}
 
 		private object CreateContainer(Type type)

@@ -54,7 +54,85 @@ namespace Castle.MonoRail.ActiveRecordSupport.Tests
 			AssertSuccess();
 			AssertReplyStartsWith("[1:John:0]");
 		}
-				
+
+		[Test]
+		public void AutoLoadNullIfInvalidKey()
+		{
+			string[] args;
+			
+			args = new string[] {
+									"SimplePerson.Id=1",
+									"SimplePerson.Name=John"
+								};
+			
+			DoGet("ARDataBinderTest/SavePersonNull.rails", args);
+			AssertSuccess();
+			AssertReplyStartsWith("[1:John:1]");
+
+			new ARDataBinderTestCase().CreateAndPopulateTables();
+			
+			args = new string[] {
+									"SimplePerson.Id=",
+									"SimplePerson.Name=John"
+								};
+			
+			DoGet("ARDataBinderTest/SavePersonNull.rails", args);
+			AssertSuccess();
+			AssertReplyStartsWith("null");
+		}
+
+		[Test]
+		public void AutoLoadNewInstanceIfInvalidKey()
+		{
+			string[] args;
+			
+			args = new string[] {
+									"SimplePerson.Id=1",
+									"SimplePerson.Name=John"
+								};
+			
+			DoGet("ARDataBinderTest/SavePersonNew.rails", args);
+			AssertSuccess();
+			AssertReplyStartsWith("[1:John:1]");
+
+			new ARDataBinderTestCase().CreateAndPopulateTables();
+			
+			args = new string[] {
+									"SimplePerson.Id=",
+									"SimplePerson.Name=John"
+								};
+			
+			DoGet("ARDataBinderTest/SavePersonNew.rails", args);
+			AssertSuccess();
+			AssertReplyStartsWith("[0:John:0]");
+		}
+
+		[Test]
+		public void AutoLoadNever()
+		{
+			string[] args;
+			
+			args = new string[] {
+									"SimplePerson.Id=1",
+									"SimplePerson.Name=John"
+								};
+			
+			DoGet("ARDataBinderTest/SavePersonNever.rails", args);
+			AssertSuccess();
+			AssertReplyStartsWith("[1:John:0]");
+
+			new ARDataBinderTestCase().CreateAndPopulateTables();
+			
+			args = new string[] {
+									"SimplePerson.Id=",
+									"SimplePerson.Name=John"
+								};
+			
+			DoGet("ARDataBinderTest/SavePersonNever.rails", args);
+			AssertSuccess();
+			AssertReplyStartsWith("[0:John:0]");
+		}
+
 		[Test]
 		public void ArrayAutoLoad()
 		{

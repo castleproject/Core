@@ -20,40 +20,62 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
+	/// Defines the behavior of 
+	/// Autoload feature on <see cref="ARDataBinder"/>
+	/// </summary>
+	public enum AutoLoadBehavior
+	{
+		/// <summary>
+		/// Means that no autoload should be perform on the target
+		/// type nor on nested types.
+		/// </summary>
+		Never,
+		
+		/// <summary>
+		/// Means that autoload should be used for the target type
+		/// and the nested types (if present). This demands that
+		/// the primary key be present on the http request
+		/// </summary>
+		Always,
+
+		/// <summary>
+		/// Means that we should autoload, but if the key is 
+		/// invalid, like <c>null</c>, 0 or an empty string, then just
+		/// create a new instance of the target type.
+		/// </summary>
+		NewInstanceIfInvalidKey,
+		
+		/// <summary>
+		/// Means that we should autoload, but if the key is 
+		/// invalid, like <c>null</c>, 0 or an empty string, then just
+		/// return null
+		/// </summary>
+		NullIfInvalidKey
+	}
+
+	/// <summary>
 	/// Extends <see cref="DataBindAttribute"/> with 
 	/// ActiveRecord specific functionallity
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Parameter), Serializable]
 	public class ARDataBindAttribute : DataBindAttribute, IParameterBinder
 	{
-		private static readonly object NullWhenPrimaryKeyEmpty = new object();
-
-		private bool autoLoad;
+		private AutoLoadBehavior autoLoad = AutoLoadBehavior.Never;
         
-		private object autoLoadUnlessKeyIs = NullWhenPrimaryKeyEmpty;
-		private object nullWhenPrimaryKey = NullWhenPrimaryKeyEmpty;
-
-		public ARDataBindAttribute(String prefix) : base (prefix)
+		public ARDataBindAttribute(String prefix) : base(prefix)
 		{
 		}
 
-		public bool AutoLoad
+		public ARDataBindAttribute(String prefix, AutoLoadBehavior autoLoadBehavior) : base(prefix)
+		{
+			autoLoad = autoLoadBehavior;
+		}
+
+		public AutoLoadBehavior AutoLoad
 		{
 			get { return autoLoad; }
 			set { autoLoad = value; }
 		}
-
-        public object NullWhenPrimaryKey
-        {
-            get { return nullWhenPrimaryKey; }
-            set { nullWhenPrimaryKey = value; }
-        }
-        
-        public object AutoLoadUnlessKeyIs
-        {
-            get { return autoLoadUnlessKeyIs; }
-            set { autoLoadUnlessKeyIs = value; }
-        }
 
         public override object Bind(SmartDispatcherController controller, ParameterInfo parameterInfo)
 		{
@@ -61,29 +83,9 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			ConfigureBinder(binder, controller);
 
-			binder.AutoLoad = AutoLoad ||IsAutoLoadWhenKeyIsSet;
+			binder.AutoLoad = autoLoad;
     
-			if (IsNullWhenPrimaryKeySet)
-            {
-                binder.NullWhenPrimaryKey = NullWhenPrimaryKey;
-            }
-            
-            if (IsAutoLoadWhenKeyIsSet)
-            {
-				binder.AutoLoadUnlessKeyIs = this.autoLoadUnlessKeyIs;
-			}
-			
 			return binder.BindObject(parameterInfo.ParameterType, Prefix, Exclude, Allow, ResolveParams(controller));
-		}
-
-		protected internal bool IsNullWhenPrimaryKeySet
-		{
-			get { return NullWhenPrimaryKey != NullWhenPrimaryKeyEmpty; }
-		}
-		
-		protected internal bool IsAutoLoadWhenKeyIsSet
-		{
-			get { return autoLoadUnlessKeyIs != NullWhenPrimaryKeyEmpty; }
 		}
 	}
 }

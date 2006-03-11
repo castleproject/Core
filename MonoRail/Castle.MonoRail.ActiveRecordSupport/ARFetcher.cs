@@ -17,7 +17,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	using System;
 	using System.Reflection;
 
-	using Castle.ActiveRecord.Framework;
+	using Castle.ActiveRecord;
 	using Castle.ActiveRecord.Framework.Internal;
 	using Castle.MonoRail.Framework;
 
@@ -29,7 +29,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 		public object FetchActiveRecord(ParameterInfo param, ARFetchAttribute attr, IRequest request)
 		{
 			Type type = param.ParameterType;
-			
+
 			bool isArray = type.IsArray;
 
 			if (isArray) type = type.GetElementType();
@@ -38,7 +38,7 @@ namespace Castle.MonoRail.ActiveRecordSupport
 
 			if (model == null)
 			{
-				throw new RailsException(String.Format("'{0}' is not an ActiveRecord " + 
+				throw new RailsException(String.Format("'{0}' is not an ActiveRecord " +
 					"class. It could not be bound to an [ARFetch] attribute.", type.Name));
 			}
 
@@ -55,9 +55,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			object[] pks = request.Params.GetValues(webParamName);
-			
-			if(pks==null)
+
+			if (pks == null)
+			{
 				pks = new object[0];
+			}
 
 			Array objs = Array.CreateInstance(type, pks.Length);
 
@@ -67,11 +69,11 @@ namespace Castle.MonoRail.ActiveRecordSupport
 			}
 
 			return objs;
-		}	
+		}
 
 		private object LoadActiveRecord(Type type, object pk, ARFetchAttribute attr, ActiveRecordModel model)
 		{
-			object obj = null;
+			object instance = null;
 
 			if (pk != null && !String.Empty.Equals(pk))
 			{
@@ -82,13 +84,15 @@ namespace Castle.MonoRail.ActiveRecordSupport
 				if (pk.GetType() != pkType)
 					pk = Convert.ChangeType(pk, pkType);
 
-				obj = SupportingUtils.FindByPK(type, pk, attr.Required);
+				instance = ActiveRecordMediator.FindByPrimaryKey(type, pk, attr.Required);
 			}
 
-			if (obj == null && attr.Create)
-				obj = Activator.CreateInstance(type);
+			if (instance == null && attr.Create)
+			{
+				instance = Activator.CreateInstance(type);
+			}
 
-			return obj;
+			return instance;
 		}
 	}
 }

@@ -16,12 +16,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
 
+	using Castle.ActiveRecord;
 	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
 	using Castle.MonoRail.Framework;
-	
-	using Castle.ActiveRecord.Framework;
-	
+
 	/// <summary>
 	/// Renders an edit form
 	/// </summary>
@@ -45,11 +44,11 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			try
 			{
-				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
 
-				new DataBinder().BindObjectInstance(instance, Model.Type.Name, 
-					new NameValueCollectionAdapter(controller.Request.Params));
-				
+				new DataBinder().BindObjectInstance(instance, Model.Type.Name,
+				                                    new NameValueCollectionAdapter(controller.Request.Params));
+
 				controller.PropertyBag["prefix"] = Model.Type.Name;
 				controller.PropertyBag["armodel"] = Model;
 				controller.PropertyBag["instance"] = instance;

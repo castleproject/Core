@@ -15,14 +15,10 @@
 namespace Castle.MonoRail.ActiveRecordScaffold
 {
 	using System;
-	using System.Collections.Specialized;
 
 	using Castle.ActiveRecord;
-	using Castle.ActiveRecord.Framework;
-	
 	using Castle.Components.Binder;
 	using Castle.Components.Common.TemplateEngine;
-	
 	using Castle.MonoRail.Framework;
 
 	/// <summary>
@@ -52,7 +48,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 			try
 			{
-				object instance = SupportingUtils.FindByPK( Model.Type, idVal );
+				object instance = ActiveRecordMediator.FindByPrimaryKey(Model.Type, idVal, true);
 
 				binder.BindObjectInstance(instance, Model.Type.Name, new NameValueCollectionAdapter(controller.Request.Form));
 
@@ -64,7 +60,7 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 			}
 			catch(Exception ex)
 			{
-				errors.Add( "Could not save " + Model.Type.Name + ". " + ex.Message );
+				errors.Add("Could not save " + Model.Type.Name + ". " + ex.Message);
 
 				scope.Dispose(true);
 			}
@@ -79,7 +75,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold
 
 		protected override void RenderStandardHtml(Controller controller)
 		{
-			
 		}
 	}
 }
