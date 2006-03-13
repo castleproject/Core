@@ -322,6 +322,14 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Configuration2\Properties\config_with_properties_and_defines.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Configuration2\Properties\config_with_properties_and_defines2.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Configuration2\Properties\config_with_properties_and_includes.xml"
                     BuildAction = "Content"
                 />

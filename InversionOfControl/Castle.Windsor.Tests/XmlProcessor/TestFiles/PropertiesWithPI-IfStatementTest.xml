@@ -1,0 +1,54 @@
+<?pi instruction will also be removed ?>
+<!-- some comments here, this should be removed by the xsl -->
+<configuration>
+	<?define debug?>
+
+	<properties>
+		<?if debug?>
+			<choose>		
+				<when defined="debug">
+					<myprop>should-exist</myprop>			
+				</when>
+				<when not-defined="debug">
+					<myprop2>should-not-exist</myprop2>			
+				</when>
+			</choose>
+		<?else?>
+			<myprop2>should-not-exist</myprop2>
+		<?end?>
+
+		<env>
+			<?if DEBUG?>debug<?else?>qa<?end?>
+		</env>
+		<log>
+			<?if DEBUG?>
+				<?if log?>debug-log<?else?>debug-not-log<?end?>
+			<?else?>
+				<?if log?>qa-log<?else?>qa-not-log<?end?>
+			<?end?>
+		</log>
+
+		<?undef debug?>
+		<env2>
+			<?if DEBUG?>debug2<?else?>qa2<?end?>
+		</env2>
+		<log2>
+			<choose>
+				<when defined="debug">
+					<?if log?>debug-log2<?else?>debug-not-log2<?end?>
+				</when>
+				<otherwise>
+					<?if log?>qa-log2<?else?>qa-not-log2<?end?>
+				</otherwise>
+			</choose>
+		</log2>
+	</properties>
+
+	<components>
+		#{myprop}#!{myprop2}
+		<component>#{env}</component>		
+		<component>#{log}</component>		
+		<component>#{env2}</component>		
+		<component>#{log2}</component>		
+	</components>
+</configuration>

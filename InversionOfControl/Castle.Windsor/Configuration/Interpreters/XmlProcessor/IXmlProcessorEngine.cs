@@ -44,5 +44,7 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 		IResource GetResource(string uri);
 		
 		void PopResource();
+
+		bool HasSpecialProcessor( XmlNode node );
 	}
 }

@@ -157,6 +157,11 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 			resourceStack.Pop();
 		}
 
+		public bool HasSpecialProcessor( XmlNode node )
+		{
+			return GetProcessor(node) != defaultElementProcessor;
+		}
+
 		public IResource GetResource(String uri)
 		{
 			IResource resource = resourceStack.Count > 0 ? resourceStack.Peek() as IResource : null;

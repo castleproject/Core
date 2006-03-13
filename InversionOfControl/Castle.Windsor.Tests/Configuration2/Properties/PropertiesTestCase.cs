@@ -105,6 +105,28 @@ namespace Castle.Windsor.Tests.Configuration2.Properties
 			AssertConfiguration();
 		}
 
+		[Test]
+		public void PropertiesAndDefines()
+		{
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
+				"config_with_properties_and_defines.xml");
+
+			container = new WindsorContainer(file);
+
+			AssertConfiguration();
+		}
+
+		[Test]
+		public void PropertiesAndDefines2()
+		{
+			String file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir + 
+				"config_with_properties_and_defines2.xml");
+
+			container = new WindsorContainer(file);
+
+			AssertConfiguration();
+		}
+
 		private void AssertConfiguration()
 		{
 			IConfigurationStore store = container.Kernel.ConfigurationStore;

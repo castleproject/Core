@@ -146,9 +146,9 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 
 		protected void MoveChildNodes(XmlDocumentFragment fragment, XmlElement element)
 		{
-			for(int i = element.ChildNodes.Count - 1; i > -1; i--)
+			while(element.ChildNodes.Count > 0)
 			{
-				fragment.AppendChild(element.ChildNodes[i]);
+				fragment.AppendChild(element.ChildNodes[0]);
 			}
 		}
 	}

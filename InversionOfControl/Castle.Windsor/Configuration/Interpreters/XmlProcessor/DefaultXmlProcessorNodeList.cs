@@ -60,9 +60,25 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 			get { return nodes[index] as XmlNode; }
 		}
 
+		public bool HasCurrent
+		{
+			get { return index < nodes.Count; }
+		}
+
 		public bool MoveNext()
 		{
 			return ++index < nodes.Count;
+		}
+
+		public int CurrentPosition
+		{
+			get { return index; }
+			set { index = value; }
+		}
+
+		public int Count
+		{
+			get { return nodes.Count; }
 		}
 	}
 }

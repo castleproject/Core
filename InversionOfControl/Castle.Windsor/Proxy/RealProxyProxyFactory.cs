@@ -36,7 +36,7 @@ namespace Castle.Windsor.Proxy
 		/// <returns></returns>
 		public override object Create(IKernel kernel, ComponentModel model, params object[] constructorArguments)
 		{
-			object target = Activator.CreateInstance( model.Implementation, constructorArguments );
+			object target = Activator.CreateInstance(model.Implementation, constructorArguments);
 
 			if (!(target is MarshalByRefObject))
 			{

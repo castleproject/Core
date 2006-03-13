@@ -18,7 +18,6 @@ namespace Castle.Windsor.Proxy
 	using System.Reflection;
 	using System.Runtime.Remoting;
 	using System.Runtime.Remoting.Messaging;
-	using System.Threading;
 
 	using Castle.Model.Interceptor;
 

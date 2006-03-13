@@ -1,0 +1,9 @@
+<configuration>
+	<components>
+		should-exist
+		<component>debug</component>		
+		<component>debug-not-log</component>		
+		<component>qa2</component>		
+		<component>qa-not-log2</component>		
+	</components>		
+</configuration>

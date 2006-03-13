@@ -35,23 +35,23 @@ namespace Castle.Windsor.Tests.XmlProcessor
 		[Test]
 		public void InvalidFiles()
 		{
-			String dirFullPath = GetFullPath();	
+			String dirFullPath = GetFullPath();
 
-			foreach(String fileName in Directory.GetFiles(dirFullPath, "Invalid*.xml" ))
+			foreach(String fileName in Directory.GetFiles(dirFullPath, "Invalid*.xml"))
 			{
 				try
 				{
-					XmlDocument doc = GetXmlDocument(fileName );
+					XmlDocument doc = GetXmlDocument(fileName);
 					XmlProcessor processor = new XmlProcessor();
 
-					XmlNode result = processor.Process(doc.DocumentElement);		
+					XmlNode result = processor.Process(doc.DocumentElement);
 
-					Assert.Fail( fileName + " should throw an exception");
+					Assert.Fail(fileName + " should throw an exception");
 				}
 				catch(XmlProcessorException e)
-				{	
-					Debug.WriteLine("Expected exception:" + e.Message);			
-				}				
+				{
+					Debug.WriteLine("Expected exception:" + e.Message);
+				}
 			}
 		}
 
@@ -61,17 +61,15 @@ namespace Castle.Windsor.Tests.XmlProcessor
 		[Test]
 		public void RunTests()
 		{
-			String dirFullPath = GetFullPath();			
+			String dirFullPath = GetFullPath();
 
-			System.Console.Out.WriteLine(dirFullPath);
-
-			foreach(String fileName in Directory.GetFiles(dirFullPath, "*Test.xml" ))
+			foreach(String fileName in Directory.GetFiles(dirFullPath, "*Test.xml"))
 			{
 				// Debug.WriteLine("Running " + fileName.Substring( fileName.LastIndexOf("/") + 1 ));
 
 				XmlDocument doc = GetXmlDocument(fileName);
 
-				String resultFileName = fileName.Substring(0, fileName.Length - 4 ) + "Result.xml";
+				String resultFileName = fileName.Substring(0, fileName.Length - 4) + "Result.xml";
 
 				XmlDocument resultDoc = GetXmlDocument(resultFileName);
 
@@ -79,14 +77,15 @@ namespace Castle.Windsor.Tests.XmlProcessor
 
 				try
 				{
-					XmlNode result = processor.Process(doc.DocumentElement); 
-				
+					XmlNode result = processor.Process(doc.DocumentElement);
+
 					String resultDocStr = StripSpaces(resultDoc.OuterXml);
 					String resultStr = StripSpaces(result.OuterXml);
-				
-					Debug.WriteLine(resultDocStr); Debug.WriteLine(resultStr);
-				
-					Assert.AreEqual( resultDocStr, resultStr );				
+
+					// Debug.WriteLine(resultDocStr);
+					// Debug.WriteLine(resultStr);
+
+					Assert.AreEqual(resultDocStr, resultStr);
 				}
 				catch(Exception e)
 				{
@@ -100,18 +99,18 @@ namespace Castle.Windsor.Tests.XmlProcessor
 		public XmlDocument GetXmlDocument(string fileName)
 		{
 			XmlDocument doc = new XmlDocument();
-			
+
 			doc.Load(fileName);
 
 			return doc;
-		}		
+		}
 
 		private string StripSpaces(String xml)
 		{
-			return Regex.Replace( xml, "\\s+", "", RegexOptions.Compiled);
+			return Regex.Replace(xml, "\\s+", "", RegexOptions.Compiled);
 		}
 
-		private string GetFullPath( )
+		private string GetFullPath()
 		{
 			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir);
 		}

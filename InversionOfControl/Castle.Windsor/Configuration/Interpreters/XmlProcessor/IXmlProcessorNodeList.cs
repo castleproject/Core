@@ -20,6 +20,12 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor
 	{
 		XmlNode Current { get; }
 
+		int CurrentPosition { get; set; }
+		
+		int Count { get; }
+
 		bool MoveNext();
+
+		bool HasCurrent { get; }
 	}
 }

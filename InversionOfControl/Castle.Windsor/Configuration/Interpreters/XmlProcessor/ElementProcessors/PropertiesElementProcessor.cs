@@ -43,17 +43,57 @@ namespace Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcesso
 		{
 			XmlElement element = nodeList.Current as XmlElement;
 
-			DefaultXmlProcessorNodeList childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
-
+			IXmlProcessorNodeList childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
+			
 			while(childNodes.MoveNext())
 			{
-				engine.DispatchProcessCurrent(childNodes);
+				// Properties processing its a little more complicated than usual
+				// since we need to support all special tags (if,else,define...)
+				// plus we need to register any regular element as a property asap
+				// since we should support properties that reference other properties
+				// i.e. <myprop2>#{prop1}</myprop2> 			
+				if (engine.HasSpecialProcessor(childNodes.Current))
+				{
+					// Current node its a special element so we bookmark it before processing it...
+					XmlNode current = childNodes.Current;
 
+					int pos = childNodes.CurrentPosition;
+
+					engine.DispatchProcessCurrent(childNodes);
+				
+					// ...after processing we need to refresh childNodes
+					// to account for any special element that affects the node tree (if,choose...)
+					childNodes = new DefaultXmlProcessorNodeList(element.ChildNodes);
+
+					// we only care about changes in the tree from the current node and forward
+					// so if the new list is empty or smaller we just exit the loop
+					if (pos < childNodes.Count)
+					{
+						childNodes.CurrentPosition = pos;
+
+						// if the current node gets replaced in the new list we need to restart processing
+						// otherwise we just continue as usual
+						if (childNodes.Current != current)
+						{
+							childNodes.CurrentPosition -= 1;
+							continue;
+						}
+					}
+					else
+					{
+						break;						
+					}					
+				}
+				else
+				{
+					engine.DispatchProcessCurrent(childNodes);	
+				}
+				
 				if (IgnoreNode(childNodes.Current)) continue;
 
 				XmlElement elem = GetNodeAsElement(element, childNodes.Current);
 
-				engine.AddProperty(elem);
+				engine.AddProperty(elem);					
 			}
 
 			RemoveItSelf(element);
