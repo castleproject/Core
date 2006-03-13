@@ -16,7 +16,8 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 {
 	using System;
 	using System.Threading;
-
+	using Castle.Model;
+	using Castle.Model.Configuration;
 	using NUnit.Framework;
 
 	using Castle.MicroKernel;
@@ -28,28 +29,28 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 	[TestFixture]
 	public class LifestyleManagerTestCase
 	{
-		private IKernel m_kernel;
+		private IKernel kernel;
 
-		private IComponent m_instance3;
+		private IComponent instance3;
 
 		[SetUp]
 		public void CreateContainer()
 		{
-			m_kernel = new DefaultKernel();
+			kernel = new DefaultKernel();
 		}
 
 		[TearDown]
 		public void DisposeContainer()
 		{
-			m_kernel.Dispose();
+			kernel.Dispose();
 		}
 
 		[Test]
 		public void TestTransient()
 		{
-			m_kernel.AddComponent( "a", typeof(IComponent), typeof(TransientComponent) );
+			kernel.AddComponent( "a", typeof(IComponent), typeof(TransientComponent) );
 
-			IHandler handler = m_kernel.GetHandler("a");
+			IHandler handler = kernel.GetHandler("a");
 			
 			IComponent instance1 = handler.Resolve() as IComponent;
 			IComponent instance2 = handler.Resolve() as IComponent;
@@ -65,11 +66,52 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 		}
 
 		[Test]
+		public void LifestyleSetThroughAttribute()
+		{
+			kernel.AddComponent( "a", typeof(TransientComponent) );
+			IHandler handler = kernel.GetHandler("a");
+			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+
+			kernel.AddComponent( "b", typeof(SingletonComponent) );
+			handler = kernel.GetHandler("b");
+			Assert.AreEqual(LifestyleType.Singleton, handler.ComponentModel.LifestyleType);
+
+			kernel.AddComponent( "c", typeof(CustomComponent) );
+			handler = kernel.GetHandler("c");
+			Assert.AreEqual(LifestyleType.Custom, handler.ComponentModel.LifestyleType);
+		}
+
+		[Test]
+		public void LifestyleSetThroughExternalConfig()
+		{
+			IConfiguration confignode = new MutableConfiguration("component");
+			confignode.Attributes.Add("lifestyle", "transient");
+			kernel.ConfigurationStore.AddComponentConfiguration("a", confignode);
+			kernel.AddComponent("a", typeof(NoInfoComponent));
+			IHandler handler = kernel.GetHandler("a");
+			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+
+			confignode = new MutableConfiguration("component");
+			confignode.Attributes.Add("lifestyle", "singleton");
+			kernel.ConfigurationStore.AddComponentConfiguration("b", confignode);
+			kernel.AddComponent("b", typeof(NoInfoComponent));
+			handler = kernel.GetHandler("b");
+			Assert.AreEqual(LifestyleType.Singleton, handler.ComponentModel.LifestyleType);
+
+			confignode = new MutableConfiguration("component");
+			confignode.Attributes.Add("lifestyle", "thread");
+			kernel.ConfigurationStore.AddComponentConfiguration("c", confignode);
+			kernel.AddComponent("c", typeof(NoInfoComponent));
+			handler = kernel.GetHandler("c");
+			Assert.AreEqual(LifestyleType.Thread, handler.ComponentModel.LifestyleType);
+		}
+
+		[Test]
 		public void TestSingleton()
 		{
-			m_kernel.AddComponent( "a", typeof(IComponent), typeof(SingletonComponent) );
+			kernel.AddComponent( "a", typeof(IComponent), typeof(SingletonComponent) );
 
-			IHandler handler = m_kernel.GetHandler("a");
+			IHandler handler = kernel.GetHandler("a");
 			
 			IComponent instance1 = handler.Resolve() as IComponent;
 			IComponent instance2 = handler.Resolve() as IComponent;
@@ -87,9 +129,9 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 		[Test]
 		public void TestCustom()
 		{
-			m_kernel.AddComponent( "a", typeof(IComponent), typeof(CustomComponent) );
+			kernel.AddComponent( "a", typeof(IComponent), typeof(CustomComponent) );
 
-			IHandler handler = m_kernel.GetHandler("a");
+			IHandler handler = kernel.GetHandler("a");
 			
 			IComponent instance1 = handler.Resolve() as IComponent;
 
@@ -99,9 +141,9 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 		[Test]
 		public void TestPerThread()
 		{
-			m_kernel.AddComponent( "a", typeof(IComponent), typeof(PerThreadComponent) );
+			kernel.AddComponent( "a", typeof(IComponent), typeof(PerThreadComponent) );
 
-			IHandler handler = m_kernel.GetHandler("a");
+			IHandler handler = kernel.GetHandler("a");
 			
 			IComponent instance1 = handler.Resolve() as IComponent;
 			IComponent instance2 = handler.Resolve() as IComponent;
@@ -116,9 +158,9 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 			thread.Start();
 			thread.Join();
 
-			Assert.IsNotNull( m_instance3 );
-			Assert.IsTrue( !instance1.Equals( m_instance3 ) );
-			Assert.IsTrue( instance1.ID != m_instance3.ID );
+			Assert.IsNotNull( this.instance3 );
+			Assert.IsTrue( !instance1.Equals( this.instance3 ) );
+			Assert.IsTrue( instance1.ID != this.instance3.ID );
 
 			handler.Release( instance1 );
 			handler.Release( instance2 );
@@ -126,8 +168,8 @@ namespace Castle.MicroKernel.Tests.Lifestyle
 
 		private void OtherThread()
 		{
-			IHandler handler = m_kernel.GetHandler( "a" );
-			m_instance3 = handler.Resolve() as IComponent;
+			IHandler handler = kernel.GetHandler( "a" );
+			this.instance3 = handler.Resolve() as IComponent;
 		}
 	}
 }

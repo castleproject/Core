@@ -305,6 +305,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Lifestyle\Components\NoInfoComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Lifestyle\Components\PerThreadComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
