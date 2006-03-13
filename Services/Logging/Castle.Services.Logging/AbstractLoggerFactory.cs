@@ -57,7 +57,7 @@ namespace Castle.Services.Logging
 			}
 			else
 			{
-				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(filename)));
+				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename));
 			}
             
 			return result;
