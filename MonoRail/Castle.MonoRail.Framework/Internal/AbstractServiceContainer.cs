@@ -12,23 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.MonoRail.Framework.Adapters
+namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 	using System.Collections;
 	using System.Collections.Specialized;
 	using System.ComponentModel.Design;
 
-	public abstract class AbstractServiceContainer : MarshalByRefObject
+	public abstract class AbstractServiceContainer : MarshalByRefObject, IServiceContainer
 	{
-		private readonly IDictionary _type2Service = new HybridDictionary();
-	
+		private readonly IServiceContainer parent;
+		private IDictionary type2Service;
+
+		public AbstractServiceContainer()
+		{
+		}
+
+		public AbstractServiceContainer(IServiceContainer parent)
+		{
+			this.parent = parent;
+		}
+
 		public void AddService(Type serviceType, object serviceInstance)
 		{
-			if (serviceInstance != null)
+			if (type2Service == null)
 			{
-				_type2Service[serviceType] = serviceInstance;
+				type2Service = new HybridDictionary();
 			}
+
+			type2Service[serviceType] = serviceInstance;
 		}
 
 		public void AddService(Type serviceType, object serviceInstance, bool promote)
@@ -58,7 +70,19 @@ namespace Castle.MonoRail.Framework.Adapters
 
 		public object GetService(Type serviceType)
 		{
-			return _type2Service[serviceType];
+			object service = null;
+
+			if (type2Service != null)
+			{
+				service = type2Service[serviceType];
+			}
+
+			if (service == null && parent != null)
+			{
+				service = parent.GetService(serviceType);
+			}
+
+			return service;
 		}
 	}
 }

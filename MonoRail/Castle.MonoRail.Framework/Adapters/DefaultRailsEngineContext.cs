@@ -15,6 +15,7 @@
 namespace Castle.MonoRail.Framework.Adapters
 {
 	using System;
+	using System.ComponentModel.Design;
 	using System.Web;
 	using System.Web.Caching;
 	using System.Web.SessionState;
@@ -26,7 +27,8 @@ namespace Castle.MonoRail.Framework.Adapters
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
-	/// Adapter to expose a valid <see cref="IRailsEngineContext"/> implementation on top of <c>HttpContext</c>.
+	/// Adapter to expose a valid <see cref="IRailsEngineContext"/> 
+	/// implementation on top of <c>HttpContext</c>.
 	/// </summary>
 	public class DefaultRailsEngineContext : AbstractServiceContainer, IRailsEngineContext
 	{
@@ -41,7 +43,7 @@ namespace Castle.MonoRail.Framework.Adapters
 		private UrlInfo _urlInfo;
 		private String _url;
 
-		public DefaultRailsEngineContext(HttpContext context)
+		public DefaultRailsEngineContext(IServiceContainer parent, HttpContext context) : base(parent)
 		{
 			_context = context;
 			_request = new RequestAdapter(context.Request);

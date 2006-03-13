@@ -33,7 +33,7 @@ namespace Castle.MonoRail.Framework
 	/// <remarks>
 	/// Allowed usage is one per method parameter, and is not inherited.
 	/// </remarks>
-	[AttributeUsage( AttributeTargets.Parameter, AllowMultiple=false, Inherited=false )]
+	[AttributeUsage(AttributeTargets.Parameter, AllowMultiple=false, Inherited=false)]
 	public class DataBindAttribute : Attribute, IParameterBinder
 	{
 		private ParamStore from = ParamStore.Params;
@@ -70,7 +70,7 @@ namespace Castle.MonoRail.Framework
 		
 		/// <summary>
 		/// Gets or sets <see cref="ParamStore"/> used to 
-		/// indicate where to get the values to databinding.
+		/// indicate where to get the values from
 		/// </summary>
 		/// <value>The <see cref="ParamStore"/> type.  
 		/// Typically <see cref="ParamStore.Params"/>.</value>
@@ -83,6 +83,11 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Gets the databinding prefix.
 		/// </summary>
+		/// <remarks>
+		/// The prefix is a name followed by a 
+		/// dot that prefixes the entries names 
+		/// on the source http request.
+		/// </remarks>
 		/// <value>The databinding prefix.</value>
 		public String Prefix
 		{

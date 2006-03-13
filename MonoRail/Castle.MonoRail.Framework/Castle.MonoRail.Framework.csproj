@@ -253,11 +253,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Adapters\AbstractServiceContainer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Adapters\DefaultRailsEngineContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -528,6 +523,11 @@
                 />
                 <File
                     RelPath = "Internal\AbstractControllerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\AbstractServiceContainer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

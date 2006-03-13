@@ -39,9 +39,16 @@ namespace Castle.MonoRail.Framework.Configuration
 		private String _scaffoldingTypeName = DefaultScaffoldType;
 		private SmtpConfig _smtp = new SmtpConfig();
 		private XmlNode _section;
+		private bool _checkIsClientConnected;
 
 		public MonoRailConfiguration()
 		{
+		}
+
+		public bool CheckIsClientConnected
+		{
+			get { return _checkIsClientConnected; }
+			set { _checkIsClientConnected = value; }
 		}
 
 		public IList ControllerAssemblies

@@ -4,6 +4,24 @@ Change history
 Release Candidate 1
 ===================
 
+- Refactored DefaultRailsEngineContext and EngineContextModule. Now EngineContextModule
+  is also a ServiceContainer. When a DefaultRailsEngineContext is created we pass
+  the EngineContextModule as a parent container. 
+  
+  This saves us some cycles of registering
+  the services on every single DefaultRailsEngineContext instance.
+
+- Added attribute 'checkClientIsConnected' to monoRail configuration check. If 
+  'true' the controller class will always check IsClientConnected on
+  
+  - InternalSend (beginning)
+  - Before Staring filter process 
+  - Before invoking the view engine
+  
+  The default value is 'false'
+  
+  (kudos to Ahmed)
+
 - Removed AutoLoadUnlessKeyIs and NullIfKeyIs from ARDataBinder. Added enum 
   AutoLoadBehavior to replace them:
 

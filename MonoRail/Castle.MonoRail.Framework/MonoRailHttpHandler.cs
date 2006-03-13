@@ -18,7 +18,6 @@ namespace Castle.MonoRail.Framework
 	using System.Web;
 	using System.Web.SessionState;
 
-	using Castle.MonoRail.Framework.Adapters;
 	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
@@ -31,7 +30,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (!EngineContextModule.Initialized)
 			{
-				throw new RailsException("Looks like you forgot to register the module " + typeof(EngineContextModule).FullName);
+				throw new RailsException("Looks like you forgot to register the http module " + typeof(EngineContextModule).FullName);
 			}
 
 			IRailsEngineContext mrContext = EngineContextModule.ObtainRailsEngineContext(context);
@@ -41,7 +40,7 @@ namespace Castle.MonoRail.Framework
 
 		public bool IsReusable
 		{
-			get { return false; }
+			get { return true; }
 		}
 
 		/// <summary>
@@ -51,7 +50,7 @@ namespace Castle.MonoRail.Framework
 		/// to it.
 		/// </summary>
 		/// <param name="context"></param>
-		public virtual void Process( IRailsEngineContext context )
+		public virtual void Process(IRailsEngineContext context)
 		{
 			UrlInfo info = ExtractUrlInfo(context);
 

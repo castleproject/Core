@@ -17,6 +17,7 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.Collections;
 	using System.ComponentModel;
+	using System.ComponentModel.Design;
 	using System.Web;
 
 	using Castle.Components.Common.EmailSender;
@@ -30,7 +31,7 @@ namespace Castle.MonoRail.Framework
 	/// <summary>
 	/// Pendent
 	/// </summary>
-	public class EngineContextModule : IHttpModule 
+	public class EngineContextModule : AbstractServiceContainer, IHttpModule 
 	{
 		internal static readonly String RailsContextKey = "rails.context";
 		
@@ -79,6 +80,8 @@ namespace Castle.MonoRail.Framework
 			InitializeEmailSender();
 
 			ConnectViewComponentFactoryToViewEngine();
+
+			RegisterServices(this);
 		}
 
 		private void InitApplicationHooks(HttpApplication context)
@@ -215,7 +218,7 @@ namespace Castle.MonoRail.Framework
 		{
 			// TODO: allow user to customize this
 
-			emailSender = new SmtpSender( monoRailConfiguration.SmtpConfig.Host );
+			emailSender = new SmtpSender(monoRailConfiguration.SmtpConfig.Host);
 
 			ISupportInitialize initializer = emailSender as ISupportInitialize;
 
@@ -302,17 +305,15 @@ namespace Castle.MonoRail.Framework
 
 			if (mrContext == null)
 			{
-				mrContext = new DefaultRailsEngineContext(context);
+				mrContext = new DefaultRailsEngineContext(this, context);
 
 				context.Items[RailsContextKey] = mrContext;
-
-				RegisterServices(mrContext);
 			}
 
 			return mrContext;
 		}
 
-		protected virtual void RegisterServices(IRailsEngineContext context)
+		protected virtual void RegisterServices(IServiceContainer context)
 		{
 			context.AddService(typeof(ExtensionManager), extensionManager);
 			context.AddService(typeof(IControllerFactory), controllerFactory);
@@ -323,6 +324,7 @@ namespace Castle.MonoRail.Framework
 			context.AddService(typeof(IViewComponentFactory), viewCompFactory);
 			context.AddService(typeof(ControllerDescriptorBuilder), controllerDescriptorBuilder);
 			context.AddService(typeof(IEmailSender), emailSender);
+			context.AddService(typeof(MonoRailConfiguration), monoRailConfiguration);
 		}
 
 		internal static bool Initialized

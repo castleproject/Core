@@ -76,6 +76,13 @@ namespace Castle.MonoRail.Framework.Configuration
 				config.SmtpConfig.Password = smtpPwdAtt.Value;
 			}
 
+			XmlAttribute checkClientIsConnectedAtt  = section.Attributes["checkClientIsConnected"];
+
+			if (checkClientIsConnectedAtt != null && checkClientIsConnectedAtt.Value != String.Empty)
+			{
+				config.CheckIsClientConnected = String.Compare(checkClientIsConnectedAtt.Value, "true", true) == 0;
+			}
+
 			foreach( XmlNode node in section.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element)

@@ -62,15 +62,36 @@ namespace Castle.MonoRail.ActiveRecordSupport
 	{
 		private AutoLoadBehavior autoLoad = AutoLoadBehavior.Never;
         
+		/// <summary>
+		/// Defines a binder for the parameter
+		/// using the <see cref="ARDataBinder"/> and the 
+		/// specified <c>prefix</c>.
+		/// </summary>
+		/// <remarks>
+		/// This uses the default <see cref="AutoLoadBehavior"/>
+		/// whic is <see cref="AutoLoadBehavior.Never"/>
+		/// </remarks>
+		/// <param name="prefix">A name that prefixes the entries on the http request</param>
 		public ARDataBindAttribute(String prefix) : base(prefix)
 		{
 		}
 
+		/// <summary>
+		/// Defines a binder for the parameter
+		/// using the <see cref="ARDataBinder"/> and the 
+		/// specified <c>prefix</c>.
+		/// </summary>
+		/// <param name="prefix">A name that prefixes the entries on the http request</param>
+		/// <param name="autoLoadBehavior">The predefined behavior the autoload feature should use</param>
 		public ARDataBindAttribute(String prefix, AutoLoadBehavior autoLoadBehavior) : base(prefix)
 		{
 			autoLoad = autoLoadBehavior;
 		}
 
+		/// <summary>
+		/// Defines the behavior the autoload feature 
+		/// should use
+		/// </summary>
 		public AutoLoadBehavior AutoLoad
 		{
 			get { return autoLoad; }

@@ -25,7 +25,7 @@ namespace Castle.MonoRail.Framework
 	using System.Text.RegularExpressions;
 
 	using Castle.Components.Common.EmailSender;
-	
+	using Castle.MonoRail.Framework.Configuration;
 	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
@@ -266,6 +266,15 @@ namespace Castle.MonoRail.Framework
 		public IDictionary CustomActions
 		{
 			get { return _dynamicActions; }
+		}
+
+		/// <summary>
+		/// Shortcut to 
+		/// <see cref="IRailsEngineContext.Response.IsClientConnected"/>
+		/// </summary>
+		protected bool IsClientConnected
+		{
+			get { return _context.Response.IsClientConnected; }
 		}
 
 		#endregion
@@ -578,6 +587,16 @@ namespace Castle.MonoRail.Framework
 
 		#region Core members
 
+		internal bool ShouldCheckWhetherClientHasDisconnected
+		{
+			get 
+			{ 
+				MonoRailConfiguration conf = (MonoRailConfiguration) 
+					_context.GetService(typeof(MonoRailConfiguration)); 
+				return conf.CheckIsClientConnected;
+			}
+		}
+
 		protected internal IServiceProvider ServiceProvider
 		{
 			get { return serviceProvider; }
@@ -690,6 +709,11 @@ namespace Castle.MonoRail.Framework
 			// wasting processor cycles
 			if (Response.WasRedirected) return;
 
+			bool checkWhetherClientHasDisconnected = ShouldCheckWhetherClientHasDisconnected;
+
+			// Nothing to do if the peer disconnected
+			if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
+
 			// Record the action
 			SetEvaluatedAction(action);
 
@@ -732,7 +756,7 @@ namespace Castle.MonoRail.Framework
 				// Overrides the current layout, if the action specifies one
 				if (actionDesc.Layout != null)
 				{
-					this.LayoutName = actionDesc.Layout.LayoutName;
+					LayoutName = actionDesc.Layout.LayoutName;
 				}
                 
 				if (actionDesc.AccessibleThrough != null)
@@ -755,6 +779,9 @@ namespace Castle.MonoRail.Framework
 
 			try
 			{
+				// Nothing to do if the peer disconnected
+				if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
+
 				// If we are supposed to run the filters...
 				if (!skipFilters)
 				{
@@ -811,6 +838,9 @@ namespace Castle.MonoRail.Framework
 			
 			try
 			{
+				// Nothing to do if the peer disconnected
+				if (checkWhetherClientHasDisconnected && !IsClientConnected) return;
+
 				// If we haven't failed anywhere and no redirect was issued
 				if (!hasError && !Response.WasRedirected)
 				{
@@ -824,7 +854,7 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 			finally
-			{			
+			{
 				// Run the filters if required
 				if (!skipFilters)
 				{
