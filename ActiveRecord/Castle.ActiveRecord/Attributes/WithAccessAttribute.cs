@@ -39,7 +39,9 @@ namespace Castle.ActiveRecord
 			get
 			{
 				if (CustomAccess!=null)
+				{
 					return CustomAccess;
+				}
 				return PropertyAccessHelper.ToString(Access);
 			}
 		}

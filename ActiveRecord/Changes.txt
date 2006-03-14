@@ -1,6 +1,16 @@
 beta 4
 ======
 
+- Added SessionScopeWebModule which hooks BeginRequest and EndRequest initializing and 
+  destructing a SessionScope properly. In order to use it add to httpModules section 
+  (web.config):
+  
+  <system.web>
+    <httpModules>
+      <add name="ar.sessionscope" type="Castle.ActiveRecord.Framework.SessionScopeWebModule, Castle.ActiveRecord" />
+    </httpModules>
+  </system.web>
+
 - Added lyfecycle methods that can be overriden:
 
   . OnSave
