@@ -1,0 +1,48 @@
+#*
+
+@test foreach-type.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+Using a Object []
+
+#foreach( $i in $obarr)
+  $i
+#end
+
+Using a Map
+
+#foreach( $i in $map )
+  $i.Value
+#end
+
+Using a Collection
+
+#foreach($i in $collection )
+  $i
+#end
+
+Using an Iterator
+
+#foreach($i in $iterator )
+  $i 
+#end
+
+
+Using an Enumeration
+
+#foreach($i in $enumerator)
+  $i
+#end
+
+
+Using an array of primitives
+
+#foreach( $i in $intarr )
+  $i
+#end

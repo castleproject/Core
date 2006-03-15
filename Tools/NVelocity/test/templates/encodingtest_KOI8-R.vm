@@ -1,0 +1,104 @@
+From - Sat Jun  2 11:47:36 2001
+Return-Path: <velocity-user-return-1985-geirm=optonline.net@jakarta.apache.org>
+Received: from mta1.srv.hcvlny.cv.net (mta1.srv.hcvlny.cv.net [167.206.5.4])
+	by s1.optonline.net (8.10.2/8.10.2) with ESMTP id f4U9uVc26907
+	for <@mail.srv.nrwlct.cv.net:geirm@optonline.net>; Wed, 30 May 2001 05:56:31 -0400 (EDT)
+Received: from apache.org (h31.sny.collab.net [64.208.42.41])
+ by mta1.srv.hcvlny.cv.net
+ (iPlanet Messaging Server 5.0 Patch 2 (built Dec 14 2000))
+ with SMTP id <0GE5008U97M83H@mta1.srv.hcvlny.cv.net> for geirm@optonline.net
+ (ORCPT geirm@optonline.net); Wed, 30 May 2001 05:56:33 -0400 (EDT)
+Received: (qmail 19350 invoked by uid 500); Wed, 30 May 2001 09:56:20 +0000
+Received: (qmail 19153 invoked from network); Wed, 30 May 2001 09:56:18 +0000
+Date: Wed, 30 May 2001 13:57:17 +0400
+From: Vitaly Repetenko <vit@mtu.ru>
+Subject: Re: Russian Character Encoding
+To: velocity-user@jakarta.apache.org
+Reply-to: velocity-user@jakarta.apache.org
+Message-id: <3B14C3FD.3834AF02@mtu.ru>
+Organization: MTU-Intel
+MIME-version: 1.0
+X-Mailer: Mozilla 4.77 [en] (Windows NT 5.0; U)
+Content-type: multipart/mixed; boundary="Boundary_(ID_tldpu1b8SMKs0pXiY1Dv8g)"
+X-Accept-Language: ru,en
+Precedence: bulk
+Delivered-to: mailing list velocity-user@jakarta.apache.org
+Mailing-List: contact velocity-user-help@jakarta.apache.org; run by ezmlm
+X-Recipient: velocity-user@jakarta.apache.org
+X-Spam-Rating: h31.sny.collab.net 1.6.2 0/1000/N
+References: <3B139D1A.E49723E2@mtu.ru> <3B139DB1.CD00E5E2@optonline.net>
+ <3B13A6B9.B02D04BF@mtu.ru> <3B13B5FB.57130BA9@optonline.net>
+ <3B149DF4.72383B1D@mtu.ru> <3B14BC65.A688FFFB@optonline.net>
+List-Post: <mailto:velocity-user@jakarta.apache.org>
+List-Subscribe: <mailto:velocity-user-subscribe@jakarta.apache.org>
+List-Unsubscribe: <mailto:velocity-user-unsubscribe@jakarta.apache.org>
+List-Help: <mailto:velocity-user-help@jakarta.apache.org>
+X-Mozilla-Status: 8011
+X-Mozilla-Status2: 00000000
+X-UIDL: a57ee51a80f6ed07173b135dbac0735e
+
+This is a multi-part message in MIME format.
+
+--Boundary_(ID_tldpu1b8SMKs0pXiY1Dv8g)
+Content-type: text/plain; charset=koi8-r
+Content-transfer-encoding: 7BIT
+
+template
+
+"Geir Magnusson Jr." wrote:
+
+> Vitaly Repetenko wrote:
+> >
+> > Hi!
+> >
+> > Test is attached.
+> >
+> > Not only russian capital "U" is converted into space but russian capital "F" (ASCII
+> > code E6) also.
+> >
+>
+> Can you attach a test template?  Or better yet, see if the latest in CVS
+> fixes it?  It might have gone in later than the nightly snapshot, so you
+> may need to just get a dump from CVS.
+>
+> geir
+>
+> --
+> Geir Magnusson Jr.                           geirm@optonline.net
+> System and Software Consulting
+> Developing for the web?  See http://jakarta.apache.org/velocity/
+> "still climbing up to the shoulders..."
+
+--Boundary_(ID_tldpu1b8SMKs0pXiY1Dv8g)
+Content-type: text/html; charset=koi8-r; name=charset_test.vm
+Content-transfer-encoding: 8BIT
+Content-disposition: inline; filename=charset_test.vm
+
+<html>
+<head><title>Russian charset test</title></head>
+<body bgcolor="#ffffff">
+
+<pre>
+ABCDEFGHIJKLMNOPRSTUVWXYZ
+abcdefghijklmnoprstuvwxyz
+
+Russian alphabet:(32 chars) Displayed without codes 0xF5 0xE6 (code page KOI8-R)
+
+Â×ÞÚÄÅ³ÃßÊËÌÍÎÏÐÒÔÕÆÈÖÉÇÀÙÜÑÝÛÁÓ
+                    ^^
+------------------>F5E6
+â÷þúäå£ãÿêëìíîïðòôõæèöéçàùüñýûáó
+
+alt="Èõíèúê"
+     ^
+---->F5
+alt="Öêúâ"
+     ^
+---->E6
+</pre>
+
+</html>
+
+
+--Boundary_(ID_tldpu1b8SMKs0pXiY1Dv8g)--
+

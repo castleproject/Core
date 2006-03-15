@@ -1,0 +1,70 @@
+#**
+
+@test velocimacro2.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression
+test doesn't fail incorrectly.
+
+*#
+#macro( foo $a )
+  Hello from foo : $a
+#end
+
+#macro( foo2 $a )
+  Hello from foo2 : $a
+#end
+
+#macro( foo_two $a )
+  Hello from foo_two : $a
+#end
+
+#foo( "hi" )
+#foo2( "hi" )
+#foo_two( "hi" )
+
+
+#foo( $notincontext )
+#foo( $notincontext.getThing() )
+
+#macro( tester $a )
+  #if($a)
+    $a :  yes
+  #else
+    $a :  no
+  #end
+#end
+
+##
+## test to see if we can print these
+## as schmoo
+##
+
+#tester( $notincontext )
+#tester( $notincontext.woogie() )
+
+#set($foo = "bar")
+
+#tester($foo)
+
+#foo2( ${foo} )
+
+#macro( poundthis $truth )
+  #if ($truth )
+    <td align=center class=v10><b>#</b></td>
+    <td align=center class=v10><b> # </b></td>
+    <td align=center class=v10><b>\#</b></td>
+  #end
+#end
+
+#poundthis( true )
+
+##
+## test for bug reported when stringlit changed to on-init parsing
+##
+
+#macro( blorp $bar ) $bar #end
+#macro( schlorp $i )#blorp( "hi $i" ) #end
+
+#schlorp("victor")

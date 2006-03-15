@@ -1,0 +1,56 @@
+#*
+
+@test foreach-array.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+--Foreach with an array. 2 blank lines follow
+
+##foreach ($element in $provider.Array)
+
+<table>
+#foreach ($element in $stringarray)
+    <tr>
+        <td>This is $element and it is the $velocityCount item</td>
+    </tr>        
+#end
+</table>
+
+--Foreach with a null array.  1 blank line follows
+
+<table>
+#foreach ($element in $woogiefoogie)
+    <tr>
+        <td>This is $element and it is the $velocityCount item</td>
+    </tr>        
+#end
+</table>
+
+-- And when we declare the array in-template :
+
+#set($colors=["red","blue","green"])
+Choose among :
+#foreach( $color in $colors )
+	$color
+#end
+
+#set($bar= 'bar')
+#set($foo = [ 'a' ])
+#set($foo2 = [ $bar ])
+#set($foo2 = [$bar ])
+#set($foo2 = [ $bar])
+#set($foo2 = [ $bar] )
+#foreach( $i in $foo )
+ \$foo : $i
+#end
+
+#foreach($i in $foo2)
+ \$foo2 : $i
+#end
+
+

@@ -1,0 +1,23 @@
+#*
+
+@test literal.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+#literal()
+
+#foreach ($woogie in $boogie)
+  nothing will happen to $woogie
+#end  
+
+#if($skin)
+    $!data.setLayoutTemplate($!skin.getLayout())
+    $!page.setCss($!skin.getCss())
+#end
+
+#end

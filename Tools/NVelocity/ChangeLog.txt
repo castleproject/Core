@@ -1,0 +1,2675 @@
+2005-01-01 Saturday 10:35  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2005-01-01 Saturday 09:32  corts
+
+	* src/Test/CommonsExtPropTestCase.cs:
+	
+	remove update todo comment that was handled
+
+2005-01-01 Saturday 09:31  corts
+
+	* src/Commons/Collections/ExtendedProperties.cs:
+	
+	Handle commas found in already parsed properties files when using
+	the convert method
+
+2004-12-26 Sunday 23:27  corts
+
+	* java/: readme.txt, velocity.zip:
+	
+	updated with some of the changes for version 1.4, mainly the
+	changes for Uberspect so far.
+
+2004-12-26 Sunday 23:21  corts
+
+	* www/.cvsignore:
+	
+	no message
+
+2004-12-26 Sunday 23:16  corts
+
+	* src/NVelocity.csproj:
+	
+	updates to support Uberspect (Velocity 1.4)
+
+2004-12-26 Sunday 23:16  corts
+
+	* src/NVelocity.sln:
+	
+	no message
+
+2004-12-26 Sunday 23:14  corts
+
+	* src/.cvsignore:
+	
+	ignore resharper add in files
+
+2004-12-26 Sunday 23:12  corts
+
+	* src/IO/VelocityWriter.cs:
+	
+	handle possible null string
+
+2004-12-26 Sunday 23:11  corts
+
+	* src/App/VelocityEngine.cs:
+	
+	add new constructors that will also initialize the instance
+
+2004-12-26 Sunday 23:09  corts
+
+	* src/Test/VTLTest.cs:
+	
+	tests for stange VTL problems -- currently has a failing test that
+	identifies a problem in Velocity as well as NVelocity
+
+2004-12-26 Sunday 23:07  corts
+
+	* src/Test/Commons/: KeyedListTest.cs, LRUMapTest.cs:
+	
+	tests for new Commons.Collections classes
+
+2004-12-26 Sunday 23:06  corts
+
+	* src/Test/ContextTest.cs:
+	
+	test to make sure that case insensative contexts could be created
+
+2004-12-26 Sunday 23:05  corts
+
+	* src/NVelocity.Test.csproj:
+	
+	add new tests
+
+2004-12-26 Sunday 23:01  corts
+
+	* src/Test/TemplateTestCase.cs:
+	
+	reformatting
+
+2004-12-26 Sunday 22:59  corts
+
+	* src/: Runtime/RuntimeInstance.cs, Runtime/RuntimeServices.cs,
+	Runtime/RuntimeSingleton.cs, SupportClass.cs:
+	
+	updates to support Uberspect (Velocity 1.4)
+
+2004-12-26 Sunday 22:55  corts
+
+	* src/: Util/ArrayIterator.cs, Util/EnumerationIterator.cs,
+	Util/Introspection/ClassMap.cs, Util/Introspection/Info.cs,
+	Util/Introspection/Introspector.cs,
+	Util/Introspection/MethodMap.cs, Util/Introspection/Uberspect.cs,
+	Util/Introspection/UberspectImpl.cs,
+	Util/Introspection/UberspectLoggable.cs,
+	Util/Introspection/VelMethod.cs,
+	Util/Introspection/VelPropertyGet.cs,
+	Util/Introspection/VelPropertySet.cs,
+	Runtime/Parser/Node/ASTIdentifier.cs,
+	Runtime/Parser/Node/AbstractExecutor.cs,
+	Runtime/Parser/Node/BooleanPropertyExecutor.cs,
+	Runtime/Parser/Node/GetExecutor.cs,
+	Runtime/Parser/Node/PropertyExecutor.cs:
+	
+	updates to support Uberspect (Velocity 1.4)
+
+2004-12-26 Sunday 22:50  corts
+
+	* src/Runtime/Parser/Node/ASTMap.cs:
+	
+	minor reformatting
+
+2004-12-26 Sunday 22:48  corts
+
+	* src/Runtime/Parser/Node/ASTMap.cs:
+	
+	add new node type for creating maps (part of Velocity 1.4)
+
+2004-12-23 Thursday 01:15  corts
+
+	* src/Runtime/Defaults/nvelocity.properties:
+	
+	minor reformatting
+
+2004-12-23 Thursday 01:14  corts
+
+	* src/Runtime/Resource/ResourceCacheImpl.cs:
+	
+	change internal cache to use a least recently used dictionary where
+	a max cache size can be enforced
+
+2004-12-23 Thursday 01:10  corts
+
+	* src/: Commons/Collections/IOrderedDictionary.cs,
+	Commons/Collections/KeyedList.cs,
+	Commons/Collections/KeyedListEnumerator.cs,
+	Commons/Collections/LRUMap.cs, Commons.csproj:
+	
+	add collections needed for a limited (max size) ResourceCache
+
+2004-12-22 Wednesday 09:16  corts
+
+	* examples/SimpleHttp/Web.config:
+	
+	correct assembly name for NVelocityHandlerFactory
+
+2004-12-22 Wednesday 08:54  corts
+
+	* examples/SimpleHttp/SimpleHttp.csproj:
+	
+	modifications made by VS2003 ide
+
+2004-12-22 Wednesday 08:33  corts
+
+	* src/Template.cs:
+	
+	fix problem with correctly creating an encoded stream reader
+	causing anything but UTF-8 to work
+
+2004-12-22 Wednesday 08:32  corts
+
+	* src/Test/EncodingTestCase.cs:
+	
+	update test so that it can be added to the project as an active
+	test
+
+2004-11-27 Saturday 11:36  corts
+
+	* examples/ViewHandler/Global.asax.cs:
+	
+	reformatting
+
+2004-07-12 Monday 17:32  corts
+
+	* src/nvelocity.build:
+	
+	reflect change in location of DAO classes when updating projects
+
+2004-07-11 Sunday 21:10  corts
+
+	* src/Http/HandlerSkeleton.cs:
+	
+	minor reformatting
+
+2004-02-09 Monday 13:06  corts
+
+	* src/Runtime/Resource/Loader/ResourceLocator.cs:
+	
+	avoid trying to get the resource filenames from dynamic assemblies
+	(derived from AssemblyBuilder) as that is not supported.  Fix per
+	bug #893569 reported by Daniel Cazzulino (dcazzulino).
+
+2004-02-09 Monday 12:38  corts
+
+	* src/Runtime/RuntimeConstants.cs:
+	
+	change constants for default runtime directives and properties to
+	use resource name format (dotted).  remove unused log4net constants
+	add constant that will be needed for defining the uberspect class
+
+2004-02-09 Monday 12:35  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	load default runtime properties and directives directly from
+	assembly resource
+
+2004-01-19 Monday 13:33  corts
+
+	* src/Runtime/Resource/: ResourceManager.cs,
+	ResourceManagerImpl.cs:
+	
+	update of comments
+
+2004-01-19 Monday 13:24  corts
+
+	* src/Test/CommonsTest.cs:
+	
+	text fix to Combine so that strings with the delimeter character
+	are not converted to a list
+
+2004-01-19 Monday 13:23  corts
+
+	* src/Commons/Collections/ExtendedProperties.cs:
+	
+	add fix to Combine so that strings with the delimeter character are
+	not converted to a list
+
+2004-01-01 Thursday 17:13  corts
+
+	* src/Runtime/Resource/Resource.cs:
+	
+	reformatting
+
+2004-01-01 Thursday 17:12  corts
+
+	* src/Runtime/Log/LogManager.cs:
+	
+	change logging level of message when a logger class can't be
+	found...configuration continues
+
+2004-01-01 Thursday 17:09  corts
+
+	* src/Runtime/Resource/ContentResource.cs:
+	
+	documentation fixes make sure reader is closed
+
+2004-01-01 Thursday 17:07  corts
+
+	* src/NAnt/Anakia/AnakiaTask.cs:
+	
+	add comments for future work
+
+2004-01-01 Thursday 17:06  corts
+
+	* src/NVelocity.sln:
+	
+	add NAnt build file to solution
+
+2004-01-01 Thursday 17:04  corts
+
+	* src/: NVelocity.csproj, Runtime/RuntimeLogger.cs:
+	
+	add RuntimeLogger interface
+
+2003-11-04 Tuesday 21:57  corts
+
+	* src/: Commons.csproj, NVelocity.Http.csproj,
+	NVelocity.NAnt.csproj, NVelocity.Test.csproj, NVelocity.csproj:
+	
+	VS IDE added subtype to AssemblyVersionInfo.cs files added
+	previously (why now, I don't know)
+
+2003-11-04 Tuesday 21:54  corts
+
+	* src/IO/VelocityWriter.cs:
+	
+	simplfy min evaluation
+
+2003-11-04 Tuesday 21:53  corts
+
+	* src/App/Velocity.cs:
+	
+	make TemplateExists obsolete in favor of ResourceExists (change in
+	terminology)
+
+2003-11-04 Tuesday 21:16  corts
+
+	* src/Runtime/Defaults/nvelocity.properties:
+	
+	default introspector
+
+2003-11-04 Tuesday 21:15  corts
+
+	* src/App/Tools/VelocityFormatter.cs:
+	
+	minor refactoring change use of ArrayList to IList
+
+2003-11-04 Tuesday 20:57  corts
+
+	* src/Util/SimplePool.cs:
+	
+	fix get() so that it removes the instance when retrieved
+
+2003-11-04 Tuesday 20:56  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	use assembly version instead of relying on this being changed for
+	each version
+
+2003-10-29 Wednesday 00:37  corts
+
+	* src/Makefile:
+	
+	only package stuff that really needs to be in the package (i.e. no
+	need for previous dist packages or the java source)
+
+2003-10-28 Tuesday 23:54  corts
+
+	* src/dist.sh:
+	
+	missed binaries that needed to be made executable
+
+2003-10-28 Tuesday 23:51  corts
+
+	* src/AssemblyVersionInfo.cs:
+	
+	update to next version
+
+2003-10-28 Tuesday 23:33  corts
+
+	* src/dist.sh:
+	
+	use make release instead of make package (from testing)
+
+2003-10-28 Tuesday 23:32  corts
+
+	* xdocs/index.xml:
+	
+	announce 0.4.2 release as well as Velocity 1.4-rc1 release.
+
+2003-10-28 Tuesday 23:12  corts
+
+	* xdocs/changelog.xml:
+	
+	add changes since 0.4.1 release
+
+2003-10-28 Tuesday 22:51  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-10-28 Tuesday 22:50  corts
+
+	* src/dist.sh:
+	
+	updated to use make targets to get most of work done
+
+2003-10-28 Tuesday 22:34  corts
+
+	* src/AssemblyVersionInfo.cs:
+	
+	set version to last released version
+
+2003-10-28 Tuesday 22:12  corts
+
+	* src/Makefile:
+	
+	add targets to help with versioning and release process
+
+2003-10-28 Tuesday 21:50  corts
+
+	* src/nvelocity.build:
+	
+	use binary from /build directory
+
+2003-10-28 Tuesday 19:02  corts
+
+	* bin/MSDN.css:
+	
+	moved to /bin/NDoc
+
+2003-10-28 Tuesday 18:39  corts
+
+	* src/getversion.sh:
+	
+	shell script to extract the version number from
+	AssemblyVersionInfo.cs
+
+2003-10-28 Tuesday 18:32  corts
+
+	* src/: Commons.csproj, NVelocity.Http.csproj,
+	NVelocity.NAnt.csproj, NVelocity.Test.csproj, NVelocity.csproj,
+	Commons/AssemblyInfo.cs, Http/AssemblyInfo.cs,
+	NAnt/AssemblyInfo.cs, Test/AssemblyInfo.cs:
+	
+	seperate version information from the rest of the assembly
+	information so that  the version can be shared across projects
+
+2003-10-28 Tuesday 18:27  corts
+
+	* src/: AssemblyInfo.cs, AssemblyVersionInfo.cs:
+	
+	seperate version information from the rest of the assembly
+	information so that  the version can be shared across projects
+
+2003-10-28 Tuesday 14:01  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-10-28 Tuesday 13:57  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-10-28 Tuesday 08:28  corts
+
+	* java/: .cvsignore, readme.txt, velocity.zip:
+	
+	This folder contains the source and comparable files from the
+	Apache Jakarta Velocity project that the NVelocity source is based
+	on.  The goal of the NVelocity project is to keep as close to the
+	original project as possible.  I use this source to compare to the
+	current CVS head to help know what has changed.  As source is
+	matched, this zip will be updated.  The contents of this zip may or
+	may not match a known Velocity version and may not contain released
+	code.
+	
+	The current zip contains the original source that was used to
+	create NVelocity - it is prior to version 1.3.1.
+
+2003-10-27 Monday 08:37  corts
+
+	* src/Runtime/VelocimacroFactory.cs:
+	
+	fix formatting of comments
+
+2003-10-27 Monday 07:35  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-10-27 Monday 07:14  corts
+
+	* src/Makefile:
+	
+	modify paths to /bin stuff to reflect changes in structure add
+	target to style cs source files add targets to convert project
+	files between VS2002 and VS2003 formats
+
+2003-10-27 Monday 07:13  corts
+
+	* examples/App/App-Examples.sln,
+	examples/App/Example1/Example1.csproj,
+	examples/App/Example2/Example2.csproj,
+	examples/SimpleHttp/SimpleHttp.csproj,
+	examples/SimpleHttp/SimpleHttp.sln,
+	examples/ViewHandler/ViewHandler.csproj,
+	examples/ViewHandler/ViewHandler.sln, src/NVelocity.Http.csproj,
+	src/NVelocity.NAnt.csproj, src/NVelocity.Tools.Dvsl.csproj,
+	src/NVelocity.Tools.csproj, src/NVelocity.csproj:
+	
+	update to VS2003 project/solution files
+
+2003-10-27 Monday 07:12  corts
+
+	* examples/ViewHandler/Global.asax.cs:
+	
+	formatting done by style
+
+2003-10-27 Monday 07:11  corts
+
+	* bin/style.sh:
+	
+	shell script to style source code using astyle and unexpand
+
+2003-10-27 Monday 07:10  corts
+
+	* src/updatechangelog.sh:
+	
+	ignore of ChangeLog.txt.bak is missing (probably because cvs2cl.pl
+	failed to connect - which seems to happen a lot lately)
+
+2003-10-27 Monday 06:54  corts
+
+	* examples/App/Example1/AssemblyInfo.cs,
+	examples/App/Example1/Example1.cs,
+	examples/App/Example2/AssemblyInfo.cs,
+	examples/App/Example2/Example2.cs,
+	examples/SimpleHttp/AssemblyInfo.cs,
+	examples/SimpleHttp/Default.aspx.cs,
+	examples/SimpleHttp/SimpleNVelocityHandler.cs,
+	examples/ViewHandler/AssemblyInfo.cs,
+	examples/ViewHandler/Default.aspx.cs,
+	examples/ViewHandler/Global.asax.cs,
+	examples/ViewHandler/ToyTool.cs, src/AssemblyInfo.cs,
+	src/SupportClass.cs, src/Template.cs, src/VelocityContext.cs,
+	src/App/AppSupportClass.cs, src/App/FieldMethodizer.cs,
+	src/App/Velocity.cs, src/App/VelocityEngine.cs,
+	src/App/Events/EventCartridge.cs, src/App/Events/EventHandler.cs,
+	src/App/Events/MethodExceptionEventHandler.cs,
+	src/App/Events/NullSetEventHandler.cs,
+	src/App/Events/ReferenceInsertionEventHandler.cs,
+	src/App/Tools/VelocityFormatter.cs, src/Commons/AssemblyInfo.cs,
+	src/Commons/Collections/CollectionsUtil.cs,
+	src/Commons/Collections/ExtendedProperties.cs,
+	src/Commons/Collections/PropertiesReader.cs,
+	src/Commons/Collections/PropertiesTokenizer.cs,
+	src/Commons/Collections/StringTokenizer.cs,
+	src/Context/AbstractContext.cs, src/Context/IContext.cs,
+	src/Context/InternalContextAdapter.cs,
+	src/Context/InternalContextAdapterImpl.cs,
+	src/Context/InternalContextBase.cs,
+	src/Context/InternalEventContext.cs,
+	src/Context/InternalHousekeepingContext.cs,
+	src/Context/InternalWrapperContext.cs, src/Context/VMContext.cs,
+	src/Dvsl/Dvsl.cs, src/Dvsl/DvslContext.cs, src/Dvsl/DvslNode.cs,
+	src/Dvsl/DvslNodeContext.cs, src/Dvsl/DvslNodeImpl.cs,
+	src/Dvsl/TemplateHandler.cs, src/Dvsl/TransformTool.cs,
+	src/Dvsl/Transformer.cs, src/Dvsl/Directive/MatchDirective.cs,
+	src/Dvsl/Directive/NameDirective.cs,
+	src/Exception/MethodInvocationException.cs,
+	src/Exception/ParseErrorException.cs,
+	src/Exception/ResourceNotFoundException.cs,
+	src/Exception/VelocityException.cs, src/Http/AssemblyInfo.cs,
+	src/Http/HandlerSkeleton.cs, src/Http/NVelocityHandler.cs,
+	src/Http/NVelocityHandlerFactory.cs,
+	src/Http/NVelocityViewHandler.cs,
+	src/Http/Context/ChainedContext.cs,
+	src/Http/Context/IViewContext.cs,
+	src/Http/Context/ToolboxContext.cs,
+	src/Http/Resource/Loader/IWebappLoaderAppContext.cs,
+	src/Http/Resource/Loader/WebappLoadAppContext.cs,
+	src/Http/Resource/Loader/WebappLoader.cs,
+	src/Http/Tool/IToolboxManager.cs, src/Http/Tool/IViewTool.cs,
+	src/Http/Tool/MultiViewsTool.cs, src/Http/Tool/ServletToolInfo.cs,
+	src/Http/Tool/ServletToolboxManager.cs,
+	src/Http/Tool/ViewToolInfo.cs, src/Http/Tool/XMLToolboxManager.cs,
+	src/IO/VelocityWriter.cs, src/NAnt/AssemblyInfo.cs,
+	src/NAnt/Anakia/AnakiaTask.cs,
+	src/NAnt/Anakia/AnakiaXmlDocument.cs,
+	src/NAnt/Anakia/AnakiaXmlElement.cs, src/NAnt/Anakia/Escape.cs,
+	src/NAnt/Anakia/NodeList.cs, src/NAnt/Anakia/OutputWrapper.cs,
+	src/NAnt/Anakia/TreeWalker.cs, src/NAnt/Anakia/XPathTool.cs,
+	src/NAnt/Dvsl/DvslTask.cs, src/NAnt/Texen/FileUtil.cs,
+	src/NAnt/Texen/Generator.cs, src/NAnt/Texen/PropertiesUtil.cs,
+	src/NAnt/Texen/SupportClass.cs, src/NAnt/Texen/TexenTask.cs,
+	src/Runtime/RuntimeConstants.cs, src/Runtime/RuntimeInstance.cs,
+	src/Runtime/RuntimeServices.cs, src/Runtime/RuntimeSingleton.cs,
+	src/Runtime/VelocimacroFactory.cs,
+	src/Runtime/VelocimacroManager.cs,
+	src/Runtime/Directive/Directive.cs,
+	src/Runtime/Directive/DirectiveConstants.cs,
+	src/Runtime/Directive/Foreach.cs, src/Runtime/Directive/Include.cs,
+	src/Runtime/Directive/Literal.cs, src/Runtime/Directive/Macro.cs,
+	src/Runtime/Directive/Parse.cs,
+	src/Runtime/Directive/ParseDirectiveException.cs,
+	src/Runtime/Directive/VMProxyArg.cs,
+	src/Runtime/Directive/VelocimacroProxy.cs,
+	src/Runtime/Exception/NodeException.cs,
+	src/Runtime/Exception/ReferenceException.cs,
+	src/Runtime/Log/AvalonLogSystem.cs,
+	src/Runtime/Log/Log4JLogSystem.cs,
+	src/Runtime/Log/Log4NetExtensionLogSystem.cs,
+	src/Runtime/Log/LogManager.cs, src/Runtime/Log/LogSystem.cs,
+	src/Runtime/Log/NullLogSystem.cs,
+	src/Runtime/Log/PrimordialLogSystem.cs,
+	src/Runtime/Log/SimpleLog4NetLogSystem.cs,
+	src/Runtime/Log/VelocityFormatter.cs,
+	src/Runtime/Parser/CharStream.cs,
+	src/Runtime/Parser/JJTParserState.cs,
+	src/Runtime/Parser/ParseException.cs, src/Runtime/Parser/Parser.cs,
+	src/Runtime/Parser/ParserConstants.cs,
+	src/Runtime/Parser/ParserTokenManager.cs,
+	src/Runtime/Parser/ParserTreeConstants.cs,
+	src/Runtime/Parser/Token.cs, src/Runtime/Parser/TokenMgrError.cs,
+	src/Runtime/Parser/VelocityCharStream.cs,
+	src/Runtime/Parser/Node/ASTAddNode.cs,
+	src/Runtime/Parser/Node/ASTAndNode.cs,
+	src/Runtime/Parser/Node/ASTAssignment.cs,
+	src/Runtime/Parser/Node/ASTBlock.cs,
+	src/Runtime/Parser/Node/ASTComment.cs,
+	src/Runtime/Parser/Node/ASTDirective.cs,
+	src/Runtime/Parser/Node/ASTDivNode.cs,
+	src/Runtime/Parser/Node/ASTEQNode.cs,
+	src/Runtime/Parser/Node/ASTElseIfStatement.cs,
+	src/Runtime/Parser/Node/ASTElseStatement.cs,
+	src/Runtime/Parser/Node/ASTEscape.cs,
+	src/Runtime/Parser/Node/ASTEscapedDirective.cs,
+	src/Runtime/Parser/Node/ASTExpression.cs,
+	src/Runtime/Parser/Node/ASTFalse.cs,
+	src/Runtime/Parser/Node/ASTGENode.cs,
+	src/Runtime/Parser/Node/ASTGTNode.cs,
+	src/Runtime/Parser/Node/ASTIdentifier.cs,
+	src/Runtime/Parser/Node/ASTIfStatement.cs,
+	src/Runtime/Parser/Node/ASTIncludeStatement.cs,
+	src/Runtime/Parser/Node/ASTIntegerRange.cs,
+	src/Runtime/Parser/Node/ASTLENode.cs,
+	src/Runtime/Parser/Node/ASTLTNode.cs,
+	src/Runtime/Parser/Node/ASTMethod.cs,
+	src/Runtime/Parser/Node/ASTModNode.cs,
+	src/Runtime/Parser/Node/ASTMulNode.cs,
+	src/Runtime/Parser/Node/ASTNENode.cs,
+	src/Runtime/Parser/Node/ASTNotNode.cs,
+	src/Runtime/Parser/Node/ASTNumberLiteral.cs,
+	src/Runtime/Parser/Node/ASTObjectArray.cs,
+	src/Runtime/Parser/Node/ASTOrNode.cs,
+	src/Runtime/Parser/Node/ASTParameters.cs,
+	src/Runtime/Parser/Node/ASTReference.cs,
+	src/Runtime/Parser/Node/ASTSetDirective.cs,
+	src/Runtime/Parser/Node/ASTStringLiteral.cs,
+	src/Runtime/Parser/Node/ASTSubtractNode.cs,
+	src/Runtime/Parser/Node/ASTText.cs,
+	src/Runtime/Parser/Node/ASTTrue.cs,
+	src/Runtime/Parser/Node/ASTVariable.cs,
+	src/Runtime/Parser/Node/ASTWord.cs,
+	src/Runtime/Parser/Node/ASTprocess.cs,
+	src/Runtime/Parser/Node/AbstractExecutor.cs,
+	src/Runtime/Parser/Node/BooleanPropertyExecutor.cs,
+	src/Runtime/Parser/Node/GetExecutor.cs,
+	src/Runtime/Parser/Node/INode.cs,
+	src/Runtime/Parser/Node/NodeUtils.cs,
+	src/Runtime/Parser/Node/ParserVisitor.cs,
+	src/Runtime/Parser/Node/PropertyExecutor.cs,
+	src/Runtime/Parser/Node/SimpleNode.cs,
+	src/Runtime/Resource/ContentResource.cs,
+	src/Runtime/Resource/Resource.cs,
+	src/Runtime/Resource/ResourceCache.cs,
+	src/Runtime/Resource/ResourceCacheImpl.cs,
+	src/Runtime/Resource/ResourceFactory.cs,
+	src/Runtime/Resource/ResourceManager.cs,
+	src/Runtime/Resource/ResourceManagerImpl.cs,
+	src/Runtime/Resource/Loader/DataSourceResourceLoader.cs,
+	src/Runtime/Resource/Loader/FileResourceLoader.cs,
+	src/Runtime/Resource/Loader/ResourceLoader.cs,
+	src/Runtime/Resource/Loader/ResourceLoaderFactory.cs,
+	src/Runtime/Resource/Loader/ResourceLocator.cs,
+	src/Runtime/Visitor/BaseVisitor.cs,
+	src/Runtime/Visitor/NodeViewMode.cs,
+	src/Runtime/Visitor/VMReferenceMungeVisitor.cs,
+	src/Test/AnakiaTestCase.cs, src/Test/AssemblyInfo.cs,
+	src/Test/BaseTestCase.cs, src/Test/ClassloaderChangeTest.cs,
+	src/Test/ClasspathResourceTest.cs,
+	src/Test/CommonsExtPropTestCase.cs, src/Test/CommonsTest.cs,
+	src/Test/ConfigurationTestCase.cs,
+	src/Test/ContextSafetyTestCase.cs, src/Test/EncodingTestCase.cs,
+	src/Test/EventHandlingTestCase.cs, src/Test/ExternalLoggerTest.cs,
+	src/Test/InlineScopeVMTestCase.cs,
+	src/Test/IntrospectorTestCase.cs,
+	src/Test/IntrospectorTestCase2.cs,
+	src/Test/MethodInvocationExceptionTest.cs,
+	src/Test/MiscTestCase.cs, src/Test/MultiLoaderTestCase.cs,
+	src/Test/MultipleFileResourcePathTest.cs, src/Test/ParserTest.cs,
+	src/Test/TemplateTestCase.cs, src/Test/TexenClasspathTestCase.cs,
+	src/Test/TexenTestCase.cs, src/Test/VelocimacroTestCase.cs,
+	src/Test/VelocityAppTestCase.cs, src/Test/VelocityTest.cs,
+	src/Test/Dvsl/TransformTest.cs, src/Test/Dvsl/XPathTest.cs,
+	src/Test/Misc/Test.cs, src/Test/Provider/BoolObj.cs,
+	src/Test/Provider/Child.cs, src/Test/Provider/Person.cs,
+	src/Test/Provider/TestProvider.cs,
+	src/Test/View/TemplateNodeView.cs, src/Tool/DataInfo.cs,
+	src/Tool/IToolInfo.cs, src/Tool/ToolLoader.cs,
+	src/Tools/AssemblyInfo.cs, src/Tools/DataInfo.cs,
+	src/Tools/IToolInfo.cs, src/Tools/SupportClass.cs,
+	src/Tools/ToolLoader.cs, src/Util/ArrayIterator.cs,
+	src/Util/EnumerationIterator.cs, src/Util/Iterator.cs,
+	src/Util/SimplePool.cs, src/Util/StringUtils.cs,
+	src/Util/Introspection/AmbiguousException.cs,
+	src/Util/Introspection/ClassMap.cs,
+	src/Util/Introspection/IntrospectionCacheData.cs,
+	src/Util/Introspection/Introspector.cs,
+	src/Util/Introspection/IntrospectorBase.cs,
+	src/Util/Introspection/MethodMap.cs,
+	src/Util/Introspection/Twonk.cs:
+	
+	formatting done by style
+
+2003-10-26 Sunday 06:21  corts
+
+	* src/ToDo.txt:
+	
+	mark upgrade of NUnit as done
+
+2003-10-26 Sunday 06:21  corts
+
+	* src/Makefile:
+	
+	remove the last of the references to NUnitRunner and add a target
+	for running all of the tests
+
+2003-10-26 Sunday 06:18  corts
+
+	* test/: configuration/.cvsignore, templates/.cvsignore:
+	
+	ignore results output directories
+
+2003-10-26 Sunday 06:16  corts
+
+	* lib/: NUnitConsole.dll, NUnitCore.dll, nunit.framework.dll:
+	
+	update to version 2.0 of NUnit
+
+2003-10-26 Sunday 06:10  corts
+
+	* bin/: NAnt/.cvsignore, NAnt/NAnt.Console.Tests.dll,
+	NAnt/NAnt.Console.Tests.pdb, NAnt/NAnt.Core.Tests.dll,
+	NAnt/NAnt.Core.Tests.pdb, NAnt/NAnt.Core.dll, NAnt/NAnt.Core.pdb,
+	NAnt/NAnt.DotNetTasks.Tests.dll, NAnt/NAnt.DotNetTasks.Tests.pdb,
+	NAnt/NAnt.DotNetTasks.dll, NAnt/NAnt.DotNetTasks.pdb,
+	NAnt/NAnt.NUnit1Tasks.dll, NAnt/NAnt.NUnit1Tasks.pdb,
+	NAnt/NAnt.NUnit2Tasks.dll, NAnt/NAnt.NUnit2Tasks.pdb,
+	NAnt/NAnt.NUnitFormatters.dll, NAnt/NAnt.NUnitFormatters.pdb,
+	NAnt/NAnt.VisualCppTasks.dll, NAnt/NAnt.VisualCppTasks.pdb,
+	NAnt/NAnt.ZipTasks.Tests.dll, NAnt/NAnt.ZipTasks.Tests.pdb,
+	NAnt/NAnt.ZipTasks.dll, NAnt/NAnt.ZipTasks.pdb, NAnt/NAnt.exe,
+	NAnt/NAnt.exe.config, NAnt/NAnt.pdb, NAnt/NDoc.Core.dll,
+	NAnt/NDoc.Documenter.Msdn.dll, NAnt/NDoc.Documenter.NAnt.dll,
+	NAnt/NDoc.Documenter.NAnt.pdb, NAnt/NUnitCore.dll,
+	NAnt/SharpZipLib.dll, NAnt/nunit.framework.dll,
+	NAnt/taskdef.Tasks.dll, NAnt/taskdef.Tasks.pdb, NUnit/NUnit V2.0
+	ReadMe.pdf, NUnit/mock-assembly.dll,
+	NUnit/nonamespace-assembly.dll, NUnit/nunit-console.exe,
+	NUnit/nunit-console.exe.config, NUnit/nunit-gui.exe,
+	NUnit/nunit-gui.exe.config, NUnit/nunit.extensions.dll,
+	NUnit/nunit.framework.dll, NUnit/nunit.tests.dll,
+	NUnit/nunit.tests.dll.config, NUnit/nunit.uikit.dll,
+	NUnit/nunit.util.dll, NUnit/timing-tests.dll:
+	
+	add that binaries for NUnit and NAnt this project are expected to
+	work with - make it easier for people dealing with the source
+
+2003-10-26 Sunday 06:09  corts
+
+	* bin/UpdateVersion.exe:
+	
+	utility that will update version numbers in AssemblyInfo.cs files
+
+2003-10-26 Sunday 06:08  corts
+
+	* bin/VSConvert.exe:
+	
+	utility to convert VS projects between 2002 and 2003 formats
+
+2003-10-26 Sunday 06:07  corts
+
+	* bin/: NDoc.Core.dll, NDoc.Documenter.JavaDoc.dll,
+	NDoc.Documenter.Latex.dll, NDoc.Documenter.Msdn.dll,
+	NDoc.Documenter.Xml.dll, NDoc.VisualStudio.dll, NDocConsole.exe,
+	NDocGui.exe, NDocGui.exe.manifest, tags.html, NDoc/MSDN.css,
+	NDoc/NDoc.Core.dll, NDoc/NDoc.Documenter.JavaDoc.dll,
+	NDoc/NDoc.Documenter.Latex.dll, NDoc/NDoc.Documenter.Msdn.dll,
+	NDoc/NDoc.Documenter.Xml.dll, NDoc/NDoc.VisualStudio.dll,
+	NDoc/NDocConsole.exe, NDoc/NDocGui.exe, NDoc/NDocGui.exe.manifest,
+	NDoc/tags.html:
+	
+	move NDoc to it's own directory
+
+2003-10-09 Thursday 05:02  corts
+
+	* src/NVelocity.Test.csproj:
+	
+	change to use NUnit 2.x framework assembly remove unneeded classes
+	and suites
+
+2003-10-09 Thursday 05:01  corts
+
+	* src/NVelocity.sln:
+	
+	removal of NUnitRunner
+
+2003-10-09 Thursday 05:00  corts
+
+	* src/Test/Provider/TestProvider.cs:
+	
+	cleanup
+
+2003-10-09 Thursday 04:57  corts
+
+	* src/Test/: BaseTestCase.cs, CommonsExtPropTestCase.cs,
+	CommonsTest.cs, IntrospectorTest.cs, ParserTest.cs,
+	TemplateTestBase.cs, TemplateTestCase.cs, TestSupportClass.cs,
+	VelocimacroTestCase.cs, VelocityAppTestCase.cs, VelocityTest.cs,
+	Dvsl/TransformTest.cs, Dvsl/XPathTest.cs:
+	
+	update test for NUnit 2.x cleanup of test
+
+2003-10-09 Thursday 04:48  corts
+
+	* src/Test/: AllTests.cs, TemplateTestSuite.cs:
+	
+	remove suites that will no longer be needed with NUnit 2.x
+
+2003-10-09 Thursday 04:47  corts
+
+	* src/Runtime/Log/SimpleLog4NetLogSystem.cs:
+	
+	use most common interface between using category and creating new
+	logger in new domain of log4net.spi.ILogger
+
+2003-10-09 Thursday 04:43  corts
+
+	* src/: NUnitRunner.csproj, Test/App.ico, Test/NUnitRunner.cs:
+	
+	remove old NUnit runner app (use NUnitAddin or connecting with
+	NUnit GUI)
+
+2003-08-30 Saturday 05:01  corts
+
+	* src/Runtime/Resource/Loader/ResourceLocator.cs:
+	
+	ignore problems loading an assembly (i.e. ADODB is not the expected
+	version)
+
+2003-08-30 Saturday 05:01  corts
+
+	* src/Runtime/Log/PrimordialLogSystem.cs:
+	
+	wihile messages are being queued, write to DefaultTraceListener
+	incase there is a problem getting a logger going
+
+2003-08-30 Saturday 05:00  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	write to DefaultTraceListener instead of relying on console.out
+
+2003-08-29 Friday 17:43  corts
+
+	* src/Runtime/VelocimacroFactory.cs:
+	
+	minor reformatting
+
+2003-08-29 Friday 17:42  corts
+
+	* src/Runtime/Log/SimpleLog4NetLogSystem.cs:
+	
+	update finalizer method to use Repository shutdown method
+
+2003-08-29 Friday 17:41  corts
+
+	* src/Runtime/Log/LogManager.cs:
+	
+	handle case where no logger classes are defined
+
+2003-08-28 Thursday 00:12  corts
+
+	* src/: AssemblyInfo.cs, Commons/AssemblyInfo.cs:
+	
+	remove UseDefaultDomain attribute since that is now the log4net
+	default add strong name key so that assemblies will be signed
+
+2003-08-28 Thursday 00:11  corts
+
+	* examples/ViewHandler/AssemblyInfo.cs, src/Http/AssemblyInfo.cs:
+	
+	remove UseDefaultDomain attribute since that is now the log4net
+	default
+
+2003-08-28 Thursday 00:10  corts
+
+	* src/Runtime/Log/SimpleLog4NetLogSystem.cs:
+	
+	reflect changes found in log4net 1.2.0 beta 8
+
+2003-08-28 Thursday 00:09  corts
+
+	* lib/log4net.dll:
+	
+	upgrade to 1.2.0 beta 8, net 1.1, release version
+
+2003-08-28 Thursday 00:07  corts
+
+	* src/NUnitRunner.csproj, src/NVelocity.csproj,
+	examples/ViewHandler/ViewHandler.csproj, src/NVelocity.Http.csproj,
+	src/NVelocity.NAnt.csproj, src/NVelocity.Test.csproj,
+	src/NVelocity.sln, src/Commons.csproj:
+	
+	upgrade to VS 2003
+
+2003-02-17 Monday 00:55  corts
+
+	* src/Runtime/Resource/Loader/: ResourceLocator.cs,
+	FileResourceLoader.cs:
+	
+	-search calling, entry and executing assemblies, plus any in
+	current app domain -search for resource name without path when
+	searching assembly resources
+
+2003-02-17 Monday 00:53  corts
+
+	* src/: NAnt/Texen/Generator.cs, Runtime/RuntimeInstance.cs:
+	
+	remove hack of using ; when specifying fully qualified class and
+	assembly names
+
+2003-02-17 Monday 00:52  corts
+
+	* src/Runtime/Defaults/: directive.properties,
+	nvelocity.properties:
+	
+	fully qualify class names
+
+2003-02-17 Monday 00:49  corts
+
+	* src/: Http/NVelocityViewHandler.cs, Dvsl/Dvsl.cs:
+	
+	correctly escape a proper class and assembly name
+
+2003-02-17 Monday 00:47  corts
+
+	* src/Commons/Collections/: PropertiesReader.cs,
+	PropertiesTokenizer.cs:
+	
+	minor reformatting
+
+2003-01-18 Saturday 09:28  corts
+
+	* src/: NVelocity.Test.csproj, NVelocity.sln, Test.csproj:
+	
+	rename Test project to NVelocity.Test
+
+2003-01-16 Thursday 10:58  corts
+
+	* xdocs/index.xml:
+	
+	update to announce Opt-NVelocity
+
+2003-01-11 Saturday 12:10  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-01-11 Saturday 12:08  corts
+
+	* src/dist.sh:
+	
+	updates to build cleaner distribution
+
+2003-01-11 Saturday 12:07  corts
+
+	* src/Makefile:
+	
+	reflect current location of ndoc output
+
+2003-01-11 Saturday 12:07  corts
+
+	* xdocs/: changelog.xml, index.xml, nant/index.xml,
+	stylesheets/project.xml:
+	
+	update site to announce build 0.4.1
+
+2003-01-11 Saturday 11:39  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-01-11 Saturday 09:54  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-01-11 Saturday 09:46  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-01-11 Saturday 09:44  corts
+
+	* src/.cvsignore:
+	
+	no message
+
+2003-01-11 Saturday 09:44  corts
+
+	* src/Dvsl/DvslNodeImpl.cs:
+	
+	fixed and simplified Copy
+
+2003-01-11 Saturday 07:13  corts
+
+	* build/.cvsignore:
+	
+	ignore temporay build directories
+
+2003-01-11 Saturday 07:11  corts
+
+	* src/ToDo.txt:
+	
+	no message
+
+2003-01-01 Wednesday 05:43  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-01-01 Wednesday 05:29  corts
+
+	* src/: Makefile, updatechangelog.sh:
+	
+	update changelog target to update and then commit ChangeLog.txt
+
+2003-01-01 Wednesday 05:27  corts
+
+	* ChangeLog.txt:
+	
+	update change log
+
+2003-01-01 Wednesday 05:14  corts
+
+	* src/ToDo.txt:
+	
+	no message
+
+2003-01-01 Wednesday 05:13  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	change version in preparation of another release
+
+2003-01-01 Wednesday 05:11  corts
+
+	* xdocs/changelog.xml:
+	
+	update changes notes
+
+2003-01-01 Wednesday 05:10  corts
+
+	* src/Test/ParserTest.cs:
+	
+	NVelocity.App.Velocity no longer has a get accessor for the
+	internal extended properties, reflect that change in this test (was
+	originally added when this test was created)
+
+2003-01-01 Wednesday 05:08  corts
+
+	* www/.cvsignore:
+	
+	no message
+
+2003-01-01 Wednesday 05:08  corts
+
+	* src/Runtime/Log/SimpleLog4NetLogSystem.cs:
+	
+	fix problem where category and appender were not being setup
+	correctly for internal logging
+
+2003-01-01 Wednesday 05:07  corts
+
+	* src/App/: Velocity.cs, VelocityEngine.cs:
+	
+	change methods that took StreamWriter as an argument to TextWriter
+	code cleanup
+
+2003-01-01 Wednesday 05:02  corts
+
+	* examples/App/: .cvsignore, App-Examples.sln, Example1/.cvsignore,
+	Example1/App.ico, Example1/AssemblyInfo.cs, Example1/Example1.cs,
+	Example1/Example1.csproj, Example1/example.vm,
+	Example1/nvelocity.properties, Example2/.cvsignore,
+	Example2/App.ico, Example2/AssemblyInfo.cs, Example2/Example2.cs,
+	Example2/Example2.csproj, Example2/example2.vm:
+	
+	examples of how to use NVelocity in an application
+
+2002-12-29 Sunday 17:03  corts
+
+	* src/Tool/: DataInfo.cs, IToolInfo.cs, ToolLoader.cs:
+	
+	needed for tool support
+
+2002-12-29 Sunday 11:18  corts
+
+	* test/templates/: foreach-map.vm, foreach-type.vm:
+	
+	change tests to match current functionality - IDictionary based
+	collections iterate over the IDictionaryItem collection, not the
+	Values collection
+
+2002-12-29 Sunday 11:13  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	change to version 0.4
+
+2002-12-29 Sunday 11:12  corts
+
+	* src/: ToDo.txt, Makefile:
+	
+	no message
+
+2002-12-29 Sunday 11:11  corts
+
+	* xdocs/: changelog.xml, index.xml, nant/index.xml,
+	stylesheets/project.xml, stylesheets/site.vsl:
+	
+	updated documentation for version 0.4
+
+2002-12-29 Sunday 11:10  corts
+
+	* src/: Example.cs, Example2.cs, changelog.sh:
+	
+	examples to be moved to correct directory and unneeded script
+
+2002-12-25 Wednesday 12:20  corts
+
+	* src/Http/Resource/Loader/WebappLoader.cs:
+	
+	changed to support all of the functionality of the
+	FileResourceLoader by not overriding any of the inheirted methods
+	except init()
+
+2002-12-25 Wednesday 12:17  corts
+
+	* src/Runtime/Resource/Loader/FileResourceLoader.cs:
+	
+	code cleanup make more extendable by making private variables
+	protected
+
+2002-12-23 Monday 13:06  corts
+
+	* src/Dvsl/Dvsl.cs:
+	
+	Allow for complete VelocityEngine configuration with configuration
+	map (not sure I understood why the limitation was made to the few
+	things that were allowed) - this allowed for Opt-NVelocity to
+	configure the WebappLoader as the resource loader
+
+2002-12-23 Monday 13:03  corts
+
+	* src/Http/Resource/Loader/WebappLoader.cs:
+	
+	add fallback option for the WebappLoader configuration - try using
+	HttpContext.Current if not otherwise configured
+
+2002-12-11 Wednesday 03:37  corts
+
+	* src/NVelocity.ndoc:
+	
+	updated NDoc project file
+
+2002-12-11 Wednesday 02:43  corts
+
+	* src/Runtime/Exception/NodeException.cs:
+	
+	correct namespace
+
+2002-12-11 Wednesday 02:42  corts
+
+	* bin/: MSDN.css, NDoc.Core.dll, NDoc.Documenter.JavaDoc.dll,
+	NDoc.Documenter.Latex.dll, NDoc.Documenter.Msdn.dll,
+	NDoc.Documenter.Xml.dll, NDoc.Gui.AboutForm.resources,
+	NDoc.Gui.AssemblySlashDocForm.resources,
+	NDoc.Gui.ErrorForm.resources, NDoc.Gui.MainForm.resources,
+	NDoc.Gui.NamespaceSummariesForm.resources,
+	NDoc.Gui.SolutionForm.resources, NDoc.VisualStudio.dll,
+	NDocConsole.exe, NDocGui.exe, NDocGui.exe.manifest, tags.html:
+	
+	update to NDoc 1.1c
+
+2002-12-11 Wednesday 01:57  corts
+
+	* xdocs/stylesheets/site.vsl:
+	
+	update to reflect changes made to AnakiaXmlElement
+
+2002-12-11 Wednesday 01:56  corts
+
+	* src/NAnt/Anakia/AnakiaXmlElement.cs:
+	
+	code cleanup use .Net style method names remove methods that hid
+	XmlNode methods (allowing them to show through and be used)
+
+2002-12-11 Wednesday 01:52  corts
+
+	* src/Runtime/RuntimeConstants.cs:
+	
+	change log4j reference to log4net (comments and constant names)
+
+2002-12-11 Wednesday 01:51  corts
+
+	* src/NVelocity.NAnt.csproj:
+	
+	change xml comments file to match assebly name
+
+2002-12-11 Wednesday 01:50  corts
+
+	* src/NVelocity.Http.csproj:
+	
+	reflect new classes
+
+2002-12-11 Wednesday 01:49  corts
+
+	* examples/SimpleHttp/SimpleHttp.csproj:
+	
+	add reference to NVelocity.Http (since breakup)
+
+2002-12-11 Wednesday 01:48  corts
+
+	* src/Runtime/Defaults/nvelocity.properties:
+	
+	fix comments from conversion
+
+2002-12-11 Wednesday 01:47  corts
+
+	* src/Runtime/Log/SimpleLog4NetLogSystem.cs:
+	
+	fix initialization problem when using a category change internal
+	field to ILog interface instead of Logger
+
+2002-12-11 Wednesday 01:45  corts
+
+	* src/Http/Resource/Loader/WebappLoadAppContext.cs:
+	
+	context for setting up the WebappLoader
+
+2002-12-11 Wednesday 01:44  corts
+
+	* src/Http/Resource/Loader/WebappLoader.cs:
+	
+	code cleanup
+
+2002-12-11 Wednesday 01:43  corts
+
+	* src/Http/: HandlerSkeleton.cs, NVelocityHandler.cs,
+	NVelocityViewHandler.cs:
+	
+	move common functionality to skeleton base class - enable some
+	reuse in Opt-NVelocity classes
+
+2002-12-11 Wednesday 01:41  corts
+
+	* src/Commons.csproj:
+	
+	add reference to log4net
+
+2002-12-11 Wednesday 01:41  corts
+
+	* lib/log4net.dll:
+	
+	use same 1.2 beta version as Maverick.Net (to remove possible
+	problems while finishing up Opt-NVelocity)
+
+2002-12-11 Wednesday 01:39  corts
+
+	* examples/ViewHandler/nvelocity-web.properties:
+	
+	use category instead of a new log file so that logging can all go
+	to one log
+
+2002-12-11 Wednesday 01:38  corts
+
+	* examples/ViewHandler/Global.asax.cs:
+	
+	move log4net configuration to assembly remove configuration of
+	Log4NetExtensionLogSystem (can simply use a log4net category)
+
+2002-12-11 Wednesday 01:36  corts
+
+	* examples/ViewHandler/AssemblyInfo.cs:
+	
+	web applications need to use the default logging domain if they
+	want to control logging for other shared assemblies that will use
+	the default logging domain as well
+
+2002-12-11 Wednesday 01:35  corts
+
+	* src/: Http/AssemblyInfo.cs, AssemblyInfo.cs:
+	
+	use default logging domain remove assembly key file until there is
+	a released signed  log4net dll
+
+2002-12-11 Wednesday 01:33  corts
+
+	* examples/ViewHandler/ToyTool.cs:
+	
+	add some logging to show that logging is working through all layers
+
+2002-12-11 Wednesday 01:33  corts
+
+	* src/Dvsl/Dvsl.cs:
+	
+	allow for specification of log4net category in configuration
+
+2002-12-11 Wednesday 01:32  corts
+
+	* src/Commons/AssemblyInfo.cs:
+	
+	use default logging domain remove assembly key file until there is
+	a released signed  log4net dll
+
+2002-11-04 Monday 08:10  corts
+
+	* src/Tools/: DataInfo.cs, IToolInfo.cs, ToolLoader.cs:
+	
+	initial port of tools package needed for tool support
+
+2002-11-04 Monday 08:09  corts
+
+	* src/Runtime/Log/Log4NetExtensionLogSystem.cs:
+	
+	LogSystem to extend log4net logging across appdomain boundaries
+	(i.e. when using HttpHandlers that get started by IIS instead of by
+	the webapp)
+
+2002-11-04 Monday 08:07  corts
+
+	* src/: NVelocity.Http.csproj, Http/AssemblyInfo.cs,
+	Http/NVelocityViewHandler.cs, Http/Context/ChainedContext.cs,
+	Http/Context/IViewContext.cs, Http/Context/ToolboxContext.cs,
+	Http/Resource/Loader/IWebappLoaderAppContext.cs,
+	Http/Resource/Loader/WebappLoader.cs, Http/Tool/IToolboxManager.cs,
+	Http/Tool/IViewTool.cs, Http/Tool/MultiViewsTool.cs,
+	Http/Tool/ServletToolInfo.cs, Http/Tool/ServletToolboxManager.cs,
+	Http/Tool/ViewToolInfo.cs, Http/Tool/XMLToolboxManager.cs:
+	
+	initial port of VelocityViewServlet (to an HttpHandler) new
+	NVelocity.Http project for all of the web related stuff - break out
+	from the core NVelocity stuff
+
+2002-11-04 Monday 08:01  corts
+
+	* src/Runtime/Log/: SimpleLog4JLogSystem.cs,
+	SimpleLog4NetLogSystem.cs:
+	
+	rename log4j references to log4net
+
+2002-11-04 Monday 08:00  corts
+
+	* src/Test.csproj:
+	
+	because of VS IDE bug, make sure that this project references all
+	other projects - even it not test modules exist so that all
+	asseblies are correctly copied to the /build folder
+
+2002-11-04 Monday 07:59  corts
+
+	* src/NVelocity.sln:
+	
+	reflect addition of NVelocity.Http project
+
+2002-11-04 Monday 07:58  corts
+
+	* src/NVelocity.csproj:
+	
+	reflect relocation and renaming of some classes
+
+2002-11-04 Monday 07:55  corts
+
+	* src/Runtime/Resource/Loader/ResourceLoaderFactory.cs:
+	
+	source reformatting since properties with commas (,) are
+	interpreted as a list, allow for fully qualified assebly names
+	using semicolon (;) instead of comma.
+
+2002-11-04 Monday 07:51  corts
+
+	* src/Runtime/Resource/: ResourceManagerImpl.cs,
+	Loader/FileResourceLoader.cs:
+	
+	source reformatting
+
+2002-11-04 Monday 07:50  corts
+
+	* src/Runtime/Defaults/nvelocity.properties:
+	
+	change log4j references to log4net
+
+2002-11-04 Monday 07:48  corts
+
+	* src/Runtime/Log/LogManager.cs:
+	
+	allow for passing in of LogSystem class work actually work change
+	Velocity default fallback of AvalonLogSystem to
+	SimpleLog4NetLogSystem source reformatting
+
+2002-11-04 Monday 07:46  corts
+
+	* src/Runtime/Log/LogSystem.cs:
+	
+	minor reformatting
+
+2002-11-04 Monday 07:41  corts
+
+	* src/Runtime/Log/PrimordialLogSystem.cs:
+	
+	initial functional port default to use of PrimordialLogSystem
+	durring startup
+
+2002-11-04 Monday 07:41  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	default to use of PrimordialLogSystem durring startup
+
+2002-11-04 Monday 07:38  corts
+
+	* src/: Http/NVelocityHandler.cs, Runtime/RuntimeConstants.cs:
+	
+	minor reformatting
+
+2002-11-04 Monday 07:36  corts
+
+	* src/dist.sh:
+	
+	change co to export so that dist binary does not have CVS turds
+
+2002-11-04 Monday 07:31  corts
+
+	* src/Commons/AssemblyInfo.cs:
+	
+	change relative location of signing key
+
+2002-11-04 Monday 07:29  corts
+
+	* src/ToDo.txt:
+	
+	no message
+
+2002-11-04 Monday 07:27  corts
+
+	* lib/log4net.dll:
+	
+	updated log4net 1.2.0 Beta3 (built from CVS source and signed)
+
+2002-11-04 Monday 07:24  corts
+
+	* src/changelog.sh:
+	
+	util script to create ChangeLog.txt from cvs commit history
+
+2002-11-04 Monday 07:22  corts
+
+	* src/AssemblyInfo.cs:
+	
+	change relative location of signing key
+
+2002-11-04 Monday 07:18  corts
+
+	* examples/ViewHandler/ViewHandler.csproj:
+	
+	change in references and addition of Global.asax page
+
+2002-11-04 Monday 07:16  corts
+
+	* examples/ViewHandler/Web.config:
+	
+	add log4net logging config reference NVelocity.Http
+
+2002-11-04 Monday 07:15  corts
+
+	* examples/ViewHandler/: Global.asax, Global.asax.cs,
+	Global.asax.resx:
+	
+	add global.asax page to handle initialtion of logging
+
+2002-10-23 Wednesday 01:42  corts
+
+	* src/Http/NVelocityHandler.cs:
+	
+	implement IRequiresSessionState so that sessions will be enabled
+	implement missing implementation of LoadConfiguration
+	(nvelocity.properties)
+
+2002-10-23 Wednesday 01:39  corts
+
+	* examples/ViewHandler/: .cvsignore, AssemblyInfo.cs, Default.aspx,
+	Default.aspx.cs, Default.aspx.resx, README.txt, ToyTool.cs,
+	ViewHandler.csproj, ViewHandler.csproj.webinfo, ViewHandler.sln,
+	Web.config, nvelocity-web.properties, sample.vm, toolbox.xml:
+	
+	first pass at example using NVelocityViewHandler
+	(VelocityViewServlet)
+
+2002-10-23 Wednesday 01:34  corts
+
+	* examples/SimpleHttp/SimpleNVelocityHandler.cs:
+	
+	update exception text to correct method signature
+
+2002-10-22 Tuesday 08:25  corts
+
+	* examples/SimpleHttp/SimpleNVelocityHandler.cs:
+	
+	reflect method signiture changes to base class
+
+2002-10-22 Tuesday 08:23  corts
+
+	* examples/SimpleHttp/sample.vm:
+	
+	reflect change to context keys for request and response
+
+2002-10-22 Tuesday 08:22  corts
+
+	* examples/SimpleHttp/SimpleHttp.csproj:
+	
+	rename ASP.NET form to match one of the default documents
+
+2002-10-22 Tuesday 08:20  corts
+
+	* examples/SimpleHttp/: README.txt, SimpleHttp.csproj.webinfo,
+	SimpleHttp.sln:
+	
+	document change to new root for all NVelocity web examples
+
+2002-10-22 Tuesday 08:18  corts
+
+	* examples/SimpleHttp/: Default.aspx, Default.aspx.cs,
+	Default.aspx.resx, WebForm1.aspx, WebForm1.aspx.cs,
+	WebForm1.aspx.resx:
+	
+	rename ASP.NET form to match one of the default documents
+
+2002-10-22 Tuesday 08:17  corts
+
+	* src/Http/: NVelocityHandler.cs, NVelocityHandlerFactory.cs:
+	
+	cleanup of code and documentation favor passing around HttpContext
+	instead of response and request objects
+
+2002-10-22 Tuesday 08:15  corts
+
+	* src/: NVelocity.NAnt.csproj, nvelocity.build:
+	
+	output NVelocity.NAntTasks.dll so that NAnt will recognize it
+	automatically when placed in the NAnt.exe directory.
+
+2002-10-22 Tuesday 08:13  corts
+
+	* src/.cvsignore:
+	
+	no message
+
+2002-10-19 Saturday 04:34  corts
+
+	* src/ToDo.txt:
+	
+	no message
+
+2002-10-19 Saturday 04:31  corts
+
+	* src/Test.csproj:
+	
+	add Dvsl tests
+
+2002-10-19 Saturday 04:30  corts
+
+	* src/Runtime/Directive/Foreach.cs:
+	
+	change IDictionary classes to retun the enumerator over the
+	IDictionaryItem collection as opposed to the Values collection -
+	otherwise there is no way to get to the keys
+
+2002-10-19 Saturday 04:26  corts
+
+	* src/Runtime/Resource/: Loader/FileResourceLoader.cs,
+	ResourceCacheImpl.cs:
+	
+	minor reformatting
+
+2002-10-19 Saturday 04:24  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	reflect changes to LogSystem interface
+
+2002-10-19 Saturday 04:23  corts
+
+	* src/Runtime/Parser/Node/PropertyExecutor.cs:
+	
+	look for differently cased properties as well as method with no
+	arguments
+
+2002-10-19 Saturday 04:22  corts
+
+	* src/Runtime/Parser/Node/ASTMethod.cs:
+	
+	look for differently cased methods as well as a property if there
+	were no arguments
+
+2002-10-19 Saturday 04:21  corts
+
+	* src/Runtime/Parser/Node/GetExecutor.cs:
+	
+	look for Get/get methods as well as indexers
+
+2002-10-19 Saturday 04:20  corts
+
+	* src/Runtime/Log/: LogManager.cs, LogSystem.cs, NullLogSystem.cs,
+	SimpleLog4JLogSystem.cs:
+	
+	make method names more .Net like
+
+2002-10-19 Saturday 04:17  corts
+
+	* src/: Dvsl/Dvsl.cs, Dvsl/DvslContext.cs, Dvsl/DvslNode.cs,
+	Dvsl/DvslNodeContext.cs, Dvsl/DvslNodeImpl.cs,
+	Dvsl/TemplateHandler.cs, Dvsl/TransformTool.cs,
+	Dvsl/Transformer.cs, Dvsl/Directive/MatchDirective.cs,
+	Dvsl/Directive/NameDirective.cs, NAnt/Dvsl/DvslTask.cs:
+	
+	clean up code, make more .Net like
+
+2002-10-19 Saturday 04:16  corts
+
+	* src/Test/: Dvsl/TransformTest.cs, Dvsl/XPathTest.cs, AllTests.cs:
+	
+	simple tests for Dvsl
+
+2002-10-19 Saturday 01:54  corts
+
+	* src/Context/IContext.cs:
+	
+	minor reformatting
+
+2002-09-24 Tuesday 03:31  corts
+
+	* src/Runtime/Directive/Foreach.cs:
+	
+	check for IEnumerable when checking for enumeration types - that
+	way classes like XmlNodeList can be used properly.
+
+2002-09-24 Tuesday 03:29  corts
+
+	* src/NAnt/Anakia/AnakiaTask.cs:
+	
+	default resource caching on
+
+2002-09-11 Wednesday 03:46  corts
+
+	* src/nvelocity.build:
+	
+	cleanup
+
+2002-09-11 Wednesday 03:45  corts
+
+	* src/Makefile:
+	
+	call nant for documentation
+
+2002-09-11 Wednesday 01:58  corts
+
+	* www/index.html:
+	
+	www content is now rendered by anakia.
+
+2002-09-11 Wednesday 01:56  corts
+
+	* examples/Texen/: additional.props, default.build, license.txt,
+	service.props, templates/Control.vm,
+	templates/ServiceImplementation.vm, templates/ServiceInterface.vm,
+	templates/ServiceStaticHelper.vm, templates/book.vm,
+	templates/Test.vm, templates/test.props:
+	
+	initial example based on Velocity test case
+
+2002-09-11 Wednesday 01:55  corts
+
+	* examples/Dvsl/nant/default.build:
+	
+	reflect updated DvslTask
+
+2002-09-11 Wednesday 01:44  corts
+
+	* xdocs/: index.xml, css/nant-task.css, css/nvelocity.css,
+	images/favicon.ico, nant/anakia.xml, nant/dvsl.xml, nant/texen.xml,
+	stylesheets/project.xml, stylesheets/site.vsl:
+	
+	initial import of site in xdocs format (to be rendered using the
+	NAnt anakia task).
+
+2002-09-11 Wednesday 01:37  corts
+
+	* src/ToDo.txt:
+	
+	updated ToDone stuff
+
+2002-09-11 Wednesday 01:37  corts
+
+	* src/NAnt/Texen/Generator.cs:
+	
+	use NAnt static log class replace ; for , in class names
+
+2002-09-11 Wednesday 01:36  corts
+
+	* src/NVelocity.NAnt.csproj:
+	
+	set properties file to be embedded resource
+
+2002-09-11 Wednesday 01:35  corts
+
+	* src/NAnt/Dvsl/DvslTask.cs:
+	
+	completed initial port
+
+2002-09-11 Wednesday 01:34  corts
+
+	* src/NAnt/Anakia/AnakiaTask.cs:
+	
+	use NAnt static log class use of Path.DirecotyrSeparatorChar
+
+2002-09-11 Wednesday 01:34  corts
+
+	* src/NAnt/Texen/TexenTask.cs:
+	
+	use NAnt static log class
+
+2002-09-11 Wednesday 01:32  corts
+
+	* src/NAnt/Texen/texen.properties:
+	
+	specify fully qualified class names
+
+2002-09-11 Wednesday 01:28  corts
+
+	* src/.cvsignore:
+	
+	ignore the .xml files output for documentation
+
+2002-09-08 Sunday 01:59  corts
+
+	* src/Runtime/Resource/ResourceManagerImpl.cs:
+	
+	fix bug loading ResourceCache manager reformatting
+
+2002-09-08 Sunday 01:57  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	change version id
+
+2002-09-08 Sunday 01:56  corts
+
+	* src/Makefile:
+	
+	update default target
+
+2002-09-08 Sunday 01:52  corts
+
+	* src/: NUnitRunner.csproj, NVelocity.NAnt.csproj,
+	NVelocity.Tools.Dvsl.csproj, NVelocity.Tools.csproj,
+	NVelocity.csproj, NVelocity.sln, Test.csproj:
+	
+	no message
+
+2002-09-08 Sunday 01:52  corts
+
+	* src/ToDo.txt:
+	
+	list of stuff to be done
+
+2002-09-08 Sunday 01:50  corts
+
+	* src/nvelocity.build:
+	
+	nant build file
+
+2002-09-08 Sunday 01:47  corts
+
+	* src/Tools/SupportClass.cs:
+	
+	no message
+
+2002-09-08 Sunday 01:46  corts
+
+	* src/Test/: AnakiaTestCase.cs, CommonsTest.cs:
+	
+	reformatting
+
+2002-09-08 Sunday 01:31  corts
+
+	* src/NAnt/: AssemblyInfo.cs, Anakia/AnakiaTask.cs,
+	Anakia/AnakiaXmlDocument.cs, Anakia/AnakiaXmlElement.cs,
+	Anakia/Escape.cs, Anakia/NodeList.cs, Anakia/OutputWrapper.cs,
+	Anakia/TreeWalker.cs, Anakia/XPathTool.cs, Dvsl/DvslTask.cs,
+	Texen/FileUtil.cs, Texen/Generator.cs, Texen/PropertiesUtil.cs,
+	Texen/SupportClass.cs, Texen/TexenTask.cs, Texen/texen.properties:
+	
+	move all NAnt related stuff to a NAnt namespace
+
+2002-09-08 Sunday 01:25  corts
+
+	* src/Dvsl/: Dvsl.cs, DvslContext.cs, DvslNode.cs,
+	DvslNodeContext.cs, DvslNodeImpl.cs, TemplateHandler.cs,
+	TransformTool.cs, Transformer.cs, Directive/MatchDirective.cs,
+	Directive/NameDirective.cs, Resource/defaultroot.dvsl:
+	
+	move from Tools to core
+
+2002-09-08 Sunday 01:22  corts
+
+	* examples/Anakia/: default.build, xdocs/index.xml,
+	xdocs/stylesheets/project.xml, xdocs/stylesheets/site.vsl:
+	
+	simple Anakia example
+
+2002-09-07 Saturday 17:29  corts
+
+	* www/index.html:
+	
+	no message
+
+2002-08-31 Saturday 16:31  corts
+
+	* lib/: NAnt.Core.dll, NAnt.DotNetTasks.dll, NAnt.ZipTasks.dll,
+	NAnt.exe, NDoc.Core.dll, NDoc.Documenter.Msdn.dll, SharpZipLib.dll,
+	taskdef.Tasks.dll:
+	
+	updated references including the addition of NAnt
+
+2002-08-31 Saturday 16:28  corts
+
+	* examples/Dvsl/nant/: default.build, xdocs/example1.dvsl,
+	xdocs/example1.xml:
+	
+	simple example of using DvslTask with NAnt
+
+2002-08-31 Saturday 16:20  corts
+
+	* src/Runtime/RuntimeInstance.cs:
+	
+	provide escaping for comma in fullly qualified Type names
+
+2002-08-31 Saturday 16:09  corts
+
+	* src/: App/VelocityEngine.cs, Runtime/Exception/NodeException.cs:
+	
+	initial port
+
+2002-08-31 Saturday 16:08  corts
+
+	* src/Runtime/Log/SimpleLog4JLogSystem.cs:
+	
+	minor reformatting
+
+2002-08-31 Saturday 16:08  corts
+
+	* src/Runtime/Resource/Loader/ResourceLocator.cs:
+	
+	corrected shortcomming of being able to find a resource in an
+	assebly that is reference but not referenced at compile time (i.e.
+	loaded programatically)
+
+2002-08-31 Saturday 16:04  corts
+
+	* src/: NVelocity.Tools.Dvsl.csproj, NVelocity.sln,
+	Tools/AssemblyInfo.cs:
+	
+	addition of Tools.Dvsl project
+
+2002-08-31 Saturday 16:03  corts
+
+	* src/Test/Provider/TestProvider.cs:
+	
+	minor reformatting
+
+2002-08-31 Saturday 16:01  corts
+
+	* src/Test.csproj:
+	
+	add reference to Dvsl - for later testing (also helps with build
+	order and file locks)
+
+2002-08-31 Saturday 15:58  corts
+
+	* src/NVelocity.csproj:
+	
+	addition of VelocityEngine and NodeException change output
+	directory to get over VS.Net bug with intermediate files being in
+	use
+
+2002-08-31 Saturday 15:54  corts
+
+	* src/Makefile:
+	
+	add publishwww and publicapi targets for publishing updated site
+
+2002-08-31 Saturday 15:53  corts
+
+	* src/dist.sh:
+	
+	assume that anyone doing this process will already have their
+	CVSROOT setup correctly - either as a developer or anonymously
+
+2002-08-31 Saturday 15:51  corts
+
+	* src/Commons.csproj:
+	
+	change output directory to get over VS.Net bug with intermediate
+	files being in use
+
+2002-08-16 Friday 17:30  corts
+
+	* ChangeLog.txt:
+	
+	start a changelog
+
+2002-08-16 Friday 17:29  corts
+
+	* build/.cvsignore, .cvsignore:
+	
+	ignore more temporary files
+
+2002-08-16 Friday 17:28  corts
+
+	* LICENSE.txt:
+	
+	Apache license text (stolen right from the velocity distribution)
+
+2002-08-16 Friday 17:27  corts
+
+	* src/: Makefile, dist.sh, package.sh:
+	
+	change package to dist (more in line with the apache project layout
+	doc)
+
+2002-08-16 Friday 17:26  corts
+
+	* www/index.html:
+	
+	start of nvelocity.sourceforge.net
+
+2002-08-16 Friday 16:06  corts
+
+	* docs/api/: NVelocity/Context/AbstractContext.html,
+	NVelocity/Context/IContext.html,
+	NVelocity/Context/InternalContextAdapter.html,
+	NVelocity/Context/InternalContextAdapterImpl.html,
+	NVelocity/Context/InternalContextBase.html,
+	NVelocity/Context/InternalEventContext.html,
+	NVelocity/Context/InternalHousekeepingContext.html,
+	NVelocity/Context/InternalWrapperContext.html,
+	NVelocity/Context/VMContext.html,
+	NVelocity/Context/namespace-summary.html,
+	NVelocity/Runtime/Parser/Node/ASTAddNode.html,
+	NVelocity/Runtime/Parser/Node/ASTAndNode.html,
+	NVelocity/Runtime/Parser/Node/ASTAssignment.html,
+	NVelocity/Runtime/Parser/Node/ASTBlock.html,
+	NVelocity/Runtime/Parser/Node/ASTComment.html,
+	NVelocity/Runtime/Parser/Node/ASTDirective.html,
+	NVelocity/Runtime/Parser/Node/ASTDivNode.html,
+	NVelocity/Runtime/Parser/Node/ASTEQNode.html,
+	NVelocity/Runtime/Parser/Node/ASTElseIfStatement.html,
+	NVelocity/Runtime/Parser/Node/ASTElseStatement.html,
+	NVelocity/Runtime/Parser/Node/ASTEscape.html,
+	NVelocity/Runtime/Parser/Node/ASTEscapedDirective.html,
+	NVelocity/Runtime/Parser/Node/ASTExpression.html,
+	NVelocity/Runtime/Parser/Node/ASTFalse.html,
+	NVelocity/Runtime/Parser/Node/ASTGENode.html,
+	NVelocity/Runtime/Parser/Node/ASTGTNode.html,
+	NVelocity/Runtime/Parser/Node/ASTIdentifier.html,
+	NVelocity/Runtime/Parser/Node/ASTIfStatement.html,
+	NVelocity/Runtime/Parser/Node/ASTIncludeStatement.html,
+	NVelocity/Runtime/Parser/Node/ASTIntegerRange.html,
+	NVelocity/Runtime/Parser/Node/ASTLENode.html,
+	NVelocity/Runtime/Parser/Node/ASTLTNode.html,
+	NVelocity/Runtime/Parser/Node/ASTMethod.html,
+	NVelocity/Runtime/Parser/Node/ASTModNode.html,
+	NVelocity/Runtime/Parser/Node/ASTMulNode.html,
+	NVelocity/Runtime/Parser/Node/ASTNENode.html,
+	NVelocity/Runtime/Parser/Node/ASTNotNode.html,
+	NVelocity/Runtime/Parser/Node/ASTNumberLiteral.html,
+	NVelocity/Runtime/Parser/Node/ASTObjectArray.html,
+	NVelocity/Runtime/Parser/Node/ASTOrNode.html,
+	NVelocity/Runtime/Parser/Node/ASTParameters.html,
+	NVelocity/Runtime/Parser/Node/ASTReference.html,
+	NVelocity/Runtime/Parser/Node/ASTSetDirective.html,
+	NVelocity/Runtime/Parser/Node/ASTStringLiteral.html,
+	NVelocity/Runtime/Parser/Node/ASTSubtractNode.html,
+	NVelocity/Runtime/Parser/Node/ASTText.html,
+	NVelocity/Runtime/Parser/Node/ASTTrue.html,
+	NVelocity/Runtime/Parser/Node/ASTVariable.html,
+	NVelocity/Runtime/Parser/Node/ASTWord.html,
+	NVelocity/Runtime/Parser/Node/ASTprocess.html,
+	NVelocity/Runtime/Parser/Node/AbstractExecutor.html,
+	NVelocity/Runtime/Parser/Node/BooleanPropertyExecutor.html,
+	NVelocity/Runtime/Parser/Node/GetExecutor.html,
+	NVelocity/Runtime/Parser/Node/INode.html,
+	NVelocity/Runtime/Parser/Node/NodeUtils.html,
+	NVelocity/Runtime/Parser/Node/ParserVisitor.html,
+	NVelocity/Runtime/Parser/Node/PropertyExecutor.html,
+	NVelocity/Runtime/Parser/Node/SimpleNode.html,
+	NVelocity/Runtime/Parser/Node/namespace-summary.html,
+	NVelocity/Test/AllTests.html, NVelocity/Test/BaseTestCase.html,
+	NVelocity/Test/CommonsExtPropTestCase.html,
+	NVelocity/Test/CommonsTest.html,
+	NVelocity/Test/IntrospectorTest.html,
+	NVelocity/Test/NUnitRunner.html, NVelocity/Test/ParserTest.html,
+	NVelocity/Test/TemplateTestBase.html,
+	NVelocity/Test/TemplateTestBase_Fields.html,
+	NVelocity/Test/TemplateTestCase.html,
+	NVelocity/Test/TemplateTestSuite.html,
+	NVelocity/Test/TestSupportClass.html,
+	NVelocity/Test/VelocimacroTestCase.html,
+	NVelocity/Test/VelocityAppTestCase.html,
+	NVelocity/Test/VelocityTest.AddressData.html,
+	NVelocity/Test/VelocityTest.ContactData.html,
+	NVelocity/Test/VelocityTest.html,
+	NVelocity/Test/namespace-summary.html,
+	NVelocity/Util/Introspection/AmbiguousException.html,
+	NVelocity/Util/Introspection/ClassMap.html,
+	NVelocity/Util/Introspection/IntrospectionCacheData.html,
+	NVelocity/Util/Introspection/Introspector.html,
+	NVelocity/Runtime/Parser/CharStream.html,
+	NVelocity/Runtime/Parser/ParseException.html,
+	NVelocity/Runtime/Parser/Parser.html,
+	NVelocity/Runtime/Parser/ParserConstants.html,
+	NVelocity/Runtime/Parser/ParserTokenManager.html,
+	NVelocity/Runtime/Parser/ParserTreeConstants.html,
+	NVelocity/Runtime/Parser/Token.html,
+	NVelocity/Runtime/Parser/TokenMgrError.html,
+	NVelocity/Runtime/Parser/VelocityCharStream.html,
+	NVelocity/Runtime/Parser/namespace-summary.html,
+	NVelocity/Runtime/Visitor/BaseVisitor.html,
+	NVelocity/Runtime/Visitor/NodeViewMode.html,
+	NVelocity/Runtime/Visitor/VMReferenceMungeVisitor.html,
+	NVelocity/Runtime/Visitor/namespace-summary.html,
+	NVelocity/Test/Provider/BoolObj.html,
+	NVelocity/Test/Provider/Child.html,
+	NVelocity/Test/Provider/Person.html,
+	NVelocity/Test/Provider/TestProvider.html,
+	NVelocity/Test/Provider/namespace-summary.html,
+	NVelocity/Util/Introspection/IntrospectorBase.html,
+	NVelocity/Util/Introspection/MethodMap.html,
+	NVelocity/Util/Introspection/namespace-summary.html,
+	Commons/Collections/CollectionsUtil.html,
+	Commons/Collections/ExtendedProperties.html,
+	Commons/Collections/StringTokenizer.html,
+	Commons/Collections/namespace-summary.html,
+	NVelocity/App/FieldMethodizer.html, NVelocity/App/Velocity.html,
+	NVelocity/App/namespace-summary.html,
+	NVelocity/App/Events/EventCartridge.html,
+	NVelocity/App/Events/EventHandler.html,
+	NVelocity/App/Events/MethodExceptionEventHandler.html,
+	NVelocity/App/Events/NullSetEventHandler.html,
+	NVelocity/App/Events/ReferenceInsertionEventHandler.html,
+	NVelocity/App/Events/namespace-summary.html,
+	NVelocity/Runtime/Directive/Directive.html,
+	NVelocity/Runtime/Directive/DirectiveConstants.html,
+	NVelocity/Runtime/Directive/DirectiveConstants_Fields.html,
+	NVelocity/Runtime/Directive/Foreach.html,
+	NVelocity/Runtime/Directive/Include.html,
+	NVelocity/Runtime/Directive/Literal.html,
+	NVelocity/Runtime/Directive/Macro.html,
+	NVelocity/Runtime/Directive/Parse.html,
+	NVelocity/Runtime/Directive/ParseDirectiveException.html,
+	NVelocity/Runtime/Directive/VMProxyArg.html,
+	NVelocity/Runtime/Directive/VelocimacroProxy.html,
+	NVelocity/Runtime/Directive/namespace-summary.html,
+	NVelocity/Runtime/Resource/ContentResource.html,
+	NVelocity/Runtime/Resource/Resource.html,
+	NVelocity/Runtime/Resource/ResourceCache.html,
+	NVelocity/Runtime/Resource/ResourceCacheImpl.html,
+	NVelocity/Runtime/Resource/ResourceFactory.html,
+	NVelocity/Runtime/Resource/ResourceManager.html,
+	NVelocity/Runtime/Resource/ResourceManagerImpl.html,
+	NVelocity/Runtime/Resource/ResourceManager_Fields.html,
+	NVelocity/Runtime/Resource/namespace-summary.html,
+	NVelocity/App/Tools/VelocityFormatter.VelocityAlternator.html,
+	NVelocity/App/Tools/VelocityFormatter.VelocityAutoAlternator.html,
+	NVelocity/App/Tools/VelocityFormatter.html,
+	NVelocity/App/Tools/namespace-summary.html,
+	NVelocity/Exception/MethodInvocationException.html,
+	NVelocity/Exception/ParseErrorException.html,
+	NVelocity/Exception/ResourceNotFoundException.html,
+	NVelocity/Exception/VelocityException.html,
+	NVelocity/Exception/namespace-summary.html,
+	NVelocity/Http/NVelocityHandler.html,
+	NVelocity/Http/NVelocityHandlerFactory.html,
+	NVelocity/Http/namespace-summary.html,
+	NVelocity/Runtime/Log/LogManager.html,
+	NVelocity/Runtime/Log/LogSystem.html,
+	NVelocity/Runtime/Log/LogSystem_Fields.html,
+	NVelocity/Runtime/Log/NullLogSystem.html,
+	NVelocity/Runtime/Log/SimpleLog4JLogSystem.html,
+	NVelocity/Runtime/Log/namespace-summary.html,
+	NVelocity/Runtime/Resource/Loader/FileResourceLoader.html,
+	NVelocity/Runtime/Resource/Loader/ResourceLoader.html,
+	NVelocity/Runtime/Resource/Loader/ResourceLoaderFactory.html,
+	NVelocity/Runtime/Resource/Loader/ResourceLocator.html,
+	NVelocity/Runtime/Resource/Loader/namespace-summary.html,
+	NVelocity/Util/Iterator.html, NVelocity/Util/SimplePool.html,
+	NVelocity/Util/StringUtils.html,
+	NVelocity/Util/namespace-summary.html,
+	NVelocity/SupportClass.DateTimeFormatManager.DateTimeFormatHashTabl
+	e.html, NVelocity/SupportClass.DateTimeFormatManager.html,
+	NVelocity/SupportClass.TextNumberFormat.html,
+	NVelocity/SupportClass.Tokenizer.html,
+	NVelocity/SupportClass.TransactionManager.ConnectionHashTable.html,
+	NVelocity/SupportClass.TransactionManager.html,
+	NVelocity/SupportClass.html, NVelocity/Template.html,
+	NVelocity/VelocityContext.html, NVelocity/namespace-summary.html,
+	NVelocity/IO/VelocityWriter.html,
+	NVelocity/IO/namespace-summary.html,
+	NVelocity/Runtime/RuntimeConstants.html,
+	NVelocity/Runtime/RuntimeConstants_Fields.html,
+	NVelocity/Runtime/RuntimeInstance.html,
+	NVelocity/Runtime/RuntimeServices.html,
+	NVelocity/Runtime/RuntimeSingleton.html,
+	NVelocity/Runtime/VelocimacroFactory.html,
+	NVelocity/Runtime/VelocimacroManager.MacroEntry.html,
+	NVelocity/Runtime/VelocimacroManager.html,
+	NVelocity/Runtime/namespace-summary.html,
+	NVelocity/Runtime/Exception/ReferenceException.html,
+	NVelocity/Runtime/Exception/namespace-summary.html:
+	
+	api documentation
+
+2002-08-16 Friday 11:32  corts
+
+	* bin/cvs2cl.pl:
+	
+	script to create ChangeLog
+
+2002-08-16 Friday 04:37  corts
+
+	* src/NVelocity.ndoc:
+	
+	use xml files from ../build directory (this time for sure)
+
+2002-08-16 Friday 04:31  corts
+
+	* src/NVelocity.ndoc:
+	
+	use xml files from ../build directory
+
+2002-08-16 Friday 04:27  corts
+
+	* bin/: NDoc.Core.dll, NDoc.Documenter.JavaDoc.dll,
+	NDoc.Documenter.Msdn.dll, NDoc.Documenter.Xml.dll,
+	NDoc.Gui.AboutForm.resources,
+	NDoc.Gui.AssemblySlashDocForm.resources,
+	NDoc.Gui.ErrorForm.resources, NDoc.Gui.MainForm.resources,
+	NDoc.Gui.NamespaceSummariesForm.resources,
+	NDoc.Gui.SolutionForm.resources, NDoc.VisualStudio.dll,
+	NDocConsole.exe, NDocGui.exe:
+	
+	binaries needed for NDoc (ok, maybe not all of them, but I didn't
+	really want to figure out exactly which ones tonight)
+
+2002-08-16 Friday 04:23  corts
+
+	* src/: Commons.csproj, NUnitRunner.csproj, NVelocity.csproj,
+	Test.csproj:
+	
+	output xml documentation file for NDoc
+
+2002-08-16 Friday 04:21  corts
+
+	* src/package.sh:
+	
+	script to aide in building SourceForge download files
+
+2002-08-16 Friday 04:20  corts
+
+	* src/NVelocity.ndoc:
+	
+	NDoc config file to create html version of api specs (javadoc style
+	and msdn .chm style)
+
+2002-08-16 Friday 04:19  corts
+
+	* src/Makefile:
+	
+	Makefile to perform various building tasks (using GNU make)
+
+2002-08-06 Tuesday 00:34  corts
+
+	* src/NVelocity.csproj:
+	
+	reflect newly added classes
+
+2002-08-06 Tuesday 00:33  corts
+
+	* src/: App/Velocity.cs, Runtime/RuntimeInstance.cs,
+	Runtime/RuntimeSingleton.cs:
+	
+	support Init with ExtendedProperties
+
+2002-08-06 Tuesday 00:30  corts
+
+	* src/IO/VelocityWriter.cs:
+	
+	untested port of VelocityWriter (not really sure if this will be
+	needed)
+
+2002-08-06 Tuesday 00:29  corts
+
+	* src/Http/: NVelocityHandler.cs, NVelocityHandlerFactory.cs:
+	
+	base class handler and factory to support use NVelocity to load
+	templates in a web environment (like VelocityServlet).
+
+2002-08-06 Tuesday 00:27  corts
+
+	* src/Commons/Collections/ExtendedProperties.cs:
+	
+	add static method to allow copying of key values from one instance
+	to another
+
+2002-08-06 Tuesday 00:25  corts
+
+	* examples/SimpleHttp/: .cvsignore, AssemblyInfo.cs, README.txt,
+	SimpleHttp.csproj, SimpleHttp.csproj.webinfo, SimpleHttp.sln,
+	SimpleNVelocityHandler.cs, Web.config, WebForm1.aspx,
+	WebForm1.aspx.cs, WebForm1.aspx.resx, sample.vm:
+	
+	SimpleHttp sample - shows how to extend NVelocityHandler
+
+2002-07-31 Wednesday 13:39  corts
+
+	* src/Runtime/Resource/Loader/ResourceLocator.cs:
+	
+	update ResourceLocator to search alternate paths to find the root
+	assembly if the EntryAssembly is null (which is the case when
+	launched by COM+)
+
+2002-07-30 Tuesday 15:32  corts
+
+	* src/: Commons/AssemblyInfo.cs, AssemblyInfo.cs, NVelocity.snk:
+	
+	add strong name key and put in AssemblyInfo.cs so that assemblies
+	will be signed
+
+2002-07-30 Tuesday 02:25  corts
+
+	* src/: Template.cs, VelocityContext.cs, App/Velocity.cs,
+	App/Events/EventCartridge.cs, App/Tools/VelocityFormatter.cs,
+	Context/AbstractContext.cs, Context/IContext.cs,
+	Context/InternalContextAdapterImpl.cs,
+	Context/InternalContextBase.cs, Context/InternalEventContext.cs,
+	Context/InternalHousekeepingContext.cs,
+	Context/InternalWrapperContext.cs, Context/VMContext.cs,
+	Runtime/Directive/Foreach.cs, Runtime/Directive/Parse.cs,
+	Runtime/Directive/VMProxyArg.cs,
+	Runtime/Directive/VelocimacroProxy.cs,
+	Runtime/Parser/Node/ASTIdentifier.cs,
+	Runtime/Parser/Node/ASTMethod.cs,
+	Runtime/Parser/Node/ASTReference.cs,
+	Runtime/Parser/Node/ASTSetDirective.cs,
+	Runtime/Parser/Node/NodeUtils.cs,
+	Runtime/Resource/ContentResource.cs, Runtime/Resource/Resource.cs,
+	Runtime/Resource/ResourceManagerImpl.cs, Test/ParserTest.cs,
+	Test/TemplateTestCase.cs, Test/VelocityAppTestCase.cs,
+	Test/VelocityTest.cs:
+	
+	change case of methods in Context and root - and effected classes
+
+2002-07-30 Tuesday 01:49  corts
+
+	* build/.cvsignore:
+	
+	initial import
+
+2002-07-30 Tuesday 01:45  corts
+
+	* test/: anakia/compare/index.html, anakia/xdocs/index.xml,
+	anakia/xdocs/stylesheets/project.xml,
+	anakia/xdocs/stylesheets/site.vsl, classloader/Foo.class,
+	classloader/Foo.java, configuration/include1.properties,
+	configuration/include2.properties, configuration/test.config,
+	configuration/compare/output.cmp, cpload/test1.jar,
+	cpload/test2.jar, cpload/compare/test1.cmp,
+	cpload/compare/test2.cmp, misc/README.txt, misc/compile.sh,
+	misc/dump.sh, misc/test.sh, multi/compare/path1.cmp,
+	multi/compare/path2.cmp, multi/path1/path1.vm,
+	multi/path2/path2.vm, multiloader/path1.vm, multiloader/test1.jar,
+	multiloader/test2.jar, multiloader/compare/path1.cmp,
+	multiloader/compare/test2.cmp, multiloader/compare/test3.cmp,
+	templates/VM_global_library.vm, templates/arithmetic.vm,
+	templates/array.vm, templates/block.vm, templates/comment.vm,
+	templates/context_safety.vm, templates/diabolical.vm,
+	templates/ed.bat, templates/encodingtest.vm,
+	templates/encodingtest2.vm, templates/encodingtest3.vm,
+	templates/encodingtest_KOI8-R.vm, templates/equality.vm,
+	templates/escape.vm, templates/escape2.vm, templates/example1.vm,
+	templates/foreach-array.vm, templates/foreach-introspect.vm,
+	templates/foreach-map.vm, templates/foreach-method.vm,
+	templates/foreach-type.vm, templates/foreach-variable.vm,
+	templates/formal.vm, templates/get.vm, templates/if.vm,
+	templates/ifstatement.vm, templates/include.vm,
+	templates/interpolation.vm, templates/literal.vm,
+	templates/logical.vm, templates/loop.vm, templates/map.vm,
+	templates/math.vm, templates/method.vm, templates/parse.vm,
+	templates/parse1.vm, templates/parse2.vm, templates/pedantic.vm,
+	templates/quotes.vm, templates/range.vm, templates/reference.vm,
+	templates/sample.vm, templates/shorthand.vm, templates/subclass.vm,
+	templates/templates.properties, templates/test.txt,
+	templates/test.vm, templates/velocimacro.vm,
+	templates/velocimacro2.vm, templates/vm_test1.vm,
+	templates/vm_test2.vm, templates/compare/arithmetic.cmp,
+	templates/compare/array.cmp, templates/compare/block.cmp,
+	templates/compare/comment.cmp,
+	templates/compare/context_safety1.cmp,
+	templates/compare/context_safety2.cmp,
+	templates/compare/diabolical.cmp, templates/compare/directive.cmp,
+	templates/compare/encodingtest.cmp,
+	templates/compare/encodingtest2.cmp,
+	templates/compare/encodingtest3.cmp,
+	templates/compare/encodingtest_KOI8-R.cmp,
+	templates/compare/equality.cmp, templates/compare/escape.cmp,
+	templates/compare/escape2.cmp, templates/compare/foreach-array.cmp,
+	templates/compare/foreach-introspect.cmp,
+	templates/compare/foreach-map.cmp,
+	templates/compare/foreach-method.cmp,
+	templates/compare/foreach-type.cmp,
+	templates/compare/foreach-variable.cmp,
+	templates/compare/formal.cmp, templates/compare/get.cmp,
+	templates/compare/if.cmp, templates/compare/ifstatement.cmp,
+	templates/compare/include.cmp, templates/compare/interpolation.cmp,
+	templates/compare/literal.cmp, templates/compare/logical.cmp,
+	templates/compare/loop.cmp, templates/compare/map.cmp,
+	templates/compare/math.cmp, templates/compare/method.cmp,
+	templates/compare/parse.cmp, templates/compare/pedantic.cmp,
+	templates/compare/quotes.cmp, templates/compare/range.cmp,
+	templates/compare/reference.cmp, templates/compare/sample.cmp,
+	templates/compare/shorthand.cmp,
+	templates/compare/string-interpolation.cmp,
+	templates/compare/subclass.cmp, templates/compare/test.cmp,
+	templates/compare/velocimacro.cmp,
+	templates/compare/velocimacro2.cmp, templates/compare/vm_test1.cmp,
+	templates/compare/vm_test2.cmp, templates/subdir/test.txt,
+	texen/additional.props, texen/license.txt, texen/service.props,
+	texen-classpath/mkjar.sh, texen-classpath/test.jar,
+	texen-classpath/compare/Test.txt,
+	texen-classpath/compare/TurbineWeather.java,
+	texen-classpath/compare/TurbineWeatherService.java,
+	texen-classpath/compare/WeatherService.java,
+	texen-classpath/compare/book.txt,
+	texen-classpath/jar-contents/Control.vm,
+	texen-classpath/jar-contents/ServiceImplementation.vm,
+	texen-classpath/jar-contents/ServiceInterface.vm,
+	texen-classpath/jar-contents/ServiceStaticHelper.vm,
+	texen-classpath/jar-contents/Test.vm,
+	texen-classpath/jar-contents/book.vm,
+	texen-classpath/jar-contents/license.txt,
+	texen-classpath/jar-contents/service.props,
+	texen-classpath/jar-contents/test.props, texen/compare/Test.txt,
+	texen/compare/TurbineWeather.java,
+	texen/compare/TurbineWeatherService.java,
+	texen/compare/WeatherService.java, texen/compare/book.txt,
+	texen/templates/Control.vm,
+	texen/templates/ServiceImplementation.vm,
+	texen/templates/ServiceInterface.vm,
+	texen/templates/ServiceStaticHelper.vm, texen/templates/Test.vm,
+	texen/templates/book.vm, texen/templates/test.props:
+	
+	initial import
+
+2002-07-30 Tuesday 01:26  corts
+
+	* src/: Commons.csproj, NUnitRunner.csproj, NVelocity.csproj,
+	SupportClass.cs, Template.cs, Test.csproj, VelocityContext.cs,
+	App/AppSupportClass.cs, App/FieldMethodizer.cs, App/Velocity.cs,
+	App/Events/EventCartridge.cs, App/Events/EventHandler.cs,
+	App/Events/MethodExceptionEventHandler.cs,
+	App/Events/NullSetEventHandler.cs,
+	App/Events/ReferenceInsertionEventHandler.cs,
+	App/Tools/VelocityFormatter.cs, Context/AbstractContext.cs,
+	Context/InternalContextAdapter.cs,
+	Context/InternalContextAdapterImpl.cs,
+	Context/InternalContextBase.cs, Context/InternalEventContext.cs,
+	Context/InternalHousekeepingContext.cs,
+	Context/InternalWrapperContext.cs, Context/VMContext.cs,
+	Exception/MethodInvocationException.cs,
+	Exception/ParseErrorException.cs,
+	Exception/ResourceNotFoundException.cs,
+	Exception/VelocityException.cs, Runtime/RuntimeConstants.cs,
+	Runtime/RuntimeInstance.cs, Runtime/RuntimeServices.cs,
+	Runtime/RuntimeSingleton.cs, Runtime/VelocimacroFactory.cs,
+	Runtime/VelocimacroManager.cs,
+	Runtime/Defaults/directive.properties,
+	Runtime/Directive/Directive.cs,
+	Runtime/Directive/DirectiveConstants.cs,
+	Runtime/Directive/Foreach.cs, Runtime/Directive/Include.cs,
+	Runtime/Directive/Literal.cs, Runtime/Directive/Macro.cs,
+	Runtime/Directive/Parse.cs,
+	Runtime/Directive/ParseDirectiveException.cs,
+	Runtime/Directive/VMProxyArg.cs,
+	Runtime/Directive/VelocimacroProxy.cs,
+	Runtime/Exception/ReferenceException.cs, Runtime/Log/LogManager.cs,
+	Runtime/Log/LogSystem.cs, Runtime/Log/NullLogSystem.cs,
+	Runtime/Log/SimpleLog4JLogSystem.cs, Runtime/Parser/CharStream.cs,
+	Runtime/Parser/JJTParserState.cs, Runtime/Parser/ParseException.cs,
+	Runtime/Parser/Parser.cs, Runtime/Parser/ParserConstants.cs,
+	Runtime/Parser/ParserTokenManager.cs,
+	Runtime/Parser/ParserTreeConstants.cs, Runtime/Parser/Token.cs,
+	Runtime/Parser/TokenMgrError.cs,
+	Runtime/Parser/VelocityCharStream.cs,
+	Runtime/Parser/Node/ASTAddNode.cs,
+	Runtime/Parser/Node/ASTAndNode.cs,
+	Runtime/Parser/Node/ASTAssignment.cs,
+	Runtime/Parser/Node/ASTBlock.cs, Runtime/Parser/Node/ASTComment.cs,
+	Runtime/Parser/Node/ASTDirective.cs,
+	Runtime/Parser/Node/ASTDivNode.cs,
+	Runtime/Parser/Node/ASTEQNode.cs,
+	Runtime/Parser/Node/ASTElseIfStatement.cs,
+	Runtime/Parser/Node/ASTElseStatement.cs,
+	Runtime/Parser/Node/ASTEscape.cs,
+	Runtime/Parser/Node/ASTEscapedDirective.cs,
+	Runtime/Parser/Node/ASTExpression.cs,
+	Runtime/Parser/Node/ASTFalse.cs, Runtime/Parser/Node/ASTGENode.cs,
+	Runtime/Parser/Node/ASTGTNode.cs,
+	Runtime/Parser/Node/ASTIdentifier.cs,
+	Runtime/Parser/Node/ASTIfStatement.cs,
+	Runtime/Parser/Node/ASTIncludeStatement.cs,
+	Runtime/Parser/Node/ASTIntegerRange.cs,
+	Runtime/Parser/Node/ASTLENode.cs, Runtime/Parser/Node/ASTLTNode.cs,
+	Runtime/Parser/Node/ASTMethod.cs,
+	Runtime/Parser/Node/ASTModNode.cs,
+	Runtime/Parser/Node/ASTMulNode.cs,
+	Runtime/Parser/Node/ASTNENode.cs,
+	Runtime/Parser/Node/ASTNotNode.cs,
+	Runtime/Parser/Node/ASTNumberLiteral.cs,
+	Runtime/Parser/Node/ASTObjectArray.cs,
+	Runtime/Parser/Node/ASTOrNode.cs,
+	Runtime/Parser/Node/ASTParameters.cs,
+	Runtime/Parser/Node/ASTReference.cs,
+	Runtime/Parser/Node/ASTSetDirective.cs,
+	Runtime/Parser/Node/ASTStringLiteral.cs,
+	Runtime/Parser/Node/ASTSubtractNode.cs,
+	Runtime/Parser/Node/ASTText.cs, Runtime/Parser/Node/ASTTrue.cs,
+	Runtime/Parser/Node/ASTVariable.cs, Runtime/Parser/Node/ASTWord.cs,
+	Runtime/Parser/Node/ASTprocess.cs,
+	Runtime/Parser/Node/AbstractExecutor.cs,
+	Runtime/Parser/Node/BooleanPropertyExecutor.cs,
+	Runtime/Parser/Node/GetExecutor.cs,
+	Runtime/Parser/Node/NodeUtils.cs,
+	Runtime/Parser/Node/ParserVisitor.cs,
+	Runtime/Parser/Node/PropertyExecutor.cs,
+	Runtime/Parser/Node/SimpleNode.cs,
+	Runtime/Resource/ContentResource.cs, Runtime/Resource/Resource.cs,
+	Runtime/Resource/ResourceCache.cs,
+	Runtime/Resource/ResourceCacheImpl.cs,
+	Runtime/Resource/ResourceFactory.cs,
+	Runtime/Resource/ResourceManager.cs,
+	Runtime/Resource/ResourceManagerImpl.cs,
+	Runtime/Resource/Loader/FileResourceLoader.cs,
+	Runtime/Resource/Loader/ResourceLoader.cs,
+	Runtime/Resource/Loader/ResourceLoaderFactory.cs,
+	Runtime/Resource/Loader/ResourceLocator.cs,
+	Runtime/Visitor/BaseVisitor.cs, Runtime/Visitor/NodeViewMode.cs,
+	Runtime/Visitor/VMReferenceMungeVisitor.cs, Test/AllTests.cs,
+	Test/BaseTestCase.cs, Test/CommonsExtPropTestCase.cs,
+	Test/CommonsTest.cs, Test/IntrospectorTest.cs, Test/NUnitRunner.cs,
+	Test/ParserTest.cs, Test/TemplateTestBase.cs,
+	Test/TemplateTestCase.cs, Test/TemplateTestSuite.cs,
+	Test/TestSupportClass.cs, Test/VelocimacroTestCase.cs,
+	Test/VelocityAppTestCase.cs, Test/VelocityTest.cs,
+	Test/Provider/BoolObj.cs, Test/Provider/Child.cs,
+	Test/Provider/Person.cs, Test/Provider/TestProvider.cs,
+	Util/Iterator.cs, Util/SimplePool.cs, Util/StringUtils.cs,
+	Util/Introspection/AmbiguousException.cs,
+	Util/Introspection/ClassMap.cs,
+	Util/Introspection/IntrospectionCacheData.cs,
+	Util/Introspection/Introspector.cs,
+	Util/Introspection/IntrospectorBase.cs,
+	Util/Introspection/MethodMap.cs, Util/Introspection/Twonk.cs:
+	
+	change namespace to NVelocity reflect INode and IContext name
+	changes
+
+2002-07-30 Tuesday 01:22  corts
+
+	* src/Runtime/Defaults/: nvelocity.properties, velocity.properties:
+	
+	rename to match project name
+
+2002-07-30 Tuesday 01:19  corts
+
+	* src/: Context/Context.cs, Context/IContext.cs,
+	Runtime/Parser/Node/INode.cs, Runtime/Parser/Node/Node.cs:
+	
+	use .Net style interface names
+
+2002-07-29 Monday 12:54  corts
+
+	* src/: .cvsignore, Commons.csproj, NUnitRunner.csproj,
+	NVelocity.csproj, NVelocity.sln, Test.csproj:
+	
+	initial import
+
+2002-07-29 Monday 08:46  corts
+
+	* src/Test/: AllTests.cs, AnakiaTestCase.cs, App.ico,
+	AssemblyInfo.cs, BaseTestCase.cs, ClassloaderChangeTest.cs,
+	ClasspathResourceTest.cs, CommonsExtPropTestCase.cs,
+	CommonsTest.cs, ConfigurationTestCase.cs, ContextSafetyTestCase.cs,
+	EncodingTestCase.cs, EventHandlingTestCase.cs,
+	ExternalLoggerTest.cs, InlineScopeVMTestCase.cs,
+	IntrospectorTest.cs, IntrospectorTestCase.cs,
+	IntrospectorTestCase2.cs, MethodInvocationExceptionTest.cs,
+	MiscTestCase.cs, MultiLoaderTestCase.cs,
+	MultipleFileResourcePathTest.cs, NUnitRunner.cs, ParserTest.cs,
+	TemplateTestBase.cs, TemplateTestCase.cs, TemplateTestSuite.cs,
+	TestSupportClass.cs, TexenClasspathTestCase.cs, TexenTestCase.cs,
+	VelocimacroTestCase.cs, VelocityAppTestCase.cs, VelocityTest.cs,
+	Provider/BoolObj.cs, Provider/Child.cs, Provider/Person.cs,
+	Provider/TestProvider.cs, Misc/Test.cs, View/TemplateNodeView.cs:
+	
+	initial import
+
+2002-07-29 Monday 08:34  corts
+
+	* lib/NUnitConsole.dll, lib/NUnitCore.dll, lib/log4net.dll,
+	src/.cvsignore, src/AssemblyInfo.cs, src/Example.cs,
+	src/Example2.cs, src/SupportClass.cs, src/Template.cs,
+	src/VelocityContext.cs, src/App/AppSupportClass.cs,
+	src/App/FieldMethodizer.cs, src/App/Velocity.cs,
+	src/App/VelocityEngine.cs, src/App/Events/EventCartridge.cs,
+	src/App/Events/EventHandler.cs,
+	src/App/Events/MethodExceptionEventHandler.cs,
+	src/App/Events/NullSetEventHandler.cs,
+	src/App/Events/ReferenceInsertionEventHandler.cs,
+	src/App/Tools/VelocityFormatter.cs, src/Commons/AssemblyInfo.cs,
+	src/Context/AbstractContext.cs, src/Context/Context.cs,
+	src/Context/InternalContextAdapter.cs,
+	src/Context/InternalContextAdapterImpl.cs,
+	src/Context/InternalContextBase.cs,
+	src/Context/InternalEventContext.cs,
+	src/Context/InternalHousekeepingContext.cs,
+	src/Context/InternalWrapperContext.cs, src/Context/VMContext.cs,
+	src/Exception/MethodInvocationException.cs,
+	src/Exception/ParseErrorException.cs,
+	src/Exception/ResourceNotFoundException.cs,
+	src/Exception/VelocityException.cs,
+	src/Runtime/RuntimeConstants.cs, src/Runtime/RuntimeInstance.cs,
+	src/Runtime/RuntimeServices.cs, src/Runtime/RuntimeSingleton.cs,
+	src/Runtime/VelocimacroFactory.cs,
+	src/Runtime/VelocimacroManager.cs,
+	src/Runtime/Defaults/directive.properties,
+	src/Runtime/Defaults/velocity.properties,
+	src/Runtime/Directive/Directive.cs,
+	src/Runtime/Directive/DirectiveConstants.cs,
+	src/Runtime/Directive/Foreach.cs, src/Runtime/Directive/Include.cs,
+	src/Runtime/Directive/Literal.cs, src/Runtime/Directive/Macro.cs,
+	src/Runtime/Directive/Parse.cs,
+	src/Runtime/Directive/ParseDirectiveException.cs,
+	src/Runtime/Directive/VMProxyArg.cs,
+	src/Runtime/Directive/VelocimacroProxy.cs,
+	src/Runtime/Exception/NodeException.cs,
+	src/Runtime/Exception/ReferenceException.cs,
+	src/Runtime/Log/AvalonLogSystem.cs,
+	src/Runtime/Log/Log4JLogSystem.cs, src/Runtime/Log/LogManager.cs,
+	src/Runtime/Log/LogSystem.cs, src/Runtime/Log/NullLogSystem.cs,
+	src/Runtime/Log/PrimordialLogSystem.cs,
+	src/Runtime/Log/SimpleLog4JLogSystem.cs,
+	src/Runtime/Log/VelocityFormatter.cs,
+	src/Runtime/Parser/CharStream.cs,
+	src/Runtime/Parser/JJTParserState.cs,
+	src/Runtime/Parser/ParseException.cs, src/Runtime/Parser/Parser.cs,
+	src/Runtime/Parser/ParserConstants.cs,
+	src/Runtime/Parser/ParserTokenManager.cs,
+	src/Runtime/Parser/ParserTreeConstants.cs,
+	src/Runtime/Parser/Token.cs, src/Runtime/Parser/TokenMgrError.cs,
+	src/Runtime/Parser/VelocityCharStream.cs,
+	src/Runtime/Parser/Node/ASTAddNode.cs,
+	src/Runtime/Parser/Node/ASTAndNode.cs,
+	src/Runtime/Parser/Node/ASTAssignment.cs,
+	src/Runtime/Parser/Node/ASTBlock.cs,
+	src/Runtime/Parser/Node/ASTComment.cs,
+	src/Runtime/Parser/Node/ASTDirective.cs,
+	src/Runtime/Parser/Node/ASTDivNode.cs,
+	src/Runtime/Parser/Node/ASTEQNode.cs,
+	src/Runtime/Parser/Node/ASTElseIfStatement.cs,
+	src/Runtime/Parser/Node/ASTElseStatement.cs,
+	src/Runtime/Parser/Node/ASTEscape.cs,
+	src/Runtime/Parser/Node/ASTEscapedDirective.cs,
+	src/Runtime/Parser/Node/ASTExpression.cs,
+	src/Runtime/Parser/Node/ASTFalse.cs,
+	src/Runtime/Parser/Node/ASTGENode.cs,
+	src/Runtime/Parser/Node/ASTGTNode.cs,
+	src/Runtime/Parser/Node/ASTIdentifier.cs,
+	src/Runtime/Parser/Node/ASTIfStatement.cs,
+	src/Runtime/Parser/Node/ASTIncludeStatement.cs,
+	src/Runtime/Parser/Node/ASTIntegerRange.cs,
+	src/Runtime/Parser/Node/ASTLENode.cs,
+	src/Runtime/Parser/Node/ASTLTNode.cs,
+	src/Runtime/Parser/Node/ASTMethod.cs,
+	src/Runtime/Parser/Node/ASTModNode.cs,
+	src/Runtime/Parser/Node/ASTMulNode.cs,
+	src/Runtime/Parser/Node/ASTNENode.cs,
+	src/Runtime/Parser/Node/ASTNotNode.cs,
+	src/Runtime/Parser/Node/ASTNumberLiteral.cs,
+	src/Runtime/Parser/Node/ASTObjectArray.cs,
+	src/Runtime/Parser/Node/ASTOrNode.cs,
+	src/Runtime/Parser/Node/ASTParameters.cs,
+	src/Runtime/Parser/Node/ASTReference.cs,
+	src/Runtime/Parser/Node/ASTSetDirective.cs,
+	src/Runtime/Parser/Node/ASTStringLiteral.cs,
+	src/Runtime/Parser/Node/ASTSubtractNode.cs,
+	src/Runtime/Parser/Node/ASTText.cs,
+	src/Runtime/Parser/Node/ASTTrue.cs,
+	src/Runtime/Parser/Node/ASTVariable.cs,
+	src/Runtime/Parser/Node/ASTWord.cs,
+	src/Runtime/Parser/Node/ASTprocess.cs,
+	src/Runtime/Parser/Node/AbstractExecutor.cs,
+	src/Runtime/Parser/Node/BooleanPropertyExecutor.cs,
+	src/Runtime/Parser/Node/GetExecutor.cs,
+	src/Runtime/Parser/Node/Node.cs,
+	src/Runtime/Parser/Node/NodeUtils.cs,
+	src/Runtime/Parser/Node/ParserVisitor.cs,
+	src/Runtime/Parser/Node/PropertyExecutor.cs,
+	src/Runtime/Parser/Node/SimpleNode.cs,
+	src/Runtime/Resource/ContentResource.cs,
+	src/Runtime/Resource/Resource.cs,
+	src/Runtime/Resource/ResourceCache.cs,
+	src/Runtime/Resource/ResourceCacheImpl.cs,
+	src/Runtime/Resource/ResourceFactory.cs,
+	src/Runtime/Resource/ResourceManager.cs,
+	src/Runtime/Resource/ResourceManagerImpl.cs,
+	src/Runtime/Resource/Loader/DataSourceResourceLoader.cs,
+	src/Runtime/Resource/Loader/FileResourceLoader.cs,
+	src/Runtime/Resource/Loader/ResourceLoader.cs,
+	src/Runtime/Resource/Loader/ResourceLoaderFactory.cs,
+	src/Runtime/Resource/Loader/ResourceLocator.cs,
+	src/Runtime/Visitor/BaseVisitor.cs,
+	src/Runtime/Visitor/NodeViewMode.cs,
+	src/Runtime/Visitor/VMReferenceMungeVisitor.cs,
+	src/Util/ArrayIterator.cs, src/Util/EnumerationIterator.cs,
+	src/Util/Iterator.cs, src/Util/SimplePool.cs,
+	src/Util/StringUtils.cs,
+	src/Util/Introspection/AmbiguousException.cs,
+	src/Util/Introspection/ClassMap.cs,
+	src/Util/Introspection/IntrospectionCacheData.cs,
+	src/Util/Introspection/Introspector.cs,
+	src/Util/Introspection/IntrospectorBase.cs,
+	src/Util/Introspection/MethodMap.cs,
+	src/Util/Introspection/Twonk.cs:
+	
+	initial import
+
+2002-07-29 Monday 08:10  corts
+
+	* src/Commons/Collections/: CollectionsUtil.cs,
+	ExtendedProperties.cs, PropertiesReader.cs, PropertiesTokenizer.cs,
+	StringTokenizer.cs:
+	
+	initial import
+
+2002-07-29 Monday 07:58  corts
+
+	* cvs.txt:
+	
+	Initial revision
+
+2002-07-29 Monday 07:58  corts
+
+	* cvs.txt:
+	
+	start repository
+

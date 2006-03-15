@@ -1,0 +1,79 @@
+#*
+
+@test ifstatement.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+#set($foo = "woogie" )
+
+start :
+
+#if($foo)
+ right
+#end
+
+#if(!$foo)
+  wrong
+#else
+  right
+#end
+
+#if( !$foo )
+  wrong
+#else
+  right
+#end
+
+#if( ! $foo )
+  wrong
+#else
+  right
+#end
+
+#if( ! ! $foo )
+  right
+#end
+
+
+#if($bar)
+ wrong
+#else
+ right
+#end
+
+#if($bar)
+ wrong
+#elseif( $foo )
+ right
+#end
+
+#if( $bar )
+ wrong
+#elseif( $floogie )
+ wrong
+#elseif( $woppie )
+ wrong
+#else
+ right
+#end
+
+#if(!$bar)
+  right
+#end
+
+#if( !$bar)
+  right
+#end
+
+#if( !!$bar)
+ wrong
+#else
+ right
+#end
+
+done

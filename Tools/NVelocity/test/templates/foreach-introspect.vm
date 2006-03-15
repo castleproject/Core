@@ -1,0 +1,14 @@
+##
+## tests a difficult introspection problem -
+## the iterator is a private inner class
+##
+
+#set($array = [1..10])
+#set($it = $array.GetEnumerator())
+
+#foreach($num in [21..30])
+#set ($moved = $it.MoveNext())
+   $num $it.Current
+#end
+
+

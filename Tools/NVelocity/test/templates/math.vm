@@ -1,0 +1,38 @@
+#*
+
+@test escape.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+Tests the basic integer math capabilities.
+
+*#
+
+Addition and subtraction : 
+#set($foo = 1)
+#set($foo = $foo + 1)
+1 + 1 = $foo
+$foo - 1 = #set($foo = $foo - 1 )$foo
+
+Multiplication, division, and modulus :
+#set($bar = 5)
+#set($rem = $bar % 2)
+#set($rem2 = $bar % 0)
+#set($rem3 = 7%2)
+$bar % 2 = $rem
+$bar % 0 = $rem2
+7 % 2 = $rem3
+$bar / 2 = #set($rem = $bar / 2 )$rem
+$bar / 0 = #set($rem4 = $bar / 0 )$rem4
+$bar * 2 = #set($rem = $bar * 2 )$rem
+
+$bar * -1 = #set($rem = $bar * -1)$rem
+$bar * -2 = #set($rem = $bar *-2)$rem
+$bar * -2 = #set($rem = -2*$bar)$rem
+
+And now null nodes to make sure it doesn't throw an NPE :
+#set($flargh=$woogie + $wabbie)
+

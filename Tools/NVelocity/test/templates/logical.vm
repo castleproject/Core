@@ -1,0 +1,284 @@
+#*
+
+@test logical.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+#set($foo = 5)
+
+#if ($foo > 1)
+    \$foo is greater then 1
+#end
+
+#if ($foo < 10)
+    \$foo is less than 10
+#end
+
+#if ($foo >= 5)
+    \$foo is great than or equal to 5
+#end
+
+#if ($foo <= 5)
+    \$foo is less than or equal to 5
+#end
+
+#set($foo = false)
+
+#if (!($foo == true))
+    foo is false
+#end
+
+--
+
+#set($t = true)
+#set($f = false)
+
+Logical OR :
+
+#if($t || $f)
+ right
+#else
+ wrong
+#end
+
+#if( !($f || $t) )
+ wrong
+#else
+ right
+#end
+
+#if( $null || $t )
+ right
+#else
+ wrong
+#end
+
+#if( $t || $null )
+ right
+#else
+ wrong
+#end
+
+#if( $f || $null)
+ wrong
+#else
+ right
+#end
+
+#if( $null || $null )
+ wrong
+#else
+ right
+#end
+
+Logical AND : 
+
+#if( $t && $t)
+ right
+#else
+ wrong
+#end
+
+#if( $f && $f )
+ wrong
+#else
+ right
+#end
+
+#if( !($f && $f) )
+ right
+#else
+ wrong
+#end
+
+#if( $t && $f )
+ wrong
+#else
+ right
+#end
+
+#if( $t && $null )
+ wrong
+#else
+ right
+#end
+
+#if( $null && $t )
+ wrong
+#else
+ right
+#end
+
+#if( $f && $null )
+ wrong
+#else
+ right
+#end
+
+#if( !($null && $null) )
+ right
+#else
+ wrong
+#end
+
+----------
+equivalence
+-----------
+
+#set($int = 1)
+#set($str = "str")
+#set($bool = true)
+
+#if( $int == $str)
+wrong
+#else
+right
+#end
+
+#if( $int == 1 )
+right
+#else
+wrong
+#end
+
+#if ( $int == 2 )
+wrong
+#else
+right
+#end
+
+#if( $str == 2 )
+wrong
+#else
+right
+#end
+
+#if( $str == "str")
+right
+#else
+wrong
+#end
+
+#if( $str == $nonexistantreference )
+wrong
+#else
+right
+#end
+
+#if( $str == $bool )
+wrong
+#else
+right
+#end
+
+#if ($bool == true )
+right
+#else
+wrong
+#end
+
+#if( $bool == false )
+wrong
+#else
+right
+#end
+
+-----------
+comparisons
+-----------
+#set($int = 1)
+#set($str = "str")
+#set($bool = true)
+
+#if( $int > 0 )
+right
+#else
+wrong
+#end
+
+#if( $str > 0 )
+wrong
+#else
+right
+#end
+
+#if( $nonexistant > 0 )
+wrong
+#else
+right
+#end
+
+#if( $int >= 0 )
+right
+#else
+wrong
+#end
+
+#if( $str >= 0 )
+wrong
+#else
+right
+#end
+
+#if( $nonexistant >= 0 )
+wrong
+#else
+right
+#end
+
+#if( $int < 10 )
+right
+#else
+wrong
+#end
+
+#if( $str < 10 )
+wrong
+#else
+right
+#end
+
+#if( $nonexistant < 10 )
+wrong
+#else
+right
+#end
+
+#if( $int <= 10 )
+right
+#else
+wrong
+#end
+
+#if( $str <= 10 )
+wrong
+#else
+right
+#end
+
+#if( $nonexistant <= 10 )
+wrong
+#else
+right
+#end
+
+----------------------
+goofy but legal stuff
+----------------------
+#set($lala = ( false || true ) )
+Should equal true : $lala
+
+#set($fofo = ( true && true ) )
+Should equal true : $fofo
+
+#set($fofo = ( true && ( false || true ) ) )
+Should equal true : $fofo
+
+#set($fofo = ( ($t || $f) && $t))
+Should equal true : $fofo
+

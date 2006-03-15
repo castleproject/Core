@@ -1,0 +1,97 @@
+#*
+
+@test block.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+First test : spacing between stuff.  Note that spacing preceeding the directives counts!
+One blank line follows
+
+#set($foo = false)
+#if ($foo)
+    this is true
+#elseif ($bar)
+    this is false
+#elseif (true)
+    this should be followed by two blank lines
+#end
+
+
+#if (true)
+    this is the if statement. (followed by two blank lines)
+
+    #if (true)
+    
+        this is great (followed by a blank line, 4 spaces on a line,and 2 more, yes there should be one after the 4 spaces)
+
+    #elseif (false)
+        this is also great.
+    #end
+
+#elseif (true)
+    this is the first elseif.
+#elseif (false)
+    this is the second elseif.
+#else
+    this is the else statement
+#end
+
+-- Second Test : no spacing between anything (1 blank line follows)
+
+#set($foo = false)
+#if ($foo)
+    this is true
+#elseif ($bar)
+    this is false
+#elseif (true)
+    this
+#end
+#if (true)
+    this is the if statement.
+    #if (true)
+        this is great (line w/ 4 spaces follows (from in front of the \#end) + another blank line)
+    #elseif (false)
+        this is also great.
+    #end
+#elseif (true)
+    this is the first elseif.
+#elseif (false)
+    this is the second elseif.
+#else
+    this is the else statement
+#end
+
+------------
+#if(false)
+False
+#else
+True
+#end
+-----------
+
+-- Third Test : tight tight tight.  Note that \#end eats the \n, which is NOT what people expect, I think.
+-- one blank line follows
+
+blargh #if(true)This follows blargh#end
+blargh#if(true)This immedately follows blargh with a following newline
+#end
+
+-- Fourth Test : another tight tight tight. If you want the \n, then put one *after* the content, not a space after \#end.
+-- one blank line follows
+
+blargh #if(true)This follows blargh
+#end
+blargh#if(true)This immedately follows blargh with a following newline
+#end
+
+-- Fifth Test : different kind of tight. blank line follows
+
+blargh
+#if(true)
+blargh2
+#end
+blargh3

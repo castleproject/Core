@@ -1,0 +1,221 @@
+#*
+
+@test test.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+<html>
+<body>
+
+$name
+
+#if ($customer)
+    $customer.Name
+#end
+
+
+## this is a comment.
+
+#if ($customer)
+    this is the first line
+#end
+
+## This is the test bed.
+
+this is testing for wild loose commas , ,
+
+$100
+
+
+#set($foo = "bar")
+
+This is the $foo way.
+
+#if ($foo)
+    This is $bar.
+#elseif ($bar)
+    This is the first elseif!
+#elseif ($foo)
+    This is the second elseif!
+#else
+    This is the else
+#end
+
+#if ($foo)
+    This is the if.
+#else
+    This is the else.
+#end
+
+
+\#set \$foo = "bar"
+
+\$foo   => $foo
+\$foo;  => $foo;
+\$foo.  => $foo.
+\$foo.. => $foo..
+\$foo/  => $foo/
+\$foo"  => $foo"
+\$foo\  => $foo\
+\$foo<  => $foo<
+\$foo-  => $foo-
+\$fooo+ => $fooo+
+\$foo-x => $foo-x
+\$foo$  => $foo$
+
+
+
+#set($iam-cool = "jon")
+$iam-cool
+$!nada nothing here
+
+function preload(imgObj,imgSrc)
+{
+    if (document.images) 
+    {
+        eval(imgObj+' = new Image()')
+        eval(imgObj+'.src = "'+imgSrc+'"')
+    }
+}
+
+function changeImage(layer,imgName,imgObj)
+{
+    if (document.images)
+    {
+        if (document.layers && layer!=null) eval('document.'+layer+'.document.images["'+imgName+'"].src = '+imgObj+'.src')
+        else document.images[imgName].src = eval(imgObj+".src")
+    }
+}
+
+#if ($javascript)
+    function changeImage(layer,imgName,imgObj)
+    {
+        if (document.images)
+        {
+            if (document.layers && layer!=null) eval('document.'+layer+'.document.images["'+imgName+'"].src = '+imgObj+'.src')
+            else document.images[imgName].src = eval(imgObj+".src")
+        }
+    }
+#end
+
+<!-- This is an HTML comment -->
+
+
+$provider2.Title
+
+#set($a = "x")
+$a
+
+#set($b = $a)
+$b
+
+<input type="text" name="email" value="">
+<input type="text" name="email" value="$!schmarg">
+
+
+#set($c = $provider.Title)
+$c
+
+
+#set($d = $provider.Title)
+$d
+
+
+#set($provider.Title = "crocodile hunter!")
+
+
+
+$provider.Title
+
+
+
+<!-- look here -->
+
+#set($provider.Title = $d)
+$provider.Title
+
+
+
+#set($provider.Title = $provider.Name)
+$provider.Title
+
+
+#set($provider.Title = $provider.Name)
+$provider.Title
+
+
+
+#set($a = true)
+
+#set($b = false)
+
+#set($provider.State = true)
+
+#set($provider.State = false)
+
+
+
+#if ($provider.StateTrue)
+    This is a property that returns a boolean
+    value of true.
+#end
+
+#if (true)
+    This expression is always (true).
+#end
+
+
+Foreach with a variable.
+
+#foreach ($element in $list)
+    This is $element.
+#end
+
+Foreach with an array.
+
+<table>
+#foreach ($element in $provider.Array)
+    <tr>
+        <td>This is $element</td>
+    </tr>        
+#end
+</table>
+
+
+#foreach ($element in $provider.Vector)
+    This is the $element.
+#end
+
+
+Foreach with a method.
+
+#foreach ($element in $provider.getCustomers())
+    This is $element.
+#end
+
+$10.00
+
+"this is great"
+
+(this is also great)
+
+This is the \#stuff and this
+is the way \#to \#go.
+
+this = that
+
+I am a $provider.Title.
+
+#if ($provider.theAPLRules())
+    Yes the APL rules!
+#else
+    It still rules!
+#end
+
+</body>
+</html>

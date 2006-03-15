@@ -1,0 +1,15 @@
+#*
+
+@test parse2.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+This is parse2.vm.
+
+#if (true)
+	This is from a true \#if.
+#end

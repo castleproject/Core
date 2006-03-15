@@ -1,0 +1,6 @@
+Something
+
+$AjaxHelper2.LinkToRemote2( "x", "y", $DictHelper.CreateDict("success=w", "failure=p") )
+
+Something else
+

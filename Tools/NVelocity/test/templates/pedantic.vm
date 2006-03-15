@@ -1,0 +1,101 @@
+#*
+
+@test pedantic.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression
+test doesn't fail incorrectly.
+
+*#
+#set( $pedantic = "pedantic")
+
+This is a test of the new #if($pedantic)$pedantic#end mode.
+
+There are a few things you can do in #if($foobar) GOOGLE! #else$pedantic#end mode.
+
+Like get the spacing between things #foreach($a in $stringarray)$a#end to be really, really tight.
+
+Further, it now binds any \n to the control structures, taking them out of the output.
+The hope that this is What You Expect. 
+So...
+
+--
+#if ($pedantic)
+$pedantic
+#end
+--
+
+should come out looking like
+
+--
+pedantic
+--
+
+But pay attention to what follows the \#end statement :
+
+1) First, follow with 'stuff' (not sure why you want to do this... but anway...)
+
+--
+#if ($pedantic)
+$pedantic
+#end woogie!
+--
+
+should be
+
+--
+pedantic
+ woogie!
+--
+
+2) Whitespace will be eaten if there is a following newline 
+
+--
+#if ($pedantic)
+$pedantic
+#end  		  
+--
+
+should be
+
+--
+pedantic
+--
+
+
+-- INLINE STUFF ---
+
+1) respect spaces in the block
+>#foreach($a in $stringarray)$a#end<
+>#foreach($a in $stringarray) $a#end<
+>#foreach($a in $stringarray)$a #end<
+>#foreach($a in $stringarray) $a #end<
+
+2) set statement has no output, incuding preceeding whitespace
+#foreach($a in $stringarray)
+		#set($b = $a)
+ $a is $b
+#end
+
+	public void foo( String lala )
+	{
+#foreach($a in $stringarray)
+		#set($b = $a)
+  		System.out.println("$b"); 
+#end
+	}
+
+	public void foo( String lala )
+	{
+	#foreach($a in $stringarray)
+		#set($b = $a)
+  	System.out.println("$b"); 
+	#end
+	}
+
+Inline set statement :
+
+Here are the prices :#set( $arr = ["$10.24","$15.32","$12.15"] ) #foreach($a in $arr) $a #end
+
+

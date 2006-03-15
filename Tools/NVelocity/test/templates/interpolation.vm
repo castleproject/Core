@@ -1,0 +1,65 @@
+#*
+
+@test interpolation.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+Start with simple string interpolation :
+
+#set($name = "jason")
+$provider.concat("it will cost you $10.00", "")
+
+#set($image = "dog")
+$provider.concat("${image}.jpg", "")
+
+#set($foo-bar = "foobar")
+$provider.concat("${foo-bar}.jpg", "")
+
+#set($foo_bar = "foobar")
+$provider.concat("${foo_bar}.jpg", "")
+
+#set($one = 1)
+#set($two = 2)
+#set($three = 3)
+$provider.concat("${one}${two}${three}", "")
+$provider.concat("$one $two $three", "")
+
+How about a directive?  Sure :
+
+#set($arr = ["a","b","c"])
+#set($foo = "#foreach($a in $arr) >$a< #end")
+
+$foo 
+
+For our next trick, lets interpolate a.... VelociMacro!
+
+#macro( interpfoo )
+  Hi, I'm a VM!
+#end
+
+#set($ivm = "#interpfoo()")
+
+$ivm
+
+And now, for something completely different :
+
+#set($code = "#if(false) True #else False #end")
+
+$code
+
+Now, non interpolated stringlits :
+
+#set($a = "$code")
+#set($b = '$code')
+#set($c = '$!$\!code')
+
+$a
+$b
+$c
+
+-- end --

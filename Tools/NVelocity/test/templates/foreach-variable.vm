@@ -1,0 +1,32 @@
+#*
+
+@test foreach-variable.vm
+
+This template is used for Velocity regression testing.
+If you alter this template make sure you change the
+corresponding comparison file so that the regression 
+test doesn't fail incorrectly.
+
+*#
+
+Foreach with a variable.
+
+#foreach ($element in $list)
+    This is $element.
+    $velocityCount
+#end
+
+#foreach ($element in $list)
+    -- inner foreach --
+    #foreach ($element in $list)
+        This is $element.
+        $velocityCount
+    #end
+    -- inner foreach --
+
+    -- outer foreach --
+    This is $element.
+    $velocityCount
+    -- outer foreach --
+#end
+
