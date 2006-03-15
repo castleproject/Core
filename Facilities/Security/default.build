@@ -31,13 +31,16 @@
 
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-container" inheritall="true" />
 
+		<!--
 		<nant buildfile="${base.dir}/../../copy-tasks.xml" target="copy-security-service" inheritall="true" />
+		-->
 
 	</target>
 
 	<target name="build" depends="init,tests.run" />
 
 	<target name="compile">
+<!--
 		<csc 
 			define="${strong}"
 			target="library" 
@@ -59,9 +62,11 @@
 				<include name="${bin.dir}/*.dll" />
 			</references>
 		</csc>
+-->
 	</target>
 
 	<target name="tests.compile" depends="compile">
+<!--
 		<csc 
 			target="library" 
 			debug="${debug}" 
@@ -76,13 +81,16 @@
 				<include name="${bin.dir}/*.dll" />
 			</references>
 		</csc>
+-->
 	</target>
 	
 	<target name="tests.run" depends="tests.compile">
+<!--
 		<nunit2>
 			<formatter type="${nunit.formatter}" />
 			<test assemblyname="${bin.dir}/${test.assembly.name}" />
 		</nunit2>
+-->
 	</target>
 	
 	<target name="docs">
