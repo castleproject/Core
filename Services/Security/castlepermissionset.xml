@@ -1,9 +1,0 @@
-<PermissionSet class="System.Security.NamedPermissionSet"
-               version="1"
-               Name="CastlePermissionSet">
-   <IPermission class="Castle.Services.Security.CustomPermission, Castle.Services.Security, Version=1.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc"
-                version="1"
-                Unrestricted="false"
-                permName="my permission"/>
-</PermissionSet>
-
