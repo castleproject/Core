@@ -1,8 +1,0 @@
-Something
-
-#set( $x = 11)
-
-#component("lineprinter" with "name=$x" "email=1")
-
-Something else
-
