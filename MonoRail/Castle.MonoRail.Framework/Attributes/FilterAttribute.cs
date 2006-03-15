@@ -23,7 +23,7 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true), Serializable]
 	public class SkipFilterAttribute : Attribute
 	{
-		private Type _filterType;
+		private Type filterType;
 
 		/// <summary>
 		/// Constructs a SkipFilterAttribute which skips all filters.
@@ -39,17 +39,17 @@ namespace Castle.MonoRail.Framework
 		/// <param name="filterType"></param>
 		public SkipFilterAttribute(Type filterType)
 		{
-			_filterType = filterType;
+			this.filterType = filterType;
 		}
 
 		public Type FilterType
 		{
-			get { return _filterType; }
+			get { return filterType; }
 		}
 
 		public bool BlanketSkip
 		{
-			get { return _filterType == null; }
+			get { return filterType == null; }
 		}
 	}
 
@@ -60,9 +60,9 @@ namespace Castle.MonoRail.Framework
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true), Serializable]
 	public class FilterAttribute : Attribute
 	{
-		private readonly Type _filterType;
-		private readonly ExecuteEnum _when;
-		private int _executionOrder = Int32.MaxValue;
+		private readonly Type filterType;
+		private readonly ExecuteEnum when;
+		private int executionOrder = Int32.MaxValue;
 
 		/// <summary>
 		/// Constructs a FilterAttribute associating 
@@ -77,24 +77,24 @@ namespace Castle.MonoRail.Framework
 				throw new ArgumentException("The specified filter does not implement IFilter");
 			}
 
-			_filterType = filterType;
-			_when = when;
+			this.filterType = filterType;
+			this.when = when;
 		}
 
 		public Type FilterType
 		{
-			get { return _filterType; }
+			get { return filterType; }
 		}
 
 		public ExecuteEnum When
 		{
-			get { return _when; }
+			get { return when; }
 		}
 
 		public int ExecutionOrder
 		{
-			get { return _executionOrder; }
-			set { _executionOrder = value; }
+			get { return executionOrder; }
+			set { executionOrder = value; }
 		}
 	}
 }

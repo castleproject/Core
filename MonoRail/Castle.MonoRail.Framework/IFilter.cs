@@ -26,22 +26,6 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// The filter is invoked before the action.
 		/// </summary>
-		[Obsolete("Use ExecuteEnum.BeforeAction")]
-		Before = BeforeAction,
-		/// <summary>
-		/// The filter is invoked after the action.
-		/// </summary>
-		[Obsolete("Use ExecuteEnum.AfterRendering or ExecuteEnum.AfterAction")]
-		After = AfterRendering,
-		/// <summary>
-		/// The filter is invoked before and after the action.
-		/// </summary>
-		[Obsolete("Use ExecuteEnum.Always or combine the ExecuteEnum values you want")]
-		Around = BeforeAction | AfterAction,
-		
-		/// <summary>
-		/// The filter is invoked before the action.
-		/// </summary>
 		BeforeAction = 0x01,
 		/// <summary>
 		/// The filter is invoked after the action.

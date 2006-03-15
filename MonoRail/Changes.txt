@@ -4,6 +4,34 @@ Change history
 Release Candidate 1
 ===================
 
+- Warning about Nullables and SmartDispatcher arguments. The behavior has changed a
+  little
+  
+  . In the past, if the value for a nullable was not present, that was accepted and
+    the nullable was initialized with HasData=false
+  . Now the value mustn't be present, but the entry must be present
+  
+  For example
+  
+  Controller Action:
+  
+	public void Transfer(NullableDouble amount)
+	{
+		...
+	}
+  
+  If you invoke it with Controller/Transfer.rails you'll get an exception
+  
+  If you invoke it with Controller/Transfer.rails?amount= then it's ok
+
+  If you invoke it with Controller/Transfer.rails?amount=10 is obviously ok too.
+
+- Removed Obsolete members of ExecuteEnum. If you were using
+
+  . ExecuteEnum.Before, change to ExecuteEnum.BeforeAction
+  . ExecuteEnum.After, change to ExecuteEnum.AfterAction or ExecuteEnum.AfterRendering
+  . ExecuteEnum.Around, change to ExecuteEnum.Always or combine the flags
+
 - Refactored DefaultRailsEngineContext and EngineContextModule. Now EngineContextModule
   is also a ServiceContainer. When a DefaultRailsEngineContext is created we pass
   the EngineContextModule as a parent container. 

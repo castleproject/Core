@@ -128,7 +128,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 		[Test]
 		public void NullableConversion1()
 		{
-			DoGet("smart/NullableConversion.rails");
+			DoGet("smart/NullableConversion.rails", "amount=");
 			String expected = "incoming False ";
 
 			AssertReplyEqualTo(expected);
