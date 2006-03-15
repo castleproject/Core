@@ -31,7 +31,7 @@ namespace PetStore.Web.Components
 
 		public override void Render()
 		{
-			String appPath = ProcessEngine.CurrentContext.ApplicationPath;
+			String appPath = RailsContext.ApplicationPath;
 
 			appPath = Path.Combine("/" + appPath, productImagesDir);
 

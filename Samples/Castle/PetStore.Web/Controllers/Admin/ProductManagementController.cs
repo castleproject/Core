@@ -20,7 +20,7 @@ namespace PetStore.Web.Controllers.Admin
 
 	using Castle.MonoRail.Framework;
 	using Castle.MonoRail.Framework.Helpers;
-
+	
 	using PetStore.Model;
 
 	/// <summary>
@@ -46,8 +46,8 @@ namespace PetStore.Web.Controllers.Admin
 		public void List()
 		{
 			Product[] products = Product.FindAll();
-			
-			PropertyBag.Add( "list", PaginationHelper.CreatePagination(products, 10) );
+
+			PropertyBag.Add("list", PaginationHelper.CreatePagination(products, 10));
 		}
 
 		public void New()
@@ -55,29 +55,29 @@ namespace PetStore.Web.Controllers.Admin
 			// This is one approach just to reuse the same form
 			// on the edit action and to preserve the inputs 
 			// values
-			PropertyBag.Add( "product", new Product() );
+			PropertyBag.Add("product", new Product());
 
 			// To populate the select html control
-			PropertyBag.Add( "categories", Category.FindAll() );
+			PropertyBag.Add("categories", Category.FindAll());
 
 			// Only necessary as we might call this action directly (see below)
 			// from other action
 			RenderView("New");
 		}
 
-		public void Create([DataBind(Prefix="product")] Product product, HttpPostedFile picture)
+		public void Create([DataBind("product")] Product product, HttpPostedFile picture)
 		{
 			if (picture.ContentLength == 0)
 			{
 				Flash["error"] = "You must attach a picture to the product";
-				New(); 
+				New();
 				return;
 			}
 
-			String filename = String.Format( "{0}{1}", 
-				Guid.NewGuid().ToString("N"), Path.GetExtension(picture.FileName) );
+			String filename = String.Format("{0}{1}",
+			                                Guid.NewGuid().ToString("N"), Path.GetExtension(picture.FileName));
 
-			picture.SaveAs( Path.Combine(GetPictureCompleteDir(), filename) );
+			picture.SaveAs(Path.Combine(GetPictureCompleteDir(), filename));
 
 			product.PictureFile = filename;
 

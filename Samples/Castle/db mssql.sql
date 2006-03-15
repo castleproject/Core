@@ -12,16 +12,16 @@ GO
 
 CREATE TABLE [dbo].[Category] (
 	[id] [int] IDENTITY (1, 1) NOT NULL ,
-	[name] [varchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[name] [varchar] (25)  NOT NULL ,
 	[parent_category_id] [int] NULL 
 ) ON [PRIMARY]
 GO
 
 CREATE TABLE [dbo].[Product] (
 	[id] [int] IDENTITY (1, 1) NOT NULL ,
-	[name] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
-	[description] [varchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[pictureFile] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[name] [varchar] (50)  NOT NULL ,
+	[description] [varchar] (1000)  NULL ,
+	[pictureFile] [varchar] (50)  NULL ,
 	[price] [money] NULL ,
 	[category_id] [int] NOT NULL 
 ) ON [PRIMARY]
@@ -29,15 +29,15 @@ GO
 
 CREATE TABLE [dbo].[User] (
 	[id] [int] IDENTITY (1, 1) NOT NULL ,
-	[login] [varchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[password] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[name] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[email] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[type] [varchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
-	[address] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[city] [varchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[country] [varchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
-	[zipcode] [varchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[login] [varchar] (15)  NULL ,
+	[password] [varchar] (12)  NULL ,
+	[name] [varchar] (30)  NULL ,
+	[email] [varchar] (50)  NULL ,
+	[type] [varchar] (8)  NOT NULL ,
+	[address] [varchar] (50)  NULL ,
+	[city] [varchar] (15)  NULL ,
+	[country] [varchar] (15)  NULL ,
+	[zipcode] [varchar] (8)  NULL ,
 	[lastAccess] [smalldatetime] NULL 
 ) ON [PRIMARY]
 GO
