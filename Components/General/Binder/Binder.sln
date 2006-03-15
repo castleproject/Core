@@ -22,6 +22,10 @@ Global
 		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release.ActiveCfg = Release|.NET
 		{57ED99CE-404E-4029-A98A-2159E2E70E22}.Release.Build.0 = Release|.NET
 	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Changes.txt = Changes.txt
+		default.build = default.build
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution

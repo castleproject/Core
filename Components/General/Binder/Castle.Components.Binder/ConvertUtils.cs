@@ -343,7 +343,7 @@ namespace Castle.Components.Binder
 			Type sourceType = (input != null ? input.GetType() : typeof(String));
 			TypeConverter conv = TypeDescriptor.GetConverter(desiredType);
 
-			if (conv != null && conv.CanConvertFrom(sourceType))
+			if (input != null && conv != null && conv.CanConvertFrom(sourceType))
 			{
 				return conv.ConvertFrom(input);
 			}

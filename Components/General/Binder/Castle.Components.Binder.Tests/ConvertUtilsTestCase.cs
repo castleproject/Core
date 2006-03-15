@@ -269,10 +269,12 @@ namespace Castle.Components.Binder.Tests
 			Hashtable hash = new Hashtable();
 			hash["value"] = "file content";
 
-			Assert.AreEqual("file content", ConvertUtils.Convert(typeof(HttpPostedFile), "value", new Hashtable(), hash, out convSucceed));
+			Assert.AreEqual("file content", 
+				ConvertUtils.Convert(typeof(HttpPostedFile), "value", new Hashtable(), hash, out convSucceed));
 			Assert.IsTrue(convSucceed);
 
-			Assert.AreEqual(null, ConvertUtils.Convert(typeof(HttpPostedFile), "invalidValue", new Hashtable(), hash, out convSucceed));
+			Assert.AreEqual(null, 
+				ConvertUtils.Convert(typeof(HttpPostedFile), "invalidValue", new Hashtable(), hash, out convSucceed));
 			Assert.IsFalse(convSucceed);
 		}
 

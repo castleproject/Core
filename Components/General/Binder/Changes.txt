@@ -2,3 +2,7 @@
 Beta 1
 ======
 
+- Fix conversion using TypeConverters. The Converter won't be invoked if 
+  the input is null.
+
+- The binder was extracted from MonoRail code base.

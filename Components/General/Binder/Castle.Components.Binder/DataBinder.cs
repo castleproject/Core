@@ -162,16 +162,6 @@ namespace Castle.Components.Binder
 
 		#endregion
 
-		protected object InstanceOnStack
-		{
-			get
-			{
-				if (instanceStack.Count == 0) return null;
-				
-				return instanceStack.Peek();
-			}
-		}
-
 		#region Overridables
 
 		protected virtual void AfterBinding(object instance, String prefix, IBindingDataSourceNode node)
@@ -347,6 +337,16 @@ namespace Castle.Components.Binder
 		#endregion
 
 		#region Support methods
+		
+		protected object InstanceOnStack
+		{
+			get
+			{
+				if (instanceStack.Count == 0) return null;
+				
+				return instanceStack.Peek();
+			}
+		}
 
 		protected String[] CreateNormalizedList(String csv)
 		{

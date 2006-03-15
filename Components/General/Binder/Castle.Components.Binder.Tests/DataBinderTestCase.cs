@@ -31,7 +31,7 @@ namespace Castle.Components.Binder.Tests
 		[TestFixtureSetUp]
 		public void Init()
 		{
-			CultureInfo en = CultureInfo.CreateSpecificCulture( "en" );
+			CultureInfo en = CultureInfo.CreateSpecificCulture("en");
 
 			Thread.CurrentThread.CurrentCulture	= en;
 			Thread.CurrentThread.CurrentUICulture = en;
@@ -424,6 +424,32 @@ namespace Castle.Components.Binder.Tests
 		}
 
 		[Test]
+		public void TypeConverterBinding()
+		{
+			NameValueCollection args = new NameValueCollection();
+
+			args.Add("Comp.Type1", "validvalue");
+
+			DataBinder binder = new DataBinder();
+			Comp instance = (Comp) binder.BindObject(typeof(Comp), "Comp", new NameValueCollectionAdapter(args));
+
+			Assert.IsNotNull(instance);
+			Assert.IsNotNull(instance.Type1);
+			Assert.IsNull(instance.Type2);
+
+			args = new NameValueCollection();
+
+			args.Add("Comp.Nonsense", "validvalue");
+
+			binder = new DataBinder();
+			instance = (Comp) binder.BindObject(typeof(Comp), "Comp", new NameValueCollectionAdapter(args));
+
+			Assert.IsNotNull(instance);
+			Assert.IsNull(instance.Type1);
+			Assert.IsNull(instance.Type2);
+		}
+
+		[Test]
 		public void ComplexDataBindWithErrors()
 		{
 			// Test when count is too big
@@ -582,6 +608,24 @@ namespace Castle.Components.Binder.Tests
 		{
 			get { return _dob; }
 			set { _dob = value; }
+		}
+	}
+
+	class Comp
+	{
+		CustomType type1;
+		CustomType type2;
+
+		public CustomType Type1
+		{
+			get { return type1; }
+			set { type1 = value; }
+		}
+
+		public CustomType Type2
+		{
+			get { return type2; }
+			set { type2 = value; }
 		}
 	}
 
