@@ -127,7 +127,7 @@
 
 	<target name="copy-nvelocity">
 		<copy todir="${bin.dir}">
-			<fileset basedir="${sharedlibrary.dir}/nvelocity">
+			<fileset basedir="${base.dir}/Tools/NVelocity/bin">
 				<include name="*.dll" />
 			</fileset>
 		</copy>

@@ -73,6 +73,7 @@
 	
 	<target name="tools" depends="init">
 		<nant buildfile="Tools/DynamicProxy/DynamicProxy.build" target="build" inheritall="true" />
+		<nant buildfile="Tools/NVelocity/nvelocity.build" target="build" inheritall="true" />
 	</target>
 
 	<target name="container" depends="init">
