@@ -167,6 +167,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\SimpleInlineViewComponent4.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Components\TemplatedInlineViewComponent.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -472,6 +477,10 @@
                 />
                 <File
                     RelPath = "views\UsingComponent\index1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent\index10.vm"
                     BuildAction = "None"
                 />
                 <File

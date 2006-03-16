@@ -24,6 +24,7 @@ using Template = NVelocity.Template;
 namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 {
 	using System;
+	using System.Collections.Specialized;
 	using System.IO;
 	using System.Text;
 	using System.Collections;
@@ -129,26 +130,70 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 		private IDictionary ProcessRemainingParams(int childrenCount, INode node, IInternalContextAdapter context)
 		{
-			ArrayList list = new ArrayList();
+			IDictionary entries = new HybridDictionary(true);
 
 			for(int i = 2; i < childrenCount; i++)
 			{
 				INode paramNode = node.GetChild(i);
 
-				Object value = paramNode.Value(context);
+				String nodeContent = paramNode.Literal.TrimStart('"', '\'').TrimEnd('"', '\'');
 
-				String stValue = (value as String);
+				String[] parts = nodeContent.Split('=');
 
-				if (stValue == null)
+				if (parts.Length == 2 && parts[1].StartsWith("$"))
 				{
-					String message = String.Format("Could not evaluate parameter {0} to a String for component {1}", i, componentName);
-					throw new RailsException(message);
+					SimpleNode inlineNode = rsvc.Parse(new StringReader(parts[1]), context.CurrentTemplateName, false);
+
+					inlineNode.Init(context, rsvc);
+
+					entries[parts[0]] = Evaluate(inlineNode, context);
+				}
+				else if (parts.Length == 2)
+				{
+					entries[parts[0]] = parts[1];
+				}
+				else
+				{
+					entries[parts[0]] = String.Empty;
 				}
 
-				list.Add(stValue);
+//				Object value = paramNode.Value(context);
+//
+//				String stValue = (value as String);
+//
+//				if (stValue == null)
+//				{
+//					String message = String.Format("Could not evaluate parameter {0} to a String for component {1}", i, componentName);
+//					throw new RailsException(message);
+//				}
+//
+//				list.Add(stValue);
 			}
 
-			return (new DictHelper()).CreateDict((String[]) list.ToArray(typeof(String)));
+			// return (new DictHelper()).CreateDict((String[]) list.ToArray(typeof(String)));
+
+			return entries;
+		}
+
+		private object Evaluate(SimpleNode inlineNode, IInternalContextAdapter context)
+		{
+			ArrayList values = new ArrayList();
+
+			for(int i=0; i < inlineNode.ChildrenCount; i++)
+			{
+				values.Add(inlineNode.GetChild(i).Value(context));
+			}
+
+			if (values.Count == 0)
+			{
+				return null;
+			}
+			else if (values.Count == 1)
+			{
+				return values[0];
+			}
+			
+			return values.ToArray();
 		}
 
 		/// <summary>

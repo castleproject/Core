@@ -1,3 +1,3 @@
 static 1
-#component(SimpleInlineViewComponent3)
+#component(SimpleInlineViewComponent3 with "source=$items")
  static 2

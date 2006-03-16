@@ -146,6 +146,16 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 			}
 		}
 
+		[Test]
+		public void ArrayListAsComponentParam()
+		{
+			DoGet("usingcomponent/index10.rails");
+
+			AssertSuccess();
+
+			AssertOutput( "static 1\n1 2  static 2", Output );
+		}
+
 		void AssertOutput(String expected, object output)
 		{
 			Assert.AreEqual(NormalizeWhitespace(expected), NormalizeWhitespace(output.ToString()));

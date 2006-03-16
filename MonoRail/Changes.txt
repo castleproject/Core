@@ -4,6 +4,34 @@ Change history
 Release Candidate 1
 ===================
 
+- ViewComponent on NVelocity: added to support to interpolation on component parameters. 
+
+  Action:
+  
+    public void List()
+    {
+      PropertyBag.Add("customers", Customer.FindAll());
+    }
+
+  View:
+
+    #blockcomponent(GridComponent with "source=$customers")
+  
+    #end
+  
+  ViewComponent code:
+  
+    public override void Render()
+    {
+      IList items = (IList) ComponentParams["source"];
+    
+      foreach(object item in items)
+      {
+        Context.ContextVars["item"] = item;
+        // Do something like rendering the body
+      }
+    }
+
 - Configuration changed:
 
   . Added <cacheprovider> node

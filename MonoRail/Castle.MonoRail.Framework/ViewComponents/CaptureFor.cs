@@ -39,7 +39,7 @@ namespace Castle.MonoRail.Framework.ViewComponents
 		/// </summary>
 		public override void Render()
 		{
-			String id = Context.ComponentParameters["id"] as string;
+			String id = (String) Context.ComponentParameters["id"];
 
 			if( id == null || id.Trim().Length == 0 )
 			{

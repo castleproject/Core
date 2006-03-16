@@ -14,9 +14,26 @@
 
 namespace TestSiteNVelocity.Components
 {
+	using System;
+	using System.Collections;
+
 	using Castle.MonoRail.Framework;
 
-	public class SimpleInlineViewComponent3 : ViewComponent
+	public class SimpleInlineViewComponent4 : ViewComponent
 	{
+		/// <summary>
+		/// Called by the framework so the component can 
+		/// render its content
+		/// </summary>
+		public override void Render()
+		{
+			IList source = (IList) ComponentParams["source"];
+
+			foreach(object item in source)
+			{
+				RenderText(item.ToString());
+				RenderText(" ");
+			}
+		}
 	}
 }

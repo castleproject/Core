@@ -92,5 +92,15 @@ namespace TestSiteNVelocity.Controllers
 		public void Index9()
 		{
 		}
+
+		public void Index10()
+		{
+			ArrayList items = new ArrayList();
+
+			items.Add("1");
+			items.Add("2");
+
+			PropertyBag.Add("items", items);
+		}
 	}
 }
