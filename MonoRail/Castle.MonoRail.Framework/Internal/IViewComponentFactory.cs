@@ -22,11 +22,6 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public interface IViewComponentFactory
 	{
-		IViewEngine ViewEngine { get; set; }
-
-		ViewComponent Create( String name );
-
-		// TODO:
-		// void Release( ViewComponent instance );
+		ViewComponent Create(String name);
 	}
 }

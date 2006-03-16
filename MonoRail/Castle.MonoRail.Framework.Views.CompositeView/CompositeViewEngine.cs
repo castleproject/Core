@@ -26,7 +26,7 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 	/// </summary>
 	public class CompositeViewEngine : ViewEngineBase
 	{
-		private AspNetViewEngine _aspxViewEngine;
+		private WebFormsViewEngine _aspxViewEngine;
 		private NVelocityViewEngine _nvelocityViewEngine;
 
 		public CompositeViewEngine()
@@ -35,15 +35,17 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 
 		#region IViewEngine Members
 
-		public override void Init()
+		public override void Init(IServiceProvider serviceProvider)
 		{
-			_aspxViewEngine = new AspNetViewEngine();
-			_aspxViewEngine.ViewRootDir = ViewRootDir;
-			_aspxViewEngine.Init();
+			base.Init(serviceProvider);
+
+			_aspxViewEngine = new WebFormsViewEngine();
+			_aspxViewEngine.XhtmlRendering = XhtmlRendering;
+			_aspxViewEngine.Init(serviceProvider);
 
 			_nvelocityViewEngine = new NVelocityViewEngine();
-			_nvelocityViewEngine.ViewRootDir = ViewRootDir;
-			_nvelocityViewEngine.Init();
+			_nvelocityViewEngine.XhtmlRendering = XhtmlRendering;
+			_nvelocityViewEngine.Init(serviceProvider);
 		}
 
 		public override bool HasTemplate(String templateName)
@@ -85,20 +87,6 @@ namespace Castle.MonoRail.Framework.Views.CompositeView
 		public override void ProcessContents(IRailsEngineContext context, Controller controller, String contents)
 		{
 			_nvelocityViewEngine.ProcessContents(context, controller, contents);
-		}
-
-		/// <summary>
-		/// Gets/sets the factory for <see cref="ViewComponent"/>s
-		/// </summary>
-		public override IViewComponentFactory ViewComponentFactory
-		{
-			get { return base.ViewComponentFactory; }
-			set 
-			{ 
-				base.ViewComponentFactory = value; 
-				_aspxViewEngine.ViewComponentFactory = value; 
-				_nvelocityViewEngine.ViewComponentFactory = value; 
-			}
 		}
 
 		#endregion

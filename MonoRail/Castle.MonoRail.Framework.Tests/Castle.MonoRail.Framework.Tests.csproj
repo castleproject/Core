@@ -124,6 +124,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "contentinfs.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "ControllerTreeTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -135,6 +139,11 @@
                 />
                 <File
                     RelPath = "DescriptorBuilderMultiThreadedTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FileAssemblyViewSourceLoaderTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -177,6 +186,14 @@
                     RelPath = "ServerUtilityTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Content\contentinassembly.vm"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Content\notinassembly.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Controllers\HomeController.cs"

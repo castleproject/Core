@@ -4,6 +4,35 @@ Change history
 Release Candidate 1
 ===================
 
+- Configuration changed:
+
+  . Added <cacheprovider> node
+  . Added <additionalSources> node under <viewEngine>
+
+  Example:
+  
+  <monoRail>
+    <cacheProvider type="my custom implementation"/>
+    
+    <viewEngine viewPathRoot="views" customEngine="Castle.MonoRail.Framework.Views.NVelocity.NVelocityViewEngine, Castle.MonoRail.Framework.Views.NVelocity">
+      <additionalSources>
+        <assembly name="MyAssembly" namespace="My.Assembly" />
+      </additionalSources>
+    </viewEngine>
+  </monoRail>
+
+- IViewEngine refactored to use the IViewSourceLoader to locate views
+
+- Introduced IViewSourceLoader and IViewSource. The former represents an approach to load
+  views. The default implementation is FileAssemblyViewSourceLoader which first look ups 
+  the file system then the configured assemblies for the specified view
+
+- ICacheProvider service introduced (available on IServiceProvider implementation).
+  Two implementations available: 
+  
+  . DefaultCacheProvider which uses the HttpContext.Cache
+  . WeakReferenceCacheProvider which uses a hashtable with WeakReferences as entries
+
 - Warning about Nullables and SmartDispatcher arguments. The behavior has changed a
   little
   

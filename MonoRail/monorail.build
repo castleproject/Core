@@ -99,7 +99,9 @@
 	</target>
 
 	<target name="brail" depends="init">
+		<!--
 		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="compile" />
+		-->
 	</target>
 
 	<target name="nvelocity" depends="init">
@@ -137,7 +139,9 @@
 		<nant buildfile="TestSite/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteWindsor/sample.build" inheritall="true" target="compile" />
 		<nant buildfile="TestSiteNVelocity/sample.build" inheritall="true" target="compile" />
+		<!--
 		<nant buildfile="TestSiteBrail/sample.build" inheritall="true" target="compile" /> 
+		-->
 		<nant buildfile="TestScaffolding/sample.build" inheritall="true" target="compile" />
 	</target>
 	
@@ -145,7 +149,9 @@
 		<nant buildfile="Castle.MonoRail.Framework/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.Framework.Views.NVelocity/default.build" inheritall="true" target="test"/>
 		<nant buildfile="Castle.MonoRail.WindsorExtension/default.build" inheritall="true" target="test" />
+		<!--
 		<nant buildfile="Castle.MonoRail.Views.Brail/default.build" inheritall="true" target="test" />
+		-->
 		<nant buildfile="Castle.MonoRail.ActiveRecordSupport/default.build" inheritall="true" target="test" />
 		<nant buildfile="Castle.MonoRail.ActiveRecordScaffold/default.build" inheritall="true" target="test" />
 	</target>

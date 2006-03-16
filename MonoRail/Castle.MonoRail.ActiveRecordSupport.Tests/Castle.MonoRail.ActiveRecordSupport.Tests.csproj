@@ -111,11 +111,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "TestScaffolding"
-                    Project = "{C4107B52-109E-4629-A202-58E93917C80B}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "Castle.Components.Binder"
                     Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"

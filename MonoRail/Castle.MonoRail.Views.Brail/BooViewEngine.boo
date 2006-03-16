@@ -13,7 +13,6 @@
 // limitations under the License.
 namespace Castle.MonoRail.Views.Brail
 
-
 import System
 import System.IO
 import System.Collections
@@ -54,7 +53,8 @@ public class BooViewEngine (ViewEngineBase):
 	# Get configuration options if they exists, if they do not exist, load the default ones
 	# Create directory to save the compiled assemblies if required.
 	# pre-compile the common scripts
-	override def Init():
+	override def Init(IServiceProvider serviceProvider):
+		base,Init(serviceProvider)
 		allFiltersButAccess = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.Size | NotifyFilters.Attributes
 		InitializeConfig() if options is null
 		baseDir = Path.GetDirectoryName(typeof(BooViewEngine).Assembly.Location)

@@ -65,6 +65,10 @@
 				<include name="**/*.cs" />
 			</sources>
 
+			<resources basedir="${test.src.dir}" prefix="${test.name}" dynamicprefix="true">
+				<include name="Content/contentinassembly.vm" />
+			</resources>
+
 			<references>
 				<include name="${nunit.framework.dll}" />
 				<include name="${bin.dir}/${assembly.name}" />

@@ -542,6 +542,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\AssemblySourceInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\ControllerDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -558,6 +563,11 @@
                 />
                 <File
                     RelPath = "Internal\ControllerMetaDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\DefaultCacheProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -592,6 +602,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\ICacheProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\IControllerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -618,6 +633,16 @@
                 />
                 <File
                     RelPath = "Internal\IViewEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\IViewSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\IViewSourceLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -652,6 +677,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\WeakReferenceCacheProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\WizardUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -677,17 +707,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Views\EmbeddedResourceViewSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\FileAssemblyViewSourceLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Views\FileViewSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Views\ViewEngineBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Views\Aspx\ActionTo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Views\Aspx\AspNetViewEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -707,10 +747,11 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Views\Xslt\XsltViewEngine.cs"
+                    RelPath = "Views\Aspx\WebFormsViewEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "Views\Xslt\" />
             </Include>
         </Files>
     </CSHARP>

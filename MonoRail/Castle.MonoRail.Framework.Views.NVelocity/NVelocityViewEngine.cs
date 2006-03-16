@@ -16,7 +16,6 @@ using NVelocity;
 using NVelocity.App;
 using NVelocity.Context;
 using NVelocity.Runtime;
-using Commons.Collections;
 
 namespace Castle.MonoRail.Framework.Views.NVelocity
 {
@@ -24,14 +23,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	using System.IO;
 	using System.Collections;
 	
-	using Castle.MonoRail.Framework.Internal;
+	using Commons.Collections;
+
 	
 	public class NVelocityViewEngine : ViewEngineBase
 	{
 		internal const String TemplateExtension = ".vm";
+
+		internal const String ServiceProvider = "service.provider";
+		
 		private const String TemplatePathPattern = "{0}{1}{2}";
 
-		private static IViewComponentFactory staticViewComponentFactory;
+		// private static IViewComponentFactory staticViewComponentFactory;
 
 		protected VelocityEngine velocity = new VelocityEngine();
 
@@ -45,17 +48,17 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		#region IViewEngine Members
 
-		public override void Init()
+		public override void Init(IServiceProvider serviceProvider)
 		{
+			base.Init(serviceProvider);
+
 			ExtendedProperties props = new ExtendedProperties();
 
-			String externalProperties = Path.Combine( ViewRootDir, "nvelocity.properties" );
-
-			if (File.Exists( externalProperties ))
+			if (ViewSourceLoader.HasTemplate("nvelocity.properties"))
 			{
-				using(FileStream fs = File.OpenRead( externalProperties ))
+				using(Stream stream = ViewSourceLoader.GetViewSource("nvelocity.properties").OpenViewStream())
 				{
- 					props.Load( fs );
+					props.Load(stream);
 				}
 			}
 
@@ -64,27 +67,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			InitializeVelocityProperties(props);
 
-			velocity.Init(props);
-		}
+			velocity.SetApplicationAttribute("service.provider", serviceProvider);
 
-		/// <summary>
-		/// Gets/sets the factory for <see cref="ViewComponent"/>s
-		/// </summary>
-		public override IViewComponentFactory ViewComponentFactory
-		{
-			get { return base.ViewComponentFactory; }
-			set 
-			{ 
-				base.ViewComponentFactory = value; 
-				staticViewComponentFactory = value; 
-			}
+			velocity.Init(props);
 		}
 
 		public override bool HasTemplate(String templateName)
 		{
-			string templateFullName = ViewRootDir + "/" + ResolveTemplateName(templateName);
-			
-			return File.Exists(templateFullName);
+			return ViewSourceLoader.HasTemplate(ResolveTemplateName(templateName));
 		}
 
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
@@ -101,11 +91,13 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 			if (hasLayout)
 			{
-				writer = new StringWriter();		//Because we are rendering within a layout we need to catch it first
+				// Because we are rendering within a layout we need to catch it first
+				writer = new StringWriter();
 			}
 			else
 			{
-				writer = context.Response.Output;	//No layout so render direct to the output
+				// No layout so render direct to the output
+				writer = context.Response.Output;
 			}
 
 			String view = ResolveTemplateName(viewName);
@@ -183,11 +175,6 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		#endregion
 
-		public static IViewComponentFactory StaticViewComponentFactory
-		{
-			get { return staticViewComponentFactory; }
-		}
-
 		/// <summary>
 		/// Initializes basic velocity properties. The main purpose of this method is to
 		/// allow this logic to be overrided.
@@ -195,29 +182,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 		/// <param name="props">The <see cref="ExtendedProperties"/> collection to populate.</param>
 		protected virtual void InitializeVelocityProperties(ExtendedProperties props)
 		{
-			props.SetProperty(RuntimeConstants.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl\\,NVelocity");
-			props.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, ViewRootDir);
-			
-			// add support for global macros. they must be defined in "Views/macros".
-			ArrayList macros = new ArrayList();
-			DirectoryInfo macrosPath = new DirectoryInfo(Path.Combine(ViewRootDir, "macros"));
-			if (macrosPath.Exists)
-				foreach (FileInfo file in macrosPath.GetFiles("*" + TemplateExtension))
-					macros.Add("macros/" + file.Name);
-			
-			if (macros.Count > 0)
-			{
-				object m = props.GetProperty(RuntimeConstants.VM_LIBRARY);
-				if (m is ICollection)
-					macros.AddRange((ICollection) m);
-				else if (m is string)
-					macros.Add(m);
+			velocity.SetApplicationAttribute(RuntimeConstants.RESOURCE_MANAGER_CLASS, 
+				new CustomResourceManager(ViewSourceLoader));
 
-				props.AddProperty(RuntimeConstants.VM_LIBRARY, macros);
-				props.AddProperty(RuntimeConstants.VM_LIBRARY_AUTORELOAD, true);
-			}
+			LoadMacros(props);
 		}
-	
+
 		/// <summary>
 		/// Resolves the template name into a velocity template file name.
 		/// </summary>
@@ -322,6 +292,31 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			writer.WriteLine("<pre>");
 			writer.WriteLine(ex.ToString());
 			writer.WriteLine("</pre>");
+		}
+
+		private void LoadMacros(ExtendedProperties props)
+		{
+			String[] macros = ViewSourceLoader.ListViews("macros");
+
+			ArrayList macroList = new ArrayList(macros);
+			
+			if (macroList.Count > 0)
+			{
+				object libPropValue = props.GetProperty(RuntimeConstants.VM_LIBRARY);
+				
+				if (libPropValue is ICollection)
+				{
+					macroList.AddRange((ICollection) libPropValue);
+				}
+				else if (libPropValue is string)
+				{
+					macroList.Add(libPropValue);
+				}
+
+				props.AddProperty(RuntimeConstants.VM_LIBRARY, macroList);
+			}
+
+			props.AddProperty(RuntimeConstants.VM_LIBRARY_AUTORELOAD, true);
 		}
 	}
 }

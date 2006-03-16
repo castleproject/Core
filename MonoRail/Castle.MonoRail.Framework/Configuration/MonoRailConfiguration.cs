@@ -30,12 +30,14 @@ namespace Castle.MonoRail.Framework.Configuration
 		private IList _components = new ArrayList();
 		private IList _routingRules = new ArrayList();
 		private IList _extensions = new ArrayList();
+		private IList additionalViewSources = new ArrayList();
 		private String _viewsPhysicalPath;
 		private String _customControllerFactory;
 		private String _customViewComponentFactory;
 		private String _customFilterFactory;
 		private String _customResourceFactory;
 		private String _customEngineTypeName;
+		private String _cacheProviderTypeName;
 		private String _scaffoldingTypeName = DefaultScaffoldType;
 		private SmtpConfig _smtp = new SmtpConfig();
 		private XmlNode _section;
@@ -70,6 +72,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		{
 			get { return _extensions; }
 			set { _extensions = value; }
+		}
+
+		public IList AdditionalViewSources
+		{
+			get { return additionalViewSources; }
 		}
 
 		public String ViewsPhysicalPath
@@ -114,6 +121,12 @@ namespace Castle.MonoRail.Framework.Configuration
 			set { _customEngineTypeName = value; }
 		}
 
+		public String CacheProviderTypeName
+		{
+			get { return _cacheProviderTypeName; }
+			set { _cacheProviderTypeName = value; }
+		}
+
 		public String ScaffoldingTypeName
 		{
 			get { return _scaffoldingTypeName; }
@@ -148,6 +161,11 @@ namespace Castle.MonoRail.Framework.Configuration
 		public Type ScaffoldingType
 		{
 			get { return _scaffoldingTypeName != null ? GetType(_scaffoldingTypeName, true) : null; }
+		}
+
+		public Type CacheProviderType
+		{
+			get { return _cacheProviderTypeName != null ? GetType(_cacheProviderTypeName, true) : null; }
 		}
 
 		public SmtpConfig SmtpConfig

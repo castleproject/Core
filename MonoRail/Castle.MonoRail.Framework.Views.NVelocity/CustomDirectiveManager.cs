@@ -27,7 +27,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 	{
 		private static readonly String DirectiveSuffix = "directive";
 
-		Hashtable directives = new Hashtable();
+		private Hashtable directives = new Hashtable();
 
 		public CustomDirectiveManager()
 		{
@@ -86,7 +86,8 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 		private IViewComponentFactory GetViewComponentFactory()
 		{
-			IViewComponentFactory compFactory = NVelocityViewEngine.StaticViewComponentFactory;
+			IViewComponentFactory compFactory = (IViewComponentFactory) 
+				MonoRailHttpHandler.CurrentContext.GetService(typeof(IViewComponentFactory));
 
 			if (compFactory == null)
 			{

@@ -17,8 +17,6 @@ namespace Castle.MonoRail.Framework
 	using System;
 	using System.IO;
 
-	using Castle.MonoRail.Framework.Internal;
-
 	/// <summary>
 	/// Depicts the contract used by the engine
 	/// to process views, in an independent manner.
@@ -28,23 +26,14 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Initializes the view engine.
 		/// </summary>
-		void Init();
+		void Init(IServiceProvider provider);
 
 		/// <summary>
-		/// Gets/sets the root directory of views, obtained from the configuration.
-		/// </summary>
-		String ViewRootDir { get; set; }
-
-		/// <summary>
-		/// Gets/sets whether rendering should aim to be XHTML compliant, obtained from the configuration.
+		/// Gets/sets whether rendering should aim to 
+		/// be XHTML compliant, obtained from the configuration.
 		/// </summary>
 		bool XhtmlRendering { get; set; }
 
-		/// <summary>
-		/// Gets/sets the factory for <see cref="ViewComponent"/>s
-		/// </summary>
-		IViewComponentFactory ViewComponentFactory { get; set; }
-		
 		/// <summary>
 		/// Evaluates whether the specified template exists.
 		/// </summary>
@@ -52,19 +41,23 @@ namespace Castle.MonoRail.Framework
 		bool HasTemplate(String templateName);
 
 		/// <summary>
-		/// Processes the view - using the templateName to obtain the correct template,
+		/// Processes the view - using the templateName 
+		/// to obtain the correct template,
 		/// and using the context to output the result.
 		/// </summary>
 		void Process(IRailsEngineContext context, Controller controller, String templateName);
 
 		///<summary>
-		/// Processes the view - using the templateName to obtain the correct template
-		/// and writes the results to the System.TextWriter. No layout is applied!
+		/// Processes the view - using the templateName 
+		/// to obtain the correct template
+		/// and writes the results to the System.TextWriter. 
+		/// No layout is applied!
 		/// </summary>
 		void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName);
 
 		/// <summary>
-		/// Wraps the specified content in the layout using the context to output the result.
+		/// Wraps the specified content in the layout using 
+		/// the context to output the result.
 		/// </summary>
 		void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 	}

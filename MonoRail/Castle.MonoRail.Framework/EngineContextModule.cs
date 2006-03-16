@@ -43,6 +43,7 @@ namespace Castle.MonoRail.Framework
 		private ArrayList extensions = new ArrayList();
 		private MonoRailConfiguration monoRailConfiguration;
 		private IViewEngine viewEngine;
+		private IViewSourceLoader viewSourceLoader;
 		private IFilterFactory filterFactory;
 		private IResourceFactory resourceFactory;
 		private IControllerFactory controllerFactory;
@@ -50,6 +51,7 @@ namespace Castle.MonoRail.Framework
 		private IViewComponentFactory viewCompFactory;
 		private IEmailSender emailSender;
 		private ControllerDescriptorBuilder controllerDescriptorBuilder;
+		private ICacheProvider cacheProvider;
 
 		public void Init(HttpApplication context)
 		{
@@ -71,17 +73,19 @@ namespace Castle.MonoRail.Framework
 			InitializeDescriptorBuilder();
 
 			InitializeExtensions();
+			InitializeCacheProvider();
 			InitializeControllerFactory();
 			InitializeViewComponentFactory();
 			InitializeFilterFactory();
 			InitializeResourceFactory();
+			InitializeViewSourceLoader();
 			InitializeViewEngine();
 			InitializeScaffoldingSupport();
 			InitializeEmailSender();
 
-			ConnectViewComponentFactoryToViewEngine();
-
 			RegisterServices(this);
+
+			ConfigureAndInvokeInit();
 		}
 
 		private void InitApplicationHooks(HttpApplication context)
@@ -120,6 +124,16 @@ namespace Castle.MonoRail.Framework
 			}
 		}
 
+		protected virtual void InitializeViewSourceLoader()
+		{
+			viewSourceLoader = new FileAssemblyViewSourceLoader();
+
+			foreach(AssemblySourceInfo sourceInfo in monoRailConfiguration.AdditionalViewSources)
+			{
+				viewSourceLoader.AdditionalSources.Add(sourceInfo);
+			}
+		}
+
 		protected virtual void InitializeViewEngine()
 		{
 			if (monoRailConfiguration.CustomViewEngineType != null)
@@ -129,15 +143,11 @@ namespace Castle.MonoRail.Framework
 			}
 			else
 			{
-				// If nothing was specified, we use the default view engine 
+				// If nothing was specified, 
+				// we use the default view engine 
 				// based on webforms
-				viewEngine = new AspNetViewEngine();
+				viewEngine = new WebFormsViewEngine();
 			}
-
-			viewEngine.ViewRootDir = monoRailConfiguration.ViewsPhysicalPath;
-			viewEngine.XhtmlRendering = monoRailConfiguration.ViewsXhtmlRendering;
-
-			viewEngine.Init();
 		}
 
 		protected virtual void InitializeFilterFactory()
@@ -228,11 +238,31 @@ namespace Castle.MonoRail.Framework
 				initializer.EndInit();
 			}
 		}
-		
-		private void ConnectViewComponentFactoryToViewEngine()
+
+		private void InitializeCacheProvider()
 		{
-			viewCompFactory.ViewEngine = viewEngine;
-			viewEngine.ViewComponentFactory = viewCompFactory;
+			if (monoRailConfiguration.CacheProviderType == null)
+			{
+				cacheProvider = new DefaultCacheProvider();
+			}
+			else
+			{
+				cacheProvider = (ICacheProvider) 
+					Activator.CreateInstance(monoRailConfiguration.CacheProviderType);
+			}
+		}
+
+		private void ConfigureAndInvokeInit()
+		{
+			// TODO: Add this configuration attribute
+			// viewSourceLoader.EnableCache = monoRailConfiguration.ViewsEnableCache;
+			viewSourceLoader.ViewRootDir = monoRailConfiguration.ViewsPhysicalPath;
+			viewSourceLoader.Init(this);
+
+			viewEngine.XhtmlRendering = monoRailConfiguration.ViewsXhtmlRendering;
+			viewEngine.Init(this);
+
+			cacheProvider.Init(this);
 		}
 
 		#region Hooks dispatched to extensions
@@ -317,6 +347,7 @@ namespace Castle.MonoRail.Framework
 		{
 			context.AddService(typeof(ExtensionManager), extensionManager);
 			context.AddService(typeof(IControllerFactory), controllerFactory);
+			context.AddService(typeof(IViewSourceLoader), viewSourceLoader);
 			context.AddService(typeof(IViewEngine), viewEngine);
 			context.AddService(typeof(IFilterFactory), filterFactory);
 			context.AddService(typeof(IResourceFactory), resourceFactory);
@@ -324,6 +355,7 @@ namespace Castle.MonoRail.Framework
 			context.AddService(typeof(IViewComponentFactory), viewCompFactory);
 			context.AddService(typeof(ControllerDescriptorBuilder), controllerDescriptorBuilder);
 			context.AddService(typeof(IEmailSender), emailSender);
+			context.AddService(typeof(ICacheProvider), cacheProvider);
 			context.AddService(typeof(MonoRailConfiguration), monoRailConfiguration);
 		}
 

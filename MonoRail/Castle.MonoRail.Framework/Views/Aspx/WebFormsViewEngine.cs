@@ -25,28 +25,23 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 	/// Default implementation of a <see cref="IViewEngine"/>.
 	/// Uses ASP.Net WebForms as views.
 	/// </summary>
-	public class AspNetViewEngine : ViewEngineBase
+	public class WebFormsViewEngine : ViewEngineBase
 	{
 		private static readonly String ProcessedBeforeKey = "processed_before";
-		
-		public override void Init()
+
+		public WebFormsViewEngine()
 		{
 		}
 
 		public override bool HasTemplate(String templateName)
 		{
-			String physicalPath = Path.Combine( ViewRootDir, templateName + ".aspx" );
-			FileInfo info = new FileInfo( physicalPath );
-			return info.Exists;
+			return ViewSourceLoader.HasTemplate(templateName + ".aspx");
 		}
 
 		/// <summary>
 		/// Obtains the aspx Page from the view name dispatch
 		/// its execution using the standard ASP.Net API.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="controller"></param>
-		/// <param name="viewName"></param>
 		public override void Process(IRailsEngineContext context, Controller controller, String viewName)
 		{
 			AdjustContentType(context);
@@ -102,7 +97,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 
 			//TODO: There needs to be a more efficient way to do this than two replace operations
 			String physicalPath = 
-				Path.Combine(ViewRootDir, viewName).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+				Path.Combine(ViewSourceLoader.ViewRootDir, viewName).Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
 
 			return PageParser.GetCompiledPageInstance(viewName, physicalPath, httpContext);
 		}
@@ -157,18 +152,18 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 			return controller.LayoutName != null;
 		}
 
-		private void WriteBuffered(HttpResponse response)
-		{
-			// response.Flush();
-
-			// Restores the original stream
-			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
-			response.Filter = filter.OriginalStream;
-			
-			// Writes the buffered contents
-			byte[] buffer = filter.GetBuffer();
-			response.OutputStream.Write(buffer, 0, buffer.Length);
-		}
+//		private void WriteBuffered(HttpResponse response)
+//		{
+//			// response.Flush();
+//
+//			// Restores the original stream
+//			DelegateMemoryStream filter = (DelegateMemoryStream) response.Filter;
+//			response.Filter = filter.OriginalStream;
+//			
+//			// Writes the buffered contents
+//			byte[] buffer = filter.GetBuffer();
+//			response.OutputStream.Write(buffer, 0, buffer.Length);
+//		}
 
 		private byte[] RestoreFilter(HttpResponse response)
 		{
@@ -185,7 +180,7 @@ namespace Castle.MonoRail.Framework.Views.Aspx
 		private Page ObtainMasterPage(HttpContext context, Controller controller)
 		{
 			String layout = "layouts/" + controller.LayoutName + ".aspx";
-			String physicalPath = Path.Combine( ViewRootDir, layout );
+			String physicalPath = Path.Combine(ViewSourceLoader.ViewRootDir, layout);
 			physicalPath = physicalPath.Replace('/', '\\');
 
 			return PageParser.GetCompiledPageInstance(layout, physicalPath, context) as Page;

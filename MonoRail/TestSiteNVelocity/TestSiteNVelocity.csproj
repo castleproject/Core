@@ -95,11 +95,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "NVelocity"
-                    AssemblyName = "NVelocity"
-                    HintPath = "..\..\SharedLibs\NVelocity\NVelocity.dll"
-                />
-                <Reference
                     Name = "Castle.MonoRail.Framework.Views.NVelocity"
                     Project = "{ECCA4D19-65D7-4EED-B8EC-56AF79F41E69}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -112,6 +107,11 @@
                 <Reference
                     Name = "Castle.Components.Binder"
                     Project = "{98F19522-C9B8-400D-8A12-DABB3DA9411D}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    Project = "{10AE9F9A-C23F-44D0-9E78-B4C125597ECE}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>

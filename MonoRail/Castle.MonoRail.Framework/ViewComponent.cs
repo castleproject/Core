@@ -124,7 +124,7 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		protected HttpContext HttpContext
 		{
-			get { return railsContext.UnderlyingContext as HttpContext; }
+			get { return railsContext.UnderlyingContext; }
 		}
 
 		/// <summary>

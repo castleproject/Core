@@ -1,4 +1,4 @@
-// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+ // Copyright 2004-2006 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private static readonly String Custom_Component_Factory_Node_Name = "customComponentFactory";
 		private static readonly String Custom_Filter_Factory_Node_Name = "customFilterFactory";
 		private static readonly String View_Path_Root = "viewPathRoot";
+		private static readonly String Cache_Provider = "cacheProvider";
 
 		#endregion
 
@@ -61,7 +62,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			XmlAttribute smtpHostAtt = section.Attributes["smtpHost"];
 			XmlAttribute smtpUserAtt = section.Attributes["smtpUsername"];
-			XmlAttribute smtpPwdAtt  = section.Attributes["smtpPassword"];
+			XmlAttribute smtpPwdAtt = section.Attributes["smtpPassword"];
 
 			if (smtpHostAtt != null && smtpHostAtt.Value != String.Empty)
 			{
@@ -76,51 +77,55 @@ namespace Castle.MonoRail.Framework.Configuration
 				config.SmtpConfig.Password = smtpPwdAtt.Value;
 			}
 
-			XmlAttribute checkClientIsConnectedAtt  = section.Attributes["checkClientIsConnected"];
+			XmlAttribute checkClientIsConnectedAtt = section.Attributes["checkClientIsConnected"];
 
 			if (checkClientIsConnectedAtt != null && checkClientIsConnectedAtt.Value != String.Empty)
 			{
 				config.CheckIsClientConnected = String.Compare(checkClientIsConnectedAtt.Value, "true", true) == 0;
 			}
 
-			foreach( XmlNode node in section.ChildNodes)
+			foreach(XmlNode node in section.ChildNodes)
 			{
 				if (node.NodeType != XmlNodeType.Element)
 				{
 					continue;
 				}
 
-				if ( String.Compare(Controllers_Node_Name, node.Name, true) == 0 )
+				if (String.Compare(Controllers_Node_Name, node.Name, true) == 0)
 				{
 					ProcessControllersNode(node, config);
 				}
-				else if ( String.Compare(Components_Node_Name, node.Name, true) == 0 )
+				else if (String.Compare(Components_Node_Name, node.Name, true) == 0)
 				{
 					ProcessComponentsNode(node, config);
 				}
-				else if ( String.Compare(Views_Node_Name, node.Name, true) == 0 )
+				else if (String.Compare(Views_Node_Name, node.Name, true) == 0)
 				{
 					ProcessViewNode(node, config);
 				}
-				else if ( String.Compare(Custom_Controller_Factory_Node_Name, node.Name, true) == 0 )
+				else if (String.Compare(Custom_Controller_Factory_Node_Name, node.Name, true) == 0)
 				{
 					ProcessControllerFactoryNode(node, config);
 				}
-				else if ( String.Compare(Custom_Component_Factory_Node_Name, node.Name, true) == 0 )
+				else if (String.Compare(Custom_Component_Factory_Node_Name, node.Name, true) == 0)
 				{
 					ProcessComponentFactoryNode(node, config);
 				}
-				else if ( String.Compare(Custom_Filter_Factory_Node_Name, node.Name, true) == 0 )
+				else if (String.Compare(Custom_Filter_Factory_Node_Name, node.Name, true) == 0)
 				{
 					ProcessFilterFactoryNode(node, config);
 				}
-				else if ( String.Compare(Routing_Node_Name, node.Name, true) == 0 )
+				else if (String.Compare(Routing_Node_Name, node.Name, true) == 0)
 				{
 					ProcessRoutingNode(node, config);
 				}
-				else if ( String.Compare(Extensions_Node_Name, node.Name, true) == 0 )
+				else if (String.Compare(Extensions_Node_Name, node.Name, true) == 0)
 				{
 					ProcessExtensionsNode(node, config);
+				}
+				else if (String.Compare(Cache_Provider, node.Name, true) == 0)
+				{
+					ProcessCacheProvider(node, config);
 				}
 			}
 
@@ -136,36 +141,36 @@ namespace Castle.MonoRail.Framework.Configuration
 		private void ProcessFilterFactoryNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute type = node.Attributes["type"];
-	
+
 			if (type == null)
 			{
 				throw new ConfigurationException("The custom filter factory node must specify a 'type' attribute");
 			}
-	
+
 			config.CustomFilterFactory = type.Value;
 		}
 
 		private void ProcessControllerFactoryNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute type = node.Attributes["type"];
-	
+
 			if (type == null)
 			{
 				throw new ConfigurationException("The custom controller factory node must specify a 'type' attribute");
 			}
-	
+
 			config.CustomControllerFactory = type.Value;
 		}
 
 		private void ProcessComponentFactoryNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute type = node.Attributes["type"];
-	
+
 			if (type == null)
 			{
 				throw new ConfigurationException("The custom controller factory node must specify a 'type' attribute");
 			}
-	
+
 			config.CustomViewComponentFactory = type.Value;
 		}
 
@@ -176,10 +181,10 @@ namespace Castle.MonoRail.Framework.Configuration
 		private void ProcessViewNode(XmlNode node, MonoRailConfiguration config)
 		{
 			XmlAttribute viewPath = node.Attributes[View_Path_Root];
-			
+
 			if (viewPath == null)
 			{
-				throw new ConfigurationException("The views node must specify the '" + View_Path_Root + 
+				throw new ConfigurationException("The views node must specify the '" + View_Path_Root +
 					"' attribute");
 			}
 
@@ -187,7 +192,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 			if (!Path.IsPathRooted(path))
 			{
-				path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, path );
+				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
 			}
 
 			config.ViewsPhysicalPath = path;
@@ -200,7 +205,7 @@ namespace Castle.MonoRail.Framework.Configuration
 				{
 					config.ViewsXhtmlRendering = bool.Parse(xhtmlRendering.Value);
 				}
-				catch (FormatException ex)
+				catch(FormatException ex)
 				{
 					throw new ConfigurationException("The xhtmlRendering attribute of the views node must be a boolean value.", ex);
 				}
@@ -211,6 +216,14 @@ namespace Castle.MonoRail.Framework.Configuration
 			if (customEngine != null)
 			{
 				config.CustomEngineTypeName = customEngine.Value;
+			}
+
+			foreach(XmlElement assemblyNode in node.SelectNodes("additionalSources/assembly"))
+			{
+				String assemblyName = assemblyNode.GetAttribute("name");
+				String ns = assemblyNode.GetAttribute("namespace");
+
+				config.AdditionalViewSources.Add(new AssemblySourceInfo(assemblyName, ns));
 			}
 		}
 
@@ -224,7 +237,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
 
-				ProcessControllerEntry( node, config );
+				ProcessControllerEntry(node, config);
 			}
 		}
 
@@ -232,12 +245,12 @@ namespace Castle.MonoRail.Framework.Configuration
 		{
 			if (!controllerEntry.HasChildNodes)
 			{
-				throw new ConfigurationException("Inside the node controllers, you have to specify the assemblies " + 
+				throw new ConfigurationException("Inside the node controllers, you have to specify the assemblies " +
 					"through the value of each child node");
 			}
 
 			String assemblyName = controllerEntry.FirstChild.Value;
-			config.ControllerAssemblies.Add( assemblyName );
+			config.ControllerAssemblies.Add(assemblyName);
 		}
 
 		#endregion
@@ -250,7 +263,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
 
-				ProcessComponentEntry( node, config );
+				ProcessComponentEntry(node, config);
 			}
 		}
 
@@ -258,12 +271,26 @@ namespace Castle.MonoRail.Framework.Configuration
 		{
 			if (!componentNode.HasChildNodes)
 			{
-				throw new ConfigurationException("Inside the node components, you have to specify the assemblies " + 
+				throw new ConfigurationException("Inside the node components, you have to specify the assemblies " +
 					"through the value of each child node");
 			}
 
 			String assemblyName = componentNode.FirstChild.Value;
-			config.ComponentsAssemblies.Add( assemblyName );
+			config.ComponentsAssemblies.Add(assemblyName);
+		}
+
+		#endregion
+
+		#region Cache provider
+
+		private void ProcessCacheProvider(XmlNode node, MonoRailConfiguration config)
+		{
+			XmlAttribute customCacheProvider = node.Attributes["type"];
+
+			if (customCacheProvider != null)
+			{
+				config.CacheProviderTypeName = customCacheProvider.Value;
+			}
 		}
 
 		#endregion
@@ -276,7 +303,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				if (node.NodeType != XmlNodeType.Element) continue;
 
-				ProcessRuleEntry( node, config );
+				ProcessRuleEntry(node, config);
 			}
 		}
 
@@ -297,7 +324,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			String pattern = patternNode.ChildNodes[0].Value;
 			String replace = replaceNode.ChildNodes[0].Value;
 
-			config.RoutingRules.Add( new RoutingRule(pattern.Trim(), replace.Trim()) ); 
+			config.RoutingRules.Add(new RoutingRule(pattern.Trim(), replace.Trim()));
 		}
 
 		#endregion
@@ -312,7 +339,7 @@ namespace Castle.MonoRail.Framework.Configuration
 
 				if (node.Name != Extension_Node_Name)
 				{
-					String message = String.Format("Unexpected node '{0}' within '{1}' node. " + 
+					String message = String.Format("Unexpected node '{0}' within '{1}' node. " +
 						"Expected {2}", node.Name, Extensions_Node_Name, Extension_Node_Name);
 					throw new ConfigurationException(message);
 				}
@@ -321,12 +348,12 @@ namespace Castle.MonoRail.Framework.Configuration
 
 				if (typeAtt == null || typeAtt.Value.Length == 0)
 				{
-					String message = String.Format("An {0} node must have a 'type' attribute " + 
+					String message = String.Format("An {0} node must have a 'type' attribute " +
 						"to declare the extension full type name", Extension_Node_Name);
 					throw new ConfigurationException(message);
 				}
 
-				config.Extensions.Add( typeAtt.Value );
+				config.Extensions.Add(typeAtt.Value);
 			}
 		}
 
@@ -344,11 +371,11 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				if (config.ControllerAssemblies.Count == 0)
 				{
-					throw new ConfigurationException("Inside the node controllers, you have to specify " + 
+					throw new ConfigurationException("Inside the node controllers, you have to specify " +
 						"at least one assembly entry");
 				}
 			}
-			
+
 			IList extensionTypes = new ArrayList();
 
 			foreach(String typeName in config.Extensions)
@@ -366,6 +393,10 @@ namespace Castle.MonoRail.Framework.Configuration
 			{
 				ValidateTypeImplements(config.CustomFilterFactory, typeof(IFilterFactory));
 			}
+			if (config.CacheProviderType != null)
+			{
+				ValidateTypeImplements(config.CacheProviderType, typeof(ICacheProvider));
+			}
 			if (config.CustomViewComponentFactory != null)
 			{
 				ValidateTypeImplements(config.CustomViewComponentFactory, typeof(IViewComponentFactory));
@@ -376,7 +407,7 @@ namespace Castle.MonoRail.Framework.Configuration
 			}
 			if (config.ViewsPhysicalPath == null || config.ViewsPhysicalPath.Length == 0)
 			{
-				throw new ConfigurationException("You must provide a '" + Views_Node_Name + "' node and a " + 
+				throw new ConfigurationException("You must provide a '" + Views_Node_Name + "' node and a " +
 					"absolute or relative path to the views directory with the attribute " + View_Path_Root);
 			}
 
@@ -394,7 +425,7 @@ namespace Castle.MonoRail.Framework.Configuration
 		private void ValidateTypeImplements(String name, Type expectedType)
 		{
 			Type type = Type.GetType(name, false, false);
-	
+
 			if (type == null)
 			{
 				String message = String.Format("Type {0} could not be loaded", name);
@@ -408,8 +439,8 @@ namespace Castle.MonoRail.Framework.Configuration
 		{
 			if (!expectedType.IsAssignableFrom(type))
 			{
-				String message = String.Format("Type {0} does not implement {1}", 
-					type.FullName, expectedType.FullName);
+				String message = String.Format("Type {0} does not implement {1}",
+				                               type.FullName, expectedType.FullName);
 				throw new ConfigurationException(message);
 			}
 		}

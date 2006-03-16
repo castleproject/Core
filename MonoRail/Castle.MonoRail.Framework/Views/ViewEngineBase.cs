@@ -16,48 +16,22 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 	using System.IO;
-	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Abstract base class for View Engines.
 	/// </summary>
 	public abstract class ViewEngineBase : IViewEngine
 	{
-		private String _viewRootDir;
-		private bool _xhtmlRendering;
-		private IViewComponentFactory viewComponentFactory;
-
-		/// <summary>
-		/// Gets/sets the root directory of views, obtained from the configuration.
-		/// </summary>
-		public String ViewRootDir
-		{
-			get { return _viewRootDir; }
-			set { _viewRootDir = value; }
-		}
-
-		/// <summary>
-		/// Gets/sets whether rendering should aim to be XHTML compliant, obtained from the configuration.
-		/// </summary>
-		public bool XhtmlRendering
-		{
-			get { return _xhtmlRendering; }
-			set { _xhtmlRendering = value; }
-		}
-
-		/// <summary>
-		/// Gets/sets the factory for <see cref="ViewComponent"/>s
-		/// </summary>
-		public virtual IViewComponentFactory ViewComponentFactory
-		{
-			get { return viewComponentFactory; }
-			set { viewComponentFactory = value; }
-		}
+		private bool xhtmlRendering;
+		private IViewSourceLoader viewSourceLoader;
 
 		/// <summary>
 		/// Initializes the view engine.
 		/// </summary>
-		public abstract void Init();
+		public virtual void Init(IServiceProvider serviceProvider)
+		{
+			viewSourceLoader = (IViewSourceLoader) serviceProvider.GetService(typeof(IViewSourceLoader));
+		}
 
 		/// <summary>
 		/// Evaluates whether the specified template exists.
@@ -66,18 +40,21 @@ namespace Castle.MonoRail.Framework
 		public abstract bool HasTemplate(String templateName);
 
 		/// <summary>
-		/// Processes the view - using the templateName to obtain the correct template,
+		/// Processes the view - using the templateName 
+		/// to obtain the correct template,
 		/// and using the context to output the result.
 		/// </summary>
 		public abstract void Process(IRailsEngineContext context, Controller controller, String templateName);
 
 		/// <summary>
-		/// Wraps the specified content in the layout using the context to output the result.
+		/// Wraps the specified content in the layout using the 
+		/// context to output the result.
 		/// </summary>
 		public abstract void ProcessContents(IRailsEngineContext context, Controller controller, String contents);
 
 		///<summary>
-		/// Processes the view - using the templateName to obtain the correct template
+		/// Processes the view - using the templateName 
+		/// to obtain the correct template
 		/// and writes the results to the System.IO.TextWriter.
 		/// </summary>
 		public virtual void Process(TextWriter output, IRailsEngineContext context, Controller controller, String templateName)
@@ -93,6 +70,21 @@ namespace Castle.MonoRail.Framework
 		protected virtual void PostSendView(Controller controller, object view)
 		{
 			controller.PostSendView(view);
+		}
+
+		/// <summary>
+		/// Gets/sets whether rendering should aim to be XHTML compliant, obtained from the configuration.
+		/// </summary>
+		public bool XhtmlRendering
+		{
+			get { return xhtmlRendering; }
+			set { xhtmlRendering = value; }
+		}
+
+		protected IViewSourceLoader ViewSourceLoader
+		{
+			get { return viewSourceLoader; }
+			set { viewSourceLoader = value; }
 		}
 
 		#region Render Helpers
