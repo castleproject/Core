@@ -514,7 +514,7 @@ namespace NVelocity.Runtime
 				*/
 
 								long tt = tw.modificationTime;
-								long ft = template.ResourceLoader.getLastModified(template)
+								long ft = template.ResourceLoader.GetLastModified(template)
 									;
 
 								if (ft > tt)

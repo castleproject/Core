@@ -23,6 +23,9 @@ Global
 		{E1B10210-6A42-4993-B383-0F6AAC255A24}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
+		..\ChangeLog.txt = ..\ChangeLog.txt
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\nvelocity.build = ..\nvelocity.build
 		ToDo.txt = ToDo.txt
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

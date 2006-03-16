@@ -72,18 +72,19 @@ namespace NVelocity.Runtime.Resource
 
 		protected internal IRuntimeServices rsvc = null;
 
-
 		public bool IsSourceModified()
 		{
-			return resourceLoader.isSourceModified(this);
+			return resourceLoader.IsSourceModified(this);
 		}
 
-		/// <summary> Perform any subsequent processing that might need
+		/// <summary> 
+		/// Perform any subsequent processing that might need
 		/// to be done by a resource. In the case of a template
 		/// the actual parsing of the input stream needs to be
 		/// performed.
 		/// </summary>
-		/// <returns>Whether the resource could be processed successfully.
+		/// <returns>
+		/// Whether the resource could be processed successfully.
 		/// For a {@link org.apache.velocity.Template} or {@link
 		/// org.apache.velocity.runtime.resource.ContentResource}, this
 		/// indicates whether the resource could be read.
@@ -94,18 +95,15 @@ namespace NVelocity.Runtime.Resource
 
 		/// <summary> Set the modification check interval.
 		/// </summary>
-		/// <param name="interval">The interval (in seconds).
-		///
-		/// </param>
 		/// <summary> Is it time to check to see if the resource
 		/// source has been updated?
 		/// </summary>
 		public bool RequiresChecking()
 		{
 			/*
-	    *  short circuit this if modificationCheckInterval == 0
-	    *  as this means "don't check"
-	    */
+			 *  short circuit this if modificationCheckInterval == 0
+			 *  as this means "don't check"
+			 */
 
 			if (modificationCheckInterval <= 0)
 			{
@@ -113,8 +111,8 @@ namespace NVelocity.Runtime.Resource
 			}
 
 			/*
-	    *  see if we need to check now
-	    */
+			 *  see if we need to check now
+			 */
 
 			return ((DateTime.Now.Ticks - 621355968000000000)/10000 >= nextCheck);
 		}
@@ -200,6 +198,5 @@ namespace NVelocity.Runtime.Resource
 		{
 			set { rsvc = value; }
 		}
-
 	}
 }

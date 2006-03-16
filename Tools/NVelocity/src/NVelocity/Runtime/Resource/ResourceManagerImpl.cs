@@ -24,7 +24,7 @@ namespace NVelocity.Runtime.Resource
 	/// <summary> 
 	/// Class to manage the text resource for the Velocity Runtime.
 	/// </summary>
-	public class ResourceManagerImpl : ResourceManager
+	public class ResourceManagerImpl : IResourceManager
 	{
 		public ResourceManagerImpl()
 		{
@@ -97,7 +97,7 @@ namespace NVelocity.Runtime.Resource
 
 			AssembleResourceLoaderInitializers();
 
-			for (int i = 0; i < sourceInitializerList.Count; i++)
+			for (int i=0; i < sourceInitializerList.Count; i++)
 			{
 				ExtendedProperties configuration = (ExtendedProperties) sourceInitializerList[i];
 				String loaderClass = configuration.GetString("class");
@@ -109,10 +109,9 @@ namespace NVelocity.Runtime.Resource
 				}
 
 				resourceLoader = ResourceLoaderFactory.getLoader(rsvc, loaderClass);
-				resourceLoader.commonInit(rsvc, configuration);
-				resourceLoader.init(configuration);
+				resourceLoader.CommonInit(rsvc, configuration);
+				resourceLoader.Init(configuration);
 				resourceLoaders.Add(resourceLoader);
-
 			}
 
 			/*
@@ -250,8 +249,8 @@ namespace NVelocity.Runtime.Resource
 			if (resource != null)
 			{
 				/*
-				*  refresh the resource
-				*/
+				 *  refresh the resource
+				 */
 
 				try
 				{
@@ -260,10 +259,10 @@ namespace NVelocity.Runtime.Resource
 				catch (ResourceNotFoundException rnfe)
 				{
 					/*
-					*  something exceptional happened to that resource
-					*  this could be on purpose, 
-					*  so clear the cache and try again
-					*/
+					 *  something exceptional happened to that resource
+					 *  this could be on purpose, 
+					 *  so clear the cache and try again
+					 */
 
 					globalCache.remove(resourceName);
 
@@ -287,12 +286,12 @@ namespace NVelocity.Runtime.Resource
 				try
 				{
 					/*
-		    *  it's not in the cache, so load it.
-		    */
+					 *  it's not in the cache, so load it.
+					 */
 
 					resource = LoadResource(resourceName, resourceType, encoding);
 
-					if (resource.ResourceLoader.isCachingOn())
+					if (resource.ResourceLoader.IsCachingOn())
 					{
 						globalCache.put(resourceName, resource);
 					}
@@ -384,7 +383,7 @@ namespace NVelocity.Runtime.Resource
 							rsvc.Info("ResourceManager : found " + resourceName + " with loader " + resourceLoader.ClassName);
 						}
 
-						howOldItWas = resourceLoader.getLastModified(resource);
+						howOldItWas = resourceLoader.GetLastModified(resource);
 						break;
 					}
 				}
@@ -471,7 +470,7 @@ namespace NVelocity.Runtime.Resource
 		    *  read how old the resource is _before_
 		    *  processing (=>reading) it
 		    */
-					long howOldItWas = resource.ResourceLoader.getLastModified(resource);
+					long howOldItWas = resource.ResourceLoader.GetLastModified(resource);
 
 					/*
 		    *  read in the fresh stream and parse
@@ -520,7 +519,6 @@ namespace NVelocity.Runtime.Resource
 		/// provides it.  This is a slightly less hokey way to support
 		/// the Velocity.templateExists() utility method, which was broken
 		/// when per-template encoding was introduced.  We can revisit this.
-		/// *
 		/// </summary>
 		/// <param name="resourceName">Name of template or content resource
 		/// </param>
@@ -546,7 +544,7 @@ namespace NVelocity.Runtime.Resource
 		*/
 				try
 				{
-					is_Renamed = resourceLoader.getResourceStream(resourceName);
+					is_Renamed = resourceLoader.GetResourceStream(resourceName);
 
 					if (is_Renamed != null)
 					{

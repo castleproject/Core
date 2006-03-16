@@ -26,33 +26,13 @@ namespace NVelocity.Runtime.Resource.Loader
 	/// <version> $Id: ResourceLoader.cs,v 1.3 2003/10/27 13:54:11 corts Exp $</version>
 	public abstract class ResourceLoader
 	{
-		public String ClassName
-		{
-			get { return className; }
-
-		}
-
-		public bool CachingOn
-		{
-			set { isCachingOn_Renamed_Field = value; }
-
-		}
-
-		public long ModificationCheckInterval
-		{
-			get { return modificationCheckInterval; }
-
-			set { this.modificationCheckInterval = value; }
-
-		}
-
-		///
 		/// <summary> Does this loader want templates produced with it
 		/// cached in the Runtime.
 		/// </summary>
 		protected internal bool isCachingOn_Renamed_Field = false;
 
-		/// <summary> This property will be passed on to the templates
+		/// <summary> 
+		/// This property will be passed on to the templates
 		/// that are created with this loader.
 		/// </summary>
 		protected internal long modificationCheckInterval = 2;
@@ -68,7 +48,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// loaders and must be called to set up common
 		/// properties shared by all resource loaders
 		/// </summary>
-		public void commonInit(IRuntimeServices rs, ExtendedProperties configuration)
+		public void CommonInit(IRuntimeServices rs, ExtendedProperties configuration)
 		{
 			this.rsvc = rs;
 
@@ -94,25 +74,25 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary> Initialize the template loader with a
 		/// a resources class.
 		/// </summary>
-		public abstract void init(ExtendedProperties configuration);
+		public abstract void Init(ExtendedProperties configuration);
 
 		///
 		/// <summary> Get the InputStream that the Runtime will parse
 		/// to create a template.
 		/// </summary>
-		public abstract Stream getResourceStream(String source);
+		public abstract Stream GetResourceStream(String source);
 
 		/// <summary> Given a template, check to see if the source of InputStream
 		/// has been modified.
 		/// </summary>
-		public abstract bool isSourceModified(Resource resource);
+		public abstract bool IsSourceModified(Resource resource);
 
 		/// <summary> Get the last modified time of the InputStream source
 		/// that was used to create the template. We need the template
 		/// here because we have to extract the name of the template
 		/// in order to locate the InputStream source.
 		/// </summary>
-		public abstract long getLastModified(Resource resource);
+		public abstract long GetLastModified(Resource resource);
 
 		/// <summary> Return the class name of this resource Loader
 		/// </summary>
@@ -126,17 +106,25 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// templates created with InputStreams provided
 		/// by this loader.
 		/// </summary>
-		public bool isCachingOn()
+		public bool IsCachingOn()
 		{
 			return isCachingOn_Renamed_Field;
 		}
 
-		/// <summary> Set the interval at which the InputStream source
-		/// should be checked for modifications.
-		/// </summary>
+		public String ClassName
+		{
+			get { return className; }
+		}
 
-		/// <summary> Get the interval at which the InputStream source
-		/// should be checked for modifications.
-		/// </summary>
+		public bool CachingOn
+		{
+			set { isCachingOn_Renamed_Field = value; }
+		}
+
+		public long ModificationCheckInterval
+		{
+			get { return modificationCheckInterval; }
+			set { this.modificationCheckInterval = value; }
+		}
 	}
 }

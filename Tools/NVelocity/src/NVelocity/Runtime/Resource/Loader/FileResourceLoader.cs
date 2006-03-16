@@ -26,7 +26,6 @@ namespace NVelocity.Runtime.Resource.Loader
 	/// <summary>
 	/// A loader for templates stored on the file system.
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
 	public class FileResourceLoader : ResourceLoader
 	{
 		/// <summary>
@@ -45,7 +44,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		{
 		}
 
-		public override void init(ExtendedProperties configuration)
+		public override void Init(ExtendedProperties configuration)
 		{
 			rsvc.Info("FileResourceLoader : initialization starting.");
 
@@ -61,7 +60,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// @throws ResourceNotFoundException if template not found
 		/// in the file template path.
 		/// </returns>
-		public override Stream getResourceStream(String templateName)
+		public override Stream GetResourceStream(String templateName)
 		{
 			lock (this)
 			{
@@ -102,7 +101,7 @@ namespace NVelocity.Runtime.Resource.Loader
 					if(path.IndexOf(Path.AltDirectorySeparatorChar) >= 0)
 						path = path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
-					Stream inputStream = findTemplate(path, template);
+					Stream inputStream = FindTemplate(path, template);
 
 					if (inputStream != null)
 					{
@@ -127,7 +126,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// </summary>
 		/// <param name="path">a normalized path</param>
 		/// <returns>InputStream input stream that will be parsed</returns>
-		private Stream findTemplate(String path, String template)
+		private Stream FindTemplate(String path, String template)
 		{
 			try
 			{
@@ -169,7 +168,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// How to keep track of all the modified times
 		/// across the paths.
 		/// </summary>
-		public override bool isSourceModified(Resource resource)
+		public override bool IsSourceModified(Resource resource)
 		{
 			String path = (String) templatePaths[resource.Name];
 			FileInfo file = new FileInfo(path + Path.AltDirectorySeparatorChar + resource.Name);
@@ -194,7 +193,7 @@ namespace NVelocity.Runtime.Resource.Loader
 			return true;
 		}
 
-		public override long getLastModified(Resource resource)
+		public override long GetLastModified(Resource resource)
 		{
 			String path = (String) templatePaths[resource.Name];
 			FileInfo file = new FileInfo(path + Path.AltDirectorySeparatorChar + resource.Name);
@@ -208,6 +207,5 @@ namespace NVelocity.Runtime.Resource.Loader
 				return 0;
 			}
 		}
-
 	}
 }

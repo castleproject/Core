@@ -16,26 +16,17 @@ namespace NVelocity.Runtime.Resource
 {
 	using System;
 
-	/// <summary> Class to manage the text resource for the Velocity
+	/// <summary> 
+	/// Class to manage the text resource for the Velocity
 	/// Runtime.
-	/// *
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:paulo.gaspar@krankikom.de">Paulo Gaspar</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ResourceManager.cs,v 1.4 2004/01/19 20:33:14 corts Exp $
-	///
-	/// </version>
 	public struct ResourceManager_Fields
 	{
 		public const int RESOURCE_TEMPLATE = 1;
 		public const int RESOURCE_CONTENT = 2;
 	}
 
-	public interface ResourceManager
+	public interface IResourceManager
 	{
 		/// <summary> A template resources.
 		/// </summary>
@@ -45,9 +36,9 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		void Initialize(IRuntimeServices rs);
 
-		/// <summary> Gets the named resource.  Returned class type corresponds to specified type
+		/// <summary> 
+		/// Gets the named resource.  Returned class type corresponds to specified type
 		/// (i.e. <code>Template</code> to <code>RESOURCE_TEMPLATE</code>).
-		/// *
 		/// </summary>
 		/// <param name="resourceName">The name of the resource to retrieve.
 		/// </param>
@@ -62,11 +53,11 @@ namespace NVelocity.Runtime.Resource
 		/// @throws ParseErrorException if template cannot be parsed due
 		/// to syntax (or other) error.
 		/// @throws Exception if a problem in parse
-		///
 		/// </returns>
 		Resource GetResource(String resourceName, int resourceType, String encoding);
 
-		/// <summary>  Determines is a template exists, and returns name of the loader that
+		/// <summary>  
+		/// Determines is a template exists, and returns name of the loader that
 		/// provides it.  This is a slightly less hokey way to support
 		/// the Velocity.templateExists() utility method, which was broken
 		/// when per-template encoding was introduced.  We can revisit this.

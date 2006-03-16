@@ -18,10 +18,11 @@ namespace NVelocity.Runtime.Resource.Loader
 	using System.IO;
 	using System.Collections;
 	using System.Reflection;
+
 	using Commons.Collections;
+	
 	using NVelocity.Exception;
 	using NVelocity.Util;
-
 
 	public class AssemblyResourceLoader : ResourceLoader
 	{
@@ -35,7 +36,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// Initialize the template loader with a
 		/// a resources class.
 		/// </summary>
-		public override void init(ExtendedProperties configuration)
+		public override void Init(ExtendedProperties configuration)
 		{
 			assemblyNames = configuration.GetVector("assembly");
 		}
@@ -44,7 +45,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary> Get the InputStream that the Runtime will parse
 		/// to create a template.
 		/// </summary>
-		public override Stream getResourceStream(String templateName)
+		public override Stream GetResourceStream(String templateName)
 		{
 			// Make sure we have a valid templateName.
 			if (templateName == null || templateName.Length == 0)
@@ -105,7 +106,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// <summary> Given a template, check to see if the source of InputStream
 		/// has been modified.
 		/// </summary>
-		public override bool isSourceModified(Resource resource)
+		public override bool IsSourceModified(Resource resource)
 		{
 			return false;
 		}
@@ -115,7 +116,7 @@ namespace NVelocity.Runtime.Resource.Loader
 		/// here because we have to extract the name of the template
 		/// in order to locate the InputStream source.
 		/// </summary>
-		public override long getLastModified(Resource resource)
+		public override long GetLastModified(Resource resource)
 		{
 			return resource.LastModified;
 		}

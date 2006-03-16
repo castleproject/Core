@@ -145,7 +145,7 @@ namespace NVelocity.Runtime
 		//UPGRADE_NOTE: The initialization of  'configuration' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private ExtendedProperties configuration;
 
-		private ResourceManager resourceManager = null;
+		private IResourceManager resourceManager = null;
 
 		/*
 		*  Each runtime instance has it's own introspector
@@ -172,36 +172,18 @@ namespace NVelocity.Runtime
 			*  create a VM factory, resource manager
 			*  and introspector
 			*/
-
 			vmFactory = new VelocimacroFactory(this);
 
 			/*
 			*  make a new introspector and initialize it
 			*/
-
 			introspector = new Introspector(this);
 
 			/*
 			* and a store for the application attributes
 			*/
-
 			applicationAttributes = new Hashtable();
 		}
-
-		/*
-		* This is the primary initialization method in the Velocity
-		* Runtime. The systems that are setup/initialized here are
-		* as follows:
-		*
-		* <ul>
-		*   <li>Logging System</li>
-		*   <li>ResourceManager</li>
-		*   <li>Parser Pool</li>
-		*   <li>Global Cache</li>
-		*   <li>Static Content Include System</li>
-		*   <li>Velocimacro System</li>
-		* </ul>
-		*/
 
 		public void Init()
 		{
@@ -209,9 +191,6 @@ namespace NVelocity.Runtime
 			{
 				if (initialized == false)
 				{
-					Info("************************************************************** ");
-					Info("Starting " + Assembly.GetExecutingAssembly().GetName());
-					Info("RuntimeInstance initializing.");
 					initializeProperties();
 					initializeLogger();
 					initializeResourceManager();
@@ -220,19 +199,18 @@ namespace NVelocity.Runtime
 					initializeIntrospection();
 
 					/*
-					*  initialize the VM Factory.  It will use the properties 
-					* accessable from Runtime, so keep this here at the end.
-					*/
+					 * initialize the VM Factory.  It will use the properties 
+					 * accessable from Runtime, so keep this here at the end.
+					 */
 					vmFactory.InitVelocimacro();
-
-					Info("NVelocity successfully started.");
 
 					initialized = true;
 				}
 			}
 		}
 
-		/// <summary>  Gets the classname for the Uberspect introspection package and
+		/// <summary>
+		/// Gets the classname for the Uberspect introspection package and
 		/// instantiates an instance.
 		/// </summary>
 		private void initializeIntrospection()
@@ -243,10 +221,8 @@ namespace NVelocity.Runtime
 			{
 				Object o = null;
 
-				//UPGRADE_NOTE: Exception 'java.lang.ClassNotFoundException' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
-					//UPGRADE_TODO: Format of parameters of method 'java.lang.Class.forName' are different in the equivalent in .NET. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1092"'
 					o = SupportClass.CreateNewInstance(Type.GetType(rm));
 				}
 				catch (System.Exception)
@@ -449,9 +425,12 @@ namespace NVelocity.Runtime
 			 * Which resource manager?
 			 */
 
+			IResourceManager rmInstance = (IResourceManager) 
+				applicationAttributes[RuntimeConstants.RESOURCE_MANAGER_CLASS];
+
 			String rm = GetString(RuntimeConstants.RESOURCE_MANAGER_CLASS);
 
-			if (rm != null && rm.Length > 0)
+			if (rmInstance == null && rm != null && rm.Length > 0)
 			{
 				/*
 				 *  if something was specified, then make one.
@@ -473,15 +452,20 @@ namespace NVelocity.Runtime
 					throw new System.Exception(err);
 				}
 
-				if (!(o is ResourceManager))
+				if (!(o is IResourceManager))
 				{
 					String err = "The specified class for ResourceManager (" + rm + ") does not implement ResourceManager." + " Velocity not initialized correctly.";
 					Error(err);
 					throw new System.Exception(err);
 				}
 
-				resourceManager = (ResourceManager) o;
+				resourceManager = (IResourceManager) o;
 
+				resourceManager.Initialize(this);
+			}
+			else if (rmInstance != null)
+			{
+				resourceManager = rmInstance;
 				resourceManager.Initialize(this);
 			}
 			else

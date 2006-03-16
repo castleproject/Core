@@ -60,16 +60,7 @@ namespace NVelocity
 			errorCondition = null;
 
 			// first, try to get the stream from the loader
-			try
-			{
-				s = resourceLoader.getResourceStream(name);
-			}
-			catch(ResourceNotFoundException rnfe)
-			{
-				//  remember and re-throw
-				errorCondition = rnfe;
-				throw;
-			}
+			s = ObtainStream();
 
 			// if that worked, lets protect in case a loader impl
 			// forgets to throw a proper exception
@@ -208,6 +199,23 @@ namespace NVelocity
 				rsvc.Error(msg);
 				throw new System.Exception(msg);
 			}
+		}
+
+		protected virtual Stream ObtainStream()
+		{
+			Stream s;
+			
+			try
+			{
+				s = resourceLoader.GetResourceStream(name);
+			}
+			catch(ResourceNotFoundException rnfe)
+			{
+				//  remember and re-throw
+				errorCondition = rnfe;
+				throw;
+			}
+			return s;
 		}
 	}
 }
