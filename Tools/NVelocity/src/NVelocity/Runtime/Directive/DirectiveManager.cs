@@ -20,7 +20,7 @@ namespace NVelocity.Runtime.Directive
 
 	public class DirectiveManager : IDirectiveManager
 	{
-		private IDictionary name2Type = Hashtable.Synchronized( new Hashtable() );
+		private IDictionary name2Type = Hashtable.Synchronized(new Hashtable());
 
 		public DirectiveManager()
 		{
@@ -30,7 +30,7 @@ namespace NVelocity.Runtime.Directive
 		{
 			directiveTypeName = directiveTypeName.Replace(';', ',');
 
-			Type type = Type.GetType( directiveTypeName, false, false );
+			Type type = Type.GetType(directiveTypeName, false, false);
 
 			if (type == null)
 			{
@@ -39,16 +39,25 @@ namespace NVelocity.Runtime.Directive
 
 			Directive directive = (Directive) Activator.CreateInstance(type);
 
-			name2Type[ directive.Name ] = type;
+			name2Type[directive.Name] = type;
 		}
 
-		public virtual Directive Create(String name)
+		public virtual Directive Create(String name, Stack directiveStack)
 		{
-			Type type = (Type) name2Type[ name ];
+			Type type = (Type) name2Type[name];
 
 			if (type != null)
 			{
 				return (Directive) Activator.CreateInstance(type);
+			}
+			else if (directiveStack.Count != 0)
+			{
+				Directive parent = (Directive) directiveStack.Peek();
+
+				if (parent.SupportsNestedDirective(name))
+				{
+					return parent.CreateNestedDirective(name);
+				}
 			}
 
 			return null;

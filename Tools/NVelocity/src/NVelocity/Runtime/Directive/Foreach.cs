@@ -2,6 +2,7 @@ namespace NVelocity.Runtime.Directive
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.IO;
 
 	using NVelocity.Context;
@@ -20,7 +21,7 @@ namespace NVelocity.Runtime.Directive
 		{
 			SectionNames = ForeachSectionEnum.GetNames(typeof(ForeachSectionEnum));
 			
-			Array.Sort(SectionNames);
+			Array.Sort(SectionNames, CaseInsensitiveComparer.Default);
 
 			for(int i = 0; i < SectionNames.Length; i++)
 			{
@@ -84,6 +85,39 @@ namespace NVelocity.Runtime.Directive
 			get { return DirectiveType.BLOCK; }
 		}
 
+		public override bool SupportsNestedDirective(String name)
+		{
+			int index = Array.BinarySearch(SectionNames, name.ToLower());
+
+			return index >= 0;
+		}
+
+		public override Directive CreateNestedDirective(String name)
+		{
+			name = name.ToLower();
+
+			if (name == "between")
+				return new ForeachBetweenSection();
+			else if (name == "odd")
+				return new ForeachOddSection();
+			else if (name == "even")
+				return new ForeachEvenSection();
+			else if (name == "nodata")
+				return new ForeachNoDataSection();
+			else if (name == "before")
+				return new ForeachBeforeSection();
+			else if (name == "after")
+				return new ForeachAfterSection();
+			else if (name == "beforeall")
+				return new ForeachBeforeAllSection();
+			else if (name == "afterall")
+				return new ForeachAfterAllSection();
+			else if (name == "each")
+				return new ForeachEachSection();
+
+			throw new NotSupportedException("Foreach directive error: Nested directive not supported: " + name);
+		}
+
 		/// <summary>  
 		/// simple init - init the tree and get the elementKey from
 		/// the AST
@@ -110,6 +144,7 @@ namespace NVelocity.Runtime.Directive
 		{
 			// get our list object, and punt if it's null.
 			Object listObject = node.GetChild(2).Value(context);
+
 			if (listObject == null)
 				return null;
 
@@ -137,8 +172,6 @@ namespace NVelocity.Runtime.Directive
 			{
 				if (listObject.GetType().IsArray)
 					type = EnumType.Array;
-
-					// NOTE: IDictionary needs to come before ICollection as it support ICollection
 				else if (listObject is IDictionary)
 					type = EnumType.Dictionary;
 				else if (listObject is ICollection)
@@ -251,7 +284,8 @@ namespace NVelocity.Runtime.Directive
 
 					counter++;
 
-				} while(enumerator.MoveNext());
+				} 
+				while(enumerator.MoveNext());
 			}
 
 			if (isFancyLoop)
@@ -298,8 +332,11 @@ namespace NVelocity.Runtime.Directive
 		private INode[][] PrepareSections(INode node)
 		{
 			bool isFancyLoop = false;
+			
 			int curSection = (int) ForeachSectionEnum.Each;
+			
 			ArrayList[] sections = new ArrayList[SectionNames.Length];
+			
 			int nodeCount = node.ChildrenCount;
 
 			for(int i = 0; i < nodeCount; i++)
@@ -310,7 +347,8 @@ namespace NVelocity.Runtime.Directive
 				if (directive != null && Array.BinarySearch(SectionNames, directive.DirectiveName) > -1)
 				{
 					isFancyLoop = true;
-					curSection = (int) ForeachSectionEnum.Parse(typeof(ForeachSectionEnum), directive.DirectiveName, true);
+					curSection = (int) ForeachSectionEnum.Parse(
+						typeof(ForeachSectionEnum), directive.DirectiveName, true);
 				}
 				else
 				{
@@ -330,7 +368,7 @@ namespace NVelocity.Runtime.Directive
 			{
 				INode[][] result = new INode[sections.Length][];
 
-				for(int i = 0; i < sections.Length; i++)
+				for(int i=0; i < sections.Length; i++)
 				{
 					if (sections[i] != null)
 					{

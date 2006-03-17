@@ -185,7 +185,7 @@ namespace NVelocity.Test
 
 				if (template != null)
 				{
-					Boolean pass = RunTest(template);
+					bool pass = RunTest(template);
 					if (!pass)
 					{
 						Console.Out.Write("Adding TemplateTestCase : " + template + "...");
@@ -250,11 +250,11 @@ namespace NVelocity.Test
 					return false;
 				}
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				Console.Out.WriteLine("EXCEPTION : " + e);
+				Console.WriteLine("Test {0} failed", baseFileName);
 
-				Assert.Fail(e.Message);
+				throw;
 			}
 
 			return true;

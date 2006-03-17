@@ -19,6 +19,33 @@ namespace NVelocity.Runtime.Directive
 	/// <version> $Id: Directive.cs,v 1.3 2003/10/27 13:54:10 corts Exp $ </version>
 	public abstract class Directive
 	{
+		protected internal IRuntimeServices rsvc = null;
+
+		private int line = 0;
+		private int column = 0;
+
+		/// <summary>
+		/// How this directive is to be initialized.
+		/// </summary>
+		public virtual void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
+		{
+			rsvc = rs;
+
+//			int i, k = node.jjtGetNumChildren();
+//			for (i = 0; i < k; i++)
+//				node.jjtGetChild(i).init(context, rs);
+		}
+
+		public virtual bool SupportsNestedDirective(String name)
+		{
+			return false;
+		}
+
+		public virtual Directive CreateNestedDirective(String name)
+		{
+			return null;
+		}
+
 		/// <summary>
 		/// Return the name of this directive
 		/// </summary>
@@ -45,11 +72,6 @@ namespace NVelocity.Runtime.Directive
 			get { return column; }
 		}
 
-		private int line = 0;
-		private int column = 0;
-
-		protected internal IRuntimeServices rsvc = null;
-
 		/// <summary>
 		/// Allows the template location to be set
 		/// </summary>
@@ -62,19 +84,6 @@ namespace NVelocity.Runtime.Directive
 		public virtual bool AcceptParams
 		{
 			get { return true; }
-		}
-
-		/// <summary>
-		/// How this directive is to be initialized.
-		/// </summary>
-		public virtual void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
-		{
-			rsvc = rs;
-
-			//        int i, k = node.jjtGetNumChildren();
-
-			//for (i = 0; i < k; i++)
-			//    node.jjtGetChild(i).init(context, rs);
 		}
 
 		/// <summary>

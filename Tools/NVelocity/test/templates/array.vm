@@ -29,10 +29,10 @@ $provider.objConcat( [$foo ] )
 
 #set($woog = "a")
 #set($floog = "b")
-#showme( [ $woog] )
-#showme( [ $woog,$floog] )
-#showme( [1..2])
-#showme( [1 ..2 ])
+#showme([$woog] )
+#showme([$woog,$floog] )
+#showme([1..2])
+#showme([1 ..2 ])
 
 ##  and more....
 

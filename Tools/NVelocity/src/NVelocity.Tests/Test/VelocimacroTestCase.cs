@@ -21,9 +21,6 @@ namespace NVelocity.Test
 		{
 			try
 			{
-				/*
-		*  setup local scope for templates
-		*/
 				Velocity.SetProperty(RuntimeConstants.VM_PERM_INLINE_LOCAL, true);
 				Velocity.Init();
 			}
@@ -46,10 +43,7 @@ namespace NVelocity.Test
 
 			String out_Renamed = writer.ToString();
 
-			if (!result1.Equals(out_Renamed))
-			{
-				Assert.Fail("output incorrect.");
-			}
+			Assert.AreEqual(result1, out_Renamed);
 		}
 	}
 }

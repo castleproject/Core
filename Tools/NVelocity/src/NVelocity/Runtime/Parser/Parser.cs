@@ -4,8 +4,9 @@ namespace NVelocity.Runtime.Parser
 {
 	using System;
 	using System.Collections;
+	using System.Diagnostics;
 	using System.IO;
-	using NVelocity.Exception;
+
 	using NVelocity.Runtime.Directive;
 	using NVelocity.Runtime.Parser.Node;
 	using NVelocity.Util;
@@ -37,8 +38,10 @@ namespace NVelocity.Runtime.Parser
 
 		private IRuntimeServices rsvc = null;
 
-		///
-		/// <summary> This constructor was added to allow the re-use of parsers.
+		protected Stack directiveStack = new Stack();
+
+		/// <summary> 
+		/// This constructor was added to allow the re-use of parsers.
 		/// The normal constructor takes a single argument which
 		/// an InputStream. This simply creates a re-usable parser
 		/// object, we satisfy the requirement of an InputStream
@@ -148,7 +151,7 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public Directive GetDirective(String directive)
 		{
-			return directives.Create(directive);
+			return directives.Create(directive, directiveStack);
 		}
 
 		/// <summary>  This method finds out of the directive exists in the directives
@@ -674,31 +677,35 @@ namespace NVelocity.Runtime.Parser
 		/// </summary>
 		public SimpleNode Directive()
 		{
-			/*@bgen(jjtree) Directive */
 			ASTDirective directiveNode = new ASTDirective(this, ParserTreeConstants.DIRECTIVE);
+
 			bool isNodeScopeOpen = true;
 			nodeTree.OpenNodeScope(directiveNode);
 			Token token = null;
 			Directive directive;
 			DirectiveType directiveType;
 			bool doItNow = false;
-			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
+
 			try
 			{
 				/*
-		* note that if we were escaped, that is now handled by 
-		* EscapedDirective()
-		*/
+				* note that if we were escaped, that is now handled by 
+				* EscapedDirective()
+				*/
 				token = ConsumeToken(ParserConstants.WORD);
 				String directiveName = token.Image.Substring(1);
 
-				directive = directives.Create(directiveName);
+				directive = directives.Create(directiveName, directiveStack);
+
+				Debug.Assert( directiveNode != null );
+				
+				directiveNode.Directive = directive;
 
 				/*
-		*  Velocimacro support : if the directive is macro directive
-		*   then set the flag so after the block parsing, we add the VM
-		*   right then. (So available if used w/in the current template )
-		*/
+				*  Velocimacro support : if the directive is macro directive
+				*   then set the flag so after the block parsing, we add the VM
+				*   right then. (So available if used w/in the current template )
+				*/
 
 				if (directiveName.Equals("macro"))
 				{
@@ -706,9 +713,9 @@ namespace NVelocity.Runtime.Parser
 				}
 
 				/*
-		* set the directive name from here.  No reason for the thing to know 
-		* about parser tokens
-		*/
+				* set the directive name from here.  No reason for the thing to know 
+				* about parser tokens
+				*/
 
 				directiveNode.DirectiveName = directiveName;
 
@@ -749,11 +756,11 @@ namespace NVelocity.Runtime.Parser
 
 				ConsumeWhiteSpaces();
 
-				if ( directive != null && !directive.AcceptParams)
+				if (directive != null && !directive.AcceptParams)
 				{
 					int curToken = GetCurrentTokenKind();
 
-					if(curToken == ParserConstants.NEWLINE)
+					if (curToken == ParserConstants.NEWLINE)
 					{
 						ConsumeToken(ParserConstants.NEWLINE);	
 					}
@@ -761,50 +768,54 @@ namespace NVelocity.Runtime.Parser
 					{
 						throw new ParseException("Foreach directives must be the only items on the line (comments or contents are not allowed)");
 					}
-											
+				}
+
+				if (directive == null || directive.AcceptParams)
+				{
+					ConsumeToken(ParserConstants.LPAREN);
+
+					while (true)
+					{
+						switch (GetCurrentTokenKind())
+						{
+							case ParserConstants.LBRACKET:
+							case ParserConstants.WHITESPACE:
+							case ParserConstants.STRING_LITERAL:
+							case ParserConstants.TRUE:
+							case ParserConstants.FALSE:
+							case ParserConstants.NUMBER_LITERAL:
+							case ParserConstants.WORD:
+							case ParserConstants.IDENTIFIER:
+							case ParserConstants.LCURLY:
+								;
+								break;
+
+							default:
+								jj_la1[7] = jj_gen;
+								//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
+								goto label_3_brk;
+
+						}
+						DirectiveArg();
+					}
+					//UPGRADE_NOTE: Label 'label_3_brk' was added. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1011"'
+					label_3_brk:
+					;
+
+					ConsumeToken(ParserConstants.RPAREN);
+				}
+
+				if (directiveType == DirectiveType.LINE)
+				{
 					return directiveNode;
 				}
 
-				ConsumeToken(ParserConstants.LPAREN);
-				while (true)
-				{
-					switch (GetCurrentTokenKind())
-					{
-						case ParserConstants.LBRACKET:
-						case ParserConstants.WHITESPACE:
-						case ParserConstants.STRING_LITERAL:
-						case ParserConstants.TRUE:
-						case ParserConstants.FALSE:
-						case ParserConstants.NUMBER_LITERAL:
-						case ParserConstants.WORD:
-						case ParserConstants.IDENTIFIER:
-						case ParserConstants.LCURLY:
-							;
-							break;
-
-						default:
-							jj_la1[7] = jj_gen;
-							//UPGRADE_NOTE: Labeled break statement was changed to a goto statement. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1012"'
-							goto label_3_brk;
-
-					}
-					DirectiveArg();
-				}
-				//UPGRADE_NOTE: Label 'label_3_brk' was added. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1011"'
-				label_3_brk:
-				;
-
-				ConsumeToken(ParserConstants.RPAREN);
-				if (directiveType == DirectiveType.LINE)
-				{
-					if (true)
-						return directiveNode;
-				}
+				directiveStack.Push(directive);
 
 				ASTBlock jjtn001 = new ASTBlock(this, ParserTreeConstants.BLOCK);
 				bool jjtc001 = true;
 				nodeTree.OpenNodeScope(jjtn001);
-				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
+
 				try
 				{
 					while (true)
@@ -882,30 +893,26 @@ namespace NVelocity.Runtime.Parser
 					{
 						nodeTree.CloseNodeScope(jjtn001, true);
 					}
+
+					directiveStack.Pop();
 				}
 				ConsumeToken(ParserConstants.END);
 				nodeTree.CloseNodeScope(directiveNode, true);
 				isNodeScopeOpen = false;
 				/*
-		*  VM : if we are processing a #macro directive, we need to 
-		*     process the block.  In truth, I can just register the name
-		*     and do the work later when init-ing.  That would work
-		*     as long as things were always defined before use.  This way
-		*     we don't have to worry about forward references and such...
-		*/
+				 *  VM : if we are processing a #macro directive, we need to 
+				 *     process the block.  In truth, I can just register the name
+				 *     and do the work later when init-ing.  That would work
+				 *     as long as things were always defined before use.  This way
+				 *     we don't have to worry about forward references and such...
+				 */
 
 				if (doItNow)
 				{
 					Macro.processAndRegister(rsvc, directiveNode, currentTemplateName);
 				}
-				{
-					/*
-		    *  VM : end
-		    */
 
-					if (true)
-						return directiveNode;
-				}
+				return directiveNode;
 			}
 			catch (Exception jjte000)
 			{
@@ -944,7 +951,6 @@ namespace NVelocity.Runtime.Parser
 					nodeTree.CloseNodeScope(directiveNode, true);
 				}
 			}
-			throw new ApplicationException("Missing return statement in function");
 		}
 
 		private int GetCurrentTokenKind( )
@@ -1123,7 +1129,6 @@ namespace NVelocity.Runtime.Parser
 
 					default:
 						jj_la1[14] = jj_gen;
-						;
 						break;
 
 				}
