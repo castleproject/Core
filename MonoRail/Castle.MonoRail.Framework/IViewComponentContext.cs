@@ -22,9 +22,13 @@ namespace Castle.MonoRail.Framework
 	{
 		String ComponentName { get; }
 
+		bool HasSection(String sectionName);
+
 		void RenderBody();
 
 		void RenderBody(TextWriter writer);
+
+		void RenderSection(String sectionName);
 
 		TextWriter Writer { get; }
 

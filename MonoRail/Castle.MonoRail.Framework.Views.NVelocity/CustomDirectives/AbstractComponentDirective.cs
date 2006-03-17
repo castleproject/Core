@@ -30,15 +30,18 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 	using System.Collections;
 
 	using Castle.MonoRail.Framework;
-	using Castle.MonoRail.Framework.Helpers;
 	using Castle.MonoRail.Framework.Internal;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public abstract class AbstractComponentDirective : Directive
 	{
 		private readonly IViewComponentFactory viewComponentFactory;
 
 		private String componentName;
 		private ViewComponent component;
+		private NVelocityViewContextAdapter contextAdapter;
 
 		public AbstractComponentDirective(IViewComponentFactory viewComponentFactory)
 		{
@@ -54,7 +57,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			if (compNameNode == null)
 			{
 				String message = String.Format("You must specify the component name on the #{0} directive", Name);
-				throw new RailsException(message);
+				throw new ViewComponentException(message);
 			}
 
 			componentName = compNameNode.FirstToken.Image;
@@ -62,10 +65,12 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			if (componentName == null)
 			{
 				String message = String.Format("Could not obtain component name from the #{0} directive", Name);
-				throw new RailsException(message);
+				throw new ViewComponentException(message);
 			}
 
 			component = viewComponentFactory.Create(componentName);
+
+			contextAdapter = new NVelocityViewContextAdapter(componentName, node);
 		}
 
 		public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
@@ -79,9 +84,10 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				bodyNode = node.GetChild(node.ChildrenCount - 1);
 			}
 
-			NVelocityViewContextAdapter contextAdapter =
-				new NVelocityViewContextAdapter(
-					componentName, context, writer, bodyNode, componentParams);
+			contextAdapter.Context = context;
+			contextAdapter.BodyNode = bodyNode;
+			contextAdapter.ComponentParams = componentParams;
+			contextAdapter.TextWriter = writer;
 
 			IRailsEngineContext railsContext = MonoRailHttpHandler.CurrentContext;
 
@@ -128,6 +134,21 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 			return new Hashtable(0);
 		}
 
+		protected string ComponentName
+		{
+			get { return componentName; }
+		}
+
+		protected ViewComponent Component
+		{
+			get { return component; }
+		}
+
+		protected NVelocityViewContextAdapter ContextAdapter
+		{
+			get { return contextAdapter; }
+		}
+
 		private IDictionary ProcessRemainingParams(int childrenCount, INode node, IInternalContextAdapter context)
 		{
 			IDictionary entries = new HybridDictionary(true);
@@ -156,21 +177,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 				{
 					entries[parts[0]] = String.Empty;
 				}
-
-//				Object value = paramNode.Value(context);
-//
-//				String stValue = (value as String);
-//
-//				if (stValue == null)
-//				{
-//					String message = String.Format("Could not evaluate parameter {0} to a String for component {1}", i, componentName);
-//					throw new RailsException(message);
-//				}
-//
-//				list.Add(stValue);
 			}
-
-			// return (new DictHelper()).CreateDict((String[]) list.ToArray(typeof(String)));
 
 			return entries;
 		}
@@ -223,22 +230,22 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 					if (childrenCount > 2)
 					{
 						String message = String.Format("A #{0} directive with a dictionary string param cannot have extra params - component {0}", componentName, Name);
-						throw new RailsException(message);
+						throw new ViewComponentException(message);
 					}
 					return dict;
 				}
 				else
 				{
 					String message = String.Format("A #{0} directive with parameters must use the keyword 'with' - component {0}", componentName, Name);
-					throw new RailsException(message);
+					throw new ViewComponentException(message);
 				}
 			}
 
 			return null;
 		}
 
-		private bool RenderComponentView(IInternalContextAdapter context,
-		                                 TextWriter writer, NVelocityViewContextAdapter contextAdapter)
+		private bool RenderComponentView(IInternalContextAdapter context, TextWriter writer, 
+			NVelocityViewContextAdapter contextAdapter)
 		{
 			foreach(DictionaryEntry entry in contextAdapter.ContextVars)
 			{

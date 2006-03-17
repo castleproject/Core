@@ -63,7 +63,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			return directives.Contains(name) ? true : base.Contains(name);
 		}
 
-		public override Directive Create(string name)
+		public override Directive Create(string name, Stack directiveStack)
 		{
 			Type customDirective = directives[name] as Type;
 
@@ -73,14 +73,14 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 
 				if (typeof(AbstractComponentDirective).IsAssignableFrom(customDirective))
 				{
-					args = new object[] {GetViewComponentFactory()};
+					args = new object[] { GetViewComponentFactory() };
 				}
 
 				return Activator.CreateInstance(customDirective, args) as Directive;
 			}
 			else
 			{
-				return base.Create(name);
+				return base.Create(name, directiveStack);
 			}
 		}
 

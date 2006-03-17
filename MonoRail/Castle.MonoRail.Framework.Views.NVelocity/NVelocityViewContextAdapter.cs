@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Directive = NVelocity.Runtime.Directive.Directive;
+using IInternalContextAdapter = NVelocity.Context.IInternalContextAdapter;
 using INode = NVelocity.Runtime.Parser.Node.INode;
 using InternalContextAdapter = NVelocity.Context.IInternalContextAdapter;
 
@@ -19,26 +21,30 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Specialized;
 	using System.IO;
+
+	using Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives;
 
 	public class NVelocityViewContextAdapter : IViewComponentContext
 	{
-		private readonly INode bodyNode;
-		private readonly TextWriter writer;
-		private readonly InternalContextAdapter context;
 		private readonly String componentName;
-		private readonly IDictionary componentParams;
-		private String viewToRender;
+		private readonly INode parentNode;
 
-		public NVelocityViewContextAdapter(String componentName, 
-			InternalContextAdapter context, TextWriter writer, INode bodyNode, IDictionary componentParams)
+		private InternalContextAdapter context;
+		private INode bodyNode;
+		private TextWriter writer;
+		private IDictionary componentParams;
+		private String viewToRender;
+		private IDictionary sections;
+
+		public NVelocityViewContextAdapter(String componentName, INode parentNode)
 		{
-			this.context = context;
 			this.componentName = componentName;
-			this.writer = writer;
-			this.bodyNode = bodyNode;
-			this.componentParams = componentParams;
+			this.parentNode = parentNode;
 		}
+
+		#region IViewComponentContext
 
 		public String ComponentName
 		{
@@ -66,9 +72,26 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			get { return writer; }
 		}
 
+		public bool HasSection(String sectionName)
+		{
+			return sections != null && sections.Contains(sectionName);
+		}
+
 		public void RenderBody()
 		{
 			RenderBody(writer);
+		}
+
+		public void RenderSection(String sectionName)
+		{
+			if (HasSection(sectionName))
+			{
+				Directive directive = (Directive) sections[sectionName];
+
+				directive.Render(context, writer, parentNode);
+			}
+
+			// Shall we throw exception?
 		}
 
 		public void RenderBody(TextWriter writer)
@@ -79,6 +102,41 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			}
 
 			bodyNode.Render(context, writer);
+		}
+
+		#endregion
+
+		internal IInternalContextAdapter Context
+		{
+			get { return context; }
+			set { context = value; }
+		}
+
+		internal INode BodyNode
+		{
+			get { return bodyNode; }
+			set { bodyNode = value; }
+		}
+
+		internal IDictionary ComponentParams
+		{
+			get { return componentParams; }
+			set { componentParams = value; }
+		}
+
+		internal TextWriter TextWriter
+		{
+			set { writer = value; }
+		}
+
+		internal void RegisterSection(SubSectionDirective section)
+		{
+			if (sections == null)
+			{
+				sections = new HybridDictionary(true);
+			}
+
+			sections[section.Name] = section;
 		}
 	}
 }

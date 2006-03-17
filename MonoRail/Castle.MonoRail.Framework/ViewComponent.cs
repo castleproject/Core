@@ -144,6 +144,15 @@ namespace Castle.MonoRail.Framework
 		}
 
 		/// <summary>
+		/// Provides a way to make data available
+		/// to the view that the component uses
+		/// </summary>
+		protected IDictionary PropertyBag
+		{
+			get { return context.ContextVars; }
+		}
+
+		/// <summary>
 		/// Shortcut to Request.Params
 		/// </summary>
 		protected NameValueCollection Params
@@ -210,5 +219,10 @@ namespace Castle.MonoRail.Framework
 		}
 
 		#endregion
+
+		public virtual bool SupportsSection(string name)
+		{
+			return false;
+		}
 	}
 }

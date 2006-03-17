@@ -20,6 +20,9 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.CustomDirectives
 
 	using Castle.MonoRail.Framework.Internal;
 
+	/// <summary>
+	/// Pendent
+	/// </summary>
 	public class ComponentDirective : AbstractComponentDirective
 	{
 		public ComponentDirective(IViewComponentFactory viewComponentFactory) : base(viewComponentFactory)

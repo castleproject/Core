@@ -175,6 +175,16 @@ namespace TestSiteNVelocity.Controllers
 	{
 		String email, phone;
 
+		public Contact()
+		{
+		}
+
+		public Contact(string email, string phone)
+		{
+			this.email = email;
+			this.phone = phone;
+		}
+
 		public string Email
 		{
 			get { return email; }

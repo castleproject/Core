@@ -243,6 +243,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ViewComponentException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WizardActionProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -4,6 +4,69 @@ Change history
 Release Candidate 1
 ===================
 
+- ViewComponents: added subsection support
+
+  (Using nvelocity as example)
+  
+  #blockcomponent(GridComponent)
+    #header
+      <th>Name</th>
+    #end
+    
+    #footer
+      Showing record $startrecord to $total
+    #end
+    
+    #item
+      <td>$item.Name</td>
+    #end
+
+    #empty
+      <td>No records found</td>
+    #end
+  #end
+  
+  On the code you can use
+
+	public override bool SupportsSection(String name)
+	{
+		return name == "header" || name == "item" || name == "footer" || 
+			name == "empty";
+	}
+
+	public override void Render()
+	{
+		ICollection source = (ICollection) ComponentParams["source"];
+
+		StartTable();
+
+		Context.RenderSection("header");
+
+		if (source != null && source.Count != 0)
+		{
+			foreach(object item in source)
+			{
+				PropertyBag["item"] = item;
+				
+				RenderText("<tr>");
+				
+				Context.RenderSection("item");
+				
+				RenderText("</tr>");
+			}
+		}
+		else
+		{
+			RenderText("<tr>");
+			Context.RenderSection("empty");
+			RenderText("</tr>");
+		}
+
+		Context.RenderSection("footer");
+
+		EndTable();
+	}
+
 - ViewComponent on NVelocity: added to support to interpolation on component parameters. 
 
   Action:

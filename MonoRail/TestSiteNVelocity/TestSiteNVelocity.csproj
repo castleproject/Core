@@ -147,6 +147,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Components\GridComponent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Components\InlineComponentWithParam1.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -272,6 +277,11 @@
                 />
                 <File
                     RelPath = "Controllers\TestWizardController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Controllers\UsingComponent2Controller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -509,6 +519,18 @@
                 />
                 <File
                     RelPath = "views\UsingComponent\InlineComponentUsingTemplatedRender.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent2\ComponentWithInvalidSections.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent2\GridComponent1.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "views\UsingComponent2\GridComponent2.vm"
                     BuildAction = "None"
                 />
                 <File

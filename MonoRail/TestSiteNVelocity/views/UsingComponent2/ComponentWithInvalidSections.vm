@@ -1,0 +1,5 @@
+#blockcomponent(GridComponent)
+  #invalidsection
+    some content
+  #end
+#end

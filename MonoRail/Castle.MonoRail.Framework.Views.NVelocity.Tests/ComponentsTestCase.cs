@@ -15,9 +15,7 @@
 namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 {
 	using System;
-
 	using NUnit.Framework;
-
 	using Castle.MonoRail.TestSupport;
 
 	[TestFixture]
@@ -70,7 +68,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput( "static 1\r\nHello from SimpleInlineViewComponent static 2", Output );
+			AssertOutput("static 1\r\nHello from SimpleInlineViewComponent static 2", Output);
 		}
 
 		[Test]
@@ -80,7 +78,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput( "static 1\r\nThis is a view used by a component static 2", Output );
+			AssertOutput("static 1\r\nThis is a view used by a component static 2", Output);
 		}
 
 		[Test]
@@ -100,7 +98,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput( "static 1\r\ndefault component view picked up automatically static 2", Output );
+			AssertOutput("static 1\r\ndefault component view picked up automatically static 2", Output);
 		}
 
 		[Test]
@@ -110,7 +108,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput( "Done 1", Output );
+			AssertOutput("Done 1", Output);
 		}
 
 		[Test]
@@ -120,7 +118,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput( "  item 0\r\n  item 1\r\n  item 2\r\n", Output );
+			AssertOutput("  item 0\r\n  item 1\r\n  item 2\r\n", Output);
 		}
 
 		[Test]
@@ -130,19 +128,19 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput( "inner content 1\r\ninner content 2\r\n", Output );
+			AssertOutput("inner content 1\r\ninner content 2\r\n", Output);
 		}
 
 		[Test]
 		public void SeveralComponentsInvocation()
 		{
-			for(int i=0; i < 10; i++)
+			for(int i = 0; i < 10; i++)
 			{
 				DoGet("usingcomponent/index9.rails");
 
 				AssertSuccess();
 
-				AssertOutput( "static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n", Output );
+				AssertOutput("static 1\r\nContent 1\r\nstatic 2\r\nContent 2\r\nstatic 3\r\nContent 3\r\nstatic 4\r\nContent 4\r\nstatic 5\r\nContent 5\r\n", Output);
 			}
 		}
 
@@ -153,7 +151,31 @@ namespace Castle.MonoRail.Framework.Views.NVelocity.Tests
 
 			AssertSuccess();
 
-			AssertOutput( "static 1\n1 2  static 2", Output );
+			AssertOutput("static 1\n1 2  static 2", Output);
+		}
+
+		[Test]
+		public void ComponentWithInvalidSection()
+		{
+			DoGet("usingcomponent2/ComponentWithInvalidSections.rails");
+
+			AssertReplyContains("The section 'invalidsection' is not supported by the ViewComponent 'GridComponent'");
+		}
+
+		[Test]
+		public void GridComponent1()
+		{
+			DoGet("usingcomponent2/GridComponent1.rails");
+
+			AssertReplyContains("<table>    <th>EMail</th>\r\n    <th>Phone</th>\r\n  <tr>    <td>hammett</td>\r\n    <td>111</td>\r\n  </tr><tr>    <td>Peter Griffin</td>\r\n    <td>222</td>\r\n  </tr></table>");
+		}
+
+		[Test]
+		public void GridComponent2()
+		{
+			DoGet("usingcomponent2/GridComponent2.rails");
+
+			AssertReplyContains("<table>    <th>EMail</th>\r\n    <th>Phone</th>\r\n  <tr><td colspan=2>Nothing here</td>\r\n  </tr></table>");
 		}
 
 		void AssertOutput(String expected, object output)
