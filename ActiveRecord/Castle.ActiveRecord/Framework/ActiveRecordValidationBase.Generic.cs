@@ -46,6 +46,7 @@ namespace Castle.ActiveRecord
 	///		}
 	///	</code>
 	/// </example>
+	[Serializable]
     public abstract class ActiveRecordValidationBase<T> : ActiveRecordBase<T>, NHibernate.IValidatable where T : class
 	{
 		/// <summary>
