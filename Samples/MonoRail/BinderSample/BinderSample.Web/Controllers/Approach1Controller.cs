@@ -37,7 +37,7 @@ namespace BinderSample.Web.Controllers
 			RenderView("EditPublisher");
 		}
 
-		public void Update([DataBind(Prefix="publisher")] Publisher formpublisher,
+		public void Update([DataBind("publisher")] Publisher formpublisher,
 			int[] bookids, String[] booknames, String[] bookauthors)
 		{
 			Publisher publisher = Publisher.Find(formpublisher.Id);

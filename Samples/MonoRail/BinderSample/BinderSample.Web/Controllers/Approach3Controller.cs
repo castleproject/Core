@@ -35,8 +35,8 @@ namespace BinderSample.Web.Controllers
 			RenderView("EditPublisher");
 		}
 
-		public void Update([ARDataBind(AutoLoad=true, Prefix="publisher")] Publisher publisher,
-			[ARDataBind(AutoLoad=true, Prefix="book")] Book[] books)
+		public void Update([ARDataBind("publisher", AutoLoad=AutoLoadBehavior.Always)] Publisher publisher,
+			[ARDataBind("book", AutoLoad=AutoLoadBehavior.Always)] Book[] books)
 		{
 			publisher.Save();
 
