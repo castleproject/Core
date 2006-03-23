@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.ActiveRecord.Framework.Queries
+namespace Castle.ActiveRecord.Queries
 {
 	using System;
 	using System.Collections;
 
-	using Castle.ActiveRecord.Queries;
-	
 	using NHibernate;
 
 	public class CountQuery : HqlBasedQuery

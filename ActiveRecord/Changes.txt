@@ -31,7 +31,10 @@ beta 4
 
 - Resolved test bugs with IsUnique for .net 1 and .net 2.
 
-- Added SimpleQuery<T>.Enumerate(), for use with large queries - .NET 2.0 only.
+- Refactored query support:
+  - Introduced generic interface IActiveRecordQuery<T>, extending IActiveRecordQuery, for strongly-typed Execute() method support;
+  - Added IActiveRecordQuery.Enumerate(), for memory-intensive queries;
+  - Introduced HqlBasedQuery, decoupling ActiveRecordBaseQuery from HQL usage;
 
 - Added ValidateCreditCard validation attribute.
 
