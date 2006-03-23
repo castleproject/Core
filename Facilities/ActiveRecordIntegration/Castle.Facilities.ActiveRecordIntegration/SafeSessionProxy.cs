@@ -29,7 +29,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	/// <see cref="ISession.Dispose"/> to <see cref="ISessionFactoryHolder.ReleaseSession"/>
 	/// as the session is in fact managed by ActiveRecord framework
 	/// </summary>
-	public class SafeSessionProxy : ISession
+	public class SafeSessionProxy : ISession, IDisposable
 	{
 		private readonly ISession innerSession;
 		private readonly ISessionFactoryHolder holder;
