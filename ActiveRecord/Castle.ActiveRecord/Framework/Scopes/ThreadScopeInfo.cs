@@ -16,29 +16,25 @@ namespace Castle.ActiveRecord.Framework.Scopes
 {
 	using System;
 	using System.Collections;
-	using System.Threading;
-	using System.Runtime.CompilerServices;
-
 
 	public sealed class ThreadScopeInfo : AbstractThreadScopeInfo
 	{
-		private static readonly LocalDataStoreSlot _slot = Thread.AllocateDataSlot();
-
+		static readonly Object syncObject = new Object();
+		[ThreadStatic] static Stack stack;
+		
 		public override Stack CurrentStack
 		{
-			[MethodImpl(MethodImplOptions.Synchronized)]
 			get
 			{
-				Stack stack = Thread.GetData(_slot) as Stack;
-
-				if (stack == null)
+				lock (syncObject)
 				{
-					stack = new Stack();
+					if (stack == null)
+					{
+						stack = new Stack();
+					}
 
-					Thread.SetData(_slot, stack);
+					return stack;
 				}
-
-				return stack;
 			}
 		}
 	}
