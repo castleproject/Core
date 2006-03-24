@@ -51,7 +51,7 @@ namespace Castle.MonoRail.Framework.Views
 
 		public long LastModified
 		{
-			get { return fileInfo.LastWriteTime.Ticks; }
+			get { return File.GetLastWriteTime(fileInfo.FullName).Ticks; }
 		}
 	}
 }

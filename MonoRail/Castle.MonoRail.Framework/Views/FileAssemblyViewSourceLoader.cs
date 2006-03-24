@@ -28,7 +28,7 @@ namespace Castle.MonoRail.Framework
 	{
 		private readonly IList additionalSources = new ArrayList();
 		private String viewRootDir;
-		private bool enableCache;
+		private bool enableCache = true;
 
 		public void Init(IServiceProvider serviceProvider)
 		{
@@ -108,6 +108,11 @@ namespace Castle.MonoRail.Framework
 
 		private FileInfo CreateFileInfo(string templateName)
 		{
+			if (Path.IsPathRooted(templateName))
+			{
+				templateName = templateName.Substring(Path.GetPathRoot(templateName).Length);
+			}
+
 			return new FileInfo(Path.Combine(viewRootDir, templateName));
 		}
 
