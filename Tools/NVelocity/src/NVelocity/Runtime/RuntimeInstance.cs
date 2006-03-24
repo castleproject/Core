@@ -5,7 +5,10 @@ namespace NVelocity.Runtime
 	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
+
 	using Commons.Collections;
+
+	using NVelocity.Exception;
 	using NVelocity.Runtime.Directive;
 	using NVelocity.Runtime.Log;
 	using NVelocity.Runtime.Parser.Node;
@@ -19,24 +22,24 @@ namespace NVelocity.Runtime
 	/// It adheres to the mediator pattern and is the only
 	/// structure that developers need to be familiar with
 	/// in order to get Velocity to perform.
-	/// *
+	/// 
 	/// The Runtime will also cooperate with external
 	/// systems like Turbine. Runtime properties can
 	/// set and then the Runtime is initialized.
-	/// *
+	/// 
 	/// Turbine for example knows where the templates
 	/// are to be loaded from, and where the velocity
 	/// log file should be placed.
-	/// *
+	/// 
 	/// So in the case of Velocity cooperating with Turbine
 	/// the code might look something like the following:
-	/// *
-	/// <pre>
+	/// 
+	/// <code>
 	/// Runtime.setProperty(Runtime.FILE_RESOURCE_LOADER_PATH, templatePath);
 	/// Runtime.setProperty(Runtime.RUNTIME_LOG, pathToVelocityLog);
 	/// Runtime.init();
-	/// </pre>
-	/// *
+	/// </code>
+	/// 
 	/// <pre>
 	/// -----------------------------------------------------------------------
 	/// N O T E S  O N  R U N T I M E  I N I T I A L I Z A T I O N
@@ -47,24 +50,18 @@ namespace NVelocity.Runtime
 	/// initialize with a set of default values.
 	/// -----------------------------------------------------------------------
 	/// Runtime.init(String/Properties)
-	/// *
+	/// 
 	/// In this case the default velocity properties are layed down
 	/// first to provide a solid base, then any properties provided
 	/// in the given properties object will override the corresponding
 	/// default property.
 	/// -----------------------------------------------------------------------
 	/// </pre>
-	/// *
+	/// 
 	/// </summary>
 	public class RuntimeInstance : IRuntimeServices
 	{
 		private DefaultTraceListener debugOutput = new DefaultTraceListener();
-
-		private void InitBlock()
-		{
-			logSystem = new PrimordialLogSystem();
-			configuration = new ExtendedProperties();
-		}
 
 		public ExtendedProperties Configuration
 		{
@@ -94,71 +91,67 @@ namespace NVelocity.Runtime
 
 		}
 
-		/// <summary>  VelocimacroFactory object to manage VMs
+		/// <summary>
+		/// VelocimacroFactory object to manage VMs
 		/// </summary>
 		private VelocimacroFactory vmFactory = null;
 
-		///
-		/// <summary>  The Runtime logger.  We start with an instance of
+		/// <summary>
+		/// The Runtime logger.  We start with an instance of
 		/// a 'primordial logger', which just collects log messages
 		/// then, when the log system is initialized, we dump
 		/// all messages out of the primordial one into the real one.
 		/// </summary>
 		private ILogSystem logSystem;
 
-		///
-		/// <summary> The Runtime parser pool
+		/// <summary>
+		/// The Runtime parser pool
 		/// </summary>
 		private SimplePool parserPool;
 
-		///
-		/// <summary> Indicate whether the Runtime has been fully initialized.
+		/// <summary>
+		/// Indicate whether the Runtime has been fully initialized.
 		/// </summary>
 		private bool initialized;
 
-		/// <summary> These are the properties that are laid down over top
+		/// <summary>
+		/// These are the properties that are laid down over top
 		/// of the default properties when requested.
 		/// </summary>
 		private ExtendedProperties overridingProperties = null;
 
-		/// <summary> This is a hashtable of initialized directives.
-		/// The directives that populate this hashtable are
-		/// taken from the RUNTIME_DEFAULT_DIRECTIVES
-		/// property file. This hashtable is passed
-		/// to each parser that is created.
-		/// </summary>
-		// private Hashtable runtimeDirectives;
-
-		/// <summary> Object that houses the configuration options for
+		/// <summary>
+		/// Object that houses the configuration options for
 		/// the velocity runtime. The ExtendedProperties object allows
 		/// the convenient retrieval of a subset of properties.
 		/// For example all the properties for a resource loader
 		/// can be retrieved from the main ExtendedProperties object
 		/// using something like the following:
-		/// *
+		/// 
+		/// <code>
 		/// ExtendedProperties loaderConfiguration =
 		/// configuration.subset(loaderID);
-		/// *
+		/// </code>
+		/// 
 		/// And a configuration is a lot more convenient to deal
 		/// with then conventional properties objects, or Maps.
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'configuration' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private ExtendedProperties configuration;
 
 		private IResourceManager resourceManager = null;
 
-		/*
-		*  Each runtime instance has it's own introspector
-		*  to ensure that each instance is completely separate.
-		*/
+		/// <summary>
+		/// Each runtime instance has it's own introspector
+		/// to ensure that each instance is completely separate.
+		/// </summary>
 		private Introspector introspector = null;
 
 
-		/*
-		*  Opaque reference to something specificed by the 
-		*  application for use in application supplied/specified
-		*  pluggable components
-		*/
+		/// <summary>
+		/// Opaque reference to something specificed by the 
+		/// application for use in application supplied/specified
+		/// pluggable components.
+		/// </summary>
 		private Hashtable applicationAttributes = null;
 
 		private IUberspect uberSpect;
@@ -167,21 +160,17 @@ namespace NVelocity.Runtime
 
 		public RuntimeInstance()
 		{
-			InitBlock();
-			/*
-			*  create a VM factory, resource manager
-			*  and introspector
-			*/
+			logSystem = new PrimordialLogSystem();
+			configuration = new ExtendedProperties();
+
+			// create a VM factory, resource manager
+			// and introspector
 			vmFactory = new VelocimacroFactory(this);
 
-			/*
-			*  make a new introspector and initialize it
-			*/
+			// make a new introspector and initialize it
 			introspector = new Introspector(this);
 
-			/*
-			* and a store for the application attributes
-			*/
+			// and a store for the application attributes
 			applicationAttributes = new Hashtable();
 		}
 
@@ -198,10 +187,8 @@ namespace NVelocity.Runtime
 					initializeParserPool();
 					initializeIntrospection();
 
-					/*
-					 * initialize the VM Factory.  It will use the properties 
-					 * accessable from Runtime, so keep this here at the end.
-					 */
+					// initialize the VM Factory.  It will use the properties 
+					// accessable from Runtime, so keep this here at the end.
 					vmFactory.InitVelocimacro();
 
 					initialized = true;
@@ -219,7 +206,7 @@ namespace NVelocity.Runtime
 
 			if (rm != null && rm.Length > 0)
 			{
-				Object o = null;
+				Object o;
 
 				try
 				{
@@ -251,10 +238,7 @@ namespace NVelocity.Runtime
 			}
 			else
 			{
-				/*
-				*  someone screwed up.  Lets not fool around...
-				*/
-
+				// someone screwed up.  Lets not fool around...
 				String err = "It appears that no class was specified as the" + " Uberspect.  Please ensure that all configuration" + " information is correct.";
 
 				Error(err);
@@ -262,7 +246,8 @@ namespace NVelocity.Runtime
 			}
 		}
 
-		/// <summary> Initializes the Velocity Runtime with properties file.
+		/// <summary>
+		/// Initializes the Velocity Runtime with properties file.
 		/// The properties file may be in the file system proper,
 		/// or the properties file may be in the classpath.
 		/// </summary>
@@ -280,74 +265,55 @@ namespace NVelocity.Runtime
 			}
 		}
 
-		/// <summary> Allows an external system to set a property in
+		/// <summary>
+		/// Allows an external system to set a property in
 		/// the Velocity Runtime.
-		/// *
 		/// </summary>
-		/// <param name="String">property key
-		/// </param>
-		/// <param name="String">property value
-		///
-		/// </param>
-		public void SetProperty(String key, Object value_)
+		/// <param name="key">property key </param>
+		/// <param name="value">property value</param>
+		public void SetProperty(String key, Object value)
 		{
 			if (overridingProperties == null)
 			{
 				overridingProperties = new ExtendedProperties();
 			}
 
-			overridingProperties.SetProperty(key, value_);
+			overridingProperties.SetProperty(key, value);
 		}
 
-		/// <summary> Allow an external system to set an ExtendedProperties
-		/// object to use. This is useful where the external
-		/// system also uses the ExtendedProperties class and
-		/// the velocity configuration is a subset of
-		/// parent application's configuration. This is
-		/// the case with Turbine.
-		/// *
-		/// </summary>
-		/// <param name="ExtendedProperties">configuration
-		///
-		/// </param>
-		/// <summary> Add a property to the configuration. If it already
+		/// <summary>
+		/// Add a property to the configuration. If it already
 		/// exists then the value stated here will be added
-		/// to the configuration entry. For example, if
-		/// *
-		/// resource.loader = file
-		/// *
+		/// to the configuration entry.
+		/// <remarks>
+		/// For example, if
+		/// <c>resource.loader = file</c>
 		/// is already present in the configuration and you
-		/// *
-		/// addProperty("resource.loader", "classpath")
-		/// *
-		/// Then you will end up with a Vector like the
+		/// <c>addProperty("resource.loader", "classpath")</c>
+		/// 
+		/// Then you will end up with a <see cref="IList"/> like the
 		/// following:
-		/// *
-		/// ["file", "classpath"]
-		/// *
+		/// 
+		/// <c>["file", "classpath"]</c>
+		/// </remarks>
 		/// </summary>
-		/// <param name="String">key
-		/// </param>
-		/// <param name="String">value
-		///
-		/// </param>
-		public void AddProperty(String key, Object value_)
+		/// <param name="key">key</param>
+		/// <param name="value">value</param>
+		public void AddProperty(String key, Object value)
 		{
 			if (overridingProperties == null)
 			{
 				overridingProperties = new ExtendedProperties();
 			}
 
-			overridingProperties.AddProperty(key, value_);
+			overridingProperties.AddProperty(key, value);
 		}
 
-		/// <summary> Clear the values pertaining to a particular
+		/// <summary>
+		/// Clear the values pertaining to a particular
 		/// property.
-		/// *
 		/// </summary>
-		/// <param name="String">key of property to clear
-		///
-		/// </param>
+		/// <param name="key">key of property to clear</param>
 		public void ClearProperty(String key)
 		{
 			if (overridingProperties != null)
@@ -356,20 +322,21 @@ namespace NVelocity.Runtime
 			}
 		}
 
-		/// <summary>  Allows an external caller to get a property.  The calling
-		/// routine is required to know the type, as this routine
+		/// <summary>
+		/// Allows an external caller to get a property.
+		/// <remarks>
+		/// The calling routine is required to know the type, as this routine
 		/// will return an Object, as that is what properties can be.
-		/// *
+		/// </remarks>
 		/// </summary>
-		/// <param name="key">property to return
-		///
-		/// </param>
+		/// <param name="key">property to return</param>
 		public Object GetProperty(String key)
 		{
 			return configuration.GetProperty(key);
 		}
 
-		/// <summary> Initialize Velocity properties, if the default
+		/// <summary>
+		/// Initialize Velocity properties, if the default
 		/// properties have not been laid down first then
 		/// do so. Then proceed to process any overriding
 		/// properties. Laying down the default properties
@@ -378,10 +345,8 @@ namespace NVelocity.Runtime
 		/// </summary>
 		private void initializeProperties()
 		{
-			/*
-	    * Always lay down the default properties first as
-	    * to provide a solid base.
-	    */
+			// Always lay down the default properties first as
+	    // to provide a solid base.
 			if (configuration.IsInitialized() == false)
 			{
 				setDefaultProperties();
@@ -393,26 +358,22 @@ namespace NVelocity.Runtime
 			}
 		}
 
-		/// <summary> Initialize the Velocity Runtime with a Properties
+		/// <summary>
+		/// Initialize the Velocity Runtime with a Properties
 		/// object.
-		/// *
 		/// </summary>
-		/// <param name="">Properties
-		///
-		/// </param>
+		/// <param name="p">Properties</param>
 		public void Init(ExtendedProperties p)
 		{
 			overridingProperties = ExtendedProperties.ConvertProperties(p);
 			Init();
 		}
 
-		/// <summary> Initialize the Velocity Runtime with the name of
+		/// <summary>
+		/// Initialize the Velocity Runtime with the name of
 		/// ExtendedProperties object.
-		/// *
 		/// </summary>
-		/// <param name="">Properties
-		///
-		/// </param>
+		/// <param name="configurationFile">Properties</param>
 		public void Init(String configurationFile)
 		{
 			overridingProperties = new ExtendedProperties(configurationFile);
@@ -421,10 +382,7 @@ namespace NVelocity.Runtime
 
 		private void initializeResourceManager()
 		{
-			/*
-			 * Which resource manager?
-			 */
-
+			// Which resource manager?
 			IResourceManager rmInstance = (IResourceManager) 
 				applicationAttributes[RuntimeConstants.RESOURCE_MANAGER_CLASS];
 
@@ -432,13 +390,10 @@ namespace NVelocity.Runtime
 
 			if (rmInstance == null && rm != null && rm.Length > 0)
 			{
-				/*
-				 *  if something was specified, then make one.
-				 *  if that isn't a ResourceManager, consider
-				 *  this a huge error and throw
-				 */
-
-				Object o = null;
+				// if something was specified, then make one.
+				// if that isn't a ResourceManager, consider
+				// this a huge error and throw
+				Object o;
 
 				try
 				{
@@ -454,7 +409,7 @@ namespace NVelocity.Runtime
 
 				if (!(o is IResourceManager))
 				{
-					String err = "The specified class for ResourceManager (" + rm + ") does not implement ResourceManager." + " Velocity not initialized correctly.";
+					String err = "The specified class for ResourceManager (" + rm + ") does not implement ResourceManager. NVelocity not initialized correctly.";
 					Error(err);
 					throw new System.Exception(err);
 				}
@@ -470,11 +425,8 @@ namespace NVelocity.Runtime
 			}
 			else
 			{
-				/*
-				 *  someone screwed up.  Lets not fool around...
-				 */
-
-				String err = "It appears that no class was specified as the" + " ResourceManager.  Please ensure that all configuration" + " information is correct.";
+				// someone screwed up.  Lets not fool around...
+				String err = "It appears that no class was specified as the ResourceManager.  Please ensure that all configuration information is correct.";
 				Error(err);
 				throw new System.Exception(err);
 			}
@@ -625,41 +577,33 @@ namespace NVelocity.Runtime
 			return parser;
 		}
 
-		/// <summary> Parse the input and return the root of
+		/// <summary>
+		/// Parse the input and return the root of
 		/// AST node structure.
-		/// <br><br>
+		/// <remarks>
 		/// In the event that it runs out of parsers in the
 		/// pool, it will create and let them be GC'd
 		/// dynamically, logging that it has to do that.  This
 		/// is considered an exceptional condition.  It is
 		/// expected that the user will set the
-		/// PARSER_POOL_SIZE property appropriately for their
+		/// <c>PARSER_POOL_SIZE</c> property appropriately for their
 		/// application.  We will revisit this.
-		/// *
+		/// </remarks>
 		/// </summary>
-		/// <param name="InputStream">inputstream retrieved by a resource loader
-		/// </param>
-		/// <param name="String">name of the template being parsed
-		///
-		/// </param>
+		/// <param name="reader">inputstream retrieved by a resource loader</param>
+		/// <param name="templateName">name of the template being parsed</param>
 		public SimpleNode Parse(TextReader reader, String templateName)
 		{
-			/*
-			*  do it and dump the VM namespace for this template
-			*/
+			// do it and dump the VM namespace for this template
 			return Parse(reader, templateName, true);
 		}
 
-		/// <summary>  Parse the input and return the root of the AST node structure.
-		/// *
+		/// <summary>
+		/// Parse the input and return the root of the AST node structure.
 		/// </summary>
-		/// <param name="reader">inputstream retrieved by a resource loader
-		/// </param>
-		/// <param name="templateName">name of the template being parsed
-		/// </param>
-		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template
-		///
-		/// </param>
+		/// <param name="reader">inputstream retrieved by a resource loader</param>
+		/// <param name="templateName">name of the template being parsed</param>
+		/// <param name="dumpNamespace">flag to dump the Velocimacro namespace for this template</param>
 		public SimpleNode Parse(TextReader reader, String templateName, bool dumpNamespace)
 		{
 			SimpleNode ast = null;
@@ -668,11 +612,8 @@ namespace NVelocity.Runtime
 
 			if (parser == null)
 			{
-				/*
-				*  if we couldn't get a parser from the pool
-				*  make one and log it.
-				*/
-
+				// if we couldn't get a parser from the pool
+				// make one and log it.
 				Error("Runtime : ran out of parsers. Creating new.  " + " Please increment the parser.pool.size property." + " The current value is too small.");
 
 				parser = CreateNewParser();
@@ -683,20 +624,14 @@ namespace NVelocity.Runtime
 				}
 			}
 
-			/*
-			*  now, if we have a parser
-			*/
-
+			// now, if we have a parser
 			if (parser != null)
 			{
 				try
 				{
-					/*
-					*  dump namespace if we are told to.  Generally, you want to 
-					*  do this - you don't in special circumstances, such as 
-					*  when a VM is getting init()-ed & parsed
-					*/
-
+					// dump namespace if we are told to.  Generally, you want to 
+					// do this - you don't in special circumstances, such as 
+					// when a VM is getting init()-ed & parsed
 					if (dumpNamespace)
 					{
 						DumpVMNamespace(templateName);
@@ -706,9 +641,7 @@ namespace NVelocity.Runtime
 				}
 				finally
 				{
-					/*
-		    *  if this came from the pool, then put back
-		    */
+					// if this came from the pool, then put back
 					if (!madeNew)
 					{
 						parserPool.put(parser);
@@ -722,22 +655,24 @@ namespace NVelocity.Runtime
 			return ast;
 		}
 
-		/// <summary> Returns a <code>Template</code> from the resource manager.
+		/// <summary>
+		/// Returns a <code>Template</code> from the resource manager.
 		/// This method assumes that the character encoding of the
 		/// template is set by the <code>input.encoding</code>
 		/// property.  The default is "ISO-8859-1"
-		/// *
 		/// </summary>
 		/// <param name="name">The file name of the desired template.
 		/// </param>
-		/// <returns>    The template.
-		/// @throws ResourceNotFoundException if template not found
-		/// from any available source.
-		/// @throws ParseErrorException if template cannot be parsed due
-		/// to syntax (or other) error.
-		/// @throws Exception if an error occurs in template initialization
-		///
-		/// </returns>
+		/// <returns>The template.</returns>
+		/// <exception cref="ResourceNotFoundException">
+		/// if template not found from any available source
+		/// </exception>
+		/// <exception cref="ParseErrorException">
+		/// if template cannot be parsed due to syntax (or other) error.
+		/// </exception>
+		/// <exception cref="Exception">
+		/// if an error occurs in template initialization
+		/// </exception>
 		public Template GetTemplate(String name)
 		{
 			return GetTemplate(name, GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT));
@@ -837,149 +772,121 @@ namespace NVelocity.Runtime
 			}
 		}
 
-		/// <summary> Handle logging.
-		/// *
+		/// <summary>
+		/// Handle logging.
 		/// </summary>
-		/// <param name="String">message to log
-		///
-		/// </param>
+		/// <param name="level">log level</param>
+		/// <param name="message">message to log</param>
 		private void Log(int level, Object message)
 		{
-			String out_Renamed;
+			String output;
 
-			/*
-	    *  now,  see if the logging stacktrace is on
-	    *  and modify the message to suit
-	    */
-			//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
+			// now,  see if the logging stacktrace is on
+	    // and modify the message to suit
 			if (showStackTrace() && (message is System.Exception || message is System.Exception))
 			{
-				//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to ' ' which has different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1100"'
-				out_Renamed = StringUtils.StackTrace((System.Exception) message);
+				output = StringUtils.StackTrace((System.Exception) message);
 			}
 			else
 			{
-				//UPGRADE_TODO: The equivalent in .NET for method 'java.Object.toString' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
-				out_Renamed = message.ToString();
+				output = message.ToString();
 			}
 
-			/*
-	    *  just log it, as we are guaranteed now to have some
-	    *  kind of logger - save the if()
-	    */
-			logSystem.LogVelocityMessage(level, out_Renamed);
+			// just log it, as we are guaranteed now to have some
+	    // kind of logger - save the if()
+			logSystem.LogVelocityMessage(level, output);
 		}
 
-		/// <summary> Log a warning message.
-		/// *
+		/// <summary>
+		/// Log a warning message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
+		/// <param name="message">message to log</param>
 		public void Warn(Object message)
 		{
 			Log(LogSystem_Fields.WARN_ID, message);
 		}
 
-		///
-		/// <summary> Log an info message.
-		/// *
+		/// <summary>
+		/// Log an info message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
+		/// <param name="message">message to log</param>
 		public void Info(Object message)
 		{
 			Log(LogSystem_Fields.INFO_ID, message);
 		}
 
-		/// <summary> Log an error message.
-		/// *
+		/// <summary>
+		/// Log an error message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
+		/// <param name="message">message to log</param>
 		public void Error(Object message)
 		{
 			Log(LogSystem_Fields.ERROR_ID, message);
 		}
 
-		/// <summary> Log a debug message.
-		/// *
+		/// <summary>
+		/// Log a debug message.
 		/// </summary>
-		/// <param name="Object">message to log
-		///
-		/// </param>
+		/// <param name="message">message to log</param>
 		public void Debug(Object message)
 		{
 			Log(LogSystem_Fields.DEBUG_ID, message);
 		}
 
-		/// <summary> String property accessor method with default to hide the
+		/// <summary>
+		/// String property accessor method with default to hide the
 		/// configuration implementation.
-		///
 		/// </summary>
-		/// <param name="String">key property key
-		/// </param>
-		/// <param name="String">defaultValue  default value to return if key not
-		/// found in resource manager.
-		/// </param>
-		/// <returns>String  value of key or default
-		///
-		/// </returns>
+		/// <param name="key">key property key</param>
+		/// <param name="defaultValue">default value to return if key not found in resource manager.</param>
+		/// <returns>String  value of key or default</returns>
 		public String GetString(String key, String defaultValue)
 		{
 			return configuration.GetString(key, defaultValue);
 		}
 
-		/// <summary> Returns the appropriate VelocimacroProxy object if strVMname
+		/// <summary>
+		/// Returns the appropriate VelocimacroProxy object if strVMname
 		/// is a valid current Velocimacro.
-		/// *
 		/// </summary>
-		/// <param name="String">vmName  Name of velocimacro requested
-		/// </param>
-		/// <returns>String VelocimacroProxy
-		///
-		/// </returns>
+		/// <param name="vmName">Name of velocimacro requested</param>
+		/// <returns>VelocimacroProxy</returns>
 		public Directive.Directive GetVelocimacro(String vmName, String templateName)
 		{
 			return vmFactory.GetVelocimacro(vmName, templateName);
 		}
 
-		/// <summary> Adds a new Velocimacro. Usually called by Macro only while parsing.
-		/// *
+		/// <summary>
+		/// Adds a new Velocimacro. Usually called by Macro only while parsing.
 		/// </summary>
-		/// <param name="String">name  Name of velocimacro
-		/// </param>
-		/// <param name="String">macro  String form of macro body
-		/// </param>
-		/// <param name="String">argArray  Array of strings, containing the
-		/// #macro() arguments.  the 0th is the name.
-		/// </param>
-		/// <returns>boolean  True if added, false if rejected for some
+		/// <param name="name">Name of velocimacro</param>
+		/// <param name="macro">String form of macro body</param>
+		/// <param name="argArray">Array of strings, containing the #macro() arguments.  the 0th is the name.</param>
+		/// <returns>
+		/// True if added, false if rejected for some
 		/// reason (either parameters or permission settings)
-		///
 		/// </returns>
 		public bool AddVelocimacro(String name, String macro, String[] argArray, String sourceTemplate)
 		{
 			return vmFactory.AddVelocimacro(name, macro, argArray, sourceTemplate);
 		}
 
-		/// <summary>  Checks to see if a VM exists
-		/// *
+		/// <summary>
+		/// Checks to see if a VM exists
 		/// </summary>
-		/// <param name="name"> Name of velocimacro
-		/// </param>
-		/// <returns>boolean  True if VM by that name exists, false if not
-		///
+		/// <param name="vmName">Name of velocimacro</param>
+		/// <returns>
+		/// True if VM by that name exists, false if not
 		/// </returns>
 		public bool IsVelocimacro(String vmName, String templateName)
 		{
 			return vmFactory.IsVelocimacro(vmName, templateName);
 		}
 
-		/// <summary>  tells the vmFactory to dump the specified namespace.  This is to support
-		/// clearing the VM list when in inline-VM-local-scope mode
+		/// <summary>
+		/// Tells the vmFactory to dump the specified namespace.
+		/// This is to support clearing the VM list when in 
+		/// <c>inline-VM-local-scope</c> mode.
 		/// </summary>
 		public bool DumpVMNamespace(String namespace_Renamed)
 		{
@@ -998,13 +905,11 @@ namespace NVelocity.Runtime
 		* --------------------------------------------------------------------
 		*/
 
-		/// <summary> String property accessor method to hide the configuration implementation
+		/// <summary>
+		/// String property accessor method to hide the configuration implementation
 		/// </summary>
-		/// <param name="key"> property key
-		/// </param>
-		/// <returns>  value of key or null
-		///
-		/// </returns>
+		/// <param name="key">property key</param>
+		/// <returns>value of key or null</returns>
 		public String GetString(String key)
 		{
 			return configuration.GetString(key);
@@ -1013,8 +918,7 @@ namespace NVelocity.Runtime
 		/// <summary>
 		///	Int property accessor method to hide the configuration implementation.
 		/// </summary>
-		/// <param name="key">property key
-		/// </param>
+		/// <param name="key">property key</param>
 		/// <returns>value</returns>
 		public int GetInt(String key)
 		{
