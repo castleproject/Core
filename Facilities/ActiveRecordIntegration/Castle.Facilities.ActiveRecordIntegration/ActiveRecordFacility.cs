@@ -27,6 +27,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	using Castle.Model;
 	using Castle.Model.Configuration;
 	
+	using Castle.Services.Logging;
 	using Castle.Services.Transaction;
 
 	using TransactionMode = Castle.Services.Transaction.TransactionMode;
@@ -36,6 +37,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 	/// </summary>
 	public class ActiveRecordFacility : AbstractFacility
 	{
+		private ILogger log;
 		private int sessionFactoryCount, sessionFactoryHolderCount;
 
 		public ActiveRecordFacility()
@@ -44,22 +46,34 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		protected override void Init()
 		{
+			if (Kernel.HasComponent(typeof(ILogger)))
+				log = (ILogger) Kernel[typeof(ILogger)];
+			else
+				log = new NullLogger();
+			
+			log.Debug("Initializing AR Facility");
+			
 			if (FacilityConfig == null)
 			{
+				log.FatalError("Configuration for AR Facility not found.");
 				throw new FacilityException("Sorry, but the ActiveRecord Facility depends on a proper configuration node.");
 			}
 
-			ArrayList assemblies = new ArrayList();
+			ConfigurationCollection assembliyConfigNodes = FacilityConfig.Children["assemblies"].Children;
 
-			foreach(IConfiguration assemblyNode in FacilityConfig.Children["assemblies"].Children)
+			if (assembliyConfigNodes.Count == 0)
 			{
-				assemblies.Add( ObtainAssembly( assemblyNode.Value ) );
+				log.FatalError("No assembly specified on AR Facility config.");
+
+				throw new FacilityException("You need to specify at least one assembly that contains " +
+					"the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
 			}
 
-			if (assemblies.Count == 0)
+			ArrayList assemblies = new ArrayList(assembliyConfigNodes.Count);
+			
+			foreach(IConfiguration assemblyNode in assembliyConfigNodes)
 			{
-				throw new FacilityException("You need to specify at least one assembly that contains " + 
-					"the ActiveRecord classes. For example, <assemblies><item>MyAssembly</item></assemblies>");
+				assemblies.Add( ObtainAssembly( assemblyNode.Value ) );
 			}
 
 			Kernel.ComponentCreated += new Castle.MicroKernel.ComponentInstanceDelegate(Kernel_ComponentCreated);
@@ -69,8 +83,16 @@ namespace Castle.Facilities.ActiveRecordIntegration
 			InitializeFramework(assemblies);
 		}
 
+		public override void Dispose()
+		{
+			log.Info("AR Facility is being disposed.");
+			base.Dispose();
+		}
+
 		private void InitializeFramework(ArrayList assemblies)
 		{
+			log.Info("Initializing ActiveRecord Framework");
+			
 			ActiveRecordStarter.SessionFactoryHolderCreated += new SessionFactoryHolderDelegate(OnSessionFactoryHolderCreated);
 
 			try
@@ -89,6 +111,8 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			if (!Kernel.HasComponent( typeof(ITransactionManager) ))
 			{
+				log.Info("No Transaction Manager registered on Kernel, registering AR Transaction Manager");
+				
 				Kernel.AddComponent( "ar.transaction.manager", 
 				                     typeof(ITransactionManager), typeof(ActiveRecordTransactionManager) );
 			}
@@ -101,6 +125,7 @@ namespace Castle.Facilities.ActiveRecordIntegration
 
 		private Assembly ObtainAssembly(String assemblyName)
 		{
+			log.Debug("Loading model assembly '{0}' for AR", assemblyName);
 			return Assembly.Load(assemblyName);
 		}
 
@@ -116,40 +141,41 @@ namespace Castle.Facilities.ActiveRecordIntegration
 		{
 			holder.OnRootTypeRegistered += new RootTypeHandler(OnRootTypeRegistered);
 
-			if (!Kernel.HasComponent("activerecord.sessionfactoryholder"))
+			string componentName = "activerecord.sessionfactoryholder";
+			if (Kernel.HasComponent(componentName))
+				componentName += "." + (++sessionFactoryHolderCount);
+			
+			while (Kernel.HasComponent(componentName))
 			{
-				Kernel.AddComponentInstance( 
-					"activerecord.sessionfactoryholder", 
-					typeof(ISessionFactoryHolder), holder );
+				componentName =
+					componentName.Substring(0, componentName.LastIndexOf('.'))
+					+ (++sessionFactoryHolderCount);
 			}
-			else
-			{
-				sessionFactoryHolderCount++;
 
-				Kernel.AddComponentInstance( 
-					"activerecord.sessionfactoryholder." + sessionFactoryCount.ToString(), 
-					typeof(ISessionFactoryHolder), holder );
-			}
+			log.Info("Registering SessionFactoryHolder named '{0}': {1}", componentName, holder);
+			Kernel.AddComponentInstance(
+				componentName, typeof(ISessionFactoryHolder), holder);
 		}
 
 		private void OnRootTypeRegistered(object sender, Type rootType)
 		{
-			if (!Kernel.HasComponent("activerecord.sessionfactory"))
-			{
-				Kernel.AddComponentInstance( 
-					"activerecord.sessionfactory", 
-					typeof(NHibernate.ISessionFactory), 
-					new SessionFactoryDelegate( (ISessionFactoryHolder) sender, rootType) );
-			}
-			else
-			{
-				sessionFactoryCount++;
+			string componentName = "activerecord.sessionfactory";
 
-				Kernel.AddComponentInstance( 
-					"activerecord.sessionfactory." + sessionFactoryCount.ToString(), 
-					typeof(NHibernate.ISessionFactory), 
-					new SessionFactoryDelegate( (ISessionFactoryHolder) sender, rootType) );
+			if (Kernel.HasComponent(componentName))
+				componentName += "." + (++sessionFactoryCount);
+
+			while (Kernel.HasComponent(componentName))
+			{
+				componentName =
+					componentName.Substring(0, componentName.LastIndexOf('.'))
+					+ (++sessionFactoryCount);
 			}
+
+			log.Info("Registering SessionFactory named '{0}' for the root type {1}: {2}", componentName, rootType, sender);
+			Kernel.AddComponentInstance(
+				componentName,
+				typeof(NHibernate.ISessionFactory),
+				new SessionFactoryDelegate((ISessionFactoryHolder) sender, rootType));
 		}
 	}
 
