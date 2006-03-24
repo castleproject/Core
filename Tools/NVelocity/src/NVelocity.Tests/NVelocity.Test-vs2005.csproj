@@ -99,6 +99,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Test\AjaxHelper2.cs" />
     <Compile Include="Test\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -120,10 +121,12 @@
     <Compile Include="Test\ContextTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Test\DictHelper.cs" />
     <Compile Include="Test\EncodingTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Test\Extensions\CustomRenderingTestCase.cs" />
+    <Compile Include="Test\ForeachTest.cs" />
     <Compile Include="Test\IntrospectorTest.cs">
       <SubType>Code</SubType>
     </Compile>
