@@ -678,84 +678,74 @@ namespace NVelocity.Runtime
 			return GetTemplate(name, GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT));
 		}
 
-		/// <summary> Returns a <code>Template</code> from the resource manager
-		/// *
+		/// <summary>
+		/// Returns a <code>Template</code> from the resource manager
 		/// </summary>
-		/// <param name="name">The  name of the desired template.
-		/// </param>
-		/// <param name="encoding">Character encoding of the template
-		/// </param>
-		/// <returns>    The template.
-		/// @throws ResourceNotFoundException if template not found
-		/// from any available source.
-		/// @throws ParseErrorException if template cannot be parsed due
-		/// to syntax (or other) error.
-		/// @throws Exception if an error occurs in template initialization
-		///
-		/// </returns>
+		/// <param name="name">The name of the desired template.</param>
+		/// <param name="encoding">Character encoding of the template</param>
+		/// <returns>The template.</returns>
+		/// <exception cref="ResourceNotFoundException">
+		/// if template not found from any available source.
+		/// </exception>
+		/// <exception cref="ParseErrorException">
+		/// if template cannot be parsed due to syntax (or other) error.
+		/// </exception>
+		/// <exception cref="Exception">
+		/// if an error occurs in template initialization
+		/// </exception>
 		public Template GetTemplate(String name, String encoding)
 		{
 			return (Template) resourceManager.GetResource(name, ResourceManager_Fields.RESOURCE_TEMPLATE, encoding);
 		}
 
-		/// <summary> Returns a static content resource from the
+		/// <summary>
+		/// Returns a static content resource from the
 		/// resource manager.  Uses the current value
-		/// if INPUT_ENCODING as the character encoding.
-		/// *
+		/// if <c>INPUT_ENCODING</c> as the character encoding.
 		/// </summary>
-		/// <param name="name">Name of content resource to get
-		/// </param>
-		/// <returns>parsed ContentResource object ready for use
-		/// @throws ResourceNotFoundException if template not found
-		/// from any available source.
-		///
-		/// </returns>
+		/// <param name="name">Name of content resource to get</param>
+		/// <returns>ContentResource object ready for use</returns>
+		/// <exception cref="ResourceNotFoundException">
+		/// if template not found from any available source.
+		/// </exception>
 		public ContentResource GetContent(String name)
 		{
-			/*
-	    *  the encoding is irrelvant as we don't do any converstion
-	    *  the bytestream should be dumped to the output stream
-	    */
-
+			// the encoding is irrelvant as we don't do any converstion
+	    // the bytestream should be dumped to the output stream
 			return GetContent(name, GetString(RuntimeConstants.INPUT_ENCODING, RuntimeConstants.ENCODING_DEFAULT));
 		}
 
-		/// <summary> Returns a static content resource from the
+		/// <summary>
+		/// Returns a static content resource from the
 		/// resource manager.
-		/// *
 		/// </summary>
-		/// <param name="name">Name of content resource to get
-		/// </param>
-		/// <param name="encoding">Character encoding to use
-		/// </param>
-		/// <returns>parsed ContentResource object ready for use
-		/// @throws ResourceNotFoundException if template not found
-		/// from any available source.
-		///
-		/// </returns>
+		/// <param name="name">Name of content resource to get</param>
+		/// <param name="encoding">Character encoding to use</param>
+		/// <returns>ContentResource object ready for use</returns>
+		/// <exception cref="ResourceNotFoundException">
+		/// if template not found from any available source.
+		/// </exception>
 		public ContentResource GetContent(String name, String encoding)
 		{
 			return (ContentResource) resourceManager.GetResource(name, ResourceManager_Fields.RESOURCE_CONTENT, encoding);
 		}
 
 
-		/// <summary>  Determines is a template exists, and returns name of the loader that
+		/// <summary>
+		/// Determines is a template exists, and returns name of the loader that
 		/// provides it.  This is a slightly less hokey way to support
-		/// the Velocity.templateExists() utility method, which was broken
+		/// the <c>Velocity.templateExists()</c> utility method, which was broken
 		/// when per-template encoding was introduced.  We can revisit this.
-		/// *
 		/// </summary>
-		/// <param name="resourceName">Name of template or content resource
-		/// </param>
-		/// <returns>class name of loader than can provide it
-		///
-		/// </returns>
+		/// <param name="resourceName">Name of template or content resource</param>
+		/// <returns>class name of loader than can provide it</returns>
 		public String GetLoaderNameForResource(String resourceName)
 		{
 			return resourceManager.GetLoaderNameForResource(resourceName);
 		}
 
-		/// <summary> Added this to check and make sure that the configuration
+		/// <summary>
+		/// Added this to check and make sure that the configuration
 		/// is initialized before trying to get properties from it.
 		/// This occurs when there are errors during initialization
 		/// and the default properties have yet to be layed down.
@@ -777,7 +767,7 @@ namespace NVelocity.Runtime
 		/// </summary>
 		/// <param name="level">log level</param>
 		/// <param name="message">message to log</param>
-		private void Log(int level, Object message)
+		private void Log(LogLevel level, Object message)
 		{
 			String output;
 
@@ -803,7 +793,7 @@ namespace NVelocity.Runtime
 		/// <param name="message">message to log</param>
 		public void Warn(Object message)
 		{
-			Log(LogSystem_Fields.WARN_ID, message);
+			Log(LogLevel.Warn, message);
 		}
 
 		/// <summary>
@@ -812,7 +802,7 @@ namespace NVelocity.Runtime
 		/// <param name="message">message to log</param>
 		public void Info(Object message)
 		{
-			Log(LogSystem_Fields.INFO_ID, message);
+			Log(LogLevel.Info, message);
 		}
 
 		/// <summary>
@@ -821,7 +811,7 @@ namespace NVelocity.Runtime
 		/// <param name="message">message to log</param>
 		public void Error(Object message)
 		{
-			Log(LogSystem_Fields.ERROR_ID, message);
+			Log(LogLevel.Error, message);
 		}
 
 		/// <summary>
@@ -830,7 +820,7 @@ namespace NVelocity.Runtime
 		/// <param name="message">message to log</param>
 		public void Debug(Object message)
 		{
-			Log(LogSystem_Fields.DEBUG_ID, message);
+			Log(LogLevel.Debug, message);
 		}
 
 		/// <summary>

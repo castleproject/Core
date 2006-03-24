@@ -27,7 +27,7 @@ namespace NVelocity.Runtime.Log
 
 		public void Init(IRuntimeServices rs)
 		{
-			rsvc = rs;
+			this.rsvc = rs;
 		}
 
 		/// <summary>
@@ -35,13 +35,11 @@ namespace NVelocity.Runtime.Log
 		/// </summary>
 		/// <param name="level">severity level</param>
 		/// <param name="message">complete error message</param>
-		public void LogVelocityMessage(int level, String message)
+		public void LogVelocityMessage(LogLevel level, String message)
 		{
 			lock (this)
 			{
-				Object[] data = new Object[2];
-				data[0] = level;
-				data[1] = message;
+				Object[] data = { level, message };
 				pendingMessages.Add(data);
 
 				// log the the OutputDebugPrint API (see www.sysinternals.com for DebugView to see debug messages)
@@ -61,7 +59,7 @@ namespace NVelocity.Runtime.Log
 					// iterate and log each individual message...
 					foreach (Object[] data in pendingMessages)
 					{
-						newLogger.LogVelocityMessage(((Int32) data[0]), (String) data[1]);
+						newLogger.LogVelocityMessage(((LogLevel) data[0]), (String) data[1]);
 					}
 				}
 

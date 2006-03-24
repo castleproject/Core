@@ -2,29 +2,27 @@ namespace NVelocity.Runtime.Log
 {
 	using System;
 
-	public struct LogSystem_Fields
+	public enum LogLevel
 	{
-		public const bool DEBUG_ON = true;
-
 		/// <summary>
 		/// Prefix for debug messages.
 		/// </summary>
-		public const int DEBUG_ID = 0;
+		Debug = 0,
 
 		/// <summary>
 		/// Prefix for info messages.
 		/// </summary>
-		public const int INFO_ID = 1;
+		Info = 1,
 
 		/// <summary>
 		/// Prefix for warning messages.
 		/// </summary>
-		public const int WARN_ID = 2;
+		Warn = 2,
 
 		/// <summary>
 		/// Prefix for error messages.
 		/// </summary>
-		public const int ERROR_ID = 3;
+		Error = 3,
 	}
 
 	/// <summary>
@@ -42,7 +40,7 @@ namespace NVelocity.Runtime.Log
 		/// <summary>
 		/// Send a log message from Velocity.
 		/// </summary>
-		void LogVelocityMessage(int level, String message);
+		void LogVelocityMessage(LogLevel level, String message);
 	}
 
 }
