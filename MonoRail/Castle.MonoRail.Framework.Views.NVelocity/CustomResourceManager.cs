@@ -43,7 +43,7 @@ namespace Castle.MonoRail.Framework.Views.NVelocity
 			cacheProvider = (ICacheProvider) serviceProvider.GetService(typeof(ICacheProvider));
 		}
 
-		public Resource GetResource(string resourceName, int resourceType, string encoding)
+		public Resource GetResource(string resourceName, ResourceType resourceType, string encoding)
 		{
 			Resource resource = (Resource) cacheProvider.Get(resourceName);
 
