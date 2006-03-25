@@ -262,7 +262,7 @@ namespace NVelocity.Runtime
 		/// <summary>  tells the vmFactory to dump the specified namespace.  This is to support
 		/// clearing the VM list when in inline-VM-local-scope mode
 		/// </summary>
-		bool DumpVMNamespace(String namespace_Renamed);
+		bool DumpVMNamespace(String ns);
 
 		/// <summary>
 		/// String property accessor method to hide the configuration implementation.

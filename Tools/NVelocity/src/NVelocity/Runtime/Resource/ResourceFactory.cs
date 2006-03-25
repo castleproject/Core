@@ -69,34 +69,28 @@ namespace NVelocity.Runtime.Resource
     */
 	using System;
 
-	/// <summary> Class responsible for instantiating <code>Resource</code> objects,
+	/// <summary>
+	/// Class responsible for instantiating <code>Resource</code> objects,
 	/// given name and type.
-	/// *
 	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ResourceFactory.cs,v 1.3 2003/10/27 13:54:11 corts Exp $
-	///
-	/// </version>
+	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a> </author>
+	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a> </author>
+	/// <version> $Id: ResourceFactory.cs,v 1.3 2003/10/27 13:54:11 corts Exp $ </version>
 	public class ResourceFactory
 	{
-		public static Resource getResource(String resourceName, int resourceType)
+		public static Resource GetResource(String resourceName, ResourceType resourceType)
 		{
 			Resource resource = null;
 
 			switch (resourceType)
 			{
-				case ResourceManager_Fields.RESOURCE_TEMPLATE:
+				case ResourceType.Template:
 					resource = new Template();
 					break;
 
-
-				case ResourceManager_Fields.RESOURCE_CONTENT:
+				case ResourceType.Content:
 					resource = new ContentResource();
 					break;
-
 			}
 
 			return resource;

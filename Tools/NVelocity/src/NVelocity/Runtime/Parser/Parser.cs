@@ -5074,10 +5074,10 @@ namespace NVelocity.Runtime.Parser
 				}
 				bool exists = false;
 				//UPGRADE_TODO: method 'java.util.Enumeration.hasMoreElements' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationhasMoreElements"'
-				for (IEnumerator enum_Renamed = jj_expentries.GetEnumerator(); enum_Renamed.MoveNext(); )
+				for (IEnumerator en = jj_expentries.GetEnumerator(); en.MoveNext(); )
 				{
 					//UPGRADE_TODO: method 'java.util.Enumeration.nextElement' was converted to ' ' which has a different behavior. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1073_javautilEnumerationnextElement"'
-					int[] oldentry = (int[]) (enum_Renamed.Current);
+					int[] oldentry = (int[]) (en.Current);
 					if (oldentry.Length == jj_expentry.Length)
 					{
 						exists = true;

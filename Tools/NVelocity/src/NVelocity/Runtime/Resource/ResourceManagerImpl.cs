@@ -28,28 +28,17 @@ namespace NVelocity.Runtime.Resource
 	{
 		public ResourceManagerImpl()
 		{
-			InitBlock();
-		}
-
-		private void InitBlock()
-		{
 			resourceLoaders = new ArrayList();
 			sourceInitializerList = new ArrayList();
 		}
 
-		/// <summary> A template resources.
-		/// </summary>
-		public const int RESOURCE_TEMPLATE = 1;
-
-		/// <summary> A static content resource.
-		/// </summary>
-		public const int RESOURCE_CONTENT = 2;
-
-		/// <summary> token used to identify the loader internally
+		/// <summary>
+		/// token used to identify the loader internally
 		/// </summary>
 		private const String RESOURCE_LOADER_IDENTIFIER = "_RESOURCE_LOADER_IDENTIFIER_";
 
-		/// <summary>  Object implementing ResourceCache to
+		/// <summary>
+		/// Object implementing ResourceCache to
 		/// be our resource manager's Resource cache.
 		/// </summary>
 		protected internal ResourceCache globalCache = null;
@@ -60,16 +49,17 @@ namespace NVelocity.Runtime.Resource
 		/// </summary>
 		protected internal ArrayList resourceLoaders;
 
-		/// <summary> This is a list of the template input stream source
+		/// <summary>
+		/// This is a list of the template input stream source
 		/// initializers, basically properties for a particular
 		/// template stream source. The order in this list
 		/// reflects numbering of the properties i.e.
-		/// *
 		/// <loader-id>.resource.loader.<property> = <value>
 		/// </summary>
 		private ArrayList sourceInitializerList;
 
-		/// <summary> Each loader needs a configuration object for
+		/// <summary>
+		/// Each loader needs a configuration object for
 		/// its initialization, this flags keeps track of whether
 		/// or not the configuration objects have been created
 		/// for the resource loaders.
@@ -114,15 +104,10 @@ namespace NVelocity.Runtime.Resource
 				resourceLoaders.Add(resourceLoader);
 			}
 
-			/*
-			* now see if this is overridden by configuration
-			*/
-
+			// now see if this is overridden by configuration
 			logWhenFound = rsvc.GetBoolean(RuntimeConstants.RESOURCE_MANAGER_LOGWHENFOUND, true);
 
-			/*
-			*  now, is a global cache specified?
-			*/
+			// now, is a global cache specified?
 			String claz = rsvc.GetString(RuntimeConstants.RESOURCE_MANAGER_CACHE_CLASS);
 			Object o = null;
 
@@ -135,7 +120,7 @@ namespace NVelocity.Runtime.Resource
 				}
 				catch (Exception cnfe)
 				{
-					String err = "The specified class for ResourceCache (" + claz + ") does not exist (or is not accessible to the current classlaoder).";
+					String err = "The specified class for ResourceCache (" + claz + ") does not exist (or is not accessible to the current classloader).";
 					rsvc.Error(err);
 					o = null;
 				}
@@ -148,9 +133,7 @@ namespace NVelocity.Runtime.Resource
 				}
 			}
 
-			/*
-			*  if we didn't get through that, just use the default.
-			*/
+			// if we didn't get through that, just use the default.
 			if (o == null)
 			{
 				o = new ResourceCacheImpl();
@@ -161,7 +144,8 @@ namespace NVelocity.Runtime.Resource
 			rsvc.Info("Default ResourceManager initialization complete.");
 		}
 
-		/// <summary> This will produce a List of Hashtables, each
+		/// <summary>
+		/// This will produce a List of Hashtables, each
 		/// hashtable contains the intialization info for
 		/// a particular resource loader. This Hastable
 		/// will be passed in when initializing the
@@ -217,13 +201,13 @@ namespace NVelocity.Runtime.Resource
 		}
 
 		/// <summary> Gets the named resource.  Returned class type corresponds to specified type
-		/// (i.e. <code>Template</code> to <code>RESOURCE_TEMPLATE</code>).
+		/// (i.e. <code>Template</code> to <code>Template</code>).
 		/// *
 		/// </summary>
 		/// <param name="resourceName">The name of the resource to retrieve.
 		/// </param>
-		/// <param name="resourceType">The type of resource (<code>RESOURCE_TEMPLATE</code>,
-		/// <code>RESOURCE_CONTENT</code>, etc.).
+		/// <param name="resourceType">The type of resource (<code>Template</code>,
+		/// <code>Content</code>, etc.).
 		/// </param>
 		/// <param name="encoding"> The character encoding to use.
 		/// </param>
@@ -235,7 +219,7 @@ namespace NVelocity.Runtime.Resource
 		/// @throws Exception if a problem in parse
 		///
 		/// </returns>
-		public Resource GetResource(String resourceName, int resourceType, String encoding)
+		public Resource GetResource(string resourceName, ResourceType resourceType, string encoding)
 		{
 			/*
 			* Check to see if the resource was placed in the cache.
@@ -270,13 +254,13 @@ namespace NVelocity.Runtime.Resource
 				}
 				catch (ParseErrorException pee)
 				{
-					rsvc.Error("ResourceManager.getResource() exception: " + pee);
+					rsvc.Error("ResourceManager.GetResource() exception: " + pee);
 
 					throw;
 				}
 				catch (Exception eee)
 				{
-					rsvc.Error("ResourceManager.getResource() exception: " + eee);
+					rsvc.Error("ResourceManager.GetResource() exception: " + eee);
 
 					throw;
 				}
@@ -285,13 +269,10 @@ namespace NVelocity.Runtime.Resource
 			{
 				try
 				{
-					/*
-					 *  it's not in the cache, so load it.
-					 */
-
+					// it's not in the cache, so load it.
 					resource = LoadResource(resourceName, resourceType, encoding);
 
-					if (resource.ResourceLoader.IsCachingOn())
+					if (resource.ResourceLoader.CachingOn)
 					{
 						globalCache.put(resourceName, resource);
 					}
@@ -304,13 +285,13 @@ namespace NVelocity.Runtime.Resource
 				}
 				catch (ParseErrorException pee)
 				{
-					rsvc.Error("ResourceManager.getResource() parse exception: " + pee);
+					rsvc.Error("ResourceManager.GetResource() parse exception: " + pee);
 
 					throw;
 				}
 				catch (Exception ee)
 				{
-					rsvc.Error("ResourceManager.getResource() exception new: " + ee);
+					rsvc.Error("ResourceManager.GetResource() exception new: " + ee);
 
 					throw;
 				}
@@ -323,8 +304,8 @@ namespace NVelocity.Runtime.Resource
 		/// Loads a resource from the current set of resource loaders
 		/// </summary>
 		/// <param name="resourceName">The name of the resource to retrieve.</param>
-		/// <param name="resourceType">The type of resource (<code>RESOURCE_TEMPLATE</code>,
-		/// <code>RESOURCE_CONTENT</code>, etc.).
+		/// <param name="resourceType">The type of resource (<code>Template</code>,
+		/// <code>Content</code>, etc.).
 		/// </param>
 		/// <param name="encoding"> The character encoding to use.</param>
 		/// <returns>Resource with the template parsed and ready.
@@ -334,9 +315,9 @@ namespace NVelocity.Runtime.Resource
 		/// to syntax (or other) error.
 		/// @throws Exception if a problem in parse
 		/// </returns>
-		protected internal Resource LoadResource(String resourceName, int resourceType, String encoding)
+		protected internal Resource LoadResource(String resourceName, ResourceType resourceType, String encoding)
 		{
-			Resource resource = ResourceFactory.getResource(resourceName, resourceType);
+			Resource resource = ResourceFactory.GetResource(resourceName, resourceType);
 
 			resource.RuntimeServices = rsvc;
 
@@ -489,13 +470,13 @@ namespace NVelocity.Runtime.Resource
 		}
 
 		/// <summary> Gets the named resource.  Returned class type corresponds to specified type
-		/// (i.e. <code>Template</code> to <code>RESOURCE_TEMPLATE</code>).
+		/// (i.e. <code>Template</code> to <code>Template</code>).
 		/// *
 		/// </summary>
 		/// <param name="resourceName">The name of the resource to retrieve.
 		/// </param>
-		/// <param name="resourceType">The type of resource (<code>RESOURCE_TEMPLATE</code>,
-		/// <code>RESOURCE_CONTENT</code>, etc.).
+		/// <param name="resourceType">The type of resource (<code>Template</code>,
+		/// <code>Content</code>, etc.).
 		/// </param>
 		/// <returns>Resource with the template parsed and ready.
 		/// @throws ResourceNotFoundException if template not found
@@ -506,11 +487,11 @@ namespace NVelocity.Runtime.Resource
 		/// *
 		/// </returns>
 		/// <deprecated>Use
-		/// {@link #getResource(String resourceName, int resourceType,
+		/// {@link #GetResource(String resourceName, int resourceType,
 		/// String encoding )}
 		///
 		/// </deprecated>
-		public Resource GetResource(String resourceName, int resourceType)
+		public Resource GetResource(String resourceName, ResourceType resourceType)
 		{
 			return GetResource(resourceName, resourceType, RuntimeConstants.ENCODING_DEFAULT);
 		}
@@ -536,38 +517,32 @@ namespace NVelocity.Runtime.Resource
 			{
 				resourceLoader = (ResourceLoader) resourceLoaders[i];
 
-				Stream is_Renamed = null;
+				Stream input = null;
 
-				/*
-		*  if we find one that can provide the resource,
-		*  return the name of the loaders's Class
-		*/
+				// if we find one that can provide the resource,
+				// return the name of the loaders's Class
 				try
 				{
-					is_Renamed = resourceLoader.GetResourceStream(resourceName);
+					input = resourceLoader.GetResourceStream(resourceName);
 
-					if (is_Renamed != null)
+					if (input != null)
 					{
 						return resourceLoader.GetType().ToString();
 					}
 				}
 				catch (ResourceNotFoundException e)
 				{
-					/*
-		    * this isn't a problem.  keep going
-		    */
+					// this isn't a problem.  keep going
 				}
 				finally
 				{
-					/*
-		    *  if we did find one, clean up because we were 
-		    *  returned an open stream
-		    */
-					if (is_Renamed != null)
+					// if we did find one, clean up because we were 
+					// returned an open stream
+					if (input != null)
 					{
 						try
 						{
-							is_Renamed.Close();
+							input.Close();
 						}
 						catch (IOException ioe)
 						{

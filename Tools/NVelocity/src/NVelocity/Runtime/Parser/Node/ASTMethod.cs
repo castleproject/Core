@@ -26,7 +26,7 @@ namespace NVelocity.Runtime.Parser.Node
 	{
 		private String methodName = "";
 		private int paramCount = 0;
-		private Object[] params_Renamed;
+		private Object[] parameters;
 		private int paramArrayIndex = -1;
 
 		public ASTMethod(int id) : base(id)
@@ -59,7 +59,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 			methodName = FirstToken.Image;
 			paramCount = ChildrenCount - 1;
-			params_Renamed = new Object[paramCount];
+			parameters = new Object[paramCount];
 
 			return data;
 		}
@@ -82,20 +82,20 @@ namespace NVelocity.Runtime.Parser.Node
 	    */
 			for (int j = 0; j < paramCount; j++)
 			{
-				params_Renamed[j] = GetChild(j + 1).Value(context);
+				parameters[j] = GetChild(j + 1).Value(context);
 			}
 
 			String methodNameUsed = methodName;
-			MethodInfo m = rsvc.Introspector.GetMethod(data, methodNameUsed, params_Renamed);
+			MethodInfo m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
 			PropertyInfo p = null;
 			if (m == null)
 			{
 				methodNameUsed = methodName.Substring(0, 1).ToUpper() + methodName.Substring(1);
-				m = rsvc.Introspector.GetMethod(data, methodNameUsed, params_Renamed);
+				m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
 				if (m == null)
 				{
 					methodNameUsed = methodName.Substring(0, 1).ToLower() + methodName.Substring(1);
-					m = rsvc.Introspector.GetMethod(data, methodNameUsed, params_Renamed);
+					m = rsvc.Introspector.GetMethod(data, methodNameUsed, parameters);
 
 					// if there are no arguments, look for a property
 					if (m == null && paramCount == 0)
@@ -145,7 +145,7 @@ namespace NVelocity.Runtime.Parser.Node
 			PropertyInfo property = null;
 			bool preparedAlready = false;
 
-			Object[] methodArguments = params_Renamed;
+			Object[] methodArguments = parameters;
 
 			try
 			{
@@ -172,12 +172,12 @@ namespace NVelocity.Runtime.Parser.Node
 
 //					for (int j = 0; j < paramCount; j++)
 //					{
-//						if (params_Renamed[j] != null && params_Renamed[j].GetType().IsArray)
+//						if (parameters[j] != null && parameters[j].GetType().IsArray)
 //						{
 //							Array array = Array.CreateInstance( 
-//								params_Renamed[j].GetType().GetElementType(), paramCount - j );
+//								parameters[j].GetType().GetElementType(), paramCount - j );
 //							
-//							params_Renamed[j] = array;
+//							parameters[j] = array;
 //							
 //							arrayArg = j; break;
 //						}
@@ -190,7 +190,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 					for (int j = 0; j < paramCount; j++)
 					{
-						params_Renamed[j] = GetChild(j + 1).Value(context);
+						parameters[j] = GetChild(j + 1).Value(context);
 					}
 
 					preparedAlready = true;
@@ -337,7 +337,7 @@ namespace NVelocity.Runtime.Parser.Node
 
 		private object[] BuildMethodArgs(MethodInfo method, int paramArrayIndex )
 		{
-			object[] methodArguments = params_Renamed;
+			object[] methodArguments = parameters;
 			ParameterInfo[] methodArgs = method.GetParameters();
 
 			if (paramArrayIndex != -1)
@@ -346,18 +346,18 @@ namespace NVelocity.Runtime.Parser.Node
 
 				object[] newParams = new object[ methodArgs.Length ];
 
-				Array.Copy( params_Renamed, newParams, methodArgs.Length - 1 );
+				Array.Copy( parameters, newParams, methodArgs.Length - 1 );
 
-				if (params_Renamed.Length < (paramArrayIndex + 1))
+				if (parameters.Length < (paramArrayIndex + 1))
 				{
 					newParams[paramArrayIndex] = Array.CreateInstance( 
 						arrayParamType.GetElementType(), 0 );
 				}
 				else
 				{
-					Array args = Array.CreateInstance( arrayParamType.GetElementType(), (params_Renamed.Length + 1) - newParams.Length );
+					Array args = Array.CreateInstance( arrayParamType.GetElementType(), (parameters.Length + 1) - newParams.Length );
 
-					Array.Copy( params_Renamed, methodArgs.Length - 1, args, 0, args.Length );
+					Array.Copy( parameters, methodArgs.Length - 1, args, 0, args.Length );
 
 					newParams[paramArrayIndex] = args;
 				}

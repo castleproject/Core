@@ -88,7 +88,6 @@ namespace NVelocity.Runtime
 		public Introspector Introspector
 		{
 			get { return introspector; }
-
 		}
 
 		/// <summary>
@@ -695,7 +694,7 @@ namespace NVelocity.Runtime
 		/// </exception>
 		public Template GetTemplate(String name, String encoding)
 		{
-			return (Template) resourceManager.GetResource(name, ResourceManager_Fields.RESOURCE_TEMPLATE, encoding);
+			return (Template) resourceManager.GetResource(name, ResourceType.Template, encoding);
 		}
 
 		/// <summary>
@@ -727,7 +726,7 @@ namespace NVelocity.Runtime
 		/// </exception>
 		public ContentResource GetContent(String name, String encoding)
 		{
-			return (ContentResource) resourceManager.GetResource(name, ResourceManager_Fields.RESOURCE_CONTENT, encoding);
+			return (ContentResource) resourceManager.GetResource(name, ResourceType.Content, encoding);
 		}
 
 

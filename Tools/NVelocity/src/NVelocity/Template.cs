@@ -2,6 +2,7 @@ namespace NVelocity
 {
 	using System;
 	using System.IO;
+	using System.Text;
 
 	using NVelocity.Context;
 	using NVelocity.Exception;
@@ -15,7 +16,7 @@ namespace NVelocity
 	/// by JavaCC to create an AST that is subsequently
 	/// traversed by a Visitor.
 	/// 
-	/// <pre>
+	/// <code>
 	/// Template template = Velocity.getTemplate("test.wm");
 	/// IContext context = new VelocityContext();
 	/// 
@@ -23,36 +24,32 @@ namespace NVelocity
 	/// context.Put("customer", new Customer());
 	/// 
 	/// template.Merge(context, writer);
-	/// </pre>
+	/// </code>
 	/// </summary>
 	public class Template : Resource
 	{
-		/// <summary>
-		/// To keep track of whether this template has been
-		/// initialized. We use the document.init(context)
-		/// to perform this.
-		/// </summary>
-		// private bool initialized = false;
 		private System.Exception errorCondition = null;
 
 		/// <summary>
-		/// Default constructor
+		/// Default constructor.
 		/// </summary>
 		public Template()
 		{
 		}
 
 		/// <summary>
-		/// gets the named resource as a stream, parses and inits
+		/// Gets the named resource as a stream, parses and inits.
 		/// </summary>
-		/// <returns>true if successful
-		/// @throws ResourceNotFoundException if template not found
-		/// from any available source.
-		/// @throws ParseErrorException if template cannot be parsed due
-		/// to syntax (or other) error.
-		/// @throws Exception some other problem, should only be from
-		/// initialization of the template AST.
-		/// </returns>
+		/// <returns>true if successful</returns>
+		/// <exception cref="ResourceNotFoundException">
+		/// if template not found from any available source.
+		/// </exception>
+		/// <exception cref="ParseErrorException">
+		/// if template cannot be parsed due to syntax (or other) error.
+		/// </exception>
+		/// <exception cref="System.Exception">
+		/// some other problem, should only be from initialization of the template AST.
+		/// </exception>
 		public override bool Process()
 		{
 			data = null;
@@ -76,20 +73,18 @@ namespace NVelocity
 					InitDocument();
 					return true;
 				}
-				catch(IOException uce)
+				catch (IOException uce)
 				{
 					String msg = "Template.process : Unsupported input encoding : " + encoding + " for template " + name;
 
-					errorCondition = new ParseErrorException(msg, uce);
-					throw errorCondition;
+					throw errorCondition = new ParseErrorException(msg, uce);
 				}
-				catch(ParseException pex)
+				catch (ParseException pex)
 				{
 					// remember the error and convert
-					errorCondition = new ParseErrorException(pex.Message, pex);
-					throw errorCondition;
+					throw errorCondition = new ParseErrorException(pex.Message, pex);
 				}
-				catch(System.Exception e)
+				catch (System.Exception e)
 				{
 					// who knows?  Something from initDocument()
 					errorCondition = e;
@@ -104,8 +99,7 @@ namespace NVelocity
 			else
 			{
 				// is == null, therefore we have some kind of file issue
-				errorCondition = new ResourceNotFoundException("Unknown resource error for resource " + name);
-				throw errorCondition;
+				throw errorCondition = new ResourceNotFoundException("Unknown resource error for resource " + name);
 			}
 		}
 
@@ -144,22 +138,21 @@ namespace NVelocity
 		/// issue, and Exception otherwise
 		/// </summary>
 		/// <param name="context">Conext with data elements accessed by template</param>
-		/// <param name="writer">
-		/// output writer for rendered template
-		/// @throws ResourceNotFoundException if template not found
-		/// from any available source.
-		/// @throws ParseErrorException if template cannot be parsed due
-		/// to syntax (or other) error.
-		/// @throws  Exception  anything else.
-		/// </param>
+		/// <param name="writer">writer for rendered template</param>
+		/// <exception cref="ResourceNotFoundException">
+		/// if template not found from any available source.
+		/// </exception>
+		/// <exception cref="ParseErrorException">
+		/// if template cannot be parsed due to syntax (or other) error.
+		/// </exception>
+		/// <exception cref="System.Exception">
+		/// anything else.
+		/// </exception>
 		public void Merge(IContext context, TextWriter writer)
 		{
-			/*
-			*  we shouldn't have to do this, as if there is an error condition, 
-			*  the application code should never get a reference to the 
-			*  Template
-			*/
-
+			// we shouldn't have to do this, as if there is an error condition, 
+			// the application code should never get a reference to the 
+			// Template
 			if (errorCondition != null)
 			{
 				throw errorCondition;
@@ -167,10 +160,8 @@ namespace NVelocity
 
 			if (data != null)
 			{
-				/*
-				*  create an InternalContextAdapter to carry the user Context down
-				*  into the rendering engine.  Set the template name and render()
-				*/
+				// create an InternalContextAdapter to carry the user Context down
+				// into the rendering engine.  Set the template name and render()
 				InternalContextAdapterImpl ica = new InternalContextAdapterImpl(context);
 
 				try
@@ -182,19 +173,15 @@ namespace NVelocity
 				}
 				finally
 				{
-					/*
-					*  lets make sure that we always clean up the context 
-					*/
+					// lets make sure that we always clean up the context 
 					ica.PopCurrentTemplateName();
 					ica.CurrentResource = null;
 				}
 			}
 			else
 			{
-				/*
-				* this shouldn't happen either, but just in case.
-				*/
-				String msg = "Template.merge() failure. The document is null, " + "most likely due to parsing error.";
+				// this shouldn't happen either, but just in case.
+				String msg = "Template.merge() failure. The document is null, most likely due to parsing error.";
 
 				rsvc.Error(msg);
 				throw new System.Exception(msg);
@@ -203,19 +190,16 @@ namespace NVelocity
 
 		protected virtual Stream ObtainStream()
 		{
-			Stream s;
-			
 			try
 			{
-				s = resourceLoader.GetResourceStream(name);
+				return resourceLoader.GetResourceStream(name);
 			}
-			catch(ResourceNotFoundException rnfe)
+			catch (ResourceNotFoundException rnfe)
 			{
 				//  remember and re-throw
 				errorCondition = rnfe;
 				throw;
 			}
-			return s;
 		}
 	}
 }

@@ -18,8 +18,8 @@ namespace Commons.Collections
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="string_Renamed">A String</param>
-		public PropertiesTokenizer(String string_Renamed) : base(string_Renamed, DELIMITER)
+		/// <param name="str">A String</param>
+		public PropertiesTokenizer(String str) : base(str, DELIMITER)
 		{
 		}
 
