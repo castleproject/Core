@@ -96,7 +96,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\AbstractServiceContainer.cs" />
     <Compile Include="Adapters\DefaultRailsEngineContext.cs" />
     <Compile Include="Adapters\FileDictionaryAdapter.cs">
       <SubType>Code</SubType>
@@ -269,10 +268,12 @@
     <Compile Include="Internal\AbstractControllerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\AbstractServiceContainer.cs" />
     <Compile Include="Internal\AbstractViewComponentFactory.cs" />
     <Compile Include="Internal\ActionProviderUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\AssemblySourceInfo.cs" />
     <Compile Include="Internal\ControllerDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -285,6 +286,7 @@
     <Compile Include="Internal\ControllerMetaDescriptor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\DefaultCacheProvider.cs" />
     <Compile Include="Internal\DefaultControllerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -306,6 +308,7 @@
     <Compile Include="Internal\Graph\ControllerTree.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\ICacheProvider.cs" />
     <Compile Include="Internal\IControllerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -324,6 +327,8 @@
     <Compile Include="Internal\IViewEngine.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\IViewSource.cs" />
+    <Compile Include="Internal\IViewSourceLoader.cs" />
     <Compile Include="Internal\ResourceDictionary.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -345,6 +350,7 @@
     <Compile Include="Internal\UrlTokenizerException.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Internal\WeakReferenceCacheProvider.cs" />
     <Compile Include="Internal\WizardUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -394,12 +400,10 @@
     <Compile Include="ViewComponent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewComponentException.cs" />
     <Compile Include="ViewComponents\CaptureFor.cs" />
     <Compile Include="ViewComponents\SecurityComponent.cs" />
     <Compile Include="Views\Aspx\ActionTo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Aspx\AspNetViewEngine.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Aspx\Contents.cs">
@@ -411,10 +415,11 @@
     <Compile Include="Views\Aspx\MasterPageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Views\Aspx\WebFormsViewEngine.cs" />
+    <Compile Include="Views\EmbeddedResourceViewSource.cs" />
+    <Compile Include="Views\FileAssemblyViewSourceLoader.cs" />
+    <Compile Include="Views\FileViewSource.cs" />
     <Compile Include="Views\ViewEngineBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Xslt\XsltViewEngine.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WizardActionProvider.cs">
