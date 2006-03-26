@@ -104,6 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="contentinfs.vm" />
+    <Compile Include="AccessibleThroughTestCase.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,13 +130,13 @@
     <Compile Include="ControllerTreeTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RequiresVerbTestCase.cs" />
     <Compile Include="DefaultControllerFactoryTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DescriptorBuilderMultiThreadedTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FileAssemblyViewSourceLoaderTestCase.cs" />
     <Compile Include="FilesTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
