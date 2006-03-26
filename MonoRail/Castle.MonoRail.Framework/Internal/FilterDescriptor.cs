@@ -20,40 +20,60 @@ namespace Castle.MonoRail.Framework.Internal
 	/// Represents the meta information and type of
 	/// an implementation of <see cref="IFilter"/>.
 	/// </summary>
-	public class FilterDescriptor
+	public class FilterDescriptor : ICloneable
 	{
-		private FilterAttribute _attribute;
+		private FilterItem _item;
+		private IFiltersAttribute _attribute;
 		private IFilter _filterInstance;
+		private bool isClone = false;
 
-		public FilterDescriptor(FilterAttribute attribute)
+		public FilterDescriptor(IFiltersAttribute attribute, FilterItem item)
 		{
 			_attribute = attribute;
+			_item = item;
 		}
 
-		public FilterAttribute Attribute
+		public IFiltersAttribute Attribute
 		{
 			get { return _attribute; }
 		}
 
 		public Type FilterType
 		{
-			get { return _attribute.FilterType; }
+			get { return _item.FilterType; }
 		}
 
 		public ExecuteEnum When
 		{
-			get { return _attribute.When; }
+			get { return _item.When; }
 		}
 
 		public int ExecutionOrder
 		{
-			get { return _attribute.ExecutionOrder; }
+			get { return _item.ExecutionOrder; }
 		}
 
 		public IFilter FilterInstance
 		{
 			get { return _filterInstance; }
-			set { _filterInstance = value; }
+			set
+			{
+				if (!isClone)
+					throw new InvalidOperationException("FilterInstance property could only be set on FilterDescriptor clones.");
+				_filterInstance = value;
+			}
+		}
+
+		public FilterDescriptor Clone()
+		{
+			FilterDescriptor clone = (FilterDescriptor) this.MemberwiseClone();
+			clone.isClone = true;
+			return clone;
+		}
+
+		object ICloneable.Clone()
+		{
+			return this.Clone();
 		}
 	}
 }

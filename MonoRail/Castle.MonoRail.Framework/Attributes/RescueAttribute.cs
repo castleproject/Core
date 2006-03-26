@@ -21,45 +21,39 @@ namespace Castle.MonoRail.Framework
 	/// (method). The rescue is invoked in response to some exception during the 
 	/// action processing.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=true), Serializable]
-	public class RescueAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true), Serializable]
+	public class RescueAttribute : Attribute, IRescuesAttribute
 	{
-		private String _viewName;
-		private Type _exceptionType;
-		
+		private RescueItem[] rescueItems;
+
 		/// <summary>
 		/// Constructs a RescueAttribute with the template name.
 		/// </summary>
 		/// <param name="viewName"></param>
-		public RescueAttribute( String viewName ) : this( viewName, typeof(Exception) )
-		{			
+		public RescueAttribute(String viewName)
+			: this(viewName, typeof(Exception))
+		{
 		}
 
-		public RescueAttribute( String viewName, Type exceptionType )
+		public RescueAttribute(String viewName, Type exceptionType)
 		{
-			if ( viewName == null || viewName.Length == 0 )
-			{
-				throw new ArgumentNullException( "viewName" );
-			}
-			
-			if ( exceptionType != null && !typeof( Exception ).IsAssignableFrom( exceptionType ) )
-			{
-				throw new ArgumentException( "exceptionType must be a type assignable from Exception" );
-			}
-			
-			this._viewName = viewName;
-			this._exceptionType = exceptionType;
+			this.rescueItems = new RescueItem[] { new RescueItem(viewName, exceptionType) };
 		}
 
 		public String ViewName
 		{
-			get { return _viewName; }
+			get { return rescueItems[0].ViewName; }
 		}
-		
+
 		public Type ExceptionType
 		{
-			get { return _exceptionType; }
-		}		
+			get { return rescueItems[0].ExceptionType; }
+		}
+
+		public RescueItem[] GetRescues()
+		{
+			return new RescueItem[] {new RescueItem(ViewName, ExceptionType)};
+		}
 	}
 
 	/// <summary>

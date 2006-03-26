@@ -22,7 +22,7 @@ namespace Castle.MonoRail.Framework
 	/// property of the <see cref="Controller"/>.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false), Serializable]
-	public class LayoutAttribute : Attribute
+	public class LayoutAttribute : Attribute, ILayoutAttribute
 	{
 		private String _layoutName;
 
@@ -30,7 +30,6 @@ namespace Castle.MonoRail.Framework
 		/// Constructs a LayoutAttribute with the 
 		/// layout name.
 		/// </summary>
-		/// <param name="layoutName"></param>
 		public LayoutAttribute(String layoutName)
 		{
 			if (layoutName == null || layoutName.Length == 0) 

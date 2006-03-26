@@ -648,9 +648,9 @@ namespace Castle.MonoRail.Framework
 			HttpContext.Items["mr.propertybag"] = PropertyBag;
 #endif
 
-			if (metaDescriptor.Filters.Count != 0)
+			if (metaDescriptor.Filters.Length != 0)
 			{
-				_filters = CollectFilterDescriptors();
+				_filters = CopyFilterDescriptors();
 			}
 
 			LayoutName = ObtainDefaultLayoutName();
@@ -888,7 +888,7 @@ namespace Castle.MonoRail.Framework
 		{
 			_helpers = new HybridDictionary();
 
-			foreach (HelperAttribute helper in metaDescriptor.Helpers)
+			foreach (HelperItem helper in metaDescriptor.Helpers)
 			{
 				object helperInstance = Activator.CreateInstance(helper.HelperType);
 
@@ -899,7 +899,7 @@ namespace Castle.MonoRail.Framework
 					aware.SetController(this);
 				}
 
-				_helpers.Add(helper.Name, helperInstance);
+				_helpers.Add(helper.Key, helperInstance);
 			}
 
 			AbstractHelper[] builtInHelpers =
@@ -959,18 +959,18 @@ namespace Castle.MonoRail.Framework
 
 			Assembly typeAssembly = this.GetType().Assembly;
 
-			foreach (ResourceAttribute resource in metaDescriptor.Resources)
+			foreach (ResourceItem resource in metaDescriptor.Resources)
 			{
-				_resources.Add(resource.Name, _resourceFactory.Create(resource, typeAssembly));
+				_resources.Add(resource.Key, _resourceFactory.Create(resource, typeAssembly));
 			}
 
 			if (method == null) return;
 
 			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
 
-			foreach (ResourceAttribute resource in actionMeta.Resources)
+			foreach (ResourceItem resource in actionMeta.Resources)
 			{
-				_resources[resource.Name] = _resourceFactory.Create(resource, typeAssembly);
+				_resources[resource.Key] = _resourceFactory.Create(resource, typeAssembly);
 			}
 		}
 
@@ -1010,39 +1010,30 @@ namespace Castle.MonoRail.Framework
 				return false;
 			}
 
-			foreach (SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
+			foreach (ISkipFilterAttribute skipfilter in actionMeta.SkipFilters)
 			{
-				// If the user declared a [SkipFilterAttribute] then skip all filters
-				if (skipfilter.BlanketSkip) return true;
+				// SkipAllFilters handling...
+				if (skipfilter.SkipAllFilters) return true;
 
-				filtersToSkip[skipfilter.FilterType] = String.Empty;
+				foreach (Type filterType in skipfilter.FiltersToSkip)
+					filtersToSkip[filterType] = String.Empty;
 			}
 
 			return false;
 		}
 
-		protected internal FilterDescriptor[] CollectFilterDescriptors()
+		/// <summary>
+		/// Clones all Filter descriptors, in order to get a read-write copy.
+		/// </summary>
+		protected internal FilterDescriptor[] CopyFilterDescriptors()
 		{
-			IList attrs = metaDescriptor.Filters;
+			FilterDescriptor[] clone = 
+				(FilterDescriptor[]) metaDescriptor.Filters.Clone();
 
-			FilterDescriptor[] descriptors = new FilterDescriptor[attrs.Count];
+			for (int i = 0; i < clone.Length; i++)
+				clone[i] = clone[i].Clone();
 
-			for (int i = 0; i < attrs.Count; i++)
-			{
-				descriptors[i] = new FilterDescriptor(attrs[i] as FilterAttribute);
-			}
-
-			if (attrs.Count > 1)
-			{
-				SortFilterDescriptors(descriptors);
-			}
-
-			return descriptors;
-		}
-
-		private void SortFilterDescriptors(FilterDescriptor[] descriptors)
-		{
-			Array.Sort(descriptors, FilterDescriptorComparer.Instance);
+			return clone;
 		}
 
 		private bool ProcessFilters(ExecuteEnum when, IDictionary filtersToSkip)
@@ -1092,26 +1083,6 @@ namespace Castle.MonoRail.Framework
 				}
 			}
 		}
-
-		class FilterDescriptorComparer : IComparer
-		{
-			private static readonly FilterDescriptorComparer instance = new FilterDescriptorComparer();
-			
-			private FilterDescriptorComparer()
-			{
-			}
-
-			public static FilterDescriptorComparer Instance
-			{
-				get { return instance; }
-			}
-
-			public int Compare(object x, object y)
-			{
-				return ((FilterDescriptor)x).ExecutionOrder - ((FilterDescriptor)y).ExecutionOrder;
-			}
-		}
-
 		#endregion
 
 		#region Views and Layout
@@ -1159,11 +1130,11 @@ namespace Castle.MonoRail.Framework
 			
 			if (actionMeta.SkipRescue != null) return false;
 			
-			RescueAttribute att = GetRescueAttributeFor(actionMeta.Rescues, exceptionType);
+			RescueItem att = GetRescueFor(actionMeta.Rescues, exceptionType);
 			
 			if (att == null)
 			{
-				att = GetRescueAttributeFor(metaDescriptor.Rescues, exceptionType);
+				att = GetRescueFor(metaDescriptor.Rescues, exceptionType);
 
 				if (att == null) return false;
 			}
@@ -1184,13 +1155,13 @@ namespace Castle.MonoRail.Framework
 			return false;
 		}
 
-		protected virtual RescueAttribute GetRescueAttributeFor(IList rescues, Type exceptionType)
+		protected virtual RescueItem GetRescueFor(IList rescues, Type exceptionType)
 		{
 			if (rescues == null || rescues.Count == 0) return null;
 			
-			RescueAttribute bestCandidate = null;
+			RescueItem bestCandidate = null;
 			
-			foreach(RescueAttribute rescue in rescues)
+			foreach(RescueItem rescue in rescues)
 			{
 				if (rescue.ExceptionType == exceptionType)
 				{

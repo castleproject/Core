@@ -20,29 +20,33 @@ namespace Castle.MonoRail.Framework
 	/// Associates a helper class with the controller.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
-	public class HelperAttribute : Attribute
+	public class HelperAttribute : Attribute, IHelpersAttribute
 	{
-		private readonly Type _helperType;
-		private readonly String _name;
+		private HelperItem[] helpers;
 
-		public HelperAttribute( Type helperType ) : this( helperType, null)
-		{			
-		}
-		
-		public HelperAttribute( Type helperType, String name )
+		public HelperAttribute(Type helperType)
+			: this(helperType, null)
 		{
-			_helperType = helperType;
-			_name = ( name == null || name.Trim() == "" ) ? helperType.Name : name;
 		}
-		
+
+		public HelperAttribute(Type helperType, String name)
+		{
+			this.helpers = new HelperItem[] { new HelperItem(helperType, name) };
+		}
+
+		public HelperItem[] GetHelpers()
+		{
+			return helpers;
+		}
+
 		public Type HelperType
 		{
-			get { return _helperType; }
+			get { return helpers[0].HelperType; }
 		}
-		
+
 		public String Name
 		{
-			get { return _name; }
-		}		
+			get { return helpers[0].Key; }
+		}
 	}
 }

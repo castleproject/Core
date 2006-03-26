@@ -65,6 +65,6 @@ namespace Castle.MonoRail.Framework
 	/// </summary>
 	public interface IFilterAttributeAware
 	{
-		FilterAttribute FilterAttribute { set; }
+		IFiltersAttribute FilterAttribute { set; }
 	}
 }

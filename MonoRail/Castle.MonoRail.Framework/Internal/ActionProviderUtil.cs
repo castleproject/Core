@@ -20,10 +20,8 @@ namespace Castle.MonoRail.Framework.Internal
 	{
 		public static void RegisterActions( Controller controller )
 		{
-			foreach( DynamicActionProviderAttribute providerAtt in controller.MetaDescriptor.ActionProviders )
+			foreach (Type providerType in controller.MetaDescriptor.ActionProviders)
 			{
-				Type providerType = providerAtt.ProviderType;
-				
 				IDynamicActionProvider provider = (IDynamicActionProvider) Activator.CreateInstance( providerType );
 
 				provider.IncludeActions( controller );

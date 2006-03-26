@@ -19,25 +19,43 @@ namespace Castle.MonoRail.Framework.Internal
 	using System.Collections.Specialized;
 	using System.Reflection;
 
+#if dotNet2
+	using ListOfRescues = System.Collections.Generic.List<RescueItem>;
+	using ListOfResources = System.Collections.Generic.List<ResourceItem>;
+	using ListOfResourcesImpl = System.Collections.Generic.List<ResourceItem>;
+	using ListOfFilters = System.Collections.Generic.List<FilterDescriptor>;
+	using ListOfFiltersImpl = System.Collections.Generic.List<FilterDescriptor>;
+	using ListOfSkipFilters = System.Collections.Generic.List<ISkipFilterAttribute>;
+	using ListOfSkipFiltersImpl = System.Collections.Generic.List<ISkipFilterAttribute>;
+#else
+	using ListOfRescues = System.Collections.IList;
+	using ListOfResources = System.Collections.IList;
+	using ListOfResourcesImpl = System.Collections.ArrayList;
+	using ListOfFilters = System.Collections.IList;
+	using ListOfFiltersImpl = System.Collections.ArrayList;
+	using ListOfSkipFilters = System.Collections.IList;
+	using ListOfSkipFiltersImpl = System.Collections.ArrayList;
+#endif
+
 	public abstract class BaseMetaDescriptor
 	{
-		private LayoutAttribute layout;
-		private IList rescues;
-		private IList resources = new ArrayList();
+		private ILayoutAttribute layout;
+		private ListOfRescues rescues;
+		private ListOfResources resources = new ListOfResourcesImpl();
 
-		public LayoutAttribute Layout
+		public ILayoutAttribute Layout
 		{
 			get { return layout; }
 			set { layout = value; }
 		}
 
-		public IList Rescues
+		public ListOfRescues Rescues
 		{
 			get { return rescues; }
 			set { rescues = value; }
 		}
 
-		public IList Resources
+		public ListOfResources Resources
 		{
 			get { return resources; }
 		}
@@ -46,9 +64,9 @@ namespace Castle.MonoRail.Framework.Internal
 	public class ActionMetaDescriptor : BaseMetaDescriptor
 	{
 		private SkipRescueAttribute skipRescue;
-        private AccessibleThroughAttribute accessibleThrough;
+		private AccessibleThroughAttribute accessibleThrough;
 
-		private IList skipFilters = new ArrayList();
+		private ListOfSkipFilters skipFilters = new ListOfSkipFiltersImpl();
 
 		public SkipRescueAttribute SkipRescue
 		{
@@ -56,13 +74,13 @@ namespace Castle.MonoRail.Framework.Internal
 			set { skipRescue = value; }
 		}
 
-        public AccessibleThroughAttribute AccessibleThrough
-        {
-            get { return accessibleThrough; }
-            set { accessibleThrough = value; }
-        }
+		public AccessibleThroughAttribute AccessibleThrough
+		{
+			get { return accessibleThrough; }
+			set { accessibleThrough = value; }
+		}
 
-		public IList SkipFilters
+		public ListOfSkipFilters SkipFilters
 		{
 			get { return skipFilters; }
 		}
@@ -79,20 +97,20 @@ namespace Castle.MonoRail.Framework.Internal
 		private DefaultActionAttribute defaultAction;
 		private IList scaffoldings = new ArrayList();
 		private IList helpers = new ArrayList();
-		private IList filters = new ArrayList();
+		private FilterDescriptor[] filters;
 		private IList actionProviders = new ArrayList();
 		private Hashtable actionMetaDescriptors = new Hashtable();
 		private IDictionary _actions = new HybridDictionary(true);
 		private Type _controllerType;
 
-		public ControllerMetaDescriptor( Type controllerType )
+		public ControllerMetaDescriptor(Type controllerType)
 		{
 			_controllerType = controllerType;
-			
+
 			CollectActions(_controllerType);
 		}
 
-		public ActionMetaDescriptor GetAction( MethodInfo actionMethod )
+		public ActionMetaDescriptor GetAction(MethodInfo actionMethod)
 		{
 			ActionMetaDescriptor desc = (ActionMetaDescriptor) actionMetaDescriptors[actionMethod];
 
@@ -105,13 +123,13 @@ namespace Castle.MonoRail.Framework.Internal
 			return desc;
 		}
 
-		private void CollectActions( Type controllerType )
+		private void CollectActions(Type controllerType)
 		{
 			// HACK: GetRealControllerType is a workaround for DYNPROXY-14 bug
 			// see: http://support.castleproject.org/jira/browse/DYNPROXY-14
 			controllerType = GetRealControllerType(controllerType);
 
-			MethodInfo[] methods = controllerType.GetMethods( BindingFlags.Public | BindingFlags.Instance );
+			MethodInfo[] methods = controllerType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
 			foreach (MethodInfo method in methods)
 			{
@@ -178,9 +196,10 @@ namespace Castle.MonoRail.Framework.Internal
 			get { return _actions; }
 		}
 
-		public IList Filters
+		public FilterDescriptor[] Filters
 		{
 			get { return filters; }
+			set { filters = value; }
 		}
 
 		public IList Scaffoldings

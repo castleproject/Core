@@ -18,12 +18,12 @@ namespace Castle.MonoRail.Framework
 
 	/// <summary>
 	/// Declares that for the specific method (action)
-	/// no filter should be applied.
+	/// the specified filters should NOT be applied.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true), Serializable]
-	public class SkipFilterAttribute : Attribute
+	public class SkipFilterAttribute : Attribute, ISkipFilterAttribute
 	{
-		private Type filterType;
+		private Type[] filtersToSkip;
 
 		/// <summary>
 		/// Constructs a SkipFilterAttribute which skips all filters.
@@ -36,20 +36,31 @@ namespace Castle.MonoRail.Framework
 		/// Constructs a SkipFilterAttribute associating 
 		/// the filter type that should be skipped.
 		/// </summary>
-		/// <param name="filterType"></param>
-		public SkipFilterAttribute(Type filterType)
+		public SkipFilterAttribute(params Type[] filtersToSkip)
 		{
-			this.filterType = filterType;
+			this.filtersToSkip = filtersToSkip;
 		}
 
+		public Type[] FiltersToSkip
+		{
+			get { return filtersToSkip; }
+		}
+
+		[Obsolete("Use FiltersToSkip")]
 		public Type FilterType
 		{
-			get { return filterType; }
+			get { return filtersToSkip != null && filtersToSkip.Length > 0 ? filtersToSkip[0] : null; }
 		}
 
+		[Obsolete("Use SkipAllFilters")]
 		public bool BlanketSkip
 		{
-			get { return filterType == null; }
+			get { return SkipAllFilters; }
+		}
+		
+		public bool SkipAllFilters
+		{
+			get { return filtersToSkip == null || filtersToSkip.Length == 0; }
 		}
 	}
 
@@ -58,11 +69,9 @@ namespace Castle.MonoRail.Framework
 	/// implementation with it. More than one can be associated.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true), Serializable]
-	public class FilterAttribute : Attribute
+	public class FilterAttribute : Attribute, IFiltersAttribute
 	{
-		private readonly Type filterType;
-		private readonly ExecuteEnum when;
-		private int executionOrder = Int32.MaxValue;
+		private FilterItem[] filters;
 
 		/// <summary>
 		/// Constructs a FilterAttribute associating 
@@ -72,29 +81,28 @@ namespace Castle.MonoRail.Framework
 		/// <param name="filterType"></param>
 		public FilterAttribute(ExecuteEnum when, Type filterType)
 		{
-			if (!typeof(IFilter).IsAssignableFrom(filterType))
-			{
-				throw new ArgumentException("The specified filter does not implement IFilter");
-			}
+			this.filters = new FilterItem[] { new FilterItem(filterType, when) };
+		}
 
-			this.filterType = filterType;
-			this.when = when;
+		public FilterItem[] GetFilters()
+		{
+			return filters;
 		}
 
 		public Type FilterType
 		{
-			get { return filterType; }
+			get { return filters[0].FilterType; }
 		}
 
 		public ExecuteEnum When
 		{
-			get { return when; }
+			get { return filters[0].When; }
 		}
 
 		public int ExecutionOrder
 		{
-			get { return executionOrder; }
-			set { executionOrder = value; }
+			get { return filters[0].ExecutionOrder; }
+			set { filters[0].ExecutionOrder = value; }
 		}
 	}
 }

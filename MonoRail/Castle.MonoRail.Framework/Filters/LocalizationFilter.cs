@@ -56,7 +56,7 @@ namespace Castle.MonoRail.Framework.Filters
 
 		#region IFilterAttributeAware Members
 
-		public FilterAttribute FilterAttribute
+		public IFiltersAttribute FilterAttribute
 		{
 			set
 			{

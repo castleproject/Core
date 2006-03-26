@@ -70,12 +70,12 @@ namespace Castle.MonoRail.Framework.Tests
 				desc2 = builder.BuildDescriptor( new Controller2() );
 
 				Assert.AreEqual( 0, desc1.ActionProviders.Count );
-				Assert.AreEqual( 1, desc1.Filters.Count );
+				Assert.AreEqual( 1, desc1.Filters.Length );
 				Assert.IsNotNull( desc1.Layout );
 				Assert.IsNotNull( desc1.Rescues );
 
 				Assert.AreEqual( 0, desc2.ActionProviders.Count );
-				Assert.AreEqual( 1, desc2.Filters.Count );
+				Assert.AreEqual( 1, desc2.Filters.Length );
 				Assert.IsNotNull( desc2.Layout );
 				Assert.IsNotNull( desc2.Rescues );
 

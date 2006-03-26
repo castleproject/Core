@@ -21,10 +21,9 @@ namespace Castle.MonoRail.Framework
 	/// loaded and set available in the PropertyBag with the specified name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true, Inherited=true), Serializable]
-	public class ResourceAttribute : Attribute, IResourceDefinition
+	public class ResourceAttribute : Attribute, IResourcesAttribute
 	{
-		private String _name, _resourceName, _cultureName, _assemblyName;
-		private Type _resourceType;
+		private ResourceItem[] resources;
 		
 		/// <summary>
 		/// Constructs a resource attribute, with the specified name, based
@@ -34,45 +33,51 @@ namespace Castle.MonoRail.Framework
 		/// <param name="resourceName">Fully qualified name of the resource in the sattelite assembly</param>
 		public ResourceAttribute( String name, String resourceName )
 		{
-			_name = name;
-			_resourceName	= resourceName;
-
-			if ( resourceName.IndexOf( ',' ) > 0 )
+			ResourceItem res;
+			
+			if (resourceName.IndexOf(',') > 0)
 			{
-				String[] pair	= resourceName.Split( ',' );
-				_resourceName	= pair[0].Trim();
-				_assemblyName	= pair[1].Trim();
+				String[] pair = resourceName.Split(',');
+				res = new ResourceItem(name, pair[0].Trim());
+				res.AssemblyName = pair[1].Trim();
 			}
+			else
+				res = new ResourceItem(name, resourceName);
+
+			this.resources = new ResourceItem[] { res };
+		}
+
+		public ResourceItem[] GetResources()
+		{
+			return resources;
 		}
 
 		public String Name
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return resources[0].Key; }
 		}
 
 		public String ResourceName
 		{
-			get { return _resourceName; }
-			set { _resourceName = value; }
+			get { return resources[0].ResourceName; }
 		}
 
 		public String CultureName
 		{
-			get { return _cultureName; }
-			set { _cultureName = value; }
+			get { return resources[0].CultureName; }
+			set { resources[0].CultureName = value; }
 		}
 
 		public String AssemblyName
 		{
-			get { return _assemblyName; }
-			set { _assemblyName = value; }
+			get { return resources[0].AssemblyName; }
+			set { resources[0].AssemblyName = value; }
 		}
 
 		public Type ResourceType
 		{
-			get { return _resourceType; }
-			set { _resourceType = value; }
+			get { return resources[0].ResourceType; }
+			set { resources[0].ResourceType = value; }
 		}
 	}
 }

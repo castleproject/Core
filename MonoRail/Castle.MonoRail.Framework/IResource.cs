@@ -25,20 +25,20 @@ namespace Castle.MonoRail.Framework
 		/// <summary>
 		/// Returns the object linked to the specific key.
 		/// </summary>
-		object this[ String key ] { get; }
+		object this[String key] { get; }
 
 		/// <summary>
 		/// Returns the object linked to the specific key as a string.
 		/// </summary>
-		String GetString( String key );
+		String GetString(String key);
 
 		/// <summary>
 		/// Returns the object linked to the specific key.
 		/// </summary>
-		object GetObject( String key );
+		object GetObject(String key);
 	}
 
-    /// <summary>
+	/// <summary>
 	/// Marker interface that declares that this attribute should
 	/// be used as a definition for a resource in the user ResourceFactory.
 	/// </summary>

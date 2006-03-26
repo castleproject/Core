@@ -28,15 +28,15 @@ namespace Castle.MonoRail.Framework.Internal
 
 		public IResource Create( IResourceDefinition definition, Assembly appAssembly )
 		{
-			if ( definition is ResourceAttribute )
+			if ( definition is ResourceItem )
 			{
-				return Create( definition as ResourceAttribute, appAssembly );
+				return Create( definition as ResourceItem, appAssembly );
 			}
 
-			throw new ArgumentException( "Can't create resource of type " + definition.ToString() );
+			throw new ArgumentException( String.Format("Can't create resource {0}, of type {1}", definition, definition.GetType().ToString()) );
 		}
 
-		public IResource Create( ResourceAttribute attribute, Assembly appAssembly )
+		public IResource Create( ResourceItem attribute, Assembly appAssembly )
 		{
 			Assembly resAssembly = ResolveAssembly(attribute.AssemblyName, appAssembly);
 			CultureInfo culture = ResolveCulture(attribute.CultureName);
