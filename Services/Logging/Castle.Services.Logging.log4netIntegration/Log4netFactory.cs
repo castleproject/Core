@@ -18,16 +18,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 	using System.IO;
 
 	using Castle.Services.Logging;
-	
+
 	using log4net;
 	using log4net.Config;
 
-	/// <summary>
-	/// Summary description for log4netFactory.
-	/// </summary>
 	public class Log4netFactory : AbstractLoggerFactory
 	{
-		public Log4netFactory() : this ("log4net.config")
+		public Log4netFactory()
+			: this("log4net.config")
 		{
 		}
 
@@ -40,7 +38,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		public override ILogger Create(String name)
 		{
 			ILog log = LogManager.GetLogger(name);
-			return new Log4netLogger(log);
+			return new Log4netLogger(log, this);
 		}
 
 		public override ILogger Create(String name, LoggerLevel level)

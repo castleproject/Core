@@ -48,10 +48,13 @@ namespace Castle.Services.Logging
 	}
 
 	/// <summary>
+	/// Manages logging.
+	/// </summary>
+	/// <remarks>
 	/// This is a facade for the different logging subsystems.
 	/// It offers a simplified interface that follows IOC patterns
 	/// and a simplified priority/level/severity abstraction. 
-	/// </summary>
+	/// </remarks>
 	public interface ILogger
 	{
 		/// <summary>

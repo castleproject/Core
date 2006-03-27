@@ -21,31 +21,32 @@ namespace Castle.Services.Logging.Log4netIntegration
 	using log4net;
 	using log4net.Core;
 
-	/// <summary>
-	/// Summary description for log4netLogger.
-	/// </summary>
 	public class Log4netLogger : Logger
 	{
 		private static Type declaringType = typeof(Log4netLogger);
 
 		private log4net.Core.ILogger _logger;
+		private Log4netFactory _factory;
 
-		public Log4netLogger()
+		internal Log4netLogger(ILog log, Log4netFactory factory)
+			: this(log.Logger, factory)
 		{
 		}
 
-		internal Log4netLogger(ILog log) : this(log.Logger)
-		{
-		}
-
-		internal Log4netLogger(ILogger logger)
+		public Log4netLogger(ILogger logger, Log4netFactory factory)
 		{
 			_logger = logger;
+			_factory = factory;
 		}
 
 		public Logger CreateChildLogger(String name)
 		{
-			return new Log4netLogger(_logger.Repository.GetLogger(name));
+			return _factory.Create(_logger.Name + "." + name);
+		}
+
+		public override string ToString()
+		{
+			return _logger.ToString();
 		}
 
 		public void Info(String format, params object[] args)

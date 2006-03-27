@@ -16,30 +16,29 @@ namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
 	using System.IO;
+
 	using Castle.Services.Logging;
 
 	using NLog;
 	using NLog.Config;
 
-	/// <summary>
-	/// Summary description for NLogFactory.
-	/// </summary>
 	public class NLogFactory : AbstractLoggerFactory
 	{
-		public NLogFactory() : this ("nlog.config")
-		{			
+		public NLogFactory()
+			: this("nlog.config")
+		{
 		}
 
-		public NLogFactory( string configFile )
+		public NLogFactory(string configFile)
 		{
-		    FileInfo file = GetConfigFile( configFile );
+			FileInfo file = GetConfigFile(configFile);
 			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
 		}
 
 		public override ILogger Create(String name)
 		{
 			Logger log = LogManager.GetLogger(name);
-			return new NLogLogger(log);
+			return new NLogLogger(log, this, name);
 		}
 
 		public override ILogger Create(String name, LoggerLevel level)

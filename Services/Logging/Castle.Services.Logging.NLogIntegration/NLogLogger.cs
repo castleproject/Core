@@ -20,21 +20,27 @@ namespace Castle.Services.Logging.NLogIntegration
 	
 	using NLog;
 
-	/// <summary>
-	/// Summary description for NLogLogger.
-	/// </summary>
 	public class NLogLogger : ILogger
 	{
 		private Logger _log;
+		private NLogFactory _factory;
+		private String _loggerName;
 
-		public NLogLogger(Logger log)
+		public NLogLogger(Logger log, NLogFactory factory, String loggerName)
 		{
 			_log = log;
+			_factory = factory;
+			_loggerName = loggerName;
 		}
 
 		public ILogger CreateChildLogger(String name)
 		{
-			throw new NotImplementedException("If you need a child logger please use the factory");
+			return _factory.Create(_loggerName + "." + name);
+		}
+
+		public override string ToString()
+		{
+			return _log.ToString();
 		}
 
 		public void Info(String format, params object[] args)
