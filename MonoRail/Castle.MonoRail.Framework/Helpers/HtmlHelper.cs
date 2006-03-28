@@ -1229,11 +1229,11 @@ namespace Castle.MonoRail.Framework.Helpers
 		{
 			if (value != null)
 			{
-				return String.Format("<OPTION {0} value=\"{1}\">{2}</OPTION>", GetAttributes(htmlAttributes), value, text);
+				return String.Format("<option {0} value=\"{1}\">{2}</option>", GetAttributes(htmlAttributes), value, text);
 			}
 			else
 			{
-				return String.Format("<OPTION {0}>{1}</OPTION>", GetAttributes(htmlAttributes), text);
+				return String.Format("<option {0}>{1}</option>", GetAttributes(htmlAttributes), text);
 			}
 		}
 
@@ -1281,7 +1281,7 @@ namespace Castle.MonoRail.Framework.Helpers
 			foreach (object elem in elems)
 			{
 				sb.AppendFormat("\t<option{0}>{1}</option>\r\n", 
-					elem.ToString() == selected ? " selected" : "", elem);
+					elem.ToString() == selected ? " selected=\"selected\"" : "", elem);
 			}
 
 			return sb.ToString();
@@ -1672,14 +1672,14 @@ namespace Castle.MonoRail.Framework.Helpers
 					bool selected = IsSelected(value, selectedValue, isMultiple);
 
 					sb.AppendFormat("\t<option {0} value=\"{1}\">{2}</option>\r\n",
-						selected ? "selected" : "", value, text);
+						selected ? "selected=\"selected\"" : "", value, text);
 				}
 				else
 				{
 					bool selected = IsSelected(text, selectedValue, isMultiple);
 
 					sb.AppendFormat("\t<option {0} >{1}</option>\r\n",
-						selected ? "selected" : "", text);
+						selected ? "selected=\"selected\"" : "", text);
 				}
 			}
 
