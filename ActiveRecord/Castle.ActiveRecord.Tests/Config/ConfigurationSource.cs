@@ -96,8 +96,27 @@ namespace Castle.ActiveRecord.Tests.Config
             AssertConfig(xmlConfig, null, sfh);
         }
 
+
+        [Test]
+        public void TestDebug() {
+            String xmlConfig = @"<activerecord isDebug=""true"" isWeb=""true"" sessionfactoryholdertype=""Castle.ActiveRecord.Tests.Config.MySessionFactoryHolder, Castle.ActiveRecord.Tests"">
+                                  <config>
+                                    <add key=""hibernate.connection.driver_class"" value=""NHibernate.Driver.SqlClientDriver"" />
+                                    <add key=""hibernate.dialect""                 value=""NHibernate.Dialect.MsSql2000Dialect"" />
+                                    <add key=""hibernate.connection.provider""     value=""NHibernate.Connection.DriverConnectionProvider"" />
+                                    <add key=""hibernate.connection.connection_string"" value=""Data Source=.;Initial Catalog=test;Integrated Security=True;Pooling=False"" />
+                                  </config>
+                                </activerecord>";
+
+            AssertConfig(xmlConfig,null,null,true);
+        }
+
 		private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType)
 		{
+            AssertConfig(xmlConfig, webinfotype, sessionFactoryHolderType, false);
+        }
+
+        private static void AssertConfig(string xmlConfig, Type webinfotype, Type sessionFactoryHolderType, bool isDebug) {
 			StringReader sr = new StringReader(xmlConfig);
 
 			XmlConfigurationSource c = new XmlConfigurationSource(sr);
@@ -111,6 +130,8 @@ namespace Castle.ActiveRecord.Tests.Config
                 Assert.IsTrue(c.SessionFactoryHolderImplementation == sessionFactoryHolderType,
                     "Expected {0}, Got {1}", sessionFactoryHolderType, c.SessionFactoryHolderImplementation);
             }
+
+            Assert.IsTrue(c.Debug == isDebug);
 		}
 
 	}

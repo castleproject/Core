@@ -22,6 +22,8 @@ namespace Castle.ActiveRecord.Framework.Internal
 	{
 		protected internal static IDictionary type2Model = Hashtable.Synchronized(new Hashtable());
 
+        protected internal static bool isDebug = false;
+
 		private readonly Type type;
 
 		private bool isJoinedSubClassBase;

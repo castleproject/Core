@@ -28,6 +28,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		private readonly IDictionary _type2Config = new Hashtable();
 		private Type threadScopeInfoImplementation;
 		private Type sessionFactoryHolderImplementation;
+        private bool _debug = false;
 
 		public InPlaceConfigurationSource()
 		{
@@ -88,6 +89,11 @@ namespace Castle.ActiveRecord.Framework.Config
             SessionFactoryHolderImplementation = sessionFactoryHolderType;
 		}
 
+        protected void SetDebug(bool isDebug) 
+        {
+            _debug = isDebug;
+        }
+
 		#region IConfigurationSource Members
 
 		public Type ThreadScopeInfoImplementation
@@ -106,6 +112,11 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			return _type2Config[type] as IConfiguration;
 		}
+
+        public bool Debug 
+        {
+            get { return _debug; }
+        }
 
 		#endregion
 

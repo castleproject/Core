@@ -47,22 +47,23 @@ namespace Castle.ActiveRecord.Framework.Internal
 			Dedent();
 			EndMappingNode();
 
-#if OUTPUTXML
-			String file = model.Type.Name + ".mapping.xml";
-
-			System.IO.File.Delete(file);
-
-			using(System.IO.FileStream fs = System.IO.File.OpenWrite(file))
+			if (ActiveRecordModel.isDebug) 
 			{
-				String xml = Xml;
+				String file = model.Type.Name + ".mapping.xml";
 
-				byte[] ba = System.Text.ASCIIEncoding.UTF8.GetBytes(xml);
+				System.IO.File.Delete(file);
 
-				fs.Write(ba, 0, ba.Length);
+				using(System.IO.FileStream fs = System.IO.File.OpenWrite(file))
+				{
+					String xml = Xml;
 
-				fs.Flush();
+					byte[] ba = System.Text.ASCIIEncoding.UTF8.GetBytes(xml);
+
+					fs.Write(ba, 0, ba.Length);
+
+					fs.Flush();
+				}
 			}
-#endif
 		}
 
 		public override void VisitModel(ActiveRecordModel model)

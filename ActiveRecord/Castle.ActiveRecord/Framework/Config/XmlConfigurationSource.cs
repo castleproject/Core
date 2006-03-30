@@ -56,6 +56,7 @@ namespace Castle.ActiveRecord.Framework.Config
 		{
 			XmlAttribute isWebAtt = section.Attributes["isWeb"];
 			XmlAttribute threadInfoAtt = section.Attributes["threadinfotype"];
+            XmlAttribute isDebug = section.Attributes["isDebug"];
 
 			SetUpThreadInfoType(isWebAtt != null && "true" == isWebAtt.Value, 
 				threadInfoAtt != null ? threadInfoAtt.Value : String.Empty);
@@ -65,6 +66,8 @@ namespace Castle.ActiveRecord.Framework.Config
 
 			SetUpSessionFactoryHolderType( sessionfactoryholdertypeAtt != null ? 
 				sessionfactoryholdertypeAtt.Value : String.Empty );
+
+            SetDebug(isDebug != null && "true" == isDebug.Value);
 
 			PopulateConfigNodes(section);
 		}

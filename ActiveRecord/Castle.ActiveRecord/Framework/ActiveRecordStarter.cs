@@ -75,6 +75,7 @@ namespace Castle.ActiveRecord
 
 			ActiveRecordModel.type2Model.Clear();
 			ActiveRecordBase.holder = holder;
+            ActiveRecordModel.isDebug = source.Debug;
 
 			// Base configuration
 			SetUpConfiguration(source, typeof(ActiveRecordBase), holder);

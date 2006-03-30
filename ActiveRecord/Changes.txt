@@ -1,6 +1,6 @@
 beta 4
 ======
-
+- Added Debug to IConfiguration Source. If set then XmlGenerationVisitor will save nhibernate mapping files to the AppDomain.BaseDirectory. 
 - Added support to CompositeKeys as Foreign Keys (kudos to G. Richard Bellamy)
 
   BelongsToAttribute - Added CompositeKeyColumns property.

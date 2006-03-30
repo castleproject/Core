@@ -34,5 +34,7 @@ namespace Castle.ActiveRecord.Framework
 		/// <param name="type"></param>
 		/// <returns></returns>
 		IConfiguration GetConfiguration(Type type);
+
+        bool Debug { get; }
 	}
 }
