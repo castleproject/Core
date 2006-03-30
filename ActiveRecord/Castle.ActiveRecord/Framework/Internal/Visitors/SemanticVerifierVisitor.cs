@@ -239,12 +239,12 @@ namespace Castle.ActiveRecord.Framework.Internal
 					model.PropertyAtt.ColumnType = "Nullables.NHibernate.NullableSingleType, Nullables.NHibernate";
 				}
 			}
-            if (ActiveRecordModel.GetModel(model.Property.PropertyType) != null)
-            {
-                throw new ActiveRecordException( String.Format(
-                    "You can't use [Property] on {0}.{1} because {2} is an active record class, did you mean to use BelongTo?",
-                    model.Property.DeclaringType.Name, model.Property.Name, model.Property.PropertyType.FullName));
-            }
+			if (ActiveRecordModel.GetModel(model.Property.PropertyType) != null)
+			{
+				throw new ActiveRecordException( String.Format(
+					"You can't use [Property] on {0}.{1} because {2} is an active record class, did you mean to use BelongTo?",
+					model.Property.DeclaringType.Name, model.Property.Name, model.Property.PropertyType.FullName));
+			}
 		}
 
 		public override void VisitField(FieldModel model)
@@ -348,7 +348,7 @@ namespace Castle.ActiveRecord.Framework.Internal
                                       model.Property.DeclaringType.Name));
                 }
             }
-			if (model.BelongsToAtt.Column == null)
+			if (model.BelongsToAtt.Column == null && model.BelongsToAtt.CompositeKeyColumns == null)
 			{
 				model.BelongsToAtt.Column = model.Property.Name;
 			}
@@ -381,10 +381,11 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 			String table = model.HasManyAtt.Table;
 			String keyColumn = model.HasManyAtt.ColumnKey;
+			String[] compositeKeyColumnKeys = model.HasManyAtt.CompositeKeyColumnKeys;
 
 			ActiveRecordModel target = arCollection[ model.HasManyAtt.MapType ];
 
-			if ((table == null || keyColumn == null) && target == null)
+			if ((table == null || (keyColumn == null && compositeKeyColumnKeys == null)) && target == null)
 			{
 				throw new ActiveRecordException( String.Format(
 					"ActiveRecord tried to infer details about the relation {0}.{1} but " + 
@@ -406,7 +407,7 @@ namespace Castle.ActiveRecord.Framework.Internal
 				}
 			}
 
-			if ((table == null || keyColumn == null) && targetBtModel == null)
+			if ((table == null || (keyColumn == null && compositeKeyColumnKeys == null)) && targetBtModel == null)
 			{
 				throw new ActiveRecordException( String.Format(
 					"ActiveRecord tried to infer details about the relation {0}.{1} but " + 
@@ -421,13 +422,28 @@ namespace Castle.ActiveRecord.Framework.Internal
 				table = target.ActiveRecordAtt.Table;
 			}
 
-			if (keyColumn == null)
+			if (targetBtModel != null)
 			{
-				keyColumn = targetBtModel.BelongsToAtt.Column;
+				if (keyColumn == null && targetBtModel.BelongsToAtt.CompositeKeyColumns == null)
+				{
+					keyColumn = targetBtModel.BelongsToAtt.Column;
+				}
+				else
+				{
+					compositeKeyColumnKeys = targetBtModel.BelongsToAtt.CompositeKeyColumns;
+				}
 			}
 
 			model.HasManyAtt.Table = table;
-			model.HasManyAtt.ColumnKey = keyColumn;
+
+			if (keyColumn != null)
+			{
+				model.HasManyAtt.ColumnKey = keyColumn;
+			}
+			else
+			{
+				model.HasManyAtt.CompositeKeyColumnKeys = compositeKeyColumnKeys;
+			}
 		}
 
 		public override void VisitHasAndBelongsToMany(HasAndBelongsToManyModel model)
@@ -444,22 +460,54 @@ namespace Castle.ActiveRecord.Framework.Internal
 					currentModel.Type.Name, model.Property.Name) );
 			}
 
-			if (model.HasManyAtt.ColumnKey == null)
+			if (model.HasManyAtt.ColumnKey == null && model.HasManyAtt.CompositeKeyColumnKeys == null)
 			{
 				throw new ActiveRecordException( String.Format(
 					"For a many to many association (HasAndBelongsToMany) we need that you " + 
-					"specify the ColumnKey - which is the column that represents the type {0} " + 
+					"specify the ColumnKey or CompositeKeyColumnKeys - which is the column(s) that represents the type {0} " + 
 					"on the association table - {0}.{1} " + 
 					currentModel.Type.Name, model.Property.Name) );
 			}
+		    
+			if (model.HasManyAtt.ColumnKey != null && model.HasManyAtt.CompositeKeyColumnKeys != null)
+			{
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) there should only be " +
+					"a ColumnKey or an array of CompositeKeyColumnKeys, not both."));
+			}
 
-			if (model.HasManyAtt.ColumnRef == null)
+			if (model.HasManyAtt.CompositeKeyColumnKeys != null && model.HasManyAtt.CompositeKeyColumnKeys.Length < 2)
+			{
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) with a CompositeKey, " +
+					"there must be at least two CompositeKeyColumnKeys  - which are the columns that represent the type {0} " +
+					"on the association table - {0}.{1} " +
+					currentModel.Type.Name, model.Property.Name));
+			}
+
+			if (model.HasManyAtt.ColumnRef == null && model.HasManyAtt.CompositeKeyColumnRefs == null)
 			{
 				throw new ActiveRecordException( String.Format(
 					"For a many to many association (HasAndBelongsToMany) we need that you " + 
-					"specify the ColumnRef - which is the column that represents the other end '{2}' " + 
+					"specify the ColumnRef or CompositeKeyColumnRefs - which is the column(s) that represents the other end '{2}' " + 
 					"on the association table - {0}.{1} " + 
 					currentModel.Type.Name, model.Property.Name, otherend.Name) );
+			}
+
+			if (model.HasManyAtt.ColumnRef != null && model.HasManyAtt.CompositeKeyColumnRefs != null)
+			{
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) there should only be " +
+					"a ColumnRef or an array of CompositeKeyColumnRefs, not both."));
+			}
+
+			if (model.HasManyAtt.CompositeKeyColumnRefs != null && model.HasManyAtt.CompositeKeyColumnRefs.Length < 2)
+			{
+				throw new ActiveRecordException(String.Format(
+					"For a many to many association (HasAndBelongsToMany) with a CompositeKey, " +
+					"there must be at least two CompositeKeyColumnRefs - which are the columns that represent the other end '{2}' " +
+					"on the association table - {0}.{1} " +
+					currentModel.Type.Name, model.Property.Name, otherend.Name));
 			}
 
 			if (model.HasManyAtt.RelationType == RelationType.IdBag && model.CollectionID == null)

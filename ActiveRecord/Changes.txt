@@ -1,6 +1,31 @@
 beta 4
 ======
 
+- Added support to CompositeKeys as Foreign Keys (kudos to G. Richard Bellamy)
+
+  BelongsToAttribute - Added CompositeKeyColumns property.
+  HasAndBelongsToManyAttribute - Added CompositeKeyColumnKeys and CompositeKeyColumnRefs.
+  HasManyAttribute - Added CompositeKeyColumnKeys.
+  VersionAttribute - Added support for UnsavedValue.
+  SemanticVerifierVisitor - Added checks to ensure the composite key attributes are used properly.
+  XmlGenerationVisitor - Added output to support mapping the composite key attributes, as well as the unsaved-value attribute for Version.
+ 
+  In general, the changes are motivated by the need to have AR map to 
+  legacy data, where composite keys are used as both primary and foreign 
+  keys. The current AR support for CompositeKeys does not support 
+  associations, this patch does.
+ 
+  There are some caveats when using this, which are driven by the NH 
+  implementation. An assigned identifier (like all CompositeKeys and 
+  many string PrimaryKeys) cannot be used to determine whether an instance 
+  is detached or transient - since it's assigned by the application, it's 
+  never null. Therefore, you must use another strategy, NH will misbehave 
+  around the way it persists the instance to the database. That is why the 
+  VersionAttribute had to have the support for UnsavedValue - the UnsavedValue 
+  property of the Version is used by NH to determine the state of the instance.
+ 
+  For a discussion of the appropriate mappings and usage, see "Hibernate in Action," pgs. 330 - 335.
+
 - Added SessionScopeWebModule which hooks BeginRequest and EndRequest initializing and 
   destructing a SessionScope properly. In order to use it add to httpModules section 
   (web.config):

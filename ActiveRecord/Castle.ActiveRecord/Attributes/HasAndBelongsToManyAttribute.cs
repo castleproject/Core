@@ -39,8 +39,10 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class HasAndBelongsToManyAttribute : RelationAttribute
 	{
-		private String columnRef;	
+		private String columnRef;
+		private String[] compositeKeyColumnRefs;
 		private String columnKey;
+		private String[] compositeKeyColumnKeys;
 
 		public HasAndBelongsToManyAttribute( Type mapType )
 		{
@@ -57,11 +59,23 @@ namespace Castle.ActiveRecord
 			get { return columnRef; }
 			set { columnRef = value; }
 		}
+	    
+		public String[] CompositeKeyColumnRefs
+		{
+			get { return compositeKeyColumnRefs; }
+			set { compositeKeyColumnRefs = value; }
+		}
 
 		public String ColumnKey
 		{
 			get { return columnKey; }
 			set { columnKey = value; }
+		}
+	    
+		public String[] CompositeKeyColumnKeys
+		{
+			get { return compositeKeyColumnKeys; }
+			set { compositeKeyColumnKeys = value; }
 		}
 	}
 }

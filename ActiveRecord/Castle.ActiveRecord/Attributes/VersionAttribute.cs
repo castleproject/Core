@@ -20,7 +20,7 @@ namespace Castle.ActiveRecord
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false), Serializable]
 	public class VersionAttribute : WithAccessAttribute
 	{
-		private String column, type;
+		private String column, type, unsavedValue;
 
 		public VersionAttribute()
 		{
@@ -41,6 +41,12 @@ namespace Castle.ActiveRecord
 		{
 			get { return type; }
 			set { type = value; }
+		}
+
+		public String UnsavedValue
+		{
+			get { return unsavedValue; }
+			set { unsavedValue = value; }
 		}
 	}
 }

@@ -45,6 +45,7 @@ namespace Castle.ActiveRecord
 	public class HasManyAttribute : RelationAttribute
 	{
 		protected String keyColumn;
+		protected String[] compositeKeyColumns;
 
 		public HasManyAttribute(Type mapType)
 		{
@@ -62,6 +63,12 @@ namespace Castle.ActiveRecord
 		{
 			get { return keyColumn; }
 			set { keyColumn = value; }
+		}
+	    
+		public String[] CompositeKeyColumnKeys
+		{
+			get { return this.compositeKeyColumns; }
+			set { this.compositeKeyColumns = value; }
 		}
 	}
 }

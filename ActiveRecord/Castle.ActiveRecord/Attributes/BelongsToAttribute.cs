@@ -63,6 +63,7 @@ namespace Castle.ActiveRecord
 	{
 		private Type type;
 		private String column;
+		private String[] compositeKeyColumns;
 		private bool update = true;
 		private bool insert = true;
 		private bool notnull;
@@ -99,6 +100,15 @@ namespace Castle.ActiveRecord
 		{
 			get { return column; }
 			set { column = value; }
+		}
+	    
+		/// <summary>
+		///  Defines the Composite Key columns used by association (aka Natural Keys).
+		/// </summary>
+		public String[] CompositeKeyColumns
+		{
+			get { return compositeKeyColumns; }
+			set { compositeKeyColumns = value; }
 		}
 
 		/// <summary>
