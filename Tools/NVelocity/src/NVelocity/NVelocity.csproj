@@ -685,6 +685,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Runtime\Parser\Node\MathUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Runtime\Parser\Node\NodeUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

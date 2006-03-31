@@ -1,3 +1,14 @@
+
+- Add support to Math operations on context variables of the types 
+
+  . Double
+  . Single
+  . Decimal
+  . Int64,32,16
+  . SByte
+  . Byte
+
+
 2005-01-01 Saturday 10:35  corts
 
 	* ChangeLog.txt:

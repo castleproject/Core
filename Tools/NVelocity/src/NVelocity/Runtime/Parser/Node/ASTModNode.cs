@@ -49,22 +49,32 @@ namespace NVelocity.Runtime.Parser.Node
 			}
 
 			// if not an Integer, not much we can do either
-			if (!(left is Int32) || !(right is Int32))
-			{
-				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of modulus operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+//			if (!(left is Int32) || !(right is Int32))
+//			{
+//				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of modulus operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+//
+//				return null;
+//			}
 
+			Type maxType = MathUtil.ToMaxType(left.GetType(), right.GetType());
+
+			if (maxType == null)
+			{
 				return null;
 			}
+
+			return MathUtil.Mod(maxType, left, right);
+
 
 			// check for divide by 0
-			if (((Int32) right) == 0)
-			{
-				rsvc.Error("Right side of modulus operation is zero. Must be non-zero. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
-
-				return null;
-			}
-
-			return ((Int32) left)%((Int32) right);
+//			if (((Int32) right) == 0)
+//			{
+//				rsvc.Error("Right side of modulus operation is zero. Must be non-zero. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+//
+//				return null;
+//			}
+//
+//			return ((Int32) left)%((Int32) right);
 		}
 	}
 }

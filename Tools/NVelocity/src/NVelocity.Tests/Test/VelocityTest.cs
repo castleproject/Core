@@ -13,6 +13,57 @@ namespace NVelocity.Test
 	public class VelocityTest
 	{
 		[Test]
+		public void MathOperations()
+		{
+			VelocityContext context = new VelocityContext();
+
+			context.Put("fval", 1.2f);
+			context.Put("dval", 5.3);
+
+			Velocity.Init();
+
+			StringWriter sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = 1 + 1)\r\n$total") );
+			Assert.AreEqual("2", sw.GetStringBuilder().ToString());
+
+			sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval + $fval)\r\n$total") );
+			Assert.AreEqual("2.4", sw.GetStringBuilder().ToString());
+
+			sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $dval + $dval)\r\n$total") );
+			Assert.AreEqual("10.6", sw.GetStringBuilder().ToString());
+
+			sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = 1 + $dval)\r\n$total") );
+			Assert.AreEqual("6.3", sw.GetStringBuilder().ToString());
+
+			sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval * $dval)\r\n$total") );
+			Assert.AreEqual("6.36000025272369", sw.GetStringBuilder().ToString());
+
+			sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval - $dval)\r\n$total") );
+			Assert.AreEqual("-4.09999995231628", sw.GetStringBuilder().ToString());
+
+			sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval % $dval)\r\n$total") );
+			Assert.AreEqual("1.20000004768372", sw.GetStringBuilder().ToString());
+
+			sw = new StringWriter();
+			
+			Assert.IsTrue( Velocity.Evaluate(context, sw, "", "#set($total = $fval / $dval)\r\n$total") );
+			Assert.AreEqual("0.22641510333655", sw.GetStringBuilder().ToString());
+		}
+
+		[Test]
 		public void Test_Evaluate()
 		{
 			VelocityContext c = new VelocityContext();

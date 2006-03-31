@@ -61,15 +61,24 @@ namespace NVelocity.Runtime.Parser.Node
 				return null;
 			}
 
-			// if not an Integer, not much we can do either
-			if (!(left is Int32) || !(right is Int32))
-			{
-				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of multiplication operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+			Type maxType = MathUtil.ToMaxType(left.GetType(), right.GetType());
 
+			if (maxType == null)
+			{
 				return null;
 			}
 
-			return ((Int32) left)*((Int32) right);
+			return MathUtil.Mult(maxType, left, right);
+
+			// if not an Integer, not much we can do either
+//			if (!(left is Int32) || !(right is Int32))
+//			{
+//				rsvc.Error((!(left is Int32) ? "Left" : "Right") + " side of multiplication operation is not a valid type. " + "Currently only integers (1,2,3...) and Integer type is supported. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
+//
+//				return null;
+//			}
+//
+//			return ((Int32) left)*((Int32) right);
 		}
 	}
 }
