@@ -19,6 +19,7 @@ namespace Castle.ActiveRecord.Tests
 	using NUnit.Framework;
 	
 	using Castle.ActiveRecord.Tests.Model;
+	using Castle.ActiveRecord.Tests.Model.CompositeModel;
 
 
 	[TestFixture]
@@ -148,6 +149,78 @@ namespace Castle.ActiveRecord.Tests
 			{
 				Assert.AreEqual(blog.Id, post.Blog.Id);
 			}
+		}
+
+		[Test]
+		public void RelationsWithCompositeKey()
+		{
+			// User HasAndBelongsToMany Groups
+			// Groups HasAndBelongsToMany Users
+			// User HasMany Groups
+			// 
+			ActiveRecordStarter.Initialize(GetConfigSource(), 
+				typeof(Group),
+				typeof(Agent),
+				typeof(Org));
+			Recreate();
+
+			Agent.DeleteAll();
+			Org.DeleteAll();
+			Group.DeleteAll();
+
+			Org org = new Org("org1", "Test Org.");
+			org.Save();
+            
+			Group group1 = new Group();
+			group1.Name = "Group1";
+			group1.Save();
+
+			Group group2 = new Group();
+			group2.Name = "Group2";
+			group2.Save();
+
+			AgentKey agentKey1 = new AgentKey("org1", "rbellamy");
+			Agent agent1 = new Agent(agentKey1);
+			agent1.Save();
+			agent1.Groups.Add(group1);
+			group1.Agents.Add(agent1);
+			agent1.Save();
+			agent1.Groups.Add(group2);
+			group2.Agents.Add(agent1);
+			agent1.Save();
+
+			AgentKey agentKey2 = new AgentKey("org1", "hammett");
+			Agent agent2 = new Agent(agentKey2);
+			agent2.Groups.Add(group1);
+			agent2.Save();
+
+			using (new SessionScope())
+			{
+				org = Org.Find(org.Id);
+				group1 = Group.Find(group1.Id);
+				group2 = Group.Find(group2.Id);
+				agent1 = Agent.Find(agentKey1);
+				agent2 = Agent.Find(agentKey2);
+
+				Assert.IsNotNull(org);
+				Assert.IsNotNull(group1);
+				Assert.IsNotNull(group2);
+				Assert.IsNotNull(agent1);
+				Assert.IsNotNull(org.Agents, "Org agent collection is null.");
+				Assert.IsNotNull(group1.Agents, "Group1 agent collection is null");
+				Assert.IsNotNull(group2.Agents, "Group2 agent collection is null");
+				Assert.IsNotNull(agent1.Groups, "Agent group collection is null.");
+				Assert.IsNotNull(agent1.Org, "Agent's org is null.");
+				Assert.AreEqual(2, group1.Agents.Count);
+				Assert.AreEqual(2, agent1.Groups.Count);
+				Assert.AreEqual(1, agent2.Groups.Count);
+
+				foreach(Agent agentLoop in org.Agents)
+				{
+					Assert.IsTrue(agentLoop.Groups.Contains(group1));
+				}				
+			}
+
 		}
 
 		[Test]

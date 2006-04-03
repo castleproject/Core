@@ -334,6 +334,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Model\CompositeModel\Agent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\CompositeModel\AgentKey.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\CompositeModel\Group.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\CompositeModel\Org.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Model\GenericModel\Blog.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
