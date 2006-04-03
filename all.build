@@ -403,6 +403,7 @@
 						<items>
 							<include name="${foldername}/Castle.*.dll"/>
 							<include name="${foldername}/AspectSharp*.dll"/>
+							<include name="${foldername}/NVelocity.dll"/>
 							<exclude name="Castle.*.Tests.dll"/>
 						</items>
 					</in>
