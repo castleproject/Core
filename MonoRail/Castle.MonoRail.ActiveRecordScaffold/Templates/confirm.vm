@@ -2,7 +2,7 @@
 <h2>Remove ${armodel.Type.Name}</h2>
 
 <p>
-Do you reall want to remove this $armodel.Type.Name ?
+Do you really want to remove this $armodel.Type.Name ?
 </p>
 
 <p>
