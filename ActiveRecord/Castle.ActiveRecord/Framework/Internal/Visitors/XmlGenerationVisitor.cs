@@ -731,11 +731,13 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		private String MakeTypeAtt(Type type, String typeName)
 		{
-			if (type.IsEnum) return String.Empty;
-
 			if (typeName != null)
 			{
 				return MakeAtt("type", typeName);
+			}
+			else if (type.IsEnum)
+			{
+				return String.Empty;
 			}
 			else
 			{
