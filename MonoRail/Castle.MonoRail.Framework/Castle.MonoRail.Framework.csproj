@@ -332,7 +332,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Attributes\Layout.cs"
+                    RelPath = "Attributes\LayoutAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -353,6 +353,16 @@
                 />
                 <File
                     RelPath = "Attributes\ScaffoldingAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\SkipFilterAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Attributes\SkipRescueAttribute.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -552,22 +562,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\ControllerDescriptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\ControllerDescriptorBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Internal\ControllerInspectionUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\ControllerMetaDescriptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -597,17 +592,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Internal\FilterDescriptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Internal\Flash.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Internal\ICacheProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -692,7 +677,147 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Internal\Descriptors\ActionMetaDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\BaseMetaDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\ControllerDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\ControllerMetaDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\FilterDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\HelperDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\IFilterDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\IHelperDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\ILayoutDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\IRescueDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\IResourceDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\LayoutDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\RescueDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Descriptors\ResourceDescriptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Internal\Graph\ControllerTree.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\ControllerDescriptorBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\DefaultFilterDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\DefaultHelperDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\DefaultLayoutDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\DefaultRescueDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\DefaultResourceDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\ICacheProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\IControllerDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\IFilterDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\IHelperDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\ILayoutDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\IProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\IRescueDescriptorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Internal\Providers\IResourceDescriptorProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

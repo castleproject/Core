@@ -22,8 +22,8 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public interface IResourceFactory
 	{
-		IResource Create( IResourceDefinition definition, Assembly appAssembly );
+		IResource Create(ResourceDescriptor descriptor, Assembly appAssembly);
 
-		void Release( IResource resource );
+		void Release(IResource resource);
 	}
 }

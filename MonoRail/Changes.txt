@@ -4,6 +4,25 @@ Change history
 Release Candidate 1
 ===================
 
+- Refactored ControllerDescriptorBuilder (renamed to ControllerDescriptorProvider)
+  to use child providers to obtain descriptor. Attributes are now descriptors builders
+  and that allows one to come up with custom attributes like
+
+  public class MyAttribute : Attribute, ILayoutDescriptorBuilder, IHelperDescriptorBuilder
+  {
+     public LayoutDescriptor BuildLayoutDescriptor() 
+     {
+       return new LayoutDescriptor("mylayout");
+     }
+
+     public HelperDescriptor[] BuildHelperDescriptors()
+     {
+       return new HelperDescriptor[] { new HelperDescriptor(typeof(MyHelper)) };
+     }
+  }
+
+  Kudos to Fabio by coming up with the idea.
+
 - ViewComponents: added subsection support
 
   (Using nvelocity as example)

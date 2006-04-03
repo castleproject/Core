@@ -22,7 +22,6 @@ namespace Castle.MonoRail.ActiveRecordScaffold.Tests
 
 	using TestScaffolding.Model;
 
-
 	public class TestDBUtils
 	{
 		public static void Recreate()

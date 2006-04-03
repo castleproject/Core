@@ -16,16 +16,29 @@ namespace Castle.MonoRail.Framework.Internal
 {
 	using System;
 
-	public interface ICacheProvider
+	[Serializable]
+	public abstract class BaseMetaDescriptor
 	{
-		void Init(IServiceProvider serviceProvider);
+		private LayoutDescriptor layout;
+		private RescueDescriptor[] rescues = new RescueDescriptor[0];
+		private ResourceDescriptor[] resources = new ResourceDescriptor[0];
 
-		bool HasKey(String key);
+		public LayoutDescriptor Layout
+		{
+			get { return layout; }
+			set { layout = value; }
+		}
 
-		object Get(String key);
+		public RescueDescriptor[] Rescues
+		{
+			get { return rescues; }
+			set { rescues = value; }
+		}
 
-		void Store(String key, object data);
-
-		void Delete(String key);
+		public ResourceDescriptor[] Resources
+		{
+			get { return resources; }
+			set { resources = value; }
+		}
 	}
 }

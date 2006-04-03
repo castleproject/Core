@@ -20,7 +20,7 @@ namespace Castle.MonoRail.Framework
 	/// Dictates the contract for resources that are publishable
 	/// through the PropertyBag context.
 	/// </summary>
-	public interface IResource : System.IDisposable
+	public interface IResource : IDisposable
 	{
 		/// <summary>
 		/// Returns the object linked to the specific key.
@@ -42,7 +42,7 @@ namespace Castle.MonoRail.Framework
 	/// Marker interface that declares that this attribute should
 	/// be used as a definition for a resource in the user ResourceFactory.
 	/// </summary>
-	public interface IResourceDefinition
-	{
-	}
+//	public interface IResourceDefinition
+//	{
+//	}
 }

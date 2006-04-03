@@ -28,12 +28,13 @@ namespace Castle.MonoRail.Framework.Tests
 		private ManualResetEvent startEvent = new ManualResetEvent(false);
 		private ManualResetEvent stopEvent = new ManualResetEvent(false);
 
-		private ControllerDescriptorBuilder builder;
+		private ControllerDescriptorProvider builder;
 
 		[SetUp]
 		public void Init()
 		{
-			builder = new ControllerDescriptorBuilder();
+			builder = new ControllerDescriptorProvider();
+			builder.Init(new TestServiceContainer());
 		}
 
 		[Test]

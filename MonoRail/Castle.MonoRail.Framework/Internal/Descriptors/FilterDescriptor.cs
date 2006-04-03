@@ -22,58 +22,50 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public class FilterDescriptor : ICloneable
 	{
-		private FilterItem _item;
-		private IFiltersAttribute _attribute;
-		private IFilter _filterInstance;
-		private bool isClone = false;
+		private readonly Type filterType;
+		private readonly ExecuteEnum when;
+		private readonly int executionOrder;
+		private IFilter filterInstance;
+		private FilterAttribute attribute;
 
-		public FilterDescriptor(IFiltersAttribute attribute, FilterItem item)
+		public FilterDescriptor(Type filterType, ExecuteEnum when, int executionOrder, FilterAttribute attribute)
 		{
-			_attribute = attribute;
-			_item = item;
-		}
-
-		public IFiltersAttribute Attribute
-		{
-			get { return _attribute; }
+			this.filterType = filterType;
+			this.when = when;
+			this.executionOrder = executionOrder;
+			this.attribute = attribute;
 		}
 
 		public Type FilterType
 		{
-			get { return _item.FilterType; }
+			get { return filterType; }
 		}
 
 		public ExecuteEnum When
 		{
-			get { return _item.When; }
+			get { return when; }
 		}
 
 		public int ExecutionOrder
 		{
-			get { return _item.ExecutionOrder; }
+			get { return executionOrder; }
 		}
 
 		public IFilter FilterInstance
 		{
-			get { return _filterInstance; }
-			set
-			{
-				if (!isClone)
-					throw new InvalidOperationException("FilterInstance property could only be set on FilterDescriptor clones.");
-				_filterInstance = value;
-			}
+			get { return filterInstance; }
+			set { filterInstance = value; }
 		}
 
-		public FilterDescriptor Clone()
+		public FilterAttribute Attribute
 		{
-			FilterDescriptor clone = (FilterDescriptor) this.MemberwiseClone();
-			clone.isClone = true;
-			return clone;
+			get { return attribute; }
+			set { attribute = value; }
 		}
 
-		object ICloneable.Clone()
+		public object Clone()
 		{
-			return this.Clone();
+			return new FilterDescriptor(filterType, when, executionOrder, attribute);
 		}
 	}
 }

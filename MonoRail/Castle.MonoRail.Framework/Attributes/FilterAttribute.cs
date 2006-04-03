@@ -16,62 +16,18 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
-	/// <summary>
-	/// Declares that for the specific method (action)
-	/// the specified filters should NOT be applied.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true), Serializable]
-	public class SkipFilterAttribute : Attribute, ISkipFilterAttribute
-	{
-		private Type[] filtersToSkip;
-
-		/// <summary>
-		/// Constructs a SkipFilterAttribute which skips all filters.
-		/// </summary>
-		public SkipFilterAttribute()
-		{
-		}
-
-		/// <summary>
-		/// Constructs a SkipFilterAttribute associating 
-		/// the filter type that should be skipped.
-		/// </summary>
-		public SkipFilterAttribute(params Type[] filtersToSkip)
-		{
-			this.filtersToSkip = filtersToSkip;
-		}
-
-		public Type[] FiltersToSkip
-		{
-			get { return filtersToSkip; }
-		}
-
-		[Obsolete("Use FiltersToSkip")]
-		public Type FilterType
-		{
-			get { return filtersToSkip != null && filtersToSkip.Length > 0 ? filtersToSkip[0] : null; }
-		}
-
-		[Obsolete("Use SkipAllFilters")]
-		public bool BlanketSkip
-		{
-			get { return SkipAllFilters; }
-		}
-		
-		public bool SkipAllFilters
-		{
-			get { return filtersToSkip == null || filtersToSkip.Length == 0; }
-		}
-	}
+	using Castle.MonoRail.Framework.Internal;
 
 	/// <summary>
 	/// Decorates a controller associating a <see cref="IFilter"/>
 	/// implementation with it. More than one can be associated.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true, Inherited=true), Serializable]
-	public class FilterAttribute : Attribute, IFiltersAttribute
+	public class FilterAttribute : Attribute, IFilterDescriptorBuilder
 	{
-		private FilterItem[] filters;
+		private readonly Type filterType;
+		private readonly ExecuteEnum when;
+		private int executionOrder = Int32.MaxValue;
 
 		/// <summary>
 		/// Constructs a FilterAttribute associating 
@@ -81,28 +37,34 @@ namespace Castle.MonoRail.Framework
 		/// <param name="filterType"></param>
 		public FilterAttribute(ExecuteEnum when, Type filterType)
 		{
-			this.filters = new FilterItem[] { new FilterItem(filterType, when) };
-		}
+			if (!typeof(IFilter).IsAssignableFrom(filterType))
+			{
+				throw new ArgumentException("The specified type does not implement IFilter");
+			}
 
-		public FilterItem[] GetFilters()
-		{
-			return filters;
+			this.filterType = filterType;
+			this.when = when;
 		}
 
 		public Type FilterType
 		{
-			get { return filters[0].FilterType; }
+			get { return filterType; }
 		}
 
 		public ExecuteEnum When
 		{
-			get { return filters[0].When; }
+			get { return when; }
 		}
 
 		public int ExecutionOrder
 		{
-			get { return filters[0].ExecutionOrder; }
-			set { filters[0].ExecutionOrder = value; }
+			get { return executionOrder; }
+			set { executionOrder = value; }
+		}
+
+		public FilterDescriptor[] BuildFilterDescriptors()
+		{
+			return new FilterDescriptor[] { new FilterDescriptor(FilterType, when, executionOrder, this) };
 		}
 	}
 }

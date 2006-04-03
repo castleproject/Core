@@ -21,30 +21,30 @@ namespace Castle.MonoRail.Framework.Internal
 	/// </summary>
 	public class ControllerDescriptor
 	{
-		private Type _controllerType;
-		private String _name;
-		private String _area;
+		private Type controllerType;
+		private String name;
+		private String area;
 
 		public ControllerDescriptor(Type controllerType, String name, String area)
 		{
-			_controllerType = controllerType;
-			_name = name;
-			_area = area;
+			this.controllerType = controllerType;
+			this.name = name;
+			this.area = area;
 		}
 
 		public Type ControllerType
 		{
-			get { return _controllerType; }
+			get { return controllerType; }
 		}
 
 		public String Name
 		{
-			get { return _name; }
+			get { return name; }
 		}
 
 		public String Area
 		{
-			get { return _area; }
+			get { return area; }
 		}
 	}
 }

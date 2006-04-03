@@ -78,6 +78,11 @@ namespace Castle.MonoRail.Framework.Tests
 	{
 		public TestServiceContainer()
 		{
+			AddService(typeof(IResourceDescriptorProvider), new DefaultResourceDescriptorProvider());
+			AddService(typeof(IRescueDescriptorProvider), new DefaultRescueDescriptorProvider());
+			AddService(typeof(ILayoutDescriptorProvider), new DefaultLayoutDescriptorProvider());
+			AddService(typeof(IHelperDescriptorProvider), new DefaultHelperDescriptorProvider());
+			AddService(typeof(IFilterDescriptorProvider), new DefaultFilterDescriptorProvider());
 		}
 	}
 }

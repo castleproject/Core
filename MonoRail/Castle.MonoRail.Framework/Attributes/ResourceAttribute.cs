@@ -1,4 +1,4 @@
-// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Declares that for the specified class or method, the given resource file should be 
 	/// loaded and set available in the PropertyBag with the specified name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true, Inherited=true), Serializable]
-	public class ResourceAttribute : Attribute, IResourcesAttribute
+	public class ResourceAttribute : Attribute, IResourceDescriptorBuilder
 	{
-		private ResourceItem[] resources;
+		private String name, resourceName, cultureName, assemblyName;
+		private Type resourceType;
 		
 		/// <summary>
 		/// Constructs a resource attribute, with the specified name, based
@@ -33,51 +36,50 @@ namespace Castle.MonoRail.Framework
 		/// <param name="resourceName">Fully qualified name of the resource in the sattelite assembly</param>
 		public ResourceAttribute( String name, String resourceName )
 		{
-			ResourceItem res;
-			
+			this.name = name;
+			this.resourceName = resourceName;
+
 			if (resourceName.IndexOf(',') > 0)
 			{
 				String[] pair = resourceName.Split(',');
-				res = new ResourceItem(name, pair[0].Trim());
-				res.AssemblyName = pair[1].Trim();
+				this.resourceName = pair[0].Trim();
+				this.assemblyName = pair[1].Trim();
 			}
-			else
-				res = new ResourceItem(name, resourceName);
-
-			this.resources = new ResourceItem[] { res };
-		}
-
-		public ResourceItem[] GetResources()
-		{
-			return resources;
 		}
 
 		public String Name
 		{
-			get { return resources[0].Key; }
+			get { return name; }
+			set { name = value; }
 		}
 
 		public String ResourceName
 		{
-			get { return resources[0].ResourceName; }
+			get { return resourceName; }
+			set { resourceName = value; }
 		}
 
 		public String CultureName
 		{
-			get { return resources[0].CultureName; }
-			set { resources[0].CultureName = value; }
+			get { return cultureName; }
+			set { cultureName = value; }
 		}
 
 		public String AssemblyName
 		{
-			get { return resources[0].AssemblyName; }
-			set { resources[0].AssemblyName = value; }
+			get { return assemblyName; }
+			set { assemblyName = value; }
 		}
 
 		public Type ResourceType
 		{
-			get { return resources[0].ResourceType; }
-			set { resources[0].ResourceType = value; }
+			get { return resourceType; }
+			set { resourceType = value; }
+		}
+
+		public ResourceDescriptor[] BuildResourceDescriptors()
+		{
+			return new ResourceDescriptor[] { new ResourceDescriptor(resourceType, name, resourceName, cultureName, assemblyName) };
 		}
 	}
 }

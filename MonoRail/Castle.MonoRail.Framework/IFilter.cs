@@ -16,6 +16,8 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Enum (flag) to indicate when the filter should 
 	/// or is invoked.
@@ -23,6 +25,22 @@ namespace Castle.MonoRail.Framework
 	[Flags]
 	public enum ExecuteEnum
 	{
+		/// <summary>
+		/// The filter is invoked before the action.
+		/// </summary>
+		[Obsolete("Use ExecuteEnum.BeforeAction")]
+		Before = BeforeAction,
+		/// <summary>
+		/// The filter is invoked after the action.
+		/// </summary>
+		[Obsolete("Use ExecuteEnum.AfterRendering or ExecuteEnum.AfterAction")]
+		After = AfterRendering,
+		/// <summary>
+		/// The filter is invoked before and after the action.
+		/// </summary>
+		[Obsolete("Use ExecuteEnum.Always or combine the ExecuteEnum values you want")]
+		Around = BeforeAction | AfterAction,
+		
 		/// <summary>
 		/// The filter is invoked before the action.
 		/// </summary>
@@ -61,10 +79,11 @@ namespace Castle.MonoRail.Framework
 	}
 
 	/// <summary>
-	/// Dictates a contract that the defining FilterAttribute can be set
+	/// Dictates a contract that the defining 
+	/// FilterAttribute can be set
 	/// </summary>
 	public interface IFilterAttributeAware
 	{
-		IFiltersAttribute FilterAttribute { set; }
+		FilterAttribute Filter { set; }
 	}
 }

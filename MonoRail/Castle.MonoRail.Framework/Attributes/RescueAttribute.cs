@@ -1,4 +1,4 @@
-// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,51 +16,56 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Associates a rescue template with a <see cref="Controller"/> or an action 
 	/// (method). The rescue is invoked in response to some exception during the 
 	/// action processing.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true), Serializable]
-	public class RescueAttribute : Attribute, IRescuesAttribute
+	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Method, AllowMultiple=true), Serializable]
+	public class RescueAttribute : Attribute, IRescueDescriptorBuilder
 	{
-		private RescueItem[] rescueItems;
-
+		private readonly String viewName;
+		private readonly Type exceptionType;
+		
 		/// <summary>
 		/// Constructs a RescueAttribute with the template name.
 		/// </summary>
 		/// <param name="viewName"></param>
-		public RescueAttribute(String viewName)
-			: this(viewName, typeof(Exception))
-		{
+		public RescueAttribute(String viewName) : this(viewName, typeof(Exception))
+		{			
 		}
 
 		public RescueAttribute(String viewName, Type exceptionType)
 		{
-			this.rescueItems = new RescueItem[] { new RescueItem(viewName, exceptionType) };
+			if (viewName == null || viewName.Length == 0)
+			{
+				throw new ArgumentNullException("viewName");
+			}
+			
+			if (exceptionType != null && !typeof(Exception).IsAssignableFrom(exceptionType))
+			{
+				throw new ArgumentException("exceptionType must be a type assignable from Exception");
+			}
+			
+			this.viewName = viewName;
+			this.exceptionType = exceptionType;
 		}
 
 		public String ViewName
 		{
-			get { return rescueItems[0].ViewName; }
+			get { return viewName; }
 		}
-
+		
 		public Type ExceptionType
 		{
-			get { return rescueItems[0].ExceptionType; }
+			get { return exceptionType; }
 		}
 
-		public RescueItem[] GetRescues()
+		public RescueDescriptor[] BuildRescueDescriptors()
 		{
-			return new RescueItem[] {new RescueItem(ViewName, ExceptionType)};
+			return new RescueDescriptor[] { new RescueDescriptor(viewName, exceptionType) };
 		}
-	}
-
-	/// <summary>
-	/// Declares that for the specific method (action) no rescue should be performed.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=true), Serializable]
-	public class SkipRescueAttribute : Attribute
-	{
 	}
 }

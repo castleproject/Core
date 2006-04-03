@@ -611,8 +611,8 @@ namespace Castle.MonoRail.Framework
 			_resourceFactory = (IResourceFactory) serviceProvider.GetService( typeof(IResourceFactory) );
 			_scaffoldSupport = (IScaffoldingSupport) serviceProvider.GetService( typeof(IScaffoldingSupport) );
 
-			ControllerDescriptorBuilder controllerDescriptorBuilder = (ControllerDescriptorBuilder)
-				serviceProvider.GetService( typeof(ControllerDescriptorBuilder) );
+			IControllerDescriptorProvider controllerDescriptorBuilder = (IControllerDescriptorProvider)
+				serviceProvider.GetService( typeof(IControllerDescriptorProvider) );
 
 			metaDescriptor = controllerDescriptorBuilder.BuildDescriptor(this);
 
@@ -888,7 +888,7 @@ namespace Castle.MonoRail.Framework
 		{
 			_helpers = new HybridDictionary();
 
-			foreach (HelperItem helper in metaDescriptor.Helpers)
+			foreach (HelperDescriptor helper in metaDescriptor.Helpers)
 			{
 				object helperInstance = Activator.CreateInstance(helper.HelperType);
 
@@ -899,7 +899,7 @@ namespace Castle.MonoRail.Framework
 					aware.SetController(this);
 				}
 
-				_helpers.Add(helper.Key, helperInstance);
+				_helpers.Add(helper.Name, helperInstance);
 			}
 
 			AbstractHelper[] builtInHelpers =
@@ -957,20 +957,20 @@ namespace Castle.MonoRail.Framework
 		{
 			_resources = new ResourceDictionary();
 
-			Assembly typeAssembly = this.GetType().Assembly;
+			Assembly typeAssembly = GetType().Assembly;
 
-			foreach (ResourceItem resource in metaDescriptor.Resources)
+			foreach(ResourceDescriptor resource in metaDescriptor.Resources)
 			{
-				_resources.Add(resource.Key, _resourceFactory.Create(resource, typeAssembly));
+				_resources.Add(resource.Name, _resourceFactory.Create(resource, typeAssembly));
 			}
 
 			if (method == null) return;
 
 			ActionMetaDescriptor actionMeta = metaDescriptor.GetAction(method);
 
-			foreach (ResourceItem resource in actionMeta.Resources)
+			foreach(ResourceDescriptor resource in actionMeta.Resources)
 			{
-				_resources[resource.Key] = _resourceFactory.Create(resource, typeAssembly);
+				_resources[resource.Name] = _resourceFactory.Create(resource, typeAssembly);
 			}
 		}
 
@@ -978,7 +978,7 @@ namespace Castle.MonoRail.Framework
 		{
 			if (_resources == null) return;
 
-			foreach (IResource resource in _resources.Values)
+			foreach(IResource resource in _resources.Values)
 			{
 				_resourceFactory.Release(resource);
 			}
@@ -1010,28 +1010,28 @@ namespace Castle.MonoRail.Framework
 				return false;
 			}
 
-			foreach (ISkipFilterAttribute skipfilter in actionMeta.SkipFilters)
+			foreach (SkipFilterAttribute skipfilter in actionMeta.SkipFilters)
 			{
 				// SkipAllFilters handling...
-				if (skipfilter.SkipAllFilters) return true;
+				if (skipfilter.BlanketSkip) return true;
 
-				foreach (Type filterType in skipfilter.FiltersToSkip)
-					filtersToSkip[filterType] = String.Empty;
+				filtersToSkip[skipfilter.FilterType] = String.Empty;
 			}
 
 			return false;
 		}
 
 		/// <summary>
-		/// Clones all Filter descriptors, in order to get a read-write copy.
+		/// Clones all Filter descriptors, in order to get a writable copy.
 		/// </summary>
 		protected internal FilterDescriptor[] CopyFilterDescriptors()
 		{
-			FilterDescriptor[] clone = 
-				(FilterDescriptor[]) metaDescriptor.Filters.Clone();
+			FilterDescriptor[] clone = (FilterDescriptor[]) metaDescriptor.Filters.Clone();
 
-			for (int i = 0; i < clone.Length; i++)
-				clone[i] = clone[i].Clone();
+			for (int i=0; i < clone.Length; i++)
+			{
+				clone[i] = (FilterDescriptor) clone[i].Clone();
+			}
 
 			return clone;
 		}
@@ -1064,7 +1064,7 @@ namespace Castle.MonoRail.Framework
 
 				if (filterAttAware != null)
 				{
-					filterAttAware.FilterAttribute = desc.Attribute;
+					filterAttAware.Filter = desc.Attribute;
 				}
 			}
 
@@ -1130,7 +1130,7 @@ namespace Castle.MonoRail.Framework
 			
 			if (actionMeta.SkipRescue != null) return false;
 			
-			RescueItem att = GetRescueFor(actionMeta.Rescues, exceptionType);
+			RescueDescriptor att = GetRescueFor(actionMeta.Rescues, exceptionType);
 			
 			if (att == null)
 			{
@@ -1155,13 +1155,13 @@ namespace Castle.MonoRail.Framework
 			return false;
 		}
 
-		protected virtual RescueItem GetRescueFor(IList rescues, Type exceptionType)
+		protected virtual RescueDescriptor GetRescueFor(IList rescues, Type exceptionType)
 		{
 			if (rescues == null || rescues.Count == 0) return null;
 			
-			RescueItem bestCandidate = null;
+			RescueDescriptor bestCandidate = null;
 			
-			foreach(RescueItem rescue in rescues)
+			foreach(RescueDescriptor rescue in rescues)
 			{
 				if (rescue.ExceptionType == exceptionType)
 				{

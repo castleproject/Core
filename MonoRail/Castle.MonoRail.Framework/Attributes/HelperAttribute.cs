@@ -1,4 +1,4 @@
-// Copyright 2004-2006 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2005 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,37 +16,40 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Associates a helper class with the controller.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple=true), Serializable]
-	public class HelperAttribute : Attribute, IHelpersAttribute
+	public class HelperAttribute : Attribute, IHelperDescriptorBuilder
 	{
-		private HelperItem[] helpers;
+		private readonly Type helperType;
+		private readonly String name;
 
-		public HelperAttribute(Type helperType)
-			: this(helperType, null)
-		{
+		public HelperAttribute(Type helperType) : this(helperType, null)
+		{			
 		}
-
+		
 		public HelperAttribute(Type helperType, String name)
 		{
-			this.helpers = new HelperItem[] { new HelperItem(helperType, name) };
-		}
-
-		public HelperItem[] GetHelpers()
-		{
-			return helpers;
-		}
-
-		public Type HelperType
-		{
-			get { return helpers[0].HelperType; }
+			this.helperType = helperType;
+			this.name = (name == null || name.Trim() == String.Empty) ? helperType.Name : name;
 		}
 
 		public String Name
 		{
-			get { return helpers[0].Key; }
+			get { return name; }
+		}		
+
+		public Type HelperType
+		{
+			get { return helperType; }
+		}
+
+		public HelperDescriptor[] BuildHelperDescriptors()
+		{
+			return new HelperDescriptor[] { new HelperDescriptor(helperType, name) };
 		}
 	}
 }

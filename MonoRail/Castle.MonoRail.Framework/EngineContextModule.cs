@@ -50,8 +50,13 @@ namespace Castle.MonoRail.Framework
 		private IScaffoldingSupport scaffoldingSupport;
 		private IViewComponentFactory viewCompFactory;
 		private IEmailSender emailSender;
-		private ControllerDescriptorBuilder controllerDescriptorBuilder;
+		private IControllerDescriptorProvider controllerDescriptorProvider;
 		private ICacheProvider cacheProvider;
+		private IResourceDescriptorProvider resourceDescriptorProvider;
+		private IRescueDescriptorProvider rescueDescriptorProvider;
+		private ILayoutDescriptorProvider layoutDescriptorProvider;
+		private IHelperDescriptorProvider helperDescriptorProvider;
+		private IFilterDescriptorProvider filterDescriptorProvider;
 
 		public void Init(HttpApplication context)
 		{
@@ -70,8 +75,8 @@ namespace Castle.MonoRail.Framework
 		{
 			monoRailConfiguration = ObtainConfiguration();
 
-			InitializeDescriptorBuilder();
-
+			InitializeControllerDescriptorProvider();
+			InitializeDescriptorProviders();
 			InitializeExtensions();
 			InitializeCacheProvider();
 			InitializeControllerFactory();
@@ -104,9 +109,18 @@ namespace Castle.MonoRail.Framework
 			return MonoRailConfiguration.GetConfig();
 		}
 
-		private void InitializeDescriptorBuilder()
+		private void InitializeControllerDescriptorProvider()
 		{
-			controllerDescriptorBuilder = new ControllerDescriptorBuilder();
+			controllerDescriptorProvider = new ControllerDescriptorProvider();
+		}
+
+		private void InitializeDescriptorProviders()
+		{
+			resourceDescriptorProvider = new DefaultResourceDescriptorProvider();
+			rescueDescriptorProvider = new DefaultRescueDescriptorProvider();
+			layoutDescriptorProvider = new DefaultLayoutDescriptorProvider();
+			helperDescriptorProvider = new DefaultHelperDescriptorProvider();
+			filterDescriptorProvider = new DefaultFilterDescriptorProvider();
 		}
 
 		protected virtual void InitializeExtensions()
@@ -254,6 +268,14 @@ namespace Castle.MonoRail.Framework
 
 		private void ConfigureAndInvokeInit()
 		{
+			resourceDescriptorProvider.Init(this);
+			rescueDescriptorProvider.Init(this);
+			layoutDescriptorProvider.Init(this);
+			helperDescriptorProvider.Init(this);
+			filterDescriptorProvider.Init(this);
+
+			controllerDescriptorProvider.Init(this);
+
 			// TODO: Add this configuration attribute
 			// viewSourceLoader.EnableCache = monoRailConfiguration.ViewsEnableCache;
 			viewSourceLoader.ViewRootDir = monoRailConfiguration.ViewsPhysicalPath;
@@ -353,10 +375,15 @@ namespace Castle.MonoRail.Framework
 			context.AddService(typeof(IResourceFactory), resourceFactory);
 			context.AddService(typeof(IScaffoldingSupport), scaffoldingSupport);
 			context.AddService(typeof(IViewComponentFactory), viewCompFactory);
-			context.AddService(typeof(ControllerDescriptorBuilder), controllerDescriptorBuilder);
+			context.AddService(typeof(IControllerDescriptorProvider), controllerDescriptorProvider);
 			context.AddService(typeof(IEmailSender), emailSender);
 			context.AddService(typeof(ICacheProvider), cacheProvider);
 			context.AddService(typeof(MonoRailConfiguration), monoRailConfiguration);
+			context.AddService(typeof(IResourceDescriptorProvider), resourceDescriptorProvider);
+			context.AddService(typeof(IRescueDescriptorProvider), rescueDescriptorProvider);
+			context.AddService(typeof(ILayoutDescriptorProvider), layoutDescriptorProvider);
+			context.AddService(typeof(IHelperDescriptorProvider), helperDescriptorProvider);
+			context.AddService(typeof(IFilterDescriptorProvider), filterDescriptorProvider);
 		}
 
 		internal static bool Initialized

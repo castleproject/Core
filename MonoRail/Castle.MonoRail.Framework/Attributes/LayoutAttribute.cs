@@ -16,15 +16,17 @@ namespace Castle.MonoRail.Framework
 {
 	using System;
 
+	using Castle.MonoRail.Framework.Internal;
+
 	/// <summary>
 	/// Associates a layout name with a controller.
 	/// The layout can later be changed using the LayoutName
 	/// property of the <see cref="Controller"/>.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=false), Serializable]
-	public class LayoutAttribute : Attribute, ILayoutAttribute
+	public class LayoutAttribute : Attribute, ILayoutDescriptorBuilder
 	{
-		private String _layoutName;
+		private readonly String layoutName;
 
 		/// <summary>
 		/// Constructs a LayoutAttribute with the 
@@ -32,14 +34,22 @@ namespace Castle.MonoRail.Framework
 		/// </summary>
 		public LayoutAttribute(String layoutName)
 		{
-			if (layoutName == null || layoutName.Length == 0) 
-				throw new ArgumentNullException("layoutName");
-			_layoutName = layoutName;
+			if (layoutName == null || layoutName.Length == 0)
+			{
+				throw new ArgumentNullException("layoutName", "Invalid layout name");
+			}
+
+			this.layoutName = layoutName;
 		}
 
 		public String LayoutName
 		{
-			get { return _layoutName; }
+			get { return layoutName; }
+		}
+
+		public LayoutDescriptor BuildLayoutDescriptor()
+		{
+			return new LayoutDescriptor(layoutName);
 		}
 	}
 }
