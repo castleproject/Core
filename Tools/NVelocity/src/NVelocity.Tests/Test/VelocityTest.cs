@@ -2,6 +2,7 @@ namespace NVelocity.Test
 {
 	using System;
 	using System.Collections;
+	using System.Globalization;
 	using System.IO;
 	using NUnit.Framework;
 	using NVelocity.App;
@@ -15,6 +16,8 @@ namespace NVelocity.Test
 		[Test]
 		public void MathOperations()
 		{
+			System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
 			VelocityContext context = new VelocityContext();
 
 			context.Put("fval", 1.2f);
