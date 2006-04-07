@@ -16,6 +16,7 @@ namespace Castle.Windsor
 {
 	using System;
 	using System.Collections;
+
 	using Castle.MicroKernel;
 
 	/// <summary>
@@ -29,14 +30,14 @@ namespace Castle.Windsor
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="facility"></param>
-		void AddFacility( String key, IFacility facility );
+		void AddFacility(String key, IFacility facility);
 
 		/// <summary>
 		/// Adds a component to be managed by the container
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
-		void AddComponent( String key, Type classType );
+		void AddComponent(String key, Type classType);
 
 		/// <summary>
 		/// Adds a component to be managed by the container
@@ -44,7 +45,7 @@ namespace Castle.Windsor
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
-		void AddComponent( String key, Type serviceType, Type classType );
+		void AddComponent(String key, Type serviceType, Type classType);
 
         /// <summary>
         /// Adds a concrete class as a component and specify the extended properties.
@@ -53,7 +54,7 @@ namespace Castle.Windsor
         /// <param name="key"></param>
         /// <param name="classType"></param>
         /// <param name="extendedProperties"></param>
-        void AddComponentWithProperties( String key, Type classType, IDictionary extendedProperties );
+        void AddComponentWithProperties(String key, Type classType, IDictionary extendedProperties);
 
         /// <summary>
         /// Adds a concrete class and an interface 
@@ -64,27 +65,27 @@ namespace Castle.Windsor
         /// <param name="serviceType"></param>
         /// <param name="classType"></param>
         /// <param name="extendedProperties"></param>
-        void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary extendedProperties );
+        void AddComponentWithProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
 
 		/// <summary>
 		/// Returns a component instance by the key
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		object Resolve( String key );
+		object Resolve(String key);
 
 		/// <summary>
 		/// Returns a component instance by the service
 		/// </summary>
 		/// <param name="service"></param>
 		/// <returns></returns>
-		object Resolve( Type service );
+		object Resolve(Type service);
 
 		/// <summary>
 		/// Releases a component instance
 		/// </summary>
 		/// <param name="instance"></param>
-		void Release( object instance );
+		void Release(object instance);
 
 		/// <summary>
 		/// Registers a subcontainer. The components exposed
@@ -94,36 +95,30 @@ namespace Castle.Windsor
 		void AddChildContainer(IWindsorContainer childContainer);
 
 		/// <summary>
-		/// Shortcut to the method <see cref="Resolve"/>
+		/// Remove a child container
 		/// </summary>
-		object this [String key]
-		{
-			get;
-		}
+		/// <param name="childContainer"></param>
+		void RemoveChildContainer(IWindsorContainer childContainer);
 
 		/// <summary>
 		/// Shortcut to the method <see cref="Resolve"/>
 		/// </summary>
-		object this [Type service]
-		{
-			get;
-		}
+		object this [String key] { get; }
+
+		/// <summary>
+		/// Shortcut to the method <see cref="Resolve"/>
+		/// </summary>
+		object this [Type service] { get; }
 
 		/// <summary>
 		/// Returns the inner instance of the MicroKernel
 		/// </summary>
-		IKernel Kernel
-		{
-			get;
-		}
+		IKernel Kernel { get; }
 
 		/// <summary>
 		/// Gets or sets the parent container if this instance
 		/// is a sub container.
 		/// </summary>
-		IWindsorContainer Parent
-		{
-			get; set;
-		}
+		IWindsorContainer Parent { get; set; }
 	}
 }

@@ -39,7 +39,7 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
-		void AddComponent( String key, Type classType );
+		void AddComponent(String key, Type classType);
 
 		/// <summary>
 		/// Adds a concrete class and an interface 
@@ -48,7 +48,7 @@ namespace Castle.MicroKernel
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
-		void AddComponent( String key, Type serviceType, Type classType );
+		void AddComponent(String key, Type serviceType, Type classType);
 
 		/// <summary>
 		/// Adds a concrete class as a component and specify the extended properties.
@@ -57,7 +57,7 @@ namespace Castle.MicroKernel
 		/// <param name="key"></param>
 		/// <param name="classType"></param>
 		/// <param name="extendedProperties"></param>
-		void AddComponentWithProperties( String key, Type classType, IDictionary extendedProperties );
+		void AddComponentWithProperties(String key, Type classType, IDictionary extendedProperties);
 
 		/// <summary>
 		/// Adds a concrete class and an interface 
@@ -68,14 +68,14 @@ namespace Castle.MicroKernel
 		/// <param name="serviceType"></param>
 		/// <param name="classType"></param>
 		/// <param name="extendedProperties"></param>
-		void AddComponentWithProperties( String key, Type serviceType, Type classType, IDictionary extendedProperties );
+		void AddComponentWithProperties(String key, Type serviceType, Type classType, IDictionary extendedProperties);
 
 		/// <summary>
 		/// Adds a custom made <see cref="ComponentModel"/>.
 		/// Used by facilities.
 		/// </summary>
 		/// <param name="model"></param>
-		void AddCustomComponent( ComponentModel model );
+		void AddCustomComponent(ComponentModel model);
 
 		/// <summary>
 		/// Used mostly by facilities. Adds an instance
@@ -83,7 +83,7 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="instance"></param>
-		void AddComponentInstance( String key, object instance );
+		void AddComponentInstance(String key, object instance);
 
 		/// <summary>
 		/// Used mostly by facilities. Adds an instance
@@ -92,7 +92,7 @@ namespace Castle.MicroKernel
 		/// <param name="key"></param>
 		/// <param name="serviceType"></param>
 		/// <param name="instance"></param>
-		void AddComponentInstance( String key, Type serviceType, object instance );
+		void AddComponentInstance(String key, Type serviceType, object instance);
 
 		/// <summary>
 		/// Returns true if the specified component was 
@@ -100,37 +100,31 @@ namespace Castle.MicroKernel
 		/// </summary>
 		/// <param name="key">The component's key</param>
 		/// <returns></returns>
-		bool RemoveComponent( String key );
+		bool RemoveComponent(String key);
 
 		/// <summary>
 		/// Returns true if the specified key was registered
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		bool HasComponent( String key );
+		bool HasComponent(String key);
 
 		/// <summary>
 		/// Returns true if the specified service was registered
 		/// </summary>
 		/// <param name="service"></param>
 		/// <returns></returns>
-		bool HasComponent( Type service );
+		bool HasComponent(Type service);
 
 		/// <summary>
 		/// Returns the component instance by the key
 		/// </summary>
-		object this[String key]
-		{
-			get;
-		}
+		object this[String key] { get; }
 
 		/// <summary>
 		/// Returns the component instance by the Type
 		/// </summary>
-		object this[Type key]
-		{
-			get;
-		}
+		object this[Type key] { get; }
 
 		/// <summary>
 		/// Releases a component instance. This allows
@@ -138,7 +132,7 @@ namespace Castle.MicroKernel
 		/// lifecycles on the component instance.
 		/// </summary>
 		/// <param name="instance"></param>
-		void ReleaseComponent( object instance );
+		void ReleaseComponent(object instance);
 		
 		/// <summary>
 		/// Constructs an implementation of <see cref="IComponentActivator"/>
@@ -151,26 +145,17 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Returns the implementation of <see cref="IComponentModelBuilder"/>
 		/// </summary>
-		IComponentModelBuilder ComponentModelBuilder
-		{
-			get; 
-		}
+		IComponentModelBuilder ComponentModelBuilder { get; }
 
 		/// <summary>
 		/// Returns the implementation of <see cref="IHandlerFactory"/>
 		/// </summary>
-		IHandlerFactory HandlerFactory
-		{
-			get;
-		}
+		IHandlerFactory HandlerFactory { get; }
 
 		/// <summary>
 		/// Gets or sets the implementation of <see cref="IConfigurationStore"/>
 		/// </summary>
-		IConfigurationStore ConfigurationStore
-		{
-			get; set;
-		}
+		IConfigurationStore ConfigurationStore { get; set; }
 
 		/// <summary>
 		/// Returns the <see cref="IHandler"/>
@@ -208,18 +193,12 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Returns the implementation for <see cref="IReleasePolicy"/>
 		/// </summary>
-		IReleasePolicy ReleasePolicy
-		{
-		 	get;
-		}
+		IReleasePolicy ReleasePolicy { get; }
 
 		/// <summary>
 		/// Returns the implementation for <see cref="IDependencyResolver"/>
 		/// </summary>
-		IDependencyResolver Resolver
-		{
-			get;
-		}
+		IDependencyResolver Resolver { get; }
 
 		/// <summary>
 		/// Adds a <see cref="IFacility"/> to the kernel.
@@ -254,24 +233,24 @@ namespace Castle.MicroKernel
 		/// Gets or sets the implementation of <see cref="IProxyFactory"/>
 		/// allowing different strategies for proxy creation.
 		/// </summary>
-		IProxyFactory ProxyFactory
-		{
-			get; set;
-		}
+		IProxyFactory ProxyFactory { get; set; }
 
 		/// <summary>
 		/// Returns the parent kernel
 		/// </summary>
-		IKernel Parent
-		{
-			get; set;
-		}
+		IKernel Parent { get; set; }
 
 		/// <summary>
 		/// Support for kernel hierarchy
 		/// </summary>
 		/// <param name="kernel"></param>
 		void AddChildKernel(IKernel kernel);
+
+		/// <summary>
+		/// Remove child kernel
+		/// </summary>
+		/// <param name="kernel"></param>
+		void RemoveChildKernel(IKernel kernel);
 
 		/// <summary>
 		/// Graph of components and iteractions.

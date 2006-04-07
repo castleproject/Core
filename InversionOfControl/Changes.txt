@@ -1,6 +1,10 @@
 RC 3
 ====
 
+- Applied patch by Alex Henderson <webmaster@bittercoder.com> adding
+    IWindsorContainer.RemoveChildContainer(IWindsorContainer childContainer)
+    and IKernel.RemoveChildKernel(IKernel kernel)
+
 - Applied fix by Ahmed. Now defines can be used on properties nodes like
 
   <properties>

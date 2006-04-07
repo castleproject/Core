@@ -34,6 +34,7 @@ namespace Castle.MicroKernel
 		private static readonly object AddedAsChildKernelEvent = new object();
 		private static readonly object ComponentModelCreatedEvent = new object();
 		private static readonly object DependencyResolvingEvent = new object();
+		private static readonly object RemovedAsChildKernelEvent = new object();
 
 		[NonSerialized]
 		private EventHandlerList events;
@@ -119,6 +120,15 @@ namespace Castle.MicroKernel
 		/// <summary>
 		/// Pending
 		/// </summary>
+		public event EventHandler RemovedAsChildKernel
+		{
+			add { events.AddHandler(RemovedAsChildKernelEvent, value); }
+			remove { events.RemoveHandler(RemovedAsChildKernelEvent, value); }
+		}
+
+		/// <summary>
+		/// Pending
+		/// </summary>
 		/// <value></value>
 		public event ComponentModelDelegate ComponentModelCreated
 		{
@@ -162,6 +172,12 @@ namespace Castle.MicroKernel
 		protected virtual void RaiseAddedAsChildKernel()
 		{
 			EventHandler eventDelegate = (EventHandler) events[AddedAsChildKernelEvent];
+			if (eventDelegate != null) eventDelegate(this, EventArgs.Empty);
+		}
+
+		protected virtual void RaiseRemovedAsChildKernel()
+		{
+			EventHandler eventDelegate = (EventHandler) events[RemovedAsChildKernelEvent];
 			if (eventDelegate != null) eventDelegate(this, EventArgs.Empty);
 		}
 

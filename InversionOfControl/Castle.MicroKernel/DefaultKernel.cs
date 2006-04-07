@@ -539,16 +539,28 @@ namespace Castle.MicroKernel
 		{
 			get { return parentKernel; }
 			set
-			{
-				// TODO: Assert no previous parent was setted
-				// TODO: Assert value is not null
+			{				
+				// TODO: should the raise add/removed as child kernel methods be invoked from within the subscriber/unsubscribe methods?
 
-				parentKernel = value;
-
-				parentKernel.ComponentRegistered += new ComponentDataDelegate(RaiseComponentRegistered);
-				parentKernel.ComponentUnregistered += new ComponentDataDelegate(RaiseComponentUnregistered);
-
-				RaiseAddedAsChildKernel();
+				if (value == null)
+				{
+					if (parentKernel != null)
+					{
+						UnsubscribeFromParentKernel();
+						RaiseRemovedAsChildKernel();
+					}
+					parentKernel = null;
+				}
+				else
+				{
+					if ((parentKernel != value) && (parentKernel != null))
+					{
+						throw new KernelException("You can not change the kernel parent once set, use the RemoveChildKernel and AddChildKernel methods together to achieve this.");
+					}
+					parentKernel = value;
+					SubscribeToParentKernel();
+					RaiseAddedAsChildKernel();
+				}
 			}
 		}
 
@@ -613,6 +625,13 @@ namespace Castle.MicroKernel
 			} 
 		}
 
+		public virtual void RemoveChildKernel(IKernel childKernel)
+		{
+			if (childKernel == null) throw new ArgumentNullException("childKernel");
+			childKernel.Parent = null;
+			childKernels.Remove(childKernel);
+		}
+
 		#endregion
 
 		#region IDisposable Members
@@ -661,7 +680,15 @@ namespace Castle.MicroKernel
 			if (Parent != null)
 			{
 				Parent.ComponentRegistered -= new ComponentDataDelegate(RaiseComponentRegistered);
-				Parent.ComponentUnregistered -= new ComponentDataDelegate(RaiseComponentUnregistered);
+			}
+		}
+
+		private void SubscribeToParentKernel()
+		{
+			if (Parent != null)
+			{
+				parentKernel.ComponentRegistered += new ComponentDataDelegate(RaiseComponentRegistered);
+				parentKernel.ComponentUnregistered += new ComponentDataDelegate(RaiseComponentUnregistered);
 			}
 		}
 

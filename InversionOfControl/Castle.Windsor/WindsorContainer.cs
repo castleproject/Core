@@ -89,7 +89,6 @@ namespace Castle.Windsor
 
 		public WindsorContainer(String parentXmlFile, String childXmlFile) : this(new XmlInterpreter(parentXmlFile), new XmlInterpreter(childXmlFile))
 		{
-
 		}
 
 		/// <summary>
@@ -135,11 +134,21 @@ namespace Castle.Windsor
 		public virtual IWindsorContainer Parent
 		{
 			get { return _parent; }
-			set
+			set 
 			{
-				_parent = value;
-
-				if (value != null) _kernel.Parent = value.Kernel;
+				if (value == null)
+				{
+					if (_parent != null)
+					{
+						_parent.Kernel.RemoveChildKernel(_kernel);
+						_parent = null;
+					}
+				}
+				else
+				{
+					_parent = value;
+					value.Kernel.AddChildKernel(_kernel);									
+				}							
 			}
 		}
 
@@ -236,9 +245,18 @@ namespace Castle.Windsor
 		/// <param name="childContainer"></param>
 		public virtual void AddChildContainer(IWindsorContainer childContainer)
 		{
-			childContainer.Parent = this;
-			_kernel.AddChildKernel(childContainer.Kernel);
+			childContainer.Parent = this;			
 		}
+
+		/// <summary>
+		/// Removes (unregisters) a subcontainer.  The components exposed by this container
+		/// will no longer be accessible to the child container.
+		/// </summary>
+		/// <param name="childContainer"></param>
+		public virtual void RemoveChildContainer(IWindsorContainer childContainer)
+		{
+			childContainer.Parent = null;			
+		}		
 
 		#endregion
 

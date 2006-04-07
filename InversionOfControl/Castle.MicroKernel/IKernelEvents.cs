@@ -82,6 +82,12 @@ namespace Castle.MicroKernel
 		/// another kernel.
 		/// </summary>
 		event EventHandler AddedAsChildKernel;
+		
+		/// <summary>
+		/// Event fired when the kernel was removed from being a child
+		/// of another kernel.
+		/// </summary>
+		event EventHandler RemovedAsChildKernel;
 
 		/// <summary>
 		/// Event fired before the component is created.
