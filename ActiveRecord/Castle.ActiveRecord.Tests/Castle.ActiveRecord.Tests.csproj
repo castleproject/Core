@@ -179,6 +179,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NestedClassWithRelationsTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NullablesTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -380,6 +385,11 @@
                 />
                 <File
                     RelPath = "Model\LazyModel\ProductLazy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Model\Nested\Operation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

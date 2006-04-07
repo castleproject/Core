@@ -1,6 +1,12 @@
 beta 4
 ======
+
+- Applied Antonio`s patches 
+  See http://forum.castleproject.org/posts/list/457.page and 
+      http://forum.castleproject.org/posts/list/566.page
+
 - Added Debug to IConfiguration Source. If set then XmlGenerationVisitor will save nhibernate mapping files to the AppDomain.BaseDirectory. 
+
 - Added support to CompositeKeys as Foreign Keys (kudos to G. Richard Bellamy)
 
   BelongsToAttribute - Added CompositeKeyColumns property.

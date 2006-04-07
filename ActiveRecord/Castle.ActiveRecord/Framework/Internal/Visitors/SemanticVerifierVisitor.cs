@@ -335,19 +335,23 @@ namespace Castle.ActiveRecord.Framework.Internal
 
 		public override void VisitBelongsTo(BelongsToModel model)
 		{
-            if (currentModel.ActiveRecordAtt.Lazy)
-            {
-                //Assuming that a property must have at least a single accessor
-                MethodInfo accessor = model.Property.GetAccessors(true)[0];
-                if (!accessor.IsVirtual)
-                {
-                    throw new ActiveRecordException(
-                        string.Format("Property {0} must be virtual because " +
-                                      "class {1} support lazy loading [ActiveRecord(Lazy=true)]", 
-                                      model.Property.Name,
-                                      model.Property.DeclaringType.Name));
-                }
-            }
+			if (currentModel.ActiveRecordAtt != null)
+			{
+				if (currentModel.ActiveRecordAtt.Lazy)
+				{
+					//Assuming that a property must have at least a single accessor
+					MethodInfo accessor = model.Property.GetAccessors(true)[0];
+					if (!accessor.IsVirtual)
+					{
+						throw new ActiveRecordException(
+							string.Format("Property {0} must be virtual because " +
+							"class {1} support lazy loading [ActiveRecord(Lazy=true)]", 
+							model.Property.Name,
+							model.Property.DeclaringType.Name));
+					}
+				}
+			}
+            
 			if (model.BelongsToAtt.Column == null && model.BelongsToAtt.CompositeKeyColumns == null)
 			{
 				model.BelongsToAtt.Column = model.Property.Name;

@@ -236,10 +236,7 @@ namespace Castle.ActiveRecord
 		{
 			CheckInitialized();
 
-			ARSchemaCreator arschema = new ARSchemaCreator( 
-				ActiveRecordBase.holder.GetConfiguration( typeof(ActiveRecordBase) ) );
-
-			arschema.Execute( scriptFileName );
+			CreateSchemaFromFile(scriptFileName, ActiveRecordBase.holder.CreateSession(typeof(ActiveRecordBase)).Connection);
 		}
 
 		/// <summary>
